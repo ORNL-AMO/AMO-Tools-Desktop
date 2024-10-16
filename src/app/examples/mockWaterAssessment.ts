@@ -31,7 +31,17 @@ export const MockWaterAssessment: Assessment = {
                 "modifiedDate": new Date("2024-09-19T13:06:19.098Z"),
                 "sourceType": 0,
                 "annualUse": 0,
-                "addedMotorEnergy": []
+                "addedMotorEnergy": [],
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
             },
             {
                 "processComponentType": "water-intake",
@@ -43,7 +53,17 @@ export const MockWaterAssessment: Assessment = {
                 "modifiedDate": new Date("2024-09-19T13:06:20.542Z"),
                 "sourceType": 0,
                 "annualUse": 0,
-                "addedMotorEnergy": []
+                "addedMotorEnergy": [],
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
             }
         ],
         "dischargeOutlets": [
@@ -57,7 +77,17 @@ export const MockWaterAssessment: Assessment = {
                 "modifiedDate": new Date("2024-09-19T13:06:38.666Z"),
                 "outletType": 0,
                 "annualUse": 0,
-                "addedMotorEnergy": []
+                "addedMotorEnergy": [],
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
             },
             {
                 "processComponentType": "water-discharge",
@@ -69,7 +99,17 @@ export const MockWaterAssessment: Assessment = {
                 "modifiedDate": new Date("2024-09-19T13:06:40.504Z"),
                 "outletType": 0,
                 "annualUse": 0,
-                "addedMotorEnergy": []
+                "addedMotorEnergy": [],
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
             }
         ],
         "waterUsingSystems": [
@@ -138,7 +178,17 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
+                "knownLosses": undefined,
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
 
             },
             {
@@ -206,7 +256,17 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
+                "knownLosses": undefined,
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
 
             },
             {
@@ -274,7 +334,17 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
+                "knownLosses": undefined,
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
 
             },
             {
@@ -342,7 +412,17 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
+                "knownLosses": undefined,
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
 
             },
             {
@@ -410,7 +490,17 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
+                "knownLosses": undefined,
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
 
             },
             {
@@ -478,7 +568,17 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
+                "knownLosses": undefined,
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
 
             },
             {
@@ -546,7 +646,17 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
+                "knownLosses": undefined,
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
 
             },
             {
@@ -614,7 +724,17 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
+                "knownLosses": undefined,
+                "handles": [
+                    { id: 'a', visible: true },
+                    { id: 'b', visible: true },
+                    { id: 'c', visible: false },
+                    { id: 'd', visible: false },
+                    { id: 'e', visible: true },
+                    { id: 'f', visible: true },
+                    { id: 'g', visible: false },
+                    { id: 'h', visible: false },
+                  ]
             }
         ],
         "waterTreatments": [],

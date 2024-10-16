@@ -25,7 +25,9 @@ export const PresetColorPicker = ({ color, onChangeHandler, presetColors, label,
                                 key={presetColor + index}
                                 className="preset"
                                 style={{ background: presetColor }}
-                                onClick={() => onChangeHandler(presetColor)}
+                                onClick={() => {
+                                    onChangeHandler(presetColor)
+                                }}
                                 />
                             ))}
                         </div>

@@ -31,7 +31,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-intake",
                         "isValid": true,
                         "diagramNodeId": "n_sz5ulomtz",
-                        "modifiedDate": "2024-09-19T13:06:19.098Z"
+                        "modifiedDate": "2024-09-19T13:06:19.098Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#75a1ff",
@@ -59,7 +69,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-intake",
                         "isValid": true,
                         "diagramNodeId": "n_mxk12ss2u",
-                        "modifiedDate": "2024-09-19T13:06:20.542Z"
+                        "modifiedDate": "2024-09-19T13:06:20.542Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#75a1ff",
@@ -87,7 +107,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_ry7pcg7y1",
-                        "modifiedDate": "2024-09-19T13:06:23.744Z"
+                        "modifiedDate": "2024-09-19T13:06:23.744Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#00bbff",
@@ -115,7 +145,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_l731t9dli",
-                        "modifiedDate": "2024-09-19T13:06:25.303Z"
+                        "modifiedDate": "2024-09-19T13:06:25.303Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#cd9323",
@@ -143,7 +183,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_dakkr4b7i",
-                        "modifiedDate": "2024-09-19T13:06:27.080Z"
+                        "modifiedDate": "2024-09-19T13:06:27.080Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#cd9323",
@@ -171,7 +221,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_innffif3i",
-                        "modifiedDate": "2024-09-19T13:06:28.668Z"
+                        "modifiedDate": "2024-09-19T13:06:28.668Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#00bbff",
@@ -199,7 +259,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_wgkadbp9x",
-                        "modifiedDate": "2024-09-19T13:06:30.641Z"
+                        "modifiedDate": "2024-09-19T13:06:30.641Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#00bbff",
@@ -227,7 +297,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_jlq55u5pt",
-                        "modifiedDate": "2024-09-19T13:06:35.060Z"
+                        "modifiedDate": "2024-09-19T13:06:35.060Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#7a7a7a",
@@ -256,7 +336,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_5yxu1fhwv",
-                        "modifiedDate": "2024-09-19T13:06:37.043Z"
+                        "modifiedDate": "2024-09-19T13:06:37.043Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#878787",
@@ -284,7 +374,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-discharge",
                         "isValid": true,
                         "diagramNodeId": "n_krrdnugeq",
-                        "modifiedDate": "2024-09-19T13:06:38.666Z"
+                        "modifiedDate": "2024-09-19T13:06:38.666Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#7f7fff",
@@ -312,7 +412,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-discharge",
                         "isValid": true,
                         "diagramNodeId": "n_mkjkxrzz0",
-                        "modifiedDate": "2024-09-19T13:06:40.504Z"
+                        "modifiedDate": "2024-09-19T13:06:40.504Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#9999f5",
@@ -340,7 +450,17 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_xfb32zunn",
-                        "modifiedDate": "2024-09-19T13:07:06.789Z"
+                        "modifiedDate": "2024-09-19T13:07:06.789Z",
+                        "handles": [
+                            { key: 0, id: 'a', visible: true, label: 'A' },
+                            { key: 1, id: 'b', visible: true, label: 'B' },
+                            { key: 2, id: 'c', visible: false, label: 'C' },
+                            { key: 3, id: 'd', visible: false, label: 'D' },
+                            { key: 4, id: 'e', visible: true, label: 'E' },
+                            { key: 5, id: 'f', visible: true, label: 'F' },
+                            { key: 6, id: 'g', visible: false, label: 'G' },
+                            { key: 7, id: 'h', visible: false, label: 'H' },
+                        ]
                     },
                     "style": {
                         "backgroundColor": "#cd9323",

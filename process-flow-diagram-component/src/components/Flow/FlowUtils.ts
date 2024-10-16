@@ -73,6 +73,10 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
     });
   }
 
+ /**
+ * edge ids are not gauranteed to be unique. They only include nodeid-nodeid. source and target handles must be looked at to identify uniqueness of edge 
+ * 
+ */
 export const setCustomEdges = (setEdges, connectedParams:  Connection | Edge) => {
   setEdges((eds) => {
       connectedParams = connectedParams as Edge;

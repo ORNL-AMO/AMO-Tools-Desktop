@@ -13,6 +13,7 @@ import CustomizeNode from './CustomizeNode';
 import ComponentConnectionsList from './ComponentConnectionList';
 import CustomizeEdge from './CustomizeEdge';
 import ComponentFlowsForm from './ComponentFlowsForm';
+import ComponentHandles from './ComponentHandles';
 
 export default function ManageDataContextDrawer(props: ManageDataContextDrawerProps) {
     const { getNodes, getEdges, setEdges, setNodes } = useReactFlow();
@@ -109,7 +110,7 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
                 // [`& .MuiPaper-root`]: { top: '75px' },
             }}
         >
-            <Box display="flex" alignItems={'center'} sx={{ width: '100%', margin: '1rem' }}>
+            <Box display="flex" alignItems={'center'} sx={{ margin: '1rem' }}>
                 <Button onClick={toggleDrawer(false)}
                     sx={{
                         alignSelf: 'flex-start',
@@ -166,7 +167,8 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
 
                 <TabPanel value={selectedTab} index={1}>
                     <TabPanelBox>
-                        <Box>
+                        <Box sx={{ paddingY: '1rem' }}>
+                            <ComponentHandles node={selectedNode}></ComponentHandles>
                             <CustomizeNode node={selectedNode}></CustomizeNode>
                             <Divider />
                         </Box>
