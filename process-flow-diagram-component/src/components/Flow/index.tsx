@@ -50,6 +50,8 @@ const Flow = (props: FlowProps) => {
         return node;
       }
     });
+
+    
     existingEdges = props.processDiagram.flowDiagramData.edges;
   }
 
@@ -113,7 +115,6 @@ const Flow = (props: FlowProps) => {
 
   // const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
   //   // todo global confirm
-  //   debugger;
   //   return { nodes, edges };
   // }, []);
   

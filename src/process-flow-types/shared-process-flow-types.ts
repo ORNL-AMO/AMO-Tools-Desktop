@@ -56,11 +56,17 @@ export interface ProcessFlowParentState {
     // * id for diagram targetting/sourcing
     diagramNodeId?: string,
     modifiedDate?: Date,
+    handles: Array<HandleOption>,
     splitterTargets?: Array<string>;
     setManageDataId?: (id: number) => void; 
     openEditData?: (boolean) => void;
     // todo this will hold any contextual data about connections to other parts, etc
     processComponentContext?: any;
+  }
+  
+  export interface HandleOption {
+    id: string,
+    visible: boolean,
   }
   
   // * union future diagram types into ProcessFlowNodeType
@@ -70,22 +76,28 @@ export interface ProcessFlowParentState {
 
   export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties> = {
     'water-intake': {
-      backgroundColor: '#75a1ff'
+      backgroundColor: '#75a1ff',
+      color: "#ffffff"
     },
     'water-discharge': {
-      backgroundColor: '#7f7fff'
+      backgroundColor: '#7f7fff',
+      color: "#ffffff"
     },
     'water-using-system': {
-      backgroundColor: '#00bbff'
+      backgroundColor: '#00bbff',
+      color: "#ffffff"
     },
     'splitter-node': {
-      backgroundColor: '#75a1ff'
+      backgroundColor: '#75a1ff',
+      color: "#ffffff"
     },
     'water-treatment': {
-      backgroundColor: '#e28000'
+      backgroundColor: '#e28000',
+      color: "#ffffff"
     },
     'waste-water-treatment': {
-      backgroundColor: '#e28000'
+      backgroundColor: '#e28000',
+      color: "#ffffff"
     }
   };
 
@@ -94,6 +106,19 @@ export interface ProcessFlowParentState {
 
   export function getNewIdString() {
     return Math.random().toString(36).substring(2, 9);
+}
+
+const getDefaultHandles = (): HandleOption[] => {
+  return [
+    { id: 'a', visible: true },
+    { id: 'b', visible: true },
+    { id: 'c', visible: false },
+    { id: 'd', visible: false },
+    { id: 'e', visible: true },
+    { id: 'f', visible: true },
+    { id: 'g', visible: false },
+    { id: 'h', visible: false },
+  ];
 }
   
   // * Assign innate behaviors and context for Diagram parts
@@ -104,6 +129,7 @@ export interface ProcessFlowParentState {
       className: 'water-intake',
       isValid: true,
       hasAssessmentData: false,
+      handles: getDefaultHandles()
     },
     {
       processComponentType: 'water-using-system',
@@ -111,6 +137,7 @@ export interface ProcessFlowParentState {
       className: 'water-using-system',
       isValid: true,
       hasAssessmentData: false,
+      handles: getDefaultHandles()
     },
     {
       processComponentType: 'water-discharge',
@@ -118,6 +145,7 @@ export interface ProcessFlowParentState {
       className: 'water-discharge',
       isValid: true,
       hasAssessmentData: false,
+      handles: getDefaultHandles()
     },
     {
       processComponentType: 'water-treatment',
@@ -125,6 +153,7 @@ export interface ProcessFlowParentState {
       className: 'water-treatment',
       isValid: true,
       hasAssessmentData: false,
+      handles: getDefaultHandles()
     },
     {
       processComponentType: 'waste-water-treatment',
@@ -132,6 +161,7 @@ export interface ProcessFlowParentState {
       className: 'waste-water-treatment',
       isValid: true,
       hasAssessmentData: false,
+      handles: getDefaultHandles()
     },
     // {
     //   processComponentType: 'splitter-node',
@@ -157,6 +187,7 @@ export const getNewProcessComponent = (processComponentType): ProcessFlowPart =>
     isValid: diagramComponent.isValid,
     diagramNodeId: getNewNodeId(),
     modifiedDate: new Date(),
+    handles: [...diagramComponent.handles]
   };
 
   return newProcessComponent;

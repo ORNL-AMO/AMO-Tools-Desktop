@@ -17,21 +17,58 @@ export const MockWaterdiagram: Diagram =
         "flowDiagramData": {
             "nodes": [
                 {
-                    "id": "n_sz5ulomtz",
+                    "id": "n_8v95pqn",
                     "type": "waterIntake",
                     "position": {
-                        "x": -330.2982632836129,
-                        "y": -51.12647130225008
+                        "x": -153,
+                        "y": 156
                     },
                     "className": "water-intake",
                     "data": {
                         "processComponentType": "water-intake",
-                        "hasAssessmentData": false,
+                        "hasAssessmentData": true,
                         "name": "Municipal Water A",
                         "className": "water-intake",
                         "isValid": true,
-                        "diagramNodeId": "n_sz5ulomtz",
-                        "modifiedDate": "2024-09-19T13:06:19.098Z"
+                        "diagramNodeId": "n_8v95pqn",
+                        "modifiedDate": "2024-10-16T15:41:39.156Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": false
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": false
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "sourceType": 0,
+                        "annualUse": 0,
+                        "addedMotorEnergy": []
                     },
                     "style": {
                         "backgroundColor": "#75a1ff",
@@ -45,21 +82,58 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "n_mxk12ss2u",
+                    "id": "n_k8i3z5t",
                     "type": "waterIntake",
                     "position": {
-                        "x": -311.4014730547056,
-                        "y": 191.3352033619054
+                        "x": -107,
+                        "y": 533
                     },
                     "className": "water-intake",
                     "data": {
                         "processComponentType": "water-intake",
-                        "hasAssessmentData": false,
+                        "hasAssessmentData": true,
                         "name": "Municipal Water B",
                         "className": "water-intake",
                         "isValid": true,
-                        "diagramNodeId": "n_mxk12ss2u",
-                        "modifiedDate": "2024-09-19T13:06:20.542Z"
+                        "diagramNodeId": "n_k8i3z5t",
+                        "modifiedDate": "2024-10-16T15:41:41.597Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "sourceType": 0,
+                        "annualUse": 0,
+                        "addedMotorEnergy": []
                     },
                     "style": {
                         "backgroundColor": "#75a1ff",
@@ -73,218 +147,58 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "n_ry7pcg7y1",
-                    "type": "waterUsingSystem",
-                    "position": {
-                        "x": 241.77588576605717,
-                        "y": -449.0941731943854
-                    },
-                    "className": "water-using-system",
-                    "data": {
-                        "processComponentType": "water-using-system",
-                        "hasAssessmentData": false,
-                        "name": "Cooling Tower",
-                        "className": "water-using-system",
-                        "isValid": true,
-                        "diagramNodeId": "n_ry7pcg7y1",
-                        "modifiedDate": "2024-09-19T13:06:23.744Z"
-                    },
-                    "style": {
-                        "backgroundColor": "#00bbff",
-                        "color": "#ffffff"
-                    },
-                    "measured": {
-                        "width": 219,
-                        "height": 69
-                    },
-                    "selected": false,
-                    "dragging": false
-                },
-                {
-                    "id": "n_l731t9dli",
-                    "type": "waterUsingSystem",
-                    "position": {
-                        "x": 235.75335547823067,
-                        "y": -156.3436769375287
-                    },
-                    "className": "water-using-system",
-                    "data": {
-                        "processComponentType": "water-using-system",
-                        "hasAssessmentData": false,
-                        "name": "Process Loop",
-                        "className": "water-using-system",
-                        "isValid": true,
-                        "diagramNodeId": "n_l731t9dli",
-                        "modifiedDate": "2024-09-19T13:06:25.303Z"
-                    },
-                    "style": {
-                        "backgroundColor": "#cd9323",
-                        "color": "#ffffff"
-                    },
-                    "measured": {
-                        "width": 219,
-                        "height": 69
-                    },
-                    "selected": false,
-                    "dragging": false
-                },
-                {
-                    "id": "n_dakkr4b7i",
-                    "type": "waterUsingSystem",
-                    "position": {
-                        "x": 246.56002264222468,
-                        "y": -66.43496986328078
-                    },
-                    "className": "water-using-system",
-                    "data": {
-                        "processComponentType": "water-using-system",
-                        "hasAssessmentData": false,
-                        "name": "Quench Tank",
-                        "className": "water-using-system",
-                        "isValid": true,
-                        "diagramNodeId": "n_dakkr4b7i",
-                        "modifiedDate": "2024-09-19T13:06:27.080Z"
-                    },
-                    "style": {
-                        "backgroundColor": "#cd9323",
-                        "color": "#ffffff"
-                    },
-                    "measured": {
-                        "width": 219,
-                        "height": 69
-                    },
-                    "selected": false,
-                    "dragging": false
-                },
-                {
-                    "id": "n_innffif3i",
-                    "type": "waterUsingSystem",
-                    "position": {
-                        "x": 303.8896656742626,
-                        "y": 277.2070158963215
-                    },
-                    "className": "water-using-system",
-                    "data": {
-                        "processComponentType": "water-using-system",
-                        "hasAssessmentData": false,
-                        "name": "Wash Bay",
-                        "className": "water-using-system",
-                        "isValid": true,
-                        "diagramNodeId": "n_innffif3i",
-                        "modifiedDate": "2024-09-19T13:06:28.668Z"
-                    },
-                    "style": {
-                        "backgroundColor": "#00bbff",
-                        "color": "#ffffff"
-                    },
-                    "measured": {
-                        "width": 219,
-                        "height": 69
-                    },
-                    "selected": false,
-                    "dragging": false
-                },
-                {
-                    "id": "n_wgkadbp9x",
-                    "type": "waterUsingSystem",
-                    "position": {
-                        "x": 300.73979573914335,
-                        "y": 392.4315155777389
-                    },
-                    "className": "water-using-system",
-                    "data": {
-                        "processComponentType": "water-using-system",
-                        "hasAssessmentData": false,
-                        "name": "Sanitary",
-                        "className": "water-using-system",
-                        "isValid": true,
-                        "diagramNodeId": "n_wgkadbp9x",
-                        "modifiedDate": "2024-09-19T13:06:30.641Z"
-                    },
-                    "style": {
-                        "backgroundColor": "#00bbff",
-                        "color": "#ffffff"
-                    },
-                    "measured": {
-                        "width": 219,
-                        "height": 69
-                    },
-                    "selected": false,
-                    "dragging": false
-                },
-                {
-                    "id": "n_jlq55u5pt",
-                    "type": "waterUsingSystem",
-                    "position": {
-                        "x": 594.5488526257843,
-                        "y": -304.6582833176652
-                    },
-                    "className": "water-using-system",
-                    "data": {
-                        "processComponentType": "water-using-system",
-                        "hasAssessmentData": false,
-                        "name": "Chillers",
-                        "className": "water-using-system",
-                        "isValid": true,
-                        "diagramNodeId": "n_jlq55u5pt",
-                        "modifiedDate": "2024-09-19T13:06:35.060Z"
-                    },
-                    "style": {
-                        "backgroundColor": "#7a7a7a",
-                        "color": "#ffffff"
-
-                    },
-                    "measured": {
-                        "width": 219,
-                        "height": 69
-                    },
-                    "selected": false,
-                    "dragging": false
-                },
-                {
-                    "id": "n_5yxu1fhwv",
-                    "type": "waterUsingSystem",
-                    "position": {
-                        "x": 682.9384196711303,
-                        "y": 77.58139331927484
-                    },
-                    "className": "water-using-system",
-                    "data": {
-                        "processComponentType": "water-using-system",
-                        "hasAssessmentData": false,
-                        "name": "Blending",
-                        "className": "water-using-system",
-                        "isValid": true,
-                        "diagramNodeId": "n_5yxu1fhwv",
-                        "modifiedDate": "2024-09-19T13:06:37.043Z"
-                    },
-                    "style": {
-                        "backgroundColor": "#878787",
-                        "color": "#ffffff"
-                    },
-                    "measured": {
-                        "width": 219,
-                        "height": 69
-                    },
-                    "selected": false,
-                    "dragging": false
-                },
-                {
-                    "id": "n_krrdnugeq",
+                    "id": "n_40pl8g8",
                     "type": "waterDischarge",
                     "position": {
-                        "x": 866.6568907343953,
-                        "y": -175.2046507731065
+                        "x": 1207,
+                        "y": 151
                     },
                     "className": "water-discharge",
                     "data": {
                         "processComponentType": "water-discharge",
-                        "hasAssessmentData": false,
-                        "name": "Municipal Sewer",
+                        "hasAssessmentData": true,
+                        "name": "Municipal Sewer A",
                         "className": "water-discharge",
                         "isValid": true,
-                        "diagramNodeId": "n_krrdnugeq",
-                        "modifiedDate": "2024-09-19T13:06:38.666Z"
+                        "diagramNodeId": "n_40pl8g8",
+                        "modifiedDate": "2024-10-16T15:41:58.374Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "outletType": 0,
+                        "annualUse": 0,
+                        "addedMotorEnergy": []
                     },
                     "style": {
                         "backgroundColor": "#7f7fff",
@@ -298,24 +212,61 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "n_mkjkxrzz0",
+                    "id": "n_km3rucx",
                     "type": "waterDischarge",
                     "position": {
-                        "x": 814.5076680194097,
-                        "y": 349.0748703004328
+                        "x": 1181.8928639391056,
+                        "y": 612.8721217887727
                     },
                     "className": "water-discharge",
                     "data": {
                         "processComponentType": "water-discharge",
-                        "hasAssessmentData": false,
-                        "name": "Municipal Sewer",
+                        "hasAssessmentData": true,
+                        "name": "Municipal Sewer B",
                         "className": "water-discharge",
                         "isValid": true,
-                        "diagramNodeId": "n_mkjkxrzz0",
-                        "modifiedDate": "2024-09-19T13:06:40.504Z"
+                        "diagramNodeId": "n_km3rucx",
+                        "modifiedDate": "2024-10-16T15:42:00.037Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "outletType": 0,
+                        "annualUse": 0,
+                        "addedMotorEnergy": []
                     },
                     "style": {
-                        "backgroundColor": "#9999f5",
+                        "backgroundColor": "#d784f5",
                         "color": "#ffffff"
                     },
                     "measured": {
@@ -326,24 +277,79 @@ export const MockWaterdiagram: Diagram =
                     "dragging": false
                 },
                 {
-                    "id": "n_xfb32zunn",
+                    "id": "n_fo9ndq3",
                     "type": "waterUsingSystem",
                     "position": {
-                        "x": 250.8696261721974,
-                        "y": 25.986870308695615
+                        "x": 308.0472795183723,
+                        "y": -146.81458333333333
                     },
                     "className": "water-using-system",
                     "data": {
                         "processComponentType": "water-using-system",
-                        "hasAssessmentData": false,
-                        "name": "Vacuum Pumps",
+                        "hasAssessmentData": true,
+                        "name": "Cooling Tower",
                         "className": "water-using-system",
                         "isValid": true,
-                        "diagramNodeId": "n_xfb32zunn",
-                        "modifiedDate": "2024-09-19T13:07:06.789Z"
+                        "diagramNodeId": "n_fo9ndq3",
+                        "modifiedDate": "2024-10-16T15:41:43.132Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "systemType": 0,
+                        "hoursPerYear": 8760,
+                        "intakeSources": [
+                            {
+                                "sourceType": 0,
+                                "annualUse": 0
+                            }
+                        ],
+                        "processUse": {
+                            "waterRequiredMetric": 0,
+                            "waterConsumedMetric": 0,
+                            "waterLossMetric": 0
+                        },
+                        "coolingTower": {},
+                        "boilerWater": {},
+                        "kitchenRestroom": {},
+                        "landscaping": {},
+                        "heatEnergy": {
+                            "heatingFuelType": 0
+                        },
+                        "addedMotorEquipment": []
                     },
                     "style": {
-                        "backgroundColor": "#cd9323",
+                        "backgroundColor": "#00bbff",
                         "color": "#ffffff"
                     },
                     "measured": {
@@ -351,6 +357,587 @@ export const MockWaterdiagram: Diagram =
                         "height": 69
                     },
                     "selected": false,
+                    "dragging": false
+                },
+                {
+                    "id": "n_35zotef",
+                    "type": "waterUsingSystem",
+                    "position": {
+                        "x": 321,
+                        "y": 38
+                    },
+                    "className": "water-using-system",
+                    "data": {
+                        "processComponentType": "water-using-system",
+                        "hasAssessmentData": true,
+                        "name": "Water Using System",
+                        "className": "water-using-system",
+                        "isValid": true,
+                        "diagramNodeId": "n_35zotef",
+                        "modifiedDate": "2024-10-16T15:41:44.719Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "systemType": 0,
+                        "hoursPerYear": 8760,
+                        "intakeSources": [
+                            {
+                                "sourceType": 0,
+                                "annualUse": 0
+                            }
+                        ],
+                        "processUse": {
+                            "waterRequiredMetric": 0,
+                            "waterConsumedMetric": 0,
+                            "waterLossMetric": 0
+                        },
+                        "coolingTower": {},
+                        "boilerWater": {},
+                        "kitchenRestroom": {},
+                        "landscaping": {},
+                        "heatEnergy": {
+                            "heatingFuelType": 0
+                        },
+                        "addedMotorEquipment": []
+                    },
+                    "style": {
+                        "backgroundColor": "#85477c",
+                        "color": "#ffffff"
+                    },
+                    "measured": {
+                        "width": 219,
+                        "height": 69
+                    },
+                    "selected": false,
+                    "dragging": false
+                },
+                {
+                    "id": "n_jhjsv61",
+                    "type": "waterUsingSystem",
+                    "position": {
+                        "x": 304,
+                        "y": 158
+                    },
+                    "className": "water-using-system",
+                    "data": {
+                        "processComponentType": "water-using-system",
+                        "hasAssessmentData": true,
+                        "name": "Quench Tank",
+                        "className": "water-using-system",
+                        "isValid": true,
+                        "diagramNodeId": "n_jhjsv61",
+                        "modifiedDate": "2024-10-16T15:41:45.761Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "systemType": 0,
+                        "hoursPerYear": 8760,
+                        "intakeSources": [
+                            {
+                                "sourceType": 0,
+                                "annualUse": 0
+                            }
+                        ],
+                        "processUse": {
+                            "waterRequiredMetric": 0,
+                            "waterConsumedMetric": 0,
+                            "waterLossMetric": 0
+                        },
+                        "coolingTower": {},
+                        "boilerWater": {},
+                        "kitchenRestroom": {},
+                        "landscaping": {},
+                        "heatEnergy": {
+                            "heatingFuelType": 0
+                        },
+                        "addedMotorEquipment": []
+                    },
+                    "style": {
+                        "backgroundColor": "#9c547e",
+                        "color": "#ffffff"
+                    },
+                    "measured": {
+                        "width": 219,
+                        "height": 69
+                    },
+                    "selected": false,
+                    "dragging": false
+                },
+                {
+                    "id": "n_9jgt12z",
+                    "type": "waterUsingSystem",
+                    "position": {
+                        "x": 292,
+                        "y": 286
+                    },
+                    "className": "water-using-system",
+                    "data": {
+                        "processComponentType": "water-using-system",
+                        "hasAssessmentData": true,
+                        "name": "Vacuum Pumps",
+                        "className": "water-using-system",
+                        "isValid": true,
+                        "diagramNodeId": "n_9jgt12z",
+                        "modifiedDate": "2024-10-16T15:41:46.932Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "systemType": 0,
+                        "hoursPerYear": 8760,
+                        "intakeSources": [
+                            {
+                                "sourceType": 0,
+                                "annualUse": 0
+                            }
+                        ],
+                        "processUse": {
+                            "waterRequiredMetric": 0,
+                            "waterConsumedMetric": 0,
+                            "waterLossMetric": 0
+                        },
+                        "coolingTower": {},
+                        "boilerWater": {},
+                        "kitchenRestroom": {},
+                        "landscaping": {},
+                        "heatEnergy": {
+                            "heatingFuelType": 0
+                        },
+                        "addedMotorEquipment": []
+                    },
+                    "style": {
+                        "backgroundColor": "#8b4689",
+                        "color": "#ffffff"
+                    },
+                    "measured": {
+                        "width": 219,
+                        "height": 69
+                    },
+                    "selected": false,
+                    "dragging": false
+                },
+                {
+                    "id": "n_0uc4i5b",
+                    "type": "waterUsingSystem",
+                    "position": {
+                        "x": 559,
+                        "y": 529
+                    },
+                    "className": "water-using-system",
+                    "data": {
+                        "processComponentType": "water-using-system",
+                        "hasAssessmentData": true,
+                        "name": "Wash Bay",
+                        "className": "water-using-system",
+                        "isValid": true,
+                        "diagramNodeId": "n_0uc4i5b",
+                        "modifiedDate": "2024-10-16T15:41:49.451Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "systemType": 0,
+                        "hoursPerYear": 8760,
+                        "intakeSources": [
+                            {
+                                "sourceType": 0,
+                                "annualUse": 0
+                            }
+                        ],
+                        "processUse": {
+                            "waterRequiredMetric": 0,
+                            "waterConsumedMetric": 0,
+                            "waterLossMetric": 0
+                        },
+                        "coolingTower": {},
+                        "boilerWater": {},
+                        "kitchenRestroom": {},
+                        "landscaping": {},
+                        "heatEnergy": {
+                            "heatingFuelType": 0
+                        },
+                        "addedMotorEquipment": []
+                    },
+                    "style": {
+                        "backgroundColor": "#00bbff",
+                        "color": "#ffffff"
+                    },
+                    "measured": {
+                        "width": 219,
+                        "height": 69
+                    },
+                    "selected": false,
+                    "dragging": false
+                },
+                {
+                    "id": "n_59n7him",
+                    "type": "waterUsingSystem",
+                    "position": {
+                        "x": 564,
+                        "y": 651
+                    },
+                    "className": "water-using-system",
+                    "data": {
+                        "processComponentType": "water-using-system",
+                        "hasAssessmentData": true,
+                        "name": "Sanitary",
+                        "className": "water-using-system",
+                        "isValid": true,
+                        "diagramNodeId": "n_59n7him",
+                        "modifiedDate": "2024-10-16T15:41:51.107Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "systemType": 0,
+                        "hoursPerYear": 8760,
+                        "intakeSources": [
+                            {
+                                "sourceType": 0,
+                                "annualUse": 0
+                            }
+                        ],
+                        "processUse": {
+                            "waterRequiredMetric": 0,
+                            "waterConsumedMetric": 0,
+                            "waterLossMetric": 0
+                        },
+                        "coolingTower": {},
+                        "boilerWater": {},
+                        "kitchenRestroom": {},
+                        "landscaping": {},
+                        "heatEnergy": {
+                            "heatingFuelType": 0
+                        },
+                        "addedMotorEquipment": []
+                    },
+                    "style": {
+                        "backgroundColor": "#00bbff",
+                        "color": "#ffffff"
+                    },
+                    "measured": {
+                        "width": 219,
+                        "height": 69
+                    },
+                    "selected": false,
+                    "dragging": false
+                },
+                {
+                    "id": "n_ewqu18d",
+                    "type": "waterUsingSystem",
+                    "position": {
+                        "x": 773.5580848648738,
+                        "y": -53.87320004861701
+                    },
+                    "className": "water-using-system",
+                    "data": {
+                        "processComponentType": "water-using-system",
+                        "hasAssessmentData": true,
+                        "name": "Chillers",
+                        "className": "water-using-system",
+                        "isValid": true,
+                        "diagramNodeId": "n_ewqu18d",
+                        "modifiedDate": "2024-10-16T15:41:54.751Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "systemType": 0,
+                        "hoursPerYear": 8760,
+                        "intakeSources": [
+                            {
+                                "sourceType": 0,
+                                "annualUse": 0
+                            }
+                        ],
+                        "processUse": {
+                            "waterRequiredMetric": 0,
+                            "waterConsumedMetric": 0,
+                            "waterLossMetric": 0
+                        },
+                        "coolingTower": {},
+                        "boilerWater": {},
+                        "kitchenRestroom": {},
+                        "landscaping": {},
+                        "heatEnergy": {
+                            "heatingFuelType": 0
+                        },
+                        "addedMotorEquipment": []
+                    },
+                    "style": {
+                        "backgroundColor": "#808080",
+                        "color": "#ffffff"
+                    },
+                    "measured": {
+                        "width": 219,
+                        "height": 69
+                    },
+                    "selected": false,
+                    "dragging": false
+                },
+                {
+                    "id": "n_zqp4xwq",
+                    "type": "waterUsingSystem",
+                    "position": {
+                        "x": 889.0486812685394,
+                        "y": 322.513417394999
+                    },
+                    "className": "water-using-system",
+                    "data": {
+                        "processComponentType": "water-using-system",
+                        "hasAssessmentData": true,
+                        "name": "Blending",
+                        "className": "water-using-system",
+                        "isValid": true,
+                        "diagramNodeId": "n_zqp4xwq",
+                        "modifiedDate": "2024-10-16T15:41:56.202Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": false
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": false
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "systemType": 0,
+                        "hoursPerYear": 8760,
+                        "intakeSources": [
+                            {
+                                "sourceType": 0,
+                                "annualUse": 0
+                            }
+                        ],
+                        "processUse": {
+                            "waterRequiredMetric": 0,
+                            "waterConsumedMetric": 0,
+                            "waterLossMetric": 0
+                        },
+                        "coolingTower": {},
+                        "boilerWater": {},
+                        "kitchenRestroom": {},
+                        "landscaping": {},
+                        "heatEnergy": {
+                            "heatingFuelType": 0
+                        },
+                        "addedMotorEquipment": []
+                    },
+                    "style": {
+                        "backgroundColor": "#8a8a8a",
+                        "color": "#ffffff"
+                    },
+                    "measured": {
+                        "width": 219,
+                        "height": 69
+                    },
+                    "selected": true,
                     "dragging": false
                 }
             ],
@@ -358,9 +945,9 @@ export const MockWaterdiagram: Diagram =
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "n_mxk12ss2u",
-                    "sourceHandle": "b",
-                    "target": "n_innffif3i",
+                    "source": "n_k8i3z5t",
+                    "sourceHandle": "e",
+                    "target": "n_0uc4i5b",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -368,19 +955,19 @@ export const MockWaterdiagram: Diagram =
                         "height": 25
                     },
                     "data": {
-                        "flowPercent": "2.13"
+                        "flowPercent": 2.13
                     },
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-n_mxk12ss2ub-n_innffif3ia"
+                    "id": "reactflow__edge-n_k8i3z5te-n_0uc4i5ba"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "n_mxk12ss2u",
-                    "sourceHandle": "b",
-                    "target": "n_wgkadbp9x",
+                    "source": "n_0uc4i5b",
+                    "sourceHandle": "e",
+                    "target": "n_km3rucx",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -388,99 +975,19 @@ export const MockWaterdiagram: Diagram =
                         "height": 25
                     },
                     "data": {
-                        "flowPercent": ".26"
+                        "flowPercent": 0.26
                     },
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-n_mxk12ss2ub-n_wgkadbp9xa"
+                    "id": "reactflow__edge-n_0uc4i5be-n_km3rucxa"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "n_sz5ulomtz",
-                    "sourceHandle": "b",
-                    "target": "n_xfb32zunn",
-                    "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
-                    "data": {
-                        "flowPercent": "4"
-                    },
-                    "style": {
-                        "stroke": "#6c757d"
-                    },
-                    "id": "reactflow__edge-n_sz5ulomtzb-n_xfb32zunna"
-                },
-                {
-                    "animated": true,
-                    "type": "default",
-                    "source": "n_sz5ulomtz",
-                    "sourceHandle": "b",
-                    "target": "n_dakkr4b7i",
-                    "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
-                    "data": {
-                        "flowPercent": "6"
-                    },
-                    "style": {
-                        "stroke": "#6c757d"
-                    },
-                    "id": "reactflow__edge-n_sz5ulomtzb-n_dakkr4b7ia"
-                },
-                {
-                    "animated": true,
-                    "type": "default",
-                    "source": "n_sz5ulomtz",
-                    "sourceHandle": "b",
-                    "target": "n_l731t9dli",
-                    "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
-                    "data": {
-                        "flowPercent": "2"
-                    },
-                    "style": {
-                        "stroke": "#6c757d"
-                    },
-                    "id": "reactflow__edge-n_sz5ulomtzb-n_l731t9dlia"
-                },
-                {
-                    "animated": true,
-                    "type": "default",
-                    "source": "n_sz5ulomtz",
-                    "sourceHandle": "b",
-                    "target": "n_ry7pcg7y1",
-                    "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
-                    "data": {
-                        "flowPercent": "8"
-                    },
-                    "style": {
-                        "stroke": "#6c757d"
-                    },
-                    "id": "reactflow__edge-n_sz5ulomtzb-n_ry7pcg7y1a"
-                },
-                {
-                    "animated": true,
-                    "type": "default",
-                    "source": "n_ry7pcg7y1",
-                    "sourceHandle": "b",
-                    "target": "n_jlq55u5pt",
+                    "source": "n_59n7him",
+                    "sourceHandle": "e",
+                    "target": "n_km3rucx",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -493,74 +1000,196 @@ export const MockWaterdiagram: Diagram =
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-n_ry7pcg7y1b-n_jlq55u5pta"
+                    "id": "reactflow__edge-n_59n7hime-n_km3rucxa",
+                    "selected": false
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_k8i3z5t",
+                    "sourceHandle": "f",
+                    "target": "n_59n7him",
+                    "targetHandle": "a",
+                    "markerEnd": {
+                        "type": MarkerType.ArrowClosed,
+                        "width": 25,
+                        "height": 25
+                    },
+                    "data": {
+                        "flowPercent": 0
+                    },
+                    "style": {
+                        "stroke": "#6c757d"
+                    },
+                    "id": "reactflow__edge-n_k8i3z5tf-n_59n7hima"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_8v95pqn",
+                    "sourceHandle": "e",
+                    "target": "n_9jgt12z",
+                    "targetHandle": "a",
+                    "markerEnd": {
+                        "type": MarkerType.ArrowClosed,
+                        "width": 25,
+                        "height": 25
+                    },
+                    "data": {
+                        "flowPercent": 12.48
+                    },
+                    "style": {
+                        "stroke": "#6c757d"
+                    },
+                    "id": "reactflow__edge-n_8v95pqne-n_9jgt12za"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_8v95pqn",
+                    "sourceHandle": "e",
+                    "target": "n_jhjsv61",
+                    "targetHandle": "a",
+                    "markerEnd": {
+                        "type": MarkerType.ArrowClosed,
+                        "width": 25,
+                        "height": 25
+                    },
+                    "data": {
+                        "flowPercent": 5.35
+                    },
+                    "style": {
+                        "stroke": "#6c757d"
+                    },
+                    "id": "reactflow__edge-n_8v95pqne-n_jhjsv61a"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_8v95pqn",
+                    "sourceHandle": "e",
+                    "target": "n_35zotef",
+                    "targetHandle": "a",
+                    "markerEnd": {
+                        "type": MarkerType.ArrowClosed,
+                        "width": 25,
+                        "height": 25
+                    },
+                    "data": {
+                        "flowPercent": 0.06
+                    },
+                    "style": {
+                        "stroke": "#6c757d"
+                    },
+                    "id": "reactflow__edge-n_8v95pqne-n_35zotefa"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_9jgt12z",
+                    "sourceHandle": "e",
+                    "target": "n_40pl8g8",
+                    "targetHandle": "a",
+                    "markerEnd": {
+                        "type": MarkerType.ArrowClosed,
+                        "width": 25,
+                        "height": 25
+                    },
+                    "data": {
+                        "flowPercent": 0
+                    },
+                    "style": {
+                        "stroke": "#6c757d"
+                    },
+                    "id": "reactflow__edge-n_9jgt12ze-n_40pl8g8a"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_jhjsv61",
+                    "sourceHandle": "e",
+                    "target": "n_40pl8g8",
+                    "targetHandle": "a",
+                    "markerEnd": {
+                        "type": MarkerType.ArrowClosed,
+                        "width": 25,
+                        "height": 25
+                    },
+                    "data": {
+                        "flowPercent": 0
+                    },
+                    "style": {
+                        "stroke": "#6c757d"
+                    },
+                    "id": "reactflow__edge-n_jhjsv61e-n_40pl8g8a"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_35zotef",
+                    "sourceHandle": "e",
+                    "target": "n_ewqu18d",
+                    "targetHandle": "a",
+                    "markerEnd": {
+                        "type": MarkerType.ArrowClosed,
+                        "width": 25,
+                        "height": 25
+                    },
+                    "data": {
+                        "flowPercent": 0.06
+                    },
+                    "style": {
+                        "stroke": "#6c757d"
+                    },
+                    "id": "reactflow__edge-n_35zotefe-n_ewqu18da"
                 },
                 {
                     "animated": true,
                     "type": "step",
-                    "source": "n_jlq55u5pt",
-                    "sourceHandle": "b",
-                    "target": "n_ry7pcg7y1",
-                    "targetHandle": "a",
+                    "source": "n_ewqu18d",
+                    "sourceHandle": "e",
+                    "target": "n_fo9ndq3",
+                    "targetHandle": "b",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
                         "width": 25,
                         "height": 25
                     },
                     "data": {
-                        "flowPercent": 0
+                        "flowPercent": 2
                     },
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-n_jlq55u5ptb-n_ry7pcg7y1a"
+                    "id": "reactflow__edge-n_ewqu18de-n_fo9ndq3b",
+                    "selected": false
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "n_5yxu1fhwv",
-                    "sourceHandle": "b",
-                    "target": "n_jlq55u5pt",
-                    "targetHandle": "a",
+                    "source": "n_fo9ndq3",
+                    "sourceHandle": "e",
+                    "target": "n_ewqu18d",
+                    "targetHandle": "b",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
                         "width": 25,
                         "height": 25
                     },
                     "data": {
-                        "flowPercent": 0
+                        "flowPercent": 2
                     },
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-n_5yxu1fhwvb-n_jlq55u5pta"
-                },
-                {
-                    "animated": true,
-                    "type": "step",
-                    "source": "n_l731t9dli",
-                    "sourceHandle": "b",
-                    "target": "n_jlq55u5pt",
-                    "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
-                    "data": {
-                        "flowPercent": "1"
-                    },
-                    "style": {
-                        "stroke": "#6c757d"
-                    },
-                    "id": "reactflow__edge-n_l731t9dlib-n_jlq55u5pta"
+                    "id": "reactflow__edge-n_fo9ndq3e-n_ewqu18db"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "n_xfb32zunn",
-                    "sourceHandle": "b",
-                    "target": "n_krrdnugeq",
+                    "source": "n_zqp4xwq",
+                    "sourceHandle": "e",
+                    "target": "n_ewqu18d",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -568,19 +1197,19 @@ export const MockWaterdiagram: Diagram =
                         "height": 25
                     },
                     "data": {
-                        "flowPercent": "1"
+                        "flowPercent": 17.94
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#00a33f"
                     },
-                    "id": "reactflow__edge-n_xfb32zunnb-n_krrdnugeqa"
+                    "id": "reactflow__edge-n_zqp4xwqe-n_ewqu18da"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "n_dakkr4b7i",
-                    "sourceHandle": "b",
-                    "target": "n_krrdnugeq",
+                    "source": "n_8v95pqn",
+                    "sourceHandle": "e",
+                    "target": "n_fo9ndq3",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -588,39 +1217,39 @@ export const MockWaterdiagram: Diagram =
                         "height": 25
                     },
                     "data": {
-                        "flowPercent": "1"
+                        "flowPercent": 2.61
                     },
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-n_dakkr4b7ib-n_krrdnugeqa"
+                    "id": "reactflow__edge-n_8v95pqne-n_fo9ndq3a"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "n_wgkadbp9x",
-                    "sourceHandle": "b",
-                    "target": "n_mkjkxrzz0",
-                    "targetHandle": "a",
+                    "source": "n_ewqu18d",
+                    "sourceHandle": "f",
+                    "target": "n_35zotef",
+                    "targetHandle": "b",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
                         "width": 25,
                         "height": 25
                     },
                     "data": {
-                        "flowPercent": ".078"
+                        "flowPercent": 0.06
                     },
                     "style": {
                         "stroke": "#6c757d"
                     },
-                    "id": "reactflow__edge-n_wgkadbp9xb-n_mkjkxrzz0a"
+                    "id": "reactflow__edge-n_ewqu18df-n_35zotefb"
                 },
                 {
                     "animated": true,
                     "type": "default",
-                    "source": "n_innffif3i",
-                    "sourceHandle": "b",
-                    "target": "n_mkjkxrzz0",
+                    "source": "n_ewqu18d",
+                    "sourceHandle": "e",
+                    "target": "n_zqp4xwq",
                     "targetHandle": "a",
                     "markerEnd": {
                         "type": MarkerType.ArrowClosed,
@@ -628,12 +1257,12 @@ export const MockWaterdiagram: Diagram =
                         "height": 25
                     },
                     "data": {
-                        "flowPercent": ".078"
+                        "flowPercent": 17.94
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#00b303"
                     },
-                    "id": "reactflow__edge-n_innffif3ib-n_mkjkxrzz0a"
+                    "id": "reactflow__edge-n_ewqu18de-n_zqp4xwqa"
                 }
             ]
         },

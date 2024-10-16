@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 
 // * this const is not the same location as devServer ./dist
 const EXPORT_DIR = './dist';
@@ -24,26 +25,6 @@ module.exports = options => {
           },
           exclude: /node_modules/,
         },
-        // todo fix css module loading
-        // {
-        //   test: /\.css$/,
-        //   use: [
-        //     "style-loader",
-        //     {
-        //       loader: "css-loader",
-        //       options: {
-        //         importLoaders: 1,
-        //         modules: true,
-        //       },
-        //     },
-        //   ],
-        //   include: /\.module\.css$/,
-        // },
-        // {
-        //   test: /\.css$/,
-        //   use: ["style-loader", "css-loader"],
-        //   exclude: /\.module\.css$/,
-        // },
         {
           test: /\.css$/i,
           use: [
@@ -74,6 +55,14 @@ module.exports = options => {
     plugins: [
       new MiniCssExtractPlugin({
         filename: 'process-flow-diagram-component.css',
+      }),
+      new CopyPlugin({
+        patterns: [
+            {
+                from: path.resolve(__dirname, './src/assets/'),
+                to: path.resolve(__dirname, 'dist/assets/')
+            }
+        ]
       }),
     ],
   }

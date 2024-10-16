@@ -259,8 +259,25 @@ a {
 }
 
 
-.color-underlay {
-  background-color: #ececec;
+
+.react-flow__handle {
+  background-color: #bbb;
+  border-radius: 0;
+  width: 8px;
+  height: 4px;
+  border: none;
+  min-width: 2px;
+  min-height: 2px;
+}
+
+.react-flow__handle.source-handle {
+  background-color: #000 !important;
+  border: solid 1px #000;
+}
+
+.react-flow__handle.target-handle {
+  background-color: #fff !important;
+  border: solid 1px #000;
 }
 
 .react-flow__node-waterIntake.selectable:hover, 
@@ -412,4 +429,9 @@ a {
 .diagram-checkbox-label {
   display: flex;
   align-items: center;
+}
+
+
+.color-underlay {
+  background-color: #ececec;
 }

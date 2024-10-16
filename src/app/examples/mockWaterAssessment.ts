@@ -5,20 +5,20 @@ import { Settings } from "../shared/models/settings";
 
 export const MockWaterAssessment: Assessment = {
     "name": "Water Example",
-    "createdDate": new Date("2024-06-11T19:35:48.626Z"),
-    "modifiedDate": new Date("2024-06-11T19:35:48.626Z"),
+    "createdDate": new Date("2024-10-16T16:37:36.336Z"),
+    "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
     "type": "Water",
-    "isExample": true,
+    "appVersion": "1.5.2",
     "directoryId": 2,
     "water": {
         "name": "Baseline",
         "modifications": [],
-        "setupDone": true,
+        "setupDone": false,
         "systemBasics": {
             "utilityType": "Electricity",
             "electricityCost": 0.066,
-            "notes": undefined,
-            "conductivityUnit": "MuS/cm"
+            "conductivityUnit": "MuS/cm",
+            "notes": ""
         },
         "intakeSources": [
             {
@@ -27,8 +27,42 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Municipal Water A",
                 "className": "water-intake",
                 "isValid": true,
-                "diagramNodeId": "n_sz5ulomtz",
-                "modifiedDate": new Date("2024-09-19T13:06:19.098Z"),
+                "diagramNodeId": "n_8v95pqn",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": false
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": false
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
                 "sourceType": 0,
                 "annualUse": 0,
                 "addedMotorEnergy": []
@@ -39,8 +73,42 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Municipal Water B",
                 "className": "water-intake",
                 "isValid": true,
-                "diagramNodeId": "n_mxk12ss2u",
-                "modifiedDate": new Date("2024-09-19T13:06:20.542Z"),
+                "diagramNodeId": "n_k8i3z5t",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
                 "sourceType": 0,
                 "annualUse": 0,
                 "addedMotorEnergy": []
@@ -50,11 +118,45 @@ export const MockWaterAssessment: Assessment = {
             {
                 "processComponentType": "water-discharge",
                 "hasAssessmentData": true,
-                "name": "Municipal Sewer",
+                "name": "Municipal Sewer A",
                 "className": "water-discharge",
                 "isValid": true,
-                "diagramNodeId": "n_krrdnugeq",
-                "modifiedDate": new Date("2024-09-19T13:06:38.666Z"),
+                "diagramNodeId": "n_40pl8g8",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
                 "outletType": 0,
                 "annualUse": 0,
                 "addedMotorEnergy": []
@@ -62,11 +164,45 @@ export const MockWaterAssessment: Assessment = {
             {
                 "processComponentType": "water-discharge",
                 "hasAssessmentData": true,
-                "name": "Municipal Sewer",
+                "name": "Municipal Sewer B",
                 "className": "water-discharge",
                 "isValid": true,
-                "diagramNodeId": "n_mkjkxrzz0",
-                "modifiedDate": new Date("2024-09-19T13:06:40.504Z"),
+                "diagramNodeId": "n_km3rucx",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
                 "outletType": 0,
                 "annualUse": 0,
                 "addedMotorEnergy": []
@@ -79,8 +215,42 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Cooling Tower",
                 "className": "water-using-system",
                 "isValid": true,
-                "diagramNodeId": "n_ry7pcg7y1",
-                "modifiedDate": new Date("2024-09-19T13:06:23.744Z"),
+                "diagramNodeId": "n_fo9ndq3",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
                 "systemType": 0,
                 "hoursPerYear": 8760,
                 "intakeSources": [
@@ -138,17 +308,50 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
-
+                "knownLosses": undefined,
             },
             {
                 "processComponentType": "water-using-system",
                 "hasAssessmentData": true,
-                "name": "Process Loop",
+                "name": "Water Using System",
                 "className": "water-using-system",
                 "isValid": true,
-                "diagramNodeId": "n_l731t9dli",
-                "modifiedDate": new Date("2024-09-19T13:06:25.303Z"),
+                "diagramNodeId": "n_35zotef",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
                 "systemType": 0,
                 "hoursPerYear": 8760,
                 "intakeSources": [
@@ -206,8 +409,7 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
-
+                "knownLosses": undefined,
             },
             {
                 "processComponentType": "water-using-system",
@@ -215,8 +417,42 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Quench Tank",
                 "className": "water-using-system",
                 "isValid": true,
-                "diagramNodeId": "n_dakkr4b7i",
-                "modifiedDate": new Date("2024-09-19T13:06:27.080Z"),
+                "diagramNodeId": "n_jhjsv61",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
                 "systemType": 0,
                 "hoursPerYear": 8760,
                 "intakeSources": [
@@ -274,280 +510,7 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
-
-            },
-            {
-                "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
-                "name": "Wash Bay",
-                "className": "water-using-system",
-                "isValid": true,
-                "diagramNodeId": "n_innffif3i",
-                "modifiedDate": new Date("2024-09-19T13:06:28.668Z"),
-                "systemType": 0,
-                "hoursPerYear": 8760,
-                "intakeSources": [
-                    {
-                        "sourceType": 0,
-                        "annualUse": 0
-                    }
-                ],
-                "processUse": {
-                    "waterRequiredMetric": 0,
-                    "waterRequiredMetricValue": 0,
-                    "waterConsumedMetric": 0,
-                    "waterConsumedMetricValue": 0,
-                    "waterLossMetric": 0,
-                    "waterLossMetricValue": 0,
-                    "annualProduction": 0,
-                    "fractionGrossWaterRecirculated": 0,
-                },
-                "coolingTower": {
-                    "tonnage": undefined,
-                    "loadFactor": undefined,
-                    "evaporationRateDegree": undefined,
-                    "temperatureDrop": undefined,
-                    "makeupConductivity": undefined,
-                    "blowdownConductivity": undefined,
-                },
-                "boilerWater": {
-                    "power": undefined,
-                    "loadFactor": undefined,
-                    "steamPerPower": undefined,
-                    "feedwaterConductivity": undefined,
-                    "makeupConductivity": undefined,
-                    "blowdownConductivity": undefined,
-                },
-                "kitchenRestroom": {
-                    "employeeCount": undefined,
-                    "workdaysPerYear": undefined,
-                    "dailyUsePerEmployee": undefined
-                },
-                "landscaping": {
-                    "areaIrrigated": undefined,
-                    "yearlyInchesIrrigated": undefined,
-                },
-                "heatEnergy": {
-                    "heatingFuelType": 0,
-                    "incomingTemp": 0,
-                    "outgoingTemp": 0,
-                    "heaterEfficiency": 0,
-                    "wasteWaterDischarge": 0
-                },
-                "addedMotorEquipment": [],
-                "sourceWater": undefined,
-                "recycledWater": undefined,
-                "recirculatedWater": undefined,
-                "dischargeWater": undefined,
-                "dischargeWaterRecycled": undefined,
-                "waterInProduct": undefined,
-                "knownLosses": undefined
-
-            },
-            {
-                "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
-                "name": "Sanitary",
-                "className": "water-using-system",
-                "isValid": true,
-                "diagramNodeId": "n_wgkadbp9x",
-                "modifiedDate": new Date("2024-09-19T13:06:30.641Z"),
-                "systemType": 0,
-                "hoursPerYear": 8760,
-                "intakeSources": [
-                    {
-                        "sourceType": 0,
-                        "annualUse": 0
-                    }
-                ],
-                "processUse": {
-                    "waterRequiredMetric": 0,
-                    "waterRequiredMetricValue": 0,
-                    "waterConsumedMetric": 0,
-                    "waterConsumedMetricValue": 0,
-                    "waterLossMetric": 0,
-                    "waterLossMetricValue": 0,
-                    "annualProduction": 0,
-                    "fractionGrossWaterRecirculated": 0,
-                },
-                "coolingTower": {
-                    "tonnage": undefined,
-                    "loadFactor": undefined,
-                    "evaporationRateDegree": undefined,
-                    "temperatureDrop": undefined,
-                    "makeupConductivity": undefined,
-                    "blowdownConductivity": undefined,
-                },
-                "boilerWater": {
-                    "power": undefined,
-                    "loadFactor": undefined,
-                    "steamPerPower": undefined,
-                    "feedwaterConductivity": undefined,
-                    "makeupConductivity": undefined,
-                    "blowdownConductivity": undefined,
-                },
-                "kitchenRestroom": {
-                    "employeeCount": undefined,
-                    "workdaysPerYear": undefined,
-                    "dailyUsePerEmployee": undefined
-                },
-                "landscaping": {
-                    "areaIrrigated": undefined,
-                    "yearlyInchesIrrigated": undefined,
-                },
-                "heatEnergy": {
-                    "heatingFuelType": 0,
-                    "incomingTemp": 0,
-                    "outgoingTemp": 0,
-                    "heaterEfficiency": 0,
-                    "wasteWaterDischarge": 0
-                },
-                "addedMotorEquipment": [],
-                "sourceWater": undefined,
-                "recycledWater": undefined,
-                "recirculatedWater": undefined,
-                "dischargeWater": undefined,
-                "dischargeWaterRecycled": undefined,
-                "waterInProduct": undefined,
-                "knownLosses": undefined
-
-            },
-            {
-                "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
-                "name": "Chillers",
-                "className": "water-using-system",
-                "isValid": true,
-                "diagramNodeId": "n_jlq55u5pt",
-                "modifiedDate": new Date("2024-09-19T13:06:35.060Z"),
-                "systemType": 0,
-                "hoursPerYear": 8760,
-                "intakeSources": [
-                    {
-                        "sourceType": 0,
-                        "annualUse": 0
-                    }
-                ],
-                "processUse": {
-                    "waterRequiredMetric": 0,
-                    "waterRequiredMetricValue": 0,
-                    "waterConsumedMetric": 0,
-                    "waterConsumedMetricValue": 0,
-                    "waterLossMetric": 0,
-                    "waterLossMetricValue": 0,
-                    "annualProduction": 0,
-                    "fractionGrossWaterRecirculated": 0,
-                },
-                "coolingTower": {
-                    "tonnage": undefined,
-                    "loadFactor": undefined,
-                    "evaporationRateDegree": undefined,
-                    "temperatureDrop": undefined,
-                    "makeupConductivity": undefined,
-                    "blowdownConductivity": undefined,
-                },
-                "boilerWater": {
-                    "power": undefined,
-                    "loadFactor": undefined,
-                    "steamPerPower": undefined,
-                    "feedwaterConductivity": undefined,
-                    "makeupConductivity": undefined,
-                    "blowdownConductivity": undefined,
-                },
-                "kitchenRestroom": {
-                    "employeeCount": undefined,
-                    "workdaysPerYear": undefined,
-                    "dailyUsePerEmployee": undefined
-                },
-                "landscaping": {
-                    "areaIrrigated": undefined,
-                    "yearlyInchesIrrigated": undefined,
-                },
-                "heatEnergy": {
-                    "heatingFuelType": 0,
-                    "incomingTemp": 0,
-                    "outgoingTemp": 0,
-                    "heaterEfficiency": 0,
-                    "wasteWaterDischarge": 0
-                },
-                "addedMotorEquipment": [],
-                "sourceWater": undefined,
-                "recycledWater": undefined,
-                "recirculatedWater": undefined,
-                "dischargeWater": undefined,
-                "dischargeWaterRecycled": undefined,
-                "waterInProduct": undefined,
-                "knownLosses": undefined
-
-            },
-            {
-                "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
-                "name": "Blending",
-                "className": "water-using-system",
-                "isValid": true,
-                "diagramNodeId": "n_5yxu1fhwv",
-                "modifiedDate": new Date("2024-09-19T13:06:37.043Z"),
-                "systemType": 0,
-                "hoursPerYear": 8760,
-                "intakeSources": [
-                    {
-                        "sourceType": 0,
-                        "annualUse": 0
-                    }
-                ],
-                "processUse": {
-                    "waterRequiredMetric": 0,
-                    "waterRequiredMetricValue": 0,
-                    "waterConsumedMetric": 0,
-                    "waterConsumedMetricValue": 0,
-                    "waterLossMetric": 0,
-                    "waterLossMetricValue": 0,
-                    "annualProduction": 0,
-                    "fractionGrossWaterRecirculated": 0,
-                },
-                "coolingTower": {
-                    "tonnage": undefined,
-                    "loadFactor": undefined,
-                    "evaporationRateDegree": undefined,
-                    "temperatureDrop": undefined,
-                    "makeupConductivity": undefined,
-                    "blowdownConductivity": undefined,
-                },
-                "boilerWater": {
-                    "power": undefined,
-                    "loadFactor": undefined,
-                    "steamPerPower": undefined,
-                    "feedwaterConductivity": undefined,
-                    "makeupConductivity": undefined,
-                    "blowdownConductivity": undefined,
-                },
-                "kitchenRestroom": {
-                    "employeeCount": undefined,
-                    "workdaysPerYear": undefined,
-                    "dailyUsePerEmployee": undefined
-                },
-                "landscaping": {
-                    "areaIrrigated": undefined,
-                    "yearlyInchesIrrigated": undefined,
-                },
-                "heatEnergy": {
-                    "heatingFuelType": 0,
-                    "incomingTemp": 0,
-                    "outgoingTemp": 0,
-                    "heaterEfficiency": 0,
-                    "wasteWaterDischarge": 0
-                },
-                "addedMotorEquipment": [],
-                "sourceWater": undefined,
-                "recycledWater": undefined,
-                "recirculatedWater": undefined,
-                "dischargeWater": undefined,
-                "dischargeWaterRecycled": undefined,
-                "waterInProduct": undefined,
-                "knownLosses": undefined
-
+                "knownLosses": undefined,
             },
             {
                 "processComponentType": "water-using-system",
@@ -555,8 +518,42 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Vacuum Pumps",
                 "className": "water-using-system",
                 "isValid": true,
-                "diagramNodeId": "n_xfb32zunn",
-                "modifiedDate": new Date("2024-09-19T13:07:06.789Z"),
+                "diagramNodeId": "n_9jgt12z",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
                 "systemType": 0,
                 "hoursPerYear": 8760,
                 "intakeSources": [
@@ -614,15 +611,422 @@ export const MockWaterAssessment: Assessment = {
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
                 "waterInProduct": undefined,
-                "knownLosses": undefined
+                "knownLosses": undefined,
+            },
+            {
+                "processComponentType": "water-using-system",
+                "hasAssessmentData": true,
+                "name": "Wash Bay",
+                "className": "water-using-system",
+                "isValid": true,
+                "diagramNodeId": "n_0uc4i5b",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
+                "systemType": 0,
+                "hoursPerYear": 8760,
+                "intakeSources": [
+                    {
+                        "sourceType": 0,
+                        "annualUse": 0
+                    }
+                ],
+                "processUse": {
+                    "waterRequiredMetric": 0,
+                    "waterRequiredMetricValue": 0,
+                    "waterConsumedMetric": 0,
+                    "waterConsumedMetricValue": 0,
+                    "waterLossMetric": 0,
+                    "waterLossMetricValue": 0,
+                    "annualProduction": 0,
+                    "fractionGrossWaterRecirculated": 0,
+                },
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
+                "heatEnergy": {
+                    "heatingFuelType": 0,
+                    "incomingTemp": 0,
+                    "outgoingTemp": 0,
+                    "heaterEfficiency": 0,
+                    "wasteWaterDischarge": 0
+                },
+                "addedMotorEquipment": [],
+                "sourceWater": undefined,
+                "recycledWater": undefined,
+                "recirculatedWater": undefined,
+                "dischargeWater": undefined,
+                "dischargeWaterRecycled": undefined,
+                "waterInProduct": undefined,
+                "knownLosses": undefined,
+            },
+            {
+                "processComponentType": "water-using-system",
+                "hasAssessmentData": true,
+                "name": "Sanitary",
+                "className": "water-using-system",
+                "isValid": true,
+                "diagramNodeId": "n_59n7him",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
+                "systemType": 0,
+                "hoursPerYear": 8760,
+                "intakeSources": [
+                    {
+                        "sourceType": 0,
+                        "annualUse": 0
+                    }
+                ],
+                "processUse": {
+                    "waterRequiredMetric": 0,
+                    "waterRequiredMetricValue": 0,
+                    "waterConsumedMetric": 0,
+                    "waterConsumedMetricValue": 0,
+                    "waterLossMetric": 0,
+                    "waterLossMetricValue": 0,
+                    "annualProduction": 0,
+                    "fractionGrossWaterRecirculated": 0,
+                },
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
+                "heatEnergy": {
+                    "heatingFuelType": 0,
+                    "incomingTemp": 0,
+                    "outgoingTemp": 0,
+                    "heaterEfficiency": 0,
+                    "wasteWaterDischarge": 0
+                },
+                "addedMotorEquipment": [],
+                "sourceWater": undefined,
+                "recycledWater": undefined,
+                "recirculatedWater": undefined,
+                "dischargeWater": undefined,
+                "dischargeWaterRecycled": undefined,
+                "waterInProduct": undefined,
+                "knownLosses": undefined,
+            },
+            {
+                "processComponentType": "water-using-system",
+                "hasAssessmentData": true,
+                "name": "Chillers",
+                "className": "water-using-system",
+                "isValid": true,
+                "diagramNodeId": "n_ewqu18d",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
+                "systemType": 0,
+                "hoursPerYear": 8760,
+                "intakeSources": [
+                    {
+                        "sourceType": 0,
+                        "annualUse": 0
+                    }
+                ],
+                "processUse": {
+                    "waterRequiredMetric": 0,
+                    "waterRequiredMetricValue": 0,
+                    "waterConsumedMetric": 0,
+                    "waterConsumedMetricValue": 0,
+                    "waterLossMetric": 0,
+                    "waterLossMetricValue": 0,
+                    "annualProduction": 0,
+                    "fractionGrossWaterRecirculated": 0,
+                },
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
+                "heatEnergy": {
+                    "heatingFuelType": 0,
+                    "incomingTemp": 0,
+                    "outgoingTemp": 0,
+                    "heaterEfficiency": 0,
+                    "wasteWaterDischarge": 0
+                },
+                "addedMotorEquipment": [],
+                "sourceWater": undefined,
+                "recycledWater": undefined,
+                "recirculatedWater": undefined,
+                "dischargeWater": undefined,
+                "dischargeWaterRecycled": undefined,
+                "waterInProduct": undefined,
+                "knownLosses": undefined,
+            },
+            {
+                "processComponentType": "water-using-system",
+                "hasAssessmentData": true,
+                "name": "Blending",
+                "className": "water-using-system",
+                "isValid": true,
+                "diagramNodeId": "n_zqp4xwq",
+                "modifiedDate": new Date("2024-10-16T16:37:36.336Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": false
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": false
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
+                "systemType": 0,
+                "hoursPerYear": 8760,
+                "intakeSources": [
+                    {
+                        "sourceType": 0,
+                        "annualUse": 0
+                    }
+                ],
+                "processUse": {
+                    "waterRequiredMetric": 0,
+                    "waterRequiredMetricValue": 0,
+                    "waterConsumedMetric": 0,
+                    "waterConsumedMetricValue": 0,
+                    "waterLossMetric": 0,
+                    "waterLossMetricValue": 0,
+                    "annualProduction": 0,
+                    "fractionGrossWaterRecirculated": 0,
+                },
+                "coolingTower": {
+                    "tonnage": undefined,
+                    "loadFactor": undefined,
+                    "evaporationRateDegree": undefined,
+                    "temperatureDrop": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "boilerWater": {
+                    "power": undefined,
+                    "loadFactor": undefined,
+                    "steamPerPower": undefined,
+                    "feedwaterConductivity": undefined,
+                    "makeupConductivity": undefined,
+                    "blowdownConductivity": undefined,
+                },
+                "kitchenRestroom": {
+                    "employeeCount": undefined,
+                    "workdaysPerYear": undefined,
+                    "dailyUsePerEmployee": undefined
+                },
+                "landscaping": {
+                    "areaIrrigated": undefined,
+                    "yearlyInchesIrrigated": undefined,
+                },
+                "heatEnergy": {
+                    "heatingFuelType": 0,
+                    "incomingTemp": 0,
+                    "outgoingTemp": 0,
+                    "heaterEfficiency": 0,
+                    "wasteWaterDischarge": 0
+                },
+                "addedMotorEquipment": [],
+                "sourceWater": undefined,
+                "recycledWater": undefined,
+                "recirculatedWater": undefined,
+                "dischargeWater": undefined,
+                "dischargeWaterRecycled": undefined,
+                "waterInProduct": undefined,
+                "knownLosses": undefined,
             }
         ],
         "waterTreatments": [],
         "wasteWaterTreatments": []
     },
-    "selected": false,
-    "appVersion": "1.5.3"
+    "id": 75,
+    "diagramId": 1
 }
+
+
+
 
 
 export const MockWaterAssessmentSettings: Settings = {
