@@ -39,7 +39,7 @@ const Flow = (props: FlowProps) => {
   let existingEdges = [];
   
   if (props.processDiagram) {
-    existingNodes = props.processDiagram.flowDiagramData.nodes.map((node: Node<ProcessFlowPart> )=> {
+    existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart> )=> {
       if (node.data.processComponentType !== 'splitter-node') {
         node.data.setManageDataId = setManageDataId;
         node.data.openEditData = setIsDataDrawerOpen;
@@ -51,7 +51,7 @@ const Flow = (props: FlowProps) => {
       }
     });
 
-    
+
     existingEdges = props.processDiagram.flowDiagramData.edges;
   }
 
@@ -66,7 +66,7 @@ const Flow = (props: FlowProps) => {
 
   useEffect(() => {
     // * on reactFlowInstance initialize with assessment added nodes
-    if (reactFlowInstance && props.height && staleNodes) {
+    if (reactFlowInstance && props.height && staleNodes && staleNodes.length > 0) {
       let updatedNodes = updateStaleNodes(reactFlowInstance, [...staleNodes], props.height);
       setStaleNodes(undefined);
       setNodes(nds => nds.concat(updatedNodes));
@@ -74,7 +74,6 @@ const Flow = (props: FlowProps) => {
   }, [reactFlowInstance]);
 
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
-  // todo test could use useUserEventDebounce if copied/splices/map?
 
   useEffect(() => {
     if (!staleNodes) {
@@ -157,7 +156,6 @@ const Flow = (props: FlowProps) => {
   const updateEdgeType = useCallback((edgeType) => {
     changeExistingEdgesType(setEdges, edgeType);
   }, []);
-
 
   return (
     props.height &&

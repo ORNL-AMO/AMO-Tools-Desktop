@@ -55,7 +55,7 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
     if (nodeType.includes('splitter-node')) {
       newNode = {
         id: getNewNodeId(),
-        type: getAdaptedTypeString(nodeType),
+        type: nodeType,
         position: position,
         className: nodeType,
         data: {}
@@ -65,8 +65,8 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
       newProcessComponent.setManageDataId = setManageDataId;
       newProcessComponent.openEditData = setIsDrawerOpen;
       newNode = getNewNode(nodeType, newProcessComponent, position);
-      newNode.type = getAdaptedTypeString(newNode.type);  
     }
+    newNode.type = getAdaptedTypeString(newNode.type);  
 
     setNodes((nds) => {
       return nds.concat(newNode)
