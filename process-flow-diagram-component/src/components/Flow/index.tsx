@@ -34,6 +34,7 @@ const Flow = (props: FlowProps) => {
   const [manageDataId, setManageDataId] = useState(undefined);
   const [isDataDrawerOpen, setIsDataDrawerOpen] = useState(false);
 
+  // * nodes with createdByAssessment
   let staleParentNodes = [];
   let existingNodes = [];
   let existingEdges = [];
@@ -66,9 +67,9 @@ const Flow = (props: FlowProps) => {
 
   useEffect(() => {
     // * on reactFlowInstance initialize with assessment added nodes
-    if (reactFlowInstance && props.height && staleNodes && staleNodes.length > 0) {
+    if (reactFlowInstance && props.height && staleNodes.length > 0) {
       let updatedNodes = updateStaleNodes(reactFlowInstance, [...staleNodes], props.height);
-      setStaleNodes(undefined);
+      setStaleNodes([]);
       setNodes(nds => nds.concat(updatedNodes));
     }
   }, [reactFlowInstance]);
@@ -76,7 +77,7 @@ const Flow = (props: FlowProps) => {
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
 
   useEffect(() => {
-    if (!staleNodes) {
+    if (staleNodes.length === 0) {
       const dbSafeNodes = debouncedNodes.map((node: Node<ProcessFlowPart>) => {
         // * IMPORTANT - removes handler functions before db save
         return {
