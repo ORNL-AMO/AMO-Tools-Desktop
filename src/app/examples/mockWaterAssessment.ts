@@ -23,7 +23,7 @@ export const MockWaterAssessment: Assessment = {
         "intakeSources": [
             {
                 "processComponentType": "water-intake",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Municipal Water A",
                 "className": "water-intake",
                 "isValid": true,
@@ -69,7 +69,7 @@ export const MockWaterAssessment: Assessment = {
             },
             {
                 "processComponentType": "water-intake",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Municipal Water B",
                 "className": "water-intake",
                 "isValid": true,
@@ -117,7 +117,7 @@ export const MockWaterAssessment: Assessment = {
         "dischargeOutlets": [
             {
                 "processComponentType": "water-discharge",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Municipal Sewer A",
                 "className": "water-discharge",
                 "isValid": true,
@@ -163,7 +163,7 @@ export const MockWaterAssessment: Assessment = {
             },
             {
                 "processComponentType": "water-discharge",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Municipal Sewer B",
                 "className": "water-discharge",
                 "isValid": true,
@@ -211,7 +211,7 @@ export const MockWaterAssessment: Assessment = {
         "waterUsingSystems": [
             {
                 "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Cooling Tower",
                 "className": "water-using-system",
                 "isValid": true,
@@ -312,7 +312,7 @@ export const MockWaterAssessment: Assessment = {
             },
             {
                 "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Water Using System",
                 "className": "water-using-system",
                 "isValid": true,
@@ -413,7 +413,7 @@ export const MockWaterAssessment: Assessment = {
             },
             {
                 "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Quench Tank",
                 "className": "water-using-system",
                 "isValid": true,
@@ -514,7 +514,7 @@ export const MockWaterAssessment: Assessment = {
             },
             {
                 "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Vacuum Pumps",
                 "className": "water-using-system",
                 "isValid": true,
@@ -615,7 +615,7 @@ export const MockWaterAssessment: Assessment = {
             },
             {
                 "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Wash Bay",
                 "className": "water-using-system",
                 "isValid": true,
@@ -716,7 +716,7 @@ export const MockWaterAssessment: Assessment = {
             },
             {
                 "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Sanitary",
                 "className": "water-using-system",
                 "isValid": true,
@@ -817,7 +817,7 @@ export const MockWaterAssessment: Assessment = {
             },
             {
                 "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Chillers",
                 "className": "water-using-system",
                 "isValid": true,
@@ -918,7 +918,7 @@ export const MockWaterAssessment: Assessment = {
             },
             {
                 "processComponentType": "water-using-system",
-                "hasAssessmentData": true,
+                "createdByAssessment": true,
                 "name": "Blending",
                 "className": "water-using-system",
                 "isValid": true,
@@ -1018,8 +1018,198 @@ export const MockWaterAssessment: Assessment = {
                 "knownLosses": undefined,
             }
         ],
-        "waterTreatments": [],
-        "wasteWaterTreatments": []
+        "waterTreatments": [
+            {
+                "processComponentType": "water-treatment",
+                "createdByAssessment": false,
+                "name": "Water Treatment",
+                "className": "water-treatment",
+                "isValid": true,
+                "diagramNodeId": "n_kqvywf4",
+                "modifiedDate": new Date("2024-10-16T17:45:42.331Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
+                "treatmentType": 0,
+                "customType": null,
+                "cost": 2.99,
+                "flowValue": 0
+            },
+            {
+                "processComponentType": "water-treatment",
+                "createdByAssessment": false,
+                "name": "Water Treatment",
+                "className": "water-treatment",
+                "isValid": true,
+                "diagramNodeId": "n_eaxzfq5",
+                "modifiedDate": new Date("2024-10-16T17:46:02.854Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
+                "treatmentType": 7,
+                "customType": null,
+                "cost": 5.99,
+                "flowValue": 0
+            }
+        ],
+        "wasteWaterTreatments": [
+            {
+                "processComponentType": "waste-water-treatment",
+                "createdByAssessment": false,
+                "name": "Waste Water Treatment",
+                "className": "waste-water-treatment",
+                "isValid": true,
+                "diagramNodeId": "n_y6s78qz",
+                "modifiedDate": new Date("2024-10-16T17:45:48.269Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
+                "treatmentType": 0,
+                "customType": null,
+                "cost": 1.99,
+                "flowValue": 0
+            },
+            {
+                "processComponentType": "waste-water-treatment",
+                "createdByAssessment": false,
+                "name": "Waste Water Treatment",
+                "className": "waste-water-treatment",
+                "isValid": true,
+                "diagramNodeId": "n_71vy6g6",
+                "modifiedDate": new Date("2024-10-16T17:45:55.049Z"),
+                "handles": [
+                    {
+                        "id": "a",
+                        "visible": true
+                    },
+                    {
+                        "id": "b",
+                        "visible": true
+                    },
+                    {
+                        "id": "c",
+                        "visible": false
+                    },
+                    {
+                        "id": "d",
+                        "visible": false
+                    },
+                    {
+                        "id": "e",
+                        "visible": true
+                    },
+                    {
+                        "id": "f",
+                        "visible": true
+                    },
+                    {
+                        "id": "g",
+                        "visible": false
+                    },
+                    {
+                        "id": "h",
+                        "visible": false
+                    }
+                ],
+                "treatmentType": 6,
+                "customType": null,
+                "cost": 3.99,
+                "flowValue": 0
+            }
+        ]
     },
     "id": 75,
     "diagramId": 1

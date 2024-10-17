@@ -26,7 +26,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-intake",
                     "data": {
                         "processComponentType": "water-intake",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Municipal Water A",
                         "className": "water-intake",
                         "isValid": true,
@@ -91,7 +91,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-intake",
                     "data": {
                         "processComponentType": "water-intake",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Municipal Water B",
                         "className": "water-intake",
                         "isValid": true,
@@ -156,7 +156,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-discharge",
                     "data": {
                         "processComponentType": "water-discharge",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Municipal Sewer A",
                         "className": "water-discharge",
                         "isValid": true,
@@ -221,7 +221,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-discharge",
                     "data": {
                         "processComponentType": "water-discharge",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Municipal Sewer B",
                         "className": "water-discharge",
                         "isValid": true,
@@ -286,7 +286,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-using-system",
                     "data": {
                         "processComponentType": "water-using-system",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Cooling Tower",
                         "className": "water-using-system",
                         "isValid": true,
@@ -369,7 +369,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-using-system",
                     "data": {
                         "processComponentType": "water-using-system",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Water Using System",
                         "className": "water-using-system",
                         "isValid": true,
@@ -452,7 +452,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-using-system",
                     "data": {
                         "processComponentType": "water-using-system",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Quench Tank",
                         "className": "water-using-system",
                         "isValid": true,
@@ -535,7 +535,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-using-system",
                     "data": {
                         "processComponentType": "water-using-system",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Vacuum Pumps",
                         "className": "water-using-system",
                         "isValid": true,
@@ -618,7 +618,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-using-system",
                     "data": {
                         "processComponentType": "water-using-system",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Wash Bay",
                         "className": "water-using-system",
                         "isValid": true,
@@ -701,7 +701,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-using-system",
                     "data": {
                         "processComponentType": "water-using-system",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Sanitary",
                         "className": "water-using-system",
                         "isValid": true,
@@ -784,7 +784,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-using-system",
                     "data": {
                         "processComponentType": "water-using-system",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Chillers",
                         "className": "water-using-system",
                         "isValid": true,
@@ -867,7 +867,7 @@ export const MockWaterdiagram: Diagram =
                     "className": "water-using-system",
                     "data": {
                         "processComponentType": "water-using-system",
-                        "hasAssessmentData": true,
+                        "createdByAssessment": true,
                         "name": "Blending",
                         "className": "water-using-system",
                         "isValid": true,

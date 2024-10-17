@@ -45,14 +45,14 @@ export interface ProcessFlowParentState {
 
  /**
  * Respresents a diagram node. is extended by Water Process Component types which hold assessment data
- * @param hasAssessmentData If WaterProcessComponent properties have been initialized - assessment form properties etc...
+ * @param createdByAssessment If WaterProcessComponent properties have been initialized - assessment form properties etc...
  */
   export interface ProcessFlowPart extends Record<string, unknown>{
     name: string,
     processComponentType: ProcessFlowNodeType,
     className: ProcessFlowPartStyleClass,
     isValid: boolean,
-    hasAssessmentData: boolean,
+    createdByAssessment: boolean,
     // * id for diagram targetting/sourcing
     diagramNodeId?: string,
     modifiedDate?: Date,
@@ -128,7 +128,7 @@ const getDefaultHandles = (): HandleOption[] => {
       name: 'Intake Source',
       className: 'water-intake',
       isValid: true,
-      hasAssessmentData: false,
+      createdByAssessment: false,
       handles: getDefaultHandles()
     },
     {
@@ -136,7 +136,7 @@ const getDefaultHandles = (): HandleOption[] => {
       name: 'Water Using System',
       className: 'water-using-system',
       isValid: true,
-      hasAssessmentData: false,
+      createdByAssessment: false,
       handles: getDefaultHandles()
     },
     {
@@ -144,7 +144,7 @@ const getDefaultHandles = (): HandleOption[] => {
       name: 'Discharge Outlet',
       className: 'water-discharge',
       isValid: true,
-      hasAssessmentData: false,
+      createdByAssessment: false,
       handles: getDefaultHandles()
     },
     {
@@ -152,7 +152,7 @@ const getDefaultHandles = (): HandleOption[] => {
       name: 'Water Treatment',
       className: 'water-treatment',
       isValid: true,
-      hasAssessmentData: false,
+      createdByAssessment: false,
       handles: getDefaultHandles()
     },
     {
@@ -160,7 +160,7 @@ const getDefaultHandles = (): HandleOption[] => {
       name: 'Waste Water Treatment',
       className: 'waste-water-treatment',
       isValid: true,
-      hasAssessmentData: false,
+      createdByAssessment: false,
       handles: getDefaultHandles()
     },
     // {
@@ -181,7 +181,7 @@ export const getNewProcessComponent = (processComponentType): ProcessFlowPart =>
   let diagramComponent: ProcessFlowPart = processFlowDiagramParts.find(part => part.processComponentType === processComponentType);
   let newProcessComponent: ProcessFlowPart = {
     processComponentType: diagramComponent.processComponentType,
-    hasAssessmentData: false,
+    createdByAssessment: false,
     name: diagramComponent.name,
     className: diagramComponent.className,
     isValid: diagramComponent.isValid,

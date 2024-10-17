@@ -47,7 +47,7 @@ export type DiagramNode = Node<{
   processComponentType: ProcessFlowNodeType,
   className: ProcessFlowPartStyleClass,
   isValid: boolean,
-  hasAssessmentData: boolean,
+  createdByAssessment: boolean,
   diagramNodeId?: string,
   modifiedDate?: Date,
   handles?: Array<HandleOption>,

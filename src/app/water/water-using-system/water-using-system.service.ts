@@ -62,7 +62,7 @@ export class WaterUsingSystemService {
     }
     waterUsingSystem = {
       ...newComponent,
-      hasAssessmentData: true,
+      createdByAssessment: true,
       systemType: 0,
       hoursPerYear: 8760,
       intakeSources: [
