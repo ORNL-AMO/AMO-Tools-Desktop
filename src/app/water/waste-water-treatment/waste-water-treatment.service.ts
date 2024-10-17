@@ -11,7 +11,7 @@ export class WasteWasteWaterTreatmentService {
   getFormFromObj(obj: WasteWaterTreatment): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       treatmentType: [obj.treatmentType],
-      customType: [obj.customType],
+      customTreatmentType: [obj.customTreatmentType],
       cost: [obj.cost],
       flowValue: [obj.flowValue]
     });
@@ -21,7 +21,7 @@ export class WasteWasteWaterTreatmentService {
   getWasteWaterTreatmentFromForm(form: FormGroup, wasteWaterTreatment: WasteWaterTreatment): WasteWaterTreatment {
     wasteWaterTreatment.treatmentType = form.controls.treatmentType.value;
     wasteWaterTreatment.cost = form.controls.cost.value;
-    wasteWaterTreatment.customType = form.controls.customType.value;
+    wasteWaterTreatment.customTreatmentType = form.controls.customTreatmentType.value;
     wasteWaterTreatment.flowValue = form.controls.flowValue.value;
     return wasteWaterTreatment;
   }
@@ -41,7 +41,7 @@ export class WasteWasteWaterTreatmentService {
     let wasteWaterTreatment = {
       ...newComponent,
       treatmentType: 0,
-      customType: undefined,
+      customTreatmentType: undefined,
       cost: 0,
       flowValue: 0
     };

@@ -106,7 +106,7 @@ export interface WasteWaterTreatment extends ProcessFlowPart {
 
 export interface WaterTreatment extends ProcessFlowPart {
     treatmentType: number,
-    customType: string,
+    customTreatmentType: string,
     cost: number,
     flowValue: number
 }

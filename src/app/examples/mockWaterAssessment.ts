@@ -1062,7 +1062,7 @@ export const MockWaterAssessment: Assessment = {
                     }
                 ],
                 "treatmentType": 0,
-                "customType": null,
+                "customTreatmentType": null,
                 "cost": 2.99,
                 "flowValue": 0
             },
@@ -1109,7 +1109,7 @@ export const MockWaterAssessment: Assessment = {
                     }
                 ],
                 "treatmentType": 7,
-                "customType": null,
+                "customTreatmentType": null,
                 "cost": 5.99,
                 "flowValue": 0
             }
@@ -1158,7 +1158,7 @@ export const MockWaterAssessment: Assessment = {
                     }
                 ],
                 "treatmentType": 0,
-                "customType": null,
+                "customTreatmentType": null,
                 "cost": 1.99,
                 "flowValue": 0
             },
@@ -1205,7 +1205,7 @@ export const MockWaterAssessment: Assessment = {
                     }
                 ],
                 "treatmentType": 6,
-                "customType": null,
+                "customTreatmentType": null,
                 "cost": 3.99,
                 "flowValue": 0
             }
