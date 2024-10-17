@@ -34,12 +34,13 @@ const Flow = (props: FlowProps) => {
   const [manageDataId, setManageDataId] = useState(undefined);
   const [isDataDrawerOpen, setIsDataDrawerOpen] = useState(false);
 
+  // * nodes with createdByAssessment
   let staleParentNodes = [];
   let existingNodes = [];
   let existingEdges = [];
   
   if (props.processDiagram) {
-    existingNodes = props.processDiagram.flowDiagramData.nodes.map((node: Node<ProcessFlowPart> )=> {
+    existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart> )=> {
       if (node.data.processComponentType !== 'splitter-node') {
         node.data.setManageDataId = setManageDataId;
         node.data.openEditData = setIsDataDrawerOpen;
@@ -51,7 +52,7 @@ const Flow = (props: FlowProps) => {
       }
     });
 
-    
+
     existingEdges = props.processDiagram.flowDiagramData.edges;
   }
 
@@ -66,18 +67,17 @@ const Flow = (props: FlowProps) => {
 
   useEffect(() => {
     // * on reactFlowInstance initialize with assessment added nodes
-    if (reactFlowInstance && props.height && staleNodes) {
+    if (reactFlowInstance && props.height && staleNodes.length > 0) {
       let updatedNodes = updateStaleNodes(reactFlowInstance, [...staleNodes], props.height);
-      setStaleNodes(undefined);
+      setStaleNodes([]);
       setNodes(nds => nds.concat(updatedNodes));
     }
   }, [reactFlowInstance]);
 
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
-  // todo test could use useUserEventDebounce if copied/splices/map?
 
   useEffect(() => {
-    if (!staleNodes) {
+    if (staleNodes.length === 0) {
       const dbSafeNodes = debouncedNodes.map((node: Node<ProcessFlowPart>) => {
         // * IMPORTANT - removes handler functions before db save
         return {
@@ -157,7 +157,6 @@ const Flow = (props: FlowProps) => {
   const updateEdgeType = useCallback((edgeType) => {
     changeExistingEdgesType(setEdges, edgeType);
   }, []);
-
 
   return (
     props.height &&

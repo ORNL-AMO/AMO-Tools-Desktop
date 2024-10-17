@@ -57,7 +57,7 @@ export class WaterAssessmentConnectionsService {
       const waterProcessComponent = waterDiagramNode.data as WaterProcessComponent;
       if (waterProcessComponent.processComponentType === 'water-intake') {
         let intakeSource: IntakeSource;
-        if (!waterProcessComponent.hasAssessmentData) {
+        if (!waterProcessComponent.createdByAssessment) {
           intakeSource = this.waterComponentService.addIntakeSource(waterProcessComponent);
         } else {
           intakeSource = waterProcessComponent as IntakeSource;
@@ -66,7 +66,7 @@ export class WaterAssessmentConnectionsService {
       }
       if (waterProcessComponent.processComponentType === 'water-discharge') {
         let dischargeOutlet: DischargeOutlet;
-        if (!waterProcessComponent.hasAssessmentData) {
+        if (!waterProcessComponent.createdByAssessment) {
           dischargeOutlet = this.waterComponentService.addDischargeOutlet(waterProcessComponent);
         } else {
           dischargeOutlet = waterProcessComponent as DischargeOutlet
@@ -75,7 +75,7 @@ export class WaterAssessmentConnectionsService {
       }
       if (waterProcessComponent.processComponentType === 'water-using-system') {
         let waterUsingSystem: WaterUsingSystem;
-        if (!waterProcessComponent.hasAssessmentData) {
+        if (!waterProcessComponent.createdByAssessment) {
           waterUsingSystem = this.waterUsingSystemService.addWaterUsingSystem(waterProcessComponent);
         } else {
           waterUsingSystem = waterProcessComponent as WaterUsingSystem;

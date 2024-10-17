@@ -32,7 +32,8 @@ export const AccordionSummary = styled((props: AccordionSummaryProps) => (
     background: '#ececec',
     '& .MuiAccordionSummary-content': {
         marginLeft: theme.spacing(1),
-        flexDirection: 'column'
+        flexDirection: 'column',
+        fontSize: '16px'
     },
 }));
 

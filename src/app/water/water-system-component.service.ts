@@ -58,7 +58,7 @@ export class WaterSystemComponentService {
     }
     intakeSource = {
       ...newComponent,
-      hasAssessmentData: true,
+      createdByAssessment: true,
       sourceType: 0,
       annualUse: 0,
       addedMotorEnergy: []
@@ -99,7 +99,7 @@ export class WaterSystemComponentService {
     
     dischargeOutlet = {
       ...newComponent,
-      hasAssessmentData: true,
+      createdByAssessment: true,
       outletType: 0,
       annualUse: 0,
       addedMotorEnergy: []
