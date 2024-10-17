@@ -187,6 +187,10 @@ export class InventoryService {
   }
 
   checkDisplayAutomaticShutdown(controlType: number): boolean {
+    //5: multi-step unloading
+    //7: Inlet butterfly modulation
+    //9: Inlet guide vane modulation
+    //1: Inlet modulation with unloading
     return (controlType != undefined && controlType != 5 && controlType != 7 && controlType != 9 && controlType != 1);
   }
 

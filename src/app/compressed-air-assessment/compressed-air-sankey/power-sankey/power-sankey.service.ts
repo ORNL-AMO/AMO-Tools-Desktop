@@ -355,7 +355,6 @@ export class PowerSankeyService {
     let canLookupByPressure: boolean = this.checkIsTenMultiple(pressure);
     let canLookupByTemperature: boolean = this.checkIsTenMultiple(temperature);
     let interpolateBothInputs: boolean = !canLookupByPressure && !canLookupByTemperature;
-    
     if (canLookupByPressure && canLookupByTemperature) {
       airPropertiesLookup.result = this.getAirPropertiesFromLookup(pressure, temperature);
     } else if (canLookupByTemperature) {
@@ -367,19 +366,35 @@ export class PowerSankeyService {
       let temperatureHighBound = this.getHighBound(temperature);
       let pressureLowBound = this.getLowBound(pressure);
       let pressureHighBound = this.getHighBound(pressure);
+      let lowRangeAirProperty: AirProperties = this.airPropertiesService.airPropertiesData.find(row => row.pressure === pressureLowBound && row.temperature === temperatureLowBound);
+      if(!lowRangeAirProperty){
+        console.log(pressureLowBound);
+        console.log(temperatureLowBound);
+        lowRangeAirProperty = {
+          pressure: pressureLowBound,
+          temperature: temperatureLowBound,
+          c_p: 0,
+          c_v: 0,
+          density: 0,
+          enthalpy: 0,
+          compressibilityFactor: 0         
+        }
+      }
+      let highRangeAirProperty: AirProperties = this.airPropertiesService.airPropertiesData.find(row => row.pressure === pressureHighBound && row.temperature === temperatureLowBound);
+
       airPropertiesLookup.doubleInterpolation = {
         pressure: {
           lowBound: pressureLowBound,
           highBound: pressureHighBound,
-          lowRangeAirProperty: this.airPropertiesService.airPropertiesData.find(row => row.pressure === pressureLowBound && row.temperature === temperatureLowBound),
-          highRangeAirProperty: this.airPropertiesService.airPropertiesData.find(row => row.pressure === pressureHighBound && row.temperature === temperatureLowBound),
+          lowRangeAirProperty: lowRangeAirProperty,
+          highRangeAirProperty: highRangeAirProperty,
           value: pressure
         },
         temperature: {
           lowBound: temperatureLowBound,
           highBound: temperatureHighBound,
-          lowRangeAirProperty: this.airPropertiesService.airPropertiesData.find(row => row.pressure === pressureLowBound && row.temperature === temperatureHighBound),
-          highRangeAirProperty: this.airPropertiesService.airPropertiesData.find(row => row.pressure === pressureHighBound && row.temperature === temperatureHighBound),
+          lowRangeAirProperty: lowRangeAirProperty,
+          highRangeAirProperty: highRangeAirProperty,
           value: temperature
         }
       }
