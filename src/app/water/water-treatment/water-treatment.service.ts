@@ -11,8 +11,9 @@ export class WaterTreatmentService {
   getFormFromObj(obj: WaterTreatment): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       treatmentType: [obj.treatmentType],
-      customType: [obj.customType],
+      customTreatmentType: [obj.customTreatmentType],
       cost: [obj.cost],
+      name: [obj.name],
       flowValue: [obj.flowValue]
     });
     return form;
@@ -21,7 +22,8 @@ export class WaterTreatmentService {
   getWaterTreatmentFromForm(form: FormGroup, waterTreatment: WaterTreatment): WaterTreatment {
     waterTreatment.treatmentType = form.controls.treatmentType.value;
     waterTreatment.cost = form.controls.cost.value;
-    waterTreatment.customType = form.controls.customType.value;
+    waterTreatment.name = form.controls.name.value;
+    waterTreatment.customTreatmentType = form.controls.customTreatmentType.value;
     waterTreatment.flowValue = form.controls.flowValue.value;
     return waterTreatment;
   }
@@ -35,15 +37,25 @@ export class WaterTreatmentService {
     });
   }
 
-  getDefaultWaterTreatment(): WaterTreatment {
-    let newComponent: WaterProcessComponent = getNewProcessComponent('water-treatment') as WasteWaterTreatment;
-    
-    let waterTreatment = {
+  /**
+ * Add new component or return component based from a diagram component
+ * @param processFlowPart Build from diagram component
+ */
+  addWaterTreatment(processFlowPart?: WaterProcessComponent): WaterTreatment {
+    let waterTreatment: WaterTreatment;
+    let newComponent: WaterProcessComponent;
+    if (!processFlowPart) {
+      newComponent = getNewProcessComponent('water-treatment') as WaterTreatment;
+    } else {
+      newComponent = processFlowPart as WaterTreatment;
+    }
+    waterTreatment = {
       ...newComponent,
-      treatmentType: 0,
-      customType: undefined,
-      cost: 0,
-      flowValue: 0
+      treatmentType: newComponent.treatmentType !== undefined? newComponent.treatmentType : 0,
+      customTreatmentType: newComponent.customTreatmentType,
+      cost: newComponent.cost !== undefined? newComponent.cost : 0,
+      name: newComponent.name,
+      flowValue: newComponent.flowValue
     };
     return waterTreatment;
   }

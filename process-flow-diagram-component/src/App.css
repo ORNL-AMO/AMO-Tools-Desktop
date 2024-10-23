@@ -143,7 +143,7 @@ a {
 
 .process-flow-diagram .dndnode.water-treatment {
   border: none;
-  background: #00dfcc;
+  background: #009386;
 }
 
 .process-flow-diagram .dndnode.waste-water-treatment {
@@ -250,7 +250,7 @@ a {
 
 .react-flow__node-waterTreatment,
 .react-flow__node-group {
-  background-color: #00dfcc;
+  background-color: #009386;
 }
 
 .react-flow__node-wasteWaterTreatment,
@@ -434,4 +434,17 @@ a {
 
 .color-underlay {
   background-color: #ececec;
+}
+
+.diagram-label {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: .85rem;
+}
+
+.diagram-select {
+  height: 32px;
+}
+
+select:hover {
+  cursor: pointer;
 }

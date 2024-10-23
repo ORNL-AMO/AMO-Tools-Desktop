@@ -11,23 +11,32 @@
     </div>
 
     <div *ngIf="inSystemBasics && form.controls.treatmentType.value === 15" class="form-group" 
-        [ngClass]="{'invalid': form.controls.customType.invalid}">
-        <label for="customType">Custom Treatment</label>
+        [ngClass]="{'invalid': form.controls.customTreatmentType.invalid}">
+        <label for="customTreatmentType">Custom Treatment</label>
         <div class="input-group">
-            <input name="customType" type="text" class="form-control" id="customType" formControlName="customType"
-                (input)="save()" (focus)="focusField('customType')">
+            <input name="customTreatmentType" type="text" class="form-control" id="customTreatmentType" formControlName="customTreatmentType"
+                (input)="save()" (focus)="focusField('customTreatmentType')">
         </div>
         <span class="alert-danger pull-right small"
-            *ngIf="form.controls.customType.invalid && !form.controls.customType.pristine">
-            <span *ngIf="form.controls.customType.errors.required">Value Required</span>
+            *ngIf="form.controls.customTreatmentType.invalid && !form.controls.customTreatmentType.pristine">
+            <span *ngIf="form.controls.customTreatmentType.errors.required">Value Required</span>
         </span>
     </div>
 
+    <div class="form-group">
+        <label class="small" for="name">Name</label>
+        <div class="input-group">
+            <input name="name" type="text" class="form-control" id="name" formControlName="name"
+                (input)="save()" (focus)="focusField('name')">
+        </div>
+    </div>
+
+
     <div *ngIf="!inSystemBasics" class="form-group" 
-        [ngClass]="{'invalid': form.controls.customType.invalid}">
-        <label for="customType">Treatment Type</label>
+        [ngClass]="{'invalid': form.controls.customTreatmentType.invalid}">
+        <label for="customTreatmentType">Treatment Type</label>
         <div class="input-group" *ngIf="form.controls.treatmentType.value === 15">
-            {{form.controls.customType.value}}
+            {{form.controls.customTreatmentType.value}}
         </div>
         <div class="input-group" *ngIf="form.controls.treatmentType.value !== 15">
             <select name="treatmentType" class="form-control" id="treatmentType" formControlName="treatmentType"

@@ -12,8 +12,8 @@ import TabPanel, { TabPanelBox } from './TabPanel';
 import CustomizeNode from './CustomizeNode';
 import ComponentConnectionsList from './ComponentConnectionList';
 import CustomizeEdge from './CustomizeEdge';
-import ComponentFlowsForm from './ComponentFlowsForm';
 import ComponentHandles from './ComponentHandles';
+import ComponentDataForm from './ComponentDataForm';
 
 export default function ManageDataContextDrawer(props: ManageDataContextDrawerProps) {
     const { getNodes, getEdges, setEdges, setNodes } = useReactFlow();
@@ -25,7 +25,7 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
     const allNodeEdges = getConnectedEdges([selectedNode], allEdges);
     const [connectedEdges, setConnectedEdges] = useState<Edge[]>(allNodeEdges);
 
-    const [selectedTab, setSelectedTab] = useState(connectedEdges.length !== 0? 0 : 1);
+    const [selectedTab, setSelectedTab] = useState(0);
     const [selectedEdge, setSelectedEdge] = useState<Edge>(connectedEdges[0]);
     const [nodeName, setNodeName] = useState(nodeData.name);
     const debounceRef = useRef<any>(null);
@@ -152,14 +152,14 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
             }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
                     <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
-                        <Tab sx={{fontSize: '.75rem'}} label="Flows" disabled={connectedEdges.length === 0} />
+                        <Tab sx={{fontSize: '.75rem'}} label="Data" />
                         <Tab sx={{fontSize: '.75rem'}} label="Component" />
                         <Tab sx={{fontSize: '.75rem'}} label="Connections" disabled={connectedEdges.length === 0} />
                     </Tabs>
                 </Box>
 
                 <TabPanel value={selectedTab} index={0}>
-                    <ComponentFlowsForm 
+                    <ComponentDataForm 
                         connectedEdges={connectedEdges}
                         setConnectedEdges={setConnectedEdges}
                         selectedNode={selectedNode}/>

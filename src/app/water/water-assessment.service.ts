@@ -192,7 +192,7 @@ export class WaterAssessmentService {
 
   // todo 6927 this will need work to check which treatment is requesting options
   getAvailableTreatmentOptions(treatments: WaterTreatment[] | WasteWaterTreatment[], treatmentOptions: {display: string, value: number}[]) {
-    // let existingTreatmentTypes = treatments.filter(treatment => treatment.customType !== 15).map((treatment: WaterTreatment | WasteWaterTreatment) => treatment.treatmentType);
+    // let existingTreatmentTypes = treatments.filter(treatment => treatment.customTreatmentType !== 15).map((treatment: WaterTreatment | WasteWaterTreatment) => treatment.treatmentType);
     // treatmentOptions = treatmentOptions.filter(option => !existingTreatmentTypes.includes(option.value));
     return treatmentOptions;
   }

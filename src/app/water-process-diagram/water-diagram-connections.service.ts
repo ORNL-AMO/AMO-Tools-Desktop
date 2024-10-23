@@ -38,7 +38,9 @@ export class WaterDiagramConnectionsService {
       this.setSplitterNodes(diagram.waterDiagram.flowDiagramData.nodes),
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.intakeSources, 'water-intake'),
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.dischargeOutlets, 'water-discharge'),
-      this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.waterUsingSystems, 'water-using-system')
+      this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.waterUsingSystems, 'water-using-system'),
+      this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.waterTreatments, 'water-treatment'),
+      this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.wasteWaterTreatments, 'waste-water-treatment'),
     );
     this.updateEdgesFromAssessment(diagram.waterDiagram, assessmentNodes);
 

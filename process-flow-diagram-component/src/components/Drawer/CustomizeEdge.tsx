@@ -47,8 +47,8 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
   return (
     <Box sx={{ marginTop: 1 }}>
           <Box display={'flex'} sx={{fontSize: '.75rem', marginTop: 2}} justifyContent={'space-between'} width={'100%'}>
-            <label htmlFor={selectId} style={{fontSize: '.75rem'}}>Line Type</label>
-            <select className="form-control" id={selectId} name="edgeType" style={{ marginLeft: '16px' }}
+            <label htmlFor={selectId} className="diagram-label" style={{fontSize: '.75rem'}}>Line Type</label>
+            <select className="form-control diagram-select" id={selectId} name="edgeType" style={{ marginLeft: '16px' }}
               value={edge.type}
               onChange={(e) => handleEdgeTypeChange(e.target.value)}>
               {edgeTypeOptions.map((option: SelectListOption) => {

@@ -4,13 +4,15 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram } from '../shared/models/diagram';
-import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet } from '../shared/models/water-assessment';
+import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet, WaterTreatment, WasteWaterTreatment } from '../shared/models/water-assessment';
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
 import { Settings } from '../shared/models/settings';
 import { WaterAssessmentService } from './water-assessment.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { Node } from '@xyflow/react';
+import { WaterTreatmentService } from './water-treatment/water-treatment.service';
+import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 
 @Injectable()
 export class WaterAssessmentConnectionsService {
@@ -19,6 +21,8 @@ export class WaterAssessmentConnectionsService {
     private waterDiagramService: WaterProcessDiagramService,
     private waterAssessmentService: WaterAssessmentService,
     private waterComponentService: WaterSystemComponentService,
+    private waterTreatmentService: WaterTreatmentService,
+    private wasteWaterTreatmentService: WasteWaterTreatmentService,
     private waterUsingSystemService: WaterUsingSystemService,
     private assessmentIdbService: AssessmentDbService) { }
 
@@ -51,8 +55,9 @@ export class WaterAssessmentConnectionsService {
     let intakeSources = [];
     let dischargeOutlets = [];
     let waterUsingSystems = [];
+    let waterTreatments = [];
+    let wasteWaterTreatments = [];
 
-    // todo 6771 for nodes added in diagram, set null or defaults
     diagram.waterDiagram.flowDiagramData.nodes.forEach((waterDiagramNode: Node) => {
       const waterProcessComponent = waterDiagramNode.data as WaterProcessComponent;
       if (waterProcessComponent.processComponentType === 'water-intake') {
@@ -82,11 +87,31 @@ export class WaterAssessmentConnectionsService {
         }
         waterUsingSystems.push(waterUsingSystem);
       }
+      if (waterProcessComponent.processComponentType === 'water-treatment') {
+        let waterTreatment: WaterTreatment;
+        if (!waterProcessComponent.createdByAssessment) {
+          waterTreatment = this.waterTreatmentService.addWaterTreatment(waterProcessComponent);
+        } else {
+          waterTreatment = waterProcessComponent as WaterTreatment;
+        }
+        waterTreatments.push(waterTreatment);
+      }
+      if (waterProcessComponent.processComponentType === 'waste-water-treatment') {
+        let wasteWaterTreatment: WasteWaterTreatment;
+        if (!waterProcessComponent.createdByAssessment) {
+          wasteWaterTreatment = this.wasteWaterTreatmentService.addWasteWaterTreatment(waterProcessComponent);
+        } else {
+          wasteWaterTreatment = waterProcessComponent as WasteWaterTreatment;
+        }
+        wasteWaterTreatments.push(wasteWaterTreatment);
+      }
     });
 
     waterAssessment.intakeSources = intakeSources;
     waterAssessment.dischargeOutlets = dischargeOutlets;
     waterAssessment.waterUsingSystems = waterUsingSystems;
+    waterAssessment.waterTreatments = waterTreatments;
+    waterAssessment.wasteWaterTreatments = wasteWaterTreatments;
   }
 
   async disconnectDiagram(diagramId: number) {

@@ -4,15 +4,16 @@ import { WasteWaterTreatment, WaterProcessComponent } from '../../shared/models/
 import { getNewProcessComponent } from '../../../process-flow-types/shared-process-flow-types';
 
 @Injectable()
-export class WasteWasteWaterTreatmentService {
+export class WasteWaterTreatmentService {
 
   constructor(private formBuilder: FormBuilder) { }
 
   getFormFromObj(obj: WasteWaterTreatment): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       treatmentType: [obj.treatmentType],
-      customType: [obj.customType],
+      customTreatmentType: [obj.customTreatmentType],
       cost: [obj.cost],
+      name: [obj.name],
       flowValue: [obj.flowValue]
     });
     return form;
@@ -21,7 +22,8 @@ export class WasteWasteWaterTreatmentService {
   getWasteWaterTreatmentFromForm(form: FormGroup, wasteWaterTreatment: WasteWaterTreatment): WasteWaterTreatment {
     wasteWaterTreatment.treatmentType = form.controls.treatmentType.value;
     wasteWaterTreatment.cost = form.controls.cost.value;
-    wasteWaterTreatment.customType = form.controls.customType.value;
+    wasteWaterTreatment.name = form.controls.name.value;
+    wasteWaterTreatment.customTreatmentType = form.controls.customTreatmentType.value;
     wasteWaterTreatment.flowValue = form.controls.flowValue.value;
     return wasteWaterTreatment;
   }
@@ -35,18 +37,30 @@ export class WasteWasteWaterTreatmentService {
     });
   }
 
-  getDefaultWasteWaterTreatment(): WasteWaterTreatment {
-    let newComponent: WaterProcessComponent = getNewProcessComponent('waste-water-treatment') as WasteWaterTreatment;
-    
-    let wasteWaterTreatment = {
-      ...newComponent,
-      treatmentType: 0,
-      customType: undefined,
-      cost: 0,
-      flowValue: 0
-    };
-    return wasteWaterTreatment;
-  }
+    /**
+ * Add new component or return component based from a diagram component
+ * @param processFlowPart Build from diagram component
+ */
+    addWasteWaterTreatment(processFlowPart?: WaterProcessComponent): WasteWaterTreatment {
+      let wasteWaterTreatment: WasteWaterTreatment;
+      let newComponent: WaterProcessComponent;
+      if (!processFlowPart) {
+        newComponent = getNewProcessComponent('water-treatment') as WasteWaterTreatment;
+      } else {
+        newComponent = processFlowPart as WasteWaterTreatment;
+      }
+      
+    // todo 7020 revisit which properties are getting overwritten here
+      wasteWaterTreatment = {
+        ...newComponent,
+        treatmentType: newComponent.treatmentType !== undefined? newComponent.treatmentType : 0,
+        customTreatmentType: newComponent.customTreatmentType,
+        cost: newComponent.cost,
+        name: newComponent.name,
+        flowValue: newComponent.flowValue
+      };
+      return wasteWaterTreatment;
+    }
 
   markFormDirtyToDisplayValidation(form: UntypedFormGroup) {
     for (let key in form.controls) {

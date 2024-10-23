@@ -56,7 +56,8 @@ const Sidebar = memo((props: SidebarProps) => {
                 <Grid item xs={2} sm={4} md={4} key={part.processComponentType}>
                   <WaterComponent className={`dndnode ${part.processComponentType}`}
                     onDragStart={(event) => onDragStart(event, part.processComponentType)}
-                    draggable={part.processComponentType != 'water-treatment' && part.processComponentType != 'waste-water-treatment'}>
+                    draggable={true}
+                    >
                     {part.name}
                   </WaterComponent>
                 </Grid>
@@ -75,11 +76,11 @@ const Sidebar = memo((props: SidebarProps) => {
 
 
         <Divider></Divider>
-        <Box sx={{marginTop: 1}}>
+        <Box sx={{marginTop: 1, padding: '.5rem'}}>
           <div className="sidebar-actions">
             <Box display={'flex'} flexDirection={'column'}  sx={{fontSize: '.75rem'}}>
-            <label htmlFor="edgeType">Set Line Type</label>
-            <select className="form-control" id="edgeType" name="edgeType" onChange={(e) => props.edgeTypeChangeCallback(e.target.value)}>
+            <label htmlFor="edgeType" className="diagram-label">Set Line Type</label>
+            <select className="form-control diagram-select" id="edgeType" name="edgeType" onChange={(e) => props.edgeTypeChangeCallback(e.target.value)}>
               {edgeTypeOptions.map((option: SelectListOption) => {
                 return (
                   <option key={option.value} value={option.value}>{option.display}</option>
@@ -93,7 +94,7 @@ const Sidebar = memo((props: SidebarProps) => {
             <ContinuousSlider setSliderValue={handleEdgeThicknessChange} value={edgeLineThickness}/>
           </Box>
           
-            <div style={{ margin: '1rem 0' }}>
+            <div style={{ margin: '1rem 0', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
             <label htmlFor="directional-arrows" className="diagram-checkbox-label">
                 <input
                   type="checkbox"

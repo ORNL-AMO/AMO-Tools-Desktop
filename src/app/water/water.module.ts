@@ -49,7 +49,7 @@ import { WasteWaterTreatmentComponent } from './waste-water-treatment/waste-wate
 import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WaterTreatmentService } from './water-treatment/water-treatment.service';
 import { WaterTreatmentComponent } from './water-treatment/water-treatment.component';
-import { WasteWasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
+import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 import { WaterTreatmentWrapperComponent } from './water-treatment/water-treatment-wrapper/water-treatment-wrapper.component';
 import { WasteWaterTreatmentWrapperComponent } from './waste-water-treatment/waste-water-treatment-wrapper/waste-water-treatment-wrapper.component';
 
@@ -113,7 +113,7 @@ import { WasteWaterTreatmentWrapperComponent } from './waste-water-treatment/was
     MotorEnergyService,
     SystemBasicsService,
     WaterTreatmentService,
-    WasteWasteWaterTreatmentService
+    WasteWaterTreatmentService
   ]
 })
 export class WaterModule { }
