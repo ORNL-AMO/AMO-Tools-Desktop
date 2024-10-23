@@ -100,14 +100,21 @@ export interface WaterUsingSystem extends ProcessFlowPart {
     addedMotorEquipment: MotorEnergy[],
 }
 
+// ! duplicated definition in shared-process-flow-types
 export interface WasteWaterTreatment extends ProcessFlowPart {
-    flowValue: number
+    treatmentType: number,
+    customTreatmentType: string,
+    cost: number,
+    name: string,
+    flowValue: number 
 }
 
+// ! duplicated definition in shared-process-flow-types
 export interface WaterTreatment extends ProcessFlowPart {
     treatmentType: number,
     customTreatmentType: string,
     cost: number,
+    name: string,
     flowValue: number
 }
 

@@ -13,7 +13,7 @@ import { WasteWaterTreatment, WaterAssessment } from '../shared/models/water-ass
 import { ParentContainerDimensions } from '../../process-flow-types/shared-process-flow-types';
 import { IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
-import { WasteWasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
+import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 
 @Component({
   selector: 'app-water-assessment',
@@ -59,7 +59,7 @@ export class WaterAssessmentComponent {
   showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private convertWaterAssessmentService: ConvertWaterAssessmentService, 
-    private wasteWaterTreatmentService: WasteWasteWaterTreatmentService,
+    private wasteWaterTreatmentService: WasteWaterTreatmentService,
     private waterAssessmentConnectionsService: WaterAssessmentConnectionsService,
     private assessmentDbService: AssessmentDbService, 
     private cd: ChangeDetectorRef, 
@@ -181,7 +181,6 @@ export class WaterAssessmentComponent {
 
   async setDiagram() {
     if (this.assessment.diagramId) {
-      this.diagramId = this.assessment.diagramId;
       await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
     } else {
       await this.waterAssessmentConnectionsService.createAssesmentDiagram(this.assessment, this.settings);
@@ -213,7 +212,7 @@ export class WaterAssessmentComponent {
 
   addNewWasteWaterTreatment() {
     this.assessment.water.wasteWaterTreatments.push(
-      this.wasteWaterTreatmentService.getDefaultWasteWaterTreatment()
+      this.wasteWaterTreatmentService.addWasteWaterTreatment()
     );
   }
 

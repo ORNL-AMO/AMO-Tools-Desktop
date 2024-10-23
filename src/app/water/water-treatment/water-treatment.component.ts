@@ -5,8 +5,8 @@ import { Settings } from '../../shared/models/settings';
 import { WaterTreatmentService } from './water-treatment.service';
 import { WaterAssessmentService } from '../water-assessment.service';
 import { copyObject } from '../../shared/helperFunctions';
-import { waterTreatmentTypeOptions } from '../waterConstants';
 import { Subscription } from 'rxjs';
+import { waterTreatmentTypeOptions } from '../../../process-flow-types/shared-process-flow-constants';
 
 @Component({
   selector: 'app-water-treatment',

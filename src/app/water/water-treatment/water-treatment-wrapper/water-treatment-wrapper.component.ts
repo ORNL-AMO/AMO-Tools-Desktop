@@ -31,7 +31,7 @@ export class WaterTreatmentWrapperComponent {
 
   addNewWaterTreatment() {
     this.waterAssessment.waterTreatments.push(
-      this.waterTreatmentService.getDefaultWaterTreatment()
+      this.waterTreatmentService.addWaterTreatment()
     );
   }
 

@@ -20,8 +20,8 @@ export const MockWaterdiagram: Diagram =
                     "id": "n_8v95pqn",
                     "type": "waterIntake",
                     "position": {
-                        "x": -153,
-                        "y": 156
+                        "x": -367,
+                        "y": 214
                     },
                     "className": "water-intake",
                     "data": {
@@ -31,7 +31,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-intake",
                         "isValid": true,
                         "diagramNodeId": "n_8v95pqn",
-                        "modifiedDate": "2024-10-16T15:41:39.156Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -85,8 +85,8 @@ export const MockWaterdiagram: Diagram =
                     "id": "n_k8i3z5t",
                     "type": "waterIntake",
                     "position": {
-                        "x": -107,
-                        "y": 533
+                        "x": -329.2528762805359,
+                        "y": 470.8313632781718
                     },
                     "className": "water-intake",
                     "data": {
@@ -96,7 +96,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-intake",
                         "isValid": true,
                         "diagramNodeId": "n_k8i3z5t",
-                        "modifiedDate": "2024-10-16T15:41:41.597Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -150,8 +150,8 @@ export const MockWaterdiagram: Diagram =
                     "id": "n_40pl8g8",
                     "type": "waterDischarge",
                     "position": {
-                        "x": 1207,
-                        "y": 151
+                        "x": 1172.8072498029944,
+                        "y": 76.39763593380613
                     },
                     "className": "water-discharge",
                     "data": {
@@ -161,7 +161,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-discharge",
                         "isValid": true,
                         "diagramNodeId": "n_40pl8g8",
-                        "modifiedDate": "2024-10-16T15:41:58.374Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -226,7 +226,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-discharge",
                         "isValid": true,
                         "diagramNodeId": "n_km3rucx",
-                        "modifiedDate": "2024-10-16T15:42:00.037Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -280,8 +280,8 @@ export const MockWaterdiagram: Diagram =
                     "id": "n_fo9ndq3",
                     "type": "waterUsingSystem",
                     "position": {
-                        "x": 308.0472795183723,
-                        "y": -146.81458333333333
+                        "x": 298.0472795183723,
+                        "y": -270.8145833333333
                     },
                     "className": "water-using-system",
                     "data": {
@@ -291,7 +291,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_fo9ndq3",
-                        "modifiedDate": "2024-10-16T15:41:43.132Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -336,15 +336,24 @@ export const MockWaterdiagram: Diagram =
                         ],
                         "processUse": {
                             "waterRequiredMetric": 0,
+                            "waterRequiredMetricValue": 0,
                             "waterConsumedMetric": 0,
-                            "waterLossMetric": 0
+                            "waterConsumedMetricValue": 0,
+                            "waterLossMetric": 0,
+                            "waterLossMetricValue": 0,
+                            "annualProduction": 0,
+                            "fractionGrossWaterRecirculated": 0
                         },
                         "coolingTower": {},
                         "boilerWater": {},
                         "kitchenRestroom": {},
                         "landscaping": {},
                         "heatEnergy": {
-                            "heatingFuelType": 0
+                            "heatingFuelType": 0,
+                            "incomingTemp": 0,
+                            "outgoingTemp": 0,
+                            "heaterEfficiency": 0,
+                            "wasteWaterDischarge": 0
                         },
                         "addedMotorEquipment": []
                     },
@@ -363,8 +372,8 @@ export const MockWaterdiagram: Diagram =
                     "id": "n_35zotef",
                     "type": "waterUsingSystem",
                     "position": {
-                        "x": 321,
-                        "y": 38
+                        "x": 285.5975395538644,
+                        "y": -105.25729350925091
                     },
                     "className": "water-using-system",
                     "data": {
@@ -374,7 +383,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_35zotef",
-                        "modifiedDate": "2024-10-16T15:41:44.719Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -419,15 +428,24 @@ export const MockWaterdiagram: Diagram =
                         ],
                         "processUse": {
                             "waterRequiredMetric": 0,
+                            "waterRequiredMetricValue": 0,
                             "waterConsumedMetric": 0,
-                            "waterLossMetric": 0
+                            "waterConsumedMetricValue": 0,
+                            "waterLossMetric": 0,
+                            "waterLossMetricValue": 0,
+                            "annualProduction": 0,
+                            "fractionGrossWaterRecirculated": 0
                         },
                         "coolingTower": {},
                         "boilerWater": {},
                         "kitchenRestroom": {},
                         "landscaping": {},
                         "heatEnergy": {
-                            "heatingFuelType": 0
+                            "heatingFuelType": 0,
+                            "incomingTemp": 0,
+                            "outgoingTemp": 0,
+                            "heaterEfficiency": 0,
+                            "wasteWaterDischarge": 0
                         },
                         "addedMotorEquipment": []
                     },
@@ -446,8 +464,8 @@ export const MockWaterdiagram: Diagram =
                     "id": "n_jhjsv61",
                     "type": "waterUsingSystem",
                     "position": {
-                        "x": 304,
-                        "y": 158
+                        "x": 286,
+                        "y": 30
                     },
                     "className": "water-using-system",
                     "data": {
@@ -457,7 +475,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_jhjsv61",
-                        "modifiedDate": "2024-10-16T15:41:45.761Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -502,15 +520,24 @@ export const MockWaterdiagram: Diagram =
                         ],
                         "processUse": {
                             "waterRequiredMetric": 0,
+                            "waterRequiredMetricValue": 0,
                             "waterConsumedMetric": 0,
-                            "waterLossMetric": 0
+                            "waterConsumedMetricValue": 0,
+                            "waterLossMetric": 0,
+                            "waterLossMetricValue": 0,
+                            "annualProduction": 0,
+                            "fractionGrossWaterRecirculated": 0
                         },
                         "coolingTower": {},
                         "boilerWater": {},
                         "kitchenRestroom": {},
                         "landscaping": {},
                         "heatEnergy": {
-                            "heatingFuelType": 0
+                            "heatingFuelType": 0,
+                            "incomingTemp": 0,
+                            "outgoingTemp": 0,
+                            "heaterEfficiency": 0,
+                            "wasteWaterDischarge": 0
                         },
                         "addedMotorEquipment": []
                     },
@@ -529,8 +556,8 @@ export const MockWaterdiagram: Diagram =
                     "id": "n_9jgt12z",
                     "type": "waterUsingSystem",
                     "position": {
-                        "x": 292,
-                        "y": 286
+                        "x": 295.1084318360914,
+                        "y": 324.85539795114266
                     },
                     "className": "water-using-system",
                     "data": {
@@ -540,7 +567,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_9jgt12z",
-                        "modifiedDate": "2024-10-16T15:41:46.932Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -585,15 +612,24 @@ export const MockWaterdiagram: Diagram =
                         ],
                         "processUse": {
                             "waterRequiredMetric": 0,
+                            "waterRequiredMetricValue": 0,
                             "waterConsumedMetric": 0,
-                            "waterLossMetric": 0
+                            "waterConsumedMetricValue": 0,
+                            "waterLossMetric": 0,
+                            "waterLossMetricValue": 0,
+                            "annualProduction": 0,
+                            "fractionGrossWaterRecirculated": 0
                         },
                         "coolingTower": {},
                         "boilerWater": {},
                         "kitchenRestroom": {},
                         "landscaping": {},
                         "heatEnergy": {
-                            "heatingFuelType": 0
+                            "heatingFuelType": 0,
+                            "incomingTemp": 0,
+                            "outgoingTemp": 0,
+                            "heaterEfficiency": 0,
+                            "wasteWaterDischarge": 0
                         },
                         "addedMotorEquipment": []
                     },
@@ -623,7 +659,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_0uc4i5b",
-                        "modifiedDate": "2024-10-16T15:41:49.451Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -668,15 +704,24 @@ export const MockWaterdiagram: Diagram =
                         ],
                         "processUse": {
                             "waterRequiredMetric": 0,
+                            "waterRequiredMetricValue": 0,
                             "waterConsumedMetric": 0,
-                            "waterLossMetric": 0
+                            "waterConsumedMetricValue": 0,
+                            "waterLossMetric": 0,
+                            "waterLossMetricValue": 0,
+                            "annualProduction": 0,
+                            "fractionGrossWaterRecirculated": 0
                         },
                         "coolingTower": {},
                         "boilerWater": {},
                         "kitchenRestroom": {},
                         "landscaping": {},
                         "heatEnergy": {
-                            "heatingFuelType": 0
+                            "heatingFuelType": 0,
+                            "incomingTemp": 0,
+                            "outgoingTemp": 0,
+                            "heaterEfficiency": 0,
+                            "wasteWaterDischarge": 0
                         },
                         "addedMotorEquipment": []
                     },
@@ -706,7 +751,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_59n7him",
-                        "modifiedDate": "2024-10-16T15:41:51.107Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -751,15 +796,24 @@ export const MockWaterdiagram: Diagram =
                         ],
                         "processUse": {
                             "waterRequiredMetric": 0,
+                            "waterRequiredMetricValue": 0,
                             "waterConsumedMetric": 0,
-                            "waterLossMetric": 0
+                            "waterConsumedMetricValue": 0,
+                            "waterLossMetric": 0,
+                            "waterLossMetricValue": 0,
+                            "annualProduction": 0,
+                            "fractionGrossWaterRecirculated": 0
                         },
                         "coolingTower": {},
                         "boilerWater": {},
                         "kitchenRestroom": {},
                         "landscaping": {},
                         "heatEnergy": {
-                            "heatingFuelType": 0
+                            "heatingFuelType": 0,
+                            "incomingTemp": 0,
+                            "outgoingTemp": 0,
+                            "heaterEfficiency": 0,
+                            "wasteWaterDischarge": 0
                         },
                         "addedMotorEquipment": []
                     },
@@ -778,8 +832,8 @@ export const MockWaterdiagram: Diagram =
                     "id": "n_ewqu18d",
                     "type": "waterUsingSystem",
                     "position": {
-                        "x": 773.5580848648738,
-                        "y": -53.87320004861701
+                        "x": 697.8352322249998,
+                        "y": -164.9213481967652
                     },
                     "className": "water-using-system",
                     "data": {
@@ -789,7 +843,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_ewqu18d",
-                        "modifiedDate": "2024-10-16T15:41:54.751Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -834,15 +888,24 @@ export const MockWaterdiagram: Diagram =
                         ],
                         "processUse": {
                             "waterRequiredMetric": 0,
+                            "waterRequiredMetricValue": 0,
                             "waterConsumedMetric": 0,
-                            "waterLossMetric": 0
+                            "waterConsumedMetricValue": 0,
+                            "waterLossMetric": 0,
+                            "waterLossMetricValue": 0,
+                            "annualProduction": 0,
+                            "fractionGrossWaterRecirculated": 0
                         },
                         "coolingTower": {},
                         "boilerWater": {},
                         "kitchenRestroom": {},
                         "landscaping": {},
                         "heatEnergy": {
-                            "heatingFuelType": 0
+                            "heatingFuelType": 0,
+                            "incomingTemp": 0,
+                            "outgoingTemp": 0,
+                            "heaterEfficiency": 0,
+                            "wasteWaterDischarge": 0
                         },
                         "addedMotorEquipment": []
                     },
@@ -861,8 +924,8 @@ export const MockWaterdiagram: Diagram =
                     "id": "n_zqp4xwq",
                     "type": "waterUsingSystem",
                     "position": {
-                        "x": 889.0486812685394,
-                        "y": 322.513417394999
+                        "x": 603.0729523481295,
+                        "y": 153.10388232801716
                     },
                     "className": "water-using-system",
                     "data": {
@@ -872,7 +935,7 @@ export const MockWaterdiagram: Diagram =
                         "className": "water-using-system",
                         "isValid": true,
                         "diagramNodeId": "n_zqp4xwq",
-                        "modifiedDate": "2024-10-16T15:41:56.202Z",
+                        "modifiedDate": "2024-10-16T16:37:36.336Z",
                         "handles": [
                             {
                                 "id": "a",
@@ -917,15 +980,24 @@ export const MockWaterdiagram: Diagram =
                         ],
                         "processUse": {
                             "waterRequiredMetric": 0,
+                            "waterRequiredMetricValue": 0,
                             "waterConsumedMetric": 0,
-                            "waterLossMetric": 0
+                            "waterConsumedMetricValue": 0,
+                            "waterLossMetric": 0,
+                            "waterLossMetricValue": 0,
+                            "annualProduction": 0,
+                            "fractionGrossWaterRecirculated": 0
                         },
                         "coolingTower": {},
                         "boilerWater": {},
                         "kitchenRestroom": {},
                         "landscaping": {},
                         "heatEnergy": {
-                            "heatingFuelType": 0
+                            "heatingFuelType": 0,
+                            "incomingTemp": 0,
+                            "outgoingTemp": 0,
+                            "heaterEfficiency": 0,
+                            "wasteWaterDischarge": 0
                         },
                         "addedMotorEquipment": []
                     },
@@ -937,7 +1009,205 @@ export const MockWaterdiagram: Diagram =
                         "width": 219,
                         "height": 69
                     },
-                    "selected": true,
+                    "selected": false,
+                    "dragging": false
+                },
+                {
+                    "id": "n_kqvywf4",
+                    "type": "waterTreatment",
+                    "className": "water-treatment",
+                    "data": {
+                        "processComponentType": "water-treatment",
+                        "createdByAssessment": false,
+                        "name": "Chlorine",
+                        "className": "water-treatment",
+                        "isValid": true,
+                        "diagramNodeId": "n_kqvywf4",
+                        "modifiedDate": "2024-10-16T17:45:42.331Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "treatmentType": 5,
+                        "customTreatmentType": null,
+                        "cost": 2,
+                        "flowValue": 0
+                    },
+                    "style": {
+                        "backgroundColor": "#009386",
+                        "color": "#ffffff"
+                    },
+                    "position": {
+                        "x": -45.73922716079733,
+                        "y": 52.11971565055478
+                    },
+                    "measured": {
+                        "width": 219,
+                        "height": 69
+                    },
+                    "selected": false,
+                    "dragging": false
+                },
+                {
+                    "id": "n_eaxzfq5",
+                    "type": "waterTreatment",
+                    "className": "water-treatment",
+                    "data": {
+                        "processComponentType": "water-treatment",
+                        "createdByAssessment": false,
+                        "name": "Chemical Treatment 2",
+                        "className": "water-treatment",
+                        "isValid": true,
+                        "diagramNodeId": "n_eaxzfq5",
+                        "modifiedDate": "2024-10-16T17:46:02.854Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "treatmentType": 7,
+                        "customTreatmentType": null,
+                        "cost": 2,
+                        "flowValue": 0
+                    },
+                    "style": {
+                        "backgroundColor": "#009386",
+                        "color": "#ffffff"
+                    },
+                    "position": {
+                        "x": -57.25,
+                        "y": -106
+                    },
+                    "measured": {
+                        "width": 219,
+                        "height": 96
+                    },
+                    "selected": false,
+                    "dragging": false
+                },
+                {
+                    "id": "n_4ml8a89",
+                    "type": "waterTreatment",
+                    "position": {
+                        "x": -66.38911969251433,
+                        "y": -270.0032744271314
+                    },
+                    "className": "water-treatment",
+                    "data": {
+                        "processComponentType": "water-treatment",
+                        "createdByAssessment": false,
+                        "cost": 1,
+                        "name": "Chemical Treatment 1",
+                        "className": "water-treatment",
+                        "isValid": true,
+                        "diagramNodeId": "n_4ml8a89",
+                        "modifiedDate": "2024-10-22T15:15:11.940Z",
+                        "handles": [
+                            {
+                                "id": "a",
+                                "visible": true
+                            },
+                            {
+                                "id": "b",
+                                "visible": true
+                            },
+                            {
+                                "id": "c",
+                                "visible": false
+                            },
+                            {
+                                "id": "d",
+                                "visible": false
+                            },
+                            {
+                                "id": "e",
+                                "visible": true
+                            },
+                            {
+                                "id": "f",
+                                "visible": true
+                            },
+                            {
+                                "id": "g",
+                                "visible": false
+                            },
+                            {
+                                "id": "h",
+                                "visible": false
+                            }
+                        ],
+                        "treatmentType": 1,
+                        "customTreatmentType": null,
+                        "flowValue": null
+                    },
+                    "style": {
+                        "backgroundColor": "#009386",
+                        "color": "#ffffff"
+                    },
+                    "measured": {
+                        "width": 219,
+                        "height": 96
+                    },
+                    "selected": false,
                     "dragging": false
                 }
             ],
@@ -949,16 +1219,13 @@ export const MockWaterdiagram: Diagram =
                     "sourceHandle": "e",
                     "target": "n_0uc4i5b",
                     "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 2.13
+                        "flowValue": 2.13
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
                     },
                     "id": "reactflow__edge-n_k8i3z5te-n_0uc4i5ba"
                 },
@@ -969,16 +1236,13 @@ export const MockWaterdiagram: Diagram =
                     "sourceHandle": "e",
                     "target": "n_km3rucx",
                     "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 0.26
+                        "flowValue": 0.26
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
                     },
                     "id": "reactflow__edge-n_0uc4i5be-n_km3rucxa"
                 },
@@ -989,16 +1253,13 @@ export const MockWaterdiagram: Diagram =
                     "sourceHandle": "e",
                     "target": "n_km3rucx",
                     "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 0
+                        "flowValue": 0
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
                     },
                     "id": "reactflow__edge-n_59n7hime-n_km3rucxa",
                     "selected": false
@@ -1010,16 +1271,13 @@ export const MockWaterdiagram: Diagram =
                     "sourceHandle": "f",
                     "target": "n_59n7him",
                     "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 0
+                        "flowValue": 0
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
                     },
                     "id": "reactflow__edge-n_k8i3z5tf-n_59n7hima"
                 },
@@ -1030,58 +1288,16 @@ export const MockWaterdiagram: Diagram =
                     "sourceHandle": "e",
                     "target": "n_9jgt12z",
                     "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 12.48
+                        "flowValue": 12.48
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
                     },
-                    "id": "reactflow__edge-n_8v95pqne-n_9jgt12za"
-                },
-                {
-                    "animated": true,
-                    "type": "default",
-                    "source": "n_8v95pqn",
-                    "sourceHandle": "e",
-                    "target": "n_jhjsv61",
-                    "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
-                    "data": {
-                        "flowPercent": 5.35
-                    },
-                    "style": {
-                        "stroke": "#6c757d"
-                    },
-                    "id": "reactflow__edge-n_8v95pqne-n_jhjsv61a"
-                },
-                {
-                    "animated": true,
-                    "type": "default",
-                    "source": "n_8v95pqn",
-                    "sourceHandle": "e",
-                    "target": "n_35zotef",
-                    "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
-                    "data": {
-                        "flowPercent": 0.06
-                    },
-                    "style": {
-                        "stroke": "#6c757d"
-                    },
-                    "id": "reactflow__edge-n_8v95pqne-n_35zotefa"
+                    "id": "reactflow__edge-n_8v95pqne-n_9jgt12za",
+                    "selected": false
                 },
                 {
                     "animated": true,
@@ -1090,16 +1306,13 @@ export const MockWaterdiagram: Diagram =
                     "sourceHandle": "e",
                     "target": "n_40pl8g8",
                     "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 0
+                        "flowValue": 12.48
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
                     },
                     "id": "reactflow__edge-n_9jgt12ze-n_40pl8g8a"
                 },
@@ -1110,38 +1323,33 @@ export const MockWaterdiagram: Diagram =
                     "sourceHandle": "e",
                     "target": "n_40pl8g8",
                     "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 0
+                        "flowValue": 0
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
                     },
                     "id": "reactflow__edge-n_jhjsv61e-n_40pl8g8a"
                 },
                 {
                     "animated": true,
-                    "type": "default",
+                    "type": "step",
                     "source": "n_35zotef",
                     "sourceHandle": "e",
                     "target": "n_ewqu18d",
                     "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 0.06
+                        "flowValue": 0.06
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#0055ff",
+                        "strokeWidth": 6
                     },
-                    "id": "reactflow__edge-n_35zotefe-n_ewqu18da"
+                    "id": "reactflow__edge-n_35zotefe-n_ewqu18da",
+                    "selected": false
                 },
                 {
                     "animated": true,
@@ -1150,39 +1358,34 @@ export const MockWaterdiagram: Diagram =
                     "sourceHandle": "e",
                     "target": "n_fo9ndq3",
                     "targetHandle": "b",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 2
+                        "flowValue": 2
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#d41c1c",
+                        "strokeWidth": 6
                     },
                     "id": "reactflow__edge-n_ewqu18de-n_fo9ndq3b",
                     "selected": false
                 },
                 {
                     "animated": true,
-                    "type": "default",
+                    "type": "step",
                     "source": "n_fo9ndq3",
                     "sourceHandle": "e",
                     "target": "n_ewqu18d",
                     "targetHandle": "b",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 2
+                        "flowValue": 2
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#0055ff",
+                        "strokeWidth": 6
                     },
-                    "id": "reactflow__edge-n_fo9ndq3e-n_ewqu18db"
+                    "id": "reactflow__edge-n_fo9ndq3e-n_ewqu18db",
+                    "selected": false
                 },
                 {
                     "animated": true,
@@ -1191,38 +1394,15 @@ export const MockWaterdiagram: Diagram =
                     "sourceHandle": "e",
                     "target": "n_ewqu18d",
                     "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 17.94
+                        "flowValue": 17.94
                     },
                     "style": {
-                        "stroke": "#00a33f"
+                        "stroke": "#00a33f",
+                        "strokeWidth": 6
                     },
                     "id": "reactflow__edge-n_zqp4xwqe-n_ewqu18da"
-                },
-                {
-                    "animated": true,
-                    "type": "default",
-                    "source": "n_8v95pqn",
-                    "sourceHandle": "e",
-                    "target": "n_fo9ndq3",
-                    "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
-                    "data": {
-                        "flowPercent": 2.61
-                    },
-                    "style": {
-                        "stroke": "#6c757d"
-                    },
-                    "id": "reactflow__edge-n_8v95pqne-n_fo9ndq3a"
                 },
                 {
                     "animated": true,
@@ -1231,18 +1411,16 @@ export const MockWaterdiagram: Diagram =
                     "sourceHandle": "f",
                     "target": "n_35zotef",
                     "targetHandle": "b",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 0.06
+                        "flowValue": 0.06
                     },
                     "style": {
-                        "stroke": "#6c757d"
+                        "stroke": "#9a2151",
+                        "strokeWidth": 6
                     },
-                    "id": "reactflow__edge-n_ewqu18df-n_35zotefb"
+                    "id": "reactflow__edge-n_ewqu18df-n_35zotefb",
+                    "selected": false
                 },
                 {
                     "animated": true,
@@ -1251,18 +1429,117 @@ export const MockWaterdiagram: Diagram =
                     "sourceHandle": "e",
                     "target": "n_zqp4xwq",
                     "targetHandle": "a",
-                    "markerEnd": {
-                        "type": MarkerType.ArrowClosed,
-                        "width": 25,
-                        "height": 25
-                    },
+                    "markerEnd": "",
                     "data": {
-                        "flowPercent": 17.94
+                        "flowValue": 17.94
                     },
                     "style": {
-                        "stroke": "#00b303"
+                        "stroke": "#00b303",
+                        "strokeWidth": 6
                     },
                     "id": "reactflow__edge-n_ewqu18de-n_zqp4xwqa"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_8v95pqn",
+                    "sourceHandle": "e",
+                    "target": "n_kqvywf4",
+                    "targetHandle": "a",
+                    "markerEnd": "",
+                    "data": {
+                        "flowValue": 6
+                    },
+                    "style": {
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
+                    },
+                    "id": "reactflow__edge-n_8v95pqne-n_kqvywf4a"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_kqvywf4",
+                    "sourceHandle": "e",
+                    "target": "n_jhjsv61",
+                    "targetHandle": "a",
+                    "markerEnd": "",
+                    "data": {
+                        "flowValue": 5.35
+                    },
+                    "style": {
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
+                    },
+                    "id": "reactflow__edge-n_kqvywf4e-n_jhjsv61a"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_8v95pqn",
+                    "sourceHandle": "e",
+                    "target": "n_eaxzfq5",
+                    "targetHandle": "a",
+                    "markerEnd": "",
+                    "data": {
+                        "flowValue": 1
+                    },
+                    "style": {
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
+                    },
+                    "id": "reactflow__edge-n_8v95pqne-n_eaxzfq5a"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_eaxzfq5",
+                    "sourceHandle": "e",
+                    "target": "n_35zotef",
+                    "targetHandle": "a",
+                    "markerEnd": "",
+                    "data": {
+                        "flowValue": 0.6
+                    },
+                    "style": {
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
+                    },
+                    "id": "reactflow__edge-n_eaxzfq5e-n_35zotefa"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_8v95pqn",
+                    "sourceHandle": "e",
+                    "target": "n_4ml8a89",
+                    "targetHandle": "a",
+                    "markerEnd": "",
+                    "data": {
+                        "flowValue": 3
+                    },
+                    "style": {
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
+                    },
+                    "id": "reactflow__edge-n_8v95pqne-n_4ml8a89a"
+                },
+                {
+                    "animated": true,
+                    "type": "default",
+                    "source": "n_4ml8a89",
+                    "sourceHandle": "e",
+                    "target": "n_fo9ndq3",
+                    "targetHandle": "a",
+                    "markerEnd": "",
+                    "data": {
+                        "flowValue": 2.5
+                    },
+                    "style": {
+                        "stroke": "#6c757d",
+                        "strokeWidth": 6
+                    },
+                    "id": "reactflow__edge-n_4ml8a89e-n_fo9ndq3a"
                 }
             ]
         },

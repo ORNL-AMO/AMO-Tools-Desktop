@@ -1022,7 +1022,7 @@ export const MockWaterAssessment: Assessment = {
             {
                 "processComponentType": "water-treatment",
                 "createdByAssessment": false,
-                "name": "Water Treatment",
+                "name": "Chlorine",
                 "className": "water-treatment",
                 "isValid": true,
                 "diagramNodeId": "n_kqvywf4",
@@ -1061,15 +1061,15 @@ export const MockWaterAssessment: Assessment = {
                         "visible": false
                     }
                 ],
-                "treatmentType": 0,
+                "treatmentType": 5,
                 "customTreatmentType": null,
-                "cost": 2.99,
+                "cost": 2,
                 "flowValue": 0
             },
             {
                 "processComponentType": "water-treatment",
                 "createdByAssessment": false,
-                "name": "Water Treatment",
+                "name": "Chemical Treatment 2",
                 "className": "water-treatment",
                 "isValid": true,
                 "diagramNodeId": "n_eaxzfq5",
@@ -1110,66 +1110,18 @@ export const MockWaterAssessment: Assessment = {
                 ],
                 "treatmentType": 7,
                 "customTreatmentType": null,
-                "cost": 5.99,
-                "flowValue": 0
-            }
-        ],
-        "wasteWaterTreatments": [
-            {
-                "processComponentType": "waste-water-treatment",
-                "createdByAssessment": false,
-                "name": "Waste Water Treatment",
-                "className": "waste-water-treatment",
-                "isValid": true,
-                "diagramNodeId": "n_y6s78qz",
-                "modifiedDate": new Date("2024-10-16T17:45:48.269Z"),
-                "handles": [
-                    {
-                        "id": "a",
-                        "visible": true
-                    },
-                    {
-                        "id": "b",
-                        "visible": true
-                    },
-                    {
-                        "id": "c",
-                        "visible": false
-                    },
-                    {
-                        "id": "d",
-                        "visible": false
-                    },
-                    {
-                        "id": "e",
-                        "visible": true
-                    },
-                    {
-                        "id": "f",
-                        "visible": true
-                    },
-                    {
-                        "id": "g",
-                        "visible": false
-                    },
-                    {
-                        "id": "h",
-                        "visible": false
-                    }
-                ],
-                "treatmentType": 0,
-                "customTreatmentType": null,
-                "cost": 1.99,
+                "cost": 2,
                 "flowValue": 0
             },
             {
-                "processComponentType": "waste-water-treatment",
+                "processComponentType": "water-treatment",
                 "createdByAssessment": false,
-                "name": "Waste Water Treatment",
-                "className": "waste-water-treatment",
+                "cost": 1,
+                "name": "Chemical Treatment 1",
+                "className": "water-treatment",
                 "isValid": true,
-                "diagramNodeId": "n_71vy6g6",
-                "modifiedDate": new Date("2024-10-16T17:45:55.049Z"),
+                "diagramNodeId": "n_4ml8a89",
+                "modifiedDate": new Date("2024-10-22T15:15:11.940Z"),
                 "handles": [
                     {
                         "id": "a",
@@ -1204,12 +1156,12 @@ export const MockWaterAssessment: Assessment = {
                         "visible": false
                     }
                 ],
-                "treatmentType": 6,
+                "treatmentType": 1,
                 "customTreatmentType": null,
-                "cost": 3.99,
-                "flowValue": 0
+                "flowValue": null
             }
-        ]
+        ],
+        "wasteWaterTreatments": []
     },
     "id": 75,
     "diagramId": 1

@@ -6,8 +6,8 @@ import { WaterAssessmentService } from '../water-assessment.service';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import { Subscription } from 'rxjs';
 import { copyObject } from '../../shared/helperFunctions';
-import { wasteWaterTreatmentTypeOptions } from '../waterConstants';
-import { WasteWasteWaterTreatmentService } from './waste-water-treatment.service';
+import { wasteWaterTreatmentTypeOptions } from '../../../process-flow-types/shared-process-flow-constants';
+import { WasteWaterTreatmentService } from './waste-water-treatment.service';
 
 @Component({
   selector: 'app-waste-water-treatment',
@@ -36,7 +36,7 @@ export class WasteWaterTreatmentComponent {
   constructor(
     private waterAssessmentService: WaterAssessmentService,
     private waterSystemComponentService: WaterSystemComponentService,
-    private wasteTreatmentService: WasteWasteWaterTreatmentService
+    private wasteTreatmentService: WasteWaterTreatmentService
   ) { }
 
   ngOnInit() {

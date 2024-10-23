@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { WaterAssessmentService } from '../../water-assessment.service';
-import { WasteWasteWaterTreatmentService } from '../waste-water-treatment.service';
 import { WasteWaterTreatment, WaterAssessment } from '../../../shared/models/water-assessment';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
+import { WasteWaterTreatmentService } from '../waste-water-treatment.service';
 
 @Component({
   selector: 'app-waste-water-treatment-wrapper',
@@ -20,7 +20,7 @@ export class WasteWaterTreatmentWrapperComponent {
 
   constructor(
     private waterAssessmentService: WaterAssessmentService,
-    private wasteWaterTreatmentService: WasteWasteWaterTreatmentService,
+    private wasteWaterTreatmentService: WasteWaterTreatmentService,
 
   ) { }
 
@@ -31,7 +31,7 @@ export class WasteWaterTreatmentWrapperComponent {
   
   addNewWasteWaterTreatment() {
     this.waterAssessment.wasteWaterTreatments.push(
-      this.wasteWaterTreatmentService.getDefaultWasteWaterTreatment()
+      this.wasteWaterTreatmentService.addWasteWaterTreatment()
     );
   }
   

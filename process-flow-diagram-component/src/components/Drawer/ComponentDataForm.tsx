@@ -1,29 +1,47 @@
-import { Box, List, TextField, InputAdornment, ListItem, ListItemButton, ListItemIcon, Divider, styled, Typography } from "@mui/material";
+import { Box, List, TextField, InputAdornment, ListItem, ListItemButton, ListItemIcon, Divider, styled, Typography, Select, MenuItem, FormControl } from "@mui/material";
 import { CustomEdgeData } from "../Edges/DiagramBaseEdge";
 import { getEdgeSourceAndTarget } from "../Flow/FlowUtils";
 import { Edge, Node, useReactFlow } from "@xyflow/react";
-import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 
 import { useState } from "react";
 import FlowConnectionText from "./FlowConnectionText";
-import { ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { ProcessFlowPart, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import { Accordion, AccordionDetails, AccordionSummary } from "../MUIStyledComponents";
 
 
-const ComponentFlowsForm = (props: ComponentFlowsFormProps) => {
-    const { getNodes } = useReactFlow();
+const ComponentDataForm = (props: ComponentDataFormProps) => {
+    // todo for future diagrams - setComponentTypeData<T>
+    let componentData: ProcessFlowPart | WaterTreatment = props.selectedNode.data as ProcessFlowPart;
+    const isWaterTreatment = props.selectedNode.type === 'waterTreatment';
+    const isWasteWaterTreatment = props.selectedNode.type === 'wasteWaterTreatment';
+    let defaultSelectedTreatmentType: number = 0;
+    let treatmentTypeOptions: Array<{value: number, display: string}> = []
+    if (isWaterTreatment) {
+        componentData = componentData as WaterTreatment;
+        defaultSelectedTreatmentType = componentData.treatmentType !== undefined? Number(componentData.treatmentType) : 0;
+        treatmentTypeOptions = waterTreatmentTypeOptions;
+    } else if (isWasteWaterTreatment) {
+        componentData = componentData as WaterTreatment;
+        defaultSelectedTreatmentType = componentData.treatmentType !== undefined? Number(componentData.treatmentType) : 0;
+        treatmentTypeOptions = wasteWaterTreatmentTypeOptions;
+    }
+
+    const { getNodes, setNodes } = useReactFlow();
     const allNodes: Node[] = getNodes();
     const [sourcesExpanded, setSourcesExpanded] = useState<boolean>(true);
     const [dischargeExpanded, setDischargeExpanded] = useState<boolean>(true);
 
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
-        setExpanded(newExpanded);
+        if (props.connectedEdges.length !== 0) {
+            setExpanded(newExpanded);
+        }
     };
 
     const handleFlowChange = (event, updateId: string) => {
         const updatedEdges = props.connectedEdges.map((edge: Edge<CustomEdgeData>) => {
             if (edge.id === updateId) {
-                edge.data.flowPercent = Number(event.target.value);
+                edge.data.flowValue = Number(event.target.value);
             }
             return edge;
         });
@@ -31,7 +49,7 @@ const ComponentFlowsForm = (props: ComponentFlowsFormProps) => {
     };
 
     const getConnectionListItem = (edge: Edge, source: ProcessFlowPart, target: ProcessFlowPart) => {
-        const flowValue = edge.data.flowPercent;
+        const flowValue = edge.data.flowValue;
         const flowId: string = edge.id;
             return (
                 <ListItem
@@ -64,8 +82,42 @@ const ComponentFlowsForm = (props: ComponentFlowsFormProps) => {
     });
     const sourceEdgeItems = sourceEdges.filter(edge => edge !== undefined);
 
+    const handleTreatmentTypeChange = (event) => {
+        setNodes((nds) =>
+            nds.map((n: Node<ProcessFlowPart>) => {
+              if (n.data.diagramNodeId === props.selectedNode.id) {
+                return {
+                  ...n,
+                  data: {
+                    ...n.data,
+                    treatmentType: Number(event.target.value)
+                  }
+                };
+              }
+              return n;
+            }),
+          );
+    };
+
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1 }}>
+
+        {(isWaterTreatment || isWasteWaterTreatment) && 
+            <Box display={'flex'} flexDirection={'column'} marginBottom={'1rem'}>
+                <label htmlFor={'treatmentType'} className={'diagram-label'} style={{fontSize: '.9rem'}}>Treatment Type</label>
+                <select className="form-control diagram-select" id={'treatmentType'} name="treatmentType"
+                value={defaultSelectedTreatmentType}
+                onChange={handleTreatmentTypeChange}>
+                    {treatmentTypeOptions.map(option => {
+                        return (
+                            <option key={option.display + '' + option.value} value={option.value}>{option.display}</option>
+                        )
+                    })
+                }
+                </select>
+            </Box>
+        }
+
         {sourceEdgeItems.length > 0 &&
             <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
                 <AccordionSummary>
@@ -96,13 +148,12 @@ const ComponentFlowsForm = (props: ComponentFlowsFormProps) => {
             </Accordion>
         }
         </Box>
-        <Divider />
     </Box>);
 }
 
-export default ComponentFlowsForm;
+export default ComponentDataForm;
 
-export interface ComponentFlowsFormProps {
+export interface ComponentDataFormProps {
     connectedEdges: Edge[];
     setConnectedEdges: (edges: Edge[]) => void;
     selectedNode: Node;

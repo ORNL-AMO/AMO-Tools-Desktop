@@ -90,7 +90,7 @@ export const setCustomEdges = (setEdges, connectedParams:  Connection | Edge) =>
       }
 
       connectedParams.data = {
-        flowPercent: 0
+        flowValue: 0
       }
 
       if (connectedParams.style === undefined) {
@@ -142,6 +142,9 @@ export const getAdaptedTypeString = (nodeType: string) => {
       break;
     case 'water-discharge':
       adaptedString = 'waterDischarge'
+      break;
+    case 'water-treatment':
+      adaptedString = 'waterTreatment'
       break;
     case 'waste-water-treatment':
       adaptedString = 'wasteWaterTreatment'

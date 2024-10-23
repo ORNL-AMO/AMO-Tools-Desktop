@@ -1,6 +1,25 @@
 import { Edge, Node } from '@xyflow/react';
 import { CSSProperties } from 'react';
 
+// ! duplicated definition in water-assessment.ts
+export interface WaterTreatment extends ProcessFlowPart {
+  treatmentType: number,
+  customTreatmentType: string,
+  cost: number,
+  name: string,
+  flowValue: number
+}
+// ! duplicated definition in water-assessment.ts
+export interface WasteWaterTreatment extends ProcessFlowPart {
+  treatmentType: number,
+  customTreatmentType: string,
+  cost: number,
+  name: string,
+  flowValue: number
+}
+
+
+
 // * passed down to diagram
 export interface ProcessFlowParentState {
     context: string;
@@ -92,7 +111,7 @@ export interface ProcessFlowParentState {
       color: "#ffffff"
     },
     'water-treatment': {
-      backgroundColor: '#e28000',
+      backgroundColor: '#009386',
       color: "#ffffff"
     },
     'waste-water-treatment': {
