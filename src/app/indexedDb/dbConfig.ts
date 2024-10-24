@@ -368,7 +368,7 @@ export const SolidLiquidFlueGasMaterialStoreMeta = {
 
 export const dbConfig: DBConfig = {
   name: 'CrudDB',
-  version: 9,
+  version: 8,
   objectStoresMeta: [
     ApplicationInstanceDataStoreMeta,
     AssessmentStoreMeta,
