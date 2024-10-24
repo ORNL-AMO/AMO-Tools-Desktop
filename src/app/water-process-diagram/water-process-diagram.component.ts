@@ -84,6 +84,7 @@ export class WaterProcessDiagramComponent {
 
   async initDiagram(id: number) {
     this.diagram = this.diagramIdbService.findById(id);
+    this.diagram.waterDiagram.assessmentId = this.diagram.assessmentId;
     this.waterDiagramConnectionsService.syncDiagramToAssessment(this.diagram, this.integratedDiagram)
     this.setSettings();
     this.waterProcessDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
@@ -185,7 +186,7 @@ export class WaterProcessDiagramComponent {
 
 
   goToAssessment() {
-      let url: string = `/water/${this.diagram.waterDiagram.assessmentId}`;
+      let url: string = `/water/${this.diagram.assessmentId}`;
       this.router.navigate([url]);
   }
 

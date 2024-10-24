@@ -31,7 +31,7 @@ export class WaterAssessmentConnectionsService {
     newDiagram.name = `${assessment.name} Diagram`;
     newDiagram.directoryId = assessment.directoryId;
     newDiagram.waterDiagram = this.waterDiagramService.getDefaultWaterDiagram(settings);
-    newDiagram.waterDiagram.assessmentId = assessment.id;
+    newDiagram.assessmentId = assessment.id;
     let createdDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(newDiagram));
     assessment.diagramId = createdDiagram.id;
     this.diagramIdbService.setAll();
@@ -116,8 +116,8 @@ export class WaterAssessmentConnectionsService {
 
   async disconnectDiagram(diagramId: number) {
     let diagram = this.diagramIdbService.findById(diagramId);
-    if (diagram && diagram.waterDiagram.assessmentId) {
-      delete diagram.waterDiagram.assessmentId;
+    if (diagram && diagram.assessmentId) {
+      delete diagram.assessmentId;
       await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
     }
   }
