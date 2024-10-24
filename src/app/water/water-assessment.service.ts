@@ -94,11 +94,7 @@ export class WaterAssessmentService {
       let newWaterUsingSystem = this.waterUsingSystemService.addWaterUsingSystem();
       waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(newWaterUsingSystem) : waterAssessment.waterUsingSystems = [newWaterUsingSystem];
       newComponent = newWaterUsingSystem;
-    } else if (componentType === 'waste-water-treatment') {
-      // let newWasteTreatment = this.waterSystemComponentService.addWasteWaterTreatment();
-      // waterAssessment.wasteWaterTreatments? waterAssessment.wasteWaterTreatments.push(newWasteTreatment) : waterAssessment.wasteWaterTreatments = [newWasteTreatment];
-      // newComponent = newWasteTreatment;
-    }
+    } 
 
     this.updateWaterAssessment(waterAssessment);
     this.waterSystemComponentService.selectedComponent.next(newComponent);
