@@ -162,7 +162,6 @@ export class ImportService {
         await this.addImportDirectoryDiagrams(importDir, newDirectory.id);
       }
 
-
       for await (let subDir of importDir.subDirectories) {
         if (subDir.directoryItem.directory) {
           subDir.directoryItem.directory.parentDirectoryId = newDirectory.id;
@@ -190,10 +189,28 @@ export class ImportService {
         delete item.calculator.id;
         await firstValueFrom(this.calculatorDbService.addWithObservable(item.calculator));
       }
+
+      // * Add connected diagram. addDiagrams() will check for existence 
+      if (item.diagram) {
+        let importedFromConnectedAssessment = this.newDiagramIdMap[item.diagram.id] !== undefined;
+        if (!importedFromConnectedAssessment) {
+          item.diagram.waterDiagram.assessmentId = addedAssessment.id;
+          let oldDiagramId = item.diagram.id;
+          delete item.diagram.id;
+          item.diagram.directoryId = newDirectoryId;
+          let newDiagram = await firstValueFrom(this.diagramIdbService.addWithObservable(item.diagram));
+          this.newDiagramIdMap[oldDiagramId] = newDiagram.id;
+          
+          addedAssessment.diagramId = newDiagram.id;
+          await firstValueFrom(this.assessmentDbService.updateWithObservable(addedAssessment));
+        }
+      }
     }
 
     let updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(updatedAssessments);
+    let allDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
+    this.diagramIdbService.setAll(allDiagrams);
     let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     let allCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
@@ -221,18 +238,33 @@ export class ImportService {
 
   async addImportDirectoryDiagrams(importDir: ImportDirectory, newDirectoryId: number) {
     for await (const importDiagram of importDir.diagrams) {
-      importDiagram.diagram.selected = false;
-      delete importDiagram.diagram.id;
-      importDiagram.diagram.directoryId = newDirectoryId;
+      let importedFromConnectedAssessment = this.newDiagramIdMap[importDiagram.diagram.id] !== undefined;
+      if (!importedFromConnectedAssessment) {
+        importDiagram.diagram.selected = false;
+        delete importDiagram.diagram.id;
+        importDiagram.diagram.directoryId = newDirectoryId;
 
-      let newDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(importDiagram.diagram));
-      delete importDiagram.settings.id;
-      importDiagram.settings.diagramId = newDiagram.id;
-      await firstValueFrom(this.settingsDbService.addWithObservable(importDiagram.settings));
+        let newDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(importDiagram.diagram));
+        delete importDiagram.settings.id;
+        importDiagram.settings.diagramId = newDiagram.id;
+        await firstValueFrom(this.settingsDbService.addWithObservable(importDiagram.settings));
+
+        if (importDiagram.assessment) {
+          importDiagram.assessment.diagramId = newDiagram.id;
+          delete importDiagram.assessment.id;
+          importDiagram.assessment.directoryId = newDirectoryId;
+          let newAssessment = await firstValueFrom(this.assessmentDbService.addWithObservable(importDiagram.assessment));
+
+          newDiagram.waterDiagram.assessmentId = newAssessment.id;
+          await firstValueFrom(this.diagramIdbService.updateWithObservable(newDiagram));
+        }
+      }
     }
 
     let updateDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
     let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(allAssessments);
     this.diagramIdbService.setAll(updateDiagrams);
     this.settingsDbService.setAll(updatedSettings);
 

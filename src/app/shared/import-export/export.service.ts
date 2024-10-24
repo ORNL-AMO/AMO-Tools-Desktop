@@ -66,7 +66,6 @@ export class ExportService {
     if (preAssessments) {
       this.exportPreAssessments = preAssessments;
     }
-    // todo change order
     if (selectedDirectories) {
       selectedDirectories.forEach(dir => {
         this.addDirectoryObj(dir);
