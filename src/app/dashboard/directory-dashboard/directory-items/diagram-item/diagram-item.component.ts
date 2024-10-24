@@ -134,7 +134,7 @@ export class DiagramItemComponent {
 
   removeAssessmentConnection() {
     if (this.diagram.waterDiagram) {
-      this.waterDiagramConnectionsService.disconnectAssessment(this.diagram.waterDiagram.assessmentId);
+      this.waterDiagramConnectionsService.disconnectAssessment(this.diagram.assessmentId);
     }
   }
 

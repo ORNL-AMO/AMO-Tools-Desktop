@@ -194,7 +194,7 @@ export class ImportService {
       if (item.diagram) {
         let importedFromConnectedAssessment = this.newDiagramIdMap[item.diagram.id] !== undefined;
         if (!importedFromConnectedAssessment) {
-          item.diagram.waterDiagram.assessmentId = addedAssessment.id;
+          item.diagram.assessmentId = addedAssessment.id;
           let oldDiagramId = item.diagram.id;
           delete item.diagram.id;
           item.diagram.directoryId = newDirectoryId;
@@ -255,7 +255,7 @@ export class ImportService {
           importDiagram.assessment.directoryId = newDirectoryId;
           let newAssessment = await firstValueFrom(this.assessmentDbService.addWithObservable(importDiagram.assessment));
 
-          newDiagram.waterDiagram.assessmentId = newAssessment.id;
+          newDiagram.assessmentId = newAssessment.id;
           await firstValueFrom(this.diagramIdbService.updateWithObservable(newDiagram));
         }
       }
@@ -286,7 +286,7 @@ export class ImportService {
 
       // * Add connected diagram. addDiagrams() will check for existence 
       if (assessment.diagram) {
-        assessment.diagram.waterDiagram.assessmentId = newAssessment.id;
+        assessment.diagram.assessmentId = newAssessment.id;
         let oldDiagramId = assessment.diagram.id; 
         delete assessment.diagram.id;
         assessment.diagram.directoryId = workingDirectoryId;
@@ -329,7 +329,7 @@ export class ImportService {
           let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
           this.assessmentDbService.setAll(allAssessments);
           
-          newDiagram.waterDiagram.assessmentId = newAssessment.id;
+          newDiagram.assessmentId = newAssessment.id;
           await firstValueFrom(this.diagramIdbService.updateWithObservable(newDiagram));
         }
 

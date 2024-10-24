@@ -294,7 +294,7 @@ async resetAllExampleAssessments(dirId: number) {
   await firstValueFrom(this.settingsDbService.addWithObservable(MockWaterAssessmentSettings));
 
   MockWaterdiagram.directoryId = dirId;
-  MockWaterdiagram.waterDiagram.assessmentId = createdWater.id
+  MockWaterdiagram.assessmentId = createdWater.id
   let createdWaterDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(MockWaterdiagram));
   createdWater.diagramId = createdWaterDiagram.id;
   await firstValueFrom(this.assessmentDbService.updateWithObservable(createdWater));

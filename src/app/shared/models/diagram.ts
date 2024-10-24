@@ -4,6 +4,7 @@ import { Assessment } from "./assessment";
 export interface Diagram {
     id?: number,
     directoryId?: number,
+    assessmentId?: number,
     waterDiagram?: WaterDiagram,
     createdDate?: Date,
     modifiedDate?: Date,

@@ -14,8 +14,8 @@
         <div class="w-100">
             <!-- <button class="btn btn-default" (click)="back()" [disabled]="mainTab === 'setup'">Back</button> -->
             <!-- <button *ngIf="mainTab == 'setup'" class="btn btn-primary pull-right" (click)="continue()">Next</button> -->
-            <button *ngIf="mainTab == 'diagram' && diagram.waterDiagram.assessmentId === undefined" class="btn btn-primary pull-right" (click)="createAssessment()">Create Assessment</button>
-            <button *ngIf="mainTab == 'diagram' && diagram.waterDiagram.assessmentId !== undefined" class="btn btn-primary pull-right" (click)="goToAssessment()">Go To Assessment</button>
+            <button *ngIf="mainTab == 'diagram' && diagram.assessmentId === undefined" class="btn btn-primary pull-right" (click)="createAssessment()">Create Assessment</button>
+            <button *ngIf="mainTab == 'diagram' && diagram.assessmentId !== undefined" class="btn btn-primary pull-right" (click)="goToAssessment()">Go To Assessment</button>
         </div>
     </div>
 </div>

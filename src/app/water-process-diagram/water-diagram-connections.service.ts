@@ -16,12 +16,12 @@ export class WaterDiagramConnectionsService {
     private assessmentIdbService: AssessmentDbService) { }
 
   async syncDiagramToAssessment(diagram: Diagram, integratedDiagram: IntegratedAssessmentDiagram) {
-    if (diagram.waterDiagram.assessmentId !== undefined) {
+    if (diagram.assessmentId !== undefined) {
       let integratedAssessment: Assessment;
       if (integratedDiagram) {
         integratedAssessment = integratedDiagram.assessment;
       } else {
-        integratedAssessment = this.assessmentIdbService.findById(diagram.waterDiagram.assessmentId);
+        integratedAssessment = this.assessmentIdbService.findById(diagram.assessmentId);
       }
 
       if (integratedAssessment && diagram.modifiedDate < integratedAssessment.modifiedDate) {

@@ -141,7 +141,7 @@ export class CoreService {
     let exampleWaterDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(MockWaterdiagram));
     MockWaterAssessment.diagramId = exampleWaterDiagram.id;
     let exampleWaterAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockWaterAssessment));
-    exampleWaterDiagram.waterDiagram.assessmentId = exampleWaterAssessment.id;
+    exampleWaterDiagram.assessmentId = exampleWaterAssessment.id;
     await firstValueFrom(this.diagramIdbService.updateWithObservable(exampleWaterDiagram));
 
 
