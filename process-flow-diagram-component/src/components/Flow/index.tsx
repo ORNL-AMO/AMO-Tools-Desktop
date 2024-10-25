@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   ReactFlow,
   Connection,
@@ -12,17 +12,16 @@ import {
   useNodesState,
   useEdgesState,
   Edge,
-  OnBeforeDelete,
   MarkerType,
-  OnDelete,
+  EdgeTypes,
 } from '@xyflow/react';
  
 import '@xyflow/react/dist/style.css';
 
 import Sidebar from '../Sidebar/Sidebar';
-import { FlowDiagramData, ProcessFlowPart, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeDefaultOptions, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
-import { edgeTypes, nodeTypes } from './FlowTypes';
+import { FlowDiagramData, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeDefaultOptions, getEdgeTypesFromString, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
+import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
 import ManageDataContextDrawer from '../Drawer/ManageDataContextDrawer';
@@ -57,7 +56,8 @@ const Flow = (props: FlowProps) => {
   const [staleNodes, setStaleNodes] = useState<Node[]>(staleParentNodes);
   const [nodes, setNodes, onNodesChange] = useNodesState(existingNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(existingEdges);
-  const [userDiagramOptions, setUserDiagramOptions] = useState(defaultUserDiagramOptions);
+  const [userDiagramOptions, setUserDiagramOptions] = useState<UserDiagramOptions>(defaultUserDiagramOptions);
+  const [edgeTypes, setEdgeTypes] = useState<EdgeTypes>(getEdgeTypesFromString(defaultUserDiagramOptions.edgeType, undefined));
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -106,7 +106,7 @@ const Flow = (props: FlowProps) => {
     (connectedParams: Connection | Edge) => {
       setCustomEdges(setEdges, connectedParams, userDiagramOptions);
     },
-    []
+    [userDiagramOptions]
   );
 
   // const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
@@ -182,13 +182,15 @@ const Flow = (props: FlowProps) => {
     setUserDiagramOptions(defaultOptions);
   }, [setNodes, setEdges]);
 
-  const handleEdgeTypeChange = useCallback((edgeType) => {
+  const handleEdgeTypeChange = useCallback((defaultEdgeType: string) => {
+    const newEdgeTypes = getEdgeTypesFromString(defaultEdgeType, edgeTypes);
     setUserDiagramOptions({
       ...userDiagramOptions,
-      edgeType: edgeType
+      edgeType: defaultEdgeType,
     });
-    changeExistingEdgesType(setEdges, edgeType);
-  }, []);
+    setEdgeTypes(newEdgeTypes);
+    changeExistingEdgesType(setEdges, defaultEdgeType);
+  }, [userDiagramOptions, edgeTypes]);
 
   return (
     props.height &&

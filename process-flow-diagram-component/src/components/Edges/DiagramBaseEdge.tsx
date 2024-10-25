@@ -30,7 +30,6 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
   const onDeleteEdge = () => {
     setEdges((edges) => edges.filter((edg) => edg.id !== props.id));
   };
-  
 const renderBaseEdgeComponent = (props: DiagramEdgeProps, edgePath: string) => {
   const customStyle = {
     ...props.style,

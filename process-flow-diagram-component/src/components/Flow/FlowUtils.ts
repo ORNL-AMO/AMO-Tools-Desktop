@@ -1,7 +1,11 @@
 import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
 import { edgeTypes, nodeTypes } from "./FlowTypes";
 import { getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions } from "../../../../src/process-flow-types/shared-process-flow-types";
-import { DefaultEdgeOptions } from "@xyflow/react";
+import { DefaultEdgeOptions, EdgeTypes } from "@xyflow/react";
+import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
+import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
+import StepDiagramEdge from "../Edges/StepDiagramEdge";
+import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
 
 export const getRandomCoordinates = (height: number, width: number): {x: number, y: number} => {
     const screenWidth = window.innerWidth;
@@ -77,30 +81,33 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
  * edge ids are not gauranteed to be unique. They only include nodeid-nodeid. source and target handles must be looked at to identify uniqueness of edge 
  * 
  */
-export const setCustomEdges = (setEdges, connectedParams:  Connection | Edge, diagramOptions: UserDiagramOptions) => {
+export const setCustomEdges = (setEdges, connectedParams: Connection | Edge, diagramOptions: UserDiagramOptions) => {
   setEdges((eds) => {
-      connectedParams = connectedParams as Edge;
-      if (connectedParams.source === connectedParams.target) {
-        connectedParams.type = 'selfconnecting';
-      }
-      connectedParams.markerEnd = { 
+    connectedParams = connectedParams as Edge;
+    if (connectedParams.source === connectedParams.target) {
+      connectedParams.type = 'selfconnecting';
+    }
+
+    if (diagramOptions.directionalArrowsVisible) {
+      connectedParams.markerEnd = {
         type: MarkerType.ArrowClosed,
         width: 25,
         height: 25
       }
+    }
 
-      connectedParams.data = {
-        flowValue: 0
+    connectedParams.data = {
+      flowValue: 0
+    }
+
+    if (connectedParams.style === undefined) {
+      connectedParams.style = {
+        stroke: '#6c757d',
+        strokeWidth: diagramOptions.edgeThickness
       }
+    }
 
-      if (connectedParams.style === undefined) {
-        connectedParams.style = {
-          stroke: '#6c757d',
-          strokeWidth: diagramOptions.edgeThickness
-        }
-      }
-
-      return addEdge(connectedParams, eds);
+    return addEdge(connectedParams, eds);
   })
 }
 
@@ -176,6 +183,33 @@ export const getEdgeDefaultOptions = (): DefaultEdgeOptions => {
     animated: true,
     type: 'default',
   }
+};
+
+export const getEdgeTypesFromString = (newDefaultType: string, currentEdgeTypes?: EdgeTypes): EdgeTypes => {
+  if (!currentEdgeTypes) {
+    currentEdgeTypes = edgeTypes;
+  }
+  const newEdgeTypes: EdgeTypes = {
+    ...currentEdgeTypes
+  }
+  switch (newDefaultType) {
+    case 'bezier':
+      newEdgeTypes.default = BezierDiagramEdge;
+      break;
+    case 'straight':
+      newEdgeTypes.default = StraightDiagramEdge;
+      break;
+    case 'step':
+      newEdgeTypes.default = StepDiagramEdge;
+      break;
+    case 'smoothstep':
+      newEdgeTypes.default = SmoothStepDiagramEdge;
+      break;
+    default:
+      newEdgeTypes.default = BezierDiagramEdge;
+  }
+  
+  return newEdgeTypes;
 };
 
 export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {

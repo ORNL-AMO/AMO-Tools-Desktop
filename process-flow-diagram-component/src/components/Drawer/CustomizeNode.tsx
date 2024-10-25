@@ -64,7 +64,8 @@ export default function CustomizeNode({ node }: CustomizeNodeProps) {
             <PresetColorPicker
               color={node.style.backgroundColor}
               presetColors={presetColors}
-              onChangeHandler={handleBackgroundColorChange}
+              pickerChangeHandler={handleBackgroundColorChange}
+              presetChangeHandler={handleBackgroundColorChange}
               showPresets={true}
               label={'Component Color'} />
           </Box>
@@ -72,7 +73,8 @@ export default function CustomizeNode({ node }: CustomizeNodeProps) {
             <PresetColorPicker
               color={node.style.color}
               presetColors={presetColors}
-              onChangeHandler={handleTextColorChange}
+              pickerChangeHandler={handleTextColorChange}
+              presetChangeHandler={handleTextColorChange}
               showPresets={false}
               label={'Text Color'} />
           </Box>

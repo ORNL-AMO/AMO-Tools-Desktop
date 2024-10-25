@@ -21,6 +21,18 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
         });
   }, [debouncedEdgeColor]);
 
+  const handlePresetColorChange = (edgeColor) => {
+    setEdgeColor(edgeColor)
+    setEdges((eds) => {
+          return eds.map((e: Edge) => {
+            if (e.id === edge.id) {
+              e.style.stroke = edgeColor;
+            }
+            return e;
+          });
+        });
+  };
+
 
   const handleEdgeTypeChange = (newEdgeType: string) => {
     edge.type = newEdgeType;
@@ -63,7 +75,8 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
             <PresetColorPicker
               color={edge.style.stroke}
               presetColors={presetColors}
-              onChangeHandler={setEdgeColor}
+              pickerChangeHandler={setEdgeColor}
+              presetChangeHandler={handlePresetColorChange}
               showPresets={true}
               label={'Pick Line Color'} />
           </Box>
