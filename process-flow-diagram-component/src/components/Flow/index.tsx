@@ -192,6 +192,15 @@ const Flow = (props: FlowProps) => {
     changeExistingEdgesType(setEdges, defaultEdgeType);
   }, [userDiagramOptions, edgeTypes]);
 
+  // * suppress 'It looks like you have created a new nodeTypes or edgeTypes object.
+  // * If this wasn't on purpose please define the nodeTypes/edgeTypes outside of the component or memoize them'
+  const onErrorWithSuppressed = (msgId, msg) => {
+    if (msgId === '002') {
+      return;
+    }
+  
+    console.warn(msg);
+  }
   return (
     props.height &&
     <div className="process-flow-diagram">
@@ -217,6 +226,7 @@ const Flow = (props: FlowProps) => {
             defaultViewport={defaultViewport}
             connectionLineType={ConnectionLineType.Bezier}
             onDrop={onDrop}
+            onError={onErrorWithSuppressed}
             // onBeforeDelete={onBeforeDelete}
             onDragOver={onDragOver}
             fitView
@@ -249,6 +259,7 @@ const Flow = (props: FlowProps) => {
         <ManageDataContextDrawer
          isDrawerOpen={isDataDrawerOpen}
          manageDataId={manageDataId}
+         userDiagramOptions={userDiagramOptions}
          setIsDataDrawerOpen={setIsDataDrawerOpen}
          setIsDialogOpen={setIsDialogOpen}
          />

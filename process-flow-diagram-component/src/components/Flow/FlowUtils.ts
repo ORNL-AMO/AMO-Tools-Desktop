@@ -6,6 +6,7 @@ import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
 import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
+import { CustomEdgeData } from "../Edges/DiagramBaseEdge";
 
 export const getRandomCoordinates = (height: number, width: number): {x: number, y: number} => {
     const screenWidth = window.innerWidth;
@@ -113,9 +114,14 @@ export const setCustomEdges = (setEdges, connectedParams: Connection | Edge, dia
 
 export const changeExistingEdgesType = (setEdges, diagramEdgeType: string) => {
   setEdges((eds) => {
-    return eds.map((edge: Edge) => {
+    return eds.map((edge: Edge<CustomEdgeData>) => {
+      // * ignore self-connecting
       if (edge.source !== edge.target) {
-        edge.type = diagramEdgeType;
+        if (edge.data.selfEdgeType !== undefined) {
+          edge.type = edge.data.selfEdgeType;
+        } else {
+          edge.type = diagramEdgeType;
+        }
       }
       return edge;
     });

@@ -4,8 +4,10 @@ import { PresetColorPicker } from './PresetColorPicker';
 import { Edge, useReactFlow } from '@xyflow/react';
 import { useEffect, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
+import { CustomEdgeData } from '../Edges/DiagramBaseEdge';
+import { UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
 
-export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
+export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdgeProps) {
   const { setEdges } = useReactFlow();
   const [edgeColor, setEdgeColor] = useState(edge.style.stroke);
   const debouncedEdgeColor = useUserEventDebounce<string>(edgeColor, 50);
@@ -33,15 +35,22 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
         });
   };
 
+  const getCurrentEdgeType = (): string => {
+    return edge.data.selfEdgeType !== undefined? edge.data.selfEdgeType : userDiagramOptions.edgeType;
+  }
 
   const handleEdgeTypeChange = (newEdgeType: string) => {
     edge.type = newEdgeType;
     setEdges((eds) => {
-      let updatedEdges = eds.map((e: Edge) => {
+      let updatedEdges = eds.map((e: Edge<CustomEdgeData>) => {
         let updatedEdge = {
           ...e,
         }
         if (e.id === edge.id) {
+          updatedEdge.data = {
+            ...e.data,
+            selfEdgeType: newEdgeType
+          }
           updatedEdge.type = newEdgeType;
         }
         return updatedEdge;
@@ -61,7 +70,7 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
           <Box display={'flex'} sx={{fontSize: '.75rem', marginTop: 2}} justifyContent={'space-between'} width={'100%'}>
             <label htmlFor={selectId} className="diagram-label" style={{fontSize: '.75rem'}}>Line Type</label>
             <select className="form-control diagram-select" id={selectId} name="edgeType" style={{ marginLeft: '16px' }}
-              value={edge.type}
+              value={getCurrentEdgeType()}
               onChange={(e) => handleEdgeTypeChange(e.target.value)}>
               {edgeTypeOptions.map((option: SelectListOption) => {
                 return (
@@ -85,5 +94,6 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
 }
 
 export interface CustomizeEdgeProps {
-  edge: Edge;
+  edge: Edge<CustomEdgeData>;
+  userDiagramOptions: UserDiagramOptions;
 }

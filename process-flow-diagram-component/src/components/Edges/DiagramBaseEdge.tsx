@@ -80,7 +80,8 @@ export interface DiagramEdgeProps extends EdgeProps {
 }
 
 export interface CustomEdgeData extends Record<string, unknown> {
-  flowValue: number
+  flowValue: number,
+  selfEdgeType: string,
 }
 
 interface SelfConnectingPath {

@@ -57,7 +57,7 @@ const Sidebar = memo((props: SidebarProps) => {
         <Box sx={{marginTop: 1, padding: '.5rem'}}>
           <div className="sidebar-actions">
             <Box display={'flex'} flexDirection={'column'}  sx={{fontSize: '.75rem'}}>
-            <label htmlFor="edgeType" className="diagram-label">Set Line Type</label>
+            <label htmlFor="edgeType" className="diagram-label">Default Line Type</label>
             <select className="form-control diagram-select" id="edgeType" 
               name="edgeType" 
               value={props.userDiagramOptions.edgeType}
