@@ -54,8 +54,16 @@ export interface ProcessFlowParentState {
   export interface FlowDiagramData {
     nodes: Node[],
     edges: Edge[],
+    userDiagramOptions: UserDiagramOptions
   }
 
+  export interface UserDiagramOptions {
+    edgeThickness: number,
+    edgeType: string,
+    minimapVisible: boolean,
+    controlsVisible: boolean,
+    directionalArrowsVisible: boolean,
+  }
 
   export interface WaterDiagramOption {
     display: string,

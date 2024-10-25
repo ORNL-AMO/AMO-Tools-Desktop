@@ -1541,7 +1541,14 @@ export const MockWaterdiagram: Diagram =
                     },
                     "id": "reactflow__edge-n_4ml8a89e-n_fo9ndq3a"
                 }
-            ]
+            ],
+            "userDiagramOptions": {
+                "edgeThickness": 10,
+                "edgeType": 'default',
+                "minimapVisible": false,
+                "controlsVisible": true,
+                "directionalArrowsVisible": false,
+            }
         },
     },
 }

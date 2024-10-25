@@ -21,7 +21,7 @@ import '@xyflow/react/dist/style.css';
 
 import Sidebar from '../Sidebar/Sidebar';
 import { FlowDiagramData, ProcessFlowPart, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { changeExistingEdgesType, getEdgeDefaultOptions, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
+import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeDefaultOptions, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
@@ -39,30 +39,25 @@ const Flow = (props: FlowProps) => {
   let existingNodes = [];
   let existingEdges = [];
   
-  if (props.processDiagram) {
-    existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart> )=> {
-      if (node.data.processComponentType !== 'splitter-node') {
-        node.data.setManageDataId = setManageDataId;
-        node.data.openEditData = setIsDataDrawerOpen;
-      }
-      if (!node.position) {
-        staleParentNodes.push(node);
-      } else {
-        return node;
-      }
-    });
-
-
-    existingEdges = props.processDiagram.flowDiagramData.edges;
-  }
+  const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions? props.processDiagram.flowDiagramData.userDiagramOptions: getDefaultUserDiagramOptions();
+  existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart> )=> {
+    if (node.data.processComponentType !== 'splitter-node') {
+      node.data.setManageDataId = setManageDataId;
+      node.data.openEditData = setIsDataDrawerOpen;
+    }
+    if (!node.position) {
+      staleParentNodes.push(node);
+    } else {
+      return node;
+    }
+  });
+  existingEdges = props.processDiagram.flowDiagramData.edges;
 
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [staleNodes, setStaleNodes] = useState<Node[]>(staleParentNodes);
   const [nodes, setNodes, onNodesChange] = useNodesState(existingNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(existingEdges);
-  const [minimapVisible, setMinimapVisible] = useState(false);
-  const [controlsVisible, setControlsVisible] = useState(true);
-  const [directionalArrowsVisible, setDirectionalArrowsVisible] = useState(true);
+  const [userDiagramOptions, setUserDiagramOptions] = useState(defaultUserDiagramOptions);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -93,9 +88,10 @@ const Flow = (props: FlowProps) => {
       props.saveFlowDiagramData({
         nodes: dbSafeNodes,
         edges: debouncedEdges,
+        userDiagramOptions
       });
     }
-  }, [debouncedNodes, debouncedEdges]);
+  }, [debouncedNodes, debouncedEdges, userDiagramOptions]);
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -108,7 +104,7 @@ const Flow = (props: FlowProps) => {
 
   const onConnect: OnConnect = useCallback(
     (connectedParams: Connection | Edge) => {
-      setCustomEdges(setEdges, connectedParams);
+      setCustomEdges(setEdges, connectedParams, userDiagramOptions);
     },
     []
   );
@@ -118,16 +114,25 @@ const Flow = (props: FlowProps) => {
   //   return { nodes, edges };
   // }, []);
   
-  const updateMinimap = useCallback((enabled) => {
-    setMinimapVisible(enabled);
-  }, []);
+  const handleMinimapVisible = useCallback((isEnabled) => {
+    setUserDiagramOptions({
+      ...userDiagramOptions,
+      minimapVisible: isEnabled
+    });
+  }, [userDiagramOptions]);
 
-  const updateControls = useCallback((enabled) => {
-    setControlsVisible(enabled);
-  }, []);
+  const handleControlsVisible = useCallback((isEnabled) => {
+    setUserDiagramOptions({
+      ...userDiagramOptions,
+      controlsVisible: isEnabled
+    });
+  }, [userDiagramOptions]);
 
   const handleShowMarkerEndArrows = useCallback((showArrows: boolean) => {
-    setDirectionalArrowsVisible(showArrows);
+    setUserDiagramOptions({
+      ...userDiagramOptions,
+      directionalArrowsVisible: showArrows
+    });
     setEdges((eds) => {
       let updatedEdges = eds.map((e: Edge) => {
         let updatedEdge = {
@@ -142,19 +147,46 @@ const Flow = (props: FlowProps) => {
       });
       return updatedEdges;
     });
-  }, []);
+  }, [userDiagramOptions]);
+
+  const handleEdgeThicknessChange = useCallback((event: Event, edgeThickness: number) => {
+    setUserDiagramOptions({
+      ...userDiagramOptions,
+      edgeThickness: edgeThickness
+    });
+    setEdges((eds) => {
+      let updatedEdges = eds.map((e: Edge) => {
+        let updatedEdge = {
+          ...e,
+          style: {
+            ...e.style,
+            strokeWidth: edgeThickness
+          }
+        }
+        return updatedEdge;
+      });
+      return updatedEdges;
+    });
+  }, [userDiagramOptions]);
 
   
   const resetDiagram = useCallback(() => {
+    const defaultOptions = getDefaultUserDiagramOptions();
     setNodes(nds => []);
     setEdges(eds => []);
     props.saveFlowDiagramData({
       nodes: [],
       edges: [],
+      userDiagramOptions: defaultOptions
     });
+    setUserDiagramOptions(defaultOptions);
   }, [setNodes, setEdges]);
 
-  const updateEdgeType = useCallback((edgeType) => {
+  const handleEdgeTypeChange = useCallback((edgeType) => {
+    setUserDiagramOptions({
+      ...userDiagramOptions,
+      edgeType: edgeType
+    });
     changeExistingEdgesType(setEdges, edgeType);
   }, []);
 
@@ -188,23 +220,25 @@ const Flow = (props: FlowProps) => {
             fitView
             className="flow"
           >
-            {minimapVisible &&
+            {userDiagramOptions.minimapVisible &&
               <MiniMap zoomable pannable nodeClassName={nodeClassName} />
             }
-            {controlsVisible &&
+            {userDiagramOptions.controlsVisible &&
               <Controls />
             }
             <Background />
           </ReactFlow>
         </div>
         <Sidebar
-            minimapVisibleCallback={updateMinimap}
-            handleShowMarkerEndArrows={handleShowMarkerEndArrows}
-            directionalArrowsVisible={directionalArrowsVisible}
-            controlsVisible={controlsVisible}
-            controlsVisibleCallback={updateControls}
+            userDiagramOptions={userDiagramOptions}
+            userDiagramOptionsHandlers={{
+              handleMinimapVisible,
+              handleShowMarkerEndArrows,
+              handleControlsVisible,
+              handleEdgeTypeChange,
+              handleEdgeThicknessChange
+            }}
             resetDiagramCallback={resetDiagram}
-            edgeTypeChangeCallback={updateEdgeType}
             shadowRoot={props.shadowRoot}
             setIsDialogOpen={setIsDialogOpen}
             hasAssessment={props.processDiagram.assessmentId !== undefined}

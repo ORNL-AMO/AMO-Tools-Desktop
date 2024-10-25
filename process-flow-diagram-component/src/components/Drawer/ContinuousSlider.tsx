@@ -49,5 +49,5 @@ export default function ContinuousSlider(props: SliderProps) {
 
   export interface SliderProps {
     setSliderValue: (event: Event | React.MouseEvent, newValue: number) => void;
-    value: any;
+    value: number;
   }

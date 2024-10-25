@@ -1,6 +1,6 @@
 import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
-import { nodeTypes } from "./FlowTypes";
-import { getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { edgeTypes, nodeTypes } from "./FlowTypes";
+import { getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { DefaultEdgeOptions } from "@xyflow/react";
 
 export const getRandomCoordinates = (height: number, width: number): {x: number, y: number} => {
@@ -77,7 +77,7 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
  * edge ids are not gauranteed to be unique. They only include nodeid-nodeid. source and target handles must be looked at to identify uniqueness of edge 
  * 
  */
-export const setCustomEdges = (setEdges, connectedParams:  Connection | Edge) => {
+export const setCustomEdges = (setEdges, connectedParams:  Connection | Edge, diagramOptions: UserDiagramOptions) => {
   setEdges((eds) => {
       connectedParams = connectedParams as Edge;
       if (connectedParams.source === connectedParams.target) {
@@ -96,6 +96,7 @@ export const setCustomEdges = (setEdges, connectedParams:  Connection | Edge) =>
       if (connectedParams.style === undefined) {
         connectedParams.style = {
           stroke: '#6c757d',
+          strokeWidth: diagramOptions.edgeThickness
         }
       }
 
@@ -176,3 +177,13 @@ export const getEdgeDefaultOptions = (): DefaultEdgeOptions => {
     type: 'default',
   }
 };
+
+export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
+  return {
+    edgeThickness: 2,
+    edgeType: 'default',
+    minimapVisible: false,
+    controlsVisible: true,
+    directionalArrowsVisible: true,
+  }
+}
