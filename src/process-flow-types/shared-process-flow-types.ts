@@ -83,7 +83,9 @@ export interface ProcessFlowParentState {
     // * id for diagram targetting/sourcing
     diagramNodeId?: string,
     modifiedDate?: Date,
-    handles: Array<HandleOption>,
+    handles: Handles,
+    disableInflowConnections?: boolean,
+    disableOutflowConnections?: boolean,
     splitterTargets?: Array<string>;
     setManageDataId?: (id: number) => void; 
     openEditData?: (boolean) => void;
@@ -135,18 +137,39 @@ export interface ProcessFlowParentState {
     return Math.random().toString(36).substring(2, 9);
 }
 
-const getDefaultHandles = (): HandleOption[] => {
-  return [
-    { id: 'a', visible: true },
-    { id: 'b', visible: true },
-    { id: 'c', visible: false },
-    { id: 'd', visible: false },
-    { id: 'e', visible: true },
-    { id: 'f', visible: true },
-    { id: 'g', visible: false },
-    { id: 'h', visible: false },
-  ];
+export interface Handles {
+  inflowHandles: {
+    a: boolean,
+    b: boolean,
+    c: boolean,
+    d: boolean,
+  },
+  outflowHandles: {
+    e: boolean,
+    f: boolean,
+    g: boolean,
+    h: boolean,
+  }
 }
+
+const getDefaultHandles = (): Handles => {
+  return {
+    inflowHandles: {
+      a: true,
+      b: true,
+      c: false,
+      d: false,
+    },
+    outflowHandles: {
+      e: true,
+      f: true,
+      g: false,
+      h: false,
+    }
+  }
+}
+
+
   
   // * Assign innate behaviors and context for Diagram parts
   export const processFlowDiagramParts: ProcessFlowPart[] = [
@@ -155,6 +178,7 @@ const getDefaultHandles = (): HandleOption[] => {
       name: 'Intake Source',
       className: 'water-intake',
       isValid: true,
+      disableInflowConnections: true,
       createdByAssessment: false,
       handles: getDefaultHandles()
     },
@@ -170,6 +194,7 @@ const getDefaultHandles = (): HandleOption[] => {
       processComponentType: 'water-discharge',
       name: 'Discharge Outlet',
       className: 'water-discharge',
+      disableOutflowConnections: true,
       isValid: true,
       createdByAssessment: false,
       handles: getDefaultHandles()
@@ -212,9 +237,11 @@ export const getNewProcessComponent = (processComponentType): ProcessFlowPart =>
     name: diagramComponent.name,
     className: diagramComponent.className,
     isValid: diagramComponent.isValid,
+    disableInflowConnections: diagramComponent.disableInflowConnections,
+    disableOutflowConnections: diagramComponent.disableOutflowConnections,
     diagramNodeId: getNewNodeId(),
     modifiedDate: new Date(),
-    handles: [...diagramComponent.handles]
+    handles: {...diagramComponent.handles}
   };
 
   return newProcessComponent;

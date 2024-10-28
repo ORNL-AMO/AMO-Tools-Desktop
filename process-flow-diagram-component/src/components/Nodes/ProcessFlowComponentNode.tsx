@@ -1,6 +1,6 @@
 import { memo, CSSProperties } from 'react';
 import { Handle, Position, NodeProps, useReactFlow, Node } from '@xyflow/react';
-import { HandleOption, ProcessFlowNodeType, ProcessFlowPartStyleClass } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { HandleOption, Handles, ProcessFlowNodeType, ProcessFlowPartStyleClass } from '../../../../src/process-flow-types/shared-process-flow-types';
 import EditIcon from '@mui/icons-material/Edit';
 import { Typography } from '@mui/material';
 
@@ -41,7 +41,7 @@ const bottomSourceHandleStyle: CSSProperties = {
 
 
 // * patches v11 -> v12 typing changes
-// * this type needs to duplicate ProcessFlowPart
+// todo this type needs to duplicate ProcessFlowPart - how to merge types
 export type DiagramNode = Node<{
   name: string,
   processComponentType: ProcessFlowNodeType,
@@ -49,8 +49,10 @@ export type DiagramNode = Node<{
   isValid: boolean,
   createdByAssessment: boolean,
   diagramNodeId?: string,
+  disableInflowConnections?: boolean,
+  disableOutflowConnections?: boolean,
   modifiedDate?: Date,
-  handles?: Array<HandleOption>,
+  handles?: Handles,
   splitterTargets?: Array<string>;
   setManageDataId?: (id: string) => void;
   openEditData?: (boolean) => void;
@@ -74,16 +76,23 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
     pointerEvents: 'all',
   }
 
+  const allowInflowOnly: boolean = data.disableInflowConnections; 
+  const allowOutflowOnly: boolean = data.disableOutflowConnections; 
+  const allowAllHandles: boolean = !allowInflowOnly && !allowOutflowOnly;
+
   return (
     <>
+
+    {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.a &&
       <Handle
-        type="target"
-        className='target-handle'
-        position={Position.Left}
-        id="a"
-        isConnectableEnd={true}
-        style={mainTargetHandleStyle}
+      type="target"
+      className='target-handle'
+      position={Position.Left}
+      id="a"
+      isConnectableEnd={true}
+      style={mainTargetHandleStyle}
       />
+    }
 
       <div
         style={{
@@ -95,7 +104,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           justifyContent: 'space-around',
         }}
       >
-        {data.handles[1].visible &&
+        {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.b &&
           <Handle
             type="target"
             className='target-handle'
@@ -105,7 +114,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           />
         }
 
-        {data.handles[2].visible &&
+        {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.c &&
           <Handle
             type="target"
             className='target-handle'
@@ -115,7 +124,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           />
         }
 
-        {data.handles[3].visible &&
+        {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.d &&
           <Handle
             type="target"
             className='target-handle'
@@ -142,13 +151,16 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         </Typography>
 
       </div>
-      <Handle
-        type="source"
-        className='source-handle'
-        position={Position.Right}
-        id="e"
-        style={mainSourceHandleStyle}
-      />
+
+      {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.e &&
+        <Handle
+          type="source"
+          className='source-handle'
+          position={Position.Right}
+          id="e"
+          style={mainSourceHandleStyle}
+        />
+      }
 
       <div
         style={{
@@ -161,7 +173,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         }}
       >
 
-        {data.handles[5].visible &&
+        {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.f &&
           <Handle
             type="source"
             className='source-handle'
@@ -171,7 +183,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           />
         }
 
-        {data.handles[6].visible &&
+        {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.g &&
           <Handle
             type="source"
             className='source-handle'
@@ -181,7 +193,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           />
         }
 
-        {data.handles[7].visible &&
+        {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.h &&
           <Handle
             type="source"
             className='source-handle'
