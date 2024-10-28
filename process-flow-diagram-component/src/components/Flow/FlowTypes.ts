@@ -7,7 +7,7 @@ import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
-import { NodeTypes } from "@xyflow/react";
+import { EdgeTypes, NodeTypes } from "@xyflow/react";
 
 
 export const nodeTypes: NodeTypes = {
@@ -22,9 +22,10 @@ export const nodeTypes: NodeTypes = {
   splitterNodeEight: SplitterNodeEight
 };
 
-export const edgeTypes = {
+export const edgeTypes: EdgeTypes = {
   selfconnecting: SelfConnectingEdge,
   default: BezierDiagramEdge,
+  bezier: BezierDiagramEdge,
   straight: StraightDiagramEdge,
   step: StepDiagramEdge,
   smoothstep: SmoothStepDiagramEdge,
@@ -32,8 +33,8 @@ export const edgeTypes = {
 
 export const edgeTypeOptions: SelectListOption[] = [
   {
-    value: 'default',
-    display: 'Bezier (default)',
+    value: 'bezier',
+    display: 'Bezier',
   },
   {
     value: 'straight',

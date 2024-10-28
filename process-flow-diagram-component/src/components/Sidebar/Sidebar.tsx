@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { ProcessFlowPart, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
 import { Box, Button, Divider, Grid, Paper, styled, Typography } from '@mui/material';
 import DownloadButton from './DownloadButton';
@@ -18,31 +18,9 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
 
 const Sidebar = memo((props: SidebarProps) => {
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
-  const { getEdges, setEdges } = useReactFlow();
-  const edges = getEdges();
-  const currentEdgeThickness: number = Number(edges.length > 0 && edges[0].style.strokeWidth);
-  const [edgeLineThickness, setEdgeLineThickness] = useState<number | number[]>(currentEdgeThickness);
-
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
-  };
-
-  const handleEdgeThicknessChange = (event: Event, newValue: number) => {
-    setEdgeLineThickness(newValue);
-    setEdges((eds) => {
-      let updatedEdges = eds.map((e: Edge) => {
-        let updatedEdge = {
-          ...e,
-          style: {
-            ...e.style,
-            strokeWidth: newValue
-          }
-        }
-        return updatedEdge;
-      });
-      return updatedEdges;
-    });
   };
 
   return (
@@ -79,8 +57,11 @@ const Sidebar = memo((props: SidebarProps) => {
         <Box sx={{marginTop: 1, padding: '.5rem'}}>
           <div className="sidebar-actions">
             <Box display={'flex'} flexDirection={'column'}  sx={{fontSize: '.75rem'}}>
-            <label htmlFor="edgeType" className="diagram-label">Set Line Type</label>
-            <select className="form-control diagram-select" id="edgeType" name="edgeType" onChange={(e) => props.edgeTypeChangeCallback(e.target.value)}>
+            <label htmlFor="edgeType" className="diagram-label">Default Line Type</label>
+            <select className="form-control diagram-select" id="edgeType" 
+              name="edgeType" 
+              value={props.userDiagramOptions.edgeType}
+              onChange={(e) => props.userDiagramOptionsHandlers.handleEdgeTypeChange(e.target.value)}>
               {edgeTypeOptions.map((option: SelectListOption) => {
                 return (
                   <option key={option.value} value={option.value}>{option.display}</option>
@@ -91,7 +72,9 @@ const Sidebar = memo((props: SidebarProps) => {
 
             <Box display={'flex'} flexDirection={'column'} sx={{fontSize: '.75rem', marginTop: '1rem'}}>
             <label htmlFor={'edgeThickness'} >Set Line Thickness</label>
-            <ContinuousSlider setSliderValue={handleEdgeThicknessChange} value={edgeLineThickness}/>
+            <ContinuousSlider 
+              setSliderValue={props.userDiagramOptionsHandlers.handleEdgeThicknessChange} 
+              value={props.userDiagramOptions.edgeThickness}/>
           </Box>
           
             <div style={{ margin: '1rem 0', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
@@ -99,9 +82,9 @@ const Sidebar = memo((props: SidebarProps) => {
                 <input
                   type="checkbox"
                   id={"directional-arrows"}
-                  checked={props.directionalArrowsVisible}
+                  checked={props.userDiagramOptions.directionalArrowsVisible}
                   className={'diagram-checkbox'}
-                  onChange={(e) => props.handleShowMarkerEndArrows(e.target.checked)}
+                  onChange={(e) => props.userDiagramOptionsHandlers.handleShowMarkerEndArrows(e.target.checked)}
                 />
                 <span>Show Directional Arrows</span>
               </label>
@@ -109,8 +92,9 @@ const Sidebar = memo((props: SidebarProps) => {
                 <input
                   type="checkbox"
                   id={"minimap-visible"}
+                  checked={props.userDiagramOptions.minimapVisible}
                   className={'diagram-checkbox'}
-                  onChange={(e) => props.minimapVisibleCallback(e.target.checked)}
+                  onChange={(e) => props.userDiagramOptionsHandlers.handleMinimapVisible(e.target.checked)}
                 />
                 <span>Show Minimap</span>
               </label>
@@ -118,9 +102,9 @@ const Sidebar = memo((props: SidebarProps) => {
                 <input
                   type="checkbox"
                   id='controls-visible'
-                  checked={props.controlsVisible}
+                  checked={props.userDiagramOptions.controlsVisible}
                   className={'diagram-checkbox'}
-                  onChange={(e) => props.controlsVisibleCallback(e.target.checked)}
+                  onChange={(e) => props.userDiagramOptionsHandlers.handleControlsVisible(e.target.checked)}
                 />
                 <span>Show Controls</span>
               </label>
@@ -145,14 +129,18 @@ const Sidebar = memo((props: SidebarProps) => {
 export default Sidebar;
 
 export interface SidebarProps {
-  minimapVisibleCallback: (enabled: boolean) => void;
-  handleShowMarkerEndArrows: (enabled: boolean) => void;
-  controlsVisible: boolean;
-  directionalArrowsVisible: boolean;
-  controlsVisibleCallback: (enabled: boolean) => void;
-  edgeTypeChangeCallback: (edgeTypeOption: string) => void;
+  userDiagramOptions: UserDiagramOptions;
+  userDiagramOptionsHandlers: UserDiagramOptionsHandlers;
   resetDiagramCallback: () => void;
   setIsDialogOpen: (boolean) => void;
   hasAssessment: boolean;
   shadowRoot;
+}
+
+export interface UserDiagramOptionsHandlers {
+  handleMinimapVisible: (enabled: boolean) => void;
+  handleShowMarkerEndArrows: (enabled: boolean) => void;
+  handleControlsVisible: (enabled: boolean) => void;
+  handleEdgeTypeChange: (edgeTypeOption: string) => void;
+  handleEdgeThicknessChange: (event: Event, edgeThickness: number) => void;
 }

@@ -40,6 +40,7 @@ export const DiagramStoreMeta = {
   storeSchema: [
     { name: 'modifiedDate', keypath: 'modifiedDate', options: {unique: false } },
     { name: 'waterDiagram', keypath: 'waterDiagram', options: {unique: false } },
+    { name: 'assessmentId', keypath: 'assessmentId', options: { unique: false } },
     { name: 'directoryId', keypath: 'directoryId', options: { unique: false } },
     { name: 'createdDate', keypath: 'createdDate', options: { unique: false } },
     { name: 'type', keypath: 'type', options: { unique: false } },

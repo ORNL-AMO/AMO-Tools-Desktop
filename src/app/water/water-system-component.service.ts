@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IntakeSource, WaterProcessComponent, DischargeOutlet, WasteWaterTreatment } from '../shared/models/water-assessment';
+import { IntakeSource, WaterProcessComponent, DischargeOutlet, WasteWaterTreatment, WaterAssessment } from '../shared/models/water-assessment';
 import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { WaterProcessComponentType, getNewProcessComponent } from '../../process-flow-types/shared-process-flow-types';
 import * as _ from 'lodash';
@@ -18,13 +18,25 @@ export class WaterSystemComponentService {
     this.selectedViewComponents = new BehaviorSubject<WaterProcessComponent[]>(undefined);
   }
 
-  setDefaultSelectedComponent(components: WaterProcessComponent[], selectedComponent: WaterProcessComponent, activeComponentType: WaterProcessComponentType) {
-    if (components.length > 0) {
-    if (!selectedComponent || (selectedComponent && selectedComponent.processComponentType !== activeComponentType)) {
-      let lastModified: WaterProcessComponent = _.maxBy(components, 'modifiedDate');
-      this.selectedComponent.next(lastModified);
+  setSelectedComponentOnTabChange(waterAssessment: WaterAssessment, tab: WaterProcessComponentType) {
+    if (tab === 'water-intake') {
+      this.setDefaultSelectedComponent(waterAssessment.intakeSources, this.selectedComponent.getValue(), tab);
+    } else if (tab === 'water-discharge') {
+      this.setDefaultSelectedComponent(waterAssessment.dischargeOutlets, this.selectedComponent.getValue(), tab);
+    } else if (tab === 'water-using-system') {
+      this.setDefaultSelectedComponent(waterAssessment.waterUsingSystems, this.selectedComponent.getValue(), tab);
     }
   }
+
+  setDefaultSelectedComponent(components: WaterProcessComponent[], selectedComponent: WaterProcessComponent, activeComponentType: WaterProcessComponentType) {
+    if (components.length > 0) {
+      if (!selectedComponent || (selectedComponent && selectedComponent.processComponentType !== activeComponentType)) {
+        let lastModified: WaterProcessComponent = _.maxBy(components, 'modifiedDate');
+        this.selectedComponent.next(lastModified);
+      }
+    } else {
+      this.selectedComponent.next(undefined);
+    }
   }
 
   getIntakeSourceForm(intakeSource: IntakeSource): FormGroup {

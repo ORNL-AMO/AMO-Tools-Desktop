@@ -1,6 +1,6 @@
 import React from "react";
 
-export const PresetColorPicker = ({ color, onChangeHandler, presetColors, label, showPresets }) => {
+export const PresetColorPicker = ({ color, pickerChangeHandler, presetChangeHandler, presetColors, label, showPresets }) => {
     return (
         <>
             <div className={'picker-wrapper'}>
@@ -11,7 +11,7 @@ export const PresetColorPicker = ({ color, onChangeHandler, presetColors, label,
                         className={'color-input'}
                         value={color}
                         onChange={(event) => {
-                            onChangeHandler(event.target.value);
+                            pickerChangeHandler(event.target.value);
                         }} 
                         style={{marginLeft: '16px'}}
                         />
@@ -26,7 +26,7 @@ export const PresetColorPicker = ({ color, onChangeHandler, presetColors, label,
                                 className="preset"
                                 style={{ background: presetColor }}
                                 onClick={() => {
-                                    onChangeHandler(presetColor)
+                                    presetChangeHandler(presetColor)
                                 }}
                                 />
                             ))}

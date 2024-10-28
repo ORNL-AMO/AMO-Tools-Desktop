@@ -3,6 +3,8 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { WaterAssessmentService, WaterSetupTabString, WaterUsingSystemTabString } from '../../water-assessment.service';
 import { WaterAssessment } from '../../../shared/models/water-assessment';
+import { WaterSystemComponentService } from '../../water-system-component.service';
+import { WaterProcessComponentType } from '../../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-setup-tabs',
@@ -36,7 +38,9 @@ export class SetupTabsComponent {
 
   hasWaterTreatments: boolean;
   hasWasteWaterTreatments: boolean;
-  constructor(private waterAssessmentService: WaterAssessmentService) { }
+  constructor(private waterAssessmentService: WaterAssessmentService, 
+    private waterSystemComponentService: WaterSystemComponentService,
+  ) { }
 
   ngOnInit(): void {
     this.settingsSub = this.waterAssessmentService.settings.subscribe(val => {
@@ -96,6 +100,7 @@ export class SetupTabsComponent {
   changeSetupTab(tab: WaterSetupTabString) {
     let canDisplayTab: boolean = tab !== 'waste-water-treatment' || (tab === 'waste-water-treatment' && this.hasWasteWaterTreatments);
     if (canDisplayTab) {
+      this.waterSystemComponentService.setSelectedComponentOnTabChange(this.waterAssessmentService.waterAssessment.getValue(), tab as WaterProcessComponentType);
       this.waterAssessmentService.setupTab.next(tab);
     }
   }

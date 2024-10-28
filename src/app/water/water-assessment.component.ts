@@ -14,6 +14,7 @@ import { ParentContainerDimensions } from '../../process-flow-types/shared-proce
 import { IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
 import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
+import { WaterSystemComponentService } from './water-system-component.service';
 
 @Component({
   selector: 'app-water-assessment',
@@ -62,6 +63,7 @@ export class WaterAssessmentComponent {
     private wasteWaterTreatmentService: WasteWaterTreatmentService,
     private waterAssessmentConnectionsService: WaterAssessmentConnectionsService,
     private assessmentDbService: AssessmentDbService, 
+    private waterSystemComponentService: WaterSystemComponentService,
     private cd: ChangeDetectorRef, 
     private settingsDbService: SettingsDbService, 
     private waterAssessmentService: WaterAssessmentService,
@@ -139,6 +141,8 @@ export class WaterAssessmentComponent {
     this.waterAssessmentService.mainTab.next('system-setup');
     this.waterAssessmentService.setupTab.next('system-basics');
     this.waterAssessmentService.waterAssessment.next(undefined);
+    this.waterSystemComponentService.selectedComponent.next(undefined);
+    this.waterSystemComponentService.selectedViewComponents.next(undefined);
   }
 
   ngAfterViewInit() {
@@ -184,6 +188,7 @@ export class WaterAssessmentComponent {
       await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
     } else {
       await this.waterAssessmentConnectionsService.createAssesmentDiagram(this.assessment, this.settings);
+      this.save(this.assessment.water);
     }
 
     this.integratedDiagram = {

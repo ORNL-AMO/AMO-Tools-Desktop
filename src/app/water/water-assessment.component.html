@@ -3,16 +3,19 @@
       <app-water-banner [assessment]="assessment"></app-water-banner>
     </div>
   
+
     <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'system-setup'">
       <div class="nav-item" (click)="setSmallScreenTab('form')"
         [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
         <a class="nav-link" *ngIf="setupTab == 'system-basics'">Assessment Settings</a>
         <a class="nav-link" *ngIf="setupTab == 'water-intake'">Water Intake</a>
+        <a class="nav-link" *ngIf="setupTab == 'water-discharge'">Water Discharge</a>
         <a class="nav-link" *ngIf="setupTab == 'water-using-system'">Water Using System</a>
+        <a class="nav-link" *ngIf="setupTab == 'waste-water-treatment'">Waste Water Treatment</a>
       </div>
       <div class="nav-item" (click)="setSmallScreenTab('details')"
         [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
-        <a class="nav-link" *ngIf="setupTab == 'system-basics'">Help</a>
+        <a class="nav-link" *ngIf="setupTab == 'system-basics' || setupTab == 'waste-water-treatment'">Help</a>
         <a class="nav-link" *ngIf="setupTab != 'system-basics' && setupTab != 'waste-water-treatment'">Details</a>
       </div>
     </div>

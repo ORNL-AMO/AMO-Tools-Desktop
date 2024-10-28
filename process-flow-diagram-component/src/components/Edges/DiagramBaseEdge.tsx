@@ -30,7 +30,6 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
   const onDeleteEdge = () => {
     setEdges((edges) => edges.filter((edg) => edg.id !== props.id));
   };
-  
 const renderBaseEdgeComponent = (props: DiagramEdgeProps, edgePath: string) => {
   const customStyle = {
     ...props.style,
@@ -81,7 +80,8 @@ export interface DiagramEdgeProps extends EdgeProps {
 }
 
 export interface CustomEdgeData extends Record<string, unknown> {
-  flowValue: number
+  flowValue: number,
+  selfEdgeType: string,
 }
 
 interface SelfConnectingPath {

@@ -1,5 +1,5 @@
 import Drawer from '@mui/material/Drawer';
-import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { getConnectedEdges, useReactFlow } from '@xyflow/react';
 import {
     type Node,
@@ -14,6 +14,7 @@ import ComponentConnectionsList from './ComponentConnectionList';
 import CustomizeEdge from './CustomizeEdge';
 import ComponentHandles from './ComponentHandles';
 import ComponentDataForm from './ComponentDataForm';
+import { CustomEdgeData } from '../Edges/DiagramBaseEdge';
 
 export default function ManageDataContextDrawer(props: ManageDataContextDrawerProps) {
     const { getNodes, getEdges, setEdges, setNodes } = useReactFlow();
@@ -26,7 +27,7 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
     const [connectedEdges, setConnectedEdges] = useState<Edge[]>(allNodeEdges);
 
     const [selectedTab, setSelectedTab] = useState(0);
-    const [selectedEdge, setSelectedEdge] = useState<Edge>(connectedEdges[0]);
+    const [selectedEdge, setSelectedEdge] = useState<Edge<CustomEdgeData>>(connectedEdges[0] as Edge<CustomEdgeData>);
     const [nodeName, setNodeName] = useState(nodeData.name);
     const debounceRef = useRef<any>(null);
 
@@ -58,7 +59,7 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
         };
     }, [nodeName]);
 
-    const handleSetSelectedEdge = (edge: Edge) => {
+    const handleSetSelectedEdge = (edge: Edge<CustomEdgeData>) => {
         setSelectedEdge(edge);
     }
 
@@ -83,7 +84,7 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
             const connectedEdges = getConnectedEdges([selectedNode], updatedEdges);
             setConnectedEdges(connectedEdges);
             if (connectedEdges.length > 0 ) {
-                setSelectedEdge(connectedEdges[0]);
+                setSelectedEdge(connectedEdges[0] as Edge<CustomEdgeData>);
             } else {
                 setSelectedTab(1);
             }
@@ -185,7 +186,7 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
                                 setSelectedEdge={handleSetSelectedEdge}
                                 selectedEdge={selectedEdge} />
                             <Divider />
-                            <CustomizeEdge edge={selectedEdge}></CustomizeEdge>
+                            <CustomizeEdge edge={selectedEdge} userDiagramOptions={props.userDiagramOptions}></CustomizeEdge>
                             <Divider />
                         </Box>
                         <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" onClick={onDeleteEdge}>Delete Selected Connection</Button>
@@ -202,6 +203,7 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
 export interface ManageDataContextDrawerProps {
     isDrawerOpen: boolean;
     manageDataId: string;
+    userDiagramOptions: UserDiagramOptions;
     setIsDataDrawerOpen: (boolean) => void;
     setIsDialogOpen: (boolean) => void;
 }
