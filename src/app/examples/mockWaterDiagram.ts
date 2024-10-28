@@ -1543,7 +1543,7 @@ export const MockWaterdiagram: Diagram =
                 }
             ],
             "userDiagramOptions": {
-                "edgeThickness": 10,
+                "edgeThickness": 6,
                 "edgeType": 'default',
                 "minimapVisible": false,
                 "controlsVisible": true,
