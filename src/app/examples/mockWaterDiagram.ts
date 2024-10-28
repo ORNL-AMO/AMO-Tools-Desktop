@@ -97,40 +97,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_k8i3z5t",
                         "modifiedDate": "2024-10-16T16:37:36.336Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "sourceType": 0,
                         "annualUse": 0,
                         "addedMotorEnergy": []
@@ -162,40 +142,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_40pl8g8",
                         "modifiedDate": "2024-10-16T16:37:36.336Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "outletType": 0,
                         "annualUse": 0,
                         "addedMotorEnergy": []
@@ -227,40 +187,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_km3rucx",
                         "modifiedDate": "2024-10-16T16:37:36.336Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "outletType": 0,
                         "annualUse": 0,
                         "addedMotorEnergy": []
@@ -292,40 +232,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_fo9ndq3",
                         "modifiedDate": "2024-10-16T16:37:36.336Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "systemType": 0,
                         "hoursPerYear": 8760,
                         "intakeSources": [
@@ -384,40 +304,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_35zotef",
                         "modifiedDate": "2024-10-16T16:37:36.336Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "systemType": 0,
                         "hoursPerYear": 8760,
                         "intakeSources": [
@@ -476,40 +376,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_jhjsv61",
                         "modifiedDate": "2024-10-16T16:37:36.336Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "systemType": 0,
                         "hoursPerYear": 8760,
                         "intakeSources": [
@@ -568,40 +448,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_9jgt12z",
                         "modifiedDate": "2024-10-16T16:37:36.336Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "systemType": 0,
                         "hoursPerYear": 8760,
                         "intakeSources": [
@@ -660,40 +520,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_0uc4i5b",
                         "modifiedDate": "2024-10-16T16:37:36.336Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "systemType": 0,
                         "hoursPerYear": 8760,
                         "intakeSources": [
@@ -752,40 +592,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_59n7him",
                         "modifiedDate": "2024-10-16T16:37:36.336Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "systemType": 0,
                         "hoursPerYear": 8760,
                         "intakeSources": [
@@ -844,40 +664,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_ewqu18d",
                         "modifiedDate": "2024-10-16T16:37:36.336Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "systemType": 0,
                         "hoursPerYear": 8760,
                         "intakeSources": [
@@ -936,40 +736,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_zqp4xwq",
                         "modifiedDate": "2024-10-16T16:37:36.336Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": false
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": false
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "systemType": 0,
                         "hoursPerYear": 8760,
                         "intakeSources": [
@@ -1024,40 +804,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_kqvywf4",
                         "modifiedDate": "2024-10-16T17:45:42.331Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "treatmentType": 5,
                         "customTreatmentType": null,
                         "cost": 2,
@@ -1090,40 +850,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_eaxzfq5",
                         "modifiedDate": "2024-10-16T17:46:02.854Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "treatmentType": 7,
                         "customTreatmentType": null,
                         "cost": 2,
@@ -1161,40 +901,20 @@ export const MockWaterdiagram: Diagram =
                         "isValid": true,
                         "diagramNodeId": "n_4ml8a89",
                         "modifiedDate": "2024-10-22T15:15:11.940Z",
-                        "handles": [
-                            {
-                                "id": "a",
-                                "visible": true
+                        "handles": {
+                            inflowHandles: {
+                              a: true,
+                              b: true,
+                              c: false,
+                              d: false,
                             },
-                            {
-                                "id": "b",
-                                "visible": true
-                            },
-                            {
-                                "id": "c",
-                                "visible": false
-                            },
-                            {
-                                "id": "d",
-                                "visible": false
-                            },
-                            {
-                                "id": "e",
-                                "visible": true
-                            },
-                            {
-                                "id": "f",
-                                "visible": true
-                            },
-                            {
-                                "id": "g",
-                                "visible": false
-                            },
-                            {
-                                "id": "h",
-                                "visible": false
+                            outflowHandles: {
+                              e: true,
+                              f: true,
+                              g: false,
+                              h: false,
                             }
-                        ],
+                          },
                         "treatmentType": 1,
                         "customTreatmentType": null,
                         "flowValue": null
