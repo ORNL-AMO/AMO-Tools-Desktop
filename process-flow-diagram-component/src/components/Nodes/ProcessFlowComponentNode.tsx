@@ -1,44 +1,9 @@
 import { memo, CSSProperties } from 'react';
-import { Handle, Position, NodeProps, useReactFlow, Node } from '@xyflow/react';
-import { HandleOption, Handles, ProcessFlowNodeType, ProcessFlowPartStyleClass } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { Position, NodeProps, Node } from '@xyflow/react';
+import { Handles, ProcessFlowNodeType, ProcessFlowPartStyleClass } from '../../../../src/process-flow-types/shared-process-flow-types';
 import EditIcon from '@mui/icons-material/Edit';
 import { Typography } from '@mui/material';
-
-
-const mainTargetHandleStyle: CSSProperties = {
-  left: '-5px',
-  height: '20px',
-  width: '10px',
-  borderRadius: '2px 0 0 2px',
-}
-
-const mainSourceHandleStyle: CSSProperties = {
-  right: '-5px',
-  height: '20px',
-  width: '10px',
-  borderRadius: '0 2px 2px 0',
-}
-
-const topTargetHandleStyle: CSSProperties = {
-  top: '-15px',
-  height: '20px',
-  width: '10px',
-  transform: 'rotate(90deg)',
-  borderRadius: '2px 0 0 2px',
-  left: 0,
-  position: 'relative'
-}
-
-const bottomSourceHandleStyle: CSSProperties = {
-  bottom: '-15px',
-  height: '20px',
-  width: '10px',
-  transform: 'rotate(90deg)',
-  borderRadius: '0 2px 2px 0',
-  left: 0,
-  position: 'relative'
-};
-
+import CustomHandle from './CustomHandle';
 
 // * patches v11 -> v12 typing changes
 // todo this type needs to duplicate ProcessFlowPart - how to merge types
@@ -84,13 +49,10 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
     <>
 
     {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.a &&
-      <Handle
-      type="target"
-      className='target-handle'
-      position={Position.Left}
-      id="a"
-      isConnectableEnd={true}
-      style={mainTargetHandleStyle}
+      <CustomHandle
+        type="target"
+        position={Position.Left}
+        id="a"
       />
     }
 
@@ -105,32 +67,26 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         }}
       >
         {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.b &&
-          <Handle
+          <CustomHandle
             type="target"
-            className='target-handle'
             position={Position.Top}
             id="b"
-            style={topTargetHandleStyle}
           />
         }
 
         {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.c &&
-          <Handle
+          <CustomHandle
             type="target"
-            className='target-handle'
             position={Position.Top}
             id="c"
-            style={topTargetHandleStyle}
           />
         }
 
         {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.d &&
-          <Handle
+          <CustomHandle
             type="target"
-            className='target-handle'
             position={Position.Top}
             id="d"
-            style={topTargetHandleStyle}
           />
         }
       </div>
@@ -153,12 +109,10 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
       </div>
 
       {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.e &&
-        <Handle
+        <CustomHandle
           type="source"
-          className='source-handle'
           position={Position.Right}
           id="e"
-          style={mainSourceHandleStyle}
         />
       }
 
@@ -174,32 +128,26 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
       >
 
         {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.f &&
-          <Handle
+          <CustomHandle
             type="source"
-            className='source-handle'
             position={Position.Bottom}
             id="f"
-            style={bottomSourceHandleStyle}
           />
         }
 
         {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.g &&
-          <Handle
+          <CustomHandle
             type="source"
-            className='source-handle'
             position={Position.Bottom}
             id="g"
-            style={bottomSourceHandleStyle}
           />
         }
 
         {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.h &&
-          <Handle
+          <CustomHandle
             type="source"
-            className='source-handle'
             position={Position.Bottom}
             id="h"
-            style={bottomSourceHandleStyle}
           />
         }
       </div>

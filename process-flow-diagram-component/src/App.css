@@ -275,10 +275,38 @@ a {
   border: solid 1px #000;
 }
 
+.react-flow__handle.source-handle:hover {
+  background-color: #b6b6b6 !important;
+}
+.react-flow__handle.source-handle.block-connection:hover {
+  background-color: #ff0000 !important;
+}
+
 .react-flow__handle.target-handle {
   background-color: #fff !important;
   border: solid 1px #000;
 }
+
+.react-flow__handle.target-handle:hover {
+  background-color: #b6b6b6 !important;
+}
+.react-flow__handle.target-handle.block-connection:hover {
+  background-color: #ff0000 !important;
+}
+
+/* 
+.block-connection-icon {
+  visibility: hidden;
+  position: absolute;
+  color: red;
+  top: 20px;
+  left: -20px;
+  z-index: 9999;
+}
+
+.block-connection-icon:hover {
+  visibility: visible;
+} */
 
 .react-flow__node-waterIntake.selectable:hover, 
 .react-flow__node-waterUsingSystem.selectable:hover, 

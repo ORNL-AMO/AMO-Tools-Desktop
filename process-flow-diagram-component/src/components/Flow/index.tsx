@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 import {
   ReactFlow,
   Connection,
@@ -20,24 +20,26 @@ import '@xyflow/react/dist/style.css';
 
 import Sidebar from '../Sidebar/Sidebar';
 import { FlowDiagramData, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeDefaultOptions, getEdgeTypesFromString, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
+import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdges, setDroppedNode, updateLegacyDiagramData, updateStaleNodes } from './FlowUtils';
 import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
 import ManageDataContextDrawer from '../Drawer/ManageDataContextDrawer';
+import { DefaultEdgeOptions } from 'reactflow';
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const nodeClassName = (node: Node) => node.type;
 
+
+export const FlowContext = createContext(null);
 const Flow = (props: FlowProps) => {
   const [manageDataId, setManageDataId] = useState(undefined);
   const [isDataDrawerOpen, setIsDataDrawerOpen] = useState(false);
 
-  // * nodes with createdByAssessment
+  // * staleNodes == nodes with createdByAssessment: true
   let staleParentNodes = [];
   let existingNodes = [];
   let existingEdges = [];
-  
   const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions? props.processDiagram.flowDiagramData.userDiagramOptions: getDefaultUserDiagramOptions();
   existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart> )=> {
     if (node.data.processComponentType !== 'splitter-node') {
@@ -128,6 +130,41 @@ const Flow = (props: FlowProps) => {
     });
   }, [userDiagramOptions]);
 
+  const handleEdgeOptionsChange = useCallback((options: DefaultEdgeOptions) => {
+    setUserDiagramOptions({
+      ...userDiagramOptions,
+      edgeOptions: {
+        ...options
+      }
+    });
+
+    setEdges((eds) => {
+      let updatedEdges = eds.map((e: Edge) => {
+        return {
+          ...e,
+          animated: options.animated
+        }
+      });
+      return updatedEdges;
+    });
+  }, [userDiagramOptions]);
+
+  const handleShowFlowValues = useCallback((isEnabled) => {
+    setUserDiagramOptions({
+      ...userDiagramOptions,
+      showFlowValues: isEnabled
+    });
+
+    setEdges((eds) => {
+      let updatedEdges = eds.map((e: Edge) => {
+        return {
+          ...e
+        }
+      });
+      return updatedEdges;
+    });
+  }, [userDiagramOptions]);
+
   const handleShowMarkerEndArrows = useCallback((showArrows: boolean) => {
     setUserDiagramOptions({
       ...userDiagramOptions,
@@ -192,7 +229,8 @@ const Flow = (props: FlowProps) => {
     changeExistingEdgesType(setEdges, defaultEdgeType);
   }, [userDiagramOptions, edgeTypes]);
 
-  // * suppress 'It looks like you have created a new nodeTypes or edgeTypes object.
+  // todo revisit memoized edgeTypes
+  // * suppress warning --> 'It looks like you have created a new nodeTypes or edgeTypes object.
   // * If this wasn't on purpose please define the nodeTypes/edgeTypes outside of the component or memoize them'
   const onErrorWithSuppressed = (msgId, msg) => {
     if (msgId === '002') {
@@ -203,6 +241,7 @@ const Flow = (props: FlowProps) => {
   }
   return (
     props.height &&
+    <FlowContext.Provider value={{userDiagramOptions}}>
     <div className="process-flow-diagram">
       {isDialogOpen &&
           <WarningDialog 
@@ -222,7 +261,7 @@ const Flow = (props: FlowProps) => {
             onInit={setReactFlowInstance}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
-            defaultEdgeOptions={getEdgeDefaultOptions()}
+            defaultEdgeOptions={userDiagramOptions.edgeOptions}
             defaultViewport={defaultViewport}
             connectionLineType={ConnectionLineType.Bezier}
             onDrop={onDrop}
@@ -245,10 +284,12 @@ const Flow = (props: FlowProps) => {
             userDiagramOptions={userDiagramOptions}
             userDiagramOptionsHandlers={{
               handleMinimapVisible,
+              handleShowFlowValues,
               handleShowMarkerEndArrows,
               handleControlsVisible,
               handleEdgeTypeChange,
-              handleEdgeThicknessChange
+              handleEdgeThicknessChange,
+              handleEdgeOptionsChange,
             }}
             resetDiagramCallback={resetDiagram}
             shadowRoot={props.shadowRoot}
@@ -266,6 +307,7 @@ const Flow = (props: FlowProps) => {
       }
       </ReactFlowProvider>
     </div>
+    </FlowContext.Provider>
   );
 }
 
@@ -276,4 +318,8 @@ export interface FlowProps {
   processDiagram?: WaterDiagram;
   clickEvent: (...args) => void;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
+}
+
+export interface FlowContext {
+  userDiagramOptions: UserDiagramOptions
 }

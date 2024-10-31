@@ -1,17 +1,45 @@
-import { ReactNode } from 'react';
+import { CSSProperties, Fragment, ReactNode, useContext } from 'react';
+import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, SmoothStepEdge, StepEdge, StraightEdge, useHandleConnections, useReactFlow } from '@xyflow/react';
+import { FlowContext } from '../Flow';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, SmoothStepEdge, StepEdge, StraightEdge, useReactFlow } from '@xyflow/react';
+const FlowValueLabel = ({ transform, selected, flowValue }: { transform: string; selected: boolean, flowValue: number }) => {
+  let style: CSSProperties = {
+    position: 'absolute',
+    background: '#fff',
+    border: 'solid 1px #3055cf',
+    padding: 4,
+    borderRadius: 8,
+    fontSize: 10,
+    fontWeight: 700,
+    transform: transform,
+    zIndex: 1000,
+    transition: 'all 100ms ease-out',
+  }
+  if (selected) {
+      style.padding = 8;
+      style.fontSize = 18;
+      style.zIndex = 10001;
+      style.transition = 'all 100ms ease-in'
+  }
+
+  return (
+       <div style={style} className={"nodrag nopan"}>{Number(flowValue).toFixed(3)}</div>
+  );
+}
+
 
 export default function DiagramBaseEdge(props: DiagramEdgeProps) {
+  const flowContext = useContext(FlowContext);
+
   const sourceX = props.sourceX;
   const sourceY = props.sourceY;
   const sourcePosition = props.sourcePosition;
   const targetX = props.targetX;
   const targetY = props.targetY;
   const targetPosition = props.targetPosition;
-  const {setEdges} = useReactFlow();
-  
+  const { setEdges } = useReactFlow();
+
   let [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
@@ -30,45 +58,76 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
   const onDeleteEdge = () => {
     setEdges((edges) => edges.filter((edg) => edg.id !== props.id));
   };
-const renderBaseEdgeComponent = (props: DiagramEdgeProps, edgePath: string) => {
-  const customStyle = {
-    ...props.style,
+  const customEdgeData = props.data as CustomEdgeData;
+  const renderBaseEdgeComponent = (props: DiagramEdgeProps, edgePath: string) => {
+    const customStyle = {
+      ...props.style,
+    }
+    switch (props.baseEdgeComponent) {
+      case BezierEdge:
+        return <BezierEdge {...props} style={customStyle} />
+      case StraightEdge:
+        return <StraightEdge {...props} style={customStyle} />
+      case StepEdge:
+        return <StepEdge {...props} style={customStyle} />
+      case SmoothStepEdge:
+        return <SmoothStepEdge {...props} style={customStyle} />
+      default:
+        return <BaseEdge {...props} path={edgePath} style={{ ...props.style }} />
+    }
   }
-  switch (props.baseEdgeComponent) {
-    case BezierEdge:
-      return <BezierEdge {...props} style={customStyle}/>
-    case StraightEdge:
-      return <StraightEdge {...props} style={customStyle}/>
-    case StepEdge:
-      return <StepEdge {...props} style={customStyle}/>
-    case SmoothStepEdge:
-      return <SmoothStepEdge {...props} style={customStyle}/>
-    default:
-      return <BaseEdge {...props} path={edgePath} style={{...props.style}}/> 
-  }
-}
 
-  const transformString = `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`;
+  const connections = useHandleConnections({ type: 'target', id: props.targetHandleId, nodeId: props.target });
+
+  let showEndLabel = true;
+  let translateXStart = '-50';
+  let translateYStart = '50';
+  if (connections.length > 1 && props.sourceHandleId === connections[1].sourceHandle) {
+    showEndLabel = false;
+    // todo or sourcePosition right
+    if (props.sourceHandleId == 'e') {
+      translateXStart = '50';
+      translateYStart = '50';
+    }
+  }
+
   return (
     <>
-    {renderBaseEdgeComponent(props, edgePath)}
-    {props.selected &&
+      {renderBaseEdgeComponent(props, edgePath)}
       <EdgeLabelRenderer>
-        <div
-          style={{
-            position: 'absolute',
-            transform: transformString,
-            fontSize: 16,
-            pointerEvents: 'all',
-          }}
-          className="nodrag nopan"
+        <Fragment>
+        {props.selected &&
+          <div
+            style={{
+              position: 'absolute',
+              transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
+              fontSize: 16,
+              pointerEvents: 'all',
+            }}
+            className="nodrag nopan"
           >
-          <button className="close-button hover-highlight" onClick={onDeleteEdge}>
-            <CloseIcon sx={{width: 'unset', height: 'unset'}} />
-          </button>
-        </div>
+            <button className="close-button hover-highlight" onClick={onDeleteEdge}>
+              <CloseIcon sx={{ width: 'unset', height: 'unset' }} />
+            </button>
+          </div>
+        }
+        {flowContext.userDiagramOptions.showFlowValues && !showEndLabel &&
+            <FlowValueLabel
+            transform={`translate(${translateXStart}%, ${translateYStart}%) translate(${sourceX}px,${sourceY}px)`}
+            selected={props.selected}
+            flowValue={customEdgeData.flowValue}
+            />
+        }
+        {flowContext.userDiagramOptions.showFlowValues && showEndLabel &&
+            <FlowValueLabel
+            transform={`translate(-50%, -100%) translate(${targetX - 25}px,${targetY - 25}px)`}
+            selected={props.selected}
+            flowValue={customEdgeData.flowValue}
+            />
+        }
+        </Fragment>
+
       </EdgeLabelRenderer>
-      }
     </>
   );
 }

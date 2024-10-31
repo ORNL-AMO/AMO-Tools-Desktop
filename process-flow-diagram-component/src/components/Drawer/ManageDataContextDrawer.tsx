@@ -61,6 +61,19 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
 
     const handleSetSelectedEdge = (edge: Edge<CustomEdgeData>) => {
         setSelectedEdge(edge);
+        // todo also set edge status as selected
+        // setEdges((eds) => {
+        //     return eds.map((e: Edge) => {
+        //       if (e.id === edge.id) {
+        //         console.log('setting edge id select', edge.id)
+        //         return {
+        //             ...e,
+        //             selected: true
+        //         }
+        //       }
+        //       return e;
+        //     });
+        //   });
     }
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
