@@ -20,7 +20,7 @@ import '@xyflow/react/dist/style.css';
 
 import Sidebar from '../Sidebar/Sidebar';
 import { FlowDiagramData, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdges, setDroppedNode, updateLegacyDiagramData, updateStaleNodes } from './FlowUtils';
+import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
