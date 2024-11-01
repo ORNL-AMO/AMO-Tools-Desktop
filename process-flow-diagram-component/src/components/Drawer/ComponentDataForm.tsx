@@ -38,18 +38,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         }
     };
 
-    const handleFlowChange = (event, updateId: string) => {
-        const updatedEdges = props.connectedEdges.map((edge: Edge<CustomEdgeData>) => {
-            if (edge.id === updateId) {
-                edge.data.flowValue = Number(event.target.value);
-            }
-            return edge;
-        });
-        props.setConnectedEdges(updatedEdges);
-    };
-
     const getConnectionListItem = (edge: Edge, source: ProcessFlowPart, target: ProcessFlowPart) => {
-        const flowValue = edge.data.flowValue;
         const flowId: string = edge.id;
             return (
                 <ListItem
@@ -60,8 +49,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                         label={<FlowConnectionText source={source} target={target} />}
                         id={flowId}
                         type={'number'}
-                        value={flowValue}
-                        onChange={(event) => handleFlowChange(event, edge.id)}
+                        value={edge.data.flowValue === null? "" : Number(edge.data.flowValue)}
+                        onChange={(event) => props.onFlowDataChange(event, edge.id)}
                         sx={{ m: 1, width: '100%' }}
                         InputProps={{
                             endAdornment: <InputAdornment position="end">Mgal</InputAdornment>,
@@ -155,7 +144,7 @@ export default ComponentDataForm;
 
 export interface ComponentDataFormProps {
     connectedEdges: Edge[];
-    setConnectedEdges: (edges: Edge[]) => void;
+    onFlowDataChange: (event, edgeId: string) => void;
     selectedNode: Node;
 }
 
