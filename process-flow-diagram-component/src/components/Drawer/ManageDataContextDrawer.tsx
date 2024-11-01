@@ -96,6 +96,18 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
         props.setIsDataDrawerOpen(newOpen)
     };
 
+    const updateDiagramEdges = (event, edgeId: string) => {
+        const updatedEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
+            if (edge.id === edgeId) {
+                const flowValue = event.target.value === ""? null : Number(event.target.value)
+                edge.data.flowValue = flowValue;
+            }
+            return edge;
+        });
+        setEdges(updatedEdges);
+        setConnectedEdges(updatedEdges);
+    }
+    
     return (
         <Drawer
             disablePortal={true}
@@ -162,7 +174,7 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
                 <TabPanel value={selectedTab} index={0}>
                     <ComponentDataForm 
                         connectedEdges={connectedEdges}
-                        setConnectedEdges={setConnectedEdges}
+                        onFlowDataChange={updateDiagramEdges}
                         selectedNode={selectedNode}/>
                 </TabPanel>
 
