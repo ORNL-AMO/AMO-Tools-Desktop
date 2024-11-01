@@ -1,12 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-power-factor-triangle-help',
-  standalone: true,
-  imports: [],
   templateUrl: './power-factor-triangle-help.component.html',
-  styleUrl: './power-factor-triangle-help.component.css'
+  styleUrls: ['./power-factor-triangle-help.component.css']
 })
 export class PowerFactorTriangleHelpComponent {
+  @Input()
+  currentField: string;
+  constructor() { }
+
+  ngOnInit() {
+  }
 
 }

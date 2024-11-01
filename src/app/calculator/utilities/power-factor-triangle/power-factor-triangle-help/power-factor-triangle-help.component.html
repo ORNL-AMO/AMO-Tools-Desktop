@@ -1,1 +1,85 @@
-<p>power-factor-triangle-help works!</p>
+<div class="p-4 pt-2 d-flex flex-column help-info">
+  <h5>
+    Power Factor Triangle Help
+    <br>
+    <small class="text-muted">Power factor is the ratio of real (useful) power to the apparent power that your utility
+      must supply. Low power factor means the utility must extra power to your facility. The main cause of low power
+      factor in industrial facilities is inductive loads from partially loaded motors. You can be penalized for having a
+      low power factor, significantly increasing your energy costs. Correcting your power factor can eliminate these
+      penalties, increase load capability in existing circuits, and reduce power system losses.
+      <hr>
+      The purpose of Power Factor Correction is to raise your facility’s power factor closer to 1.0 by installing
+      capacitance to counterbalance inductive loads. Many utilities charge a ‘power factor fee’ for having a power
+      factor below a minimum level (often 0.95).
+      <hr>
+      This calculator can be used to calculate different aspects of the power factor triangle and explore how adjusting
+      your power factor affects delivered power.
+
+    </small>
+  </h5>
+  <hr class="my-1 hr-spacer">
+
+
+  <div class="my-2" *ngIf="currentField == 'apparentPower'">
+    <h6>
+      Apparent Power
+      <br>
+      <small class="text-muted">
+        The total amount of AC power delivered by the utility to your facility. The magnitude of apparent power can be
+        found with the power factor triangle and the Pythagorean theorem. Apparent power is measured in kilovolt-ampere
+        (kVA).
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'realPower'">
+    <h6>
+      Real Power
+      <br>
+      <small class="text-muted">
+        The component of delivered AC power that does actual work. Real power is measured in kilowatts (kW).
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'reactivePower'">
+    <h6>
+      Reactive Power
+      <br>
+      <small class="text-muted">
+        The component of delivered AC power that does no work but is required to energize reactive loads like capacitors
+        and inductors. Reactive power is measured in reactive kilovolt-ampere (kVAr).
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'phaseAngle'">
+    <h6>
+      Phase Angle
+      <br>
+      <small class="text-muted">
+        The angle between the current and voltage in an AC circuit. Phase angle can also be visualized as the angle
+        between real and apparent power in the power factor triangle.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'powerFactor'">
+    <h6>
+      Power Factor
+      <br>
+      <small class="text-muted">
+        The ratio between real power that does work and the actual apparent power delivered by the utility. A low power
+        factor means that your utility must supply a lot of extra energy to your facility to do the same amount of real
+        work. Power factor is also the cosine of the phase angle.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+</div>
