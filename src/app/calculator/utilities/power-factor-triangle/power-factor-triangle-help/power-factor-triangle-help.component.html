@@ -19,6 +19,17 @@
   </h5>
   <hr class="my-1 hr-spacer">
 
+  <div class="my-2" *ngIf="currentField == 'mode'">
+    <h6>
+      Known Inputs
+      <br>
+      <small class="text-muted">
+        Which combination of power factor parameters do you have data for?
+        <hr>
+      </small>
+    </h6>
+  </div>
+
 
   <div class="my-2" *ngIf="currentField == 'apparentPower'">
     <h6>
