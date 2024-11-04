@@ -21,6 +21,7 @@ export class TutorialSettingsComponent implements OnInit {
   }
 
   checkDisableAll() {
+    debugger;
     this.disableAllTutorials = (this.settings.disableTutorial &&
       this.settings.disableDashboardTutorial &&
       this.settings.disablePsatTutorial &&

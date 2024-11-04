@@ -13,12 +13,14 @@
           "options": {
             "allowedCommonJsDependencies": [
               "lodash",
-              "plotly.js",
-              "c3",
               "regression",
               "xlsx",
               "exceljs",
-              "pptxgenjs"
+              "pptxgenjs",
+              "file-saver",
+              "moment",
+              "plotly.js-dist",
+              "papaparse"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
