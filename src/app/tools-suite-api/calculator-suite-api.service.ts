@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
+import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, PowerFactorTriangleModeInputs, PowerFactorTriangleOutputs, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
@@ -475,5 +475,19 @@ export class CalculatorSuiteApiService {
     return tankInsulationReductionResult;
   }
 
-
+  powerFactorTriangle(inputObj: PowerFactorTriangleModeInputs): PowerFactorTriangleOutputs {
+    let PowerFactor = new Module.PowerFactor();
+    let rawOutput = PowerFactor.calculate(inputObj.mode, inputObj.input1, inputObj.input2, inputObj.inputPowerFactor);
+    let powerFactorTriangleOutputs: PowerFactorTriangleOutputs = {
+      apparentPower: rawOutput.apparentPower,
+      realPower: rawOutput.realPower,
+      reactivePower: rawOutput.reactivePower,
+      phaseAngle: rawOutput.phaseAngle,
+      powerFactor: rawOutput.powerFactor,
+    }
+    rawOutput.delete();
+    PowerFactor.delete();
+    return powerFactorTriangleOutputs;
+  }
+  
 }

@@ -9,6 +9,8 @@ import {
   ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult,
   CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult, SteamReductionInput, PipeInsulationReductionInput,
   PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput, SteamReductionOutput, SteamReductionResult,
+  PowerFactorTriangleModeInputs,
+  PowerFactorTriangleOutputs,
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -360,5 +362,9 @@ export class StandaloneService {
 
   tankInsulationReduction(inputObj: TankInsulationReductionInput): TankInsulationReductionResult {
     return this.calculatorSuiteApiService.tankInsulationReduction(inputObj);
+  }
+
+  powerFactorTriangle(inputObj: PowerFactorTriangleModeInputs): PowerFactorTriangleOutputs {
+    return this.calculatorSuiteApiService.powerFactorTriangle(inputObj);
   }
 }
