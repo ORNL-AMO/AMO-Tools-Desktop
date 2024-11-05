@@ -1,6 +1,5 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { PowerFactorTriangleOutputs } from '../../../../shared/models/standalone';
-import { TraceData } from '../../../../shared/models/plotting';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
@@ -11,17 +10,9 @@ import { PlotlyService } from 'angular-plotly.js';
 export class PowerFactorTriangleResultsComponent implements OnInit {
   @Input()
   results: PowerFactorTriangleOutputs;
-  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-  @ViewChild('copyChart', { static: false }) copyChart: ElementRef;
   @ViewChild("powerFactorTiangle", { static: false }) powerFactorTiangle: ElementRef;
-
-  tableString: any;
-  chartString: any;
-
-
-  dataPointTraces: Array<TraceData>;
-
-  constructor(private cd: ChangeDetectorRef, private plotlyService: PlotlyService) { }
+  
+  constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit() {
   }
