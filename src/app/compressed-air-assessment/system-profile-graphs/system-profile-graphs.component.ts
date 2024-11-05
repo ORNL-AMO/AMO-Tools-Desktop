@@ -145,7 +145,7 @@ export class SystemProfileGraphsComponent implements OnInit {
   }
 
   getMaxLineTrace(xAxisRange: Array<number>, yMaxvalue: number, name: string) {
-    if (yMaxvalue) {
+    if (yMaxvalue !== undefined) {
       let maxLineTrace = {
         x: [xAxisRange[0] - 1, xAxisRange[1] + 1],
         y: [yMaxvalue, yMaxvalue],
@@ -165,7 +165,7 @@ export class SystemProfileGraphsComponent implements OnInit {
   }
 
   getPeakLineTrace(xAxisRange: Array<number>, peakValue: number, name: string) {
-    if (peakValue) {
+    if (peakValue !== undefined) {
       let peakValueTrace = {
         x: [xAxisRange[0] - 1, xAxisRange[1] + 1],
         y: [peakValue, peakValue],
