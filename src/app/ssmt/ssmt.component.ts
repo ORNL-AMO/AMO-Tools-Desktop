@@ -294,14 +294,20 @@ export class SsmtComponent implements OnInit {
       ssmt.modifications.forEach(mod => {
         if (ssmt.co2SavingsData) {
           if (!mod.ssmt.co2SavingsData) {
+            console.log('setting mod obj co2 from bl')
             mod.ssmt.co2SavingsData = ssmt.co2SavingsData;
           } else {
             mod.ssmt.co2SavingsData.zipcode = ssmt.co2SavingsData.zipcode;
             mod.ssmt.co2SavingsData.eGridSubregion = ssmt.co2SavingsData.eGridSubregion;
-            if (!mod.ssmt.co2SavingsData.totalEmissionOutputRate) {
+            console.log('setting mod obj co2 from bl');
+
+            // todo this should be === undefined
+            if (mod.ssmt.co2SavingsData.totalEmissionOutputRate === undefined) {
+              // todo does not appear to ever be hit
               mod.ssmt.co2SavingsData.totalEmissionOutputRate = ssmt.co2SavingsData.totalEmissionOutputRate;
+              console.log('ssmt.component set totalEmissionOutputRate from bl', ssmt.co2SavingsData.totalEmissionOutputRate)
             }
-            if (!mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate) {
+            if (mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate === undefined) {
               mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate = ssmt.co2SavingsData.totalFuelEmissionOutputRate;
             }
           }

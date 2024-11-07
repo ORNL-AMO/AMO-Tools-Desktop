@@ -151,6 +151,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
     this.zipCodeSubRegionData = [];
 
     let subRegionData: SubRegionData = _.find(this.egridService.subRegionsByZipcode, (val) => this.form.controls.zipcode.value === val.zip);
+    debugger;
     if (subRegionData) {
       this.isUsAverage = false;
       subRegionData.subregions.forEach(subregion => {
@@ -228,6 +229,7 @@ export class AssessmentCo2SavingsComponent implements OnInit {
 
     let subregionEmissions: SubregionEmissions = this.egridService.findEGRIDCO2Emissions(this.form.controls.eGridSubregion.value);
 
+    debugger;
     if (subregionEmissions) {
       if(this.inTreasureHunt){
         let conversionHelper = this.convertUnitsService.value(1).from('MWh').to('kWh');

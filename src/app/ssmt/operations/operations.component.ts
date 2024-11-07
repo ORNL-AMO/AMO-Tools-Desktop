@@ -118,9 +118,12 @@ export class OperationsComponent implements OnInit {
     this.co2SavingsData.zipcode = co2SavingsData.zipcode,
     this.save();
   }
-
+  
   setCo2SavingsData() {
-    let co2SavingsData: Co2SavingsData = this.ssmt.co2SavingsData;
+    // todo 6993 - simplify duplicated co2SavingsData objects
+    let co2SavingsData: Co2SavingsData = copyObject(this.ssmt.co2SavingsData);
+    console.log('isBaseline', this.isBaseline);
+    // todo weird
     if (this.ssmt.co2SavingsData) {
       this.co2SavingsData = co2SavingsData;
     } else {
@@ -132,6 +135,7 @@ export class OperationsComponent implements OnInit {
       co2SavingsData.energyType = 'fuel';
       co2SavingsData.energySource = 'Natural Gas';
     }
+
     this.co2SavingsData = co2SavingsData;
     let shouldSetOutputRate: boolean = false;
     if(this.co2SavingsData.totalFuelEmissionOutputRate === undefined || (this.co2SavingsData.energySource !== 'Mixed Fuels' && !this.co2SavingsData.fuelType)) {
@@ -139,7 +143,7 @@ export class OperationsComponent implements OnInit {
     } 
     this.setEnergySource(shouldSetOutputRate);
   }
-  
+
   canCompare() {
     if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
       return true;
@@ -162,6 +166,7 @@ export class OperationsComponent implements OnInit {
   }
 
   setEnergySource(shouldSetOutputRate: boolean = true) {
+    debugger;
     this.setFuelOptions();
     let outputRate: number = this.fuelOptions[0].outputRate;
     if(this.settings.unitsOfMeasure !== 'Imperial'){
