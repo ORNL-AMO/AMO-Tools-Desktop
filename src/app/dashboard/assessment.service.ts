@@ -195,7 +195,7 @@ export class AssessmentService {
       },
       fsatOperations: {
         operatingHours: 8760,
-        cost: 0.06,
+        cost: settings.electricityCost || .06,
       },
       fanMotor: {
         lineFrequency: 60,
@@ -237,7 +237,7 @@ export class AssessmentService {
     return newFsat;
   }
 
-  getNewSsmt(): SSMT {
+  getNewSsmt(settings: Settings): SSMT {
     return {
       name: '',
       setupDone: false,
@@ -250,9 +250,9 @@ export class AssessmentService {
         hoursPerYear: 8760
       },
       operatingCosts: {
-        fuelCost: 5.78,
+        fuelCost: settings.fuelCost || 5.78,
         makeUpWaterCost: 0.03,
-        electricityCost: .05,
+        electricityCost: settings.electricityCost || .05,
         implementationCosts: 0.0
       },
       generalSteamOperations: {
