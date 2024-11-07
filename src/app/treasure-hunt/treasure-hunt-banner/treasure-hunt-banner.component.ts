@@ -60,7 +60,7 @@ export class TreasureHuntBannerComponent implements OnInit {
 
   changeTab(str: string) {
     if (this.disableTabs == false) {
-      if (str == 'system-basics') {
+      if (str == 'system-setup') {
         this.treasureHuntService.mainTab.next(str);
       } else if (this.assessment.treasureHunt.setupDone == true) {
         this.treasureHuntService.mainTab.next(str);
