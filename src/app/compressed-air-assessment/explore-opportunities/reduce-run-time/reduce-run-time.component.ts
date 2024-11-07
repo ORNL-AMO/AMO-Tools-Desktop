@@ -61,6 +61,7 @@ export class ReduceRunTimeComponent implements OnInit {
     }
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment) {
+        console.log('reduce runtime compressedAirAssessment sub')
         this.displayShutdownTimer = compressedAirAssessment.systemInformation.multiCompressorSystemControls != 'loadSharing';
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         this.intervalAmount = this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
@@ -108,6 +109,7 @@ export class ReduceRunTimeComponent implements OnInit {
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (this.modificationResults && this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       this.reduceRuntime = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime));
+      console.log('set reduceRuntime', this.reduceRuntime);
       this.form = this.reduceRunTimeService.getFormFromObj(this.reduceRuntime);
       let isRuntimeOrderShown: boolean = this.reduceRuntime.order != 100; 
       if (isRuntimeOrderShown) {
@@ -125,6 +127,7 @@ export class ReduceRunTimeComponent implements OnInit {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
       this.orderOptions = new Array();
       let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
+      debugger;
       if (modification) {
         let allOrders: Array<number> = [
           modification.addPrimaryReceiverVolume.order,
@@ -163,11 +166,14 @@ export class ReduceRunTimeComponent implements OnInit {
     let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime.order));
     this.reduceRuntime = this.reduceRunTimeService.updateObjFromForm(this.form, this.reduceRuntime);
     this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime = this.reduceRuntime;
+    debugger;
     if (isOrderChange) {
       this.isFormChange = false;
       let newOrder: number = this.reduceRuntime.order;
       this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'reduceRuntime', previousOrder, newOrder);
     }
+    console.log('save', this.compressedAirAssessment);
+    console.log('isFormChange', this.isFormChange);
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
   }
 
@@ -223,7 +229,9 @@ export class ReduceRunTimeComponent implements OnInit {
 
   checkShowShutdownTimer(compressorId: string): boolean {
     let compressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(compressor => { return compressor.itemId == compressorId });
-    return this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType);
+    let showAutomaticShutdown = this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType);
+    console.log('checkShowShutdownTimer', showAutomaticShutdown)
+    return showAutomaticShutdown;
   }
 
   setReduceRuntimeValid() {

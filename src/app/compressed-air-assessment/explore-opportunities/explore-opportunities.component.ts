@@ -54,6 +54,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {
+        debugger;
+        console.log('explore opps compressedAirAssessment sub')
         this.compressedAirAssessment = val;
         this.setBaselineResults();
         this.showCascadingAndSequencer = (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading' || this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer');
@@ -210,6 +212,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   resizeTabs() {
     if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
       this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      console.log('containerheight', this.containerHeight);
     }    
   }
 
