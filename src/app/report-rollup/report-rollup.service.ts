@@ -174,16 +174,15 @@ export class ReportRollupService {
   }
 
   getCarbonEmissionsUnit(settings: Settings): string {
-    let carbonEmissionsUnit = 'ton CO<sub>2</sub>';
-      if (settings.unitsOfMeasure === 'Metric') {
-        carbonEmissionsUnit = 'tonne CO<sub>2</sub>'; 
-      }
+    let carbonEmissionsUnit = 'tonne CO<sub>2</sub>'; 
+    if (settings.unitsOfMeasure !== 'Metric') {
+        carbonEmissionsUnit = 'ton CO<sub>2</sub>';
+    }
     return carbonEmissionsUnit
   }
 
   getAnnualCarbonEmissionsLabel(carbonEmissionsUnit: string): string {
-      return `Annual CO<sub>2</sub> Emissions (${carbonEmissionsUnit})`
-      
+      return `Annual CO<sub>2</sub> Emissions (${carbonEmissionsUnit})`   
   }
 
 }

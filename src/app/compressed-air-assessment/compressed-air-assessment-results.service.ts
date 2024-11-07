@@ -70,7 +70,7 @@ export class CompressedAirAssessmentResultsService {
       if (compressedAirAssessment.systemInformation.co2SavingsData) {
         compressedAirAssessment.systemInformation.co2SavingsData.electricityUse = baselineResults.power;
         dayTypeAnnualEmissionsOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(compressedAirAssessment.systemInformation.co2SavingsData, settings);
-        // * converts annualEmissionOutput to tonne
+        // * handle offset result - electricity use is passed here as kWh but the method is meant to accept MWh
         dayTypeAnnualEmissionsOutput = dayTypeAnnualEmissionsOutput / 1000;
       }
       dayTypeResults.push({
@@ -198,9 +198,9 @@ export class CompressedAirAssessmentResultsService {
       if (baselineResults && compressedAirAssessment.systemInformation.co2SavingsData) {
         compressedAirAssessment.systemInformation.co2SavingsData.electricityUse = allSavingsResults.adjustedResults.power;
         allSavingsResults.adjustedResults.annualEmissionOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(compressedAirAssessment.systemInformation.co2SavingsData, settings);
-        // * converts annualEmissionOutput to tonne
+        // * handle offset result - electricity use is passed here as kWh but the method is meant to accept MWh
         allSavingsResults.adjustedResults.annualEmissionOutput = allSavingsResults.adjustedResults.annualEmissionOutput / 1000;
-        
+
         let currentDayTypeBaselineResult: BaselineResult = baselineResults.dayTypeResults.find(result => result.dayTypeId === dayType.dayTypeId);
         allSavingsResults.savings.annualEmissionOutputSavings = currentDayTypeBaselineResult.annualEmissionOutput - allSavingsResults.adjustedResults.annualEmissionOutput;
       }
