@@ -40,7 +40,7 @@
     
     <tr *ngFor="let output of results.monthlyOutputs; let i = index;">
       <td>
-        Month {{i + 1}}
+        {{inputs.monthyInputs[i].month}}
       </td>
 
       <td *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 0">
