@@ -5,10 +5,10 @@
       <a (click)="changeCalcTab('o2-enrichment')">O<sub>2</sub> Enrichment</a>
     </li>
     <li [ngClass]="{'active': calcTab == 'energy-equivalency'}">
-      <a (click)="changeCalcTab('energy-equivalency')">Energy Equivalency</a>
+      <a (click)="changeCalcTab('energy-equivalency')">Fuel to Electricity Equivalency</a>
     </li>
     <li [ngClass]="{'active': calcTab == 'energy-use'}">
-      <a (click)="changeCalcTab('energy-use')">Flow and Energy Used</a>
+      <a (click)="changeCalcTab('energy-use')">Orifice Meter Flow Calculator</a>
     </li>
     <li [ngClass]="{'active': calcTab == 'pre-assessment'}">
       <a (click)="changeCalcTab('pre-assessment')">Pre-assessment Screening</a>
@@ -30,10 +30,10 @@
       <a (click)="changeCalcTab('o2-enrichment')">O<sub>2</sub> Enrichment</a>
     </div>
     <div [ngClass]="{'active': calcTab == 'energy-equivalency', 'collapse': calcTabsCollapsed}">
-      <a (click)="changeCalcTab('energy-equivalency')">Energy Equivalency</a>
+      <a (click)="changeCalcTab('energy-equivalency')">Fuel to Electricity Equivalency</a>
     </div>
     <div [ngClass]="{'active': calcTab == 'energy-use', 'collapse': calcTabsCollapsed}">
-      <a (click)="changeCalcTab('energy-use')">Flow and Energy Used</a>
+      <a (click)="changeCalcTab('energy-use')">Orifice Meter Flow Calculator</a>
     </div>
     <div [ngClass]="{'active': calcTab == 'pre-assessment', 'collapse': calcTabsCollapsed}">
       <a (click)="changeCalcTab('pre-assessment')">Pre-assessment Screening</a>
