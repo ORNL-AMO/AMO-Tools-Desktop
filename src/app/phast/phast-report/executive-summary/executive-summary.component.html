@@ -54,7 +54,10 @@
         </td>
       </tr>
       <tr>
-        <td> Total CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)</td>
+        <td> Total CO<sub>2</sub> Emissions 
+          <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+          <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+        </td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           {{baselineSummary.co2EmissionsOutput.totalEmissionOutput | number:'1.0-2'}}</td>
         <td *ngFor="let mod of modificationSummaries; let index = index;"
@@ -64,7 +67,10 @@
         </td>
       </tr>
       <tr>
-        <td> CO<sub>2</sub> Emissions Savings (tonne CO<sub>2</sub>)</td>
+        <td> CO<sub>2</sub> Emissions Savings 
+          <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+          <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+        </td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationSummaries; let index = index;">
           <span>
@@ -331,7 +337,10 @@
           </thead>
           <tbody>
             <tr>
-              <td> Electrical CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>) </td>
+              <td> Electrical CO<sub>2</sub> Emissions 
+                <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+                <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+              </td>
               <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                 {{baselinePhastResults.co2EmissionsOutput.electricityEmissionOutput | number:'1.0-2'}}</td>
               <td *ngFor="let mod of modificationPhastResults; let index = index;"
@@ -344,10 +353,14 @@
               </td>
             </tr>
             <tr>
-              <td *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'"> Natural Gas CO<sub>2</sub> Emissions (tonne
-                CO<sub>2</sub>)</td>
-              <td *ngIf="settings.furnaceType !== 'Electric Arc Furnace (EAF)'"> Fuel CO<sub>2</sub> Emissions (tonne
-                CO<sub>2</sub>)</td>
+              <td *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'"> Natural Gas CO<sub>2</sub> Emissions 
+                <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+                <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+              </td>
+              <td *ngIf="settings.furnaceType !== 'Electric Arc Furnace (EAF)'"> Fuel CO<sub>2</sub> Emissions 
+                <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+                <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+              </td>
               <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                 {{baselinePhastResults.co2EmissionsOutput.fuelEmissionOutput | number:'1.0-2'}}</td>
               <td *ngFor="let mod of modificationPhastResults; let index = index;"
@@ -361,7 +374,10 @@
       
             <ng-container *ngIf="settings.furnaceType === 'Electric Arc Furnace (EAF)'">
               <tr>
-                <td> Coal Carbon CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)</td>
+                <td> Coal Carbon CO<sub>2</sub> Emissions 
+                  <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+                  <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                   {{baselinePhastResults.co2EmissionsOutput.coalCarbonEmissionsOutput | number:'1.0-2'}}</td>
                 <td *ngFor="let mod of modificationPhastResults; let index = index;"
@@ -375,7 +391,10 @@
               </tr>
       
               <tr>
-                <td> Electrode CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)</td>
+                <td> Electrode CO<sub>2</sub> Emissions 
+                  <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+                  <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                   {{baselinePhastResults.co2EmissionsOutput.electrodeEmissionsOutput | number:'1.0-2'}}</td>
                 <td *ngFor="let mod of modificationPhastResults; let index = index;"
@@ -388,7 +407,10 @@
               </tr>
       
               <tr>
-                <td> Other Fuel CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)</td>
+                <td> Other Fuel CO<sub>2</sub> Emissions 
+                  <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+                  <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                   {{baselinePhastResults.co2EmissionsOutput.otherFuelEmissionsOutput
                   |

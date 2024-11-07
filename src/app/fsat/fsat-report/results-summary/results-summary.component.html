@@ -138,7 +138,10 @@
       </tr>  
       
       <tr class="callout">
-        <th>Annual CO2 Emissions (tonne CO<sub>2</sub>)</th>
+        <th>Annual CO2 Emissions 
+          <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+          <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+        </th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{fsat.outputs.co2EmissionsOutput |
           number:'1.1-1'}}</th>
         <th *ngFor="let modification of fsat.modifications; let index = index;"
@@ -149,7 +152,10 @@
         </th>
       </tr>
       <tr class="callout">
-        <th>Annual CO2 Emissions Savings (tonne CO<sub>2</sub>)</th>
+        <th>Annual CO2 Emissions Savings 
+          <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+          <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+        </th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
         <th *ngFor="let modification of fsat.modifications; let index = index;"
           [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">

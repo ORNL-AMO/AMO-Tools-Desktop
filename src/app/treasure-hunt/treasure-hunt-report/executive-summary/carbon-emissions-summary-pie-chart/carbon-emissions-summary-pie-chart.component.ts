@@ -98,8 +98,12 @@ export class CarbonEmissionsSummaryPieChartComponent implements OnInit {
       rotation: 115
     }];
 
+    let emissionsUnits: string = 'tonne CO<sub>2</sub>';
+    if (this.settings.unitsOfMeasure !== 'Metric') {
+      emissionsUnits = 'ton CO<sub>2</sub>';
+    }
     var layout = {
-      title: 'CO<sub>2</sub> Emission Savings (tonne CO<sub>2</sub>)',
+      title: `CO<sub>2</sub> Emission Savings (${emissionsUnits})`,
       font: {
         size: 10,
       },

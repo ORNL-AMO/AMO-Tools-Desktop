@@ -56,13 +56,15 @@
                 </div>
                 <div class="row no-gutters justify-content-center" [ngClass]="{'collapse': graphsCollapsed}">
                         <div class="col-12 col-lg-6" *ngIf="pieChartData.length !== 0">
-                                <app-report-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'carbon'"
+                                <app-report-summary-pie-chart [pieChartData]="pieChartData" 
+                                        [carbonEmissionsUnit]="carbonEmissionsUnit"
+                                        [dataOption]="'carbon'"
                                         [energyUnit]="reportSummaryEnergyUnit">
                                 </app-report-summary-pie-chart>
                         </div>
                         <div class="col-12 col-lg-6" *ngIf="carbonBarChart.length !== 0">
                                 <app-report-summary-bar-chart [barChartData]="carbonBarChart"
-                                        [yAxisLabel]="'Annual CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)'"
+                                        [yAxisLabel]="carbonEmissionsBarYLabel"
                                         [tickFormat]="'.2s'">
                                 </app-report-summary-bar-chart>
                         </div>
