@@ -12,6 +12,8 @@ import { UntypedFormGroup } from '@angular/forms';
 export class BlowdownRateResultsComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inTreasureHunt: boolean;
 
   baselineSub: Subscription;
   modificationSub: Subscription;
@@ -29,11 +31,19 @@ export class BlowdownRateResultsComponent implements OnInit {
 
   ngOnInit() {
     this.showBoilerSubscription = this.boilerBlowdownRateService.showBoiler.subscribe(val => {
-      this.showBoiler = val;
+      if (!this.inTreasureHunt) {
+        this.showBoiler = val;
+      } else {
+        this.showBoiler = true;
+      }
       this.calculateResults();
     });
     this.showOperationsSubscription = this.boilerBlowdownRateService.showOperations.subscribe(val => {
-      this.showOperations = val;
+      if (!this.inTreasureHunt) {
+        this.showOperations = val;
+      } else {
+        this.showOperations = true;
+      }
       this.calculateResults();
     });
     this.baselineSub = this.boilerBlowdownRateService.baselineInputs.subscribe(val => {
