@@ -133,7 +133,6 @@ export class Co2SavingsFormComponent implements OnInit {
   setSubRegionEmissionsOutput() {
     let subregionEmissions: SubregionEmissions = this.egridService.findEGRIDCO2Emissions(this.data.eGridSubregion);
 
-    debugger;
     if (subregionEmissions) {
       this.data.totalEmissionOutputRate = subregionEmissions.co2Emissions
       this.calculate();
