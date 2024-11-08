@@ -9,6 +9,7 @@ import { DashboardService } from './dashboard.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { PrintOptionsMenuService } from '../shared/print-options-menu/print-options-menu.service';
 import { ImportExportService } from '../shared/import-export/import-export.service';
+import { SurveyModalService } from '../shared/survey-modal/survey-modal/survey-modal.service';
 
 
 @Component({
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit {
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
+  showSurveyToast: boolean = true;
 
   createFolder: boolean;
   createFolderSub: Subscription;
@@ -42,6 +44,7 @@ export class DashboardComponent implements OnInit {
   showImportModal: boolean;
 
   dashboardToastMessageSub: Subscription;
+  showSurveyModalSub: Subscription;
 
   showExportModalSub: Subscription;
   showExportModal: boolean;
@@ -67,6 +70,7 @@ export class DashboardComponent implements OnInit {
   showPrintViewSub: Subscription;
   exportInProgressSub: Subscription;
   showExportInProgress: boolean;
+  showSurveyModal: boolean;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -76,6 +80,7 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private printOptionsMenuService: PrintOptionsMenuService,
     private importExportService: ImportExportService,
+    private surveyModalService: SurveyModalService,
     private directoryDashboardService: DirectoryDashboardService, private cd: ChangeDetectorRef) {
   }
 
@@ -108,6 +113,10 @@ export class DashboardComponent implements OnInit {
 
     this.copyItemsSub = this.dashboardService.copyItems.subscribe(val => {
       this.copyItems = val;
+    });
+
+    this.showSurveyModalSub = this.surveyModalService.showSurveyModal.subscribe(val => {
+      this.showSurveyModal = val;
     });
 
     this.dashboardToastMessageSub = this.dashboardService.dashboardToastMessage.subscribe(val => {
@@ -153,6 +162,7 @@ export class DashboardComponent implements OnInit {
     this.routerSubscription.unsubscribe();
     this.showPrintViewSub.unsubscribe();
     this.exportInProgressSub.unsubscribe();
+    this.showSurveyModalSub.unsubscribe();
     if (this.importExportService.removeDownloadListener) {
       this.importExportService.removeDownloadListener();
     }
@@ -178,6 +188,15 @@ export class DashboardComponent implements OnInit {
   }
 
   hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    }
+  }  
+
+  hideSurveyToast() {
     this.showToast = false;
     this.toastData = {
       title: '',

@@ -1,0 +1,40 @@
+.card.card-toast {
+    position: fixed;
+    z-index: 9999;
+    right: 10px;
+    top: 0px;
+    margin: 10px;
+    min-width: 300px;
+    max-width: 500px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+
+}
+
+.alert {
+    padding: 0;
+}
+
+.info-icon {
+    font-size: 22px;
+}
+
+.close-button {
+  float: right;
+  font-size: 16px;
+}
+
+.close-button:hover {
+ cursor: pointer;
+}
+
+.card-header {
+    font-size: 18px;
+}
+
+.card-body {
+    font-size: 16px;
+}
+
+a {
+    font-size: 16px;
+}

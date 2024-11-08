@@ -26,6 +26,8 @@ import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/securit
 import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
 import { AppErrorModule } from '../shared/errors/app-error.module';
 import { DataAndBackupComponent } from './data-and-backup/data-and-backup.component';
+import { SurveyToastModule } from '../shared/survey-toast/survey-toast.module';
+import { SurveyModalModule } from '../shared/survey-modal/survey-modal.module';
 
 @NgModule({
   declarations: [
@@ -55,6 +57,8 @@ import { DataAndBackupComponent } from './data-and-backup/data-and-backup.compon
     ToastModule,
     SecurityAndPrivacyModule,
     CreateAssessmentModalModule,
+    SurveyToastModule,
+    SurveyModalModule,
     AppErrorModule
   ],
   providers: [

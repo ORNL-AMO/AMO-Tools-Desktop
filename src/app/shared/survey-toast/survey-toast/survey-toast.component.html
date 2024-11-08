@@ -1,0 +1,16 @@
+<div class="card card-toast alert alert-info" [@toast]="showSurveyToast">
+  <div class="card-header">
+    <span class="fa fa-info-circle mr-2 info-icon"></span>
+    Help Support MEASUR 
+    <span class="fa fa-times close-button" (click)="closeToast()"></span>
+  </div>
+  <div class="card-body">
+    <p class="card-text">
+      Please complete a five question survey to help support  MEASUR.
+    </p>
+  </div>
+  <div class="card-footer text-end">
+    <a class="click-link text-center" (click)="showSurvey()">Take Survey</a>
+    <a class="click-link pull-right" (click)="closeToast()">Close</a>
+  </div>
+</div>

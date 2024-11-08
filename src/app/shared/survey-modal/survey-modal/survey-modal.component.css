@@ -1,0 +1,14 @@
+.btn{
+    padding: 6px;
+}
+
+.btn-primary {
+    color: white;
+    background: #117A65;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    color: white;
+    background: #447f73 !important;
+}

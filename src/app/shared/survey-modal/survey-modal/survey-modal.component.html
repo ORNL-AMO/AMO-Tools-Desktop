@@ -1,0 +1,95 @@
+<div bsModal #surveyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="deleteModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header p-2">
+                    <span class="card-header-text">
+                        MEASUR User Survey
+                    </span>
+                    <button class="close" aria-label="Close" (click)="close()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-block p-4">
+                    <div class="card-body">
+                        <p class="card-text">
+                          Some explanation of what MEASUR will do with this info...
+                        </p>
+                      </div>
+
+                    <form [formGroup]="userSurveyForm" class="mb-4 px-2">
+
+                        <div class="form-group d-flex flex-column w-100 mb-3">
+                          <label for="email">Email</label>
+                          <div class="input-group">
+                            <input type="text" formControlName="email" name="email" class="form-control" (input)="save()"
+                              id="email" />
+                          </div>
+                          <div class="input-group">
+                            <span class="alert-danger w-100 pull-right small py-1 px-2"
+                              *ngIf="userSurveyForm.controls.email.invalid && !userSurveyForm.controls.email.pristine">
+                              <span *ngIf="userSurveyForm.controls.email.errors.email">Must be a valid email address</span>
+                            </span>
+                          </div>
+                        </div>
+
+                          <div class="form-group d-flex flex-column w-100 mb-3">
+                            <label for="questionA">Question A</label>
+                            <div class="input-group">
+                              <input type="text" formControlName="questionA" name="questionA" class="form-control" (input)="save()"
+                                id="questionA" />
+                            </div>
+                            <div class="input-group">
+                              <span class="alert-danger w-100 pull-right small py-1 px-2"
+                                *ngIf="userSurveyForm.controls.questionA.invalid && !userSurveyForm.controls.questionA.pristine">
+                                <!-- <span *ngIf="userSurveyForm.controls.questionA.errors.email">Must be a valid email address</span> -->
+                              </span>
+                            </div>
+                          </div>
+
+                          <div class="form-group d-flex flex-column w-100 mb-3">
+                            <label for="questionB">Question B</label>
+                            <div class="input-group">
+                              <input type="text" formControlName="questionB" name="questionB" class="form-control" (input)="save()"
+                                id="questionB" />
+                            </div>
+                            <div class="input-group">
+                              <span class="alert-danger w-100 pull-right small py-1 px-2"
+                                *ngIf="userSurveyForm.controls.questionB.invalid && !userSurveyForm.controls.questionB.pristine">
+                                <!-- <span *ngIf="userSurveyForm.controls.questionB.errors.email">Must be a valid email address</span> -->
+                              </span>
+                            </div>
+                          </div>
+
+                          <div class="form-group">
+                            <label for="dropdownA">Dropdown A</label>
+                            <div class="input-group">
+                                <select class="form-control" name="dropdownA"
+                                    formControlName="dropdownA" (change)="save()">
+                                    <option [ngValue]="'option1'">option 1</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dropdownB">Dropdown B</label>
+                            <div class="input-group">
+                                <select class="form-control" name="dropdownB"
+                                    formControlName="dropdownB" (change)="save()">
+                                    <option [ngValue]="'option1'">option 1</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                      </form>
+                </div>
+                <div class="modal-footer p-2">
+                    <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close()">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm " (click)="sendAnswers()">Send Answers</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
