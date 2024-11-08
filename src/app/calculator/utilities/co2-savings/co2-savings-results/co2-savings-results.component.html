@@ -7,30 +7,43 @@
 
     <tr *ngFor="let data of baselineData; let index = index;">
       <td>Energy Use #{{index+1}}</td>
-      <td class="text-center">{{data.totalEmissionOutput | number:'1.1-1'}} tonne CO<sub>2</sub></td>
+      <td class="text-center">{{data.totalEmissionOutput | number:'1.1-1'}} 
+        <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+        <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+      </td>
     </tr>
     <tr *ngIf="modificationData.length != 0">
       <td class="bold" colspan="2">Modification Summary</td>
     </tr>
     <tr *ngFor="let data of modificationData; let index = index;">
       <td>Energy Use #{{index+1}}</td>
-      <td class="text-center">{{data.totalEmissionOutput | number:'1.1-1'}} tonne CO<sub>2</sub></td>
+      <td class="text-center">{{data.totalEmissionOutput | number:'1.1-1'}} 
+        <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+        <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+      </td>
     </tr>
     <tr>
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
       <td class="bold">Baseline Total</td>
-      <td class="text-center">{{baselineTotal | number:'1.1-1'}} tonne CO<sub>2</sub>
+      <td class="text-center">{{baselineTotal | number:'1.1-1'}} 
+        <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+        <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
       </td>
     </tr>
     <tr>
       <td class="bold">Modification Total</td>
-      <td class="text-center">{{modificationTotal | number:'1.1-1'}} tonne CO<sub>2</sub>
+      <td class="text-center">{{modificationTotal | number:'1.1-1'}} 
+        <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+        <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
     </tr>
     <tr>
       <td class="bold">Total Savings</td>
-      <td class="text-center">{{baselineTotal - modificationTotal | number:'1.1-1'}} tonne CO<sub>2</sub></td>
+      <td class="text-center">{{baselineTotal - modificationTotal | number:'1.1-1'}} 
+        <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
+        <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+      </td>
     </tr>
   </tbody>
 </table>
