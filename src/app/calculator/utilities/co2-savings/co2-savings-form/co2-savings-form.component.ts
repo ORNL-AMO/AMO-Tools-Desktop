@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { Co2SavingsData } from '../co2-savings.service';
 import { Settings } from '../../../../shared/models/settings';
 import { EGridService, SubRegionData, SubregionEmissions } from '../../../../shared/helper-services/e-grid.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 @Component({
   selector: 'app-co2-savings-form',
   templateUrl: './co2-savings-form.component.html',
@@ -39,7 +40,7 @@ export class Co2SavingsFormComponent implements OnInit {
 
   hasValidSubRegion: boolean;
   zipCodeSubRegionData: Array<string>;
-  constructor(private egridService: EGridService) { }
+  constructor(private egridService: EGridService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.otherFuels = otherFuels;
@@ -75,8 +76,13 @@ export class Co2SavingsFormComponent implements OnInit {
     this.data.totalEmissionOutputRate = undefined;
   }
   setFuel() {
-    let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.data.fuelType === val.fuelType; });
-    this.data.totalEmissionOutputRate = tmpFuel.outputRate;
+    let fuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.data.fuelType === val.fuelType; });
+    let outputRate = fuel.outputRate;
+    if(this.settings.unitsOfMeasure !== 'Imperial'){
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
+      outputRate = Number(outputRate.toFixed(3));
+    }
+    this.data.totalEmissionOutputRate = outputRate;
     this.calculate();
   }
   setRegion() {

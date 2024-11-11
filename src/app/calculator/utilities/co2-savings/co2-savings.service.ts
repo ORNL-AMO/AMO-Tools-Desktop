@@ -45,6 +45,11 @@ export class Co2SavingsService {
     } else {
       data.totalEmissionOutput = 0;
     }
+
+    if (settings.unitsOfMeasure !== 'Metric') {
+      data.totalEmissionOutput = this.convertUnitsService.value(data.totalEmissionOutput).from('tonne').to('ton');
+    }
+
     return data;
   }
 }
