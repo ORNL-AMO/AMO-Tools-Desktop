@@ -1,6 +1,7 @@
 import React from 'react';
 import { toJpeg, toPng, toSvg } from 'html-to-image';
 import { getNodesBounds, getViewportForBounds, useReactFlow } from '@xyflow/react';
+import { Button } from '@mui/material';
 
 function downloadImage(dataUrl) {
   const a = document.createElement('a');
@@ -35,9 +36,8 @@ function DownloadButton(props: DownloadProps) {
   };
 
   return (
-    <button className="download-btn" onClick={onClick}>
-      Download Image
-    </button>
+    <Button variant="outlined" sx={{ width: '100%', marginBottom: '1rem' }} onClick={() => onClick}>Download Image</Button>
+
   );
 }
 

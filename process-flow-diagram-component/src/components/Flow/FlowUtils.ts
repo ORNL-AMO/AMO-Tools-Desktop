@@ -1,7 +1,7 @@
 import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
 import { edgeTypes, nodeTypes } from "./FlowTypes";
 import { getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions } from "../../../../src/process-flow-types/shared-process-flow-types";
-import { DefaultEdgeOptions, EdgeTypes } from "@xyflow/react";
+import { DefaultEdgeOptions, EdgeTypes, useHandleConnections } from "@xyflow/react";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
@@ -85,6 +85,7 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
 export const setCustomEdges = (setEdges, connectedParams: Connection | Edge, diagramOptions: UserDiagramOptions) => {
   setEdges((eds) => {
     connectedParams = connectedParams as Edge;
+
     if (connectedParams.source === connectedParams.target) {
       connectedParams.type = 'selfconnecting';
     }
@@ -225,5 +226,10 @@ export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
     minimapVisible: false,
     controlsVisible: true,
     directionalArrowsVisible: true,
+    showFlowValues: false,
+    edgeOptions: {
+      animated: true,
+      type: 'default',
+    }
   }
 }

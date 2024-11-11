@@ -1,4 +1,4 @@
-import { Edge, Node } from '@xyflow/react';
+import { DefaultEdgeOptions, Edge, Node } from '@xyflow/react';
 import { CSSProperties } from 'react';
 
 // ! duplicated definition in water-assessment.ts
@@ -60,9 +60,11 @@ export interface ProcessFlowParentState {
   export interface UserDiagramOptions {
     edgeThickness: number,
     edgeType: string,
+    showFlowValues?: boolean,
     minimapVisible: boolean,
     controlsVisible: boolean,
     directionalArrowsVisible: boolean,
+    edgeOptions: DefaultEdgeOptions
   }
 
   export interface WaterDiagramOption {
@@ -138,13 +140,13 @@ export interface ProcessFlowParentState {
 }
 
 export interface Handles {
-  inflowHandles: {
+  inflowHandles?: {
     a: boolean,
     b: boolean,
     c: boolean,
     d: boolean,
   },
-  outflowHandles: {
+  outflowHandles?: {
     e: boolean,
     f: boolean,
     g: boolean,

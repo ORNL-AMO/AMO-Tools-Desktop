@@ -34,7 +34,7 @@ export const edgeTypes: EdgeTypes = {
 export const edgeTypeOptions: SelectListOption[] = [
   {
     value: 'bezier',
-    display: 'Bezier',
+    display: 'Curve',
   },
   {
     value: 'straight',
