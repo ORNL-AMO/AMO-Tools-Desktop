@@ -136,6 +136,7 @@ export class ModificationListComponent implements OnInit {
     let ssmtCopy: SSMT = (JSON.parse(JSON.stringify(ssmt)));
     delete ssmtCopy.modifications;
     ssmtCopy.name = this.newModificationName;
+
     if (ssmtCopy.headerInput.lowPressureHeader) {
       ssmtCopy.headerInput.lowPressureHeader.useBaselineProcessSteamUsage = true;
     }
@@ -146,6 +147,8 @@ export class ModificationListComponent implements OnInit {
       ssmt: ssmtCopy,
       exploreOpportunities: (this.assessmentTab === 'explore-opportunities')
     };
+
+    tmpModification.ssmt.co2SavingsData.userEnteredModificationEmissions = tmpModification.ssmt.co2SavingsData.userEnteredBaselineEmissions; 
     this.dropdown.push(false);
     this.rename.push(false);
     this.deleteArr.push(false);

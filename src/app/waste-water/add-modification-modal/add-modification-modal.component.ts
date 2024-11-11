@@ -37,6 +37,7 @@ export class AddModificationModalComponent implements OnInit {
   addModification() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.baselineData));
+    modification.co2SavingsData.userEnteredModificationEmissions = modification.co2SavingsData.userEnteredBaselineEmissions; 
     modification.exploreOpportunities = (this.assessmentTab == 'explore-opportunities');
     modification.name = this.newModificationName;
     modification.id = Math.random().toString(36).substr(2, 9);
