@@ -120,9 +120,7 @@ export class OperationsComponent implements OnInit {
   }
   
   setCo2SavingsData() {
-    // todo 6993 - simplify duplicated co2SavingsData objects
     let co2SavingsData: Co2SavingsData = copyObject(this.ssmt.co2SavingsData);
-    // todo weird
     if (this.ssmt.co2SavingsData) {
       this.co2SavingsData = co2SavingsData;
     } else {
