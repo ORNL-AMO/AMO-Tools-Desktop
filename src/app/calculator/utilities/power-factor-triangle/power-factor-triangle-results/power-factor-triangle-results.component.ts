@@ -11,6 +11,8 @@ export class PowerFactorTriangleResultsComponent implements OnInit {
   @Input()
   results: PowerFactorTriangleOutputs;
   @ViewChild("powerFactorTiangle", { static: false }) powerFactorTiangle: ElementRef;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  tableString: any;
   
   constructor(private plotlyService: PlotlyService) { }
 
@@ -25,6 +27,10 @@ export class PowerFactorTriangleResultsComponent implements OnInit {
     if (changes.results && !changes.results.firstChange) {
       this.renderChart();
     }
+  }
+
+  updateTableString() {
+    this.tableString = this.copyTable.nativeElement.innerText;
   }
 
   renderChart() {
@@ -79,6 +85,12 @@ export class PowerFactorTriangleResultsComponent implements OnInit {
         x: 0.5,
         xanchor: 'center',
         y: -0.2
+      },
+      xaxis: {
+        range: [0, 100]
+      },
+      yaxis: {
+        range: [0, 100]
       },
       margin: { t: 25, b: 25, l: 25, r: 25 },
     };
