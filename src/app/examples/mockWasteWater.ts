@@ -141,6 +141,7 @@ export const MockWasteWaterSettings: Settings = {
   "language": "English",
   "currency": "$",
   "unitsOfMeasure": "Imperial",
+  "emissionsUnit": "Metric",
   "distanceMeasurement": "ft",
   "flowMeasurement": "MGD",
   "powerMeasurement": "hp",

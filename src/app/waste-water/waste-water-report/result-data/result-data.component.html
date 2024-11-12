@@ -300,7 +300,10 @@
             | number:'1.0-2'}}</td>
             </tr>
             <tr>
-                <th>Annual CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)</th>
+                <th>Annual CO<sub>2</sub> Emissions 
+                    <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                    <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                </th>
                 <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{wasteWater.baselineData.outputs.co2EmissionsOutput | number:'1.0-0'}}</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
@@ -308,7 +311,10 @@
             | number:'1.0-0'}}</th>
             </tr>
             <tr>
-                <th>Annual CO<sub>2</sub> Emissions Savings (tonne CO<sub>2</sub>)</th>
+                <th>Annual CO<sub>2</sub> Emissions Savings 
+                    <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                    <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                </th>
                 <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
                 <th *ngFor="let modification of wasteWater.modifications; let index = index;"
                     [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.outputs.co2EmissionsSavings

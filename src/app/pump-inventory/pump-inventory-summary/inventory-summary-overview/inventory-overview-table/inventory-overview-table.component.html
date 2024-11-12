@@ -48,11 +48,13 @@
                 </td>
                 <td>
                     <span *ngIf="departmentSummaryItem.co2EmissionOutput">
-                        {{departmentSummaryItem.co2EmissionOutput | number :'1.0-0'}} tonne CO<sub>2</sub>
+                        {{departmentSummaryItem.co2EmissionOutput | number :'1.0-0'}}
                     </span>
                     <span *ngIf="!departmentSummaryItem.co2EmissionOutput">
-                        &mdash; tonne CO<sub>2</sub>
+                        &mdash; 
                     </span>
+                    <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                    <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
                 </td>
             </tr>
         </tbody>
@@ -82,11 +84,13 @@
                 </td>
                 <td>
                     <span *ngIf="inventorySummary.totalEmissions">
-                        {{inventorySummary.totalEmissions | number :'1.0-0'}} tonne CO<sub>2</sub>
+                        {{inventorySummary.totalEmissions | number :'1.0-0'}}
                     </span>
                     <span *ngIf="!inventorySummary.totalEmissions">
-                        &mdash; tonne CO<sub>2</sub>
+                        &mdash; 
                     </span>
+                    <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                    <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
                 </td>
             </tr>
         </tfoot>

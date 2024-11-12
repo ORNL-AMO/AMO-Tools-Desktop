@@ -12,6 +12,7 @@ import { SsmtReportRollupService } from '../ssmt-report-rollup.service';
 import { WasteWaterReportRollupService } from '../waste-water-report-rollup.service';
 import * as _ from 'lodash';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
+import { ReportRollupService } from '../report-rollup.service';
 
 @Injectable()
 export class ReportSummaryGraphsService {
@@ -24,6 +25,7 @@ export class ReportSummaryGraphsService {
   constructor(private convertUnitsService: ConvertUnitsService, private compressedAirReportRollupService: CompressedAirReportRollupService,
     private fsatReportRollupService: FsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
     private psatReportRollupService: PsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService,
+    private reportRollupService: ReportRollupService,
     private wasteWaterReportRollupService: WasteWaterReportRollupService) {
     this.reportSummaryGraphData = new BehaviorSubject<Array<PieChartDataItem>>(new Array<PieChartDataItem>());
     this.energyChartData = new BehaviorSubject<Array<PieChartDataItem>>(new Array<PieChartDataItem>());
@@ -119,7 +121,7 @@ export class ReportSummaryGraphsService {
       reportSummaryCostData.push(costBarChartItem);
     }
     if (compressedAirTotals.carbonEmissions != 0) {
-      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(compressedAirTotals, 'Compressed Air', '#7030A0');
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(compressedAirTotals, 'Compressed Air', '#7030A0', settings);
       reportSummaryCarbonData.push(carbonBarChartItem);
     }
     if (fsatTotals.totalEnergy != 0) {
@@ -133,7 +135,7 @@ export class ReportSummaryGraphsService {
       reportSummaryCostData.push(costBarChartItem);
     }
     if (fsatTotals.carbonEmissions != 0){
-      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(fsatTotals, 'Fans', '#FFE400');
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(fsatTotals, 'Fans', '#FFE400', settings);
       reportSummaryCarbonData.push(carbonBarChartItem);
     }
     if (phastTotals.totalEnergy != 0) {
@@ -147,7 +149,7 @@ export class ReportSummaryGraphsService {
       reportSummaryCostData.push(costBarChartItem);
     }
     if (phastTotals.carbonEmissions != 0) {
-      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(phastTotals, 'Process Heating', '#bf3d00');
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(phastTotals, 'Process Heating', '#bf3d00', settings);
       reportSummaryCarbonData.push(carbonBarChartItem);
     }
     if (ssmtTotals.totalEnergy != 0) {
@@ -161,7 +163,7 @@ export class ReportSummaryGraphsService {
       reportSummaryCostData.push(costBarChartItem);
     }
     if (ssmtTotals.carbonEmissions != 0) {
-      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(ssmtTotals, 'Steam', '#F39C12');
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(ssmtTotals, 'Steam', '#F39C12', settings);
       reportSummaryCarbonData.push(carbonBarChartItem);
     }
     if (psatTotals.totalEnergy != 0) {
@@ -175,7 +177,7 @@ export class ReportSummaryGraphsService {
       reportSummaryCostData.push(costBarChartItem);
     }
     if (psatTotals.carbonEmissions != 0) {
-      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(psatTotals, 'Pumps', '#2980b9');
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(psatTotals, 'Pumps', '#2980b9', settings);
       reportSummaryCarbonData.push(carbonBarChartItem);
     }
     if (wasteWaterTotals.totalEnergy != 0) {
@@ -189,7 +191,7 @@ export class ReportSummaryGraphsService {
       reportSummaryCostData.push(costBarChartItem);
     }
     if (wasteWaterTotals.carbonEmissions != 0) {
-      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(wasteWaterTotals, 'Waste Water', '#003087');
+      let carbonBarChartItem: BarChartDataItem = this.getCO2BarChartItem(wasteWaterTotals, 'Waste Water', '#003087', settings);
       reportSummaryCarbonData.push(carbonBarChartItem);
     }
     this.reportSummaryGraphData.next(reportSummaryGraphData);
@@ -251,8 +253,9 @@ export class ReportSummaryGraphsService {
     }
   }
 
-  getCO2BarChartItem(totals: ReportUtilityTotal, equipmentName: string, color: string): BarChartDataItem {
-    let hoverTemplate: string = '%{y:,.0f}<extra></extra> ' + 'tonne CO<sub>2</sub>';
+  getCO2BarChartItem(totals: ReportUtilityTotal, equipmentName: string, color: string, settings: Settings): BarChartDataItem {
+    let carbonEmissionsUnit = this.reportRollupService.getCarbonEmissionsUnit(settings);
+    let hoverTemplate: string = '%{y:,.0f}<extra></extra> ' + carbonEmissionsUnit;
     let baselineCO2: number = totals.carbonEmissions + totals.carbonSavings;
     let modCO2: number = totals.carbonEmissions;
     return {

@@ -34,13 +34,15 @@
         <label class="group-label text-center">Annual Carbon Emissions</label>
     </div>
     <div class="col-6" *ngIf="pieChartData">
-        <app-report-summary-pie-chart [pieChartData]="pieChartData" [dataOption]="'carbon'"
-            [energyUnit]="reportSummaryEnergyUnit" [printView]="true">
+        <app-report-summary-pie-chart [pieChartData]="pieChartData" 
+            [dataOption]="'carbon'"
+            [settings]="settings"
+            [energyUnit]="carbonEmissionsUnit" [printView]="true">
         </app-report-summary-pie-chart>
     </div>
     <div class="col-6" *ngIf="carbonBarChart">
         <app-report-summary-bar-chart [barChartData]="carbonBarChart"
-            [yAxisLabel]="'Annual CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)'" [tickFormat]="'.2s'"
+            [yAxisLabel]="carbonEmissionsBarYLabel"
             [printView]="true">
         </app-report-summary-bar-chart>
     </div>

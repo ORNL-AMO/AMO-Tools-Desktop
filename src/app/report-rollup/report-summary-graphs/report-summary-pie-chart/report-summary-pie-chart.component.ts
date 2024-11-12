@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-report-summary-pie-chart',
@@ -19,6 +20,9 @@ export class ReportSummaryPieChartComponent implements OnInit {
   energyUnit: string;
   @Input()
   printView: boolean;
+  @Input()
+  carbonEmissionsUnit: string;
+
 
   @ViewChild('reportSummaryPieChart', { static: false }) reportSummaryPieChart: ElementRef;
 
@@ -76,7 +80,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.carbonEmissions
       });
-      textTemplate = '%{label}:<br>%{value:,.0f} ' + 'tonne CO<sub>2</sub>';
+      textTemplate = '%{label}:<br>%{value:,.0f} ' + this.carbonEmissionsUnit;
     }
     let data = [{
       values: valuesArr,
@@ -145,7 +149,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       valuesArr = this.pieChartData.map(dataItem => {
         return dataItem.carbonEmissions
       });
-      textTemplate = '%{label}:<br>%{value:,.0f} ' + 'tonne CO<sub>2</sub>';
+      textTemplate = '%{label}:<br>%{value:,.0f} ' + this.carbonEmissionsUnit;
     }
     let data = [{
       values: valuesArr,
