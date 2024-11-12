@@ -445,4 +445,27 @@ export class SuiteApiHelperService {
     }
   }
 
+  getPowerFactorModeEnum(mode: number): any {
+    switch (mode) {
+      case 1:
+        return Module.PowerFactorModeType.ApparentPower_RealPower;
+      case 2:
+        return Module.PowerFactorModeType.ApparentPower_ReactivePower;
+      case 3:
+        return Module.PowerFactorModeType.ApparentPower_PhaseAngle;
+      case 4:
+        return Module.PowerFactorModeType.ApparentPower_PowerFactor;
+      case 5:
+        return Module.PowerFactorModeType.RealPower_ReactivePower;
+      case 6:
+        return Module.PowerFactorModeType.RealPower_PhaseAngle;
+      case 7:
+        return Module.PowerFactorModeType.RealPower_PowerFactor;
+      case 8:
+        return Module.PowerFactorModeType.ReactivePower_PhaseAngle;
+      case 9:
+        return Module.PowerFactorModeType.ReactivePower_PowerFactor;
+    }
+  }
+
 }

@@ -43,7 +43,7 @@ export class PowerFactorTriangleService {
     let calcInputs: PowerFactorTriangleModeInputs;
     if (data.mode == 1){
       calcInputs = {
-        mode: 'ApparentPower_RealPower',
+        mode: 1,
         input1: data.apparentPower,
         input2: data.realPower,
         inputPowerFactor: data.powerFactor
@@ -51,7 +51,7 @@ export class PowerFactorTriangleService {
       
     } else if (data.mode == 2){
       calcInputs = {
-        mode: 'ApparentPower_ReactivePower',
+        mode: 2,
         input1: data.apparentPower,
         input2: data.reactivePower,
         inputPowerFactor: data.powerFactor
@@ -59,7 +59,7 @@ export class PowerFactorTriangleService {
       
     } else if (data.mode == 3){
       calcInputs = {
-        mode: 'ApparentPower_PhaseAngle',
+        mode: 3,
         input1: data.apparentPower,
         input2: data.phaseAngle,
         inputPowerFactor: data.powerFactor
@@ -67,7 +67,7 @@ export class PowerFactorTriangleService {
       
     } else if (data.mode == 4){
       calcInputs = {
-        mode: 'ApparentPower_PowerFactor',
+        mode: 4,
         input1: data.apparentPower,
         input2: data.powerFactor,
         inputPowerFactor: data.powerFactor
@@ -75,7 +75,7 @@ export class PowerFactorTriangleService {
       
     } else if (data.mode == 5){
       calcInputs = {
-        mode: 'RealPower_ReactivePower',
+        mode: 5,
         input1: data.realPower,
         input2: data.reactivePower,
         inputPowerFactor: data.powerFactor
@@ -83,7 +83,7 @@ export class PowerFactorTriangleService {
       
     } else if (data.mode == 6){
       calcInputs = {
-        mode: 'RealPower_PhaseAngle',
+        mode: 6,
         input1: data.realPower,
         input2: data.phaseAngle,
         inputPowerFactor: data.powerFactor
@@ -91,7 +91,7 @@ export class PowerFactorTriangleService {
       
     } else if (data.mode == 7){
       calcInputs = {
-        mode: 'RealPower_PowerFactor',
+        mode: 7,
         input1: data.realPower,
         input2: data.powerFactor,
         inputPowerFactor: data.powerFactor
@@ -99,7 +99,7 @@ export class PowerFactorTriangleService {
       
     } else if (data.mode == 8){
       calcInputs = {
-        mode: 'ReactivePower_PhaseAngle',
+        mode: 8,
         input1: data.reactivePower,
         input2: data.phaseAngle,
         inputPowerFactor: data.powerFactor
@@ -107,7 +107,7 @@ export class PowerFactorTriangleService {
       
     } else if (data.mode == 9){
       calcInputs = {
-        mode: 'ReactivePower_PowerFactor',
+        mode: 9,
         input1: data.reactivePower,
         input2: data.powerFactor,
         inputPowerFactor: data.powerFactor

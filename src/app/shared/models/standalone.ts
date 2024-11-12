@@ -762,7 +762,7 @@ export interface PowerFactorTriangleInputs {
 }
 
 export interface PowerFactorTriangleModeInputs {
-  mode: Mode;
+  mode: number;
   input1: number;
   input2: number;
   inputPowerFactor: number;
