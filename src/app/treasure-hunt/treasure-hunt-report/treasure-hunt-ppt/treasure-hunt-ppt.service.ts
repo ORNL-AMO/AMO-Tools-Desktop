@@ -360,7 +360,6 @@ export class TreasureHuntPptService {
         ]);
         let utilityUnit: string;
         opp.annualEnergySavings.forEach(annulEnergy => {
-          console.log(annulEnergy);
           utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(annulEnergy.label, settings);
           rows.push([
             annulEnergy.label,
