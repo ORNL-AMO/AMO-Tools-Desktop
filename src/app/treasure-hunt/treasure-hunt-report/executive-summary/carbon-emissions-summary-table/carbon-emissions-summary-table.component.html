@@ -7,18 +7,18 @@
             </td>
             <td>
                 Current CO<sub>2</sub> Emissions 
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
             </td>
             <td>
                 Projected CO<sub>2</sub> Emissions 
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
             </td>
             <td>
                 CO<sub>2</sub> Emission Savings 
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
             </td>
         </tr>
         <!--Electricity-->

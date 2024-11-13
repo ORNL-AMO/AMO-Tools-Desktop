@@ -137,7 +137,7 @@ export class AssessmentCo2SavingsService {
       totalEmissionsOutput = 0;
     }
 
-    if (settings.unitsOfMeasure !== 'Metric') {
+    if (settings.emissionsUnit !== 'Metric') {
       totalEmissionsOutput = this.convertUnitsService.value(totalEmissionsOutput).from('tonne').to('ton');
     }
     

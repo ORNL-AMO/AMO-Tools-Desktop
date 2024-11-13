@@ -146,8 +146,8 @@
 
       <tr class="callout">
         <td>Annual CO2 Emissions 
-          <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-          <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
         </td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.co2EmissionsOutput |
           number:'1.1-1'}}</td>
@@ -160,8 +160,8 @@
       </tr>
       <tr class="callout">
         <td>Annual CO2 Emissions Savings 
-          <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-          <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
         </td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</td>
         <td *ngFor="let modification of psat.modifications; let index = index;"

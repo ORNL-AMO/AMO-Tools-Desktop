@@ -225,8 +225,8 @@
   <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
       <span class="bold table-text">Annual CO2 Emissions
-        <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-        <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+        <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+        <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
       </span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
@@ -242,8 +242,8 @@
   <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
       <span class="bold table-text">Annual CO2 Emissions Savings 
-        <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-        <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+        <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+        <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
       </span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">

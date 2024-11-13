@@ -136,7 +136,7 @@ export class SsmtService {
       ssmtInputCopy.co2SavingsData.electricityUse = fuelUse;
       ssmtOutput.co2EmissionsOutput.fuelEmissionOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(ssmtInputCopy.co2SavingsData, settings, true);
 
-      if (settings.unitsOfMeasure !== 'Metric') {
+      if (settings.emissionsUnit !== 'Metric') {
         ssmtOutput.co2EmissionsOutput.electricityEmissionsFromChange = this.convertUnitsService.value(ssmtOutput.co2EmissionsOutput.electricityEmissionsFromChange).from('tonne').to('ton');
         ssmtOutput.co2EmissionsOutput.electricityEmissionsFromSelling = this.convertUnitsService.value(ssmtOutput.co2EmissionsOutput.electricityEmissionsFromSelling).from('tonne').to('ton');
       }

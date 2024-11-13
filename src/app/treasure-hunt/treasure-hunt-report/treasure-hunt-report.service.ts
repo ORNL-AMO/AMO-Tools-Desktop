@@ -363,7 +363,7 @@ export class TreasureHuntReportService {
     if (outputRate && electricityUsed) {
       totalEmissionsResult = (outputRate) * (electricityUsed / 1000);
 
-      if (settings.unitsOfMeasure !== 'Metric') {
+      if (settings.emissionsUnit !== 'Metric') {
         totalEmissionsResult = this.convertUnitsService.value(totalEmissionsResult).from('tonne').to('ton');
       }
     }

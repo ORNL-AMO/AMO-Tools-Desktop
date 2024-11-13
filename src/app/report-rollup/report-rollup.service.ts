@@ -175,7 +175,7 @@ export class ReportRollupService {
 
   getCarbonEmissionsUnit(settings: Settings): string {
     let carbonEmissionsUnit = 'tonne CO<sub>2</sub>'; 
-    if (settings.unitsOfMeasure !== 'Metric') {
+    if (settings.emissionsUnit !== 'Metric') {
         carbonEmissionsUnit = 'ton CO<sub>2</sub>';
     }
     return carbonEmissionsUnit

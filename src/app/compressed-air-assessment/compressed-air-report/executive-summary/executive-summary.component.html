@@ -219,8 +219,8 @@
             </tr>
             <tr class="bold-row">
                 <td>Annual Emission Output Rate 
-                    <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-                    <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                    <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                    <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     {{baselineResults.total.annualEmissionOutput | number:'1.0-0'}}</td>
@@ -264,8 +264,8 @@
 
             <tr class="bold-row row-stripe bg-row">
                 <td>Annual Emission Savings
-                    <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-                    <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                    <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                    <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
                 <td *ngFor="let result of combinedDayTypeResults; let index = index;"

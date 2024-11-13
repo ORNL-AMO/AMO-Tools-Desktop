@@ -176,15 +176,15 @@
         <div class="d-flex align-items-center pl-1 pr-1 col-4">
             <span class="bold  table-text">{{dayTypeBaselineResult.annualEmissionOutput |
                 number:'1.0-0'}} 
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
             </span>
         </div>
         <div class="col-4 d-flex align-items-center pl-1 pr-1">
             <span class="bold table-text">{{dayTypeModificationResult.annualEmissionOutput
                 | number:'1.0-0'}} 
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
             </span>
         </div>
     </div>
@@ -228,8 +228,8 @@
         <div class="col-4 d-flex align-items-center pl-1 pr-1">
             <span class="bold table-text">{{dayTypeModificationResult.allSavingsResults.savings.annualEmissionOutputSavings
                 | number:'1.0-0'}} 
-                <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-                <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
             </span>
         </div>
     </div>

@@ -265,7 +265,7 @@ export class Co2SavingsPhastService {
       co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.hourlyTotalEmissionOutput * phastCopy.operatingHours.hoursPerYear;   
     }
 
-    if (settings.unitsOfMeasure !== 'Metric') {
+    if (settings.emissionsUnit !== 'Metric') {
       co2EmissionsOutput.hourlyTotalEmissionOutput = co2EmissionsOutput.hourlyTotalEmissionOutput !== undefined? this.convertUnitsService.value(co2EmissionsOutput.hourlyTotalEmissionOutput).from('tonne').to('ton') : undefined;
       co2EmissionsOutput.emissionsSavings = co2EmissionsOutput.emissionsSavings !== undefined? this.convertUnitsService.value(co2EmissionsOutput.emissionsSavings).from('tonne').to('ton') : undefined;
       co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.totalEmissionOutput !== undefined? this.convertUnitsService.value(co2EmissionsOutput.totalEmissionOutput).from('tonne').to('ton') : undefined;

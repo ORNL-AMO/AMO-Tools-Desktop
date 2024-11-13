@@ -36,6 +36,7 @@ export class FsatResultsPanelComponent implements OnInit {
   constructor(private fsatService: FsatService) { }
 
   ngOnInit() {
+    console.log('settings', this.settings);
     this.updateDataSub = this.fsatService.updateData.subscribe(() => { this.getResults(); });
     if (this.fsat.modifications && this.fsat.modifications.length > 0) {
       this.isWhatIfScenario = this.fsat.modifications[this.modificationIndex].fsat.whatIfScenario;

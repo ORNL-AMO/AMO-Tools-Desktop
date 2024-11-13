@@ -94,8 +94,8 @@
       <tr>
         <td class="pl-4">
           CO<sub>2</sub> Emissions 
-          <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-          <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span>  
+          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>  
         </td>
         <td [ngClass]="{
                   'selected-modification': selectedModificationIndex == -1
@@ -117,8 +117,8 @@
       <tr>
         <td class="pl-4">
           CO<sub>2</sub> Emissions Savings
-            <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-            <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span> 
+            <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+            <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span> 
         </td>
         <td [ngClass]="{
                   'selected-modification': selectedModificationIndex == -1
@@ -577,8 +577,8 @@
 
       <tr>
         <td class="bold" [ngStyle]="{ 'width.%': 15 }">CO<sub>2</sub> Emissions 
-          <span *ngIf="settings.unitsOfMeasure === 'Imperial' || settings.unitsOfMeasure === 'Custom'">(ton CO<sub>2</sub>)</span>
-          <span *ngIf="settings.unitsOfMeasure === 'Metric'">(tonne CO<sub>2</sub>)</span></td>
+          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span></td>
         <td
           [ngClass]="{
             'selected-modification': selectedModificationIndex == -1
