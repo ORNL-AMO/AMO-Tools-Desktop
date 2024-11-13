@@ -187,7 +187,10 @@ export class InventoryService {
   }
 
   checkDisplayAutomaticShutdown(controlType: number): boolean {
-    return (controlType != undefined && controlType != 5 && controlType != 7 && controlType != 9 && controlType != 1);
+    if (controlType !== undefined) {
+      return [2, 3, 4, 6, 7, 8, 9, 10, 11].includes(controlType);
+    } 
+    return false;
   }
 
   setCompressorControlValidators(form: UntypedFormGroup): UntypedFormGroup {
