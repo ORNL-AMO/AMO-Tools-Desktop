@@ -274,24 +274,11 @@ export class TreasureHuntPptService {
         slideTeamSummary.addText('Placeholder for picture', { x: 8.32, y: 1.8, w: 4.43, h: 2.81, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
         slideTeamSummary.addText('Team Members:', slideTextProps);
 
-        // todo next time we're in here opportunityCardsData should be filtered by opportunitySummaries that exist in it, otherwise we iterate over all 
+       
+        opportunityCardsData = _.orderBy(opportunityCardsData, 'name', 'asc');
 
-
-        debugger;
-        // ** BUG - ln 286-287 - This is what's causing 6923 opportunities data to mismatch
-        // ** below we were using a 'counter', and now an index to index into two different arrays opportunityCardsData, and treasureHuntResults.opportunitySummaries.
-        // ** Unless it's absolutely known that both arrays are ordered the same - this is a red flag 
-
-        // ** Solution - Area of method should be rewritten to have access to all data (cards and summary) as one array of objects
-        // ** OR rewrite so that TH opportunities are now assigned a string index that can be compared to find a match
-        // ** also check out previously written todo above
-        opportunityCardsData.forEach((opp, index) => {
-          let opportunitySummary: OpportunitySummary = treasureHuntResults.opportunitySummaries[index];
-          // let opportunitySummary: OpportunitySummary = treasureHuntResults.opportunitySummaries[index];
-          if (opp.name === 'Compressed Air Leaks') {
-            debugger;
-          }
-          if (opportunitySummary && opp.opportunitySheet.owner == team.team) {
+        opportunityCardsData.forEach((opp: OpportunityCardData) => {
+          if (opp.opportunitySheet.owner == team.team) {
             let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
             newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
             let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.getOpportunitySlideText(opp.opportunitySheet);
@@ -309,32 +296,20 @@ export class TreasureHuntPptService {
               { text: "Total Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
               { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
             ]);
-              let utilityUnit: string;
-              if (opportunitySummary.mixedIndividualResults) {
-                opportunitySummary.mixedIndividualResults.forEach(individualResults => {
-                  utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(individualResults.utilityType, settings);
-                  rows.push([
-                    individualResults.utilityType, 
-                    this.treasureHuntPptTableService.roundValToFormatString(individualResults.totalEnergySavings), 
-                    utilityUnit, 
-                    this.treasureHuntPptTableService.roundValToCurrency(individualResults.costSavings), 
-                    this.treasureHuntPptTableService.roundValToCurrency(individualResults.opportunityCost.material), 
-                    this.treasureHuntPptTableService.roundValToCurrency(individualResults.opportunityCost.labor), 
-                    this.treasureHuntPptTableService.getOtherCost(individualResults.opportunityCost), 
-                    this.treasureHuntPptTableService.roundValToCurrency(individualResults.totalCost), 
-                    this.treasureHuntPptTableService.roundValToFormatString(individualResults.payback)]);
-                  });
-                } else {
-                  utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(opportunitySummary.utilityType, settings);
-                  rows.push([opportunitySummary.utilityType, 
-                    this.treasureHuntPptTableService.roundValToFormatString(opportunitySummary.totalEnergySavings), 
-                    utilityUnit, this.treasureHuntPptTableService.roundValToCurrency(opportunitySummary.costSavings), 
-                    this.treasureHuntPptTableService.roundValToCurrency(opportunitySummary.opportunityCost.material), 
-                    this.treasureHuntPptTableService.roundValToCurrency(opportunitySummary.opportunityCost.labor), 
-                    this.treasureHuntPptTableService.getOtherCost(opportunitySummary.opportunityCost), 
-                this.treasureHuntPptTableService.roundValToCurrency(opportunitySummary.totalCost), 
-                this.treasureHuntPptTableService.roundValToFormatString(opportunitySummary.payback)]);
-              } 
+            let utilityUnit: string;
+            opp.annualEnergySavings.forEach(annulEnergy => {
+              utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(annulEnergy.label, settings);
+              rows.push([
+                annulEnergy.label,
+                this.treasureHuntPptTableService.roundValToFormatString(annulEnergy.savings),
+                utilityUnit,
+                this.treasureHuntPptTableService.roundValToCurrency(opp.annualCostSavings),
+                this.treasureHuntPptTableService.roundValToCurrency(opp.opportunitySheet.opportunityCost.material),
+                this.treasureHuntPptTableService.roundValToCurrency(opp.opportunitySheet.opportunityCost.labor),
+                this.treasureHuntPptTableService.getOtherCost(opp.opportunitySheet.opportunityCost),
+                this.treasureHuntPptTableService.roundValToCurrency(opp.implementationCost),
+                this.treasureHuntPptTableService.roundValToFormatString(opp.paybackPeriod)]);
+            });
               newSlide.addTable(rows, { x: 1.14, y: 5.2, w: 11.05, colW: [1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
           }
         });
@@ -363,11 +338,9 @@ export class TreasureHuntPptService {
     let oppsWithNoTeam = pptx.addSlide();
     oppsWithNoTeam.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
     oppsWithNoTeam.addText('Other Opportunities', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
-
-    // todo opportunityCardsData should be filtered by opportunitySummaries that exist in it, otherwise we iterate over all
-    opportunityCardsData.forEach((opp, index) => {
-      let opportunitySummary: OpportunitySummary = treasureHuntResults.opportunitySummaries[index];
-      if (opportunitySummary && !opp.opportunitySheet.owner) {
+   
+    opportunityCardsData.forEach((opp) => {
+      if (!opp.opportunitySheet.owner) {
         let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
         newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
         let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.getOpportunitySlideText(opp.opportunitySheet);
@@ -386,16 +359,20 @@ export class TreasureHuntPptService {
           { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
         ]);
         let utilityUnit: string;
-        if (opportunitySummary.mixedIndividualResults) {
-          opportunitySummary.mixedIndividualResults.forEach(individualResults => {
-            utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(individualResults.utilityType, settings);
-            rows.push([individualResults.utilityType, this.treasureHuntPptTableService.roundValToFormatString(individualResults.totalEnergySavings), utilityUnit, this.treasureHuntPptTableService.roundValToCurrency(individualResults.costSavings), this.treasureHuntPptTableService.roundValToCurrency(individualResults.opportunityCost.material), this.treasureHuntPptTableService.roundValToCurrency(individualResults.opportunityCost.labor), this.treasureHuntPptTableService.getOtherCost(individualResults.opportunityCost), this.treasureHuntPptTableService.roundValToCurrency(individualResults.totalCost), this.treasureHuntPptTableService.roundValToFormatString(opportunitySummary.payback)]);
-          });
-        } else {
-          utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(opportunitySummary.utilityType, settings);
-          rows.push([opportunitySummary.utilityType, this.treasureHuntPptTableService.roundValToFormatString(opportunitySummary.totalEnergySavings), utilityUnit, this.treasureHuntPptTableService.roundValToCurrency(opportunitySummary.costSavings), this.treasureHuntPptTableService.roundValToCurrency(opportunitySummary.opportunityCost.material), this.treasureHuntPptTableService.roundValToCurrency(opportunitySummary.opportunityCost.labor), this.treasureHuntPptTableService.getOtherCost(opportunitySummary.opportunityCost), this.treasureHuntPptTableService.roundValToCurrency(opportunitySummary.totalCost), this.treasureHuntPptTableService.roundValToFormatString(opportunitySummary.payback)]);
-        }
-
+        opp.annualEnergySavings.forEach(annulEnergy => {
+          console.log(annulEnergy);
+          utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(annulEnergy.label, settings);
+          rows.push([
+            annulEnergy.label,
+            this.treasureHuntPptTableService.roundValToFormatString(annulEnergy.savings),
+            utilityUnit,
+            this.treasureHuntPptTableService.roundValToCurrency(opp.annualCostSavings),
+            this.treasureHuntPptTableService.roundValToCurrency(opp.opportunitySheet.opportunityCost.material),
+            this.treasureHuntPptTableService.roundValToCurrency(opp.opportunitySheet.opportunityCost.labor),
+            this.treasureHuntPptTableService.getOtherCost(opp.opportunitySheet.opportunityCost),
+            this.treasureHuntPptTableService.roundValToCurrency(opp.implementationCost),
+            this.treasureHuntPptTableService.roundValToFormatString(opp.paybackPeriod)]);
+        });
         newSlide.addTable(rows, { x: 1.14, y: 5.2, w: 11.05, colW: [1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
       }
     });
