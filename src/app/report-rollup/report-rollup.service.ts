@@ -178,7 +178,7 @@ export class ReportRollupService {
     if (settings.emissionsUnit !== 'Metric') {
         carbonEmissionsUnit = 'ton CO<sub>2</sub>';
     }
-    return carbonEmissionsUnit
+    return carbonEmissionsUnit;
   }
 
   getAnnualCarbonEmissionsLabel(carbonEmissionsUnit: string): string {

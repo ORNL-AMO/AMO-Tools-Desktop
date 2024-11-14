@@ -37,27 +37,6 @@
 
         <div *ngIf="showCo2Settings">
           <p class="help-text">These will be default settings for any new assessments and folders.</p>
-        
-        <form [formGroup]="settingsForm">
-          <div class="form-group">
-            <label>Emissions Unit</label>
-            <div class="input-group">
-              <div class="d-flex flex-column">
-                <div class="d-flex">
-                  <label class="w-100" for="emissionsUnit">
-                    <input type="radio" name="emissionsUnit" id="Imperial" formControlName="emissionsUnit" value="Imperial"
-                      (change)="updateSettings()">Imperial</label>
-                </div>
-                <div class="d-flex">
-                  <label class="w-100" for="emissionsUnit">
-                    <input type="radio" name="emissionsUnit" id="Metric" formControlName="emissionsUnit" value="Metric"
-                      (change)="updateSettings()">Metric</label>
-                </div>
-              </div>
-            </div>
-          </div>
-          </form>
-
           <app-co2-savings-settings [(settingsForm)]="settingsForm" (startSavePolling)="updateSettings()"></app-co2-savings-settings>
         </div>
       </div>
