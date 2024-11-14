@@ -278,7 +278,7 @@ export class TreasureHuntPptService {
         opportunityCardsData = _.orderBy(opportunityCardsData, 'name', 'asc');
 
         opportunityCardsData.forEach((opp: OpportunityCardData) => {
-          if (opp.opportunitySheet.owner == team.team) {
+          if (opp.opportunitySheet.owner == team.team && opp.selected == true) {
             let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
             newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
             let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.getOpportunitySlideText(opp.opportunitySheet);
@@ -340,7 +340,7 @@ export class TreasureHuntPptService {
     oppsWithNoTeam.addText('Other Opportunities', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
    
     opportunityCardsData.forEach((opp) => {
-      if (!opp.opportunitySheet.owner) {
+      if (!opp.opportunitySheet.owner && opp.selected == true) {
         let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
         newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
         let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.getOpportunitySlideText(opp.opportunitySheet);
