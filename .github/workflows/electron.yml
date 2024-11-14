@@ -35,7 +35,6 @@ jobs:
           cp "$PROV_PROF_PATH" ./embedded.provisionprofile
           npm ci --legacy-peer-deps &&
           security -v unlock-keychain -p "${{ secrets.KC_SECRET }}" ~/Library/Keychains/login.keychain-db
-          rm -rf ../output/*
       - name: Build
         run: npm run build-prod-desktop-ci
       - name: Package
@@ -82,6 +81,9 @@ jobs:
           compression-level: 1
           if-no-files-found: error
           retention-days: 1
+      - name: Cleanup
+        run: |
+          rm -rf ../output/*
     outputs:
       BUILD_VERSION: ${{ steps.output.outputs.BUILD_VERSION }}
 
