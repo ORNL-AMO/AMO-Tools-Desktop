@@ -20,8 +20,6 @@ export class AddModificationComponent implements OnInit {
   @Input()
   modificationExists: boolean;
 
-
-
   newModificationName: string;
   currentTab: string;
   tabSubscription: Subscription;
@@ -44,7 +42,7 @@ export class AddModificationComponent implements OnInit {
 
   addModification() {
     let exploreOppsDefault: SavingsOpportunity = { hasOpportunity: false, display: '' };
-    let tmpModification: Modification = {
+    let modification: Modification = {
       phast: {
         losses: {},
         name: this.newModificationName,
@@ -85,15 +83,16 @@ export class AddModificationComponent implements OnInit {
       exploreOppsShowFixtures: exploreOppsDefault,
     };
     if (this.currentTab === 'explore-opportunities') {
-      tmpModification.exploreOpportunities = true;
+      modification.exploreOpportunities = true;
     }
     if (this.phast.co2SavingsData) {
-      tmpModification.phast.co2SavingsData = (JSON.parse(JSON.stringify(this.phast.co2SavingsData)));
+      modification.phast.co2SavingsData = (JSON.parse(JSON.stringify(this.phast.co2SavingsData)));
+      modification.phast.co2SavingsData.userEnteredModificationEmissions = modification.phast.co2SavingsData.userEnteredBaselineEmissions; 
     } 
-    tmpModification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
-    tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(this.phast.operatingCosts)));
-    tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(this.phast.operatingHours)));
-    tmpModification.phast.systemEfficiency = (JSON.parse(JSON.stringify(this.phast.systemEfficiency)));
-    this.save.emit(tmpModification);
+    modification.phast.losses = (JSON.parse(JSON.stringify(this.phast.losses)));
+    modification.phast.operatingCosts = (JSON.parse(JSON.stringify(this.phast.operatingCosts)));
+    modification.phast.operatingHours = (JSON.parse(JSON.stringify(this.phast.operatingHours)));
+    modification.phast.systemEfficiency = (JSON.parse(JSON.stringify(this.phast.systemEfficiency)));
+    this.save.emit(modification);
   }
 }

@@ -169,7 +169,7 @@ export class CreateAssessmentModalComponent {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('SSMT');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
-        tmpAssessment.ssmt = this.assessmentService.getNewSsmt();
+        tmpAssessment.ssmt = this.assessmentService.getNewSsmt(this.settings);
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
         this.finishAndNavigate(createdAssessment, '/ssmt/' + createdAssessment.id);
       }

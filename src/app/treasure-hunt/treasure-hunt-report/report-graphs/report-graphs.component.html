@@ -46,13 +46,19 @@
 </div>
 <div *ngIf="graphTab == 'carbon' || showPrint" class="row">
   <div class="print-avoid-break col-12 col-lg-6">
-    <label class="group-label w-100">Current CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)</label>
+    <label class="group-label w-100">Current CO<sub>2</sub> Emissions 
+      <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+      <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+    </label>
     <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="true" [showPrint]="showPrint"
       [settings]="settings" [graphTab]="'carbon'">
     </app-cost-pie-chart>
   </div>
   <div class="print-avoid-break col-12 col-lg-6">
-    <label class="group-label w-100">Projected CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>)</label>
+    <label class="group-label w-100">Projected CO<sub>2</sub> Emissions 
+      <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+      <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+    </label>
     <app-cost-pie-chart [treasureHuntResults]="treasureHuntResults" [isBaseline]="false" [showPrint]="showPrint"
       [settings]="settings" [graphTab]="'carbon'">
     </app-cost-pie-chart>
@@ -86,8 +92,10 @@
   <div class="print-avoid-break d-flex flex-column justify-content-end"
     [ngClass]="{'col-lg-3 col-12': !showPrint, 'col-4': showPrint}" *ngFor="let savingsItem of carbonSavingsItems">
     <div class="p-0">
-      <label class="group-label w-100">{{savingsItem.label}} (tonne
-        CO<sub>2</sub>)</label>
+      <label class="group-label w-100">{{savingsItem.label}} 
+        <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+        <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+      </label>
       <app-utility-donut-chart [showPrint]="showPrint" [savingsItem]="savingsItem" [graphTab]="'carbon'">
       </app-utility-donut-chart>
     </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Co2SavingsData } from '../co2-savings.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-co2-savings-results',
@@ -15,6 +16,8 @@ export class Co2SavingsResultsComponent implements OnInit {
   baselineTotal: number;
   @Input()
   modificationTotal: number;
+  @Input()
+  settings: Settings;
 
   @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;

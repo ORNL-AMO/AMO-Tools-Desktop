@@ -124,6 +124,18 @@ export class CompressedAirReductionComponent implements OnInit {
 
   removeBaselineEquipment(i: number) {
     this.baselineData.splice(i, 1);
+    if (this.modificationData?.length > 1 && this.modificationData[i]) {
+      this.modificationData.splice(i, 1);
+    }
+
+    this.getResults();
+  }
+
+  removeModificationEquipment(i: number) {
+    this.modificationData.splice(i, 1);
+    if (this.modificationData.length === 0) {
+      this.modificationExists = false;
+    }
     this.getResults();
   }
 
@@ -135,23 +147,20 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
+    let currentIndex = this.modificationData.length - 1;
+    let hasBaselineEquipment = this.baselineData[currentIndex + 1];
+    if (!hasBaselineEquipment) {
+      this.addBaselineEquipment();
+    }
+
     let utilityType: number;
     if (this.baselineData.length != 0) {
       utilityType = this.baselineData[0].utilityType;
     }
 
     let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours, utilityType);
-    let currentIndex = this.baselineData.length > 0 ? this.baselineData.length - 1 : 0;
     tmpObj.compressorElectricityData = this.baselineData[currentIndex].compressorElectricityData;
     this.modificationData.push(tmpObj);
-    this.getResults();
-  }
-
-  removeModificationEquipment(i: number) {
-    this.modificationData.splice(i, 1);
-    if (this.modificationData.length === 0) {
-      this.modificationExists = false;
-    }
     this.getResults();
   }
 
