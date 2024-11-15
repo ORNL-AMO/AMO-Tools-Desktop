@@ -36,7 +36,7 @@ export class PowerFactorTriangleFormComponent implements OnInit {
   }
 
   calculate() {
-    if (this.data.apparentPower != null && this.data.realPower != null && this.data.reactivePower != null && (this.data.phaseAngle != null && this.data.phaseAngle <= 90) && (this.data.powerFactor != null && (this.data.powerFactor <= 1 && this.data.powerFactor > 0))) {
+    if (this.data.phaseAngle < 90 || (this.data.powerFactor <= 1 && this.data.powerFactor > 0)) {
       this.emitCalculate.emit(this.data);
     }
   }

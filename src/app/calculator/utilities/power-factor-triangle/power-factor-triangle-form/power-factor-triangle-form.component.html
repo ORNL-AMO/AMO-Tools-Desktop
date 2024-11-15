@@ -66,7 +66,7 @@
     <div class="text-center" *ngIf="data.mode == 1 || data.mode == 2 || data.mode == 4 || data.mode == 5 || data.mode == 7 || data.mode == 9">
       <span class="small bold">{{results.phaseAngle | number:'1.0-2'}} deg</span>
     </div>
-    <span *ngIf="data.phaseAngle == null || data.phaseAngle > 90" class="alert-danger pull-right small">
+    <span *ngIf="data.phaseAngle == null || data.phaseAngle >= 90" class="alert-danger pull-right small">
       <span *ngIf="data.phaseAngle == null">Value required.</span>      
       <span *ngIf="data.phaseAngle >= 90">Value must be less than 90 deg</span>
     </span>
