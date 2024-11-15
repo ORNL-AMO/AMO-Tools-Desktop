@@ -32,6 +32,24 @@
     </div>
   </div>
 
+  <div class="form-group my-2">
+    <label>Emissions Result Unit</label>
+    <div class="input-group">
+      <div class="d-flex flex-column">
+        <div class="d-flex">
+          <label class="w-100" for="emissionsUnit">
+            <input type="radio" name="emissionsUnit" id="Imperial" formControlName="emissionsUnit" value="Imperial"
+              (change)="save()"> ton (short)</label>
+        </div>
+        <div class="d-flex">
+          <label class="w-100" for="emissionsUnit">
+            <input type="radio" name="emissionsUnit" id="Metric" formControlName="emissionsUnit" value="Metric"
+              (change)="save()"> tonne (Metric)</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="form-group" *ngIf="!inPsat && !inTreasureHunt">
     <label for="energyResultUnit">Energy Result Unit</label>
     <div class="input-group">

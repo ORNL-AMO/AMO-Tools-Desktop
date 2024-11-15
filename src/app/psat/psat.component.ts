@@ -435,7 +435,7 @@ export class PsatComponent implements OnInit {
 
   addNewMod() {
     let modName: string = 'Scenario ' + (this._psat.modifications.length + 1);
-    let tmpModification: Modification = {
+    let modification: Modification = {
       psat: {
         name: modName,
       },
@@ -448,12 +448,13 @@ export class PsatComponent implements OnInit {
       },
       exploreOpportunities: this.currentTab == 'explore-opportunities'
     }
-    tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
-    tmpModification.psat.inputs.pump_style = 11;
-    tmpModification.psat.inputs.whatIfScenario = true;
+    modification.psat.inputs = (JSON.parse(JSON.stringify(this._psat.inputs)));
+    modification.psat.inputs.co2SavingsData.userEnteredModificationEmissions = modification.psat.inputs.co2SavingsData.userEnteredBaselineEmissions;
+    modification.psat.inputs.pump_style = 11;
+    modification.psat.inputs.whatIfScenario = true;
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this._psat.inputs, this.settings);
-    tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
-    this.saveNewMod(tmpModification)
+    modification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
+    this.saveNewMod(modification)
   }
 
   async addSettings(settings: Settings) {

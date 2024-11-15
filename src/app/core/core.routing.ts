@@ -117,6 +117,7 @@ import { pumpInventoryRoutes } from '../pump-inventory/pump-inventory.routing';
 import { WaterProcessDiagramComponent } from '../water-process-diagram/water-process-diagram.component';
 import { WaterAssessmentComponent } from '../water/water-assessment.component';
 import { DataAndBackupComponent } from '../dashboard/data-and-backup/data-and-backup.component';
+import { PowerFactorTriangleComponent } from '../calculator/utilities/power-factor-triangle/power-factor-triangle.component';
 
 export const coreRoutes: Routes = [
   {
@@ -315,6 +316,10 @@ export const coreRoutes: Routes = [
           {
             path: 'power-factor-correction',
             component: PowerFactorCorrectionComponent
+          },
+          {
+            path: 'power-factor-triangle',
+            component: PowerFactorTriangleComponent
           },
           {
             path: 'pre-assessment',

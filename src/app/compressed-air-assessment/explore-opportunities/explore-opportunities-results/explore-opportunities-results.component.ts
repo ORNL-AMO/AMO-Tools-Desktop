@@ -5,6 +5,7 @@ import { BaselineResult, BaselineResults, CompressedAirAssessmentResult, Compres
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-explore-opportunities-results',
@@ -28,9 +29,6 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   baselineResults: BaselineResults;
   dayTypeBaselineResult: BaselineResult;
 
-
-
-
   addReceiverVolumeValid: boolean;
   addReceiverVolumeValidSub: Subscription;
   adjustCascadingSetPointsValid: boolean;
@@ -47,11 +45,13 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   useAutomaticSequencerValidSub: Subscription;
   hasInvalidData: boolean;
   isInit: boolean = true;
+  settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.setValidationSubs();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {

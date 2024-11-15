@@ -127,9 +127,9 @@ export class CompressedAirReductionFormComponent implements OnInit {
 
     this.compressedAirResultsSub = this.compressedAirReductionService.compressedAirResults.subscribe(results => {
       if (results) {
-        if (this.isBaseline) {
+        if (this.isBaseline && results.baselineResults[this.index]) {
           this.individualResults = results.baselineResults[this.index];
-        } else {
+        } else if (!this.isBaseline && results.modificationResults[this.index]) {
           this.individualResults = results.modificationResults[this.index];
         }
       }

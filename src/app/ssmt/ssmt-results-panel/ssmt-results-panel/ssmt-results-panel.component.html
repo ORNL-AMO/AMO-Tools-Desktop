@@ -321,7 +321,10 @@
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="bold table-text">Annual Emissions (<span>tonne CO<sub>2</sub></span>)</span>
+      <span class="bold table-text">Annual Emissions 
+        <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+        <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+      </span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
       <span *ngIf="baselineValid && baselineOutput.co2EmissionsOutput && baselineOutput.co2EmissionsOutput.totalEmissionOutput != undefined" class="bold table-text">
@@ -351,7 +354,10 @@
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="bold table-text">Annual Emissions Savings (<span>tonne CO<sub>2</sub></span>)</span>
+      <span class="bold table-text">Annual Emissions Savings 
+        <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+        <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+      </span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
       <span class="bold table-text">&mdash;</span>

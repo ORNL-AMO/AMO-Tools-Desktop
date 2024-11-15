@@ -194,7 +194,6 @@ export class AssessmentCo2SavingsComponent implements OnInit {
   }
 
   setModificationSubregionForm() {
-    // set selected baseline subregion value
     this.form.controls.eGridSubregion.patchValue(this.co2SavingsData.eGridSubregion);
     this.hasValidSubRegion = true;
     this.setSubregionControlStatus();

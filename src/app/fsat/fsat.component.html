@@ -88,8 +88,8 @@
     <nav class="navbar fsat">
       <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
         <div class="tab-content pl-2 pr-2">
-          <div class="form-group" *ngIf="fsatOptionsLength > 1">
-            <select name="fsatSelect" class="form-control mt-0 mx-auto w-100" id="fsatSelect" [(ngModel)]="fsat1">
+          <div class="form-group" *ngIf="fsatOptions.length > 1">
+            <select name="fsatSelect" class="form-control mt-0 mx-auto w-100" id="fsatSelect" [(ngModel)]="selectedSankeyFsatOption">
               <option *ngFor="let fsat of fsatOptions" [ngValue]="fsat">{{fsat.name}}</option>
             </select>
           </div>
@@ -105,8 +105,11 @@
       </div>
   </nav>
     <div class="sankey-padding w-100">
-      <app-fsat-sankey [fsat]="fsat1.fsat" [settings]="settings" [labelStyle]="sankeyLabelStyle" [appBackground]="true"
-        [isBaseline]="fsat1.fsat.name == 'Baseline'"></app-fsat-sankey>
+      <app-fsat-sankey [fsat]="selectedSankeyFsatOption.fsat" 
+        [settings]="settings" 
+        [labelStyle]="sankeyLabelStyle" 
+        [appBackground]="true"
+        [isBaseline]="selectedSankeyFsatOption.name == 'Baseline'"></app-fsat-sankey>
     </div>
   </div>
 

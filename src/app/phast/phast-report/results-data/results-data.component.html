@@ -404,7 +404,10 @@
       </tr>
 
       <tr>
-        <td> CO<sub>2</sub> Emissions (tonne CO<sub>2</sub>/hr)</td>
+        <td> CO<sub>2</sub> Emissions 
+          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+        </td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           <span *ngIf="baseLineResults.co2EmissionsOutput.hourlyTotalEmissionOutput">
             {{baseLineResults.co2EmissionsOutput.hourlyTotalEmissionOutput | number:'1.0-2'}}
@@ -419,7 +422,10 @@
         </td>
       </tr>
       <tr *ngIf="modificationResults.length > 0" class="tr-underline">
-        <td> CO<sub>2</sub> Emissions Savings (tonne CO<sub>2</sub>/hr)</td>
+        <td> CO<sub>2</sub> Emissions Savings 
+          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+        </td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
         <td *ngFor="let mod of modificationResults; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">

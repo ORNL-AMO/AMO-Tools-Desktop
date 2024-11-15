@@ -54,6 +54,7 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   addNewMod() {
     let wasteWater: WasteWater = this.wasteWaterService.wasteWater.getValue();
     let modification: WasteWaterData = JSON.parse(JSON.stringify(wasteWater.baselineData));
+    modification.co2SavingsData.userEnteredModificationEmissions = modification.co2SavingsData.userEnteredBaselineEmissions; 
     modification.exploreOpportunities = true;
     modification.name = 'Scenario ' + (wasteWater.modifications.length + 1);
     modification.id = Math.random().toString(36).substr(2, 9);

@@ -21,6 +21,7 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
 import * as _ from 'lodash';
 import { OperationsService } from './operations/operations.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { copyObject } from '../shared/helperFunctions';
 
 @Component({
   selector: 'app-fsat',
@@ -71,12 +72,10 @@ export class FsatComponent implements OnInit {
 
 
   fsatOptions: Array<any>;
-  fsatOptionsLength: number;
 
   sankeyLabelStyle: string = 'both';
   showSankeyLabelOptions: boolean;
-  fsat1: { fsat: FSAT, name: string };
-  fsat2: { fsat: FSAT, name: string };
+  selectedSankeyFsatOption: { fsat: FSAT, name: string };
   //exploreOppsToast: boolean = false;
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
@@ -203,17 +202,17 @@ export class FsatComponent implements OnInit {
   }
 
   initSankeyList() {
-    this.fsatOptions = new Array<any>();
-    this.fsatOptions.push({ name: 'Baseline', fsat: this._fsat });
-    this.fsat1 = this.fsatOptions[0];
-    this.showSankeyLabelOptions = ((this.fsat1.name == 'Baseline' || this.fsat1.name == null) && this.fsat1.fsat.setupDone) || (this.fsat1.fsat.valid && this.fsat1.fsat.valid.isValid);
+    this.fsatOptions = [{ name: 'Baseline', fsat: this._fsat }];
+    this.selectedSankeyFsatOption = this.fsatOptions[0];
     if (this._fsat.modifications) {
       this._fsat.modifications.forEach(mod => {
         this.fsatOptions.push({ name: mod.fsat.name, fsat: mod.fsat });
       });
-      this.fsat2 = this.fsatOptions[1];
     }
-    this.fsatOptionsLength = this.fsatOptions.length;
+    // * we need isFinishedBaseline because setupDone can be true but not valid? ??
+    const isFinishedBaseline = this.selectedSankeyFsatOption.name == 'Baseline' && this.selectedSankeyFsatOption.fsat.setupDone;
+    const isValidFsat = this.selectedSankeyFsatOption.fsat.valid && this.selectedSankeyFsatOption.fsat.valid.isValid;
+    this.showSankeyLabelOptions = isFinishedBaseline || isValidFsat;
   }
 
   setSankeyLabelStyle(style: string) {
@@ -314,6 +313,7 @@ export class FsatComponent implements OnInit {
     this.compareService.setCompareVals(this._fsat, this.modificationIndex);
     this._fsat.setupDone = this.checkSetupDone(this._fsat);
     this.assessment.fsat = (JSON.parse(JSON.stringify(this._fsat)));
+    this.initSankeyList();
     await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);

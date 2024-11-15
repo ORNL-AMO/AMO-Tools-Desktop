@@ -118,9 +118,9 @@ export class OperationsComponent implements OnInit {
     this.co2SavingsData.zipcode = co2SavingsData.zipcode,
     this.save();
   }
-
+  
   setCo2SavingsData() {
-    let co2SavingsData: Co2SavingsData = this.ssmt.co2SavingsData;
+    let co2SavingsData: Co2SavingsData = copyObject(this.ssmt.co2SavingsData);
     if (this.ssmt.co2SavingsData) {
       this.co2SavingsData = co2SavingsData;
     } else {
@@ -139,7 +139,6 @@ export class OperationsComponent implements OnInit {
     } 
     this.setEnergySource(shouldSetOutputRate);
   }
-  
   canCompare() {
     if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
       return true;
