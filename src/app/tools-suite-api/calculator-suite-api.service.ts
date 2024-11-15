@@ -478,6 +478,9 @@ export class CalculatorSuiteApiService {
   powerFactorTriangle(inputObj: PowerFactorTriangleModeInputs): PowerFactorTriangleOutputs {
     let modeEnum = this.suiteApiHelperService.getPowerFactorModeEnum(inputObj.mode);
     inputObj.mode = modeEnum;
+    inputObj.input1 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input1);    
+    inputObj.input2 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input2);
+    inputObj.inputPowerFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.inputPowerFactor);
     let PowerFactor = new Module.PowerFactor();
     let rawOutput = PowerFactor.calculate(inputObj.mode, inputObj.input1, inputObj.input2, inputObj.inputPowerFactor);
     let powerFactorTriangleOutputs: PowerFactorTriangleOutputs = {

@@ -87,10 +87,10 @@ export class PowerFactorTriangleResultsComponent implements OnInit {
         y: -0.2
       },
       xaxis: {
-        range: [0, 100]
+        range: [0, 1.05 * Math.max(this.results.realPower, this.results.reactivePower)]
       },
       yaxis: {
-        range: [0, 100]
+        range: [0, 1.05 * Math.max(this.results.realPower, this.results.reactivePower)]
       },
       margin: { t: 25, b: 25, l: 25, r: 25 },
     };
