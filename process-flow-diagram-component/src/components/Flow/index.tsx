@@ -14,6 +14,7 @@ import {
   Edge,
   MarkerType,
   EdgeTypes,
+  FitViewOptions,
 } from '@xyflow/react';
  
 import '@xyflow/react/dist/style.css';
@@ -65,7 +66,7 @@ const Flow = (props: FlowProps) => {
   useEffect(() => {
     // * on reactFlowInstance initialize with assessment added nodes
     if (reactFlowInstance && props.height && staleNodes.length > 0) {
-      let updatedNodes = updateStaleNodes(reactFlowInstance, [...staleNodes], props.height);
+      const updatedNodes = updateStaleNodes(reactFlowInstance, [...staleNodes], props.height);
       setStaleNodes([]);
       setNodes(nds => nds.concat(updatedNodes));
     }
@@ -239,6 +240,10 @@ const Flow = (props: FlowProps) => {
   
     console.warn(msg);
   }
+
+  const fitViewOptions: FitViewOptions = {
+    // padding: 10
+  };
   return (
     props.height &&
     <FlowContext.Provider value={{userDiagramOptions}}>
@@ -268,7 +273,8 @@ const Flow = (props: FlowProps) => {
             onError={onErrorWithSuppressed}
             // onBeforeDelete={onBeforeDelete}
             onDragOver={onDragOver}
-            fitView
+            fitView={true}
+            fitViewOptions={fitViewOptions}
             className="flow"
           >
             {userDiagramOptions.minimapVisible &&
