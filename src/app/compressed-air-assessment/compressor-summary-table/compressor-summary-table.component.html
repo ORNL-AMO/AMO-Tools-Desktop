@@ -29,12 +29,9 @@
                         {{dayTypes[index].name}}
                     </td>
                     <td *ngFor="let compressor of compressorSummary">
-                        <span *ngIf="compressor.specificPowerAvgLoad">
-                            {{compressor.specificPowerAvgLoad}}
-                        </span>
-                        <span *ngIf="!compressor.specificPowerAvgLoad">
-                            &mdash;
-                        </span>
+                        <span *ngIf="compressor.specificPowerAvgLoad && !getIsFinite(compressor.specificPowerAvgLoad)">No Flow</span>
+                        <span *ngIf="compressor.specificPowerAvgLoad && getIsFinite(compressor.specificPowerAvgLoad)">{{compressor.specificPowerAvgLoad}}</span>
+                        <span *ngIf="!compressor.specificPowerAvgLoad">&mdash;</span>
                     </td>
 
                 </tr>
@@ -44,12 +41,9 @@
                         <span *ngIf="settings.unitsOfMeasure != 'Imperial'"> kW/m<sup>3</sup>/min</span>
                     </th>
                     <td *ngFor="let compressor of compressorSummaries[0]">
-                        <span *ngIf="compressor.ratedSpecificPower">
-                            {{compressor.ratedSpecificPower}}
-                        </span>
-                        <span *ngIf="!compressor.ratedSpecificPower">
-                            &mdash;
-                        </span>
+                        <span *ngIf="compressor.ratedSpecificPower && !getIsFinite(compressor.ratedSpecificPower)">No Flow</span>
+                        <span *ngIf="compressor.ratedSpecificPower && getIsFinite(compressor.ratedSpecificPower)">{{compressor.ratedSpecificPower}}</span>
+                        <span *ngIf="!compressor.ratedSpecificPower">&mdash;</span>
                     </td>
                 </tr>
                 <tr>

@@ -309,9 +309,7 @@ export class OperationCostsComponent implements OnInit {
   }
 
   setCo2SavingsData() {
-    if (this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData) {
-      this.co2SavingsData = this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData;
-    } else {
+    if (!this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData) {
       let convertOutputRate: number = this.globalSettings.totalEmissionOutputRate/1000;
       let co2SavingsData: Co2SavingsData = {
         energyType: 'electricity',
@@ -326,9 +324,13 @@ export class OperationCostsComponent implements OnInit {
         userEnteredModificationEmissions: false,
         zipcode: this.globalSettings.zipcode
       }
+      this.treasureHunt.currentEnergyUsage.waterCO2OutputRate = co2SavingsData.totalEmissionOutputRate; 
+      this.treasureHunt.currentEnergyUsage.wasteWaterCO2OutputRate = co2SavingsData.totalEmissionOutputRate; 
+      this.treasureHunt.currentEnergyUsage.compressedAirCO2OutputRate = co2SavingsData.totalEmissionOutputRate; 
+      this.treasureHunt.currentEnergyUsage.steamCO2OutputRate = co2SavingsData.totalEmissionOutputRate; 
       this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData = co2SavingsData;
-      this.co2SavingsData = this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData;
     }
+    this.co2SavingsData = this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData;
   }
 
   setOtherFuelCo2SavingsData() {

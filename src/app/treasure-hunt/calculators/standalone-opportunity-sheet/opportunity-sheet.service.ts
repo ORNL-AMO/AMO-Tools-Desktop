@@ -66,8 +66,13 @@ export class OpportunitySheetService {
     let baselineWasterWaterResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.baselineEnergyUseItems, settings.waterWasteCost, 'WWT', settings);
     let modificationWasteWaterResult: { energyUse: number, energyCost: number, numItems: number } = this.getEnergyUseData(opportunitySheet.modificationEnergyUseItems, settings.waterWasteCost, 'WWT', settings);
     let wasteWaterResults: OpportunitySheetResult = this.getOpportunitySheetResult(baselineWasterWaterResult, modificationWasteWaterResult);
+    
+    let additionalAnnualSavingsCost: number = 0;
+    if (opportunitySheet.opportunityCost.additionalAnnualSavings){
+      additionalAnnualSavingsCost = opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+    }
 
-    let totalCostSavings: number = electricityResults.energyCostSavings + gasResults.energyCostSavings + compressedAirResults.energyCostSavings + otherFuelResults.energyCostSavings + steamResults.energyCostSavings + waterResults.energyCostSavings + wasteWaterResults.energyCostSavings;
+    let totalCostSavings: number = electricityResults.energyCostSavings + gasResults.energyCostSavings + compressedAirResults.energyCostSavings + otherFuelResults.energyCostSavings + steamResults.energyCostSavings + waterResults.energyCostSavings + wasteWaterResults.energyCostSavings + additionalAnnualSavingsCost;
     let totalImplementationCost: number = this.getOppSheetImplementationCost(opportunitySheet.opportunityCost);
     return {
       electricityResults: electricityResults,

@@ -96,6 +96,12 @@ export class FanFieldDataService {
         currentMoverShaftPower = tempShaftPower;
       }
     }
+
+    if (isNaN(compressibilityFactor)) {
+      compressibilityFactor = null;
+    } else {
+      compressibilityFactor = Number(compressibilityFactor.toFixed(3))
+    }
     return compressibilityFactor;
   }
 

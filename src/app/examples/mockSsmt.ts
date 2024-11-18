@@ -450,6 +450,7 @@ export const MockSsmtSettings: Settings = {
     "language": "English",
     "currency": "$",
     "unitsOfMeasure": "Imperial",
+    "emissionsUnit": "Metric",
     "distanceMeasurement": "ft",
     "flowMeasurement": "gpm",
     "powerMeasurement": "hp",

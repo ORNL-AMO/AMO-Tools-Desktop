@@ -13,8 +13,6 @@ export class Co2SavingsSettingsComponent implements OnInit {
   settingsForm: UntypedFormGroup;
   @Output('startSavePolling')
   startSavePolling = new EventEmitter<boolean>();
-  @Input()
-  generalSettings: boolean;
 
   co2SavingsData: Co2SavingsData;
 

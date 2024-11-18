@@ -1,3 +1,5 @@
+import { Mode } from "fs";
+
 export interface CombinedHeatPower {
   annualOperatingHours: number;
   annualElectricityConsumption: number;
@@ -747,3 +749,33 @@ export interface TankInsulationReductionResult {
 };
 
 //===== END tank insulation reduction objects =====
+
+//===== Power Factor Triangle objects =====
+
+export interface PowerFactorTriangleInputs {
+  mode: number;
+  apparentPower: number;
+  realPower: number;
+  reactivePower: number;
+  phaseAngle: number;
+  powerFactor: number;
+}
+
+export interface PowerFactorTriangleModeInputs {
+  mode: number;
+  input1: number;
+  input2: number;
+  inputPowerFactor: number;
+}
+
+
+export interface PowerFactorTriangleOutputs {
+  apparentPower: number;
+  realPower: number;
+  reactivePower: number;
+  phaseAngle: number;
+  powerFactor: number;
+}
+
+//==== END Power Factor Triangle objects =====
+

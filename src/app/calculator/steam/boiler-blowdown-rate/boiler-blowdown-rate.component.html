@@ -111,7 +111,7 @@
 
                 <div class="p-2">
                     <!-- app results if results tab -->
-                    <app-blowdown-rate-results *ngIf="tabSelect === 'results'" [settings]="settings">
+                    <app-blowdown-rate-results *ngIf="tabSelect === 'results'" [settings]="settings" [inTreasureHunt]="inTreasureHunt">
                     </app-blowdown-rate-results>
                     <!-- app help if help tab -->
                     <app-blowdown-rate-help *ngIf="tabSelect === 'help'" [settings]="settings">

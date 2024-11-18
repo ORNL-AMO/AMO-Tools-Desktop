@@ -34,69 +34,53 @@
             not be available.</li>
         </ul>
 
-      <label>Here are the details of what's new in version 1.5.3:</label>
+      <label>Here are the details of what's new in version 1.5.4:</label>
         <br>
         <label>Application</label>
         <ul>
-          <li>Added: Information regarding data storage to "Data Storage and Backup" Page</li>
-          <li>Added: Information regarding open-source licensing to About Page</li>
-          <li>Added: Information regarding citing MEASUR, our DOI, and our OSTI page to the About Page</li>
-          <li>Enhancement: Optional Auto-backup feature for installed MEASUR</li>
-          <li>Enhancement: Replaced "Download Backup Data" with "Data Storage and Backup"</li>
-          <li>Fixed: Issue causing custom materials to be returned as fractions instead of percents</li>
-          <li>Fixed: Issue preventing custom materials from saving</li>
-          <li>Fixed: Issue preventing the deletion of custom materials via the "Delete Material" button</li>
-          <li>Fixed: Auto Updater message showing "MEASUR MEASUR v__"</li>
+          <li>Added: Additional Acknowledgement for DOE sponsors</li>
+          <li>Added: Instructions on how to cite MEASUR</li>
+          <li>Enhancement: Assessment level toggle allowing users to express GHG emissions results in imperial (ton CO2)</li>
+          <li>Enhancement: Upgrade to Angular 18 and Fixed Electron debugging</li>
+          <li>Fixed: Bug regarding CO2 default data when new mod created</li>
+          <li>Fixed: Bug regarding emission factor set to zero</li>
+          <li>Fixed: Bug relating to WASM error on new version deployment</li>
+          <li>Fixed: Bug where changes to CO2 Emissions from electricity were not carried over to the mod</li>
+          <li>Fixed: Bug where folder level cost details were not populating assessments</li>
         </ul>
 
         <label>Calculators</label>
         <ul>
-          <li>Added: Validation to Chiller Staging regarding chiller load</li>
-          <li>Fixed: Issue in Power Factor Correction where choosing "Both" for "PF Adjusted or Actual Demand" then switching to "Apparent Power" caused bugs</li>
-        </ul>
-
-        <label>Data Explorer</label>
-        <ul>
-          <li>Added: Automatic estimation of data interval and warning message relating to it</li>
-          <li>Added: Field name labels for various user inputs</li>
-          <li>Fixed: Bug relating to axis labels not updating</li>
-          <li>Fixed: Issue where the histogram option "# of points" was disabled</li>
+          <li>Added: New calculator for creating a dynamic Power Factor triangle</li>
+          <li>Fixed: Bug in Boiler Calculator where calculations would not update after closing the stack loss calculator</li>
+          <li>Fixed: Bug where CO2 emissions Calculator not performing unit conversions</li>
+          <li>Fixed: Power Factor Correction Calculator not displaying user specified months in results table</li>
+          <li>Updated: Changed name of PH calculator (Energy Equivalency to Fuel and Electricity equivalency)</li>
+          <li>Updated: Changed name of PH calculator (Flow and Energy Used to Orifice Meter Flow Calculator)</li>
+          <li>Updated: Icon for Power Factor Correction Calculator</li>
         </ul>
 
         <label>Compressed Air</label>
         <ul>
-          <li>Fixed: Bug relating to Multi-step Unloading</li>
-        </ul>
-
-        <label>Pumps</label>
-        <ul>
-         <li>Enhancement: Added help text to motor efficiency class and efficiency fields</li>
+          <li>Enhancement: Added "Centrifugal Equal Capacity Ratio Load Sharing" to "Multi compressor System Controls Method"</li>
+          <li>Fixed: Bug relating to deleting equipment in the compressed air reduction calc</li>
+          <li>Fixed: Bug relating to having energy but no flow showing "Infinity", NAN, now showing "No Flow"</li>
+          <li>Fixed: Bug relating to Plotly graphs in Summary</li>
+          <li>Fixed: Expert submitted bug relating to Sankey generation</li>
         </ul>
 
         <label>Fans</label>
         <ul>
-         <li>Enhancement: Added help text to motor efficiency class and efficiency fields</li>
+         <li>Fixed: Issues relating to WASM errors</li>
         </ul>
 
-        <label>Process Heating</label>
+        <label>Treasure Hunt</label>
         <ul>
-         <li>Fixed: Various bugs relating to custom materials</li>
-        </ul>
-
-        <label>Steam</label>
-        <ul>
-          <li>Fixed: Issue where steam GHG emissions were reported in units different than label</li>
-          <li>Fixed: Various bugs relating to custom materials</li>
-        </ul>
-
-        <label>Inventories</label>
-        <ul>
-          <li>Enhancement: Added help text to motor efficiency class and efficiency fields</li>
-        </ul>
-        
-        <label>Process Cooling</label>
-        <ul>
-          <li>Added: Validation to Chiller Staging regarding chiller load</li>
+          <li>Fixed: Bug relating to blowdown calculator not providing results</li>
+          <li>Fixed: Bug relating to custom opportunities displaying in Treasure Chest</li>
+          <li>Fixed: Bug relating to custom opportunities getting scrambled in PowerPoint</li>
+          <li>Fixed: Bug relating to hard refreshing while in Treasure Hunt</li>
+          <li>Fixed: Bug relating to PowerPoint tables scrambling if projects are unselected</li>
         </ul>
 
         <label>Known Issues</label>

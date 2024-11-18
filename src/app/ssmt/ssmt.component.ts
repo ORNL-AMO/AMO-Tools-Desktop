@@ -298,10 +298,10 @@ export class SsmtComponent implements OnInit {
           } else {
             mod.ssmt.co2SavingsData.zipcode = ssmt.co2SavingsData.zipcode;
             mod.ssmt.co2SavingsData.eGridSubregion = ssmt.co2SavingsData.eGridSubregion;
-            if (!mod.ssmt.co2SavingsData.totalEmissionOutputRate) {
+            if (mod.ssmt.co2SavingsData.totalEmissionOutputRate === undefined) {
               mod.ssmt.co2SavingsData.totalEmissionOutputRate = ssmt.co2SavingsData.totalEmissionOutputRate;
             }
-            if (!mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate) {
+            if (mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate === undefined) {
               mod.ssmt.co2SavingsData.totalFuelEmissionOutputRate = ssmt.co2SavingsData.totalFuelEmissionOutputRate;
             }
           }

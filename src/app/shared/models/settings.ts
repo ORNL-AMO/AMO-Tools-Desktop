@@ -97,6 +97,7 @@ export interface Settings {
     co2SavingsEnergySource?: string,
     co2SavingsFuelType?: string,
     totalEmissionOutputRate?: number,
+    emissionsUnit?: 'Metric' | 'Imperial',
     electricityUse?: number,
     eGridRegion?: string,
     eGridSubregion?: string,

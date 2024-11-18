@@ -35,7 +35,10 @@
         </table>
       </div>
       <div class="col-12 col-lg-6 text-center treasure-hunt-item">
-        <label class="mb-0 group-label">CO<sub>2</sub> Emissions Savings<br>(tonne CO<sub>2</sub>)</label>
+        <label class="mb-0 group-label">CO<sub>2</sub> Emissions Savings<br>
+          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+        </label>
         <app-treasure-hunt-gauge [value]="carbonData.totalPercentSavings" [chartHeight]="125" [chartWidth]="165">
         </app-treasure-hunt-gauge>
         <table class="mx-auto">

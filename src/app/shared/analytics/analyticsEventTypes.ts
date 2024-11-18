@@ -95,6 +95,7 @@ export type AnalyticsEventString = 'page_view' |
     'calculator-UTIL-electricity-reduction' |
     'calculator-UTIL-natural-gas-reduction' |
     'calculator-UTIL-power-factor-correction' |
+    'calculator-UTIL-power-factor-triangle' |
     'calculator-UTIL-pre-assessment' |
     'calculator-UTIL-unit-converter' |
     'calculator-UTIL-weather-bins' |

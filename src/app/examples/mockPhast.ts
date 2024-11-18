@@ -1302,6 +1302,7 @@ export const MockPhastSettings: Settings = {
     co2SavingsEnergySource: "Natural Gas",
     co2SavingsFuelType: "Natural Gas",
     totalEmissionOutputRate: 401.07,
+    emissionsUnit: 'Metric',
     totalFuelEmissionOutputRate: 0,
     totalNaturalGasEmissionOutputRate: 53.06,
     totalCoalEmissionOutputRate: 0,

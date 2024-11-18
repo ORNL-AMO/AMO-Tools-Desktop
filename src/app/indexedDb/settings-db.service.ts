@@ -202,6 +202,10 @@ export class SettingsDbService {
     if (!settings.unitsOfMeasure) {
       settings.unitsOfMeasure = 'Imperial';
     }
+
+    if (!settings.emissionsUnit) {
+      settings.emissionsUnit = 'Metric';
+    }
     if (assessment && settings.unitsOfMeasure === 'Custom') {
       let hasCustomUnitOption: boolean = assessment.psat !== undefined || assessment.fsat !== undefined || assessment.ssmt !== undefined;  
       if (!hasCustomUnitOption) {

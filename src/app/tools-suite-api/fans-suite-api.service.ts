@@ -401,10 +401,13 @@ export class FansSuiteApiService {
   }
 
   compressibilityFactor(inputs: CompressibilityFactor): number {
-    // null on new mod
     inputs.inletPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.inletPressure);
     inputs.outletPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.outletPressure);
     inputs.flowRate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.flowRate);
+    inputs.moverShaftPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.moverShaftPower);
+    inputs.specificHeatRatio = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.specificHeatRatio);
+    inputs.barometricPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.barometricPressure);
+    
     let compressibilityFactor = new Module.CompressibilityFactor(inputs.moverShaftPower, inputs.inletPressure, inputs.outletPressure, inputs.barometricPressure, inputs.flowRate, inputs.specificHeatRatio);
     let compressibilityFactorResult = compressibilityFactor.calculate();
     compressibilityFactor.delete();

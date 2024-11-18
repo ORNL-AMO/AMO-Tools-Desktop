@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { InventorySummary, InventorySummaryOverviewService } from '../inventory-summary-overview.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
   selector: 'app-pump-inventory-overview-table',
@@ -9,6 +10,8 @@ import { InventorySummary, InventorySummaryOverviewService } from '../inventory-
 })
 export class InventoryOverviewTableComponent implements OnInit {
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  @Input()
+  settings: Settings;
   tableString: any;
   inventorySummary: InventorySummary;
   invetorySummarySub: Subscription;
