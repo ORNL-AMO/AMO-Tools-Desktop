@@ -188,7 +188,7 @@ export const getAdaptedTypeString = (nodeType: string) => {
 export const getEdgeDefaultOptions = (): DefaultEdgeOptions => {
   return {
     animated: true,
-    type: 'default',
+    type: 'smoothstep',
   }
 };
 
@@ -222,14 +222,14 @@ export const getEdgeTypesFromString = (newDefaultType: string, currentEdgeTypes?
 export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
   return {
     edgeThickness: 2,
-    edgeType: 'default',
+    edgeType: 'smoothstep',
     minimapVisible: false,
     controlsVisible: true,
     directionalArrowsVisible: true,
     showFlowValues: false,
     edgeOptions: {
       animated: true,
-      type: 'default',
+      type: 'smoothstep',
     }
   }
 }
