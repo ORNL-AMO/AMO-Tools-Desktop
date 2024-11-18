@@ -33,7 +33,7 @@ jobs:
           cp "$WIN_CERT_PATH" ./wincert.pem
           echo -n "${{ secrets.APPLE_PROV_PROF_BASE64 }}" | base64 --decode -o $PROV_PROF_PATH &&
           cp "$PROV_PROF_PATH" ./embedded.provisionprofile
-          npm ci --legacy-peer-deps &&
+          npm ci &&
           security -v unlock-keychain -p "${{ secrets.KC_SECRET }}" ~/Library/Keychains/login.keychain-db
       - name: Build
         run: npm run build-prod-desktop-ci
