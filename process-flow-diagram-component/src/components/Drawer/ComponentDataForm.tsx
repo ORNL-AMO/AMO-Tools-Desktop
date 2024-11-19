@@ -1,9 +1,9 @@
-import { Box, List, TextField, InputAdornment, ListItem, ListItemButton, ListItemIcon, Divider, styled, Typography, Select, MenuItem, FormControl } from "@mui/material";
+import { Box, List, TextField, InputAdornment, ListItem, ListItemButton, ListItemIcon, Divider, styled, Typography, Select, MenuItem, FormControl, Chip } from "@mui/material";
 import { CustomEdgeData } from "../Edges/DiagramBaseEdge";
 import { getEdgeSourceAndTarget } from "../Flow/FlowUtils";
 import { Edge, Node, useReactFlow } from "@xyflow/react";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import FlowConnectionText from "./FlowConnectionText";
 import { ProcessFlowPart, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
@@ -60,12 +60,16 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             );
     }
 
-    let dischargeEdges = [];
+    const dischargeEdges = [];
+    let sourceEdgesTotalFlow = 0;
+    let dischargeEdgesTotalFlow = 0;
     const sourceEdges: JSX.Element[] = props.connectedEdges.map((edge: Edge<CustomEdgeData>) => {
         const { source, target } = getEdgeSourceAndTarget(edge, allNodes);
         if (props.selectedNode.id === target.diagramNodeId) {
+            sourceEdgesTotalFlow += edge.data.flowValue;
             return getConnectionListItem(edge, source, target);
         } else if (props.selectedNode.id === source.diagramNodeId) {
+            dischargeEdgesTotalFlow += edge.data.flowValue;
             dischargeEdges.push(getConnectionListItem(edge, source, target));
         }
     });
@@ -110,7 +114,12 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         {sourceEdgeItems.length > 0 &&
             <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
                 <AccordionSummary>
-                    Source
+                    <span>Sources</span>
+                    <Chip label={`${sourceEdgesTotalFlow} Mgal`} 
+                        variant="outlined" 
+                        sx={{background: '#fff', borderRadius: '8px', marginRight: '1rem'}}
+                    />
+                    {/* <span style={{marginRight: '1rem', fontWeight: 600}}>{sourceEdgesTotalFlow} Mgal</span> */}
                 </AccordionSummary>
                 <AccordionDetails>
                     <List sx={{ padding: 0 }}>
@@ -127,7 +136,11 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                 transition: { unmountOnExit: true }
             }}>
                 <AccordionSummary>
-                    Discharge
+                    <span>Discharge</span>
+                    <Chip label={`${dischargeEdgesTotalFlow} Mgal`} 
+                        variant="outlined" 
+                        sx={{background: '#fff', borderRadius: '8px', marginRight: '1rem'}}
+                    />
                 </AccordionSummary>
                 <AccordionDetails>
                     <List sx={{ padding: 0 }}>

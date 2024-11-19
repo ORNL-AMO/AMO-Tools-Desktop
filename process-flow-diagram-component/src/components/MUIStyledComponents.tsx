@@ -20,7 +20,7 @@ export const Accordion = styled((props: AccordionProps) => (
 }));
 
 export const AccordionSummary = styled((props: AccordionSummaryProps) => (
-    <MuiAccordionSummary
+    <MuiAccordionSummary 
         expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.75rem' }} />}
         {...props}
     />
@@ -32,7 +32,8 @@ export const AccordionSummary = styled((props: AccordionSummaryProps) => (
     background: '#ececec',
     '& .MuiAccordionSummary-content': {
         marginLeft: theme.spacing(1),
-        flexDirection: 'column',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         fontSize: '16px'
     },
 }));
