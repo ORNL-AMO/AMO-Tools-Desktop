@@ -8,6 +8,7 @@ import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import { EdgeTypes, NodeTypes } from "@xyflow/react";
+import FlowLossNode from "../Nodes/FlowLossNode";
 
 
 export const nodeTypes: NodeTypes = {
@@ -16,10 +17,12 @@ export const nodeTypes: NodeTypes = {
   waterDischarge: ProcessFlowComponentNode,
   waterTreatment: ProcessFlowComponentNode,
   wasteWaterTreatment: ProcessFlowComponentNode,
+  // flowLoss: ProcessFlowComponentNode,
   // custom
   // splitterNode: SplitterNode,
   splitterNodeFour: SplitterNodeFour,
-  splitterNodeEight: SplitterNodeEight
+  splitterNodeEight: SplitterNodeEight,
+  flowLoss: FlowLossNode,
 };
 
 export const edgeTypes: EdgeTypes = {

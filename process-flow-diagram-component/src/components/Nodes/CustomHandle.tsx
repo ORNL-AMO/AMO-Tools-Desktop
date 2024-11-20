@@ -41,17 +41,17 @@ const mainTargetHandleStyle: CSSProperties = {
 
   
 const CustomHandle = (props: HandleProps) => {
-    const { type, position, id } = props;
-
-    // turn into hook
-    const connectionLimit = 2;
+    const { type, position, id, connectionLimit } = props;
+    let { className } = props;
+    const maxConnections = connectionLimit === undefined? 2 : connectionLimit;
     const connections = useHandleConnections({
         type: props.type,
         id: id,
     });
-    const blockConnections: boolean = connections.length >= connectionLimit;
+    const blockConnections: boolean = connections.length >= maxConnections;
 
     let style: CSSProperties = {};
+    if (!className) {
     switch (position) {
         case Position.Left:
             style = mainTargetHandleStyle;
@@ -70,14 +70,16 @@ const CustomHandle = (props: HandleProps) => {
             break;
       }
 
-      let className = 'source-handle'
-      if (type === 'target') {
-        className = 'target-handle';
-      }
+        className = 'custom-handle source-handle'
+        if (type === 'target') {
+          className = 'custom-handle target-handle';
+        }
+  
+        if (blockConnections) {
+          className += ' limit-connection';
+        }
+    }
 
-      if (blockConnections) {
-        className += ' limit-connection';
-      }
 
   return (
       <Handle
@@ -99,5 +101,7 @@ export default CustomHandle;
 export interface HandleProps {
     type: HandleType,
     position: Position,
+    className?: string,
+    connectionLimit?: number,
     id: string,
 }
