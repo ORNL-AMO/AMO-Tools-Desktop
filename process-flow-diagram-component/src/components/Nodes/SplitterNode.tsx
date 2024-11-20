@@ -1,6 +1,5 @@
 import { memo, FC, CSSProperties, useState, useRef, useEffect } from 'react';
-import { ProcessFlowPart, getNewIdString } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { DiagramNode } from './ProcessFlowComponentNode';
+import { DiagramNode, ProcessFlowPart, getNewIdString } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { Edge, Handle, Node, NodeProps, NodeResizer, Position, useReactFlow, useUpdateNodeInternals } from '@xyflow/react';
 
 

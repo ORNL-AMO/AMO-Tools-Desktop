@@ -168,44 +168,25 @@ const Flow = (props: FlowProps) => {
     [setEdges],
   );
 
-  const onReconnectEnd = useCallback(
-    (_, oldEdge, handleType) => {
-      console.log('onReconnectEnd')
-      if (handleType === 'source') {
-        setNodes((nodes) => {
-          return nodes.filter((node) => {
-            const isFlowLoss = node.type === 'flowLoss';
-            const isTarget = node.id === oldEdge.target;
+  // const onReconnectEnd = useCallback(
+  //   (_, oldEdge, handleType) => {
+  //     console.log('onReconnectEnd')
+  //     if (handleType === 'source') {
+  //       setNodes((nodes) => {
+  //         return nodes.filter((node) => {
+  //           const isFlowLoss = node.type === 'flowLoss';
+  //           const isTarget = node.id === oldEdge.target;
             
-            return !(isFlowLoss && isTarget);
-          });
-        });
+  //           return !(isFlowLoss && isTarget);
+  //         });
+  //       });
 
-        setEdges((edges) => edges.filter((edge) => edge.id !== oldEdge.id));
-      }
-    },
-    [setNodes, setEdges],
-  );
+  //       setEdges((edges) => edges.filter((edge) => edge.id !== oldEdge.id));
+  //     }
+  //   },
+  //   [setNodes, setEdges],
+  // );
 
-  const onEdgesDelete = useCallback(
-    (deletedEdges) => {
-      setNodes((nodes) => {
-        // todo refactor readability
-        return deletedEdges.reduce(
-          (acc, edge) =>
-            acc.filter((n) => {
-              const isFlowLoss = n.type === 'flowLoss';
-              const isSourceOrTarget =
-                n.id === edge.source || n.id === edge.target;
-
-              return !(isFlowLoss && isSourceOrTarget);
-            }),
-          nodes,
-        );
-      });
-    },
-    [setNodes],
-  );
 
   // const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
   //   // todo global confirm
@@ -359,9 +340,7 @@ const Flow = (props: FlowProps) => {
             edges={edges}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
-            onConnectEnd={onConnectEnd}
             onReconnect={onReconnect}
-            onReconnectEnd={onReconnectEnd}
             onInit={setReactFlowInstance}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
@@ -370,7 +349,6 @@ const Flow = (props: FlowProps) => {
             connectionLineType={ConnectionLineType.Bezier}
             onDrop={onDrop}
             onError={onErrorWithSuppressed}
-            onEdgesDelete={onEdgesDelete}
             // onBeforeDelete={onBeforeDelete}
             onDragOver={onDragOver}
             fitView={true}

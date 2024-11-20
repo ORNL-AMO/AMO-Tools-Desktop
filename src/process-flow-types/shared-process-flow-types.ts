@@ -94,6 +94,25 @@ export interface ProcessFlowParentState {
     // todo this will hold any contextual data about connections to other parts, etc
     processComponentContext?: any;
   }
+
+  // * patches v11 -> v12 typing changes
+// todo this type needs to duplicate ProcessFlowPart - how to merge types
+export type DiagramNode = Node<{
+  name: string,
+  processComponentType: ProcessFlowNodeType,
+  className: ProcessFlowPartStyleClass,
+  isValid: boolean,
+  createdByAssessment: boolean,
+  diagramNodeId?: string,
+  disableInflowConnections?: boolean,
+  disableOutflowConnections?: boolean,
+  modifiedDate?: Date,
+  handles?: Handles,
+  splitterTargets?: Array<string>;
+  setManageDataId?: (id: string) => void;
+  openEditData?: (boolean) => void;
+  processComponentContext?: any;
+}, 'processFlowPart'>;
   
   export interface HandleOption {
     id: string,

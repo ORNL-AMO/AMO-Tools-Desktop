@@ -119,6 +119,7 @@ a {
   align-items: center;
   cursor: grab;
   color: #fff;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
 }
 
 .process-flow-diagram .dndnode.splitterNode {
@@ -152,6 +153,7 @@ a {
 }
 
 .process-flow-diagram .dndnode.flow-loss {
+  display: flex;
   border: none;
   background: #fff;
   color: #000;
@@ -212,34 +214,59 @@ a {
 .react-flow__node-wasteWaterTreatment,
 .react-flow__node-group {
   padding: 10px;
-  border-radius: 3px;
+  border-radius: 5px;
   min-width: 150px;
   font-size: 12px;
   color: #fff;
   text-align: center;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #1a192b;
   background-color: white;
+  border: 2px solid transparent;
 }
 
 .react-flow__node-flowLoss {
   padding-top: 4px;
   font-size: 12px;
-  background-color: transparent;
-  border-radius: 50%;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
   height: 50px;
   width: 50px;
   text-align: center;
-  border: solid 1px #000000;
 }
 
-.react-flow__node-flowLoss.flow-loss,
-.react-flow__node-flowLoss.flow-loss.selected.selectable,
-.react-flow__node-flowLoss.flow-loss.selectable:focus {
-  /* border: 0; */
-  box-shadow: none;
-  background-color: rgba(102, 102, 102, 1);
+.react-flow__node.selectable:focus {
+  box-shadow: 0px 0px 0px 4px #E8E8E8;
+  border-color: #d9d9d9;
+}
+
+.react-flow__node.selectable:focus:active {
+  box-shadow:  0px 3.54px 4.55px 0px #00000005, 
+  0px 3.54px 4.55px 0px #0000000D, 
+  0px 0.51px 1.01px 0px #0000001A;
+}
+
+.react-flow__node.selectable:hover, 
+.react-flow__node.draggable:hover {
+  border-color: #C5C5C5;
+}
+
+.react-flow__node.selectable.selected {
+  border: 2px solid #505050;
+  box-shadow:  0px 3.54px 4.55px 0px #00000005, 
+  0px 3.54px 4.55px 0px #0000000D, 
+  0px 0.51px 1.01px 0px #0000001A;
+}
+
+
+.react-flow__node-waterIntake.selectable:hover, 
+.react-flow__node-waterUsingSystem.selectable:hover, 
+.react-flow__node-waterDischarge.selectable:hover, 
+.react-flow__node-waterTreatment.selectable:hover, 
+.react-flow__node-wasteWaterTreatment.selectable:hover, 
+.react-flow__node-group.selectable:hover {
+      box-shadow: 0px 3.54px 4.55px 0px #00000005, 
+      0px 3.54px 4.55px 0px #0000000D, 
+      0px 0.51px 1.01px 0px #0000001A;
 }
 
 
@@ -348,41 +375,6 @@ a {
   visibility: visible;
 } */
 
-.react-flow__node-waterIntake.selectable:hover, 
-.react-flow__node-waterUsingSystem.selectable:hover, 
-.react-flow__node-waterDischarge.selectable:hover, 
-.react-flow__node-waterTreatment.selectable:hover, 
-.react-flow__node-wasteWaterTreatment.selectable:hover, 
-.react-flow__node-group.selectable:hover {
-      box-shadow: 0 1px 4px 1px rgba(0, 0, 0, 0.08);
-}
-
-.react-flow__node-splitterNode.selectable.selected,
-.react-flow__node-splitterNode.selectable:focus,
-.react-flow__node-splitterNode.selectable:focus-visible,
-.react-flow__node-waterIntake.selectable.selected,
-.react-flow__node-waterIntake.selectable:focus,
-.react-flow__node-waterIntake.selectable:focus-visible,
-.react-flow__node-waterUsingSystem.selectable.selected,
-.react-flow__node-waterUsingSystem.selectable:focus,
-.react-flow__node-waterUsingSystem.selectable:focus-visible,
-.react-flow__node-waterDischarge.selectable.selected,
-.react-flow__node-waterDischarge.selectable:focus,
-.react-flow__node-waterDischarge.selectable:focus-visible,
-.react-flow__node-waterTreatment.selectable.selected,
-.react-flow__node-waterTreatment.selectable:focus,
-.react-flow__node-waterTreatment.selectable:focus-visible,
-.react-flow__node-wasteWaterTreatment.selectable.selected,
-.react-flow__node-wasteWaterTreatment.selectable:focus,
-.react-flow__node-wasteWaterTreatment.selectable:focus-visible,
-.react-flow__node-flowLoss.selectable.selected,
-.react-flow__node-flowLoss.selectable:focus,
-.react-flow__node-flowLoss.selectable:focus-visible,
-.react-flow__node-group.selectable.selected,
-.react-flow__node-group.selectable:focus,
-.react-flow__node-group.selectable:focus-visible {
-  box-shadow: 0 0 0 0.5px #1a192b;
-}
 
 .node-inner-input {
   /* background: rgba(255, 255, 255, 0.5); */
