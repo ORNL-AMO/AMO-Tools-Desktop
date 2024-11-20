@@ -70,9 +70,9 @@ const CustomHandle = (props: HandleProps) => {
             break;
       }
 
-      let className = 'source-handle'
+      let className = 'custom-handle source-handle'
       if (type === 'target') {
-        className = 'target-handle';
+        className = 'custom-handle target-handle';
       }
 
       if (blockConnections) {

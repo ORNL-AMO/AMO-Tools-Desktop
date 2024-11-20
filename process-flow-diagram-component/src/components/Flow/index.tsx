@@ -15,13 +15,17 @@ import {
   MarkerType,
   EdgeTypes,
   FitViewOptions,
+  addEdge,
+  reconnectEdge,
+  OnConnectEnd,
+  FinalConnectionState,
 } from '@xyflow/react';
  
 import '@xyflow/react/dist/style.css';
 
 import Sidebar from '../Sidebar/Sidebar';
 import { FlowDiagramData, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
+import { changeExistingEdgesType, getAdaptedTypeString, getDefaultNodeFromType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdgeDefaults, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
@@ -88,6 +92,8 @@ const Flow = (props: FlowProps) => {
         }
       });
 
+      console.log('nodes', nodes);
+      console.log('edges', edges);
       props.saveFlowDiagramData({
         nodes: dbSafeNodes,
         edges: debouncedEdges,
@@ -110,6 +116,95 @@ const Flow = (props: FlowProps) => {
       setCustomEdges(setEdges, connectedParams, userDiagramOptions);
     },
     [userDiagramOptions]
+  );
+
+   /**
+ * Check for flow loss node
+ */
+  const onConnectEnd: OnConnectEnd = useCallback(
+    (event, connectionState: FinalConnectionState) => {
+      if (
+        connectionState.isValid ||
+        connectionState.fromHandle.type === 'target'
+      ) {
+        return;
+      }
+
+      console.log('onConnectEnd')
+      const fromNodeId = connectionState.fromNode.id;
+      const { clientX, clientY } = 'changedTouches' in event ? event.changedTouches[0] : event;
+
+      let lossNode: Node<ProcessFlowPart> = getDefaultNodeFromType('flow-loss', setManageDataId, setIsDataDrawerOpen);
+      lossNode.data.disableInflowConnections = true;
+      lossNode.type = getAdaptedTypeString(lossNode.type);
+      lossNode.data.disableOutflowConnections = true;
+      lossNode.position = reactFlowInstance.screenToFlowPosition({
+        x: clientX,
+        y: clientY,
+      })
+
+      const newEdge: Edge = {
+        animated: userDiagramOptions.edgeOptions.animated,
+        id: `reactflow__edge-${fromNodeId}-${lossNode.id}`,
+        source: fromNodeId,
+        sourceHandle: connectionState.fromHandle.id,
+        target: lossNode.id,
+        reconnectable: 'target',
+      };
+      
+      setCustomEdgeDefaults(newEdge, userDiagramOptions);
+      setNodes((nodes) => nodes.concat(lossNode));
+      setEdges((edges) => addEdge(newEdge, edges));
+    },
+    [setNodes, setEdges, reactFlowInstance],
+  );
+
+  const onReconnect = useCallback(
+    (oldEdge, newConnection) => {
+
+      console.log('onReconnect')
+      setEdges((edges) => reconnectEdge(oldEdge, newConnection, edges))
+    },
+    [setEdges],
+  );
+
+  const onReconnectEnd = useCallback(
+    (_, oldEdge, handleType) => {
+      console.log('onReconnectEnd')
+      if (handleType === 'source') {
+        setNodes((nodes) => {
+          return nodes.filter((node) => {
+            const isFlowLoss = node.type === 'flowLoss';
+            const isTarget = node.id === oldEdge.target;
+            
+            return !(isFlowLoss && isTarget);
+          });
+        });
+
+        setEdges((edges) => edges.filter((edge) => edge.id !== oldEdge.id));
+      }
+    },
+    [setNodes, setEdges],
+  );
+
+  const onEdgesDelete = useCallback(
+    (deletedEdges) => {
+      setNodes((nodes) => {
+        // todo refactor readability
+        return deletedEdges.reduce(
+          (acc, edge) =>
+            acc.filter((n) => {
+              const isFlowLoss = n.type === 'flowLoss';
+              const isSourceOrTarget =
+                n.id === edge.source || n.id === edge.target;
+
+              return !(isFlowLoss && isSourceOrTarget);
+            }),
+          nodes,
+        );
+      });
+    },
+    [setNodes],
   );
 
   // const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
@@ -244,6 +339,7 @@ const Flow = (props: FlowProps) => {
   const fitViewOptions: FitViewOptions = {
     // padding: 10
   };
+
   return (
     props.height &&
     <FlowContext.Provider value={{userDiagramOptions}}>
@@ -263,6 +359,9 @@ const Flow = (props: FlowProps) => {
             edges={edges}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
+            onConnectEnd={onConnectEnd}
+            onReconnect={onReconnect}
+            onReconnectEnd={onReconnectEnd}
             onInit={setReactFlowInstance}
             nodeTypes={nodeTypes}
             edgeTypes={edgeTypes}
@@ -271,6 +370,7 @@ const Flow = (props: FlowProps) => {
             connectionLineType={ConnectionLineType.Bezier}
             onDrop={onDrop}
             onError={onErrorWithSuppressed}
+            onEdgesDelete={onEdgesDelete}
             // onBeforeDelete={onBeforeDelete}
             onDragOver={onDragOver}
             fitView={true}

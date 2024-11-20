@@ -102,7 +102,7 @@ export interface ProcessFlowParentState {
   
   // * union future diagram types into ProcessFlowNodeType
   export type ProcessFlowNodeType = WaterProcessComponentType | undefined;
-  export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system' | 'splitter-node' | 'water-treatment' | 'waste-water-treatment';
+  export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system' | 'splitter-node' | 'water-treatment' | 'waste-water-treatment' | 'flow-loss';
   export type ProcessFlowPartStyleClass = WaterProcessComponentType;
 
   export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties> = {
@@ -129,6 +129,10 @@ export interface ProcessFlowParentState {
     'waste-water-treatment': {
       backgroundColor: '#e28000',
       color: "#ffffff"
+    },
+    'flow-loss': {
+      backgroundColor: '#fff',
+      color: "#000"
     }
   };
 
@@ -213,6 +217,14 @@ const getDefaultHandles = (): Handles => {
       processComponentType: 'waste-water-treatment',
       name: 'Waste Water Treatment',
       className: 'waste-water-treatment',
+      isValid: true,
+      createdByAssessment: false,
+      handles: getDefaultHandles()
+    },
+    {
+      processComponentType: 'flow-loss',
+      name: 'Flow Loss',
+      className: 'flow-loss',
       isValid: true,
       createdByAssessment: false,
       handles: getDefaultHandles()

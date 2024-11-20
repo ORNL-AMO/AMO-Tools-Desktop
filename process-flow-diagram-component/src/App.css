@@ -151,6 +151,12 @@ a {
   background: #e28000;
 }
 
+.process-flow-diagram .dndnode.flow-loss {
+  border: none;
+  background: #fff;
+  color: #000;
+}
+
 .process-flow-diagram .reactflow-wrapper {
   flex-grow: 1;
   height: 100%;
@@ -217,6 +223,26 @@ a {
   background-color: white;
 }
 
+.react-flow__node-flowLoss {
+  padding-top: 4px;
+  font-size: 12px;
+  background-color: transparent;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  border: solid 1px #000000;
+}
+
+.react-flow__node-flowLoss.flow-loss,
+.react-flow__node-flowLoss.flow-loss.selected.selectable,
+.react-flow__node-flowLoss.flow-loss.selectable:focus {
+  /* border: 0; */
+  box-shadow: none;
+  background-color: rgba(102, 102, 102, 1);
+}
+
+
 .react-flow__node-splitterNode
 {
   text-align: center;
@@ -259,8 +285,22 @@ a {
 }
 
 
+.react-flow__handle.flowLoss-handle {
+  background-color: #ffffff;
+  border-radius: 2px;
+  width: 16px;
+  height: 8px;
+  border: none;
+  min-width: 2px;
+  min-height: 2px;
 
-.react-flow__handle {
+  border-left: solid 1px gray;
+  border-right: solid 1px gray;
+  border-top: solid 1px gray;
+}
+
+
+.react-flow__handle.custom-handle {
   background-color: #bbb;
   border-radius: 0;
   width: 8px;
@@ -270,27 +310,27 @@ a {
   min-height: 2px;
 }
 
-.react-flow__handle.source-handle {
+.react-flow__handle.custom-handle.source-handle {
   background-color: #000 !important;
   border: solid 1px #000;
 }
 
-.react-flow__handle.source-handle:hover {
+.react-flow__handle.custom-handle.source-handle:hover {
   background-color: #b6b6b6 !important;
 }
-.react-flow__handle.source-handle.block-connection:hover {
+.react-flow__handle.custom-handle.source-handle.block-connection:hover {
   background-color: #ff0000 !important;
 }
 
-.react-flow__handle.target-handle {
+.react-flow__handle.custom-handle.target-handle {
   background-color: #fff !important;
   border: solid 1px #000;
 }
 
-.react-flow__handle.target-handle:hover {
+.react-flow__handle.custom-handle.target-handle:hover {
   background-color: #b6b6b6 !important;
 }
-.react-flow__handle.target-handle.block-connection:hover {
+.react-flow__handle.custom-handle.target-handle.block-connection:hover {
   background-color: #ff0000 !important;
 }
 
@@ -335,6 +375,9 @@ a {
 .react-flow__node-wasteWaterTreatment.selectable.selected,
 .react-flow__node-wasteWaterTreatment.selectable:focus,
 .react-flow__node-wasteWaterTreatment.selectable:focus-visible,
+.react-flow__node-flowLoss.selectable.selected,
+.react-flow__node-flowLoss.selectable:focus,
+.react-flow__node-flowLoss.selectable:focus-visible,
 .react-flow__node-group.selectable.selected,
 .react-flow__node-group.selectable:focus,
 .react-flow__node-group.selectable:focus-visible {
