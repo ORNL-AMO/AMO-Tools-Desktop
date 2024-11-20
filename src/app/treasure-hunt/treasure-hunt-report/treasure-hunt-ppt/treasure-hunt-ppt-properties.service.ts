@@ -15,10 +15,10 @@ export class TreasureHuntPptPropertiesService {
 
     getSlideTitleProperties(): pptxgen.TextPropsOptions {
         let slideTitleProps: pptxgen.TextPropsOptions = {
-            x: 0,
+            x: 0.67,
             y: 0,
-            w: '100%',
-            h: 1.2,
+            w: 11.08,
+            h: 1.18,
             align: 'center',
             bold: true,
             color: 'FFFFFF',

@@ -28,9 +28,58 @@ export class TreasureHuntPptService {
     let date: string = this.getCurrentDate();
 
     pptx.layout = "LAYOUT_WIDE";
+    
     pptx.defineSlideMaster({
-      title: "MASTER_SLIDE",
+      title: "Title Slide",
+      background: { data: betterPlantsPPTimg.betterPlantsTitleSlide },
+      objects: [
+       {placeholder: { options:{ name:'title', type:'title', x:0.27, y:2.67, w:5.73, h:1.02, align: 'center', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle' },
+        text:'Click to add title' }},
+       {placeholder: { options:{ name:'body', type:'body', x:0.3, y:4.07, w:4.34, h:0.74, align: 'left', color: '8B93B1', fontSize: 20, fontFace: 'Arial (Body)', valign: 'top', }, text:'Click to add subtitle' }}
+      ],
+      margin: 0.0
+    });
+    
+    pptx.defineSlideMaster({
+      title: "Section Header",
+      background: { data: betterPlantsPPTimg.betterPlantsSectionSlide },
+      objects: [
+       {placeholder: { options:{ name:'title', type:'title', x:1.38, y:2.97, w:9.42, h:0.99 }, text:'Click To Edit Master Title Style' }},
+      ],
+      margin: 0.0
+    });
+
+    pptx.defineSlideMaster({
+      title: "Title and Content",
       background: { data: betterPlantsPPTimg.betterPlantsSlide },
+      objects: [
+       {placeholder: { options:{ name:'title', type:'title', x:0.67, y:0, w:11.08, h:1.18 }, text:'Click to add title' }},
+       {placeholder: { options:{ name:'body', type:'body', x:0.67, y:1.68, w:12, h:4.95, bullet: true }, text:'Click to add text' }}
+      ],
+      margin: 0.0
+    });
+
+    pptx.defineSlideMaster({
+      title: "Two Content",
+      background: { data: betterPlantsPPTimg.betterPlantsSlide },
+      objects: [
+       {placeholder: { options:{ name:'title', type:'title', x:0.67, y:0, w:11.08, h:1.18 }, text:'Click to add title' }},
+       {placeholder: { options:{ name:'body', type:'body', x:0.67, y:1.75, w:5.74, h:4.95, bullet: true }, text:'Click to add text' }},
+       {placeholder: { options:{ name:'body', type:'body', x:6.93, y:1.75, w:5.74, h:4.95, bullet: true }, text:'Click to add text' }}
+      ],
+      margin: 0.0
+    });
+
+    pptx.defineSlideMaster({
+      title: "Comparison",
+      background: { data: betterPlantsPPTimg.betterPlantsSlide },
+      objects: [
+       {placeholder: { options:{ name:'title', type:'title', x:0.67, y:0, w:11.08, h:1.18 }, text:'Click to add title' }},
+       {placeholder: { options:{ name:'body', type:'body', x:0.67, y:1.56, w:5.89, h:0.7 }, text:'Click to add text' }},
+       {placeholder: { options:{ name:'body', type:'body', x:6.77, y:1.56, w:5.89, h:0.7 }, text:'Click to add text' }},
+       {placeholder: { options:{ name:'body', type:'body', x:0.67, y:2.38, w:5.89, h:4.32, bullet: true }, text:'Click to add text' }},
+       {placeholder: { options:{ name:'body', type:'body', x:6.77, y:2.38, w:5.89, h:4.32, bullet: true }, text:'Click to add text' }}
+      ],
       margin: 0.0
     });
 
@@ -40,12 +89,11 @@ export class TreasureHuntPptService {
     let teamSummaryData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getTeamSummaryData(opportunityCardsData);
     let paybackBarData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getPaybackData(opportunitiesPaybackDetails, settings);
 
-    let slide1 = pptx.addSlide();
-    slide1.background = { data: betterPlantsPPTimg.betterPlantsTitleSlide };
-    slide1.addText(pptTitle, { x: 0.3, y: 2.1, w: 5.73, h: 1.21, align: 'center', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
-    slide1.addText(date, { x: 0.3, y: 4.19, w: 4.34, h: 0.74, align: 'left', color: '8B93B1', fontSize: 20, fontFace: 'Arial (Body)', valign: 'top', isTextBox: true, autoFit: true });
+    let slide1 = pptx.addSlide({ masterName: "Title Slide" });
+    slide1.addText(pptTitle, {placeholder: 'title'});
+    slide1.addText(date, {placeholder: 'body'});
 
-    let thBackground = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let thBackground = pptx.addSlide({ masterName: "Title and Content" });
     thBackground.addText('Energy Treasure Hunt Background', slideTitleProperties);
     thBackground.addText(
       "An Energy Treasure Hunt is a 2 - 3 day event focusing on day-to-day operational energy efficiency improvements\nProcess involves observing the facility during idle/partially idle times (frequently a Sunday) to identify energy waste\n{COMPANY/FACILITY} awarded treasure hunt through a competitive process",
@@ -65,7 +113,7 @@ export class TreasureHuntPptService {
       { x: 4.5, y: 6.3, w: 1.9, h: 0.5, margin: .25, align: 'left', color: '000000', fontSize: 10, fontFace: 'Arial (Body)', valign: 'top' }
     );
 
-    let thConcept = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let thConcept = pptx.addSlide({ masterName: "Title and Content" });
     thConcept.addText('Energy Treasure Hunt Concept', slideTitleProperties);
     thConcept.addText(
       "Cross-functional teams engage employees and outside personnel to brainstorm ways to reduce energy use throughout the plant\nFinding low cost/no cost actions to reduce energy consumption\nLearning a repeatable process to continuously improve and reduce energy consumption\nParticipants learn skills to quantify opportunities using standard methodologies, tools, and calculations",
@@ -76,11 +124,11 @@ export class TreasureHuntPptService {
       { x: 2.54, y: 5.34, w: 8.25, h: 0.6, margin: .25, align: 'left', color: '#2F5597', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top' }
     );
 
-    let previousResults = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let previousResults = pptx.addSlide({ masterName: "Title and Content" });
     previousResults.addText('Previous DOE Energy Treasure Hunt Results', slideTitleProperties);
     previousResults.addImage({ data: betterPlantsPPTimg.previousTHChart, x: 1.22, y: 1.57, w: 10.9, h: 5.08 });
 
-    let thOverview = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let thOverview = pptx.addSlide({ masterName: "Title and Content" });
     thOverview.addText('{FACILITY NAME} Treasure Hunt Overview', slideTitleProperties);
     thOverview.addText(
       "{TREASURE HUNT DATES}\nLocation: {FACILITY LOCATION}\nAfter kickoff, safety briefing,  and tool training, we will employ the treasure hunt process\nConclude with report out to plant management",
@@ -91,11 +139,11 @@ export class TreasureHuntPptService {
     thOverview.addText('Placeholder for agenda day 2', { x: 6.3, y: 2.85, w: 6.9, h: 2, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 10, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     thOverview.addText('Placeholder for agenda day 3', { x: 6.3, y: 4.9, w: 6.9, h: 1.9, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 10, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
 
-    let facilitySlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let facilitySlide = pptx.addSlide({ masterName: "Title and Content" });
     facilitySlide.addText('{Facility Name} Hunt Overview', slideTitleProperties);
     facilitySlide.addText('Placeholder for group picture', { x: 2.17, y: 1.34, w: 9, h: 6, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
 
-    let slide2 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let slide2 = pptx.addSlide({ masterName: "Title and Content" });
     slide2.addText('Cost Summary', slideTitleProperties);
     slide2 = this.treasureHuntPptTableService.getCostSummaryTable(slide2, treasureHuntResults);
     let costSavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getCostSavingsData(treasureHuntResults);
@@ -106,17 +154,17 @@ export class TreasureHuntPptService {
     slide2.addText(`${totalCurrentCost}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
 
 
-    let slide3 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let slide3 = pptx.addSlide({ masterName: "Title and Content" });
     slide3.addText('Detailed Summary', slideTitleProperties);
     slide3 = this.treasureHuntPptTableService.getDetailedSummaryTable(slide3, treasureHuntResults, settings);
 
-    let slide4 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let slide4 = pptx.addSlide({ masterName: "Title and Content" });
     slide4.addText('Energy Utility Usage & Cost', slideTitleProperties);
     if (treasureHunt.currentEnergyUsage) {
       slide4 = this.treasureHuntPptTableService.getEnergyUtilityTable(slide4, treasureHunt.currentEnergyUsage, settings);
     }
 
-    let slide5 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let slide5 = pptx.addSlide({ masterName: "Title and Content" });
     slide5.addText('Electricity & Natural Gas Usage', slideTitleProperties);
     if (treasureHuntResults.electricity.energySavings) {
       let electricitySavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getElectricitySavingsData(treasureHuntResults);
@@ -136,7 +184,7 @@ export class TreasureHuntPptService {
       slide5.addText(`${totalNaturalGas}`, { w: 2, h: 0.34, x: 8.95, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     }
 
-    let slide6 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let slide6 = pptx.addSlide({ masterName: "Title and Content" });
     slide6.addText('Utility Usage & Savings', slideTitleProperties);
     if (treasureHuntResults.water.energySavings) {
       let waterSavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getWaterSavingsData(treasureHuntResults);
@@ -210,7 +258,7 @@ export class TreasureHuntPptService {
 
 
 
-    let slide7 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let slide7 = pptx.addSlide({ masterName: "Title and Content" });
     slide7.addText('Carbon Emission Results (tonne CO2)', slideTitleProperties);
     doughnutChartOptions = this.treasureHuntPptPropertiesService.getDoughnutChartProperties();
     slide7 = this.treasureHuntPptTableService.getCarbonSummaryTable(slide7, treasureHuntResults.co2EmissionsResults);
@@ -222,7 +270,7 @@ export class TreasureHuntPptService {
 
 
     if (this.treasureHuntReportService.getTeamData(opportunityCardsData).length > 0) {
-      let slide8 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+      let slide8 = pptx.addSlide({ masterName: "Title and Content" });
       slide8.addText('Team Summary ($)', slideTitleProperties);
       slide8 = this.treasureHuntPptTableService.getTeamSummaryTable(slide8, opportunityCardsData);
       slide8.addChart("pie", teamSummaryData, pieChartOptions);
@@ -231,11 +279,10 @@ export class TreasureHuntPptService {
       let slideTextProps = this.treasureHuntPptPropertiesService.getOppSlideProperties();
       teamData = _.orderBy(teamData, 'team', 'asc');
       teamData.forEach(team => {
-        let teamTitle = pptx.addSlide();
-        teamTitle.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
+        let teamTitle = pptx.addSlide({ masterName: "Section Header"});
         teamTitle.addText('Team ' + team.team, { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
 
-        let slideTeamTopOpps = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+        let slideTeamTopOpps = pptx.addSlide({ masterName: "Title and Content" });
         slideTeamTopOpps.addText('Team ' + team.team + ' - Top Opportunities', slideTitleProperties);
         slideTeamTopOpps.addText(
           "additional notes here",
@@ -269,7 +316,7 @@ export class TreasureHuntPptService {
         }
         slideTeamTopOpps.addTable(rows, { x: 0.14, y: 2.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
 
-        let slideTeamSummary = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+        let slideTeamSummary = pptx.addSlide({ masterName: "Title and Content" });
         slideTeamSummary.addText('Team ' + team.team, slideTitleProperties);
         slideTeamSummary.addText('Placeholder for picture', { x: 8.32, y: 1.8, w: 4.43, h: 2.81, align: 'center', fill: { color: 'BDEEFF' }, color: 'BFBFBF', fontSize: 18, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
         slideTeamSummary.addText('Team Members:', slideTextProps);
@@ -279,7 +326,7 @@ export class TreasureHuntPptService {
 
         opportunityCardsData.forEach((opp: OpportunityCardData) => {
           if (opp.opportunitySheet.owner == team.team && opp.selected == true) {
-            let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+            let newSlide = pptx.addSlide({ masterName: "Title and Content" });
             newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
             let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.getOpportunitySlideText(opp.opportunitySheet);
             newSlide.addText(slideText.text, slideText.options);
@@ -314,7 +361,7 @@ export class TreasureHuntPptService {
           }
         });
 
-        let slideTeamAllOpps = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+        let slideTeamAllOpps = pptx.addSlide({ masterName: "Title and Content" });
         slideTeamAllOpps.addText('Team ' + team.team + ' - All Opportunities', slideTitleProperties);
         for (let i = 3; i < teamOpportunities.length; i++) {
           let x: OpportunitySummary = teamOpportunities[i];
@@ -324,7 +371,7 @@ export class TreasureHuntPptService {
         }
         slideTeamAllOpps.addTable(rows, { x: 0.14, y: 1.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
 
-        let slideTeamBestPractices = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+        let slideTeamBestPractices = pptx.addSlide({ masterName: "Title and Content" });
         slideTeamBestPractices.addText('Team ' + team.team + ' - Best Practices', slideTitleProperties);
         slideTeamBestPractices.addText(
           "Outline key best practices identified in Treasure Hunt here\ntype here\ntype here",
@@ -335,13 +382,12 @@ export class TreasureHuntPptService {
 
     }
 
-    let oppsWithNoTeam = pptx.addSlide();
-    oppsWithNoTeam.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
+    let oppsWithNoTeam = pptx.addSlide({ masterName: "Section Header"});
     oppsWithNoTeam.addText('Other Opportunities', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
    
     opportunityCardsData.forEach((opp) => {
       if (!opp.opportunitySheet.owner && opp.selected == true) {
-        let newSlide = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+        let newSlide = pptx.addSlide({ masterName: "Title and Content" });
         newSlide.addText('Opportunity: ' + opp.name, slideTitleProperties);
         let slideText: { text: pptxgen.TextProps[], options: pptxgen.TextPropsOptions } = this.getOpportunitySlideText(opp.opportunitySheet);
         newSlide.addText(slideText.text, slideText.options);
@@ -376,38 +422,37 @@ export class TreasureHuntPptService {
       }
     });
 
-    let summaryTransition = pptx.addSlide();
-    summaryTransition.background = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
+    let summaryTransition = pptx.addSlide({ masterName: "Section Header"});
     summaryTransition.addText('Summary', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
 
 
-    let slide9 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let slide9 = pptx.addSlide({ masterName: "Title and Content" });
     slide9.addText('Opportunity Payback Details ($)', slideTitleProperties);
     slide9 = this.treasureHuntPptTableService.getOppPaybackTable(slide9, opportunitiesPaybackDetails);
     slide9.addChart("pie", paybackBarData, pieChartOptions);
 
-    let slide10 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let slide10 = pptx.addSlide({ masterName: "Title and Content" });
     slide10.addText('Best Practices', slideTitleProperties);
     slide10.addText(
       "Outline key best practices identified in Treasure Hunt here\ntype here\ntype here",
       { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
     );
 
-    let slide11 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let slide11 = pptx.addSlide({ masterName: "Title and Content" });
     slide11.addText('Other Opportunities Not Evaluated', slideTitleProperties);
     slide11.addText(
       "Outline any major opportunities identified, but not evaluated here\ntype here\ntype here",
       { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
     );
 
-    let slide12 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let slide12 = pptx.addSlide({ masterName: "Title and Content" });
     slide12.addText('{FACILITY NAME} Next Actions', slideTitleProperties);
     slide12.addText(
       "Outline the next stpes for the facility here\ntype here\ntype here",
       { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
     );
 
-    let slide13 = pptx.addSlide({ masterName: "MASTER_SLIDE" });
+    let slide13 = pptx.addSlide({ masterName: "Title and Content" });
     slide13.addText('{COMPANY NAME}/DOE Partnership Future Actions', slideTitleProperties);
     slide13.addText(
       "Outline the next steps for the company and DOE/Better Plants here\ntype here\ntype here",
