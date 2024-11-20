@@ -1,6 +1,6 @@
 import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
 import { edgeTypes, nodeTypes } from "./FlowTypes";
-import { getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { DefaultEdgeOptions, EdgeTypes, useHandleConnections } from "@xyflow/react";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
@@ -8,109 +8,120 @@ import StepDiagramEdge from "../Edges/StepDiagramEdge";
 import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
 import { CustomEdgeData } from "../Edges/DiagramBaseEdge";
 
-export const getRandomCoordinates = (height: number, width: number): {x: number, y: number} => {
-    const screenWidth = window.innerWidth;
-    const screenHeight = height;
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
-    
-    // Generate random coordinates within the visible area
-    const randomX = Math.random() * screenWidth + scrollX;
-    const randomY = Math.random() * screenHeight + scrollY;
-    return {x: randomX, y: randomY};
+export const getRandomCoordinates = (height: number, width: number): { x: number, y: number } => {
+  const screenWidth = window.innerWidth;
+  const screenHeight = height;
+  const scrollX = window.scrollX;
+  const scrollY = window.scrollY;
+
+  // Generate random coordinates within the visible area
+  const randomX = Math.random() * screenWidth + scrollX;
+  const randomY = Math.random() * screenHeight + scrollY;
+  return { x: randomX, y: randomY };
 }
 
 export const updateStaleNodes = (reactFlowInstance: ReactFlowInstance, staleNodes: Array<Node>, clientHeight: number) => {
   staleNodes = staleNodes.map((node: Node) => {
-      if (!node.position) {
-       setNodeFallbackPosition(reactFlowInstance, node, clientHeight);
-      }
+    if (!node.position) {
+      setNodeFallbackPosition(reactFlowInstance, node, clientHeight);
+    }
 
-      node.type = getAdaptedTypeString(node.type)
-      return node;
-    });
-    return staleNodes;
+    node.type = getAdaptedTypeString(node.type)
+    return node;
+  });
+  return staleNodes;
 }
 
 /**
-	 * Mimick random drop point for nodes in the connected diagram parent (MEASUR assessment or other)
-	 * @param clientHeight parent height
-	 */
+   * Mimick random drop point for nodes in the connected diagram parent (MEASUR assessment or other)
+   * @param clientHeight parent height
+   */
 const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Node, clientHeight: number) => {
-    const screenPoint = getRandomCoordinates(clientHeight, undefined);
-    const position = reactFlowInstance.screenToFlowPosition({
-      x: screenPoint.x,
-      y: screenPoint.y,
-    });
-    node.position = position;
+  const screenPoint = getRandomCoordinates(clientHeight, undefined);
+  const position = reactFlowInstance.screenToFlowPosition({
+    x: screenPoint.x,
+    y: screenPoint.y,
+  });
+  node.position = position;
 }
 
-  export const setDroppedNode = (event, reactFlowInstance: ReactFlowInstance, setNodes, setManageDataId, setIsDrawerOpen) => {
-    event.preventDefault();
-    const nodeType = event.dataTransfer.getData('application/reactflow');
-    if (typeof nodeType === 'undefined' || !nodeType) {
-      return;
-    }
-    const position = reactFlowInstance.screenToFlowPosition({
-      x: event.clientX,
-      y: event.clientY,
-    });
-
-    let newNode: Node;
-    if (nodeType.includes('splitter-node')) {
-      newNode = {
-        id: getNewNodeId(),
-        type: nodeType,
-        position: position,
-        className: nodeType,
-        data: {}
-      };
-    } else {
-      const newProcessComponent = getNewProcessComponent(nodeType);
-      newProcessComponent.setManageDataId = setManageDataId;
-      newProcessComponent.openEditData = setIsDrawerOpen;
-      newNode = getNewNode(nodeType, newProcessComponent, position);
-    }
-    newNode.type = getAdaptedTypeString(newNode.type);  
-
-    setNodes((nds) => {
-      return nds.concat(newNode)
-    });
+export const setDroppedNode = (event, reactFlowInstance: ReactFlowInstance, setNodes, setManageDataId, setIsDrawerOpen) => {
+  event.preventDefault();
+  const nodeType = event.dataTransfer.getData('application/reactflow');
+  if (typeof nodeType === 'undefined' || !nodeType) {
+    return;
   }
+  const position = reactFlowInstance.screenToFlowPosition({
+    x: event.clientX,
+    y: event.clientY,
+  });
 
- /**
- * edge ids are not gauranteed to be unique. They only include nodeid-nodeid. source and target handles must be looked at to identify uniqueness of edge 
- * 
- */
+  let newNode: Node;
+  if (nodeType.includes('splitter-node')) {
+    newNode = {
+      id: getNewNodeId(),
+      type: nodeType,
+      position: position,
+      className: nodeType,
+      data: {}
+    };
+  } else {
+    const newProcessComponent = getNewProcessComponent(nodeType);
+    newProcessComponent.setManageDataId = setManageDataId;
+    newProcessComponent.openEditData = setIsDrawerOpen;
+    newNode = getNewNode(nodeType, newProcessComponent, position);
+  }
+  newNode.type = getAdaptedTypeString(newNode.type);
+
+  setNodes((nds) => {
+    return nds.concat(newNode)
+  });
+}
+
+
+export const getDefaultNodeFromType = (nodeType: WaterProcessComponentType, setManageDataId, setIsDrawerOpen): Node => {
+  const newProcessComponent = getNewProcessComponent(nodeType);
+    newProcessComponent.setManageDataId = setManageDataId;
+    newProcessComponent.openEditData = setIsDrawerOpen;
+    const newNode: Node = getNewNode(nodeType, newProcessComponent);
+    return newNode;
+}
+
+
+/**
+* edge ids are not gauranteed to be unique. They only include nodeid-nodeid. source and target handles must be looked at to identify uniqueness of edge 
+* 
+*/
 export const setCustomEdges = (setEdges, connectedParams: Connection | Edge, diagramOptions: UserDiagramOptions) => {
   setEdges((eds) => {
     connectedParams = connectedParams as Edge;
-
-    if (connectedParams.source === connectedParams.target) {
-      connectedParams.type = 'selfconnecting';
-    }
-
-    if (diagramOptions.directionalArrowsVisible) {
-      connectedParams.markerEnd = {
-        type: MarkerType.ArrowClosed,
-        width: 25,
-        height: 25
-      }
-    }
-
-    connectedParams.data = {
-      flowValue: 0
-    }
-
-    if (connectedParams.style === undefined) {
-      connectedParams.style = {
-        stroke: '#6c757d',
-        strokeWidth: diagramOptions.edgeThickness
-      }
-    }
-
+    setCustomEdgeDefaults(connectedParams, diagramOptions);
     return addEdge(connectedParams, eds);
   })
+}
+
+export const setCustomEdgeDefaults = (edge: Edge, userDiagramOptions: UserDiagramOptions) => {
+  if (edge.source === edge.target) {
+    edge.type = 'selfconnecting';
+  }
+  if (userDiagramOptions.directionalArrowsVisible) {
+    edge.markerEnd = {
+      type: MarkerType.ArrowClosed,
+      width: 25,
+      height: 25
+    }
+  }
+
+  edge.data = {
+    flowValue: 0
+  }
+
+  if (edge.style === undefined) {
+    edge.style = {
+      stroke: '#6c757d',
+      strokeWidth: userDiagramOptions.edgeThickness
+    }
+  }
 }
 
 export const changeExistingEdgesType = (setEdges, diagramEdgeType: string) => {
@@ -131,8 +142,8 @@ export const changeExistingEdgesType = (setEdges, diagramEdgeType: string) => {
 
 export const getEdgeSourceAndTarget = (edge: Edge, nodes: Node[]) => {
   let target: ProcessFlowPart;
-  let source: ProcessFlowPart; 
-  
+  let source: ProcessFlowPart;
+
   nodes.forEach((node: Node) => {
     if (node.id === edge.source) {
       source = node.data;
@@ -142,12 +153,13 @@ export const getEdgeSourceAndTarget = (edge: Edge, nodes: Node[]) => {
     }
   });
 
-  return {source, target};
+  return { source, target };
 
 }
 
 export const getAdaptedTypeString = (nodeType: string) => {
   let adaptedString: string;
+  console.log(nodeType);
   switch (nodeType) {
     case 'water-intake':
       adaptedString = 'waterIntake';
@@ -173,13 +185,16 @@ export const getAdaptedTypeString = (nodeType: string) => {
     case 'splitter-node-8':
       adaptedString = 'splitterNodeEight'
       break;
+    case 'flow-loss':
+      adaptedString = 'flowLoss'
+      break;
     default:
-      console.log('No nodeType string detected - using default')
+      console.warn('No nodeType string detected - using default')
       adaptedString = 'default'
   }
 
   if (adaptedString !== 'default' && !nodeTypes[adaptedString]) {
-    throw new Error('ProcessFlowNodeType string must be adapted to fit nodeTypes (custom React-Flow NodeTypes)');
+    throw new Error('ProcessFlowNodeType string must be camelCased and added to custom NodeTypes object definition');
   }
   return adaptedString;
 }
@@ -215,7 +230,7 @@ export const getEdgeTypesFromString = (newDefaultType: string, currentEdgeTypes?
     default:
       newEdgeTypes.default = BezierDiagramEdge;
   }
-  
+
   return newEdgeTypes;
 };
 

@@ -1,6 +1,5 @@
 import { memo, FC } from 'react';
-import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { DiagramNode } from './ProcessFlowComponentNode';
+import { DiagramNode, ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { Handle, NodeProps, NodeResizer, Position } from '@xyflow/react';
 
 

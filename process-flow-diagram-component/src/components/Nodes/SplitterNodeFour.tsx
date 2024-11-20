@@ -1,6 +1,6 @@
 import { memo, FC } from 'react';
-import { DiagramNode } from './ProcessFlowComponentNode';
 import { Handle, NodeProps, NodeResizer, Position } from '@xyflow/react';
+import { DiagramNode } from '../../../../src/process-flow-types/shared-process-flow-types';
 
 
 const SplitterNodeFour = (id, { data }: NodeProps<DiagramNode>) =>  {
