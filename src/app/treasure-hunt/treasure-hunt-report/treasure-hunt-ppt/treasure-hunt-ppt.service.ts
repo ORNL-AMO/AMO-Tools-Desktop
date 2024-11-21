@@ -49,7 +49,7 @@ export class TreasureHuntPptService {
       title: "Section Header",
       background: { data: betterPlantsPPTimg.betterPlantsSectionSlide },
       objects: [
-       {placeholder: { options:{ name:'title', type:'title', x:1.38, y:2.97, w:9.42, h:0.99, align: 'left', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle' }, text:'Click To Edit Master Title Style' }},
+       {placeholder: { options:{ name:'title', type:'title', x:1.38, y:2.97, w:9.42, h:0.99, align: 'left', bold: true, color: 'FFFFFF', fontSize: 28, fontFace: 'Arial (Headings)', valign: 'middle' }, text:'Click To Edit Master Title Style' }},
       ],
       margin: 0.0
     });
@@ -156,7 +156,7 @@ export class TreasureHuntPptService {
     facilitySlide.addText('{Facility Name} Hunt Overview', {placeholder: 'title'});
     facilitySlide.addText('Placeholder for group picture', {placeholder: 'body'});
 
-    let slide2 = pptx.addSlide({ masterName: "Title and Content" });
+    let slide2 = pptx.addSlide({ masterName: "Title Only" });
     slide2.addText('Cost Summary', {placeholder: 'title'});
     slide2 = this.treasureHuntPptTableService.getCostSummaryTable(slide2, treasureHuntResults);
     let costSavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getCostSavingsData(treasureHuntResults);
@@ -167,17 +167,17 @@ export class TreasureHuntPptService {
     slide2.addText(`${totalCurrentCost}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
 
 
-    let slide3 = pptx.addSlide({ masterName: "Title and Content" });
+    let slide3 = pptx.addSlide({ masterName: "Title Only" });
     slide3.addText('Detailed Summary', {placeholder: 'title'});
     slide3 = this.treasureHuntPptTableService.getDetailedSummaryTable(slide3, treasureHuntResults, settings);
 
-    let slide4 = pptx.addSlide({ masterName: "Title and Content" });
+    let slide4 = pptx.addSlide({ masterName: "Title Only" });
     slide4.addText('Energy Utility Usage & Cost', {placeholder: 'title'});
     if (treasureHunt.currentEnergyUsage) {
       slide4 = this.treasureHuntPptTableService.getEnergyUtilityTable(slide4, treasureHunt.currentEnergyUsage, settings);
     }
 
-    let slide5 = pptx.addSlide({ masterName: "Title and Content" });
+    let slide5 = pptx.addSlide({ masterName: "Title Only" });
     slide5.addText('Electricity & Natural Gas Usage', {placeholder: 'title'});
     if (treasureHuntResults.electricity.energySavings) {
       let electricitySavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getElectricitySavingsData(treasureHuntResults);
@@ -197,7 +197,7 @@ export class TreasureHuntPptService {
       slide5.addText(`${totalNaturalGas}`, { w: 2, h: 0.34, x: 8.95, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
     }
 
-    let slide6 = pptx.addSlide({ masterName: "Title and Content" });
+    let slide6 = pptx.addSlide({ masterName: "Title Only" });
     slide6.addText('Utility Usage & Savings', {placeholder: 'title'});
     if (treasureHuntResults.water.energySavings) {
       let waterSavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getWaterSavingsData(treasureHuntResults);
@@ -271,7 +271,7 @@ export class TreasureHuntPptService {
 
 
 
-    let slide7 = pptx.addSlide({ masterName: "Title and Content" });
+    let slide7 = pptx.addSlide({ masterName: "Title Only" });
     slide7.addText('Carbon Emission Results (tonne CO2)', {placeholder: 'title'});
     doughnutChartOptions = this.treasureHuntPptPropertiesService.getDoughnutChartProperties();
     slide7 = this.treasureHuntPptTableService.getCarbonSummaryTable(slide7, treasureHuntResults.co2EmissionsResults);
@@ -283,7 +283,7 @@ export class TreasureHuntPptService {
 
 
     if (this.treasureHuntReportService.getTeamData(opportunityCardsData).length > 0) {
-      let slide8 = pptx.addSlide({ masterName: "Title and Content" });
+      let slide8 = pptx.addSlide({ masterName: "Title Only" });
       slide8.addText('Team Summary ($)', {placeholder: 'title'});
       slide8 = this.treasureHuntPptTableService.getTeamSummaryTable(slide8, opportunityCardsData);
       slide8.addChart("pie", teamSummaryData, pieChartOptions);
@@ -293,7 +293,7 @@ export class TreasureHuntPptService {
       teamData = _.orderBy(teamData, 'team', 'asc');
       teamData.forEach(team => {
         let teamTitle = pptx.addSlide({ masterName: "Section Header"});
-        teamTitle.addText('Team ' + team.team, { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
+        teamTitle.addText('Team ' + team.team, {placeholder: 'title'});
 
         let slideTeamTopOpps = pptx.addSlide({ masterName: "Title and Content" });
         slideTeamTopOpps.addText('Team ' + team.team + ' - Top Opportunities', {placeholder: 'title'});
