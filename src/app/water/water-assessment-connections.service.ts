@@ -4,7 +4,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram } from '../shared/models/diagram';
-import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet, WaterTreatment, WasteWaterTreatment } from '../shared/models/water-assessment';
+import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet, WaterTreatment, WasteWaterTreatment, KnownLoss } from '../shared/models/water-assessment';
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
 import { Settings } from '../shared/models/settings';
 import { WaterAssessmentService } from './water-assessment.service';
@@ -57,6 +57,7 @@ export class WaterAssessmentConnectionsService {
     let waterUsingSystems = [];
     let waterTreatments = [];
     let wasteWaterTreatments = [];
+    let knownLosses = []
 
     diagram.waterDiagram.flowDiagramData.nodes.forEach((waterDiagramNode: Node) => {
       const waterProcessComponent = waterDiagramNode.data as WaterProcessComponent;
@@ -104,6 +105,15 @@ export class WaterAssessmentConnectionsService {
           wasteWaterTreatment = waterProcessComponent as WasteWaterTreatment;
         }
         wasteWaterTreatments.push(wasteWaterTreatment);
+      }
+      if (waterProcessComponent.processComponentType === 'known-loss') {
+        let knownLoss: KnownLoss;
+        if (!waterProcessComponent.createdByAssessment) {
+          knownLoss = this.waterUsingSystemService.addKnownLoss(waterProcessComponent);
+        } else {
+          knownLoss = waterProcessComponent as KnownLoss;
+        }
+        knownLosses.push(knownLoss);
       }
     });
 

@@ -185,8 +185,8 @@ export const getAdaptedTypeString = (nodeType: string) => {
     case 'splitter-node-8':
       adaptedString = 'splitterNodeEight'
       break;
-    case 'flow-loss':
-      adaptedString = 'flowLoss'
+    case 'known-loss':
+      adaptedString = 'knownLoss'
       break;
     default:
       console.warn('No nodeType string detected - using default')

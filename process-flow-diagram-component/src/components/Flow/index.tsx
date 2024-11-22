@@ -131,7 +131,7 @@ const Flow = (props: FlowProps) => {
       const fromNodeId = connectionState.fromNode.id;
       const { clientX, clientY } = 'changedTouches' in event ? event.changedTouches[0] : event;
 
-      let lossNode: Node<ProcessFlowPart> = getDefaultNodeFromType('flow-loss', setManageDataId, setIsDataDrawerOpen);
+      let lossNode: Node<ProcessFlowPart> = getDefaultNodeFromType('known-loss', setManageDataId, setIsDataDrawerOpen);
       lossNode.data.disableInflowConnections = true;
       lossNode.type = getAdaptedTypeString(lossNode.type);
       lossNode.data.disableOutflowConnections = true;
@@ -170,10 +170,10 @@ const Flow = (props: FlowProps) => {
   //     if (handleType === 'source') {
   //       setNodes((nodes) => {
   //         return nodes.filter((node) => {
-  //           const isFlowLoss = node.type === 'flowLoss';
+  //           const isKnownLoss = node.type === 'knownLoss';
   //           const isTarget = node.id === oldEdge.target;
             
-  //           return !(isFlowLoss && isTarget);
+  //           return !(isKnownLoss && isTarget);
   //         });
   //       });
 

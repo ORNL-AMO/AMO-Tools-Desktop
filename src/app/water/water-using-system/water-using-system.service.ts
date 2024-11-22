@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { BoilerWater, CoolingTower, FlowMetric, KitchenRestroom, Landscaping, ProcessUse, WaterProcessComponent, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../shared/models/water-assessment';
+import { BoilerWater, CoolingTower, FlowMetric, KitchenRestroom, KnownLoss, Landscaping, ProcessUse, WaterProcessComponent, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../shared/models/water-assessment';
 import { getNewProcessComponent, ProcessFlowPart } from '../../../process-flow-types/shared-process-flow-types';
 import { BehaviorSubject } from 'rxjs';
 import { OperatingHours } from '../../shared/models/operations';
@@ -118,6 +118,26 @@ export class WaterUsingSystemService {
     }
 
     return waterUsingSystem;
+  }
+
+  /**
+* Add new component or return component based from a diagram component
+* @param processFlowPart Build from diagram component
+*/
+  addKnownLoss(processFlowPart?: WaterProcessComponent): KnownLoss {
+    let knownLoss: KnownLoss;
+    let newComponent: WaterProcessComponent;
+    if (!processFlowPart) {
+      newComponent = getNewProcessComponent('known-loss') as KnownLoss;
+    } else {
+      newComponent = processFlowPart as KnownLoss;
+    }
+
+    knownLoss = {
+      ...newComponent,
+      lossValue: 0,
+    };
+    return knownLoss;
   }
 
   getWaterUsingSystemForm(waterUsingSystem: WaterUsingSystem): FormGroup {
