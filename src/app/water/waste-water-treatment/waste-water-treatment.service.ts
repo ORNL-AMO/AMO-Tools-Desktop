@@ -43,7 +43,7 @@ export class WasteWaterTreatmentService {
  */
     addWasteWaterTreatment(processFlowPart?: WaterProcessComponent): WasteWaterTreatment {
       let wasteWaterTreatment: WasteWaterTreatment;
-      let newComponent: WaterProcessComponent;
+      let newComponent: WasteWaterTreatment;
       if (!processFlowPart) {
         newComponent = getNewProcessComponent('water-treatment') as WasteWaterTreatment;
       } else {

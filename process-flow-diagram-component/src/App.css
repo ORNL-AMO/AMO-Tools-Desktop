@@ -152,7 +152,7 @@ a {
   background: #e28000;
 }
 
-.process-flow-diagram .dndnode.flow-loss {
+.process-flow-diagram .dndnode.known-loss {
   display: flex;
   border: none;
   background: #fff;
@@ -223,7 +223,7 @@ a {
   border: 2px solid transparent;
 }
 
-.react-flow__node-flowLoss {
+.react-flow__node-knownLoss {
   padding-top: 4px;
   font-size: 12px;
   background-color: transparent !important;
@@ -312,7 +312,7 @@ a {
 }
 
 
-.react-flow__handle.flowLoss-handle {
+.react-flow__handle.knownLoss-handle {
   background-color: #ffffff;
   border-radius: 2px;
   width: 16px;

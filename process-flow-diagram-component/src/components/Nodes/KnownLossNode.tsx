@@ -7,7 +7,7 @@ import CustomHandle from "./CustomHandle";
 import EditNodeButton from "./EditNodeButton";
 
 
-const FlowLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
+const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   
   const transformString = `translate(0%, 0%) translate(145px, -30px)`;
   const lossInnerStyle: CSSProperties = {
@@ -32,11 +32,11 @@ const FlowLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
         id={id}
         type="target"
         position={Position.Top}
-        className={'flowLoss-handle'}
+        className={'knownLoss-handle'}
         connectionLimit={1}
       />
     </div>
   );
 }
 
-export default FlowLossNode;
+export default KnownLossNode;

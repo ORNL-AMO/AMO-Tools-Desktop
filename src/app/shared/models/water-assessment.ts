@@ -11,6 +11,7 @@ export interface WaterAssessment {
     waterTreatments?: WaterTreatment[],
     wasteWaterTreatments?: WasteWaterTreatment[],
     dischargeOutlets?: DischargeOutlet[],
+    knownLosses?: KnownLoss[],
     setupDone: boolean
 }
 
@@ -118,8 +119,12 @@ export interface WaterTreatment extends ProcessFlowPart {
     flowValue: number
 }
 
+export interface KnownLoss extends ProcessFlowPart {
+    lossValue: number,
+}
 
-export type WaterProcessComponent = IntakeSource | DischargeOutlet | WaterUsingSystem | WaterTreatment | WasteWaterTreatment;
+
+export type WaterProcessComponent = IntakeSource | DischargeOutlet | WaterUsingSystem | WaterTreatment | WasteWaterTreatment | KnownLoss;
 
 export type WaterSystemTypeData = ProcessUse | CoolingTower | BoilerWater | KitchenRestroom | Landscaping;
 

@@ -41,6 +41,7 @@ export class WaterDiagramConnectionsService {
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.waterUsingSystems, 'water-using-system'),
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.waterTreatments, 'water-treatment'),
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.wasteWaterTreatments, 'waste-water-treatment'),
+      this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.knownLosses, 'known-loss'),
     );
     this.updateEdgesFromAssessment(diagram.waterDiagram, assessmentNodes);
 
