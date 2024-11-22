@@ -430,10 +430,10 @@ export class TreasureHuntPptService {
     });
 
     let summaryTransition = pptx.addSlide({ masterName: "Section Header"});
-    summaryTransition.addText('Summary', { w: '100%', h: '100%', align: 'center', bold: true, color: 'FFFFFF', fontSize: 68, fontFace: 'Arial (Headings)', valign: 'middle', isTextBox: true, autoFit: true });
+    summaryTransition.addText('Summary', {placeholder: 'title'});
 
 
-    let slide9 = pptx.addSlide({ masterName: "Title and Content" });
+    let slide9 = pptx.addSlide({ masterName: "Title Only" });
     slide9.addText('Opportunity Payback Details ($)', {placeholder: 'title'});
     slide9 = this.treasureHuntPptTableService.getOppPaybackTable(slide9, opportunitiesPaybackDetails);
     slide9.addChart("pie", paybackBarData, pieChartOptions);
@@ -442,28 +442,28 @@ export class TreasureHuntPptService {
     slide10.addText('Best Practices', {placeholder: 'title'});
     slide10.addText(
       "Outline key best practices identified in Treasure Hunt here\ntype here\ntype here",
-      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+      { placeholder: 'body' }
     );
 
     let slide11 = pptx.addSlide({ masterName: "Title and Content" });
     slide11.addText('Other Opportunities Not Evaluated', {placeholder: 'title'});
     slide11.addText(
       "Outline any major opportunities identified, but not evaluated here\ntype here\ntype here",
-      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+      { placeholder: 'body' }
     );
 
     let slide12 = pptx.addSlide({ masterName: "Title and Content" });
     slide12.addText('{FACILITY NAME} Next Actions', {placeholder: 'title'});
     slide12.addText(
       "Outline the next stpes for the facility here\ntype here\ntype here",
-      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+      { placeholder: 'body' }
     );
 
     let slide13 = pptx.addSlide({ masterName: "Title and Content" });
     slide13.addText('{COMPANY NAME}/DOE Partnership Future Actions', {placeholder: 'title'});
     slide13.addText(
       "Outline the next steps for the company and DOE/Better Plants here\ntype here\ntype here",
-      { x: 2.17, y: 1.4, w: 9, h: 5.5, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+      { placeholder: 'body' }
     );
 
     return pptx;
