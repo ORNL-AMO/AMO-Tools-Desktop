@@ -1,12 +1,11 @@
 import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
 import { edgeTypes, nodeTypes } from "./FlowTypes";
-import { getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { CustomEdgeData, getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { DefaultEdgeOptions, EdgeTypes, useHandleConnections } from "@xyflow/react";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
 import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
-import { CustomEdgeData } from "../Edges/DiagramBaseEdge";
 
 export const getRandomCoordinates = (height: number, width: number): { x: number, y: number } => {
   const screenWidth = window.innerWidth;
@@ -129,8 +128,8 @@ export const changeExistingEdgesType = (setEdges, diagramEdgeType: string) => {
     return eds.map((edge: Edge<CustomEdgeData>) => {
       // * ignore self-connecting
       if (edge.source !== edge.target) {
-        if (edge.data.selfEdgeType !== undefined) {
-          edge.type = edge.data.selfEdgeType;
+        if (edge.data.hasOwnEdgeType !== undefined) {
+          edge.type = edge.data.hasOwnEdgeType;
         } else {
           edge.type = diagramEdgeType;
         }

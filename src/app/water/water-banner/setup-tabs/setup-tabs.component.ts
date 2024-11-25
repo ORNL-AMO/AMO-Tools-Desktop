@@ -100,7 +100,8 @@ export class SetupTabsComponent {
   changeSetupTab(tab: WaterSetupTabString) {
     let canDisplayTab: boolean = tab !== 'waste-water-treatment' || (tab === 'waste-water-treatment' && this.hasWasteWaterTreatments);
     if (canDisplayTab) {
-      this.waterSystemComponentService.setSelectedComponentOnTabChange(this.waterAssessmentService.waterAssessment.getValue(), tab as WaterProcessComponentType);
+      // todo 7069 whatever event was causing this to be needed seems obsolete
+      // this.waterSystemComponentService.setSelectedComponentOnTabChange(this.waterAssessmentService.waterAssessment.getValue(), tab as WaterProcessComponentType);
       this.waterAssessmentService.setupTab.next(tab);
     }
   }

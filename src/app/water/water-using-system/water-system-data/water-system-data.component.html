@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="name">Name</label>
         <input type="text" class="form-control" name="name" formControlName="name"
-            (focus)="focusField('waterWaterUsingSystemName')" (input)="save()" />
+            (focus)="focusField('waterWaterUsingSystemName')" (input)="saveForm()" />
     </div>
     <div class="form-group">
         <label for="systemType">System Type</label>
@@ -20,7 +20,7 @@
                 <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
             </span>
             <input name="hoursPerYear" type="number" class="form-control" id="hoursPerYear"
-                formControlName="hoursPerYear" (input)="save()" (focus)="focusField('hoursPerYear')">
+                formControlName="hoursPerYear" (input)="saveForm()" (focus)="focusField('hoursPerYear')">
             <span class="input-group-addon units">hrs/yr</span>
         </div>
         <span class="alert-danger pull-right small"
@@ -48,7 +48,7 @@
         Flows</a>
     <app-water-system-data-modal *ngIf="showWaterSystemDataModal" [settings]="settings"
         [waterUsingSystem]="selectedWaterUsingSystem" [systemType]="selectedSystemType"
-        (emitClose)="closeWaterSystemDataModal()" (emitSave)="saveWaterSystemData($event)">
+        (emitClose)="closeWaterSystemDataModal()" (emitSave)="updateWaterUsingSystem($event)">
     </app-water-system-data-modal>
 </ng-container>
 
@@ -57,8 +57,14 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.sourceWater.invalid}">
         <label for="sourceWater">Source Water</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units">
+                <a class="click-link" (click)="revertToDiagramValue('sourceWater')"
+                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.sourceWater === undefined}"><span
+                        class="fa fa-refresh"></span>
+                </a>
+            </span>
             <input name="sourceWater" type="number" class="form-control" id="sourceWater" formControlName="sourceWater"
-                (input)="save()" (focus)="focusField('sourceWater')">
+                (input)="saveWithUserOverride('sourceWater')" (focus)="focusField('sourceWater')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
         </div>
@@ -73,18 +79,24 @@
         </span>
     </div>
 
-    <div class="form-group" [ngClass]="{'invalid': form.controls.recycledWater.invalid}">
-        <label for="recycledWater">Recycled Water</label>
+    <div class="form-group" [ngClass]="{'invalid': form.controls.recycledSourceWater.invalid}">
+        <label for="recycledSourceWater">Recycled Water</label>
         <div class="input-group">
-            <input name="recycledWater" type="number" class="form-control" id="recycledWater"
-                formControlName="recycledWater" (input)="save()" (focus)="focusField('recycledWater')">
+            <span class="input-group-addon calc-addon units">
+                <a class="click-link" (click)="revertToDiagramValue('recycledSourceWater')"
+                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.recycledSourceWater === undefined}"><span
+                        class="fa fa-refresh"></span>
+                </a>
+            </span>
+            <input name="recycledSourceWater" type="number" class="form-control" id="recycledSourceWater"
+                formControlName="recycledSourceWater" (input)="saveWithUserOverride('recycledSourceWater')" (focus)="focusField('recycledSourceWater')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
         </div>
         <span class="alert-danger pull-right small"
-            *ngIf="form.controls.recycledWater.invalid && !form.controls.recycledWater.pristine">
-            <span *ngIf="form.controls.recycledWater.errors.min">Value can't be less than
-                {{form.controls.recycledWater.errors.min.min}}
+            *ngIf="form.controls.recycledSourceWater.invalid && !form.controls.recycledSourceWater.pristine">
+            <span *ngIf="form.controls.recycledSourceWater.errors.min">Value can't be less than
+                {{form.controls.recycledSourceWater.errors.min.min}}
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
                 <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
             </span>
@@ -94,8 +106,14 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.recirculatedWater.invalid}">
         <label for="recirculatedWater">Recirculated Water</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units">
+                <a class="click-link" (click)="revertToDiagramValue('recirculatedWater')"
+                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.recirculatedWater === undefined}"><span
+                        class="fa fa-refresh"></span>
+                </a>
+            </span>
             <input name="recirculatedWater" type="number" class="form-control" id="recirculatedWater"
-                formControlName="recirculatedWater" (input)="save()" (focus)="focusField('recirculatedWater')">
+                formControlName="recirculatedWater" (input)="saveWithUserOverride('recirculatedWater')" (focus)="focusField('recirculatedWater')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
         </div>
@@ -132,8 +150,14 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.dischargeWater.invalid}">
         <label for="dischargeWater">Discharge Water</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units">
+                <a class="click-link" (click)="revertToDiagramValue('dischargeWater')"
+                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.dischargeWater === undefined}"><span
+                        class="fa fa-refresh"></span>
+                </a>
+            </span>
             <input name="dischargeWater" type="number" class="form-control" id="dischargeWater"
-                formControlName="dischargeWater" (input)="save()" (focus)="focusField('dischargeWater')">
+                formControlName="dischargeWater" (input)="saveWithUserOverride('dischargeWater')" (focus)="focusField('dischargeWater')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
         </div>
@@ -151,8 +175,14 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.dischargeWaterRecycled.invalid}">
         <label for="dischargeWaterRecycled">Recycled Water</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units">
+                <a class="click-link" (click)="revertToDiagramValue('dischargeWaterRecycled')"
+                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.dischargeWaterRecycled === undefined}"><span
+                        class="fa fa-refresh"></span>
+                </a>
+            </span>
             <input name="dischargeWaterRecycled" type="number" class="form-control" id="dischargeWaterRecycled"
-                formControlName="dischargeWaterRecycled" (input)="save()"
+                formControlName="dischargeWaterRecycled" (input)="saveWithUserOverride('dischargeWaterRecycled')"
                 (focus)="focusField('dischargeWaterRecycled')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
@@ -171,8 +201,14 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.knownLosses.invalid}">
         <label for="knownLosses">Known Losses</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units">
+                <a class="click-link" (click)="revertToDiagramValue('knownLosses')"
+                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.knownLosses === undefined}"><span
+                        class="fa fa-refresh"></span>
+                </a>
+            </span>
             <input name="knownLosses" type="number" class="form-control" id="knownLosses" formControlName="knownLosses"
-                (input)="save()" (focus)="focusField('knownLosses')">
+                (input)="saveWithUserOverride('knownLosses')" (focus)="focusField('knownLosses')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
         </div>
@@ -190,8 +226,14 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.waterInProduct.invalid}">
         <label for="waterInProduct">Water In Product</label>
         <div class="input-group">
+            <span class="input-group-addon calc-addon units">
+                <a class="click-link" (click)="revertToDiagramValue('waterInProduct')"
+                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.waterInProduct === undefined}"><span
+                        class="fa fa-refresh"></span>
+                </a>
+            </span>
             <input name="waterInProduct" type="number" class="form-control" id="waterInProduct"
-                formControlName="waterInProduct" (input)="save()" (focus)="focusField('waterInProduct')">
+                formControlName="waterInProduct" (input)="saveWithUserOverride('waterInProduct')" (focus)="focusField('waterInProduct')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
         </div>

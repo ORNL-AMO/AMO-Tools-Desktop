@@ -12,6 +12,7 @@ export interface WaterAssessment {
     wasteWaterTreatments?: WasteWaterTreatment[],
     dischargeOutlets?: DischargeOutlet[],
     knownLosses?: KnownLoss[],
+    diagramComponentFlows?: WaterSystemComponentFlows[]
     setupDone: boolean
 }
 
@@ -49,13 +50,13 @@ export interface WaterBalanceResults {
 }
 
 export interface AggregatedSystemResults {
-    processUseAggregatedResults: ProcessUseAggregatedResults,
-    coolingtowerAggregatedResults: CoolingTowerAggregatedResults,
+    ProcessUseTotalResults: ProcessUseTotalResults,
+    CoolingTowerTotalResults: CoolingTowerTotalResults,
 }
 
 export interface WaterSystemResults {
     grossWaterUse: number,
-    waterBalance: WaterBalanceResults,
+    plantWaterBalance: WaterBalanceResults,
     processUseResults?: ProcessUseResults,
     coolingTowerResults?: CoolingTowerResults,
     boilerWaterResults?: BoilerWaterResults,
@@ -63,6 +64,55 @@ export interface WaterSystemResults {
     landscapingResults?: LandscapingResults,
     heatEnergyResults?: HeatEnergyResults,
     motorEnergyResults?: MotorEnergyResults[]
+}
+
+/**
+* Component water flow connections - used to populate water-using-system and other components
+* @property id - diagramNodeId
+* @property sourceFlows - source from plant-level source, i.e. IntakeSource (or IntakeSource --> WT)
+* @property recycledSourceFlows - source from another Water Using System.
+* @property recirculatedFlows - source from self
+* @property dischargeFlows - discharges to platn-level outlet, i.e. DischargeOutlet (or WWT --> DichargeOutlet).
+* @property recycledDischargeFlows - discharges to another WaterUsingSystem. 
+* @property knownLossFlows - discharges to known loss, flow loss (this is 'water in product')
+*/
+export interface WaterSystemComponentFlows {
+    id: string,
+    componentName: string,
+    sourceWater: {
+        total: number,
+        flows: ComponentFlowData[]
+    },
+    recycledSourceWater: {
+        total: number,
+        flows: ComponentFlowData[]
+    },
+    recirculatedWater: {
+        total: number,
+        flows: ComponentFlowData[]
+    },
+    dischargeWater: {
+        total: number,
+        flows: ComponentFlowData[]
+    },
+    dischargeWaterRecycled: {
+        total: number,
+        flows: ComponentFlowData[]
+    },
+    knownLosses: {
+        total: number,
+        flows: ComponentFlowData[]
+    },
+    waterInProduct: {
+        total: number,
+        flows: ComponentFlowData[]
+    },
+}
+
+export interface ComponentFlowData {
+    source: string,
+    target: string,
+    flowValue: number,
 }
 
 // * Plant level intakes AND system level intakes
@@ -80,17 +130,29 @@ export interface DischargeOutlet extends ProcessFlowPart {
     addedMotorEnergy: MotorEnergy[]
 }
 
-export interface WaterUsingSystem extends ProcessFlowPart {
-    isValid: boolean,
-    hoursPerYear: number,
-    systemType: number,
+export interface WaterSystemFlows {
     sourceWater: number,
-    recycledWater: number,
+    recycledSourceWater: number,
     recirculatedWater: number,
     dischargeWater: number,
     dischargeWaterRecycled: number,
     knownLosses: number,
     waterInProduct: number,
+}
+export type ConnectedFlowType = keyof WaterSystemFlows;
+
+export interface WaterUsingSystem extends ProcessFlowPart {
+    isValid: boolean,
+    hoursPerYear: number,
+    systemType: number,
+    sourceWater: number,
+    recycledSourceWater: number,
+    recirculatedWater: number,
+    dischargeWater: number,
+    dischargeWaterRecycled: number,
+    knownLosses: number,
+    waterInProduct: number,
+    userDiagramFlowOverrides?: WaterSystemFlows;
     processUse?: ProcessUse,
     coolingTower?: CoolingTower,
     boilerWater?: BoilerWater,
@@ -98,7 +160,7 @@ export interface WaterUsingSystem extends ProcessFlowPart {
     heatEnergy?: HeatEnergy,
     kitchenRestroom?: KitchenRestroom,
     landscaping?: Landscaping,
-    addedMotorEquipment: MotorEnergy[],
+    addedMotorEnergy: MotorEnergy[],
 }
 
 // ! duplicated definition in shared-process-flow-types
@@ -124,8 +186,14 @@ export interface KnownLoss extends ProcessFlowPart {
 }
 
 
-export type WaterProcessComponent = IntakeSource | DischargeOutlet | WaterUsingSystem | WaterTreatment | WasteWaterTreatment | KnownLoss;
 
+/**
+ * Wrapper type for use in shared logic/components that come from ProcessFlowPart
+*/
+export type WaterProcessComponent = IntakeSource | DischargeOutlet | WaterUsingSystem | WaterTreatment | WasteWaterTreatment | KnownLoss;
+/**
+* wrapper type for water systems 
+*/
 export type WaterSystemTypeData = ProcessUse | CoolingTower | BoilerWater | KitchenRestroom | Landscaping;
 
 export enum FlowMetric {
@@ -157,7 +225,7 @@ export interface ProcessUseResults {
     wasteDischargedAndRecycledOther: number,
 }
 
-export interface ProcessUseAggregatedResults {
+export interface ProcessUseTotalResults {
     processUseResults: ProcessUseResults[],
     grossWaterUse: number,
     waterConsumed: number,
@@ -185,7 +253,7 @@ export interface CoolingTowerResults {
     blowdownLoss: number,
 }
 
-export interface CoolingTowerAggregatedResults {
+export interface CoolingTowerTotalResults {
     coolingTowerResults: CoolingTowerResults[],
     grossWaterUse: number,
     evaporationLoss: number,

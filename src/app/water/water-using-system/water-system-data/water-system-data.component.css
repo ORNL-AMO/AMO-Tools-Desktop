@@ -36,6 +36,18 @@
     color: red !important;
 }
 
+.input-group-addon.calc-addon.units {
+    border-left: 2px solid;
+}
+
+a.click-link.disabled {
+    color:gray !important;
+    cursor: default !important; 
+}
+
+a.click-link.disabled:hover {
+    cursor: default !important;
+}
 
 .small {
     font-size: 85%;

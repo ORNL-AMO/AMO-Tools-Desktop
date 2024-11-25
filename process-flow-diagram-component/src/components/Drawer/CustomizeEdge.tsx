@@ -4,8 +4,7 @@ import { PresetColorPicker } from './PresetColorPicker';
 import { Edge, useReactFlow } from '@xyflow/react';
 import { useEffect, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
-import { CustomEdgeData } from '../Edges/DiagramBaseEdge';
-import { UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { CustomEdgeData, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
 
 export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdgeProps) {
   const { setEdges } = useReactFlow();
@@ -36,7 +35,7 @@ export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdg
   };
 
   const getCurrentEdgeType = (): string => {
-    return edge.data.selfEdgeType !== undefined? edge.data.selfEdgeType : userDiagramOptions.edgeType;
+    return edge.data.hasOwnEdgeType !== undefined? edge.data.hasOwnEdgeType : userDiagramOptions.edgeType;
   }
 
   const handleEdgeTypeChange = (newEdgeType: string) => {
@@ -49,7 +48,7 @@ export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdg
         if (e.id === edge.id) {
           updatedEdge.data = {
             ...e.data,
-            selfEdgeType: newEdgeType
+            hasOwnEdgeType: newEdgeType
           }
           updatedEdge.type = newEdgeType;
         }

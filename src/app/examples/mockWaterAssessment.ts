@@ -151,6 +151,15 @@ export const MockWaterAssessment: Assessment = {
                 },
                 "systemType": 0,
                 "hoursPerYear": 8760,
+                "userDiagramFlowOverrides": {
+                    "sourceWater": undefined,
+                    "recycledSourceWater": undefined,
+                    "recirculatedWater": undefined,
+                    "dischargeWater": undefined,
+                    "dischargeWaterRecycled": undefined,
+                    "knownLosses": undefined,
+                    "waterInProduct": undefined,
+                }, 
                 "intakeSources": [
                     {
                         "sourceType": 0,
@@ -199,9 +208,9 @@ export const MockWaterAssessment: Assessment = {
                     "heaterEfficiency": 0,
                     "wasteWaterDischarge": 0
                 },
-                "addedMotorEquipment": [],
+                "addedMotorEnergy": [],
                 "sourceWater": undefined,
-                "recycledWater": undefined,
+                "recycledSourceWater": undefined,
                 "recirculatedWater": undefined,
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
@@ -232,6 +241,15 @@ export const MockWaterAssessment: Assessment = {
                 },
                 "systemType": 0,
                 "hoursPerYear": 8760,
+                "userDiagramFlowOverrides": {
+                    "sourceWater": undefined,
+                    "recycledSourceWater": undefined,
+                    "recirculatedWater": undefined,
+                    "dischargeWater": undefined,
+                    "dischargeWaterRecycled": undefined,
+                    "knownLosses": undefined,
+                    "waterInProduct": undefined,
+                }, 
                 "intakeSources": [
                     {
                         "sourceType": 0,
@@ -280,9 +298,9 @@ export const MockWaterAssessment: Assessment = {
                     "heaterEfficiency": 0,
                     "wasteWaterDischarge": 0
                 },
-                "addedMotorEquipment": [],
+                "addedMotorEnergy": [],
                 "sourceWater": undefined,
-                "recycledWater": undefined,
+                "recycledSourceWater": undefined,
                 "recirculatedWater": undefined,
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
@@ -313,6 +331,15 @@ export const MockWaterAssessment: Assessment = {
                 },
                 "systemType": 0,
                 "hoursPerYear": 8760,
+                "userDiagramFlowOverrides": {
+                    "sourceWater": undefined,
+                    "recycledSourceWater": undefined,
+                    "recirculatedWater": undefined,
+                    "dischargeWater": undefined,
+                    "dischargeWaterRecycled": undefined,
+                    "knownLosses": undefined,
+                    "waterInProduct": undefined,
+                }, 
                 "intakeSources": [
                     {
                         "sourceType": 0,
@@ -361,9 +388,9 @@ export const MockWaterAssessment: Assessment = {
                     "heaterEfficiency": 0,
                     "wasteWaterDischarge": 0
                 },
-                "addedMotorEquipment": [],
+                "addedMotorEnergy": [],
                 "sourceWater": undefined,
-                "recycledWater": undefined,
+                "recycledSourceWater": undefined,
                 "recirculatedWater": undefined,
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
@@ -394,6 +421,15 @@ export const MockWaterAssessment: Assessment = {
                 },
                 "systemType": 0,
                 "hoursPerYear": 8760,
+                "userDiagramFlowOverrides": {
+                    "sourceWater": undefined,
+                    "recycledSourceWater": undefined,
+                    "recirculatedWater": undefined,
+                    "dischargeWater": undefined,
+                    "dischargeWaterRecycled": undefined,
+                    "knownLosses": undefined,
+                    "waterInProduct": undefined,
+                }, 
                 "intakeSources": [
                     {
                         "sourceType": 0,
@@ -442,9 +478,9 @@ export const MockWaterAssessment: Assessment = {
                     "heaterEfficiency": 0,
                     "wasteWaterDischarge": 0
                 },
-                "addedMotorEquipment": [],
+                "addedMotorEnergy": [],
                 "sourceWater": undefined,
-                "recycledWater": undefined,
+                "recycledSourceWater": undefined,
                 "recirculatedWater": undefined,
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
@@ -475,6 +511,15 @@ export const MockWaterAssessment: Assessment = {
                 },
                 "systemType": 0,
                 "hoursPerYear": 8760,
+                "userDiagramFlowOverrides": {
+                    "sourceWater": undefined,
+                    "recycledSourceWater": undefined,
+                    "recirculatedWater": undefined,
+                    "dischargeWater": undefined,
+                    "dischargeWaterRecycled": undefined,
+                    "knownLosses": undefined,
+                    "waterInProduct": undefined,
+                }, 
                 "intakeSources": [
                     {
                         "sourceType": 0,
@@ -523,9 +568,9 @@ export const MockWaterAssessment: Assessment = {
                     "heaterEfficiency": 0,
                     "wasteWaterDischarge": 0
                 },
-                "addedMotorEquipment": [],
+                "addedMotorEnergy": [],
                 "sourceWater": undefined,
-                "recycledWater": undefined,
+                "recycledSourceWater": undefined,
                 "recirculatedWater": undefined,
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
@@ -556,6 +601,15 @@ export const MockWaterAssessment: Assessment = {
                 },
                 "systemType": 0,
                 "hoursPerYear": 8760,
+                "userDiagramFlowOverrides": {
+                    "sourceWater": undefined,
+                    "recycledSourceWater": undefined,
+                    "recirculatedWater": undefined,
+                    "dischargeWater": undefined,
+                    "dischargeWaterRecycled": undefined,
+                    "knownLosses": undefined,
+                    "waterInProduct": undefined,
+                }, 
                 "intakeSources": [
                     {
                         "sourceType": 0,
@@ -604,9 +658,9 @@ export const MockWaterAssessment: Assessment = {
                     "heaterEfficiency": 0,
                     "wasteWaterDischarge": 0
                 },
-                "addedMotorEquipment": [],
+                "addedMotorEnergy": [],
                 "sourceWater": undefined,
-                "recycledWater": undefined,
+                "recycledSourceWater": undefined,
                 "recirculatedWater": undefined,
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
@@ -637,6 +691,15 @@ export const MockWaterAssessment: Assessment = {
                 },
                 "systemType": 0,
                 "hoursPerYear": 8760,
+                "userDiagramFlowOverrides": {
+                    "sourceWater": undefined,
+                    "recycledSourceWater": undefined,
+                    "recirculatedWater": undefined,
+                    "dischargeWater": undefined,
+                    "dischargeWaterRecycled": undefined,
+                    "knownLosses": undefined,
+                    "waterInProduct": undefined,
+                }, 
                 "intakeSources": [
                     {
                         "sourceType": 0,
@@ -685,9 +748,9 @@ export const MockWaterAssessment: Assessment = {
                     "heaterEfficiency": 0,
                     "wasteWaterDischarge": 0
                 },
-                "addedMotorEquipment": [],
+                "addedMotorEnergy": [],
                 "sourceWater": undefined,
-                "recycledWater": undefined,
+                "recycledSourceWater": undefined,
                 "recirculatedWater": undefined,
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,
@@ -718,6 +781,15 @@ export const MockWaterAssessment: Assessment = {
                 },
                 "systemType": 0,
                 "hoursPerYear": 8760,
+                "userDiagramFlowOverrides": {
+                    "sourceWater": undefined,
+                    "recycledSourceWater": undefined,
+                    "recirculatedWater": undefined,
+                    "dischargeWater": undefined,
+                    "dischargeWaterRecycled": undefined,
+                    "knownLosses": undefined,
+                    "waterInProduct": undefined,
+                }, 
                 "intakeSources": [
                     {
                         "sourceType": 0,
@@ -766,9 +838,9 @@ export const MockWaterAssessment: Assessment = {
                     "heaterEfficiency": 0,
                     "wasteWaterDischarge": 0
                 },
-                "addedMotorEquipment": [],
+                "addedMotorEnergy": [],
                 "sourceWater": undefined,
-                "recycledWater": undefined,
+                "recycledSourceWater": undefined,
                 "recirculatedWater": undefined,
                 "dischargeWater": undefined,
                 "dischargeWaterRecycled": undefined,

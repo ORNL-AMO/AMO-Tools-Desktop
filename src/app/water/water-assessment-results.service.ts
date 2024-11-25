@@ -15,10 +15,9 @@ export class WaterAssessmentResultsService {
     this.waterAssessmentResults = new BehaviorSubject<WaterAssessmentResults>(undefined);
   }
 
-  // todo 6879 - needs conversion coming out of the suite
   getWaterSystemResults(waterSystem: WaterUsingSystem, selectedSystemType: number, settings: Settings): WaterSystemResults {
     let waterSystemResults: WaterSystemResults = {
-      waterBalance: undefined,
+      plantWaterBalance: undefined,
       grossWaterUse: undefined,
       processUseResults: undefined,
       coolingTowerResults: undefined,
@@ -71,7 +70,7 @@ export class WaterAssessmentResultsService {
     if (waterSystem.heatEnergy) {
       waterSystemResults.heatEnergyResults = this.waterSuiteApiService.calculateHeatEnergy(waterSystem.heatEnergy);
     }
-    waterSystem.addedMotorEquipment.forEach(motorEnergy => {
+    waterSystem.addedMotorEnergy.forEach(motorEnergy => {
       waterSystemResults.motorEnergyResults.push(this.waterSuiteApiService.calculateMotorEnergy(motorEnergy))
      });
 

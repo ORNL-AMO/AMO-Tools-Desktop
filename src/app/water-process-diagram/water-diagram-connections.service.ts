@@ -53,32 +53,42 @@ export class WaterDiagramConnectionsService {
     return splitterNodes;
   }
 
-  buildNodesFromWaterComponents(waterDiagram: WaterDiagram, components: WaterProcessComponent[], componentType: WaterProcessComponentType) {
+  buildNodesFromWaterComponents(waterDiagram: WaterDiagram, assessmentComponents: WaterProcessComponent[], componentType: WaterProcessComponentType) {
     let componentTypeNodes: Node[] = waterDiagram.flowDiagramData.nodes.filter(node => node.data.processComponentType === componentType); 
-    let updatedNodes: Node[] = componentTypeNodes.filter((node: Node) => {
-      // * update existing, ignore deleted
-      let existingComponentIndex: number = components.findIndex(component =>  component.diagramNodeId === node.data.diagramNodeId);
+    let diagramNodes: Node[] = this.updateExistingDiagramNodes(componentTypeNodes, assessmentComponents);
+    this.addNewDiagramNodes(componentTypeNodes, assessmentComponents, diagramNodes);
+    // console.log(`***Assessment Synced ${componentType} nodes`, diagramNodes);
+    return diagramNodes;
+  }
+
+  /**
+  * Update diagram node.data from existing assessment components and drop any deleted nodes
+  */
+  updateExistingDiagramNodes(componentTypeNodes: Node[], assessmentComponents: WaterProcessComponent[]) {
+    return componentTypeNodes.filter((node: Node) => {
+      let existingComponentIndex: number = assessmentComponents.findIndex(component =>  component.diagramNodeId === node.data.diagramNodeId);
       if (existingComponentIndex !== -1) {
-        node.data = components[existingComponentIndex];
+        node.data = assessmentComponents[existingComponentIndex];
         return node;
       }
     });
-    // * add new nodes
-    components.forEach((component: WaterProcessComponent) => {
+  }
+
+  addNewDiagramNodes(componentTypeNodes: Node[], assessmentComponents: WaterProcessComponent[], diagramNodes: Node[]) {
+    assessmentComponents.forEach((component: WaterProcessComponent) => {
       let existingComponentIndex: number = componentTypeNodes.findIndex(node => node.data.diagramNodeId === component.diagramNodeId);
       if (existingComponentIndex === -1) {
         // * Assert as ProcessFlowPart (ignores type WaterUsingSystem-->IntakeSource)
         let processFlowPart = component as ProcessFlowPart;
         let newNode = getNewNode(component.processComponentType, processFlowPart);
-        updatedNodes.push(newNode);
+        diagramNodes.push(newNode);
       }
     });
-
-    // console.log(`***Assessment Synced ${componentType} nodes`, updatedNodes);
-    return updatedNodes;
   }
 
-  // Throw away edges that relate to deleted nodes (this is handled automatically by diagram)
+  /**
+  * Update and filter out edges related to deleted nodes. This is mimicking xy-flow lib utils
+  */
   updateEdgesFromAssessment(waterDiagram: WaterDiagram, assessmentNodes: Node[]) {
     const nodeIds = new Set();
     assessmentNodes.forEach((node) => {
