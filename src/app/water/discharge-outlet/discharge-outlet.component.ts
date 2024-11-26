@@ -60,7 +60,7 @@ export class DischargeOutletComponent {
   }
 
   initForm() {
-   this.form = this.waterSystemComponentService.getDischargeOutletForm(this.selectedDischargeOutlet);
+    this.form = this.waterSystemComponentService.getDischargeOutletForm(this.selectedDischargeOutlet);
   }
 
   save() {

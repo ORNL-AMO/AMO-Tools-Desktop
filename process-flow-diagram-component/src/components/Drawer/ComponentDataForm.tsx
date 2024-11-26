@@ -1,11 +1,10 @@
 import { Box, List, TextField, InputAdornment, ListItem, ListItemButton, ListItemIcon, Divider, styled, Typography, Select, MenuItem, FormControl, Chip } from "@mui/material";
-import { CustomEdgeData } from "../Edges/DiagramBaseEdge";
 import { getEdgeSourceAndTarget } from "../Flow/FlowUtils";
 import { Edge, Node, useReactFlow } from "@xyflow/react";
 
 import React, { useState } from "react";
 import FlowConnectionText from "./FlowConnectionText";
-import { ProcessFlowPart, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { CustomEdgeData, ProcessFlowPart, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import { Accordion, AccordionDetails, AccordionSummary } from "../MUIStyledComponents";
 

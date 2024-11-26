@@ -58,14 +58,14 @@ export class AddedEnergyComponent {
   }
 
   saveMotorEnergy(updatedMotorEnergy: MotorEnergy, index: number) {
-    this.motorEnergyService.updateMotorEnergy(this.selectedWaterUsingSystem.addedMotorEquipment, updatedMotorEnergy, index)
+    this.motorEnergyService.updateMotorEnergy(this.selectedWaterUsingSystem.addedMotorEnergy, updatedMotorEnergy, index)
     this.save(this.selectedWaterUsingSystem);
   }
 
   
   addNewMotorEnergy() {
-    this.selectedWaterUsingSystem.addedMotorEquipment.push(
-      this.motorEnergyService.getDefaultMotorEnergy(this.selectedWaterUsingSystem.addedMotorEquipment.length)
+    this.selectedWaterUsingSystem.addedMotorEnergy.push(
+      this.motorEnergyService.getDefaultMotorEnergy(this.selectedWaterUsingSystem.addedMotorEnergy.length)
     );
     this.save(this.selectedWaterUsingSystem);
   }
@@ -91,7 +91,7 @@ export class AddedEnergyComponent {
   }
 
   deleteMotorEnergy() {
-    this.selectedWaterUsingSystem.addedMotorEquipment.splice(this.deleteIndex, 1);
+    this.selectedWaterUsingSystem.addedMotorEnergy.splice(this.deleteIndex, 1);
     this.save(this.selectedWaterUsingSystem);
   }
 

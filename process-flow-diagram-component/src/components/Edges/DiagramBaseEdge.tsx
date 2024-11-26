@@ -2,6 +2,7 @@ import { CSSProperties, Fragment, ReactNode, useContext } from 'react';
 import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, SmoothStepEdge, StepEdge, StraightEdge, useHandleConnections, useReactFlow } from '@xyflow/react';
 import { FlowContext } from '../Flow';
 import CloseIcon from '@mui/icons-material/Close';
+import { CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
 
 const FlowValueLabel = ({ transform, selected, flowValue }: { transform: string; selected: boolean, flowValue: number }) => {
   let style: CSSProperties = {
@@ -136,11 +137,6 @@ export interface DiagramEdgeProps extends EdgeProps {
     selfConnectingPath?: SelfConnectingPath;
     baseEdgeComponent?: ReactFlowEdgeElement;
     reactFlowRef?: any;
-}
-
-export interface CustomEdgeData extends Record<string, unknown> {
-  flowValue: number,
-  selfEdgeType: string,
 }
 
 interface SelfConnectingPath {

@@ -264,6 +264,15 @@ export const MockWaterdiagram: Diagram =
                         },
                         "systemType": 0,
                         "hoursPerYear": 8760,
+                        "userDiagramFlowOverrides": {
+                            "sourceWater": undefined,
+                            "recycledSourceWater": undefined,
+                            "recirculatedWater": undefined,
+                            "dischargeWater": undefined,
+                            "dischargeWaterRecycled": undefined,
+                            "knownLosses": undefined,
+                            "waterInProduct": undefined,
+                        }, 
                         "intakeSources": [
                             {
                                 "sourceType": 0,
@@ -282,7 +291,7 @@ export const MockWaterdiagram: Diagram =
                         "heatEnergy": {
                             "heatingFuelType": 0
                         },
-                        "addedMotorEquipment": []
+                        "addedMotorEnergy": []
                     },
                     "style": {
                         "backgroundColor": "#00bbff",
@@ -327,6 +336,15 @@ export const MockWaterdiagram: Diagram =
                         },
                         "systemType": 0,
                         "hoursPerYear": 8760,
+                        "userDiagramFlowOverrides": {
+                            "sourceWater": undefined,
+                            "recycledSourceWater": undefined,
+                            "recirculatedWater": undefined,
+                            "dischargeWater": undefined,
+                            "dischargeWaterRecycled": undefined,
+                            "knownLosses": undefined,
+                            "waterInProduct": undefined,
+                        },
                         "intakeSources": [
                             {
                                 "sourceType": 0,
@@ -345,7 +363,7 @@ export const MockWaterdiagram: Diagram =
                         "heatEnergy": {
                             "heatingFuelType": 0
                         },
-                        "addedMotorEquipment": []
+                        "addedMotorEnergy": []
                     },
                     "style": {
                         "backgroundColor": "#00bbff",
@@ -390,6 +408,15 @@ export const MockWaterdiagram: Diagram =
                         },
                         "systemType": 0,
                         "hoursPerYear": 8760,
+                        "userDiagramFlowOverrides": {
+                            "sourceWater": undefined,
+                            "recycledSourceWater": undefined,
+                            "recirculatedWater": undefined,
+                            "dischargeWater": undefined,
+                            "dischargeWaterRecycled": undefined,
+                            "knownLosses": undefined,
+                            "waterInProduct": undefined,
+                        },
                         "intakeSources": [
                             {
                                 "sourceType": 0,
@@ -408,7 +435,7 @@ export const MockWaterdiagram: Diagram =
                         "heatEnergy": {
                             "heatingFuelType": 0
                         },
-                        "addedMotorEquipment": []
+                        "addedMotorEnergy": []
                     },
                     "style": {
                         "backgroundColor": "#00bbff",
@@ -453,6 +480,15 @@ export const MockWaterdiagram: Diagram =
                         },
                         "systemType": 0,
                         "hoursPerYear": 8760,
+                        "userDiagramFlowOverrides": {
+                            "sourceWater": undefined,
+                            "recycledSourceWater": undefined,
+                            "recirculatedWater": undefined,
+                            "dischargeWater": undefined,
+                            "dischargeWaterRecycled": undefined,
+                            "knownLosses": undefined,
+                            "waterInProduct": undefined,
+                        },
                         "intakeSources": [
                             {
                                 "sourceType": 0,
@@ -471,7 +507,7 @@ export const MockWaterdiagram: Diagram =
                         "heatEnergy": {
                             "heatingFuelType": 0
                         },
-                        "addedMotorEquipment": []
+                        "addedMotorEnergy": []
                     },
                     "style": {
                         "backgroundColor": "#00bbff",
@@ -516,6 +552,15 @@ export const MockWaterdiagram: Diagram =
                         },
                         "systemType": 0,
                         "hoursPerYear": 8760,
+                        "userDiagramFlowOverrides": {
+                            "sourceWater": undefined,
+                            "recycledSourceWater": undefined,
+                            "recirculatedWater": undefined,
+                            "dischargeWater": undefined,
+                            "dischargeWaterRecycled": undefined,
+                            "knownLosses": undefined,
+                            "waterInProduct": undefined,
+                        },
                         "intakeSources": [
                             {
                                 "sourceType": 0,
@@ -534,7 +579,7 @@ export const MockWaterdiagram: Diagram =
                         "heatEnergy": {
                             "heatingFuelType": 0
                         },
-                        "addedMotorEquipment": []
+                        "addedMotorEnergy": []
                     },
                     "style": {
                         "backgroundColor": "#adadad",
@@ -579,6 +624,15 @@ export const MockWaterdiagram: Diagram =
                         },
                         "systemType": 0,
                         "hoursPerYear": 8760,
+                        "userDiagramFlowOverrides": {
+                            "sourceWater": undefined,
+                            "recycledSourceWater": undefined,
+                            "recirculatedWater": undefined,
+                            "dischargeWater": undefined,
+                            "dischargeWaterRecycled": undefined,
+                            "knownLosses": undefined,
+                            "waterInProduct": undefined,
+                        },
                         "intakeSources": [
                             {
                                 "sourceType": 0,
@@ -597,7 +651,7 @@ export const MockWaterdiagram: Diagram =
                         "heatEnergy": {
                             "heatingFuelType": 0
                         },
-                        "addedMotorEquipment": []
+                        "addedMotorEnergy": []
                     },
                     "style": {
                         "backgroundColor": "#b0b0b0",
@@ -642,6 +696,15 @@ export const MockWaterdiagram: Diagram =
                         },
                         "systemType": 0,
                         "hoursPerYear": 8760,
+                        "userDiagramFlowOverrides": {
+                            "sourceWater": undefined,
+                            "recycledSourceWater": undefined,
+                            "recirculatedWater": undefined,
+                            "dischargeWater": undefined,
+                            "dischargeWaterRecycled": undefined,
+                            "knownLosses": undefined,
+                            "waterInProduct": undefined,
+                        },
                         "intakeSources": [
                             {
                                 "sourceType": 0,
@@ -660,7 +723,7 @@ export const MockWaterdiagram: Diagram =
                         "heatEnergy": {
                             "heatingFuelType": 0
                         },
-                        "addedMotorEquipment": []
+                        "addedMotorEnergy": []
                     },
                     "style": {
                         "backgroundColor": "#00bbff",
@@ -705,6 +768,15 @@ export const MockWaterdiagram: Diagram =
                         },
                         "systemType": 0,
                         "hoursPerYear": 8760,
+                        "userDiagramFlowOverrides": {
+                            "sourceWater": undefined,
+                            "recycledSourceWater": undefined,
+                            "recirculatedWater": undefined,
+                            "dischargeWater": undefined,
+                            "dischargeWaterRecycled": undefined,
+                            "knownLosses": undefined,
+                            "waterInProduct": undefined,
+                        },
                         "intakeSources": [
                             {
                                 "sourceType": 0,
@@ -723,7 +795,7 @@ export const MockWaterdiagram: Diagram =
                         "heatEnergy": {
                             "heatingFuelType": 0
                         },
-                        "addedMotorEquipment": []
+                        "addedMotorEnergy": []
                     },
                     "style": {
                         "backgroundColor": "#00bbff",
@@ -1038,7 +1110,7 @@ export const MockWaterdiagram: Diagram =
                     "markerEnd": "",
                     "data": {
                         "flowValue": 0,
-                        "selfEdgeType": "step"
+                        "hasOwnEdgeType": "step"
                     },
                     "style": {
                         "stroke": "#1a53d8",
@@ -1074,7 +1146,7 @@ export const MockWaterdiagram: Diagram =
                     "markerEnd": "",
                     "data": {
                         "flowValue": 0,
-                        "selfEdgeType": "step"
+                        "hasOwnEdgeType": "step"
                     },
                     "style": {
                         "stroke": "#1a53d8",
@@ -1093,7 +1165,7 @@ export const MockWaterdiagram: Diagram =
                     "markerEnd": "",
                     "data": {
                         "flowValue": 0,
-                        "selfEdgeType": "step"
+                        "hasOwnEdgeType": "step"
                     },
                     "style": {
                         "stroke": "#1a53d8",
@@ -1146,7 +1218,7 @@ export const MockWaterdiagram: Diagram =
                     "markerEnd": "",
                     "data": {
                         "flowValue": 0.43,
-                        "selfEdgeType": "step"
+                        "hasOwnEdgeType": "step"
                     },
                     "style": {
                         "stroke": "#6c757d",

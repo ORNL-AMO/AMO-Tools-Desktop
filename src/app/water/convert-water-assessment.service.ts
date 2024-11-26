@@ -59,7 +59,7 @@ export class ConvertWaterAssessmentService {
     waterUsingSystems.forEach((waterUsingSystem: WaterUsingSystem) => {      
       if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
         waterUsingSystem.sourceWater = this.convertUnitsService.value(waterUsingSystem.sourceWater).from('Mgal').to('m3');
-        waterUsingSystem.recycledWater = this.convertUnitsService.value(waterUsingSystem.recycledWater).from('Mgal').to('m3');
+        waterUsingSystem.recycledSourceWater = this.convertUnitsService.value(waterUsingSystem.recycledSourceWater).from('Mgal').to('m3');
         waterUsingSystem.recirculatedWater = this.convertUnitsService.value(waterUsingSystem.recirculatedWater).from('Mgal').to('m3');
         waterUsingSystem.dischargeWater = this.convertUnitsService.value(waterUsingSystem.dischargeWater).from('Mgal').to('m3');
         waterUsingSystem.dischargeWaterRecycled = this.convertUnitsService.value(waterUsingSystem.dischargeWaterRecycled).from('Mgal').to('m3');
@@ -67,7 +67,7 @@ export class ConvertWaterAssessmentService {
         waterUsingSystem.waterInProduct = this.convertUnitsService.value(waterUsingSystem.waterInProduct).from('Mgal').to('m3');
       } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
         waterUsingSystem.sourceWater = this.convertUnitsService.value(waterUsingSystem.sourceWater).from('m3').to('Mgal');
-        waterUsingSystem.recycledWater = this.convertUnitsService.value(waterUsingSystem.recycledWater).from('m3').to('Mgal');
+        waterUsingSystem.recycledSourceWater = this.convertUnitsService.value(waterUsingSystem.recycledSourceWater).from('m3').to('Mgal');
         waterUsingSystem.recirculatedWater = this.convertUnitsService.value(waterUsingSystem.recirculatedWater).from('m3').to('Mgal');
         waterUsingSystem.dischargeWater = this.convertUnitsService.value(waterUsingSystem.dischargeWater).from('m3').to('Mgal');
         waterUsingSystem.dischargeWaterRecycled = this.convertUnitsService.value(waterUsingSystem.dischargeWaterRecycled).from('m3').to('Mgal');
@@ -76,7 +76,7 @@ export class ConvertWaterAssessmentService {
         
       }
       waterUsingSystem.sourceWater = this.convertUnitsService.roundVal(waterUsingSystem.sourceWater, 2);
-      waterUsingSystem.recycledWater = this.convertUnitsService.roundVal(waterUsingSystem.recycledWater, 2);
+      waterUsingSystem.recycledSourceWater = this.convertUnitsService.roundVal(waterUsingSystem.recycledSourceWater, 2);
       waterUsingSystem.recirculatedWater = this.convertUnitsService.roundVal(waterUsingSystem.recirculatedWater, 2);
       waterUsingSystem.dischargeWater = this.convertUnitsService.roundVal(waterUsingSystem.dischargeWater, 2);
       waterUsingSystem.dischargeWaterRecycled = this.convertUnitsService.roundVal(waterUsingSystem.dischargeWaterRecycled, 2);
@@ -90,7 +90,7 @@ export class ConvertWaterAssessmentService {
       waterUsingSystem.landscaping = this.convertLandscaping(waterUsingSystem.landscaping, newSettings, oldSettings);
       
       waterUsingSystem.heatEnergy = this.convertHeatEnergy(waterUsingSystem.heatEnergy, newSettings, oldSettings);
-      waterUsingSystem.addedMotorEquipment.map(motorEnergy => {
+      waterUsingSystem.addedMotorEnergy.map(motorEnergy => {
         return this.convertMotorEnergy(motorEnergy, newSettings, oldSettings);
       });
 

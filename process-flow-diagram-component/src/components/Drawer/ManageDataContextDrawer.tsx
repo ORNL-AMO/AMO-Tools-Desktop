@@ -1,5 +1,5 @@
 import Drawer from '@mui/material/Drawer';
-import { ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { CustomEdgeData, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { getConnectedEdges, useReactFlow } from '@xyflow/react';
 import {
     type Node,
@@ -14,7 +14,6 @@ import ComponentConnectionsList from './ComponentConnectionList';
 import CustomizeEdge from './CustomizeEdge';
 import ComponentHandles from './ComponentHandles';
 import ComponentDataForm from './ComponentDataForm';
-import { CustomEdgeData } from '../Edges/DiagramBaseEdge';
 
 export default function ManageDataContextDrawer(props: ManageDataContextDrawerProps) {
     const { getNodes, getEdges, setEdges, setNodes } = useReactFlow();

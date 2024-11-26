@@ -12,7 +12,6 @@ export class WaterSystemComponentService {
   selectedComponent: BehaviorSubject<WaterProcessComponent>;
   selectedViewComponents: BehaviorSubject<WaterProcessComponent[]>;
 
-  // todo break out components to individual services if things intensify
   constructor(private formBuilder: FormBuilder) {
     this.selectedComponent = new BehaviorSubject<WaterProcessComponent>(undefined);
     this.selectedViewComponents = new BehaviorSubject<WaterProcessComponent[]>(undefined);

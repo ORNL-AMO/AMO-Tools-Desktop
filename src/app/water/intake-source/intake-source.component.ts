@@ -69,7 +69,7 @@ export class IntakeSourceComponent {
   }
 
   initForm() {
-   this.form = this.waterSystemComponentService.getIntakeSourceForm(this.selectedIntakeSource);
+    this.form = this.waterSystemComponentService.getIntakeSourceForm(this.selectedIntakeSource);
   }
 
   save() {

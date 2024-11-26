@@ -17,7 +17,7 @@
 
 <div class="motor-equipment">
     <div class="form-section"
-        *ngFor="let motorEquipment of selectedWaterUsingSystem.addedMotorEquipment; let i = index">
+        *ngFor="let motorEquipment of selectedWaterUsingSystem.addedMotorEnergy; let i = index">
         <app-motor-energy [motorEnergy]="motorEquipment" (updateMotorEnergy)="saveMotorEnergy($event, i)">
         </app-motor-energy>
         <div class="text-center">

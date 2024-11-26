@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { WaterAssessment, WaterProcessComponent, WaterSystemResults, WaterUsingSystem } from '../../../shared/models/water-assessment';
+import { ConnectedFlowType, WaterAssessment, WaterProcessComponent, WaterSystemFlows, WaterSystemResults, WaterUsingSystem } from '../../../shared/models/water-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -55,14 +55,14 @@ export class WaterSystemDataComponent {
   ngOnInit() {
     this.systemTypeOptions = copyObject(waterUsingSystemTypeOptions);
     this.settings = this.waterAssessmentService.settings.getValue();
-    
     this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
       this.selectedWaterUsingSystem = selectedComponent as WaterUsingSystem;
       this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
       this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.waterUsingSystems as WaterProcessComponent[]);
       if (this.selectedWaterUsingSystem) {
+        this.setSystemType(this.selectedWaterUsingSystem.systemType);
+        this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(this.selectedWaterUsingSystem, this.selectedSystemType, this.settings);
         this.initForm();
-        this.setSystemType();
       }
     });
 
@@ -83,25 +83,53 @@ export class WaterSystemDataComponent {
   }
 
   initForm() {
-   this.form = this.waterUsingSystemService.getWaterUsingSystemForm(this.selectedWaterUsingSystem);
+    this.form = this.waterUsingSystemService.getWaterUsingSystemForm(this.selectedWaterUsingSystem, this.waterAssessment);
+  }
+
+  setSystemType(systemType?: number) {
+    this.selectedSystemType = systemType !== undefined? systemType : this.form.controls.systemType.value;
+  }
+
+
+  /**
+ * Save Form user entered values to override values that were populated from diagram flows
+ */
+  saveWithUserOverride(controlName: ConnectedFlowType) {
+    let updatedWaterUsingSystem: WaterUsingSystem = this.waterUsingSystemService.getWaterUsingSystemFromForm(this.form, this.selectedWaterUsingSystem);
+    updatedWaterUsingSystem.userDiagramFlowOverrides[controlName] = this.form.get(controlName as string).value;
+    this.updateWaterUsingSystem(updatedWaterUsingSystem);
+  }
+
+  /**
+ * Restore sum totals from diagram user data-entry
+ */
+  revertToDiagramValue(controlName: ConnectedFlowType) {
+    let componentFlows = this.waterAssessment.diagramComponentFlows.find(componentFlows => componentFlows.id === this.selectedWaterUsingSystem.diagramNodeId);
+    if (componentFlows && this.selectedWaterUsingSystem.userDiagramFlowOverrides[controlName] !== undefined) {
+      this.form.get(controlName as string).setValue(componentFlows[controlName].total);
+      let updatedWaterUsingSystem: WaterUsingSystem = this.waterUsingSystemService.getWaterUsingSystemFromForm(this.form, this.selectedWaterUsingSystem);
+      updatedWaterUsingSystem.userDiagramFlowOverrides[controlName] = undefined;
+      this.updateWaterUsingSystem(updatedWaterUsingSystem);
+    }
   }
 
   /**
  * Update selectedWaterUsingSystem in water assessment
  * @param updatedWaterUsingSystem Pass when sub-form (ProcessUse, MotorEnergy, etc) updates system data.
  */
-  save(updatedWaterUsingSystem?: WaterUsingSystem) {
+  saveForm(updatedWaterUsingSystem?: WaterUsingSystem) {
     if (!updatedWaterUsingSystem) {
       updatedWaterUsingSystem = this.waterUsingSystemService.getWaterUsingSystemFromForm(this.form, this.selectedWaterUsingSystem);
     }
+    this.updateWaterUsingSystem(updatedWaterUsingSystem);
+  }
+
+
+  updateWaterUsingSystem(updatedWaterUsingSystem: WaterUsingSystem) {
     let updateIndex: number = this.waterAssessment.waterUsingSystems.findIndex(system => system.diagramNodeId === updatedWaterUsingSystem.diagramNodeId);
     this.waterAssessment.waterUsingSystems[updateIndex] = updatedWaterUsingSystem;
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
     this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(updatedWaterUsingSystem, this.selectedSystemType, this.settings);
-  }
-
-  saveWaterSystemData(selectedWaterUsingSystem: WaterUsingSystem) {
-    this.save(selectedWaterUsingSystem);
   }
 
   toggleCollapse(group: WaterSystemGroupString) {
@@ -110,10 +138,6 @@ export class WaterSystemDataComponent {
   
   focusField(str: string) {
     this.waterAssessmentService.focusedField.next(str);
-  }
-
-  setSystemType() {
-    this.selectedSystemType = this.form.controls.systemType.value;
   }
 
   openWaterSystemDataModal() {
@@ -137,11 +161,9 @@ export class WaterSystemDataComponent {
   updateOperatingHours(oppHours: OperatingHours) {
     this.waterUsingSystemService.operatingHours = oppHours;
     this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
-    this.save();
+    this.saveForm();
     this.closeOperatingHoursModal();
   }
-
-  
   setOpHoursModalWidth() {
     if (this.formElement && this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;

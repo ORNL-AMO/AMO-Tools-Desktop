@@ -4,15 +4,16 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram } from '../shared/models/diagram';
-import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet, WaterTreatment, WasteWaterTreatment, KnownLoss } from '../shared/models/water-assessment';
+import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet, WaterTreatment, WasteWaterTreatment, WaterSystemComponentFlows, ComponentFlowData, KnownLoss } from '../shared/models/water-assessment';
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
 import { Settings } from '../shared/models/settings';
 import { WaterAssessmentService } from './water-assessment.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
 import { WaterSystemComponentService } from './water-system-component.service';
-import { Node } from '@xyflow/react';
+import { Edge, Node } from '@xyflow/react';
 import { WaterTreatmentService } from './water-treatment/water-treatment.service';
 import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
+import { CustomEdgeData, ProcessFlowPart, WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
 
 @Injectable()
 export class WaterAssessmentConnectionsService {
@@ -48,8 +49,91 @@ export class WaterAssessmentConnectionsService {
 
   updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment) {
     this.updateAssessmentWaterComponents(diagram, assessment.water);
+    this.updateAssessmentComponentFlows(diagram.waterDiagram, assessment.water);
     // console.log('=== updated assessment', assessment.water);
   }
+
+  updateAssessmentComponentFlows(waterDiagram: WaterDiagram, waterAssessment: WaterAssessment, settings?: Settings) {
+    let diagramComponentFlows: WaterSystemComponentFlows[] = []
+    waterAssessment.waterUsingSystems.forEach((systemComponent: WaterUsingSystem) => {
+      let componentFlows: WaterSystemComponentFlows = {
+        id: systemComponent.diagramNodeId,
+        componentName: systemComponent.name,
+        sourceWater: {total: 0, flows: []},
+        recycledSourceWater: {total: 0, flows: []},
+        recirculatedWater: {total: 0, flows: []},
+        dischargeWater: {total: 0, flows: []},
+        dischargeWaterRecycled: {total: 0, flows: []},
+        knownLosses: {total: 0, flows: []},
+        waterInProduct: {total: 0, flows: []},
+      }
+
+      waterDiagram.flowDiagramData.edges.forEach((edge: Edge<CustomEdgeData>) => {
+        let flowData: ComponentFlowData = {
+          source: edge.source,
+          target: edge.target,
+          flowValue: edge.data.flowValue,
+        }
+
+        const isRecycledSource = this.isRecycledTarget(edge, systemComponent.diagramNodeId, waterAssessment.waterUsingSystems);
+        const isRecycledTarget = this.isRecycledTarget(edge, systemComponent.diagramNodeId, waterAssessment.waterUsingSystems);
+        const isKnownFlowLoss = edge.source === systemComponent.diagramNodeId && this.isKnownLossFlow(edge.target, waterAssessment.knownLosses)
+        
+        if (systemComponent.diagramNodeId === edge.target && edge.source === edge.target) {
+          componentFlows.recirculatedWater.flows.push(flowData)
+        } else if (isRecycledTarget) {
+          componentFlows.recycledSourceWater.flows.push(flowData);
+        } else if (isRecycledSource) {
+          componentFlows.recycledSourceWater.flows.push(flowData);
+        }  else if (isKnownFlowLoss) {
+          componentFlows.knownLosses.flows.push(flowData);
+          componentFlows.waterInProduct.flows.push(flowData);
+        } else if (edge.source === systemComponent.diagramNodeId) {
+          componentFlows.dischargeWater.flows.push(flowData);
+        } else if (edge.target === systemComponent.diagramNodeId) {
+          componentFlows.sourceWater.flows.push(flowData);
+        } 
+      });
+
+      componentFlows.sourceWater.total = this.getTotalFlowValue(componentFlows.sourceWater.flows);
+      componentFlows.recycledSourceWater.total = this.getTotalFlowValue(componentFlows.recycledSourceWater.flows);
+      componentFlows.recirculatedWater.total = this.getTotalFlowValue(componentFlows.recirculatedWater.flows);
+      componentFlows.dischargeWater.total = this.getTotalFlowValue(componentFlows.dischargeWater.flows);
+      componentFlows.recycledSourceWater.total = this.getTotalFlowValue(componentFlows.recycledSourceWater.flows);
+      componentFlows.knownLosses.total = this.getTotalFlowValue(componentFlows.knownLosses.flows);
+      componentFlows.waterInProduct.total = this.getTotalFlowValue(componentFlows.waterInProduct.flows);
+
+      diagramComponentFlows.push(componentFlows);
+    });
+    
+    // * store on assessment - avoid redundant data on diagram components
+    waterAssessment.diagramComponentFlows = diagramComponentFlows;
+  }
+
+  getTotalFlowValue(flows: Array<ComponentFlowData>) {
+    return flows.reduce((total, flow) => total + flow.flowValue, 0);
+  }
+
+  isRecycledFlow(sourceOrTargetId: string, waterUsingSystems: WaterUsingSystem[]) {
+    return waterUsingSystems.some((system: WaterUsingSystem) => system.diagramNodeId === sourceOrTargetId);
+  } 
+
+  isRecycledTarget(edge: Edge, currentComponentId: string, waterUsingSystems: WaterUsingSystem[]) {
+    return edge.target === currentComponentId && this.isWaterSystemDischarge(waterUsingSystems, edge.source);
+  } 
+
+  isRecycledSource(edge: Edge, currentComponentId: string, waterUsingSystems: WaterUsingSystem[]) {
+    return edge.source === currentComponentId && this.isWaterSystemDischarge(waterUsingSystems, edge.target);
+  } 
+
+  isWaterSystemDischarge(waterUsingSystems: WaterUsingSystem[], edgeSourceId: string) {
+    return waterUsingSystems.some((system: WaterUsingSystem) => system.diagramNodeId === edgeSourceId);
+  }
+
+  isKnownLossFlow(targetId: string, knownLosses: KnownLoss[]) {
+    return knownLosses.some((knownLoss: KnownLoss) => knownLoss.diagramNodeId === targetId);
+  } 
+
 
   updateAssessmentWaterComponents(diagram: Diagram, waterAssessment: WaterAssessment, settings?: Settings) {
     let intakeSources = [];
@@ -75,7 +159,7 @@ export class WaterAssessmentConnectionsService {
         if (!waterProcessComponent.createdByAssessment) {
           dischargeOutlet = this.waterComponentService.addDischargeOutlet(waterProcessComponent);
         } else {
-          dischargeOutlet = waterProcessComponent as DischargeOutlet
+          dischargeOutlet = waterProcessComponent as DischargeOutlet;
         }
         dischargeOutlets.push(dischargeOutlet);
       }
@@ -122,6 +206,7 @@ export class WaterAssessmentConnectionsService {
     waterAssessment.waterUsingSystems = waterUsingSystems;
     waterAssessment.waterTreatments = waterTreatments;
     waterAssessment.wasteWaterTreatments = wasteWaterTreatments;
+    waterAssessment.knownLosses = knownLosses;
   }
 
   async disconnectDiagram(diagramId: number) {

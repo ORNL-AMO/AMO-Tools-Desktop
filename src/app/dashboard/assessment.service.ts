@@ -381,7 +381,8 @@ export class AssessmentService {
       dischargeOutlets: [],
       waterUsingSystems: [],
       waterTreatments: [],
-      wasteWaterTreatments: []
+      wasteWaterTreatments: [],
+      knownLosses: []
     }
   }
 
