@@ -33,75 +33,94 @@ export class TreasureHuntPptService {
     let paybackBarData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getPaybackData(opportunitiesPaybackDetails, settings);
 
     pptx.layout = "LAYOUT_WIDE";
-    
+    let titleColor: string;
+    let titleSlideImg: pptxgen.BackgroundProps;
+    let sectionSlideImg: pptxgen.BackgroundProps;
+    let contentSlideImg: pptxgen.BackgroundProps;
+    if (pptThemeOption == 0) {
+      titleColor = '000000';
+      titleSlideImg = undefined;
+      sectionSlideImg = undefined;
+      contentSlideImg = undefined;
+    } else if (pptThemeOption == 1) {      
+      titleColor = 'FFFFFF';
+      titleSlideImg = { data: betterPlantsPPTimg.betterPlantsTitleSlide };
+      sectionSlideImg = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
+      contentSlideImg = { data: betterPlantsPPTimg.betterPlantsSlide };
+    }
+
     pptx.defineSlideMaster({
       title: "Title Slide",
-      background: { data: betterPlantsPPTimg.betterPlantsTitleSlide },
+      background: titleSlideImg,
       objects: [
-       {placeholder: { options:{ name:'title', type:'title', x:0.27, y:2.67, w:5.73, h:1.02, align: 'left', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle' },
-        text:'Click to add title' }},
-       {placeholder: { options:{ name:'body', type:'body', x:0.3, y:4.07, w:4.34, h:0.74, align: 'left', color: '8B93B1', fontSize: 20, fontFace: 'Arial (Body)', valign: 'top', }, text:'Click to add subtitle' }}
+        {
+          placeholder: {
+            options: { name: 'title', type: 'title', x: 0.27, y: 2.67, w: 5.73, h: 1.02, align: 'left', bold: true, color: '1D428A', fontSize: 26, fontFace: 'Arial (Headings)', valign: 'middle' },
+            text: 'Click to add title'
+          }
+        },
+        { placeholder: { options: { name: 'body', type: 'body', x: 0.3, y: 4.07, w: 4.34, h: 0.74, align: 'left', color: '8B93B1', fontSize: 20, fontFace: 'Arial (Body)', valign: 'top', }, text: 'Click to add subtitle' } }
       ],
       margin: 0.0
     });
-    
+
     pptx.defineSlideMaster({
       title: "Section Header",
-      background: { data: betterPlantsPPTimg.betterPlantsSectionSlide },
+      background: sectionSlideImg,
       objects: [
-       {placeholder: { options:{ name:'title', type:'title', x:1.38, y:2.97, w:9.42, h:0.99, align: 'left', bold: true, color: 'FFFFFF', fontSize: 28, fontFace: 'Arial (Headings)', valign: 'middle' }, text:'Click To Edit Master Title Style' }},
+        { placeholder: { options: { name: 'title', type: 'title', x: 1.38, y: 2.97, w: 9.42, h: 0.99, align: 'left', bold: true, color: titleColor, fontSize: 28, fontFace: 'Arial (Headings)', valign: 'middle' }, text: 'Click To Edit Master Title Style' } },
       ],
       margin: 0.0
     });
 
     pptx.defineSlideMaster({
       title: "Title and Content",
-      background: { data: betterPlantsPPTimg.betterPlantsSlide },
+      background: contentSlideImg,
       objects: [
-       {placeholder: { options:{ name:'title', type:'title', x: 0.67, y: 0, w: 11.08, h: 1.18, align: 'left', bold: true, color: 'FFFFFF', fontSize: 32, fontFace: 'Arial (Headings)', valign: 'middle'}, text:'Click to add title' }},
-       {placeholder: { options:{ name:'body', type:'body', x:0.67, y:1.68, w:12, h:4.95, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }, text:'Click to add text' }}
+        { placeholder: { options: { name: 'title', type: 'title', x: 0.67, y: 0, w: 11.08, h: 1.18, align: 'left', bold: true, color: titleColor, fontSize: 32, fontFace: 'Arial (Headings)', valign: 'middle' }, text: 'Click to add title' } },
+        { placeholder: { options: { name: 'body', type: 'body', x: 0.67, y: 1.68, w: 12, h: 4.95, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }, text: 'Click to add text' } }
       ],
       margin: 0.0
     });
 
     pptx.defineSlideMaster({
       title: "Title Only",
-      background: { data: betterPlantsPPTimg.betterPlantsSlide },
+      background: contentSlideImg,
       objects: [
-       {placeholder: { options:{ name:'title', type:'title', x: 0.67, y: 0, w: 11.08, h: 1.18, align: 'left', bold: true, color: 'FFFFFF', fontSize: 32, fontFace: 'Arial (Headings)', valign: 'middle'}, text:'Click to add title' }}
+        { placeholder: { options: { name: 'title', type: 'title', x: 0.67, y: 0, w: 11.08, h: 1.18, align: 'left', bold: true, color: titleColor, fontSize: 32, fontFace: 'Arial (Headings)', valign: 'middle' }, text: 'Click to add title' } }
       ],
       margin: 0.0
     });
 
     pptx.defineSlideMaster({
       title: "Two Content",
-      background: { data: betterPlantsPPTimg.betterPlantsSlide },
+      background: contentSlideImg,
       objects: [
-       {placeholder: { options:{ name:'title', type:'title', x:0.67, y:0, w:11.08, h:1.18, align: 'left', bold: true, color: 'FFFFFF', fontSize: 32, fontFace: 'Arial (Headings)', valign: 'middle' }, text:'Click to add title' }},
-       {placeholder: { options:{ name:'body1', type:'body', x:0.67, y:1.75, w:5.74, h:4.95, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }, text:'Click to add text' }},
-       {placeholder: { options:{ name:'body2', type:'body', x:6.93, y:1.75, w:5.74, h:4.95, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }, text:'Click to add text' }}
+        { placeholder: { options: { name: 'title', type: 'title', x: 0.67, y: 0, w: 11.08, h: 1.18, align: 'left', bold: true, color: titleColor, fontSize: 32, fontFace: 'Arial (Headings)', valign: 'middle' }, text: 'Click to add title' } },
+        { placeholder: { options: { name: 'body1', type: 'body', x: 0.67, y: 1.75, w: 5.74, h: 4.95, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }, text: 'Click to add text' } },
+        { placeholder: { options: { name: 'body2', type: 'body', x: 6.93, y: 1.75, w: 5.74, h: 4.95, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }, text: 'Click to add text' } }
       ],
       margin: 0.0
     });
 
     pptx.defineSlideMaster({
       title: "Comparison",
-      background: { data: betterPlantsPPTimg.betterPlantsSlide },
+      background: contentSlideImg,
       objects: [
-       {placeholder: { options:{ name:'title', type:'title', x:0.67, y:0, w:11.08, h:1.18, align: 'left', bold: true, color: 'FFFFFF', fontSize: 32, fontFace: 'Arial (Headings)', valign: 'middle' }, text:'Click to add title' }},
-       {placeholder: { options:{ name:'subTitle1', type:'body', x:0.67, y:1.56, w:5.89, h:0.7, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'middle' }, text:'Click to add text' }},
-       {placeholder: { options:{ name:'subTitle2', type:'body', x:6.77, y:1.56, w:5.89, h:0.7, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'middle' }, text:'Click to add text' }},
-       {placeholder: { options:{ name:'body1', type:'body', x:0.67, y:2.38, w:5.89, h:4.32, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }, text:'Click to add text' }},
-       {placeholder: { options:{ name:'body2', type:'body', x:6.77, y:2.38, w:5.89, h:4.32, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }, text:'Click to add text' }}
+        { placeholder: { options: { name: 'title', type: 'title', x: 0.67, y: 0, w: 11.08, h: 1.18, align: 'left', bold: true, color: titleColor, fontSize: 32, fontFace: 'Arial (Headings)', valign: 'middle' }, text: 'Click to add title' } },
+        { placeholder: { options: { name: 'subTitle1', type: 'body', x: 0.67, y: 1.56, w: 5.89, h: 0.7, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'middle' }, text: 'Click to add text' } },
+        { placeholder: { options: { name: 'subTitle2', type: 'body', x: 6.77, y: 1.56, w: 5.89, h: 0.7, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'middle' }, text: 'Click to add text' } },
+        { placeholder: { options: { name: 'body1', type: 'body', x: 0.67, y: 2.38, w: 5.89, h: 4.32, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }, text: 'Click to add text' } },
+        { placeholder: { options: { name: 'body2', type: 'body', x: 6.77, y: 2.38, w: 5.89, h: 4.32, align: 'left', color: '000000', fontSize: 24, fontFace: 'Arial (Body)', valign: 'top', bullet: true }, text: 'Click to add text' } }
       ],
       margin: 0.0
     });
 
     pptx.defineSlideMaster({
       title: "Blank",
-      background: { data: betterPlantsPPTimg.betterPlantsSlide },
+      background: contentSlideImg,
       margin: 0.0
-    });
+    });    
 
 
     let slide1 = pptx.addSlide({ masterName: "Title Slide" });
