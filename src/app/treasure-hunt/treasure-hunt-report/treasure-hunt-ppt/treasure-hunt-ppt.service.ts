@@ -21,7 +21,7 @@ export class TreasureHuntPptService {
 
 
   createPPT(settings: Settings, treasureHunt: TreasureHunt, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
-    opportunitiesPaybackDetails: OpportunitiesPaybackDetails): pptxgen {
+    opportunitiesPaybackDetails: OpportunitiesPaybackDetails, pptThemeOption: number): pptxgen {
     let pptx = new pptxgen();
 
     let pptTitle = this.getpptTitle(settings);
