@@ -44,8 +44,11 @@
 </label>
 
 <ng-container *ngIf="!isCollapsed.waterFlows">
-    <a class="form-text click-link text-center small mt-3" (click)="openWaterSystemDataModal()">Estimate System Water
-        Flows</a>
+    <div class="alert alert-info px-4 py-3 mt-2 mb-0">
+        <p class="text-left small mb-0">
+            Flow values are totalled from diagram flow connections. You may enter your own data, with the ability to restore diagram totals any time.
+        </p>
+    </div>
     <app-water-system-data-modal *ngIf="showWaterSystemDataModal" [settings]="settings"
         [waterUsingSystem]="selectedWaterUsingSystem" [systemType]="selectedSystemType"
         (emitClose)="closeWaterSystemDataModal()" (emitSave)="updateWaterUsingSystem($event)">
@@ -140,6 +143,7 @@
             </span>
             <span *ngIf="!waterSystemResults">&mdash; &mdash;</span>
         </div>
+        <a class="form-text small click-link text-left" (click)="openWaterSystemDataModal()">Estimate With System Data</a>
     </div>
 </form>
 
