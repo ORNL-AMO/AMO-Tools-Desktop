@@ -52,6 +52,7 @@ import { WaterTreatmentComponent } from './water-treatment/water-treatment.compo
 import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 import { WaterTreatmentWrapperComponent } from './water-treatment/water-treatment-wrapper/water-treatment-wrapper.component';
 import { WasteWaterTreatmentWrapperComponent } from './waste-water-treatment/waste-water-treatment-wrapper/waste-water-treatment-wrapper.component';
+import { WaterBalanceResultsTableComponent } from './results-panel/water-balance-results-table/water-balance-results-table.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { WasteWaterTreatmentWrapperComponent } from './waste-water-treatment/was
     IntakeSourceComponent,
     WaterUsingSystemComponent,
     WaterComponentTableComponent,
+    WaterBalanceResultsTableComponent,
     DischargeOutletComponent,
     HeatEnergyComponent,
     MotorEnergyComponent,

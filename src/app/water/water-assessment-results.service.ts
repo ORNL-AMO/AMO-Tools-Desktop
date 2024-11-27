@@ -1,23 +1,24 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CoolingTower, CoolingTowerResults, FlowMetric, ProcessUse, ProcessUseResults, WaterAssessmentResults, WaterSystemResults, WaterSystemTypeEnum, WaterUsingSystem } from '../shared/models/water-assessment';
+import { FlowMetric, ProcessUse, ProcessUseResults, WaterAssessment, SystemBalanceResults, WaterSystemResults, WaterSystemTypeEnum, WaterUsingSystem, WaterBalanceResults } from '../shared/models/water-assessment';
 import { WaterSuiteApiService } from '../tools-suite-api/water-suite-api.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
+import { roundVal } from '../shared/helperFunctions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WaterAssessmentResultsService {
 
-  waterAssessmentResults: BehaviorSubject<WaterAssessmentResults>;
-  constructor(private waterSuiteApiService: WaterSuiteApiService, private convertWaterAssessmentService: ConvertWaterAssessmentService) { 
-    this.waterAssessmentResults = new BehaviorSubject<WaterAssessmentResults>(undefined);
+  // waterAssessmentResults: BehaviorSubject<WaterAssessmentResults>;
+  constructor(private waterSuiteApiService: WaterSuiteApiService, 
+    private convertWaterAssessmentService: ConvertWaterAssessmentService) { 
+    // this.waterAssessmentResults = new BehaviorSubject<WaterAssessmentResults>(undefined);
   }
 
-  getWaterSystemResults(waterSystem: WaterUsingSystem, selectedSystemType: number, settings: Settings): WaterSystemResults {
+  getWaterSystemResults(waterSystem: WaterUsingSystem, waterAssessment: WaterAssessment, settings: Settings): WaterSystemResults {
     let waterSystemResults: WaterSystemResults = {
-      plantWaterBalance: undefined,
       grossWaterUse: undefined,
       processUseResults: undefined,
       coolingTowerResults: undefined,
@@ -27,7 +28,7 @@ export class WaterAssessmentResultsService {
       motorEnergyResults: []
     }
 
-    if (selectedSystemType === WaterSystemTypeEnum.PROCESS && waterSystem.processUse) {
+    if (waterSystem.systemType === WaterSystemTypeEnum.PROCESS && waterSystem.processUse) {
       waterSystemResults.processUseResults = this.calculateProcessUseResults(waterSystem.processUse, waterSystem.hoursPerYear);
       waterSystemResults.processUseResults.incomingWater = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.processUseResults.incomingWater, settings);
       waterSystemResults.processUseResults.recirculatedWater = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.processUseResults.recirculatedWater, settings);
@@ -37,7 +38,7 @@ export class WaterAssessmentResultsService {
       waterSystemResults.processUseResults.grossWaterUse = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.processUseResults.grossWaterUse, settings);
       waterSystemResults.grossWaterUse = waterSystemResults.processUseResults.grossWaterUse;
     }
-    if (selectedSystemType === WaterSystemTypeEnum.COOLINGTOWER && waterSystem.coolingTower) {
+    if (waterSystem.systemType === WaterSystemTypeEnum.COOLINGTOWER && waterSystem.coolingTower) {
       waterSystemResults.coolingTowerResults = this.waterSuiteApiService.calculateCoolingTowerResults(waterSystem.coolingTower, waterSystem.hoursPerYear);
       waterSystemResults.coolingTowerResults.blowdownLoss = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.coolingTowerResults.blowdownLoss, settings);
       waterSystemResults.coolingTowerResults.evaporationLoss = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.coolingTowerResults.evaporationLoss, settings);
@@ -45,7 +46,7 @@ export class WaterAssessmentResultsService {
       waterSystemResults.coolingTowerResults.grossWaterUse = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.coolingTowerResults.grossWaterUse, settings);
       waterSystemResults.grossWaterUse = waterSystemResults.coolingTowerResults.grossWaterUse;
     }
-    if (selectedSystemType === WaterSystemTypeEnum.BOILER && waterSystem.boilerWater) {
+    if (waterSystem.systemType === WaterSystemTypeEnum.BOILER && waterSystem.boilerWater) {
       waterSystemResults.boilerWaterResults = this.waterSuiteApiService.calculateBoilerWaterResults(waterSystem.boilerWater, waterSystem.hoursPerYear);
       waterSystemResults.boilerWaterResults.blowdownLoss = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.boilerWaterResults.blowdownLoss, settings);
       waterSystemResults.boilerWaterResults.condensateReturn = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.boilerWaterResults.condensateReturn, settings);
@@ -54,12 +55,12 @@ export class WaterAssessmentResultsService {
       waterSystemResults.boilerWaterResults.grossWaterUse = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.boilerWaterResults.grossWaterUse, settings);
       waterSystemResults.grossWaterUse = waterSystemResults.boilerWaterResults.grossWaterUse;
     }
-    if (selectedSystemType === WaterSystemTypeEnum.KITCHEN && waterSystem.kitchenRestroom) {
+    if (waterSystem.systemType === WaterSystemTypeEnum.KITCHEN && waterSystem.kitchenRestroom) {
       waterSystemResults.kitchenRestroomResults = this.waterSuiteApiService.calculateKitchenRestroomResults(waterSystem.kitchenRestroom);
       waterSystemResults.kitchenRestroomResults.grossWaterUse = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.kitchenRestroomResults.grossWaterUse, settings);
       waterSystemResults.grossWaterUse = waterSystemResults.kitchenRestroomResults.grossWaterUse;
     }
-    if (selectedSystemType === WaterSystemTypeEnum.LANDSCAPING && waterSystem.landscaping) {
+    if (waterSystem.systemType === WaterSystemTypeEnum.LANDSCAPING && waterSystem.landscaping) {
       waterSystem.landscaping = this.convertWaterAssessmentService.convertLandscapingSuiteInput(waterSystem.landscaping, settings);
       waterSystemResults.landscapingResults = this.waterSuiteApiService.calculateLandscapingResults(waterSystem.landscaping);
       waterSystemResults.landscapingResults = this.convertWaterAssessmentService.convertLandscapingResults(waterSystemResults.landscapingResults, settings);
@@ -75,6 +76,73 @@ export class WaterAssessmentResultsService {
      });
 
     return waterSystemResults;
+  }
+
+  getSystemSystemBalanceResults(waterSystem: WaterUsingSystem): SystemBalanceResults {
+    let systemBalanceResults = {
+      id: waterSystem.diagramNodeId,
+      name: waterSystem.name,
+      incomingWater: 0,
+      outgoingWater: 0,
+      waterBalance: 0,
+      percentIncomingWater: 0,
+      percentTotalBalance: 0,
+  }
+    let consumptiveIrrigationLoss = 0;
+    if (waterSystem.systemType = WaterSystemTypeEnum.LANDSCAPING) {
+      // todo 7121 how should this be retrieved?
+      consumptiveIrrigationLoss = 0;
+    }
+
+    systemBalanceResults.incomingWater = waterSystem.sourceWater + waterSystem.recycledSourceWater;
+    systemBalanceResults.outgoingWater = waterSystem.waterInProduct + waterSystem.dischargeWater + waterSystem.dischargeWaterRecycled + consumptiveIrrigationLoss;
+    systemBalanceResults.waterBalance = systemBalanceResults.incomingWater - systemBalanceResults.outgoingWater;
+    systemBalanceResults.percentIncomingWater = this.getBalancePercent(systemBalanceResults.incomingWater, systemBalanceResults.waterBalance);
+
+    console.log('SystemBalanceResults', waterSystem.name, systemBalanceResults);
+    return systemBalanceResults;
+  }
+
+
+  getBalancePercent(total: number, segment: number) {
+    if (total) {
+      let percent = Math.abs((segment / total) * 100);
+      return roundVal(percent, 2);
+    }
+    return 0;
+  }
+
+
+  getWaterBalanceResults(waterAssessment: WaterAssessment): WaterBalanceResults {
+    let allSystemBalanceResults = [];
+    let systemTotalBalance = 0;
+    waterAssessment.waterUsingSystems.forEach(system => {
+      let systemBalanceResults:  SystemBalanceResults = this.getSystemSystemBalanceResults(system);
+      allSystemBalanceResults.push(systemBalanceResults);
+      systemTotalBalance += systemBalanceResults.waterBalance;
+    });
+    
+    let plantBalanceResults: WaterBalanceResults = {
+      incomingWater: 0,
+      outgoingWater: 0,
+      waterBalance: 0,
+      percentIncomingWater: 0,
+      percentTotalBalance: 0,
+      allSystemBalanceResults: []
+    }
+    
+    plantBalanceResults.allSystemBalanceResults = allSystemBalanceResults.map(systemResult => {
+      plantBalanceResults.incomingWater += systemResult.incomingWater; 
+      plantBalanceResults.outgoingWater += systemResult.outgoingWater; 
+      plantBalanceResults.waterBalance += systemResult.waterBalance; 
+      plantBalanceResults.percentTotalBalance += systemResult.percentTotalBalance; 
+      
+      systemResult.percentTotalBalance = this.getBalancePercent(systemTotalBalance, systemResult.waterBalance);
+      return systemResult;
+    });
+
+    console.log('plantWaterBalance', plantBalanceResults);
+    return plantBalanceResults;
   }
 
   calculateProcessUseResults(processUse: ProcessUse, hoursPerYear: number): ProcessUseResults {

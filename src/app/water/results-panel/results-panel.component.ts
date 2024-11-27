@@ -21,6 +21,8 @@ export class ResultsPanelComponent {
       this.setupTab = val;
       if (this.setupTab !== 'system-basics' && this.setupTab !== 'waste-water-treatment') {
         this.panelTabSelect = 'component-table'
+      } else if (this.setupTab === 'waste-water-treatment') {
+        this.panelTabSelect = 'results'
       } else {
         this.panelTabSelect = 'help';
       }

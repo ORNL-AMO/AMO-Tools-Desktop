@@ -38,15 +38,21 @@ export enum WaterSystemTypeEnum {
     LANDSCAPING = 4
 }
 
-export interface WaterAssessmentResults {
-    waterBalance: WaterBalanceResults,
-    aggregatedSystemResults: AggregatedSystemResults
+// export interface WaterAssessmentResults {
+//     aggregatedSystemResults: AggregatedSystemResults
+// }
+
+export interface SystemBalanceResults {
+    name?: string,
+    incomingWater: number,
+    outgoingWater: number,
+    waterBalance: number,
+    percentIncomingWater: number,
+    percentTotalBalance: number,
 }
 
-export interface WaterBalanceResults {
-    sourceWater: number,
-    recirculatedWater: number,
-    grossWaterUse: number,
+export interface WaterBalanceResults extends SystemBalanceResults {
+    allSystemBalanceResults: SystemBalanceResults[]
 }
 
 export interface AggregatedSystemResults {
@@ -56,7 +62,6 @@ export interface AggregatedSystemResults {
 
 export interface WaterSystemResults {
     grossWaterUse: number,
-    plantWaterBalance: WaterBalanceResults,
     processUseResults?: ProcessUseResults,
     coolingTowerResults?: CoolingTowerResults,
     boilerWaterResults?: BoilerWaterResults,

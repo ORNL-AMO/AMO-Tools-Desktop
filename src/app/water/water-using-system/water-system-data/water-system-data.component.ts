@@ -61,7 +61,8 @@ export class WaterSystemDataComponent {
       this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.waterUsingSystems as WaterProcessComponent[]);
       if (this.selectedWaterUsingSystem) {
         this.setSystemType(this.selectedWaterUsingSystem.systemType);
-        this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(this.selectedWaterUsingSystem, this.selectedSystemType, this.settings);
+        // todo 7121 do we need to call this anymore (only on estimate modal)
+        this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(this.selectedWaterUsingSystem, this.waterAssessment, this.settings);
         this.initForm();
       }
     });
@@ -129,7 +130,8 @@ export class WaterSystemDataComponent {
     let updateIndex: number = this.waterAssessment.waterUsingSystems.findIndex(system => system.diagramNodeId === updatedWaterUsingSystem.diagramNodeId);
     this.waterAssessment.waterUsingSystems[updateIndex] = updatedWaterUsingSystem;
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
-    this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(updatedWaterUsingSystem, this.selectedSystemType, this.settings);
+       // todo 7121 do we need to call this anymore (only on estimate modal)
+    this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(updatedWaterUsingSystem, this.waterAssessment, this.settings);
   }
 
   toggleCollapse(group: WaterSystemGroupString) {

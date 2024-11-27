@@ -53,9 +53,13 @@ export class WaterAssessmentConnectionsService {
     // console.log('=== updated assessment', assessment.water);
   }
 
+   /**
+* Sets flow data from the diagram, defering to user-entered override values if defined
+* @param processFlowPart Build from diagram component
+*/
   updateAssessmentComponentFlows(waterDiagram: WaterDiagram, waterAssessment: WaterAssessment, settings?: Settings) {
     let diagramComponentFlows: WaterSystemComponentFlows[] = []
-    waterAssessment.waterUsingSystems.forEach((systemComponent: WaterUsingSystem) => {
+    waterAssessment.waterUsingSystems = waterAssessment.waterUsingSystems.map((systemComponent: WaterUsingSystem) => {
       let componentFlows: WaterSystemComponentFlows = {
         id: systemComponent.diagramNodeId,
         componentName: systemComponent.name,
@@ -102,8 +106,17 @@ export class WaterAssessmentConnectionsService {
       componentFlows.recycledSourceWater.total = this.getTotalFlowValue(componentFlows.recycledSourceWater.flows);
       componentFlows.knownLosses.total = this.getTotalFlowValue(componentFlows.knownLosses.flows);
       componentFlows.waterInProduct.total = this.getTotalFlowValue(componentFlows.waterInProduct.flows);
-
       diagramComponentFlows.push(componentFlows);
+
+      systemComponent.sourceWater = systemComponent.userDiagramFlowOverrides.sourceWater? systemComponent.userDiagramFlowOverrides.sourceWater :  componentFlows.sourceWater.total;
+      systemComponent.recycledSourceWater = systemComponent.userDiagramFlowOverrides.recycledSourceWater? systemComponent.userDiagramFlowOverrides.recycledSourceWater :  componentFlows.recycledSourceWater.total;
+      systemComponent.recirculatedWater = systemComponent.userDiagramFlowOverrides.recirculatedWater? systemComponent.userDiagramFlowOverrides.recirculatedWater :  componentFlows.recirculatedWater.total;
+      systemComponent.dischargeWater = systemComponent.userDiagramFlowOverrides.dischargeWater? systemComponent.userDiagramFlowOverrides.dischargeWater :  componentFlows.dischargeWater.total;
+      systemComponent.dischargeWaterRecycled = systemComponent.userDiagramFlowOverrides.dischargeWaterRecycled? systemComponent.userDiagramFlowOverrides.dischargeWaterRecycled :  componentFlows.recycledSourceWater.total;
+      systemComponent.knownLosses = systemComponent.userDiagramFlowOverrides.knownLosses? systemComponent.userDiagramFlowOverrides.knownLosses :  componentFlows.knownLosses.total;
+      systemComponent.waterInProduct = systemComponent.userDiagramFlowOverrides.waterInProduct? systemComponent.userDiagramFlowOverrides.waterInProduct :  componentFlows.waterInProduct.total;
+
+      return systemComponent;
     });
     
     // * store on assessment - avoid redundant data on diagram components
