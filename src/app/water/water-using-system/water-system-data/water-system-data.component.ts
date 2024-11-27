@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { ConnectedFlowType, WaterAssessment, WaterProcessComponent, WaterSystemFlows, WaterSystemResults, WaterUsingSystem } from '../../../shared/models/water-assessment';
+import { ConnectedFlowType, DiagramWaterSystemFlows, WaterAssessment, WaterProcessComponent, WaterSystemFlows, WaterSystemResults, WaterUsingSystem } from '../../../shared/models/water-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -38,6 +38,8 @@ export class WaterSystemDataComponent {
   waterSystemResults: WaterSystemResults;
   waterUsingSystemTabSub: Subscription;
   waterUsingSystemTab: string;
+
+  diagramWaterSystemFlows: DiagramWaterSystemFlows;
   
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -61,7 +63,8 @@ export class WaterSystemDataComponent {
       this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.waterUsingSystems as WaterProcessComponent[]);
       if (this.selectedWaterUsingSystem) {
         this.setSystemType(this.selectedWaterUsingSystem.systemType);
-        this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(this.selectedWaterUsingSystem, this.selectedSystemType, this.settings);
+        // todo 7121 do we need to call this anymore (only on estimate modal)
+        this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(this.selectedWaterUsingSystem, this.waterAssessment, this.settings);
         this.initForm();
       }
     });
@@ -79,11 +82,15 @@ export class WaterSystemDataComponent {
   }
 
   setDefaultSelectedComponent() {
-    this.waterSystemComponentService.setDefaultSelectedComponent(this.waterAssessment.waterUsingSystems, this.selectedWaterUsingSystem, 'water-using-system')
+    this.waterSystemComponentService.setDefaultSelectedComponent(this.waterAssessment.waterUsingSystems, this.selectedWaterUsingSystem, 'water-using-system');
   }
 
   initForm() {
-    this.form = this.waterUsingSystemService.getWaterUsingSystemForm(this.selectedWaterUsingSystem, this.waterAssessment);
+    this.diagramWaterSystemFlows = this.waterAssessmentService.getDefaultDiagramWaterFlows();
+    if (this.waterAssessment.diagramWaterSystemFlows && this.waterAssessment.diagramWaterSystemFlows.length > 0) {
+      this.diagramWaterSystemFlows = this.waterAssessment.diagramWaterSystemFlows.find(componentFlows => componentFlows.id === this.selectedWaterUsingSystem.diagramNodeId);
+    } 
+    this.form = this.waterUsingSystemService.getWaterUsingSystemForm(this.selectedWaterUsingSystem, this.diagramWaterSystemFlows);
   }
 
   setSystemType(systemType?: number) {
@@ -100,17 +107,38 @@ export class WaterSystemDataComponent {
     this.updateWaterUsingSystem(updatedWaterUsingSystem);
   }
 
+  restoreAllToDiagramValues() {
+    if (this.diagramWaterSystemFlows) {
+      Object.keys(this.diagramWaterSystemFlows)
+      .filter(controlName => controlName !== 'id' && controlName !== 'componentName')
+      .forEach((controlName: ConnectedFlowType) => {
+        this.form.get(controlName as string).setValue(this.diagramWaterSystemFlows[controlName].total);
+        this.selectedWaterUsingSystem.userDiagramFlowOverrides[controlName] = undefined;
+      });
+      let updatedWaterUsingSystem: WaterUsingSystem = this.waterUsingSystemService.getWaterUsingSystemFromForm(this.form, this.selectedWaterUsingSystem);
+      this.updateWaterUsingSystem(updatedWaterUsingSystem);
+    }
+  }
+
+  getIsDisabledRestoreAll() {}
+
+
   /**
  * Restore sum totals from diagram user data-entry
  */
-  revertToDiagramValue(controlName: ConnectedFlowType) {
-    let componentFlows = this.waterAssessment.diagramComponentFlows.find(componentFlows => componentFlows.id === this.selectedWaterUsingSystem.diagramNodeId);
-    if (componentFlows && this.selectedWaterUsingSystem.userDiagramFlowOverrides[controlName] !== undefined) {
-      this.form.get(controlName as string).setValue(componentFlows[controlName].total);
+  restoreToDiagramValue(controlName: ConnectedFlowType) {
+    if (this.diagramWaterSystemFlows) {
+      this.form.get(controlName as string).setValue(this.diagramWaterSystemFlows[controlName].total);
       let updatedWaterUsingSystem: WaterUsingSystem = this.waterUsingSystemService.getWaterUsingSystemFromForm(this.form, this.selectedWaterUsingSystem);
       updatedWaterUsingSystem.userDiagramFlowOverrides[controlName] = undefined;
       this.updateWaterUsingSystem(updatedWaterUsingSystem);
     }
+  }
+
+  getIsDisabledRestore(connectedFlowType: ConnectedFlowType): boolean {
+    let hasUserOverride: boolean = this.selectedWaterUsingSystem.userDiagramFlowOverrides && this.selectedWaterUsingSystem.userDiagramFlowOverrides[connectedFlowType] !== undefined;
+    let hasDiagramDefault: boolean = this.diagramWaterSystemFlows && this.diagramWaterSystemFlows[connectedFlowType].total !== undefined;
+    return (hasUserOverride && !hasDiagramDefault) || !hasUserOverride;
   }
 
   /**
@@ -129,7 +157,8 @@ export class WaterSystemDataComponent {
     let updateIndex: number = this.waterAssessment.waterUsingSystems.findIndex(system => system.diagramNodeId === updatedWaterUsingSystem.diagramNodeId);
     this.waterAssessment.waterUsingSystems[updateIndex] = updatedWaterUsingSystem;
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
-    this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(updatedWaterUsingSystem, this.selectedSystemType, this.settings);
+       // todo 7121 do we need to call this anymore (only on estimate modal)
+    this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(updatedWaterUsingSystem, this.waterAssessment, this.settings);
   }
 
   toggleCollapse(group: WaterSystemGroupString) {

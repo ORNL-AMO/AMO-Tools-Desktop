@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BoilerWater, CoolingTower, DischargeOutlet, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, Landscaping, LandscapingResults, Modification, MotorEnergy, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterTreatment, WaterUsingSystem } from '../shared/models/water-assessment';
+import { BoilerWater, CoolingTower, DischargeOutlet, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, Landscaping, LandscapingResults, Modification, MotorEnergy, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterSystemFlows, WaterTreatment, WaterUsingSystem } from '../shared/models/water-assessment';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 
@@ -57,31 +57,8 @@ export class ConvertWaterAssessmentService {
 
   convertWaterUsingSystems(waterUsingSystems: WaterUsingSystem[], oldSettings: Settings, newSettings: Settings): WaterUsingSystem[] {
     waterUsingSystems.forEach((waterUsingSystem: WaterUsingSystem) => {      
-      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-        waterUsingSystem.sourceWater = this.convertUnitsService.value(waterUsingSystem.sourceWater).from('Mgal').to('m3');
-        waterUsingSystem.recycledSourceWater = this.convertUnitsService.value(waterUsingSystem.recycledSourceWater).from('Mgal').to('m3');
-        waterUsingSystem.recirculatedWater = this.convertUnitsService.value(waterUsingSystem.recirculatedWater).from('Mgal').to('m3');
-        waterUsingSystem.dischargeWater = this.convertUnitsService.value(waterUsingSystem.dischargeWater).from('Mgal').to('m3');
-        waterUsingSystem.dischargeWaterRecycled = this.convertUnitsService.value(waterUsingSystem.dischargeWaterRecycled).from('Mgal').to('m3');
-        waterUsingSystem.knownLosses = this.convertUnitsService.value(waterUsingSystem.knownLosses).from('Mgal').to('m3');
-        waterUsingSystem.waterInProduct = this.convertUnitsService.value(waterUsingSystem.waterInProduct).from('Mgal').to('m3');
-      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-        waterUsingSystem.sourceWater = this.convertUnitsService.value(waterUsingSystem.sourceWater).from('m3').to('Mgal');
-        waterUsingSystem.recycledSourceWater = this.convertUnitsService.value(waterUsingSystem.recycledSourceWater).from('m3').to('Mgal');
-        waterUsingSystem.recirculatedWater = this.convertUnitsService.value(waterUsingSystem.recirculatedWater).from('m3').to('Mgal');
-        waterUsingSystem.dischargeWater = this.convertUnitsService.value(waterUsingSystem.dischargeWater).from('m3').to('Mgal');
-        waterUsingSystem.dischargeWaterRecycled = this.convertUnitsService.value(waterUsingSystem.dischargeWaterRecycled).from('m3').to('Mgal');
-        waterUsingSystem.knownLosses = this.convertUnitsService.value(waterUsingSystem.knownLosses).from('m3').to('Mgal');
-        waterUsingSystem.waterInProduct = this.convertUnitsService.value(waterUsingSystem.waterInProduct).from('m3').to('Mgal');
-        
-      }
-      waterUsingSystem.sourceWater = this.convertUnitsService.roundVal(waterUsingSystem.sourceWater, 2);
-      waterUsingSystem.recycledSourceWater = this.convertUnitsService.roundVal(waterUsingSystem.recycledSourceWater, 2);
-      waterUsingSystem.recirculatedWater = this.convertUnitsService.roundVal(waterUsingSystem.recirculatedWater, 2);
-      waterUsingSystem.dischargeWater = this.convertUnitsService.roundVal(waterUsingSystem.dischargeWater, 2);
-      waterUsingSystem.dischargeWaterRecycled = this.convertUnitsService.roundVal(waterUsingSystem.dischargeWaterRecycled, 2);
-      waterUsingSystem.knownLosses = this.convertUnitsService.roundVal(waterUsingSystem.knownLosses, 2);
-      waterUsingSystem.waterInProduct = this.convertUnitsService.roundVal(waterUsingSystem.waterInProduct, 2);
+      waterUsingSystem.waterFlows = this.convertWaterFlows(waterUsingSystem.waterFlows, oldSettings, newSettings);
+      waterUsingSystem.userDiagramFlowOverrides = this.convertWaterFlows(waterUsingSystem.userDiagramFlowOverrides, oldSettings, newSettings);
       
       waterUsingSystem.processUse = this.convertProcessUse(waterUsingSystem.processUse, newSettings, oldSettings);
       waterUsingSystem.coolingTower = this.convertCoolingTower(waterUsingSystem.coolingTower, newSettings, oldSettings);
@@ -96,6 +73,36 @@ export class ConvertWaterAssessmentService {
 
     });
     return waterUsingSystems;
+  }
+
+  convertWaterFlows(waterFlows: WaterSystemFlows, oldSettings: Settings, newSettings: Settings) {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      waterFlows.sourceWater = this.convertUnitsService.value(waterFlows.sourceWater).from('Mgal').to('m3');
+      waterFlows.recycledSourceWater = this.convertUnitsService.value(waterFlows.recycledSourceWater).from('Mgal').to('m3');
+      waterFlows.recirculatedWater = this.convertUnitsService.value(waterFlows.recirculatedWater).from('Mgal').to('m3');
+      waterFlows.dischargeWater = this.convertUnitsService.value(waterFlows.dischargeWater).from('Mgal').to('m3');
+      waterFlows.dischargeWaterRecycled = this.convertUnitsService.value(waterFlows.dischargeWaterRecycled).from('Mgal').to('m3');
+      waterFlows.knownLosses = this.convertUnitsService.value(waterFlows.knownLosses).from('Mgal').to('m3');
+      waterFlows.waterInProduct = this.convertUnitsService.value(waterFlows.waterInProduct).from('Mgal').to('m3');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      waterFlows.sourceWater = this.convertUnitsService.value(waterFlows.sourceWater).from('m3').to('Mgal');
+      waterFlows.recycledSourceWater = this.convertUnitsService.value(waterFlows.recycledSourceWater).from('m3').to('Mgal');
+      waterFlows.recirculatedWater = this.convertUnitsService.value(waterFlows.recirculatedWater).from('m3').to('Mgal');
+      waterFlows.dischargeWater = this.convertUnitsService.value(waterFlows.dischargeWater).from('m3').to('Mgal');
+      waterFlows.dischargeWaterRecycled = this.convertUnitsService.value(waterFlows.dischargeWaterRecycled).from('m3').to('Mgal');
+      waterFlows.knownLosses = this.convertUnitsService.value(waterFlows.knownLosses).from('m3').to('Mgal');
+      waterFlows.waterInProduct = this.convertUnitsService.value(waterFlows.waterInProduct).from('m3').to('Mgal');
+      
+    }
+    waterFlows.sourceWater = this.convertUnitsService.roundVal(waterFlows.sourceWater, 2);
+    waterFlows.recycledSourceWater = this.convertUnitsService.roundVal(waterFlows.recycledSourceWater, 2);
+    waterFlows.recirculatedWater = this.convertUnitsService.roundVal(waterFlows.recirculatedWater, 2);
+    waterFlows.dischargeWater = this.convertUnitsService.roundVal(waterFlows.dischargeWater, 2);
+    waterFlows.dischargeWaterRecycled = this.convertUnitsService.roundVal(waterFlows.dischargeWaterRecycled, 2);
+    waterFlows.knownLosses = this.convertUnitsService.roundVal(waterFlows.knownLosses, 2);
+    waterFlows.waterInProduct = this.convertUnitsService.roundVal(waterFlows.waterInProduct, 2);
+
+    return waterFlows;
   }
 
   // todo 6907, see processUse WaterUseUnits dependant on metric selected

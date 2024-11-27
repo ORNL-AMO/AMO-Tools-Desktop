@@ -6,7 +6,6 @@ import { WaterAssessmentService } from '../../../../../water/water-assessment.se
 import { AssessmentService } from '../../../../assessment.service';
 import { WaterAssessmentResultsService } from '../../../../../water/water-assessment-results.service';
 import { Settings } from '../../../../../shared/models/settings';
-import { WaterAssessmentResults } from '../../../../../shared/models/water-assessment';
 
 @Component({
   selector: 'app-water-summary-card',
@@ -19,8 +18,8 @@ export class WaterSummaryCardComponent {
 
   @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
-  baselineResults: WaterAssessmentResults;
-  modificationResults: WaterAssessmentResults;
+  // baselineResults: WaterAssessmentResults;
+  // modificationResults: WaterAssessmentResults;
   setupDone: boolean;
   numMods: number = 0;
   showReport: boolean = false;

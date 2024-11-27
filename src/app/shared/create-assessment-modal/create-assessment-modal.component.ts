@@ -238,7 +238,7 @@ export class CreateAssessmentModalComponent {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
     // todo set settings/units match
     // newSettings = this.settingsService.setPumpSettingsUnitType(newSettings);
-    this.waterAssessmentConnectionsService.updateAssessmentWaterComponents(this.diagram, createdAssessment.water, newSettings);
+    this.waterAssessmentConnectionsService.updateAssessmentWithDiagram(this.diagram, createdAssessment);
     this.diagram.assessmentId = createdAssessment.id;
     createdAssessment.diagramId = this.diagram.id;
     await this.waterDiagramService.updateWaterDiagram(this.diagram.waterDiagram);

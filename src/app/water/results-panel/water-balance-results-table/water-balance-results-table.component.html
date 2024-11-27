@@ -1,0 +1,90 @@
+<div class="card p-2">
+    <div class="card-body p-0">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr class="text-center">
+                    <th>
+                        System
+                    </th>
+                    <th>
+                        Incoming Water
+                        (Mgal)
+                    </th>
+                    <th>
+                        Outgoing Water
+                        (Mgal)
+                    </th>
+                    <th>
+                        Water Balance
+                        (Mgal)
+                    </th>
+                    <th>
+                        Percent of Incoming Water
+                    </th>
+                    <th>
+                        Percent of Total Plant Balance
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="item-row text-center" *ngFor="let systemBalance of waterBalanceResults.allSystemBalanceResults"
+                [ngClass]="{'selected-highlight': selectedSystemId === systemBalance.id}">
+                    <td>
+                        <span *ngIf="selectedSystemId === systemBalance.id"
+                            class="fa fa-chevron-right"></span>
+                        {{systemBalance.name}}
+                    </td>
+                    <td>
+                        <span *ngIf="systemBalance.incomingWater">{{systemBalance.incomingWater | number:'1.0-2'}}</span>
+                        <span *ngIf="!systemBalance.incomingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemBalance.outgoingWater">{{systemBalance.outgoingWater | number:'1.0-2'}}</span>
+                        <span *ngIf="!systemBalance.outgoingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemBalance.waterBalance">{{systemBalance.waterBalance | number:'1.0-2'}}</span>
+                        <span *ngIf="!systemBalance.waterBalance">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemBalance.percentIncomingWater">{{systemBalance.percentIncomingWater | number:'1.0-2'}}%</span>
+                        <span *ngIf="!systemBalance.percentIncomingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemBalance.percentTotalBalance">{{systemBalance.percentTotalBalance | number:'1.0-2'}}%</span>
+                        <span *ngIf="!systemBalance.percentTotalBalance">&mdash;</span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="bold text-center footer-row">
+                    <td>
+                        Annual Total
+                    </td>
+                    <td>
+                        <span *ngIf="waterBalanceResults.incomingWater">{{waterBalanceResults.incomingWater | number:'1.0-2'}}</span>
+                        <span *ngIf="!waterBalanceResults.incomingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="waterBalanceResults.outgoingWater">{{waterBalanceResults.outgoingWater | number:'1.0-2'}}</span>
+                        <span *ngIf="!waterBalanceResults.outgoingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="waterBalanceResults.waterBalance">{{waterBalanceResults.waterBalance | number:'1.0-2'}}</span>
+                        <span *ngIf="!waterBalanceResults.waterBalance">&mdash;</span>
+                    </td>
+                    <td>
+                        <span
+                            *ngIf="waterBalanceResults.percentIncomingWater">{{waterBalanceResults.percentIncomingWater | number:'1.0-2'}}%</span>
+                        <span *ngIf="!waterBalanceResults.percentIncomingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span
+                            *ngIf="waterBalanceResults.percentTotalBalance">{{waterBalanceResults.percentTotalBalance | number:'1.0-2'}}%</span>
+                        <span *ngIf="!waterBalanceResults.percentTotalBalance">&mdash;</span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

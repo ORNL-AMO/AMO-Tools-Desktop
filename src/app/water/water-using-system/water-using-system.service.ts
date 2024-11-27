@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { BoilerWater, CoolingTower, WaterSystemComponentFlows, FlowMetric, KitchenRestroom, KnownLoss, Landscaping, ProcessUse, WaterAssessment, WaterProcessComponent, WaterSystemFlows, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../shared/models/water-assessment';
+import { BoilerWater, ConnectedFlowType, CoolingTower, DiagramWaterSystemFlows, FlowMetric, KitchenRestroom, KnownLoss, Landscaping, ProcessUse, WaterAssessment, WaterProcessComponent, WaterSystemFlows, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../shared/models/water-assessment';
 import { getNewProcessComponent, ProcessFlowPart } from '../../../process-flow-types/shared-process-flow-types';
 import { BehaviorSubject } from 'rxjs';
 import { OperatingHours } from '../../shared/models/operations';
@@ -122,7 +122,16 @@ export class WaterUsingSystemService {
         heatingFuelType: 0,
         wasteWaterDischarge: undefined
       },
-      addedMotorEnergy: []
+      addedMotorEnergy: [],
+      waterFlows: {
+        sourceWater: 0,
+        recycledSourceWater: 0,
+        recirculatedWater: 0,
+        dischargeWater: 0,
+        dischargeWaterRecycled: 0,
+        knownLosses: 0,
+        waterInProduct: 0,
+      }
 
     }
 
@@ -149,45 +158,58 @@ export class WaterUsingSystemService {
     return knownLoss;
   }
 
-  getWaterUsingSystemForm(waterUsingSystem: WaterUsingSystem, waterAssessment: WaterAssessment): FormGroup {
-    let waterSystemComponentFlows: WaterSystemComponentFlows = waterAssessment.diagramComponentFlows.find(flows => flows.id === waterUsingSystem.diagramNodeId);
-
-    let sourceWater = waterUsingSystem.userDiagramFlowOverrides.sourceWater? waterUsingSystem.userDiagramFlowOverrides.sourceWater :  waterSystemComponentFlows.sourceWater.total;
-    let recycledSourceWater = waterUsingSystem.userDiagramFlowOverrides.recycledSourceWater? waterUsingSystem.userDiagramFlowOverrides.recycledSourceWater :  waterSystemComponentFlows.recycledSourceWater.total;
-    let recirculatedWater = waterUsingSystem.userDiagramFlowOverrides.recirculatedWater? waterUsingSystem.userDiagramFlowOverrides.recirculatedWater :  waterSystemComponentFlows.recirculatedWater.total;
-    let dischargeWater = waterUsingSystem.userDiagramFlowOverrides.dischargeWater? waterUsingSystem.userDiagramFlowOverrides.dischargeWater :  waterSystemComponentFlows.dischargeWater.total;
-    let dischargeWaterRecycled = waterUsingSystem.userDiagramFlowOverrides.dischargeWaterRecycled? waterUsingSystem.userDiagramFlowOverrides.dischargeWaterRecycled :  waterSystemComponentFlows.recycledSourceWater.total;
-    let knownLosses = waterUsingSystem.userDiagramFlowOverrides.knownLosses? waterUsingSystem.userDiagramFlowOverrides.knownLosses :  waterSystemComponentFlows.knownLosses.total;
-    let waterInProduct = waterUsingSystem.userDiagramFlowOverrides.waterInProduct? waterUsingSystem.userDiagramFlowOverrides.waterInProduct :  waterSystemComponentFlows.waterInProduct.total;
-
+  getWaterUsingSystemForm(waterUsingSystem: WaterUsingSystem, diagramWaterSystemFlows: DiagramWaterSystemFlows): FormGroup {
+    let waterFlows: WaterSystemFlows = waterUsingSystem.waterFlows;
+    if (diagramWaterSystemFlows) {
+      waterFlows = this.getWaterFlowsFromSource(waterUsingSystem, diagramWaterSystemFlows);
+    }
+    
     let form: FormGroup = this.formBuilder.group({
       name: [waterUsingSystem.name, Validators.required],
       systemType: [waterUsingSystem.systemType],
       hoursPerYear: [waterUsingSystem.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      sourceWater: [sourceWater, [Validators.required, Validators.min(0)]],
-      recycledSourceWater: [recycledSourceWater, [Validators.min(0)]],
-      recirculatedWater: [recirculatedWater, [Validators.min(0)]],
-      dischargeWater: [dischargeWater, [Validators.required, Validators.min(0)]],
-      dischargeWaterRecycled: [dischargeWaterRecycled, [Validators.required, Validators.min(0)]],
-      knownLosses: [knownLosses, [Validators.required, Validators.min(0)]],
-      waterInProduct: [waterInProduct, [Validators.required, Validators.min(0)]],
+      sourceWater: [waterFlows.sourceWater, [Validators.required, Validators.min(0)]],
+      recycledSourceWater: [waterFlows.recycledSourceWater, [Validators.min(0)]],
+      recirculatedWater: [waterFlows.recirculatedWater, [Validators.min(0)]],
+      dischargeWater: [waterFlows.dischargeWater, [Validators.required, Validators.min(0)]],
+      dischargeWaterRecycled: [waterFlows.dischargeWaterRecycled, [Validators.required, Validators.min(0)]],
+      knownLosses: [waterFlows.knownLosses, [Validators.required, Validators.min(0)]],
+      waterInProduct: [waterFlows.waterInProduct, [Validators.required, Validators.min(0)]],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
+  }
+
+/**
+ * Set flows from users values, or default to diagram values
+ */
+  getWaterFlowsFromSource(waterUsingSystem: WaterUsingSystem, diagramWaterSystemFlows: DiagramWaterSystemFlows): WaterSystemFlows {
+    let waterFlows: WaterSystemFlows = {
+      sourceWater: diagramWaterSystemFlows.sourceWater.total,
+      recycledSourceWater: diagramWaterSystemFlows.recycledSourceWater.total,
+      recirculatedWater: diagramWaterSystemFlows.recirculatedWater.total,
+      dischargeWater: diagramWaterSystemFlows.dischargeWater.total,
+      dischargeWaterRecycled: diagramWaterSystemFlows.dischargeWaterRecycled.total,
+      knownLosses: diagramWaterSystemFlows.knownLosses.total,
+      waterInProduct: diagramWaterSystemFlows.waterInProduct.total,
+    };
+    Object.keys(waterUsingSystem.userDiagramFlowOverrides).forEach((key: ConnectedFlowType) => {
+      waterFlows[key] = waterUsingSystem.userDiagramFlowOverrides[key]? waterUsingSystem.userDiagramFlowOverrides[key] : diagramWaterSystemFlows[key].total;
+    });
+    return waterFlows;
   }
 
   getWaterUsingSystemFromForm(form: FormGroup, waterUsingSystem: WaterUsingSystem) {
     waterUsingSystem.name = form.controls.name.value;
     waterUsingSystem.systemType = form.controls.systemType.value;
     waterUsingSystem.hoursPerYear = form.controls.hoursPerYear.value;
-    waterUsingSystem.sourceWater = form.controls.sourceWater.value;
-    waterUsingSystem.recycledSourceWater = form.controls.recycledSourceWater.value;
-    waterUsingSystem.recirculatedWater = form.controls.recirculatedWater.value;
-    waterUsingSystem.dischargeWater = form.controls.dischargeWater.value;
-    waterUsingSystem.dischargeWaterRecycled = form.controls.dischargeWaterRecycled.value;
-    waterUsingSystem.knownLosses = form.controls.knownLosses.value;
-    waterUsingSystem.waterInProduct = form.controls.waterInProduct.value;
-    waterUsingSystem.recycledSourceWater = form.controls.recycledSourceWater.value;
+    waterUsingSystem.waterFlows.sourceWater = form.controls.sourceWater.value;
+    waterUsingSystem.waterFlows.recycledSourceWater = form.controls.recycledSourceWater.value;
+    waterUsingSystem.waterFlows.recirculatedWater = form.controls.recirculatedWater.value;
+    waterUsingSystem.waterFlows.dischargeWater = form.controls.dischargeWater.value;
+    waterUsingSystem.waterFlows.dischargeWaterRecycled = form.controls.dischargeWaterRecycled.value;
+    waterUsingSystem.waterFlows.knownLosses = form.controls.knownLosses.value;
+    waterUsingSystem.waterFlows.waterInProduct = form.controls.waterInProduct.value;
     return waterUsingSystem;
   }
 
