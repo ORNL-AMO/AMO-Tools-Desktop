@@ -105,7 +105,7 @@ export class WaterSystemDataComponent {
  * Restore sum totals from diagram user data-entry
  */
   revertToDiagramValue(controlName: ConnectedFlowType) {
-    let componentFlows = this.waterAssessment.diagramComponentFlows.find(componentFlows => componentFlows.id === this.selectedWaterUsingSystem.diagramNodeId);
+    let componentFlows = this.waterAssessment.diagramWaterSystemFlows.find(componentFlows => componentFlows.id === this.selectedWaterUsingSystem.diagramNodeId);
     if (componentFlows && this.selectedWaterUsingSystem.userDiagramFlowOverrides[controlName] !== undefined) {
       this.form.get(controlName as string).setValue(componentFlows[controlName].total);
       let updatedWaterUsingSystem: WaterUsingSystem = this.waterUsingSystemService.getWaterUsingSystemFromForm(this.form, this.selectedWaterUsingSystem);

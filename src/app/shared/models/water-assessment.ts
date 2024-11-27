@@ -12,7 +12,7 @@ export interface WaterAssessment {
     wasteWaterTreatments?: WasteWaterTreatment[],
     dischargeOutlets?: DischargeOutlet[],
     knownLosses?: KnownLoss[],
-    diagramComponentFlows?: WaterSystemComponentFlows[]
+    diagramWaterSystemFlows?: DiagramWaterSystemFlows[]
     setupDone: boolean
 }
 
@@ -81,40 +81,51 @@ export interface WaterSystemResults {
 * @property recycledDischargeFlows - discharges to another WaterUsingSystem. 
 * @property knownLossFlows - discharges to known loss, flow loss (this is 'water in product')
 */
-export interface WaterSystemComponentFlows {
+export interface DiagramWaterSystemFlows {
     id: string,
     componentName: string,
     sourceWater: {
         total: number,
-        flows: ComponentFlowData[]
+        flows: FlowData[]
     },
     recycledSourceWater: {
         total: number,
-        flows: ComponentFlowData[]
+        flows: FlowData[]
     },
     recirculatedWater: {
         total: number,
-        flows: ComponentFlowData[]
+        flows: FlowData[]
     },
     dischargeWater: {
         total: number,
-        flows: ComponentFlowData[]
+        flows: FlowData[]
     },
     dischargeWaterRecycled: {
         total: number,
-        flows: ComponentFlowData[]
+        flows: FlowData[]
     },
     knownLosses: {
         total: number,
-        flows: ComponentFlowData[]
+        flows: FlowData[]
     },
     waterInProduct: {
         total: number,
-        flows: ComponentFlowData[]
+        flows: FlowData[]
     },
 }
 
-export interface ComponentFlowData {
+export interface WaterSystemFlows {
+    sourceWater: number,
+    recycledSourceWater: number,
+    recirculatedWater: number,
+    dischargeWater: number,
+    dischargeWaterRecycled: number,
+    knownLosses: number,
+    waterInProduct: number,
+}
+export type ConnectedFlowType = keyof WaterSystemFlows;
+
+export interface FlowData {
     source: string,
     target: string,
     flowValue: number,
@@ -135,28 +146,12 @@ export interface DischargeOutlet extends ProcessFlowPart {
     addedMotorEnergy: MotorEnergy[]
 }
 
-export interface WaterSystemFlows {
-    sourceWater: number,
-    recycledSourceWater: number,
-    recirculatedWater: number,
-    dischargeWater: number,
-    dischargeWaterRecycled: number,
-    knownLosses: number,
-    waterInProduct: number,
-}
-export type ConnectedFlowType = keyof WaterSystemFlows;
 
 export interface WaterUsingSystem extends ProcessFlowPart {
     isValid: boolean,
     hoursPerYear: number,
     systemType: number,
-    sourceWater: number,
-    recycledSourceWater: number,
-    recirculatedWater: number,
-    dischargeWater: number,
-    dischargeWaterRecycled: number,
-    knownLosses: number,
-    waterInProduct: number,
+    waterFlows: WaterSystemFlows;
     userDiagramFlowOverrides?: WaterSystemFlows;
     processUse?: ProcessUse,
     coolingTower?: CoolingTower,

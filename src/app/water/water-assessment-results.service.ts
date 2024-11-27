@@ -94,8 +94,8 @@ export class WaterAssessmentResultsService {
       consumptiveIrrigationLoss = 0;
     }
 
-    systemBalanceResults.incomingWater = waterSystem.sourceWater + waterSystem.recycledSourceWater;
-    systemBalanceResults.outgoingWater = waterSystem.waterInProduct + waterSystem.dischargeWater + waterSystem.dischargeWaterRecycled + consumptiveIrrigationLoss;
+    systemBalanceResults.incomingWater = waterSystem.waterFlows.sourceWater + waterSystem.waterFlows.recycledSourceWater;
+    systemBalanceResults.outgoingWater = waterSystem.waterFlows.waterInProduct + waterSystem.waterFlows.dischargeWater + waterSystem.waterFlows.dischargeWaterRecycled + consumptiveIrrigationLoss;
     systemBalanceResults.waterBalance = systemBalanceResults.incomingWater - systemBalanceResults.outgoingWater;
     systemBalanceResults.percentIncomingWater = this.getBalancePercent(systemBalanceResults.incomingWater, systemBalanceResults.waterBalance);
 

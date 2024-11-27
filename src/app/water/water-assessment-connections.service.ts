@@ -4,7 +4,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram } from '../shared/models/diagram';
-import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet, WaterTreatment, WasteWaterTreatment, WaterSystemComponentFlows, ComponentFlowData, KnownLoss } from '../shared/models/water-assessment';
+import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet, WaterTreatment, WasteWaterTreatment, DiagramWaterSystemFlows, FlowData, KnownLoss, WaterSystemFlows } from '../shared/models/water-assessment';
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
 import { Settings } from '../shared/models/settings';
 import { WaterAssessmentService } from './water-assessment.service';
@@ -58,9 +58,9 @@ export class WaterAssessmentConnectionsService {
 * @param processFlowPart Build from diagram component
 */
   updateAssessmentComponentFlows(waterDiagram: WaterDiagram, waterAssessment: WaterAssessment, settings?: Settings) {
-    let diagramComponentFlows: WaterSystemComponentFlows[] = []
+    let diagramWaterSystemFlows: DiagramWaterSystemFlows[] = []
     waterAssessment.waterUsingSystems = waterAssessment.waterUsingSystems.map((systemComponent: WaterUsingSystem) => {
-      let componentFlows: WaterSystemComponentFlows = {
+      let componentFlows: DiagramWaterSystemFlows = {
         id: systemComponent.diagramNodeId,
         componentName: systemComponent.name,
         sourceWater: {total: 0, flows: []},
@@ -73,7 +73,7 @@ export class WaterAssessmentConnectionsService {
       }
 
       waterDiagram.flowDiagramData.edges.forEach((edge: Edge<CustomEdgeData>) => {
-        let flowData: ComponentFlowData = {
+        let flowData: FlowData = {
           source: edge.source,
           target: edge.target,
           flowValue: edge.data.flowValue,
@@ -88,7 +88,7 @@ export class WaterAssessmentConnectionsService {
         } else if (isRecycledTarget) {
           componentFlows.recycledSourceWater.flows.push(flowData);
         } else if (isRecycledSource) {
-          componentFlows.recycledSourceWater.flows.push(flowData);
+          componentFlows.dischargeWaterRecycled.flows.push(flowData);
         }  else if (isKnownFlowLoss) {
           componentFlows.knownLosses.flows.push(flowData);
           componentFlows.waterInProduct.flows.push(flowData);
@@ -103,27 +103,22 @@ export class WaterAssessmentConnectionsService {
       componentFlows.recycledSourceWater.total = this.getTotalFlowValue(componentFlows.recycledSourceWater.flows);
       componentFlows.recirculatedWater.total = this.getTotalFlowValue(componentFlows.recirculatedWater.flows);
       componentFlows.dischargeWater.total = this.getTotalFlowValue(componentFlows.dischargeWater.flows);
-      componentFlows.recycledSourceWater.total = this.getTotalFlowValue(componentFlows.recycledSourceWater.flows);
+      componentFlows.dischargeWaterRecycled.total = this.getTotalFlowValue(componentFlows.dischargeWaterRecycled.flows);
       componentFlows.knownLosses.total = this.getTotalFlowValue(componentFlows.knownLosses.flows);
       componentFlows.waterInProduct.total = this.getTotalFlowValue(componentFlows.waterInProduct.flows);
-      diagramComponentFlows.push(componentFlows);
+      diagramWaterSystemFlows.push(componentFlows);
 
-      systemComponent.sourceWater = systemComponent.userDiagramFlowOverrides.sourceWater? systemComponent.userDiagramFlowOverrides.sourceWater :  componentFlows.sourceWater.total;
-      systemComponent.recycledSourceWater = systemComponent.userDiagramFlowOverrides.recycledSourceWater? systemComponent.userDiagramFlowOverrides.recycledSourceWater :  componentFlows.recycledSourceWater.total;
-      systemComponent.recirculatedWater = systemComponent.userDiagramFlowOverrides.recirculatedWater? systemComponent.userDiagramFlowOverrides.recirculatedWater :  componentFlows.recirculatedWater.total;
-      systemComponent.dischargeWater = systemComponent.userDiagramFlowOverrides.dischargeWater? systemComponent.userDiagramFlowOverrides.dischargeWater :  componentFlows.dischargeWater.total;
-      systemComponent.dischargeWaterRecycled = systemComponent.userDiagramFlowOverrides.dischargeWaterRecycled? systemComponent.userDiagramFlowOverrides.dischargeWaterRecycled :  componentFlows.recycledSourceWater.total;
-      systemComponent.knownLosses = systemComponent.userDiagramFlowOverrides.knownLosses? systemComponent.userDiagramFlowOverrides.knownLosses :  componentFlows.knownLosses.total;
-      systemComponent.waterInProduct = systemComponent.userDiagramFlowOverrides.waterInProduct? systemComponent.userDiagramFlowOverrides.waterInProduct :  componentFlows.waterInProduct.total;
+      let waterFlows: WaterSystemFlows = this.waterUsingSystemService.getWaterFlowsFromSource(systemComponent, componentFlows);
+      systemComponent.waterFlows = waterFlows
 
       return systemComponent;
     });
     
     // * store on assessment - avoid redundant data on diagram components
-    waterAssessment.diagramComponentFlows = diagramComponentFlows;
+    waterAssessment.diagramWaterSystemFlows = diagramWaterSystemFlows;
   }
 
-  getTotalFlowValue(flows: Array<ComponentFlowData>) {
+  getTotalFlowValue(flows: Array<FlowData>) {
     return flows.reduce((total, flow) => total + flow.flowValue, 0);
   }
 
