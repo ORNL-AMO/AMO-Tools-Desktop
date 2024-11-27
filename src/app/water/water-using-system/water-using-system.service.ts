@@ -122,7 +122,16 @@ export class WaterUsingSystemService {
         heatingFuelType: 0,
         wasteWaterDischarge: undefined
       },
-      addedMotorEnergy: []
+      addedMotorEnergy: [],
+      waterFlows: {
+        sourceWater: 0,
+        recycledSourceWater: 0,
+        recirculatedWater: 0,
+        dischargeWater: 0,
+        dischargeWaterRecycled: 0,
+        knownLosses: 0,
+        waterInProduct: 0,
+      }
 
     }
 
@@ -149,9 +158,11 @@ export class WaterUsingSystemService {
     return knownLoss;
   }
 
-  getWaterUsingSystemForm(waterUsingSystem: WaterUsingSystem, waterAssessment: WaterAssessment): FormGroup {
-    let diagramWaterSystemFlows: DiagramWaterSystemFlows = waterAssessment.diagramWaterSystemFlows.find(flows => flows.id === waterUsingSystem.diagramNodeId);
-    let waterFlows: WaterSystemFlows = this.getWaterFlowsFromSource(waterUsingSystem, diagramWaterSystemFlows);
+  getWaterUsingSystemForm(waterUsingSystem: WaterUsingSystem, diagramWaterSystemFlows: DiagramWaterSystemFlows): FormGroup {
+    let waterFlows: WaterSystemFlows = waterUsingSystem.waterFlows;
+    if (diagramWaterSystemFlows) {
+      waterFlows = this.getWaterFlowsFromSource(waterUsingSystem, diagramWaterSystemFlows);
+    }
     
     let form: FormGroup = this.formBuilder.group({
       name: [waterUsingSystem.name, Validators.required],
@@ -174,13 +185,13 @@ export class WaterUsingSystemService {
  */
   getWaterFlowsFromSource(waterUsingSystem: WaterUsingSystem, diagramWaterSystemFlows: DiagramWaterSystemFlows): WaterSystemFlows {
     let waterFlows: WaterSystemFlows = {
-      sourceWater: undefined,
-      recycledSourceWater: undefined,
-      recirculatedWater: undefined,
-      dischargeWater: undefined,
-      dischargeWaterRecycled: undefined,
-      knownLosses: undefined,
-      waterInProduct: undefined,
+      sourceWater: diagramWaterSystemFlows.sourceWater.total,
+      recycledSourceWater: diagramWaterSystemFlows.recycledSourceWater.total,
+      recirculatedWater: diagramWaterSystemFlows.recirculatedWater.total,
+      dischargeWater: diagramWaterSystemFlows.dischargeWater.total,
+      dischargeWaterRecycled: diagramWaterSystemFlows.dischargeWaterRecycled.total,
+      knownLosses: diagramWaterSystemFlows.knownLosses.total,
+      waterInProduct: diagramWaterSystemFlows.waterInProduct.total,
     };
     Object.keys(waterUsingSystem.userDiagramFlowOverrides).forEach((key: ConnectedFlowType) => {
       waterFlows[key] = waterUsingSystem.userDiagramFlowOverrides[key]? waterUsingSystem.userDiagramFlowOverrides[key] : diagramWaterSystemFlows[key].total;

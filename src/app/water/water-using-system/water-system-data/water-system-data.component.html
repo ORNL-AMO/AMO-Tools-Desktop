@@ -44,10 +44,19 @@
 </label>
 
 <ng-container *ngIf="!isCollapsed.waterFlows">
-    <div class="alert alert-info px-3 py-2 mt-2 mb-0">
+    <!-- <div class="alert alert-info px-3 py-2 mt-2 mb-0">
         <p class="text-left small mb-0">
             Flow values are totalled from diagram flow connections. You may enter your own data and restore diagram totals at any time.
         </p>
+    </div> -->
+    <div class="form-group my-2 px-2 d-flex justify-content-end">
+        <div class="btn-group btn-group-sm pull-right">
+            <button type="button" class="btn btn-primary btn-sm py-1 px-2 small mx-2"
+            [ngClass]="{'disabled': getIsDisabledRestoreAll()}"
+                (click)="restoreAllToDiagramValues()">
+                <span class="fa fa-refresh pr-2"></span>
+                Restore All to Diagram</button>
+        </div>
     </div>
     <app-water-system-data-modal *ngIf="showWaterSystemDataModal" [settings]="settings"
         [waterUsingSystem]="selectedWaterUsingSystem" [systemType]="selectedSystemType"
@@ -55,14 +64,14 @@
     </app-water-system-data-modal>
 </ng-container>
 
-<form [formGroup]="form" *ngIf="!isCollapsed.waterFlows">
-    <label class="group-label secondary-group pt-2">Incoming Water</label>
+<form [formGroup]="form" class="pt-0" *ngIf="!isCollapsed.waterFlows">
+    <label class="group-label secondary-group">Incoming Water</label>
     <div class="form-group" [ngClass]="{'invalid': form.controls.sourceWater.invalid}">
         <label for="sourceWater">Source Water</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
-                <a class="click-link" (click)="revertToDiagramValue('sourceWater')"
-                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.sourceWater === undefined}"><span
+                <a class="click-link" (click)="restoreToDiagramValue('sourceWater')"
+                    [ngClass]="{'disabled': getIsDisabledRestore('sourceWater')}"><span
                         class="fa fa-refresh"></span>
                 </a>
             </span>
@@ -86,8 +95,8 @@
         <label for="recycledSourceWater">Recycled Water</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
-                <a class="click-link" (click)="revertToDiagramValue('recycledSourceWater')"
-                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.recycledSourceWater === undefined}"><span
+                <a class="click-link" (click)="restoreToDiagramValue('recycledSourceWater')"
+                    [ngClass]="{'disabled': getIsDisabledRestore('recycledSourceWater')}"><span
                         class="fa fa-refresh"></span>
                 </a>
             </span>
@@ -110,8 +119,8 @@
         <label for="recirculatedWater">Recirculated Water</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
-                <a class="click-link" (click)="revertToDiagramValue('recirculatedWater')"
-                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.recirculatedWater === undefined}"><span
+                <a class="click-link" (click)="restoreToDiagramValue('recirculatedWater')"
+                    [ngClass]="{'disabled': getIsDisabledRestore('recirculatedWater')}"><span
                         class="fa fa-refresh"></span>
                 </a>
             </span>
@@ -155,8 +164,8 @@
         <label for="dischargeWater">Discharge Water</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
-                <a class="click-link" (click)="revertToDiagramValue('dischargeWater')"
-                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.dischargeWater === undefined}"><span
+                <a class="click-link" (click)="restoreToDiagramValue('dischargeWater')"
+                    [ngClass]="{'disabled': getIsDisabledRestore('dischargeWater')}"><span
                         class="fa fa-refresh"></span>
                 </a>
             </span>
@@ -180,8 +189,8 @@
         <label for="dischargeWaterRecycled">Recycled Water</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
-                <a class="click-link" (click)="revertToDiagramValue('dischargeWaterRecycled')"
-                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.dischargeWaterRecycled === undefined}"><span
+                <a class="click-link" (click)="restoreToDiagramValue('dischargeWaterRecycled')"
+                    [ngClass]="{'disabled': getIsDisabledRestore('dischargeWaterRecycled')}"><span
                         class="fa fa-refresh"></span>
                 </a>
             </span>
@@ -206,8 +215,8 @@
         <label for="knownLosses">Known Losses</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
-                <a class="click-link" (click)="revertToDiagramValue('knownLosses')"
-                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.knownLosses === undefined}"><span
+                <a class="click-link" (click)="restoreToDiagramValue('knownLosses')"
+                    [ngClass]="{'disabled': getIsDisabledRestore('knownLosses')}"><span
                         class="fa fa-refresh"></span>
                 </a>
             </span>
@@ -231,8 +240,8 @@
         <label for="waterInProduct">Water In Product</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
-                <a class="click-link" (click)="revertToDiagramValue('waterInProduct')"
-                    [ngClass]="{'disabled': selectedWaterUsingSystem.userDiagramFlowOverrides.waterInProduct === undefined}"><span
+                <a class="click-link" (click)="restoreToDiagramValue('waterInProduct')"
+                    [ngClass]="{'disabled': getIsDisabledRestore('waterInProduct')}"><span
                         class="fa fa-refresh"></span>
                 </a>
             </span>

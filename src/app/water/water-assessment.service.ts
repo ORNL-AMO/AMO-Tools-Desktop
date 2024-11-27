@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import {  DischargeOutlet, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterTreatment, WaterUsingSystem } from '../shared/models/water-assessment';
+import {  DiagramWaterSystemFlows, DischargeOutlet, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterTreatment, WaterUsingSystem } from '../shared/models/water-assessment';
 import { ProcessFlowPart, WaterProcessComponentType, getComponentNameFromType, getNewProcessComponent } from '../../process-flow-types/shared-process-flow-types';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
@@ -191,6 +191,41 @@ export class WaterAssessmentService {
     // let existingTreatmentTypes = treatments.filter(treatment => treatment.customTreatmentType !== 15).map((treatment: WaterTreatment | WasteWaterTreatment) => treatment.treatmentType);
     // treatmentOptions = treatmentOptions.filter(option => !existingTreatmentTypes.includes(option.value));
     return treatmentOptions;
+  }
+
+  getDefaultDiagramWaterFlows(): DiagramWaterSystemFlows {
+    return {
+      id: undefined,
+      componentName: undefined,
+      sourceWater: {
+        total: undefined,
+        flows: []
+      },
+      recycledSourceWater: {
+        total: undefined,
+        flows: []
+      },
+      recirculatedWater: {
+        total: undefined,
+        flows: []
+      },
+      dischargeWater: {
+        total: undefined,
+        flows: []
+      },
+      dischargeWaterRecycled: {
+        total: undefined,
+        flows: []
+      },
+      knownLosses: {
+        total: undefined,
+        flows: []
+      },
+      waterInProduct: {
+        total: undefined,
+        flows: []
+      },
+    }
   }
 
 }

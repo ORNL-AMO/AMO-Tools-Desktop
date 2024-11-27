@@ -78,7 +78,7 @@ export class WaterAssessmentResultsService {
     return waterSystemResults;
   }
 
-  getSystemSystemBalanceResults(waterSystem: WaterUsingSystem): SystemBalanceResults {
+  getSystemBalanceResults(waterSystem: WaterUsingSystem): SystemBalanceResults {
     let systemBalanceResults = {
       id: waterSystem.diagramNodeId,
       name: waterSystem.name,
@@ -117,7 +117,7 @@ export class WaterAssessmentResultsService {
     let allSystemBalanceResults = [];
     let systemTotalBalance = 0;
     waterAssessment.waterUsingSystems.forEach(system => {
-      let systemBalanceResults:  SystemBalanceResults = this.getSystemSystemBalanceResults(system);
+      let systemBalanceResults:  SystemBalanceResults = this.getSystemBalanceResults(system);
       allSystemBalanceResults.push(systemBalanceResults);
       systemTotalBalance += systemBalanceResults.waterBalance;
     });

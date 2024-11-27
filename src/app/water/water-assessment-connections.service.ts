@@ -109,7 +109,7 @@ export class WaterAssessmentConnectionsService {
       diagramWaterSystemFlows.push(componentFlows);
 
       let waterFlows: WaterSystemFlows = this.waterUsingSystemService.getWaterFlowsFromSource(systemComponent, componentFlows);
-      systemComponent.waterFlows = waterFlows
+      systemComponent.waterFlows = waterFlows;
 
       return systemComponent;
     });
@@ -143,7 +143,7 @@ export class WaterAssessmentConnectionsService {
   } 
 
 
-  updateAssessmentWaterComponents(diagram: Diagram, waterAssessment: WaterAssessment, settings?: Settings) {
+  updateAssessmentWaterComponents(diagram: Diagram, waterAssessment: WaterAssessment) {
     let intakeSources = [];
     let dischargeOutlets = [];
     let waterUsingSystems = [];
@@ -224,8 +224,5 @@ export class WaterAssessmentConnectionsService {
       await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
     }
   }
-
-
-
 
 }
