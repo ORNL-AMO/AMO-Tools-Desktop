@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import {  WeatherBinsInput, WeatherBinsService } from '../../weather-bins.service';
 import { CsvImportData } from '../../../../../shared/helper-services/csv-to-json.service';
-import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
+import { FormGroup } from '@angular/forms';
+import { WeatherBinsFormService } from '../weather-bins-form.service';
 
 @Component({
   selector: 'app-bins-form',
@@ -14,71 +15,113 @@ export class BinsFormComponent implements OnInit {
   @Input()
   settings: Settings;
 
-  inputData: WeatherBinsInput;
-  inputDataSub: Subscription;
-  importDataFromCsvSub: Subscription;
+  weatherBinsInput: WeatherBinsInput;
   importDataFromCsv: CsvImportData;
   parameterMin: number;
   parameterMax: number;
-  parameterOptions: Array<{display: string, value: string}> = [
-    {display: "Dry-bulb Temperature", value: "Dry-bulb (C)"},
-    {display: "Wet-bulb Temperature", value: "Wet Bulb (C)"},
-    {display: "Relative Humidity", value: "RHum (%)"},
-    {display: "Dew-point", value: "Dew-point (C)"},
-    {display: "Wind Speed", value: "Wspd (m/s)"},
-    {display: "Wind Direction", value: "Wdir (degrees)"},
-    {display: "Liquid Precipitation Depth", value: "Lprecip depth (mm)"},
-    {display: "Pressure", value: "Pressure (mbar)"},
-  ];
+  parameterOptions: Array<{display: string, value: string}>;
   hasIntegratedCalculatorParameter: boolean = false;
+  weatherBinsInputSub: Subscription;
+  importDataFromCsvSub: Subscription;
   integratedCalculatorSub: Subscription;
-  constructor(private weatherBinsService: WeatherBinsService, private convertUnitsService: ConvertUnitsService) { }
+  binParametersForms: FormGroup[];
+  updateBinParametersForm: any;
+
+  constructor(private weatherBinsService: WeatherBinsService,
+    private weatherBinFormService: WeatherBinsFormService) { }
 
   ngOnInit(): void {
-    this.inputDataSub = this.weatherBinsService.inputData.subscribe(val => {
-      this.inputData = val;
-      this.setParameterMinMax();
-    });
-
+    this.parameterOptions = this.weatherBinsService.getParameterOptions(this.settings);
+    
     this.importDataFromCsvSub = this.weatherBinsService.importDataFromCsv.subscribe(importData => {
       this.importDataFromCsv = importData;
-      this.setParameterMinMax();
+      this.initForm();
     });
+
+    this.weatherBinsInputSub = this.weatherBinsService.inputData.subscribe(val => {
+      this.weatherBinsInput = val;
+    });
+
+    // * avoid circular updates and unecessary renders of bin-detail forms
+    this.updateBinParametersForm = this.weatherBinFormService.updateBinParametersForm.subscribe(update => {
+      this.initForm();
+    })
 
     this.integratedCalculatorSub = this.weatherBinsService.integratedCalculator.subscribe(integratedCalculator => {
       if (integratedCalculator) {
         this.parameterOptions.filter(option => option.value === integratedCalculator.binningParameters[0]);
         this.hasIntegratedCalculatorParameter = true;
+        // todo 6657 disable parameter name field when integrated (it defalts to dry bulb)
       }
-  });
+    });
+    this.initForm();
   }
 
   ngOnDestroy() {
-    this.inputDataSub.unsubscribe();
+    this.weatherBinsInputSub.unsubscribe();
     this.importDataFromCsvSub.unsubscribe();
     this.integratedCalculatorSub.unsubscribe();
+    this.updateBinParametersForm.unsubscribe();
+  }
+  initForm() {
+    if (this.weatherBinsInput && this.importDataFromCsv) {
+      this.binParametersForms = this.weatherBinFormService.getBinParametersForms(this.weatherBinsInput, this.settings);
+    }
+  }
+  
+  getIsDisabled(parameterIndex: number, casesLength: number, binForm: FormGroup): boolean {
+    return (parameterIndex !== 0 && casesLength === 0) || (binForm && !binForm.valid);
   }
 
   focusField(str: string) {
     this.weatherBinsService.currentField.next(str);
   }
-
-  save() {
-    this.inputData.cases = [];
-    this.inputData = this.weatherBinsService.setAutoBinCases(this.inputData, this.settings);
-    this.weatherBinsService.save(this.inputData, this.settings);
+  addBinParameter() {
+    this.weatherBinFormService.addBinParameter(this.binParametersForms, this.weatherBinsInput, this.settings);
   }
 
-  deleteAllCase(){    
-    this.inputData.cases = [];
-    this.weatherBinsService.inputData.next(this.inputData)
-  }
-
-  setParameterMinMax() {
-    if (this.importDataFromCsv) {
-      let minAndMax: { min: number, max: number } = this.weatherBinsService.getParameterMinMax(this.inputData, this.inputData.autoBinParameter, this.settings);
-      this.parameterMin = Math.floor(minAndMax.min);
-      this.parameterMax = Math.ceil(minAndMax.max);
+  save(parameterIndex: number) {
+    this.weatherBinFormService.setBinParameters(this.binParametersForms, this.weatherBinsInput);
+    let parametersValid = this.weatherBinFormService.getFormValid(this.binParametersForms);
+    if (parametersValid) {
+      if (parameterIndex === 0) {
+        this.weatherBinsInput = this.weatherBinsService.setAutoBinCases(this.weatherBinsInput, this.settings);
+      } else if (parameterIndex === 1 && this.weatherBinsInput.cases.length !== 0) {
+        this.weatherBinsInput.cases.map(yParameterBin => {
+          yParameterBin.caseParameters = []
+        });
+        this.weatherBinsInput = this.weatherBinsService.setAutoSubBins(this.weatherBinsInput);
+      }
+      this.weatherBinsService.save(this.weatherBinsInput, this.settings);
     }
+  }
+
+  clearBins(parameterIndex: number){   
+    if (parameterIndex === 0) {
+      this.weatherBinsInput.cases = [];
+    } else if (parameterIndex === 1 && this.weatherBinsInput.cases.length !== 0){
+      this.weatherBinsInput.cases.map(yParameterBin => {
+        yParameterBin.caseParameters = []
+      });
+    }
+    this.weatherBinsService.save(this.weatherBinsInput, this.settings);
+  }
+
+  deleteBinParameter(index: number) {
+    this.weatherBinsInput.binParameters.splice(index, 1);
+    this.weatherBinsService.setGraphType(this.weatherBinsInput);
+    this.weatherBinsService.inputData.next(this.weatherBinsInput);
+    this.weatherBinFormService.updateBinParametersForm.next(true);
+  }
+
+  changeParameter(form: FormGroup, parameterIndex: number) {
+    this.weatherBinFormService.setParameterMinMax(form, this.weatherBinsInput, this.settings);
+    this.weatherBinFormService.setFormDefaultBounds(form, true)
+    this.weatherBinFormService.setValidators(form, true)
+    this.clearBins(parameterIndex);
+  }
+
+  setParameterMinMax(form: FormGroup) {
+   this.weatherBinFormService.setParameterMinMax(form, this.weatherBinsInput, this.settings);
   }
 }

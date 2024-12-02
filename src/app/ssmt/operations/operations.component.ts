@@ -13,6 +13,7 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from '../compare.service';
 import { Subscription } from 'rxjs';
+import { copyObject } from '../../shared/helperFunctions';
 
 
 @Component({
@@ -117,9 +118,9 @@ export class OperationsComponent implements OnInit {
     this.co2SavingsData.zipcode = co2SavingsData.zipcode,
     this.save();
   }
-
+  
   setCo2SavingsData() {
-    let co2SavingsData: Co2SavingsData = this.ssmt.co2SavingsData;
+    let co2SavingsData: Co2SavingsData = copyObject(this.ssmt.co2SavingsData);
     if (this.ssmt.co2SavingsData) {
       this.co2SavingsData = co2SavingsData;
     } else {
@@ -133,12 +134,11 @@ export class OperationsComponent implements OnInit {
     }
     this.co2SavingsData = co2SavingsData;
     let shouldSetOutputRate: boolean = false;
-    if(this.co2SavingsData.totalFuelEmissionOutputRate === undefined || !this.co2SavingsData.fuelType) {
+    if(this.co2SavingsData.totalFuelEmissionOutputRate === undefined || (this.co2SavingsData.energySource !== 'Mixed Fuels' && !this.co2SavingsData.fuelType)) {
       shouldSetOutputRate = true;
     } 
     this.setEnergySource(shouldSetOutputRate);
   }
-  
   canCompare() {
     if (this.compareService.baselineSSMT && this.compareService.modifiedSSMT && !this.inSetup) {
       return true;
@@ -191,7 +191,6 @@ export class OperationsComponent implements OnInit {
 
   initForm(){
     this.operationsForm = this.operationsService.getForm(this.ssmt, this.settings);
-    
   }
 
   disableForm() {
@@ -237,7 +236,7 @@ export class OperationsComponent implements OnInit {
     this.ssmt.operatingCosts = newData.operatingCosts;
     this.ssmt.operatingHours.hoursPerYear = newData.operatingHours.hoursPerYear;
     this.ssmt.generalSteamOperations = newData.generalSteamOperations;
-    this.ssmt.co2SavingsData = this.co2SavingsData;
+    this.ssmt.co2SavingsData = copyObject(this.co2SavingsData);
     this.emitSave.emit(this.ssmt);
     this.isCo2SavingsDifferent();
   }

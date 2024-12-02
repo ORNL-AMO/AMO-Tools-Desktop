@@ -384,11 +384,6 @@ export class VisualizeSidebarService {
     }
   }
 
-  addAxis(selectedGraphObj: GraphObj) {
-    selectedGraphObj.hasSecondYAxis = true;
-    this.saveGraphDataChange(selectedGraphObj);
-  }
-
   removeAxis(selectedGraphObj: GraphObj, shouldRender?: boolean) {
     selectedGraphObj.hasSecondYAxis = false;
     selectedGraphObj.selectedYAxisDataOptions.forEach(option => {

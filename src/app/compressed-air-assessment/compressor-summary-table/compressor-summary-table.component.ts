@@ -38,4 +38,8 @@ export class CompressorSummaryTableComponent implements OnInit {
     this.allTablesString = this.profileTable.nativeElement.innerText;
   }
 
+  getIsFinite(value: number) {
+    return isFinite(value);
+  }
+
 }

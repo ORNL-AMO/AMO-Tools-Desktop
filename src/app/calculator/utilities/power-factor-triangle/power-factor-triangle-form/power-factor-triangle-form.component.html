@@ -1,0 +1,90 @@
+<form>
+
+  <div class="form-group">
+    <label for="mode">Known Inputs</label>
+    <select id="mode" name="mode" class="form-control" [(ngModel)]="data.mode" (focus)="focusField('mode')"
+      (change)="calculate()">
+      <option *ngFor="let mode of modeList" [ngValue]="mode.value">{{mode.name}}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="apparentPower">Apparent Power</label>
+    <div class="input-group  calc-addon-group"
+      *ngIf="data.mode == 1 || data.mode == 2 || data.mode == 3 || data.mode == 4">
+      <input name="apparentPower" class="form-control" type="number" step="any" [(ngModel)]="data.apparentPower"
+        id="apparentPower" (input)="calculate()" onfocus="this.select();" (focus)="focusField('apparentPower')">
+      <span class="input-group-addon units">kVA</span>
+    </div>
+    <div class="text-center" *ngIf="data.mode == 5 || data.mode == 6 || data.mode == 7 || data.mode == 8 || data.mode == 9">
+      <span class="small bold">{{results.apparentPower | number:'1.0-2'}} kVA</span>
+    </div>
+    <span *ngIf="data.apparentPower == null" class="alert-danger pull-right small">
+      <span >Value required.</span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="realPower">Real Power</label>
+    <div class="input-group  calc-addon-group"
+      *ngIf="data.mode == 1 || data.mode == 5 || data.mode == 6 || data.mode == 7">
+      <input name="realPower" class="form-control" type="number" step="any" [(ngModel)]="data.realPower" id="realPower"
+        (input)="calculate()" onfocus="this.select();" (focus)="focusField('realPower')">
+      <span class="input-group-addon units">kW</span>
+    </div>
+    <div class="text-center" *ngIf="data.mode == 2 || data.mode == 3 || data.mode == 4 || data.mode == 8 || data.mode == 9">
+      <span class="small bold">{{results.realPower | number:'1.0-2'}} kW</span>
+    </div>
+    <span *ngIf="data.realPower == null" class="alert-danger pull-right small">
+      <span>Value required.</span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="reactivePower">Reactive Power</label>
+    <div class="input-group  calc-addon-group"
+      *ngIf="data.mode == 2 || data.mode == 5 || data.mode == 8 || data.mode == 9">
+      <input name="reactivePower" class="form-control" type="number" step="any" [(ngModel)]="data.reactivePower"
+        id="reactivePower" (input)="calculate()" onfocus="this.select();" (focus)="focusField('reactivePower')">
+      <span class="input-group-addon units">kVAr</span>
+    </div>
+    <div class="text-center" *ngIf="data.mode == 1 || data.mode == 3 || data.mode == 4 || data.mode == 6 || data.mode == 7">
+      <span class="small bold">{{results.reactivePower | number:'1.0-2'}} kVAr</span>
+    </div>
+    <span *ngIf="data.reactivePower == null" class="alert-danger pull-right small">
+      <span>Value required.</span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="phaseAngle">Phase Angle</label>
+    <div class="input-group  calc-addon-group" *ngIf="data.mode == 3 || data.mode == 6 || data.mode == 8">
+      <input name="phaseAngle" class="form-control" type="number" step="any" [(ngModel)]="data.phaseAngle"
+        id="phaseAngle" (input)="calculate()" onfocus="this.select();" (focus)="focusField('phaseAngle')">
+      <span class="input-group-addon units">deg</span>
+    </div>
+    <div class="text-center" *ngIf="data.mode == 1 || data.mode == 2 || data.mode == 4 || data.mode == 5 || data.mode == 7 || data.mode == 9">
+      <span class="small bold">{{results.phaseAngle | number:'1.0-2'}} deg</span>
+    </div>
+    <span *ngIf="data.phaseAngle == null || data.phaseAngle >= 90" class="alert-danger pull-right small">
+      <span *ngIf="data.phaseAngle == null">Value required.</span>      
+      <span *ngIf="data.phaseAngle >= 90">Value must be less than 90 deg</span>
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="powerFactor">Power Factor</label>
+    <input *ngIf="data.mode == 4 || data.mode == 7 || data.mode == 9" name="powerFactor" class="form-control"
+      type="number" step="any" [(ngModel)]="data.powerFactor" id="powerFactor" (input)="calculate()"
+      onfocus="this.select();" (focus)="focusField('powerFactor')">
+    <div class="text-center" *ngIf="data.mode == 1 || data.mode == 2 || data.mode == 3 || data.mode == 5 || data.mode == 6 || data.mode == 8">
+      <span class="small bold">{{results.powerFactor | number:'1.0-2'}}</span>
+    </div>
+    <span *ngIf="data.powerFactor == null || this.data.powerFactor > 1 || this.data.powerFactor <= 0" class="alert-danger pull-right small">
+      <span *ngIf="data.powerFactor == null">Value required.</span>
+      <span *ngIf="this.data.powerFactor > 1 || this.data.powerFactor <= 0">Value must be less than or equal to 1 OR greater than 0</span>
+    </span>
+  </div>
+
+
+</form>

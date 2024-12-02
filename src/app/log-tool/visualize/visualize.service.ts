@@ -157,6 +157,7 @@ export class VisualizeService {
       layout: this.getEmptyLayout(),
       mode: {
         modeBarButtonsToRemove: ['lasso2d'],
+        modeBarButtonsToAdd: ['toggleSpikelines'],
         // plotGlPixelRatio: 3,
         responsive: true,
         displaylogo: false,
@@ -233,7 +234,7 @@ export class VisualizeService {
         autorange: true,
         type: undefined,
         title: {
-          text: 'Y Axis 2 Label'
+          text: 'Right Y Axis Label'
         },
         side: 'right',
         overlaying: 'y',

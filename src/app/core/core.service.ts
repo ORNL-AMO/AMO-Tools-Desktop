@@ -19,6 +19,7 @@ import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService } from '../electron/electron.service';
 import { MockPumpInventory } from '../examples/mockPumpInventoryData';
+import { ApplicationInstanceDbService, ApplicationInstanceData } from '../indexedDb/application-instance-db.service';
 import { MockCompressedAirInventory } from '../examples/mockCompressedAirInventoryData';
 @Injectable()
 export class CoreService {
@@ -42,6 +43,7 @@ export class CoreService {
     private inventoryDbService: InventoryDbService,
     private electronService: ElectronService,
     private securityAndPrivacyService: SecurityAndPrivacyService,
+    private applicationDataService: ApplicationInstanceDbService,
     private directoryDbService: DirectoryDbService) {
   }
 
@@ -65,6 +67,27 @@ export class CoreService {
       inventoryItems: this.inventoryDbService.getAllInventory(),
     };
     return forkJoin(initializedAppData);
+  }
+
+  async setNewApplicationInstanceData() {
+    let newInstanceData: ApplicationInstanceData = {
+      dataBackupFilePath: undefined,
+      createVersionedBackups: false,
+      isAutomaticBackupOn: false,
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+    };
+    let applicationInstanceData = await firstValueFrom(this.applicationDataService.addWithObservable(newInstanceData));
+    this.applicationDataService.applicationInstanceData.next(applicationInstanceData);
+  }
+
+  async setApplicationInstanceData() {
+    let existingApplicationData: Array<ApplicationInstanceData> = await firstValueFrom(this.applicationDataService.getApplicationInstanceData());
+    if (existingApplicationData.length === 0) {
+      await this.setNewApplicationInstanceData();
+    } else {
+      this.applicationDataService.applicationInstanceData.next(existingApplicationData[0]);
+    }
   }
 
   async createDefaultDirectories() {

@@ -48,7 +48,7 @@ export class AddModificationComponent implements OnInit {
   }
 
   addModification() {
-    let tmpModification: Modification = {
+    let modification: Modification = {
       psat: {
         name: this.newModificationName,
       },
@@ -60,13 +60,16 @@ export class AddModificationComponent implements OnInit {
         systemBasicsNotes: ''
       },
     }
-    tmpModification.psat.inputs = (JSON.parse(JSON.stringify(this.psat.inputs)));
-    tmpModification.psat.inputs.pump_style = 11;
-    tmpModification.psat.inputs.whatIfScenario = this.isWhatIfScenario;
-    tmpModification.exploreOpportunities = (this.currentTab == 'explore-opportunities');
+    modification.psat.inputs = (JSON.parse(JSON.stringify(this.psat.inputs)));
+    if (modification.psat.inputs.co2SavingsData) {
+      modification.psat.inputs.co2SavingsData.userEnteredModificationEmissions = modification.psat.inputs.co2SavingsData.userEnteredBaselineEmissions;
+    }
+    modification.psat.inputs.pump_style = 11;
+    modification.psat.inputs.whatIfScenario = this.isWhatIfScenario;
+    modification.exploreOpportunities = (this.currentTab == 'explore-opportunities');
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
-    tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
-    this.save.emit(tmpModification)
+    modification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
+    this.save.emit(modification)
   }
 
   saveScenarioChange(isNewModWhatIfScenario: boolean){

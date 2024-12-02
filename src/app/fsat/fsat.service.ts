@@ -473,6 +473,9 @@ export class FsatService {
     tmpModification.fsat.whatIfScenario = true;
     tmpModification.fsat.fsatOperations = fsatCopy.fsatOperations;
     tmpModification.fsat.fsatOperations.cO2SavingsData = fsatCopy.fsatOperations.cO2SavingsData;
+    if (fsatCopy.fsatOperations.cO2SavingsData) {
+      tmpModification.fsat.fsatOperations.cO2SavingsData.userEnteredModificationEmissions = fsatCopy.fsatOperations.cO2SavingsData.userEnteredBaselineEmissions;
+    }
     return tmpModification;
   }
 }

@@ -81,6 +81,8 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
       let suiteDbResult = this.sqlDbApiService.insertSolidLoadChargeMaterial(this.newMaterial);
       if (suiteDbResult === true) {
         await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(this.newMaterial));
+        let materials: SolidLoadChargeMaterial[] = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+        this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }
@@ -99,6 +101,8 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
       //need to set id for idb to put updates
       this.newMaterial.id = this.idbEditMaterialId;
       await firstValueFrom(this.solidLoadMaterialDbService.updateWithObservable(this.newMaterial))
+      let materials: SolidLoadChargeMaterial[] = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+      this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials.next(materials);
       this.closeModal.emit(this.newMaterial);
     }
   }
@@ -108,6 +112,8 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
       let suiteDbResult = this.sqlDbApiService.deleteSolidLoadChargeMaterial(this.sdbEditMaterialId);
       if (suiteDbResult === true) {
         await firstValueFrom(this.solidLoadMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
+        let materials: SolidLoadChargeMaterial[] = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+        this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials.next(materials);
         this.closeModal.emit(this.newMaterial);
       }
     }

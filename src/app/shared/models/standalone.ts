@@ -1,3 +1,5 @@
+import { Mode } from "fs";
+
 export interface CombinedHeatPower {
   annualOperatingHours: number;
   annualElectricityConsumption: number;
@@ -163,6 +165,7 @@ export interface AirVelocityInput {
 
 export interface BleedTestInput {
   totalSystemVolume: number;
+  atmosphericPressure: number;
   normalOperatingPressure: number;
   testPressure: number;
   time: number;
@@ -605,6 +608,10 @@ export interface SteamReductionData {
   measurementMethod: number,
   systemEfficiency: number,
   pressure: number,
+  boilerEfficiency: number;
+  steamVariableOption: number;
+  steamVariable: number;
+  feedWaterTemperature: number;
   flowMeterMethodData: SteamFlowMeterMethodData,
   airMassFlowMethodData: SteamMassFlowMethodData,
   waterMassFlowMethodData: SteamMassFlowMethodData,
@@ -742,3 +749,33 @@ export interface TankInsulationReductionResult {
 };
 
 //===== END tank insulation reduction objects =====
+
+//===== Power Factor Triangle objects =====
+
+export interface PowerFactorTriangleInputs {
+  mode: number;
+  apparentPower: number;
+  realPower: number;
+  reactivePower: number;
+  phaseAngle: number;
+  powerFactor: number;
+}
+
+export interface PowerFactorTriangleModeInputs {
+  mode: number;
+  input1: number;
+  input2: number;
+  inputPowerFactor: number;
+}
+
+
+export interface PowerFactorTriangleOutputs {
+  apparentPower: number;
+  realPower: number;
+  reactivePower: number;
+  phaseAngle: number;
+  powerFactor: number;
+}
+
+//==== END Power Factor Triangle objects =====
+

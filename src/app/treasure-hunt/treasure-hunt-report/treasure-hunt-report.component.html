@@ -186,6 +186,12 @@
       <div class="modal-body">
         <div class="d-flex justify-content-center w-100">
           <div class="form-group d-flex mr-2">
+            <label for="pptThemeOption">PowerPoint Theme</label>
+            <select id="pptThemeOption" name="pptThemeOption" class="form-control" [(ngModel)]="pptThemeOption" (change)="changePptTheme(pptThemeOption)">
+              <option *ngFor="let theme of pptThemeOptions" [ngValue]="theme.value">{{theme.name}}</option>
+            </select>
+          </div>
+          <div class="form-group d-flex mr-2">
             <label for="fileName"> Name your file:</label>
             <input type="text" class="form-control" id="fileName" [(ngModel)]="fileName">
           </div>

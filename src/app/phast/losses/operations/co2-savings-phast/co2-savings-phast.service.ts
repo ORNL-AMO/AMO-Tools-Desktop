@@ -156,7 +156,7 @@ export class Co2SavingsPhastService {
     return obj;
   }
 
-  getCo2EmissionsResult(data: PhastCo2SavingsData, settings: Settings, isCombinedEnergy?: boolean): number {
+  getHourlyTotalEmissionsOutput(data: PhastCo2SavingsData, settings: Settings, isCombinedEnergy?: boolean): number {
     //use copy for conversion data
     let dataCpy: PhastCo2SavingsData = JSON.parse(JSON.stringify(data));
     let totalEmissionsResult: number;
@@ -164,11 +164,14 @@ export class Co2SavingsPhastService {
     if (isCombinedEnergy) {
       totalEmissionOutputRate = dataCpy.totalFuelEmissionOutputRate;
     }
+
+    // * totalEmissionOutputRate is only GJ/MMBTu in fuel
     if (settings.unitsOfMeasure != 'Imperial' && data.energyType == 'fuel') {
       let conversionHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
       totalEmissionOutputRate = totalEmissionOutputRate / conversionHelper;
-      dataCpy.electricityUse = this.convertUnitsService.value(dataCpy.electricityUse).from('GJ').to('MMBtu');
     }
+
+    dataCpy.electricityUse = this.checkConvertEnergyResultValue(dataCpy.electricityUse, settings.energyResultUnit, settings)
     
     if (totalEmissionOutputRate && dataCpy.electricityUse) {
       //set results on original obj
@@ -179,6 +182,21 @@ export class Co2SavingsPhastService {
     return totalEmissionsResult;
   }
 
+  // * phastEnergyUnit is baseEnergyUnit, resultEnergyUnit or other depending on context
+  checkConvertEnergyResultValue(energyValue: number, phastEnergyUnit: string, settings: Settings) {
+    let emissionsUnit = settings.unitsOfMeasure != 'Imperial'? 'MMBtu' : 'GJ';
+    let shouldConvert: boolean = phastEnergyUnit !== emissionsUnit;
+
+    if (shouldConvert) {
+      energyValue = this.convertUnitsService.convertValue(energyValue, phastEnergyUnit, emissionsUnit);
+    }
+    return energyValue;
+  }
+
+  /**
+ * Returns total emissions output in tons (imperial) or tonne (metric)
+ * @param phast - emissions output rates in GJ/MMBtu
+ */
   setCo2EmissionsResults(phast: PHAST, results: PhastResults, settings: Settings): PhastCo2EmissionsOutput {
     let phastCopy: PHAST = JSON.parse(JSON.stringify(phast)); 
     let resultsCopy: PhastResults = JSON.parse(JSON.stringify(results)); 
@@ -209,6 +227,8 @@ export class Co2SavingsPhastService {
           hourlyElectrodeUse = this.convertUnitsService.value(hourlyElectrodeUse).from('lb').to('kg');
         }
 
+        // Carbon is 12 grams per 1 "mol" (that is a count of atoms/molecules).  Carbon dioxide is 44 grams per mol.  there is one mole of C in each mole of CO2
+        // X kg/hr electrode used * (1 kmol C/12 kg C) * (1 kmol CO2/1 kmol C) * (44kg CO2/kmol CO2) = X*44/12 kg CO2/hr
         let hourlyElectrodeEmissionsOutput = hourlyElectrodeUse * (44/12) * 1/1000;
         co2EmissionsOutput.electrodeEmissionsOutput = hourlyElectrodeEmissionsOutput * phastCopy.operatingHours.hoursPerYear;
         let hourlyCoalCarbonEmissionsOutput = resultsCopy.hourlyEAFResults.coalCarbonUsed * phastCopy.co2SavingsData.totalCoalEmissionOutputRate * 1/1000;
@@ -228,10 +248,9 @@ export class Co2SavingsPhastService {
             fuelHeatInputTotal += exGas.totalHeatInput;
           });
         }
-
         phastCopy.co2SavingsData.electricityUse = resultsCopy.electricalHeatDelivered + resultsCopy.electricalHeaterLosses;
-        let hourlyElectricityEmissionOutput: number = this.getCo2EmissionsResult(phastCopy.co2SavingsData, settings);
-
+        let hourlyElectricityEmissionOutput: number = this.getHourlyTotalEmissionsOutput(phastCopy.co2SavingsData, settings);
+        fuelHeatInputTotal = this.checkConvertEnergyResultValue(fuelHeatInputTotal, settings.energyResultUnit, settings);
         let hourlyFuelEmissionOutput = fuelHeatInputTotal * phastCopy.co2SavingsData.totalFuelEmissionOutputRate;
         co2EmissionsOutput.hourlyTotalEmissionOutput = hourlyElectricityEmissionOutput + hourlyFuelEmissionOutput;
         // 1tonne / 1000kW or 1tonne / 1000kg
@@ -242,10 +261,20 @@ export class Co2SavingsPhastService {
       
     } else {
       phastCopy.co2SavingsData.electricityUse = results.grossHeatInput;
-      co2EmissionsOutput.hourlyTotalEmissionOutput = this.getCo2EmissionsResult(phastCopy.co2SavingsData, settings, true);   
+      co2EmissionsOutput.hourlyTotalEmissionOutput = this.getHourlyTotalEmissionsOutput(phastCopy.co2SavingsData, settings, true);   
       co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.hourlyTotalEmissionOutput * phastCopy.operatingHours.hoursPerYear;   
     }
 
+    if (settings.emissionsUnit !== 'Metric') {
+      co2EmissionsOutput.hourlyTotalEmissionOutput = co2EmissionsOutput.hourlyTotalEmissionOutput !== undefined? this.convertUnitsService.value(co2EmissionsOutput.hourlyTotalEmissionOutput).from('tonne').to('ton') : undefined;
+      co2EmissionsOutput.emissionsSavings = co2EmissionsOutput.emissionsSavings !== undefined? this.convertUnitsService.value(co2EmissionsOutput.emissionsSavings).from('tonne').to('ton') : undefined;
+      co2EmissionsOutput.totalEmissionOutput = co2EmissionsOutput.totalEmissionOutput !== undefined? this.convertUnitsService.value(co2EmissionsOutput.totalEmissionOutput).from('tonne').to('ton') : undefined;
+      co2EmissionsOutput.fuelEmissionOutput = co2EmissionsOutput.fuelEmissionOutput !== undefined? this.convertUnitsService.value(co2EmissionsOutput.fuelEmissionOutput).from('tonne').to('ton') : undefined;
+      co2EmissionsOutput.electricityEmissionOutput = co2EmissionsOutput.electricityEmissionOutput !== undefined? this.convertUnitsService.value(co2EmissionsOutput.electricityEmissionOutput).from('tonne').to('ton') : undefined;
+      co2EmissionsOutput.electrodeEmissionsOutput = co2EmissionsOutput.electrodeEmissionsOutput !== undefined? this.convertUnitsService.value(co2EmissionsOutput.electrodeEmissionsOutput).from('tonne').to('ton') : undefined;
+      co2EmissionsOutput.otherFuelEmissionsOutput = co2EmissionsOutput.otherFuelEmissionsOutput !== undefined? this.convertUnitsService.value(co2EmissionsOutput.otherFuelEmissionsOutput).from('tonne').to('ton') : undefined;
+      co2EmissionsOutput.coalCarbonEmissionsOutput = co2EmissionsOutput.coalCarbonEmissionsOutput !== undefined? this.convertUnitsService.value(co2EmissionsOutput.coalCarbonEmissionsOutput).from('tonne').to('ton') : undefined;
+    }
     return co2EmissionsOutput;
 }
 

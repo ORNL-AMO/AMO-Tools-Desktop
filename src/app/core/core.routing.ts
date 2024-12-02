@@ -114,6 +114,8 @@ import { BleedTestComponent } from '../calculator/compressed-air/bleed-test/blee
 import { DisclaimerComponent } from '../dashboard/disclaimer/disclaimer.component';
 import { PumpInventoryComponent } from '../pump-inventory/pump-inventory.component';
 import { pumpInventoryRoutes } from '../pump-inventory/pump-inventory.routing';
+import { DataAndBackupComponent } from '../dashboard/data-and-backup/data-and-backup.component';
+import { PowerFactorTriangleComponent } from '../calculator/utilities/power-factor-triangle/power-factor-triangle.component';
 import { CompressedAirInventoryComponent } from '../compressed-air-inventory/compressed-air-inventory.component';
 
 export const coreRoutes: Routes = [
@@ -141,6 +143,10 @@ export const coreRoutes: Routes = [
       {
         component: AboutPageComponent,
         path: 'about'
+      },
+      {
+        component: DataAndBackupComponent,
+        path: 'data-and-backup'
       },
       {
         component: DisclaimerComponent,
@@ -309,6 +315,10 @@ export const coreRoutes: Routes = [
           {
             path: 'power-factor-correction',
             component: PowerFactorCorrectionComponent
+          },
+          {
+            path: 'power-factor-triangle',
+            component: PowerFactorTriangleComponent
           },
           {
             path: 'pre-assessment',

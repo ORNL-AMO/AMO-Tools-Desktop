@@ -1,3 +1,7 @@
+input[type=checkbox] {
+    cursor: pointer;
+}
+
 a:not([href]):not([tabindex]).click-link {
     color: #007bff;
 }
@@ -347,7 +351,8 @@ a:not([href]):not([tabindex]).disabled-link:hover {
 
 
 
-.standalone-calculator .ng-invalid:not(form, .form-array), .flow-pressure-form .ng-invalid:not(form){
+.standalone-calculator .pressure-readings-array .ng-invalid:not(form, .form-array), 
+.flow-pressure-form .ng-invalid:not(form){
     border-left: 5px solid #a94442; /* red */
 }
 
@@ -493,4 +498,4 @@ a:not([href]):not([tabindex]).disabled-link:hover {
   .fsat .fa-pie-chart{
     font-size: large;
     color: #FFE400;
-  }    
+  }   

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
+import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, PowerFactorTriangleModeInputs, PowerFactorTriangleOutputs, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
@@ -364,7 +364,9 @@ export class CalculatorSuiteApiService {
         MassFlowMeasuredData, MassFlowNameplateData,
         steamReduction.waterMassFlowMethodData.inletTemperature, steamReduction.waterMassFlowMethodData.outletTemperature);
 
-      let OtherMethodData = new Module.SteamOtherMethodData(steamReduction.otherMethodData.consumption);
+      let OtherMethodData = new Module.SteamOffsheetMethodData(steamReduction.otherMethodData.consumption);
+
+      let steamVariableOptionThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(steamReduction.steamVariableOption)
 
       let wasmConvertedInput = new Module.SteamReductionInput(
         steamReduction.hoursPerYear,
@@ -373,7 +375,15 @@ export class CalculatorSuiteApiService {
         steamReduction.measurementMethod,
         steamReduction.systemEfficiency,
         steamReduction.pressure,
-        FlowMeterMethodData, AirMassFlowMethodData, WaterMassFlowMethodData, OtherMethodData, steamReduction.units);
+        FlowMeterMethodData, 
+        AirMassFlowMethodData, 
+        WaterMassFlowMethodData, 
+        OtherMethodData, 
+        steamReduction.units, 
+        steamReduction.boilerEfficiency, 
+        steamVariableOptionThermodynamicQuantity,
+        steamReduction.steamVariable,
+        steamReduction.feedWaterTemperature);
       inputs.push_back(wasmConvertedInput);
 
       wasmConvertedInput.delete();
@@ -465,5 +475,24 @@ export class CalculatorSuiteApiService {
     return tankInsulationReductionResult;
   }
 
-
+  powerFactorTriangle(inputObj: PowerFactorTriangleModeInputs): PowerFactorTriangleOutputs {
+    let modeEnum = this.suiteApiHelperService.getPowerFactorModeEnum(inputObj.mode);
+    inputObj.mode = modeEnum;
+    inputObj.input1 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input1);    
+    inputObj.input2 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input2);
+    inputObj.inputPowerFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.inputPowerFactor);
+    let PowerFactor = new Module.PowerFactor();
+    let rawOutput = PowerFactor.calculate(inputObj.mode, inputObj.input1, inputObj.input2, inputObj.inputPowerFactor);
+    let powerFactorTriangleOutputs: PowerFactorTriangleOutputs = {
+      apparentPower: rawOutput.apparentPower,
+      realPower: rawOutput.realPower,
+      reactivePower: rawOutput.reactivePower,
+      phaseAngle: rawOutput.phaseAngle,
+      powerFactor: rawOutput.powerFactor,
+    }
+    rawOutput.delete();
+    PowerFactor.delete();
+    return powerFactorTriangleOutputs;
+  }
+  
 }

@@ -1,0 +1,34 @@
+<div class="text-center">
+    <div *ngIf="measurFormattedError" class="mx-auto text-left mt-3 p-3">
+        <h5 class="bold h5">Troubleshooting:</h5>
+        <ul class="ml-5 pl-2" *ngIf="measurPlatform == 'web' || 'development'">
+            <!-- todo issue 6766-->
+            <!-- <li><a class="click-link" (click)="downloadBackupData()">Download Backup Data</a></li> -->
+            <li>Reload the page or try again:<a href="https://measur.ornl.gov">https://measur.ornl.gov</a></li>
+            <li>Perform a hard refresh on the page in your browser or open MEASUR from a private/incognito window</li>
+            <li>If using a VPN or Proxy, try temporarily disabling it or accessing MEASUR from a different network</li>
+        </ul>
+        <ul class="ml-5 pl-2" *ngIf="measurPlatform == 'desktop'">
+            <!-- todo issue 6766-->
+            <!-- <li><a class="click-link" (click)="downloadBackupData()">Download Backup Data</a></li> -->
+            <li>Restart the application</li>
+            <li>If the problem persists, ensure you have the latest version of MEASUR and reinstall the application</li>
+        </ul>
+    </div>
+    <div class="mx-auto text-left p-3">
+        <h5 class="bold h5">Submit a Bug Report</h5>
+        <h6 class="h6">To submit an issue, please send the information below to
+            <a id="supportEmail"
+                href="mailto:measur-help@ornl.gov?subject=AMO Tools Support Request">measur-help&#64;ornl.gov</a>
+        </h6>
+        <ul class="ml-5 pl-2">
+            <!-- if changed, update in index.html -->
+            <li>A screenshot of the error message, issue, or unexpected outcome with a detailed description of the
+                behavior. For example: I visited Data Explorer and uploaded a single xlsx. I selected a header row and
+                clicked the “Next” tab which caused an error.</li>
+            <li>The assessment, Treasure Hunt, Data Explorer data or other MEASUR exported data with .json or .gz file
+                extensions that the team may use to reproduce the issue.</li>
+            <li>MEASUR version number (v{{appVersion}}) and platform used: Web, Desktop, PWA installed from the browser</li>
+        </ul>
+    </div>
+</div>

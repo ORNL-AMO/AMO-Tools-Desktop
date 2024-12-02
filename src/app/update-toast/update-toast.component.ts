@@ -108,9 +108,6 @@ export class UpdateToastComponent implements OnInit {
     this.downloadingUpdate = true;
     this.cd.detectChanges();
     this.electronService.sendUpdateSignal();
-    setTimeout(() => {
-      this.error = true;
-    }, 120000)
   }
 
   async quitAndInstall() {

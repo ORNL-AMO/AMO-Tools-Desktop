@@ -17,7 +17,7 @@ export class FlashTankDiagramComponent implements OnInit {
   @Output('emitSelectEquipment')
   emitSelectEquipment = new EventEmitter<string>();
   @Input()
-  flashTankType: string;
+  flashTankType: 'highPressure' | 'mediumPressure';
   @Input()
   settings: Settings;
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { PowerFactorCorrectionOutputs } from '../power-factor-correction.component';
+import { PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from '../power-factor-correction.component';
 
 @Component({
   selector: 'app-power-factor-correction-results',
@@ -9,9 +9,13 @@ import { PowerFactorCorrectionOutputs } from '../power-factor-correction.compone
 export class PowerFactorCorrectionResultsComponent implements OnInit {
   @Input()
   results: PowerFactorCorrectionOutputs;
+  @Input()
+  inputs: PowerFactorCorrectionInputs;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  @ViewChild('copyChart', { static: false }) copyChart: ElementRef;
   tableString: any;
+  chartString: any;
 
   constructor() { }
 
@@ -20,5 +24,9 @@ export class PowerFactorCorrectionResultsComponent implements OnInit {
 
   updateTableString() {
     this.tableString = this.copyTable.nativeElement.innerText;
+  }
+
+  updateChartString() {
+    this.chartString = this.copyChart.nativeElement.innerText;
   }
 }

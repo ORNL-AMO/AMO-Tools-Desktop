@@ -32,8 +32,7 @@
 
       <div class="d-flex flex-column justify-content-between flex-grow-1">
         <app-graph-data-selection *ngIf="selectedSidebarTab === 'graph-data'"></app-graph-data-selection>
-        <app-graph-series-management *ngIf="selectedSidebarTab === 'other-series'"
-          [selectedGraphObj]="selectedGraphObj"></app-graph-series-management>
+        <app-graph-series-management *ngIf="selectedSidebarTab === 'other-series'"></app-graph-series-management>
         <app-graph-annotations *ngIf="selectedSidebarTab === 'annotations'"></app-graph-annotations>
         <div *ngIf="selectedSidebarTab === 'settings'" class="mt-3">
           <button [ngClass]="{'disabled': numberOfGraphs == 1}" class="btn btn-danger small px-3 w-100 my-2 mr-2" (click)="deleteGraph()">Delete Graph</button>

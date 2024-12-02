@@ -41,17 +41,18 @@ export class AddModificationComponent implements OnInit {
   addModification() {
     let ssmtCopy: SSMT = (JSON.parse(JSON.stringify(this.ssmt)));
     delete ssmtCopy.modifications;
-    let tmpModification: Modification = {
+    let modification: Modification = {
       ssmt: ssmtCopy,
       exploreOpportunities: (this.assessmentTab === 'explore-opportunities')
     };
-    tmpModification.ssmt.name = this.newModificationName;
-    if (tmpModification.ssmt.headerInput.lowPressureHeader) {
-      tmpModification.ssmt.headerInput.lowPressureHeader.useBaselineProcessSteamUsage = true;
+    modification.ssmt.co2SavingsData.userEnteredModificationEmissions = modification.ssmt.co2SavingsData.userEnteredBaselineEmissions;
+    modification.ssmt.name = this.newModificationName;
+    if (modification.ssmt.headerInput.lowPressureHeader) {
+      modification.ssmt.headerInput.lowPressureHeader.useBaselineProcessSteamUsage = true;
     }
-    if (tmpModification.ssmt.headerInput.mediumPressureHeader) {
-      tmpModification.ssmt.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage = true;
+    if (modification.ssmt.headerInput.mediumPressureHeader) {
+      modification.ssmt.headerInput.mediumPressureHeader.useBaselineProcessSteamUsage = true;
     }
-    this.save.emit(tmpModification);
+    this.save.emit(modification);
   }
 }

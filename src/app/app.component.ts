@@ -2,10 +2,11 @@ import { Component, ViewEncapsulation, ViewContainerRef, ApplicationRef } from '
 import { NavigationEnd, Router } from '@angular/router';
 import { environment } from '../environments/environment';
 import { AnalyticsService } from './shared/analytics/analytics.service';
-import { concat, first, interval } from 'rxjs';
+import { Subscription, catchError, concat, first, interval, pipe } from 'rxjs';
 import { SwUpdate } from '@angular/service-worker';
 import { ElectronService } from './electron/electron.service';
 import { PwaService } from './shared/pwa/pwa.service';
+import { AppErrorService } from './shared/errors/app-error.service';
 // declare ga as a function to access the JS code in TS
 declare let gtag: Function;
 
@@ -16,6 +17,8 @@ declare let gtag: Function;
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
+  measurFormattedErrorSubscription: Subscription;
+  showAppErrorModal: boolean;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -23,12 +26,16 @@ export class AppComponent {
     private updates: SwUpdate,
     private pwaService: PwaService,
     private electronService: ElectronService,
+    private appErrorService: AppErrorService,
     private router: Router) {
 
     if (environment.production) {
       // analytics handled through gatg() automatically manages sessions, visits, clicks, etc
       gtag('config', 'G-EEHE8GEBH4');
-      this.analyticsService.sendEvent('measur_app_open');
+
+      if (!this.electronService.isElectron) {
+        this.analyticsService.sendEvent('measur_app_open_v2');
+      }
       this.router.events.subscribe(event => {
         if (event instanceof NavigationEnd) {
           let path: string = environment.production ? event.urlAfterRedirects : 'testing-web';
@@ -55,15 +62,30 @@ export class AppComponent {
         }
       });
 
-      updates.unrecoverable.subscribe((event) => {
-        console.log(
-          'An error occurred that MEASUR cannot recover from:\n' +
-          event.reason +
-          '\n\nPlease reload the page or reinstall the application.',
-        );
+      updates.unrecoverable
+      .pipe(catchError(error => this.appErrorService.handleObservableAppError('An error occurred that MEASUR cannot recover from', error)
+      ))
+      .subscribe({
+        next: (resp) => {},
+        error: (error) => {}
       });
 
     }
   }
+
+  ngOnInit() {
+    this.measurFormattedErrorSubscription = this.appErrorService.measurFormattedError.subscribe(error => {
+      this.showAppErrorModal = (error !== undefined);
+    });
+  }
+
+  ngOnDestroy() {
+    this.measurFormattedErrorSubscription.unsubscribe();
+  }
+
+  closeErrorModal(isClosedEvent?: boolean) {
+    this.appErrorService.measurFormattedError.next(undefined);
+  }
+
 
 }

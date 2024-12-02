@@ -80,6 +80,19 @@
                         </h6>
                     </div>
 
+                    <div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
+                        <h6>
+                          Atmospheric Pressure
+                          <br>
+                          <small class="text-muted">
+                            General value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective
+                            atmospheric pressure
+                            at that location can be given.
+                            <hr>
+                          </small>
+                        </h6>
+                      </div>
+
                     <div class="my-2" *ngIf="currentField == 'testPressure'">
                         <h6>
                             Test Pressure
@@ -91,6 +104,7 @@
                                 <hr>
                             </small>
                         </h6>
+                        <img class="bleed-test-help" src="assets/images/bleedTest-help.png">
                     </div>
 
                     <div class="my-2" *ngIf="currentField == 'time'">
@@ -103,6 +117,7 @@
                                 <hr>
                             </small>
                         </h6>
+                        <img class="bleed-test-help" src="assets/images/bleedTest-help.png">
                     </div>
                 </div>
             </div>

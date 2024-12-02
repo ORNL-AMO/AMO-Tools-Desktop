@@ -30,6 +30,9 @@ export class ReportSummaryGraphsPrintComponent implements OnInit {
 
   carbonBarChartSub: Subscription;
   carbonBarChart: Array<BarChartDataItem>;
+  
+  carbonEmissionsUnit: string;
+  carbonEmissionsBarYLabel: string;
 
   settings: Settings;
   settingsSub: Subscription;
@@ -41,6 +44,8 @@ export class ReportSummaryGraphsPrintComponent implements OnInit {
     this.settingsSub = this.reportRollupService.settings.subscribe(settings => {
       this.settings = settings;
       this.reportSummaryEnergyUnit = settings.commonRollupUnit;
+      this.carbonEmissionsUnit = this.reportRollupService.getCarbonEmissionsUnit(settings);
+      this.carbonEmissionsBarYLabel = this.reportRollupService.getAnnualCarbonEmissionsLabel(this.carbonEmissionsUnit);
     });
     this.pieChartDataSub = this.reportSummaryGraphService.reportSummaryGraphData.subscribe(val => {
       this.pieChartData = val;

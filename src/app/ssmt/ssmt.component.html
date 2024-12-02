@@ -37,7 +37,7 @@
         (emitSave)="saveTurbineData($event)" [isBaseline]="true"></app-turbine>
     </div>
     <div class="assessment-panel-container scroll-item" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
-      <app-help-panel [settings]="settings" [inSetup]="true"></app-help-panel>
+      <app-help-panel [ssmt]="_ssmt" [settings]="settings" [inSetup]="true"></app-help-panel>
     </div>
   </div>
   <!--Assessment-->

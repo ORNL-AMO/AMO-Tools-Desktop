@@ -30,6 +30,7 @@ import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-ma
 import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
 import { ElectronService } from '../../../electron/electron.service';
 import { MockPumpInventory } from '../../../examples/mockPumpInventoryData';
+import { AppErrorService } from '../../../shared/errors/app-error.service';
 
 @Component({
   selector: 'app-reset-data-modal',
@@ -62,7 +63,9 @@ export class ResetDataModalComponent implements OnInit {
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private atmosphereDbService: AtmosphereDbService,
-    private inventoryDbService: InventoryDbService) { }
+    private appErrorService: AppErrorService,
+    private inventoryDbService: InventoryDbService,
+  ) { }
 
   ngOnInit() {
   }
@@ -123,16 +126,20 @@ export class ResetDataModalComponent implements OnInit {
 
   async resetSystemSettingsAccept() {
     this.deleting = true;
-    if (this.resetAll) {
-      this.resetAllData();
-    } else if (this.resetUserAssessments) {
-      this.resetAllUserAssessments();
-    } else if (this.resetAppSettings) {
-      this.resetFactorySystemSettings();
-    } else if (this.resetExampleItems) {
-      this.resetFactoryExampleItems();
-    } else if (this.resetCustomMaterials) {
-      this.resetFactoryCustomMaterials();
+    try {
+      if (this.resetAll) {
+        this.resetAllData();
+      } else if (this.resetUserAssessments) {
+        this.resetAllUserAssessments();
+      } else if (this.resetAppSettings) {
+        this.resetFactorySystemSettings();
+      } else if (this.resetExampleItems) {
+        this.resetFactoryExampleItems();
+      } else if (this.resetCustomMaterials) {
+        this.resetFactoryCustomMaterials();
+      }
+    } catch(e) {
+      this.appErrorService.handleAppError('Error restoring system settings', e)
     }
 }
 
@@ -295,6 +302,7 @@ async resetAllExampleAssessments(dirId: number) {
 }
 
   async resetAllUserAssessments() {
+    // todo 6925 aren't these all stored within the directory as well?
     let directoryDataIds: DirectoryDataIds = this.getAssessmentsAndDataIds();
     let assessments: Array<Assessment[]> = await firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(directoryDataIds.assessments));
     let settings: Array<Settings[]> = await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(directoryDataIds.settings));
@@ -321,9 +329,8 @@ async resetAllExampleAssessments(dirId: number) {
     try {
       this.dbService.deleteDatabase()
         .pipe(
-          catchError(err => {
-            throw new Error(`Database error`);
-          })
+          catchError(e => this.appErrorService.handleObservableAppError('Error Resetting Data', e
+        ))
         )
         .subscribe(
           {

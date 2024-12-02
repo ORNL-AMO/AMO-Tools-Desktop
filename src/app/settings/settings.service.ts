@@ -15,42 +15,6 @@ export class SettingsService {
 
   }
 
-  // getSettingsForm(): FormGroup {
-  //   return this.formBuilder.group({
-  //     'language': ['', Validators.required],
-  //     'currency': ['', Validators.required],
-  //     'unitsOfMeasure': ['', Validators.required],
-  //     'distanceMeasurement': [''],
-  //     'flowMeasurement': [''],
-  //     'powerMeasurement': [''],
-  //     'pressureMeasurement': [''],
-  //     'steamPressureMeasurement': [''],
-  //     'steamTemperatureMeasurement': [''],
-  //     'steamSpecificEnthalpyMeasurement': [''],
-  //     'steamSpecificEntropyMeasurement': [''],
-  //     'steamSpecificVolumeMeasurement': [''],
-  //     'steamPowerMeasurement': [''],
-  //     'steamMassFlowMeasurement': [''],
-  //     'steamVolumeMeasurement': [''],
-  //     'steamVolumeFlowMeasurement': [''],
-  //     'steamVacuumPressure': [''],
-  //     'currentMeasurement': [''],
-  //     'viscosityMeasurement': [''],
-  //     'voltageMeasurement': [''],
-  //     'energySourceType': [''],
-  //     'furnaceType': [''],
-  //     'energyResultUnit': [''],
-  //     'customFurnaceName': [''],
-  //     'temperatureMeasurement': [''],
-  //     'phastRollupUnit': [''],
-  //     'defaultPanelTab': [''],
-  //     'fuelCost': [3.99],
-  //     'steamCost': [4.69],
-  //     'electricityCost': [.066],
-  //     'densityMeasurement': ['']
-  //   });
-  // }
-
   setPumpSettingsUnitType(settings: Settings): Settings {
     let hasImperialUnits: boolean = this.checkHasPumpMatchingUnitTypes(settings, PumpImperialDefaults);
     let hasMetricUnits: boolean = this.checkHasPumpMatchingUnitTypes(settings, PumpMetricDefaults);
@@ -168,6 +132,7 @@ export class SettingsService {
       'co2SavingsEnergyType': settings.co2SavingsEnergyType || 'electricity',
       'co2SavingsEnergySource': settings.co2SavingsEnergySource || 'Natural Gas',
       'co2SavingsFuelType': settings.co2SavingsFuelType || 'Natural Gas',
+      'emissionsUnit': settings.emissionsUnit || 'Metric',
       'totalEmissionOutputRate': settings.totalEmissionOutputRate || 401.07,
       'electricityUse': settings.electricityUse || 0,
       'eGridRegion': settings.eGridRegion || '',
@@ -275,6 +240,7 @@ export class SettingsService {
       co2SavingsEnergySource: form.controls.co2SavingsEnergySource.value,
       co2SavingsFuelType: form.controls.co2SavingsFuelType.value,
       totalEmissionOutputRate: form.controls.totalEmissionOutputRate.value,
+      emissionsUnit: form.controls.emissionsUnit.value,
       totalFuelEmissionOutputRate: form.controls.totalFuelEmissionOutputRate.value,
       electricityUse: form.controls.electricityUse.value,
       eGridRegion: form.controls.eGridRegion.value,
@@ -380,6 +346,7 @@ export class SettingsService {
       co2SavingsEnergySource: settings.co2SavingsEnergySource,
       co2SavingsFuelType: settings.co2SavingsFuelType,
       totalEmissionOutputRate: settings.totalEmissionOutputRate,
+      emissionsUnit: settings.emissionsUnit,
       totalFuelEmissionOutputRate: settings.totalFuelEmissionOutputRate,
       electricityUse: settings.electricityUse,
       eGridRegion: settings.eGridRegion,
@@ -454,6 +421,8 @@ export class SettingsService {
         co2SavingsEnergySource: "Natural Gas",
         co2SavingsFuelType: "Natural Gas",
         totalEmissionOutputRate: 401.07,
+        // emissionsUnit should always default to Metric
+        emissionsUnit: 'Metric',
         totalNaturalGasEmissionOutputRate: 53.06,
         totalCoalEmissionOutputRate: 0,
         totalOtherEmissionOutputRate: 0,
@@ -508,6 +477,7 @@ export class SettingsService {
         co2SavingsFuelType: "Natural Gas",
         totalEmissionOutputRate: 401.07,
         totalNaturalGasEmissionOutputRate: 53.06,
+        emissionsUnit: 'Metric',
         totalCoalEmissionOutputRate: 0,
         totalOtherEmissionOutputRate: 0,
         coalFuelType: 'Mixed - Industrial Sector',

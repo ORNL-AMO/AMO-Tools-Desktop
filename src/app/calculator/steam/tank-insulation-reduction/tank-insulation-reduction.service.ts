@@ -264,7 +264,7 @@ export class TankInsulationReductionService {
     results.heatedOrChilled = convertedInput.heatedOrChilled;
     results = this.convertResults(results, settings);
     if (settings.unitsOfMeasure != 'Imperial') {
-      results.energyCost = results.annualHeatLoss * input.utilityCost / 1000;
+      results.energyCost = results.annualHeatLoss * input.utilityCost;
     } else {
       results.energyCost = results.annualHeatLoss * input.utilityCost;
     }
@@ -292,7 +292,7 @@ export class TankInsulationReductionService {
 
   convertResults(results: TankInsulationReductionResult, settings: Settings): TankInsulationReductionResult {
     if (results.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial') {
-      results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('MMBtu').to('MJ');
+      results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('MMBtu').to('GJ');
     } else if (results.energySourceType == 2) {
       results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('MMBtu').to('kWh');
     }
@@ -557,7 +557,7 @@ export class TankInsulationReductionService {
     if (utilityType === 2) {
       energyUnit = "kWh";
     } else {
-      if (settings.unitsOfMeasure == 'Meteric'){
+      if (settings.unitsOfMeasure == 'Metric'){
         energyUnit = "GJ"
       } else {
         energyUnit = "MMBtu"

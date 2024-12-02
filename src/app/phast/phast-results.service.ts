@@ -261,7 +261,7 @@ export class PhastResultsService {
     }
 
     if (phast.co2SavingsData) {
-      results.co2EmissionsOutput = this.co2SavingPhastService.setCo2EmissionsResults(phast, results, settings);   
+      results.co2EmissionsOutput = this.co2SavingPhastService.setCo2EmissionsResults(phast, results, settings);  
     } 
 
     // * IMPORTANT - grossHeatInput is in differing units/time depending on energy source type.

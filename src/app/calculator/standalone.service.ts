@@ -7,9 +7,10 @@ import {
   OperatingCostInput, OperatingCostOutput, AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, PipeSizes,
   PipeSizingOutput, PipeSizingInput, BagMethodInput, BagMethodOutput, CalculateUsableCapacity,
   ElectricityReductionInput, NaturalGasReductionInput, NaturalGasReductionResult, ElectricityReductionResult,
-  CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult,
-  CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, SteamReductionInput, PipeInsulationReductionInput,
-  PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput, SteamReductionOutput, SteamReductionResult
+  CompressedAirReductionInput, CompressedAirReductionResult, WaterReductionInput, WaterReductionResult, SteamReductionInput, PipeInsulationReductionInput,
+  PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput, SteamReductionOutput, SteamReductionResult,
+  PowerFactorTriangleModeInputs,
+  PowerFactorTriangleOutputs,
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -135,12 +136,13 @@ export class StandaloneService {
 
     let outputs: AirSystemCapacityOutput;
     if (settings.unitsOfMeasure === 'Metric') {
-      //convert input data
-      for (let key in inputCpy) {
-        if (key !== 'customPipes' && key !== 'receiverCapacities') {
-          inputCpy[key] = this.convertUnitsService.value(inputCpy[key]).from('m').to('ft');
-        }
-      }
+
+      inputCpy.allPipes = inputCpy.allPipes.map(pipe => {
+        pipe.pipeSize = this.convertUnitsService.value(pipe.pipeSize).from('mm').to('in');
+        pipe.pipeLength = this.convertUnitsService.value(pipe.pipeLength).from('m').to('ft');
+        pipe.customPipeSize = this.convertUnitsService.value(pipe.customPipeSize).from('mm').to('in');
+        return pipe;
+      })
       //convert input data and get custom volumes
       let customPipeVolume: number = 0;
       inputCpy.customPipes.forEach((pipe: { pipeSize: number, pipeLength: number }) => {
@@ -170,10 +172,9 @@ export class StandaloneService {
       outputs.totalCapacityOfCompressedAirSystem += customPipeVolume;
       outputs.totalPipeVolume += customPipeVolume;
     }
-    // Output airCap used to calculate leakRate
     let numerator = outputs.totalCapacityOfCompressedAirSystem * (inputCpy.leakRateInput.airPressureIn - inputCpy.leakRateInput.airPressureOut);
-    let denominator = (inputCpy.leakRateInput.dischargeTime / 60) * inputCpy.leakRateInput.atmosphericPressure;
-    outputs.leakRate = numerator / denominator;
+    let denominator = (inputCpy.leakRateInput.dischargeTime) * inputCpy.leakRateInput.atmosphericPressure;
+    outputs.leakRate = numerator * 1.25 / denominator;
 
     if (settings.unitsOfMeasure == 'Imperial') {
       outputs.totalReceiverVolume = this.convertUnitsService.value(outputs.totalReceiverVolume).from('ft3').to('gal');
@@ -361,5 +362,9 @@ export class StandaloneService {
 
   tankInsulationReduction(inputObj: TankInsulationReductionInput): TankInsulationReductionResult {
     return this.calculatorSuiteApiService.tankInsulationReduction(inputObj);
+  }
+
+  powerFactorTriangle(inputObj: PowerFactorTriangleModeInputs): PowerFactorTriangleOutputs {
+    return this.calculatorSuiteApiService.powerFactorTriangle(inputObj);
   }
 }

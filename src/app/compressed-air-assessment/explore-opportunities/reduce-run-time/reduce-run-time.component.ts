@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormGroup, UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntime } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
@@ -47,6 +47,8 @@ export class ReduceRunTimeComponent implements OnInit {
   numberPipeDecimals: string;
   intervalAmount: number;
   displayShutdownTimer: boolean;
+  fillRightHourInterval: boolean;
+
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private inventoryService: InventoryService, private reduceRunTimeService: ReduceRunTimeService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
@@ -139,6 +141,21 @@ export class ReduceRunTimeComponent implements OnInit {
         }
       }
     }
+  }
+
+  setHourIntervalState(intervalData: Array<{
+    isCompressorOn: boolean,
+    timeInterval: number,
+  }>, data: {
+    isCompressorOn: boolean,
+    timeInterval: number,
+  }, dataIndex: number) {
+    if (this.fillRightHourInterval) {
+      for (let index = dataIndex + 1; index <= intervalData.length - 1; index++) {
+        intervalData[index].isCompressorOn = data.isCompressorOn;
+      }
+    }
+    this.save(false);
   }
 
   save(isOrderChange: boolean) {

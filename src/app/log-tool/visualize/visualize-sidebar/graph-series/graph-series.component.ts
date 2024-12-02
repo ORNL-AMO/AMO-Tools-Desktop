@@ -16,7 +16,7 @@ export class GraphSeriesComponent {
   @Input()
   yAxisOptionIndex: number;
   
-  currentYAxisOption: YAxisDataOption
+  currentYAxisOption: YAxisDataOption;
   yAxisOptions: Array<{ axis: string, label: string }> = [{ axis: 'y', label: 'Left' }, { axis: 'y2', label: 'Right' }];
   
   constructor(private visualizeService: VisualizeService,
@@ -35,7 +35,9 @@ export class GraphSeriesComponent {
     this.visualizeSidebarService.saveExistingPlotChange(this.selectedGraphObj);
   }
   
-  saveUserInput() {
+  saveSeriesNameChange() {
+    // * if we trust visualizeSidebarService.setGraphYAxisData, indexes of selectedYAxisDataOptions and selectedGraphObj.data are always aligned
+    this.selectedGraphObj.data[this.yAxisOptionIndex].name = this.currentYAxisOption.seriesName;
     this.visualizeSidebarService.saveUserInputChange(this.selectedGraphObj);
   }
 

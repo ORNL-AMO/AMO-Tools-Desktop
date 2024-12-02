@@ -151,6 +151,7 @@ export class FanFieldDataComponent implements OnInit {
     let fsatOutput: FsatOutput;
     let fsatCopy: FSAT = JSON.parse(JSON.stringify(this.fsat));
     fsatCopy.fieldData = this.fanFieldDataService.getObjFromForm(this.fieldDataForm);
+    // set temporary 1 so we can get results to calculate factor? What if we set to default .988
     if(isNaN(fsatCopy.fieldData.compressibilityFactor) || fsatCopy.fieldData.compressibilityFactor == 0 || fsatCopy.fieldData.compressibilityFactor == undefined){
       fsatCopy.fieldData.compressibilityFactor = 1;
     }
@@ -165,9 +166,7 @@ export class FanFieldDataComponent implements OnInit {
     };
 
     let compressibilityFactor: number = this.fanFieldDataService.calculateCompressibilityFactor(inputs, true, fsatOutput, this.settings);
-    this.fieldDataForm.patchValue({
-      compressibilityFactor: Number(compressibilityFactor.toFixed(3))
-    });
+    this.fieldDataForm.controls.compressibilityFactor.patchValue(compressibilityFactor);
   }
 
   setInletVelocityPressure() {

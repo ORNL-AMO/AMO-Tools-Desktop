@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { Settings } from '../models/settings';
+import { copyObject } from '../helperFunctions';
 
 @Injectable()
 export class AssessmentCo2SavingsService {
@@ -112,10 +113,13 @@ export class AssessmentCo2SavingsService {
     return obj;
   }
 
+  /**
+ * Returns total emissions output in tons (imperial) or tonne (metric)
+ * @param data - data.electricityUse in MWh OR GJ/MMBtu, EXCEPT compressed air (kWh)
+ */
   getCo2EmissionsResult(data: Co2SavingsData, settings: Settings, isCombinedEnergy?: boolean): number {
-    //use copy for conversion data
-    let dataCpy: Co2SavingsData = JSON.parse(JSON.stringify(data));
-    let totalEmissionsResult: number;
+    let dataCpy: Co2SavingsData = copyObject(data);
+    let totalEmissionsOutput: number;
     let totalEmissionOutputRate: number = dataCpy.totalEmissionOutputRate;
     if (isCombinedEnergy) {
       totalEmissionOutputRate = dataCpy.totalFuelEmissionOutputRate;
@@ -127,12 +131,17 @@ export class AssessmentCo2SavingsService {
     }
     
     if (totalEmissionOutputRate && dataCpy.electricityUse) {
-      //set results on original obj
-      totalEmissionsResult = (totalEmissionOutputRate) * (dataCpy.electricityUse / 1000);
+      // * totalEmissionOutputRate (in kg CO2/MWh) * electricityUse (converted to MWH)
+      totalEmissionsOutput = totalEmissionOutputRate * (dataCpy.electricityUse / 1000);
     } else {
-      totalEmissionsResult = 0;
+      totalEmissionsOutput = 0;
     }
-    return totalEmissionsResult;
+
+    if (settings.emissionsUnit !== 'Metric') {
+      totalEmissionsOutput = this.convertUnitsService.value(totalEmissionsOutput).from('tonne').to('ton');
+    }
+    
+    return totalEmissionsOutput;
   }
 
 

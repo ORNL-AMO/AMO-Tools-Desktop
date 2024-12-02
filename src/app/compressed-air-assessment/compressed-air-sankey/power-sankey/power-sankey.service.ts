@@ -58,7 +58,8 @@ export class PowerSankeyService {
       // T4 == temp at exit with starting value of t3 
       let t4: number = t3;
 
-      let pressure3ConvertedPSIG: number = this.convertUnitsService.value(pressure3).from('psia').to('psig');
+      // * PSIG = PSIA - 14.7 (at sea level or subbing in user atmos p in this case)
+      let pressure3ConvertedPSIG: number = pressure3 - compressedAirAssessment.systemInformation.atmosphericPressure;
       if (sankeyResults.CFM_sys > 0) {
         let cp_3: number = this.getSpecificHeatConstantPressure(pressure3ConvertedPSIG, t3);
         // let cp_3: number = .2429
@@ -123,7 +124,8 @@ export class PowerSankeyService {
       pressure2 = currentCompressor.nameplateData.fullLoadOperatingPressure;
     }
 
-    let pressure1ConvertedPSIG = this.convertUnitsService.value(pressure1).from('psia').to('psig');
+    // * PSIG = PSIA - 14.7 (at sea level or subbing in user atmos p in this case)
+    let pressure1ConvertedPSIG: number = pressure1 - compressedAirAssessment.systemInformation.atmosphericPressure;
     let cp_1 = this.getSpecificHeatConstantPressure(pressure1ConvertedPSIG, temperature1);
     let cv_1 = this.getSpecificHeatConstantVolume(pressure1ConvertedPSIG, temperature1);
 
@@ -141,7 +143,8 @@ export class PowerSankeyService {
     //lowestDiffN = n corresponding to lowestDiff
     let lowestDiffN: number;
     let iterationValue: number = .001;
-    let pressure2ConvertedPSIA = this.convertUnitsService.value(pressure2).from('psig').to('psia');
+    // * PSIA = PSIG + 14.7 (at sea level or subbing in user atmos p in this case)
+    let pressure2ConvertedPSIA: number = pressure2 + compressedAirAssessment.systemInformation.atmosphericPressure;
     let dt_poly: number;
     
     // Should three change here?
@@ -241,7 +244,6 @@ export class PowerSankeyService {
   getSpecificHeatConstantPressure(pressure: number, temperature: number): number {
     let specificHeatConstantPressure: number;
     let airPropertiesLookup: AirPropertiesLookup = this.getAirPropertiesLookupData(pressure, temperature);
-    
     if (airPropertiesLookup.result) { 
       specificHeatConstantPressure = airPropertiesLookup.result.c_p;
     } else if (airPropertiesLookup.singleInterpolation) {
@@ -355,7 +357,6 @@ export class PowerSankeyService {
     let canLookupByPressure: boolean = this.checkIsTenMultiple(pressure);
     let canLookupByTemperature: boolean = this.checkIsTenMultiple(temperature);
     let interpolateBothInputs: boolean = !canLookupByPressure && !canLookupByTemperature;
-    
     if (canLookupByPressure && canLookupByTemperature) {
       airPropertiesLookup.result = this.getAirPropertiesFromLookup(pressure, temperature);
     } else if (canLookupByTemperature) {
@@ -367,19 +368,47 @@ export class PowerSankeyService {
       let temperatureHighBound = this.getHighBound(temperature);
       let pressureLowBound = this.getLowBound(pressure);
       let pressureHighBound = this.getHighBound(pressure);
+      
+      let lowRangeAirProperty: AirProperties = this.airPropertiesService.airPropertiesData.find(row => {
+        return row.pressure === pressureLowBound && row.temperature === temperatureLowBound
+      });
+      let highRangeAirProperty: AirProperties = this.airPropertiesService.airPropertiesData.find(row => row.pressure === pressureHighBound && row.temperature === temperatureLowBound);
+   
+      if(!lowRangeAirProperty){
+        lowRangeAirProperty = {
+          pressure: pressureLowBound,
+          temperature: temperatureLowBound,
+          c_p: 0,
+          c_v: 0,
+          density: 0,
+          enthalpy: 0,
+          compressibilityFactor: 0         
+        }
+      }
+      if(!highRangeAirProperty){
+        highRangeAirProperty = {
+          pressure: pressureHighBound,
+          temperature: temperatureHighBound,
+          c_p: 0,
+          c_v: 0,
+          density: 0,
+          enthalpy: 0,
+          compressibilityFactor: 0         
+        }
+      }
       airPropertiesLookup.doubleInterpolation = {
         pressure: {
           lowBound: pressureLowBound,
           highBound: pressureHighBound,
-          lowRangeAirProperty: this.airPropertiesService.airPropertiesData.find(row => row.pressure === pressureLowBound && row.temperature === temperatureLowBound),
-          highRangeAirProperty: this.airPropertiesService.airPropertiesData.find(row => row.pressure === pressureHighBound && row.temperature === temperatureLowBound),
+          lowRangeAirProperty: lowRangeAirProperty,
+          highRangeAirProperty: highRangeAirProperty,
           value: pressure
         },
         temperature: {
           lowBound: temperatureLowBound,
           highBound: temperatureHighBound,
-          lowRangeAirProperty: this.airPropertiesService.airPropertiesData.find(row => row.pressure === pressureLowBound && row.temperature === temperatureHighBound),
-          highRangeAirProperty: this.airPropertiesService.airPropertiesData.find(row => row.pressure === pressureHighBound && row.temperature === temperatureHighBound),
+          lowRangeAirProperty: lowRangeAirProperty,
+          highRangeAirProperty: highRangeAirProperty,
           value: temperature
         }
       }

@@ -96,11 +96,12 @@ export class BoilerFormComponent implements OnInit {
 
   closeBoilerEfficiencyModal() {
     this.showBoilerEfficiencyModal = false;
-    this.boilerService.modalOpen.next(this.showBoilerEfficiencyModal)
+    this.boilerService.modalOpen.next(this.showBoilerEfficiencyModal);
   }
 
   setBoilerEfficiencyAndClose(efficiency: number) {
     this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
+    this.calculate();
     this.closeBoilerEfficiencyModal();
   }
 }

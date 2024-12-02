@@ -145,7 +145,7 @@ export class SystemProfileGraphsComponent implements OnInit {
   }
 
   getMaxLineTrace(xAxisRange: Array<number>, yMaxvalue: number, name: string) {
-    if (yMaxvalue) {
+    if (yMaxvalue !== undefined) {
       let maxLineTrace = {
         x: [xAxisRange[0] - 1, xAxisRange[1] + 1],
         y: [yMaxvalue, yMaxvalue],
@@ -161,6 +161,25 @@ export class SystemProfileGraphsComponent implements OnInit {
       };
 
       return maxLineTrace;
+    }
+  }
+
+  getPeakLineTrace(xAxisRange: Array<number>, peakValue: number, name: string) {
+    if (peakValue !== undefined) {
+      let peakValueTrace = {
+        x: [xAxisRange[0] - 1, xAxisRange[1] + 1],
+        y: [peakValue, peakValue],
+        type: 'scatter',
+        mode: 'lines',
+        name: name,
+        line: {
+          dash: 'dashdot',
+          width: 3,
+          color: '#fc7f03',
+        },
+      };
+
+      return peakValueTrace;
     }
   }
 
@@ -251,19 +270,26 @@ export class SystemProfileGraphsComponent implements OnInit {
   drawSystemCapacityChart() {
     if (this.profileSummary && this.systemCapacityGraph) {
       let traceData = new Array();
+      let airflowByInterval = this.profileSummary.length > 0 && this.profileSummary[0].profileSummaryData.map(data => []);
       this.profileSummary.forEach(compressorProfile => {
         let percentOfSystem: Array<number> = [];
+        let xData = compressorProfile.profileSummaryData.map(data => {
+          return data.timeInterval
+        })
+        let yData = compressorProfile.profileSummaryData.map((data, intervalIndex) => {
+          let airflow = 0;
+          if (data.order != 0) {
+            percentOfSystem.push(data.percentSystemCapacity);
+            airflow = data.airflow;
+          } else {
+            percentOfSystem.push(0);
+          }
+          airflowByInterval[intervalIndex].push(airflow);
+          return airflow;
+        });
         let trace = {
-          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
-          y: compressorProfile.profileSummaryData.map(data => {
-            if (data.order != 0) {
-              percentOfSystem.push(data.percentSystemCapacity);
-              return data.airflow
-            } else {
-              percentOfSystem.push(0);
-              return 0;
-            }
-          }),
+          x: xData,
+          y: yData,
           customdata: percentOfSystem,
           type: 'bar',
           hovertemplate: `%{y:.3r} (%{customdata: .3r}%)`,
@@ -300,6 +326,13 @@ export class SystemProfileGraphsComponent implements OnInit {
         let maxLineTrace = this.getMaxLineTrace(xRange, this.totalFullLoadCapacity, 'Max System Capacity');
         traceData.push(maxLineTrace);
       }
+
+      let maxFlows = airflowByInterval.map(intervalAirflows => {
+        return _.sum(intervalAirflows);
+      });
+      let peakAirflow = Math.max(...maxFlows);
+      let peakTrace = this.getPeakLineTrace(xRange, peakAirflow, 'Peak Airflow');
+      traceData.push(peakTrace);
 
       this.plotlyService.newPlot(this.systemCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
         this.updateHoverPositionData(chart, 'systemCapacityGraph');
@@ -375,19 +408,25 @@ export class SystemProfileGraphsComponent implements OnInit {
   drawSystemPowerChart() {
     if (this.profileSummary && this.systemPowerGraph) {
       let traceData = new Array();
+      let powerByInterval = this.profileSummary.length > 0 && this.profileSummary[0].profileSummaryData.map(data => []);
       this.profileSummary.forEach(compressorProfile => {
         let percentOfSystem: Array<number> = [];
+        let xData = compressorProfile.profileSummaryData.map(data => { return data.timeInterval });
+        let yData = compressorProfile.profileSummaryData.map((data, intervalIndex) => {
+          let power = 0;
+          if (data.order != 0) {
+            percentOfSystem.push(data.percentSystemPower);
+            power = data.power;
+          } else {
+            percentOfSystem.push(0);
+          }
+          powerByInterval[intervalIndex].push(power);
+          return power;
+        });
+
         let trace = {
-          x: compressorProfile.profileSummaryData.map(data => { return data.timeInterval }),
-          y: compressorProfile.profileSummaryData.map(data => {
-            if (data.order != 0) {
-              percentOfSystem.push(data.percentSystemPower);
-              return data.power
-            } else {
-              percentOfSystem.push(0);
-              return 0;
-            }
-          }),
+          x: xData,
+          y: yData,
           customdata: percentOfSystem,
           type: 'bar',
           hovertemplate: `%{y:.3r} (%{customdata: .3r}%)`,
@@ -419,6 +458,13 @@ export class SystemProfileGraphsComponent implements OnInit {
         let maxLineTrace = this.getMaxLineTrace(xRange, this.totalFullLoadPower, 'Max Full Load Power');
         traceData.push(maxLineTrace);
       }
+
+      let maxPowers = powerByInterval.map(intervalPower => {
+        return _.sum(intervalPower);
+      });
+      let peakPower = Math.max(...maxPowers);
+      let peakTrace = this.getPeakLineTrace(xRange, peakPower, 'Peak Power');
+      traceData.push(peakTrace);
 
       this.plotlyService.newPlot(this.systemPowerGraph.nativeElement, traceData, layout, config).then(chart => {
         this.updateHoverPositionData(chart, 'systemPowerGraph');
@@ -473,7 +519,7 @@ export class SystemProfileGraphsComponent implements OnInit {
   getCompressorName(compressorId: string): string {
     let compressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == compressorId });
 
-    if (compressor) {
+    if (compressor && this.selectedDayType) {
       if (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
         let selection = this.compressedAirAssessment.systemInformation.trimSelections.find(selection => { return selection.dayTypeId == this.selectedDayType.dayTypeId && selection.compressorId == compressorId });
         if (selection != undefined) {

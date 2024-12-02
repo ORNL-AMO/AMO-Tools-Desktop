@@ -28,14 +28,16 @@ jobs:
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci
       - name: Build
         run: npm run build-prod-web
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: ./dist
+          if-no-files-found: error
+          retention-days: 3
 
   deploy-dev:
     if: github.ref_name == 'develop'
@@ -46,7 +48,7 @@ jobs:
       BACKUP_DIR: /opt/actions-runner/backups
     steps:
       - name: Get artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist
       - name: Deploy
@@ -55,7 +57,7 @@ jobs:
           rm -rf $APACHE_DIR/measur/*
           chgrp -R apache ./
           mv -v ./* $APACHE_DIR/measur/
-  
+
   deploy-prod:
     if: github.ref_name == 'master'
     runs-on: [self-hosted, prod]
@@ -65,7 +67,7 @@ jobs:
       BACKUP_DIR: /opt/actions-runner/backups
     steps:
       - name: Get artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: dist
       - name: Deploy

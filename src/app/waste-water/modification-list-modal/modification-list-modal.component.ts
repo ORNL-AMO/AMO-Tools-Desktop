@@ -114,6 +114,9 @@ export class ModificationListModalComponent implements OnInit {
 
   addNewModification() {
     let modification: WasteWaterData = JSON.parse(JSON.stringify(this.wasteWater.baselineData));
+    if (modification.co2SavingsData) {
+      modification.co2SavingsData.userEnteredModificationEmissions = modification.co2SavingsData.userEnteredBaselineEmissions; 
+    }
     modification.name = this.newModificationName;
     modification.id = Math.random().toString(36).substr(2, 9);
     this.wasteWater.modifications.push(modification);

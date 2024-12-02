@@ -1,6 +1,6 @@
 
 export type AnalyticsEventString = 'page_view' |
-    'measur_app_open' |
+    'measur_app_open_v2' |
     'create-assessment' |
     'view-pump-assessment' |
     'view-process-heating-assessment' |
@@ -95,6 +95,7 @@ export type AnalyticsEventString = 'page_view' |
     'calculator-UTIL-electricity-reduction' |
     'calculator-UTIL-natural-gas-reduction' |
     'calculator-UTIL-power-factor-correction' |
+    'calculator-UTIL-power-factor-triangle' |
     'calculator-UTIL-pre-assessment' |
     'calculator-UTIL-unit-converter' |
     'calculator-UTIL-weather-bins' |

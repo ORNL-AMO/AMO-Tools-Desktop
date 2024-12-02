@@ -24,11 +24,13 @@
             </select>
         </div>
         <div class="form-group pt-2">
+            <label for="xAxisLabel">X Axis Label</label>
             <textarea rows="1" class="form-control w-100" [(ngModel)]="selectedGraphObj.layout.xaxis.title.text"
                 name="xAxisLabel" id="xAxisLabel" (input)="saveUserInput()" (focus)="focusField()"
                 (blur)="focusOut()"></textarea>
         </div>
         <div class="form-group pt-2">
+            <label for="yAxisLabel">Y Axis Label</label>
             <textarea rows="1" class="form-control w-100" [(ngModel)]="selectedGraphObj.layout.yaxis.title.text"
                 name="yAxisLabel" id="yAxisLabel" (input)="saveUserInput()" (focus)="focusField()"
                 (blur)="focusOut()"></textarea>

@@ -13,6 +13,7 @@ import { UtilitiesListComponent } from './utilities-list/utilities-list.componen
 import { RouterModule } from '@angular/router';
 import { WeatherBinsModule } from './weather-bins/weather-bins.module';
 import { AltitudeCorrectionModule } from './altitude-correction/altitude-correction.module';
+import { PowerFactorTriangleModule } from './power-factor-triangle/power-factor-triangle.module';
 
 @NgModule({
     declarations: [
@@ -35,7 +36,8 @@ import { AltitudeCorrectionModule } from './altitude-correction/altitude-correct
         UnitConverterModule,
         RouterModule,
         WeatherBinsModule,
-        AltitudeCorrectionModule
+        AltitudeCorrectionModule,
+        PowerFactorTriangleModule
     ]
 })
 
