@@ -8,6 +8,7 @@ import { DashboardService } from '../dashboard.service';
 import { CoreService } from '../../core/core.service';
 import { environment } from '../../../environments/environment';
 import { ExportService } from '../../shared/import-export/export.service';
+import { SurveyModalService } from '../../shared/survey-modal/survey-modal/survey-modal.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -34,6 +35,7 @@ export class SidebarComponent implements OnInit {
   expandedXWidth: number = 300;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private exportService: ExportService,
+    private surveyModalService: SurveyModalService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private cd: ChangeDetectorRef) { }
 
@@ -92,6 +94,10 @@ export class SidebarComponent implements OnInit {
     this.dashboardService.showCreateInventory.next(undefined);
     this.showNewDropdown = false;
     this.directoryDashboardService.createFolder.next(true);
+  }
+
+  showSurvey() {
+    this.surveyModalService.showSurveyModal.next(true);
   }
 
   initSidebarView() {

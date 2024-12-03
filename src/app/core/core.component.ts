@@ -15,8 +15,9 @@ import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur
 import { PwaService } from '../shared/pwa/pwa.service';
 import { AppErrorService } from '../shared/errors/app-error.service';
 import { AutomaticBackupService } from '../electron/automatic-backup.service';
-import { ApplicationInstanceData, ApplicationInstanceDbService } from '../indexedDb/application-instance-db.service';
+import { ApplicationInstanceDbService } from '../indexedDb/application-instance-db.service';
 import { ImportBackupModalService } from '../shared/import-backup-modal/import-backup-modal.service';
+import { SurveyModalService } from '../shared/survey-modal/survey-modal/survey-modal.service';
 
 @Component({
   selector: 'app-core',
@@ -55,6 +56,10 @@ export class CoreComponent implements OnInit {
   showImportBackupModal: boolean;
   pwaUpdateAvailableSubscription: Subscription;
   applicationInstanceDataSubscription: Subscription;
+  showSurveyModalSub: Subscription;
+  showSurveyModal: boolean;
+
+  showSurveyToast: boolean;
 
   constructor(private electronService: ElectronService,
     private assessmentService: AssessmentService,
@@ -73,6 +78,7 @@ export class CoreComponent implements OnInit {
     private applicationInstanceDbService: ApplicationInstanceDbService,
     private importBackupModalService: ImportBackupModalService,
     private sqlDbApiService: SqlDbApiService,
+    private surveyModalService: SurveyModalService,
     private inventoryDbService: InventoryDbService) {
   }
 
@@ -98,9 +104,14 @@ export class CoreComponent implements OnInit {
     }
 
     this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe(applicationData => {
+      console.log('core applicationData', applicationData)
         if (!this.automaticBackupService.observableDataChanges && applicationData?.isAutomaticBackupOn) {
           this.automaticBackupService.subscribeToDataChanges();
         }
+    });
+
+    this.showSurveyModalSub = this.surveyModalService.showSurveyModal.subscribe(val => {
+      this.showSurveyModal = val;
     });
 
     this.assessmentUpdateAvailableSub = this.assessmentService.updateAvailable.subscribe(val => {
@@ -153,6 +164,7 @@ export class CoreComponent implements OnInit {
     this.showEmailMeasurDataModalSub.unsubscribe();
     this.showImportBackupModalSubscription.unsubscribe();
     this.pwaUpdateAvailableSubscription.unsubscribe();
+    this.showSurveyModalSub.unsubscribe();
   }
 
   async initData() {
@@ -198,6 +210,15 @@ export class CoreComponent implements OnInit {
         error: (error) => {}
       });
   }
+
+  hideSurveyToast() {
+    this.showSurveyToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    }
+  }  
 
   hideToast() {
     this.showToast = false;

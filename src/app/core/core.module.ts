@@ -39,6 +39,8 @@ import { BrowsingDataToastModule } from '../shared/browsing-data-toast/browsing-
 import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
 import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-data.module';
 import { ImportBackupModalModule } from '../shared/import-backup-modal/import-backup-modal.module';
+import { SurveyToastModule } from '../shared/survey-toast/survey-toast.module';
+import { SurveyModalModule } from '../shared/survey-modal/survey-modal.module';
 
 @NgModule({
   declarations: [
@@ -79,7 +81,9 @@ import { ImportBackupModalModule } from '../shared/import-backup-modal/import-ba
     BrowsingDataToastModule,
     AnalyticsModule,
     EmailMeasurDataModule,
-    ImportBackupModalModule
+    ImportBackupModalModule,
+    SurveyToastModule,
+    SurveyModalModule,
   ],
   providers: [
     AssessmentService,
