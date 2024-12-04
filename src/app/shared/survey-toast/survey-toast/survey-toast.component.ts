@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { SurveyModalService } from '../../survey-modal/survey-modal/survey-modal.service';
+import { MeasurSurveyService } from '../../measur-survey/measur-survey.service';
 
 @Component({
   selector: 'app-survey-toast',
@@ -21,12 +21,12 @@ export class SurveyToastComponent {
 
   showSurveyToast: string = 'hide';
   constructor(private cd: ChangeDetectorRef, 
-    private surveyModalService: SurveyModalService) { }
+    private measurSurveyService: MeasurSurveyService) { }
 
   ngOnInit() {}
 
   showSurvey() {
-    this.surveyModalService.showSurveyModal.next(true);
+    this.measurSurveyService.showSurveyModal.next(true);
     this.closeToast();
   }
 

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SurveyModalService } from './survey-modal.service';
+import { MeasurSurveyService } from './measur-survey.service';
 
-describe('SurveyModalService', () => {
-  let service: SurveyModalService;
+describe('MeasurSurveyService', () => {
+  let service: MeasurSurveyService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SurveyModalService);
+    service = TestBed.inject(MeasurSurveyService);
   });
 
   it('should be created', () => {

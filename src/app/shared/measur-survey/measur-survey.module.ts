@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { SurveyModalComponent } from './survey-modal/survey-modal.component';
-import { SurveyModalService } from './survey-modal/survey-modal.service';
+import { ExperienceSurveyComponent } from './experience-survey/experience-survey.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { ExperienceSurveyComponent } from './experience-survey/experience-survey.component';
+import { MeasurSurveyService } from './measur-survey.service';
 
 
 
@@ -22,7 +22,7 @@ import { ExperienceSurveyComponent } from './experience-survey/experience-survey
     ExperienceSurveyComponent
   ],
   providers: [
-    SurveyModalService
+    MeasurSurveyService
   ]
 })
-export class SurveyModalModule { }
+export class MeasurSurveyModule { }

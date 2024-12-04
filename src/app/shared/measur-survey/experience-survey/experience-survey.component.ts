@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { ApplicationInstanceDbService } from '../../../indexedDb/application-instance-db.service';
-import { SurveyModalService } from '../survey-modal/survey-modal.service';
+import { MeasurSurveyService } from '../measur-survey.service';
 
 @Component({
   selector: 'app-experience-survey',
@@ -19,14 +19,14 @@ export class ExperienceSurveyComponent {
   userSurveyForm: FormGroup;
   statusSub: Subscription;
   constructor(
-    private surveyModalService: SurveyModalService,
+    private measurSurveyService: MeasurSurveyService,
     private router: Router,
     private appInstanceDbService: ApplicationInstanceDbService, 
     private fb: FormBuilder) { }
 
   ngOnInit() {
     this.initForm();
-    this.statusSub = this.surveyModalService.completedStatus.subscribe(status => {
+    this.statusSub = this.measurSurveyService.completedStatus.subscribe(status => {
       this.completedStatus = status; 
       if (this.completedStatus === 'success' && !this.inModal) {
         this.setSurveyDone();
@@ -51,8 +51,8 @@ export class ExperienceSurveyComponent {
       hasProfilingInterest: [defaultFormData.hasProfilingInterest, []],
       questionFeedback: [defaultFormData.questionFeedback, []],
     });
-    this.surveyModalService.completedStatus.next(undefined)
-    this.surveyModalService.userSurvey.next(undefined)
+    this.measurSurveyService.completedStatus.next(undefined)
+    this.measurSurveyService.userSurvey.next(undefined)
   }
 
   async setSurveyDone() {
@@ -67,14 +67,14 @@ export class ExperienceSurveyComponent {
 
   save() {
     if (this.userSurveyForm.controls.email.valid) {
-      this.surveyModalService.userSurvey.next(this.getSurveyFromForm())
+      this.measurSurveyService.userSurvey.next(this.getSurveyFromForm())
     } else {
-      this.surveyModalService.userSurvey.next(undefined)
+      this.measurSurveyService.userSurvey.next(undefined)
     }
   }
 
   sendAnswers() {
-    this.surveyModalService.sendAnswers();
+    this.measurSurveyService.sendAnswers();
   }
 
 
@@ -105,7 +105,7 @@ export class ExperienceSurveyComponent {
   }
 
   navigateToPrivacyNotice() {
-    this.surveyModalService.showSurveyModal.next(false);
+    this.measurSurveyService.showSurveyModal.next(false);
     this.router.navigate(['/privacy']);
   }
 }

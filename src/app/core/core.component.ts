@@ -17,7 +17,7 @@ import { AppErrorService } from '../shared/errors/app-error.service';
 import { AutomaticBackupService } from '../electron/automatic-backup.service';
 import { ApplicationInstanceData, ApplicationInstanceDbService } from '../indexedDb/application-instance-db.service';
 import { ImportBackupModalService } from '../shared/import-backup-modal/import-backup-modal.service';
-import { SurveyModalService } from '../shared/survey-modal/survey-modal/survey-modal.service';
+import { MeasurSurveyService } from '../shared/measur-survey/measur-survey.service';
 
 @Component({
   selector: 'app-core',
@@ -78,7 +78,7 @@ export class CoreComponent implements OnInit {
     private applicationInstanceDbService: ApplicationInstanceDbService,
     private importBackupModalService: ImportBackupModalService,
     private sqlDbApiService: SqlDbApiService,
-    private surveyModalService: SurveyModalService,
+    private measurSurveyService: MeasurSurveyService,
     private inventoryDbService: InventoryDbService) {
   }
 
@@ -114,7 +114,7 @@ export class CoreComponent implements OnInit {
       }
     });
 
-    this.showSurveyModalSub = this.surveyModalService.showSurveyModal.subscribe(val => {
+    this.showSurveyModalSub = this.measurSurveyService.showSurveyModal.subscribe(val => {
       this.showSurveyModal = val;
       if (this.showSurveyModal) {
         this.setSurveyDone();
@@ -194,8 +194,8 @@ export class CoreComponent implements OnInit {
   }
 
   setAppOpenNotifications(applicationData: ApplicationInstanceData) {
-      let shouldShowSurveyModal = this.surveyModalService.getShouldShowSurveyModal(applicationData);
-      this.surveyModalService.showSurveyModal.next(shouldShowSurveyModal);
+      let shouldShowSurveyModal = this.measurSurveyService.getShouldShowSurveyModal(applicationData);
+      this.measurSurveyService.showSurveyModal.next(shouldShowSurveyModal);
       if (!applicationData.isSurveyToastDone) {
         setTimeout(() => {
           this.showSurveyToast = true;

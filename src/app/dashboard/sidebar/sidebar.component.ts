@@ -8,8 +8,8 @@ import { DashboardService } from '../dashboard.service';
 import { CoreService } from '../../core/core.service';
 import { environment } from '../../../environments/environment';
 import { ExportService } from '../../shared/import-export/export.service';
-import { SurveyModalService } from '../../shared/survey-modal/survey-modal/survey-modal.service';
 import { ApplicationInstanceData, ApplicationInstanceDbService } from '../../indexedDb/application-instance-db.service';
+import { MeasurSurveyService } from '../../shared/measur-survey/measur-survey.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -38,7 +38,7 @@ export class SidebarComponent implements OnInit {
   showSurveyLink: boolean;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private exportService: ExportService,
-    private surveyModalService: SurveyModalService,
+    private measurSurveyService: MeasurSurveyService,
     private applicationInstanceDbService: ApplicationInstanceDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private cd: ChangeDetectorRef) { }
@@ -106,7 +106,7 @@ export class SidebarComponent implements OnInit {
   }
 
   showSurvey() {
-    this.surveyModalService.showSurveyModal.next(true);
+    this.measurSurveyService.showSurveyModal.next(true);
   }
 
   initSidebarView() {

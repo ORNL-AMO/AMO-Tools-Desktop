@@ -1,15 +1,15 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
-import { ApplicationInstanceData } from '../../../indexedDb/application-instance-db.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
-import { MeasurUserSurvey } from '../experience-survey/experience-survey.component';
+import { environment } from '../../../environments/environment';
+import { ApplicationInstanceData } from '../../indexedDb/application-instance-db.service';
+import { MeasurUserSurvey } from './experience-survey/experience-survey.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SurveyModalService {
+export class MeasurSurveyService {
   completedStatus: BehaviorSubject<'sending' | 'success' | 'error'>;
   showSurveyModal: BehaviorSubject<boolean>;
   userSurvey: BehaviorSubject<MeasurUserSurvey>;

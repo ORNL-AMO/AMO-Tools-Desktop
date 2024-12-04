@@ -40,7 +40,7 @@ import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
 import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-data.module';
 import { ImportBackupModalModule } from '../shared/import-backup-modal/import-backup-modal.module';
 import { SurveyToastModule } from '../shared/survey-toast/survey-toast.module';
-import { SurveyModalModule } from '../shared/survey-modal/survey-modal.module';
+import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
 
 @NgModule({
   declarations: [
@@ -83,7 +83,7 @@ import { SurveyModalModule } from '../shared/survey-modal/survey-modal.module';
     EmailMeasurDataModule,
     ImportBackupModalModule,
     SurveyToastModule,
-    SurveyModalModule,
+    MeasurSurveyModule
   ],
   providers: [
     AssessmentService,
