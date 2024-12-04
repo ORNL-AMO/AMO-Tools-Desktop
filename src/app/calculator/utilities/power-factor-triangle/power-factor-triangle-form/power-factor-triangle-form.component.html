@@ -12,7 +12,7 @@
     <label for="apparentPower">Apparent Power</label>
     <div class="input-group  calc-addon-group"
       *ngIf="data.mode == 1 || data.mode == 2 || data.mode == 3 || data.mode == 4">
-      <input name="apparentPower" class="form-control" type="number" step="any" [(ngModel)]="data.apparentPower"
+      <input name="apparentPower" class="form-control" type="number" step="1" [(ngModel)]="data.apparentPower"
         id="apparentPower" (input)="calculate()" onfocus="this.select();" (focus)="focusField('apparentPower')">
       <span class="input-group-addon units">kVA</span>
     </div>
@@ -28,7 +28,7 @@
     <label for="realPower">Real Power</label>
     <div class="input-group  calc-addon-group"
       *ngIf="data.mode == 1 || data.mode == 5 || data.mode == 6 || data.mode == 7">
-      <input name="realPower" class="form-control" type="number" step="any" [(ngModel)]="data.realPower" id="realPower"
+      <input name="realPower" class="form-control" type="number" step="1" [(ngModel)]="data.realPower" id="realPower"
         (input)="calculate()" onfocus="this.select();" (focus)="focusField('realPower')">
       <span class="input-group-addon units">kW</span>
     </div>
@@ -44,7 +44,7 @@
     <label for="reactivePower">Reactive Power</label>
     <div class="input-group  calc-addon-group"
       *ngIf="data.mode == 2 || data.mode == 5 || data.mode == 8 || data.mode == 9">
-      <input name="reactivePower" class="form-control" type="number" step="any" [(ngModel)]="data.reactivePower"
+      <input name="reactivePower" class="form-control" type="number" step="1" [(ngModel)]="data.reactivePower"
         id="reactivePower" (input)="calculate()" onfocus="this.select();" (focus)="focusField('reactivePower')">
       <span class="input-group-addon units">kVAr</span>
     </div>
@@ -59,7 +59,7 @@
   <div class="form-group">
     <label for="phaseAngle">Phase Angle</label>
     <div class="input-group  calc-addon-group" *ngIf="data.mode == 3 || data.mode == 6 || data.mode == 8">
-      <input name="phaseAngle" class="form-control" type="number" step="any" [(ngModel)]="data.phaseAngle"
+      <input name="phaseAngle" class="form-control" type="number" step="1" [(ngModel)]="data.phaseAngle"
         id="phaseAngle" (input)="calculate()" onfocus="this.select();" (focus)="focusField('phaseAngle')">
       <span class="input-group-addon units">deg</span>
     </div>
@@ -75,7 +75,7 @@
   <div class="form-group">
     <label for="powerFactor">Power Factor</label>
     <input *ngIf="data.mode == 4 || data.mode == 7 || data.mode == 9" name="powerFactor" class="form-control"
-      type="number" step="any" [(ngModel)]="data.powerFactor" id="powerFactor" (input)="calculate()"
+      type="number" step="0.01" [(ngModel)]="data.powerFactor" id="powerFactor" (input)="calculate()"
       onfocus="this.select();" (focus)="focusField('powerFactor')">
     <div class="text-center" *ngIf="data.mode == 1 || data.mode == 2 || data.mode == 3 || data.mode == 5 || data.mode == 6 || data.mode == 8">
       <span class="small bold">{{results.powerFactor | number:'1.0-2'}}</span>
