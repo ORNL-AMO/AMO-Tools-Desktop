@@ -71,6 +71,8 @@ export class CoreService {
     let newInstanceData: ApplicationInstanceData = {
       dataBackupFilePath: undefined,
       createVersionedBackups: false,
+      isSurveyToastDone: false,
+      isSurveyDone: false,
       isAutomaticBackupOn: false,
       createdDate: new Date(),
       modifiedDate: new Date(),

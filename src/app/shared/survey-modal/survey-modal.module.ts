@@ -5,11 +5,12 @@ import { SurveyModalComponent } from './survey-modal/survey-modal.component';
 import { SurveyModalService } from './survey-modal/survey-modal.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ExperienceSurveyComponent } from './experience-survey/experience-survey.component';
 
 
 
 @NgModule({
-  declarations: [SurveyModalComponent],
+  declarations: [SurveyModalComponent, ExperienceSurveyComponent],
   imports: [
     CommonModule,
     ModalModule,
@@ -17,7 +18,8 @@ import { RouterModule } from '@angular/router';
     RouterModule
   ],
   exports: [
-    SurveyModalComponent
+    SurveyModalComponent,
+    ExperienceSurveyComponent
   ],
   providers: [
     SurveyModalService

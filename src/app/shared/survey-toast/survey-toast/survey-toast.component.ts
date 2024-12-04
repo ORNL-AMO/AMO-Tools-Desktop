@@ -27,7 +27,7 @@ export class SurveyToastComponent {
 
   showSurvey() {
     this.surveyModalService.showSurveyModal.next(true);
-    this.showSurveyToast = 'hide';
+    this.closeToast();
   }
 
   ngOnDestroy() {

@@ -40,7 +40,7 @@
     </div>
   </div>
   
-  <div class="sidebar-group secondary" >
+  <div class="sidebar-group secondary" *ngIf="showSurveyLink">
     <span routerLinkActive="selected" class="sidebar-item" (click)="showSurvey()">
       <span class="fa fa-info-circle mr-1 info-icon"></span>
       MEASUR Survey 

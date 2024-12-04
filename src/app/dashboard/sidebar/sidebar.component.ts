@@ -9,6 +9,7 @@ import { CoreService } from '../../core/core.service';
 import { environment } from '../../../environments/environment';
 import { ExportService } from '../../shared/import-export/export.service';
 import { SurveyModalService } from '../../shared/survey-modal/survey-modal/survey-modal.service';
+import { ApplicationInstanceData, ApplicationInstanceDbService } from '../../indexedDb/application-instance-db.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -33,9 +34,12 @@ export class SidebarComponent implements OnInit {
 
   collapsedXWidth: number = 40;
   expandedXWidth: number = 300;
+  applicationInstanceDataSubscription: Subscription;
+  showSurveyLink: boolean;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private exportService: ExportService,
     private surveyModalService: SurveyModalService,
+    private applicationInstanceDbService: ApplicationInstanceDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private cd: ChangeDetectorRef) { }
 
@@ -53,6 +57,10 @@ export class SidebarComponent implements OnInit {
     this.selectedDirectoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(val => {
       this.selectedDirectoryId = val;
     });
+    
+    this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
+      this.showSurveyLink = !applicationData?.isSurveyDone;
+    });
 
     this.collapseSidebarSub = this.dashboardService.collapseSidebar.subscribe(shouldCollapse => {
       if (shouldCollapse !== undefined) {
@@ -68,6 +76,7 @@ export class SidebarComponent implements OnInit {
     this.updateDashboardDataSub.unsubscribe();
     this.selectedDirectoryIdSub.unsubscribe();
     this.collapseSidebarSub.unsubscribe();
+    this.applicationInstanceDataSubscription.unsubscribe();
   }
 
   downloadData() {

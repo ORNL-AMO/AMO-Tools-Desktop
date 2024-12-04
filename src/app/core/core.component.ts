@@ -15,7 +15,7 @@ import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur
 import { PwaService } from '../shared/pwa/pwa.service';
 import { AppErrorService } from '../shared/errors/app-error.service';
 import { AutomaticBackupService } from '../electron/automatic-backup.service';
-import { ApplicationInstanceDbService } from '../indexedDb/application-instance-db.service';
+import { ApplicationInstanceData, ApplicationInstanceDbService } from '../indexedDb/application-instance-db.service';
 import { ImportBackupModalService } from '../shared/import-backup-modal/import-backup-modal.service';
 import { SurveyModalService } from '../shared/survey-modal/survey-modal/survey-modal.service';
 
@@ -103,15 +103,22 @@ export class CoreComponent implements OnInit {
       });
     }
 
-    this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe(applicationData => {
-      console.log('core applicationData', applicationData)
-        if (!this.automaticBackupService.observableDataChanges && applicationData?.isAutomaticBackupOn) {
+    this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
+      if (applicationData) {
+        if (!applicationData.isSurveyDone) {
+          this.setAppOpenNotifications(applicationData);
+        }
+        if (!this.automaticBackupService.observableDataChanges && applicationData.isAutomaticBackupOn) {
           this.automaticBackupService.subscribeToDataChanges();
         }
+      }
     });
 
     this.showSurveyModalSub = this.surveyModalService.showSurveyModal.subscribe(val => {
       this.showSurveyModal = val;
+      if (this.showSurveyModal) {
+        this.setSurveyDone();
+      }
     });
 
     this.assessmentUpdateAvailableSub = this.assessmentService.updateAvailable.subscribe(val => {
@@ -186,6 +193,16 @@ export class CoreComponent implements OnInit {
 
   }
 
+  setAppOpenNotifications(applicationData: ApplicationInstanceData) {
+      let shouldShowSurveyModal = this.surveyModalService.getShouldShowSurveyModal(applicationData);
+      this.surveyModalService.showSurveyModal.next(shouldShowSurveyModal);
+      if (!applicationData.isSurveyToastDone) {
+        setTimeout(() => {
+          this.showSurveyToast = true;
+        }, 2000);
+      }
+  }
+
   async getIsFirstStartup() {
     let existingDirectories: number = await firstValueFrom(this.directoryDbService.count());
     return existingDirectories === 0;
@@ -211,14 +228,25 @@ export class CoreComponent implements OnInit {
       });
   }
 
-  hideSurveyToast() {
-    this.showSurveyToast = false;
+  async hideSurveyToast() {
+    this.setSurveyToastDone();
     this.toastData = {
       title: '',
       body: '',
       setTimeoutVal: undefined
     }
   }  
+
+  async setSurveyToastDone() {
+    this.showSurveyToast = false;
+    let appData = await firstValueFrom(this.applicationInstanceDbService.setSurveyToastDone());
+    this.applicationInstanceDbService.applicationInstanceData.next(appData);
+  }
+
+  async setSurveyDone() {
+    let appData = await firstValueFrom(this.applicationInstanceDbService.setSurveyDone());
+    this.applicationInstanceDbService.applicationInstanceData.next(appData);
+  }
 
   hideToast() {
     this.showToast = false;

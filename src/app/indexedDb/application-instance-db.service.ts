@@ -27,11 +27,26 @@ export class ApplicationInstanceDbService {
     return this.dbService.getAll(this.storeName);
   }
 
+  setSurveyDone() {
+    let applicationInstanceData = this.applicationInstanceData.getValue();
+    applicationInstanceData.isSurveyDone = true;
+    applicationInstanceData.isSurveyToastDone = true;
+    return this.updateWithObservable(applicationInstanceData);
+  }
+  
+  setSurveyToastDone() {
+    let applicationInstanceData = this.applicationInstanceData.getValue();
+    applicationInstanceData.isSurveyToastDone = true;
+    return this.updateWithObservable(applicationInstanceData);
+  }
+
 }
 
 export interface ApplicationInstanceData {
   dataBackupFilePath: string,
   isAutomaticBackupOn: boolean,
+  isSurveyToastDone: boolean,
+  isSurveyDone: boolean,
   createVersionedBackups: boolean,
   createdDate: Date,
   modifiedDate: Date,
