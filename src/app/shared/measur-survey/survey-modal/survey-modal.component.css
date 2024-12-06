@@ -1,0 +1,91 @@
+.btn{
+    padding: 12px;
+}
+
+.btn-primary {
+    color: white;
+    background: #117A65;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    color: white;
+    background: #447f73 !important;
+}
+
+
+.survey-textarea {
+    font-size: 14px;
+}
+
+.modal-dialog.modal-md {
+    top: 0 !important;
+    width: 50%;
+    min-width: 375px;
+    max-width: 700px;
+}
+
+
+.card-text-small {
+    font-size: 14px;
+}
+
+.active {
+    background-color: #117A65 !important;
+}
+
+.text-input {
+    max-width: 300px;
+}
+
+label {
+    font-size: 16px;
+}
+
+input[type="checkbox"] {
+    transform: scale(1.25);
+}
+
+.hint {
+    font-size: 14px;
+}
+
+.card-body {
+    max-height: 700px;
+    overflow-y: scroll;
+}
+
+.btn.btn-secondary.btn-sm.toggle-btn {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+.alert-danger {
+    width: unset;
+  }
+  
+  .spinner-overlay {
+    height: 125px;
+    z-index: 999;
+    background: white;
+  }
+  
+  .spinner > div {
+    width: 25px;
+    height: 25px;
+    background-color: #117A65;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  }
+  
+  .card-header {
+    background: #117A65;
+    color: white;
+    font-size: 20px;
+    padding: 1rem !important;
+  }
+  .close {
+    color: white;
+  }

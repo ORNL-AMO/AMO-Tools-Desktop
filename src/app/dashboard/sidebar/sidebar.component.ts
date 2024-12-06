@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
-import { CoreService } from '../../core/core.service';
 import { environment } from '../../../environments/environment';
 import { ExportService } from '../../shared/import-export/export.service';
+import { ApplicationInstanceData, ApplicationInstanceDbService } from '../../indexedDb/application-instance-db.service';
+import { MeasurSurveyService } from '../../shared/measur-survey/measur-survey.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -32,8 +33,12 @@ export class SidebarComponent implements OnInit {
 
   collapsedXWidth: number = 40;
   expandedXWidth: number = 300;
+  applicationInstanceDataSubscription: Subscription;
+  showSurveyLink: boolean;
   constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
     private exportService: ExportService,
+    private measurSurveyService: MeasurSurveyService,
+    private applicationInstanceDbService: ApplicationInstanceDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private cd: ChangeDetectorRef) { }
 
@@ -51,6 +56,10 @@ export class SidebarComponent implements OnInit {
     this.selectedDirectoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(val => {
       this.selectedDirectoryId = val;
     });
+    
+    this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
+      this.showSurveyLink = !applicationData?.isSurveyDone;
+    });
 
     this.collapseSidebarSub = this.dashboardService.collapseSidebar.subscribe(shouldCollapse => {
       if (shouldCollapse !== undefined) {
@@ -66,6 +75,7 @@ export class SidebarComponent implements OnInit {
     this.updateDashboardDataSub.unsubscribe();
     this.selectedDirectoryIdSub.unsubscribe();
     this.collapseSidebarSub.unsubscribe();
+    this.applicationInstanceDataSubscription.unsubscribe();
   }
 
   downloadData() {
@@ -92,6 +102,10 @@ export class SidebarComponent implements OnInit {
     this.dashboardService.showCreateInventory.next(undefined);
     this.showNewDropdown = false;
     this.directoryDashboardService.createFolder.next(true);
+  }
+
+  showSurvey() {
+    this.measurSurveyService.showSurveyModal.next(true);
   }
 
   initSidebarView() {

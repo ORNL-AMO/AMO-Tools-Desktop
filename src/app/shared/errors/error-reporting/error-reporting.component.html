@@ -16,7 +16,7 @@
         </ul>
     </div>
     <div class="mx-auto text-left p-3">
-        <h5 class="bold h5">Submit a Bug Report</h5>
+        <h5 *ngIf="inModal" class="bold h5">Submit a Bug Report</h5>
         <h6 class="h6">To submit an issue, please send the information below to
             <a id="supportEmail"
                 href="mailto:measur-help@ornl.gov?subject=AMO Tools Support Request">measur-help&#64;ornl.gov</a>

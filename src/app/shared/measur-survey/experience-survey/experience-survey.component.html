@@ -1,0 +1,153 @@
+<div [ngClass]="{'card-body': inModal}">
+  <div *ngIf="completedStatus === 'error'" class="alert-danger small mx-2 px-3 py-2">
+    <span>An error has occured. Please verify your network connection and try again.</span>
+  </div>
+  <ng-container *ngIf="completedStatus !== 'success' && completedStatus !== 'sending'">
+    <p class="px-2 mb-0" [ngClass]="{'card-text-small': inModal}">
+      The MEASUR team is committed to continuously improving and delivering a high-quality tool for our users. 
+      To help us achieve this, we would greatly appreciate your support in sharing a bit of information about yourself. 
+      Since we don't currently collect any user data, your voluntary input will provide us with valuable insights that will ensure 
+      continued support for the tool and guide future updates and improvements. Rest assured, <span class="bold">all responses are optional</span>, and 
+      the information you provide will only be used for the purpose of this survey. <span class="bold">Your input is incredibly valuable to us</span>.
+      <br>
+      <a class="click-link d-block mt-1" (click)="navigateToPrivacyNotice()">Go to privacy notice</a>
+    </p>
+    <div class="banner-thanks mt-3 mb-2">Thank you for being a part of the MEASUR community!</div>
+
+    <hr>
+    <form [formGroup]="userSurveyForm" class="mb-3 pl-3 pr-5">
+      <div class="form-group text-input d-flex flex-column w-100 mb-3">
+        <label class="bold mb-1" for="email">Email</label>
+        <div class="input-group">
+          <input (input)="save()" type="text" formControlName="email" name="email" class="form-control" 
+            id="email" />
+        </div>
+        <div class="input-group">
+          <span class="alert-danger w-100 pull-right small py-1 px-2"
+            *ngIf="userSurveyForm.controls.email.invalid && !userSurveyForm.controls.email.pristine">
+            <span *ngIf="userSurveyForm.controls.email.errors.email">Must be a valid email address</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group d-flex text-input flex-column w-100 mb-3">
+        <label class="bold mb-1" for="contactName">Contact Name</label>
+        <div class="input-group">
+          <input (input)="save()" type="text" formControlName="contactName" name="contactName" class="form-control"
+             id="contactName" />
+        </div>
+      </div>
+
+      <div class="form-group d-flex text-input flex-column w-100 mb-3">
+        <label class="bold mb-1" for="companyName">Company Name</label>
+        <div class="input-group">
+          <input (input)="save()" type="text" formControlName="companyName" name="companyName" class="form-control"
+             id="companyName" />
+        </div>
+      </div>
+      
+
+      <div class="form-group pb-2 mb-3">
+        <label class="small w-100 mb-1 bold" for="usefulRating">Have you found MEASUR useful? </label>
+        <div class="hint">(With 1 meaning "not very useful" and 5 meaning "very useful")</div>
+        <div class="btn-group btn-group-sm align-self-center my-2">
+          <button type="button" id="{{'usefulRating_1'}}"
+            class="btn btn-secondary btn-sm toggle-btn py-1 px-2" (click)="setRatingValue('usefulRating', 1)"
+            [ngClass]="{'active':  userSurveyForm.controls.usefulRating.value === 1}">1</button>
+          <button type="button" id="{{'usefulRating_2'}}"
+            class="btn btn-secondary btn-sm toggle-btn py-1 px-2" (click)="setRatingValue('usefulRating', 2)"
+            [ngClass]="{'active':  userSurveyForm.controls.usefulRating.value === 2}">2</button>
+          <button type="button" id="{{'usefulRating_3'}}"
+            class="btn btn-secondary btn-sm toggle-btn py-1 px-2" (click)="setRatingValue('usefulRating', 3)"
+            [ngClass]="{'active':  userSurveyForm.controls.usefulRating.value === 3}">3</button>
+          <button type="button" id="{{'usefulRating_4'}}"
+            class="btn btn-secondary btn-sm toggle-btn py-1 px-2" (click)="setRatingValue('usefulRating', 4)"
+            [ngClass]="{'active':  userSurveyForm.controls.usefulRating.value === 4}">4</button>
+          <button type="button" id="{{'usefulRating_5'}}"
+            class="btn btn-secondary btn-sm toggle-btn py-1 px-2" (click)="setRatingValue('usefulRating', 5)"
+            [ngClass]="{'active':  userSurveyForm.controls.usefulRating.value === 5}">5</button>
+        </div>
+      </div>
+
+      <div class="form-group pb-2 mb-3">
+        <label class="small w-100 mb-1 bold" for="recommendRating">Would you recommend MEASUR to others doing
+          energy analyses?</label>
+        <div class="hint">(With 1 meaning "never" and 5 meaning "absolutely")</div>
+        <div class="btn-group btn-group-sm align-self-center my-2">
+          <button type="button" id="{{'recommendRating_1'}}"
+            class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+            (click)="setRatingValue('recommendRating', 1)"
+            [ngClass]="{'active':  userSurveyForm.controls.recommendRating.value === 1}">1</button>
+          <button type="button" id="{{'recommendRating_2'}}"
+            class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+            (click)="setRatingValue('recommendRating', 2)"
+            [ngClass]="{'active':  userSurveyForm.controls.recommendRating.value === 2}">2</button>
+          <button type="button" id="{{'recommendRating_3'}}"
+            class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+            (click)="setRatingValue('recommendRating', 3)"
+            [ngClass]="{'active':  userSurveyForm.controls.recommendRating.value === 3}">3</button>
+          <button type="button" id="{{'recommendRating_4'}}"
+            class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+            (click)="setRatingValue('recommendRating', 4)"
+            [ngClass]="{'active':  userSurveyForm.controls.recommendRating.value === 4}">4</button>
+          <button type="button" id="{{'recommendRating_5'}}"
+            class="btn btn-secondary btn-sm toggle-btn py-1 px-2"
+            (click)="setRatingValue('recommendRating', 5)"
+            [ngClass]="{'active':  userSurveyForm.controls.recommendRating.value === 5}">5</button>
+        </div>
+      </div>
+
+      <div class="form-group d-flex flex-column w-100 mb-3">
+        <label class="bold mb-1">Would you be interested in being profiled in a case study?</label>
+        <label class="pl-2" for="hasProfilingInterest">
+          <input (input)="save()" type="checkbox" formControlName="hasProfilingInterest" id="hasProfilingInterest"
+            name="hasProfilingInterest"  onfocus="this.select();">
+          <span class="ml-2">Yes, contact me for a case study</span>
+        </label>
+      </div>
+
+      <div class="form-group d-flex flex-column w-100 mb-3">
+        <label for="questionDescribeSuccess" class="bold mb-1">Please describe any real-world successes you
+          have
+          had using the software.</label>
+        <textarea (input)="save()" class="survey-textarea" rows="4" id="questionDescribeSuccess"
+          formControlName="questionDescribeSuccess" placeholder="Describe how MEASUR has helped you succeed"
+          ></textarea>
+      </div>
+
+      <div class="form-group d-flex flex-column w-100 mb-3">
+        <label for="questionFeedback" class="bold mb-1">Do you have any recommendations on improving the
+          tool?</label>
+        <textarea (input)="save()" class="survey-textarea" rows="4" id="questionFeedback" formControlName="questionFeedback"
+          placeholder="List recommendations..." ></textarea>
+      </div>
+    </form>
+  </ng-container>
+
+
+  <div *ngIf="completedStatus === 'success'" class="alert-success small mx-2 px-3 py-2">
+    Your Survey has been submitted. Thank you!
+  </div>
+
+  <div *ngIf="completedStatus === 'error'" class="alert-danger small mx-2 px-3 py-2">
+    <span>An error has occured. Please verify your network connection and try again.</span>
+  </div>
+
+  <ng-container *ngIf="completedStatus === 'sending'">
+    <div class="spinner-overlay align-items-center w-100 text-center">
+      <div class="spinner mt-2 w-100">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+      <div class="importing-text w-100">Submitting Survey...</div>
+    </div>
+  </ng-container>
+
+  <div *ngIf="!inModal && this.completedStatus !== 'success'" class="p-2 pull-right">
+    <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="initForm()">Reset</button>
+    <button type="button" [disabled]="!userSurveyForm.valid" class="btn btn-primary btn-sm "
+      (click)="sendAnswers()">Send Answers</button>
+  </div>
+
+</div>
