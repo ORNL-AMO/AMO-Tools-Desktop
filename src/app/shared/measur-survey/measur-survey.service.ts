@@ -24,14 +24,16 @@ export class MeasurSurveyService {
       let firstAppInitDate = moment(new Date(applicationData.createdDate));
       let currentDate = moment(new Date());
   
-      let hasMetUsageThreshold;
+      let hasMetUsageThreshold: boolean;
       let dateDifference;
       if (!environment.production) {
         dateDifference = currentDate.diff(firstAppInitDate, 'seconds');
-        hasMetUsageThreshold = dateDifference >= 120;
+        // hasMetUsageThreshold = applicationData.appOpenCount >= 2;
+        // hasMetUsageThreshold = dateDifference >= 120;
+        hasMetUsageThreshold = dateDifference >= 120 || applicationData.appOpenCount >= 2;
       } else {
         dateDifference = currentDate.diff(firstAppInitDate, 'days');
-        hasMetUsageThreshold = dateDifference >= 7;
+        hasMetUsageThreshold = dateDifference >= 30 || applicationData.appOpenCount >= 10;
       }
       
       return hasMetUsageThreshold;
@@ -46,7 +48,7 @@ export class MeasurSurveyService {
     };
 
     this.completedStatus.next('sending');
-    let measurUserSurvey = this.userSurvey.getValue();
+    let measurUserSurvey: MeasurUserSurvey = this.userSurvey.getValue();
     console.log('measurUserSurvey', measurUserSurvey);
     let url: string = environment.measurUtilitiesApi + 'measur-survey';
     this.httpClient.post(url, measurUserSurvey, httpOptions).subscribe({
@@ -56,14 +58,13 @@ export class MeasurSurveyService {
       },
       error: (error: any) => {
         this.setStatus(undefined, error);
-        this.userSurvey.next(undefined);
       }
     });
   }
 
   setStatus(resp, error?: any) {
-    if (resp == "OK") {
-      console.log('resp', resp);
+    console.log('resp', resp);
+    if (resp === "Created") {
       this.completedStatus.next('success');
     } else if (error) {
       this.completedStatus.next('error');

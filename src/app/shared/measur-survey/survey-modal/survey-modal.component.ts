@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { MeasurUserSurvey } from '../experience-survey/experience-survey.component';
 import { MeasurSurveyService } from '../measur-survey.service';
+import { ApplicationInstanceDbService } from '../../../indexedDb/application-instance-db.service';
 
 @Component({
   selector: 'app-survey-modal',
@@ -16,7 +17,7 @@ export class SurveyModalComponent {
   statusSub: Subscription;
 
   constructor(
-    private measurSurveyService: MeasurSurveyService) { }
+    private measurSurveyService: MeasurSurveyService, private applicationInstanceDbService: ApplicationInstanceDbService) { }
 
   ngOnInit() {
     this.surveySub = this.measurSurveyService.userSurvey.subscribe(survey => {
@@ -44,7 +45,12 @@ export class SurveyModalComponent {
     this.measurSurveyService.sendAnswers();
   }
 
-  close(isAppDestroy?: boolean) {
+  async setRemindAndClose() {
+    await firstValueFrom(this.applicationInstanceDbService.setSurveyDone(false));
+    this.close();
+  }
+
+  close() {
     this.surveyModal.hide();
     this.measurSurveyService.showSurveyModal.next(false);
   }

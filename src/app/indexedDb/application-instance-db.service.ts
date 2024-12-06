@@ -27,9 +27,10 @@ export class ApplicationInstanceDbService {
     return this.dbService.getAll(this.storeName);
   }
 
-  setSurveyDone() {
+  setSurveyDone(isDone = true) {
     let applicationInstanceData = this.applicationInstanceData.getValue();
-    applicationInstanceData.isSurveyDone = true;
+    applicationInstanceData.isSurveyDone = isDone;
+    applicationInstanceData.doSurveyReminder = !isDone;
     applicationInstanceData.isSurveyToastDone = true;
     return this.updateWithObservable(applicationInstanceData);
   }
@@ -47,6 +48,8 @@ export interface ApplicationInstanceData {
   isAutomaticBackupOn: boolean,
   isSurveyToastDone: boolean,
   isSurveyDone: boolean,
+  doSurveyReminder: boolean,
+  appOpenCount: number,
   createVersionedBackups: boolean,
   createdDate: Date,
   modifiedDate: Date,

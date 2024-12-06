@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
-import { CoreService } from '../../core/core.service';
 import { environment } from '../../../environments/environment';
 import { ExportService } from '../../shared/import-export/export.service';
 import { ApplicationInstanceData, ApplicationInstanceDbService } from '../../indexedDb/application-instance-db.service';

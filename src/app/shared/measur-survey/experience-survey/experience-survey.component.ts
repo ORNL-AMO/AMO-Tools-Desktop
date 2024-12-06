@@ -83,10 +83,10 @@ export class ExperienceSurveyComponent {
       email: undefined,
       companyName: undefined,
       contactName: undefined,
-      usefulRating: undefined,
-      recommendRating: undefined,
+      usefulRating: 0,
+      recommendRating: 0,
       questionDescribeSuccess: undefined,
-      hasProfilingInterest: undefined,
+      hasProfilingInterest: false,
       questionFeedback: undefined, 
     }
   }
@@ -112,7 +112,7 @@ export class ExperienceSurveyComponent {
 
 
 export interface MeasurUserSurvey {
-  // appInstanceId: string,
+  appInstanceId?: string,
   email: string,
   companyName: string,
   contactName: string,

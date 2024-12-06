@@ -105,9 +105,7 @@ export class CoreComponent implements OnInit {
 
     this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
       if (applicationData) {
-        if (!applicationData.isSurveyDone) {
           this.setAppOpenNotifications(applicationData);
-        }
         if (!this.automaticBackupService.observableDataChanges && applicationData.isAutomaticBackupOn) {
           this.automaticBackupService.subscribeToDataChanges();
         }
@@ -193,14 +191,26 @@ export class CoreComponent implements OnInit {
 
   }
 
-  setAppOpenNotifications(applicationData: ApplicationInstanceData) {
-      let shouldShowSurveyModal = this.measurSurveyService.getShouldShowSurveyModal(applicationData);
-      this.measurSurveyService.showSurveyModal.next(shouldShowSurveyModal);
-      if (!applicationData.isSurveyToastDone) {
+  async setAppOpenNotifications(applicationData: ApplicationInstanceData) {
+    if (!applicationData.isSurveyDone) {
+      if (applicationData.doSurveyReminder) {
         setTimeout(() => {
-          this.showSurveyToast = true;
-        }, 2000);
+          this.measurSurveyService.showSurveyModal.next(true);
+        }, 5000);
+        await firstValueFrom(this.applicationInstanceDbService.setSurveyDone());
+      } else {
+        let shouldShowSurveyModal = this.measurSurveyService.getShouldShowSurveyModal(applicationData);
+        setTimeout(() => {
+          this.measurSurveyService.showSurveyModal.next(shouldShowSurveyModal);
+        }, 5000);
+        
+        if (!applicationData.isSurveyToastDone) {
+          setTimeout(() => {
+            this.showSurveyToast = true;
+          }, 5000);
+        }
       }
+    }
   }
 
   async getIsFirstStartup() {
@@ -230,11 +240,6 @@ export class CoreComponent implements OnInit {
 
   async hideSurveyToast() {
     this.setSurveyToastDone();
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    }
   }  
 
   async setSurveyToastDone() {

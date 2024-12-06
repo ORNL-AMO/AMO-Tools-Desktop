@@ -14,10 +14,12 @@
         <div class="card-block">
         </div>
         <app-experience-survey [inModal]="true"></app-experience-survey>
-        <div class="modal-footer p-2">
-          <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close()">Cancel</button>
-          <button type="button" [disabled]="!userSurvey" class="btn btn-primary btn-sm "
-            (click)="sendAnswers()">Send Answers</button>
+        <div class="modal-footer p-2 d-flex flex-row justify-content-between">
+          <a class="click-link ml-2" (click)="setRemindAndClose()">Remind Me Next Time</a>
+          <div>
+            <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close()">Cancel</button>
+            <button type="button" [disabled]="!userSurvey" class="btn btn-primary btn-sm " (click)="sendAnswers()">Send Answers</button>
+          </div>
         </div>
       </div>
     </div>
