@@ -6,22 +6,7 @@ declare var Module: any;
 @Injectable()
 export class SuiteApiHelperService {
 
-  constructor() {
-    console.log('init');
-    // var Module = {
-    // 	onRuntimeInitialized: function () {
-    // 		console.log('Tools Suite Module Initialized');
-    // 	}
-    // }
-    // fetch("assets/client.js");
-    // let config: WebAssembly.Module = {
-
-    // }
-
-    // WebAssembly.instantiateStreaming(fetch("assets/client.wasm"), { }).then(results => {
-    //   console.log(results);
-    // });
-  }
+  constructor() {}
   getPumpStyleEnum(pumpStyle: number): any {
     switch (pumpStyle) {
       case 0:

@@ -17,6 +17,7 @@ import { AppErrorService } from '../shared/errors/app-error.service';
 import { AutomaticBackupService } from '../electron/automatic-backup.service';
 import { ApplicationInstanceData, ApplicationInstanceDbService } from '../indexedDb/application-instance-db.service';
 import { ImportBackupModalService } from '../shared/import-backup-modal/import-backup-modal.service';
+import { MeasurSurveyService } from '../shared/measur-survey/measur-survey.service';
 
 @Component({
   selector: 'app-core',
@@ -55,6 +56,10 @@ export class CoreComponent implements OnInit {
   showImportBackupModal: boolean;
   pwaUpdateAvailableSubscription: Subscription;
   applicationInstanceDataSubscription: Subscription;
+  showSurveyModalSub: Subscription;
+  showSurveyModal: boolean;
+
+  showSurveyToast: boolean;
 
   constructor(private electronService: ElectronService,
     private assessmentService: AssessmentService,
@@ -73,6 +78,7 @@ export class CoreComponent implements OnInit {
     private applicationInstanceDbService: ApplicationInstanceDbService,
     private importBackupModalService: ImportBackupModalService,
     private sqlDbApiService: SqlDbApiService,
+    private measurSurveyService: MeasurSurveyService,
     private inventoryDbService: InventoryDbService) {
   }
 
@@ -97,10 +103,20 @@ export class CoreComponent implements OnInit {
       });
     }
 
-    this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe(applicationData => {
-        if (!this.automaticBackupService.observableDataChanges && applicationData?.isAutomaticBackupOn) {
+    this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
+      if (applicationData) {
+          this.setAppOpenNotifications(applicationData);
+        if (!this.automaticBackupService.observableDataChanges && applicationData.isAutomaticBackupOn) {
           this.automaticBackupService.subscribeToDataChanges();
         }
+      }
+    });
+
+    this.showSurveyModalSub = this.measurSurveyService.showSurveyModal.subscribe(val => {
+      this.showSurveyModal = val;
+      if (this.showSurveyModal) {
+        this.setSurveyDone();
+      }
     });
 
     this.assessmentUpdateAvailableSub = this.assessmentService.updateAvailable.subscribe(val => {
@@ -153,6 +169,7 @@ export class CoreComponent implements OnInit {
     this.showEmailMeasurDataModalSub.unsubscribe();
     this.showImportBackupModalSubscription.unsubscribe();
     this.pwaUpdateAvailableSubscription.unsubscribe();
+    this.showSurveyModalSub.unsubscribe();
   }
 
   async initData() {
@@ -172,6 +189,31 @@ export class CoreComponent implements OnInit {
       this.setAllDbData();
     }
 
+  }
+
+  async setAppOpenNotifications(applicationData: ApplicationInstanceData) {
+    if (!applicationData.isSurveyDone) {
+      if (applicationData.doSurveyReminder) {
+        setTimeout(() => {
+          this.measurSurveyService.showSurveyModal.next(true);
+        }, 5000);
+        await firstValueFrom(this.applicationInstanceDbService.setSurveyDone());
+      } else {
+        let hasMetUsageRequirement = await this.measurSurveyService.getHasMetUsageRequirements(applicationData);
+        let showModalToExistingUser = await this.measurSurveyService.checkIsExistingUser();
+        let showModal = showModalToExistingUser || hasMetUsageRequirement;
+        
+        setTimeout(() => {
+          this.measurSurveyService.showSurveyModal.next(showModal);
+        }, 5000);
+        
+        if (!applicationData.isSurveyToastDone && !showModalToExistingUser) {
+          setTimeout(() => {
+            this.showSurveyToast = true;
+          }, 5000);
+        }
+      }
+    }
   }
 
   async getIsFirstStartup() {
@@ -197,6 +239,21 @@ export class CoreComponent implements OnInit {
         },
         error: (error) => {}
       });
+  }
+
+  async hideSurveyToast() {
+    this.setSurveyToastDone();
+  }  
+
+  async setSurveyToastDone() {
+    this.showSurveyToast = false;
+    let appData = await firstValueFrom(this.applicationInstanceDbService.setSurveyToastDone());
+    this.applicationInstanceDbService.applicationInstanceData.next(appData);
+  }
+
+  async setSurveyDone() {
+    let appData = await firstValueFrom(this.applicationInstanceDbService.setSurveyDone());
+    this.applicationInstanceDbService.applicationInstanceData.next(appData);
   }
 
   hideToast() {
