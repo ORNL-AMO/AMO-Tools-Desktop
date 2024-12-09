@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PowerFactorTriangleInputs, PowerFactorTriangleOutputs } from '../../../../shared/models/standalone';
+import { PowerFactorTriangleOutputs } from '../../../../shared/models/standalone';
 import { UntypedFormGroup } from '@angular/forms';
 import { PowerFactorTriangleService } from '../power-factor-triangle.service';
 
@@ -31,8 +31,6 @@ export class PowerFactorTriangleFormComponent implements OnInit {
     { value: 8, name: 'Reactive & Phase Angle' },
     { value: 9, name: 'Reactive & Power Factor' },
   ];
-
-  isValid: boolean = true;
 
   constructor(private powerFactorTriangleService: PowerFactorTriangleService) { }
 
