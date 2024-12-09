@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import { PowerFactorTriangleService } from './power-factor-triangle.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 import { PowerFactorTriangleInputs, PowerFactorTriangleOutputs } from '../../../shared/models/standalone';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-power-factor-triangle',
@@ -36,6 +37,7 @@ export class PowerFactorTriangleComponent implements OnInit {
   currentField: string;
   toggleCalculate: boolean = false;
   tabSelect: string = 'results';
+  powerFactorTriangleForm: UntypedFormGroup;
   constructor(private powerFactorTriangleService: PowerFactorTriangleService,
     private analyticsService: AnalyticsService) { }
 
@@ -45,8 +47,9 @@ export class PowerFactorTriangleComponent implements OnInit {
       this.generateExample();
     } else{
       this.inputData = this.powerFactorTriangleService.inputData;
+      this.powerFactorTriangleForm = this.powerFactorTriangleService.getFormFromObj(this.inputData);
     }
-    this.calculate(this.inputData);
+    this.calculate(this.powerFactorTriangleForm);
   }
 
   ngAfterViewInit() {
@@ -62,17 +65,19 @@ export class PowerFactorTriangleComponent implements OnInit {
   btnResetData() {
     this.inputData = this.powerFactorTriangleService.getResetData();
     this.powerFactorTriangleService.inputData = this.inputData;
-    this.calculate(this.inputData);
+    this.powerFactorTriangleForm = this.powerFactorTriangleService.getFormFromObj(this.inputData);
+    this.calculate(this.powerFactorTriangleForm);
   }
 
   generateExample() {
     this.inputData = this.powerFactorTriangleService.generateExample();
+    this.powerFactorTriangleForm = this.powerFactorTriangleService.getFormFromObj(this.inputData);
     this.powerFactorTriangleService.inputData = this.inputData;
   }
 
   btnGenerateExample() {
     this.generateExample();
-    this.calculate(this.inputData);
+    this.calculate(this.powerFactorTriangleForm);
   }
 
   resizeTabs() {
@@ -92,9 +97,10 @@ export class PowerFactorTriangleComponent implements OnInit {
     this.currentField = str;
   }
 
-  calculate(data: PowerFactorTriangleInputs) {
-    this.inputData = data;
-    this.results = this.powerFactorTriangleService.getResults(data);
+  calculate(form: UntypedFormGroup) {
+    this.powerFactorTriangleForm = form;
+    this.inputData = this.powerFactorTriangleService.getObjFromForm(form);
+    this.results = this.powerFactorTriangleService.getResults(this.inputData);
   }
 
   setSmallScreenTab(selectedTab: string) {

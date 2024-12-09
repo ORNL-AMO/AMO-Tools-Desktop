@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { PowerFactorTriangleComponent } from './power-factor-triangle.component';
 import { PowerFactorTriangleFormComponent } from './power-factor-triangle-form/power-factor-triangle-form.component';
@@ -14,7 +14,8 @@ import { PowerFactorTriangleService } from './power-factor-triangle.service';
   imports: [
     CommonModule,
     FormsModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    ReactiveFormsModule
   ],
   declarations: [
     PowerFactorTriangleComponent, 
