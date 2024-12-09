@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PowerFactorTriangleInputs, PowerFactorTriangleOutputs } from '../../../../shared/models/standalone';
+import { PowerFactorTriangleOutputs } from '../../../../shared/models/standalone';
 import { UntypedFormGroup } from '@angular/forms';
 import { PowerFactorTriangleService } from '../power-factor-triangle.service';
 
@@ -40,7 +40,10 @@ export class PowerFactorTriangleFormComponent implements OnInit {
   calculate() {
     this.powerFactorTriangleForm = this.powerFactorTriangleService.setModeValidation(this.powerFactorTriangleForm);
     if (this.powerFactorTriangleForm.valid) {
+      this.powerFactorTriangleForm.controls.mode.enable();
       this.emitCalculate.emit(this.powerFactorTriangleForm);
+    } else {
+      this.powerFactorTriangleForm.controls.mode.disable();
     }
   }
 
