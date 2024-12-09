@@ -199,12 +199,15 @@ export class CoreComponent implements OnInit {
         }, 5000);
         await firstValueFrom(this.applicationInstanceDbService.setSurveyDone());
       } else {
-        let shouldShowSurveyModal = this.measurSurveyService.getShouldShowSurveyModal(applicationData);
+        let hasMetUsageRequirement = await this.measurSurveyService.getHasMetUsageRequirements(applicationData);
+        let showModalToExistingUser = await this.measurSurveyService.checkIsExistingUser();
+        let showModal = showModalToExistingUser || hasMetUsageRequirement;
+        
         setTimeout(() => {
-          this.measurSurveyService.showSurveyModal.next(shouldShowSurveyModal);
+          this.measurSurveyService.showSurveyModal.next(showModal);
         }, 5000);
         
-        if (!applicationData.isSurveyToastDone) {
+        if (!applicationData.isSurveyToastDone && !showModalToExistingUser) {
           setTimeout(() => {
             this.showSurveyToast = true;
           }, 5000);

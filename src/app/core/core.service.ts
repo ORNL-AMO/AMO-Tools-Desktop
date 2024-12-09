@@ -88,6 +88,9 @@ export class CoreService {
     if (existingApplicationData.length === 0) {
       await this.setNewApplicationInstanceData();
     } else {
+      if (existingApplicationData[0].appOpenCount === undefined) {
+        existingApplicationData[0].appOpenCount = 0;
+      }
       existingApplicationData[0].appOpenCount++;
       await firstValueFrom(this.applicationDataService.updateWithObservable(existingApplicationData[0]));
       this.applicationDataService.applicationInstanceData.next(existingApplicationData[0]);
