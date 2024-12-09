@@ -32,6 +32,8 @@ export class PowerFactorTriangleFormComponent implements OnInit {
     { value: 9, name: 'Reactive & Power Factor' },
   ];
 
+  isValid: boolean = true;
+
   constructor(private powerFactorTriangleService: PowerFactorTriangleService) { }
 
   ngOnInit() {
@@ -40,7 +42,10 @@ export class PowerFactorTriangleFormComponent implements OnInit {
   calculate() {
     this.powerFactorTriangleForm = this.powerFactorTriangleService.setModeValidation(this.powerFactorTriangleForm);
     if (this.powerFactorTriangleForm.valid) {
+      this.powerFactorTriangleForm.controls.mode.enable();
       this.emitCalculate.emit(this.powerFactorTriangleForm);
+    } else {
+      this.powerFactorTriangleForm.controls.mode.disable();
     }
   }
 
