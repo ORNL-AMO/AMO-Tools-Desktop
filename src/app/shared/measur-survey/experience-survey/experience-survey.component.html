@@ -113,6 +113,13 @@
         <textarea (input)="save()" class="survey-textarea" rows="4" id="questionDescribeSuccess"
           formControlName="questionDescribeSuccess" placeholder="Describe how MEASUR has helped you succeed"
           ></textarea>
+          <span class="small">
+            Characters remaining: {{ getRemainingCharacters('questionDescribeSuccess') }}
+          </span>
+          <span class="alert-danger w-100 pull-right small py-1 px-2"
+          *ngIf="userSurveyForm.controls.questionDescribeSuccess.invalid && !userSurveyForm.controls.questionDescribeSuccess.pristine">
+          <span *ngIf="userSurveyForm.controls.questionDescribeSuccess.hasError('maxlength')">Must be less than 2048 character</span>
+        </span>
       </div>
 
       <div class="form-group d-flex flex-column w-100 mb-3">
@@ -120,6 +127,13 @@
           tool?</label>
         <textarea (input)="save()" class="survey-textarea" rows="4" id="questionFeedback" formControlName="questionFeedback"
           placeholder="List recommendations..." ></textarea>
+            <span class="small">
+              Characters remaining: {{ getRemainingCharacters('questionFeedback') }}
+            </span>
+          <span class="alert-danger w-100 pull-right small py-1 px-2"
+          *ngIf="userSurveyForm.controls.questionFeedback.invalid && !userSurveyForm.controls.questionFeedback.pristine">
+          <span *ngIf="userSurveyForm.controls.questionFeedback.hasError('maxlength')">Must be less than 2048 character</span>
+          </span>
       </div>
     </form>
   </ng-container>

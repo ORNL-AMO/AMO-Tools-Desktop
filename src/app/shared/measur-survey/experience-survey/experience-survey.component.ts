@@ -47,9 +47,9 @@ export class ExperienceSurveyComponent {
       contactName: [defaultFormData.contactName, []],
       usefulRating: [defaultFormData.usefulRating, []],
       recommendRating: [defaultFormData.recommendRating, []],
-      questionDescribeSuccess: [defaultFormData.questionDescribeSuccess, []],
+      questionDescribeSuccess: [defaultFormData.questionDescribeSuccess, [Validators.maxLength(2048)]],
       hasProfilingInterest: [defaultFormData.hasProfilingInterest, []],
-      questionFeedback: [defaultFormData.questionFeedback, []],
+      questionFeedback: [defaultFormData.questionFeedback, [Validators.maxLength(2048)]],
     });
     this.measurSurveyService.completedStatus.next(undefined)
     this.measurSurveyService.userSurvey.next(undefined)
@@ -77,6 +77,11 @@ export class ExperienceSurveyComponent {
     this.measurSurveyService.sendAnswers();
   }
 
+  getRemainingCharacters(controlName: string): number {
+    let textLength = this.userSurveyForm.get(controlName).value?.length || 0;
+    let charactersRemaining = 2048 - textLength;
+    return charactersRemaining;
+  }
 
   getDefaultForm() {
     return {

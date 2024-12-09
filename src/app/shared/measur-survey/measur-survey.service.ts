@@ -63,7 +63,6 @@ export class MeasurSurveyService {
   }
 
   setStatus(resp, error?: any) {
-    console.log('resp', resp);
     if (resp === "Created") {
       this.completedStatus.next('success');
     } else if (error) {
