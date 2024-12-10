@@ -8,17 +8,14 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pt-0">
                 <div *ngIf="!deleting">
-                    <div class="row">
-                        <div class="col-12">
-                            <p>
-                                All selected options will be restored to the factory default state.
-                                <br>
-                                <span class="red">This cannot be undone!</span>
-                            </p>
+                        <div class="alert alert-danger px-2 small text-left mb-3">
+                            <ul class="m-2 pl-3">
+                                <li>All selected options will be restored to the factory default state. <span class="bold">This cannot be undone</span></li>
+                                <li><span class="bold">Reset All Data</span> and <span class="bold">Reset Application Settings</span> will delete settings related to automatic backup.</li>
+                            </ul>
                         </div>
-                    </div>
                     <div class="row toggle-btn" (click)="toggleResetSystemSettingsOption('reset-all')">
                         <div class="col-2">
                             <app-animated-checkmark [active]="resetAll"></app-animated-checkmark>
