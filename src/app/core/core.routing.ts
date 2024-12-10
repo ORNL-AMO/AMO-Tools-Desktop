@@ -117,6 +117,7 @@ import { pumpInventoryRoutes } from '../pump-inventory/pump-inventory.routing';
 import { DataAndBackupComponent } from '../dashboard/data-and-backup/data-and-backup.component';
 import { PowerFactorTriangleComponent } from '../calculator/utilities/power-factor-triangle/power-factor-triangle.component';
 import { CompressedAirInventoryComponent } from '../compressed-air-inventory/compressed-air-inventory.component';
+import { compressedAirInventoryRoutes } from '../compressed-air-inventory/compressed-air-inventory.routing';
 
 export const coreRoutes: Routes = [
   {
@@ -606,7 +607,7 @@ export const coreRoutes: Routes = [
   {
     component: CompressedAirInventoryComponent,
     path: 'compressed-air-inventory',
-    //children: pumpInventoryRoutes
+    children: compressedAirInventoryRoutes
   },
 
 ];

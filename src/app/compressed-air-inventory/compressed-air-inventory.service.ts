@@ -3,9 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirInventoryData } from './compressed-air-inventory.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class CompressedAirInventoryService {
 
   mainTab: BehaviorSubject<string>;
