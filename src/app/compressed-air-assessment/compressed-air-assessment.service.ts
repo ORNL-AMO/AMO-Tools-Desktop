@@ -246,10 +246,7 @@ export class CompressedAirAssessmentService {
       profileSummaryValid.powerFactorError = `Power Factor must be 0 or greater`;
     }
 
-    if (volts > 6600) {
-      powerFactorInputValidationData.voltsValid = false;
-      profileSummaryValid.voltError = 'Volts cannot be greater than 6600';
-    } else if (this.checkIsInvalidNumber(volts)) {
+   if (this.checkIsInvalidNumber(volts)) {
       powerFactorInputValidationData.voltsValid = false;
       profileSummaryValid.voltError = `Volts must be 0 or greater`;
     }
