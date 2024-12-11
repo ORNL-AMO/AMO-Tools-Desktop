@@ -15,7 +15,7 @@
                     <div class="alert alert-danger p-3 text-left">
                         <h2 class="h4">{{measurFormattedError.message}}</h2>
                     </div>
-                    <app-error-reporting [measurFormattedError]="measurFormattedError"></app-error-reporting>
+                    <app-error-reporting [inModal]="true" [measurFormattedError]="measurFormattedError"></app-error-reporting>
                 </div>
                 <div class="modal-footer justify-content-between px-3 p-2">
                     <button type="button" class="btn btn-secondary pull-right btn-sm mr-2" (click)="close()">

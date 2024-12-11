@@ -40,9 +40,16 @@
     </div>
   </div>
   
+  <div class="sidebar-group secondary" *ngIf="showSurveyLink">
+    <span routerLinkActive="selected" class="sidebar-item" (click)="showSurvey()">
+      <span class="fa fa-info-circle mr-1 info-icon"></span>
+      MEASUR Survey 
+    </span>
+  </div>
+
   <div class="sidebar-group secondary" (click)="navigateWithSidebarOptions('/landing-screen')">
     <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
-</div>
+  </div>
 
 <div class="sidebar-group secondary pl-1 scroll-item">
   <app-directory-item [directory]="rootDirectory"></app-directory-item>
