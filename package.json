@@ -27,7 +27,8 @@
     "postinstall": "electron-builder install-app-deps",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "download-stats": "node scripts/download-stats.js"
+    "download-stats": "node scripts/download-stats.js",
+    "download-repo-issues": "node scripts/download-repo-issues.js"
   },
   "private": true,
   "dependencies": {
