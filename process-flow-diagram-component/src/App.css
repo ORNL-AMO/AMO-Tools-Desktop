@@ -89,20 +89,6 @@ a {
 
 
 /* Sidebar */
-.process-flow-diagram aside {
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid #eee;
-  padding: 15px 10px;
-  font-size: 12px;
-  background: #fcfcfc;
-
-}
-
-.process-flow-diagram aside .description {
-  margin-bottom: 10px;
-  font-size: 12px;
-}
 
 /*  mui grid */
 .process-flow-diagram .dndnode {
@@ -194,11 +180,6 @@ a {
 @media screen and (min-width: 768px) {
   .process-flow-diagram {
     flex-direction: row-reverse;
-  }
-
-  .process-flow-diagram aside {
-    /* todo retrieve width for context menu offsets */
-    width: 375px;
   }
 }
 

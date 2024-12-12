@@ -24,13 +24,15 @@ import {
 import '@xyflow/react/dist/style.css';
 
 import Sidebar from '../Sidebar/Sidebar';
-import { FlowDiagramData, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { changeExistingEdgesType, getAdaptedTypeString, getDefaultNodeFromType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdgeDefaults, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
 import ManageDataContextDrawer from '../Drawer/ManageDataContextDrawer';
 import { DefaultEdgeOptions } from 'reactflow';
+import { MenuContextDrawer } from '../MenuDrawer/MenuContextDrawer';
+import { MenuSidebarProps } from '../MenuDrawer/MenuSidebar';
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const nodeClassName = (node: Node) => node.type;
@@ -40,6 +42,7 @@ export const FlowContext = createContext(null);
 const Flow = (props: FlowProps) => {
   const [manageDataId, setManageDataId] = useState(undefined);
   const [isDataDrawerOpen, setIsDataDrawerOpen] = useState(false);
+  const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(true);
 
   // * staleNodes == nodes with createdByAssessment: true
   let staleParentNodes = [];
@@ -116,46 +119,6 @@ const Flow = (props: FlowProps) => {
     [userDiagramOptions]
   );
 
-   /**
- * Check for flow loss node
- */
-  const onConnectEnd: OnConnectEnd = useCallback(
-    (event, connectionState: FinalConnectionState) => {
-      if (
-        connectionState.isValid ||
-        connectionState.fromHandle.type === 'target'
-      ) {
-        return;
-      }
-
-      const fromNodeId = connectionState.fromNode.id;
-      const { clientX, clientY } = 'changedTouches' in event ? event.changedTouches[0] : event;
-
-      let lossNode: Node<ProcessFlowPart> = getDefaultNodeFromType('known-loss', setManageDataId, setIsDataDrawerOpen);
-      lossNode.data.disableInflowConnections = true;
-      lossNode.type = getAdaptedTypeString(lossNode.type);
-      lossNode.data.disableOutflowConnections = true;
-      lossNode.position = reactFlowInstance.screenToFlowPosition({
-        x: clientX,
-        y: clientY,
-      })
-
-      const newEdge: Edge = {
-        animated: userDiagramOptions.edgeOptions.animated,
-        id: `reactflow__edge-${fromNodeId}-${lossNode.id}`,
-        source: fromNodeId,
-        sourceHandle: connectionState.fromHandle.id,
-        target: lossNode.id,
-        reconnectable: 'target',
-      };
-      
-      setCustomEdgeDefaults(newEdge, userDiagramOptions);
-      setNodes((nodes) => nodes.concat(lossNode));
-      setEdges((edges) => addEdge(newEdge, edges));
-    },
-    [setNodes, setEdges, reactFlowInstance],
-  );
-
   const onReconnect = useCallback(
     (oldEdge, newConnection) => {
 
@@ -163,31 +126,6 @@ const Flow = (props: FlowProps) => {
     },
     [setEdges],
   );
-
-  // const onReconnectEnd = useCallback(
-  //   (_, oldEdge, handleType) => {
-  //     console.log('onReconnectEnd')
-  //     if (handleType === 'source') {
-  //       setNodes((nodes) => {
-  //         return nodes.filter((node) => {
-  //           const isKnownLoss = node.type === 'knownLoss';
-  //           const isTarget = node.id === oldEdge.target;
-            
-  //           return !(isKnownLoss && isTarget);
-  //         });
-  //       });
-
-  //       setEdges((edges) => edges.filter((edge) => edge.id !== oldEdge.id));
-  //     }
-  //   },
-  //   [setNodes, setEdges],
-  // );
-
-
-  // const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
-  //   // todo global confirm
-  //   return { nodes, edges };
-  // }, []);
   
   const handleMinimapVisible = useCallback((isEnabled) => {
     setUserDiagramOptions({
@@ -317,6 +255,23 @@ const Flow = (props: FlowProps) => {
     // padding: 10
   };
 
+  const menuSidebarProps: MenuSidebarProps = {
+    userDiagramOptions: userDiagramOptions,
+    userDiagramOptionsHandlers: {
+      handleMinimapVisible,
+      handleShowFlowValues,
+      handleShowMarkerEndArrows,
+      handleControlsVisible,
+      handleEdgeTypeChange,
+      handleEdgeThicknessChange,
+      handleEdgeOptionsChange,
+    },
+    resetDiagramCallback: resetDiagram,
+    shadowRoot: props.shadowRoot,
+    setIsDialogOpen: setIsDialogOpen,
+    hasAssessment: props.processDiagram.assessmentId !== undefined
+  }
+
   return (
     props.height &&
     <FlowContext.Provider value={{userDiagramOptions}}>
@@ -360,22 +315,14 @@ const Flow = (props: FlowProps) => {
             <Background />
           </ReactFlow>
         </div>
-        <Sidebar
-            userDiagramOptions={userDiagramOptions}
-            userDiagramOptionsHandlers={{
-              handleMinimapVisible,
-              handleShowFlowValues,
-              handleShowMarkerEndArrows,
-              handleControlsVisible,
-              handleEdgeTypeChange,
-              handleEdgeThicknessChange,
-              handleEdgeOptionsChange,
-            }}
-            resetDiagramCallback={resetDiagram}
-            shadowRoot={props.shadowRoot}
-            setIsDialogOpen={setIsDialogOpen}
-            hasAssessment={props.processDiagram.assessmentId !== undefined}
-          />
+      {isMenuDrawerOpen &&
+        <MenuContextDrawer
+         menuSidebarProps={menuSidebarProps}
+         parentContainer={props.parentContainer}
+        //  isMenuDrawerOpen={isMenuDrawerOpen}
+        //  setIsMenuDrawerOpen={setIsMenuDrawerOpen}
+         ></MenuContextDrawer>
+      }
       {isDataDrawerOpen &&
         <ManageDataContextDrawer
          isDrawerOpen={isDataDrawerOpen}
@@ -395,6 +342,7 @@ export default Flow;
 export interface FlowProps {
   shadowRoot,
   height?: number,
+  parentContainer: ParentContainerDimensions,
   processDiagram?: WaterDiagram;
   clickEvent: (...args) => void;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
