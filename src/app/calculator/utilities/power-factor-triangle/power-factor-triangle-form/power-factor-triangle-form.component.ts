@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PowerFactorTriangleOutputs } from '../../../../shared/models/standalone';
 import { UntypedFormGroup } from '@angular/forms';
 import { PowerFactorTriangleService } from '../power-factor-triangle.service';
