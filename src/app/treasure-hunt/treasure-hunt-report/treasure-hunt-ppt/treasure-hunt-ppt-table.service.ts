@@ -234,12 +234,20 @@ export class TreasureHuntPptTableService {
         let utilityUnit: string;
         if (opportunity.mixedIndividualResults) {
             opportunity.mixedIndividualResults.forEach(opp => {
+                let additionalSavings: number = 0;
+                if (opp.opportunityCost.additionalAnnualSavings) {
+                    additionalSavings = opp.opportunityCost.additionalAnnualSavings.cost;
+                }
                 utilityUnit = this.getUtilityUnit(opp.utilityType, settings);
-                rows.push([opp.opportunityName, opp.utilityType, this.roundValToFormatString(opp.totalEnergySavings), utilityUnit, this.roundValToCurrency(opp.costSavings), this.roundValToCurrency(opp.opportunityCost.material), this.roundValToCurrency(opp.opportunityCost.labor), this.getOtherCost(opp.opportunityCost), this.roundValToCurrency(opp.totalCost), this.roundValToFormatString(opp.payback)]);
+                rows.push([opp.opportunityName, opp.utilityType, this.roundValToFormatString(opp.totalEnergySavings), utilityUnit, this.roundValToCurrency(opp.costSavings + additionalSavings), this.roundValToCurrency(opp.opportunityCost.material), this.roundValToCurrency(opp.opportunityCost.labor), this.getOtherCost(opp.opportunityCost), this.roundValToCurrency(opp.totalCost), this.roundValToFormatString(opp.payback)]);
             });
         } else {
+            let additionalSavings: number = 0;
+            if (opportunity.opportunityCost.additionalAnnualSavings) {
+                additionalSavings = opportunity.opportunityCost.additionalAnnualSavings.cost;
+            }
             utilityUnit = this.getUtilityUnit(opportunity.utilityType, settings);
-            rows.push([opportunity.opportunityName, opportunity.utilityType, this.roundValToFormatString(opportunity.totalEnergySavings), utilityUnit, this.roundValToCurrency(opportunity.costSavings), this.roundValToCurrency(opportunity.opportunityCost.material), this.roundValToCurrency(opportunity.opportunityCost.labor), this.getOtherCost(opportunity.opportunityCost), this.roundValToCurrency(opportunity.totalCost), this.roundValToFormatString(opportunity.payback)]);
+            rows.push([opportunity.opportunityName, opportunity.utilityType, this.roundValToFormatString(opportunity.totalEnergySavings), utilityUnit, this.roundValToCurrency(opportunity.costSavings + additionalSavings), this.roundValToCurrency(opportunity.opportunityCost.material), this.roundValToCurrency(opportunity.opportunityCost.labor), this.getOtherCost(opportunity.opportunityCost), this.roundValToCurrency(opportunity.totalCost), this.roundValToFormatString(opportunity.payback)]);
         }
         return rows;
     }
