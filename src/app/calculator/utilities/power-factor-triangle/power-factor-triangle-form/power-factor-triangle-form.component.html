@@ -81,7 +81,7 @@
     <span class="alert-danger pull-right small"
       *ngIf="powerFactorTriangleForm.controls.phaseAngle.invalid && !powerFactorTriangleForm.controls.phaseAngle.pristine">
       <span *ngIf="powerFactorTriangleForm.controls.phaseAngle.errors.required">Value required.</span>
-      <span *ngIf="powerFactorTriangleForm.controls.phaseAngle.errors.min">Value cannot be less than 0.</span>
+      <span *ngIf="powerFactorTriangleForm.controls.phaseAngle.errors.min">Value cannot be less than 1.</span>
       <span *ngIf="powerFactorTriangleForm.controls.phaseAngle.errors.max">Value cannot be more than 90.</span>
     </span>
   </div>
