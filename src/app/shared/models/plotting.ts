@@ -79,6 +79,8 @@ export interface AxisObj {
     tickvals?: Array<number | string>,
     ticktext?: Array<number | string>,
     tickmode?: string,
+    tickformat?: string,
+    hovertemplate?: string,
     autotick?: boolean,
     ticksuffix?: string,
     tickangle?: number,
@@ -139,8 +141,8 @@ export interface TraceData {
 }
 
 export interface TraceCoordinates {
-    x: Array<number>,
-    y: Array<number>,
+    x: Array<string | number>,
+    y: Array<string | number>,
 };
 
 export interface ChartConfig {

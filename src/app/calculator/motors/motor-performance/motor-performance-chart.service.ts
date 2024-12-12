@@ -130,12 +130,11 @@ export class MotorPerformanceChartService {
           showticksuffix: 'all',
           tickangle: -60,
           tickmode: 'array',
-          hoverformat: '%{x}%',
           range: [0, 1.4],
           tickvals: [0, .20, .40, .60, .80, 1, 1.2],
+          tickformat: '.0%'
         },
         yaxis: {
-          autorange: true,
           type: 'linear',
           showgrid: true,
           title: {
