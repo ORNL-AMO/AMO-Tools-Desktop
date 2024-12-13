@@ -1,10 +1,10 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
 import { Box, Button, Divider, Grid, Paper, styled, Typography } from '@mui/material';
+import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
-import ContinuousSlider from '../Drawer/ContinuousSlider';
-import { DefaultEdgeOptions, Edge, useReactFlow } from '@xyflow/react';
+import { UserDiagramOptionsHandlers } from '../Flow';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
@@ -16,7 +16,7 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const Sidebar = memo((props: SidebarProps) => {
+const MenuSidebar = memo((props: MenuSidebarProps) => {
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
@@ -24,14 +24,13 @@ const Sidebar = memo((props: SidebarProps) => {
   };
 
   return (
-    <aside>
       <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingX: 1 }}>
         <Box>
           <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px' }}>Drag plant water system components into the pane</Typography>
           <Box sx={{ flexGrow: 1, paddingY: '1rem' }}>
-            <Grid container spacing={{ xs: 1, md: 2 }} columns={{ xs: 3, sm: 8, md: 12 }}>
+            <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
               {processFlowParts.map((part: ProcessFlowPart) => (
-                <Grid item xs={2} sm={4} md={4} key={part.processComponentType}>
+                <Grid item xs={1} sm={2} md={2} key={part.processComponentType}>
                   <WaterComponent className={`dndnode ${part.processComponentType}`}
                     onDragStart={(event) => onDragStart(event, part.processComponentType)}
                     draggable={true}>
@@ -39,11 +38,11 @@ const Sidebar = memo((props: SidebarProps) => {
                   </WaterComponent>
                 </Grid>
               ))}
-              <Grid item xs={2} sm={4} md={4}>
+              <Grid item xs={1} sm={2} md={2}>
                 <WaterComponent className={`dndnode splitterNode`}
                   onDragStart={(event) => onDragStart(event, 'splitter-node-4')} draggable> 4-way Connection</WaterComponent>
               </Grid>
-              <Grid item xs={2} sm={4} md={4}>
+              <Grid item xs={1} sm={2} md={2}>
                 <WaterComponent className={`dndnode splitterNode`}
                   onDragStart={(event) => onDragStart(event, 'splitter-node-8')} draggable> 8-way Connection</WaterComponent>
               </Grid>
@@ -156,26 +155,16 @@ const Sidebar = memo((props: SidebarProps) => {
           }
         </Box>
       </Box>
-    </aside>
   );
 });
-export default Sidebar;
+export default MenuSidebar;
 
-export interface SidebarProps {
+export interface MenuSidebarProps {
   userDiagramOptions: UserDiagramOptions;
   userDiagramOptionsHandlers: UserDiagramOptionsHandlers;
-  resetDiagramCallback: () => void;
-  setIsDialogOpen: (boolean) => void;
   hasAssessment: boolean;
   shadowRoot;
+  setIsDialogOpen: (boolean) => void;
+  resetDiagramCallback: () => void;
 }
 
-export interface UserDiagramOptionsHandlers {
-  handleMinimapVisible: (enabled: boolean) => void;
-  handleShowMarkerEndArrows: (enabled: boolean) => void;
-  handleControlsVisible: (enabled: boolean) => void;
-  handleShowFlowValues: (enabled: boolean) => void;
-  handleEdgeTypeChange: (edgeTypeOption: string) => void;
-  handleEdgeOptionsChange: (edgeOptions: any) => void;
-  handleEdgeThicknessChange: (event: Event, edgeThickness: number) => void;
-}

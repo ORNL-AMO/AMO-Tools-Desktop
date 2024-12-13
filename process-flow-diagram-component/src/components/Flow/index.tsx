@@ -15,24 +15,20 @@ import {
   MarkerType,
   EdgeTypes,
   FitViewOptions,
-  addEdge,
   reconnectEdge,
-  OnConnectEnd,
-  FinalConnectionState,
 } from '@xyflow/react';
- 
+
 import '@xyflow/react/dist/style.css';
 
-import Sidebar from '../Sidebar/Sidebar';
 import { FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { changeExistingEdgesType, getAdaptedTypeString, getDefaultNodeFromType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdgeDefaults, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
+import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdgeDefaults, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
-import ManageDataContextDrawer from '../Drawer/ManageDataContextDrawer';
 import { DefaultEdgeOptions } from 'reactflow';
-import { MenuContextDrawer } from '../MenuDrawer/MenuContextDrawer';
-import { MenuSidebarProps } from '../MenuDrawer/MenuSidebar';
+import { MenuSidebarProps } from '../Drawer/MenuSidebar';
+import { SideDrawer } from '../Drawer/SideDrawer';
+import DataDrawer from '../Drawer/DataDrawer';
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const nodeClassName = (node: Node) => node.type;
@@ -42,14 +38,13 @@ export const FlowContext = createContext(null);
 const Flow = (props: FlowProps) => {
   const [manageDataId, setManageDataId] = useState(undefined);
   const [isDataDrawerOpen, setIsDataDrawerOpen] = useState(false);
-  const [isMenuDrawerOpen, setIsMenuDrawerOpen] = useState(true);
 
   // * staleNodes == nodes with createdByAssessment: true
   let staleParentNodes = [];
   let existingNodes = [];
   let existingEdges = [];
-  const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions? props.processDiagram.flowDiagramData.userDiagramOptions: getDefaultUserDiagramOptions();
-  existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart> )=> {
+  const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions ? props.processDiagram.flowDiagramData.userDiagramOptions : getDefaultUserDiagramOptions();
+  existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
     if (node.data.processComponentType !== 'splitter-node') {
       node.data.setManageDataId = setManageDataId;
       node.data.openEditData = setIsDataDrawerOpen;
@@ -126,7 +121,6 @@ const Flow = (props: FlowProps) => {
     },
     [setEdges],
   );
-  
   const handleMinimapVisible = useCallback((isEnabled) => {
     setUserDiagramOptions({
       ...userDiagramOptions,
@@ -185,7 +179,7 @@ const Flow = (props: FlowProps) => {
       let updatedEdges = eds.map((e: Edge) => {
         let updatedEdge = {
           ...e,
-          markerEnd: showArrows? { 
+          markerEnd: showArrows ? {
             type: MarkerType.ArrowClosed,
             width: 25,
             height: 25
@@ -217,7 +211,6 @@ const Flow = (props: FlowProps) => {
     });
   }, [userDiagramOptions]);
 
-  
   const resetDiagram = useCallback(() => {
     const defaultOptions = getDefaultUserDiagramOptions();
     setNodes(nds => []);
@@ -247,7 +240,6 @@ const Flow = (props: FlowProps) => {
     if (msgId === '002') {
       return;
     }
-  
     console.warn(msg);
   }
 
@@ -274,66 +266,66 @@ const Flow = (props: FlowProps) => {
 
   return (
     props.height &&
-    <FlowContext.Provider value={{userDiagramOptions}}>
-    <div className="process-flow-diagram">
-      {isDialogOpen &&
-          <WarningDialog 
-          isDialogOpen={isDialogOpen} 
-          handleDialogCloseCallback={setIsDialogOpen}
-          handleResetDiagramCallback={resetDiagram}/>
+    <FlowContext.Provider value={{ userDiagramOptions }}>
+      <div className="process-flow-diagram">
+        {isDialogOpen &&
+          <WarningDialog
+            isDialogOpen={isDialogOpen}
+            handleDialogCloseCallback={setIsDialogOpen}
+            handleResetDiagramCallback={resetDiagram} />
         }
 
-      <ReactFlowProvider>
-        <div className={'flow-wrapper'} style={{ height: props.height }}>
-          <ReactFlow
-            nodes={nodes}
-            onNodesChange={onNodesChange}
-            edges={edges}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onReconnect={onReconnect}
-            onInit={setReactFlowInstance}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            defaultEdgeOptions={userDiagramOptions.edgeOptions}
-            defaultViewport={defaultViewport}
-            connectionLineType={ConnectionLineType.Bezier}
-            onDrop={onDrop}
-            onError={onErrorWithSuppressed}
-            // onBeforeDelete={onBeforeDelete}
-            onDragOver={onDragOver}
-            fitView={true}
-            fitViewOptions={fitViewOptions}
-            className="flow"
-          >
-            {userDiagramOptions.minimapVisible &&
-              <MiniMap zoomable pannable nodeClassName={nodeClassName} />
-            }
-            {userDiagramOptions.controlsVisible &&
-              <Controls />
-            }
-            <Background />
-          </ReactFlow>
-        </div>
-      {isMenuDrawerOpen &&
-        <MenuContextDrawer
-         menuSidebarProps={menuSidebarProps}
-         parentContainer={props.parentContainer}
-        //  isMenuDrawerOpen={isMenuDrawerOpen}
-        //  setIsMenuDrawerOpen={setIsMenuDrawerOpen}
-         ></MenuContextDrawer>
-      }
-      {isDataDrawerOpen &&
-        <ManageDataContextDrawer
-         isDrawerOpen={isDataDrawerOpen}
-         manageDataId={manageDataId}
-         userDiagramOptions={userDiagramOptions}
-         setIsDataDrawerOpen={setIsDataDrawerOpen}
-         setIsDialogOpen={setIsDialogOpen}
-         />
-      }
-      </ReactFlowProvider>
-    </div>
+        <ReactFlowProvider>
+          <div className={'flow-wrapper'} style={{ height: props.height }}>
+            <ReactFlow
+              nodes={nodes}
+              onNodesChange={onNodesChange}
+              edges={edges}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              onReconnect={onReconnect}
+              onInit={setReactFlowInstance}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              defaultEdgeOptions={userDiagramOptions.edgeOptions}
+              defaultViewport={defaultViewport}
+              connectionLineType={ConnectionLineType.Bezier}
+              onDrop={onDrop}
+              onError={onErrorWithSuppressed}
+              // onBeforeDelete={onBeforeDelete}
+              onDragOver={onDragOver}
+              fitView={true}
+              fitViewOptions={fitViewOptions}
+              className="flow"
+            >
+              {userDiagramOptions.minimapVisible &&
+                <MiniMap zoomable pannable nodeClassName={nodeClassName} />
+              }
+              {userDiagramOptions.controlsVisible &&
+                <Controls />
+              }
+              <Background />
+            </ReactFlow>
+          </div>
+
+          <SideDrawer
+            anchor={'left'}
+            menuSidebarProps={menuSidebarProps}
+            parentContainer={props.parentContainer}
+          ></SideDrawer>
+          
+          {isDataDrawerOpen &&
+            <DataDrawer
+            isDrawerOpen={isDataDrawerOpen}
+            manageDataId={manageDataId}
+            userDiagramOptions={userDiagramOptions}
+            setIsDataDrawerOpen={setIsDataDrawerOpen}
+            parentContainer={props.parentContainer}
+            setIsDialogOpen={setIsDialogOpen}
+            />
+          }
+        </ReactFlowProvider>
+      </div>
     </FlowContext.Provider>
   );
 }
@@ -350,4 +342,14 @@ export interface FlowProps {
 
 export interface FlowContext {
   userDiagramOptions: UserDiagramOptions
+}
+
+export interface UserDiagramOptionsHandlers {
+  handleMinimapVisible: (enabled: boolean) => void;
+  handleShowMarkerEndArrows: (enabled: boolean) => void;
+  handleControlsVisible: (enabled: boolean) => void;
+  handleShowFlowValues: (enabled: boolean) => void;
+  handleEdgeTypeChange: (edgeTypeOption: string) => void;
+  handleEdgeOptionsChange: (edgeOptions: any) => void;
+  handleEdgeThicknessChange: (event: Event, edgeThickness: number) => void;
 }
