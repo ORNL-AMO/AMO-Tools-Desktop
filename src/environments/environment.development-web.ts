@@ -3,9 +3,9 @@ import packageInfo from '../../package.json';
 
 export const environment = {
   production: true,
-  name: 'web',
+  name: 'development-web',
   version: packageInfo.version,
   useServiceWorker: true,
-  measurWeatherApi: 'https://weather.ornl.gov/',
-  measurUtilitiesApi: 'https://weather.ornl.gov/'
+  measurWeatherApi: 'https://dev.weather.ornl.gov/',
+  measurUtilitiesApi: 'https://dev.weather.ornl.gov/'
 };

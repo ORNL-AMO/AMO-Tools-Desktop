@@ -13,6 +13,8 @@ import { DirectoryDashboardService } from '../../../dashboard/directory-dashboar
 export class ErrorReportingComponent {
   @Input()
   measurFormattedError: MeasurFormattedError;
+  @Input()
+  inModal: boolean;
   measurPlatform: string = environment.name;
   appVersion: string = environment.version;
 

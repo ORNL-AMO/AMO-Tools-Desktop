@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-tutorial-settings',
@@ -11,7 +12,7 @@ export class TutorialSettingsComponent implements OnInit {
   settings: Settings;
   @Output('saveTutorialChanges')
   saveTutorialChanges = new EventEmitter<boolean>();
-
+  isDevelopment = !environment.production;
 
   disableAllTutorials: boolean = false;
   constructor() { }
