@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useState } from 'react';
+
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer, { DrawerProps } from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -7,9 +8,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuSidebar, { MenuSidebarProps } from './MenuSidebar';
-import { Box } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 import { ParentContainerDimensions } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { DataSidebarProps } from './DataSidebar';
+import DrawerToggleButton from './DrawerToggleButton';
 
 const drawerWidth = 375;
 
@@ -91,59 +92,34 @@ const Drawer = styled(MuiDrawer, {
   }),
 );
 
-// todo rightside:  float chevron to the left and reverse logic, 
-// todo is offsetting the canvas, reverse other logic
 
 export const SideDrawer = (props: SideDrawerProps) => {
-  const [open, setOpen] = React.useState(props.dataSidebarProps?.isDrawerOpen);
-
-  const handleDrawerOpen = () => {
-    setOpen(!open);
+  const [open, setOpen] = React.useState(true);
+  const toggleDrawerOpen = () => {
+    setOpen(!open)
   };
 
-  let chevronIcon = <ChevronLeftIcon /> 
   let justifyContent = 'flex-end';
-  let variant: 'permanent' | 'temporary' = 'permanent';
+  const closedButton = (<IconButton onClick={toggleDrawerOpen}>
+    <MenuIcon/>
+  </IconButton>);
+  const drawerChevron = (<DrawerToggleButton toggleDrawer={toggleDrawerOpen} side={'left'}></DrawerToggleButton>);
+  const toggleButton = open? drawerChevron : closedButton;
 
-  if (props.anchor == 'right') {
-    chevronIcon = <ChevronRightIcon />;
-    justifyContent = 'flex-start';
-    variant = 'temporary';
-  }
   
-  const openButton = open? chevronIcon : <MenuIcon />;
-  console.log(chevronIcon);
   return (
     <>
       <CssBaseline />
-      <Drawer variant={variant}
-        // open={open} 
-        // anchor={props.anchor} 
-        // parentContainer={props.parentContainer} 
-        // animationProps={{anchor: props.anchor}}
-
-        parentContainer={props.parentContainer} 
-        animationProps={{anchor: props.anchor}}
+      <Drawer variant={'permanent'}
+        parentContainer={props.parentContainer}
+        animationProps={{ anchor: props.anchor }}
         open={open}
         anchor={props.anchor}
-        onClose={props.dataSidebarProps?.setIsDataDrawerOpen}
-        
-        // sx={{
-        //     width: 400,
-        //     flexShrink: 0,
-        //     [`& .MuiDrawer-root`]: { zIndex: 0 },
-        //     [`& .MuiBackdrop-root.MuiModal-backdrop`]: { opacity: '0 !important' },
-        //     [`& .MuiDrawer-paper`]: { width: 400, zIndex: 0, boxSizing: 'border-box' },
-        //     // [`& .MuiPaper-root`]: { top: '75px' },
-        // }}
-
-        >
+      >
         <DrawerHeader justifyContent={justifyContent}>
-          <IconButton onClick={handleDrawerOpen}>
-            {openButton}
-          </IconButton>
+        {toggleButton}
         </DrawerHeader>
-        <Box padding={'1rem .5rem'}>
+        <Box paddingBottom={'1rem'} paddingTop={0} paddingX={'.5rem'}>
           {open && props.menuSidebarProps &&
             <MenuSidebar {...props.menuSidebarProps} />
           }
@@ -155,11 +131,8 @@ export const SideDrawer = (props: SideDrawerProps) => {
 
 export interface SideDrawerProps {
     anchor: 'left' | 'right',
-    // isMenuDrawerOpen: boolean;
-    // setIsMenuDrawerOpen: (boolean) => void;
     parentContainer: ParentContainerDimensions,
     menuSidebarProps?: MenuSidebarProps,
-    dataSidebarProps?: DataSidebarProps
 }
 
 

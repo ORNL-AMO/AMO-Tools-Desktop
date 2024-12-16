@@ -1,10 +1,11 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
-import { Box, Button, Divider, Grid, Paper, styled, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import { UserDiagramOptionsHandlers } from '../Flow';
+import TabPanel from './TabPanel';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
@@ -17,16 +18,31 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
 }));
 
 const MenuSidebar = memo((props: MenuSidebarProps) => {
+  const [selectedTab, setSelectedTab] = useState(0);
+  
+
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
   };
 
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setSelectedTab(newValue);
+};
+
   return (
       <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingX: 1 }}>
         <Box>
-          <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px' }}>Drag plant water system components into the pane</Typography>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
+                    <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
+                        <Tab sx={{fontSize: '.75rem'}} label="Build" />
+                        <Tab sx={{fontSize: '.75rem'}} label="Options" />
+                    </Tabs>
+                </Box>
+          <TabPanel value={selectedTab} index={0}>    
+          <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px', paddingTop: '.5rem' }}>Drag plant water system components into the pane</Typography>
+          
           <Box sx={{ flexGrow: 1, paddingY: '1rem' }}>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
               {processFlowParts.map((part: ProcessFlowPart) => (
@@ -47,11 +63,11 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                   onDragStart={(event) => onDragStart(event, 'splitter-node-8')} draggable> 8-way Connection</WaterComponent>
               </Grid>
             </Grid>
-
           </Box>
+          </TabPanel>
 
+          <TabPanel value={selectedTab} index={1}>    
 
-          <Divider></Divider>
           <Box sx={{ marginTop: 1, padding: '.5rem' }}>
             <div className="sidebar-actions">
               <Box display={'flex'} flexDirection={'column'} sx={{ fontSize: '.75rem' }}>
@@ -145,10 +161,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 
             </div>
           </Box>
+          </TabPanel>
         </Box>
 
-        <Divider></Divider>
-        <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'}>
+        <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingTop={'1rem'}>
           <DownloadButton shadowRoot={props.shadowRoot} />
           {!props.hasAssessment &&
             <Button variant="outlined" sx={{ width: '100%' }} onClick={() => props.setIsDialogOpen(true)}>Reset Diagram</Button>

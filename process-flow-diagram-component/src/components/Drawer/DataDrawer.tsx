@@ -5,7 +5,6 @@ import {
     Edge,
 } from '@xyflow/react';
 import { Box, Button, Divider, Tab, Tabs, TextField, Typography } from "@mui/material";
-import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 import React, { BaseSyntheticEvent, useEffect, useRef, useState } from 'react';
 import TabPanel, { TabPanelBox } from "./TabPanel";
 import ComponentDataForm from "./ComponentDataForm";
@@ -14,7 +13,7 @@ import CustomizeNode from "./CustomizeNode";
 import ComponentConnectionsList from "./ComponentConnectionList";
 import CustomizeEdge from "./CustomizeEdge";
 import Drawer from '@mui/material/Drawer';
-import { TransitionProps } from "@mui/material/transitions";
+import DrawerToggleButton from "./DrawerToggleButton";
 
 export default function DataDrawer(props: DataDrawerProps) {
     const { getNodes, getEdges, setEdges, setNodes } = useReactFlow();
@@ -106,8 +105,8 @@ export default function DataDrawer(props: DataDrawerProps) {
         });
     };
 
-    const toggleDrawer = (newOpen: boolean) => () => {
-        props.setIsDataDrawerOpen(newOpen)
+    const toggleDrawerOpen = () => {
+        props.setIsDataDrawerOpen(false)
     };
 
     const handleDrawerClose = (event: any, reason: string) => {
@@ -150,17 +149,7 @@ export default function DataDrawer(props: DataDrawerProps) {
             }}
         >
             <Box display="flex" alignItems={'center'} sx={{ margin: '1rem' }}>
-                <Button onClick={toggleDrawer(false)}
-                    sx={{
-                        alignSelf: 'flex-start',
-                        // width: '25%',
-                        transform: 'rotate(-90deg)'
-                    }}>
-                    <ExpandCircleDownIcon sx={{
-                        width: '32px',
-                        height: '32px',
-                    }} />
-                </Button>
+                <DrawerToggleButton toggleDrawer={toggleDrawerOpen} side={'right'}></DrawerToggleButton>
                 <Typography variant="h6" gutterBottom
                     sx={{
                         marginTop: '0',
