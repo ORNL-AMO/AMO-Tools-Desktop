@@ -1,24 +1,25 @@
-import Drawer from '@mui/material/Drawer';
-import { CustomEdgeData, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { CustomEdgeData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { getConnectedEdges, useReactFlow } from '@xyflow/react';
 import {
     type Node,
     Edge,
 } from '@xyflow/react';
-import { Box, Button, Divider, Tab, Tabs, TextField, Typography } from '@mui/material';
-import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
-import React, { useEffect, useRef, useState } from 'react';
-import TabPanel, { TabPanelBox } from './TabPanel';
-import CustomizeNode from './CustomizeNode';
-import ComponentConnectionsList from './ComponentConnectionList';
-import CustomizeEdge from './CustomizeEdge';
-import ComponentHandles from './ComponentHandles';
-import ComponentDataForm from './ComponentDataForm';
+import { Box, Button, Divider, Tab, Tabs, TextField, Typography } from "@mui/material";
+import React, { BaseSyntheticEvent, useEffect, useRef, useState } from 'react';
+import TabPanel, { TabPanelBox } from "./TabPanel";
+import ComponentDataForm from "./ComponentDataForm";
+import ComponentHandles from "./ComponentHandles";
+import CustomizeNode from "./CustomizeNode";
+import ComponentConnectionsList from "./ComponentConnectionList";
+import CustomizeEdge from "./CustomizeEdge";
+import Drawer from '@mui/material/Drawer';
+import DrawerToggleButton from "./DrawerToggleButton";
 
-export default function ManageDataContextDrawer(props: ManageDataContextDrawerProps) {
+export default function DataDrawer(props: DataDrawerProps) {
     const { getNodes, getEdges, setEdges, setNodes } = useReactFlow();
     const allNodes: Node[] = getNodes();
     const selectedNode: Node = allNodes.find((node: Node<ProcessFlowPart>) => node.data.diagramNodeId === props.manageDataId);
+    
     const nodeData = selectedNode.data as ProcessFlowPart;
     
     const allEdges: Edge[] = getEdges();
@@ -104,8 +105,13 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
         });
     };
 
-    const toggleDrawer = (newOpen: boolean) => () => {
-        props.setIsDataDrawerOpen(newOpen)
+    const toggleDrawerOpen = () => {
+        props.setIsDataDrawerOpen(false)
+    };
+
+    const handleDrawerClose = (event: any, reason: string) => {
+            event = event as BaseSyntheticEvent;
+            props.setIsDataDrawerOpen(event.target.value)
     };
 
     const updateDiagramEdges = (event, edgeId: string) => {
@@ -125,28 +131,25 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
             disablePortal={true}
             open={props.isDrawerOpen}
             anchor='right'
-            onClose={toggleDrawer(false)}
+            keepMounted
+            disableEnforceFocus
+            onClose={(event, reason) => handleDrawerClose(event, reason)}
             sx={{
                 width: 400,
                 flexShrink: 0,
-                [`& .MuiDrawer-root`]: { zIndex: 0 },
+                [`& .MuiDrawer-root`]: { 
+                    zIndex: 0,
+                },
                 [`& .MuiBackdrop-root.MuiModal-backdrop`]: { opacity: '0 !important' },
-                [`& .MuiDrawer-paper`]: { width: 400, zIndex: 0, boxSizing: 'border-box' },
-                // [`& .MuiPaper-root`]: { top: '75px' },
+                [`& .MuiDrawer-paper`]: { boxSizing: 'border-box' },
+                [`& .MuiPaper-root.MuiPaper-elevation.MuiDrawer-paper`]: { 
+                    top: props.parentContainer.headerHeight,
+                    height: props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight
+                 },
             }}
         >
             <Box display="flex" alignItems={'center'} sx={{ margin: '1rem' }}>
-                <Button onClick={toggleDrawer(false)}
-                    sx={{
-                        alignSelf: 'flex-start',
-                        // width: '25%',
-                        transform: 'rotate(-90deg)'
-                    }}>
-                    <ExpandCircleDownIcon sx={{
-                        width: '32px',
-                        height: '32px',
-                    }} />
-                </Button>
+                <DrawerToggleButton toggleDrawer={toggleDrawerOpen} side={'right'}></DrawerToggleButton>
                 <Typography variant="h6" gutterBottom
                     sx={{
                         marginTop: '0',
@@ -224,9 +227,10 @@ export default function ManageDataContextDrawer(props: ManageDataContextDrawerPr
 };
 
 
-export interface ManageDataContextDrawerProps {
+export interface DataDrawerProps {
     isDrawerOpen: boolean;
     manageDataId: string;
+    parentContainer: ParentContainerDimensions;
     userDiagramOptions: UserDiagramOptions;
     setIsDataDrawerOpen: (boolean) => void;
     setIsDialogOpen: (boolean) => void;

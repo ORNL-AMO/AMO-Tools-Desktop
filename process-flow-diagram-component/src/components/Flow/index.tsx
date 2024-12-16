@@ -15,22 +15,20 @@ import {
   MarkerType,
   EdgeTypes,
   FitViewOptions,
-  addEdge,
   reconnectEdge,
-  OnConnectEnd,
-  FinalConnectionState,
 } from '@xyflow/react';
- 
+
 import '@xyflow/react/dist/style.css';
 
-import Sidebar from '../Sidebar/Sidebar';
-import { FlowDiagramData, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { changeExistingEdgesType, getAdaptedTypeString, getDefaultNodeFromType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdgeDefaults, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
+import { FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdgeDefaults, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
-import ManageDataContextDrawer from '../Drawer/ManageDataContextDrawer';
 import { DefaultEdgeOptions } from 'reactflow';
+import { MenuSidebarProps } from '../Drawer/MenuSidebar';
+import { SideDrawer } from '../Drawer/SideDrawer';
+import DataDrawer from '../Drawer/DataDrawer';
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const nodeClassName = (node: Node) => node.type;
@@ -45,8 +43,8 @@ const Flow = (props: FlowProps) => {
   let staleParentNodes = [];
   let existingNodes = [];
   let existingEdges = [];
-  const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions? props.processDiagram.flowDiagramData.userDiagramOptions: getDefaultUserDiagramOptions();
-  existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart> )=> {
+  const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions ? props.processDiagram.flowDiagramData.userDiagramOptions : getDefaultUserDiagramOptions();
+  existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
     if (node.data.processComponentType !== 'splitter-node') {
       node.data.setManageDataId = setManageDataId;
       node.data.openEditData = setIsDataDrawerOpen;
@@ -116,46 +114,6 @@ const Flow = (props: FlowProps) => {
     [userDiagramOptions]
   );
 
-   /**
- * Check for flow loss node
- */
-  const onConnectEnd: OnConnectEnd = useCallback(
-    (event, connectionState: FinalConnectionState) => {
-      if (
-        connectionState.isValid ||
-        connectionState.fromHandle.type === 'target'
-      ) {
-        return;
-      }
-
-      const fromNodeId = connectionState.fromNode.id;
-      const { clientX, clientY } = 'changedTouches' in event ? event.changedTouches[0] : event;
-
-      let lossNode: Node<ProcessFlowPart> = getDefaultNodeFromType('known-loss', setManageDataId, setIsDataDrawerOpen);
-      lossNode.data.disableInflowConnections = true;
-      lossNode.type = getAdaptedTypeString(lossNode.type);
-      lossNode.data.disableOutflowConnections = true;
-      lossNode.position = reactFlowInstance.screenToFlowPosition({
-        x: clientX,
-        y: clientY,
-      })
-
-      const newEdge: Edge = {
-        animated: userDiagramOptions.edgeOptions.animated,
-        id: `reactflow__edge-${fromNodeId}-${lossNode.id}`,
-        source: fromNodeId,
-        sourceHandle: connectionState.fromHandle.id,
-        target: lossNode.id,
-        reconnectable: 'target',
-      };
-      
-      setCustomEdgeDefaults(newEdge, userDiagramOptions);
-      setNodes((nodes) => nodes.concat(lossNode));
-      setEdges((edges) => addEdge(newEdge, edges));
-    },
-    [setNodes, setEdges, reactFlowInstance],
-  );
-
   const onReconnect = useCallback(
     (oldEdge, newConnection) => {
 
@@ -163,32 +121,6 @@ const Flow = (props: FlowProps) => {
     },
     [setEdges],
   );
-
-  // const onReconnectEnd = useCallback(
-  //   (_, oldEdge, handleType) => {
-  //     console.log('onReconnectEnd')
-  //     if (handleType === 'source') {
-  //       setNodes((nodes) => {
-  //         return nodes.filter((node) => {
-  //           const isKnownLoss = node.type === 'knownLoss';
-  //           const isTarget = node.id === oldEdge.target;
-            
-  //           return !(isKnownLoss && isTarget);
-  //         });
-  //       });
-
-  //       setEdges((edges) => edges.filter((edge) => edge.id !== oldEdge.id));
-  //     }
-  //   },
-  //   [setNodes, setEdges],
-  // );
-
-
-  // const onBeforeDelete: OnBeforeDelete = useCallback(async ({ nodes, edges }) => {
-  //   // todo global confirm
-  //   return { nodes, edges };
-  // }, []);
-  
   const handleMinimapVisible = useCallback((isEnabled) => {
     setUserDiagramOptions({
       ...userDiagramOptions,
@@ -247,7 +179,7 @@ const Flow = (props: FlowProps) => {
       let updatedEdges = eds.map((e: Edge) => {
         let updatedEdge = {
           ...e,
-          markerEnd: showArrows? { 
+          markerEnd: showArrows ? {
             type: MarkerType.ArrowClosed,
             width: 25,
             height: 25
@@ -279,7 +211,6 @@ const Flow = (props: FlowProps) => {
     });
   }, [userDiagramOptions]);
 
-  
   const resetDiagram = useCallback(() => {
     const defaultOptions = getDefaultUserDiagramOptions();
     setNodes(nds => []);
@@ -309,7 +240,6 @@ const Flow = (props: FlowProps) => {
     if (msgId === '002') {
       return;
     }
-  
     console.warn(msg);
   }
 
@@ -317,76 +247,85 @@ const Flow = (props: FlowProps) => {
     // padding: 10
   };
 
+  const menuSidebarProps: MenuSidebarProps = {
+    userDiagramOptions: userDiagramOptions,
+    userDiagramOptionsHandlers: {
+      handleMinimapVisible,
+      handleShowFlowValues,
+      handleShowMarkerEndArrows,
+      handleControlsVisible,
+      handleEdgeTypeChange,
+      handleEdgeThicknessChange,
+      handleEdgeOptionsChange,
+    },
+    resetDiagramCallback: resetDiagram,
+    shadowRoot: props.shadowRoot,
+    setIsDialogOpen: setIsDialogOpen,
+    hasAssessment: props.processDiagram.assessmentId !== undefined
+  }
+
   return (
     props.height &&
-    <FlowContext.Provider value={{userDiagramOptions}}>
-    <div className="process-flow-diagram">
-      {isDialogOpen &&
-          <WarningDialog 
-          isDialogOpen={isDialogOpen} 
-          handleDialogCloseCallback={setIsDialogOpen}
-          handleResetDiagramCallback={resetDiagram}/>
+    <FlowContext.Provider value={{ userDiagramOptions }}>
+      <div className="process-flow-diagram">
+        {isDialogOpen &&
+          <WarningDialog
+            isDialogOpen={isDialogOpen}
+            handleDialogCloseCallback={setIsDialogOpen}
+            handleResetDiagramCallback={resetDiagram} />
         }
 
-      <ReactFlowProvider>
-        <div className={'flow-wrapper'} style={{ height: props.height }}>
-          <ReactFlow
-            nodes={nodes}
-            onNodesChange={onNodesChange}
-            edges={edges}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onReconnect={onReconnect}
-            onInit={setReactFlowInstance}
-            nodeTypes={nodeTypes}
-            edgeTypes={edgeTypes}
-            defaultEdgeOptions={userDiagramOptions.edgeOptions}
-            defaultViewport={defaultViewport}
-            connectionLineType={ConnectionLineType.Bezier}
-            onDrop={onDrop}
-            onError={onErrorWithSuppressed}
-            // onBeforeDelete={onBeforeDelete}
-            onDragOver={onDragOver}
-            fitView={true}
-            fitViewOptions={fitViewOptions}
-            className="flow"
-          >
-            {userDiagramOptions.minimapVisible &&
-              <MiniMap zoomable pannable nodeClassName={nodeClassName} />
-            }
-            {userDiagramOptions.controlsVisible &&
-              <Controls />
-            }
-            <Background />
-          </ReactFlow>
-        </div>
-        <Sidebar
+        <ReactFlowProvider>
+          <div className={'flow-wrapper'} style={{ height: props.height }}>
+            <ReactFlow
+              nodes={nodes}
+              onNodesChange={onNodesChange}
+              edges={edges}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              onReconnect={onReconnect}
+              onInit={setReactFlowInstance}
+              nodeTypes={nodeTypes}
+              edgeTypes={edgeTypes}
+              defaultEdgeOptions={userDiagramOptions.edgeOptions}
+              defaultViewport={defaultViewport}
+              connectionLineType={ConnectionLineType.Bezier}
+              onDrop={onDrop}
+              onError={onErrorWithSuppressed}
+              // onBeforeDelete={onBeforeDelete}
+              onDragOver={onDragOver}
+              fitView={true}
+              fitViewOptions={fitViewOptions}
+              className="flow"
+            >
+              {userDiagramOptions.minimapVisible &&
+                <MiniMap zoomable pannable nodeClassName={nodeClassName} />
+              }
+              {userDiagramOptions.controlsVisible &&
+                <Controls />
+              }
+              <Background />
+            </ReactFlow>
+          </div>
+
+          <SideDrawer
+            anchor={'left'}
+            menuSidebarProps={menuSidebarProps}
+            parentContainer={props.parentContainer}
+          ></SideDrawer>
+          
+          {isDataDrawerOpen &&
+            <DataDrawer
+            isDrawerOpen={isDataDrawerOpen}
+            manageDataId={manageDataId}
             userDiagramOptions={userDiagramOptions}
-            userDiagramOptionsHandlers={{
-              handleMinimapVisible,
-              handleShowFlowValues,
-              handleShowMarkerEndArrows,
-              handleControlsVisible,
-              handleEdgeTypeChange,
-              handleEdgeThicknessChange,
-              handleEdgeOptionsChange,
-            }}
-            resetDiagramCallback={resetDiagram}
-            shadowRoot={props.shadowRoot}
+            setIsDataDrawerOpen={setIsDataDrawerOpen}
+            parentContainer={props.parentContainer}
             setIsDialogOpen={setIsDialogOpen}
-            hasAssessment={props.processDiagram.assessmentId !== undefined}
-          />
-      {isDataDrawerOpen &&
-        <ManageDataContextDrawer
-         isDrawerOpen={isDataDrawerOpen}
-         manageDataId={manageDataId}
-         userDiagramOptions={userDiagramOptions}
-         setIsDataDrawerOpen={setIsDataDrawerOpen}
-         setIsDialogOpen={setIsDialogOpen}
-         />
-      }
-      </ReactFlowProvider>
-    </div>
+            />
+          }
+        </ReactFlowProvider>
+      </div>
     </FlowContext.Provider>
   );
 }
@@ -395,6 +334,7 @@ export default Flow;
 export interface FlowProps {
   shadowRoot,
   height?: number,
+  parentContainer: ParentContainerDimensions,
   processDiagram?: WaterDiagram;
   clickEvent: (...args) => void;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
@@ -402,4 +342,14 @@ export interface FlowProps {
 
 export interface FlowContext {
   userDiagramOptions: UserDiagramOptions
+}
+
+export interface UserDiagramOptionsHandlers {
+  handleMinimapVisible: (enabled: boolean) => void;
+  handleShowMarkerEndArrows: (enabled: boolean) => void;
+  handleControlsVisible: (enabled: boolean) => void;
+  handleShowFlowValues: (enabled: boolean) => void;
+  handleEdgeTypeChange: (edgeTypeOption: string) => void;
+  handleEdgeOptionsChange: (edgeOptions: any) => void;
+  handleEdgeThicknessChange: (event: Event, edgeThickness: number) => void;
 }
