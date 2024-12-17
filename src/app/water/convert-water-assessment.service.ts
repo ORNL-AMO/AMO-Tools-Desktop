@@ -245,12 +245,17 @@ export class ConvertWaterAssessmentService {
   }
 
   convertLandscapingSuiteInput(landscaping: Landscaping, settings: Settings): Landscaping {
+    let convertedLandscaping: Landscaping = {
+      areaIrrigated: landscaping.areaIrrigated,
+      yearlyInchesIrrigated: landscaping.yearlyInchesIrrigated
+    };
     if (settings.unitsOfMeasure == 'Imperial') {
-      landscaping.yearlyInchesIrrigated = this.convertUnitsService.value(landscaping.yearlyInchesIrrigated).from('in').to('ft');
+      convertedLandscaping.yearlyInchesIrrigated = this.convertUnitsService.value(landscaping.yearlyInchesIrrigated).from('in').to('ft');
     } else if (settings.unitsOfMeasure == "Metric") {
-      landscaping.yearlyInchesIrrigated = this.convertUnitsService.value(landscaping.yearlyInchesIrrigated).from('cm').to('m');
+      convertedLandscaping.yearlyInchesIrrigated = this.convertUnitsService.value(landscaping.yearlyInchesIrrigated).from('cm').to('m');
     }
-    return landscaping;
+
+    return convertedLandscaping;
   }
 
   convertLandscapingResults(results: LandscapingResults, settings: Settings): LandscapingResults {
