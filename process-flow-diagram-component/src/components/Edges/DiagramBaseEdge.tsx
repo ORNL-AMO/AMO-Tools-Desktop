@@ -4,22 +4,25 @@ import { FlowContext } from '../Flow';
 import CloseIcon from '@mui/icons-material/Close';
 import { CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
 
-const FlowValueLabel = ({ transform, selected, flowValue }: { transform: string; selected: boolean, flowValue: number }) => {
+const FlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: string; selected: boolean, flowValue: number, scale: number }) => {
+  let adjustedTransform = transform + ` scale(${scale})`;
   let style: CSSProperties = {
     position: 'absolute',
     background: '#fff',
     border: 'solid 1px #3055cf',
-    padding: 4,
+    padding: 8,
     borderRadius: 8,
-    fontSize: 10,
+    fontSize: 18,
     fontWeight: 700,
-    transform: transform,
+    transform: adjustedTransform,
     zIndex: 1000,
     transition: 'all 100ms ease-out',
+    transformOrigin: 'center'
   }
   if (selected) {
-      style.padding = 8;
-      style.fontSize = 18;
+      let adjustedScale = scale * 1.5;
+      let emphasisTransform = transform + ` scale(${adjustedScale})`;
+      style.transform = emphasisTransform;
       style.zIndex = 10001;
       style.transition = 'all 100ms ease-in'
   }
@@ -116,6 +119,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
             <FlowValueLabel
             transform={`translate(${translateXStart}%, ${translateYStart}%) translate(${sourceX}px,${sourceY}px)`}
             selected={props.selected}
+            scale={flowContext.userDiagramOptions.flowLabelSize !== undefined? flowContext.userDiagramOptions.flowLabelSize : 1}
             flowValue={customEdgeData.flowValue}
             />
         }
@@ -123,6 +127,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
             <FlowValueLabel
             transform={`translate(-50%, -100%) translate(${targetX - 25}px,${targetY - 25}px)`}
             selected={props.selected}
+            scale={flowContext.userDiagramOptions.flowLabelSize !== undefined? flowContext.userDiagramOptions.flowLabelSize : 1}
             flowValue={customEdgeData.flowValue}
             />
         }

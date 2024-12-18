@@ -211,6 +211,16 @@ const Flow = (props: FlowProps) => {
     });
   }, [userDiagramOptions]);
 
+
+  const handleFlowLabelSizeChange = useCallback((event: Event, flowLabelSize: number) => {
+    setUserDiagramOptions({
+      ...userDiagramOptions,
+      flowLabelSize: flowLabelSize
+    });
+    setEdges((eds) => eds);
+  }, [userDiagramOptions]);
+
+
   const resetDiagram = useCallback(() => {
     const defaultOptions = getDefaultUserDiagramOptions();
     setNodes(nds => []);
@@ -257,6 +267,7 @@ const Flow = (props: FlowProps) => {
       handleEdgeTypeChange,
       handleEdgeThicknessChange,
       handleEdgeOptionsChange,
+      handleFlowLabelSizeChange
     },
     resetDiagramCallback: resetDiagram,
     shadowRoot: props.shadowRoot,
@@ -352,4 +363,5 @@ export interface UserDiagramOptionsHandlers {
   handleEdgeTypeChange: (edgeTypeOption: string) => void;
   handleEdgeOptionsChange: (edgeOptions: any) => void;
   handleEdgeThicknessChange: (event: Event, edgeThickness: number) => void;
+  handleFlowLabelSizeChange: (event: Event, flowLabelSize: number) => void;
 }
