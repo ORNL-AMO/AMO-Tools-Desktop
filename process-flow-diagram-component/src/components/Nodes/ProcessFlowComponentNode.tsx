@@ -2,7 +2,7 @@ import { memo, CSSProperties } from 'react';
 import { Position, NodeProps, Node } from '@xyflow/react';
 import { DiagramNode, Handles, ProcessFlowNodeType, ProcessFlowPartStyleClass } from '../../../../src/process-flow-types/shared-process-flow-types';
 import EditIcon from '@mui/icons-material/Edit';
-import { Typography } from '@mui/material';
+import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
 import EditNodeButton from './EditNodeButton';
 
@@ -13,6 +13,15 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
   const allowInflowOnly: boolean = data.disableInflowConnections; 
   const allowOutflowOnly: boolean = data.disableOutflowConnections; 
   const allowAllHandles: boolean = !allowInflowOnly && !allowOutflowOnly;
+  let plantLevelFlow: number;
+  if (data.processComponentType === 'water-intake') {
+    // todo update with logic in place form 7193
+    plantLevelFlow = 200  
+  }
+  if (data.processComponentType === 'water-discharge') {
+    // todo update with logic in place form 7193
+    plantLevelFlow = 200  
+  }
 
   return (
     <>
@@ -68,6 +77,13 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         <Typography sx={{ width: '100%' }} >
           {data.name}
         </Typography>
+
+        {plantLevelFlow !== undefined && 
+            <Chip label={`${plantLevelFlow} Mgal`} 
+            variant="outlined" 
+            sx={{background: '#fff', borderRadius: '8px', marginTop: '.25rem'}}
+            />
+        }
       </div>
 
       {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.e &&
