@@ -85,10 +85,21 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
               </Box>
 
               <Box display={'flex'} flexDirection={'column'} sx={{ fontSize: '.75rem', marginTop: '1rem' }}>
-                <label htmlFor={'edgeThickness'} >Set Line Thickness</label>
+                <label htmlFor={'edgeThickness'} >Line Thickness</label>
                 <ContinuousSlider
                   setSliderValue={props.userDiagramOptionsHandlers.handleEdgeThicknessChange}
                   value={props.userDiagramOptions.edgeThickness} />
+              </Box>
+
+              <Box display={'flex'} flexDirection={'column'} sx={{ fontSize: '.75rem', marginTop: '1rem' }}>
+                <label htmlFor={'edgeThickness'} >Flow Label Size Scale</label>
+                <ContinuousSlider
+                  min={.5}
+                  max={2}
+                  step={.10}
+                  unit={''}
+                  setSliderValue={props.userDiagramOptionsHandlers.handleFlowLabelSizeChange}
+                  value={props.userDiagramOptions.flowLabelSize} />
               </Box>
 
 
@@ -100,6 +111,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                       id={"show-flow-values"}
                       checked={props.userDiagramOptions.showFlowValues}
                       className={'diagram-checkbox'}
+                      style={{ marginRight: '.5rem'}}
                       onChange={(e) => props.userDiagramOptionsHandlers.handleShowFlowValues(e.target.checked)}
                     />
                     <span>Show Connected Flow Values (Mgal)</span>
@@ -113,6 +125,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                       id={"edge-options"}
                       checked={props.userDiagramOptions.edgeOptions.animated}
                       className={'diagram-checkbox'}
+                      style={{ marginRight: '.5rem'}}
                       onChange={(e) => props.userDiagramOptionsHandlers.handleEdgeOptionsChange({animated: e.target.checked})}
                     />
                     <span>Animated Connecting Lines</span>
@@ -126,6 +139,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                       id={"directional-arrows"}
                       checked={props.userDiagramOptions.directionalArrowsVisible}
                       className={'diagram-checkbox'}
+                      style={{ marginRight: '.5rem'}}
                       onChange={(e) => props.userDiagramOptionsHandlers.handleShowMarkerEndArrows(e.target.checked)}
                     />
                     <span>Show Directional Arrows</span>
@@ -139,6 +153,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                       id={"minimap-visible"}
                       checked={props.userDiagramOptions.minimapVisible}
                       className={'diagram-checkbox'}
+                      style={{ marginRight: '.5rem'}}
                       onChange={(e) => props.userDiagramOptionsHandlers.handleMinimapVisible(e.target.checked)}
                     />
                     <span>Show Minimap</span>
@@ -152,6 +167,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                       id='controls-visible'
                       checked={props.userDiagramOptions.controlsVisible}
                       className={'diagram-checkbox'}
+                      style={{ marginRight: '.5rem'}}
                       onChange={(e) => props.userDiagramOptionsHandlers.handleControlsVisible(e.target.checked)}
                     />
                     <span>Show Controls</span>

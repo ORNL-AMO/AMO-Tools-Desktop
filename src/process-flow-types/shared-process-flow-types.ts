@@ -61,6 +61,7 @@ export interface UserDiagramOptions {
   minimapVisible: boolean,
   controlsVisible: boolean,
   directionalArrowsVisible: boolean,
+  flowLabelSize: number,
   edgeOptions: DefaultEdgeOptions
 }
 

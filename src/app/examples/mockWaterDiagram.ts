@@ -1340,6 +1340,7 @@ export const MockWaterdiagram: Diagram =
                 "controlsVisible": true,
                 "directionalArrowsVisible": false,
                 "showFlowValues": true,
+                "flowLabelSize": 1,
                 "edgeOptions": {
                     "animated": true
                 }
