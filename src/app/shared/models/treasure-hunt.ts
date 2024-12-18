@@ -397,6 +397,14 @@ export interface CondensingEconTreasureHunt extends TreasureHuntOpportunity {
     selected?: boolean;
 }
 
+export interface PowerFactorCorrectionTreasureHunt extends TreasureHuntOpportunity {
+    //inputData: CondensingEconomizerInput;
+    //energySourceData: EnergySourceData;
+    //opportunitySheet?: OpportunitySheet;
+    //selected?: boolean;
+}
+
+
 
 export interface EnergySourceData {
     energySourceType: string,

@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { PowerFactorCorrectionService } from './power-factor-correction.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
+import { PowerFactorCorrectionTreasureHunt } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-power-factor-correction',
@@ -8,6 +9,12 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
   styleUrls: ['./power-factor-correction.component.css']
 })
 export class PowerFactorCorrectionComponent implements OnInit {
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<PowerFactorCorrectionTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
 
   inputData: PowerFactorCorrectionInputs = {
     existingDemand: 100,
@@ -93,7 +100,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
         input2: 0.8,
         input3: 0
       },
-    ],    
+    ],
     startMonth: 1,
     startYear: 2024,
   };
@@ -122,7 +129,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
     this.analyticsService.sendEvent('calculator-UTIL-power-factor-correction');
     if (!this.powerFactorCorrectionService.inputData) {
       this.generateExample();
-    } else{
+    } else {
       this.inputData = this.powerFactorCorrectionService.inputData;
     }
     this.calculate(this.inputData);
@@ -142,12 +149,10 @@ export class PowerFactorCorrectionComponent implements OnInit {
     this.inputData = this.powerFactorCorrectionService.getResetData();
     this.results = this.powerFactorCorrectionService.getResetOutput();
     this.powerFactorCorrectionService.inputData = this.inputData;
-    //this.calculate(this.inputData);
   }
 
   generateExample() {
     this.inputData = this.powerFactorCorrectionService.generateExample();
-    //this.results = this.powerFactorCorrectionService.generateExampleOutput();
     this.powerFactorCorrectionService.inputData = this.inputData;
   }
 
@@ -175,7 +180,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
   calculate(data: PowerFactorCorrectionInputs) {
     this.inputData = data;
-    if (data.billedForDemand == 0){
+    if (data.billedForDemand == 0) {
       if (data.adjustedOrActual == 0) {
         this.results = this.powerFactorCorrectionService.calculateRealPowerAndPowerFactor(data);
       } else if (data.adjustedOrActual == 1) {
@@ -183,7 +188,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
       } else if (data.adjustedOrActual == 2) {
         this.results = this.powerFactorCorrectionService.calculateRealPowerAndBoth(data);
       }
-    } else if (data.billedForDemand == 1){
+    } else if (data.billedForDemand == 1) {
       if (data.adjustedOrActual == 0) {
         this.results = this.powerFactorCorrectionService.calculateApparentPowerAndPowerFactor(data);
       } else if (data.adjustedOrActual == 1) {
@@ -213,6 +218,14 @@ export class PowerFactorCorrectionComponent implements OnInit {
     }
 
 
+  }
+
+  save() {
+    //this.emitSave.emit({ replaceExistingData: this.inputs, opportunityType: Treasure.replaceExisting });
+  }
+
+  cancel() {
+    this.emitCancel.emit(true);
   }
 
   setSmallScreenTab(selectedTab: string) {
