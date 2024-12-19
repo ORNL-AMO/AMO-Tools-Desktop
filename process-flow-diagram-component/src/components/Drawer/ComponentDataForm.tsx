@@ -89,12 +89,12 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             dischargeEdgeInputElements.push(getConnectionListItem(edge, source, target));
         }
     });
-    // if (componentData.totalSourceFlow === undefined) {
-    //     componentData.totalSourceFlow = sourceEdgesTotalFlow;
-    // }
-    // if (componentData.totalDischargeFlow === undefined) {
-    //     componentData.totalDischargeFlow = dischargeEdgesTotalFlow;
-    // }
+    if (componentData.totalSourceFlow === undefined) {
+        componentData.totalSourceFlow = sourceEdgesTotalFlow;
+    }
+    if (componentData.totalDischargeFlow === undefined) {
+        componentData.totalDischargeFlow = dischargeEdgesTotalFlow;
+    }
     const sourceEdgeItems = sourceEdgeInputElements.filter(edge => edge !== undefined);
 
     const handleTreatmentTypeChange = (event) => {
@@ -113,6 +113,13 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             }),
         );
     };
+
+    const getTotalChipLabel = (totalFlowValue) => {
+        if (totalFlowValue === undefined || totalFlowValue === null) {
+            return '';
+        }
+        return totalFlowValue;
+    }
 
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1 }}>
@@ -136,16 +143,14 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             {sourceEdgeItems.length > 0 &&
                 <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
                     <AccordionSummary>
-                        <span>Sources</span>
-                        {componentData.totalSourceFlow !== undefined &&
-                            <Chip label={`${componentData.totalSourceFlow} Mgal`}
+                        <span style={{alignSelf: 'center'}}>Sources</span>
+                            <Chip label={`${getTotalChipLabel(componentData.totalSourceFlow)} Mgal`}
                                 variant="outlined"
                                 sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
                             />
-                        }
                     </AccordionSummary>
                     <AccordionDetails>
-                        <SmallTooltip title="Set evenly-distributed flows"
+                        <SmallTooltip title="Set flows evenly from total source value"
                             slotProps={{
                                 popper: {
                                     disablePortal: true,
@@ -155,17 +160,17 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             <span>
                             <Button onClick={() => props.onDistributeFlowEvenly(componentData.totalSourceFlow, sourceEdgeIds)}
                                 disabled={!componentData.totalSourceFlow}
-                                variant="outlined" sx={{
+                                variant="outlined" 
+                                sx={{
                                     marginRight: '1rem',
                                     padding: '.5rem',
-                                    display: 'inline-block'
+                                    display: 'inline-block',
+                                    minWidth: 0
                                 }}>
                                 <CallSplitOutlinedIcon />
                             </Button>
                             </span>
                         </SmallTooltip>
-                        {/* // todo should become uncontrolled or use debounce. overwriting user input */}
-
                         <TextField
                             label={'Total Source Flow'}
                             id={'totalSourceFlow'}
@@ -193,16 +198,14 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                         transition: { unmountOnExit: true }
                     }}>
                     <AccordionSummary>
-                        <span>Discharge</span>
-                        {componentData.totalDischargeFlow !== undefined &&
-                            <Chip label={`${componentData.totalDischargeFlow} Mgal`}
+                        <span style={{alignSelf: 'center'}}>Discharge</span>
+                            <Chip label={`${getTotalChipLabel(componentData.totalDischargeFlow)} Mgal`}
                                 variant="outlined"
                                 sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
                             />
-                        }
                     </AccordionSummary>
                     <AccordionDetails>
-                        <SmallTooltip title="Set evenly-distributed flows"
+                        <SmallTooltip title="Set flows evenly from total discharge value"
                             slotProps={{
                                 popper: {
                                     disablePortal: true,
@@ -212,10 +215,12 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             <span>
                                 <Button onClick={() => props.onDistributeFlowEvenly(componentData.totalDischargeFlow, dischargeEdgeIds)}
                                     disabled={!componentData.totalDischargeFlow}
-                                    variant="outlined" sx={{
+                                    variant="outlined" 
+                                    sx={{
                                         marginRight: '1rem',
                                         padding: '.5rem',
-                                        display: 'inline-block'
+                                        display: 'inline-block',
+                                        minWidth: 0
                                     }}>
                                     <CallSplitOutlinedIcon />
                                 </Button>

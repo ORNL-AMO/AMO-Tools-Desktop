@@ -124,8 +124,7 @@ const DataDrawer = (props: DataDrawerProps) => {
     }
 
     const onTotalFlowValueChange = (event, isSource: boolean) => {
-        console.log('==== DataDrawer onTotalFlowValueChange setNodes');
-        console.log('onTotalFlowValueChange', event.target.value);
+        const updatedValue = event.target.value === ""? null : Number(event.target.value)
         setNodes((nds) =>
             nds.map((n: Node<ProcessFlowPart>) => {
                 if (n.data.diagramNodeId === drawerNode.data.diagramNodeId) {
@@ -133,8 +132,8 @@ const DataDrawer = (props: DataDrawerProps) => {
                         ...n,
                         data: {
                             ...n.data,
-                            totalSourceFlow: isSource? Number(event.target.value) : n.data.totalSourceFlow,
-                            totalDischargeFlow: isSource? n.data.totalDischargeFlow : Number(event.target.value),
+                            totalSourceFlow: isSource? updatedValue : n.data.totalSourceFlow,
+                            totalDischargeFlow: isSource? n.data.totalDischargeFlow : updatedValue,
                         }
                     };
                     setDrawerNode(updatedNode);
