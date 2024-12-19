@@ -39,6 +39,7 @@ class AppWebComponent extends HTMLElement {
 
     this.shadowRoot = this.attachShadow({ mode: 'open' });
     this.mountPoint = document.createElement('div');
+    this.mountPoint.setAttribute('aria-hidden', 'false');
     this.mountPoint.id = 'root';
     this.shadowRoot.appendChild(this.mountPoint);
     
