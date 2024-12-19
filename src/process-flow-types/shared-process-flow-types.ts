@@ -76,6 +76,8 @@ export interface WaterDiagramOption {
 */
 export interface ProcessFlowPart extends Record<string, unknown> {
   name: string,
+  totalSourceFlow?: number,
+  totalDischargeFlow?: number,
   processComponentType: ProcessFlowNodeType,
   className: ProcessFlowPartStyleClass,
   isValid: boolean,
@@ -101,6 +103,8 @@ export interface CustomEdgeData extends Record<string, unknown> {
 // todo this type needs to duplicate ProcessFlowPart - how to merge types
 export type DiagramNode = Node<{
   name: string,
+  totalSourceFlow?: number,
+  totalDischargeFlow?: number,
   processComponentType: ProcessFlowNodeType,
   className: ProcessFlowPartStyleClass,
   isValid: boolean,

@@ -15,7 +15,6 @@ import DrawerToggleButton from './DrawerToggleButton';
 const drawerWidth = 375;
 
 const openedMixin = (theme: Theme, parentContainer: ParentContainerDimensions, animationProps): CSSObject => {
-  console.log('theme transitions', theme.transitions);
   let duration = theme.transitions.duration.enteringScreen;
   if (animationProps.anchor === 'right') {
     duration = -theme.transitions.duration.enteringScreen;
@@ -28,6 +27,7 @@ const openedMixin = (theme: Theme, parentContainer: ParentContainerDimensions, a
   }),
   top: parentContainer.headerHeight,
   height: parentContainer.height - parentContainer.headerHeight - parentContainer.footerHeight,
+  boxShadow: '0 0 5px 0 rgba(136, 136, 136, .6)',
   overflowX: 'hidden',
 });
 }
@@ -41,6 +41,7 @@ const closedMixin = (theme: Theme, parentContainer: ParentContainerDimensions): 
   overflowX: 'hidden',
   top: parentContainer.headerHeight,
   height: parentContainer.height - parentContainer.headerHeight - parentContainer.footerHeight,
+  boxShadow: '0 0 5px 0 rgba(136, 136, 136, .6)',
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,

@@ -5,7 +5,7 @@ import {
     Edge,
 } from '@xyflow/react';
 import { Box, Button, Divider, Tab, Tabs, TextField, Typography } from "@mui/material";
-import React, { BaseSyntheticEvent, useEffect, useRef, useState } from 'react';
+import React, { BaseSyntheticEvent, memo, useEffect, useRef, useState } from 'react';
 import TabPanel, { TabPanelBox } from "./TabPanel";
 import ComponentDataForm from "./ComponentDataForm";
 import ComponentHandles from "./ComponentHandles";
@@ -15,26 +15,23 @@ import CustomizeEdge from "./CustomizeEdge";
 import Drawer from '@mui/material/Drawer';
 import DrawerToggleButton from "./DrawerToggleButton";
 
-export default function DataDrawer(props: DataDrawerProps) {
+const DataDrawer = (props: DataDrawerProps) => {
     const { getNodes, getEdges, setEdges, setNodes } = useReactFlow();
-    const allNodes: Node[] = getNodes();
-    const selectedNode: Node = allNodes.find((node: Node<ProcessFlowPart>) => node.data.diagramNodeId === props.manageDataId);
-    
-    const nodeData = selectedNode.data as ProcessFlowPart;
-    
-    const allEdges: Edge[] = getEdges();
-    const allNodeEdges = getConnectedEdges([selectedNode], allEdges);
+
+    const selectedNode: Node<ProcessFlowPart> = getNodes().find((node: Node<ProcessFlowPart>) => node.data.diagramNodeId === props.manageDataId) as Node<ProcessFlowPart>;
+    const allNodeEdges = getConnectedEdges([selectedNode], getEdges());
     const [connectedEdges, setConnectedEdges] = useState<Edge[]>(allNodeEdges);
+    const [drawerNode, setDrawerNode] = useState<Node<ProcessFlowPart>>(selectedNode);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [selectedEdge, setSelectedEdge] = useState<Edge<CustomEdgeData>>(connectedEdges[0] as Edge<CustomEdgeData>);
-    const [nodeName, setNodeName] = useState(nodeData.name);
+    const [nodeName, setNodeName] = useState<string>(drawerNode.data.name);
     const debounceRef = useRef<any>(null);
 
     const updateNodeName = (nodeName: string) => {
         setNodes((nds) =>
             nds.map((n: Node<ProcessFlowPart>) => {
-                if (n.data.diagramNodeId === nodeData.diagramNodeId) {
+                if (n.data.diagramNodeId === drawerNode.data.diagramNodeId) {
                     return {
                         ...n,
                         data: {
@@ -82,9 +79,9 @@ export default function DataDrawer(props: DataDrawerProps) {
 
     const onDeleteNode = () => {
         // todo integrate warning
-        setNodes((nodes) => nodes.filter((nd) => nd.id !== selectedNode.id));
+        setNodes((nodes) => nodes.filter((nd) => nd.id !== drawerNode.id));
         setEdges((edges) => {
-            let updatedEdges = edges.filter((edge) => edge.source !== selectedNode.id && edge.target !== selectedNode.id);
+            let updatedEdges = edges.filter((edge) => edge.source !== drawerNode.id && edge.target !== drawerNode.id);
             console.log(updatedEdges);
             return updatedEdges;
         });
@@ -94,7 +91,7 @@ export default function DataDrawer(props: DataDrawerProps) {
     const onDeleteEdge = () => {
         setEdges((edges) => {
             const updatedEdges = edges.filter((edg) => edg.id !== selectedEdge.id);
-            const connectedEdges = getConnectedEdges([selectedNode], updatedEdges);
+            const connectedEdges = getConnectedEdges([drawerNode], updatedEdges);
             setConnectedEdges(connectedEdges);
             if (connectedEdges.length > 0 ) {
                 setSelectedEdge(connectedEdges[0] as Edge<CustomEdgeData>);
@@ -125,6 +122,39 @@ export default function DataDrawer(props: DataDrawerProps) {
         setEdges(updatedEdges);
         setConnectedEdges(updatedEdges);
     }
+
+    const onTotalFlowValueChange = (event, isSource: boolean) => {
+        console.log('==== DataDrawer onTotalFlowValueChange setNodes');
+        console.log('onTotalFlowValueChange', event.target.value);
+        setNodes((nds) =>
+            nds.map((n: Node<ProcessFlowPart>) => {
+                if (n.data.diagramNodeId === drawerNode.data.diagramNodeId) {
+                    const updatedNode = {
+                        ...n,
+                        data: {
+                            ...n.data,
+                            totalSourceFlow: isSource? Number(event.target.value) : n.data.totalSourceFlow,
+                            totalDischargeFlow: isSource? n.data.totalDischargeFlow : Number(event.target.value),
+                        }
+                    };
+                    setDrawerNode(updatedNode);
+                    return updatedNode;
+                }
+                return n;
+            }),
+        );
+    }
+    const onDistributeFlowEvenly = (totalFlowValue: number, updateIds: string[]) => {
+        let dividedTotalFlow = totalFlowValue / updateIds.length; 
+        const updatedEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
+            if (updateIds.includes(edge.id)) {
+                edge.data.flowValue = dividedTotalFlow;
+            }
+            return edge;
+        });
+        setEdges(updatedEdges);
+        setConnectedEdges(updatedEdges);
+    }
     
     return (
         <Drawer
@@ -144,7 +174,8 @@ export default function DataDrawer(props: DataDrawerProps) {
                 [`& .MuiDrawer-paper`]: { boxSizing: 'border-box' },
                 [`& .MuiPaper-root.MuiPaper-elevation.MuiDrawer-paper`]: { 
                     top: props.parentContainer.headerHeight,
-                    height: props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight
+                    height: props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight,
+                    boxShadow: '-5px 0 5px 0 rgba(136, 136, 136, .6)',
                  },
             }}
         >
@@ -190,14 +221,16 @@ export default function DataDrawer(props: DataDrawerProps) {
                     <ComponentDataForm 
                         connectedEdges={connectedEdges}
                         onFlowDataChange={updateDiagramEdges}
-                        selectedNode={selectedNode}/>
+                        onTotalFlowValueChange={onTotalFlowValueChange}
+                        onDistributeFlowEvenly={onDistributeFlowEvenly}
+                        selectedNode={drawerNode}/>
                 </TabPanel>
 
                 <TabPanel value={selectedTab} index={1}>
                     <TabPanelBox>
                         <Box sx={{ paddingY: '1rem' }}>
-                            <ComponentHandles node={selectedNode}></ComponentHandles>
-                            <CustomizeNode node={selectedNode}></CustomizeNode>
+                            <ComponentHandles node={drawerNode}></ComponentHandles>
+                            <CustomizeNode node={drawerNode}></CustomizeNode>
                             <Divider />
                         </Box>
                         <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" onClick={onDeleteNode}>Delete Component</Button>
@@ -226,6 +259,7 @@ export default function DataDrawer(props: DataDrawerProps) {
 
 };
 
+export default memo(DataDrawer);
 
 export interface DataDrawerProps {
     isDrawerOpen: boolean;
