@@ -112,20 +112,39 @@ const DataDrawer = (props: DataDrawerProps) => {
     };
 
     const updateDiagramEdges = (event, edgeId: string) => {
-        const updatedEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
+        let connectedEdges = [];
+        const allEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
             if (edge.id === edgeId) {
-                const flowValue = event.target.value === ""? null : Number(event.target.value)
+                const flowValue = event.target.value === "" ? null : Number(event.target.value)
                 edge.data.flowValue = flowValue;
+            }
+            if (edge.source === drawerNode.id || edge.target === drawerNode.id) {
+                connectedEdges.push(edge);
             }
             return edge;
         });
-        setEdges(updatedEdges);
-        setConnectedEdges(updatedEdges);
+        setEdges(allEdges);
+        setConnectedEdges(connectedEdges);
+    }
+
+    const onDistributeFlowEvenly = (totalFlowValue: number, updateIds: string[]) => {
+        let dividedTotalFlow = totalFlowValue / updateIds.length; 
+        let connectedEdges = [];
+        const allEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
+            if (updateIds.includes(edge.id)) {
+                edge.data.flowValue = dividedTotalFlow;
+            } 
+            if (edge.source === drawerNode.id || edge.target === drawerNode.id) {
+                connectedEdges.push(edge);
+            }
+            return edge;
+        });
+        setEdges(allEdges);
+        setConnectedEdges(connectedEdges);
     }
 
     const onTotalFlowValueChange = (event, isSource: boolean) => {
-        console.log('==== DataDrawer onTotalFlowValueChange setNodes');
-        console.log('onTotalFlowValueChange', event.target.value);
+        const updatedValue = event.target.value === ""? null : Number(event.target.value);
         setNodes((nds) =>
             nds.map((n: Node<ProcessFlowPart>) => {
                 if (n.data.diagramNodeId === drawerNode.data.diagramNodeId) {
@@ -133,8 +152,8 @@ const DataDrawer = (props: DataDrawerProps) => {
                         ...n,
                         data: {
                             ...n.data,
-                            totalSourceFlow: isSource? Number(event.target.value) : n.data.totalSourceFlow,
-                            totalDischargeFlow: isSource? n.data.totalDischargeFlow : Number(event.target.value),
+                            totalSourceFlow: isSource? updatedValue : n.data.totalSourceFlow,
+                            totalDischargeFlow: isSource? n.data.totalDischargeFlow : updatedValue,
                         }
                     };
                     setDrawerNode(updatedNode);
@@ -144,18 +163,6 @@ const DataDrawer = (props: DataDrawerProps) => {
             }),
         );
     }
-    const onDistributeFlowEvenly = (totalFlowValue: number, updateIds: string[]) => {
-        let dividedTotalFlow = totalFlowValue / updateIds.length; 
-        const updatedEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
-            if (updateIds.includes(edge.id)) {
-                edge.data.flowValue = dividedTotalFlow;
-            }
-            return edge;
-        });
-        setEdges(updatedEdges);
-        setConnectedEdges(updatedEdges);
-    }
-    
     return (
         <Drawer
             disablePortal={true}

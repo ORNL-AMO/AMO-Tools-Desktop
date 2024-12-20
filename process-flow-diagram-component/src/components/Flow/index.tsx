@@ -322,6 +322,7 @@ const Flow = (props: FlowProps) => {
           <SideDrawer
             anchor={'left'}
             menuSidebarProps={menuSidebarProps}
+            isOpen={props.processDiagram.assessmentId === undefined}
             parentContainer={props.parentContainer}
           ></SideDrawer>
           

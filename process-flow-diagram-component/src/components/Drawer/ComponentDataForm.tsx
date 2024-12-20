@@ -53,13 +53,14 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         const flowId: string = edge.id;
         return (
             <ListItem
-                sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}
+                sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: '.5rem' }}
                 key={flowId}
                 disablePadding>
                 <TextField
                     label={<FlowConnectionText source={source} target={target} />}
                     id={flowId}
                     type={'number'}
+                    size="small"
                     value={edge.data.flowValue === null ? "" : Number(edge.data.flowValue)}
                     onChange={(event) => props.onFlowDataChange(event, edge.id)}
                     sx={{ m: 1, width: '100%' }}
@@ -89,12 +90,12 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             dischargeEdgeInputElements.push(getConnectionListItem(edge, source, target));
         }
     });
-    // if (componentData.totalSourceFlow === undefined) {
-    //     componentData.totalSourceFlow = sourceEdgesTotalFlow;
-    // }
-    // if (componentData.totalDischargeFlow === undefined) {
-    //     componentData.totalDischargeFlow = dischargeEdgesTotalFlow;
-    // }
+    if (componentData.totalSourceFlow === undefined) {
+        componentData.totalSourceFlow = sourceEdgesTotalFlow;
+    }
+    if (componentData.totalDischargeFlow === undefined) {
+        componentData.totalDischargeFlow = dischargeEdgesTotalFlow;
+    }
     const sourceEdgeItems = sourceEdgeInputElements.filter(edge => edge !== undefined);
 
     const handleTreatmentTypeChange = (event) => {
@@ -113,6 +114,13 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             }),
         );
     };
+
+    const getTotalChipLabel = (totalFlowValue) => {
+        if (totalFlowValue === undefined || totalFlowValue === null) {
+            return '';
+        }
+        return totalFlowValue;
+    }
 
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1 }}>
@@ -136,16 +144,14 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             {sourceEdgeItems.length > 0 &&
                 <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
                     <AccordionSummary>
-                        <span>Sources</span>
-                        {componentData.totalSourceFlow !== undefined &&
-                            <Chip label={`${componentData.totalSourceFlow} Mgal`}
+                        <span style={{alignSelf: 'center'}}>Sources</span>
+                            <Chip label={`${getTotalChipLabel(componentData.totalSourceFlow)} Mgal`}
                                 variant="outlined"
                                 sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
                             />
-                        }
                     </AccordionSummary>
                     <AccordionDetails>
-                        <SmallTooltip title="Set evenly-distributed flows"
+                        <SmallTooltip title="Set flows evenly from total source value"
                             slotProps={{
                                 popper: {
                                     disablePortal: true,
@@ -155,22 +161,27 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             <span>
                             <Button onClick={() => props.onDistributeFlowEvenly(componentData.totalSourceFlow, sourceEdgeIds)}
                                 disabled={!componentData.totalSourceFlow}
-                                variant="outlined" sx={{
+                                variant="outlined" 
+                                sx={{
                                     marginRight: '1rem',
-                                    padding: '.5rem',
-                                    display: 'inline-block'
+                                    padding: '2px 12px',
+                                    display: 'inline-block',
+                                    minWidth: 0
                                 }}>
-                                <CallSplitOutlinedIcon />
+                                <CallSplitOutlinedIcon 
+                                sx={{
+                                    transform: 'rotate(180deg) scaleX(-1)',
+
+                                }}/>
                             </Button>
                             </span>
                         </SmallTooltip>
-                        {/* // todo should become uncontrolled or use debounce. overwriting user input */}
-
                         <TextField
-                            label={'Total Source Flow'}
+                            label={'Total Flow'}
                             id={'totalSourceFlow'}
                             type={'number'}
                             color={'primary'}
+                            size="small"
                             value={componentData.totalSourceFlow ?? ''}
                             onChange={(event) => props.onTotalFlowValueChange(event, true)}
                             InputProps={{
@@ -193,16 +204,14 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                         transition: { unmountOnExit: true }
                     }}>
                     <AccordionSummary>
-                        <span>Discharge</span>
-                        {componentData.totalDischargeFlow !== undefined &&
-                            <Chip label={`${componentData.totalDischargeFlow} Mgal`}
+                        <span style={{alignSelf: 'center'}}>Discharge</span>
+                            <Chip label={`${getTotalChipLabel(componentData.totalDischargeFlow)} Mgal`}
                                 variant="outlined"
                                 sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
                             />
-                        }
                     </AccordionSummary>
                     <AccordionDetails>
-                        <SmallTooltip title="Set evenly-distributed flows"
+                        <SmallTooltip title="Set flows evenly from total discharge value"
                             slotProps={{
                                 popper: {
                                     disablePortal: true,
@@ -212,20 +221,26 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             <span>
                                 <Button onClick={() => props.onDistributeFlowEvenly(componentData.totalDischargeFlow, dischargeEdgeIds)}
                                     disabled={!componentData.totalDischargeFlow}
-                                    variant="outlined" sx={{
+                                    variant="outlined" 
+                                    sx={{
                                         marginRight: '1rem',
-                                        padding: '.5rem',
-                                        display: 'inline-block'
+                                        padding: '2px 12px',
+                                        display: 'inline-block',
+                                        minWidth: 0
                                     }}>
-                                    <CallSplitOutlinedIcon />
+                                    <CallSplitOutlinedIcon 
+                                    sx={{
+                                        transform: 'rotate(180deg) scaleX(-1)',
+                                    }}/>
                                 </Button>
                             </span>
 
                         </SmallTooltip>
                         <TextField
-                            label={'Total Discharge Flow'}
+                            label={'Total Flow'}
                             id={'totalDischargeFlow'}
                             type={'number'}
+                            size="small"
                             color={'primary'}
                             value={componentData.totalDischargeFlow ?? ''}
                             onChange={(event) => props.onTotalFlowValueChange(event, false)}
