@@ -363,6 +363,46 @@ export class PowerFactorCorrectionService {
     }
   }
 
+  getResults(data: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs{
+    let results: PowerFactorCorrectionOutputs;
+    if (data.billedForDemand == 0) {
+      if (data.adjustedOrActual == 0) {
+        results = this.calculateRealPowerAndPowerFactor(data);
+      } else if (data.adjustedOrActual == 1) {
+        results = this.calculateRealPowerAndActualDemand(data);
+      } else if (data.adjustedOrActual == 2) {
+        results = this.calculateRealPowerAndBoth(data);
+      }
+    } else if (data.billedForDemand == 1) {
+      if (data.adjustedOrActual == 0) {
+        results = this.calculateApparentPowerAndPowerFactor(data);
+      } else if (data.adjustedOrActual == 1) {
+        results = this.calculateApparentPowerAndActualDemand(data);
+      }
+    } else {
+      results = {
+        annualPFPenalty: 0,
+        proposedFixedCapacitance: 0,
+        proposedVariableCapacitance: 0,
+        capitalCost: 0,
+        simplePayback: 0,
+        monthlyOutputs: [
+          {
+            realDemand: 0,
+            pfAdjustedDemand: 0,
+            proposedApparentPower: 0,
+            demandPenalty: 0,
+            penaltyCost: 0,
+            currentReactivePower: 0,
+            proposedReactivePower: 0,
+            proposedCapacitance: 0,
+          }
+        ]
+      };
+    }
+    return results;
+  }
+
   calculateRealPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
     let outputData: PowerFactorCorrectionOutputs = this.getEmptyPowerFactorCorrectionOutputs();
     let monthlyOutputs: Array<PFMonthlyOutputs> = new Array();

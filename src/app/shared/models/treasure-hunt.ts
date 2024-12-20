@@ -20,6 +20,7 @@ import { ChillerStagingInput } from "./chillers";
 import { WeatherBinsInput } from "../../calculator/utilities/weather-bins/weather-bins.service";
 import { ExistingIntegrationData } from "../assessment-integration/assessment-integration.service";
 import { BoilerBlowdownRateInputs } from "../../calculator/steam/boiler-blowdown-rate/boiler-blowdown-rate.service";
+import { PowerFactorCorrectionInputs } from "../../calculator/utilities/power-factor-correction/power-factor-correction.component";
 
 export interface TreasureHunt {
     name: string,
@@ -51,7 +52,8 @@ export interface TreasureHunt {
     chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
     coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
     coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
-    boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;
+    boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;    
+    powerFactorCorrectionOpportunities?: Array<PowerFactorCorrectionTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -88,7 +90,8 @@ export enum Treasure {
     coolingTowerFan = 'cooling-tower-fan',
     coolingTowerBasin = 'cooling-tower-basin',
     assessmentOpportunity ='assessment-opportunity',
-    boilerBlowdownRate = 'boiler-blowdown-rate'
+    boilerBlowdownRate = 'boiler-blowdown-rate',
+    powerFactorCorrection = 'power-factor-correction'
 }
 
 export interface FilterOption {
@@ -398,10 +401,9 @@ export interface CondensingEconTreasureHunt extends TreasureHuntOpportunity {
 }
 
 export interface PowerFactorCorrectionTreasureHunt extends TreasureHuntOpportunity {
-    //inputData: CondensingEconomizerInput;
-    //energySourceData: EnergySourceData;
-    //opportunitySheet?: OpportunitySheet;
-    //selected?: boolean;
+    inputData: PowerFactorCorrectionInputs;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
 }
 
 
@@ -618,4 +620,5 @@ export interface ImportExportOpportunities {
     coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
     coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
     boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;
+    powerFactorCorrectionOpportunities?: Array<PowerFactorCorrectionTreasureHunt>;
 }
