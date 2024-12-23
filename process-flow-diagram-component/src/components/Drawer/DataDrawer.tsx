@@ -21,17 +21,16 @@ const DataDrawer = (props: DataDrawerProps) => {
     const selectedNode: Node<ProcessFlowPart> = getNodes().find((node: Node<ProcessFlowPart>) => node.data.diagramNodeId === props.manageDataId) as Node<ProcessFlowPart>;
     const allNodeEdges = getConnectedEdges([selectedNode], getEdges());
     const [connectedEdges, setConnectedEdges] = useState<Edge[]>(allNodeEdges);
-    const [drawerNode, setDrawerNode] = useState<Node<ProcessFlowPart>>(selectedNode);
 
     const [selectedTab, setSelectedTab] = useState(0);
     const [selectedEdge, setSelectedEdge] = useState<Edge<CustomEdgeData>>(connectedEdges[0] as Edge<CustomEdgeData>);
-    const [nodeName, setNodeName] = useState<string>(drawerNode.data.name);
+    const [nodeName, setNodeName] = useState<string>(selectedNode.data.name);
     const debounceRef = useRef<any>(null);
 
     const updateNodeName = (nodeName: string) => {
         setNodes((nds) =>
             nds.map((n: Node<ProcessFlowPart>) => {
-                if (n.data.diagramNodeId === drawerNode.data.diagramNodeId) {
+                if (n.data.diagramNodeId === selectedNode.data.diagramNodeId) {
                     return {
                         ...n,
                         data: {
@@ -79,9 +78,9 @@ const DataDrawer = (props: DataDrawerProps) => {
 
     const onDeleteNode = () => {
         // todo integrate warning
-        setNodes((nodes) => nodes.filter((nd) => nd.id !== drawerNode.id));
+        setNodes((nodes) => nodes.filter((nd) => nd.id !== selectedNode.id));
         setEdges((edges) => {
-            let updatedEdges = edges.filter((edge) => edge.source !== drawerNode.id && edge.target !== drawerNode.id);
+            let updatedEdges = edges.filter((edge) => edge.source !== selectedNode.id && edge.target !== selectedNode.id);
             console.log(updatedEdges);
             return updatedEdges;
         });
@@ -91,7 +90,7 @@ const DataDrawer = (props: DataDrawerProps) => {
     const onDeleteEdge = () => {
         setEdges((edges) => {
             const updatedEdges = edges.filter((edg) => edg.id !== selectedEdge.id);
-            const connectedEdges = getConnectedEdges([drawerNode], updatedEdges);
+            const connectedEdges = getConnectedEdges([selectedNode], updatedEdges);
             setConnectedEdges(connectedEdges);
             if (connectedEdges.length > 0 ) {
                 setSelectedEdge(connectedEdges[0] as Edge<CustomEdgeData>);
@@ -111,58 +110,6 @@ const DataDrawer = (props: DataDrawerProps) => {
             props.setIsDataDrawerOpen(event.target.value)
     };
 
-    const updateDiagramEdges = (event, edgeId: string) => {
-        let connectedEdges = [];
-        const allEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
-            if (edge.id === edgeId) {
-                const flowValue = event.target.value === "" ? null : Number(event.target.value)
-                edge.data.flowValue = flowValue;
-            }
-            if (edge.source === drawerNode.id || edge.target === drawerNode.id) {
-                connectedEdges.push(edge);
-            }
-            return edge;
-        });
-        setEdges(allEdges);
-        setConnectedEdges(connectedEdges);
-    }
-
-    const onDistributeFlowEvenly = (totalFlowValue: number, updateIds: string[]) => {
-        let dividedTotalFlow = totalFlowValue / updateIds.length; 
-        let connectedEdges = [];
-        const allEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
-            if (updateIds.includes(edge.id)) {
-                edge.data.flowValue = dividedTotalFlow;
-            } 
-            if (edge.source === drawerNode.id || edge.target === drawerNode.id) {
-                connectedEdges.push(edge);
-            }
-            return edge;
-        });
-        setEdges(allEdges);
-        setConnectedEdges(connectedEdges);
-    }
-
-    const onTotalFlowValueChange = (event, isSource: boolean) => {
-        const updatedValue = event.target.value === ""? null : Number(event.target.value);
-        setNodes((nds) =>
-            nds.map((n: Node<ProcessFlowPart>) => {
-                if (n.data.diagramNodeId === drawerNode.data.diagramNodeId) {
-                    const updatedNode = {
-                        ...n,
-                        data: {
-                            ...n.data,
-                            totalSourceFlow: isSource? updatedValue : n.data.totalSourceFlow,
-                            totalDischargeFlow: isSource? n.data.totalDischargeFlow : updatedValue,
-                        }
-                    };
-                    setDrawerNode(updatedNode);
-                    return updatedNode;
-                }
-                return n;
-            }),
-        );
-    }
     return (
         <Drawer
             disablePortal={true}
@@ -227,17 +174,15 @@ const DataDrawer = (props: DataDrawerProps) => {
                 <TabPanel value={selectedTab} index={0}>
                     <ComponentDataForm 
                         connectedEdges={connectedEdges}
-                        onFlowDataChange={updateDiagramEdges}
-                        onTotalFlowValueChange={onTotalFlowValueChange}
-                        onDistributeFlowEvenly={onDistributeFlowEvenly}
-                        selectedNode={drawerNode}/>
+                        setConnectedEdges={setConnectedEdges}
+                        selectedNode={selectedNode}/>
                 </TabPanel>
 
                 <TabPanel value={selectedTab} index={1}>
                     <TabPanelBox>
                         <Box sx={{ paddingY: '1rem' }}>
-                            <ComponentHandles node={drawerNode}></ComponentHandles>
-                            <CustomizeNode node={drawerNode}></CustomizeNode>
+                            <ComponentHandles node={selectedNode}></ComponentHandles>
+                            <CustomizeNode node={selectedNode}></CustomizeNode>
                             <Divider />
                         </Box>
                         <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" onClick={onDeleteNode}>Delete Component</Button>

@@ -19,7 +19,7 @@ const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
 }));
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
-    const { getNodes, setNodes } = useReactFlow();
+    const { getNodes, setNodes, setEdges, getEdges } = useReactFlow();
     const [sourcesExpanded, setSourcesExpanded] = useState<boolean>(true);
     const [dischargeExpanded, setDischargeExpanded] = useState<boolean>(true);
 
@@ -49,6 +49,113 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         }
     };
 
+    const handleTreatmentTypeChange = (event) => {
+        setNodes((nds) =>
+            nds.map((n: Node<ProcessFlowPart>) => {
+                if (n.data.diagramNodeId === props.selectedNode.id) {
+                    return {
+                        ...n,
+                        data: {
+                            ...n.data,
+                            treatmentType: Number(event.target.value)
+                        }
+                    };
+                }
+                return n;
+            }),
+        );
+    };
+
+    const getTotalChipLabel = (totalFlowValue) => {
+        if (totalFlowValue === undefined || totalFlowValue === null) {
+            return '';
+        }
+        return totalFlowValue;
+    }
+
+        
+    const getFlowTotals = (connectedEdges: Edge[]) => {
+        let sourceCalculatedTotalFlow = 0;
+        let dischargeCalculatedTotalFlow = 0;
+        connectedEdges.map((edge: Edge<CustomEdgeData>) => {
+            const { source, target } = getEdgeSourceAndTarget(edge, getNodes());
+            if (props.selectedNode.id === target.diagramNodeId) {
+                sourceCalculatedTotalFlow += edge.data.flowValue;
+            } else if (props.selectedNode.id === source.diagramNodeId) {
+                dischargeCalculatedTotalFlow += edge.data.flowValue;
+            }
+        });
+
+        return {sourceCalculatedTotalFlow, dischargeCalculatedTotalFlow};
+    }
+
+    const onDistributeFlowEvenly = (totalFlowValue: number, updateIds: string[]) => {
+        let dividedTotalFlow = totalFlowValue / updateIds.length;
+        let connectedEdges = [];
+        const allEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
+            if (updateIds.includes(edge.id)) {
+                edge.data.flowValue = dividedTotalFlow;
+            }
+            if (edge.source === componentData.diagramNodeId || edge.target === componentData.diagramNodeId) {
+                connectedEdges.push(edge);
+            }
+            return edge;
+        });
+        props.setConnectedEdges(connectedEdges);
+        setEdges(allEdges);
+    }
+
+    const onFlowDataChange = (event, edgeId: string) => {
+        let connectedEdges = [];
+        const allEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
+            if (edge.id === edgeId) {
+                const flowValue = event.target.value === "" ? null : Number(event.target.value)
+                edge.data.flowValue = flowValue;
+            }
+            if (edge.source === props.selectedNode.id || edge.target === props.selectedNode.id) {
+                connectedEdges.push(edge);
+            }
+            return edge;
+        });
+
+        const {sourceCalculatedTotalFlow, dischargeCalculatedTotalFlow} = getFlowTotals(connectedEdges);
+        if (componentData.userEnteredData.totalSourceFlow === undefined) {
+            setTotalSourceFlow(sourceCalculatedTotalFlow);
+        }
+        if (componentData.userEnteredData.totalDischargeFlow === undefined) {
+            setTotalDischargeFlow(dischargeCalculatedTotalFlow);
+        }
+
+        setEdges(allEdges);
+        props.setConnectedEdges(connectedEdges);
+        
+    }
+
+
+    const onTotalFlowValueChange = (event, setTotalFlow: (number) => void, isSource: boolean) => {
+        const updatedValue = event.target.value === "" ? null : Number(event.target.value);
+        setTotalFlow(updatedValue);
+        setNodes((nds) =>
+            nds.map((n: Node<ProcessFlowPart>) => {
+                if (n.data.diagramNodeId === componentData.diagramNodeId) {
+                    const updatedNode = {
+                        ...n,
+                        data: {
+                            ...n.data,
+                            userEnteredData: {
+                                totalSourceFlow: isSource ? updatedValue : n.data.userEnteredData.totalSourceFlow,
+                                totalDischargeFlow: isSource ? n.data.userEnteredData.totalDischargeFlow : updatedValue,
+                            }
+                        }
+                    };
+                    return updatedNode;
+                }
+                return n;
+            }),
+        );
+        
+    }
+
     const getConnectionListItem = (edge: Edge, source: ProcessFlowPart, target: ProcessFlowPart) => {
         const flowId: string = edge.id;
         return (
@@ -62,7 +169,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     type={'number'}
                     size="small"
                     value={edge.data.flowValue === null ? "" : Number(edge.data.flowValue)}
-                    onChange={(event) => props.onFlowDataChange(event, edge.id)}
+                    onChange={(event) => onFlowDataChange(event, edge.id)}
                     sx={{ m: 1, width: '100%' }}
                     InputProps={{
                         endAdornment: <InputAdornment position="end">Mgal</InputAdornment>,
@@ -90,37 +197,10 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             dischargeEdgeInputElements.push(getConnectionListItem(edge, source, target));
         }
     });
-    if (componentData.totalSourceFlow === undefined) {
-        componentData.totalSourceFlow = sourceEdgesTotalFlow;
-    }
-    if (componentData.totalDischargeFlow === undefined) {
-        componentData.totalDischargeFlow = dischargeEdgesTotalFlow;
-    }
+
+    const [totalSourceFlow, setTotalSourceFlow] = useState<number>(componentData.userEnteredData.totalSourceFlow !== undefined? componentData.userEnteredData.totalSourceFlow : sourceEdgesTotalFlow);
+    const [totalDischargeFlow, setTotalDischargeFlow] = useState<number>(componentData.userEnteredData.totalDischargeFlow !== undefined? componentData.userEnteredData.totalDischargeFlow : dischargeEdgesTotalFlow);
     const sourceEdgeItems = sourceEdgeInputElements.filter(edge => edge !== undefined);
-
-    const handleTreatmentTypeChange = (event) => {
-        setNodes((nds) =>
-            nds.map((n: Node<ProcessFlowPart>) => {
-                if (n.data.diagramNodeId === props.selectedNode.id) {
-                    return {
-                        ...n,
-                        data: {
-                            ...n.data,
-                            treatmentType: Number(event.target.value)
-                        }
-                    };
-                }
-                return n;
-            }),
-        );
-    };
-
-    const getTotalChipLabel = (totalFlowValue) => {
-        if (totalFlowValue === undefined || totalFlowValue === null) {
-            return '';
-        }
-        return totalFlowValue;
-    }
 
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1 }}>
@@ -145,7 +225,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                 <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
                     <AccordionSummary>
                         <span style={{alignSelf: 'center'}}>Sources</span>
-                            <Chip label={`${getTotalChipLabel(componentData.totalSourceFlow)} Mgal`}
+                            <Chip label={`${getTotalChipLabel(totalSourceFlow)} Mgal`}
                                 variant="outlined"
                                 sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
                             />
@@ -159,8 +239,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             }}>
                             {/* * must wrap with span to allow tooltip events when disabled*/}
                             <span>
-                            <Button onClick={() => props.onDistributeFlowEvenly(componentData.totalSourceFlow, sourceEdgeIds)}
-                                disabled={!componentData.totalSourceFlow}
+                            <Button onClick={() => onDistributeFlowEvenly(totalSourceFlow, sourceEdgeIds)}
+                                disabled={!totalSourceFlow}
                                 variant="outlined" 
                                 sx={{
                                     marginRight: '1rem',
@@ -182,8 +262,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             type={'number'}
                             color={'primary'}
                             size="small"
-                            value={componentData.totalSourceFlow ?? ''}
-                            onChange={(event) => props.onTotalFlowValueChange(event, true)}
+                            value={totalSourceFlow ?? ''}
+                            onChange={(event) => onTotalFlowValueChange(event, setTotalSourceFlow, true)}
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">Mgal</InputAdornment>,
                             }}
@@ -205,7 +285,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     }}>
                     <AccordionSummary>
                         <span style={{alignSelf: 'center'}}>Discharge</span>
-                            <Chip label={`${getTotalChipLabel(componentData.totalDischargeFlow)} Mgal`}
+                            <Chip label={`${getTotalChipLabel(totalDischargeFlow)} Mgal`}
                                 variant="outlined"
                                 sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
                             />
@@ -219,8 +299,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             }}>
                             {/* * must wrap with span to allow tooltip events when disabled*/}
                             <span>
-                                <Button onClick={() => props.onDistributeFlowEvenly(componentData.totalDischargeFlow, dischargeEdgeIds)}
-                                    disabled={!componentData.totalDischargeFlow}
+                                <Button onClick={() => onDistributeFlowEvenly(totalDischargeFlow, dischargeEdgeIds)}
+                                    disabled={!totalDischargeFlow}
                                     variant="outlined" 
                                     sx={{
                                         marginRight: '1rem',
@@ -242,8 +322,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             type={'number'}
                             size="small"
                             color={'primary'}
-                            value={componentData.totalDischargeFlow ?? ''}
-                            onChange={(event) => props.onTotalFlowValueChange(event, false)}
+                            value={totalDischargeFlow ?? ''}
+                            onChange={(event) => onTotalFlowValueChange(event, setTotalDischargeFlow, false)}
                             InputProps={{
                                 endAdornment: <InputAdornment position="end">Mgal</InputAdornment>,
                             }}
@@ -264,9 +344,7 @@ export default memo(ComponentDataForm);
 
 export interface ComponentDataFormProps {
     connectedEdges: Edge[];
-    onFlowDataChange: (event, edgeId: string) => void;
-    onTotalFlowValueChange: (event, isSource: boolean) => void;
-    onDistributeFlowEvenly: (totalFlowValue: number, updateIds: string[]) => void;
+    setConnectedEdges: (connectedEdges: Edge[]) => void;
     selectedNode: Node;
 }
 
