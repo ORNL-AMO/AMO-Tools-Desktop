@@ -1,13 +1,13 @@
-import { memo, CSSProperties } from 'react';
-import { Position, NodeProps, Node } from '@xyflow/react';
-import { DiagramNode, Handles, ProcessFlowNodeType, ProcessFlowPartStyleClass } from '../../../../src/process-flow-types/shared-process-flow-types';
-import EditIcon from '@mui/icons-material/Edit';
+import { memo, useContext } from 'react';
+import { Position, NodeProps, Node, useReactFlow } from '@xyflow/react';
+import { DiagramNode } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
 import EditNodeButton from './EditNodeButton';
+import { FlowContext } from '../Flow';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
-
+  const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
   const transformString = `translate(0%, 0%) translate(180px, -36px)`;
 
   const allowInflowOnly: boolean = data.disableInflowConnections; 
@@ -15,14 +15,11 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
   const allowAllHandles: boolean = !allowInflowOnly && !allowOutflowOnly;
   let plantLevelFlow: number;
   if (data.processComponentType === 'water-intake') {
-    // todo update with logic in place form 7193
-    plantLevelFlow = 200  
+    plantLevelFlow = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalDischargeFlow;
   }
   if (data.processComponentType === 'water-discharge') {
-    // todo update with logic in place form 7193
-    plantLevelFlow = 200  
+    plantLevelFlow = data.userEnteredData.totalSourceFlow? data.userEnteredData.totalSourceFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalSourceFlow;
   }
-
   return (
     <>
 
@@ -78,7 +75,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           {data.name}
         </Typography>
 
-        {plantLevelFlow !== undefined && 
+        {plantLevelFlow !== undefined && plantLevelFlow !== null &&
             <Chip label={`${plantLevelFlow} Mgal`} 
             variant="outlined" 
             sx={{background: '#fff', borderRadius: '8px', marginTop: '.25rem'}}

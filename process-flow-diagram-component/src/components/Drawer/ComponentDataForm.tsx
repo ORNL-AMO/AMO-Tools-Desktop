@@ -1,13 +1,14 @@
 import { Box, List, TextField, InputAdornment, ListItem, ListItemButton, ListItemIcon, Divider, styled, Typography, Select, MenuItem, FormControl, Chip, Tooltip, TooltipProps, tooltipClasses, Button } from "@mui/material";
-import { getEdgeSourceAndTarget } from "../Flow/FlowUtils";
-import { Edge, Node, useReactFlow } from "@xyflow/react";
+import { getEdgeSourceAndTarget, getNodeFlowTotals, updateNodeCalculatedDataMap } from "../Flow/FlowUtils";
+import { Edge, getConnectedEdges, Node, useReactFlow } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
-import React, { memo, useState } from "react";
+import React, { memo, useContext, useState } from "react";
 import FlowConnectionText from "./FlowConnectionText";
-import { CustomEdgeData, ProcessFlowPart, WasteWaterTreatment, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { CustomEdgeData, NodeCalculatedData, ProcessFlowPart, WasteWaterTreatment, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import { Accordion, AccordionDetails, AccordionSummary } from "../MUIStyledComponents";
+import { FlowContext } from "../Flow";
 
 const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -19,6 +20,7 @@ const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
 }));
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
+    const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
     const { getNodes, setNodes, setEdges, getEdges } = useReactFlow();
     const [sourcesExpanded, setSourcesExpanded] = useState<boolean>(true);
     const [dischargeExpanded, setDischargeExpanded] = useState<boolean>(true);
@@ -73,22 +75,6 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         return totalFlowValue;
     }
 
-        
-    const getFlowTotals = (connectedEdges: Edge[]) => {
-        let sourceCalculatedTotalFlow = 0;
-        let dischargeCalculatedTotalFlow = 0;
-        connectedEdges.map((edge: Edge<CustomEdgeData>) => {
-            const { source, target } = getEdgeSourceAndTarget(edge, getNodes());
-            if (props.selectedNode.id === target.diagramNodeId) {
-                sourceCalculatedTotalFlow += edge.data.flowValue;
-            } else if (props.selectedNode.id === source.diagramNodeId) {
-                dischargeCalculatedTotalFlow += edge.data.flowValue;
-            }
-        });
-
-        return {sourceCalculatedTotalFlow, dischargeCalculatedTotalFlow};
-    }
-
     const onDistributeFlowEvenly = (totalFlowValue: number, updateIds: string[]) => {
         let dividedTotalFlow = totalFlowValue / updateIds.length;
         let connectedEdges = [];
@@ -105,30 +91,77 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         setEdges(allEdges);
     }
 
+    // todo can this be optimized? updating a lot of state here...
     const onFlowDataChange = (event, edgeId: string) => {
         let connectedEdges = [];
+        let connectedNodeIds = [];
+        const updatedValue = event.target.value === "" ? null : Number(event.target.value);
+
         const allEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
             if (edge.id === edgeId) {
-                const flowValue = event.target.value === "" ? null : Number(event.target.value)
-                edge.data.flowValue = flowValue;
+                edge.data.flowValue = updatedValue;
             }
-            if (edge.source === props.selectedNode.id || edge.target === props.selectedNode.id) {
+            if (edge.source === props.selectedNode.id) {
+                // push target id to check for potential discharge
+                connectedEdges.push(edge);
+                connectedNodeIds.push(edge.target);
+            }
+            if (edge.target === props.selectedNode.id) {
+                // push source id to check for potential intake
+                connectedNodeIds.push(edge.source);
                 connectedEdges.push(edge);
             }
             return edge;
         });
 
-        const {sourceCalculatedTotalFlow, dischargeCalculatedTotalFlow} = getFlowTotals(connectedEdges);
+        const nodes = getNodes();
+        const {sourceCalculatedTotalFlow, dischargeCalculatedTotalFlow} = getNodeFlowTotals(connectedEdges, nodes, props.selectedNode.id);
         if (componentData.userEnteredData.totalSourceFlow === undefined) {
             setTotalSourceFlow(sourceCalculatedTotalFlow);
         }
         if (componentData.userEnteredData.totalDischargeFlow === undefined) {
             setTotalDischargeFlow(dischargeCalculatedTotalFlow);
         }
+        
+        let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
+            ...flowContext.nodeCalculatedDataMap,
+        }
+        nodes.forEach((node: Node<ProcessFlowPart>) => {
+            if (connectedNodeIds.includes(node.id)) {
+                if (node.data.processComponentType === 'water-intake' || node.data.processComponentType === 'water-discharge') {
+                    const nodeEdges = getConnectedEdges([node], getEdges());
+                    updateNodeCalculatedDataMap(
+                      node, 
+                      nodes, 
+                      nodeEdges, 
+                      updatedNodeCalculatedDataMap,
+                      flowContext.setNodeCalculatedData
+                    );
+                }
+            }
+        });
+
+        setNodes((nds) =>
+            nds.map((n: Node<ProcessFlowPart>) => {
+                if (n.data.diagramNodeId === componentData.diagramNodeId) {
+                    const updatedNode = {
+                        ...n,
+                        data: {
+                            ...n.data,
+                            calculatedData: {
+                                totalSourceFlow: sourceCalculatedTotalFlow,
+                                totalDischargeFlow: dischargeCalculatedTotalFlow,
+                            }
+                        }
+                    };
+                    return updatedNode;
+                }
+                return n;
+            }),
+        );
 
         setEdges(allEdges);
         props.setConnectedEdges(connectedEdges);
-        
     }
 
 

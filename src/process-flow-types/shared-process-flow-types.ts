@@ -51,7 +51,8 @@ export interface WaterDiagram {
 export interface FlowDiagramData {
   nodes: Node[],
   edges: Edge[],
-  userDiagramOptions: UserDiagramOptions
+  userDiagramOptions: UserDiagramOptions,
+  nodeCalculatedDataMap: Record<string, NodeCalculatedData>
 }
 
 export interface UserDiagramOptions {
@@ -63,6 +64,12 @@ export interface UserDiagramOptions {
   directionalArrowsVisible: boolean,
   flowLabelSize: number,
   edgeOptions: DefaultEdgeOptions
+}
+
+
+export interface NodeCalculatedData {
+  totalSourceFlow: number,
+  totalDischargeFlow: number,
 }
 
 export interface WaterDiagramOption {
