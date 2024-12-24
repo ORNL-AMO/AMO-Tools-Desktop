@@ -235,6 +235,7 @@ const Flow = (props: FlowProps) => {
       nodeCalculatedDataMap: {}
     });
     setUserDiagramOptions(defaultOptions);
+    setNodeCalculatedData({});
   }, [setNodes, setEdges]);
 
   const handleEdgeTypeChange = useCallback((defaultEdgeType: string) => {

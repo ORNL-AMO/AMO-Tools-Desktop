@@ -14,11 +14,14 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
   const allowOutflowOnly: boolean = data.disableOutflowConnections; 
   const allowAllHandles: boolean = !allowInflowOnly && !allowOutflowOnly;
   let plantLevelFlow: number;
+  let condensedPadding: boolean;
   if (data.processComponentType === 'water-intake') {
     plantLevelFlow = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalDischargeFlow;
+    condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
   }
   if (data.processComponentType === 'water-discharge') {
     plantLevelFlow = data.userEnteredData.totalSourceFlow? data.userEnteredData.totalSourceFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalSourceFlow;
+    condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
   }
   return (
     <>
@@ -66,7 +69,9 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         }
       </div>
 
-      <div className="node-inner-input">
+      <div className="node-inner-input" style={{
+        padding: condensedPadding? '0' : undefined
+      }}>
         <EditNodeButton 
           data={data}
           selected={selected}

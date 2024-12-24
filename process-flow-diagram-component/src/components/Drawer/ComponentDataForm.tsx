@@ -75,6 +75,30 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         return totalFlowValue;
     }
 
+    /**
+   * Edge states are assumed to be updated from caller
+   */
+    const updateCalculatedDataFromConnectedIds = (nodes, connectedNodeIds, nodeCalculatedDataMap, setNodeCalculatedData) => {
+      let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
+        ...nodeCalculatedDataMap,
+      }
+
+      nodes.forEach((node: Node<ProcessFlowPart>) => {
+        if (connectedNodeIds.includes(node.id)) {
+          if (node.data.processComponentType === 'water-intake' || node.data.processComponentType === 'water-discharge') {
+            const nodeEdges = getConnectedEdges([node], getEdges());
+            updateNodeCalculatedDataMap(
+              node,
+              nodes,
+              nodeEdges,
+              updatedNodeCalculatedDataMap,
+              setNodeCalculatedData
+            );
+          }
+        }
+      });
+    }
+
     const onDistributeFlowEvenly = (totalFlowValue: number, updateIds: string[]) => {
         let dividedTotalFlow = totalFlowValue / updateIds.length;
         let connectedEdges = [];
@@ -122,43 +146,21 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         if (componentData.userEnteredData.totalDischargeFlow === undefined) {
             setTotalDischargeFlow(dischargeCalculatedTotalFlow);
         }
-        
-        let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
-            ...flowContext.nodeCalculatedDataMap,
-        }
-        nodes.forEach((node: Node<ProcessFlowPart>) => {
-            if (connectedNodeIds.includes(node.id)) {
-                if (node.data.processComponentType === 'water-intake' || node.data.processComponentType === 'water-discharge') {
-                    const nodeEdges = getConnectedEdges([node], getEdges());
-                    updateNodeCalculatedDataMap(
-                      node, 
-                      nodes, 
-                      nodeEdges, 
-                      updatedNodeCalculatedDataMap,
-                      flowContext.setNodeCalculatedData
-                    );
-                }
-            }
-        });
 
-        setNodes((nds) =>
-            nds.map((n: Node<ProcessFlowPart>) => {
-                if (n.data.diagramNodeId === componentData.diagramNodeId) {
-                    const updatedNode = {
-                        ...n,
-                        data: {
-                            ...n.data,
-                            calculatedData: {
-                                totalSourceFlow: sourceCalculatedTotalFlow,
-                                totalDischargeFlow: dischargeCalculatedTotalFlow,
-                            }
-                        }
-                    };
-                    return updatedNode;
-                }
-                return n;
-            }),
-        );
+        if (props.selectedNode.data.processComponentType === 'water-intake' || props.selectedNode.data.processComponentType === 'water-discharge') {
+            // * Update self
+            let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
+                ...flowContext.nodeCalculatedDataMap,
+            }
+            updatedNodeCalculatedDataMap[props.selectedNode.id] = {
+                totalSourceFlow: sourceCalculatedTotalFlow,
+                totalDischargeFlow: dischargeCalculatedTotalFlow,
+            }
+            flowContext.setNodeCalculatedData(updatedNodeCalculatedDataMap);
+        } else {
+            // * Update related nodes
+            updateCalculatedDataFromConnectedIds(nodes, connectedNodeIds, flowContext.nodeCalculatedDataMap, flowContext.setNodeCalculatedData);
+        }
 
         setEdges(allEdges);
         props.setConnectedEdges(connectedEdges);
