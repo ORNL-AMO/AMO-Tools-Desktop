@@ -20,7 +20,7 @@ import {
 
 import '@xyflow/react/dist/style.css';
 
-import { FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { NodeCalculatedData, FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdgeDefaults, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
@@ -44,6 +44,7 @@ const Flow = (props: FlowProps) => {
   let existingNodes = [];
   let existingEdges = [];
   const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions ? props.processDiagram.flowDiagramData.userDiagramOptions : getDefaultUserDiagramOptions();
+  const defaultNodeCalculatedData = props.processDiagram.flowDiagramData.nodeCalculatedDataMap ? props.processDiagram.flowDiagramData.nodeCalculatedDataMap : {};
   existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
     if (node.data.processComponentType !== 'splitter-node') {
       node.data.setManageDataId = setManageDataId;
@@ -62,6 +63,7 @@ const Flow = (props: FlowProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(existingNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(existingEdges);
   const [userDiagramOptions, setUserDiagramOptions] = useState<UserDiagramOptions>(defaultUserDiagramOptions);
+  const [nodeCalculatedDataMap, setNodeCalculatedData] = useState<Record<string, NodeCalculatedData>>(defaultNodeCalculatedData);
   const [edgeTypes, setEdgeTypes] = useState<EdgeTypes>(getEdgeTypesFromString(defaultUserDiagramOptions.edgeType, undefined));
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -93,7 +95,8 @@ const Flow = (props: FlowProps) => {
       props.saveFlowDiagramData({
         nodes: dbSafeNodes,
         edges: debouncedEdges,
-        userDiagramOptions
+        userDiagramOptions,
+        nodeCalculatedDataMap
       });
     }
   }, [debouncedNodes, debouncedEdges, userDiagramOptions]);
@@ -228,9 +231,11 @@ const Flow = (props: FlowProps) => {
     props.saveFlowDiagramData({
       nodes: [],
       edges: [],
-      userDiagramOptions: defaultOptions
+      userDiagramOptions: defaultOptions,
+      nodeCalculatedDataMap: {}
     });
     setUserDiagramOptions(defaultOptions);
+    setNodeCalculatedData({});
   }, [setNodes, setEdges]);
 
   const handleEdgeTypeChange = useCallback((defaultEdgeType: string) => {
@@ -277,7 +282,7 @@ const Flow = (props: FlowProps) => {
 
   return (
     props.height &&
-    <FlowContext.Provider value={{ userDiagramOptions }}>
+    <FlowContext.Provider value={{ userDiagramOptions, nodeCalculatedDataMap, setNodeCalculatedData }}>
       <div className="process-flow-diagram">
         {isDialogOpen &&
           <WarningDialog
@@ -322,6 +327,7 @@ const Flow = (props: FlowProps) => {
           <SideDrawer
             anchor={'left'}
             menuSidebarProps={menuSidebarProps}
+            isOpen={props.processDiagram.assessmentId === undefined}
             parentContainer={props.parentContainer}
           ></SideDrawer>
           
@@ -352,7 +358,9 @@ export interface FlowProps {
 }
 
 export interface FlowContext {
-  userDiagramOptions: UserDiagramOptions
+  userDiagramOptions: UserDiagramOptions,
+  nodeCalculatedDataMap: Record<string, NodeCalculatedData>,
+  setNodeCalculatedData: (nodeCalculatedDataMap: Record<string, NodeCalculatedData>) => void
 }
 
 export interface UserDiagramOptionsHandlers {

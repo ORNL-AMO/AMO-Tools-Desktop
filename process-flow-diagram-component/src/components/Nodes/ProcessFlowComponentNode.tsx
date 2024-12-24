@@ -1,19 +1,28 @@
-import { memo, CSSProperties } from 'react';
-import { Position, NodeProps, Node } from '@xyflow/react';
-import { DiagramNode, Handles, ProcessFlowNodeType, ProcessFlowPartStyleClass } from '../../../../src/process-flow-types/shared-process-flow-types';
-import EditIcon from '@mui/icons-material/Edit';
-import { Typography } from '@mui/material';
+import { memo, useContext } from 'react';
+import { Position, NodeProps, Node, useReactFlow } from '@xyflow/react';
+import { DiagramNode } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
 import EditNodeButton from './EditNodeButton';
+import { FlowContext } from '../Flow';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
-
+  const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
   const transformString = `translate(0%, 0%) translate(180px, -36px)`;
 
   const allowInflowOnly: boolean = data.disableInflowConnections; 
   const allowOutflowOnly: boolean = data.disableOutflowConnections; 
   const allowAllHandles: boolean = !allowInflowOnly && !allowOutflowOnly;
-
+  let plantLevelFlow: number;
+  let condensedPadding: boolean;
+  if (data.processComponentType === 'water-intake') {
+    plantLevelFlow = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalDischargeFlow;
+    condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
+  }
+  if (data.processComponentType === 'water-discharge') {
+    plantLevelFlow = data.userEnteredData.totalSourceFlow? data.userEnteredData.totalSourceFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalSourceFlow;
+    condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
+  }
   return (
     <>
 
@@ -60,7 +69,9 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         }
       </div>
 
-      <div className="node-inner-input">
+      <div className="node-inner-input" style={{
+        padding: condensedPadding? '0' : undefined
+      }}>
         <EditNodeButton 
           data={data}
           selected={selected}
@@ -68,6 +79,13 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         <Typography sx={{ width: '100%' }} >
           {data.name}
         </Typography>
+
+        {plantLevelFlow !== undefined && plantLevelFlow !== null &&
+            <Chip label={`${plantLevelFlow} Mgal`} 
+            variant="outlined" 
+            sx={{background: '#fff', borderRadius: '8px', marginTop: '.25rem'}}
+            />
+        }
       </div>
 
       {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.e &&

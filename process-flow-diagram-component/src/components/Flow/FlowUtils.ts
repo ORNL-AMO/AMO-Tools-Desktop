@@ -1,6 +1,6 @@
 import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
 import { edgeTypes, nodeTypes } from "./FlowTypes";
-import { CustomEdgeData, getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { CustomEdgeData, NodeCalculatedData, getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { DefaultEdgeOptions, EdgeTypes, useHandleConnections } from "@xyflow/react";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
@@ -29,6 +29,42 @@ export const updateStaleNodes = (reactFlowInstance: ReactFlowInstance, staleNode
     return node;
   });
   return staleNodes;
+}
+
+export const updateNodeCalculatedDataMap = (
+  node: Node, 
+  nodes: Node[], 
+  nodeEdges: Edge[], 
+  nodeCalculatedDataMap: Record<string, NodeCalculatedData>,
+  setNodeCalculatedData: (updatedData: Record<string, NodeCalculatedData>) => void
+) => {
+  const {
+    sourceCalculatedTotalFlow,
+    dischargeCalculatedTotalFlow
+  } = getNodeFlowTotals(nodeEdges, nodes, node.id);
+  let calculatedData = { ...nodeCalculatedDataMap[node.id] };
+  if (node.data.processComponentType === 'water-intake') {
+    calculatedData.totalDischargeFlow = dischargeCalculatedTotalFlow;
+  } else if (node.data.processComponentType === 'water-discharge') {
+    calculatedData.totalSourceFlow = sourceCalculatedTotalFlow;
+  }
+  nodeCalculatedDataMap[node.id] = calculatedData;
+  setNodeCalculatedData(nodeCalculatedDataMap);
+}
+
+export const getNodeFlowTotals = (connectedEdges: Edge[], nodes: Node[], selectedNodeId: string) => {
+  let sourceCalculatedTotalFlow = 0;
+  let dischargeCalculatedTotalFlow = 0;
+  connectedEdges.map((edge: Edge<CustomEdgeData>) => {
+    const { source, target } = getEdgeSourceAndTarget(edge, nodes);
+    if (selectedNodeId === target.diagramNodeId) {
+      sourceCalculatedTotalFlow += edge.data.flowValue;
+    } else if (selectedNodeId === source.diagramNodeId) {
+      dischargeCalculatedTotalFlow += edge.data.flowValue;
+    }
+  });
+
+  return { sourceCalculatedTotalFlow, dischargeCalculatedTotalFlow };
 }
 
 /**

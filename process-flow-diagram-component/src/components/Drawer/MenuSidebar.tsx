@@ -9,7 +9,7 @@ import TabPanel from './TabPanel';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
-  padding: theme.spacing(1),
+  padding: theme.spacing(2),
   textAlign: 'center',
   '&:hover': {
     cursor: props.draggable? 'grab' : 'no-drop',

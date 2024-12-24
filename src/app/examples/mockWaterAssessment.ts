@@ -77,6 +77,10 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Municipal Sewer 1",
                 "className": "water-discharge",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "disableOutflowConnections": true,
                 "diagramNodeId": "n_i8u4vhf",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
@@ -104,6 +108,10 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Municipal Sewer 2",
                 "className": "water-discharge",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "disableOutflowConnections": true,
                 "diagramNodeId": "n_s0riw08",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
@@ -133,6 +141,10 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Cooling Tower",
                 "className": "water-using-system",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "diagramNodeId": "n_jpmgb59",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
                 "handles": {
@@ -225,6 +237,10 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Process Loop",
                 "className": "water-using-system",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "diagramNodeId": "n_bap4mdz",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
                 "handles": {
@@ -317,6 +333,10 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Quench Tank",
                 "className": "water-using-system",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "diagramNodeId": "n_q8z56fu",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
                 "handles": {
@@ -409,6 +429,10 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Vacuum Pump",
                 "className": "water-using-system",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "diagramNodeId": "n_7uv5ufq",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
                 "handles": {
@@ -501,6 +525,10 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Chillers",
                 "className": "water-using-system",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "diagramNodeId": "n_oy8l0zr",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
                 "handles": {
@@ -593,6 +621,10 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Blending",
                 "className": "water-using-system",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "diagramNodeId": "n_z5ch3bo",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
                 "handles": {
@@ -685,6 +717,10 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Wash Bay",
                 "className": "water-using-system",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "diagramNodeId": "n_ytvqdez",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
                 "handles": {
@@ -777,6 +813,10 @@ export const MockWaterAssessment: Assessment = {
                 "name": "Sanitary",
                 "className": "water-using-system",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "diagramNodeId": "n_zxuieyv",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
                 "handles": {
@@ -873,6 +913,10 @@ export const MockWaterAssessment: Assessment = {
                 "flowValue": undefined,
                 "className": "water-treatment",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "diagramNodeId": "n_8isow7x",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
                 "handles": {
@@ -900,6 +944,10 @@ export const MockWaterAssessment: Assessment = {
                 "flowValue": undefined,
                 "className": "water-treatment",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "diagramNodeId": "n_id24c8f",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
                 "handles": {
@@ -927,6 +975,10 @@ export const MockWaterAssessment: Assessment = {
                 "flowValue": undefined,
                 "className": "water-treatment",
                 "isValid": true,
+                "userEnteredData": {
+                    "totalDischargeFlow": undefined ,
+                    "totalSourceFlow": undefined 
+                  },
                 "diagramNodeId": "n_1zvy0mn",
                 "modifiedDate": new Date("2024-10-31T18:32:13.111Z"),
                 "handles": {

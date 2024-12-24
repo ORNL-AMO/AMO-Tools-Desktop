@@ -20,8 +20,8 @@ export class ProcessFlowDiagramService {
     return {
       nodes: [],
       edges: [],
-      userDiagramOptions: undefined
-      
+      userDiagramOptions: undefined,
+      nodeCalculatedDataMap: {}
     }
   }
 

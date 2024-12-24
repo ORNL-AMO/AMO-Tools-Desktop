@@ -33,8 +33,9 @@ export class WaterProcessDiagramService {
       flowDiagramData: {
         nodes: [],
         edges: [],
-        userDiagramOptions: undefined
-      }
+        userDiagramOptions: undefined,
+        nodeCalculatedDataMap: {}
+      },
     }
   }
 

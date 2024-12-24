@@ -51,7 +51,8 @@ export interface WaterDiagram {
 export interface FlowDiagramData {
   nodes: Node[],
   edges: Edge[],
-  userDiagramOptions: UserDiagramOptions
+  userDiagramOptions: UserDiagramOptions,
+  nodeCalculatedDataMap: Record<string, NodeCalculatedData>
 }
 
 export interface UserDiagramOptions {
@@ -65,6 +66,12 @@ export interface UserDiagramOptions {
   edgeOptions: DefaultEdgeOptions
 }
 
+
+export interface NodeCalculatedData {
+  totalSourceFlow: number,
+  totalDischargeFlow: number,
+}
+
 export interface WaterDiagramOption {
   display: string,
   id: number,
@@ -76,6 +83,10 @@ export interface WaterDiagramOption {
 */
 export interface ProcessFlowPart extends Record<string, unknown> {
   name: string,
+  userEnteredData: {
+    totalSourceFlow: number,
+    totalDischargeFlow: number,
+  },
   processComponentType: ProcessFlowNodeType,
   className: ProcessFlowPartStyleClass,
   isValid: boolean,
@@ -101,6 +112,10 @@ export interface CustomEdgeData extends Record<string, unknown> {
 // todo this type needs to duplicate ProcessFlowPart - how to merge types
 export type DiagramNode = Node<{
   name: string,
+  userEnteredData: {
+    totalSourceFlow: number,
+    totalDischargeFlow: number,
+  },
   processComponentType: ProcessFlowNodeType,
   className: ProcessFlowPartStyleClass,
   isValid: boolean,
@@ -204,6 +219,10 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     name: 'Intake Source',
     className: 'water-intake',
     isValid: true,
+    userEnteredData: {
+      totalDischargeFlow: undefined,
+      totalSourceFlow: undefined
+    },
     disableInflowConnections: true,
     createdByAssessment: false,
     handles: getDefaultHandles()
@@ -213,6 +232,10 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     name: 'Water Using System',
     className: 'water-using-system',
     isValid: true,
+    userEnteredData: {
+      totalDischargeFlow: undefined,
+      totalSourceFlow: undefined
+    },
     createdByAssessment: false,
     handles: getDefaultHandles()
   },
@@ -222,6 +245,10 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     className: 'water-discharge',
     disableOutflowConnections: true,
     isValid: true,
+    userEnteredData: {
+      totalDischargeFlow: undefined,
+      totalSourceFlow: undefined
+    },
     createdByAssessment: false,
     handles: getDefaultHandles()
   },
@@ -230,6 +257,10 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     name: 'Water Treatment',
     className: 'water-treatment',
     isValid: true,
+    userEnteredData: {
+      totalDischargeFlow: undefined,
+      totalSourceFlow: undefined
+    },
     createdByAssessment: false,
     handles: getDefaultHandles()
   },
@@ -238,6 +269,10 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     name: 'Waste Treatment',
     className: 'waste-water-treatment',
     isValid: true,
+    userEnteredData: {
+      totalDischargeFlow: undefined,
+      totalSourceFlow: undefined
+    },
     createdByAssessment: false,
     handles: getDefaultHandles()
   },
@@ -246,6 +281,10 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     name: 'Known Loss',
     className: 'known-loss',
     isValid: true,
+    userEnteredData: {
+      totalDischargeFlow: undefined,
+      totalSourceFlow: undefined
+    },
     createdByAssessment: false,
     handles: getDefaultHandles()
   },
@@ -273,6 +312,10 @@ export const getNewProcessComponent = (processComponentType): ProcessFlowPart =>
     isValid: diagramComponent.isValid,
     disableInflowConnections: diagramComponent.disableInflowConnections,
     disableOutflowConnections: diagramComponent.disableOutflowConnections,
+    userEnteredData: {
+      totalDischargeFlow: diagramComponent.totalDischargeFlow as number,
+      totalSourceFlow: diagramComponent.totalSourceFlow as number
+    },
     diagramNodeId: getNewNodeId(),
     modifiedDate: new Date(),
     handles: { ...diagramComponent.handles }
