@@ -142,7 +142,11 @@ export class PowerFactorCorrectionComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.powerFactorCorrectionService.inputData = this.inputData;
+    if (!this.inTreasureHunt) {
+      this.powerFactorCorrectionService.inputData = this.inputData;
+    } else {
+      this.powerFactorCorrectionService.inputData = undefined;
+    }
   }
 
   btnResetData() {

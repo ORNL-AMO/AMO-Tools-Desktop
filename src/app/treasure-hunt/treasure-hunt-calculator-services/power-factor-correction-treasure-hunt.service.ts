@@ -72,7 +72,7 @@ export class PowerFactorCorrectionTreasureHuntService {
         modificationCost: opportunitySummary.modificationCost,
       }],
 
-      replaceExistingMotor: powerFactorCorrection,
+      powerFactorCorrection: powerFactorCorrection,
       name: opportunitySummary.opportunityName,
       opportunitySheet: powerFactorCorrection.opportunitySheet,
       iconString: 'assets/images/calculator-icons/utilities-icons/power-factor-correction-icon.png',
