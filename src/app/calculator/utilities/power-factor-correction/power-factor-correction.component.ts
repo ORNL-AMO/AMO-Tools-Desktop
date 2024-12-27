@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { PowerFactorCorrectionService } from './power-factor-correction.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
-import { PowerFactorCorrectionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { PowerFactorCorrectionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-power-factor-correction',
@@ -142,7 +142,11 @@ export class PowerFactorCorrectionComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.powerFactorCorrectionService.inputData = this.inputData;
+    if (!this.inTreasureHunt) {
+      this.powerFactorCorrectionService.inputData = this.inputData;
+    } else {
+      this.powerFactorCorrectionService.inputData = undefined;
+    }
   }
 
   btnResetData() {
@@ -180,48 +184,11 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
   calculate(data: PowerFactorCorrectionInputs) {
     this.inputData = data;
-    if (data.billedForDemand == 0) {
-      if (data.adjustedOrActual == 0) {
-        this.results = this.powerFactorCorrectionService.calculateRealPowerAndPowerFactor(data);
-      } else if (data.adjustedOrActual == 1) {
-        this.results = this.powerFactorCorrectionService.calculateRealPowerAndActualDemand(data);
-      } else if (data.adjustedOrActual == 2) {
-        this.results = this.powerFactorCorrectionService.calculateRealPowerAndBoth(data);
-      }
-    } else if (data.billedForDemand == 1) {
-      if (data.adjustedOrActual == 0) {
-        this.results = this.powerFactorCorrectionService.calculateApparentPowerAndPowerFactor(data);
-      } else if (data.adjustedOrActual == 1) {
-        this.results = this.powerFactorCorrectionService.calculateApparentPowerAndActualDemand(data);
-      }
-    } else {
-      this.results = {
-        annualPFPenalty: 0,
-        proposedFixedCapacitance: 0,
-        proposedVariableCapacitance: 0,
-        capitalCost: 0,
-        simplePayback: 0,
-        monthlyOutputs: [
-          {
-            realDemand: 0,
-            pfAdjustedDemand: 0,
-            proposedApparentPower: 0,
-            demandPenalty: 0,
-            penaltyCost: 0,
-            currentReactivePower: 0,
-            proposedReactivePower: 0,
-            proposedCapacitance: 0,
-          }
-        ]
-      };
-
-    }
-
-
+    this.results = this.powerFactorCorrectionService.getResults(data);
   }
 
   save() {
-    //this.emitSave.emit({ replaceExistingData: this.inputs, opportunityType: Treasure.replaceExisting });
+    this.emitSave.emit({ inputData: this.inputData, opportunityType: Treasure.powerFactorCorrection });
   }
 
   cancel() {
