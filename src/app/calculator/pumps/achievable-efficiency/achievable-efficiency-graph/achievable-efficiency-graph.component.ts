@@ -57,8 +57,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   selectedDataPoints: Array<EfficiencyPoint>;
   pointColors: Array<string>;
   efficiencyChart: SimpleChart;
-  xAxisTitle: string = "Flow Rate (gpm)";
-  currentPumpType: any;
+  xAxisTitle: string;
   defaultTraceCount: number = 2;
   defaultTraceOutlineColor = 'rgba(0, 0, 0, .6)';
   dataPointTraces: Array<EfficiencyTrace>;
@@ -70,36 +69,22 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   ngOnInit() {
     this.xAxisTitle = `Flow Rate (${this.settings.flowMeasurement})`;
-    this.currentPumpType = this.efficiencyForm.controls.pumpType.value;
   }
 
   ngAfterViewInit() {
     this.renderChart();
-    this.currentPumpType = this.efficiencyForm.controls.pumpType.value;
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.toggleResetData) {
+      if (this.checkForm()) {
         this.achievableEfficiencyService.initChartData();
         this.renderChart();
-      }
-      if (changes.toggleExampleData) {
-        if (this.checkForm()) {
-          this.achievableEfficiencyService.initChartData();
-          this.renderChart();
-        }
-      }
-      if (changes.toggleCalculate && !changes.toggleResetData && !changes.toggleExampleData) {
-        if (this.checkForm()) {
-          this.checkReplotMethod();
-        }
       }
     } else {
       this.firstChange = false;
     }
   }
-
 
   save() {
     this.achievableEfficiencyService.efficiencyChart.next(this.efficiencyChart);
@@ -291,16 +276,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.save();
   }
 
-  checkReplotMethod() {
-    if (this.efficiencyForm.controls.pumpType.value !== this.currentPumpType) {
-      this.currentPumpType = this.efficiencyForm.controls.pumpType.value;
-      this.achievableEfficiencyService.initChartData();
-      this.renderChart();
-    } else {
-      this.updateChart();
-    }
-  }
-
   deleteDataPoint(deletePoint: EfficiencyPoint, index: number) {
     this.dataPointTraces = this.dataPointTraces.filter(trace => { return trace.id != deletePoint.id && trace.id != deletePoint.pairId});
     this.selectedDataPoints.splice(index, 1);
@@ -316,7 +291,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       range: { min: 0, max: 0 },
       increment: 10,
     };
-    xRange.range = ranges.find(pumpType => pumpType.value == this.currentPumpType).range;
+    xRange.range = ranges.find(pumpType => pumpType.value == this.efficiencyForm.controls.pumpType.value).range;
     if (xRange.range.min <= 5000) {
       xRange.increment = 10;
     } else if (xRange.range.max <= 50000) {
