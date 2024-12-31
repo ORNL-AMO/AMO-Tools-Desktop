@@ -1,7 +1,7 @@
 import React, { memo, useState } from 'react';
 import { ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
-import { Box, Button, Divider, Grid, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import { UserDiagramOptionsHandlers } from '../Flow';
@@ -38,6 +38,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                     <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
                         <Tab sx={{fontSize: '.75rem'}} label="Build" />
                         <Tab sx={{fontSize: '.75rem'}} label="Options" />
+                        <Tab sx={{fontSize: '.75rem'}} label="Help" />
                     </Tabs>
                 </Box>
           <TabPanel value={selectedTab} index={0}>    
@@ -178,15 +179,45 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             </div>
           </Box>
           </TabPanel>
-        </Box>
 
-        <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingTop={'1rem'}>
-          <DownloadButton shadowRoot={props.shadowRoot} />
-          {!props.hasAssessment &&
-            <Button variant="outlined" sx={{ width: '100%' }} onClick={() => props.setIsDialogOpen(true)}>Reset Diagram</Button>
-          }
-        </Box>
+        <TabPanel value={selectedTab} index={2}>
+          <Box sx={{ marginTop: 1, padding: '.5rem', height: '100%', whiteSpace: "normal" }}>
+            <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', paddingTop: '.5rem' }}>
+              Many diagram actions support keyboard input and key combinations.
+            </Typography>
+            <Box display={'flex'} flexDirection={'column'} maxWidth={350} sx={{ fontSize: '.75rem' }}>
+              <List dense>
+                {keyInputDirections.map((direction, index: number) => {
+                    const key: string = `${direction.primary}_${index}`;
+                    return (
+                      <ListItem sx={{ padding: 0 }} key={key}>
+                        <ListItemText
+                          primary={
+                              direction.primary
+                          }
+                          primaryTypographyProps={{fontSize: '.85rem'}} 
+                          secondary={
+                            direction.secondary
+                          }
+                          secondaryTypographyProps={{fontSize: '.75rem'}}
+                        />
+                      </ListItem>
+                    );
+                })}
+              </List>
+            </Box>
+          </Box>
+        </TabPanel>
+
       </Box>
+
+      <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingTop={'1rem'}>
+        <DownloadButton shadowRoot={props.shadowRoot} />
+        {!props.hasAssessment &&
+          <Button variant="outlined" sx={{ width: '100%' }} onClick={() => props.setIsDialogOpen(true)}>Reset Diagram</Button>
+        }
+      </Box>
+    </Box>
   );
 });
 export default MenuSidebar;
@@ -200,3 +231,9 @@ export interface MenuSidebarProps {
   resetDiagramCallback: () => void;
 }
 
+const keyInputDirections = [
+  {primary: 'Move a component', secondary: 'Press arrow keys to move the component. Use shift + arrow for quicker movement'},
+  {primary: 'Select multiple components or lines', secondary: 'Hold down ctrl while clicking to select multiple entities.'},
+  {primary: 'Delete a component or line', secondary: 'Select the entity and hit backspace or delete.'},
+  {primary: 'Zoom In/Out', secondary: 'Use the mouse wheel to zoom in and out'},
+]

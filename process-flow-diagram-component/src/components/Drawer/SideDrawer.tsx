@@ -120,7 +120,7 @@ export const SideDrawer = (props: SideDrawerProps) => {
         <DrawerHeader justifyContent={justifyContent}>
         {toggleButton}
         </DrawerHeader>
-        <Box paddingBottom={'1rem'} paddingTop={0} paddingX={'.5rem'}>
+        <Box paddingBottom={'1rem'} paddingTop={0} paddingX={'.5rem'} height={'100%'}>
           {open && props.menuSidebarProps &&
             <MenuSidebar {...props.menuSidebarProps} />
           }
