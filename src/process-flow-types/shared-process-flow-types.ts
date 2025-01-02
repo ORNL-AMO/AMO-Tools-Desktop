@@ -154,8 +154,8 @@ export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties
     color: "#ffffff"
   },
   'splitter-node': {
-    backgroundColor: '#75a1ff',
-    color: "#ffffff"
+    // backgroundColor: '#75a1ff',
+    // color: "#ffffff"
   },
   'water-treatment': {
     backgroundColor: '#009386',
@@ -288,12 +288,31 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     createdByAssessment: false,
     handles: getDefaultHandles()
   },
-  // {
-  //   processComponentType: 'splitter-node',
-  //   name: 'Junction Connector',
-  //   className: 'splitter-node',
-  //   isValid: true,
-  // }
+  {
+    processComponentType: 'splitter-node',
+    name: 'Summing Connector',
+    className: 'splitter-node',
+    isValid: true,
+    userEnteredData: {
+      totalDischargeFlow: undefined,
+      totalSourceFlow: undefined
+    },
+    createdByAssessment: false,
+    handles: {
+      inflowHandles: {
+        a: true,
+        b: true,
+        c: true,
+        d: true,
+      },
+      outflowHandles: {
+        e: true,
+        f: true,
+        g: true,
+        h: true,
+      }
+    }
+  }
 ];
 
 

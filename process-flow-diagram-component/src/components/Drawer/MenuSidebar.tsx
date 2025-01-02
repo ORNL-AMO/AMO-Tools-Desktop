@@ -30,7 +30,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
 };
-
+  const splitterNode = processFlowParts.pop();
   return (
       <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingX: 1 }}>
         <Box>
@@ -54,20 +54,24 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                   </WaterComponent>
                 </Grid>
               ))}
+            </Grid>
+          </Box>
+          <Divider></Divider>
+          <Box sx={{ flexGrow: 1, marginBottom: '2rem' }}>
+            <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px', paddingTop: '.5rem' }}>Utilities</Typography>
+            <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
               <Grid item xs={1} sm={2} md={2}>
-                <WaterComponent className={`dndnode splitterNode`}
-                  onDragStart={(event) => onDragStart(event, 'splitter-node-4')} draggable> 4-way Connection</WaterComponent>
-              </Grid>
-              <Grid item xs={1} sm={2} md={2}>
-                <WaterComponent className={`dndnode splitterNode`}
-                  onDragStart={(event) => onDragStart(event, 'splitter-node-8')} draggable> 8-way Connection</WaterComponent>
+                <WaterComponent className={`dndnode ${splitterNode.processComponentType}`}
+                  onDragStart={(event) => onDragStart(event, splitterNode.processComponentType)}
+                  draggable={true}>
+                  {splitterNode.name}
+                </WaterComponent>
               </Grid>
             </Grid>
           </Box>
           </TabPanel>
 
           <TabPanel value={selectedTab} index={1}>    
-
           <Box sx={{ marginTop: 1, padding: '.5rem' }}>
             <div className="sidebar-actions">
               <Box display={'flex'} flexDirection={'column'} sx={{ fontSize: '.75rem' }}>

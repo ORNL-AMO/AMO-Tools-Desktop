@@ -28,7 +28,7 @@ const EditNodeButton = ({ data, selected, transformLocation }: EditNodeButtonPro
                 className="nodrag nopan"
             >
                 {selected &&
-                    <button className="edit-button hover-highlight" onClick={onEditNode}>
+                    <button className="node-button edit-button hover-highlight" onClick={onEditNode}>
                         <EditIcon sx={{ width: 'unset', height: 'unset' }} />
                     </button>
                 }

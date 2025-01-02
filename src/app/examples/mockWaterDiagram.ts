@@ -18,44 +18,6 @@ export const MockWaterdiagram: Diagram =
             "nodeCalculatedDataMap": {},
             "nodes": [
                 {
-                    "id": "n_07ezr25",
-                    "type": "splitterNodeFour",
-                    "position": {
-                        "x": 1094.511576543104,
-                        "y": 185.5472577406199
-                    },
-                    "className": "splitter-node-4",
-                    "data": {},
-                    "measured": {
-                        "width": 169,
-                        "height": 10
-                    },
-                    "selected": false,
-                    "dragging": false,
-                    "resizing": false,
-                    "width": 169,
-                    "height": 10
-                },
-                {
-                    "id": "n_838vgxz",
-                    "type": "splitterNodeFour",
-                    "position": {
-                        "x": 816.1033145044203,
-                        "y": 619.3899840344272
-                    },
-                    "className": "splitter-node-4",
-                    "data": {},
-                    "measured": {
-                        "width": 186,
-                        "height": 10
-                    },
-                    "selected": false,
-                    "dragging": false,
-                    "width": 186,
-                    "height": 10,
-                    "resizing": false
-                },
-                {
                     "id": "n_sikn350",
                     "type": "waterIntake",
                     "position": {

@@ -1,154 +1,199 @@
-import { memo, FC, CSSProperties, useState, useRef, useEffect } from 'react';
-import { DiagramNode, ProcessFlowPart, getNewIdString } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { Edge, Handle, Node, NodeProps, NodeResizer, Position, useReactFlow, useUpdateNodeInternals } from '@xyflow/react';
+import { memo, CSSProperties, useState, useContext } from 'react';
+import { DiagramNode } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { NodeProps, Position } from '@xyflow/react';
+import CustomHandle from './CustomHandle';
+import DeleteButton from './DeleteButton';
+import AspectRatioIcon from '@mui/icons-material/AspectRatio';
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+import { FlowContext } from '../Flow';
 
+
+// export const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
+//   <Tooltip {...props} classes={{ popper: className }} />
+// ))(({ theme }) => ({
+//   [`& .${tooltipClasses.tooltip}`]: {
+//     backgroundColor: '#525252',
+//     color: '#fff',
+//     padding: '.5rem',
+//     maxWidth: 300,
+//     fontSize: theme.typography.pxToRem(10),
+//   },
+// }));
 
 // * note the type of NodeProps is automagically accessible via the 'data' property 
-const SplitterNode= (id, { data }: NodeProps<DiagramNode>) => {
-  const updateNodeInternals = useUpdateNodeInternals();
-  const { setNodes, setEdges } = useReactFlow();
-  
-  // todo accessing .data , should just treat as processflowpart?
-  const splitterRef = useRef(null);
-  const initialNodes = data.splitterTargets? data.splitterTargets : [getNewIdString()];
-  const [showInnerNode, setShowInnerNode] = useState(true);
-  const [targetHandles, setTargetHandles] = useState<Array<string>>(initialNodes);
+const SplitterNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
+  const [isHovering, setIsHovering] = useState<boolean>(false);
+  const deleteTransformString = `translate(0%, 0%) translate(96px, 0)`;
+  const expandTransformString = `translate(0%, 0%) translate(36px, 0)`;
 
-  const updateNodes = () => {
-    updateNodeInternals(id);
-    setNodes((nds: Node[]) => {
-      return nds.map((n: Node) => {
-        if (n.id === id) {
-          return {
-            ...n,
-            data: {
-              splitterTargets: targetHandles
-            }
-          };
-        }
-        return n;
-      })},
-    );
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const onExpand = () => {
+    setIsExpanded(!isExpanded);
   };
 
-  const removeConnectedEdge = (connectedEdgeId) => {
-    setEdges((eds) =>
-      eds.map((e: Edge) => {
-        if (e.targetHandle !== connectedEdgeId) {
-          return e;
-        }
-      }).filter(Boolean),
-    );
+  const onHover = (
+    event: React.MouseEvent<HTMLInputElement>
+  ) => {
+    setIsHovering(!isHovering);
   };
 
-
-  const handleSubtractTarget = () => {
-    if (targetHandles.length > 1) {
-      let targetHandleId: string = targetHandles[targetHandles.length - 1];
-      targetHandles.splice(targetHandles.length - 1, 1);
-      setTargetHandles([...targetHandles]);
-      removeConnectedEdge(targetHandleId);
-      updateNodes();
-    }
+  const nodeStyle: CSSProperties = {
+    height: isExpanded ? undefined : '0',
+    padding: isExpanded ? undefined : '0',
+    border: isExpanded ? undefined : 'none',
   }
 
-  const handleAddTarget = () => {
-    targetHandles.push(getNewIdString());
-    setTargetHandles([...targetHandles]);
-    updateNodes();
+  const collapsedStyle: CSSProperties = {
+    top: '0px !important',
+    height: '0px !important',
+    width: '0px !important',
+    visibility: 'hidden'
   }
-
-  const checkSplitterHeight = (height) => {
-    if (height < 50) {
-      setShowInnerNode(false);
-    } else {
-      setShowInnerNode(true);
-    }
-  }
-
-  const handleOnResize = (event, params) => {
-    checkSplitterHeight(params.height)
-  }
-
-  useEffect(() => {
-    if (splitterRef) {
-      checkSplitterHeight(splitterRef.current.offsetHeight)
-    }
-  }, [splitterRef]);
-
 
   return (
     <>
-      <div ref={splitterRef} className="node-inner-input junction-circle"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-        }}>
-        {showInnerNode &&
-          <>
-            <button onClick={handleSubtractTarget}>
-              -1
-            </button>
-            <button onClick={handleAddTarget}>
-              +1
-            </button>
-          </>
-        }
-      </div>
-      <Handle type="target" position={Position.Left} />
-      <Handle type="source" position={Position.Right} />
-      <div
-        style={{
-          display: 'flex',
-          position: 'absolute',
-          top: 0,
-          width: '100%',
-          justifyContent: 'space-evenly',
-        }}
-      >
-        {targetHandles.map((handleId, index) => {
-          return (
-            <Handle
-              key={handleId}
-              style={{ position: 'relative', left: index, transform: 'none' }}
-              id={handleId}
-              type="target"
-              position={Position.Top}
-            />
-          )
-        })
-        }
-      </div>
-      <NodeResizer
-      onResize={(event, params) => handleOnResize(event, params)}
+    <div style={nodeStyle} onMouseEnter={onHover} onMouseLeave={onHover}>
+      <CustomHandle
+        type="target"
+        position={Position.Left}
+        collapsedStyle={isExpanded ? undefined : collapsedStyle}
+        id="a"
       />
-    </>
 
+      <div style={{
+        display: 'flex',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        justifyContent: 'space-around'
+      }}>
+        <CustomHandle
+          type="target"
+          position={Position.Top}
+          collapsedStyle={isExpanded ? undefined : collapsedStyle}
+          id="b"
+        />
 
+        <CustomHandle
+          type="target"
+          position={Position.Top}
+          collapsedStyle={isExpanded ? undefined : collapsedStyle}
+          id="c"
+        />
+
+        <CustomHandle
+          type="target"
+          position={Position.Top}
+          collapsedStyle={isExpanded ? undefined : collapsedStyle}
+          id="d"
+        />
+      </div>
+
+      {/* <HtmlTooltip
+      placement={'top'}
+      open={!selected && isHovering && !isExpanded}
+      title={
+        <>
+          <Typography color="inherit" fontSize={'.75rem'}>Summing Connector</Typography>
+          <div>{"Select the collapsed line and click expand to manage connections"}</div>
+        </>
+      }
+      enterDelay={500} leaveDelay={500}
+      slotProps={{
+        popper: {
+          modifiers: [
+            // {
+            //   name: 'offset',
+            //   options: {
+            //     offset: [0, -50],
+            //   },
+              
+            // },
+          ],
+          disablePortal: true,
+        },
+      }}
+      > */}
+      <div className="node-inner-input" style={{ display: isExpanded ? undefined : 'none !important' }}>
+        <div
+          style={{
+            position: 'absolute',
+            transform: expandTransformString,
+            color: '#fff',
+            fontSize: 16,
+            pointerEvents: 'all',
+          }}
+          className="nodrag nopan"
+        >
+          {selected &&
+            <button className="node-button expand-button hover-highlight" onClick={onExpand}>
+              {!isExpanded &&
+                <AspectRatioIcon sx={{ width: 'unset', height: 'unset' }} />
+              }
+              {isExpanded &&
+                <CloseFullscreenIcon sx={{ width: 'unset', height: 'unset' }} />
+              }
+            </button>
+          }
+        </div>
+        <DeleteButton
+          id={id}
+          data={data}
+          selected={selected}
+          transformLocation={deleteTransformString} />
+        {/* {plantLevelFlow !== undefined && plantLevelFlow !== null &&
+        <Chip label={`${plantLevelFlow} Mgal`} 
+        variant="outlined" 
+        sx={{background: '#fff', borderRadius: '8px', marginTop: '.25rem'}}
+        />
+    } */}
+      </div>
+      {/* </HtmlTooltip> */}
+
+        <CustomHandle
+          type="source"
+          position={Position.Right}
+          collapsedStyle={isExpanded ? undefined : collapsedStyle}
+          id="e"
+        />
+
+        <div
+          style={{
+            display: 'flex',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: '100%',
+            justifyContent: 'space-around',
+          }}
+        >
+          <CustomHandle
+            type="source"
+            position={Position.Bottom}
+            collapsedStyle={isExpanded ? undefined : collapsedStyle}
+            id="f"
+          />
+
+          <CustomHandle
+            type="source"
+            position={Position.Bottom}
+            collapsedStyle={isExpanded ? undefined : collapsedStyle}
+            id="g"
+          />
+
+          <CustomHandle
+            type="source"
+            position={Position.Bottom}
+            collapsedStyle={isExpanded ? undefined : collapsedStyle}
+            id="h"
+          />
+        </div>
+    </div>
+</>
   );
 };
 
-function ResizeIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      strokeWidth="2"
-      stroke="#000000"
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      style={{ position: 'absolute', right: 5, bottom: 5 }}
-    >
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <polyline points="16 20 20 20 20 16" />
-      <line x1="14" y1="14" x2="20" y2="20" />
-      <polyline points="8 4 4 4 4 8" />
-      <line x1="4" y1="4" x2="10" y2="10" />
-    </svg>
-  );
-}
 
 export default memo(SplitterNode);

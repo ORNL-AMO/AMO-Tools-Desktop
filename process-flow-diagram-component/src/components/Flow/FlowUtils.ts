@@ -214,12 +214,6 @@ export const getAdaptedTypeString = (nodeType: string) => {
     case 'splitter-node':
       adaptedString = 'splitterNode'
       break;
-    case 'splitter-node-4':
-      adaptedString = 'splitterNodeFour'
-      break;
-    case 'splitter-node-8':
-      adaptedString = 'splitterNodeEight'
-      break;
     case 'known-loss':
       adaptedString = 'knownLoss'
       break;
