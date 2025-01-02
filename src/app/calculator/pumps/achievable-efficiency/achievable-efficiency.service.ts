@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-import { SimpleChart, DataPoint, TraceData } from '../../../shared/models/plotting';
+import { SimpleChart, TraceData } from '../../../shared/models/plotting';
 import { BehaviorSubject } from 'rxjs';
+import { getNewIdString } from '../../../shared/helperFunctions';
 
 @Injectable()
 export class AchievableEfficiencyService {
@@ -9,18 +10,17 @@ export class AchievableEfficiencyService {
   pumpType: number;
   flowRate: number;
   efficiencyChart: BehaviorSubject<SimpleChart>;
-  selectedDataPoints: BehaviorSubject<Array<DataPoint>>;
-  // selectedDataPoints: BehaviorSubject<Array<SelectedDataPoint>>;
+  selectedDataPoints: BehaviorSubject<Array<EfficiencyPoint>>;
+  dataPointTraces: BehaviorSubject<Array<EfficiencyTrace>>;
   
   constructor(private formBuilder: UntypedFormBuilder) {
     this.initChartData();
    }
 
    initChartData() {
-    let emptyChart: SimpleChart = this.getEmptyChart();
-    let dataPoints = new Array<DataPoint>();
-    this.efficiencyChart = new BehaviorSubject<SimpleChart>(emptyChart);
-    this.selectedDataPoints = new BehaviorSubject<Array<DataPoint>>(dataPoints);
+    this.efficiencyChart = new BehaviorSubject<SimpleChart>(this.getEmptyChart());
+    this.selectedDataPoints = new BehaviorSubject<Array<EfficiencyPoint>>([]);
+    this.dataPointTraces = new BehaviorSubject<Array<EfficiencyTrace>>([]);
   }
 
 
@@ -35,10 +35,12 @@ export class AchievableEfficiencyService {
     return form;
   }
 
-  getTraceDataFromPoint(selectedPoint: DataPoint): TraceData {
-    let trace: TraceData = {
+  getTraceDataFromPoint(selectedPoint: EfficiencyPoint): EfficiencyTrace {
+    let trace: EfficiencyTrace = {
       x: [selectedPoint.x],
       y: [selectedPoint.y],
+      id: getNewIdString(),
+      pairId: undefined,
       type: 'scatter',
       name: `${selectedPoint.x}, ${selectedPoint.y}`,
       showlegend: false,
@@ -123,4 +125,21 @@ export class AchievableEfficiencyService {
   }
 
   
+}
+
+
+export interface EfficiencyPoint {
+  id: string,
+  pairId?: string,
+  pointColor?: string;
+  pointOutlineColor?: string;
+  pointTraceIndex?: number;
+  name?: string;
+  x: number;
+  y: number;
+  avgMaxEffColumn?: string;
+}
+
+export interface EfficiencyTrace extends TraceData {
+  pairId: string,
 }
