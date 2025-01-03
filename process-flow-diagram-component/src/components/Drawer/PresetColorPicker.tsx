@@ -1,32 +1,50 @@
-import React from "react";
+import { useState } from "react";
+const PresetColorPicker = (props: ColorPickerProps) => {
+    const { color, recentColors, setParentColor, setRecentColors, label, showRecent } = props;
+    const [selectedColor, setSelectedColor] = useState(color);
+    const recentColorsLimit = 5;
 
-export const PresetColorPicker = ({ color, pickerChangeHandler, presetChangeHandler, presetColors, label, showPresets }) => {
+    const handleSetColor = () => {
+        setRecentColors((prev) => {
+            if (!prev.includes(selectedColor) && selectedColor !== color) {
+                const updatedColors = [...prev, selectedColor];
+                return updatedColors.length > recentColorsLimit ? updatedColors.slice(1) : updatedColors;
+            }
+            return prev;
+        });
+        setParentColor(selectedColor);
+    };
+
+    const handleSetColorFromRecent = (color: string) => {
+        setParentColor(color);
+        setSelectedColor(color);
+    }
+    
     return (
         <>
             <div className={'picker-wrapper'}>
                 <div className={'picker'}>
-                    <label htmlFor={'color'}>{label}</label>
+                    <label>{label}</label>
                     <input type="color" id="color"
                         name="color"
                         className={'color-input'}
                         value={color}
-                        onChange={(event) => {
-                            pickerChangeHandler(event.target.value);
-                        }} 
+                        onChange={(event) => setSelectedColor(event.target.value)}
+                        onBlur={handleSetColor}
                         style={{marginLeft: '16px'}}
                         />
                 </div>
-                {showPresets && 
-                    <div className="presets-wrapper">
-                        <label htmlFor={'preset-color'}>Color Presets</label>
-                        <div className="presets" style={{marginLeft: '16px'}}>
-                            {presetColors.map((presetColor, index) => (
+                {showRecent && 
+                    <div className="recents-wrapper">
+                        <label htmlFor={'recent-color'}>Recent Colors</label>
+                        <div className="recents" style={{marginLeft: '16px'}}>
+                            {recentColors.map((recentColor, index) => (
                                 <button
-                                key={presetColor + index}
-                                className="preset"
-                                style={{ background: presetColor }}
+                                key={recentColor + index}
+                                className="recent"
+                                style={{ background: recentColor }}
                                 onClick={() => {
-                                    presetChangeHandler(presetColor)
+                                    handleSetColorFromRecent(recentColor)
                                 }}
                                 />
                             ))}
@@ -37,3 +55,15 @@ export const PresetColorPicker = ({ color, pickerChangeHandler, presetChangeHand
         </>
     );
 };
+
+
+export default PresetColorPicker;
+
+export interface ColorPickerProps { 
+    color: string, 
+    setParentColor: React.Dispatch<React.SetStateAction<string>>, 
+    recentColors?: string[],
+    setRecentColors?: React.Dispatch<React.SetStateAction<string[]>>,
+    label: string, 
+    showRecent: boolean 
+}

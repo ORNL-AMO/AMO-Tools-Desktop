@@ -21,7 +21,9 @@ export class ProcessFlowDiagramService {
       nodes: [],
       edges: [],
       userDiagramOptions: undefined,
-      nodeCalculatedDataMap: {}
+      nodeCalculatedDataMap: {},
+      recentEdgeColors: [],
+      recentNodeColors: []
     }
   }
 
