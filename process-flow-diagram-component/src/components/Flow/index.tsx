@@ -259,7 +259,8 @@ const Flow = (props: FlowProps) => {
   }
 
   const fitViewOptions: FitViewOptions = {
-    // padding: 10
+    padding: 300,
+    minZoom: .5
   };
 
   const menuSidebarProps: MenuSidebarProps = {
