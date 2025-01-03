@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Treasure, OpportunitySheet, TreasureHunt, OpportunitySummary } from '../../shared/models/treasure-hunt';
+import { Treasure, OpportunitySheet, TreasureHunt, OpportunitySummary, TreasureHuntOpportunity, PowerFactorCorrectionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { OpportunitySheetService } from './standalone-opportunity-sheet/opportunity-sheet.service';
 import { AirLeakTreasureHuntService } from '../treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
 import { OpportunityCardData, OpportunityCardsService } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
@@ -637,5 +637,17 @@ export class CalculatorsService {
       return oppSheet;
     } else { return }
   }
+
+  updatePFCorrectionOppSheet(currentOpportunity: TreasureHuntOpportunity, opportunitySheet: OpportunitySheet): OpportunitySheet{
+      let oppSheet: OpportunitySheet;    
+      let powerFactorCorrection = currentOpportunity as PowerFactorCorrectionTreasureHunt;
+      if (opportunitySheet == undefined) {
+        opportunitySheet = this.opportunitySheetService.initOpportunitySheet();
+      }
+      oppSheet = this.powerFactorCorrectionTreasureHuntService.getPowerFactorCorrectionOpportunitySheet(powerFactorCorrection, opportunitySheet);
+  
+  
+      return oppSheet;
+    }
 
 }

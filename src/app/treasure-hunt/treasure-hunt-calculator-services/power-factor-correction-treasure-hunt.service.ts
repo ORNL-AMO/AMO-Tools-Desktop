@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PowerFactorCorrectionService } from '../../calculator/utilities/power-factor-correction/power-factor-correction.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { EnergyUsage, OpportunitySummary, PowerFactorCorrectionTreasureHunt, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
+import { EnergyUsage, OpportunitySheet, OpportunitySummary, OtherCostItem, PowerFactorCorrectionTreasureHunt, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { PowerFactorCorrectionOutputs } from '../../calculator/utilities/power-factor-correction/power-factor-correction.component';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
@@ -36,21 +36,39 @@ export class PowerFactorCorrectionTreasureHuntService {
     this.powerFactorCorrectionService.inputData = undefined;
   }
 
-  //TODO
+  getPowerFactorCorrectionOpportunitySheet(powerFactorCorrection: PowerFactorCorrectionTreasureHunt, opportunitySheet: OpportunitySheet): OpportunitySheet{
+    let pfResults: PowerFactorCorrectionOutputs = this.powerFactorCorrectionService.getResults(powerFactorCorrection.inputData);
+    let pfOppSheet: OpportunitySheet = opportunitySheet;
+
+    let capitalCost = this.convertUnitsService.roundVal(pfResults.capitalCost, 2);
+    let annualPFPenalty = this.convertUnitsService.roundVal(pfResults.annualPFPenalty, 2);
+    
+    let pfOtherCostItem: OtherCostItem = {
+      cost: annualPFPenalty,
+      description: 'Other Annual Savings'
+    }
+
+    if (pfOppSheet.opportunityCost){
+      pfOppSheet.opportunityCost.material = capitalCost;
+      pfOppSheet.opportunityCost.additionalAnnualSavings = pfOtherCostItem;
+
+    }
+    return pfOppSheet;
+  }
+
   getTreasureHuntOpportunityResults(powerFactorCorrection: PowerFactorCorrectionTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
     let results: PowerFactorCorrectionOutputs = this.powerFactorCorrectionService.getResults(powerFactorCorrection.inputData);
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
-      costSavings: 100,
-      energySavings: 100,
-      baselineCost: 100,
-      modificationCost: 100,
+      costSavings: 0,
+      energySavings: 0,
+      baselineCost: 0,
+      modificationCost: 0,
       utilityType: 'Electricity',
     }
 
     return treasureHuntOpportunityResults;
   }
 
-  //TODO
   getPowerFactorCorrectionCardData(powerFactorCorrection: PowerFactorCorrectionTreasureHunt, opportunitySummary: OpportunitySummary, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
