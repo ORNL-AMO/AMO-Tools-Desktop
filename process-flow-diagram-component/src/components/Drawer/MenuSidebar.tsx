@@ -41,9 +41,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                         <Tab sx={{fontSize: '.75rem'}} label="Help" />
                     </Tabs>
                 </Box>
-          <TabPanel value={selectedTab} index={0}>    
-          <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px', paddingTop: '.5rem' }}>Drag plant water system components into the pane</Typography>
-          
+          <TabPanel value={selectedTab} index={0} >    
+          <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', paddingTop: '.5rem', marginTop: '.5rem',  whiteSpace: "normal" }}>
+          Drag plant water system components into the pane
+            </Typography>
           <Box sx={{ flexGrow: 1, paddingY: '1rem' }}>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
               {processFlowParts.map((part: ProcessFlowPart) => (
@@ -183,7 +184,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
         <TabPanel value={selectedTab} index={2}>
           <Box sx={{ marginTop: 1, padding: '.5rem', height: '100%', whiteSpace: "normal" }}>
             <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', paddingTop: '.5rem' }}>
-              Many diagram actions support keyboard input and key combinations.
+              Many diagram actions support keyboard input and key combinations:
             </Typography>
             <Box display={'flex'} flexDirection={'column'} maxWidth={350} sx={{ fontSize: '.75rem' }}>
               <List dense>
@@ -232,8 +233,8 @@ export interface MenuSidebarProps {
 }
 
 const keyInputDirections = [
-  {primary: 'Move a component', secondary: 'Press arrow keys to move the component. Use shift + arrow for quicker movement'},
-  {primary: 'Select multiple components or lines', secondary: 'Hold down ctrl while clicking to select multiple entities.'},
-  {primary: 'Delete a component or line', secondary: 'Select the entity and hit backspace or delete.'},
+  {primary: 'Move a component', secondary: 'Press arrow keys to move the component. Use Shift + Arrow for quicker movement'},
+  {primary: 'Select multiple components or lines', secondary: 'Hold down CTRL while clicking components or lines'},
+  {primary: 'Delete a component or line', secondary: 'Select the component or line and hit Backspace or Delete'},
   {primary: 'Zoom In/Out', secondary: 'Use the mouse wheel to zoom in and out'},
 ]
