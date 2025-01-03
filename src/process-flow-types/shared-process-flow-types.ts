@@ -70,6 +70,8 @@ export interface UserDiagramOptions {
 export interface NodeCalculatedData {
   totalSourceFlow: number,
   totalDischargeFlow: number,
+  // * summing node total divided by active handle connections
+  summingFlowEvenlyDivided?: number,
 }
 
 export interface WaterDiagramOption {
@@ -97,7 +99,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   handles: Handles,
   disableInflowConnections?: boolean,
   disableOutflowConnections?: boolean,
-  splitterTargets?: Array<string>;
+  summingTargets?: Array<string>;
   setManageDataId?: (id: number) => void;
   openEditData?: (boolean) => void;
   processComponentContext?: any;
@@ -125,7 +127,7 @@ export type DiagramNode = Node<{
   disableOutflowConnections?: boolean,
   modifiedDate?: Date,
   handles?: Handles,
-  splitterTargets?: Array<string>;
+  summingTargets?: Array<string>;
   setManageDataId?: (id: string) => void;
   openEditData?: (boolean) => void;
   processComponentContext?: any;
@@ -137,7 +139,7 @@ export interface HandleOption {
 }
 // * union future diagram types into ProcessFlowNodeType
 export type ProcessFlowNodeType = WaterProcessComponentType | undefined;
-export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system' | 'splitter-node' | 'water-treatment' | 'waste-water-treatment' | 'known-loss';
+export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system' | 'summing-node' | 'water-treatment' | 'waste-water-treatment' | 'known-loss';
 export type ProcessFlowPartStyleClass = WaterProcessComponentType;
 
 export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties> = {
@@ -153,7 +155,7 @@ export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties
     backgroundColor: '#00bbff',
     color: "#ffffff"
   },
-  'splitter-node': {
+  'summing-node': {
     // backgroundColor: '#75a1ff',
     // color: "#ffffff"
   },
@@ -289,9 +291,9 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     handles: getDefaultHandles()
   },
   {
-    processComponentType: 'splitter-node',
+    processComponentType: 'summing-node',
     name: 'Summing Connector',
-    className: 'splitter-node',
+    className: 'summing-node',
     isValid: true,
     userEnteredData: {
       totalDischargeFlow: undefined,

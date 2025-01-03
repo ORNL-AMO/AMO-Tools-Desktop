@@ -30,7 +30,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
 };
-  const splitterNode = processFlowParts.pop();
+  const summingNode = processFlowParts.pop();
   return (
       <Box sx={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingX: 1 }}>
         <Box>
@@ -61,10 +61,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px', paddingTop: '.5rem' }}>Utilities</Typography>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
               <Grid item xs={1} sm={2} md={2}>
-                <WaterComponent className={`dndnode ${splitterNode.processComponentType}`}
-                  onDragStart={(event) => onDragStart(event, splitterNode.processComponentType)}
+                <WaterComponent className={`dndnode ${summingNode.processComponentType}`}
+                  onDragStart={(event) => onDragStart(event, summingNode.processComponentType)}
                   draggable={true}>
-                  {splitterNode.name}
+                  {summingNode.name}
                 </WaterComponent>
               </Grid>
             </Grid>

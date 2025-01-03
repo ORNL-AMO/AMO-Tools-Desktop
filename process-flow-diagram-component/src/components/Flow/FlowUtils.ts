@@ -42,13 +42,19 @@ export const updateNodeCalculatedDataMap = (
     sourceCalculatedTotalFlow,
     dischargeCalculatedTotalFlow
   } = getNodeFlowTotals(nodeEdges, nodes, node.id);
-  let calculatedData = { ...nodeCalculatedDataMap[node.id] };
+  let calculatedData: NodeCalculatedData = { ...nodeCalculatedDataMap[node.id] };
   if (node.data.processComponentType === 'water-intake') {
     calculatedData.totalDischargeFlow = dischargeCalculatedTotalFlow;
   } else if (node.data.processComponentType === 'water-discharge') {
     calculatedData.totalSourceFlow = sourceCalculatedTotalFlow;
+  } else if (node.data.processComponentType === 'summing-node') {
+    calculatedData.totalSourceFlow = sourceCalculatedTotalFlow;
+    // todo add in edge id's?
+    const dividedTargetConnections: number = nodeEdges.filter(edge => edge.source === node.id).length;
+    calculatedData.summingFlowEvenlyDivided = sourceCalculatedTotalFlow / dividedTargetConnections;
   }
   nodeCalculatedDataMap[node.id] = calculatedData;
+  console.log('updated nodeDataMap', nodeCalculatedDataMap);
   setNodeCalculatedData(nodeCalculatedDataMap);
 }
 
@@ -92,20 +98,26 @@ export const setDroppedNode = (event, reactFlowInstance: ReactFlowInstance, setN
   });
 
   let newNode: Node;
-  if (nodeType.includes('splitter-node')) {
-    newNode = {
-      id: getNewNodeId(),
-      type: nodeType,
-      position: position,
-      className: nodeType,
-      data: {}
-    };
-  } else {
-    const newProcessComponent = getNewProcessComponent(nodeType);
+  // if (nodeType.includes('summing-node')) {
+  //   newNode = {
+  //     id: getNewNodeId(),
+  //     type: nodeType,
+  //     position: position,
+  //     className: nodeType,
+  //     data: {}
+  //   };
+  // } else {
+  //   const newProcessComponent = getNewProcessComponent(nodeType);
+  //   newProcessComponent.setManageDataId = setManageDataId;
+  //   newProcessComponent.openEditData = setIsDrawerOpen;
+  //   newNode = getNewNode(nodeType, newProcessComponent, position);
+  // }
+  const newProcessComponent = getNewProcessComponent(nodeType);
+  if (!nodeType.includes('summing-node')) {
     newProcessComponent.setManageDataId = setManageDataId;
     newProcessComponent.openEditData = setIsDrawerOpen;
-    newNode = getNewNode(nodeType, newProcessComponent, position);
   }
+  newNode = getNewNode(nodeType, newProcessComponent, position);
   newNode.type = getAdaptedTypeString(newNode.type);
 
   setNodes((nds) => {
@@ -211,8 +223,8 @@ export const getAdaptedTypeString = (nodeType: string) => {
     case 'waste-water-treatment':
       adaptedString = 'wasteWaterTreatment'
       break;
-    case 'splitter-node':
-      adaptedString = 'splitterNode'
+    case 'summing-node':
+      adaptedString = 'summingNode'
       break;
     case 'known-loss':
       adaptedString = 'knownLoss'

@@ -108,7 +108,7 @@ a {
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
 }
 
-.process-flow-diagram .dndnode.splitter-node {
+.process-flow-diagram .dndnode.summing-node {
   border: none;
   background: #757575;
 }
@@ -244,20 +244,20 @@ a {
 .react-flow__node-waterDischarge.selectable:hover, 
 .react-flow__node-waterTreatment.selectable:hover, 
 .react-flow__node-wasteWaterTreatment.selectable:hover, 
-.react-flow__node-splitterNode.selectable:hover, 
+.react-flow__node-summingNode.selectable:hover, 
 .react-flow__node-group.selectable:hover {
       box-shadow: 0px 3.54px 4.55px 0px #00000005, 
       0px 3.54px 4.55px 0px #0000000D, 
       0px 0.51px 1.01px 0px #0000001A;
 }
 
-.react-flow__node-splitterNode.expandIcon:hover {
+.react-flow__node-summingNode.expandIcon:hover {
       box-shadow: 0px 3.54px 4.55px 0px #00000005, 
       0px 3.54px 4.55px 0px #0000000D, 
       0px 0.51px 1.01px 0px #0000001A
 }
 
-.react-flow__node-splitterNode,
+.react-flow__node-summingNode,
 .react-flow__node-group {
   min-width: 150px;
   border: 1px solid #c0c0c0;

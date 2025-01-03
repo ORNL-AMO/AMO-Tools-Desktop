@@ -83,10 +83,14 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         ...nodeCalculatedDataMap,
       }
 
+      debugger;
       nodes.forEach((node: Node<ProcessFlowPart>) => {
         if (connectedNodeIds.includes(node.id)) {
-          if (node.data.processComponentType === 'water-intake' || node.data.processComponentType === 'water-discharge') {
+          if (node.data.processComponentType === 'water-intake' 
+            || node.data.processComponentType === 'water-discharge'
+            || node.data.processComponentType === 'summing-node') {
             const nodeEdges = getConnectedEdges([node], getEdges());
+            debugger;
             updateNodeCalculatedDataMap(
               node,
               nodes,
@@ -116,11 +120,17 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     }
 
     // todo can this be optimized? updating a lot of state here...
-    const onFlowDataChange = (event, edgeId: string) => {
+    const onFlowDataChange = (event, edgeId: string, sourceNodeData: ProcessFlowPart, targetNodeData: ProcessFlowPart) => {
         let connectedEdges = [];
         let connectedNodeIds = [];
         const updatedValue = event.target.value === "" ? null : Number(event.target.value);
+        const nodes = getNodes();
 
+        // todo will need to check if connected to summing node, and add to node total 
+        if (sourceNodeData.processComponentType === 'summing-node' || targetNodeData.processComponentType === 'summing-node') {
+            debugger;
+            // todo get all summing node connected edges and update node map
+        }
         const allEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
             if (edge.id === edgeId) {
                 edge.data.flowValue = updatedValue;
@@ -138,7 +148,6 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             return edge;
         });
 
-        const nodes = getNodes();
         const {sourceCalculatedTotalFlow, dischargeCalculatedTotalFlow} = getNodeFlowTotals(connectedEdges, nodes, props.selectedNode.id);
         if (componentData.userEnteredData.totalSourceFlow === undefined) {
             setTotalSourceFlow(sourceCalculatedTotalFlow);
@@ -204,7 +213,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     type={'number'}
                     size="small"
                     value={edge.data.flowValue === null ? "" : Number(edge.data.flowValue)}
-                    onChange={(event) => onFlowDataChange(event, edge.id)}
+                    onChange={(event) => onFlowDataChange(event, edge.id, source, target)}
                     sx={{ m: 1, width: '100%' }}
                     InputProps={{
                         endAdornment: <InputAdornment position="end">Mgal</InputAdornment>,
@@ -221,7 +230,14 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const sourceEdgeIds = [];
     const dischargeEdgeIds = [];
     const sourceEdgeInputElements: JSX.Element[] = props.connectedEdges.map((edge: Edge<CustomEdgeData>) => {
-        const { source, target } = getEdgeSourceAndTarget(edge, getNodes());
+        const nodes = getNodes();
+        const { source, target } = getEdgeSourceAndTarget(edge, nodes);
+        const isSummingNodeTarget = nodes.some(node => node.id === source.diagramNodeId);
+        // todo if is summing node get totals from map?
+        console.log(flowContext.nodeCalculatedDataMap);
+        if (isSummingNodeTarget) {
+            edge.data.flowValue = flowContext.nodeCalculatedDataMap[source.diagramNodeId].summingFlowEvenlyDivided;
+        }
         if (props.selectedNode.id === target.diagramNodeId) {
             sourceEdgesTotalFlow += edge.data.flowValue;
             sourceEdgeIds.push(edge.id);
@@ -231,12 +247,14 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             dischargeEdgeIds.push(edge.id);
             dischargeEdgeInputElements.push(getConnectionListItem(edge, source, target));
         }
+
     });
 
     const [totalSourceFlow, setTotalSourceFlow] = useState<number>(componentData.userEnteredData.totalSourceFlow !== undefined? componentData.userEnteredData.totalSourceFlow : sourceEdgesTotalFlow);
     const [totalDischargeFlow, setTotalDischargeFlow] = useState<number>(componentData.userEnteredData.totalDischargeFlow !== undefined? componentData.userEnteredData.totalDischargeFlow : dischargeEdgesTotalFlow);
     const sourceEdgeItems = sourceEdgeInputElements.filter(edge => edge !== undefined);
 
+    debugger;
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1 }}>
 

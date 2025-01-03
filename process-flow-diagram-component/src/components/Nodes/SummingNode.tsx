@@ -21,12 +21,12 @@ import { FlowContext } from '../Flow';
 // }));
 
 // * note the type of NodeProps is automagically accessible via the 'data' property 
-const SplitterNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
+const SummingNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   const [isHovering, setIsHovering] = useState<boolean>(false);
   const deleteTransformString = `translate(0%, 0%) translate(96px, 0)`;
   const expandTransformString = `translate(0%, 0%) translate(36px, 0)`;
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const onExpand = () => {
     setIsExpanded(!isExpanded);
@@ -196,4 +196,4 @@ const SplitterNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
 };
 
 
-export default memo(SplitterNode);
+export default memo(SummingNode);

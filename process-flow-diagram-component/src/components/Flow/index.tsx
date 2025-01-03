@@ -46,7 +46,7 @@ const Flow = (props: FlowProps) => {
   const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions ? props.processDiagram.flowDiagramData.userDiagramOptions : getDefaultUserDiagramOptions();
   const defaultNodeCalculatedData = props.processDiagram.flowDiagramData.nodeCalculatedDataMap ? props.processDiagram.flowDiagramData.nodeCalculatedDataMap : {};
   existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
-    if (node.data.processComponentType !== 'splitter-node') {
+    if (node.data.processComponentType !== 'summing-node') {
       node.data.setManageDataId = setManageDataId;
       node.data.openEditData = setIsDataDrawerOpen;
     }
