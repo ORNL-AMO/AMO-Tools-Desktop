@@ -8,7 +8,6 @@ const SplitterNode= (id, { data }: NodeProps<DiagramNode>) => {
   const updateNodeInternals = useUpdateNodeInternals();
   const { setNodes, setEdges } = useReactFlow();
   
-  // todo accessing .data , should just treat as processflowpart?
   const splitterRef = useRef(null);
   const initialNodes = data.splitterTargets? data.splitterTargets : [getNewIdString()];
   const [showInnerNode, setShowInnerNode] = useState(true);

@@ -284,3 +284,7 @@ export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
     }
   }
 }
+
+export const getDefaultColorPalette = () => {
+  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#e28000'];
+}

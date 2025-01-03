@@ -16,6 +16,8 @@ export const MockWaterdiagram: Diagram =
         "isValid": true,
         "flowDiagramData": {
             "nodeCalculatedDataMap": {},
+            "recentEdgeColors": [],
+            "recentNodeColors": [],
             "nodes": [
                 {
                     "id": "n_07ezr25",

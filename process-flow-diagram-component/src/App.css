@@ -424,7 +424,7 @@ a {
 }
 
 .picker,
-.presets-wrapper {
+.recents-wrapper {
   align-self: baseline;
   justify-content: space-between;
   display: flex;
@@ -441,13 +441,17 @@ a {
   cursor: pointer;
 }
 
-.presets {
+.recents {
   display: flex;
   padding: 0;
   flex-wrap: wrap;
 }
 
-.preset {
+.recents:hover {
+  cursor: pointer;
+}
+
+.recent {
   width: 24px;
   height: 24px;
   margin: 4px;

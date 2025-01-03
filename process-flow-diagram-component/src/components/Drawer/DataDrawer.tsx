@@ -44,7 +44,6 @@ const DataDrawer = (props: DataDrawerProps) => {
         );
     };
 
-    // todo 7001 setup generic debounce input
     useEffect(() => {
         debounceRef.current = setTimeout(() => {
             updateNodeName(nodeName);
@@ -81,7 +80,6 @@ const DataDrawer = (props: DataDrawerProps) => {
         setNodes((nodes) => nodes.filter((nd) => nd.id !== selectedNode.id));
         setEdges((edges) => {
             let updatedEdges = edges.filter((edge) => edge.source !== selectedNode.id && edge.target !== selectedNode.id);
-            console.log(updatedEdges);
             return updatedEdges;
         });
         props.setIsDataDrawerOpen(false);

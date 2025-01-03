@@ -1,13 +1,15 @@
 import { Box } from '@mui/material';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
-import { PresetColorPicker } from './PresetColorPicker';
 import { Edge, useReactFlow } from '@xyflow/react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
 import { CustomEdgeData, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { FlowContext } from '../Flow';
+import ColorPicker from './ColorPicker';
 
 export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdgeProps) {
   const { setEdges } = useReactFlow();
+  const flowContext: FlowContext = useContext(FlowContext);
   const [edgeColor, setEdgeColor] = useState(edge.style.stroke);
   const debouncedEdgeColor = useUserEventDebounce<string>(edgeColor, 50);
 
@@ -21,18 +23,6 @@ export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdg
           });
         });
   }, [debouncedEdgeColor]);
-
-  const handlePresetColorChange = (edgeColor) => {
-    setEdgeColor(edgeColor)
-    setEdges((eds) => {
-          return eds.map((e: Edge) => {
-            if (e.id === edge.id) {
-              e.style.stroke = edgeColor;
-            }
-            return e;
-          });
-        });
-  };
 
   const getCurrentEdgeType = (): string => {
     return edge.data.hasOwnEdgeType !== undefined? edge.data.hasOwnEdgeType : userDiagramOptions.edgeType;
@@ -58,10 +48,6 @@ export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdg
     });
   }
 
-  const presetColors = [
-    "#cd9323", "#1a53d8", "#9a2151", "#0d6416", "#8d2808",
-  ];
-
   const selectId = `edgeType_${edge.id}`;
 
   return (
@@ -80,13 +66,14 @@ export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdg
           </Box>
 
           <Box sx={{fontSize: '.75rem'}}>
-            <PresetColorPicker
-              color={edge.style.stroke}
-              presetColors={presetColors}
-              pickerChangeHandler={setEdgeColor}
-              presetChangeHandler={handlePresetColorChange}
-              showPresets={true}
-              label={'Pick Line Color'} />
+            <ColorPicker
+              label={'Pick Line Color'} 
+              color={edgeColor}
+              setParentColor={setEdgeColor}
+              showRecent={true}
+              recentColors={flowContext.recentEdgeColors}
+              setRecentColors={flowContext.setRecentEdgeColors}
+              />
           </Box>
     </Box>
   );

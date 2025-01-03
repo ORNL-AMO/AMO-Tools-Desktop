@@ -21,7 +21,7 @@ import {
 import '@xyflow/react/dist/style.css';
 
 import { NodeCalculatedData, FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { changeExistingEdgesType, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdgeDefaults, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
+import { changeExistingEdgesType, getDefaultColorPalette, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdgeDefaults, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
@@ -45,6 +45,8 @@ const Flow = (props: FlowProps) => {
   let existingEdges = [];
   const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions ? props.processDiagram.flowDiagramData.userDiagramOptions : getDefaultUserDiagramOptions();
   const defaultNodeCalculatedData = props.processDiagram.flowDiagramData.nodeCalculatedDataMap ? props.processDiagram.flowDiagramData.nodeCalculatedDataMap : {};
+  const defaultRecentNodeColors = props.processDiagram.flowDiagramData.recentNodeColors.length !== 0 ? props.processDiagram.flowDiagramData.recentNodeColors : getDefaultColorPalette();
+  const defaultRecentEdgeColors = props.processDiagram.flowDiagramData.recentEdgeColors.length !== 0 ? props.processDiagram.flowDiagramData.recentEdgeColors : getDefaultColorPalette();
   existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
     if (node.data.processComponentType !== 'splitter-node') {
       node.data.setManageDataId = setManageDataId;
@@ -62,6 +64,8 @@ const Flow = (props: FlowProps) => {
   const [staleNodes, setStaleNodes] = useState<Node[]>(staleParentNodes);
   const [nodes, setNodes, onNodesChange] = useNodesState(existingNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(existingEdges);
+  const [recentNodeColors, setRecentNodeColors] = useState(defaultRecentNodeColors);
+  const [recentEdgeColors, setRecentEdgeColors] = useState(defaultRecentEdgeColors);
   const [userDiagramOptions, setUserDiagramOptions] = useState<UserDiagramOptions>(defaultUserDiagramOptions);
   const [nodeCalculatedDataMap, setNodeCalculatedData] = useState<Record<string, NodeCalculatedData>>(defaultNodeCalculatedData);
   const [edgeTypes, setEdgeTypes] = useState<EdgeTypes>(getEdgeTypesFromString(defaultUserDiagramOptions.edgeType, undefined));
@@ -96,7 +100,9 @@ const Flow = (props: FlowProps) => {
         nodes: dbSafeNodes,
         edges: debouncedEdges,
         userDiagramOptions,
-        nodeCalculatedDataMap
+        nodeCalculatedDataMap,
+        recentNodeColors,
+        recentEdgeColors
       });
     }
   }, [debouncedNodes, debouncedEdges, userDiagramOptions]);
@@ -232,7 +238,9 @@ const Flow = (props: FlowProps) => {
       nodes: [],
       edges: [],
       userDiagramOptions: defaultOptions,
-      nodeCalculatedDataMap: {}
+      nodeCalculatedDataMap: {},
+      recentEdgeColors,
+      recentNodeColors
     });
     setUserDiagramOptions(defaultOptions);
     setNodeCalculatedData({});
@@ -283,7 +291,15 @@ const Flow = (props: FlowProps) => {
 
   return (
     props.height &&
-    <FlowContext.Provider value={{ userDiagramOptions, nodeCalculatedDataMap, setNodeCalculatedData }}>
+    <FlowContext.Provider value={{ 
+      userDiagramOptions, 
+      nodeCalculatedDataMap, 
+      setNodeCalculatedData,
+      recentNodeColors,
+      recentEdgeColors,
+      setRecentNodeColors,
+      setRecentEdgeColors
+      }}>
       <div className="process-flow-diagram">
         {isDialogOpen &&
           <WarningDialog
@@ -359,9 +375,13 @@ export interface FlowProps {
 }
 
 export interface FlowContext {
-  userDiagramOptions: UserDiagramOptions,
-  nodeCalculatedDataMap: Record<string, NodeCalculatedData>,
-  setNodeCalculatedData: (nodeCalculatedDataMap: Record<string, NodeCalculatedData>) => void
+  userDiagramOptions: UserDiagramOptions;
+  nodeCalculatedDataMap: Record<string, NodeCalculatedData>;
+  setNodeCalculatedData: React.Dispatch<Record<string, NodeCalculatedData>>;
+  setRecentNodeColors: React.Dispatch<React.SetStateAction<string[]>>;
+  setRecentEdgeColors: React.Dispatch<React.SetStateAction<string[]>>;
+  recentNodeColors: string[];
+  recentEdgeColors: string[];
 }
 
 export interface UserDiagramOptionsHandlers {

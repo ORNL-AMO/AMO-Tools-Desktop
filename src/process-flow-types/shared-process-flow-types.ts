@@ -53,6 +53,8 @@ export interface FlowDiagramData {
   edges: Edge[],
   userDiagramOptions: UserDiagramOptions,
   nodeCalculatedDataMap: Record<string, NodeCalculatedData>
+  recentNodeColors: string[];
+  recentEdgeColors: string[];
 }
 
 export interface UserDiagramOptions {

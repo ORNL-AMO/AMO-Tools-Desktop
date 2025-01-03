@@ -9,7 +9,7 @@ export default function ComponentHandles({ node }: ComponentHandlesProps) {
   const { setNodes } = useReactFlow();
   const nodeData = node.data as ProcessFlowPart;
   const updateNodeInternals = useUpdateNodeInternals();
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [handles, setHandles] = useState<Handles>(nodeData.handles);
 
   const handleAccordianChange = (newExpanded: boolean) => {
