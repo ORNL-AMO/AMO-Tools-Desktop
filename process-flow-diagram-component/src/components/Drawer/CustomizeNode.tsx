@@ -1,11 +1,11 @@
 import { Box } from '@mui/material';
 import { Node, useReactFlow } from '@xyflow/react';
 import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { useContext, useEffect, useState } from 'react';
+import { CSSProperties, useContext, useEffect, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
 import { Accordion, AccordionDetails, AccordionSummary } from '../MUIStyledComponents';
-import PresetColorPicker from './PresetColorPicker';
 import { FlowContext } from '../Flow';
+import ColorPicker from './ColorPicker';
 
 
 export default function CustomizeNode({ node }: CustomizeNodeProps) {
@@ -13,32 +13,47 @@ export default function CustomizeNode({ node }: CustomizeNodeProps) {
   const { setNodes } = useReactFlow();
   const [backgroundColor, setBackgroundColor] = useState(node.style.backgroundColor);
   const [textColor, setTextColor] = useState(node.style.color);
-  const debouncedBackgroundColor = useUserEventDebounce<string>(backgroundColor, 50);
-  const debouncedTextColor = useUserEventDebounce<string>(textColor, 50);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   const handleAccordianChange = (newExpanded: boolean) => {
     setIsExpanded(newExpanded);
   };
 
-  // todo remove debouncing
-  useEffect(() => {
+  const handleSetBackgroundColor = (selectedColor: string) => {
+    setBackgroundColor(selectedColor);
+    updateNodeStyle(
+      {
+        ...node.style,
+        backgroundColor: selectedColor,
+      }
+    );
+  }
+
+  const handleSetTextColor = (selectedColor: string) => {
+    setTextColor(selectedColor);
+    updateNodeStyle(
+      {
+        ...node.style,
+        color: selectedColor,
+      }
+    );
+  }
+
+  const updateNodeStyle = (nodeStyle: CSSProperties) => {
     setNodes((nds) =>
       nds.map((n: Node<ProcessFlowPart>) => {
         if (n.data.diagramNodeId === node.id) {
           return {
             ...n,
             style: {
-              ...n.style,
-              backgroundColor: backgroundColor,
-              color: textColor
+              ...nodeStyle,
             }
           };
         }
         return n;
       }),
     );
-  }, [debouncedBackgroundColor, debouncedTextColor]);
+  }
 
 
   return (
@@ -49,18 +64,18 @@ export default function CustomizeNode({ node }: CustomizeNodeProps) {
       <AccordionDetails>
         <Box sx={{ marginTop: 1 }}>
           <Box sx={{ fontSize: '.75rem' }}>
-            <PresetColorPicker
+            <ColorPicker
               color={backgroundColor}
-              setParentColor={setBackgroundColor}
+              setParentColor={handleSetBackgroundColor}
               showRecent={true}
               recentColors={flowContext.recentNodeColors}
               setRecentColors={flowContext.setRecentNodeColors}
               label={'Component Color'} />
           </Box>
           <Box sx={{ fontSize: '.75rem' }}>
-            <PresetColorPicker
+            <ColorPicker
               color={textColor}
-              setParentColor={setTextColor}
+              setParentColor={handleSetTextColor}
               showRecent={false}
               label={'Text Color'} />
           </Box>

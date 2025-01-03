@@ -4,8 +4,8 @@ import { Edge, useReactFlow } from '@xyflow/react';
 import { useContext, useEffect, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
 import { CustomEdgeData, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
-import PresetColorPicker from './PresetColorPicker';
 import { FlowContext } from '../Flow';
+import ColorPicker from './ColorPicker';
 
 export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdgeProps) {
   const { setEdges } = useReactFlow();
@@ -13,7 +13,6 @@ export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdg
   const [edgeColor, setEdgeColor] = useState(edge.style.stroke);
   const debouncedEdgeColor = useUserEventDebounce<string>(edgeColor, 50);
 
-  // todo remove debounce
   useEffect(() => {
     setEdges((eds) => {
           return eds.map((e: Edge) => {
@@ -67,7 +66,7 @@ export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdg
           </Box>
 
           <Box sx={{fontSize: '.75rem'}}>
-            <PresetColorPicker
+            <ColorPicker
               label={'Pick Line Color'} 
               color={edgeColor}
               setParentColor={setEdgeColor}

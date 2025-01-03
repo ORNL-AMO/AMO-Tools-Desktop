@@ -1,17 +1,19 @@
 import { useState } from "react";
-const PresetColorPicker = (props: ColorPickerProps) => {
+const ColorPicker = (props: ColorPickerProps) => {
     const { color, recentColors, setParentColor, setRecentColors, label, showRecent } = props;
     const [selectedColor, setSelectedColor] = useState(color);
     const recentColorsLimit = 5;
 
     const handleSetColor = () => {
-        setRecentColors((prev) => {
-            if (!prev.includes(selectedColor) && selectedColor !== color) {
-                const updatedColors = [...prev, selectedColor];
-                return updatedColors.length > recentColorsLimit ? updatedColors.slice(1) : updatedColors;
-            }
-            return prev;
-        });
+        if (showRecent && recentColors) {
+            setRecentColors((prev) => {
+                if (!prev.includes(selectedColor) && selectedColor !== color) {
+                    const updatedColors = [...prev, selectedColor];
+                    return updatedColors.length > recentColorsLimit ? updatedColors.slice(1) : updatedColors;
+                }
+                return prev;
+            });
+        }
         setParentColor(selectedColor);
     };
 
@@ -57,11 +59,11 @@ const PresetColorPicker = (props: ColorPickerProps) => {
 };
 
 
-export default PresetColorPicker;
+export default ColorPicker;
 
 export interface ColorPickerProps { 
     color: string, 
-    setParentColor: React.Dispatch<React.SetStateAction<string>>, 
+    setParentColor: (selectedColor: string) => void, 
     recentColors?: string[],
     setRecentColors?: React.Dispatch<React.SetStateAction<string[]>>,
     label: string, 
