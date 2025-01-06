@@ -76,7 +76,6 @@ export class TreasureHuntOpportunityService {
 
   saveTreasureHuntOpportunity(currentOpportunity: TreasureHuntOpportunity, selectedCalc: string, customOpportunity: OpportunitySheet | AssessmentOpportunity) {
     let treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-    
     if (selectedCalc === Treasure.airLeak) {
       let airLeakSurveyOpportunity = currentOpportunity as AirLeakSurveyTreasureHunt;
       treasureHunt = this.airLeakTreasureHuntService.saveTreasureHuntOpportunity(airLeakSurveyOpportunity, treasureHunt);
