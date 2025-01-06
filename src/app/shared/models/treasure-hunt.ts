@@ -527,7 +527,9 @@ export interface TreasureHuntResults {
     totalAdditionalSavings: number,
 
     totalImplementationCost?: number,
-    paybackPeriod?: number,
+    paybackPeriod?: number,    
+    totalAdditionalImplementationCost?: number,
+    totalAdditionalPayback?: number,
 
     electricity: UtilityUsageData,
     naturalGas: UtilityUsageData,
