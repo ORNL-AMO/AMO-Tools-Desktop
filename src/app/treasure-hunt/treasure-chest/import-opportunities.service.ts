@@ -198,6 +198,13 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.boilerBlowdownRateOpportunities, Treasure.boilerBlowdownRate);
       treasureHunt.boilerBlowdownRateOpportunities = treasureHunt.boilerBlowdownRateOpportunities.concat(data.boilerBlowdownRateOpportunities);
     }
+    if (data.powerFactorCorrectionOpportunities) {
+      if (treasureHunt.powerFactorCorrectionOpportunities == undefined) {
+        treasureHunt.powerFactorCorrectionOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.powerFactorCorrectionOpportunities, Treasure.powerFactorCorrection);
+      treasureHunt.powerFactorCorrectionOpportunities = treasureHunt.powerFactorCorrectionOpportunities.concat(data.powerFactorCorrectionOpportunities);
+    }
     return treasureHunt;
   }
 
