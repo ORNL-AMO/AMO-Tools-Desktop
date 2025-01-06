@@ -215,7 +215,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
       <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingTop={'1rem'}>
         <DownloadButton shadowRoot={props.shadowRoot} />
         {!props.hasAssessment &&
-          <Button variant="outlined" sx={{ width: '100%' }} onClick={() => props.setIsDialogOpen(true)}>Reset Diagram</Button>
+          <Button variant="outlined" color="secondary" sx={{ width: '100%' }} onClick={() => props.setIsDialogOpen(true)}>Reset Diagram</Button>
         }
       </Box>
     </Box>
