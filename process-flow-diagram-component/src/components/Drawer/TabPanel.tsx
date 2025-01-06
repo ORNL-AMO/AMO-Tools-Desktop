@@ -15,6 +15,9 @@ export const TabPanelBox = styled((props: BoxProps) => (
   justifyContent: 'space-between',
   // height: '100%',
   width: '100%',
+  '&:Mui-Box-root': {
+    height: '100%',
+  },
 }));
 
 function TabPanel(props: TabPanelProps) {
@@ -22,7 +25,7 @@ function TabPanel(props: TabPanelProps) {
 
   let wrapperProps: CSSProperties = { height: '100%', width: '100%' };
 
-  if (value === index && value === 0) {
+  if (value === index && (value === 0 || value === 2)) {
     wrapperProps.display = 'flex'
     wrapperProps.justifyContent = 'space-between';
   }

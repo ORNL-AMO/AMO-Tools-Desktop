@@ -183,12 +183,12 @@ const DataDrawer = (props: DataDrawerProps) => {
                             <CustomizeNode node={selectedNode}></CustomizeNode>
                             <Divider />
                         </Box>
-                        <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" onClick={onDeleteNode}>Delete Component</Button>
                     </TabPanelBox>
                 </TabPanel>
 
                 <TabPanel value={selectedTab} index={2}>
                     {connectedEdges &&
+                    <>
                     <TabPanelBox>
                         <Box>
                             <ComponentConnectionsList
@@ -199,10 +199,14 @@ const DataDrawer = (props: DataDrawerProps) => {
                             <CustomizeEdge edge={selectedEdge} userDiagramOptions={props.userDiagramOptions}></CustomizeEdge>
                             <Divider />
                         </Box>
-                        <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" onClick={onDeleteEdge}>Delete Selected Connection</Button>
                     </TabPanelBox>
+                    <TabPanelBox>
+                        <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" color="secondary" onClick={onDeleteEdge}>Delete Selected Connection</Button>
+                    </TabPanelBox>
+                    </>
                     }
                 </TabPanel>
+                <Button sx={{ width: '100%', marginY: 2 }} color="secondary" variant="outlined" onClick={onDeleteNode}>Delete Component</Button>
             </Box>
         </Drawer>
     );
