@@ -63,7 +63,7 @@ export class PowerFactorCorrectionTreasureHuntService {
       energySavings: 0,
       baselineCost: 0,
       modificationCost: 0,
-      utilityType: 'Electricity',
+      utilityType: 'Other',
     }
 
     return treasureHuntOpportunityResults;
@@ -76,16 +76,16 @@ export class PowerFactorCorrectionTreasureHuntService {
       selected: powerFactorCorrection.selected,
       opportunityType: 'power-factor-correction',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: powerFactorCorrection.opportunitySheet.opportunityCost.additionalAnnualSavings.cost,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
-        energyUnit: 'kWh',
-        label: 'Electricity'
+        energyUnit: '',
+        label: 'Other'
       }],
-      utilityType: ['Electricity'],
+      utilityType: ['Other'],
       percentSavings: [{
         percent: (opportunitySummary.costSavings / currentEnergyUsage.electricityCosts) * 100,
-        label: 'Electricity',
+        label: 'Other',
         baselineCost: opportunitySummary.baselineCost,
         modificationCost: opportunitySummary.modificationCost,
       }],
