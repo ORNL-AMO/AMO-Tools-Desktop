@@ -82,9 +82,7 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
 
 export const setDroppedNode = (event, 
   reactFlowInstance: ReactFlowInstance, 
-  setNodes: React.Dispatch<React.SetStateAction<Node[]>>, 
-  setManageDataId: (id: string) => void,
-  setIsDrawerOpen: (isOpen: boolean) => void) => {
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>) => {
   event.preventDefault();
   const nodeType = event.dataTransfer.getData('application/reactflow');
   if (typeof nodeType === 'undefined' || !nodeType) {
@@ -106,8 +104,6 @@ export const setDroppedNode = (event,
     };
   } else {
     const newProcessComponent = getNewProcessComponent(nodeType);
-    newProcessComponent.setManageDataId = setManageDataId;
-    newProcessComponent.setIsDataDrawerOpen = setIsDrawerOpen;
     newNode = getNewNode(nodeType, newProcessComponent, position);
   }
   newNode.type = getAdaptedTypeString(newNode.type);
@@ -118,10 +114,8 @@ export const setDroppedNode = (event,
 }
 
 
-export const getDefaultNodeFromType = (nodeType: WaterProcessComponentType, setManageDataId, setIsDrawerOpen): Node => {
+export const getDefaultNodeFromType = (nodeType: WaterProcessComponentType): Node => {
   const newProcessComponent = getNewProcessComponent(nodeType);
-    newProcessComponent.setManageDataId = setManageDataId;
-    newProcessComponent.setIsDataDrawerOpen = setIsDrawerOpen;
     const newNode: Node = getNewNode(nodeType, newProcessComponent);
     return newNode;
 }

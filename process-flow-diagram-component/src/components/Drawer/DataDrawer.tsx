@@ -6,10 +6,8 @@ import {
 } from '@xyflow/react';
 import React, { BaseSyntheticEvent, memo } from 'react';
 import Drawer from '@mui/material/Drawer';
-import DrawerToggleButton from "./DrawerToggleButton";
-import ManageNodeData from "../Nodes/ManageNodeData";
-import ManageEdgeData from "../Edges/ManageEdgeData";
-import { Box } from "@mui/material";
+import ManageEdgeData from "./ManageEdgeData";
+import ManageNodeData from "./ManageNodeData";
 
 const DataDrawer = (props: DataDrawerProps) => {
     const { getNodes, getEdges } = useReactFlow();
@@ -35,13 +33,15 @@ const DataDrawer = (props: DataDrawerProps) => {
             disableEnforceFocus
             onClose={(event, reason) => handleDrawerClose(event, reason)}
             sx={{
-                width: 400,
                 flexShrink: 0,
                 [`& .MuiDrawer-root`]: {
                     zIndex: 0,
                 },
-                [`& .MuiBackdrop-root.MuiModal-backdrop`]: { opacity: '0 !important' },
-                [`& .MuiDrawer-paper`]: { boxSizing: 'border-box' },
+                [`& .MuiBackdrop-root.MuiModal-backdrop`]: { 
+                    opacity: '0 !important' },
+                [`& .MuiDrawer-paper`]: { 
+                    boxSizing: 'border-box', 
+                    width: 450 },
                 [`& .MuiPaper-root.MuiPaper-elevation.MuiDrawer-paper`]: {
                     top: props.parentContainer.headerHeight,
                     height: props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight,

@@ -48,11 +48,6 @@ const Flow = (props: FlowProps) => {
   const defaultRecentNodeColors = props.processDiagram.flowDiagramData.recentNodeColors.length !== 0 ? props.processDiagram.flowDiagramData.recentNodeColors : getDefaultColorPalette();
   const defaultRecentEdgeColors = props.processDiagram.flowDiagramData.recentEdgeColors.length !== 0 ? props.processDiagram.flowDiagramData.recentEdgeColors : getDefaultColorPalette();
   existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
-    if (node.data.processComponentType !== 'splitter-node') {
-      // * add state handlers
-      node.data.setManageDataId = setManageDataId;
-      node.data.setIsDataDrawerOpen = setIsDataDrawerOpen;
-    }
     if (!node.position) {
       staleParentNodes.push(node);
     } else {
@@ -60,12 +55,7 @@ const Flow = (props: FlowProps) => {
     }
   });
 
-  existingEdges = props.processDiagram.flowDiagramData.edges.filter((edge: Edge<CustomEdgeData>) => {
-    // * add state handlers
-    edge.data.setManageDataId = setManageDataId;
-    edge.data.setIsDataDrawerOpen = setIsDataDrawerOpen;
-    return edge;
-  });
+  existingEdges = props.processDiagram.flowDiagramData.edges;
 
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [staleNodes, setStaleNodes] = useState<Node[]>(staleParentNodes);
@@ -91,34 +81,9 @@ const Flow = (props: FlowProps) => {
 
   useEffect(() => {
     if (staleNodes.length === 0) {
-      // todo move to ng app
-      const dbSafeNodes = debouncedNodes.map((node: Node<ProcessFlowPart>) => {
-        // * IMPORTANT - removes handler functions before db save
-        return {
-          ...node,
-          data: {
-            ...node.data,
-            setManageDataId: undefined,
-            setIsDataDrawerOpen: undefined,
-          }
-        }
-      });
-
-      const dbSafeEdges = debouncedEdges.map((edge: Edge<CustomEdgeData>) => {
-        // * IMPORTANT - removes handler functions before db save
-        return {
-          ...edge,
-          data: {
-            ...edge.data,
-            setManageDataId: undefined,
-            setIsDataDrawerOpen: undefined,
-          }
-        }
-      });
-
       props.saveFlowDiagramData({
-        nodes: dbSafeNodes,
-        edges: dbSafeEdges,
+        nodes: debouncedNodes,
+        edges: debouncedEdges,
         userDiagramOptions,
         nodeCalculatedDataMap,
         recentNodeColors,
@@ -132,8 +97,8 @@ const Flow = (props: FlowProps) => {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
-  const onDrop = useCallback((event) => setDroppedNode(event, reactFlowInstance, setNodes, setManageDataId, setIsDataDrawerOpen),
-    [reactFlowInstance, setManageDataId, setIsDataDrawerOpen],
+  const onDrop = useCallback((event) => setDroppedNode(event, reactFlowInstance, setNodes),
+    [reactFlowInstance],
   );
 
   const onConnect: OnConnect = useCallback(

@@ -107,13 +107,13 @@ const ManageNodeData = (props: ManageNodeDataProps) => {
                 </TabPanel>
 
                 <TabPanel value={selectedTab} index={1}>
-                    <TabPanelBox>
+                    {/* <TabPanelBox> */}
                         <Box sx={{ paddingY: '1rem' }}>
                             <ComponentHandles node={selectedNode}></ComponentHandles>
                             <CustomizeNode node={selectedNode}></CustomizeNode>
                             <Divider />
                         </Box>
-                    </TabPanelBox>
+                    {/* </TabPanelBox> */}
                 </TabPanel>
 
                 <Button sx={{ width: '100%', marginY: 2 }} color="secondary" variant="outlined" onClick={onDeleteNode}>Delete Component</Button>
