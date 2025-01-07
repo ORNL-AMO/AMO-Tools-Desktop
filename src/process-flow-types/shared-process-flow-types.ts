@@ -100,14 +100,16 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   disableInflowConnections?: boolean,
   disableOutflowConnections?: boolean,
   splitterTargets?: Array<string>;
-  setManageDataId?: (id: number) => void;
-  openEditData?: (boolean) => void;
+  setManageDataId?: (id: string) => void;
+  setIsDataDrawerOpen?: (isOpen: boolean) => void;
   processComponentContext?: any;
 }
 
 export interface CustomEdgeData extends Record<string, unknown> {
   flowValue: number,
   hasOwnEdgeType: string,
+  setManageDataId?: (id: string) => void,
+  setIsDataDrawerOpen?: (isOpen: boolean) => void
 }
 
 // * patches v11 -> v12 typing changes
@@ -129,7 +131,7 @@ export type DiagramNode = Node<{
   handles?: Handles,
   splitterTargets?: Array<string>;
   setManageDataId?: (id: string) => void;
-  openEditData?: (boolean) => void;
+  setIsDataDrawerOpen?: (isOpen: boolean) => void;
   processComponentContext?: any;
 }, 'processFlowPart'>;
 

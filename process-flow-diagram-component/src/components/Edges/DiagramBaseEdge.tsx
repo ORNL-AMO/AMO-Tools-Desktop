@@ -1,8 +1,8 @@
 import { CSSProperties, Fragment, ReactNode, useContext } from 'react';
 import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, SmoothStepEdge, StepEdge, StraightEdge, useHandleConnections, useReactFlow } from '@xyflow/react';
 import { FlowContext } from '../Flow';
-import CloseIcon from '@mui/icons-material/Close';
 import { CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
+import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
 
 const FlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: string; selected: boolean, flowValue: number, scale: number }) => {
   let adjustedTransform = transform + ` scale(${scale})`;
@@ -59,9 +59,6 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
     labelY = props.selfConnectingPath.labelY;
   }
 
-  const onDeleteEdge = () => {
-    setEdges((edges) => edges.filter((edg) => edg.id !== props.id));
-  };
   const customEdgeData = props.data as CustomEdgeData;
   const renderBaseEdgeComponent = (props: DiagramEdgeProps, edgePath: string) => {
     const customStyle = {
@@ -95,26 +92,24 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
     }
   }
 
+  const transformString = `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`;
+
+  const onEditEdge = () => {
+    flowContext.setManageDataId(props.id);
+    flowContext.setIsDataDrawerOpen(true);
+}
+
   return (
     <>
       {renderBaseEdgeComponent(props, edgePath)}
       <EdgeLabelRenderer>
         <Fragment>
-        {props.selected &&
-          <div
-            style={{
-              position: 'absolute',
-              transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
-              fontSize: 16,
-              pointerEvents: 'all',
-            }}
-            className="nodrag nopan"
-          >
-            <button className="close-button hover-highlight" onClick={onDeleteEdge}>
-              <CloseIcon sx={{ width: 'unset', height: 'unset' }} />
-            </button>
-          </div>
-        }
+
+          <EditDataDrawerButton 
+            onEdit={onEditEdge}
+            selected={props.selected}
+            transformLocation={transformString}/>
+
         {flowContext.userDiagramOptions.showFlowValues && !showEndLabel &&
             <FlowValueLabel
             transform={`translate(${translateXStart}%, ${translateYStart}%) translate(${sourceX}px,${sourceY}px)`}

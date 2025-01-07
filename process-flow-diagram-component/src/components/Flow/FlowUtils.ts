@@ -80,7 +80,11 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
   node.position = position;
 }
 
-export const setDroppedNode = (event, reactFlowInstance: ReactFlowInstance, setNodes, setManageDataId, setIsDrawerOpen) => {
+export const setDroppedNode = (event, 
+  reactFlowInstance: ReactFlowInstance, 
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>, 
+  setManageDataId: (id: string) => void,
+  setIsDrawerOpen: (isOpen: boolean) => void) => {
   event.preventDefault();
   const nodeType = event.dataTransfer.getData('application/reactflow');
   if (typeof nodeType === 'undefined' || !nodeType) {
@@ -103,7 +107,7 @@ export const setDroppedNode = (event, reactFlowInstance: ReactFlowInstance, setN
   } else {
     const newProcessComponent = getNewProcessComponent(nodeType);
     newProcessComponent.setManageDataId = setManageDataId;
-    newProcessComponent.openEditData = setIsDrawerOpen;
+    newProcessComponent.setIsDataDrawerOpen = setIsDrawerOpen;
     newNode = getNewNode(nodeType, newProcessComponent, position);
   }
   newNode.type = getAdaptedTypeString(newNode.type);
@@ -117,7 +121,7 @@ export const setDroppedNode = (event, reactFlowInstance: ReactFlowInstance, setN
 export const getDefaultNodeFromType = (nodeType: WaterProcessComponentType, setManageDataId, setIsDrawerOpen): Node => {
   const newProcessComponent = getNewProcessComponent(nodeType);
     newProcessComponent.setManageDataId = setManageDataId;
-    newProcessComponent.openEditData = setIsDrawerOpen;
+    newProcessComponent.setIsDataDrawerOpen = setIsDrawerOpen;
     const newNode: Node = getNewNode(nodeType, newProcessComponent);
     return newNode;
 }
@@ -127,36 +131,36 @@ export const getDefaultNodeFromType = (nodeType: WaterProcessComponentType, setM
 * edge ids are not gauranteed to be unique. They only include nodeid-nodeid. source and target handles must be looked at to identify uniqueness of edge 
 * 
 */
-export const setCustomEdges = (setEdges, connectedParams: Connection | Edge, diagramOptions: UserDiagramOptions) => {
-  setEdges((eds) => {
+export const setCustomEdges = (setEdges: React.Dispatch<React.SetStateAction<Edge[]>>, 
+  connectedParams: Connection | Edge, 
+  userDiagramOptions: UserDiagramOptions,
+  ) => {
+  setEdges((eds: Edge[]) => {
     connectedParams = connectedParams as Edge;
-    setCustomEdgeDefaults(connectedParams, diagramOptions);
+    if (connectedParams.source === connectedParams.target) {
+      connectedParams.type = 'selfconnecting';
+    }
+    if (userDiagramOptions.directionalArrowsVisible) {
+      connectedParams.markerEnd = {
+        type: MarkerType.ArrowClosed,
+        width: 25,
+        height: 25
+      }
+    }
+  
+    connectedParams.data = {
+      flowValue: 0,
+    }
+  
+    if (connectedParams.style === undefined) {
+      connectedParams.style = {
+        stroke: '#6c757d',
+        strokeWidth: userDiagramOptions.edgeThickness
+      }
+    }
+
     return addEdge(connectedParams, eds);
   })
-}
-
-export const setCustomEdgeDefaults = (edge: Edge, userDiagramOptions: UserDiagramOptions) => {
-  if (edge.source === edge.target) {
-    edge.type = 'selfconnecting';
-  }
-  if (userDiagramOptions.directionalArrowsVisible) {
-    edge.markerEnd = {
-      type: MarkerType.ArrowClosed,
-      width: 25,
-      height: 25
-    }
-  }
-
-  edge.data = {
-    flowValue: 0
-  }
-
-  if (edge.style === undefined) {
-    edge.style = {
-      stroke: '#6c757d',
-      strokeWidth: userDiagramOptions.edgeThickness
-    }
-  }
 }
 
 export const changeExistingEdgesType = (setEdges, diagramEdgeType: string) => {

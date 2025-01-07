@@ -20,8 +20,8 @@ import {
 
 import '@xyflow/react/dist/style.css';
 
-import { NodeCalculatedData, FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { changeExistingEdgesType, getDefaultColorPalette, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdgeDefaults, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
+import { NodeCalculatedData, FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram, CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { changeExistingEdgesType, getDefaultColorPalette, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
@@ -40,17 +40,18 @@ const Flow = (props: FlowProps) => {
   const [isDataDrawerOpen, setIsDataDrawerOpen] = useState(false);
 
   // * staleNodes == nodes with createdByAssessment: true
-  let staleParentNodes = [];
-  let existingNodes = [];
-  let existingEdges = [];
+  let staleParentNodes: Node[] = [];
+  let existingNodes: Node[] = [];
+  let existingEdges: Edge[] = [];
   const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions ? props.processDiagram.flowDiagramData.userDiagramOptions : getDefaultUserDiagramOptions();
   const defaultNodeCalculatedData = props.processDiagram.flowDiagramData.nodeCalculatedDataMap ? props.processDiagram.flowDiagramData.nodeCalculatedDataMap : {};
   const defaultRecentNodeColors = props.processDiagram.flowDiagramData.recentNodeColors.length !== 0 ? props.processDiagram.flowDiagramData.recentNodeColors : getDefaultColorPalette();
   const defaultRecentEdgeColors = props.processDiagram.flowDiagramData.recentEdgeColors.length !== 0 ? props.processDiagram.flowDiagramData.recentEdgeColors : getDefaultColorPalette();
   existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
     if (node.data.processComponentType !== 'splitter-node') {
+      // * add state handlers
       node.data.setManageDataId = setManageDataId;
-      node.data.openEditData = setIsDataDrawerOpen;
+      node.data.setIsDataDrawerOpen = setIsDataDrawerOpen;
     }
     if (!node.position) {
       staleParentNodes.push(node);
@@ -58,7 +59,13 @@ const Flow = (props: FlowProps) => {
       return node;
     }
   });
-  existingEdges = props.processDiagram.flowDiagramData.edges;
+
+  existingEdges = props.processDiagram.flowDiagramData.edges.filter((edge: Edge<CustomEdgeData>) => {
+    // * add state handlers
+    edge.data.setManageDataId = setManageDataId;
+    edge.data.setIsDataDrawerOpen = setIsDataDrawerOpen;
+    return edge;
+  });
 
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const [staleNodes, setStaleNodes] = useState<Node[]>(staleParentNodes);
@@ -84,6 +91,7 @@ const Flow = (props: FlowProps) => {
 
   useEffect(() => {
     if (staleNodes.length === 0) {
+      // todo move to ng app
       const dbSafeNodes = debouncedNodes.map((node: Node<ProcessFlowPart>) => {
         // * IMPORTANT - removes handler functions before db save
         return {
@@ -91,18 +99,30 @@ const Flow = (props: FlowProps) => {
           data: {
             ...node.data,
             setManageDataId: undefined,
-            openEditData: undefined,
+            setIsDataDrawerOpen: undefined,
+          }
+        }
+      });
+
+      const dbSafeEdges = debouncedEdges.map((edge: Edge<CustomEdgeData>) => {
+        // * IMPORTANT - removes handler functions before db save
+        return {
+          ...edge,
+          data: {
+            ...edge.data,
+            setManageDataId: undefined,
+            setIsDataDrawerOpen: undefined,
           }
         }
       });
 
       props.saveFlowDiagramData({
         nodes: dbSafeNodes,
-        edges: debouncedEdges,
+        edges: dbSafeEdges,
         userDiagramOptions,
         nodeCalculatedDataMap,
         recentNodeColors,
-        recentEdgeColors
+        recentEdgeColors,
       });
     }
   }, [debouncedNodes, debouncedEdges, userDiagramOptions]);
@@ -298,7 +318,9 @@ const Flow = (props: FlowProps) => {
       recentNodeColors,
       recentEdgeColors,
       setRecentNodeColors,
-      setRecentEdgeColors
+      setRecentEdgeColors,
+      setManageDataId,
+      setIsDataDrawerOpen
       }}>
       <div className="process-flow-diagram">
         {isDialogOpen &&
@@ -382,6 +404,8 @@ export interface FlowContext {
   setRecentEdgeColors: React.Dispatch<React.SetStateAction<string[]>>;
   recentNodeColors: string[];
   recentEdgeColors: string[];
+  setManageDataId: (id: string) => void;
+  setIsDataDrawerOpen: (isOpen: boolean) => void;
 }
 
 export interface UserDiagramOptionsHandlers {

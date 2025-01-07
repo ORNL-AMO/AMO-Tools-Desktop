@@ -1,13 +1,14 @@
-import { Handle, NodeProps, Position, useHandleConnections } from "@xyflow/react";
-import { CSSProperties } from "react";
+import { NodeProps, Position } from "@xyflow/react";
+import { CSSProperties, useContext } from "react";
 import { DiagramNode } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { Typography } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
 import CustomHandle from "./CustomHandle";
-import EditNodeButton from "./EditNodeButton";
+import EditDataDrawerButton from "../Drawer/EditDataDrawerButton";
+import { FlowContext } from "../Flow";
 
 
 const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
+  const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
   
   const transformString = `translate(0%, 0%) translate(145px, -30px)`;
   const lossInnerStyle: CSSProperties = {
@@ -16,14 +17,18 @@ const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
     position: 'absolute'
   };
 
+  const onEditNode = () => {
+    flowContext.setManageDataId(id);
+    flowContext.setIsDataDrawerOpen(true);
+}
+
   return (
     <div>
       <div className="node-inner-input" style={lossInnerStyle}>
-        <EditNodeButton
-          data={data}
+      <EditDataDrawerButton 
+          onEdit={onEditNode}
           selected={selected}
-          transformLocation={transformString}
-        />
+          transformLocation={transformString}/>
         <Typography sx={{ width: '100%' }} >
           {data.name}
         </Typography>
