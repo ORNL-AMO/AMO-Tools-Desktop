@@ -84,7 +84,7 @@ export class PowerFactorCorrectionTreasureHuntService {
       }],
       utilityType: ['Other'],
       percentSavings: [{
-        percent: (opportunitySummary.costSavings / currentEnergyUsage.electricityCosts) * 100,
+        percent: (powerFactorCorrection.opportunitySheet.opportunityCost.additionalAnnualSavings.cost / currentEnergyUsage.electricityCosts) * 100,
         label: 'Other',
         baselineCost: opportunitySummary.baselineCost,
         modificationCost: opportunitySummary.modificationCost,
