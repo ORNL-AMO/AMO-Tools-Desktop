@@ -35,7 +35,7 @@ export class WaterDiagramConnectionsService {
   updateDiagramFromAssessment(diagram: Diagram, waterAssessment: WaterAssessment) {
     let assessmentNodes: Node[] = [];
     assessmentNodes = assessmentNodes.concat(
-      this.setSplitterNodes(diagram.waterDiagram.flowDiagramData.nodes),
+      this.setSummingNodes(diagram.waterDiagram.flowDiagramData.nodes),
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.intakeSources, 'water-intake'),
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.dischargeOutlets, 'water-discharge'),
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.waterUsingSystems, 'water-using-system'),
@@ -48,9 +48,9 @@ export class WaterDiagramConnectionsService {
     diagram.waterDiagram.flowDiagramData.nodes = assessmentNodes;
   }
 
-  setSplitterNodes(nodes) {
-    let splitterNodes: Node[] = nodes.filter((node: Node) => node.type.includes('splitterNode')); 
-    return splitterNodes;
+  setSummingNodes(nodes) {
+    let summingNodes: Node[] = nodes.filter((node: Node) => node.type.includes('summingNode')); 
+    return summingNodes;
   }
 
   buildNodesFromWaterComponents(waterDiagram: WaterDiagram, assessmentComponents: WaterProcessComponent[], componentType: WaterProcessComponentType) {

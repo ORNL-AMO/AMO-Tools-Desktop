@@ -93,19 +93,8 @@ export const setDroppedNode = (event,
     y: event.clientY,
   });
 
-  let newNode: Node;
-  if (nodeType.includes('splitter-node')) {
-    newNode = {
-      id: getNewNodeId(),
-      type: nodeType,
-      position: position,
-      className: nodeType,
-      data: {}
-    };
-  } else {
-    const newProcessComponent = getNewProcessComponent(nodeType);
-    newNode = getNewNode(nodeType, newProcessComponent, position);
-  }
+  const newProcessComponent = getNewProcessComponent(nodeType);
+  let newNode: Node = getNewNode(nodeType, newProcessComponent, position);
   newNode.type = getAdaptedTypeString(newNode.type);
 
   setNodes((nds) => {
@@ -209,14 +198,8 @@ export const getAdaptedTypeString = (nodeType: string) => {
     case 'waste-water-treatment':
       adaptedString = 'wasteWaterTreatment'
       break;
-    case 'splitter-node':
-      adaptedString = 'splitterNode'
-      break;
-    case 'splitter-node-4':
-      adaptedString = 'splitterNodeFour'
-      break;
-    case 'splitter-node-8':
-      adaptedString = 'splitterNodeEight'
+    case 'summing-node':
+      adaptedString = 'summingNode'
       break;
     case 'known-loss':
       adaptedString = 'knownLoss'

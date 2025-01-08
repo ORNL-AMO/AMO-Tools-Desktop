@@ -108,9 +108,9 @@ a {
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
 }
 
-.process-flow-diagram .dndnode.splitterNode {
+.process-flow-diagram .dndnode.summing-node {
   border: none;
-  background: #757575;
+  background: rgb(108, 117, 125);
 }
 
 .process-flow-diagram .dndnode.water-intake {
@@ -244,24 +244,24 @@ a {
 .react-flow__node-waterDischarge.selectable:hover, 
 .react-flow__node-waterTreatment.selectable:hover, 
 .react-flow__node-wasteWaterTreatment.selectable:hover, 
+.react-flow__node-summingNode.selectable:hover, 
 .react-flow__node-group.selectable:hover {
       box-shadow: 0px 3.54px 4.55px 0px #00000005, 
       0px 3.54px 4.55px 0px #0000000D, 
       0px 0.51px 1.01px 0px #0000001A;
 }
 
+.react-flow__node-summingNode.expandIcon:hover {
+      box-shadow: 0px 3.54px 4.55px 0px #00000005, 
+      0px 3.54px 4.55px 0px #0000000D, 
+      0px 0.51px 1.01px 0px #0000001A
+}
 
-.react-flow__node-splitterNode
-{
-  text-align: center;
-  border-width: 1px;
-  border-style: solid;
-  border-color: #c0c0c0;
-  padding: 2px;
+.react-flow__node-summingNode,
+.react-flow__node-group {
   min-width: 150px;
-  font-size: 0;
-  color: #c0c0c0;
-  background-color: #c0c0c0;
+  border: 1px solid rgb(108, 117, 125);
+  background-color: rgb(108, 117, 125);
 }
 
 .react-flow__node-waterIntake,
@@ -301,7 +301,7 @@ a {
   border: none;
   min-width: 2px;
   min-height: 2px;
-
+  z-index: -1;
   border-left: solid 1px gray;
   border-right: solid 1px gray;
   border-top: solid 1px gray;
@@ -316,6 +316,7 @@ a {
   border: none;
   min-width: 2px;
   min-height: 2px;
+  z-index: -1;
 }
 
 .react-flow__handle.custom-handle.source-handle {
@@ -368,6 +369,7 @@ a {
 }
 /* Custom Node End */
 
+
 .edit-button {
   width: 36px;
   height: 36px;
@@ -379,6 +381,10 @@ a {
   font-size: 12px;
   line-height: 1;
   padding: 2px;
+}
+
+.expand-button {
+  border-radius: 5px;
 }
 
 .hover-highlight:hover {
