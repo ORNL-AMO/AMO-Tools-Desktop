@@ -377,7 +377,7 @@ export class TreasureHuntPptService {
             let utilityUnit: string;
             opp.annualEnergySavings.forEach(annulEnergy => {
               let additionalSavings: number = 0;
-              if(opp.opportunitySheet.opportunityCost.additionalAnnualSavings){
+              if (opp.opportunitySheet.opportunityCost.additionalAnnualSavings && opp.opportunityType != 'power-factor-correction'){
                 additionalSavings = opp.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
               }
               utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(annulEnergy.label, settings);
@@ -437,7 +437,7 @@ export class TreasureHuntPptService {
         let utilityUnit: string;
         opp.annualEnergySavings.forEach(annulEnergy => {
         let additionalSavings: number = 0;
-            if(opp.opportunitySheet.opportunityCost.additionalAnnualSavings){
+            if (opp.opportunitySheet.opportunityCost.additionalAnnualSavings && opp.opportunityType != 'power-factor-correction'){
               additionalSavings = opp.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
             }
           utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(annulEnergy.label, settings);
