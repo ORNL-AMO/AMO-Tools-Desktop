@@ -1,10 +1,10 @@
 import { memo, useContext } from 'react';
-import { Position, NodeProps, Node, useReactFlow } from '@xyflow/react';
+import { Position, NodeProps } from '@xyflow/react';
 import { DiagramNode } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
-import EditNodeButton from './EditNodeButton';
 import { FlowContext } from '../Flow';
+import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
@@ -23,6 +23,12 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
     plantLevelFlow = data.userEnteredData.totalSourceFlow? data.userEnteredData.totalSourceFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalSourceFlow;
     condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
   }
+
+  const onEditNode = () => {
+    flowContext.setManageDataId(id);
+    flowContext.setIsDataDrawerOpen(true);
+}
+
   return (
     <>
 
@@ -72,10 +78,11 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
       <div className="node-inner-input" style={{
         padding: condensedPadding? '0' : undefined
       }}>
-        <EditNodeButton 
-          data={data}
+        <EditDataDrawerButton 
+          onEdit={onEditNode}
           selected={selected}
           transformLocation={transformString}/>
+
         <Typography sx={{ width: '100%' }} >
           {data.name}
         </Typography>

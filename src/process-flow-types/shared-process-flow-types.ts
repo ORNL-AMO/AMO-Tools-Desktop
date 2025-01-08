@@ -100,8 +100,6 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   disableInflowConnections?: boolean,
   disableOutflowConnections?: boolean,
   splitterTargets?: Array<string>;
-  setManageDataId?: (id: number) => void;
-  openEditData?: (boolean) => void;
   processComponentContext?: any;
 }
 
@@ -128,8 +126,6 @@ export type DiagramNode = Node<{
   modifiedDate?: Date,
   handles?: Handles,
   splitterTargets?: Array<string>;
-  setManageDataId?: (id: string) => void;
-  openEditData?: (boolean) => void;
   processComponentContext?: any;
 }, 'processFlowPart'>;
 
