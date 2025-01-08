@@ -89,6 +89,13 @@ export class WaterHeatingTreasureHuntService {
 
   getWaterHeatingOpportunityCardData(waterHeatingOpportunity: WaterHeatingTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
     let energyData = this.getEnergyData(waterHeatingOpportunity, settings, currentEnergyUsage, opportunitySummary,);
+
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (waterHeatingOpportunity.opportunitySheet){
+      if (waterHeatingOpportunity.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += waterHeatingOpportunity.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
     
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
@@ -96,7 +103,7 @@ export class WaterHeatingTreasureHuntService {
       selected: waterHeatingOpportunity.selected,
       opportunityType: Treasure.waterHeating,
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: energyData.annualEnergySavings,
       percentSavings: energyData.percentSavings,
       utilityType: energyData.utilityTypes,

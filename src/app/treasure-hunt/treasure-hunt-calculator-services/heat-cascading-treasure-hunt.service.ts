@@ -61,13 +61,21 @@ export class HeatCascadingTreasureHuntService {
     } else if (heatCascadingOpportunity.energySourceData.energySourceType == 'Other Fuel') {
       currentCosts = currentEnergyUsage.otherFuelCosts;
     }
+
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (heatCascadingOpportunity.opportunitySheet){
+      if (heatCascadingOpportunity.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += heatCascadingOpportunity.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: heatCascadingOpportunity.selected,
       opportunityType: Treasure.heatCascading,
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: heatCascadingOpportunity.energySourceData.unit,

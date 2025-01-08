@@ -54,13 +54,21 @@ export class WasteHeatTreasureHuntService {
   }
 
   getWasteHeatCardData(wasteHeat: WasteHeatTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
+    
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (wasteHeat.opportunitySheet){
+      if (wasteHeat.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += wasteHeat.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+    
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: wasteHeat.selected,
       opportunityType: Treasure.wasteHeat,
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: 'kWh',
