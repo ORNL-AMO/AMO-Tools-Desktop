@@ -375,17 +375,13 @@ export class TreasureHuntPptService {
               { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
             ]);
             let utilityUnit: string;
-            opp.annualEnergySavings.forEach(annulEnergy => {
-              let additionalSavings: number = 0;
-              if (opp.opportunitySheet.opportunityCost.additionalAnnualSavings && opp.opportunityType != 'power-factor-correction'){
-                additionalSavings = opp.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
-              }
+            opp.annualEnergySavings.forEach(annulEnergy => {              
               utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(annulEnergy.label, settings);
               rows.push([
                 annulEnergy.label,
                 this.treasureHuntPptTableService.roundValToFormatString(annulEnergy.savings),
                 utilityUnit,
-                this.treasureHuntPptTableService.roundValToCurrency(opp.annualCostSavings + additionalSavings),
+                this.treasureHuntPptTableService.roundValToCurrency(opp.annualCostSavings),
                 this.treasureHuntPptTableService.roundValToCurrency(opp.opportunitySheet.opportunityCost.material),
                 this.treasureHuntPptTableService.roundValToCurrency(opp.opportunitySheet.opportunityCost.labor),
                 this.treasureHuntPptTableService.getOtherCost(opp.opportunitySheet.opportunityCost),
@@ -436,16 +432,12 @@ export class TreasureHuntPptService {
         ]);
         let utilityUnit: string;
         opp.annualEnergySavings.forEach(annulEnergy => {
-        let additionalSavings: number = 0;
-            if (opp.opportunitySheet.opportunityCost.additionalAnnualSavings && opp.opportunityType != 'power-factor-correction'){
-              additionalSavings = opp.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
-            }
           utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(annulEnergy.label, settings);
           rows.push([
             annulEnergy.label,
             this.treasureHuntPptTableService.roundValToFormatString(annulEnergy.savings),
             utilityUnit,
-            this.treasureHuntPptTableService.roundValToCurrency(opp.annualCostSavings + additionalSavings),
+            this.treasureHuntPptTableService.roundValToCurrency(opp.annualCostSavings),
             this.treasureHuntPptTableService.roundValToCurrency(opp.opportunitySheet.opportunityCost.material),
             this.treasureHuntPptTableService.roundValToCurrency(opp.opportunitySheet.opportunityCost.labor),
             this.treasureHuntPptTableService.getOtherCost(opp.opportunitySheet.opportunityCost),
