@@ -14,10 +14,8 @@ import DrawerToggleButton from "../Drawer/DrawerToggleButton";
 
 const ManageNodeData = (props: ManageNodeDataProps) => {
     const { selectedNode, closeDrawer } = props;
-    const { getEdges, setEdges, setNodes } = useReactFlow();
+    const { setEdges, setNodes } = useReactFlow();
 
-    const allNodeEdges = getConnectedEdges([selectedNode], getEdges());
-    const [connectedEdges, setConnectedEdges] = useState<Edge[]>(allNodeEdges);
     const [selectedTab, setSelectedTab] = useState(0);
     const [nodeName, setNodeName] = useState<string>(selectedNode.data.name);
     const debounceRef = useRef<any>(null);
@@ -101,19 +99,15 @@ const ManageNodeData = (props: ManageNodeDataProps) => {
 
                 <TabPanel value={selectedTab} index={0}>
                     <ComponentDataForm
-                        connectedEdges={connectedEdges}
-                        setConnectedEdges={setConnectedEdges}
                         selectedNode={selectedNode} />
                 </TabPanel>
 
                 <TabPanel value={selectedTab} index={1}>
-                    {/* <TabPanelBox> */}
-                        <Box sx={{ paddingY: '1rem' }}>
-                            <ComponentHandles node={selectedNode}></ComponentHandles>
-                            <CustomizeNode node={selectedNode}></CustomizeNode>
-                            <Divider />
-                        </Box>
-                    {/* </TabPanelBox> */}
+                    <Box sx={{ paddingY: '1rem' }}>
+                        <ComponentHandles node={selectedNode}></ComponentHandles>
+                        <CustomizeNode node={selectedNode}></CustomizeNode>
+                        <Divider />
+                    </Box>
                 </TabPanel>
 
                 <Button sx={{ width: '100%', marginY: 2 }} color="secondary" variant="outlined" onClick={onDeleteNode}>Delete Component</Button>

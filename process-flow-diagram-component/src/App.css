@@ -370,7 +370,7 @@ a {
 /* Custom Node End */
 
 
-.edit-button {
+.node-button {
   width: 36px;
   height: 36px;
   background: #fff;
@@ -387,18 +387,12 @@ a {
   border-radius: 5px;
 }
 
+
 .hover-highlight:hover {
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
   background-color: rgb(48 85 207 / 25%);
 }
 
-.edit-button.editing {
-  font-size: 16px;
-  width: 32px;
-  height: 32px;
-  position: absolute;
-  transform: translate(275px, -5px);
-}
 
 .close-button {
   width: 20px;

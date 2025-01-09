@@ -70,6 +70,7 @@ export interface UserDiagramOptions {
 
 
 export interface NodeCalculatedData {
+  name: string,
   totalSourceFlow: number,
   totalDischargeFlow: number,
   // * summing node total divided by active handle connections

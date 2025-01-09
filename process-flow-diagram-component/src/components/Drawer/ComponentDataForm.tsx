@@ -25,6 +25,9 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const [sourcesExpanded, setSourcesExpanded] = useState<boolean>(true);
     const [dischargeExpanded, setDischargeExpanded] = useState<boolean>(true);
 
+    const allNodeEdges = getConnectedEdges([props.selectedNode], getEdges());
+    const [connectedEdges, setConnectedEdges] = useState<Edge[]>(allNodeEdges);
+
     // todo for future diagrams - setComponentTypeData<T>
     let componentData: ProcessFlowPart | WaterTreatment = {...props.selectedNode.data} as ProcessFlowPart;
     const isWaterTreatment = props.selectedNode.type === 'waterTreatment';
@@ -46,7 +49,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
 
 
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
-        if (props.connectedEdges.length !== 0) {
+        if (connectedEdges.length !== 0) {
             setExpanded(newExpanded);
         }
     };
@@ -78,7 +81,11 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     /**
    * Edge states are assumed to be updated from caller
    */
-    const updateCalculatedDataFromConnectedIds = (nodes, connectedNodeIds, nodeCalculatedDataMap, setNodeCalculatedData) => {
+    const updateCalculatedDataFromConnectedIds = (
+        nodes: Node[], 
+        connectedNodeIds: string[], 
+        nodeCalculatedDataMap: Record<string, NodeCalculatedData>, 
+        setNodeCalculatedData: React.Dispatch<React.SetStateAction<Record<string, NodeCalculatedData>>>) => {
       let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
         ...nodeCalculatedDataMap,
       }
@@ -111,7 +118,9 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             }
             return edge;
         });
-        props.setConnectedEdges(connectedEdges);
+
+        // todo do we still need to set connected edges
+        setConnectedEdges(connectedEdges);
         setEdges(allEdges);
     }
 
@@ -121,6 +130,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         let connectedNodeIds = [];
         const updatedValue = event.target.value === "" ? null : Number(event.target.value);
 
+        // * Update connected edge value
+        // * Rebuild connected edges (props array is stale with new edge value)
         const allEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
             if (edge.id === edgeId) {
                 edge.data.flowValue = updatedValue;
@@ -139,6 +150,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         });
 
         const nodes = getNodes();
+
+        // * Calculate connected flow totals
         const {sourceCalculatedTotalFlow, dischargeCalculatedTotalFlow} = getNodeFlowTotals(connectedEdges, nodes, props.selectedNode.id);
         if (componentData.userEnteredData.totalSourceFlow === undefined) {
             setTotalSourceFlow(sourceCalculatedTotalFlow);
@@ -147,23 +160,28 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             setTotalDischargeFlow(dischargeCalculatedTotalFlow);
         }
 
+        // * Set calculated values for intake/discharge label
+        debugger;
         if (props.selectedNode.data.processComponentType === 'water-intake' || props.selectedNode.data.processComponentType === 'water-discharge') {
             // * Update self
+            debugger;
             let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
                 ...flowContext.nodeCalculatedDataMap,
             }
             updatedNodeCalculatedDataMap[props.selectedNode.id] = {
+                name: props.selectedNode.data.name,
                 totalSourceFlow: sourceCalculatedTotalFlow,
                 totalDischargeFlow: dischargeCalculatedTotalFlow,
             }
             flowContext.setNodeCalculatedData(updatedNodeCalculatedDataMap);
         } else {
-            // * Update related nodes
+            // * Update connected nodes
+            debugger;
             updateCalculatedDataFromConnectedIds(nodes, connectedNodeIds, flowContext.nodeCalculatedDataMap, flowContext.setNodeCalculatedData);
         }
 
         setEdges(allEdges);
-        props.setConnectedEdges(connectedEdges);
+        setConnectedEdges(connectedEdges);
     }
 
 
@@ -220,7 +238,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
 
     const sourceEdgeIds = [];
     const dischargeEdgeIds = [];
-    const sourceEdgeInputElements: JSX.Element[] = props.connectedEdges.map((edge: Edge<CustomEdgeData>) => {
+    const sourceEdgeInputElements: JSX.Element[] = connectedEdges.map((edge: Edge<CustomEdgeData>) => {
         const { source, target } = getEdgeSourceAndTarget(edge, getNodes());
         if (props.selectedNode.id === target.diagramNodeId) {
             sourceEdgesTotalFlow += edge.data.flowValue;
@@ -378,9 +396,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
 export default memo(ComponentDataForm);
 
 export interface ComponentDataFormProps {
-    connectedEdges: Edge[];
-    setConnectedEdges: (connectedEdges: Edge[]) => void;
-    selectedNode: Node;
+    selectedNode: Node<ProcessFlowPart>;
 }
 
 

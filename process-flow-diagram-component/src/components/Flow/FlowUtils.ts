@@ -44,11 +44,15 @@ export const updateNodeCalculatedDataMap = (
   } = getNodeFlowTotals(nodeEdges, nodes, node.id);
   let calculatedData = { ...nodeCalculatedDataMap[node.id] };
   if (node.data.processComponentType === 'water-intake') {
+    console.log('==== updateNodeCalculatedDataMap intake', node, nodes, nodeEdges, nodeCalculatedDataMap);
     calculatedData.totalDischargeFlow = dischargeCalculatedTotalFlow;
   } else if (node.data.processComponentType === 'water-discharge') {
+    console.log('==== updateNodeCalculatedDataMap discharge', node, nodes, nodeEdges, nodeCalculatedDataMap);
     calculatedData.totalSourceFlow = sourceCalculatedTotalFlow;
   }
+  calculatedData.name = node.data.name;
   nodeCalculatedDataMap[node.id] = calculatedData;
+  console.log('updated dataMap', nodeCalculatedDataMap);
   setNodeCalculatedData(nodeCalculatedDataMap);
 }
 

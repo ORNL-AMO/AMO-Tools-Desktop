@@ -26,7 +26,7 @@ const DeleteButton = ({ id, data, selected, transformLocation }: DeleteButtonPro
                 className="nodrag nopan"
             >
                 {selected &&
-                    <button className="node-button edit-button hover-highlight" onClick={onDeleteNode}>
+                    <button className="node-button hover-highlight" onClick={onDeleteNode}>
                         <DeleteIcon sx={{ width: 'unset', height: 'unset' }} />
                     </button>
                 }
