@@ -5,7 +5,8 @@ import { SortCardsData } from './sort-cards-by.pipe';
 import * as _ from 'lodash';
 import {
   TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt,
-  CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt, WallLossTreasureHunt, OpportunitySummary, Treasure, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt
+  CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, FlueGasTreasureHunt, WallLossTreasureHunt, OpportunitySummary, Treasure, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt,
+  PowerFactorCorrectionTreasureHunt
 } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 
@@ -37,6 +38,7 @@ import { ChillerPerformanceTreasureHuntService } from '../../treasure-hunt-calcu
 import { CoolingTowerFanTreasureHuntService } from '../../treasure-hunt-calculator-services/cooling-tower-fan-treasure-hunt.service';
 import { CoolingTowerBasinTreasureHuntService } from '../../treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 import { BoilerBlowdownRateTreasureHuntService } from '../../treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
+import { PowerFactorCorrectionTreasureHuntService } from '../../treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
 
 @Injectable()
 export class SortCardsService {
@@ -69,7 +71,8 @@ export class SortCardsService {
     private chillerPerformanceTreasureHuntService : ChillerPerformanceTreasureHuntService,
     private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
     private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
-    private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService
+    private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,       
+    private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService
     ) { }
 
   sortCards(value: Array<OpportunityCardData>, sortByData: SortCardsData): Array<OpportunityCardData> {
@@ -138,6 +141,7 @@ export class SortCardsService {
     let hasCoolingTowerFan: boolean = calculatorTypes.includes(Treasure.coolingTowerFan);
     let hasCoolingTowerBasin: boolean = calculatorTypes.includes(Treasure.coolingTowerBasin);
     let hasBoilerBlowdownRate: boolean = calculatorTypes.includes(Treasure.boilerBlowdownRate);
+    let hasPowerFactorCorrection: boolean = calculatorTypes.includes(Treasure.powerFactorCorrection);
 
     let lightingReplacements: Array<LightingReplacementTreasureHunt> = [];
     if (allCalcTypes || hasLightingReplacement) {
@@ -307,6 +311,12 @@ export class SortCardsService {
         boilerBlowdownRateOpportunities = this.sortBoilerBlowdownRateOpportunities(treasureHunt.boilerBlowdownRateOpportunities, sortBy, treasureHunt, settings);
       }
     }
+    let powerFactorCorrectionOpportunities: Array<PowerFactorCorrectionTreasureHunt> = [];
+    if (allCalcTypes || hasPowerFactorCorrection) {
+      if (treasureHunt.powerFactorCorrectionOpportunities && treasureHunt.powerFactorCorrectionOpportunities.length != 0) {
+        powerFactorCorrectionOpportunities = this.sortPowerFactorCorrectionOpportunities(treasureHunt.powerFactorCorrectionOpportunities, sortBy, treasureHunt, settings);
+      }
+    }
 
     let filteredTreasureHunt: TreasureHunt = {
       name: treasureHunt.name,
@@ -338,6 +348,7 @@ export class SortCardsService {
       coolingTowerFanOpportunities: coolingTowerFanOpportunities,
       coolingTowerBasinOpportunities: coolingTowerBasinOpportunities,
       boilerBlowdownRateOpportunities: boilerBlowdownRateOpportunities,
+      powerFactorCorrectionOpportunities: powerFactorCorrectionOpportunities,
       operatingHours: treasureHunt.operatingHours,
       currentEnergyUsage: treasureHunt.currentEnergyUsage,
       setupDone: treasureHunt.setupDone
@@ -583,6 +594,14 @@ sortAirHeatingOpportunities(items: Array<AirHeatingTreasureHunt>, sortBy: SortCa
     return items.filter(item => {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
       let cardItem: OpportunityCardData = this.boilerBlowdownRateTreasureHuntService.getBoilerBlowdownRateCardData(item, opportunitySummary, settings, 0, treasureHunt.currentEnergyUsage);
+      return this.checkCardItemIncluded(cardItem, sortBy);
+    });
+  }
+
+  sortPowerFactorCorrectionOpportunities(items: Array<PowerFactorCorrectionTreasureHunt>, sortBy: SortCardsData, treasureHunt: TreasureHunt, settings: Settings): Array<PowerFactorCorrectionTreasureHunt>{
+    return items.filter(item => {
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(item, settings);
+      let cardItem: OpportunityCardData = this.powerFactorCorrectionTreasureHuntService.getPowerFactorCorrectionCardData(item, opportunitySummary, 0, treasureHunt.currentEnergyUsage, settings);
       return this.checkCardItemIncluded(cardItem, sortBy);
     });
   }

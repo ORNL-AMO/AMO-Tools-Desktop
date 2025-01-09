@@ -130,7 +130,7 @@ export class MotorPerformanceChartComponent implements OnInit {
       trace.x = data.x;
       trace.y = data.y;
       trace.name = this.traceNames[index];
-      trace.hovertemplate = '%{y:.2r}%';
+      trace.hovertemplate = '%{y:.1f}%';
       trace.line.color = this.graphColors[(index) % this.graphColors.length]
       this.performanceChart.data[index] = trace;
     });
@@ -158,7 +158,7 @@ export class MotorPerformanceChartComponent implements OnInit {
     });
     this.newPlot();
     selectedMotorPoint.pointColor = currentColor;
-    selectedMotorPoint.shaftLoad = Number((selectedMotorPoint.shaftLoad * 100).toFixed(0));
+    selectedMotorPoint.shaftLoad = Number((selectedMotorPoint.shaftLoad * 100).toFixed(3));
     this.selectedDataPoints.push(selectedMotorPoint);
     this.cd.detectChanges();
     this.save();

@@ -79,11 +79,18 @@ export class TreasureHuntReportService {
     let otherFuelSummaries: Array<OpportunitySummary> = opportunitySummaries.filter(summary => { return summary.utilityType == 'Other Fuel' && summary.selected == true });
     let otherFuelUtilityUsage: UtilityUsageData = this.getUtilityUsageData(otherFuelSummaries, 'Other Fuel', treasureHunt.currentEnergyUsage.otherFuelUsage, treasureHunt.currentEnergyUsage.otherFuelCosts, mixedSummaries)
 
+    //Other Additional
+    let otherAdditionalSummaries: Array<OpportunitySummary> = opportunitySummaries.filter(summary => { return summary.utilityType == 'Other' && summary.selected == true });
+    let otherAdditionalUtilityUsage: UtilityUsageData = this.getUtilityUsageData(otherAdditionalSummaries, 'Other', 0, 0)
+
+
     let utilityArr: Array<UtilityUsageData> = [electricityUtilityUsage, compressedAirUtilityUsage, naturalGasUtilityUsage, waterUtilityUsage, wasteWaterUtilityUsage, steamUtilityUsage, otherFuelUtilityUsage];
     let totalImplementationCost: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.implementationCost }) + mixedUtilityUsage.implementationCost;
     let totalCostSavings: number = _.sumBy(utilityArr, (usage: UtilityUsageData) => { return usage.costSavings }) + totalAdditionalSavings;
 
     let hasMixed: boolean = electricityUtilityUsage.hasMixed || naturalGasUtilityUsage.hasMixed || waterUtilityUsage.hasMixed || wasteWaterUtilityUsage.hasMixed || otherFuelUtilityUsage.hasMixed || compressedAirUtilityUsage.hasMixed || steamUtilityUsage.hasMixed;
+
+    let totalAdditionalPayback: number = _.sumBy(otherAdditionalSummaries, (summary: OpportunitySummary) => { return summary.payback });
 
     let thuntResults: TreasureHuntResults = {
       totalSavings: totalCostSavings,
@@ -101,6 +108,8 @@ export class TreasureHuntReportService {
       steam: steamUtilityUsage,
       other: mixedUtilityUsage,
       totalAdditionalSavings: totalAdditionalSavings,
+      totalAdditionalImplementationCost: otherAdditionalUtilityUsage.implementationCost,
+      totalAdditionalPayback: totalAdditionalPayback,
       totalImplementationCost: totalImplementationCost,
       hasMixed: hasMixed,
     };

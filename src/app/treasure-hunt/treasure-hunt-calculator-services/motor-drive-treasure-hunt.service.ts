@@ -52,13 +52,21 @@ export class MotorDriveTreasureHuntService {
   }
 
   getMotorDriveCard(drive: MotorDriveInputsTreasureHunt, opportunitySummary: OpportunitySummary, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
+    
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (drive.opportunitySheet){
+      if (drive.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += drive.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: drive.selected,
       opportunityType: 'motor-drive',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: 'kWh',

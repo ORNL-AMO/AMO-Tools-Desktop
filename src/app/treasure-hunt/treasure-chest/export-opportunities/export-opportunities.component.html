@@ -415,6 +415,22 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="col-6 p-2" *ngIf="exportOpportunities.powerFactorCorrectionOpportunities">
+                        <label>Power Factor Correction </label>
+                        <ul>
+                            <li
+                                *ngFor="let powerFactorCorrection of exportOpportunities.powerFactorCorrectionOpportunities; let index = index;">
+                                <span
+                                    *ngIf="!powerFactorCorrection.opportunitySheet || !powerFactorCorrection.opportunitySheet.name">
+                                    Power Factor Correction #{{index+1}}
+                                </span>
+                                <span
+                                    *ngIf="powerFactorCorrection.opportunitySheet && powerFactorCorrection.opportunitySheet.name">
+                                    {{powerFactorCorrection.opportunitySheet.name}}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                     <div class="col-6 p-2" *ngIf="exportOpportunities.opportunitySheets">
                         <label>Opportunity Sheets</label>
                         <ul>

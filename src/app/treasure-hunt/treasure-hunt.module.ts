@@ -61,6 +61,7 @@ import { CoolingTowerFanTreasureHuntService } from './treasure-hunt-calculator-s
 import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
+import { PowerFactorCorrectionTreasureHuntService } from './treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
 
 @NgModule({
   imports: [
@@ -129,7 +130,8 @@ import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculato
     ChillerPerformanceTreasureHuntService,
     CoolingTowerFanTreasureHuntService,
     CoolingTowerBasinTreasureHuntService,
-    BoilerBlowdownRateTreasureHuntService
+    BoilerBlowdownRateTreasureHuntService,
+    PowerFactorCorrectionTreasureHuntService
   ]
 })
 export class TreasureHuntModule { }

@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import { PowerFactorCorrectionService } from './power-factor-correction.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
+import { PowerFactorCorrectionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-power-factor-correction',
@@ -8,6 +9,12 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
   styleUrls: ['./power-factor-correction.component.css']
 })
 export class PowerFactorCorrectionComponent implements OnInit {
+  @Input()
+  inTreasureHunt: boolean;
+  @Output('emitSave')
+  emitSave = new EventEmitter<PowerFactorCorrectionTreasureHunt>();
+  @Output('emitCancel')
+  emitCancel = new EventEmitter<boolean>();
 
   inputData: PowerFactorCorrectionInputs = {
     existingDemand: 100,
@@ -93,7 +100,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
         input2: 0.8,
         input3: 0
       },
-    ],    
+    ],
     startMonth: 1,
     startYear: 2024,
   };
@@ -122,7 +129,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
     this.analyticsService.sendEvent('calculator-UTIL-power-factor-correction');
     if (!this.powerFactorCorrectionService.inputData) {
       this.generateExample();
-    } else{
+    } else {
       this.inputData = this.powerFactorCorrectionService.inputData;
     }
     this.calculate(this.inputData);
@@ -135,19 +142,21 @@ export class PowerFactorCorrectionComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.powerFactorCorrectionService.inputData = this.inputData;
+    if (!this.inTreasureHunt) {
+      this.powerFactorCorrectionService.inputData = this.inputData;
+    } else {
+      this.powerFactorCorrectionService.inputData = undefined;
+    }
   }
 
   btnResetData() {
     this.inputData = this.powerFactorCorrectionService.getResetData();
     this.results = this.powerFactorCorrectionService.getResetOutput();
     this.powerFactorCorrectionService.inputData = this.inputData;
-    //this.calculate(this.inputData);
   }
 
   generateExample() {
     this.inputData = this.powerFactorCorrectionService.generateExample();
-    //this.results = this.powerFactorCorrectionService.generateExampleOutput();
     this.powerFactorCorrectionService.inputData = this.inputData;
   }
 
@@ -175,44 +184,15 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
   calculate(data: PowerFactorCorrectionInputs) {
     this.inputData = data;
-    if (data.billedForDemand == 0){
-      if (data.adjustedOrActual == 0) {
-        this.results = this.powerFactorCorrectionService.calculateRealPowerAndPowerFactor(data);
-      } else if (data.adjustedOrActual == 1) {
-        this.results = this.powerFactorCorrectionService.calculateRealPowerAndActualDemand(data);
-      } else if (data.adjustedOrActual == 2) {
-        this.results = this.powerFactorCorrectionService.calculateRealPowerAndBoth(data);
-      }
-    } else if (data.billedForDemand == 1){
-      if (data.adjustedOrActual == 0) {
-        this.results = this.powerFactorCorrectionService.calculateApparentPowerAndPowerFactor(data);
-      } else if (data.adjustedOrActual == 1) {
-        this.results = this.powerFactorCorrectionService.calculateApparentPowerAndActualDemand(data);
-      }
-    } else {
-      this.results = {
-        annualPFPenalty: 0,
-        proposedFixedCapacitance: 0,
-        proposedVariableCapacitance: 0,
-        capitalCost: 0,
-        simplePayback: 0,
-        monthlyOutputs: [
-          {
-            realDemand: 0,
-            pfAdjustedDemand: 0,
-            proposedApparentPower: 0,
-            demandPenalty: 0,
-            penaltyCost: 0,
-            currentReactivePower: 0,
-            proposedReactivePower: 0,
-            proposedCapacitance: 0,
-          }
-        ]
-      };
+    this.results = this.powerFactorCorrectionService.getResults(data);
+  }
 
-    }
+  save() {
+    this.emitSave.emit({ inputData: this.inputData, opportunityType: Treasure.powerFactorCorrection });
+  }
 
-
+  cancel() {
+    this.emitCancel.emit(true);
   }
 
   setSmallScreenTab(selectedTab: string) {

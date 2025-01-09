@@ -38,6 +38,7 @@ export class CalculatorsComponent implements OnInit {
   ngOnInit() {
     this.selectedCalcSubscription = this.calculatorsService.selectedCalc.subscribe(val => {
       this.selectedCalc = val;
+      console.log('selected calc ', this.selectedCalc);
     });
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
@@ -55,6 +56,9 @@ export class CalculatorsComponent implements OnInit {
 
   showOpportunitySheetModal() {
     this.calculatorOpportunitySheet = this.calculatorsService.calcOpportunitySheet;
+    if (this.selectedCalc ===  Treasure.powerFactorCorrection){
+      this.calculatorOpportunitySheet = this.calculatorsService.updatePFCorrectionOppSheet(this.currentOpportunity, this.calculatorOpportunitySheet);
+    }
     this.opportunitySheetModal.show();
   }
   hideOpportunitySheetModal() {

@@ -73,6 +73,13 @@ export class LeakageTreasureHuntService {
     } else if (leakageLoss.energySourceData.energySourceType == 'Steam') {
       currentCosts = currentEnergyUsage.steamCosts
     }
+
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (leakageLoss.opportunitySheet){
+      if (leakageLoss.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += leakageLoss.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
     
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
@@ -80,7 +87,7 @@ export class LeakageTreasureHuntService {
       selected: leakageLoss.selected,
       opportunityType: Treasure.leakageLoss,
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: leakageLoss.energySourceData.unit,

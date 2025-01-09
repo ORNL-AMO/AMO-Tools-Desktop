@@ -61,13 +61,21 @@ export class AirHeatingTreasureHuntService {
     } else if (airHeatingOpportunity.energySourceData.energySourceType == 'Other Fuel') {
       currentCosts = currentEnergyUsage.otherFuelCosts;
     }
+
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (airHeatingOpportunity.opportunitySheet){
+      if (airHeatingOpportunity.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += airHeatingOpportunity.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: airHeatingOpportunity.selected,
       opportunityType: Treasure.airHeating,
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: airHeatingOpportunity.energySourceData.unit,

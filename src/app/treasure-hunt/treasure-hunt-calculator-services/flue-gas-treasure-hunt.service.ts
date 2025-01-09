@@ -70,13 +70,20 @@ export class FlueGasTreasureHuntService {
       currentCosts = currentEnergyUsage.otherFuelCosts;
     }
 
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (flueGas.opportunitySheet){
+      if (flueGas.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += flueGas.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: flueGas.selected,
       opportunityType: 'flue-gas',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: unitStr,

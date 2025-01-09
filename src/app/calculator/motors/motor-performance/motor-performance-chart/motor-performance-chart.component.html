@@ -66,10 +66,10 @@
             [ngStyle]="{'background': point.pointColor}">
           </div>
         </td>
-        <td class="text-center">{{point.shaftLoad | number: '1.0-3'}}</td>
-        <td class="text-center">{{point.current | number: '1.0-0'}}</td>
-        <td class="text-center">{{point.power | number: '1.0-0'}}</td>
-        <td class="text-center">{{point.efficiency | number: '1.0-0'}}</td>
+        <td class="text-center">{{point.shaftLoad | number: '1.1-3'}}</td>
+        <td class="text-center">{{point.current | number: '1.1-1'}}</td>
+        <td class="text-center">{{point.power | number: '1.1-1'}}</td>
+        <td class="text-center">{{point.efficiency | number: '1.1-1'}}</td>
         <td class='delete-row text-center'>
           <a class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
             Delete

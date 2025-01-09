@@ -59,13 +59,21 @@ export class NaturalGasReductionTreasureHuntService {
     if (settings.unitsOfMeasure == 'Metric') {
       unitStr = 'MJ/yr';
     }
+
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (naturalGasReduction.opportunitySheet){
+      if (naturalGasReduction.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += naturalGasReduction.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: naturalGasReduction.selected,
       opportunityType: 'natural-gas-reduction',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: unitStr,

@@ -429,9 +429,9 @@ export class PsatService {
     }
     let motorPerformanceResults: MotorPerformanceResults = this.pumpsSuiteApiService.motorPerformance(lineFreq, efficiencyClass, motorRatedPower, motorRPM, specifiedEfficiency, motorRatedVoltage, fullLoadAmps, loadFactor);
     let results: MotorPerformanceResults = {
-      efficiency: this.roundVal(motorPerformanceResults.efficiency, 2),
-      current: this.roundVal(motorPerformanceResults.current, 2),
-      powerFactor: this.roundVal(motorPerformanceResults.powerFactor, 2)
+      efficiency: this.roundVal(motorPerformanceResults.efficiency, 3),
+      current: this.roundVal(motorPerformanceResults.current, 3),
+      powerFactor: this.roundVal(motorPerformanceResults.powerFactor, 3)
     }
     return results;
   }

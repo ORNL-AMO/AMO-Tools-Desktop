@@ -37,20 +37,23 @@
     <tr class="bold small text-center no-border">
       <th class="bold w-25">Key</th>
       <th class="bold w-25">{{ xAxisTitle }}</th>
-      <th class="bold w-25">Achievable Efficiency (%)</th>
+      <th class="bold w-25 text-left">Achievable Efficiency (%)
+        <br>
+        Avg. - Max
+      </th>
       <th class="bold w-25"></th>
     </tr>
     <tr *ngFor="let point of selectedDataPoints; let index = index">
       <td class="text-center">
         <div class="point-key-circle" 
         [ngStyle]="{'background': point.pointColor, 
-                    'border': index < defaultTraceCount? '4px solid ' + defaultTraceOutlineColor : ''}">
+                    'border': index < 1? '4px solid ' + defaultTraceOutlineColor : ''}">
       </div>
       </td>
       <td class="text-center">{{point.x}}</td>
-      <td class="text-center">{{point.y}}</td>
+      <td class="text-left">{{point.avgMaxEffColumn}}</td>
       <td class='delete-row text-center'>
-        <a *ngIf="!validEfficiency || index >= defaultTraceCount" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
+        <a *ngIf="!validEfficiency || index > 0" class="click-link m-2 text-danger" (click)="deleteDataPoint(point, index)">
           Delete
         </a>
       </td>
@@ -72,7 +75,7 @@
     </tr>
     <tr *ngFor="let point of selectedDataPoints; let index = index">
       <td class="text-center">{{point.x}}</td>
-      <td class="text-center">{{point.y}}</td>
+      <td class="text-left">{{point.avgMaxEffColumn}}</td>
     </tr>
   </tbody>
 </table>

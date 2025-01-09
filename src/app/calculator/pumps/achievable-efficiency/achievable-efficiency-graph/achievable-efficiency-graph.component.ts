@@ -4,11 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 import { FormGroup } from '../../../../../../node_modules/@angular/forms';
-import { DataPoint, SimpleChart, TraceData, TraceCoordinates } from '../../../../shared/models/plotting';
-import { AchievableEfficiencyService } from '../achievable-efficiency.service';
+import { SimpleChart, TraceData, TraceCoordinates } from '../../../../shared/models/plotting';
+import { AchievableEfficiencyService, EfficiencyPoint, EfficiencyTrace } from '../achievable-efficiency.service';
 import { pumpTypeRanges } from '../../../../psat/psatConstants';
 import { PlotlyService } from 'angular-plotly.js';
-
 
 @Component({
   selector: 'app-achievable-efficiency-graph',
@@ -55,14 +54,13 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   firstChange: boolean = true;
 
   // Graphing / Defaults
-  selectedDataPoints: Array<DataPoint>;
+  selectedDataPoints: Array<EfficiencyPoint>;
   pointColors: Array<string>;
   efficiencyChart: SimpleChart;
-  xAxisTitle: string = "Flow Rate (gpm)";
-  currentPumpType: any;
+  xAxisTitle: string;
   defaultTraceCount: number = 2;
   defaultTraceOutlineColor = 'rgba(0, 0, 0, .6)';
-  dataPointTraces: Array<TraceData>;
+  dataPointTraces: Array<EfficiencyTrace>;
 
   constructor(private psatService: PsatService,
     private achievableEfficiencyService: AchievableEfficiencyService,
@@ -71,7 +69,6 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   ngOnInit() {
     this.xAxisTitle = `Flow Rate (${this.settings.flowMeasurement})`;
-    this.currentPumpType = this.efficiencyForm.controls.pumpType.value;
   }
 
   ngAfterViewInit() {
@@ -80,37 +77,28 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
-      if (changes.toggleResetData) {
+      if (this.checkForm()) {
         this.achievableEfficiencyService.initChartData();
         this.renderChart();
-      }
-      if (changes.toggleExampleData) {
-        if (this.checkForm()) {
-          this.achievableEfficiencyService.initChartData();
-          this.renderChart();
-        }
-      }
-      if (changes.toggleCalculate && !changes.toggleResetData && !changes.toggleExampleData) {
-        if (this.checkForm()) {
-          this.checkReplotMethod();
-        }
       }
     } else {
       this.firstChange = false;
     }
   }
 
-
   save() {
     this.achievableEfficiencyService.efficiencyChart.next(this.efficiencyChart);
     this.achievableEfficiencyService.selectedDataPoints.next(this.selectedDataPoints);
+    this.achievableEfficiencyService.dataPointTraces.next(this.dataPointTraces);
   }
 
   renderChart() {
-    this.initChartSetup();
-    this.dataPointTraces = new Array();
-    this.selectedDataPoints = new Array();
-    this.setCalculatedTraces();
+    this.pointColors = graphColors;
+    this.efficiencyChart = this.achievableEfficiencyService.efficiencyChart.getValue();
+    this.dataPointTraces = this.achievableEfficiencyService.dataPointTraces.getValue();
+    this.selectedDataPoints = this.achievableEfficiencyService.selectedDataPoints.getValue();
+    this.setMaxAvgLines();
+    this.setMaxAndAvgPoints();
     this.newPlot();
     this.save();
   }
@@ -122,7 +110,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     });
     this.dataPointTraces.forEach(trace => {
       traceData.push(trace);
-    })
+    });
+
     let chartLayout = JSON.parse(JSON.stringify(this.efficiencyChart.layout));
     if (this.expanded && this.expandedChartDiv) {
       this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, this.efficiencyChart.config)
@@ -142,119 +131,153 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   }
 
   updateChart() {
-    this.setCalculatedTraces();
+    this.setMaxAndAvgPoints();
     this.newPlot();
     this.save();
   }
 
-  initChartSetup() {
-    this.pointColors = graphColors;
-    this.efficiencyChart = this.achievableEfficiencyService.efficiencyChart.getValue();
-    this.selectedDataPoints = this.achievableEfficiencyService.selectedDataPoints.getValue();
-
+  setMaxAvgLines() {
     // Default line traces
     let maxData: TraceCoordinates = this.getMaxData();
     this.efficiencyChart.data[0].x = maxData.x;
     this.efficiencyChart.data[0].y = maxData.y;
-    this.efficiencyChart.data[0].line.color = this.pointColors[0];
+    this.efficiencyChart.data[0].line.color = this.getPointColor(0);
 
     let avgData: TraceCoordinates = this.getAvgData();
     this.efficiencyChart.data[1].x = avgData.x;
     this.efficiencyChart.data[1].y = avgData.y;
-    this.efficiencyChart.data[1].line.color = this.pointColors[1];
+    this.efficiencyChart.data[1].line.color = this.getPointColor(1);
 
     this.efficiencyChart.layout.xaxis.title.text = this.xAxisTitle;
   }
 
-
-  getCurrentPoints(isUserDataPoint: boolean, userDataPointX?: number): Array<DataPoint> {
-    let flowRateValue: number = isUserDataPoint ? userDataPointX : this.efficiencyForm.controls.flowRate.value;
-    let points: Array<DataPoint> = [];
-
-    // Y values
-    let efficiencyMax = this.calculateYmax(flowRateValue);
-    let efficiencyAvg = this.calculateYaverage(flowRateValue);
-    let calculatedX: number;
-
-    if (efficiencyMax >= 0) {
-      calculatedX = flowRateValue;
-      points.push({ x: calculatedX, y: efficiencyMax });
-    }
-    if (efficiencyAvg >= 0) {
-      calculatedX = flowRateValue;
-      points.push({ x: calculatedX, y: efficiencyAvg });
-    }
-
-    return points;
-  }
-
-  setCalculatedTraces() {
-    let currentPoints: DataPoint[] = this.getCurrentPoints(false);
+  setMaxAndAvgPoints() {
+    let currentPoints: EfficiencyPoint[] = this.getCurrentPoints(false);
     let isInvalidPlot: boolean = currentPoints.some(point => isNaN(point.x) || isNaN(point.y)
       || !isFinite(point.x) || !isFinite(point.y)
     );
 
     if (!isInvalidPlot) {
       this.validEfficiency = true;
-      currentPoints.forEach((point, i) => {
-        let calculatedPoint: DataPoint = {
-          pointColor: this.pointColors[i],
-          x: point.x,
-          y: point.y
-        }
-        let resultCoordinateTrace: TraceData = this.achievableEfficiencyService.getTraceDataFromPoint(calculatedPoint);
-        let yMeasureTitle = i == 0 ? 'Maximum' : 'Average';
-        let hoverTemplate = 'Flow Rate' + ': %{x} <br>' + yMeasureTitle + ': %{y:.2r}% <br>' + '<extra></extra>';
-        resultCoordinateTrace.hovertemplate = hoverTemplate;
-        resultCoordinateTrace.marker.color = calculatedPoint.pointColor;
-        resultCoordinateTrace.marker.line = {
-          color: this.defaultTraceOutlineColor,
-          width: 4
-        }
+      let maximumPoint: EfficiencyPoint = {
+        id: undefined,
+        pointColor: this.getPointColor(0),
+        x: currentPoints[0].x,
+        y: currentPoints[0].y,
+        name: 'Maximum',
+        avgMaxEffColumn: this.getAvgMaxEffColumn(currentPoints[1].y, currentPoints[0].y)
+      }
 
-        this.efficiencyChart.data[this.defaultTraceCount + i] = resultCoordinateTrace;
-        this.selectedDataPoints.splice(i, 1, calculatedPoint);
-        this.cd.detectChanges();
-      });
+      if (this.selectedDataPoints.length === 0) {
+        this.selectedDataPoints.push(maximumPoint);
+      } else {
+        this.selectedDataPoints.shift();
+        this.selectedDataPoints.unshift(maximumPoint);
+      }
+  
+      let maximumPointTrace = this.achievableEfficiencyService.getTraceDataFromPoint(maximumPoint);
+      let hoverTemplate = 'Flow Rate' + ': %{x} <br>' + 'Maximum' + ': %{y:.2r}% <br>' + '<extra></extra>';
+      maximumPointTrace.hovertemplate = hoverTemplate;
+      maximumPointTrace.marker.line = {
+        color: this.defaultTraceOutlineColor,
+        width: 4
+      }
+      this.efficiencyChart.data[this.defaultTraceCount] = maximumPointTrace;
+
+  
+      let averagePoint: EfficiencyPoint = {
+        id: undefined,
+        pointColor: this.getPointColor(1),
+        x: currentPoints[1].x,
+        y: currentPoints[1].y,
+        name: 'Average'
+      }
+      let averagePointTrace = this.achievableEfficiencyService.getTraceDataFromPoint(averagePoint);
+      hoverTemplate = 'Flow Rate' + ': %{x} <br>' + 'Average' + ': %{y:.2r}% <br>' + '<extra></extra>';
+      averagePointTrace.hovertemplate = hoverTemplate;
+      averagePointTrace.marker.line = {
+        color: this.defaultTraceOutlineColor,
+        width: 4
+      }
+      this.efficiencyChart.data[this.defaultTraceCount + 1] = averagePointTrace;
+      this.cd.detectChanges();
+
     } else {
       this.validEfficiency = false;
     }
   }
 
-  createDataPoints(graphData) {
-    let dataPoints: DataPoint[] = this.getCurrentPoints(true, graphData.points[0].x);
 
-    dataPoints.forEach((point, i) => {
-      let selectedPoint: DataPoint = {
-        pointColor: this.pointColors[(this.dataPointTraces.length + 2) % this.pointColors.length],
-        x: point.x,
-        y: point.y
-      }
-      let selectedPointTrace = this.achievableEfficiencyService.getTraceDataFromPoint(selectedPoint);
-      this.dataPointTraces.push(selectedPointTrace);
-      let yMeasureTitle = i == 0 ? 'Maximum' : 'Average';
-      let hoverTemplate = 'Flow Rate' + ': %{x} <br>' + yMeasureTitle + ': %{y:.2r}% <br>' + '<extra></extra>';
-      selectedPointTrace.hovertemplate = hoverTemplate;
-      this.selectedDataPoints.push(selectedPoint);
-    });
+  getCurrentPoints(isUserDataPoint: boolean, userDataPointX?: number): Array<EfficiencyPoint> {
+    let flowRateValue: number = isUserDataPoint ? userDataPointX : this.efficiencyForm.controls.flowRate.value;
+    let points: Array<EfficiencyPoint> = [];
+    let efficiencyMax = this.calculateYmax(flowRateValue);
+    let efficiencyAvg = this.calculateYaverage(flowRateValue);
+
+    if (efficiencyMax >= 0 && efficiencyAvg >= 0) {
+      points.push({
+        id: undefined,
+        pairId: undefined,
+        x: flowRateValue,
+        y: efficiencyMax,
+        avgMaxEffColumn: this.getAvgMaxEffColumn(efficiencyMax, efficiencyAvg)
+      });
+    }
+    if (efficiencyAvg >= 0) {
+      points.push({
+        id: undefined,
+        x: flowRateValue,
+        y: efficiencyAvg,
+        avgMaxEffColumn: undefined
+      });
+    }
+
+    return points;
+  }
+
+  createDataPoints(graphData) {
+    let dataPoints: EfficiencyPoint[] = this.getCurrentPoints(true, graphData.points[0].x);
+
+    let maximumPoint: EfficiencyPoint = {
+      id: undefined,
+      pairId: undefined,
+      pointColor: this.getPointColor(0),
+      x: dataPoints[0].x,
+      y: dataPoints[0].y,
+      name: 'Maximum',
+      avgMaxEffColumn: this.getAvgMaxEffColumn(dataPoints[1].y, dataPoints[0].y)
+    }
+    
+    let maximumPointTrace = this.achievableEfficiencyService.getTraceDataFromPoint(maximumPoint);
+    let hoverTemplate = 'Flow Rate' + ': %{x} <br>' + 'Maximum' + ': %{y:.2r}% <br>' + '<extra></extra>';
+    maximumPointTrace.hovertemplate = hoverTemplate;
+
+    let averagePoint: EfficiencyPoint = {
+      id: undefined,
+      pointColor: this.getPointColor(1),
+      x: dataPoints[1].x,
+      y: dataPoints[1].y,
+      name: 'Average'
+    }
+    let averagePointTrace: EfficiencyTrace = this.achievableEfficiencyService.getTraceDataFromPoint(averagePoint);
+    hoverTemplate = 'Flow Rate' + ': %{x} <br>' + 'Average' + ': %{y:.2r}% <br>' + '<extra></extra>';
+    averagePointTrace.hovertemplate = hoverTemplate;
+    
+    maximumPointTrace.id = maximumPointTrace.id;
+    maximumPointTrace.pairId = averagePointTrace.id;
+    maximumPoint.id = maximumPointTrace.id;
+    maximumPoint.pairId = averagePointTrace.id;
+
+    this.selectedDataPoints.push(maximumPoint);
+    this.dataPointTraces.push(maximumPointTrace, averagePointTrace);
 
     this.newPlot();
     this.cd.detectChanges();
     this.save();
   }
 
-  checkReplotMethod() {
-    if (this.efficiencyForm.controls.pumpType.value !== this.currentPumpType) {
-      this.currentPumpType = this.efficiencyForm.controls.pumpType.value;
-      this.achievableEfficiencyService.initChartData();
-      this.renderChart();
-    } else {
-      this.updateChart();
-    }
-  }
-
-  deleteDataPoint(point: DataPoint, index: number) {
-    this.dataPointTraces = this.dataPointTraces.filter(trace => { return trace.marker.color != point.pointColor });
+  deleteDataPoint(deletePoint: EfficiencyPoint, index: number) {
+    this.dataPointTraces = this.dataPointTraces.filter(trace => { return trace.id != deletePoint.id && trace.id != deletePoint.pairId});
     this.selectedDataPoints.splice(index, 1);
     this.newPlot();
     this.cd.detectChanges();
@@ -268,7 +291,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       range: { min: 0, max: 0 },
       increment: 10,
     };
-    xRange.range = ranges.find(pumpType => pumpType.value == this.currentPumpType).range;
+    xRange.range = ranges.find(pumpType => pumpType.value == this.efficiencyForm.controls.pumpType.value).range;
     if (xRange.range.min <= 5000) {
       xRange.increment = 10;
     } else if (xRange.range.max <= 50000) {
@@ -430,5 +453,32 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.efficiencyChart.layout.yaxis.showgrid = !showingGridY;
     this.updateChart();
   }
+
+  getPointColor(index: number, getRandom = false) {
+    let color = index % 2 === 0? this.pointColors[0] : this.pointColors[1]
+    if(!getRandom) {
+      return color;
+    }
+    // return this.getRandomOpacity(color);
+    return this.pointColors[(this.dataPointTraces.length + 1) % this.pointColors.length];
+  }
+
+  getAvgMaxEffColumn(avg: number, max: number) {
+    return `${avg} - ${max}`;
+  }
+
+//   getRandomOpacity(pointColor: string) {
+//     const sanitizedHex = pointColor.replace("#", "");
+//     const bigint = parseInt(sanitizedHex, 16);
+//     const r = (bigint >> 16) & 255;
+//     const g = (bigint >> 8) & 255;
+//     const b = bigint & 255;
+
+//     const minOpacity = 0.3; 
+//     const maxOpacity = 0.9;
+//     const opacity = Math.random() * (maxOpacity - minOpacity) + minOpacity;
+
+//     return `rgba(${r}, ${g}, ${b}, ${opacity.toFixed(2)})`;
+// }
 
 }

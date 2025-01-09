@@ -702,6 +702,8 @@ export class TreasureHuntPptTableService {
             } else {
                 utilityUnit = 'GJ';
             }
+        } else if (utilityType == 'Other') {
+            utilityUnit = ' ';
         }
         return utilityUnit;
     }

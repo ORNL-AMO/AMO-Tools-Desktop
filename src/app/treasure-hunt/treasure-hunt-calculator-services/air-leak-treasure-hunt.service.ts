@@ -80,13 +80,20 @@ export class AirLeakTreasureHuntService {
       unitStr = 'kWh';
     }
 
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (airLeakSurvey.opportunitySheet){
+      if (airLeakSurvey.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += airLeakSurvey.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: airLeakSurvey.selected,
       opportunityType: 'air-leak-survey',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: unitStr,

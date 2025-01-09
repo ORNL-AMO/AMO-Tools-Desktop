@@ -50,13 +50,21 @@ export class CoolingTowerFanTreasureHuntService {
   }
 
   getCoolingTowerFanCardData(coolingTowerFan: CoolingTowerFanTreasureHunt, opportunitySummary: OpportunitySummary, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
+    
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (coolingTowerFan.opportunitySheet){
+      if (coolingTowerFan.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += coolingTowerFan.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+    
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: coolingTowerFan.selected,
       opportunityType: 'cooling-tower-fan',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: 'kWh',

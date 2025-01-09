@@ -57,13 +57,21 @@ export class LightingReplacementTreasureHuntService {
   }
 
   getLightingReplacementCardData(lightingReplacement: LightingReplacementTreasureHunt, opportunitySummary: OpportunitySummary, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
+    
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (lightingReplacement.opportunitySheet){
+      if (lightingReplacement.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += lightingReplacement.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: lightingReplacement.selected,
       opportunityType: 'lighting-replacement',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: 'kWh',

@@ -82,13 +82,20 @@ export class SteamReductionTreasureHuntService {
       }
     }
 
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (reduction.opportunitySheet){
+      if (reduction.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += reduction.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: reduction.selected,
       opportunityType: 'steam-reduction',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: unitStr,

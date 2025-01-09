@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, AssessmentOpportunityResults, Treasure, BoilerBlowdownRateTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, AssessmentOpportunityResults, Treasure, BoilerBlowdownRateTreasureHunt, PowerFactorCorrectionTreasureHunt } from '../../../shared/models/treasure-hunt';
 import *  as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -33,6 +33,7 @@ import { CoolingTowerFanTreasureHuntService } from '../../treasure-hunt-calculat
 import { CoolingTowerBasinTreasureHuntService } from '../../treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 import { AssessmentOpportunityService } from '../../treasure-hunt-calculator-services/assessment-opportunity.service';
 import { BoilerBlowdownRateTreasureHuntService } from '../../treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
+import { PowerFactorCorrectionTreasureHuntService } from '../../treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
 
 @Injectable()
 export class OpportunityCardsService {
@@ -70,7 +71,8 @@ export class OpportunityCardsService {
     private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
     private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
     private assessmentOpportunityService: AssessmentOpportunityService,
-    private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService
+    private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,    
+    private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService
   ) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
     this.opportunityCards = new BehaviorSubject(new Array());
@@ -108,6 +110,7 @@ export class OpportunityCardsService {
     let standaloneOpportunitySheetData: Array<OpportunityCardData> = this.getStandaloneOpportunitySheets(treasureHunt.opportunitySheets, treasureHunt.currentEnergyUsage, settings)
     let assessmentOpportunityData: Array<OpportunityCardData> = this.getAssessmentOpportunities(treasureHunt.assessmentOpportunities, treasureHunt.currentEnergyUsage, settings)
     let boilerBlowdownRate: Array<OpportunityCardData> = this.getBoilerBlowdownRateOpportunities(treasureHunt.boilerBlowdownRateOpportunities, treasureHunt.currentEnergyUsage, settings);
+    let powerFactorCorrection: Array<OpportunityCardData> = this.getPowerFactorCorrectionOpportunities(treasureHunt.powerFactorCorrectionOpportunities, treasureHunt.currentEnergyUsage, settings);
 
     opportunityCardsData = _.union(
       lightingReplacementsCardData,
@@ -137,7 +140,8 @@ export class OpportunityCardsService {
       coolingTowerFan,
       coolingTowerBasin,
       assessmentOpportunityData,
-      boilerBlowdownRate
+      boilerBlowdownRate,
+      powerFactorCorrection
     );
     let index: number = 0;
     opportunityCardsData.forEach(card => {
@@ -797,6 +801,20 @@ export class OpportunityCardsService {
     return opportunityCardsData;
   }
 
+  getPowerFactorCorrectionOpportunities(powerFactorCorrectionOpportunities: Array<PowerFactorCorrectionTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (powerFactorCorrectionOpportunities) {
+      let index: number = 0;
+      powerFactorCorrectionOpportunities.forEach(powerFactorCorrection => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(powerFactorCorrection, settings);
+        let cardData: OpportunityCardData = this.powerFactorCorrectionTreasureHuntService.getPowerFactorCorrectionCardData(powerFactorCorrection, opportunitySummary, index, currentEnergyUsage, settings);
+        opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+
 }
 
 
@@ -847,6 +865,7 @@ export interface OpportunityCardData {
   coolingTowerFan?: CoolingTowerFanTreasureHunt;
   coolingTowerBasin?: CoolingTowerBasinTreasureHunt;
   boilerBlowdownRate?: BoilerBlowdownRateTreasureHunt;
+  powerFactorCorrection?: PowerFactorCorrectionTreasureHunt;
   iconCalcType?: string;
   needBackground?: boolean;
 }

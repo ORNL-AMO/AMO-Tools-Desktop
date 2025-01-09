@@ -91,14 +91,20 @@ export class BoilerBlowdownRateTreasureHuntService {
 
     getBoilerBlowdownRateCardData(opportunity: BoilerBlowdownRateTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
         let energyData = this.getEnergyData(opportunity, settings, currentEnergyUsage, opportunitySummary,);
-    
+
+        let annualCostSavings: number = opportunitySummary.costSavings;
+        if (opportunity.opportunitySheet) {
+            if (opportunity.opportunitySheet.opportunityCost.additionalAnnualSavings) {
+                annualCostSavings += opportunity.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+            }
+        }
         let cardData: OpportunityCardData = {
             implementationCost: opportunitySummary.totalCost,
             paybackPeriod: opportunitySummary.payback,
             selected: opportunity.selected,
             opportunityType: 'boiler-blowdown-rate',
             opportunityIndex: index,
-            annualCostSavings: opportunitySummary.costSavings,
+            annualCostSavings: annualCostSavings,
             annualEnergySavings: energyData.annualEnergySavings,
             percentSavings: energyData.percentSavings,
             utilityType: energyData.utilityTypes,
