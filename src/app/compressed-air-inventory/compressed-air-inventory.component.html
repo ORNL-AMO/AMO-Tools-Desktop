@@ -1,1 +1,19 @@
-<p>compressed-air-inventory works!</p>
+<div #content class="compressed-air-inventory-container compressed-air-inventory d-flex flex-column">
+    <div #header class="w-100 hide-print sticky-top">
+        <app-compressed-air-inventory-banner [compressedAirInventoryItem]="compressedAirInventoryItem"></app-compressed-air-inventory-banner>
+    </div>
+        <div class="assessment-container" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'scroll-item': mainTab == 'summary' || mainTab == 'analysis'}">
+        <div class="w-100" [ngClass]="{'modal-open': isModalOpen == true}">
+            <app-compressed-air-inventory-setup *ngIf="mainTab == 'setup'" [containerHeight]="containerHeight"></app-compressed-air-inventory-setup>
+            <app-compressed-air-inventory-summary *ngIf="mainTab == 'summary'"></app-compressed-air-inventory-summary>
+        </div>
+    </div>
+    <div *ngIf="mainTab == 'setup'" #footer id="compressedAirInventoryFooter" class="footer d-lg-block d-none hide-print">
+        <div class="d-flex w-100 justify-content-between">
+            <button class="btn btn-default" (click)="back()" [disabled]="setupTab == 'plant-setup'">Back</button>
+            <button class="btn btn-primary" (click)="continue()">Next</button>
+        </div>
+    </div>
+</div>
+
+<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [inventoryItem]="compressedAirInventoryItem" (close)="closeExportModal($event)"></app-export-modal>

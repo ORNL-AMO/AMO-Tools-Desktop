@@ -7,12 +7,20 @@ import { SettingsModule } from '../settings/settings.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CompressedAirInventoryService } from './compressed-air-inventory.service';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { CompressedAirInventoryBannerComponent } from './compressed-air-inventory-banner/compressed-air-inventory-banner.component';
+import { CompressedAirInventorySetupModule } from './compressed-air-inventory-setup/compressed-air-inventory-setup.module';
+import { CompressedAirInventorySummaryModule } from './compressed-air-inventory-summary/compressed-air-inventory-summary.module';
+import { HelpPanelModule } from './help-panel/help-panel.module';
+import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
+import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 
 
 
 @NgModule({
   declarations: [
-    CompressedAirInventoryComponent
+    CompressedAirInventoryComponent,
+    CompressedAirInventoryBannerComponent,
   ],
   imports: [
     CommonModule,
@@ -21,7 +29,13 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     SettingsModule,
     FormsModule,
     ReactiveFormsModule,   
-    ImportExportModule
+    ImportExportModule,
+    CompressedAirInventorySetupModule,
+    CompressedAirInventorySummaryModule,
+    ConnectedInventoryModule,    
+    HelpPanelModule,
+    ConfirmDeleteModalModule,
+    AssessmentCo2SavingsModule,
   ],
   providers: [
     CompressedAirInventoryService

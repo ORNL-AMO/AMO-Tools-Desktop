@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HelpPanelComponent } from './help-panel.component';
+import { ConnectedInventoryModule } from '../../shared/connected-inventory/connected-inventory-module';
 
 
 
@@ -9,7 +10,11 @@ import { HelpPanelComponent } from './help-panel.component';
     HelpPanelComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,    
+    ConnectedInventoryModule
+  ],
+  exports: [
+    HelpPanelComponent
   ]
 })
 export class HelpPanelModule { }

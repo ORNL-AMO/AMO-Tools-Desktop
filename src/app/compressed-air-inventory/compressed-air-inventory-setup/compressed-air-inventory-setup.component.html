@@ -1,1 +1,58 @@
-<p>compressed-air-inventory-setup works!</p>
+<div class="d-flex flex-column h-100 w-100">
+    <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+        <div class="nav-item" (click)="setSmallScreenTab('form')"
+            [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+            <a class="nav-link" *ngIf="setupTab == 'plant-setup' && initPlantSetup">Plant Setup</a>
+            <a class="nav-link" *ngIf="setupTab == 'department-setup'">Departments</a>
+            <a class="nav-link" *ngIf="setupTab == 'pump-properties'">Pump Properties</a>
+            <a class="nav-link" *ngIf="setupTab == 'pump-catalog'">Catalog</a>
+        </div>
+        <div class="nav-item" (click)="setSmallScreenTab('details')"
+            [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+            <a class="nav-link" *ngIf="setupTab != 'pump-catalog'">Help</a>
+            <a class="nav-link" *ngIf="setupTab == 'pump-catalog'">Details</a>
+        </div>
+    </div>
+    <div class="assessment-container tab-content">
+        <div class="assessment-panel-container lookup-form modification scroll-item"
+            [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}"
+            [ngStyle]="{'height.px': containerHeight}">
+            <!-- <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
+            <app-pump-properties *ngIf="setupTab == 'pump-properties'"></app-pump-properties>
+            <app-pump-catalog *ngIf="setupTab == 'pump-catalog'"></app-pump-catalog>
+            <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup> -->
+        </div>
+        <div class="row no-gutters assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
+            [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+            <div class="col-12">
+                <div class="row no-gutters">
+                    <div class="col-12">
+                        <div class="d-flex flex-wrap tabs primary mr-2 ml-2" *ngIf="setupTab == 'pump-catalog'">
+                            <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+                                <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                                    (click)="setTab('results')">
+                                    <div>Department Catalog</div>
+                                </a>
+                            </div>
+                            <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                                <a class="h-100 d-flex justify-content-center align-items-center"
+                                    (click)="setTab('help')">
+                                    <div>Help</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col-12">
+                        <!-- <app-help-panel
+                            *ngIf="(tabSelect == 'help' && setupTab == 'pump-catalog') || setupTab != 'pump-catalog'">
+                        </app-help-panel>
+                        <app-department-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'pump-catalog'">
+                        </app-department-catalog-table> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

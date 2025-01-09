@@ -1,1 +1,50 @@
-<p>help-panel works!</p>
+<div class="mr-2 ml-2 d-flex flex-column help-info">
+    <div class="header" *ngIf="displayHeader">
+        <div class="h3">
+            Help
+        </div>
+    </div>
+    <div class="p-2 pt-3" *ngIf="setupTab == 'pump-properties' || setupTab == 'pump-catalog'">
+        <h5 *ngIf="setupTab == 'pump-catalog'">
+            Pump Catalog Help
+            <br>
+            <small class="text-muted">Add pumps and fill out the property information for departments.
+            </small>
+        </h5>
+        <h5 *ngIf="setupTab == 'pump-properties'">
+            Pump Properties Help
+            <br>
+            <small class="text-muted">Select pump properties you want to track in this pump inventory.
+            </small>
+        </h5>
+
+        <!-- <app-integration-help *ngIf="focusedDataGroup == 'motor-integration'" [connectionType]="'motor'"
+            [focusedField]="focusedField"></app-integration-help>
+        <app-pump-equipment-help *ngIf="focusedDataGroup == 'pump-equipment'"></app-pump-equipment-help>
+        <app-pump-field-help *ngIf="focusedDataGroup == 'field-measurements'"></app-pump-field-help>
+        <app-pump-motor-help *ngIf="focusedDataGroup == 'pump-motor'"></app-pump-motor-help>
+        <app-pump-fluid-help *ngIf="focusedDataGroup == 'pump-fluid'"></app-pump-fluid-help>
+        <app-pump-nameplate-data-help *ngIf="focusedDataGroup == 'nameplate-data'"></app-pump-nameplate-data-help>
+        <app-pump-status-help *ngIf="focusedDataGroup == 'pump-status'"></app-pump-status-help>
+        <app-pump-system-help *ngIf="focusedDataGroup == 'pump-system'"></app-pump-system-help> -->
+    </div>
+    <div class="p-2 pt-3" *ngIf="setupTab == 'department-setup'">
+        <h5>
+            Departments Help
+            <br>
+            <small class="text-muted">Add departments to the inventory that will then hold pump catalogs.
+            </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+    </div>
+    <div class="p-2 pt-3" *ngIf="setupTab == 'plant-setup'">
+        <h5>
+            Setup Help
+            <br>
+            <small class="text-muted">Select the units of measure for this inventory.
+            </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+        <app-co2-help-text [currentField]="focusedField"></app-co2-help-text>
+    </div>
+</div>
