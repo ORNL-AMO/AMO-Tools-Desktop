@@ -79,7 +79,7 @@ export class WaterAssessmentResultsService {
   }
 
   getSystemBalanceResults(waterSystem: WaterUsingSystem): SystemBalanceResults {
-    let systemBalanceResults = {
+    let systemBalanceResults: SystemBalanceResults = {
       id: waterSystem.diagramNodeId,
       name: waterSystem.name,
       incomingWater: 0,
@@ -98,7 +98,6 @@ export class WaterAssessmentResultsService {
     systemBalanceResults.outgoingWater = waterSystem.waterFlows.waterInProduct + waterSystem.waterFlows.dischargeWater + waterSystem.waterFlows.dischargeWaterRecycled + consumptiveIrrigationLoss;
     systemBalanceResults.waterBalance = systemBalanceResults.incomingWater - systemBalanceResults.outgoingWater;
     systemBalanceResults.percentIncomingWater = this.getBalancePercent(systemBalanceResults.incomingWater, systemBalanceResults.waterBalance);
-
     console.log('SystemBalanceResults', waterSystem.name, systemBalanceResults);
     return systemBalanceResults;
   }

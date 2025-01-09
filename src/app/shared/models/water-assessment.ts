@@ -43,6 +43,7 @@ export enum WaterSystemTypeEnum {
 // }
 
 export interface SystemBalanceResults {
+    id?: string,
     name?: string,
     incomingWater: number,
     outgoingWater: number,
