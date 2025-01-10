@@ -113,6 +113,10 @@
     border-bottom: #2980b9 solid 2px;
 }
 
+.compressed-air-inventory .header{
+    border-bottom: #d7b4f3 solid 2px;
+}
+
 .waste-water .header{
     border-bottom: #003087 solid 2px;
 }
@@ -184,6 +188,12 @@
 
 .pump-inventory .btn-secondary:not([disabled]):not(.disabled).active{
     background: #2980b9;
+    transition: all .5s ease-in-out;
+    color: black;
+}
+
+.compressed-air-inventory .btn-secondary:not([disabled]):not(.disabled).active{
+    background: #d7b4f3;
     transition: all .5s ease-in-out;
     color: black;
 }
@@ -346,6 +356,10 @@
 
 .pump-inventory .group-label{
     border-bottom: #2980b9 solid 2px;
+}
+
+.compressed-air-inventory .group-label{
+    border-bottom: #d7b4f3 solid 2px;
 }
 
 .waste-water .group-label{
@@ -534,6 +548,11 @@
 
 .pump-inventory .scroll-item::-webkit-scrollbar-thumb{
     background-color: #2980b9;
+    outline: 1px solid slategrey;
+}
+
+.compressed-air-inventory .scroll-item::-webkit-scrollbar-thumb{
+    background-color: #d7b4f3;
     outline: 1px solid slategrey;
 }
 .waste-water .scroll-item::-webkit-scrollbar-thumb{

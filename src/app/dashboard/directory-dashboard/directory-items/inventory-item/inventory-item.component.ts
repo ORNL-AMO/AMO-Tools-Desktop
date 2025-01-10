@@ -174,6 +174,8 @@ export class InventoryItemComponent implements OnInit {
       this.motorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
     } else if (inventoryCopy.pumpInventoryData) {
       this.motorIntegrationService.removeAllPumpConnectedItems(inventoryCopy);
+    } else if (inventoryCopy.compressedAirInventoryData) {
+      this.motorIntegrationService.removeAllCompressedAirConnectedItems(inventoryCopy);
     }
     
     inventoryCopy.name = this.copyForm.controls.name.value;

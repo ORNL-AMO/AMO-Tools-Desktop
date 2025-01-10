@@ -62,7 +62,8 @@ export class DashboardComponent implements OnInit {
     'log-tool',
     'motor-inventory',
     'pump-inventory',
-    'waste-water'
+    'waste-water',
+    'compressed-air-inventory'
   ];
   showPrintViewSub: Subscription;
   exportInProgressSub: Subscription;
