@@ -1,10 +1,12 @@
 <!--grid view-->
 <div *ngIf="dashboardView == 'grid'" class="card card-item"
     [ngClass]="{'motor-inventory': inventoryItem.motorInventoryData,
-                'pump-inventory': inventoryItem.pumpInventoryData}">
+                'pump-inventory': inventoryItem.pumpInventoryData,
+                'compressed-air-inventory': inventoryItem.compressedAirInventoryData}">
     <div class="summary-card-header d-flex justify-content-between align-items-center"
     [ngClass]="{'motor-header': inventoryItem.motorInventoryData,
-                'pump-header': inventoryItem.pumpInventoryData}">
+                'pump-header': inventoryItem.pumpInventoryData,
+                'compressed-air-header': inventoryItem.compressedAirInventoryData}">
         <input type="checkbox" [(ngModel)]="inventoryItem.selected" (change)="updateSelectedStatus()">
         <div class="d-flex align-items-center">
             <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.motorInventoryData" src="assets/images/motor-inventory-icon.png">
@@ -14,7 +16,8 @@
         <div class="btn-group">
             <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()" 
             [ngClass]="{'motor-primary': inventoryItem.motorInventoryData,
-            'pump-primary': inventoryItem.pumpInventoryData}">
+            'pump-primary': inventoryItem.pumpInventoryData,
+            'compressed-air-primary': inventoryItem.compressedAirInventoryData}">
             </button>
             <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
                 <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
@@ -25,7 +28,8 @@
     </div>
     <div class="card-body scroll-item summary-card-body">
         <app-motor-inventory-card *ngIf="inventoryItem.motorInventoryData" [inventoryItem]="inventoryItem"></app-motor-inventory-card>
-        <app-pump-inventory-card *ngIf="inventoryItem.pumpInventoryData" [inventoryItem]="inventoryItem"></app-pump-inventory-card>
+        <app-pump-inventory-card *ngIf="inventoryItem.pumpInventoryData" [inventoryItem]="inventoryItem"></app-pump-inventory-card>        
+        <app-compressed-air-inventory-card *ngIf="inventoryItem.compressedAirInventoryData" [inventoryItem]="inventoryItem"></app-compressed-air-inventory-card>
     </div>
     <div class="card-footer summary-card-footer">
         <div class="last-updated pull-right">Last updated {{inventoryItem.modifiedDate | date }}</div>
@@ -35,7 +39,8 @@
 <!--list view-->
 <div *ngIf="dashboardView == 'list'" class="list-row d-flex w-100"
 [ngClass]="{'motor-row': inventoryItem.motorInventoryData,
-            'pump-row': inventoryItem.pumpInventoryData}">
+            'pump-row': inventoryItem.pumpInventoryData,
+            'compressed-air-row': inventoryItem.compressedAirInventoryData}">
     <div class="d-flex">
         <div class="p-1">
             <input type="checkbox" [(ngModel)]="inventoryItem.selected" (change)="updateSelectedStatus()"/>
@@ -44,6 +49,7 @@
             <div class="d-flex">
                 <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.motorInventoryData" src="assets/images/motor-inventory-icon.png">
                 <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.pumpInventoryData" src="assets/images/pump-inventory-icon.png">
+                <img class="icon-image pl-1 pr-1" *ngIf="inventoryItem.compressedAirInventoryData" src="assets/images/ca-icon.png">
                 <a (click)="goToInventoryItem()">{{inventoryItem.name}}</a>
             </div>
             <div class="last-updated">Last updated {{inventoryItem.modifiedDate | date }}</div>
@@ -54,7 +60,8 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()" 
                 [ngClass]="{'motor-primary': inventoryItem.motorInventoryData,
-                'pump-primary': inventoryItem.pumpInventoryData}">
+                'pump-primary': inventoryItem.pumpInventoryData,
+                'compressed-air-primary': inventoryItem.compressedAirInventoryData}">
                 </button>
                 <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
                     <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>

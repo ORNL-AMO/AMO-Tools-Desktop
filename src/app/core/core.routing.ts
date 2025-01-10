@@ -606,7 +606,7 @@ export const coreRoutes: Routes = [
   },  
   {
     component: CompressedAirInventoryComponent,
-    path: 'compressed-air-inventory',
+    path: 'compressed-air-inventory/:id',
     children: compressedAirInventoryRoutes
   },
 

@@ -37,4 +37,13 @@ export class CompressedAirInventoryService {
       //   statusValues: new Array()
       // });
     }
+
+    initInventoryData(): CompressedAirInventoryData {
+        //let initialDepartment: PumpInventoryDepartment = this.getNewDepartment(1);
+        //let displayOptions: PumpPropertyDisplayOptions = this.getDefaultDisplayOptions();
+        return {
+          //departments: [initialDepartment],
+          //displayOptions: displayOptions
+        }
+      }
 }

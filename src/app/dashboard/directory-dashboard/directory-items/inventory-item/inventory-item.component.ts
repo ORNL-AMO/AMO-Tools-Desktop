@@ -16,6 +16,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
 import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
 import { MotorIntegrationService } from '../../../../shared/connected-inventory/motor-integration.service';
+import { CompressedAirInventoryService } from '../../../../compressed-air-inventory/compressed-air-inventory.service';
 
 @Component({
   selector: 'app-inventory-item',
@@ -47,7 +48,8 @@ export class InventoryItemComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private motorInventoryService: MotorInventoryService,
     private motorIntegrationService: MotorIntegrationService,
-    private pumpInventoryService: PumpInventoryService) { }
+    private pumpInventoryService: PumpInventoryService,
+    private compressedAirInventoryService: CompressedAirInventoryService) { }
 
   ngOnInit(): void {
     this.inventoryItem.selected = false;
@@ -83,6 +85,11 @@ export class InventoryItemComponent implements OnInit {
       inventoryRoute = 'pump-inventory';
       if (inventoryPage) {
         this.pumpInventoryService.mainTab.next(inventoryPage);
+      }
+    } else if (this.inventoryItem.compressedAirInventoryData) {
+      inventoryRoute = 'compressed-air-inventory';
+      if (inventoryPage) {
+        this.compressedAirInventoryService.mainTab.next(inventoryPage);
       }
     }
     this.dashboardService.navigateWithSidebarOptions(`/${inventoryRoute}/${this.inventoryItem.id}`, {shouldCollapse: true})

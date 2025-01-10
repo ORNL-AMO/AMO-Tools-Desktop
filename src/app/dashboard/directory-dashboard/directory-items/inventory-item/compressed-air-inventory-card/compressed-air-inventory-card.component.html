@@ -1,0 +1,37 @@
+<table class="table">
+    <tr>
+        <td class="bold no-border-top" colspan="2">Inventory Summary:</td>
+    </tr>
+    <tr>
+        <td>
+            Number of Departments:
+        </td>
+        <td>
+            {{numberOfDepartments}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Number of Compressed Air:
+        </td>
+        <td>
+            {{numberOfCompressedAir}}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Annual Energy Use:
+        </td>
+        <td>
+            {{totalEnergyUse | number:'1.0-0'}} kWh
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Annual Energy Cost:
+        </td>
+        <td>
+            {{totalEnergyCost | currency:'USD':'symbol':'2.0-0'}}
+        </td>
+    </tr>
+</table>
