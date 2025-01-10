@@ -21,7 +21,7 @@
       <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
         [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
         <div class="d-flex flex-column m-4">
-          <app-power-factor-triangle-form [data]="inputData" [results]="results" (changeField)="changeField($event)"
+          <app-power-factor-triangle-form [results]="results" [powerFactorTriangleForm]="powerFactorTriangleForm" (changeField)="changeField($event)"
             (emitCalculate)="calculate($event)"></app-power-factor-triangle-form>
           <div class="w-100 justify-content-center btn-group btn-group-sm">
             <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">

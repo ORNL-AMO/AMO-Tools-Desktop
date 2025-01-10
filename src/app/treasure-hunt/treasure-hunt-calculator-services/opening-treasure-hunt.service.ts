@@ -72,6 +72,13 @@ export class OpeningTreasureHuntService {
     } else if (openingLoss.energySourceData.energySourceType == 'Steam') {
       currentCosts = currentEnergyUsage.steamCosts
     }
+
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (openingLoss.opportunitySheet){
+      if (openingLoss.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += openingLoss.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
     
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
@@ -79,7 +86,7 @@ export class OpeningTreasureHuntService {
       selected: openingLoss.selected,
       opportunityType: Treasure.openingLoss,
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: openingLoss.energySourceData.unit,

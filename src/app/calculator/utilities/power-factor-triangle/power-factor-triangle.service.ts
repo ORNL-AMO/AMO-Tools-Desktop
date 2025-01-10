@@ -1,11 +1,56 @@
 import { Injectable } from '@angular/core';
 import { PowerFactorTriangleInputs, PowerFactorTriangleModeInputs, PowerFactorTriangleOutputs } from '../../../shared/models/standalone';
 import { StandaloneService } from '../../standalone.service';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Injectable()
 export class PowerFactorTriangleService {
   inputData: PowerFactorTriangleInputs;
-  constructor(private standaloneService: StandaloneService) { }
+  constructor(private standaloneService: StandaloneService, private formBuilder: UntypedFormBuilder) { }
+
+  getFormFromObj(inputs: PowerFactorTriangleInputs): UntypedFormGroup{
+    let form = this.formBuilder.group({
+      mode: [inputs.mode, [Validators.required]],
+      apparentPower: [inputs.apparentPower, [Validators.required, Validators.min(0)]],
+      realPower: [inputs.realPower, [Validators.required, Validators.min(0)]],
+      reactivePower: [inputs.reactivePower, [Validators.required, Validators.min(0)]],
+      phaseAngle: [inputs.phaseAngle, [Validators.required, Validators.min(1), Validators.max(90)]],
+      powerFactor: [inputs.powerFactor, [Validators.required, Validators.min(0), Validators.max(1)]],
+    });
+
+    form = this.setModeValidation(form);
+
+    return form;
+  }
+
+  setModeValidation(form: UntypedFormGroup): UntypedFormGroup{
+    if (form.controls.mode.value == 1){
+      form.controls.apparentPower.setValidators([Validators.required, Validators.min(form.controls.realPower.value)]);
+      form.controls.realPower.setValidators([Validators.required, Validators.min(0), Validators.max(form.controls.apparentPower.value)]);
+
+    } else if (form.controls.mode.value == 2) {
+      form.controls.apparentPower.setValidators([Validators.required, Validators.min(form.controls.reactivePower.value)]);   
+      form.controls.reactivePower.setValidators([Validators.required, , Validators.min(0), Validators.max(form.controls.apparentPower.value)]);
+
+    }
+    form.controls.apparentPower.updateValueAndValidity();    
+    form.controls.realPower.updateValueAndValidity();
+    form.controls.reactivePower.updateValueAndValidity();
+
+    return form;
+  }
+
+  getObjFromForm(form: UntypedFormGroup): PowerFactorTriangleInputs {
+    return {
+      mode: form.controls.mode.value,
+      apparentPower: form.controls.apparentPower.value,
+      realPower: form.controls.realPower.value,
+      reactivePower: form.controls.reactivePower.value,
+      phaseAngle: form.controls.phaseAngle.value,
+      powerFactor: form.controls.powerFactor.value,
+    }
+
+  }
 
   generateExample(): PowerFactorTriangleInputs {
     return {

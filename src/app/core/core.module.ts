@@ -39,6 +39,8 @@ import { BrowsingDataToastModule } from '../shared/browsing-data-toast/browsing-
 import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
 import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-data.module';
 import { ImportBackupModalModule } from '../shared/import-backup-modal/import-backup-modal.module';
+import { SurveyToastModule } from '../shared/survey-toast/survey-toast.module';
+import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
 import { CompressedAirInventoryModule } from '../compressed-air-inventory/compressed-air-inventory.module';
 
 @NgModule({
@@ -81,6 +83,8 @@ import { CompressedAirInventoryModule } from '../compressed-air-inventory/compre
     AnalyticsModule,
     EmailMeasurDataModule,
     ImportBackupModalModule,
+    SurveyToastModule,
+    MeasurSurveyModule,
     CompressedAirInventoryModule
   ],
   providers: [

@@ -375,7 +375,7 @@ export class TreasureHuntPptService {
               { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
             ]);
             let utilityUnit: string;
-            opp.annualEnergySavings.forEach(annulEnergy => {
+            opp.annualEnergySavings.forEach(annulEnergy => {              
               utilityUnit = this.treasureHuntPptTableService.getUtilityUnit(annulEnergy.label, settings);
               rows.push([
                 annulEnergy.label,

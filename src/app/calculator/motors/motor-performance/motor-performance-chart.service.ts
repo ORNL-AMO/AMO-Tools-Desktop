@@ -30,23 +30,22 @@ export class MotorPerformanceChartService {
     let powerData: TraceCoordinates = {x: [], y: []};
     let efficiencyData: TraceCoordinates = {x: [], y: []};
 
-    for (let i = .001; i <= 1.2; i = i + .01) {
+    for (let i = .005; i <= 1.2; i = i + .005) {
       let performanceResults = this.calculateMotorPerformance(i, performanceForm, settings);
       let current: number = performanceResults.current;
       let efficiency: number = performanceResults.efficiency;
       let powerFactor: number = performanceResults.powerFactor;
-
       if (current >= 0) {
         currentData.x.push(i);
-        currentData.y.push(this.psatService.roundVal(current, 3));
+        currentData.y.push(current);
       }
       if (powerFactor >= 0 && powerFactor <= 120) {
         powerData.x.push(i);
-        powerData.y.push(this.psatService.roundVal(powerFactor, 3));
+        powerData.y.push(powerFactor);
       }
       if (efficiency >= 0 && efficiency <= 120) {
         efficiencyData.x.push(i);
-        efficiencyData.y.push(this.psatService.roundVal(efficiency, 3));
+        efficiencyData.y.push(efficiency);
       }
     }
     return [currentData, powerData, efficiencyData];
@@ -130,12 +129,11 @@ export class MotorPerformanceChartService {
           showticksuffix: 'all',
           tickangle: -60,
           tickmode: 'array',
-          hoverformat: '%{x}%',
           range: [0, 1.4],
           tickvals: [0, .20, .40, .60, .80, 1, 1.2],
+          tickformat: '.0%'
         },
         yaxis: {
-          autorange: true,
           type: 'linear',
           showgrid: true,
           title: {
