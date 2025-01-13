@@ -74,7 +74,7 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   ngOnDestroy() {
     this.setupTabSub.unsubscribe();
     this.compressedAirInventoryDataSub.unsubscribe();
-    this.selectedDepartmentIdSub.unsubscribe();
+    //this.selectedDepartmentIdSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.summaryTabSub.unsubscribe();
     this.connectedInventoryDataSub.unsubscribe();

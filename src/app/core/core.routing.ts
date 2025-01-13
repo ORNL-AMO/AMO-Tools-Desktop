@@ -600,14 +600,14 @@ export const coreRoutes: Routes = [
     component: WasteWaterComponent,
     path: 'waste-water/:id',
   },
-  { 
-    path: '**', 
-    component: NotFoundComponent 
-  },  
   {
     component: CompressedAirInventoryComponent,
     path: 'compressed-air-inventory/:id',
     children: compressedAirInventoryRoutes
   },
+  { 
+    path: '**', 
+    component: NotFoundComponent 
+  },  
 
 ];
