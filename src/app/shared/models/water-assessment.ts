@@ -137,8 +137,14 @@ export interface FlowData {
 export interface IntakeSource extends Partial<ProcessFlowPart> {
     sourceType: number,
     annualUse: number,
-    addedMotorEnergy?: MotorEnergy[]
+    addedMotorEnergy?: MotorEnergy[],
+    monthlyIntake?: MonthlyIntakeData[];
 }
+
+export interface MonthlyIntakeData {
+    month: string,
+    flow: number
+  }
 
 // * Plant level discharge
 export interface DischargeOutlet extends ProcessFlowPart {

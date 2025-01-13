@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { WaterAssessmentService } from '../water-assessment.service';
-import { IntakeSource, MotorEnergy, WaterAssessment } from '../../shared/models/water-assessment';
+import { IntakeSource, MonthlyIntakeData, MotorEnergy, WaterAssessment } from '../../shared/models/water-assessment';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import * as _ from 'lodash';
 import { FormGroup } from '@angular/forms';
@@ -33,6 +33,7 @@ export class IntakeSourceComponent {
   deleteIndex: number;
   confirmDeleteData: ConfirmDeleteData;
   isMotorEnergyCollapsed: boolean;
+  showMonthlyIntakeModal: boolean;
 
   idString: string;
   constructor(private waterAssessmentService: WaterAssessmentService, 
@@ -72,8 +73,10 @@ export class IntakeSourceComponent {
     this.form = this.waterSystemComponentService.getIntakeSourceForm(this.selectedIntakeSource);
   }
 
-  save() {
-    let updated: IntakeSource = this.waterSystemComponentService.getIntakeSourceFromForm(this.form, this.selectedIntakeSource);
+  save(updated?: IntakeSource) {
+    if (!updated) {
+      updated = this.waterSystemComponentService.getIntakeSourceFromForm(this.form, this.selectedIntakeSource);
+    }
     let updateIndex: number = this.waterAssessment.intakeSources.findIndex(intake => intake.diagramNodeId === updated.diagramNodeId);
     this.waterAssessment.intakeSources[updateIndex] = updated;
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
@@ -131,6 +134,21 @@ export class IntakeSourceComponent {
     }
     this.showConfirmDeleteModal = false;
     this.waterAssessmentService.modalOpen.next(false);
+  }
+
+  setMonthlyIntake(monthlyIntakeData: MonthlyIntakeData[]) {
+    let updated: IntakeSource = this.waterSystemComponentService.getIntakeSourceFromForm(this.form, this.selectedIntakeSource);
+    this.form.controls.annualUse.patchValue(this.waterSystemComponentService.getAnnualUseFromMonthly(monthlyIntakeData))
+    updated.monthlyIntake = monthlyIntakeData;
+    this.selectedIntakeSource.monthlyIntake = monthlyIntakeData;
+    this.save(updated);
+    this.setMonthlyIntakeModal(false);
+
+  }
+
+  setMonthlyIntakeModal(isOpen: boolean) {
+    this.waterAssessmentService.modalOpen.next(isOpen);
+    this.showMonthlyIntakeModal = isOpen;
   }
 
 }

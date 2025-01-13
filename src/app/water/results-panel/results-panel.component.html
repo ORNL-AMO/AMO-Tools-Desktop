@@ -30,7 +30,12 @@
                 </ng-container>
                 
                 <ng-container *ngIf="panelTabSelect === 'results'">
-                    <app-water-balance-results-table></app-water-balance-results-table>
+                    <ng-container *ngIf="selectedComponentType && selectedComponentType === 'water-using-system'">
+                        <app-water-balance-results-table></app-water-balance-results-table>
+                    </ng-container>
+                    <ng-container *ngIf="selectedComponentType && selectedComponentType === 'water-intake'">
+                        <app-monthly-intake-graph></app-monthly-intake-graph>
+                    </ng-container>
                 </ng-container>
                 
                 <app-help-panel *ngIf="panelTabSelect === 'help'">

@@ -9,7 +9,7 @@ import { Assessment } from '../shared/models/assessment';
 import { WaterAssessmentService } from './water-assessment.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
-import { WasteWaterTreatment, WaterAssessment } from '../shared/models/water-assessment';
+import { WasteWaterTreatment, WaterAssessment, WaterProcessComponent } from '../shared/models/water-assessment';
 import { ParentContainerDimensions } from '../../process-flow-types/shared-process-flow-types';
 import { IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';

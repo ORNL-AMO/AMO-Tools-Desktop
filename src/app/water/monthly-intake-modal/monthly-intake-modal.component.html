@@ -1,0 +1,48 @@
+<div bsModal #monthlyIntakeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="deleteModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header p-2">
+                    <span class="card-header-text">
+                        Monthly Intake Flows
+                    </span>
+                    <button class="close" aria-label="Close" (click)="close(false)">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div *ngIf="monthlyIntakeForm" class="card-block p-3">
+                      <ng-container *ngFor="let monthForm of monthlyIntakeForm.controls.months.value.controls; let index = index;">
+                        <form [formGroup]="monthForm" class="d-flex flex-content-center">
+                                <div class="form-group d-flex flex-row w-100">
+                                    <label class="section-label w-100" for="flow">{{monthForm.controls.month.value}}</label>
+                                    <div class="input-group w-100">
+                                        <input name="flow" formControlName="flow" type="number" step="any" class="form-control"
+                                            id="flow" (input)="calculateAnnual()">
+                                            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                                            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                                    </div>
+                                </div>
+
+                        </form>
+                    </ng-container>
+                    <hr>
+                    <div class="form-group">
+                        <label for="grossWaterUse">Annual Intake</label>
+                        <div class="text-center small bold">
+                            <span *ngIf="annualIntake">{{annualIntake | number}}</span>
+                            <span *ngIf="!annualIntake">&mdash; &mdash;</span>
+                            <span class="pl-3" *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                            <span class="pl-3" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer p-2">
+                    <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close(true)">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm " (click)="close()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
