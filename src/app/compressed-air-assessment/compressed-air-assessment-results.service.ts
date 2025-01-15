@@ -460,7 +460,7 @@ export class CompressedAirAssessmentResultsService {
     if (dayTypeModificationResult.allSavingsResults.paybackPeriod < 0) {
       dayTypeModificationResult.allSavingsResults.paybackPeriod = 0;
     }
-    dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((baselineResults.total.totalAnnualOperatingCost - dayTypeModificationResult.totalAnnualOperatingCost) / dayTypeModificationResult.totalAnnualOperatingCost) * 100
+    dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((baselineResults.total.totalAnnualOperatingCost - dayTypeModificationResult.totalAnnualOperatingCost) / baselineResults.total.totalAnnualOperatingCost) * 100
 
     return dayTypeModificationResult;
   }
