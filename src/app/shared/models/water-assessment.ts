@@ -138,10 +138,10 @@ export interface IntakeSource extends Partial<ProcessFlowPart> {
     sourceType: number,
     annualUse: number,
     addedMotorEnergy?: MotorEnergy[],
-    monthlyIntake?: MonthlyIntakeData[];
+    monthlyFlow?: MonthlyFlowData[];
 }
 
-export interface MonthlyIntakeData {
+export interface MonthlyFlowData {
     month: string,
     flow: number
   }
@@ -150,6 +150,7 @@ export interface MonthlyIntakeData {
 export interface DischargeOutlet extends ProcessFlowPart {
     outletType: number,
     annualUse: number,
+    monthlyFlow?: MonthlyFlowData[],
     addedMotorEnergy: MotorEnergy[]
 }
 

@@ -48,7 +48,7 @@
                     <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
                 </span>
             </span>
-        <a class="form-text small click-link" (click)="setMonthlyIntakeModal(true)">Enter Monthly Use Data</a>
+        <a class="form-text small click-link" (click)="setMonthlyFlowModal(true)">Enter Monthly Intake Data</a>
         </div>
     </form>
 
@@ -98,8 +98,9 @@
 </app-confirm-delete-modal>
 
 
-<app-monthly-intake-modal *ngIf="showMonthlyIntakeModal" 
+<app-monthly-flow-modal *ngIf="showMonthlyFlowModal" 
     [settings]="settings"
-    [monthlyIntake]="selectedIntakeSource.monthlyIntake"
-    (emitMonthlyIntakeData)="setMonthlyIntake($event)">
-</app-monthly-intake-modal>
+    [monthlyFlow]="selectedIntakeSource.monthlyFlow"
+    [flowTypeTitle]="'Intake'"
+    (emitMonthlyFlowData)="setMonthlyFlow($event)">
+</app-monthly-flow-modal>

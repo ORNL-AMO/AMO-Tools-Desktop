@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { WaterAssessmentService, WaterSetupTabString, WaterUsingSystemTabString } from '../water-assessment.service';
+import { WaterAssessmentService, WaterSetupTabString } from '../water-assessment.service';
 import { WaterSystemComponentService } from '../water-system-component.service';
-import { WaterProcessComponent } from '../../shared/models/water-assessment';
 import { ProcessFlowNodeType } from '../../../process-flow-types/shared-process-flow-types';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-results-panel',
@@ -16,15 +16,16 @@ export class ResultsPanelComponent {
   panelTabSelect: WaterPanelTab = 'component-table';
   displayResults: boolean;
   displayComponentTable: boolean;
-  selectedComponent: WaterProcessComponent;
-  selectedComponentType: ProcessFlowNodeType;
   selectedComponentSub: Subscription;
-
+  selectedComponentType: ProcessFlowNodeType;
+  settings: Settings;
   constructor(private waterAssessmentService: WaterAssessmentService,
     private waterSystemComponentService: WaterSystemComponentService
   ) { }
 
   ngOnInit(): void {
+    this.settings = this.waterAssessmentService.settings.getValue();
+
     this.setupTabSub = this.waterAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
       if (this.setupTab !== 'system-basics' && this.setupTab !== 'waste-water-treatment') {
@@ -41,6 +42,7 @@ export class ResultsPanelComponent {
         this.selectedComponentType = component.processComponentType;
       }
     });
+
 
   }
 

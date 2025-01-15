@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { WaterAssessmentService } from '../water-assessment.service';
-import { IntakeSource, MonthlyIntakeData, MotorEnergy, WaterAssessment } from '../../shared/models/water-assessment';
+import { IntakeSource, MonthlyFlowData, MotorEnergy, WaterAssessment } from '../../shared/models/water-assessment';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import * as _ from 'lodash';
 import { FormGroup } from '@angular/forms';
@@ -33,7 +33,7 @@ export class IntakeSourceComponent {
   deleteIndex: number;
   confirmDeleteData: ConfirmDeleteData;
   isMotorEnergyCollapsed: boolean;
-  showMonthlyIntakeModal: boolean;
+  showMonthlyFlowModal: boolean;
 
   idString: string;
   constructor(private waterAssessmentService: WaterAssessmentService, 
@@ -136,19 +136,19 @@ export class IntakeSourceComponent {
     this.waterAssessmentService.modalOpen.next(false);
   }
 
-  setMonthlyIntake(monthlyIntakeData: MonthlyIntakeData[]) {
+  setMonthlyFlow(monthlyFlowData: MonthlyFlowData[]) {
     let updated: IntakeSource = this.waterSystemComponentService.getIntakeSourceFromForm(this.form, this.selectedIntakeSource);
-    this.form.controls.annualUse.patchValue(this.waterSystemComponentService.getAnnualUseFromMonthly(monthlyIntakeData))
-    updated.monthlyIntake = monthlyIntakeData;
-    this.selectedIntakeSource.monthlyIntake = monthlyIntakeData;
+    this.form.controls.annualUse.patchValue(this.waterSystemComponentService.getAnnualUseFromMonthly(monthlyFlowData))
+    updated.monthlyFlow = monthlyFlowData;
+    this.selectedIntakeSource.monthlyFlow = monthlyFlowData;
     this.save(updated);
-    this.setMonthlyIntakeModal(false);
+    this.setMonthlyFlowModal(false);
 
   }
 
-  setMonthlyIntakeModal(isOpen: boolean) {
+  setMonthlyFlowModal(isOpen: boolean) {
     this.waterAssessmentService.modalOpen.next(isOpen);
-    this.showMonthlyIntakeModal = isOpen;
+    this.showMonthlyFlowModal = isOpen;
   }
 
 }

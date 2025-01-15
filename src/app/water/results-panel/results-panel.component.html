@@ -33,8 +33,10 @@
                     <ng-container *ngIf="selectedComponentType && selectedComponentType === 'water-using-system'">
                         <app-water-balance-results-table></app-water-balance-results-table>
                     </ng-container>
-                    <ng-container *ngIf="selectedComponentType && selectedComponentType === 'water-intake'">
-                        <app-monthly-intake-graph></app-monthly-intake-graph>
+                    <ng-container *ngIf="selectedComponentType && (selectedComponentType === 'water-intake' || selectedComponentType === 'water-discharge')">
+                        <app-monthly-flow-chart
+                            [settings]="settings"
+                            [componentType]="selectedComponentType"></app-monthly-flow-chart>
                     </ng-container>
                 </ng-container>
                 
