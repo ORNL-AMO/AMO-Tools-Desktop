@@ -3,6 +3,9 @@ import { InventoryItem } from "../shared/models/inventory/inventory";
 
 
 export const MockCompressedAirInventory: InventoryItem = {
+    "compressedAirInventoryData":{
+
+    },
     "createdDate": new Date(),
     "modifiedDate": new Date(),
     "type": "compressedAirInventory",
