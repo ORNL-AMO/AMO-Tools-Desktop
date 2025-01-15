@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { copyObject } from '../../shared/helperFunctions';
-import { WaterAssessment, DischargeOutlet, WaterProcessComponent, MotorEnergy } from '../../shared/models/water-assessment';
+import { WaterAssessment, DischargeOutlet, WaterProcessComponent, MotorEnergy, MonthlyFlowData } from '../../shared/models/water-assessment';
 import { WaterAssessmentService } from '../water-assessment.service';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import { dischargeOutletTypeOptions } from '../waterConstants';
@@ -30,6 +30,9 @@ export class DischargeOutletComponent {
   confirmDeleteData: ConfirmDeleteData;
   isMotorEnergyCollapsed: boolean;
   idString: string;
+
+  showMonthlyFlowModal: boolean;
+
   constructor(private waterAssessmentService: WaterAssessmentService,
     private motorEnergyService: MotorEnergyService, 
     private waterSystemComponentService: WaterSystemComponentService) {}
@@ -63,8 +66,10 @@ export class DischargeOutletComponent {
     this.form = this.waterSystemComponentService.getDischargeOutletForm(this.selectedDischargeOutlet);
   }
 
-  save() {
-    let updated: DischargeOutlet = this.waterSystemComponentService.getDischargeOutletFromForm(this.form, this.selectedDischargeOutlet);
+  save(updated?: DischargeOutlet) {
+    if (!updated) {
+      updated = this.waterSystemComponentService.getDischargeOutletFromForm(this.form, this.selectedDischargeOutlet);
+    }
     let updateIndex: number = this.waterAssessment.dischargeOutlets.findIndex(discharge => discharge.diagramNodeId === updated.diagramNodeId);
     this.waterAssessment.dischargeOutlets[updateIndex] = updated;
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
@@ -123,5 +128,21 @@ export class DischargeOutletComponent {
     this.showConfirmDeleteModal = false;
     this.waterAssessmentService.modalOpen.next(false);
   }
+
+    setMonthlyFlow(monthlyFlowData: MonthlyFlowData[]) {
+      let updated: DischargeOutlet = this.waterSystemComponentService.getDischargeOutletFromForm(this.form, this.selectedDischargeOutlet);
+      this.form.controls.annualUse.patchValue(this.waterSystemComponentService.getAnnualUseFromMonthly(monthlyFlowData))
+      updated.monthlyFlow = monthlyFlowData;
+      this.selectedDischargeOutlet.monthlyFlow = monthlyFlowData;
+      this.save(updated);
+      this.setMonthlyFlowModal(false);
+  
+    }
+  
+    setMonthlyFlowModal(isOpen: boolean) {
+      this.waterAssessmentService.modalOpen.next(isOpen);
+      this.showMonthlyFlowModal = isOpen;
+    }
+  
 
 }

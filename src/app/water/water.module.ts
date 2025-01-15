@@ -53,6 +53,8 @@ import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-
 import { WaterTreatmentWrapperComponent } from './water-treatment/water-treatment-wrapper/water-treatment-wrapper.component';
 import { WasteWaterTreatmentWrapperComponent } from './waste-water-treatment/waste-water-treatment-wrapper/waste-water-treatment-wrapper.component';
 import { WaterBalanceResultsTableComponent } from './results-panel/water-balance-results-table/water-balance-results-table.component';
+import { MonthlyFlowChartComponent } from './results-panel/monthly-flow-chart/monthly-flow-chart.component';
+import { MonthlyFlowModalComponent } from './monthly-flow-modal/monthly-flow-modal.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +82,9 @@ import { WaterBalanceResultsTableComponent } from './results-panel/water-balance
     WasteWaterTreatmentComponent,
     SystemBasicsComponent,
     WaterTreatmentWrapperComponent,
-    WasteWaterTreatmentWrapperComponent
+    WasteWaterTreatmentWrapperComponent,
+    MonthlyFlowModalComponent,
+    MonthlyFlowChartComponent
   ],
   imports: [
     CommonModule,
