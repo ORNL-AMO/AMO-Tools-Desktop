@@ -38,8 +38,6 @@ export class CoreComponent implements OnInit {
   isOnline: boolean;
   releaseData: ReleaseData;
 
-  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
-  showToast: boolean;
   showWebDisclaimerToast: boolean = false;
   routerSubscription: Subscription;
   analyticsSessionId: string;
@@ -254,16 +252,6 @@ export class CoreComponent implements OnInit {
   async setSurveyDone() {
     let appData = await firstValueFrom(this.applicationInstanceDbService.setSurveyDone());
     this.applicationInstanceDbService.applicationInstanceData.next(appData);
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    };
-    this.changeDetectorRef.detectChanges();
   }
 
   hideUpdateToast() {

@@ -26,7 +26,5 @@
 <app-create-folder *ngIf="createFolder"></app-create-folder>
 <app-import-modal *ngIf="showImportModal"></app-import-modal>
 <app-export-modal *ngIf="showExportModal"></app-export-modal>
-<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-    [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'warning'"></app-toast>
 <app-create-inventory *ngIf="showCreateInventory" [defaultInventoryType]="showCreateInventory"></app-create-inventory>
 <app-copy-items *ngIf="copyItems"></app-copy-items>
