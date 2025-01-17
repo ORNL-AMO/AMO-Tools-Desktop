@@ -21,7 +21,6 @@ import { CoreService } from './core.service';
 import { SsmtModule } from '../ssmt/ssmt.module';
 import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
 import { HelperServicesModule } from '../shared/helper-services/helper-services.module';
-import { ToastModule } from '../shared/toast/toast.module';
 import { TutorialsModule } from '../tutorials/tutorials.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
 import { UpdateToastComponent } from '../update-toast/update-toast.component';
@@ -41,6 +40,7 @@ import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-
 import { ImportBackupModalModule } from '../shared/import-backup-modal/import-backup-modal.module';
 import { SurveyToastModule } from '../shared/survey-toast/survey-toast.module';
 import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
+import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 
 @NgModule({
   declarations: [
@@ -66,7 +66,6 @@ import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module
     SsmtModule,
     TreasureHuntModule,
     HelperServicesModule,
-    ToastModule,
     TutorialsModule,
     DashboardModule,
     LogToolModule,
@@ -83,7 +82,8 @@ import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module
     EmailMeasurDataModule,
     ImportBackupModalModule,
     SurveyToastModule,
-    MeasurSurveyModule
+    MeasurSurveyModule,
+    SnackbarModule
   ],
   providers: [
     AssessmentService,

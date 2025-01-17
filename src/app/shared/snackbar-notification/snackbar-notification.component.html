@@ -1,0 +1,14 @@
+<div class="card card-toast alert m-0 p-0" [@snackbarState]="snackbarState" 
+    [ngClass]="{'alert-info measur-info': snackbarMessage && snackbarMessage.level === 'info',
+    'alert-danger': snackbarMessage && snackbarMessage.level === 'danger' 
+  }">
+  <div *ngIf="snackbarMessage" class="snackbar-container">
+    <div class="d-flex align-items-center">
+      <span class="level-icon fa" [ngClass]="{'fa-info-circle':snackbarMessage.level === 'info',
+        'fa-exclamation-circle': snackbarMessage.level === 'danger' 
+      }"></span>
+      <span class="card-msg" [innerHTML]="snackbarMessage.msg"></span>
+    </div>
+    <span class="fa fa-times close-button" (click)="closeSnackbar()"></span>
+  </div>
+</div>
