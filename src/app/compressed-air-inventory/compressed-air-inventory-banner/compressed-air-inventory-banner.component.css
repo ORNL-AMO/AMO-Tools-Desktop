@@ -1,0 +1,73 @@
+.h2-name{
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.hidden{
+    display: none;
+}
+
+.hidden.show{
+    display: inherit;
+}
+
+.gray-badge.missing-data {
+    background-color: red !important;
+}
+
+.missing-data-tab {
+    background: red;
+  }
+
+.nav-item{
+    color: white;
+}
+
+.nav-item, .home-nav-item a{
+    color: white;
+}
+
+.banner .nav-link:not(.disabled):not(.active){
+    color: white;
+}
+
+.img-icon{
+    width: 65px;
+}
+
+
+.gray-badge{
+    background-color: #d7b4f3;
+}
+
+.btn.chevron-btn{
+    border: none !important;
+    width: 20px;
+    height: 28px;
+    color: white;
+    box-shadow: none !important;
+}
+
+.fa.fa-chevron-right,
+.fa.fa-chevron-left {
+    font-size: 28px;
+}
+
+li.page-item{
+    background-color:#ECECEC !important;
+}
+
+span.fa.fa-download{
+    padding: 0px !important;
+}
+
+.download-nav-item .fa.fa-download{
+    border: none !important;
+    background-color: inherit;
+    opacity: 1;
+}
+
+.download-nav-item{
+    border: none !important;
+    background-color: #d7b4f3;
+}

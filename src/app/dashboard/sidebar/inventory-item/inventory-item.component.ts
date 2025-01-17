@@ -24,5 +24,8 @@ export class InventoryItemComponent implements OnInit {
     if (this.inventoryItem.type === 'motorInventory') {
       this.dashboardService.navigateWithSidebarOptions('/motor-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
     }
+    if (this.inventoryItem.type === 'compressedAirInventory') {
+      this.dashboardService.navigateWithSidebarOptions('/compressed-air-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
+    }
   }
 }

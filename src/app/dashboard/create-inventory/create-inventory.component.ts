@@ -18,6 +18,7 @@ import { MotorInventoryService } from '../../motor-inventory/motor-inventory.ser
 import { firstValueFrom } from 'rxjs';
 import { PumpInventoryService } from '../../pump-inventory/pump-inventory.service';
 import { AnalyticsService } from '../../shared/analytics/analytics.service';
+import { CompressedAirInventoryService } from '../../compressed-air-inventory/compressed-air-inventory.service';
 
 @Component({
   selector: 'app-create-inventory',
@@ -47,7 +48,8 @@ export class CreateInventoryComponent implements OnInit {
     private inventoryService: InventoryService,
     private settingsService: SettingsService,
     private motorInventoryService: MotorInventoryService,
-    private pumpInventoryService: PumpInventoryService,
+    private pumpInventoryService: PumpInventoryService,    
+    private compressedAirInventoryService: CompressedAirInventoryService,
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
@@ -72,6 +74,8 @@ export class CreateInventoryComponent implements OnInit {
     let defaultInventoryName: string = 'New Motor Inventory'; 
     if (this.defaultInventoryType === 'pumpInventory') {
       defaultInventoryName = 'New Pump Inventory'; 
+    } else if (this.defaultInventoryType === 'compressedAirInventory') {
+      defaultInventoryName = 'New Compressed Air Inventory'; 
     }
     return this.formBuilder.group({
       'inventoryName': [defaultInventoryName, Validators.required],
@@ -95,6 +99,8 @@ export class CreateInventoryComponent implements OnInit {
       this.newInventoryItemForm.controls.inventoryName.patchValue('New Motor Inventory');
     } else if (this.newInventoryItemForm.controls.inventoryType.value === 'pumpInventory') {
       this.newInventoryItemForm.controls.inventoryName.patchValue('New Pump Inventory');
+    } else if (this.newInventoryItemForm.controls.inventoryType.value === 'compressedAirInventory') {
+      this.newInventoryItemForm.controls.inventoryName.patchValue('New Compressed Air Inventory');
     }
   }
 
@@ -118,6 +124,13 @@ export class CreateInventoryComponent implements OnInit {
           this.pumpInventoryService.setupTab.next('plant-setup');
           inventoryItem = this.inventoryService.getNewPumpInventoryItem();
           inventoryRoute = 'pump-inventory';
+        }
+        if (this.newInventoryItemForm.controls.inventoryType.value === 'compressedAirInventory') {
+          this.analyticsService.sendEvent('create-inventory', undefined);
+          this.compressedAirInventoryService.mainTab.next('setup');
+          this.compressedAirInventoryService.setupTab.next('plant-setup');
+          inventoryItem = this.inventoryService.getNewCompressedAirInventoryItem();
+          inventoryRoute = 'compressed-air-inventory';
         }
         inventoryItem.name = this.newInventoryItemForm.controls.inventoryName.value;
         inventoryItem.directoryId = this.newInventoryItemForm.controls.directoryId.value;

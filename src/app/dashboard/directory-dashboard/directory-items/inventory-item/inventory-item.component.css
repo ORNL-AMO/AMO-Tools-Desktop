@@ -90,6 +90,11 @@
     border-bottom: #2980b9 groove 2px;
     border-image: linear-gradient(to right, #F0F3F4, #2980b9) 50 / 2;
   }
+
+  .compressed-air-header{
+    border-bottom: #2980b9 groove 2px;
+    border-image: linear-gradient(to right, #F0F3F4, #d7b4f3) 50 / 2;
+  }
   .motor-row{
     border-bottom: #84b641 groove 6px;
     border-image: linear-gradient(to right,#F0F3F4, #84b641) 80 / 2;
@@ -107,6 +112,11 @@
     border-bottom: #2980b9 groove 6px;
     border-image: linear-gradient(to right,#F0F3F4, #2980b9) 80 / 2;
   }
+  .compressed-air-row{
+    border-bottom: #2980b9 groove 6px;
+    border-image: linear-gradient(to right,#F0F3F4, #d7b4f3) 80 / 2;
+  }
+
 
 .btn-primary.dropdown-toggle,
 .motor-primary{
@@ -116,6 +126,10 @@
 .btn-primary.dropdown-toggle,
 .pump-primary{
   background-color: #2980b9 !important;
+}
+
+.compressed-air-primary{
+  background-color: #d7b4f3 !important;
 }
 
 .icon-image{

@@ -4,10 +4,11 @@ import { MotorInventoryService } from '../motor-inventory/motor-inventory.servic
 import { environment } from '../../environments/environment';
 
 import { PumpInventoryService } from '../pump-inventory/pump-inventory.service';
+import { CompressedAirInventoryService } from '../compressed-air-inventory/compressed-air-inventory.service';
 @Injectable()
 export class InventoryService {
 
-  constructor(private motorInventoryService: MotorInventoryService, private pumpInventoryService: PumpInventoryService) { }
+  constructor(private motorInventoryService: MotorInventoryService, private pumpInventoryService: PumpInventoryService, private compressedAirInventoryService: CompressedAirInventoryService) { }
 
 
   getNewMotorInventoryItem(): InventoryItem{
@@ -28,6 +29,18 @@ export class InventoryService {
       createdDate: new Date(),
       modifiedDate: new Date(),
       type: 'pumpInventory',
+      name: null,
+      appVersion:  environment.version,
+      isExample: false
+    }
+  }
+
+  getNewCompressedAirInventoryItem(): InventoryItem {
+    return {
+      compressedAirInventoryData: this.compressedAirInventoryService.initInventoryData(),
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+      type: 'compressedAirInventory',
       name: null,
       appVersion:  environment.version,
       isExample: false

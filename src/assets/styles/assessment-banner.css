@@ -90,6 +90,10 @@
     .banner.pump-inventory{
       background: #2980b9;
     }
+
+    .banner.compressed-air-inventory{
+      background: #d7b4f3;
+    }
   
     .banner.waste-water{
       background: #003087;

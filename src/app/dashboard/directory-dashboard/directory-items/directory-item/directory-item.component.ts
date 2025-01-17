@@ -118,6 +118,9 @@ export class DirectoryItemComponent implements OnInit {
     if (item.type === 'motorInventory') {
       this.dashboardService.navigateWithSidebarOptions('/motor-inventory/' + item.id, {shouldCollapse: true})
     }
+    if (item.type === 'compressedAirInventory') {
+      this.dashboardService.navigateWithSidebarOptions('/compressed-air-inventory/' + item.id, {shouldCollapse: true})
+    }
   }
 
   async save() {
