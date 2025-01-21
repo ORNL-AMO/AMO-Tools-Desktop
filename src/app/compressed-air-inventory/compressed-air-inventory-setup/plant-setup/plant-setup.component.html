@@ -1,0 +1,34 @@
+<div class="row no-gutters pr-2 pl-2">
+    <div class="col-12">
+        <div class="header">
+            <div class="h3">Settings</div>
+        </div>
+    </div>
+    <app-integration-status class="col-12 py-1 px-3"></app-integration-status>
+    <app-connected-assessment-status [parentIntegrationState]="connectedAssessmentState"
+        class="col-12 py-1 px-3"></app-connected-assessment-status>
+    <div class="col-12">
+        <div class="alert-warning mt-3 small mx-auto" *ngIf="showUpdateDataReminder">
+            <div>Units of measure were changed after assessment data was entered.
+                <br>Please update your assessment data for accurate results.
+            </div>
+            <a class="click-link" (click)="updateData(true)">Update Data</a>
+        </div>
+        <div class="alert-success mt-3 py-3 small mx-auto w-75 text-center" *ngIf="showSuccessMessage">
+            <div>
+                Data updated successfully!
+            </div>
+            <a class="click-link" (click)="dismissSuccessMessage()">Dismiss</a>
+        </div>
+        <app-application-settings [settingsForm]="settingsForm" [inPhast]="true" [inTreasureHunt]="true"
+            (startSavePolling)="save()" [inInventory]="true">
+        </app-application-settings>
+    </div>
+
+    <div class="col-12" *ngIf="co2SavingsData">
+        <app-assessment-co2-savings [co2SavingsData]="co2SavingsData" [isFormDisabled]="false" [inBaseline]="true"
+            (emitCurrentField)="focusField($event)"
+            (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)"></app-assessment-co2-savings>
+    </div>
+
+</div>
