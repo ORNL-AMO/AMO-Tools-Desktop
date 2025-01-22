@@ -189,7 +189,7 @@ export class InventoryService {
   checkDisplayAutomaticShutdown(controlType: number): boolean {
     if (controlType !== undefined) {
       return [2, 3, 4, 6, 7, 8, 9, 10, 11].includes(controlType);
-    } 
+    }
     return false;
   }
 
@@ -515,6 +515,19 @@ export class InventoryService {
     }
     // this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
     // this.selectedCompressor.next(newInventoryItem);
+  }
+
+  addReplacementCompressor(compressedAirAssessment: CompressedAirAssessment, newInventoryItem?: CompressorInventoryItem): { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } {
+    if (!newInventoryItem) {
+      newInventoryItem = this.getNewInventoryItem();
+    }
+    newInventoryItem.isReplacementCompressor = true;
+    newInventoryItem.modifiedDate = new Date();
+    compressedAirAssessment.replacementCompressorInventoryItems.push(newInventoryItem);
+    return {
+      newInventoryItem: newInventoryItem,
+      compressedAirAssessment: compressedAirAssessment
+    }
   }
 
   addNewDayType(compressedAirAssessment: CompressedAirAssessment, dayTypeName: string, dayTypeId?: string): CompressedAirAssessment {

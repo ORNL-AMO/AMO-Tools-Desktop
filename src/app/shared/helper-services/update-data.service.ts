@@ -22,18 +22,18 @@ export class UpdateDataService {
         if (assessment.type === 'PSAT') {
             return this.updatePsat(assessment);
         } else if (assessment.type === 'FSAT') {
-            return  this.updateFsat(assessment);
+            return this.updateFsat(assessment);
         } else if (assessment.type === 'PHAST') {
-            return  this.updatePhast(assessment);
+            return this.updatePhast(assessment);
         } else if (assessment.type == 'SSMT') {
-            return  this.updateSSMT(assessment);
+            return this.updateSSMT(assessment);
         } else if (assessment.type === 'TreasureHunt') {
-            return  this.updateTreasureHunt(assessment);
+            return this.updateTreasureHunt(assessment);
         } else if (assessment.type === 'WasteWater') {
-            return  this.updateWasteWater(assessment);
+            return this.updateWasteWater(assessment);
         } else if (assessment.type === 'CompressedAir') {
-            return  this.updateCompressedAir(assessment);
-        } 
+            return this.updateCompressedAir(assessment);
+        }
     }
 
     updateWasteWater(assessment: Assessment): Assessment {
@@ -145,9 +145,19 @@ export class UpdateDataService {
             }
         }
 
+        if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.modifications) {
+            assessment.compressedAirAssessment.modifications.forEach(mod => {
+                if (!mod.replaceCompressor) {
+                    mod['replaceCompressor'] = {
+                        order: 100
+                    };
+                }
+            })
+        }
+
         return assessment;
     }
-    
+
     updateAssessmentCalculatorVersion(assessmentCalculators: Calculator) {
         if (assessmentCalculators) {
             if (assessmentCalculators.bleedTestInputs) {
@@ -155,13 +165,13 @@ export class UpdateDataService {
                     assessmentCalculators.bleedTestInputs.atmosphericPressure = 14.7;
                 }
             }
-    
+
             if (assessmentCalculators.airSystemCapacityInputs && assessmentCalculators.airSystemCapacityInputs.leakRateInput) {
                 if (assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime) {
-                    assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime = assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime / 60; 
+                    assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime = assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime / 60;
                 }
             }
-    
+
         }
         return assessmentCalculators;
 
@@ -177,7 +187,7 @@ export class UpdateDataService {
         }
         assessment.appVersion = environment.version;
 
-        if (assessment.psat.inputs.line_frequency === 0){
+        if (assessment.psat.inputs.line_frequency === 0) {
             assessment.psat.inputs.line_frequency = 50;
         }
         if (assessment.psat.inputs.line_frequency === 1) {

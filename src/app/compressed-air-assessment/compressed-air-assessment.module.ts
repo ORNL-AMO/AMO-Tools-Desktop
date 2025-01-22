@@ -151,6 +151,7 @@ import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end
 import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-air-sankey.module';
 import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { ReplaceCompressorComponent } from './explore-opportunities/replace-compressor/replace-compressor.component';
 
 @NgModule({
   declarations: [
@@ -236,7 +237,8 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     ImproveEndUseFormControlsPipe,
     TurndownComponent,
     MidTurndownComponent,
-    EndUseHelpComponent
+    EndUseHelpComponent,
+    ReplaceCompressorComponent
   ],
   imports: [
     CommonModule,

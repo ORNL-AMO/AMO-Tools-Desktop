@@ -38,4 +38,4 @@ export class ResultsPanelComponent implements OnInit {
 }
 
 
-  export type CompressedAirSetupTab = 'help' | 'performance-profile' | 'inventory' | 'end-uses';
+  export type CompressedAirSetupTab = 'help' | 'performance-profile' | 'inventory' | 'end-uses' | 'replacementInventory';

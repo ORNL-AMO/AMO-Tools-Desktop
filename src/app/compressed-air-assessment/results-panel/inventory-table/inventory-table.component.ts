@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
@@ -14,6 +14,8 @@ import { SystemProfileService } from '../../system-profile/system-profile.servic
   styleUrls: ['./inventory-table.component.css']
 })
 export class InventoryTableComponent implements OnInit {
+  @Input()
+  isReplacementInventory: boolean;
 
   compressedAirAssessmentSub: Subscription;
   compressorInventoryItems: Array<CompressorInventoryItem>;
@@ -37,7 +39,15 @@ export class InventoryTableComponent implements OnInit {
     })
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {
-        this.compressorInventoryItems = val.compressorInventoryItems;
+        if (!this.isReplacementInventory) {
+          this.compressorInventoryItems = val.compressorInventoryItems;
+        } else {
+          //todo: data update
+          if (!val.replacementCompressorInventoryItems) {
+            val.replacementCompressorInventoryItems = [];
+          }
+          this.compressorInventoryItems = val.replacementCompressorInventoryItems;
+        }
         this.compressorInventoryItems.forEach(compressor => {
           compressor.isValid = this.inventoryService.isCompressorValid(compressor, val.systemInformation);
         });
@@ -57,43 +67,54 @@ export class InventoryTableComponent implements OnInit {
 
   addNewCompressor() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let result: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } = this.inventoryService.addNewCompressor(compressedAirAssessment);
+    let result: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment };
+    if (!this.isReplacementInventory) {
+      result = this.inventoryService.addNewCompressor(compressedAirAssessment);
+    } else {
+      result = this.inventoryService.addReplacementCompressor(compressedAirAssessment);
+    }
     this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
     this.inventoryService.selectedCompressor.next(result.newInventoryItem);
   }
 
   deleteItem() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let itemIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId });
-    compressedAirAssessment.compressorInventoryItems.splice(itemIndex, 1);
+    if (!this.isReplacementInventory) {
+      let itemIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId });
+      compressedAirAssessment.compressorInventoryItems.splice(itemIndex, 1);
 
-    compressedAirAssessment.modifications.forEach(modification => {
-      modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(data => { return data.compressorId != this.deleteSelectedId });
-      modification.adjustCascadingSetPoints.setPointData = modification.adjustCascadingSetPoints.setPointData.filter(data => { return data.compressorId != this.deleteSelectedId });
-      modification.useAutomaticSequencer.profileSummary = modification.useAutomaticSequencer.profileSummary.filter(summary => { return summary.compressorId != this.deleteSelectedId })
-    });
+      compressedAirAssessment.modifications.forEach(modification => {
+        modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(data => { return data.compressorId != this.deleteSelectedId });
+        modification.adjustCascadingSetPoints.setPointData = modification.adjustCascadingSetPoints.setPointData.filter(data => { return data.compressorId != this.deleteSelectedId });
+        modification.useAutomaticSequencer.profileSummary = modification.useAutomaticSequencer.profileSummary.filter(summary => { return summary.compressorId != this.deleteSelectedId })
+      });
 
-    let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
-    compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-      itemIndex = compressedAirAssessment.systemProfile.profileSummary.findIndex(summary => { return summary.compressorId == this.deleteSelectedId && summary.dayTypeId == dayType.dayTypeId });
-      let removedSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary.splice(itemIndex, 1);
-      if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, removedSummary[0], numberOfHourIntervals);
-      } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading') {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
-      } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, this.settings, compressedAirAssessment.systemInformation);
-      } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
-        compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
-      }
-    });
-
-    if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
-      compressedAirAssessment.systemInformation.trimSelections.forEach(selection => {
-        if (selection.compressorId == this.deleteSelectedId) {
-          selection.compressorId = undefined;
+      let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+      compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        itemIndex = compressedAirAssessment.systemProfile.profileSummary.findIndex(summary => { return summary.compressorId == this.deleteSelectedId && summary.dayTypeId == dayType.dayTypeId });
+        let removedSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary.splice(itemIndex, 1);
+        if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
+          compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingSequencer(compressedAirAssessment.systemProfile.profileSummary, dayType, removedSummary[0], numberOfHourIntervals);
+        } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading') {
+          compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
+        } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
+          compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, this.settings, compressedAirAssessment.systemInformation);
+        } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+          compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
         }
-      })
+      });
+
+      if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+        compressedAirAssessment.systemInformation.trimSelections.forEach(selection => {
+          if (selection.compressorId == this.deleteSelectedId) {
+            selection.compressorId = undefined;
+          }
+        })
+      }
+    }else{
+      let itemIndex: number = compressedAirAssessment.replacementCompressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId });
+      compressedAirAssessment.replacementCompressorInventoryItems.splice(itemIndex, 1);
+      //TODO: update modificaitons
     }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     this.inventoryService.selectedCompressor.next(compressedAirAssessment.compressorInventoryItems[0]);

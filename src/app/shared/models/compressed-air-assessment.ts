@@ -10,6 +10,7 @@ export interface CompressedAirAssessment {
     systemBasics: CASystemBasics,
     systemInformation: SystemInformation,
     compressorInventoryItems: Array<CompressorInventoryItem>,
+    replacementCompressorInventoryItems: Array<CompressorInventoryItem>,
     systemProfile: SystemProfile,
     // logToolDbData?: LogToolDbData,
     logToolData?: {
@@ -32,12 +33,17 @@ export interface Modification {
     useAutomaticSequencer: UseAutomaticSequencer,
     reduceRuntime: ReduceRuntime,
     addPrimaryReceiverVolume: AddPrimaryReceiverVolume,
+    replaceCompressor: ReplaceCompressor,
     notes?: string
 }
 
 // export interface FlowReallocation {
 //     // selected: boolean
 // }
+
+export interface ReplaceCompressor {
+    order: number
+}
 
 export interface ReduceAirLeaks {
     leakFlow: number,
@@ -204,7 +210,9 @@ export interface CompressorInventoryItem {
     designDetails: DesignDetails,
     performancePoints: PerformancePoints,
     centrifugalSpecifics: CentrifugalSpecifics,
-    modifiedDate: Date
+    modifiedDate: Date,
+    replacementCompressorId?: string,
+    isReplacementCompressor?: boolean
 
 }
 

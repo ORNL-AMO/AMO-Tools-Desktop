@@ -174,6 +174,9 @@ export class CompressedAirAssessmentResultsService {
     modificationOrders = modificationOrders.filter(order => { return order != 100 });
     let modificationResults: Array<DayTypeModificationResult> = new Array();
     let compressedAirAssessmentCopy: CompressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
+    if(modification.replaceCompressor.order != 100){
+      //TODO: swap out replacement compressors
+    }
     if (compressedAirAssessmentCopy.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
       compressedAirAssessmentCopy.compressorInventoryItems.forEach(item => {
         item = this.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessmentCopy.systemInformation.targetPressure, compressedAirAssessmentCopy.systemInformation.variance, item, compressedAirAssessmentCopy.systemInformation.atmosphericPressure, settings)

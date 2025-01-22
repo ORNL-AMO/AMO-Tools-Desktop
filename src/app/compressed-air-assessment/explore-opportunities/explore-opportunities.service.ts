@@ -122,6 +122,9 @@ export class ExploreOpportunitiesService {
         increasedVolume: 0,
         implementationCost: 0,
         order: 100
+      },
+      replaceCompressor: {
+        order: 100
       }
     }
   }

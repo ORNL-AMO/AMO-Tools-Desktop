@@ -4,7 +4,7 @@ import { Settings } from "../shared/models/settings";
 
 
 
-export const MockCompressedAirAssessment: Assessment =  {
+export const MockCompressedAirAssessment: Assessment = {
     "name": "Compressed Air Example",
     "createdDate": new Date("2022-08-03T21:06:22.630Z"),
     "modifiedDate": new Date("2022-08-03T21:13:37.500Z"),
@@ -13,6 +13,7 @@ export const MockCompressedAirAssessment: Assessment =  {
     "directoryId": 2,
     "compressedAirAssessment": {
         "name": "Baseline",
+        "replacementCompressorInventoryItems": [],
         "modifications": [
             {
                 "name": "Scenario 1",
@@ -6151,6 +6152,9 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "increasedVolume": 0,
                     "implementationCost": 0,
                     "order": 100
+                },
+                "replaceCompressor": {
+                    order: 100
                 }
             },
             {
@@ -6161,6 +6165,9 @@ export const MockCompressedAirAssessment: Assessment =  {
                     "leakReduction": 15,
                     "implementationCost": 1000,
                     "order": 1
+                },
+                "replaceCompressor": {
+                    order: 100
                 },
                 "improveEndUseEfficiency": {
                     "endUseEfficiencyItems": [

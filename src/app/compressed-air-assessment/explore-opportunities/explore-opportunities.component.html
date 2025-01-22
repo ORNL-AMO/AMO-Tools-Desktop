@@ -27,6 +27,7 @@
                             [(ngModel)]="modification.name" (input)="save()" />
                     </div>
                     <hr>
+                    <app-replace-compressor [style.order]="modification.replaceCompressor.order"></app-replace-compressor>
                     <app-reduce-air-leaks [style.order]="modification.reduceAirLeaks.order"></app-reduce-air-leaks>
                     <app-improve-end-use-efficiency [style.order]="modification.improveEndUseEfficiency.order">
                     </app-improve-end-use-efficiency>

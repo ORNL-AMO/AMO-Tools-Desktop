@@ -386,6 +386,7 @@ export class AssessmentService {
           compressorId: undefined
         }]
       },
+      replacementCompressorInventoryItems: new Array(),
       compressorInventoryItems: new Array(),
       systemProfile: {
         systemProfileSetup: {

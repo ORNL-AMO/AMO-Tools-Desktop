@@ -1,0 +1,100 @@
+<form *ngIf="form" [formGroup]="form" class="p-0">
+    <div class="checkbox">
+        <label class="group-label" for="reduceRuntime">
+            Replace Compressors
+            <span *ngIf="(hasInvalidDayType || form.invalid) && form.controls.order.value != 100">
+                <span class="fa fa-exclamation-circle"></span>
+            </span>
+            <select id="replaceCompressorOrder" formControlName="order" class="form-control pull-right"
+                (change)="save(true)">
+                <option [ngValue]=100>Off</option>
+                <option [ngValue]=1>On</option>
+            </select>
+        </label>
+    </div>
+    <ng-container *ngIf="form.controls.order.value == 1">
+        <div class="scroll-item">
+            <table class="table bg-white">
+                <thead>
+                    <tr>
+                        <th class="w-50">
+                            <!-- Compressor -->
+                            Current
+                        </th>
+                        <th class="w-50">
+                            Replacement
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let compressor of compressedAirAssessment.compressorInventoryItems">
+                        <td>
+                            {{compressor.name}}
+                            <!-- <span class="pl-2" *ngIf="rData.compressorId == trimCompressorId">(Trim)</span> -->
+                        </td>
+                        <td class="text-center">
+                            <select class="form-select w-100">
+                                <option [ngValue]="undefined"></option>
+                                <option
+                                    *ngFor="let replacementCompressor of compressedAirAssessment.replacementCompressorInventoryItems"
+                                    [ngValue]="replacementCompressor.guid">
+                                    {{replacementCompressor.name}}
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+                <!-- <tfoot>
+                    <tr>
+                        <td>
+                            Available Airflow
+                        </td>
+                        <td>
+    
+                        </td>
+                        <td *ngIf="displayShutdownTimer">
+    
+                        </td>
+                        <td *ngFor="let airflow of selectedDayType.availableAirflow; let index = index"
+                            [ngClass]="{'cell-error': (airflow - selectedDayType.requiredAirflow[index]) < 0}">
+                            {{airflow | number:numberPipeDecimals}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Required Airflow
+                        </td>
+                        <td>
+    
+                        </td>
+                        <td *ngIf="displayShutdownTimer">
+    
+                        </td>
+                        <td *ngFor="let airflow of selectedDayType.requiredAirflow">
+                            {{airflow| number:numberPipeDecimals}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Power, kW
+                        </td>
+                        <td>
+    
+                        </td>
+                        <td *ngIf="displayShutdownTimer">
+    
+                        </td>
+                        <td *ngFor="let power of selectedDayType.profilePower">
+                            {{power| number:'1.0-1'}}
+                        </td>
+                    </tr>
+                </tfoot> -->
+            </table>
+        </div>
+        <!-- <div *ngIf="!selectedDayType.isValid && reduceRuntime.order != 100" class="alert alert-danger p-2 text-center">
+            One or more hours have less available airflow then is required.
+        </div> -->
+
+
+    </ng-container>
+</form>
