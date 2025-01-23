@@ -1,11 +1,50 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
+import { AssessmentType, ConnectedFromState, InventoryType } from "../shared/connected-inventory/integrations";
 
 export interface CompressedAirInventoryData {
   co2SavingsData?: Co2SavingsData,
-  // departments: Array<PumpInventoryDepartment>,
+  departments: Array<CompressedAirInventoryDepartment>,
   //displayOptions: PumpPropertyDisplayOptions,
   hasConnectedInventoryItems?: boolean,
   hasConnectedPsat?: boolean,
   isValid?: boolean,
   existingDataUnits?: string
+}
+
+export interface CompressedAirInventoryDepartment {
+  name: string,
+  operatingHours: number,
+  description: string,
+  id: string,
+  catalog: Array<CompressedAirItem>,
+  isValid?: boolean,
+}
+
+export interface ConnectedInventoryProperties {
+  connectedItem?: ConnectedItem,
+  connectedItems?: Array<ConnectedItem>,
+  connectedAssessments?: Array<ConnectedItem>,
+}
+
+
+export interface CompressedAirItem extends ConnectedInventoryProperties {
+  id: string,
+  suiteDbItemId?: number,
+  departmentId: string,
+  name: string,
+  description: string,
+  notes: string,
+}
+
+export interface ConnectedItem {
+  id?: string,
+  name: string,
+  inventoryId: number,
+  inventoryName?: string,
+  departmentId?: string,
+  inventoryType?: InventoryType,
+  assessmentType?: AssessmentType,
+  assessmentId?: number,
+  assessmentName?: string,
+  connectedFromState?: ConnectedFromState
 }

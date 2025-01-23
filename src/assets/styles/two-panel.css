@@ -114,7 +114,7 @@
 }
 
 .compressed-air-inventory .header{
-    border-bottom: #d7b4f3 solid 2px;
+    border-bottom: #7030A0 solid 2px;
 }
 
 .waste-water .header{
@@ -193,7 +193,7 @@
 }
 
 .compressed-air-inventory .btn-secondary:not([disabled]):not(.disabled).active{
-    background: #d7b4f3;
+    background: #7030A0;
     transition: all .5s ease-in-out;
     color: black;
 }
@@ -359,7 +359,7 @@
 }
 
 .compressed-air-inventory .group-label{
-    border-bottom: #d7b4f3 solid 2px;
+    border-bottom: #7030A0 solid 2px;
 }
 
 .waste-water .group-label{
@@ -552,7 +552,7 @@
 }
 
 .compressed-air-inventory .scroll-item::-webkit-scrollbar-thumb{
-    background-color: #d7b4f3;
+    background-color: #7030A0;
     outline: 1px solid slategrey;
 }
 .waste-water .scroll-item::-webkit-scrollbar-thumb{

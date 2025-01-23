@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { CompressedAirInventoryData } from './compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventoryDepartment, CompressedAirItem } from './compressed-air-inventory';
 
 @Injectable()
 export class CompressedAirInventoryService {
@@ -39,16 +39,16 @@ export class CompressedAirInventoryService {
   }
 
   initInventoryData(): CompressedAirInventoryData {
-    //let initialDepartment: PumpInventoryDepartment = this.getNewDepartment(1);
+    let initialDepartment: CompressedAirInventoryDepartment = this.getNewDepartment(1);
     //let displayOptions: PumpPropertyDisplayOptions = this.getDefaultDisplayOptions();
     return {
-      //departments: [initialDepartment],
+      departments: [initialDepartment],
       //displayOptions: displayOptions
     }
   }
 
 
-  setIsValidInventory( compressedAirInventoryData: CompressedAirInventoryData) {
+  setIsValidInventory(compressedAirInventoryData: CompressedAirInventoryData) {
     let isValid: boolean = true;
     // if (pumpInventoryData) {
     //   pumpInventoryData.departments.forEach(dept => {
@@ -64,5 +64,28 @@ export class CompressedAirInventoryService {
     //   });
     // }
     compressedAirInventoryData.isValid = isValid;
+  }
+
+  getNewDepartment(departmentNum: number): CompressedAirInventoryDepartment {
+    let departmentId: string = Math.random().toString(36).substr(2, 9);
+    let initPump: CompressedAirItem = this.getNewPump(departmentId);
+    return {
+      name: 'Department ' + departmentNum,
+      operatingHours: 8760,
+      description: '',
+      id: departmentId,
+      catalog: [initPump]
+    }
+  }
+
+  getNewPump(departmentId: string): CompressedAirItem {
+    return {
+      id: Math.random().toString(36).substr(2, 9),
+      departmentId: departmentId,
+      suiteDbItemId: undefined,
+      description: '',
+      notes: '',
+      name: 'New Pump',
+    }
   }
 }
