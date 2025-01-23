@@ -23,7 +23,6 @@ import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
 import { HelperServicesModule } from '../shared/helper-services/helper-services.module';
 import { TutorialsModule } from '../tutorials/tutorials.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
-import { UpdateToastComponent } from '../update-toast/update-toast.component';
 import { LogToolModule } from '../log-tool/log-tool.module';
 import { MotorInventoryModule } from '../motor-inventory/motor-inventory.module';
 import { WasteWaterModule } from '../waste-water/waste-water.module';
@@ -41,11 +40,11 @@ import { ImportBackupModalModule } from '../shared/import-backup-modal/import-ba
 import { SurveyToastModule } from '../shared/survey-toast/survey-toast.module';
 import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
+import { UpdateApplicationModule } from '../shared/update-application/update-application.module';
 
 @NgModule({
   declarations: [
     CoreComponent,
-    UpdateToastComponent,
     NotFoundComponent,
   ],
   imports: [
@@ -83,7 +82,8 @@ import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module'
     ImportBackupModalModule,
     SurveyToastModule,
     MeasurSurveyModule,
-    SnackbarModule
+    SnackbarModule,
+    UpdateApplicationModule,
   ],
   providers: [
     AssessmentService,
