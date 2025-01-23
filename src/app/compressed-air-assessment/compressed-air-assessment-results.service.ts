@@ -8,6 +8,8 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption } from '../shared/assessment-integration/assessment-integration.service';
 import { EnergyUseItem } from '../shared/models/treasure-hunt';
+import { AdjustProfileResults, BaselineResult, BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult, DayTypeProfileSummary, EemSavingsResults, FlowReallocationSummary, SavingsItem } from './calculations/caCalculationModels';
+import { getEmptyEemSavings, getProfileSummaryDataAverages, getTotalCapacity, getTotalPower } from './calculations/caCalculationHelpers';
 
 @Injectable()
 export class CompressedAirAssessmentResultsService {
@@ -22,8 +24,8 @@ export class CompressedAirAssessmentResultsService {
   calculateBaselineResults(compressedAirAssessment: CompressedAirAssessment,
     settings: Settings, baselineProfileSummaries?: Array<DayTypeProfileSummary>): BaselineResults {
     let dayTypeResults: Array<BaselineResult> = new Array();
-    let totalFullLoadCapacity: number = this.getTotalCapacity(compressedAirAssessment.compressorInventoryItems);
-    let totalFullLoadPower: number = this.getTotalPower(compressedAirAssessment.compressorInventoryItems);
+    let totalFullLoadCapacity: number = getTotalCapacity(compressedAirAssessment.compressorInventoryItems);
+    let totalFullLoadPower: number = getTotalPower(compressedAirAssessment.compressorInventoryItems);
     compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       let baselineProfileSummary: Array<ProfileSummary>;
       if (baselineProfileSummaries) {
@@ -134,7 +136,7 @@ export class CompressedAirAssessmentResultsService {
     dayTypes.forEach(dayType => {
       let baselineProfileSummary: Array<ProfileSummary> = baselineDayTypeProfileSummarries.find(summary => { return summary.dayTypeId == dayType.dayTypeId }).profileSummary;
       this.flowReallocationSummaries = new Array();
-      let flowReallocationSavings: EemSavingsResults = this.getEmptyEemSavings();
+      let flowReallocationSavings: EemSavingsResults = getEmptyEemSavings();
       let flowAllocationProfileSummary: Array<ProfileSummary>;
       let totals: Array<ProfileSummaryTotal> = this.calculateProfileSummaryTotals(compressors, dayType, baselineProfileSummary, numberOfSummaryIntervals);
       let adjustedProfileSummary: Array<ProfileSummary> = this.reallocateFlow(dayType, settings, baselineProfileSummary, compressors, 0, totals, atmosphericPressure, totalAirStorage, systemInformation);
@@ -359,15 +361,15 @@ export class CompressedAirAssessmentResultsService {
       adjustedProfileSummary: [],
       adjustedCompressors: [],
       profileSummaryTotals: [],
-      allSavingsResults: this.getEmptyEemSavings(),
-      flowReallocationSavings: this.getEmptyEemSavings(),
-      addReceiverVolumeSavings: this.getEmptyEemSavings(),
-      adjustCascadingSetPointsSavings: this.getEmptyEemSavings(),
-      improveEndUseEfficiencySavings: this.getEmptyEemSavings(),
-      reduceAirLeaksSavings: this.getEmptyEemSavings(),
-      reduceRunTimeSavings: this.getEmptyEemSavings(),
-      reduceSystemAirPressureSavings: this.getEmptyEemSavings(),
-      useAutomaticSequencerSavings: this.getEmptyEemSavings(),
+      allSavingsResults: getEmptyEemSavings(),
+      flowReallocationSavings: getEmptyEemSavings(),
+      addReceiverVolumeSavings: getEmptyEemSavings(),
+      adjustCascadingSetPointsSavings: getEmptyEemSavings(),
+      improveEndUseEfficiencySavings: getEmptyEemSavings(),
+      reduceAirLeaksSavings: getEmptyEemSavings(),
+      reduceRunTimeSavings: getEmptyEemSavings(),
+      reduceSystemAirPressureSavings: getEmptyEemSavings(),
+      useAutomaticSequencerSavings: getEmptyEemSavings(),
       reduceRunTimeProfileSummary: undefined,
       flowAllocationProfileSummary: undefined,
       reduceAirLeaksProfileSummary: undefined,
@@ -478,14 +480,14 @@ export class CompressedAirAssessmentResultsService {
   }
 
   adjustProfileSummary(dayType: CompressedAirDayType, settings: Settings, baselineProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItem>, modification: Modification, modificationOrders: Array<number>, atmosphericPressure: number, numberOfSummaryIntervals: number, totalAirStorage: number, electricityCost: number, systemInformation: SystemInformation): AdjustProfileResults {
-    let addReceiverVolumeSavings: EemSavingsResults = this.getEmptyEemSavings();
-    let adjustCascadingSetPointsSavings: EemSavingsResults = this.getEmptyEemSavings();
-    let improveEndUseEfficiencySavings: EemSavingsResults = this.getEmptyEemSavings();
-    let reduceAirLeaksSavings: EemSavingsResults = this.getEmptyEemSavings();
-    let reduceRunTimeSavings: EemSavingsResults = this.getEmptyEemSavings();
-    let reduceSystemAirPressureSavings: EemSavingsResults = this.getEmptyEemSavings();
-    let useAutomaticSequencerSavings: EemSavingsResults = this.getEmptyEemSavings();
-    let flowReallocationSavings: EemSavingsResults = this.getEmptyEemSavings();
+    let addReceiverVolumeSavings: EemSavingsResults = getEmptyEemSavings();
+    let adjustCascadingSetPointsSavings: EemSavingsResults = getEmptyEemSavings();
+    let improveEndUseEfficiencySavings: EemSavingsResults = getEmptyEemSavings();
+    let reduceAirLeaksSavings: EemSavingsResults = getEmptyEemSavings();
+    let reduceRunTimeSavings: EemSavingsResults = getEmptyEemSavings();
+    let reduceSystemAirPressureSavings: EemSavingsResults = getEmptyEemSavings();
+    let useAutomaticSequencerSavings: EemSavingsResults = getEmptyEemSavings();
+    let flowReallocationSavings: EemSavingsResults = getEmptyEemSavings();
     let flowAllocationProfileSummary: Array<ProfileSummary>;
     let reduceRunTimeProfileSummary: Array<ProfileSummary>;
     let addReceiverVolumeProfileSummary: Array<ProfileSummary>;
@@ -668,8 +670,8 @@ export class CompressedAirAssessmentResultsService {
     }
     let selectedProfileSummary: Array<ProfileSummary> = compressedAirAssessment.systemProfile.profileSummary;
     let selectedDayTypeSummary: Array<ProfileSummary> = new Array();
-    let totalFullLoadCapacity: number = this.getTotalCapacity(inventoryItems);
-    let totalFullLoadPower: number = this.getTotalPower(inventoryItems);
+    let totalFullLoadCapacity: number = getTotalCapacity(inventoryItems);
+    let totalFullLoadPower: number = getTotalPower(inventoryItems);
     selectedProfileSummary.forEach(summary => {
       let compressor: CompressorInventoryItem = inventoryItems.find(item => { return item.itemId == summary.compressorId });
       if (summary.dayTypeId == dayType.dayTypeId) {
@@ -714,13 +716,13 @@ export class CompressedAirAssessmentResultsService {
         selectedDayTypeSummary.push(summary);
       }
     });
-    selectedDayTypeSummary = this.getProfileSummaryDataAverages(selectedDayTypeSummary);
+    selectedDayTypeSummary = getProfileSummaryDataAverages(selectedDayTypeSummary);
     return selectedDayTypeSummary;
   }
 
   calculateProfileSummaryTotals(compressorInventoryItems: Array<CompressorInventoryItem>, selectedDayType: CompressedAirDayType, profileSummary: Array<ProfileSummary>, selectedHourInterval: number, improveEndUseEfficiency?: ImproveEndUseEfficiency): Array<ProfileSummaryTotal> {
-    let totalSystemCapacity: number = this.getTotalCapacity(compressorInventoryItems);
-    let totalFullLoadPower: number = this.getTotalPower(compressorInventoryItems);
+    let totalSystemCapacity: number = getTotalCapacity(compressorInventoryItems);
+    let totalFullLoadPower: number = getTotalPower(compressorInventoryItems);
     let allData: Array<ProfileSummaryData> = new Array();
     profileSummary.forEach(summary => {
       if (summary.dayTypeId == selectedDayType.dayTypeId) {
@@ -807,8 +809,8 @@ export class CompressedAirAssessmentResultsService {
       return this.shareLoad(intervalData, adjustedProfileSummary, adjustedCompressors, neededAirFlow, settings, additionalRecieverVolume, atmosphericPressure, totalAirStorage, reduceRuntime, dayType);
     }
     //calc totals for system percentages
-    let totalFullLoadCapacity: number = this.getTotalCapacity(adjustedCompressors);
-    let totalFullLoadPower: number = this.getTotalPower(adjustedCompressors);
+    let totalFullLoadCapacity: number = getTotalCapacity(adjustedCompressors);
+    let totalFullLoadPower: number = getTotalPower(adjustedCompressors);
     let reduceRuntimeShutdownTimer: boolean;
     intervalData = _.orderBy(intervalData, (data) => { return data.summaryData.order });
     let orderCount: number = 1;
@@ -1051,8 +1053,8 @@ export class CompressedAirAssessmentResultsService {
       power: number,
       compressorResult: CompressorCalcResult
     }> = [];
-    let totalFullLoadCapacity: number = this.getTotalCapacity(adjustedCompressors);
-    let totalFullLoadPower: number = this.getTotalPower(adjustedCompressors);
+    let totalFullLoadCapacity: number = getTotalCapacity(adjustedCompressors);
+    let totalFullLoadPower: number = getTotalPower(adjustedCompressors);
     let minPower: number = Infinity;
     for (let validCombination of validCombinations) {
       let totalCombinationPower: number = _.sumBy(validCombination.operatingCompressors, (compressor) => {
@@ -1418,91 +1420,91 @@ export class CompressedAirAssessmentResultsService {
     }
   }
 
-  getEmptyEemSavings(): EemSavingsResults {
-    return {
-      baselineResults: {
-        cost: 0,
-        power: 0,
-      },
-      adjustedResults: {
-        cost: 0,
-        power: 0,
-      },
-      savings: {
-        cost: 0,
-        power: 0,
-        percentSavings: 0,
-      },
-      implementationCost: 0,
-      paybackPeriod: 0,
-      dayTypeId: undefined,
-    };
-  }
+  // getEmptyEemSavings(): EemSavingsResults {
+  //   return {
+  //     baselineResults: {
+  //       cost: 0,
+  //       power: 0,
+  //     },
+  //     adjustedResults: {
+  //       cost: 0,
+  //       power: 0,
+  //     },
+  //     savings: {
+  //       cost: 0,
+  //       power: 0,
+  //       percentSavings: 0,
+  //     },
+  //     implementationCost: 0,
+  //     paybackPeriod: 0,
+  //     dayTypeId: undefined,
+  //   };
+  // }
 
-  getTotalCapacity(inventoryItems: Array<CompressorInventoryItem>): number {
-    return _.sumBy(inventoryItems, (inventoryItem) => {
-      return inventoryItem.nameplateData.fullLoadRatedCapacity;
-    });
-  }
+  // getTotalCapacity(inventoryItems: Array<CompressorInventoryItem>): number {
+  //   return _.sumBy(inventoryItems, (inventoryItem) => {
+  //     return inventoryItem.nameplateData.fullLoadRatedCapacity;
+  //   });
+  // }
 
-  getTotalPower(inventoryItems: Array<CompressorInventoryItem>): number {
-    return _.sumBy(inventoryItems, (inventoryItem) => {
-      return inventoryItem.performancePoints.fullLoad.power;
-    });
-  }
+  // getTotalPower(inventoryItems: Array<CompressorInventoryItem>): number {
+  //   return _.sumBy(inventoryItems, (inventoryItem) => {
+  //     return inventoryItem.performancePoints.fullLoad.power;
+  //   });
+  // }
 
-  getProfileSummaryDataAverages(profileSummary: Array<ProfileSummary>): Array<ProfileSummary> {
-    let updatedSum: Array<ProfileSummary> = new Array<ProfileSummary>();
-    profileSummary.forEach(sums => {
-      let updatedData: ProfileSummary = sums;
-      updatedData.avgPower = this.getAvgPower(sums.profileSummaryData);
-      updatedData.avgAirflow = this.getAvgAirflow(sums.profileSummaryData);
-      updatedData.avgPrecentPower = this.getAvgPercentPower(sums.profileSummaryData);
-      updatedData.avgPercentCapacity = this.getAvgPercentCapacity(sums.profileSummaryData);
-      updatedSum.push(updatedData);
-    });
-    return updatedSum;
-  }
+  // getProfileSummaryDataAverages(profileSummary: Array<ProfileSummary>): Array<ProfileSummary> {
+  //   let updatedSum: Array<ProfileSummary> = new Array<ProfileSummary>();
+  //   profileSummary.forEach(sums => {
+  //     let updatedData: ProfileSummary = sums;
+  //     updatedData.avgPower = this.getAvgPower(sums.profileSummaryData);
+  //     updatedData.avgAirflow = this.getAvgAirflow(sums.profileSummaryData);
+  //     updatedData.avgPrecentPower = this.getAvgPercentPower(sums.profileSummaryData);
+  //     updatedData.avgPercentCapacity = this.getAvgPercentCapacity(sums.profileSummaryData);
+  //     updatedSum.push(updatedData);
+  //   });
+  //   return updatedSum;
+  // }
 
-  getAvgPower(profileSummaryData: Array<ProfileSummaryData>): number {
-    let powerData: Array<number> = new Array<number>();
-    profileSummaryData.forEach(data => {
-      powerData.push(data.power);
-    });
-    let avgPower: number = _.mean(powerData);
-    return avgPower;
-  }
+  // getAvgPower(profileSummaryData: Array<ProfileSummaryData>): number {
+  //   let powerData: Array<number> = new Array<number>();
+  //   profileSummaryData.forEach(data => {
+  //     powerData.push(data.power);
+  //   });
+  //   let avgPower: number = _.mean(powerData);
+  //   return avgPower;
+  // }
 
-  getAvgAirflow(profileSummaryData: Array<ProfileSummaryData>): number {
-    let airflowData: Array<number> = new Array<number>();
-    profileSummaryData.forEach(data => {
-      airflowData.push(data.airflow);
-    });
-    let avgAirflow: number = _.mean(airflowData);
-    return avgAirflow;
-  }
+  // getAvgAirflow(profileSummaryData: Array<ProfileSummaryData>): number {
+  //   let airflowData: Array<number> = new Array<number>();
+  //   profileSummaryData.forEach(data => {
+  //     airflowData.push(data.airflow);
+  //   });
+  //   let avgAirflow: number = _.mean(airflowData);
+  //   return avgAirflow;
+  // }
 
-  getAvgPercentPower(profileSummaryData: Array<ProfileSummaryData>): number {
-    let percentPowerData: Array<number> = new Array<number>();
-    profileSummaryData.forEach(data => {
-      if (data.percentPower != 0) {
-        percentPowerData.push(data.percentPower);
-      }
-    });
-    let avgPercentPower: number = _.mean(percentPowerData);
-    return avgPercentPower;
-  }
+  // getAvgPercentPower(profileSummaryData: Array<ProfileSummaryData>): number {
+  //   let percentPowerData: Array<number> = new Array<number>();
+  //   profileSummaryData.forEach(data => {
+  //     if (data.percentPower != 0) {
+  //       percentPowerData.push(data.percentPower);
+  //     }
+  //   });
+  //   let avgPercentPower: number = _.mean(percentPowerData);
+  //   return avgPercentPower;
+  // }
 
-  getAvgPercentCapacity(profileSummaryData: Array<ProfileSummaryData>): number {
-    let percentCapacityData: Array<number> = new Array<number>();
-    profileSummaryData.forEach(data => {
-      if (data.percentCapacity != 0) {
-        percentCapacityData.push(data.percentCapacity);
-      }
-    });
-    let avgPercentCapacity: number = _.mean(percentCapacityData);
-    return avgPercentCapacity;
-  }
+  // getAvgPercentCapacity(profileSummaryData: Array<ProfileSummaryData>): number {
+  //   let percentCapacityData: Array<number> = new Array<number>();
+  //   profileSummaryData.forEach(data => {
+  //     if (data.percentCapacity != 0) {
+  //       percentCapacityData.push(data.percentCapacity);
+  //     }
+  //   });
+  //   let avgPercentCapacity: number = _.mean(percentCapacityData);
+  //   return avgPercentCapacity;
+  // }
 
   getProfileSummariesForPrinting(profileSummary: Array<ProfileSummary>): Array<ProfileSummary> {
     profileSummary.forEach(summary => {
@@ -1552,118 +1554,4 @@ export class CompressedAirAssessmentResultsService {
     return profliesForPrint;
   }
 
-}
-
-
-export interface CompressedAirAssessmentResult {
-  dayTypeModificationResults: Array<DayTypeModificationResult>,
-  totalBaselineCost: number,
-  totalBaselinePower: number,
-  totalModificationCost: number,
-  totalModificationPower: number,
-  totalCostSavings: number,
-  totalCostPower: number,
-  modification: Modification
-}
-export interface DayTypeProfileSummary { dayTypeId: string, profileSummary: Array<ProfileSummary> };
-
-export interface DayTypeModificationResult {
-  adjustedProfileSummary: Array<ProfileSummary>,
-  adjustedCompressors: Array<CompressorInventoryItem>,
-  profileSummaryTotals: Array<ProfileSummaryTotal>,
-  allSavingsResults: EemSavingsResults,
-  flowReallocationSavings: EemSavingsResults,
-  flowAllocationProfileSummary: Array<ProfileSummary>,
-  addReceiverVolumeSavings: EemSavingsResults,
-  addReceiverVolumeProfileSummary: Array<ProfileSummary>,
-  adjustCascadingSetPointsSavings: EemSavingsResults,
-  adjustCascadingSetPointsProfileSummary: Array<ProfileSummary>,
-  improveEndUseEfficiencySavings: EemSavingsResults,
-  improveEndUseEfficiencyProfileSummary: Array<ProfileSummary>,
-  reduceAirLeaksSavings: EemSavingsResults,
-  reduceAirLeaksProfileSummary: Array<ProfileSummary>,
-  reduceRunTimeSavings: EemSavingsResults,
-  reduceRunTimeProfileSummary: Array<ProfileSummary>,
-  reduceSystemAirPressureSavings: EemSavingsResults,
-  reduceSystemAirPressureProfileSummary: Array<ProfileSummary>,
-  useAutomaticSequencerSavings: EemSavingsResults,
-  useAutomaticSequencerProfileSummary: Array<ProfileSummary>,
-  auxiliaryPowerUsage: { cost: number, energyUse: number },
-  dayTypeId: string,
-  dayTypeName: string,
-  peakDemand: number,
-  peakDemandCost: number,
-  peakDemandCostSavings: number,
-  totalAnnualOperatingCost: number,
-  annualEmissionOutput: number
-}
-
-
-export interface EemSavingsResults {
-  baselineResults: SavingsItem,
-  adjustedResults: SavingsItem,
-  savings: SavingsItem,
-  implementationCost: number,
-  paybackPeriod: number,
-  dayTypeId: string,
-}
-
-export interface SavingsItem {
-  cost: number,
-  power: number,
-  annualEmissionOutput?: number,
-  annualEmissionOutputSavings?: number,
-  percentSavings?: number
-}
-
-export interface BaselineResults {
-  total: BaselineResult,
-  dayTypeResults: Array<BaselineResult>
-}
-
-export interface BaselineResult {
-  cost: number,
-  energyUse: number,
-  peakDemand: number,
-  demandCost: number,
-  name: string,
-  maxAirFlow: number,
-  averageAirFlow: number,
-  averageAirFlowPercentCapacity: number,
-  operatingDays: number,
-  totalOperatingHours: number,
-  annualEmissionOutput?: number,
-  loadFactorPercent: number,
-  dayTypeId?: string,
-  totalAnnualOperatingCost: number
-}
-
-
-export interface AdjustProfileResults {
-  adjustedProfileSummary: Array<ProfileSummary>,
-  adjustedCompressors: Array<CompressorInventoryItem>,
-  flowReallocationSavings: EemSavingsResults,
-  flowAllocationProfileSummary: Array<ProfileSummary>,
-  addReceiverVolumeSavings: EemSavingsResults,
-  addReceiverVolumeProfileSummary: Array<ProfileSummary>,
-  adjustCascadingSetPointsSavings: EemSavingsResults,
-  adjustCascadingSetPointsProfileSummary: Array<ProfileSummary>,
-  improveEndUseEfficiencySavings: EemSavingsResults,
-  improveEndUseEfficiencyProfileSummary: Array<ProfileSummary>,
-  reduceAirLeaksSavings: EemSavingsResults,
-  reduceAirLeaksProfileSummary: Array<ProfileSummary>,
-  reduceRunTimeSavings: EemSavingsResults,
-  reduceRunTimeProfileSummary: Array<ProfileSummary>,
-  reduceSystemAirPressureSavings: EemSavingsResults,
-  reduceSystemAirPressureProfileSummary: Array<ProfileSummary>,
-  useAutomaticSequencerSavings: EemSavingsResults,
-  useAutomaticSequencerProfileSummary: Array<ProfileSummary>,
-  auxiliaryPowerUsage: { cost: number, energyUse: number },
-}
-
-export interface FlowReallocationSummary {
-  dayTypeId: string,
-  profileSummary: Array<ProfileSummary>,
-  dayTypeBaselineTotals: Array<ProfileSummaryTotal>,
-  flowReallocationSavings: EemSavingsResults
 }
