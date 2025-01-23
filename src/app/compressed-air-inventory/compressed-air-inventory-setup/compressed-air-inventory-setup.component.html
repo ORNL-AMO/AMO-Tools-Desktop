@@ -17,8 +17,8 @@
         <div class="assessment-panel-container lookup-form modification scroll-item"
             [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}"
             [ngStyle]="{'height.px': containerHeight}">
-            <!-- <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
-            <app-pump-properties *ngIf="setupTab == 'pump-properties'"></app-pump-properties>
+            <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
+            <!--  <app-pump-properties *ngIf="setupTab == 'pump-properties'"></app-pump-properties>
             <app-pump-catalog *ngIf="setupTab == 'pump-catalog'"></app-pump-catalog>
             <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup> -->
         </div>
@@ -45,10 +45,10 @@
                 </div>
                 <div class="row no-gutters">
                     <div class="col-12">
-                        <!-- <app-help-panel
+                        <app-help-panel
                             *ngIf="(tabSelect == 'help' && setupTab == 'pump-catalog') || setupTab != 'pump-catalog'">
                         </app-help-panel>
-                        <app-department-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'pump-catalog'">
+                        <!--<app-department-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'pump-catalog'">
                         </app-department-catalog-table> -->
                     </div>
                 </div>

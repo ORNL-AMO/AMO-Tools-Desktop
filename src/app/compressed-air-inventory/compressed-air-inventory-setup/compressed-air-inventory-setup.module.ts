@@ -7,12 +7,15 @@ import { AssessmentCo2SavingsModule } from '../../shared/assessment-co2-savings/
 import { ConfirmDeleteModalModule } from '../../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { ConnectedInventoryModule } from '../../shared/connected-inventory/connected-inventory-module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { PlantSetupComponent } from './plant-setup/plant-setup.component';
+import { HelpPanelModule } from '../help-panel/help-panel.module';
 
 
 
 @NgModule({
   declarations: [
-    CompressedAirInventorySetupComponent
+    CompressedAirInventorySetupComponent,
+    PlantSetupComponent
   ],
   imports: [
     CommonModule,
@@ -22,7 +25,8 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
     SharedPipesModule,
     AssessmentCo2SavingsModule,
     ConfirmDeleteModalModule,
-    ConnectedInventoryModule
+    ConnectedInventoryModule,
+    HelpPanelModule
   ],
   exports: [
     CompressedAirInventorySetupComponent
