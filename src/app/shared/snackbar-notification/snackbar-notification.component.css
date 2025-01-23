@@ -33,8 +33,7 @@
 .snackbar-container {
     display: flex;
     justify-content: space-between;
-    padding: 12px 16px;
-    /* padding: .25rem .75rem; */
+    padding: 20px 24px;
 }
 
 .close-button {
@@ -54,7 +53,7 @@
 }
 
 .card-msg {
-    font-size: 15px;
+    font-size: 16px;
     text-align: left;
 }
 

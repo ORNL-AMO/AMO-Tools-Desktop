@@ -57,7 +57,7 @@
             </ng-container>
         </div>
         <div class="card-footer text-end">
-            <a *ngIf="updateStatus === 'web-available'" class="click-link mr-3" (click)="updateWeb()">Update to {{releaseData.releaseName}}</a>
+            <a *ngIf="updateStatus === 'web-available'" class="click-link mr-3" (click)="updateWeb()">Refresh Page</a>
             <a *ngIf="updateStatus === 'desktop-available'" class="click-link mr-3" (click)="downloadUpdate()">Download and Install</a>
             <a *ngIf="updateStatus === 'downloaded'" class="click-link mr-3" (click)="quitAndInstall()">Quit and Install</a>
             <span class="pull-right">
