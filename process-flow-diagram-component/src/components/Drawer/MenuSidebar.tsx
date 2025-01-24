@@ -106,6 +106,18 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 
 
               <div style={{ margin: '.5rem 0', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
+                <Box display={'flex'} flexDirection={'column'} marginBottom={'1rem'}>
+                  <label htmlFor={'flowDecimalPrecision'} className={'diagram-label'} style={{ fontSize: '.9rem' }}>Treatment Type</label>
+                  <select className="form-control diagram-select" id={'flowDecimalPrecision'} name="flowDecimalPrecision"
+                    value={2}
+                    onChange={props.userDiagramOptions.handleFlowDecimalPrecisionChange}>
+                      <option key={'flowDecimalPrecision_0'} value={0}>0</option>
+                      <option key={'flowDecimalPrecision_1'} value={1}>1</option>
+                      <option key={'flowDecimalPrecision_2'} value={2}>2</option>
+                      <option key={'flowDecimalPrecision_3'} value={3}>3</option>
+                  </select>
+                </Box>
+
                 <Box display={'flex'} flexDirection={'column'} sx={{ fontSize: '.75rem', marginTop: '1rem' }}>
                   <label htmlFor="show-flow-values" className="diagram-checkbox-label">
                     <input

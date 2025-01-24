@@ -65,6 +65,7 @@ export interface UserDiagramOptions {
   controlsVisible: boolean,
   directionalArrowsVisible: boolean,
   flowLabelSize: number,
+  flowDecimalPrecision: number,
   edgeOptions: DefaultEdgeOptions
 }
 

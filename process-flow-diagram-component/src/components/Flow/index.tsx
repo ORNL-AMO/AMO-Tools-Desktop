@@ -214,6 +214,14 @@ const Flow = (props: FlowProps) => {
     setEdges((eds) => eds);
   }, [userDiagramOptions]);
 
+  const handleFlowDecimalPrecisionChange = useCallback((event: Event, decimalPrecision: number) => {
+    setUserDiagramOptions({
+      ...userDiagramOptions,
+      flowDecimalPrecision: decimalPrecision
+    });
+    setEdges((eds) => eds);
+  }, [userDiagramOptions]);
+
 
   const resetDiagram = useCallback(() => {
     const defaultOptions = getDefaultUserDiagramOptions();
@@ -266,7 +274,8 @@ const Flow = (props: FlowProps) => {
       handleEdgeTypeChange,
       handleEdgeThicknessChange,
       handleEdgeOptionsChange,
-      handleFlowLabelSizeChange
+      handleFlowLabelSizeChange,
+      handleFlowDecimalPrecisionChange
     },
     resetDiagramCallback: resetDiagram,
     shadowRoot: props.shadowRoot,
@@ -382,4 +391,5 @@ export interface UserDiagramOptionsHandlers {
   handleEdgeOptionsChange: (edgeOptions: any) => void;
   handleEdgeThicknessChange: (event: Event, edgeThickness: number) => void;
   handleFlowLabelSizeChange: (event: Event, flowLabelSize: number) => void;
+  handleFlowDecimalPrecisionChange: (event: Event, flowLabelSize: number) => void;
 }

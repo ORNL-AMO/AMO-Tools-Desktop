@@ -276,6 +276,7 @@ export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
     directionalArrowsVisible: true,
     showFlowValues: false,
     flowLabelSize: 1,
+    flowDecimalPrecision: 2,
     edgeOptions: {
       animated: true,
       type: 'smoothstep',
