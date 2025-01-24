@@ -15,10 +15,9 @@
         <tbody *ngFor="let summary of profileSummary">
             <tr class="compressor-name-row">
                 <td colspan="100" class="bold">{{(summary.compressorId | compressorName: inventoryItems)}}
-                    <span *ngIf="checkIsTrim(summary.compressorId)">
+                    <span *ngIf="summary.compressorId === selectedTrimCompressorId">
                         (Trim)
                     </span>
-
                 </td>
             </tr>
             <tr>
@@ -80,12 +79,18 @@
                     Order
                 </td>
                 <td *ngFor="let data of summary.profileSummaryData;">
-                    <span *ngIf="data.order != 0">
-                        {{data.order}}
-                    </span>
-                    <span *ngIf="data.order == 0">
-                        &mdash;
-                    </span>
+                    @if (systemInformation.multiCompressorSystemControls == 'baseTrim') {
+                        <span *ngIf="data.order != 0 && summary.compressorId === selectedTrimCompressorId">Trim</span>
+                        <span *ngIf="data.order != 0 && summary.compressorId !== selectedTrimCompressorId">Base</span>
+                        <span *ngIf="data.order == 0">&mdash;</span>
+                    } @else {
+                        <span *ngIf="data.order != 0">
+                            {{data.order}}
+                        </span>
+                        <span *ngIf="data.order == 0">
+                            &mdash;
+                        </span>
+                    }
                 </td>
             </tr>
         </tbody>

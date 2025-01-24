@@ -212,7 +212,7 @@ export class CompressedAirSuiteApiService {
 
   compressorsCalcVariableDisplacement(input: CompressorsCalcInput) {
     let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoad)
-    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad)
     let receiverVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.receiverVolume)
     let powerMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerMax)
     let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtNoLoad)
