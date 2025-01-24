@@ -16,6 +16,7 @@ import { ConvertSsmtService } from './convert-ssmt.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { SteamService } from '../calculator/steam/steam.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { SnackbarService } from '../shared/snackbar-notification/snackbar.service';
 
 @Component({
   selector: 'app-ssmt',
@@ -75,8 +76,6 @@ export class SsmtComponent implements OnInit {
 
   saveSsmtSub: Subscription;
   modListOpen: boolean = false;
-  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
-  showToast: boolean = false;
 
   ssmtOptions: Array<any>;
   selectedSSMT: { ssmt: SSMT, name };
@@ -101,7 +100,8 @@ export class SsmtComponent implements OnInit {
     private settingsService: SettingsService,
     private steamService: SteamService,
     private convertSsmtService: ConvertSsmtService,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -140,10 +140,10 @@ export class SsmtComponent implements OnInit {
 
     this.steamModelerErrorSubscription = this.steamService.steamModelerError.subscribe(error => {
       if (error) {
-        this.openToast('Invalid Inputs', error);
-        this.cd.detectChanges();
+        this.snackbarService.setSnackbarMessage(`Invalid Inputs: ${error}`, 'danger');
       }
     });
+    
     this.addNewModificationSubscription = this.ssmtService.openNewModificationModal.subscribe(val => {
       this.showAddModal = val;
       if (val) {
@@ -546,21 +546,6 @@ export class SsmtComponent implements OnInit {
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.ssmtService.modalOpen.next(false);
-  }
-
-  openToast(title: string, body: string) {
-    this.toastData.title = title;
-    this.toastData.body = body;
-    this.showToast = true;
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    }
   }
 
   setSmallScreenTab(selectedTab: string) {

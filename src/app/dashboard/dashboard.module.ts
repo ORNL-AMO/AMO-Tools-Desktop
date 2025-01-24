@@ -14,7 +14,6 @@ import { AcknowledgmentsPageComponent } from './acknowledgments-page/acknowledgm
 import { ContactPageComponent } from './contact-page/contact-page.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { DirectoryDashboardModule } from './directory-dashboard/directory-dashboard.module';
-import { ToastModule } from '../shared/toast/toast.module';
 import { DragBarComponent } from './drag-bar/drag-bar.component';
 import { CreateInventoryComponent } from './create-inventory/create-inventory.component';
 
@@ -27,6 +26,7 @@ import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/c
 import { AppErrorModule } from '../shared/errors/app-error.module';
 import { DataAndBackupComponent } from './data-and-backup/data-and-backup.component';
 import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
+import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,7 @@ import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module
     RouterModule,
     ImportExportModule,
     DirectoryDashboardModule,
-    ToastModule,
+    SnackbarModule,
     SecurityAndPrivacyModule,
     CreateAssessmentModalModule,
     AppErrorModule,

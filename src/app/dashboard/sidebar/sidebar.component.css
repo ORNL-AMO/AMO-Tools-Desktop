@@ -9,6 +9,10 @@
     font-size: 25px;
 }
 
+.version-modal-link:hover {
+    cursor: pointer;
+}
+
 .update-available{
     cursor: pointer;
     color: darkslategray;
