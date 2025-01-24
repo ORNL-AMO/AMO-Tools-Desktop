@@ -117,7 +117,7 @@ Tabs
 
   .compressed-air-inventory .tabs.primary .active a {
     border: none;
-    border-bottom: #d7b4f3 solid 3px;
+    border-bottom: #7030A0 solid 3px;
   }
 
   .waste-water .tabs.primary .active a {
@@ -194,7 +194,7 @@ Tabs
   }
 
   .tabs.subtabs.compressed-air-inventory {
-    border-bottom: #d7b4f3 solid 3px;
+    border-bottom: #7030A0 solid 3px;
   }
   
   .tabs.subtabs.waste-water {
@@ -302,7 +302,7 @@ Tabs
       }
 
       .tabs.subtabs.compressed-air-inventory .active .step-number {
-        background: #d7b4f3;
+        background: #7030A0;
       }
 
       .tabs.subtabs.waste-water .active .step-number {

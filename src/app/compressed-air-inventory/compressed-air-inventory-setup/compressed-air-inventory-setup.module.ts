@@ -9,13 +9,17 @@ import { ConnectedInventoryModule } from '../../shared/connected-inventory/conne
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { PlantSetupComponent } from './plant-setup/plant-setup.component';
 import { HelpPanelModule } from '../help-panel/help-panel.module';
+import { DepartmentSetupComponent } from './department-setup/department-setup.component';
+import { DepartmentCatalogTableComponent } from './department-catalog-table/department-catalog-table.component';
 
 
 
 @NgModule({
   declarations: [
     CompressedAirInventorySetupComponent,
-    PlantSetupComponent
+    PlantSetupComponent,
+    DepartmentSetupComponent, 
+    DepartmentCatalogTableComponent
   ],
   imports: [
     CommonModule,

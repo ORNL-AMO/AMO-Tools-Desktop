@@ -8,7 +8,7 @@
 }
 
 .compressed-air-inventory .btn-primary{
-    background: #d7b4f3;
+    background: #7030A0;
     color: white;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .compressed-air-inventory .assessment-panel-container::-webkit-scrollbar-thumb{
-    background-color: #d7b4f3;
+    background-color: #7030A0;
 }
 
 /* Screens above  1024 */

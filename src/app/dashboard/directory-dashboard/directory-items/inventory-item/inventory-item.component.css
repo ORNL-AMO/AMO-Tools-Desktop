@@ -93,7 +93,7 @@
 
   .compressed-air-header{
     border-bottom: #2980b9 groove 2px;
-    border-image: linear-gradient(to right, #F0F3F4, #d7b4f3) 50 / 2;
+    border-image: linear-gradient(to right, #F0F3F4, #7030A0) 50 / 2;
   }
   .motor-row{
     border-bottom: #84b641 groove 6px;
@@ -114,7 +114,7 @@
   }
   .compressed-air-row{
     border-bottom: #2980b9 groove 6px;
-    border-image: linear-gradient(to right,#F0F3F4, #d7b4f3) 80 / 2;
+    border-image: linear-gradient(to right,#F0F3F4, #7030A0) 80 / 2;
   }
 
 
@@ -129,7 +129,7 @@
 }
 
 .compressed-air-primary{
-  background-color: #d7b4f3 !important;
+  background-color: #7030A0 !important;
 }
 
 .icon-image{

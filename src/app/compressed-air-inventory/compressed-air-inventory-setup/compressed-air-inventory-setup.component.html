@@ -19,8 +19,8 @@
             [ngStyle]="{'height.px': containerHeight}">
             <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
             <!--  <app-pump-properties *ngIf="setupTab == 'pump-properties'"></app-pump-properties>
-            <app-pump-catalog *ngIf="setupTab == 'pump-catalog'"></app-pump-catalog>
-            <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup> -->
+            <app-pump-catalog *ngIf="setupTab == 'pump-catalog'"></app-pump-catalog>-->
+            <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup> 
         </div>
         <div class="row no-gutters assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
             [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
