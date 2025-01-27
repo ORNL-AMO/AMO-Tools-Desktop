@@ -5,23 +5,28 @@ import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
 import { FlowContext } from '../Flow';
 import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
+import { formatNumberValue } from '../Flow/FlowUtils';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
-  const transformString = `translate(0%, 0%) translate(180px, -36px)`;
+  let transformString = `translate(0%, 0%) translate(180px, -36px)`;
 
   const allowInflowOnly: boolean = data.disableInflowConnections; 
   const allowOutflowOnly: boolean = data.disableOutflowConnections; 
   const allowAllHandles: boolean = !allowInflowOnly && !allowOutflowOnly;
-  let plantLevelFlow: number;
+  let plantLevelFlow: number | string;
   let condensedPadding: boolean;
   if (data.processComponentType === 'water-intake') {
     plantLevelFlow = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalDischargeFlow;
+    plantLevelFlow = formatNumberValue(plantLevelFlow, flowContext.userDiagramOptions.flowDecimalPrecision);
     condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
+    transformString = `translate(0%, 0%) translate(188px, -25px)`;
   }
   if (data.processComponentType === 'water-discharge') {
     plantLevelFlow = data.userEnteredData.totalSourceFlow? data.userEnteredData.totalSourceFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalSourceFlow;
+    plantLevelFlow = formatNumberValue(plantLevelFlow, flowContext.userDiagramOptions.flowDecimalPrecision);
     condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
+    transformString = `translate(0%, 0%) translate(188px, -25px)`;
   }
 
   const onEditNode = () => {

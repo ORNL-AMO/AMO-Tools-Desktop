@@ -287,3 +287,18 @@ export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
 export const getDefaultColorPalette = () => {
   return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#e28000'];
 }
+
+
+export const formatDecimalPlaces = (value: number | string, decimalPlaces: number) => {
+  return Number(value).toFixed(decimalPlaces);
+}
+
+export const formatNumberValue = (value: number | string, places: number): number | string => {
+  if (value === undefined || value === null) {
+    return '';
+  }
+  if (!Number.isInteger(Number(value))) {
+    value = formatDecimalPlaces(value, places);
+  }
+  return value;
+}

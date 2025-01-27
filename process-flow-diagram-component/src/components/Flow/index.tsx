@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { ChangeEvent, createContext, useCallback, useEffect, useState } from 'react';
 import {
   ReactFlow,
   Connection,
@@ -63,17 +63,23 @@ const Flow = (props: FlowProps) => {
   const [edges, setEdges, onEdgesChange] = useEdgesState(existingEdges);
   const [recentNodeColors, setRecentNodeColors] = useState(defaultRecentNodeColors);
   const [recentEdgeColors, setRecentEdgeColors] = useState(defaultRecentEdgeColors);
+  const [diagramParentDimensions, setDiagramParentDimensions] = useState(props.parentContainer);
   const [userDiagramOptions, setUserDiagramOptions] = useState<UserDiagramOptions>(defaultUserDiagramOptions);
   const [nodeCalculatedDataMap, setNodeCalculatedData] = useState<Record<string, NodeCalculatedData>>(defaultNodeCalculatedData);
   const [edgeTypes, setEdgeTypes] = useState<EdgeTypes>(getEdgeTypesFromString(defaultUserDiagramOptions.edgeType, undefined));
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
-    // * on reactFlowInstance initialize with assessment added nodes
-    if (reactFlowInstance && props.height && staleNodes.length > 0) {
-      const updatedNodes = updateStaleNodes(reactFlowInstance, [...staleNodes], props.height);
-      setStaleNodes([]);
-      setNodes(nds => nds.concat(updatedNodes));
+    // * on reactFlowInstance initialize with 
+    if (reactFlowInstance && props.height) {
+      setDiagramParentDimensions(props.parentContainer);
+      
+      // * assessment added nodes
+      if (staleNodes.length > 0) {
+        const updatedNodes = updateStaleNodes(reactFlowInstance, [...staleNodes], props.height);
+        setStaleNodes([]);
+        setNodes(nds => nds.concat(updatedNodes));
+      }
     }
   }, [reactFlowInstance]);
 
@@ -214,10 +220,10 @@ const Flow = (props: FlowProps) => {
     setEdges((eds) => eds);
   }, [userDiagramOptions]);
 
-  const handleFlowDecimalPrecisionChange = useCallback((event: Event, decimalPrecision: number) => {
+  const handleFlowDecimalPrecisionChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
     setUserDiagramOptions({
       ...userDiagramOptions,
-      flowDecimalPrecision: decimalPrecision
+      flowDecimalPrecision: Number(event.target.value)
     });
     setEdges((eds) => eds);
   }, [userDiagramOptions]);
@@ -266,6 +272,7 @@ const Flow = (props: FlowProps) => {
 
   const menuSidebarProps: MenuSidebarProps = {
     userDiagramOptions: userDiagramOptions,
+    diagramParentDimensions: diagramParentDimensions,
     userDiagramOptionsHandlers: {
       handleMinimapVisible,
       handleShowFlowValues,
@@ -371,6 +378,7 @@ export interface FlowProps {
 }
 
 export interface FlowContext {
+  diagramParentDimensions: ParentContainerDimensions,
   userDiagramOptions: UserDiagramOptions;
   nodeCalculatedDataMap: Record<string, NodeCalculatedData>;
   setNodeCalculatedData: React.Dispatch<Record<string, NodeCalculatedData>>;
@@ -391,5 +399,5 @@ export interface UserDiagramOptionsHandlers {
   handleEdgeOptionsChange: (edgeOptions: any) => void;
   handleEdgeThicknessChange: (event: Event, edgeThickness: number) => void;
   handleFlowLabelSizeChange: (event: Event, flowLabelSize: number) => void;
-  handleFlowDecimalPrecisionChange: (event: Event, flowLabelSize: number) => void;
+  handleFlowDecimalPrecisionChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }

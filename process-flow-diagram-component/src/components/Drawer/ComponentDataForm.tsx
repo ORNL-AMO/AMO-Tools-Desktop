@@ -1,5 +1,5 @@
 import { Box, List, TextField, InputAdornment, ListItem, ListItemButton, ListItemIcon, Divider, styled, Typography, Select, MenuItem, FormControl, Chip, Tooltip, TooltipProps, tooltipClasses, Button } from "@mui/material";
-import { getEdgeSourceAndTarget, getNodeFlowTotals, updateNodeCalculatedDataMap } from "../Flow/FlowUtils";
+import { formatNumberValue, getEdgeSourceAndTarget, getNodeFlowTotals, updateNodeCalculatedDataMap } from "../Flow/FlowUtils";
 import { Edge, getConnectedEdges, Node, useReactFlow } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
@@ -68,12 +68,6 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         );
     };
 
-    const getTotalChipLabel = (totalFlowValue) => {
-        if (totalFlowValue === undefined || totalFlowValue === null) {
-            return '';
-        }
-        return totalFlowValue;
-    }
 
     /**
    * Edge states are assumed to be updated from caller
@@ -191,8 +185,9 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         
     }
 
-    const getConnectionListItem = (edge: Edge, source: ProcessFlowPart, target: ProcessFlowPart) => {
+    const getConnectionListItem = (edge: Edge<CustomEdgeData>, source: ProcessFlowPart, target: ProcessFlowPart) => {
         const flowId: string = edge.id;
+        let flowValue: number | string = edge.data.flowValue === null ? "" : Number(edge.data.flowValue);
         return (
             <ListItem
                 sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: '.5rem' }}
@@ -203,7 +198,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     id={flowId}
                     type={'number'}
                     size="small"
-                    value={edge.data.flowValue === null ? "" : Number(edge.data.flowValue)}
+                    value={flowValue}
                     onChange={(event) => onFlowDataChange(event, edge.id)}
                     sx={{ m: 1, width: '100%' }}
                     InputProps={{
@@ -237,6 +232,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const [totalDischargeFlow, setTotalDischargeFlow] = useState<number>(componentData.userEnteredData.totalDischargeFlow !== undefined? componentData.userEnteredData.totalDischargeFlow : dischargeEdgesTotalFlow);
     const sourceEdgeItems = sourceEdgeInputElements.filter(edge => edge !== undefined);
 
+    const totalSourceFlowFormatted = formatNumberValue(totalSourceFlow, flowContext.userDiagramOptions.flowDecimalPrecision);
+    const totalDischargeFlowFormatted = formatNumberValue(totalDischargeFlow, flowContext.userDiagramOptions.flowDecimalPrecision);
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1 }}>
 
@@ -260,7 +257,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                 <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
                     <AccordionSummary>
                         <span style={{alignSelf: 'center'}}>Sources</span>
-                            <Chip label={`${getTotalChipLabel(totalSourceFlow)} Mgal`}
+                            <Chip label={`${totalSourceFlowFormatted} Mgal`}
                                 variant="outlined"
                                 sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
                             />
@@ -320,7 +317,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     }}>
                     <AccordionSummary>
                         <span style={{alignSelf: 'center'}}>Discharge</span>
-                            <Chip label={`${getTotalChipLabel(totalDischargeFlow)} Mgal`}
+                            <Chip label={`${totalDischargeFlowFormatted} Mgal`}
                                 variant="outlined"
                                 sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
                             />

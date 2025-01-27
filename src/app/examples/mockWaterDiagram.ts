@@ -1399,6 +1399,7 @@ export const MockWaterdiagram: Diagram =
             "userDiagramOptions": {
                 "edgeThickness": 4,
                 "edgeType": "default",
+                "flowDecimalPrecision": 2,
                 "minimapVisible": false,
                 "controlsVisible": true,
                 "directionalArrowsVisible": false,

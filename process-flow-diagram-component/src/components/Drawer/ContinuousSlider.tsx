@@ -30,6 +30,7 @@ export default function ContinuousSlider(props: SliderProps) {
           max={MAX}
           step={step}
           marks={marks}
+          sx={{padding: 0}}
           value={props.value} onChange={props.setSliderValue}
         />
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

@@ -5,10 +5,8 @@ import MuiDrawer, { DrawerProps } from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import MenuSidebar, { MenuSidebarProps } from './MenuSidebar';
-import { Box, Divider } from '@mui/material';
+import { Box } from '@mui/material';
 import { ParentContainerDimensions } from '../../../../src/process-flow-types/shared-process-flow-types';
 import DrawerToggleButton from './DrawerToggleButton';
 
@@ -28,7 +26,7 @@ const openedMixin = (theme: Theme, parentContainer: ParentContainerDimensions, a
   top: parentContainer.headerHeight,
   height: parentContainer.height - parentContainer.headerHeight - parentContainer.footerHeight,
   boxShadow: '0 0 5px 0 rgba(136, 136, 136, .6)',
-  overflowX: 'hidden',
+  overflow: 'hidden'
 });
 }
 

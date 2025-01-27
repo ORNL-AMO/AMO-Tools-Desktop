@@ -154,26 +154,39 @@ a {
   margin-top: 10px;
 }
 
-.sidebar-actions {
+.sidebar-options {
   display: flex;
   flex-direction: column;
   justify-content: end;
   height: 100%;
 }
 
-.sidebar-actions label {
+.sidebar-options label {
   cursor: pointer;
   margin: .25rem;
+  font-size: .75rem;
 }
 
-.sidebar-action-buttons {
+.sidebar-option-buttons {
   margin-top: .5rem;
   display: flex;
   align-self: center;
   width: 100%;
 }
 
-.sidebar-action-buttons .download-btn {
+.sidebar-option-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: .5rem;
+  font-size: .75rem;
+  margin-bottom: 0;
+}
+
+.sidebar-option-container.checkbox {
+  margin-top: 0;
+}
+
+.sidebar-option-buttons .download-btn {
   width: 100%;
 }
 
@@ -490,7 +503,8 @@ a {
 }
 
 .diagram-select {
-  height: 32px;
+  height: 25px;
+  margin: 0 .5rem;
 }
 
 select:hover {
