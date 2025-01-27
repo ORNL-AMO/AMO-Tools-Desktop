@@ -15,12 +15,12 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 
 @NgModule({
   declarations: [
+    CompressedAirPropertiesComponent,
     NameplateDataPropertiesComponent,
     CompressedAirMotorPropertiesComponent,
     CompressedAirControlsPropertiesComponent,
     DesignDetailsPropertiesComponent,
     PerformancePointsPropertiesComponent,
-    CompressedAirPropertiesComponent,
   ],
   imports: [
     CommonModule,

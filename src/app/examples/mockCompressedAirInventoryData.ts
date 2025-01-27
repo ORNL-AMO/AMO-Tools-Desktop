@@ -17,17 +17,34 @@ export const MockCompressedAirInventory: InventoryItem = {
                         "description": "Main pump",
                         "name": "Pump A",
                         "notes": "",
-                    },
-                    {
-                        "id": "11343yw8i",
-                        "departmentId": "l6rd7tt1i",
-                        "description": "New Pump installed 2021",
-                        "name": "Pump B",
-                        "notes": "",
+                        "nameplateData": {
+                            "compressorType": 2,
+                            "fullLoadOperatingPressure": 100,
+                            "fullLoadRatedCapacity": 1857,
+                            "totalPackageInputPower": 290.1
+                        },
+                        "compressedAirMotor": {
+                            "motorPower": 350,
+                            "motorFullLoadAmps": 385
+                        }
                     },
                 ]
             },
         ],
+        displayOptions: {
+            nameplateDataOptions: {
+                displayNameplateData: true,
+                compressorType: true,
+                fullLoadOperatingPressure: true,
+                fullLoadRatedCapacity: true,
+                totalPackageInputPower: true
+            },
+            compressedAirMotorPropertiesOptions: {
+                displayCompressedAirMotorProperties: true,
+                motorPower: true,
+                motorFullLoadAmps: true
+            }
+        }
     },
     "createdDate": new Date(),
     "modifiedDate": new Date(),
