@@ -3,8 +3,9 @@ import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, Smoo
 import { FlowContext } from '../Flow';
 import { CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
+import { formatNumberValue } from '../Flow/FlowUtils';
 
-const FlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: string; selected: boolean, flowValue: number, scale: number }) => {
+const FlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: string; selected: boolean, flowValue: number | string, scale: number }) => {
   let adjustedTransform = transform + ` scale(${scale})`;
   let style: CSSProperties = {
     position: 'absolute',
@@ -28,7 +29,7 @@ const FlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: 
   }
 
   return (
-       <div style={style} className={"nodrag nopan"}>{Number(flowValue).toFixed(3)}</div>
+       <div style={style} className={"nodrag nopan"}>{flowValue}</div>
   );
 }
 
@@ -42,7 +43,6 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
   const targetX = props.targetX;
   const targetY = props.targetY;
   const targetPosition = props.targetPosition;
-  const { setEdges } = useReactFlow();
 
   let [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
@@ -78,26 +78,27 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
     }
   }
 
+  const onEditEdge = () => {
+    flowContext.setManageDataId(props.id);
+    flowContext.setIsDataDrawerOpen(true);
+  }
+
   const connections = useHandleConnections({ type: 'target', id: props.targetHandleId, nodeId: props.target });
 
-  let showEndLabel = true;
+  const editButtonTransform = `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`;
   let translateXStart = '-50';
   let translateYStart = '50';
+  let flowLabelTransform = `translate(-50%, -100%) translate(${targetX - 25}px,${targetY - 25}px)`;
   if (connections.length > 1 && props.sourceHandleId === connections[1].sourceHandle) {
-    showEndLabel = false;
     // todo or sourcePosition right
     if (props.sourceHandleId == 'e') {
       translateXStart = '50';
       translateYStart = '50';
     }
+    flowLabelTransform = `translate(${translateXStart}%, ${translateYStart}%) translate(${sourceX}px,${sourceY}px)`;
   }
 
-  const transformString = `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`;
-
-  const onEditEdge = () => {
-    flowContext.setManageDataId(props.id);
-    flowContext.setIsDataDrawerOpen(true);
-}
+  const flowValue = formatNumberValue(customEdgeData.flowValue, flowContext.userDiagramOptions.flowDecimalPrecision); 
 
   return (
     <>
@@ -108,22 +109,14 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
           <EditDataDrawerButton 
             onEdit={onEditEdge}
             selected={props.selected}
-            transformLocation={transformString}/>
+            transformLocation={editButtonTransform}/>
 
-        {flowContext.userDiagramOptions.showFlowValues && !showEndLabel &&
+        {flowContext.userDiagramOptions.showFlowValues && flowValue &&
             <FlowValueLabel
-            transform={`translate(${translateXStart}%, ${translateYStart}%) translate(${sourceX}px,${sourceY}px)`}
+            transform={flowLabelTransform}
             selected={props.selected}
             scale={flowContext.userDiagramOptions.flowLabelSize !== undefined? flowContext.userDiagramOptions.flowLabelSize : 1}
-            flowValue={customEdgeData.flowValue}
-            />
-        }
-        {flowContext.userDiagramOptions.showFlowValues && showEndLabel &&
-            <FlowValueLabel
-            transform={`translate(-50%, -100%) translate(${targetX - 25}px,${targetY - 25}px)`}
-            selected={props.selected}
-            scale={flowContext.userDiagramOptions.flowLabelSize !== undefined? flowContext.userDiagramOptions.flowLabelSize : 1}
-            flowValue={customEdgeData.flowValue}
+            flowValue={flowValue}
             />
         }
         </Fragment>
