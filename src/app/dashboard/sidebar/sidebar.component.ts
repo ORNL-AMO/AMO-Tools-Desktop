@@ -47,14 +47,20 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
     this.versionNum = environment.version;
 
-    let isUpdateAvailable: Observable<any> = this.electronService.updateAvailable
-      .pipe(
-        combineLatestWith(this.updateApplicationService.webUpdateAvailable)
-      );
+    if (this.electronService.isElectron) {
+      let isUpdateAvailable: Observable<any> = this.electronService.updateAvailable
+        .pipe(
+          combineLatestWith(this.electronService.releaseData)
+        );
 
-    this.updateSub = isUpdateAvailable.subscribe(hasUpdate => {
-      this.isUpdateAvailable = hasUpdate;
-    });
+      this.updateSub = isUpdateAvailable.subscribe(([hasUpdate, releaseData]) => {
+        this.isUpdateAvailable = hasUpdate && releaseData;
+      });
+    } else {
+      this.updateSub = this.updateApplicationService.webUpdateAvailable.subscribe(hasUpdate => {
+        this.isUpdateAvailable = hasUpdate;
+      });
+    }
 
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.rootDirectory = this.directoryDbService.getById(1);

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { combineLatestWith, Observable, Subscription } from 'rxjs';
 import { ReleaseData, ElectronService } from '../../../electron/electron.service';
 import { UpdateApplicationService } from '../update-application.service';
 import { SwUpdate } from '@angular/service-worker';
@@ -24,7 +24,6 @@ export class UpdateApplicationToastComponent {
   updateStatus: UpdateStatus;
   isDownloading: boolean;
 
-  releaseDataSub: Subscription;
   electronUpdateAvailableSub: Subscription;
   updateDownloadedSub: Subscription;
   updateErrorSub: Subscription;
@@ -37,10 +36,6 @@ export class UpdateApplicationToastComponent {
   ) { }
 
   ngOnInit() {
-    this.releaseDataSub = this.electronService.releaseData.subscribe(releaseData => {
-      this.releaseData = releaseData;
-    });
-
     this.webAndPwaUpdateSub = this.updateApplicationService.webUpdateAvailable.subscribe(webAvailable => {
       if (webAvailable) {
         this.showUpdateToast('web-available');
@@ -55,35 +50,37 @@ export class UpdateApplicationToastComponent {
     });
 
     if (this.electronService.isElectron) {
-      this.electronUpdateAvailableSub = this.electronService.updateAvailable.subscribe(hasUpdate => {
-        if (hasUpdate) {
+      let isUpdateAvailable: Observable<any> = this.electronService.updateAvailable
+      .pipe(
+        combineLatestWith(this.electronService.releaseData)
+      );
+
+    this.electronUpdateAvailableSub = isUpdateAvailable.subscribe(([hasUpdate, releaseData]) => {
+        if (hasUpdate && releaseData) {
+          this.releaseData = releaseData;
           this.showUpdateToast();
         } else if (this.toastAnimate === 'show') {
           this.closeUpdateToast();
         }
-      });
+    }); 
 
       this.updateDownloadedSub = this.electronService.updateDownloaded.subscribe(downloaded => {
         if (downloaded) {
           this.updateStatus = 'downloaded';
         }
-      });
-
+      });   
       this.updateErrorSub = this.electronService.updateError.subscribe(error => {
         if (error) {
           this.updateStatus = 'error';
         }
       });
     }
-
   }
 
   ngOnDestroy() {
     this.toastAnimate = 'hide';
     this.updateStatus = undefined;
-    this.releaseDataSub.unsubscribe();
     this.webAndPwaUpdateSub.unsubscribe();
-
     if (this.electronService.isElectron) {
       this.electronUpdateAvailableSub.unsubscribe();
       this.updateDownloadedSub.unsubscribe();
@@ -91,7 +88,6 @@ export class UpdateApplicationToastComponent {
 
     }
   }
-
 
   async downloadUpdate() {
     this.updateStatus = 'downloading';
@@ -128,7 +124,7 @@ export class UpdateApplicationToastComponent {
     setTimeout(() => {
       // * allow animation to finish
       this.updateStatus = undefined;
-    }, 2000);
+    }, 550);
   }
 
 }

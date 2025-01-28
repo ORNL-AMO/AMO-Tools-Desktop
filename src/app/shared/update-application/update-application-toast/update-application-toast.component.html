@@ -2,7 +2,8 @@
     <ng-container *ngIf="updateStatus">
         <div class="card-header">
             <img src="assets/images/app-icon.png" class="app-icon mr-2">
-            {{releaseData.releaseName}} is now available!
+            <span *ngIf="releaseData">{{releaseData.releaseName}} is now available!</span>
+            <span *ngIf="!releaseData">A new version of MEASUR is now available!</span>
             <span class="fa fa-times close-button" (click)="closeUpdateToast()"></span>
         </div>
         <div class="card-body" [ngStyle]="{'height': (updateStatus === 'error' || updateStatus === 'web-error')? 'unset': undefined}"
@@ -19,7 +20,7 @@
             <ng-container *ngIf="updateStatus === 'web-error'">
                 <p class="card-text text-left px-3 py-1">
                     Error updating MEASUR. The application can be updated manually by doing a hard-refresh on the current tab or window. 
-                    If the application is installed to the desktop, uninstall the current version, then install {{releaseData.releaseName}}. 
+                    If the application is installed to the desktop, uninstall the current version, then install the new version. 
                     <br><br>
                     If the error persists, please use the "Feedback" page to notify the MEASUR team of your issue.
                 </p>
