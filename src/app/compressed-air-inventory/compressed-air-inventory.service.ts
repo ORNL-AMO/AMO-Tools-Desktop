@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { CompressedAirInventoryData, CompressedAirInventoryDepartment, CompressedAirItem } from './compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventoryDepartment, CompressedAirItem, CompressedAirPropertyDisplayOptions } from './compressed-air-inventory';
 
 @Injectable()
 export class CompressedAirInventoryService {
@@ -40,10 +40,10 @@ export class CompressedAirInventoryService {
 
   initInventoryData(): CompressedAirInventoryData {
     let initialDepartment: CompressedAirInventoryDepartment = this.getNewDepartment(1);
-    //let displayOptions: PumpPropertyDisplayOptions = this.getDefaultDisplayOptions();
+    let displayOptions: CompressedAirPropertyDisplayOptions = this.getDefaultDisplayOptions();
     return {
       departments: [initialDepartment],
-      //displayOptions: displayOptions
+      displayOptions: displayOptions
     }
   }
 
@@ -68,7 +68,7 @@ export class CompressedAirInventoryService {
 
   getNewDepartment(departmentNum: number): CompressedAirInventoryDepartment {
     let departmentId: string = Math.random().toString(36).substr(2, 9);
-    let initPump: CompressedAirItem = this.getNewPump(departmentId);
+    let initPump: CompressedAirItem = this.getNewCompressor(departmentId);
     return {
       name: 'Department ' + departmentNum,
       operatingHours: 8760,
@@ -78,7 +78,7 @@ export class CompressedAirInventoryService {
     }
   }
 
-  getNewPump(departmentId: string): CompressedAirItem {
+  getNewCompressor(departmentId: string): CompressedAirItem {
     return {
       id: Math.random().toString(36).substr(2, 9),
       departmentId: departmentId,
@@ -86,6 +86,40 @@ export class CompressedAirInventoryService {
       description: '',
       notes: '',
       name: 'New Pump',
+      nameplateData: {
+        compressorType: undefined,
+        fullLoadOperatingPressure: undefined,
+        fullLoadRatedCapacity: undefined,
+        totalPackageInputPower: undefined
+      },
+      compressedAirMotor: {
+        motorPower: undefined,
+        motorFullLoadAmps: undefined,
+      }
     }
   }
+
+
+  getDefaultDisplayOptions(): CompressedAirPropertyDisplayOptions {
+    return {
+      nameplateDataOptions: {
+        displayNameplateData: true,
+        compressorType: true,
+        fullLoadOperatingPressure: true,
+        fullLoadRatedCapacity: true,
+        totalPackageInputPower: true
+      },
+      compressedAirMotorPropertiesOptions: {
+        displayCompressedAirMotorProperties: true,
+        motorPower: true,
+        motorFullLoadAmps: true,
+      }
+    }
+
+  }
+
+
+
+
+
 }

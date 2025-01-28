@@ -11,6 +11,7 @@ import { PlantSetupComponent } from './plant-setup/plant-setup.component';
 import { HelpPanelModule } from '../help-panel/help-panel.module';
 import { DepartmentSetupComponent } from './department-setup/department-setup.component';
 import { DepartmentCatalogTableComponent } from './department-catalog-table/department-catalog-table.component';
+import { CompressedAirPropertiesModule } from './compressed-air-properties/compressed-air-properties.module';
 
 
 
@@ -30,7 +31,8 @@ import { DepartmentCatalogTableComponent } from './department-catalog-table/depa
     AssessmentCo2SavingsModule,
     ConfirmDeleteModalModule,
     ConnectedInventoryModule,
-    HelpPanelModule
+    HelpPanelModule,
+    CompressedAirPropertiesModule
   ],
   exports: [
     CompressedAirInventorySetupComponent

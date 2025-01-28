@@ -4,7 +4,7 @@ import { AssessmentType, ConnectedFromState, InventoryType } from "../shared/con
 export interface CompressedAirInventoryData {
   co2SavingsData?: Co2SavingsData,
   departments: Array<CompressedAirInventoryDepartment>,
-  //displayOptions: PumpPropertyDisplayOptions,
+  displayOptions: CompressedAirPropertyDisplayOptions,
   hasConnectedInventoryItems?: boolean,
   hasConnectedPsat?: boolean,
   isValid?: boolean,
@@ -34,6 +34,13 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   name: string,
   description: string,
   notes: string,
+  nameplateData: NameplateData,
+  compressedAirMotor: CompressedAirMotorProperties,
+}
+
+export interface CompressedAirPropertyDisplayOptions {
+  nameplateDataOptions: NameplateDataOptions,
+  compressedAirMotorPropertiesOptions: CompressedAirMotorPropertiesOptions,
 }
 
 export interface ConnectedItem {
@@ -46,5 +53,36 @@ export interface ConnectedItem {
   assessmentType?: AssessmentType,
   assessmentId?: number,
   assessmentName?: string,
-  connectedFromState?: ConnectedFromState
+  connectedFromState?: ConnectedFromState,
+}
+
+
+export interface NameplateData {
+  compressorType: number,
+  fullLoadOperatingPressure: number,
+  fullLoadRatedCapacity: number,
+  totalPackageInputPower: number
+  //motorPower: number,
+  //fullLoadAmps: number,
+  //ratedLoadPower: number,
+  //ploytropicCompressorExponent: number,
+
+}
+
+export interface NameplateDataOptions {
+  displayNameplateData: boolean,
+  compressorType: boolean,
+  fullLoadOperatingPressure: boolean,
+  fullLoadRatedCapacity: boolean,
+  totalPackageInputPower: boolean
+}
+
+export interface CompressedAirMotorProperties {
+  motorPower: number,
+  motorFullLoadAmps: number,
+}
+export interface CompressedAirMotorPropertiesOptions {
+  displayCompressedAirMotorProperties: boolean,
+  motorPower: boolean,
+  motorFullLoadAmps: boolean,
 }

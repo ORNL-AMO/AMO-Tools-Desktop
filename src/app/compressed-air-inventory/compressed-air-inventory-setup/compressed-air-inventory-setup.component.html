@@ -4,13 +4,13 @@
             [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
             <a class="nav-link" *ngIf="setupTab == 'plant-setup' && initPlantSetup">Plant Setup</a>
             <a class="nav-link" *ngIf="setupTab == 'department-setup'">Departments</a>
-            <a class="nav-link" *ngIf="setupTab == 'pump-properties'">Pump Properties</a>
-            <a class="nav-link" *ngIf="setupTab == 'pump-catalog'">Catalog</a>
+            <a class="nav-link" *ngIf="setupTab == 'compressed-air-properties'">Compressed Air Properties</a>
+            <a class="nav-link" *ngIf="setupTab == 'compressed-air-catalog'">Catalog</a>
         </div>
         <div class="nav-item" (click)="setSmallScreenTab('details')"
             [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
-            <a class="nav-link" *ngIf="setupTab != 'pump-catalog'">Help</a>
-            <a class="nav-link" *ngIf="setupTab == 'pump-catalog'">Details</a>
+            <a class="nav-link" *ngIf="setupTab != 'compressed-air-catalog'">Help</a>
+            <a class="nav-link" *ngIf="setupTab == 'compressed-air-catalog'">Details</a>
         </div>
     </div>
     <div class="assessment-container tab-content">
@@ -18,16 +18,16 @@
             [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}"
             [ngStyle]="{'height.px': containerHeight}">
             <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
-            <!--  <app-pump-properties *ngIf="setupTab == 'pump-properties'"></app-pump-properties>
-            <app-pump-catalog *ngIf="setupTab == 'pump-catalog'"></app-pump-catalog>-->
             <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup> 
+            <app-compressed-air-properties *ngIf="setupTab == 'compressed-air-properties'"></app-compressed-air-properties>
+            <!--  <app-compressed-air-catalog *ngIf="setupTab == 'compressed-air-catalog'"></app-compressed-air-catalog>-->
         </div>
         <div class="row no-gutters assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
             [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
             <div class="col-12">
                 <div class="row no-gutters">
                     <div class="col-12">
-                        <div class="d-flex flex-wrap tabs primary mr-2 ml-2" *ngIf="setupTab == 'pump-catalog'">
+                        <div class="d-flex flex-wrap tabs primary mr-2 ml-2" *ngIf="setupTab == 'compressed-air-catalog'">
                             <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
                                 <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
                                     (click)="setTab('results')">
@@ -46,9 +46,9 @@
                 <div class="row no-gutters">
                     <div class="col-12">
                         <app-help-panel
-                            *ngIf="(tabSelect == 'help' && setupTab == 'pump-catalog') || setupTab != 'pump-catalog'">
+                            *ngIf="(tabSelect == 'help' && setupTab == 'compressed-air-catalog') || setupTab != 'compressed-air-catalog'">
                         </app-help-panel>
-                        <!--<app-department-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'pump-catalog'">
+                        <!--<app-department-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'compressed-air-catalog'">
                         </app-department-catalog-table> -->
                     </div>
                 </div>
