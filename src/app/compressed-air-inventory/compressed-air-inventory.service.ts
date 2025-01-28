@@ -102,6 +102,16 @@ export class CompressedAirInventoryService {
         numberOfUnloadSteps: undefined,
         automaticShutdown: undefined,
         unloadSumpPressure: undefined,
+      },
+      compressedAirDesignDetailsProperties: {
+        blowdownTime: undefined,
+        modulatingPressureRange: undefined,
+        inputPressure: undefined,
+        designEfficiency: undefined,
+        serviceFactor: undefined,
+        noLoadPowerFM: undefined,
+        noLoadPowerUL: undefined,
+        maxFullFlowPressure: undefined
       }
     }
   }
@@ -128,7 +138,18 @@ export class CompressedAirInventoryService {
         numberOfUnloadSteps: true,
         automaticShutdown: true,
         unloadSumpPressure: true,
-    }
+      },
+      compressedAirDesignDetailsPropertiesOptions: {
+        displayCompressedAirDesignDetailsProperties: true,
+        blowdownTime: true,
+        modulatingPressureRange: true,
+        inputPressure: true,
+        designEfficiency: true,
+        serviceFactor: true,
+        noLoadPowerFM: true,
+        noLoadPowerUL: true,
+        maxFullFlowPressure: true
+      }
     }
 
   }

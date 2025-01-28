@@ -33,6 +33,16 @@ export const MockCompressedAirInventory: InventoryItem = {
                             "numberOfUnloadSteps": 2,
                             "automaticShutdown": true,
                             "unloadSumpPressure": 15,
+                        },
+                        "compressedAirDesignDetailsProperties": {
+                            "blowdownTime": 40,
+                            "modulatingPressureRange": 50,
+                            "inputPressure": 14.5,
+                            "designEfficiency": 94.5,
+                            "serviceFactor": 1.15,
+                            "noLoadPowerFM": 20,
+                            "noLoadPowerUL": 20,
+                            "maxFullFlowPressure": 110
                         }
                     },
                 ]
@@ -58,6 +68,17 @@ export const MockCompressedAirInventory: InventoryItem = {
                 numberOfUnloadSteps: true,
                 automaticShutdown: true,
                 unloadSumpPressure: true,
+            },
+            compressedAirDesignDetailsPropertiesOptions: {
+                displayCompressedAirDesignDetailsProperties: true,
+                blowdownTime: true,
+                modulatingPressureRange: true,
+                inputPressure: true,
+                designEfficiency: true,
+                serviceFactor: true,
+                noLoadPowerFM: true,
+                noLoadPowerUL: true,
+                maxFullFlowPressure: true
             }
         }
     },
