@@ -79,6 +79,9 @@ export const MockCompressedAirInventory: InventoryItem = {
                 noLoadPowerFM: true,
                 noLoadPowerUL: true,
                 maxFullFlowPressure: true
+            },
+            compressedAirPerformancePointsPropertiesOptions: {
+                displayCompressedAirPerformancePointsProperties: true
             }
         }
     },

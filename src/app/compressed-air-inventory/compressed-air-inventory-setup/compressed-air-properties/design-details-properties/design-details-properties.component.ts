@@ -59,6 +59,6 @@ export class DesignDetailsPropertiesComponent implements OnInit {
   }
 
   focusGroup() {
-    this.compressedAirInventoryService.focusedDataGroup.next('compressed-air-motor-properties');
+    this.compressedAirInventoryService.focusedDataGroup.next('compressed-air-design-details-properties');
   }
 }

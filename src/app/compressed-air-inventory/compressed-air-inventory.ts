@@ -44,7 +44,8 @@ export interface CompressedAirPropertyDisplayOptions {
   nameplateDataOptions: NameplateDataOptions,
   compressedAirMotorPropertiesOptions: CompressedAirMotorPropertiesOptions,
   compressedAirControlsPropertiesOptions: CompressedAirControlsPropertiesOptions,
-  compressedAirDesignDetailsPropertiesOptions: CompressedAirDesignDetailsPropertiesOptions
+  compressedAirDesignDetailsPropertiesOptions: CompressedAirDesignDetailsPropertiesOptions,
+  compressedAirPerformancePointsPropertiesOptions: CompressedAirPerformancePointsPropertiesOptions
 }
 
 export interface ConnectedItem {
@@ -127,4 +128,25 @@ export interface CompressedAirDesignDetailsPropertiesOptions {
   noLoadPowerFM: boolean,
   noLoadPowerUL: boolean,
   maxFullFlowPressure: boolean
+}
+
+export interface CompressedAirPerformancePointsProperties {
+  fullLoad: PerformancePoint,
+  maxFullFlow: PerformancePoint,
+  midTurndown?: PerformancePoint,
+  turndown?: PerformancePoint,
+  unloadPoint: PerformancePoint,
+  noLoad: PerformancePoint,
+  blowoff: PerformancePoint
+}
+export interface CompressedAirPerformancePointsPropertiesOptions {
+  displayCompressedAirPerformancePointsProperties: boolean
+}
+export interface PerformancePoint {
+  dischargePressure: number,
+  isDefaultPressure: boolean,
+  airflow: number,
+  isDefaultAirFlow: boolean,
+  power: number,
+  isDefaultPower: boolean
 }

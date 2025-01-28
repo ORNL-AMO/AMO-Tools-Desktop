@@ -8,8 +8,8 @@
     </div>
     <div class="custom-control custom-switch">
         <input type="checkbox" class="custom-control-input" (change)="setAll()"
-            [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties" name="displayCompressedAirDesignDetailsProperties"
-            id="displayCompressedAirDesignDetailsProperties">
+            [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties"
+            name="displayCompressedAirDesignDetailsProperties" id="displayCompressedAirDesignDetailsProperties">
         <label class="custom-control-label" for="displayCompressedAirDesignDetailsProperties"></label>
     </div>
 </div>
@@ -17,58 +17,66 @@
 <form class="p-1" *ngIf="displayForm">
     <div class="checkbox" (mouseenter)="focusField('blowdownTime')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.blowdownTime" name="blowdownTime"
+            <input type="checkbox" (change)="save()"
+                [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.blowdownTime" name="blowdownTime"
                 id="blowdownTime">
-                blowdownTime
+            Blowdown Time
         </label>
     </div>
     <div class="checkbox" (mouseenter)="focusField('modulatingPressureRange')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.modulatingPressureRange" name="modulatingPressureRange"
-                id="modulatingPressureRange">
-                modulatingPressureRange
+            <input type="checkbox" (change)="save()"
+                [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.modulatingPressureRange"
+                name="modulatingPressureRange" id="modulatingPressureRange">
+            Proportional Modulating Pressure Range
         </label>
     </div>
     <div class="checkbox" (mouseenter)="focusField('inputPressure')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.inputPressure" name="inputPressure"
+            <input type="checkbox" (change)="save()"
+                [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.inputPressure" name="inputPressure"
                 id="inputPressure">
-                inputPressure
+            Design Inlet Pressure
         </label>
     </div>
     <div class="checkbox" (mouseenter)="focusField('designEfficiency')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.designEfficiency" name="designEfficiency"
+            <input type="checkbox" (change)="save()"
+                [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.designEfficiency" name="designEfficiency"
                 id="designEfficiency">
-                designEfficiency
+            Motor Design Efficiency
         </label>
     </div>
     <div class="checkbox" (mouseenter)="focusField('serviceFactor')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.serviceFactor" name="serviceFactor"
+            <input type="checkbox" (change)="save()"
+                [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.serviceFactor" name="serviceFactor"
                 id="serviceFactor">
-                serviceFactor
+            Motor Service Factor
         </label>
     </div>
     <div class="checkbox" (mouseenter)="focusField('noLoadPowerFM')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.noLoadPowerFM" name="noLoadPowerFM"
+            <input type="checkbox" (change)="save()"
+                [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.noLoadPowerFM" name="noLoadPowerFM"
                 id="noLoadPowerFM">
-                noLoadPowerFM
+            Full Modulated Power % of Full Load
         </label>
     </div>
     <div class="checkbox" (mouseenter)="focusField('noLoadPowerUL')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.noLoadPowerUL" name="noLoadPowerUL"
+            <input type="checkbox" (change)="save()"
+                [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.noLoadPowerUL" name="noLoadPowerUL"
                 id="noLoadPowerUL">
-                noLoadPowerUL
+            Full Unloaded Power % of Full Load
         </label>
     </div>
     <div class="checkbox" (mouseenter)="focusField('maxFullFlowPressure')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.maxFullFlowPressure" name="maxFullFlowPressure"
+            <input type="checkbox" (change)="save()"
+                [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.maxFullFlowPressure" name="maxFullFlowPressure"
                 id="maxFullFlowPressure">
-                maxFullFlowPressure
+            Max Full Flow Pressure
         </label>
     </div>
 

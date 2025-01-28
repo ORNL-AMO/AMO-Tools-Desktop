@@ -1,1 +1,13 @@
-<p>performance-points-properties works!</p>
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
+    <div class="d-flex flex-fill">
+        <label class="group-label">
+            Performance Points
+        </label>
+    </div>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (change)="save()"
+            [(ngModel)]="compressedAirPerformancePointsPropertiesOptions.displayCompressedAirPerformancePointsProperties"
+            name="displayCompressedAirPerformancePointsProperties" id="displayCompressedAirPerformancePointsProperties">
+        <label class="custom-control-label" for="displayCompressedAirPerformancePointsProperties"></label>
+    </div>
+</div>
