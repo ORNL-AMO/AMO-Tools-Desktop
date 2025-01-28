@@ -36,11 +36,13 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   notes: string,
   nameplateData: NameplateData,
   compressedAirMotor: CompressedAirMotorProperties,
+  compressedAirControlsProperties: CompressedAirControlsProperties
 }
 
 export interface CompressedAirPropertyDisplayOptions {
   nameplateDataOptions: NameplateDataOptions,
   compressedAirMotorPropertiesOptions: CompressedAirMotorPropertiesOptions,
+  compressedAirControlsPropertiesOptions: CompressedAirControlsPropertiesOptions
 }
 
 export interface ConnectedItem {
@@ -85,4 +87,20 @@ export interface CompressedAirMotorPropertiesOptions {
   displayCompressedAirMotorProperties: boolean,
   motorPower: boolean,
   motorFullLoadAmps: boolean,
+}
+
+export interface CompressedAirControlsProperties {
+  controlType: number,
+  unloadPointCapacity: number,
+  numberOfUnloadSteps: number,
+  automaticShutdown: boolean,
+  unloadSumpPressure: number,
+}
+export interface CompressedAirControlsPropertiesOptions {
+  displayCompressedAirControlsProperties: boolean,
+  controlType: boolean,
+  unloadPointCapacity: boolean,
+  numberOfUnloadSteps: boolean,
+  automaticShutdown: boolean,
+  unloadSumpPressure: boolean,
 }

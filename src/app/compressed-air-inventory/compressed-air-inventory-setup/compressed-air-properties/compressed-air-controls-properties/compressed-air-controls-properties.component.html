@@ -1,1 +1,54 @@
-<p>compressed-air-controls-properties works!</p>
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
+    <div class="d-flex flex-fill">
+        <label class="group-label" (click)="toggleForm()">
+            <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+            <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+            Controls
+        </label>
+    </div>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
+            [(ngModel)]="compressedAirControlsPropertiesOptions.displayCompressedAirControlsProperties"
+            name="displayCompressedAirControlsProperties" id="displayCompressedAirControlsProperties">
+        <label class="custom-control-label" for="displayCompressedAirControlsProperties"></label>
+    </div>
+</div>
+
+<form class="p-1" *ngIf="displayForm">
+    <div class="checkbox" (mouseenter)="focusField('controlType')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirControlsPropertiesOptions.controlType"
+                name="controlType" id="controlType">
+                controlType
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('unloadPointCapacity')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirControlsPropertiesOptions.unloadPointCapacity"
+                name="unloadPointCapacity" id="unloadPointCapacity">
+                unloadPointCapacity
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('numberOfUnloadSteps')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirControlsPropertiesOptions.numberOfUnloadSteps"
+                name="numberOfUnloadSteps" id="numberOfUnloadSteps">
+                numberOfUnloadSteps
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('automaticShutdown')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirControlsPropertiesOptions.automaticShutdown"
+                name="automaticShutdown" id="automaticShutdown">
+                automaticShutdown
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('unloadSumpPressure')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirControlsPropertiesOptions.unloadSumpPressure"
+                name="unloadSumpPressure" id="unloadSumpPressure">
+                unloadSumpPressure
+        </label>
+    </div>
+
+</form>

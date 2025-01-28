@@ -26,6 +26,13 @@ export const MockCompressedAirInventory: InventoryItem = {
                         "compressedAirMotor": {
                             "motorPower": 350,
                             "motorFullLoadAmps": 385
+                        },
+                        "compressedAirControlsProperties": {
+                            "controlType": 4,
+                            "unloadPointCapacity": 100,
+                            "numberOfUnloadSteps": 2,
+                            "automaticShutdown": true,
+                            "unloadSumpPressure": 15,
                         }
                     },
                 ]
@@ -43,6 +50,14 @@ export const MockCompressedAirInventory: InventoryItem = {
                 displayCompressedAirMotorProperties: true,
                 motorPower: true,
                 motorFullLoadAmps: true
+            },
+            compressedAirControlsPropertiesOptions: {
+                displayCompressedAirControlsProperties: true,
+                controlType: true,
+                unloadPointCapacity: true,
+                numberOfUnloadSteps: true,
+                automaticShutdown: true,
+                unloadSumpPressure: true,
             }
         }
     },
