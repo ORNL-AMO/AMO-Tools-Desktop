@@ -7,6 +7,7 @@ import { CompressedAirControlsCatalogComponent } from './compressed-air-controls
 import { CompressedAirMotorCatalogComponent } from './compressed-air-motor-catalog/compressed-air-motor-catalog.component';
 import { DesignDetailsCatalogComponent } from './design-details-catalog/design-details-catalog.component';
 import { PerformancePointsCatalogComponent } from './performance-points-catalog/performance-points-catalog.component';
+import { CompressedAirBasicsComponent } from './compressed-air-basics/compressed-air-basics.component';
 
 
 
@@ -17,7 +18,8 @@ import { PerformancePointsCatalogComponent } from './performance-points-catalog/
     CompressedAirControlsCatalogComponent,
     CompressedAirMotorCatalogComponent,
     DesignDetailsCatalogComponent,
-    PerformancePointsCatalogComponent
+    PerformancePointsCatalogComponent,
+    CompressedAirBasicsComponent
   ],
   imports: [
     CommonModule
