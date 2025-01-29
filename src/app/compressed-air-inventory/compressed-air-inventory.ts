@@ -37,7 +37,8 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   nameplateData: NameplateData,
   compressedAirMotor: CompressedAirMotorProperties,
   compressedAirControlsProperties: CompressedAirControlsProperties,
-  compressedAirDesignDetailsProperties: CompressedAirDesignDetailsProperties
+  compressedAirDesignDetailsProperties: CompressedAirDesignDetailsProperties,
+  compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties
 }
 
 export interface CompressedAirPropertyDisplayOptions {
