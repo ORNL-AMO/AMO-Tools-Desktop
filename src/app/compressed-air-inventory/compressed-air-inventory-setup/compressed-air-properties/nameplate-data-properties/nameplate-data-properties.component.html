@@ -17,31 +17,32 @@
 <form class="p-1" *ngIf="displayForm">
     <div class="checkbox" (mouseenter)="focusField('compressorType')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.compressorType" name="compressorType"
-                id="compressorType">
-                compressorType
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.compressorType"
+                name="compressorType" id="compressorType">
+            Compressor Type
         </label>
     </div>
     <div class="checkbox" (mouseenter)="focusField('fullLoadOperatingPressure')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadOperatingPressure" name="fullLoadOperatingPressure" id="fullLoadOperatingPressure">
-            fullLoadOperatingPressure
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadOperatingPressure"
+                name="fullLoadOperatingPressure" id="fullLoadOperatingPressure">
+            Full Load Operating Pressure
         </label>
     </div>
 
     <div class="checkbox" (mouseenter)="focusField('fullLoadRatedCapacity')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadRatedCapacity" name="fullLoadRatedCapacity"
-                id="fullLoadRatedCapacity">
-                fullLoadRatedCapacity
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadRatedCapacity"
+                name="fullLoadRatedCapacity" id="fullLoadRatedCapacity">
+            Rated Capacity at Full Load Pressure
         </label>
     </div>
 
     <div class="checkbox" (mouseenter)="focusField('totalPackageInputPower')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.totalPackageInputPower" name="totalPackageInputPower"
-                id="totalPackageInputPower">
-                totalPackageInputPower
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.totalPackageInputPower"
+                name="totalPackageInputPower" id="totalPackageInputPower">
+            Total Package Input Power
         </label>
     </div>
 

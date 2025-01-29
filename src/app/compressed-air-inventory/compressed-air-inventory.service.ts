@@ -95,6 +95,23 @@ export class CompressedAirInventoryService {
       compressedAirMotor: {
         motorPower: undefined,
         motorFullLoadAmps: undefined,
+      },
+      compressedAirControlsProperties: {
+        controlType: undefined,
+        unloadPointCapacity: undefined,
+        numberOfUnloadSteps: undefined,
+        automaticShutdown: undefined,
+        unloadSumpPressure: undefined,
+      },
+      compressedAirDesignDetailsProperties: {
+        blowdownTime: undefined,
+        modulatingPressureRange: undefined,
+        inputPressure: undefined,
+        designEfficiency: undefined,
+        serviceFactor: undefined,
+        noLoadPowerFM: undefined,
+        noLoadPowerUL: undefined,
+        maxFullFlowPressure: undefined
       }
     }
   }
@@ -113,6 +130,28 @@ export class CompressedAirInventoryService {
         displayCompressedAirMotorProperties: true,
         motorPower: true,
         motorFullLoadAmps: true,
+      },
+      compressedAirControlsPropertiesOptions: {
+        displayCompressedAirControlsProperties: true,
+        controlType: true,
+        unloadPointCapacity: true,
+        numberOfUnloadSteps: true,
+        automaticShutdown: true,
+        unloadSumpPressure: true,
+      },
+      compressedAirDesignDetailsPropertiesOptions: {
+        displayCompressedAirDesignDetailsProperties: true,
+        blowdownTime: true,
+        modulatingPressureRange: true,
+        inputPressure: true,
+        designEfficiency: true,
+        serviceFactor: true,
+        noLoadPowerFM: true,
+        noLoadPowerUL: true,
+        maxFullFlowPressure: true
+      },
+      compressedAirPerformancePointsPropertiesOptions: {
+        displayCompressedAirPerformancePointsProperties: true
       }
     }
 

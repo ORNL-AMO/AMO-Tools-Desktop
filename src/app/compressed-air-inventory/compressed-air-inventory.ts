@@ -36,11 +36,16 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   notes: string,
   nameplateData: NameplateData,
   compressedAirMotor: CompressedAirMotorProperties,
+  compressedAirControlsProperties: CompressedAirControlsProperties,
+  compressedAirDesignDetailsProperties: CompressedAirDesignDetailsProperties
 }
 
 export interface CompressedAirPropertyDisplayOptions {
   nameplateDataOptions: NameplateDataOptions,
   compressedAirMotorPropertiesOptions: CompressedAirMotorPropertiesOptions,
+  compressedAirControlsPropertiesOptions: CompressedAirControlsPropertiesOptions,
+  compressedAirDesignDetailsPropertiesOptions: CompressedAirDesignDetailsPropertiesOptions,
+  compressedAirPerformancePointsPropertiesOptions: CompressedAirPerformancePointsPropertiesOptions
 }
 
 export interface ConnectedItem {
@@ -85,4 +90,63 @@ export interface CompressedAirMotorPropertiesOptions {
   displayCompressedAirMotorProperties: boolean,
   motorPower: boolean,
   motorFullLoadAmps: boolean,
+}
+
+export interface CompressedAirControlsProperties {
+  controlType: number,
+  unloadPointCapacity: number,
+  numberOfUnloadSteps: number,
+  automaticShutdown: boolean,
+  unloadSumpPressure: number,
+}
+export interface CompressedAirControlsPropertiesOptions {
+  displayCompressedAirControlsProperties: boolean,
+  controlType: boolean,
+  unloadPointCapacity: boolean,
+  numberOfUnloadSteps: boolean,
+  automaticShutdown: boolean,
+  unloadSumpPressure: boolean,
+}
+
+export interface CompressedAirDesignDetailsProperties {
+  blowdownTime: number,
+  modulatingPressureRange: number,
+  inputPressure: number,
+  designEfficiency: number,
+  serviceFactor: number,
+  noLoadPowerFM: number,
+  noLoadPowerUL: number,
+  maxFullFlowPressure: number
+}
+export interface CompressedAirDesignDetailsPropertiesOptions {
+  displayCompressedAirDesignDetailsProperties: boolean,
+  blowdownTime: boolean,
+  modulatingPressureRange: boolean,
+  inputPressure: boolean,
+  designEfficiency: boolean,
+  serviceFactor: boolean,
+  noLoadPowerFM: boolean,
+  noLoadPowerUL: boolean,
+  maxFullFlowPressure: boolean
+}
+
+export interface CompressedAirPerformancePointsProperties {
+  fullLoad: PerformancePoint,
+  maxFullFlow: PerformancePoint,
+  midTurndown?: PerformancePoint,
+  turndown?: PerformancePoint,
+  unloadPoint: PerformancePoint,
+  noLoad: PerformancePoint,
+  blowoff: PerformancePoint
+}
+export interface CompressedAirPerformancePointsPropertiesOptions {
+  displayCompressedAirPerformancePointsProperties: boolean
+}
+export interface PerformancePoint {
+  dischargePressure: number,
+  isDefaultPressure: boolean,
+  airflow: number,
+  isDefaultAirFlow: boolean,
+  power: number,
+  isDefaultPower: boolean
 }

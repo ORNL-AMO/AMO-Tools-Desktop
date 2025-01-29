@@ -26,6 +26,23 @@ export const MockCompressedAirInventory: InventoryItem = {
                         "compressedAirMotor": {
                             "motorPower": 350,
                             "motorFullLoadAmps": 385
+                        },
+                        "compressedAirControlsProperties": {
+                            "controlType": 4,
+                            "unloadPointCapacity": 100,
+                            "numberOfUnloadSteps": 2,
+                            "automaticShutdown": true,
+                            "unloadSumpPressure": 15,
+                        },
+                        "compressedAirDesignDetailsProperties": {
+                            "blowdownTime": 40,
+                            "modulatingPressureRange": 50,
+                            "inputPressure": 14.5,
+                            "designEfficiency": 94.5,
+                            "serviceFactor": 1.15,
+                            "noLoadPowerFM": 20,
+                            "noLoadPowerUL": 20,
+                            "maxFullFlowPressure": 110
                         }
                     },
                 ]
@@ -43,6 +60,28 @@ export const MockCompressedAirInventory: InventoryItem = {
                 displayCompressedAirMotorProperties: true,
                 motorPower: true,
                 motorFullLoadAmps: true
+            },
+            compressedAirControlsPropertiesOptions: {
+                displayCompressedAirControlsProperties: true,
+                controlType: true,
+                unloadPointCapacity: true,
+                numberOfUnloadSteps: true,
+                automaticShutdown: true,
+                unloadSumpPressure: true,
+            },
+            compressedAirDesignDetailsPropertiesOptions: {
+                displayCompressedAirDesignDetailsProperties: true,
+                blowdownTime: true,
+                modulatingPressureRange: true,
+                inputPressure: true,
+                designEfficiency: true,
+                serviceFactor: true,
+                noLoadPowerFM: true,
+                noLoadPowerUL: true,
+                maxFullFlowPressure: true
+            },
+            compressedAirPerformancePointsPropertiesOptions: {
+                displayCompressedAirPerformancePointsProperties: true
             }
         }
     },
