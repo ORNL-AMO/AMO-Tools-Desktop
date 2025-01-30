@@ -16,6 +16,7 @@ import { ConfirmDeleteModalModule } from '../../../shared/confirm-delete-modal/c
 import { ConnectedInventoryModule } from '../../../shared/connected-inventory/connected-inventory-module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { NameplateDataCatalogService } from './nameplate-data-catalog/nameplate-data-catalog.service';
 
 
 
@@ -42,7 +43,8 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
   ],
   providers: [
     CompressedAirCatalogService,
-    CompressedAirBasicsService
+    CompressedAirBasicsService,
+    NameplateDataCatalogService
   ],
   exports: [
     CompressedAirCatalogComponent
