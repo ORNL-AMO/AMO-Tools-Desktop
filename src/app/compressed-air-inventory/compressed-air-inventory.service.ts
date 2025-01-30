@@ -215,6 +215,19 @@ export class CompressedAirInventoryService {
 
   }
 
+  async deleteCompressedAirItem(selectedCompressedAir: CompressedAirItem) {
+      let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
+      let selectedDepartmentIndex: number = compressedAirInventoryData.departments.findIndex(department => { return department.id == selectedCompressedAir.departmentId });
+      let compressedAirItemIndex: number = compressedAirInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(compressedAirItem => {return compressedAirItem.id == selectedCompressedAir.id});
+      compressedAirInventoryData.departments[selectedDepartmentIndex].catalog.splice(compressedAirItemIndex, 1);
+      // if (selectedCompressedAir.connectedItem) {
+      //  await this.motorIntegrationService.removeMotorConnectedItem(selectedCompressedAir);
+      //  compressedAirInventoryData.hasConnectedInventoryItems = false;
+      // }
+      this.setIsValidInventory(compressedAirInventoryData);
+      this.compressedAirInventoryData.next(compressedAirInventoryData);
+    }
+
 
 
 
