@@ -14,8 +14,8 @@ export const MockCompressedAirInventory: InventoryItem = {
                     {
                         "id": "66334rw8x",
                         "departmentId": "l6rd7tt1i",
-                        "description": "Main pump",
-                        "name": "Pump A",
+                        "description": "Main Compressor",
+                        "name": "Compressor A",
                         "notes": "",
                         "nameplateData": {
                             "compressorType": 2,

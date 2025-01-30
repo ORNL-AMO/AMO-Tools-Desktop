@@ -8,6 +8,14 @@ import { CompressedAirMotorCatalogComponent } from './compressed-air-motor-catal
 import { DesignDetailsCatalogComponent } from './design-details-catalog/design-details-catalog.component';
 import { PerformancePointsCatalogComponent } from './performance-points-catalog/performance-points-catalog.component';
 import { CompressedAirBasicsComponent } from './compressed-air-basics/compressed-air-basics.component';
+import { CompressedAirBasicsService } from './compressed-air-basics/compressed-air-basics.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { ConfirmDeleteModalModule } from '../../../shared/confirm-delete-modal/confirm-delete-modal.module';
+import { ConnectedInventoryModule } from '../../../shared/connected-inventory/connected-inventory-module';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 
 
@@ -22,10 +30,19 @@ import { CompressedAirBasicsComponent } from './compressed-air-basics/compressed
     CompressedAirBasicsComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ModalModule,
+    SharedPipesModule,
+    OperatingHoursModalModule,
+    ConfirmDeleteModalModule,
+    ConnectedInventoryModule,
+    RouterModule
   ],
   providers: [
-    CompressedAirCatalogService
+    CompressedAirCatalogService,
+    CompressedAirBasicsService
   ],
   exports: [
     CompressedAirCatalogComponent

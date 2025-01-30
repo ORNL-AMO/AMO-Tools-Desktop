@@ -68,13 +68,13 @@ export class CompressedAirInventoryService {
 
   getNewDepartment(departmentNum: number): CompressedAirInventoryDepartment {
     let departmentId: string = Math.random().toString(36).substr(2, 9);
-    let initPump: CompressedAirItem = this.getNewCompressor(departmentId);
+    let initCompressor: CompressedAirItem = this.getNewCompressor(departmentId);
     return {
       name: 'Department ' + departmentNum,
       operatingHours: 8760,
       description: '',
       id: departmentId,
-      catalog: [initPump]
+      catalog: [initCompressor]
     }
   }
 
@@ -85,7 +85,7 @@ export class CompressedAirInventoryService {
       suiteDbItemId: undefined,
       description: '',
       notes: '',
-      name: 'New Pump',
+      name: 'New Compressor',
       nameplateData: {
         compressorType: undefined,
         fullLoadOperatingPressure: undefined,
@@ -216,17 +216,39 @@ export class CompressedAirInventoryService {
   }
 
   async deleteCompressedAirItem(selectedCompressedAir: CompressedAirItem) {
-      let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
-      let selectedDepartmentIndex: number = compressedAirInventoryData.departments.findIndex(department => { return department.id == selectedCompressedAir.departmentId });
-      let compressedAirItemIndex: number = compressedAirInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(compressedAirItem => {return compressedAirItem.id == selectedCompressedAir.id});
-      compressedAirInventoryData.departments[selectedDepartmentIndex].catalog.splice(compressedAirItemIndex, 1);
-      // if (selectedCompressedAir.connectedItem) {
-      //  await this.motorIntegrationService.removeMotorConnectedItem(selectedCompressedAir);
-      //  compressedAirInventoryData.hasConnectedInventoryItems = false;
-      // }
-      this.setIsValidInventory(compressedAirInventoryData);
-      this.compressedAirInventoryData.next(compressedAirInventoryData);
-    }
+    let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
+    let selectedDepartmentIndex: number = compressedAirInventoryData.departments.findIndex(department => { return department.id == selectedCompressedAir.departmentId });
+    let compressedAirItemIndex: number = compressedAirInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(compressedAirItem => { return compressedAirItem.id == selectedCompressedAir.id });
+    compressedAirInventoryData.departments[selectedDepartmentIndex].catalog.splice(compressedAirItemIndex, 1);
+    // if (selectedCompressedAir.connectedItem) {
+    //  await this.motorIntegrationService.removeMotorConnectedItem(selectedCompressedAir);
+    //  compressedAirInventoryData.hasConnectedInventoryItems = false;
+    // }
+    this.setIsValidInventory(compressedAirInventoryData);
+    this.compressedAirInventoryData.next(compressedAirInventoryData);
+  }
+
+  updateCompressedAirItem(selectedCompressedAir: CompressedAirItem) {
+    let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
+    let isValid: boolean = true;
+    compressedAirInventoryData.departments.map(dept => {
+      let isValidDepartment: boolean = true;
+      dept.catalog.map(compressedAirItem => {
+        if (selectedCompressedAir.id === compressedAirItem.id) {
+          compressedAirItem = selectedCompressedAir;
+        }
+        // let isValidCompressedAir = this.isCompressedAirValid(compressedAirItem);
+        // compressedAirItem.validCompressedAir = isValidCompressedAir;
+        // if (!isValidCompressedAir.isValid) {
+        //   isValid = false;
+        //   isValidDepartment = false;
+        // }
+      })
+      dept.isValid = isValidDepartment;
+    });
+    compressedAirInventoryData.isValid = isValid;
+    this.compressedAirInventoryData.next(compressedAirInventoryData);
+  }
 
 
 
