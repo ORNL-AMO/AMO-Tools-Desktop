@@ -34,6 +34,10 @@ export class WaterProcessDiagramService {
         nodes: [],
         edges: [],
         userDiagramOptions: undefined,
+        settings: {
+          flowDecimalPrecision: settings.flowDecimalPrecision,
+          unitsOfMeasure: settings.unitsOfMeasure
+        },
         nodeCalculatedDataMap: {},
         recentNodeColors: [],
         recentEdgeColors: []

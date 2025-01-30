@@ -1,11 +1,12 @@
 import React, { memo, useState } from 'react';
-import { ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { DiagramSettings, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
 import { Box, Button, Divider, Grid, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import { UserDiagramOptionsHandlers } from '../Flow';
 import TabPanel from './TabPanel';
+import { flowDecimalPrecisionOptions } from '../../../../src/process-flow-types/shared-process-flow-constants';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
@@ -29,7 +30,6 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
   };
-
 
   return (
     <Box sx={{
@@ -78,6 +78,30 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
         <TabPanel value={selectedTab} index={1} diagramParentDimensions={props.diagramParentDimensions}>
           <Box paddingX={'.5rem'}>
             <div className="sidebar-options">
+            <Box className={'sidebar-option-container'}>
+                  <label htmlFor={'unitsOfMeasure'}>Units of Measure</label>
+                  <select className="form-control diagram-select" id={'unitsOfMeasure'} name="unitsOfMeasure"
+                    value={props.settings.unitsOfMeasure}
+                    disabled={props.hasAssessment}
+                    onChange={props.userDiagramOptionsHandlers.handleUnitsOfMeasureChange}>
+                    <option key={'imperial'} value={'Imperial'}>Imperial</option>
+                    <option key={'metric'} value={'Metric'}>Metric</option>
+                  </select>
+                </Box>
+                
+            <Box className={'sidebar-option-container'}>
+                  <label htmlFor={'flowDecimalPrecision'}>Decimal Precision</label>
+                  <select className="form-control diagram-select" id={'flowDecimalPrecision'} name="flowDecimalPrecision"
+                    value={props.settings.flowDecimalPrecision}
+                    onChange={props.userDiagramOptionsHandlers.handleFlowDecimalPrecisionChange}>
+                    {flowDecimalPrecisionOptions.map((option) => {
+                    return (
+                      <option key={`flowDecimalPrecision_${option.value}`} value={option.value}>{option.display}</option>
+                    )
+                  })}
+                  </select>
+                </Box>
+
               <Box className={'sidebar-option-container'}>
                 <label htmlFor="edgeType" className="diagram-label">Default Line Type</label>
                 <select className="form-control diagram-select" id="edgeType"
@@ -109,19 +133,6 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                   setSliderValue={props.userDiagramOptionsHandlers.handleFlowLabelSizeChange}
                   value={props.userDiagramOptions.flowLabelSize} />
               </Box>
-
-              <Box className={'sidebar-option-container'}>
-                  <label htmlFor={'flowDecimalPrecision'}>Decimal Precision</label>
-                  <select className="form-control diagram-select" id={'flowDecimalPrecision'} name="flowDecimalPrecision"
-                    value={props.userDiagramOptions.flowDecimalPrecision}
-                    onChange={props.userDiagramOptionsHandlers.handleFlowDecimalPrecisionChange}>
-                    <option key={'flowDecimalPrecision_0'} value={0}>0 </option>
-                    <option key={'flowDecimalPrecision_1'} value={1}>1 Place</option>
-                    <option key={'flowDecimalPrecision_2'} value={2}>2 Places</option>
-                    <option key={'flowDecimalPrecision_3'} value={3}>3 Places</option>
-                  </select>
-                </Box>
-
 
               <div style={{ margin: '1rem 0', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
                 <Box className={'sidebar-option-container checkbox'} display={'flex'} flexDirection={'column'} sx={{ fontSize: '.75rem', marginTop: '1rem' }}>
@@ -244,6 +255,7 @@ export default MenuSidebar;
 export interface MenuSidebarProps {
   diagramParentDimensions: ParentContainerDimensions,
   userDiagramOptions: UserDiagramOptions;
+  settings: DiagramSettings;
   userDiagramOptionsHandlers: UserDiagramOptionsHandlers;
   hasAssessment: boolean;
   shadowRoot;

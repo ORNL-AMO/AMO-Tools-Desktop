@@ -1,6 +1,5 @@
 import ProcessFlowComponentNode from "../Nodes/ProcessFlowComponentNode";
 import SelfConnectingEdge from "../Edges/SelfConnectingEdge";
-import SplitterNode from "../Nodes/SplitterNode";
 import SplitterNodeFour from "../Nodes/SplitterNodeFour";
 import SplitterNodeEight from "../Nodes/SplitterNodeEight";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
@@ -50,5 +49,5 @@ export const edgeTypeOptions: SelectListOption[] = [
   }
 ]
 
-export interface SelectListOption {value: string, display: string}
+export interface SelectListOption {value: string | number, display: string}
 

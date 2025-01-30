@@ -10,6 +10,9 @@ import { firstValueFrom } from "rxjs";
 import { SystemBasicsService } from "./system-basics.service";
 import * as _ from 'lodash';
 import { ConvertWaterAssessmentService } from "../convert-water-assessment.service";
+import { copyObject } from "../../shared/helperFunctions";
+import { flowDecimalPrecisionOptions } from "../../../process-flow-types/shared-process-flow-constants";
+
 @Component({
   selector: 'app-system-basics',
   templateUrl: './system-basics.component.html',
@@ -26,11 +29,13 @@ export class SystemBasicsComponent implements OnInit {
   systemBasicsForm: UntypedFormGroup;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
+  flowDecimalPrecisionOptions: {value: number, display: string}[];
 
   isCollapsed: Record<SystemBasicsGroupString, boolean> = {
     waterTreatment: false,
     wasteWaterTreatment: false,
   };
+  settingsSub: any;
 
   constructor(private settingsService: SettingsService,
     private waterAssessmentService: WaterAssessmentService,
@@ -41,9 +46,15 @@ export class SystemBasicsComponent implements OnInit {
 
 
   ngOnInit() {
+    this.flowDecimalPrecisionOptions = copyObject(flowDecimalPrecisionOptions);
     let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
     this.systemBasicsForm = this.systemBasicsService.getFormFromObj(waterAssessment.systemBasics);
-    let settings: Settings = this.waterAssessmentService.settings.getValue();
+    this.settingsSub = this.waterAssessmentService.settings.subscribe(settings => {
+      this.initSettingsForm(settings);
+    });
+  }
+
+  initSettingsForm(settings: Settings) {
     this.settingsForm = this.settingsService.getFormFromSettings(settings);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
 
@@ -57,6 +68,7 @@ export class SystemBasicsComponent implements OnInit {
     if(this.showUpdateDataReminder && this.oldSettings) {
       this.openUpdateUnitsModal.emit(this.oldSettings);
     }
+    this.settingsSub.unsubscribe();
   }
 
   saveSystemBasics() {
@@ -93,13 +105,16 @@ export class SystemBasicsComponent implements OnInit {
     this.waterAssessmentService.settings.next(newSettings);
   }
 
-  updateData(showSuccess?: boolean) {
+  async updateData(showSuccess?: boolean) {
     if(showSuccess) {
       this.initSuccessMessage();
     }
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     let waterAssessment: WaterAssessment = this.waterAssessmentService.waterAssessment.getValue();
     waterAssessment = this.convertWaterAssessmentService.convertWaterAssessment(waterAssessment, this.oldSettings, newSettings);
+    if (this.assessment.diagramId) {
+      await this.convertWaterAssessmentService.convertWaterAssessmentDiagram(this.assessment, newSettings);
+    }
     this.showUpdateDataReminder = false;
     waterAssessment.existingDataUnits = newSettings.unitsOfMeasure;
     this.waterAssessmentService.updateWaterAssessment(waterAssessment);

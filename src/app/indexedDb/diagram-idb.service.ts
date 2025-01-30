@@ -50,8 +50,6 @@ export class DiagramIdbService {
 
   
   getNewDiagram(diagramType: string): Diagram {
-    let currentDate = new Date();
-    let defaultName = getNewIdString();
     return {
       createdDate: new Date(),
       modifiedDate: new Date(),

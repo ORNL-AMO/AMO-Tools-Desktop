@@ -151,13 +151,13 @@ export class WaterAssessmentComponent {
     }, 100);
   }
 
-  initAssessment(assessmentId: number) {
+  async initAssessment(assessmentId: number) {
     this.assessment = this.assessmentDbService.findById(assessmentId);
     this.waterAssessmentService.assessmentId = assessmentId;
     let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     if (!settings) {
       settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-      this.addSettings(settings);
+      await this.addSettings(settings);
     } else {
       this.settings = settings;
       this.waterAssessmentService.settings.next(settings);
@@ -185,7 +185,7 @@ export class WaterAssessmentComponent {
 
   async setDiagram() {
     if (this.assessment.diagramId) {
-      await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
+      await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment, this.settings);
     } else {
       await this.waterAssessmentConnectionsService.createAssesmentDiagram(this.assessment, this.settings);
       this.save(this.assessment.water);
@@ -206,7 +206,7 @@ export class WaterAssessmentComponent {
   }
 
   async updateAssessmentFromDiagram() {
-    await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment);
+    await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment, this.settings);
     this.save(this.assessment.water);
   }
 

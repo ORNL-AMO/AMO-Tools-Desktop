@@ -3,9 +3,10 @@ import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, Smoo
 import { FlowContext } from '../Flow';
 import { CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
-import { formatNumberValue } from '../Flow/FlowUtils';
+import FlowValueDisplay from '../Flow/FlowValueDisplay';
+import FlowDisplayUnit from '../Flow/FlowDisplayUnit';
 
-const FlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: string; selected: boolean, flowValue: number | string, scale: number }) => {
+const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: string; selected: boolean, flowValue: number | string, scale: number }) => {
   let adjustedTransform = transform + ` scale(${scale})`;
   let style: CSSProperties = {
     position: 'absolute',
@@ -29,7 +30,12 @@ const FlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: 
   }
 
   return (
-       <div style={style} className={"nodrag nopan"}>{flowValue}</div>
+       <div style={style} className={"nodrag nopan"}>
+        <>
+          <FlowValueDisplay flowValue={flowValue}/>
+          <FlowDisplayUnit/>
+        </>
+       </div>
   );
 }
 
@@ -98,8 +104,6 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
     flowLabelTransform = `translate(${translateXStart}%, ${translateYStart}%) translate(${sourceX}px,${sourceY}px)`;
   }
 
-  const flowValue = formatNumberValue(customEdgeData.flowValue, flowContext.userDiagramOptions.flowDecimalPrecision); 
-
   return (
     <>
       {renderBaseEdgeComponent(props, edgePath)}
@@ -111,12 +115,12 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
             selected={props.selected}
             transformLocation={editButtonTransform}/>
 
-        {flowContext.userDiagramOptions.showFlowValues && flowValue &&
-            <FlowValueLabel
+        {flowContext.userDiagramOptions.showFlowValues && Boolean(customEdgeData.flowValue) &&
+            <EdgeFlowValueLabel
             transform={flowLabelTransform}
             selected={props.selected}
             scale={flowContext.userDiagramOptions.flowLabelSize !== undefined? flowContext.userDiagramOptions.flowLabelSize : 1}
-            flowValue={flowValue}
+            flowValue={customEdgeData.flowValue}
             />
         }
         </Fragment>

@@ -8,14 +8,18 @@ import { WaterAssessment, WaterProcessComponent } from '../shared/models/water-a
 import { Edge, Node } from '@xyflow/react';
 import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
+import { Settings } from '../shared/models/settings';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
 
 @Injectable()
 export class WaterDiagramConnectionsService {
 
   constructor(private diagramIdbService: DiagramIdbService,
+    private settingsDbService: SettingsDbService,
     private assessmentIdbService: AssessmentDbService) { }
 
-  async syncDiagramToAssessment(diagram: Diagram, integratedDiagram: IntegratedAssessmentDiagram) {
+  async syncDiagramToAssessment(diagram: Diagram, 
+    integratedDiagram: IntegratedAssessmentDiagram) {
     if (diagram.assessmentId !== undefined) {
       let integratedAssessment: Assessment;
       if (integratedDiagram) {
@@ -25,8 +29,9 @@ export class WaterDiagramConnectionsService {
       }
 
       if (integratedAssessment && diagram.modifiedDate < integratedAssessment.modifiedDate) {
-        // console.log('=== DIAGRAM STALE -> syncing to assessment')
         this.updateDiagramFromAssessment(diagram, integratedAssessment.water);
+        let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(integratedAssessment);
+        this.setDiagramSettingsFromAssessment(assessmentSettings, diagram);
         await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
       }
     }
@@ -47,6 +52,11 @@ export class WaterDiagramConnectionsService {
 
     diagram.waterDiagram.flowDiagramData.nodes = assessmentNodes;
   }
+
+  setDiagramSettingsFromAssessment(settings: Settings, diagram: Diagram) {
+      diagram.waterDiagram.flowDiagramData.settings.unitsOfMeasure = settings.unitsOfMeasure;
+      diagram.waterDiagram.flowDiagramData.settings.flowDecimalPrecision = settings.flowDecimalPrecision;
+    }
 
   setSplitterNodes(nodes) {
     let splitterNodes: Node[] = nodes.filter((node: Node) => node.type.includes('splitterNode')); 

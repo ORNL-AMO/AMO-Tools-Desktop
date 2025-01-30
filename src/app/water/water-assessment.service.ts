@@ -112,9 +112,6 @@ export class WaterAssessmentService {
     } else if (componentType === 'water-using-system') {
       copiedComponent = copiedComponent as WaterUsingSystem;
       waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(copiedComponent) : waterAssessment.waterUsingSystems = [copiedComponent];
-    } else if (componentType === 'waste-water-treatment') {
-      copiedComponent = copiedComponent as WasteWaterTreatment;
-      waterAssessment.waterUsingSystems? waterAssessment.wasteWaterTreatments.push(copiedComponent) : waterAssessment.wasteWaterTreatments = [copiedComponent];
     } 
 
     this.updateWaterAssessment(waterAssessment);

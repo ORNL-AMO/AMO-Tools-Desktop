@@ -18,6 +18,10 @@ export const MockWaterdiagram: Diagram =
             "nodeCalculatedDataMap": {},
             "recentEdgeColors": [],
             "recentNodeColors": [],
+            "settings": {
+                "flowDecimalPrecision": 2,
+                "unitsOfMeasure": 'Imperial'
+            },
             "nodes": [
                 {
                     "id": "n_07ezr25",
@@ -1399,7 +1403,6 @@ export const MockWaterdiagram: Diagram =
             "userDiagramOptions": {
                 "edgeThickness": 4,
                 "edgeType": "default",
-                "flowDecimalPrecision": 2,
                 "minimapVisible": false,
                 "controlsVisible": true,
                 "directionalArrowsVisible": false,

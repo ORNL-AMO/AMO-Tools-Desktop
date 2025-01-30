@@ -5,7 +5,8 @@ import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
 import { FlowContext } from '../Flow';
 import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
-import { formatNumberValue } from '../Flow/FlowUtils';
+import FlowValueDisplay from '../Flow/FlowValueDisplay';
+import FlowDisplayUnit from '../Flow/FlowDisplayUnit';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
@@ -18,13 +19,11 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
   let condensedPadding: boolean;
   if (data.processComponentType === 'water-intake') {
     plantLevelFlow = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalDischargeFlow;
-    plantLevelFlow = formatNumberValue(plantLevelFlow, flowContext.userDiagramOptions.flowDecimalPrecision);
     condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
     transformString = `translate(0%, 0%) translate(188px, -25px)`;
   }
   if (data.processComponentType === 'water-discharge') {
     plantLevelFlow = data.userEnteredData.totalSourceFlow? data.userEnteredData.totalSourceFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalSourceFlow;
-    plantLevelFlow = formatNumberValue(plantLevelFlow, flowContext.userDiagramOptions.flowDecimalPrecision);
     condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
     transformString = `translate(0%, 0%) translate(188px, -25px)`;
   }
@@ -93,7 +92,12 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         </Typography>
 
         {plantLevelFlow !== undefined && plantLevelFlow !== null &&
-            <Chip label={`${plantLevelFlow} Mgal`} 
+            <Chip label={
+              <>
+              <FlowValueDisplay flowValue={plantLevelFlow}/>
+              <FlowDisplayUnit/>
+              </>
+          } 
             variant="outlined" 
             sx={{background: '#fff', borderRadius: '8px', marginTop: '.25rem'}}
             />

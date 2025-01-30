@@ -36,3 +36,13 @@ export const wasteWaterTreatmentTypeOptions: {value: number, display: string}[] 
     {value: 14, display: 'Alkaline Chlorination'},
     {value: 15, display: 'Other'},
 ]
+
+export const MAX_FLOW_DECIMALS = 3;
+
+export const flowDecimalPrecisionOptions: {value: number | string, display: string}[] = [
+    {value: 0, display: '0'},
+    {value: 1, display: '1 Place'},
+    {value: 2, display: '2 Places'},
+    {value: MAX_FLOW_DECIMALS, display: '3 Places'},
+];
+

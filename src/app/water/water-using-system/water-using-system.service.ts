@@ -153,7 +153,7 @@ export class WaterUsingSystemService {
 
     knownLoss = {
       ...newComponent,
-      lossValue: 0,
+      flowValue: 0,
     };
     return knownLoss;
   }

@@ -236,15 +236,19 @@ export class CreateAssessmentModalComponent {
   async createFromWaterDiagram(createdAssessment: Assessment) {
     let assessmentSettings = this.settingsDbService.getByAssessmentId(createdAssessment, false);
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
-    // todo set settings/units match
-    // newSettings = this.settingsService.setPumpSettingsUnitType(newSettings);
-    this.waterAssessmentConnectionsService.updateAssessmentWithDiagram(this.diagram, createdAssessment);
+    newSettings.assessmentId = createdAssessment.id;
+    this.waterAssessmentConnectionsService.updateAssessmentWithDiagram(this.diagram, createdAssessment, newSettings);
     this.diagram.assessmentId = createdAssessment.id;
     createdAssessment.diagramId = this.diagram.id;
-    await this.waterDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
-    await this.saveAssessmentAndSettings(newSettings, createdAssessment)
+    this.waterDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
+    
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(createdAssessment));
+    let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(allAssessments);
   }
 
+  // todo 6893 - Not sure why this was needed for assessment creation from an inventory. It looks 
+  // todo like assessments create their own settings on first init
   async saveAssessmentAndSettings(settings: Settings, assessment: Assessment) {
     let settingsForm = this.settingsService.getFormFromSettings(settings);
     settingsForm = this.settingsService.setUnits(settingsForm);

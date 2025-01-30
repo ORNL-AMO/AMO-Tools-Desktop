@@ -34,6 +34,7 @@ export interface Settings {
     viscosityMeasurement?: string,
     voltageMeasurement?: string,
     temperatureMeasurement?: string,
+    flowDecimalPrecision?: number,
     id?: number,
     energySourceType?: string,
     furnaceType?: string,

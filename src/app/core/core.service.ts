@@ -47,7 +47,6 @@ export class CoreService {
     private inventoryDbService: InventoryDbService,
     private electronService: ElectronService,
     private diagramIdbService: DiagramIdbService,
-    private securityAndPrivacyService: SecurityAndPrivacyService,
     private applicationDataService: ApplicationInstanceDbService,
     private directoryDbService: DirectoryDbService) {
   }
