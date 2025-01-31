@@ -145,7 +145,6 @@ export class ExportService {
   
   getDiagramObj(diagram: Diagram): ImportExportDiagram {
     let settings: Settings = this.settingsDbService.getByDiagramId(diagram);
-    // todo 7081 - move assessmentId up to diagram
     let assessment: Assessment = this.assessmentDbService.findById(diagram.assessmentId);
     let importExportDiagram: ImportExportDiagram = {
       diagram: diagram,

@@ -97,6 +97,7 @@ export class WaterProcessDiagramComponent {
     this.diagramIdbService.setAll(diagrams);
   }
 
+  // * 6893 Settings object - is unused, does not currently get updated by diagram operations
   setSettings() {
     let settings: Settings = this.settingsDbService.getByDiagramId(this.diagram, true);
     if (!settings) {
