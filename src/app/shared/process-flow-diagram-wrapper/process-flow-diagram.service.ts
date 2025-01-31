@@ -16,17 +16,6 @@ export class ProcessFlowDiagramService {
     this.flowDiagramData = new BehaviorSubject<FlowDiagramData>(undefined);
   }
 
-  getNewDiagram(): FlowDiagramData {
-    return {
-      nodes: [],
-      edges: [],
-      userDiagramOptions: undefined,
-      nodeCalculatedDataMap: {},
-      recentEdgeColors: [],
-      recentNodeColors: []
-    }
-  }
-
   updateFlowDiagramData(diagramState: ProcessFlowDiagramState) {
     if (diagramState && diagramState.context === 'water') {
       let waterDiagram = this.waterProcessDiagramService.waterDiagram.getValue();

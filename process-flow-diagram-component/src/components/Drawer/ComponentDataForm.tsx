@@ -1,14 +1,16 @@
-import { Box, List, TextField, InputAdornment, ListItem, ListItemButton, ListItemIcon, Divider, styled, Typography, Select, MenuItem, FormControl, Chip, Tooltip, TooltipProps, tooltipClasses, Button } from "@mui/material";
-import { formatNumberValue, getEdgeSourceAndTarget, getNodeFlowTotals, updateNodeCalculatedDataMap } from "../Flow/FlowUtils";
+import { Box, List, TextField, InputAdornment, ListItem, Divider, styled, Chip, Tooltip, TooltipProps, tooltipClasses, Button } from "@mui/material";
+import { formatDecimalPlaces, getEdgeSourceAndTarget, getNodeFlowTotals, updateNodeCalculatedDataMap } from "../Flow/FlowUtils";
 import { Edge, getConnectedEdges, Node, useReactFlow } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
 import React, { memo, useContext, useState } from "react";
 import FlowConnectionText from "./FlowConnectionText";
 import { CustomEdgeData, NodeCalculatedData, ProcessFlowPart, WasteWaterTreatment, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
-import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
+import { MAX_FLOW_DECIMALS, wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import { Accordion, AccordionDetails, AccordionSummary } from "../MUIStyledComponents";
 import { FlowContext } from "../Flow";
+import FlowDisplayUnit from "../Flow/FlowDisplayUnit";
+import FlowValueDisplay from "../Flow/FlowValueDisplay";
 
 const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -26,7 +28,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const [dischargeExpanded, setDischargeExpanded] = useState<boolean>(true);
 
     // todo for future diagrams - setComponentTypeData<T>
-    let componentData: ProcessFlowPart | WaterTreatment = {...props.selectedNode.data} as ProcessFlowPart;
+    let componentData: ProcessFlowPart | WaterTreatment = { ...props.selectedNode.data } as ProcessFlowPart;
     const isWaterTreatment = props.selectedNode.type === 'waterTreatment';
     const isWasteWaterTreatment = props.selectedNode.type === 'wasteWaterTreatment';
     let defaultSelectedTreatmentType: number = 0;
@@ -73,28 +75,29 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
    * Edge states are assumed to be updated from caller
    */
     const updateCalculatedDataFromConnectedIds = (nodes, connectedNodeIds, nodeCalculatedDataMap, setNodeCalculatedData) => {
-      let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
-        ...nodeCalculatedDataMap,
-      }
-
-      nodes.forEach((node: Node<ProcessFlowPart>) => {
-        if (connectedNodeIds.includes(node.id)) {
-          if (node.data.processComponentType === 'water-intake' || node.data.processComponentType === 'water-discharge') {
-            const nodeEdges = getConnectedEdges([node], getEdges());
-            updateNodeCalculatedDataMap(
-              node,
-              nodes,
-              nodeEdges,
-              updatedNodeCalculatedDataMap,
-              setNodeCalculatedData
-            );
-          }
+        let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
+            ...nodeCalculatedDataMap,
         }
-      });
+
+        nodes.forEach((node: Node<ProcessFlowPart>) => {
+            if (connectedNodeIds.includes(node.id)) {
+                if (node.data.processComponentType === 'water-intake' || node.data.processComponentType === 'water-discharge') {
+                    const nodeEdges = getConnectedEdges([node], getEdges());
+                    updateNodeCalculatedDataMap(
+                        node,
+                        nodes,
+                        nodeEdges,
+                        updatedNodeCalculatedDataMap,
+                        setNodeCalculatedData
+                    );
+                }
+            }
+        });
     }
 
     const onDistributeFlowEvenly = (totalFlowValue: number, updateIds: string[]) => {
         let dividedTotalFlow = totalFlowValue / updateIds.length;
+        dividedTotalFlow = Number(formatDecimalPlaces(dividedTotalFlow, MAX_FLOW_DECIMALS));
         let connectedEdges = [];
         const allEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
             if (updateIds.includes(edge.id)) {
@@ -133,7 +136,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         });
 
         const nodes = getNodes();
-        const {sourceCalculatedTotalFlow, dischargeCalculatedTotalFlow} = getNodeFlowTotals(connectedEdges, nodes, props.selectedNode.id);
+        const { sourceCalculatedTotalFlow, dischargeCalculatedTotalFlow } = getNodeFlowTotals(connectedEdges, nodes, props.selectedNode.id);
         if (componentData.userEnteredData.totalSourceFlow === undefined) {
             setTotalSourceFlow(sourceCalculatedTotalFlow);
         }
@@ -182,7 +185,6 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                 return n;
             }),
         );
-        
     }
 
     const getConnectionListItem = (edge: Edge<CustomEdgeData>, source: ProcessFlowPart, target: ProcessFlowPart) => {
@@ -202,7 +204,9 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     onChange={(event) => onFlowDataChange(event, edge.id)}
                     sx={{ m: 1, width: '100%' }}
                     InputProps={{
-                        endAdornment: <InputAdornment position="end">Mgal</InputAdornment>,
+                        endAdornment: <InputAdornment position="end">
+                            <FlowDisplayUnit />
+                        </InputAdornment>,
                     }}
                 />
             </ListItem>
@@ -228,12 +232,10 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         }
     });
 
-    const [totalSourceFlow, setTotalSourceFlow] = useState<number>(componentData.userEnteredData.totalSourceFlow !== undefined? componentData.userEnteredData.totalSourceFlow : sourceEdgesTotalFlow);
-    const [totalDischargeFlow, setTotalDischargeFlow] = useState<number>(componentData.userEnteredData.totalDischargeFlow !== undefined? componentData.userEnteredData.totalDischargeFlow : dischargeEdgesTotalFlow);
+    const [totalSourceFlow, setTotalSourceFlow] = useState<number>(componentData.userEnteredData.totalSourceFlow !== undefined ? componentData.userEnteredData.totalSourceFlow : sourceEdgesTotalFlow);
+    const [totalDischargeFlow, setTotalDischargeFlow] = useState<number>(componentData.userEnteredData.totalDischargeFlow !== undefined ? componentData.userEnteredData.totalDischargeFlow : dischargeEdgesTotalFlow);
     const sourceEdgeItems = sourceEdgeInputElements.filter(edge => edge !== undefined);
 
-    const totalSourceFlowFormatted = formatNumberValue(totalSourceFlow, flowContext.userDiagramOptions.flowDecimalPrecision);
-    const totalDischargeFlowFormatted = formatNumberValue(totalDischargeFlow, flowContext.userDiagramOptions.flowDecimalPrecision);
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1 }}>
 
@@ -256,11 +258,16 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             {sourceEdgeItems.length > 0 &&
                 <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
                     <AccordionSummary>
-                        <span style={{alignSelf: 'center'}}>Sources</span>
-                            <Chip label={`${totalSourceFlowFormatted} Mgal`}
-                                variant="outlined"
-                                sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
-                            />
+                        <span style={{ alignSelf: 'center' }}>Sources</span>
+                        <Chip label={
+                            <>
+                            <FlowValueDisplay flowValue={totalSourceFlow}/>
+                            <FlowDisplayUnit/>
+                            </>
+                        }
+                            variant="outlined"
+                            sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
+                        />
                     </AccordionSummary>
                     <AccordionDetails>
                         <SmallTooltip title="Set flows evenly from total source value"
@@ -271,21 +278,21 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             }}>
                             {/* * must wrap with span to allow tooltip events when disabled*/}
                             <span>
-                            <Button onClick={() => onDistributeFlowEvenly(totalSourceFlow, sourceEdgeIds)}
-                                disabled={!totalSourceFlow}
-                                variant="outlined" 
-                                sx={{
-                                    marginRight: '1rem',
-                                    padding: '2px 12px',
-                                    display: 'inline-block',
-                                    minWidth: 0
-                                }}>
-                                <CallSplitOutlinedIcon 
-                                sx={{
-                                    transform: 'rotate(180deg) scaleX(-1)',
+                                <Button onClick={() => onDistributeFlowEvenly(totalSourceFlow, sourceEdgeIds)}
+                                    disabled={!totalSourceFlow}
+                                    variant="outlined"
+                                    sx={{
+                                        marginRight: '1rem',
+                                        padding: '2px 12px',
+                                        display: 'inline-block',
+                                        minWidth: 0
+                                    }}>
+                                    <CallSplitOutlinedIcon
+                                        sx={{
+                                            transform: 'rotate(180deg) scaleX(-1)',
 
-                                }}/>
-                            </Button>
+                                        }} />
+                                </Button>
                             </span>
                         </SmallTooltip>
                         <TextField
@@ -297,7 +304,9 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             value={totalSourceFlow ?? ''}
                             onChange={(event) => onTotalFlowValueChange(event, setTotalSourceFlow, true)}
                             InputProps={{
-                                endAdornment: <InputAdornment position="end">Mgal</InputAdornment>,
+                                endAdornment: <InputAdornment position="end">
+                                    <FlowDisplayUnit />
+                                </InputAdornment>,
                             }}
                         />
                         <Divider sx={{ marginY: '1rem', backgroundColor: '#1976d2' }}></Divider>
@@ -316,11 +325,16 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                         transition: { unmountOnExit: true }
                     }}>
                     <AccordionSummary>
-                        <span style={{alignSelf: 'center'}}>Discharge</span>
-                            <Chip label={`${totalDischargeFlowFormatted} Mgal`}
-                                variant="outlined"
-                                sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
-                            />
+                        <span style={{ alignSelf: 'center' }}>Discharge</span>
+                        <Chip label={
+                            <>
+                            <FlowValueDisplay flowValue={totalDischargeFlow}/>
+                            <FlowDisplayUnit/>
+                            </>
+                        }
+                            variant="outlined"
+                            sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
+                        />
                     </AccordionSummary>
                     <AccordionDetails>
                         <SmallTooltip title="Set flows evenly from total discharge value"
@@ -333,17 +347,17 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             <span>
                                 <Button onClick={() => onDistributeFlowEvenly(totalDischargeFlow, dischargeEdgeIds)}
                                     disabled={!totalDischargeFlow}
-                                    variant="outlined" 
+                                    variant="outlined"
                                     sx={{
                                         marginRight: '1rem',
                                         padding: '2px 12px',
                                         display: 'inline-block',
                                         minWidth: 0
                                     }}>
-                                    <CallSplitOutlinedIcon 
-                                    sx={{
-                                        transform: 'rotate(180deg) scaleX(-1)',
-                                    }}/>
+                                    <CallSplitOutlinedIcon
+                                        sx={{
+                                            transform: 'rotate(180deg) scaleX(-1)',
+                                        }} />
                                 </Button>
                             </span>
 
@@ -357,7 +371,9 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             value={totalDischargeFlow ?? ''}
                             onChange={(event) => onTotalFlowValueChange(event, setTotalDischargeFlow, false)}
                             InputProps={{
-                                endAdornment: <InputAdornment position="end">Mgal</InputAdornment>,
+                                endAdornment: <InputAdornment position="end">
+                                    <FlowDisplayUnit />
+                                </InputAdornment>,
                             }}
                         />
 

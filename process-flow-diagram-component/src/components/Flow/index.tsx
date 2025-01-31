@@ -20,8 +20,8 @@ import {
 
 import '@xyflow/react/dist/style.css';
 
-import { NodeCalculatedData, FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram, CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { changeExistingEdgesType, getDefaultColorPalette, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
+import { NodeCalculatedData, FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram, CustomEdgeData, DiagramSettings, convertFlowDiagramData } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { changeExistingEdgesType, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
@@ -44,6 +44,7 @@ const Flow = (props: FlowProps) => {
   let existingNodes: Node[] = [];
   let existingEdges: Edge[] = [];
   const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions ? props.processDiagram.flowDiagramData.userDiagramOptions : getDefaultUserDiagramOptions();
+  const defaultSettings = props.processDiagram.flowDiagramData.settings ? props.processDiagram.flowDiagramData.settings : getDefaultSettings();
   const defaultNodeCalculatedData = props.processDiagram.flowDiagramData.nodeCalculatedDataMap ? props.processDiagram.flowDiagramData.nodeCalculatedDataMap : {};
   const defaultRecentNodeColors = props.processDiagram.flowDiagramData.recentNodeColors.length !== 0 ? props.processDiagram.flowDiagramData.recentNodeColors : getDefaultColorPalette();
   const defaultRecentEdgeColors = props.processDiagram.flowDiagramData.recentEdgeColors.length !== 0 ? props.processDiagram.flowDiagramData.recentEdgeColors : getDefaultColorPalette();
@@ -64,6 +65,7 @@ const Flow = (props: FlowProps) => {
   const [recentNodeColors, setRecentNodeColors] = useState(defaultRecentNodeColors);
   const [recentEdgeColors, setRecentEdgeColors] = useState(defaultRecentEdgeColors);
   const [diagramParentDimensions, setDiagramParentDimensions] = useState(props.parentContainer);
+  const [settings, setSettings] = useState<DiagramSettings>(defaultSettings);
   const [userDiagramOptions, setUserDiagramOptions] = useState<UserDiagramOptions>(defaultUserDiagramOptions);
   const [nodeCalculatedDataMap, setNodeCalculatedData] = useState<Record<string, NodeCalculatedData>>(defaultNodeCalculatedData);
   const [edgeTypes, setEdgeTypes] = useState<EdgeTypes>(getEdgeTypesFromString(defaultUserDiagramOptions.edgeType, undefined));
@@ -90,13 +92,14 @@ const Flow = (props: FlowProps) => {
       props.saveFlowDiagramData({
         nodes: debouncedNodes,
         edges: debouncedEdges,
+        settings,
         userDiagramOptions,
         nodeCalculatedDataMap,
         recentNodeColors,
         recentEdgeColors,
       });
     }
-  }, [debouncedNodes, debouncedEdges, userDiagramOptions]);
+  }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings]);
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -221,12 +224,29 @@ const Flow = (props: FlowProps) => {
   }, [userDiagramOptions]);
 
   const handleFlowDecimalPrecisionChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
-    setUserDiagramOptions({
-      ...userDiagramOptions,
+    setSettings({
+      ...settings,
       flowDecimalPrecision: Number(event.target.value)
     });
+    // todo also set nodes?
     setEdges((eds) => eds);
-  }, [userDiagramOptions]);
+  }, [settings]);
+
+  const handleUnitsOfMeasureChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+    const convertedDiagramData = {
+      nodes: [...nodes],
+      edges: [...edges],
+      nodeCalculatedDataMap: {...nodeCalculatedDataMap}
+    }
+    convertFlowDiagramData(convertedDiagramData, event.target.value);
+    setSettings({
+      ...settings,
+      unitsOfMeasure: event.target.value
+    });
+    setNodes(nds => convertedDiagramData.nodes);
+    setEdges(eds => convertedDiagramData.edges);
+    setNodeCalculatedData(calculateData => convertedDiagramData.nodeCalculatedDataMap);
+  }, [settings]);
 
 
   const resetDiagram = useCallback(() => {
@@ -236,6 +256,7 @@ const Flow = (props: FlowProps) => {
     props.saveFlowDiagramData({
       nodes: [],
       edges: [],
+      settings: settings,
       userDiagramOptions: defaultOptions,
       nodeCalculatedDataMap: {},
       recentEdgeColors,
@@ -273,6 +294,7 @@ const Flow = (props: FlowProps) => {
   const menuSidebarProps: MenuSidebarProps = {
     userDiagramOptions: userDiagramOptions,
     diagramParentDimensions: diagramParentDimensions,
+    settings: settings,
     userDiagramOptionsHandlers: {
       handleMinimapVisible,
       handleShowFlowValues,
@@ -282,7 +304,8 @@ const Flow = (props: FlowProps) => {
       handleEdgeThicknessChange,
       handleEdgeOptionsChange,
       handleFlowLabelSizeChange,
-      handleFlowDecimalPrecisionChange
+      handleFlowDecimalPrecisionChange,
+      handleUnitsOfMeasureChange
     },
     resetDiagramCallback: resetDiagram,
     shadowRoot: props.shadowRoot,
@@ -294,6 +317,7 @@ const Flow = (props: FlowProps) => {
     props.height &&
     <FlowContext.Provider value={{ 
       userDiagramOptions, 
+      settings,
       nodeCalculatedDataMap, 
       setNodeCalculatedData,
       recentNodeColors,
@@ -380,6 +404,7 @@ export interface FlowProps {
 export interface FlowContext {
   diagramParentDimensions: ParentContainerDimensions,
   userDiagramOptions: UserDiagramOptions;
+  settings: DiagramSettings,
   nodeCalculatedDataMap: Record<string, NodeCalculatedData>;
   setNodeCalculatedData: React.Dispatch<Record<string, NodeCalculatedData>>;
   setRecentNodeColors: React.Dispatch<React.SetStateAction<string[]>>;
@@ -400,4 +425,5 @@ export interface UserDiagramOptionsHandlers {
   handleEdgeThicknessChange: (event: Event, edgeThickness: number) => void;
   handleFlowLabelSizeChange: (event: Event, flowLabelSize: number) => void;
   handleFlowDecimalPrecisionChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleUnitsOfMeasureChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }

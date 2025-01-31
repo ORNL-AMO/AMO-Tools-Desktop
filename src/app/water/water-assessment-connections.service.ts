@@ -14,6 +14,7 @@ import { Edge, Node } from '@xyflow/react';
 import { WaterTreatmentService } from './water-treatment/water-treatment.service';
 import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 import { CustomEdgeData, ProcessFlowPart, WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
 
 @Injectable()
 export class WaterAssessmentConnectionsService {
@@ -25,6 +26,7 @@ export class WaterAssessmentConnectionsService {
     private waterTreatmentService: WaterTreatmentService,
     private wasteWaterTreatmentService: WasteWaterTreatmentService,
     private waterUsingSystemService: WaterUsingSystemService,
+    private settingsDbService: SettingsDbService,
     private assessmentIdbService: AssessmentDbService) { }
 
   async createAssesmentDiagram(assessment: Assessment, settings: Settings) {
@@ -38,19 +40,29 @@ export class WaterAssessmentConnectionsService {
     this.diagramIdbService.setAll();
   }
 
-  async syncAssessmentToDiagram(assessment: Assessment) {
+  async syncAssessmentToDiagram(assessment: Assessment, assessmentSettings: Settings) {
     let integratedDiagram = this.diagramIdbService.findById(assessment.diagramId);
     if (integratedDiagram && assessment.modifiedDate < integratedDiagram.modifiedDate) {
       // console.log('=== ASSESSMENT STALE -> syncing to diagram')
-      this.updateAssessmentWithDiagram(integratedDiagram, assessment);
+      this.updateAssessmentWithDiagram(integratedDiagram, assessment, assessmentSettings);
       await firstValueFrom(this.assessmentIdbService.updateWithObservable(assessment));
     }
   }
 
-  updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment) {
+  async updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment, assessmentSettings: Settings) {
     this.updateAssessmentWaterComponents(diagram, assessment.water);
     this.updateAssessmentComponentFlows(diagram.waterDiagram, assessment.water);
-    // console.log('=== updated assessment', assessment.water);
+    this.setAssessmentSettingsFromDiagram(assessmentSettings, diagram);
+    
+    await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings));
+    this.waterAssessmentService.settings.next(assessmentSettings);
+    let allSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(allSettings);
+  }
+  
+  setAssessmentSettingsFromDiagram(settings: Settings, diagram: Diagram) {
+    settings.unitsOfMeasure = diagram.waterDiagram.flowDiagramData.settings.unitsOfMeasure;
+    settings.flowDecimalPrecision = diagram.waterDiagram.flowDiagramData.settings.flowDecimalPrecision;
   }
 
    /**

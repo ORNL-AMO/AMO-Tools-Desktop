@@ -190,7 +190,8 @@ export interface WaterTreatment extends ProcessFlowPart {
 }
 
 export interface KnownLoss extends ProcessFlowPart {
-    lossValue: number,
+    lossType: string,
+    flowValue: number,
 }
 
 

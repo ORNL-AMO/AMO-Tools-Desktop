@@ -59,6 +59,18 @@
     </div>
   </form>
 
+  <form class="pt-0" [formGroup]="settingsForm">
+    <div class="form-group">
+      <label for="flowDecimalPrecision">Flow Value Decimal Precision</label>
+      <div class="input-group">
+        <select class="form-control" id="flowDecimalPrecision" formControlName="flowDecimalPrecision" (change)="saveSettings()"
+        (focus)="focusField('flowDecimalPrecision')">
+        <option *ngFor="let option of flowDecimalPrecisionOptions" [ngValue]="option.value">{{option.display}}</option>
+      </select>
+      </div>
+    </div>
+  </form>
+
   <div class="mx-2 pt-3">
     <label class="group-label" (click)="toggleCollapse('waterTreatment')">
       <span class="fa fa-chevron-right"

@@ -52,6 +52,7 @@ export interface FlowDiagramData {
   nodes: Node[],
   edges: Edge[],
   userDiagramOptions: UserDiagramOptions,
+  settings: DiagramSettings,
   nodeCalculatedDataMap: Record<string, NodeCalculatedData>
   recentNodeColors: string[];
   recentEdgeColors: string[];
@@ -65,8 +66,12 @@ export interface UserDiagramOptions {
   controlsVisible: boolean,
   directionalArrowsVisible: boolean,
   flowLabelSize: number,
-  flowDecimalPrecision: number,
   edgeOptions: DefaultEdgeOptions
+}
+
+export interface DiagramSettings {
+  flowDecimalPrecision: number,
+  unitsOfMeasure: string,
 }
 
 
@@ -342,4 +347,59 @@ export const getNewNode = (nodeType: WaterProcessComponentType, newProcessCompon
 
   return newNode;
 }
+
+
+export const convertFlowDiagramData = (flowDiagramData: {nodes: Node[], edges: Edge[], nodeCalculatedDataMap: Record<string, NodeCalculatedData>}, newUnits: string) => {
+  flowDiagramData.nodes = flowDiagramData.nodes.map((nd: Node<ProcessFlowPart>) => {
+    const convertedTotalSourceFlow = convertFlowValue(nd.data.userEnteredData.totalSourceFlow, newUnits);
+    const convertedTotalDischargeFlow = convertFlowValue(nd.data.userEnteredData.totalDischargeFlow, newUnits);
+    return {
+      ...nd,
+      data: {
+        ...nd.data,
+        userEnteredData: {
+          ...nd.data.userEnteredData,
+          totalSourceFlow: convertedTotalSourceFlow,
+          totalDischargeFlow: convertedTotalDischargeFlow
+        }
+      }
+    }
+  });
+
+  flowDiagramData.edges = flowDiagramData.edges.map((edge: Edge<CustomEdgeData>) => {
+    const convertedEdgeflowValue = convertFlowValue(edge.data.flowValue, newUnits);
+    return {
+      ...edge,
+      data: {
+        ...edge.data,
+        flowValue: convertedEdgeflowValue
+      }
+    }
+  });
+
+  Object.keys(flowDiagramData.nodeCalculatedDataMap).forEach((key: string) => {
+    flowDiagramData.nodeCalculatedDataMap[key].totalSourceFlow = convertFlowValue(flowDiagramData.nodeCalculatedDataMap[key].totalSourceFlow, newUnits);
+    flowDiagramData.nodeCalculatedDataMap[key].totalDischargeFlow = convertFlowValue(flowDiagramData.nodeCalculatedDataMap[key].totalDischargeFlow, newUnits);
+  });
+
+}
+
+const convertFlowValue = (value: number, newUnits: string) => {
+  if (isValidNumber(value)) {
+    if (newUnits === 'Metric') {
+      // * return m3 
+      return value * 3785.4118;
+    } else if (newUnits === 'Imperial') {
+      // * return mGal 
+      return value / 3785.4118;
+    }
+  }
+  return value;
+}
+
+const isValidNumber = (num: number): boolean => {
+  return !isNaN(num) && num !== null && num !== undefined;
+}
+
+
 

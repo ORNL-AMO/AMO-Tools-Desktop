@@ -1,6 +1,6 @@
 import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
 import { edgeTypes, nodeTypes } from "./FlowTypes";
-import { CustomEdgeData, NodeCalculatedData, getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { CustomEdgeData, NodeCalculatedData, getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, DiagramSettings } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { DefaultEdgeOptions, EdgeTypes, useHandleConnections } from "@xyflow/react";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
@@ -276,11 +276,17 @@ export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
     directionalArrowsVisible: true,
     showFlowValues: false,
     flowLabelSize: 1,
-    flowDecimalPrecision: 2,
     edgeOptions: {
       animated: true,
       type: 'smoothstep',
     }
+  }
+}
+
+export const getDefaultSettings = (): DiagramSettings => {
+  return {
+    unitsOfMeasure: 'Imperial',
+    flowDecimalPrecision: 2
   }
 }
 
@@ -298,7 +304,7 @@ export const formatNumberValue = (value: number | string, places: number): numbe
     return '';
   }
   if (!Number.isInteger(Number(value))) {
-    value = formatDecimalPlaces(value, places);
+    value = Number(formatDecimalPlaces(value, places));
   }
   return value;
 }

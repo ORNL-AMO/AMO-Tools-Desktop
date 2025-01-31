@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
-import { BoilerWater, CoolingTower, DischargeOutlet, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, Landscaping, LandscapingResults, Modification, MotorEnergy, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterSystemFlows, WaterTreatment, WaterUsingSystem } from '../shared/models/water-assessment';
+import { BoilerWater, CoolingTower, DiagramWaterSystemFlows, DischargeOutlet, FlowData, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, KnownLoss, Landscaping, LandscapingResults, Modification, MotorEnergy, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterSystemFlows, WaterTreatment, WaterUsingSystem } from '../shared/models/water-assessment';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
+import { Assessment } from '../shared/models/assessment';
+import { convertFlowDiagramData } from '../../process-flow-types/shared-process-flow-types';
+import { MAX_FLOW_DECIMALS } from '../../process-flow-types/shared-process-flow-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConvertWaterAssessmentService {
-
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  MAX_FLOW_DECIMALS: number = MAX_FLOW_DECIMALS;
+  constructor(private convertUnitsService: ConvertUnitsService, private diagramIdbService: DiagramIdbService) { }
 
   convertWaterAssessment(waterAssessment: WaterAssessment, oldSettings: Settings, newSettings: Settings): WaterAssessment {
     waterAssessment = this.convertWaterAssessmentData(waterAssessment, oldSettings, newSettings);
@@ -20,14 +24,50 @@ export class ConvertWaterAssessmentService {
     return waterAssessment;
   }
 
+  async convertWaterAssessmentDiagram(assessment: Assessment, newSettings: Settings) {
+    let diagram = this.diagramIdbService.findById(assessment.diagramId);
+    diagram.waterDiagram.flowDiagramData.settings.unitsOfMeasure = newSettings.unitsOfMeasure;
+    convertFlowDiagramData(diagram.waterDiagram.flowDiagramData, newSettings.unitsOfMeasure);
+  }
+
   convertWaterAssessmentData(waterAssessment: WaterAssessment, oldSettings: Settings, newSettings: Settings): WaterAssessment {
     waterAssessment.intakeSources = this.convertIntakeSources(waterAssessment.intakeSources, oldSettings, newSettings);
     waterAssessment.dischargeOutlets = this.convertDischargeOutlets(waterAssessment.dischargeOutlets, oldSettings, newSettings);
     waterAssessment.waterUsingSystems = this.convertWaterUsingSystems(waterAssessment.waterUsingSystems, oldSettings, newSettings);
     waterAssessment.waterTreatments = this.convertWaterTreatments(waterAssessment.waterTreatments, oldSettings, newSettings);
     waterAssessment.wasteWaterTreatments = this.convertWasteWaterTreatments(waterAssessment.wasteWaterTreatments, oldSettings, newSettings);
+    waterAssessment.knownLosses = this.convertKnownLosses(waterAssessment.knownLosses, oldSettings, newSettings);
+    waterAssessment.diagramWaterSystemFlows = this.convertDiagramWaterSystemFlows(waterAssessment.diagramWaterSystemFlows, oldSettings, newSettings);
     return waterAssessment;
   }
+
+  convertDiagramWaterSystemFlows(systemFlows: DiagramWaterSystemFlows[], oldSettings: Settings, newSettings: Settings): DiagramWaterSystemFlows[] {
+    systemFlows.forEach(systemFlow => {
+      systemFlow.sourceWater = this.convertWaterSystemFlowData(systemFlow.sourceWater, oldSettings, newSettings);
+      systemFlow.recycledSourceWater = this.convertWaterSystemFlowData(systemFlow.recycledSourceWater, oldSettings, newSettings);
+      systemFlow.recirculatedWater = this.convertWaterSystemFlowData(systemFlow.recirculatedWater, oldSettings, newSettings);
+      systemFlow.dischargeWater = this.convertWaterSystemFlowData(systemFlow.dischargeWater, oldSettings, newSettings);
+      systemFlow.dischargeWaterRecycled = this.convertWaterSystemFlowData(systemFlow.dischargeWaterRecycled, oldSettings, newSettings);
+      systemFlow.knownLosses = this.convertWaterSystemFlowData(systemFlow.knownLosses, oldSettings, newSettings);
+      systemFlow.waterInProduct = this.convertWaterSystemFlowData(systemFlow.waterInProduct, oldSettings, newSettings);
+    });
+    
+    return systemFlows;
+  }
+
+  convertWaterSystemFlowData(systemFlowData: {
+    total: number,
+    flows: FlowData[]
+  }, oldSettings: Settings, newSettings: Settings) {
+
+    systemFlowData.total = this.convertFlowValue(systemFlowData.total, oldSettings, newSettings);
+    systemFlowData.total = this.convertUnitsService.roundVal(systemFlowData.total, this.MAX_FLOW_DECIMALS);
+    systemFlowData.flows.forEach(flow => {
+      flow.flowValue = this.convertFlowValue(flow.flowValue, oldSettings, newSettings);
+    });
+    return systemFlowData;
+  }
+
 
   convertIntakeSources(intakeSources: IntakeSource[], oldSettings: Settings, newSettings: Settings): IntakeSource[] {
     intakeSources.forEach((intakeSource: IntakeSource) => {      
@@ -35,11 +75,21 @@ export class ConvertWaterAssessmentService {
         intakeSource.annualUse = this.convertUnitsService.value(intakeSource.annualUse).from('Mgal').to('m3');
       } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
         intakeSource.annualUse = this.convertUnitsService.value(intakeSource.annualUse).from('m3').to('Mgal');
-  
       }
-      intakeSource.annualUse = this.convertUnitsService.roundVal(intakeSource.annualUse, 2);
+      intakeSource.annualUse = this.convertUnitsService.roundVal(intakeSource.annualUse, this.MAX_FLOW_DECIMALS);
+      intakeSource.userEnteredData = this.convertUserEnteredFlowData(intakeSource.userEnteredData, oldSettings, newSettings);
     });
     return intakeSources;
+  }
+
+  convertUserEnteredFlowData(userEnteredData: {totalSourceFlow: number, totalDischargeFlow: number}, oldSettings: Settings, newSettings: Settings) {
+    if (userEnteredData.totalSourceFlow) {
+      userEnteredData.totalSourceFlow = this.convertFlowValue(userEnteredData.totalSourceFlow, oldSettings, newSettings);
+    }
+    if (userEnteredData.totalDischargeFlow) {
+      userEnteredData.totalDischargeFlow = this.convertFlowValue(userEnteredData.totalDischargeFlow, oldSettings, newSettings);
+    }
+    return userEnteredData;
   }
 
   convertDischargeOutlets(dischargeOutlet: DischargeOutlet[], oldSettings: Settings, newSettings: Settings): DischargeOutlet[] {
@@ -50,13 +100,14 @@ export class ConvertWaterAssessmentService {
         dischargeOutlet.annualUse = this.convertUnitsService.value(dischargeOutlet.annualUse).from('m3').to('Mgal');
   
       }
-      dischargeOutlet.annualUse = this.convertUnitsService.roundVal(dischargeOutlet.annualUse, 2);
+      dischargeOutlet.annualUse = this.convertUnitsService.roundVal(dischargeOutlet.annualUse, this.MAX_FLOW_DECIMALS);
+      dischargeOutlet.userEnteredData = this.convertUserEnteredFlowData(dischargeOutlet.userEnteredData, oldSettings, newSettings);
     });
     return dischargeOutlet;
   }
 
   convertWaterUsingSystems(waterUsingSystems: WaterUsingSystem[], oldSettings: Settings, newSettings: Settings): WaterUsingSystem[] {
-    waterUsingSystems.forEach((waterUsingSystem: WaterUsingSystem) => {      
+    waterUsingSystems.forEach((waterUsingSystem: WaterUsingSystem) => {     
       waterUsingSystem.waterFlows = this.convertWaterFlows(waterUsingSystem.waterFlows, oldSettings, newSettings);
       waterUsingSystem.userDiagramFlowOverrides = this.convertWaterFlows(waterUsingSystem.userDiagramFlowOverrides, oldSettings, newSettings);
       
@@ -71,8 +122,52 @@ export class ConvertWaterAssessmentService {
         return this.convertMotorEnergy(motorEnergy, newSettings, oldSettings);
       });
 
+      waterUsingSystem.userEnteredData = this.convertUserEnteredFlowData(waterUsingSystem.userEnteredData, oldSettings, newSettings);
     });
     return waterUsingSystems;
+  }
+
+  convertWaterTreatments(waterTreatments: WaterTreatment[], oldSettings: Settings, newSettings: Settings): WaterTreatment[] {
+    waterTreatments.forEach((waterTreatment: WaterTreatment) => {      
+      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        waterTreatment.flowValue = this.convertUnitsService.value(waterTreatment.flowValue).from('Mgal').to('m3');
+      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        waterTreatment.flowValue = this.convertUnitsService.value(waterTreatment.flowValue).from('m3').to('Mgal');
+  
+      }
+      waterTreatment.flowValue = this.convertUnitsService.roundVal(waterTreatment.flowValue, this.MAX_FLOW_DECIMALS);
+      waterTreatment.userEnteredData = this.convertUserEnteredFlowData(waterTreatment.userEnteredData, oldSettings, newSettings);
+
+    });
+    return waterTreatments;
+  }
+
+  convertWasteWaterTreatments(wasteWaterTreatment: WasteWaterTreatment[], oldSettings: Settings, newSettings: Settings): WasteWaterTreatment[] {
+    wasteWaterTreatment.forEach((wasteWaterTreatment: WasteWaterTreatment) => {      
+      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        wasteWaterTreatment.flowValue = this.convertUnitsService.value(wasteWaterTreatment.flowValue).from('Mgal').to('m3');
+      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        wasteWaterTreatment.flowValue = this.convertUnitsService.value(wasteWaterTreatment.flowValue).from('m3').to('Mgal');
+      }
+      wasteWaterTreatment.flowValue = this.convertUnitsService.roundVal(wasteWaterTreatment.flowValue, this.MAX_FLOW_DECIMALS);
+      wasteWaterTreatment.userEnteredData = this.convertUserEnteredFlowData(wasteWaterTreatment.userEnteredData, oldSettings, newSettings);
+
+    });
+    return wasteWaterTreatment;
+  }
+
+  convertKnownLosses(knownLoss: KnownLoss[], oldSettings: Settings, newSettings: Settings): KnownLoss[] {
+    knownLoss.forEach((knownLoss: KnownLoss) => {      
+      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        knownLoss.flowValue = this.convertUnitsService.value(knownLoss.flowValue).from('Mgal').to('m3');
+      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        knownLoss.flowValue = this.convertUnitsService.value(knownLoss.flowValue).from('m3').to('Mgal');
+      }
+      knownLoss.flowValue = this.convertUnitsService.roundVal(knownLoss.flowValue, this.MAX_FLOW_DECIMALS);
+      knownLoss.userEnteredData = this.convertUserEnteredFlowData(knownLoss.userEnteredData, oldSettings, newSettings);
+
+    });
+    return knownLoss;
   }
 
   convertWaterFlows(waterFlows: WaterSystemFlows, oldSettings: Settings, newSettings: Settings) {
@@ -94,14 +189,13 @@ export class ConvertWaterAssessmentService {
       waterFlows.waterInProduct = this.convertUnitsService.value(waterFlows.waterInProduct).from('m3').to('Mgal');
       
     }
-    waterFlows.sourceWater = this.convertUnitsService.roundVal(waterFlows.sourceWater, 2);
-    waterFlows.recycledSourceWater = this.convertUnitsService.roundVal(waterFlows.recycledSourceWater, 2);
-    waterFlows.recirculatedWater = this.convertUnitsService.roundVal(waterFlows.recirculatedWater, 2);
-    waterFlows.dischargeWater = this.convertUnitsService.roundVal(waterFlows.dischargeWater, 2);
-    waterFlows.dischargeWaterRecycled = this.convertUnitsService.roundVal(waterFlows.dischargeWaterRecycled, 2);
-    waterFlows.knownLosses = this.convertUnitsService.roundVal(waterFlows.knownLosses, 2);
-    waterFlows.waterInProduct = this.convertUnitsService.roundVal(waterFlows.waterInProduct, 2);
-
+    waterFlows.sourceWater = this.convertUnitsService.roundVal(waterFlows.sourceWater, this.MAX_FLOW_DECIMALS);
+    waterFlows.recycledSourceWater = this.convertUnitsService.roundVal(waterFlows.recycledSourceWater, this.MAX_FLOW_DECIMALS);
+    waterFlows.recirculatedWater = this.convertUnitsService.roundVal(waterFlows.recirculatedWater, this.MAX_FLOW_DECIMALS);
+    waterFlows.dischargeWater = this.convertUnitsService.roundVal(waterFlows.dischargeWater, this.MAX_FLOW_DECIMALS);
+    waterFlows.dischargeWaterRecycled = this.convertUnitsService.roundVal(waterFlows.dischargeWaterRecycled, this.MAX_FLOW_DECIMALS);
+    waterFlows.knownLosses = this.convertUnitsService.roundVal(waterFlows.knownLosses, this.MAX_FLOW_DECIMALS);
+    waterFlows.waterInProduct = this.convertUnitsService.roundVal(waterFlows.waterInProduct, this.MAX_FLOW_DECIMALS);
     return waterFlows;
   }
 
@@ -118,9 +212,9 @@ export class ConvertWaterAssessmentService {
       processUse.waterLossMetricValue = this.convertUnitsService.value(processUse.waterLossMetricValue).from('m3').to('Mgal');
     }
 
-    processUse.waterRequiredMetricValue = this.convertUnitsService.roundVal(processUse.waterRequiredMetricValue, 2);
-    processUse.waterConsumedMetricValue = this.convertUnitsService.roundVal(processUse.waterConsumedMetricValue, 2);
-    processUse.waterLossMetricValue = this.convertUnitsService.roundVal(processUse.waterLossMetricValue, 2);
+    processUse.waterRequiredMetricValue = this.convertUnitsService.roundVal(processUse.waterRequiredMetricValue, this.MAX_FLOW_DECIMALS);
+    processUse.waterConsumedMetricValue = this.convertUnitsService.roundVal(processUse.waterConsumedMetricValue, this.MAX_FLOW_DECIMALS);
+    processUse.waterLossMetricValue = this.convertUnitsService.roundVal(processUse.waterLossMetricValue, this.MAX_FLOW_DECIMALS);
 
     return processUse;
   }
@@ -134,11 +228,11 @@ export class ConvertWaterAssessmentService {
       coolingTower.temperatureDrop = this.convertUnitsService.value(coolingTower.temperatureDrop).from('C').to('F');
     }
 
-    coolingTower.tonnage = this.convertUnitsService.roundVal(coolingTower.tonnage, 2);
-    coolingTower.loadFactor = this.convertUnitsService.roundVal(coolingTower.loadFactor, 2);
-    coolingTower.temperatureDrop = this.convertUnitsService.roundVal(coolingTower.temperatureDrop, 2);
-    coolingTower.makeupConductivity = this.convertUnitsService.roundVal(coolingTower.makeupConductivity, 2);
-    coolingTower.blowdownConductivity = this.convertUnitsService.roundVal(coolingTower.blowdownConductivity, 2);
+    coolingTower.tonnage = this.convertUnitsService.roundVal(coolingTower.tonnage, this.MAX_FLOW_DECIMALS);
+    coolingTower.loadFactor = this.convertUnitsService.roundVal(coolingTower.loadFactor, this.MAX_FLOW_DECIMALS);
+    coolingTower.temperatureDrop = this.convertUnitsService.roundVal(coolingTower.temperatureDrop, this.MAX_FLOW_DECIMALS);
+    coolingTower.makeupConductivity = this.convertUnitsService.roundVal(coolingTower.makeupConductivity, this.MAX_FLOW_DECIMALS);
+    coolingTower.blowdownConductivity = this.convertUnitsService.roundVal(coolingTower.blowdownConductivity, this.MAX_FLOW_DECIMALS);
 
     return coolingTower;
   }
@@ -155,12 +249,12 @@ export class ConvertWaterAssessmentService {
       // boilerWater.steamPerPower = this.convertUnitsService.value(boilerWater.steamPerPower).from('F').to('C');
     }
 
-    boilerWater.power = this.convertUnitsService.roundVal(boilerWater.power, 2); 
-    boilerWater.loadFactor = this.convertUnitsService.roundVal(boilerWater.loadFactor, 2); 
-    boilerWater.steamPerPower = this.convertUnitsService.roundVal(boilerWater.steamPerPower, 2); 
-    boilerWater.feedwaterConductivity = this.convertUnitsService.roundVal(boilerWater.feedwaterConductivity, 2); 
-    boilerWater.makeupConductivity = this.convertUnitsService.roundVal(boilerWater.makeupConductivity, 2); 
-    boilerWater.blowdownConductivity = this.convertUnitsService.roundVal(boilerWater.blowdownConductivity, 2); 
+    boilerWater.power = this.convertUnitsService.roundVal(boilerWater.power, this.MAX_FLOW_DECIMALS); 
+    boilerWater.loadFactor = this.convertUnitsService.roundVal(boilerWater.loadFactor, this.MAX_FLOW_DECIMALS); 
+    boilerWater.steamPerPower = this.convertUnitsService.roundVal(boilerWater.steamPerPower, this.MAX_FLOW_DECIMALS); 
+    boilerWater.feedwaterConductivity = this.convertUnitsService.roundVal(boilerWater.feedwaterConductivity, this.MAX_FLOW_DECIMALS); 
+    boilerWater.makeupConductivity = this.convertUnitsService.roundVal(boilerWater.makeupConductivity, this.MAX_FLOW_DECIMALS); 
+    boilerWater.blowdownConductivity = this.convertUnitsService.roundVal(boilerWater.blowdownConductivity, this.MAX_FLOW_DECIMALS); 
 
     return boilerWater;
   }
@@ -172,7 +266,7 @@ export class ConvertWaterAssessmentService {
       kitchenRestroom.dailyUsePerEmployee = this.convertUnitsService.value(kitchenRestroom.dailyUsePerEmployee).from('m3').to('Mgal');
     }
 
-    kitchenRestroom.dailyUsePerEmployee = this.convertUnitsService.roundVal(kitchenRestroom.dailyUsePerEmployee, 2); 
+    kitchenRestroom.dailyUsePerEmployee = this.convertUnitsService.roundVal(kitchenRestroom.dailyUsePerEmployee, this.MAX_FLOW_DECIMALS); 
 
     return kitchenRestroom;
   }
@@ -186,8 +280,8 @@ export class ConvertWaterAssessmentService {
       landscaping.yearlyInchesIrrigated = this.convertUnitsService.value(landscaping.yearlyInchesIrrigated).from('cm').to('in');
     }
 
-    landscaping.areaIrrigated = this.convertUnitsService.roundVal(landscaping.areaIrrigated, 2); 
-    landscaping.yearlyInchesIrrigated = this.convertUnitsService.roundVal(landscaping.yearlyInchesIrrigated, 2); 
+    landscaping.areaIrrigated = this.convertUnitsService.roundVal(landscaping.areaIrrigated, this.MAX_FLOW_DECIMALS); 
+    landscaping.yearlyInchesIrrigated = this.convertUnitsService.roundVal(landscaping.yearlyInchesIrrigated, this.MAX_FLOW_DECIMALS); 
 
     return landscaping;
   }
@@ -203,9 +297,9 @@ export class ConvertWaterAssessmentService {
       heatEnergy.wasteWaterDischarge = this.convertUnitsService.value(heatEnergy.wasteWaterDischarge).from('m3').to('Mgal'); 
     }
 
-    heatEnergy.incomingTemp = this.convertUnitsService.roundVal(heatEnergy.incomingTemp, 2); 
-    heatEnergy.outgoingTemp = this.convertUnitsService.roundVal(heatEnergy.outgoingTemp, 2); 
-    heatEnergy.wasteWaterDischarge = this.convertUnitsService.roundVal(heatEnergy.wasteWaterDischarge, 2); 
+    heatEnergy.incomingTemp = this.convertUnitsService.roundVal(heatEnergy.incomingTemp, this.MAX_FLOW_DECIMALS); 
+    heatEnergy.outgoingTemp = this.convertUnitsService.roundVal(heatEnergy.outgoingTemp, this.MAX_FLOW_DECIMALS); 
+    heatEnergy.wasteWaterDischarge = this.convertUnitsService.roundVal(heatEnergy.wasteWaterDischarge, this.MAX_FLOW_DECIMALS); 
     return heatEnergy;
   }
 
@@ -215,33 +309,8 @@ export class ConvertWaterAssessmentService {
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       motorEnergy.ratedPower = this.convertUnitsService.value(motorEnergy.ratedPower).from('kW').to('hp');
     }
-    motorEnergy.ratedPower = this.convertUnitsService.roundVal(motorEnergy.ratedPower, 2); 
+    motorEnergy.ratedPower = this.convertUnitsService.roundVal(motorEnergy.ratedPower, this.MAX_FLOW_DECIMALS); 
     return motorEnergy;
-  }
-
-  convertWaterTreatments(waterTreatments: WaterTreatment[], oldSettings: Settings, newSettings: Settings): WaterTreatment[] {
-    waterTreatments.forEach((waterTreatment: WaterTreatment) => {      
-      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-        waterTreatment.flowValue = this.convertUnitsService.value(waterTreatment.flowValue).from('Mgal').to('m3');
-      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-        waterTreatment.flowValue = this.convertUnitsService.value(waterTreatment.flowValue).from('m3').to('Mgal');
-  
-      }
-      waterTreatment.flowValue = this.convertUnitsService.roundVal(waterTreatment.flowValue, 2);
-    });
-    return waterTreatments;
-  }
-
-  convertWasteWaterTreatments(wasteWaterTreatment: WasteWaterTreatment[], oldSettings: Settings, newSettings: Settings): WasteWaterTreatment[] {
-    wasteWaterTreatment.forEach((wasteWaterTreatment: WasteWaterTreatment) => {      
-      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-        wasteWaterTreatment.flowValue = this.convertUnitsService.value(wasteWaterTreatment.flowValue).from('Mgal').to('m3');
-      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-        wasteWaterTreatment.flowValue = this.convertUnitsService.value(wasteWaterTreatment.flowValue).from('m3').to('Mgal');
-      }
-      wasteWaterTreatment.flowValue = this.convertUnitsService.roundVal(wasteWaterTreatment.flowValue, 2);
-    });
-    return wasteWaterTreatment;
   }
 
   convertLandscapingSuiteInput(landscaping: Landscaping, settings: Settings): Landscaping {
@@ -282,6 +351,14 @@ export class ConvertWaterAssessmentService {
     }
   }
 
+  convertFlowValue(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      val = this.convertUnitsService.value(val).from('Mgal').to('m3');
+    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      val = this.convertUnitsService.value(val).from('m3').to('Mgal');
+    }
+    return val;
+  }
 
   convertModification(waterAssessment: Modification, oldSettings: Settings, newSettings: Settings): Modification {
     return waterAssessment;
