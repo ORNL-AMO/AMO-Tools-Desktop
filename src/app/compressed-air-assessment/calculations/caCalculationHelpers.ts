@@ -1,6 +1,7 @@
 import { CompressorInventoryItem, ProfileSummary, ProfileSummaryData } from "../../shared/models/compressed-air-assessment";
 import { EemSavingsResults } from "./caCalculationModels";
 import * as _ from 'lodash';
+import { CompressorInventoryItemClass } from "./CompressorInventoryItemClass";
 
 export function getEmptyEemSavings(): EemSavingsResults {
     return {
@@ -24,13 +25,13 @@ export function getEmptyEemSavings(): EemSavingsResults {
 }
 
 
-export function getTotalCapacity(inventoryItems: Array<CompressorInventoryItem>): number {
+export function getTotalCapacity(inventoryItems: Array<CompressorInventoryItemClass | CompressorInventoryItem>): number {
     return _.sumBy(inventoryItems, (inventoryItem) => {
         return inventoryItem.nameplateData.fullLoadRatedCapacity;
     });
 }
 
-export function getTotalPower(inventoryItems: Array<CompressorInventoryItem>): number {
+export function getTotalPower(inventoryItems: Array<CompressorInventoryItemClass | CompressorInventoryItem>): number {
     return _.sumBy(inventoryItems, (inventoryItem) => {
         return inventoryItem.performancePoints.fullLoad.power;
     });
