@@ -1,0 +1,90 @@
+<div bsModal #releaseNotesModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="versionModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header p-2">
+          <span class="card-header-text">
+            MEASUR v{{versionNum}} Release Notes
+          </span>
+          <button class="close" aria-label="Close" (click)="hideModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            MEASUR helps manufacturers increase industrial energy efficiency at the plant-level and in specific systems.
+            Learn step-by-step
+            ways to identify opportunities, monitor progress, and improve efficiency in any facility.
+            Some tools help facilities implement an energy management system and prepare to become ISO 50001 and
+            Superior Energy Performance certified. Based on
+            older Department of Energy (DOE) tools, the Advanced Manufacturing Office (AMO) has undertaken this effort
+            to refactor the legacy tools into a modern environment.
+            The suite includes 7 energy system assessment modules, a Data Exploration Module, extensive help text,
+            comprehensive reports, data visualization, and 80 calculators!
+          </p>
+          <p class="card-text-small">
+            MEASUR is a supported application, updates are expected and may impact previously created assessments.
+          </p>
+          <label class="header-label">Warnings</label>
+          <ul>
+            <li>Installing v1.0.0 or an earlier version of this tool will automatically reset your app data. Data can be
+              imported into an earlier version from v1.0.0</li>
+            <li>Do not install an earlier version of this tool without resetting your app data (in settings).</li>
+            <li>If MEASUR freezes during installation or fails to install, uninstall the previous version of MEASUR and
+              repeat installation of the new installer</li>
+            <li>Assessments created in MEASUR 0.8.0 or later are not compatible with older versions. </li>
+            <li>Exporting from v.0.8.0 and importing to a lower version will continue to work, though new features will
+              not be available.</li>
+          </ul>
+
+          <label class="header-label">Here are the details of what's new in version 1.5.9:</label>
+          <br>
+          <label>Compressed Air</label>
+          <ul>
+            <li>Enhanced: In Compressor Ordering and Profile Summary tables, trim compressors are now marked 'Base' or
+              'Trim'</li>
+            <li>Fixed: Explore Opportunities results are now calculated with user-entered electricity cost</li>
+            <li>Fixed: Trim compressor validation</li>
+            <li>Fixed: Calculation method for compressors with variable displacement</li>
+          </ul>
+
+          <label class="header-label">Here are the details of what's new in version 1.5.8:</label>
+          <br>
+          <label>Compressed Air</label>
+          <ul>
+            <li>Fixed: Compressed Air assessment percent savings chart result calculation</li>
+          </ul>
+
+          <label>Steam</label>
+          <ul>
+            <li>Fixed: Blowdown rate result calculation</li>
+          </ul>
+
+          <label class="header-label">Here are the details of what's new in version 1.5.7:</label>
+          <br>
+          <label>Compressed Air</label>
+          <ul>
+            <li>Fixed: Performance Profiles chart displaying no data due to AMO-Tools-Suite bug</li>
+          </ul>
+
+          <label>Known Issues</label>
+          <ul>
+            <li>The Auto-update feature is currently unavailable for the Mac and Linux versions</li>
+            <li>Renaming an export in Windows Download menu can delete the file extension (.json, or .gz)</li>
+            <li>Assessments made in a previous major release may experience errors</li>
+            <li>Import files made in a previous major release may not be useable due to field additions/removals</li>
+            <li>We have observed cases where if MEASUR is open for a long period of time while many assessments are
+              present, MEASUR performance can become slow. If experienced, close and reopen MEASUR</li>
+          </ul>
+        </div>
+
+        <div class="modal-footer p-2 d-flex flex-row justify-content-end">
+          <div>
+            <button type="button" class="btn btn-secondary btn-sm mr-2 pull-right" (click)="hideModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

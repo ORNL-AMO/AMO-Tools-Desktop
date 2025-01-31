@@ -2,10 +2,9 @@
     position: fixed;
     z-index: 9999;
     right: 10px;
-    top: 0px;
+    top: 0;
     margin: 10px;
-    min-width: 300px;
-    max-width: 500px;
+    width: 500px;
     background: rgb(111, 113, 116);
     color: #fff;
     box-shadow: 0 6px 6px rgba(0, 0, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.4);
@@ -19,6 +18,11 @@
 
 .card-text-small {
     font-size: 14px;
+}
+
+.card-text,
+.card-text-small {
+    margin-bottom: .5rem;
 }
 
 .alert {
@@ -44,6 +48,7 @@
 
 .card-body {
     font-size: 16px;
+    height: 100px;
 }
 
 a.click-link {
@@ -51,3 +56,13 @@ a.click-link {
     text-decoration: underline;
     color: #b5ffd6 !important;
 }
+  
+  .spinner > div {
+    width: 25px;
+    height: 25px;
+    background-color: #ffffff;
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  }
