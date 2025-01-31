@@ -17,6 +17,7 @@ import { ConnectedInventoryModule } from '../../../shared/connected-inventory/co
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { NameplateDataCatalogService } from './nameplate-data-catalog/nameplate-data-catalog.service';
+import { CompressedAirMotorCatalogService } from './compressed-air-motor-catalog/compressed-air-motor-catalog.service';
 
 
 
@@ -44,7 +45,8 @@ import { NameplateDataCatalogService } from './nameplate-data-catalog/nameplate-
   providers: [
     CompressedAirCatalogService,
     CompressedAirBasicsService,
-    NameplateDataCatalogService
+    NameplateDataCatalogService,
+    CompressedAirMotorCatalogService
   ],
   exports: [
     CompressedAirCatalogComponent

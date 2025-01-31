@@ -1,1 +1,44 @@
-<p>compressed-air-motor-catalog works!</p>
+<label class="group-label" (click)="toggleForm()">
+    <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+    Motor
+</label>
+<form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
+
+    <div class="form-group" *ngIf="displayOptions.motorPower">
+        <label for="motorPower">Motor Power</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('motorPower')" (input)="save()"
+                formControlName="motorPower" id="motorPower">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">hp</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">kW</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.motorPower.invalid && !form.controls.motorPower.pristine">
+            <span *ngIf="form.controls.motorPower.errors.required">Value Required</span>
+            <span *ngIf="form.controls.motorPower.errors.min">Value can't be less than
+                {{form.controls.motorPower.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">hp</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">kW</span>
+            </span>
+        </span>
+    </div>
+
+    <div class="form-group" *ngIf="displayOptions.motorFullLoadAmps">
+        <label for="motorFullLoadAmps">Motor Full Load Amps</label>
+        <div class="input-group">
+            <input type="number" class="form-control" (focus)="focusField('motorFullLoadAmps')" (input)="save()"
+                formControlName="motorFullLoadAmps" id="motorFullLoadAmps">
+            <span class="units input-group-addon">amps</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.motorFullLoadAmps.invalid && !form.controls.motorFullLoadAmps.pristine">
+            <span *ngIf="form.controls.motorFullLoadAmps.errors.required">Value Required</span>
+            <span *ngIf="form.controls.motorFullLoadAmps.errors.min">Value can't be less than
+                {{form.controls.motorFullLoadAmps.errors.min.min}}
+                <span class="units input-group-addon">amps</span>
+            </span>
+        </span>
+    </div>
+
+</form>
