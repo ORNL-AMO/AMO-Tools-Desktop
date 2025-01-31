@@ -20,6 +20,14 @@ import { NameplateDataCatalogService } from './nameplate-data-catalog/nameplate-
 import { CompressedAirMotorCatalogService } from './compressed-air-motor-catalog/compressed-air-motor-catalog.service';
 import { CompressedAirControlsCatalogService } from './compressed-air-controls-catalog/compressed-air-controls-catalog.service';
 import { DesignDetailsCatalogService } from './design-details-catalog/design-details-catalog.service';
+import { PerformancePointsCatalogService } from './performance-points-catalog/performance-points-catalog.service';
+import { BlowoffCatalogComponent } from './performance-points-catalog/blowoff-catalog/blowoff-catalog.component';
+import { FullLoadCatalogComponent } from './performance-points-catalog/full-load-catalog/full-load-catalog.component';
+import { MaxFullFlowCatalogComponent } from './performance-points-catalog/max-full-flow-catalog/max-full-flow-catalog.component';
+import { MidTurndownCatalogComponent } from './performance-points-catalog/mid-turndown-catalog/mid-turndown-catalog.component';
+import { NoLoadCatalogComponent } from './performance-points-catalog/no-load-catalog/no-load-catalog.component';
+import { TurndownCatalogComponent } from './performance-points-catalog/turndown-catalog/turndown-catalog.component';
+import { UnloadPointCatalogComponent } from './performance-points-catalog/unload-point-catalog/unload-point-catalog.component';
 
 
 
@@ -31,7 +39,14 @@ import { DesignDetailsCatalogService } from './design-details-catalog/design-det
     CompressedAirMotorCatalogComponent,
     DesignDetailsCatalogComponent,
     PerformancePointsCatalogComponent,
-    CompressedAirBasicsComponent
+    CompressedAirBasicsComponent,
+    BlowoffCatalogComponent,
+    FullLoadCatalogComponent,
+    MaxFullFlowCatalogComponent,
+    MidTurndownCatalogComponent,
+    NoLoadCatalogComponent,
+    TurndownCatalogComponent,
+    UnloadPointCatalogComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +65,8 @@ import { DesignDetailsCatalogService } from './design-details-catalog/design-det
     NameplateDataCatalogService,
     CompressedAirMotorCatalogService,
     CompressedAirControlsCatalogService,
-    DesignDetailsCatalogService
+    DesignDetailsCatalogService,
+    PerformancePointsCatalogService
   ],
   exports: [
     CompressedAirCatalogComponent
