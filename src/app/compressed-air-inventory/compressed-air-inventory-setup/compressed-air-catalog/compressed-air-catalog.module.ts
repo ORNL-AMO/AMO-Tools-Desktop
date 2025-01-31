@@ -19,6 +19,7 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
 import { NameplateDataCatalogService } from './nameplate-data-catalog/nameplate-data-catalog.service';
 import { CompressedAirMotorCatalogService } from './compressed-air-motor-catalog/compressed-air-motor-catalog.service';
 import { CompressedAirControlsCatalogService } from './compressed-air-controls-catalog/compressed-air-controls-catalog.service';
+import { DesignDetailsCatalogService } from './design-details-catalog/design-details-catalog.service';
 
 
 
@@ -48,7 +49,8 @@ import { CompressedAirControlsCatalogService } from './compressed-air-controls-c
     CompressedAirBasicsService,
     NameplateDataCatalogService,
     CompressedAirMotorCatalogService,
-    CompressedAirControlsCatalogService
+    CompressedAirControlsCatalogService,
+    DesignDetailsCatalogService
   ],
   exports: [
     CompressedAirCatalogComponent
