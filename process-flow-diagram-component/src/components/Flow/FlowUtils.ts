@@ -304,7 +304,7 @@ export const formatNumberValue = (value: number | string, places: number): numbe
     return '';
   }
   if (!Number.isInteger(Number(value))) {
-    value = formatDecimalPlaces(value, places);
+    value = Number(formatDecimalPlaces(value, places));
   }
   return value;
 }

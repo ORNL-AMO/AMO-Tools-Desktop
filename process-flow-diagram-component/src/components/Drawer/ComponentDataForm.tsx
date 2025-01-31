@@ -1,12 +1,12 @@
 import { Box, List, TextField, InputAdornment, ListItem, Divider, styled, Chip, Tooltip, TooltipProps, tooltipClasses, Button } from "@mui/material";
-import { getEdgeSourceAndTarget, getNodeFlowTotals, updateNodeCalculatedDataMap } from "../Flow/FlowUtils";
+import { formatDecimalPlaces, getEdgeSourceAndTarget, getNodeFlowTotals, updateNodeCalculatedDataMap } from "../Flow/FlowUtils";
 import { Edge, getConnectedEdges, Node, useReactFlow } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
 import React, { memo, useContext, useState } from "react";
 import FlowConnectionText from "./FlowConnectionText";
 import { CustomEdgeData, NodeCalculatedData, ProcessFlowPart, WasteWaterTreatment, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
-import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
+import { MAX_FLOW_DECIMALS, wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import { Accordion, AccordionDetails, AccordionSummary } from "../MUIStyledComponents";
 import { FlowContext } from "../Flow";
 import FlowDisplayUnit from "../Flow/FlowDisplayUnit";
@@ -97,6 +97,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
 
     const onDistributeFlowEvenly = (totalFlowValue: number, updateIds: string[]) => {
         let dividedTotalFlow = totalFlowValue / updateIds.length;
+        dividedTotalFlow = Number(formatDecimalPlaces(dividedTotalFlow, MAX_FLOW_DECIMALS));
         let connectedEdges = [];
         const allEdges = [...getEdges()].map((edge: Edge<CustomEdgeData>) => {
             if (updateIds.includes(edge.id)) {
