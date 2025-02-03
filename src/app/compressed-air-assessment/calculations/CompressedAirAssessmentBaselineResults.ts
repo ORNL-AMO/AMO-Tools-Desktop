@@ -6,7 +6,7 @@ import { BaselineResult, BaselineResults } from "./caCalculationModels";
 import { CompressedAirBaselineDayTypeProfileSummary } from "./CompressedAirBaselineDayTypeProfileSummary";
 
 import * as _ from 'lodash';
-export class CompressedairAssessmentBaselineResults {
+export class CompressedAirAssessmentBaselineResults {
 
     baselineDayTypeProfileSummaries: Array<CompressedAirBaselineDayTypeProfileSummary>;
     baselineResults: BaselineResults;
