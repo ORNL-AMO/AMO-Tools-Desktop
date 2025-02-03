@@ -1,1 +1,33 @@
-<p>performance-points-catalog works!</p>
+<label class="group-label" (click)="toggleForm()">
+    <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+    Performance Points
+</label>
+<div *ngIf="displayForm" class="p-2">
+    <table class="table mb-0">
+        <thead>
+            <tr class="small bold">
+                <th class="p-1"></th>
+                <th class="text-center p-1">
+                    Discharge Pressure
+                </th>
+                <th class="text-center p-1">
+                    Airflow
+                </th>
+                <th class="text-center p-1">
+                    Power
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <app-full-load-catalog></app-full-load-catalog>
+            <tr [app-full-load-catalog]></tr>
+            <tr [app-max-full-flow-catalog] *ngIf="showMaxFullFlow"></tr>
+            <tr [app-unload-point-catalog] *ngIf="showUnload"></tr>
+            <tr [app-mid-turndown-catalog] *ngIf="showMidTurndown"></tr>
+            <tr [app-turndown-catalog] *ngIf="showTurndown"></tr>
+            <tr [app-no-load-catalog] *ngIf="showNoLoad"></tr>
+            <tr [app-blowoff-catalog] *ngIf="showBlowoff"></tr>
+        </tbody>
+    </table>
+</div>

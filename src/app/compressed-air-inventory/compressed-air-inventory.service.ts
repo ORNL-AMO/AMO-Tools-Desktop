@@ -193,6 +193,13 @@ export class CompressedAirInventoryService {
           dischargePressure: undefined,
         }
       },
+      centrifugalSpecifics: {
+        surgeAirflow: null,
+        maxFullLoadPressure: null,
+        maxFullLoadCapacity: null,
+        minFullLoadPressure: null,
+        minFullLoadCapacity: null
+      },
     }
   }
 
