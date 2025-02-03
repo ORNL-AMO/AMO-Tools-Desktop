@@ -6,12 +6,12 @@ import {
 } from '@xyflow/react';
 import { Box, Button, Tab, Tabs } from "@mui/material";
 import React, { memo, useState } from 'react';
-import TabPanel, { TabPanelBox } from "../Drawer/TabPanel";
-import CustomizeEdge from "../Drawer/CustomizeEdge";
-import DrawerToggleButton from "../Drawer/DrawerToggleButton";
-import FlowConnectionText from "../Drawer/FlowConnectionText";
+import TabPanel, { TabPanelBox } from "./TabPanel";
+import CustomizeEdge from "./CustomizeEdge";
+import DrawerToggleButton from "./DrawerToggleButton";
+import FlowConnectionText from "./FlowConnectionText";
 
-const ManageEdgeData = (props: ManageEdgeDataProps) => {
+const ManageEdge = (props: ManageEdgeProps) => {
     const { setEdges, getNodes } = useReactFlow();
     const {selectedEdge, userDiagramOptions, closeDrawer} = props;
     const [selectedTab, setSelectedTab] = useState(0);  
@@ -72,9 +72,9 @@ const ManageEdgeData = (props: ManageEdgeDataProps) => {
 
 };
 
-export default memo(ManageEdgeData);
+export default memo(ManageEdge);
 
-export interface ManageEdgeDataProps {
+export interface ManageEdgeProps {
     selectedEdge: Edge<CustomEdgeData>,
     userDiagramOptions: UserDiagramOptions;
     closeDrawer: () => void;

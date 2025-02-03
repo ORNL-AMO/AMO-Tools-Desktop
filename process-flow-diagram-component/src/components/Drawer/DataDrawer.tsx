@@ -6,8 +6,8 @@ import {
 } from '@xyflow/react';
 import React, { BaseSyntheticEvent, memo } from 'react';
 import Drawer from '@mui/material/Drawer';
-import ManageEdgeData from "./ManageEdgeData";
-import ManageNodeData from "./ManageNodeData";
+import ManageEdge from "./ManageEdge";
+import ManageComponent from "./ManageComponent";
 
 const DataDrawer = (props: DataDrawerProps) => {
     const { getNodes, getEdges } = useReactFlow();
@@ -41,7 +41,7 @@ const DataDrawer = (props: DataDrawerProps) => {
                     opacity: '0 !important' },
                 [`& .MuiDrawer-paper`]: { 
                     boxSizing: 'border-box', 
-                    width: 450 },
+                    width: 475 },
                 [`& .MuiPaper-root.MuiPaper-elevation.MuiDrawer-paper`]: {
                     top: props.parentContainer.headerHeight,
                     height: props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight,
@@ -51,17 +51,17 @@ const DataDrawer = (props: DataDrawerProps) => {
         >
             <>
                 {selectedNode &&
-                    <ManageNodeData
+                    <ManageComponent
                         selectedNode={selectedNode}
                         closeDrawer={closeDrawer}
-                    ></ManageNodeData>
+                    ></ManageComponent>
                 }
                 {selectedEdge &&
-                    <ManageEdgeData
+                    <ManageEdge
                         selectedEdge={selectedEdge}
                         userDiagramOptions={props.userDiagramOptions}
                         closeDrawer={closeDrawer}
-                    ></ManageEdgeData>
+                    ></ManageEdge>
                 }
             </>
         </Drawer>
