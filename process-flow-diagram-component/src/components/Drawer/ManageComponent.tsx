@@ -6,13 +6,13 @@ import {
 } from '@xyflow/react';
 import { Box, Button, Divider, Tab, Tabs, TextField, Typography } from "@mui/material";
 import React, { memo, useEffect, useRef, useState } from 'react';
-import ComponentDataForm from "../Drawer/ComponentDataForm";
-import ComponentHandles from "../Drawer/ComponentHandles";
-import CustomizeNode from "../Drawer/CustomizeNode";
-import TabPanel, { TabPanelBox } from "../Drawer/TabPanel";
-import DrawerToggleButton from "../Drawer/DrawerToggleButton";
+import ComponentDataForm from "../Forms/ComponentDataForm";
+import ComponentHandles from "./ComponentHandles";
+import CustomizeNode from "./CustomizeNode";
+import TabPanel, { TabPanelBox } from "./TabPanel";
+import DrawerToggleButton from "./DrawerToggleButton";
 
-const ManageNodeData = (props: ManageNodeDataProps) => {
+const ManageComponent = (props: ManageComponentProps) => {
     const { selectedNode, closeDrawer } = props;
     const { getEdges, setEdges, setNodes } = useReactFlow();
 
@@ -102,7 +102,6 @@ const ManageNodeData = (props: ManageNodeDataProps) => {
                 <TabPanel value={selectedTab} index={0}>
                     <ComponentDataForm
                         connectedEdges={connectedEdges}
-                        setConnectedEdges={setConnectedEdges}
                         selectedNode={selectedNode} />
                 </TabPanel>
 
@@ -123,9 +122,9 @@ const ManageNodeData = (props: ManageNodeDataProps) => {
 
 };
 
-export default memo(ManageNodeData);
+export default memo(ManageComponent);
 
-export interface ManageNodeDataProps {
+export interface ManageComponentProps {
     selectedNode: Node<ProcessFlowPart>,
     closeDrawer: () => void;
 
