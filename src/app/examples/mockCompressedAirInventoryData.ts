@@ -14,8 +14,8 @@ export const MockCompressedAirInventory: InventoryItem = {
                     {
                         "id": "66334rw8x",
                         "departmentId": "l6rd7tt1i",
-                        "description": "Main pump",
-                        "name": "Pump A",
+                        "description": "Main Compressor",
+                        "name": "Compressor A",
                         "notes": "",
                         "nameplateData": {
                             "compressorType": 2,
@@ -43,7 +43,65 @@ export const MockCompressedAirInventory: InventoryItem = {
                             "noLoadPowerFM": 20,
                             "noLoadPowerUL": 20,
                             "maxFullFlowPressure": 110
-                        }
+                        },
+                        "compressedAirPerformancePointsProperties": {
+                            "fullLoad": {
+                                "dischargePressure": 100,
+                                "isDefaultPower": true,
+                                "airflow": 1857,
+                                "isDefaultAirFlow": true,
+                                "power": 290.1,
+                                "isDefaultPressure": true
+                            },
+                            "maxFullFlow": {
+                                "dischargePressure": 110,
+                                "isDefaultPower": true,
+                                "airflow": 1843,
+                                "isDefaultAirFlow": true,
+                                "power": 305.9,
+                                "isDefaultPressure": true
+                            },
+                            "unloadPoint": {
+                                "isDefaultPower": true,
+                                "isDefaultAirFlow": true,
+                                "isDefaultPressure": true,
+                                "power": undefined,
+                                "airflow": undefined,
+                                "dischargePressure": undefined,
+                            },
+                            "noLoad": {
+                                "dischargePressure": 15,
+                                "isDefaultPower": true,
+                                "airflow": 0,
+                                "isDefaultAirFlow": true,
+                                "power": 59.5,
+                                "isDefaultPressure": true
+                            },
+                            "blowoff": {
+                                "isDefaultPower": true,
+                                "isDefaultAirFlow": true,
+                                "isDefaultPressure": true,
+                                "power": undefined,
+                                "airflow": undefined,
+                                "dischargePressure": undefined,
+                            },
+                            "midTurndown": {
+                                "isDefaultPower": true,
+                                "isDefaultAirFlow": true,
+                                "isDefaultPressure": true,
+                                "power": undefined,
+                                "airflow": undefined,
+                                "dischargePressure": undefined,
+                            },
+                            "turndown": {
+                                "isDefaultPower": true,
+                                "isDefaultAirFlow": true,
+                                "isDefaultPressure": true,
+                                "power": undefined,
+                                "airflow": undefined,
+                                "dischargePressure": undefined,
+                            }
+                        },
                     },
                 ]
             },

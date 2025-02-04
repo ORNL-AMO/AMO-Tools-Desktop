@@ -12,6 +12,7 @@ import { HelpPanelModule } from '../help-panel/help-panel.module';
 import { DepartmentSetupComponent } from './department-setup/department-setup.component';
 import { DepartmentCatalogTableComponent } from './department-catalog-table/department-catalog-table.component';
 import { CompressedAirPropertiesModule } from './compressed-air-properties/compressed-air-properties.module';
+import { CompressedAirCatalogModule } from './compressed-air-catalog/compressed-air-catalog.module';
 
 
 
@@ -32,7 +33,8 @@ import { CompressedAirPropertiesModule } from './compressed-air-properties/compr
     ConfirmDeleteModalModule,
     ConnectedInventoryModule,
     HelpPanelModule,
-    CompressedAirPropertiesModule
+    CompressedAirPropertiesModule,
+    CompressedAirCatalogModule
   ],
   exports: [
     CompressedAirInventorySetupComponent
