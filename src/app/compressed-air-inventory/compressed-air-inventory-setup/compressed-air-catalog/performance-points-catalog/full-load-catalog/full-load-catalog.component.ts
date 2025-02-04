@@ -9,7 +9,7 @@ import { CompressedAirInventoryService } from '../../../../compressed-air-invent
 import { FullLoadCatalogService } from './full-load-catalog.service';
 
 @Component({
-  selector: 'app-full-load-catalog',
+  selector: '[app-full-load-catalog]',
   templateUrl: './full-load-catalog.component.html',
   styleUrl: './full-load-catalog.component.css'
 })
