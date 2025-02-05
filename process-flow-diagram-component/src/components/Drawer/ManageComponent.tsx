@@ -115,7 +115,7 @@ const ManageComponent = (props: ManageComponentProps) => {
                     {/* </TabPanelBox> */}
                 </TabPanel>
 
-                <Button sx={{ width: '100%', marginY: 2 }} color="secondary" variant="outlined" onClick={onDeleteNode}>Delete Component</Button>
+                <Button sx={{ width: '100%', marginY: 2 }} color="error" variant="outlined" onClick={onDeleteNode}>Delete Component</Button>
             </Box>
         </>
     );

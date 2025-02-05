@@ -69,6 +69,17 @@ export interface UserDiagramOptions {
   edgeOptions: DefaultEdgeOptions
 }
 
+
+export type NodeFlowValidation = {
+  totalFlowValueDifferent?: string,
+  flowValues: {
+      [key: string]: {
+          flowValueGreaterThan?: string,
+      }
+  }
+}
+
+
 export interface DiagramSettings {
   flowDecimalPrecision: number,
   unitsOfMeasure: string,

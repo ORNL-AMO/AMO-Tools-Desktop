@@ -5,7 +5,7 @@ import { Edge, Node, useReactFlow } from "@xyflow/react";
 import React, { memo, useContext, useState } from "react";
 import { CustomEdgeData, ProcessFlowPart, WasteWaterTreatment, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
-import { Accordion, AccordionDetails, AccordionSummary } from "../MUIStyledComponents";
+import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/AccordianComponents";
 import FlowDisplayUnit from "../Flow/FlowDisplayUnit";
 import FlowValueDisplay from "../Flow/FlowValueDisplay";
 import SourceFlowForm from "./SourceFlowForm";

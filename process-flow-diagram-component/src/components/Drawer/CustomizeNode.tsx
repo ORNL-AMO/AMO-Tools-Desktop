@@ -3,7 +3,7 @@ import { Node, useReactFlow } from '@xyflow/react';
 import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { CSSProperties, useContext, useEffect, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
-import { Accordion, AccordionDetails, AccordionSummary } from '../MUIStyledComponents';
+import { Accordion, AccordionDetails, AccordionSummary } from '../StyledMUI/AccordianComponents';
 import { FlowContext } from '../Flow';
 import ColorPicker from './ColorPicker';
 

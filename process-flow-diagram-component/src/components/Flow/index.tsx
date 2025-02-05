@@ -43,6 +43,7 @@ const Flow = (props: FlowProps) => {
   let staleParentNodes: Node[] = [];
   let existingNodes: Node[] = [];
   let existingEdges: Edge[] = [];
+  
   const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions ? props.processDiagram.flowDiagramData.userDiagramOptions : getDefaultUserDiagramOptions();
   const defaultSettings = props.processDiagram.flowDiagramData.settings ? props.processDiagram.flowDiagramData.settings : getDefaultSettings();
   const defaultNodeCalculatedData = props.processDiagram.flowDiagramData.nodeCalculatedDataMap ? props.processDiagram.flowDiagramData.nodeCalculatedDataMap : {};
