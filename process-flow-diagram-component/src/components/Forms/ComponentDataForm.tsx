@@ -3,13 +3,16 @@ import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Flow/FlowUtils";
 import { Edge, Node, useReactFlow } from "@xyflow/react";
 
 import React, { memo, useContext, useState } from "react";
-import { CustomEdgeData, ProcessFlowPart, WasteWaterTreatment, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { CustomEdgeData, ComponentFlowValidation, ComponentValidation, ProcessFlowPart, WasteWaterTreatment, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/AccordianComponents";
 import FlowDisplayUnit from "../Flow/FlowDisplayUnit";
 import FlowValueDisplay from "../Flow/FlowValueDisplay";
 import SourceFlowForm from "./SourceFlowForm";
 import DischargeFlowForm from "./DischargeFlowForm";
+import WarningIcon from '@mui/icons-material/Warning';
+import ErrorIcon from '@mui/icons-material/Error';
+import { FlowContext } from "../Flow";
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
     const { getNodes, setNodes } = useReactFlow();
@@ -34,7 +37,9 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     } else {
         componentData = componentData as ProcessFlowPart;
     }
-
+    
+    // const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
+    // const componentValidation: ComponentValidation = flowContext.diagramValidation.nodes[componentData.diagramNodeId];
 
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
         if (props.connectedEdges.length !== 0) {
@@ -96,6 +101,12 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                 <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
                     <AccordionSummary>
                         <span style={{ alignSelf: 'center' }}>Sources</span>
+                        {/* {componentValidation.source.hasWarning &&
+                            <WarningIcon />
+                        }
+                        {componentValidation.discharge.hasError &&
+                            <ErrorIcon/>
+                        } */}
                         <Chip label={
                             <>
                             <FlowValueDisplay flowValue={totalSourceFlow}/>
@@ -120,6 +131,12 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     }}>
                     <AccordionSummary>
                         <span style={{ alignSelf: 'center' }}>Discharge</span>
+                        {/* {componentValidation.discharge.hasWarning &&
+                            <WarningIcon/>
+                        }
+                        {componentValidation.discharge.hasError &&
+                            <ErrorIcon/>
+                        } */}
                         <Chip label={
                             <>
                             <FlowValueDisplay flowValue={totalDischargeFlow}/>

@@ -20,7 +20,7 @@ import {
 
 import '@xyflow/react/dist/style.css';
 
-import { NodeCalculatedData, FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram, CustomEdgeData, DiagramSettings, convertFlowDiagramData } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { NodeCalculatedData, FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterDiagram, CustomEdgeData, DiagramSettings, convertFlowDiagramData, DiagramValidation } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { changeExistingEdgesType, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeTypesFromString, setCustomEdges, setDroppedNode, updateStaleNodes } from './FlowUtils';
 import { nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
@@ -29,6 +29,7 @@ import { DefaultEdgeOptions } from 'reactflow';
 import { MenuSidebarProps } from '../Drawer/MenuSidebar';
 import { SideDrawer } from '../Drawer/SideDrawer';
 import DataDrawer from '../Drawer/DataDrawer';
+import { getInitialDiagramValidation } from '../../validation-helpers/ValidationHelpers';
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const nodeClassName = (node: Node) => node.type;
@@ -68,6 +69,7 @@ const Flow = (props: FlowProps) => {
   const [diagramParentDimensions, setDiagramParentDimensions] = useState(props.parentContainer);
   const [settings, setSettings] = useState<DiagramSettings>(defaultSettings);
   const [userDiagramOptions, setUserDiagramOptions] = useState<UserDiagramOptions>(defaultUserDiagramOptions);
+  const [diagramValidation, setDiagramValidation] = useState<DiagramValidation>();
   const [nodeCalculatedDataMap, setNodeCalculatedData] = useState<Record<string, NodeCalculatedData>>(defaultNodeCalculatedData);
   const [edgeTypes, setEdgeTypes] = useState<EdgeTypes>(getEdgeTypesFromString(defaultUserDiagramOptions.edgeType, undefined));
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -76,7 +78,8 @@ const Flow = (props: FlowProps) => {
     // * on reactFlowInstance initialize with 
     if (reactFlowInstance && props.height) {
       setDiagramParentDimensions(props.parentContainer);
-      
+      const initialDiagramValidation = getInitialDiagramValidation(props.processDiagram.flowDiagramData, edges);
+      setDiagramValidation(initialDiagramValidation);
       // * assessment added nodes
       if (staleNodes.length > 0) {
         const updatedNodes = updateStaleNodes(reactFlowInstance, [...staleNodes], props.height);
@@ -326,7 +329,9 @@ const Flow = (props: FlowProps) => {
       setRecentNodeColors,
       setRecentEdgeColors,
       setManageDataId,
-      setIsDataDrawerOpen
+      setIsDataDrawerOpen,
+      diagramValidation,
+      setDiagramValidation
       }}>
       <div className="process-flow-diagram">
         {isDialogOpen &&
@@ -406,6 +411,7 @@ export interface FlowContext {
   diagramParentDimensions: ParentContainerDimensions,
   userDiagramOptions: UserDiagramOptions;
   settings: DiagramSettings,
+  diagramValidation: DiagramValidation,
   nodeCalculatedDataMap: Record<string, NodeCalculatedData>;
   setNodeCalculatedData: React.Dispatch<Record<string, NodeCalculatedData>>;
   setRecentNodeColors: React.Dispatch<React.SetStateAction<string[]>>;

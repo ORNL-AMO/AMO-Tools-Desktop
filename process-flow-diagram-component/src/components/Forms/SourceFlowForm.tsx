@@ -5,12 +5,13 @@ import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
-import { CustomEdgeData, NodeCalculatedData, NodeFlowValidation, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { CustomEdgeData, NodeCalculatedData, ComponentFlowValidation, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { MAX_FLOW_DECIMALS } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import { FlowContext } from "../Flow";
 import FlowDisplayUnit from "../Flow/FlowDisplayUnit";
 import InputField from "../StyledMUI/InputField";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
+import { validateFlowValue, validateTotalFlowValue } from "../../validation-helpers/ValidationHelpers";
 
 
 /**
@@ -33,26 +34,8 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
     const [totalSourceFlow, setTotalSourceFlow] = useState<number>(componentData.userEnteredData.totalSourceFlow !== undefined ? componentData.userEnteredData.totalSourceFlow : totalCalculatedSourceFlow);
     const isFirstRender = useRef(true);
 
-    const validateFlowValue = (value: number | null) => {
-        let validationMessage = "";
-        if (value === null || value === undefined || value <= 0) {
-            validationMessage = "Flow value must be greater than 0";
-        }
-        return validationMessage;
-    };
-
-    const validateTotalFlowValue = (newValue: number) => {
-        let validationMessage = "";
-        let hasValue = newValue !== null && newValue !== undefined;
-        if (hasValue && componentData.userEnteredData.totalSourceFlow !== undefined && newValue !== totalSourceFlow) {
-            validationMessage = "The sum of all source flows should equal Total Flow";
-        }
-        return validationMessage;
-    };
-
-
-    const initialValidation: NodeFlowValidation = {totalFlowValueDifferent: undefined, flowValues: {}};
-    initialValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow);
+    const initialValidation: ComponentFlowValidation = {totalFlowValueDifferent: undefined, flowValues: {}};
+    initialValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow, componentData.userEnteredData.totalSourceFlow, totalSourceFlow);
     componentSourceEdges.map((edge: Edge<CustomEdgeData>) => {
         const validationMessage = validateFlowValue(edge.data.flowValue);
         initialValidation.flowValues = {
@@ -62,9 +45,9 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
             }
         }
     });
-    const [validation, setValidation] = useState<NodeFlowValidation>(initialValidation); 
+    const [validation, setValidation] = useState<ComponentFlowValidation>(initialValidation); 
 
-    // * side-effects of allEdges must be handled here after state update or xyFlow setEdges will cause state inconsistency over multiple renders. Could also debounce user input in the future
+    // * side-effects of allEdges must be handled here after state update or xyFlow setEdges() will cause state inconsistency over multiple renders. Could also resolve by debounce user input in the future
     useEffect(() => {
         if (isFirstRender.current) {
             isFirstRender.current = false; 
@@ -77,8 +60,8 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
             setTotalSourceFlow(totalCalculatedSourceFlow);
         }
 
-        const totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow);
-        setValidation((prevValidation: NodeFlowValidation) => {
+        const totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow, componentData.userEnteredData.totalSourceFlow, totalSourceFlow);
+        setValidation((prevValidation: ComponentFlowValidation) => {
             let updatedMap = {...prevValidation};
             allEdges.forEach((edge) => {
                 const flowValueError = validateFlowValue(edge.data.flowValue);
@@ -96,22 +79,15 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
     }, [allEdges]);
 
 
-    useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false; 
-            return; 
-        }
+    const onTotalFlowValueInputChange = (event) => {
+        const updatedValue = event.target.value === "" ? null : Number(event.target.value);
 
-        setValidation((prevValidation: NodeFlowValidation) => {
+        setValidation((prevValidation: ComponentFlowValidation) => {
             let updatedMap = {...prevValidation};
-            updatedMap.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow);
+            updatedMap.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow, updatedValue, updatedValue);
             return updatedMap;
         });
 
-    }, [totalSourceFlow]);
-
-    const onTotalFlowValueInputChange = (event) => {
-        const updatedValue = event.target.value === "" ? null : Number(event.target.value);
         setNodes((nds) =>
             nds.map((n: Node<ProcessFlowPart>) => {
                 if (n.data.diagramNodeId === componentData.diagramNodeId) {
@@ -214,7 +190,6 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
         });
         flowContext.setNodeCalculatedData(updatedNodeCalculatedDataMap);
     }
-
 
     console.log('validation', validation);
     return (

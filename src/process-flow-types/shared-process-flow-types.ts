@@ -69,11 +69,23 @@ export interface UserDiagramOptions {
   edgeOptions: DefaultEdgeOptions
 }
 
+export interface DiagramValidation {
+  nodes: {
+    [nodeId: string]: ComponentValidation
+  }
+}
 
-export type NodeFlowValidation = {
+export interface ComponentValidation {
+  source: ComponentFlowValidation
+  discharge: ComponentFlowValidation
+}
+
+export type ComponentFlowValidation = {
+  hasError?: boolean,
+  hasWarning?: boolean, 
   totalFlowValueDifferent?: string,
   flowValues: {
-      [key: string]: {
+      [nodeId: string]: {
           flowValueGreaterThan?: string,
       }
   }

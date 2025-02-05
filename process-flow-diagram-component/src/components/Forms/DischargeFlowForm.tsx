@@ -5,12 +5,13 @@ import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
 import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
-import { CustomEdgeData, NodeCalculatedData, NodeFlowValidation, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { CustomEdgeData, NodeCalculatedData, ComponentFlowValidation, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { MAX_FLOW_DECIMALS } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import { FlowContext } from "../Flow";
 import FlowDisplayUnit from "../Flow/FlowDisplayUnit";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import InputField from "../StyledMUI/InputField";
+import { validateFlowValue, validateTotalFlowValue } from "../../validation-helpers/ValidationHelpers";
 
 /**
    * Handle Flow states for discharge edges of selected node/component
@@ -31,37 +32,19 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentDischargeEdges, allNodes, props.selectedNodeId);
     const [totalDischargeFlow, setTotalDischargeFlow] = useState<number>(componentData.userEnteredData.totalDischargeFlow !== undefined ? componentData.userEnteredData.totalDischargeFlow : totalCalculatedDischargeFlow);
     const isFirstRender = useRef(true);
-
-     const validateFlowValue = (value: number | null) => {
-            let validationMessage = "";
-            if (value === null || value === undefined || value <= 0) {
-                validationMessage = "Flow value must be greater than 0";
-            }
-            return validationMessage;
-        };
     
-        const validateTotalFlowValue = (newValue: number) => {
-            let validationMessage = "";
-            let hasValue = newValue !== null && newValue !== undefined;
-            if (hasValue && componentData.userEnteredData.totalDischargeFlow !== undefined && newValue !== totalDischargeFlow) {
-                validationMessage = "The sum of all discharge flows should equal Total Flow";
+    const initialValidation: ComponentFlowValidation = {totalFlowValueDifferent: undefined, flowValues: {}, hasError: false, hasWarning: false};
+    initialValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow, componentData.userEnteredData.totalDischargeFlow, totalDischargeFlow);
+    componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => {
+        const validationMessage = validateFlowValue(edge.data.flowValue);
+        initialValidation.flowValues = {
+            ...initialValidation.flowValues,
+            [edge.id]: {
+                flowValueGreaterThan: validationMessage,
             }
-            return validationMessage;
-        };
-    
-    
-        const initialValidation: NodeFlowValidation = {totalFlowValueDifferent: undefined, flowValues: {}};
-        initialValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow);
-        componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => {
-            const validationMessage = validateFlowValue(edge.data.flowValue);
-            initialValidation.flowValues = {
-                ...initialValidation.flowValues,
-                [edge.id]: {
-                    flowValueGreaterThan: validationMessage,
-                }
-            }
-        });
-        const [validation, setValidation] = useState<NodeFlowValidation>(initialValidation); 
+        }
+    });
+    const [validation, setValidation] = useState<ComponentFlowValidation>(initialValidation); 
     
 
     // * side-effects of allEdges must be handled here after state update or xyFlow setEdges will cause state inconsistency over multiple renders. Could also debounce user input in the future
@@ -77,8 +60,8 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
             setTotalDischargeFlow(totalCalculatedDischargeFlow);
         }
 
-        const totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow);
-        setValidation((prevValidation: NodeFlowValidation) => {
+        const totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow, componentData.userEnteredData.totalDischargeFlow, totalDischargeFlow);
+        setValidation((prevValidation: ComponentFlowValidation) => {
             let updatedMap = {...prevValidation};
             allEdges.forEach((edge) => {
                 const flowValueError = validateFlowValue(edge.data.flowValue);
@@ -101,9 +84,9 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                 return; 
             }
     
-            setValidation((prevValidation: NodeFlowValidation) => {
+            setValidation((prevValidation: ComponentFlowValidation) => {
                 let updatedMap = {...prevValidation};
-                updatedMap.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow);
+                updatedMap.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow, componentData.userEnteredData.totalDischargeFlow, totalDischargeFlow);
                 return updatedMap;
             });
     
@@ -111,6 +94,13 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
 
     const onTotalFlowValueInputChange = (event) => {
         const updatedValue = event.target.value === "" ? null : Number(event.target.value);
+
+        setValidation((prevValidation: ComponentFlowValidation) => {
+            let updatedMap = {...prevValidation};
+            updatedMap.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow, updatedValue, updatedValue);
+            return updatedMap;
+        });
+
         setNodes((nds) =>
             nds.map((n: Node<ProcessFlowPart>) => {
                 if (n.data.diagramNodeId === componentData.diagramNodeId) {
