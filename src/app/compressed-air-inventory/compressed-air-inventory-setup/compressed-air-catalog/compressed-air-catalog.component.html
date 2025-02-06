@@ -30,6 +30,10 @@
             *ngIf="compressedAirInventoryData.displayOptions.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties"></app-design-details-catalog>
     </div>
     <div class="col-12">
+        <app-centrifugal-specifics-catalog
+            *ngIf="selectedCompressedAirItem.nameplateData.compressorType == 6"></app-centrifugal-specifics-catalog>
+    </div>
+    <div class="col-12">
         <app-performance-points-catalog
             *ngIf="compressedAirInventoryData.displayOptions.compressedAirPerformancePointsPropertiesOptions.displayCompressedAirPerformancePointsProperties"></app-performance-points-catalog>
     </div>    
