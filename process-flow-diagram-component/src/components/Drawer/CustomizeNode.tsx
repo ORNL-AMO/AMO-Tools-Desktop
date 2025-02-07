@@ -3,13 +3,14 @@ import { Node, useReactFlow } from '@xyflow/react';
 import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { CSSProperties, useContext, useEffect, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
-import { Accordion, AccordionDetails, AccordionSummary } from '../MUIStyledComponents';
-import { FlowContext } from '../Flow';
+import { Accordion, AccordionDetails, AccordionSummary } from '../StyledMUI/AccordianComponents';
 import ColorPicker from './ColorPicker';
+import { RootDiagramContext } from '../Diagram/Diagram';
+import { DiagramContext } from '../Diagram/FlowTypes';
 
 
 export default function CustomizeNode({ node }: CustomizeNodeProps) {
-  const flowContext: FlowContext = useContext(FlowContext);
+  const diagramContext: DiagramContext = useContext(RootDiagramContext);
   const { setNodes } = useReactFlow();
   const [backgroundColor, setBackgroundColor] = useState(node.style.backgroundColor);
   const [textColor, setTextColor] = useState(node.style.color);
@@ -68,8 +69,8 @@ export default function CustomizeNode({ node }: CustomizeNodeProps) {
               color={backgroundColor}
               setParentColor={handleSetBackgroundColor}
               showRecent={true}
-              recentColors={flowContext.recentNodeColors}
-              setRecentColors={flowContext.setRecentNodeColors}
+              recentColors={diagramContext.recentNodeColors}
+              setRecentColors={diagramContext.setRecentNodeColors}
               label={'Component Color'} />
           </Box>
           <Box sx={{ fontSize: '.75rem' }}>

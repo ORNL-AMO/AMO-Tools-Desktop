@@ -1,10 +1,9 @@
 import React, { memo, useState } from 'react';
 import { DiagramSettings, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
+import { edgeTypeOptions, SelectListOption, UserDiagramOptionsHandlers } from '../Diagram/FlowTypes';
 import { Box, Button, Divider, Grid, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
-import { UserDiagramOptionsHandlers } from '../Flow';
 import TabPanel from './TabPanel';
 import { flowDecimalPrecisionOptions } from '../../../../src/process-flow-types/shared-process-flow-constants';
 
@@ -244,7 +243,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
       <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingTop={'1rem'}>
         <DownloadButton shadowRoot={props.shadowRoot} />
         {!props.hasAssessment &&
-          <Button variant="outlined" color="secondary" sx={{ width: '100%' }} onClick={() => props.setIsDialogOpen(true)}>Reset Diagram</Button>
+          <Button variant="outlined" color="error" sx={{ width: '100%' }} onClick={() => props.setIsDialogOpen(true)}>Reset Diagram</Button>
         }
       </Box>
     </Box>

@@ -5,11 +5,11 @@ import {
     Edge,
 } from '@xyflow/react';
 import { Box, Button, Divider, Tab, Tabs, TextField, Typography } from "@mui/material";
-import React, { memo, useEffect, useRef, useState } from 'react';
+import React, { memo, useContext, useEffect, useRef, useState } from 'react';
 import ComponentDataForm from "../Forms/ComponentDataForm";
 import ComponentHandles from "./ComponentHandles";
 import CustomizeNode from "./CustomizeNode";
-import TabPanel, { TabPanelBox } from "./TabPanel";
+import TabPanel from "./TabPanel";
 import DrawerToggleButton from "./DrawerToggleButton";
 
 const ManageComponent = (props: ManageComponentProps) => {
@@ -21,6 +21,10 @@ const ManageComponent = (props: ManageComponentProps) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const [nodeName, setNodeName] = useState<string>(selectedNode.data.name);
     const debounceRef = useRef<any>(null);
+
+    // const diagramContext: DiagramContext = useContext<DiagramContext>(RootDiagramContext);
+    // const componentValidation: ComponentValidation = diagramContext.diagramValidation.nodes[selectedNode.data.diagramNodeId];
+    // const isValid = isValidComponent(componentValidation);
 
     const updateNodeName = (nodeName: string) => {
         setNodes((nds) =>
@@ -94,7 +98,13 @@ const ManageComponent = (props: ManageComponentProps) => {
             }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
                     <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
-                        <Tab sx={{ fontSize: '.75rem' }} label="Data" />
+                        {/* {isValid ?
+                            (
+                                <Tab sx={{ fontSize: '.75rem' }} label="Data" />
+                            ) : (
+                                <Tab icon={<InvalidIcon status={componentValidation?.status} />} sx={{ fontSize: '.75rem', minHeight: 'unset' }}  iconPosition="start" label="Data" />
+                            )
+                        } */}
                         <Tab sx={{ fontSize: '.75rem' }} label="Customize" />
                     </Tabs>
                 </Box>
@@ -106,16 +116,14 @@ const ManageComponent = (props: ManageComponentProps) => {
                 </TabPanel>
 
                 <TabPanel value={selectedTab} index={1}>
-                    {/* <TabPanelBox> */}
                         <Box sx={{ paddingY: '1rem' }}>
                             <ComponentHandles node={selectedNode}></ComponentHandles>
                             <CustomizeNode node={selectedNode}></CustomizeNode>
                             <Divider />
                         </Box>
-                    {/* </TabPanelBox> */}
                 </TabPanel>
 
-                <Button sx={{ width: '100%', marginY: 2 }} color="secondary" variant="outlined" onClick={onDeleteNode}>Delete Component</Button>
+                <Button sx={{ width: '100%', marginY: 2 }} color="error" variant="outlined" onClick={onDeleteNode}>Delete Component</Button>
             </Box>
         </>
     );

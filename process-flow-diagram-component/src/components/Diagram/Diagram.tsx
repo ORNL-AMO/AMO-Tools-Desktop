@@ -29,13 +29,21 @@ import { DefaultEdgeOptions } from 'reactflow';
 import { MenuSidebarProps } from '../Drawer/MenuSidebar';
 import { SideDrawer } from '../Drawer/SideDrawer';
 import DataDrawer from '../Drawer/DataDrawer';
-
-const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
-const nodeClassName = (node: Node) => node.type;
+// import { getInitialDiagramValidation, isDiagramValid } from '../../validation/Validation';
 
 
-export const FlowContext = createContext(null);
-const Flow = (props: FlowProps) => {
+export interface DiagramProps {
+  shadowRoot,
+  height?: number,
+  parentContainer: ParentContainerDimensions,
+  processDiagram?: WaterDiagram;
+  clickEvent: (...args) => void;
+  saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
+}
+
+
+export const RootDiagramContext = createContext(null);
+const Diagram = (props: DiagramProps) => {
   const [manageDataId, setManageDataId] = useState(undefined);
   const [isDataDrawerOpen, setIsDataDrawerOpen] = useState(false);
 
@@ -67,6 +75,7 @@ const Flow = (props: FlowProps) => {
   const [diagramParentDimensions, setDiagramParentDimensions] = useState(props.parentContainer);
   const [settings, setSettings] = useState<DiagramSettings>(defaultSettings);
   const [userDiagramOptions, setUserDiagramOptions] = useState<UserDiagramOptions>(defaultUserDiagramOptions);
+  // const [diagramValidation, setDiagramValidation] = useState<DiagramValidation>();
   const [nodeCalculatedDataMap, setNodeCalculatedData] = useState<Record<string, NodeCalculatedData>>(defaultNodeCalculatedData);
   const [edgeTypes, setEdgeTypes] = useState<EdgeTypes>(getEdgeTypesFromString(defaultUserDiagramOptions.edgeType, undefined));
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -75,7 +84,8 @@ const Flow = (props: FlowProps) => {
     // * on reactFlowInstance initialize with 
     if (reactFlowInstance && props.height) {
       setDiagramParentDimensions(props.parentContainer);
-      
+      // const initialDiagramValidation = getInitialDiagramValidation(props.processDiagram.flowDiagramData, edges);
+      // setDiagramValidation(initialDiagramValidation);
       // * assessment added nodes
       if (staleNodes.length > 0) {
         const updatedNodes = updateStaleNodes(reactFlowInstance, [...staleNodes], props.height);
@@ -315,7 +325,7 @@ const Flow = (props: FlowProps) => {
 
   return (
     props.height &&
-    <FlowContext.Provider value={{ 
+    <RootDiagramContext.Provider value={{ 
       userDiagramOptions, 
       settings,
       nodeCalculatedDataMap, 
@@ -325,7 +335,9 @@ const Flow = (props: FlowProps) => {
       setRecentNodeColors,
       setRecentEdgeColors,
       setManageDataId,
-      setIsDataDrawerOpen
+      setIsDataDrawerOpen,
+      // diagramValidation,
+      // setDiagramValidation
       }}>
       <div className="process-flow-diagram">
         {isDialogOpen &&
@@ -348,7 +360,7 @@ const Flow = (props: FlowProps) => {
               nodeTypes={nodeTypes}
               edgeTypes={edgeTypes}
               defaultEdgeOptions={userDiagramOptions.edgeOptions}
-              defaultViewport={defaultViewport}
+              defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
               connectionLineType={ConnectionLineType.Bezier}
               onDrop={onDrop}
               onError={onErrorWithSuppressed}
@@ -359,7 +371,7 @@ const Flow = (props: FlowProps) => {
               className="flow"
             >
               {userDiagramOptions.minimapVisible &&
-                <MiniMap zoomable pannable nodeClassName={nodeClassName} />
+                <MiniMap zoomable pannable nodeClassName={(node: Node) => node.type} />
               }
               {userDiagramOptions.controlsVisible &&
                 <Controls />
@@ -387,43 +399,8 @@ const Flow = (props: FlowProps) => {
           }
         </ReactFlowProvider>
       </div>
-    </FlowContext.Provider>
+    </RootDiagramContext.Provider>
   );
 }
 
-export default Flow;
-export interface FlowProps {
-  shadowRoot,
-  height?: number,
-  parentContainer: ParentContainerDimensions,
-  processDiagram?: WaterDiagram;
-  clickEvent: (...args) => void;
-  saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
-}
-
-export interface FlowContext {
-  diagramParentDimensions: ParentContainerDimensions,
-  userDiagramOptions: UserDiagramOptions;
-  settings: DiagramSettings,
-  nodeCalculatedDataMap: Record<string, NodeCalculatedData>;
-  setNodeCalculatedData: React.Dispatch<Record<string, NodeCalculatedData>>;
-  setRecentNodeColors: React.Dispatch<React.SetStateAction<string[]>>;
-  setRecentEdgeColors: React.Dispatch<React.SetStateAction<string[]>>;
-  recentNodeColors: string[];
-  recentEdgeColors: string[];
-  setManageDataId: (id: string) => void;
-  setIsDataDrawerOpen: (isOpen: boolean) => void;
-}
-
-export interface UserDiagramOptionsHandlers {
-  handleMinimapVisible: (enabled: boolean) => void;
-  handleShowMarkerEndArrows: (enabled: boolean) => void;
-  handleControlsVisible: (enabled: boolean) => void;
-  handleShowFlowValues: (enabled: boolean) => void;
-  handleEdgeTypeChange: (edgeTypeOption: string) => void;
-  handleEdgeOptionsChange: (edgeOptions: any) => void;
-  handleEdgeThicknessChange: (event: Event, edgeThickness: number) => void;
-  handleFlowLabelSizeChange: (event: Event, flowLabelSize: number) => void;
-  handleFlowDecimalPrecisionChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleUnitsOfMeasureChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-}
+export default Diagram;

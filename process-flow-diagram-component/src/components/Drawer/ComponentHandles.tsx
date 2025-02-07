@@ -2,7 +2,7 @@ import { Box, FormControlLabel, FormGroup, FormLabel, Stack, Switch } from '@mui
 import { Node, useReactFlow, useUpdateNodeInternals } from '@xyflow/react';
 import { Handles, ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary } from '../MUIStyledComponents';
+import { Accordion, AccordionDetails, AccordionSummary } from '../StyledMUI/AccordianComponents';
 
 
 export default function ComponentHandles({ node }: ComponentHandlesProps) {

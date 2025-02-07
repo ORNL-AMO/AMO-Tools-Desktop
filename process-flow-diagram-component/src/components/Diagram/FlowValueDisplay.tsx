@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'; 
 import { formatNumberValue } from './FlowUtils';
-import { FlowContext } from '../Flow';
+import { RootDiagramContext } from './Diagram';
+import { DiagramContext } from './FlowTypes';
 
 const FlowValueDisplay = ({ flowValue }: { flowValue: number | string }): JSX.Element => {
-    const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
-    flowValue = formatNumberValue(flowValue, flowContext.settings.flowDecimalPrecision);
+    const diagramContext: DiagramContext = useContext<DiagramContext>(RootDiagramContext);
+    flowValue = formatNumberValue(flowValue, diagramContext.settings.flowDecimalPrecision);
     const formattedValue = flowValue.toLocaleString('en-US');
     return (<span>{formattedValue}</span>);
 }

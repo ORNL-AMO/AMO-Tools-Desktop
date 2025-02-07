@@ -1,5 +1,5 @@
 import { List, TextField, InputAdornment, ListItem, Divider, styled, Tooltip, TooltipProps, tooltipClasses, Button } from "@mui/material";
-import { formatDecimalPlaces, getEdgeSourceAndTarget, getNodeFlowTotals } from "../Flow/FlowUtils";
+import { formatDecimalPlaces, getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, getConnectedEdges, Node, useReactFlow } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
@@ -7,8 +7,9 @@ import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
 import { CustomEdgeData, NodeCalculatedData, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { MAX_FLOW_DECIMALS } from "../../../../src/process-flow-types/shared-process-flow-constants";
-import { FlowContext } from "../Flow";
-import FlowDisplayUnit from "../Flow/FlowDisplayUnit";
+import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
+import { DiagramContext } from "../Diagram/FlowTypes";
+import { RootDiagramContext } from "../Diagram/Diagram";
 
 const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -25,7 +26,7 @@ const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility
    */
 const DischargeFlowForm = (props: DischargeFlowFormProps) => {
-    const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
+    const diagramContext: DiagramContext = useContext<DiagramContext>(RootDiagramContext);
     const { getNodes, setNodes, setEdges, getEdges } = useReactFlow();
 
     const allNodes = getNodes();
@@ -123,14 +124,14 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
     const updateRelatedDiagramData = () => {
         if (componentData.processComponentType === 'water-discharge') {
             let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
-                ...flowContext.nodeCalculatedDataMap,
+                ...diagramContext.nodeCalculatedDataMap,
             }
 
             updatedNodeCalculatedDataMap[props.selectedNodeId] = {
                 totalSourceFlow: updatedNodeCalculatedDataMap[props.selectedNodeId]? updatedNodeCalculatedDataMap[props.selectedNodeId].totalSourceFlow : undefined,
                 totalDischargeFlow: totalCalculatedDischargeFlow,
             }
-            flowContext.setNodeCalculatedData(updatedNodeCalculatedDataMap);
+            diagramContext.setNodeCalculatedData(updatedNodeCalculatedDataMap);
 
         } else {
             updateDischargeOutletTotalLabels();
@@ -144,7 +145,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
 */
     const updateDischargeOutletTotalLabels = () => {
         let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
-            ...flowContext.nodeCalculatedDataMap,
+            ...diagramContext.nodeCalculatedDataMap,
         }
         const componentDischargeNodeIds: string[] = componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.target);
         allNodes.forEach((node: Node<ProcessFlowPart>) => {
@@ -158,7 +159,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                 }
             }
         });
-        flowContext.setNodeCalculatedData(updatedNodeCalculatedDataMap);
+        diagramContext.setNodeCalculatedData(updatedNodeCalculatedDataMap);
     }
 
 

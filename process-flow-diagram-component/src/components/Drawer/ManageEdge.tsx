@@ -62,7 +62,7 @@ const ManageEdge = (props: ManageEdgeProps) => {
                         </Box>
                     </TabPanelBox>
                     <TabPanelBox>
-                        <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" color="secondary" onClick={onDeleteEdge}>Delete Selected Connection</Button>
+                        <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" color="error" onClick={onDeleteEdge}>Delete Selected Connection</Button>
                     </TabPanelBox>
                 </TabPanel>
             </Box>

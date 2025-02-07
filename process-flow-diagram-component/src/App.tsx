@@ -1,5 +1,6 @@
 import './App.css'
-import Flow, { FlowProps } from './components/Flow';
+import Diagram from './components/Diagram/Diagram';
+import { DiagramProps } from './components/Diagram/Diagram';
 
 function App(props?: ProcessFlowDiagramWrapperProps) {
   let availableHeight = props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight;
@@ -7,14 +8,14 @@ function App(props?: ProcessFlowDiagramWrapperProps) {
   return (
     availableHeight &&
       <div className={'wc-app-container'} style={{height: availableHeight}}>
-        <Flow {...props} height={availableHeight}/>
+        <Diagram {...props} height={availableHeight}/>
       </div>
   );
 }
 
 export default App;
 
-export interface ProcessFlowDiagramWrapperProps extends FlowProps {
+export interface ProcessFlowDiagramWrapperProps extends DiagramProps {
     context: string;
     parentContainer: {
       height: number,

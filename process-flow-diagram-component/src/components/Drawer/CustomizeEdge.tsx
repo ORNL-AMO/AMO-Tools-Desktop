@@ -1,15 +1,15 @@
 import { Box } from '@mui/material';
-import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
+import { edgeTypeOptions, DiagramContext, SelectListOption } from '../Diagram/FlowTypes';
 import { Edge, useReactFlow } from '@xyflow/react';
 import { useContext, useEffect, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
 import { CustomEdgeData, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { FlowContext } from '../Flow';
 import ColorPicker from './ColorPicker';
+import { RootDiagramContext } from '../Diagram/Diagram';
 
 export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdgeProps) {
   const { setEdges } = useReactFlow();
-  const flowContext: FlowContext = useContext(FlowContext);
+  const diagramContext: DiagramContext = useContext(RootDiagramContext);
   const [edgeColor, setEdgeColor] = useState(edge.style.stroke);
   const debouncedEdgeColor = useUserEventDebounce<string>(edgeColor, 50);
 
@@ -71,8 +71,8 @@ export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdg
               color={edgeColor}
               setParentColor={setEdgeColor}
               showRecent={true}
-              recentColors={flowContext.recentEdgeColors}
-              setRecentColors={flowContext.setRecentEdgeColors}
+              recentColors={diagramContext.recentEdgeColors}
+              setRecentColors={diagramContext.setRecentEdgeColors}
               />
           </Box>
     </Box>

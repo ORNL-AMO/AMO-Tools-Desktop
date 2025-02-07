@@ -1,15 +1,20 @@
 import { Box, Chip,  } from "@mui/material";
-import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Flow/FlowUtils";
+import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node, useReactFlow } from "@xyflow/react";
 
 import React, { memo, useContext, useState } from "react";
 import { CustomEdgeData, ProcessFlowPart, WasteWaterTreatment, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
-import { Accordion, AccordionDetails, AccordionSummary } from "../MUIStyledComponents";
-import FlowDisplayUnit from "../Flow/FlowDisplayUnit";
-import FlowValueDisplay from "../Flow/FlowValueDisplay";
+import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/AccordianComponents";
+import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
+import FlowValueDisplay from "../Diagram/FlowValueDisplay";
 import SourceFlowForm from "./SourceFlowForm";
 import DischargeFlowForm from "./DischargeFlowForm";
+import WarningIcon from '@mui/icons-material/Warning';
+import ErrorIcon from '@mui/icons-material/Error';
+import InvalidIcon from "../../validation/InvalidIcon";
+import { DiagramContext } from "../Diagram/FlowTypes";
+import { RootDiagramContext } from "../Diagram/Diagram";
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
     const { getNodes, setNodes } = useReactFlow();
@@ -34,7 +39,11 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     } else {
         componentData = componentData as ProcessFlowPart;
     }
-
+    
+    // const diagramContext: DiagramContext = useContext<DiagramContext>(RootDiagramContext);
+    // const componentValidation: ComponentValidation = diagramContext.diagramValidation.nodes[componentData.diagramNodeId];
+    // const isValid = isValidComponent(componentValidation);
+    // console.log('ComponentDataForm isValidComponent', isValid);
 
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
         if (props.connectedEdges.length !== 0) {
@@ -95,7 +104,19 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             {hasSources &&
                 <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
                     <AccordionSummary>
-                        <span style={{ alignSelf: 'center' }}>Sources</span>
+                    <span style={{ display: 'flex', alignSelf: 'center' }}>
+                            <span>
+                                Sources
+                            </span>
+                        </span>
+                        {/* <span style={{ display: 'flex', alignSelf: 'center' }}>
+                            <span>
+                                Sources
+                            </span>
+                            {componentValidation && !isValid &&
+                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon status={componentValidation.status} /></span>
+                            }
+                        </span> */}
                         <Chip label={
                             <>
                             <FlowValueDisplay flowValue={totalSourceFlow}/>
@@ -131,7 +152,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                         />
                     </AccordionSummary>
                     <AccordionDetails>
-                        <DischargeFlowForm selectedNodeId={props.selectedNode.data.diagramNodeId}></DischargeFlowForm>
+                        {/* <DischargeFlowForm selectedNodeId={props.selectedNode.data.diagramNodeId}></DischargeFlowForm> */}
                     </AccordionDetails>
                 </Accordion>
             }

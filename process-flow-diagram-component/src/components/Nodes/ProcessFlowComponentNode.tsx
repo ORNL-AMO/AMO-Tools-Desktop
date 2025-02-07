@@ -3,13 +3,14 @@ import { Position, NodeProps } from '@xyflow/react';
 import { DiagramNode } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
-import { FlowContext } from '../Flow';
 import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
-import FlowValueDisplay from '../Flow/FlowValueDisplay';
-import FlowDisplayUnit from '../Flow/FlowDisplayUnit';
+import FlowValueDisplay from '../Diagram/FlowValueDisplay';
+import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
+import { RootDiagramContext } from '../Diagram/Diagram';
+import { DiagramContext } from '../Diagram/FlowTypes';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
-  const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
+  const diagramContext: DiagramContext = useContext<DiagramContext>(RootDiagramContext);
   let transformString = `translate(0%, 0%) translate(180px, -36px)`;
 
   const allowInflowOnly: boolean = data.disableInflowConnections; 
@@ -18,19 +19,19 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
   let plantLevelFlow: number | string;
   let condensedPadding: boolean;
   if (data.processComponentType === 'water-intake') {
-    plantLevelFlow = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalDischargeFlow;
+    plantLevelFlow = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : diagramContext.nodeCalculatedDataMap[id] && diagramContext.nodeCalculatedDataMap[id].totalDischargeFlow;
     condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
     transformString = `translate(0%, 0%) translate(188px, -25px)`;
   }
   if (data.processComponentType === 'water-discharge') {
-    plantLevelFlow = data.userEnteredData.totalSourceFlow? data.userEnteredData.totalSourceFlow : flowContext.nodeCalculatedDataMap[id] && flowContext.nodeCalculatedDataMap[id].totalSourceFlow;
+    plantLevelFlow = data.userEnteredData.totalSourceFlow? data.userEnteredData.totalSourceFlow : diagramContext.nodeCalculatedDataMap[id] && diagramContext.nodeCalculatedDataMap[id].totalSourceFlow;
     condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
     transformString = `translate(0%, 0%) translate(188px, -25px)`;
   }
 
   const onEditNode = () => {
-    flowContext.setManageDataId(id);
-    flowContext.setIsDataDrawerOpen(true);
+    diagramContext.setManageDataId(id);
+    diagramContext.setIsDataDrawerOpen(true);
 }
 
   return (

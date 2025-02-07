@@ -4,11 +4,11 @@ import { DiagramNode } from "../../../../src/process-flow-types/shared-process-f
 import { Typography } from "@mui/material";
 import CustomHandle from "./CustomHandle";
 import EditDataDrawerButton from "../Drawer/EditDataDrawerButton";
-import { FlowContext } from "../Flow";
-
+import { DiagramContext } from "../Diagram/FlowTypes";
+import { RootDiagramContext } from "../Diagram/Diagram";
 
 const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
-  const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
+  const diagramContext: DiagramContext = useContext<DiagramContext>(RootDiagramContext);
   
   const transformString = `translate(0%, 0%) translate(145px, -30px)`;
   const lossInnerStyle: CSSProperties = {
@@ -18,8 +18,8 @@ const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   };
 
   const onEditNode = () => {
-    flowContext.setManageDataId(id);
-    flowContext.setIsDataDrawerOpen(true);
+    diagramContext.setManageDataId(id);
+    diagramContext.setIsDataDrawerOpen(true);
 }
 
   return (
