@@ -17,6 +17,13 @@ export const MockCompressedAirInventory: InventoryItem = {
                         "description": "Main Compressor",
                         "name": "Compressor A",
                         "notes": "",
+                        "centrifugalSpecifics": {
+                            "surgeAirflow": null,
+                            "maxFullLoadPressure": null,
+                            "maxFullLoadCapacity": null,
+                            "minFullLoadPressure": null,
+                            "minFullLoadCapacity": null
+                        },
                         "nameplateData": {
                             "compressorType": 2,
                             "fullLoadOperatingPressure": 100,

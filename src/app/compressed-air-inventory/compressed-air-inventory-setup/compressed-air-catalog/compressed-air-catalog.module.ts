@@ -28,6 +28,7 @@ import { MidTurndownCatalogComponent } from './performance-points-catalog/mid-tu
 import { NoLoadCatalogComponent } from './performance-points-catalog/no-load-catalog/no-load-catalog.component';
 import { TurndownCatalogComponent } from './performance-points-catalog/turndown-catalog/turndown-catalog.component';
 import { UnloadPointCatalogComponent } from './performance-points-catalog/unload-point-catalog/unload-point-catalog.component';
+import { FullLoadCatalogService } from './performance-points-catalog/full-load-catalog/full-load-catalog.service';
 
 
 
@@ -66,7 +67,8 @@ import { UnloadPointCatalogComponent } from './performance-points-catalog/unload
     CompressedAirMotorCatalogService,
     CompressedAirControlsCatalogService,
     DesignDetailsCatalogService,
-    PerformancePointsCatalogService
+    PerformancePointsCatalogService,
+    FullLoadCatalogService
   ],
   exports: [
     CompressedAirCatalogComponent

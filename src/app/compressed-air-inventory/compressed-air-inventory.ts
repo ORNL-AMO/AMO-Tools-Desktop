@@ -39,6 +39,7 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   compressedAirControlsProperties: CompressedAirControlsProperties,
   compressedAirDesignDetailsProperties: CompressedAirDesignDetailsProperties,
   compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties,  
+  centrifugalSpecifics: CentrifugalSpecifics,
   validCompressedAir?: ValidCompressedAir
 }
 
@@ -70,6 +71,15 @@ export interface ConnectedItem {
   assessmentId?: number,
   assessmentName?: string,
   connectedFromState?: ConnectedFromState,
+}
+
+
+export interface CentrifugalSpecifics {
+  surgeAirflow: number,
+  maxFullLoadPressure: number,
+  maxFullLoadCapacity: number,
+  minFullLoadPressure: number
+  minFullLoadCapacity: number
 }
 
 
