@@ -29,6 +29,8 @@ import { NoLoadCatalogComponent } from './performance-points-catalog/no-load-cat
 import { TurndownCatalogComponent } from './performance-points-catalog/turndown-catalog/turndown-catalog.component';
 import { UnloadPointCatalogComponent } from './performance-points-catalog/unload-point-catalog/unload-point-catalog.component';
 import { FullLoadCatalogService } from './performance-points-catalog/full-load-catalog/full-load-catalog.service';
+import { CentrifugalSpecificsCatalogComponent } from './centrifugal-specifics-catalog/centrifugal-specifics-catalog.component';
+import { CentrifugalSpecificsCatalogService } from './centrifugal-specifics-catalog/centrifugal-specifics-catalog.service';
 
 
 
@@ -47,7 +49,8 @@ import { FullLoadCatalogService } from './performance-points-catalog/full-load-c
     MidTurndownCatalogComponent,
     NoLoadCatalogComponent,
     TurndownCatalogComponent,
-    UnloadPointCatalogComponent
+    UnloadPointCatalogComponent,
+    CentrifugalSpecificsCatalogComponent
   ],
   imports: [
     CommonModule,
@@ -68,7 +71,8 @@ import { FullLoadCatalogService } from './performance-points-catalog/full-load-c
     CompressedAirControlsCatalogService,
     DesignDetailsCatalogService,
     PerformancePointsCatalogService,
-    FullLoadCatalogService
+    FullLoadCatalogService,
+    CentrifugalSpecificsCatalogService
   ],
   exports: [
     CompressedAirCatalogComponent
