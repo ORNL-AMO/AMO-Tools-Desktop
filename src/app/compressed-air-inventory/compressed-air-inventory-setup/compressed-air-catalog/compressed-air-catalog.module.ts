@@ -29,7 +29,6 @@ import { NoLoadCatalogComponent } from './performance-points-catalog/no-load-cat
 import { TurndownCatalogComponent } from './performance-points-catalog/turndown-catalog/turndown-catalog.component';
 import { UnloadPointCatalogComponent } from './performance-points-catalog/unload-point-catalog/unload-point-catalog.component';
 import { FullLoadCatalogService } from './performance-points-catalog/full-load-catalog/full-load-catalog.service';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -59,9 +58,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     OperatingHoursModalModule,
     ConfirmDeleteModalModule,
     ConnectedInventoryModule,
-    RouterModule,
-    NgbModule,
-    ModalModule
+    RouterModule
   ],
   providers: [
     CompressedAirCatalogService,
