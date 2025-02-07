@@ -29,7 +29,6 @@ import { NoLoadCatalogComponent } from './performance-points-catalog/no-load-cat
 import { TurndownCatalogComponent } from './performance-points-catalog/turndown-catalog/turndown-catalog.component';
 import { UnloadPointCatalogComponent } from './performance-points-catalog/unload-point-catalog/unload-point-catalog.component';
 import { FullLoadCatalogService } from './performance-points-catalog/full-load-catalog/full-load-catalog.service';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CentrifugalSpecificsCatalogComponent } from './centrifugal-specifics-catalog/centrifugal-specifics-catalog.component';
 import { CentrifugalSpecificsCatalogService } from './centrifugal-specifics-catalog/centrifugal-specifics-catalog.service';
 
@@ -62,9 +61,7 @@ import { CentrifugalSpecificsCatalogService } from './centrifugal-specifics-cata
     OperatingHoursModalModule,
     ConfirmDeleteModalModule,
     ConnectedInventoryModule,
-    RouterModule,
-    NgbModule,
-    ModalModule
+    RouterModule
   ],
   providers: [
     CompressedAirCatalogService,
