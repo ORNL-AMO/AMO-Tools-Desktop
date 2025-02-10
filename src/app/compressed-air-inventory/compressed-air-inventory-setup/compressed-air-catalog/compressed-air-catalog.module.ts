@@ -32,6 +32,7 @@ import { FullLoadCatalogService } from './performance-points-catalog/full-load-c
 import { CentrifugalSpecificsCatalogComponent } from './centrifugal-specifics-catalog/centrifugal-specifics-catalog.component';
 import { CentrifugalSpecificsCatalogService } from './centrifugal-specifics-catalog/centrifugal-specifics-catalog.service';
 import { MaxFullFlowCatalogService } from './performance-points-catalog/max-full-flow-catalog/max-full-flow-catalog.service';
+import { UnloadPointCatalogService } from './performance-points-catalog/unload-point-catalog/unload-point-catalog.service';
 
 
 
@@ -74,7 +75,8 @@ import { MaxFullFlowCatalogService } from './performance-points-catalog/max-full
     PerformancePointsCatalogService,
     FullLoadCatalogService,
     CentrifugalSpecificsCatalogService,
-    MaxFullFlowCatalogService
+    MaxFullFlowCatalogService,
+    UnloadPointCatalogService
   ],
   exports: [
     CompressedAirCatalogComponent
