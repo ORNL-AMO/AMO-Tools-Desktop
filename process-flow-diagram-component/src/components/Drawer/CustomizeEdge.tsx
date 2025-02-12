@@ -1,51 +1,37 @@
 import { Box } from '@mui/material';
-import { edgeTypeOptions, DiagramContext, SelectListOption } from '../Diagram/FlowTypes';
-import { Edge, useReactFlow } from '@xyflow/react';
-import { useContext, useEffect, useState } from 'react';
+import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
+import { Edge } from '@xyflow/react';
+import { useEffect, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
-import { CustomEdgeData, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import ColorPicker from './ColorPicker';
-import { RootDiagramContext } from '../Diagram/Diagram';
+import { useAppDispatch, useAppSelector } from '../../hooks/state';
+import { customEdgeTypeChange, setEdgeStrokeColor } from '../Diagram/diagramReducer';
 
-export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdgeProps) {
-  const { setEdges } = useReactFlow();
-  const diagramContext: DiagramContext = useContext(RootDiagramContext);
+export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
+  const dispatch = useAppDispatch();
+  const recentEdgeColors = useAppSelector((state) => state.diagram.recentEdgeColors);
+  const edgeType: string = useAppSelector((state) => state.diagram.diagramOptions.edgeType); 
+  
   const [edgeColor, setEdgeColor] = useState(edge.style.stroke);
-  const debouncedEdgeColor = useUserEventDebounce<string>(edgeColor, 50);
+  const [recentColors, setRecentColors] = useState(recentEdgeColors);
+  const debouncedEdgeColor = useUserEventDebounce<string>(edgeColor, 50);  
 
   useEffect(() => {
-    setEdges((eds) => {
-          return eds.map((e: Edge) => {
-            if (e.id === edge.id) {
-              e.style.stroke = debouncedEdgeColor;
-            }
-            return e;
-          });
-        });
+    dispatch(setEdgeStrokeColor({color: debouncedEdgeColor, recentColors}));
   }, [debouncedEdgeColor]);
 
+  const handleEdgeStrokeChange = (color: string, recentColors?: string[]) => {
+    setEdgeColor(color);
+    setRecentColors(recentColors);
+  }
+
   const getCurrentEdgeType = (): string => {
-    return edge.data.hasOwnEdgeType !== undefined? edge.data.hasOwnEdgeType : userDiagramOptions.edgeType;
+    return edge.data.hasOwnEdgeType !== undefined? edge.data.hasOwnEdgeType : edgeType;
   }
 
   const handleEdgeTypeChange = (newEdgeType: string) => {
-    edge.type = newEdgeType;
-    setEdges((eds) => {
-      let updatedEdges = eds.map((e: Edge<CustomEdgeData>) => {
-        let updatedEdge = {
-          ...e,
-        }
-        if (e.id === edge.id) {
-          updatedEdge.data = {
-            ...e.data,
-            hasOwnEdgeType: newEdgeType
-          }
-          updatedEdge.type = newEdgeType;
-        }
-        return updatedEdge;
-      });
-      return updatedEdges;
-    });
+    dispatch(customEdgeTypeChange(newEdgeType));
   }
 
   const selectId = `edgeType_${edge.id}`;
@@ -69,10 +55,9 @@ export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdg
             <ColorPicker
               label={'Pick Line Color'} 
               color={edgeColor}
-              setParentColor={setEdgeColor}
+              recentColors={recentEdgeColors}
+              setParentColor={handleEdgeStrokeChange}
               showRecent={true}
-              recentColors={diagramContext.recentEdgeColors}
-              setRecentColors={diagramContext.setRecentEdgeColors}
               />
           </Box>
     </Box>
@@ -81,5 +66,4 @@ export default function CustomizeEdge({ edge, userDiagramOptions }: CustomizeEdg
 
 export interface CustomizeEdgeProps {
   edge: Edge<CustomEdgeData>;
-  userDiagramOptions: UserDiagramOptions;
 }

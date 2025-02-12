@@ -3,13 +3,13 @@ import { formatDecimalPlaces, getEdgeSourceAndTarget, getNodeFlowTotals } from "
 import { Edge, getConnectedEdges, Node, useReactFlow } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
-import React, { memo, useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
 import { CustomEdgeData, NodeCalculatedData, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { MAX_FLOW_DECIMALS } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
-import { DiagramContext } from "../Diagram/FlowTypes";
-import { RootDiagramContext } from "../Diagram/Diagram";
+import { useAppDispatch, useAppSelector } from "../../hooks/state";
+import { calculatedDataUpdate } from "../Diagram/diagramReducer";
 
 const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -26,7 +26,8 @@ const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility
    */
 const DischargeFlowForm = (props: DischargeFlowFormProps) => {
-    const diagramContext: DiagramContext = useContext<DiagramContext>(RootDiagramContext);
+    const dispatch = useAppDispatch();
+    const calculatedData = useAppSelector((state) => state.diagram.calculatedData);
     const { getNodes, setNodes, setEdges, getEdges } = useReactFlow();
 
     const allNodes = getNodes();
@@ -123,15 +124,15 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
 
     const updateRelatedDiagramData = () => {
         if (componentData.processComponentType === 'water-discharge') {
-            let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
-                ...diagramContext.nodeCalculatedDataMap,
+            let updatedCalculatedData: Record<string, NodeCalculatedData> = {
+                ...calculatedData,
             }
 
-            updatedNodeCalculatedDataMap[props.selectedNodeId] = {
-                totalSourceFlow: updatedNodeCalculatedDataMap[props.selectedNodeId]? updatedNodeCalculatedDataMap[props.selectedNodeId].totalSourceFlow : undefined,
+            updatedCalculatedData[props.selectedNodeId] = {
+                totalSourceFlow: updatedCalculatedData[props.selectedNodeId]? updatedCalculatedData[props.selectedNodeId].totalSourceFlow : undefined,
                 totalDischargeFlow: totalCalculatedDischargeFlow,
             }
-            diagramContext.setNodeCalculatedData(updatedNodeCalculatedDataMap);
+            dispatch(calculatedDataUpdate(updatedCalculatedData))
 
         } else {
             updateDischargeOutletTotalLabels();
@@ -144,8 +145,8 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
 * Other component types don't need update - they will show updated value from edges array on drawer open
 */
     const updateDischargeOutletTotalLabels = () => {
-        let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
-            ...diagramContext.nodeCalculatedDataMap,
+        let updatedCalculatedData: Record<string, NodeCalculatedData> = {
+            ...calculatedData,
         }
         const componentDischargeNodeIds: string[] = componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.target);
         allNodes.forEach((node: Node<ProcessFlowPart>) => {
@@ -153,13 +154,14 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                 if (node.data.processComponentType === 'water-discharge') {
                     const plantDischargeConnectedEdges = getConnectedEdges([node], allEdges);
                     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(plantDischargeConnectedEdges, allNodes, node.id);
-                    let calculatedData = { ...updatedNodeCalculatedDataMap[node.id] };
+                    let calculatedData = { ...updatedCalculatedData[node.id] };
                     calculatedData.totalSourceFlow = totalCalculatedSourceFlow;
-                    updatedNodeCalculatedDataMap[node.id] = calculatedData;
+                    updatedCalculatedData[node.id] = calculatedData;
                 }
             }
         });
-        diagramContext.setNodeCalculatedData(updatedNodeCalculatedDataMap);
+        dispatch(calculatedDataUpdate(updatedCalculatedData))
+
     }
 
 

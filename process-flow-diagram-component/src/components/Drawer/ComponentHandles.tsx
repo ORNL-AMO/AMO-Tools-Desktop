@@ -1,12 +1,14 @@
 import { Box, FormControlLabel, FormGroup, FormLabel, Stack, Switch } from '@mui/material';
-import { Node, useReactFlow, useUpdateNodeInternals } from '@xyflow/react';
+import { Node, useUpdateNodeInternals } from '@xyflow/react';
 import { Handles, ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary } from '../StyledMUI/AccordianComponents';
+import { useAppDispatch } from '../../hooks/state';
+import { updateNodeHandles } from '../Diagram/diagramReducer';
 
 
 export default function ComponentHandles({ node }: ComponentHandlesProps) {
-  const { setNodes } = useReactFlow();
+  const dispatch = useAppDispatch();
   const nodeData = node.data as ProcessFlowPart;
   const updateNodeInternals = useUpdateNodeInternals();
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -17,7 +19,8 @@ export default function ComponentHandles({ node }: ComponentHandlesProps) {
   };
 
   const toggleHandle = (event: React.ChangeEvent<HTMLInputElement>, handleId: string, isInflowHandle: boolean) => {
-    const updatedHandles = {inflowHandles: {...handles.inflowHandles}, outflowHandles: {...handles.outflowHandles}}
+    const updatedHandles = {inflowHandles: {...handles.inflowHandles}, outflowHandles: {...handles.outflowHandles}};
+
     if (isInflowHandle) {
       updatedHandles.inflowHandles[handleId] = event.target.checked;
     } else {
@@ -25,24 +28,8 @@ export default function ComponentHandles({ node }: ComponentHandlesProps) {
     }
     setHandles(updatedHandles)
     updateNodeInternals(node.id);
-
+    dispatch(updateNodeHandles(updatedHandles));
     // todo update edges - removed handles with edges are stale inside the edges array
-
-    setNodes((nds) =>
-      nds.map((n: Node<ProcessFlowPart>) => {
-        if (node.id === n.id) {
-
-          return {
-            ...n,
-            data: {
-              ...n.data,
-              handles: updatedHandles
-            }
-          };
-        }
-        return n;
-      }),
-    );
 
   };
 
@@ -63,7 +50,6 @@ export default function ComponentHandles({ node }: ComponentHandlesProps) {
   }
 
   let handleImgSrc = './assets/component-handles.png';
-  let componentHandles = handles;
   let inflowOptions: JSX.Element[] = [];
   let outflowOptions: JSX.Element[] = [];
 
@@ -76,15 +62,13 @@ export default function ComponentHandles({ node }: ComponentHandlesProps) {
   const setAvailableHandleContext = () => {
     if (nodeData.disableInflowConnections) {
       handleImgSrc = './assets/intake-handles.png';
-      delete componentHandles.inflowHandles;
-      outflowOptions = getHandleToggleElements(componentHandles.outflowHandles, false);
+      outflowOptions = getHandleToggleElements(handles.outflowHandles, false);
     } else if (nodeData.disableOutflowConnections) {
       handleImgSrc = './assets/discharge-handles.png';
-      delete componentHandles.outflowHandles;
-      inflowOptions = getHandleToggleElements(componentHandles.inflowHandles, true);
+      inflowOptions = getHandleToggleElements(handles.inflowHandles, true);
     } else {
-      inflowOptions = getHandleToggleElements(componentHandles.inflowHandles, true);
-      outflowOptions = getHandleToggleElements(componentHandles.outflowHandles, false);
+      inflowOptions = getHandleToggleElements(handles.inflowHandles, true);
+      outflowOptions = getHandleToggleElements(handles.outflowHandles, false);
     }
   }
 

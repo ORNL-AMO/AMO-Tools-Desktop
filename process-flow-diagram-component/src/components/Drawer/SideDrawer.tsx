@@ -102,7 +102,7 @@ export const SideDrawer = (props: SideDrawerProps) => {
   const closedButton = (<IconButton onClick={toggleDrawerOpen}>
     <MenuIcon/>
   </IconButton>);
-  const drawerChevron = (<DrawerToggleButton toggleDrawer={toggleDrawerOpen} side={'left'}></DrawerToggleButton>);
+  const drawerChevron = (<DrawerToggleButton toggleSidebarDrawer={toggleDrawerOpen} side={'left'}></DrawerToggleButton>);
   const toggleButton = open? drawerChevron : closedButton;
 
   

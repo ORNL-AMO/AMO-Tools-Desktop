@@ -1,17 +1,16 @@
 import { Box } from '@mui/material';
-import { Node, useReactFlow } from '@xyflow/react';
-import { ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { CSSProperties, useContext, useEffect, useState } from 'react';
-import useUserEventDebounce from '../../hooks/useUserEventDebounce';
+import { Node } from '@xyflow/react';
+import { useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary } from '../StyledMUI/AccordianComponents';
 import ColorPicker from './ColorPicker';
-import { RootDiagramContext } from '../Diagram/Diagram';
-import { DiagramContext } from '../Diagram/FlowTypes';
+import { useAppDispatch, useAppSelector } from '../../hooks/state';
+import { setNodeColor, setNodeStyle, } from '../Diagram/diagramReducer';
 
 
 export default function CustomizeNode({ node }: CustomizeNodeProps) {
-  const diagramContext: DiagramContext = useContext(RootDiagramContext);
-  const { setNodes } = useReactFlow();
+  const dispatch = useAppDispatch();
+  const recentNodeColors = useAppSelector((state) => state.diagram.recentNodeColors);
+
   const [backgroundColor, setBackgroundColor] = useState(node.style.backgroundColor);
   const [textColor, setTextColor] = useState(node.style.color);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -20,40 +19,19 @@ export default function CustomizeNode({ node }: CustomizeNodeProps) {
     setIsExpanded(newExpanded);
   };
 
-  const handleSetBackgroundColor = (selectedColor: string) => {
-    setBackgroundColor(selectedColor);
-    updateNodeStyle(
-      {
-        ...node.style,
-        backgroundColor: selectedColor,
-      }
-    );
+  const handleSetNodeColor = (color: string, recentColors?: string[]) => {
+    dispatch(setNodeColor({color, recentColors}));
+    setBackgroundColor(color);
   }
 
   const handleSetTextColor = (selectedColor: string) => {
     setTextColor(selectedColor);
-    updateNodeStyle(
+    dispatch(setNodeStyle(
       {
         ...node.style,
         color: selectedColor,
       }
-    );
-  }
-
-  const updateNodeStyle = (nodeStyle: CSSProperties) => {
-    setNodes((nds) =>
-      nds.map((n: Node<ProcessFlowPart>) => {
-        if (n.data.diagramNodeId === node.id) {
-          return {
-            ...n,
-            style: {
-              ...nodeStyle,
-            }
-          };
-        }
-        return n;
-      }),
-    );
+    ));
   }
 
 
@@ -67,10 +45,9 @@ export default function CustomizeNode({ node }: CustomizeNodeProps) {
           <Box sx={{ fontSize: '.75rem' }}>
             <ColorPicker
               color={backgroundColor}
-              setParentColor={handleSetBackgroundColor}
+              setParentColor={handleSetNodeColor}
               showRecent={true}
-              recentColors={diagramContext.recentNodeColors}
-              setRecentColors={diagramContext.setRecentNodeColors}
+              recentColors={recentNodeColors}
               label={'Component Color'} />
           </Box>
           <Box sx={{ fontSize: '.75rem' }}>

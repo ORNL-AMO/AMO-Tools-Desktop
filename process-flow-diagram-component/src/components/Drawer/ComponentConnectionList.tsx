@@ -2,17 +2,18 @@ import { Box, List, ListItem, ListItemButton, ListItemIcon, Divider } from "@mui
 import { getEdgeSourceAndTarget } from "../Diagram/FlowUtils";
 import ConnectionBreadcrumbs from "./ConnectionBreadcrumbs";
 import EditNoteIcon from '@mui/icons-material/EditNote';
-import { Edge, Node, useReactFlow } from '@xyflow/react';
+import { Edge, Node } from '@xyflow/react';
+import { useAppSelector } from "../../hooks/state";
 
 const ComponentConnectionsList = (props: ComponentConnectionsListProps) => {
-    const { getNodes } = useReactFlow();
-    const allNodes: Node[] = getNodes();
+    const nodes = useAppSelector(state => state.diagram.nodes) as Node[];
+
     return (
         <Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
             <List>
                 {props.connectedEdges.map((edge: Edge, index: number) => {
                     const key: string = `${edge.id}_${index}`;
-                    const { source, target } = getEdgeSourceAndTarget(edge, allNodes);
+                    const { source, target } = getEdgeSourceAndTarget(edge, nodes);
                     let isSelected: boolean = props.selectedEdge && props.selectedEdge.id === edge.id;
 
                     return (

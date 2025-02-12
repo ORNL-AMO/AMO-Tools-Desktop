@@ -1,5 +1,4 @@
-import { CustomEdgeData, ProcessFlowPart, UserDiagramOptions } from "../../../../src/process-flow-types/shared-process-flow-types";
-import { useReactFlow } from '@xyflow/react';
+import { CustomEdgeData, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import {
     type Node,
     Edge,
@@ -10,13 +9,15 @@ import TabPanel, { TabPanelBox } from "./TabPanel";
 import CustomizeEdge from "./CustomizeEdge";
 import DrawerToggleButton from "./DrawerToggleButton";
 import FlowConnectionText from "./FlowConnectionText";
+import { deleteEdge } from "../Diagram/diagramReducer";
+import { useAppDispatch, useAppSelector } from "../../hooks/state";
 
 const ManageEdge = (props: ManageEdgeProps) => {
-    const { setEdges, getNodes } = useReactFlow();
-    const {selectedEdge, userDiagramOptions, closeDrawer} = props;
+    const dispatch = useAppDispatch();
+    const {selectedEdge} = props;
     const [selectedTab, setSelectedTab] = useState(0);  
 
-    const nodes: Node<ProcessFlowPart>[] = [...getNodes()] as Node<ProcessFlowPart>[];
+    const nodes: Node<ProcessFlowPart>[] = useAppSelector((state) => state.diagram.nodes) as Node<ProcessFlowPart>[];
     const source: Node<ProcessFlowPart> = nodes.find(node => node.id == props.selectedEdge.source);
     const target: Node<ProcessFlowPart> = nodes.find(node => node.id == props.selectedEdge.target);
     
@@ -24,15 +25,10 @@ const ManageEdge = (props: ManageEdgeProps) => {
         setSelectedTab(newValue);
     };
 
-    const onDeleteEdge = () => {
-        setEdges((edges) => edges.filter((edg) => edg.id !== selectedEdge.id));
-        closeDrawer();
-    };
-
     return (
         <>
             <Box display="flex" alignItems={'center'} sx={{ margin: '1rem' }}>
-                <DrawerToggleButton toggleDrawer={closeDrawer} side={'right'}></DrawerToggleButton>
+                <DrawerToggleButton side={'right'}></DrawerToggleButton>
                 <FlowConnectionText source={source.data} 
                     target={target.data} 
                     style={{
@@ -58,11 +54,11 @@ const ManageEdge = (props: ManageEdgeProps) => {
                 <TabPanel value={selectedTab} index={0}>
                     <TabPanelBox>
                         <Box>
-                            <CustomizeEdge edge={selectedEdge} userDiagramOptions={userDiagramOptions}></CustomizeEdge>
+                            <CustomizeEdge edge={selectedEdge}></CustomizeEdge>
                         </Box>
                     </TabPanelBox>
                     <TabPanelBox>
-                        <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" color="error" onClick={onDeleteEdge}>Delete Selected Connection</Button>
+                        <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" color="error" onClick={() => dispatch(deleteEdge(selectedEdge.id))}>Delete Selected Connection</Button>
                     </TabPanelBox>
                 </TabPanel>
             </Box>
@@ -76,6 +72,4 @@ export default memo(ManageEdge);
 
 export interface ManageEdgeProps {
     selectedEdge: Edge<CustomEdgeData>,
-    userDiagramOptions: UserDiagramOptions;
-    closeDrawer: () => void;
 }
