@@ -1,7 +1,6 @@
 import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { PowerFactorTriangleOutputs } from '../../../../shared/models/standalone';
 import { PlotlyService } from 'angular-plotly.js';
-import { auto } from '@popperjs/core';
 
 @Component({
   selector: 'app-power-factor-triangle-results',
