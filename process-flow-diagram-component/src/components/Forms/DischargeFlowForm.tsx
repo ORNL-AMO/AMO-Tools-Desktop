@@ -1,4 +1,4 @@
-import { List, TextField, InputAdornment, ListItem, Divider, styled, Tooltip, TooltipProps, tooltipClasses, Button } from "@mui/material";
+import { List, TextField, InputAdornment, ListItem, Divider, Button } from "@mui/material";
 import { formatDecimalPlaces, getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, getConnectedEdges, Node, useReactFlow } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
@@ -7,19 +7,11 @@ import React, { useEffect, useRef, useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
 import { CustomEdgeData, NodeCalculatedData, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { MAX_FLOW_DECIMALS } from "../../../../src/process-flow-types/shared-process-flow-constants";
-import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
-import { useAppDispatch, useAppSelector } from "../../hooks/state";
+import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { calculatedDataUpdate } from "../Diagram/diagramReducer";
-
-const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltip}`]: {
-        padding: '.5rem',
-        fontSize: 14,
-    },
-}));
-
+import { useAppDispatch, useAppSelector } from "../../hooks/state";
+import InputField from "../StyledMUI/InputField";
+import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 
 /**
    * Handle Flow states for discharge edges of selected node/component
@@ -37,16 +29,30 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
     const [allEdges, setAllEdges] = useState<Edge<CustomEdgeData>[]>(getEdges() as Edge<CustomEdgeData>[]);
     const componentDischargeEdges = allEdges.filter((edge: Edge<CustomEdgeData>) => edge.source === props.selectedNodeId);
     const componentDischargeEdgeIds = componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
-    
+
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentDischargeEdges, allNodes, props.selectedNodeId);
     const [totalDischargeFlow, setTotalDischargeFlow] = useState<number>(componentData.userEnteredData.totalDischargeFlow !== undefined ? componentData.userEnteredData.totalDischargeFlow : totalCalculatedDischargeFlow);
     const isFirstRender = useRef(true);
 
+    // const initialValidation: ComponentFlowValidation = {totalFlowValueDifferent: undefined, flowValues: {}, status: undefined};
+    // initialValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow, componentData.userEnteredData.totalDischargeFlow, totalDischargeFlow);
+    // componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => {
+    //     const validationMessage = validateFlowValue(edge.data.flowValue);
+    //     initialValidation.flowValues = {
+    //         ...initialValidation.flowValues,
+    //         [edge.id]: {
+    //             flowValueGreaterThan: validationMessage,
+    //         }
+    //     }
+    // });
+    // const [validation, setValidation] = useState<ComponentFlowValidation>(initialValidation); 
+
+
     // * side-effects of allEdges must be handled here after state update or xyFlow setEdges will cause state inconsistency over multiple renders. Could also debounce user input in the future
     useEffect(() => {
         if (isFirstRender.current) {
-            isFirstRender.current = false; 
-            return; 
+            isFirstRender.current = false;
+            return;
         }
 
         setEdges(allEdges);
@@ -54,11 +60,48 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
         if (componentData.userEnteredData.totalDischargeFlow === undefined && totalCalculatedDischargeFlow !== totalDischargeFlow) {
             setTotalDischargeFlow(totalCalculatedDischargeFlow);
         }
+
+        // const totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow, componentData.userEnteredData.totalDischargeFlow, totalDischargeFlow);
+        // setValidation((prevValidation: ComponentFlowValidation) => {
+        //     let updatedMap = {...prevValidation};
+        //     allEdges.forEach((edge) => {
+        //         const flowValueError = validateFlowValue(edge.data.flowValue);
+        //         updatedMap.flowValues[edge.id] = {
+        //             ...updatedMap.flowValues[edge.id],
+        //             flowValueGreaterThan: flowValueError,
+        //         }
+        //     });
+
+        //     updatedMap.totalFlowValueDifferent = totalFlowValueDifferent;
+        //     return updatedMap;
+        // });
         updateRelatedDiagramData();
     }, allEdges);
 
+
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
+        // setValidation((prevValidation: ComponentFlowValidation) => {
+        //     let updatedMap = {...prevValidation};
+        //     updatedMap.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow, componentData.userEnteredData.totalDischargeFlow, totalDischargeFlow);
+        //     return updatedMap;
+        // });
+
+    }, [totalDischargeFlow]);
+
     const onTotalFlowValueInputChange = (event) => {
         const updatedValue = event.target.value === "" ? null : Number(event.target.value);
+
+        // setValidation((prevValidation: ComponentFlowValidation) => {
+        //     let updatedMap = {...prevValidation};
+        //     updatedMap.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow, updatedValue, updatedValue);
+        //     return updatedMap;
+        // });
+
         setNodes((nds) =>
             nds.map((n: Node<ProcessFlowPart>) => {
                 if (n.data.diagramNodeId === componentData.diagramNodeId) {
@@ -129,7 +172,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
             }
 
             updatedCalculatedData[props.selectedNodeId] = {
-                totalSourceFlow: updatedCalculatedData[props.selectedNodeId]? updatedCalculatedData[props.selectedNodeId].totalSourceFlow : undefined,
+                totalSourceFlow: updatedCalculatedData[props.selectedNodeId] ? updatedCalculatedData[props.selectedNodeId].totalSourceFlow : undefined,
                 totalDischargeFlow: totalCalculatedDischargeFlow,
             }
             dispatch(calculatedDataUpdate(updatedCalculatedData))
@@ -164,7 +207,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
 
     }
 
-
+    // console.log('validation', validation);
     return (
         <>
             <SmallTooltip title="Set flows evenly from total discharge value"
@@ -195,10 +238,13 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                 label={'Total Flow'}
                 id={'totalDischargeFlow'}
                 type={'number'}
-                color={'primary'}
                 size="small"
                 value={totalDischargeFlow ?? ''}
                 onChange={(event) => onTotalFlowValueInputChange(event)}
+                // color={validation.totalFlowValueDifferent? 'error' : 'primary'}
+                // error={validation.totalFlowValueDifferent ? true : false}
+                // helperText={validation.totalFlowValueDifferent}
+                FormHelperTextProps={{ sx: { whiteSpace: 'normal', maxWidth: 250 } }}
                 InputProps={{
                     endAdornment: <InputAdornment position="end">
                         <FlowDisplayUnit />
@@ -217,17 +263,22 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                             sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: '.5rem' }}
                             key={edge.id}
                             disablePadding>
-                            <TextField
+                            <InputField
                                 label={<FlowConnectionText source={source} target={target} />}
                                 id={edge.id}
                                 type={'number'}
                                 size="small"
                                 value={flowValue}
+                                // color={validation.flowValues[edge.id]?.flowValueGreaterThan? 'warning' : 'primary'}
+                                // helperText={validation.flowValues[edge.id]?.flowValueGreaterThan}
+                                // warning={validation.flowValues[edge.id]?.flowValueGreaterThan? true : false}
                                 onChange={(event) => onFlowValueInputChange(event, edge.id)}
                                 sx={{ m: 1, width: '100%' }}
                                 InputProps={{
-                                    endAdornment: <InputAdornment position="end">
-                                        <FlowDisplayUnit />
+                                    endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                        <span style={{ zIndex: 1, background: 'white' }}>
+                                            <FlowDisplayUnit />
+                                        </span>
                                     </InputAdornment>,
                                 }}
                             />
@@ -247,6 +298,3 @@ export default DischargeFlowForm;
 export interface DischargeFlowFormProps {
     selectedNodeId: string,
 }
-
-
-

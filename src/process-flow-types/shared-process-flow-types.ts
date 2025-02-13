@@ -69,6 +69,45 @@ export interface UserDiagramOptions {
   animated: boolean,
 }
 
+export interface DiagramValidation {
+  nodes: {
+    [nodeId: string]: ComponentValidation
+  }
+}
+
+export interface ComponentValidation {
+  status: ValidationStatus,
+  source: ComponentFlowValidation
+  discharge: ComponentFlowValidation
+}
+
+export type ComponentFlowValidation = {
+  status: ValidationStatus,
+  totalFlowValueDifferent?: string,
+  flowValues: {
+      [edgeId: string]: {
+          flowValueGreaterThan?: string,
+      }
+  }
+}
+
+export interface ValidationState {
+  errors: ValidityError[],
+  warnings: ValidityWarning[],
+}
+
+export interface ValidityError {
+  message: string,
+}
+
+export interface ValidityWarning {
+  message: string,
+}
+
+// * Invalid represents 'error' state
+export type ValidationStatus = 'ERROR' | 'VALID' | 'WARNING'
+
+
 export interface DiagramSettings {
   flowDecimalPrecision: number,
   unitsOfMeasure: string,

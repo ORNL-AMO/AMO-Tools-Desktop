@@ -1,4 +1,4 @@
-import { List, TextField, InputAdornment, ListItem, Divider, styled, Tooltip, TooltipProps, tooltipClasses, Button } from "@mui/material";
+import { List, TextField, InputAdornment, ListItem, Divider, Button } from "@mui/material";
 import { formatDecimalPlaces, getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, getConnectedEdges, Node, useReactFlow } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
@@ -7,18 +7,12 @@ import React, { useEffect, useRef, useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
 import { CustomEdgeData, NodeCalculatedData, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { MAX_FLOW_DECIMALS } from "../../../../src/process-flow-types/shared-process-flow-constants";
-import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
+import InputField from "../StyledMUI/InputField";
+import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { calculatedDataUpdate } from "../Diagram/diagramReducer";
-
-const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
-    [`& .${tooltipClasses.tooltip}`]: {
-        padding: '.5rem',
-        fontSize: 14,
-    },
-}));
+import { validateTotalFlowValue } from "../../validation/Validation";
+import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 
 
 /**
@@ -37,16 +31,32 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
     const [allEdges, setAllEdges] = useState<Edge<CustomEdgeData>[]>(getEdges() as Edge<CustomEdgeData>[]);
     const componentSourceEdges = allEdges.filter((edge: Edge<CustomEdgeData>) => edge.target === props.selectedNodeId);
     const componentSourceEdgeIds = componentSourceEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
-    
+
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentSourceEdges, allNodes, props.selectedNodeId);
     const [totalSourceFlow, setTotalSourceFlow] = useState<number>(componentData.userEnteredData.totalSourceFlow !== undefined ? componentData.userEnteredData.totalSourceFlow : totalCalculatedSourceFlow);
     const isFirstRender = useRef(true);
 
-    // * side-effects of allEdges must be handled here after state update or xyFlow setEdges will cause state inconsistency over multiple renders. Could also debounce user input in the future
+    // const sourceValidation: ComponentFlowValidation = {totalFlowValueDifferent: undefined, flowValues: {}, status: 'VALID'};
+    // const totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow, componentData.userEnteredData.totalSourceFlow, totalSourceFlow);
+    // componentSourceEdges.map((edge: Edge<CustomEdgeData>) => {
+    //     const validationMessage = validateFlowValue(edge.data.flowValue);
+    //     sourceValidation.status = validationMessage? 'WARNING' : sourceValidation.status;
+    //     sourceValidation.flowValues = {
+    //         ...sourceValidation.flowValues,
+    //         [edge.id]: {
+    //             flowValueGreaterThan: validationMessage,
+    //         }
+    //     }
+    // });
+    // sourceValidation.totalFlowValueDifferent = totalFlowValueDifferent;
+    // sourceValidation.status = totalFlowValueDifferent? 'ERROR' : sourceValidation.status;
+    // const [validation, setValidation] = useState<ComponentFlowValidation>(sourceValidation); 
+
+    // * side-effects of allEdges must be handled here after state update or xyFlow setEdges() will cause state inconsistency over multiple renders. Could also resolve by debounce user input in the future
     useEffect(() => {
         if (isFirstRender.current) {
-            isFirstRender.current = false; 
-            return; 
+            isFirstRender.current = false;
+            return;
         }
 
         setEdges(allEdges);
@@ -54,11 +64,68 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
         if (componentData.userEnteredData.totalSourceFlow === undefined && totalCalculatedSourceFlow !== totalSourceFlow) {
             setTotalSourceFlow(totalCalculatedSourceFlow);
         }
+
+        const totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow, componentData.userEnteredData.totalSourceFlow, totalSourceFlow);
+        // setValidation((prevValidation: ComponentFlowValidation) => {
+        //     let status: ValidationStatus = 'VALID';
+        //     let flowValidation: ComponentFlowValidation = {...prevValidation};
+        //     allEdges.forEach((edge) => {
+        //         const validationMessage = validateFlowValue(edge.data.flowValue);
+        //         status = validationMessage? 'WARNING' : status;
+        //         flowValidation.flowValues[edge.id] = {
+        //             ...flowValidation.flowValues[edge.id],
+        //             flowValueGreaterThan: validationMessage,
+        //         }
+        //     });
+        //     flowValidation.totalFlowValueDifferent = totalFlowValueDifferent;
+        //     flowValidation.status = totalFlowValueDifferent? 'ERROR' : status;
+        //     return flowValidation;
+        // });
+
         updateRelatedDiagramData();
-    }, allEdges);
+    }, [allEdges]);
+
+    // useEffect(() => {
+    //     if (isFirstRender.current) {
+    //         isFirstRender.current = false; 
+    //         return; 
+    //     }
+    //     flowContext.setDiagramValidation((prev) => {
+    //         let newValidation: DiagramValidation = {
+    //             ...prev,
+
+    //         }
+
+    //         newValidation.nodes[componentData.diagramNodeId] = {
+    //             source: validation,
+    //             discharge: newValidation.nodes[componentData.diagramNodeId]?.discharge,
+    //             status: getComponentValidStatus(validation, newValidation.nodes[componentData.diagramNodeId]?.discharge)
+    //         }
+    //         return newValidation;
+    //     });
+    // }, [validation]);
+
 
     const onTotalFlowValueInputChange = (event) => {
         const updatedValue = event.target.value === "" ? null : Number(event.target.value);
+
+        // setValidation((prevValidation: ComponentFlowValidation) => {
+        //     let updatedSourceValidation = {...prevValidation};
+        //     componentSourceEdges.map((edge: Edge<CustomEdgeData>) => {
+        //         const validationMessage = validateFlowValue(edge.data.flowValue);
+        //         updatedSourceValidation.status = validationMessage? 'WARNING' : sourceValidation.status;
+        //         updatedSourceValidation.flowValues = {
+        //             ...updatedSourceValidation.flowValues,
+        //             [edge.id]: {
+        //                 flowValueGreaterThan: validationMessage,
+        //             }
+        //         }
+        //     });
+        //     updatedSourceValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow, updatedValue, updatedValue);
+        //     updatedSourceValidation.status = updatedSourceValidation.totalFlowValueDifferent? 'ERROR' : 'VALID';
+        //     return updatedSourceValidation;
+        // });
+
         setNodes((nds) =>
             nds.map((n: Node<ProcessFlowPart>) => {
                 if (n.data.diagramNodeId === componentData.diagramNodeId) {
@@ -121,7 +188,6 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
         });
     }
 
-
     const updateRelatedDiagramData = () => {
         if (componentData.processComponentType === 'water-discharge') {
             let updatedCalculatedData: Record<string, NodeCalculatedData> = {
@@ -130,7 +196,7 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
 
             updatedCalculatedData[props.selectedNodeId] = {
                 totalSourceFlow: totalCalculatedSourceFlow,
-                totalDischargeFlow: updatedCalculatedData[props.selectedNodeId]? updatedCalculatedData[props.selectedNodeId].totalDischargeFlow : undefined,
+                totalDischargeFlow: updatedCalculatedData[props.selectedNodeId] ? updatedCalculatedData[props.selectedNodeId].totalDischargeFlow : undefined,
             }
             dispatch(calculatedDataUpdate(updatedCalculatedData));
         } else {
@@ -162,7 +228,7 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
         dispatch(calculatedDataUpdate(updatedCalculatedData));
     }
 
-
+    // console.log('validation', validation);
     return (
         <>
             <SmallTooltip title="Set flows evenly from total source value"
@@ -193,10 +259,13 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
                 label={'Total Flow'}
                 id={'totalSourceFlow'}
                 type={'number'}
-                color={'primary'}
                 size="small"
                 value={totalSourceFlow ?? ''}
                 onChange={(event) => onTotalFlowValueInputChange(event)}
+                // color={validation.totalFlowValueDifferent? 'error' : 'primary'}
+                // error={validation.totalFlowValueDifferent ? true : false}
+                // helperText={validation.totalFlowValueDifferent}
+                FormHelperTextProps={{ sx: { whiteSpace: 'normal', maxWidth: 250 } }}
                 InputProps={{
                     endAdornment: <InputAdornment position="end">
                         <FlowDisplayUnit />
@@ -215,17 +284,22 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
                             sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: '.5rem' }}
                             key={edge.id}
                             disablePadding>
-                            <TextField
+                            <InputField
                                 label={<FlowConnectionText source={source} target={target} />}
                                 id={edge.id}
                                 type={'number'}
                                 size="small"
                                 value={flowValue}
+                                // color={validation.flowValues[edge.id]?.flowValueGreaterThan? 'warning' : 'primary'}
+                                // helperText={validation.flowValues[edge.id]?.flowValueGreaterThan}
+                                // warning={validation.flowValues[edge.id]?.flowValueGreaterThan? true : false}
                                 onChange={(event) => onFlowValueInputChange(event, edge.id)}
                                 sx={{ m: 1, width: '100%' }}
                                 InputProps={{
-                                    endAdornment: <InputAdornment position="end">
-                                        <FlowDisplayUnit />
+                                    endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                        <span style={{ zIndex: 1, background: 'white' }}>
+                                            <FlowDisplayUnit />
+                                        </span>
                                     </InputAdornment>,
                                 }}
                             />
@@ -245,6 +319,5 @@ export default SourceFlowForm;
 export interface SourceFlowFormProps {
     selectedNodeId: string,
 }
-
 
 
