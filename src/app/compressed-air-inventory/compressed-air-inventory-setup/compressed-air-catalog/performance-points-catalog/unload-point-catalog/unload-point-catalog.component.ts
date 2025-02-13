@@ -20,7 +20,6 @@ export class UnloadPointCatalogComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
   isFormChange: boolean = false;
-  fullLoadLabel: string;
   //validationMessages: ValidationMessageMap;
   //warnings: PerformancePointWarnings;
 
@@ -28,7 +27,6 @@ export class UnloadPointCatalogComponent implements OnInit {
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
   selectedCompressor: CompressedAirItem;
-  atmosphericPressure: number;
 
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService,
     private compressedAirCatalogService: CompressedAirCatalogService,
@@ -37,11 +35,6 @@ export class UnloadPointCatalogComponent implements OnInit {
 
 
   ngOnInit(): void {
-    //let compressedAirAssessment: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    //TODO: CA Inventory get atmosphericPressure
-    this.atmosphericPressure = 14.7;
-
-
     this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
       this.settings = val;
     });
@@ -50,12 +43,12 @@ export class UnloadPointCatalogComponent implements OnInit {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.fullLoad.power, compressor);
+        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.unloadPoint.power, compressor);
         if (this.isFormChange == false) {
-          this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.fullLoad, compressor, 'unloadPoint')
+          this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.unloadPoint, compressor, 'unloadPoint')
           //this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
-          this.updateForm(compressor.compressedAirPerformancePointsProperties.fullLoad);
+          this.updateForm(compressor.compressedAirPerformancePointsProperties.unloadPoint);
           this.isFormChange = false;
         }
       }
@@ -68,9 +61,9 @@ export class UnloadPointCatalogComponent implements OnInit {
 
   save() {
     this.isFormChange = true;
-    let fullLoad: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
+    let unloadPoint: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
     //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateFullLoad(fullLoad);
+    //this.compressedAirDataManagementService.updateUnloadPoint(unloadPoint);
   }
 
   focusField(str: string) {

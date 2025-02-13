@@ -51,13 +51,13 @@ export class MaxFullFlowCatalogComponent implements OnInit {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.fullLoad.power, compressor);
+        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.maxFullFlow.power, compressor);
         if (this.isFormChange == false) {
           this.setMaxFullFlowLabel(compressor.compressedAirControlsProperties.controlType);
           this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.maxFullFlow, compressor, 'maxFullFlow')
           //this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
-          this.updateForm(compressor.compressedAirPerformancePointsProperties.fullLoad);
+          this.updateForm(compressor.compressedAirPerformancePointsProperties.maxFullFlow);
           this.isFormChange = false;
         }
       }
@@ -94,9 +94,9 @@ export class MaxFullFlowCatalogComponent implements OnInit {
 
   save() {
     this.isFormChange = true;
-    let fullLoad: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
+    let maxFullFlow: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
     //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateFullLoad(fullLoad);
+    //this.compressedAirDataManagementService.updateMaxFullFlow(maxFullFlow);
   }
 
   focusField(str: string) {

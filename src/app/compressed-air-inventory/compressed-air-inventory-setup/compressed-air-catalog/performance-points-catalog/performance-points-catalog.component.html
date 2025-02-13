@@ -26,8 +26,7 @@
             <tr [app-mid-turndown-catalog] *ngIf="showMidTurndown"></tr>
             <tr [app-turndown-catalog] *ngIf="showTurndown"></tr>
             <tr [app-no-load-catalog] *ngIf="showNoLoad"></tr>
-            <!-- <tr [app-blowoff-catalog] *ngIf="showBlowoff"></tr> -->
-            <tr [app-blowoff-catalog]></tr>
+            <tr [app-blowoff-catalog] *ngIf="showBlowoff"></tr>
         </tbody>
     </table>
 </div>

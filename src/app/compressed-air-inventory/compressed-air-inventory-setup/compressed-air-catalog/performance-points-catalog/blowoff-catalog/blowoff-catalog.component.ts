@@ -43,7 +43,7 @@ export class BlowoffCatalogComponent implements OnInit {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.fullLoad.power, compressor);
+        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.blowoff.power, compressor);
         if (this.isFormChange == false) {
           this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.blowoff, compressor, 'blowoff');
           //this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
@@ -61,9 +61,9 @@ export class BlowoffCatalogComponent implements OnInit {
 
   save() {
     this.isFormChange = true;
-    let fullLoad: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
+    let blowoff: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
     //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateFullLoad(blowoff);
+    //this.compressedAirDataManagementService.updateBlowoff(blowoff);
   }
 
   focusField(str: string) {

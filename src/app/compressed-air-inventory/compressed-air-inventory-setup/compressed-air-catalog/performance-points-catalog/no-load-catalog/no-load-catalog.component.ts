@@ -29,7 +29,6 @@ export class NoLoadCatalogComponent implements OnInit {
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
   selectedCompressor: CompressedAirItem;
-  atmosphericPressure: number;
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService,
     private compressedAirCatalogService: CompressedAirCatalogService,
     private compressedAirInventoryService: CompressedAirInventoryService,
@@ -38,11 +37,6 @@ export class NoLoadCatalogComponent implements OnInit {
 
 
   ngOnInit(): void {
-    //let compressedAirAssessment: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    //TODO: CA Inventory get atmosphericPressure
-    this.atmosphericPressure = 14.7;
-
-
     this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
       this.settings = val;
     });
@@ -51,7 +45,7 @@ export class NoLoadCatalogComponent implements OnInit {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.fullLoad.power, compressor);
+        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.noLoad.power, compressor);
         if (this.isFormChange == false) {
           this.setNoLoadLabel(compressor.compressedAirControlsProperties.controlType);
           this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.noLoad, compressor, 'noLoad')
@@ -70,9 +64,9 @@ export class NoLoadCatalogComponent implements OnInit {
 
   save() {
     this.isFormChange = true;
-    let fullLoad: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
+    let noLoad: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
     //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateFullLoad(fullLoad);
+    //this.compressedAirDataManagementService.updateNoLoad(noLoad);
   }
 
   focusField(str: string) {

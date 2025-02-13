@@ -21,7 +21,6 @@ export class TurndownCatalogComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
   isFormChange: boolean = false;
-  fullLoadLabel: string;
   //validationMessages: ValidationMessageMap;
   //warnings: PerformancePointWarnings;
 
@@ -51,12 +50,12 @@ export class TurndownCatalogComponent implements OnInit {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.fullLoad.power, compressor);
+        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.turndown.power, compressor);
         if (this.isFormChange == false) {
-          this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.fullLoad, compressor, 'turndown');
+          this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.turndown, compressor, 'turndown');
           //this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
-          this.updateForm(compressor.compressedAirPerformancePointsProperties.fullLoad);
+          this.updateForm(compressor.compressedAirPerformancePointsProperties.turndown);
           this.isFormChange = false;
         }
       }
@@ -69,9 +68,9 @@ export class TurndownCatalogComponent implements OnInit {
 
   save() {
     this.isFormChange = true;
-    let fullLoad: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
+    let turndown: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
     //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateFullLoad(fullLoad);
+    //this.compressedAirDataManagementService.updateTurndown(turndown);
   }
 
   focusField(str: string) {
