@@ -6,8 +6,8 @@ import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
 import { flowDecimalPrecisionOptions } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { defaultEdgeTypeChange, diagramOptionsChange, flowDecimalPrecisionChange, OptionsDependentState, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
-import { RootState } from '../Diagram/store';
+import { defaultEdgeTypeChange, diagramOptionsChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
+import { RootState, selectHasAssessment } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
@@ -23,6 +23,9 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
 const MenuSidebar = memo((props: MenuSidebarProps) => {
   const dispatch = useAppDispatch();
 
+  const diagramParentDimensions: ParentContainerDimensions = useAppSelector((state: RootState) => state.diagram.diagramParentDimensions);
+  const hasAssessment = useAppSelector(selectHasAssessment);
+  
   const edgeType = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
   const strokeWidth = useAppSelector((state: RootState) => state.diagram.diagramOptions.strokeWidth);
   const flowLabelSize = useAppSelector((state: RootState) => state.diagram.diagramOptions.flowLabelSize);
@@ -108,14 +111,14 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={1} diagramParentDimensions={props.diagramParentDimensions}>
+        <TabPanel value={selectedTab} index={1} diagramParentDimensions={diagramParentDimensions}>
           <Box paddingX={'.5rem'}>
             <div className="sidebar-options">
             <Box className={'sidebar-option-container'}>
                   <label htmlFor={'unitsOfMeasure'}>Units of Measure</label>
                   <select className="form-control diagram-select" id={'unitsOfMeasure'} name="unitsOfMeasure"
                     value={unitsOfMeasure}
-                    disabled={props.hasAssessment}
+                    disabled={hasAssessment}
                     onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}>
                     <option key={'imperial'} value={'Imperial'}>Imperial</option>
                     <option key={'metric'} value={'Metric'}>Metric</option>
@@ -275,9 +278,9 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
       </Box>
 
       <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingTop={'1rem'}>
-        <DownloadButton shadowRoot={props.shadowRoot} />
-        {!props.hasAssessment &&
-          <Button variant="outlined" color="error" sx={{ width: '100%' }} onClick={() => props.setIsDialogOpen(true)}>Reset Diagram</Button>
+        <DownloadButton shadowRoot={props.shadowRootRef} />
+        {!hasAssessment &&
+          <Button variant="outlined" color="error" sx={{ width: '100%' }} onClick={() => dispatch(setDialogOpen())}>Reset Diagram</Button>
         }
       </Box>
     </Box>
@@ -286,10 +289,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 export default MenuSidebar;
 
 export interface MenuSidebarProps {
-  diagramParentDimensions: ParentContainerDimensions,
-  hasAssessment: boolean;
-  shadowRoot;
-  setIsDialogOpen: (boolean) => void;
+  shadowRootRef: any;
 }
 
 const keyInputDirections = [

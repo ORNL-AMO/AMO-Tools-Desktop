@@ -6,18 +6,17 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useAppDispatch } from '../../hooks/state';
-import { resetDiagram } from './diagramReducer';
+import { resetDiagram, setDialogOpen } from './diagramReducer';
 
 const WarningDialog = (props: WarningDialogProps) => {
   const dispatch = useAppDispatch();
   
   const handleClose = () => {
-    props.handleDialogCloseCallback(false)
+    dispatch(setDialogOpen());
   };
 
   const handleReset = () => {
     dispatch(resetDiagram());
-    props.handleDialogCloseCallback(false);
   };
   
   return (
@@ -50,7 +49,6 @@ const WarningDialog = (props: WarningDialogProps) => {
 
 export interface WarningDialogProps {
  isDialogOpen: boolean;
- handleDialogCloseCallback: (boolean) => void;
 }
 
 export default WarningDialog;

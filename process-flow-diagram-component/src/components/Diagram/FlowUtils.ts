@@ -19,7 +19,7 @@ export const getRandomCoordinates = (height: number, width: number): { x: number
   return { x: randomX, y: randomY };
 }
 
-export const updateStaleNodes = (reactFlowInstance: ReactFlowInstance, staleNodes: Array<Node>, clientHeight: number) => {
+export const updateAssessmentCreatedNodes = (reactFlowInstance: ReactFlowInstance, staleNodes: Array<Node>, clientHeight: number) => {
   staleNodes = staleNodes.map((node: Node) => {
     if (!node.position) {
       setNodeFallbackPosition(reactFlowInstance, node, clientHeight);
@@ -244,30 +244,6 @@ export const getEdgeTypesFromString = (newDefaultType: string, currentEdgeTypes?
 
   return currentEdgeTypes;
 };
-
-export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
-  return {
-    strokeWidth: 2,
-    edgeType: 'smoothstep',
-    minimapVisible: false,
-    controlsVisible: true,
-    directionalArrowsVisible: true,
-    showFlowLabels: false,
-    flowLabelSize: 1,
-    animated: true,
-  }
-}
-
-export const getDefaultSettings = (): DiagramSettings => {
-  return {
-    unitsOfMeasure: 'Imperial',
-    flowDecimalPrecision: 2
-  }
-}
-
-export const getDefaultColorPalette = () => {
-  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#e28000'];
-}
 
 
 export const formatDecimalPlaces = (value: number | string, decimalPlaces: number) => {

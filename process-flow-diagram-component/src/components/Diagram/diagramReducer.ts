@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
-import { convertFlowDiagramData, CustomEdgeData, DiagramSettings, Handles, NodeCalculatedData, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { convertFlowDiagramData, CustomEdgeData, DiagramSettings, Handles, NodeCalculatedData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { createNewNode, getEdgeFromConnection } from './FlowUtils';
 import { CSSProperties } from 'react';
+import { getResetData } from './store';
 
 export interface DiagramState {
   nodes: Node[];
@@ -16,46 +17,28 @@ export interface DiagramState {
   calculatedData: Record<string, NodeCalculatedData>,
   recentNodeColors: string[],
   recentEdgeColors: string[],
+  diagramParentDimensions: ParentContainerDimensions,
+  isDialogOpen: boolean,
+  assessmentId: number
 }
-
-const defaultSettings = {
-  unitsOfMeasure: 'Imperial',
-  flowDecimalPrecision: 2
-}
-const defaultDiagramOptions = {
-  strokeWidth: 2,
-  edgeType: 'smoothstep',
-  minimapVisible: false,
-  controlsVisible: true,
-  directionalArrowsVisible: true,
-  showFlowLabels: false,
-  flowLabelSize: 1,
-  animated: true,
-}
-
-const initialState: DiagramState = {
-  nodes: [],
-  edges: [],
-  settings: defaultSettings,
-  diagramOptions: defaultDiagramOptions,
-  isDrawerOpen: false,
-  selectedDataId: undefined,
-  calculatedData: {},
-  recentEdgeColors: [],
-  recentNodeColors: []
-}
-// todo remove immutable style transformations below
 
 const resetDiagramReducer = (state: DiagramState) => {
-  return initialState;
+  const diagramState = getResetData(state);
+  return diagramState;
 };
 
+const setDialogOpenReducer = (state: DiagramState) => {
+  state.isDialogOpen = !state.isDialogOpen;
+}
 
 // * NODES
 const nodesChangeReducer = (state: DiagramState, action: PayloadAction<NodeChange[]>) => {
   const updatedNodes: Node[] = applyNodeChanges(action.payload, state.nodes) as Node[];
   state.nodes = updatedNodes;
 };
+const addNodesReducer = (state: DiagramState, action: PayloadAction<Node[]>) => {
+  state.nodes = state.nodes.concat(action.payload);
+}
 
 const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType, position }>) => {
   const { nodeType, position } = action.payload;
@@ -174,9 +157,8 @@ const flowDecimalPrecisionChangeReducer = (state: DiagramState, action: PayloadA
   });
 }
 
-// todo test without maps
 /**
- * Update diagram options as well as affected nodes and edges
+ * Update diagram options by key as well as affected nodes and edges
  * @param state 
  * @param action 
  */
@@ -242,11 +224,12 @@ const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<
 
 export const diagramSlice = createSlice({
   name: 'diagram',
-  initialState,
+  initialState: getResetData(),
   reducers: {
     resetDiagram: resetDiagramReducer,
     nodesChange: nodesChangeReducer,
     addNode: addNodeReducer,
+    addNodes: addNodesReducer,
     updateNodeHandles: updateNodeHandlesReducer,
     deleteNode: deleteNodeReducer,
     setNodeName: setNodeNameReducer,
@@ -265,6 +248,7 @@ export const diagramSlice = createSlice({
     flowDecimalPrecisionChange: flowDecimalPrecisionChangeReducer,
     showMarkerEndArrows: showMarkerEndArrowsReducer,
     toggleDrawer: toggleDrawerReducer,
+    setDialogOpen: setDialogOpenReducer,
   }
 })
 
@@ -273,6 +257,7 @@ export const {
   edgesChange, 
   connectEdge, 
   addNode,
+  addNodes,
   setNodeName,
   deleteNode,
   setNodeDataProperty,
@@ -290,6 +275,7 @@ export const {
   flowDecimalPrecisionChange,
   showMarkerEndArrows,
   toggleDrawer,
+  setDialogOpen
 } = diagramSlice.actions
 export default diagramSlice.reducer
 

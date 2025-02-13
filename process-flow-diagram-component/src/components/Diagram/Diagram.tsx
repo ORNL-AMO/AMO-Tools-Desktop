@@ -10,26 +10,22 @@ import {
   OnConnect,
   type Node,
   Edge,
-  FitViewOptions,
-  NodeChange,
   EdgeTypes,
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
 
 import { FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, WaterDiagram, DiagramSettings, NodeCalculatedData, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { formatDataForMEASUR, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeTypesFromString, updateStaleNodes } from './FlowUtils';
+import { formatDataForMEASUR, getEdgeTypesFromString, updateAssessmentCreatedNodes } from './FlowUtils';
 import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
-import { DefaultEdgeOptions } from 'reactflow';
-import { MenuSidebarProps } from '../Drawer/MenuSidebar';
 import { SideDrawer } from '../Drawer/SideDrawer';
 import DataDrawer from '../Drawer/DataDrawer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { RootState, selectIsDrawerOpen, store } from './store';
+import { configureAppStore, RootState, selectIsDrawerOpen } from './store';
 import { Provider } from 'react-redux';
-import { addNode, connectEdge, edgesChange, nodesChange } from './diagramReducer';
+import { addNode, addNodes, connectEdge, edgesChange, nodesChange } from './diagramReducer';
 
 
 export interface DiagramProps {
@@ -43,37 +39,16 @@ export interface DiagramProps {
 
 export const RootDiagramContext = createContext(null);
 
-const fitViewOptions: FitViewOptions = {
-  padding: 300,
-  minZoom: .5
-};
-
 const Diagram = (props: DiagramProps) => {
   const dispatch = useAppDispatch()
-
-  // todo START existing state from MEASUR OR DEFAULTS
-  let assessmentCreatedNodes: Node[] = [];
-  let existingNodes: Node[] = [];
-  let existingEdges: Edge[] = [];
-  const defaultUserDiagramOptions = props.processDiagram.flowDiagramData.userDiagramOptions ? props.processDiagram.flowDiagramData.userDiagramOptions : getDefaultUserDiagramOptions();
-  const defaultSettings = props.processDiagram.flowDiagramData.settings ? props.processDiagram.flowDiagramData.settings : getDefaultSettings();
-  const defaultNodeCalculatedData = props.processDiagram.flowDiagramData.calculatedData ? props.processDiagram.flowDiagramData.calculatedData : {};
-  const defaultRecentNodeColors = props.processDiagram.flowDiagramData.recentNodeColors.length !== 0 ? props.processDiagram.flowDiagramData.recentNodeColors : getDefaultColorPalette();
-  const defaultRecentEdgeColors = props.processDiagram.flowDiagramData.recentEdgeColors.length !== 0 ? props.processDiagram.flowDiagramData.recentEdgeColors : getDefaultColorPalette();
-  existingNodes = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
-    if (!node.position) {
-      assessmentCreatedNodes.push(node);
-    } else {
+  const assessmentNodes: Node[] = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
+    if (!node.position && node.data.createdByAssessment) {
       return node;
-    }
-  });
-  existingEdges = props.processDiagram.flowDiagramData.edges;
-  // todo END existing state from MEASUR OR DEFAULTS
-
+    } 
+  })
+  const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [staleNodes, setStaleNodes] = useState<Node[]>(assessmentCreatedNodes);
-  const [diagramParentDimensions, setDiagramParentDimensions] = useState(props.parentContainer);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const isDialogOpen = useAppSelector((state: RootState) => state.diagram.isDialogOpen);
   
   const isDataDrawerOpen: boolean = useAppSelector(selectIsDrawerOpen)
   const nodes: Node[] = useAppSelector((state: RootState) => state.diagram.nodes);
@@ -92,32 +67,25 @@ const Diagram = (props: DiagramProps) => {
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {
     return getEdgeTypesFromString(state.diagram.diagramOptions.edgeType, edgeTypes);
   });
-
-  const defaultEdgeOptions: DefaultEdgeOptions = {
-    animated: animated,
-    type: defaultEdgeType,
-  };
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
 
 
   // * on xyFlow instance ready
   useEffect(() => {
     if (reactFlowInstance && props.height) {
-      setDiagramParentDimensions(props.parentContainer);
-      // * assessment added nodes
-      if (staleNodes.length > 0) {
-        const updatedNodes = updateStaleNodes(reactFlowInstance, [...staleNodes], props.height);
-        setStaleNodes([]);
-        console.log('hasStaleNodes updatedNodes', updatedNodes);
-        dispatch(nodesChange(updatedNodes as NodeChange[]));
+      if (assessmentCreatedNodes.length > 0) {
+        const updatedNodes = updateAssessmentCreatedNodes(reactFlowInstance, [...assessmentCreatedNodes], props.height);
+        setAssessmentCreatedNodes([]);
+        dispatch(addNodes(updatedNodes));
       }
     }
   }, [reactFlowInstance]);
 
 
   // todo 6918 - eventually move to side-effect/async middleware of state changes
+  // todo 6918 - move debouncing to middleware?
   useEffect(() => {
-    if (staleNodes.length === 0) {
+    if (assessmentCreatedNodes.length === 0) {
       const updatedDiagramData: FlowDiagramData = {
         nodes: debouncedNodes,
         edges: debouncedEdges,
@@ -159,20 +127,13 @@ const Diagram = (props: DiagramProps) => {
     [userDiagramOptions]
   );
 
-  const menuSidebarProps: MenuSidebarProps = {
-    diagramParentDimensions: diagramParentDimensions,
-    shadowRoot: props.shadowRoot,
-    setIsDialogOpen: setIsDialogOpen,
-    hasAssessment: props.processDiagram.assessmentId !== undefined
-  }
 
   return (
     props.height &&
       <div className="process-flow-diagram">
         {isDialogOpen &&
           <WarningDialog
-            isDialogOpen={isDialogOpen}
-            handleDialogCloseCallback={setIsDialogOpen}/>
+            isDialogOpen={isDialogOpen}/>
         }
         <ReactFlowProvider>
           <div className={'flow-wrapper'} style={{ height: props.height }}>
@@ -186,7 +147,10 @@ const Diagram = (props: DiagramProps) => {
               onInit={setReactFlowInstance}
               nodeTypes={nodeTypes}
               edgeTypes={diagramEdgeTypes}
-              defaultEdgeOptions={defaultEdgeOptions}
+              defaultEdgeOptions={{
+                animated: animated,
+                type: defaultEdgeType,
+              }}
               defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
               connectionLineType={ConnectionLineType.Bezier}
               onDrop={onDrop}
@@ -194,7 +158,10 @@ const Diagram = (props: DiagramProps) => {
               // onBeforeDelete={onBeforeDelete}
               onDragOver={onDragOver}
               fitView={true}
-              fitViewOptions={fitViewOptions}
+              fitViewOptions={{
+                padding: 300,
+                minZoom: .5
+              }}
               className="flow"
             >
               {minimapVisible &&
@@ -209,15 +176,11 @@ const Diagram = (props: DiagramProps) => {
 
           <SideDrawer
             anchor={'left'}
-            menuSidebarProps={menuSidebarProps}
-            isOpen={props.processDiagram.assessmentId === undefined}
-            parentContainer={props.parentContainer}
+            shadowRootRef={props.shadowRoot}
           ></SideDrawer>
           
           {isDataDrawerOpen &&
-            <DataDrawer
-            parentContainer={props.parentContainer}
-            />
+            <DataDrawer />
           }
         </ReactFlowProvider>
       </div>
@@ -225,7 +188,7 @@ const Diagram = (props: DiagramProps) => {
 }
 
 export default (props: DiagramProps) => (
-  <Provider store={store}>
+  <Provider store={configureAppStore(props)}>
     <Diagram {...props}/>
   </Provider>
 );

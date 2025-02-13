@@ -11,8 +11,10 @@ import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { toggleDrawer } from "../Diagram/diagramReducer";
 import { memo } from "react";
 
-const DataDrawer = (props: DataDrawerProps) => {
+const DataDrawer = () => {
     const dispatch = useAppDispatch();
+    const diagramParentDimensions: ParentContainerDimensions = useAppSelector((state) => state.diagram.diagramParentDimensions);
+    
     const isDrawerOpen = useAppSelector(selectIsDrawerOpen);
     const selectedDataId = useAppSelector((state) => state.diagram.selectedDataId);
     const nodes = useAppSelector((state) => state.diagram.nodes) as Node<ProcessFlowPart>[];
@@ -43,8 +45,8 @@ const DataDrawer = (props: DataDrawerProps) => {
                     boxSizing: 'border-box', 
                     width: 475 },
                 [`& .MuiPaper-root.MuiPaper-elevation.MuiDrawer-paper`]: {
-                    top: props.parentContainer.headerHeight,
-                    height: props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight,
+                    top: diagramParentDimensions.headerHeight,
+                    height: diagramParentDimensions.height - diagramParentDimensions.headerHeight - diagramParentDimensions.footerHeight,
                     boxShadow: '-5px 0 5px 0 rgba(136, 136, 136, .6)',
                 },
             }}
@@ -67,8 +69,4 @@ const DataDrawer = (props: DataDrawerProps) => {
 };
 
 export default memo(DataDrawer);
-
-export interface DataDrawerProps {
-    parentContainer: ParentContainerDimensions;
-}
 
