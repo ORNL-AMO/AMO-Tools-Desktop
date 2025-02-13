@@ -5,10 +5,12 @@ import MuiDrawer, { DrawerProps } from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import MenuSidebar, { MenuSidebarProps } from './MenuSidebar';
+import MenuSidebar from './MenuSidebar';
 import { Box } from '@mui/material';
 import { ParentContainerDimensions } from '../../../../src/process-flow-types/shared-process-flow-types';
 import DrawerToggleButton from './DrawerToggleButton';
+import { useAppSelector } from '../../hooks/state';
+import { selectHasAssessment } from '../Diagram/store';
 
 const drawerWidth = 375;
 
@@ -93,7 +95,10 @@ const Drawer = styled(MuiDrawer, {
 
 
 export const SideDrawer = (props: SideDrawerProps) => {
-  const [open, setOpen] = React.useState(props.isOpen);
+  const diagramParentDimensions = useAppSelector((state) => state.diagram.diagramParentDimensions);
+  const hasAssessment = useAppSelector(selectHasAssessment);
+  const [open, setOpen] = React.useState(!hasAssessment);
+
   const toggleDrawerOpen = () => {
     setOpen(!open)
   };
@@ -102,7 +107,7 @@ export const SideDrawer = (props: SideDrawerProps) => {
   const closedButton = (<IconButton onClick={toggleDrawerOpen}>
     <MenuIcon/>
   </IconButton>);
-  const drawerChevron = (<DrawerToggleButton toggleDrawer={toggleDrawerOpen} side={'left'}></DrawerToggleButton>);
+  const drawerChevron = (<DrawerToggleButton toggleSidebarDrawer={toggleDrawerOpen} side={'left'}></DrawerToggleButton>);
   const toggleButton = open? drawerChevron : closedButton;
 
   
@@ -110,7 +115,7 @@ export const SideDrawer = (props: SideDrawerProps) => {
     <>
       <CssBaseline />
       <Drawer variant={'permanent'}
-        parentContainer={props.parentContainer}
+        parentContainer={diagramParentDimensions}
         animationProps={{ anchor: props.anchor }}
         open={open}
         anchor={props.anchor}
@@ -119,8 +124,8 @@ export const SideDrawer = (props: SideDrawerProps) => {
         {toggleButton}
         </DrawerHeader>
         <Box paddingBottom={'1rem'} paddingTop={0} paddingX={'.5rem'} height={'100%'}>
-          {open && props.menuSidebarProps &&
-            <MenuSidebar {...props.menuSidebarProps} />
+          {open &&
+            <MenuSidebar shadowRootRef={props.shadowRootRef} />
           }
         </Box>
       </Drawer>
@@ -130,9 +135,7 @@ export const SideDrawer = (props: SideDrawerProps) => {
 
 export interface SideDrawerProps {
     anchor: 'left' | 'right',
-    parentContainer: ParentContainerDimensions,
-    menuSidebarProps?: MenuSidebarProps,
-    isOpen: boolean,
+    shadowRootRef: any,
 }
 
 

@@ -53,20 +53,20 @@ export interface FlowDiagramData {
   edges: Edge[],
   userDiagramOptions: UserDiagramOptions,
   settings: DiagramSettings,
-  nodeCalculatedDataMap: Record<string, NodeCalculatedData>
+  calculatedData: Record<string, NodeCalculatedData>
   recentNodeColors: string[];
   recentEdgeColors: string[];
 }
 
 export interface UserDiagramOptions {
-  edgeThickness: number,
+  strokeWidth: number,
   edgeType: string,
-  showFlowValues?: boolean,
+  showFlowLabels?: boolean,
   minimapVisible: boolean,
   controlsVisible: boolean,
   directionalArrowsVisible: boolean,
   flowLabelSize: number,
-  edgeOptions: DefaultEdgeOptions
+  animated: boolean,
 }
 
 export interface DiagramSettings {
@@ -197,8 +197,8 @@ export interface Handles {
   }
 }
 
-const getDefaultHandles = (): Handles => {
-  return {
+const getDefaultHandles = (componentType?: ProcessFlowNodeType): Handles => {
+  let handles = {
     inflowHandles: {
       a: true,
       b: true,
@@ -212,6 +212,16 @@ const getDefaultHandles = (): Handles => {
       h: false,
     }
   }
+
+  if ('water-intake' === componentType) {
+    return { outflowHandles: handles.outflowHandles };
+  }
+  
+  if ('water-discharge' === componentType) {
+    return { inflowHandles: handles.inflowHandles };
+  }
+
+  return handles;
 }
 
 
@@ -229,7 +239,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     },
     disableInflowConnections: true,
     createdByAssessment: false,
-    handles: getDefaultHandles()
+    handles: getDefaultHandles('water-intake')
   },
   {
     processComponentType: 'water-using-system',
@@ -254,7 +264,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
       totalSourceFlow: undefined
     },
     createdByAssessment: false,
-    handles: getDefaultHandles()
+    handles: getDefaultHandles('water-discharge')
   },
   {
     processComponentType: 'water-treatment',
@@ -349,7 +359,7 @@ export const getNewNode = (nodeType: WaterProcessComponentType, newProcessCompon
 }
 
 
-export const convertFlowDiagramData = (flowDiagramData: {nodes: Node[], edges: Edge[], nodeCalculatedDataMap: Record<string, NodeCalculatedData>}, newUnits: string) => {
+export const convertFlowDiagramData = (flowDiagramData: {nodes: Node[], edges: Edge[], calculatedData: Record<string, NodeCalculatedData>}, newUnits: string) => {
   flowDiagramData.nodes = flowDiagramData.nodes.map((nd: Node<ProcessFlowPart>) => {
     const convertedTotalSourceFlow = convertFlowValue(nd.data.userEnteredData.totalSourceFlow, newUnits);
     const convertedTotalDischargeFlow = convertFlowValue(nd.data.userEnteredData.totalDischargeFlow, newUnits);
@@ -377,9 +387,9 @@ export const convertFlowDiagramData = (flowDiagramData: {nodes: Node[], edges: E
     }
   });
 
-  Object.keys(flowDiagramData.nodeCalculatedDataMap).forEach((key: string) => {
-    flowDiagramData.nodeCalculatedDataMap[key].totalSourceFlow = convertFlowValue(flowDiagramData.nodeCalculatedDataMap[key].totalSourceFlow, newUnits);
-    flowDiagramData.nodeCalculatedDataMap[key].totalDischargeFlow = convertFlowValue(flowDiagramData.nodeCalculatedDataMap[key].totalDischargeFlow, newUnits);
+  Object.keys(flowDiagramData.calculatedData).forEach((key: string) => {
+    flowDiagramData.calculatedData[key].totalSourceFlow = convertFlowValue(flowDiagramData.calculatedData[key].totalSourceFlow, newUnits);
+    flowDiagramData.calculatedData[key].totalDischargeFlow = convertFlowValue(flowDiagramData.calculatedData[key].totalDischargeFlow, newUnits);
   });
 
 }

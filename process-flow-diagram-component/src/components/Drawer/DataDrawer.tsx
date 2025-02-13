@@ -1,33 +1,35 @@
-import { CustomEdgeData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from "../../../../src/process-flow-types/shared-process-flow-types";
-import { useReactFlow } from '@xyflow/react';
+import { CustomEdgeData, ParentContainerDimensions, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import {
     type Node,
     Edge,
 } from '@xyflow/react';
-import React, { BaseSyntheticEvent, memo } from 'react';
 import Drawer from '@mui/material/Drawer';
 import ManageEdge from "./ManageEdge";
 import ManageComponent from "./ManageComponent";
+import { selectIsDrawerOpen } from "../Diagram/store";
+import { useAppDispatch, useAppSelector } from "../../hooks/state";
+import { toggleDrawer } from "../Diagram/diagramReducer";
+import { memo } from "react";
 
-const DataDrawer = (props: DataDrawerProps) => {
-    const { getNodes, getEdges } = useReactFlow();
-
-    const selectedNode: Node<ProcessFlowPart> = getNodes().find((node: Node<ProcessFlowPart>) => node.data.diagramNodeId === props.manageDataId) as Node<ProcessFlowPart>;
-    const selectedEdge: Edge<CustomEdgeData> = getEdges().find((edge: Edge<CustomEdgeData>) => edge.id === props.manageDataId) as Edge<CustomEdgeData>;
-
-    const closeDrawer = () => {
-        props.setIsDataDrawerOpen(false)
-    };
+const DataDrawer = () => {
+    const dispatch = useAppDispatch();
+    const diagramParentDimensions: ParentContainerDimensions = useAppSelector((state) => state.diagram.diagramParentDimensions);
+    
+    const isDrawerOpen = useAppSelector(selectIsDrawerOpen);
+    const selectedDataId = useAppSelector((state) => state.diagram.selectedDataId);
+    const nodes = useAppSelector((state) => state.diagram.nodes) as Node<ProcessFlowPart>[];
+    const edges = useAppSelector((state) => state.diagram.edges) as Edge<CustomEdgeData>[];
+    const selectedNode: Node<ProcessFlowPart> = nodes.find((node: Node<ProcessFlowPart>) => node.data.diagramNodeId === selectedDataId) as Node<ProcessFlowPart>;
+    const selectedEdge: Edge<CustomEdgeData> = edges.find((edge: Edge<CustomEdgeData>) => edge.id === selectedDataId) as Edge<CustomEdgeData>;
 
     const handleDrawerClose = (event: any, reason: string) => {
-        event = event as BaseSyntheticEvent;
-        props.setIsDataDrawerOpen(event.target.value)
+        dispatch(toggleDrawer());
     };
 
     return (
         <Drawer
             disablePortal={true}
-            open={props.isDrawerOpen}
+            open={isDrawerOpen}
             anchor='right'
             keepMounted
             disableEnforceFocus
@@ -43,8 +45,8 @@ const DataDrawer = (props: DataDrawerProps) => {
                     boxSizing: 'border-box', 
                     width: 475 },
                 [`& .MuiPaper-root.MuiPaper-elevation.MuiDrawer-paper`]: {
-                    top: props.parentContainer.headerHeight,
-                    height: props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight,
+                    top: diagramParentDimensions.headerHeight,
+                    height: diagramParentDimensions.height - diagramParentDimensions.headerHeight - diagramParentDimensions.footerHeight,
                     boxShadow: '-5px 0 5px 0 rgba(136, 136, 136, .6)',
                 },
             }}
@@ -53,14 +55,11 @@ const DataDrawer = (props: DataDrawerProps) => {
                 {selectedNode &&
                     <ManageComponent
                         selectedNode={selectedNode}
-                        closeDrawer={closeDrawer}
                     ></ManageComponent>
                 }
                 {selectedEdge &&
                     <ManageEdge
                         selectedEdge={selectedEdge}
-                        userDiagramOptions={props.userDiagramOptions}
-                        closeDrawer={closeDrawer}
                     ></ManageEdge>
                 }
             </>
@@ -70,13 +69,4 @@ const DataDrawer = (props: DataDrawerProps) => {
 };
 
 export default memo(DataDrawer);
-
-export interface DataDrawerProps {
-    isDrawerOpen: boolean;
-    manageDataId: string;
-    parentContainer: ParentContainerDimensions;
-    userDiagramOptions: UserDiagramOptions;
-    setIsDataDrawerOpen: (boolean) => void;
-    setIsDialogOpen: (boolean) => void;
-}
 

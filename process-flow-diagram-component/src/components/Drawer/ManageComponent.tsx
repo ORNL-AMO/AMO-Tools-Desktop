@@ -1,5 +1,5 @@
 import { ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
-import { getConnectedEdges, useReactFlow } from '@xyflow/react';
+import { getConnectedEdges } from '@xyflow/react';
 import {
     type Node,
     Edge,
@@ -9,63 +9,49 @@ import React, { memo, useEffect, useRef, useState } from 'react';
 import ComponentDataForm from "../Forms/ComponentDataForm";
 import ComponentHandles from "./ComponentHandles";
 import CustomizeNode from "./CustomizeNode";
-import TabPanel, { TabPanelBox } from "./TabPanel";
+import TabPanel from "./TabPanel";
 import DrawerToggleButton from "./DrawerToggleButton";
+import { useAppDispatch, useAppSelector } from "../../hooks/state";
+import { deleteNode, setNodeName } from "../Diagram/diagramReducer";
 
 const ManageComponent = (props: ManageComponentProps) => {
-    const { selectedNode, closeDrawer } = props;
-    const { getEdges, setEdges, setNodes } = useReactFlow();
-
-    const allNodeEdges = getConnectedEdges([selectedNode], getEdges());
+    const dispatch = useAppDispatch();
+    const edges = useAppSelector((state) => state.diagram.edges);
+    const { selectedNode } = props;
+    
+    const allNodeEdges = getConnectedEdges([selectedNode], edges);
     const [connectedEdges, setConnectedEdges] = useState<Edge[]>(allNodeEdges);
     const [selectedTab, setSelectedTab] = useState(0);
-    const [nodeName, setNodeName] = useState<string>(selectedNode.data.name);
+    const [name, setName] = useState<string>(selectedNode.data.name);
     const debounceRef = useRef<any>(null);
 
-    const updateNodeName = (nodeName: string) => {
-        setNodes((nds) =>
-            nds.map((n: Node<ProcessFlowPart>) => {
-                if (n.data.diagramNodeId === selectedNode.data.diagramNodeId) {
-                    return {
-                        ...n,
-                        data: {
-                            ...n.data,
-                            name: nodeName
-                        }
-                    };
-                }
-                return n;
-            }),
-        );
+    // const diagramContext: DiagramContext = useContext<DiagramContext>(RootDiagramContext);
+    // const componentValidation: ComponentValidation = diagramContext.diagramValidation.nodes[selectedNode.data.diagramNodeId];
+    // const isValid = isValidComponent(componentValidation);
+    
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setSelectedTab(newValue);
     };
 
     useEffect(() => {
         debounceRef.current = setTimeout(() => {
-            updateNodeName(nodeName);
+            updateNodeName(name);
         }, 150);
 
         return () => {
             clearTimeout(debounceRef.current);
         };
-    }, [nodeName]);
+    }, [name]);
 
-    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-        setSelectedTab(newValue);
+    const updateNodeName = (name: string) => {
+        dispatch(setNodeName(name));
     };
 
-    const onDeleteNode = () => {
-        setNodes((nodes) => nodes.filter((nd) => nd.id !== selectedNode.id));
-        setEdges((edges) => {
-            let updatedEdges = edges.filter((edge) => edge.source !== selectedNode.id && edge.target !== selectedNode.id);
-            return updatedEdges;
-        });
-        closeDrawer();
-    };
 
     return (
         <>
             <Box display="flex" alignItems={'center'} sx={{ margin: '1rem' }}>
-                <DrawerToggleButton toggleDrawer={closeDrawer} side={'right'}></DrawerToggleButton>
+                <DrawerToggleButton side={'right'}></DrawerToggleButton>
                 <Typography variant="h6" gutterBottom
                     sx={{
                         marginTop: '0',
@@ -75,10 +61,10 @@ const ManageComponent = (props: ManageComponentProps) => {
                     <TextField
                         label={'Component Name'}
                         id={'component_name'}
-                        value={nodeName}
+                        value={name}
                         type={'text'}
                         size={'small'}
-                        onChange={evt => setNodeName(evt.target.value)}
+                        onChange={evt => setName(evt.target.value)}
                         sx={{ paddingRight: '1rem', margin: 0, width: '100%' }}
                     />
                 </Typography>
@@ -94,6 +80,13 @@ const ManageComponent = (props: ManageComponentProps) => {
             }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
                     <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
+                        {/* {isValid ?
+                            (
+                                <Tab sx={{ fontSize: '.75rem' }} label="Data" />
+                            ) : (
+                                <Tab icon={<InvalidIcon status={componentValidation?.status} />} sx={{ fontSize: '.75rem', minHeight: 'unset' }}  iconPosition="start" label="Data" />
+                            )
+                        } */}
                         <Tab sx={{ fontSize: '.75rem' }} label="Data" />
                         <Tab sx={{ fontSize: '.75rem' }} label="Customize" />
                     </Tabs>
@@ -106,16 +99,14 @@ const ManageComponent = (props: ManageComponentProps) => {
                 </TabPanel>
 
                 <TabPanel value={selectedTab} index={1}>
-                    {/* <TabPanelBox> */}
                         <Box sx={{ paddingY: '1rem' }}>
                             <ComponentHandles node={selectedNode}></ComponentHandles>
                             <CustomizeNode node={selectedNode}></CustomizeNode>
                             <Divider />
                         </Box>
-                    {/* </TabPanelBox> */}
                 </TabPanel>
 
-                <Button sx={{ width: '100%', marginY: 2 }} color="secondary" variant="outlined" onClick={onDeleteNode}>Delete Component</Button>
+                <Button sx={{ width: '100%', marginY: 2 }} color="error" variant="outlined" onClick={() => dispatch(deleteNode())}>Delete Component</Button>
             </Box>
         </>
     );
@@ -126,7 +117,6 @@ export default memo(ManageComponent);
 
 export interface ManageComponentProps {
     selectedNode: Node<ProcessFlowPart>,
-    closeDrawer: () => void;
 
 }
 

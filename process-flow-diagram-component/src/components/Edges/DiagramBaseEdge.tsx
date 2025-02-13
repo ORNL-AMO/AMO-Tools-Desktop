@@ -1,10 +1,12 @@
 import { CSSProperties, Fragment, ReactNode, useContext } from 'react';
-import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, SmoothStepEdge, StepEdge, StraightEdge, useHandleConnections, useReactFlow } from '@xyflow/react';
-import { FlowContext } from '../Flow';
+import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, SmoothStepEdge, StepEdge, StraightEdge, useHandleConnections } from '@xyflow/react';
 import { CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
-import FlowValueDisplay from '../Flow/FlowValueDisplay';
-import FlowDisplayUnit from '../Flow/FlowDisplayUnit';
+import FlowValueDisplay from '../Diagram/FlowValueDisplay';
+import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
+import { useAppDispatch, useAppSelector } from '../../hooks/state';
+import { toggleDrawer } from '../Diagram/diagramReducer';
+import { RootState } from '../Diagram/store';
 
 const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: string; selected: boolean, flowValue: number | string, scale: number }) => {
   let adjustedTransform = transform + ` scale(${scale})`;
@@ -41,14 +43,16 @@ const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale }: { transfo
 
 
 export default function DiagramBaseEdge(props: DiagramEdgeProps) {
-  const flowContext = useContext(FlowContext);
-
+  const dispatch = useAppDispatch();
   const sourceX = props.sourceX;
   const sourceY = props.sourceY;
   const sourcePosition = props.sourcePosition;
   const targetX = props.targetX;
   const targetY = props.targetY;
   const targetPosition = props.targetPosition;
+
+  const showFlowLabels = useAppSelector((state: RootState) => state.diagram.diagramOptions.showFlowLabels);
+  const flowLabelSize = useAppSelector((state: RootState) => state.diagram.diagramOptions.flowLabelSize);
 
   let [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
@@ -66,6 +70,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
   }
 
   const customEdgeData = props.data as CustomEdgeData;
+  
   const renderBaseEdgeComponent = (props: DiagramEdgeProps, edgePath: string) => {
     const customStyle = {
       ...props.style,
@@ -85,8 +90,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
   }
 
   const onEditEdge = () => {
-    flowContext.setManageDataId(props.id);
-    flowContext.setIsDataDrawerOpen(true);
+    dispatch(toggleDrawer(props.id));
   }
 
   const connections = useHandleConnections({ type: 'target', id: props.targetHandleId, nodeId: props.target });
@@ -115,11 +119,11 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
             selected={props.selected}
             transformLocation={editButtonTransform}/>
 
-        {flowContext.userDiagramOptions.showFlowValues && Boolean(customEdgeData.flowValue) &&
+        {showFlowLabels && Boolean(customEdgeData.flowValue) &&
             <EdgeFlowValueLabel
             transform={flowLabelTransform}
             selected={props.selected}
-            scale={flowContext.userDiagramOptions.flowLabelSize !== undefined? flowContext.userDiagramOptions.flowLabelSize : 1}
+            scale={flowLabelSize !== undefined? flowLabelSize : 1}
             flowValue={customEdgeData.flowValue}
             />
         }

@@ -1,14 +1,15 @@
 import { List, TextField, InputAdornment, ListItem, Divider, styled, Tooltip, TooltipProps, tooltipClasses, Button } from "@mui/material";
-import { formatDecimalPlaces, getEdgeSourceAndTarget, getNodeFlowTotals } from "../Flow/FlowUtils";
+import { formatDecimalPlaces, getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, getConnectedEdges, Node, useReactFlow } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
-import React, { memo, useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
 import { CustomEdgeData, NodeCalculatedData, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { MAX_FLOW_DECIMALS } from "../../../../src/process-flow-types/shared-process-flow-constants";
-import { FlowContext } from "../Flow";
-import FlowDisplayUnit from "../Flow/FlowDisplayUnit";
+import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
+import { useAppDispatch, useAppSelector } from "../../hooks/state";
+import { calculatedDataUpdate } from "../Diagram/diagramReducer";
 
 const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
@@ -25,7 +26,8 @@ const SmallTooltip = styled(({ className, ...props }: TooltipProps) => (
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility
    */
 const SourceFlowForm = (props: SourceFlowFormProps) => {
-    const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
+    const dispatch = useAppDispatch();
+    const calculatedData = useAppSelector((state) => state.diagram.calculatedData);
     const { getNodes, setNodes, setEdges, getEdges } = useReactFlow();
 
     const allNodes = getNodes();
@@ -122,16 +124,15 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
 
     const updateRelatedDiagramData = () => {
         if (componentData.processComponentType === 'water-discharge') {
-            let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
-                ...flowContext.nodeCalculatedDataMap,
+            let updatedCalculatedData: Record<string, NodeCalculatedData> = {
+                ...calculatedData,
             }
 
-            updatedNodeCalculatedDataMap[props.selectedNodeId] = {
+            updatedCalculatedData[props.selectedNodeId] = {
                 totalSourceFlow: totalCalculatedSourceFlow,
-                totalDischargeFlow: updatedNodeCalculatedDataMap[props.selectedNodeId]? updatedNodeCalculatedDataMap[props.selectedNodeId].totalDischargeFlow : undefined,
+                totalDischargeFlow: updatedCalculatedData[props.selectedNodeId]? updatedCalculatedData[props.selectedNodeId].totalDischargeFlow : undefined,
             }
-            flowContext.setNodeCalculatedData(updatedNodeCalculatedDataMap);
-
+            dispatch(calculatedDataUpdate(updatedCalculatedData));
         } else {
             updateIntakeSourceTotalLabels();
         }
@@ -143,8 +144,8 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
 * Other component types don't need update - they will show updated value from edges array on drawer open
 */
     const updateIntakeSourceTotalLabels = () => {
-        let updatedNodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
-            ...flowContext.nodeCalculatedDataMap,
+        let updatedCalculatedData: Record<string, NodeCalculatedData> = {
+            ...calculatedData,
         }
         const componentSourceNodeIds: string[] = componentSourceEdges.map((edge: Edge<CustomEdgeData>) => edge.source);
         allNodes.forEach((node: Node<ProcessFlowPart>) => {
@@ -152,13 +153,13 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
                 if (node.data.processComponentType === 'water-intake') {
                     const plantIntakeConnectedEdges = getConnectedEdges([node], allEdges);
                     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(plantIntakeConnectedEdges, allNodes, node.id);
-                    let calculatedData = { ...updatedNodeCalculatedDataMap[node.id] };
+                    let calculatedData = { ...updatedCalculatedData[node.id] };
                     calculatedData.totalDischargeFlow = totalCalculatedDischargeFlow;
-                    updatedNodeCalculatedDataMap[node.id] = calculatedData;
+                    updatedCalculatedData[node.id] = calculatedData;
                 }
             }
         });
-        flowContext.setNodeCalculatedData(updatedNodeCalculatedDataMap);
+        dispatch(calculatedDataUpdate(updatedCalculatedData));
     }
 
 

@@ -1,20 +1,25 @@
 import { Box, Chip,  } from "@mui/material";
-import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Flow/FlowUtils";
-import { Edge, Node, useReactFlow } from "@xyflow/react";
+import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
+import { Edge, Node } from "@xyflow/react";
 
-import React, { memo, useContext, useState } from "react";
+import React, { memo, useState } from "react";
 import { CustomEdgeData, ProcessFlowPart, WasteWaterTreatment, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
-import { Accordion, AccordionDetails, AccordionSummary } from "../MUIStyledComponents";
-import FlowDisplayUnit from "../Flow/FlowDisplayUnit";
-import FlowValueDisplay from "../Flow/FlowValueDisplay";
+import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/AccordianComponents";
+import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
+import FlowValueDisplay from "../Diagram/FlowValueDisplay";
 import SourceFlowForm from "./SourceFlowForm";
+import { useAppDispatch, useAppSelector } from "../../hooks/state";
+import { setNodeDataProperty } from "../Diagram/diagramReducer";
 import DischargeFlowForm from "./DischargeFlowForm";
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
-    const { getNodes, setNodes } = useReactFlow();
+    const dispatch = useAppDispatch();
+    const nodes = useAppSelector(state => state.diagram.nodes);
+
     const [sourcesExpanded, setSourcesExpanded] = useState<boolean>(true);
     const [dischargeExpanded, setDischargeExpanded] = useState<boolean>(true);
+
 
     // todo for future diagrams - setComponentTypeData<T>
     let componentData: ProcessFlowPart = { ...props.selectedNode.data } as ProcessFlowPart;
@@ -34,7 +39,11 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     } else {
         componentData = componentData as ProcessFlowPart;
     }
-
+    
+    // const diagramContext: DiagramContext = useContext<DiagramContext>(RootDiagramContext);
+    // const componentValidation: ComponentValidation = diagramContext.diagramValidation.nodes[componentData.diagramNodeId];
+    // const isValid = isValidComponent(componentValidation);
+    // console.log('ComponentDataForm isValidComponent', isValid);
 
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
         if (props.connectedEdges.length !== 0) {
@@ -43,33 +52,20 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     };
 
     const handleTreatmentTypeChange = (event) => {
-        setNodes((nds) =>
-            nds.map((n: Node<ProcessFlowPart>) => {
-                if (n.data.diagramNodeId === props.selectedNode.id) {
-                    return {
-                        ...n,
-                        data: {
-                            ...n.data,
-                            treatmentType: Number(event.target.value)
-                        }
-                    };
-                }
-                return n;
-            }),
-        );
+        dispatch(setNodeDataProperty({optionsProp: 'treatmentType', updatedValue: Number(event.target.value)}));
     };
 
     const hasSources = props.connectedEdges.some((edge: Edge<CustomEdgeData>) => {
-        const { source, target } = getEdgeSourceAndTarget(edge, getNodes());
+        const { source, target } = getEdgeSourceAndTarget(edge, nodes);
         return props.selectedNode.id === target.diagramNodeId;
     });
     
     const hasTargets = props.connectedEdges.some((edge: Edge<CustomEdgeData>) => {   
-        const { source, target } = getEdgeSourceAndTarget(edge, getNodes());
+        const { source, target } = getEdgeSourceAndTarget(edge, nodes);
         return props.selectedNode.id === source.diagramNodeId;
     });
     
-    const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(props.connectedEdges, getNodes(), props.selectedNode.id);
+    const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(props.connectedEdges, nodes, props.selectedNode.id);
     const totalSourceFlow = componentData.userEnteredData.totalSourceFlow !== undefined ? componentData.userEnteredData.totalSourceFlow : totalCalculatedSourceFlow;
     const totalDischargeFlow = componentData.userEnteredData.totalDischargeFlow !== undefined ? componentData.userEnteredData.totalDischargeFlow : totalCalculatedDischargeFlow;
 
@@ -95,7 +91,19 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             {hasSources &&
                 <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
                     <AccordionSummary>
-                        <span style={{ alignSelf: 'center' }}>Sources</span>
+                        <span style={{ display: 'flex', alignSelf: 'center' }}>
+                            <span>
+                                Sources
+                            </span>
+                        </span> 
+                        {/* <span style={{ display: 'flex', alignSelf: 'center' }}>
+                            <span>
+                                Sources
+                            </span>
+                            {componentValidation && !isValid &&
+                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon status={componentValidation.status} /></span>
+                            }
+                        </span> */}
                         <Chip label={
                             <>
                             <FlowValueDisplay flowValue={totalSourceFlow}/>

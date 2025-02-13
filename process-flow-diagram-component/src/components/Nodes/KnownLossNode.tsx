@@ -1,15 +1,14 @@
 import { NodeProps, Position } from "@xyflow/react";
-import { CSSProperties, useContext } from "react";
+import { CSSProperties } from "react";
 import { DiagramNode } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { Typography } from "@mui/material";
 import CustomHandle from "./CustomHandle";
 import EditDataDrawerButton from "../Drawer/EditDataDrawerButton";
-import { FlowContext } from "../Flow";
-
+import { useAppDispatch } from "../../hooks/state";
+import { toggleDrawer } from "../Diagram/diagramReducer";
 
 const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
-  const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
-  
+  const dispatch = useAppDispatch();
   const transformString = `translate(0%, 0%) translate(145px, -30px)`;
   const lossInnerStyle: CSSProperties = {
     top: '0',
@@ -18,8 +17,7 @@ const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   };
 
   const onEditNode = () => {
-    flowContext.setManageDataId(id);
-    flowContext.setIsDataDrawerOpen(true);
+    dispatch(toggleDrawer(id));
 }
 
   return (

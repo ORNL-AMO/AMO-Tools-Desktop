@@ -15,7 +15,7 @@ export const MockWaterdiagram: Diagram =
     "waterDiagram": {
         "isValid": true,
         "flowDiagramData": {
-            "nodeCalculatedDataMap": {},
+            "calculatedData": {},
             "recentEdgeColors": [],
             "recentNodeColors": [],
             "settings": {
@@ -1401,16 +1401,14 @@ export const MockWaterdiagram: Diagram =
                 }
             ],
             "userDiagramOptions": {
-                "edgeThickness": 4,
+                "strokeWidth": 4,
                 "edgeType": "default",
                 "minimapVisible": false,
                 "controlsVisible": true,
                 "directionalArrowsVisible": false,
-                "showFlowValues": true,
+                "animated": true,
+                "showFlowLabels": true,
                 "flowLabelSize": 1,
-                "edgeOptions": {
-                    "animated": true
-                }
             }
         }
     },

@@ -1,7 +1,7 @@
 import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
 import { edgeTypes, nodeTypes } from "./FlowTypes";
-import { CustomEdgeData, NodeCalculatedData, getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, DiagramSettings } from "../../../../src/process-flow-types/shared-process-flow-types";
-import { DefaultEdgeOptions, EdgeTypes, useHandleConnections } from "@xyflow/react";
+import { CustomEdgeData, getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, DiagramSettings, FlowDiagramData } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { DefaultEdgeOptions, EdgeTypes } from "@xyflow/react";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
@@ -19,7 +19,7 @@ export const getRandomCoordinates = (height: number, width: number): { x: number
   return { x: randomX, y: randomY };
 }
 
-export const updateStaleNodes = (reactFlowInstance: ReactFlowInstance, staleNodes: Array<Node>, clientHeight: number) => {
+export const updateAssessmentCreatedNodes = (reactFlowInstance: ReactFlowInstance, staleNodes: Array<Node>, clientHeight: number) => {
   staleNodes = staleNodes.map((node: Node) => {
     if (!node.position) {
       setNodeFallbackPosition(reactFlowInstance, node, clientHeight);
@@ -86,7 +86,6 @@ export const setDroppedNode = (event,
     newNode = getNewNode(nodeType, newProcessComponent, position);
   }
   newNode.type = getAdaptedTypeString(newNode.type);
-
   setNodes((nds) => {
     return nds.concat(newNode)
   });
@@ -104,15 +103,15 @@ export const getDefaultNodeFromType = (nodeType: WaterProcessComponentType): Nod
 * edge ids are not gauranteed to be unique. They only include nodeid-nodeid. source and target handles must be looked at to identify uniqueness of edge 
 * 
 */
-export const setCustomEdges = (setEdges: React.Dispatch<React.SetStateAction<Edge[]>>, 
+export const getEdgeFromConnection = (
   connectedParams: Connection | Edge, 
   userDiagramOptions: UserDiagramOptions,
   ) => {
-  setEdges((eds: Edge[]) => {
     connectedParams = connectedParams as Edge;
     if (connectedParams.source === connectedParams.target) {
       connectedParams.type = 'selfconnecting';
     }
+
     if (userDiagramOptions.directionalArrowsVisible) {
       connectedParams.markerEnd = {
         type: MarkerType.ArrowClosed,
@@ -128,29 +127,13 @@ export const setCustomEdges = (setEdges: React.Dispatch<React.SetStateAction<Edg
     if (connectedParams.style === undefined) {
       connectedParams.style = {
         stroke: '#6c757d',
-        strokeWidth: userDiagramOptions.edgeThickness
+        strokeWidth: userDiagramOptions.strokeWidth
       }
     }
 
-    return addEdge(connectedParams, eds);
-  })
+    return connectedParams;
 }
 
-export const changeExistingEdgesType = (setEdges, diagramEdgeType: string) => {
-  setEdges((eds) => {
-    return eds.map((edge: Edge<CustomEdgeData>) => {
-      // * ignore self-connecting
-      if (edge.source !== edge.target) {
-        if (edge.data.hasOwnEdgeType !== undefined) {
-          edge.type = edge.data.hasOwnEdgeType;
-        } else {
-          edge.type = diagramEdgeType;
-        }
-      }
-      return edge;
-    });
-  });
-}
 
 export const getEdgeSourceAndTarget = (edge: Edge, nodes: Node[]) => {
   let target: ProcessFlowPart;
@@ -167,6 +150,24 @@ export const getEdgeSourceAndTarget = (edge: Edge, nodes: Node[]) => {
 
   return { source, target };
 
+}
+
+export const createNewNode = (nodeType: WaterProcessComponentType, position: { x: number, y: number }) => {
+  let newNode: Node;
+  if (nodeType.includes('splitter-node')) {
+    newNode = {
+      id: getNewNodeId(),
+      type: nodeType,
+      position: position,
+      className: nodeType,
+      data: {}
+    };
+  } else {
+    const newProcessComponent = getNewProcessComponent(nodeType);
+    newNode = getNewNode(nodeType, newProcessComponent, position);
+  }
+  newNode.type = getAdaptedTypeString(newNode.type);
+  return newNode;
 }
 
 export const getAdaptedTypeString = (nodeType: string) => {
@@ -223,55 +224,26 @@ export const getEdgeTypesFromString = (newDefaultType: string, currentEdgeTypes?
   if (!currentEdgeTypes) {
     currentEdgeTypes = edgeTypes;
   }
-  const newEdgeTypes: EdgeTypes = {
-    ...currentEdgeTypes
-  }
+
   switch (newDefaultType) {
     case 'bezier':
-      newEdgeTypes.default = BezierDiagramEdge;
+      currentEdgeTypes.default = BezierDiagramEdge;
       break;
     case 'straight':
-      newEdgeTypes.default = StraightDiagramEdge;
+      currentEdgeTypes.default = StraightDiagramEdge;
       break;
     case 'step':
-      newEdgeTypes.default = StepDiagramEdge;
+      currentEdgeTypes.default = StepDiagramEdge;
       break;
     case 'smoothstep':
-      newEdgeTypes.default = SmoothStepDiagramEdge;
+      currentEdgeTypes.default = SmoothStepDiagramEdge;
       break;
     default:
-      newEdgeTypes.default = BezierDiagramEdge;
+      currentEdgeTypes.default = BezierDiagramEdge;
   }
 
-  return newEdgeTypes;
+  return currentEdgeTypes;
 };
-
-export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
-  return {
-    edgeThickness: 2,
-    edgeType: 'smoothstep',
-    minimapVisible: false,
-    controlsVisible: true,
-    directionalArrowsVisible: true,
-    showFlowValues: false,
-    flowLabelSize: 1,
-    edgeOptions: {
-      animated: true,
-      type: 'smoothstep',
-    }
-  }
-}
-
-export const getDefaultSettings = (): DiagramSettings => {
-  return {
-    unitsOfMeasure: 'Imperial',
-    flowDecimalPrecision: 2
-  }
-}
-
-export const getDefaultColorPalette = () => {
-  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#e28000'];
-}
 
 
 export const formatDecimalPlaces = (value: number | string, decimalPlaces: number) => {
@@ -286,4 +258,18 @@ export const formatNumberValue = (value: number | string, places: number): numbe
     value = Number(formatDecimalPlaces(value, places));
   }
   return value;
+}
+
+export const formatDataForMEASUR = (diagramData: FlowDiagramData): FlowDiagramData => {
+  const processedNodes = diagramData.nodes.map((node: Node<ProcessFlowPart>) => {
+    return {
+      ...node,
+      data: {
+        ...node.data,
+        modifiedDate: new Date().toISOString()
+      }
+    }
+  });
+  diagramData.nodes = processedNodes;
+  return diagramData;
 }

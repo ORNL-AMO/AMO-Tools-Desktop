@@ -1,7 +1,8 @@
 import React from 'react';
 import { toJpeg, toPng, toSvg } from 'html-to-image';
-import { getNodesBounds, getViewportForBounds, useReactFlow } from '@xyflow/react';
+import { getNodesBounds, getViewportForBounds } from '@xyflow/react';
 import { Button } from '@mui/material';
+import { useAppSelector } from '../../hooks/state';
 
 function downloadImage(dataUrl) {
   const a = document.createElement('a');
@@ -15,9 +16,9 @@ const imageWidth = 1024;
 const imageHeight = 768;
 
 function DownloadButton(props: DownloadProps) {
-  const { getNodes } = useReactFlow();
+  const nodes = useAppSelector(state => state.diagram.nodes);
   const onClick = () => {
-    const nodesBounds = getNodesBounds(getNodes());
+    const nodesBounds = getNodesBounds(nodes);
     const transform: {x: number, y: number, zoom: number} = getViewportForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2, 0);
 
     // https://www.npmjs.com/package/save-html-as-image

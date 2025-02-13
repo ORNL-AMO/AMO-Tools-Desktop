@@ -1,12 +1,14 @@
-import React, { memo, useState } from 'react';
-import { DiagramSettings, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { edgeTypeOptions, SelectListOption } from '../Flow/FlowTypes';
-import { Box, Button, Divider, Grid, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
+import React, { ChangeEvent, memo, useState } from 'react';
+import { ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { Box, Button, Grid, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
-import { UserDiagramOptionsHandlers } from '../Flow';
 import TabPanel from './TabPanel';
 import { flowDecimalPrecisionOptions } from '../../../../src/process-flow-types/shared-process-flow-constants';
+import { useAppDispatch, useAppSelector } from '../../hooks/state';
+import { defaultEdgeTypeChange, diagramOptionsChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
+import { RootState, selectHasAssessment } from '../Diagram/store';
+import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
@@ -19,8 +21,25 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
 }));
 
 const MenuSidebar = memo((props: MenuSidebarProps) => {
-  const [selectedTab, setSelectedTab] = useState(0);
+  const dispatch = useAppDispatch();
 
+  const diagramParentDimensions: ParentContainerDimensions = useAppSelector((state: RootState) => state.diagram.diagramParentDimensions);
+  const hasAssessment = useAppSelector(selectHasAssessment);
+  
+  const edgeType = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
+  const strokeWidth = useAppSelector((state: RootState) => state.diagram.diagramOptions.strokeWidth);
+  const flowLabelSize = useAppSelector((state: RootState) => state.diagram.diagramOptions.flowLabelSize);
+  const showFlowLabels = useAppSelector((state: RootState) => state.diagram.diagramOptions.showFlowLabels);
+
+  const animated = useAppSelector((state: RootState) => state.diagram.diagramOptions.animated);
+  const minimapVisible = useAppSelector((state: RootState) => state.diagram.diagramOptions.minimapVisible);
+  const controlsVisible = useAppSelector((state: RootState) => state.diagram.diagramOptions.controlsVisible);
+  const directionalArrowsVisible = useAppSelector((state: RootState) => state.diagram.diagramOptions.directionalArrowsVisible);
+  
+  const flowDecimalPrecision = useAppSelector((state: RootState) => state.diagram.settings.flowDecimalPrecision);
+  const unitsOfMeasure = useAppSelector((state: RootState) => state.diagram.settings.unitsOfMeasure);
+
+  const [selectedTab, setSelectedTab] = useState(0);
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
@@ -30,6 +49,23 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
   };
+
+  const handleSliderChange = (event, newValue: number, optionsProp: keyof UserDiagramOptions, updateDependencies?: OptionsDependentState[]) => {
+    dispatch(diagramOptionsChange({
+      optionsProp: optionsProp,
+      updatedValue: newValue,
+      updateDependencies: updateDependencies
+    }))
+  };
+
+  const handleGenericCheckboxChange = (event: ChangeEvent<HTMLInputElement>, optionsProp: keyof UserDiagramOptions, updateDependencies?: OptionsDependentState[]) => {
+    dispatch(diagramOptionsChange({
+      optionsProp: optionsProp,
+      updatedValue: event.target.checked,
+      updateDependencies: updateDependencies
+    }))
+  };
+
 
   return (
     <Box sx={{
@@ -63,27 +99,27 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                   </WaterComponent>
                 </Grid>
               ))}
-              <Grid item xs={1} sm={2} md={2}>
+              {/* <Grid item xs={1} sm={2} md={2}>
                 <WaterComponent className={`dndnode splitterNode`}
                   onDragStart={(event) => onDragStart(event, 'splitter-node-4')} draggable> 4-way Connection</WaterComponent>
               </Grid>
               <Grid item xs={1} sm={2} md={2}>
                 <WaterComponent className={`dndnode splitterNode`}
                   onDragStart={(event) => onDragStart(event, 'splitter-node-8')} draggable> 8-way Connection</WaterComponent>
-              </Grid>
+              </Grid> */}
             </Grid>
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={1} diagramParentDimensions={props.diagramParentDimensions}>
+        <TabPanel value={selectedTab} index={1} diagramParentDimensions={diagramParentDimensions}>
           <Box paddingX={'.5rem'}>
             <div className="sidebar-options">
             <Box className={'sidebar-option-container'}>
                   <label htmlFor={'unitsOfMeasure'}>Units of Measure</label>
                   <select className="form-control diagram-select" id={'unitsOfMeasure'} name="unitsOfMeasure"
-                    value={props.settings.unitsOfMeasure}
-                    disabled={props.hasAssessment}
-                    onChange={props.userDiagramOptionsHandlers.handleUnitsOfMeasureChange}>
+                    value={unitsOfMeasure}
+                    disabled={hasAssessment}
+                    onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}>
                     <option key={'imperial'} value={'Imperial'}>Imperial</option>
                     <option key={'metric'} value={'Metric'}>Metric</option>
                   </select>
@@ -92,8 +128,8 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             <Box className={'sidebar-option-container'}>
                   <label htmlFor={'flowDecimalPrecision'}>Decimal Precision</label>
                   <select className="form-control diagram-select" id={'flowDecimalPrecision'} name="flowDecimalPrecision"
-                    value={props.settings.flowDecimalPrecision}
-                    onChange={props.userDiagramOptionsHandlers.handleFlowDecimalPrecisionChange}>
+                    value={flowDecimalPrecision}
+                    onChange={(e) => dispatch(flowDecimalPrecisionChange(e.target.value))}>
                     {flowDecimalPrecisionOptions.map((option) => {
                     return (
                       <option key={`flowDecimalPrecision_${option.value}`} value={option.value}>{option.display}</option>
@@ -106,8 +142,8 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 <label htmlFor="edgeType" className="diagram-label">Default Line Type</label>
                 <select className="form-control diagram-select" id="edgeType"
                   name="edgeType"
-                  value={props.userDiagramOptions.edgeType}
-                  onChange={(e) => props.userDiagramOptionsHandlers.handleEdgeTypeChange(e.target.value)}>
+                  value={edgeType}
+                  onChange={(e) => dispatch(defaultEdgeTypeChange(e.target.value))}>
                   {edgeTypeOptions.map((option: SelectListOption) => {
                     return (
                       <option key={option.value} value={option.value}>{option.display}</option>
@@ -117,21 +153,21 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
               </Box>
 
               <Box className={'sidebar-option-container'}>
-                <label htmlFor={'edgeThickness'} >Line Thickness</label>
+                <label htmlFor={'strokeWidth'} >Line Thickness</label>
                 <ContinuousSlider
-                  setSliderValue={props.userDiagramOptionsHandlers.handleEdgeThicknessChange}
-                  value={props.userDiagramOptions.edgeThickness} />
+                  setSliderValue={(e, newValue) => handleSliderChange(e, newValue, 'strokeWidth', ['updateEdgeProperties'])}
+                  value={strokeWidth} />
               </Box>
 
               <Box className={'sidebar-option-container'}>
-                <label htmlFor={'edgeThickness'} >Flow Label Size Scale</label>
+                <label htmlFor={'flowLabelSize'} >Flow Label Size Scale</label>
                 <ContinuousSlider
                   min={.5}
                   max={2}
                   step={.10}
                   unit={''}
-                  setSliderValue={props.userDiagramOptionsHandlers.handleFlowLabelSizeChange}
-                  value={props.userDiagramOptions.flowLabelSize} />
+                  setSliderValue={(e, newValue) => handleSliderChange(e, newValue, 'flowLabelSize', ['updateEdges'])}
+                  value={flowLabelSize} />
               </Box>
 
               <div style={{ margin: '1rem 0', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
@@ -140,10 +176,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                     <input
                       type="checkbox"
                       id={"show-flow-values"}
-                      checked={props.userDiagramOptions.showFlowValues}
+                      checked={showFlowLabels}
                       className={'diagram-checkbox'}
                       style={{ marginRight: '.5rem' }}
-                      onChange={(e) => props.userDiagramOptionsHandlers.handleShowFlowValues(e.target.checked)}
+                      onChange={(e) => handleGenericCheckboxChange(e, 'showFlowLabels', ['updateEdges'])}
                     />
                     <span>Show Connected Flow Values (Mgal)</span>
                   </label>
@@ -154,10 +190,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                     <input
                       type="checkbox"
                       id={"edge-options"}
-                      checked={props.userDiagramOptions.edgeOptions.animated}
+                      checked={animated}
                       className={'diagram-checkbox'}
                       style={{ marginRight: '.5rem' }}
-                      onChange={(e) => props.userDiagramOptionsHandlers.handleEdgeOptionsChange({ animated: e.target.checked })}
+                      onChange={(e) => handleGenericCheckboxChange(e, 'animated', ['updateEdgeProperties'])}
                     />
                     <span>Animated Connecting Lines</span>
                   </label>
@@ -168,10 +204,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                     <input
                       type="checkbox"
                       id={"directional-arrows"}
-                      checked={props.userDiagramOptions.directionalArrowsVisible}
+                      checked={directionalArrowsVisible}
                       className={'diagram-checkbox'}
                       style={{ marginRight: '.5rem' }}
-                      onChange={(e) => props.userDiagramOptionsHandlers.handleShowMarkerEndArrows(e.target.checked)}
+                      onChange={(e) => dispatch(showMarkerEndArrows(e.target.checked))}
                     />
                     <span>Show Directional Arrows</span>
                   </label>
@@ -182,10 +218,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                     <input
                       type="checkbox"
                       id={"minimap-visible"}
-                      checked={props.userDiagramOptions.minimapVisible}
+                      checked={minimapVisible}
                       className={'diagram-checkbox'}
                       style={{ marginRight: '.5rem' }}
-                      onChange={(e) => props.userDiagramOptionsHandlers.handleMinimapVisible(e.target.checked)}
+                      onChange={(e) => handleGenericCheckboxChange(e, 'minimapVisible')}
                     />
                     <span>Show Minimap</span>
                   </label>
@@ -196,10 +232,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                     <input
                       type="checkbox"
                       id='controls-visible'
-                      checked={props.userDiagramOptions.controlsVisible}
+                      checked={controlsVisible}
                       className={'diagram-checkbox'}
                       style={{ marginRight: '.5rem' }}
-                      onChange={(e) => props.userDiagramOptionsHandlers.handleControlsVisible(e.target.checked)}
+                      onChange={(e) => handleGenericCheckboxChange(e, 'controlsVisible')}
                     />
                     <span>Show Controls</span>
                   </label>
@@ -242,9 +278,9 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
       </Box>
 
       <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingTop={'1rem'}>
-        <DownloadButton shadowRoot={props.shadowRoot} />
-        {!props.hasAssessment &&
-          <Button variant="outlined" color="secondary" sx={{ width: '100%' }} onClick={() => props.setIsDialogOpen(true)}>Reset Diagram</Button>
+        <DownloadButton shadowRoot={props.shadowRootRef} />
+        {!hasAssessment &&
+          <Button variant="outlined" color="error" sx={{ width: '100%' }} onClick={() => dispatch(setDialogOpen())}>Reset Diagram</Button>
         }
       </Box>
     </Box>
@@ -253,14 +289,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 export default MenuSidebar;
 
 export interface MenuSidebarProps {
-  diagramParentDimensions: ParentContainerDimensions,
-  userDiagramOptions: UserDiagramOptions;
-  settings: DiagramSettings;
-  userDiagramOptionsHandlers: UserDiagramOptionsHandlers;
-  hasAssessment: boolean;
-  shadowRoot;
-  setIsDialogOpen: (boolean) => void;
-  resetDiagramCallback: () => void;
+  shadowRootRef: any;
 }
 
 const keyInputDirections = [
