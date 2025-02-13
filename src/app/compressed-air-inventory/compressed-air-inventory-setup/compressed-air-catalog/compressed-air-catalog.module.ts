@@ -35,6 +35,7 @@ import { MaxFullFlowCatalogService } from './performance-points-catalog/max-full
 import { UnloadPointCatalogService } from './performance-points-catalog/unload-point-catalog/unload-point-catalog.service';
 import { MidTurndownCatalogService } from './performance-points-catalog/mid-turndown-catalog/mid-turndown-catalog.service';
 import { TurndownCatalogService } from './performance-points-catalog/turndown-catalog/turndown-catalog.service';
+import { NoLoadCatalogService } from './performance-points-catalog/no-load-catalog/no-load-catalog.service';
 
 
 
@@ -80,7 +81,8 @@ import { TurndownCatalogService } from './performance-points-catalog/turndown-ca
     MaxFullFlowCatalogService,
     UnloadPointCatalogService,
     MidTurndownCatalogService,
-    TurndownCatalogService
+    TurndownCatalogService,
+    NoLoadCatalogService
   ],
   exports: [
     CompressedAirCatalogComponent
