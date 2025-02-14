@@ -8,18 +8,18 @@ import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../..
 import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/AccordianComponents";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import FlowValueDisplay from "../Diagram/FlowValueDisplay";
-import SourceFlowForm from "./SourceFlowForm";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { setNodeDataProperty } from "../Diagram/diagramReducer";
+import SourceFlowForm from "./SourceFlowForm";
+import { selectNodes, selectTotalDischargeFlow, selectTotalSourceFlow } from "../Diagram/store";
 import DischargeFlowForm from "./DischargeFlowForm";
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
     const dispatch = useAppDispatch();
-    const nodes = useAppSelector(state => state.diagram.nodes);
+    const nodes = useAppSelector(selectNodes);
 
     const [sourcesExpanded, setSourcesExpanded] = useState<boolean>(true);
     const [dischargeExpanded, setDischargeExpanded] = useState<boolean>(true);
-
 
     // todo for future diagrams - setComponentTypeData<T>
     let componentData: ProcessFlowPart = { ...props.selectedNode.data } as ProcessFlowPart;
@@ -65,9 +65,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         return props.selectedNode.id === source.diagramNodeId;
     });
     
-    const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(props.connectedEdges, nodes, props.selectedNode.id);
-    const totalSourceFlow = componentData.userEnteredData.totalSourceFlow !== undefined ? componentData.userEnteredData.totalSourceFlow : totalCalculatedSourceFlow;
-    const totalDischargeFlow = componentData.userEnteredData.totalDischargeFlow !== undefined ? componentData.userEnteredData.totalDischargeFlow : totalCalculatedDischargeFlow;
+    const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
+    const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
 
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1 }}>
@@ -115,7 +114,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                         />
                     </AccordionSummary>
                     <AccordionDetails>
-                        <SourceFlowForm selectedNodeId={props.selectedNode.data.diagramNodeId}></SourceFlowForm>
+                        <SourceFlowForm></SourceFlowForm>
                     </AccordionDetails>
                 </Accordion>
             }

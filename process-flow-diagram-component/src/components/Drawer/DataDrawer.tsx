@@ -6,7 +6,7 @@ import {
 import Drawer from '@mui/material/Drawer';
 import ManageEdge from "./ManageEdge";
 import ManageComponent from "./ManageComponent";
-import { selectIsDrawerOpen } from "../Diagram/store";
+import { selectEdges, selectIsDrawerOpen, selectNodes } from "../Diagram/store";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { toggleDrawer } from "../Diagram/diagramReducer";
 import { memo } from "react";
@@ -17,8 +17,8 @@ const DataDrawer = () => {
     
     const isDrawerOpen = useAppSelector(selectIsDrawerOpen);
     const selectedDataId = useAppSelector((state) => state.diagram.selectedDataId);
-    const nodes = useAppSelector((state) => state.diagram.nodes) as Node<ProcessFlowPart>[];
-    const edges = useAppSelector((state) => state.diagram.edges) as Edge<CustomEdgeData>[];
+    const nodes = useAppSelector(selectNodes);
+    const edges = useAppSelector(selectEdges);
     const selectedNode: Node<ProcessFlowPart> = nodes.find((node: Node<ProcessFlowPart>) => node.data.diagramNodeId === selectedDataId) as Node<ProcessFlowPart>;
     const selectedEdge: Edge<CustomEdgeData> = edges.find((edge: Edge<CustomEdgeData>) => edge.id === selectedDataId) as Edge<CustomEdgeData>;
 

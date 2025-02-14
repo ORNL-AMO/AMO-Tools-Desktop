@@ -10,7 +10,11 @@ Currently supports water diagram flows
 ## Build Production Package
 - `npm run build-web-component`
 
-## Terminology
+
+## Developing
+Ensure React components import Node, Edge types from xyflow or Typescript will automatically check against native Node
+
+### Terminology
 
 Though naming and implementation was intended to be consistent, the following words are sometimes used interchangably:
 

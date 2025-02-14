@@ -1,6 +1,6 @@
 import { memo, useContext } from 'react';
 import { Position, NodeProps } from '@xyflow/react';
-import { DiagramNode } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { DiagramNode, NodeFlowData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
 import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
@@ -8,10 +8,11 @@ import FlowValueDisplay from '../Diagram/FlowValueDisplay';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { toggleDrawer } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
+import { selectNodeFlowData } from '../Diagram/store';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
-  const calculatedData = useAppSelector(state => state.diagram.calculatedData);
+  const calculatedData: NodeFlowData = useAppSelector((state) => selectNodeFlowData(state, id));
   let transformString = `translate(0%, 0%) translate(180px, -36px)`;
 
   const allowInflowOnly: boolean = data.disableInflowConnections; 
@@ -19,13 +20,14 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
   const allowAllHandles: boolean = !allowInflowOnly && !allowOutflowOnly;
   let plantLevelFlow: number | string;
   let condensedPadding: boolean;
+  
   if (data.processComponentType === 'water-intake') {
-    plantLevelFlow = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : calculatedData[id] && calculatedData[id].totalDischargeFlow;
+    plantLevelFlow = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : calculatedData && calculatedData.totalDischargeFlow;
     condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
     transformString = `translate(0%, 0%) translate(188px, -25px)`;
   }
   if (data.processComponentType === 'water-discharge') {
-    plantLevelFlow = data.userEnteredData.totalSourceFlow? data.userEnteredData.totalSourceFlow : calculatedData[id] && calculatedData[id].totalSourceFlow;
+    plantLevelFlow = data.userEnteredData.totalSourceFlow? data.userEnteredData.totalSourceFlow : calculatedData && calculatedData.totalSourceFlow;
     condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
     transformString = `translate(0%, 0%) translate(188px, -25px)`;
   }

@@ -53,7 +53,7 @@ export interface FlowDiagramData {
   edges: Edge[],
   userDiagramOptions: UserDiagramOptions,
   settings: DiagramSettings,
-  calculatedData: Record<string, NodeCalculatedData>
+  calculatedData: DiagramCalculatedData,
   recentNodeColors: string[];
   recentEdgeColors: string[];
 }
@@ -69,15 +69,61 @@ export interface UserDiagramOptions {
   animated: boolean,
 }
 
+export interface DiagramValidation {
+  nodes: {
+    [nodeId: string]: ComponentValidation
+  }
+}
+
+export interface ComponentValidation {
+  status: ValidationStatus,
+  source: ComponentFlowValidation
+  discharge: ComponentFlowValidation
+}
+
+export type ComponentFlowValidation = {
+  status: ValidationStatus,
+  totalFlowValueDifferent?: string,
+  flowValues: {
+      [edgeId: string]: {
+          flowValueGreaterThan?: string,
+      }
+  }
+}
+
+export interface ValidationState {
+  errors: ValidityError[],
+  warnings: ValidityWarning[],
+}
+
+export interface ValidityError {
+  message: string,
+}
+
+export interface ValidityWarning {
+  message: string,
+}
+
+// * Invalid represents 'error' state
+export type ValidationStatus = 'ERROR' | 'VALID' | 'WARNING'
+
+
 export interface DiagramSettings {
   flowDecimalPrecision: number,
   unitsOfMeasure: string,
 }
 
 
-export interface NodeCalculatedData {
-  totalSourceFlow: number,
-  totalDischargeFlow: number,
+export interface NodeFlowData {
+  name?: string,
+  totalSourceFlow?: number,
+  totalDischargeFlow?: number,
+}
+
+export interface DiagramCalculatedData {
+  nodes: {
+    [nodeId: string]: NodeFlowData
+  }
 }
 
 export interface WaterDiagramOption {
@@ -91,10 +137,7 @@ export interface WaterDiagramOption {
 */
 export interface ProcessFlowPart extends Record<string, unknown> {
   name: string,
-  userEnteredData: {
-    totalSourceFlow: number,
-    totalDischargeFlow: number,
-  },
+  userEnteredData: NodeFlowData,
   processComponentType: ProcessFlowNodeType,
   className: ProcessFlowPartStyleClass,
   isValid: boolean,
@@ -359,7 +402,7 @@ export const getNewNode = (nodeType: WaterProcessComponentType, newProcessCompon
 }
 
 
-export const convertFlowDiagramData = (flowDiagramData: {nodes: Node[], edges: Edge[], calculatedData: Record<string, NodeCalculatedData>}, newUnits: string) => {
+export const convertFlowDiagramData = (flowDiagramData: {nodes: Node[], edges: Edge[], calculatedData: DiagramCalculatedData}, newUnits: string) => {
   flowDiagramData.nodes = flowDiagramData.nodes.map((nd: Node<ProcessFlowPart>) => {
     const convertedTotalSourceFlow = convertFlowValue(nd.data.userEnteredData.totalSourceFlow, newUnits);
     const convertedTotalDischargeFlow = convertFlowValue(nd.data.userEnteredData.totalDischargeFlow, newUnits);
@@ -387,10 +430,11 @@ export const convertFlowDiagramData = (flowDiagramData: {nodes: Node[], edges: E
     }
   });
 
-  Object.keys(flowDiagramData.calculatedData).forEach((key: string) => {
-    flowDiagramData.calculatedData[key].totalSourceFlow = convertFlowValue(flowDiagramData.calculatedData[key].totalSourceFlow, newUnits);
-    flowDiagramData.calculatedData[key].totalDischargeFlow = convertFlowValue(flowDiagramData.calculatedData[key].totalDischargeFlow, newUnits);
-  });
+  // todo update new type
+  // Object.keys(flowDiagramData.calculatedData).forEach((key: string) => {
+  //   flowDiagramData.calculatedData[key].totalSourceFlow = convertFlowValue(flowDiagramData.calculatedData[key].totalSourceFlow, newUnits);
+  //   flowDiagramData.calculatedData[key].totalDischargeFlow = convertFlowValue(flowDiagramData.calculatedData[key].totalDischargeFlow, newUnits);
+  // });
 
 }
 

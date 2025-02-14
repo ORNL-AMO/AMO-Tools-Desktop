@@ -3,6 +3,7 @@ import { toJpeg, toPng, toSvg } from 'html-to-image';
 import { getNodesBounds, getViewportForBounds } from '@xyflow/react';
 import { Button } from '@mui/material';
 import { useAppSelector } from '../../hooks/state';
+import { selectNodes } from '../Diagram/store';
 
 function downloadImage(dataUrl) {
   const a = document.createElement('a');
@@ -16,7 +17,7 @@ const imageWidth = 1024;
 const imageHeight = 768;
 
 function DownloadButton(props: DownloadProps) {
-  const nodes = useAppSelector(state => state.diagram.nodes);
+  const nodes = useAppSelector(selectNodes);
   const onClick = () => {
     const nodesBounds = getNodesBounds(nodes);
     const transform: {x: number, y: number, zoom: number} = getViewportForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2, 0);

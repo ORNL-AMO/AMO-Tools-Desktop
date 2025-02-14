@@ -15,7 +15,7 @@ import {
 
 import '@xyflow/react/dist/style.css';
 
-import { FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, WaterDiagram, DiagramSettings, NodeCalculatedData, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, WaterDiagram, DiagramSettings, NodeFlowData, UserDiagramOptions, DiagramCalculatedData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { formatDataForMEASUR, getEdgeTypesFromString, updateAssessmentCreatedNodes } from './FlowUtils';
 import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
@@ -23,7 +23,7 @@ import WarningDialog from './WarningDialog';
 import { SideDrawer } from '../Drawer/SideDrawer';
 import DataDrawer from '../Drawer/DataDrawer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { configureAppStore, RootState, selectIsDrawerOpen } from './store';
+import { configureAppStore, RootState, selectEdges, selectIsDrawerOpen, selectNodes } from './store';
 import { Provider } from 'react-redux';
 import { addNode, addNodes, connectEdge, edgesChange, nodesChange } from './diagramReducer';
 
@@ -51,14 +51,14 @@ const Diagram = (props: DiagramProps) => {
   const isDialogOpen = useAppSelector((state: RootState) => state.diagram.isDialogOpen);
   
   const isDataDrawerOpen: boolean = useAppSelector(selectIsDrawerOpen)
-  const nodes: Node[] = useAppSelector((state: RootState) => state.diagram.nodes);
-  const edges: Edge[] = useAppSelector((state: RootState) => state.diagram.edges);
+  const nodes: Node[] = useAppSelector(selectNodes);
+  const edges: Edge[] = useAppSelector(selectEdges);
   const userDiagramOptions: UserDiagramOptions = useAppSelector((state: RootState) => state.diagram.diagramOptions);
   const settings: DiagramSettings = useAppSelector((state: RootState) => state.diagram.settings);
 
   const recentNodeColors = useAppSelector((state: RootState) => state.diagram.recentNodeColors);
   const recentEdgeColors = useAppSelector((state: RootState) => state.diagram.recentEdgeColors);
-  const calculatedData: Record<string, NodeCalculatedData> = useAppSelector((state: RootState) => state.diagram.calculatedData);
+  const calculatedData: DiagramCalculatedData = useAppSelector((state: RootState) => state.diagram.calculatedData);
 
   const animated: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.animated);
   const minimapVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.minimapVisible);
@@ -68,7 +68,6 @@ const Diagram = (props: DiagramProps) => {
     return getEdgeTypesFromString(state.diagram.diagramOptions.edgeType, edgeTypes);
   });
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
-
 
   // * on xyFlow instance ready
   useEffect(() => {

@@ -4,9 +4,10 @@ import ConnectionBreadcrumbs from "./ConnectionBreadcrumbs";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { Edge, Node } from '@xyflow/react';
 import { useAppSelector } from "../../hooks/state";
+import { selectNodes } from "../Diagram/store";
 
 const ComponentConnectionsList = (props: ComponentConnectionsListProps) => {
-    const nodes = useAppSelector(state => state.diagram.nodes) as Node[];
+    const nodes = useAppSelector(selectNodes);
 
     return (
         <Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
