@@ -21,7 +21,6 @@ export class MidTurndownCatalogComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
   isFormChange: boolean = false;
-  fullLoadLabel: string;
   //validationMessages: ValidationMessageMap;
   //warnings: PerformancePointWarnings;
 
@@ -50,12 +49,12 @@ export class MidTurndownCatalogComponent implements OnInit {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.fullLoad.power, compressor);
+        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.midTurndown.power, compressor);
         if (this.isFormChange == false) {
-          this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.fullLoad, compressor, 'midTurndown');
+          this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.midTurndown, compressor, 'midTurndown');
           //this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
-          this.updateForm(compressor.compressedAirPerformancePointsProperties.fullLoad);
+          this.updateForm(compressor.compressedAirPerformancePointsProperties.midTurndown);
           this.isFormChange = false;
         }
       }
