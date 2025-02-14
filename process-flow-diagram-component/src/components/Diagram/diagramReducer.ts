@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
-import { convertFlowDiagramData, CustomEdgeData, DiagramSettings, Handles, NodeCalculatedData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { createNewNode, getEdgeFromConnection } from './FlowUtils';
+import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, Handles, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { createNewNode, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
 import { CSSProperties } from 'react';
 import { getResetData } from './store';
+import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
 
 export interface DiagramState {
   nodes: Node[];
@@ -14,7 +15,7 @@ export interface DiagramState {
   isDrawerOpen: boolean,
   /** Selected node or edge */
   selectedDataId: string,
-  calculatedData: Record<string, NodeCalculatedData>,
+  calculatedData: DiagramCalculatedData,
   recentNodeColors: string[],
   recentEdgeColors: string[],
   diagramParentDimensions: ParentContainerDimensions,
@@ -46,6 +47,84 @@ const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType, p
   newNode.data.modifiedDate = (newNode.data.modifiedDate as Date).toISOString();
   state.nodes = state.nodes.concat(newNode);
 };
+
+const totalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{flowProperty: NodeFlowProperty, totalFlow: number}>) => {
+  const { flowProperty, totalFlow } = action.payload;
+  const updateNode: Node<ProcessFlowPart> = state.nodes.find((node: Node<ProcessFlowPart>) => state.selectedDataId === node.id) as Node<ProcessFlowPart>;
+  updateNode.data.userEnteredData[flowProperty] = totalFlow;
+}
+
+const sourceFlowValueChangeReducer = (state: DiagramState, action: PayloadAction<{sourceEdgeId: string, flowValue: number}>) => {
+  const { sourceEdgeId, flowValue } = action.payload;
+  const sourceEdge: Edge<CustomEdgeData> = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === sourceEdgeId) as Edge<CustomEdgeData>;
+  sourceEdge.data.flowValue = flowValue;
+
+  const sourceEdges = getNodeSourceEdges(state.edges, state.selectedDataId);
+  const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(sourceEdges, state.nodes, state.selectedDataId);
+  setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalSourceFlow', totalCalculatedSourceFlow);
+
+  // * set calculated totals for source nodes
+  // * alternatively, getNodeFlowTotals on ComponentFlowData rerender
+  const componentSourceNodeIds: string[] = sourceEdges.map((edge: Edge<CustomEdgeData>) => edge.source);
+  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
+    if (componentSourceNodeIds.includes(node.id)) {
+      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(sourceEdges, state.nodes, node.id);
+      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalDischargeFlow', totalCalculatedDischargeFlow);
+    }
+  });
+}
+
+
+const dischargeFlowValueChangeReducer = (state: DiagramState, action: PayloadAction<{dischargeEdgeId: string, flowValue: number}>) => {
+  const { dischargeEdgeId, flowValue } = action.payload;
+  const dischargeEdge: Edge<CustomEdgeData> = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === dischargeEdgeId) as Edge<CustomEdgeData>;
+  dischargeEdge.data.flowValue = flowValue;
+
+  const dischargeEdges = getNodeTargetEdges(state.edges, state.selectedDataId);
+  const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(dischargeEdges, state.nodes, state.selectedDataId);
+  setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalDischargeFlow', totalCalculatedDischargeFlow);
+
+  // todo find any connected discharges and update their total discharge flow for label display
+  // * set calculated totals for dicharge nodes
+  // * alternatively, getNodeFlowTotals on ComponentFlowData rerender
+  const componentDischargeNodeIds: string[] = dischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.target);
+  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
+    if (componentDischargeNodeIds.includes(node.id)) {
+      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(dischargeEdges, state.nodes, node.id);
+      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalSourceFlow', totalCalculatedSourceFlow);
+    }
+  });
+}
+
+const distributeTotalSourceFlowReducer = (state: DiagramState, action: PayloadAction<number>) => {
+  const totalFlowValue = action.payload;
+  const componentSourceEdges: Edge[] = getNodeSourceEdges(state.edges, state.selectedDataId);
+  const componentSourceEdgeIds = componentSourceEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
+  
+  let dividedTotalFlow = totalFlowValue / componentSourceEdges.length;
+  dividedTotalFlow = Number(formatDecimalPlaces(dividedTotalFlow, MAX_FLOW_DECIMALS));
+  state.edges = state.edges.map((edge: Edge<CustomEdgeData>) => {
+    if (componentSourceEdgeIds.includes(edge.id)) {
+      edge.data.flowValue = dividedTotalFlow;
+    }
+    return edge;
+  });
+}
+
+const distributeTotalDischargeFlowReducer = (state: DiagramState, action: PayloadAction<number>) => {
+  const totalFlowValue = action.payload;
+  const componentDischargeEdges: Edge[] = getNodeTargetEdges(state.edges, state.selectedDataId);
+  const componentDischargeEdgesIds = componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
+  
+  let dividedTotalFlow = totalFlowValue / componentDischargeEdges.length;
+  dividedTotalFlow = Number(formatDecimalPlaces(dividedTotalFlow, MAX_FLOW_DECIMALS));
+  state.edges = state.edges.map((edge: Edge<CustomEdgeData>) => {
+    if (componentDischargeEdgesIds.includes(edge.id)) {
+      edge.data.flowValue = dividedTotalFlow;
+    }
+    return edge;
+  });
+}
 
 const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) => {
   const updateNode = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId);
@@ -217,7 +296,7 @@ const toggleDrawerReducer = (state: DiagramState, action?: PayloadAction<string>
   state.selectedDataId = action.payload ? action.payload : undefined;
 };
 
-const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<Record<string, NodeCalculatedData>>) => {
+const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<DiagramCalculatedData>) => {
   console.log(current(state))
   state.calculatedData = action.payload;
 }
@@ -231,6 +310,8 @@ export const diagramSlice = createSlice({
     addNode: addNodeReducer,
     addNodes: addNodesReducer,
     updateNodeHandles: updateNodeHandlesReducer,
+    sourceFlowValueChange: sourceFlowValueChangeReducer,
+    totalFlowChange: totalFlowChangeReducer,
     deleteNode: deleteNodeReducer,
     setNodeName: setNodeNameReducer,
     setNodeDataProperty: setNodeDataPropertyReducer,
@@ -247,6 +328,9 @@ export const diagramSlice = createSlice({
     unitsOfMeasureChange: unitsOfMeasureChangeReducer,
     flowDecimalPrecisionChange: flowDecimalPrecisionChangeReducer,
     showMarkerEndArrows: showMarkerEndArrowsReducer,
+    distributeTotalSourceFlow: distributeTotalSourceFlowReducer,
+    dischargeFlowValueChange: dischargeFlowValueChangeReducer,
+    distributeTotalDischargeFlow: distributeTotalDischargeFlowReducer,
     toggleDrawer: toggleDrawerReducer,
     setDialogOpen: setDialogOpenReducer,
   }
@@ -262,6 +346,11 @@ export const {
   deleteNode,
   setNodeDataProperty,
   setNodeStyle,
+  totalFlowChange,
+  sourceFlowValueChange,
+  dischargeFlowValueChange,
+  distributeTotalSourceFlow,
+  distributeTotalDischargeFlow,
   updateNodeHandles,
   deleteEdge,
   defaultEdgeTypeChange,
@@ -282,3 +371,4 @@ export default diagramSlice.reducer
 export interface UserOptionsPayload<K extends keyof UserDiagramOptions> { optionsProp: K, updatedValue: UserDiagramOptions[K], updateDependencies?: OptionsDependentState[] };
 export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp: K, updatedValue: ProcessFlowPart[K] };
 export type OptionsDependentState = 'updateEdges' | 'updateEdgeProperties';
+export type NodeFlowProperty = keyof Pick<NodeFlowData, 'totalSourceFlow' | 'totalDischargeFlow'>;

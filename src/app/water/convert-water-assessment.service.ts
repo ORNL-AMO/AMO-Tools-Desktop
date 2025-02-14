@@ -4,7 +4,7 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
-import { convertFlowDiagramData } from '../../process-flow-types/shared-process-flow-types';
+import { convertFlowDiagramData, NodeFlowData } from '../../process-flow-types/shared-process-flow-types';
 import { MAX_FLOW_DECIMALS } from '../../process-flow-types/shared-process-flow-constants';
 
 @Injectable({
@@ -82,7 +82,7 @@ export class ConvertWaterAssessmentService {
     return intakeSources;
   }
 
-  convertUserEnteredFlowData(userEnteredData: {totalSourceFlow: number, totalDischargeFlow: number}, oldSettings: Settings, newSettings: Settings) {
+  convertUserEnteredFlowData(userEnteredData: NodeFlowData, oldSettings: Settings, newSettings: Settings) {
     if (userEnteredData.totalSourceFlow) {
       userEnteredData.totalSourceFlow = this.convertFlowValue(userEnteredData.totalSourceFlow, oldSettings, newSettings);
     }

@@ -15,7 +15,7 @@ export const MockWaterdiagram: Diagram =
     "waterDiagram": {
         "isValid": true,
         "flowDiagramData": {
-            "calculatedData": {},
+            "calculatedData": {nodes: {}},
             "recentEdgeColors": [],
             "recentNodeColors": [],
             "settings": {

@@ -1,11 +1,12 @@
 import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
 import { edgeTypes, nodeTypes } from "./FlowTypes";
-import { CustomEdgeData, getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, DiagramSettings, FlowDiagramData } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { CustomEdgeData, getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, DiagramSettings, FlowDiagramData, DiagramCalculatedData, NodeFlowData } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { DefaultEdgeOptions, EdgeTypes } from "@xyflow/react";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
 import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
+import { NodeFlowProperty } from "./diagramReducer";
 
 export const getRandomCoordinates = (height: number, width: number): { x: number, y: number } => {
   const screenWidth = window.innerWidth;
@@ -46,6 +47,15 @@ export const getNodeFlowTotals = (connectedEdges: Edge[], nodes: Node[], selecte
   return { totalCalculatedSourceFlow, totalCalculatedDischargeFlow };
 }
 
+export const setCalculatedNodeDataProperty = (calculatedData: DiagramCalculatedData, nodeId: string, flowProperty: NodeFlowProperty, value: number) => {
+  if (calculatedData.nodes[nodeId]) {
+    calculatedData.nodes[nodeId][flowProperty] = value;
+  } else {
+    calculatedData.nodes[nodeId] = {
+      [flowProperty]: value
+    }
+  }
+}
 /**
    * Mimick random drop point for nodes in the connected diagram parent (MEASUR assessment or other)
    * @param clientHeight parent height
@@ -57,38 +67,6 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
     y: screenPoint.y,
   });
   node.position = position;
-}
-
-export const setDroppedNode = (event, 
-  reactFlowInstance: ReactFlowInstance, 
-  setNodes: React.Dispatch<React.SetStateAction<Node[]>>) => {
-  event.preventDefault();
-  const nodeType = event.dataTransfer.getData('application/reactflow');
-  if (typeof nodeType === 'undefined' || !nodeType) {
-    return;
-  }
-  const position = reactFlowInstance.screenToFlowPosition({
-    x: event.clientX,
-    y: event.clientY,
-  });
-
-  let newNode: Node;
-  if (nodeType.includes('splitter-node')) {
-    newNode = {
-      id: getNewNodeId(),
-      type: nodeType,
-      position: position,
-      className: nodeType,
-      data: {}
-    };
-  } else {
-    const newProcessComponent = getNewProcessComponent(nodeType);
-    newNode = getNewNode(nodeType, newProcessComponent, position);
-  }
-  newNode.type = getAdaptedTypeString(newNode.type);
-  setNodes((nds) => {
-    return nds.concat(newNode)
-  });
 }
 
 
@@ -273,3 +251,19 @@ export const formatDataForMEASUR = (diagramData: FlowDiagramData): FlowDiagramDa
   diagramData.nodes = processedNodes;
   return diagramData;
 }
+
+export const getNodeSourceEdges = (edges: Edge[], nodeId: string) => edges.filter((edge) => edge.target === nodeId);
+
+export const getNodeTargetEdges = (edges: Edge[], nodeId: string) => edges.filter((edge) => edge.source === nodeId);
+
+export const getNodeTotalFlow = (flowProperty: NodeFlowProperty, calculatedNode: NodeFlowData, nodes: Node<ProcessFlowPart>[], nodeId?: string) => {
+   const selectedNode: Node<ProcessFlowPart> = nodes.find((node: Node<ProcessFlowPart>) => node.id === nodeId);
+   if (selectedNode.data.userEnteredData[flowProperty] !== undefined) {
+     return selectedNode.data.userEnteredData[flowProperty];
+   } else if (calculatedNode) {
+     return calculatedNode[flowProperty];
+   } else {
+     return 0;
+   }
+}
+
