@@ -29,6 +29,7 @@ export class TurndownCatalogComponent implements OnInit {
   showPowerCalc: boolean;
   selectedCompressor: CompressedAirItem;
   atmosphericPressure: number;
+  inventoryDataSub: Subscription;
 
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService,
     private compressedAirCatalogService: CompressedAirCatalogService,
@@ -37,10 +38,12 @@ export class TurndownCatalogComponent implements OnInit {
 
 
   ngOnInit(): void {
-    //let compressedAirAssessment: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    //TODO: CA Inventory get atmosphericPressure
-    this.atmosphericPressure = 14.7;
-
+    
+    this.inventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(inventoryData => {
+      if (inventoryData) {
+        this.atmosphericPressure = inventoryData.systemInformation.atmosphericPressure;
+      }
+    });
 
     this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
       this.settings = val;
@@ -64,6 +67,7 @@ export class TurndownCatalogComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.inventoryDataSub.unsubscribe();
   }
 
   save() {

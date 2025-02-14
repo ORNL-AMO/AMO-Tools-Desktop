@@ -4,6 +4,12 @@ import { InventoryItem } from "../shared/models/inventory/inventory";
 
 export const MockCompressedAirInventory: InventoryItem = {
     "compressedAirInventoryData": {
+        "systemInformation": {
+            "systemElevation": null,
+            "atmosphericPressure": 14.7,
+            "atmosphericPressureKnown": true,
+            "totalAirStorage": 3000,
+        },
         "departments": [
             {
                 "name": "QC Dept",
