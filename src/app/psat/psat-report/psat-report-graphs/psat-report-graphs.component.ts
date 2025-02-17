@@ -106,14 +106,14 @@ export class PsatReportGraphsComponent implements OnInit {
 
   getGraphData(results: PsatOutputs): PsatGraphData {
     let motorShaftPower: number = results.motor_shaft_power;
-    let pumpShaftPower: number = results.pump_shaft_power;
+    let moverShaftPower: number = results.mover_shaft_power;
     if (this.settings.powerMeasurement === 'hp') {
       motorShaftPower = this.convertUnitsService.value(results.motor_shaft_power).from('hp').to('kW');
-      pumpShaftPower = this.convertUnitsService.value(results.pump_shaft_power).from("hp").to('kW');
+      moverShaftPower = this.convertUnitsService.value(results.mover_shaft_power).from("hp").to('kW');
     }
     let energyInput = results.motor_power;
     let motorLoss = results.motor_power * (1 - (results.motor_efficiency / 100));
-    let driveLoss = motorShaftPower - pumpShaftPower;
+    let driveLoss = motorShaftPower - moverShaftPower;
     let pumpLoss = (results.motor_power - motorLoss - driveLoss) * (1 - (results.pump_efficiency / 100));
     let usefulOutput = results.motor_power - (motorLoss + driveLoss + pumpLoss);
     return { energyInput: energyInput, motorLoss: motorLoss, pumpLoss: pumpLoss, driveLoss: driveLoss, usefulOutput: usefulOutput };

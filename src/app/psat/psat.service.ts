@@ -65,7 +65,7 @@ export class PsatService {
     if (settings.powerMeasurement != 'hp') {
       psatOutputs.motor_rated_power = this.convertUnitsService.value(psatOutputs.motor_rated_power).from('hp').to(settings.powerMeasurement);
       psatOutputs.motor_shaft_power = this.convertUnitsService.value(psatOutputs.motor_shaft_power).from('hp').to(settings.powerMeasurement);
-      psatOutputs.pump_shaft_power = this.convertUnitsService.value(psatOutputs.pump_shaft_power).from('hp').to(settings.powerMeasurement);
+      psatOutputs.mover_shaft_power = this.convertUnitsService.value(psatOutputs.mover_shaft_power).from('hp').to(settings.powerMeasurement);
     }
     if (settings.currency !== "$") {
       psatOutputs.annual_cost = this.convertUnitsService.value(psatOutputs.annual_cost).from('$').to(settings.currency);
@@ -190,7 +190,7 @@ export class PsatService {
       pump_efficiency: 0,
       motor_rated_power: 0,
       motor_shaft_power: 0,
-      pump_shaft_power: 0,
+      mover_shaft_power: 0,
       motor_efficiency: 0,
       motor_power_factor: 0,
       motor_current: 0,
@@ -210,7 +210,7 @@ export class PsatService {
       pump_efficiency: this.roundVal(psatResults.pump_efficiency, 2),
       motor_rated_power: this.roundVal(psatResults.motor_rated_power, 2),
       motor_shaft_power: this.roundVal(psatResults.motor_shaft_power, 2),
-      pump_shaft_power: this.roundVal(psatResults.pump_shaft_power, 2),
+      mover_shaft_power: this.roundVal(psatResults.mover_shaft_power, 2),
       motor_efficiency: this.roundVal(psatResults.motor_efficiency, 2),
       motor_power_factor: this.roundVal(psatResults.motor_power_factor, 2),
       motor_current: this.roundVal(psatResults.motor_current, 2),
