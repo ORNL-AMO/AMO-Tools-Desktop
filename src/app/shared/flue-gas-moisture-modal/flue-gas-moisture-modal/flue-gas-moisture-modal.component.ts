@@ -1,6 +1,6 @@
-import { Component, Input, Output, OnInit, EventEmitter, ViewChild, HostListener, ElementRef } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Settings } from '../../models/settings';
-import { FlueGasCompareService } from '../../../phast/losses/flue-gas-losses/flue-gas-compare.service';
+import { FlueGasMoistureModalService } from '../flue-gas-moisture-modal.service';
 
 
 @Component({
@@ -15,12 +15,20 @@ import { FlueGasCompareService } from '../../../phast/losses/flue-gas-losses/flu
     @Output('hideModal')
     hideModal = new EventEmitter<number>();
 
-    constructor(private flueGasCompareService: FlueGasCompareService) {
+    constructor(private flueGasMoistureModalService: FlueGasMoistureModalService) {
     }
-    
-    ngOnInit() {
-      this.settings = this.flueGasCompareService.setFanDefaultUnits(this.settings);
+
+  ngOnInit() {
+    if (this.settings.unitsOfMeasure == 'Imperial') {
+      this.settings.densityMeasurement = 'lbscf';
+      this.settings.fanPressureMeasurement = 'inH2o';
+      this.settings.fanBarometricPressure = 'inHg';
+    } else {
+      this.settings.densityMeasurement = 'kgNm3';
+      this.settings.fanPressureMeasurement = 'Pa';
+      this.settings.fanBarometricPressure = 'Pa';
     }
+  }
 
 
     hideMoistureModal(event: number) {

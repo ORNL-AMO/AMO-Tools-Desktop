@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FlueGasCompareService } from '../../../../phast/losses/flue-gas-losses/flue-gas-compare.service';
+import { FlueGasMoistureModalService } from '../../flue-gas-moisture-modal.service';
 
 @Component({
   selector: 'app-flue-gas-moisture-help',
@@ -11,12 +11,12 @@ export class FlueGasMoistureHelpComponent implements OnInit {
   @Input()
   currentField: string;
   fieldSubscription: Subscription;
-  constructor(private flueGasCompareService: FlueGasCompareService) {
+  constructor(private flueGasMoistureModalService: FlueGasMoistureModalService) {
     
    }
 
   ngOnInit() {
-    this.fieldSubscription = this.flueGasCompareService.currentField.subscribe(val => {
+    this.fieldSubscription = this.flueGasMoistureModalService.currentField.subscribe(val => {
       this.currentField = val;
     });
   }

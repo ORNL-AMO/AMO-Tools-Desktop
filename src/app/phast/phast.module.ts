@@ -42,6 +42,7 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
+import { FlueGasMoistureModalModule } from '../shared/flue-gas-moisture-modal/flue-gas-moisture-modal.module';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module'
     UnitConverterModule,
     PhastSankeyModule,
     UpdateUnitsModalModule,    
-    ImportExportModule
+    ImportExportModule,
+    FlueGasMoistureModalModule
   ],
   providers: [
     PhastService,

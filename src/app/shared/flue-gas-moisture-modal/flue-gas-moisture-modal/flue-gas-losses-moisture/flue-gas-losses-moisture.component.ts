@@ -4,7 +4,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { BaseGasDensity, PsychrometricResults } from '../../../models/fans';
 import { FsatFluidService, GasDensityValidators } from '../../../../fsat/fsat-fluid/fsat-fluid.service';
 import { Settings } from '../../../models/settings';
-import { FlueGasCompareService } from '../../../../phast/losses/flue-gas-losses/flue-gas-compare.service';
+import { FlueGasMoistureModalService } from '../../flue-gas-moisture-modal.service';
 
 @Component({
   selector: 'app-flue-gas-losses-moisture',
@@ -26,16 +26,11 @@ export class FlueGasLossesMoistureComponent implements OnInit {
     { display: 'Gas Dew Point', value: 'dewPoint' },
   ];
 
-  gasTypes: Array<{ display: string, value: string }> = [
-    { display: 'Air', value: 'AIR' },
-    { display: 'Other Gas', value: 'OTHER' }
-  ];
-
   moistureInCombustionAir: number;
   constructor(
     private fsatService: FsatService,
     private fsatFluidService: FsatFluidService,
-    private flueGasCompareService: FlueGasCompareService,) { }
+    private flueGasMoistureModalService: FlueGasMoistureModalService) { }
 
   ngOnInit() {
     this.init();
@@ -43,23 +38,21 @@ export class FlueGasLossesMoistureComponent implements OnInit {
   }
 
   init() {
-    let baseGasDensityDefaults: BaseGasDensity = this.flueGasCompareService.baseGasDensity;
+    let baseGasDensityDefaults: BaseGasDensity = this.flueGasMoistureModalService.baseGasDensity;
     this.gasDensityForm = this.fsatFluidService.getGasDensityFormFromObj(baseGasDensityDefaults, this.settings);
   }
 
   disableForm() {
-    this.gasDensityForm.controls.gasType.disable();
     this.gasDensityForm.controls.inputType.disable();
   }
 
   enableForm() {
-    this.gasDensityForm.controls.gasType.enable();
     this.gasDensityForm.controls.inputType.enable();
   }
 
   save() {
     let baseGasDensity: BaseGasDensity = this.fsatFluidService.getGasDensityObjFromForm(this.gasDensityForm);
-    this.flueGasCompareService.baseGasDensity = baseGasDensity;
+    this.flueGasMoistureModalService.baseGasDensity = baseGasDensity;
     this.updateFormValidators(baseGasDensity);
   }
 
@@ -76,18 +69,7 @@ export class FlueGasLossesMoistureComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.flueGasCompareService.currentField.next(str);
-  }
-
-  changeGasType() {
-    if (this.gasDensityForm.controls.gasType.value === 'OTHER') {
-      this.gasDensityForm.patchValue({
-        inputType: 'custom'
-      });
-      this.changeMethod();
-    } else {
-      this.getResults();
-    }
+    this.flueGasMoistureModalService.currentField.next(str);
   }
 
   getResults() {
@@ -117,7 +99,7 @@ export class FlueGasLossesMoistureComponent implements OnInit {
       psychrometricResults.barometricPressure = this.gasDensityForm.controls.barometricPressure.value;
     }
 
-    this.flueGasCompareService.setPsychrometricResults(psychrometricResults);
+    this.flueGasMoistureModalService.psychrometricResults.next(psychrometricResults);
     if (psychrometricResults) {
       this.moistureInCombustionAir = psychrometricResults.humidityRatio * 100;
     } else {
