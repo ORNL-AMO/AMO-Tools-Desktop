@@ -44,16 +44,6 @@
       </span>
     </div>
 
-    <div class="form-group d-none">
-      <label for="gasType">Gas Type</label>
-      <div class="input-group">
-        <select class="form-control" name="gasType" formControlName="gasType" id="gasType" (change)="changeGasType()"
-          (focus)="focusField('gasType')" disabled>
-          <option *ngFor="let gas of gasTypes" [ngValue]="gas.value">{{gas.display}}</option>
-        </select>
-      </div>
-    </div>
-
     <div *ngIf="gasDensityForm.controls.gasType.value != 'OTHER'">
 
       <div class="form-group">

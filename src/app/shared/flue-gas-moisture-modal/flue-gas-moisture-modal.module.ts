@@ -9,7 +9,8 @@ import { FlueGasMoistureResultsComponent } from './flue-gas-moisture-modal/flue-
 import { FlueGasMoistureHelpComponent } from './flue-gas-moisture-modal/flue-gas-moisture-help/flue-gas-moisture-help.component';
 import { FlueGasMoisturePanelComponent } from './flue-gas-moisture-modal/flue-gas-moisture-panel/flue-gas-moisture-panel.component';
 import { FlueGasMoistureModalComponent } from './flue-gas-moisture-modal/flue-gas-moisture-modal.component';
-
+import { LossesModule } from '../../phast/losses/losses.module';
+import { FlueGasMoistureModalService } from './flue-gas-moisture-modal.service';
 
 
 @NgModule({
@@ -19,7 +20,7 @@ import { FlueGasMoistureModalComponent } from './flue-gas-moisture-modal/flue-ga
       ReactiveFormsModule,
       SuiteDbModule,
       ModalModule,
-      SharedPipesModule
+      SharedPipesModule,
     ],
     declarations: [
       FlueGasLossesMoistureComponent,
@@ -29,7 +30,7 @@ import { FlueGasMoistureModalComponent } from './flue-gas-moisture-modal/flue-ga
       FlueGasMoistureModalComponent,
     ],
     providers: [
-      FlueGasCompareService,
+      FlueGasMoistureModalService
     ],
     exports: [
       FlueGasLossesMoistureComponent,
