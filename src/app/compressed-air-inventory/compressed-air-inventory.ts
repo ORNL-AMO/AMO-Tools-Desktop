@@ -3,12 +3,20 @@ import { AssessmentType, ConnectedFromState, InventoryType } from "../shared/con
 
 export interface CompressedAirInventoryData {
   co2SavingsData?: Co2SavingsData,
+  systemInformation: SystemInformation,
   departments: Array<CompressedAirInventoryDepartment>,
   displayOptions: CompressedAirPropertyDisplayOptions,
   hasConnectedInventoryItems?: boolean,
   hasConnectedPsat?: boolean,
   isValid?: boolean,
   existingDataUnits?: string
+}
+
+export interface SystemInformation {
+  systemElevation: number,
+  atmosphericPressure: number,
+  atmosphericPressureKnown: boolean,
+  totalAirStorage: number,
 }
 
 export interface CompressedAirInventoryDepartment {
@@ -38,7 +46,7 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   compressedAirMotor: CompressedAirMotorProperties,
   compressedAirControlsProperties: CompressedAirControlsProperties,
   compressedAirDesignDetailsProperties: CompressedAirDesignDetailsProperties,
-  compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties,  
+  compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties,
   centrifugalSpecifics: CentrifugalSpecifics,
   validCompressedAir?: ValidCompressedAir
 }

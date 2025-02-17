@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { CompressedAirInventoryData, CompressedAirInventoryDepartment, CompressedAirItem, CompressedAirPropertyDisplayOptions, ValidCompressedAir } from './compressed-air-inventory';
-import { UntypedFormGroup } from '@angular/forms';
+import { CompressedAirInventoryData, CompressedAirInventoryDepartment, CompressedAirItem, CompressedAirPropertyDisplayOptions, SystemInformation, ValidCompressedAir } from './compressed-air-inventory';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { GreaterThanValidator } from '../shared/validators/greater-than';
 
 @Injectable()
 export class CompressedAirInventoryService {
@@ -19,7 +21,7 @@ export class CompressedAirInventoryService {
   showExportModal: BehaviorSubject<boolean>;
   currentInventoryId: number;
 
-  constructor() {
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
     let inventoryData: CompressedAirInventoryData; //= this.initInventoryData();
@@ -42,9 +44,20 @@ export class CompressedAirInventoryService {
   initInventoryData(): CompressedAirInventoryData {
     let initialDepartment: CompressedAirInventoryDepartment = this.getNewDepartment(1);
     let displayOptions: CompressedAirPropertyDisplayOptions = this.getDefaultDisplayOptions();
+    let systemInformation: SystemInformation = this.getSystemInformation();
     return {
+      systemInformation: systemInformation,
       departments: [initialDepartment],
       displayOptions: displayOptions
+    }
+  }
+
+  getSystemInformation(): SystemInformation {
+    return {
+      systemElevation: null,
+      atmosphericPressure: 14.7,
+      atmosphericPressureKnown: true,
+      totalAirStorage: 3000,
     }
   }
 
@@ -279,6 +292,30 @@ export class CompressedAirInventoryService {
     this.compressedAirInventoryData.next(compressedAirInventoryData);
   }
 
+  getFormFromObj(obj: SystemInformation, settings: Settings): UntypedFormGroup {
+    let maxAtmosphericPressure: number = 16;
+    if (settings && settings.unitsOfMeasure == 'Metric') {
+      maxAtmosphericPressure = this.convertUnitsService.value(maxAtmosphericPressure).from('psia').to('kPaa');
+      maxAtmosphericPressure = this.convertUnitsService.roundVal(maxAtmosphericPressure, 2);
+    }
+    let form: UntypedFormGroup = this.formBuilder.group({
+      systemElevation: [obj.systemElevation, [Validators.min(0), Validators.max(29000)]],
+      totalAirStorage: [obj.totalAirStorage, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      atmosphericPressure: [obj.atmosphericPressure, [Validators.required, Validators.min(0), Validators.max(maxAtmosphericPressure)]],
+      atmosphericPressureKnown: [obj.atmosphericPressureKnown],
+
+    });
+
+    return form;
+  }
+
+  updateObjFromForm(form: UntypedFormGroup, systemInformation: SystemInformation): SystemInformation {
+    systemInformation.systemElevation = form.controls.systemElevation.value;
+    systemInformation.totalAirStorage = form.controls.totalAirStorage.value;
+    systemInformation.atmosphericPressure = form.controls.atmosphericPressure.value;
+    systemInformation.atmosphericPressureKnown = form.controls.atmosphericPressureKnown.value;
+    return systemInformation;
+  }
 
 
 
