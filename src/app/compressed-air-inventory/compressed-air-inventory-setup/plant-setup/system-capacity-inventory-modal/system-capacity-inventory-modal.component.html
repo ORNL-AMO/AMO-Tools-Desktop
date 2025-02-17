@@ -1,0 +1,16 @@
+<div class="modal-content">
+    <div class="modal-header p-2">
+        <button class="close" aria-label="Close" (click)="closeSystemCapacityModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-0">
+        <app-system-capacity [inModal]="true" (emitTotalCapacity)="setSystemCapacity($event)" [settings]="settings">
+        </app-system-capacity>
+    </div>
+    <div class="modal-footer p-2">
+        <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="closeSystemCapacityModal()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" (click)="saveSystemCapacity()"
+            [disabled]="!totalCapacityOfCompressedAirSystem">Save</button>
+    </div>
+</div>

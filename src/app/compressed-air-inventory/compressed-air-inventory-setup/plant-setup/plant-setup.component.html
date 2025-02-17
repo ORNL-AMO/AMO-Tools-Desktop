@@ -59,10 +59,11 @@
         <!--atmospheric Pressure-->
         <div class="form-group" [ngClass]="{'invalid': plantSetupForm.controls.atmosphericPressure.invalid}">
             <label for="atmosphericPressure">Atmospheric Pressure
-                <a *ngIf="plantSetupForm.controls.atmosphericPressureKnown.value == false" class="form-text small click-link"
-                    (click)="toggleAtmosphericPressureKnown()">Pressure Known</a>
-                <a *ngIf="plantSetupForm.controls.atmosphericPressureKnown.value == true" class="form-text small click-link"
-                    (click)="toggleAtmosphericPressureKnown()">Calculate from Elevation</a>
+                <a *ngIf="plantSetupForm.controls.atmosphericPressureKnown.value == false"
+                    class="form-text small click-link" (click)="toggleAtmosphericPressureKnown()">Pressure Known</a>
+                <a *ngIf="plantSetupForm.controls.atmosphericPressureKnown.value == true"
+                    class="form-text small click-link" (click)="toggleAtmosphericPressureKnown()">Calculate from
+                    Elevation</a>
             </label>
             <div class="input-group" *ngIf="plantSetupForm.controls.atmosphericPressureKnown.value == true">
                 <input name="atmosphericPressure" type="number" step="any" class="form-control" id="atmosphericPressure"
@@ -107,7 +108,8 @@
             <span class="alert-danger pull-right small"
                 *ngIf="plantSetupForm.controls.totalAirStorage.invalid && !plantSetupForm.controls.totalAirStorage.pristine">
                 <span *ngIf="plantSetupForm.controls.totalAirStorage.errors.required">Value Required</span>
-                <span *ngIf="plantSetupForm.controls.totalAirStorage.errors.greaterThan !== undefined">Value must be greater than
+                <span *ngIf="plantSetupForm.controls.totalAirStorage.errors.greaterThan !== undefined">Value must be
+                    greater than
                     0
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>.
@@ -119,11 +121,10 @@
 
 </div>
 
-<!-- TODO: CA Inventory  -->
-<!-- <div bsModal #systemCapacityModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+<div bsModal #systemCapacityModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
     aria-labelledby="systemCapacityModalLabel" aria-hidden="true" [config]="{backdrop: 'fixed'}">
     <div class="modal-dialog modal-lg">
-        <app-system-capacity-modal *ngIf="showSystemCapacityModal" [settings]="settings"
-            (closeModal)="closeSystemCapacityModal($event)"></app-system-capacity-modal>
+        <app-system-capacity-inventory-modal *ngIf="showSystemCapacityModal" [settings]="settings"
+            (closeModal)="closeSystemCapacityModal($event)"></app-system-capacity-inventory-modal>
     </div>
-</div> -->
+</div>

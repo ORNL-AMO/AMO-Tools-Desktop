@@ -185,23 +185,21 @@ export class PlantSetupComponent implements OnInit {
   }
 
   openSystemCapacityModal() {
-    //TODO: CA Inventory 
-    // this.showSystemCapacityModal = true;
-    // this.systemCapacityModal.show();
-    // this.compressedAirInventoryService.modalOpen.next(true);
+    this.showSystemCapacityModal = true;
+    this.systemCapacityModal.show();
+    this.compressedAirInventoryService.modalOpen.next(true);
   }
 
   closeSystemCapacityModal(totalCapacityOfCompressedAirSystem?: number) {
-    //TODO: CA Inventory 
-    // if (totalCapacityOfCompressedAirSystem) {
-    //   this.plantSetupForm.patchValue({
-    //     totalAirStorage: totalCapacityOfCompressedAirSystem
-    //   });
-    // }
-    // this.systemCapacityModal.hide();
-    // this.compressedAirInventoryService.modalOpen.next(false);
-    // this.showSystemCapacityModal = false;
-    // this.save();
+    if (totalCapacityOfCompressedAirSystem) {
+      this.plantSetupForm.patchValue({
+        totalAirStorage: totalCapacityOfCompressedAirSystem
+      });
+    }
+    this.systemCapacityModal.hide();
+    this.compressedAirInventoryService.modalOpen.next(false);
+    this.showSystemCapacityModal = false;
+    this.save();
   }
 
 

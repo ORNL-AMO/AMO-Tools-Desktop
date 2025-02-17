@@ -13,6 +13,9 @@ import { DepartmentSetupComponent } from './department-setup/department-setup.co
 import { DepartmentCatalogTableComponent } from './department-catalog-table/department-catalog-table.component';
 import { CompressedAirPropertiesModule } from './compressed-air-properties/compressed-air-properties.module';
 import { CompressedAirCatalogModule } from './compressed-air-catalog/compressed-air-catalog.module';
+import { SystemCapacityInventoryModalComponent } from './plant-setup/system-capacity-inventory-modal/system-capacity-inventory-modal.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { SystemCapacityModule } from '../../calculator/compressed-air/system-capacity/system-capacity.module';
 
 
 
@@ -20,13 +23,15 @@ import { CompressedAirCatalogModule } from './compressed-air-catalog/compressed-
   declarations: [
     CompressedAirInventorySetupComponent,
     PlantSetupComponent,
-    DepartmentSetupComponent, 
-    DepartmentCatalogTableComponent
+    DepartmentSetupComponent,
+    DepartmentCatalogTableComponent,
+    SystemCapacityInventoryModalComponent
   ],
   imports: [
     CommonModule,
     SettingsModule,
     FormsModule,
+    ModalModule,
     ReactiveFormsModule,
     SharedPipesModule,
     AssessmentCo2SavingsModule,
@@ -34,7 +39,8 @@ import { CompressedAirCatalogModule } from './compressed-air-catalog/compressed-
     ConnectedInventoryModule,
     HelpPanelModule,
     CompressedAirPropertiesModule,
-    CompressedAirCatalogModule
+    CompressedAirCatalogModule,
+    SystemCapacityModule
   ],
   exports: [
     CompressedAirInventorySetupComponent
