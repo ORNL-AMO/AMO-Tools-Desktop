@@ -48,6 +48,7 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   compressedAirDesignDetailsProperties: CompressedAirDesignDetailsProperties,
   compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties,
   centrifugalSpecifics: CentrifugalSpecifics,
+  fieldMeasurements: FieldMeasurements;
   validCompressedAir?: ValidCompressedAir
 }
 
@@ -65,7 +66,8 @@ export interface CompressedAirPropertyDisplayOptions {
   compressedAirMotorPropertiesOptions: CompressedAirMotorPropertiesOptions,
   compressedAirControlsPropertiesOptions: CompressedAirControlsPropertiesOptions,
   compressedAirDesignDetailsPropertiesOptions: CompressedAirDesignDetailsPropertiesOptions,
-  compressedAirPerformancePointsPropertiesOptions: CompressedAirPerformancePointsPropertiesOptions
+  compressedAirPerformancePointsPropertiesOptions: CompressedAirPerformancePointsPropertiesOptions,
+  fieldMeasurementsOptions: FieldMeasurementsOptions,
 }
 
 export interface ConnectedItem {
@@ -88,6 +90,16 @@ export interface CentrifugalSpecifics {
   maxFullLoadCapacity: number,
   minFullLoadPressure: number
   minFullLoadCapacity: number
+}
+
+export interface FieldMeasurements {
+  operatingHours: number,
+
+}
+
+export interface FieldMeasurementsOptions {
+  displayFieldMeasurements: boolean,
+  operatingHours: boolean,
 }
 
 
