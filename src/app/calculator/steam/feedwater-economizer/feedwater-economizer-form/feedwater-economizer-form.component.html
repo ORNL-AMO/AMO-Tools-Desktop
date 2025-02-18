@@ -35,7 +35,7 @@
     <label class="small" for="higherHeatingVal">Higher Heating Value</label>
     <div class="input-group">
       <input name="higherHeatingVal" type="number" step="10" class="form-control" formControlName="higherHeatingVal"
-        id="higherHeatingVal" onfocus="this.select();" (input)="calculate()" (focus)="focusField('fuelHV')">
+        id="higherHeatingVal" onfocus="this.select();" (input)="calculate()" (focus)="focusField('higherHeatingVal')">
       <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/scf</span>
       <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/Nm<sup>3</sup>
       </span>
