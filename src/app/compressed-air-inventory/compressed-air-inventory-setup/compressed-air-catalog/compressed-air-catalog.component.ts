@@ -94,7 +94,7 @@ export class CompressedAirCatalogComponent implements OnInit {
     this.compressedAirInventoryService.focusedField.next(str);
   }
 
-  openDeletePumpModal() {
+  openDeleteCompressedAirModal() {
     let selectedCompressedAirItem: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     this.confirmDeleteCompressedAirInventoryData = {
       modalTitle: 'Delete Compressed Air Inventory Item',

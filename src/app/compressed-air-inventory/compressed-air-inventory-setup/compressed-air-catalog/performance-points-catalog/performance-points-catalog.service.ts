@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirItem, PerformancePoint } from '../../../compressed-air-inventory';
+import { CompressedAirItem, CompressedAirPerformancePointsProperties, PerformancePoint } from '../../../compressed-air-inventory';
 import { SystemInformation } from '../../../../shared/models/compressed-air-assessment';
 import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
@@ -351,7 +351,25 @@ export class PerformancePointsCatalogService {
     let maxFullFlowPower: number = p1 * (Math.pow(p2, polytropicExponent) - 1) / p3 * TotPackageInputPower;
     return maxFullFlowPower;
   }
-  
+
+  getCompressorPressureMinMax(controlType: number, performancePoints: CompressedAirPerformancePointsProperties): { min: number, max: number } {
+    let min: number = performancePoints.fullLoad.dischargePressure || 0;
+    let max: number = 0;
+
+    if (controlType == 2 || controlType == 3 || controlType == 8 || controlType == 10) {
+      max = performancePoints.unloadPoint.dischargePressure;
+    } else if (controlType == 1) {
+      max = performancePoints.noLoad.dischargePressure;
+    } else if (controlType == 6 || controlType == 4 || controlType == 5) {
+      max = performancePoints.maxFullFlow.dischargePressure;
+    } else if (controlType == 7 || controlType == 9) {
+      max = performancePoints.blowoff.dischargePressure;
+    } else if (controlType == 11) {
+      max = performancePoints.turndown.dischargePressure;
+    }
+    return { min: min, max: max };
+  }
+
 
 
 

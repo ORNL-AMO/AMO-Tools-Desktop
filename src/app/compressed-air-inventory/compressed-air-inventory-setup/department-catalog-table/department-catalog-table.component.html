@@ -1,1 +1,84 @@
-<p>department-catalog-table works!</p>
+<div class="p-2">
+    <table class="table table-sm table-striped table-hover" *ngIf="selectedCompressedAirDepartment">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Op. Hours (hrs/yr)
+                </th>
+                <th>
+                    Compressor Type
+                </th>
+                <th>
+                    Control Type
+                </th>
+                <th>
+                    Pressure Range
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let tableDataItem of tableDataItems"
+                [ngClass]="{'selected-item':tableDataItem.compressedAirItem.id == selectedCompressedAirItem.id}">
+                <!-- <tr *ngFor="let tableDataItem of tableDataItems" [ngClass]="{'selected-item':tableDataItem.compressedAirItem.id == selectedCompressedAirItem.id,
+                'invalid-item': !tableDataItem.compressedAirItem.validCompressedAir.isValid}"> -->
+                <td>
+                    <span *ngIf="tableDataItem.compressedAirItem.id == selectedCompressedAirItem.id"
+                        class="fa fa-chevron-right"></span>
+                    <a class="click-link"
+                        (click)="selectCompressedAir(tableDataItem.compressedAirItem)">{{tableDataItem.name}}</a>
+                </td>
+                <td>
+                    <span *ngIf="tableDataItem.operatingHours">
+                        {{tableDataItem.operatingHours}}
+                    </span>
+                    <span *ngIf="!tableDataItem.operatingHours">
+                        &mdash;
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="tableDataItem.compressorType">
+                        {{tableDataItem.compressorType}}
+                    </span>
+                    <span *ngIf="!tableDataItem.compressorType">
+                        &mdash;
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="tableDataItem.controlType">
+                        {{tableDataItem.controlType}}
+                    </span>
+                    <span *ngIf="!tableDataItem.controlType">
+                        &mdash;
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="tableDataItem.pressureRange">
+                        {{tableDataItem.pressureRange}}
+                    </span>
+                    <span *ngIf="!tableDataItem.pressureRange">
+                        &mdash;
+                    </span>
+                </td>
+                <td>
+                    <a class="fa fa-trash danger" [ngClass]="{'disabled': tableDataItems.length <= 1}"
+                        (click)="openConfirmDeleteModal(tableDataItem.compressedAirItem)"></a>
+
+                </td>
+                <td>
+                    <a class="fa fa-copy" (click)="createCopy(tableDataItem.compressedAirItem)"></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="p-2 w-100 text-center">
+    <a class="click-link" (click)="addNewCompressor()">+Add New </a>
+</div>
+
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteCompressedAirInventoryData"
+    (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>
