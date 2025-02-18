@@ -214,6 +214,7 @@
     </span>
     <span class="alert-warning pull-right small"
       *ngIf="warnings.moistureInCombustionAir !== null">{{warnings.moistureInCombustionAir}}</span>
+      <a id="moistureCalc" class="form-text small click-link" (click)="showMoistureModal()">Calculate</a>
 
   </div>
 
@@ -368,3 +369,13 @@
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
 </app-operating-hours-modal>
+
+<div bsModal #moistureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="moistureModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg flue-gas-modal">
+    <div class="modal-content h-100">
+      <app-flue-gas-moisture-modal class="h-100" *ngIf="showMoisture" (closeModal)="hideMoistureModal($event)"
+        (hideModal)="hideMoistureModal($event)" [settings]="settings"></app-flue-gas-moisture-modal>
+    </div>
+  </div>
+</div>
