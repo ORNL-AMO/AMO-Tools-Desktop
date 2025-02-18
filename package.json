@@ -8,8 +8,8 @@
   "repository": "https://github.com/ORNL-AMO/AMO-Tools-Desktop.git",
   "angular-cli": {},
   "engines": {
-    "node": "20.11.1",
-    "npm": "10.2.4"
+    "node": "22.14.0",
+    "npm": "10.9.2"
   },
   "scripts": {
     "start": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng serve",
