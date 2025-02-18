@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Settings } from '../../../../shared/models/settings';
+import { Settings } from '../../../models/settings';
 
 @Component({
     selector: 'app-flue-gas-moisture-panel',
