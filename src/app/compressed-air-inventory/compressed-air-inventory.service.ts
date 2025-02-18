@@ -128,7 +128,7 @@ export class CompressedAirInventoryService {
         totalPackageInputPower: undefined
       },
       fieldMeasurements: {
-          operatingHours: 8760,
+        yearlyOperatingHours: 8760,
       },
       compressedAirMotor: {
         motorPower: undefined,
@@ -231,7 +231,7 @@ export class CompressedAirInventoryService {
       },
       fieldMeasurementsOptions: {
         displayFieldMeasurements: true,
-        operatingHours: true,
+        yearlyOperatingHours: true,
       },
       compressedAirMotorPropertiesOptions: {
         displayCompressedAirMotorProperties: true,

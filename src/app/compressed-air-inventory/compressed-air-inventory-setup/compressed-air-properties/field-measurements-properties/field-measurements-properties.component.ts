@@ -30,13 +30,13 @@ export class FieldMeasurementsPropertiesComponent implements OnInit {
     }
   
     setAll() {
-      this.fieldMeasurementsOptions.operatingHours = this.fieldMeasurementsOptions.displayFieldMeasurements;
+      this.fieldMeasurementsOptions.yearlyOperatingHours = this.fieldMeasurementsOptions.displayFieldMeasurements;
       this.save();
     }
   
     checkDisplayFields() {
       this.fieldMeasurementsOptions.displayFieldMeasurements = (
-        this.fieldMeasurementsOptions.operatingHours 
+        this.fieldMeasurementsOptions.yearlyOperatingHours 
       );
     }
     focusField(str: string){

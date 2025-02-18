@@ -14,17 +14,11 @@ export class CompressedAirCatalogService {
   }
 
   getUpdatedSelectedCompressedAirItem(): CompressedAirItem {
-      let compressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue()
-      let selectedCompressedAirItem = this.selectedCompressedAirItem.getValue();
-      let department = compressedAirInventoryData.departments.find(department => { return department.id == selectedCompressedAirItem.departmentId });
-      selectedCompressedAirItem = department.catalog.find(compressedAirItem => { return compressedAirItem.id == selectedCompressedAirItem.id });
-      return selectedCompressedAirItem;
-    }
-  
-
-
-
-
-
+    let compressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue()
+    let selectedCompressedAirItem = this.selectedCompressedAirItem.getValue();
+    let department = compressedAirInventoryData.departments.find(department => { return department.id == selectedCompressedAirItem.departmentId });
+    selectedCompressedAirItem = department.catalog.find(compressedAirItem => { return compressedAirItem.id == selectedCompressedAirItem.id });
+    return selectedCompressedAirItem;
+  }
 
 }

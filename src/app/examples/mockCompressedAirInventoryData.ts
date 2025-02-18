@@ -37,7 +37,7 @@ export const MockCompressedAirInventory: InventoryItem = {
                             "totalPackageInputPower": 290.1
                         },
                         "fieldMeasurements": {
-                            "operatingHours": 8760,
+                            "yearlyOperatingHours": 8760,
                         },
                         "compressedAirMotor": {
                             "motorPower": 350,
@@ -132,7 +132,7 @@ export const MockCompressedAirInventory: InventoryItem = {
             },
             fieldMeasurementsOptions: {
                 displayFieldMeasurements: true,
-                operatingHours: true,
+                yearlyOperatingHours: true,
             },
             compressedAirMotorPropertiesOptions: {
                 displayCompressedAirMotorProperties: true,

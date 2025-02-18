@@ -1,5 +1,6 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
 import { AssessmentType, ConnectedFromState, InventoryType } from "../shared/connected-inventory/integrations";
+import { OperatingHours } from "../shared/models/operations";
 
 export interface CompressedAirInventoryData {
   co2SavingsData?: Co2SavingsData,
@@ -92,14 +93,15 @@ export interface CentrifugalSpecifics {
   minFullLoadCapacity: number
 }
 
-export interface FieldMeasurements {
-  operatingHours: number,
+export interface FieldMeasurements {  
+  yearlyOperatingHours: number,
+  operatingHours?: OperatingHours,
 
 }
 
 export interface FieldMeasurementsOptions {
   displayFieldMeasurements: boolean,
-  operatingHours: boolean,
+  yearlyOperatingHours: boolean,
 }
 
 

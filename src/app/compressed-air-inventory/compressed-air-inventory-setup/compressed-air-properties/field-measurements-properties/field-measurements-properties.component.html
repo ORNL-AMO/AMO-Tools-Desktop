@@ -15,10 +15,10 @@
 </div>
 
 <form class="p-1" *ngIf="displayForm">
-    <div class="checkbox" (mouseenter)="focusField('operatingHours')">
+    <div class="checkbox" (mouseenter)="focusField('yearlyOperatingHours')">
         <label>
-            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementsOptions.operatingHours"
-                name="operatingHours" id="operatingHours">
+            <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementsOptions.yearlyOperatingHours"
+                name="yearlyOperatingHours" id="yearlyOperatingHours">
             Operating Hours
         </label>
     </div>
