@@ -37,6 +37,8 @@ import { MidTurndownCatalogService } from './performance-points-catalog/mid-turn
 import { TurndownCatalogService } from './performance-points-catalog/turndown-catalog/turndown-catalog.service';
 import { NoLoadCatalogService } from './performance-points-catalog/no-load-catalog/no-load-catalog.service';
 import { BlowoffCatalogService } from './performance-points-catalog/blowoff-catalog/blowoff-catalog.service';
+import { FieldMeasurementsCatalogComponent } from './field-measurements-catalog/field-measurements-catalog.component';
+import { FieldMeasurementsCatalogService } from './field-measurements-catalog/field-measurements-catalog.service';
 
 
 
@@ -56,7 +58,8 @@ import { BlowoffCatalogService } from './performance-points-catalog/blowoff-cata
     NoLoadCatalogComponent,
     TurndownCatalogComponent,
     UnloadPointCatalogComponent,
-    CentrifugalSpecificsCatalogComponent
+    CentrifugalSpecificsCatalogComponent,
+    FieldMeasurementsCatalogComponent
   ],
   imports: [
     CommonModule,
@@ -84,7 +87,8 @@ import { BlowoffCatalogService } from './performance-points-catalog/blowoff-cata
     MidTurndownCatalogService,
     TurndownCatalogService,
     NoLoadCatalogService,
-    BlowoffCatalogService
+    BlowoffCatalogService,
+    FieldMeasurementsCatalogService
   ],
   exports: [
     CompressedAirCatalogComponent
