@@ -96,8 +96,7 @@ export class DepartmentCatalogTableComponent implements OnInit {
     let pressureRange = this.getPressureMinMax(compressedAirItem);
     let tableDataItem: DepartmentCatalogTableDataItem = {
       name: compressedAirItem.name,      
-      //TODO: CA Inventory add op hours to table
-      operatingHours: undefined,
+      operatingHours: compressedAirItem.fieldMeasurements.yearlyOperatingHours,
       compressorType: compressorType,
       controlType: controlType,
       pressureRange: pressureRange,
@@ -162,7 +161,6 @@ export class DepartmentCatalogTableComponent implements OnInit {
 
 export interface DepartmentCatalogTableDataItem {
   name: string,
-  //TODO: CA Inventory add op hours to table
   operatingHours: number,
   compressorType: string,
   controlType: string,
