@@ -127,6 +127,9 @@ export class CompressedAirInventoryService {
         fullLoadRatedCapacity: undefined,
         totalPackageInputPower: undefined
       },
+      fieldMeasurements: {
+        yearlyOperatingHours: 8760,
+      },
       compressedAirMotor: {
         motorPower: undefined,
         motorFullLoadAmps: undefined,
@@ -225,6 +228,10 @@ export class CompressedAirInventoryService {
         fullLoadOperatingPressure: true,
         fullLoadRatedCapacity: true,
         totalPackageInputPower: true
+      },
+      fieldMeasurementsOptions: {
+        displayFieldMeasurements: true,
+        yearlyOperatingHours: true,
       },
       compressedAirMotorPropertiesOptions: {
         displayCompressedAirMotorProperties: true,

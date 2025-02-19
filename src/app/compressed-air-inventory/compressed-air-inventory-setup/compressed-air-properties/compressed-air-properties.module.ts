@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SettingsModule } from '../../../settings/settings.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { FieldMeasurementsPropertiesComponent } from './field-measurements-properties/field-measurements-properties.component';
 
 
 
@@ -21,6 +22,7 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     CompressedAirControlsPropertiesComponent,
     DesignDetailsPropertiesComponent,
     PerformancePointsPropertiesComponent,
+    FieldMeasurementsPropertiesComponent
   ],
   imports: [
     CommonModule,

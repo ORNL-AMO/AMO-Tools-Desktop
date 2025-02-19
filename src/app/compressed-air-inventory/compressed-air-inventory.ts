@@ -1,5 +1,6 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
 import { AssessmentType, ConnectedFromState, InventoryType } from "../shared/connected-inventory/integrations";
+import { OperatingHours } from "../shared/models/operations";
 
 export interface CompressedAirInventoryData {
   co2SavingsData?: Co2SavingsData,
@@ -48,6 +49,7 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   compressedAirDesignDetailsProperties: CompressedAirDesignDetailsProperties,
   compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties,
   centrifugalSpecifics: CentrifugalSpecifics,
+  fieldMeasurements: FieldMeasurements;
   validCompressedAir?: ValidCompressedAir
 }
 
@@ -65,7 +67,8 @@ export interface CompressedAirPropertyDisplayOptions {
   compressedAirMotorPropertiesOptions: CompressedAirMotorPropertiesOptions,
   compressedAirControlsPropertiesOptions: CompressedAirControlsPropertiesOptions,
   compressedAirDesignDetailsPropertiesOptions: CompressedAirDesignDetailsPropertiesOptions,
-  compressedAirPerformancePointsPropertiesOptions: CompressedAirPerformancePointsPropertiesOptions
+  compressedAirPerformancePointsPropertiesOptions: CompressedAirPerformancePointsPropertiesOptions,
+  fieldMeasurementsOptions: FieldMeasurementsOptions,
 }
 
 export interface ConnectedItem {
@@ -88,6 +91,17 @@ export interface CentrifugalSpecifics {
   maxFullLoadCapacity: number,
   minFullLoadPressure: number
   minFullLoadCapacity: number
+}
+
+export interface FieldMeasurements {  
+  yearlyOperatingHours: number,
+  operatingHours?: OperatingHours,
+
+}
+
+export interface FieldMeasurementsOptions {
+  displayFieldMeasurements: boolean,
+  yearlyOperatingHours: boolean,
 }
 
 

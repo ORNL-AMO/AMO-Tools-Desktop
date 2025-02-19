@@ -18,6 +18,10 @@
             *ngIf="compressedAirInventoryData.displayOptions.nameplateDataOptions.displayNameplateData"></app-nameplate-data-catalog>
     </div>
     <div class="col-12">
+        <app-field-measurements-catalog
+            *ngIf="compressedAirInventoryData.displayOptions.nameplateDataOptions.displayNameplateData"></app-field-measurements-catalog>
+    </div>
+    <div class="col-12">
         <app-compressed-air-motor-catalog
             *ngIf="compressedAirInventoryData.displayOptions.compressedAirMotorPropertiesOptions.displayCompressedAirMotorProperties"></app-compressed-air-motor-catalog>
     </div>
@@ -36,7 +40,7 @@
     <div class="col-12">
         <app-performance-points-catalog
             *ngIf="compressedAirInventoryData.displayOptions.compressedAirPerformancePointsPropertiesOptions.displayCompressedAirPerformancePointsProperties"></app-performance-points-catalog>
-    </div>    
+    </div>
 </div>
 
 
