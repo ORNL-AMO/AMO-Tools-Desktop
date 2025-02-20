@@ -84,8 +84,8 @@ import { CompressedAirInventoryModule } from '../compressed-air-inventory/compre
     SurveyToastModule,
     MeasurSurveyModule,
     SnackbarModule,
-    UpdateApplicationModule,,
-    CompressedAirInventoryModule
+    UpdateApplicationModule,
+    CompressedAirInventoryModule,
   ],
   providers: [
     AssessmentService,
