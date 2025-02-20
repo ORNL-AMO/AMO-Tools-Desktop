@@ -34,7 +34,6 @@ import { ModificationListComponent } from './modification-list/modification-list
 import { AddModificationComponent } from './add-modification/add-modification.component';
 import { UtilitiesModule } from '../calculator/utilities/utilities.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
-import { ToastModule } from '../shared/toast/toast.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 import { PhastValidService } from './phast-valid.service';
 import { FlueGasModule } from '../calculator/furnaces/flue-gas/flue-gas.module';
@@ -42,6 +41,8 @@ import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
+import { FlueGasMoistureModalModule } from '../shared/flue-gas-moisture-modal/flue-gas-moisture-modal.module';
 
 @NgModule({
   declarations: [
@@ -80,11 +81,12 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     LossesTabsModule,
     UtilitiesModule,
     TabsTooltipModule,
-    ToastModule,
+    SnackbarModule,
     UnitConverterModule,
     PhastSankeyModule,
     UpdateUnitsModalModule,    
-    ImportExportModule
+    ImportExportModule,
+    FlueGasMoistureModalModule
   ],
   providers: [
     PhastService,

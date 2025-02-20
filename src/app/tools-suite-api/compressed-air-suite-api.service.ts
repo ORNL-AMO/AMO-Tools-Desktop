@@ -212,7 +212,7 @@ export class CompressedAirSuiteApiService {
 
   compressorsCalcVariableDisplacement(input: CompressorsCalcInput) {
     let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoad)
-    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload)
+    let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad)
     let receiverVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.receiverVolume)
     let powerMax = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerMax)
     let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtNoLoad)
@@ -221,7 +221,7 @@ export class CompressedAirSuiteApiService {
     let modulatingPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.modulatingPsi)
     let atmosphericPsi = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPsi)
     let unloadPointCapacity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadPointCapacity)
-    let controlType = this.suiteApiHelperService.getControlTypeEnum(input.controlType);
+    let controlType = input.controlType;
     let blowdownTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.blowdownTime)
     let unloadSumpPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadSumpPressure)
     let noLoadPowerFM = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.noLoadPowerFM)

@@ -3,6 +3,7 @@ import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { FsatService } from '../fsat.service';
 import { FSAT } from '../../shared/models/fans';
+import { SnackbarMessage, SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -47,7 +48,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
-  constructor(private fsatService: FsatService) {
+  constructor(private fsatService: FsatService, private snackbarService: SnackbarService) {
   }
 
   ngOnInit() {
@@ -62,7 +63,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
     if (changes.modificationIndex) {
       this.getSankeyData();
-      this.checkToasty();
+      this.notifyExpertView();
     }
     if (changes.fsat) {
       this.getSankeyData();
@@ -121,30 +122,11 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
 
-  checkToasty() {
+  notifyExpertView() {
     if (this.modificationExists) {
       if (!this.fsat.modifications[this.modificationIndex].exploreOpportunities) {
-        let title: string = 'Explore Opportunities';
-        let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
-        this.openToast(title, body);
-      } else if (this.showToast) {
-        this.hideToast();
+        this.snackbarService.setSnackbarMessage('exploreOpportunities', 'info', 'long');
       }
-    }
-  }
-
-  openToast(title: string, body: string) {
-    this.toastData.title = title;
-    this.toastData.body = body;
-    this.showToast = true;
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
     }
   }
 

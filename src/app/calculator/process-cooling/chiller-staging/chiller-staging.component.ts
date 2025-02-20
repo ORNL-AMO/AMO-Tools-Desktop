@@ -58,7 +58,7 @@ export class ChillerStagingComponent implements OnInit {
     this.chillerStagingInput = this.chillerStagingService.chillerStagingInput.getValue();
     if (!this.chillerStagingInput) {
       this.chillerStagingService.initDefaultEmptyInputs(this.settings);
-      this.chillerStagingService.initDefaultEmptyOutputs();
+      this.chillerStagingService.chillerStagingOutput.next(this.chillerStagingService.getDefaultEmptyOutput());
     }
     this.initSubscriptions();
   }
@@ -97,7 +97,8 @@ export class ChillerStagingComponent implements OnInit {
   }
 
   calculate() {
-    this.chillerStagingService.calculate(this.settings);
+    let chillerStagingOutput = this.chillerStagingService.calculate(this.settings);
+    this.chillerStagingService.chillerStagingOutput.next(chillerStagingOutput);
   }
 
   btnResetData() {
