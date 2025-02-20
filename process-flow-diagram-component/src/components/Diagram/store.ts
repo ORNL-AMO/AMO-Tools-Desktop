@@ -36,6 +36,7 @@ export function configureAppStore(diagramProps: DiagramProps) {
     }
   }
 
+  console.log('initiale state', initialState);
   const store = configureStore({
     reducer: { diagram: diagramReducer },
     preloadedState: initialState
@@ -78,11 +79,13 @@ export const selectCalculatedNodeData = createSelector([selectCalculatedData, se
 });
 
 export const selectTotalSourceFlow = createSelector([selectCalculatedNodeData, selectNodes, selectNodeId], (calculatedNode: NodeFlowData, nodes: Node<ProcessFlowPart>[], nodeId?: string) => {
-  return getNodeTotalFlow('totalSourceFlow', calculatedNode, nodes, nodeId);
+  const nodeTotalFlow = getNodeTotalFlow('totalSourceFlow', calculatedNode, nodes, nodeId);
+  return nodeTotalFlow;
 });
 
 export const selectTotalDischargeFlow = createSelector([selectCalculatedNodeData, selectNodes, selectNodeId], (calculatedNode: NodeFlowData, nodes: Node<ProcessFlowPart>[], nodeId?: string) => {
-  return getNodeTotalFlow('totalDischargeFlow', calculatedNode, nodes, nodeId);
+  const nodeTotalFlow = getNodeTotalFlow('totalDischargeFlow', calculatedNode, nodes, nodeId);
+  return nodeTotalFlow;
 });
 
 

@@ -1,7 +1,32 @@
 import { CustomEdgeData, DiagramValidation, FlowDiagramData, ComponentFlowValidation, ProcessFlowPart, ComponentValidation, ValidationStatus } from "../../../src/process-flow-types/shared-process-flow-types";
 import { Node, Edge } from "reactflow";
 import { getNodeFlowTotals } from "../components/Diagram/FlowUtils";
+import * as Yup from 'yup';
 
+// export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge', totalCalculatedFlow: number) => {
+//     let validationSchema = Yup.object({
+//         totalSourceFlow: Yup.number()
+//         // .nonNullable(totalMinMessage)
+//         // .required(`Total ${flowLabel} Flow is required`)
+//             .moreThan(0, `Total ${flowLabel} Flow must be greater than 0`)
+//             .test('sum-differs',
+//                 (d) => {
+//                     return `Total Source Flow must equal the sum of all flow values`
+//                 },
+//                 (value) => {
+//                     debugger;
+//                     const isValid = validateTotalFlowValue(totalCalculatedFlow, value)
+//                     return isValid;
+//                 },
+//             ),
+//         flows: Yup.array().of(Yup.number()
+//             // .required('Flow value is required')
+//             // .nonNullable(`Flow must be greater than 0`)
+//             .moreThan(0, `Flow must be greater than 0`)
+//         ),
+//     });
+//     return validationSchema;
+// }
 
 export const getInitialDiagramValidation = (flowDiagramData: FlowDiagramData, allEdges: Edge[]): DiagramValidation => {
     let diagramValidation: DiagramValidation = { nodes: {}};
@@ -11,7 +36,7 @@ export const getInitialDiagramValidation = (flowDiagramData: FlowDiagramData, al
         const componentDischargeEdges = allEdges.filter((edge: Edge<CustomEdgeData>) => edge.source === nd.data.diagramNodeId);
         const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentSourceEdges.concat(componentDischargeEdges), flowDiagramData.nodes, nd.data.diagramNodeId);
         let sourceValidation: ComponentFlowValidation = {totalFlowValueDifferent: undefined, flowValues: {}, status: 'VALID'};
-        sourceValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow, nd.data.userEnteredData.totalSourceFlow, nd.data.userEnteredData.totalSourceFlow);
+        // sourceValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow, nd.data.userEnteredData.totalSourceFlow, nd.data.userEnteredData.totalSourceFlow);
          componentSourceEdges.map((edge: Edge<CustomEdgeData>) => {
              const validationMessage = validateFlowValue(edge.data.flowValue);
              sourceValidation.status = validationMessage? 'WARNING' : sourceValidation.status;
@@ -24,7 +49,7 @@ export const getInitialDiagramValidation = (flowDiagramData: FlowDiagramData, al
          });
 
         let dischargeFlowValidation: ComponentFlowValidation = {totalFlowValueDifferent: undefined, flowValues: {}, status: 'VALID'};
-        dischargeFlowValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow, nd.data.userEnteredData.totalDischargeFlow, nd.data.userEnteredData.totalDischargeFlow);
+        // dischargeFlowValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow, nd.data.userEnteredData.totalDischargeFlow, nd.data.userEnteredData.totalDischargeFlow);
         componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => {
              const validationMessage = validateFlowValue(edge.data.flowValue);
              dischargeFlowValidation.status = validationMessage? 'WARNING' : dischargeFlowValidation.status;
@@ -63,16 +88,28 @@ export const validateFlowValue = (value: number | null) => {
    * @param userEnteredTotalFlow componentData.userEnteredData.totalSourceFlow or componentData.userEnteredData.totalSourceFlow 
    * @param statefulTotalFlow totalSourceFlow or totalDischargeFlow as either state of component or as saved to userEnteredData
    */
-export const validateTotalFlowValue = (calculatedTotalFlow: number, userEnteredTotalFlow: number, statefulTotalFlow: number) => {
-    let validationMessage = "";
+// export const validateTotalFlowValue = (calculatedTotalFlow: number, userEnteredTotalFlow: number, statefulTotalFlow: number) => {
+//     let validationMessage = "";
+//     let hasFlows = calculatedTotalFlow !== null && calculatedTotalFlow !== undefined;
+//     // *If a user entered value exists, check that our calculated total does not differ with component saved value (useEnteredValue)
+//     if (hasFlows) {
+//         if (userEnteredTotalFlow !== undefined && statefulTotalFlow !== undefined && calculatedTotalFlow !== statefulTotalFlow) {
+//             validationMessage = "The sum of all source flows should equal Total Flow";
+//         }
+//     } 
+//     return validationMessage;
+// };
+export const validateTotalFlowValue = (calculatedTotalFlow: number, userEnteredTotalFlow: number) => {
     let hasFlows = calculatedTotalFlow !== null && calculatedTotalFlow !== undefined;
     // *If a user entered value exists, check that our calculated total does not differ with component saved value (useEnteredValue)
     if (hasFlows) {
-        if (userEnteredTotalFlow !== undefined && statefulTotalFlow !== undefined && calculatedTotalFlow !== statefulTotalFlow) {
-            validationMessage = "The sum of all source flows should equal Total Flow";
+        if (userEnteredTotalFlow !== undefined && userEnteredTotalFlow !== null && userEnteredTotalFlow !== calculatedTotalFlow ) {
+            console.log('totalFlow invalid');
+            return false;
         }
     } 
-    return validationMessage;
+    console.log('totalFlow valid');
+    return true;
 };
 
 

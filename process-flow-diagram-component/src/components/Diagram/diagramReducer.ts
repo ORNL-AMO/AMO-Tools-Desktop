@@ -46,6 +46,8 @@ const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType, p
   let newNode: Node = createNewNode(nodeType, position);
   newNode.data.modifiedDate = (newNode.data.modifiedDate as Date).toISOString();
   state.nodes = state.nodes.concat(newNode);
+  current(state);
+  console.log('debug addNode', current(state));
 };
 
 const totalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{flowProperty: NodeFlowProperty, totalFlow: number}>) => {
@@ -68,7 +70,9 @@ const sourceFlowValueChangeReducer = (state: DiagramState, action: PayloadAction
   const componentSourceNodeIds: string[] = sourceEdges.map((edge: Edge<CustomEdgeData>) => edge.source);
   state.nodes.forEach((node: Node<ProcessFlowPart>) => {
     if (componentSourceNodeIds.includes(node.id)) {
-      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(sourceEdges, state.nodes, node.id);
+      // * update discharge edges of the node.id calculated data being set
+      const nodeDischargeEdges = getNodeTargetEdges(state.edges, node.id);
+      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeDischargeEdges, state.nodes, node.id);
       setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalDischargeFlow', totalCalculatedDischargeFlow);
     }
   });
@@ -84,13 +88,14 @@ const dischargeFlowValueChangeReducer = (state: DiagramState, action: PayloadAct
   const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(dischargeEdges, state.nodes, state.selectedDataId);
   setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalDischargeFlow', totalCalculatedDischargeFlow);
 
-  // todo find any connected discharges and update their total discharge flow for label display
   // * set calculated totals for dicharge nodes
   // * alternatively, getNodeFlowTotals on ComponentFlowData rerender
   const componentDischargeNodeIds: string[] = dischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.target);
   state.nodes.forEach((node: Node<ProcessFlowPart>) => {
     if (componentDischargeNodeIds.includes(node.id)) {
-      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(dischargeEdges, state.nodes, node.id);
+      // * update source edges of the node.id calculated data being set
+      const nodeSourceEdges = getNodeSourceEdges(state.edges, node.id);
+      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeSourceEdges, state.nodes, node.id);
       setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalSourceFlow', totalCalculatedSourceFlow);
     }
   });
