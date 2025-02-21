@@ -11,12 +11,15 @@ import FlowValueDisplay from "../Diagram/FlowValueDisplay";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { setNodeDataProperty } from "../Diagram/diagramReducer";
 import SourceFlowForm from "./SourceFlowForm";
-import { selectNodes, selectTotalDischargeFlow, selectTotalSourceFlow } from "../Diagram/store";
+import { selectNodes, selectNodeValidation, selectTotalDischargeFlow, selectTotalSourceFlow } from "../Diagram/store";
 import DischargeFlowForm from "./DischargeFlowForm";
+import InvalidIcon from "../../validation/InvalidIcon";
+import { hasValidDischargeForm, hasValidSourceForm, isValidComponent } from "../../validation/Validation";
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
     const dispatch = useAppDispatch();
     const nodes = useAppSelector(selectNodes);
+    const errors = useAppSelector(selectNodeValidation);
 
     const [sourcesExpanded, setSourcesExpanded] = useState<boolean>(true);
     const [dischargeExpanded, setDischargeExpanded] = useState<boolean>(true);
@@ -40,11 +43,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         componentData = componentData as ProcessFlowPart;
     }
     
-    // const diagramContext: DiagramContext = useContext<DiagramContext>(RootDiagramContext);
-    // const componentValidation: ComponentValidation = diagramContext.diagramValidation.nodes[componentData.diagramNodeId];
-    // const isValid = isValidComponent(componentValidation);
-    // console.log('ComponentDataForm isValidComponent', isValid);
-
+    
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
         if (props.connectedEdges.length !== 0) {
             setExpanded(newExpanded);
@@ -54,7 +53,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const handleTreatmentTypeChange = (event) => {
         dispatch(setNodeDataProperty({optionsProp: 'treatmentType', updatedValue: Number(event.target.value)}));
     };
-
+    
     const hasSources = props.connectedEdges.some((edge: Edge<CustomEdgeData>) => {
         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
         return props.selectedNode.id === target.diagramNodeId;
@@ -67,6 +66,9 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     
     const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
+    
+    const hasSourceErrors = errors && hasValidSourceForm(errors);
+    const hasTargetErrors = errors && hasValidDischargeForm(errors);
 
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1 }}>
@@ -94,15 +96,10 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             <span>
                                 Sources
                             </span>
-                        </span> 
-                        {/* <span style={{ display: 'flex', alignSelf: 'center' }}>
-                            <span>
-                                Sources
-                            </span>
-                            {componentValidation && !isValid &&
-                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon status={componentValidation.status} /></span>
+                            {hasSourceErrors &&
+                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.level} /></span>
                             }
-                        </span> */}
+                        </span>
                         <Chip label={
                             <>
                             <FlowValueDisplay flowValue={totalSourceFlow}/>
@@ -126,7 +123,14 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                         transition: { unmountOnExit: true }
                     }}>
                     <AccordionSummary>
-                        <span style={{ alignSelf: 'center' }}>Discharge</span>
+                        <span style={{ display: 'flex', alignSelf: 'center' }}>
+                            <span>
+                                Discharge
+                            </span>
+                            {hasTargetErrors &&
+                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.level} /></span>
+                            }
+                        </span>
                         <Chip label={
                             <>
                             <FlowValueDisplay flowValue={totalDischargeFlow}/>
@@ -138,7 +142,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                         />
                     </AccordionSummary>
                     <AccordionDetails>
-                        <DischargeFlowForm selectedNodeId={props.selectedNode.data.diagramNodeId}></DischargeFlowForm>
+                        <DischargeFlowForm></DischargeFlowForm>
                     </AccordionDetails>
                 </Accordion>
             }

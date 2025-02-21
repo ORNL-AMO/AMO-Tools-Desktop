@@ -99,7 +99,7 @@ export const getEdgeFromConnection = (
     }
   
     connectedParams.data = {
-      flowValue: 0,
+      flowValue: null,
     }
   
     if (connectedParams.style === undefined) {
@@ -130,7 +130,7 @@ export const getEdgeSourceAndTarget = (edge: Edge, nodes: Node[]) => {
 
 }
 
-export const createNewNode = (nodeType: WaterProcessComponentType, position: { x: number, y: number }) => {
+export const createNewNode = (nodeType: WaterProcessComponentType, position: { x: number, y: number }, existingNames?: string[]) => {
   let newNode: Node;
   if (nodeType.includes('splitter-node')) {
     newNode = {
@@ -146,9 +146,25 @@ export const createNewNode = (nodeType: WaterProcessComponentType, position: { x
     // newProcessComponent.name = newProcessComponent.diagramNodeId;
     newNode = getNewNode(nodeType, newProcessComponent, position);
   }
+
   newNode.type = getAdaptedTypeString(newNode.type);
+  newNode = getUniqueName(newNode, existingNames);
   return newNode;
 }
+
+/**
+   * Differentiate names quickly for debugging
+   */
+const getUniqueName = (newNode, existingNames, attempt = 1) => {
+  const baseName = newNode.data.name.replace(/\s\(\d+\)$/, ""); 
+  const newName = attempt === 1 ? baseName : `${baseName} (${attempt})`;
+  if (!existingNames.includes(newName)) {
+      newNode.data.name = newName;
+      return newNode;
+  }
+  return getUniqueName(newNode, existingNames, attempt + 1);
+};
+
 
 export const getAdaptedTypeString = (nodeType: string) => {
   let adaptedString: string;
@@ -265,7 +281,7 @@ export const getNodeTotalFlow = (flowProperty: NodeFlowProperty, calculatedNode:
    } else if (calculatedNode) {
      return calculatedNode[flowProperty];
    } else {
-     return 0;
+     return null;
    }
 }
 
