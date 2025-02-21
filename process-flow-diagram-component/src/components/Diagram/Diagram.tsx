@@ -96,7 +96,16 @@ const Diagram = (props: DiagramProps) => {
       };
 
       formatDataForMEASUR(updatedDiagramData);
-      props.saveFlowDiagramData(updatedDiagramData);
+
+      // todo this patches reset event bug where state conflicts with debounced, measur state,  should be moved to middleware
+      if (debouncedNodes.length === nodes.length) {
+        props.saveFlowDiagramData(updatedDiagramData);
+        console.log('saved', updatedDiagramData.nodes);
+        console.log('saved debounced', debouncedNodes);
+      }
+      //  else {
+      //   console.log('skip save, nodes length mismatch', debouncedNodes, nodes);
+      // }
     }
   }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings]);
 

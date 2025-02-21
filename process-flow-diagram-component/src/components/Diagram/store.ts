@@ -21,24 +21,27 @@ export function configureAppStore(diagramProps: DiagramProps) {
             return node;
           }
         }),
-        edges: diagramData.edges,
-        diagramOptions: diagramData.userDiagramOptions ? diagramData.userDiagramOptions : getDefaultUserDiagramOptions(),
-        settings: diagramData.settings ? diagramData.settings : getDefaultSettings(),
-        calculatedData: diagramData.calculatedData ? diagramData.calculatedData : {nodes: {}},
-        recentNodeColors: diagramData.recentNodeColors.length !== 0 ? diagramData.recentNodeColors : getDefaultColorPalette(),
-        recentEdgeColors: diagramData.recentEdgeColors.length !== 0 ? diagramData.recentEdgeColors : getDefaultColorPalette(),
+        edges: diagramData.edges.map((edge: Edge<CustomEdgeData>) => edge),
+        diagramOptions: diagramData.userDiagramOptions ? {...diagramData.userDiagramOptions} : getDefaultUserDiagramOptions(),
+        settings: diagramData.settings ? {...diagramData.settings} : getDefaultSettings(),
+        calculatedData: diagramData.calculatedData ? {...diagramData.calculatedData} : {nodes: {}},
+        nodeErrors: {},
+        recentNodeColors: diagramData.recentNodeColors.length !== 0 ? {...diagramData.recentNodeColors} : getDefaultColorPalette(),
+        recentEdgeColors: diagramData.recentEdgeColors.length !== 0 ? {...diagramData.recentEdgeColors} : getDefaultColorPalette(),
         isDrawerOpen: false,
+        focusedEdgeId: undefined,
         selectedDataId: undefined,
-        diagramParentDimensions: diagramProps.parentContainer,
+        diagramParentDimensions: {...diagramProps.parentContainer},
         isDialogOpen: false,
         assessmentId: diagramProps.processDiagram?.assessmentId
       }
     }
   }
 
+  console.log('initiale state', initialState);
   const store = configureStore({
     reducer: { diagram: diagramReducer },
-    preloadedState: initialState
+    preloadedState: initialState,
   });
 
   return store;
@@ -58,6 +61,10 @@ export const selectIsDrawerOpen = (state: RootState) => state.diagram.isDrawerOp
 export const selectHasAssessment = (state: RootState) => state.diagram.assessmentId !== undefined;
 export const selectCurrentNode = (state: RootState) => state.diagram.nodes.find((node: Node<ProcessFlowPart>) => node.id === state.diagram.selectedDataId) as Node<ProcessFlowPart>;
 export const selectCalculatedData = (state: RootState) => state.diagram.calculatedData;
+export const selectNodeValidation = (state: RootState) => {
+  return  state.diagram.nodeErrors[state.diagram.selectedDataId]
+};
+
 export const selectNodeFlowData = (state: RootState, nodeId: string) => {
   return state.diagram.calculatedData.nodes[nodeId]};
 export const selectNodeId = (state: RootState, nodeId?: number) => {
@@ -78,11 +85,13 @@ export const selectCalculatedNodeData = createSelector([selectCalculatedData, se
 });
 
 export const selectTotalSourceFlow = createSelector([selectCalculatedNodeData, selectNodes, selectNodeId], (calculatedNode: NodeFlowData, nodes: Node<ProcessFlowPart>[], nodeId?: string) => {
-  return getNodeTotalFlow('totalSourceFlow', calculatedNode, nodes, nodeId);
+  const nodeTotalFlow = getNodeTotalFlow('totalSourceFlow', calculatedNode, nodes, nodeId);
+  return nodeTotalFlow;
 });
 
 export const selectTotalDischargeFlow = createSelector([selectCalculatedNodeData, selectNodes, selectNodeId], (calculatedNode: NodeFlowData, nodes: Node<ProcessFlowPart>[], nodeId?: string) => {
-  return getNodeTotalFlow('totalDischargeFlow', calculatedNode, nodes, nodeId);
+  const nodeTotalFlow = getNodeTotalFlow('totalDischargeFlow', calculatedNode, nodes, nodeId);
+  return nodeTotalFlow;
 });
 
 
@@ -137,7 +146,9 @@ export const getResetData = (currentState?: DiagramState): DiagramState => {
     diagramOptions: getDefaultUserDiagramOptions(),
     isDrawerOpen: false,
     selectedDataId: undefined,
+    focusedEdgeId: undefined,
     calculatedData: {nodes: {}},
+    nodeErrors: {},
     recentEdgeColors: getDefaultColorPalette(),
     recentNodeColors: getDefaultColorPalette(),
     diagramParentDimensions: currentState?.diagramParentDimensions,

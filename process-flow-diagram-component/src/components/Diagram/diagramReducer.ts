@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
+import { createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, Handles, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
@@ -6,6 +6,8 @@ import { createNewNode, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowT
 import { CSSProperties } from 'react';
 import { getResetData } from './store';
 import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
+import { FormikErrors } from 'formik';
+import { NodeErrors } from '../../validation/Validation';
 
 export interface DiagramState {
   nodes: Node[];
@@ -19,6 +21,8 @@ export interface DiagramState {
   recentNodeColors: string[],
   recentEdgeColors: string[],
   diagramParentDimensions: ParentContainerDimensions,
+  nodeErrors: Record<string, NodeErrors>,
+  focusedEdgeId: string,
   isDialogOpen: boolean,
   assessmentId: number
 }
@@ -43,9 +47,12 @@ const addNodesReducer = (state: DiagramState, action: PayloadAction<Node[]>) => 
 
 const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType, position }>) => {
   const { nodeType, position } = action.payload;
-  let newNode: Node = createNewNode(nodeType, position);
+  let newNode: Node = createNewNode(nodeType, position, state.nodes.map((node: Node<ProcessFlowPart>) => node.data.name));
+  // todo can we remove date completely?
   newNode.data.modifiedDate = (newNode.data.modifiedDate as Date).toISOString();
   state.nodes = state.nodes.concat(newNode);
+  current(state);
+  console.log('debug addNode', current(state));
 };
 
 const totalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{flowProperty: NodeFlowProperty, totalFlow: number}>) => {
@@ -68,7 +75,9 @@ const sourceFlowValueChangeReducer = (state: DiagramState, action: PayloadAction
   const componentSourceNodeIds: string[] = sourceEdges.map((edge: Edge<CustomEdgeData>) => edge.source);
   state.nodes.forEach((node: Node<ProcessFlowPart>) => {
     if (componentSourceNodeIds.includes(node.id)) {
-      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(sourceEdges, state.nodes, node.id);
+      // * update discharge edges of the node.id calculated data being set
+      const nodeDischargeEdges = getNodeTargetEdges(state.edges, node.id);
+      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeDischargeEdges, state.nodes, node.id);
       setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalDischargeFlow', totalCalculatedDischargeFlow);
     }
   });
@@ -84,13 +93,14 @@ const dischargeFlowValueChangeReducer = (state: DiagramState, action: PayloadAct
   const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(dischargeEdges, state.nodes, state.selectedDataId);
   setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalDischargeFlow', totalCalculatedDischargeFlow);
 
-  // todo find any connected discharges and update their total discharge flow for label display
   // * set calculated totals for dicharge nodes
   // * alternatively, getNodeFlowTotals on ComponentFlowData rerender
   const componentDischargeNodeIds: string[] = dischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.target);
   state.nodes.forEach((node: Node<ProcessFlowPart>) => {
     if (componentDischargeNodeIds.includes(node.id)) {
-      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(dischargeEdges, state.nodes, node.id);
+      // * update source edges of the node.id calculated data being set
+      const nodeSourceEdges = getNodeSourceEdges(state.edges, node.id);
+      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeSourceEdges, state.nodes, node.id);
       setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalSourceFlow', totalCalculatedSourceFlow);
     }
   });
@@ -109,6 +119,8 @@ const distributeTotalSourceFlowReducer = (state: DiagramState, action: PayloadAc
     }
     return edge;
   });
+
+  // todo set connected nodes calculated data
 }
 
 const distributeTotalDischargeFlowReducer = (state: DiagramState, action: PayloadAction<number>) => {
@@ -124,6 +136,30 @@ const distributeTotalDischargeFlowReducer = (state: DiagramState, action: Payloa
     }
     return edge;
   });
+
+  // todo set connected nodes calculated data
+}
+
+const nodeErrorsChangeReducer = (state: DiagramState, action: PayloadAction<{flowType: FlowType, errors: FormikErrors<{ totalFlow: string | number; flows: (string | number)[] }>}>) => {
+  const { flowType, errors } = action.payload;
+  const validationErrors: NodeErrors = {totalFlow: undefined, flows: undefined, level: 'WARNING', flowType: flowType};
+
+  if (errors.flows) {
+    validationErrors.flows = [...errors.flows];
+    validationErrors.level = 'WARNING';
+  }
+
+  if (errors.totalFlow) {
+    validationErrors.totalFlow = errors.totalFlow;
+    validationErrors.level = 'ERROR'; 
+  }
+
+  if (!errors.flows && !errors.totalFlow) {
+    delete state.nodeErrors[state.selectedDataId];
+  } else {
+    state.nodeErrors[state.selectedDataId] = validationErrors as NodeErrors;
+  }
+
 }
 
 const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) => {
@@ -183,6 +219,11 @@ const deleteEdgeReducer = (state: DiagramState, action: PayloadAction<string>) =
 
   state.isDrawerOpen = !state.isDrawerOpen;
   state.selectedDataId = action.payload ? action.payload : undefined;
+}
+
+const focusedEdgeChangeReducer = (state: DiagramState, action: PayloadAction<{edgeId: string}>) => {
+  const { edgeId } = action.payload;
+  state.focusedEdgeId = edgeId;
 }
 
 const defaultEdgeTypeChangeReducer = (state: DiagramState, action: PayloadAction<string>) => {
@@ -294,6 +335,9 @@ const showMarkerEndArrowsReducer = (state: DiagramState, action: PayloadAction<b
 const toggleDrawerReducer = (state: DiagramState, action?: PayloadAction<string>) => {
   state.isDrawerOpen = !state.isDrawerOpen;
   state.selectedDataId = action.payload ? action.payload : undefined;
+  if (!state.isDrawerOpen) {
+    state.focusedEdgeId = undefined;
+  }
 };
 
 const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<DiagramCalculatedData>) => {
@@ -312,6 +356,7 @@ export const diagramSlice = createSlice({
     updateNodeHandles: updateNodeHandlesReducer,
     sourceFlowValueChange: sourceFlowValueChangeReducer,
     totalFlowChange: totalFlowChangeReducer,
+    nodeErrorsChange: nodeErrorsChangeReducer,
     deleteNode: deleteNodeReducer,
     setNodeName: setNodeNameReducer,
     setNodeDataProperty: setNodeDataPropertyReducer,
@@ -321,6 +366,7 @@ export const diagramSlice = createSlice({
     setEdgeStrokeColor: setEdgeStrokeColorReducer,
     connectEdge: connectEdgeReducer,
     deleteEdge: deleteEdgeReducer,
+    focusedEdgeChange: focusedEdgeChangeReducer,
     defaultEdgeTypeChange: defaultEdgeTypeChangeReducer,
     customEdgeTypeChange: customEdgeTypeChangeReducer,
     calculatedDataUpdate: calculatedDataUpdateReducer,
@@ -351,8 +397,10 @@ export const {
   dischargeFlowValueChange,
   distributeTotalSourceFlow,
   distributeTotalDischargeFlow,
+  nodeErrorsChange,
   updateNodeHandles,
   deleteEdge,
+  focusedEdgeChange,
   defaultEdgeTypeChange,
   customEdgeTypeChange,
   setNodeColor,
@@ -372,3 +420,4 @@ export interface UserOptionsPayload<K extends keyof UserDiagramOptions> { option
 export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp: K, updatedValue: ProcessFlowPart[K] };
 export type OptionsDependentState = 'updateEdges' | 'updateEdgeProperties';
 export type NodeFlowProperty = keyof Pick<NodeFlowData, 'totalSourceFlow' | 'totalDischargeFlow'>;
+export type FlowType = 'source' | 'discharge';

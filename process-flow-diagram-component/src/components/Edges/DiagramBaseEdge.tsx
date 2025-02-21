@@ -53,6 +53,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
 
   const showFlowLabels = useAppSelector((state: RootState) => state.diagram.diagramOptions.showFlowLabels);
   const flowLabelSize = useAppSelector((state: RootState) => state.diagram.diagramOptions.flowLabelSize);
+  // const focusedEdgeId = useAppSelector((state: RootState) => state.diagram.focusedEdgeId);
 
   let [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
@@ -75,6 +76,10 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
     const customStyle = {
       ...props.style,
     }
+    // if (focusedEdgeId === props.id) {
+    //   customStyle.stroke = '#007bff';
+    //   customStyle.strokeWidth = String(Number(customStyle.strokeWidth) * 2);
+    // } 
     switch (props.baseEdgeComponent) {
       case BezierEdge:
         return <BezierEdge {...props} style={customStyle} />
