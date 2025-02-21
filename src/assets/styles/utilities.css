@@ -499,3 +499,12 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     font-size: large;
     color: #FFE400;
   }   
+
+
+  @media print {
+    .card-toast-notification {
+        display: none;
+    }
+  }
+  
+  

@@ -43,12 +43,12 @@ import { DeaeratorModule } from '../calculator/steam/deaerator/deaerator.module'
 import { ConvertSsmtService } from './convert-ssmt.service';
 import { BlowdownRateModalModule } from './blowdown-rate-modal/blowdown-rate-modal.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
-import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { RouterModule } from '@angular/router';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 
 @NgModule({
   imports: [
@@ -75,12 +75,12 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     TurbineModule,
     BlowdownRateModalModule,
     TabsTooltipModule,
-    ToastModule,
     SharedPipesModule,
     RouterModule,
     SsmtSankeyModule,
     UpdateUnitsModalModule,    
-    ImportExportModule
+    ImportExportModule,
+    SnackbarModule
   ],
   declarations: [
     SsmtComponent,

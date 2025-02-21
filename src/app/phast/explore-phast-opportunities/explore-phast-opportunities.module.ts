@@ -17,9 +17,9 @@ import { ExploreSlagFormComponent } from './explore-phast-opportunities-form/exp
 import { ExploreCoolingFormComponent } from './explore-phast-opportunities-form/explore-cooling-form/explore-cooling-form.component';
 import { ExploreAtmosphereFormComponent } from './explore-phast-opportunities-form/explore-atmosphere-form/explore-atmosphere-form.component';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
-import { ToastModule } from '../../shared/toast/toast.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { PhastSankeyModule } from '../../shared/phast-sankey/phast-sankey.module';
+import { SnackbarModule } from '../../shared/snackbar-notification/snackbar.module';
 
 @NgModule({
   imports: [
@@ -28,10 +28,10 @@ import { PhastSankeyModule } from '../../shared/phast-sankey/phast-sankey.module
     LossesModule,
     ModalModule,
     OperatingHoursModalModule,
-    ToastModule,
     SharedPipesModule,
     PhastSankeyModule,    
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SnackbarModule
   ],
   declarations: [
     ExplorePhastOpportunitiesFormComponent,

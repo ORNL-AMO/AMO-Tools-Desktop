@@ -3,14 +3,12 @@ import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { FlueGas, FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../../../shared/models/phast/losses/flueGas';
 import { Losses } from '../../../shared/models/phast/phast';
-import { FlueGasCompareService } from './flue-gas-compare.service';
 import { Settings } from '../../../shared/models/settings';
-import { FormGroup } from '@angular/forms';
 import { UntypedFormGroup } from '@angular/forms';
-import { FlueGasService } from '../../../calculator/furnaces/flue-gas/flue-gas.service';
 import { FlueGasFormService } from '../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
+import { FlueGasCompareService } from './flue-gas-compare.service';
 @Component({
   selector: 'app-flue-gas-losses',
   templateUrl: './flue-gas-losses.component.html',

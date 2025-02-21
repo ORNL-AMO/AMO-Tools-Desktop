@@ -21,11 +21,9 @@ export class AssessmentService {
   subTab: string;
   showLandingScreen: boolean = true;
 
-  updateAvailable: BehaviorSubject<boolean>;
   showTutorial: BehaviorSubject<string>;
   tutorialShown: boolean = false;
   constructor(private router: Router, private dashboardService: DashboardService) {
-    this.updateAvailable = new BehaviorSubject<boolean>(null);
     this.showTutorial = new BehaviorSubject<string>(null);
   }
 

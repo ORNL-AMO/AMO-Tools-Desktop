@@ -28,6 +28,7 @@ export class FlueGasFormMassComponent implements OnInit {
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
+  @ViewChild('moistureModal', { static: false }) public moistureModal: ModalDirective;
 
   resetDataSub: Subscription;
   byMassForm: UntypedFormGroup;
@@ -44,6 +45,7 @@ export class FlueGasFormMassComponent implements OnInit {
   warnings: FlueGasWarnings;
 
   higherHeatingValue: number;
+  showMoisture: boolean;
 
   constructor(private flueGasService: FlueGasService,
     private flueGasFormService: FlueGasFormService,
@@ -220,6 +222,25 @@ export class FlueGasFormMassComponent implements OnInit {
     let test = Number(val.toFixed(digits));
     return test;
   }
+
+  
+  showMoistureModal() {
+    this.flueGasService.modalOpen.next(true);
+    this.showMoisture = true;
+    this.moistureModal.show();
+  }
+
+  hideMoistureModal(moistureInAirCombustion?: number) {
+    if (moistureInAirCombustion) {
+      moistureInAirCombustion = Number(moistureInAirCombustion.toFixed(2));
+      this.byMassForm.controls.moistureInAirCombustion.patchValue(moistureInAirCombustion);
+    }
+    this.moistureModal.hide();
+    this.showMoisture = false;
+    this.flueGasService.modalOpen.next(false);
+    this.calculate();
+  }
+  
 
   showMaterialModal() {
     this.flueGasService.modalOpen.next(true);

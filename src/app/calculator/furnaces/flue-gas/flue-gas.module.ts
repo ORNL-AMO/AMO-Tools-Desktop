@@ -16,6 +16,7 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
 import { EnergyFormComponent } from './energy-form/energy-form.component';
 import { FlueGasFormService } from './flue-gas-form.service';
 import { EnergyFormService } from './energy-form.service';
+import { FlueGasMoistureModalModule } from '../../../shared/flue-gas-moisture-modal/flue-gas-moisture-modal.module';
 
 
 
@@ -37,7 +38,8 @@ import { EnergyFormService } from './energy-form.service';
     SuiteDbModule,
     SharedPipesModule,
     ExportableResultsTableModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    FlueGasMoistureModalModule
   ],
   exports: [
     FlueGasComponent,

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges } from '@angular/core';
-import { FlueGasCompareService } from "../flue-gas-compare.service";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
@@ -10,6 +9,7 @@ import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
 import { firstValueFrom } from 'rxjs';
+import { FlueGasCompareService } from '../flue-gas-compare.service';
 
 @Component({
   selector: 'app-flue-gas-losses-form-volume',

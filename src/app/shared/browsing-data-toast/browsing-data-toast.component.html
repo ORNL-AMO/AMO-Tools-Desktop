@@ -1,22 +1,29 @@
-<div class="card toasty-card update-toast" [@toast]="showBrowsingDataToast">
-    <div class="card-header">
-      User Data Notice
-      <button class="close pull-right" (click)="closeToast()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="card-body d-flex flex-column text-left toast-text p-2">
-        MEASUR saves assessments, inventories, and settings as local data in the browser on your machine. Some browsers allow disabling or deleting of this data alongside cookies. 
-        If you experience issues saving data, please ensure your browser "Privacy and Security" or "Site Data" settings are set to allow local data from this website.
-        <br>
-        <br>
-        <span class="text-center">
-          For information on user data usage, visit the <a class="click-link" (click)="routeToPrivacyNotice()">Privacy Notice</a> page
-        </span>
-    </div>
-
-    <div class="card-body d-flex flex-column text-center">
-      <a class="click-link" (click)="closeToast()">Close</a>
-    </div>
+<div class="card card-toast-notification" [@toastAnimate]="toastAnimate">
+  <div class="card-header">
+    <img src="assets/images/app-icon.png" class="app-icon mr-2">
+    User Data Notice
+    <span class="fa fa-times close-button" (click)="closeToast()"></span>
   </div>
-  
+  <div class="card-body">
+    <p class="card-text text-left">
+      <b class="bold-emphasis">
+        MEASUR saves assessments, inventories, and settings as local data in the browser on your machine</b>. Some
+      browsers
+      allow disabling or deleting of this data alongside cookies.
+      If you experience issues saving data, please ensure your browser "Privacy and Security" or "Site Data" settings
+      are set to allow local data from this website.
+    </p>
+    <p class="card-text-small text-left">
+      For information on data storage and backup, visit the <a class="click-link" (click)="routeToDataStorage()">Data
+        Storage</a> page
+    </p>
+    <p class="card-text-small text-left">
+      For information on user data usage, visit the <a class="click-link" (click)="routeToPrivacyNotice()">Privacy
+        Notice</a> page
+    </p>
+
+  </div>
+  <div class="card-footer text-end">
+    <a class="click-link pull-right" (click)="closeToast()">Close</a>
+  </div>
+</div>

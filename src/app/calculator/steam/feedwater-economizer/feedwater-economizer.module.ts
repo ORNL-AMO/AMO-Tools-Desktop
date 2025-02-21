@@ -12,6 +12,7 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
+import { FlueGasMoistureModalModule } from '../../../shared/flue-gas-moisture-modal/flue-gas-moisture-modal.module';
 
 
 
@@ -30,7 +31,8 @@ import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
     SuiteDbModule,
     SharedPipesModule,
     ExportableResultsTableModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    FlueGasMoistureModalModule
   ],
   exports: [
     FeedwaterEconomizerComponent

@@ -110,12 +110,10 @@ export class ImportModalComponent implements OnInit {
     else if (importData.origin === "AMO-TOOLS-DESKTOP-OPPORTUNITIES") {
       this.treasureFile = true;
       this.validFile = false;
-      this.dashboardService.dashboardToastMessage.next('INVALID FILE DESTINATION - This is a treasure hunt opportunites file and must be imported from within a treasure hunt.');
     }
     else {
       this.treasureFile = false;
       this.validFile = false;
-      this.dashboardService.dashboardToastMessage.next('INVALID FILE');
     }
   }
 }

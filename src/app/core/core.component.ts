@@ -12,12 +12,12 @@ import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService, ReleaseData } from '../electron/electron.service';
 import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur-data.service';
-import { PwaService } from '../shared/pwa/pwa.service';
 import { AppErrorService } from '../shared/errors/app-error.service';
 import { AutomaticBackupService } from '../electron/automatic-backup.service';
 import { ApplicationInstanceData, ApplicationInstanceDbService } from '../indexedDb/application-instance-db.service';
 import { ImportBackupModalService } from '../shared/import-backup-modal/import-backup-modal.service';
 import { MeasurSurveyService } from '../shared/measur-survey/measur-survey.service';
+import { UpdateApplicationService } from '../shared/update-application/update-application.service';
 
 @Component({
   selector: 'app-core',
@@ -26,42 +26,31 @@ import { MeasurSurveyService } from '../shared/measur-survey/measur-survey.servi
 })
 
 export class CoreComponent implements OnInit {
-  updateDesktop: boolean;
-  updatePwa: boolean;
   showBrowsingDataToast: boolean;
   hideTutorial: boolean = true;
   openingTutorialSub: Subscription;
   idbStarted: boolean = false;
   tutorialType: string;
   inTutorialsView: boolean;
-  updateError: boolean = false;
-  isOnline: boolean;
-  releaseData: ReleaseData;
-
-  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
-  showToast: boolean;
-  showWebDisclaimerToast: boolean = false;
-  routerSubscription: Subscription;
   analyticsSessionId: string;
+  applicationInstanceDataSubscription: Subscription;
+  routerSubscription: Subscription;
+
+  // * Modals
   modalOpenSub: Subscription;
-  showSecurityAndPrivacyModalSub: Subscription;
-  showSecurityAndPrivacyModal: boolean;
-  showEmailMeasurDataModal: boolean;
-  electronUpdateAvailableSub: Subscription;
-  assessmentUpdateAvailableSub: Subscription;
-  updateAvailable: boolean;
-  releaseDataSub: Subscription;
   showEmailMeasurDataModalSub: Subscription;
+  showEmailMeasurDataModal: boolean;
   showImportBackupModalSubscription: Subscription;
   showImportBackupModal: boolean;
-  pwaUpdateAvailableSubscription: Subscription;
-  applicationInstanceDataSubscription: Subscription;
+  showSecurityAndPrivacyModalSub: Subscription;
+  showSecurityAndPrivacyModal: boolean;
   showSurveyModalSub: Subscription;
   showSurveyModal: boolean;
-
   showSurveyToast: boolean;
+  showReleaseNotesModal: boolean;
+  showReleaseNotesModalSub: Subscription;
 
-  constructor(private electronService: ElectronService,
+  constructor(public electronService: ElectronService,
     private assessmentService: AssessmentService,
     private changeDetectorRef: ChangeDetectorRef,
     private assessmentDbService: AssessmentDbService,
@@ -72,13 +61,13 @@ export class CoreComponent implements OnInit {
     private router: Router,
     private securityAndPrivacyService: SecurityAndPrivacyService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private pwaService: PwaService,
     private appErrorService: AppErrorService,
     private automaticBackupService: AutomaticBackupService,
     private applicationInstanceDbService: ApplicationInstanceDbService,
     private importBackupModalService: ImportBackupModalService,
     private sqlDbApiService: SqlDbApiService,
     private measurSurveyService: MeasurSurveyService,
+    private updateApplicationService: UpdateApplicationService,
     private inventoryDbService: InventoryDbService) {
   }
 
@@ -89,18 +78,6 @@ export class CoreComponent implements OnInit {
 
     if (this.electronService.isElectron) {
       this.electronService.sendAppReady('ready');
-      this.electronUpdateAvailableSub = this.electronService.updateAvailable.subscribe(val => {
-        this.updateAvailable = val;
-        if (this.updateAvailable) {
-          this.updateDesktop = true;
-          this.assessmentService.updateAvailable.next(true);
-          this.changeDetectorRef.detectChanges();
-        }
-      });
-
-      this.releaseDataSub = this.electronService.releaseData.subscribe(val => {
-        this.releaseData = val;
-      });
     }
 
     this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
@@ -119,15 +96,8 @@ export class CoreComponent implements OnInit {
       }
     });
 
-    this.assessmentUpdateAvailableSub = this.assessmentService.updateAvailable.subscribe(val => {
-      if (val == true) {
-        this.updateDesktop = true;
-        this.changeDetectorRef.detectChanges();
-      }
-    });
-
-    this.pwaUpdateAvailableSubscription = this.pwaService.displayUpdateToast.subscribe(updatePwa => {
-      this.updatePwa = updatePwa;
+    this.showReleaseNotesModalSub = this.updateApplicationService.showReleaseNotesModal.subscribe(val => {
+      this.showReleaseNotesModal = val;
     });
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
@@ -157,18 +127,15 @@ export class CoreComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.electronService.isElectron) {
-      this.electronUpdateAvailableSub.unsubscribe();
-      this.releaseDataSub.unsubscribe();
       if (this.applicationInstanceDataSubscription) {
         this.applicationInstanceDataSubscription.unsubscribe();
       }
     }
-    this.assessmentUpdateAvailableSub.unsubscribe();
     this.openingTutorialSub.unsubscribe();
     this.showSecurityAndPrivacyModalSub.unsubscribe();
+    this.showReleaseNotesModalSub.unsubscribe();
     this.showEmailMeasurDataModalSub.unsubscribe();
     this.showImportBackupModalSubscription.unsubscribe();
-    this.pwaUpdateAvailableSubscription.unsubscribe();
     this.showSurveyModalSub.unsubscribe();
   }
 
@@ -256,22 +223,6 @@ export class CoreComponent implements OnInit {
     this.applicationInstanceDbService.applicationInstanceData.next(appData);
   }
 
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    };
-    this.changeDetectorRef.detectChanges();
-  }
-
-  hideUpdateToast() {
-    this.updateDesktop = false;
-    this.updatePwa = false;
-    this.changeDetectorRef.detectChanges();
-  }
-
   hideBrowsingDataToast() {
     this.showBrowsingDataToast = false;
     this.changeDetectorRef.detectChanges();
@@ -290,6 +241,10 @@ export class CoreComponent implements OnInit {
   closeEmailModal(isClosedEvent?: boolean) {
     this.emailMeasurDataService.modalOpen.next(false)
     this.emailMeasurDataService.showEmailMeasurDataModal.next(false);
+  }
+
+  closeReleaseNotes() {
+    this.updateApplicationService.showReleaseNotesModal.next(false);
   }
 
 }

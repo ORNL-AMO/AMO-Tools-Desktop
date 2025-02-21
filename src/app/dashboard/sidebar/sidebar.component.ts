@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
-import { AssessmentService } from '../assessment.service';
-import { Subscription } from 'rxjs';
+import { combineLatestWith, Observable, Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
@@ -9,6 +8,8 @@ import { environment } from '../../../environments/environment';
 import { ExportService } from '../../shared/import-export/export.service';
 import { ApplicationInstanceData, ApplicationInstanceDbService } from '../../indexedDb/application-instance-db.service';
 import { MeasurSurveyService } from '../../shared/measur-survey/measur-survey.service';
+import { UpdateApplicationService } from '../../shared/update-application/update-application.service';
+import { ElectronService } from '../../electron/electron.service';
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
@@ -21,7 +22,6 @@ export class SidebarComponent implements OnInit {
   versionNum: any;
   isUpdateAvailable: boolean;
   showModal: boolean;
-  showVersionModal: boolean;
   updateSub: Subscription;
   updateDashboardDataSub: Subscription;
   rootDirectory: Directory;
@@ -35,18 +35,32 @@ export class SidebarComponent implements OnInit {
   expandedXWidth: number = 300;
   applicationInstanceDataSubscription: Subscription;
   showSurveyLink: boolean;
-  constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
+  constructor(private directoryDbService: DirectoryDbService,
     private exportService: ExportService,
+    private updateApplicationService: UpdateApplicationService,
     private measurSurveyService: MeasurSurveyService,
     private applicationInstanceDbService: ApplicationInstanceDbService,
+    private electronService: ElectronService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.versionNum = environment.version;
-    this.updateSub = this.assessmentService.updateAvailable.subscribe(val => {
-      this.isUpdateAvailable = val;
-    });
+
+    if (this.electronService.isElectron) {
+      let isUpdateAvailable: Observable<any> = this.electronService.updateAvailable
+        .pipe(
+          combineLatestWith(this.electronService.releaseData)
+        );
+
+      this.updateSub = isUpdateAvailable.subscribe(([hasUpdate, releaseData]) => {
+        this.isUpdateAvailable = hasUpdate && releaseData;
+      });
+    } else {
+      this.updateSub = this.updateApplicationService.webUpdateAvailable.subscribe(hasUpdate => {
+        this.isUpdateAvailable = hasUpdate;
+      });
+    }
 
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.rootDirectory = this.directoryDbService.getById(1);
@@ -146,17 +160,11 @@ export class SidebarComponent implements OnInit {
   }
 
   openUpdateModal() {
-    this.assessmentService.updateAvailable.next(true);
+    this.updateApplicationService.showUpdateToast.next(true);
   }
 
   openVersionModal() {
-    this.openModal.emit(true);
-    this.showVersionModal = true;
-  }
-
-  closeVersionModal() {
-    this.openModal.emit(false);
-    this.showVersionModal = false;
+    this.updateApplicationService.showReleaseNotesModal.next(true);
   }
 
   toggleNewDropdown(){

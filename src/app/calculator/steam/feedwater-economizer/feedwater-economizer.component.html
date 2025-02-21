@@ -36,7 +36,8 @@
 	</div>
 	<div class="panel-group">
 		<div class="calculator-panel-container modification mh-100"
-			[ngClass]="{'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
+			[ngClass]="{'small-screen-tab': smallScreenTab === 'form', 'modal-open': isModalOpen == true}" 
+			[ngStyle]="{'height.px': containerHeight}">
 			<div class="d-flex flex-column m-4">
 				<app-feedwater-economizer-form [inTreasureHunt]="inTreasureHunt" [settings]="settings">
 				</app-feedwater-economizer-form>
@@ -56,7 +57,8 @@
 
 		<!-- help panel -->
 		<div class="calculator-panel-container help-panel"
-			[ngClass]="{'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
+			[ngClass]="{'small-screen-tab': smallScreenTab === 'details', 'modal-open': isModalOpen == true}" 
+			[ngStyle]="{'height.px': containerHeight}">
 			<div class="d-flex flex-column mh-100">
 				<div class="d-flex flex-wrap tabs primary sticky-top">
 					<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">

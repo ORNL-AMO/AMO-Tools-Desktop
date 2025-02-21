@@ -67,7 +67,7 @@ export function initializeWasmScript(): Promise<any> {
 		window['Module'] = {
       onRuntimeInitialized: function () {
         window['dbInstance'] = new window['Module'].SQLite(":memory:", true);
-        console.log('AMO Tools Suite module initialized');
+        console.log('MEASUR Tools Suite module initialized');
         resolve(module);
 			},
       onAbort: function () {

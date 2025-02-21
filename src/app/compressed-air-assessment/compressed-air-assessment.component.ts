@@ -168,7 +168,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   ngAfterViewInit() {
     setTimeout(() => {
-      // this.disclaimerToast();
       this.setContainerHeight();
     }, 100);
   }
