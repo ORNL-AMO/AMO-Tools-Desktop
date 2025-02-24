@@ -120,9 +120,11 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   backSetupTabs() {
-    if (this.setupTab == 'pump-catalog') {
-      this.compressedAirInventoryService.setupTab.next('pump-properties');
-    } else if (this.setupTab == 'pump-properties') {
+    if (this.setupTab == 'end-uses') {
+      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
+    } else if (this.setupTab == 'compressed-air-catalog') {
+      this.compressedAirInventoryService.setupTab.next('compressor-properties');
+    } else if (this.setupTab == 'compressor-properties') {
       this.compressedAirInventoryService.setupTab.next('system-setup');
     } else if (this.setupTab == 'system-setup') {
       this.compressedAirInventoryService.setupTab.next('plant-setup');
@@ -133,9 +135,11 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     if (this.setupTab == 'plant-setup') {
       this.compressedAirInventoryService.setupTab.next('system-setup');
     } else if (this.setupTab == 'system-setup') {
-      this.compressedAirInventoryService.setupTab.next('pump-properties');
-    } else if (this.setupTab == 'pump-properties') {
-      this.compressedAirInventoryService.setupTab.next('pump-catalog');
+      this.compressedAirInventoryService.setupTab.next('compressor-properties');
+    } else if (this.setupTab == 'compressor-properties') {
+      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
+    } else if (this.setupTab == 'compressed-air-catalog') {
+      this.compressedAirInventoryService.setupTab.next('end-uses');
     }
   }
 
@@ -185,7 +189,7 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
       itemName: this.compressedAirInventoryItem.name,
       itemData: this.compressedAirInventoryItem
     }
-    this.emailMeasurDataService.emailItemType.next('PUMP-inventory');
+    this.emailMeasurDataService.emailItemType.next('compresses-air-inventory');
     this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
   }
 

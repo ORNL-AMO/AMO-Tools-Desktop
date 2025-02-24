@@ -41,7 +41,8 @@
             <a class="nav-link" [ngClass]="{'active': mainTab == 'setup'}">Setup</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" (click)="setMainTab('summary')" [ngClass]="{'active': mainTab == 'summary', 'disabled': !compressedAirInventoryData.isValid}" >Summary</a>
+            <a class="nav-link" (click)="setMainTab('summary')"
+                [ngClass]="{'active': mainTab == 'summary', 'disabled': !compressedAirInventoryData.isValid}">Summary</a>
         </div>
     </div>
     <div *ngIf="!bannerCollapsed" class="d-block d-lg-none nav-pills nav-fill flex-wrap mx-auto">
@@ -49,7 +50,8 @@
             <a class="nav-link" [ngClass]="{'active': mainTab == 'setup'}">Setup</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" (click)="setMainTab('summary')" [ngClass]="{'active': mainTab == 'summary', 'disabled': !compressedAirInventoryData.isValid}" >Summary</a>
+            <a class="nav-link" (click)="setMainTab('summary')"
+                [ngClass]="{'active': mainTab == 'summary', 'disabled': !compressedAirInventoryData.isValid}">Summary</a>
         </div>
     </div>
 
@@ -151,6 +153,9 @@
             <a><span class="step-number"
                     [ngClass]="{'missing-data-tab': compressedAirInventoryData}">4</span>Catalog</a>
         </div>
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'end-uses'}" (click)="setSetupTab('end-uses')">
+            <a><span class="step-number">5</span>End Uses</a>
+        </div>
     </div>
     <div class="d-lg-none d-flex tabs subtabs progress-tabs flex-wrap compressedAir-inventory">
         <ul
@@ -177,9 +182,14 @@
                 (click)="setSetupTab('compressed-air-catalog')">
                 <a><span class="step-number">4</span>Catalog</a>
             </li>
-            <li class="page-item" [ngClass]="{'disabled': setupTab == 'compressed-air-catalog'}">
+            <li *ngIf="setupTab == 'end-uses'" class="fixed-tab-size"
+                [ngClass]="{'active': setupTab == 'end-uses'}"
+                (click)="setSetupTab('end-uses')">
+                <a><span class="step-number">5</span>End Uses</a>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': setupTab == 'end-uses'}">
                 <a class="nav-link small" (click)="continueSetupTabs()"
-                    [ngClass]="{'disabled': setupTab == 'compressed-air-catalog'}">
+                    [ngClass]="{'disabled': setupTab == 'end-uses'}">
                     <span class="fa fa-chevron-right"></span></a>
             </li>
         </ul>

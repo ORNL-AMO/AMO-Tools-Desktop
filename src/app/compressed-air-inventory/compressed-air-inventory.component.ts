@@ -133,23 +133,25 @@ export class CompressedAirInventoryComponent implements OnInit {
 
   continue() {
     if (this.setupTab == 'plant-setup') {
-      this.compressedAirInventoryService.setupTab.next('department-setup');
-    } else if (this.setupTab == 'department-setup') {
-      this.compressedAirInventoryService.setupTab.next('pump-properties');
-    } else if (this.setupTab == 'pump-properties') {
-      this.compressedAirInventoryService.setupTab.next('pump-catalog');
-    } else if (this.setupTab == 'pump-catalog') {
-      this.compressedAirInventoryService.mainTab.next('summary');
+      this.compressedAirInventoryService.setupTab.next('system-setup');
+    } else if (this.setupTab == 'system-setup') {
+      this.compressedAirInventoryService.setupTab.next('compressor-properties');
+    } else if (this.setupTab == 'compressor-properties') {
+      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
+    } else if (this.setupTab == 'compressed-air-catalog') {
+      this.compressedAirInventoryService.setupTab.next('end-uses');
     }
   }
 
   back() {
-    if (this.setupTab == 'department-setup') {
+    if (this.setupTab == 'end-uses') {
+      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
+    } else if (this.setupTab == 'compressed-air-catalog') {
+      this.compressedAirInventoryService.setupTab.next('compressor-properties');
+    } else if (this.setupTab == 'compressor-properties') {
+      this.compressedAirInventoryService.setupTab.next('system-setup');
+    } else if (this.setupTab == 'system-setup') {
       this.compressedAirInventoryService.setupTab.next('plant-setup');
-    } else if (this.setupTab == 'pump-properties') {
-      this.compressedAirInventoryService.setupTab.next('department-setup');
-    } else if (this.setupTab == 'pump-catalog') {
-      this.compressedAirInventoryService.setupTab.next('pump-properties');
     }
   }
 
