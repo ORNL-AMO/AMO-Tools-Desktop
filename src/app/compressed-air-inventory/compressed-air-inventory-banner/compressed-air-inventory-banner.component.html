@@ -133,13 +133,13 @@
             (click)="setSetupTab('plant-setup')">
             <a><span class="step-number">1</span>Plant Setup</a>
         </div>
-        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'department-setup'}"
-            (click)="setSetupTab('department-setup')">
-            <a><span class="step-number">2</span>Departments</a>
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'system-setup'}"
+            (click)="setSetupTab('system-setup')">
+            <a><span class="step-number">2</span>System Setup</a>
         </div>
-        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'compressed-air-properties'}"
-            (click)="setSetupTab('compressed-air-properties')">
-            <a><span class="step-number">3</span>Compressed Air Properties</a>
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'compressor-properties'}"
+            (click)="setSetupTab('compressor-properties')">
+            <a><span class="step-number">3</span>Compressor Properties</a>
         </div>
         <!-- <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'compressed-air-catalog' && compressedAirInventoryData && compressedAirInventoryData.isValid}"
             (click)="setSetupTab('compressed-air-catalog')">
@@ -163,14 +163,14 @@
                 [ngClass]="{'active': setupTab == 'plant-setup'}" (click)="setSetupTab('plant-setup')">
                 <a><span class="step-number">1</span>Plant Setup</a>
             </li>
-            <li *ngIf="setupTab == 'department-setup'" class="fixed-tab-size"
-                [ngClass]="{'active': setupTab == 'department-setup'}" (click)="setSetupTab('department-setup')">
-                <a><span class="step-number">2</span>Departments</a>
+            <li *ngIf="setupTab == 'system-setup'" class="fixed-tab-size"
+                [ngClass]="{'active': setupTab == 'system-setup'}" (click)="setSetupTab('system-setup')">
+                <a><span class="step-number">2</span>System Setup</a>
             </li>
-            <li *ngIf="setupTab == 'compressed-air-properties'" class="fixed-tab-size"
-                [ngClass]="{'active': setupTab == 'compressed-air-properties'}"
-                (click)="setSetupTab('compressed-air-properties')">
-                <a><span class="step-number">3</span>Compressed Air Properties</a>
+            <li *ngIf="setupTab == 'compressor-properties'" class="fixed-tab-size"
+                [ngClass]="{'active': setupTab == 'compressor-properties'}"
+                (click)="setSetupTab('compressor-properties')">
+                <a><span class="step-number">3</span>Compressor Properties</a>
             </li>
             <li *ngIf="setupTab == 'compressed-air-catalog'" class="fixed-tab-size"
                 [ngClass]="{'active': setupTab == 'compressed-air-catalog'}"
@@ -199,15 +199,15 @@
         </div> -->
     </div>
     <div class="d-flex d-lg-none tabs subtabs progress-tabs flex-wrap compressed-air-inventory">
-        <ul
+        <!-- <ul
             class="pagination d-flex justify-content-between tabs compressed-air-inventory subtabs progress-tabs flex-fill">
-            <!-- <li class="page-item"
+            <li class="page-item"
                 [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.departments[0].id}">
                 <a class="nav-link small" (click)="backCompressedAirCatalogTabs()"
                     [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.departments[0].id}">
                     <span class="fa fa-chevron-left"></span></a>
-            </li> -->
-            <!-- <ng-container *ngFor="let department of compressedAirInventoryData.departments">
+            </li> 
+           <ng-container *ngFor="let department of compressedAirInventoryData.departments">
                 <li *ngIf="selectedDepartmentId == department.id"
                     [ngClass]="{'active': selectedDepartmentId == department.id}"
                     (click)="selectedDepartment(department.id)">
@@ -217,14 +217,14 @@
                         </span>
                     </a>
                 </li>
-            </ng-container> -->
-            <!-- <li class="page-item"
+            </ng-container>
+            <li class="page-item"
                 [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.departments[compressedAirInventoryData.departments.length - 1].id}">
                 <a class="nav-link small" (click)="continueCompressedAirCatalogTabs()"
                     [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.departments[compressedAirInventoryData.departments.length - 1].id}">
                     <span class="fa fa-chevron-right"></span></a>
-            </li> -->
-        </ul>
+            </li>
+        </ul> -->
     </div>
 </nav>
 <!-- 

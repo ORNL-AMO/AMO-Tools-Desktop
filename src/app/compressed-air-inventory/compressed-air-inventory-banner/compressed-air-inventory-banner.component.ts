@@ -123,16 +123,16 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     if (this.setupTab == 'pump-catalog') {
       this.compressedAirInventoryService.setupTab.next('pump-properties');
     } else if (this.setupTab == 'pump-properties') {
-      this.compressedAirInventoryService.setupTab.next('department-setup');
-    } else if (this.setupTab == 'department-setup') {
+      this.compressedAirInventoryService.setupTab.next('system-setup');
+    } else if (this.setupTab == 'system-setup') {
       this.compressedAirInventoryService.setupTab.next('plant-setup');
     }
   }
 
   continueSetupTabs() {
     if (this.setupTab == 'plant-setup') {
-      this.compressedAirInventoryService.setupTab.next('department-setup');
-    } else if (this.setupTab == 'department-setup') {
+      this.compressedAirInventoryService.setupTab.next('system-setup');
+    } else if (this.setupTab == 'system-setup') {
       this.compressedAirInventoryService.setupTab.next('pump-properties');
     } else if (this.setupTab == 'pump-properties') {
       this.compressedAirInventoryService.setupTab.next('pump-catalog');

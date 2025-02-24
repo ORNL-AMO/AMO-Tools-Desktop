@@ -1,14 +1,14 @@
 <div class="row ml-0 mr-0">
     <div class="col-12">
         <div class="header">
-            <div class="h3">Departments Setup</div>
+            <div class="h3">System Setup</div>
         </div>
-        <a class="click-link small pull-right" (click)="addDepartment()">+Add Department</a>
+        <a class="click-link small pull-right" (click)="addSystem()">+Add System</a>
     </div>
     <div class="col-12 pt-1 pb-2 form-section" *ngFor="let department of compressedAirInventoryData.departments">
         <form class="p-0">
             <div class="form-group">
-                <label>Department Name</label>
+                <label>System Name</label>
                 <input class="form-control" type="text" id="name" name="name" [(ngModel)]="department.name"
                     (input)="save()">
             </div>
@@ -28,7 +28,7 @@
                     [(ngModel)]="department.description" (input)="save()"></textarea>
             </div>
         </form>
-        <a class="click-link danger pull-right small" (click)="deleteDepartment(department.id)"
+        <a class="click-link danger pull-right small" (click)="deleteSystem(department.id)"
             *ngIf="compressedAirInventoryData.departments.length != 1">Delete</a>
     </div>
 </div>
