@@ -17,12 +17,12 @@ export interface SystemInformation {
   systemElevation: number,
   atmosphericPressure: number,
   atmosphericPressureKnown: boolean,
-  totalAirStorage: number,
 }
 
 export interface CompressedAirInventoryDepartment {
   name: string,
   operatingHours: number,
+  totalAirStorage: number,
   description: string,
   id: string,
   catalog: Array<CompressedAirItem>,

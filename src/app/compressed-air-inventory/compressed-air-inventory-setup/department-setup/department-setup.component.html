@@ -23,6 +23,16 @@
                 </div>
             </div>
             <div class="form-group">
+                <label>Total Air Storage</label>
+                <div class="input-group">
+                    <input class="form-control" type="number" step="10" id="totalAirStorage" name="totalAirStorage"
+                        [(ngModel)]="department.totalAirStorage" (input)="save()">
+                    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label>Description</label>
                 <textarea class="form-control" type="text" id="description" name="description"
                     [(ngModel)]="department.description" (input)="save()"></textarea>
