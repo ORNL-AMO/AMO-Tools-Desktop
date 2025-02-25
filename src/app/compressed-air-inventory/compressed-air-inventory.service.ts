@@ -104,7 +104,7 @@ export class CompressedAirInventoryService {
     let departmentId: string = Math.random().toString(36).substr(2, 9);
     let initCompressor: CompressedAirItem = this.getNewCompressor(departmentId);
     return {
-      name: 'Department ' + departmentNum,
+      name: 'System ' + departmentNum,
       operatingHours: 8760,
       totalAirStorage: 3000,
       description: '',

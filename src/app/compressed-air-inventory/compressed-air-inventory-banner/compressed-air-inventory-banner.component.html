@@ -197,19 +197,23 @@
 </nav>
 
 <nav class="hide-print" *ngIf="setupTab == 'compressed-air-catalog' && mainTab == 'setup'">
-    <div class="d-lg-flex d-none tabs subtabs progress-tabs flex-wrap compressed-air-inventory">
-        <!-- <div *ngFor="let department of compressedAirInventoryData.departments"
+    <!-- <div class="d-lg-flex d-none tabs subtabs progress-tabs flex-wrap compressed-air-inventory">
+        <div *ngFor="let department of compressedAirInventoryData.departments"
             [ngClass]="{'active': selectedDepartmentId == department.id}" (click)="selectedDepartment(department.id)">
-            <a>{{department.name}}
-                <span class="badge gray-badge" [ngClass]="{'missing-data': !department.isValid}">
+            <a>{{department.name}} -->
+                <!-- <span class="badge gray-badge" [ngClass]="{'missing-data': !department.isValid}">
+                    <strong>{{department.catalog.length}}</strong>
+                </span> 
+                -->
+                <!-- <span class="badge gray-badge">
                     <strong>{{department.catalog.length}}</strong>
                 </span>
 
             </a>
-        </div> -->
-    </div>
-    <div class="d-flex d-lg-none tabs subtabs progress-tabs flex-wrap compressed-air-inventory">
-        <!-- <ul
+        </div>
+    </div> -->
+    <!-- <div class="d-flex d-lg-none tabs subtabs progress-tabs flex-wrap compressed-air-inventory">
+        <ul
             class="pagination d-flex justify-content-between tabs compressed-air-inventory subtabs progress-tabs flex-fill">
             <li class="page-item"
                 [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.departments[0].id}">
@@ -234,11 +238,11 @@
                     [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.departments[compressedAirInventoryData.departments.length - 1].id}">
                     <span class="fa fa-chevron-right"></span></a>
             </li>
-        </ul> -->
-    </div>
+        </ul>
+    </div> -->
 </nav>
-<!-- 
-<app-summary-filter *ngIf="mainTab == 'summary' || mainTab == 'analysis'"></app-summary-filter> -->
+
+<!-- <app-summary-filter *ngIf="mainTab == 'summary' || mainTab == 'analysis'"></app-summary-filter> -->
 
 <nav class="hide-print" *ngIf="mainTab == 'summary'">
     <div class="d-lg-flex d-none tabs subtabs progress-tabs flex-wrap compressed-air-inventory">
