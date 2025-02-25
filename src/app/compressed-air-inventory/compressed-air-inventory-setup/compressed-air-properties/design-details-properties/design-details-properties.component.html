@@ -9,7 +9,7 @@
     <div class="custom-control custom-switch">
         <input type="checkbox" class="custom-control-input" (change)="setAll()"
             [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties"
-            name="displayCompressedAirDesignDetailsProperties" id="displayCompressedAirDesignDetailsProperties">
+            name="displayCompressedAirDesignDetailsProperties" id="displayCompressedAirDesignDetailsProperties" disabled>
         <label class="custom-control-label" for="displayCompressedAirDesignDetailsProperties"></label>
     </div>
 </div>
@@ -19,7 +19,7 @@
         <label>
             <input type="checkbox" (change)="save()"
                 [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.blowdownTime" name="blowdownTime"
-                id="blowdownTime">
+                id="blowdownTime" disabled>
             Blowdown Time
         </label>
     </div>
@@ -27,7 +27,7 @@
         <label>
             <input type="checkbox" (change)="save()"
                 [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.modulatingPressureRange"
-                name="modulatingPressureRange" id="modulatingPressureRange">
+                name="modulatingPressureRange" id="modulatingPressureRange" disabled>
             Proportional Modulating Pressure Range
         </label>
     </div>
@@ -35,7 +35,7 @@
         <label>
             <input type="checkbox" (change)="save()"
                 [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.inputPressure" name="inputPressure"
-                id="inputPressure">
+                id="inputPressure" disabled>
             Design Inlet Pressure
         </label>
     </div>
@@ -43,7 +43,7 @@
         <label>
             <input type="checkbox" (change)="save()"
                 [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.designEfficiency" name="designEfficiency"
-                id="designEfficiency">
+                id="designEfficiency" disabled>
             Motor Design Efficiency
         </label>
     </div>
@@ -51,7 +51,7 @@
         <label>
             <input type="checkbox" (change)="save()"
                 [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.serviceFactor" name="serviceFactor"
-                id="serviceFactor">
+                id="serviceFactor" disabled>
             Motor Service Factor
         </label>
     </div>
@@ -59,7 +59,7 @@
         <label>
             <input type="checkbox" (change)="save()"
                 [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.noLoadPowerFM" name="noLoadPowerFM"
-                id="noLoadPowerFM">
+                id="noLoadPowerFM" disabled>
             Full Modulated Power % of Full Load
         </label>
     </div>
@@ -67,7 +67,7 @@
         <label>
             <input type="checkbox" (change)="save()"
                 [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.noLoadPowerUL" name="noLoadPowerUL"
-                id="noLoadPowerUL">
+                id="noLoadPowerUL" disabled>
             Full Unloaded Power % of Full Load
         </label>
     </div>
@@ -75,7 +75,7 @@
         <label>
             <input type="checkbox" (change)="save()"
                 [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.maxFullFlowPressure" name="maxFullFlowPressure"
-                id="maxFullFlowPressure">
+                id="maxFullFlowPressure" disabled>
             Max Full Flow Pressure
         </label>
     </div>

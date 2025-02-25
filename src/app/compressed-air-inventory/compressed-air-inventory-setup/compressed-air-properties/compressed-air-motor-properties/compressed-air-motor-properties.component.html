@@ -9,7 +9,7 @@
     <div class="custom-control custom-switch">
         <input type="checkbox" class="custom-control-input" (change)="setAll()"
             [(ngModel)]="compressedAirMotorPropertiesOptions.displayCompressedAirMotorProperties" name="displayCompressedAirMotorProperties"
-            id="displayCompressedAirMotorProperties">
+            id="displayCompressedAirMotorProperties" disabled>
         <label class="custom-control-label" for="displayCompressedAirMotorProperties"></label>
     </div>
 </div>
@@ -18,14 +18,14 @@
     <div class="checkbox" (mouseenter)="focusField('motorPower')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirMotorPropertiesOptions.motorPower" name="motorPower"
-                id="motorPower">
+                id="motorPower" disabled>
             Motor Power
         </label>
     </div>
     <div class="checkbox" (mouseenter)="focusField('motorFullLoadAmps')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="compressedAirMotorPropertiesOptions.motorFullLoadAmps" name="motorFullLoadAmps"
-                id="motorFullLoadAmps">
+                id="motorFullLoadAmps" disabled>
                 Motor Full Load Amps
         </label>
     </div>

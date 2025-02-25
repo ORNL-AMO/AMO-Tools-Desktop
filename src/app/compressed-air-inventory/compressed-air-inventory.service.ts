@@ -57,7 +57,6 @@ export class CompressedAirInventoryService {
       systemElevation: null,
       atmosphericPressure: 14.7,
       atmosphericPressureKnown: true,
-      totalAirStorage: 3000,
     }
   }
 
@@ -105,8 +104,9 @@ export class CompressedAirInventoryService {
     let departmentId: string = Math.random().toString(36).substr(2, 9);
     let initCompressor: CompressedAirItem = this.getNewCompressor(departmentId);
     return {
-      name: 'Department ' + departmentNum,
+      name: 'System ' + departmentNum,
       operatingHours: 8760,
+      totalAirStorage: 3000,
       description: '',
       id: departmentId,
       catalog: [initCompressor]
@@ -307,7 +307,6 @@ export class CompressedAirInventoryService {
     }
     let form: UntypedFormGroup = this.formBuilder.group({
       systemElevation: [obj.systemElevation, [Validators.min(0), Validators.max(29000)]],
-      totalAirStorage: [obj.totalAirStorage, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       atmosphericPressure: [obj.atmosphericPressure, [Validators.required, Validators.min(0), Validators.max(maxAtmosphericPressure)]],
       atmosphericPressureKnown: [obj.atmosphericPressureKnown],
 
@@ -318,7 +317,6 @@ export class CompressedAirInventoryService {
 
   updateObjFromForm(form: UntypedFormGroup, systemInformation: SystemInformation): SystemInformation {
     systemInformation.systemElevation = form.controls.systemElevation.value;
-    systemInformation.totalAirStorage = form.controls.totalAirStorage.value;
     systemInformation.atmosphericPressure = form.controls.atmosphericPressure.value;
     systemInformation.atmosphericPressureKnown = form.controls.atmosphericPressureKnown.value;
     return systemInformation;

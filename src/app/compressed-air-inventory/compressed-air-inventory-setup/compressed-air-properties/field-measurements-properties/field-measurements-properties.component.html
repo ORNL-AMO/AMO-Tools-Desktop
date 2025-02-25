@@ -9,7 +9,7 @@
     <div class="custom-control custom-switch">
         <input type="checkbox" class="custom-control-input" (change)="setAll()"
             [(ngModel)]="fieldMeasurementsOptions.displayFieldMeasurements" name="fieldMeasurementsOptions"
-            id="fieldMeasurementsOptions">
+            id="fieldMeasurementsOptions" disabled>
         <label class="custom-control-label" for="fieldMeasurementsOptions"></label>
     </div>
 </div>
@@ -18,7 +18,7 @@
     <div class="checkbox" (mouseenter)="focusField('yearlyOperatingHours')">
         <label>
             <input type="checkbox" (change)="save()" [(ngModel)]="fieldMeasurementsOptions.yearlyOperatingHours"
-                name="yearlyOperatingHours" id="yearlyOperatingHours">
+                name="yearlyOperatingHours" id="yearlyOperatingHours" disabled>
             Operating Hours
         </label>
     </div>
