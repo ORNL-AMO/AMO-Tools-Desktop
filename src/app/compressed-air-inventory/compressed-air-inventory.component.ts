@@ -76,6 +76,11 @@ export class CompressedAirInventoryComponent implements OnInit {
       this.getContainerHeight();
     });
 
+    this.compressedAirInventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(data => {
+      this.handleConnectedItemChanges();
+      this.saveDbData();
+    });
+
     this.modalOpenSub = this.compressedAirInventoryService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
       this.cd.detectChanges();
@@ -150,6 +155,14 @@ export class CompressedAirInventoryComponent implements OnInit {
 
   closeExportModal(input: boolean) {
     this.compressedAirInventoryService.showExportModal.next(input);
+  }
+
+  handleConnectedItemChanges() {
+    //TODO: CA Inventory integration 
+    // let selectedPump = this.pumpCatalogService.selectedPumpItem.getValue();
+    // if (selectedPump && selectedPump.connectedAssessments) {
+    //   this.psatIntegrationService.checkConnectedAssessmentDiffers(selectedPump);
+    // }
   }
 
 
