@@ -5,7 +5,7 @@ import { OperatingHours } from "../shared/models/operations";
 export interface CompressedAirInventoryData {
   co2SavingsData?: Co2SavingsData,
   systemInformation: SystemInformation,
-  departments: Array<CompressedAirInventoryDepartment>,
+  systems: Array<CompressedAirInventoryDepartment>,
   displayOptions: CompressedAirPropertyDisplayOptions,
   hasConnectedInventoryItems?: boolean,
   hasConnectedPsat?: boolean,
@@ -39,7 +39,7 @@ export interface ConnectedInventoryProperties {
 export interface CompressedAirItem extends ConnectedInventoryProperties {
   id: string,
   suiteDbItemId?: number,
-  departmentId: string,
+  systemId: string,
   name: string,
   description: string,
   notes: string,
@@ -76,7 +76,7 @@ export interface ConnectedItem {
   name: string,
   inventoryId: number,
   inventoryName?: string,
-  departmentId?: string,
+  systemId?: string,
   inventoryType?: InventoryType,
   assessmentType?: AssessmentType,
   assessmentId?: number,

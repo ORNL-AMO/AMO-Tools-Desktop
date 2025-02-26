@@ -34,7 +34,7 @@ export class CompressedAirCatalogComponent implements OnInit {
       this.compressedAirInventoryData = val;
       let selectedDepartmentId: string = this.compressedAirCatalogService.selectedDepartmentId.getValue();
       if (selectedDepartmentId) {
-        let findDepartment: CompressedAirInventoryDepartment = this.compressedAirInventoryData.departments.find(department => { return department.id == selectedDepartmentId });
+        let findDepartment: CompressedAirInventoryDepartment = this.compressedAirInventoryData.systems.find(system => { return system.id == selectedDepartmentId });
         if (findDepartment) {
           this.showDeleteCompressedAirButton = (findDepartment.catalog.length > 1);
         }
@@ -43,9 +43,9 @@ export class CompressedAirCatalogComponent implements OnInit {
 
     this.selectedDepartmentIdSub = this.compressedAirCatalogService.selectedDepartmentId.subscribe(val => {
       if (!val) {
-        this.compressedAirCatalogService.selectedDepartmentId.next(this.compressedAirInventoryData.departments[0].id);
+        this.compressedAirCatalogService.selectedDepartmentId.next(this.compressedAirInventoryData.systems[0].id);
       } else {
-        let findDepartment: CompressedAirInventoryDepartment = this.compressedAirInventoryData.departments.find(department => { return department.id == val });
+        let findDepartment: CompressedAirInventoryDepartment = this.compressedAirInventoryData.systems.find(system => { return system.id == val });
         if (findDepartment) {
           this.showDeleteCompressedAirButton = (findDepartment.catalog.length > 1);
           let selectedCompressedAirItem: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
@@ -58,9 +58,9 @@ export class CompressedAirCatalogComponent implements OnInit {
             this.compressedAirCatalogService.selectedCompressedAirItem.next(findDepartment.catalog[0]);
           }
         } else {
-          this.showDeleteCompressedAirButton = (this.compressedAirInventoryData.departments[0].catalog.length != 1);
-          this.compressedAirCatalogService.selectedDepartmentId.next(this.compressedAirInventoryData.departments[0].id);
-          this.compressedAirCatalogService.selectedCompressedAirItem.next(this.compressedAirInventoryData.departments[0].catalog[0]);
+          this.showDeleteCompressedAirButton = (this.compressedAirInventoryData.systems[0].catalog.length != 1);
+          this.compressedAirCatalogService.selectedDepartmentId.next(this.compressedAirInventoryData.systems[0].id);
+          this.compressedAirCatalogService.selectedCompressedAirItem.next(this.compressedAirInventoryData.systems[0].catalog[0]);
         }
       }
     });
@@ -73,7 +73,7 @@ export class CompressedAirCatalogComponent implements OnInit {
           id: selectedCompressedAir.id,
           name: selectedCompressedAir.name,
           inventoryId: this.compressedAirInventoryService.currentInventoryId,
-          departmentId: this.compressedAirCatalogService.selectedDepartmentId.getValue(),
+          systemId: this.compressedAirCatalogService.selectedDepartmentId.getValue(),
           inventoryType: 'compressed-air',
         }
       }
@@ -108,7 +108,7 @@ export class CompressedAirCatalogComponent implements OnInit {
   onConfirmDeleteClose(shouldDeleteCompressedAirItem: boolean) {
     if (shouldDeleteCompressedAirItem) {
       this.compressedAirInventoryService.deleteCompressedAirItem(this.compressedAirItemToDelete);
-      //re-select department to reset data process after deleting
+      //re-select system to reset data process after deleting
       let selectedDepartmentId: string = this.compressedAirCatalogService.selectedDepartmentId.getValue();
       this.compressedAirCatalogService.selectedDepartmentId.next(selectedDepartmentId);
     }

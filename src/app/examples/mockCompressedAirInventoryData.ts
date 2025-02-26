@@ -9,7 +9,7 @@ export const MockCompressedAirInventory: InventoryItem = {
             "atmosphericPressure": 14.7,
             "atmosphericPressureKnown": true,
         },
-        "departments": [
+        "systems": [
             {
                 "name": "QC Dept",
                 "operatingHours": 8760,
@@ -19,7 +19,7 @@ export const MockCompressedAirInventory: InventoryItem = {
                 "catalog": [
                     {
                         "id": "66334rw8x",
-                        "departmentId": "l6rd7tt1i",
+                        "systemId": "l6rd7tt1i",
                         "description": "Main Compressor",
                         "name": "Compressor A",
                         "notes": "",

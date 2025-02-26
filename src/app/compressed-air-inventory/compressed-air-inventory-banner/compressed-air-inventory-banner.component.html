@@ -198,15 +198,15 @@
 
 <nav class="hide-print" *ngIf="setupTab == 'compressed-air-catalog' && mainTab == 'setup'">
     <!-- <div class="d-lg-flex d-none tabs subtabs progress-tabs flex-wrap compressed-air-inventory">
-        <div *ngFor="let department of compressedAirInventoryData.departments"
-            [ngClass]="{'active': selectedDepartmentId == department.id}" (click)="selectedDepartment(department.id)">
-            <a>{{department.name}} -->
-                <!-- <span class="badge gray-badge" [ngClass]="{'missing-data': !department.isValid}">
-                    <strong>{{department.catalog.length}}</strong>
+        <div *ngFor="let system of compressedAirInventoryData.systems"
+            [ngClass]="{'active': selectedDepartmentId == system.id}" (click)="selectedDepartment(system.id)">
+            <a>{{system.name}} -->
+                <!-- <span class="badge gray-badge" [ngClass]="{'missing-data': !system.isValid}">
+                    <strong>{{system.catalog.length}}</strong>
                 </span> 
                 -->
                 <!-- <span class="badge gray-badge">
-                    <strong>{{department.catalog.length}}</strong>
+                    <strong>{{system.catalog.length}}</strong>
                 </span>
 
             </a>
@@ -216,26 +216,26 @@
         <ul
             class="pagination d-flex justify-content-between tabs compressed-air-inventory subtabs progress-tabs flex-fill">
             <li class="page-item"
-                [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.departments[0].id}">
+                [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.systems[0].id}">
                 <a class="nav-link small" (click)="backCompressedAirCatalogTabs()"
-                    [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.departments[0].id}">
+                    [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.systems[0].id}">
                     <span class="fa fa-chevron-left"></span></a>
             </li> 
-           <ng-container *ngFor="let department of compressedAirInventoryData.departments">
-                <li *ngIf="selectedDepartmentId == department.id"
-                    [ngClass]="{'active': selectedDepartmentId == department.id}"
-                    (click)="selectedDepartment(department.id)">
-                    <a>{{department.name}}
+           <ng-container *ngFor="let system of compressedAirInventoryData.systems">
+                <li *ngIf="selectedDepartmentId == system.id"
+                    [ngClass]="{'active': selectedDepartmentId == system.id}"
+                    (click)="selectedDepartment(system.id)">
+                    <a>{{system.name}}
                         <span class="badge gray-badge">
-                            <strong>{{department.catalog.length}}</strong>
+                            <strong>{{system.catalog.length}}</strong>
                         </span>
                     </a>
                 </li>
             </ng-container>
             <li class="page-item"
-                [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.departments[compressedAirInventoryData.departments.length - 1].id}">
+                [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.systems[compressedAirInventoryData.systems.length - 1].id}">
                 <a class="nav-link small" (click)="continueCompressedAirCatalogTabs()"
-                    [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.departments[compressedAirInventoryData.departments.length - 1].id}">
+                    [ngClass]="{'disabled': selectedDepartmentId == compressedAirInventoryData.systems[compressedAirInventoryData.systems.length - 1].id}">
                     <span class="fa fa-chevron-right"></span></a>
             </li>
         </ul>

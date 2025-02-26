@@ -84,8 +84,8 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     this.compressedAirInventoryService.setupTab.next(str);
   }
 
-  selectedDepartment(departmentId: string) {
-    //this.pumpCatalogService.selectedDepartmentId.next(departmentId);
+  selectedDepartment(systemId: string) {
+    //this.pumpCatalogService.selectedDepartmentId.next(systemId);
   }
 
   setMainTab(str: string) {
@@ -144,17 +144,17 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   continuePumpCatalogTabs() {
-    // let currentIndex: number = _.findIndex(this.pumpInventoryData.departments, (department) => { return department.id == this.selectedDepartmentId });
-    // if (currentIndex != this.pumpInventoryData.departments.length - 1) {
-    //   let nextID: string = this.pumpInventoryData.departments[currentIndex + 1].id;
+    // let currentIndex: number = _.findIndex(this.pumpInventoryData.systems, (system) => { return system.id == this.selectedDepartmentId });
+    // if (currentIndex != this.pumpInventoryData.systems.length - 1) {
+    //   let nextID: string = this.pumpInventoryData.systems[currentIndex + 1].id;
     //   this.pumpCatalogService.selectedDepartmentId.next(nextID);
     // }
   }
 
   backPumpCatalogTabs() {
-    // let currentIndex: number = _.findIndex(this.pumpInventoryData.departments, (department) => { return department.id == this.selectedDepartmentId });
+    // let currentIndex: number = _.findIndex(this.pumpInventoryData.systems, (system) => { return system.id == this.selectedDepartmentId });
     // if (currentIndex != 0) {
-    //   let nextID: string = this.pumpInventoryData.departments[currentIndex - 1].id;
+    //   let nextID: string = this.pumpInventoryData.systems[currentIndex - 1].id;
     //   this.pumpCatalogService.selectedDepartmentId.next(nextID);
     // }
   }

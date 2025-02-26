@@ -27,16 +27,16 @@ export class DepartmentSetupComponent implements OnInit {
   }
 
   deleteSystem(id: string) {
-    let departmentIndex: number = this.compressedAirInventoryData.departments.findIndex((department) => { return department.id == id })
-    //this.motorIntegrationService.removeDepartmentMotorConnections(this.pumpInventoryData, departmentIndex);
-    this.compressedAirInventoryData.departments.splice(departmentIndex, 1);
+    let systemIndex: number = this.compressedAirInventoryData.systems.findIndex((system) => { return system.id == id })
+    //this.motorIntegrationService.removeDepartmentMotorConnections(this.pumpInventoryData, systemIndex);
+    this.compressedAirInventoryData.systems.splice(systemIndex, 1);
     this.compressedAirInventoryService.setIsValidInventory(this.compressedAirInventoryData);
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);
   }
 
   addSystem() {
-    let newDepartment: CompressedAirInventoryDepartment = this.compressedAirInventoryService.getNewDepartment(this.compressedAirInventoryData.departments.length + 1);
-    this.compressedAirInventoryData.departments.push(newDepartment);
+    let newDepartment: CompressedAirInventoryDepartment = this.compressedAirInventoryService.getNewDepartment(this.compressedAirInventoryData.systems.length + 1);
+    this.compressedAirInventoryData.systems.push(newDepartment);
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);
   }
 

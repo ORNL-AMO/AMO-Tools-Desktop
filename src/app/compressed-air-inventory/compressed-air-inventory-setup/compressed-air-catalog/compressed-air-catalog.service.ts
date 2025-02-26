@@ -16,8 +16,8 @@ export class CompressedAirCatalogService {
   getUpdatedSelectedCompressedAirItem(): CompressedAirItem {
     let compressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue()
     let selectedCompressedAirItem = this.selectedCompressedAirItem.getValue();
-    let department = compressedAirInventoryData.departments.find(department => { return department.id == selectedCompressedAirItem.departmentId });
-    selectedCompressedAirItem = department.catalog.find(compressedAirItem => { return compressedAirItem.id == selectedCompressedAirItem.id });
+    let system = compressedAirInventoryData.systems.find(system => { return system.id == selectedCompressedAirItem.systemId });
+    selectedCompressedAirItem = system.catalog.find(compressedAirItem => { return compressedAirItem.id == selectedCompressedAirItem.id });
     return selectedCompressedAirItem;
   }
 

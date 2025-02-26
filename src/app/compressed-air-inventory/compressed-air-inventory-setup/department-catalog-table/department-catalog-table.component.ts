@@ -61,16 +61,16 @@ export class DepartmentCatalogTableComponent implements OnInit {
 
   setSelectedCompressedAirDepartment() {
     if (this.compressedAirInventoryData && this.selectedDepartmentId) {
-      this.selectedCompressedAirDepartment = this.compressedAirInventoryData.departments.find(department => { return department.id == this.selectedDepartmentId });
+      this.selectedCompressedAirDepartment = this.compressedAirInventoryData.systems.find(system => { return system.id == this.selectedDepartmentId });
       this.setTableData();
     }
   }
 
   addNewCompressor() {
     let newCompressedAir: CompressedAirItem = this.compressedAirInventoryService.getNewCompressor(this.selectedDepartmentId);
-    this.compressedAirInventoryData.departments.forEach(department => {
-      if (department.id == this.selectedDepartmentId) {
-        department.catalog.push(newCompressedAir);
+    this.compressedAirInventoryData.systems.forEach(system => {
+      if (system.id == this.selectedDepartmentId) {
+        system.catalog.push(newCompressedAir);
       }
     });
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);
@@ -110,9 +110,9 @@ export class DepartmentCatalogTableComponent implements OnInit {
     compressedAirItemCopy.name = compressedAirItem.name + ' (copy)';
     compressedAirItemCopy.id = Math.random().toString(36).substr(2, 9);
 
-    this.compressedAirInventoryData.departments.forEach(department => {
-      if (department.id == this.selectedDepartmentId) {
-        department.catalog.push(compressedAirItemCopy);
+    this.compressedAirInventoryData.systems.forEach(system => {
+      if (system.id == this.selectedDepartmentId) {
+        system.catalog.push(compressedAirItemCopy);
       }
     });
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);

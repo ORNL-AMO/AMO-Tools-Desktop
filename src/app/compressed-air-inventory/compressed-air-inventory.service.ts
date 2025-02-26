@@ -47,7 +47,7 @@ export class CompressedAirInventoryService {
     let systemInformation: SystemInformation = this.getSystemInformation();
     return {
       systemInformation: systemInformation,
-      departments: [initialDepartment],
+      systems: [initialDepartment],
       displayOptions: displayOptions
     }
   }
@@ -64,7 +64,7 @@ export class CompressedAirInventoryService {
   setIsValidInventory(compressedAirInventoryData: CompressedAirInventoryData) {
     let isValid: boolean = true;
     // if (compressedAirInventoryData) {
-    //   compressedAirInventoryData.departments.forEach(dept => {
+    //   compressedAirInventoryData.systems.forEach(dept => {
     //     let isValidDepartment: boolean = true;
     //     dept.catalog.map(compressedAirItem => {
     //       compressedAirItem.validCompressedAir = this.isCompressedAirValid(compressedAirItem);
@@ -100,23 +100,23 @@ export class CompressedAirInventoryService {
   //   }
   // }
 
-  getNewDepartment(departmentNum: number): CompressedAirInventoryDepartment {
-    let departmentId: string = Math.random().toString(36).substr(2, 9);
-    let initCompressor: CompressedAirItem = this.getNewCompressor(departmentId);
+  getNewDepartment(systemNum: number): CompressedAirInventoryDepartment {
+    let systemId: string = Math.random().toString(36).substr(2, 9);
+    let initCompressor: CompressedAirItem = this.getNewCompressor(systemId);
     return {
-      name: 'System ' + departmentNum,
+      name: 'System ' + systemNum,
       operatingHours: 8760,
       totalAirStorage: 3000,
       description: '',
-      id: departmentId,
+      id: systemId,
       catalog: [initCompressor]
     }
   }
 
-  getNewCompressor(departmentId: string): CompressedAirItem {
+  getNewCompressor(systemId: string): CompressedAirItem {
     return {
       id: Math.random().toString(36).substr(2, 9),
-      departmentId: departmentId,
+      systemId: systemId,
       suiteDbItemId: undefined,
       description: '',
       notes: '',
@@ -266,9 +266,9 @@ export class CompressedAirInventoryService {
 
   async deleteCompressedAirItem(selectedCompressedAir: CompressedAirItem) {
     let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
-    let selectedDepartmentIndex: number = compressedAirInventoryData.departments.findIndex(department => { return department.id == selectedCompressedAir.departmentId });
-    let compressedAirItemIndex: number = compressedAirInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(compressedAirItem => { return compressedAirItem.id == selectedCompressedAir.id });
-    compressedAirInventoryData.departments[selectedDepartmentIndex].catalog.splice(compressedAirItemIndex, 1);
+    let selectedDepartmentIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedCompressedAir.systemId });
+    let compressedAirItemIndex: number = compressedAirInventoryData.systems[selectedDepartmentIndex].catalog.findIndex(compressedAirItem => { return compressedAirItem.id == selectedCompressedAir.id });
+    compressedAirInventoryData.systems[selectedDepartmentIndex].catalog.splice(compressedAirItemIndex, 1);
     // if (selectedCompressedAir.connectedItem) {
     //  await this.motorIntegrationService.removeMotorConnectedItem(selectedCompressedAir);
     //  compressedAirInventoryData.hasConnectedInventoryItems = false;
@@ -280,7 +280,7 @@ export class CompressedAirInventoryService {
   updateCompressedAirItem(selectedCompressedAir: CompressedAirItem) {
     let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
     let isValid: boolean = true;
-    compressedAirInventoryData.departments.map(dept => {
+    compressedAirInventoryData.systems.map(dept => {
       let isValidDepartment: boolean = true;
       dept.catalog.map(compressedAirItem => {
         if (selectedCompressedAir.id === compressedAirItem.id) {

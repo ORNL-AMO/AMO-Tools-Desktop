@@ -59,10 +59,10 @@ export class CompressedAirInventoryComponent implements OnInit {
       this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryItem.compressedAirInventoryData);
       this.compressedAirInventoryService.currentInventoryId = tmpItemId;
 
-      let departmentId = this.activatedRoute.snapshot.queryParamMap.get('departmentId');
+      let systemId = this.activatedRoute.snapshot.queryParamMap.get('systemId');
       let itemId = this.activatedRoute.snapshot.queryParamMap.get('itemId');
-      // if (departmentId && itemId) {
-      //   this.redirectFromConnectedInventory(departmentId, itemId);
+      // if (systemId && itemId) {
+      //   this.redirectFromConnectedInventory(systemId, itemId);
       // }
     });
 
@@ -168,10 +168,10 @@ export class CompressedAirInventoryComponent implements OnInit {
   }
 
 
-  redirectFromConnectedInventory(departmentId: string, itemId: string) {
-    // this.compressedAirInventoryService.selectedDepartmentId.next(departmentId)
-    // let department: PumpInventoryDepartment = this.compressedAirInventoryItem.pumpInventoryData.departments.find(department => { return department.id == departmentId });
-    // let selectedItem: PumpItem = department.catalog.find(pumpItem => { return pumpItem.id == itemId });
+  redirectFromConnectedInventory(systemId: string, itemId: string) {
+    // this.compressedAirInventoryService.selectedDepartmentId.next(systemId)
+    // let system: PumpInventoryDepartment = this.compressedAirInventoryItem.pumpInventoryData.systems.find(system => { return system.id == systemId });
+    // let selectedItem: PumpItem = system.catalog.find(pumpItem => { return pumpItem.id == itemId });
     // this.pumpCatalogService.selectedPumpItem.next(selectedItem);
     // this.pumpInventoryService.mainTab.next('setup');
     // this.pumpInventoryService.setupTab.next('pump-catalog');

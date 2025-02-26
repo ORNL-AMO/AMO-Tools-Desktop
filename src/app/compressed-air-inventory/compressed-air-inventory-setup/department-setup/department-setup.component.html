@@ -6,18 +6,18 @@
         </div>
         <a class="click-link small pull-right" (click)="addSystem()">+Add System</a>
     </div>
-    <div class="col-12 pt-1 pb-2 form-section" *ngFor="let department of compressedAirInventoryData.departments">
+    <div class="col-12 pt-1 pb-2 form-section" *ngFor="let system of compressedAirInventoryData.systems">
         <form class="p-0">
             <div class="form-group">
                 <label>System Name</label>
-                <input class="form-control" type="text" id="name" name="name" [(ngModel)]="department.name"
+                <input class="form-control" type="text" id="name" name="name" [(ngModel)]="system.name"
                     (input)="save()">
             </div>
             <div class="form-group">
                 <label>Operating Hours</label>
                 <div class="input-group">
                     <input class="form-control" type="text" id="operatingHours" name="operatingHours"
-                        [(ngModel)]="department.operatingHours" (input)="save()">
+                        [(ngModel)]="system.operatingHours" (input)="save()">
                     <span class="input-group-addon units">
                         hr/yr
                     </span>
@@ -27,7 +27,7 @@
                 <label>Total Air Storage</label>
                 <div class="input-group">
                     <input class="form-control" type="number" step="10" id="totalAirStorage" name="totalAirStorage"
-                        [(ngModel)]="department.totalAirStorage" (input)="save()">
+                        [(ngModel)]="system.totalAirStorage" (input)="save()">
                     <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
                     <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
                 </div>
@@ -36,10 +36,10 @@
             <div class="form-group">
                 <label>Description</label>
                 <textarea class="form-control" type="text" id="description" name="description"
-                    [(ngModel)]="department.description" (input)="save()"></textarea>
+                    [(ngModel)]="system.description" (input)="save()"></textarea>
             </div>
         </form>
-        <a class="click-link danger pull-right small" (click)="deleteSystem(department.id)"
-            *ngIf="compressedAirInventoryData.departments.length != 1">Delete</a>
+        <a class="click-link danger pull-right small" (click)="deleteSystem(system.id)"
+            *ngIf="compressedAirInventoryData.systems.length != 1">Delete</a>
     </div>
 </div>
