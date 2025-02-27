@@ -19,7 +19,7 @@
             [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}"
             [ngStyle]="{'height.px': containerHeight}">
             <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
-            <app-department-setup *ngIf="setupTab == 'system-setup'"></app-department-setup> 
+            <app-system-setup *ngIf="setupTab == 'system-setup'"></app-system-setup> 
             <app-compressed-air-properties *ngIf="setupTab == 'compressor-properties'"></app-compressed-air-properties>
             <app-compressed-air-catalog *ngIf="setupTab == 'compressed-air-catalog'"></app-compressed-air-catalog>
             <app-end-uses-setup *ngIf="setupTab == 'end-uses'"></app-end-uses-setup>
@@ -50,8 +50,8 @@
                         <app-help-panel
                             *ngIf="(tabSelect == 'help' && setupTab == 'compressed-air-catalog') || setupTab != 'compressed-air-catalog'">
                         </app-help-panel>
-                        <app-department-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'compressed-air-catalog'">
-                        </app-department-catalog-table>
+                        <app-system-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'compressed-air-catalog'">
+                        </app-system-catalog-table>
                     </div>
                 </div>
             </div>

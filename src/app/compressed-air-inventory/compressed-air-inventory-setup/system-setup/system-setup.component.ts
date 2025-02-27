@@ -5,11 +5,11 @@ import { MotorIntegrationService } from '../../../shared/connected-inventory/mot
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-department-setup',
-  templateUrl: './department-setup.component.html',
-  styleUrl: './department-setup.component.css'
+  selector: 'app-system-setup',
+  templateUrl: './system-setup.component.html',
+  styleUrl: './system-setup.component.css'
 })
-export class DepartmentSetupComponent implements OnInit {
+export class SystemSetupComponent implements OnInit {
 
 
   settings: Settings;

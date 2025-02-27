@@ -9,8 +9,8 @@ import { ConnectedInventoryModule } from '../../shared/connected-inventory/conne
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { PlantSetupComponent } from './plant-setup/plant-setup.component';
 import { HelpPanelModule } from '../help-panel/help-panel.module';
-import { DepartmentSetupComponent } from './department-setup/department-setup.component';
-import { DepartmentCatalogTableComponent } from './department-catalog-table/department-catalog-table.component';
+import { SystemSetupComponent } from './system-setup/system-setup.component';
+import { SystemCatalogTableComponent } from './system-catalog-table/system-catalog-table.component';
 import { CompressedAirPropertiesModule } from './compressed-air-properties/compressed-air-properties.module';
 import { CompressedAirCatalogModule } from './compressed-air-catalog/compressed-air-catalog.module';
 import { SystemCapacityInventoryModalComponent } from './plant-setup/system-capacity-inventory-modal/system-capacity-inventory-modal.component';
@@ -24,8 +24,8 @@ import { EndUsesSetupComponent } from './end-uses-setup/end-uses-setup.component
   declarations: [
     CompressedAirInventorySetupComponent,
     PlantSetupComponent,
-    DepartmentSetupComponent,
-    DepartmentCatalogTableComponent,
+    SystemSetupComponent,
+    SystemCatalogTableComponent,
     SystemCapacityInventoryModalComponent,
     EndUsesSetupComponent,
   ],

@@ -8,11 +8,11 @@ import { CompressedAirCatalogService } from '../compressed-air-catalog/compresse
 import { PerformancePointsCatalogService } from '../compressed-air-catalog/performance-points-catalog/performance-points-catalog.service';
 
 @Component({
-  selector: 'app-department-catalog-table',
-  templateUrl: './department-catalog-table.component.html',
-  styleUrl: './department-catalog-table.component.css'
+  selector: 'app-system-catalog-table',
+  templateUrl: './system-catalog-table.component.html',
+  styleUrl: './system-catalog-table.component.css'
 })
-export class DepartmentCatalogTableComponent implements OnInit {
+export class SystemCatalogTableComponent implements OnInit {
 
   selectedCompressedAirSystem: CompressedAirInventorySystem;
 
