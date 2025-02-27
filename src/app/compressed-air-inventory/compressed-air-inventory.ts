@@ -5,7 +5,7 @@ import { OperatingHours } from "../shared/models/operations";
 export interface CompressedAirInventoryData {
   co2SavingsData?: Co2SavingsData,
   systemInformation: SystemInformation,
-  systems: Array<CompressedAirInventoryDepartment>,
+  systems: Array<CompressedAirInventorySystem>,
   displayOptions: CompressedAirPropertyDisplayOptions,
   hasConnectedInventoryItems?: boolean,
   hasConnectedPsat?: boolean,
@@ -19,7 +19,7 @@ export interface SystemInformation {
   atmosphericPressureKnown: boolean,
 }
 
-export interface CompressedAirInventoryDepartment {
+export interface CompressedAirInventorySystem {
   name: string,
   operatingHours: number,
   totalAirStorage: number,

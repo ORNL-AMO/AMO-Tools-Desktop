@@ -26,8 +26,8 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   mainTabSub: Subscription;
   compressedAirInventoryData: CompressedAirInventoryData;
   compressedAirInventoryDataSub: Subscription;
-  selectedDepartmentId: string;
-  selectedDepartmentIdSub: Subscription;
+  selectedSystemId: string;
+  selectedSystemIdSub: Subscription;
   connectedInventoryDataSub: Subscription;
   showConnectedItemBadge: boolean;
   catalogClassStatus: string[];
@@ -58,8 +58,8 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
       // }
     });
 
-    // this.selectedDepartmentIdSub = this.pumpCatalogService.selectedDepartmentId.subscribe(val => {
-    //   this.selectedDepartmentId = val;
+    // this.selectedSystemIdSub = this.pumpCatalogService.selectedSystemId.subscribe(val => {
+    //   this.selectedSystemId = val;
     // });
 
     this.summaryTabSub = this.compressedAirInventoryService.summaryTab.subscribe(val => {
@@ -74,7 +74,7 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   ngOnDestroy() {
     this.setupTabSub.unsubscribe();
     this.compressedAirInventoryDataSub.unsubscribe();
-    //this.selectedDepartmentIdSub.unsubscribe();
+    //this.selectedSystemIdSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.summaryTabSub.unsubscribe();
     //this.connectedInventoryDataSub.unsubscribe();
@@ -84,8 +84,8 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     this.compressedAirInventoryService.setupTab.next(str);
   }
 
-  selectedDepartment(systemId: string) {
-    //this.pumpCatalogService.selectedDepartmentId.next(systemId);
+  selectedSystem(systemId: string) {
+    //this.pumpCatalogService.selectedSystemId.next(systemId);
   }
 
   setMainTab(str: string) {
@@ -144,18 +144,18 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   continuePumpCatalogTabs() {
-    // let currentIndex: number = _.findIndex(this.pumpInventoryData.systems, (system) => { return system.id == this.selectedDepartmentId });
+    // let currentIndex: number = _.findIndex(this.pumpInventoryData.systems, (system) => { return system.id == this.selectedSystemId });
     // if (currentIndex != this.pumpInventoryData.systems.length - 1) {
     //   let nextID: string = this.pumpInventoryData.systems[currentIndex + 1].id;
-    //   this.pumpCatalogService.selectedDepartmentId.next(nextID);
+    //   this.pumpCatalogService.selectedSystemId.next(nextID);
     // }
   }
 
   backPumpCatalogTabs() {
-    // let currentIndex: number = _.findIndex(this.pumpInventoryData.systems, (system) => { return system.id == this.selectedDepartmentId });
+    // let currentIndex: number = _.findIndex(this.pumpInventoryData.systems, (system) => { return system.id == this.selectedSystemId });
     // if (currentIndex != 0) {
     //   let nextID: string = this.pumpInventoryData.systems[currentIndex - 1].id;
-    //   this.pumpCatalogService.selectedDepartmentId.next(nextID);
+    //   this.pumpCatalogService.selectedSystemId.next(nextID);
     // }
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CompressedAirInventoryData, CompressedAirInventoryDepartment, CompressedAirItem, ConnectedItem } from '../../compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem, ConnectedItem } from '../../compressed-air-inventory';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
@@ -17,7 +17,7 @@ export class CompressedAirCatalogComponent implements OnInit {
   compressedAirInventoryData: CompressedAirInventoryData;
   compressedAirInventoryDataSub: Subscription;
 
-  selectedDepartmentIdSub: Subscription;
+  selectedSystemIdSub: Subscription;
   showDeleteCompressedAirButton: boolean = false;
   showConfirmDeleteModal: boolean = false;
   confirmDeleteCompressedAirInventoryData: ConfirmDeleteData;
@@ -32,34 +32,34 @@ export class CompressedAirCatalogComponent implements OnInit {
   ngOnInit(): void {
     this.compressedAirInventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(val => {
       this.compressedAirInventoryData = val;
-      let selectedDepartmentId: string = this.compressedAirCatalogService.selectedDepartmentId.getValue();
-      if (selectedDepartmentId) {
-        let findDepartment: CompressedAirInventoryDepartment = this.compressedAirInventoryData.systems.find(system => { return system.id == selectedDepartmentId });
-        if (findDepartment) {
-          this.showDeleteCompressedAirButton = (findDepartment.catalog.length > 1);
+      let selectedSystemId: string = this.compressedAirCatalogService.selectedSystemId.getValue();
+      if (selectedSystemId) {
+        let findSystem: CompressedAirInventorySystem = this.compressedAirInventoryData.systems.find(system => { return system.id == selectedSystemId });
+        if (findSystem) {
+          this.showDeleteCompressedAirButton = (findSystem.catalog.length > 1);
         }
       }
     });
 
-    this.selectedDepartmentIdSub = this.compressedAirCatalogService.selectedDepartmentId.subscribe(val => {
+    this.selectedSystemIdSub = this.compressedAirCatalogService.selectedSystemId.subscribe(val => {
       if (!val) {
-        this.compressedAirCatalogService.selectedDepartmentId.next(this.compressedAirInventoryData.systems[0].id);
+        this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryData.systems[0].id);
       } else {
-        let findDepartment: CompressedAirInventoryDepartment = this.compressedAirInventoryData.systems.find(system => { return system.id == val });
-        if (findDepartment) {
-          this.showDeleteCompressedAirButton = (findDepartment.catalog.length > 1);
+        let findSystem: CompressedAirInventorySystem = this.compressedAirInventoryData.systems.find(system => { return system.id == val });
+        if (findSystem) {
+          this.showDeleteCompressedAirButton = (findSystem.catalog.length > 1);
           let selectedCompressedAirItem: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
           if (selectedCompressedAirItem) {
-            let findItemInDepartment: CompressedAirItem = findDepartment.catalog.find(compressedAirItem => { return compressedAirItem.id == selectedCompressedAirItem.id });
-            if (!findItemInDepartment) {
-              this.compressedAirCatalogService.selectedCompressedAirItem.next(findDepartment.catalog[0]);
+            let findItemInSystem: CompressedAirItem = findSystem.catalog.find(compressedAirItem => { return compressedAirItem.id == selectedCompressedAirItem.id });
+            if (!findItemInSystem) {
+              this.compressedAirCatalogService.selectedCompressedAirItem.next(findSystem.catalog[0]);
             }
           } else {
-            this.compressedAirCatalogService.selectedCompressedAirItem.next(findDepartment.catalog[0]);
+            this.compressedAirCatalogService.selectedCompressedAirItem.next(findSystem.catalog[0]);
           }
         } else {
           this.showDeleteCompressedAirButton = (this.compressedAirInventoryData.systems[0].catalog.length != 1);
-          this.compressedAirCatalogService.selectedDepartmentId.next(this.compressedAirInventoryData.systems[0].id);
+          this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryData.systems[0].id);
           this.compressedAirCatalogService.selectedCompressedAirItem.next(this.compressedAirInventoryData.systems[0].catalog[0]);
         }
       }
@@ -73,7 +73,7 @@ export class CompressedAirCatalogComponent implements OnInit {
           id: selectedCompressedAir.id,
           name: selectedCompressedAir.name,
           inventoryId: this.compressedAirInventoryService.currentInventoryId,
-          systemId: this.compressedAirCatalogService.selectedDepartmentId.getValue(),
+          systemId: this.compressedAirCatalogService.selectedSystemId.getValue(),
           inventoryType: 'compressed-air',
         }
       }
@@ -82,7 +82,7 @@ export class CompressedAirCatalogComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.selectedDepartmentIdSub.unsubscribe();
+    this.selectedSystemIdSub.unsubscribe();
     this.compressedAirInventoryDataSub.unsubscribe();
     this.selectedCompressedAirItemSub.unsubscribe();
     this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData())
@@ -109,8 +109,8 @@ export class CompressedAirCatalogComponent implements OnInit {
     if (shouldDeleteCompressedAirItem) {
       this.compressedAirInventoryService.deleteCompressedAirItem(this.compressedAirItemToDelete);
       //re-select system to reset data process after deleting
-      let selectedDepartmentId: string = this.compressedAirCatalogService.selectedDepartmentId.getValue();
-      this.compressedAirCatalogService.selectedDepartmentId.next(selectedDepartmentId);
+      let selectedSystemId: string = this.compressedAirCatalogService.selectedSystemId.getValue();
+      this.compressedAirCatalogService.selectedSystemId.next(selectedSystemId);
     }
 
     this.showConfirmDeleteModal = false;

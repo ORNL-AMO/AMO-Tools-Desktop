@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CompressedAirInventoryData, CompressedAirInventoryDepartment } from '../../compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventorySystem } from '../../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
 import { MotorIntegrationService } from '../../../shared/connected-inventory/motor-integration.service';
 import { Settings } from '../../../shared/models/settings';
@@ -35,8 +35,8 @@ export class DepartmentSetupComponent implements OnInit {
   }
 
   addSystem() {
-    let newDepartment: CompressedAirInventoryDepartment = this.compressedAirInventoryService.getNewDepartment(this.compressedAirInventoryData.systems.length + 1);
-    this.compressedAirInventoryData.systems.push(newDepartment);
+    let newSystem: CompressedAirInventorySystem = this.compressedAirInventoryService.getNewSystem(this.compressedAirInventoryData.systems.length + 1);
+    this.compressedAirInventoryData.systems.push(newSystem);
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);
   }
 

@@ -169,8 +169,8 @@ export class CompressedAirInventoryComponent implements OnInit {
 
 
   redirectFromConnectedInventory(systemId: string, itemId: string) {
-    // this.compressedAirInventoryService.selectedDepartmentId.next(systemId)
-    // let system: PumpInventoryDepartment = this.compressedAirInventoryItem.pumpInventoryData.systems.find(system => { return system.id == systemId });
+    // this.compressedAirInventoryService.selectedSystemId.next(systemId)
+    // let system: PumpInventorySystem = this.compressedAirInventoryItem.pumpInventoryData.systems.find(system => { return system.id == systemId });
     // let selectedItem: PumpItem = system.catalog.find(pumpItem => { return pumpItem.id == itemId });
     // this.pumpCatalogService.selectedPumpItem.next(selectedItem);
     // this.pumpInventoryService.mainTab.next('setup');

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { CompressedAirInventoryData, CompressedAirInventoryDepartment, CompressedAirItem, CompressedAirPropertyDisplayOptions, SystemInformation, ValidCompressedAir } from './compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem, CompressedAirPropertyDisplayOptions, SystemInformation, ValidCompressedAir } from './compressed-air-inventory';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { GreaterThanValidator } from '../shared/validators/greater-than';
@@ -34,7 +34,7 @@ export class CompressedAirInventoryService {
     this.helpPanelTab = new BehaviorSubject<string>(undefined);
     this.showExportModal = new BehaviorSubject<boolean>(false);
     // this.filterInventorySummary = new BehaviorSubject({
-    //   selectedDepartmentIds: new Array(),
+    //   selectedSystemIds: new Array(),
     //   pumpTypes: new Array(),
     //   motorRatedPowerValues: new Array(),
     //   statusValues: new Array()
@@ -42,12 +42,12 @@ export class CompressedAirInventoryService {
   }
 
   initInventoryData(): CompressedAirInventoryData {
-    let initialDepartment: CompressedAirInventoryDepartment = this.getNewDepartment(1);
+    let initialSystem: CompressedAirInventorySystem = this.getNewSystem(1);
     let displayOptions: CompressedAirPropertyDisplayOptions = this.getDefaultDisplayOptions();
     let systemInformation: SystemInformation = this.getSystemInformation();
     return {
       systemInformation: systemInformation,
-      systems: [initialDepartment],
+      systems: [initialSystem],
       displayOptions: displayOptions
     }
   }
@@ -65,15 +65,15 @@ export class CompressedAirInventoryService {
     let isValid: boolean = true;
     // if (compressedAirInventoryData) {
     //   compressedAirInventoryData.systems.forEach(dept => {
-    //     let isValidDepartment: boolean = true;
+    //     let isValidSystem: boolean = true;
     //     dept.catalog.map(compressedAirItem => {
     //       compressedAirItem.validCompressedAir = this.isCompressedAirValid(compressedAirItem);
     //       if (!compressedAirItem.validCompressedAir.isValid) {
     //         isValid = false;
-    //         isValidDepartment = false;
+    //         isValidSystem = false;
     //       }
     //     })
-    //     dept.isValid = isValidDepartment
+    //     dept.isValid = isValidSystem
     //   });
     // }
     compressedAirInventoryData.isValid = isValid;
@@ -100,7 +100,7 @@ export class CompressedAirInventoryService {
   //   }
   // }
 
-  getNewDepartment(systemNum: number): CompressedAirInventoryDepartment {
+  getNewSystem(systemNum: number): CompressedAirInventorySystem {
     let systemId: string = Math.random().toString(36).substr(2, 9);
     let initCompressor: CompressedAirItem = this.getNewCompressor(systemId);
     return {
@@ -266,9 +266,9 @@ export class CompressedAirInventoryService {
 
   async deleteCompressedAirItem(selectedCompressedAir: CompressedAirItem) {
     let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
-    let selectedDepartmentIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedCompressedAir.systemId });
-    let compressedAirItemIndex: number = compressedAirInventoryData.systems[selectedDepartmentIndex].catalog.findIndex(compressedAirItem => { return compressedAirItem.id == selectedCompressedAir.id });
-    compressedAirInventoryData.systems[selectedDepartmentIndex].catalog.splice(compressedAirItemIndex, 1);
+    let selectedSystemIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedCompressedAir.systemId });
+    let compressedAirItemIndex: number = compressedAirInventoryData.systems[selectedSystemIndex].catalog.findIndex(compressedAirItem => { return compressedAirItem.id == selectedCompressedAir.id });
+    compressedAirInventoryData.systems[selectedSystemIndex].catalog.splice(compressedAirItemIndex, 1);
     // if (selectedCompressedAir.connectedItem) {
     //  await this.motorIntegrationService.removeMotorConnectedItem(selectedCompressedAir);
     //  compressedAirInventoryData.hasConnectedInventoryItems = false;
@@ -281,7 +281,7 @@ export class CompressedAirInventoryService {
     let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
     let isValid: boolean = true;
     compressedAirInventoryData.systems.map(dept => {
-      let isValidDepartment: boolean = true;
+      let isValidSystem: boolean = true;
       dept.catalog.map(compressedAirItem => {
         if (selectedCompressedAir.id === compressedAirItem.id) {
           compressedAirItem = selectedCompressedAir;
@@ -290,10 +290,10 @@ export class CompressedAirInventoryService {
         // compressedAirItem.validCompressedAir = isValidCompressedAir;
         // if (!isValidCompressedAir.isValid) {
         //   isValid = false;
-        //   isValidDepartment = false;
+        //   isValidSystem = false;
         // }
       })
-      dept.isValid = isValidDepartment;
+      dept.isValid = isValidSystem;
     });
     compressedAirInventoryData.isValid = isValid;
     this.compressedAirInventoryData.next(compressedAirInventoryData);

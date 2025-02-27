@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
-import { CompressedAirInventoryDepartment, CompressedAirInventoryData, CompressedAirItem, CompressorTypeOptions, ControlTypes } from '../../compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirItem, CompressorTypeOptions, ControlTypes, CompressedAirInventorySystem } from '../../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
 import { CompressedAirCatalogService } from '../compressed-air-catalog/compressed-air-catalog.service';
 import { PerformancePointsCatalogService } from '../compressed-air-catalog/performance-points-catalog/performance-points-catalog.service';
@@ -14,16 +14,16 @@ import { PerformancePointsCatalogService } from '../compressed-air-catalog/perfo
 })
 export class DepartmentCatalogTableComponent implements OnInit {
 
-  selectedCompressedAirDepartment: CompressedAirInventoryDepartment;
+  selectedCompressedAirSystem: CompressedAirInventorySystem;
 
   compressedAirInventoryDataSub: Subscription;
   compressedAirInventoryData: CompressedAirInventoryData;
 
-  selectedDepartmentId: string;
-  selectedDepartmentIdSub: Subscription;
+  selectedSystemId: string;
+  selectedSystemIdSub: Subscription;
   settings: Settings;
   settingsSub: Subscription;
-  tableDataItems: Array<DepartmentCatalogTableDataItem>;
+  tableDataItems: Array<SystemCatalogTableDataItem>;
 
   confirmDeleteCompressedAirInventoryData: ConfirmDeleteData;
   showConfirmDeleteModal: boolean = false;
@@ -39,12 +39,12 @@ export class DepartmentCatalogTableComponent implements OnInit {
     })
     this.compressedAirInventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(val => {
       this.compressedAirInventoryData = val;
-      this.setSelectedCompressedAirDepartment();
+      this.setSelectedCompressedAirSystem();
     });
 
-    this.selectedDepartmentIdSub = this.compressedAirCatalogService.selectedDepartmentId.subscribe(val => {
-      this.selectedDepartmentId = val;
-      this.setSelectedCompressedAirDepartment();
+    this.selectedSystemIdSub = this.compressedAirCatalogService.selectedSystemId.subscribe(val => {
+      this.selectedSystemId = val;
+      this.setSelectedCompressedAirSystem();
     });
 
     this.selectedCompressedAirItemSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(val => {
@@ -54,22 +54,22 @@ export class DepartmentCatalogTableComponent implements OnInit {
 
   ngOnDestroy() {
     this.compressedAirInventoryDataSub.unsubscribe();
-    this.selectedDepartmentIdSub.unsubscribe();
+    this.selectedSystemIdSub.unsubscribe();
     this.settingsSub.unsubscribe();
     this.selectedCompressedAirItemSub.unsubscribe();
   }
 
-  setSelectedCompressedAirDepartment() {
-    if (this.compressedAirInventoryData && this.selectedDepartmentId) {
-      this.selectedCompressedAirDepartment = this.compressedAirInventoryData.systems.find(system => { return system.id == this.selectedDepartmentId });
+  setSelectedCompressedAirSystem() {
+    if (this.compressedAirInventoryData && this.selectedSystemId) {
+      this.selectedCompressedAirSystem = this.compressedAirInventoryData.systems.find(system => { return system.id == this.selectedSystemId });
       this.setTableData();
     }
   }
 
   addNewCompressor() {
-    let newCompressedAir: CompressedAirItem = this.compressedAirInventoryService.getNewCompressor(this.selectedDepartmentId);
+    let newCompressedAir: CompressedAirItem = this.compressedAirInventoryService.getNewCompressor(this.selectedSystemId);
     this.compressedAirInventoryData.systems.forEach(system => {
-      if (system.id == this.selectedDepartmentId) {
+      if (system.id == this.selectedSystemId) {
         system.catalog.push(newCompressedAir);
       }
     });
@@ -82,19 +82,19 @@ export class DepartmentCatalogTableComponent implements OnInit {
   }
 
   setTableData() {
-    let tableDataItems: Array<DepartmentCatalogTableDataItem> = new Array();
-    this.selectedCompressedAirDepartment.catalog.forEach(compressedAirItem => {
-      let compressedAirItemData: DepartmentCatalogTableDataItem = this.getCompressedAirItemData(compressedAirItem);
+    let tableDataItems: Array<SystemCatalogTableDataItem> = new Array();
+    this.selectedCompressedAirSystem.catalog.forEach(compressedAirItem => {
+      let compressedAirItemData: SystemCatalogTableDataItem = this.getCompressedAirItemData(compressedAirItem);
       tableDataItems.push(compressedAirItemData);
     });
     this.tableDataItems = tableDataItems;
   }
 
-  getCompressedAirItemData(compressedAirItem: CompressedAirItem): DepartmentCatalogTableDataItem {
+  getCompressedAirItemData(compressedAirItem: CompressedAirItem): SystemCatalogTableDataItem {
     let compressorType = CompressorTypeOptions.find(type => type.value == compressedAirItem.nameplateData.compressorType).label;
     let controlType = ControlTypes.find(controlType => controlType.value == compressedAirItem.compressedAirControlsProperties.controlType).label;
     let pressureRange = this.getPressureMinMax(compressedAirItem);
-    let tableDataItem: DepartmentCatalogTableDataItem = {
+    let tableDataItem: SystemCatalogTableDataItem = {
       name: compressedAirItem.name,      
       operatingHours: compressedAirItem.fieldMeasurements.yearlyOperatingHours,
       compressorType: compressorType,
@@ -111,7 +111,7 @@ export class DepartmentCatalogTableComponent implements OnInit {
     compressedAirItemCopy.id = Math.random().toString(36).substr(2, 9);
 
     this.compressedAirInventoryData.systems.forEach(system => {
-      if (system.id == this.selectedDepartmentId) {
+      if (system.id == this.selectedSystemId) {
         system.catalog.push(compressedAirItemCopy);
       }
     });
@@ -142,8 +142,8 @@ export class DepartmentCatalogTableComponent implements OnInit {
 
   deleteItem() {
     this.compressedAirInventoryService.deleteCompressedAirItem(this.compressedAirItemToDelete);
-    let selectedDepartmentId: string = this.compressedAirCatalogService.selectedDepartmentId.getValue();
-    this.compressedAirCatalogService.selectedDepartmentId.next(selectedDepartmentId);
+    let selectedSystemId: string = this.compressedAirCatalogService.selectedSystemId.getValue();
+    this.compressedAirCatalogService.selectedSystemId.next(selectedSystemId);
   }
 
   getPressureMinMax(compressor: CompressedAirItem): string {
@@ -159,7 +159,7 @@ export class DepartmentCatalogTableComponent implements OnInit {
 }
 
 
-export interface DepartmentCatalogTableDataItem {
+export interface SystemCatalogTableDataItem {
   name: string,
   operatingHours: number,
   compressorType: string,

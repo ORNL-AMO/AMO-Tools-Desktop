@@ -6,10 +6,10 @@ import { CompressedAirInventoryService } from '../../compressed-air-inventory.se
 @Injectable()
 export class CompressedAirCatalogService {
 
-  selectedDepartmentId: BehaviorSubject<string>;
+  selectedSystemId: BehaviorSubject<string>;
   selectedCompressedAirItem: BehaviorSubject<CompressedAirItem>;
   constructor(private compressedAirInventoryService: CompressedAirInventoryService) {
-    this.selectedDepartmentId = new BehaviorSubject<string>(undefined);
+    this.selectedSystemId = new BehaviorSubject<string>(undefined);
     this.selectedCompressedAirItem = new BehaviorSubject<CompressedAirItem>(undefined);
   }
 
