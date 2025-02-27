@@ -1,0 +1,44 @@
+<div class="row ml-0 mr-0">
+    <div class="col-12">
+        <div class="header">
+            <div class="h3">System Setup</div>
+        </div>
+        <a class="click-link small pull-right" (click)="addSystem()">+Add System</a>
+    </div>
+    <div class="col-12 pt-1 pb-2 form-section" *ngFor="let system of compressedAirInventoryData.systems">
+        <form class="p-0">
+            <div class="form-group">
+                <label>System Name</label>
+                <input class="form-control" type="text" id="name" name="name" [(ngModel)]="system.name"
+                    (input)="save()">
+            </div>
+            <div class="form-group">
+                <label>Operating Hours</label>
+                <div class="input-group">
+                    <input class="form-control" type="text" id="operatingHours" name="operatingHours"
+                        [(ngModel)]="system.operatingHours" (input)="save()">
+                    <span class="input-group-addon units">
+                        hr/yr
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Total Air Storage</label>
+                <div class="input-group">
+                    <input class="form-control" type="number" step="10" id="totalAirStorage" name="totalAirStorage"
+                        [(ngModel)]="system.totalAirStorage" (input)="save()">
+                    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+                    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea class="form-control" type="text" id="description" name="description"
+                    [(ngModel)]="system.description" (input)="save()"></textarea>
+            </div>
+        </form>
+        <a class="click-link danger pull-right small" (click)="deleteSystem(system.id)"
+            *ngIf="compressedAirInventoryData.systems.length != 1">Delete</a>
+    </div>
+</div>

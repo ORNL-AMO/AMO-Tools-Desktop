@@ -59,10 +59,10 @@ export class CompressedAirInventoryComponent implements OnInit {
       this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryItem.compressedAirInventoryData);
       this.compressedAirInventoryService.currentInventoryId = tmpItemId;
 
-      let departmentId = this.activatedRoute.snapshot.queryParamMap.get('departmentId');
+      let systemId = this.activatedRoute.snapshot.queryParamMap.get('systemId');
       let itemId = this.activatedRoute.snapshot.queryParamMap.get('itemId');
-      // if (departmentId && itemId) {
-      //   this.redirectFromConnectedInventory(departmentId, itemId);
+      // if (systemId && itemId) {
+      //   this.redirectFromConnectedInventory(systemId, itemId);
       // }
     });
 
@@ -133,23 +133,25 @@ export class CompressedAirInventoryComponent implements OnInit {
 
   continue() {
     if (this.setupTab == 'plant-setup') {
-      this.compressedAirInventoryService.setupTab.next('department-setup');
-    } else if (this.setupTab == 'department-setup') {
-      this.compressedAirInventoryService.setupTab.next('pump-properties');
-    } else if (this.setupTab == 'pump-properties') {
-      this.compressedAirInventoryService.setupTab.next('pump-catalog');
-    } else if (this.setupTab == 'pump-catalog') {
-      this.compressedAirInventoryService.mainTab.next('summary');
+      this.compressedAirInventoryService.setupTab.next('system-setup');
+    } else if (this.setupTab == 'system-setup') {
+      this.compressedAirInventoryService.setupTab.next('compressor-properties');
+    } else if (this.setupTab == 'compressor-properties') {
+      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
+    } else if (this.setupTab == 'compressed-air-catalog') {
+      this.compressedAirInventoryService.setupTab.next('end-uses');
     }
   }
 
   back() {
-    if (this.setupTab == 'department-setup') {
+    if (this.setupTab == 'end-uses') {
+      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
+    } else if (this.setupTab == 'compressed-air-catalog') {
+      this.compressedAirInventoryService.setupTab.next('compressor-properties');
+    } else if (this.setupTab == 'compressor-properties') {
+      this.compressedAirInventoryService.setupTab.next('system-setup');
+    } else if (this.setupTab == 'system-setup') {
       this.compressedAirInventoryService.setupTab.next('plant-setup');
-    } else if (this.setupTab == 'pump-properties') {
-      this.compressedAirInventoryService.setupTab.next('department-setup');
-    } else if (this.setupTab == 'pump-catalog') {
-      this.compressedAirInventoryService.setupTab.next('pump-properties');
     }
   }
 
@@ -166,10 +168,10 @@ export class CompressedAirInventoryComponent implements OnInit {
   }
 
 
-  redirectFromConnectedInventory(departmentId: string, itemId: string) {
-    // this.compressedAirInventoryService.selectedDepartmentId.next(departmentId)
-    // let department: PumpInventoryDepartment = this.compressedAirInventoryItem.pumpInventoryData.departments.find(department => { return department.id == departmentId });
-    // let selectedItem: PumpItem = department.catalog.find(pumpItem => { return pumpItem.id == itemId });
+  redirectFromConnectedInventory(systemId: string, itemId: string) {
+    // this.compressedAirInventoryService.selectedSystemId.next(systemId)
+    // let system: PumpInventorySystem = this.compressedAirInventoryItem.pumpInventoryData.systems.find(system => { return system.id == systemId });
+    // let selectedItem: PumpItem = system.catalog.find(pumpItem => { return pumpItem.id == itemId });
     // this.pumpCatalogService.selectedPumpItem.next(selectedItem);
     // this.pumpInventoryService.mainTab.next('setup');
     // this.pumpInventoryService.setupTab.next('pump-catalog');

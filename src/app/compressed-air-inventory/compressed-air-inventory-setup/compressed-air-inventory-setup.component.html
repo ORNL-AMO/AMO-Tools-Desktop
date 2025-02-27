@@ -3,9 +3,10 @@
         <div class="nav-item" (click)="setSmallScreenTab('form')"
             [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
             <a class="nav-link" *ngIf="setupTab == 'plant-setup' && initPlantSetup">Plant Setup</a>
-            <a class="nav-link" *ngIf="setupTab == 'department-setup'">Departments</a>
-            <a class="nav-link" *ngIf="setupTab == 'compressed-air-properties'">Compressed Air Properties</a>
+            <a class="nav-link" *ngIf="setupTab == 'system-setup'">System Setup</a>
+            <a class="nav-link" *ngIf="setupTab == 'compressor-properties'">Compressed Air Properties</a>
             <a class="nav-link" *ngIf="setupTab == 'compressed-air-catalog'">Catalog</a>
+            <a class="nav-link" *ngIf="setupTab == 'end-uses'">End Uses</a>
         </div>
         <div class="nav-item" (click)="setSmallScreenTab('details')"
             [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
@@ -18,9 +19,10 @@
             [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}"
             [ngStyle]="{'height.px': containerHeight}">
             <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
-            <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup> 
-            <app-compressed-air-properties *ngIf="setupTab == 'compressed-air-properties'"></app-compressed-air-properties>
+            <app-system-setup *ngIf="setupTab == 'system-setup'"></app-system-setup> 
+            <app-compressed-air-properties *ngIf="setupTab == 'compressor-properties'"></app-compressed-air-properties>
             <app-compressed-air-catalog *ngIf="setupTab == 'compressed-air-catalog'"></app-compressed-air-catalog>
+            <app-end-uses-setup *ngIf="setupTab == 'end-uses'"></app-end-uses-setup>
         </div>
         <div class="row no-gutters assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
             [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
@@ -31,7 +33,7 @@
                             <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
                                 <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
                                     (click)="setTab('results')">
-                                    <div>Department Catalog</div>
+                                    <div>System Catalog</div>
                                 </a>
                             </div>
                             <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
@@ -48,8 +50,8 @@
                         <app-help-panel
                             *ngIf="(tabSelect == 'help' && setupTab == 'compressed-air-catalog') || setupTab != 'compressed-air-catalog'">
                         </app-help-panel>
-                        <app-department-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'compressed-air-catalog'">
-                        </app-department-catalog-table>
+                        <app-system-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'compressed-air-catalog'">
+                        </app-system-catalog-table>
                     </div>
                 </div>
             </div>

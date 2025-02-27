@@ -8,18 +8,18 @@ export const MockCompressedAirInventory: InventoryItem = {
             "systemElevation": null,
             "atmosphericPressure": 14.7,
             "atmosphericPressureKnown": true,
-            "totalAirStorage": 3000,
         },
-        "departments": [
+        "systems": [
             {
                 "name": "QC Dept",
                 "operatingHours": 8760,
+                "totalAirStorage": 3000,
                 "description": "Main building",
                 "id": "l6rd7tt1i",
                 "catalog": [
                     {
                         "id": "66334rw8x",
-                        "departmentId": "l6rd7tt1i",
+                        "systemId": "l6rd7tt1i",
                         "description": "Main Compressor",
                         "name": "Compressor A",
                         "notes": "",

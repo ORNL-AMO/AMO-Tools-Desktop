@@ -1,19 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { CompressedAirInventoryData, CompressedAirInventoryDepartment } from '../../compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventorySystem } from '../../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
 import { MotorIntegrationService } from '../../../shared/connected-inventory/motor-integration.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-department-setup',
-  templateUrl: './department-setup.component.html',
-  styleUrl: './department-setup.component.css'
+  selector: 'app-system-setup',
+  templateUrl: './system-setup.component.html',
+  styleUrl: './system-setup.component.css'
 })
-export class DepartmentSetupComponent implements OnInit {
+export class SystemSetupComponent implements OnInit {
+
+
+  settings: Settings;
 
   compressedAirInventoryData: CompressedAirInventoryData;
   constructor(private compressedAirInventoryService: CompressedAirInventoryService, private motorIntegrationService: MotorIntegrationService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirInventoryService.settings.getValue();
     this.compressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
   }
 
@@ -21,17 +26,17 @@ export class DepartmentSetupComponent implements OnInit {
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);
   }
 
-  deleteDepartment(id: string) {
-    let departmentIndex: number = this.compressedAirInventoryData.departments.findIndex((department) => { return department.id == id })
-    //this.motorIntegrationService.removeDepartmentMotorConnections(this.pumpInventoryData, departmentIndex);
-    this.compressedAirInventoryData.departments.splice(departmentIndex, 1);
+  deleteSystem(id: string) {
+    let systemIndex: number = this.compressedAirInventoryData.systems.findIndex((system) => { return system.id == id })
+    //this.motorIntegrationService.removeDepartmentMotorConnections(this.pumpInventoryData, systemIndex);
+    this.compressedAirInventoryData.systems.splice(systemIndex, 1);
     this.compressedAirInventoryService.setIsValidInventory(this.compressedAirInventoryData);
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);
   }
 
-  addDepartment() {
-    let newDepartment: CompressedAirInventoryDepartment = this.compressedAirInventoryService.getNewDepartment(this.compressedAirInventoryData.departments.length + 1);
-    this.compressedAirInventoryData.departments.push(newDepartment);
+  addSystem() {
+    let newSystem: CompressedAirInventorySystem = this.compressedAirInventoryService.getNewSystem(this.compressedAirInventoryData.systems.length + 1);
+    this.compressedAirInventoryData.systems.push(newSystem);
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);
   }
 

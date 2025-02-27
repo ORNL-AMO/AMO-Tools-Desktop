@@ -6,18 +6,18 @@ import { CompressedAirInventoryService } from '../../compressed-air-inventory.se
 @Injectable()
 export class CompressedAirCatalogService {
 
-  selectedDepartmentId: BehaviorSubject<string>;
+  selectedSystemId: BehaviorSubject<string>;
   selectedCompressedAirItem: BehaviorSubject<CompressedAirItem>;
   constructor(private compressedAirInventoryService: CompressedAirInventoryService) {
-    this.selectedDepartmentId = new BehaviorSubject<string>(undefined);
+    this.selectedSystemId = new BehaviorSubject<string>(undefined);
     this.selectedCompressedAirItem = new BehaviorSubject<CompressedAirItem>(undefined);
   }
 
   getUpdatedSelectedCompressedAirItem(): CompressedAirItem {
     let compressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue()
     let selectedCompressedAirItem = this.selectedCompressedAirItem.getValue();
-    let department = compressedAirInventoryData.departments.find(department => { return department.id == selectedCompressedAirItem.departmentId });
-    selectedCompressedAirItem = department.catalog.find(compressedAirItem => { return compressedAirItem.id == selectedCompressedAirItem.id });
+    let system = compressedAirInventoryData.systems.find(system => { return system.id == selectedCompressedAirItem.systemId });
+    selectedCompressedAirItem = system.catalog.find(compressedAirItem => { return compressedAirItem.id == selectedCompressedAirItem.id });
     return selectedCompressedAirItem;
   }
 

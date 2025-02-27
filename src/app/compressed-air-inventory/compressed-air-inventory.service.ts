@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { CompressedAirInventoryData, CompressedAirInventoryDepartment, CompressedAirItem, CompressedAirPropertyDisplayOptions, SystemInformation, ValidCompressedAir } from './compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem, CompressedAirPropertyDisplayOptions, SystemInformation, ValidCompressedAir } from './compressed-air-inventory';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { GreaterThanValidator } from '../shared/validators/greater-than';
@@ -34,7 +34,7 @@ export class CompressedAirInventoryService {
     this.helpPanelTab = new BehaviorSubject<string>(undefined);
     this.showExportModal = new BehaviorSubject<boolean>(false);
     // this.filterInventorySummary = new BehaviorSubject({
-    //   selectedDepartmentIds: new Array(),
+    //   selectedSystemIds: new Array(),
     //   pumpTypes: new Array(),
     //   motorRatedPowerValues: new Array(),
     //   statusValues: new Array()
@@ -42,12 +42,12 @@ export class CompressedAirInventoryService {
   }
 
   initInventoryData(): CompressedAirInventoryData {
-    let initialDepartment: CompressedAirInventoryDepartment = this.getNewDepartment(1);
+    let initialSystem: CompressedAirInventorySystem = this.getNewSystem(1);
     let displayOptions: CompressedAirPropertyDisplayOptions = this.getDefaultDisplayOptions();
     let systemInformation: SystemInformation = this.getSystemInformation();
     return {
       systemInformation: systemInformation,
-      departments: [initialDepartment],
+      systems: [initialSystem],
       displayOptions: displayOptions
     }
   }
@@ -57,7 +57,6 @@ export class CompressedAirInventoryService {
       systemElevation: null,
       atmosphericPressure: 14.7,
       atmosphericPressureKnown: true,
-      totalAirStorage: 3000,
     }
   }
 
@@ -65,16 +64,16 @@ export class CompressedAirInventoryService {
   setIsValidInventory(compressedAirInventoryData: CompressedAirInventoryData) {
     let isValid: boolean = true;
     // if (compressedAirInventoryData) {
-    //   compressedAirInventoryData.departments.forEach(dept => {
-    //     let isValidDepartment: boolean = true;
+    //   compressedAirInventoryData.systems.forEach(dept => {
+    //     let isValidSystem: boolean = true;
     //     dept.catalog.map(compressedAirItem => {
     //       compressedAirItem.validCompressedAir = this.isCompressedAirValid(compressedAirItem);
     //       if (!compressedAirItem.validCompressedAir.isValid) {
     //         isValid = false;
-    //         isValidDepartment = false;
+    //         isValidSystem = false;
     //       }
     //     })
-    //     dept.isValid = isValidDepartment
+    //     dept.isValid = isValidSystem
     //   });
     // }
     compressedAirInventoryData.isValid = isValid;
@@ -101,22 +100,23 @@ export class CompressedAirInventoryService {
   //   }
   // }
 
-  getNewDepartment(departmentNum: number): CompressedAirInventoryDepartment {
-    let departmentId: string = Math.random().toString(36).substr(2, 9);
-    let initCompressor: CompressedAirItem = this.getNewCompressor(departmentId);
+  getNewSystem(systemNum: number): CompressedAirInventorySystem {
+    let systemId: string = Math.random().toString(36).substr(2, 9);
+    let initCompressor: CompressedAirItem = this.getNewCompressor(systemId);
     return {
-      name: 'Department ' + departmentNum,
+      name: 'System ' + systemNum,
       operatingHours: 8760,
+      totalAirStorage: 3000,
       description: '',
-      id: departmentId,
+      id: systemId,
       catalog: [initCompressor]
     }
   }
 
-  getNewCompressor(departmentId: string): CompressedAirItem {
+  getNewCompressor(systemId: string): CompressedAirItem {
     return {
       id: Math.random().toString(36).substr(2, 9),
-      departmentId: departmentId,
+      systemId: systemId,
       suiteDbItemId: undefined,
       description: '',
       notes: '',
@@ -266,9 +266,9 @@ export class CompressedAirInventoryService {
 
   async deleteCompressedAirItem(selectedCompressedAir: CompressedAirItem) {
     let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
-    let selectedDepartmentIndex: number = compressedAirInventoryData.departments.findIndex(department => { return department.id == selectedCompressedAir.departmentId });
-    let compressedAirItemIndex: number = compressedAirInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(compressedAirItem => { return compressedAirItem.id == selectedCompressedAir.id });
-    compressedAirInventoryData.departments[selectedDepartmentIndex].catalog.splice(compressedAirItemIndex, 1);
+    let selectedSystemIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedCompressedAir.systemId });
+    let compressedAirItemIndex: number = compressedAirInventoryData.systems[selectedSystemIndex].catalog.findIndex(compressedAirItem => { return compressedAirItem.id == selectedCompressedAir.id });
+    compressedAirInventoryData.systems[selectedSystemIndex].catalog.splice(compressedAirItemIndex, 1);
     // if (selectedCompressedAir.connectedItem) {
     //  await this.motorIntegrationService.removeMotorConnectedItem(selectedCompressedAir);
     //  compressedAirInventoryData.hasConnectedInventoryItems = false;
@@ -280,8 +280,8 @@ export class CompressedAirInventoryService {
   updateCompressedAirItem(selectedCompressedAir: CompressedAirItem) {
     let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
     let isValid: boolean = true;
-    compressedAirInventoryData.departments.map(dept => {
-      let isValidDepartment: boolean = true;
+    compressedAirInventoryData.systems.map(dept => {
+      let isValidSystem: boolean = true;
       dept.catalog.map(compressedAirItem => {
         if (selectedCompressedAir.id === compressedAirItem.id) {
           compressedAirItem = selectedCompressedAir;
@@ -290,10 +290,10 @@ export class CompressedAirInventoryService {
         // compressedAirItem.validCompressedAir = isValidCompressedAir;
         // if (!isValidCompressedAir.isValid) {
         //   isValid = false;
-        //   isValidDepartment = false;
+        //   isValidSystem = false;
         // }
       })
-      dept.isValid = isValidDepartment;
+      dept.isValid = isValidSystem;
     });
     compressedAirInventoryData.isValid = isValid;
     this.compressedAirInventoryData.next(compressedAirInventoryData);
@@ -307,7 +307,6 @@ export class CompressedAirInventoryService {
     }
     let form: UntypedFormGroup = this.formBuilder.group({
       systemElevation: [obj.systemElevation, [Validators.min(0), Validators.max(29000)]],
-      totalAirStorage: [obj.totalAirStorage, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       atmosphericPressure: [obj.atmosphericPressure, [Validators.required, Validators.min(0), Validators.max(maxAtmosphericPressure)]],
       atmosphericPressureKnown: [obj.atmosphericPressureKnown],
 
@@ -318,7 +317,6 @@ export class CompressedAirInventoryService {
 
   updateObjFromForm(form: UntypedFormGroup, systemInformation: SystemInformation): SystemInformation {
     systemInformation.systemElevation = form.controls.systemElevation.value;
-    systemInformation.totalAirStorage = form.controls.totalAirStorage.value;
     systemInformation.atmosphericPressure = form.controls.atmosphericPressure.value;
     systemInformation.atmosphericPressureKnown = form.controls.atmosphericPressureKnown.value;
     return systemInformation;
