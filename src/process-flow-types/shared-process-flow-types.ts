@@ -51,6 +51,7 @@ export interface WaterDiagram {
 export interface FlowDiagramData {
   nodes: Node[],
   edges: Edge[],
+  nodeErrors: Record<string, NodeErrors>,
   userDiagramOptions: UserDiagramOptions,
   settings: DiagramSettings,
   calculatedData: DiagramCalculatedData,
@@ -69,7 +70,8 @@ export interface UserDiagramOptions {
   animated: boolean,
 }
 
-
+export type NodeErrors = { totalFlow?: string | number; flows?: (string | number)[], level: ValidationLevel, flowType: 'source' | 'discharge' }
+export type ValidationLevel = 'error' | 'warning'
 
 export interface DiagramSettings {
   flowDecimalPrecision: number,
@@ -172,8 +174,8 @@ export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties
     color: "#ffffff"
   },
   'waste-water-treatment': {
-    backgroundColor: '#e28000',
-    color: "#ffffff"
+    backgroundColor: '#93e200',
+    color: "#000"
   },
   'known-loss': {
     backgroundColor: '#fff',

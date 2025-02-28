@@ -35,7 +35,7 @@ const ColorPicker = (props: ColorPickerProps) => {
                         style={{marginLeft: '16px'}}
                         />
                 </div>
-                {showRecent && 
+                {showRecent && recentColors &&
                     <div className="recents-wrapper">
                         <label htmlFor={'recent-color'}>Recent Colors</label>
                         <div className="recents" style={{marginLeft: '16px'}}>

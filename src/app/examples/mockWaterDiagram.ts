@@ -22,6 +22,7 @@ export const MockWaterdiagram: Diagram =
                 "flowDecimalPrecision": 2,
                 "unitsOfMeasure": 'Imperial'
             },
+            "nodeErrors": {},
             "nodes": [
                 {
                     "id": "n_07ezr25",

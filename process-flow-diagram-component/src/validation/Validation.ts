@@ -1,4 +1,4 @@
-import { CustomEdgeData, FlowDiagramData, ProcessFlowPart} from "../../../src/process-flow-types/shared-process-flow-types";
+import { CustomEdgeData, FlowDiagramData, NodeErrors, ProcessFlowPart} from "../../../src/process-flow-types/shared-process-flow-types";
 import { Node, Edge } from "reactflow";
 import { getNodeFlowTotals } from "../components/Diagram/FlowUtils";
 import * as Yup from 'yup';
@@ -57,7 +57,7 @@ export const validateTotalFlowValue = (calculatedTotalFlow: number, userEnteredT
 //         // sourceValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedSourceFlow, nd.data.userEnteredData.totalSourceFlow, nd.data.userEnteredData.totalSourceFlow);
 //          componentSourceEdges.map((edge: Edge<CustomEdgeData>) => {
 //              const validationMessage = validateFlowValue(edge.data.flowValue);
-//              sourceValidation.status = validationMessage? 'WARNING' : sourceValidation.status;
+//              sourceValidation.status = validationMessage? 'warning' : sourceValidation.status;
 //              sourceValidation.flowValues = {
 //                  ...sourceValidation.flowValues,
 //                  [edge.id]: {
@@ -70,7 +70,7 @@ export const validateTotalFlowValue = (calculatedTotalFlow: number, userEnteredT
 //         // dischargeFlowValidation.totalFlowValueDifferent = validateTotalFlowValue(totalCalculatedDischargeFlow, nd.data.userEnteredData.totalDischargeFlow, nd.data.userEnteredData.totalDischargeFlow);
 //         componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => {
 //              const validationMessage = validateFlowValue(edge.data.flowValue);
-//              dischargeFlowValidation.status = validationMessage? 'WARNING' : dischargeFlowValidation.status;
+//              dischargeFlowValidation.status = validationMessage? 'warning' : dischargeFlowValidation.status;
 //              dischargeFlowValidation.flowValues = {
 //                  ...dischargeFlowValidation.flowValues,
 //                  [edge.id]: {
@@ -112,29 +112,20 @@ export const hasValidDischargeForm = (errors: NodeErrors) => {
     return errors.flowType === 'discharge';
 }
 
-// export const isDiagramValid = (diagramValidation: DiagramValidation) => {
-//     if (diagramValidation.nodes) {
-//         const invalid = Object.entries(diagramValidation.nodes).some(([nodeId, componentValidation]) => {
-//             return !isValidComponent(componentValidation);
-//         });
-//         return !invalid;
-//     }
-//     return true;
-// }
+export const getIsDiagramValid = (nodeErrors: Record<string, NodeErrors>) => {
+    return Object.keys(nodeErrors).length === 0;
+}
 
 // export const getComponentValidStatus = (sourceFlowValidation: ComponentFlowValidation, dischargeFlowValidation: ComponentFlowValidation) => {
 //     let componentStatus: ValidationStatus = 'VALID';
-//     if (sourceFlowValidation?.status === 'ERROR' || dischargeFlowValidation?.status === 'ERROR') {
-//         componentStatus = 'ERROR';
-//     } else if (sourceFlowValidation?.status === 'WARNING' || dischargeFlowValidation?.status === 'WARNING') {
-//         componentStatus = 'WARNING';
+//     if (sourceFlowValidation?.status === 'error' || dischargeFlowValidation?.status === 'error') {
+//         componentStatus = 'error';
+//     } else if (sourceFlowValidation?.status === 'warning' || dischargeFlowValidation?.status === 'warning') {
+//         componentStatus = 'warning';
 //     }
 //     return componentStatus;
 // }
 
-// export const InvalidStates = ['ERROR', 'WARNING'] as ValidationStatus[];
-
-export type NodeErrors = { totalFlow?: string | number; flows?: (string | number)[], level: ValidationLevel, flowType: 'source' | 'discharge' }
-export type ValidationLevel = 'ERROR' | 'WARNING'
+// export const InvalidStates = ['error', 'warning'] as ValidationStatus[];
 
 export type FlowForm = { totalFlow: number | null, flows: (number | null)[] };

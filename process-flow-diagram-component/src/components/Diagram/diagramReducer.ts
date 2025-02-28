@@ -1,13 +1,12 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
-import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, Handles, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, Handles, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { createNewNode, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
 import { CSSProperties } from 'react';
 import { getResetData } from './store';
 import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { FormikErrors } from 'formik';
-import { NodeErrors } from '../../validation/Validation';
 
 export interface DiagramState {
   nodes: Node[];
@@ -25,6 +24,7 @@ export interface DiagramState {
   focusedEdgeId: string,
   isDialogOpen: boolean,
   assessmentId: number
+  isValidationWindowOpen: boolean
 }
 
 const resetDiagramReducer = (state: DiagramState) => {
@@ -142,24 +142,30 @@ const distributeTotalDischargeFlowReducer = (state: DiagramState, action: Payloa
 
 const nodeErrorsChangeReducer = (state: DiagramState, action: PayloadAction<{flowType: FlowType, errors: FormikErrors<{ totalFlow: string | number; flows: (string | number)[] }>}>) => {
   const { flowType, errors } = action.payload;
-  const validationErrors: NodeErrors = {totalFlow: undefined, flows: undefined, level: 'WARNING', flowType: flowType};
+  const validationErrors: NodeErrors = {totalFlow: undefined, flows: undefined, level: 'warning', flowType: flowType};
 
   if (errors.flows) {
     validationErrors.flows = [...errors.flows];
-    validationErrors.level = 'WARNING';
+    validationErrors.level = 'warning';
   }
 
   if (errors.totalFlow) {
     validationErrors.totalFlow = errors.totalFlow;
-    validationErrors.level = 'ERROR'; 
+    validationErrors.level = 'error'; 
   }
 
+  // const debug = current(state.nodeErrors);
+  // debugger;
   if (!errors.flows && !errors.totalFlow) {
     delete state.nodeErrors[state.selectedDataId];
   } else {
     state.nodeErrors[state.selectedDataId] = validationErrors as NodeErrors;
   }
 
+}
+
+const toggleValidationWindowReducer = (state: DiagramState, action: PayloadAction<boolean>) => {
+  state.isValidationWindowOpen = !state.isValidationWindowOpen;
 }
 
 const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) => {
@@ -357,6 +363,7 @@ export const diagramSlice = createSlice({
     sourceFlowValueChange: sourceFlowValueChangeReducer,
     totalFlowChange: totalFlowChangeReducer,
     nodeErrorsChange: nodeErrorsChangeReducer,
+    toggleValidationWindow: toggleValidationWindowReducer,
     deleteNode: deleteNodeReducer,
     setNodeName: setNodeNameReducer,
     setNodeDataProperty: setNodeDataPropertyReducer,
@@ -398,6 +405,7 @@ export const {
   distributeTotalSourceFlow,
   distributeTotalDischargeFlow,
   nodeErrorsChange,
+  toggleValidationWindow,
   updateNodeHandles,
   deleteEdge,
   focusedEdgeChange,
