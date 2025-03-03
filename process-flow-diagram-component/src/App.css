@@ -135,7 +135,8 @@ a {
 
 .process-flow-diagram .dndnode.waste-water-treatment {
   border: none;
-  background: #e28000;
+  color: #000;
+  background: #93e200;
 }
 
 .process-flow-diagram .dndnode.known-loss {
@@ -302,7 +303,7 @@ a {
 
 .react-flow__node-wasteWaterTreatment,
 .react-flow__node-group {
-  background-color: #e28000;
+  background-color: #93e200;
 }
 
 

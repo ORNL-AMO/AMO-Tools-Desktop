@@ -7,7 +7,7 @@ import React, { useEffect, useState }  from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
 import { CustomEdgeData } from "../../../../src/process-flow-types/shared-process-flow-types";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
-import { dischargeFlowValueChange, distributeTotalDischargeFlow, focusedEdgeChange, nodeErrorsChange, totalFlowChange } from "../Diagram/diagramReducer";
+import { dischargeFlowValueChange, distributeTotalDischargeFlow, focusedEdgeChange, totalFlowChange } from "../Diagram/diagramReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import InputField from "../StyledMUI/InputField";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";

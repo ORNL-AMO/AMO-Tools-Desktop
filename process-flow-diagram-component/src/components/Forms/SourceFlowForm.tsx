@@ -9,12 +9,11 @@ import { CustomEdgeData } from "../../../../src/process-flow-types/shared-proces
 import InputField from "../StyledMUI/InputField";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { distributeTotalSourceFlow, focusedEdgeChange, nodeErrorsChange, sourceFlowValueChange, totalFlowChange } from "../Diagram/diagramReducer";
+import { distributeTotalSourceFlow, focusedEdgeChange, sourceFlowValueChange, totalFlowChange } from "../Diagram/diagramReducer";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import { selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
 import { Formik, Form, FieldArray, useFormikContext } from 'formik';
 import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/Validation";
-import { useDispatch } from "react-redux";
 import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import { ObjectSchema } from "yup";
@@ -65,8 +64,6 @@ const SourceFlowForm = () => {
             onSubmit={() => { }}
         >
             {({ values, errors, handleChange, setFieldValue }) => {
-                console.log('values', values);
-                console.log('errors', errors);
 
                 return (
                     <Form>
@@ -158,6 +155,7 @@ const TotalSourceFlowField = () => {
     }, [totalSourceFlow, errors, values]);
 
     const hasError = Boolean(errors.totalFlow) && totalSourceFlow !== null;
+    
     return (
         <>
             <SmallTooltip title="Set flows evenly from total source value"

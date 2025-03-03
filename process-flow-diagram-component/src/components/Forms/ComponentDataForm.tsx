@@ -70,6 +70,11 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const hasSourceErrors = errors && hasValidSourceForm(errors);
     const hasTargetErrors = errors && hasValidDischargeForm(errors);
 
+    const invalidIconStyle = {
+        marginRight: '.5rem',
+        height: '24px',
+    }
+
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1 }}>
 
@@ -97,7 +102,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                                 Sources
                             </span>
                             {hasSourceErrors &&
-                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.level} /></span>
+                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.source.level} sx={invalidIconStyle}/></span>
                             }
                         </span>
                         <Chip label={
@@ -128,7 +133,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                                 Discharge
                             </span>
                             {hasTargetErrors &&
-                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.level} /></span>
+                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.discharge.level} sx={invalidIconStyle}/></span>
                             }
                         </span>
                         <Chip label={

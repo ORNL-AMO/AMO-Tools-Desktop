@@ -1,13 +1,12 @@
 import { createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
-import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, Handles, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowErrors, Handles, NodeErrors, NodeFlowData, NodeFlowTypeErrors, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { createNewNode, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
 import { CSSProperties } from 'react';
 import { getResetData } from './store';
 import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { FormikErrors } from 'formik';
-import { NodeErrors } from '../../validation/Validation';
 
 export interface DiagramState {
   nodes: Node[];
@@ -21,10 +20,11 @@ export interface DiagramState {
   recentNodeColors: string[],
   recentEdgeColors: string[],
   diagramParentDimensions: ParentContainerDimensions,
-  nodeErrors: Record<string, NodeErrors>,
+  nodeErrors: NodeErrors,
   focusedEdgeId: string,
   isDialogOpen: boolean,
   assessmentId: number
+  isValidationWindowOpen: boolean
 }
 
 const resetDiagramReducer = (state: DiagramState) => {
@@ -36,7 +36,6 @@ const setDialogOpenReducer = (state: DiagramState) => {
   state.isDialogOpen = !state.isDialogOpen;
 }
 
-// * NODES
 const nodesChangeReducer = (state: DiagramState, action: PayloadAction<NodeChange[]>) => {
   const updatedNodes: Node[] = applyNodeChanges(action.payload, state.nodes) as Node[];
   state.nodes = updatedNodes;
@@ -142,24 +141,25 @@ const distributeTotalDischargeFlowReducer = (state: DiagramState, action: Payloa
 
 const nodeErrorsChangeReducer = (state: DiagramState, action: PayloadAction<{flowType: FlowType, errors: FormikErrors<{ totalFlow: string | number; flows: (string | number)[] }>}>) => {
   const { flowType, errors } = action.payload;
-  const validationErrors: NodeErrors = {totalFlow: undefined, flows: undefined, level: 'WARNING', flowType: flowType};
-
-  if (errors.flows) {
-    validationErrors.flows = [...errors.flows];
-    validationErrors.level = 'WARNING';
+  const level = errors.totalFlow ? 'error' : errors.flows?.length > 0? 'warning' : undefined;
+  const flowErrors: FlowErrors = {
+    // todo ts compiler confusion - reading FormikErrors flows as string | string[]
+    flows: errors.flows as (string | number)[] ?? undefined,
+    totalFlow: errors.totalFlow ?? undefined,
+    level: level
   }
 
-  if (errors.totalFlow) {
-    validationErrors.totalFlow = errors.totalFlow;
-    validationErrors.level = 'ERROR'; 
+  const errorsExist =  Object.entries(flowErrors).some(([, value]) => value !== undefined);
+  if (errorsExist) {
+    setFlowErrors(state, flowType, flowErrors);
+  } else if (state.nodeErrors[state.selectedDataId]) {
+    removeFlowErrors(state, flowType);
   }
+}
 
-  if (!errors.flows && !errors.totalFlow) {
-    delete state.nodeErrors[state.selectedDataId];
-  } else {
-    state.nodeErrors[state.selectedDataId] = validationErrors as NodeErrors;
-  }
 
+const toggleValidationWindowReducer = (state: DiagramState, action: PayloadAction<boolean>) => {
+  state.isValidationWindowOpen = !state.isValidationWindowOpen;
 }
 
 const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) => {
@@ -189,11 +189,26 @@ const setNodeStyleReducer = (state: DiagramState, action: PayloadAction<CSSPrope
   updateNode.style = action.payload;
 }
 
+/**
+ * "Delete Component" button click from drawer
+ */
 const deleteNodeReducer = (state: DiagramState, action: PayloadAction<string>) => {
     state.nodes = state.nodes.filter((nd) => nd.id !== state.selectedDataId);
     state.edges = state.edges.filter((edge) => edge.source !== state.selectedDataId && edge.target !== state.selectedDataId);
     state.isDrawerOpen = !state.isDrawerOpen;
+    state.nodeErrors = state.nodeErrors[state.selectedDataId] = undefined;
     state.selectedDataId = action.payload ? action.payload : undefined;
+};
+
+/**
+ * Node deleted from keyboard input. Update related state. nodesChangeReducer handles nodes state update
+ */
+const keyboardDeleteNodeReducer = (state: DiagramState, action: PayloadAction<Node<ProcessFlowPart>>) => {
+  const node = action.payload;
+  if (node.selected) {
+    state.selectedDataId = undefined;
+  }
+  delete state.nodeErrors[node.id];
 };
 
 const updateNodeHandlesReducer = (state: DiagramState, action: PayloadAction<Handles>) => {
@@ -256,7 +271,6 @@ const setEdgeStrokeColorReducer = (state: DiagramState, action: PayloadAction<{c
   }
 }
 
-// * SETTINGS and misc
 const unitsOfMeasureChangeReducer = (state: DiagramState, action: PayloadAction<string>) => {
   const convertedDiagramData = {
     nodes: state.nodes,
@@ -341,7 +355,6 @@ const toggleDrawerReducer = (state: DiagramState, action?: PayloadAction<string>
 };
 
 const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<DiagramCalculatedData>) => {
-  console.log(current(state))
   state.calculatedData = action.payload;
 }
 
@@ -357,6 +370,7 @@ export const diagramSlice = createSlice({
     sourceFlowValueChange: sourceFlowValueChangeReducer,
     totalFlowChange: totalFlowChangeReducer,
     nodeErrorsChange: nodeErrorsChangeReducer,
+    toggleValidationWindow: toggleValidationWindowReducer,
     deleteNode: deleteNodeReducer,
     setNodeName: setNodeNameReducer,
     setNodeDataProperty: setNodeDataPropertyReducer,
@@ -366,6 +380,7 @@ export const diagramSlice = createSlice({
     setEdgeStrokeColor: setEdgeStrokeColorReducer,
     connectEdge: connectEdgeReducer,
     deleteEdge: deleteEdgeReducer,
+    keyboardDeleteNode: keyboardDeleteNodeReducer,
     focusedEdgeChange: focusedEdgeChangeReducer,
     defaultEdgeTypeChange: defaultEdgeTypeChangeReducer,
     customEdgeTypeChange: customEdgeTypeChangeReducer,
@@ -390,6 +405,7 @@ export const {
   addNodes,
   setNodeName,
   deleteNode,
+  keyboardDeleteNode,
   setNodeDataProperty,
   setNodeStyle,
   totalFlowChange,
@@ -398,6 +414,7 @@ export const {
   distributeTotalSourceFlow,
   distributeTotalDischargeFlow,
   nodeErrorsChange,
+  toggleValidationWindow,
   updateNodeHandles,
   deleteEdge,
   focusedEdgeChange,
@@ -421,3 +438,22 @@ export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp:
 export type OptionsDependentState = 'updateEdges' | 'updateEdgeProperties';
 export type NodeFlowProperty = keyof Pick<NodeFlowData, 'totalSourceFlow' | 'totalDischargeFlow'>;
 export type FlowType = 'source' | 'discharge';
+
+
+// helpers
+const setFlowErrors = (state: DiagramState, flowType: FlowType, errors: FlowErrors) => {
+  if (state.nodeErrors[state.selectedDataId]) {
+    state.nodeErrors[state.selectedDataId][flowType] = errors;
+  } else {
+    state.nodeErrors[state.selectedDataId] = {
+      [flowType]: errors
+    }
+  }
+}
+
+const removeFlowErrors = (state: DiagramState, flowType: FlowType) => {
+  delete state.nodeErrors[state.selectedDataId][flowType];
+  if (Object.entries(state.nodeErrors[state.selectedDataId]).every(([, value]) => value === undefined)) {
+    delete state.nodeErrors[state.selectedDataId];
+  }
+}

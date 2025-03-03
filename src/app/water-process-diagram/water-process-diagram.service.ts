@@ -33,6 +33,7 @@ export class WaterProcessDiagramService {
       flowDiagramData: {
         nodes: [],
         edges: [],
+        nodeErrors: {},
         userDiagramOptions: undefined,
         settings: {
           flowDecimalPrecision: settings.flowDecimalPrecision,

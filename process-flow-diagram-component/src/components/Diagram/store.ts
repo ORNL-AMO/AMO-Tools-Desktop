@@ -25,7 +25,7 @@ export function configureAppStore(diagramProps: DiagramProps) {
         diagramOptions: diagramData.userDiagramOptions ? {...diagramData.userDiagramOptions} : getDefaultUserDiagramOptions(),
         settings: diagramData.settings ? {...diagramData.settings} : getDefaultSettings(),
         calculatedData: diagramData.calculatedData ? {...diagramData.calculatedData} : {nodes: {}},
-        nodeErrors: {},
+        nodeErrors: diagramData.nodeErrors ? {...diagramData.nodeErrors} : {},
         recentNodeColors: diagramData.recentNodeColors.length !== 0 ? {...diagramData.recentNodeColors} : getDefaultColorPalette(),
         recentEdgeColors: diagramData.recentEdgeColors.length !== 0 ? {...diagramData.recentEdgeColors} : getDefaultColorPalette(),
         isDrawerOpen: false,
@@ -33,12 +33,12 @@ export function configureAppStore(diagramProps: DiagramProps) {
         selectedDataId: undefined,
         diagramParentDimensions: {...diagramProps.parentContainer},
         isDialogOpen: false,
+        isValidationWindowOpen: false,
         assessmentId: diagramProps.processDiagram?.assessmentId
       }
     }
   }
 
-  console.log('initiale state', initialState);
   const store = configureStore({
     reducer: { diagram: diagramReducer },
     preloadedState: initialState,
@@ -62,7 +62,7 @@ export const selectHasAssessment = (state: RootState) => state.diagram.assessmen
 export const selectCurrentNode = (state: RootState) => state.diagram.nodes.find((node: Node<ProcessFlowPart>) => node.id === state.diagram.selectedDataId) as Node<ProcessFlowPart>;
 export const selectCalculatedData = (state: RootState) => state.diagram.calculatedData;
 export const selectNodeValidation = (state: RootState) => {
-  return  state.diagram.nodeErrors[state.diagram.selectedDataId]
+  return state.diagram.nodeErrors[state.diagram.selectedDataId]
 };
 
 export const selectNodeFlowData = (state: RootState, nodeId: string) => {
@@ -135,7 +135,7 @@ export const getDefaultSettings = (): DiagramSettings => {
 }
 
 export const getDefaultColorPalette = () => {
-  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#e28000'];
+  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#93e200'];
 }
 
 export const getResetData = (currentState?: DiagramState): DiagramState => {
@@ -153,6 +153,7 @@ export const getResetData = (currentState?: DiagramState): DiagramState => {
     recentNodeColors: getDefaultColorPalette(),
     diagramParentDimensions: currentState?.diagramParentDimensions,
     isDialogOpen: false,
-    assessmentId: undefined
+    assessmentId: undefined,
+    isValidationWindowOpen: false
   }
 }
