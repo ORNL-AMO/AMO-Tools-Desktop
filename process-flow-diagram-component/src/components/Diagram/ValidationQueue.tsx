@@ -153,11 +153,10 @@
 
 // * V2 window collapse and expand on top
 
-import { getIsDiagramValid } from "../../validation/Validation";
-
+import { getHasErrorLevel, getHasFlowError, getHasTotalFlowError, getIsDiagramValid } from "../../validation/Validation";
 import { Paper, Typography, Stack, Alert, Button, Box, Collapse } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { NodeErrors, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { Node } from '@xyflow/react';
 import { selectNodes } from "./store";
 import { toggleDrawer, toggleValidationWindow } from "./diagramReducer";
@@ -171,19 +170,19 @@ import NotificationsPausedIcon from '@mui/icons-material/NotificationsPaused';
 const ValidationQueue = () => {
   const dispatch = useAppDispatch();
   const nodes: Node[] = useAppSelector(selectNodes);
-  const errors: Record<string, NodeErrors> = useAppSelector((state) => state.diagram.nodeErrors);
+  const errors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
   const isWindowOpen = useAppSelector((state) => state.diagram.isValidationWindowOpen);
   
   const isDiagramValid = getIsDiagramValid(errors);
   const [isSilenced, setIsSilenced] = useState(false);
 
-  console.log('isWindowOpen', isWindowOpen);
   const toggleWindow = () => {
     dispatch(toggleValidationWindow());
   }
 
   const handleFixIssue = (nodeId: string) => {
     toggleWindow();
+    // * allow window close or new state causes rerender
     setTimeout(() => {
       dispatch(toggleDrawer(nodeId));
     }, 150);
@@ -193,10 +192,8 @@ const ValidationQueue = () => {
     setIsSilenced(!isSilenced);
   }
 
-  const hasError = Object.entries(errors).some(([key, errors]: [string, NodeErrors]) => {
-    return errors.level === 'error';
-  });
-  const maxAlertlevel = hasError ? 'error' : 'warning';
+  const hasErrorLevel = getHasErrorLevel(errors);
+  const maxAlertlevel = hasErrorLevel ? 'error' : 'warning';
   const alertLevelColor = `${maxAlertlevel}.light`;
   return (
     <>
@@ -225,7 +222,7 @@ const ValidationQueue = () => {
           >
 
             <Box display={'flex'} justifyContent={'space-between'} sx={{ paddingLeft: '1rem', 
-              backgroundColor: hasError? '#ffebee' : '#fff3e0', 
+              backgroundColor: hasErrorLevel? '#ffebee' : '#fff3e0', 
               minHeight: '50px'
               }} >
               <Box display={'flex'} alignItems={'center'}>
@@ -269,45 +266,44 @@ const ValidationQueue = () => {
             >
               <Stack spacing={1} sx={{ p: ".5rem .25rem", overflowY: "auto", maxHeight: "calc(300px - 50px)" }}>
                 {!isDiagramValid &&
-                  Object.entries(errors).map(([key, errors]: [string, NodeErrors]) => {
+                  Object.entries(errors).map(([key, errors]: [string, NodeFlowTypeErrors]) => {
                     const node: Node<ProcessFlowPart> = nodes.find((n) => n.id === key) as Node<ProcessFlowPart>;
                     if (node) {
-                    const name = node.data.name || "Unnamed Component";
-                    const totalFlowError = errors.totalFlow ? 'Total Flow Error' : undefined;
-                    const flowErrors = errors.flows?.length > 0 ? 'Flow Errors' : undefined;
+                      const name = node.data.name || "Unnamed Component";
+                      const hasTotalFlowError = getHasTotalFlowError(errors);
+                      const hasFlowError = getHasFlowError(errors);
+                      const currentAlertLevel = hasTotalFlowError ? 'error' : 'warning';
+                      
+                      if (hasTotalFlowError || hasFlowError) {
+                        return (
+                          <Alert severity={currentAlertLevel}
+                            key={key}
+                            sx={{
+                              borderLeft: "4px solid",
+                              borderColor: `${currentAlertLevel}.dark`,
+                              color: `${currentAlertLevel}.dark`,
+                              p: '.25rem .5rem',
+                              borderRadius: 1
+                            }}
+                            action={
+                              <Button
+                                size="small"
+                                sx={{ fontSize: '.75rem', marginRight: '1rem', color: `${currentAlertLevel}.dark` }}
+                                onClick={() => handleFixIssue(key)}>
+                                Fix Issue
+                              </Button>
+                            }>
+                            <Typography variant="body2" fontWeight="bold" sx={{ color: `${currentAlertLevel}.dark`, fontSize: '.75rem' }}>
+                              {/* // todo truncate */}
+                              <span>{name}</span>
 
-                    const currentAlertLevel = totalFlowError ? 'error' : 'warning';
-                    console.log('currentalertlevel', currentAlertLevel);
-                    if (totalFlowError || flowErrors) {
-                      return (
-                        <Alert severity={currentAlertLevel}
-                          key={key}
-                          sx={{
-                            borderLeft: "4px solid",
-                            borderColor: `${currentAlertLevel}.dark`,
-                            color: `${currentAlertLevel}.dark`,
-                            p: '.25rem .5rem',
-                            borderRadius: 1
-                          }}
-                          action={
-                            <Button
-                              size="small"
-                              sx={{ fontSize: '.75rem', marginRight: '1rem', color: `${currentAlertLevel}.dark` }}
-                              onClick={() => handleFixIssue(key)}>
-                              Fix Issue
-                            </Button>
-                          }>
-                          <Typography variant="body2" fontWeight="bold" sx={{ color: `${currentAlertLevel}.dark`, fontSize: '.75rem' }}>
-                            {/* // todo truncate */}
-                            <span>{name}</span>
-
-                          </Typography>
-                        </Alert>
-                      )
-                    } else {
-                      return null;
+                            </Typography>
+                          </Alert>
+                        )
+                      } else {
+                        return null;
+                      }
                     }
-                  }
 
                   })}
               </Stack>

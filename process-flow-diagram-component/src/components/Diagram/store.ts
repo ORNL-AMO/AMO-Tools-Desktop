@@ -39,7 +39,6 @@ export function configureAppStore(diagramProps: DiagramProps) {
     }
   }
 
-  console.log('initiale state', initialState);
   const store = configureStore({
     reducer: { diagram: diagramReducer },
     preloadedState: initialState,
@@ -63,7 +62,7 @@ export const selectHasAssessment = (state: RootState) => state.diagram.assessmen
 export const selectCurrentNode = (state: RootState) => state.diagram.nodes.find((node: Node<ProcessFlowPart>) => node.id === state.diagram.selectedDataId) as Node<ProcessFlowPart>;
 export const selectCalculatedData = (state: RootState) => state.diagram.calculatedData;
 export const selectNodeValidation = (state: RootState) => {
-  return  state.diagram.nodeErrors[state.diagram.selectedDataId]
+  return state.diagram.nodeErrors[state.diagram.selectedDataId]
 };
 
 export const selectNodeFlowData = (state: RootState, nodeId: string) => {

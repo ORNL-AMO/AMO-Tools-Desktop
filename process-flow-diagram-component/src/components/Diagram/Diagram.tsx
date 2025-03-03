@@ -25,7 +25,7 @@ import DataDrawer from '../Drawer/DataDrawer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { configureAppStore, RootState, selectEdges, selectIsDrawerOpen, selectNodes } from './store';
 import { Provider } from 'react-redux';
-import { addNode, addNodes, connectEdge, edgesChange, nodesChange } from './diagramReducer';
+import { addNode, addNodes, connectEdge, edgesChange, keyboardDeleteNode, nodesChange } from './diagramReducer';
 import ValidationQueue from './ValidationQueue';
 
 
@@ -65,7 +65,7 @@ const Diagram = (props: DiagramProps) => {
   const minimapVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.minimapVisible);
   const controlsVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.controlsVisible);
   const defaultEdgeType: string = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
-  const nodeErrors: Record<string, NodeErrors> = useAppSelector((state: RootState) => state.diagram.nodeErrors);
+  const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
 
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {
     return getEdgeTypesFromString(state.diagram.diagramOptions.edgeType, edgeTypes);
@@ -104,9 +104,9 @@ const Diagram = (props: DiagramProps) => {
       // todo this patches reset event bug where state conflicts with debounced, measur state,  should be moved to middleware
       if (debouncedNodes.length === nodes.length) {
         props.saveFlowDiagramData(updatedDiagramData);
-        console.log('saved FlowDiagramData', updatedDiagramData);
-        console.log('saved', updatedDiagramData.nodes);
-        console.log('saved debounced', debouncedNodes);
+        // console.log('saved FlowDiagramData', updatedDiagramData);
+        // console.log('saved', updatedDiagramData.nodes);
+        // console.log('saved debounced', debouncedNodes);
       }
       //  else {
       //   console.log('skip save, nodes length mismatch', debouncedNodes, nodes);
@@ -141,6 +141,13 @@ const Diagram = (props: DiagramProps) => {
   );
 
 
+  const onBeforeDelete = useCallback(
+    async ({ nodes: nds, edges: eds }: { nodes: Node[]; edges: Edge[] }) => {
+      nds.forEach((node: Node<ProcessFlowPart>) => {
+        dispatch(keyboardDeleteNode(node))});
+      return { nodes: nds, edges: eds }
+    },[])
+
   return (
     props.height &&
       <div className="process-flow-diagram">
@@ -170,7 +177,7 @@ const Diagram = (props: DiagramProps) => {
               connectionLineType={ConnectionLineType.Bezier}
               onDrop={onDrop}
               // onError={onErrorWithSuppressed}
-              // onBeforeDelete={onBeforeDelete}
+              onBeforeDelete={onBeforeDelete}
               onDragOver={onDragOver}
               fitView={true}
               fitViewOptions={{

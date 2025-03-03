@@ -51,13 +51,28 @@ export interface WaterDiagram {
 export interface FlowDiagramData {
   nodes: Node[],
   edges: Edge[],
-  nodeErrors: Record<string, NodeErrors>,
+  nodeErrors: NodeErrors,
   userDiagramOptions: UserDiagramOptions,
   settings: DiagramSettings,
   calculatedData: DiagramCalculatedData,
   recentNodeColors: string[];
   recentEdgeColors: string[];
 }
+
+export type NodeErrors = Record<string, NodeFlowTypeErrors>; 
+
+export type NodeFlowTypeErrors = {
+  source?: FlowErrors,
+  discharge?: FlowErrors
+}
+
+export type FlowErrors = { 
+  totalFlow?: string | number; 
+  flows?: (string | number)[], 
+  level: ValidationLevel, 
+}
+export type ValidationLevel = 'error' | 'warning'
+export type FlowType = 'source' | 'discharge';
 
 export interface UserDiagramOptions {
   strokeWidth: number,
@@ -70,8 +85,6 @@ export interface UserDiagramOptions {
   animated: boolean,
 }
 
-export type NodeErrors = { totalFlow?: string | number; flows?: (string | number)[], level: ValidationLevel, flowType: 'source' | 'discharge' }
-export type ValidationLevel = 'error' | 'warning'
 
 export interface DiagramSettings {
   flowDecimalPrecision: number,
