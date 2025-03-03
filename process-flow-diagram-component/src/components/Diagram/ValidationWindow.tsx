@@ -10,7 +10,7 @@
 // import InvalidIcon from "../../validation/InvalidIcon";
 // import ClearIcon from '@mui/icons-material/Clear';
 
-// const ValidationQueue = ({ errors }: { errors: Record<string, NodeErrors> }) => {
+// const validationWindow = ({ errors }: { errors: Record<string, NodeErrors> }) => {
 //   const isDiagramValid = getIsDiagramValid(errors);
 //   const dispatch = useAppDispatch();
 //   const nodes: Node[] = useAppSelector(selectNodes);
@@ -149,7 +149,7 @@
 //   );
 // };
 
-// export default ValidationQueue;
+// export default validationWindow;
 
 // * V2 window collapse and expand on top
 
@@ -167,7 +167,7 @@ import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { useState } from "react";
 import NotificationsPausedIcon from '@mui/icons-material/NotificationsPaused';
 
-const ValidationQueue = () => {
+const ValidationWindow = () => {
   const dispatch = useAppDispatch();
   const nodes: Node[] = useAppSelector(selectNodes);
   const errors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
@@ -316,4 +316,4 @@ const ValidationQueue = () => {
   );
 };
 
-export default ValidationQueue;
+export default ValidationWindow;

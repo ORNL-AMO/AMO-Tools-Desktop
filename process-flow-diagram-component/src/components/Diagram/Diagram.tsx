@@ -26,7 +26,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { configureAppStore, RootState, selectEdges, selectIsDrawerOpen, selectNodes } from './store';
 import { Provider } from 'react-redux';
 import { addNode, addNodes, connectEdge, edgesChange, keyboardDeleteNode, nodesChange } from './diagramReducer';
-import ValidationQueue from './ValidationQueue';
+import ValidationWindow from './ValidationWindow';
 
 
 export interface DiagramProps {
@@ -156,7 +156,7 @@ const Diagram = (props: DiagramProps) => {
             isDialogOpen={isDialogOpen}/>
         }
 
-      <ValidationQueue/>
+      <ValidationWindow/>
         <ReactFlowProvider>
           <div className={'flow-wrapper'} style={{ height: props.height }}>
             <ReactFlow
