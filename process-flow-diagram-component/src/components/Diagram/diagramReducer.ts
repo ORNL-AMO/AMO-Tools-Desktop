@@ -1,10 +1,10 @@
-import { createSlice, current } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
-import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowErrors, Handles, NodeErrors, NodeFlowData, NodeFlowTypeErrors, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { createNewNode, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
+import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, NodeErrors, NodeFlowData, NodeFlowTypeErrors, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { createNewNode, formatDataForMEASUR, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
 import { CSSProperties } from 'react';
-import { getResetData } from './store';
+import { getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getResetData } from './store';
 import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { FormikErrors } from 'formik';
 
@@ -27,6 +27,30 @@ export interface DiagramState {
   isValidationWindowOpen: boolean
 }
 
+const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{ diagramData: FlowDiagramData, parentContainer: ParentContainerDimensions, assessmentId: number }>) => {
+  const { diagramData, parentContainer, assessmentId } = action.payload;
+  
+  state.nodes = diagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
+    if (node.position) {
+      return node;
+    }
+  });
+  state.edges = diagramData.edges.map((edge: Edge<CustomEdgeData>) => edge);
+  state.diagramOptions = diagramData.userDiagramOptions ? { ...diagramData.userDiagramOptions } : getDefaultUserDiagramOptions();
+  state.settings = diagramData.settings ? { ...diagramData.settings } : getDefaultSettings();
+  state.calculatedData = diagramData.calculatedData ? { ...diagramData.calculatedData } : { nodes: {} };
+  state.nodeErrors = diagramData.nodeErrors ? { ...diagramData.nodeErrors } : {};
+  state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();
+  state.recentEdgeColors = diagramData.recentEdgeColors.length !== 0 ? { ...diagramData.recentEdgeColors } : getDefaultColorPalette();
+  state.isDrawerOpen = false;
+  state.focusedEdgeId = undefined;
+  state.selectedDataId = undefined;
+  state.diagramParentDimensions = { ...parentContainer };
+  state.isDialogOpen = false;
+  state.isValidationWindowOpen = false;
+  state.assessmentId = assessmentId
+}
+
 const resetDiagramReducer = (state: DiagramState) => {
   const diagramState = getResetData(state);
   return diagramState;
@@ -44,14 +68,12 @@ const addNodesReducer = (state: DiagramState, action: PayloadAction<Node[]>) => 
   state.nodes = state.nodes.concat(action.payload);
 }
 
-const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType, position }>) => {
+const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType: WaterProcessComponentType, position: { x: number, y: number } }>) => {
   const { nodeType, position } = action.payload;
   let newNode: Node = createNewNode(nodeType, position, state.nodes.map((node: Node<ProcessFlowPart>) => node.data.name));
   // todo can we remove date completely?
   newNode.data.modifiedDate = (newNode.data.modifiedDate as Date).toISOString();
-  state.nodes = state.nodes.concat(newNode);
-  current(state);
-  console.log('debug addNode', current(state));
+  state.nodes.push(newNode);
 };
 
 const totalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{flowProperty: NodeFlowProperty, totalFlow: number}>) => {
@@ -363,6 +385,7 @@ export const diagramSlice = createSlice({
   initialState: getResetData(),
   reducers: {
     resetDiagram: resetDiagramReducer,
+    diagramParentRender: diagramParentRenderReducer,
     nodesChange: nodesChangeReducer,
     addNode: addNodeReducer,
     addNodes: addNodesReducer,
@@ -406,6 +429,7 @@ export const {
   setNodeName,
   deleteNode,
   keyboardDeleteNode,
+  diagramParentRender,
   setNodeDataProperty,
   setNodeStyle,
   totalFlowChange,
@@ -438,6 +462,35 @@ export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp:
 export type OptionsDependentState = 'updateEdges' | 'updateEdgeProperties';
 export type NodeFlowProperty = keyof Pick<NodeFlowData, 'totalSourceFlow' | 'totalDischargeFlow'>;
 export type FlowType = 'source' | 'discharge';
+
+
+// todo 7364 - migrate save event to thunk
+// pass MEASUR save method here, 
+// need to check for assessment added nodes,
+//  handle debouncing
+export const saveDiagramState = createAsyncThunk(
+  'diagram/save',
+  async (_, { getState }) => {
+    const diagramState = getState() as DiagramState;
+    const { nodes, edges, nodeErrors, settings, diagramOptions, calculatedData, recentNodeColors, recentEdgeColors } = diagramState;
+    const userDiagramOptions = diagramOptions;
+    const updatedDiagramData: FlowDiagramData = {
+      nodes: nodes,
+      nodeErrors: nodeErrors,
+      edges: edges,
+      settings,
+      userDiagramOptions,
+      calculatedData,
+      recentNodeColors,
+      recentEdgeColors,
+    };
+    formatDataForMEASUR(updatedDiagramData);
+
+    // props.saveFlowDiagramData(updatedDiagramData);
+    console.log('=== SAVED FlowDiagramData', updatedDiagramData);
+  }
+);
+
 
 
 // helpers

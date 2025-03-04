@@ -337,7 +337,7 @@ export const getComponentNameFromType = (componentType) => {
   return component ? component.name : '';
 }
 
-export const getNewProcessComponent = (processComponentType): ProcessFlowPart => {
+export const getNewProcessComponent = (processComponentType: WaterProcessComponentType): ProcessFlowPart => {
   let diagramComponent: ProcessFlowPart = processFlowDiagramParts.find(part => part.processComponentType === processComponentType);
   let newProcessComponent: ProcessFlowPart = {
     processComponentType: diagramComponent.processComponentType,

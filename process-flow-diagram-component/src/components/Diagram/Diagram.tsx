@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ReactFlow,
   Connection,
@@ -23,9 +23,9 @@ import WarningDialog from './WarningDialog';
 import { SideDrawer } from '../Drawer/SideDrawer';
 import DataDrawer from '../Drawer/DataDrawer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { configureAppStore, RootState, selectEdges, selectIsDrawerOpen, selectNodes } from './store';
+import { AppStore, configureAppStore, RootState, selectEdges, selectIsDrawerOpen, selectNodes } from './store';
 import { Provider } from 'react-redux';
-import { addNode, addNodes, connectEdge, edgesChange, keyboardDeleteNode, nodesChange } from './diagramReducer';
+import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, keyboardDeleteNode, nodesChange } from './diagramReducer';
 import ValidationWindow from './ValidationWindow';
 
 
@@ -34,14 +34,13 @@ export interface DiagramProps {
   height?: number,
   parentContainer: ParentContainerDimensions,
   processDiagram?: WaterDiagram;
-  clickEvent: (...args) => void;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
 }
 
 export const RootDiagramContext = createContext(null);
 
 const Diagram = (props: DiagramProps) => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const assessmentNodes: Node[] = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
     if (!node.position && node.data.createdByAssessment) {
       return node;
@@ -50,31 +49,35 @@ const Diagram = (props: DiagramProps) => {
   const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const isDialogOpen = useAppSelector((state: RootState) => state.diagram.isDialogOpen);
-  
   const isDataDrawerOpen: boolean = useAppSelector(selectIsDrawerOpen)
-  const nodes: Node[] = useAppSelector(selectNodes);
   const edges: Edge[] = useAppSelector(selectEdges);
   const userDiagramOptions: UserDiagramOptions = useAppSelector((state: RootState) => state.diagram.diagramOptions);
   const settings: DiagramSettings = useAppSelector((state: RootState) => state.diagram.settings);
-
   const recentNodeColors = useAppSelector((state: RootState) => state.diagram.recentNodeColors);
   const recentEdgeColors = useAppSelector((state: RootState) => state.diagram.recentEdgeColors);
   const calculatedData: DiagramCalculatedData = useAppSelector((state: RootState) => state.diagram.calculatedData);
-
   const animated: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.animated);
   const minimapVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.minimapVisible);
   const controlsVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.controlsVisible);
   const defaultEdgeType: string = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
-
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {
     return getEdgeTypesFromString(state.diagram.diagramOptions.edgeType, edgeTypes);
   });
+  const nodes: Node[] = useAppSelector(selectNodes);
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
 
   // * on xyFlow instance ready
   useEffect(() => {
     if (reactFlowInstance && props.height) {
+      const parentState = {
+        diagramData: props.processDiagram?.flowDiagramData,
+        parentContainer: props.parentContainer,
+        assessmentId: props.processDiagram.assessmentId
+      }
+      dispatch(diagramParentRender(parentState));
+
+      // todo re-testtSbugger;
       if (assessmentCreatedNodes.length > 0) {
         const updatedNodes = updateAssessmentCreatedNodes(reactFlowInstance, [...assessmentCreatedNodes], props.height);
         setAssessmentCreatedNodes([]);
@@ -89,7 +92,7 @@ const Diagram = (props: DiagramProps) => {
   useEffect(() => {
     if (assessmentCreatedNodes.length === 0) {
       const updatedDiagramData: FlowDiagramData = {
-        nodes: debouncedNodes,
+        nodes: nodes,
         nodeErrors: nodeErrors,
         edges: debouncedEdges,
         settings,
@@ -101,16 +104,8 @@ const Diagram = (props: DiagramProps) => {
 
       formatDataForMEASUR(updatedDiagramData);
 
-      // todo this patches reset event bug where state conflicts with debounced, measur state,  should be moved to middleware
-      if (debouncedNodes.length === nodes.length) {
-        props.saveFlowDiagramData(updatedDiagramData);
-        // console.log('saved FlowDiagramData', updatedDiagramData);
-        // console.log('saved', updatedDiagramData.nodes);
-        // console.log('saved debounced', debouncedNodes);
-      }
-      //  else {
-      //   console.log('skip save, nodes length mismatch', debouncedNodes, nodes);
-      // }
+      props.saveFlowDiagramData(updatedDiagramData);
+      console.log('=== SAVED FlowDiagramData', updatedDiagramData);
     }
   }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings]);
 
@@ -209,8 +204,16 @@ const Diagram = (props: DiagramProps) => {
   );
 }
 
-export default (props: DiagramProps) => (
-  <Provider store={configureAppStore(props)}>
+export default (props: DiagramProps) => {
+  // * prevent multiple store instances on parent re-renders. Could also be lifted to AppWebComponent.tsx if needed
+  const storeRef = useRef<AppStore | null>(null);
+  if (!storeRef.current) {
+    storeRef.current = configureAppStore();
+  }
+
+  return (
+  <Provider store={storeRef.current}>
     <Diagram {...props}/>
   </Provider>
 );
+}

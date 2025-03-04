@@ -168,7 +168,6 @@ const getUniqueName = (newNode, existingNames, attempt = 1) => {
 
 export const getAdaptedTypeString = (nodeType: string) => {
   let adaptedString: string;
-  console.log(nodeType);
   switch (nodeType) {
     case 'water-intake':
       adaptedString = 'waterIntake';
