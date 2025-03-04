@@ -15,9 +15,9 @@
                 <div class="row" *ngIf="!importInProgress">
                     <div class="col-12 form-group">
                         <input type="file" class="form-control-file" (change)="setImportFile($event)" accept=".json, .gz">
-                        <div class="alert alert-danger small" *ngIf="treasureFile == true">Invalid File Destination - This 
-                            is a treasure hunt opportunites file and must be imported from within a treasure hunt.</div>
-                        <div class="alert alert-danger small" *ngIf="validFile == false && treasureFile == false">Invalid File Type</div>
+                        <span class="alert-danger small" *ngIf="treasureFile == true">Invalid File Destination - This 
+                            is a treasure hunt opportunites file and must be imported from within a treasure hunt.</span>
+                        <span class="alert-danger small" *ngIf="validFile == false && treasureFile == false">Invalid File Type</span>
                     </div>
                 </div>
 

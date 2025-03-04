@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';
-import { SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -17,7 +16,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
   selectedModificationIdSub: Subscription;
   smallScreenTab: string = 'form';
 
-  constructor(private wasteWaterService: WasteWaterService, private snackbarService: SnackbarService) { }
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean = false;
+  constructor(private wasteWaterService: WasteWaterService) { }
 
   ngOnInit(): void {
     this.selectedModificationIdSub = this.wasteWaterService.selectedModificationId.subscribe(selectedModificationId => {
@@ -25,7 +26,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         let modification: WasteWaterData = this.wasteWaterService.getModificationFromId();
         if (modification) {
           this.modificationExists = true;
-          this.notifyExploreOpps(modification);
+          this.checkExploreOpps(modification);
         } else {
           this.modificationExists = false;
         }
@@ -52,12 +53,30 @@ export class ExploreOpportunitiesComponent implements OnInit {
   }
 
 
-  notifyExploreOpps(modification: WasteWaterData) {
+  checkExploreOpps(modification: WasteWaterData) {
       if (modification && !modification.exploreOpportunities) {
-        this.snackbarService.setSnackbarMessage('exploreOpportunities', 'info', 'long');
+        let title: string = 'Explore Opportunities';
+        let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
+        this.openToast(title, body);
+      }else if(this.showToast){
+        this.hideToast();
       }
   }
 
+  openToast(title: string, body: string) {
+    this.toastData.title = title;
+    this.toastData.body = body;
+    this.showToast = true;
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
+    }
+  }
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;

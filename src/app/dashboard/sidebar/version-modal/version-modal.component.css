@@ -1,0 +1,17 @@
+.close{
+    cursor: pointer;
+}
+
+.modal-dialog{
+    top: auto;
+    max-width: none;
+    margin: 15px;
+}
+
+li{
+    font-size: small;
+}
+
+.modal-body{
+    max-height: 85vh;
+}

@@ -47,7 +47,7 @@ export class ChillerStagingService {
     this.chillerStagingInput.next(emptyInput);
   }
 
-  getDefaultEmptyOutput(): ChillerStagingOutput {
+  initDefaultEmptyOutputs() {
     let emptyOutput: ChillerStagingOutput = {
       baselineTotalPower: 0,
       baselineTotalEnergy: 0,
@@ -60,8 +60,7 @@ export class ChillerStagingService {
       baselinePowerList: [],
       modPowerList: [],
     };
-
-    return emptyOutput;
+    this.chillerStagingOutput.next(emptyOutput);
   }
 
   calculate(settings: Settings, inputs?: ChillerStagingInput) {
@@ -76,12 +75,11 @@ export class ChillerStagingService {
     let validInput: boolean;
     validInput = this.chillerStagingFormService.getChillerStagingForm(inputCopy).valid;
     
-    let chillerStagingOutput: ChillerStagingOutput
     if(!validInput) {
-      chillerStagingOutput = this.getDefaultEmptyOutput()
+      this.initDefaultEmptyOutputs();
     } else {
       inputCopy = this.convertInputUnits(inputCopy, settings);
-      chillerStagingOutput = this.chillersSuiteApiService.chillerStagingEfficiency(inputCopy);
+      let chillerStagingOutput: ChillerStagingOutput = this.chillersSuiteApiService.chillerStagingEfficiency(inputCopy);
       if (chillerStagingOutput.baselinePowerList && chillerStagingOutput.modPowerList) {
         chillerStagingOutput.chillerLoadResults = [];
         chillerStagingOutput.baselinePowerList.forEach((baselineLoad: number, index) => {
@@ -91,8 +89,9 @@ export class ChillerStagingService {
         chillerStagingOutput.modificationCost = chillerStagingOutput.modTotalEnergy * inputCopy.electricityCost;
         chillerStagingOutput.costSavings = chillerStagingOutput.baselineCost - chillerStagingOutput.modificationCost;
       }
+      this.chillerStagingOutput.next(chillerStagingOutput);
+      return chillerStagingOutput;
     }
-    return chillerStagingOutput;
   }
   convertInputUnits(input: ChillerStagingInput, settings: Settings): ChillerStagingInput {
     if (settings.unitsOfMeasure == "Metric") {

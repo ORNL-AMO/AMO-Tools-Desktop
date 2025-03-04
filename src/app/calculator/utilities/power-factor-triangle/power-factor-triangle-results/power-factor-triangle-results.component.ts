@@ -90,10 +90,12 @@ export class PowerFactorTriangleResultsComponent implements OnInit {
       xaxis: {
         range: [0, 1.05 * this.results.realPower],
         scaleratio: 1,
+        dtick: 10,
       },
       yaxis: {
         range: [-1, 1.05 * this.results.reactivePower],
         scaleratio: 1,
+        dtick: 10,
       },
       margin: { t: 25, b: 25, l: 25, r: 25 },
     };

@@ -35,8 +35,6 @@ export class FeedwaterEconomizerComponent implements OnInit {
     }, 100);
   }
   feedWaterInputSub: Subscription;
-  modalopenSub: Subscription;
-  isModalOpen: boolean;
   containerHeight: number;
   tabSelect: string = 'results';
   smallScreenTab: string = 'form';
@@ -68,15 +66,10 @@ export class FeedwaterEconomizerComponent implements OnInit {
         this.calculate();
       }
     });
-
-    this.modalopenSub = this.feedwaterEconomizerService.modalOpen.subscribe(isModalOpen => {
-      this.isModalOpen = isModalOpen;
-    });
   }
 
   ngOnDestroy() {
     this.feedWaterInputSub.unsubscribe();
-    this.modalopenSub.unsubscribe();
     if (this.inTreasureHunt) {
       this.feedwaterEconomizerService.feedwaterEconomizerInput.next(undefined);
     }

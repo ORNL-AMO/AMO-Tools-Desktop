@@ -35,7 +35,7 @@
     <label class="small" for="higherHeatingVal">Higher Heating Value</label>
     <div class="input-group">
       <input name="higherHeatingVal" type="number" step="10" class="form-control" formControlName="higherHeatingVal"
-        id="higherHeatingVal" onfocus="this.select();" (input)="calculate()" (focus)="focusField('higherHeatingVal')">
+        id="higherHeatingVal" onfocus="this.select();" (input)="calculate()" (focus)="focusField('fuelHV')">
       <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Btu/scf</span>
       <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kJ/Nm<sup>3</sup>
       </span>
@@ -214,7 +214,6 @@
     </span>
     <span class="alert-warning pull-right small"
       *ngIf="warnings.moistureInCombustionAir !== null">{{warnings.moistureInCombustionAir}}</span>
-      <a id="moistureCalc" class="form-text small click-link" (click)="showMoistureModal()">Calculate</a>
 
   </div>
 
@@ -369,13 +368,3 @@
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
   (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true">
 </app-operating-hours-modal>
-
-<div bsModal #moistureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="moistureModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
-  <div class="modal-dialog modal-lg flue-gas-modal">
-    <div class="modal-content h-100">
-      <app-flue-gas-moisture-modal class="h-100" *ngIf="showMoisture" (closeModal)="hideMoistureModal($event)"
-        (hideModal)="hideMoistureModal($event)" [settings]="settings"></app-flue-gas-moisture-modal>
-    </div>
-  </div>
-</div>
