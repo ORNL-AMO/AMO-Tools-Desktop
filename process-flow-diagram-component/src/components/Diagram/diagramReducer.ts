@@ -1,8 +1,8 @@
-import { createSlice, current } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, NodeErrors, NodeFlowData, NodeFlowTypeErrors, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { createNewNode, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
+import { createNewNode, formatDataForMEASUR, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
 import { CSSProperties } from 'react';
 import { getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getResetData } from './store';
 import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
@@ -462,6 +462,35 @@ export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp:
 export type OptionsDependentState = 'updateEdges' | 'updateEdgeProperties';
 export type NodeFlowProperty = keyof Pick<NodeFlowData, 'totalSourceFlow' | 'totalDischargeFlow'>;
 export type FlowType = 'source' | 'discharge';
+
+
+// todo 7364 - migrate save event to thunk
+// pass MEASUR save method here, 
+// need to check for assessment added nodes,
+//  handle debouncing
+export const saveDiagramState = createAsyncThunk(
+  'diagram/save',
+  async (_, { getState }) => {
+    const diagramState = getState() as DiagramState;
+    const { nodes, edges, nodeErrors, settings, diagramOptions, calculatedData, recentNodeColors, recentEdgeColors } = diagramState;
+    const userDiagramOptions = diagramOptions;
+    const updatedDiagramData: FlowDiagramData = {
+      nodes: nodes,
+      nodeErrors: nodeErrors,
+      edges: edges,
+      settings,
+      userDiagramOptions,
+      calculatedData,
+      recentNodeColors,
+      recentEdgeColors,
+    };
+    formatDataForMEASUR(updatedDiagramData);
+
+    // props.saveFlowDiagramData(updatedDiagramData);
+    console.log('=== SAVED FlowDiagramData', updatedDiagramData);
+  }
+);
+
 
 
 // helpers

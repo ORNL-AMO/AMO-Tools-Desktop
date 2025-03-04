@@ -1,7 +1,7 @@
-import { configureStore, createSelector } from '@reduxjs/toolkit'
-import diagramReducer, { DiagramState } from './diagramReducer'
+import { configureStore, createListenerMiddleware, createSelector, isAnyOf } from '@reduxjs/toolkit'
+import diagramReducer, { addNode, DiagramState, saveDiagramState } from './diagramReducer'
 import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowData, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { Edge, getConnectedEdges, Node } from '@xyflow/react';
+import { addEdge, Edge, getConnectedEdges, Node } from '@xyflow/react';
 import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
 
 
@@ -11,10 +11,33 @@ export function configureAppStore() {
     preloadedState: {
       diagram: getResetData()
     },
+    middleware: (getDefaultMiddleware) => {
+      const listenerMiddleware = createListenerMiddleware();
+      listenerMiddleware.startListening({
+        matcher: isAnyOf(addNode),
+        effect: async (_, { dispatch }) => {
+          dispatch(saveDiagramState());
+        },
+      });
+  
+      return getDefaultMiddleware().prepend(listenerMiddleware.middleware);
+    },
   });
 
   return store;
 }
+
+// // todo 7364 - migrate save event to thunk
+// // which reducer/events should dispatch?
+// const listenerMiddleware = createListenerMiddleware();
+// listenerMiddleware.startListening({
+//   matcher: isAnyOf(addNode),
+//   effect: async (_, { dispatch }) => {
+//     console.log('Node added - call savediagramstate');
+//     // todo wrap w lodash debounce and/or batching 
+//     dispatch(saveDiagramState());
+//   },
+// });
 
 
 export type AppStore = ReturnType<typeof configureAppStore>
@@ -83,7 +106,7 @@ export const selectNodeFlowTotals = (state: RootState, node: Node<ProcessFlowPar
 }
 
 
-
+// helpers
 export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
   return {
     strokeWidth: 2,
