@@ -25,8 +25,6 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('gasMaterialModal', { static: false }) public gasMaterialModal: ModalDirective;
-  @ViewChild('moistureModal', { static: false }) public moistureModal: ModalDirective;
-  
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.setOpHoursModalWidth();
@@ -39,7 +37,6 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
   warnings: FeedwaterEconomizerWarnings;
   formWidth: number;
   showOperatingHoursModal: boolean;
-  showMoisture: boolean;
 
   calculationMethods: Array<string> = [
     'Excess Air',
@@ -199,24 +196,6 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
   }
-
-  showMoistureModal() {
-    this.feedwaterEconomizerService.modalOpen.next(true);
-    this.showMoisture = true;
-    this.moistureModal.show();
-  }
-
-  hideMoistureModal(moistureInAirCombustion?: number) {
-    if (moistureInAirCombustion) {
-      moistureInAirCombustion = Number(moistureInAirCombustion.toFixed(2));
-      this.form.controls.moistureInCombustionAir.patchValue(moistureInAirCombustion);
-    }
-    this.moistureModal.hide();
-    this.showMoisture = false;
-    this.feedwaterEconomizerService.modalOpen.next(false);
-    this.calculate();
-  }
-  
 
   showMaterialModal() {
     this.feedwaterEconomizerService.modalOpen.next(true);

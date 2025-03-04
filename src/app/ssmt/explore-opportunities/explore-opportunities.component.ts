@@ -3,7 +3,6 @@ import { SSMT } from '../../shared/models/steam/ssmt';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { SsmtService } from '../ssmt.service';
-import { SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -42,7 +41,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
   showToast: boolean = false;
-  constructor(private ssmtService: SsmtService, private snackbarService: SnackbarService) {
+  constructor(private ssmtService: SsmtService) {
+    // this.toastyConfig.theme = 'bootstrap';
+    // this.toastyConfig.position = 'bottom-right';
+    // this.toastyConfig.limit = 1;
   }
 
   ngOnInit() {
@@ -53,7 +55,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     if (changes.containerHeight) {
       if (!changes.containerHeight.firstChange) {
         this.getContainerHeight();
-        this.notifyExploreOpps();
+        this.checkExploreOpps();
       }
     }
     if (changes.modificationIndex) {
@@ -67,7 +69,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.getContainerHeight();
-      this.notifyExploreOpps();
+      this.checkExploreOpps();
     }, 100);
   }
 
@@ -102,11 +104,30 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
   }
 
-  notifyExploreOpps() {
+  checkExploreOpps() {
     if (this.modificationExists) {
       if (!this.ssmt.modifications[this.modificationIndex].exploreOpportunities) {
-        this.snackbarService.setSnackbarMessage('exploreOpportunities', 'info', 'long');
+        let title: string = 'Explore Opportunities';
+        let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
+        this.openToast(title, body);
+      }else if(this.showToast){
+        this.hideToast();
       }
+    }
+  }
+
+  openToast(title: string, body: string) {
+    this.toastData.title = title;
+    this.toastData.body = body;
+    this.showToast = true;
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
     }
   }
 

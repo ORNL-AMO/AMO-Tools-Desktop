@@ -1,62 +1,46 @@
-.card.card-toast-notification {
+.toasty-card{
     position: fixed;
-    z-index: 9999;
-    right: 10px;
-    top: 0;
-    margin: 10px;
-    width: 500px;
-    background: rgb(111, 113, 116);
-    color: #fff;
-    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.4);
-}
-
-.app-icon{
-    width: 2rem;
-    border-radius: 16px;
+    z-index: 8000;
+    right: 15px;
+    top: -100%;
   }
 
-.card-text-small {
+  .update-toast{
+    min-width: 300px;
+    max-width: 500px;
+  }
+
+  .toast-text {
     font-size: 14px;
-}
+  }
 
-.card-text,
-.card-text-small {
-    margin-bottom: .5rem;
-}
+  .close{
+      padding-left: 1rem;
+      color: white;
+    }
 
-.alert {
-    padding: 0;
-}
+    a.click-link.danger{
+        color: red;
+    }
 
-.info-icon {
-    font-size: 22px;
-}
+    a.click-link{
+        font-size: small;
+    }
 
-.close-button {
-    float: right;
-    font-size: 24px;
-}
+    .card-body{
+        padding: .25rem;
+    }
 
-.close-button:hover {
-    cursor: pointer;
-}
+    .card-header{
+        background-color: #145A32;
+        color: white;
+        padding: 6px;
+    }
 
-.card-header {
-    font-size: 18px;
-}
+    h1{
+        font-size: 1.5rem !important;
+    }
 
-.card-body {
-    font-size: 16px;
-    padding: 1rem;
-}
-
-.bold-emphasis {
-    color: #b5ffd6 !important;
-    font-weight: bold;
-}
-
-a.click-link {
-    text-decoration: underline;
-    color: #b5ffd6 !important;
-}
-  
+    p{
+        margin-bottom: .25rem;
+    }

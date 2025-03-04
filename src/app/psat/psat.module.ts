@@ -49,6 +49,7 @@ import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module
 import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
 import { SimpleTooltipModule } from '../shared/simple-tooltip/simple-tooltip.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
+import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
@@ -61,7 +62,6 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
 import { IntegratePumpInventoryComponent } from './integrate-pump-inventory/integrate-pump-inventory.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
-import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 
 @NgModule({
   declarations: [
@@ -112,6 +112,7 @@ import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module'
     PieChartModule,
     SimpleTooltipModule,
     TabsTooltipModule,
+    ToastModule,
     SharedPipesModule,
     UnitConverterModule,
     SystemAndEquipmentCurveModule,
@@ -119,8 +120,7 @@ import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module'
     UpdateUnitsModalModule,
     AssessmentCo2SavingsModule,
     ConnectedInventoryModule,    
-    ImportExportModule,
-    SnackbarModule
+    ImportExportModule
   ],
   providers: [
     PsatService,

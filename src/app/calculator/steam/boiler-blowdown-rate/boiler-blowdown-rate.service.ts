@@ -205,7 +205,7 @@ export class BoilerBlowdownRateService {
   }
 
   calculateBlowdownRate(feedwaterConductivity: number, blowdownConductivity: number): number {
-    return feedwaterConductivity / blowdownConductivity;
+    return feedwaterConductivity / (blowdownConductivity - feedwaterConductivity);;
   }
 
   calculateBlowdownEnthalpy(steamTemp: number, settings: Settings): number {

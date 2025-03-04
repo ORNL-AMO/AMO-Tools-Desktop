@@ -5,6 +5,7 @@ import { OtherLossesCompareService } from './losses/other-losses/other-losses-co
 import { OpeningLossesCompareService } from './losses/opening-losses/opening-losses-compare.service';
 import { HeatSystemEfficiencyCompareService } from './losses/heat-system-efficiency/heat-system-efficiency-compare.service';
 import { GasLeakageCompareService } from './losses/gas-leakage-losses/gas-leakage-compare.service';
+import { FlueGasCompareService } from './losses/flue-gas-losses/flue-gas-compare.service';
 import { FixtureLossesCompareService } from './losses/fixture-losses/fixture-losses-compare.service';
 import { ExtendedSurfaceCompareService } from './losses/extended-surface-losses/extended-surface-compare.service';
 import { ExhaustGasCompareService } from './losses/exhaust-gas/exhaust-gas-compare.service';
@@ -17,7 +18,6 @@ import { PHAST, Losses } from '../shared/models/phast/phast';
 import { EnergyInputCompareService } from './losses/energy-input/energy-input-compare.service';
 import { OperationsCompareService } from './losses/operations/operations-compare.service';
 import { BehaviorSubject } from 'rxjs';
-import { FlueGasCompareService } from './losses/flue-gas-losses/flue-gas-compare.service';
 
 @Injectable()
 export class PhastCompareService {

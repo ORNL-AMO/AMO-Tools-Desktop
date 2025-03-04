@@ -5,7 +5,6 @@ import { Settings } from '../../shared/models/settings';
 import { PsatService } from '../psat.service';
 import { CompareService } from '../compare.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -53,11 +52,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
   tabSelect: string = 'results';
   currentField: string;
   helpHeight: number;
+  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
+  showToast: boolean = false;  
   smallScreenTab: string = 'form';
-  constructor(private psatService: PsatService, 
-    private settingsDbService: SettingsDbService, 
-    private compareService: CompareService, 
-    private snackbarService: SnackbarService) { }
+  constructor(private psatService: PsatService, private settingsDbService: SettingsDbService, private compareService: CompareService) { }
 
   ngOnInit() {
     let globalSettings = this.settingsDbService.globalSettings;
@@ -76,7 +74,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     setTimeout(() => {
       this.resizeTabs();
       this.getContainerHeight();
-      this.notifyExploreOpps();
+      this.checkExploreOpps();
     }, 100);
   }
 
@@ -88,7 +86,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }
     if (changes.modificationIndex && !changes.modificationIndex.isFirstChange()) {
       this.getResults();
-      this.notifyExploreOpps();
+      this.checkExploreOpps();
     }
   }
 
@@ -153,11 +151,30 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.emitAddNewMod.emit(true);
   }
 
-  notifyExploreOpps() {
+  checkExploreOpps() {
     if (this.modificationExists) {
       if (!this.psat.modifications[this.modificationIndex].exploreOpportunities) {
-        this.snackbarService.setSnackbarMessage('exploreOpportunities', 'info', 'long');
-      } 
+        let title: string = 'Explore Opportunities';
+        let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
+        this.openToast(title, body);
+      } else if (this.showToast) {
+        this.hideToast();
+      }
+    }
+  }
+
+  openToast(title: string, body: string) {
+    this.toastData.title = title;
+    this.toastData.body = body;
+    this.showToast = true;
+  }
+
+  hideToast() {
+    this.showToast = false;
+    this.toastData = {
+      title: '',
+      body: '',
+      setTimeoutVal: undefined
     }
   }
 

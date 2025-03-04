@@ -136,7 +136,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.compressedAirAssessment.systemInformation.atmosphericPressure,
         this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval,
         this.compressedAirAssessment.systemInformation.totalAirStorage,
-        this.compressedAirAssessment.systemBasics.electricityCost,
+        this.settings.electricityCost,
         this.compressedAirAssessment.systemInformation
       );
     }

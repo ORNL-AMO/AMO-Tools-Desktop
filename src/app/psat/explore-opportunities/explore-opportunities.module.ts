@@ -13,10 +13,10 @@ import { HeadToolModule } from '../../calculator/pumps/head-tool/head-tool.modul
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
+import { ToastModule } from '../../shared/toast/toast.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { PsatSankeyModule } from '../../shared/psat-sankey/psat-sankey.module';
 import { ConnectedInventoryModule } from '../../shared/connected-inventory/connected-inventory-module';
-import { SnackbarModule } from '../../shared/snackbar-notification/snackbar.module';
 
 @NgModule({
   imports: [
@@ -27,10 +27,10 @@ import { SnackbarModule } from '../../shared/snackbar-notification/snackbar.modu
     ModalModule,
     OperatingHoursModalModule,
     PercentGraphModule,
+    ToastModule,
     SharedPipesModule,
     PsatSankeyModule,
-    ConnectedInventoryModule,
-    SnackbarModule
+    ConnectedInventoryModule
   ],
   declarations: [
     ExploreOpportunitiesComponent, 

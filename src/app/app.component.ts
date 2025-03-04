@@ -5,8 +5,8 @@ import { AnalyticsService } from './shared/analytics/analytics.service';
 import { Subscription, catchError, concat, first, interval, pipe } from 'rxjs';
 import { SwUpdate } from '@angular/service-worker';
 import { ElectronService } from './electron/electron.service';
+import { PwaService } from './shared/pwa/pwa.service';
 import { AppErrorService } from './shared/errors/app-error.service';
-import { UpdateApplicationService } from './shared/update-application/update-application.service';
 // declare ga as a function to access the JS code in TS
 declare let gtag: Function;
 
@@ -24,7 +24,7 @@ export class AppComponent {
     private analyticsService: AnalyticsService,
     private appRef: ApplicationRef,
     private updates: SwUpdate,
-    private updateApplicationService: UpdateApplicationService,
+    private pwaService: PwaService,
     private electronService: ElectronService,
     private appErrorService: AppErrorService,
     private router: Router) {
@@ -54,7 +54,7 @@ export class AppComponent {
         try {
           const updateFound = await updates.checkForUpdate();
           if (updateFound) {
-            this.updateApplicationService.webUpdateAvailable.next(true);
+            this.pwaService.displayUpdateToast.next(true);
           }
           console.log(updateFound ? 'A new version is available.' : 'Already on the latest version.');
         } catch (err) {

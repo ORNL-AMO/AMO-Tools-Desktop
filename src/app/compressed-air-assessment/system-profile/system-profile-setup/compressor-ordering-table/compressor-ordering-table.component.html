@@ -137,10 +137,7 @@
                         class="btn btn-sm" *ngIf="summaryData.order == 0" (click)="toggleOn(summary, orderIndex)">Off</button>
                     <button id="{{'order_'+compressorIndex+orderIndex}}" name="{{'order_'+compressorIndex+orderIndex}}"
                         class="btn btn-sm btn-active" *ngIf="summaryData.order != 0"
-                        (click)="toggleOn(summary, orderIndex)">
-                        <span *ngIf="summary.compressorId === this.trimSelection">Trim</span>
-                        <span *ngIf="summary.compressorId !== this.trimSelection">Base</span>
-                    </button>
+                        (click)="toggleOn(summary, orderIndex)">{{summaryData.order}}</button>
                 </td>
             </tr>
         </tbody>

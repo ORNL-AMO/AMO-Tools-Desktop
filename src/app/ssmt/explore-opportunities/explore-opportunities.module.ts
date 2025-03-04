@@ -17,9 +17,9 @@ import { ExploreOpportunitiesService } from './explore-opportunities.service';
 import { SsmtResultsPanelModule } from '../ssmt-results-panel/ssmt-results-panel.module';
 import { BlowdownRateModalModule } from '../blowdown-rate-modal/blowdown-rate-modal.module';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
+import { ToastModule } from '../../shared/toast/toast.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { SsmtSankeyModule } from '../../shared/ssmt-sankey/ssmt-sankey.module';
-import { SnackbarModule } from '../../shared/snackbar-notification/snackbar.module';
 
 @NgModule({
   imports: [
@@ -30,9 +30,9 @@ import { SnackbarModule } from '../../shared/snackbar-notification/snackbar.modu
     SsmtResultsPanelModule,
     BlowdownRateModalModule,
     OperatingHoursModalModule,
+    ToastModule,
     SharedPipesModule,
-    SsmtSankeyModule,
-    SnackbarModule
+    SsmtSankeyModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent, HeaderFormComponent, CondensateHandlingFormComponent, TurbineFormComponent, ExploreCondensingTurbineFormComponent, ExplorePressureTurbineFormComponent, ExploreTurbineFormComponent],
   exports: [ExploreOpportunitiesComponent],

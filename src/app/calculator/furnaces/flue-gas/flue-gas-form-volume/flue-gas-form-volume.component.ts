@@ -34,7 +34,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
-  @ViewChild('moistureModal', { static: false }) public moistureModal: ModalDirective;
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
@@ -53,7 +52,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   baselineDataSub: Subscription;
 
   higherHeatingValue: number;
-  showMoisture: boolean;
 
   constructor(private flueGasService: FlueGasService,
     private convertUnitsService: ConvertUnitsService,
@@ -246,23 +244,6 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.materialModal.show();
   }
 
-  showMoistureModal() {
-    this.flueGasService.modalOpen.next(true);
-    this.showMoisture = true;
-    this.moistureModal.show();
-  }
-
-  hideMoistureModal(moistureInAirCombustion?: number) {
-    if (moistureInAirCombustion) {
-      moistureInAirCombustion = Number(moistureInAirCombustion.toFixed(2));
-      this.byVolumeForm.controls.moistureInAirCombustion.patchValue(moistureInAirCombustion);
-    }
-    this.moistureModal.hide();
-    this.showMoisture = false;
-    this.flueGasService.modalOpen.next(false);
-    this.calculate();
-  }
-  
   hideMaterialModal(event?: any) {
     if (event) {
       this.options = this.sqlDbApiService.selectGasFlueGasMaterials();

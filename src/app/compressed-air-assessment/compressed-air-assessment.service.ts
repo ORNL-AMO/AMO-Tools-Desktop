@@ -57,19 +57,15 @@ export class CompressedAirAssessmentService {
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {
     if (isBaselineChange) {
-      this.setIsSetupDone(compressedAirAssessment)  
+      let settings: Settings = this.settings.getValue();
+      let hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, settings).valid;
+      let hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
+      let hasValidDayTypes = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
+      let profileSummaryValid = this.hasValidProfileSummaryData(compressedAirAssessment);
+      compressedAirAssessment.setupDone = (hasValidSystemInformation && hasValidCompressors && hasValidDayTypes && profileSummaryValid.isValid);
     }
     //TODO? set modifications valid?
     this.compressedAirAssessment.next(compressedAirAssessment);
-  }
-
-  setIsSetupDone(compressedAirAssessment: CompressedAirAssessment) {
-    let settings: Settings = this.settings.getValue();
-    let hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, settings).valid;
-    let hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
-    let hasValidDayTypes = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
-    let profileSummaryValid = this.hasValidProfileSummaryData(compressedAirAssessment);
-    compressedAirAssessment.setupDone = (hasValidSystemInformation && hasValidCompressors && hasValidDayTypes && profileSummaryValid.isValid);
   }
 
   getDefaultProfileSummaryValid(): ProfileSummaryValid {
@@ -109,7 +105,7 @@ export class CompressedAirAssessmentService {
       };
 
       if (summary.dayTypeId == selectedDayTypeId) {
-        let currentCompressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(compressor => compressor.itemId === summary.compressorId);
+        let currentCompressor: CompressorInventoryItem = this.compressedAirAssessment.getValue().compressorInventoryItems.find(compressor => compressor.itemId === summary.compressorId);
         summary.profileSummaryData.forEach((data, index) => {
           if (data.order != 0) {
             let isValidProfileData: boolean = true;
@@ -336,15 +332,18 @@ export class CompressedAirAssessmentService {
   }
 
   getHasMissingTrimSelection(compressedAirAssessment: CompressedAirAssessment): boolean {
-    let hasMissingTrimSelection: boolean = compressedAirAssessment.systemInformation.trimSelections.some(selection => {
-      let dayTypeInUse = compressedAirAssessment.compressedAirDayTypes.some(dayType => dayType.dayTypeId === selection.dayTypeId);
-      if (dayTypeInUse && selection.compressorId) {
-        return false;
-      } else {
-        return true;
-      }
-    });
+    let dayTypesInUse: CompressedAirDayType[] = compressedAirAssessment.compressedAirDayTypes;
+    let hasMissingTrimSelection: boolean = true;
+    dayTypesInUse.forEach(dayType => {
+      hasMissingTrimSelection = !compressedAirAssessment.systemInformation.trimSelections.some(selection => {
+        if (selection.dayTypeId == dayType.dayTypeId && selection.compressorId) {
+          return true;
+        } else {
+          return false;
+        }
+      });
 
+    });
     return hasMissingTrimSelection;
   }
 

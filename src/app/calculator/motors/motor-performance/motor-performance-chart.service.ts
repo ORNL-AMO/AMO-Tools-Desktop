@@ -123,9 +123,6 @@ export class MotorPerformanceChartService {
         xaxis: {
           autorange: false,
           showgrid: true,
-          // * hoverformat will be overridden by tickvals and tickformat
-          // hoverformat: '.1f',
-          hoverformat: '.1%',
           title: {
             text: "Motor Shaft Load"
           },
@@ -133,10 +130,8 @@ export class MotorPerformanceChartService {
           tickangle: -60,
           tickmode: 'array',
           range: [0, 1.4],
-          tickvals: [0, 0.2, 0.4, 0.6, 0.8, 1, 1.2],  
-          // * conflicts with hoverFormat
-          // tickformat: '.0%'
-          ticktext: ["0%", "20%", "40%", "60%", "80%", "100%", "120%"], 
+          tickvals: [0, .20, .40, .60, .80, 1, 1.2],
+          tickformat: '.0%'
         },
         yaxis: {
           type: 'linear',

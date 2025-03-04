@@ -14,8 +14,8 @@ import { VariableFrequencyDriveFormComponent } from './explore-opportunities-for
 import { CalculatePressuresModule } from '../calculate-pressures/calculate-pressures.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/operating-hours-modal.module';
+import { ToastModule } from '../../shared/toast/toast.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
-import { SnackbarModule } from '../../shared/snackbar-notification/snackbar.module';
 
 @NgModule({
   imports: [
@@ -28,8 +28,8 @@ import { SnackbarModule } from '../../shared/snackbar-notification/snackbar.modu
     CalculatePressuresModule,
     ModalModule,
     OperatingHoursModalModule,
-    SharedPipesModule,
-    SnackbarModule
+    ToastModule,
+    SharedPipesModule
   ],
   declarations: [
     ExploreOpportunitiesComponent,
