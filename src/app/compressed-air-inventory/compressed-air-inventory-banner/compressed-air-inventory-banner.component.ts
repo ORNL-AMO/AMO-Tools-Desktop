@@ -7,6 +7,8 @@ import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/sec
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
+import { CompressedAirCatalogService } from '../compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
+import _ from 'lodash';
 
 @Component({
   selector: 'app-compressed-air-inventory-banner',
@@ -37,6 +39,7 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     private securityAndPrivacyService: SecurityAndPrivacyService, 
     private emailMeasurDataService: EmailMeasurDataService, 
     private dashboardService: DashboardService, 
+    private compressedAirCatalogService: CompressedAirCatalogService,
     private integrationStateService: IntegrationStateService) { }
 
 
@@ -58,9 +61,9 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
       // }
     });
 
-    // this.selectedSystemIdSub = this.pumpCatalogService.selectedSystemId.subscribe(val => {
-    //   this.selectedSystemId = val;
-    // });
+    this.selectedSystemIdSub = this.compressedAirCatalogService.selectedSystemId.subscribe(val => {
+      this.selectedSystemId = val;
+    });
 
     this.summaryTabSub = this.compressedAirInventoryService.summaryTab.subscribe(val => {
       this.summaryTab = val;
@@ -85,7 +88,7 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   selectedSystem(systemId: string) {
-    //this.pumpCatalogService.selectedSystemId.next(systemId);
+    this.compressedAirCatalogService.selectedSystemId.next(systemId);
   }
 
   setMainTab(str: string) {
@@ -143,20 +146,20 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     }
   }
 
-  continuePumpCatalogTabs() {
-    // let currentIndex: number = _.findIndex(this.pumpInventoryData.systems, (system) => { return system.id == this.selectedSystemId });
-    // if (currentIndex != this.pumpInventoryData.systems.length - 1) {
-    //   let nextID: string = this.pumpInventoryData.systems[currentIndex + 1].id;
-    //   this.pumpCatalogService.selectedSystemId.next(nextID);
-    // }
+  continueCompressedAirCatalogTabs() {
+    let currentIndex: number = _.findIndex(this.compressedAirInventoryData.systems, (system) => { return system.id == this.selectedSystemId });
+    if (currentIndex != this.compressedAirInventoryData.systems.length - 1) {
+      let nextID: string = this.compressedAirInventoryData.systems[currentIndex + 1].id;
+      this.compressedAirCatalogService.selectedSystemId.next(nextID);
+    }
   }
 
-  backPumpCatalogTabs() {
-    // let currentIndex: number = _.findIndex(this.pumpInventoryData.systems, (system) => { return system.id == this.selectedSystemId });
-    // if (currentIndex != 0) {
-    //   let nextID: string = this.pumpInventoryData.systems[currentIndex - 1].id;
-    //   this.pumpCatalogService.selectedSystemId.next(nextID);
-    // }
+  backCompressedAirCatalogTabs() {
+    let currentIndex: number = _.findIndex(this.compressedAirInventoryData.systems, (system) => { return system.id == this.selectedSystemId });
+    if (currentIndex != 0) {
+      let nextID: string = this.compressedAirInventoryData.systems[currentIndex - 1].id;
+      this.compressedAirCatalogService.selectedSystemId.next(nextID);
+    }
   }
 
   continueSummaryTabs() {

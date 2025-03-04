@@ -121,35 +121,42 @@ export class CompressedAirInventoryService {
       description: '',
       notes: '',
       name: 'New Compressor',
+      centrifugalSpecifics: {
+        surgeAirflow: null,
+        maxFullLoadPressure: null,
+        maxFullLoadCapacity: null,
+        minFullLoadPressure: null,
+        minFullLoadCapacity: null
+      },
       nameplateData: {
-        compressorType: undefined,
-        fullLoadOperatingPressure: undefined,
-        fullLoadRatedCapacity: undefined,
-        totalPackageInputPower: undefined
+        compressorType: 1,
+        fullLoadOperatingPressure: 100,
+        fullLoadRatedCapacity: 1857,
+        totalPackageInputPower: 290.1
       },
       fieldMeasurements: {
         yearlyOperatingHours: 8760,
       },
       compressedAirMotor: {
-        motorPower: undefined,
-        motorFullLoadAmps: undefined,
+        motorPower: 350,
+        motorFullLoadAmps: 385
       },
       compressedAirControlsProperties: {
-        controlType: undefined,
-        unloadPointCapacity: undefined,
-        numberOfUnloadSteps: undefined,
-        automaticShutdown: undefined,
-        unloadSumpPressure: undefined,
+        controlType: 1,
+        unloadPointCapacity: 100,
+        numberOfUnloadSteps: 2,
+        automaticShutdown: true,
+        unloadSumpPressure: 15,
       },
       compressedAirDesignDetailsProperties: {
-        blowdownTime: undefined,
-        modulatingPressureRange: undefined,
-        inputPressure: undefined,
-        designEfficiency: undefined,
-        serviceFactor: undefined,
-        noLoadPowerFM: undefined,
-        noLoadPowerUL: undefined,
-        maxFullFlowPressure: undefined
+        blowdownTime: 40,
+        modulatingPressureRange: 50,
+        inputPressure: 14.5,
+        designEfficiency: 94.5,
+        serviceFactor: 1.15,
+        noLoadPowerFM: 20,
+        noLoadPowerUL: 20,
+        maxFullFlowPressure: 110
       },
       compressedAirPerformancePointsProperties: {
         fullLoad: {
@@ -208,13 +215,6 @@ export class CompressedAirInventoryService {
           airflow: undefined,
           dischargePressure: undefined,
         }
-      },
-      centrifugalSpecifics: {
-        surgeAirflow: null,
-        maxFullLoadPressure: null,
-        maxFullLoadCapacity: null,
-        minFullLoadPressure: null,
-        minFullLoadCapacity: null
       },
     }
   }
