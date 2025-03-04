@@ -1,51 +1,21 @@
 import { configureStore, createSelector } from '@reduxjs/toolkit'
 import diagramReducer, { DiagramState } from './diagramReducer'
-import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, NodeFlowData, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowData, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { Edge, getConnectedEdges, Node } from '@xyflow/react';
-import { DiagramProps } from './Diagram';
 import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
 
 
-export function configureAppStore(diagramProps: DiagramProps) {
-  const diagramData: FlowDiagramData = diagramProps.processDiagram?.flowDiagramData;
-
-  let initialState: { diagram: DiagramState } = {
-    diagram: getResetData()
-  };
-
-  if (diagramData) {
-    initialState = {
-      diagram: {
-        nodes: diagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
-          if (node.position) {
-            return node;
-          }
-        }),
-        edges: diagramData.edges.map((edge: Edge<CustomEdgeData>) => edge),
-        diagramOptions: diagramData.userDiagramOptions ? {...diagramData.userDiagramOptions} : getDefaultUserDiagramOptions(),
-        settings: diagramData.settings ? {...diagramData.settings} : getDefaultSettings(),
-        calculatedData: diagramData.calculatedData ? {...diagramData.calculatedData} : {nodes: {}},
-        nodeErrors: diagramData.nodeErrors ? {...diagramData.nodeErrors} : {},
-        recentNodeColors: diagramData.recentNodeColors.length !== 0 ? {...diagramData.recentNodeColors} : getDefaultColorPalette(),
-        recentEdgeColors: diagramData.recentEdgeColors.length !== 0 ? {...diagramData.recentEdgeColors} : getDefaultColorPalette(),
-        isDrawerOpen: false,
-        focusedEdgeId: undefined,
-        selectedDataId: undefined,
-        diagramParentDimensions: {...diagramProps.parentContainer},
-        isDialogOpen: false,
-        isValidationWindowOpen: false,
-        assessmentId: diagramProps.processDiagram?.assessmentId
-      }
-    }
-  }
-
+export function configureAppStore() {
   const store = configureStore({
     reducer: { diagram: diagramReducer },
-    preloadedState: initialState,
+    preloadedState: {
+      diagram: getResetData()
+    },
   });
 
   return store;
 }
+
 
 export type AppStore = ReturnType<typeof configureAppStore>
 // Infer the type of `store`
@@ -151,9 +121,15 @@ export const getResetData = (currentState?: DiagramState): DiagramState => {
     nodeErrors: {},
     recentEdgeColors: getDefaultColorPalette(),
     recentNodeColors: getDefaultColorPalette(),
-    diagramParentDimensions: currentState?.diagramParentDimensions,
+    diagramParentDimensions: {
+      height: undefined,
+      headerHeight: undefined,
+      footerHeight: undefined
+    },
     isDialogOpen: false,
     assessmentId: undefined,
     isValidationWindowOpen: false
   }
 }
+
+

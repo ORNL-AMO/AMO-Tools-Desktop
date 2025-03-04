@@ -27,7 +27,9 @@ function TabPanel(props: TabPanelProps) {
 
   let wrapperProps: CSSProperties = { height: '100%', width: '100%', marginTop: '1rem' };
   if (props.diagramParentDimensions) {
-    wrapperProps.height = props.diagramParentDimensions.height - props.diagramParentDimensions.headerHeight - props.diagramParentDimensions.footerHeight - 300;
+    if (props.diagramParentDimensions.height && props.diagramParentDimensions.headerHeight && props.diagramParentDimensions.footerHeight) {
+      wrapperProps.height = props.diagramParentDimensions.height - props.diagramParentDimensions.headerHeight - props.diagramParentDimensions.footerHeight - 300;
+    }
     wrapperProps.overflowY = 'auto';
   }
 

@@ -2,7 +2,7 @@ import { Root, createRoot } from 'react-dom/client';
 import App from './App';
 import { FlowDiagramData, ProcessFlowDiagramState, ProcessFlowParentState } from '../../src/process-flow-types/shared-process-flow-types';
 import { CacheProvider } from '@emotion/react';
-import createCache from "@emotion/cache";
+import createCache, { EmotionCache } from "@emotion/cache";
 
 class AppWebComponent extends HTMLElement {
   mountPoint!: HTMLDivElement;
@@ -15,7 +15,7 @@ class AppWebComponent extends HTMLElement {
   // * 2. Due to this change, events must now be dispatched from shadowRoot, instead of 'this' (AppWebComponent)
   shadowRoot;
   // * make MUI library styles available too shadowDom
-  MUIStylesCache;
+  MUIStylesCache: EmotionCache;
 
   renderDiagramComponent(parentState: ProcessFlowParentState) {
     if (parentState && parentState.parentContainer) {
@@ -25,7 +25,6 @@ class AppWebComponent extends HTMLElement {
             context={parentState.context}
             processDiagram={parentState.waterDiagram}
             shadowRoot={this.shadowRoot}
-            clickEvent={this.handleClickEvent}
             saveFlowDiagramData={this.emitFlowDiagramDataUpdate}
             />
         </CacheProvider>
@@ -75,7 +74,7 @@ class AppWebComponent extends HTMLElement {
       detail: detail,
     });
 
-    // * see note at shadowRoot decl
+    // * see note at shadowRoot declaration
     this.shadowRoot.dispatchEvent(event);
   }
   
@@ -94,7 +93,6 @@ class AppWebComponent extends HTMLElement {
   }
 
   set parentstate(newValue) {
-    // const newValue = coerceType(value);
     this.setAttribute("parentstate", JSON.stringify(newValue));
   }
 
@@ -102,10 +100,6 @@ class AppWebComponent extends HTMLElement {
     if (attrName === 'parentstate') {
       this.renderDiagramComponent(this.parentstate)
     }
-  }
-
-  handleClickEvent = (...args) => {
-    console.log(...args)
   }
 }
 
