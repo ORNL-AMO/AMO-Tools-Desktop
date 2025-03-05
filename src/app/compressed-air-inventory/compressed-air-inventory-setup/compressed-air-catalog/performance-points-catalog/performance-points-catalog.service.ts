@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirItem, CompressedAirPerformancePointsProperties, PerformancePoint } from '../../../compressed-air-inventory';
-import { SystemInformation } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirItem, CompressedAirPerformancePointsProperties, PerformancePoint, SystemInformation } from '../../../compressed-air-inventory';
 import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 import { EqualToValidator } from '../../../../shared/validators/equal-to';
@@ -20,26 +19,26 @@ export class PerformancePointsCatalogService {
 
 
   checkPerformancePointsValid(compressor: CompressedAirItem, systemInformation: SystemInformation): boolean {
-    // let fullLoadForm: UntypedFormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.fullLoad, compressor, 'fullLoad', systemInformation);
+    // let fullLoadForm: UntypedFormGroup = this.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.fullLoad, compressor, 'fullLoad', systemInformation);
     // let isValid: boolean = fullLoadForm.valid;
-    // let showMaxFullFlow: boolean = this.checkShowMaxFlowPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
+    // let showMaxFullFlow: boolean = this.checkShowMaxFlowPerformancePoint(compressor.nameplateData.compressorType, compressor.compressedAirControlsProperties.controlType);
     // if (isValid && showMaxFullFlow) {
-    //   let maxFlowForm: UntypedFormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.maxFullFlow, compressor, 'maxFullFlow', systemInformation);
+    //   let maxFlowForm: UntypedFormGroup = this.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.maxFullFlow, compressor, 'maxFullFlow', systemInformation);
     //   isValid = maxFlowForm.valid;
     // }
-    // let showUnloadForm: boolean = this.checkShowUnloadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
+    // let showUnloadForm: boolean = this.checkShowUnloadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressedAirControlsProperties.controlType);
     // if (isValid && showUnloadForm) {
-    //   let unloadForm: UntypedFormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.unloadPoint, compressor, 'unloadPoint', systemInformation);
+    //   let unloadForm: UntypedFormGroup = this.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.unloadPoint, compressor, 'unloadPoint', systemInformation);
     //   isValid = unloadForm.valid;
     // }
-    // let showNoLoadForm: boolean = this.checkShowNoLoadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
+    // let showNoLoadForm: boolean = this.checkShowNoLoadPerformancePoint(compressor.nameplateData.compressorType, compressor.compressedAirControlsProperties.controlType);
     // if (isValid && showNoLoadForm) {
-    //   let noLoadForm: UntypedFormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.noLoad, compressor, 'noLoad', systemInformation);
+    //   let noLoadForm: UntypedFormGroup = this.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.noLoad, compressor, 'noLoad', systemInformation);
     //   isValid = noLoadForm.valid;
     // }
-    // let showBlowoff: boolean = this.checkShowBlowoffPerformancePoint(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
+    // let showBlowoff: boolean = this.checkShowBlowoffPerformancePoint(compressor.nameplateData.compressorType, compressor.compressedAirControlsProperties.controlType);
     // if (isValid && showBlowoff) {
-    //   let blowoffForm: UntypedFormGroup = this.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff', systemInformation);
+    //   let blowoffForm: UntypedFormGroup = this.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.blowoff, compressor, 'blowoff', systemInformation);
     //   isValid = blowoffForm.valid;
     // }
     // return isValid;

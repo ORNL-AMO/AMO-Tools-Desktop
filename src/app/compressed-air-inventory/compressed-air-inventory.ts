@@ -59,7 +59,9 @@ export interface ValidCompressedAir {
   compressedAirMotorValid: boolean,
   compressedAirControlsValid: boolean,
   compressedAirDesignDetailsValid: boolean,
-  compressedAirPerformancePointsValid: boolean
+  compressedAirCentrifugalSpecifics: boolean,
+  compressedAirPerformancePointsValid: boolean,
+  compressedAirFieldMeasurementsValid: boolean,
 }
 
 export interface CompressedAirPropertyDisplayOptions {

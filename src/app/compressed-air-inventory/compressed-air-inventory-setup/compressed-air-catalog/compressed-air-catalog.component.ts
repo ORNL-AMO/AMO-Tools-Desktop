@@ -68,7 +68,7 @@ export class CompressedAirCatalogComponent implements OnInit {
     this.selectedCompressedAirItemSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(selectedCompressedAir => {
       if (selectedCompressedAir) {
         this.selectedCompressedAirItem = selectedCompressedAir;
-        //this.selectedCompressedAirItem.validCompressedAir = this.compressedAirInventoryService.isCompressedAirValid(selectedCompressedAir);
+        this.selectedCompressedAirItem.validCompressedAir = this.compressedAirInventoryService.isCompressedAirValid(selectedCompressedAir);
         this.connectedCompressedAirItem = {
           id: selectedCompressedAir.id,
           name: selectedCompressedAir.name,
