@@ -62,8 +62,8 @@
                 <span *ngIf="form.controls.power.errors.max">Value can't be greater than Full Load Power
                     {{form.controls.power.errors.max.max}} kW.</span>
             </span>
-            <!-- <span class="alert-warning pull-right small"
-                *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span> -->
+            <span class="alert-warning pull-right small"
+                *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span>
         </div>
     </form>
 </td>

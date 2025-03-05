@@ -324,3 +324,7 @@ export const ControlTypes: Array<ControlType> = [
     enumValue: 7
   },
 ]
+
+export interface CompressorInventoryItemWarnings {
+  serviceFactor?: string;
+}

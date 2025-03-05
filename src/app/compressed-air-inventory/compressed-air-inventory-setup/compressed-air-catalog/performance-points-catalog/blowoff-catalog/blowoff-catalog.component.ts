@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../../../../compressed-air-inventory.service';
 import { CompressedAirCatalogService } from '../../compressed-air-catalog.service';
-import { PerformancePointsCatalogService } from '../performance-points-catalog.service';
+import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-catalog.service';
 import { Settings } from '../../../../../shared/models/settings';
 import { BlowoffCatalogService } from './blowoff-catalog.service';
 
@@ -21,8 +21,8 @@ export class BlowoffCatalogComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
   isFormChange: boolean = false;
-  //validationMessages: ValidationMessageMap;
-  //warnings: PerformancePointWarnings;
+  validationMessages: ValidationMessageMap;
+  warnings: PerformancePointWarnings;
 
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
@@ -43,10 +43,10 @@ export class BlowoffCatalogComponent implements OnInit {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.blowoff.power, compressor);
+        this.warnings = this.performancePointsCatalogService.checkMotorServiceFactorExceededWarning(compressor.compressedAirPerformancePointsProperties.blowoff.power, compressor);
         if (this.isFormChange == false) {
           this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.blowoff, compressor, 'blowoff');
-          //this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
+          this.validationMessages = this.performancePointsCatalogService.validationMessageMap.getValue();
         } else {
           this.updateForm(compressor.compressedAirPerformancePointsProperties.blowoff);
           this.isFormChange = false;

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressorTypeOptions, CompressedAirItem, CompressedAirDesignDetailsPropertiesOptions } from '../../../compressed-air-inventory';
+import { CompressorTypeOptions, CompressedAirItem, CompressedAirDesignDetailsPropertiesOptions, CompressorInventoryItemWarnings } from '../../../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../../../compressed-air-inventory.service';
 import { CompressedAirCatalogService } from '../compressed-air-catalog.service';
 import { DesignDetailsCatalogService } from './design-details-catalog.service';
@@ -25,6 +25,7 @@ export class DesignDetailsCatalogComponent implements OnInit {
   displayNoLoadPowerFM: boolean;
   displayNoLoadPowerUL: boolean;
   displayMaxFullFlow: boolean;
+  warnings: CompressorInventoryItemWarnings;
 
   compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
   invalidCompressorType: boolean;
@@ -37,6 +38,7 @@ export class DesignDetailsCatalogComponent implements OnInit {
       this.settings = val;
     });
     this.selectedCompressedAirItemSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(selectedCompressedAir => {
+      this.warnings = this.compressedAirCatalogService.checkWarnings(selectedCompressedAir);
       if (selectedCompressedAir) {
         this.form = this.designDetailsCatalogService.getFormFromDesignDetails(selectedCompressedAir.compressedAirDesignDetailsProperties, selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
         this.setDisplayBlowdownTime(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
