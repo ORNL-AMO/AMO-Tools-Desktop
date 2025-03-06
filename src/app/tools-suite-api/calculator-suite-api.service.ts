@@ -430,16 +430,16 @@ export class CalculatorSuiteApiService {
       pipeMaterialCoefficients,
       insulationMaterialCoefficients);
 
-    let InsulatedPipeCalculator = new Module.InsulatedPipeCalculator(wasmConvertedInput);
+    let InsulatedPipeReduction = new Module.InsulatedPipeReduction(wasmConvertedInput);
 
-    let rawOutput = InsulatedPipeCalculator.calculate();
+    let rawOutput = InsulatedPipeReduction.calculate();
     let pipeInsulationReductionResult: PipeInsulationReductionResult = {
       heatLength: rawOutput.getHeatLength(),
       annualHeatLoss: rawOutput.getAnnualHeatLoss(),
       energyCost: undefined,
     }
     rawOutput.delete();
-    InsulatedPipeCalculator.delete();
+    InsulatedPipeReduction.delete();
     wasmConvertedInput.delete();
     insulationMaterialCoefficients.delete();
     pipeMaterialCoefficients.delete();
@@ -462,15 +462,15 @@ export class CalculatorSuiteApiService {
       inputObj.jacketEmissivity,
       inputObj.surfaceTemperature
     );
-    let InsulatedTankCalculator = new Module.InsulatedTankCalculator(input);
-    let rawOutput = InsulatedTankCalculator.calculate();
+    let InsulatedTankReduction = new Module.InsulatedTankReduction(input);
+    let rawOutput = InsulatedTankReduction.calculate();
     let tankInsulationReductionResult: TankInsulationReductionResult = {
       heatLoss: rawOutput.getHeatLoss(),
       annualHeatLoss: rawOutput.getAnnualHeatLoss() * 100,
       energyCost: undefined,
     }
     rawOutput.delete();
-    InsulatedTankCalculator.delete();
+    InsulatedTankReduction.delete();
     input.delete();
     return tankInsulationReductionResult;
   }
