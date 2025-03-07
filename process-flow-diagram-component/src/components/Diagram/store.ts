@@ -145,9 +145,9 @@ export const getResetData = (currentState?: DiagramState): DiagramState => {
     recentEdgeColors: getDefaultColorPalette(),
     recentNodeColors: getDefaultColorPalette(),
     diagramParentDimensions: {
-      height: undefined,
-      headerHeight: undefined,
-      footerHeight: undefined
+      height: currentState?.diagramParentDimensions?.height,
+      headerHeight: currentState?.diagramParentDimensions?.headerHeight,
+      footerHeight: currentState?.diagramParentDimensions?.footerHeight
     },
     isDialogOpen: false,
     assessmentId: undefined,
