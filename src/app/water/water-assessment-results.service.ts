@@ -106,7 +106,7 @@ export class WaterAssessmentResultsService {
   getBalancePercent(total: number, segment: number) {
     if (total) {
       let percent = Math.abs((segment / total) * 100);
-      return roundVal(percent, 2);
+      return percent;
     }
     return 0;
   }

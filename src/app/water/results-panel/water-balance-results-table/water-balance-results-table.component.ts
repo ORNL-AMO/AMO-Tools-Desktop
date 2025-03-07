@@ -43,6 +43,11 @@ export class WaterBalanceResultsTableComponent {
     });
   }
   
+  getFlowDecimalPrecisionPipeValue(): string {
+    let pipeVal = `1.0-${this.settings.flowDecimalPrecision}`;
+    return pipeVal;
+  }
+
   ngOnDestroy() {
     this.settingsSub.unsubscribe();
     this.waterAssessmentSub.unsubscribe();
