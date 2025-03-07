@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../../../../compressed-air-inventory.service';
 import { CompressedAirCatalogService } from '../../compressed-air-catalog.service';
-import { PerformancePointsCatalogService } from '../performance-points-catalog.service';
+import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-catalog.service';
 import { Settings } from '../../../../../shared/models/settings';
 import { MidTurndownCatalogService } from './mid-turndown-catalog.service';
 
@@ -21,8 +21,8 @@ export class MidTurndownCatalogComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
   isFormChange: boolean = false;
-  //validationMessages: ValidationMessageMap;
-  //warnings: PerformancePointWarnings;
+  validationMessages: ValidationMessageMap;
+  warnings: PerformancePointWarnings;
 
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
@@ -53,10 +53,10 @@ export class MidTurndownCatalogComponent implements OnInit {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.midTurndown.power, compressor);
+        this.warnings = this.performancePointsCatalogService.checkMotorServiceFactorExceededWarning(compressor.compressedAirPerformancePointsProperties.midTurndown.power, compressor);
         if (this.isFormChange == false) {
           this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.midTurndown, compressor, 'midTurndown');
-          //this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
+          this.validationMessages = this.performancePointsCatalogService.validationMessageMap.getValue();
         } else {
           this.updateForm(compressor.compressedAirPerformancePointsProperties.midTurndown);
           this.isFormChange = false;

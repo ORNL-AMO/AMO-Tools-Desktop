@@ -59,7 +59,9 @@ export interface ValidCompressedAir {
   compressedAirMotorValid: boolean,
   compressedAirControlsValid: boolean,
   compressedAirDesignDetailsValid: boolean,
-  compressedAirPerformancePointsValid: boolean
+  compressedAirCentrifugalSpecifics: boolean,
+  compressedAirPerformancePointsValid: boolean,
+  compressedAirFieldMeasurementsValid: boolean,
 }
 
 export interface CompressedAirPropertyDisplayOptions {
@@ -322,3 +324,7 @@ export const ControlTypes: Array<ControlType> = [
     enumValue: 7
   },
 ]
+
+export interface CompressorInventoryItemWarnings {
+  serviceFactor?: string;
+}

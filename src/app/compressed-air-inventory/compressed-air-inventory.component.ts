@@ -100,6 +100,7 @@ export class CompressedAirInventoryComponent implements OnInit {
     this.mainTabSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
+    this.compressedAirInventoryDataSub.unsubscribe();
   }
 
 

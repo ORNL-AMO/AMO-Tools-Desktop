@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../../../../compressed-air-inventory.service';
 import { CompressedAirCatalogService } from '../../compressed-air-catalog.service';
-import { PerformancePointsCatalogService } from '../performance-points-catalog.service';
+import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-catalog.service';
 import { MaxFullFlowCatalogService } from './max-full-flow-catalog.service';
 import { Settings } from '../../../../../shared/models/settings';
 
@@ -23,8 +23,8 @@ export class MaxFullFlowCatalogComponent implements OnInit {
   isFormChange: boolean = false;
 
   maxFullFlowLabel: string;
-  //validationMessages: ValidationMessageMap;
-  //warnings: PerformancePointWarnings;
+  validationMessages: ValidationMessageMap;
+  warnings: PerformancePointWarnings;
 
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
@@ -55,11 +55,11 @@ export class MaxFullFlowCatalogComponent implements OnInit {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.maxFullFlow.power, compressor);
+        this.warnings = this.performancePointsCatalogService.checkMotorServiceFactorExceededWarning(compressor.compressedAirPerformancePointsProperties.maxFullFlow.power, compressor);
         if (this.isFormChange == false) {
           this.setMaxFullFlowLabel(compressor.compressedAirControlsProperties.controlType);
           this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.maxFullFlow, compressor, 'maxFullFlow')
-          //this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
+          this.validationMessages = this.performancePointsCatalogService.validationMessageMap.getValue();
         } else {
           this.updateForm(compressor.compressedAirPerformancePointsProperties.maxFullFlow);
           this.isFormChange = false;

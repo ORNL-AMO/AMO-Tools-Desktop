@@ -5,7 +5,7 @@ import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirInventoryService } from '../../../../compressed-air-inventory.service';
 import { CompressedAirCatalogService } from '../../compressed-air-catalog.service';
-import { PerformancePointsCatalogService } from '../performance-points-catalog.service';
+import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-catalog.service';
 import { UnloadPointCatalogService } from './unload-point-catalog.service';
 
 @Component({
@@ -20,8 +20,8 @@ export class UnloadPointCatalogComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
   isFormChange: boolean = false;
-  //validationMessages: ValidationMessageMap;
-  //warnings: PerformancePointWarnings;
+  validationMessages: ValidationMessageMap;
+  warnings: PerformancePointWarnings;
 
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
@@ -43,10 +43,10 @@ export class UnloadPointCatalogComponent implements OnInit {
       if (compressor) {
         this.selectedCompressor = compressor;
         this.checkShowCalc();
-        //this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.unloadPoint.power, compressor);
+        this.warnings = this.performancePointsCatalogService.checkMotorServiceFactorExceededWarning(compressor.compressedAirPerformancePointsProperties.unloadPoint.power, compressor);
         if (this.isFormChange == false) {
           this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.unloadPoint, compressor, 'unloadPoint')
-          //this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
+          this.validationMessages = this.performancePointsCatalogService.validationMessageMap.getValue();
         } else {
           this.updateForm(compressor.compressedAirPerformancePointsProperties.unloadPoint);
           this.isFormChange = false;
