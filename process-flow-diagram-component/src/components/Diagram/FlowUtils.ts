@@ -32,6 +32,31 @@ export const updateAssessmentCreatedNodes = (reactFlowInstance: ReactFlowInstanc
   return staleNodes;
 }
 
+// export const updateNodeCalculatedDataMap = (
+//   node: Node, 
+//   nodes: Node[], 
+//   nodeEdges: Edge[], 
+// ) => {
+//   const flowContext: FlowContext = useContext<FlowContext>(FlowContext);
+//   let nodeCalculatedDataMap: Record<string, NodeCalculatedData> = {
+//               ...flowContext.nodeCalculatedDataMap,
+//           }
+
+//   const { sourceCalculatedTotalFlow, dischargeCalculatedTotalFlow} = getNodeFlowTotals(nodeEdges, nodes, node.id);
+//   let calculatedData = { ...nodeCalculatedDataMap[node.id] };
+//   if (node.data.processComponentType === 'water-intake') {
+//     console.log(`${nodeCalculatedDataMap.name} ==== updateNodeCalculatedDataMap intake`, node, nodes, nodeEdges, nodeCalculatedDataMap);
+//     calculatedData.totalDischargeFlow = dischargeCalculatedTotalFlow;
+//   } else if (node.data.processComponentType === 'water-discharge') {
+//     console.log(`${nodeCalculatedDataMap.name} ==== updateNodeCalculatedDataMap discharge`, node, nodes, nodeEdges, nodeCalculatedDataMap);
+//     calculatedData.totalSourceFlow = sourceCalculatedTotalFlow;
+//   }
+//   calculatedData.name = node.data.name;
+//   nodeCalculatedDataMap[node.id] = calculatedData;
+//   console.log(`${nodeCalculatedDataMap.name} ==== updated data map`, nodeCalculatedDataMap);
+//   flowContext.setNodeCalculatedData(nodeCalculatedDataMap);
+// }
+
 export const getNodeFlowTotals = (connectedEdges: Edge[], nodes: Node[], selectedNodeId: string) => {
   let totalCalculatedSourceFlow = 0;
   let totalCalculatedDischargeFlow = 0;
@@ -67,6 +92,28 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
     y: screenPoint.y,
   });
   node.position = position;
+}
+
+export const setDroppedNode = (event, 
+  reactFlowInstance: ReactFlowInstance, 
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>) => {
+  event.preventDefault();
+  const nodeType = event.dataTransfer.getData('application/reactflow');
+  if (typeof nodeType === 'undefined' || !nodeType) {
+    return;
+  }
+  const position = reactFlowInstance.screenToFlowPosition({
+    x: event.clientX,
+    y: event.clientY,
+  });
+
+  const newProcessComponent = getNewProcessComponent(nodeType);
+  let newNode: Node = getNewNode(nodeType, newProcessComponent, position);
+  newNode.type = getAdaptedTypeString(newNode.type);
+
+  setNodes((nds) => {
+    return nds.concat(newNode)
+  });
 }
 
 
@@ -184,14 +231,8 @@ export const getAdaptedTypeString = (nodeType: string) => {
     case 'waste-water-treatment':
       adaptedString = 'wasteWaterTreatment'
       break;
-    case 'splitter-node':
-      adaptedString = 'splitterNode'
-      break;
-    case 'splitter-node-4':
-      adaptedString = 'splitterNodeFour'
-      break;
-    case 'splitter-node-8':
-      adaptedString = 'splitterNodeEight'
+    case 'summing-node':
+      adaptedString = 'summingNode'
       break;
     case 'known-loss':
       adaptedString = 'knownLoss'

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, memo, useState } from 'react';
 import { ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { Box, Button, Grid, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
@@ -66,6 +66,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
     }))
   };
 
+  const summingNode = processFlowParts.pop();
 
   return (
     <Box sx={{
@@ -108,7 +109,22 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                   onDragStart={(event) => onDragStart(event, 'splitter-node-8')} draggable> 8-way Connection</WaterComponent>
               </Grid> */}
             </Grid>
+            </Box>
+
+          <Divider></Divider>
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px' }}>Utilities</Typography>
+            <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }} paddingTop={'.25rem'}>
+              <Grid item xs={1} sm={2} md={2}>
+                <WaterComponent className={`dndnode ${summingNode.processComponentType}`}
+                  onDragStart={(event) => onDragStart(event, summingNode.processComponentType)}
+                  draggable={true}>
+                  {summingNode.name}
+                </WaterComponent>
+              </Grid>
+            </Grid>
           </Box>
+
         </TabPanel>
 
         <TabPanel value={selectedTab} index={1} diagramParentDimensions={diagramParentDimensions}>
