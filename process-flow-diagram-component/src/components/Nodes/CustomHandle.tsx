@@ -42,7 +42,7 @@ const mainTargetHandleStyle: CSSProperties = {
   
 const CustomHandle = (props: HandleProps) => {
     const { type, position, id, connectionLimit } = props;
-    let { className } = props;
+    let { className, collapsedStyle } = props;
     const maxConnections = connectionLimit === undefined? 2 : connectionLimit;
     const connections = useHandleConnections({
         type: props.type,
@@ -78,6 +78,16 @@ const CustomHandle = (props: HandleProps) => {
         if (blockConnections) {
           className += ' limit-connection';
         }
+
+        if (collapsedStyle) {
+          style = {
+            ...style,
+            top: collapsedStyle.top,
+            height: collapsedStyle.height,
+            width: collapsedStyle.width,
+            visibility: collapsedStyle.visibility,
+          }
+        }
     }
 
 
@@ -102,6 +112,7 @@ export interface HandleProps {
     type: HandleType,
     position: Position,
     className?: string,
+    collapsedStyle?: CSSProperties,
     connectionLimit?: number,
     id: string,
 }

@@ -96,6 +96,8 @@ export interface NodeFlowData {
   name?: string,
   totalSourceFlow?: number,
   totalDischargeFlow?: number,
+  // * summing node total divided by active handle connections
+  summingFlowEvenlyDivided?: number,
 }
 
 export interface DiagramCalculatedData {
@@ -126,7 +128,6 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   handles: Handles,
   disableInflowConnections?: boolean,
   disableOutflowConnections?: boolean,
-  splitterTargets?: Array<string>;
   processComponentContext?: any;
 }
 
@@ -152,7 +153,6 @@ export type DiagramNode = Node<{
   disableOutflowConnections?: boolean,
   modifiedDate?: Date,
   handles?: Handles,
-  splitterTargets?: Array<string>;
   processComponentContext?: any;
 }, 'processFlowPart'>;
 
@@ -162,7 +162,7 @@ export interface HandleOption {
 }
 // * union future diagram types into ProcessFlowNodeType
 export type ProcessFlowNodeType = WaterProcessComponentType | undefined;
-export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system' | 'splitter-node' | 'water-treatment' | 'waste-water-treatment' | 'known-loss';
+export type WaterProcessComponentType = 'water-intake' | 'water-discharge' | 'water-using-system' | 'summing-node' | 'water-treatment' | 'waste-water-treatment' | 'known-loss';
 export type ProcessFlowPartStyleClass = WaterProcessComponentType;
 
 export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties> = {
@@ -178,9 +178,9 @@ export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties
     backgroundColor: '#00bbff',
     color: "#ffffff"
   },
-  'splitter-node': {
-    backgroundColor: '#75a1ff',
-    color: "#ffffff"
+  'summing-node': {
+    // backgroundColor: '#75a1ff',
+    // color: "#ffffff"
   },
   'water-treatment': {
     backgroundColor: '#009386',
@@ -323,12 +323,31 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     createdByAssessment: false,
     handles: getDefaultHandles()
   },
-  // {
-  //   processComponentType: 'splitter-node',
-  //   name: 'Junction Connector',
-  //   className: 'splitter-node',
-  //   isValid: true,
-  // }
+  {
+    processComponentType: 'summing-node',
+    name: 'Summing Connector',
+    className: 'summing-node',
+    isValid: true,
+    userEnteredData: {
+      totalDischargeFlow: undefined,
+      totalSourceFlow: undefined
+    },
+    createdByAssessment: false,
+    handles: {
+      inflowHandles: {
+        a: true,
+        b: true,
+        c: true,
+        d: true,
+      },
+      outflowHandles: {
+        e: true,
+        f: true,
+        g: true,
+        h: true,
+      }
+    }
+  }
 ];
 
 

@@ -1,13 +1,12 @@
 import ProcessFlowComponentNode from "../Nodes/ProcessFlowComponentNode";
 import SelfConnectingEdge from "../Edges/SelfConnectingEdge";
-import SplitterNodeFour from "../Nodes/SplitterNodeFour";
-import SplitterNodeEight from "../Nodes/SplitterNodeEight";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import { EdgeTypes, NodeTypes } from "@xyflow/react";
 import KnownLossNode from "../Nodes/KnownLossNode";
+import SummingNode from "../Nodes/SummingNode";
 
 export const nodeTypes: NodeTypes = {
   waterIntake: ProcessFlowComponentNode,
@@ -15,8 +14,7 @@ export const nodeTypes: NodeTypes = {
   waterDischarge: ProcessFlowComponentNode,
   waterTreatment: ProcessFlowComponentNode,
   wasteWaterTreatment: ProcessFlowComponentNode,
-  splitterNodeFour: SplitterNodeFour,
-  splitterNodeEight: SplitterNodeEight,
+  summingNode: SummingNode,
   knownLoss: KnownLossNode,
 };
 
