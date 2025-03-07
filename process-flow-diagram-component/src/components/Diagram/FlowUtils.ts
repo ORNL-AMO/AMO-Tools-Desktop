@@ -5,8 +5,8 @@ import { DefaultEdgeOptions, EdgeTypes } from "@xyflow/react";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
-import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
 import { NodeFlowProperty } from "./diagramReducer";
+import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
 
 export const getRandomCoordinates = (height: number, width: number): { x: number, y: number } => {
   const screenWidth = window.innerWidth;

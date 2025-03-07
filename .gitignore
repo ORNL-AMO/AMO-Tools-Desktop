@@ -29,6 +29,7 @@
 .vscode/extensions.json
 
 # misc
+/docker
 /.sass-cache
 /connect.lock
 /coverage/*
