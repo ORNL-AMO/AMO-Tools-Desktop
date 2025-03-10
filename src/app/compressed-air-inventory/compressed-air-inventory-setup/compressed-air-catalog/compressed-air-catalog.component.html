@@ -5,9 +5,11 @@
             <a *ngIf="showDeleteCompressedAirButton" class="click-link danger small pull-right"
                 (click)="openDeleteCompressedAirModal()">Delete</a>
         </div>
+
     </div>
     <div class="col-12">
         <app-compressed-air-basics></app-compressed-air-basics>
+        <a class="click-link small pull-right" (click)="openCompressorModal()">Set Data From Existing Compressor</a>
         <!-- <app-connected-assessment [assessmentType]="'CompressedAir'" [connectedInventoryItem]="connectedCompressedAirItem"
             [connectedAssessmentItems]="selectedCompressedAirItem.connectedAssessments"
             [isItemValid]="selectedCompressedAirItem.validCompressedAir.isValid"
@@ -47,3 +49,6 @@
 <app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteCompressedAirInventoryData"
     (emitShouldDelete)="onConfirmDeleteClose($event)">
 </app-confirm-delete-modal>
+
+<app-existing-compressor-modal *ngIf="showCompressorModal" (emitClose)="closeCompressorModal()">
+</app-existing-compressor-modal>

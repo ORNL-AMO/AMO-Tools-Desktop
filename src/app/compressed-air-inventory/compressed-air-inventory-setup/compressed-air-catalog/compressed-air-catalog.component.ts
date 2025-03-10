@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem, ConnectedItem } from '../../compressed-air-inventory';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -26,8 +26,12 @@ export class CompressedAirCatalogComponent implements OnInit {
   connectedCompressedAirItem: ConnectedItem;
   form: FormGroup;
   selectedCompressedAirItemSub: Subscription;
+  showCompressorModal: boolean = false;
 
-  constructor(private compressedAirInventoryService: CompressedAirInventoryService, private integrationStateService: IntegrationStateService, private compressedAirCatalogService: CompressedAirCatalogService) { }
+  constructor(private compressedAirInventoryService: CompressedAirInventoryService, 
+    private integrationStateService: IntegrationStateService, 
+    private compressedAirCatalogService: CompressedAirCatalogService,
+   private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.compressedAirInventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(val => {
@@ -121,7 +125,16 @@ export class CompressedAirCatalogComponent implements OnInit {
     this.compressedAirInventoryService.modalOpen.next(true);
   }
 
+  
 
+  openCompressorModal() {
+    this.showCompressorModal = true;
+    this.cd.detectChanges();
+  }
 
+  closeCompressorModal() {
+    this.showCompressorModal = false;
+    this.cd.detectChanges();
+  }
 
 }

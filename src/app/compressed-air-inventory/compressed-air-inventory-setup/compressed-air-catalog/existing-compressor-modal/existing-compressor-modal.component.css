@@ -1,0 +1,19 @@
+.btn {
+    padding: 6px;
+}
+
+.modal-dialog {
+    top: 0;
+    margin: 5px;
+}
+
+.modal-content,
+.card {
+    height: 99vh;
+    width: 99vw;
+}
+
+
+.card-header-text {
+    font-size: 24px;
+}
