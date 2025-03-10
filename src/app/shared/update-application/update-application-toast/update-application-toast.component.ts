@@ -38,6 +38,7 @@ export class UpdateApplicationToastComponent {
   ngOnInit() {
     this.webAndPwaUpdateSub = this.updateApplicationService.webUpdateAvailable.subscribe(webAvailable => {
       if (webAvailable) {
+        console.log('web update available - show update toast');
         this.showUpdateToast('web-available');
       }
     });
@@ -45,6 +46,7 @@ export class UpdateApplicationToastComponent {
     this.showUpdateToastSub = this.updateApplicationService.showUpdateToast.subscribe(showUpdateToast => {
       if (showUpdateToast) {
         let platformAvailable: 'desktop-available' | 'web-available' = this.electronService.isElectron? 'desktop-available' : 'web-available';
+        console.log(`${platformAvailable}update available - show update toast`);
         this.showUpdateToast(platformAvailable);
       }
     });

@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PsychrometricResults } from '../../../../shared/models/fans';
+import { PsychrometricResults } from '../../../models/fans';
 import { Subscription } from 'rxjs';
-import { Settings } from '../../../../shared/models/settings';
-import { FlueGasCompareService } from '../flue-gas-compare.service';
+import { Settings } from '../../../models/settings';
 import { FanPsychrometricService, FanPsychrometricWarnings } from '../../../../calculator/process-cooling/fan-psychrometric/fan-psychrometric.service';
+import { FlueGasMoistureModalService } from '../../flue-gas-moisture-modal.service';
 
 
 @Component({
@@ -14,20 +14,20 @@ import { FanPsychrometricService, FanPsychrometricWarnings } from '../../../../c
 export class FlueGasMoistureResultsComponent implements OnInit {
   @Input() 
   settings: Settings;
-
   psychrometricSubscription: Subscription;
   psychrometricResults: PsychrometricResults;
   warnings: FanPsychrometricWarnings;
 
-  constructor(private flueGasCompareService: FlueGasCompareService, private fanPsychrometricService: FanPsychrometricService) { }
+  constructor(private flueGasMoistureModalService: FlueGasMoistureModalService, private fanPsychrometricService: FanPsychrometricService) { }
 
   ngOnInit(): void {
-    this.psychrometricSubscription = this.flueGasCompareService.moistureSubject.subscribe(val => {
+    this.psychrometricSubscription = this.flueGasMoistureModalService.psychrometricResults.subscribe(val => {
       this.psychrometricResults = val;
       this.warnings = this.fanPsychrometricService.checkWarnings(this.psychrometricResults);
     });
 
   }
+
 
   ngOnDestroy() {
     this.psychrometricSubscription.unsubscribe();
