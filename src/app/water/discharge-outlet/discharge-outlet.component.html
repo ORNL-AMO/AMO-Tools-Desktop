@@ -1,6 +1,6 @@
 <div class="d-flex flex-column panel-container pb-4">
     <div class="header mr-2 ml-2">
-        <h3>{{componentFormTitle}}</h3>
+        <h3>{{dischargeOutletTabTitle}}</h3>
         <br>
     </div>
 
@@ -11,47 +11,52 @@
         </button>
     </div>
     }
-    @else if (form) {
-    <form [formGroup]="form">
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" name="name" formControlName="name"
-                (focus)="focusField('dischargeOutletName')" (input)="save()" />
-        </div>
-
-        <div class="form-group">
-            <label for="outletType">Outlet</label>
-            <select class="form-control" id="outletType" formControlName="outletType" (change)="setDischargeOutletType()"
-              (focus)="focusField('outletType')">
-              <option *ngFor="let outletType of dischargeOutletTypeOptions"
-                [ngValue]="outletType.value">{{outletType.display}}
-              </option>
-            </select>
-          </div>
-
-        <div class="form-group" [ngClass]="{'invalid': form.controls.annualUse.invalid}">
-            <label for="{{idString}}">Annual Use</label>
-            <div class="input-group">
-                <input type="number" name="annualUse" class="form-control number-input-field"
-                    id="{{'annualUse_'+idString}}" (focus)="focusField('annualUse')" (input)="save()"
-                    formControlName="annualUse">
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
+    @else {
+    <ng-container *ngIf="dischargeOutletTab === 'data' && form">
+        <form [formGroup]="form">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" name="name" formControlName="name"
+                    (focus)="focusField('dischargeOutletName')" (input)="save()" />
             </div>
-            <span *ngIf="form.controls.annualUse.invalid && !form.controls.annualUse.pristine">
-                <span class="alert-danger pull-right small" *ngIf="form.controls.annualUse.errors.required">Value
-                    Required</span>
-                <span class="alert-danger pull-right small" *ngIf="form.controls.annualUse.errors.min">Value can't be
-                    less than {{form.controls.annualUse.errors.min.min}} 
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
-                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
-                </span>
-            </span>
-            <a class="form-text small click-link" (click)="setMonthlyFlowModal(true)">Enter Monthly Discharge Data</a>
-        </div>
-    </form>
 
-    <div class="px-2">
+            <div class="form-group">
+                <label for="outletType">Outlet</label>
+                <select class="form-control" id="outletType" formControlName="outletType"
+                    (change)="setDischargeOutletType()" (focus)="focusField('outletType')">
+                    <option *ngFor="let outletType of dischargeOutletTypeOptions" [ngValue]="outletType.value">
+                        {{outletType.display}}
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group" [ngClass]="{'invalid': form.controls.annualUse.invalid}">
+                <label for="{{idString}}">Annual Use</label>
+                <div class="input-group">
+                    <input type="number" name="annualUse" class="form-control number-input-field"
+                        id="{{'annualUse_'+idString}}" (focus)="focusField('annualUse')" (input)="save()"
+                        formControlName="annualUse">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
+                    <span *ngIf="settings.unitsOfMeasure != 'Imperial'"
+                        class="input-group-addon units">m<sup>3</sup>/yr</span>
+                </div>
+                <span *ngIf="form.controls.annualUse.invalid && !form.controls.annualUse.pristine">
+                    <span class="alert-danger pull-right small" *ngIf="form.controls.annualUse.errors.required">Value
+                        Required</span>
+                    <span class="alert-danger pull-right small" *ngIf="form.controls.annualUse.errors.min">Value can't
+                        be
+                        less than {{form.controls.annualUse.errors.min.min}}
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                    </span>
+                </span>
+                <a class="form-text small click-link" (click)="setMonthlyFlowModal(true)">Enter Monthly Discharge
+                    Data</a>
+            </div>
+        </form>
+    </ng-container>
+
+    <div class="px-2" *ngIf="dischargeOutletTab === 'added-energy'">
         <label class="group-label header h3" (click)="toggleCollapseMotorEnergy()">
             <span class="fa fa-chevron-right"
                 [ngClass]="{'fa-chevron-right': isMotorEnergyCollapsed, 'fa-chevron-down': !isMotorEnergyCollapsed}"></span>
@@ -87,9 +92,6 @@
             </div>
         </ng-container>
     </div>
-
-
-    
     }
 </div>
 
@@ -97,9 +99,7 @@
     (emitShouldDelete)="onConfirmDeleteClose($event)">
 </app-confirm-delete-modal>
 
-<app-monthly-flow-modal *ngIf="showMonthlyFlowModal" 
-    [settings]="settings"
-    [monthlyFlow]="selectedDischargeOutlet.monthlyFlow"
-    [flowTypeTitle]="'Discharge'"
+<app-monthly-flow-modal *ngIf="showMonthlyFlowModal" [settings]="settings"
+    [monthlyFlow]="selectedDischargeOutlet.monthlyFlow" [flowTypeTitle]="'Discharge'"
     (emitMonthlyFlowData)="setMonthlyFlow($event)">
 </app-monthly-flow-modal>

@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { copyObject } from '../../shared/helperFunctions';
 import { WaterAssessment, DischargeOutlet, WaterProcessComponent, MotorEnergy, MonthlyFlowData } from '../../shared/models/water-assessment';
-import { WaterAssessmentService } from '../water-assessment.service';
+import { PlantIntakeDischargeTab, WaterAssessmentService } from '../water-assessment.service';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import { dischargeOutletTypeOptions } from '../waterConstants';
 import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDeleteData';
@@ -29,8 +29,11 @@ export class DischargeOutletComponent {
   deleteIndex: number;
   confirmDeleteData: ConfirmDeleteData;
   isMotorEnergyCollapsed: boolean;
-  idString: string;
 
+  idString: string;
+  dischargeOutletTabSub: Subscription;
+  dischargeOutletTab: PlantIntakeDischargeTab;
+  dischargeOutletTabTitle: string;
   showMonthlyFlowModal: boolean;
 
   constructor(private waterAssessmentService: WaterAssessmentService,
@@ -51,6 +54,12 @@ export class DischargeOutletComponent {
         this.initForm();
       }
     });
+
+    this.dischargeOutletTabSub = this.waterAssessmentService.dischargeOutletTab.subscribe(val => {
+      this.dischargeOutletTab = val;
+      this.dischargeOutletTabTitle = this.waterAssessmentService.setDischargeOutletTabTitle(this.dischargeOutletTab);
+    });
+
     this.setDefaultSelectedComponent();
   }
 

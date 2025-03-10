@@ -17,6 +17,8 @@ export class WaterAssessmentService {
   mainTab: BehaviorSubject<string>;
   setupTab: BehaviorSubject<WaterSetupTabString>;
   waterUsingSystemTab: BehaviorSubject<WaterUsingSystemTabString>;
+  intakeSourceTab: BehaviorSubject<PlantIntakeDischargeTab>;
+  dischargeOutletTab: BehaviorSubject<PlantIntakeDischargeTab>;
   focusedField: BehaviorSubject<string>;
   helpTextField: BehaviorSubject<string>;
   calcTab: BehaviorSubject<string>;
@@ -40,6 +42,8 @@ export class WaterAssessmentService {
     this.mainTab = new BehaviorSubject<string>('system-setup');
     this.setupTab = new BehaviorSubject<WaterSetupTabString>('system-basics');
     this.waterUsingSystemTab = new BehaviorSubject<WaterUsingSystemTabString>('system');
+    this.intakeSourceTab = new BehaviorSubject<PlantIntakeDischargeTab>('data');
+    this.dischargeOutletTab = new BehaviorSubject<PlantIntakeDischargeTab>('data');
     this.focusedField = new BehaviorSubject<string>('default');
     this.helpTextField = new BehaviorSubject<string>('default');
     // this.calcTab = new BehaviorSubject<string>('air-flow-conversion');
@@ -64,6 +68,29 @@ export class WaterAssessmentService {
 
   setWaterProcessComponentTitle(componentType: WaterProcessComponentType) {
     return getComponentNameFromType(componentType);
+  }
+
+  setIntakeSourceTabTitle(tabString: PlantIntakeDischargeTab) {
+    switch (tabString) {
+      case 'data':
+        return 'Intake Data'
+      case 'added-energy':
+        return 'Added Heat'
+      default:
+         return 'Intake Data'
+    }
+  }
+
+  
+  setDischargeOutletTabTitle(tabString: PlantIntakeDischargeTab) {
+    switch (tabString) {
+      case 'data':
+        return 'Discharge Data'
+      case 'added-energy':
+        return 'Added Heat'
+      default:
+         return 'Discharge Data'
+    }
   }
 
   setWaterSystemTabTitle(tabString: WaterUsingSystemTabString) {
@@ -229,3 +256,4 @@ export class WaterAssessmentService {
 
 export type WaterSetupTabString = WaterProcessComponentType | 'system-basics' | 'system-balance-results';
 export type WaterUsingSystemTabString = 'system' | 'added-energy' | 'water-treatment';
+export type PlantIntakeDischargeTab = 'data' | 'added-energy';

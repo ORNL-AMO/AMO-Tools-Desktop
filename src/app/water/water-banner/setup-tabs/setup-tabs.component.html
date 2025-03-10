@@ -64,6 +64,63 @@
     </ul>
 </nav>
 
+<!--  Sub Tabs -->
+<ul *ngIf="setupTab == 'water-intake'" class="tabs subtabs progress-tabs water-assessment d-none d-lg-block">
+    <li [ngClass]="{'active': intakeSourceTab == 'data'}">
+        <a (click)="changeIntakeSourceTab('data')">Intake Data</a>
+    </li>
+    <li [ngClass]="{'active': intakeSourceTab == 'added-energy'}">
+        <a (click)="changeIntakeSourceTab('added-energy')">Added Energy</a>
+    </li>
+</ul>
+
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs water-assessment flex-wrap flex-fill">
+    <ul *ngIf="setupTab == 'water-intake'" class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill water-assessment">
+        <li class="page-item" [ngClass]="{'disabled': intakeSourceTab == 'data'}">
+            <a class="nav-link small" (click)="backIntakeSourceTab()" [ngClass]="{'disabled': intakeSourceTab == 'data'}">
+                <span class="fa fa-chevron-left"></span></a>
+        </li>
+        <li [ngClass]="{'active': intakeSourceTab == 'data'}" *ngIf="intakeSourceTab == 'data'">
+            <a (click)="changeIntakeSourceTab('system')">Intake Data</a>
+        </li>
+        <li [ngClass]="{'active': intakeSourceTab == 'added-energy'}" *ngIf="intakeSourceTab == 'added-energy'">
+            <a (click)="changeIntakeSourceTab('added-energy')">Added Energy</a>
+        </li>
+        <li class="page-item" [ngClass]="{'disabled': intakeSourceTab == 'added-energy'}">
+            <a class="nav-link small" (click)="continueIntakeSourceTab()">
+                <span class="fa fa-chevron-right"></span></a>
+        </li>
+    </ul>
+</nav>
+
+<ul *ngIf="setupTab == 'water-discharge'" class="tabs subtabs progress-tabs water-assessment d-none d-lg-block">
+    <li [ngClass]="{'active': dischargeOutletTab == 'data'}">
+        <a (click)="changeDischargeOutletTab('data')">Discharge Data</a>
+    </li>
+    <li [ngClass]="{'active': dischargeOutletTab == 'added-energy'}">
+        <a (click)="changeDischargeOutletTab('added-energy')">Added Energy</a>
+    </li>
+</ul>
+
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs water-assessment flex-wrap flex-fill">
+    <ul *ngIf="setupTab == 'water-discharge'" class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill water-assessment">
+        <li class="page-item" [ngClass]="{'disabled': dischargeOutletTab == 'data'}">
+            <a class="nav-link small" (click)="backDischargeOutletTab()" [ngClass]="{'disabled': dischargeOutletTab == 'data'}">
+                <span class="fa fa-chevron-left"></span></a>
+        </li>
+        <li [ngClass]="{'active': dischargeOutletTab == 'data'}" *ngIf="dischargeOutletTab == 'data'">
+            <a (click)="changeDischargeOutletTab('system')">Discharge Data</a>
+        </li>
+        <li [ngClass]="{'active': dischargeOutletTab == 'added-energy'}" *ngIf="dischargeOutletTab == 'added-energy'">
+            <a (click)="changeDischargeOutletTab('added-energy')">Added Energy</a>
+        </li>
+        <li class="page-item" [ngClass]="{'disabled': dischargeOutletTab == 'added-energy'}">
+            <a class="nav-link small" (click)="continueDischargeOutletTab()">
+                <span class="fa fa-chevron-right"></span></a>
+        </li>
+    </ul>
+</nav>
+
 
 <ul *ngIf="setupTab == 'water-using-system'" class="tabs subtabs progress-tabs water-assessment d-none d-lg-block">
     <li [ngClass]="{'active': waterUsingSystemTab == 'system'}">
