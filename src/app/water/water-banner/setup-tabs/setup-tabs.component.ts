@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
-import { WaterAssessmentService, WaterSetupTabString, WaterUsingSystemTabString } from '../../water-assessment.service';
+import { PlantIntakeDischargeTab, WaterAssessmentService, WaterSetupTabString, WaterUsingSystemTabString } from '../../water-assessment.service';
 import { WaterAssessment } from '../../../shared/models/water-assessment';
 import { WaterSystemComponentService } from '../../water-system-component.service';
 import { WaterProcessComponentType } from '../../../../process-flow-types/shared-process-flow-types';
@@ -14,9 +14,17 @@ import { WaterProcessComponentType } from '../../../../process-flow-types/shared
 export class SetupTabsComponent {
 
   setupTabSub: Subscription;
-  waterUsingSystemTabSub: Subscription;
   setupTab: WaterSetupTabString;
+
+  waterUsingSystemTabSub: Subscription;
   waterUsingSystemTab: WaterUsingSystemTabString;
+  
+  intakeSourceTabSub: Subscription;
+  intakeSourceTab: PlantIntakeDischargeTab;
+
+  dischargeOutletTabSub: Subscription;
+  dischargeOutletTab: PlantIntakeDischargeTab;
+
   disabledSetupTabs: Array<string>;
   disableTabs: boolean;
   canContinue: boolean;
@@ -52,6 +60,14 @@ export class SetupTabsComponent {
       this.setupTab = val;
       this.disabledSetupTabs = [];
       this.setTabStatus();
+    });
+
+    this.intakeSourceTabSub = this.waterAssessmentService.intakeSourceTab.subscribe(val => {
+      this.intakeSourceTab = val;
+    });
+
+    this.dischargeOutletTabSub = this.waterAssessmentService.dischargeOutletTab.subscribe(val => {
+      this.dischargeOutletTab = val;
     });
 
     this.waterUsingSystemTabSub = this.waterAssessmentService.waterUsingSystemTab.subscribe(val => {
@@ -106,6 +122,44 @@ export class SetupTabsComponent {
     }
   }
 
+
+  
+  // * Intake Source Sub Tabs
+  changeIntakeSourceTab(tab: PlantIntakeDischargeTab) {
+      this.waterAssessmentService.intakeSourceTab.next(tab);
+  }
+
+  continueIntakeSourceTab() {
+    if(this.intakeSourceTab == 'data') {
+      this.changeIntakeSourceTab('added-energy');
+    } 
+  }
+
+  backIntakeSourceTab() {
+    if (this.intakeSourceTab == 'added-energy') {
+      this.changeIntakeSourceTab('data');
+    }
+  }
+
+  // * Discharge Outlet Sub Tabs
+  changeDischargeOutletTab(tab: PlantIntakeDischargeTab) {
+    this.waterAssessmentService.dischargeOutletTab.next(tab);
+  }
+
+  continueDischargeOutletTab() {
+    if (this.dischargeOutletTab == 'data') {
+      this.changeDischargeOutletTab('added-energy');
+    }
+  }
+
+  backDischargeOutletTab() {
+    if (this.dischargeOutletTab == 'added-energy') {
+      this.changeDischargeOutletTab('data');
+    }
+  }
+
+
+  // * Water Using System Sub Tabs
   changeWaterUsingSystemTab(tab: WaterUsingSystemTabString) {
     let canDisplayTab: boolean = tab !== 'water-treatment' || (tab === 'water-treatment' && this.hasWaterTreatments);
     if (canDisplayTab) {

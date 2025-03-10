@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { WaterAssessmentService } from '../water-assessment.service';
+import { PlantIntakeDischargeTab, WaterAssessmentService } from '../water-assessment.service';
 import { IntakeSource, MonthlyFlowData, MotorEnergy, WaterAssessment } from '../../shared/models/water-assessment';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import * as _ from 'lodash';
@@ -17,7 +17,7 @@ import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDele
   styleUrl: './intake-source.component.css'
 })
 export class IntakeSourceComponent {
-  // * intake source supplied as part of a water using system
+  // * NOT currently used. intake source supplied as part of a water using system
   @Input()
   systemIntakeSource: IntakeSource;
 
@@ -36,6 +36,10 @@ export class IntakeSourceComponent {
   showMonthlyFlowModal: boolean;
 
   idString: string;
+  intakeSourceTabSub: Subscription;
+  intakeSourceTab: PlantIntakeDischargeTab;
+  intakeSourceTabTitle: string;
+  
   constructor(private waterAssessmentService: WaterAssessmentService, 
     private motorEnergyService: MotorEnergyService,
     private waterSystemComponentService: WaterSystemComponentService) {}
@@ -55,6 +59,12 @@ export class IntakeSourceComponent {
           this.initForm();
         }
       });
+
+      this.intakeSourceTabSub = this.waterAssessmentService.intakeSourceTab.subscribe(val => {
+        this.intakeSourceTab = val;
+        this.intakeSourceTabTitle = this.waterAssessmentService.setIntakeSourceTabTitle(this.intakeSourceTab);
+      });
+
       this.setDefaultSelectedComponent();
     }
   }
