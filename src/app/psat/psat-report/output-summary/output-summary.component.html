@@ -70,11 +70,11 @@
       </tr>
       <tr>
         <td>Pump shaft power ({{settings.powerMeasurement}})</td>
-        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.pump_shaft_power |
+        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.mover_shaft_power |
           number:'1.0-1'}}</td>
         <td *ngFor="let modification of psat.modifications; let index = index;"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.psat.outputs.pump_shaft_power
+          {{modification.psat.outputs.mover_shaft_power
           | number:'1.0-1'}}</td>
       </tr>
       <tr>
