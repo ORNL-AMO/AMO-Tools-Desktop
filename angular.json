@@ -206,6 +206,9 @@
     }
   },
   "cli": {
-    "analytics": "c7c821ee-29e2-4918-ab71-1e94bd66b1fb"
+    "analytics": "c7c821ee-29e2-4918-ab71-1e94bd66b1fb",
+    "cache": {
+      "enabled": false
+    }
   }
 }

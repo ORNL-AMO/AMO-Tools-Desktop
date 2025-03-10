@@ -33,6 +33,7 @@ testem.log
 /typings
 /db/*.db
 scripts/download-stats
+/docker
 
 # e2e
 /e2e/*.js
