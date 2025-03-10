@@ -15,6 +15,7 @@ import { ConnectedInventoryModule } from '../shared/connected-inventory/connecte
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { ExistingCompressorDbService } from './existing-compressor-db.service';
+import { CompressorDataManagementService } from './compressor-data-management.service';
 
 
 
@@ -40,7 +41,8 @@ import { ExistingCompressorDbService } from './existing-compressor-db.service';
   ],
   providers: [
     CompressedAirInventoryService,
-    ExistingCompressorDbService
+    ExistingCompressorDbService,
+    CompressorDataManagementService
   ]
 })
 export class CompressedAirInventoryModule { }
