@@ -7,12 +7,11 @@ import { Router } from '@angular/router';
   templateUrl: './browsing-data-toast.component.html',
   styleUrls: ['./browsing-data-toast.component.css'],
   animations: [
-    trigger('toast', [
-      state('show', style({
-        top: '20px'
-      })),
-      transition('hide => show', animate('.5s ease-in')),
-      transition('show => hide', animate('.5s ease-out'))
+    trigger('toastAnimate', [
+      state('show', style({ top: '0px' })),
+      state('hide', style({ top: '-300px' })),
+      transition('hide => show', animate('.5s ease')),
+      transition('show => hide', animate('.5s ease'))
     ])
   ]
 })
@@ -20,7 +19,7 @@ export class BrowsingDataToastComponent {
   @Output('emitClose')
   emitClose = new EventEmitter<boolean>();
   
-  showBrowsingDataToast: string = 'hide';
+  toastAnimate: string = 'hide';
 
   constructor(private cd: ChangeDetectorRef, private router: Router) { }
 
@@ -28,7 +27,7 @@ export class BrowsingDataToastComponent {
   }
   
   ngAfterViewInit(){
-    this.showBrowsingDataToast = 'show';
+    this.toastAnimate = 'show';
     this.cd.detectChanges();
   }
 
@@ -37,8 +36,13 @@ export class BrowsingDataToastComponent {
     this.closeToast();
   }
 
+  routeToDataStorage() {
+    this.router.navigateByUrl('/data-and-backup');
+    this.closeToast();
+  }
+
   closeToast() {
-    this.showBrowsingDataToast = 'hide';
+    this.toastAnimate = 'hide';
     this.cd.detectChanges();
     setTimeout(() => {
       this.emitClose.emit(true);

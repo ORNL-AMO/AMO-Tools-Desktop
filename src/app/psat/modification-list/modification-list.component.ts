@@ -160,7 +160,9 @@ export class ModificationListComponent implements OnInit {
       tmpModification.exploreOpportunities = true;
     }
     tmpModification.psat.inputs = (JSON.parse(JSON.stringify(psat.inputs)));
-    tmpModification.psat.inputs.co2SavingsData.userEnteredModificationEmissions = tmpModification.psat.inputs.co2SavingsData.userEnteredBaselineEmissions;
+    if (tmpModification.psat.inputs.co2SavingsData) { 
+      tmpModification.psat.inputs.co2SavingsData.userEnteredModificationEmissions = tmpModification.psat.inputs.co2SavingsData.userEnteredBaselineEmissions;
+    }
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     tmpModification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
     tmpModification.psat.inputs.whatIfScenario = true;

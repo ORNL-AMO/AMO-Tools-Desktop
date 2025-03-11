@@ -61,7 +61,9 @@ export class AddModificationComponent implements OnInit {
       },
     }
     modification.psat.inputs = (JSON.parse(JSON.stringify(this.psat.inputs)));
-    modification.psat.inputs.co2SavingsData.userEnteredModificationEmissions = modification.psat.inputs.co2SavingsData.userEnteredBaselineEmissions;
+    if (modification.psat.inputs.co2SavingsData) {
+      modification.psat.inputs.co2SavingsData.userEnteredModificationEmissions = modification.psat.inputs.co2SavingsData.userEnteredBaselineEmissions;
+    }
     modification.psat.inputs.pump_style = 11;
     modification.psat.inputs.whatIfScenario = this.isWhatIfScenario;
     modification.exploreOpportunities = (this.currentTab == 'explore-opportunities');

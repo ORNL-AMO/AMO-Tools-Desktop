@@ -74,6 +74,13 @@ export class WallTreasureHuntService {
     } else if (wallLoss.energySourceData.energySourceType == 'Steam') {
       currentCosts = currentEnergyUsage.steamCosts
     }
+
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (wallLoss.opportunitySheet){
+      if (wallLoss.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += wallLoss.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
     
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
@@ -81,7 +88,7 @@ export class WallTreasureHuntService {
       selected: wallLoss.selected,
       opportunityType: 'wall-loss',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: wallLoss.energySourceData.unit,

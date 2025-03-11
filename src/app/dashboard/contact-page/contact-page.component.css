@@ -10,3 +10,7 @@ a:not([href]):not([tabindex]) {
     background-color: transparent;
     -webkit-text-decoration-skip: objects;
 }
+
+.card-text-small {
+    font-size: 16px;
+}

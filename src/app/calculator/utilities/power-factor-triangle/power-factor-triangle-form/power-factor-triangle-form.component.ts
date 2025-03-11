@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PowerFactorTriangleInputs, PowerFactorTriangleOutputs } from '../../../../shared/models/standalone';
+import { PowerFactorTriangleOutputs } from '../../../../shared/models/standalone';
+import { UntypedFormGroup } from '@angular/forms';
+import { PowerFactorTriangleService } from '../power-factor-triangle.service';
 
 @Component({
   selector: 'app-power-factor-triangle-form',
@@ -9,14 +11,14 @@ import { PowerFactorTriangleInputs, PowerFactorTriangleOutputs } from '../../../
 export class PowerFactorTriangleFormComponent implements OnInit {
 
   @Input()
-  data: PowerFactorTriangleInputs;
+  powerFactorTriangleForm: UntypedFormGroup;
   @Input()
   results: PowerFactorTriangleOutputs;
   @Output('changeField')
   changeField = new EventEmitter<string>();
 
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<PowerFactorTriangleInputs>();
+  emitCalculate = new EventEmitter<UntypedFormGroup>();
 
   modeList: Array<{ value: number, name: string }> = [
     { value: 1, name: 'Apparent & Real' },
@@ -30,14 +32,18 @@ export class PowerFactorTriangleFormComponent implements OnInit {
     { value: 9, name: 'Reactive & Power Factor' },
   ];
 
-  constructor() { }
+  constructor(private powerFactorTriangleService: PowerFactorTriangleService) { }
 
   ngOnInit() {
   }
 
   calculate() {
-    if (this.data.apparentPower != null && this.data.realPower != null && this.data.reactivePower != null && this.data.phaseAngle != null && this.data.powerFactor != null) {
-      this.emitCalculate.emit(this.data);
+    this.powerFactorTriangleForm = this.powerFactorTriangleService.setModeValidation(this.powerFactorTriangleForm);
+    if (this.powerFactorTriangleForm.valid) {
+      this.powerFactorTriangleForm.controls.mode.enable();
+      this.emitCalculate.emit(this.powerFactorTriangleForm);
+    } else {
+      this.powerFactorTriangleForm.controls.mode.disable();
     }
   }
 

@@ -1,9 +1,7 @@
 <div class="d-flex flex-row justify-content-end" [ngStyle]="{'height': isSidebarCollapsed? '100%' : undefined}">
-  <div>
-    <div class="d-flex justify-content-center p-2" (click)="collapseSidebar()">
-      <span *ngIf="isSidebarCollapsed" class="fa fa-chevron-circle-right h5"></span>
-      <span *ngIf="!isSidebarCollapsed" class="fa fa-chevron-circle-left h5"></span>
-    </div>
+  <div class="d-flex justify-content-center p-2" (click)="collapseSidebar()">
+    <span *ngIf="isSidebarCollapsed" class="fa fa-chevron-circle-right h5 mb-0"></span>
+    <span *ngIf="!isSidebarCollapsed" class="fa fa-chevron-circle-left h5 mb-0"></span>
   </div>
   <div *ngIf="isSidebarCollapsed" class="sidebar-border"></div>
 </div>
@@ -16,7 +14,7 @@
   </div>
   
   <div class="sidebar-group create-button">
-    <div class="p-3">
+    <div class="py-0 px-2">
       <div class="nav-item dropdown">
         <button type="button" class="btn btn-primary w-100" (click)="toggleNewDropdown()">
           <span class="dropdown-toggle">
@@ -43,9 +41,30 @@
     </div>
   </div>
   
+  <div *ngIf="isUpdateAvailable" class="sidebar-group secondary" (click)="openUpdateModal()">
+    <span routerLinkActive="selected" class="sidebar-item">
+      <span class="fa fa-info-circle mr-1 info-icon"></span>
+      Update Available!
+    </span>
+  </div>
+
+  <div class="sidebar-group secondary" (click)="openVersionModal()">
+    <span routerLinkActive="selected" class="sidebar-item">
+      <i class="fa fa-info-circle info-icon mr-1"></i>
+      v{{versionNum}} Release Notes
+    </span>
+  </div>
+  
+  <div *ngIf="showSurveyLink" class="sidebar-group secondary">
+    <span routerLinkActive="selected" class="sidebar-item" (click)="showSurvey()">
+      <span class="fa fa-info-circle mr-1 info-icon"></span>
+      MEASUR Survey
+    </span>
+  </div>
+
   <div class="sidebar-group secondary" (click)="navigateWithSidebarOptions('/landing-screen')">
     <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
-</div>
+  </div>
 
 <div class="sidebar-group secondary pl-1 scroll-item">
   <app-directory-item [directory]="rootDirectory"></app-directory-item>
@@ -70,13 +89,4 @@
   <span (click)="navigateWithSidebarOptions('/privacy')" routerLinkActive="selected" class="sidebar-item">Privacy Notice</span>
   <span (click)="navigateWithSidebarOptions('/acknowledgments')" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
   </div>
-  
-  <div class="sidebar-group">
-    <span class="version-num">v{{versionNum}}
-      <i class="fa fa-info-circle" (click)="openVersionModal()"></i>
-    </span>
-    <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
-  </div>
-  
-  <app-version-modal *ngIf="showVersionModal" (closeModal)="closeVersionModal()"></app-version-modal>
 </ng-container>

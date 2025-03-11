@@ -51,13 +51,21 @@ export class ReplaceExistingTreasureHuntService {
   }
 
   getReplaceExistingCardData(replaceExistingMotor: ReplaceExistingMotorTreasureHunt, opportunitySummary: OpportunitySummary, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
+    
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (replaceExistingMotor.opportunitySheet){
+      if (replaceExistingMotor.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += replaceExistingMotor.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+    
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: replaceExistingMotor.selected,
       opportunityType: 'replace-existing',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: 'kWh',

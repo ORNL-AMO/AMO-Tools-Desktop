@@ -1,0 +1,21 @@
+<div class="card card-toast-notification" [@toast]="showSurveyToast">
+  <div class="card-header">
+    <!-- <span class="fa fa-info-circle mr-2 info-icon"></span> -->
+    <img src="assets/images/app-icon.png" class="app-icon mr-2">
+    Help Support MEASUR 
+    <span class="fa fa-times close-button" (click)="closeToast()"></span>
+  </div>
+  <div class="card-body">
+    <p class="card-text mb-1 bold">
+      The MEASUR team is proud to bring you this free tool.
+    </p>
+    <p class="card-text-small my-2">
+      Your feedback would provide support for its continued development. 
+      Please complete a brief survey about your experience.
+    </p>
+  </div>
+  <div class="card-footer text-end">
+    <a class="click-link text-center" (click)="showSurvey()">Take Survey</a>
+    <a class="click-link pull-right" (click)="closeToast()">Close</a>
+  </div>
+</div>

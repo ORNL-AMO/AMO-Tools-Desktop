@@ -28,9 +28,14 @@ jobs:
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm ci
       - name: Build
-        run: npm run build-prod-web
+        run: |
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
+            npm run build-prod-web
+          elif [[ "${{ github.ref_name }}" == "develop" ]]; then
+            npm run build-dev-web
+          fi
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

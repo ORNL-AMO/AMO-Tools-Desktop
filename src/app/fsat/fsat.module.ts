@@ -38,7 +38,6 @@ import { FsatWarningService } from './fsat-warning.service';
 import { CalculatePressuresModule } from './calculate-pressures/calculate-pressures.module';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
-import { ToastModule } from '../shared/toast/toast.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 import { FsatSankeyModule } from '../shared/fsat-sankey/fsat-sankey.module';
@@ -48,6 +47,7 @@ import { OperationsService } from './operations/operations.service';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 
 @NgModule({
   imports: [
@@ -69,7 +69,7 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     CalculatePressuresModule,
     OperatingHoursModalModule,
     TabsTooltipModule,
-    ToastModule,
+    SnackbarModule,
     SharedPipesModule,
     SystemAndEquipmentCurveModule,
     UpdateUnitsModalModule,

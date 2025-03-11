@@ -12,25 +12,7 @@ import moment from 'moment';
 export class TreasureHuntPptPropertiesService {
 
     constructor(private treasureHuntReportService: TreasureHuntReportService) { }
-
-    getSlideTitleProperties(): pptxgen.TextPropsOptions {
-        let slideTitleProps: pptxgen.TextPropsOptions = {
-            x: 0,
-            y: 0,
-            w: '100%',
-            h: 1.2,
-            align: 'center',
-            bold: true,
-            color: 'FFFFFF',
-            fontSize: 32,
-            fontFace: 'Arial (Headings)',
-            valign: 'middle',
-            isTextBox: true,
-            autoFit: true
-        };
-        return slideTitleProps;
-    }
-
+    
     getPieChartProperties() {
         let pieChartOptions: pptxgen.IChartOpts = {
             x: 5.54,
