@@ -460,7 +460,7 @@ export class CompressedAirAssessmentResultsService {
     if (dayTypeModificationResult.allSavingsResults.paybackPeriod < 0) {
       dayTypeModificationResult.allSavingsResults.paybackPeriod = 0;
     }
-    dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((baselineResults.total.totalAnnualOperatingCost - dayTypeModificationResult.totalAnnualOperatingCost) / dayTypeModificationResult.totalAnnualOperatingCost) * 100
+    dayTypeModificationResult.allSavingsResults.savings.percentSavings = ((baselineResults.total.totalAnnualOperatingCost - dayTypeModificationResult.totalAnnualOperatingCost) / baselineResults.total.totalAnnualOperatingCost) * 100
 
     return dayTypeModificationResult;
   }
@@ -798,7 +798,9 @@ export class CompressedAirAssessmentResultsService {
     if (systemInformation.multiCompressorSystemControls == 'baseTrim') {
       //set base trim ordering
       let trimSelection: { dayTypeId: string, compressorId: string } = systemInformation.trimSelections.find(selection => { return selection.dayTypeId == dayType.dayTypeId });
-      intervalData = this.setBaseTrimOrdering(intervalData, adjustedCompressors, neededAirFlow, trimSelection.compressorId, dayType, reduceRuntime);
+      if (trimSelection.compressorId) {
+        intervalData = this.setBaseTrimOrdering(intervalData, adjustedCompressors, neededAirFlow, trimSelection.compressorId, dayType, reduceRuntime);
+      }
     } else if (systemInformation.multiCompressorSystemControls == 'loadSharing') {
       //share load..
       return this.shareLoad(intervalData, adjustedProfileSummary, adjustedCompressors, neededAirFlow, settings, additionalRecieverVolume, atmosphericPressure, totalAirStorage, reduceRuntime, dayType);

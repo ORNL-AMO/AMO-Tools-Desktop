@@ -26,9 +26,6 @@ export class DashboardComponent implements OnInit {
   showCreateInventory: string;
   showCreateInventorySub: Subscription;
 
-  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
-  showToast: boolean = false;
-
   createFolder: boolean;
   createFolderSub: Subscription;
 
@@ -40,8 +37,6 @@ export class DashboardComponent implements OnInit {
 
   showImportModalSub: Subscription;
   showImportModal: boolean;
-
-  dashboardToastMessageSub: Subscription;
 
   showExportModalSub: Subscription;
   showExportModal: boolean;
@@ -116,13 +111,6 @@ export class DashboardComponent implements OnInit {
       this.copyItems = val;
     });
 
-    this.dashboardToastMessageSub = this.dashboardService.dashboardToastMessage.subscribe(val => {
-      if (val != undefined) {
-        this.addToast(val);
-        this.dashboardService.dashboardToastMessage.next(undefined);
-      }
-    });
-
     this.showImportModalSub = this.directoryDashboardService.showImportModal.subscribe(val => {
       this.showImportModal = val;
     });
@@ -150,7 +138,6 @@ export class DashboardComponent implements OnInit {
   ngOnDestroy() {
     this.moveItemsSub.unsubscribe();
     this.createAssessmentSub.unsubscribe();
-    this.dashboardToastMessageSub.unsubscribe();
     this.createFolderSub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.sidebarWidthSub.unsubscribe();
@@ -176,21 +163,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  //TOAST HERE
-  addToast(msg: string) {
-    this.toastData.title = msg;
-    this.toastData.setTimeoutVal = 2000;
-    this.showToast = true;
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    }
-  }  
 }
 
 export interface ImportDataObjects {

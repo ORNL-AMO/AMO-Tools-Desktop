@@ -1,0 +1,15 @@
+services:
+  httpd:
+    container_name: measur-web
+    image: httpd:2.4
+    restart: unless-stopped
+    volumes:
+      - ./docker/httpd/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - ./docker/httpd/conf.d:/usr/local/apache2/conf.d
+      - ./docker/httpd/modules.d:/usr/local/apache2/modules.d
+      - ./docker/httpd/ssl:/usr/local/apache2/ssl
+      - ${APP_VOLUME:-./dist}:/usr/local/apache2/web/app
+      # APP_VOLUME can be passed in to easily switch between two different dists. Run from sh/ git bash ---> APP_VOLUME=./dist2 docker-compose up
+    ports:
+      - 8123:443
+      - 8122:80

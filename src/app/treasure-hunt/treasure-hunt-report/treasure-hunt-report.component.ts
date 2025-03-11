@@ -42,6 +42,13 @@ export class TreasureHuntReportComponent implements OnInit {
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
   reportContainerHeight: number;
 
+  pptThemeOptions: Array<{ value: number, name: string }> = [
+    { value: 0, name: 'Blank' },
+    { value: 1, name: 'Better Plants' },
+  ];
+
+  pptThemeOption: number = 0;
+
   //print logic
   showPrintView: boolean = false;
   showPrintViewSub: Subscription;
@@ -200,7 +207,7 @@ export class TreasureHuntReportComponent implements OnInit {
     if (this.dataCalculated) {
       let settings = this.settingsDbService.getByAssessmentId(this.assessment, true);;    
       let pptx = new pptxgen();
-      pptx = this.treasureHuntPPTService.createPPT(settings, this.assessment.treasureHunt, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails);
+      pptx = this.treasureHuntPPTService.createPPT(settings, this.assessment.treasureHunt, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails, this.pptThemeOption);
       pptx.writeFile({ fileName: this.fileName + '.pptx' });
     }
     this.hideExportModal();
@@ -208,6 +215,10 @@ export class TreasureHuntReportComponent implements OnInit {
 
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
+  }
+
+  changePptTheme(option: number){
+    this.pptThemeOption = option;
   }
 
 

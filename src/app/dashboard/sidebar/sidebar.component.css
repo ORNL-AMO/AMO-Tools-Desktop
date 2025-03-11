@@ -9,6 +9,10 @@
     font-size: 25px;
 }
 
+.version-modal-link:hover {
+    cursor: pointer;
+}
+
 .update-available{
     cursor: pointer;
     color: darkslategray;
@@ -79,3 +83,8 @@ a.list-group-item.active:hover{
 /* .nav-link.dropdown-toggle:hover, .nav-btn:hover{
     background-color: #808B96;
 } */
+
+.info-icon {
+    font-size: 22px;
+    color: #156739;
+}

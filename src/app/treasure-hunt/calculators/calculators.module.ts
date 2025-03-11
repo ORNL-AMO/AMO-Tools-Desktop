@@ -42,6 +42,7 @@ import { AssessmentOpportunityComponent } from './assessment-opportunity/assessm
 import { AssessmentIntegrationModule } from '../../shared/assessment-integration/assessment-integration.module';
 import { BoilerBlowdownRateModule } from '../../calculator/steam/boiler-blowdown-rate/boiler-blowdown-rate.module';
 import { AssessmentOpportunityHelpComponent } from './assessment-opportunity/assessment-opportunity-help/assessment-opportunity-help.component';
+import { PowerFactorCorrectionModule } from '../../calculator/utilities/power-factor-correction/power-factor-correction.module';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,8 @@ import { AssessmentOpportunityHelpComponent } from './assessment-opportunity/ass
     CoolingTowerFanModule,
     CoolingTowerBasinModule,
     AssessmentIntegrationModule,
-    BoilerBlowdownRateModule
+    BoilerBlowdownRateModule,
+    PowerFactorCorrectionModule
   ],
   providers: [
     CalculatorsService,

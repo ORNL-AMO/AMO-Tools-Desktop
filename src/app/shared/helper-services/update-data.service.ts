@@ -468,6 +468,11 @@ export class UpdateDataService {
                     opportunity.opportunityType = Treasure.airLeak;
                 });
             }
+            if (assessment.treasureHunt.powerFactorCorrectionOpportunities) {
+                assessment.treasureHunt.powerFactorCorrectionOpportunities.forEach(opportunity => {
+                    opportunity.opportunityType = Treasure.powerFactorCorrection;
+                });
+            }
 
         }
         return assessment;

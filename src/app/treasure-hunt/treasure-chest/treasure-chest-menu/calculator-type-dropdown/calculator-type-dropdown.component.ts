@@ -140,6 +140,8 @@ export class CalculatorTypeDropdownComponent implements OnInit {
         return 'Cooling Tower Basin'
       case Treasure.boilerBlowdownRate:
         return 'Boiler Blowdown Rate'
+      case Treasure.powerFactorCorrection:
+        return 'Power Factor Correction'
     }
   }
 }

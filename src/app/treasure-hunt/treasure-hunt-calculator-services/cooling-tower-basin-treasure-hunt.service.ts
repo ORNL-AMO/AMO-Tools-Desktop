@@ -52,13 +52,21 @@ export class CoolingTowerBasinTreasureHuntService {
   }
 
   getCoolingTowerBasinCardData(coolingTowerBasin: CoolingTowerBasinTreasureHunt, opportunitySummary: OpportunitySummary, index: number, currentEnergyUsage: EnergyUsage, settings: Settings): OpportunityCardData {
+    
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (coolingTowerBasin.opportunitySheet){
+      if (coolingTowerBasin.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += coolingTowerBasin.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+    
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: coolingTowerBasin.selected,
       opportunityType: 'cooling-tower-basin',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: 'kWh',

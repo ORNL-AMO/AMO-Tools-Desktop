@@ -1,0 +1,27 @@
+<div bsModal #surveyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header p-2">
+          <span class="card-header-text">
+            MEASUR Experience Survey
+          </span>
+          <button class="close" aria-label="Close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="card-block">
+        </div>
+        <app-experience-survey [inModal]="true"></app-experience-survey>
+        <div class="modal-footer p-2 d-flex flex-row justify-content-between">
+          <a class="click-link ml-2" (click)="setRemindAndClose()">Remind Me Next Time</a>
+          <div>
+            <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close()">Cancel</button>
+            <button type="button" [disabled]="!userSurvey" class="btn btn-primary btn-sm " (click)="sendAnswers()">Send Answers</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

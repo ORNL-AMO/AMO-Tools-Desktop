@@ -21,10 +21,8 @@ import { CoreService } from './core.service';
 import { SsmtModule } from '../ssmt/ssmt.module';
 import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
 import { HelperServicesModule } from '../shared/helper-services/helper-services.module';
-import { ToastModule } from '../shared/toast/toast.module';
 import { TutorialsModule } from '../tutorials/tutorials.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
-import { UpdateToastComponent } from '../update-toast/update-toast.component';
 import { LogToolModule } from '../log-tool/log-tool.module';
 import { MotorInventoryModule } from '../motor-inventory/motor-inventory.module';
 import { WasteWaterModule } from '../waste-water/waste-water.module';
@@ -41,11 +39,14 @@ import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-
 import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
 import { WaterModule } from '../water/water.module';
 import { ImportBackupModalModule } from '../shared/import-backup-modal/import-backup-modal.module';
+import { SurveyToastModule } from '../shared/survey-toast/survey-toast.module';
+import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
+import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
+import { UpdateApplicationModule } from '../shared/update-application/update-application.module';
 
 @NgModule({
   declarations: [
     CoreComponent,
-    UpdateToastComponent,
     NotFoundComponent,
   ],
   imports: [
@@ -66,7 +67,6 @@ import { ImportBackupModalModule } from '../shared/import-backup-modal/import-ba
     SsmtModule,
     TreasureHuntModule,
     HelperServicesModule,
-    ToastModule,
     TutorialsModule,
     DashboardModule,
     LogToolModule,
@@ -83,7 +83,11 @@ import { ImportBackupModalModule } from '../shared/import-backup-modal/import-ba
     EmailMeasurDataModule,
     WaterProcessDiagramModule,
     WaterModule,
-    ImportBackupModalModule
+    ImportBackupModalModule,
+    SurveyToastModule,
+    MeasurSurveyModule,
+    SnackbarModule,
+    UpdateApplicationModule,
   ],
   providers: [
     AssessmentService,

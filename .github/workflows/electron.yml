@@ -33,7 +33,7 @@ jobs:
           cp "$WIN_CERT_PATH" ./wincert.pem
           echo -n "${{ secrets.APPLE_PROV_PROF_BASE64 }}" | base64 --decode -o $PROV_PROF_PATH &&
           cp "$PROV_PROF_PATH" ./embedded.provisionprofile
-          npm ci --legacy-peer-deps &&
+          npm ci &&
           security -v unlock-keychain -p "${{ secrets.KC_SECRET }}" ~/Library/Keychains/login.keychain-db
       - name: Build
         run: npm run build-prod-desktop-ci
@@ -50,7 +50,7 @@ jobs:
               $EXE_PATH &&
             (OLD_HASH=$(ggrep -o -P -m 1 '(?<=sha512:\s).*' ../output/latest.yml) &
             NEW_HASH=$(node ~/gen_hash.js -f $EXE_PATH)) &&
-            sed -i.bk "s|$OLD_HASH|$NEW_HASH|g" ../output/latest.yml) &
+            fndrep $OLD_HASH $NEW_HASH ../output/latest.yml) &
           node ./node_modules/.bin/electron-builder --linux --x64 --publish never
       - name: Prepare output
         id: output

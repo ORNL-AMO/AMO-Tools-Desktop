@@ -63,13 +63,21 @@ export class CoolingTowerMakeupTreasureHuntService {
     if (settings.unitsOfMeasure == 'Metric') {
       unitStr = 'm3'
     }
+
+    let annualCostSavings: number = opportunitySummary.costSavings;
+    if (coolingTowerMakeupWaterTreasureHunt.opportunitySheet){
+      if (coolingTowerMakeupWaterTreasureHunt.opportunitySheet.opportunityCost.additionalAnnualSavings){
+        annualCostSavings += coolingTowerMakeupWaterTreasureHunt.opportunitySheet.opportunityCost.additionalAnnualSavings.cost;
+      }
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
       selected: coolingTowerMakeupWaterTreasureHunt.selected,
       opportunityType: 'cooling-tower-makeup',
       opportunityIndex: index,
-      annualCostSavings: opportunitySummary.costSavings,
+      annualCostSavings: annualCostSavings,
       annualEnergySavings: [{
         savings: opportunitySummary.totalEnergySavings,
         energyUnit: unitStr,

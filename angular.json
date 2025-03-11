@@ -71,7 +71,7 @@
             "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
-            "web": {
+            "production-web": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -83,7 +83,23 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.web.ts"
+                  "with": "src/environments/environment.production-web.ts"
+                }
+              ]
+            },
+            "development-web": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development-web.ts"
                 }
               ]
             },
@@ -120,8 +136,11 @@
             "buildTarget": "amo-tools-desktop:build"
           },
           "configurations": {
-            "web": {
-              "buildTarget": "amo-tools-desktop:build:web"
+            "production-web": {
+              "buildTarget": "amo-tools-desktop:build:production-web"
+            },
+            "development-web": {
+              "buildTarget": "amo-tools-desktop:build:development-web"
             },
             "development": {
               "buildTarget": "amo-tools-desktop:build:development"
@@ -192,6 +211,9 @@
     }
   },
   "cli": {
-    "analytics": "c7c821ee-29e2-4918-ab71-1e94bd66b1fb"
+    "analytics": "c7c821ee-29e2-4918-ab71-1e94bd66b1fb",
+    "cache": {
+      "enabled": false
+    }
   }
 }

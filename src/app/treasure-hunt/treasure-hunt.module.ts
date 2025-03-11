@@ -23,7 +23,6 @@ import { SortCardsService } from './treasure-chest/opportunity-cards/sort-cards.
 import { TreasureHuntGaugeComponent } from './treasure-hunt-gauge/treasure-hunt-gauge.component';
 import { AnimatedCheckmarkModule } from '../shared/animated-checkmark/animated-checkmark.module';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
-import { ToastModule } from '../shared/toast/toast.module';
 import { ConvertInputDataService } from './convert-input-data.service';
 import { RouterModule } from '@angular/router';
 import { TreasureChestMenuModule } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.module';
@@ -61,6 +60,7 @@ import { CoolingTowerFanTreasureHuntService } from './treasure-hunt-calculator-s
 import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
+import { PowerFactorCorrectionTreasureHuntService } from './treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
 
 @NgModule({
   imports: [
@@ -72,7 +72,6 @@ import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculato
     TreasureHuntReportModule,
     AnimatedCheckmarkModule,
     OperatingHoursModalModule,
-    ToastModule,
     RouterModule,
     TreasureChestMenuModule,
     UpdateUnitsModalModule,
@@ -129,7 +128,8 @@ import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculato
     ChillerPerformanceTreasureHuntService,
     CoolingTowerFanTreasureHuntService,
     CoolingTowerBasinTreasureHuntService,
-    BoilerBlowdownRateTreasureHuntService
+    BoilerBlowdownRateTreasureHuntService,
+    PowerFactorCorrectionTreasureHuntService
   ]
 })
 export class TreasureHuntModule { }
