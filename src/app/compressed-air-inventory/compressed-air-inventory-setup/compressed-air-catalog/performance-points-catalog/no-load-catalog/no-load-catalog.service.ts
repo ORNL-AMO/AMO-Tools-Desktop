@@ -1,11 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../../../../shared/models/settings';
-import { CompressedAirItem } from '../../../../compressed-air-inventory';
+import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
 
 @Injectable()
 export class NoLoadCatalogService {
 
   constructor() { }
+
+  setNoLoad(selectedCompressor: CompressedAirItem, settings: Settings): PerformancePoint {
+    selectedCompressor.compressedAirPerformancePointsProperties.noLoad.dischargePressure = this.getNoLoadPressure(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.noLoad.isDefaultPressure, settings);
+    selectedCompressor.compressedAirPerformancePointsProperties.noLoad.airflow = this.getNoLoadAirFlow(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.noLoad.isDefaultAirFlow);
+    selectedCompressor.compressedAirPerformancePointsProperties.noLoad.power = this.getNoLoadPower(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.noLoad.isDefaultPower);
+    return selectedCompressor.compressedAirPerformancePointsProperties.noLoad;
+  }
 
   getNoLoadPressure(selectedCompressor: CompressedAirItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {

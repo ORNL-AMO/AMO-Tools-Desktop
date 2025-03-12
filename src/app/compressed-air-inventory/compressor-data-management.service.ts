@@ -2,20 +2,20 @@ import { Injectable } from '@angular/core';
 import { GenericCompressor } from './existing-compressor-db.service';
 import { CompressedAirInventoryService } from './compressed-air-inventory.service';
 import { CompressedAirCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
-import { PerformancePointsCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/performance-points-catalog/performance-points-catalog.service';
 import { CompressedAirInventoryData, CompressedAirItem } from './compressed-air-inventory';
 import { Settings } from '../shared/models/settings';
+import { PerformancePointsCalculationsService } from './compressed-air-inventory-setup/compressed-air-catalog/performance-points-catalog/calculations/performance-points-calculations.service';
 
 @Injectable()
 export class CompressorDataManagementService {
 
-  constructor(private compressedAirAssessmentService: CompressedAirInventoryService,
-    private inventoryService: CompressedAirCatalogService, private performancePointCalculationsService: PerformancePointsCatalogService) { }
+  constructor(private compressedAirInventoryService: CompressedAirInventoryService,
+    private compressedAirCatalogService: CompressedAirCatalogService, private performancePointCalculationsService: PerformancePointsCalculationsService) { }
 
 
   //update from generic compressor
   setCompressorDataFromGenericCompressorDb(genericCompressor: GenericCompressor) {
-    let selectedCompressor: CompressedAirItem = this.inventoryService.selectedCompressedAirItem.getValue();
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     ///selectedCompressor.modifiedDate = new Date();
     selectedCompressor.compressorLibId = genericCompressor.IDCompLib;
 
