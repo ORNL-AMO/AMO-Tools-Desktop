@@ -1,5 +1,5 @@
 import React, { CSSProperties, Fragment } from 'react';
-import { Handle, HandleType, Position, useHandleConnections } from '@xyflow/react';
+import { Handle, HandleType, Position, useHandleConnections, useNodeConnections } from '@xyflow/react';
 
 const mainTargetHandleStyle: CSSProperties = {
     left: '-5px',
@@ -44,9 +44,9 @@ const CustomHandle = (props: HandleProps) => {
     const { type, position, id, connectionLimit } = props;
     let { className, collapsedStyle } = props;
     const maxConnections = connectionLimit === undefined? 2 : connectionLimit;
-    const connections = useHandleConnections({
-        type: props.type,
-        id: id,
+    const connections = useNodeConnections({
+      handleType: props.type,
+      handleId: id,
     });
     const blockConnections: boolean = connections.length >= maxConnections;
 
