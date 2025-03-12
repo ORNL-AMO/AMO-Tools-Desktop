@@ -44,6 +44,13 @@ import { FilterCompressorsPipePipe } from './existing-compressor-modal/filter-co
 import { CompressorOptionsTableComponent } from './existing-compressor-modal/compressor-options-table/compressor-options-table.component';
 import { FilterCompressorsComponent } from './existing-compressor-modal/filter-compressors/filter-compressors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BlowoffCalculationsService } from './performance-points-catalog/calculations/blowoff-calculations.service';
+import { MaxFullFlowCalculationsService } from './performance-points-catalog/calculations/max-full-flow-calculations.service';
+import { MidTurndownCalculationsService } from './performance-points-catalog/calculations/mid-turndown-calculations.service';
+import { NoLoadCalculationsService } from './performance-points-catalog/calculations/no-load-calculations.service';
+import { PerformancePointsCalculationsService } from './performance-points-catalog/calculations/performance-points-calculations.service';
+import { TurndownCalculationsService } from './performance-points-catalog/calculations/turndown-calculations.service';
+import { UnloadPointCalculationsService } from './performance-points-catalog/calculations/unload-point-calculations.service';
 
 
 
@@ -98,7 +105,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     TurndownCatalogService,
     NoLoadCatalogService,
     BlowoffCatalogService,
-    FieldMeasurementsCatalogService
+    FieldMeasurementsCatalogService,
+    BlowoffCalculationsService,
+    MaxFullFlowCalculationsService,
+    MidTurndownCalculationsService,
+    NoLoadCalculationsService,
+    PerformancePointsCalculationsService,
+    TurndownCalculationsService,
+    UnloadPointCalculationsService
   ],
   exports: [
     CompressedAirCatalogComponent
