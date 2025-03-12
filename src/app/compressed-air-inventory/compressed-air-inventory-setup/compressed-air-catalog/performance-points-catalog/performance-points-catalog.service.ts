@@ -46,17 +46,15 @@ export class PerformancePointsCatalogService {
   }
 
   checkMotorServiceFactorExceededWarning(power: number, compressor: CompressedAirItem): PerformancePointWarnings {
-      let motorServiceFactorExceeded: string = null;
-      let motorServiceFactor: number = compressor.nameplateData.totalPackageInputPower * compressor.compressedAirDesignDetailsProperties.serviceFactor;
-      if (power > motorServiceFactor) {
-        motorServiceFactorExceeded = `Power exceeds Motor Service Factor (${motorServiceFactor})`;
-      }
-      return {
-        motorServiceFactorExceeded: motorServiceFactorExceeded
-      }
+    let motorServiceFactorExceeded: string = null;
+    let motorServiceFactor: number = compressor.nameplateData.totalPackageInputPower * compressor.compressedAirDesignDetailsProperties.serviceFactor;
+    if (power > motorServiceFactor) {
+      motorServiceFactorExceeded = `Power exceeds Motor Service Factor (${motorServiceFactor})`;
     }
-
-
+    return {
+      motorServiceFactorExceeded: motorServiceFactorExceeded
+    }
+  }
 
   checkShowMaxFlowPerformancePoint(compressorType: number, controlType: number): boolean {
     if (compressorType == 6 && (controlType == 7 || controlType == 9)) {
@@ -379,7 +377,6 @@ export class PerformancePointsCatalogService {
     }
     return { min: min, max: max };
   }
-
 
 
 

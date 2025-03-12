@@ -43,6 +43,7 @@ import { ExistingCompressorModalComponent } from './existing-compressor-modal/ex
 import { FilterCompressorsPipePipe } from './existing-compressor-modal/filter-compressors-pipe.pipe';
 import { CompressorOptionsTableComponent } from './existing-compressor-modal/compressor-options-table/compressor-options-table.component';
 import { FilterCompressorsComponent } from './existing-compressor-modal/filter-compressors/filter-compressors.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -78,7 +79,8 @@ import { FilterCompressorsComponent } from './existing-compressor-modal/filter-c
     OperatingHoursModalModule,
     ConfirmDeleteModalModule,
     ConnectedInventoryModule,
-    RouterModule
+    RouterModule,
+    NgbModule,
   ],
   providers: [
     CompressedAirCatalogService,

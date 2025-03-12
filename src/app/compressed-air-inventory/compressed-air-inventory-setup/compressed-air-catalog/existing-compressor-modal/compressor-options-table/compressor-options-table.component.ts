@@ -42,7 +42,7 @@ export class CompressorOptionsTableComponent implements OnInit {
     }
   
     selectCompressor(genericCompressor: GenericCompressor) {
-      //this.compressorDataManagementService.setCompressorDataFromGenericCompressorDb(genericCompressor);
+      this.compressorDataManagementService.setCompressorDataFromGenericCompressorDb(genericCompressor);
       this.emitClose.emit(true);
     }
 

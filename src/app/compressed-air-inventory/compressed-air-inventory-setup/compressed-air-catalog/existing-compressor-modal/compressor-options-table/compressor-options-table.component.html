@@ -31,10 +31,10 @@
                 {{compressor.IDCompLib}}
             </td>
             <td>
-                {{compressor.IDCompType | compressorType}}
+                {{compressor.IDCompType}}
             </td>
             <td>
-                {{compressor.IDControlType | controlType}}
+                {{compressor.IDControlType}}
             </td>
             <td>
                 {{compressor.Model}}
@@ -58,11 +58,11 @@
     </table>
 </div>
 
-<!-- <div class="tableControls d-flex pull-right small pr-2">
+<div class="tableControls d-flex pull-right small pr-2">
     <p class="pull-right">({{filteredCompressors.length}} compressors)</p>
     <div class="pull-right">
         <ngb-pagination [collectionSize]="filteredCompressors.length" [(page)]="pageNumber" [pageSize]="itemsPerPage"
             [rotate]="true" aria-label="Default pagination" [maxSize]="5">
         </ngb-pagination>
     </div>
-</div> -->
+</div>
