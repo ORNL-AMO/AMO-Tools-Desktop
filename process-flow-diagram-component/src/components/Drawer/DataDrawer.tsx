@@ -43,7 +43,7 @@ const DataDrawer = () => {
                     opacity: '0 !important' },
                 [`& .MuiDrawer-paper`]: { 
                     boxSizing: 'border-box', 
-                    width: 475 },
+                    width: 500 },
                 [`& .MuiPaper-root.MuiPaper-elevation.MuiDrawer-paper`]: {
                     top: diagramParentDimensions.headerHeight,
                     height: diagramParentDimensions.height - diagramParentDimensions.headerHeight - diagramParentDimensions.footerHeight,

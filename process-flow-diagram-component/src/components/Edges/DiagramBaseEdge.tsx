@@ -1,5 +1,5 @@
 import { CSSProperties, Fragment, ReactNode, useContext } from 'react';
-import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, SmoothStepEdge, StepEdge, StraightEdge, useHandleConnections } from '@xyflow/react';
+import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, SmoothStepEdge, StepEdge, StraightEdge, useNodeConnections } from '@xyflow/react';
 import { CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
 import FlowValueDisplay from '../Diagram/FlowValueDisplay';
@@ -98,7 +98,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
     dispatch(toggleDrawer(props.id));
   }
 
-  const connections = useHandleConnections({ type: 'target', id: props.targetHandleId, nodeId: props.target });
+  const connections = useNodeConnections({ handleType: 'target', handleId: props.targetHandleId, id: props.target });
 
   const editButtonTransform = `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`;
   let translateXStart = '-50';

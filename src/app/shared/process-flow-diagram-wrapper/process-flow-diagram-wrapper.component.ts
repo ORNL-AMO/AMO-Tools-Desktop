@@ -23,14 +23,14 @@ export class ProcessFlowDiagramWrapperComponent {
 
     updateDiagramParentState() {
         if (this.processFlowDiagramElement) {
-            console.log('SET DIAGRAM FROM MEASUR updateDiagramParentState flowDiagramData', JSON.parse(JSON.stringify(this.processFlowParentState.waterDiagram.flowDiagramData)));
+            // console.log('SET DIAGRAM FROM MEASUR updateDiagramParentState flowDiagramData', JSON.parse(JSON.stringify(this.processFlowParentState.waterDiagram.flowDiagramData)));
             this.processFlowDiagramElement.nativeElement.parentstate = this.processFlowParentState;
         }
     }
 
     onUpdateDiagramState(event) {
         let diagramState = event.detail as ProcessFlowDiagramState;
-        console.log('SAVE DIAGRAM TO MEASUR updateDiagramParentState flowDiagramData', JSON.parse(JSON.stringify(diagramState.flowDiagramData)));
+        // console.log('SAVE DIAGRAM TO MEASUR updateDiagramParentState flowDiagramData', JSON.parse(JSON.stringify(diagramState.flowDiagramData)));
 
         this.processFlowDiagramService.updateFlowDiagramData(diagramState);
     }

@@ -1,9 +1,9 @@
-import { List, TextField, InputAdornment, ListItem, Divider, Button } from "@mui/material";
-import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
+import { List, TextField, InputAdornment, ListItem, Divider, Button, useTheme, Box } from "@mui/material";
+import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
-import React, { useEffect, useState }  from "react";
+import React, { useEffect, useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
 import { CustomEdgeData } from "../../../../src/process-flow-types/shared-process-flow-types";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
@@ -12,60 +12,69 @@ import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import InputField from "../StyledMUI/InputField";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import { selectNodes, selectNodeTargetEdges, selectTotalDischargeFlow } from "../Diagram/store";
-import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/Validation";
+import { FlowForm, getDefaultFlowValidationSchema, TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR } from "../../validation/Validation";
 import { FieldArray, Form, Formik, FormikErrors, useFormikContext } from "formik";
 import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import { ObjectSchema } from "yup";
+import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
+
 
 /**
-   * Handle Flow states for discharge edges of selected node/component
+   * Formik is used for validation only, while source of truth for values is redux store. This avoids state race conditions when rendering.
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility
    */
 const DischargeFlowForm = () => {
+    const theme = useTheme();
     const dispatch = useAppDispatch();
     const nodes: Node[] = useAppSelector(selectNodes);
     const componentDischargeEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeTargetEdges);
     const selectedDataId = useAppSelector((state) => state.diagram.selectedDataId);
-    const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
+    const [inPercent, setInPercent] = useState<boolean>(false);
+    const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
+    // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
+    // const handleFieldState = (edgeId: string, stateProp: string, val: boolean) => {
+    //     if (stateProp === 'focused') {
+    //         dispatch(focusedEdgeChange({ edgeId: edgeId }));
+    //     }
+    //     setFieldState((prev) => {
+    //         return {
+    //             ...prev,
+    //             [stateProp]: val
+    //         }
+    //     });
+    // }
 
     const onFlowValueInputChange = (event, dischargeEdgeId: string, handleChange: (event: React.ChangeEvent<any>) => void) => {
         handleChange(event);
-        const flowValue = event.target.value === "" ? null : Number(event.target.value);
+        let flowValue = event.target.value === "" ? null : Number(event.target.value);
+        if (inPercent) {
+            flowValue = getFlowValueFromPercent(flowValue, totalDischargeFlow);
+        }
         dispatch(dischargeFlowValueChange({ dischargeEdgeId, flowValue }));
     }
 
-    const handleFieldState = (edgeId: string, stateProp: string, val: boolean) => {
-        if (stateProp === 'focused') {
-            dispatch(focusedEdgeChange({ edgeId: edgeId }));
-        }
-        setFieldState((prev) => {
-            return {
-                ...prev,
-                [stateProp]: val
-            }
-        });
+    const onToggleDataEntryUnit = () => {
+        setInPercent(!inPercent);
     }
+
 
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentDischargeEdges, nodes, selectedDataId);
     const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', totalCalculatedDischargeFlow);
-    
+
     return (
         <Formik
             initialValues={{
-                totalDischargeFlow: "",
-                flows: componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => {
-                    let flowValue: number | string = edge.data.flowValue === null ? "" : Number(edge.data.flowValue);
-                    return flowValue;
-                }),
+                totalFlow: "",
+                flows: getFlowDisplayValues(componentDischargeEdges),
             }}
             validationSchema={validationSchema}
             validateOnMount={true}
             onSubmit={() => { }}
         >
             {({ values, errors, handleChange, setFieldValue }) => {
-                console.log('values', values);
-                console.log('errors', errors);
+                const disabledToggle = values.totalFlow === null;
+                const disabledPercentDataEntryFields = inPercent && (disabledToggle || (errors.totalFlow && errors.totalFlow === TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR));
 
                 return (
                     <Form>
@@ -73,53 +82,65 @@ const DischargeFlowForm = () => {
                         <DistributeTotalFlowField componentEdges={componentDischargeEdges} setFieldValue={setFieldValue} />
 
                         <TotaDischargeFlowField />
-                        <Divider sx={{ marginY: '1rem', backgroundColor: '#1976d2' }}></Divider>
 
-                        <FieldArray name="fields">
-                            {({ push, remove }) => (
-                                <List sx={{ padding: 0 }}>
-                                    {componentDischargeEdges.map((edge: Edge<CustomEdgeData>, index) => {
-                                        const { source, target } = getEdgeSourceAndTarget(edge, nodes);
+                        <Box sx={{ border: `1px solid ${theme.palette.primary.main}`, padding: '1rem', borderRadius: '8px', marginTop: '1rem' }}>
+                            <ToggleDataEntryUnitButton inPercent={inPercent} disabled={disabledToggle} handleToggleDataEntryUnit={onToggleDataEntryUnit} />
 
-                                        const hasWarning = Boolean(errors?.flows && errors.flows[index]) && values?.flows[index] !== null;
-                                        return (
-                                            <ListItem
-                                                sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: '.5rem' }}
-                                                key={edge.id}
-                                                disablePadding>
-                                                <InputField
-                                                    label={<FlowConnectionText source={source} target={target} />}
-                                                    id={edge.id}
-                                                    name={`flows[${index}]`}
-                                                    type={'number'}
-                                                    size="small"
-                                                    value={values.flows[index] ?? ''}
-                                                    onFocus={() => handleFieldState(edge.id, 'focused', true )}
-                                                    onBlur={() => handleFieldState(edge.id, 'touched', true )}
-                                                    warning={hasWarning}
-                                                    helperText={hasWarning ? String(errors.flows[index]) : ""}
-                                                    FormHelperTextProps={{
-                                                        sx: {
-                                                            whiteSpace: 'normal',
-                                                            maxWidth: 250,
-                                                        }
-                                                    }}
-                                                    onChange={(event) => onFlowValueInputChange(event, edge.id, handleChange)}
-                                                    sx={{ m: 1, width: '100%' }}
-                                                    InputProps={{
-                                                        endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
-                                                            <span style={{ zIndex: 1, background: 'white' }}>
-                                                                <FlowDisplayUnit />
-                                                            </span>
-                                                        </InputAdornment>,
-                                                    }}
-                                                />
-                                            </ListItem>
-                                        );
-                                    })}
-                                </List>
-                            )}
-                        </FieldArray>
+                            <FieldArray name="fields">
+                                {({ push, remove }) => (
+                                    <List sx={{ padding: 0 }}>
+                                        {componentDischargeEdges.map((edge: Edge<CustomEdgeData>, index) => {
+                                            const { source, target } = getEdgeSourceAndTarget(edge, nodes);
+                                            const hasWarning = Boolean(errors?.flows && errors.flows[index]) && values?.flows[index] !== null;
+
+                                            let currentValue: string | number = '';
+                                            if (edge.data.flowValue !== null) {
+                                                currentValue = inPercent ? getFlowValuePercent(edge.data.flowValue, totalDischargeFlow) : edge.data.flowValue;
+                                            }
+                                            return (
+                                                <ListItem
+                                                    sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: '.5rem' }}
+                                                    key={edge.id}
+                                                    disablePadding>
+                                                    <InputField
+                                                        disabled={disabledPercentDataEntryFields}
+                                                        label={<FlowConnectionText source={source} target={target} />}
+                                                        id={edge.id}
+                                                        name={`flows[${index}]`}
+                                                        type={'number'}
+                                                        size="small"
+                                                        value={currentValue}
+                                                        // onFocus={() => handleFieldState(edge.id, 'focused', true )}
+                                                        // onBlur={() => handleFieldState(edge.id, 'touched', true )}
+                                                        warning={hasWarning}
+                                                        helperText={hasWarning ? String(errors.flows[index]) : ""}
+                                                        FormHelperTextProps={{
+                                                            sx: {
+                                                                whiteSpace: 'normal',
+                                                                maxWidth: 250,
+                                                            }
+                                                        }}
+                                                        onChange={(event) => onFlowValueInputChange(event, edge.id, handleChange)}
+                                                        sx={{ m: 1, width: '100%' }}
+                                                        InputProps={{
+                                                            endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                                                <span style={{ zIndex: 1, background: 'white' }}>
+                                                                    {inPercent ?
+                                                                        <span>%</span>
+                                                                        :
+                                                                        <FlowDisplayUnit />
+                                                                    }
+                                                                </span>
+                                                            </InputAdornment>,
+                                                        }}
+                                                    />
+                                                </ListItem>
+                                            );
+                                        })}
+                                    </List>
+                                )}
+                            </FieldArray>
+                        </Box>
                     </Form>
                 );
             }}
@@ -139,7 +160,7 @@ const TotaDischargeFlowField = () => {
     const { setFieldValue, values, handleChange, errors } = useFormikContext<any>();
     const dispatch = useAppDispatch();
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
-    const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
+    // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
 
     const onTotalFlowValueInputChange = (event: React.ChangeEvent<any>) => {
         handleChange(event);
@@ -189,8 +210,8 @@ const TotaDischargeFlowField = () => {
                 size="small"
                 value={values.totalFlow ?? ''}
                 onChange={(event) => onTotalFlowValueInputChange(event)}
-                onFocus={() => setFieldState({ ...fieldState, focused: true })}
-                onAbort={() => setFieldState({ ...fieldState, touched: true })}
+                // onFocus={() => setFieldState({ ...fieldState, focused: true })}
+                // onAbort={() => setFieldState({ ...fieldState, touched: true })}
                 error={hasError}
                 helperText={hasError ? String(errors.totalFlow) : ""}
                 FormHelperTextProps={{ sx: { whiteSpace: 'normal', maxWidth: 250 } }}

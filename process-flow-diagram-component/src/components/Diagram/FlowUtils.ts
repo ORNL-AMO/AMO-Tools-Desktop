@@ -7,6 +7,7 @@ import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
 import { NodeFlowProperty } from "./diagramReducer";
 import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
+import { MAX_FLOW_DECIMALS } from "../../../../src/process-flow-types/shared-process-flow-constants";
 
 export const getRandomCoordinates = (height: number, width: number): { x: number, y: number } => {
   const screenWidth = window.innerWidth;
@@ -325,3 +326,21 @@ export const getNodeTotalFlow = (flowProperty: NodeFlowProperty, calculatedNode:
    }
 }
 
+export const getFlowValueFromPercent = (flowValue: number, totalFlow: number) => {
+  let flowValueConverted = (flowValue / 100) * totalFlow;
+  flowValueConverted = Number(formatDecimalPlaces(flowValueConverted, MAX_FLOW_DECIMALS));
+  return flowValueConverted;
+}
+
+export const getFlowValuePercent = (flowValue: number, totalFlow: number) => {
+  let flowValueConverted = (flowValue / totalFlow) * 100;
+  flowValueConverted = Number(formatDecimalPlaces(flowValueConverted, MAX_FLOW_DECIMALS));
+  return flowValueConverted;
+}
+
+export const getFlowDisplayValues = (componentEdges: Edge<CustomEdgeData>[]) => {
+  return componentEdges.map((edge: Edge<CustomEdgeData>) => {
+    let flowValue: number | string = edge.data.flowValue ?? '';
+    return flowValue;
+  });
+}
