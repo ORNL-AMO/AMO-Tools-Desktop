@@ -80,14 +80,7 @@ const ManageComponent = (props: ManageComponentProps) => {
             }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
                     <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
-                        {/* {isValid ?
-                            (
-                                <Tab sx={{ fontSize: '.75rem' }} label="Data" />
-                            ) : (
-                                <Tab icon={<InvalidIcon status={componentValidation?.status} />} sx={{ fontSize: '.75rem', minHeight: 'unset' }}  iconPosition="start" label="Data" />
-                            )
-                        } */}
-                        <Tab sx={{ fontSize: '.75rem' }} label="Data" />
+                        <Tab sx={{ fontSize: '.75rem' }} label="Flows" />
                         <Tab sx={{ fontSize: '.75rem' }} label="Customize" />
                     </Tabs>
                 </Box>

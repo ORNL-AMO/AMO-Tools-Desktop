@@ -7,7 +7,7 @@ const ColorPicker = (props: ColorPickerProps) => {
 
     const handleSetColor = () => {
         let updatedRecentColors;
-        if (showRecent && recentColors) {
+        if (showRecent && recentColors && recentColors.length > 0) {
                 if (!recentColors.includes(selectedColor) && selectedColor !== color) {
                     const updatedColors = [...recentColors, selectedColor];
                     updatedRecentColors = updatedColors.length > recentColorsLimit ? updatedColors.slice(1) : updatedColors;
@@ -35,7 +35,7 @@ const ColorPicker = (props: ColorPickerProps) => {
                         style={{marginLeft: '16px'}}
                         />
                 </div>
-                {showRecent && recentColors &&
+                {showRecent && recentColors && recentColors.length > 0 &&
                     <div className="recents-wrapper">
                         <label htmlFor={'recent-color'}>Recent Colors</label>
                         <div className="recents" style={{marginLeft: '16px'}}>

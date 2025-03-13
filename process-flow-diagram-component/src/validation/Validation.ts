@@ -1,12 +1,15 @@
 import { FlowType, NodeErrors, NodeFlowTypeErrors } from "../../../src/process-flow-types/shared-process-flow-types";
 import * as Yup from 'yup';
 
+export const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be greater than 0`;
+export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
+
 export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge', totalCalculatedFlow: number): Yup.ObjectSchema<FlowForm> => {
-    // const totalFlowField = `total${flowLabel}Flow`;
+    const totalFlowError = flowLabel === 'Source' ? TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR : TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR;
     let validationSchema = Yup.object({
         totalFlow: Yup.number()
             .nullable()
-            .moreThan(0, `Total ${flowLabel} Flow must be greater than 0`)
+            .moreThan(0, totalFlowError)
             .test('sum-differs',
                 (d) => {
                     return `Total ${flowLabel} Flow must equal the sum of all flow values`

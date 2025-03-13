@@ -105,7 +105,7 @@ const Diagram = (props: DiagramProps) => {
       formatDataForMEASUR(updatedDiagramData);
 
       props.saveFlowDiagramData(updatedDiagramData);
-      console.log('=== SAVED FlowDiagramData', updatedDiagramData);
+      // console.log('=== SAVED FlowDiagramData', updatedDiagramData);
     }
   }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings]);
 
