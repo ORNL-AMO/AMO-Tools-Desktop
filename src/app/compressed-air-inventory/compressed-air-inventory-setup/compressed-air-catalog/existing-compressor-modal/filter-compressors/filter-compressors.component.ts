@@ -8,7 +8,7 @@ import { CompressedAirInventoryService } from '../../../../compressed-air-invent
 import _ from 'lodash';
 
 @Component({
-  selector: 'app-filter-compressors',
+  selector: 'app-filter-compressors-inventory',
   templateUrl: './filter-compressors.component.html',
   styleUrl: './filter-compressors.component.css'
 })

@@ -8,7 +8,7 @@ import { CompressedAirInventoryService } from '../../../../compressed-air-invent
 import { CompressorDataManagementService } from '../../../../compressor-data-management.service';
 
 @Component({
-  selector: 'app-compressor-options-table',
+  selector: 'app-compressor-options-table-inventory',
   templateUrl: './compressor-options-table.component.html',
   styleUrl: './compressor-options-table.component.css'
 })
