@@ -81,51 +81,30 @@ export class CompressorDataManagementService {
     selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.isDefaultAirFlow = true;
     selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.isDefaultPower = true;
     selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.isDefaultPressure = true;
-    this.updateCatalogFromDependentCompressorItem(selectedCompressor, true, true)
+    this.updateCatalogFromDependentCompressorItem(selectedCompressor, true)
   }
 
-  updateCatalogFromDependentCompressorItem(selectedCompressor: CompressedAirItem, modificationsNeedUpdate: boolean, performancePointUpdateNeeded: boolean) {
-    // //update performance points
-    // if (performancePointUpdateNeeded) {
-    //   let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirAssessmentService.compressedAirInventoryData.getValue();
-    //   let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
-    //   //selectedCompressor.compressedAirPerformancePointsProperties = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor, compressedAirAssessment.systemInformation.atmosphericPressure, settings);
-    // }
-    // //update assessment
-    // let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirAssessmentService.compressedAirInventoryData.getValue();
-    // let compressorIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedCompressor.id });
-    // compressedAirInventoryData.systems[compressorIndex] = selectedCompressor;
-    // // if (modificationsNeedUpdate) {
-    // //   compressedAirAssessment.modifications = this.updateModifications(selectedCompressor, compressedAirAssessment.modifications);
-    // // };
-    // //update system profile ordering
-    // let recalculateOrdering: boolean = false;
-    // compressedAirInventoryData.systemProfile.profileSummary.forEach(summary => {
-    //   if (summary.compressorId == selectedCompressor.itemId) {
-    //     if (summary.fullLoadPressure != selectedCompressor.performancePoints.fullLoad.dischargePressure) {
-    //       summary.fullLoadPressure = selectedCompressor.performancePoints.fullLoad.dischargePressure;
-    //       recalculateOrdering = true;
-    //     }
-    //   }
-    // });
-    // //TODO: Recalculate other control types??
-    // //issue 6969 updated to include baseTrim
-    // if (recalculateOrdering && (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading' || compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim')) {
-    //   let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
-    //   compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-    //     compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingCascading(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals);
-    //   })
-    // } else if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
-    //   let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
-    //   let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
-    //   compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-    //     compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, settings, compressedAirAssessment.systemInformation);
-    //   })
-    // }
+  updateCatalogFromDependentCompressorItem(selectedCompressor: CompressedAirItem,performancePointUpdateNeeded: boolean) {
+    //update performance points
+    if (performancePointUpdateNeeded) {
+      let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
+      let settings: Settings = this.compressedAirInventoryService.settings.getValue();
+      selectedCompressor.compressedAirPerformancePointsProperties = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor, compressedAirInventoryData.systemInformation.atmosphericPressure, settings);
+    }
+    //update assessment
+    let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
+    let selectedSystemId: string = this.compressedAirCatalogService.selectedSystemId.getValue();
+    let systemIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedSystemId });
+
+    let selectedCompressedAirItem: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    let itemIndex: number = compressedAirInventoryData.systems[systemIndex].catalog.findIndex(item => { return item.id == selectedCompressedAirItem.id });
+
+    compressedAirInventoryData.systems[systemIndex].catalog[itemIndex] = selectedCompressor;
+     
     // //update assessment
     // this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     // //update selected compressor
-    // this.inventoryService.selectedCompressedAirItem.next(selectedCompressor);
+    this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
   }
 
   overrideGenericDbValueForDisplay(databaseVal: number) {
