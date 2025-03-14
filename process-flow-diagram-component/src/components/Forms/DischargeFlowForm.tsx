@@ -1,4 +1,4 @@
-import { List, TextField, InputAdornment, ListItem, Divider, Button, useTheme, Box } from "@mui/material";
+import { List, TextField, InputAdornment, ListItem, Divider, Button, useTheme, Box, Input, Typography } from "@mui/material";
 import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
@@ -11,15 +11,16 @@ import { dischargeFlowValueChange, distributeTotalDischargeFlow, focusedEdgeChan
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import InputField from "../StyledMUI/InputField";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
-import { selectNodes, selectNodeTargetEdges, selectTotalDischargeFlow } from "../Diagram/store";
+import { selectCurrentNode, selectNodes, selectNodeTargetEdges, selectTotalDischargeFlow } from "../Diagram/store";
 import { FlowForm, getDefaultFlowValidationSchema, TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR } from "../../validation/Validation";
 import { FieldArray, Form, Formik, FormikErrors, useFormikContext } from "formik";
 import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import { ObjectSchema } from "yup";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
+import { blue } from "@mui/material/colors";
 
-
+const blueBackground = blue[50];
 /**
    * Formik is used for validation only, while source of truth for values is redux store. This avoids state race conditions when rendering.
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility
@@ -32,6 +33,7 @@ const DischargeFlowForm = () => {
     const selectedDataId = useAppSelector((state) => state.diagram.selectedDataId);
     const [inPercent, setInPercent] = useState<boolean>(false);
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
+    const selectedNode = useAppSelector(selectCurrentNode);
     // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
     // const handleFieldState = (edgeId: string, stateProp: string, val: boolean) => {
     //     if (stateProp === 'focused') {
@@ -54,6 +56,17 @@ const DischargeFlowForm = () => {
         dispatch(dischargeFlowValueChange({ dischargeEdgeId, flowValue }));
     }
 
+    const onKnownLossChange = (event, handleChange: (event: React.ChangeEvent<any>) => void) => {
+        handleChange(event);
+        // todo handle
+    }
+
+    const onWaterInProductChange = (event, handleChange: (event: React.ChangeEvent<any>) => void) => {
+        handleChange(event);
+        // todo handle
+    }
+
+
     const onToggleDataEntryUnit = () => {
         setInPercent(!inPercent);
     }
@@ -67,6 +80,8 @@ const DischargeFlowForm = () => {
             initialValues={{
                 totalFlow: "",
                 flows: getFlowDisplayValues(componentDischargeEdges),
+                knownLosses: "",
+                waterInProduct: "",
             }}
             validationSchema={validationSchema}
             validateOnMount={true}
@@ -76,75 +91,143 @@ const DischargeFlowForm = () => {
                 const disabledToggle = values.totalFlow === null;
                 const disabledPercentDataEntryFields = inPercent && (disabledToggle || (errors.totalFlow && errors.totalFlow === TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR));
 
+
                 return (
                     <Form>
                         <UpdateNodeErrors flowType={'discharge'} errors={errors} />
                         <DistributeTotalFlowField componentEdges={componentDischargeEdges} setFieldValue={setFieldValue} />
-
                         <TotaDischargeFlowField />
 
-                        <Box sx={{ border: `1px solid ${theme.palette.primary.main}`, padding: '1rem', borderRadius: '8px', marginTop: '1rem' }}>
-                            <ToggleDataEntryUnitButton inPercent={inPercent} disabled={disabledToggle} handleToggleDataEntryUnit={onToggleDataEntryUnit} />
+                        {componentDischargeEdges.length > 0 &&
+                            <Box sx={{ border: `1px solid ${theme.palette.primary.main}`, padding: '1rem', borderRadius: '8px', marginTop: '1rem' }}>
+                                <ToggleDataEntryUnitButton inPercent={inPercent} disabled={disabledToggle} handleToggleDataEntryUnit={onToggleDataEntryUnit} />
 
-                            <FieldArray name="fields">
-                                {({ push, remove }) => (
-                                    <List sx={{ padding: 0 }}>
-                                        {componentDischargeEdges.map((edge: Edge<CustomEdgeData>, index) => {
-                                            const { source, target } = getEdgeSourceAndTarget(edge, nodes);
-                                            const hasWarning = Boolean(errors?.flows && errors.flows[index]) && values?.flows[index] !== null;
+                                <FieldArray name="fields">
+                                    {({ push, remove }) => (
+                                        <List sx={{ padding: 0 }}>
+                                            {componentDischargeEdges.map((edge: Edge<CustomEdgeData>, index) => {
+                                                const { source, target } = getEdgeSourceAndTarget(edge, nodes);
+                                                const hasWarning = Boolean(errors?.flows && errors.flows[index]) && values?.flows[index] !== null;
 
-                                            let currentValue: string | number = '';
-                                            if (edge.data.flowValue !== null) {
-                                                currentValue = inPercent ? getFlowValuePercent(edge.data.flowValue, totalDischargeFlow) : edge.data.flowValue;
-                                            }
-                                            return (
-                                                <ListItem
-                                                    sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: '.5rem' }}
-                                                    key={edge.id}
-                                                    disablePadding>
-                                                    <InputField
-                                                        disabled={disabledPercentDataEntryFields}
-                                                        label={<FlowConnectionText source={source} target={target} />}
-                                                        id={edge.id}
-                                                        name={`flows[${index}]`}
-                                                        type={'number'}
-                                                        size="small"
-                                                        value={currentValue}
-                                                        // onFocus={() => handleFieldState(edge.id, 'focused', true )}
-                                                        // onBlur={() => handleFieldState(edge.id, 'touched', true )}
-                                                        warning={hasWarning}
-                                                        helperText={hasWarning ? String(errors.flows[index]) : ""}
-                                                        FormHelperTextProps={{
-                                                            sx: {
-                                                                whiteSpace: 'normal',
-                                                                maxWidth: 250,
-                                                            }
-                                                        }}
-                                                        onChange={(event) => onFlowValueInputChange(event, edge.id, handleChange)}
-                                                        sx={{ m: 1, width: '100%' }}
-                                                        InputProps={{
-                                                            endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
-                                                                <span style={{ zIndex: 1, background: 'white' }}>
-                                                                    {inPercent ?
-                                                                        <span>%</span>
-                                                                        :
-                                                                        <FlowDisplayUnit />
-                                                                    }
-                                                                </span>
-                                                            </InputAdornment>,
-                                                        }}
-                                                    />
-                                                </ListItem>
-                                            );
-                                        })}
-                                    </List>
-                                )}
-                            </FieldArray>
-                        </Box>
+                                                let currentValue: string | number = '';
+                                                if (edge.data.flowValue !== null) {
+                                                    currentValue = inPercent ? getFlowValuePercent(edge.data.flowValue, totalDischargeFlow) : edge.data.flowValue;
+                                                }
+                                                return (
+                                                    <ListItem
+                                                        sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: '.5rem' }}
+                                                        key={edge.id}
+                                                        disablePadding>
+                                                        <InputField
+                                                            disabled={disabledPercentDataEntryFields}
+                                                            label={<FlowConnectionText source={source} target={target} />}
+                                                            id={edge.id}
+                                                            name={`flows[${index}]`}
+                                                            type={'number'}
+                                                            size="small"
+                                                            value={currentValue}
+                                                            // onFocus={() => handleFieldState(edge.id, 'focused', true )}
+                                                            // onBlur={() => handleFieldState(edge.id, 'touched', true )}
+                                                            warning={hasWarning}
+                                                            helperText={hasWarning ? String(errors.flows[index]) : ""}
+                                                            FormHelperTextProps={{
+                                                                sx: {
+                                                                    whiteSpace: 'normal',
+                                                                    maxWidth: 250,
+                                                                }
+                                                            }}
+                                                            onChange={(event) => onFlowValueInputChange(event, edge.id, handleChange)}
+                                                            sx={{ m: 1, width: '100%' }}
+                                                            InputProps={{
+                                                                endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                                                    <span style={{ zIndex: 1, background: 'white' }}>
+                                                                        {inPercent ?
+                                                                            <span>%</span>
+                                                                            :
+                                                                            <FlowDisplayUnit />
+                                                                        }
+                                                                    </span>
+                                                                </InputAdornment>,
+                                                            }}
+                                                        />
+                                                    </ListItem>
+                                                );
+                                            })}
+                                        </List>
+                                    )}
+                                </FieldArray>
+                            </Box>
+                        }
+
+                        {selectedNode.type === 'waterUsingSystem' &&
+                            <Box sx={{ 
+                                display: 'flex', 
+                                flexDirection: 'column', 
+                                marginTop: '1rem',
+                                padding: '1rem',
+                                border: `1px solid ${theme.palette.primary.main}`,
+                                borderRadius: '8px' }}>
+                                <Box
+                                    sx={{
+                                        marginBottom: '1rem',
+                                        padding: '2px 12px',
+                                        display: 'flex',
+                                        justifyContent: 'left',
+                                        background: blueBackground,
+                                        border: `1px solid ${theme.palette.grey}`,
+                                        borderRadius: '8px'
+                                    }}
+                                >
+                                    <Typography color={theme.palette.primary.dark} fontSize={'1rem'} sx={{ margin: '.75rem' }}>Loss Detail</Typography>
+                                </Box>
+                                <InputField
+                                    name={'knownLosses'}
+                                    id={'knownLosses'}
+                                    label={'Known Losses'}
+                                    type={'number'}
+                                    size="small"
+                                    value={values.knownLosses ?? ''}
+                                    onChange={(event) => onKnownLossChange(event, handleChange)}
+                                    sx={{ marginBottom: '1rem', width: '100%' }}
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                            <span style={{ zIndex: 1, background: 'white' }}>
+                                                {inPercent ?
+                                                    <span>%</span>
+                                                    :
+                                                    <FlowDisplayUnit />
+                                                }
+                                            </span>
+                                        </InputAdornment>,
+                                    }}
+                                />
+                                <InputField
+                                    name={'waterInProduct'}
+                                    id={'waterInProduct'}
+                                    label={'Water In Product'}
+                                    type={'number'}
+                                    size="small"
+                                    value={values.waterInProduct ?? ''}
+                                    onChange={(event) => onWaterInProductChange(event, handleChange)}
+                                    sx={{ width: '100%' }}
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                            <span style={{ zIndex: 1, background: 'white' }}>
+                                                {inPercent ?
+                                                    <span>%</span>
+                                                    :
+                                                    <FlowDisplayUnit />
+                                                }
+                                            </span>
+                                        </InputAdornment>,
+                                    }}
+                                />
+                            </Box>
+                        }
                     </Form>
                 );
             }}
-        </Formik>
+        </Formik >
 
     );
 
@@ -228,6 +311,4 @@ const TotaDischargeFlowField = () => {
 
 export default DischargeFlowForm;
 
-export interface DischargeFlowFormProps {
-    selectedNodeId: string,
-}
+export interface DischargeFlowFormProps { }
