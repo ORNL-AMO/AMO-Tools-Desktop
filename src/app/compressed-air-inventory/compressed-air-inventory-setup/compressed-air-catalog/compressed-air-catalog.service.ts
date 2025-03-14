@@ -2,15 +2,18 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CompressedAirItem, CompressorInventoryItemWarnings } from '../../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
+import { FilterCompressorOptions } from './existing-compressor-modal/filter-compressors-pipe.pipe';
 
 @Injectable()
 export class CompressedAirCatalogService {
 
   selectedSystemId: BehaviorSubject<string>;
   selectedCompressedAirItem: BehaviorSubject<CompressedAirItem>;
+  filterCompressorOptions: BehaviorSubject<FilterCompressorOptions>;
   constructor(private compressedAirInventoryService: CompressedAirInventoryService) {
     this.selectedSystemId = new BehaviorSubject<string>(undefined);
     this.selectedCompressedAirItem = new BehaviorSubject<CompressedAirItem>(undefined);
+    this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
   }
 
   getUpdatedSelectedCompressedAirItem(): CompressedAirItem {
@@ -22,13 +25,13 @@ export class CompressedAirCatalogService {
   }
 
   checkWarnings(compressor: CompressedAirItem): CompressorInventoryItemWarnings {
-      let serviceFactorWarning: string = null;
-      if (compressor.compressedAirDesignDetailsProperties.serviceFactor > 2) {
-        serviceFactorWarning = 'Service factor is typically around 1.15 or less than 2';
-      }
-      return {
-        serviceFactor: serviceFactorWarning,
-      }
+    let serviceFactorWarning: string = null;
+    if (compressor.compressedAirDesignDetailsProperties.serviceFactor > 2) {
+      serviceFactorWarning = 'Service factor is typically around 1.15 or less than 2';
     }
+    return {
+      serviceFactor: serviceFactorWarning,
+    }
+  }
 
 }

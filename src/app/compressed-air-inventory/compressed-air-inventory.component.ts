@@ -11,6 +11,7 @@ import { MotorIntegrationService } from '../shared/connected-inventory/motor-int
 import { Settings } from '../shared/models/settings';
 import { CompressedAirInventoryData } from './compressed-air-inventory';
 import { environment } from '../../environments/environment';
+import { ExistingCompressorDbService } from './existing-compressor-db.service';
 
 @Component({
   selector: 'app-compressed-air-inventory',
@@ -47,7 +48,8 @@ export class CompressedAirInventoryComponent implements OnInit {
     private analyticsService: AnalyticsService,
     private activatedRoute: ActivatedRoute,
     private settingsDbService: SettingsDbService,
-    private inventoryDbService: InventoryDbService,) { }
+    private inventoryDbService: InventoryDbService,
+    private existingCompressorDbService: ExistingCompressorDbService) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -57,7 +59,8 @@ export class CompressedAirInventoryComponent implements OnInit {
       this.compressedAirInventoryService.settings.next(settings);
       this.compressedAirInventoryService.setIsValidInventory(this.compressedAirInventoryItem.compressedAirInventoryData);
       this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryItem.compressedAirInventoryData);
-      this.compressedAirInventoryService.currentInventoryId = tmpItemId;
+      this.compressedAirInventoryService.currentInventoryId = tmpItemId;      
+      this.existingCompressorDbService.getAllCompressors(settings);
 
       let systemId = this.activatedRoute.snapshot.queryParamMap.get('systemId');
       let itemId = this.activatedRoute.snapshot.queryParamMap.get('itemId');

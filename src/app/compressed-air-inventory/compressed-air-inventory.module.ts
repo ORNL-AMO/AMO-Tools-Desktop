@@ -14,6 +14,8 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
+import { ExistingCompressorDbService } from './existing-compressor-db.service';
+import { CompressorDataManagementService } from './compressor-data-management.service';
 
 
 
@@ -38,7 +40,9 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
     AssessmentCo2SavingsModule,
   ],
   providers: [
-    CompressedAirInventoryService
+    CompressedAirInventoryService,
+    ExistingCompressorDbService,
+    CompressorDataManagementService
   ]
 })
 export class CompressedAirInventoryModule { }

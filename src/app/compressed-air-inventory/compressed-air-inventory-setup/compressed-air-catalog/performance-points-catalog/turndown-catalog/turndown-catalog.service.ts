@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
-import { CompressedAirItem } from '../../../../compressed-air-inventory';
+import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
 import { Settings } from '../../../../../shared/models/settings';
 
 @Injectable()
 export class TurndownCatalogService {
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
+
+  setTurndown(selectedCompressor: CompressedAirItem, settings: Settings): PerformancePoint {
+    selectedCompressor.compressedAirPerformancePointsProperties.turndown.airflow = this.getTurndownAirflow(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.turndown.isDefaultAirFlow, settings);
+    selectedCompressor.compressedAirPerformancePointsProperties.turndown.dischargePressure = this.getTurndownPressure(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.turndown.isDefaultPressure, settings);
+    selectedCompressor.compressedAirPerformancePointsProperties.turndown.power = this.getTurndownPower(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.turndown.isDefaultPower);
+    return selectedCompressor.compressedAirPerformancePointsProperties.turndown;
+  }
 
   getTurndownPressure(selectedCompressor: CompressedAirItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {
