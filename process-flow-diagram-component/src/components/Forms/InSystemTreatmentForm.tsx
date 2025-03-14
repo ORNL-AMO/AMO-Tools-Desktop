@@ -17,7 +17,7 @@ const InSystemTreatmentForm = (props: InSystemTreatmentFormProps) => {
     }, [treatments]);
 
     const addTreatment = () => {
-        const newTreatment = getWaterTreatmentComponent();
+        const newTreatment = getWaterTreatmentComponent(undefined, true);
         const updatedTreatments = [...treatments, newTreatment];
         // dispatch(nodeDataPropertyChange({ optionsProp: 'inSystemTreatment', updatedValue: updatedTreatments }));
         setTreatments(updatedTreatments);

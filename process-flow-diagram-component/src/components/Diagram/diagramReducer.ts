@@ -73,7 +73,8 @@ const addNodesReducer = (state: DiagramState, action: PayloadAction<Node[]>) => 
 
 const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType: WaterProcessComponentType, position: { x: number, y: number } }>) => {
   const { nodeType, position } = action.payload;
-  let newNode: Node = createNewNode(nodeType, position, state.nodes.map((node: Node<ProcessFlowPart>) => node.data.name));
+  const existingNames = state.nodes.map((node: Node<ProcessFlowPart>) => node.data.name);
+  let newNode: Node = createNewNode(nodeType, position, existingNames);
   // todo can we remove date completely?
   newNode.data.modifiedDate = getStoreSerializedDate(newNode.data.modifiedDate as Date);
   state.nodes.push(newNode);

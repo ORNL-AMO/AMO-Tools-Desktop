@@ -390,7 +390,7 @@ export const getNewNodeId = () => {
 }
 
 
-export const getWaterTreatmentComponent = (existingTreatment?: WaterTreatment): WaterTreatment => {
+export const getWaterTreatmentComponent = (existingTreatment?: WaterTreatment, inSystem?: boolean): WaterTreatment => {
     let waterTreatment: WaterTreatment;
     let newComponent: WaterTreatment;
     if (!existingTreatment) {
@@ -406,6 +406,11 @@ export const getWaterTreatmentComponent = (existingTreatment?: WaterTreatment): 
       name: newComponent.name,
       flowValue: newComponent.flowValue
     };
+
+    if (inSystem) {
+      delete waterTreatment.modifiedDate
+    }
+    
     return waterTreatment;
   }
 
