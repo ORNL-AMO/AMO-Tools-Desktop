@@ -24,13 +24,13 @@ const ToggleDataEntryUnitButton = (props: ToggleDataEntryUnitProps) => {
             sx={{width: '50%'}}
             disabled={disabled}
             >
-                Flow in <FlowDisplayUnit />
+                Flows in <FlowDisplayUnit />
             </ToggleButton>
             <ToggleButton value={true} aria-label="percent"
             disabled={disabled}
             sx={{width: '50%'}}
             >
-                Flow in %
+                Flows in %
             </ToggleButton>
         </ToggleButtonGroup>
     );

@@ -1,4 +1,4 @@
-import { Box, Chip,  } from "@mui/material";
+import { Box, Chip, createTheme, Typography, useTheme, } from "@mui/material";
 import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 
@@ -15,8 +15,17 @@ import { selectNodes, selectNodeValidation, selectTotalDischargeFlow, selectTota
 import DischargeFlowForm from "./DischargeFlowForm";
 import InvalidIcon from "../../validation/InvalidIcon";
 import { hasValidDischargeForm, hasValidSourceForm, isValidComponent } from "../../validation/Validation";
+import { yellow } from "@mui/material/colors";
+
+
+const theme = createTheme({
+    palette: {
+      info: yellow,
+    },
+  });
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
+    // const theme = useTheme();
     const dispatch = useAppDispatch();
     const nodes = useAppSelector(selectNodes);
     const errors = useAppSelector(selectNodeValidation);
@@ -42,8 +51,6 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     } else {
         componentData = componentData as ProcessFlowPart;
     }
-    
-    
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
         if (props.connectedEdges.length !== 0) {
             setExpanded(newExpanded);
@@ -51,22 +58,19 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     };
 
     const handleTreatmentTypeChange = (event) => {
-        dispatch(setNodeDataProperty({optionsProp: 'treatmentType', updatedValue: Number(event.target.value)}));
+        dispatch(setNodeDataProperty({ optionsProp: 'treatmentType', updatedValue: Number(event.target.value) }));
     };
-    
     const hasSources = props.connectedEdges.some((edge: Edge<CustomEdgeData>) => {
         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
         return props.selectedNode.id === target.diagramNodeId;
     });
-    
-    const hasTargets = props.connectedEdges.some((edge: Edge<CustomEdgeData>) => {   
+    const hasTargets = props.connectedEdges.some((edge: Edge<CustomEdgeData>) => {
         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
         return props.selectedNode.id === source.diagramNodeId;
     });
-    
     const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
-    
+    const unknownLoss = totalSourceFlow - totalDischargeFlow;
     const hasSourceErrors = errors && hasValidSourceForm(errors);
     const hasTargetErrors = errors && hasValidDischargeForm(errors);
 
@@ -76,8 +80,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     }
 
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
-        <Box sx={{ marginTop: 1 }}>
-
+        <Box sx={{ marginTop: 1, display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row', flexWrap: 'wrap', flexBasis: '100%' }}>
             {(isWaterTreatment || isWasteWaterTreatment) &&
                 <Box display={'flex'} flexDirection={'column'} marginBottom={'1rem'}>
                     <label htmlFor={'treatmentType'} className={'diagram-label'} style={{ fontSize: '.9rem' }}>Treatment Type</label>
@@ -99,16 +102,16 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     <AccordionSummary>
                         <span style={{ display: 'flex', alignSelf: 'center' }}>
                             <span>
-                                Sources
+                                Source
                             </span>
                             {hasSourceErrors &&
-                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.source.level} sx={invalidIconStyle}/></span>
+                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.source.level} sx={invalidIconStyle} /></span>
                             }
                         </span>
                         <Chip label={
                             <>
-                            <FlowValueDisplay flowValue={totalSourceFlow}/>
-                            <FlowDisplayUnit/>
+                                <FlowValueDisplay flowValue={totalSourceFlow} />
+                                <FlowDisplayUnit />
                             </>
                         }
                             variant="outlined"
@@ -121,35 +124,51 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                 </Accordion>
             }
 
-            {hasTargets &&
-                <Accordion expanded={dischargeExpanded}
-                    onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setDischargeExpanded)}
-                    slotProps={{
-                        transition: { unmountOnExit: true }
-                    }}>
-                    <AccordionSummary>
-                        <span style={{ display: 'flex', alignSelf: 'center' }}>
-                            <span>
-                                Discharge
-                            </span>
-                            {hasTargetErrors &&
-                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.discharge.level} sx={invalidIconStyle}/></span>
-                            }
+            <Accordion expanded={dischargeExpanded}
+                onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setDischargeExpanded)}
+                >
+                <AccordionSummary>
+                    <span style={{ display: 'flex', alignSelf: 'center' }}>
+                        <span>
+                            Discharge
                         </span>
-                        <Chip label={
-                            <>
-                            <FlowValueDisplay flowValue={totalDischargeFlow}/>
-                            <FlowDisplayUnit/>
-                            </>
+                        {hasTargetErrors &&
+                            <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.discharge.level} sx={invalidIconStyle} /></span>
                         }
-                            variant="outlined"
-                            sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
-                        />
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <DischargeFlowForm></DischargeFlowForm>
-                    </AccordionDetails>
-                </Accordion>
+                    </span>
+                    <Chip label={
+                        <>
+                            <FlowValueDisplay flowValue={totalDischargeFlow} />
+                            <FlowDisplayUnit />
+                        </>
+                    }
+                        variant="outlined"
+                        sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
+                    />
+                </AccordionSummary>
+                <AccordionDetails>
+                    <DischargeFlowForm></DischargeFlowForm>
+                </AccordionDetails>
+            </Accordion>
+
+        </Box>
+        <Box sx={{ marginY: '1rem', marginLeft: '1rem', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row', flexWrap: 'wrap' }}>
+            <Box sx={{ flexGrow: 1, minWidth: 0 }} />
+            {Boolean(unknownLoss)  &&
+            <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}
+                sx={{ 
+                    background: theme.palette.info.main, 
+                    borderRadius: '8px', 
+                    width: '100%', 
+                }}>
+                <Typography fontSize={'.9rem'} sx={{ color: theme.palette.info.contrastText, marginTop: '.5rem' }}>
+                    Unknown Loss
+                </Typography>
+                <Typography fontSize={'1.25rem'} sx={{ color: theme.palette.info.contrastText, marginBottom: '.5rem' }}>
+                    <span>{unknownLoss}</span>
+                    <FlowDisplayUnit style={{fontSize: '.9rem'}}/>
+                </Typography>
+            </Box>
             }
         </Box>
     </Box>);

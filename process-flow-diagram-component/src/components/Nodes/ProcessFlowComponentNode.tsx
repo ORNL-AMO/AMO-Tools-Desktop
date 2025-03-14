@@ -6,7 +6,7 @@ import CustomHandle from './CustomHandle';
 import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
 import FlowValueDisplay from '../Diagram/FlowValueDisplay';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
-import { toggleDrawer } from '../Diagram/diagramReducer';
+import { selectedDataIdChange, toggleDrawer } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { selectNodeFlowData } from '../Diagram/store';
 
@@ -33,7 +33,8 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
   }
 
   const onEditNode = () => {
-    dispatch(toggleDrawer(id));
+    // dispatch(toggleDrawer(id));
+    dispatch(selectedDataIdChange(id));
 }
 
   return (

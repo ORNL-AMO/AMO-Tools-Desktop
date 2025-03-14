@@ -376,6 +376,11 @@ const toggleDrawerReducer = (state: DiagramState, action?: PayloadAction<string>
   }
 };
 
+const selectedDataIdChangeReducer = (state: DiagramState, action?: PayloadAction<string>) => {
+  state.selectedDataId = action?.payload;
+  state.isDrawerOpen = true;
+};
+
 const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<DiagramCalculatedData>) => {
   state.calculatedData = action.payload;
 }
@@ -416,6 +421,7 @@ export const diagramSlice = createSlice({
     dischargeFlowValueChange: dischargeFlowValueChangeReducer,
     distributeTotalDischargeFlow: distributeTotalDischargeFlowReducer,
     toggleDrawer: toggleDrawerReducer,
+    selectedDataIdChange: selectedDataIdChangeReducer,
     setDialogOpen: setDialogOpenReducer,
   }
 })
@@ -453,6 +459,7 @@ export const {
   flowDecimalPrecisionChange,
   showMarkerEndArrows,
   toggleDrawer,
+  selectedDataIdChange,
   setDialogOpen
 } = diagramSlice.actions
 export default diagramSlice.reducer

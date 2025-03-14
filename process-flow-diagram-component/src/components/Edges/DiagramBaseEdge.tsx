@@ -5,7 +5,7 @@ import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
 import FlowValueDisplay from '../Diagram/FlowValueDisplay';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { toggleDrawer } from '../Diagram/diagramReducer';
+import { selectedDataIdChange, toggleDrawer } from '../Diagram/diagramReducer';
 import { RootState } from '../Diagram/store';
 
 const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: string; selected: boolean, flowValue: number | string, scale: number }) => {
@@ -95,7 +95,8 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
   }
 
   const onEditEdge = () => {
-    dispatch(toggleDrawer(props.id));
+    dispatch(selectedDataIdChange(props.id));
+    // dispatch(toggleDrawer(props.id));
   }
 
   const connections = useNodeConnections({ handleType: 'target', handleId: props.targetHandleId, id: props.target });
