@@ -81,7 +81,7 @@ const ManageComponent = (props: ManageComponentProps) => {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
                     <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
                         <Tab sx={{ fontSize: '.75rem' }} label="Flows" />
-                        <Tab sx={{ fontSize: '.75rem' }} label="Customize" />
+                        <Tab sx={{ fontSize: '.75rem' }} label="Manage" />
                     </Tabs>
                 </Box>
 
@@ -95,11 +95,10 @@ const ManageComponent = (props: ManageComponentProps) => {
                         <Box sx={{ paddingY: '1rem' }}>
                             <ComponentHandles node={selectedNode}></ComponentHandles>
                             <CustomizeNode node={selectedNode}></CustomizeNode>
-                            <Divider />
+                            <Button sx={{ width: '100%', marginY: 2 }} color="error" variant="outlined" onClick={() => dispatch(deleteNode())}>Delete Component</Button>
                         </Box>
                 </TabPanel>
 
-                <Button sx={{ width: '100%', marginY: 2 }} color="error" variant="outlined" onClick={() => dispatch(deleteNode())}>Delete Component</Button>
             </Box>
         </>
     );
