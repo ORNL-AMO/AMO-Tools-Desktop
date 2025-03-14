@@ -7,14 +7,17 @@ import { CSSProperties } from 'react';
 import { getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getResetData } from './store';
 import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { FormikErrors } from 'formik';
+import { date } from 'yup';
 
 export interface DiagramState {
   nodes: Node[];
   edges: Edge[];
+  // * Owned or managed by another node. Does not display in the diagram
+  composedNodeData: ProcessFlowPart[];
   settings: DiagramSettings,
   diagramOptions: UserDiagramOptions,
   isDrawerOpen: boolean,
-  /** Selected node or edge */
+  // * Selected node or edge 
   selectedDataId: string,
   calculatedData: DiagramCalculatedData,
   recentNodeColors: string[],
@@ -72,7 +75,7 @@ const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType: W
   const { nodeType, position } = action.payload;
   let newNode: Node = createNewNode(nodeType, position, state.nodes.map((node: Node<ProcessFlowPart>) => node.data.name));
   // todo can we remove date completely?
-  newNode.data.modifiedDate = (newNode.data.modifiedDate as Date).toISOString();
+  newNode.data.modifiedDate = getStoreSerializedDate(newNode.data.modifiedDate as Date);
   state.nodes.push(newNode);
 };
 
@@ -189,7 +192,7 @@ const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) 
   updateNode.data.name = action.payload;
 }
 
-const setNodeDataPropertyReducer = <K extends keyof ProcessFlowPart>(state: DiagramState, action: PayloadAction<NodeDataPayload<K>>) => {
+const nodeDataPropertyChangeReducer = <K extends keyof ProcessFlowPart>(state: DiagramState, action: PayloadAction<NodeDataPayload<K>>) => {
   const updateNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId) as Node<ProcessFlowPart>;
   // todo 6918 currently ignores WaterTreatment and WasteWaterTreatment
   if (updateNode && action.payload.optionsProp in updateNode.data) {
@@ -396,7 +399,7 @@ export const diagramSlice = createSlice({
     toggleValidationWindow: toggleValidationWindowReducer,
     deleteNode: deleteNodeReducer,
     setNodeName: setNodeNameReducer,
-    setNodeDataProperty: setNodeDataPropertyReducer,
+    nodeDataPropertyChange: nodeDataPropertyChangeReducer,
     setNodeStyle: setNodeStyleReducer,
     setNodeColor: setNodeColorReducer,
     edgesChange: edgesChangeReducer,
@@ -430,7 +433,7 @@ export const {
   deleteNode,
   keyboardDeleteNode,
   diagramParentRender,
-  setNodeDataProperty,
+  nodeDataPropertyChange,
   setNodeStyle,
   totalFlowChange,
   sourceFlowValueChange,
@@ -509,4 +512,8 @@ const removeFlowErrors = (state: DiagramState, flowType: FlowType) => {
   if (Object.entries(state.nodeErrors[state.selectedDataId]).every(([, value]) => value === undefined)) {
     delete state.nodeErrors[state.selectedDataId];
   }
+}
+
+export const getStoreSerializedDate = (dateObject: Date): string => {
+  return dateObject.toISOString();
 }

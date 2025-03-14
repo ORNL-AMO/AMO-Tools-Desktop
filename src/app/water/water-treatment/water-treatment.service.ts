@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
-import { WasteWaterTreatment, WaterProcessComponent, WaterTreatment } from '../../shared/models/water-assessment';
-import { getNewProcessComponent, ProcessFlowPart } from '../../../process-flow-types/shared-process-flow-types';
+import { WaterProcessComponent, WaterTreatment } from '../../shared/models/water-assessment';
+import { getWaterTreatmentComponent } from '../../../process-flow-types/shared-process-flow-types';
 
 @Injectable()
 export class WaterTreatmentService {
@@ -32,32 +32,15 @@ export class WaterTreatmentService {
   updateWaterTreatment(waterTreatments: WaterTreatment[], updatedWaterTreatment: WaterTreatment, updateIndex: number) {
     return waterTreatments.map((waterTreatment: WaterTreatment, index) => {
       if (index === updateIndex) {
-        waterTreatment.cost = updatedWaterTreatment.cost
+        waterTreatment.cost = updatedWaterTreatment.cost;
       }
     });
   }
 
-  /**
- * Add new component or return component based from a diagram component
- * @param processFlowPart Build from diagram component
- */
-  addWaterTreatment(processFlowPart?: WaterProcessComponent): WaterTreatment {
-    let waterTreatment: WaterTreatment;
-    let newComponent: WaterTreatment;
-    if (!processFlowPart) {
-      newComponent = getNewProcessComponent('water-treatment') as WaterTreatment;
-    } else {
-      newComponent = processFlowPart as WaterTreatment;
-    }
-    waterTreatment = {
-      ...newComponent,
-      treatmentType: newComponent.treatmentType !== undefined? newComponent.treatmentType : 0,
-      customTreatmentType: newComponent.customTreatmentType,
-      cost: newComponent.cost !== undefined? newComponent.cost : 0,
-      name: newComponent.name,
-      flowValue: newComponent.flowValue
-    };
-    return waterTreatment;
+  
+  addWaterTreatmentComponent(existingComponent?: WaterProcessComponent): WaterTreatment {
+    const waterTreatment = existingComponent? existingComponent as WaterTreatment : undefined;
+    return getWaterTreatmentComponent(waterTreatment);
   }
 
   markFormDirtyToDisplayValidation(form: UntypedFormGroup) {

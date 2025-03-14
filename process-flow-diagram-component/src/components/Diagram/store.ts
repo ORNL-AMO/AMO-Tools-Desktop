@@ -135,6 +135,7 @@ export const getResetData = (currentState?: DiagramState): DiagramState => {
   return {
     nodes: [],
     edges: [],
+    composedNodeData: [],
     settings: getDefaultSettings(),
     diagramOptions: getDefaultUserDiagramOptions(),
     isDrawerOpen: false,

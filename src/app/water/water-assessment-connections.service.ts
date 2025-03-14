@@ -195,7 +195,7 @@ export class WaterAssessmentConnectionsService {
       if (waterProcessComponent.processComponentType === 'water-treatment') {
         let waterTreatment: WaterTreatment;
         if (!waterProcessComponent.createdByAssessment) {
-          waterTreatment = this.waterTreatmentService.addWaterTreatment(waterProcessComponent);
+          waterTreatment = this.waterTreatmentService.addWaterTreatmentComponent(waterProcessComponent);
         } else {
           waterTreatment = waterProcessComponent as WaterTreatment;
         }

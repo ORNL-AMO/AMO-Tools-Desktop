@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react';
+import { Fragment, memo, useContext } from 'react';
 import { Position, NodeProps } from '@xyflow/react';
 import { DiagramNode, NodeFlowData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { Chip, Typography } from '@mui/material';
@@ -9,6 +9,7 @@ import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { toggleDrawer } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { selectNodeFlowData } from '../Diagram/store';
+import WaterDropIcon from '@mui/icons-material/WaterDrop';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
@@ -20,6 +21,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
   const allowAllHandles: boolean = !allowInflowOnly && !allowOutflowOnly;
   let plantLevelFlow: number | string;
   let condensedPadding: boolean;
+  let showInSystemTreatment: boolean;
   
   if (data.processComponentType === 'water-intake') {
     plantLevelFlow = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : calculatedData && calculatedData.totalDischargeFlow;
@@ -31,14 +33,16 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
     condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
     transformString = `translate(0%, 0%) translate(188px, -25px)`;
   }
+  if (data.processComponentType === 'water-using-system' && data.inSystemTreatment.length > 0) {
+    showInSystemTreatment = true;
+  }
 
   const onEditNode = () => {
     dispatch(toggleDrawer(id));
-}
+  }
 
   return (
     <>
-
     {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.a &&
       <CustomHandle
         type="target"
@@ -85,6 +89,33 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
       <div className="node-inner-input" style={{
         padding: condensedPadding? '0' : undefined
       }}>
+        {showInSystemTreatment &&
+          <div style={{
+            position: 'absolute',
+            display: 'flex',
+            width: '100px',
+            height: '20px',
+            left: '-12px',
+            top: '-12px',
+            background: 'rgb(0, 147, 134)',
+            borderTopLeftRadius: '6px',
+            borderBottomRightRadius: '6px'
+          }} >
+            <WaterDropIcon style={{
+              fontSize: '12px',
+              color: '#fff',
+              marginRight: '.25rem',
+              marginLeft: '.25rem',
+              alignSelf: 'center'
+            }} />
+            <span style={{
+              alignSelf: 'center'
+            }}>
+              Treatment
+            </span>
+          </div>
+        }
+      
         <EditDataDrawerButton 
           onEdit={onEditNode}
           selected={selected}

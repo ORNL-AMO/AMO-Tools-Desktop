@@ -13,22 +13,20 @@ import TabPanel from "./TabPanel";
 import DrawerToggleButton from "./DrawerToggleButton";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { deleteNode, setNodeName } from "../Diagram/diagramReducer";
+import InSystemTreatmentForm from "../Forms/InSystemTreatmentForm";
 
 const ManageComponent = (props: ManageComponentProps) => {
     const dispatch = useAppDispatch();
     const edges = useAppSelector((state) => state.diagram.edges);
     const { selectedNode } = props;
+    const isWaterUsingSystem = props.selectedNode.type === 'waterUsingSystem';
+
     
     const allNodeEdges = getConnectedEdges([selectedNode], edges);
     const [connectedEdges, setConnectedEdges] = useState<Edge[]>(allNodeEdges);
     const [selectedTab, setSelectedTab] = useState(0);
     const [name, setName] = useState<string>(selectedNode.data.name);
     const debounceRef = useRef<any>(null);
-
-    // const diagramContext: DiagramContext = useContext<DiagramContext>(RootDiagramContext);
-    // const componentValidation: ComponentValidation = diagramContext.diagramValidation.nodes[selectedNode.data.diagramNodeId];
-    // const isValid = isValidComponent(componentValidation);
-    
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setSelectedTab(newValue);
     };
@@ -81,6 +79,9 @@ const ManageComponent = (props: ManageComponentProps) => {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
                     <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
                         <Tab sx={{ fontSize: '.75rem' }} label="Flows" />
+                        {isWaterUsingSystem &&
+                            <Tab sx={{ fontSize: '.75rem' }} label="Treatment" />
+                        }
                         <Tab sx={{ fontSize: '.75rem' }} label="Manage" />
                     </Tabs>
                 </Box>
@@ -91,7 +92,15 @@ const ManageComponent = (props: ManageComponentProps) => {
                         selectedNode={selectedNode} />
                 </TabPanel>
 
-                <TabPanel value={selectedTab} index={1}>
+                {isWaterUsingSystem &&
+                    <TabPanel value={selectedTab} index={1}>
+                        <Box sx={{ paddingY: '1rem' }}>
+                            <InSystemTreatmentForm selectedNode={selectedNode}></InSystemTreatmentForm>
+                        </Box>
+                    </TabPanel>
+                }
+
+                <TabPanel value={selectedTab} index={isWaterUsingSystem? 2 : 1}>
                         <Box sx={{ paddingY: '1rem' }}>
                             <ComponentHandles node={selectedNode}></ComponentHandles>
                             <CustomizeNode node={selectedNode}></CustomizeNode>
