@@ -25,7 +25,7 @@ export const TabPanelBox = styled((props: BoxProps) => (
 function TabPanel(props: TabPanelProps) {
   const { children, value, diagramParentDimensions, index, ...other } = props;
 
-  let wrapperProps: CSSProperties = { height: '100%', width: '100%', marginTop: '1rem' };
+  let wrapperProps: CSSProperties = { height: '100%', width: '100%', marginTop: '.5rem' };
   if (props.diagramParentDimensions) {
     if (props.diagramParentDimensions.height && props.diagramParentDimensions.headerHeight && props.diagramParentDimensions.footerHeight) {
       wrapperProps.height = props.diagramParentDimensions.height - props.diagramParentDimensions.headerHeight - props.diagramParentDimensions.footerHeight - 300;

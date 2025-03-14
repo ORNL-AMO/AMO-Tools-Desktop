@@ -121,6 +121,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   processComponentType: ProcessFlowNodeType,
   className: ProcessFlowPartStyleClass,
   isValid: boolean,
+  inSystemTreatment?: WaterTreatment[],
   createdByAssessment: boolean,
   // * id for diagram targetting/sourcing
   diagramNodeId?: string,
@@ -147,6 +148,7 @@ export type DiagramNode = Node<{
   processComponentType: ProcessFlowNodeType,
   className: ProcessFlowPartStyleClass,
   isValid: boolean,
+  inSystemTreatment?: WaterTreatment[],
   createdByAssessment: boolean,
   diagramNodeId?: string,
   disableInflowConnections?: boolean,
@@ -246,8 +248,6 @@ const getDefaultHandles = (componentType?: ProcessFlowNodeType): Handles => {
 }
 
 
-
-// * Assign innate behaviors and context for Diagram parts
 export const processFlowDiagramParts: ProcessFlowPart[] = [
   {
     processComponentType: 'water-intake',
@@ -267,6 +267,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     name: 'Water Using System',
     className: 'water-using-system',
     isValid: true,
+    inSystemTreatment: [],
     userEnteredData: {
       totalDischargeFlow: undefined,
       totalSourceFlow: undefined
@@ -375,6 +376,10 @@ export const getNewProcessComponent = (processComponentType: WaterProcessCompone
     handles: { ...diagramComponent.handles }
   };
 
+  if (newProcessComponent.processComponentType === 'water-using-system') {
+    newProcessComponent.inSystemTreatment = [];
+  }
+
   return newProcessComponent;
 }
 
@@ -383,6 +388,31 @@ export const getNewNodeId = () => {
   let nodeId = `n_${getNewIdString()}`;
   return nodeId;
 }
+
+
+export const getWaterTreatmentComponent = (existingTreatment?: WaterTreatment, inSystem?: boolean): WaterTreatment => {
+    let waterTreatment: WaterTreatment;
+    let newComponent: WaterTreatment;
+    if (!existingTreatment) {
+      newComponent = getNewProcessComponent('water-treatment') as WaterTreatment;
+    } else {
+      newComponent = existingTreatment as WaterTreatment;
+    }
+    waterTreatment = {
+      ...newComponent,
+      treatmentType: newComponent.treatmentType !== undefined? newComponent.treatmentType : 0,
+      customTreatmentType: newComponent.customTreatmentType,
+      cost: newComponent.cost !== undefined? newComponent.cost : 0,
+      name: newComponent.name,
+      flowValue: newComponent.flowValue
+    };
+
+    if (inSystem) {
+      delete waterTreatment.modifiedDate
+    }
+    
+    return waterTreatment;
+  }
 
 
 export const getNewNode = (nodeType: WaterProcessComponentType, newProcessComponent: ProcessFlowPart, position?: { x: number, y: number }): Node => {

@@ -9,13 +9,14 @@ import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/Acco
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import FlowValueDisplay from "../Diagram/FlowValueDisplay";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { setNodeDataProperty } from "../Diagram/diagramReducer";
+import { nodeDataPropertyChange } from "../Diagram/diagramReducer";
 import SourceFlowForm from "./SourceFlowForm";
 import { selectNodes, selectNodeValidation, selectTotalDischargeFlow, selectTotalSourceFlow } from "../Diagram/store";
 import DischargeFlowForm from "./DischargeFlowForm";
 import InvalidIcon from "../../validation/InvalidIcon";
 import { hasValidDischargeForm, hasValidSourceForm, isValidComponent } from "../../validation/Validation";
 import { yellow } from "@mui/material/colors";
+import SelectTreatmentType from "./SelectTreatmentType";
 
 
 const theme = createTheme({
@@ -52,13 +53,11 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         componentData = componentData as ProcessFlowPart;
     }
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
-        if (props.connectedEdges.length !== 0) {
-            setExpanded(newExpanded);
-        }
+        setExpanded(newExpanded);
     };
 
     const handleTreatmentTypeChange = (event) => {
-        dispatch(setNodeDataProperty({ optionsProp: 'treatmentType', updatedValue: Number(event.target.value) }));
+        dispatch(nodeDataPropertyChange({ optionsProp: 'treatmentType', updatedValue: Number(event.target.value) }));
     };
     const hasSources = props.connectedEdges.some((edge: Edge<CustomEdgeData>) => {
         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
@@ -84,16 +83,11 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             {(isWaterTreatment || isWasteWaterTreatment) &&
                 <Box display={'flex'} flexDirection={'column'} marginBottom={'1rem'}>
                     <label htmlFor={'treatmentType'} className={'diagram-label'} style={{ fontSize: '.9rem' }}>Treatment Type</label>
-                    <select className="form-control diagram-select" id={'treatmentType'} name="treatmentType"
-                        value={defaultSelectedTreatmentType}
-                        onChange={handleTreatmentTypeChange}>
-                        {treatmentTypeOptions.map(option => {
-                            return (
-                                <option key={option.display + '' + option.value} value={option.value}>{option.display}</option>
-                            )
-                        })
-                        }
-                    </select>
+                    <SelectTreatmentType
+                        treatmentType={defaultSelectedTreatmentType}
+                        handleTreatmentTypeChange={handleTreatmentTypeChange}
+                        treatmentOptions={treatmentTypeOptions}
+                    ></SelectTreatmentType>
                 </Box>
             }
 
