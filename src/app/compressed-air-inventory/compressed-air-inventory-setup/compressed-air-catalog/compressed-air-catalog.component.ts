@@ -93,6 +93,11 @@ export class CompressedAirCatalogComponent implements OnInit {
 
   }
 
+  save() {
+    let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
+  }
+
   focusField(str: string) {
     this.compressedAirInventoryService.focusedDataGroup.next('compressed-air-basics');
     this.compressedAirInventoryService.focusedField.next(str);
@@ -134,6 +139,7 @@ export class CompressedAirCatalogComponent implements OnInit {
 
   closeCompressorModal() {
     this.showCompressorModal = false;
+    this.save();
     this.cd.detectChanges();
   }
 
