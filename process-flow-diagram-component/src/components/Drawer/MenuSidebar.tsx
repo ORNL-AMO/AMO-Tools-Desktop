@@ -106,7 +106,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 </Box>
               } />
               : 
-              <Tab sx={{ fontSize: '.75rem' }} label="Alerts" />
+              <Tab sx={{ fontSize: '.75rem' }} label="Alerts" disabled />
             }
 
           </Tabs>
@@ -139,7 +139,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             </Box>
 
           <Divider></Divider>
-          <Box sx={{ flexGrow: 1 }}>
+          {/* <Box sx={{ flexGrow: 1 }}>
             <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px' }}>Utilities</Typography>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }} paddingTop={'.25rem'}>
               <Grid item xs={1} sm={2} md={2}>
@@ -150,7 +150,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 </WaterComponent>
               </Grid>
             </Grid>
-          </Box>
+          </Box> */}
 
         </TabPanel>
 
