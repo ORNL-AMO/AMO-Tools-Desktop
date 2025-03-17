@@ -38,6 +38,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     let componentData: ProcessFlowPart = { ...props.selectedNode.data } as ProcessFlowPart;
     const isWaterTreatment = props.selectedNode.type === 'waterTreatment';
     const isWasteWaterTreatment = props.selectedNode.type === 'wasteWaterTreatment';
+    const isWaterUsingSystem = props.selectedNode.type === 'waterUsingSystem';
+    const isDischargeOutlet = props.selectedNode.type === 'waterDischarge';
     let defaultSelectedTreatmentType: number = 0;
     let treatmentTypeOptions: Array<{ value: number, display: string }> = [];
 
@@ -56,8 +58,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         setExpanded(newExpanded);
     };
 
-    const handleTreatmentTypeChange = (event) => {
-        dispatch(nodeDataPropertyChange({ optionsProp: 'treatmentType', updatedValue: Number(event.target.value) }));
+    const handleTreatmentTypeChange = (treatmentType: number) => {
+        dispatch(nodeDataPropertyChange({ optionsProp: 'treatmentType', updatedValue: treatmentType }));
     };
     const hasSources = props.connectedEdges.some((edge: Edge<CustomEdgeData>) => {
         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
@@ -81,8 +83,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1, display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row', flexWrap: 'wrap', flexBasis: '100%' }}>
             {(isWaterTreatment || isWasteWaterTreatment) &&
-                <Box display={'flex'} flexDirection={'column'} marginBottom={'1rem'}>
-                    <label htmlFor={'treatmentType'} className={'diagram-label'} style={{ fontSize: '.9rem' }}>Treatment Type</label>
+                <Box display={'flex'} flexDirection={'column'} marginBottom={'1rem'} width={'100%'}>
+                    <label htmlFor={'treatmentType'} className={'diagram-label'} style={{ fontSize: '.9rem', marginLeft: '.5rem' }}>Treatment Type</label>
                     <SelectTreatmentType
                         treatmentType={defaultSelectedTreatmentType}
                         handleTreatmentTypeChange={handleTreatmentTypeChange}
@@ -118,6 +120,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                 </Accordion>
             }
 
+            {!isDischargeOutlet &&
             <Accordion expanded={dischargeExpanded}
                 onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setDischargeExpanded)}
                 >
@@ -144,11 +147,11 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     <DischargeFlowForm></DischargeFlowForm>
                 </AccordionDetails>
             </Accordion>
-
+        }
         </Box>
         <Box sx={{ marginY: '1rem', marginLeft: '1rem', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row', flexWrap: 'wrap' }}>
             <Box sx={{ flexGrow: 1, minWidth: 0 }} />
-            {Boolean(unknownLoss)  &&
+            {Boolean(unknownLoss) && isWaterUsingSystem  &&
             <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}
                 sx={{ 
                     background: theme.palette.info.main, 

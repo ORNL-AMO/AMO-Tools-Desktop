@@ -152,7 +152,7 @@ export const getResetData = (currentState?: DiagramState): DiagramState => {
     },
     isDialogOpen: false,
     assessmentId: undefined,
-    isValidationWindowOpen: false
+    validationWindowLocation: 'diagram'
   }
 }
 

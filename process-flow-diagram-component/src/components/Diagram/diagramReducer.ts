@@ -7,7 +7,7 @@ import { CSSProperties } from 'react';
 import { getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getResetData } from './store';
 import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { FormikErrors } from 'formik';
-import { date } from 'yup';
+import { ValidationWindowLocation } from './ValidationWindow';
 
 export interface DiagramState {
   nodes: Node[];
@@ -27,7 +27,7 @@ export interface DiagramState {
   focusedEdgeId: string,
   isDialogOpen: boolean,
   assessmentId: number
-  isValidationWindowOpen: boolean
+  validationWindowLocation: ValidationWindowLocation
 }
 
 const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{ diagramData: FlowDiagramData, parentContainer: ParentContainerDimensions, assessmentId: number }>) => {
@@ -50,7 +50,7 @@ const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{
   state.selectedDataId = undefined;
   state.diagramParentDimensions = { ...parentContainer };
   state.isDialogOpen = false;
-  state.isValidationWindowOpen = false;
+  state.validationWindowLocation = 'diagram';
   state.assessmentId = assessmentId
 }
 
@@ -184,8 +184,8 @@ const nodeErrorsChangeReducer = (state: DiagramState, action: PayloadAction<{flo
 }
 
 
-const toggleValidationWindowReducer = (state: DiagramState, action: PayloadAction<boolean>) => {
-  state.isValidationWindowOpen = !state.isValidationWindowOpen;
+const validationWindowOpenChangeReducer = (state: DiagramState, action: PayloadAction<ValidationWindowLocation>) => {
+  state.validationWindowLocation = action.payload;
 }
 
 const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) => {
@@ -222,7 +222,7 @@ const deleteNodeReducer = (state: DiagramState, action: PayloadAction<string>) =
     state.nodes = state.nodes.filter((nd) => nd.id !== state.selectedDataId);
     state.edges = state.edges.filter((edge) => edge.source !== state.selectedDataId && edge.target !== state.selectedDataId);
     state.isDrawerOpen = !state.isDrawerOpen;
-    state.nodeErrors = state.nodeErrors[state.selectedDataId] = undefined;
+    delete state.nodeErrors[state.selectedDataId];
     state.selectedDataId = action.payload ? action.payload : undefined;
 };
 
@@ -397,7 +397,7 @@ export const diagramSlice = createSlice({
     sourceFlowValueChange: sourceFlowValueChangeReducer,
     totalFlowChange: totalFlowChangeReducer,
     nodeErrorsChange: nodeErrorsChangeReducer,
-    toggleValidationWindow: toggleValidationWindowReducer,
+    validationWindowOpenChange: validationWindowOpenChangeReducer,
     deleteNode: deleteNodeReducer,
     setNodeName: setNodeNameReducer,
     nodeDataPropertyChange: nodeDataPropertyChangeReducer,
@@ -442,7 +442,7 @@ export const {
   distributeTotalSourceFlow,
   distributeTotalDischargeFlow,
   nodeErrorsChange,
-  toggleValidationWindow,
+  validationWindowOpenChange,
   updateNodeHandles,
   deleteEdge,
   focusedEdgeChange,

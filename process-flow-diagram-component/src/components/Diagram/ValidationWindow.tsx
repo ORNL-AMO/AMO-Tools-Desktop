@@ -4,53 +4,45 @@ import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { Node } from '@xyflow/react';
 import { selectNodes } from "./store";
-import { toggleDrawer, toggleValidationWindow } from "./diagramReducer";
+import { toggleDrawer, validationWindowOpenChange } from "./diagramReducer";
 import InvalidIcon from "../../validation/InvalidIcon";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { useState } from "react";
-import NotificationsPausedIcon from '@mui/icons-material/NotificationsPaused';
+import EastIcon from '@mui/icons-material/East';
+import WestIcon from '@mui/icons-material/West';
 
 const ValidationWindow = () => {
   const dispatch = useAppDispatch();
   const nodes: Node[] = useAppSelector(selectNodes);
   const errors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
-  const isWindowOpen = useAppSelector((state) => state.diagram.isValidationWindowOpen);
-  
-  const isDiagramValid = getIsDiagramValid(errors);
-  const [isSilenced, setIsSilenced] = useState(false);
+  const openLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const toggleWindow = () => {
-    dispatch(toggleValidationWindow());
+  const handleSetOpenLocation = (state: ValidationWindowLocation) => {
+    dispatch(validationWindowOpenChange(state));
   }
 
   const handleFixIssue = (nodeId: string) => {
-    toggleWindow();
-    // * allow window close or new state causes rerender
-    setTimeout(() => {
       dispatch(toggleDrawer(nodeId));
-    }, 150);
   }
 
-  const handleSilenceAlerts = () => {
-    setIsSilenced(!isSilenced);
-  }
 
   const hasErrorLevel = getHasErrorLevel(errors);
   const maxAlertlevel = hasErrorLevel ? 'error' : 'warning';
   const alertLevelColor = `${maxAlertlevel}.light`;
+
+  let windowPositionProps = {
+    position: "absolute",
+    left: 450,
+    top: 90,
+    width: 400,
+    zIndex: 999,
+  }
+
   return (
-    <>
-      {!isDiagramValid && !isSilenced &&
         <Box
-          sx={{
-            position: "absolute",
-            left: 400,
-            top: 90,
-            width: 500,
-            zIndex: 999,
-          }}
+          sx={openLocation === 'diagram' ? windowPositionProps : undefined}
         >
           <Paper
             elevation={6}
@@ -59,16 +51,16 @@ const ValidationWindow = () => {
               flexDirection: "column",
               overflowY: "auto",
               borderRadius: 2,
-              boxShadow: 3,
+              boxShadow: openLocation === 'diagram' ? 3 : 'none',
               border: "1px solid",
               borderColor: alertLevelColor,
-              maxHeight: '350px',
+              maxHeight: '500px',
             }}
           >
 
             <Box display={'flex'} justifyContent={'space-between'} sx={{ paddingLeft: '1rem', 
               backgroundColor: hasErrorLevel? '#ffebee' : '#fff3e0', 
-              minHeight: '50px'
+              minHeight: '60px'
               }} >
               <Box display={'flex'} alignItems={'center'}>
                 <InvalidIcon level={maxAlertlevel} useOutline={true}></InvalidIcon>
@@ -83,35 +75,22 @@ const ValidationWindow = () => {
               </Box>
 
               <Box display={'flex'} alignItems={'center'}>
-                <SmallTooltip title="Hide alert window while building. Alerts can still be viewed in the Help tab." slotProps={{
-                    popper: {
-                        disablePortal: true,
-                    }
-                }}>
-                  <Stack alignItems={'center'}>
-                    <Button onClick={handleSilenceAlerts} sx={{ color: `${maxAlertlevel}.dark`, minWidth: '1rem' }}>
-                      <NotificationsPausedIcon style={{ scale: '.9' }}></NotificationsPausedIcon>
-                    </Button>
-                    {/* <Typography variant="body2" sx={{ fontSize: '.75rem', color: `${maxAlertlevel}.dark` }}>
-                      Hide Alerts
-                    </Typography> */}
-                  </Stack>
-                </SmallTooltip>
-                <Button onClick={toggleWindow} sx={{ color: `${maxAlertlevel}.dark`, minWidth: '64px' }}>
-                  {isWindowOpen ? <ExpandLessIcon style={{ scale: '1.25' }}></ExpandLessIcon> : <ExpandMoreIcon style={{ scale: '1.25' }}></ExpandMoreIcon>}
-                </Button>
+                {openLocation === 'diagram' &&
+                  <Button onClick={() => setIsCollapsed(!isCollapsed)} sx={{ color: `${maxAlertlevel}.dark`, minWidth: '64px' }}>
+                    {isCollapsed? <ExpandLessIcon style={{ scale: '1.25' }}></ExpandLessIcon> : <ExpandMoreIcon style={{ scale: '1.25' }}></ExpandMoreIcon>}
+                  </Button>
+                }
               </Box>
             </Box>
 
             <Collapse
-              in={isWindowOpen}
+              in={!isCollapsed || openLocation === 'alerts-tab'}
               timeout={100}
               unmountOnExit
               sx={{ flexGrow: 1, maxHeight: "inherit" }}
             >
-              <Stack spacing={1} sx={{ p: ".5rem .25rem", overflowY: "auto", maxHeight: "calc(300px - 50px)" }}>
-                {!isDiagramValid &&
-                  Object.entries(errors).map(([key, errors]: [string, NodeFlowTypeErrors]) => {
+              <Stack spacing={1} sx={{ p: ".5rem .25rem", overflowY: "auto", maxHeight: "calc(440px - 60px)" }}>
+                  {Object.entries(errors).map(([key, errors]: [string, NodeFlowTypeErrors]) => {
                     const node: Node<ProcessFlowPart> = nodes.find((n) => n.id === key) as Node<ProcessFlowPart>;
                     if (node) {
                       const name = node.data.name || "Unnamed Component";
@@ -153,12 +132,31 @@ const ValidationWindow = () => {
                   })}
               </Stack>
             </Collapse>
-
+            <Stack display={'flex'} flexDirection={'row'} alignItems={'center'} padding={'.5rem'}>
+              {openLocation === 'diagram' ?
+                <>
+                  <Button onClick={(e) => handleSetOpenLocation('alerts-tab')} variant="outlined" color={maxAlertlevel} sx={{ color: `${maxAlertlevel}.dark`, minWidth: '1rem', width: '100%' }}>
+                    <WestIcon style={{ scale: '.9' }}></WestIcon>
+                    <Typography variant="body2" marginX={'.25rem'} sx={{ fontSize: '.75rem', color: `${maxAlertlevel}.dark` }}>
+                      Dismiss to Alerts tab
+                    </Typography>
+                  </Button>
+                </>
+                :
+                <>
+                  <Button onClick={(e) => handleSetOpenLocation('diagram')} variant="outlined" color={maxAlertlevel} sx={{ color: `${maxAlertlevel}.dark`, minWidth: '1rem', width: '100%' }}>
+                    <Typography variant="body2" marginX={'.25rem'} sx={{ fontSize: '.75rem', color: `${maxAlertlevel}.dark` }}>
+                      View over Diagram
+                    </Typography>
+                    <EastIcon style={{ scale: '.9' }}></EastIcon>
+                  </Button>
+                </>
+              }
+            </Stack>
           </Paper>
         </Box>
-      }
-    </>
   );
 };
 
 export default ValidationWindow;
+export type ValidationWindowLocation = 'diagram' | 'alerts-tab' ;

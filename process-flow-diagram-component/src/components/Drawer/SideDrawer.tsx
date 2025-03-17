@@ -12,7 +12,7 @@ import DrawerToggleButton from './DrawerToggleButton';
 import { useAppSelector } from '../../hooks/state';
 import { selectHasAssessment } from '../Diagram/store';
 
-const drawerWidth = 375;
+const drawerWidth = 425;
 
 const openedMixin = (theme: Theme, parentContainer: ParentContainerDimensions, animationProps): CSSObject => {
   let duration = theme.transitions.duration.enteringScreen;
@@ -25,6 +25,7 @@ const openedMixin = (theme: Theme, parentContainer: ParentContainerDimensions, a
     easing: theme.transitions.easing.sharp,
     duration: duration,
   }),
+  zIndex: 'auto',
   top: parentContainer.headerHeight,
   height: parentContainer.height - parentContainer.headerHeight - parentContainer.footerHeight,
   boxShadow: '0 0 5px 0 rgba(136, 136, 136, .6)',

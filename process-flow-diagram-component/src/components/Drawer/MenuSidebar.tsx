@@ -1,6 +1,6 @@
 import React, { ChangeEvent, memo, useState } from 'react';
-import { ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { Box, Button, Divider, Grid, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography } from '@mui/material';
+import { NodeErrors, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { Box, Button, Chip, Divider, Grid, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
@@ -9,6 +9,10 @@ import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { defaultEdgeTypeChange, diagramOptionsChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
 import { RootState, selectHasAssessment } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
+import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { getIsDiagramValid } from '../../validation/Validation';
+import { blue } from '@mui/material/colors';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
@@ -21,6 +25,7 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
 }));
 
 const MenuSidebar = memo((props: MenuSidebarProps) => {
+  const theme = useTheme();
   const dispatch = useAppDispatch();
 
   const diagramParentDimensions: ParentContainerDimensions = useAppSelector((state: RootState) => state.diagram.diagramParentDimensions);
@@ -38,6 +43,9 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   
   const flowDecimalPrecision = useAppSelector((state: RootState) => state.diagram.settings.flowDecimalPrecision);
   const unitsOfMeasure = useAppSelector((state: RootState) => state.diagram.settings.unitsOfMeasure);
+  const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
+  const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
+  const isDiagramValid = getIsDiagramValid(nodeErrors);
 
   const [selectedTab, setSelectedTab] = useState(0);
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
@@ -67,6 +75,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   };
 
   const summingNode = processFlowParts.pop();
+  const alertsCount = Object.entries(nodeErrors).length > 0 ? Object.entries(nodeErrors).length : '';
 
   return (
     <Box sx={{
@@ -83,8 +92,26 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             <Tab sx={{ fontSize: '.75rem' }} label="Build" />
             <Tab sx={{ fontSize: '.75rem' }} label="Options" />
             <Tab sx={{ fontSize: '.75rem' }} label="Help" />
+            {!isDiagramValid && validationWindowLocation === 'alerts-tab'? 
+              <Tab sx={{ fontSize: '.75rem' }} label={
+                <Box display={'block'}>
+                  <Chip
+                    icon={
+                      <NotificationsIcon sx={{ width: '.75em', color: selectedTab === 3? `${theme.palette.primary.main} !important` : 'inherit' }} />}
+                    sx={{ backgroundColor: selectedTab === 3 ? blue[50] : '#ececec'}
+                    }
+                    label={<Typography variant="subtitle1" component={'span'} sx={{fontSize: '.75rem',  color: selectedTab === 3? `${theme.palette.primary.main} !important` : '#616161' }}>{alertsCount}</Typography>}
+                  />
+                <Typography variant="subtitle1" component={'span'} sx={{fontSize: '.75rem', marginLeft: '.25rem', color: selectedTab === 3? `${theme.palette.primary.main} !important` : '#inherit'}}>Alerts</Typography>
+                </Box>
+              } />
+              : 
+              <Tab sx={{ fontSize: '.75rem' }} label="Alerts" />
+            }
+
           </Tabs>
         </Box>
+
         <TabPanel value={selectedTab} index={0} >
           <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', padding: '.5rem', marginTop: '.5rem', whiteSpace: "normal" }}>
             Drag plant water system components into the pane
@@ -288,6 +315,14 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 })}
               </List>
             </Box>
+          </Box>
+        </TabPanel>
+
+        <TabPanel value={selectedTab} index={3}>
+          <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
+                {!isDiagramValid && validationWindowLocation === 'alerts-tab' &&
+                  <ValidationWindow></ValidationWindow>
+                }
           </Box>
         </TabPanel>
 
