@@ -50,7 +50,8 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties,
   centrifugalSpecifics: CentrifugalSpecifics,
   fieldMeasurements: FieldMeasurements;
-  validCompressedAir?: ValidCompressedAir
+  validCompressedAir?: ValidCompressedAir,
+  compressorLibId?: number,
 }
 
 export interface ValidCompressedAir {

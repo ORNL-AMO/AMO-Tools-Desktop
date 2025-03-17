@@ -1,11 +1,24 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirItem } from '../../../../compressed-air-inventory';
+import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
 import { Settings } from '../../../../../shared/models/settings';
 
 @Injectable()
 export class UnloadPointCatalogService {
 
   constructor() { }
+
+  setUnload(selectedCompressor: CompressedAirItem, settings: Settings): PerformancePoint {
+    if (selectedCompressor.nameplateData.compressorType == 6) {
+      selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.isDefaultPressure, settings);
+      selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.airflow = this.getUnloadAirFlow(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.isDefaultAirFlow, settings);
+    } else {
+      //non centrifugal calcs need airflow calc first, discharge pressure uses value
+      selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.airflow = this.getUnloadAirFlow(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.isDefaultAirFlow, settings);
+      selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.dischargePressure = this.getUnloadPressure(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.isDefaultPressure, settings);
+    }
+    selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.power = this.getUnloadPower(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.isDefaultPower);
+    return selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint;
+  }
 
   getUnloadAirFlow(selectedCompressor: CompressedAirItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {
