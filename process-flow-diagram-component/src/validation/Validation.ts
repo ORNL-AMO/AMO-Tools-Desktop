@@ -15,7 +15,7 @@ export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge'
                     return `Total ${flowLabel} Flow must equal the sum of all flow values`
                 },
                 (value) => {
-                    const isValid = validateTotalFlowValue(totalCalculatedFlow, value)
+                    const isValid = validateTotalFlowValue(totalCalculatedFlow, value);
                     return isValid;
                 },
             ),

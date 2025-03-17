@@ -85,6 +85,10 @@ export default function ComponentHandles({ node }: ComponentHandlesProps) {
             alt={'component-handles'}
             style={{
               width: '330px',
+              display: 'block',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              marginBottom: '1rem'
             }}
           />
 

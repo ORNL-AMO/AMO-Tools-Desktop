@@ -26,7 +26,8 @@ import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { AppStore, configureAppStore, RootState, selectEdges, selectIsDrawerOpen, selectNodes } from './store';
 import { Provider } from 'react-redux';
 import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, keyboardDeleteNode, nodesChange } from './diagramReducer';
-import ValidationWindow from './ValidationWindow';
+import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
+import { getIsDiagramValid } from '../../validation/Validation';
 
 
 export interface DiagramProps {
@@ -61,6 +62,10 @@ const Diagram = (props: DiagramProps) => {
   const controlsVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.controlsVisible);
   const defaultEdgeType: string = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
+  const isDiagramValid = getIsDiagramValid(nodeErrors);
+
+  const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
+
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {
     return getEdgeTypesFromString(state.diagram.diagramOptions.edgeType, edgeTypes);
   });
@@ -151,7 +156,9 @@ const Diagram = (props: DiagramProps) => {
             isDialogOpen={isDialogOpen}/>
         }
 
-      <ValidationWindow/>
+              {!isDiagramValid && validationWindowLocation === 'diagram' &&
+                <ValidationWindow></ValidationWindow>
+              }
         <ReactFlowProvider>
           <div className={'flow-wrapper'} style={{ height: props.height }}>
             <ReactFlow
