@@ -161,7 +161,17 @@ export const MockCompressedAirInventory: InventoryItem = {
             compressedAirPerformancePointsPropertiesOptions: {
                 displayCompressedAirPerformancePointsProperties: true
             }
-        }
+        },
+        endUses: [
+            {
+                "endUseId": "x22ow6wc6",
+                "modifiedDate": new Date("2022-08-03T21:07:29.942Z"),
+                "endUseName": "Pneumatic Tools 1",
+                "requiredPressure": 95,
+                "location": "Production Line 1",
+                "endUseDescription": "Total of all hand tools found on production line 1",                
+            },
+        ]
     },
     "createdDate": new Date(),
     "modifiedDate": new Date(),

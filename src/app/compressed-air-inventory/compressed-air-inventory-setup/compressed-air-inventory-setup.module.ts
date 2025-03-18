@@ -17,6 +17,7 @@ import { SystemCapacityInventoryModalComponent } from './plant-setup/system-capa
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SystemCapacityModule } from '../../calculator/compressed-air/system-capacity/system-capacity.module';
 import { EndUsesSetupComponent } from './end-uses-setup/end-uses-setup.component';
+import { EndUsesService } from './end-uses-setup/end-uses.service';
 
 
 
@@ -43,6 +44,9 @@ import { EndUsesSetupComponent } from './end-uses-setup/end-uses-setup.component
     CompressedAirPropertiesModule,
     CompressedAirCatalogModule,
     SystemCapacityModule
+  ],
+  providers: [
+    EndUsesService
   ],
   exports: [
     CompressedAirInventorySetupComponent

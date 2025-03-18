@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
-import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem, CompressedAirPropertyDisplayOptions, SystemInformation, ValidCompressedAir } from './compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem, CompressedAirPropertyDisplayOptions, EndUse, SystemInformation, ValidCompressedAir } from './compressed-air-inventory';
 import { FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { CentrifugalSpecificsCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/centrifugal-specifics-catalog/centrifugal-specifics-catalog.service';
@@ -61,11 +61,27 @@ export class CompressedAirInventoryService {
     let initialSystem: CompressedAirInventorySystem = this.getNewSystem(1);
     let displayOptions: CompressedAirPropertyDisplayOptions = this.getDefaultDisplayOptions();
     let systemInformation: SystemInformation = this.getSystemInformation();
+    let endUses: Array<EndUse> = new Array<EndUse>;
     return {
       systemInformation: systemInformation,
       systems: [initialSystem],
-      displayOptions: displayOptions
+      displayOptions: displayOptions,
+      endUses: endUses
     }
+  }
+
+  getEndUses(): Array<EndUse> {
+    return [
+      {
+        endUseId: Math.random().toString(36).substr(2, 9),
+        modifiedDate: new Date("2022-08-03T21:07:29.942Z"),
+        endUseName: "Pneumatic Tools 1",
+        requiredPressure: 95,
+        location: "Production Line 1",
+        endUseDescription: "Total of all hand tools found on production line 1",
+      }
+    ]
+
   }
 
   getSystemInformation(): SystemInformation {
@@ -100,16 +116,16 @@ export class CompressedAirInventoryService {
     let compressedAirMotorForm: FormGroup = this.compressedAirMotorCatalogService.getFormFromMotorProperties(compressor.compressedAirMotor);
     let controlsForm: FormGroup = this.compressedAirControlsCatalogService.getFormFromControlsProperties(compressor.compressedAirControlsProperties, compressor.nameplateData.compressorType);
     let designDetailsForm: FormGroup = this.designDetailsCatalogService.getFormFromDesignDetails(compressor.compressedAirDesignDetailsProperties, compressor.nameplateData.compressorType, compressor.compressedAirControlsProperties.controlType);
-    let fieldMeasurementsForm: FormGroup =this.fieldMeasurementsCatalogService.getFormFromFieldMeasurements(compressor.fieldMeasurements);
+    let fieldMeasurementsForm: FormGroup = this.fieldMeasurementsCatalogService.getFormFromFieldMeasurements(compressor.fieldMeasurements);
     let centrifugalSpecificsFormIsValid: boolean
     let centrifugalSpecificsForm: UntypedFormGroup = this.centrifugalSpecificsCatalogService.getCentrifugalFormFromObj(compressor);
-    if (compressor.nameplateData.compressorType == 6){
+    if (compressor.nameplateData.compressorType == 6) {
       centrifugalSpecificsFormIsValid = centrifugalSpecificsForm.valid;
     } else {
       centrifugalSpecificsFormIsValid = true;
     }
     let performancePointsIsValid: boolean = this.performancePointsCatalogService.checkPerformancePointsValid(compressor, compressedAirInventoryData.systemInformation);
-     
+
     return {
       isValid: nameplateDataForm.valid && compressedAirMotorForm.valid && controlsForm.valid && designDetailsForm.valid && centrifugalSpecificsFormIsValid && fieldMeasurementsForm.valid && performancePointsIsValid,
       nameplateDataValid: nameplateDataForm.valid,
