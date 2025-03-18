@@ -4,7 +4,7 @@ import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange,
 import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { createNewNode, formatDataForMEASUR, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
 import { CSSProperties } from 'react';
-import { getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getResetData } from './store';
+// import { getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getResetData } from './store';
 import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
@@ -29,6 +29,64 @@ export interface DiagramState {
   assessmentId: number
   validationWindowLocation: ValidationWindowLocation
 }
+
+export const getStoreSerializedDate = (dateObject: Date): string => {
+  return dateObject.toISOString();
+}
+
+
+// helpers
+export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
+  return {
+    strokeWidth: 2,
+    edgeType: 'smoothstep',
+    minimapVisible: false,
+    controlsVisible: true,
+    directionalArrowsVisible: true,
+    showFlowLabels: false,
+    flowLabelSize: 1,
+    animated: true,
+  }
+}
+
+export const getDefaultSettings = (): DiagramSettings => {
+  return {
+    unitsOfMeasure: 'Imperial',
+    flowDecimalPrecision: 2
+  }
+}
+
+export const getDefaultColorPalette = () => {
+  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#93e200'];
+}
+
+export const getResetData = (currentState?: DiagramState): DiagramState => {
+  return {
+    nodes: [],
+    edges: [],
+    composedNodeData: [],
+    settings: getDefaultSettings(),
+    diagramOptions: getDefaultUserDiagramOptions(),
+    isDrawerOpen: false,
+    selectedDataId: undefined,
+    focusedEdgeId: undefined,
+    calculatedData: {nodes: {}},
+    nodeErrors: {},
+    recentEdgeColors: getDefaultColorPalette(),
+    recentNodeColors: getDefaultColorPalette(),
+    diagramParentDimensions: {
+      height: currentState?.diagramParentDimensions?.height,
+      headerHeight: currentState?.diagramParentDimensions?.headerHeight,
+      footerHeight: currentState?.diagramParentDimensions?.footerHeight
+    },
+    isDialogOpen: false,
+    assessmentId: undefined,
+    validationWindowLocation: 'diagram'
+  }
+}
+
+
+
 
 const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{ diagramData: FlowDiagramData, parentContainer: ParentContainerDimensions, assessmentId: number }>) => {
   const { diagramData, parentContainer, assessmentId } = action.payload;
@@ -387,6 +445,28 @@ const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<
 export const diagramSlice = createSlice({
   name: 'diagram',
   initialState: getResetData(),
+  // initialState: {
+  //   nodes: [],
+  //   edges: [],
+  //   composedNodeData: [],
+  //   settings: {},
+  //   diagramOptions: {},
+  //   isDrawerOpen: false,
+  //   selectedDataId: undefined,
+  //   focusedEdgeId: undefined,
+  //   calculatedData: {nodes: {}},
+  //   nodeErrors: {},
+  //   recentEdgeColors: [],
+  //   recentNodeColors: [],
+  //   diagramParentDimensions: {
+  //     height: undefined,
+  //     headerHeight: undefined,
+  //     footerHeight: undefined
+  //   },
+  //   isDialogOpen: false,
+  //   assessmentId: undefined,
+  //   validationWindowLocation: 'diagram'
+  // },
   reducers: {
     resetDiagram: resetDiagramReducer,
     diagramParentRender: diagramParentRenderReducer,
@@ -513,8 +593,4 @@ const removeFlowErrors = (state: DiagramState, flowType: FlowType) => {
   if (Object.entries(state.nodeErrors[state.selectedDataId]).every(([, value]) => value === undefined)) {
     delete state.nodeErrors[state.selectedDataId];
   }
-}
-
-export const getStoreSerializedDate = (dateObject: Date): string => {
-  return dateObject.toISOString();
 }

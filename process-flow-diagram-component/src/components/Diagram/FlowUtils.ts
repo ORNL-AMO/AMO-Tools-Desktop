@@ -1,7 +1,6 @@
-import { Connection, Edge, MarkerType, Node, ReactFlowInstance, addEdge } from "reactflow";
 import { edgeTypes, nodeTypes } from "./FlowTypes";
 import { CustomEdgeData, getNewNode, getNewNodeId, getNewProcessComponent, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, DiagramSettings, FlowDiagramData, DiagramCalculatedData, NodeFlowData } from "../../../../src/process-flow-types/shared-process-flow-types";
-import { DefaultEdgeOptions, EdgeTypes } from "@xyflow/react";
+import { DefaultEdgeOptions, EdgeTypes, ReactFlowInstance, Node, Edge, Connection, MarkerType } from "@xyflow/react";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
@@ -167,10 +166,10 @@ export const getEdgeSourceAndTarget = (edge: Edge, nodes: Node[]) => {
 
   nodes.forEach((node: Node) => {
     if (node.id === edge.source) {
-      source = node.data;
+      source = node.data as ProcessFlowPart;
     }
     if (node.id === edge.target) {
-      target = node.data;
+      target = node.data  as ProcessFlowPart;
     }
   });
 

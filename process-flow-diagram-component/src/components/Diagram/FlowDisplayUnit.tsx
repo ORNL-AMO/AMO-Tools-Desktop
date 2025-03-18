@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react'; 
+import React, { CSSProperties, JSX } from 'react'; 
 import { useAppSelector } from '../../hooks/state';
 
 const FlowDisplayUnit = ({style}: {style?: CSSProperties}): JSX.Element => {

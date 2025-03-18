@@ -9,7 +9,29 @@ export function configureAppStore() {
   const store = configureStore({
     reducer: { diagram: diagramReducer },
     preloadedState: {
-      diagram: getResetData()
+      // diagram: getResetData(),
+      diagram: {
+        nodes: [],
+        edges: [],
+        composedNodeData: [],
+        settings: {},
+        diagramOptions: {},
+        isDrawerOpen: false,
+        selectedDataId: undefined,
+        focusedEdgeId: undefined,
+        calculatedData: {nodes: {}},
+        nodeErrors: {},
+        recentEdgeColors: [],
+        recentNodeColors: [],
+        diagramParentDimensions: {
+          height: undefined,
+          headerHeight: undefined,
+          footerHeight: undefined
+        },
+        isDialogOpen: false,
+        assessmentId: undefined,
+        validationWindowLocation: 'diagram'
+      }
     },
     middleware: (getDefaultMiddleware) => {
       const listenerMiddleware = createListenerMiddleware();
@@ -106,54 +128,54 @@ export const selectNodeFlowTotals = (state: RootState, node: Node<ProcessFlowPar
 }
 
 
-// helpers
-export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
-  return {
-    strokeWidth: 2,
-    edgeType: 'smoothstep',
-    minimapVisible: false,
-    controlsVisible: true,
-    directionalArrowsVisible: true,
-    showFlowLabels: false,
-    flowLabelSize: 1,
-    animated: true,
-  }
-}
+// // helpers
+// export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
+//   return {
+//     strokeWidth: 2,
+//     edgeType: 'smoothstep',
+//     minimapVisible: false,
+//     controlsVisible: true,
+//     directionalArrowsVisible: true,
+//     showFlowLabels: false,
+//     flowLabelSize: 1,
+//     animated: true,
+//   }
+// }
 
-export const getDefaultSettings = (): DiagramSettings => {
-  return {
-    unitsOfMeasure: 'Imperial',
-    flowDecimalPrecision: 2
-  }
-}
+// export const getDefaultSettings = (): DiagramSettings => {
+//   return {
+//     unitsOfMeasure: 'Imperial',
+//     flowDecimalPrecision: 2
+//   }
+// }
 
-export const getDefaultColorPalette = () => {
-  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#93e200'];
-}
+// export const getDefaultColorPalette = () => {
+//   return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#93e200'];
+// }
 
-export const getResetData = (currentState?: DiagramState): DiagramState => {
-  return {
-    nodes: [],
-    edges: [],
-    composedNodeData: [],
-    settings: getDefaultSettings(),
-    diagramOptions: getDefaultUserDiagramOptions(),
-    isDrawerOpen: false,
-    selectedDataId: undefined,
-    focusedEdgeId: undefined,
-    calculatedData: {nodes: {}},
-    nodeErrors: {},
-    recentEdgeColors: getDefaultColorPalette(),
-    recentNodeColors: getDefaultColorPalette(),
-    diagramParentDimensions: {
-      height: currentState?.diagramParentDimensions?.height,
-      headerHeight: currentState?.diagramParentDimensions?.headerHeight,
-      footerHeight: currentState?.diagramParentDimensions?.footerHeight
-    },
-    isDialogOpen: false,
-    assessmentId: undefined,
-    validationWindowLocation: 'diagram'
-  }
-}
+// export const getResetData = (currentState?: DiagramState): DiagramState => {
+//   return {
+//     nodes: [],
+//     edges: [],
+//     composedNodeData: [],
+//     settings: getDefaultSettings(),
+//     diagramOptions: getDefaultUserDiagramOptions(),
+//     isDrawerOpen: false,
+//     selectedDataId: undefined,
+//     focusedEdgeId: undefined,
+//     calculatedData: {nodes: {}},
+//     nodeErrors: {},
+//     recentEdgeColors: getDefaultColorPalette(),
+//     recentNodeColors: getDefaultColorPalette(),
+//     diagramParentDimensions: {
+//       height: currentState?.diagramParentDimensions?.height,
+//       headerHeight: currentState?.diagramParentDimensions?.headerHeight,
+//       footerHeight: currentState?.diagramParentDimensions?.footerHeight
+//     },
+//     isDialogOpen: false,
+//     assessmentId: undefined,
+//     validationWindowLocation: 'diagram'
+//   }
+// }
 
 

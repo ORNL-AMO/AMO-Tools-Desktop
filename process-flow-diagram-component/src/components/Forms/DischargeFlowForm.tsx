@@ -29,7 +29,7 @@ const DischargeFlowForm = () => {
     const theme = useTheme();
     const dispatch = useAppDispatch();
     const nodes: Node[] = useAppSelector(selectNodes);
-    const componentDischargeEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeTargetEdges);
+    const componentDischargeEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeTargetEdges) as Edge<CustomEdgeData>[];
     const selectedDataId = useAppSelector((state) => state.diagram.selectedDataId);
     const [inPercent, setInPercent] = useState<boolean>(false);
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
