@@ -26,7 +26,7 @@ const ManageComponent = (props: ManageComponentProps) => {
     const [connectedEdges, setConnectedEdges] = useState<Edge[]>(allNodeEdges);
     const [selectedTab, setSelectedTab] = useState(0);
     const [name, setName] = useState<string>(selectedNode.data.name);
-    const debounceRef = useRef<any>(null);
+    const debounceRef = useRef(null);
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setSelectedTab(newValue);
     };

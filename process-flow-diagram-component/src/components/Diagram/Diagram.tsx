@@ -38,7 +38,6 @@ export interface DiagramProps {
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
 }
 
-export const RootDiagramContext = createContext(null);
 
 const Diagram = (props: DiagramProps) => {
   const dispatch = useAppDispatch();
@@ -217,6 +216,7 @@ export default (props: DiagramProps) => {
   if (!storeRef.current) {
     storeRef.current = configureAppStore();
   }
+  // const storeRef = useMemo(() => configureAppStore(), []);
 
   return (
   <Provider store={storeRef.current}>

@@ -16,8 +16,8 @@ import { Formik, Form, FieldArray, useFormikContext } from 'formik';
 import { FlowForm, getDefaultFlowValidationSchema, TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR } from "../../validation/Validation";
 import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
-import { ObjectSchema } from "yup";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
+import { ObjectSchema } from "yup";
 
 /**
    * Formik is used for validation only, while source of truth for values is redux store. This avoids state race conditions when rendering.
@@ -27,7 +27,7 @@ const SourceFlowForm = () => {
     const theme = useTheme();
     const dispatch = useAppDispatch();
     const nodes: Node[] = useAppSelector(selectNodes);
-    const componentSourceEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeSourceEdges);
+    const componentSourceEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeSourceEdges) as Edge<CustomEdgeData>[];
     const selectedDataId = useAppSelector((state) => state.diagram.selectedDataId);
     const [inPercent, setInPercent] = useState<boolean>(false);
     const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
@@ -145,7 +145,6 @@ const SourceFlowForm = () => {
                 );
             }}
         </Formik>
-
     );
 
 }

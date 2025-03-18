@@ -1,7 +1,7 @@
 import { Box, FormControlLabel, FormGroup, FormLabel, Stack, Switch } from '@mui/material';
 import { Node, useUpdateNodeInternals } from '@xyflow/react';
 import { Handles, ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary } from '../StyledMUI/AccordianComponents';
 import { useAppDispatch } from '../../hooks/state';
 import { updateNodeHandles } from '../Diagram/diagramReducer';
