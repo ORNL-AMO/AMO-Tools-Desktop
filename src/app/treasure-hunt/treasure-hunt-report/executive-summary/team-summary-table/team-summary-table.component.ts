@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
-  selector: 'app-team-summary-table',
-  templateUrl: './team-summary-table.component.html',
-  styleUrls: ['./team-summary-table.component.css']
+    selector: 'app-team-summary-table',
+    templateUrl: './team-summary-table.component.html',
+    styleUrls: ['./team-summary-table.component.css'],
+    standalone: false
 })
 export class TeamSummaryTableComponent implements OnInit {
   @Input()

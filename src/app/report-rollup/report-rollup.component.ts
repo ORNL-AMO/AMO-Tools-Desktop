@@ -8,9 +8,10 @@ import { PrintOptionsMenuService } from '../shared/print-options-menu/print-opti
 import { ReportSummaryGraphsService } from './report-summary-graphs/report-summary-graphs.service';
 
 @Component({
-  selector: 'app-report-rollup',
-  templateUrl: './report-rollup.component.html',
-  styleUrls: ['./report-rollup.component.css']
+    selector: 'app-report-rollup',
+    templateUrl: './report-rollup.component.html',
+    styleUrls: ['./report-rollup.component.css'],
+    standalone: false
 })
 export class ReportRollupComponent implements OnInit {
 

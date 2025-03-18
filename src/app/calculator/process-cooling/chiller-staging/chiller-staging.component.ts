@@ -9,9 +9,10 @@ import { ChillerStagingService } from './chiller-staging.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-chiller-staging',
-  templateUrl: './chiller-staging.component.html',
-  styleUrls: ['./chiller-staging.component.css']
+    selector: 'app-chiller-staging',
+    templateUrl: './chiller-staging.component.html',
+    styleUrls: ['./chiller-staging.component.css'],
+    standalone: false
 })
 export class ChillerStagingComponent implements OnInit {
   @Input()

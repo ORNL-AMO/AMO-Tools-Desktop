@@ -3,9 +3,10 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 
 
 @Component({
-  selector: 'app-welcome-screen',
-  templateUrl: './welcome-screen.component.html',
-  styleUrls: ['./welcome-screen.component.css']
+    selector: 'app-welcome-screen',
+    templateUrl: './welcome-screen.component.html',
+    styleUrls: ['./welcome-screen.component.css'],
+    standalone: false
 })
 export class WelcomeScreenComponent implements OnInit {
   @Output('emitClose')

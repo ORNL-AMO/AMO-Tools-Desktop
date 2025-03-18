@@ -5,9 +5,10 @@ import * as _ from 'lodash';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 import { LogToolDataService } from '../../log-tool-data.service';
 @Component({
-  selector: 'app-day-type-calendar',
-  templateUrl: './day-type-calendar.component.html',
-  styleUrls: ['./day-type-calendar.component.css']
+    selector: 'app-day-type-calendar',
+    templateUrl: './day-type-calendar.component.html',
+    styleUrls: ['./day-type-calendar.component.css'],
+    standalone: false
 })
 export class DayTypeCalendarComponent implements OnInit {
 

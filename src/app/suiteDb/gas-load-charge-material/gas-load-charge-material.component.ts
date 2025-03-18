@@ -9,9 +9,10 @@ import { GasLoadMaterialDbService } from '../../indexedDb/gas-load-material-db.s
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-gas-load-charge-material',
-  templateUrl: './gas-load-charge-material.component.html',
-  styleUrls: ['./gas-load-charge-material.component.css']
+    selector: 'app-gas-load-charge-material',
+    templateUrl: './gas-load-charge-material.component.html',
+    styleUrls: ['./gas-load-charge-material.component.css'],
+    standalone: false
 })
 export class GasLoadChargeMaterialComponent implements OnInit {
   @Output('closeModal')

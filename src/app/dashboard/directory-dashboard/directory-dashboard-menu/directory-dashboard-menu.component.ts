@@ -13,9 +13,10 @@ import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-directory-dashboard-menu',
-  templateUrl: './directory-dashboard-menu.component.html',
-  styleUrls: ['./directory-dashboard-menu.component.css']
+    selector: 'app-directory-dashboard-menu',
+    templateUrl: './directory-dashboard-menu.component.html',
+    styleUrls: ['./directory-dashboard-menu.component.css'],
+    standalone: false
 })
 export class DirectoryDashboardMenuComponent implements OnInit { 
 

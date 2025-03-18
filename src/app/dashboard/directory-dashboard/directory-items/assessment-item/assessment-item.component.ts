@@ -18,9 +18,10 @@ import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { PsatIntegrationService } from '../../../../shared/connected-inventory/psat-integration.service';
 
 @Component({
-  selector: 'app-assessment-item',
-  templateUrl: './assessment-item.component.html',
-  styleUrls: ['./assessment-item.component.css']
+    selector: 'app-assessment-item',
+    templateUrl: './assessment-item.component.html',
+    styleUrls: ['./assessment-item.component.css'],
+    standalone: false
 })
 export class AssessmentItemComponent implements OnInit {
   @Input()

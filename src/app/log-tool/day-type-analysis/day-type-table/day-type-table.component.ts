@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 @Component({
-  selector: 'app-day-type-table',
-  templateUrl: './day-type-table.component.html',
-  styleUrls: ['./day-type-table.component.css']
+    selector: 'app-day-type-table',
+    templateUrl: './day-type-table.component.html',
+    styleUrls: ['./day-type-table.component.css'],
+    standalone: false
 })
 export class DayTypeTableComponent implements OnInit {
   selectedGraphType: string;

@@ -3,9 +3,10 @@ import { SSMTInputs, CondensingTurbine, PressureTurbine, SsmtValid } from '../..
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-turbine-summary',
-  templateUrl: './turbine-summary.component.html',
-  styleUrls: ['./turbine-summary.component.css']
+    selector: 'app-turbine-summary',
+    templateUrl: './turbine-summary.component.html',
+    styleUrls: ['./turbine-summary.component.css'],
+    standalone: false
 })
 export class TurbineSummaryComponent implements OnInit {
   @Input()

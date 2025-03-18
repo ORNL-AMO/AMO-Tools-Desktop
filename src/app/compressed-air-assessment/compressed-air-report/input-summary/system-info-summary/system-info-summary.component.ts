@@ -3,9 +3,10 @@ import { SystemInformation } from '../../../../shared/models/compressed-air-asse
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-system-info-summary',
-  templateUrl: './system-info-summary.component.html',
-  styleUrls: ['./system-info-summary.component.css']
+    selector: 'app-system-info-summary',
+    templateUrl: './system-info-summary.component.html',
+    styleUrls: ['./system-info-summary.component.css'],
+    standalone: false
 })
 export class SystemInfoSummaryComponent implements OnInit {
   @Input()

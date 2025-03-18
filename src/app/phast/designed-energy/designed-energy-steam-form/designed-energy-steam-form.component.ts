@@ -5,9 +5,10 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { PhastService } from '../../phast.service';
 
 @Component({
-  selector: 'app-designed-energy-steam-form',
-  templateUrl: './designed-energy-steam-form.component.html',
-  styleUrls: ['./designed-energy-steam-form.component.css']
+    selector: 'app-designed-energy-steam-form',
+    templateUrl: './designed-energy-steam-form.component.html',
+    styleUrls: ['./designed-energy-steam-form.component.css'],
+    standalone: false
 })
 export class DesignedEnergySteamFormComponent implements OnInit {
   @Input()

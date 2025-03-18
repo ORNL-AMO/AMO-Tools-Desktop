@@ -5,9 +5,10 @@ import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-feedwater-form',
-  templateUrl: './feedwater-form.component.html',
-  styleUrls: ['./feedwater-form.component.css']
+    selector: 'app-feedwater-form',
+    templateUrl: './feedwater-form.component.html',
+    styleUrls: ['./feedwater-form.component.css'],
+    standalone: false
 })
 export class FeedwaterFormComponent implements OnInit {
   @Input()

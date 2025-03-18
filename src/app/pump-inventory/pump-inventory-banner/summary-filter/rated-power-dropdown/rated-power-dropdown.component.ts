@@ -8,9 +8,10 @@ import { PumpInventoryData, PumpItem } from '../../../pump-inventory';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-pump-rated-power-dropdown',
-  templateUrl: './rated-power-dropdown.component.html',
-  styleUrls: ['./rated-power-dropdown.component.css']
+    selector: 'app-pump-rated-power-dropdown',
+    templateUrl: './rated-power-dropdown.component.html',
+    styleUrls: ['./rated-power-dropdown.component.css'],
+    standalone: false
 })
 export class RatedPowerDropdownComponent {
 

@@ -6,9 +6,10 @@ import { SsmtValid } from '../../../shared/models/steam/ssmt';
 import { SsmtReportRollupService } from '../../../report-rollup/ssmt-report-rollup.service';
 
 @Component({
-  selector: 'app-energy-summary',
-  templateUrl: './energy-summary.component.html',
-  styleUrls: ['./energy-summary.component.css']
+    selector: 'app-energy-summary',
+    templateUrl: './energy-summary.component.html',
+    styleUrls: ['./energy-summary.component.css'],
+    standalone: false
 })
 export class EnergySummaryComponent implements OnInit {
   @Input()

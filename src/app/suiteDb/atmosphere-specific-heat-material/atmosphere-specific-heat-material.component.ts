@@ -8,9 +8,10 @@ import { AtmosphereDbService } from '../../indexedDb/atmosphere-db.service';
 import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 @Component({
-  selector: 'app-atmosphere-specific-heat-material',
-  templateUrl: './atmosphere-specific-heat-material.component.html',
-  styleUrls: ['./atmosphere-specific-heat-material.component.css']
+    selector: 'app-atmosphere-specific-heat-material',
+    templateUrl: './atmosphere-specific-heat-material.component.html',
+    styleUrls: ['./atmosphere-specific-heat-material.component.css'],
+    standalone: false
 })
 export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   @Output('closeModal')

@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { FanAnalysisService } from '../../../fan-analysis.service';
 
 @Component({
-  selector: 'app-gas-density-help',
-  templateUrl: './gas-density-help.component.html',
-  styleUrls: ['./gas-density-help.component.css']
+    selector: 'app-gas-density-help',
+    templateUrl: './gas-density-help.component.html',
+    styleUrls: ['./gas-density-help.component.css'],
+    standalone: false
 })
 export class GasDensityHelpComponent implements OnInit {
 

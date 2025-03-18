@@ -20,9 +20,10 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TreasureHuntPptService } from './treasure-hunt-ppt/treasure-hunt-ppt.service';
 @Component({
-  selector: 'app-treasure-hunt-report',
-  templateUrl: './treasure-hunt-report.component.html',
-  styleUrls: ['./treasure-hunt-report.component.css']
+    selector: 'app-treasure-hunt-report',
+    templateUrl: './treasure-hunt-report.component.html',
+    styleUrls: ['./treasure-hunt-report.component.css'],
+    standalone: false
 })
 export class TreasureHuntReportComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-stack-loss-form',
-  templateUrl: './stack-loss-form.component.html',
-  styleUrls: ['./stack-loss-form.component.css']
+    selector: 'app-stack-loss-form',
+    templateUrl: './stack-loss-form.component.html',
+    styleUrls: ['./stack-loss-form.component.css'],
+    standalone: false
 })
 export class StackLossFormComponent implements OnInit {
   @Input()

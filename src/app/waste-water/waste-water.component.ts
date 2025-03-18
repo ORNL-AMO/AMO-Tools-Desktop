@@ -20,9 +20,10 @@ import { WasteWaterOperationsService } from './waste-water-operations/waste-wate
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-waste-water',
-  templateUrl: './waste-water.component.html',
-  styleUrls: ['./waste-water.component.css']
+    selector: 'app-waste-water',
+    templateUrl: './waste-water.component.html',
+    styleUrls: ['./waste-water.component.css'],
+    standalone: false
 })
 export class WasteWaterComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;

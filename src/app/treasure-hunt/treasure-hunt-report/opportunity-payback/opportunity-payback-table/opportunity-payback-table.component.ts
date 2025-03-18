@@ -3,9 +3,10 @@ import { OpportunitiesPaybackDetails } from '../../../../shared/models/treasure-
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-opportunity-payback-table',
-  templateUrl: './opportunity-payback-table.component.html',
-  styleUrls: ['./opportunity-payback-table.component.css']
+    selector: 'app-opportunity-payback-table',
+    templateUrl: './opportunity-payback-table.component.html',
+    styleUrls: ['./opportunity-payback-table.component.css'],
+    standalone: false
 })
 export class OpportunityPaybackTableComponent implements OnInit {
   @Input()

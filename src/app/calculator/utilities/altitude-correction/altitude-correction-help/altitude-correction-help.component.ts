@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { AltitudeCorrectionService } from '../altitude-correction.service';
 
 @Component({
-  selector: 'app-altitude-correction-help',
-  templateUrl: './altitude-correction-help.component.html',
-  styleUrls: ['./altitude-correction-help.component.css']
+    selector: 'app-altitude-correction-help',
+    templateUrl: './altitude-correction-help.component.html',
+    styleUrls: ['./altitude-correction-help.component.css'],
+    standalone: false
 })
 export class AltitudeCorrectionHelpComponent implements OnInit {
 

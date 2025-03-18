@@ -8,9 +8,10 @@ import { OtherLoss } from '../../../../shared/models/phast/losses/otherLoss';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-other-tab',
-  templateUrl: './other-tab.component.html',
-  styleUrls: ['./other-tab.component.css']
+    selector: 'app-other-tab',
+    templateUrl: './other-tab.component.html',
+    styleUrls: ['./other-tab.component.css'],
+    standalone: false
 })
 export class OtherTabComponent implements OnInit {
   @Input()

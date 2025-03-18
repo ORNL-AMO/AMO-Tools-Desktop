@@ -9,9 +9,10 @@ import { CompareService } from '../compare.service';
 import { FanMotorWarnings, FsatWarningService } from '../fsat-warning.service';
 import { motorEfficiencyConstants } from '../../psat/psatConstants';
 @Component({
-  selector: 'app-fan-motor',
-  templateUrl: './fan-motor.component.html',
-  styleUrls: ['./fan-motor.component.css']
+    selector: 'app-fan-motor',
+    templateUrl: './fan-motor.component.html',
+    styleUrls: ['./fan-motor.component.css'],
+    standalone: false
 })
 export class FanMotorComponent implements OnInit {
   @Input()

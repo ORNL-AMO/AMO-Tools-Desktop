@@ -9,9 +9,10 @@ import { FixtureFormService } from '../../../../calculator/furnaces/fixture/fixt
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
-  selector: 'app-explore-fixtures-form',
-  templateUrl: './explore-fixtures-form.component.html',
-  styleUrls: ['./explore-fixtures-form.component.css']
+    selector: 'app-explore-fixtures-form',
+    templateUrl: './explore-fixtures-form.component.html',
+    styleUrls: ['./explore-fixtures-form.component.css'],
+    standalone: false
 })
 export class ExploreFixturesFormComponent implements OnInit {
   @Input()

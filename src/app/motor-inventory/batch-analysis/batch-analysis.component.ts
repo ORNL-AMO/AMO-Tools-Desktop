@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { MotorInventoryService } from '../motor-inventory.service';
 
 @Component({
-  selector: 'app-batch-analysis',
-  templateUrl: './batch-analysis.component.html',
-  styleUrls: ['./batch-analysis.component.css']
+    selector: 'app-batch-analysis',
+    templateUrl: './batch-analysis.component.html',
+    styleUrls: ['./batch-analysis.component.css'],
+    standalone: false
 })
 export class BatchAnalysisComponent implements OnInit {
 

@@ -5,9 +5,10 @@ import { EmailMeasurDataService, EmailSentStatus } from '../email-measur-data.se
 import { truncate } from '../../helperFunctions';
 
 @Component({
-  selector: 'app-email-measur-data-modal',
-  templateUrl: './email-measur-data-modal.component.html',
-  styleUrls: ['./email-measur-data-modal.component.css']
+    selector: 'app-email-measur-data-modal',
+    templateUrl: './email-measur-data-modal.component.html',
+    styleUrls: ['./email-measur-data-modal.component.css'],
+    standalone: false
 })
 export class EmailMeasurDataModalComponent {
   measurItemName: string = 'assessment';

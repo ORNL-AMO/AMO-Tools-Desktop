@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-unload-point-help',
-  templateUrl: './unload-point-help.component.html',
-  styleUrls: ['./unload-point-help.component.css']
+    selector: 'app-unload-point-help',
+    templateUrl: './unload-point-help.component.html',
+    styleUrls: ['./unload-point-help.component.css'],
+    standalone: false
 })
 export class UnloadPointHelpComponent implements OnInit {
 

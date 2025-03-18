@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, Output, EventEmitter } from '@angular/core';
 import * as _ from 'lodash';
 @Component({
-  selector: 'app-exportable-results-table',
-  templateUrl: './exportable-results-table.component.html',
-  styleUrls: ['./exportable-results-table.component.css']
+    selector: 'app-exportable-results-table',
+    templateUrl: './exportable-results-table.component.html',
+    styleUrls: ['./exportable-results-table.component.css'],
+    standalone: false
 })
 export class ExportableResultsTableComponent implements OnInit {
   @Input()

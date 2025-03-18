@@ -6,9 +6,10 @@ import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss'
 import { LeakageFormService, LeakageWarnings } from '../../../../calculator/furnaces/leakage/leakage-form.service';
 
 @Component({
-  selector: 'app-gas-leakage-losses-form',
-  templateUrl: './gas-leakage-losses-form.component.html',
-  styleUrls: ['./gas-leakage-losses-form.component.css']
+    selector: 'app-gas-leakage-losses-form',
+    templateUrl: './gas-leakage-losses-form.component.html',
+    styleUrls: ['./gas-leakage-losses-form.component.css'],
+    standalone: false
 })
 export class GasLeakageLossesFormComponent implements OnInit {
   @Input()

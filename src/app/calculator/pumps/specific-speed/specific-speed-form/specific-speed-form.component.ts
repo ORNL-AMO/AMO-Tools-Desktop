@@ -4,9 +4,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { pumpTypesConstant } from '../../../../psat/psatConstants';
 
 @Component({
-  selector: 'app-specific-speed-form',
-  templateUrl: './specific-speed-form.component.html',
-  styleUrls: ['./specific-speed-form.component.css']
+    selector: 'app-specific-speed-form',
+    templateUrl: './specific-speed-form.component.html',
+    styleUrls: ['./specific-speed-form.component.css'],
+    standalone: false
 })
 export class SpecificSpeedFormComponent implements OnInit {
   @Input()

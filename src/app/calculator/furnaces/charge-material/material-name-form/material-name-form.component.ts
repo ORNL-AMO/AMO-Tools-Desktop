@@ -6,9 +6,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { ChargeMaterialService } from '../charge-material.service';
 
 @Component({
-  selector: 'app-material-name-form',
-  templateUrl: './material-name-form.component.html',
-  styleUrls: ['./material-name-form.component.css']
+    selector: 'app-material-name-form',
+    templateUrl: './material-name-form.component.html',
+    styleUrls: ['./material-name-form.component.css'],
+    standalone: false
 })
 export class MaterialNameFormComponent implements OnInit {
   @Input()

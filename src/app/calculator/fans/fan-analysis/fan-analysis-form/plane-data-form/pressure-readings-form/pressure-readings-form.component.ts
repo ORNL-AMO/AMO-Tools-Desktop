@@ -6,9 +6,10 @@ import * as XLSX from 'xlsx';
 
 
 @Component({
-  selector: 'app-pressure-readings-form',
-  templateUrl: './pressure-readings-form.component.html',
-  styleUrls: ['./pressure-readings-form.component.css']
+    selector: 'app-pressure-readings-form',
+    templateUrl: './pressure-readings-form.component.html',
+    styleUrls: ['./pressure-readings-form.component.css'],
+    standalone: false
 })
 export class PressureReadingsFormComponent implements OnInit {
   @Input()

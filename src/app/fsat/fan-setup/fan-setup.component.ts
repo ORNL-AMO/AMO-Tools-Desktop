@@ -11,9 +11,10 @@ import { FanEfficiencyInputs } from '../../calculator/fans/fan-efficiency/fan-ef
 import { FsatService } from '../fsat.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
-  selector: 'app-fan-setup',
-  templateUrl: './fan-setup.component.html',
-  styleUrls: ['./fan-setup.component.css']
+    selector: 'app-fan-setup',
+    templateUrl: './fan-setup.component.html',
+    styleUrls: ['./fan-setup.component.css'],
+    standalone: false
 })
 export class FanSetupComponent implements OnInit {
   @Input()

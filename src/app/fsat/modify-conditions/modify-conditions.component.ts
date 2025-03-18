@@ -7,9 +7,10 @@ import { FsatService } from '../fsat.service';
 import { BaseGasDensity, FanSetup, FanMotor, FieldData, FSAT, FsatOperations } from '../../shared/models/fans';
 
 @Component({
-  selector: 'app-modify-conditions',
-  templateUrl: './modify-conditions.component.html',
-  styleUrls: ['./modify-conditions.component.css']
+    selector: 'app-modify-conditions',
+    templateUrl: './modify-conditions.component.html',
+    styleUrls: ['./modify-conditions.component.css'],
+    standalone: false
 })
 export class ModifyConditionsComponent implements OnInit {
   @Input()

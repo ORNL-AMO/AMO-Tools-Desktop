@@ -3,9 +3,10 @@ import { HoverGroupData } from '../system-and-equipment-curve-graph/system-and-e
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-chart-hover-data',
-  templateUrl: './chart-hover-data.component.html',
-  styleUrls: ['./chart-hover-data.component.css']
+    selector: 'app-chart-hover-data',
+    templateUrl: './chart-hover-data.component.html',
+    styleUrls: ['./chart-hover-data.component.css'],
+    standalone: false
 })
 export class ChartHoverDataComponent implements OnInit {
 

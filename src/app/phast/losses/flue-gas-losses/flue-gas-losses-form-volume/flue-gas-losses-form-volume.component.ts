@@ -12,9 +12,10 @@ import { firstValueFrom } from 'rxjs';
 import { FlueGasCompareService } from '../flue-gas-compare.service';
 
 @Component({
-  selector: 'app-flue-gas-losses-form-volume',
-  templateUrl: './flue-gas-losses-form-volume.component.html',
-  styleUrls: ['./flue-gas-losses-form-volume.component.css']
+    selector: 'app-flue-gas-losses-form-volume',
+    templateUrl: './flue-gas-losses-form-volume.component.html',
+    styleUrls: ['./flue-gas-losses-form-volume.component.css'],
+    standalone: false
 })
 export class FlueGasLossesFormVolumeComponent implements OnInit {
   @Input()

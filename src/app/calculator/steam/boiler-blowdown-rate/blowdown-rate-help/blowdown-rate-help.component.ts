@@ -4,9 +4,10 @@ import { BoilerBlowdownRateService, BoilerBlowdownRateRanges } from '../boiler-b
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-blowdown-rate-help',
-  templateUrl: './blowdown-rate-help.component.html',
-  styleUrls: ['./blowdown-rate-help.component.css']
+    selector: 'app-blowdown-rate-help',
+    templateUrl: './blowdown-rate-help.component.html',
+    styleUrls: ['./blowdown-rate-help.component.css'],
+    standalone: false
 })
 export class BlowdownRateHelpComponent implements OnInit {
   @Input()

@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { AtmosphereService } from '../atmosphere.service';
 
 @Component({
-  selector: 'app-atmosphere-results',
-  templateUrl: './atmosphere-results.component.html',
-  styleUrls: ['./atmosphere-results.component.css']
+    selector: 'app-atmosphere-results',
+    templateUrl: './atmosphere-results.component.html',
+    styleUrls: ['./atmosphere-results.component.css'],
+    standalone: false
 })
 export class AtmosphereResultsComponent implements OnInit {
 

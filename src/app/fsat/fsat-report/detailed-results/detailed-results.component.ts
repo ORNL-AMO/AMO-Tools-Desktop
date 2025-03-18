@@ -6,9 +6,10 @@ import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-detailed-results',
-  templateUrl: './detailed-results.component.html',
-  styleUrls: ['./detailed-results.component.css']
+    selector: 'app-detailed-results',
+    templateUrl: './detailed-results.component.html',
+    styleUrls: ['./detailed-results.component.css'],
+    standalone: false
 })
 export class DetailedResultsComponent implements OnInit {
 

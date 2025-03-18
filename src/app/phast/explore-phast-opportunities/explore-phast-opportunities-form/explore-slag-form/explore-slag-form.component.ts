@@ -3,9 +3,10 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-explore-slag-form',
-  templateUrl: './explore-slag-form.component.html',
-  styleUrls: ['./explore-slag-form.component.css']
+    selector: 'app-explore-slag-form',
+    templateUrl: './explore-slag-form.component.html',
+    styleUrls: ['./explore-slag-form.component.css'],
+    standalone: false
 })
 export class ExploreSlagFormComponent implements OnInit {
   @Input()

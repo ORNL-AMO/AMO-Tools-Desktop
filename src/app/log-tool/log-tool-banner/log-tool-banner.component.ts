@@ -8,9 +8,10 @@ import { EmailMeasurDataService } from '../../shared/email-measur-data/email-mea
 import { LogToolDbService } from '../log-tool-db.service';
 
 @Component({
-  selector: 'app-log-tool-banner',
-  templateUrl: './log-tool-banner.component.html',
-  styleUrls: ['./log-tool-banner.component.css']
+    selector: 'app-log-tool-banner',
+    templateUrl: './log-tool-banner.component.html',
+    styleUrls: ['./log-tool-banner.component.css'],
+    standalone: false
 })
 export class LogToolBannerComponent implements OnInit {
 

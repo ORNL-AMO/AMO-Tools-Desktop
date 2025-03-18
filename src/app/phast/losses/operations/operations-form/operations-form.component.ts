@@ -11,9 +11,10 @@ import { Co2SavingsPhastService, PhastCo2SavingsDifferent } from '../co2-savings
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-operations-form',
-  templateUrl: './operations-form.component.html',
-  styleUrls: ['./operations-form.component.css']
+    selector: 'app-operations-form',
+    templateUrl: './operations-form.component.html',
+    styleUrls: ['./operations-form.component.css'],
+    standalone: false
 })
 export class OperationsFormComponent implements OnInit {
   @Output('changeField')

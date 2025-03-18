@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirPressureReductionResults } from '../../../../shared/models/standalone';
 
 @Component({
-  selector: 'app-compressed-air-pressure-reduction-results',
-  templateUrl: './compressed-air-pressure-reduction-results.component.html',
-  styleUrls: ['./compressed-air-pressure-reduction-results.component.css']
+    selector: 'app-compressed-air-pressure-reduction-results',
+    templateUrl: './compressed-air-pressure-reduction-results.component.html',
+    styleUrls: ['./compressed-air-pressure-reduction-results.component.css'],
+    standalone: false
 })
 export class CompressedAirPressureReductionResultsComponent implements OnInit {
   @Input()

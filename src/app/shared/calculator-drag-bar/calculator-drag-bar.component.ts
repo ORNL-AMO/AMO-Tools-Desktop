@@ -3,9 +3,10 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { CalculatorDragBarService } from './calculator-drag-bar.service';
 
 @Component({
-  selector: 'app-calculator-drag-bar',
-  templateUrl: './calculator-drag-bar.component.html',
-  styleUrls: ['./calculator-drag-bar.component.css']
+    selector: 'app-calculator-drag-bar',
+    templateUrl: './calculator-drag-bar.component.html',
+    styleUrls: ['./calculator-drag-bar.component.css'],
+    standalone: false
 })
 export class CalculatorDragBarComponent implements OnInit {
 

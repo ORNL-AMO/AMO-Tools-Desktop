@@ -5,10 +5,11 @@ import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.se
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-system-curve',
-  templateUrl: './system-curve.component.html',
-  styleUrls: ['./system-curve.component.css'],
-  animations: collapseAnimation
+    selector: 'app-system-curve',
+    templateUrl: './system-curve.component.html',
+    styleUrls: ['./system-curve.component.css'],
+    animations: collapseAnimation,
+    standalone: false
 })
 export class SystemCurveComponent implements OnInit {
   @Input()

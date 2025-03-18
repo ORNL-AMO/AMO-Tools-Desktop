@@ -3,9 +3,10 @@ import { MotorInventoryService } from '../../motor-inventory.service';
 import { Subscription } from 'rxjs';
 import { MotorPropertyDisplayOptions } from '../../motor-inventory';
 @Component({
-  selector: 'app-load-characteristics-help',
-  templateUrl: './load-characteristics-help.component.html',
-  styleUrls: ['./load-characteristics-help.component.css']
+    selector: 'app-load-characteristics-help',
+    templateUrl: './load-characteristics-help.component.html',
+    styleUrls: ['./load-characteristics-help.component.css'],
+    standalone: false
 })
 export class LoadCharacteristicsHelpComponent implements OnInit {
 

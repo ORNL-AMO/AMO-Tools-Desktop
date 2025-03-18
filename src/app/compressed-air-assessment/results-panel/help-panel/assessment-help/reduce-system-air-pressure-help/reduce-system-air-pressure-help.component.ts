@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-reduce-system-air-pressure-help',
-  templateUrl: './reduce-system-air-pressure-help.component.html',
-  styleUrls: ['./reduce-system-air-pressure-help.component.css']
+    selector: 'app-reduce-system-air-pressure-help',
+    templateUrl: './reduce-system-air-pressure-help.component.html',
+    styleUrls: ['./reduce-system-air-pressure-help.component.css'],
+    standalone: false
 })
 export class ReduceSystemAirPressureHelpComponent implements OnInit {
 

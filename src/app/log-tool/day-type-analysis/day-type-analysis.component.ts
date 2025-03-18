@@ -11,9 +11,10 @@ import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms
 import { LogToolService } from '../log-tool.service';
 import { AnalyticsService } from '../../shared/analytics/analytics.service';
 @Component({
-  selector: 'app-day-type-analysis',
-  templateUrl: './day-type-analysis.component.html',
-  styleUrls: ['./day-type-analysis.component.css']
+    selector: 'app-day-type-analysis',
+    templateUrl: './day-type-analysis.component.html',
+    styleUrls: ['./day-type-analysis.component.css'],
+    standalone: false
 })
 export class DayTypeAnalysisComponent implements OnInit {
 

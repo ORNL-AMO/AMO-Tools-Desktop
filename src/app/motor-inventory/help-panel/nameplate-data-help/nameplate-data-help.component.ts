@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { MotorPropertyDisplayOptions } from '../../motor-inventory';
 @Component({
-  selector: 'app-nameplate-data-help',
-  templateUrl: './nameplate-data-help.component.html',
-  styleUrls: ['./nameplate-data-help.component.css']
+    selector: 'app-nameplate-data-help',
+    templateUrl: './nameplate-data-help.component.html',
+    styleUrls: ['./nameplate-data-help.component.css'],
+    standalone: false
 })
 export class NameplateDataHelpComponent implements OnInit {
 

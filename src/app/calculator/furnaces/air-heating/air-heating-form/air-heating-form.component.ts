@@ -13,9 +13,10 @@ import { AirHeatingFormService } from '../air-heating-form.service';
 import { AirHeatingService } from '../air-heating.service';
 
 @Component({
-  selector: 'app-air-heating-form',
-  templateUrl: './air-heating-form.component.html',
-  styleUrls: ['./air-heating-form.component.css']
+    selector: 'app-air-heating-form',
+    templateUrl: './air-heating-form.component.html',
+    styleUrls: ['./air-heating-form.component.css'],
+    standalone: false
 })
 export class AirHeatingFormComponent implements OnInit {
   @Input()

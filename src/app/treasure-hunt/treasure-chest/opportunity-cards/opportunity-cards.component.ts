@@ -10,9 +10,10 @@ import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-
 import { SortCardsData } from './sort-cards-by.pipe';
 
 @Component({
-  selector: 'app-opportunity-cards',
-  templateUrl: './opportunity-cards.component.html',
-  styleUrls: ['./opportunity-cards.component.css']
+    selector: 'app-opportunity-cards',
+    templateUrl: './opportunity-cards.component.html',
+    styleUrls: ['./opportunity-cards.component.css'],
+    standalone: false
 })
 export class OpportunityCardsComponent implements OnInit {
   @Input()

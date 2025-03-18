@@ -4,9 +4,10 @@ import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-
 import { RollupSummaryTableData } from '../../rollup-summary-table/rollup-summary-table.component';
 
 @Component({
-  selector: 'app-waste-water-rollup-print',
-  templateUrl: './waste-water-rollup-print.component.html',
-  styleUrls: ['./waste-water-rollup-print.component.css']
+    selector: 'app-waste-water-rollup-print',
+    templateUrl: './waste-water-rollup-print.component.html',
+    styleUrls: ['./waste-water-rollup-print.component.css'],
+    standalone: false
 })
 export class WasteWaterRollupPrintComponent implements OnInit {
   @Input()

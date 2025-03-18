@@ -3,9 +3,10 @@ import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-prv-diagram',
-  templateUrl: './prv-diagram.component.html',
-  styleUrls: ['./prv-diagram.component.css']
+    selector: 'app-prv-diagram',
+    templateUrl: './prv-diagram.component.html',
+    styleUrls: ['./prv-diagram.component.css'],
+    standalone: false
 })
 export class PrvDiagramComponent implements OnInit {
   @Input()

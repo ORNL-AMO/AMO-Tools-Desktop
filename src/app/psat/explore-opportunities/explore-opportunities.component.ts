@@ -8,9 +8,10 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
 
 @Component({
-  selector: 'app-explore-opportunities',
-  templateUrl: './explore-opportunities.component.html',
-  styleUrls: ['./explore-opportunities.component.css']
+    selector: 'app-explore-opportunities',
+    templateUrl: './explore-opportunities.component.html',
+    styleUrls: ['./explore-opportunities.component.css'],
+    standalone: false
 })
 export class ExploreOpportunitiesComponent implements OnInit {
   @Input()

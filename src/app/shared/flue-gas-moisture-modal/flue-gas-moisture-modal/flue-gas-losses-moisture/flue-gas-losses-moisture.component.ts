@@ -7,9 +7,10 @@ import { Settings } from '../../../models/settings';
 import { FlueGasMoistureModalService } from '../../flue-gas-moisture-modal.service';
 
 @Component({
-  selector: 'app-flue-gas-losses-moisture',
-  templateUrl: './flue-gas-losses-moisture.component.html',
-  styleUrls: ['./flue-gas-losses-moisture.component.css']
+    selector: 'app-flue-gas-losses-moisture',
+    templateUrl: './flue-gas-losses-moisture.component.html',
+    styleUrls: ['./flue-gas-losses-moisture.component.css'],
+    standalone: false
 })
 export class FlueGasLossesMoistureComponent implements OnInit {
   @Input()

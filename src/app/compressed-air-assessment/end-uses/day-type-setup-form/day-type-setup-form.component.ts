@@ -8,9 +8,10 @@ import { EndUsesService } from '../end-uses.service';
 import { DayTypeSetupService, DayTypeSetupWarnings } from './day-type-setup.service';
 
 @Component({
-  selector: 'app-day-type-setup-form',
-  templateUrl: './day-type-setup-form.component.html',
-  styleUrls: ['./day-type-setup-form.component.css']
+    selector: 'app-day-type-setup-form',
+    templateUrl: './day-type-setup-form.component.html',
+    styleUrls: ['./day-type-setup-form.component.css'],
+    standalone: false
 })
 export class DayTypeSetupFormComponent implements OnInit {
   @Input()

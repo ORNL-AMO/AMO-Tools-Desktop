@@ -9,9 +9,10 @@ import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { AddReceiverVolumeService } from './add-receiver-volume.service';
 
 @Component({
-  selector: 'app-add-receiver-volume',
-  templateUrl: './add-receiver-volume.component.html',
-  styleUrls: ['./add-receiver-volume.component.css']
+    selector: 'app-add-receiver-volume',
+    templateUrl: './add-receiver-volume.component.html',
+    styleUrls: ['./add-receiver-volume.component.css'],
+    standalone: false
 })
 export class AddReceiverVolumeComponent implements OnInit {
 

@@ -6,9 +6,10 @@ import { Subscription } from 'rxjs';
 import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
-  selector: 'app-motor-options-table',
-  templateUrl: './motor-options-table.component.html',
-  styleUrls: ['./motor-options-table.component.css']
+    selector: 'app-motor-options-table',
+    templateUrl: './motor-options-table.component.html',
+    styleUrls: ['./motor-options-table.component.css'],
+    standalone: false
 })
 export class MotorOptionsTableComponent implements OnInit {
   @Output('emitSelect')

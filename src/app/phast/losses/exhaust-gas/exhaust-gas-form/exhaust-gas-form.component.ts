@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-exhaust-gas-form',
-  templateUrl: './exhaust-gas-form.component.html',
-  styleUrls: ['./exhaust-gas-form.component.css']
+    selector: 'app-exhaust-gas-form',
+    templateUrl: './exhaust-gas-form.component.html',
+    styleUrls: ['./exhaust-gas-form.component.css'],
+    standalone: false
 })
 export class ExhaustGasFormComponent implements OnInit {
   @Input()

@@ -5,9 +5,10 @@ import { WaterHeatingOutput } from '../../../../shared/models/steam/waterHeating
 import { WaterHeatingService } from '../water-heating.service';
 
 @Component({
-  selector: 'app-water-heating-results',
-  templateUrl: './water-heating-results.component.html',
-  styleUrls: ['./water-heating-results.component.css']
+    selector: 'app-water-heating-results',
+    templateUrl: './water-heating-results.component.html',
+    styleUrls: ['./water-heating-results.component.css'],
+    standalone: false
 })
 export class WaterHeatingResultsComponent implements OnInit {
   @Input()

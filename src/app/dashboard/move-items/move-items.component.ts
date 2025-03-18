@@ -17,9 +17,10 @@ import { DashboardService } from '../dashboard.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 
 @Component({
-  selector: 'app-move-items',
-  templateUrl: './move-items.component.html',
-  styleUrls: ['./move-items.component.css']
+    selector: 'app-move-items',
+    templateUrl: './move-items.component.html',
+    styleUrls: ['./move-items.component.css'],
+    standalone: false
 })
 export class MoveItemsComponent implements OnInit {
 

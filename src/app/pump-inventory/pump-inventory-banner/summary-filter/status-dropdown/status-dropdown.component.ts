@@ -8,9 +8,10 @@ import { PumpInventoryData, PumpItem } from '../../../pump-inventory';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-status-dropdown',
-  templateUrl: './status-dropdown.component.html',
-  styleUrls: ['./status-dropdown.component.css']
+    selector: 'app-status-dropdown',
+    templateUrl: './status-dropdown.component.html',
+    styleUrls: ['./status-dropdown.component.css'],
+    standalone: false
 })
 export class StatusDropdownComponent {
 

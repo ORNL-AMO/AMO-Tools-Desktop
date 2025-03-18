@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { motorEfficiencyConstants } from '../../psat/psatConstants';
 
 @Pipe({
-  name: 'motorEfficiencyClass'
+    name: 'motorEfficiencyClass',
+    standalone: false
 })
 export class MotorEfficiencyClassPipe implements PipeTransform {
 

@@ -6,9 +6,10 @@ import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-s
 import { ReportUtilityTotal } from '../../report-rollup-models';
 
 @Component({
-  selector: 'app-waste-water-summary',
-  templateUrl: './waste-water-summary.component.html',
-  styleUrls: ['./waste-water-summary.component.css', '../report-summary.component.css']
+    selector: 'app-waste-water-summary',
+    templateUrl: './waste-water-summary.component.html',
+    styleUrls: ['./waste-water-summary.component.css', '../report-summary.component.css'],
+    standalone: false
 })
 export class WasteWaterSummaryComponent implements OnInit {
   @Input()

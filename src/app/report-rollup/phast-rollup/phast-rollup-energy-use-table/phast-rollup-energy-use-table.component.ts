@@ -5,9 +5,10 @@ import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-phast-rollup-energy-use-table',
-  templateUrl: './phast-rollup-energy-use-table.component.html',
-  styleUrls: ['./phast-rollup-energy-use-table.component.css']
+    selector: 'app-phast-rollup-energy-use-table',
+    templateUrl: './phast-rollup-energy-use-table.component.html',
+    styleUrls: ['./phast-rollup-energy-use-table.component.css'],
+    standalone: false
 })
 export class PhastRollupEnergyUseTableComponent implements OnInit {
   @Input()

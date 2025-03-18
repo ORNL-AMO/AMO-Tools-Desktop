@@ -10,9 +10,10 @@ import { FsatService } from '../../../fsat.service';
 import { FanEfficiencyInputs } from '../../../../calculator/fans/fan-efficiency/fan-efficiency.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 @Component({
-  selector: 'app-fan-data-form',
-  templateUrl: './fan-data-form.component.html',
-  styleUrls: ['./fan-data-form.component.css']
+    selector: 'app-fan-data-form',
+    templateUrl: './fan-data-form.component.html',
+    styleUrls: ['./fan-data-form.component.css'],
+    standalone: false
 })
 export class FanDataFormComponent implements OnInit {
   @Input()

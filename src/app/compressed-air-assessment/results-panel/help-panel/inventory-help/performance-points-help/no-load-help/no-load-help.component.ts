@@ -4,9 +4,10 @@ import { CompressedAirAssessmentService } from '../../../../../compressed-air-as
 import { InventoryService } from '../../../../../inventory/inventory.service';
 
 @Component({
-  selector: 'app-no-load-help',
-  templateUrl: './no-load-help.component.html',
-  styleUrls: ['./no-load-help.component.css']
+    selector: 'app-no-load-help',
+    templateUrl: './no-load-help.component.html',
+    styleUrls: ['./no-load-help.component.css'],
+    standalone: false
 })
 export class NoLoadHelpComponent implements OnInit {
 

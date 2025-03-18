@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { TreasureHuntCo2EmissionsResults, TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 
 @Component({
-  selector: 'app-carbon-emissions-summary-table',
-  templateUrl: './carbon-emissions-summary-table.component.html',
-  styleUrls: ['./carbon-emissions-summary-table.component.css']
+    selector: 'app-carbon-emissions-summary-table',
+    templateUrl: './carbon-emissions-summary-table.component.html',
+    styleUrls: ['./carbon-emissions-summary-table.component.css'],
+    standalone: false
 })
 export class CarbonEmissionsSummaryTableComponent implements OnInit {
 

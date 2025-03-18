@@ -3,9 +3,10 @@ import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-explore-opportunities-help',
-  templateUrl: './explore-opportunities-help.component.html',
-  styleUrls: ['./explore-opportunities-help.component.css']
+    selector: 'app-explore-opportunities-help',
+    templateUrl: './explore-opportunities-help.component.html',
+    styleUrls: ['./explore-opportunities-help.component.css'],
+    standalone: false
 })
 export class ExploreOpportunitiesHelpComponent implements OnInit {
 

@@ -5,9 +5,10 @@ import { BarChartDataItem } from '../../rollup-summary-bar-chart/rollup-summary-
 import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 
 @Component({
-  selector: 'app-phast-rollup-print',
-  templateUrl: './phast-rollup-print.component.html',
-  styleUrls: ['./phast-rollup-print.component.css']
+    selector: 'app-phast-rollup-print',
+    templateUrl: './phast-rollup-print.component.html',
+    styleUrls: ['./phast-rollup-print.component.css'],
+    standalone: false
 })
 export class PhastRollupPrintComponent implements OnInit {
   @Input()

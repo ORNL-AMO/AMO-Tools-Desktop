@@ -8,9 +8,10 @@ import { CompressedAirDataManagementService } from '../../compressed-air-data-ma
 import { InventoryService } from '../inventory.service';
 
 @Component({
-  selector: 'app-centrifugal-specifics',
-  templateUrl: './centrifugal-specifics.component.html',
-  styleUrls: ['./centrifugal-specifics.component.css']
+    selector: 'app-centrifugal-specifics',
+    templateUrl: './centrifugal-specifics.component.html',
+    styleUrls: ['./centrifugal-specifics.component.css'],
+    standalone: false
 })
 export class CentrifugalSpecificsComponent implements OnInit {
 

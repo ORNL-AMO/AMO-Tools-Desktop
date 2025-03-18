@@ -8,9 +8,10 @@ import { CompareService } from '../../compare.service';
 import { TurbineService } from '../turbine.service';
 
 @Component({
-  selector: 'app-condensing-turbine-form',
-  templateUrl: './condensing-turbine-form.component.html',
-  styleUrls: ['./condensing-turbine-form.component.css']
+    selector: 'app-condensing-turbine-form',
+    templateUrl: './condensing-turbine-form.component.html',
+    styleUrls: ['./condensing-turbine-form.component.css'],
+    standalone: false
 })
 export class CondensingTurbineFormComponent implements OnInit {
   @Input()

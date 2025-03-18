@@ -13,9 +13,10 @@ import { FieldDataService } from '../field-data/field-data.service';
 import { PumpOperationsService } from '../pump-operations/pump-operations.service';
 
 @Component({
-  selector: 'app-psat-tabs',
-  templateUrl: './psat-tabs.component.html',
-  styleUrls: ['./psat-tabs.component.css']
+    selector: 'app-psat-tabs',
+    templateUrl: './psat-tabs.component.html',
+    styleUrls: ['./psat-tabs.component.css'],
+    standalone: false
 })
 export class PsatTabsComponent implements OnInit {
   @Input()

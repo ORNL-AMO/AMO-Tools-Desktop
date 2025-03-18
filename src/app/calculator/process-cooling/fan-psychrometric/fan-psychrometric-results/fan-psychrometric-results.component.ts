@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FanPsychrometricService, FanPsychrometricWarnings } from '../fan-psychrometric.service';
 
 @Component({
-  selector: 'app-fan-psychrometric-results',
-  templateUrl: './fan-psychrometric-results.component.html',
-  styleUrls: ['./fan-psychrometric-results.component.css']
+    selector: 'app-fan-psychrometric-results',
+    templateUrl: './fan-psychrometric-results.component.html',
+    styleUrls: ['./fan-psychrometric-results.component.css'],
+    standalone: false
 })
 export class FanPsychrometricResultsComponent implements OnInit {
 

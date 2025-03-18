@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { WallService } from '../wall.service';
 
 @Component({
-  selector: 'app-wall-results',
-  templateUrl: './wall-results.component.html',
-  styleUrls: ['./wall-results.component.css']
+    selector: 'app-wall-results',
+    templateUrl: './wall-results.component.html',
+    styleUrls: ['./wall-results.component.css'],
+    standalone: false
 })
 export class WallResultsComponent implements OnInit {
 

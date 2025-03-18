@@ -9,9 +9,10 @@ import { FanAnalysisService } from '../../fan-analysis.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-gas-density-form',
-  templateUrl: './gas-density-form.component.html',
-  styleUrls: ['./gas-density-form.component.css']
+    selector: 'app-gas-density-form',
+    templateUrl: './gas-density-form.component.html',
+    styleUrls: ['./gas-density-form.component.css'],
+    standalone: false
 })
 export class GasDensityFormComponent implements OnInit {
   @Input()

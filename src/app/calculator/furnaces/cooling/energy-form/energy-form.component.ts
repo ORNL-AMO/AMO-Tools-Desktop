@@ -10,9 +10,10 @@ import { EnergyFormService } from '../../charge-material/energy-form/energy-form
 import { CoolingService } from '../cooling.service';
 
 @Component({
-  selector: 'app-cooling-energy-form',
-  templateUrl: './energy-form.component.html',
-  styleUrls: ['./energy-form.component.css']
+    selector: 'app-cooling-energy-form',
+    templateUrl: './energy-form.component.html',
+    styleUrls: ['./energy-form.component.css'],
+    standalone: false
 })
 export class EnergyFormComponent implements OnInit {
   showOperatingHoursModal: boolean;

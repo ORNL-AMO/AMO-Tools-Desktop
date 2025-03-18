@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { Subscription } from 'rxjs';
 @Component({
-  selector: 'app-other-help',
-  templateUrl: './other-help.component.html',
-  styleUrls: ['./other-help.component.css']
+    selector: 'app-other-help',
+    templateUrl: './other-help.component.html',
+    styleUrls: ['./other-help.component.css'],
+    standalone: false
 })
 export class OtherHelpComponent implements OnInit {
 

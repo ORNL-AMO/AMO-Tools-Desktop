@@ -3,9 +3,10 @@ import { CompressedAirAssessment } from '../../../shared/models/compressed-air-a
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-input-summary',
-  templateUrl: './input-summary.component.html',
-  styleUrls: ['./input-summary.component.css']
+    selector: 'app-input-summary',
+    templateUrl: './input-summary.component.html',
+    styleUrls: ['./input-summary.component.css'],
+    standalone: false
 })
 export class InputSummaryComponent implements OnInit {
   @Input()

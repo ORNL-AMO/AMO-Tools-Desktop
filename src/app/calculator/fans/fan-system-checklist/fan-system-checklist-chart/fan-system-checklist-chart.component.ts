@@ -5,9 +5,10 @@ import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-fan-system-checklist-chart',
-  templateUrl: './fan-system-checklist-chart.component.html',
-  styleUrls: ['./fan-system-checklist-chart.component.css']
+    selector: 'app-fan-system-checklist-chart',
+    templateUrl: './fan-system-checklist-chart.component.html',
+    styleUrls: ['./fan-system-checklist-chart.component.css'],
+    standalone: false
 })
 export class FanSystemChecklistChartComponent implements OnInit {
   @Input()

@@ -21,9 +21,10 @@ import { firstValueFrom } from 'rxjs';
 import { LogToolDataService } from '../../../log-tool-data.service';
 
 @Component({
-  selector: 'app-select-assessment-modal',
-  templateUrl: './select-assessment-modal.component.html',
-  styleUrls: ['./select-assessment-modal.component.css'],
+    selector: 'app-select-assessment-modal',
+    templateUrl: './select-assessment-modal.component.html',
+    styleUrls: ['./select-assessment-modal.component.css'],
+    standalone: false
 })
 export class SelectAssessmentModalComponent implements OnInit {
   @Output('close')

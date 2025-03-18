@@ -6,9 +6,10 @@ import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-mixed-co2-emissions',
-  templateUrl: './mixed-co2-emissions.component.html',
-  styleUrls: ['./mixed-co2-emissions.component.css']
+    selector: 'app-mixed-co2-emissions',
+    templateUrl: './mixed-co2-emissions.component.html',
+    styleUrls: ['./mixed-co2-emissions.component.css'],
+    standalone: false
 })
 export class MixedCo2EmissionsComponent implements OnInit {
 

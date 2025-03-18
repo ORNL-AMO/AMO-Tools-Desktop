@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-parameter-unit',
-  templateUrl: './parameter-unit.component.html',
-  styleUrls: ['./parameter-unit.component.css']
+    selector: 'app-parameter-unit',
+    templateUrl: './parameter-unit.component.html',
+    styleUrls: ['./parameter-unit.component.css'],
+    standalone: false
 })
 export class ParameterUnitComponent implements OnInit {
   @Input()

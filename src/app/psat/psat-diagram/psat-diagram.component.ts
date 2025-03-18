@@ -4,9 +4,10 @@ import { PsatService } from '../psat.service';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
-  selector: 'app-psat-diagram',
-  templateUrl: './psat-diagram.component.html',
-  styleUrls: ['./psat-diagram.component.css']
+    selector: 'app-psat-diagram',
+    templateUrl: './psat-diagram.component.html',
+    styleUrls: ['./psat-diagram.component.css'],
+    standalone: false
 })
 export class PsatDiagramComponent implements OnInit {
   @Input()

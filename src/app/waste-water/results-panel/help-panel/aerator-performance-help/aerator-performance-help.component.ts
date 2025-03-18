@@ -6,9 +6,10 @@ import { aerationRanges, AerationRanges } from '../../../waste-water-defaults';
 import { WasteWaterService } from '../../../waste-water.service';
 
 @Component({
-  selector: 'app-aerator-performance-help',
-  templateUrl: './aerator-performance-help.component.html',
-  styleUrls: ['./aerator-performance-help.component.css']
+    selector: 'app-aerator-performance-help',
+    templateUrl: './aerator-performance-help.component.html',
+    styleUrls: ['./aerator-performance-help.component.css'],
+    standalone: false
 })
 export class AeratorPerformanceHelpComponent implements OnInit {
 

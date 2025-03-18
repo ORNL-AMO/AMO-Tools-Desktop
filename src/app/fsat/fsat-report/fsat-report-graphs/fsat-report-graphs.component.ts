@@ -3,9 +3,10 @@ import { FSAT, FsatOutput, Modification, FsatValid } from '../../../shared/model
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
-  selector: 'app-fsat-report-graphs',
-  templateUrl: './fsat-report-graphs.component.html',
-  styleUrls: ['./fsat-report-graphs.component.css']
+    selector: 'app-fsat-report-graphs',
+    templateUrl: './fsat-report-graphs.component.html',
+    styleUrls: ['./fsat-report-graphs.component.css'],
+    standalone: false
 })
 export class FsatReportGraphsComponent implements OnInit {
   @Input()

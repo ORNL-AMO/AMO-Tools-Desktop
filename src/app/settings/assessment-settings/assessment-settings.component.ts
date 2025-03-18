@@ -8,9 +8,10 @@ import { EGridService } from '../../shared/helper-services/e-grid.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-assessment-settings',
-  templateUrl: './assessment-settings.component.html',
-  styleUrls: ['./assessment-settings.component.css']
+    selector: 'app-assessment-settings',
+    templateUrl: './assessment-settings.component.html',
+    styleUrls: ['./assessment-settings.component.css'],
+    standalone: false
 })
 export class AssessmentSettingsComponent implements OnInit {
 

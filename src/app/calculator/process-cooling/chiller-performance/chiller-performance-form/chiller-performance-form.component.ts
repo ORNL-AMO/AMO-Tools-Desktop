@@ -9,9 +9,10 @@ import { ChillerPerformanceFormService } from '../chiller-performance-form.servi
 import { ChillerPerformanceService } from '../chiller-performance.service';
 
 @Component({
-  selector: 'app-chiller-performance-form',
-  templateUrl: './chiller-performance-form.component.html',
-  styleUrls: ['./chiller-performance-form.component.css']
+    selector: 'app-chiller-performance-form',
+    templateUrl: './chiller-performance-form.component.html',
+    styleUrls: ['./chiller-performance-form.component.css'],
+    standalone: false
 })
 export class ChillerPerformanceFormComponent implements OnInit {
   @Input()

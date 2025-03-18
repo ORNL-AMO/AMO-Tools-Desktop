@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { FanAnalysisService } from '../../../fan-analysis.service';
 
 @Component({
-  selector: 'app-fsat-basics-help',
-  templateUrl: './fsat-basics-help.component.html',
-  styleUrls: ['./fsat-basics-help.component.css']
+    selector: 'app-fsat-basics-help',
+    templateUrl: './fsat-basics-help.component.html',
+    styleUrls: ['./fsat-basics-help.component.css'],
+    standalone: false
 })
 export class FsatBasicsHelpComponent implements OnInit {
 

@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-head-tool-help',
-  templateUrl: './head-tool-help.component.html',
-  styleUrls: ['./head-tool-help.component.css']
+    selector: 'app-head-tool-help',
+    templateUrl: './head-tool-help.component.html',
+    styleUrls: ['./head-tool-help.component.css'],
+    standalone: false
 })
 export class HeadToolHelpComponent implements OnInit {
   @Input()

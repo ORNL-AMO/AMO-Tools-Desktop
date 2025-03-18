@@ -7,9 +7,10 @@ import { Settings } from '../../../shared/models/settings';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-combined-heat-power',
-  templateUrl: './combined-heat-power.component.html',
-  styleUrls: ['./combined-heat-power.component.css']
+    selector: 'app-combined-heat-power',
+    templateUrl: './combined-heat-power.component.html',
+    styleUrls: ['./combined-heat-power.component.css'],
+    standalone: false
 })
 export class CombinedHeatPowerComponent implements OnInit {
 

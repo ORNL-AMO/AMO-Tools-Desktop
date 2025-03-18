@@ -6,9 +6,10 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 @Component({
-  selector: 'app-charge-material-summary',
-  templateUrl: './charge-material-summary.component.html',
-  styleUrls: ['./charge-material-summary.component.css']
+    selector: 'app-charge-material-summary',
+    templateUrl: './charge-material-summary.component.html',
+    styleUrls: ['./charge-material-summary.component.css'],
+    standalone: false
 })
 export class ChargeMaterialSummaryComponent implements OnInit {
   @Input()

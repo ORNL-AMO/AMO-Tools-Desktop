@@ -4,23 +4,24 @@ import { Settings } from '../../../../shared/models/settings';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { PreAssessmentService } from '../pre-assessment.service';
 @Component({
-  selector: 'app-pre-assessment-form',
-  templateUrl: './pre-assessment-form.component.html',
-  styleUrls: ['./pre-assessment-form.component.css'],
-  animations: [
-    trigger('collapsed', [
-      state('open', style({
-        height: 500,
-        opacity: 100
-      })),
-      state('closed', style({
-        height: 0,
-        opacity: 0
-      })),
-      transition('closed => open', animate('.5s ease-in')),
-      transition('open => closed', animate('.5s ease-out'))
-    ])
-  ]
+    selector: 'app-pre-assessment-form',
+    templateUrl: './pre-assessment-form.component.html',
+    styleUrls: ['./pre-assessment-form.component.css'],
+    animations: [
+        trigger('collapsed', [
+            state('open', style({
+                height: 500,
+                opacity: 100
+            })),
+            state('closed', style({
+                height: 0,
+                opacity: 0
+            })),
+            transition('closed => open', animate('.5s ease-in')),
+            transition('open => closed', animate('.5s ease-out'))
+        ])
+    ],
+    standalone: false
 })
 export class PreAssessmentFormComponent implements OnInit {
   @Input()

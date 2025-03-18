@@ -4,9 +4,10 @@ import { Settings } from '../../../../../shared/models/settings';
 import { SSMTOutput } from '../../../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-header-input-table',
-  templateUrl: './header-input-table.component.html',
-  styleUrls: ['./header-input-table.component.css']
+    selector: 'app-header-input-table',
+    templateUrl: './header-input-table.component.html',
+    styleUrls: ['./header-input-table.component.css'],
+    standalone: false
 })
 export class HeaderInputTableComponent implements OnInit {
   @Input()

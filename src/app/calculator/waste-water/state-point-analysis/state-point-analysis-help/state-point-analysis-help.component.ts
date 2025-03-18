@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { StatePointAnalysisService } from '../state-point-analysis.service';
 
 @Component({
-  selector: 'app-state-point-analysis-help',
-  templateUrl: './state-point-analysis-help.component.html',
-  styleUrls: ['./state-point-analysis-help.component.css']
+    selector: 'app-state-point-analysis-help',
+    templateUrl: './state-point-analysis-help.component.html',
+    styleUrls: ['./state-point-analysis-help.component.css'],
+    standalone: false
 })
 export class StatePointAnalysisHelpComponent implements OnInit {
 

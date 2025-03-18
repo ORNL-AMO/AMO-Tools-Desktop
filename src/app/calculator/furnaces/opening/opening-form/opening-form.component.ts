@@ -14,9 +14,10 @@ import { treasureHuntUtilityOptions } from '../../furnace-defaults';
 import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 
 @Component({
-  selector: 'app-opening-form',
-  templateUrl: './opening-form.component.html',
-  styleUrls: ['./opening-form.component.css']
+    selector: 'app-opening-form',
+    templateUrl: './opening-form.component.html',
+    styleUrls: ['./opening-form.component.css'],
+    standalone: false
 })
 export class OpeningFormComponent implements OnInit {
   @Input()

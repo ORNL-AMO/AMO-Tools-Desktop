@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AssessmentService } from '../dashboard/assessment.service';
 
 @Component({
-  selector: 'app-tutorials',
-  templateUrl: './tutorials.component.html',
-  styleUrls: ['./tutorials.component.css']
+    selector: 'app-tutorials',
+    templateUrl: './tutorials.component.html',
+    styleUrls: ['./tutorials.component.css'],
+    standalone: false
 })
 export class TutorialsComponent implements OnInit {
 

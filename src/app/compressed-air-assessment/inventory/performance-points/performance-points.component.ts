@@ -5,9 +5,10 @@ import { InventoryService } from '../inventory.service';
 import { PerformancePointsFormService } from './performance-points-form.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service'
 @Component({
-  selector: 'app-performance-points',
-  templateUrl: './performance-points.component.html',
-  styleUrls: ['./performance-points.component.css']
+    selector: 'app-performance-points',
+    templateUrl: './performance-points.component.html',
+    styleUrls: ['./performance-points.component.css'],
+    standalone: false
 })
 export class PerformancePointsComponent implements OnInit {
 

@@ -4,9 +4,10 @@ import { Settings } from '../../../shared/models/settings';
 import { PumpInventoryService } from '../../pump-inventory.service';
 
 @Component({
-  selector: 'app-pump-status-help',
-  templateUrl: './pump-status-help.component.html',
-  styleUrls: ['./pump-status-help.component.css']
+    selector: 'app-pump-status-help',
+    templateUrl: './pump-status-help.component.html',
+    styleUrls: ['./pump-status-help.component.css'],
+    standalone: false
 })
 export class PumpStatusHelpComponent {
 

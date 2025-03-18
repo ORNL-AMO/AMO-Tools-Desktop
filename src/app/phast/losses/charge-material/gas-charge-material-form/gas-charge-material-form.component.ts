@@ -11,9 +11,10 @@ import { GasLoadMaterialDbService } from '../../../../indexedDb/gas-load-materia
 import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-gas-charge-material-form',
-  templateUrl: './gas-charge-material-form.component.html',
-  styleUrls: ['./gas-charge-material-form.component.css']
+    selector: 'app-gas-charge-material-form',
+    templateUrl: './gas-charge-material-form.component.html',
+    styleUrls: ['./gas-charge-material-form.component.css'],
+    standalone: false
 })
 export class GasChargeMaterialFormComponent implements OnInit {
   @Input()

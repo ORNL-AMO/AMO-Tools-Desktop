@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { RegressionEquationsService } from '../regression-equations.service';
 
 @Component({
-  selector: 'app-regression-equations',
-  templateUrl: './regression-equations.component.html',
-  styleUrls: ['./regression-equations.component.css']
+    selector: 'app-regression-equations',
+    templateUrl: './regression-equations.component.html',
+    styleUrls: ['./regression-equations.component.css'],
+    standalone: false
 })
 export class RegressionEquationsComponent implements OnInit {
   @Input()

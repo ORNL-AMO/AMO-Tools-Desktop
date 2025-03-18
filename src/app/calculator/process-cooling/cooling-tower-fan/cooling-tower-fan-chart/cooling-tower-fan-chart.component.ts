@@ -7,9 +7,10 @@ import * as Plotly from 'plotly.js-dist';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-cooling-tower-fan-chart',
-  templateUrl: './cooling-tower-fan-chart.component.html',
-  styleUrls: ['./cooling-tower-fan-chart.component.css']
+    selector: 'app-cooling-tower-fan-chart',
+    templateUrl: './cooling-tower-fan-chart.component.html',
+    styleUrls: ['./cooling-tower-fan-chart.component.css'],
+    standalone: false
 })
 export class CoolingTowerFanChartComponent implements OnInit {
   @Input()

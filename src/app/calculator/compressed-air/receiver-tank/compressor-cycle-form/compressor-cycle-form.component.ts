@@ -5,9 +5,10 @@ import { ReceiverTankCompressorCycle, ReceiverTankCompressorCycleOutput } from '
 import { ReceiverTankService } from '../receiver-tank.service';
 
 @Component({
-  selector: 'app-compressor-cycle-form',
-  templateUrl: './compressor-cycle-form.component.html',
-  styleUrls: ['./compressor-cycle-form.component.css']
+    selector: 'app-compressor-cycle-form',
+    templateUrl: './compressor-cycle-form.component.html',
+    styleUrls: ['./compressor-cycle-form.component.css'],
+    standalone: false
 })
 export class CompressorCycleFormComponent implements OnInit {
 

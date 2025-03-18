@@ -6,9 +6,10 @@ import { LogToolDataService } from '../../log-tool-data.service';
 import { LogToolDbService } from '../../log-tool-db.service';
 
 @Component({
-  selector: 'app-visualize-tabs',
-  templateUrl: './visualize-tabs.component.html',
-  styleUrls: ['./visualize-tabs.component.css']
+    selector: 'app-visualize-tabs',
+    templateUrl: './visualize-tabs.component.html',
+    styleUrls: ['./visualize-tabs.component.css'],
+    standalone: false
 })
 export class VisualizeTabsComponent implements OnInit {
 

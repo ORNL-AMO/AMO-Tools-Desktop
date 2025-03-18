@@ -15,9 +15,10 @@ import { Subscription } from 'rxjs';
 import { PsatIntegrationService } from '../../shared/connected-inventory/psat-integration.service';
 import { Assessment } from '../../shared/models/assessment';
 @Component({
-  selector: 'app-motor',
-  templateUrl: './motor.component.html',
-  styleUrls: ['./motor.component.css']
+    selector: 'app-motor',
+    templateUrl: './motor.component.html',
+    styleUrls: ['./motor.component.css'],
+    standalone: false
 })
 export class MotorComponent implements OnInit {
   @Input()

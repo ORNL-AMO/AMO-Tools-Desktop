@@ -17,10 +17,11 @@ import { PlotlyService } from "angular-plotly.js";
 import { SankeyNode } from "../models/sankey";
 
 @Component({
-  selector: 'app-psat-sankey',
-  templateUrl: './psat-sankey.component.html',
-  styleUrls: ['./psat-sankey.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-psat-sankey',
+    templateUrl: './psat-sankey.component.html',
+    styleUrls: ['./psat-sankey.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PsatSankeyComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { PumpInventoryData, PumpPropertiesOptions } from '../../../pump-inventor
 import { PumpInventoryService } from '../../../pump-inventory.service';
 
 @Component({
-  selector: 'app-pump-equipment-properties',
-  templateUrl: './pump-equipment-properties.component.html',
-  styleUrls: ['./pump-equipment-properties.component.css']
+    selector: 'app-pump-equipment-properties',
+    templateUrl: './pump-equipment-properties.component.html',
+    styleUrls: ['./pump-equipment-properties.component.css'],
+    standalone: false
 })
 export class PumpEquipmentPropertiesComponent implements OnInit {
 

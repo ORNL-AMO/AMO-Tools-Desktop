@@ -7,9 +7,10 @@ import { SsmtService } from '../../../../ssmt.service';
 
 
 @Component({
-  selector: 'app-explore-turbine-form',
-  templateUrl: './explore-turbine-form.component.html',
-  styleUrls: ['./explore-turbine-form.component.css']
+    selector: 'app-explore-turbine-form',
+    templateUrl: './explore-turbine-form.component.html',
+    styleUrls: ['./explore-turbine-form.component.css'],
+    standalone: false
 })
 export class ExploreTurbineFormComponent implements OnInit {
   @Input()

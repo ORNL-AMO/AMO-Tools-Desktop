@@ -6,9 +6,10 @@ import { CompressedAirAssessmentResultsService } from '../../compressed-air-asse
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-system-profile-summary',
-  templateUrl: './system-profile-summary.component.html',
-  styleUrls: ['./system-profile-summary.component.css']
+    selector: 'app-system-profile-summary',
+    templateUrl: './system-profile-summary.component.html',
+    styleUrls: ['./system-profile-summary.component.css'],
+    standalone: false
 })
 export class SystemProfileSummaryComponent implements OnInit {
 

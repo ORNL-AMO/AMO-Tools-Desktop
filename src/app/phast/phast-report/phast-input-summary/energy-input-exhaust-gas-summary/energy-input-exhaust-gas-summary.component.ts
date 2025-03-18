@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
-  selector: 'app-energy-input-exhaust-gas-summary',
-  templateUrl: './energy-input-exhaust-gas-summary.component.html',
-  styleUrls: ['./energy-input-exhaust-gas-summary.component.css']
+    selector: 'app-energy-input-exhaust-gas-summary',
+    templateUrl: './energy-input-exhaust-gas-summary.component.html',
+    styleUrls: ['./energy-input-exhaust-gas-summary.component.css'],
+    standalone: false
 })
 export class EnergyInputExhaustGasSummaryComponent implements OnInit {
   @Input()

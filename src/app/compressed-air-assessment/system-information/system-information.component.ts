@@ -12,9 +12,10 @@ import { SystemProfileService } from '../system-profile/system-profile.service';
 import { SystemInformationFormService } from './system-information-form.service';
 
 @Component({
-  selector: 'app-system-information',
-  templateUrl: './system-information.component.html',
-  styleUrls: ['./system-information.component.css']
+    selector: 'app-system-information',
+    templateUrl: './system-information.component.html',
+    styleUrls: ['./system-information.component.css'],
+    standalone: false
 })
 export class SystemInformationComponent implements OnInit {
   settings: Settings;

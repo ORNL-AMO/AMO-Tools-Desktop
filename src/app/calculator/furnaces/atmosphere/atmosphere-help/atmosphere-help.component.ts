@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { AtmosphereService } from '../atmosphere.service';
 
 @Component({
-  selector: 'app-atmosphere-help',
-  templateUrl: './atmosphere-help.component.html',
-  styleUrls: ['./atmosphere-help.component.css']
+    selector: 'app-atmosphere-help',
+    templateUrl: './atmosphere-help.component.html',
+    styleUrls: ['./atmosphere-help.component.css'],
+    standalone: false
 })
 export class AtmosphereHelpComponent implements OnInit {
   @Input()

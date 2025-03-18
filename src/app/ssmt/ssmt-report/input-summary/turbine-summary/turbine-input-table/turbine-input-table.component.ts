@@ -3,9 +3,10 @@ import { PressureTurbine, CondensingTurbine } from '../../../../../shared/models
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-turbine-input-table',
-  templateUrl: './turbine-input-table.component.html',
-  styleUrls: ['./turbine-input-table.component.css']
+    selector: 'app-turbine-input-table',
+    templateUrl: './turbine-input-table.component.html',
+    styleUrls: ['./turbine-input-table.component.css'],
+    standalone: false
 })
 export class TurbineInputTableComponent implements OnInit {
   @Input()

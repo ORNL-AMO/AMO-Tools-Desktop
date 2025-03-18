@@ -11,9 +11,10 @@ import { Assessment } from '../../models/assessment';
 import { InventoryItem } from '../../models/inventory/inventory';
 
 @Component({
-  selector: 'app-export-modal',
-  templateUrl: './export-modal.component.html',
-  styleUrls: ['./export-modal.component.css']
+    selector: 'app-export-modal',
+    templateUrl: './export-modal.component.html',
+    styleUrls: ['./export-modal.component.css'],
+    standalone: false
 })
 export class ExportModalComponent implements OnInit {
 

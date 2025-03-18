@@ -3,9 +3,10 @@ import { PrvRanges, PrvService, FeedwaterRanges } from '../prv.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-prv-help',
-  templateUrl: './prv-help.component.html',
-  styleUrls: ['./prv-help.component.css']
+    selector: 'app-prv-help',
+    templateUrl: './prv-help.component.html',
+    styleUrls: ['./prv-help.component.css'],
+    standalone: false
 })
 export class PrvHelpComponent implements OnInit {
   @Input()

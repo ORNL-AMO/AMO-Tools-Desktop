@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-system-information-help',
-  templateUrl: './system-information-help.component.html',
-  styleUrls: ['./system-information-help.component.css']
+    selector: 'app-system-information-help',
+    templateUrl: './system-information-help.component.html',
+    styleUrls: ['./system-information-help.component.css'],
+    standalone: false
 })
 export class SystemInformationHelpComponent implements OnInit {
 

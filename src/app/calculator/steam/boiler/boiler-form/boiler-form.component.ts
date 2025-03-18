@@ -6,9 +6,10 @@ import { SteamService } from '../../steam.service';
 import { BoilerService } from '../boiler.service';
 
 @Component({
-  selector: 'app-boiler-form',
-  templateUrl: './boiler-form.component.html',
-  styleUrls: ['./boiler-form.component.css']
+    selector: 'app-boiler-form',
+    templateUrl: './boiler-form.component.html',
+    styleUrls: ['./boiler-form.component.css'],
+    standalone: false
 })
 export class BoilerFormComponent implements OnInit {
   @Input()

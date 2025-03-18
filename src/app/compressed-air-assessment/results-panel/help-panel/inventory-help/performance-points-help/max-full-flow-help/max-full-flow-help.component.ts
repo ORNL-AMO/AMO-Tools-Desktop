@@ -4,9 +4,10 @@ import { CompressedAirAssessmentService } from '../../../../../compressed-air-as
 import { InventoryService } from '../../../../../inventory/inventory.service';
 
 @Component({
-  selector: 'app-max-full-flow-help',
-  templateUrl: './max-full-flow-help.component.html',
-  styleUrls: ['./max-full-flow-help.component.css']
+    selector: 'app-max-full-flow-help',
+    templateUrl: './max-full-flow-help.component.html',
+    styleUrls: ['./max-full-flow-help.component.css'],
+    standalone: false
 })
 export class MaxFullFlowHelpComponent implements OnInit {
 

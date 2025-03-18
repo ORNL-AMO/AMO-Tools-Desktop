@@ -5,9 +5,10 @@ import { FanTypes, Drives } from '../../../fanOptions';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-fan-setup-summary',
-  templateUrl: './fan-setup-summary.component.html',
-  styleUrls: ['./fan-setup-summary.component.css']
+    selector: 'app-fan-setup-summary',
+    templateUrl: './fan-setup-summary.component.html',
+    styleUrls: ['./fan-setup-summary.component.css'],
+    standalone: false
 })
 export class FanSetupSummaryComponent implements OnInit {
   @Input()

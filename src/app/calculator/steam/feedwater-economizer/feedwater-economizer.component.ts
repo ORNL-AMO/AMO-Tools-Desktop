@@ -8,9 +8,10 @@ import { FeedwaterEconomizerService } from './feedwater-economizer.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-feedwater-economizer',
-  templateUrl: './feedwater-economizer.component.html',
-  styleUrls: ['./feedwater-economizer.component.css']
+    selector: 'app-feedwater-economizer',
+    templateUrl: './feedwater-economizer.component.html',
+    styleUrls: ['./feedwater-economizer.component.css'],
+    standalone: false
 })
 export class FeedwaterEconomizerComponent implements OnInit {
 

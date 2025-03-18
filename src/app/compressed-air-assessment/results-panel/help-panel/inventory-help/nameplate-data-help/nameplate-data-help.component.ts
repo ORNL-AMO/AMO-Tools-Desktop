@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-nameplate-data-help',
-  templateUrl: './nameplate-data-help.component.html',
-  styleUrls: ['./nameplate-data-help.component.css']
+    selector: 'app-nameplate-data-help',
+    templateUrl: './nameplate-data-help.component.html',
+    styleUrls: ['./nameplate-data-help.component.css'],
+    standalone: false
 })
 export class NameplateDataHelpComponent implements OnInit {
 

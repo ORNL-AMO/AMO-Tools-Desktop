@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { CondensingEconomizerService } from '../condensing-economizer.service';
 
 @Component({
-  selector: 'app-condensing-economizer-help',
-  templateUrl: './condensing-economizer-help.component.html',
-  styleUrls: ['./condensing-economizer-help.component.css']
+    selector: 'app-condensing-economizer-help',
+    templateUrl: './condensing-economizer-help.component.html',
+    styleUrls: ['./condensing-economizer-help.component.css'],
+    standalone: false
 })
 export class CondensingEconomizerHelpComponent implements OnInit {
 

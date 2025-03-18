@@ -5,9 +5,10 @@ import { LossesService } from '../losses.service';
 import { LossTab } from '../../tabs';
 import * as _ from 'lodash';
 @Component({
-  selector: 'app-losses-tabs',
-  templateUrl: './losses-tabs.component.html',
-  styleUrls: ['./losses-tabs.component.css']
+    selector: 'app-losses-tabs',
+    templateUrl: './losses-tabs.component.html',
+    styleUrls: ['./losses-tabs.component.css'],
+    standalone: false
 })
 export class LossesTabsComponent implements OnInit {
   @Input()

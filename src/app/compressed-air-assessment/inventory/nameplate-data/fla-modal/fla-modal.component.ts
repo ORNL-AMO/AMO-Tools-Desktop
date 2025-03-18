@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-fla-modal',
-  templateUrl: './fla-modal.component.html',
-  styleUrls: ['./fla-modal.component.css']
+    selector: 'app-fla-modal',
+    templateUrl: './fla-modal.component.html',
+    styleUrls: ['./fla-modal.component.css'],
+    standalone: false
 })
 export class FlaModalComponent implements OnInit {
 

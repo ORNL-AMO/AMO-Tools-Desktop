@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { FlueGasMoistureModalService } from '../../flue-gas-moisture-modal.service';
 
 @Component({
-  selector: 'app-flue-gas-moisture-help',
-  templateUrl: './flue-gas-moisture-help.component.html',
-  styleUrls: ['./flue-gas-moisture-help.component.css']
+    selector: 'app-flue-gas-moisture-help',
+    templateUrl: './flue-gas-moisture-help.component.html',
+    styleUrls: ['./flue-gas-moisture-help.component.css'],
+    standalone: false
 })
 export class FlueGasMoistureHelpComponent implements OnInit {
   @Input()

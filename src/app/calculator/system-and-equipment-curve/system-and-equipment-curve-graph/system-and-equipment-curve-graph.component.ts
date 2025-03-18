@@ -15,9 +15,10 @@ import { RegressionEquationsService } from '../regression-equations.service';
 
 
 @Component({
-  selector: 'app-system-and-equipment-curve-graph',
-  templateUrl: './system-and-equipment-curve-graph.component.html',
-  styleUrls: ['./system-and-equipment-curve-graph.component.css']
+    selector: 'app-system-and-equipment-curve-graph',
+    templateUrl: './system-and-equipment-curve-graph.component.html',
+    styleUrls: ['./system-and-equipment-curve-graph.component.css'],
+    standalone: false
 })
 export class SystemAndEquipmentCurveGraphComponent implements OnInit {
   @Input()

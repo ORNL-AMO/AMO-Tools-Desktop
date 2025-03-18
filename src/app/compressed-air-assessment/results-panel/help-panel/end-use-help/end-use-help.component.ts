@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-end-use-help',
-  templateUrl: './end-use-help.component.html',
-  styleUrls: ['./end-use-help.component.css']
+    selector: 'app-end-use-help',
+    templateUrl: './end-use-help.component.html',
+    styleUrls: ['./end-use-help.component.css'],
+    standalone: false
 })
 export class EndUseHelpComponent implements OnInit {
 

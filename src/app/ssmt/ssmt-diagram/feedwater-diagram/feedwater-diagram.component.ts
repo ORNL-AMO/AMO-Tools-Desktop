@@ -3,9 +3,10 @@ import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-feedwater-diagram',
-  templateUrl: './feedwater-diagram.component.html',
-  styleUrls: ['./feedwater-diagram.component.css']
+    selector: 'app-feedwater-diagram',
+    templateUrl: './feedwater-diagram.component.html',
+    styleUrls: ['./feedwater-diagram.component.css'],
+    standalone: false
 })
 export class FeedwaterDiagramComponent implements OnInit {
   @Input()

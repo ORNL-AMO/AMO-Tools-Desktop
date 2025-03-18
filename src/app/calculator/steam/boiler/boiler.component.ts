@@ -10,9 +10,10 @@ import { Subscription } from 'rxjs';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-boiler-calculator',
-  templateUrl: './boiler.component.html',
-  styleUrls: ['./boiler.component.css']
+    selector: 'app-boiler-calculator',
+    templateUrl: './boiler.component.html',
+    styleUrls: ['./boiler.component.css'],
+    standalone: false
 })
 export class BoilerComponent implements OnInit {
   @Input()

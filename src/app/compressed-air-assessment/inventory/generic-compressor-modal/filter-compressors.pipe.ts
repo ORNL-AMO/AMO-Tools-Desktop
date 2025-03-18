@@ -3,8 +3,9 @@ import { GenericCompressor } from '../../generic-compressor-db.service';
 import * as _ from 'lodash';
 
 @Pipe({
-  name: 'filterCompressors',
-  pure: false
+    name: 'filterCompressors',
+    pure: false,
+    standalone: false
 })
 export class FilterCompressorsPipe implements PipeTransform {
 

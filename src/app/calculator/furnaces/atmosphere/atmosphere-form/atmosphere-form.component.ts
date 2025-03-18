@@ -13,9 +13,10 @@ import { AtmosphereFormService, AtmosphereLossWarnings } from '../atmosphere-for
 import { AtmosphereService } from '../atmosphere.service';
 
 @Component({
-  selector: 'app-atmosphere-form',
-  templateUrl: './atmosphere-form.component.html',
-  styleUrls: ['./atmosphere-form.component.css']
+    selector: 'app-atmosphere-form',
+    templateUrl: './atmosphere-form.component.html',
+    styleUrls: ['./atmosphere-form.component.css'],
+    standalone: false
 })
 export class AtmosphereFormComponent implements OnInit {
   @Input()

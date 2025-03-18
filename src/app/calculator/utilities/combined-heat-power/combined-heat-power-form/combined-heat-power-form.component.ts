@@ -4,9 +4,10 @@ import { CombinedHeatPowerService } from '../combined-heat-power.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
-  selector: 'app-combined-heat-power-form',
-  templateUrl: './combined-heat-power-form.component.html',
-  styleUrls: ['./combined-heat-power-form.component.css']
+    selector: 'app-combined-heat-power-form',
+    templateUrl: './combined-heat-power-form.component.html',
+    styleUrls: ['./combined-heat-power-form.component.css'],
+    standalone: false
 })
 export class CombinedHeatPowerFormComponent implements OnInit {
   @Input()

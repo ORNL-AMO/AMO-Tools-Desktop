@@ -3,9 +3,10 @@ import { PneumaticAirRequirementInput, PneumaticAirRequirementOutput } from "../
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-pneumatic-air-form',
-  templateUrl: './pneumatic-air-form.component.html',
-  styleUrls: ['./pneumatic-air-form.component.css']
+    selector: 'app-pneumatic-air-form',
+    templateUrl: './pneumatic-air-form.component.html',
+    styleUrls: ['./pneumatic-air-form.component.css'],
+    standalone: false
 })
 export class PneumaticAirFormComponent implements OnInit {
   @Input()

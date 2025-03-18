@@ -4,9 +4,10 @@ import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-boiler-diagram',
-  templateUrl: './boiler-diagram.component.html',
-  styleUrls: ['./boiler-diagram.component.css']
+    selector: 'app-boiler-diagram',
+    templateUrl: './boiler-diagram.component.html',
+    styleUrls: ['./boiler-diagram.component.css'],
+    standalone: false
 })
 export class BoilerDiagramComponent implements OnInit {
   @Input()

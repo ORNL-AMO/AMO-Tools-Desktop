@@ -2,9 +2,10 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular
 import { DashboardService } from '../dashboard.service';
 
 @Component({
-  selector: 'app-drag-bar',
-  templateUrl: './drag-bar.component.html',
-  styleUrls: ['./drag-bar.component.css']
+    selector: 'app-drag-bar',
+    templateUrl: './drag-bar.component.html',
+    styleUrls: ['./drag-bar.component.css'],
+    standalone: false
 })
 export class DragBarComponent implements OnInit {
 

@@ -8,9 +8,10 @@ import { WasteWaterService } from '../../../../../waste-water/waste-water.servic
 import { AssessmentService } from '../../../../assessment.service';
 
 @Component({
-  selector: 'app-waste-water-summary-card',
-  templateUrl: './waste-water-summary-card.component.html',
-  styleUrls: ['./waste-water-summary-card.component.css']
+    selector: 'app-waste-water-summary-card',
+    templateUrl: './waste-water-summary-card.component.html',
+    styleUrls: ['./waste-water-summary-card.component.css'],
+    standalone: false
 })
 export class WasteWaterSummaryCardComponent implements OnInit {
   @Input()

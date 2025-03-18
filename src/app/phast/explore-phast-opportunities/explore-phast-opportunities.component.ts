@@ -9,9 +9,10 @@ import { LossesService } from '../losses/losses.service';
 import { SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
 
 @Component({
-  selector: 'app-explore-phast-opportunities',
-  templateUrl: './explore-phast-opportunities.component.html',
-  styleUrls: ['./explore-phast-opportunities.component.css']
+    selector: 'app-explore-phast-opportunities',
+    templateUrl: './explore-phast-opportunities.component.html',
+    styleUrls: ['./explore-phast-opportunities.component.css'],
+    standalone: false
 })
 export class ExplorePhastOpportunitiesComponent implements OnInit {
   @Input()

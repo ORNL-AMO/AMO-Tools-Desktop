@@ -4,9 +4,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { ReplaceExistingService } from '../replace-existing.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 @Component({
-  selector: 'app-replace-existing-form',
-  templateUrl: './replace-existing-form.component.html',
-  styleUrls: ['./replace-existing-form.component.css']
+    selector: 'app-replace-existing-form',
+    templateUrl: './replace-existing-form.component.html',
+    styleUrls: ['./replace-existing-form.component.css'],
+    standalone: false
 })
 export class ReplaceExistingFormComponent implements OnInit {
   @Input()

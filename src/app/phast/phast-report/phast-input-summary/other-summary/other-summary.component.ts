@@ -2,9 +2,10 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
-  selector: 'app-other-summary',
-  templateUrl: './other-summary.component.html',
-  styleUrls: ['./other-summary.component.css']
+    selector: 'app-other-summary',
+    templateUrl: './other-summary.component.html',
+    styleUrls: ['./other-summary.component.css'],
+    standalone: false
 })
 export class OtherSummaryComponent implements OnInit {
   @Input()

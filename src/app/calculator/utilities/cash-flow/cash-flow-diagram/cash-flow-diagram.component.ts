@@ -8,9 +8,10 @@ import { PlotlyService } from 'angular-plotly.js';
 
 
 @Component({
-  selector: 'app-cash-flow-diagram',
-  templateUrl: './cash-flow-diagram.component.html',
-  styleUrls: ['./cash-flow-diagram.component.css']
+    selector: 'app-cash-flow-diagram',
+    templateUrl: './cash-flow-diagram.component.html',
+    styleUrls: ['./cash-flow-diagram.component.css'],
+    standalone: false
 })
 export class CashFlowDiagramComponent implements OnInit {
   @Input()

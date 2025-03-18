@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { InventorySummaryOverviewService, InventorySummary } from '../inventory-summary-overview.service';
 
 @Component({
-  selector: 'app-inventory-overview-pie-chart',
-  templateUrl: './inventory-overview-pie-chart.component.html',
-  styleUrls: ['./inventory-overview-pie-chart.component.css']
+    selector: 'app-inventory-overview-pie-chart',
+    templateUrl: './inventory-overview-pie-chart.component.html',
+    styleUrls: ['./inventory-overview-pie-chart.component.css'],
+    standalone: false
 })
 export class InventoryOverviewPieChartComponent implements OnInit {
 

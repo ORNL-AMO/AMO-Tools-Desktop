@@ -8,9 +8,10 @@ import { AtmosphereService } from './atmosphere.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-atmosphere',
-  templateUrl: './atmosphere.component.html',
-  styleUrls: ['./atmosphere.component.css']
+    selector: 'app-atmosphere',
+    templateUrl: './atmosphere.component.html',
+    styleUrls: ['./atmosphere.component.css'],
+    standalone: false
 })
 export class AtmosphereComponent implements OnInit {
   @Input()

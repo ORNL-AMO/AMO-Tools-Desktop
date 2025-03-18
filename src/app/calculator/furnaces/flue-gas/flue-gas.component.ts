@@ -10,9 +10,10 @@ import { FlueGasService } from './flue-gas.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-flue-gas',
-  templateUrl: './flue-gas.component.html',
-  styleUrls: ['./flue-gas.component.css']
+    selector: 'app-flue-gas',
+    templateUrl: './flue-gas.component.html',
+    styleUrls: ['./flue-gas.component.css'],
+    standalone: false
 })
 export class FlueGasComponent implements OnInit {
 

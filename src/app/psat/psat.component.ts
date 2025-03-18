@@ -25,9 +25,10 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { copyObject, getNewIdString } from '../shared/helperFunctions';
 
 @Component({
-  selector: 'app-psat',
-  templateUrl: './psat.component.html',
-  styleUrls: ['./psat.component.css'],
+    selector: 'app-psat',
+    templateUrl: './psat.component.html',
+    styleUrls: ['./psat.component.css'],
+    standalone: false
 })
 export class PsatComponent implements OnInit {
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;

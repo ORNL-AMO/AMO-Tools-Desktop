@@ -10,9 +10,10 @@ import { HeaderService } from '../../header/header.service';
 import { OperationsService } from '../../operations/operations.service';
 
 @Component({
-  selector: 'app-modify-conditions-tabs',
-  templateUrl: './modify-conditions-tabs.component.html',
-  styleUrls: ['./modify-conditions-tabs.component.css']
+    selector: 'app-modify-conditions-tabs',
+    templateUrl: './modify-conditions-tabs.component.html',
+    styleUrls: ['./modify-conditions-tabs.component.css'],
+    standalone: false
 })
 export class ModifyConditionsTabsComponent implements OnInit {
   @Input()

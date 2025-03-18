@@ -11,9 +11,10 @@ import { PhastResultsService } from '../../phast/phast-results.service';
 import { PhastReportRollupService } from '../phast-report-rollup.service';
 import { ReportRollupService } from '../report-rollup.service';
 @Component({
-  selector: 'app-phast-rollup',
-  templateUrl: './phast-rollup.component.html',
-  styleUrls: ['./phast-rollup.component.css']
+    selector: 'app-phast-rollup',
+    templateUrl: './phast-rollup.component.html',
+    styleUrls: ['./phast-rollup.component.css'],
+    standalone: false
 })
 export class PhastRollupComponent implements OnInit {
   @Input()

@@ -6,9 +6,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
-  selector: 'app-motor-drive-form',
-  templateUrl: './motor-drive-form.component.html',
-  styleUrls: ['./motor-drive-form.component.css']
+    selector: 'app-motor-drive-form',
+    templateUrl: './motor-drive-form.component.html',
+    styleUrls: ['./motor-drive-form.component.css'],
+    standalone: false
 })
 export class MotorDriveFormComponent implements OnInit {
   @Output('emitCalculate')
