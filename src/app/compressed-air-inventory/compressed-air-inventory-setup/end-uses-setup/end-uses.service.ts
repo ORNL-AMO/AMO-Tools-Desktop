@@ -18,7 +18,7 @@ export class EndUsesService {
   }
 
   //TODO
-  // isEndUseValid(endUse: EndUse, compressedAirInventoryData: CompressedAirInventoryData, settings: Settings): boolean {
+  isEndUseValid(endUse: EndUse, compressedAirInventoryData: CompressedAirInventoryData, settings: Settings): boolean {
   //   let allEndUseFieldsValid: boolean = true;
   //   let dayTypeBaselineResults: BaselineResults = this.getBaselineResults(compressedAirInventoryData, settings);
   //   let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == compressedAirInventoryData.endUseData.endUseDayTypeSetup.selectedDayTypeId);
@@ -36,7 +36,8 @@ export class EndUsesService {
   //     allEndUseFieldsValid = false;
   //   }
   //   return allEndUseFieldsValid;
-  // }
+  return true;
+  }
 
   getNewEndUse(): EndUse {
     return {
