@@ -5,13 +5,15 @@ import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Val
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
+import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
 
 @Injectable()
 export class EndUsesService {
 
   selectedEndUse: BehaviorSubject<EndUse>;
   constructor(private formBuilder: UntypedFormBuilder,
-    private convertUnitsService: ConvertUnitsService) {
+    private convertUnitsService: ConvertUnitsService,
+    private compressedAirInventoryService: CompressedAirInventoryService) {
     this.selectedEndUse = new BehaviorSubject<EndUse>(undefined);
   }
 
@@ -54,13 +56,13 @@ export class EndUsesService {
 
   getEndUseFormFromObj(endUse: EndUse, endUses: Array<EndUse>): UntypedFormGroup {
     let form: UntypedFormGroup = this.formBuilder.group({
-      endUseName: [endUse.endUseName,[Validators.required]],
+      endUseName: [endUse.endUseName, [Validators.required]],
       endUseDescription: [endUse.endUseDescription],
       location: [endUse.location],
       endUseId: [endUse.endUseId],
       averageRequiredPressure: [endUse.averageRequiredPressure, [Validators.required, Validators.min(0)]],
       averageLeakRate: [endUse.averageLeakRate, [Validators.required, Validators.min(0)]],
-      averageAirflow: [endUse.averageAirflow,[Validators.required, GreaterThanValidator.greaterThan(0)]],
+      averageAirflow: [endUse.averageAirflow, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       averagePercentCapacity: [endUse.averagePercentCapacity],
       regulated: [endUse.regulated],
       averageMeasuredPressure: [endUse.averageMeasuredPressure, [Validators.required, GreaterThanValidator.greaterThan(0)]],
@@ -180,6 +182,26 @@ export class EndUsesService {
     return { endUse: updatedEndUse, compressedAirInventoryData: compressedAirInventoryData };
   }
 
+  getEndUseResults(endUse: EndUse): EndUseResults {
+    let endUses: Array<EndUse> = this.compressedAirInventoryService.compressedAirInventoryData.getValue().endUses;
+    // end use airflow / Average system flow for day type
+    let dayTypeEndUseResult: EndUseResults = {
+      averagePercentCapacity: undefined,
+      averageExcessPressure: undefined,
+    }
+    let sumEndUsesAirflow: number = 0;
+    endUses.forEach(use => {
+      sumEndUsesAirflow += use.averageAirflow;
+    });
+    if (sumEndUsesAirflow) {
+      let averagePercentCapacity = this.convertUnitsService.roundVal((endUse.averageAirflow / sumEndUsesAirflow) * 100, 2);
+      let excessPressure = endUse.averageMeasuredPressure - endUse.averageRequiredPressure;
+      dayTypeEndUseResult.averagePercentCapacity = averagePercentCapacity;
+      dayTypeEndUseResult.averageExcessPressure = excessPressure;
+    }
+    return dayTypeEndUseResult;
+  }
+
 
 
 }
@@ -193,4 +215,9 @@ export interface EndUseWarnings {
 export interface UpdatedEndUseData {
   endUse: EndUse,
   compressedAirInventoryData: CompressedAirInventoryData
+}
+
+export interface EndUseResults {
+  averagePercentCapacity: number
+  averageExcessPressure: number,
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
-import { EndUsesService, EndUseWarnings, UpdatedEndUseData } from './end-uses.service';
+import { EndUseResults, EndUsesService, EndUseWarnings, UpdatedEndUseData } from './end-uses.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
@@ -20,6 +20,7 @@ export class EndUsesSetupComponent implements OnInit {
   selectedEndUseSubscription: Subscription;
   settings: Settings;
   compressedAirInventoryData: CompressedAirInventoryData;
+  endUseResult: EndUseResults;
   warnings: EndUseWarnings = { averageRequiredPressure: undefined, averageMeasuredPressure: undefined };
 
   constructor(private compressedAirInventoryService: CompressedAirInventoryService,
@@ -40,6 +41,7 @@ export class EndUsesSetupComponent implements OnInit {
       } else {
         this.hasEndUses = false;
       }
+      this.endUseResult = this.endUsesService.getEndUseResults(selectedEndUse);
     });
 
   }
@@ -59,6 +61,7 @@ export class EndUsesSetupComponent implements OnInit {
     }
     this.isFormChange = true;
     this.warnings = this.endUsesService.checkEndUseWarnings(endUse);
+    this.endUseResult = this.endUsesService.getEndUseResults(endUse);
     let updated: UpdatedEndUseData = this.endUsesService.updateCompressedAirEndUse(endUse, this.compressedAirInventoryData, this.settings);
     this.compressedAirInventoryData = updated.compressedAirInventoryData;
     this.compressedAirInventoryService.compressedAirInventoryData.next(updated.compressedAirInventoryData);

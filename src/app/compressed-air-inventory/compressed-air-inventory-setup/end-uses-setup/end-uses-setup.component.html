@@ -102,11 +102,11 @@
                 <div (click)="focusField('averagePercentCapacity')" class="form-group">
                     <label for="averagePercentCapacity">Average Percent Capacity</label>
                     <div class="text-center small bold">
-                        <!-- <span
+                        <span
                             *ngIf="endUseResult.averagePercentCapacity">{{endUseResult.averagePercentCapacity
                             |
                             number}}%</span>
-                        <span *ngIf="!endUseResult.averagePercentCapacity">&mdash; &mdash;</span> -->
+                        <span *ngIf="!endUseResult.averagePercentCapacity">&mdash; &mdash;</span>
                     </div>
                 </div>
 
@@ -144,11 +144,11 @@
                 <div (click)="focusField('averageExcessPressure')" class="form-group">
                     <label for="averageExcessPressure">Average Excess Pressure</label>
                     <div class="text-center small bold">
-                        <!-- <span *ngIf="form.averageExcessPressure">{{endUseResult.averageExcessPressure | number}}
+                        <span *ngIf="endUseResult.averageExcessPressure">{{endUseResult.averageExcessPressure | number}}
                             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
                             <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
                         </span>
-                        <span *ngIf="!endUseResult.averageExcessPressure">&mdash; &mdash;</span> -->
+                        <span *ngIf="!endUseResult.averageExcessPressure">&mdash; &mdash;</span>
                     </div>
                 </div>
 
