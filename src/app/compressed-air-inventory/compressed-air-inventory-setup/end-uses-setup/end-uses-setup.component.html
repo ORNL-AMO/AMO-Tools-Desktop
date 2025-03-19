@@ -1,13 +1,34 @@
 <div class="d-flex flex-column panel-container">
-    <div class="header mr-2 ml-2">
-        <h3>End Use</h3>
-        <br>
-    </div>
     <div class="p-3 no-data" *ngIf="!hasEndUses">
         <button type="button" class="btn btn-primary active" (click)="addEndUse()">+Add End Use</button>
     </div>
-    <div class="mr-2 ml-2" *ngIf="hasEndUses">
+    <div *ngIf="hasEndUses">
         <form [formGroup]="form">
+
+            <div class="header">
+                <h3>Leak Rate Setup</h3>
+                <br>
+            </div>
+            <div class="form-group">
+                <label for="averageLeakRate">Average Leak Rate</label>
+                <div class="input-group">
+                    <input class="form-control" type="number" (input)="save()" formControlName="averageLeakRate"
+                        (focus)="focusField('averageLeakRate')">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'"
+                        class="units input-group-addon">m<sup>3</sup>/min</span>
+                    <span class="alert-danger pull-right small"
+                        *ngIf="form.controls.averageLeakRate.invalid && !form.controls.averageLeakRate.pristine">
+                        <span *ngIf="form.controls.averageLeakRate.errors.required">Value Required</span>
+                        <span *ngIf="form.controls.averageLeakRate.errors.min">Value must be 0 or greater</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="header">
+                <h3>End Use</h3>
+                <br>
+            </div>
             <div class="form-group">
                 <label for="name">End Use Name</label>
                 <div class="input-group">
@@ -17,7 +38,7 @@
                         *ngIf="form.controls.endUseName.invalid && !form.controls.endUseName.pristine">
                         <span *ngIf="form.controls.endUseName.errors.required">Value Required</span>
                         <span *ngIf="form.controls.endUseName.errors.duplicateNamedUse">An End Use with the name
-                            "{{form.controls.endUseName.errors.duplicateNamedUse.val}}" already exists </span> 
+                            "{{form.controls.endUseName.errors.duplicateNamedUse.val}}" already exists </span>
                     </span>
                 </div>
             </div>
@@ -37,24 +58,100 @@
             </div>
 
             <div class="form-group">
-                <label for="requiredPressure">Required Pressure</label>
+                <label for="averageRequiredPressure">Average Required Pressure</label>
                 <div class="input-group">
-                    <input name="requiredPressure" type="number" step="any" class="form-control" id="requiredPressure"
-                        formControlName="requiredPressure" (input)="save()"
-                        (focus)="focusField('requiredPressure')">
+                    <input name="averageRequiredPressure" type="number" step="any" class="form-control"
+                        id="averageRequiredPressure" formControlName="averageRequiredPressure" (input)="save()"
+                        (focus)="focusField('averageRequiredPressure')">
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
                     <span class="alert-danger pull-right small"
-                        *ngIf="form.controls.requiredPressure.invalid && !form.controls.requiredPressure.pristine">
-                        <span *ngIf="form.controls.requiredPressure.errors.required">Value Required</span>
-                        <span *ngIf="form.controls.requiredPressure.errors.min">Value can't be less than
-                            {{form.controls.requiredPressure.errors.min.min}} </span>
+                        *ngIf="form.controls.averageRequiredPressure.invalid && !form.controls.averageRequiredPressure.pristine">
+                        <span *ngIf="form.controls.averageRequiredPressure.errors.required">Value Required</span>
+                        <span *ngIf="form.controls.averageRequiredPressure.errors.min">Value can't be less than
+                            {{form.controls.averageRequiredPressure.errors.min.min}} </span>
                     </span>
                     <span class="alert-warning small px-4 py-2 mx-auto"
-                        *ngIf="warnings.requiredPressure !== undefined">{{
-                        warnings.requiredPressure }}</span>
+                        *ngIf="warnings.averageRequiredPressure !== undefined">{{
+                        warnings.averageRequiredPressure }}</span>
 
                 </div>
+            </div>
+
+            <div>
+                <label class="group-label sub-form-label">End Use Data</label>
+
+                <div class="form-group">
+                    <label for="averageAirflow">Average Airflow</label>
+                    <div class="input-group">
+                        <input name="averageAirflow" type="number" step="any" class="form-control" id="averageAirflow"
+                            formControlName="averageAirflow" (input)="save()" (focus)="focusField('averageAirflow')">
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'"
+                            class="units input-group-addon">m<sup>3</sup>/min</span>
+                        <span class="alert-danger pull-right small"
+                            *ngIf="form.controls.averageAirflow.invalid && !form.controls.averageAirflow.pristine">
+                            <span *ngIf="form.controls.averageAirflow.errors.required">Value Required</span>
+                            <span *ngIf="form.controls.averageAirflow.errors.greaterThan === 0">Value must be greater
+                                than 0
+                            </span>
+                        </span>
+                    </div>
+                </div>
+
+                <div (click)="focusField('averagePercentCapacity')" class="form-group">
+                    <label for="averagePercentCapacity">Average Percent Capacity</label>
+                    <div class="text-center small bold">
+                        <!-- <span
+                            *ngIf="endUseResult.averagePercentCapacity">{{endUseResult.averagePercentCapacity
+                            |
+                            number}}%</span>
+                        <span *ngIf="!endUseResult.averagePercentCapacity">&mdash; &mdash;</span> -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="regulated">Regulated</label>
+                    <select id="regulated" name="regulated" formControlName="regulated" (change)="save()"
+                        (focus)="focusField('regulated')" class="form-control">
+                        <option [ngValue]="true">Yes</option>
+                        <option [ngValue]="false">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="averageMeasuredPressure">Average Measured Pressure</label>
+                    <div class="input-group">
+                        <input name="averageMeasuredPressure" type="number" step="any" class="form-control"
+                            id="averageMeasuredPressure" formControlName="averageMeasuredPressure" (input)="save()"
+                            (focus)="focusField('averageMeasuredPressure')">
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+                        <span class="alert-danger pull-right small"
+                            *ngIf="form.controls.averageMeasuredPressure.invalid && !form.controls.averageMeasuredPressure.pristine">
+                            <span *ngIf="form.controls.averageMeasuredPressure.errors.required">Value Required</span>
+                            <span *ngIf="form.controls.averageMeasuredPressure.errors.greaterThan == 0">Value must be
+                                greater
+                                than 0
+                            </span>
+                        </span>
+                        <span class="alert-warning small px-4 py-2 mx-auto"
+                            *ngIf="warnings.averageMeasuredPressure !== undefined">{{
+                            warnings.averageMeasuredPressure }}</span>
+                    </div>
+                </div>
+
+                <div (click)="focusField('averageExcessPressure')" class="form-group">
+                    <label for="averageExcessPressure">Average Excess Pressure</label>
+                    <div class="text-center small bold">
+                        <!-- <span *ngIf="form.averageExcessPressure">{{endUseResult.averageExcessPressure | number}}
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                        </span>
+                        <span *ngIf="!endUseResult.averageExcessPressure">&mdash; &mdash;</span> -->
+                    </div>
+                </div>
+
             </div>
 
         </form>

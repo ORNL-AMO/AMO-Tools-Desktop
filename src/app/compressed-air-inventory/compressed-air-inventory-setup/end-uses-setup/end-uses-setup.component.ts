@@ -20,7 +20,7 @@ export class EndUsesSetupComponent implements OnInit {
   selectedEndUseSubscription: Subscription;
   settings: Settings;
   compressedAirInventoryData: CompressedAirInventoryData;
-  warnings: EndUseWarnings = { requiredPressure: undefined };
+  warnings: EndUseWarnings = { averageRequiredPressure: undefined, averageMeasuredPressure: undefined };
 
   constructor(private compressedAirInventoryService: CompressedAirInventoryService,
     private endUsesService: EndUsesService) { }

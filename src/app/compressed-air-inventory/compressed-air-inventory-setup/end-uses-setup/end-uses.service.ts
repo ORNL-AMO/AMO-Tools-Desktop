@@ -4,6 +4,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class EndUsesService {
@@ -41,17 +42,30 @@ export class EndUsesService {
       endUseName: 'New End Use',
       modifiedDate: new Date(),
       endUseDescription: undefined,
-      requiredPressure: undefined,
+      averageRequiredPressure: undefined,
+      averageLeakRate: undefined,
+      averageAirflow: undefined,
+      averagePercentCapacity: undefined,
+      regulated: false,
+      averageMeasuredPressure: undefined,
+      averageExcessPressure: undefined,
     }
   }
 
   getEndUseFormFromObj(endUse: EndUse, endUses: Array<EndUse>): UntypedFormGroup {
     let form: UntypedFormGroup = this.formBuilder.group({
-      endUseName: [endUse.endUseName],
+      endUseName: [endUse.endUseName,[Validators.required]],
       endUseDescription: [endUse.endUseDescription],
       location: [endUse.location],
       endUseId: [endUse.endUseId],
-      requiredPressure: [endUse.requiredPressure, [Validators.required, Validators.min(0)]],
+      averageRequiredPressure: [endUse.averageRequiredPressure, [Validators.required, Validators.min(0)]],
+      averageLeakRate: [endUse.averageLeakRate, [Validators.required, Validators.min(0)]],
+      averageAirflow: [endUse.averageAirflow,[Validators.required, GreaterThanValidator.greaterThan(0)]],
+      averagePercentCapacity: [endUse.averagePercentCapacity],
+      regulated: [endUse.regulated],
+      averageMeasuredPressure: [endUse.averageMeasuredPressure, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      averageExcessPressure: [endUse.averageExcessPressure],
+
     });
     form = this.setEndUseNameValidators(form, endUses);
 
@@ -99,22 +113,37 @@ export class EndUsesService {
       endUseId: selectedEndUse.endUseId,
       modifiedDate: selectedEndUse.modifiedDate,
       endUseName: form.controls.endUseName.value,
-      requiredPressure: form.controls.requiredPressure.value,
+      averageRequiredPressure: form.controls.averageRequiredPressure.value,
       location: form.controls.location.value,
       endUseDescription: form.controls.endUseDescription.value,
+      averageLeakRate: form.controls.averageLeakRate.value,
+      averageAirflow: form.controls.averageAirflow.value,
+      averagePercentCapacity: form.controls.averagePercentCapacity.value,
+      regulated: form.controls.regulated.value,
+      averageMeasuredPressure: form.controls.averageMeasuredPressure.value,
+      averageExcessPressure: form.controls.averageExcessPressure.value,
     }
   }
 
   checkEndUseWarnings(endUse: EndUse): EndUseWarnings {
     return {
-      requiredPressure: this.checkRequiredPressure(endUse),
+      averageRequiredPressure: this.checkRequiredPressure(endUse),
+      averageMeasuredPressure: this.checkMeasuredPressure(endUse)
     }
   }
 
 
   checkRequiredPressure(endUse: EndUse): string {
-    if (endUse.requiredPressure !== undefined && endUse.requiredPressure === 0) {
+    if (endUse.averageRequiredPressure !== undefined && endUse.averageRequiredPressure === 0) {
       return `Required Pressure should be greater than 0`;
+    } else {
+      return undefined;
+    }
+  }
+
+  checkMeasuredPressure(endUse: EndUse): string {
+    if (endUse.averageMeasuredPressure && endUse.averageMeasuredPressure <= endUse.averageRequiredPressure) {
+      return `Measured Pressure should be greater than Required Pressure (${endUse.averageRequiredPressure})`;
     } else {
       return undefined;
     }
@@ -145,7 +174,7 @@ export class EndUsesService {
   }
 
   updateCompressedAirEndUse(updatedEndUse: EndUse, compressedAirInventoryData: CompressedAirInventoryData, settings: Settings): UpdatedEndUseData {
-    updatedEndUse.modifiedDate = new Date();    
+    updatedEndUse.modifiedDate = new Date();
     let endUseIndex: number = compressedAirInventoryData.endUses.findIndex(item => { return item.endUseId == updatedEndUse.endUseId });
     compressedAirInventoryData.endUses[endUseIndex] = updatedEndUse;
     return { endUse: updatedEndUse, compressedAirInventoryData: compressedAirInventoryData };
@@ -156,7 +185,8 @@ export class EndUsesService {
 }
 
 export interface EndUseWarnings {
-  requiredPressure: string,
+  averageRequiredPressure: string,
+  averageMeasuredPressure: string,
   duplicateNameWarning?: string
 }
 

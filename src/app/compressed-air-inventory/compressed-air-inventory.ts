@@ -214,7 +214,14 @@ export interface EndUse {
   location?: string,
   endUseDescription: string,
   isValid?: boolean,
-  requiredPressure?: number,
+  averageRequiredPressure?: number,
+  averageLeakRate?: number,
+  averageAirflow?: number,
+  averagePercentCapacity?: number,
+  regulated?: boolean,
+  averageMeasuredPressure?: number,
+  averageExcessPressure?: number,
+
 }
 
 

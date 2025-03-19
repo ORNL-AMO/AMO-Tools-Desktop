@@ -69,21 +69,7 @@ export class CompressedAirInventoryService {
       endUses: endUses
     }
   }
-
-  getEndUses(): Array<EndUse> {
-    return [
-      {
-        endUseId: Math.random().toString(36).substr(2, 9),
-        modifiedDate: new Date("2022-08-03T21:07:29.942Z"),
-        endUseName: "Pneumatic Tools 1",
-        requiredPressure: 95,
-        location: "Production Line 1",
-        endUseDescription: "Total of all hand tools found on production line 1",
-      }
-    ]
-
-  }
-
+  
   getSystemInformation(): SystemInformation {
     return {
       systemElevation: null,
