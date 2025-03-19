@@ -19,7 +19,7 @@
             [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}"
             [ngStyle]="{'height.px': containerHeight}">
             <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
-            <app-system-setup *ngIf="setupTab == 'system-setup'"></app-system-setup> 
+            <app-system-setup *ngIf="setupTab == 'system-setup'"></app-system-setup>
             <app-compressed-air-properties *ngIf="setupTab == 'compressor-properties'"></app-compressed-air-properties>
             <app-compressed-air-catalog *ngIf="setupTab == 'compressed-air-catalog'"></app-compressed-air-catalog>
             <app-end-uses-setup *ngIf="setupTab == 'end-uses'"></app-end-uses-setup>
@@ -29,11 +29,26 @@
             <div class="col-12">
                 <div class="row no-gutters">
                     <div class="col-12">
-                        <div class="d-flex flex-wrap tabs primary mr-2 ml-2" *ngIf="setupTab == 'compressed-air-catalog'">
+                        <div class="d-flex flex-wrap tabs primary mr-2 ml-2"
+                            *ngIf="setupTab == 'compressed-air-catalog'">
                             <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
                                 <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
                                     (click)="setTab('results')">
                                     <div>System Catalog</div>
+                                </a>
+                            </div>
+                            <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+                                <a class="h-100 d-flex justify-content-center align-items-center"
+                                    (click)="setTab('help')">
+                                    <div>Help</div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap tabs primary mr-2 ml-2" *ngIf="setupTab == 'end-uses'">
+                            <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+                                <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                                    (click)="setTab('results')">
+                                    <div>End Uses</div>
                                 </a>
                             </div>
                             <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
@@ -48,10 +63,13 @@
                 <div class="row no-gutters">
                     <div class="col-12">
                         <app-help-panel
-                            *ngIf="(tabSelect == 'help' && setupTab == 'compressed-air-catalog') || setupTab != 'compressed-air-catalog'">
+                            *ngIf="(tabSelect == 'help' && (setupTab == 'compressed-air-catalog' || setupTab == 'end-uses' )) || (setupTab != 'compressed-air-catalog' &&  setupTab != 'end-uses')">
                         </app-help-panel>
-                        <app-system-catalog-table *ngIf="tabSelect == 'results' && setupTab == 'compressed-air-catalog'">
+                        <app-system-catalog-table
+                            *ngIf="tabSelect == 'results' && setupTab == 'compressed-air-catalog'">
                         </app-system-catalog-table>
+                        <app-end-uses-table
+                            *ngIf="tabSelect == 'results' && setupTab == 'end-uses'"></app-end-uses-table>
                     </div>
                 </div>
             </div>

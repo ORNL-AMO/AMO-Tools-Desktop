@@ -18,6 +18,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { SystemCapacityModule } from '../../calculator/compressed-air/system-capacity/system-capacity.module';
 import { EndUsesSetupComponent } from './end-uses-setup/end-uses-setup.component';
 import { EndUsesService } from './end-uses-setup/end-uses.service';
+import { EndUsesTableComponent } from './end-uses-table/end-uses-table.component';
 
 
 
@@ -29,6 +30,7 @@ import { EndUsesService } from './end-uses-setup/end-uses.service';
     SystemCatalogTableComponent,
     SystemCapacityInventoryModalComponent,
     EndUsesSetupComponent,
+    EndUsesTableComponent,
   ],
   imports: [
     CommonModule,
