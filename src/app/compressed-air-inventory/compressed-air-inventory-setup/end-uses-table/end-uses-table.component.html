@@ -11,7 +11,8 @@
                         Name
                     </th>
                     <th>Location</th>
-                    <th>Required Pressure</th>
+                    <th>Average Required Pressure</th>
+                    <th>Average Airflow</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -28,10 +29,17 @@
                         {{endUse.location}}
                     </td>
                     <td>
-                        {{endUse.requiredPressure}}
-                        <span *ngIf="endUse.requiredPressure">
+                        {{endUse.averageRequiredPressure}}
+                        <span *ngIf="endUse.averageRequiredPressure">
                             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
                             <span *ngIf="settings.unitsOfMeasure == 'Metric'">barg</span>
+                        </span>
+                    </td>
+                    <td>
+                        {{endUse.averageAirflow}}
+                        <span *ngIf="endUse.averageAirflow">
+                            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                         </span>
                     </td>
                     <td>
