@@ -7,6 +7,7 @@ export interface CompressedAirInventoryData {
   systemInformation: SystemInformation,
   systems: Array<CompressedAirInventorySystem>,
   displayOptions: CompressedAirPropertyDisplayOptions,
+  endUses: Array<EndUse>,
   hasConnectedInventoryItems?: boolean,
   hasConnectedPsat?: boolean,
   isValid?: boolean,
@@ -96,7 +97,7 @@ export interface CentrifugalSpecifics {
   minFullLoadCapacity: number
 }
 
-export interface FieldMeasurements {  
+export interface FieldMeasurements {
   yearlyOperatingHours: number,
   operatingHours?: OperatingHours,
 
@@ -205,6 +206,25 @@ export interface CompressorTypeOption {
   lubricantTypeEnumValue: number,
   stageTypeEnumValue: number
 }
+
+export interface EndUse {
+  endUseId: string,
+  modifiedDate: Date,
+  endUseName: string,
+  location?: string,
+  endUseDescription: string,
+  isValid?: boolean,
+  averageRequiredPressure?: number,
+  averageLeakRate?: number,
+  averageAirflow?: number,
+  averagePercentCapacity?: number,
+  regulated?: boolean,
+  averageMeasuredPressure?: number,
+  averageExcessPressure?: number,
+
+}
+
+
 export const CompressorTypeOptions: Array<CompressorTypeOption> = [
   {
     value: 1,
