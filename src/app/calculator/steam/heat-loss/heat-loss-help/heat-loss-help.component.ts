@@ -3,9 +3,10 @@ import { HeatLossRanges, HeatLossService } from '../heat-loss.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-heat-loss-help',
-  templateUrl: './heat-loss-help.component.html',
-  styleUrls: ['./heat-loss-help.component.css']
+    selector: 'app-heat-loss-help',
+    templateUrl: './heat-loss-help.component.html',
+    styleUrls: ['./heat-loss-help.component.css'],
+    standalone: false
 })
 export class HeatLossHelpComponent implements OnInit {
   @Input()

@@ -6,9 +6,10 @@ import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
-  selector: 'app-blowdown-rate-form',
-  templateUrl: './blowdown-rate-form.component.html',
-  styleUrls: ['./blowdown-rate-form.component.css']
+    selector: 'app-blowdown-rate-form',
+    templateUrl: './blowdown-rate-form.component.html',
+    styleUrls: ['./blowdown-rate-form.component.css'],
+    standalone: false
 })
 export class BlowdownRateFormComponent implements OnInit {
   @Input()

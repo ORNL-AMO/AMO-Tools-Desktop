@@ -9,9 +9,10 @@ import { PumpCatalogService } from '../pump-catalog.service';
 import { FluidCatalogService } from './fluid-catalog.service';
 
 @Component({
-  selector: 'app-fluid-catalog',
-  templateUrl: './fluid-catalog.component.html',
-  styleUrls: ['./fluid-catalog.component.css']
+    selector: 'app-fluid-catalog',
+    templateUrl: './fluid-catalog.component.html',
+    styleUrls: ['./fluid-catalog.component.css'],
+    standalone: false
 })
 export class FluidCatalogComponent implements OnInit {
   settingsSub: Subscription;

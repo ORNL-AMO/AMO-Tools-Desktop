@@ -6,9 +6,10 @@ import { Assessment } from '../../../shared/models/assessment';
 import { SsmtService } from '../../ssmt.service';
 
 @Component({
-  selector: 'app-report-diagram',
-  templateUrl: './report-diagram.component.html',
-  styleUrls: ['./report-diagram.component.css']
+    selector: 'app-report-diagram',
+    templateUrl: './report-diagram.component.html',
+    styleUrls: ['./report-diagram.component.css'],
+    standalone: false
 })
 export class ReportDiagramComponent implements OnInit {
   @Input()

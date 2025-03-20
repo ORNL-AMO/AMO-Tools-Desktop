@@ -10,9 +10,10 @@ import { TreasureHuntService } from '../../treasure-hunt/treasure-hunt.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-assessment-integration',
-  templateUrl: './assessment-integration.component.html',
-  styleUrls: ['./assessment-integration.component.css']
+    selector: 'app-assessment-integration',
+    templateUrl: './assessment-integration.component.html',
+    styleUrls: ['./assessment-integration.component.css'],
+    standalone: false
 })
 export class AssessmentIntegrationComponent implements OnInit {
   @Input()

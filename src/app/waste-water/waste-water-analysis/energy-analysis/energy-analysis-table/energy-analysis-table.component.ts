@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { WasteWaterService } from '../../../waste-water.service';
 
 @Component({
-  selector: 'app-energy-analysis-table',
-  templateUrl: './energy-analysis-table.component.html',
-  styleUrls: ['./energy-analysis-table.component.css']
+    selector: 'app-energy-analysis-table',
+    templateUrl: './energy-analysis-table.component.html',
+    styleUrls: ['./energy-analysis-table.component.css'],
+    standalone: false
 })
 export class EnergyAnalysisTableComponent implements OnInit {
   @Input()

@@ -5,9 +5,10 @@ import { Settings } from '../../shared/models/settings';
 import { WasteWaterService } from '../waste-water.service';
 
 @Component({
-  selector: 'app-waste-water-calculators',
-  templateUrl: './waste-water-calculators.component.html',
-  styleUrls: ['./waste-water-calculators.component.css']
+    selector: 'app-waste-water-calculators',
+    templateUrl: './waste-water-calculators.component.html',
+    styleUrls: ['./waste-water-calculators.component.css'],
+    standalone: false
 })
 export class WasteWaterCalculatorsComponent implements OnInit {
 

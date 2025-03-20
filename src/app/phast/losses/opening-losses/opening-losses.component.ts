@@ -9,9 +9,10 @@ import { OpeningFormService } from '../../../calculator/furnaces/opening/opening
 import { OpeningService } from '../../../calculator/furnaces/opening/opening.service';
 
 @Component({
-  selector: 'app-opening-losses',
-  templateUrl: './opening-losses.component.html',
-  styleUrls: ['./opening-losses.component.css']
+    selector: 'app-opening-losses',
+    templateUrl: './opening-losses.component.html',
+    styleUrls: ['./opening-losses.component.css'],
+    standalone: false
 })
 export class OpeningLossesComponent implements OnInit {
   @Input()

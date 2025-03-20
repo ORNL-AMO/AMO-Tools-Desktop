@@ -10,9 +10,10 @@ import { AssessmentService } from '../../../../assessment.service';
 import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment/compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-compressed-air-assessment-card',
-  templateUrl: './compressed-air-assessment-card.component.html',
-  styleUrls: ['./compressed-air-assessment-card.component.css']
+    selector: 'app-compressed-air-assessment-card',
+    templateUrl: './compressed-air-assessment-card.component.html',
+    styleUrls: ['./compressed-air-assessment-card.component.css'],
+    standalone: false
 })
 export class CompressedAirAssessmentCardComponent implements OnInit {
   @Input()

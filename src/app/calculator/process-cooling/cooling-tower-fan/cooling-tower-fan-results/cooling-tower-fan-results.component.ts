@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { CoolingTowerFanService } from '../cooling-tower-fan.service';
 
 @Component({
-  selector: 'app-cooling-tower-fan-results',
-  templateUrl: './cooling-tower-fan-results.component.html',
-  styleUrls: ['./cooling-tower-fan-results.component.css']
+    selector: 'app-cooling-tower-fan-results',
+    templateUrl: './cooling-tower-fan-results.component.html',
+    styleUrls: ['./cooling-tower-fan-results.component.css'],
+    standalone: false
 })
 export class CoolingTowerFanResultsComponent implements OnInit {
 

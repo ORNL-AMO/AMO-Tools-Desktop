@@ -7,9 +7,10 @@ import { SsmtService } from '../../../../ssmt.service';
 import { HeaderService, HeaderWarnings } from '../../../../header/header.service';
 
 @Component({
-  selector: 'app-condensate-handling-form',
-  templateUrl: './condensate-handling-form.component.html',
-  styleUrls: ['./condensate-handling-form.component.css']
+    selector: 'app-condensate-handling-form',
+    templateUrl: './condensate-handling-form.component.html',
+    styleUrls: ['./condensate-handling-form.component.css'],
+    standalone: false
 })
 export class CondensateHandlingFormComponent implements OnInit {
   @Input()

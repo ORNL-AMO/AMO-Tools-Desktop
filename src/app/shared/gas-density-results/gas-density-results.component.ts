@@ -8,9 +8,10 @@ import { FanPsychrometricService, FanPsychrometricWarnings } from '../../calcula
 
 
 @Component({
-  selector: 'app-gas-density-results',
-  templateUrl: './gas-density-results.component.html',
-  styleUrls: ['./gas-density-results.component.css']
+    selector: 'app-gas-density-results',
+    templateUrl: './gas-density-results.component.html',
+    styleUrls: ['./gas-density-results.component.css'],
+    standalone: false
 })
 export class GasDensityResultsComponent implements OnInit {
   @Input() inSetup: boolean;

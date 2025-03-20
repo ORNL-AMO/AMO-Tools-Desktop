@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { OpeningService } from '../opening.service';
 
 @Component({
-  selector: 'app-opening-results',
-  templateUrl: './opening-results.component.html',
-  styleUrls: ['./opening-results.component.css']
+    selector: 'app-opening-results',
+    templateUrl: './opening-results.component.html',
+    styleUrls: ['./opening-results.component.css'],
+    standalone: false
 })
 export class OpeningResultsComponent implements OnInit {
   @Input()

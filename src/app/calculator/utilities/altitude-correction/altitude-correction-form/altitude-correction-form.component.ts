@@ -6,9 +6,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { AltitudeCorrectionService } from '../altitude-correction.service';
 
 @Component({
-  selector: 'app-altitude-correction-form',
-  templateUrl: './altitude-correction-form.component.html',
-  styleUrls: ['./altitude-correction-form.component.css']
+    selector: 'app-altitude-correction-form',
+    templateUrl: './altitude-correction-form.component.html',
+    styleUrls: ['./altitude-correction-form.component.css'],
+    standalone: false
 })
 export class AltitudeCorrectionFormComponent implements OnInit {
   @Input()

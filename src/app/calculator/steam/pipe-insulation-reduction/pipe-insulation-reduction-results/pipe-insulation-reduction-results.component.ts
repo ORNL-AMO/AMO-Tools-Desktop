@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { PipeInsulationReductionResults } from '../../../../shared/models/standalone';
 
 @Component({
-  selector: 'app-pipe-insulation-reduction-results',
-  templateUrl: './pipe-insulation-reduction-results.component.html',
-  styleUrls: ['./pipe-insulation-reduction-results.component.css']
+    selector: 'app-pipe-insulation-reduction-results',
+    templateUrl: './pipe-insulation-reduction-results.component.html',
+    styleUrls: ['./pipe-insulation-reduction-results.component.css'],
+    standalone: false
 })
 export class PipeInsulationReductionResultsComponent implements OnInit {
   @Input()

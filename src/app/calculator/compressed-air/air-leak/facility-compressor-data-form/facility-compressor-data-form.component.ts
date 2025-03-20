@@ -10,9 +10,10 @@ import { AirLeakFormService } from '../air-leak-form/air-leak-form.service';
 import { ConvertAirLeakService } from '../convert-air-leak.service';
 
 @Component({
-  selector: 'app-facility-compressor-data-form',
-  templateUrl: './facility-compressor-data-form.component.html',
-  styleUrls: ['./facility-compressor-data-form.component.css']
+    selector: 'app-facility-compressor-data-form',
+    templateUrl: './facility-compressor-data-form.component.html',
+    styleUrls: ['./facility-compressor-data-form.component.css'],
+    standalone: false
 })
 export class FacilityCompressorDataFormComponent implements OnInit {
 

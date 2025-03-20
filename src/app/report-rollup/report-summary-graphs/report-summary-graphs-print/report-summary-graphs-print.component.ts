@@ -7,9 +7,10 @@ import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-
 import { ReportSummaryGraphsService } from '../report-summary-graphs.service';
 
 @Component({
-  selector: 'app-report-summary-graphs-print',
-  templateUrl: './report-summary-graphs-print.component.html',
-  styleUrls: ['./report-summary-graphs-print.component.css']
+    selector: 'app-report-summary-graphs-print',
+    templateUrl: './report-summary-graphs-print.component.html',
+    styleUrls: ['./report-summary-graphs-print.component.css'],
+    standalone: false
 })
 export class ReportSummaryGraphsPrintComponent implements OnInit {
 

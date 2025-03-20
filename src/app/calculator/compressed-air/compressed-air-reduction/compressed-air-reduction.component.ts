@@ -8,9 +8,10 @@ import { CompressedAirReductionTreasureHunt, Treasure } from '../../../shared/mo
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-compressed-air-reduction',
-  templateUrl: './compressed-air-reduction.component.html',
-  styleUrls: ['./compressed-air-reduction.component.css']
+    selector: 'app-compressed-air-reduction',
+    templateUrl: './compressed-air-reduction.component.html',
+    styleUrls: ['./compressed-air-reduction.component.css'],
+    standalone: false
 })
 export class CompressedAirReductionComponent implements OnInit {
   @Input()

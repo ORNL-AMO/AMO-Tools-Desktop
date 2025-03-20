@@ -6,9 +6,10 @@ import { ApplicationInstanceDbService } from '../../../indexedDb/application-ins
 import { MeasurSurveyService } from '../measur-survey.service';
 
 @Component({
-  selector: 'app-experience-survey',
-  templateUrl: './experience-survey.component.html',
-  styleUrl: './experience-survey.component.css'
+    selector: 'app-experience-survey',
+    templateUrl: './experience-survey.component.html',
+    styleUrl: './experience-survey.component.css',
+    standalone: false
 })
 export class ExperienceSurveyComponent {
   @Input()

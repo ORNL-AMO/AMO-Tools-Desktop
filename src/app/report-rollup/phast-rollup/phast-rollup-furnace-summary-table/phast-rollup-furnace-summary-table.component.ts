@@ -6,9 +6,10 @@ import { PhastResultsData } from '../../report-rollup-models';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
 
 @Component({
-  selector: 'app-phast-rollup-furnace-summary-table',
-  templateUrl: './phast-rollup-furnace-summary-table.component.html',
-  styleUrls: ['./phast-rollup-furnace-summary-table.component.css']
+    selector: 'app-phast-rollup-furnace-summary-table',
+    templateUrl: './phast-rollup-furnace-summary-table.component.html',
+    styleUrls: ['./phast-rollup-furnace-summary-table.component.css'],
+    standalone: false
 })
 export class PhastRollupFurnaceSummaryTableComponent implements OnInit {
   @Input()

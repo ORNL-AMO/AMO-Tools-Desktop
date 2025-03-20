@@ -5,9 +5,10 @@ import { Settings } from '../../../shared/models/settings';
 import { HelpPanelService } from '../help-panel.service';
 import { Subscription } from 'rxjs';
 @Component({
-  selector: 'app-motor-help',
-  templateUrl: './motor-help.component.html',
-  styleUrls: ['./motor-help.component.css']
+    selector: 'app-motor-help',
+    templateUrl: './motor-help.component.html',
+    styleUrls: ['./motor-help.component.css'],
+    standalone: false
 })
 export class MotorHelpComponent implements OnInit {
   currentField: string;

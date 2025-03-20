@@ -5,9 +5,10 @@ import { PumpInventoryService } from '../../pump-inventory.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-pump-field-help',
-  templateUrl: './pump-field-help.component.html',
-  styleUrls: ['./pump-field-help.component.css']
+    selector: 'app-pump-field-help',
+    templateUrl: './pump-field-help.component.html',
+    styleUrls: ['./pump-field-help.component.css'],
+    standalone: false
 })
 export class PumpFieldHelpComponent {
 

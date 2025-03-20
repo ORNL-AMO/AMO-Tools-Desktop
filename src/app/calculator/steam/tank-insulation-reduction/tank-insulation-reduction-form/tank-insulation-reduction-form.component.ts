@@ -7,9 +7,10 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { TankInsulationReductionInput } from '../../../../shared/models/standalone';
 
 @Component({
-  selector: 'app-tank-insulation-reduction-form',
-  templateUrl: './tank-insulation-reduction-form.component.html',
-  styleUrls: ['./tank-insulation-reduction-form.component.css']
+    selector: 'app-tank-insulation-reduction-form',
+    templateUrl: './tank-insulation-reduction-form.component.html',
+    styleUrls: ['./tank-insulation-reduction-form.component.css'],
+    standalone: false
 })
 export class TankInsulationReductionFormComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { DeaeratorOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-deaerator-diagram',
-  templateUrl: './deaerator-diagram.component.html',
-  styleUrls: ['./deaerator-diagram.component.css']
+    selector: 'app-deaerator-diagram',
+    templateUrl: './deaerator-diagram.component.html',
+    styleUrls: ['./deaerator-diagram.component.css'],
+    standalone: false
 })
 export class DeaeratorDiagramComponent implements OnInit {
   @Input()

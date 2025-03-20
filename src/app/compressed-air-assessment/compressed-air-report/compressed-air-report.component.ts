@@ -13,9 +13,10 @@ import { CompressedAirAssessmentService } from '../compressed-air-assessment.ser
 import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../explore-opportunities/explore-opportunities-validation.service';
 
 @Component({
-  selector: 'app-compressed-air-report',
-  templateUrl: './compressed-air-report.component.html',
-  styleUrls: ['./compressed-air-report.component.css']
+    selector: 'app-compressed-air-report',
+    templateUrl: './compressed-air-report.component.html',
+    styleUrls: ['./compressed-air-report.component.css'],
+    standalone: false
 })
 export class CompressedAirReportComponent implements OnInit {
   @Input()

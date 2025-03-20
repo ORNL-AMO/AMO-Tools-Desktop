@@ -3,9 +3,10 @@ import { HelpPanelService } from '../help-panel.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-pump-operations-help',
-  templateUrl: './pump-operations-help.component.html',
-  styleUrls: ['./pump-operations-help.component.css']
+    selector: 'app-pump-operations-help',
+    templateUrl: './pump-operations-help.component.html',
+    styleUrls: ['./pump-operations-help.component.css'],
+    standalone: false
 })
 export class PumpOperationsHelpComponent implements OnInit {
  

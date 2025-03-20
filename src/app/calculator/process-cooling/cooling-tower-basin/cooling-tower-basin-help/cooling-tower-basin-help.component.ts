@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { CoolingTowerBasinService } from '../cooling-tower-basin.service';
 
 @Component({
-  selector: 'app-cooling-tower-basin-help',
-  templateUrl: './cooling-tower-basin-help.component.html',
-  styleUrls: ['./cooling-tower-basin-help.component.css']
+    selector: 'app-cooling-tower-basin-help',
+    templateUrl: './cooling-tower-basin-help.component.html',
+    styleUrls: ['./cooling-tower-basin-help.component.css'],
+    standalone: false
 })
 export class CoolingTowerBasinHelpComponent implements OnInit {
 

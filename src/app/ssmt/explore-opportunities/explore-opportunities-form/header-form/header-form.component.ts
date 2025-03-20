@@ -7,9 +7,10 @@ import { UntypedFormGroup, Validators } from '@angular/forms';
 import { SsmtService } from '../../../ssmt.service';
 
 @Component({
-  selector: 'app-header-form',
-  templateUrl: './header-form.component.html',
-  styleUrls: ['./header-form.component.css']
+    selector: 'app-header-form',
+    templateUrl: './header-form.component.html',
+    styleUrls: ['./header-form.component.css'],
+    standalone: false
 })
 export class HeaderFormComponent implements OnInit {
   @Input()

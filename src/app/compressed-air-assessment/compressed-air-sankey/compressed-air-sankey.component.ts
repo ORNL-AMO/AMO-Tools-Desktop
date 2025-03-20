@@ -3,9 +3,10 @@ import { Assessment } from "../../shared/models/assessment";
 
 
 @Component({
-  selector: 'app-compressed-air-sankey',
-  templateUrl: './compressed-air-sankey.component.html',
-  styleUrls: ['./compressed-air-sankey.component.css']
+    selector: 'app-compressed-air-sankey',
+    templateUrl: './compressed-air-sankey.component.html',
+    styleUrls: ['./compressed-air-sankey.component.css'],
+    standalone: false
 })
 export class CompressedAirSankeyComponent implements OnInit {
   @Input()

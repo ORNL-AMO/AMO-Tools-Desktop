@@ -5,9 +5,10 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-cash-flow',
-  templateUrl: './cash-flow.component.html',
-  styleUrls: ['./cash-flow.component.css']
+    selector: 'app-cash-flow',
+    templateUrl: './cash-flow.component.html',
+    styleUrls: ['./cash-flow.component.css'],
+    standalone: false
 })
 export class CashFlowComponent implements OnInit {
   @Input()

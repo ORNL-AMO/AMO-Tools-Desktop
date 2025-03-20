@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-adjust-cascading-set-points-help',
-  templateUrl: './adjust-cascading-set-points-help.component.html',
-  styleUrls: ['./adjust-cascading-set-points-help.component.css']
+    selector: 'app-adjust-cascading-set-points-help',
+    templateUrl: './adjust-cascading-set-points-help.component.html',
+    styleUrls: ['./adjust-cascading-set-points-help.component.css'],
+    standalone: false
 })
 export class AdjustCascadingSetPointsHelpComponent implements OnInit {
 

@@ -6,9 +6,10 @@ import { Settings } from '../../../../../shared/models/settings';
 import { FanAnalysisService } from '../../fan-analysis.service';
 
 @Component({
-  selector: 'app-plane-data-form',
-  templateUrl: './plane-data-form.component.html',
-  styleUrls: ['./plane-data-form.component.css']
+    selector: 'app-plane-data-form',
+    templateUrl: './plane-data-form.component.html',
+    styleUrls: ['./plane-data-form.component.css'],
+    standalone: false
 })
 export class PlaneDataFormComponent implements OnInit {
   @Input()

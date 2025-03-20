@@ -5,9 +5,10 @@ import { Assessment } from '../../../shared/models/assessment';
 import { ExecutiveSummaryService } from '../executive-summary.service';
 
 @Component({
-  selector: 'app-report-sankey',
-  templateUrl: './report-sankey.component.html',
-  styleUrls: ['./report-sankey.component.css']
+    selector: 'app-report-sankey',
+    templateUrl: './report-sankey.component.html',
+    styleUrls: ['./report-sankey.component.css'],
+    standalone: false
 })
 export class ReportSankeyComponent implements OnInit {
   @Input()

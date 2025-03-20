@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-blowdown-rate-results',
-  templateUrl: './blowdown-rate-results.component.html',
-  styleUrls: ['./blowdown-rate-results.component.css']
+    selector: 'app-blowdown-rate-results',
+    templateUrl: './blowdown-rate-results.component.html',
+    styleUrls: ['./blowdown-rate-results.component.css'],
+    standalone: false
 })
 export class BlowdownRateResultsComponent implements OnInit {
   @Input()

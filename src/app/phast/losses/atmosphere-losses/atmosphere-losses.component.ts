@@ -8,9 +8,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { AtmosphereFormService } from '../../../calculator/furnaces/atmosphere/atmosphere-form.service';
 
 @Component({
-  selector: 'app-atmosphere-losses',
-  templateUrl: './atmosphere-losses.component.html',
-  styleUrls: ['./atmosphere-losses.component.css']
+    selector: 'app-atmosphere-losses',
+    templateUrl: './atmosphere-losses.component.html',
+    styleUrls: ['./atmosphere-losses.component.css'],
+    standalone: false
 })
 export class AtmosphereLossesComponent implements OnInit {
   @Input()

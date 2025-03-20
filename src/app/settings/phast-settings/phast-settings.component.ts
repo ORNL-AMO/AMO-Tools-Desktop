@@ -3,9 +3,10 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-phast-settings',
-  templateUrl: './phast-settings.component.html',
-  styleUrls: ['./phast-settings.component.css']
+    selector: 'app-phast-settings',
+    templateUrl: './phast-settings.component.html',
+    styleUrls: ['./phast-settings.component.css'],
+    standalone: false
 })
 export class PhastSettingsComponent implements OnInit {
   @Input()

@@ -12,9 +12,10 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { TreasureHuntReportService } from '../../treasure-hunt-report/treasure-hunt-report.service';
 
 @Component({
-  selector: 'app-summary-card',
-  templateUrl: './summary-card.component.html',
-  styleUrls: ['./summary-card.component.css']
+    selector: 'app-summary-card',
+    templateUrl: './summary-card.component.html',
+    styleUrls: ['./summary-card.component.css'],
+    standalone: false
 })
 export class SummaryCardComponent implements OnInit {
   @Input()

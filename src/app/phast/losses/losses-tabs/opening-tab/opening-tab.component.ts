@@ -8,9 +8,10 @@ import { Subscription } from 'rxjs';
 import { OpeningFormService, OpeningLossWarnings } from '../../../../calculator/furnaces/opening/opening-form.service';
 
 @Component({
-  selector: 'app-opening-tab',
-  templateUrl: './opening-tab.component.html',
-  styleUrls: ['./opening-tab.component.css']
+    selector: 'app-opening-tab',
+    templateUrl: './opening-tab.component.html',
+    styleUrls: ['./opening-tab.component.css'],
+    standalone: false
 })
 export class OpeningTabComponent implements OnInit {
   @Input()

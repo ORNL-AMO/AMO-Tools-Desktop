@@ -6,9 +6,10 @@ import { ReceiverTankService } from '../receiver-tank.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-general-method-form',
-  templateUrl: './general-method-form.component.html',
-  styleUrls: ['./general-method-form.component.css']
+    selector: 'app-general-method-form',
+    templateUrl: './general-method-form.component.html',
+    styleUrls: ['./general-method-form.component.css'],
+    standalone: false
 })
 export class GeneralMethodFormComponent implements OnInit {
   @Input()

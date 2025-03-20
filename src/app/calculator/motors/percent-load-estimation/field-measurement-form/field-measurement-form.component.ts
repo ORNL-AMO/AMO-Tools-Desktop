@@ -3,9 +3,10 @@ import { FieldMeasurementInputs, PercentLoadEstimationService } from '../percent
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-field-measurement-form',
-  templateUrl: './field-measurement-form.component.html',
-  styleUrls: ['./field-measurement-form.component.css']
+    selector: 'app-field-measurement-form',
+    templateUrl: './field-measurement-form.component.html',
+    styleUrls: ['./field-measurement-form.component.css'],
+    standalone: false
 })
 export class FieldMeasurementFormComponent implements OnInit {
   @Input()

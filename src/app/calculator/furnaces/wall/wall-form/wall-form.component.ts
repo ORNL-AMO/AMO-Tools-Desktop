@@ -13,9 +13,10 @@ import { WallFormService } from '../wall-form.service';
 import { WallService } from '../wall.service';
 
 @Component({
-  selector: 'app-wall-form',
-  templateUrl: './wall-form.component.html',
-  styleUrls: ['./wall-form.component.css']
+    selector: 'app-wall-form',
+    templateUrl: './wall-form.component.html',
+    styleUrls: ['./wall-form.component.css'],
+    standalone: false
 })
 export class WallFormComponent implements OnInit {
   @Input()

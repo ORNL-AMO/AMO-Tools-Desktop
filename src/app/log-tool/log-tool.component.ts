@@ -9,9 +9,10 @@ import { LogToolService } from './log-tool.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-log-tool',
-  templateUrl: './log-tool.component.html',
-  styleUrls: ['./log-tool.component.css']
+    selector: 'app-log-tool',
+    templateUrl: './log-tool.component.html',
+    styleUrls: ['./log-tool.component.css'],
+    standalone: false
 })
 export class LogToolComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;

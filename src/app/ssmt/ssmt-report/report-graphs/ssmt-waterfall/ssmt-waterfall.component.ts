@@ -7,9 +7,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-ssmt-waterfall',
-  templateUrl: './ssmt-waterfall.component.html',
-  styleUrls: ['./ssmt-waterfall.component.css']
+    selector: 'app-ssmt-waterfall',
+    templateUrl: './ssmt-waterfall.component.html',
+    styleUrls: ['./ssmt-waterfall.component.css'],
+    standalone: false
 })
 export class SsmtWaterfallComponent implements OnInit {
   @Input()

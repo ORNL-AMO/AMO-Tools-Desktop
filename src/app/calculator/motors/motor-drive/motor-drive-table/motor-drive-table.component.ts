@@ -2,9 +2,10 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { MotorDriveOutputs } from '../../../../shared/models/calculators';
 
 @Component({
-  selector: 'app-motor-drive-table',
-  templateUrl: './motor-drive-table.component.html',
-  styleUrls: ['./motor-drive-table.component.css']
+    selector: 'app-motor-drive-table',
+    templateUrl: './motor-drive-table.component.html',
+    styleUrls: ['./motor-drive-table.component.css'],
+    standalone: false
 })
 export class MotorDriveTableComponent implements OnInit {
   @Input()

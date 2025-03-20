@@ -4,9 +4,10 @@ import { EmailMeasurDataService, EmailSentStatus } from './email-measur-data.ser
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-email-measur-data',
-  templateUrl: './email-measur-data.component.html',
-  styleUrls: ['./email-measur-data.component.css']
+    selector: 'app-email-measur-data',
+    templateUrl: './email-measur-data.component.html',
+    styleUrls: ['./email-measur-data.component.css'],
+    standalone: false
 })
 export class EmailMeasurDataComponent {
   @Input()

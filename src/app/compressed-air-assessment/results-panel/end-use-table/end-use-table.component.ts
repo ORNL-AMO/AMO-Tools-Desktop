@@ -7,9 +7,10 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
 import { EndUseResults, EndUsesService, UpdatedEndUseData } from '../../end-uses/end-uses.service';
 
 @Component({
-  selector: 'app-end-use-table',
-  templateUrl: './end-use-table.component.html',
-  styleUrls: ['./end-use-table.component.css']
+    selector: 'app-end-use-table',
+    templateUrl: './end-use-table.component.html',
+    styleUrls: ['./end-use-table.component.css'],
+    standalone: false
 })
 export class EndUseTableComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;

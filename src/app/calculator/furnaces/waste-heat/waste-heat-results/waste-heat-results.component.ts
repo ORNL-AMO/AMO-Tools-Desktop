@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { WasteHeatService } from '../waste-heat.service';
 
 @Component({
-  selector: 'app-waste-heat-results',
-  templateUrl: './waste-heat-results.component.html',
-  styleUrls: ['./waste-heat-results.component.css']
+    selector: 'app-waste-heat-results',
+    templateUrl: './waste-heat-results.component.html',
+    styleUrls: ['./waste-heat-results.component.css'],
+    standalone: false
 })
 export class WasteHeatResultsComponent implements OnInit {
   @Input()

@@ -5,9 +5,10 @@ import { WasteWaterService } from '../../waste-water.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-explore-opportunities-form',
-  templateUrl: './explore-opportunities-form.component.html',
-  styleUrls: ['./explore-opportunities-form.component.css']
+    selector: 'app-explore-opportunities-form',
+    templateUrl: './explore-opportunities-form.component.html',
+    styleUrls: ['./explore-opportunities-form.component.css'],
+    standalone: false
 })
 export class ExploreOpportunitiesFormComponent implements OnInit {
 

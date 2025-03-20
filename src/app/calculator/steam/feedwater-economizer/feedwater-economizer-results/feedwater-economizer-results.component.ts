@@ -5,9 +5,10 @@ import { FeedwaterEconomizerOutput } from '../../../../shared/models/steam/feedw
 import { FeedwaterEconomizerService } from '../feedwater-economizer.service';
 
 @Component({
-  selector: 'app-feedwater-economizer-results',
-  templateUrl: './feedwater-economizer-results.component.html',
-  styleUrls: ['./feedwater-economizer-results.component.css']
+    selector: 'app-feedwater-economizer-results',
+    templateUrl: './feedwater-economizer-results.component.html',
+    styleUrls: ['./feedwater-economizer-results.component.css'],
+    standalone: false
 })
 export class FeedwaterEconomizerResultsComponent implements OnInit {
   @Input()

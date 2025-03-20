@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-control-data-help',
-  templateUrl: './control-data-help.component.html',
-  styleUrls: ['./control-data-help.component.css']
+    selector: 'app-control-data-help',
+    templateUrl: './control-data-help.component.html',
+    styleUrls: ['./control-data-help.component.css'],
+    standalone: false
 })
 export class ControlDataHelpComponent implements OnInit {
 

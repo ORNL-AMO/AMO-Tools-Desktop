@@ -7,9 +7,10 @@ import { InventoryService } from './inventory.service';
 import * as _ from 'lodash';
 import { CompressedAirDataManagementService } from '../compressed-air-data-management.service';
 @Component({
-  selector: 'app-inventory',
-  templateUrl: './inventory.component.html',
-  styleUrls: ['./inventory.component.css']
+    selector: 'app-inventory',
+    templateUrl: './inventory.component.html',
+    styleUrls: ['./inventory.component.css'],
+    standalone: false
 })
 export class InventoryComponent implements OnInit {
 

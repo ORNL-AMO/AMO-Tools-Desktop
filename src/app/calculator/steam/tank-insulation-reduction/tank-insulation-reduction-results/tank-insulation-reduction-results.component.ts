@@ -3,9 +3,10 @@ import { TankInsulationReductionResults } from '../../../../shared/models/standa
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-tank-insulation-reduction-results',
-  templateUrl: './tank-insulation-reduction-results.component.html',
-  styleUrls: ['./tank-insulation-reduction-results.component.css']
+    selector: 'app-tank-insulation-reduction-results',
+    templateUrl: './tank-insulation-reduction-results.component.html',
+    styleUrls: ['./tank-insulation-reduction-results.component.css'],
+    standalone: false
 })
 export class TankInsulationReductionResultsComponent implements OnInit {
   @Input()

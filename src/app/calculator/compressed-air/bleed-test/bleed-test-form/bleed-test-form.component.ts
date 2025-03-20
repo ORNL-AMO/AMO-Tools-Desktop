@@ -6,9 +6,10 @@ import { BleedTestInput } from '../../../../shared/models/standalone';
 import { BleedTestService } from '../bleed-test.service';
 
 @Component({
-  selector: 'app-bleed-test-form',
-  templateUrl: './bleed-test-form.component.html',
-  styleUrls: ['./bleed-test-form.component.css']
+    selector: 'app-bleed-test-form',
+    templateUrl: './bleed-test-form.component.html',
+    styleUrls: ['./bleed-test-form.component.css'],
+    standalone: false
 })
 export class BleedTestFormComponent implements OnInit {
   @Input()

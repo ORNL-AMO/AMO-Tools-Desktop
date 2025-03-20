@@ -10,9 +10,10 @@ import * as _ from 'lodash';
 
 
 @Component({
-  selector: 'app-inventory-integration',
-  templateUrl: './inventory-integration.component.html',
-  styleUrls: ['./inventory-integration.component.css']
+    selector: 'app-inventory-integration',
+    templateUrl: './inventory-integration.component.html',
+    styleUrls: ['./inventory-integration.component.css'],
+    standalone: false
 })
 export class InventoryIntegrationComponent {
   @Input()

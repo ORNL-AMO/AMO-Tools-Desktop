@@ -17,9 +17,10 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 declare const packageJson;
 @Component({
-  selector: 'app-pump-inventory',
-  templateUrl: './pump-inventory.component.html',
-  styleUrls: ['./pump-inventory.component.css']
+    selector: 'app-pump-inventory',
+    templateUrl: './pump-inventory.component.html',
+    styleUrls: ['./pump-inventory.component.css'],
+    standalone: false
 })
 export class PumpInventoryComponent implements OnInit {
   @HostListener('window:resize', ['$event'])

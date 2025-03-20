@@ -7,9 +7,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-orifice-method-form',
-  templateUrl: './orifice-method-form.component.html',
-  styleUrls: ['./orifice-method-form.component.css']
+    selector: 'app-orifice-method-form',
+    templateUrl: './orifice-method-form.component.html',
+    styleUrls: ['./orifice-method-form.component.css'],
+    standalone: false
 })
 export class OrificeMethodFormComponent implements OnInit {
 

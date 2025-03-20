@@ -4,9 +4,10 @@ import { PsatService } from '../../psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 @Component({
-  selector: 'app-input-summary',
-  templateUrl: './input-summary.component.html',
-  styleUrls: ['./input-summary.component.css']
+    selector: 'app-input-summary',
+    templateUrl: './input-summary.component.html',
+    styleUrls: ['./input-summary.component.css'],
+    standalone: false
 })
 export class InputSummaryComponent implements OnInit {
   @Input()

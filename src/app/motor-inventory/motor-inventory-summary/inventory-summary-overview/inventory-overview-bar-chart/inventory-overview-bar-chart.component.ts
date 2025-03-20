@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-inventory-overview-bar-chart',
-  templateUrl: './inventory-overview-bar-chart.component.html',
-  styleUrls: ['./inventory-overview-bar-chart.component.css']
+    selector: 'app-inventory-overview-bar-chart',
+    templateUrl: './inventory-overview-bar-chart.component.html',
+    styleUrls: ['./inventory-overview-bar-chart.component.css'],
+    standalone: false
 })
 export class InventoryOverviewBarChartComponent implements OnInit {
 

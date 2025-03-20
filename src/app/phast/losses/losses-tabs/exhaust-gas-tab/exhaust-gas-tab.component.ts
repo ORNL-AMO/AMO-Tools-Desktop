@@ -9,9 +9,10 @@ import { ExhaustGasCompareService } from '../../exhaust-gas/exhaust-gas-compare.
 import { ExhaustGasEAF } from '../../../../shared/models/phast/losses/exhaustGasEAF';
 
 @Component({
-  selector: 'app-exhaust-gas-tab',
-  templateUrl: './exhaust-gas-tab.component.html',
-  styleUrls: ['./exhaust-gas-tab.component.css']
+    selector: 'app-exhaust-gas-tab',
+    templateUrl: './exhaust-gas-tab.component.html',
+    styleUrls: ['./exhaust-gas-tab.component.css'],
+    standalone: false
 })
 export class ExhaustGasTabComponent implements OnInit {
   @Input()

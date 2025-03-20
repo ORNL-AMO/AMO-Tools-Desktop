@@ -7,9 +7,10 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-pneumatic-air',
-  templateUrl: './pneumatic-air.component.html',
-  styleUrls: ['./pneumatic-air.component.css']
+    selector: 'app-pneumatic-air',
+    templateUrl: './pneumatic-air.component.html',
+    styleUrls: ['./pneumatic-air.component.css'],
+    standalone: false
 })
 export class PneumaticAirComponent implements OnInit {
   @Input()

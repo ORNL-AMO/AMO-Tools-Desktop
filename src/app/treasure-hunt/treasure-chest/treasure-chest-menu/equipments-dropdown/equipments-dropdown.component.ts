@@ -11,9 +11,10 @@ import { processEquipmentOptions } from '../../../calculators/opportunity-sheet/
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-equipments-dropdown',
-  templateUrl: './equipments-dropdown.component.html',
-  styleUrls: ['./equipments-dropdown.component.css']
+    selector: 'app-equipments-dropdown',
+    templateUrl: './equipments-dropdown.component.html',
+    styleUrls: ['./equipments-dropdown.component.css'],
+    standalone: false
 })
 export class EquipmentsDropdownComponent implements OnInit {
   @Input()

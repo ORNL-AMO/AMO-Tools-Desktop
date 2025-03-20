@@ -13,9 +13,10 @@ import { FeedwaterEconomizerFormService, FeedwaterEconomizerWarnings } from '../
 import { FeedwaterEconomizerService } from '../feedwater-economizer.service';
 
 @Component({
-  selector: 'app-feedwater-economizer-form',
-  templateUrl: './feedwater-economizer-form.component.html',
-  styleUrls: ['./feedwater-economizer-form.component.css']
+    selector: 'app-feedwater-economizer-form',
+    templateUrl: './feedwater-economizer-form.component.html',
+    styleUrls: ['./feedwater-economizer-form.component.css'],
+    standalone: false
 })
 export class FeedwaterEconomizerFormComponent implements OnInit {
   @Input()

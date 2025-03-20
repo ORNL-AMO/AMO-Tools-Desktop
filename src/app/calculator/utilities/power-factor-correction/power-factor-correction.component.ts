@@ -4,9 +4,10 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 import { PowerFactorCorrectionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
-  selector: 'app-power-factor-correction',
-  templateUrl: './power-factor-correction.component.html',
-  styleUrls: ['./power-factor-correction.component.css']
+    selector: 'app-power-factor-correction',
+    templateUrl: './power-factor-correction.component.html',
+    styleUrls: ['./power-factor-correction.component.css'],
+    standalone: false
 })
 export class PowerFactorCorrectionComponent implements OnInit {
   @Input()

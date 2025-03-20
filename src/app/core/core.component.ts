@@ -20,9 +20,10 @@ import { MeasurSurveyService } from '../shared/measur-survey/measur-survey.servi
 import { UpdateApplicationService } from '../shared/update-application/update-application.service';
 
 @Component({
-  selector: 'app-core',
-  templateUrl: './core.component.html',
-  styleUrls: ['./core.component.css'],
+    selector: 'app-core',
+    templateUrl: './core.component.html',
+    styleUrls: ['./core.component.css'],
+    standalone: false
 })
 
 export class CoreComponent implements OnInit {

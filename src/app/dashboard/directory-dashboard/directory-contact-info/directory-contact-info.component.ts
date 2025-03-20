@@ -11,9 +11,10 @@ import { Directory } from '../../../shared/models/directory';
 import { DashboardService } from '../../dashboard.service';
 
 @Component({
-  selector: 'app-directory-contact-info',
-  templateUrl: './directory-contact-info.component.html',
-  styleUrls: ['./directory-contact-info.component.css']
+    selector: 'app-directory-contact-info',
+    templateUrl: './directory-contact-info.component.html',
+    styleUrls: ['./directory-contact-info.component.css'],
+    standalone: false
 })
 export class DirectoryContactInfoComponent implements OnInit {
 

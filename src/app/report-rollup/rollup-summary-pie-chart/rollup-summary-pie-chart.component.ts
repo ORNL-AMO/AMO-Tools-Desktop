@@ -2,9 +2,10 @@ import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef } fr
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-rollup-summary-pie-chart',
-  templateUrl: './rollup-summary-pie-chart.component.html',
-  styleUrls: ['./rollup-summary-pie-chart.component.css']
+    selector: 'app-rollup-summary-pie-chart',
+    templateUrl: './rollup-summary-pie-chart.component.html',
+    styleUrls: ['./rollup-summary-pie-chart.component.css'],
+    standalone: false
 })
 export class RollupSummaryPieChartComponent implements OnInit {
   @Input()

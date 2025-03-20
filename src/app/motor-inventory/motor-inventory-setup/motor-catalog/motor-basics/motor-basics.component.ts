@@ -7,9 +7,10 @@ import { MotorItem } from '../../../motor-inventory';
 import { MotorBasicsService } from './motor-basics.service';
 
 @Component({
-  selector: 'app-motor-basics',
-  templateUrl: './motor-basics.component.html',
-  styleUrls: ['./motor-basics.component.css']
+    selector: 'app-motor-basics',
+    templateUrl: './motor-basics.component.html',
+    styleUrls: ['./motor-basics.component.css'],
+    standalone: false
 })
 export class MotorBasicsComponent implements OnInit {
 

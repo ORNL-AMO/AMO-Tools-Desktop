@@ -6,9 +6,10 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-calculate-flow-pressure-banner',
-  templateUrl: './calculate-flow-pressure-banner.component.html',
-  styleUrls: ['./calculate-flow-pressure-banner.component.css']
+    selector: 'app-calculate-flow-pressure-banner',
+    templateUrl: './calculate-flow-pressure-banner.component.html',
+    styleUrls: ['./calculate-flow-pressure-banner.component.css'],
+    standalone: false
 })
 export class CalculateFlowPressureBannerComponent implements OnInit {
   @Input()

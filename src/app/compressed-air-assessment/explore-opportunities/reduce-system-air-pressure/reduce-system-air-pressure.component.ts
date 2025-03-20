@@ -9,9 +9,10 @@ import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { ReduceSystemAirPressureService } from './reduce-system-air-pressure.service';
 
 @Component({
-  selector: 'app-reduce-system-air-pressure',
-  templateUrl: './reduce-system-air-pressure.component.html',
-  styleUrls: ['./reduce-system-air-pressure.component.css']
+    selector: 'app-reduce-system-air-pressure',
+    templateUrl: './reduce-system-air-pressure.component.html',
+    styleUrls: ['./reduce-system-air-pressure.component.css'],
+    standalone: false
 })
 export class ReduceSystemAirPressureComponent implements OnInit {
 

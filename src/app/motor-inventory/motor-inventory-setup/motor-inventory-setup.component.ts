@@ -5,9 +5,10 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { EGridService } from '../../shared/helper-services/e-grid.service';
 
 @Component({
-  selector: 'app-motor-inventory-setup',
-  templateUrl: './motor-inventory-setup.component.html',
-  styleUrls: ['./motor-inventory-setup.component.css']
+    selector: 'app-motor-inventory-setup',
+    templateUrl: './motor-inventory-setup.component.html',
+    styleUrls: ['./motor-inventory-setup.component.css'],
+    standalone: false
 })
 export class MotorInventorySetupComponent implements OnInit {
 

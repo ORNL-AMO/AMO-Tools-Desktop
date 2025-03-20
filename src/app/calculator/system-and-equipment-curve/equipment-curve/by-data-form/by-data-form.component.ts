@@ -8,9 +8,10 @@ import { CurveDataService } from '../../curve-data.service';
 import { ByDataInputs } from '../../../../shared/models/system-and-equipment-curve';
 
 @Component({
-  selector: 'app-by-data-form',
-  templateUrl: './by-data-form.component.html',
-  styleUrls: ['./by-data-form.component.css']
+    selector: 'app-by-data-form',
+    templateUrl: './by-data-form.component.html',
+    styleUrls: ['./by-data-form.component.css'],
+    standalone: false
 })
 export class ByDataFormComponent implements OnInit {
   @Input()

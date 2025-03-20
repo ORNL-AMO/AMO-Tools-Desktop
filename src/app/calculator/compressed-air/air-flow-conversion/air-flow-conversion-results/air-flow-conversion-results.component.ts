@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { AirFlowConversionService } from '../air-flow-conversion.service';
 
 @Component({
-  selector: 'app-air-flow-conversion-results',
-  templateUrl: './air-flow-conversion-results.component.html',
-  styleUrls: ['./air-flow-conversion-results.component.css']
+    selector: 'app-air-flow-conversion-results',
+    templateUrl: './air-flow-conversion-results.component.html',
+    styleUrls: ['./air-flow-conversion-results.component.css'],
+    standalone: false
 })
 export class AirFlowConversionResultsComponent implements OnInit {
 

@@ -6,9 +6,10 @@ import { ExportService } from '../../import-export/export.service';
 import { DirectoryDashboardService } from '../../../dashboard/directory-dashboard/directory-dashboard.service';
 
 @Component({
-  selector: 'app-error-reporting',
-  templateUrl: './error-reporting.component.html',
-  styleUrl: './error-reporting.component.css'
+    selector: 'app-error-reporting',
+    templateUrl: './error-reporting.component.html',
+    styleUrl: './error-reporting.component.css',
+    standalone: false
 })
 export class ErrorReportingComponent {
   @Input()

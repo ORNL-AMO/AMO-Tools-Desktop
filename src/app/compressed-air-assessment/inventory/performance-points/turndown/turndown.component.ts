@@ -10,9 +10,10 @@ import { TurndownCalculationService } from '../calculations/turndown-calculation
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 
 @Component({
-  selector: '[app-turndown]',
-  templateUrl: './turndown.component.html',
-  styleUrls: ['./turndown.component.css']
+    selector: '[app-turndown]',
+    templateUrl: './turndown.component.html',
+    styleUrls: ['./turndown.component.css'],
+    standalone: false
 })
 export class TurndownComponent implements OnInit {
 

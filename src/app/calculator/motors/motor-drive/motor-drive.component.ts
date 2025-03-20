@@ -8,9 +8,10 @@ import { MotorDriveInputsTreasureHunt, Treasure } from '../../../shared/models/t
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-motor-drive',
-  templateUrl: './motor-drive.component.html',
-  styleUrls: ['./motor-drive.component.css']
+    selector: 'app-motor-drive',
+    templateUrl: './motor-drive.component.html',
+    styleUrls: ['./motor-drive.component.css'],
+    standalone: false
 })
 export class MotorDriveComponent implements OnInit {
   @Input()

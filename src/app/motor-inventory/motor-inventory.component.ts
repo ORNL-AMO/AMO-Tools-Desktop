@@ -16,9 +16,10 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 
 @Component({
-  selector: 'app-motor-inventory',
-  templateUrl: './motor-inventory.component.html',
-  styleUrls: ['./motor-inventory.component.css']
+    selector: 'app-motor-inventory',
+    templateUrl: './motor-inventory.component.html',
+    styleUrls: ['./motor-inventory.component.css'],
+    standalone: false
 })
 export class MotorInventoryComponent implements OnInit {
   @HostListener('window:resize', ['$event'])

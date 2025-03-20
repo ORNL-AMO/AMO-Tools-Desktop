@@ -3,9 +3,10 @@ import { FanPsychrometricService } from '../fan-psychrometric.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-fan-psychrometric-help',
-  templateUrl: './fan-psychrometric-help.component.html',
-  styleUrls: ['./fan-psychrometric-help.component.css']
+    selector: 'app-fan-psychrometric-help',
+    templateUrl: './fan-psychrometric-help.component.html',
+    styleUrls: ['./fan-psychrometric-help.component.css'],
+    standalone: false
 })
 export class FanPsychrometricHelpComponent implements OnInit {
 

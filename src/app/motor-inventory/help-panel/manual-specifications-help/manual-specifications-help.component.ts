@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { Subscription } from 'rxjs';
 @Component({
-  selector: 'app-manual-specifications-help',
-  templateUrl: './manual-specifications-help.component.html',
-  styleUrls: ['./manual-specifications-help.component.css']
+    selector: 'app-manual-specifications-help',
+    templateUrl: './manual-specifications-help.component.html',
+    styleUrls: ['./manual-specifications-help.component.css'],
+    standalone: false
 })
 export class ManualSpecificationsHelpComponent implements OnInit {
 

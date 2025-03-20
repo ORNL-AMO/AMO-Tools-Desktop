@@ -5,9 +5,10 @@ import * as _ from 'lodash';
 import { combineLatestWith, debounce, interval, Observable, Subscription } from 'rxjs';
 import { LogToolDataService } from '../../log-tool-data.service';
 @Component({
-  selector: 'app-visualize-data',
-  templateUrl: './visualize-data.component.html',
-  styleUrls: ['./visualize-data.component.css']
+    selector: 'app-visualize-data',
+    templateUrl: './visualize-data.component.html',
+    styleUrls: ['./visualize-data.component.css'],
+    standalone: false
 })
 export class VisualizeDataComponent implements OnInit {
   timeSummaries: Array<{

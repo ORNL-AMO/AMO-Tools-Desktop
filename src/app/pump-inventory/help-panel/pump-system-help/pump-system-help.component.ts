@@ -4,9 +4,10 @@ import { Settings } from '../../../shared/models/settings';
 import { PumpInventoryService } from '../../pump-inventory.service';
 
 @Component({
-  selector: 'app-pump-system-help',
-  templateUrl: './pump-system-help.component.html',
-  styleUrls: ['./pump-system-help.component.css']
+    selector: 'app-pump-system-help',
+    templateUrl: './pump-system-help.component.html',
+    styleUrls: ['./pump-system-help.component.css'],
+    standalone: false
 })
 export class PumpSystemHelpComponent {
   focusedField: string;

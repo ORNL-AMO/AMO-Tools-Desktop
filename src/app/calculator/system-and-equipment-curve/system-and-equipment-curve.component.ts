@@ -13,9 +13,10 @@ import { AnalyticsService } from '../../shared/analytics/analytics.service';
 import { ByDataInputs, ByEquationInputs, EquipmentInputs, FanSystemCurveData, PumpSystemCurveData } from '../../shared/models/system-and-equipment-curve';
 
 @Component({
-  selector: 'app-system-and-equipment-curve',
-  templateUrl: './system-and-equipment-curve.component.html',
-  styleUrls: ['./system-and-equipment-curve.component.css']
+    selector: 'app-system-and-equipment-curve',
+    templateUrl: './system-and-equipment-curve.component.html',
+    styleUrls: ['./system-and-equipment-curve.component.css'],
+    standalone: false
 })
 export class SystemAndEquipmentCurveComponent implements OnInit {
   @Input()

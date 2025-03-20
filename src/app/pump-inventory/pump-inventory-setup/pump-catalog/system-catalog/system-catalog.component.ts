@@ -8,9 +8,10 @@ import { PumpCatalogService } from '../pump-catalog.service';
 import { SystemCatalogService } from './system-catalog.service';
 
 @Component({
-  selector: 'app-system-catalog',
-  templateUrl: './system-catalog.component.html',
-  styleUrls: ['./system-catalog.component.css']
+    selector: 'app-system-catalog',
+    templateUrl: './system-catalog.component.html',
+    styleUrls: ['./system-catalog.component.css'],
+    standalone: false
 })
 export class SystemCatalogComponent implements OnInit {
 

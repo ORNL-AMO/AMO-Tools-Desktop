@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { SavingsItem, TreasureHuntResults } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 @Component({
-  selector: 'app-report-graphs',
-  templateUrl: './report-graphs.component.html',
-  styleUrls: ['./report-graphs.component.css']
+    selector: 'app-report-graphs',
+    templateUrl: './report-graphs.component.html',
+    styleUrls: ['./report-graphs.component.css'],
+    standalone: false
 })
 export class ReportGraphsComponent implements OnInit {
   @Input()

@@ -8,9 +8,10 @@ import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { TurbineService } from '../../../../turbine/turbine.service';
 
 @Component({
-  selector: 'app-explore-pressure-turbine-form',
-  templateUrl: './explore-pressure-turbine-form.component.html',
-  styleUrls: ['./explore-pressure-turbine-form.component.css']
+    selector: 'app-explore-pressure-turbine-form',
+    templateUrl: './explore-pressure-turbine-form.component.html',
+    styleUrls: ['./explore-pressure-turbine-form.component.css'],
+    standalone: false
 })
 export class ExplorePressureTurbineFormComponent implements OnInit {
   @Input()

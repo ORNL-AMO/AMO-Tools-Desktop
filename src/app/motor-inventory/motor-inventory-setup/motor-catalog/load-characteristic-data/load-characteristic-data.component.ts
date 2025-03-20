@@ -8,9 +8,10 @@ import { LoadCharacteristicDataService } from './load-characteristic-data.servic
 import { PsatService } from '../../../../psat/psat.service';
 
 @Component({
-  selector: 'app-load-characteristic-data',
-  templateUrl: './load-characteristic-data.component.html',
-  styleUrls: ['./load-characteristic-data.component.css']
+    selector: 'app-load-characteristic-data',
+    templateUrl: './load-characteristic-data.component.html',
+    styleUrls: ['./load-characteristic-data.component.css'],
+    standalone: false
 })
 export class LoadCharacteristicDataComponent implements OnInit {
   motorForm: UntypedFormGroup;

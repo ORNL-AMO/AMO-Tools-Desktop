@@ -11,9 +11,10 @@ import { HeadToolService } from './head-tool.service';
 import { firstValueFrom } from 'rxjs';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 @Component({
-  selector: 'app-head-tool',
-  templateUrl: './head-tool.component.html',
-  styleUrls: ['./head-tool.component.css']
+    selector: 'app-head-tool',
+    templateUrl: './head-tool.component.html',
+    styleUrls: ['./head-tool.component.css'],
+    standalone: false
 })
 export class HeadToolComponent implements OnInit {
   @Output('close')

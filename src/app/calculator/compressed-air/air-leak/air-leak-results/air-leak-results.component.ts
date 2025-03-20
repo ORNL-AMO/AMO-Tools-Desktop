@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { AirLeakService } from '../air-leak.service';
 
 @Component({
-  selector: 'app-air-leak-results',
-  templateUrl: './air-leak-results.component.html',
-  styleUrls: ['./air-leak-results.component.css']
+    selector: 'app-air-leak-results',
+    templateUrl: './air-leak-results.component.html',
+    styleUrls: ['./air-leak-results.component.css'],
+    standalone: false
 })
 export class AirLeakSurveyResultsComponent implements OnInit {
 

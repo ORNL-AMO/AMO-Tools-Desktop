@@ -8,9 +8,10 @@ import { DataPoint, SimpleChart, TraceData } from '../../../../shared/models/plo
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-specific-speed-graph',
-  templateUrl: './specific-speed-graph.component.html',
-  styleUrls: ['./specific-speed-graph.component.css']
+    selector: 'app-specific-speed-graph',
+    templateUrl: './specific-speed-graph.component.html',
+    styleUrls: ['./specific-speed-graph.component.css'],
+    standalone: false
 })
 export class SpecificSpeedGraphComponent implements OnInit {
   @Input()

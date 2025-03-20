@@ -6,9 +6,10 @@ import { SteamService } from '../../steam.service';
 import {TurbineService} from "../turbine.service";
 
 @Component({
-  selector: 'app-turbine-form',
-  templateUrl: './turbine-form.component.html',
-  styleUrls: ['./turbine-form.component.css']
+    selector: 'app-turbine-form',
+    templateUrl: './turbine-form.component.html',
+    styleUrls: ['./turbine-form.component.css'],
+    standalone: false
 })
 export class TurbineFormComponent implements OnInit {
   @Input()

@@ -4,9 +4,10 @@ import { Settings } from '../../../shared/models/settings';
 import { PumpInventoryService } from '../../pump-inventory.service';
 
 @Component({
-  selector: 'app-pump-motor-help',
-  templateUrl: './pump-motor-help.component.html',
-  styleUrls: ['./pump-motor-help.component.css']
+    selector: 'app-pump-motor-help',
+    templateUrl: './pump-motor-help.component.html',
+    styleUrls: ['./pump-motor-help.component.css'],
+    standalone: false
 })
 export class PumpMotorHelpComponent {
 

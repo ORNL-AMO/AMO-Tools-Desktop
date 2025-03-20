@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { aeratorTypes } from '../../waste-water/waste-water-defaults';
 
 @Pipe({
-  name: 'wasteWaterOptionsDisplay'
+    name: 'wasteWaterOptionsDisplay',
+    standalone: false
 })
 export class WasteWaterOptionsDisplayPipe implements PipeTransform {
 

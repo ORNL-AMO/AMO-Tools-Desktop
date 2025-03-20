@@ -6,9 +6,10 @@ import { CoreService } from '../../core/core.service';
 declare var google: any;
 
 @Component({
-  selector: 'app-application-settings',
-  templateUrl: './application-settings.component.html',
-  styleUrls: ['./application-settings.component.css']
+    selector: 'app-application-settings',
+    templateUrl: './application-settings.component.html',
+    styleUrls: ['./application-settings.component.css'],
+    standalone: false
 })
 export class ApplicationSettingsComponent implements OnInit {
   @Input()

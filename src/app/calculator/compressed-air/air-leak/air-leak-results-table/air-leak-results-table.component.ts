@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-air-leak-results-table',
-  templateUrl: './air-leak-results-table.component.html',
-  styleUrls: ['./air-leak-results-table.component.css']
+    selector: 'app-air-leak-results-table',
+    templateUrl: './air-leak-results-table.component.html',
+    styleUrls: ['./air-leak-results-table.component.css'],
+    standalone: false
 })
 export class AirLeakResultsTableComponent implements OnInit {
 

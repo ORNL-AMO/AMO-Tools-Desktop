@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 
 @Component({
-  selector: 'app-saturated-properties-table',
-  templateUrl: './saturated-properties-table.component.html',
-  styleUrls: ['./saturated-properties-table.component.css']
+    selector: 'app-saturated-properties-table',
+    templateUrl: './saturated-properties-table.component.html',
+    styleUrls: ['./saturated-properties-table.component.css'],
+    standalone: false
 })
 export class SaturatedPropertiesTableComponent implements OnInit {
   @Input()

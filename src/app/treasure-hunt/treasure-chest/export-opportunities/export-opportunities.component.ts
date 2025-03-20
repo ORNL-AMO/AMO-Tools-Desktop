@@ -7,9 +7,10 @@ import { ImportExportService } from '../../../shared/import-export/import-export
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
 @Component({
-  selector: 'app-export-opportunities',
-  templateUrl: './export-opportunities.component.html',
-  styleUrls: ['./export-opportunities.component.css']
+    selector: 'app-export-opportunities',
+    templateUrl: './export-opportunities.component.html',
+    styleUrls: ['./export-opportunities.component.css'],
+    standalone: false
 })
 export class ExportOpportunitiesComponent implements OnInit {
   @ViewChild('exportModal', { static: false }) public exportModal: ModalDirective;

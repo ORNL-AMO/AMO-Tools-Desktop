@@ -8,9 +8,10 @@ import { FixtureService } from './fixture.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-fixture',
-  templateUrl: './fixture.component.html',
-  styleUrls: ['./fixture.component.css']
+    selector: 'app-fixture',
+    templateUrl: './fixture.component.html',
+    styleUrls: ['./fixture.component.css'],
+    standalone: false
 })
 export class FixtureComponent implements OnInit {
   @Input()

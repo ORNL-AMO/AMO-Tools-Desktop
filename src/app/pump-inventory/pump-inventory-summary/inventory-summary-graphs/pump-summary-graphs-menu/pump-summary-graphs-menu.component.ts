@@ -8,9 +8,10 @@ import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-pump-summary-graphs-menu',
-  templateUrl: './pump-summary-graphs-menu.component.html',
-  styleUrls: ['./pump-summary-graphs-menu.component.css']
+    selector: 'app-pump-summary-graphs-menu',
+    templateUrl: './pump-summary-graphs-menu.component.html',
+    styleUrls: ['./pump-summary-graphs-menu.component.css'],
+    standalone: false
 })
 export class PumpSummaryGraphsMenuComponent {
 

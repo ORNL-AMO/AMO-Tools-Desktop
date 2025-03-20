@@ -6,9 +6,10 @@ import { LogToolDataService } from '../../log-tool-data.service';
 import { VisualizeSidebarService } from './visualize-sidebar.service';
 
 @Component({
-  selector: 'app-visualize-sidebar',
-  templateUrl: './visualize-sidebar.component.html',
-  styleUrls: ['./visualize-sidebar.component.css']
+    selector: 'app-visualize-sidebar',
+    templateUrl: './visualize-sidebar.component.html',
+    styleUrls: ['./visualize-sidebar.component.css'],
+    standalone: false
 })
 export class VisualizeSidebarComponent {
 

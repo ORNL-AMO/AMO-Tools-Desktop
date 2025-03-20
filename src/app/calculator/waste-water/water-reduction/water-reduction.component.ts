@@ -9,9 +9,10 @@ import { Assessment } from '../../../shared/models/assessment';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-water-reduction',
-  templateUrl: './water-reduction.component.html',
-  styleUrls: ['./water-reduction.component.css']
+    selector: 'app-water-reduction',
+    templateUrl: './water-reduction.component.html',
+    styleUrls: ['./water-reduction.component.css'],
+    standalone: false
 })
 export class WaterReductionComponent implements OnInit {
   @Input()

@@ -6,9 +6,10 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-weather-bins',
-  templateUrl: './weather-bins.component.html',
-  styleUrls: ['./weather-bins.component.css']
+    selector: 'app-weather-bins',
+    templateUrl: './weather-bins.component.html',
+    styleUrls: ['./weather-bins.component.css'],
+    standalone: false
 })
 export class WeatherBinsComponent implements OnInit {
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;

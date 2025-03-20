@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { AbstractControl, UntypedFormGroup } from '@angular/forms';
 
 @Pipe({
-  name: 'improveEndUseFormControls'
+    name: 'improveEndUseFormControls',
+    standalone: false
 })
 export class ImproveEndUseFormControlsPipe implements PipeTransform {
 

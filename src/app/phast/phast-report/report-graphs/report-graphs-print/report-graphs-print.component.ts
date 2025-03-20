@@ -6,7 +6,8 @@ import { ScenarioSummary } from '../../../../shared/models/reports';
 @Component({
     selector: 'app-report-graphs-print',
     templateUrl: './report-graphs-print.component.html',
-    styleUrls: ['./report-graphs-print.component.css']
+    styleUrls: ['./report-graphs-print.component.css'],
+    standalone: false
 })
 export class ReportGraphsPrintComponent implements OnInit {
     @Input()

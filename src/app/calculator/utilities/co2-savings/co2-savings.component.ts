@@ -7,9 +7,10 @@ import { EGridService } from '../../../shared/helper-services/e-grid.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-co2-savings',
-  templateUrl: './co2-savings.component.html',
-  styleUrls: ['./co2-savings.component.css']
+    selector: 'app-co2-savings',
+    templateUrl: './co2-savings.component.html',
+    styleUrls: ['./co2-savings.component.css'],
+    standalone: false
 })
 export class Co2SavingsComponent implements OnInit {
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;

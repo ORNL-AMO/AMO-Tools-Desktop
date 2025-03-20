@@ -3,9 +3,10 @@ import { PumpInventoryData, PumpStatusOptions } from '../../../pump-inventory';
 import { PumpInventoryService } from '../../../pump-inventory.service';
 
 @Component({
-  selector: 'app-pump-status-properties',
-  templateUrl: './pump-status-properties.component.html',
-  styleUrls: ['./pump-status-properties.component.css']
+    selector: 'app-pump-status-properties',
+    templateUrl: './pump-status-properties.component.html',
+    styleUrls: ['./pump-status-properties.component.css'],
+    standalone: false
 })
 export class PumpStatusPropertiesComponent implements OnInit {
   displayForm: boolean;

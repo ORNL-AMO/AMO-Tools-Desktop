@@ -3,9 +3,10 @@ import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-executive-summary-table',
-  templateUrl: './executive-summary-table.component.html',
-  styleUrls: ['./executive-summary-table.component.css']
+    selector: 'app-executive-summary-table',
+    templateUrl: './executive-summary-table.component.html',
+    styleUrls: ['./executive-summary-table.component.css'],
+    standalone: false
 })
 export class ExecutiveSummaryTableComponent implements OnInit {
   @Input()

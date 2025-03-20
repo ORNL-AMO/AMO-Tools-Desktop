@@ -8,9 +8,10 @@ import { WasteWaterService } from '../waste-water.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
-  selector: 'app-waste-water-banner',
-  templateUrl: './waste-water-banner.component.html',
-  styleUrls: ['./waste-water-banner.component.css']
+    selector: 'app-waste-water-banner',
+    templateUrl: './waste-water-banner.component.html',
+    styleUrls: ['./waste-water-banner.component.css'],
+    standalone: false
 })
 export class WasteWaterBannerComponent implements OnInit {
   @Input()

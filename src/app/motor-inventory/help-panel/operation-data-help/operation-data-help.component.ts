@@ -3,9 +3,10 @@ import { MotorInventoryService } from '../../motor-inventory.service';
 import { Subscription } from 'rxjs';
 import { MotorPropertyDisplayOptions } from '../../motor-inventory';
 @Component({
-  selector: 'app-operation-data-help',
-  templateUrl: './operation-data-help.component.html',
-  styleUrls: ['./operation-data-help.component.css']
+    selector: 'app-operation-data-help',
+    templateUrl: './operation-data-help.component.html',
+    styleUrls: ['./operation-data-help.component.css'],
+    standalone: false
 })
 export class OperationDataHelpComponent implements OnInit {
 

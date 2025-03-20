@@ -4,9 +4,10 @@ import { Settings } from '../../../shared/models/settings';
 import { PumpInventoryService } from '../../pump-inventory.service';
 
 @Component({
-  selector: 'app-pump-nameplate-data-help',
-  templateUrl: './pump-nameplate-data-help.component.html',
-  styleUrls: ['./pump-nameplate-data-help.component.css']
+    selector: 'app-pump-nameplate-data-help',
+    templateUrl: './pump-nameplate-data-help.component.html',
+    styleUrls: ['./pump-nameplate-data-help.component.css'],
+    standalone: false
 })
 export class PumpNameplateDataHelpComponent {
 

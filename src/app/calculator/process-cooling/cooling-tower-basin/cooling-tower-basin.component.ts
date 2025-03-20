@@ -9,9 +9,10 @@ import { CoolingTowerBasinInput } from '../../../shared/models/chillers';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-cooling-tower-basin',
-  templateUrl: './cooling-tower-basin.component.html',
-  styleUrls: ['./cooling-tower-basin.component.css']
+    selector: 'app-cooling-tower-basin',
+    templateUrl: './cooling-tower-basin.component.html',
+    styleUrls: ['./cooling-tower-basin.component.css'],
+    standalone: false
 })
 export class CoolingTowerBasinComponent implements OnInit {
   @Input()

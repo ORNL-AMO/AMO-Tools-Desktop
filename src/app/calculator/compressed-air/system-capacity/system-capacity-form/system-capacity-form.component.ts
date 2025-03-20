@@ -5,9 +5,10 @@ import { standardSizesConstant, metricSizesConstant } from '../../compressed-air
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-system-capacity-form',
-  templateUrl: './system-capacity-form.component.html',
-  styleUrls: ['./system-capacity-form.component.css']
+    selector: 'app-system-capacity-form',
+    templateUrl: './system-capacity-form.component.html',
+    styleUrls: ['./system-capacity-form.component.css'],
+    standalone: false
 })
 export class SystemCapacityFormComponent implements OnInit {
   @Input()

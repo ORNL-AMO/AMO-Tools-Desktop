@@ -7,9 +7,10 @@ import { FanMotor } from '../../../../shared/models/fans';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 
 @Component({
-  selector: 'app-full-load-amps-form',
-  templateUrl: './full-load-amps-form.component.html',
-  styleUrls: ['./full-load-amps-form.component.css']
+    selector: 'app-full-load-amps-form',
+    templateUrl: './full-load-amps-form.component.html',
+    styleUrls: ['./full-load-amps-form.component.css'],
+    standalone: false
 })
 export class FullLoadAmpsFormComponent implements OnInit {
   @Input()

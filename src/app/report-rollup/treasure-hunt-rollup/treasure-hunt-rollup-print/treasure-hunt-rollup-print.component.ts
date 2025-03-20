@@ -4,9 +4,10 @@ import { OpportunitiesPaybackDetails, TreasureHuntResults } from '../../../share
 import { OpportunityCardData } from '../../../treasure-hunt/treasure-chest/opportunity-cards/opportunity-cards.service';
 
 @Component({
-  selector: 'app-treasure-hunt-rollup-print',
-  templateUrl: './treasure-hunt-rollup-print.component.html',
-  styleUrls: ['./treasure-hunt-rollup-print.component.css']
+    selector: 'app-treasure-hunt-rollup-print',
+    templateUrl: './treasure-hunt-rollup-print.component.html',
+    styleUrls: ['./treasure-hunt-rollup-print.component.css'],
+    standalone: false
 })
 export class TreasureHuntRollupPrintComponent implements OnInit {
   @Input()

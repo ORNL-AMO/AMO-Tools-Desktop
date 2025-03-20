@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 
 @Component({
-  selector: 'app-tabs-tooltip',
-  templateUrl: './tabs-tooltip.component.html',
-  styleUrls: ['./tabs-tooltip.component.css']
+    selector: 'app-tabs-tooltip',
+    templateUrl: './tabs-tooltip.component.html',
+    styleUrls: ['./tabs-tooltip.component.css'],
+    standalone: false
 })
 export class TabsTooltipComponent implements OnInit {
   @Input()

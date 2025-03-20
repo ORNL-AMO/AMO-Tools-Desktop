@@ -4,9 +4,10 @@ import { SteamReductionResults } from '../../../../shared/models/standalone';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-steam-reduction-results',
-  templateUrl: './steam-reduction-results.component.html',
-  styleUrls: ['./steam-reduction-results.component.css']
+    selector: 'app-steam-reduction-results',
+    templateUrl: './steam-reduction-results.component.html',
+    styleUrls: ['./steam-reduction-results.component.css'],
+    standalone: false
 })
 export class SteamReductionResultsComponent implements OnInit {
   @Input()

@@ -10,9 +10,10 @@ import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 import { FlueGasCompareService } from './flue-gas-compare.service';
 @Component({
-  selector: 'app-flue-gas-losses',
-  templateUrl: './flue-gas-losses.component.html',
-  styleUrls: ['./flue-gas-losses.component.css']
+    selector: 'app-flue-gas-losses',
+    templateUrl: './flue-gas-losses.component.html',
+    styleUrls: ['./flue-gas-losses.component.css'],
+    standalone: false
 })
 export class FlueGasLossesComponent implements OnInit {
   @Input()

@@ -11,9 +11,10 @@ import { PhastReportRollupService } from '../../phast-report-rollup.service';
 import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 
 @Component({
-  selector: 'app-phast-rollup-energy-table',
-  templateUrl: './phast-rollup-energy-table.component.html',
-  styleUrls: ['./phast-rollup-energy-table.component.css']
+    selector: 'app-phast-rollup-energy-table',
+    templateUrl: './phast-rollup-energy-table.component.html',
+    styleUrls: ['./phast-rollup-energy-table.component.css'],
+    standalone: false
 })
 export class PhastRollupEnergyTableComponent implements OnInit {
   @Input()

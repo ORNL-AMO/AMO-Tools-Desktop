@@ -3,9 +3,10 @@ import { HelpPanelService } from '../help-panel.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-system-basics-help',
-  templateUrl: './system-basics-help.component.html',
-  styleUrls: ['./system-basics-help.component.css']
+    selector: 'app-system-basics-help',
+    templateUrl: './system-basics-help.component.html',
+    styleUrls: ['./system-basics-help.component.css'],
+    standalone: false
 })
 export class SystemBasicsHelpComponent implements OnInit {
 

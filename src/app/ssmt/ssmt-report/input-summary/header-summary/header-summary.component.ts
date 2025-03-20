@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-header-summary',
-  templateUrl: './header-summary.component.html',
-  styleUrls: ['./header-summary.component.css']
+    selector: 'app-header-summary',
+    templateUrl: './header-summary.component.html',
+    styleUrls: ['./header-summary.component.css'],
+    standalone: false
 })
 export class HeaderSummaryComponent implements OnInit {
   @Input()

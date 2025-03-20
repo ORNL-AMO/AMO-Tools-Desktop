@@ -8,9 +8,10 @@ import { WasteWaterService } from '../waste-water.service';
 import { ActivatedSludgeFormService } from './activated-sludge-form.service';
 
 @Component({
-  selector: 'app-activated-sludge-form',
-  templateUrl: './activated-sludge-form.component.html',
-  styleUrls: ['./activated-sludge-form.component.css']
+    selector: 'app-activated-sludge-form',
+    templateUrl: './activated-sludge-form.component.html',
+    styleUrls: ['./activated-sludge-form.component.css'],
+    standalone: false
 })
 export class ActivatedSludgeFormComponent implements OnInit {
   @Input()

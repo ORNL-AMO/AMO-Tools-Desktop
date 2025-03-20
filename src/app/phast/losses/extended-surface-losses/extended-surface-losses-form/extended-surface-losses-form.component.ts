@@ -5,9 +5,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { ExtendedSurfaceWarnings, ExtendedSurfaceLossesService } from '../extended-surface-losses.service';
 import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
 @Component({
-  selector: 'app-extended-surface-losses-form',
-  templateUrl: './extended-surface-losses-form.component.html',
-  styleUrls: ['./extended-surface-losses-form.component.css']
+    selector: 'app-extended-surface-losses-form',
+    templateUrl: './extended-surface-losses-form.component.html',
+    styleUrls: ['./extended-surface-losses-form.component.css'],
+    standalone: false
 })
 export class ExtendedSurfaceLossesFormComponent implements OnInit {
   @Input()

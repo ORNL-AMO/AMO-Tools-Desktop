@@ -4,9 +4,10 @@ import { BoilerInput } from '../../../../shared/models/steam/steam-inputs';
 import { BoilerOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-boiler-results',
-  templateUrl: './boiler-results.component.html',
-  styleUrls: ['./boiler-results.component.css']
+    selector: 'app-boiler-results',
+    templateUrl: './boiler-results.component.html',
+    styleUrls: ['./boiler-results.component.css'],
+    standalone: false
 })
 export class BoilerResultsComponent implements OnInit {
   @Input()

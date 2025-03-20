@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { O2UtilizationDataPoints, O2UtilizationRateService } from '../o2-utilization-rate.service';
 
 @Component({
-  selector: 'app-o2-utilization-rate-graph',
-  templateUrl: './o2-utilization-rate-graph.component.html',
-  styleUrls: ['./o2-utilization-rate-graph.component.css']
+    selector: 'app-o2-utilization-rate-graph',
+    templateUrl: './o2-utilization-rate-graph.component.html',
+    styleUrls: ['./o2-utilization-rate-graph.component.css'],
+    standalone: false
 })
 export class O2UtilizationRateGraphComponent implements OnInit {
 

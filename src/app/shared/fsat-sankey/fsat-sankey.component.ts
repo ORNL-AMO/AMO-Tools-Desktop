@@ -9,10 +9,11 @@ import { SankeyNode } from '../models/sankey';
 
 
 @Component({
-  selector: 'app-fsat-sankey',
-  templateUrl: './fsat-sankey.component.html',
-  styleUrls: ['./fsat-sankey.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-fsat-sankey',
+    templateUrl: './fsat-sankey.component.html',
+    styleUrls: ['./fsat-sankey.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class FsatSankeyComponent implements OnInit {
   @Input()

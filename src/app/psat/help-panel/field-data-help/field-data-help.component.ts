@@ -6,9 +6,10 @@ import { HelpPanelService } from '../help-panel.service';
 import { Subscription } from 'rxjs';
 import { PsatWarningService } from '../../psat-warning.service';
 @Component({
-  selector: 'app-field-data-help',
-  templateUrl: './field-data-help.component.html',
-  styleUrls: ['./field-data-help.component.css']
+    selector: 'app-field-data-help',
+    templateUrl: './field-data-help.component.html',
+    styleUrls: ['./field-data-help.component.css'],
+    standalone: false
 })
 export class FieldDataHelpComponent implements OnInit {
   @Input()

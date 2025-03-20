@@ -7,9 +7,10 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 import { PurchaseInformationDataService } from './purchase-information-data.service';
 
 @Component({
-  selector: 'app-purchase-information-data',
-  templateUrl: './purchase-information-data.component.html',
-  styleUrls: ['./purchase-information-data.component.css']
+    selector: 'app-purchase-information-data',
+    templateUrl: './purchase-information-data.component.html',
+    styleUrls: ['./purchase-information-data.component.css'],
+    standalone: false
 })
 export class PurchaseInformationDataComponent implements OnInit {
  

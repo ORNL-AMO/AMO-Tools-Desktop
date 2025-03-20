@@ -4,9 +4,10 @@ import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savin
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
-  selector: 'app-co2-savings-settings',
-  templateUrl: './co2-savings-settings.component.html',
-  styleUrls: ['./co2-savings-settings.component.css']
+    selector: 'app-co2-savings-settings',
+    templateUrl: './co2-savings-settings.component.html',
+    styleUrls: ['./co2-savings-settings.component.css'],
+    standalone: false
 })
 export class Co2SavingsSettingsComponent implements OnInit {
   @Input()

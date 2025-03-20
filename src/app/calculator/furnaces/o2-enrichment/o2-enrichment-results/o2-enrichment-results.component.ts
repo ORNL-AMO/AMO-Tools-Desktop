@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-o2-enrichment-results',
-  templateUrl: './o2-enrichment-results.component.html',
-  styleUrls: ['./o2-enrichment-results.component.css']
+    selector: 'app-o2-enrichment-results',
+    templateUrl: './o2-enrichment-results.component.html',
+    styleUrls: ['./o2-enrichment-results.component.css'],
+    standalone: false
 })
 export class O2EnrichmentResultsComponent implements OnInit {
 

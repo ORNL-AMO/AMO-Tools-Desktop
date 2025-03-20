@@ -4,9 +4,10 @@ import { AssessmentService } from '../assessment.service';
 import { DashboardService } from '../dashboard.service';
 
 @Component({
-  selector: 'app-landing-screen',
-  templateUrl: './landing-screen.component.html',
-  styleUrls: ['./landing-screen.component.css']
+    selector: 'app-landing-screen',
+    templateUrl: './landing-screen.component.html',
+    styleUrls: ['./landing-screen.component.css'],
+    standalone: false
 })
 export class LandingScreenComponent implements OnInit {
 

@@ -11,9 +11,10 @@ import { Subscription } from 'rxjs';
 import { FanFieldDataWarnings, FsatWarningService } from '../fsat-warning.service';
 
 @Component({
-  selector: 'app-fan-field-data',
-  templateUrl: './fan-field-data.component.html',
-  styleUrls: ['./fan-field-data.component.css']
+    selector: 'app-fan-field-data',
+    templateUrl: './fan-field-data.component.html',
+    styleUrls: ['./fan-field-data.component.css'],
+    standalone: false
 })
 export class FanFieldDataComponent implements OnInit {
   @Input()

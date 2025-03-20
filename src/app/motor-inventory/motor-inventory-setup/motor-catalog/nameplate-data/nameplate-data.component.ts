@@ -12,9 +12,10 @@ import { ConnectedItem } from '../../../../shared/connected-inventory/integratio
 import { MotorIntegrationService } from '../../../../shared/connected-inventory/motor-integration.service';
 
 @Component({
-  selector: 'app-nameplate-data',
-  templateUrl: './nameplate-data.component.html',
-  styleUrls: ['./nameplate-data.component.css']
+    selector: 'app-nameplate-data',
+    templateUrl: './nameplate-data.component.html',
+    styleUrls: ['./nameplate-data.component.css'],
+    standalone: false
 })
 export class NameplateDataComponent implements OnInit {
   settingsSub: Subscription;

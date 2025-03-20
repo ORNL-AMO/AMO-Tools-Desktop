@@ -5,9 +5,10 @@ import { Settings } from '../../shared/models/settings';
 import { WasteWaterService } from '../waste-water.service';
 
 @Component({
-  selector: 'app-results-panel',
-  templateUrl: './results-panel.component.html',
-  styleUrls: ['./results-panel.component.css']
+    selector: 'app-results-panel',
+    templateUrl: './results-panel.component.html',
+    styleUrls: ['./results-panel.component.css'],
+    standalone: false
 })
 export class ResultsPanelComponent implements OnInit {
 

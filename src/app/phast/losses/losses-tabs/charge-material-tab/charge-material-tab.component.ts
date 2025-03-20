@@ -10,9 +10,10 @@ import { GasMaterialFormService } from '../../../../calculator/furnaces/charge-m
 import { SolidMaterialFormService, SolidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 
 @Component({
-  selector: 'app-charge-material-tab',
-  templateUrl: './charge-material-tab.component.html',
-  styleUrls: ['./charge-material-tab.component.css']
+    selector: 'app-charge-material-tab',
+    templateUrl: './charge-material-tab.component.html',
+    styleUrls: ['./charge-material-tab.component.css'],
+    standalone: false
 })
 export class ChargeMaterialTabComponent implements OnInit {
   @Input()

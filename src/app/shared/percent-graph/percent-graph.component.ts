@@ -2,9 +2,10 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleCh
 import bb, {gauge} from "billboard.js";
 
 @Component({
-  selector: 'app-percent-graph',
-  templateUrl: './percent-graph.component.html',
-  styleUrls: ['./percent-graph.component.css'],
+    selector: 'app-percent-graph',
+    templateUrl: './percent-graph.component.html',
+    styleUrls: ['./percent-graph.component.css'],
+    standalone: false
 })
 export class PercentGraphComponent implements OnInit {
   @Input()

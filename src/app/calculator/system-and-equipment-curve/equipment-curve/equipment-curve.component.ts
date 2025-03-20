@@ -5,10 +5,11 @@ import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.se
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-equipment-curve',
-  templateUrl: './equipment-curve.component.html',
-  styleUrls: ['./equipment-curve.component.css'],
-  animations: collapseAnimation
+    selector: 'app-equipment-curve',
+    templateUrl: './equipment-curve.component.html',
+    styleUrls: ['./equipment-curve.component.css'],
+    animations: collapseAnimation,
+    standalone: false
 })
 export class EquipmentCurveComponent implements OnInit {
   @Input()

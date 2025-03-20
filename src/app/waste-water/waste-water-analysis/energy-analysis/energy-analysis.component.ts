@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-energy-analysis',
-  templateUrl: './energy-analysis.component.html',
-  styleUrls: ['./energy-analysis.component.css']
+    selector: 'app-energy-analysis',
+    templateUrl: './energy-analysis.component.html',
+    styleUrls: ['./energy-analysis.component.css'],
+    standalone: false
 })
 export class EnergyAnalysisComponent implements OnInit {
   @Input()

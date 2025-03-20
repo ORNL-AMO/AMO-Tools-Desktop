@@ -12,9 +12,10 @@ import { FSAT } from '../../../shared/models/fans';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-nema-energy-efficiency',
-  templateUrl: './nema-energy-efficiency.component.html',
-  styleUrls: ['./nema-energy-efficiency.component.css']
+    selector: 'app-nema-energy-efficiency',
+    templateUrl: './nema-energy-efficiency.component.html',
+    styleUrls: ['./nema-energy-efficiency.component.css'],
+    standalone: false
 })
 export class NemaEnergyEfficiencyComponent implements OnInit {
   @Input()

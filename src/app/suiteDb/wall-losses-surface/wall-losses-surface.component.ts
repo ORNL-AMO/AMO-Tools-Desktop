@@ -8,9 +8,10 @@ import { firstValueFrom } from 'rxjs';
 import { WallLossesSurfaceDbService } from '../../indexedDb/wall-losses-surface-db.service';
 
 @Component({
-  selector: 'app-wall-losses-surface',
-  templateUrl: './wall-losses-surface.component.html',
-  styleUrls: ['./wall-losses-surface.component.css']
+    selector: 'app-wall-losses-surface',
+    templateUrl: './wall-losses-surface.component.html',
+    styleUrls: ['./wall-losses-surface.component.css'],
+    standalone: false
 })
 export class WallLossesSurfaceComponent implements OnInit {
   @Output('closeModal')

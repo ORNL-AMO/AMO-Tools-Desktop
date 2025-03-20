@@ -5,9 +5,10 @@ import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-fan-motor-summary',
-  templateUrl: './fan-motor-summary.component.html',
-  styleUrls: ['./fan-motor-summary.component.css']
+    selector: 'app-fan-motor-summary',
+    templateUrl: './fan-motor-summary.component.html',
+    styleUrls: ['./fan-motor-summary.component.css'],
+    standalone: false
 })
 export class FanMotorSummaryComponent implements OnInit {
   @Input()

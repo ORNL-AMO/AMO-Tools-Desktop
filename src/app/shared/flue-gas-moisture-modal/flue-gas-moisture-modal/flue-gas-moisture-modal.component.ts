@@ -6,8 +6,9 @@ import { FlueGasMoistureModalService } from '../flue-gas-moisture-modal.service'
 @Component({
     selector: 'app-flue-gas-moisture-modal',
     templateUrl: './flue-gas-moisture-modal.component.html',
-    styleUrls: ['./flue-gas-moisture-modal.component.css']
-  })
+    styleUrls: ['./flue-gas-moisture-modal.component.css'],
+    standalone: false
+})
   
   export class FlueGasMoistureModalComponent implements OnInit {
     @Input()

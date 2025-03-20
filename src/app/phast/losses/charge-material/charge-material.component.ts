@@ -11,9 +11,10 @@ import { SolidMaterialFormService } from '../../../calculator/furnaces/charge-ma
 import { ChargeMaterialCompareService } from './charge-material-compare.service';
 
 @Component({
-  selector: 'app-charge-material',
-  templateUrl: './charge-material.component.html',
-  styleUrls: ['./charge-material.component.css']
+    selector: 'app-charge-material',
+    templateUrl: './charge-material.component.html',
+    styleUrls: ['./charge-material.component.css'],
+    standalone: false
 })
 export class ChargeMaterialComponent implements OnInit {
   @Input()

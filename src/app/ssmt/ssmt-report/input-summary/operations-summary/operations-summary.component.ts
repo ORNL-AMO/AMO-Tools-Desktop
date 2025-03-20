@@ -3,9 +3,10 @@ import { SSMTInputs, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-operations-summary',
-  templateUrl: './operations-summary.component.html',
-  styleUrls: ['./operations-summary.component.css']
+    selector: 'app-operations-summary',
+    templateUrl: './operations-summary.component.html',
+    styleUrls: ['./operations-summary.component.css'],
+    standalone: false
 })
 export class OperationsSummaryComponent implements OnInit {
   @Input()

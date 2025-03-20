@@ -2,9 +2,10 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
-  selector: 'app-exhaust-gas-summary',
-  templateUrl: './exhaust-gas-summary.component.html',
-  styleUrls: ['./exhaust-gas-summary.component.css']
+    selector: 'app-exhaust-gas-summary',
+    templateUrl: './exhaust-gas-summary.component.html',
+    styleUrls: ['./exhaust-gas-summary.component.css'],
+    standalone: false
 })
 export class ExhaustGasSummaryComponent implements OnInit {
   @Input()

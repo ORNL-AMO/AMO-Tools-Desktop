@@ -4,9 +4,10 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-hover-condensate-table',
-  templateUrl: './hover-condensate-table.component.html',
-  styleUrls: ['./hover-condensate-table.component.css']
+    selector: 'app-hover-condensate-table',
+    templateUrl: './hover-condensate-table.component.html',
+    styleUrls: ['./hover-condensate-table.component.css'],
+    standalone: false
 })
 export class HoverCondensateTableComponent implements OnInit {
   @Input()

@@ -4,9 +4,10 @@ import { InletRanges, HeaderService } from '../header.service';
 import { SteamService } from '../../steam.service';
 
 @Component({
-  selector: 'app-header-help',
-  templateUrl: './header-help.component.html',
-  styleUrls: ['./header-help.component.css']
+    selector: 'app-header-help',
+    templateUrl: './header-help.component.html',
+    styleUrls: ['./header-help.component.css'],
+    standalone: false
 })
 export class HeaderHelpComponent implements OnInit {
   @Input()
