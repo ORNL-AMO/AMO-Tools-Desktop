@@ -21,7 +21,7 @@
     "build-prod-desktop": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
     "build-prod-web": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration production-web",
     "build-prod-desktop-ci": "node --max_old_space_size=16000 webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
-    "build-dev-web": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration development-web",
+    "build-dev-web": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration development-web",
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
     "windows-clean": "powershell Remove-Item -Path \"package-lock.json\" && powershell Remove-Item -Path \"node_modules\", \"dist\" -Recurse",
     "electron": "electron .",
