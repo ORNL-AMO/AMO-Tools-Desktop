@@ -4,6 +4,35 @@ import * as Yup from 'yup';
 export const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be greater than 0`;
 export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
 
+const getSystemNumberFieldValidation = (fieldLabel: string) => Yup.number()
+.nullable()
+.required(`${fieldLabel} is required`)
+.moreThan(0, (d) => {
+    return `${fieldLabel} must be greater than 0`;
+});
+
+const getSystemStringFieldValidation = (fieldLabel: string) => Yup.string()
+.nullable()
+.required(`${fieldLabel} is required`);
+
+export const getEstimateSystemValidationSchema = (
+    formMapping: WaterSystemFormMapping
+  ): Yup.Lazy<any> => {
+    return Yup.lazy((values) =>
+      Yup.object().shape(
+        Object.keys(values).reduce((schema, key) => {
+          const fieldLabel = formMapping[key].display || key;
+          if (typeof(formMapping[key].initialValue) === 'number') {
+            schema[key] = getSystemNumberFieldValidation(fieldLabel);
+        } else {
+            schema[key] = getSystemStringFieldValidation(fieldLabel);
+          }
+          return schema;
+        }, {} as Record<string, Yup.NumberSchema | Yup.StringSchema>)
+      )
+    );
+  };
+
 export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge', totalCalculatedFlow: number): Yup.ObjectSchema<FlowForm> => {
     const totalFlowError = flowLabel === 'Source' ? TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR : TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR;
     let validationSchema = Yup.object({
@@ -103,7 +132,7 @@ export const getIsDiagramValid = (nodeErrors: NodeErrors) => {
 
 
 export type FlowForm = { totalFlow: number | null, flows: (number | null)[] };
-
+export type WaterSystemFormMapping = {[formControlName: string]: {display: string, initialValue: number | string}};
 
 
 // export const getInitialDiagramValidation = (flowDiagramData: FlowDiagramData, allEdges: Edge[]): DiagramValidation => {

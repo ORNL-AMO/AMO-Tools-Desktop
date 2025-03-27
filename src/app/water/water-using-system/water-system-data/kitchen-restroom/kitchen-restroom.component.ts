@@ -2,9 +2,9 @@ import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewC
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { KitchenRestroom } from '../../../../shared/models/water-assessment';
 import { WaterAssessmentService } from '../../../water-assessment.service';
 import { WaterUsingSystemService } from '../../water-using-system.service';
+import { KitchenRestroom } from '../../../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-kitchen-restroom',

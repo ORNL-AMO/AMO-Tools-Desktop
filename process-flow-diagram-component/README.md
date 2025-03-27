@@ -12,7 +12,9 @@ Currently supports water diagram flows
 
 
 ## Developing
-Ensure React components import Node, Edge types from xyflow or Typescript will automatically check against native Node
+Ensure React components import Node, Edge types from xyflow or Typescript will automatically check against native DOM Node interface
+
+When the component is rendered as a child/module, there have been occasional issues accessing DOM nodes and rendering MUI components that utilize backdrop/portal (Modal, Dialog, Popover). Accessing the 'shadowRoot' ref (AppWebComponent.tsx) in place of document or root node has been found to remedy these issues. 
 
 ### Terminology
 

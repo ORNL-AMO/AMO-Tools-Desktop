@@ -52,7 +52,7 @@ export class WaterAssessmentConnectionsService {
   async updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment, assessmentSettings: Settings) {
     this.updateAssessmentWaterComponents(diagram, assessment.water);
     this.updateAssessmentComponentFlows(diagram.waterDiagram, assessment.water);
-    this.setAssessmentSettingsFromDiagram(assessmentSettings, diagram);
+    this.setAssessmentSettingsFromDiagram(assessment, assessmentSettings, diagram);
     
     await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings));
     this.waterAssessmentService.settings.next(assessmentSettings);
@@ -60,9 +60,10 @@ export class WaterAssessmentConnectionsService {
     this.settingsDbService.setAll(allSettings);
   }
   
-  setAssessmentSettingsFromDiagram(settings: Settings, diagram: Diagram) {
+  setAssessmentSettingsFromDiagram(assessment: Assessment, settings: Settings, diagram: Diagram) {
     settings.unitsOfMeasure = diagram.waterDiagram.flowDiagramData.settings.unitsOfMeasure;
     settings.flowDecimalPrecision = diagram.waterDiagram.flowDiagramData.settings.flowDecimalPrecision;
+    assessment.water.systemBasics.conductivityUnit = diagram.waterDiagram.flowDiagramData.settings.conductivityUnit;
   }
 
    /**

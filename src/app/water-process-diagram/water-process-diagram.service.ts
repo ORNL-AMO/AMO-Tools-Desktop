@@ -37,7 +37,8 @@ export class WaterProcessDiagramService {
         userDiagramOptions: undefined,
         settings: {
           flowDecimalPrecision: settings.flowDecimalPrecision,
-          unitsOfMeasure: settings.unitsOfMeasure
+          unitsOfMeasure: settings.unitsOfMeasure,
+          conductivityUnit: 'mmho',
         },
         calculatedData: {nodes: {}},
         recentNodeColors: [],

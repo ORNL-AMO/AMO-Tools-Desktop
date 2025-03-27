@@ -1,11 +1,11 @@
 import { ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { getConnectedEdges } from '@xyflow/react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import {
     type Node,
     Edge,
 } from '@xyflow/react';
 import { Box, Button, Divider, Tab, Tabs, TextField, Typography } from "@mui/material";
-import React, { memo, useEffect, useRef, useState } from 'react';
 import ComponentDataForm from "../Forms/ComponentDataForm";
 import ComponentHandles from "./ComponentHandles";
 import CustomizeNode from "./CustomizeNode";
@@ -93,11 +93,11 @@ const ManageComponent = (props: ManageComponentProps) => {
                 </TabPanel>
 
                 {isWaterUsingSystem &&
-                    <TabPanel value={selectedTab} index={1}>
-                        <Box sx={{ paddingY: '1rem' }}>
-                            <InSystemTreatmentForm selectedNode={selectedNode}></InSystemTreatmentForm>
-                        </Box>
-                    </TabPanel>
+                        <TabPanel value={selectedTab} index={1}>
+                            <Box sx={{ paddingY: '1rem' }}>
+                                <InSystemTreatmentForm selectedNode={selectedNode}></InSystemTreatmentForm>
+                            </Box>
+                        </TabPanel>
                 }
 
                 <TabPanel value={selectedTab} index={isWaterUsingSystem? 2 : 1}>

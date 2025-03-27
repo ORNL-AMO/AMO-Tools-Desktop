@@ -15,7 +15,7 @@ import { selectNodes, selectNodeValidation, selectTotalDischargeFlow, selectTota
 import DischargeFlowForm from "./DischargeFlowForm";
 import InvalidIcon from "../../validation/InvalidIcon";
 import { hasValidDischargeForm, hasValidSourceForm, isValidComponent } from "../../validation/Validation";
-import { yellow } from "@mui/material/colors";
+import { blue, yellow } from "@mui/material/colors";
 import SelectTreatmentType from "./SelectTreatmentType";
 
 
@@ -71,6 +71,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     });
     const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
+    // todo subtract known losses and water in product
     const unknownLoss = totalSourceFlow - totalDischargeFlow;
     const hasSourceErrors = errors && hasValidSourceForm(errors);
     const hasTargetErrors = errors && hasValidDischargeForm(errors);
@@ -82,6 +83,61 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
 
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1, display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row', flexWrap: 'wrap', flexBasis: '100%' }}>
+            {isWaterUsingSystem && Boolean(unknownLoss) &&
+                <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}
+                    sx={{
+                        background: theme.palette.info.main,
+                        borderRadius: '8px',
+                        border: `1px solid ${theme.palette.info.dark}`,
+                        width: '100%',
+                        marginBottom: '1rem',
+                    }}>
+                    <Box display={'flex'}
+                        flexDirection={'row'}
+                        justifyContent={'space-around'}
+                        alignItems={'center'}
+                        margin={'1rem .5rem'}
+                        width={'100%'}
+                        fontSize={'.9rem'}
+                        fontWeight={'700'}
+                        sx={{ color: theme.palette.info.contrastText, fontWeight: '700' }}
+                    >
+                        <Typography>
+                            Unknown Loss
+                        </Typography>
+                        <Typography fontSize={'1.25rem'}>
+                            <span>{unknownLoss}</span>
+                            <FlowDisplayUnit style={{ fontSize: '1.25rem' }} />
+                        </Typography>
+                    </Box>
+                </Box>
+            }
+            {isWaterUsingSystem && !Boolean(unknownLoss) &&
+                 <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}
+                 sx={{
+                     background: blue[50],
+                     borderRadius: '8px',
+                     border: `1px solid ${theme.palette.primary.dark}`,
+                     width: '100%',
+                     marginBottom: '1rem',
+                 }}>
+                 <Box display={'flex'} 
+                     flexDirection={'row'} 
+                     justifyContent={'space-around'} 
+                     alignItems={'center'} 
+                     margin={'1rem .5rem'} 
+                     width={'100%'}
+                     fontSize={'.9rem'}
+                     fontWeight={'700'}
+                     sx={{ color: theme.palette.primary.dark, fontWeight: '700'}}
+                     >
+                     <Typography>
+                         Source and Discharge are balanced.
+                     </Typography>
+                 </Box>
+             </Box>
+            }
+
             {(isWaterTreatment || isWasteWaterTreatment) &&
                 <Box display={'flex'} flexDirection={'column'} marginBottom={'1rem'} width={'100%'}>
                     <label htmlFor={'treatmentType'} className={'diagram-label'} style={{ fontSize: '.9rem', marginLeft: '.5rem' }}>Treatment Type</label>
@@ -148,25 +204,6 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                 </AccordionDetails>
             </Accordion>
         }
-        </Box>
-        <Box sx={{ marginY: '1rem', marginLeft: '1rem', display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row', flexWrap: 'wrap' }}>
-            <Box sx={{ flexGrow: 1, minWidth: 0 }} />
-            {Boolean(unknownLoss) && isWaterUsingSystem  &&
-            <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}
-                sx={{ 
-                    background: theme.palette.info.main, 
-                    borderRadius: '8px', 
-                    width: '100%', 
-                }}>
-                <Typography fontSize={'.9rem'} sx={{ color: theme.palette.info.contrastText, marginTop: '.5rem' }}>
-                    Unknown Loss
-                </Typography>
-                <Typography fontSize={'1.25rem'} sx={{ color: theme.palette.info.contrastText, marginBottom: '.5rem' }}>
-                    <span>{unknownLoss}</span>
-                    <FlowDisplayUnit style={{fontSize: '.9rem'}}/>
-                </Typography>
-            </Box>
-            }
         </Box>
     </Box>);
 }

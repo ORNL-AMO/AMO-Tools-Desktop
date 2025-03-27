@@ -373,7 +373,7 @@ export class AssessmentService {
         utilityType: 'Electricity',
         electricityCost: settings.electricityCost,
         notes: undefined,
-        conductivityUnit: 'MuS/cm'
+        conductivityUnit: 'mmho'
       },
       intakeSources: [],
       dischargeOutlets: [],

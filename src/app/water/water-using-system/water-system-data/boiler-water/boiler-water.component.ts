@@ -1,9 +1,9 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
-import { BoilerWater } from '../../../../shared/models/water-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { WaterAssessmentService } from '../../../water-assessment.service';
 import { WaterUsingSystemService } from '../../water-using-system.service';
+import { BoilerWater } from '../../../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-boiler-water',

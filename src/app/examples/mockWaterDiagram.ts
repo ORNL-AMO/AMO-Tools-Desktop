@@ -20,7 +20,8 @@ export const MockWaterdiagram: Diagram =
             "recentNodeColors": [],
             "settings": {
                 "flowDecimalPrecision": 2,
-                "unitsOfMeasure": 'Imperial'
+                "unitsOfMeasure": 'Imperial',
+                "conductivityUnit": 'mmho',
             },
             "nodeErrors": {},
             "nodes": [

@@ -511,3 +511,10 @@ a {
 select:hover {
   cursor: pointer;
 }
+
+.water-flow-metric-group {
+  margin-top: 1.5rem;
+  border: 1px solid #1976d2;
+  padding: 1rem;
+  border-radius: 8px;
+}

@@ -28,6 +28,7 @@ import { Provider } from 'react-redux';
 import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, keyboardDeleteNode, nodesChange } from './diagramReducer';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import { getIsDiagramValid } from '../../validation/Validation';
+import StaticModal from '../Forms/StaticModal';
 
 
 export interface DiagramProps {
@@ -44,7 +45,7 @@ const Diagram = (props: DiagramProps) => {
   const assessmentNodes: Node[] = props.processDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
     if (!node.position && node.data.createdByAssessment) {
       return node;
-    } 
+    }
   })
   const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -129,8 +130,8 @@ const Diagram = (props: DiagramProps) => {
       y: event.clientY,
     });
 
-    dispatch(addNode({nodeType, position}));
-  },[reactFlowInstance]);
+    dispatch(addNode({ nodeType, position }));
+  }, [reactFlowInstance]);
 
   const onConnect: OnConnect = useCallback(
     (connectedParams: Connection | Edge) => {
@@ -143,70 +144,73 @@ const Diagram = (props: DiagramProps) => {
   const onBeforeDelete = useCallback(
     async ({ nodes: nds, edges: eds }: { nodes: Node[]; edges: Edge[] }) => {
       nds.forEach((node: Node<ProcessFlowPart>) => {
-        dispatch(keyboardDeleteNode(node))});
+        dispatch(keyboardDeleteNode(node))
+      });
       return { nodes: nds, edges: eds }
-    },[])
+    }, [])
 
   return (
     props.height &&
-      <div className="process-flow-diagram">
-        {isDialogOpen &&
-          <WarningDialog
-            isDialogOpen={isDialogOpen}/>
+    <div className="process-flow-diagram">
+      {isDialogOpen &&
+        <WarningDialog
+          isDialogOpen={isDialogOpen} />
+      }
+
+      {!isDiagramValid && validationWindowLocation === 'diagram' &&
+        <ValidationWindow></ValidationWindow>
+      }
+      <ReactFlowProvider>
+        <div className={'flow-wrapper'} style={{ height: props.height }}>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={(e) => dispatch(nodesChange(e))}
+            onEdgesChange={(e) => dispatch(edgesChange(e))}
+            onConnect={onConnect}
+            // onReconnect={onReconnect}
+            onInit={setReactFlowInstance}
+            nodeTypes={nodeTypes}
+            edgeTypes={diagramEdgeTypes}
+            defaultEdgeOptions={{
+              animated: animated,
+              type: defaultEdgeType,
+            }}
+            defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
+            connectionLineType={ConnectionLineType.Bezier}
+            onDrop={onDrop}
+            // onError={onErrorWithSuppressed}
+            onBeforeDelete={onBeforeDelete}
+            onDragOver={onDragOver}
+            fitView={true}
+            fitViewOptions={{
+              padding: 300,
+              minZoom: .5
+            }}
+            className="flow"
+          >
+            {minimapVisible &&
+              <MiniMap zoomable pannable nodeClassName={(node: Node) => node.type} />
+            }
+            {controlsVisible &&
+              <Controls />
+            }
+            <Background />
+          </ReactFlow>
+        </div>
+
+        <SideDrawer
+          anchor={'left'}
+          shadowRootRef={props.shadowRoot}
+        ></SideDrawer>
+
+        <StaticModal shadowRootRef={props.shadowRoot}/>
+
+        {isDataDrawerOpen &&
+          <DataDrawer />
         }
-
-              {!isDiagramValid && validationWindowLocation === 'diagram' &&
-                <ValidationWindow></ValidationWindow>
-              }
-        <ReactFlowProvider>
-          <div className={'flow-wrapper'} style={{ height: props.height }}>
-            <ReactFlow
-              nodes={nodes}
-              edges={edges}
-              onNodesChange={(e) => dispatch(nodesChange(e))}
-              onEdgesChange={(e) => dispatch(edgesChange(e))}
-              onConnect={onConnect}
-              // onReconnect={onReconnect}
-              onInit={setReactFlowInstance}
-              nodeTypes={nodeTypes}
-              edgeTypes={diagramEdgeTypes}
-              defaultEdgeOptions={{
-                animated: animated,
-                type: defaultEdgeType,
-              }}
-              defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
-              connectionLineType={ConnectionLineType.Bezier}
-              onDrop={onDrop}
-              // onError={onErrorWithSuppressed}
-              onBeforeDelete={onBeforeDelete}
-              onDragOver={onDragOver}
-              fitView={true}
-              fitViewOptions={{
-                padding: 300,
-                minZoom: .5
-              }}
-              className="flow"
-            >
-              {minimapVisible &&
-                <MiniMap zoomable pannable nodeClassName={(node: Node) => node.type} />
-              }
-              {controlsVisible &&
-                <Controls />
-              }
-              <Background />
-            </ReactFlow>
-          </div>
-
-          <SideDrawer
-            anchor={'left'}
-            shadowRootRef={props.shadowRoot}
-          ></SideDrawer>
-          
-          {isDataDrawerOpen &&
-            <DataDrawer />
-          }
-        </ReactFlowProvider>
-      </div>
+      </ReactFlowProvider>
+    </div>
   );
 }
 
@@ -219,8 +223,8 @@ export default (props: DiagramProps) => {
   // const storeRef = useMemo(() => configureAppStore(), []);
 
   return (
-  <Provider store={storeRef.current}>
-    <Diagram {...props}/>
-  </Provider>
-);
+    <Provider store={storeRef.current}>
+      <Diagram {...props} />
+    </Provider>
+  );
 }

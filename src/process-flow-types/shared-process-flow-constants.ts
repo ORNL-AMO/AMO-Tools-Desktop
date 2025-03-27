@@ -46,3 +46,75 @@ export const flowDecimalPrecisionOptions: {value: number | string, display: stri
     {value: MAX_FLOW_DECIMALS, display: '3 Places'},
 ];
 
+
+export const waterUsingSystemTypeOptions: {value: number, display: string}[] = [
+    {value: 0, display: 'Process Use'},
+    {value: 1, display: 'Cooling Tower'},
+    {value: 2, display: 'Boiler Water'},
+    {value: 3, display: 'Kitchen and Restroom'},
+    {value: 4, display: 'Landscaping and Irrigation'},
+]
+
+export const intakeSourceTypeOptions: {value: number, display: string}[] = [
+    {value: 0, display: 'Municipal Water (Potable)'},
+    {value: 1, display: 'Municipal Water (Non-potable)'},
+    {value: 2, display: 'Municipal Water'},
+    {value: 3, display: 'River or Lake (Non-Potable)'},
+    {value: 4, display: 'Ocean or Tide'},
+    {value: 5, display: 'Groundwater'},
+    {value: 6, display: 'Other'},
+]
+
+
+export const dischargeOutletTypeOptions: {value: number, display: string}[] = [
+    {value: 0, display: 'Municipal Sewer'},
+    {value: 1, display: 'Third-party Disposal'},
+    {value: 2, display: 'River or Lake'},
+    {value: 3, display: 'Ocean or Tide'},
+    {value: 4, display: 'Groundwater'},
+    {value: 5, display: 'Onsite Disposal'},
+    // Water not used in any processes
+    {value: 6, display: 'Stormwater to Municipal Sewer'},
+]
+
+export const waterFlowMetricOptions: {value: number, display: string}[] = [
+    {value: 0, display: 'Annual Flow'},
+    {value: 1, display: 'Hourly Flow'},
+    {value: 2, display: 'Water Intensity'},
+    {value: 3, display: 'Fraction of Gross Water Use'},
+    {value: 4, display: 'Fraction of Incoming Water'},
+]
+
+
+export enum FlowMetric {
+    ANNUAL = 0,
+    HOURLY = 1,
+    INTENSITY = 2,
+    FRACTION_GROSS = 3,
+    FRACTION_INCOMING = 4
+}
+
+export const ImperialFlowUnitMap: Record<FlowMetric, WaterUseUnit> = {
+    [FlowMetric.ANNUAL]: 'gal',
+    [FlowMetric.HOURLY]: 'gal/hr',
+    [FlowMetric.INTENSITY]: 'gal/unit',
+    [FlowMetric.FRACTION_GROSS]: undefined,
+    [FlowMetric.FRACTION_INCOMING]: undefined,
+  };
+
+export const MetricFlowUnitMap: Record<FlowMetric, WaterUseUnit> = {
+    [FlowMetric.ANNUAL]: 'm<sup>3</sup>',
+    [FlowMetric.HOURLY]: 'm<sup>3</sup>/hr',
+    [FlowMetric.INTENSITY]: 'm<sup>3</sup>/unit',
+    [FlowMetric.FRACTION_GROSS]: undefined,
+    [FlowMetric.FRACTION_INCOMING]: undefined,
+  };
+
+export const conductivityUnitOptions: {value: string, display: string}[] = [
+    {value: 'mmho', display: 'mmho'},
+    {value: 'TDS ppm', display: 'TDS ppm'},
+    {value: 'MuS/cm', display: 'MuS/cm'},
+    {value: 'mS/cm', display: 'mS/cm'},
+]
+export type WaterUseUnit = undefined | 'gal' | 'gal/hr' | 'gal/unit' | 'm<sup>3</sup>' | 'm<sup>3</sup>/hr' | 'm<sup>3</sup>/unit' ;
+

@@ -8,8 +8,8 @@ import { WaterAssessmentResultsService } from '../../water-assessment-results.se
 import { WaterSystemComponentService } from '../../water-system-component.service';
 import { WaterUsingSystemService } from '../water-using-system.service';
 import { copyObject } from '../../../shared/helperFunctions';
-import { waterUsingSystemTypeOptions } from '../../waterConstants';
 import { OperatingHours } from '../../../shared/models/operations';
+import { waterUsingSystemTypeOptions } from '../../../../process-flow-types/shared-process-flow-constants';
 
 @Component({
   selector: 'app-water-system-data',

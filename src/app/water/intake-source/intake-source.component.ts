@@ -1,15 +1,16 @@
 import { Component, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { PlantIntakeDischargeTab, WaterAssessmentService } from '../water-assessment.service';
-import { IntakeSource, MonthlyFlowData, MotorEnergy, WaterAssessment } from '../../shared/models/water-assessment';
+import { IntakeSource, MonthlyFlowData, WaterAssessment } from '../../shared/models/water-assessment';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import * as _ from 'lodash';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { copyObject } from '../../shared/helperFunctions';
-import { intakeSourceTypeOptions } from '../waterConstants';
 import { MotorEnergyService } from '../water-using-system/added-energy/motor-energy/motor-energy.service';
 import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDeleteData';
+import { intakeSourceTypeOptions } from '../../../process-flow-types/shared-process-flow-constants';
+import { MotorEnergy } from '../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-intake-source',
