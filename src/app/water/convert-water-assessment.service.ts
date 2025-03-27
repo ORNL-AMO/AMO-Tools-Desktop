@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BoilerWater, CoolingTower, DiagramWaterSystemFlows, DischargeOutlet, FlowData, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, KnownLoss, Landscaping, LandscapingResults, Modification, MotorEnergy, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterSystemFlows, WaterTreatment, WaterUsingSystem } from '../shared/models/water-assessment';
+import { DiagramWaterSystemFlows, DischargeOutlet, FlowData, IntakeSource, KnownLoss, Modification, WasteWaterTreatment, WaterAssessment, WaterSystemFlows, WaterTreatment, WaterUsingSystem } from '../shared/models/water-assessment';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
-import { convertFlowDiagramData, NodeFlowData } from '../../process-flow-types/shared-process-flow-types';
+import { BoilerWater, convertFlowDiagramData, CoolingTower, HeatEnergy, HeatEnergyResults, KitchenRestroom, Landscaping, LandscapingResults, MotorEnergy, NodeFlowData, ProcessUse } from '../../process-flow-types/shared-process-flow-types';
 import { MAX_FLOW_DECIMALS } from '../../process-flow-types/shared-process-flow-constants';
 
 @Injectable({
@@ -313,23 +313,23 @@ export class ConvertWaterAssessmentService {
     return motorEnergy;
   }
 
-  convertLandscapingSuiteInput(landscaping: Landscaping, settings: Settings): Landscaping {
+  convertLandscapingSuiteInput(landscaping: Landscaping, unitsOfMeasure: string): Landscaping {
     let convertedLandscaping: Landscaping = {
       areaIrrigated: landscaping.areaIrrigated,
       yearlyInchesIrrigated: landscaping.yearlyInchesIrrigated
     };
-    if (settings.unitsOfMeasure == 'Imperial') {
-      convertedLandscaping.yearlyInchesIrrigated = this.convertUnitsService.value(landscaping.yearlyInchesIrrigated).from('in').to('ft');
-    } else if (settings.unitsOfMeasure == "Metric") {
-      convertedLandscaping.yearlyInchesIrrigated = this.convertUnitsService.value(landscaping.yearlyInchesIrrigated).from('cm').to('m');
+    if (unitsOfMeasure == 'Imperial') {
+      convertedLandscaping.yearlyInchesIrrigated = this.convertUnitsService.value(landscaping.yearlyInchesIrrigated).from('ft2').to('in2');
+    } else if (unitsOfMeasure == "Metric") {
+      convertedLandscaping.yearlyInchesIrrigated = this.convertUnitsService.value(landscaping.yearlyInchesIrrigated).from('m2').to('cm2');
     }
 
     return convertedLandscaping;
   }
 
-  convertLandscapingResults(results: LandscapingResults, settings: Settings): LandscapingResults {
-    if (settings.unitsOfMeasure == 'Imperial') {
-      results.grossWaterUse = this.convertUnitsService.value(results.grossWaterUse).from('ft3').to('gal');
+  convertLandscapingResults(results: LandscapingResults, unitsOfMeasure: string): LandscapingResults {
+    if (unitsOfMeasure == 'Imperial') {
+      results.grossWaterUse = this.convertUnitsService.value(results.grossWaterUse).from('in3').to('gal');
     } 
     return results;
   }
@@ -342,11 +342,12 @@ export class ConvertWaterAssessmentService {
     return results;
   }
 
-  convertAnnualFlowResult(flowValue: number, settings: Settings) {
+  // todo This may not be correct for metric
+  convertAnnualFlowResult(flowValue: number, unitsOfMeasure: string): number {
     let annualFlowResult = this.convertUnitsService.value(flowValue).from('gal').to('Mgal');
-    if (settings.unitsOfMeasure == 'Imperial') {
+    if (unitsOfMeasure == 'Imperial') {
       return annualFlowResult
-    } else if (settings.unitsOfMeasure == 'Metric') {
+    } else if (unitsOfMeasure == 'Metric') {
       return this.convertUnitsService.value(annualFlowResult).from('Mgal').to('m3');
     }
   }

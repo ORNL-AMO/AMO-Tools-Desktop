@@ -18,8 +18,6 @@ export interface WasteWaterTreatment extends ProcessFlowPart {
   flowValue: number
 }
 
-
-
 // * passed down to diagram
 export interface ProcessFlowParentState {
   context: string;
@@ -89,6 +87,7 @@ export interface UserDiagramOptions {
 export interface DiagramSettings {
   flowDecimalPrecision: number,
   unitsOfMeasure: string,
+  conductivityUnit: string,
 }
 
 
@@ -104,6 +103,17 @@ export interface DiagramCalculatedData {
   nodes: {
     [nodeId: string]: NodeFlowData
   }
+}
+
+export interface WaterSystemResults {
+  grossWaterUse: number,
+  processUseResults?: ProcessUseResults,
+  coolingTowerResults?: CoolingTowerResults,
+  boilerWaterResults?: BoilerWaterResults,
+  kitchenRestroomResults?: KitchenRestroomResults,
+  landscapingResults?: LandscapingResults,
+  heatEnergyResults?: HeatEnergyResults,
+  motorEnergyResults?: MotorEnergyResults[]
 }
 
 export interface WaterDiagramOption {
@@ -483,4 +493,135 @@ const isValidNumber = (num: number): boolean => {
 }
 
 
+
+// * Water System Types
+export interface ProcessUse  {
+  hoursPerYear?: number
+  waterRequiredMetric: number,
+  waterRequiredMetricValue: number,
+  waterConsumedMetric: number,
+  waterConsumedMetricValue: number,
+  waterLossMetric: number,
+  waterLossMetricValue: number,
+  annualProduction: number,
+  fractionGrossWaterRecirculated: number,
+}
+
+// * grossWaterUse, waterConsumed, waterLoss are added on MEASUR side
+export interface ProcessUseResults {
+  grossWaterUse: number,
+  waterConsumed: number,
+  waterLoss: number,
+  recirculatedWater: number,
+  incomingWater: number,
+  wasteDischargedAndRecycledOther: number,
+}
+
+
+export interface ProcessUseTotalResults {
+  processUseResults: ProcessUseResults[],
+  grossWaterUse: number,
+  waterConsumed: number,
+  waterLoss: number,
+  recirculatedWater: number,
+  incomingWater: number,
+  wasteDischargedAndRecycledOther: number,
+}
+
+export interface CoolingTower {
+  hoursPerYear?: number
+  tonnage: number
+  loadFactor: number,
+  evaporationRateDegree: number,
+  temperatureDrop: number,
+  makeupConductivity: number,
+  blowdownConductivity: number,
+}
+
+export interface CoolingTowerResults {
+  grossWaterUse: number,
+  evaporationLoss: number,
+  cycleOfConcentration: number,
+  makeupWater: number,
+  blowdownLoss: number,
+}
+
+export interface CoolingTowerTotalResults {
+  coolingTowerResults: CoolingTowerResults[],
+  grossWaterUse: number,
+  evaporationLoss: number,
+  cycleOfConcentration: number,
+  makeupWater: number,
+  blowdownLoss: number,
+}
+
+export interface BoilerWater {
+  hoursPerYear?: number,
+  power: number
+  loadFactor: number,
+  steamPerPower: number,
+  feedwaterConductivity: number,
+  makeupConductivity: number,
+  blowdownConductivity: number,
+}
+
+export interface BoilerWaterResults {
+  cycleOfConcentration: number,
+  grossWaterUse: number,
+  makeupWater: number,
+  blowdownLoss: number,
+  steamLoss: number,
+  condensateReturn: number,
+  rateOfRecirculation: number,
+}
+
+
+export interface KitchenRestroom {
+  hoursPerYear?: number,
+  employeeCount: number,
+  workdaysPerYear: number,
+  dailyUsePerEmployee: number
+}
+
+export interface KitchenRestroomResults {
+  grossWaterUse: number
+}
+
+export interface Landscaping {
+  hoursPerYear?: number,
+  areaIrrigated: number,
+  yearlyInchesIrrigated: number,
+}
+
+export interface LandscapingResults {
+  grossWaterUse: number
+}
+
+
+export interface HeatEnergy {
+  hoursPerYear?: number,
+  incomingTemp: number,
+  outgoingTemp: number,
+  heaterEfficiency: number,
+  heatingFuelType: number,
+  wasteWaterDischarge: number
+}
+
+export interface HeatEnergyResults {
+  heatEnergy: number,
+  
+}
+
+export interface MotorEnergy {
+  name: string,
+  numberUnits: number,
+  hoursPerYear: number,
+  loadFactor: number,
+  ratedPower: number,
+  systemEfficiency: number,
+}
+
+export interface MotorEnergyResults {
+  energyUse: number,
+}
 

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
-import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { createNewNode, formatDataForMEASUR, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
 import { CSSProperties } from 'react';
 // import { getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getResetData } from './store';
@@ -26,8 +26,9 @@ export interface DiagramState {
   nodeErrors: NodeErrors,
   focusedEdgeId: string,
   isDialogOpen: boolean,
-  assessmentId: number
-  validationWindowLocation: ValidationWindowLocation
+  assessmentId: number,
+  validationWindowLocation: ValidationWindowLocation,
+  isModalOpen: boolean
 }
 
 export const getStoreSerializedDate = (dateObject: Date): string => {
@@ -43,7 +44,7 @@ export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
     minimapVisible: false,
     controlsVisible: true,
     directionalArrowsVisible: true,
-    showFlowLabels: false,
+    showFlowLabels: true,
     flowLabelSize: 1,
     animated: true,
   }
@@ -52,7 +53,8 @@ export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
 export const getDefaultSettings = (): DiagramSettings => {
   return {
     unitsOfMeasure: 'Imperial',
-    flowDecimalPrecision: 2
+    flowDecimalPrecision: 2,
+    conductivityUnit: 'mmho',
   }
 }
 
@@ -81,7 +83,8 @@ export const getResetData = (currentState?: DiagramState): DiagramState => {
     },
     isDialogOpen: false,
     assessmentId: undefined,
-    validationWindowLocation: 'diagram'
+    validationWindowLocation: 'diagram',
+    isModalOpen: false
   }
 }
 
@@ -375,6 +378,10 @@ const flowDecimalPrecisionChangeReducer = (state: DiagramState, action: PayloadA
   });
 }
 
+const conductivityUnitChangeReducer = (state: DiagramState, action: PayloadAction<string>) => {
+  state.settings.conductivityUnit = action.payload;
+}
+
 /**
  * Update diagram options by key as well as affected nodes and edges
  * @param state 
@@ -442,31 +449,13 @@ const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<
   state.calculatedData = action.payload;
 }
 
+const modalOpenChangeReducer = (state: DiagramState, action: PayloadAction<boolean>) => {
+  state.isModalOpen = action.payload;
+}
+
 export const diagramSlice = createSlice({
   name: 'diagram',
   initialState: getResetData(),
-  // initialState: {
-  //   nodes: [],
-  //   edges: [],
-  //   composedNodeData: [],
-  //   settings: {},
-  //   diagramOptions: {},
-  //   isDrawerOpen: false,
-  //   selectedDataId: undefined,
-  //   focusedEdgeId: undefined,
-  //   calculatedData: {nodes: {}},
-  //   nodeErrors: {},
-  //   recentEdgeColors: [],
-  //   recentNodeColors: [],
-  //   diagramParentDimensions: {
-  //     height: undefined,
-  //     headerHeight: undefined,
-  //     footerHeight: undefined
-  //   },
-  //   isDialogOpen: false,
-  //   assessmentId: undefined,
-  //   validationWindowLocation: 'diagram'
-  // },
   reducers: {
     resetDiagram: resetDiagramReducer,
     diagramParentRender: diagramParentRenderReducer,
@@ -501,6 +490,8 @@ export const diagramSlice = createSlice({
     distributeTotalDischargeFlow: distributeTotalDischargeFlowReducer,
     toggleDrawer: toggleDrawerReducer,
     setDialogOpen: setDialogOpenReducer,
+    conductivityUnitChange: conductivityUnitChangeReducer,
+    modalOpenChange: modalOpenChangeReducer
   }
 })
 
@@ -537,12 +528,19 @@ export const {
   flowDecimalPrecisionChange,
   showMarkerEndArrows,
   toggleDrawer,
-  setDialogOpen
+  setDialogOpen,
+  modalOpenChange,
+  conductivityUnitChange
 } = diagramSlice.actions
 export default diagramSlice.reducer
 
 export interface UserOptionsPayload<K extends keyof UserDiagramOptions> { optionsProp: K, updatedValue: UserDiagramOptions[K], updateDependencies?: OptionsDependentState[] };
 export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp: K, updatedValue: ProcessFlowPart[K] };
+
+/**
+ * estimated system results Object, i.e. ProcessUseResults, BoilerResults
+ */
+export interface EstimatedSystemPayload<K extends keyof WaterSystemResults> { systemResultProp: K, updatedValue: WaterSystemResults[K] };
 export type OptionsDependentState = 'updateEdges' | 'updateEdgeProperties';
 export type NodeFlowProperty = keyof Pick<NodeFlowData, 'totalSourceFlow' | 'totalDischargeFlow'>;
 export type FlowType = 'source' | 'discharge';

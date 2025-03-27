@@ -17,7 +17,7 @@ export const MockWaterAssessment: Assessment = {
         "systemBasics": {
             "utilityType": "Electricity",
             "electricityCost": 0.066,
-            "conductivityUnit": "MuS/cm",
+            "conductivityUnit": "mmho",
             "notes": ""
         },
         "intakeSources": [

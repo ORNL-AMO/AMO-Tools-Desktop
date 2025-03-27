@@ -5,8 +5,8 @@ import { PercentLoadEstimationService } from "../../../../calculator/motors/perc
 import { OperatingHours } from "../../../../shared/models/operations";
 import { WaterAssessmentService } from "../../../water-assessment.service";
 import { MotorEnergyService } from "./motor-energy.service";
-import { MotorEnergy } from "../../../../shared/models/water-assessment";
 import { Settings } from "../../../../shared/models/settings";
+import { MotorEnergy } from "../../../../../process-flow-types/shared-process-flow-types";
 
 @Component({
   selector: 'app-motor-energy',

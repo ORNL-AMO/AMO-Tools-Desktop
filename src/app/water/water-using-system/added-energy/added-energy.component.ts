@@ -3,10 +3,11 @@ import { MotorEnergyService } from './motor-energy/motor-energy.service';
 import { WaterUsingSystemService } from '../water-using-system.service';
 import { WaterAssessmentService } from '../../water-assessment.service';
 import { WaterSystemComponentService } from '../../water-system-component.service';
-import { HeatEnergy, MotorEnergy, WaterAssessment, WaterUsingSystem } from '../../../shared/models/water-assessment';
+import { WaterAssessment, WaterUsingSystem } from '../../../shared/models/water-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
+import { HeatEnergy, MotorEnergy } from '../../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-added-energy',

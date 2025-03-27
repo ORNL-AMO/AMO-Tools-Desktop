@@ -4,9 +4,9 @@ import { Box, Button, Chip, Divider, Grid, List, ListItem, ListItemText, Paper, 
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
-import { flowDecimalPrecisionOptions } from '../../../../src/process-flow-types/shared-process-flow-constants';
+import { conductivityUnitOptions, flowDecimalPrecisionOptions } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { defaultEdgeTypeChange, diagramOptionsChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
+import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
 import { RootState, selectHasAssessment } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
@@ -43,6 +43,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   
   const flowDecimalPrecision = useAppSelector((state: RootState) => state.diagram.settings.flowDecimalPrecision);
   const unitsOfMeasure = useAppSelector((state: RootState) => state.diagram.settings.unitsOfMeasure);
+  const conductivityUnit = useAppSelector((state: RootState) => state.diagram.settings.conductivityUnit);
   const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
   const isDiagramValid = getIsDiagramValid(nodeErrors);
@@ -176,6 +177,19 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                     {flowDecimalPrecisionOptions.map((option) => {
                     return (
                       <option key={`flowDecimalPrecision_${option.value}`} value={option.value}>{option.display}</option>
+                    )
+                  })}
+                  </select>
+                </Box>
+
+                <Box className={'sidebar-option-container'}>
+                  <label htmlFor={'conductivityUnit'}>Conductivity Unit</label>
+                  <select className="form-control diagram-select" id={'conductivityUnit'} name="conductivityUnit"
+                    value={conductivityUnit}
+                    onChange={(e) => dispatch(conductivityUnitChange(e.target.value))}>
+                    {conductivityUnitOptions.map((option) => {
+                    return (
+                      <option key={`conductivityUnit_${option.value}`} value={option.value}>{option.display}</option>
                     )
                   })}
                   </select>

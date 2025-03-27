@@ -9,7 +9,7 @@ import { CustomEdgeData } from "../../../../src/process-flow-types/shared-proces
 import InputField from "../StyledMUI/InputField";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { distributeTotalSourceFlow, focusedEdgeChange, sourceFlowValueChange, totalFlowChange } from "../Diagram/diagramReducer";
+import { distributeTotalSourceFlow, modalOpenChange, focusedEdgeChange, sourceFlowValueChange, totalFlowChange } from "../Diagram/diagramReducer";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import { selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
 import { Formik, Form, FieldArray, useFormikContext } from 'formik';
@@ -18,7 +18,8 @@ import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
 import { ObjectSchema } from "yup";
-
+import CalculateIcon from '@mui/icons-material/Calculate';
+import EstimationModal from "./StaticModal";
 /**
    * Formik is used for validation only, while source of truth for values is redux store. This avoids state race conditions when rendering.
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility
@@ -173,13 +174,19 @@ const TotalSourceFlowField = () => {
         dispatch(distributeTotalSourceFlow(totalFlowValue));
     }
 
+    
+    const onClickEstimateFlow = (): void => {
+        dispatch(modalOpenChange(true));
+    }
+    
     React.useEffect(() => {
         setFieldValue('totalFlow', totalSourceFlow, true);
     }, [totalSourceFlow, errors, values]);
 
     const hasError = Boolean(errors.totalFlow) && totalSourceFlow !== null;
+
     return (
-        <>
+        <Box display={'flex'}>
             <SmallTooltip title="Set flows evenly from total source value"
                 slotProps={{
                     popper: {
@@ -222,7 +229,26 @@ const TotalSourceFlowField = () => {
                     </InputAdornment>,
                 }}
             />
-        </>
+            <SmallTooltip title="Estimate flow by system type"
+                slotProps={{
+                    popper: {
+                        disablePortal: true,
+                    }
+                }}>
+                <span>
+                    <Button onClick={() => onClickEstimateFlow()} 
+                        sx={{
+                            marginLeft: '1rem',
+                            padding: '.25rem .5rem',
+                            display: 'inline-block',
+                            minWidth: 0
+                        }}
+                        variant="outlined">
+                        <CalculateIcon/>
+                    </Button>
+                </span>
+            </SmallTooltip>
+        </Box>
     );
 };
 

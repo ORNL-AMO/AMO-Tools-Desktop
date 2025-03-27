@@ -1,10 +1,10 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { Landscaping } from '../../../../shared/models/water-assessment';
 import { FormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { WaterAssessmentService } from '../../../water-assessment.service';
 import { WaterUsingSystemService } from '../../water-using-system.service';
+import { Landscaping } from '../../../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-landscaping',

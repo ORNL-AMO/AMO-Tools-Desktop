@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { BoilerWater, ConnectedFlowType, CoolingTower, DiagramWaterSystemFlows, FlowMetric, KitchenRestroom, KnownLoss, Landscaping, ProcessUse, WaterAssessment, WaterProcessComponent, WaterSystemFlows, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../shared/models/water-assessment';
-import { getNewProcessComponent, ProcessFlowPart } from '../../../process-flow-types/shared-process-flow-types';
+import { FormBuilder, FormGroup, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { ConnectedFlowType, DiagramWaterSystemFlows, KnownLoss, WaterProcessComponent, WaterSystemFlows, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../shared/models/water-assessment';
+import { BoilerWater, CoolingTower, getNewProcessComponent, KitchenRestroom, Landscaping, ProcessUse } from '../../../process-flow-types/shared-process-flow-types';
 import { BehaviorSubject } from 'rxjs';
 import { OperatingHours } from '../../shared/models/operations';
+import { FlowMetric } from '../../../process-flow-types/shared-process-flow-constants';
 
 @Injectable()
 export class WaterUsingSystemService {

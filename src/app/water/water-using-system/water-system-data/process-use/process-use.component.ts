@@ -1,12 +1,11 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
-import { FlowMetric, ProcessUse } from '../../../../shared/models/water-assessment';
 import { WaterUsingSystemService } from '../../water-using-system.service';
 import { WaterAssessmentService } from '../../../water-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { OperatingHours } from '../../../../shared/models/operations';
+import { FormGroup } from '@angular/forms';
 import { copyObject } from '../../../../shared/helperFunctions';
-import { waterFlowMetricOptions } from '../../../waterConstants';
+import { FlowMetric, ImperialFlowUnitMap, MetricFlowUnitMap, waterFlowMetricOptions, WaterUseUnit } from '../../../../../process-flow-types/shared-process-flow-constants';
+import { ProcessUse } from '../../../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-process-use',
@@ -24,19 +23,10 @@ export class ProcessUseComponent {
   smallScreenTab: string = 'form';
   waterFlowMetricOptions: {value: number, display: string}[];
   waterRequiredFlowMetricOptions: {value: number, display: string}[];
-  
   FlowMetric = FlowMetric;
 
   // no units needed for fraction
-  inputUnitMap: Record<FlowMetric, WaterUseUnit> = {
-    [FlowMetric.ANNUAL]: 'gal',
-    [FlowMetric.HOURLY]: 'gal/hr',
-    [FlowMetric.INTENSITY]: 'gal/unit',
-    [FlowMetric.FRACTION_GROSS]: undefined,
-    [FlowMetric.FRACTION_INCOMING]: undefined,
-  };
-
-
+  inputUnitMap: Record<FlowMetric, WaterUseUnit>;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   formWidth: number;
 
@@ -86,14 +76,10 @@ export class ProcessUseComponent {
 
   setFlowMetricDataUnits() {
     if (this.settings.unitsOfMeasure !== 'Imperial') {
-      this.inputUnitMap = {
-        [FlowMetric.ANNUAL]: 'm<sup>3</sup>',
-        [FlowMetric.HOURLY]: 'm<sup>3</sup>/hr',
-        [FlowMetric.INTENSITY]: 'm<sup>3</sup>/unit',
-        [FlowMetric.FRACTION_GROSS]: undefined,
-        [FlowMetric.FRACTION_INCOMING]: undefined,
-      };
-    } 
+      this.inputUnitMap = MetricFlowUnitMap;
+    } else {
+      this.inputUnitMap = ImperialFlowUnitMap;
+    }
   }
 
   setSmallScreenTab(selectedTab: string) {
@@ -102,6 +88,5 @@ export class ProcessUseComponent {
 }
 
 
-type WaterUseUnit = undefined | 'gal' | 'gal/hr' | 'gal/unit' | 'm<sup>3</sup>' | 'm<sup>3</sup>/hr' | 'm<sup>3</sup>/unit' ;
 
 

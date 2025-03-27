@@ -31,7 +31,7 @@ export class WaterDiagramConnectionsService {
       if (integratedAssessment && diagram.modifiedDate < integratedAssessment.modifiedDate) {
         this.updateDiagramFromAssessment(diagram, integratedAssessment.water);
         let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(integratedAssessment);
-        this.setDiagramSettingsFromAssessment(assessmentSettings, diagram);
+        this.setDiagramSettingsFromAssessment(integratedAssessment, assessmentSettings, diagram);
         await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
       }
     }
@@ -53,9 +53,10 @@ export class WaterDiagramConnectionsService {
     diagram.waterDiagram.flowDiagramData.nodes = assessmentNodes;
   }
 
-  setDiagramSettingsFromAssessment(settings: Settings, diagram: Diagram) {
+  setDiagramSettingsFromAssessment(integratedAssessment: Assessment, settings: Settings, diagram: Diagram) {
       diagram.waterDiagram.flowDiagramData.settings.unitsOfMeasure = settings.unitsOfMeasure;
       diagram.waterDiagram.flowDiagramData.settings.flowDecimalPrecision = settings.flowDecimalPrecision;
+      diagram.waterDiagram.flowDiagramData.settings.conductivityUnit = integratedAssessment.water.systemBasics.conductivityUnit;
     }
 
   setSummingNodes(nodes) {

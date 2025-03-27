@@ -72,7 +72,9 @@ const DischargeFlowForm = () => {
     }
 
 
+    // todo 7339 - don't validate when flows dont exist
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentDischargeEdges, nodes, selectedDataId);
+    
     const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', totalCalculatedDischargeFlow);
 
     return (

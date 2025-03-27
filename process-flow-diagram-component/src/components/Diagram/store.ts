@@ -1,6 +1,6 @@
 import { configureStore, createListenerMiddleware, createSelector, isAnyOf } from '@reduxjs/toolkit'
 import diagramReducer, { addNode, DiagramState, saveDiagramState } from './diagramReducer'
-import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowData, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowData, ProcessFlowPart, UserDiagramOptions, WaterSystemResults } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { addEdge, Edge, getConnectedEdges, Node } from '@xyflow/react';
 import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
 
@@ -30,7 +30,8 @@ export function configureAppStore() {
         },
         isDialogOpen: false,
         assessmentId: undefined,
-        validationWindowLocation: 'diagram'
+        validationWindowLocation: 'diagram',
+        isModalOpen: false
       }
     },
     middleware: (getDefaultMiddleware) => {
@@ -73,6 +74,7 @@ export type AppDispatch = AppStore['dispatch']
 export const selectEdges = (state: RootState) => state.diagram.edges;
 export const selectNodes = (state: RootState) => state.diagram.nodes;
 export const selectIsDrawerOpen = (state: RootState) => state.diagram.isDrawerOpen;
+export const selectIsModalOpen = (state: RootState) => state.diagram.isModalOpen;
 export const selectHasAssessment = (state: RootState) => state.diagram.assessmentId !== undefined;
 export const selectCurrentNode = (state: RootState) => state.diagram.nodes.find((node: Node<ProcessFlowPart>) => node.id === state.diagram.selectedDataId) as Node<ProcessFlowPart>;
 export const selectCalculatedData = (state: RootState) => state.diagram.calculatedData;
@@ -105,7 +107,7 @@ export const selectTotalSourceFlow = createSelector([selectCalculatedNodeData, s
 });
 
 export const selectTotalDischargeFlow = createSelector([selectCalculatedNodeData, selectNodes, selectNodeId], (calculatedNode: NodeFlowData, nodes: Node<ProcessFlowPart>[], nodeId?: string) => {
-  const nodeTotalFlow = getNodeTotalFlow('totalDischargeFlow', calculatedNode, nodes, nodeId);
+  let nodeTotalFlow = getNodeTotalFlow('totalDischargeFlow', calculatedNode, nodes, nodeId);
   return nodeTotalFlow;
 });
 

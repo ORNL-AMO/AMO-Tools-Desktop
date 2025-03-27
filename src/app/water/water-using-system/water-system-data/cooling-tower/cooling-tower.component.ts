@@ -1,10 +1,10 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
-import { CoolingTower } from '../../../../shared/models/water-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { WaterUsingSystemService } from '../../water-using-system.service';
 import { WaterAssessmentService } from '../../../water-assessment.service';
+import { CoolingTower } from '../../../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-cooling-tower',
