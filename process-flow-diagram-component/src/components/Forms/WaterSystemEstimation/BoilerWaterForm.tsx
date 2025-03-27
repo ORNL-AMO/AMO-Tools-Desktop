@@ -167,7 +167,7 @@ const BoilerWaterForm = (props: BoilerWaterProps) => {
                     name="makeupConductivity"
                     type="number"
                     size={'small'}
-                    label={'Makuup Water Conductivity'}
+                    label={'Makeup Water Conductivity'}
                     onChange={handleInputChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.makeupConductivity}
