@@ -32,12 +32,14 @@ export class SetupTabsComponent {
   systemBasicsClassStatus: Array<string> = [];
   intakeSourceClassStatus: Array<string> = [];
   dischargeOutletClassStatus: Array<string> = [];
+  waterTreatmentClassStatus: Array<string> = [];
   waterUsingSystemClassStatus: Array<string> = [];
   wasteTreatmentClassStatus: Array<string> = [];
   
   systemBasicsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   intakeSourceBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   dischargeOutletBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
+  waterTreatmentBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   waterUsingSystemBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   wasteTreatmentBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   waterAssessmentSub: Subscription;
@@ -95,6 +97,7 @@ export class SetupTabsComponent {
     this.setSystemBasicsStatus();
     this.setIntakeSourceStatus();
     this.setDischargeOutletStatus();
+    this.setWaterTreatmentStatus();
     this.setWaterUsingSystemStatus();
     this.setWasteTreatmentStatus();
 
@@ -114,14 +117,15 @@ export class SetupTabsComponent {
   }
 
   changeSetupTab(tab: WaterSetupTabString) {
-    let canDisplayTab: boolean = tab !== 'waste-water-treatment' || (tab === 'waste-water-treatment' && this.hasWasteWaterTreatments);
+    let canTreatment = (tab === 'water-treatment' && this.hasWaterTreatments)
+    let canWasteTreatment = (tab === 'waste-water-treatment' && this.hasWasteWaterTreatments)
+    let canDisplayTab: boolean = (tab !== 'waste-water-treatment' && tab !== 'water-treatment') || canTreatment || canWasteTreatment;
     if (canDisplayTab) {
       // todo 7069 whatever event was causing this to be needed seems obsolete
       // this.waterSystemComponentService.setSelectedComponentOnTabChange(this.waterAssessmentService.waterAssessment.getValue(), tab as WaterProcessComponentType);
       this.waterAssessmentService.setupTab.next(tab);
     }
   }
-
 
   
   // * Intake Source Sub Tabs
@@ -204,6 +208,14 @@ export class SetupTabsComponent {
       this.dischargeOutletClassStatus = ["active"];
     } else {
       this.dischargeOutletClassStatus = [];
+    }
+  }
+
+  setWaterTreatmentStatus() {
+    if (this.setupTab == "water-treatment") {
+      this.waterTreatmentClassStatus = ["active"];
+    } else {
+      this.waterTreatmentClassStatus = [];
     }
   }
   

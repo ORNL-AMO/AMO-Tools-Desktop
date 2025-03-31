@@ -28,6 +28,7 @@
           [assessment]="assessment"></app-system-basics>
         <app-intake-source *ngIf="setupTab == 'water-intake'" [assessment]="assessment"></app-intake-source>
         <app-discharge-outlet *ngIf="setupTab == 'water-discharge'" [assessment]="assessment"></app-discharge-outlet>
+        <app-water-treatment-wrapper *ngIf="setupTab == 'water-treatment'" [waterAssessment]="assessment.water"></app-water-treatment-wrapper>
         <app-water-using-system *ngIf="setupTab == 'water-using-system'" [assessment]="assessment"></app-water-using-system>
         <ng-container *ngIf="setupTab === 'waste-water-treatment'">
           <app-waste-water-treatment-wrapper [waterAssessment]="assessment.water"></app-waste-water-treatment-wrapper>

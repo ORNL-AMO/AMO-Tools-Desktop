@@ -14,15 +14,20 @@
             <span (mouseenter)="showTooltip(dischargeOutletBadge)" (mouseleave)="hideTooltip(dischargeOutletBadge)"
                 class="step-number">3</span>Water Discharge</a>
     </li>
+    <li [ngClass]="waterTreatmentClassStatus">
+        <a (click)="changeSetupTab('water-treatment')" [ngClass]="{'disabled': !hasWaterTreatments}">
+            <span (mouseenter)="showTooltip(waterTreatmentBadge)" (mouseleave)="hideTooltip(wasteTreatmentBadge)"
+                class="step-number">4</span>Water Treatment</a>
+    </li>
     <li [ngClass]="waterUsingSystemClassStatus">
         <a (click)="changeSetupTab('water-using-system')">
             <span (mouseenter)="showTooltip(waterUsingSystemBadge)" (mouseleave)="hideTooltip(waterUsingSystemBadge)"
-                class="step-number">4</span>Water Using System</a>
+                class="step-number">5</span>Water Using System</a>
     </li>
     <li [ngClass]="wasteTreatmentClassStatus">
         <a (click)="changeSetupTab('waste-water-treatment')" [ngClass]="{'disabled': !hasWasteWaterTreatments}">
             <span (mouseenter)="showTooltip(wasteTreatmentBadge)" (mouseleave)="hideTooltip(wasteTreatmentBadge)"
-                class="step-number">4</span>Waste Water Treatment</a>
+                class="step-number">6</span>Waste Water Treatment</a>
     </li>
 </ul>
 
