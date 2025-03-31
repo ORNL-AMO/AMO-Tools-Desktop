@@ -1,15 +1,15 @@
-import { Box, Chip, createTheme, Typography, useTheme, } from "@mui/material";
+import { Box, Button, Chip, createTheme, FormControl, InputLabel, MenuItem, Select, Typography, useTheme, } from "@mui/material";
 import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 
 import React, { memo, useState } from "react";
 import { CustomEdgeData, ProcessFlowPart, WasteWaterTreatment, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
-import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
+import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions, waterUsingSystemTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/AccordianComponents";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import FlowValueDisplay from "../Diagram/FlowValueDisplay";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { nodeDataPropertyChange } from "../Diagram/diagramReducer";
+import { modalOpenChange, nodeDataPropertyChange } from "../Diagram/diagramReducer";
 import SourceFlowForm from "./SourceFlowForm";
 import { selectNodes, selectNodeValidation, selectTotalDischargeFlow, selectTotalSourceFlow } from "../Diagram/store";
 import DischargeFlowForm from "./DischargeFlowForm";
@@ -17,19 +17,32 @@ import InvalidIcon from "../../validation/InvalidIcon";
 import { hasValidDischargeForm, hasValidSourceForm, isValidComponent } from "../../validation/Validation";
 import { blue, yellow } from "@mui/material/colors";
 import SelectTreatmentType from "./SelectTreatmentType";
+import SmallTooltip from "../StyledMUI/SmallTooltip";
+import CalculateIcon from '@mui/icons-material/Calculate';
 
 
 const theme = createTheme({
     palette: {
-      info: yellow,
+        info: yellow,
     },
-  });
+});
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
     // const theme = useTheme();
     const dispatch = useAppDispatch();
     const nodes = useAppSelector(selectNodes);
     const errors = useAppSelector(selectNodeValidation);
+
+    const [systemType, setSystemType] = React.useState<number>(props.selectedNode.data.systemType);
+
+    const handleSystemTypeChange = (systemType: number): void => {
+        setSystemType(systemType);
+        dispatch(nodeDataPropertyChange({ optionsProp: "systemType", updatedValue: systemType }));
+    }
+
+    const onClickEstimateFlow = (): void => {
+        dispatch(modalOpenChange(true));
+    }
 
     const [sourcesExpanded, setSourcesExpanded] = useState<boolean>(true);
     const [dischargeExpanded, setDischargeExpanded] = useState<boolean>(true);
@@ -112,30 +125,66 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     </Box>
                 </Box>
             }
-            {isWaterUsingSystem && !Boolean(unknownLoss) &&
-                 <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}
-                 sx={{
-                     background: blue[50],
-                     borderRadius: '8px',
-                     border: `1px solid ${theme.palette.primary.dark}`,
-                     width: '100%',
-                     marginBottom: '1rem',
-                 }}>
-                 <Box display={'flex'} 
-                     flexDirection={'row'} 
-                     justifyContent={'space-around'} 
-                     alignItems={'center'} 
-                     margin={'1rem .5rem'} 
-                     width={'100%'}
-                     fontSize={'.9rem'}
-                     fontWeight={'700'}
-                     sx={{ color: theme.palette.primary.dark, fontWeight: '700'}}
-                     >
-                     <Typography>
-                         Source and Discharge are balanced.
-                     </Typography>
-                 </Box>
-             </Box>
+
+            {isWaterUsingSystem &&
+                <Box display={'flex'} width={'100%'}>
+
+                    <FormControl fullWidth size='small' variant='outlined' sx={{ marginBottom: '1rem' }}>
+                        <InputLabel id={`systemType-label`}>
+                            System Type
+                        </InputLabel>
+                        <Select
+                            labelId={`systemType-label`}
+                            label={'System Type'}
+                            id={'systemType'}
+                            name={'systemType'}
+                            size='small'
+                            fullWidth
+                            value={systemType}
+                            onChange={(e) => handleSystemTypeChange(Number(e.target.value))}
+                            MenuProps={{
+                                disablePortal: true,
+                                anchorOrigin: {
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                },
+                                transformOrigin: {
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }
+                            }}
+                        >
+                            {waterUsingSystemTypeOptions.map((option, index) => {
+                                return (
+                                    <MenuItem key={option.display + '_' + index} value={option.value}>
+                                        {option.display}
+                                    </MenuItem>
+                                )
+                            })
+                            }
+                        </Select>
+                    </FormControl>
+                    <SmallTooltip title="Estimate flow by system type"
+                        slotProps={{
+                            popper: {
+                                disablePortal: true,
+                            }
+                        }}>
+                        <span>
+                            <Button onClick={() => onClickEstimateFlow()}
+                                sx={{
+                                    marginLeft: '1rem',
+                                    padding: '.25rem .5rem',
+                                    display: 'inline-block',
+                                    minWidth: 0
+                                }}
+                                variant="outlined">
+                                <CalculateIcon />
+                            </Button>
+                        </span>
+                    </SmallTooltip>
+                </Box>
+
             }
 
             {(isWaterTreatment || isWasteWaterTreatment) &&
@@ -177,33 +226,33 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             }
 
             {!isDischargeOutlet &&
-            <Accordion expanded={dischargeExpanded}
-                onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setDischargeExpanded)}
+                <Accordion expanded={dischargeExpanded}
+                    onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setDischargeExpanded)}
                 >
-                <AccordionSummary>
-                    <span style={{ display: 'flex', alignSelf: 'center' }}>
-                        <span>
-                            Discharge
+                    <AccordionSummary>
+                        <span style={{ display: 'flex', alignSelf: 'center' }}>
+                            <span>
+                                Discharge
+                            </span>
+                            {hasTargetErrors &&
+                                <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.discharge.level} sx={invalidIconStyle} /></span>
+                            }
                         </span>
-                        {hasTargetErrors &&
-                            <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.discharge.level} sx={invalidIconStyle} /></span>
+                        <Chip label={
+                            <>
+                                <FlowValueDisplay flowValue={totalDischargeFlow} />
+                                <FlowDisplayUnit />
+                            </>
                         }
-                    </span>
-                    <Chip label={
-                        <>
-                            <FlowValueDisplay flowValue={totalDischargeFlow} />
-                            <FlowDisplayUnit />
-                        </>
-                    }
-                        variant="outlined"
-                        sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
-                    />
-                </AccordionSummary>
-                <AccordionDetails>
-                    <DischargeFlowForm></DischargeFlowForm>
-                </AccordionDetails>
-            </Accordion>
-        }
+                            variant="outlined"
+                            sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
+                        />
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <DischargeFlowForm></DischargeFlowForm>
+                    </AccordionDetails>
+                </Accordion>
+            }
         </Box>
     </Box>);
 }

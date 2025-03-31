@@ -6,6 +6,8 @@ import CoolingTowerForm from './CoolingTowerForm';
 import BoilerWaterForm from './BoilerWaterForm';
 import KitchenRestroomForm from './KitchenRestroomForm';
 import LandscapingForm from './LandscapingForm';
+import { useAppSelector } from '../../../hooks/state';
+import { selectCurrentNode } from '../../Diagram/store';
 
 export interface EstimateSystemState {
     estimate: number;
@@ -16,14 +18,9 @@ export const EstimateSystemContext = React.createContext<EstimateSystemState>(nu
 
 const EstimateWaterSystem = (props: EstimateWaterSystemProps) => {
     const {shadowRootRef} = props;
-    const [estimateSystemType, setEstimateSystemType] = React.useState<number>(0);
     const [estimate, setEstimate] = React.useState<number>(0);
-    const estimateSystemTypeOptions: Array<{ value: number, display: string }> = waterUsingSystemTypeOptions;
-    const formControlRef = useRef(null);
+    const selectedComponent = useAppSelector(selectCurrentNode);
 
-    const handleSystemTypeChange = (systemType: number): void => {
-        setEstimateSystemType(systemType);
-    }
     const applyEstimate = (estimate: number): void => {
         // todo set flows
         console.log('apply estimate to flows')
@@ -31,7 +28,7 @@ const EstimateWaterSystem = (props: EstimateWaterSystemProps) => {
 
     
     let SystemTypeComponent: ReactNode;
-    switch (estimateSystemType) {
+    switch (selectedComponent.data.systemType) {
         case 0:
             SystemTypeComponent = <ProcessUseForm />;
             break;
@@ -59,37 +56,6 @@ const EstimateWaterSystem = (props: EstimateWaterSystemProps) => {
             shadowRootRef: shadowRootRef
         }}>
             <Box padding={'1rem'}>
-                <FormControl fullWidth size='small' variant='outlined' >
-                    <InputLabel id={`estimateSystemType-label`}>
-                        System Type
-                    </InputLabel>
-                    <Select
-                        labelId={`estimateSystemType-label`}
-                        label={'System Type'}
-                        id={'estimateSystemType'}
-                        name={'estimateSystemType'}
-                        size='small'
-                        fullWidth
-                        value={estimateSystemType}
-                        onChange={(e) => handleSystemTypeChange(Number(e.target.value))}
-                        MenuProps={{
-                            container: () => {
-                                const modalContainer = shadowRootRef.getElementById('modal-container');
-                                return modalContainer;
-                            },
-                            disablePortal: false,
-                        }}
-                    >
-                        {estimateSystemTypeOptions.map((option, index) => {
-                            return (
-                                <MenuItem key={option.display + '_' + index} value={option.value}>
-                                    {option.display}
-                                </MenuItem>
-                            )
-                        })
-                        }
-                    </Select>
-                </FormControl>
                 {SystemTypeComponent}
             </Box>
         </EstimateSystemContext.Provider>

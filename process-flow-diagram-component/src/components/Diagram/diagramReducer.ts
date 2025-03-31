@@ -491,7 +491,7 @@ export const diagramSlice = createSlice({
     toggleDrawer: toggleDrawerReducer,
     setDialogOpen: setDialogOpenReducer,
     conductivityUnitChange: conductivityUnitChangeReducer,
-    modalOpenChange: modalOpenChangeReducer
+    modalOpenChange: modalOpenChangeReducer,
   }
 })
 
@@ -530,7 +530,7 @@ export const {
   toggleDrawer,
   setDialogOpen,
   modalOpenChange,
-  conductivityUnitChange
+  conductivityUnitChange,
 } = diagramSlice.actions
 export default diagramSlice.reducer
 
