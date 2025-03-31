@@ -89,19 +89,11 @@ export interface DiagramWaterSystemFlows {
         total: number,
         flows: FlowData[]
     },
-    recycledSourceWater: {
-        total: number,
-        flows: FlowData[]
-    },
     recirculatedWater: {
         total: number,
         flows: FlowData[]
     },
     dischargeWater: {
-        total: number,
-        flows: FlowData[]
-    },
-    dischargeWaterRecycled: {
         total: number,
         flows: FlowData[]
     },
@@ -117,10 +109,8 @@ export interface DiagramWaterSystemFlows {
 
 export interface WaterSystemFlows {
     sourceWater: number,
-    recycledSourceWater: number,
     recirculatedWater: number,
     dischargeWater: number,
-    dischargeWaterRecycled: number,
     knownLosses: number,
     waterInProduct: number,
 }
