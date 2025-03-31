@@ -33,6 +33,7 @@ export class WaterTreatmentWrapperComponent {
     this.waterAssessment.waterTreatments.push(
       this.waterTreatmentService.addWaterTreatmentComponent()
     );
+    this.waterAssessmentService.updateWaterAssessment(this.waterAssessment);
   }
 
   openConfirmDeleteModal(item: WaterTreatment, index: number) {

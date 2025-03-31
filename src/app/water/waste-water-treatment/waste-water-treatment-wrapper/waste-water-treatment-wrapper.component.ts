@@ -33,6 +33,7 @@ export class WasteWaterTreatmentWrapperComponent {
     this.waterAssessment.wasteWaterTreatments.push(
       this.wasteWaterTreatmentService.addWasteWaterTreatment()
     );
+    this.waterAssessmentService.updateWaterAssessment(this.waterAssessment);
   }
   
 
