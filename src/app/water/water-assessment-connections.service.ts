@@ -77,10 +77,8 @@ export class WaterAssessmentConnectionsService {
         id: systemComponent.diagramNodeId,
         componentName: systemComponent.name,
         sourceWater: {total: 0, flows: []},
-        recycledSourceWater: {total: 0, flows: []},
         recirculatedWater: {total: 0, flows: []},
         dischargeWater: {total: 0, flows: []},
-        dischargeWaterRecycled: {total: 0, flows: []},
         knownLosses: {total: 0, flows: []},
         waterInProduct: {total: 0, flows: []},
       }
@@ -91,18 +89,11 @@ export class WaterAssessmentConnectionsService {
           target: edge.target,
           flowValue: edge.data.flowValue,
         }
-
-        const isRecycledSource = this.isRecycledTarget(edge, systemComponent.diagramNodeId, waterAssessment.waterUsingSystems);
-        const isRecycledTarget = this.isRecycledTarget(edge, systemComponent.diagramNodeId, waterAssessment.waterUsingSystems);
         const isKnownFlowLoss = edge.source === systemComponent.diagramNodeId && this.isKnownLossFlow(edge.target, waterAssessment.knownLosses)
         
         if (systemComponent.diagramNodeId === edge.target && edge.source === edge.target) {
           componentFlows.recirculatedWater.flows.push(flowData)
-        } else if (isRecycledTarget) {
-          componentFlows.recycledSourceWater.flows.push(flowData);
-        } else if (isRecycledSource) {
-          componentFlows.dischargeWaterRecycled.flows.push(flowData);
-        }  else if (isKnownFlowLoss) {
+        } else if (isKnownFlowLoss) {
           componentFlows.knownLosses.flows.push(flowData);
           componentFlows.waterInProduct.flows.push(flowData);
         } else if (edge.source === systemComponent.diagramNodeId) {
@@ -113,10 +104,8 @@ export class WaterAssessmentConnectionsService {
       });
 
       componentFlows.sourceWater.total = this.getTotalFlowValue(componentFlows.sourceWater.flows);
-      componentFlows.recycledSourceWater.total = this.getTotalFlowValue(componentFlows.recycledSourceWater.flows);
       componentFlows.recirculatedWater.total = this.getTotalFlowValue(componentFlows.recirculatedWater.flows);
       componentFlows.dischargeWater.total = this.getTotalFlowValue(componentFlows.dischargeWater.flows);
-      componentFlows.dischargeWaterRecycled.total = this.getTotalFlowValue(componentFlows.dischargeWaterRecycled.flows);
 
       componentFlows.knownLosses.total = systemComponent.userEnteredData.totalKnownLosses? systemComponent.userEnteredData.totalKnownLosses : this.getTotalFlowValue(componentFlows.knownLosses.flows);
       componentFlows.waterInProduct.total = systemComponent.userEnteredData.waterInProduct? systemComponent.userEnteredData.waterInProduct : this.getTotalFlowValue(componentFlows.waterInProduct.flows);

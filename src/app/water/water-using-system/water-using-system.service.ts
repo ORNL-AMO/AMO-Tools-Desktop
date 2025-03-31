@@ -68,10 +68,8 @@ export class WaterUsingSystemService {
       hoursPerYear: 8760,
       userDiagramFlowOverrides: {
         sourceWater: undefined,
-        recycledSourceWater: undefined,
         recirculatedWater: undefined,
         dischargeWater: undefined,
-        dischargeWaterRecycled: undefined,
         knownLosses: undefined,
         waterInProduct: undefined,
       }, 
@@ -126,10 +124,8 @@ export class WaterUsingSystemService {
       addedMotorEnergy: [],
       waterFlows: {
         sourceWater: 0,
-        recycledSourceWater: 0,
         recirculatedWater: 0,
         dischargeWater: 0,
-        dischargeWaterRecycled: 0,
         knownLosses: 0,
         waterInProduct: 0,
       }
@@ -170,10 +166,8 @@ export class WaterUsingSystemService {
       systemType: [waterUsingSystem.systemType],
       hoursPerYear: [waterUsingSystem.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       sourceWater: [waterFlows.sourceWater, [Validators.required, Validators.min(0)]],
-      recycledSourceWater: [waterFlows.recycledSourceWater, [Validators.min(0)]],
       recirculatedWater: [waterFlows.recirculatedWater, [Validators.min(0)]],
       dischargeWater: [waterFlows.dischargeWater, [Validators.required, Validators.min(0)]],
-      dischargeWaterRecycled: [waterFlows.dischargeWaterRecycled, [Validators.required, Validators.min(0)]],
       knownLosses: [waterFlows.knownLosses, [Validators.required, Validators.min(0)]],
       waterInProduct: [waterFlows.waterInProduct, [Validators.required, Validators.min(0)]],
     });
@@ -187,10 +181,8 @@ export class WaterUsingSystemService {
   getWaterFlowsFromSource(waterUsingSystem: WaterUsingSystem, diagramWaterSystemFlows: DiagramWaterSystemFlows): WaterSystemFlows {
     let waterFlows: WaterSystemFlows = {
       sourceWater: diagramWaterSystemFlows.sourceWater.total,
-      recycledSourceWater: diagramWaterSystemFlows.recycledSourceWater.total,
       recirculatedWater: diagramWaterSystemFlows.recirculatedWater.total,
       dischargeWater: diagramWaterSystemFlows.dischargeWater.total,
-      dischargeWaterRecycled: diagramWaterSystemFlows.dischargeWaterRecycled.total,
       knownLosses: diagramWaterSystemFlows.knownLosses.total,
       waterInProduct: diagramWaterSystemFlows.waterInProduct.total,
     };
@@ -205,10 +197,8 @@ export class WaterUsingSystemService {
     waterUsingSystem.systemType = form.controls.systemType.value;
     waterUsingSystem.hoursPerYear = form.controls.hoursPerYear.value;
     waterUsingSystem.waterFlows.sourceWater = form.controls.sourceWater.value;
-    waterUsingSystem.waterFlows.recycledSourceWater = form.controls.recycledSourceWater.value;
     waterUsingSystem.waterFlows.recirculatedWater = form.controls.recirculatedWater.value;
     waterUsingSystem.waterFlows.dischargeWater = form.controls.dischargeWater.value;
-    waterUsingSystem.waterFlows.dischargeWaterRecycled = form.controls.dischargeWaterRecycled.value;
     waterUsingSystem.waterFlows.knownLosses = form.controls.knownLosses.value;
     waterUsingSystem.waterFlows.waterInProduct = form.controls.waterInProduct.value;
     return waterUsingSystem;

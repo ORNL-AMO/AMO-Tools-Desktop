@@ -225,19 +225,11 @@ export class WaterAssessmentService {
         total: undefined,
         flows: []
       },
-      recycledSourceWater: {
-        total: undefined,
-        flows: []
-      },
       recirculatedWater: {
         total: undefined,
         flows: []
       },
       dischargeWater: {
-        total: undefined,
-        flows: []
-      },
-      dischargeWaterRecycled: {
         total: undefined,
         flows: []
       },

@@ -94,8 +94,11 @@ export class WaterAssessmentResultsService {
       consumptiveIrrigationLoss = 0;
     }
 
-    systemBalanceResults.incomingWater = waterSystem.waterFlows.sourceWater + waterSystem.waterFlows.recycledSourceWater;
-    systemBalanceResults.outgoingWater = waterSystem.waterFlows.waterInProduct + waterSystem.waterFlows.dischargeWater + waterSystem.waterFlows.dischargeWaterRecycled + consumptiveIrrigationLoss;
+    // * recycled removed 7423
+    // systemBalanceResults.incomingWater = waterSystem.waterFlows.sourceWater + waterSystem.waterFlows.recycledSourceWater;
+    systemBalanceResults.incomingWater = waterSystem.waterFlows.sourceWater;
+    // systemBalanceResults.outgoingWater = waterSystem.waterFlows.waterInProduct + waterSystem.waterFlows.dischargeWater + waterSystem.waterFlows.dischargeWaterRecycled + consumptiveIrrigationLoss;
+    systemBalanceResults.outgoingWater = waterSystem.waterFlows.waterInProduct + waterSystem.waterFlows.dischargeWater + consumptiveIrrigationLoss;
     systemBalanceResults.waterBalance = systemBalanceResults.incomingWater - systemBalanceResults.outgoingWater;
     systemBalanceResults.percentIncomingWater = this.getBalancePercent(systemBalanceResults.incomingWater, systemBalanceResults.waterBalance);
     console.log('SystemBalanceResults', waterSystem.name, systemBalanceResults);
