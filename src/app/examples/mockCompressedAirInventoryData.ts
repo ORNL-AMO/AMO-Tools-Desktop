@@ -13,7 +13,9 @@ export const MockCompressedAirInventory: InventoryItem = {
             {
                 "name": "QC Dept",
                 "operatingHours": 8760,
-                "totalAirStorage": 3000,
+                "totalAirStorage": 3000,                
+                "averageLeakRate": 2100,
+                "knownTotalAirflow": 10000,
                 "description": "Main building",
                 "id": "l6rd7tt1i",
                 "catalog": [
@@ -170,7 +172,6 @@ export const MockCompressedAirInventory: InventoryItem = {
                 "averageRequiredPressure": 110,
                 "location": "Production Line 1",
                 "endUseDescription": "Total of all hand tools found on production line 1",
-                "averageLeakRate": 2100,
                 "averageAirflow": 1460,
                 "averagePercentCapacity": 16.82,
                 "regulated": false,

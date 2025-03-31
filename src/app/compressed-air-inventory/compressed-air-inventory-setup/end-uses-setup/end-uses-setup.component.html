@@ -4,27 +4,6 @@
     </div>
     <div *ngIf="hasEndUses">
         <form [formGroup]="form">
-
-            <div class="header">
-                <h3>Leak Rate Setup</h3>
-                <br>
-            </div>
-            <div class="form-group">
-                <label for="averageLeakRate">Average Leak Rate</label>
-                <div class="input-group">
-                    <input class="form-control" type="number" (input)="save()" formControlName="averageLeakRate"
-                        (focus)="focusField('averageLeakRate')">
-                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
-                    <span *ngIf="settings.unitsOfMeasure == 'Metric'"
-                        class="units input-group-addon">m<sup>3</sup>/min</span>
-                    <span class="alert-danger pull-right small"
-                        *ngIf="form.controls.averageLeakRate.invalid && !form.controls.averageLeakRate.pristine">
-                        <span *ngIf="form.controls.averageLeakRate.errors.required">Value Required</span>
-                        <span *ngIf="form.controls.averageLeakRate.errors.min">Value must be 0 or greater</span>
-                    </span>
-                </div>
-            </div>
-
             <div class="header">
                 <h3>End Use</h3>
                 <br>

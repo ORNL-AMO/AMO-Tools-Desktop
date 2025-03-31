@@ -41,7 +41,7 @@ export class EndUsesSetupComponent implements OnInit {
       } else {
         this.hasEndUses = false;
       }
-      this.endUseResult = this.endUsesService.getEndUseResults(selectedEndUse);
+      this.endUseResult = this.endUsesService.getEndUseResults(selectedEndUse, this.compressedAirInventoryData);
     });
 
   }
@@ -61,7 +61,7 @@ export class EndUsesSetupComponent implements OnInit {
     }
     this.isFormChange = true;
     this.warnings = this.endUsesService.checkEndUseWarnings(endUse);
-    this.endUseResult = this.endUsesService.getEndUseResults(endUse);
+    this.endUseResult = this.endUsesService.getEndUseResults(endUse, this.compressedAirInventoryData);
     let updated: UpdatedEndUseData = this.endUsesService.updateCompressedAirEndUse(endUse, this.compressedAirInventoryData, this.settings);
     this.compressedAirInventoryData = updated.compressedAirInventoryData;
     this.compressedAirInventoryService.compressedAirInventoryData.next(updated.compressedAirInventoryData);

@@ -74,7 +74,7 @@ export class CompressedAirInventoryService {
     return {
       systemElevation: null,
       atmosphericPressure: 14.7,
-      atmosphericPressureKnown: true,
+      atmosphericPressureKnown: true
     }
   }
 
@@ -130,7 +130,9 @@ export class CompressedAirInventoryService {
     return {
       name: 'System ' + systemNum,
       operatingHours: 8760,
-      totalAirStorage: 3000,
+      totalAirStorage: 3000,      
+      averageLeakRate: 2100,
+      knownTotalAirflow: 10000,
       description: '',
       id: systemId,
       catalog: [initCompressor]

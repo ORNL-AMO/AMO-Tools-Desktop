@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirInventoryData, EndUse } from '../../compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventorySystem, EndUse } from '../../compressed-air-inventory';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
+import { CompressedAirCatalogService } from '../compressed-air-catalog/compressed-air-catalog.service';
 
 @Injectable()
 export class EndUsesService {
@@ -13,30 +14,31 @@ export class EndUsesService {
   selectedEndUse: BehaviorSubject<EndUse>;
   constructor(private formBuilder: UntypedFormBuilder,
     private convertUnitsService: ConvertUnitsService,
-    private compressedAirInventoryService: CompressedAirInventoryService) {
+    private compressedAirInventoryService: CompressedAirInventoryService,
+    private compressedAirCatalogService: CompressedAirCatalogService) {
     this.selectedEndUse = new BehaviorSubject<EndUse>(undefined);
   }
 
   //TODO
   isEndUseValid(endUse: EndUse, compressedAirInventoryData: CompressedAirInventoryData, settings: Settings): boolean {
-  //   let allEndUseFieldsValid: boolean = true;
-  //   let dayTypeBaselineResults: BaselineResults = this.getBaselineResults(compressedAirInventoryData, settings);
-  //   let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == compressedAirInventoryData.endUseData.endUseDayTypeSetup.selectedDayTypeId);
+    //   let allEndUseFieldsValid: boolean = true;
+    //   let dayTypeBaselineResults: BaselineResults = this.getBaselineResults(compressedAirInventoryData, settings);
+    //   let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == compressedAirInventoryData.endUseData.endUseDayTypeSetup.selectedDayTypeId);
 
-  //   let isValidEndUse: boolean = this.getEndUseFormFromObj(endUse, compressedAirInventoryData.endUseData.endUses).valid;
-  //   if (isValidEndUse) {
-  //     let dayTypeEndUse: DayTypeEndUse = endUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId == compressedAirInventoryData.endUseData.endUseDayTypeSetup.selectedDayTypeId);
-  //     if (dayTypeEndUse) {
-  //       let isValidDayTypeEndUse: boolean = this.dayTypeUseFormService.getDayTypeUseForm(dayTypeEndUse, currentDayTypeResults.averageAirFlow).valid;
-  //       if (!isValidDayTypeEndUse) {
-  //         allEndUseFieldsValid = false;
-  //       }
-  //     }
-  //   } else {
-  //     allEndUseFieldsValid = false;
-  //   }
-  //   return allEndUseFieldsValid;
-  return true;
+    //   let isValidEndUse: boolean = this.getEndUseFormFromObj(endUse, compressedAirInventoryData.endUseData.endUses).valid;
+    //   if (isValidEndUse) {
+    //     let dayTypeEndUse: DayTypeEndUse = endUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId == compressedAirInventoryData.endUseData.endUseDayTypeSetup.selectedDayTypeId);
+    //     if (dayTypeEndUse) {
+    //       let isValidDayTypeEndUse: boolean = this.dayTypeUseFormService.getDayTypeUseForm(dayTypeEndUse, currentDayTypeResults.averageAirFlow).valid;
+    //       if (!isValidDayTypeEndUse) {
+    //         allEndUseFieldsValid = false;
+    //       }
+    //     }
+    //   } else {
+    //     allEndUseFieldsValid = false;
+    //   }
+    //   return allEndUseFieldsValid;
+    return true;
   }
 
   getNewEndUse(): EndUse {
@@ -46,7 +48,6 @@ export class EndUsesService {
       modifiedDate: new Date(),
       endUseDescription: undefined,
       averageRequiredPressure: undefined,
-      averageLeakRate: undefined,
       averageAirflow: undefined,
       averagePercentCapacity: undefined,
       regulated: false,
@@ -62,7 +63,6 @@ export class EndUsesService {
       location: [endUse.location],
       endUseId: [endUse.endUseId],
       averageRequiredPressure: [endUse.averageRequiredPressure, [Validators.required, Validators.min(0)]],
-      averageLeakRate: [endUse.averageLeakRate, [Validators.required, Validators.min(0)]],
       averageAirflow: [endUse.averageAirflow, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       averagePercentCapacity: [endUse.averagePercentCapacity],
       regulated: [endUse.regulated],
@@ -119,7 +119,6 @@ export class EndUsesService {
       averageRequiredPressure: form.controls.averageRequiredPressure.value,
       location: form.controls.location.value,
       endUseDescription: form.controls.endUseDescription.value,
-      averageLeakRate: form.controls.averageLeakRate.value,
       averageAirflow: form.controls.averageAirflow.value,
       averagePercentCapacity: form.controls.averagePercentCapacity.value,
       regulated: form.controls.regulated.value,
@@ -183,8 +182,18 @@ export class EndUsesService {
     return { endUse: updatedEndUse, compressedAirInventoryData: compressedAirInventoryData };
   }
 
-  getEndUseResults(endUse: EndUse): EndUseResults {
+  getEndUseResults(endUse: EndUse, compressedAirInventoryData: CompressedAirInventoryData): EndUseResults {
     let endUses: Array<EndUse> = this.compressedAirInventoryService.compressedAirInventoryData.getValue().endUses;
+
+    //todo CA Inventory
+    // let selectedSystem: CompressedAirInventorySystem;
+    // let selectedSystemId: string = this.compressedAirCatalogService.selectedSystemId.getValue();
+    // if (selectedSystemId) {
+    //   selectedSystem = compressedAirInventoryData.systems.find(system => { return system.id == selectedSystemId });
+    // }
+
+    let selectedSystem: CompressedAirInventorySystem = compressedAirInventoryData.systems[0];
+
     // end use airflow / Average system flow for day type
     let dayTypeEndUseResult: EndUseResults = {
       averagePercentCapacity: undefined,
@@ -195,7 +204,7 @@ export class EndUsesService {
       sumEndUsesAirflow += use.averageAirflow;
     });
     if (sumEndUsesAirflow) {
-      let averagePercentCapacity = this.convertUnitsService.roundVal((endUse.averageAirflow / sumEndUsesAirflow) * 100, 2);
+      let averagePercentCapacity = this.convertUnitsService.roundVal((endUse.averageAirflow / selectedSystem.knownTotalAirflow) * 100, 2);
       let excessPressure = endUse.averageMeasuredPressure - endUse.averageRequiredPressure;
       dayTypeEndUseResult.averagePercentCapacity = averagePercentCapacity;
       dayTypeEndUseResult.averageExcessPressure = excessPressure;

@@ -23,7 +23,9 @@ export interface SystemInformation {
 export interface CompressedAirInventorySystem {
   name: string,
   operatingHours: number,
-  totalAirStorage: number,
+  totalAirStorage: number,    
+  averageLeakRate: number,
+  knownTotalAirflow: number
   description: string,
   id: string,
   catalog: Array<CompressedAirItem>,
@@ -215,7 +217,6 @@ export interface EndUse {
   endUseDescription: string,
   isValid?: boolean,
   averageRequiredPressure?: number,
-  averageLeakRate?: number,
   averageAirflow?: number,
   averagePercentCapacity?: number,
   regulated?: boolean,
