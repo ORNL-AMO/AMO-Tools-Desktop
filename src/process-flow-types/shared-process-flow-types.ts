@@ -95,6 +95,8 @@ export interface NodeFlowData {
   name?: string,
   totalSourceFlow?: number,
   totalDischargeFlow?: number,
+  totalKnownLosses?: number,
+  waterInProduct?: number,
   // * summing node total divided by active handle connections
   summingFlowEvenlyDivided?: number,
 }
@@ -130,6 +132,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   userEnteredData: NodeFlowData,
   processComponentType: ProcessFlowNodeType,
   className: ProcessFlowPartStyleClass,
+  systemType?: number,
   isValid: boolean,
   inSystemTreatment?: WaterTreatment[],
   createdByAssessment: boolean,
@@ -156,6 +159,7 @@ export type DiagramNode = Node<{
     totalDischargeFlow: number,
   },
   processComponentType: ProcessFlowNodeType,
+  systemType?: number,
   className: ProcessFlowPartStyleClass,
   isValid: boolean,
   inSystemTreatment?: WaterTreatment[],

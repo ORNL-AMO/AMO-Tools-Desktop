@@ -18,8 +18,6 @@ import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
 import { ObjectSchema } from "yup";
-import CalculateIcon from '@mui/icons-material/Calculate';
-import EstimationModal from "./StaticModal";
 /**
    * Formik is used for validation only, while source of truth for values is redux store. This avoids state race conditions when rendering.
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility
@@ -173,11 +171,6 @@ const TotalSourceFlowField = () => {
     const onClickDistributeFlowEvenly = (totalFlowValue: number,) => {
         dispatch(distributeTotalSourceFlow(totalFlowValue));
     }
-
-    
-    const onClickEstimateFlow = (): void => {
-        dispatch(modalOpenChange(true));
-    }
     
     React.useEffect(() => {
         setFieldValue('totalFlow', totalSourceFlow, true);
@@ -229,25 +222,6 @@ const TotalSourceFlowField = () => {
                     </InputAdornment>,
                 }}
             />
-            <SmallTooltip title="Estimate flow by system type"
-                slotProps={{
-                    popper: {
-                        disablePortal: true,
-                    }
-                }}>
-                <span>
-                    <Button onClick={() => onClickEstimateFlow()} 
-                        sx={{
-                            marginLeft: '1rem',
-                            padding: '.25rem .5rem',
-                            display: 'inline-block',
-                            minWidth: 0
-                        }}
-                        variant="outlined">
-                        <CalculateIcon/>
-                    </Button>
-                </span>
-            </SmallTooltip>
         </Box>
     );
 };

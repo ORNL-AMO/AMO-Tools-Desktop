@@ -1,5 +1,5 @@
 import { List, TextField, InputAdornment, ListItem, Divider, Button, useTheme, Box, Input, Typography } from "@mui/material";
-import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getNodeFlowTotals } from "../Diagram/FlowUtils";
+import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getKnownLossComponentTotals, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
 import { CustomEdgeData } from "../../../../src/process-flow-types/shared-process-flow-types";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
-import { dischargeFlowValueChange, distributeTotalDischargeFlow, focusedEdgeChange, totalFlowChange } from "../Diagram/diagramReducer";
+import { dischargeFlowValueChange, distributeTotalDischargeFlow, focusedEdgeChange, nodeDataPropertyChange, totalFlowChange } from "../Diagram/diagramReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import InputField from "../StyledMUI/InputField";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
@@ -56,14 +56,22 @@ const DischargeFlowForm = () => {
         dispatch(dischargeFlowValueChange({ dischargeEdgeId, flowValue }));
     }
 
-    const onKnownLossChange = (event, handleChange: (event: React.ChangeEvent<any>) => void) => {
+    const onKnownLossesChange = (event, handleChange: (event: React.ChangeEvent<any>) => void) => {
         handleChange(event);
-        // todo handle
+        const updated = {
+            ...selectedNode.data.userEnteredData,
+            totalKnownLosses: event.target.value === "" ? null : Number(event.target.value)
+        }
+        dispatch(nodeDataPropertyChange({ optionsProp: 'userEnteredData', updatedValue: updated }));
     }
 
     const onWaterInProductChange = (event, handleChange: (event: React.ChangeEvent<any>) => void) => {
         handleChange(event);
-        // todo handle
+        const updated = {
+            ...selectedNode.data.userEnteredData,
+            waterInProduct: event.target.value === "" ? null : Number(event.target.value)
+        }
+        dispatch(nodeDataPropertyChange({ optionsProp: 'userEnteredData', updatedValue: updated }));
     }
 
 
@@ -74,8 +82,8 @@ const DischargeFlowForm = () => {
 
     // todo 7339 - don't validate when flows dont exist
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentDischargeEdges, nodes, selectedDataId);
-    
-    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', totalCalculatedDischargeFlow);
+    const totalKnownLosses = getKnownLossComponentTotals(componentDischargeEdges, nodes, selectedDataId);
+    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', totalCalculatedDischargeFlow, totalKnownLosses);
 
     return (
         <Formik
@@ -92,7 +100,6 @@ const DischargeFlowForm = () => {
             {({ values, errors, handleChange, setFieldValue }) => {
                 const disabledToggle = values.totalFlow === null;
                 const disabledPercentDataEntryFields = inPercent && (disabledToggle || (errors.totalFlow && errors.totalFlow === TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR));
-
 
                 return (
                     <Form>
@@ -162,13 +169,14 @@ const DischargeFlowForm = () => {
                         }
 
                         {selectedNode.type === 'waterUsingSystem' &&
-                            <Box sx={{ 
-                                display: 'flex', 
-                                flexDirection: 'column', 
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
                                 marginTop: '1rem',
                                 padding: '1rem',
                                 border: `1px solid ${theme.palette.primary.main}`,
-                                borderRadius: '8px' }}>
+                                borderRadius: '8px'
+                            }}>
                                 <Box
                                     sx={{
                                         marginBottom: '1rem',
@@ -180,17 +188,19 @@ const DischargeFlowForm = () => {
                                         borderRadius: '8px'
                                     }}
                                 >
-                                    <Typography color={theme.palette.primary.dark} fontSize={'1rem'} sx={{ margin: '.75rem' }}>Loss Detail</Typography>
+                                    <Typography color={theme.palette.primary.dark} fontSize={'1rem'} sx={{ margin: '.75rem' }}>Loss Summary</Typography>
                                 </Box>
                                 <InputField
                                     name={'knownLosses'}
                                     id={'knownLosses'}
-                                    label={'Known Losses'}
+                                    label={'Total Known Losses'}
                                     type={'number'}
                                     size="small"
-                                    value={values.knownLosses ?? ''}
-                                    onChange={(event) => onKnownLossChange(event, handleChange)}
+                                    value={selectedNode.data.userEnteredData.totalKnownLosses ?? ''}
+                                    onChange={(event) => onKnownLossesChange(event, handleChange)}
                                     sx={{ marginBottom: '1rem', width: '100%' }}
+                                    warning={Boolean(errors.knownLosses)}
+                                    helperText={Boolean(errors.knownLosses) ? String(errors.knownLosses) : ""}
                                     InputProps={{
                                         endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
                                             <span style={{ zIndex: 1, background: 'white' }}>
@@ -203,27 +213,29 @@ const DischargeFlowForm = () => {
                                         </InputAdornment>,
                                     }}
                                 />
-                                <InputField
-                                    name={'waterInProduct'}
-                                    id={'waterInProduct'}
-                                    label={'Water In Product'}
-                                    type={'number'}
-                                    size="small"
-                                    value={values.waterInProduct ?? ''}
-                                    onChange={(event) => onWaterInProductChange(event, handleChange)}
-                                    sx={{ width: '100%' }}
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
-                                            <span style={{ zIndex: 1, background: 'white' }}>
-                                                {inPercent ?
-                                                    <span>%</span>
-                                                    :
-                                                    <FlowDisplayUnit />
-                                                }
-                                            </span>
-                                        </InputAdornment>,
-                                    }}
-                                />
+                                {selectedNode.data.systemType === 0 &&
+                                    <InputField
+                                        name={'waterInProduct'}
+                                        id={'waterInProduct'}
+                                        label={'Water In Product'}
+                                        type={'number'}
+                                        size="small"
+                                        value={selectedNode.data.userEnteredData.waterInProduct ?? ''}
+                                        onChange={(event) => onWaterInProductChange(event, handleChange)}
+                                        sx={{ width: '100%' }}
+                                        InputProps={{
+                                            endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                                <span style={{ zIndex: 1, background: 'white' }}>
+                                                    {inPercent ?
+                                                        <span>%</span>
+                                                        :
+                                                        <FlowDisplayUnit />
+                                                    }
+                                                </span>
+                                            </InputAdornment>,
+                                        }}
+                                    />
+                                }
                             </Box>
                         }
                     </Form>

@@ -62,7 +62,6 @@ export class WaterSystemDataComponent {
       this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
       this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.waterUsingSystems as WaterProcessComponent[]);
       if (this.selectedWaterUsingSystem) {
-        this.setSystemType(this.selectedWaterUsingSystem.systemType);
         // todo 7121 do we need to call this anymore (only on estimate modal)
         this.waterSystemResults = this.waterAssessmentResultsService.getWaterSystemResults(this.selectedWaterUsingSystem, this.waterAssessment, this.settings);
         this.initForm();
@@ -93,9 +92,6 @@ export class WaterSystemDataComponent {
     this.form = this.waterUsingSystemService.getWaterUsingSystemForm(this.selectedWaterUsingSystem, this.diagramWaterSystemFlows);
   }
 
-  setSystemType(systemType?: number) {
-    this.selectedSystemType = systemType !== undefined? systemType : this.form.controls.systemType.value;
-  }
 
 
   /**

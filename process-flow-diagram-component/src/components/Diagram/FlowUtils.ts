@@ -72,6 +72,17 @@ export const getNodeFlowTotals = (connectedEdges: Edge[], nodes: Node[], selecte
   return { totalCalculatedSourceFlow, totalCalculatedDischargeFlow };
 }
 
+export const getKnownLossComponentTotals = (dischargeEdges: Edge[], nodes: Node[], selectedNodeId: string) => {
+  let totalKnownLosses = 0;
+  dischargeEdges.forEach((edge: Edge<CustomEdgeData>) => {
+    const { source, target } = getEdgeSourceAndTarget(edge, nodes);
+    if (target.processComponentType === 'known-loss' && selectedNodeId === source.diagramNodeId) { 
+      totalKnownLosses += edge.data.flowValue;
+    }
+  });
+  return totalKnownLosses;
+}
+
 export const setCalculatedNodeDataProperty = (calculatedData: DiagramCalculatedData, nodeId: string, flowProperty: NodeFlowProperty, value: number) => {
   if (calculatedData.nodes[nodeId]) {
     calculatedData.nodes[nodeId][flowProperty] = value;

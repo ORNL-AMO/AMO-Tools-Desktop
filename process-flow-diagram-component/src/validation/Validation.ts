@@ -5,37 +5,37 @@ export const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be g
 export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
 
 const getSystemNumberFieldValidation = (fieldLabel: string) => Yup.number()
-.nullable()
-.required(`${fieldLabel} is required`)
-.moreThan(0, (d) => {
-    return `${fieldLabel} must be greater than 0`;
-});
+    .nullable()
+    .required(`${fieldLabel} is required`)
+    .moreThan(0, (d) => {
+        return `${fieldLabel} must be greater than 0`;
+    });
 
 const getSystemStringFieldValidation = (fieldLabel: string) => Yup.string()
-.nullable()
-.required(`${fieldLabel} is required`);
+    .nullable()
+    .required(`${fieldLabel} is required`);
 
 export const getEstimateSystemValidationSchema = (
     formMapping: WaterSystemFormMapping
-  ): Yup.Lazy<any> => {
+): Yup.Lazy<any> => {
     return Yup.lazy((values) =>
-      Yup.object().shape(
-        Object.keys(values).reduce((schema, key) => {
-          const fieldLabel = formMapping[key].display || key;
-          if (typeof(formMapping[key].initialValue) === 'number') {
-            schema[key] = getSystemNumberFieldValidation(fieldLabel);
-        } else {
-            schema[key] = getSystemStringFieldValidation(fieldLabel);
-          }
-          return schema;
-        }, {} as Record<string, Yup.NumberSchema | Yup.StringSchema>)
-      )
+        Yup.object().shape(
+            Object.keys(values).reduce((schema, key) => {
+                const fieldLabel = formMapping[key].display || key;
+                if (typeof (formMapping[key].initialValue) === 'number') {
+                    schema[key] = getSystemNumberFieldValidation(fieldLabel);
+                } else {
+                    schema[key] = getSystemStringFieldValidation(fieldLabel);
+                }
+                return schema;
+            }, {} as Record<string, Yup.NumberSchema | Yup.StringSchema>)
+        )
     );
-  };
+};
 
-export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge', totalCalculatedFlow: number): Yup.ObjectSchema<FlowForm> => {
+export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge', totalCalculatedFlow: number, sumUserKnownLosses?: number): Yup.ObjectSchema<FlowForm> => {
     const totalFlowError = flowLabel === 'Source' ? TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR : TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR;
-    let validationSchema = Yup.object({
+    let defaultSchema = {
         totalFlow: Yup.number()
             .nullable()
             .moreThan(0, totalFlowError)
@@ -51,10 +51,30 @@ export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge'
         flows: Yup.array().of(Yup.number()
             .nullable()
             .moreThan(0, `Flow must be greater than 0`)
-        ),
-    })
-    return validationSchema;
-}
+        )
+    };
+
+    const knownLossesSchema = Yup.number()
+        .nullable()
+        .test('known-losses-differs',
+            (d) => {
+                return `Known Losses should equal the sum of all Known Loss flows (${sumUserKnownLosses})`
+            },
+            (value) => {
+                const isValid = validateKnownLosses(sumUserKnownLosses, value);
+                return isValid;
+            },
+        );
+
+    const validationSchema = sumUserKnownLosses ? {
+        ...defaultSchema,
+        knownLosses: knownLossesSchema
+    } : defaultSchema;
+
+    return Yup.object(validationSchema);
+};
+
+
 
 /**
    * Check accuracy of calculated or stateful total flow against each other
@@ -72,6 +92,20 @@ export const validateTotalFlowValue = (calculatedTotalFlow: number, userEnteredT
         }
     }
     // console.log('## totalFlow valid');
+    return true;
+};
+
+/**
+   * Users can enter total known losses as input, or construct them from diagram components. Ensure they match
+   * @param sumKnownLosses sum of user placed Known Loss components on diagram (Known Loss Flows)
+   * @param userEnteredKnownLoss 
+   */
+export const validateKnownLosses = (sumKnownLosses: number, userEnteredKnownLoss: number) => {
+    if (sumKnownLosses > 0) {
+        if (userEnteredKnownLoss !== undefined && userEnteredKnownLoss !== null && userEnteredKnownLoss !== sumKnownLosses) {
+            return false;
+        }
+    }
     return true;
 };
 
@@ -132,7 +166,7 @@ export const getIsDiagramValid = (nodeErrors: NodeErrors) => {
 
 
 export type FlowForm = { totalFlow: number | null, flows: (number | null)[] };
-export type WaterSystemFormMapping = {[formControlName: string]: {display: string, initialValue: number | string}};
+export type WaterSystemFormMapping = { [formControlName: string]: { display: string, initialValue: number | string } };
 
 
 // export const getInitialDiagramValidation = (flowDiagramData: FlowDiagramData, allEdges: Edge[]): DiagramValidation => {

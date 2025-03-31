@@ -117,8 +117,9 @@ export class WaterAssessmentConnectionsService {
       componentFlows.recirculatedWater.total = this.getTotalFlowValue(componentFlows.recirculatedWater.flows);
       componentFlows.dischargeWater.total = this.getTotalFlowValue(componentFlows.dischargeWater.flows);
       componentFlows.dischargeWaterRecycled.total = this.getTotalFlowValue(componentFlows.dischargeWaterRecycled.flows);
-      componentFlows.knownLosses.total = this.getTotalFlowValue(componentFlows.knownLosses.flows);
-      componentFlows.waterInProduct.total = this.getTotalFlowValue(componentFlows.waterInProduct.flows);
+
+      componentFlows.knownLosses.total = systemComponent.userEnteredData.totalKnownLosses? systemComponent.userEnteredData.totalKnownLosses : this.getTotalFlowValue(componentFlows.knownLosses.flows);
+      componentFlows.waterInProduct.total = systemComponent.userEnteredData.waterInProduct? systemComponent.userEnteredData.waterInProduct : this.getTotalFlowValue(componentFlows.waterInProduct.flows);
       diagramWaterSystemFlows.push(componentFlows);
 
       let waterFlows: WaterSystemFlows = this.waterUsingSystemService.getWaterFlowsFromSource(systemComponent, componentFlows);

@@ -6,7 +6,7 @@
     </div>
     <div class="form-group">
         <label for="systemType">System Type</label>
-        <select class="form-control" id="systemType" formControlName="systemType" (change)="setSystemType()"
+        <select class="form-control" id="systemType" formControlName="systemType" (change)="saveForm()"
             (focus)="focusField('systemType')">
             <option *ngFor="let systemType of systemTypeOptions" [ngValue]="systemType.value">
                 {{systemType.display}}
@@ -59,7 +59,7 @@
         </div>
     </div>
     <app-water-system-data-modal *ngIf="showWaterSystemDataModal" [settings]="settings"
-        [waterUsingSystem]="selectedWaterUsingSystem" [systemType]="selectedSystemType"
+        [waterUsingSystem]="selectedWaterUsingSystem" [systemType]="form.controls.systemType.value"
         (emitClose)="closeWaterSystemDataModal()" (emitSave)="updateWaterUsingSystem($event)">
     </app-water-system-data-modal>
 </ng-container>
@@ -236,7 +236,7 @@
         </span>
     </div>
 
-    <div class="form-group" [ngClass]="{'invalid': form.controls.waterInProduct.invalid}">
+    <div *ngIf="form.controls.systemType.value === 0" class="form-group" [ngClass]="{'invalid': form.controls.waterInProduct.invalid}">
         <label for="waterInProduct">Water In Product</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
