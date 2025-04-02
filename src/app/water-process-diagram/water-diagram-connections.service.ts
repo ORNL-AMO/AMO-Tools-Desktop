@@ -99,26 +99,26 @@ export class WaterDiagramConnectionsService {
     });
   }
 
-  /**
+    /**
   * Update and filter out edges related to deleted nodes or edges deleted in assessment.
   */
-  filterDeletedEdges(waterDiagram: WaterDiagram, waterAssessment: WaterAssessment, assessmentNodes: Node[]) {
-    const nodeIds = new Set();
-    assessmentNodes.forEach((node) => {
-      nodeIds.add(node.id);
-    });
-  
-    let updatedEdges = waterDiagram.flowDiagramData.edges.filter((edge) => {
-      const edgeNodesExist = nodeIds.has(edge.source) && nodeIds.has(edge.target);
-      let assessmentDeletedEdges: string[] = [];
-      waterAssessment.diagramWaterSystemFlows.forEach((systemFlow: DiagramWaterSystemFlows) => {
-        systemFlow.sourceWater.flows.forEach((edgeFlow: EdgeFlowData) => this.addDeletedEdge(waterDiagram, edgeFlow, assessmentDeletedEdges));
-        systemFlow.dischargeWater.flows.forEach((edgeFlow: EdgeFlowData) => this.addDeletedEdge(waterDiagram, edgeFlow, assessmentDeletedEdges));
+    filterDeletedEdges(waterDiagram: WaterDiagram, waterAssessment: WaterAssessment, assessmentNodes: Node[]) {
+      const nodeIds = new Set();
+      assessmentNodes.forEach((node) => {
+        nodeIds.add(node.id);
       });
-      return edgeNodesExist && !assessmentDeletedEdges.includes(edge.id);
-    });
-    waterDiagram.flowDiagramData.edges = updatedEdges;
-  }
+    
+      let assessmentEdgeIds: string[] = [];
+      waterAssessment.diagramWaterSystemFlows.forEach((systemFlow: DiagramWaterSystemFlows) => {
+        systemFlow.sourceWater.flows.forEach((edgeFlow: EdgeFlowData) => assessmentEdgeIds.push(edgeFlow.diagramEdgeId));
+        systemFlow.dischargeWater.flows.forEach((edgeFlow: EdgeFlowData) => assessmentEdgeIds.push(edgeFlow.diagramEdgeId));
+      });
+
+      let updatedEdges = waterDiagram.flowDiagramData.edges.filter((edge) => {
+        return nodeIds.has(edge.source) && nodeIds.has(edge.target) && assessmentEdgeIds.includes(edge.id);
+      });
+      waterDiagram.flowDiagramData.edges = updatedEdges;
+    }
 
   updateDiagramEdgesFromAssessment(waterDiagram: WaterDiagram, waterAssessment: WaterAssessment) {
     waterAssessment.diagramWaterSystemFlows.forEach((systemFlow: DiagramWaterSystemFlows) => {
@@ -136,13 +136,6 @@ export class WaterDiagramConnectionsService {
     } else {
       waterDiagram.flowDiagramData.edges.push(diagramEdge);
 
-    }
-  }
-
-  addDeletedEdge(waterDiagram: WaterDiagram, edgeFlow: EdgeFlowData, assessmentDeletedEdges: string[]) {
-    let exists = waterDiagram.flowDiagramData.edges.find((edge: Edge) => edge.id === edgeFlow.diagramEdgeId);
-    if (!exists) {
-      assessmentDeletedEdges.push(edgeFlow.diagramEdgeId);
     }
   }
 

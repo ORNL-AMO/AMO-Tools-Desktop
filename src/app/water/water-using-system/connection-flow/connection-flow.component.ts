@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EdgeFlowData } from '../../../shared/models/water-assessment';
@@ -9,7 +9,7 @@ import { EdgeFlowData } from '../../../shared/models/water-assessment';
   templateUrl: './connection-flow.component.html',
   styleUrl: './connection-flow.component.css'
 })
-export class ConnectionFlowComponent {
+export class ConnectionFlowComponent implements OnChanges {
   @Input()
   edgeFlowData: EdgeFlowData;
   @Input()
@@ -28,7 +28,7 @@ export class ConnectionFlowComponent {
     });
 
     this.form = this.fb.group({
-      selectedConnection: [selectedConnection? selectedConnection.value : this.connectionOptions[0].value],
+      selectedConnection: [selectedConnection.value],
       flowValue: [this.edgeFlowData.flowValue, [Validators.required, Validators.min(0)]],
     });
   }
@@ -42,7 +42,6 @@ export class ConnectionFlowComponent {
 
     
     if (updatedEdgeFlowData.source !== undefined) {
-      console.log(this.connectionOptions);
       this.updateFlow.emit(updatedEdgeFlowData);
     }
   }

@@ -4,6 +4,7 @@ import { Settings } from '../shared/models/settings';
 import * as _ from 'lodash';
 import { ParentContainerDimensions, WaterDiagram, } from '../../process-flow-types/shared-process-flow-types';
 import { Diagram } from '../shared/models/diagram';
+import { getDefaultUserDiagramOptions } from '../../process-flow-types/shared-process-flow-logic';
 
 @Injectable()
 export class WaterProcessDiagramService {
@@ -27,6 +28,7 @@ export class WaterProcessDiagramService {
     this.waterDiagram.next(waterDiagram);
   }
 
+  // todo 6906 this mirrors DiagramState but does not need all props. Look at potential bugs
   getDefaultWaterDiagram(settings: Settings): WaterDiagram {
     return {
       isValid: true,
@@ -34,7 +36,7 @@ export class WaterProcessDiagramService {
         nodes: [],
         edges: [],
         nodeErrors: {},
-        userDiagramOptions: undefined,
+        userDiagramOptions: getDefaultUserDiagramOptions(),
         settings: {
           flowDecimalPrecision: settings.flowDecimalPrecision,
           unitsOfMeasure: settings.unitsOfMeasure,

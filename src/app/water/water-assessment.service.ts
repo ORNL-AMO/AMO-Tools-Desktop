@@ -119,6 +119,9 @@ export class WaterAssessmentService {
     } else if (componentType === 'water-using-system') {
       let newWaterUsingSystem = this.waterUsingSystemService.addWaterUsingSystem();
       waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(newWaterUsingSystem) : waterAssessment.waterUsingSystems = [newWaterUsingSystem];
+      let componentWaterFlows = this.getDefaultDiagramWaterFlows();
+      componentWaterFlows.id = newWaterUsingSystem.diagramNodeId;
+      waterAssessment.diagramWaterSystemFlows.push(componentWaterFlows);
       newComponent = newWaterUsingSystem;
     } 
 
@@ -271,7 +274,7 @@ export class WaterAssessmentService {
   updateSystemSourceFlowData(waterAssessment: WaterAssessment, flowData: EdgeFlowData): void {
     waterAssessment.diagramWaterSystemFlows = waterAssessment.diagramWaterSystemFlows.map(componentFlows => {
       if (componentFlows.id === flowData.target) {
-        let existingFlowIndex = componentFlows.sourceWater.flows.findIndex(flow => flow.diagramEdgeId === flowData.diagramEdgeId);
+        let existingFlowIndex = componentFlows.sourceWater.flows.findIndex(flow => flow.source !== undefined && flow.source === flowData.source);
         if (existingFlowIndex >= 0) {
           componentFlows.sourceWater.flows[existingFlowIndex] = flowData;
         } else {
@@ -282,9 +285,8 @@ export class WaterAssessmentService {
     });
   }
 
-  // todo 6906 modify to pass in selecteedoptions array
-  getAvailableConnectionOptions(existingFlows: EdgeFlowData[], connectionOptions:{value: string, display: string}[], selectedOption: string): {value: string, display: string}[] {
-    const existingFlowIds: string[] = existingFlows.map(flow => flow.source).filter(flow => flow !== selectedOption);
+  getAvailableConnectionOptions(existingFlows: EdgeFlowData[], connectionOptions:{value: string, display: string}[]): {value: string, display: string}[] {
+    const existingFlowIds: string[] = existingFlows.map(flow => flow.source);
     connectionOptions = connectionOptions.filter(option => !existingFlowIds.includes(option.value));
     return connectionOptions;
   }

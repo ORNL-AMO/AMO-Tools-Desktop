@@ -36,19 +36,21 @@ export class WaterSourcesWrapperComponent {
   }
 
   addNewFlowConnection() {
+    let availableOptions = this.connectionOptions.filter(option => !this.sourceFlows.map(flow => flow.source).includes(option.value));
     let newSourceFlow: EdgeFlowData = {
       diagramEdgeId: undefined,
-      source: undefined,
+      source: availableOptions[0].value,
       target: this.diagramNodeId,
       flowValue: 0,
     }
     this.sourceFlows.push(newSourceFlow);
+    this.saveWaterSource(newSourceFlow);
   }
 
-  deleteConnection(systemFlowData: EdgeFlowData, index: number) {
-    if (index !== 0) {
+  deleteConnection(systemFlowData: EdgeFlowData, sourceFlowIndex: number) {
+    if (sourceFlowIndex !== 0) {
       let componentWaterFlows = this.waterAssessment.diagramWaterSystemFlows.find(systemFlows => systemFlows.id === this.diagramNodeId);
-      let deleteIndex = componentWaterFlows.sourceWater.flows.findIndex(systemFlow => systemFlow.diagramEdgeId = systemFlowData.diagramEdgeId);
+      let deleteIndex = componentWaterFlows.sourceWater.flows.findIndex(systemFlow => systemFlow.diagramEdgeId === systemFlowData.diagramEdgeId);
       componentWaterFlows.sourceWater.flows.splice(deleteIndex, 1);
       this.sourceFlows = componentWaterFlows.sourceWater.flows.map(flow => flow);
       this.waterAssessmentService.updateWaterAssessment(this.waterAssessment);

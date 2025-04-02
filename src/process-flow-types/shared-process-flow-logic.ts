@@ -4,6 +4,38 @@ import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, Dia
 
 // * WASM Module with suite api
 declare var Module: any;
+
+
+
+
+export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
+  return {
+    strokeWidth: 2,
+    edgeType: 'smoothstep',
+    minimapVisible: false,
+    controlsVisible: true,
+    directionalArrowsVisible: true,
+    showFlowLabels: true,
+    flowLabelSize: 1,
+    animated: true,
+  }
+}
+
+export const getDefaultSettings = (): DiagramSettings => {
+  return {
+    unitsOfMeasure: 'Imperial',
+    flowDecimalPrecision: 2,
+    conductivityUnit: 'mmho',
+  }
+}
+
+export const getDefaultColorPalette = () => {
+  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#93e200'];
+}
+
+
+
+
 export const convertAnnualFlow = (flowInput: number, metric: number, hoursPerYear: number, annualProduction: number, grossWaterUse?: number, incomingWater?: number): number => {
     if (metric == FlowMetric.ANNUAL) {
       return flowInput;
