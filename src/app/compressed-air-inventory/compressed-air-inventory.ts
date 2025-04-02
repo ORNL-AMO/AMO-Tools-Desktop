@@ -7,7 +7,6 @@ export interface CompressedAirInventoryData {
   systemInformation: SystemInformation,
   systems: Array<CompressedAirInventorySystem>,
   displayOptions: CompressedAirPropertyDisplayOptions,
-  endUses: Array<EndUse>,
   hasConnectedInventoryItems?: boolean,
   hasConnectedPsat?: boolean,
   isValid?: boolean,
@@ -28,7 +27,8 @@ export interface CompressedAirInventorySystem {
   knownTotalAirflow: number
   description: string,
   id: string,
-  catalog: Array<CompressedAirItem>,
+  catalog: Array<CompressedAirItem>,  
+  endUses: Array<EndUse>,
   isValid?: boolean,
 }
 

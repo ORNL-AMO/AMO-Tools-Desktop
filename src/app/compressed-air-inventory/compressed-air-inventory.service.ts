@@ -61,15 +61,13 @@ export class CompressedAirInventoryService {
     let initialSystem: CompressedAirInventorySystem = this.getNewSystem(1);
     let displayOptions: CompressedAirPropertyDisplayOptions = this.getDefaultDisplayOptions();
     let systemInformation: SystemInformation = this.getSystemInformation();
-    let endUses: Array<EndUse> = new Array<EndUse>;
     return {
       systemInformation: systemInformation,
       systems: [initialSystem],
-      displayOptions: displayOptions,
-      endUses: endUses
+      displayOptions: displayOptions
     }
   }
-  
+
   getSystemInformation(): SystemInformation {
     return {
       systemElevation: null,
@@ -127,16 +125,34 @@ export class CompressedAirInventoryService {
   getNewSystem(systemNum: number): CompressedAirInventorySystem {
     let systemId: string = Math.random().toString(36).substr(2, 9);
     let initCompressor: CompressedAirItem = this.getNewCompressor(systemId);
+    let endUses: Array<EndUse> = this.getNewEndUses();
     return {
       name: 'System ' + systemNum,
       operatingHours: 8760,
-      totalAirStorage: 3000,      
+      totalAirStorage: 3000,
       averageLeakRate: 2100,
       knownTotalAirflow: 10000,
       description: '',
       id: systemId,
-      catalog: [initCompressor]
+      catalog: [initCompressor],
+      endUses: endUses
     }
+  }
+  getNewEndUses() {
+    let endUseId: string = Math.random().toString(36).substr(2, 9);
+    return [{
+      endUseId: endUseId,
+      modifiedDate: new Date("2022-08-03T21:07:29.942Z"),
+      endUseName: "Pneumatic Tools 1",
+      averageRequiredPressure: 110,
+      location: "Production Line 1",
+      endUseDescription: "Total of all hand tools found on production line 1",
+      averageAirflow: 1460,
+      averagePercentCapacity: 16.82,
+      regulated: false,
+      averageMeasuredPressure: 126,
+      averageExcessPressure: 16,
+    }]
   }
 
   getNewCompressor(systemId: string): CompressedAirItem {

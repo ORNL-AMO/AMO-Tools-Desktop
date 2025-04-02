@@ -196,7 +196,7 @@
     </div>
 </nav>
 
-<nav class="hide-print" *ngIf="setupTab == 'compressed-air-catalog' && mainTab == 'setup'">
+<nav class="hide-print" *ngIf="(setupTab == 'compressed-air-catalog' || setupTab == 'end-uses') && mainTab == 'setup'">
     <div class="d-lg-flex d-none tabs subtabs progress-tabs flex-wrap compressed-air-inventory">
         <div *ngFor="let system of compressedAirInventoryData.systems"
             [ngClass]="{'active': selectedSystemId == system.id}" (click)="selectedSystem(system.id)">

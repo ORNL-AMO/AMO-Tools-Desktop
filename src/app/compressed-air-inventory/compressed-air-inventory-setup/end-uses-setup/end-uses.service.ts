@@ -159,16 +159,18 @@ export class EndUsesService {
     }
   }
 
-  addToInventory(compressedAirInventoryData: CompressedAirInventoryData, settings: Settings, newEndUse?: EndUse): UpdatedEndUseData {
+  addToInventory(compressedAirInventoryData: CompressedAirInventoryData, selectedEndUses: Array<EndUse>, newEndUse?: EndUse): UpdatedEndUseData {
     if (!newEndUse) {
       newEndUse = this.getNewEndUse();
     }
     newEndUse.modifiedDate = new Date();
-    if (!compressedAirInventoryData.endUses) {
+    if (!selectedEndUses) {
 
-      compressedAirInventoryData.endUses = []
+      selectedEndUses = []
     }
-    compressedAirInventoryData.endUses.push(newEndUse);
+    let selectedSystemId = this.compressedAirCatalogService.selectedSystemId.getValue();
+    let systemIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedSystemId });
+    compressedAirInventoryData.systems[systemIndex].endUses.push(newEndUse);
     return {
       endUse: newEndUse,
       compressedAirInventoryData: compressedAirInventoryData
@@ -177,22 +179,28 @@ export class EndUsesService {
 
   updateCompressedAirEndUse(updatedEndUse: EndUse, compressedAirInventoryData: CompressedAirInventoryData, settings: Settings): UpdatedEndUseData {
     updatedEndUse.modifiedDate = new Date();
-    let endUseIndex: number = compressedAirInventoryData.endUses.findIndex(item => { return item.endUseId == updatedEndUse.endUseId });
-    compressedAirInventoryData.endUses[endUseIndex] = updatedEndUse;
+     
+    let selectedSystemId = this.compressedAirCatalogService.selectedSystemId.getValue();
+    let systemIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedSystemId });
+
+    let endUseIndex: number = compressedAirInventoryData.systems[systemIndex].endUses.findIndex(item => { return item.endUseId == updatedEndUse.endUseId });
+    compressedAirInventoryData.systems[systemIndex].endUses[endUseIndex] = updatedEndUse;
     return { endUse: updatedEndUse, compressedAirInventoryData: compressedAirInventoryData };
   }
 
   getEndUseResults(endUse: EndUse, compressedAirInventoryData: CompressedAirInventoryData): EndUseResults {
-    let endUses: Array<EndUse> = this.compressedAirInventoryService.compressedAirInventoryData.getValue().endUses;
+    let selectedSystemId = this.compressedAirCatalogService.selectedSystemId.getValue();
+    let systemIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedSystemId });
+    
+    let endUses: Array<EndUse> = this.compressedAirInventoryService.compressedAirInventoryData.getValue().systems[systemIndex].endUses;
 
     //todo CA Inventory
-    // let selectedSystem: CompressedAirInventorySystem;
-    // let selectedSystemId: string = this.compressedAirCatalogService.selectedSystemId.getValue();
-    // if (selectedSystemId) {
-    //   selectedSystem = compressedAirInventoryData.systems.find(system => { return system.id == selectedSystemId });
-    // }
+    let selectedSystem: CompressedAirInventorySystem;
+    if (selectedSystemId) {
+      selectedSystem = compressedAirInventoryData.systems.find(system => { return system.id == selectedSystemId });
+    }
 
-    let selectedSystem: CompressedAirInventorySystem = compressedAirInventoryData.systems[0];
+    //let selectedSystem: CompressedAirInventorySystem = compressedAirInventoryData.systems[0];
 
     // end use airflow / Average system flow for day type
     let dayTypeEndUseResult: EndUseResults = {

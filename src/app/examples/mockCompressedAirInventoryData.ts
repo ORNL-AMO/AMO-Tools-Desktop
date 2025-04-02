@@ -13,7 +13,7 @@ export const MockCompressedAirInventory: InventoryItem = {
             {
                 "name": "QC Dept",
                 "operatingHours": 8760,
-                "totalAirStorage": 3000,                
+                "totalAirStorage": 3000,
                 "averageLeakRate": 2100,
                 "knownTotalAirflow": 10000,
                 "description": "Main building",
@@ -121,6 +121,21 @@ export const MockCompressedAirInventory: InventoryItem = {
                             }
                         },
                     },
+                ],
+                "endUses": [
+                    {
+                        "endUseId": "x22ow6wc6",
+                        "modifiedDate": new Date("2022-08-03T21:07:29.942Z"),
+                        "endUseName": "Pneumatic Tools 1",
+                        "averageRequiredPressure": 110,
+                        "location": "Production Line 1",
+                        "endUseDescription": "Total of all hand tools found on production line 1",
+                        "averageAirflow": 1460,
+                        "averagePercentCapacity": 16.82,
+                        "regulated": false,
+                        "averageMeasuredPressure": 126,
+                        "averageExcessPressure": 16,
+                    },
                 ]
             },
         ],
@@ -163,22 +178,7 @@ export const MockCompressedAirInventory: InventoryItem = {
             compressedAirPerformancePointsPropertiesOptions: {
                 displayCompressedAirPerformancePointsProperties: true
             }
-        },
-        endUses: [
-            {
-                "endUseId": "x22ow6wc6",
-                "modifiedDate": new Date("2022-08-03T21:07:29.942Z"),
-                "endUseName": "Pneumatic Tools 1",
-                "averageRequiredPressure": 110,
-                "location": "Production Line 1",
-                "endUseDescription": "Total of all hand tools found on production line 1",
-                "averageAirflow": 1460,
-                "averagePercentCapacity": 16.82,
-                "regulated": false,
-                "averageMeasuredPressure": 126,
-                "averageExcessPressure": 16,
-            },
-        ]
+        }
     },
     "createdDate": new Date(),
     "modifiedDate": new Date(),
