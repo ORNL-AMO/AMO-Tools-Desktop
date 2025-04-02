@@ -1,18 +1,11 @@
+
 <form [formGroup]="form">
     <div class="form-group">
         <label for="name">Name</label>
         <input type="text" class="form-control" name="name" formControlName="name"
             (focus)="focusField('waterWaterUsingSystemName')" (input)="saveForm()" />
     </div>
-    <div class="form-group">
-        <label for="systemType">System Type</label>
-        <select class="form-control" id="systemType" formControlName="systemType" (change)="saveForm()"
-            (focus)="focusField('systemType')">
-            <option *ngFor="let systemType of systemTypeOptions" [ngValue]="systemType.value">
-                {{systemType.display}}
-            </option>
-        </select>
-    </div>
+
     <div class="form-group" [ngClass]="{'invalid': form.controls.hoursPerYear.invalid}">
         <label for="hoursPerYear">Hours Water Used Per Year</label>
         <div class="input-group">
@@ -32,16 +25,36 @@
                 {{form.controls.hoursPerYear.errors.min.min}} hrs/yr.</span>
         </span>
     </div>
+
+    <div class="form-group">
+        <label for="systemType">System Type</label>
+        <select class="form-control" id="systemType" formControlName="systemType" (change)="saveForm()"
+            (focus)="focusField('systemType')">
+            <option *ngFor="let systemType of systemTypeOptions" [ngValue]="systemType.value">
+                {{systemType.display}}
+            </option>
+        </select>
+    </div>
+
+    <div (click)="focusField('grossWaterUse')" class="form-group">
+        <label for="grossWaterUse">System Gross Water Use</label>
+        <div class="text-center small bold">
+            <span *ngIf="waterSystemResults">{{waterSystemResults.grossWaterUse | number}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+            </span>
+            <span *ngIf="!waterSystemResults">&mdash; &mdash;</span>
+        </div>
+        <a class="form-text small click-link text-left" (click)="openWaterSystemDataModal()">Estimate With System
+            Data</a>
+    </div>
+
 </form>
 
-<label class="group-label" (click)="toggleCollapse('waterFlows')">
-    <span class="fa fa-chevron-right"
-        [ngClass]="{'fa-chevron-right': isCollapsed.waterFlows, 'fa-chevron-down': !isCollapsed.waterFlows}"></span>
-    Water Flows
-    <span *ngIf="!form.valid" class="pull-right">
-        <span class="fa fa-exclamation-circle"></span>
-    </span>
-</label>
+<div class="header mr-2 ml-2 mt-3">
+    <h3>Water Source and Discharge Flows</h3>
+    <br>
+</div>
 
 <ng-container *ngIf="!isCollapsed.waterFlows">
     <!-- <div class="alert alert-info px-3 py-2 mt-2 mb-0">
@@ -52,8 +65,7 @@
     <div class="form-group my-2 px-2 d-flex justify-content-end">
         <div class="btn-group btn-group-sm pull-right">
             <button type="button" class="btn btn-primary btn-sm py-1 px-2 small mx-2"
-            [ngClass]="{'disabled': getIsDisabledRestoreAll()}"
-                (click)="restoreAllToDiagramValues()">
+                [ngClass]="{'disabled': getIsDisabledRestoreAll()}" (click)="restoreAllToDiagramValues()">
                 <span class="fa fa-refresh pr-2"></span>
                 Restore All to Diagram</button>
         </div>
@@ -65,14 +77,14 @@
 </ng-container>
 
 <form [formGroup]="form" class="pt-0" *ngIf="!isCollapsed.waterFlows">
-    <label class="group-label secondary-group">Incoming Water</label>
+    <!-- <label class="group-label secondary-group">Incoming Water</label> -->
+
     <div class="form-group" [ngClass]="{'invalid': form.controls.sourceWater.invalid}">
-        <label for="sourceWater">Source Water</label>
+        <label for="sourceWater">Total Source Water</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
                 <a class="click-link" (click)="restoreToDiagramValue('sourceWater')"
-                    [ngClass]="{'disabled': getIsDisabledRestore('sourceWater')}"><span
-                        class="fa fa-refresh"></span>
+                    [ngClass]="{'disabled': getIsDisabledRestore('sourceWater')}"><span class="fa fa-refresh"></span>
                 </a>
             </span>
             <input name="sourceWater" type="number" class="form-control" id="sourceWater" formControlName="sourceWater"
@@ -101,7 +113,8 @@
                 </a>
             </span>
             <input name="recirculatedWater" type="number" class="form-control" id="recirculatedWater"
-                formControlName="recirculatedWater" (input)="saveWithUserOverride('recirculatedWater')" (focus)="focusField('recirculatedWater')">
+                formControlName="recirculatedWater" (input)="saveWithUserOverride('recirculatedWater')"
+                (focus)="focusField('recirculatedWater')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
         </div>
@@ -114,39 +127,24 @@
             </span>
         </span>
     </div>
-
 </form>
-
-
-<form [formGroup]="form" *ngIf="!isCollapsed.waterFlows">
-    <div (click)="focusField('grossWaterUse')" class="form-group">
-        <label for="grossWaterUse">Gross Water Use</label>
-        <div class="text-center small bold">
-            <span *ngIf="waterSystemResults">{{waterSystemResults.grossWaterUse | number}}
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
-            </span>
-            <span *ngIf="!waterSystemResults">&mdash; &mdash;</span>
-        </div>
-        <a class="form-text small click-link text-left" (click)="openWaterSystemDataModal()">Estimate With System Data</a>
-    </div>
-</form>
-
+<app-water-sources-wrapper [waterAssessment]="waterAssessment" [diagramNodeId]="selectedWaterUsingSystem.diagramNodeId" [settings]="settings"></app-water-sources-wrapper>
 
 <!-- Outgoing water -->
 <form [formGroup]="form" *ngIf="!isCollapsed.waterFlows">
-    <label class="group-label secondary-group">Outgoing Water</label>
+    <!-- <label class="group-label secondary-group">Outgoing Water</label> -->
+
     <div class="form-group" [ngClass]="{'invalid': form.controls.dischargeWater.invalid}">
-        <label for="dischargeWater">Discharge Water</label>
+        <label for="dischargeWater">Total Discharge Water</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
                 <a class="click-link" (click)="restoreToDiagramValue('dischargeWater')"
-                    [ngClass]="{'disabled': getIsDisabledRestore('dischargeWater')}"><span
-                        class="fa fa-refresh"></span>
+                    [ngClass]="{'disabled': getIsDisabledRestore('dischargeWater')}"><span class="fa fa-refresh"></span>
                 </a>
             </span>
             <input name="dischargeWater" type="number" class="form-control" id="dischargeWater"
-                formControlName="dischargeWater" (input)="saveWithUserOverride('dischargeWater')" (focus)="focusField('dischargeWater')">
+                formControlName="dischargeWater" (input)="saveWithUserOverride('dischargeWater')"
+                (focus)="focusField('dischargeWater')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
         </div>
@@ -166,8 +164,7 @@
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
                 <a class="click-link" (click)="restoreToDiagramValue('knownLosses')"
-                    [ngClass]="{'disabled': getIsDisabledRestore('knownLosses')}"><span
-                        class="fa fa-refresh"></span>
+                    [ngClass]="{'disabled': getIsDisabledRestore('knownLosses')}"><span class="fa fa-refresh"></span>
                 </a>
             </span>
             <input name="knownLosses" type="number" class="form-control" id="knownLosses" formControlName="knownLosses"
@@ -186,17 +183,18 @@
         </span>
     </div>
 
-    <div *ngIf="form.controls.systemType.value === 0" class="form-group" [ngClass]="{'invalid': form.controls.waterInProduct.invalid}">
+    <div *ngIf="form.controls.systemType.value === 0" class="form-group"
+        [ngClass]="{'invalid': form.controls.waterInProduct.invalid}">
         <label for="waterInProduct">Water In Product</label>
         <div class="input-group">
             <span class="input-group-addon calc-addon units">
                 <a class="click-link" (click)="restoreToDiagramValue('waterInProduct')"
-                    [ngClass]="{'disabled': getIsDisabledRestore('waterInProduct')}"><span
-                        class="fa fa-refresh"></span>
+                    [ngClass]="{'disabled': getIsDisabledRestore('waterInProduct')}"><span class="fa fa-refresh"></span>
                 </a>
             </span>
             <input name="waterInProduct" type="number" class="form-control" id="waterInProduct"
-                formControlName="waterInProduct" (input)="saveWithUserOverride('waterInProduct')" (focus)="focusField('waterInProduct')">
+                formControlName="waterInProduct" (input)="saveWithUserOverride('waterInProduct')"
+                (focus)="focusField('waterInProduct')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
         </div>
@@ -212,12 +210,6 @@
     </div>
 </form>
 
-
-<label class="group-label" (click)="toggleCollapse('waterSources')">
-    <span class="fa fa-chevron-right"
-        [ngClass]="{'fa-chevron-right': isCollapsed.waterSources, 'fa-chevron-down': !isCollapsed.waterSources}"></span>
-    Water Sources
-</label>
 
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"

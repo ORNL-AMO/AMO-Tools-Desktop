@@ -1,0 +1,17 @@
+<form *ngIf="form" [formGroup]="form" class="p-0">
+    <div class="form-group">
+        <select class="form-control mr-3" id="selectedConnection" formControlName="selectedConnection"
+            (change)="updateFlowData()">
+            <option *ngFor="let option of connectionOptions" [ngValue]="option.value">
+                {{option.display}}
+            </option>
+        </select>
+        <div class="input-group">
+            <input type="number" class="form-control" id="flowValue" formControlName="flowValue"
+                (input)="updateFlowData()">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
+        </div>
+    </div>
+
+</form>

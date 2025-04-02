@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
-import { ProcessFlowPart, WaterDiagram, WaterProcessComponentType, getNewNode } from '../../process-flow-types/shared-process-flow-types';
+import { ProcessFlowPart, UserDiagramOptions, WaterDiagram, WaterProcessComponentType, getNewNode } from '../../process-flow-types/shared-process-flow-types';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
-import { WaterAssessment, WaterProcessComponent } from '../shared/models/water-assessment';
-import { Edge, Node } from '@xyflow/react';
+import { DiagramWaterSystemFlows, EdgeFlowData, WaterAssessment, WaterProcessComponent } from '../shared/models/water-assessment';
+import { Connection, Edge, Node } from '@xyflow/react';
 import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { getEdgeFromConnection } from '../../process-flow-types/shared-process-flow-logic';
 
 @Injectable()
 export class WaterDiagramConnectionsService {
@@ -48,7 +49,8 @@ export class WaterDiagramConnectionsService {
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.wasteWaterTreatments, 'waste-water-treatment'),
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.knownLosses, 'known-loss'),
     );
-    this.updateEdgesFromAssessment(diagram.waterDiagram, assessmentNodes);
+    this.filterDeletedEdges(diagram.waterDiagram, waterAssessment, assessmentNodes);
+    this.updateDiagramEdgesFromAssessment(diagram.waterDiagram, waterAssessment);
 
     diagram.waterDiagram.flowDiagramData.nodes = assessmentNodes;
   }
@@ -98,16 +100,65 @@ export class WaterDiagramConnectionsService {
   }
 
   /**
-  * Update and filter out edges related to deleted nodes. This is mimicking xy-flow lib utils
+  * Update and filter out edges related to deleted nodes or edges deleted in assessment.
   */
-  updateEdgesFromAssessment(waterDiagram: WaterDiagram, assessmentNodes: Node[]) {
+  filterDeletedEdges(waterDiagram: WaterDiagram, waterAssessment: WaterAssessment, assessmentNodes: Node[]) {
     const nodeIds = new Set();
     assessmentNodes.forEach((node) => {
       nodeIds.add(node.id);
     });
   
-    let updatedEdges = waterDiagram.flowDiagramData.edges.filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target));
+    let updatedEdges = waterDiagram.flowDiagramData.edges.filter((edge) => {
+      const edgeNodesExist = nodeIds.has(edge.source) && nodeIds.has(edge.target);
+      let assessmentDeletedEdges: string[] = [];
+      waterAssessment.diagramWaterSystemFlows.forEach((systemFlow: DiagramWaterSystemFlows) => {
+        systemFlow.sourceWater.flows.forEach((edgeFlow: EdgeFlowData) => this.addDeletedEdge(waterDiagram, edgeFlow, assessmentDeletedEdges));
+        systemFlow.dischargeWater.flows.forEach((edgeFlow: EdgeFlowData) => this.addDeletedEdge(waterDiagram, edgeFlow, assessmentDeletedEdges));
+      });
+      return edgeNodesExist && !assessmentDeletedEdges.includes(edge.id);
+    });
     waterDiagram.flowDiagramData.edges = updatedEdges;
+  }
+
+  updateDiagramEdgesFromAssessment(waterDiagram: WaterDiagram, waterAssessment: WaterAssessment) {
+    waterAssessment.diagramWaterSystemFlows.forEach((systemFlow: DiagramWaterSystemFlows) => {
+      systemFlow.sourceWater.flows.forEach((edgeFlow: EdgeFlowData) => this.updateDiagramEdge(waterDiagram, edgeFlow));
+      systemFlow.dischargeWater.flows.forEach((edgeFlow: EdgeFlowData) => this.updateDiagramEdge(waterDiagram, edgeFlow));
+    });
+  }
+
+  updateDiagramEdge(waterDiagram: WaterDiagram, edgeFlow: EdgeFlowData) {
+    let edgeIndex = waterDiagram.flowDiagramData.edges.findIndex((edge: Edge) => edge.id === edgeFlow.diagramEdgeId);
+    let diagramEdge: Edge = this.getDiagramEdge(edgeFlow, waterDiagram.flowDiagramData.userDiagramOptions);
+    console.log('adding/updating edge from assessment', diagramEdge);
+    if (edgeIndex !== -1) {
+      waterDiagram.flowDiagramData.edges[edgeIndex] = diagramEdge
+    } else {
+      waterDiagram.flowDiagramData.edges.push(diagramEdge);
+
+    }
+  }
+
+  addDeletedEdge(waterDiagram: WaterDiagram, edgeFlow: EdgeFlowData, assessmentDeletedEdges: string[]) {
+    let exists = waterDiagram.flowDiagramData.edges.find((edge: Edge) => edge.id === edgeFlow.diagramEdgeId);
+    if (!exists) {
+      assessmentDeletedEdges.push(edgeFlow.diagramEdgeId);
+    }
+  }
+
+  getDiagramEdge(edgeFlow: EdgeFlowData, userDiagramOptions: UserDiagramOptions) {
+    // todo 6906 check handle restrictions
+    let connectedParams: Connection = {
+      source: edgeFlow.source,
+      sourceHandle: "e",
+      target: edgeFlow.target,
+      targetHandle: "a",
+    }
+
+    let newEdge: Edge = getEdgeFromConnection(connectedParams, userDiagramOptions, true);
+    newEdge.data.flowValue = edgeFlow.flowValue;
+
+    return newEdge;
   }
 
   async disconnectAssessment(assessmentId: number) {

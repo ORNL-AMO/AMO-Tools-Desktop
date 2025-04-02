@@ -6,6 +6,7 @@ import CustomHandle from "./CustomHandle";
 import EditDataDrawerButton from "../Drawer/EditDataDrawerButton";
 import { useAppDispatch } from "../../hooks/state";
 import { toggleDrawer } from "../Diagram/diagramReducer";
+import React from "react";
 
 const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();

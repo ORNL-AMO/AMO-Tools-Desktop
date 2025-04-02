@@ -392,6 +392,7 @@ export const getNewProcessComponent = (processComponentType: WaterProcessCompone
 
   if (newProcessComponent.processComponentType === 'water-using-system') {
     newProcessComponent.inSystemTreatment = [];
+    newProcessComponent.systemType = 0;
   }
 
   return newProcessComponent;

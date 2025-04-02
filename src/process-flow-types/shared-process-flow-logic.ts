@@ -1,5 +1,6 @@
+import { Connection, Edge, MarkerType } from "@xyflow/react";
 import { FlowMetric } from "./shared-process-flow-constants";
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramSettings, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, ProcessUse, ProcessUseResults } from "./shared-process-flow-types";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramSettings, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, ProcessUse, ProcessUseResults, UserDiagramOptions } from "./shared-process-flow-types";
 
 // * WASM Module with suite api
 declare var Module: any;
@@ -234,4 +235,50 @@ export const calculateProcessUseResults = (processUse: ProcessUse, hoursPerYear:
       validInput = Number(inputValue);
     }
     return validInput;
+  }
+
+
+  
+/**
+* edge ids are not gauranteed to be unique. They only include nodeid-nodeid. source and target handles must be looked at to identify uniqueness of edge 
+* 
+*/
+export const getEdgeFromConnection = (
+  connectedParams: Connection | Edge, 
+  userDiagramOptions: UserDiagramOptions,
+  shouldSetId: boolean = false
+  ) => {
+    connectedParams = connectedParams as Edge;
+    if (connectedParams.source === connectedParams.target) {
+      connectedParams.type = 'selfconnecting';
+    }
+
+    if (userDiagramOptions.directionalArrowsVisible) {
+      connectedParams.markerEnd = {
+        type: MarkerType.ArrowClosed,
+        width: 25,
+        height: 25
+      }
+    }
+  
+    connectedParams.data = {
+      flowValue: null,
+    }
+  
+    if (connectedParams.style === undefined) {
+      connectedParams.style = {
+        stroke: '#6c757d',
+        strokeWidth: userDiagramOptions.strokeWidth
+      }
+    }
+
+    if (shouldSetId) {
+      connectedParams.id = getNewEdgeId(connectedParams.source, connectedParams.target);
+    }
+
+    return connectedParams;
+  }
+
+  export const getNewEdgeId = (sourceId: string, targetId: string): string => {
+    return `xy-edge__${sourceId}-${targetId}`;
   }

@@ -5,6 +5,7 @@ import CustomHandle from './CustomHandle';
 import DeleteButton from './DeleteButton';
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+import React from 'react';
 
 // * note the type of NodeProps is automagically accessible via the 'data' property 
 const SummingNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
