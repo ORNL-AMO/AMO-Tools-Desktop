@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import {  WaterAssessment, WaterProcessComponent, WaterTreatment, WaterUsingSystem } from '../../shared/models/water-assessment';
+import {  WaterAssessment, WaterProcessComponent, WaterUsingSystem } from '../../shared/models/water-assessment';
 import { Subscription } from 'rxjs';
 import { WaterAssessmentService, WaterUsingSystemTabString } from '../water-assessment.service';
 import * as _ from 'lodash';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import { WaterTreatmentService } from '../water-treatment/water-treatment.service';
+import { WaterTreatment } from '../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-water-using-system',

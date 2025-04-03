@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { DiagramWaterSystemFlows, DischargeOutlet, FlowData, IntakeSource, KnownLoss, Modification, WasteWaterTreatment, WaterAssessment, WaterSystemFlows, WaterTreatment, WaterUsingSystem } from '../shared/models/water-assessment';
+import { DiagramWaterSystemFlows, DischargeOutlet, FlowData, IntakeSource, KnownLoss, Modification, WaterAssessment, WaterSystemFlows, WaterUsingSystem } from '../shared/models/water-assessment';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
-import { BoilerWater, convertFlowDiagramData, CoolingTower, HeatEnergy, HeatEnergyResults, KitchenRestroom, Landscaping, LandscapingResults, MotorEnergy, NodeFlowData, ProcessUse } from '../../process-flow-types/shared-process-flow-types';
+import { BoilerWater, CoolingTower, HeatEnergy, HeatEnergyResults, KitchenRestroom, Landscaping, LandscapingResults, MotorEnergy, NodeFlowData, ProcessUse, WasteWaterTreatment, WaterTreatment } from '../../process-flow-types/shared-process-flow-types';
 import { MAX_FLOW_DECIMALS } from '../../process-flow-types/shared-process-flow-constants';
+import { convertFlowDiagramData } from '../../process-flow-types/shared-process-flow-logic';
 
 @Injectable({
   providedIn: 'root'

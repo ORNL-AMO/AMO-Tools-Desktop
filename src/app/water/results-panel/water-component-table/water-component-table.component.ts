@@ -5,9 +5,10 @@ import { Settings } from '../../../shared/models/settings';
 import { WaterProcessComponent } from '../../../shared/models/water-assessment';
 import { WaterAssessmentService } from '../../water-assessment.service';
 import { WaterSystemComponentService } from '../../water-system-component.service';
-import { WaterProcessComponentType, getNewNodeId } from '../../../../process-flow-types/shared-process-flow-types';
+import { WaterProcessComponentType } from '../../../../process-flow-types/shared-process-flow-types';
 import { copyObject } from '../../../shared/helperFunctions';
 import * as _ from 'lodash';
+import { getNewNodeId } from '../../../../process-flow-types/shared-process-flow-logic';
 
 
 @Component({
