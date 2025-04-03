@@ -65,7 +65,6 @@ export class WaterUsingSystemService {
     waterUsingSystem = {
       ...newComponent,
       createdByAssessment: true,
-      systemType: 0,
       hoursPerYear: 8760,
       userDiagramFlowOverrides: {
         sourceWater: undefined,

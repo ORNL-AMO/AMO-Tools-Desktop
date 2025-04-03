@@ -377,6 +377,10 @@ export const calculateProcessUseResults = (processUse: ProcessUse, hoursPerYear:
       createdByAssessment: false,
       name: diagramComponent.name,
       className: diagramComponent.className,
+      systemType: 0,
+      treatmentType: 0,
+      customTreatmentType: undefined,
+      cost: undefined,
       isValid: diagramComponent.isValid,
       disableInflowConnections: diagramComponent.disableInflowConnections,
       disableOutflowConnections: diagramComponent.disableOutflowConnections,
@@ -386,7 +390,7 @@ export const calculateProcessUseResults = (processUse: ProcessUse, hoursPerYear:
       },
       diagramNodeId: getNewNodeId(),
       modifiedDate: new Date(),
-      handles: { ...diagramComponent.handles }
+      handles: { ...diagramComponent.handles },
     };
   
     if (newProcessComponent.processComponentType === 'water-using-system') {
@@ -403,7 +407,7 @@ export const calculateProcessUseResults = (processUse: ProcessUse, hoursPerYear:
   }
   
   
-  export const getWaterTreatmentComponent = (existingTreatment?: WaterTreatment, inSystem?: boolean): WaterTreatment => {
+  export const getWaterTreatmentComponent = (existingTreatment?: WaterTreatment, inSystem: boolean = false, createdByAssessment: boolean = false): WaterTreatment => {
       let waterTreatment: WaterTreatment;
       let newComponent: WaterTreatment;
       if (!existingTreatment) {
@@ -413,6 +417,7 @@ export const calculateProcessUseResults = (processUse: ProcessUse, hoursPerYear:
       }
       waterTreatment = {
         ...newComponent,
+        createdByAssessment: createdByAssessment,
         treatmentType: newComponent.treatmentType !== undefined? newComponent.treatmentType : 0,
         customTreatmentType: newComponent.customTreatmentType,
         cost: newComponent.cost !== undefined? newComponent.cost : 0,

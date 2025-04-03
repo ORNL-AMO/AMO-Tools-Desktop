@@ -39,9 +39,9 @@ export class WaterTreatmentService {
   }
 
   
-  addWaterTreatmentComponent(existingComponent?: WaterProcessComponent): WaterTreatment {
+  addWaterTreatmentComponent(existingComponent?: WaterProcessComponent, createdByAssessment = false): WaterTreatment {
     const waterTreatment = existingComponent? existingComponent as WaterTreatment : undefined;
-    return getWaterTreatmentComponent(waterTreatment);
+    return getWaterTreatmentComponent(waterTreatment, false, createdByAssessment);
   }
 
   markFormDirtyToDisplayValidation(form: UntypedFormGroup) {

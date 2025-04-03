@@ -9,13 +9,7 @@ export interface WaterTreatment extends ProcessFlowPart {
   flowValue: number
 }
 
-export interface WasteWaterTreatment extends ProcessFlowPart {
-  treatmentType: number,
-  customTreatmentType: string,
-  cost: number,
-  name: string,
-  flowValue: number
-}
+export interface WasteWaterTreatment extends WaterTreatment {}
 
 // * passed down to diagram
 export interface ProcessFlowParentState {
@@ -130,8 +124,11 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   name: string,
   userEnteredData: NodeFlowData,
   processComponentType: ProcessFlowNodeType,
-  className: ProcessFlowPartStyleClass,
   systemType?: number,
+  treatmentType?: number,
+  customTreatmentType?: string,
+  cost?: number,
+  className: ProcessFlowPartStyleClass,
   isValid: boolean,
   inSystemTreatment?: WaterTreatment[],
   createdByAssessment: boolean,
@@ -141,7 +138,6 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   handles: Handles,
   disableInflowConnections?: boolean,
   disableOutflowConnections?: boolean,
-  processComponentContext?: any;
 }
 
 export interface CustomEdgeData extends Record<string, unknown> {
@@ -153,22 +149,21 @@ export interface CustomEdgeData extends Record<string, unknown> {
 // todo this type needs to duplicate ProcessFlowPart - how to merge types
 export type DiagramNode = Node<{
   name: string,
-  userEnteredData: {
-    totalSourceFlow: number,
-    totalDischargeFlow: number,
-  },
+  userEnteredData: NodeFlowData,
   processComponentType: ProcessFlowNodeType,
   systemType?: number,
+  treatmentType?: number,
+  customTreatmentType?: string,
+  cost?: number,
   className: ProcessFlowPartStyleClass,
   isValid: boolean,
   inSystemTreatment?: WaterTreatment[],
   createdByAssessment: boolean,
   diagramNodeId?: string,
-  disableInflowConnections?: boolean,
-  disableOutflowConnections?: boolean,
   modifiedDate?: Date,
   handles?: Handles,
-  processComponentContext?: any;
+  disableInflowConnections?: boolean,
+  disableOutflowConnections?: boolean,
 }, 'processFlowPart'>;
 
 export interface HandleOption {

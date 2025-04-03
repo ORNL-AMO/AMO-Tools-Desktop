@@ -22,19 +22,16 @@ const InSystemTreatmentForm = (props: InSystemTreatmentFormProps) => {
     const addTreatment = () => {
         const newTreatment = getWaterTreatmentComponent(undefined, true);
         const updatedTreatments = [...treatments, newTreatment];
-        // dispatch(nodeDataPropertyChange({ optionsProp: 'inSystemTreatment', updatedValue: updatedTreatments }));
         setTreatments(updatedTreatments);
     };
 
     const handleTreatmentChange = (id: string, field: 'name' | 'treatmentType', value: string | number) => {
         const updatedTreatments = treatments.map((treatment: WaterTreatment) => treatment.diagramNodeId === id ? { ...treatment, [field]: value } : treatment);
-        // dispatch(nodeDataPropertyChange({ optionsProp: 'inSystemTreatment', updatedValue: updatedTreatments }));
         setTreatments(updatedTreatments);
     };
 
     const removeTreatment = (id: string) => {
         const updatedTreatments = treatments.filter((treatment: WaterTreatment) => treatment.diagramNodeId !== id);
-        // dispatch(nodeDataPropertyChange({ optionsProp: 'inSystemTreatment', updatedValue: updatedTreatments }));
         setTreatments(updatedTreatments);
 
     };

@@ -7,6 +7,7 @@ import { ProcessFlowPart, WasteWaterTreatment, WaterProcessComponentType, WaterT
 import { WaterSystemComponentService } from './water-system-component.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
 import { getComponentNameFromType } from '../../process-flow-types/shared-process-flow-logic';
+import { WaterTreatmentService } from './water-treatment/water-treatment.service';
 // todo 6875 measur compiler doesn't like pulling in this module because it's from jsx
 
 @Injectable({
@@ -122,7 +123,7 @@ export class WaterAssessmentService {
       let newWaterUsingSystem = this.waterUsingSystemService.addWaterUsingSystem();
       waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(newWaterUsingSystem) : waterAssessment.waterUsingSystems = [newWaterUsingSystem];
       newComponent = newWaterUsingSystem;
-    } 
+    }
 
     this.updateWaterAssessment(waterAssessment);
     this.waterSystemComponentService.selectedComponent.next(newComponent);

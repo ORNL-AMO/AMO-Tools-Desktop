@@ -32,7 +32,7 @@ export class WaterTreatmentWrapperComponent {
 
   addNewWaterTreatment() {
     this.waterAssessment.waterTreatments.push(
-      this.waterTreatmentService.addWaterTreatmentComponent()
+      this.waterTreatmentService.addWaterTreatmentComponent(undefined, true)
     );
     this.waterAssessmentService.updateWaterAssessment(this.waterAssessment);
   }

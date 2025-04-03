@@ -201,8 +201,6 @@ export const createNewNode = (nodeType: WaterProcessComponentType, position: { x
     };
   } else {
     const newProcessComponent = getNewProcessComponent(nodeType);
-    // ( debugging )
-    // newProcessComponent.name = newProcessComponent.diagramNodeId;
     newNode = getNewNode(nodeType, newProcessComponent, position);
   }
 

@@ -46,7 +46,7 @@ export class WasteWaterTreatmentService {
       let wasteWaterTreatment: WasteWaterTreatment;
       let newComponent: WasteWaterTreatment;
       if (!processFlowPart) {
-        newComponent = getNewProcessComponent('water-treatment') as WasteWaterTreatment;
+        newComponent = getNewProcessComponent('waste-water-treatment') as WasteWaterTreatment;
       } else {
         newComponent = processFlowPart as WasteWaterTreatment;
       }
@@ -54,6 +54,7 @@ export class WasteWaterTreatmentService {
     // todo 7020 revisit which properties are getting overwritten here
       wasteWaterTreatment = {
         ...newComponent,
+        createdByAssessment: true,
         treatmentType: newComponent.treatmentType !== undefined? newComponent.treatmentType : 0,
         customTreatmentType: newComponent.customTreatmentType,
         cost: newComponent.cost,
