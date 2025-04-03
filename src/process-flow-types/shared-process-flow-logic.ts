@@ -1,5 +1,6 @@
+import { Node, Edge } from "@xyflow/react";
 import { FlowMetric } from "./shared-process-flow-constants";
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramSettings, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, ProcessUse, ProcessUseResults } from "./shared-process-flow-types";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, CustomEdgeData, CustomNodeStyleMap, DiagramCalculatedData, DiagramSettings, Handles, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, ProcessFlowNodeType, ProcessFlowPart, ProcessUse, ProcessUseResults, WaterProcessComponentType, WaterTreatment } from "./shared-process-flow-types";
 
 // * WASM Module with suite api
 declare var Module: any;
@@ -207,16 +208,6 @@ export const calculateProcessUseResults = (processUse: ProcessUse, hoursPerYear:
     return results;
   }
 
-  const convertFlowValue = (value: number, newUnits: string) => {
-      if (newUnits === 'Metric') {
-        // * return m3 
-        return value * 3785.4118;
-      } else if (newUnits === 'Imperial') {
-        // * return mGal 
-        return value / 3785.4118;
-      }
-    return value;
-  }
 
   export const getUnknownLossees = (totalSourceFlow: number, totalDischargeFlow: number, knownLosses: number, waterInProduct: number): number => {
     return totalSourceFlow - totalDischargeFlow - knownLosses - waterInProduct;
@@ -235,3 +226,288 @@ export const calculateProcessUseResults = (processUse: ProcessUse, hoursPerYear:
     }
     return validInput;
   }
+
+
+
+  export function getNewIdString() {
+    return Math.random().toString(36).substring(2, 9);
+  }
+  
+  const getDefaultHandles = (componentType?: ProcessFlowNodeType): Handles => {
+    let handles = {
+      inflowHandles: {
+        a: true,
+        b: true,
+        c: false,
+        d: false,
+      },
+      outflowHandles: {
+        e: true,
+        f: true,
+        g: false,
+        h: false,
+      }
+    }
+  
+    if ('water-intake' === componentType) {
+      return { outflowHandles: handles.outflowHandles };
+    }
+    
+    if ('water-discharge' === componentType) {
+      return { inflowHandles: handles.inflowHandles };
+    }
+  
+    return handles;
+  }
+  
+  
+  export const processFlowDiagramParts: ProcessFlowPart[] = [
+    {
+      processComponentType: 'water-intake',
+      name: 'Intake Source',
+      className: 'water-intake',
+      isValid: true,
+      userEnteredData: {
+        totalDischargeFlow: undefined,
+        totalSourceFlow: undefined
+      },
+      disableInflowConnections: true,
+      createdByAssessment: false,
+      handles: getDefaultHandles('water-intake')
+    },
+    {
+      processComponentType: 'water-using-system',
+      name: 'Water Using System',
+      className: 'water-using-system',
+      isValid: true,
+      inSystemTreatment: [],
+      userEnteredData: {
+        totalDischargeFlow: undefined,
+        totalSourceFlow: undefined
+      },
+      createdByAssessment: false,
+      handles: getDefaultHandles()
+    },
+    {
+      processComponentType: 'water-discharge',
+      name: 'Discharge Outlet',
+      className: 'water-discharge',
+      disableOutflowConnections: true,
+      isValid: true,
+      userEnteredData: {
+        totalDischargeFlow: undefined,
+        totalSourceFlow: undefined
+      },
+      createdByAssessment: false,
+      handles: getDefaultHandles('water-discharge')
+    },
+    {
+      processComponentType: 'water-treatment',
+      name: 'Water Treatment',
+      className: 'water-treatment',
+      isValid: true,
+      userEnteredData: {
+        totalDischargeFlow: undefined,
+        totalSourceFlow: undefined
+      },
+      createdByAssessment: false,
+      handles: getDefaultHandles()
+    },
+    {
+      processComponentType: 'waste-water-treatment',
+      name: 'Waste Treatment',
+      className: 'waste-water-treatment',
+      isValid: true,
+      userEnteredData: {
+        totalDischargeFlow: undefined,
+        totalSourceFlow: undefined
+      },
+      createdByAssessment: false,
+      handles: getDefaultHandles()
+    },
+    {
+      processComponentType: 'known-loss',
+      name: 'Known Loss',
+      className: 'known-loss',
+      isValid: true,
+      userEnteredData: {
+        totalDischargeFlow: undefined,
+        totalSourceFlow: undefined
+      },
+      createdByAssessment: false,
+      handles: getDefaultHandles()
+    },
+    {
+      processComponentType: 'summing-node',
+      name: 'Summing Connector',
+      className: 'summing-node',
+      isValid: true,
+      userEnteredData: {
+        totalDischargeFlow: undefined,
+        totalSourceFlow: undefined
+      },
+      createdByAssessment: false,
+      handles: {
+        inflowHandles: {
+          a: true,
+          b: true,
+          c: true,
+          d: true,
+        },
+        outflowHandles: {
+          e: true,
+          f: true,
+          g: true,
+          h: true,
+        }
+      }
+    }
+  ];
+  
+  
+  export const getComponentNameFromType = (componentType) => {
+    let component = processFlowDiagramParts.find(part => part.processComponentType === componentType);
+    return component ? component.name : '';
+  }
+  
+  export const getNewProcessComponent = (processComponentType: WaterProcessComponentType): ProcessFlowPart => {
+    let diagramComponent: ProcessFlowPart = processFlowDiagramParts.find(part => part.processComponentType === processComponentType);
+    let newProcessComponent: ProcessFlowPart = {
+      processComponentType: diagramComponent.processComponentType,
+      createdByAssessment: false,
+      name: diagramComponent.name,
+      className: diagramComponent.className,
+      systemType: 0,
+      treatmentType: 0,
+      customTreatmentType: undefined,
+      cost: undefined,
+      isValid: diagramComponent.isValid,
+      disableInflowConnections: diagramComponent.disableInflowConnections,
+      disableOutflowConnections: diagramComponent.disableOutflowConnections,
+      userEnteredData: {
+        totalDischargeFlow: diagramComponent.totalDischargeFlow as number,
+        totalSourceFlow: diagramComponent.totalSourceFlow as number
+      },
+      diagramNodeId: getNewNodeId(),
+      modifiedDate: new Date(),
+      handles: { ...diagramComponent.handles },
+    };
+  
+    if (newProcessComponent.processComponentType === 'water-using-system') {
+      newProcessComponent.inSystemTreatment = [];
+    }
+  
+    return newProcessComponent;
+  }
+  
+  
+  export const getNewNodeId = () => {
+    let nodeId = `n_${getNewIdString()}`;
+    return nodeId;
+  }
+  
+  
+  export const getWaterTreatmentComponent = (existingTreatment?: WaterTreatment, inSystem: boolean = false, createdByAssessment: boolean = false): WaterTreatment => {
+      let waterTreatment: WaterTreatment;
+      let newComponent: WaterTreatment;
+      if (!existingTreatment) {
+        newComponent = getNewProcessComponent('water-treatment') as WaterTreatment;
+      } else {
+        newComponent = existingTreatment as WaterTreatment;
+      }
+      waterTreatment = {
+        ...newComponent,
+        createdByAssessment: createdByAssessment,
+        treatmentType: newComponent.treatmentType !== undefined? newComponent.treatmentType : 0,
+        customTreatmentType: newComponent.customTreatmentType,
+        cost: newComponent.cost !== undefined? newComponent.cost : 0,
+        name: newComponent.name,
+        flowValue: newComponent.flowValue
+      };
+  
+      if (inSystem) {
+        delete waterTreatment.modifiedDate
+      }
+      
+      return waterTreatment;
+    }
+  
+  
+  export const getNewNode = (nodeType: WaterProcessComponentType, newProcessComponent: ProcessFlowPart, position?: { x: number, y: number }): Node => {
+    const newNode: Node = {
+      id: newProcessComponent.diagramNodeId,
+      type: nodeType,
+      position: position,
+      className: newProcessComponent.className,
+      data: newProcessComponent,
+      style: CustomNodeStyleMap[nodeType]
+    };
+  
+    return newNode;
+  }
+  
+  
+  export const convertFlowDiagramData = (flowDiagramData: {nodes: Node[], edges: Edge[], calculatedData: DiagramCalculatedData}, newUnits: string) => {
+    flowDiagramData.nodes = flowDiagramData.nodes.map((nd: Node<ProcessFlowPart>) => {
+      const convertedTotalSourceFlow = convertFlowValue(nd.data.userEnteredData.totalSourceFlow, newUnits);
+      const convertedTotalDischargeFlow = convertFlowValue(nd.data.userEnteredData.totalDischargeFlow, newUnits);
+      return {
+        ...nd,
+        data: {
+          ...nd.data,
+          userEnteredData: {
+            ...nd.data.userEnteredData,
+            totalSourceFlow: convertedTotalSourceFlow,
+            totalDischargeFlow: convertedTotalDischargeFlow
+          }
+        }
+      }
+    });
+  
+    flowDiagramData.edges = flowDiagramData.edges.map((edge: Edge<CustomEdgeData>) => {
+      const convertedEdgeflowValue = convertFlowValue(edge.data.flowValue, newUnits);
+      return {
+        ...edge,
+        data: {
+          ...edge.data,
+          flowValue: convertedEdgeflowValue
+        }
+      }
+    });
+  
+    // todo update new type
+    // Object.keys(flowDiagramData.calculatedData).forEach((key: string) => {
+    //   flowDiagramData.calculatedData[key].totalSourceFlow = convertFlowValue(flowDiagramData.calculatedData[key].totalSourceFlow, newUnits);
+    //   flowDiagramData.calculatedData[key].totalDischargeFlow = convertFlowValue(flowDiagramData.calculatedData[key].totalDischargeFlow, newUnits);
+    // });
+  
+  }
+  
+  const convertFlowValue = (value: number, newUnits: string) => {
+    if (isValidNumber(value)) {
+      if (newUnits === 'Metric') {
+        // * return m3 
+        return value * 3785.4118;
+      } else if (newUnits === 'Imperial') {
+        // * return mGal 
+        return value / 3785.4118;
+      }
+    }
+    return value;
+  }
+
+//   const convertFlowValue = (value: number, newUnits: string) => {
+//     if (newUnits === 'Metric') {
+//       // * return m3 
+//       return value * 3785.4118;
+//     } else if (newUnits === 'Imperial') {
+//       // * return mGal 
+//       return value / 3785.4118;
+//     }
+//   return value;
+// }
+  
+  const isValidNumber = (num: number): boolean => {
+    return !isNaN(num) && num !== null && num !== undefined;
+  }
+  

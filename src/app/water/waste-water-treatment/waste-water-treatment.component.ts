@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { WasteWaterTreatment, WaterAssessment } from '../../shared/models/water-assessment';
+import { WaterAssessment } from '../../shared/models/water-assessment';
 import { FormGroup } from '@angular/forms';
 import { WaterAssessmentService } from '../water-assessment.service';
 import { WaterSystemComponentService } from '../water-system-component.service';
@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { copyObject } from '../../shared/helperFunctions';
 import { wasteWaterTreatmentTypeOptions } from '../../../process-flow-types/shared-process-flow-constants';
 import { WasteWaterTreatmentService } from './waste-water-treatment.service';
+import { WasteWaterTreatment } from '../../../process-flow-types/shared-process-flow-types';
 
 @Component({
   selector: 'app-waste-water-treatment',

@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
-import { convertFlowDiagramData, CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults } from '../../../../src/process-flow-types/shared-process-flow-types';
+import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { createNewNode, formatDataForMEASUR, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
 import { CSSProperties } from 'react';
 // import { getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getResetData } from './store';
 import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
+import { convertFlowDiagramData } from '../../../../src/process-flow-types/shared-process-flow-logic';
 
 export interface DiagramState {
   nodes: Node[];
@@ -254,9 +255,8 @@ const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) 
   updateNode.data.name = action.payload;
 }
 
-const nodeDataPropertyChangeReducer = <K extends keyof ProcessFlowPart>(state: DiagramState, action: PayloadAction<NodeDataPayload<K>>) => {
+const nodeDataPropertyChangeReducer = <K extends keyof ProcessFlowPart, T extends keyof WaterTreatment>(state: DiagramState, action: PayloadAction<NodeDataPayload<K> | NodeTreatmentDataPayload<T>>) => {
   const updateNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId) as Node<ProcessFlowPart>;
-  // todo 6918 currently ignores WaterTreatment and WasteWaterTreatment
   if (updateNode && action.payload.optionsProp in updateNode.data) {
     updateNode.data[action.payload.optionsProp] = action.payload.updatedValue;
   }
@@ -536,6 +536,7 @@ export default diagramSlice.reducer
 
 export interface UserOptionsPayload<K extends keyof UserDiagramOptions> { optionsProp: K, updatedValue: UserDiagramOptions[K], updateDependencies?: OptionsDependentState[] };
 export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp: K, updatedValue: ProcessFlowPart[K] };
+export interface NodeTreatmentDataPayload<K extends keyof WaterTreatment> { optionsProp: K, updatedValue: WaterTreatment[K] };
 
 /**
  * estimated system results Object, i.e. ProcessUseResults, BoilerResults

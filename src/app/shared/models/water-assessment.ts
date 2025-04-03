@@ -1,4 +1,4 @@
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, CoolingTowerTotalResults, HeatEnergy, HeatEnergyResults, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, MotorEnergyResults, ProcessFlowPart, ProcessUse, ProcessUseResults, ProcessUseTotalResults } from "../../../process-flow-types/shared-process-flow-types";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, CoolingTowerTotalResults, HeatEnergy, HeatEnergyResults, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, MotorEnergyResults, ProcessFlowPart, ProcessUse, ProcessUseResults, ProcessUseTotalResults, WasteWaterTreatment, WaterTreatment } from "../../../process-flow-types/shared-process-flow-types";
 
 export interface WaterAssessment {
     name?: string;
@@ -161,23 +161,6 @@ export interface WaterUsingSystem extends ProcessFlowPart {
     addedMotorEnergy: MotorEnergy[],
 }
 
-// ! duplicated definition in shared-process-flow-types
-export interface WasteWaterTreatment extends ProcessFlowPart {
-    treatmentType: number,
-    customTreatmentType: string,
-    cost: number,
-    name: string,
-    flowValue: number 
-}
-
-// ! duplicated definition in shared-process-flow-types
-export interface WaterTreatment extends ProcessFlowPart {
-    treatmentType: number,
-    customTreatmentType: string,
-    cost: number,
-    name: string,
-    flowValue: number
-}
 
 export interface KnownLoss extends ProcessFlowPart {
     lossType: string,

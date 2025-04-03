@@ -1,3 +1,4 @@
+import { Edge } from "@xyflow/react";
 import { FlowType, NodeErrors, NodeFlowTypeErrors } from "../../../src/process-flow-types/shared-process-flow-types";
 import * as Yup from 'yup';
 
@@ -33,7 +34,7 @@ export const getEstimateSystemValidationSchema = (
     );
 };
 
-export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge', totalCalculatedFlow: number, sumUserKnownLosses?: number): Yup.ObjectSchema<FlowForm> => {
+export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge', connectedEdges: Edge[], totalCalculatedFlow: number, sumUserKnownLosses?: number): Yup.ObjectSchema<FlowForm> => {
     const totalFlowError = flowLabel === 'Source' ? TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR : TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR;
     let defaultSchema = {
         totalFlow: Yup.number()
@@ -44,7 +45,7 @@ export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge'
                     return `Total ${flowLabel} Flow must equal the sum of all flow values`
                 },
                 (value) => {
-                    const isValid = validateTotalFlowValue(totalCalculatedFlow, value);
+                    const isValid = validateTotalFlowValue(connectedEdges, totalCalculatedFlow, value);
                     return isValid;
                 },
             ),
@@ -81,10 +82,10 @@ export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge'
    * @param calculatedValue retrived from getNodeFlowTotals()
    * @param userEnteredTotalFlow componentData.userEnteredData.totalSourceFlow or componentData.userEnteredData.totalSourceFlow 
    */
-export const validateTotalFlowValue = (calculatedTotalFlow: number, userEnteredTotalFlow: number) => {
-    let hasFlows = calculatedTotalFlow !== null && calculatedTotalFlow !== undefined;
+export const validateTotalFlowValue = (connectedEdges: Edge[], calculatedTotalFlow: number, userEnteredTotalFlow: number) => {
+    let shouldValidate = connectedEdges.length > 0 && calculatedTotalFlow !== null && calculatedTotalFlow !== undefined;
     // *If a user entered value exists, check that our calculated total does not differ with component saved value (useEnteredValue)
-    if (hasFlows) {
+    if (shouldValidate) {
         // console.log(`## validate totalFlow computed: ${calculatedTotalFlow} vs userEntered: ${userEnteredTotalFlow}`);
         if (userEnteredTotalFlow !== undefined && userEnteredTotalFlow !== null && userEnteredTotalFlow !== calculatedTotalFlow) {
             // console.log('## totalFlow invalid');

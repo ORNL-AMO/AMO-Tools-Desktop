@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
-import { WaterProcessComponent, WaterTreatment } from '../../shared/models/water-assessment';
-import { getWaterTreatmentComponent } from '../../../process-flow-types/shared-process-flow-types';
+import { WaterProcessComponent } from '../../shared/models/water-assessment';
+import { getWaterTreatmentComponent } from '../../../process-flow-types/shared-process-flow-logic';
+import { WaterTreatment } from '../../../process-flow-types/shared-process-flow-types';
 
 @Injectable()
 export class WaterTreatmentService {
@@ -38,9 +39,9 @@ export class WaterTreatmentService {
   }
 
   
-  addWaterTreatmentComponent(existingComponent?: WaterProcessComponent): WaterTreatment {
+  addWaterTreatmentComponent(existingComponent?: WaterProcessComponent, createdByAssessment = false): WaterTreatment {
     const waterTreatment = existingComponent? existingComponent as WaterTreatment : undefined;
-    return getWaterTreatmentComponent(waterTreatment);
+    return getWaterTreatmentComponent(waterTreatment, false, createdByAssessment);
   }
 
   markFormDirtyToDisplayValidation(form: UntypedFormGroup) {

@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { getWaterTreatmentComponent, ProcessFlowPart, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { ProcessFlowPart, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { Box, Select, MenuItem, IconButton, TextField, Button, Divider } from "@mui/material";
 import { waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -9,6 +9,7 @@ import SelectTreatmentType from "./SelectTreatmentType";
 import {
     type Node,
   } from '@xyflow/react';
+import { getWaterTreatmentComponent } from "../../../../src/process-flow-types/shared-process-flow-logic";
 
 const InSystemTreatmentForm = (props: InSystemTreatmentFormProps) => {
     const dispatch = useAppDispatch();
@@ -21,19 +22,16 @@ const InSystemTreatmentForm = (props: InSystemTreatmentFormProps) => {
     const addTreatment = () => {
         const newTreatment = getWaterTreatmentComponent(undefined, true);
         const updatedTreatments = [...treatments, newTreatment];
-        // dispatch(nodeDataPropertyChange({ optionsProp: 'inSystemTreatment', updatedValue: updatedTreatments }));
         setTreatments(updatedTreatments);
     };
 
     const handleTreatmentChange = (id: string, field: 'name' | 'treatmentType', value: string | number) => {
         const updatedTreatments = treatments.map((treatment: WaterTreatment) => treatment.diagramNodeId === id ? { ...treatment, [field]: value } : treatment);
-        // dispatch(nodeDataPropertyChange({ optionsProp: 'inSystemTreatment', updatedValue: updatedTreatments }));
         setTreatments(updatedTreatments);
     };
 
     const removeTreatment = (id: string) => {
         const updatedTreatments = treatments.filter((treatment: WaterTreatment) => treatment.diagramNodeId !== id);
-        // dispatch(nodeDataPropertyChange({ optionsProp: 'inSystemTreatment', updatedValue: updatedTreatments }));
         setTreatments(updatedTreatments);
 
     };

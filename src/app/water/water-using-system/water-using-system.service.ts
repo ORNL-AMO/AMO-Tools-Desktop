@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ConnectedFlowType, DiagramWaterSystemFlows, KnownLoss, WaterProcessComponent, WaterSystemFlows, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../shared/models/water-assessment';
-import { BoilerWater, CoolingTower, getNewProcessComponent, KitchenRestroom, Landscaping, ProcessUse } from '../../../process-flow-types/shared-process-flow-types';
+import { BoilerWater, CoolingTower, KitchenRestroom, Landscaping, ProcessUse } from '../../../process-flow-types/shared-process-flow-types';
 import { BehaviorSubject } from 'rxjs';
 import { OperatingHours } from '../../shared/models/operations';
 import { FlowMetric } from '../../../process-flow-types/shared-process-flow-constants';
+import { getNewProcessComponent } from '../../../process-flow-types/shared-process-flow-logic';
 
 @Injectable()
 export class WaterUsingSystemService {
@@ -64,7 +65,6 @@ export class WaterUsingSystemService {
     waterUsingSystem = {
       ...newComponent,
       createdByAssessment: true,
-      systemType: 0,
       hoursPerYear: 8760,
       userDiagramFlowOverrides: {
         sourceWater: undefined,
