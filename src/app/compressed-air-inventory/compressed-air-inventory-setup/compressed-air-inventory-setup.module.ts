@@ -19,6 +19,7 @@ import { SystemCapacityModule } from '../../calculator/compressed-air/system-cap
 import { EndUsesSetupComponent } from './end-uses-setup/end-uses-setup.component';
 import { EndUsesService } from './end-uses-setup/end-uses.service';
 import { EndUsesTableComponent } from './end-uses-table/end-uses-table.component';
+import { EndUsesChartComponent } from './end-uses-chart/end-uses-chart.component';
 
 
 
@@ -31,6 +32,7 @@ import { EndUsesTableComponent } from './end-uses-table/end-uses-table.component
     SystemCapacityInventoryModalComponent,
     EndUsesSetupComponent,
     EndUsesTableComponent,
+    EndUsesChartComponent
   ],
   imports: [
     CommonModule,

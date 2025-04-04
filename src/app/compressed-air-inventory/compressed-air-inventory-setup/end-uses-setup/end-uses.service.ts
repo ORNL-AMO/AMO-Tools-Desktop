@@ -179,7 +179,7 @@ export class EndUsesService {
 
   updateCompressedAirEndUse(updatedEndUse: EndUse, compressedAirInventoryData: CompressedAirInventoryData, settings: Settings): UpdatedEndUseData {
     updatedEndUse.modifiedDate = new Date();
-     
+
     let selectedSystemId = this.compressedAirCatalogService.selectedSystemId.getValue();
     let systemIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedSystemId });
 
@@ -191,7 +191,7 @@ export class EndUsesService {
   getEndUseResults(endUse: EndUse, compressedAirInventoryData: CompressedAirInventoryData): EndUseResults {
     let selectedSystemId = this.compressedAirCatalogService.selectedSystemId.getValue();
     let systemIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedSystemId });
-    
+
     let endUses: Array<EndUse> = this.compressedAirInventoryService.compressedAirInventoryData.getValue().systems[systemIndex].endUses;
 
     //todo CA Inventory
@@ -220,6 +220,58 @@ export class EndUsesService {
     return dayTypeEndUseResult;
   }
 
+  getEndUseEnergyData(system: CompressedAirInventorySystem): EndUseEnergy {
+    let endUseEnergyData = new Array<EndUseEnergyData>();
+    let hasInvalidEndUse: boolean = true;
+    if (system.endUses) {
+      hasInvalidEndUse = system.endUses.some((endUse: EndUse) => {
+        let isValidEndUse: boolean = this.getEndUseFormFromObj(endUse, system.endUses).valid;
+        if (isValidEndUse) {
+          let endUseResult: EndUseResults = this.getSingleEndUseResults(system, endUse);
+          endUseEnergyData.push({
+            averageAirflowPercent: endUseResult.averagePercentCapacity,
+            averageAirFlow: endUse.averageAirflow,
+            endUseName: endUse.endUseName,
+            endUseId: endUse.endUseId,
+            color: undefined
+          });
+        } else {
+          return true;
+        }
+      });
+
+      let dayTypeLeakRate: number = system.averageLeakRate;
+      if (dayTypeLeakRate) {
+        let leakRatePercent: number = (dayTypeLeakRate / system.knownTotalAirflow) * 100;
+        endUseEnergyData.unshift({
+          averageAirflowPercent: leakRatePercent,
+          averageAirFlow: dayTypeLeakRate,
+          endUseName: 'Day Type Leak Rate',
+          endUseId: 'dayTypeLeakRate',
+          color: 'rgb(255, 0, 0)'
+        });
+      }
+    }
+
+    return { hasValidEndUses: !hasInvalidEndUse, endUseEnergyData: endUseEnergyData };
+  }
+
+  getSingleEndUseResults(system: CompressedAirInventorySystem, endUse: EndUse): EndUseResults {
+    // end use airflow / Average system flow for day type
+    let endUseResult: EndUseResults = {
+      averagePercentCapacity: undefined,
+      averageExcessPressure: undefined,
+    }
+    let dayTypeAverageAirflow: number = system.knownTotalAirflow;
+    if (dayTypeAverageAirflow) {
+      let averagePercentCapacity = this.convertUnitsService.roundVal((endUse.averageAirflow / dayTypeAverageAirflow) * 100, 2);
+      let excessPressure = endUse.averageMeasuredPressure - endUse.averageRequiredPressure;
+      endUseResult.averagePercentCapacity = averagePercentCapacity
+      endUseResult.averageExcessPressure = excessPressure
+    }
+    return endUseResult;
+  }
+
 
 
 }
@@ -238,4 +290,17 @@ export interface UpdatedEndUseData {
 export interface EndUseResults {
   averagePercentCapacity: number
   averageExcessPressure: number,
+}
+
+export interface EndUseEnergyData {
+  averageAirFlow: number,
+  averageAirflowPercent: number,
+  endUseName: string,
+  endUseId: string,
+  color: string
+}
+
+export interface EndUseEnergy {
+  hasValidEndUses: boolean,
+  endUseEnergyData: Array<EndUseEnergyData>
 }
