@@ -7,7 +7,6 @@
     "skipLibCheck": true,
     "outDir": "dist",
     "sourceMap": true,
-
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": false,
@@ -15,6 +14,11 @@
     "isolatedModules": true,
     "noEmit": false,
     "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "process-flow-lib": ["../src/process-flow-lib"],
+    },
+    
     /* Linting */
     "strict": false,
     "noImplicitAny": false,
@@ -22,11 +26,5 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
   },
-  "include": ["src"],
-  "paths": {
-    "process-flow-types": ["./lib/process-flow-types"]
-  },
-  "references": [
-    { "path": "../src/process-flow-types" }
-  ]
+  "include": ["src", "../src/process-flow-lib/**/*.ts"],
 }

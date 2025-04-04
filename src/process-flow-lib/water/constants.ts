@@ -1,3 +1,6 @@
+import { CSSProperties } from "react";
+import { WaterProcessComponentType } from "./types/diagram";
+
 export const waterTreatmentTypeOptions: {value: number, display: string}[] = [
     {value: 0, display: 'Sand Filtration'},
     {value: 1, display: 'Bag Filtration'},
@@ -118,3 +121,33 @@ export const conductivityUnitOptions: {value: string, display: string}[] = [
 ]
 export type WaterUseUnit = undefined | 'gal' | 'gal/hr' | 'gal/unit' | 'm<sup>3</sup>' | 'm<sup>3</sup>/hr' | 'm<sup>3</sup>/unit' ;
 
+export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties> = {
+  'water-intake': {
+    backgroundColor: '#75a1ff',
+    color: "#ffffff"
+  },
+  'water-discharge': {
+    backgroundColor: '#7f7fff',
+    color: "#ffffff"
+  },
+  'water-using-system': {
+    backgroundColor: '#00bbff',
+    color: "#ffffff"
+  },
+  'summing-node': {
+    // backgroundColor: '#75a1ff',
+    // color: "#ffffff"
+  },
+  'water-treatment': {
+    backgroundColor: '#009386',
+    color: "#ffffff"
+  },
+  'waste-water-treatment': {
+    backgroundColor: '#93e200',
+    color: "#000"
+  },
+  'known-loss': {
+    backgroundColor: '#fff',
+    color: "#000"
+  }
+};

@@ -46,6 +46,9 @@ module.exports = options => {
       ],
     },
     resolve: {
+      alias: {
+        'process-flow-lib': path.resolve(__dirname, '../src/process-flow-lib')
+      },
       extensions: [".tsx", ".ts", ".js"],
     },
     output: {
