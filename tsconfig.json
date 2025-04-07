@@ -20,5 +20,8 @@
       "es2019",
       "dom"
     ],
+    "paths": {
+      "process-flow-lib": ["./src/process-flow-lib"],
+    }
   }
 }

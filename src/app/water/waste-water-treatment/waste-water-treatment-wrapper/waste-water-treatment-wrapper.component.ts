@@ -1,9 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { WaterAssessmentService } from '../../water-assessment.service';
-import { WaterAssessment } from '../../../shared/models/water-assessment';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { WasteWaterTreatmentService } from '../waste-water-treatment.service';
-import { WasteWaterTreatment } from '../../../../process-flow-types/shared-process-flow-types';
+import { WaterAssessment, WasteWaterTreatment } from 'process-flow-lib';
 
 @Component({
   selector: 'app-waste-water-treatment-wrapper',

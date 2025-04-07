@@ -1,4 +1,3 @@
-import { CustomEdgeData, ParentContainerDimensions, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import {
     type Node,
     Edge,
@@ -10,6 +9,7 @@ import { selectEdges, selectIsDrawerOpen, selectNodes } from "../Diagram/store";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { toggleDrawer } from "../Diagram/diagramReducer";
 import { memo } from "react";
+import { CustomEdgeData, ParentContainerDimensions, ProcessFlowPart } from 'process-flow-lib';
 
 const DataDrawer = () => {
     const dispatch = useAppDispatch();

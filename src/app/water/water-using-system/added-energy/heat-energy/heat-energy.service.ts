@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
-import { HeatEnergy } from '../../../../../process-flow-types/shared-process-flow-types';
+import { HeatEnergy } from 'process-flow-lib';
 
 @Injectable()
 export class HeatEnergyService {

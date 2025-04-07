@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup } from '@angular/forms';
-import { WaterProcessComponent } from '../../shared/models/water-assessment';
-import { getNewProcessComponent } from '../../../process-flow-types/shared-process-flow-logic';
-import { WasteWaterTreatment } from '../../../process-flow-types/shared-process-flow-types';
+import { WasteWaterTreatment, WaterProcessComponent, getNewProcessComponent } from 'process-flow-lib';
 
 @Injectable()
 export class WasteWaterTreatmentService {

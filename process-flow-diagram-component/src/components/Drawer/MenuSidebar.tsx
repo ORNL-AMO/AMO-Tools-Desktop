@@ -1,10 +1,8 @@
 import React, { ChangeEvent, memo, useState } from 'react';
-import { NodeErrors, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { Box, Button, Chip, Divider, Grid, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
-import { conductivityUnitOptions, flowDecimalPrecisionOptions } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
 import { RootState, selectHasAssessment } from '../Diagram/store';
@@ -13,7 +11,7 @@ import ValidationWindow, { ValidationWindowLocation } from '../Diagram/Validatio
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { getIsDiagramValid } from '../../validation/Validation';
 import { blue } from '@mui/material/colors';
-import { processFlowDiagramParts } from '../../../../src/process-flow-types/shared-process-flow-logic';
+import { ParentContainerDimensions, NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions } from 'process-flow-lib';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,

@@ -5,7 +5,6 @@ import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, 
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 import FlowConnectionText from "../Drawer/FlowConnectionText";
-import { CustomEdgeData } from "../../../../src/process-flow-types/shared-process-flow-types";
 import InputField from "../StyledMUI/InputField";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
@@ -18,6 +17,7 @@ import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
 import { ObjectSchema } from "yup";
+import { CustomEdgeData } from "process-flow-lib";
 /**
    * Formik is used for validation only, while source of truth for values is redux store. This avoids state race conditions when rendering.
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility

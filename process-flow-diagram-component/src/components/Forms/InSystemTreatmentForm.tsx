@@ -1,15 +1,13 @@
 import { memo, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { ProcessFlowPart, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { Box, Select, MenuItem, IconButton, TextField, Button, Divider } from "@mui/material";
-import { waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getStoreSerializedDate, nodeDataPropertyChange } from "../Diagram/diagramReducer";
 import SelectTreatmentType from "./SelectTreatmentType";
 import {
     type Node,
   } from '@xyflow/react';
-import { getWaterTreatmentComponent } from "../../../../src/process-flow-types/shared-process-flow-logic";
+import { WaterTreatment, getWaterTreatmentComponent, ProcessFlowPart } from "process-flow-lib";
 
 const InSystemTreatmentForm = (props: InSystemTreatmentFormProps) => {
     const dispatch = useAppDispatch();

@@ -5,7 +5,7 @@ import { EmailMeasurDataService } from '../../shared/email-measur-data/email-mea
 import { Assessment } from '../../shared/models/assessment';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { WaterAssessmentService } from '../water-assessment.service';
-import { Modification, WaterAssessment } from '../../shared/models/water-assessment';
+import { Modification, WaterAssessment } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-banner',

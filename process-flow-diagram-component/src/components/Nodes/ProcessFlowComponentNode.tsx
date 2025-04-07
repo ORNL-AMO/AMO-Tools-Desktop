@@ -1,6 +1,5 @@
 import { Fragment, memo, useContext } from 'react';
 import { Position, NodeProps } from '@xyflow/react';
-import { DiagramNode, NodeFlowData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
 import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
@@ -10,6 +9,7 @@ import { toggleDrawer } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { selectNodeFlowData } from '../Diagram/store';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
+import { DiagramNode, NodeFlowData } from 'process-flow-lib';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WaterProcessDiagramService } from '../water-process-diagram.service';
-import { ProcessFlowParentState, WaterDiagram } from '../../../process-flow-types/shared-process-flow-types';
+import { WaterDiagram, ProcessFlowParentState } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-diagram',

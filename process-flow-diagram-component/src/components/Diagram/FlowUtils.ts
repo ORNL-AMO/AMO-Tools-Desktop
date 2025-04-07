@@ -1,13 +1,11 @@
 import { edgeTypes, nodeTypes } from "./FlowTypes";
-import { CustomEdgeData, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, DiagramSettings, FlowDiagramData, DiagramCalculatedData, NodeFlowData, ProcessUse } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { DefaultEdgeOptions, EdgeTypes, ReactFlowInstance, Node, Edge, Connection, MarkerType } from "@xyflow/react";
 import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
 import { NodeFlowProperty } from "./diagramReducer";
 import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
-import { MAX_FLOW_DECIMALS } from "../../../../src/process-flow-types/shared-process-flow-constants";
-import { getNewNode, getNewNodeId, getNewProcessComponent } from "../../../../src/process-flow-types/shared-process-flow-logic";
+import { CustomEdgeData, DiagramCalculatedData, getNewProcessComponent, getNewNode, WaterProcessComponentType, UserDiagramOptions, ProcessFlowPart, getNewNodeId, FlowDiagramData, NodeFlowData, MAX_FLOW_DECIMALS } from "process-flow-lib";
 
 export const getRandomCoordinates = (height: number, width: number): { x: number, y: number } => {
   const screenWidth = window.innerWidth;

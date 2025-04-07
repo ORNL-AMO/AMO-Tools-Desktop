@@ -7,10 +7,10 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuSidebar from './MenuSidebar';
 import { Box } from '@mui/material';
-import { ParentContainerDimensions } from '../../../../src/process-flow-types/shared-process-flow-types';
 import DrawerToggleButton from './DrawerToggleButton';
 import { useAppSelector } from '../../hooks/state';
 import { selectHasAssessment } from '../Diagram/store';
+import { ParentContainerDimensions } from 'process-flow-lib';
 
 const drawerWidth = 425;
 

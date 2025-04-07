@@ -1,7 +1,7 @@
 import { NodeProps, useReactFlow } from "@xyflow/react";
 import { CSSProperties } from "react";
-import { DiagramNode } from "../../../../src/process-flow-types/shared-process-flow-types";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { DiagramNode } from "process-flow-lib";
 
 const DeleteButton = ({ id, data, selected, transformLocation }: DeleteButtonProps) => {
     const {setNodes, setEdges} = useReactFlow();

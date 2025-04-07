@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { IntakeSource, WaterProcessComponent, DischargeOutlet, WaterAssessment, MonthlyFlowData } from '../shared/models/water-assessment';
 import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
-import { WaterProcessComponentType } from '../../process-flow-types/shared-process-flow-types';
 import * as _ from 'lodash';
-import { getNewProcessComponent } from '../../process-flow-types/shared-process-flow-logic';
+import { WaterProcessComponent, WaterAssessment, WaterProcessComponentType, IntakeSource, getNewProcessComponent, DischargeOutlet, MonthlyFlowData } from 'process-flow-lib';
 
 @Injectable({
   providedIn: 'root'

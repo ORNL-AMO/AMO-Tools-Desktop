@@ -5,13 +5,12 @@ import { UntypedFormGroup } from "@angular/forms";
 import { SettingsService } from "../../settings/settings.service";
 import { WaterAssessmentService } from "../water-assessment.service";
 import { SettingsDbService } from "../../indexedDb/settings-db.service";
-import { WaterAssessment, WaterSystemBasics } from "../../shared/models/water-assessment";
 import { firstValueFrom } from "rxjs";
 import { SystemBasicsService } from "./system-basics.service";
 import * as _ from 'lodash';
 import { ConvertWaterAssessmentService } from "../convert-water-assessment.service";
 import { copyObject } from "../../shared/helperFunctions";
-import { flowDecimalPrecisionOptions } from "../../../process-flow-types/shared-process-flow-constants";
+import { flowDecimalPrecisionOptions, WaterAssessment, WaterSystemBasics } from "process-flow-lib";
 
 @Component({
   selector: 'app-system-basics',

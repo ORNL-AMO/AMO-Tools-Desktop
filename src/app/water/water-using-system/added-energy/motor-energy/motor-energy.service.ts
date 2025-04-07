@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { MotorEnergy } from '../../../../../process-flow-types/shared-process-flow-types';
+import { MotorEnergy } from 'process-flow-lib';
 
 @Injectable()
 export class MotorEnergyService {

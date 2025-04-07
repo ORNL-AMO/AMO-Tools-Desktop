@@ -3,13 +3,13 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Subscription, firstValueFrom } from 'rxjs';
 import { WaterProcessDiagramService } from './water-process-diagram.service';
-import { ParentContainerDimensions, WaterDiagram } from '../../process-flow-types/shared-process-flow-types';
 import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Settings } from '../shared/models/settings';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { WaterDiagramConnectionsService } from './water-diagram-connections.service';
+import { WaterDiagram, ParentContainerDimensions } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-process-diagram',

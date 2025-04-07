@@ -1,10 +1,10 @@
 import { Box, FormControlLabel, FormGroup, FormLabel, Stack, Switch } from '@mui/material';
 import { Node, useUpdateNodeInternals } from '@xyflow/react';
-import { Handles, ProcessFlowPart } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { JSX, useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary } from '../StyledMUI/AccordianComponents';
 import { useAppDispatch } from '../../hooks/state';
 import { updateNodeHandles } from '../Diagram/diagramReducer';
+import { ProcessFlowPart, Handles } from 'process-flow-lib';
 
 
 export default function ComponentHandles({ node }: ComponentHandlesProps) {

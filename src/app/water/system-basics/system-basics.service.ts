@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { WaterSystemBasics } from '../../shared/models/water-assessment';
+import { WaterSystemBasics } from '../../../process-flow-lib/water/types/assessment';
 
 @Injectable({
   providedIn: 'root'

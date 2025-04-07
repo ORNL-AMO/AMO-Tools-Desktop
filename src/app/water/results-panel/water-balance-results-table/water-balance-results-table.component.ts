@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { WaterAssessmentService } from '../../water-assessment.service';
 import { Settings } from '../../../shared/models/settings';
 import { Subscription } from 'rxjs';
-import { WaterAssessment, SystemBalanceResults, WaterUsingSystem, WaterBalanceResults } from '../../../shared/models/water-assessment';
 import { WaterSystemComponentService } from '../../water-system-component.service';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
+import { WaterBalanceResults } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-balance-results-table',

@@ -3,8 +3,6 @@ import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils"
 import { Edge, Node } from "@xyflow/react";
 
 import React, { memo, useState } from "react";
-import { CustomEdgeData, ProcessFlowPart, WasteWaterTreatment, WaterTreatment } from "../../../../src/process-flow-types/shared-process-flow-types";
-import { wasteWaterTreatmentTypeOptions, waterTreatmentTypeOptions, waterUsingSystemTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
 import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/AccordianComponents";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import FlowValueDisplay from "../Diagram/FlowValueDisplay";
@@ -19,6 +17,7 @@ import { blue, yellow } from "@mui/material/colors";
 import SelectTreatmentType from "./SelectTreatmentType";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import CalculateIcon from '@mui/icons-material/Calculate';
+import { ProcessFlowPart, WaterTreatment, waterTreatmentTypeOptions, WasteWaterTreatment, wasteWaterTreatmentTypeOptions, CustomEdgeData, waterUsingSystemTypeOptions } from "process-flow-lib";
 
 
 const theme = createTheme({

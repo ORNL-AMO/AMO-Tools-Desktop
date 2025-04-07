@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import * as _ from 'lodash';
-import { ParentContainerDimensions, WaterDiagram, } from '../../process-flow-types/shared-process-flow-types';
 import { Diagram } from '../shared/models/diagram';
+import { ParentContainerDimensions, WaterDiagram } from 'process-flow-lib';
 
 @Injectable()
 export class WaterProcessDiagramService {

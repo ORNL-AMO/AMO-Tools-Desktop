@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { WaterAssessmentService } from '../../../water-assessment.service';
 import { WaterUsingSystemService } from '../../water-using-system.service';
-import { KitchenRestroom } from '../../../../../process-flow-types/shared-process-flow-types';
+import { KitchenRestroom } from 'process-flow-lib';
 
 @Component({
   selector: 'app-kitchen-restroom',

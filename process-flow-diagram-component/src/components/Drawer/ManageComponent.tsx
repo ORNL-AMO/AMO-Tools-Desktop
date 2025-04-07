@@ -1,4 +1,3 @@
-import { ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { getConnectedEdges } from '@xyflow/react';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import {
@@ -14,6 +13,7 @@ import DrawerToggleButton from "./DrawerToggleButton";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { deleteNode, setNodeName } from "../Diagram/diagramReducer";
 import InSystemTreatmentForm from "../Forms/InSystemTreatmentForm";
+import { ProcessFlowPart } from 'process-flow-lib';
 
 const ManageComponent = (props: ManageComponentProps) => {
     const dispatch = useAppDispatch();

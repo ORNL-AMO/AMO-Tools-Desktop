@@ -1,10 +1,10 @@
 import { memo, CSSProperties, useState, useContext } from 'react';
-import { DiagramNode } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { NodeProps, Position } from '@xyflow/react';
 import CustomHandle from './CustomHandle';
 import DeleteButton from './DeleteButton';
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+import { DiagramNode } from 'process-flow-lib';
 
 // * note the type of NodeProps is automagically accessible via the 'data' property 
 const SummingNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {

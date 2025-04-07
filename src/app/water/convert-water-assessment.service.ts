@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
-import { DiagramWaterSystemFlows, DischargeOutlet, FlowData, IntakeSource, KnownLoss, Modification, WaterAssessment, WaterSystemFlows, WaterUsingSystem } from '../shared/models/water-assessment';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
-import { BoilerWater, CoolingTower, HeatEnergy, HeatEnergyResults, KitchenRestroom, Landscaping, LandscapingResults, MotorEnergy, NodeFlowData, ProcessUse, WasteWaterTreatment, WaterTreatment } from '../../process-flow-types/shared-process-flow-types';
-import { MAX_FLOW_DECIMALS } from '../../process-flow-types/shared-process-flow-constants';
-import { convertFlowDiagramData } from '../../process-flow-types/shared-process-flow-logic';
+import { BoilerWater, convertFlowDiagramData, CoolingTower, DiagramWaterSystemFlows, DischargeOutlet, FlowData, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, KnownLoss, Landscaping, LandscapingResults, MAX_FLOW_DECIMALS, Modification, MotorEnergy, NodeFlowData, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterSystemFlows, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
 
 @Injectable({
   providedIn: 'root'

@@ -5,7 +5,7 @@ import { SSMT } from './steam/ssmt';
 import { TreasureHunt } from './treasure-hunt';
 import { WasteWater } from './waste-water';
 import { CompressedAirAssessment } from './compressed-air-assessment';
-import { WaterAssessment } from './water-assessment';
+import { WaterAssessment } from 'process-flow-lib';
 
 export interface Assessment {
   id?: number,

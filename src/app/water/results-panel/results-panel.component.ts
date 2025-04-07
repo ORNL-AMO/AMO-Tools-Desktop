@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WaterAssessmentService, WaterSetupTabString } from '../water-assessment.service';
 import { WaterSystemComponentService } from '../water-system-component.service';
-import { ProcessFlowNodeType } from '../../../process-flow-types/shared-process-flow-types';
 import { Settings } from '../../shared/models/settings';
+import { ProcessFlowNodeType } from 'process-flow-lib';
 
 @Component({
   selector: 'app-results-panel',

@@ -1,7 +1,6 @@
 import { getHasErrorLevel, getHasFlowError, getHasTotalFlowError, getIsDiagramValid } from "../../validation/Validation";
 import { Paper, Typography, Stack, Alert, Button, Box, Collapse } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { Node } from '@xyflow/react';
 import { selectNodes } from "./store";
 import { toggleDrawer, validationWindowOpenChange } from "./diagramReducer";
@@ -11,6 +10,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useState } from "react";
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
+import { NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "process-flow-lib";
 
 const ValidationWindow = () => {
   const dispatch = useAppDispatch();

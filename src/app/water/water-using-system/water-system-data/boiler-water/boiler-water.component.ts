@@ -3,7 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { WaterAssessmentService } from '../../../water-assessment.service';
 import { WaterUsingSystemService } from '../../water-using-system.service';
-import { BoilerWater } from '../../../../../process-flow-types/shared-process-flow-types';
+import { BoilerWater } from 'process-flow-lib';
 
 @Component({
   selector: 'app-boiler-water',

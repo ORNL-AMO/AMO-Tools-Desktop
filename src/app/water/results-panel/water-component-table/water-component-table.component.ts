@@ -2,13 +2,11 @@ import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { Settings } from '../../../shared/models/settings';
-import { WaterProcessComponent } from '../../../shared/models/water-assessment';
 import { WaterAssessmentService } from '../../water-assessment.service';
 import { WaterSystemComponentService } from '../../water-system-component.service';
-import { WaterProcessComponentType } from '../../../../process-flow-types/shared-process-flow-types';
 import { copyObject } from '../../../shared/helperFunctions';
 import * as _ from 'lodash';
-import { getNewNodeId } from '../../../../process-flow-types/shared-process-flow-logic';
+import { WaterProcessComponent, WaterProcessComponentType, getNewNodeId } from 'process-flow-lib';
 
 
 @Component({

@@ -1,12 +1,12 @@
 import { CSSProperties, Fragment, ReactNode, useContext } from 'react';
 import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps, getBezierPath, SmoothStepEdge, StepEdge, StraightEdge, useNodeConnections } from '@xyflow/react';
-import { CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
 import FlowValueDisplay from '../Diagram/FlowValueDisplay';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { toggleDrawer } from '../Diagram/diagramReducer';
 import { RootState } from '../Diagram/store';
+import { CustomEdgeData } from 'process-flow-lib';
 
 const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: string; selected: boolean, flowValue: number | string, scale: number }) => {
   let adjustedTransform = transform + ` scale(${scale})`;

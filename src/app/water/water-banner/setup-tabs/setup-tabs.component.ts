@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { PlantIntakeDischargeTab, WaterAssessmentService, WaterSetupTabString, WaterUsingSystemTabString } from '../../water-assessment.service';
-import { WaterAssessment } from '../../../shared/models/water-assessment';
 import { WaterSystemComponentService } from '../../water-system-component.service';
-import { WaterProcessComponentType } from '../../../../process-flow-types/shared-process-flow-types';
+import { WaterAssessment } from 'process-flow-lib';
 
 @Component({
   selector: 'app-setup-tabs',

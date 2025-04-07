@@ -3,10 +3,10 @@ import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import { Edge } from '@xyflow/react';
 import { useEffect, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
-import { CustomEdgeData } from '../../../../src/process-flow-types/shared-process-flow-types';
 import ColorPicker from './ColorPicker';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { customEdgeTypeChange, setEdgeStrokeColor } from '../Diagram/diagramReducer';
+import { CustomEdgeData } from 'process-flow-lib';
 
 export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
   const dispatch = useAppDispatch();

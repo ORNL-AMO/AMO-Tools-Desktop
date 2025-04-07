@@ -1,4 +1,4 @@
-import { ParentContainerDimensions, WaterDiagram } from "../../../process-flow-types/shared-process-flow-types";
+import { ParentContainerDimensions, WaterDiagram } from "process-flow-lib";
 import { Assessment } from "./assessment";
 
 export interface Diagram {
