@@ -68,8 +68,11 @@
                         <app-system-catalog-table
                             *ngIf="tabSelect == 'results' && setupTab == 'compressed-air-catalog'">
                         </app-system-catalog-table>
-                        <app-end-uses-table
-                            *ngIf="tabSelect == 'results' && setupTab == 'end-uses'"></app-end-uses-table>
+                        <ng-container *ngIf="tabSelect == 'results' && setupTab == 'end-uses'">
+                            <app-end-uses-table></app-end-uses-table>
+                            <hr>
+                            <app-end-uses-chart></app-end-uses-chart>
+                        </ng-container>
                     </div>
                 </div>
             </div>
