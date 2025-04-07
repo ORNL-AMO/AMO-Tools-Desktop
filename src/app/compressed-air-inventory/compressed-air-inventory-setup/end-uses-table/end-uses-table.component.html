@@ -4,7 +4,7 @@
             One or more End Use is invalid - review End Uses and make changes to continue
         </span>
         <table class="table table-sm table-striped table-hover mb-0"
-            *ngIf="selectedEndUse && compressedAirInventoryData.systems[selectedSystemIndex].endUses">
+            *ngIf="selectedEndUse && selectedSystem.endUses">
             <thead>
                 <tr>
                     <th>
@@ -18,7 +18,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let endUse of compressedAirInventoryData.systems[selectedSystemIndex].endUses" [ngClass]="{'selected-end-use': endUse.endUseId == selectedEndUse.endUseId,
+                <tr *ngFor="let endUse of selectedSystem.endUses" [ngClass]="{'selected-end-use': endUse.endUseId == selectedEndUse.endUseId,
                     'invalid-end-use': !endUse.isValid}">
                     <td>
                         <span *ngIf="endUse.endUseId == selectedEndUse.endUseId"
