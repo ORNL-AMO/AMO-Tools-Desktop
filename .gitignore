@@ -1,17 +1,14 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
-/process-flow-diagram-component/dist
-/process-flow-diagram-component/node_modules
-/process-flow-diagram-component/lib
+**/dist
 /tmp
 .angular
 
 *.tsbuildinfo
 
 # dependencies
-/node_modules
+**/node_modules
 
 # IDEs and editors
 /.idea
