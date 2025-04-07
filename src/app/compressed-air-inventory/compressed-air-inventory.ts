@@ -7,7 +7,6 @@ export interface CompressedAirInventoryData {
   systemInformation: SystemInformation,
   systems: Array<CompressedAirInventorySystem>,
   displayOptions: CompressedAirPropertyDisplayOptions,
-  endUses: Array<EndUse>,
   hasConnectedInventoryItems?: boolean,
   hasConnectedPsat?: boolean,
   isValid?: boolean,
@@ -23,10 +22,13 @@ export interface SystemInformation {
 export interface CompressedAirInventorySystem {
   name: string,
   operatingHours: number,
-  totalAirStorage: number,
+  totalAirStorage: number,    
+  averageLeakRate: number,
+  knownTotalAirflow: number
   description: string,
   id: string,
-  catalog: Array<CompressedAirItem>,
+  catalog: Array<CompressedAirItem>,  
+  endUses: Array<EndUse>,
   isValid?: boolean,
 }
 
@@ -215,7 +217,6 @@ export interface EndUse {
   endUseDescription: string,
   isValid?: boolean,
   averageRequiredPressure?: number,
-  averageLeakRate?: number,
   averageAirflow?: number,
   averagePercentCapacity?: number,
   regulated?: boolean,
