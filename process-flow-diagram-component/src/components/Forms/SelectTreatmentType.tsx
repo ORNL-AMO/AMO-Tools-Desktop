@@ -1,5 +1,5 @@
+import { waterTreatmentTypeOptions } from "process-flow-lib";
 import { CSSProperties, memo } from "react";
-import { waterTreatmentTypeOptions } from "../../../../src/process-flow-types/shared-process-flow-constants";
 
 /**
 * Render a select element for water or water water treatment types

@@ -8,9 +8,8 @@ import EstimateResult from './EstimateResult';
 import HoursPerYearInputField from './HoursPerYearInputField';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
 import { getInitialValuesFromForm } from './SystemEstimationFormUtils';
-import { BoilerWater, BoilerWaterResults } from '../../../../../src/process-flow-types/shared-process-flow-types';
-import { calculateBoilerWaterResults, convertAnnualFlowResult } from '../../../../../src/process-flow-types/shared-process-flow-logic';
 import { modalOpenChange } from '../../Diagram/diagramReducer';
+import { BoilerWaterResults, BoilerWater, calculateBoilerWaterResults, convertAnnualFlowResult } from 'process-flow-lib';
 
 const formLabelMapping: WaterSystemFormMapping = {
     power: { display: 'Power', initialValue: 0 },

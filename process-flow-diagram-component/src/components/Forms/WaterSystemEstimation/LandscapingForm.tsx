@@ -7,9 +7,8 @@ import { EstimateSystemContext, EstimateSystemState } from './EstimateWaterSyste
 import EstimateResult from './EstimateResult';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
 import { getInitialValuesFromForm } from './SystemEstimationFormUtils';
-import { Landscaping, LandscapingResults } from '../../../../../src/process-flow-types/shared-process-flow-types';
-import { calculateLandscapingResults, convertAnnualFlowResult, convertLandscapingResults, convertLandscapingSuiteInput } from '../../../../../src/process-flow-types/shared-process-flow-logic';
 import { modalOpenChange } from '../../Diagram/diagramReducer';
+import { calculateLandscapingResults, convertAnnualFlowResult, convertLandscapingResults, convertLandscapingSuiteInput, Landscaping, LandscapingResults } from 'process-flow-lib';
 
 const formLabelMapping: WaterSystemFormMapping = {
     areaIrrigated: { display: 'Area of Land Irrigated', initialValue: 0 },

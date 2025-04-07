@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { copyObject } from '../shared/helperFunctions';
-import { CoolingTower, CoolingTowerResults, BoilerWater, BoilerWaterResults, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, HeatEnergy, HeatEnergyResults, MotorEnergy, MotorEnergyResults } from '../../process-flow-types/shared-process-flow-types';
+import { HeatEnergy, HeatEnergyResults, MotorEnergy, MotorEnergyResults } from 'process-flow-lib';
 
 declare var Module: any;
 

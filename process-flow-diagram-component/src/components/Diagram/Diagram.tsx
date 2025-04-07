@@ -15,7 +15,6 @@ import {
 
 import '@xyflow/react/dist/style.css';
 
-import { FlowDiagramData, ParentContainerDimensions, ProcessFlowPart, WaterDiagram, DiagramSettings, NodeFlowData, UserDiagramOptions, DiagramCalculatedData, NodeErrors } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { formatDataForMEASUR, getEdgeTypesFromString, updateAssessmentCreatedNodes } from './FlowUtils';
 import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
@@ -29,6 +28,7 @@ import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, keybo
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import { getIsDiagramValid } from '../../validation/Validation';
 import StaticModal from '../Forms/StaticModal';
+import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors } from 'process-flow-lib';
 
 
 export interface DiagramProps {

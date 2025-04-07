@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
-import { ProcessFlowPart, WaterDiagram, WaterProcessComponentType } from '../../process-flow-types/shared-process-flow-types';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
-import { WaterAssessment, WaterProcessComponent } from '../shared/models/water-assessment';
 import { Edge, Node } from '@xyflow/react';
 import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { getNewNode } from '../../process-flow-types/shared-process-flow-logic';
+import { WaterAssessment, WaterDiagram, WaterProcessComponent, WaterProcessComponentType, ProcessFlowPart, getNewNode } from 'process-flow-lib';
 
 @Injectable()
 export class WaterDiagramConnectionsService {

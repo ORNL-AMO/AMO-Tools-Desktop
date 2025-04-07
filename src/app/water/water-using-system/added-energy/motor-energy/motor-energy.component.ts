@@ -6,7 +6,7 @@ import { OperatingHours } from "../../../../shared/models/operations";
 import { WaterAssessmentService } from "../../../water-assessment.service";
 import { MotorEnergyService } from "./motor-energy.service";
 import { Settings } from "../../../../shared/models/settings";
-import { MotorEnergy } from "../../../../../process-flow-types/shared-process-flow-types";
+import { MotorEnergy } from "process-flow-lib";
 
 @Component({
   selector: 'app-motor-energy',

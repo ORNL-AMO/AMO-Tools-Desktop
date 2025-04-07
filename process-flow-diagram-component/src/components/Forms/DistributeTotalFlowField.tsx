@@ -1,8 +1,8 @@
 import { FormikErrors } from "formik";
-import { CustomEdgeData } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { useEffect } from "react";
 import { getFlowDisplayValues } from "../Diagram/FlowUtils";
 import { Edge } from "@xyflow/react";
+import { CustomEdgeData } from "process-flow-lib";
 
 /**
    * A utility component to render flow value updates not triggerd by formik

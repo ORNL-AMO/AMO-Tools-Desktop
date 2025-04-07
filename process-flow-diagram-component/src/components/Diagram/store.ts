@@ -1,8 +1,8 @@
 import { configureStore, createListenerMiddleware, createSelector, isAnyOf } from '@reduxjs/toolkit'
 import diagramReducer, { addNode, DiagramState, saveDiagramState } from './diagramReducer'
-import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowData, ProcessFlowPart, UserDiagramOptions, WaterSystemResults } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { addEdge, Edge, getConnectedEdges, Node } from '@xyflow/react';
 import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
+import { CustomEdgeData, DiagramCalculatedData, NodeFlowData, ProcessFlowPart } from 'process-flow-lib';
 
 
 export function configureAppStore() {

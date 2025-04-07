@@ -1,5 +1,4 @@
 import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { ConnectedFlowType, DiagramWaterSystemFlows, WaterAssessment, WaterProcessComponent, WaterSystemFlows, WaterSystemResults, WaterUsingSystem } from '../../../shared/models/water-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -9,7 +8,7 @@ import { WaterSystemComponentService } from '../../water-system-component.servic
 import { WaterUsingSystemService } from '../water-using-system.service';
 import { copyObject } from '../../../shared/helperFunctions';
 import { OperatingHours } from '../../../shared/models/operations';
-import { waterUsingSystemTypeOptions } from '../../../../process-flow-types/shared-process-flow-constants';
+import { ConnectedFlowType, DiagramWaterSystemFlows, WaterAssessment, WaterProcessComponent, WaterSystemResults, WaterUsingSystem, waterUsingSystemTypeOptions } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-system-data',

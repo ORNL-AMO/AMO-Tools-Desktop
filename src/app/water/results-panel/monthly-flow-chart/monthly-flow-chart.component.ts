@@ -1,10 +1,9 @@
 import { Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
-import { DischargeOutlet, IntakeSource, WaterAssessment } from '../../../shared/models/water-assessment';
-import { WaterProcessComponentType } from '../../../../process-flow-types/shared-process-flow-types';
 import { WaterAssessmentService } from '../../water-assessment.service';
 import { Subscription } from 'rxjs';
+import { DischargeOutlet, IntakeSource, WaterAssessment, WaterProcessComponentType } from 'process-flow-lib';
 
 @Component({
   selector: 'app-monthly-flow-chart',

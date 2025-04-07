@@ -12,7 +12,7 @@ import { CompressedAirAssessment } from '../shared/models/compressed-air-assessm
 import { environment } from '../../environments/environment';
 
 import { DashboardService } from './dashboard.service';
-import { WaterAssessment } from '../shared/models/water-assessment';
+import { WaterAssessment } from 'process-flow-lib';
 
 @Injectable()
 export class AssessmentService {

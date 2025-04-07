@@ -1,4 +1,3 @@
-import { CustomEdgeData, ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import {
     type Node,
     Edge,
@@ -11,6 +10,7 @@ import DrawerToggleButton from "./DrawerToggleButton";
 import FlowConnectionText from "./FlowConnectionText";
 import { deleteEdge } from "../Diagram/diagramReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
+import { CustomEdgeData, ProcessFlowPart } from 'process-flow-lib';
 
 const ManageEdge = (props: ManageEdgeProps) => {
     const dispatch = useAppDispatch();

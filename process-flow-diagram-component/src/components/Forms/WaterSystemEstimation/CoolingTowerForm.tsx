@@ -8,9 +8,8 @@ import EstimateResult from './EstimateResult';
 import HoursPerYearInputField from './HoursPerYearInputField';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
 import { getInitialValuesFromForm } from './SystemEstimationFormUtils';
-import { CoolingTower, CoolingTowerResults } from '../../../../../src/process-flow-types/shared-process-flow-types';
-import { calculateCoolingTowerResults, convertAnnualFlow, convertAnnualFlowResult } from '../../../../../src/process-flow-types/shared-process-flow-logic';
 import { modalOpenChange } from '../../Diagram/diagramReducer';
+import { CoolingTowerResults, CoolingTower, calculateCoolingTowerResults, convertAnnualFlowResult } from 'process-flow-lib';
 
 const formLabelMapping: WaterSystemFormMapping = {
     tonnage: { display: 'Cooling Tower Tonnage', initialValue: 0 },

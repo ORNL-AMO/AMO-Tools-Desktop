@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, UntypedFormGroup, UntypedFormArray, AbstractControl } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { MonthlyFlowData } from '../../shared/models/water-assessment';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import { Settings } from '../../shared/models/settings';
+import { MonthlyFlowData } from 'process-flow-lib';
 
 @Component({
   selector: 'app-monthly-flow-modal',

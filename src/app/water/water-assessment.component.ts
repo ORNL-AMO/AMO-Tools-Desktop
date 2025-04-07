@@ -9,12 +9,11 @@ import { Assessment } from '../shared/models/assessment';
 import { WaterAssessmentService } from './water-assessment.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
-import { WaterAssessment } from '../shared/models/water-assessment';
-import { ParentContainerDimensions, WasteWaterTreatment } from '../../process-flow-types/shared-process-flow-types';
 import { IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
 import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 import { WaterSystemComponentService } from './water-system-component.service';
+import { ParentContainerDimensions, WasteWaterTreatment, WaterAssessment } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-assessment',

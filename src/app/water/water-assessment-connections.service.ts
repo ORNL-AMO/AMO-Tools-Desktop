@@ -4,7 +4,6 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram } from '../shared/models/diagram';
-import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet, DiagramWaterSystemFlows, FlowData, KnownLoss, WaterSystemFlows } from '../shared/models/water-assessment';
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
 import { Settings } from '../shared/models/settings';
 import { WaterAssessmentService } from './water-assessment.service';
@@ -13,8 +12,8 @@ import { WaterSystemComponentService } from './water-system-component.service';
 import { Edge, Node } from '@xyflow/react';
 import { WaterTreatmentService } from './water-treatment/water-treatment.service';
 import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
-import { CustomEdgeData, ProcessFlowPart, WasteWaterTreatment, WaterDiagram, WaterTreatment } from '../../process-flow-types/shared-process-flow-types';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { WaterDiagram, WaterAssessment, DiagramWaterSystemFlows, WaterUsingSystem, CustomEdgeData, FlowData, WaterSystemFlows, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment } from 'process-flow-lib';
 
 @Injectable()
 export class WaterAssessmentConnectionsService {

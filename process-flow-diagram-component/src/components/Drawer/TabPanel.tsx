@@ -1,6 +1,6 @@
 import { Box, BoxProps, styled } from "@mui/material";
+import { ParentContainerDimensions } from "process-flow-lib";
 import { CSSProperties } from "react";
-import { ParentContainerDimensions } from "../../../../src/process-flow-types/shared-process-flow-types";
 
 interface TabPanelProps {
   children?: React.ReactNode;

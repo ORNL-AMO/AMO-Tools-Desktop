@@ -1,11 +1,11 @@
 import { NodeProps, Position } from "@xyflow/react";
 import { CSSProperties } from "react";
-import { DiagramNode } from "../../../../src/process-flow-types/shared-process-flow-types";
 import { Typography } from "@mui/material";
 import CustomHandle from "./CustomHandle";
 import EditDataDrawerButton from "../Drawer/EditDataDrawerButton";
 import { useAppDispatch } from "../../hooks/state";
 import { toggleDrawer } from "../Diagram/diagramReducer";
+import { DiagramNode } from "process-flow-lib";
 
 const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();

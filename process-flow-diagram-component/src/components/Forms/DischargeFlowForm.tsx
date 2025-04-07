@@ -5,7 +5,6 @@ import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
 import React, { useEffect, useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
-import { CustomEdgeData } from "../../../../src/process-flow-types/shared-process-flow-types";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { dischargeFlowValueChange, distributeTotalDischargeFlow, focusedEdgeChange, nodeDataPropertyChange, totalFlowChange } from "../Diagram/diagramReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
@@ -19,6 +18,7 @@ import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import { ObjectSchema } from "yup";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
 import { blue } from "@mui/material/colors";
+import { CustomEdgeData } from "process-flow-lib";
 
 const blueBackground = blue[50];
 /**

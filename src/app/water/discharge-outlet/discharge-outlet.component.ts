@@ -4,13 +4,11 @@ import { FormGroup } from '@angular/forms';
 import _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { copyObject } from '../../shared/helperFunctions';
-import { WaterAssessment, DischargeOutlet, MonthlyFlowData } from '../../shared/models/water-assessment';
 import { PlantIntakeDischargeTab, WaterAssessmentService } from '../water-assessment.service';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDeleteData';
 import { MotorEnergyService } from '../water-using-system/added-energy/motor-energy/motor-energy.service';
-import { dischargeOutletTypeOptions } from '../../../process-flow-types/shared-process-flow-constants';
-import { MotorEnergy } from '../../../process-flow-types/shared-process-flow-types';
+import { DischargeOutlet, dischargeOutletTypeOptions, MonthlyFlowData, MotorEnergy, WaterAssessment } from 'process-flow-lib';
 
 @Component({
   selector: 'app-discharge-outlet',

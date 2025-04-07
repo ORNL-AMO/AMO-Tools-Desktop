@@ -3,7 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { WaterAssessmentService } from '../../../water-assessment.service';
 import { HeatEnergyService } from './heat-energy.service';
-import { HeatEnergy } from '../../../../../process-flow-types/shared-process-flow-types';
+import { HeatEnergy } from 'process-flow-lib';
 
 @Component({
   selector: 'app-heat-energy',

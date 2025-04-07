@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { WaterUsingSystemService } from '../../water-using-system.service';
 import { WaterAssessmentService } from '../../../water-assessment.service';
-import { CoolingTower } from '../../../../../process-flow-types/shared-process-flow-types';
+import { CoolingTower } from 'process-flow-lib';
 
 @Component({
   selector: 'app-cooling-tower',

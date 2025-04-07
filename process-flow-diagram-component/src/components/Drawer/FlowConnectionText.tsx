@@ -1,6 +1,6 @@
 import { CSSProperties } from "react";
-import { ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { ProcessFlowPart } from "process-flow-lib";
 
 export const FlowConnectionText = (props: FlowConnectionTextProps) => {
 

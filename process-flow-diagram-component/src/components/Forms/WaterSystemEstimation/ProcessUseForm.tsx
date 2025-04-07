@@ -7,11 +7,9 @@ import { EstimateSystemContext, EstimateSystemState } from './EstimateWaterSyste
 import EstimateResult from './EstimateResult';
 import HoursPerYearInputField from './HoursPerYearInputField';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
-import { FlowMetric, ImperialFlowUnitMap, MetricFlowUnitMap, waterFlowMetricOptions } from '../../../../../src/process-flow-types/shared-process-flow-constants';
-import { calculateProcessUseResults, convertAnnualFlowResult } from '../../../../../src/process-flow-types/shared-process-flow-logic';
-import { ProcessUse, ProcessUseResults } from '../../../../../src/process-flow-types/shared-process-flow-types';
 import { getInitialValuesFromForm } from './SystemEstimationFormUtils';
 import { modalOpenChange } from '../../Diagram/diagramReducer';
+import { calculateProcessUseResults, convertAnnualFlowResult, FlowMetric, ImperialFlowUnitMap, MetricFlowUnitMap, ProcessUse, ProcessUseResults, waterFlowMetricOptions } from 'process-flow-lib';
 
 const systemFormMapping: WaterSystemFormMapping = {
     fractionGrossWaterRecirculated: { display: 'Fraction of Gross Water Use Recirculated', initialValue: 0 },

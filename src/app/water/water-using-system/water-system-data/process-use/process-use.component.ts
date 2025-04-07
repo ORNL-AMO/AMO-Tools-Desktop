@@ -4,8 +4,7 @@ import { WaterAssessmentService } from '../../../water-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { copyObject } from '../../../../shared/helperFunctions';
-import { FlowMetric, ImperialFlowUnitMap, MetricFlowUnitMap, waterFlowMetricOptions, WaterUseUnit } from '../../../../../process-flow-types/shared-process-flow-constants';
-import { ProcessUse } from '../../../../../process-flow-types/shared-process-flow-types';
+import { ProcessUse, FlowMetric, WaterUseUnit, waterFlowMetricOptions, MetricFlowUnitMap, ImperialFlowUnitMap } from 'process-flow-lib';
 
 @Component({
   selector: 'app-process-use',

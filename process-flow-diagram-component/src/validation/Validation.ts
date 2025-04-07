@@ -1,7 +1,6 @@
 import { Edge } from "@xyflow/react";
-import { FlowType, NodeErrors, NodeFlowTypeErrors } from "../../../src/process-flow-types/shared-process-flow-types";
+import { FlowType, NodeErrors, NodeFlowTypeErrors } from "process-flow-lib";
 import * as Yup from 'yup';
-
 export const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be greater than 0`;
 export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
 

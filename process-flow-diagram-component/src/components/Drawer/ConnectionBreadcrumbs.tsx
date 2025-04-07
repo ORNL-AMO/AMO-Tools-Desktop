@@ -1,7 +1,7 @@
 import { Breadcrumbs, Typography } from "@mui/material";
 import React from "react";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { ProcessFlowPart } from "../../../../src/process-flow-types/shared-process-flow-types";
+import { ProcessFlowPart } from "process-flow-lib";
 
 
 export const ConnectionBreadcrumbs = (props: ConnectionBreadcrumbsProps) => {

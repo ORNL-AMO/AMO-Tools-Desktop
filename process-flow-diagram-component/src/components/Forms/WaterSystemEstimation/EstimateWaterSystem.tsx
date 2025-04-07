@@ -1,13 +1,12 @@
 import { Box, Divider, FormControl, InputLabel, MenuItem, Popover, Select, Typography } from '@mui/material';
 import React, { ReactNode, useRef } from 'react';
-import { waterUsingSystemTypeOptions } from '../../../../../src/process-flow-types/shared-process-flow-constants';
-import ProcessUseForm from './ProcessUseForm';
-import CoolingTowerForm from './CoolingTowerForm';
-import BoilerWaterForm from './BoilerWaterForm';
-import KitchenRestroomForm from './KitchenRestroomForm';
 import LandscapingForm from './LandscapingForm';
 import { useAppSelector } from '../../../hooks/state';
 import { selectCurrentNode } from '../../Diagram/store';
+import BoilerWaterForm from './BoilerWaterForm';
+import CoolingTowerForm from './CoolingTowerForm';
+import KitchenRestroomForm from './KitchenRestroomForm';
+import ProcessUseForm from './ProcessUseForm';
 
 export interface EstimateSystemState {
     estimate: number;

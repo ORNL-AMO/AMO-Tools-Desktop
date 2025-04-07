@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { WaterAssessment, SystemBalanceResults, WaterSystemResults, WaterSystemTypeEnum, WaterUsingSystem, WaterBalanceResults } from '../shared/models/water-assessment';
 import { WaterSuiteApiService } from '../tools-suite-api/water-suite-api.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
-import { calculateBoilerWaterResults, calculateCoolingTowerResults, calculateKitchenRestroomResults, calculateLandscapingResults, calculateProcessUseResults } from '../../process-flow-types/shared-process-flow-logic';
+import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults } from 'process-flow-lib';
 
 @Injectable({
   providedIn: 'root'

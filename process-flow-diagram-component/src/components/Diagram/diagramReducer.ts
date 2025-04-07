@@ -1,14 +1,11 @@
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
-import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment } from '../../../../src/process-flow-types/shared-process-flow-types';
 import { createNewNode, formatDataForMEASUR, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
 import { CSSProperties } from 'react';
-// import { getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getResetData } from './store';
-import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { convertFlowDiagramData } from '../../../../src/process-flow-types/shared-process-flow-logic';
+import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData } from 'process-flow-lib';
 
 export interface DiagramState {
   nodes: Node[];

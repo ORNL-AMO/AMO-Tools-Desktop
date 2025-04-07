@@ -1,8 +1,8 @@
 import { Root, createRoot } from 'react-dom/client';
 import App from './App';
-import { FlowDiagramData, ProcessFlowDiagramState, ProcessFlowParentState } from '../../src/process-flow-types/shared-process-flow-types';
 import { CacheProvider } from '@emotion/react';
 import createCache, { EmotionCache } from "@emotion/cache";
+import { ProcessFlowParentState, FlowDiagramData, ProcessFlowDiagramState } from 'process-flow-lib';
 
 class AppWebComponent extends HTMLElement {
   mountPoint!: HTMLDivElement;
