@@ -26,7 +26,7 @@ export class EndUsesTableComponent implements OnInit {
 
   selectedSystemIdSub: Subscription;
   selectedSystemId: string;
-  selectedSystemIndex: number;
+  selectedSystem: CompressedAirInventorySystem;
 
   settings: Settings;
   hasInvalidEndUses: boolean = false;
@@ -43,23 +43,22 @@ export class EndUsesTableComponent implements OnInit {
     this.selectedSystemIdSub = this.compressedAirCatalogService.selectedSystemId.subscribe(val => {
       if (!val) {
         this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryData.systems[0].id);
-        this.selectedSystemIndex = 0;
       } else {
         this.selectedSystemId = val;
         let compressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
-        this.selectedSystemIndex = compressedAirInventoryData.systems.findIndex(system => { return system.id == val });
+        this.selectedSystem = compressedAirInventoryData.systems.find(system => { return system.id == val });
 
       }
     });
 
     this.compressedAirInventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(compressedAirInventoryData => {
-      this.selectedSystemIndex = compressedAirInventoryData.systems.findIndex(system => { return system.id == this.selectedSystemId });
-      if (compressedAirInventoryData && compressedAirInventoryData.systems[this.selectedSystemIndex].endUses) {
+      this.selectedSystem = compressedAirInventoryData.systems.find(system => { return system.id == this.selectedSystemId });
+      if (compressedAirInventoryData && this.selectedSystem.endUses) {
         this.compressedAirInventoryData = compressedAirInventoryData;
-        this.compressedAirInventoryData.systems[this.selectedSystemIndex].endUses.forEach(endUse => {
+        this.selectedSystem.endUses.forEach(endUse => {
           endUse.isValid = this.endUsesService.isEndUseValid(endUse, this.compressedAirInventoryData, this.settings);
         });
-        this.hasInvalidEndUses = this.compressedAirInventoryData.systems[this.selectedSystemIndex].endUses.some(endUse => !endUse.isValid);
+        this.hasInvalidEndUses = this.selectedSystem.endUses.some(endUse => !endUse.isValid);
       }
     });
   }
@@ -81,10 +80,10 @@ export class EndUsesTableComponent implements OnInit {
   }
 
   deleteEndUse() {
-    let itemIndex: number = this.compressedAirInventoryData.systems[this.selectedSystemIndex].endUses.findIndex(endUse => { return endUse.endUseId == this.deleteSelectedId });
-    this.compressedAirInventoryData.systems[this.selectedSystemIndex].endUses.splice(itemIndex, 1);
+    let itemIndex: number = this.selectedSystem.endUses.findIndex(endUse => { return endUse.endUseId == this.deleteSelectedId });
+    this.selectedSystem.endUses.splice(itemIndex, 1);
 
-    this.endUsesService.selectedEndUse.next(this.compressedAirInventoryData.systems[this.selectedSystemIndex].endUses[0]);
+    this.endUsesService.selectedEndUse.next(this.selectedSystem.endUses[0]);
   }
 
   openConfirmDeleteModal(endUse: EndUse) {
