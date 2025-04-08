@@ -1,4 +1,4 @@
-import { Box, Button, Chip, createTheme, FormControl, InputLabel, MenuItem, Select, Typography, useTheme, } from "@mui/material";
+import { Alert, Box, Button, Chip, createTheme, FormControl, InputLabel, MenuItem, Select, Typography, useTheme, } from "@mui/material";
 import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 
@@ -31,6 +31,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const dispatch = useAppDispatch();
     const nodes = useAppSelector(selectNodes);
     const errors = useAppSelector(selectNodeValidation);
+    const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
+    const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
 
     const [systemType, setSystemType] = React.useState<number>(props.selectedNode.data.systemType);
 
@@ -52,9 +54,11 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const isWasteWaterTreatment = props.selectedNode.type === 'wasteWaterTreatment';
     const isWaterUsingSystem = props.selectedNode.type === 'waterUsingSystem';
     const isDischargeOutlet = props.selectedNode.type === 'waterDischarge';
+    let totalUnknownLoss: number = 0;
+
     let defaultSelectedTreatmentType: number = 0;
     let treatmentTypeOptions: Array<{ value: number, display: string }> = [];
-
+    
     if (isWaterTreatment) {
         componentData = componentData as WaterTreatment;
         defaultSelectedTreatmentType = componentData.treatmentType !== undefined ? Number(componentData.treatmentType) : 0;
@@ -63,6 +67,13 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         componentData = componentData as WasteWaterTreatment;
         defaultSelectedTreatmentType = componentData.treatmentType !== undefined ? Number(componentData.treatmentType) : 0;
         treatmentTypeOptions = wasteWaterTreatmentTypeOptions;
+    } else if (isWaterUsingSystem) {
+        componentData = componentData as ProcessFlowPart;
+        const totalKnownLosses = componentData.userEnteredData.totalKnownLosses?? 0;
+        const waterInProduct = componentData.userEnteredData.waterInProduct?? 0;
+        const allKnownLosses = totalKnownLosses + waterInProduct;
+        let unknownLoss: number = totalSourceFlow - totalDischargeFlow; 
+        totalUnknownLoss = unknownLoss - allKnownLosses;
     } else {
         componentData = componentData as ProcessFlowPart;
     }
@@ -81,10 +92,6 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
         return props.selectedNode.id === source.diagramNodeId;
     });
-    const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
-    const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
-    // todo subtract known losses and water in product
-    const unknownLoss = totalSourceFlow - totalDischargeFlow;
     const hasSourceErrors = errors && hasValidSourceForm(errors);
     const hasTargetErrors = errors && hasValidDischargeForm(errors);
 
@@ -95,34 +102,12 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
 
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
         <Box sx={{ marginTop: 1, display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row', flexWrap: 'wrap', flexBasis: '100%' }}>
-            {isWaterUsingSystem && Boolean(unknownLoss) &&
-                <Box display={'flex'} flexDirection={'column'} justifyContent={'center'} alignItems={'center'}
-                    sx={{
-                        background: theme.palette.info.main,
-                        borderRadius: '8px',
-                        border: `1px solid ${theme.palette.info.dark}`,
-                        width: '100%',
-                        marginBottom: '1rem',
-                    }}>
-                    <Box display={'flex'}
-                        flexDirection={'row'}
-                        justifyContent={'space-around'}
-                        alignItems={'center'}
-                        margin={'1rem .5rem'}
-                        width={'100%'}
-                        fontSize={'.9rem'}
-                        fontWeight={'700'}
-                        sx={{ color: theme.palette.info.contrastText, fontWeight: '700' }}
-                    >
-                        <Typography>
-                            Unknown Loss
-                        </Typography>
-                        <Typography fontSize={'1.25rem'}>
-                            <span>{unknownLoss}</span>
-                            <FlowDisplayUnit style={{ fontSize: '1.25rem' }} />
-                        </Typography>
-                    </Box>
-                </Box>
+            {isWaterUsingSystem && totalDischargeFlow > totalSourceFlow && totalUnknownLoss !== 0 &&
+                <Alert severity="warning" sx={{marginBottom: '1rem', width: '100%'}}>
+                    <span>System Imbalance: </span>
+                    <span>{totalUnknownLoss}</span>
+                    <FlowDisplayUnit  />
+                </Alert>
             }
 
             {isWaterUsingSystem &&
@@ -248,6 +233,13 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                         />
                     </AccordionSummary>
                     <AccordionDetails>
+                        {isWaterUsingSystem && totalSourceFlow > totalDischargeFlow && totalUnknownLoss !== 0 &&
+                            <Alert severity="warning" sx={{marginBottom: '1rem', width: '100%'}}>
+                            <span>Estimated Unknown Loss: </span>
+                            <span>{totalUnknownLoss}</span>
+                            <FlowDisplayUnit />
+                        </Alert>
+                        }
                         <DischargeFlowForm></DischargeFlowForm>
                     </AccordionDetails>
                 </Accordion>
