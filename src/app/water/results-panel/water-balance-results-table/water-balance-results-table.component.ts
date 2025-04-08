@@ -4,7 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { WaterSystemComponentService } from '../../water-system-component.service';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
-import { WaterBalanceResults } from 'process-flow-lib';
+import { WaterBalanceResults, getWaterBalanceResults } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-balance-results-table',
@@ -31,8 +31,8 @@ export class WaterBalanceResultsTableComponent {
 
     this.waterAssessmentSub = this.waterAssessmentService.waterAssessment.subscribe(waterAssessment => {
       if (waterAssessment) {
-        this.waterBalanceResults = this.waterAssessmentResultsService.getWaterBalanceResults(waterAssessment);
-
+        this.waterBalanceResults = getWaterBalanceResults(waterAssessment.waterUsingSystems);
+        console.log('Water Balance Results:', this.waterBalanceResults);
       }
     })
 

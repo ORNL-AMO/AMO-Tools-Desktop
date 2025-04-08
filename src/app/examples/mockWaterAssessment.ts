@@ -219,7 +219,7 @@ export const MockWaterAssessment: Assessment = {
                     "wasteWaterDischarge": 0
                 },
                 "addedMotorEnergy": [],
-                "waterFlows": {
+                "systemFlowTotals": {
                     "sourceWater": undefined,
                     "recirculatedWater": undefined,
                     "dischargeWater": undefined,
@@ -311,7 +311,7 @@ export const MockWaterAssessment: Assessment = {
                     "wasteWaterDischarge": 0
                 },
                 "addedMotorEnergy": [],
-                "waterFlows": {
+                "systemFlowTotals": {
                     "sourceWater": undefined,
                     "recirculatedWater": undefined,
                     "dischargeWater": undefined,
@@ -403,7 +403,7 @@ export const MockWaterAssessment: Assessment = {
                     "wasteWaterDischarge": 0
                 },
                 "addedMotorEnergy": [],
-                "waterFlows": {
+                "systemFlowTotals": {
                     "sourceWater": undefined,
                     "recirculatedWater": undefined,
                     "dischargeWater": undefined,
@@ -495,7 +495,7 @@ export const MockWaterAssessment: Assessment = {
                     "wasteWaterDischarge": 0
                 },
                 "addedMotorEnergy": [],
-                "waterFlows": {
+                "systemFlowTotals": {
                     "sourceWater": undefined,
                     "recirculatedWater": undefined,
                     "dischargeWater": undefined,
@@ -587,7 +587,7 @@ export const MockWaterAssessment: Assessment = {
                     "wasteWaterDischarge": 0
                 },
                 "addedMotorEnergy": [],
-                "waterFlows": {
+                "systemFlowTotals": {
                     "sourceWater": undefined,
                     "recirculatedWater": undefined,
                     "dischargeWater": undefined,
@@ -679,7 +679,7 @@ export const MockWaterAssessment: Assessment = {
                     "wasteWaterDischarge": 0
                 },
                 "addedMotorEnergy": [],
-                "waterFlows": {
+                "systemFlowTotals": {
                     "sourceWater": undefined,
                     "recirculatedWater": undefined,
                     "dischargeWater": undefined,
@@ -771,7 +771,7 @@ export const MockWaterAssessment: Assessment = {
                     "wasteWaterDischarge": 0
                 },
                 "addedMotorEnergy": [],
-                "waterFlows": {
+                "systemFlowTotals": {
                     "sourceWater": undefined,
                     "recirculatedWater": undefined,
                     "dischargeWater": undefined,
@@ -863,7 +863,7 @@ export const MockWaterAssessment: Assessment = {
                     "wasteWaterDischarge": 0
                 },
                 "addedMotorEnergy": [],
-                "waterFlows": {
+                "systemFlowTotals": {
                     "sourceWater": undefined,
                     "recirculatedWater": undefined,
                     "dischargeWater": undefined,

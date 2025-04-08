@@ -12,6 +12,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { getIsDiagramValid } from '../../validation/Validation';
 import { blue } from '@mui/material/colors';
 import { ParentContainerDimensions, NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions } from 'process-flow-lib';
+import DiagramResults from './DiagramResults';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
@@ -86,7 +87,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
       justifyContent: 'space-between',
       paddingX: 0
     }}>
-      <Box sx={{ marginBottom: '1rem' }}>
+      <Box sx={{ 
+        padding: '0rem .5rem 2rem 0rem',
+        height: '40%',
+        }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
           <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
             <Tab sx={{ fontSize: '.75rem' }} label="Build" />
@@ -138,7 +142,6 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             </Grid>
             </Box>
 
-          <Divider></Divider>
           {/* <Box sx={{ flexGrow: 1 }}>
             <Typography variant='body1' component={'i'} sx={{ fontWeight: '500', fontSize: '14px' }}>Utilities</Typography>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }} paddingTop={'.25rem'}>
@@ -339,6 +342,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
+        <Box>
+          <Divider sx={{ margin: '1rem' }} />
+          <DiagramResults />
+        </Box>
       </Box>
 
       <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingTop={'1rem'}>

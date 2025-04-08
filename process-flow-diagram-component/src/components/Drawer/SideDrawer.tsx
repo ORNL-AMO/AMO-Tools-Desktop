@@ -12,7 +12,7 @@ import { useAppSelector } from '../../hooks/state';
 import { selectHasAssessment } from '../Diagram/store';
 import { ParentContainerDimensions } from 'process-flow-lib';
 
-const drawerWidth = 425;
+const drawerWidth = 500;
 
 const openedMixin = (theme: Theme, parentContainer: ParentContainerDimensions, animationProps): CSSObject => {
   let duration = theme.transitions.duration.enteringScreen;

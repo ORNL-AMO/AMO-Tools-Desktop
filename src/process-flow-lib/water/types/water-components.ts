@@ -94,8 +94,8 @@ export interface WaterUsingSystem extends ProcessFlowPart {
     isValid: boolean,
     hoursPerYear: number,
     systemType: number,
-    waterFlows: WaterSystemFlows;
-    userDiagramFlowOverrides?: WaterSystemFlows;
+    systemFlowTotals: WaterSystemFlowsTotals;
+    userDiagramFlowOverrides?: WaterSystemFlowsTotals;
     processUse?: ProcessUse,
     coolingTower?: CoolingTower,
     boilerWater?: BoilerWater,
@@ -229,12 +229,14 @@ export interface SystemBalanceResults {
     incomingWater: number,
     outgoingWater: number,
     waterBalance: number,
+    totalKnownLosses: number,
+    estimatedUnknownLosses: number,
     percentIncomingWater: number,
     percentTotalBalance: number,
 }
 
 export interface WaterBalanceResults extends SystemBalanceResults {
-    allSystemBalanceResults: SystemBalanceResults[]
+    allSystemBalanceResults: SystemBalanceResults[],
 }
 
 export interface AggregatedSystemResults {
@@ -288,14 +290,14 @@ export interface DiagramWaterSystemFlows {
     },
 }
 
-export interface WaterSystemFlows {
+export interface WaterSystemFlowsTotals {
     sourceWater: number,
     recirculatedWater: number,
     dischargeWater: number,
     knownLosses: number,
     waterInProduct: number,
 }
-export type ConnectedFlowType = keyof WaterSystemFlows;
+export type ConnectedFlowType = keyof WaterSystemFlowsTotals;
 
 export interface FlowData {
     source: string,
