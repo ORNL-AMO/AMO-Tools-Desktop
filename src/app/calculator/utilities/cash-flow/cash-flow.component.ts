@@ -48,7 +48,7 @@ export class CashFlowComponent implements OnInit {
         salvageInput: 3000,
         installationCost: 10000,
         operationCost: 500,
-        fuelCost: 500,
+        otherCost: 500,
         junkCost: 500
       };
     } else {
@@ -77,7 +77,7 @@ export class CashFlowComponent implements OnInit {
       salvageInput: 3000,
       installationCost: 10000,
       operationCost: 500,
-      fuelCost: 500,
+      otherCost: 500,
       junkCost: 500
     };
     this.cashFlowService.inputData = this.cashFlowForm;
@@ -91,7 +91,7 @@ export class CashFlowComponent implements OnInit {
       salvageInput: 0,
       installationCost: 0,
       operationCost: 0,
-      fuelCost: 0,
+      otherCost: 0,
       junkCost: 0
     };
     this.cashFlowService.inputData = this.cashFlowForm;
@@ -119,7 +119,7 @@ export class CashFlowComponent implements OnInit {
   calculate() {
     // Benefits/Cost Ratio
     this.cashFlowResults.results = ((this.cashFlowForm.energySavings * this.cashFlowForm.lifeYears) + this.cashFlowForm.salvageInput) /
-      (((this.cashFlowForm.installationCost + this.cashFlowForm.junkCost) + (this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost)) * this.cashFlowForm.lifeYears);
+      (((this.cashFlowForm.installationCost + this.cashFlowForm.junkCost) + (this.cashFlowForm.operationCost + this.cashFlowForm.otherCost)) * this.cashFlowForm.lifeYears);
     // Payback
     this.cashFlowResults.payback = (this.cashFlowForm.installationCost * 12) / this.cashFlowForm.energySavings;
     this.toggleCalculate = !this.toggleCalculate;

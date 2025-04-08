@@ -4,7 +4,7 @@ export interface CashFlowForm {
   salvageInput?: number;
   installationCost?: number;
   operationCost?: number;
-  fuelCost?: number;
+  otherCost?: number;
   junkCost?: number;
 }
 
