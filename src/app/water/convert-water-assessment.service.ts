@@ -3,7 +3,7 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
-import { BoilerWater, convertFlowDiagramData, CoolingTower, DiagramWaterSystemFlows, DischargeOutlet, FlowData, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, KnownLoss, Landscaping, LandscapingResults, MAX_FLOW_DECIMALS, Modification, MotorEnergy, NodeFlowData, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterSystemFlows, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { BoilerWater, convertFlowDiagramData, CoolingTower, DiagramWaterSystemFlows, DischargeOutlet, FlowData, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, KnownLoss, Landscaping, LandscapingResults, MAX_FLOW_DECIMALS, Modification, MotorEnergy, NodeFlowData, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
 
 @Injectable({
   providedIn: 'root'
@@ -104,7 +104,7 @@ export class ConvertWaterAssessmentService {
 
   convertWaterUsingSystems(waterUsingSystems: WaterUsingSystem[], oldSettings: Settings, newSettings: Settings): WaterUsingSystem[] {
     waterUsingSystems.forEach((waterUsingSystem: WaterUsingSystem) => {     
-      waterUsingSystem.waterFlows = this.convertWaterFlows(waterUsingSystem.waterFlows, oldSettings, newSettings);
+      waterUsingSystem.systemFlowTotals = this.convertWaterFlows(waterUsingSystem.systemFlowTotals, oldSettings, newSettings);
       waterUsingSystem.userDiagramFlowOverrides = this.convertWaterFlows(waterUsingSystem.userDiagramFlowOverrides, oldSettings, newSettings);
       
       waterUsingSystem.processUse = this.convertProcessUse(waterUsingSystem.processUse, newSettings, oldSettings);
@@ -166,27 +166,27 @@ export class ConvertWaterAssessmentService {
     return knownLoss;
   }
 
-  convertWaterFlows(waterFlows: WaterSystemFlows, oldSettings: Settings, newSettings: Settings) {
+  convertWaterFlows(systemFlowTotals: WaterSystemFlowsTotals, oldSettings: Settings, newSettings: Settings) {
     if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      waterFlows.sourceWater = this.convertUnitsService.value(waterFlows.sourceWater).from('Mgal').to('m3');
-      waterFlows.recirculatedWater = this.convertUnitsService.value(waterFlows.recirculatedWater).from('Mgal').to('m3');
-      waterFlows.dischargeWater = this.convertUnitsService.value(waterFlows.dischargeWater).from('Mgal').to('m3');
-      waterFlows.knownLosses = this.convertUnitsService.value(waterFlows.knownLosses).from('Mgal').to('m3');
-      waterFlows.waterInProduct = this.convertUnitsService.value(waterFlows.waterInProduct).from('Mgal').to('m3');
+      systemFlowTotals.sourceWater = this.convertUnitsService.value(systemFlowTotals.sourceWater).from('Mgal').to('m3');
+      systemFlowTotals.recirculatedWater = this.convertUnitsService.value(systemFlowTotals.recirculatedWater).from('Mgal').to('m3');
+      systemFlowTotals.dischargeWater = this.convertUnitsService.value(systemFlowTotals.dischargeWater).from('Mgal').to('m3');
+      systemFlowTotals.knownLosses = this.convertUnitsService.value(systemFlowTotals.knownLosses).from('Mgal').to('m3');
+      systemFlowTotals.waterInProduct = this.convertUnitsService.value(systemFlowTotals.waterInProduct).from('Mgal').to('m3');
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      waterFlows.sourceWater = this.convertUnitsService.value(waterFlows.sourceWater).from('m3').to('Mgal');
-      waterFlows.recirculatedWater = this.convertUnitsService.value(waterFlows.recirculatedWater).from('m3').to('Mgal');
-      waterFlows.dischargeWater = this.convertUnitsService.value(waterFlows.dischargeWater).from('m3').to('Mgal');
-      waterFlows.knownLosses = this.convertUnitsService.value(waterFlows.knownLosses).from('m3').to('Mgal');
-      waterFlows.waterInProduct = this.convertUnitsService.value(waterFlows.waterInProduct).from('m3').to('Mgal');
+      systemFlowTotals.sourceWater = this.convertUnitsService.value(systemFlowTotals.sourceWater).from('m3').to('Mgal');
+      systemFlowTotals.recirculatedWater = this.convertUnitsService.value(systemFlowTotals.recirculatedWater).from('m3').to('Mgal');
+      systemFlowTotals.dischargeWater = this.convertUnitsService.value(systemFlowTotals.dischargeWater).from('m3').to('Mgal');
+      systemFlowTotals.knownLosses = this.convertUnitsService.value(systemFlowTotals.knownLosses).from('m3').to('Mgal');
+      systemFlowTotals.waterInProduct = this.convertUnitsService.value(systemFlowTotals.waterInProduct).from('m3').to('Mgal');
       
     }
-    waterFlows.sourceWater = this.convertUnitsService.roundVal(waterFlows.sourceWater, this.MAX_FLOW_DECIMALS);
-    waterFlows.recirculatedWater = this.convertUnitsService.roundVal(waterFlows.recirculatedWater, this.MAX_FLOW_DECIMALS);
-    waterFlows.dischargeWater = this.convertUnitsService.roundVal(waterFlows.dischargeWater, this.MAX_FLOW_DECIMALS);
-    waterFlows.knownLosses = this.convertUnitsService.roundVal(waterFlows.knownLosses, this.MAX_FLOW_DECIMALS);
-    waterFlows.waterInProduct = this.convertUnitsService.roundVal(waterFlows.waterInProduct, this.MAX_FLOW_DECIMALS);
-    return waterFlows;
+    systemFlowTotals.sourceWater = this.convertUnitsService.roundVal(systemFlowTotals.sourceWater, this.MAX_FLOW_DECIMALS);
+    systemFlowTotals.recirculatedWater = this.convertUnitsService.roundVal(systemFlowTotals.recirculatedWater, this.MAX_FLOW_DECIMALS);
+    systemFlowTotals.dischargeWater = this.convertUnitsService.roundVal(systemFlowTotals.dischargeWater, this.MAX_FLOW_DECIMALS);
+    systemFlowTotals.knownLosses = this.convertUnitsService.roundVal(systemFlowTotals.knownLosses, this.MAX_FLOW_DECIMALS);
+    systemFlowTotals.waterInProduct = this.convertUnitsService.roundVal(systemFlowTotals.waterInProduct, this.MAX_FLOW_DECIMALS);
+    return systemFlowTotals;
   }
 
   // todo 6907, see processUse WaterUseUnits dependant on metric selected

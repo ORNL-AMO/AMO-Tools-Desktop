@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { OperatingHours } from '../../shared/models/operations';
-import { BoilerWater, ConnectedFlowType, CoolingTower, DiagramWaterSystemFlows, FlowMetric, getNewProcessComponent, KitchenRestroom, KnownLoss, Landscaping, ProcessUse, WaterProcessComponent, WaterSystemFlows, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from '../../../process-flow-lib';
+import { BoilerWater, ConnectedFlowType, CoolingTower, DiagramWaterSystemFlows, FlowMetric, getNewProcessComponent, getWaterFlowsFromSource, KitchenRestroom, KnownLoss, Landscaping, ProcessUse, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from 'process-flow-lib';
 
 @Injectable()
 export class WaterUsingSystemService {
@@ -47,90 +47,6 @@ export class WaterUsingSystemService {
     }
   }
 
-   /**
- * Add new component or return component based from a diagram component
- * @param processFlowPart Build from diagram component
- */
-  addWaterUsingSystem(processFlowPart?: WaterProcessComponent): WaterUsingSystem {
-    let waterUsingSystem: WaterUsingSystem;
-    let newComponent: WaterProcessComponent;
-    if (!processFlowPart) {
-      newComponent = getNewProcessComponent('water-using-system') as WaterUsingSystem;
-    } else {
-      newComponent = processFlowPart as WaterUsingSystem;
-    }
-    waterUsingSystem = {
-      ...newComponent,
-      createdByAssessment: true,
-      hoursPerYear: 8760,
-      userDiagramFlowOverrides: {
-        sourceWater: undefined,
-        recirculatedWater: undefined,
-        dischargeWater: undefined,
-        knownLosses: undefined,
-        waterInProduct: undefined,
-      }, 
-      intakeSources: [
-        {
-          sourceType: 0,
-          annualUse: 0
-        }
-      ],
-      processUse: {
-        waterRequiredMetric: 0,
-        waterRequiredMetricValue: undefined,
-        waterConsumedMetric: 0,
-        waterConsumedMetricValue: undefined,
-        waterLossMetric: 0,
-        waterLossMetricValue: undefined,
-        annualProduction: undefined,
-        fractionGrossWaterRecirculated: undefined,
-      },
-      coolingTower: {
-        tonnage: undefined,
-        loadFactor: undefined,
-        evaporationRateDegree: undefined,
-        temperatureDrop: undefined,
-        makeupConductivity: undefined,
-        blowdownConductivity: undefined,
-      },
-      boilerWater: {
-        power: undefined,
-        loadFactor: undefined,
-        steamPerPower: undefined,
-        feedwaterConductivity: undefined,
-        makeupConductivity: undefined,
-        blowdownConductivity: undefined,
-      },
-      kitchenRestroom: {
-        employeeCount: undefined,
-        workdaysPerYear: undefined,
-        dailyUsePerEmployee: undefined
-      },
-      landscaping: {
-        areaIrrigated: undefined,
-        yearlyInchesIrrigated: undefined,
-      },
-      heatEnergy: {
-        incomingTemp: undefined,
-        outgoingTemp: undefined,
-        heaterEfficiency: undefined,
-        heatingFuelType: 0,
-        wasteWaterDischarge: undefined
-      },
-      addedMotorEnergy: [],
-      waterFlows: {
-        sourceWater: 0,
-        recirculatedWater: 0,
-        dischargeWater: 0,
-        knownLosses: 0,
-        waterInProduct: 0,
-      }
-
-    }
-
-    return waterUsingSystem;
-  }
 
   /**
 * Add new component or return component based from a diagram component
@@ -153,51 +69,35 @@ export class WaterUsingSystemService {
   }
 
   getWaterUsingSystemForm(waterUsingSystem: WaterUsingSystem, diagramWaterSystemFlows: DiagramWaterSystemFlows): FormGroup {
-    let waterFlows: WaterSystemFlows = waterUsingSystem.waterFlows;
+    let systemFlowTotals: WaterSystemFlowsTotals = waterUsingSystem.systemFlowTotals;
     if (diagramWaterSystemFlows) {
-      waterFlows = this.getWaterFlowsFromSource(waterUsingSystem, diagramWaterSystemFlows);
+      systemFlowTotals = getWaterFlowsFromSource(waterUsingSystem, diagramWaterSystemFlows);
     }
     
     let form: FormGroup = this.formBuilder.group({
       name: [waterUsingSystem.name, Validators.required],
       systemType: [waterUsingSystem.systemType],
       hoursPerYear: [waterUsingSystem.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      sourceWater: [waterFlows.sourceWater, [Validators.required, Validators.min(0)]],
-      recirculatedWater: [waterFlows.recirculatedWater, [Validators.min(0)]],
-      dischargeWater: [waterFlows.dischargeWater, [Validators.required, Validators.min(0)]],
-      knownLosses: [waterFlows.knownLosses, [Validators.required, Validators.min(0)]],
-      waterInProduct: [waterFlows.waterInProduct, [Validators.required, Validators.min(0)]],
+      sourceWater: [systemFlowTotals.sourceWater, [Validators.required, Validators.min(0)]],
+      recirculatedWater: [systemFlowTotals.recirculatedWater, [Validators.min(0)]],
+      dischargeWater: [systemFlowTotals.dischargeWater, [Validators.required, Validators.min(0)]],
+      knownLosses: [systemFlowTotals.knownLosses, [Validators.required, Validators.min(0)]],
+      waterInProduct: [systemFlowTotals.waterInProduct, [Validators.required, Validators.min(0)]],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
   }
 
-/**
- * Set flows from users values, or default to diagram values
- */
-  getWaterFlowsFromSource(waterUsingSystem: WaterUsingSystem, diagramWaterSystemFlows: DiagramWaterSystemFlows): WaterSystemFlows {
-    let waterFlows: WaterSystemFlows = {
-      sourceWater: diagramWaterSystemFlows.sourceWater.total,
-      recirculatedWater: diagramWaterSystemFlows.recirculatedWater.total,
-      dischargeWater: diagramWaterSystemFlows.dischargeWater.total,
-      knownLosses: diagramWaterSystemFlows.knownLosses.total,
-      waterInProduct: diagramWaterSystemFlows.waterInProduct.total,
-    };
-    Object.keys(waterUsingSystem.userDiagramFlowOverrides).forEach((key: ConnectedFlowType) => {
-      waterFlows[key] = waterUsingSystem.userDiagramFlowOverrides[key]? waterUsingSystem.userDiagramFlowOverrides[key] : diagramWaterSystemFlows[key].total;
-    });
-    return waterFlows;
-  }
 
   getWaterUsingSystemFromForm(form: FormGroup, waterUsingSystem: WaterUsingSystem) {
     waterUsingSystem.name = form.controls.name.value;
     waterUsingSystem.systemType = form.controls.systemType.value;
     waterUsingSystem.hoursPerYear = form.controls.hoursPerYear.value;
-    waterUsingSystem.waterFlows.sourceWater = form.controls.sourceWater.value;
-    waterUsingSystem.waterFlows.recirculatedWater = form.controls.recirculatedWater.value;
-    waterUsingSystem.waterFlows.dischargeWater = form.controls.dischargeWater.value;
-    waterUsingSystem.waterFlows.knownLosses = form.controls.knownLosses.value;
-    waterUsingSystem.waterFlows.waterInProduct = form.controls.waterInProduct.value;
+    waterUsingSystem.systemFlowTotals.sourceWater = form.controls.sourceWater.value;
+    waterUsingSystem.systemFlowTotals.recirculatedWater = form.controls.recirculatedWater.value;
+    waterUsingSystem.systemFlowTotals.dischargeWater = form.controls.dischargeWater.value;
+    waterUsingSystem.systemFlowTotals.knownLosses = form.controls.knownLosses.value;
+    waterUsingSystem.systemFlowTotals.waterInProduct = form.controls.waterInProduct.value;
     return waterUsingSystem;
   }
 

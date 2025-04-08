@@ -2,7 +2,7 @@ import { configureStore, createListenerMiddleware, createSelector, isAnyOf } fro
 import diagramReducer, { addNode, DiagramState, saveDiagramState } from './diagramReducer'
 import { addEdge, Edge, getConnectedEdges, Node } from '@xyflow/react';
 import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
-import { CustomEdgeData, DiagramCalculatedData, NodeFlowData, ProcessFlowPart } from 'process-flow-lib';
+import { CustomEdgeData, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterProcessComponent } from 'process-flow-lib';
 
 
 export function configureAppStore() {
@@ -71,7 +71,7 @@ export type AppDispatch = AppStore['dispatch']
 
 // * memoize selectors only if deriving results (returning new references, i.e. .map())
 // * may also use globalized selectors
-export const selectEdges = (state: RootState) => state.diagram.edges;
+export const selectEdges = (state: RootState) => state.diagram.edges as Edge<CustomEdgeData>[];
 export const selectNodes = (state: RootState) => state.diagram.nodes;
 export const selectIsDrawerOpen = (state: RootState) => state.diagram.isDrawerOpen;
 export const selectIsModalOpen = (state: RootState) => state.diagram.isModalOpen;
@@ -110,6 +110,38 @@ export const selectTotalDischargeFlow = createSelector([selectCalculatedNodeData
   let nodeTotalFlow = getNodeTotalFlow('totalDischargeFlow', calculatedNode, nodes, nodeId);
   return nodeTotalFlow;
 });
+
+
+export const selectNodesAsWaterUsingSystems = createSelector(
+  [selectNodes],
+  (nodes: Node<ProcessFlowPart>[]) => {
+    return nodes
+      .filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-using-system')
+      .map((node: Node<ProcessFlowPart>) => {
+        const processFlowPart: WaterProcessComponent = node.data as WaterProcessComponent;
+        return getWaterUsingSystem(processFlowPart);
+      });
+  }
+);
+
+export const selectIntakeSourceNodes = createSelector(
+  [selectNodes],
+  (nodes: Node<ProcessFlowPart>[]) => {
+    return nodes
+      .filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-intake')
+  }
+);
+
+export const selectDischargeOutletNodes = createSelector(
+  [selectNodes],
+  (nodes: Node<ProcessFlowPart>[]) => {
+    return nodes
+      .filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-discharge')
+  }
+);
+
+
+
 
 
 // todo use FlowUtils helper instead when possible, this may be more expensive than passing in state to utils

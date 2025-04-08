@@ -1,7 +1,7 @@
 import { CustomNodeStyleMap } from "../constants";
 import { Node } from "@xyflow/react";
 import { Handles, ProcessFlowNodeType, ProcessFlowPart, WaterProcessComponentType } from "../types/diagram";
-import { WaterTreatment } from "../types/water-components";
+import { ConnectedFlowType, DiagramWaterSystemFlows, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { getNewIdString } from "./utils";
 
  
@@ -219,3 +219,116 @@ import { getNewIdString } from "./utils";
   }
   
   
+     /**
+ * Add new component or return component based from a diagram component
+ * @param processFlowPart Build from diagram component
+ */
+  export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): WaterUsingSystem => {
+      let waterUsingSystem: WaterUsingSystem;
+      let newComponent: WaterProcessComponent;
+      if (!processFlowPart) {
+        newComponent = getNewProcessComponent('water-using-system') as WaterUsingSystem;
+      } else {
+        newComponent = processFlowPart as WaterUsingSystem;
+      }
+      waterUsingSystem = {
+        ...newComponent,
+        createdByAssessment: true,
+        hoursPerYear: 8760,
+        userDiagramFlowOverrides: {
+          sourceWater: undefined,
+          recirculatedWater: undefined,
+          dischargeWater: undefined,
+          knownLosses: undefined,
+          waterInProduct: undefined,
+        }, 
+        intakeSources: [
+          {
+            sourceType: 0,
+            annualUse: 0
+          }
+        ],
+        processUse: {
+          waterRequiredMetric: 0,
+          waterRequiredMetricValue: undefined,
+          waterConsumedMetric: 0,
+          waterConsumedMetricValue: undefined,
+          waterLossMetric: 0,
+          waterLossMetricValue: undefined,
+          annualProduction: undefined,
+          fractionGrossWaterRecirculated: undefined,
+        },
+        coolingTower: {
+          tonnage: undefined,
+          loadFactor: undefined,
+          evaporationRateDegree: undefined,
+          temperatureDrop: undefined,
+          makeupConductivity: undefined,
+          blowdownConductivity: undefined,
+        },
+        boilerWater: {
+          power: undefined,
+          loadFactor: undefined,
+          steamPerPower: undefined,
+          feedwaterConductivity: undefined,
+          makeupConductivity: undefined,
+          blowdownConductivity: undefined,
+        },
+        kitchenRestroom: {
+          employeeCount: undefined,
+          workdaysPerYear: undefined,
+          dailyUsePerEmployee: undefined
+        },
+        landscaping: {
+          areaIrrigated: undefined,
+          yearlyInchesIrrigated: undefined,
+        },
+        heatEnergy: {
+          incomingTemp: undefined,
+          outgoingTemp: undefined,
+          heaterEfficiency: undefined,
+          heatingFuelType: 0,
+          wasteWaterDischarge: undefined
+        },
+        addedMotorEnergy: [],
+        waterFlows: {
+          sourceWater: 0,
+          recirculatedWater: 0,
+          dischargeWater: 0,
+          knownLosses: 0,
+          waterInProduct: 0,
+        }
+  
+      }
+  
+      return waterUsingSystem;
+    }
+  
+
+    /**
+ * Set flows from users values, or default to diagram values
+ */
+  export const getWaterFlowsFromSource = (waterUsingSystem: WaterUsingSystem, diagramWaterSystemFlows: DiagramWaterSystemFlows): WaterSystemFlowsTotals => {
+    let systemFlowTotals: WaterSystemFlowsTotals = {
+      sourceWater: diagramWaterSystemFlows.sourceWater.total,
+      recirculatedWater: diagramWaterSystemFlows.recirculatedWater.total,
+      dischargeWater: diagramWaterSystemFlows.dischargeWater.total,
+      knownLosses: diagramWaterSystemFlows.knownLosses.total,
+      waterInProduct: diagramWaterSystemFlows.waterInProduct.total,
+    };
+    Object.keys(waterUsingSystem.userDiagramFlowOverrides).forEach((key: ConnectedFlowType) => {
+      systemFlowTotals[key] = waterUsingSystem.userDiagramFlowOverrides[key]? waterUsingSystem.userDiagramFlowOverrides[key] : diagramWaterSystemFlows[key].total;
+    });
+    return systemFlowTotals;
+  }
+
+  export const getWaterFlowTotals = (diagramWaterSystemFlows: DiagramWaterSystemFlows): WaterSystemFlowsTotals => {
+    let systemFlowTotals: WaterSystemFlowsTotals = {
+      sourceWater: diagramWaterSystemFlows.sourceWater.total,
+      recirculatedWater: diagramWaterSystemFlows.recirculatedWater.total,
+      dischargeWater: diagramWaterSystemFlows.dischargeWater.total,
+      knownLosses: diagramWaterSystemFlows.knownLosses.total,
+      waterInProduct: diagramWaterSystemFlows.waterInProduct.total,
+    };
+    return systemFlowTotals;
+  }

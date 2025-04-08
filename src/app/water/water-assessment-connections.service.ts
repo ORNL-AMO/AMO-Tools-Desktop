@@ -13,7 +13,7 @@ import { Edge, Node } from '@xyflow/react';
 import { WaterTreatmentService } from './water-treatment/water-treatment.service';
 import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { WaterDiagram, WaterAssessment, DiagramWaterSystemFlows, WaterUsingSystem, CustomEdgeData, FlowData, WaterSystemFlows, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment } from 'process-flow-lib';
+import { WaterDiagram, WaterAssessment, DiagramWaterSystemFlows, WaterUsingSystem, CustomEdgeData, FlowData, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, WaterSystemFlowsTotals, getTotalFlowValue, getWaterFlowsFromSource, getIsKnownLossFlow, setWaterUsingSystemFlows } from 'process-flow-lib';
 
 @Injectable()
 export class WaterAssessmentConnectionsService {
@@ -50,7 +50,7 @@ export class WaterAssessmentConnectionsService {
 
   async updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment, assessmentSettings: Settings) {
     this.updateAssessmentWaterComponents(diagram, assessment.water);
-    this.updateAssessmentComponentFlows(diagram.waterDiagram, assessment.water);
+    assessment.water.diagramWaterSystemFlows = setWaterUsingSystemFlows(assessment.water.waterUsingSystems, diagram.waterDiagram.flowDiagramData.edges);
     this.setAssessmentSettingsFromDiagram(assessment, assessmentSettings, diagram);
     
     await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings));
@@ -63,65 +63,6 @@ export class WaterAssessmentConnectionsService {
     settings.unitsOfMeasure = diagram.waterDiagram.flowDiagramData.settings.unitsOfMeasure;
     settings.flowDecimalPrecision = diagram.waterDiagram.flowDiagramData.settings.flowDecimalPrecision;
     assessment.water.systemBasics.conductivityUnit = diagram.waterDiagram.flowDiagramData.settings.conductivityUnit;
-  }
-
-   /**
-* Sets flow data from the diagram, defering to user-entered override values if defined
-* @param processFlowPart Build from diagram component
-*/
-  updateAssessmentComponentFlows(waterDiagram: WaterDiagram, waterAssessment: WaterAssessment, settings?: Settings) {
-    let diagramWaterSystemFlows: DiagramWaterSystemFlows[] = []
-    waterAssessment.waterUsingSystems = waterAssessment.waterUsingSystems.map((systemComponent: WaterUsingSystem) => {
-      let componentFlows: DiagramWaterSystemFlows = {
-        id: systemComponent.diagramNodeId,
-        componentName: systemComponent.name,
-        sourceWater: {total: 0, flows: []},
-        recirculatedWater: {total: 0, flows: []},
-        dischargeWater: {total: 0, flows: []},
-        knownLosses: {total: 0, flows: []},
-        waterInProduct: {total: 0, flows: []},
-      }
-
-      waterDiagram.flowDiagramData.edges.forEach((edge: Edge<CustomEdgeData>) => {
-        let flowData: FlowData = {
-          source: edge.source,
-          target: edge.target,
-          flowValue: edge.data.flowValue,
-        }
-        const isKnownFlowLoss = edge.source === systemComponent.diagramNodeId && this.isKnownLossFlow(edge.target, waterAssessment.knownLosses)
-        
-        if (systemComponent.diagramNodeId === edge.target && edge.source === edge.target) {
-          componentFlows.recirculatedWater.flows.push(flowData)
-        } else if (isKnownFlowLoss) {
-          componentFlows.knownLosses.flows.push(flowData);
-          componentFlows.waterInProduct.flows.push(flowData);
-        } else if (edge.source === systemComponent.diagramNodeId) {
-          componentFlows.dischargeWater.flows.push(flowData);
-        } else if (edge.target === systemComponent.diagramNodeId) {
-          componentFlows.sourceWater.flows.push(flowData);
-        } 
-      });
-
-      componentFlows.sourceWater.total = this.getTotalFlowValue(componentFlows.sourceWater.flows);
-      componentFlows.recirculatedWater.total = this.getTotalFlowValue(componentFlows.recirculatedWater.flows);
-      componentFlows.dischargeWater.total = this.getTotalFlowValue(componentFlows.dischargeWater.flows);
-
-      componentFlows.knownLosses.total = systemComponent.userEnteredData.totalKnownLosses? systemComponent.userEnteredData.totalKnownLosses : this.getTotalFlowValue(componentFlows.knownLosses.flows);
-      componentFlows.waterInProduct.total = systemComponent.userEnteredData.waterInProduct? systemComponent.userEnteredData.waterInProduct : this.getTotalFlowValue(componentFlows.waterInProduct.flows);
-      diagramWaterSystemFlows.push(componentFlows);
-
-      let waterFlows: WaterSystemFlows = this.waterUsingSystemService.getWaterFlowsFromSource(systemComponent, componentFlows);
-      systemComponent.waterFlows = waterFlows;
-
-      return systemComponent;
-    });
-    
-    // * store on assessment - avoid redundant data on diagram components
-    waterAssessment.diagramWaterSystemFlows = diagramWaterSystemFlows;
-  }
-
-  getTotalFlowValue(flows: Array<FlowData>) {
-    return flows.reduce((total, flow) => total + flow.flowValue, 0);
   }
 
   isRecycledFlow(sourceOrTargetId: string, waterUsingSystems: WaterUsingSystem[]) {
@@ -139,10 +80,6 @@ export class WaterAssessmentConnectionsService {
   isWaterSystemDischarge(waterUsingSystems: WaterUsingSystem[], edgeSourceId: string) {
     return waterUsingSystems.some((system: WaterUsingSystem) => system.diagramNodeId === edgeSourceId);
   }
-
-  isKnownLossFlow(targetId: string, knownLosses: KnownLoss[]) {
-    return knownLosses.some((knownLoss: KnownLoss) => knownLoss.diagramNodeId === targetId);
-  } 
 
 
   updateAssessmentWaterComponents(diagram: Diagram, waterAssessment: WaterAssessment) {
@@ -176,7 +113,7 @@ export class WaterAssessmentConnectionsService {
       if (waterProcessComponent.processComponentType === 'water-using-system') {
         let waterUsingSystem: WaterUsingSystem;
         if (!waterProcessComponent.createdByAssessment) {
-          waterUsingSystem = this.waterUsingSystemService.addWaterUsingSystem(waterProcessComponent);
+          waterUsingSystem = getWaterUsingSystem(waterProcessComponent);
         } else {
           waterUsingSystem = waterProcessComponent as WaterUsingSystem;
         }
