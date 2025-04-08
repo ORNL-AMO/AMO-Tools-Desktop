@@ -49,7 +49,8 @@ export class CashFlowComponent implements OnInit {
         installationCost: 10000,
         operationCost: 500,
         otherCost: 500,
-        junkCost: 500
+        junkCost: 500,
+        otherSavings: 500
       };
     } else {
       this.cashFlowForm = this.cashFlowService.inputData;
@@ -78,7 +79,8 @@ export class CashFlowComponent implements OnInit {
       installationCost: 10000,
       operationCost: 500,
       otherCost: 500,
-      junkCost: 500
+      junkCost: 500,
+      otherSavings: 500
     };
     this.cashFlowService.inputData = this.cashFlowForm;
     this.calculate();
@@ -92,7 +94,8 @@ export class CashFlowComponent implements OnInit {
       installationCost: 0,
       operationCost: 0,
       otherCost: 0,
-      junkCost: 0
+      junkCost: 0,
+      otherSavings: 0
     };
     this.cashFlowService.inputData = this.cashFlowForm;
     this.calculate();

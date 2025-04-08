@@ -20,6 +20,14 @@
       </div>
     </div>
     <div class="form-group">
+      <label class="small">Other Annual Savings</label>
+      <div class="input-group calc-addon-group">
+        <input type="number" step="any" class="form-control addon-input" name="otherSavings" id="otherSavings"
+          [(ngModel)]="cashFlowForm.otherSavings" (focus)="focusField('otherSavings')" (input)="calculate()">
+        <span class="input-group-addon units">$</span>
+      </div>
+    </div>
+    <div class="form-group">
       <label class="small">Salvage</label>
       <div class="input-group calc-addon-group">
         <input type="number" step="any" class="form-control addon-input" name="salvageInput" id="salvageInput"

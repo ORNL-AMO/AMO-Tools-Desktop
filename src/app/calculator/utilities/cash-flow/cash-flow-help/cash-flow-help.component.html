@@ -66,11 +66,22 @@
 
   <div class="my-2" *ngIf="currentField == 'otherCost'">
     <h6>
-      Annual Fuel Cost
+      Other Annual Cost
       <br>
       <small class="text-muted">
-        Annual fuel costs for the equipment or increase in fuel costs with the new equipment. (If there is a fuel savings, that should
+        Annual costs for the equipment or increase in fuel costs with the new equipment. (If there is a fuel savings, that should
         be include in "Annual Energy Savings").
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'otherSavings'">
+    <h6>
+      Other Annual Savings
+      <br>
+      <small class="text-muted">
+        **** Need help text**************
         <hr>
       </small>
     </h6>

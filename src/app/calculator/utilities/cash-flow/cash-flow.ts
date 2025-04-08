@@ -6,6 +6,7 @@ export interface CashFlowForm {
   operationCost?: number;
   otherCost?: number;
   junkCost?: number;
+  otherSavings?: number;
 }
 
 export interface CashFlowResults {
