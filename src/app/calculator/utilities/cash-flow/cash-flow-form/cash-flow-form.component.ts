@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { CashFlowForm } from '../cash-flow';
+import { AdvancedCashflowData, CashFlowForm } from '../cash-flow';
 
 @Component({
     selector: 'app-cash-flow-form',
@@ -14,6 +14,8 @@ export class CashFlowFormComponent implements OnInit {
   emitCalculate = new EventEmitter<boolean>();
   @Output('changeField')
   changeField = new EventEmitter<string>();
+
+  disableAddBtn: boolean = false;
   
   constructor() { }
 
@@ -25,6 +27,20 @@ export class CashFlowFormComponent implements OnInit {
   }
   calculate() {
     this.emitCalculate.emit(true);
+  }
+
+  addCashflow() {
+    let newData: AdvancedCashflowData = {
+      year: this.cashFlowForm.advancedCashflows.length,
+      cashflow: 0,
+    }
+
+    this.cashFlowForm.advancedCashflows.push(0);
+    
+  }
+
+  deleteCashflow(index: number) {
+    this.cashFlowForm.advancedCashflows.splice(index, 1);
   }
 
 }

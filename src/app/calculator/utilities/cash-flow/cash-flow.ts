@@ -7,6 +7,16 @@ export interface CashFlowForm {
   otherCost?: number;
   junkCost?: number;
   otherSavings?: number;
+  discountRate?: number;
+  includeTaxes?: number;
+  taxRate?: number;
+  depreciationMethod?: number;
+  advancedCashflows?: Array<number>;
+}
+
+export interface AdvancedCashflowData {
+  year: number,
+  cashflow: number
 }
 
 export interface CashFlowResults {

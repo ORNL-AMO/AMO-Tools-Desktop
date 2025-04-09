@@ -72,4 +72,71 @@
       </div>
     </div>
   </div>
+  <br>
+  <div class="form-group">
+    <label class="small">Discount Rate</label>
+    <div class="input-group calc-addon-group">
+      <input type="number" step="any" class="form-control addon-input" name="discountRate" id="discountRate"
+        [(ngModel)]="cashFlowForm.discountRate" (focus)="focusField('discountRate')" (input)="calculate()">
+      <span class="input-group-addon units">%</span>
+    </div>
+  </div>
+  <br>
+  <div class="form-group">
+    <label class="small">Include Taxes?</label>
+    <div class="input-group calc-addon-group">
+      <select id="includeTaxes" name="includeTaxes" class="form-control" [(ngModel)]="cashFlowForm.includeTaxes"
+        (focus)="focusField('includeTaxes')" (change)="calculate()">
+        <option value="0">Yes</option>
+        <option value="1">No</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-section" *ngIf="cashFlowForm.includeTaxes == 0">
+    <div class="form-group">
+      <label class="small">Tax Rate</label>
+      <div class="input-group calc-addon-group">
+        <input type="number" step="any" class="form-control addon-input" name="taxRate" id="taxRate"
+          [(ngModel)]="cashFlowForm.taxRate" (focus)="focusField('taxRate')" (input)="calculate()">
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="small">Depreciation Method</label>
+      <div class="input-group calc-addon-group">
+        <select id="depreciationMethod" name="depreciationMethod" class="form-control"
+          [(ngModel)]="cashFlowForm.depreciationMethod" (focus)="focusField('depreciationMethod')"
+          (change)="calculate()">
+          <option value="0">Simple</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <br>  
+  <label class="group-label point-label">Advanced Cashflows</label>
+  <div class="btn-group btn-group-sm">
+    <button type="button" class="btn btn-primary btn-sm m-2 btn-form" (click)="addCashflow()">+Add Cashflow</button>
+  </div>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th class="table-col-0">Year</th>
+        <th class="table-col-0">Cashflow</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of cashFlowForm.advancedCashflows; let i = index">
+        <td>
+          {{i+1}}
+        </td>
+        <td>
+          <input type="number" step="any" class="form-control addon-input" name="{{'cashFlowData'+i}}"
+            id="{{'cashFlowData'+i}}" [(ngModel)]="data" (focus)="focusField('cashFlowData')"
+            (input)="calculate()">
+        </td>
+        <td class="delete-row" (click)="deleteCashflow(i)">Delete</td>
+      </tr>
+    </tbody>
+  </table>
 </form>
