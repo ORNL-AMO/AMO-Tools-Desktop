@@ -40,8 +40,9 @@ export class WaterSystemComponentService {
   getIntakeSourceForm(intakeSource: IntakeSource): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       name: [intakeSource.name, Validators.required],
+      cost: [intakeSource.cost, Validators.required],
       sourceType: [intakeSource.sourceType],
-      annualUse: [intakeSource.annualUse, [Validators.required, Validators.min(0)]],
+      annualUse: [intakeSource.userEnteredData.totalDischargeFlow, [Validators.required, Validators.min(0)]],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
@@ -49,8 +50,9 @@ export class WaterSystemComponentService {
 
   getIntakeSourceFromForm(form: FormGroup, intakeSource: IntakeSource): IntakeSource {
     intakeSource.name = form.controls.name.value;
+    intakeSource.cost = form.controls.cost.value;
     intakeSource.sourceType = form.controls.sourceType.value;
-    intakeSource.annualUse = form.controls.annualUse.value;
+    intakeSource.userEnteredData.totalDischargeFlow = form.controls.annualUse.value;
     return intakeSource;
   }
 
@@ -71,6 +73,7 @@ export class WaterSystemComponentService {
       createdByAssessment: true,
       sourceType: 0,
       annualUse: 0,
+      cost: 0,
       addedMotorEnergy: []
     };
     return intakeSource;
@@ -79,8 +82,9 @@ export class WaterSystemComponentService {
   getDischargeOutletForm(dischargeOutlet: DischargeOutlet): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       name: [dischargeOutlet.name, Validators.required],
+      cost: [dischargeOutlet.cost, Validators.required],
       outletType: [dischargeOutlet.outletType],
-      annualUse: [dischargeOutlet.annualUse, [Validators.required, Validators.min(0)]],
+      annualUse: [dischargeOutlet.userEnteredData.totalSourceFlow, [Validators.required, Validators.min(0)]],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;
@@ -88,8 +92,9 @@ export class WaterSystemComponentService {
 
   getDischargeOutletFromForm(form: FormGroup, dischargeOutlet: DischargeOutlet): DischargeOutlet {
     dischargeOutlet.name = form.controls.name.value;
+    dischargeOutlet.cost = form.controls.cost.value;  
     dischargeOutlet.outletType = form.controls.outletType.value;
-    dischargeOutlet.annualUse = form.controls.annualUse.value;
+    dischargeOutlet.userEnteredData.totalSourceFlow = form.controls.annualUse.value;
     return dischargeOutlet;
   }
 
@@ -112,6 +117,7 @@ export class WaterSystemComponentService {
       createdByAssessment: true,
       outletType: 0,
       annualUse: 0,
+      cost: 0,
       addedMotorEnergy: []
     };
     return dischargeOutlet;

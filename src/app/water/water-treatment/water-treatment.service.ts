@@ -13,7 +13,7 @@ export class WaterTreatmentService {
       customTreatmentType: [obj.customTreatmentType],
       cost: [obj.cost],
       name: [obj.name],
-      flowValue: [obj.flowValue]
+      flowValue: [obj.userEnteredData.totalSourceFlow]
     });
     return form;
   }
@@ -23,7 +23,7 @@ export class WaterTreatmentService {
     waterTreatment.cost = form.controls.cost.value;
     waterTreatment.name = form.controls.name.value;
     waterTreatment.customTreatmentType = form.controls.customTreatmentType.value;
-    waterTreatment.flowValue = form.controls.flowValue.value;
+    waterTreatment.userEnteredData.totalSourceFlow = form.controls.flowValue.value;
     return waterTreatment;
   }
 

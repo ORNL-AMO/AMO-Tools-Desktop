@@ -1,6 +1,6 @@
-import { Edge } from "@xyflow/react";
-import { CustomEdgeData, DiagramSettings } from "../types/diagram";
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, FlowData, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
+import { Node, Edge } from "@xyflow/react";
+import { CustomEdgeData, DiagramSettings, NodeFlowData, NodeFlowProperty, ProcessFlowPart } from "../types/diagram";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, FlowData, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor} from "./utils";
 import { getWaterFlowTotals } from "./water-components";
 
@@ -344,3 +344,43 @@ export const getUnknownLossees = (totalSourceFlow: number, totalDischargeFlow: n
   return totalSourceFlow - totalDischargeFlow - knownLosses - waterInProduct;
 }
 
+     /**
+ * Get annual cost of all components for a given type
+ * @param components WaterProcessComponent/ProcessFlowPart 
+ * @param nodeFlowProperty NodeFlowData property that represents flow cost, i.e. totalDischargeflow for intakes, totalSourceflow for discharges
+ * 
+ */
+export const getComponentTypeTotalCost = (components: Node<ProcessFlowPart>[], nodeFlowProperty: NodeFlowProperty) => {
+  return components.reduce((total: number, component: Node<ProcessFlowPart>) => {
+    let acc = getKGalCost(component.data.cost, component.data.userEnteredData[nodeFlowProperty]?? 0);
+    return acc; 
+  }, 0);
+}
+
+
+export const getKGalCost = (kGalUnitCost: number, flowMgal: number): number => {
+  return kGalUnitCost * (flowMgal * 1000);
+}
+
+
+     /**
+ * Get annual true cost. Direct costs (intake and discharges) + indirect costs (energy, treatment, etc.)
+ */
+export const getWaterTrueCost = (
+  intakeCost: number, 
+  dischargeCost: number,
+  motorEnergyCost?: number,
+  heatEnergyCost?: number,
+  waterTreatmentCost?: number,
+  wasteTreatmentCost?: number,
+  ): number => {
+    // todo
+    const directCosts = intakeCost + dischargeCost;
+    
+    let energyCosts = motorEnergyCost + heatEnergyCost;
+    energyCosts = energyCosts ?? 0;
+    const indirectCost = waterTreatmentCost + wasteTreatmentCost;
+    const trueCost =  directCosts + indirectCost;
+    console.log('dc, id, true cost', directCosts, indirectCost, trueCost); 
+  return trueCost;
+}

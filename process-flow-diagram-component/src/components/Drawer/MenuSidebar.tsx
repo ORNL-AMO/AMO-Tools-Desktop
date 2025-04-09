@@ -89,7 +89,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
     }}>
       <Box sx={{ 
         padding: '0rem .5rem 2rem 0rem',
-        height: '40%',
+        height: '35%',
         }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
           <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
@@ -155,6 +155,12 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             </Grid>
           </Box> */}
 
+          <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingTop={'1rem'}>
+            <DownloadButton shadowRoot={props.shadowRootRef} />
+            {!hasAssessment &&
+              <Button variant="outlined" color="error" sx={{ width: '100%' }} onClick={() => dispatch(setDialogOpen())}>Reset Diagram</Button>
+            }
+          </Box>
         </TabPanel>
 
         <TabPanel value={selectedTab} index={1} diagramParentDimensions={diagramParentDimensions}>
@@ -346,13 +352,6 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           <Divider sx={{ margin: '1rem' }} />
           <DiagramResults />
         </Box>
-      </Box>
-
-      <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingTop={'1rem'}>
-        <DownloadButton shadowRoot={props.shadowRootRef} />
-        {!hasAssessment &&
-          <Button variant="outlined" color="error" sx={{ width: '100%' }} onClick={() => dispatch(setDialogOpen())}>Reset Diagram</Button>
-        }
       </Box>
     </Box>
   );

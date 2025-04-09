@@ -75,6 +75,7 @@ export const MockWaterAssessment: Assessment = {
                 "processComponentType": "water-discharge",
                 "createdByAssessment": true,
                 "name": "Municipal Sewer 1",
+                "cost": 0,
                 "className": "water-discharge",
                 "isValid": true,
                 "userEnteredData": {
@@ -106,6 +107,7 @@ export const MockWaterAssessment: Assessment = {
                 "processComponentType": "water-discharge",
                 "createdByAssessment": true,
                 "name": "Municipal Sewer 2",
+                "cost": 0,
                 "className": "water-discharge",
                 "isValid": true,
                 "userEnteredData": {
@@ -140,6 +142,7 @@ export const MockWaterAssessment: Assessment = {
                 "createdByAssessment": true,
                 "name": "Cooling Tower",
                 "className": "water-using-system",
+                "cost": 0,
                 "isValid": true,
                 "userEnteredData": {
                     "totalDischargeFlow": undefined ,
@@ -231,6 +234,7 @@ export const MockWaterAssessment: Assessment = {
                 "processComponentType": "water-using-system",
                 "createdByAssessment": true,
                 "name": "Process Loop",
+                "cost": 0,
                 "className": "water-using-system",
                 "isValid": true,
                 "userEnteredData": {
@@ -323,6 +327,7 @@ export const MockWaterAssessment: Assessment = {
                 "processComponentType": "water-using-system",
                 "createdByAssessment": true,
                 "name": "Quench Tank",
+                "cost": 0,
                 "className": "water-using-system",
                 "isValid": true,
                 "userEnteredData": {
@@ -416,6 +421,7 @@ export const MockWaterAssessment: Assessment = {
                 "createdByAssessment": true,
                 "name": "Vacuum Pump",
                 "className": "water-using-system",
+                "cost": 0,
                 "isValid": true,
                 "userEnteredData": {
                     "totalDischargeFlow": undefined ,
@@ -508,6 +514,7 @@ export const MockWaterAssessment: Assessment = {
                 "createdByAssessment": true,
                 "name": "Chillers",
                 "className": "water-using-system",
+                "cost": 0,
                 "isValid": true,
                 "userEnteredData": {
                     "totalDischargeFlow": undefined ,
@@ -600,6 +607,7 @@ export const MockWaterAssessment: Assessment = {
                 "createdByAssessment": true,
                 "name": "Blending",
                 "className": "water-using-system",
+                "cost": 0,
                 "isValid": true,
                 "userEnteredData": {
                     "totalDischargeFlow": undefined ,
@@ -691,6 +699,7 @@ export const MockWaterAssessment: Assessment = {
                 "processComponentType": "water-using-system",
                 "createdByAssessment": true,
                 "name": "Wash Bay",
+                "cost": 0,
                 "className": "water-using-system",
                 "isValid": true,
                 "userEnteredData": {
@@ -783,6 +792,7 @@ export const MockWaterAssessment: Assessment = {
                 "processComponentType": "water-using-system",
                 "createdByAssessment": true,
                 "name": "Sanitary",
+                "cost": 0,
                 "className": "water-using-system",
                 "isValid": true,
                 "userEnteredData": {
@@ -877,6 +887,7 @@ export const MockWaterAssessment: Assessment = {
                 "processComponentType": "water-treatment",
                 "createdByAssessment": false,
                 "name": "Chemical Treatment 1",
+                "cost": 0,
                 "customTreatmentType": undefined,
                 "flowValue": undefined,
                 "className": "water-treatment",
@@ -902,10 +913,10 @@ export const MockWaterAssessment: Assessment = {
                     }
                 },
                 "treatmentType": 3,
-                "cost": 0
             },
             {
                 "processComponentType": "water-treatment",
+                "cost": 0,
                 "createdByAssessment": false,
                 "name": "Chemical Treatment 2",
                 "customTreatmentType": undefined,
@@ -933,7 +944,6 @@ export const MockWaterAssessment: Assessment = {
                     }
                 },
                 "treatmentType": 3,
-                "cost": 0
             },
             {
                 "processComponentType": "water-treatment",

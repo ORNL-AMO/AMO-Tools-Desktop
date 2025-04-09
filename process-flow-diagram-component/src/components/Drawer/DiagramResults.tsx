@@ -9,8 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { Box } from '@mui/material';
-import { CustomEdgeData, getWaterBalanceResults, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
-import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems } from '../Diagram/store';
+import { CustomEdgeData, getComponentTypeTotalCost, getWaterBalanceResults, getWaterTrueCost, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
+import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
 import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
 
@@ -61,8 +61,8 @@ const ResultTable = (props: DiagramResultsProps) => {
               </StyledTableCell>
               <StyledTableCell align="right">
                 {row.unit === '$' ?
-                  <>
-                    <span>{row.unit}</span><span>{row.result}</span>
+                   <>
+                    <span>{row.result}</span>
                   </>
                   :
                   <>
@@ -79,6 +79,10 @@ const ResultTable = (props: DiagramResultsProps) => {
 
 const DiagramResults = () => {
   const edges: Edge<CustomEdgeData>[] = useAppSelector(selectEdges);
+  const intakes: Node<ProcessFlowPart>[] = useAppSelector(selectIntakeSourceNodes);
+  const discharges: Node<ProcessFlowPart>[] = useAppSelector(selectDischargeOutletNodes);
+  const waterTreatmentNodes: Node<ProcessFlowPart>[] = useAppSelector(selectWaterTreatmentNodes);
+  const wasteTreatmentNodes: Node<ProcessFlowPart>[] = useAppSelector(selectWasteTreatmentNodes);
   const plantWaterUsingSystems: WaterUsingSystem[] = useAppSelector(selectNodesAsWaterUsingSystems);
   // todo - done after each node 'water-using-system' change in reducer?
   setWaterUsingSystemFlows(plantWaterUsingSystems, edges);
@@ -86,15 +90,29 @@ const DiagramResults = () => {
   console.log(diagramResults)
   
   const costTitle = "Water Costs";
+  const currency = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  });
+
+  // direct costs
+  const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow');
+  const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow');
+
+  // indirect costs
+  const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow');
+  const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow');
+
+  const trueCost = getWaterTrueCost(intakeCost, dischargeCost, undefined, undefined, treatmentCost, wasteTreatmentCost);
   const costRows = [
-    { label: 'Intake Costs', result: 0, unit: '$'},
-    { label: 'Discharge Costs', result: 0, unit: '$' },
-    { label: 'True Cost', result: 0, unit: '$' },
+    { label: 'Intake Costs', result: currency.format(intakeCost), unit: '$'},
+    { label: 'Discharge Costs', result: currency.format(dischargeCost), unit: '$' },
+    { label: 'Indirect Costs', result: currency.format(treatmentCost+wasteTreatmentCost), unit: '$' },
+    { label: 'True Cost', result: currency.format(trueCost), unit: '$' },
   ];
   
 
   // todo row name should be clickable link
-  const intakes: Node<ProcessFlowPart>[] = useAppSelector(selectIntakeSourceNodes);
   const intakeTitle = "Water Intake";
   let intakeRows = intakes.map((intake: Node<ProcessFlowPart>) => {
       return { label: intake.data.name, result: intake.data.userEnteredData.totalDischargeFlow, unit: <FlowDisplayUnit/> };
@@ -104,7 +122,6 @@ const DiagramResults = () => {
     { label: 'Total Intake', result: diagramResults.incomingWater, unit: <FlowDisplayUnit/> },
   );
 
-  const discharges: Node<ProcessFlowPart>[] = useAppSelector(selectDischargeOutletNodes);
   const dischargeTitle = "Water Discharge";
   let dischargeRows: DiagramResultsRow[] = discharges.map((discharge: Node<ProcessFlowPart>) => {
       return { label: discharge.data.name, result: discharge.data.userEnteredData.totalSourceFlow, unit: <FlowDisplayUnit/> };
@@ -141,6 +158,6 @@ export interface DiagramResultsProps {
 
 export interface DiagramResultsRow {
   label: string,
-  result: number,
+  result: number | string,
   unit: string | React.ReactNode,
 }

@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Chip, createTheme, FormControl, InputLabel, MenuItem, Select, Typography, useTheme, } from "@mui/material";
+import { Alert, Box, Button, Chip, createTheme, FormControl, InputAdornment, InputLabel, MenuItem, Select, Typography, useTheme, } from "@mui/material";
 import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 
@@ -18,6 +18,7 @@ import SelectTreatmentType from "./SelectTreatmentType";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import CalculateIcon from '@mui/icons-material/Calculate';
 import { ProcessFlowPart, WaterTreatment, waterTreatmentTypeOptions, WasteWaterTreatment, wasteWaterTreatmentTypeOptions, CustomEdgeData, waterUsingSystemTypeOptions } from "process-flow-lib";
+import InputField from "../StyledMUI/InputField";
 
 
 const theme = createTheme({
@@ -33,6 +34,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const errors = useAppSelector(selectNodeValidation);
     const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
+    const settings = useAppSelector((state) => state.diagram.settings);
 
     const [systemType, setSystemType] = React.useState<number>(props.selectedNode.data.systemType);
 
@@ -81,8 +83,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         setExpanded(newExpanded);
     };
 
-    const handleTreatmentTypeChange = (treatmentType: number) => {
-        dispatch(nodeDataPropertyChange({ optionsProp: 'treatmentType', updatedValue: treatmentType }));
+    const handleNodePropertyChange = (nodeProp: string, value: number) => {
+        dispatch(nodeDataPropertyChange({ optionsProp: nodeProp, updatedValue: value }));
     };
     const hasSources = props.connectedEdges.some((edge: Edge<CustomEdgeData>) => {
         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
@@ -176,11 +178,36 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     <label htmlFor={'treatmentType'} className={'diagram-label'} style={{ fontSize: '.9rem', marginLeft: '.5rem' }}>Treatment Type</label>
                     <SelectTreatmentType
                         treatmentType={defaultSelectedTreatmentType}
-                        handleTreatmentTypeChange={handleTreatmentTypeChange}
+                        handleTreatmentTypeChange={(event) => handleNodePropertyChange('treatmentType', event)}
                         treatmentOptions={treatmentTypeOptions}
                     ></SelectTreatmentType>
                 </Box>
             }
+
+            <Box display={'flex'} marginBottom={'1rem'} width={'100%'}>
+
+                <InputField
+                    label={'Cost'}
+                    id={`${props.selectedNode.id}-cost`}
+                    name={`cost`}
+                    type={'number'}
+                    size="small"
+                    value={componentData.cost}
+                    // warning={hasWarning}
+                    // helperText={hasWarning ? String(errors.flows[index]) : ""}
+                    onChange={(event) => handleNodePropertyChange('cost', Number(event.target.value))}
+                    sx={{ m: '1 0', width: '100%' }}
+                    InputProps={{
+                        endAdornment:
+                            <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                {settings.unitsOfMeasure === 'Imperial' ?
+                                    <span style={{ zIndex: 1, background: 'white' }}>$/kgal</span>
+                                    : <span style={{ zIndex: 1, background: 'white' }}>$/kL</span>
+                                }
+                            </InputAdornment>,
+                    }}
+                />
+            </Box>
 
             {hasSources &&
                 <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
