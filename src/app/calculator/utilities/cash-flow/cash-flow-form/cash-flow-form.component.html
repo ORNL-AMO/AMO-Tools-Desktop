@@ -115,7 +115,7 @@
   <br>  
   <label class="group-label point-label">Advanced Cashflows</label>
   <div class="btn-group btn-group-sm">
-    <button type="button" class="btn btn-primary btn-sm m-2 btn-form" (click)="addCashflow()">+Add Cashflow</button>
+    <button type="button" class="btn btn-primary btn-sm m-2 btn-form" (click)="addCashflow()" [disabled]="disableAddBtn">+Add Cashflow</button>
   </div>
   <table class="data-table">
     <thead>

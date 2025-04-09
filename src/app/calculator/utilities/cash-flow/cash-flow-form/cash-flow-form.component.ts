@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { AdvancedCashflowData, CashFlowForm } from '../cash-flow';
 
 @Component({
@@ -19,7 +19,11 @@ export class CashFlowFormComponent implements OnInit {
   
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() {    
+    this.checkDisableAddBtn();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
   }
 
   focusField(str: string) {
@@ -30,17 +34,22 @@ export class CashFlowFormComponent implements OnInit {
   }
 
   addCashflow() {
-    let newData: AdvancedCashflowData = {
-      year: this.cashFlowForm.advancedCashflows.length,
-      cashflow: 0,
-    }
-
-    this.cashFlowForm.advancedCashflows.push(0);
+    this.cashFlowForm.advancedCashflows.push(0);    
+    this.checkDisableAddBtn();
     
   }
 
   deleteCashflow(index: number) {
     this.cashFlowForm.advancedCashflows.splice(index, 1);
+    this.checkDisableAddBtn();
+  }
+
+  checkDisableAddBtn(){
+    if (this.cashFlowForm.advancedCashflows.length == this.cashFlowForm.lifeYears) {
+      this.disableAddBtn = true;
+    } else {
+      this.disableAddBtn = false;
+    }
   }
 
 }
