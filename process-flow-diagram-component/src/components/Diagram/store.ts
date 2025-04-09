@@ -140,6 +140,22 @@ export const selectDischargeOutletNodes = createSelector(
   }
 );
 
+export const selectWaterTreatmentNodes = createSelector(
+  [selectNodes],
+  (nodes: Node<ProcessFlowPart>[]) => {
+    return nodes
+      .filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-treatment')
+  }
+);
+
+export const selectWasteTreatmentNodes = createSelector(
+  [selectNodes],
+  (nodes: Node<ProcessFlowPart>[]) => {
+    return nodes
+      .filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment')
+  }
+);
+
 
 
 

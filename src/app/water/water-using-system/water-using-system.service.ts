@@ -76,6 +76,7 @@ export class WaterUsingSystemService {
     
     let form: FormGroup = this.formBuilder.group({
       name: [waterUsingSystem.name, Validators.required],
+      cost: [waterUsingSystem.cost, Validators.required],
       systemType: [waterUsingSystem.systemType],
       hoursPerYear: [waterUsingSystem.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       sourceWater: [systemFlowTotals.sourceWater, [Validators.required, Validators.min(0)]],
@@ -91,6 +92,7 @@ export class WaterUsingSystemService {
 
   getWaterUsingSystemFromForm(form: FormGroup, waterUsingSystem: WaterUsingSystem) {
     waterUsingSystem.name = form.controls.name.value;
+    waterUsingSystem.cost = form.controls.cost.value;
     waterUsingSystem.systemType = form.controls.systemType.value;
     waterUsingSystem.hoursPerYear = form.controls.hoursPerYear.value;
     waterUsingSystem.systemFlowTotals.sourceWater = form.controls.sourceWater.value;

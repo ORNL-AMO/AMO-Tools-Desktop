@@ -38,6 +38,7 @@ import { getNewIdString } from "./utils";
       processComponentType: 'water-intake',
       name: 'Intake Source',
       className: 'water-intake',
+      cost: 0, 
       isValid: true,
       userEnteredData: {
         totalDischargeFlow: undefined,
@@ -51,6 +52,7 @@ import { getNewIdString } from "./utils";
       processComponentType: 'water-using-system',
       name: 'Water Using System',
       className: 'water-using-system',
+      cost: 0, 
       isValid: true,
       inSystemTreatment: [],
       userEnteredData: {
@@ -65,6 +67,7 @@ import { getNewIdString } from "./utils";
       name: 'Discharge Outlet',
       className: 'water-discharge',
       disableOutflowConnections: true,
+      cost: 0, 
       isValid: true,
       userEnteredData: {
         totalDischargeFlow: undefined,
@@ -77,6 +80,7 @@ import { getNewIdString } from "./utils";
       processComponentType: 'water-treatment',
       name: 'Water Treatment',
       className: 'water-treatment',
+      cost: 0, 
       isValid: true,
       userEnteredData: {
         totalDischargeFlow: undefined,
@@ -89,6 +93,7 @@ import { getNewIdString } from "./utils";
       processComponentType: 'waste-water-treatment',
       name: 'Waste Treatment',
       className: 'waste-water-treatment',
+      cost: 0, 
       isValid: true,
       userEnteredData: {
         totalDischargeFlow: undefined,
@@ -101,6 +106,7 @@ import { getNewIdString } from "./utils";
       processComponentType: 'known-loss',
       name: 'Known Loss',
       className: 'known-loss',
+      cost: 0, 
       isValid: true,
       userEnteredData: {
         totalDischargeFlow: undefined,
@@ -113,6 +119,7 @@ import { getNewIdString } from "./utils";
       processComponentType: 'summing-node',
       name: 'Summing Connector',
       className: 'summing-node',
+      cost: 0, 
       isValid: true,
       userEnteredData: {
         totalDischargeFlow: undefined,
@@ -152,7 +159,7 @@ import { getNewIdString } from "./utils";
       systemType: 0,
       treatmentType: 0,
       customTreatmentType: undefined,
-      cost: undefined,
+      cost: 0,
       isValid: diagramComponent.isValid,
       disableInflowConnections: diagramComponent.disableInflowConnections,
       disableOutflowConnections: diagramComponent.disableOutflowConnections,
@@ -291,7 +298,7 @@ import { getNewIdString } from "./utils";
           wasteWaterDischarge: undefined
         },
         addedMotorEnergy: [],
-        waterFlows: {
+        systemFlowTotals: {
           sourceWater: 0,
           recirculatedWater: 0,
           dischargeWater: 0,

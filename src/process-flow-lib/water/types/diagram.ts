@@ -12,7 +12,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     systemType?: number,
     treatmentType?: number,
     customTreatmentType?: string,
-    cost?: number,
+    cost: number,
     className: ProcessFlowPartStyleClass,
     isValid: boolean,
     inSystemTreatment?: WaterTreatment[],
@@ -134,6 +134,9 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     // * summing node total divided by active handle connections
     summingFlowEvenlyDivided?: number,
   }
+
+  
+export type NodeFlowProperty = keyof Pick<NodeFlowData, 'totalSourceFlow' | 'totalDischargeFlow'>;
   
   export interface DiagramCalculatedData {
     nodes: {
