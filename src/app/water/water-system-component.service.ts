@@ -56,29 +56,6 @@ export class WaterSystemComponentService {
     return intakeSource;
   }
 
-/**
- * Add new component or return component based from a diagram component
- * @param processFlowPart Build from diagram component
- */
-  addIntakeSource(processFlowPart?: WaterProcessComponent): IntakeSource {
-    let intakeSource: IntakeSource;
-    let newComponent: WaterProcessComponent;
-    if (!processFlowPart) {
-      newComponent = getNewProcessComponent('water-intake') as IntakeSource;
-    } else {
-      newComponent = processFlowPart as IntakeSource;
-    }
-    intakeSource = {
-      ...newComponent,
-      createdByAssessment: true,
-      sourceType: 0,
-      annualUse: 0,
-      cost: 0,
-      addedMotorEnergy: []
-    };
-    return intakeSource;
-  }
-
   getDischargeOutletForm(dischargeOutlet: DischargeOutlet): FormGroup {
     let form: FormGroup = this.formBuilder.group({
       name: [dischargeOutlet.name, Validators.required],
@@ -98,30 +75,6 @@ export class WaterSystemComponentService {
     return dischargeOutlet;
   }
 
-
-/**
- * Add new component or return component based from a diagram component
- * @param processFlowPart Build from diagram component
- */
-  addDischargeOutlet(processFlowPart?: WaterProcessComponent): DischargeOutlet {
-    let dischargeOutlet: DischargeOutlet;
-    let newComponent: WaterProcessComponent;
-    if (!processFlowPart) {
-      newComponent = getNewProcessComponent('water-discharge') as DischargeOutlet;
-    } else {
-      newComponent = processFlowPart as DischargeOutlet;
-    }
-    
-    dischargeOutlet = {
-      ...newComponent,
-      createdByAssessment: true,
-      outletType: 0,
-      annualUse: 0,
-      cost: 0,
-      addedMotorEnergy: []
-    };
-    return dischargeOutlet;
-  }
 
   markFormDirtyToDisplayValidation(form: UntypedFormGroup) {
     for (let key in form.controls) {

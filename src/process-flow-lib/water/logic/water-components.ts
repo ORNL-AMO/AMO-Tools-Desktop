@@ -1,7 +1,7 @@
 import { CustomNodeStyleMap } from "../constants";
 import { Node } from "@xyflow/react";
 import { Handles, ProcessFlowNodeType, ProcessFlowPart, WaterProcessComponentType } from "../types/diagram";
-import { ConnectedFlowType, DiagramWaterSystemFlows, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
+import { ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, IntakeSource, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { getNewIdString } from "./utils";
 
  
@@ -210,6 +210,54 @@ import { getNewIdString } from "./utils";
       
       return waterTreatment;
     }
+
+  /**
+ * Add new component or return component based from a diagram component
+ * @param processFlowPart Build from diagram component
+ */
+  export const getIntakeSource = (processFlowPart?: WaterProcessComponent): IntakeSource => {
+    let intakeSource: IntakeSource;
+    let newComponent: WaterProcessComponent;
+    if (!processFlowPart) {
+      newComponent = getNewProcessComponent('water-intake') as IntakeSource;
+    } else {
+      newComponent = processFlowPart as IntakeSource;
+    }
+    intakeSource = {
+      ...newComponent,
+      createdByAssessment: true,
+      sourceType: 0,
+      annualUse: 0,
+      cost: 0,
+      addedMotorEnergy: []
+    };
+    return intakeSource;
+  }
+
+  /**
+ * Add new component or return component based from a diagram component
+ * @param processFlowPart Build from diagram component
+ */
+  export const getDischargeOutlet = (processFlowPart?: WaterProcessComponent): DischargeOutlet => {
+    let dischargeOutlet: DischargeOutlet;
+    let newComponent: WaterProcessComponent;
+    if (!processFlowPart) {
+      newComponent = getNewProcessComponent('water-discharge') as DischargeOutlet;
+    } else {
+      newComponent = processFlowPart as DischargeOutlet;
+    }
+    
+    dischargeOutlet = {
+      ...newComponent,
+      createdByAssessment: true,
+      outletType: 0,
+      annualUse: 0,
+      cost: 0,
+      addedMotorEnergy: []
+    };
+    return dischargeOutlet;
+  }
+
   
   
   export const getNewNode = (nodeType: WaterProcessComponentType, newProcessComponent: ProcessFlowPart, position?: { x: number, y: number }): Node => {
@@ -230,31 +278,25 @@ import { getNewIdString } from "./utils";
  * Add new component or return component based from a diagram component
  * @param processFlowPart Build from diagram component
  */
-  export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): WaterUsingSystem => {
+     export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): WaterUsingSystem => {
       let waterUsingSystem: WaterUsingSystem;
-      let newComponent: WaterProcessComponent;
+      let waterProcessComponent: WaterProcessComponent;
       if (!processFlowPart) {
-        newComponent = getNewProcessComponent('water-using-system') as WaterUsingSystem;
+        waterProcessComponent = getNewProcessComponent('water-using-system') as WaterUsingSystem;
       } else {
-        newComponent = processFlowPart as WaterUsingSystem;
+        waterProcessComponent = processFlowPart as WaterUsingSystem;
       }
       waterUsingSystem = {
-        ...newComponent,
+        ...waterProcessComponent,
         createdByAssessment: true,
         hoursPerYear: 8760,
         userDiagramFlowOverrides: {
-          sourceWater: undefined,
-          recirculatedWater: undefined,
-          dischargeWater: undefined,
-          knownLosses: undefined,
-          waterInProduct: undefined,
+          sourceWater: waterProcessComponent.userDiagramFlowOverrides?.sourceWater,
+          recirculatedWater: waterProcessComponent.userDiagramFlowOverrides?.recirculatedWater,
+          dischargeWater: waterProcessComponent.userDiagramFlowOverrides?.dischargeWater,
+          knownLosses: waterProcessComponent.userDiagramFlowOverrides?.knownLosses,
+          waterInProduct: waterProcessComponent.userDiagramFlowOverrides?.waterInProduct,
         }, 
-        intakeSources: [
-          {
-            sourceType: 0,
-            annualUse: 0
-          }
-        ],
         processUse: {
           waterRequiredMetric: 0,
           waterRequiredMetricValue: undefined,
@@ -297,13 +339,13 @@ import { getNewIdString } from "./utils";
           heatingFuelType: 0,
           wasteWaterDischarge: undefined
         },
-        addedMotorEnergy: [],
+        addedMotorEnergy: waterProcessComponent.addedMotorEnergy || [],
         systemFlowTotals: {
-          sourceWater: 0,
-          recirculatedWater: 0,
-          dischargeWater: 0,
-          knownLosses: 0,
-          waterInProduct: 0,
+          sourceWater: waterProcessComponent.systemFlowTotals?.sourceWater,
+          recirculatedWater: waterProcessComponent.systemFlowTotals?.recirculatedWater,
+          dischargeWater: waterProcessComponent.systemFlowTotals?.dischargeWater,
+          knownLosses: waterProcessComponent.systemFlowTotals?.knownLosses,
+          waterInProduct: waterProcessComponent.systemFlowTotals?.waterInProduct,
         }
   
       }

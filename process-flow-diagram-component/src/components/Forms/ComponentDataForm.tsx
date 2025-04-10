@@ -17,7 +17,7 @@ import { blue, yellow } from "@mui/material/colors";
 import SelectTreatmentType from "./SelectTreatmentType";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import CalculateIcon from '@mui/icons-material/Calculate';
-import { ProcessFlowPart, WaterTreatment, waterTreatmentTypeOptions, WasteWaterTreatment, wasteWaterTreatmentTypeOptions, CustomEdgeData, waterUsingSystemTypeOptions } from "process-flow-lib";
+import { ProcessFlowPart, WaterTreatment, waterTreatmentTypeOptions, WasteWaterTreatment, wasteWaterTreatmentTypeOptions, CustomEdgeData, waterUsingSystemTypeOptions, WaterUsingSystem, getSystemEstimatedUnknownLosses } from "process-flow-lib";
 import InputField from "../StyledMUI/InputField";
 
 
@@ -70,15 +70,10 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         defaultSelectedTreatmentType = componentData.treatmentType !== undefined ? Number(componentData.treatmentType) : 0;
         treatmentTypeOptions = wasteWaterTreatmentTypeOptions;
     } else if (isWaterUsingSystem) {
-        componentData = componentData as ProcessFlowPart;
-        const totalKnownLosses = componentData.userEnteredData.totalKnownLosses?? 0;
-        const waterInProduct = componentData.userEnteredData.waterInProduct?? 0;
-        const allKnownLosses = totalKnownLosses + waterInProduct;
-        let unknownLoss: number = totalSourceFlow - totalDischargeFlow; 
-        totalUnknownLoss = unknownLoss - allKnownLosses;
-    } else {
-        componentData = componentData as ProcessFlowPart;
-    }
+        const waterSystem = componentData as WaterUsingSystem;
+        totalUnknownLoss = getSystemEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow);
+    } 
+
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
         setExpanded(newExpanded);
     };

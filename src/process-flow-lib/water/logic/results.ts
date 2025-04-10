@@ -1,6 +1,6 @@
 import { Node, Edge } from "@xyflow/react";
 import { CustomEdgeData, DiagramSettings, NodeFlowData, NodeFlowProperty, ProcessFlowPart } from "../types/diagram";
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, FlowData, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, FlowData, HeatEnergy, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor} from "./utils";
 import { getWaterFlowTotals } from "./water-components";
 
@@ -58,6 +58,7 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem): SystemBa
     percentTotalBalance: 0,
   }
   let consumptiveIrrigationLoss = 0;
+  // todo might not be needed ask Kiran
   if (waterSystem.systemType = WaterSystemTypeEnum.LANDSCAPING) {
     // todo 7121 need info on what this is
     consumptiveIrrigationLoss = 0;
@@ -66,14 +67,36 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem): SystemBa
   // * recycled removed 7423
   // systemBalanceResults.incomingWater = waterSystem.systemFlowTotals.sourceWater + waterSystem.systemFlowTotals.recycledSourceWater;
   // systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct + waterSystem.systemFlowTotals.dischargeWater + waterSystem.systemFlowTotals.dischargeWaterRecycled + consumptiveIrrigationLoss;
+  
+  const estimatedUnknownLosses = getSystemEstimatedUnknownLosses(waterSystem, waterSystem.userEnteredData.totalSourceFlow, waterSystem.userEnteredData.totalDischargeFlow);
   systemBalanceResults.incomingWater = waterSystem.systemFlowTotals.sourceWater;
-  systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct + waterSystem.systemFlowTotals.dischargeWater + consumptiveIrrigationLoss;
+  systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct 
+    + waterSystem.systemFlowTotals.dischargeWater 
+    + waterSystem.systemFlowTotals.knownLosses 
+    + estimatedUnknownLosses
+    + consumptiveIrrigationLoss;
+  // todo + total known loss and estimated known losses
   
   systemBalanceResults.totalKnownLosses = waterSystem.systemFlowTotals.knownLosses;
   systemBalanceResults.waterBalance = systemBalanceResults.incomingWater - systemBalanceResults.outgoingWater;
   systemBalanceResults.percentIncomingWater = getBalancePercent(systemBalanceResults.incomingWater, systemBalanceResults.waterBalance);
   console.log('SystemBalanceResults', waterSystem.name, systemBalanceResults);
   return systemBalanceResults;
+}
+
+export const getSystemEstimatedUnknownLosses = (
+  componentData: WaterUsingSystem, 
+  systemTotalSourceFlow: number, 
+  systemTotalDischargeFlow: number
+): number => {
+  systemTotalDischargeFlow = systemTotalDischargeFlow?? 0;
+  systemTotalSourceFlow = systemTotalSourceFlow?? 0; 
+  const totalKnownLosses = componentData.userEnteredData.totalKnownLosses?? 0;
+  const waterInProduct = componentData.userEnteredData.waterInProduct?? 0;
+  const allKnownLosses = totalKnownLosses + waterInProduct;
+  const unknownLoss: number = systemTotalSourceFlow - systemTotalDischargeFlow; 
+  const totalUnknownLoss = unknownLoss - allKnownLosses;
+  return totalUnknownLoss;
 }
 
 
@@ -383,4 +406,37 @@ export const getWaterTrueCost = (
     const trueCost =  directCosts + indirectCost;
     console.log('dc, id, true cost', directCosts, indirectCost, trueCost); 
   return trueCost;
+}
+
+/**
+* Get cost for MotorEnergy
+* @param motorEnergy MotorEnergy object
+* @param energyUnitCost Cost of energy per kWh or MMBTU / GJ
+*/
+export const getMotorEnergyCost = (motorEnergy: MotorEnergy, energyUnitCost: number): number => {
+  // todo verify conversion
+  const ratedPowerKW = motorEnergy.ratedPower * 0.7457; // convert HP to kW
+  const energyKwPerYear = (motorEnergy.hoursPerYear * motorEnergy.loadFactor) / 100 * (ratedPowerKW * motorEnergy.systemEfficiency) / 100;
+  const motorEnergyCost = energyKwPerYear * energyUnitCost;
+  return motorEnergyCost;
+}
+
+
+/**
+* Get Cost for HeatEnergy
+* @param heatEnergy HeatEnergy object
+* @param energyUnitCost Cost of energy per kWh or MMBTU / GJ
+*/
+export const getHeatEnergyCost = (systemHeatEnergy: HeatEnergy, energyUnitCost: number): number => {
+  const heatEnergy: HeatEnergy = {
+    incomingTemp: systemHeatEnergy.incomingTemp?? 0,
+    outgoingTemp: systemHeatEnergy.outgoingTemp?? 0,
+    heaterEfficiency: systemHeatEnergy.heaterEfficiency?? 0,
+    wasteWaterDischarge: systemHeatEnergy.wasteWaterDischarge?? 0,
+    hoursPerYear: systemHeatEnergy.hoursPerYear?? 0,
+    heatingFuelType: systemHeatEnergy.heatingFuelType?? 0,
+  }
+  const energy = heatEnergy.wasteWaterDischarge * (heatEnergy.outgoingTemp - heatEnergy.incomingTemp) * 1 * 8.3454 * heatEnergy.heaterEfficiency / 1000000
+  const heatEnergyCost = energy * energyUnitCost;
+  return heatEnergyCost;
 }

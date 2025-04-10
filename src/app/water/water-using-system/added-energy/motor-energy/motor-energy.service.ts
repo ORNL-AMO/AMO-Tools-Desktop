@@ -32,8 +32,8 @@ export class MotorEnergyService {
     };
   }
 
-  updateMotorEnergy(addedMotorEnergy: MotorEnergy[], updatedMotorEnergy: MotorEnergy, updateIndex: number) {
-    return addedMotorEnergy.map((equipmentEnergy: MotorEnergy, index) => {
+  updateMotorEnergy(addedMotorEnergy: MotorEnergy[], updatedMotorEnergy: MotorEnergy, updateIndex: number): MotorEnergy[] {
+    const updatedMotorEnergies = addedMotorEnergy.map((equipmentEnergy: MotorEnergy, index) => {
       if (index === updateIndex) {
         equipmentEnergy.name = updatedMotorEnergy.name;
         equipmentEnergy.numberUnits = updatedMotorEnergy.numberUnits;
@@ -42,7 +42,9 @@ export class MotorEnergyService {
         equipmentEnergy.ratedPower = updatedMotorEnergy.ratedPower;
         equipmentEnergy.systemEfficiency = updatedMotorEnergy.systemEfficiency;
       }
+      return equipmentEnergy;
     });
+    return updatedMotorEnergies;
   }
 
   getDefaultMotorEnergy(lastIndex: number): MotorEnergy {
