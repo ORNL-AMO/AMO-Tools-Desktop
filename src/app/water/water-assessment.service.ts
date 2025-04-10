@@ -5,7 +5,7 @@ import { Settings } from '../shared/models/settings';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
 import { WaterTreatmentService } from './water-treatment/water-treatment.service';
-import { DiagramWaterSystemFlows, DischargeOutlet, getComponentNameFromType, getWaterUsingSystem, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { DiagramWaterSystemFlows, DischargeOutlet, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getWaterUsingSystem, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
 
 @Injectable({
   providedIn: 'root'
@@ -109,11 +109,11 @@ export class WaterAssessmentService {
     let waterAssessment: WaterAssessment = this.waterAssessment.getValue();
     let newComponent: WaterProcessComponent;
     if (componentType === 'water-intake') {
-      let newIntakeSource = this.waterSystemComponentService.addIntakeSource();
+      let newIntakeSource = getIntakeSource();
       waterAssessment.intakeSources? waterAssessment.intakeSources.push(newIntakeSource) : waterAssessment.intakeSources = [newIntakeSource];
       newComponent = newIntakeSource;
     } else if (componentType === 'water-discharge') {
-      let newDischargeOutlet = this.waterSystemComponentService.addDischargeOutlet();
+      let newDischargeOutlet = getDischargeOutlet();
       waterAssessment.dischargeOutlets? waterAssessment.dischargeOutlets.push(newDischargeOutlet) : waterAssessment.dischargeOutlets = [newDischargeOutlet];
       newComponent = newDischargeOutlet;
     } else if (componentType === 'water-using-system') {

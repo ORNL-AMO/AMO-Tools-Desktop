@@ -59,7 +59,7 @@ export class AddedEnergyComponent {
   }
 
   saveMotorEnergy(updatedMotorEnergy: MotorEnergy, index: number) {
-    this.motorEnergyService.updateMotorEnergy(this.selectedWaterUsingSystem.addedMotorEnergy, updatedMotorEnergy, index)
+    this.selectedWaterUsingSystem.addedMotorEnergy = this.motorEnergyService.updateMotorEnergy(this.selectedWaterUsingSystem.addedMotorEnergy, updatedMotorEnergy, index)
     this.save(this.selectedWaterUsingSystem);
   }
 

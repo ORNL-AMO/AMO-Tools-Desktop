@@ -13,7 +13,7 @@ import { Edge, Node } from '@xyflow/react';
 import { WaterTreatmentService } from './water-treatment/water-treatment.service';
 import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { WaterDiagram, WaterAssessment, DiagramWaterSystemFlows, WaterUsingSystem, CustomEdgeData, FlowData, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, WaterSystemFlowsTotals, getTotalFlowValue, getWaterFlowsFromSource, getIsKnownLossFlow, setWaterUsingSystemFlows } from 'process-flow-lib';
+import { WaterDiagram, WaterAssessment, DiagramWaterSystemFlows, WaterUsingSystem, CustomEdgeData, FlowData, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, WaterSystemFlowsTotals, getTotalFlowValue, getWaterFlowsFromSource, getIsKnownLossFlow, setWaterUsingSystemFlows, getIntakeSource, getDischargeOutlet } from 'process-flow-lib';
 
 @Injectable()
 export class WaterAssessmentConnectionsService {
@@ -95,7 +95,7 @@ export class WaterAssessmentConnectionsService {
       if (waterProcessComponent.processComponentType === 'water-intake') {
         let intakeSource: IntakeSource;
         if (!waterProcessComponent.createdByAssessment) {
-          intakeSource = this.waterComponentService.addIntakeSource(waterProcessComponent);
+          intakeSource = getIntakeSource(waterProcessComponent);
         } else {
           intakeSource = waterProcessComponent as IntakeSource;
         }
@@ -104,7 +104,7 @@ export class WaterAssessmentConnectionsService {
       if (waterProcessComponent.processComponentType === 'water-discharge') {
         let dischargeOutlet: DischargeOutlet;
         if (!waterProcessComponent.createdByAssessment) {
-          dischargeOutlet = this.waterComponentService.addDischargeOutlet(waterProcessComponent);
+          dischargeOutlet = getDischargeOutlet(waterProcessComponent);
         } else {
           dischargeOutlet = waterProcessComponent as DischargeOutlet;
         }

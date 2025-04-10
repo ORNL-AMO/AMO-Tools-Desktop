@@ -89,7 +89,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
     }}>
       <Box sx={{ 
         padding: '0rem .5rem 2rem 0rem',
-        height: '35%',
+        height: '40%',
         }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
           <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">

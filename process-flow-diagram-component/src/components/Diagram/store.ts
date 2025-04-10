@@ -2,7 +2,7 @@ import { configureStore, createListenerMiddleware, createSelector, isAnyOf } fro
 import diagramReducer, { addNode, DiagramState, saveDiagramState } from './diagramReducer'
 import { addEdge, Edge, getConnectedEdges, Node } from '@xyflow/react';
 import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
-import { CustomEdgeData, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterProcessComponent } from 'process-flow-lib';
+import { CustomEdgeData, DiagramCalculatedData, getIntakeSource, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterProcessComponent } from 'process-flow-lib';
 
 
 export function configureAppStore() {
@@ -112,6 +112,22 @@ export const selectTotalDischargeFlow = createSelector([selectCalculatedNodeData
 });
 
 
+export const selectIntakeSourceNodes = createSelector(
+  [selectNodes],
+  (nodes: Node<ProcessFlowPart>[]) => {
+    return nodes
+    .filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-intake')
+  }
+);
+
+export const selectDischargeOutletNodes = createSelector(
+  [selectNodes],
+  (nodes: Node<ProcessFlowPart>[]) => {
+    return nodes
+    .filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-discharge')
+  }
+);
+
 export const selectNodesAsWaterUsingSystems = createSelector(
   [selectNodes],
   (nodes: Node<ProcessFlowPart>[]) => {
@@ -121,22 +137,6 @@ export const selectNodesAsWaterUsingSystems = createSelector(
         const processFlowPart: WaterProcessComponent = node.data as WaterProcessComponent;
         return getWaterUsingSystem(processFlowPart);
       });
-  }
-);
-
-export const selectIntakeSourceNodes = createSelector(
-  [selectNodes],
-  (nodes: Node<ProcessFlowPart>[]) => {
-    return nodes
-      .filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-intake')
-  }
-);
-
-export const selectDischargeOutletNodes = createSelector(
-  [selectNodes],
-  (nodes: Node<ProcessFlowPart>[]) => {
-    return nodes
-      .filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-discharge')
   }
 );
 
