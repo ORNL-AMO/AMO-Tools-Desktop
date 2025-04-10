@@ -19,17 +19,16 @@ export class CashFlowFormComponent implements OnInit {
   
   constructor() { }
 
-  ngOnInit() {    
+  ngOnInit() { 
     this.checkDisableAddBtn();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
   }
 
   focusField(str: string) {
     this.changeField.emit(str);
   }
-  calculate() {
+  
+  calculate() {    
+    this.checkDisableAddBtn();
     this.emitCalculate.emit(true);
   }
 
