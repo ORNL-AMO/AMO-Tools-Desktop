@@ -2,13 +2,11 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import {  DiagramWaterSystemFlows, DischargeOutlet, IntakeSource, WaterAssessment, WaterProcessComponent, WaterUsingSystem } from '../shared/models/water-assessment';
-import { ProcessFlowPart, WasteWaterTreatment, WaterProcessComponentType, WaterTreatment } from '../../process-flow-types/shared-process-flow-types';
+import {  DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, WaterAssessment, WaterProcessComponent, WaterUsingSystem } from '../shared/models/water-assessment';
+import { WasteWaterTreatment, WaterProcessComponentType, WaterTreatment } from '../../process-flow-types/shared-process-flow-types';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
 import { getComponentNameFromType } from '../../process-flow-types/shared-process-flow-logic';
-import { WaterTreatmentService } from './water-treatment/water-treatment.service';
-// todo 6875 measur compiler doesn't like pulling in this module because it's from jsx
 
 @Injectable({
   providedIn: 'root'
@@ -122,6 +120,9 @@ export class WaterAssessmentService {
     } else if (componentType === 'water-using-system') {
       let newWaterUsingSystem = this.waterUsingSystemService.addWaterUsingSystem();
       waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(newWaterUsingSystem) : waterAssessment.waterUsingSystems = [newWaterUsingSystem];
+      let componentWaterFlows = this.getDefaultDiagramWaterFlows();
+      componentWaterFlows.id = newWaterUsingSystem.diagramNodeId;
+      waterAssessment.diagramWaterSystemFlows.push(componentWaterFlows);
       newComponent = newWaterUsingSystem;
     }
 
@@ -245,6 +246,52 @@ export class WaterAssessmentService {
       },
     }
   }
+
+  // todo rename diagramWaterSystemFlows
+  getSourceConnectionOptions(waterAssessment: WaterAssessment, diagramNodeId: string): {value: string, display: string}[] {
+    // find all components not already listed as a connected source in FlowData of diagramWaterSystemFlow
+    let connectionOptions = [].concat(
+      waterAssessment.intakeSources,
+      waterAssessment.waterUsingSystems,
+      waterAssessment.waterTreatments,
+    ).filter(component => component.diagramNodeId !== diagramNodeId).map(component => {
+      return {
+        value: component.diagramNodeId,
+        display: component.name,
+      };
+    });
+
+    return connectionOptions;
+  }
+
+  getSystemSourceFlows(waterAssessment: WaterAssessment, diagramNodeId: string): EdgeFlowData[] {
+    let componentWaterFlows: DiagramWaterSystemFlows = waterAssessment.diagramWaterSystemFlows?.find(componentFlows => componentFlows.id === diagramNodeId);
+    if (!componentWaterFlows) {
+      return [];
+    }
+    return componentWaterFlows.sourceWater.flows.map(flow => flow);
+  }
+
+  updateSystemSourceFlowData(waterAssessment: WaterAssessment, flowData: EdgeFlowData): void {
+    waterAssessment.diagramWaterSystemFlows = waterAssessment.diagramWaterSystemFlows.map(componentFlows => {
+      if (componentFlows.id === flowData.target) {
+        let existingFlowIndex = componentFlows.sourceWater.flows.findIndex(flow => flow.source !== undefined && flow.source === flowData.source);
+        if (existingFlowIndex >= 0) {
+          componentFlows.sourceWater.flows[existingFlowIndex] = flowData;
+        } else {
+          componentFlows.sourceWater.flows.push(flowData);
+        }
+      }
+      return componentFlows;
+    });
+  }
+
+  getAvailableConnectionOptions(existingFlows: EdgeFlowData[], connectionOptions:{value: string, display: string}[]): {value: string, display: string}[] {
+    const existingFlowIds: string[] = existingFlows.map(flow => flow.source);
+    connectionOptions = connectionOptions.filter(option => !existingFlowIds.includes(option.value));
+    return connectionOptions;
+  }
+  
 
 }
 

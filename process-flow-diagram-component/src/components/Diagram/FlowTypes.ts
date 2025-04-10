@@ -7,6 +7,7 @@ import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import { EdgeTypes, NodeTypes } from "@xyflow/react";
 import KnownLossNode from "../Nodes/KnownLossNode";
 import SummingNode from "../Nodes/SummingNode";
+import React from "react";
 
 export const nodeTypes: NodeTypes = {
   waterIntake: ProcessFlowComponentNode,

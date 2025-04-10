@@ -1,9 +1,38 @@
-import { Node, Edge } from "@xyflow/react";
+import { Node, Edge, Connection, MarkerType } from "@xyflow/react";
 import { FlowMetric } from "./shared-process-flow-constants";
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, CustomEdgeData, CustomNodeStyleMap, DiagramCalculatedData, DiagramSettings, Handles, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, ProcessFlowNodeType, ProcessFlowPart, ProcessUse, ProcessUseResults, WaterProcessComponentType, WaterTreatment } from "./shared-process-flow-types";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, CustomEdgeData, CustomNodeStyleMap, DiagramCalculatedData, DiagramSettings, Handles, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, ProcessFlowNodeType, ProcessFlowPart, ProcessUse, ProcessUseResults, UserDiagramOptions, WaterProcessComponentType, WaterTreatment } from "./shared-process-flow-types";
 
 // * WASM Module with suite api
 declare var Module: any;
+
+export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
+  return {
+    strokeWidth: 2,
+    edgeType: 'smoothstep',
+    minimapVisible: false,
+    controlsVisible: true,
+    directionalArrowsVisible: true,
+    showFlowLabels: true,
+    flowLabelSize: 1,
+    animated: true,
+  }
+}
+
+export const getDefaultSettings = (): DiagramSettings => {
+  return {
+    unitsOfMeasure: 'Imperial',
+    flowDecimalPrecision: 2,
+    conductivityUnit: 'mmho',
+  }
+}
+
+export const getDefaultColorPalette = () => {
+  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#93e200'];
+}
+
+
+
+
 export const convertAnnualFlow = (flowInput: number, metric: number, hoursPerYear: number, annualProduction: number, grossWaterUse?: number, incomingWater?: number): number => {
     if (metric == FlowMetric.ANNUAL) {
       return flowInput;
@@ -226,8 +255,6 @@ export const calculateProcessUseResults = (processUse: ProcessUse, hoursPerYear:
     }
     return validInput;
   }
-
-
 
   export function getNewIdString() {
     return Math.random().toString(36).substring(2, 9);
@@ -511,3 +538,47 @@ export const calculateProcessUseResults = (processUse: ProcessUse, hoursPerYear:
     return !isNaN(num) && num !== null && num !== undefined;
   }
   
+  
+/**
+* edge ids are not gauranteed to be unique. They only include nodeid-nodeid. source and target handles must be looked at to identify uniqueness of edge 
+* 
+*/
+export const getEdgeFromConnection = (
+  connectedParams: Connection | Edge, 
+  userDiagramOptions: UserDiagramOptions,
+  shouldSetId: boolean = false
+  ) => {
+    connectedParams = connectedParams as Edge;
+    if (connectedParams.source === connectedParams.target) {
+      connectedParams.type = 'selfconnecting';
+    }
+
+    if (userDiagramOptions.directionalArrowsVisible) {
+      connectedParams.markerEnd = {
+        type: MarkerType.ArrowClosed,
+        width: 25,
+        height: 25
+      }
+    }
+  
+    connectedParams.data = {
+      flowValue: null,
+    }
+  
+    if (connectedParams.style === undefined) {
+      connectedParams.style = {
+        stroke: '#6c757d',
+        strokeWidth: userDiagramOptions.strokeWidth
+      }
+    }
+
+    if (shouldSetId) {
+      connectedParams.id = getNewEdgeId(connectedParams.source, connectedParams.target);
+    }
+
+    return connectedParams;
+  }
+
+  export const getNewEdgeId = (sourceId: string, targetId: string): string => {
+    return `xy-edge__${sourceId}-${targetId}`;
+  }

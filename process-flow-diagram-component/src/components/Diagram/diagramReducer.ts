@@ -2,13 +2,13 @@ import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment } from '../../../../src/process-flow-types/shared-process-flow-types';
-import { createNewNode, formatDataForMEASUR, formatDecimalPlaces, getEdgeFromConnection, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
+import { createNewNode, formatDataForMEASUR, formatDecimalPlaces, getNodeFlowTotals, getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty } from './FlowUtils';
 import { CSSProperties } from 'react';
 // import { getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getResetData } from './store';
 import { MAX_FLOW_DECIMALS } from '../../../../src/process-flow-types/shared-process-flow-constants';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { convertFlowDiagramData } from '../../../../src/process-flow-types/shared-process-flow-logic';
+import { convertFlowDiagramData, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from '../../../../src/process-flow-types/shared-process-flow-logic';
 
 export interface DiagramState {
   nodes: Node[];
@@ -32,38 +32,7 @@ export interface DiagramState {
   isModalOpen: boolean
 }
 
-export const getStoreSerializedDate = (dateObject: Date): string => {
-  return dateObject.toISOString();
-}
-
-
-// helpers
-export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
-  return {
-    strokeWidth: 2,
-    edgeType: 'smoothstep',
-    minimapVisible: false,
-    controlsVisible: true,
-    directionalArrowsVisible: true,
-    showFlowLabels: true,
-    flowLabelSize: 1,
-    animated: true,
-  }
-}
-
-export const getDefaultSettings = (): DiagramSettings => {
-  return {
-    unitsOfMeasure: 'Imperial',
-    flowDecimalPrecision: 2,
-    conductivityUnit: 'mmho',
-  }
-}
-
-export const getDefaultColorPalette = () => {
-  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#93e200'];
-}
-
-export const getResetData = (currentState?: DiagramState): DiagramState => {
+export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState => {
   return {
     nodes: [],
     edges: [],
@@ -89,7 +58,9 @@ export const getResetData = (currentState?: DiagramState): DiagramState => {
   }
 }
 
-
+export const getStoreSerializedDate = (dateObject: Date): string => {
+  return dateObject.toISOString();
+}
 
 
 const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{ diagramData: FlowDiagramData, parentContainer: ParentContainerDimensions, assessmentId: number }>) => {
@@ -117,7 +88,7 @@ const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{
 }
 
 const resetDiagramReducer = (state: DiagramState) => {
-  const diagramState = getResetData(state);
+  const diagramState = getDefaultDiagramData(state);
   return diagramState;
 };
 
@@ -455,7 +426,7 @@ const modalOpenChangeReducer = (state: DiagramState, action: PayloadAction<boole
 
 export const diagramSlice = createSlice({
   name: 'diagram',
-  initialState: getResetData(),
+  initialState: getDefaultDiagramData(),
   reducers: {
     resetDiagram: resetDiagramReducer,
     diagramParentRender: diagramParentRenderReducer,
@@ -569,8 +540,8 @@ export const saveDiagramState = createAsyncThunk(
     };
     formatDataForMEASUR(updatedDiagramData);
 
-    // props.saveFlowDiagramData(updatedDiagramData);
-    // console.log('=== SAVED FlowDiagramData', updatedDiagramData);
+    // props.saveFlowDiagram(updatedDiagramData);
+    // console.log('=== SAVED FlowDiagram', updatedDiagramData);
   }
 );
 

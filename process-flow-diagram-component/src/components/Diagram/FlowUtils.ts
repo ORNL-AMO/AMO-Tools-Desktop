@@ -136,42 +136,6 @@ export const getDefaultNodeFromType = (nodeType: WaterProcessComponentType): Nod
 }
 
 
-/**
-* edge ids are not gauranteed to be unique. They only include nodeid-nodeid. source and target handles must be looked at to identify uniqueness of edge 
-* 
-*/
-export const getEdgeFromConnection = (
-  connectedParams: Connection | Edge, 
-  userDiagramOptions: UserDiagramOptions,
-  ) => {
-    connectedParams = connectedParams as Edge;
-    if (connectedParams.source === connectedParams.target) {
-      connectedParams.type = 'selfconnecting';
-    }
-
-    if (userDiagramOptions.directionalArrowsVisible) {
-      connectedParams.markerEnd = {
-        type: MarkerType.ArrowClosed,
-        width: 25,
-        height: 25
-      }
-    }
-  
-    connectedParams.data = {
-      flowValue: null,
-    }
-  
-    if (connectedParams.style === undefined) {
-      connectedParams.style = {
-        stroke: '#6c757d',
-        strokeWidth: userDiagramOptions.strokeWidth
-      }
-    }
-
-    return connectedParams;
-}
-
-
 export const getEdgeSourceAndTarget = (edge: Edge, nodes: Node[]) => {
   let target: ProcessFlowPart;
   let source: ProcessFlowPart;

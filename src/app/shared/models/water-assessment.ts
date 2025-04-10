@@ -87,23 +87,23 @@ export interface DiagramWaterSystemFlows {
     componentName: string,
     sourceWater: {
         total: number,
-        flows: FlowData[]
+        flows: EdgeFlowData[]
     },
     recirculatedWater: {
         total: number,
-        flows: FlowData[]
+        flows: EdgeFlowData[]
     },
     dischargeWater: {
         total: number,
-        flows: FlowData[]
+        flows: EdgeFlowData[]
     },
     knownLosses: {
         total: number,
-        flows: FlowData[]
+        flows: EdgeFlowData[]
     },
     waterInProduct: {
         total: number,
-        flows: FlowData[]
+        flows: EdgeFlowData[]
     },
 }
 
@@ -116,10 +116,11 @@ export interface WaterSystemFlows {
 }
 export type ConnectedFlowType = keyof WaterSystemFlows;
 
-export interface FlowData {
+export interface EdgeFlowData {
     source: string,
     target: string,
     flowValue: number,
+    diagramEdgeId: string
 }
 
 // * Plant level intakes AND system level intakes

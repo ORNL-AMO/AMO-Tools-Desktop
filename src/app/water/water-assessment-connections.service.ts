@@ -4,7 +4,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram } from '../shared/models/diagram';
-import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet, DiagramWaterSystemFlows, FlowData, KnownLoss, WaterSystemFlows } from '../shared/models/water-assessment';
+import { WaterAssessment, WaterProcessComponent, IntakeSource, WaterUsingSystem, DischargeOutlet, DiagramWaterSystemFlows, KnownLoss, WaterSystemFlows, EdgeFlowData } from '../shared/models/water-assessment';
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
 import { Settings } from '../shared/models/settings';
 import { WaterAssessmentService } from './water-assessment.service';
@@ -84,10 +84,11 @@ export class WaterAssessmentConnectionsService {
       }
 
       waterDiagram.flowDiagramData.edges.forEach((edge: Edge<CustomEdgeData>) => {
-        let flowData: FlowData = {
+        let flowData: EdgeFlowData = {
           source: edge.source,
           target: edge.target,
           flowValue: edge.data.flowValue,
+          diagramEdgeId: edge.id,
         }
         const isKnownFlowLoss = edge.source === systemComponent.diagramNodeId && this.isKnownLossFlow(edge.target, waterAssessment.knownLosses)
         
@@ -110,7 +111,6 @@ export class WaterAssessmentConnectionsService {
       componentFlows.knownLosses.total = systemComponent.userEnteredData.totalKnownLosses? systemComponent.userEnteredData.totalKnownLosses : this.getTotalFlowValue(componentFlows.knownLosses.flows);
       componentFlows.waterInProduct.total = systemComponent.userEnteredData.waterInProduct? systemComponent.userEnteredData.waterInProduct : this.getTotalFlowValue(componentFlows.waterInProduct.flows);
       diagramWaterSystemFlows.push(componentFlows);
-
       let waterFlows: WaterSystemFlows = this.waterUsingSystemService.getWaterFlowsFromSource(systemComponent, componentFlows);
       systemComponent.waterFlows = waterFlows;
 
@@ -121,7 +121,7 @@ export class WaterAssessmentConnectionsService {
     waterAssessment.diagramWaterSystemFlows = diagramWaterSystemFlows;
   }
 
-  getTotalFlowValue(flows: Array<FlowData>) {
+  getTotalFlowValue(flows: Array<EdgeFlowData>) {
     return flows.reduce((total, flow) => total + flow.flowValue, 0);
   }
 

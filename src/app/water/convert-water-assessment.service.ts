@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DiagramWaterSystemFlows, DischargeOutlet, FlowData, IntakeSource, KnownLoss, Modification, WaterAssessment, WaterSystemFlows, WaterUsingSystem } from '../shared/models/water-assessment';
+import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, KnownLoss, Modification, WaterAssessment, WaterSystemFlows, WaterUsingSystem } from '../shared/models/water-assessment';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
@@ -56,7 +56,7 @@ export class ConvertWaterAssessmentService {
 
   convertWaterSystemFlowData(systemFlowData: {
     total: number,
-    flows: FlowData[]
+    flows: EdgeFlowData[]
   }, oldSettings: Settings, newSettings: Settings) {
 
     systemFlowData.total = this.convertFlowValue(systemFlowData.total, oldSettings, newSettings);

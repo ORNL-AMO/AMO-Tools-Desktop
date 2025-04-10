@@ -375,6 +375,7 @@ export class AssessmentService {
         notes: undefined,
         conductivityUnit: 'mmho'
       },
+      diagramWaterSystemFlows:[],
       intakeSources: [],
       dischargeOutlets: [],
       waterUsingSystems: [],
