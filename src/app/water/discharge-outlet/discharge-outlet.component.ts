@@ -27,7 +27,6 @@ export class DischargeOutletComponent {
   showConfirmDeleteModal: boolean = false;
   deleteIndex: number;
   confirmDeleteData: ConfirmDeleteData;
-  isMotorEnergyCollapsed: boolean;
 
   idString: string;
   dischargeOutletTabSub: Subscription;
@@ -94,11 +93,6 @@ export class DischargeOutletComponent {
   addDischargeOutlet() {
     this.waterAssessmentService.addNewWaterComponent('water-discharge')
   }
-
-  
-  toggleCollapseMotorEnergy() {
-    this.isMotorEnergyCollapsed = !this.isMotorEnergyCollapsed;
-  }
   
   saveMotorEnergy(updatedMotorEnergy: MotorEnergy, index: number) {
     this.motorEnergyService.updateMotorEnergy(this.selectedDischargeOutlet.addedMotorEnergy, updatedMotorEnergy, index)
@@ -138,11 +132,11 @@ export class DischargeOutletComponent {
   }
 
     setMonthlyFlow(monthlyFlowData: MonthlyFlowData[]) {
-      let updated: DischargeOutlet = this.waterSystemComponentService.getDischargeOutletFromForm(this.form, this.selectedDischargeOutlet);
-      this.form.controls.annualUse.patchValue(this.waterSystemComponentService.getAnnualUseFromMonthly(monthlyFlowData))
-      updated.monthlyFlow = monthlyFlowData;
+      let totalAnnualUse: number = this.waterSystemComponentService.getAnnualUseFromMonthly(monthlyFlowData);
+      this.form.controls.annualUse.patchValue(totalAnnualUse)
+      this.selectedDischargeOutlet.annualUse = totalAnnualUse;
       this.selectedDischargeOutlet.monthlyFlow = monthlyFlowData;
-      this.save(updated);
+      this.save();
       this.setMonthlyFlowModal(false);
   
     }

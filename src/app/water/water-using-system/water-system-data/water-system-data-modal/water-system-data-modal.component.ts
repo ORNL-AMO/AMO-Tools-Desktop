@@ -37,7 +37,8 @@ export class WaterSystemDataModalComponent {
   }
 
   updateSystemTypeData(updatedSystemTypeData: WaterSystemTypeData) {
-    this.waterUsingSystemService.setUpdatedSystemTypeData(this.waterUsingSystem, updatedSystemTypeData, this.systemType);
+    // todo this needs to be modified to only set system type validity
+    // this.waterUsingSystemService.setUpdatedSystemTypeData(this.waterUsingSystem, updatedSystemTypeData, this.systemType);
     this.cd.detectChanges();
   }
 

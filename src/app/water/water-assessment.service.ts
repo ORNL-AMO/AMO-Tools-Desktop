@@ -73,7 +73,7 @@ export class WaterAssessmentService {
       case 'data':
         return 'Intake Data'
       case 'added-energy':
-        return 'Added Heat'
+        return 'Added Motor Energy'
       default:
          return 'Intake Data'
     }
@@ -85,7 +85,7 @@ export class WaterAssessmentService {
       case 'data':
         return 'Discharge Data'
       case 'added-energy':
-        return 'Added Heat'
+        return 'Added Motor Energy'
       default:
          return 'Discharge Data'
     }

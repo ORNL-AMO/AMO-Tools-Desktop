@@ -3,7 +3,7 @@
         <div class="row no-gutters">
             <div class="col-12">
                 <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
-                    <div *ngIf="setupTab !== 'system-basics' && setupTab != 'waste-water-treatment'"
+                    <div *ngIf="setupTab !== 'system-basics' && setupTab != 'water-treatment' && setupTab != 'waste-water-treatment'"
                         class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': panelTabSelect == 'component-table'}">
                         <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('component-table')">
                             <div>Components</div>
@@ -25,7 +25,7 @@
         </div>
         <div class="row no-gutters">
             <div class="col-12 pr-2 pl-2 pb-4 mt-1">
-                <ng-container *ngIf="panelTabSelect === 'component-table'">
+                <ng-container *ngIf="panelTabSelect === 'component-table' && (setupTab !== 'water-treatment' && setupTab !== 'waste-water-treatment')">
                     <app-water-component-table></app-water-component-table>
                 </ng-container>
                 

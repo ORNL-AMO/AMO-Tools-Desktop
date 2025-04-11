@@ -16,62 +16,53 @@ import { IntakeSource, intakeSourceTypeOptions, MonthlyFlowData, MotorEnergy, Wa
   styleUrl: './intake-source.component.css'
 })
 export class IntakeSourceComponent {
-  // * NOT currently used. intake source supplied as part of a water using system
-  @Input()
-  systemIntakeSource: IntakeSource;
-
   settings: Settings;
   componentFormTitle: string;
   waterAssessment: WaterAssessment;
   selectedIntakeSource: IntakeSource;
   form: FormGroup;
   selectedComponentSub: Subscription;
-  intakeSourceTypeOptions: {value: number, display: string}[];
+  intakeSourceTypeOptions: { value: number, display: string }[];
 
   showConfirmDeleteModal: boolean = false;
   deleteIndex: number;
   confirmDeleteData: ConfirmDeleteData;
-  isMotorEnergyCollapsed: boolean;
   showMonthlyFlowModal: boolean;
 
   idString: string;
   intakeSourceTabSub: Subscription;
   intakeSourceTab: PlantIntakeDischargeTab;
   intakeSourceTabTitle: string;
-  
-  constructor(private waterAssessmentService: WaterAssessmentService, 
+
+  constructor(private waterAssessmentService: WaterAssessmentService,
     private motorEnergyService: MotorEnergyService,
-    private waterSystemComponentService: WaterSystemComponentService) {}
+    private waterSystemComponentService: WaterSystemComponentService) { }
 
   ngOnInit() {
     this.intakeSourceTypeOptions = copyObject(intakeSourceTypeOptions);
     this.settings = this.waterAssessmentService.settings.getValue();
     this.componentFormTitle = this.waterAssessmentService.setWaterProcessComponentTitle('water-intake');
 
-    if (!this.systemIntakeSource) {
-      this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
-        this.selectedIntakeSource = selectedComponent as IntakeSource;
-        this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-        this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.intakeSources);
-        if (this.selectedIntakeSource) {
-          this.idString = this.componentFormTitle + this.selectedIntakeSource.diagramNodeId;
-          this.initForm();
-        }
-      });
+    this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
+      this.selectedIntakeSource = selectedComponent as IntakeSource;
+      this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
+      this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.intakeSources);
+      if (this.selectedIntakeSource) {
+        this.idString = this.componentFormTitle + this.selectedIntakeSource.diagramNodeId;
+        this.initForm();
+      }
+    });
 
-      this.intakeSourceTabSub = this.waterAssessmentService.intakeSourceTab.subscribe(val => {
-        this.intakeSourceTab = val;
-        this.intakeSourceTabTitle = this.waterAssessmentService.setIntakeSourceTabTitle(this.intakeSourceTab);
-      });
+    this.intakeSourceTabSub = this.waterAssessmentService.intakeSourceTab.subscribe(val => {
+      this.intakeSourceTab = val;
+      this.intakeSourceTabTitle = this.waterAssessmentService.setIntakeSourceTabTitle(this.intakeSourceTab);
+    });
 
-      this.setDefaultSelectedComponent();
-    }
+    this.setDefaultSelectedComponent();
   }
 
   ngOnDestroy() {
-    if (this.selectedComponentSub) {
-      this.selectedComponentSub.unsubscribe();
-    }
+    this.selectedComponentSub.unsubscribe();
   }
 
   setDefaultSelectedComponent() {
@@ -91,28 +82,24 @@ export class IntakeSourceComponent {
     this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
   }
 
-  
+
   setIntakeSourceType() {
     this.save();
   }
-  
+
   focusField(str: string) {
     this.waterAssessmentService.focusedField.next(str);
   }
-  
+
   addIntakeSource() {
     this.waterAssessmentService.addNewWaterComponent('water-intake')
-  }
- 
-  toggleCollapseMotorEnergy() {
-    this.isMotorEnergyCollapsed = !this.isMotorEnergyCollapsed;
   }
   
   saveMotorEnergy(updatedMotorEnergy: MotorEnergy, index: number) {
     this.motorEnergyService.updateMotorEnergy(this.selectedIntakeSource.addedMotorEnergy, updatedMotorEnergy, index)
     this.save();
   }
-  
+
   addNewMotorEnergy() {
     this.selectedIntakeSource.addedMotorEnergy.push(
       this.motorEnergyService.getDefaultMotorEnergy(this.selectedIntakeSource.addedMotorEnergy.length)
@@ -125,7 +112,7 @@ export class IntakeSourceComponent {
     this.save();
   }
 
-  addMotorEnergyFromInventory () {}
+  addMotorEnergyFromInventory() { }
 
   openConfirmDeleteModal(item: MotorEnergy, index: number) {
     this.confirmDeleteData = {
@@ -146,11 +133,11 @@ export class IntakeSourceComponent {
   }
 
   setMonthlyFlow(monthlyFlowData: MonthlyFlowData[]) {
-    let updated: IntakeSource = this.waterSystemComponentService.getIntakeSourceFromForm(this.form, this.selectedIntakeSource);
-    this.form.controls.annualUse.patchValue(this.waterSystemComponentService.getAnnualUseFromMonthly(monthlyFlowData))
-    updated.monthlyFlow = monthlyFlowData;
+    let totalAnnualUse: number = this.waterSystemComponentService.getAnnualUseFromMonthly(monthlyFlowData);
+    this.form.controls.annualUse.patchValue(totalAnnualUse)
+    this.selectedIntakeSource.annualUse = totalAnnualUse;
     this.selectedIntakeSource.monthlyFlow = monthlyFlowData;
-    this.save(updated);
+    this.save();
     this.setMonthlyFlowModal(false);
 
   }

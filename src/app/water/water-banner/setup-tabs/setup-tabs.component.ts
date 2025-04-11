@@ -47,6 +47,7 @@ export class SetupTabsComponent {
 
   hasWaterTreatments: boolean;
   hasWasteWaterTreatments: boolean;
+  waterAssessment: WaterAssessment;
   constructor(private waterAssessmentService: WaterAssessmentService, 
     private waterSystemComponentService: WaterSystemComponentService,
   ) { }
@@ -76,6 +77,7 @@ export class SetupTabsComponent {
     });
 
     this.waterAssessmentSub = this.waterAssessmentService.waterAssessment.subscribe(val => {
+      this.waterAssessment = val;
       this.disabledSetupTabs = [];
       this.setTabStatus();
     });
@@ -126,14 +128,15 @@ export class SetupTabsComponent {
     }
   }
 
-  
   // * Intake Source Sub Tabs
   changeIntakeSourceTab(tab: PlantIntakeDischargeTab) {
+    if (this.waterAssessment.intakeSources.length !== 0) {
       this.waterAssessmentService.intakeSourceTab.next(tab);
+    }
   }
 
   continueIntakeSourceTab() {
-    if(this.intakeSourceTab == 'data') {
+    if(this.intakeSourceTab == 'data' && this.waterAssessment.intakeSources.length > 0) {
       this.changeIntakeSourceTab('added-energy');
     } 
   }
@@ -146,11 +149,13 @@ export class SetupTabsComponent {
 
   // * Discharge Outlet Sub Tabs
   changeDischargeOutletTab(tab: PlantIntakeDischargeTab) {
-    this.waterAssessmentService.dischargeOutletTab.next(tab);
+    if (this.waterAssessment.dischargeOutlets.length !== 0) {
+      this.waterAssessmentService.dischargeOutletTab.next(tab);
+    }
   }
 
   continueDischargeOutletTab() {
-    if (this.dischargeOutletTab == 'data') {
+    if (this.dischargeOutletTab == 'data' && this.waterAssessment.dischargeOutlets.length > 0) {
       this.changeDischargeOutletTab('added-energy');
     }
   }
@@ -165,13 +170,13 @@ export class SetupTabsComponent {
   // * Water Using System Sub Tabs
   changeWaterUsingSystemTab(tab: WaterUsingSystemTabString) {
     let canDisplayTab: boolean = tab !== 'water-treatment' || (tab === 'water-treatment' && this.hasWaterTreatments);
-    if (canDisplayTab) {
+    if (canDisplayTab && this.waterAssessment.waterUsingSystems.length !== 0) {
       this.waterAssessmentService.waterUsingSystemTab.next(tab);
     }
   }
 
   continueWaterUsingSystemTab() {
-    if(this.waterUsingSystemTab == 'system') {
+    if(this.waterUsingSystemTab == 'system' && this.waterAssessment.waterUsingSystems.length > 0) {
       this.changeWaterUsingSystemTab('added-energy');
     } else if (this.waterUsingSystemTab == 'added-energy') {      
       this.changeWaterUsingSystemTab('water-treatment');

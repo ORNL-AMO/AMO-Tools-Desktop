@@ -29,6 +29,7 @@ const theme = createTheme({
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
     // const theme = useTheme();
+    const {selectedNode, connectedEdges} = props;
     const dispatch = useAppDispatch();
     const nodes = useAppSelector(selectNodes);
     const errors = useAppSelector(selectNodeValidation);
@@ -36,7 +37,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
     const settings = useAppSelector((state) => state.diagram.settings);
 
-    const [systemType, setSystemType] = React.useState<number>(props.selectedNode.data.systemType);
+    const [systemType, setSystemType] = React.useState<number>(selectedNode.data.systemType);
 
     const handleSystemTypeChange = (systemType: number): void => {
         setSystemType(systemType);
@@ -51,11 +52,12 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const [dischargeExpanded, setDischargeExpanded] = useState<boolean>(true);
 
     // todo for future diagrams - setComponentTypeData<T>
-    let componentData: ProcessFlowPart = { ...props.selectedNode.data } as ProcessFlowPart;
-    const isWaterTreatment = props.selectedNode.type === 'waterTreatment';
-    const isWasteWaterTreatment = props.selectedNode.type === 'wasteWaterTreatment';
-    const isWaterUsingSystem = props.selectedNode.type === 'waterUsingSystem';
-    const isDischargeOutlet = props.selectedNode.type === 'waterDischarge';
+    let componentData: ProcessFlowPart = { ...selectedNode.data } as ProcessFlowPart;
+    const isWaterTreatment = selectedNode.data.processComponentType === 'water-treatment';
+    const isWasteWaterTreatment = selectedNode.data.processComponentType === 'water-treatment';
+    const isWaterUsingSystem = selectedNode.data.processComponentType === 'water-using-system';
+    const isDischargeOutlet = selectedNode.data.processComponentType === 'water-discharge';
+    const isKnownLoss = selectedNode.data.processComponentType === 'known-loss';
     let totalUnknownLoss: number = 0;
 
     let defaultSelectedTreatmentType: number = 0;
@@ -78,16 +80,17 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         setExpanded(newExpanded);
     };
 
-    const handleNodePropertyChange = (nodeProp: string, value: number) => {
-        dispatch(nodeDataPropertyChange({ optionsProp: nodeProp, updatedValue: value }));
+    const handleNodePropertyNumber = (nodeProp: string, event: any) => {
+        const updatedValue = event.target.value === "" ? null : Number(event.target.value);
+        dispatch(nodeDataPropertyChange({ optionsProp: nodeProp, updatedValue: updatedValue  }));
     };
-    const hasSources = props.connectedEdges.some((edge: Edge<CustomEdgeData>) => {
+    const hasSources = connectedEdges.some((edge: Edge<CustomEdgeData>) => {
         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
-        return props.selectedNode.id === target.diagramNodeId;
+        return selectedNode.id === target.diagramNodeId;
     });
-    const hasTargets = props.connectedEdges.some((edge: Edge<CustomEdgeData>) => {
+    const hasTargets = connectedEdges.some((edge: Edge<CustomEdgeData>) => {
         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
-        return props.selectedNode.id === source.diagramNodeId;
+        return selectedNode.id === source.diagramNodeId;
     });
     const hasSourceErrors = errors && hasValidSourceForm(errors);
     const hasTargetErrors = errors && hasValidDischargeForm(errors);
@@ -173,36 +176,37 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     <label htmlFor={'treatmentType'} className={'diagram-label'} style={{ fontSize: '.9rem', marginLeft: '.5rem' }}>Treatment Type</label>
                     <SelectTreatmentType
                         treatmentType={defaultSelectedTreatmentType}
-                        handleTreatmentTypeChange={(event) => handleNodePropertyChange('treatmentType', event)}
+                        handleTreatmentTypeChange={(event) => handleNodePropertyNumber('treatmentType', event)}
                         treatmentOptions={treatmentTypeOptions}
                     ></SelectTreatmentType>
                 </Box>
             }
 
+            {!isWaterUsingSystem && !isKnownLoss &&
             <Box display={'flex'} marginBottom={'1rem'} width={'100%'}>
-
                 <InputField
                     label={'Cost'}
-                    id={`${props.selectedNode.id}-cost`}
+                    id={`${selectedNode.id}-cost`}
                     name={`cost`}
                     type={'number'}
                     size="small"
-                    value={componentData.cost}
+                    value={componentData.cost?? ''}
                     // warning={hasWarning}
                     // helperText={hasWarning ? String(errors.flows[index]) : ""}
-                    onChange={(event) => handleNodePropertyChange('cost', Number(event.target.value))}
+                    onChange={(event) => handleNodePropertyNumber('cost', event)}
                     sx={{ m: '1 0', width: '100%' }}
                     InputProps={{
                         endAdornment:
-                            <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                        <InputAdornment position="end" sx={{ zIndex: 1 }}>
                                 {settings.unitsOfMeasure === 'Imperial' ?
                                     <span style={{ zIndex: 1, background: 'white' }}>$/kgal</span>
                                     : <span style={{ zIndex: 1, background: 'white' }}>$/kL</span>
                                 }
                             </InputAdornment>,
                     }}
-                />
+                    />
             </Box>
+            }
 
             {hasSources &&
                 <Accordion expanded={sourcesExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded, setSourcesExpanded)}>
@@ -258,7 +262,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                         {isWaterUsingSystem && totalSourceFlow > totalDischargeFlow && totalUnknownLoss !== 0 &&
                             <Alert severity="warning" sx={{marginBottom: '1rem', width: '100%'}}>
                             <span>Estimated Unknown Loss: </span>
-                            <span>{totalUnknownLoss}</span>
+                            <span>{Math.abs(totalUnknownLoss)}</span>
                             <FlowDisplayUnit />
                         </Alert>
                         }
