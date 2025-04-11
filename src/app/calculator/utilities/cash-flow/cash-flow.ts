@@ -51,3 +51,16 @@ export interface CashFlowOutputs {
   disposal: number;
   otherCashFlow: number;
 }
+
+export interface WithoutTaxesOutputs {
+  cashFlowOutputs: CashFlowOutputs;
+  net: number;
+  simplePayback: number;
+  simplePaybackWithCostsSavings: number;
+  sir: number;
+  roi: number;
+  interestRate: number;
+  nvp: number;
+  irr: number;
+  
+}
