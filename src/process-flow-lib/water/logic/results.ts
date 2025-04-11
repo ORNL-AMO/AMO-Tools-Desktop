@@ -1,6 +1,6 @@
 import { Node, Edge } from "@xyflow/react";
 import { CustomEdgeData, DiagramSettings, NodeFlowData, NodeFlowProperty, ProcessFlowPart } from "../types/diagram";
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, FlowData, HeatEnergy, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, EdgeFlowData, HeatEnergy, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor} from "./utils";
 import { getWaterFlowTotals } from "./water-components";
 
@@ -122,10 +122,11 @@ export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], 
     }
 
     edges.forEach((edge: Edge<CustomEdgeData>) => {
-      let flowData: FlowData = {
+      let flowData: EdgeFlowData = {
         source: edge.source,
         target: edge.target,
         flowValue: edge.data.flowValue,
+        diagramEdgeId: edge.id,
       }
 
       // * totalKnownLoss field should now be used as source of truth for known losses.
@@ -205,7 +206,7 @@ export const calculateProcessUseResults = (processUse: ProcessUse, hoursPerYear:
   }
 }
 
-export const getTotalFlowValue = (flows: Array<FlowData>) => {
+export const getTotalFlowValue = (flows: Array<EdgeFlowData>) => {
   return flows.reduce((total, flow) => total + flow.flowValue, 0);
 }
 

@@ -1,0 +1,31 @@
+<div class="p-0 m-2">
+    <div class="my-2 px-2 d-flex">
+        <label class="group-label">Sources</label>
+    </div>
+    
+    @if(connectionOptions.length > 0) {
+        <div class="px-1 pt-0 pb-2" >
+            <div *ngFor="let source of sourceFlows; let i = index" class="d-flex flex-row align-items-center">
+                <app-connection-flow class="w-100" 
+                [edgeFlowData]="source" 
+                [settings]="settings" 
+                [connectionOptions]="connectionOptions"
+                (updateFlow)="saveWaterSource($event)"></app-connection-flow>
+    
+                <div class="pull-right px-3 py-0">
+                    <a class="click-link delete small danger" [ngStyle]="{'visibility': i == 0? 'hidden' : 'visible'}"
+                     (click)="deleteConnection(source, i)">X</a>
+                </div>
+    
+            </div>
+        </div>
+    } @else {
+        <div class="p-3 pt-0 alert alert-info text-center small">
+            Add Intakes, Treatment, or Water Using Systems to establish a source water connection.  
+        </div>
+    }
+
+    <button type="button" id="addWaterSource" class="add-connection-btn btn btn-primary btn-sm p-2 small mx-2" 
+        [disabled]="connectionOptions.length == 0 || connectionOptions.length <= sourceFlows.length"
+        (click)="addNewFlowConnection()">Add Water Source</button>
+</div>

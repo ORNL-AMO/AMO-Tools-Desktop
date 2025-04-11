@@ -13,7 +13,7 @@ import { Edge, Node } from '@xyflow/react';
 import { WaterTreatmentService } from './water-treatment/water-treatment.service';
 import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { WaterDiagram, WaterAssessment, DiagramWaterSystemFlows, WaterUsingSystem, CustomEdgeData, FlowData, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, WaterSystemFlowsTotals, getTotalFlowValue, getWaterFlowsFromSource, getIsKnownLossFlow, setWaterUsingSystemFlows, getIntakeSource, getDischargeOutlet } from 'process-flow-lib';
+import { WaterDiagram, WaterAssessment, DiagramWaterSystemFlows, WaterUsingSystem, CustomEdgeData, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, WaterSystemFlowsTotals, getTotalFlowValue, getWaterFlowsFromSource, getIsKnownLossFlow, setWaterUsingSystemFlows, getIntakeSource, getDischargeOutlet, EdgeFlowData } from 'process-flow-lib';
 
 @Injectable()
 export class WaterAssessmentConnectionsService {
@@ -63,6 +63,10 @@ export class WaterAssessmentConnectionsService {
     settings.unitsOfMeasure = diagram.waterDiagram.flowDiagramData.settings.unitsOfMeasure;
     settings.flowDecimalPrecision = diagram.waterDiagram.flowDiagramData.settings.flowDecimalPrecision;
     assessment.water.systemBasics.conductivityUnit = diagram.waterDiagram.flowDiagramData.settings.conductivityUnit;
+  }
+
+  getTotalFlowValue(flows: Array<EdgeFlowData>) {
+    return flows.reduce((total, flow) => total + flow.flowValue, 0);
   }
 
   isRecycledFlow(sourceOrTargetId: string, waterUsingSystems: WaterUsingSystem[]) {

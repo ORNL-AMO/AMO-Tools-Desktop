@@ -12,7 +12,8 @@ export interface WaterAssessment {
     wasteWaterTreatments?: WasteWaterTreatment[],
     dischargeOutlets?: DischargeOutlet[],
     knownLosses?: KnownLoss[],
-    diagramWaterSystemFlows?: DiagramWaterSystemFlows[]
+    diagramWaterSystemFlows?: DiagramWaterSystemFlows[],
+    connectedNodesMap?: Record<string, string>,
     setupDone: boolean
 }
 

@@ -1,7 +1,7 @@
 import { CustomNodeStyleMap } from "../constants";
-import { Node } from "@xyflow/react";
-import { Handles, ProcessFlowNodeType, ProcessFlowPart, WaterProcessComponentType } from "../types/diagram";
-import { ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, IntakeSource, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
+import { Connection, Edge, MarkerType, Node } from "@xyflow/react";
+import { DiagramSettings, Handles, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../types/diagram";
+import { ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { getNewIdString } from "./utils";
 
  
@@ -366,7 +366,7 @@ import { getNewIdString } from "./utils";
       waterInProduct: diagramWaterSystemFlows.waterInProduct.total,
     };
     Object.keys(waterUsingSystem.userDiagramFlowOverrides).forEach((key: ConnectedFlowType) => {
-      systemFlowTotals[key] = waterUsingSystem.userDiagramFlowOverrides[key]? waterUsingSystem.userDiagramFlowOverrides[key] : diagramWaterSystemFlows[key].total;
+      systemFlowTotals[key] = waterUsingSystem.userDiagramFlowOverrides[key]?? diagramWaterSystemFlows[key].total;
     });
     return systemFlowTotals;
   }
@@ -381,3 +381,95 @@ import { getNewIdString } from "./utils";
     };
     return systemFlowTotals;
   }
+
+
+  export const getAssessmentWaterSystemFlowEdges = (diagramWaterSystemFlows: DiagramWaterSystemFlows[]): { source: string, target: string }[] => {
+    const waterSystemFlowEdges: { source: string, target: string }[] = diagramWaterSystemFlows.flatMap((systemFlow: DiagramWaterSystemFlows) => {
+      if (!systemFlow) {
+        return [];
+      }
+      return Object.values(systemFlow).flatMap((property: any) => {
+        if (!property.flows) {
+          return [];
+        }
+        return property.flows.map((flow: EdgeFlowData) => ({
+          source: flow.source,
+          target: flow.target,
+        }));
+      });
+    });
+
+    return waterSystemFlowEdges;
+  }
+  
+/**
+* edge ids are not gauranteed to be unique. They only include nodeid-nodeid. source and target handles must be looked at to identify uniqueness of edge 
+* 
+*/
+export const getEdgeFromConnection = (
+  connectedParams: Connection | Edge, 
+  userDiagramOptions: UserDiagramOptions,
+  shouldSetId: boolean = false
+  ) => {
+    connectedParams = connectedParams as Edge;
+    if (connectedParams.source === connectedParams.target) {
+      connectedParams.type = 'selfconnecting';
+    }
+
+    if (userDiagramOptions.directionalArrowsVisible) {
+      connectedParams.markerEnd = {
+        type: MarkerType.ArrowClosed,
+        width: 25,
+        height: 25
+      }
+    }
+  
+    connectedParams.data = {
+      flowValue: null,
+    }
+  
+    if (connectedParams.style === undefined) {
+      connectedParams.style = {
+        stroke: '#6c757d',
+        strokeWidth: userDiagramOptions.strokeWidth
+      }
+    }
+
+    if (shouldSetId) {
+      connectedParams.id = getNewEdgeId(connectedParams.source, connectedParams.target);
+    }
+
+    return connectedParams;
+  }
+
+  export const getNewEdgeId = (sourceId: string, targetId: string): string => {
+    return `xy-edge__${sourceId}-${targetId}`;
+  }
+
+  
+export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
+  return {
+    strokeWidth: 2,
+    edgeType: 'smoothstep',
+    minimapVisible: false,
+    controlsVisible: true,
+    directionalArrowsVisible: true,
+    showFlowLabels: true,
+    flowLabelSize: 1,
+    animated: true,
+  }
+}
+
+export const getDefaultSettings = (): DiagramSettings => {
+  return {
+    unitsOfMeasure: 'Imperial',
+    flowDecimalPrecision: 2,
+    conductivityUnit: 'mmho',
+  }
+}
+
+export const getDefaultColorPalette = () => {
+  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#93e200'];
+}
+
+
