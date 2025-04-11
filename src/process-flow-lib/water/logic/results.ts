@@ -24,12 +24,10 @@ export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[]): W
     percentIncomingWater: 0,
     percentTotalBalance: 0,
     totalKnownLosses: 0,
-    estimatedUnknownLosses: allSystemsTotalBalance,
+    estimatedUnknownLosses: allSystemsTotalBalance >= 0 ? allSystemsTotalBalance : 0,
     allSystemBalanceResults: []
   }
 
-  // todo verify
-  // * outgoingWater - seems to be including estimated loss. Is this correct? Or should we only consider discharge outlet flow
   plantBalanceResults.allSystemBalanceResults = allSystemBalanceResults.map(systemResult => {
     plantBalanceResults.incomingWater += systemResult.incomingWater;
     plantBalanceResults.outgoingWater += systemResult.outgoingWater;
@@ -75,7 +73,6 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem): SystemBa
     + waterSystem.systemFlowTotals.knownLosses 
     + estimatedUnknownLosses
     + consumptiveIrrigationLoss;
-  // todo + total known loss and estimated known losses
   
   systemBalanceResults.totalKnownLosses = waterSystem.systemFlowTotals.knownLosses;
   systemBalanceResults.waterBalance = systemBalanceResults.incomingWater - systemBalanceResults.outgoingWater;
@@ -377,7 +374,7 @@ export const getUnknownLossees = (totalSourceFlow: number, totalDischargeFlow: n
 export const getComponentTypeTotalCost = (components: Node<ProcessFlowPart>[], nodeFlowProperty: NodeFlowProperty) => {
   return components.reduce((total: number, component: Node<ProcessFlowPart>) => {
     let acc = getKGalCost(component.data.cost, component.data.userEnteredData[nodeFlowProperty]?? 0);
-    return acc; 
+    return total + acc; 
   }, 0);
 }
 
@@ -398,14 +395,12 @@ export const getWaterTrueCost = (
   waterTreatmentCost?: number,
   wasteTreatmentCost?: number,
   ): number => {
-    // todo
-    const directCosts = intakeCost + dischargeCost;
-    
     let energyCosts = motorEnergyCost + heatEnergyCost;
     energyCosts = energyCosts ?? 0;
-    const indirectCost = waterTreatmentCost + wasteTreatmentCost;
+    const directCosts = intakeCost + dischargeCost;
+    const indirectCost = waterTreatmentCost + wasteTreatmentCost + energyCosts;
     const trueCost =  directCosts + indirectCost;
-    console.log('dc, id, true cost', directCosts, indirectCost, trueCost); 
+    console.log('direct costs, indirect costs, true cost', directCosts, indirectCost, trueCost); 
   return trueCost;
 }
 
@@ -415,7 +410,6 @@ export const getWaterTrueCost = (
 * @param energyUnitCost Cost of energy per kWh or MMBTU / GJ
 */
 export const getMotorEnergyCost = (motorEnergy: MotorEnergy, energyUnitCost: number): number => {
-  // todo verify conversion
   const ratedPowerKW = motorEnergy.ratedPower * 0.7457; // convert HP to kW
   const energyKwPerYear = (motorEnergy.hoursPerYear * motorEnergy.loadFactor) / 100 * (ratedPowerKW * motorEnergy.systemEfficiency) / 100;
   const motorEnergyCost = energyKwPerYear * energyUnitCost;

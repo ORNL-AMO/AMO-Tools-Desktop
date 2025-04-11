@@ -87,7 +87,7 @@ const DiagramResults = () => {
   const waterUsingSystems: WaterUsingSystem[] = useAppSelector(selectNodesAsWaterUsingSystems);
   setWaterUsingSystemFlows(waterUsingSystems, edges);
   const diagramResults: WaterBalanceResults = getWaterBalanceResults(waterUsingSystems); 
-  console.log('Diagram WB', diagramResults)
+  console.log('Diagram WB', diagramResults);
   
   const costTitle = "Costs";
   // direct costs

@@ -389,7 +389,7 @@ import { getNewIdString } from "./utils";
         return [];
       }
       return Object.values(systemFlow).flatMap((property: any) => {
-        if (!property.flows) {
+        if (!property || !property.flows) {
           return [];
         }
         return property.flows.map((flow: EdgeFlowData) => ({

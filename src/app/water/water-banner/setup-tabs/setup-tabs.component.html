@@ -74,7 +74,7 @@
     <li [ngClass]="{'active': intakeSourceTab == 'data'}">
         <a (click)="changeIntakeSourceTab('data')">Intake Data</a>
     </li>
-    <li [ngClass]="{'active': intakeSourceTab == 'added-energy'}">
+    <li [ngClass]="{'active': intakeSourceTab == 'added-energy', 'disabled': waterAssessment.intakeSources.length === 0}">
         <a (click)="changeIntakeSourceTab('added-energy')">Added Energy</a>
     </li>
 </ul>
@@ -88,7 +88,7 @@
         <li [ngClass]="{'active': intakeSourceTab == 'data'}" *ngIf="intakeSourceTab == 'data'">
             <a (click)="changeIntakeSourceTab('system')">Intake Data</a>
         </li>
-        <li [ngClass]="{'active': intakeSourceTab == 'added-energy'}" *ngIf="intakeSourceTab == 'added-energy'">
+        <li [ngClass]="{'active': intakeSourceTab == 'added-energy', 'disabled': waterAssessment.intakeSources.length === 0}" *ngIf="intakeSourceTab == 'added-energy'">
             <a (click)="changeIntakeSourceTab('added-energy')">Added Energy</a>
         </li>
         <li class="page-item" [ngClass]="{'disabled': intakeSourceTab == 'added-energy'}">
@@ -102,7 +102,7 @@
     <li [ngClass]="{'active': dischargeOutletTab == 'data'}">
         <a (click)="changeDischargeOutletTab('data')">Discharge Data</a>
     </li>
-    <li [ngClass]="{'active': dischargeOutletTab == 'added-energy'}">
+    <li [ngClass]="{'active': dischargeOutletTab == 'added-energy','disabled': waterAssessment.dischargeOutlets.length === 0}">
         <a (click)="changeDischargeOutletTab('added-energy')">Added Energy</a>
     </li>
 </ul>
@@ -116,7 +116,7 @@
         <li [ngClass]="{'active': dischargeOutletTab == 'data'}" *ngIf="dischargeOutletTab == 'data'">
             <a (click)="changeDischargeOutletTab('system')">Discharge Data</a>
         </li>
-        <li [ngClass]="{'active': dischargeOutletTab == 'added-energy'}" *ngIf="dischargeOutletTab == 'added-energy'">
+        <li [ngClass]="{'active': dischargeOutletTab == 'added-energy', 'disabled': waterAssessment.dischargeOutlets.length === 0}" *ngIf="dischargeOutletTab == 'added-energy'">
             <a (click)="changeDischargeOutletTab('added-energy')">Added Energy</a>
         </li>
         <li class="page-item" [ngClass]="{'disabled': dischargeOutletTab == 'added-energy'}">
@@ -131,7 +131,7 @@
     <li [ngClass]="{'active': waterUsingSystemTab == 'system'}">
         <a (click)="changeWaterUsingSystemTab('system')">System Data</a>
     </li>
-    <li [ngClass]="{'active': waterUsingSystemTab == 'added-energy'}">
+    <li [ngClass]="{'active': waterUsingSystemTab == 'added-energy', 'disabled': waterAssessment.waterUsingSystems.length === 0}">
         <a (click)="changeWaterUsingSystemTab('added-energy')">Added Energy</a>
     </li>
     <li [ngClass]="{'active': waterUsingSystemTab == 'water-treatment', 'disabled': !hasWaterTreatments}">
@@ -148,7 +148,7 @@
         <li [ngClass]="{'active': waterUsingSystemTab == 'system'}" *ngIf="waterUsingSystemTab == 'system'">
             <a (click)="changeWaterUsingSystemTab('system')">System Data</a>
         </li>
-        <li [ngClass]="{'active': waterUsingSystemTab == 'added-energy'}" *ngIf="waterUsingSystemTab == 'added-energy'">
+        <li [ngClass]="{'active': waterUsingSystemTab == 'added-energy', 'disabled': waterAssessment.waterUsingSystems.length === 0}" *ngIf="waterUsingSystemTab == 'added-energy'">
             <a (click)="changeWaterUsingSystemTab('added-energy')">Added Energy</a>
         </li>
         <li [ngClass]="{'active': waterUsingSystemTab == 'water-treatment', 'disabled': !hasWaterTreatments}" *ngIf="waterUsingSystemTab == 'water-treatment'">

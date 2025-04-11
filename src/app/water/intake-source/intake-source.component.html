@@ -71,15 +71,6 @@
 
 
     <div class="px-2" *ngIf="intakeSourceTab === 'added-energy'">
-        <label class="group-label header h3" (click)="toggleCollapseMotorEnergy()">
-            <span class="fa fa-chevron-right"
-                [ngClass]="{'fa-chevron-right': isMotorEnergyCollapsed, 'fa-chevron-down': !isMotorEnergyCollapsed}"></span>
-            Added Motor Energy
-            <span *ngIf="!form.valid" class="pull-right">
-                <span class="fa fa-exclamation-circle"></span>
-            </span>
-        </label>
-
         <ng-container *ngIf="!isMotorEnergyCollapsed">
             <div class="form-group my-2 px-2 d-flex justify-content-end">
                 <div class="btn-group btn-group-sm pull-right">
