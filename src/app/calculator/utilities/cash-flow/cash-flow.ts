@@ -23,5 +23,31 @@ export interface CashFlowResults {
   benefits?: number;
   cost?: number;
   results?: number;
+
+  totalCosts?: number;
+  capital?: number;
+  operating?: number;
+  disposal?: number;
+  other?: number;
+
+  totalSavings?: number;
+  energy?: number;
+  otherCashFlow?: number;
+  salvage?: number;
+
+  netPresentValue?: number;
+  annualWorth?: number;
   payback?: number;
+  sir?: number;
+  irr?: number;
+  roi?: number;
+}
+
+export interface CashFlowOutputs {
+  capitalExpenditures: number;
+  energySavings: number;
+  salvage: number;
+  operationCost: number;
+  disposal: number;
+  otherCashFlow: number;
 }
