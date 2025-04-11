@@ -4,8 +4,7 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { Settings } from '../shared/models/settings';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
-import { WaterTreatmentService } from './water-treatment/water-treatment.service';
-import { DiagramWaterSystemFlows, DischargeOutlet, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getWaterUsingSystem, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getWaterUsingSystem, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
 
 @Injectable({
   providedIn: 'root'
@@ -119,6 +118,9 @@ export class WaterAssessmentService {
     } else if (componentType === 'water-using-system') {
       let newWaterUsingSystem = getWaterUsingSystem();
       waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(newWaterUsingSystem) : waterAssessment.waterUsingSystems = [newWaterUsingSystem];
+      let componentWaterFlows = this.getDefaultDiagramWaterFlows();
+      componentWaterFlows.id = newWaterUsingSystem.diagramNodeId;
+      waterAssessment.diagramWaterSystemFlows.push(componentWaterFlows);
       newComponent = newWaterUsingSystem;
     }
 
@@ -242,6 +244,55 @@ export class WaterAssessmentService {
       },
     }
   }
+
+  // todo rename diagramWaterSystemFlows
+  getSourceConnectionOptions(waterAssessment: WaterAssessment, diagramNodeId: string): {value: string, display: string}[] {
+    // find all components not already listed as a connected source in FlowData of diagramWaterSystemFlow
+    let connectionOptions = [].concat(
+      waterAssessment.intakeSources,
+      waterAssessment.waterUsingSystems,
+      waterAssessment.waterTreatments,
+    ).filter(component => component.diagramNodeId !== diagramNodeId).map(component => {
+      return {
+        value: component.diagramNodeId,
+        display: component.name,
+      };
+    });
+
+    return connectionOptions;
+  }
+
+  getSystemSourceFlows(waterAssessment: WaterAssessment, diagramNodeId: string): EdgeFlowData[] {
+    let componentWaterFlows: DiagramWaterSystemFlows = waterAssessment.diagramWaterSystemFlows?.find(componentFlows => componentFlows.id === diagramNodeId);
+    if (!componentWaterFlows) {
+      return [];
+    }
+    return componentWaterFlows.sourceWater.flows.map(flow => flow);
+  }
+
+  updateSystemSourceFlowData(waterAssessment: WaterAssessment, flowData: EdgeFlowData): void {
+    // todo if is connected to water system need to also add to discharge of that system 
+    waterAssessment.diagramWaterSystemFlows = waterAssessment.diagramWaterSystemFlows.map(componentFlows => {
+      if (componentFlows.id === flowData.target) {
+        let existingFlowIndex = componentFlows.sourceWater.flows.findIndex(flow => flow.source !== undefined && flow.source === flowData.source);
+        if (existingFlowIndex >= 0) {
+          componentFlows.sourceWater.flows[existingFlowIndex] = flowData;
+        } else {
+          // todo map discharge also
+          // waterAssessment.connectedNodesMap[flowData.source] = flowData.target;
+          componentFlows.sourceWater.flows.push(flowData);
+        }
+      }
+      return componentFlows;
+    });
+  }
+
+  getAvailableConnectionOptions(existingFlows: EdgeFlowData[], connectionOptions:{value: string, display: string}[]): {value: string, display: string}[] {
+    const existingFlowIds: string[] = existingFlows.map(flow => flow.source);
+    connectionOptions = connectionOptions.filter(option => !existingFlowIds.includes(option.value));
+    return connectionOptions;
+  }
+  
 
 }
 
