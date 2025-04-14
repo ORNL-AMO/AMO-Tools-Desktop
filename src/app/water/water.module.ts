@@ -47,11 +47,7 @@ import { MotorEnergyComponent } from './water-using-system/added-energy/motor-en
 import { MotorEnergyService } from './water-using-system/added-energy/motor-energy/motor-energy.service';
 import { WasteWaterTreatmentComponent } from './waste-water-treatment/waste-water-treatment.component';
 import { SystemBasicsService } from './system-basics/system-basics.service';
-import { WaterTreatmentService } from './water-treatment/water-treatment.service';
 import { WaterTreatmentComponent } from './water-treatment/water-treatment.component';
-import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
-import { WaterTreatmentWrapperComponent } from './water-treatment/water-treatment-wrapper/water-treatment-wrapper.component';
-import { WasteWaterTreatmentWrapperComponent } from './waste-water-treatment/waste-water-treatment-wrapper/waste-water-treatment-wrapper.component';
 import { WaterBalanceResultsTableComponent } from './results-panel/water-balance-results-table/water-balance-results-table.component';
 import { MonthlyFlowChartComponent } from './results-panel/monthly-flow-chart/monthly-flow-chart.component';
 import { MonthlyFlowModalComponent } from './monthly-flow-modal/monthly-flow-modal.component';
@@ -83,8 +79,6 @@ import { ConnectionFlowComponent } from './water-using-system/connection-flow/co
     WaterTreatmentComponent,
     WasteWaterTreatmentComponent,
     SystemBasicsComponent,
-    WaterTreatmentWrapperComponent,
-    WasteWaterTreatmentWrapperComponent,
     MonthlyFlowModalComponent,
     MonthlyFlowChartComponent,
     WaterSourcesWrapperComponent,
@@ -122,8 +116,6 @@ import { ConnectionFlowComponent } from './water-using-system/connection-flow/co
     HeatEnergyService,
     MotorEnergyService,
     SystemBasicsService,
-    WaterTreatmentService,
-    WasteWaterTreatmentService
   ]
 })
 export class WaterModule { }

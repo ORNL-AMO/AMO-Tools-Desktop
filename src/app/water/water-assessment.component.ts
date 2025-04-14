@@ -11,7 +11,6 @@ import { ConvertWaterAssessmentService } from './convert-water-assessment.servic
 import { Settings } from '../shared/models/settings';
 import { IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
-import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { ParentContainerDimensions, WasteWaterTreatment, WaterAssessment } from 'process-flow-lib';
 
@@ -59,7 +58,6 @@ export class WaterAssessmentComponent {
   showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private convertWaterAssessmentService: ConvertWaterAssessmentService, 
-    private wasteWaterTreatmentService: WasteWaterTreatmentService,
     private waterAssessmentConnectionsService: WaterAssessmentConnectionsService,
     private assessmentDbService: AssessmentDbService, 
     private waterSystemComponentService: WaterSystemComponentService,
@@ -207,17 +205,6 @@ export class WaterAssessmentComponent {
   async updateAssessmentFromDiagram() {
     await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment, this.settings);
     this.save(this.assessment.water);
-  }
-
-  saveWasteWaterTreatment(updatedWasteWaterTreatment: WasteWaterTreatment, index: number) {
-    this.wasteWaterTreatmentService.updateWasteWaterTreatment(this.assessment.water.wasteWaterTreatments, updatedWasteWaterTreatment, index)
-    this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
-  }
-
-  addNewWasteWaterTreatment() {
-    this.assessment.water.wasteWaterTreatments.push(
-      this.wasteWaterTreatmentService.addWasteWaterTreatment()
-    );
   }
 
   setDisableNext() {

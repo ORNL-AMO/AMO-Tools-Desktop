@@ -28,10 +28,8 @@ export class ResultsPanelComponent {
 
     this.setupTabSub = this.waterAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
-      if (this.setupTab !== 'system-basics' && this.setupTab !== 'waste-water-treatment') {
+      if (this.setupTab !== 'system-basics') {
         this.panelTabSelect = 'component-table'
-      } else if (this.setupTab === 'waste-water-treatment') {
-        this.panelTabSelect = 'results'
       } else {
         this.panelTabSelect = 'help';
       }

@@ -4,7 +4,7 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { Settings } from '../shared/models/settings';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
-import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getWaterUsingSystem, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getWasteWaterTreatmentComponent, getWaterTreatmentComponent, getWaterUsingSystem, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
 
 @Injectable({
   providedIn: 'root'
@@ -122,6 +122,14 @@ export class WaterAssessmentService {
       componentWaterFlows.id = newWaterUsingSystem.diagramNodeId;
       waterAssessment.diagramWaterSystemFlows.push(componentWaterFlows);
       newComponent = newWaterUsingSystem;
+    } else if (componentType === 'water-treatment') {
+      let newWaterTreatment = getWaterTreatmentComponent(undefined, false, true);
+      waterAssessment.waterTreatments? waterAssessment.waterTreatments.push(newWaterTreatment) : waterAssessment.waterTreatments = [newWaterTreatment];
+      newComponent = newWaterTreatment;
+    } else if (componentType === 'waste-water-treatment') {
+      let newWasteTreatment = getWasteWaterTreatmentComponent();
+      waterAssessment.wasteWaterTreatments? waterAssessment.wasteWaterTreatments.push(newWasteTreatment) : waterAssessment.wasteWaterTreatments = [newWasteTreatment];
+      newComponent = newWasteTreatment;
     }
 
     this.updateWaterAssessment(waterAssessment);
@@ -160,6 +168,10 @@ export class WaterAssessmentService {
       deleteIndex = waterAssessment.dischargeOutlets.findIndex(component => component.diagramNodeId === deleteId);
       waterAssessment.dischargeOutlets.splice(deleteIndex, 1);
       updatedViewComponents = waterAssessment.dischargeOutlets;
+    } else if (componentType === 'water-treatment') {
+      deleteIndex = waterAssessment.waterTreatments.findIndex(component => component.diagramNodeId === deleteId);
+      waterAssessment.waterTreatments.splice(deleteIndex, 1);
+      updatedViewComponents = waterAssessment.wasteWaterTreatments;
     } else if (componentType === 'water-using-system') {
       deleteIndex = waterAssessment.waterUsingSystems.findIndex(component => component.diagramNodeId === deleteId);
       waterAssessment.waterUsingSystems.splice(deleteIndex, 1);

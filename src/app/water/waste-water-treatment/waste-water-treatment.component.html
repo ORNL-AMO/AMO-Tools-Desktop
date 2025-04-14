@@ -1,76 +1,78 @@
-<form [formGroup]="form" class="form-section">
-    <div *ngIf="inSystemBasics" class="form-group">
-        <label class="small" for="treatmentType">Treatment Type</label>
-        <div class="input-group">
-          <select name="treatmentType" class="form-control" id="treatmentType" formControlName="treatmentType"
-            (focus)="focusField('treatmentType')" (change)="save()">
-            <option *ngFor="let treatmentOption of wasteWaterTreatmentOptions" 
-            [ngValue]="treatmentOption.value">{{treatmentOption.display}}</option>
-          </select>
-        </div>
+<div class="d-flex flex-column panel-container pb-4">
+    <div class="header mr-2 ml-2">
+        <h3>{{componentFormTitle}}</h3>
+        <br>
     </div>
 
-    <div *ngIf="inSystemBasics && form.controls.treatmentType.value === 15" class="form-group" 
-        [ngClass]="{'invalid': form.controls.customTreatmentType.invalid}">
-        <label for="customTreatmentType">Custom Treatment</label>
-        <div class="input-group">
-            <input name="customTreatmentType" type="text" class="form-control" id="customTreatmentType" formControlName="customTreatmentType"
-                (input)="save()" (focus)="focusField('customTreatmentType')">
-        </div>
-        <span class="alert-danger pull-right small"
-            *ngIf="form.controls.customTreatmentType.invalid && !form.controls.customTreatmentType.pristine">
-            <span *ngIf="form.controls.customTreatmentType.errors.required">Value Required</span>
-        </span>
-    </div>
 
-    <div class="form-group">
-        <label class="small" for="name">Name</label>
-        <div class="input-group">
-            <input name="name" type="text" class="form-control" id="name" formControlName="name"
-                (input)="save()" (focus)="focusField('name')">
-        </div>
+    @if (waterAssessment.wasteWaterTreatments.length === 0) {
+    <div class="p-3 align-self-center">
+        <button type="button" class="btn btn-primary active" (click)="addWasteWaterTreatments()">
+            Add {{componentFormTitle}}
+        </button>
     </div>
-
-    <div *ngIf="!inSystemBasics" class="form-group" 
-        [ngClass]="{'invalid': form.controls.customTreatmentType.invalid}">
-        <label for="customTreatmentType">Treatment Type</label>
-        <div class="input-group" *ngIf="form.controls.treatmentType.value === 15">
-            {{form.controls.customTreatmentType.value}}
+    }
+    @else {
+    <form [formGroup]="form" class="form-section">
+        <div class="form-group">
+            <label class="small" for="treatmentType">Treatment Type</label>
+            <div class="input-group">
+                <select name="treatmentType" class="form-control" id="treatmentType" formControlName="treatmentType"
+                    (focus)="focusField('treatmentType')" (change)="save()">
+                    <option *ngFor="let treatmentOption of wasteWaterTreatmentOptions" [ngValue]="treatmentOption.value">
+                        {{treatmentOption.display}}</option>
+                </select>
+            </div>
         </div>
-        <div class="input-group" *ngIf="form.controls.treatmentType.value !== 15">
-            <select name="treatmentType" class="form-control" id="treatmentType" formControlName="treatmentType"
-              (focus)="focusField('treatmentType')" (change)="save()">
-              <option *ngFor="let treatmentOption of wasteWaterTreatmentOptions" 
-              [ngValue]="treatmentOption.value">{{treatmentOption.display}}</option>
-            </select>
-        </div>
-    </div>
 
-    <div class="form-group">
-        <label for="cost">Cost</label>
-        <div class="input-group">
-            <input name="cost" type="number" class="form-control" id="cost" formControlName="cost"
-                (input)="save()" (focus)="focusField('cost')">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">$/kgal</span>
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/kL</span>
+        <div *ngIf="form.controls.treatmentType.value === 15" class="form-group"
+            [ngClass]="{'invalid': form.controls.customTreatmentType.invalid}">
+            <label for="customTreatmentType">Custom Treatment</label>
+            <div class="input-group">
+                <input name="customTreatmentType" type="text" class="form-control" id="customTreatmentType"
+                    formControlName="customTreatmentType" (input)="save()" (focus)="focusField('customTreatmentType')">
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.customTreatmentType.invalid && !form.controls.customTreatmentType.pristine">
+                <span *ngIf="form.controls.customTreatmentType.errors.required">Value Required</span>
+            </span>
         </div>
-        <span class="alert-danger pull-right small"
-            *ngIf="form.controls.cost.invalid && !form.controls.cost.pristine">
-            <span *ngIf="form.controls.cost.errors.required">Value Required</span>
-        </span>
-    </div>
 
-    <div *ngIf="!inSystemBasics" class="form-group" [ngClass]="{'invalid': form.controls.flowValue.invalid}">
-        <label for="flowValue">Flow into Treatment</label>
-        <div class="input-group">
-            <input name="flowValue" type="number" class="form-control" id="flowValue" formControlName="flowValue"
-                (input)="save()" (focus)="focusField('flowValue')">
+        <div class="form-group">
+            <label class="small" for="name">Name</label>
+            <div class="input-group">
+                <input name="name" type="text" class="form-control" id="name" formControlName="name" (input)="save()"
+                    (focus)="focusField('name')">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cost">Cost</label>
+            <div class="input-group">
+                <input name="cost" type="number" class="form-control" id="cost" formControlName="cost" (input)="save()"
+                    (focus)="focusField('cost')">
+                <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">$/kgal</span>
+                <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/kL</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.cost.invalid && !form.controls.cost.pristine">
+                <span *ngIf="form.controls.cost.errors.required">Value Required</span>
+            </span>
+        </div>
+
+        <div class="form-group" [ngClass]="{'invalid': form.controls.flowValue.invalid}">
+            <label for="flowValue">Flow into Treatment</label>
+            <div class="input-group">
+                <input name="flowValue" type="number" class="form-control" id="flowValue" formControlName="flowValue"
+                    (input)="save()" (focus)="focusField('flowValue')">
                 <span class="units input-group-addon">Mgal</span>
+
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.flowValue.invalid && !form.controls.flowValue.pristine">
+                <span *ngIf="form.controls.flowValue.errors.required">Value Required</span>
+            </span>
         </div>
-        <span class="alert-danger pull-right small"
-            *ngIf="form.controls.flowValue.invalid && !form.controls.flowValue.pristine">
-            <span *ngIf="form.controls.flowValue.errors.required">Value Required</span>
-        </span>
-    </div>
-    
-</form>
+    </form>
+    }
+</div>
