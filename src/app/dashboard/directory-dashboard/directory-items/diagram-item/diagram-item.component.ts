@@ -12,7 +12,7 @@ import { DiagramIdbService } from '../../../../indexedDb/diagram-idb.service';
 import { Settings } from '../../../../shared/models/settings';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
 import { Diagram } from '../../../../shared/models/diagram';
-import { WaterDiagramConnectionsService } from '../../../../water-process-diagram/water-diagram-connections.service';
+import { UpdateDiagramFromAssessmentService } from '../../../../water-process-diagram/update-diagram-from-assessment.service';
 
 @Component({
   selector: 'app-diagram-item',
@@ -39,7 +39,7 @@ export class DiagramItemComponent {
   constructor(private directoryDashboardService: DirectoryDashboardService,
     private diagramIdbService: DiagramIdbService,
     private assessmenDbService: AssessmentDbService,
-    private waterDiagramConnectionsService: WaterDiagramConnectionsService,
+    private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService,
     private formBuilder: UntypedFormBuilder,    
     private dashboardService: DashboardService, 
     private directoryDbService: DirectoryDbService, 
@@ -134,7 +134,7 @@ export class DiagramItemComponent {
 
   removeAssessmentConnection() {
     if (this.diagram.waterDiagram) {
-      this.waterDiagramConnectionsService.disconnectAssessment(this.diagram.assessmentId);
+      this.updateDiagramFromAssessmentService.disconnectAssessment(this.diagram.assessmentId);
     }
   }
 

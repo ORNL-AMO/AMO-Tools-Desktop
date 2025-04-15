@@ -23,7 +23,7 @@ import { PumpItem } from '../../pump-inventory/pump-inventory';
 import { getNameDateString } from '../helperFunctions';
 import { WaterProcessDiagramService } from '../../water-process-diagram/water-process-diagram.service';
 import { Diagram } from '../models/diagram';
-import { WaterAssessmentConnectionsService } from '../../water/water-assessment-connections.service';
+import { UpdateAssessmentFromDiagramService } from '../../water/update-assessment-from-diagram.service';
 
 @Component({
   selector: 'app-create-assessment-modal',
@@ -57,7 +57,7 @@ export class CreateAssessmentModalComponent {
     private dashboardService: DashboardService,
     private convertFanAnalysisService: ConvertFanAnalysisService,
     private waterDiagramService: WaterProcessDiagramService,
-    private waterAssessmentConnectionsService: WaterAssessmentConnectionsService,
+    private updateAssessmentFromDiagramService: UpdateAssessmentFromDiagramService,
     private psatIntegrationService: PsatIntegrationService,
     private integrationStateService: IntegrationStateService,
     private settingsService: SettingsService,
@@ -237,7 +237,7 @@ export class CreateAssessmentModalComponent {
     let assessmentSettings = this.settingsDbService.getByAssessmentId(createdAssessment, false);
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
     newSettings.assessmentId = createdAssessment.id;
-    this.waterAssessmentConnectionsService.updateAssessmentWithDiagram(this.diagram, createdAssessment, newSettings);
+    this.updateAssessmentFromDiagramService.updateAssessmentWithDiagram(this.diagram, createdAssessment, newSettings);
     this.diagram.assessmentId = createdAssessment.id;
     createdAssessment.diagramId = this.diagram.id;
     this.waterDiagramService.updateWaterDiagram(this.diagram.waterDiagram);

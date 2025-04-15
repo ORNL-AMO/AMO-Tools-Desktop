@@ -11,7 +11,7 @@ import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { Assessment } from '../shared/models/assessment';
 
 @Injectable()
-export class WaterDiagramConnectionsService {
+export class UpdateDiagramFromAssessmentService {
 
   constructor(private diagramIdbService: DiagramIdbService,
     private settingsDbService: SettingsDbService,

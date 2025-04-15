@@ -26,7 +26,7 @@ import { IntakeSourceComponent } from './intake-source/intake-source.component';
 import { WaterComponentTableComponent } from './results-panel/water-component-table/water-component-table.component';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
-import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
+import { UpdateAssessmentFromDiagramService } from './update-assessment-from-diagram.service';
 import { DischargeOutletComponent } from './discharge-outlet/discharge-outlet.component';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
 import { HeatEnergyComponent } from './water-using-system/added-energy/heat-energy/heat-energy.component';
@@ -115,7 +115,7 @@ import { InSystemTreatmentTableComponent } from './results-panel/in-system-treat
     WaterSystemComponentService,
     WaterAssessmentResultsService,
     ConvertWaterAssessmentService,
-    WaterAssessmentConnectionsService,
+    UpdateAssessmentFromDiagramService,
     WaterUsingSystemService,
     HeatEnergyService,
     MotorEnergyService,

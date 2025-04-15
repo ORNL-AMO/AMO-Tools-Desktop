@@ -10,7 +10,7 @@ import { WaterAssessmentService } from './water-assessment.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
 import { IntegratedAssessmentDiagram } from '../shared/models/diagram';
-import { WaterAssessmentConnectionsService } from './water-assessment-connections.service';
+import { UpdateAssessmentFromDiagramService } from './update-assessment-from-diagram.service';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { ParentContainerDimensions, WasteWaterTreatment, WaterAssessment } from 'process-flow-lib';
 
@@ -58,7 +58,7 @@ export class WaterAssessmentComponent {
   showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private convertWaterAssessmentService: ConvertWaterAssessmentService, 
-    private waterAssessmentConnectionsService: WaterAssessmentConnectionsService,
+    private updateAssessmentFromDiagramService: UpdateAssessmentFromDiagramService,
     private assessmentDbService: AssessmentDbService, 
     private waterSystemComponentService: WaterSystemComponentService,
     private cd: ChangeDetectorRef, 
@@ -182,9 +182,9 @@ export class WaterAssessmentComponent {
 
   async setDiagram() {
     if (this.assessment.diagramId) {
-      await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment, this.settings);
+      await this.updateAssessmentFromDiagramService.syncAssessmentToDiagram(this.assessment, this.settings);
     } else {
-      await this.waterAssessmentConnectionsService.createAssesmentDiagram(this.assessment, this.settings);
+      await this.updateAssessmentFromDiagramService.createAssesmentDiagram(this.assessment, this.settings);
       this.save(this.assessment.water);
     }
 
@@ -203,7 +203,7 @@ export class WaterAssessmentComponent {
   }
 
   async updateAssessmentFromDiagram() {
-    await this.waterAssessmentConnectionsService.syncAssessmentToDiagram(this.assessment, this.settings);
+    await this.updateAssessmentFromDiagramService.syncAssessmentToDiagram(this.assessment, this.settings);
     this.save(this.assessment.water);
   }
 

@@ -14,7 +14,7 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { WaterAssessment, WaterUsingSystem, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, setWaterUsingSystemFlows, getIntakeSource, getDischargeOutlet, EdgeFlowData, getWasteWaterTreatmentComponent } from 'process-flow-lib';
 
 @Injectable()
-export class WaterAssessmentConnectionsService {
+export class UpdateAssessmentFromDiagramService {
 
   constructor(private diagramIdbService: DiagramIdbService,
     private waterDiagramService: WaterProcessDiagramService,
