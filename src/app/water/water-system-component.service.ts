@@ -2,18 +2,22 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
-import { WaterProcessComponent, WaterAssessment, WaterProcessComponentType, IntakeSource, getNewProcessComponent, DischargeOutlet, MonthlyFlowData } from 'process-flow-lib';
+import { WaterProcessComponent, WaterAssessment, WaterProcessComponentType, IntakeSource, getNewProcessComponent, DischargeOutlet, MonthlyFlowData, WaterTreatment, getWaterTreatmentComponent, WasteWaterTreatment } from 'process-flow-lib';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WaterSystemComponentService {
   selectedComponent: BehaviorSubject<WaterProcessComponent>;
+  selectedInSystemTreatment: BehaviorSubject<WaterTreatment>;
+  inSystemTreatmentComponents: BehaviorSubject<WaterTreatment[]>;
   selectedViewComponents: BehaviorSubject<WaterProcessComponent[]>;
 
   constructor(private formBuilder: FormBuilder) {
     this.selectedComponent = new BehaviorSubject<WaterProcessComponent>(undefined);
     this.selectedViewComponents = new BehaviorSubject<WaterProcessComponent[]>(undefined);
+    this.selectedInSystemTreatment = new BehaviorSubject<WaterTreatment>(undefined);
+    this.inSystemTreatmentComponents = new BehaviorSubject<WaterTreatment[]>(undefined);
   }
 
   setSelectedComponentOnTabChange(waterAssessment: WaterAssessment, tab: WaterProcessComponentType) {
@@ -23,6 +27,10 @@ export class WaterSystemComponentService {
       this.setDefaultSelectedComponent(waterAssessment.dischargeOutlets, this.selectedComponent.getValue(), tab);
     } else if (tab === 'water-using-system') {
       this.setDefaultSelectedComponent(waterAssessment.waterUsingSystems, this.selectedComponent.getValue(), tab);
+    } else if (tab === 'water-treatment') {
+      this.setDefaultSelectedComponent(waterAssessment.waterTreatments, this.selectedComponent.getValue(), tab);
+    } else if (tab === 'waste-water-treatment') {
+      this.setDefaultSelectedComponent(waterAssessment.wasteWaterTreatments, this.selectedComponent.getValue(), tab);
     }
   }
 
@@ -69,13 +77,59 @@ export class WaterSystemComponentService {
 
   getDischargeOutletFromForm(form: FormGroup, dischargeOutlet: DischargeOutlet): DischargeOutlet {
     dischargeOutlet.name = form.controls.name.value;
-    dischargeOutlet.cost = form.controls.cost.value;  
+    dischargeOutlet.cost = form.controls.cost.value;
     dischargeOutlet.outletType = form.controls.outletType.value;
     dischargeOutlet.userEnteredData.totalSourceFlow = form.controls.annualUse.value;
     return dischargeOutlet;
   }
 
 
+  getWaterTreatmentFormFromObj(obj: WaterTreatment): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
+      treatmentType: [obj.treatmentType],
+      customTreatmentType: [obj.customTreatmentType],
+      cost: [obj.cost],
+      name: [obj.name],
+      flowValue: [obj.userEnteredData.totalSourceFlow]
+    });
+    return form;
+  }
+
+  getWaterTreatmentFromForm(form: FormGroup, waterTreatment: WaterTreatment): WaterTreatment {
+    waterTreatment.treatmentType = form.controls.treatmentType.value;
+    waterTreatment.cost = form.controls.cost.value;
+    waterTreatment.name = form.controls.name.value;
+    waterTreatment.customTreatmentType = form.controls.customTreatmentType.value;
+    waterTreatment.userEnteredData.totalSourceFlow = form.controls.flowValue.value;
+    return waterTreatment;
+  }
+
+
+  addWaterTreatmentComponent(existingComponent?: WaterProcessComponent, createdByAssessment = false): WaterTreatment {
+    const waterTreatment = existingComponent ? existingComponent as WaterTreatment : undefined;
+    return getWaterTreatmentComponent(waterTreatment, false, createdByAssessment);
+  }
+
+    getWasteWaterFormFromObj(obj: WasteWaterTreatment): FormGroup {
+      let form: FormGroup = this.formBuilder.group({
+        treatmentType: [obj.treatmentType],
+        customTreatmentType: [obj.customTreatmentType],
+        cost: [obj.cost],
+        name: [obj.name],
+        flowValue: [obj.userEnteredData.totalSourceFlow]
+      });
+      return form;
+    }
+  
+    getWasteWaterTreatmentFromForm(form: FormGroup, wasteWaterTreatment: WasteWaterTreatment): WasteWaterTreatment {
+      wasteWaterTreatment.treatmentType = form.controls.treatmentType.value;
+      wasteWaterTreatment.cost = form.controls.cost.value;
+      wasteWaterTreatment.name = form.controls.name.value;
+      wasteWaterTreatment.customTreatmentType = form.controls.customTreatmentType.value;
+      wasteWaterTreatment.userEnteredData.totalSourceFlow = form.controls.flowValue.value;
+      return wasteWaterTreatment;
+    }
+  
   markFormDirtyToDisplayValidation(form: UntypedFormGroup) {
     for (let key in form.controls) {
       if (form.controls[key]) {

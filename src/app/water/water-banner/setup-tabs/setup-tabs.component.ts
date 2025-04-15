@@ -93,6 +93,7 @@ export class SetupTabsComponent {
       // hasValidSystemBasics = _____
       // canView_____
       this.hasWaterTreatments = this.waterAssessmentService.getHasWaterTreatments();
+      // todo this.hasInSystemTreatments
       this.hasWasteWaterTreatments = this.waterAssessmentService.getHasWasteWaterTreatments();
     }
     this.setSystemBasicsStatus();
@@ -118,14 +119,9 @@ export class SetupTabsComponent {
   }
 
   changeSetupTab(tab: WaterSetupTabString) {
-    let canTreatment = (tab === 'water-treatment' && this.hasWaterTreatments)
-    let canWasteTreatment = (tab === 'waste-water-treatment' && this.hasWasteWaterTreatments)
-    let canDisplayTab: boolean = (tab !== 'waste-water-treatment' && tab !== 'water-treatment') || canTreatment || canWasteTreatment;
-    if (canDisplayTab) {
       // todo 7069 whatever event was causing this to be needed seems obsolete
       // this.waterSystemComponentService.setSelectedComponentOnTabChange(this.waterAssessmentService.waterAssessment.getValue(), tab as WaterProcessComponentType);
       this.waterAssessmentService.setupTab.next(tab);
-    }
   }
 
   // * Intake Source Sub Tabs
@@ -169,8 +165,7 @@ export class SetupTabsComponent {
 
   // * Water Using System Sub Tabs
   changeWaterUsingSystemTab(tab: WaterUsingSystemTabString) {
-    let canDisplayTab: boolean = tab !== 'water-treatment' || (tab === 'water-treatment' && this.hasWaterTreatments);
-    if (canDisplayTab && this.waterAssessment.waterUsingSystems.length !== 0) {
+    if (this.waterAssessment.waterUsingSystems.length !== 0) {
       this.waterAssessmentService.waterUsingSystemTab.next(tab);
     }
   }

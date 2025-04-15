@@ -71,30 +71,6 @@
     </div>
   </form>
 
-  <div class="mx-2 pt-3">
-    <label class="group-label" (click)="toggleCollapse('waterTreatment')">
-      <span class="fa fa-chevron-right"
-        [ngClass]="{'fa-chevron-right': isCollapsed.waterTreatment, 'fa-chevron-down': !isCollapsed.waterTreatment}"></span>
-      Water Treatment
-    </label>
-
-    <ng-container *ngIf="!isCollapsed.waterTreatment">
-      <app-water-treatment-wrapper [waterAssessment]="assessment.water" [inSystemBasics]="true"></app-water-treatment-wrapper>
-    </ng-container>
-  </div>
-
-  <div class="mx-2 pt-3">
-    <label class="group-label" (click)="toggleCollapse('wasteWaterTreatment')">
-      <span class="fa fa-chevron-right"
-        [ngClass]="{'fa-chevron-right': isCollapsed.wasteWaterTreatment, 'fa-chevron-down': !isCollapsed.wasteWaterTreatment}"></span>
-      Waste Water Treatment
-    </label>
-
-    <ng-container *ngIf="!isCollapsed.wasteWaterTreatment">
-      <app-waste-water-treatment-wrapper [waterAssessment]="assessment.water" [inSystemBasics]="true"></app-waste-water-treatment-wrapper>
-    </ng-container>
-  </div>
-
   <form [formGroup]="systemBasicsForm">
     <div class="form-group pt-4">
       <label class="group-label w-100">Equipment Notes</label>

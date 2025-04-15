@@ -10,10 +10,8 @@ import { WaterAssessmentService } from './water-assessment.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { Edge, Node } from '@xyflow/react';
-import { WaterTreatmentService } from './water-treatment/water-treatment.service';
-import { WasteWaterTreatmentService } from './waste-water-treatment/waste-water-treatment.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { WaterDiagram, WaterAssessment, DiagramWaterSystemFlows, WaterUsingSystem, CustomEdgeData, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, WaterSystemFlowsTotals, getTotalFlowValue, getWaterFlowsFromSource, getIsKnownLossFlow, setWaterUsingSystemFlows, getIntakeSource, getDischargeOutlet, EdgeFlowData } from 'process-flow-lib';
+import { WaterAssessment, WaterUsingSystem, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, setWaterUsingSystemFlows, getIntakeSource, getDischargeOutlet, EdgeFlowData, getWasteWaterTreatmentComponent } from 'process-flow-lib';
 
 @Injectable()
 export class WaterAssessmentConnectionsService {
@@ -22,8 +20,6 @@ export class WaterAssessmentConnectionsService {
     private waterDiagramService: WaterProcessDiagramService,
     private waterAssessmentService: WaterAssessmentService,
     private waterComponentService: WaterSystemComponentService,
-    private waterTreatmentService: WaterTreatmentService,
-    private wasteWaterTreatmentService: WasteWaterTreatmentService,
     private waterUsingSystemService: WaterUsingSystemService,
     private settingsDbService: SettingsDbService,
     private assessmentIdbService: AssessmentDbService) { }
@@ -126,7 +122,7 @@ export class WaterAssessmentConnectionsService {
       if (waterProcessComponent.processComponentType === 'water-treatment') {
         let waterTreatment: WaterTreatment;
         if (!waterProcessComponent.createdByAssessment) {
-          waterTreatment = this.waterTreatmentService.addWaterTreatmentComponent(waterProcessComponent);
+          waterTreatment = this.waterComponentService.addWaterTreatmentComponent(waterProcessComponent);
         } else {
           waterTreatment = waterProcessComponent as WaterTreatment;
         }
@@ -135,7 +131,7 @@ export class WaterAssessmentConnectionsService {
       if (waterProcessComponent.processComponentType === 'waste-water-treatment') {
         let wasteWaterTreatment: WasteWaterTreatment;
         if (!waterProcessComponent.createdByAssessment) {
-          wasteWaterTreatment = this.wasteWaterTreatmentService.addWasteWaterTreatment(waterProcessComponent);
+          wasteWaterTreatment = getWasteWaterTreatmentComponent(waterProcessComponent);
         } else {
           wasteWaterTreatment = waterProcessComponent as WasteWaterTreatment;
         }

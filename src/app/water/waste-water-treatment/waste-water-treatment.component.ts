@@ -1,12 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 import { WaterAssessmentService } from '../water-assessment.service';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import { Subscription } from 'rxjs';
+import { WasteWaterTreatment, wasteWaterTreatmentTypeOptions, WaterAssessment, } from 'process-flow-lib';
 import { copyObject } from '../../shared/helperFunctions';
-import { WasteWaterTreatmentService } from './waste-water-treatment.service';
-import { WasteWaterTreatment, WaterAssessment, wasteWaterTreatmentTypeOptions } from 'process-flow-lib';
 
 @Component({
   selector: 'app-waste-water-treatment',
@@ -14,83 +13,73 @@ import { WasteWaterTreatment, WaterAssessment, wasteWaterTreatmentTypeOptions } 
   styleUrl: './waste-water-treatment.component.css'
 })
 export class WasteWaterTreatmentComponent {
-  @Input()
-  wasteWaterTreatment: WasteWaterTreatment;
-  @Output()
-  updateWaterTreatment: EventEmitter<WasteWaterTreatment> = new EventEmitter<WasteWaterTreatment>();
-  @Input()
-  inSystemBasics: boolean;
-
-  form: FormGroup;
-
   settings: Settings;
-  wasteWaterTreatmentOptions: {value: number, display: string}[];
+  wasteWaterTreatmentOptions: { value: number, display: string }[];
   formWidth: number;
-  waterAssessmentSub: Subscription;
+  showOperatingHoursModal: boolean = false;
+  form: FormGroup;
+  settingsSub: Subscription;
+  componentFormTitle: string;
+
+  selectedComponentSub: Subscription;
   waterAssessment: WaterAssessment;
   selectedWasteWaterTreatment: WasteWaterTreatment;
-  selectedComponentSub: Subscription;
-  settingsSub: Subscription;
+  idString: string;
 
   constructor(
     private waterAssessmentService: WaterAssessmentService,
     private waterSystemComponentService: WaterSystemComponentService,
-    private wasteTreatmentService: WasteWaterTreatmentService
   ) { }
 
   ngOnInit() {
     this.settingsSub = this.waterAssessmentService.settings.subscribe(settings => {
       this.settings = settings;
     });
+    this.componentFormTitle = this.waterAssessmentService.setWaterProcessComponentTitle('waste-water-treatment');
+    this.wasteWaterTreatmentOptions = copyObject(wasteWaterTreatmentTypeOptions);
 
-    this.waterAssessmentSub = this.waterAssessmentService.waterAssessment.subscribe(waterAssessment => {
-      this.wasteWaterTreatmentOptions = this.waterAssessmentService.getAvailableTreatmentOptions(waterAssessment.wasteWaterTreatments, copyObject(wasteWaterTreatmentTypeOptions));
+    this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
+      this.selectedWasteWaterTreatment = selectedComponent as WasteWaterTreatment;
+      this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
+      this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.wasteWaterTreatments);
+      if (this.selectedWasteWaterTreatment) {
+        this.initForm();
+      }
     });
 
-    // * 6927 component table will be hidden for this component
-    // this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
-    //   this.selectedWasteWaterTreatment = selectedComponent as WasteWaterTreatment;
-    //   this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-    //   this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.wasteWaterTreatments);
-    //   if (this.selectedWasteWaterTreatment) {
-    //     // this.initForm();
-    //   }
-    // });
-
-    // this.setDefaultSelectedComponent();
-    this.initForm();
+    this.setDefaultSelectedComponent();
   }
 
   ngOnDestroy() {
-    this.waterAssessmentSub.unsubscribe();
     this.settingsSub.unsubscribe();
-  }
-  //   setDefaultSelectedComponent() {
-  //   this.waterSystemComponentService.setDefaultSelectedComponent(this.waterAssessment.wasteWaterTreatments, this.selectedWasteWaterTreatment, 'waste-water-treatment')
-  // }
-
-  setWasteWaterTreatmentType() {
-    this.save();
   }
 
   initForm() {
-    this.form = this.wasteTreatmentService.getFormFromObj(this.wasteWaterTreatment);
-    if (!this.inSystemBasics) {
-      this.form.controls.treatmentType.disable();
-      this.form.controls.cost.disable();
-    } 
-   }
+    this.form = this.waterSystemComponentService.getWasteWaterFormFromObj(this.selectedWasteWaterTreatment);
+  }
+
+  save(updated?: WasteWaterTreatment) {
+    if (!updated) {
+      updated = this.waterSystemComponentService.getWaterTreatmentFromForm(this.form, this.selectedWasteWaterTreatment);
+    }
+    let updateIndex: number = this.waterAssessment.wasteWaterTreatments.findIndex(treatment => treatment.diagramNodeId === updated.diagramNodeId);
+    this.waterAssessment.wasteWaterTreatments[updateIndex] = updated;
+    this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
+  }
 
 
-  save() {
-    let updatedWasteWaterTreatment: WasteWaterTreatment = this.wasteTreatmentService.getWasteWaterTreatmentFromForm(this.form, this.wasteWaterTreatment);
-    this.updateWaterTreatment.emit(updatedWasteWaterTreatment);
+  addWasteWaterTreatments() {
+    this.waterAssessmentService.addNewWaterComponent('waste-water-treatment')
+  }
+
+  setDefaultSelectedComponent() {
+    this.waterSystemComponentService.setDefaultSelectedComponent(this.waterAssessment.wasteWaterTreatments, this.selectedWasteWaterTreatment, 'waste-water-treatment')
   }
 
   focusField(str: string) {
     this.waterAssessmentService.focusedField.next(str);
   }
-  
+
 
 
 }

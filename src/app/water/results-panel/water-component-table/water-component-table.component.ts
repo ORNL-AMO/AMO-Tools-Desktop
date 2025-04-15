@@ -52,7 +52,6 @@ export class WaterComponentTableComponent {
 
     this.selectedViewComponentsSub = this.waterSystemComponentService.selectedViewComponents.subscribe(viewComponents => {
       this.selectedViewComponents = _.orderBy(viewComponents, 'modifiedDate', 'desc');
-      // todo set isValid
     });
 
     this.setDefaultSelectedComponent();
@@ -77,7 +76,7 @@ export class WaterComponentTableComponent {
   }
 
   addNewComponent() {
-    this.waterAssessmentService.addNewWaterComponent(this.activeComponentType);
+      this.waterAssessmentService.addNewWaterComponent(this.activeComponentType);
   }
 
   deleteComponent() {

@@ -1,7 +1,7 @@
 import { CustomNodeStyleMap } from "../constants";
 import { Connection, Edge, MarkerType, Node } from "@xyflow/react";
 import { DiagramSettings, Handles, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../types/diagram";
-import { ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
+import { ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, WasteWaterTreatment, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { getNewIdString } from "./utils";
 
  
@@ -257,6 +257,32 @@ import { getNewIdString } from "./utils";
     };
     return dischargeOutlet;
   }
+
+/**
+* Add new component or return component based from a diagram component
+* @param processFlowPart Build from diagram component
+*/
+export const getWasteWaterTreatmentComponent = (processFlowPart?: WaterProcessComponent): WasteWaterTreatment => {
+  let wasteWaterTreatment: WasteWaterTreatment;
+  let newComponent: WasteWaterTreatment;
+  if (!processFlowPart) {
+    newComponent = getNewProcessComponent('waste-water-treatment') as WasteWaterTreatment;
+  } else {
+    newComponent = processFlowPart as WasteWaterTreatment;
+  }
+
+  // todo 7020 revisit which properties are getting overwritten here
+  wasteWaterTreatment = {
+    ...newComponent,
+    createdByAssessment: true,
+    treatmentType: newComponent.treatmentType !== undefined ? newComponent.treatmentType : 0,
+    customTreatmentType: newComponent.customTreatmentType,
+    cost: newComponent.cost,
+    name: newComponent.name,
+    flowValue: newComponent.flowValue
+  };
+  return wasteWaterTreatment;
+}
 
   
   

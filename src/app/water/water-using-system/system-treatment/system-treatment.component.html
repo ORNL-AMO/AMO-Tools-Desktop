@@ -1,14 +1,8 @@
 <div class="d-flex flex-column panel-container pb-4">
-    <div class="header mr-2 ml-2">
-        <h3>{{componentFormTitle}}</h3>
-        <br>
-    </div>
-
-
-    @if (waterAssessment.wasteWaterTreatments.length === 0) {
+    @if (waterSystem.inSystemTreatment.length === 0) {
     <div class="p-3 align-self-center">
-        <button type="button" class="btn btn-primary active" (click)="addWasteWaterTreatments()">
-            Add {{componentFormTitle}}
+        <button type="button" class="btn btn-primary active" (click)="addWaterTreatment()">
+            Add Water Treatment
         </button>
     </div>
     }
@@ -19,7 +13,7 @@
             <div class="input-group">
                 <select name="treatmentType" class="form-control" id="treatmentType" formControlName="treatmentType"
                     (focus)="focusField('treatmentType')" (change)="save()">
-                    <option *ngFor="let treatmentOption of wasteWaterTreatmentOptions" [ngValue]="treatmentOption.value">
+                    <option *ngFor="let treatmentOption of waterTreatmentOptions" [ngValue]="treatmentOption.value">
                         {{treatmentOption.display}}</option>
                 </select>
             </div>

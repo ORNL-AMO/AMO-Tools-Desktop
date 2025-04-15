@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { WaterAssessmentService, WaterSetupTabString } from '../water-assessment.service';
+import { WaterAssessmentService, WaterSetupTabString, WaterUsingSystemTabString } from '../water-assessment.service';
 import { WaterSystemComponentService } from '../water-system-component.service';
 import { Settings } from '../../shared/models/settings';
 import { ProcessFlowNodeType } from 'process-flow-lib';
@@ -12,6 +12,7 @@ import { ProcessFlowNodeType } from 'process-flow-lib';
 })
 export class ResultsPanelComponent {
   setupTabSub: Subscription;
+  waterUsingSystemTab: WaterUsingSystemTabString;
   setupTab: WaterSetupTabString;
   panelTabSelect: WaterPanelTab = 'component-table';
   displayResults: boolean;
@@ -19,6 +20,7 @@ export class ResultsPanelComponent {
   selectedComponentSub: Subscription;
   selectedComponentType: ProcessFlowNodeType;
   settings: Settings;
+  waterUsingSystemTabSub: Subscription;
   constructor(private waterAssessmentService: WaterAssessmentService,
     private waterSystemComponentService: WaterSystemComponentService
   ) { }
@@ -28,13 +30,21 @@ export class ResultsPanelComponent {
 
     this.setupTabSub = this.waterAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
-      if (this.setupTab !== 'system-basics' && this.setupTab !== 'waste-water-treatment') {
-        this.panelTabSelect = 'component-table'
-      } else if (this.setupTab === 'waste-water-treatment') {
-        this.panelTabSelect = 'results'
+      if (this.setupTab !== 'water-using-system') {
+        // * hide system treatment table
+        this.waterAssessmentService.waterUsingSystemTab.next('system');
+      } 
+
+      if (this.setupTab !== 'system-basics') {
+        this.panelTabSelect = 'component-table';
       } else {
         this.panelTabSelect = 'help';
       }
+
+    });
+
+    this.waterUsingSystemTabSub = this.waterAssessmentService.waterUsingSystemTab.subscribe(val => {
+      this.waterUsingSystemTab = val;
     });
 
     this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(component => {
@@ -49,6 +59,7 @@ export class ResultsPanelComponent {
   ngOnDestroy() {
     this.setupTabSub.unsubscribe();
     this.selectedComponentSub.unsubscribe();
+    this.waterUsingSystemTabSub.unsubscribe();
   }
 
   setTab(tab: WaterPanelTab) {
