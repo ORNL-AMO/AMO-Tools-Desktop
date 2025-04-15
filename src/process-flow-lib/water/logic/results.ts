@@ -373,7 +373,9 @@ export const getUnknownLossees = (totalSourceFlow: number, totalDischargeFlow: n
  */
 export const getComponentTypeTotalCost = (components: Node<ProcessFlowPart>[], nodeFlowProperty: NodeFlowProperty) => {
   return components.reduce((total: number, component: Node<ProcessFlowPart>) => {
-    let acc = getKGalCost(component.data.cost, component.data.userEnteredData[nodeFlowProperty]?? 0);
+    const flowMgal = component.data.userEnteredData[nodeFlowProperty]?? 0;
+    const cost = component.data.cost?? 0;
+    let acc = getKGalCost(cost, flowMgal);
     return total + acc; 
   }, 0);
 }
@@ -410,6 +412,7 @@ export const getWaterTrueCost = (
 * @param energyUnitCost Cost of energy per kWh or MMBTU / GJ
 */
 export const getMotorEnergyCost = (motorEnergy: MotorEnergy, energyUnitCost: number): number => {
+  debugger;
   const ratedPowerKW = motorEnergy.ratedPower * 0.7457; // convert HP to kW
   const energyKwPerYear = (motorEnergy.hoursPerYear * motorEnergy.loadFactor) / 100 * (ratedPowerKW * motorEnergy.systemEfficiency) / 100;
   const motorEnergyCost = energyKwPerYear * energyUnitCost;
