@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
-import { AdvancedCashflowData, CashFlowForm } from '../cash-flow';
+import { CashFlowForm } from '../cash-flow';
 
 @Component({
     selector: 'app-cash-flow-form',

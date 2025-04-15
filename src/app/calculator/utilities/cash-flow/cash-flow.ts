@@ -14,11 +14,6 @@ export interface CashFlowForm {
   advancedCashflows?: Array<number>;
 }
 
-export interface AdvancedCashflowData {
-  year: number,
-  cashflow: number
-}
-
 export interface CashFlowResults {
   benefits?: number;
   cost?: number;
@@ -43,24 +38,42 @@ export interface CashFlowResults {
   roi?: number;
 }
 
+export interface Outputs {
+  cashFlowOutputs: Array<CashFlowOutputs>;
+  totalOutputs: CashFlowOutputs;
+}
+
 export interface CashFlowOutputs {
-  capitalExpenditures: number;
-  energySavings: number;
-  salvage: number;
-  operationCost: number;
-  disposal: number;
-  otherCashFlow: number;
+  cashFlow?: number;
+  capitalExpenditures?: number;
+  energySavings?: number;
+  salvage?: number;
+  operationCost?: number;
+  disposal?: number;
+  otherCashFlow?: number;
+  total?: number;
 }
 
 export interface WithoutTaxesOutputs {
   cashFlowOutputs: CashFlowOutputs;
   net: number;
-  simplePayback: number;
-  simplePaybackWithCostsSavings: number;
-  sir: number;
-  roi: number;
+  simplePayback?: number;
+  simplePaybackWithCostsSavings?: number;
+  sir?: number;
+  roi?: number;
   interestRate: number;
   nvp: number;
-  irr: number;
-  
+  irr?: number;
 }
+
+export interface BruteForceResult {
+  interestRate: number;
+  results: Array<number>;
+  total: number;
+  continueA: number;
+  iterationA: number;
+  continueB: number;
+  iterationB: number;
+}
+
+
