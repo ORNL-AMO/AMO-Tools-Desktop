@@ -41,7 +41,6 @@ export class WaterUsingSystemComponent {
   }
 
   saveWaterTreatment() {
-    // todo shouldnt need to take event. Should be same instance
     let updateIndex: number = this.waterAssessment.waterUsingSystems.findIndex(system => system.diagramNodeId === this.selectedWaterUsingSystem.diagramNodeId);
     this.waterAssessment.waterUsingSystems[updateIndex] = this.selectedWaterUsingSystem;
     this.waterAssessmentService.updateWaterAssessment(this.waterAssessment);

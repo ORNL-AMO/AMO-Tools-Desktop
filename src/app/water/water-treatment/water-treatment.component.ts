@@ -13,11 +13,7 @@ import { copyObject } from '../../shared/helperFunctions';
   styleUrl: './water-treatment.component.css'
 })
 export class WaterTreatmentComponent {
-  @Input()
   waterSystem: WaterUsingSystem;
-  @Output()
-  emitInSystemUpdate = new EventEmitter<WaterUsingSystem>();
-
   settings: Settings;
   waterTreatmentOptions: { value: number, display: string }[];
   formWidth: number;
@@ -45,8 +41,7 @@ export class WaterTreatmentComponent {
     this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
         this.selectedWaterTreatment = selectedComponent as WaterTreatment;
         this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
-        let waterTreatments = this.getWaterTreatments();
-        this.waterSystemComponentService.selectedViewComponents.next(waterTreatments);
+        this.waterSystemComponentService.selectedViewComponents.next(this.waterAssessment.waterTreatments);
         if (this.selectedWaterTreatment) {
           this.idString = this.componentFormTitle + this.selectedWaterTreatment.diagramNodeId;
           this.initForm();
@@ -61,45 +56,25 @@ export class WaterTreatmentComponent {
   }
 
   setDefaultSelectedComponent() {
-    this.waterSystemComponentService.setDefaultSelectedComponent(this.getWaterTreatments(), this.selectedWaterTreatment, 'water-treatment')
+    this.waterSystemComponentService.setDefaultSelectedComponent(this.waterAssessment.waterTreatments, this.selectedWaterTreatment, 'water-treatment')
   }
 
   initForm() {
     this.form = this.waterSystemComponentService.getWaterTreatmentFormFromObj(this.selectedWaterTreatment);
   }
 
-  getWaterTreatments(): WaterTreatment[] {
-    if (this.waterSystem) {
-      return this.waterSystem.inSystemTreatment;
-    }
-    return this.waterAssessment.waterTreatments;
-  }
-
-  updateWaterTreatments(updated: WaterTreatment) {
-    if (this.waterSystem) {
-      let updateIndex: number = this.waterSystem.inSystemTreatment.findIndex(treatment => treatment.diagramNodeId === updated.diagramNodeId);
-      this.waterSystem.inSystemTreatment[updateIndex] = updated;
-      this.emitInSystemUpdate.emit(this.waterSystem);
-    } else { 
-      let updateIndex: number = this.waterAssessment.waterTreatments.findIndex(treatment => treatment.diagramNodeId === updated.diagramNodeId);
-      this.waterAssessment.waterTreatments[updateIndex] = updated;
-      this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
-    }
-  }
-
   save(updated?: WaterTreatment) {
     if (!updated) {
       updated = this.waterSystemComponentService.getWaterTreatmentFromForm(this.form, this.selectedWaterTreatment);
     }
-    this.updateWaterTreatments(updated);
+    let updateIndex: number = this.waterAssessment.waterTreatments.findIndex(treatment => treatment.diagramNodeId === updated.diagramNodeId);
+    this.waterAssessment.waterTreatments[updateIndex] = updated;
+    this.waterAssessmentService.waterAssessment.next(this.waterAssessment);
   }
-
 
   addWaterTreatment() {
     this.waterAssessmentService.addNewWaterComponent('water-treatment')
   }
-
-
 
   focusField(str: string) {
     this.waterAssessmentService.focusedField.next(str);

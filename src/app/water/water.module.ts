@@ -53,6 +53,8 @@ import { MonthlyFlowChartComponent } from './results-panel/monthly-flow-chart/mo
 import { MonthlyFlowModalComponent } from './monthly-flow-modal/monthly-flow-modal.component';
 import { WaterSourcesWrapperComponent } from './water-using-system/water-sources-wrapper/water-sources-wrapper.component';
 import { ConnectionFlowComponent } from './water-using-system/connection-flow/connection-flow.component';
+import { SystemTreatmentComponent } from './water-using-system/system-treatment/system-treatment.component';
+import { InSystemTreatmentTableComponent } from './results-panel/in-system-treatment-table/in-system-treatment-table.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +84,9 @@ import { ConnectionFlowComponent } from './water-using-system/connection-flow/co
     MonthlyFlowModalComponent,
     MonthlyFlowChartComponent,
     WaterSourcesWrapperComponent,
-    ConnectionFlowComponent
+    ConnectionFlowComponent,
+    SystemTreatmentComponent,
+    InSystemTreatmentTableComponent
   ],
   imports: [
     CommonModule,

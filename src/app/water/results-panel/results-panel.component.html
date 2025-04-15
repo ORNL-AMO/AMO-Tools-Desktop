@@ -26,7 +26,12 @@
         <div class="row no-gutters">
             <div class="col-12 pr-2 pl-2 pb-4 mt-1">
                 <ng-container *ngIf="panelTabSelect === 'component-table'">
-                    <app-water-component-table></app-water-component-table>
+                    @if (waterUsingSystemTab === 'water-treatment') {
+                        <app-in-system-treatment-table></app-in-system-treatment-table>
+                    } 
+                    @else {
+                        <app-water-component-table></app-water-component-table>
+                    }
                 </ng-container>
                 
                 <ng-container *ngIf="panelTabSelect === 'results'">

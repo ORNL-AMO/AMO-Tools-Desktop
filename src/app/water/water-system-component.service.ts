@@ -9,11 +9,15 @@ import { WaterProcessComponent, WaterAssessment, WaterProcessComponentType, Inta
 })
 export class WaterSystemComponentService {
   selectedComponent: BehaviorSubject<WaterProcessComponent>;
+  selectedInSystemTreatment: BehaviorSubject<WaterTreatment>;
+  inSystemTreatmentComponents: BehaviorSubject<WaterTreatment[]>;
   selectedViewComponents: BehaviorSubject<WaterProcessComponent[]>;
 
   constructor(private formBuilder: FormBuilder) {
     this.selectedComponent = new BehaviorSubject<WaterProcessComponent>(undefined);
     this.selectedViewComponents = new BehaviorSubject<WaterProcessComponent[]>(undefined);
+    this.selectedInSystemTreatment = new BehaviorSubject<WaterTreatment>(undefined);
+    this.inSystemTreatmentComponents = new BehaviorSubject<WaterTreatment[]>(undefined);
   }
 
   setSelectedComponentOnTabChange(waterAssessment: WaterAssessment, tab: WaterProcessComponentType) {
