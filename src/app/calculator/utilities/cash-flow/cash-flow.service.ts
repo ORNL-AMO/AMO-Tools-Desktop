@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { BruteForceResult, CashFlowForm, CashFlowOutputs, Outputs, WithoutTaxesOutputs } from './cash-flow';
+import { BruteForceResult, CashFlowFinalResults, CashFlowForm, CashFlowOutputs, CashFlowResults, Outputs, WithoutTaxesOutputs } from './cash-flow';
 import { TraceData, SimpleChart } from '../../../shared/models/plotting';
 
 @Injectable()
@@ -122,7 +122,7 @@ export class CashFlowService {
     return outputs;
   }
 
-  calculateWithoutTaxesPresentValueOutputs(presentValueCashFlowOutputs: Outputs): WithoutTaxesOutputs {
+  calculateWithoutTaxesPresentValueOutputs(presentValueCashFlowOutputs: Outputs, bruteForceResults: Array<BruteForceResult>): WithoutTaxesOutputs {
     let withoutTaxesPresentValueOutputs: WithoutTaxesOutputs;
 
     withoutTaxesPresentValueOutputs.cashFlowOutputs.capitalExpenditures = presentValueCashFlowOutputs.totalOutputs.capitalExpenditures;
@@ -135,17 +135,31 @@ export class CashFlowService {
     withoutTaxesPresentValueOutputs.net = presentValueCashFlowOutputs.totalOutputs.capitalExpenditures + presentValueCashFlowOutputs.totalOutputs.energySavings + presentValueCashFlowOutputs.totalOutputs.salvage + presentValueCashFlowOutputs.totalOutputs.operationCost + presentValueCashFlowOutputs.totalOutputs.disposal + presentValueCashFlowOutputs.totalOutputs.otherCashFlow;
 
 
-    //TODO calulations using brute force outputs
+    let sumContinueA: number = 0;
+    let sumIterationA: number = 0;
+    let sumContinueB: number = 0;
+    let sumIterationB: number = 0;
+    bruteForceResults.forEach(result => {
+      sumContinueA += result.continueA;
+      sumIterationA += result.iterationA;
+      sumContinueB += result.continueB;
+      sumIterationB += result.iterationB;
+    });
 
 
+    withoutTaxesPresentValueOutputs.interestRate = sumContinueA;
+    withoutTaxesPresentValueOutputs.nvp = sumContinueB;
 
-    //withoutTaxesPresentValueOutputs.irr = withoutTaxesPresentValueOutputs.interestRate - ((withoutTaxesPresentValueOutputs.nvp - 0) / (withoutTaxesPresentValueOutputs.nvp - withoutTaxesAnnualWorthOutputs.nvp)) * (withoutTaxesPresentValueOutputs.interestRate - withoutTaxesAnnualWorthOutputs.interestRate);
+    let withoutTaxesAnnualWorthOutputsInterestRate: number = sumIterationA;
+    let withoutTaxesAnnualWorthOutputsNVP: number = sumIterationB;
+
+    withoutTaxesPresentValueOutputs.irr = withoutTaxesPresentValueOutputs.interestRate - ((withoutTaxesPresentValueOutputs.nvp - 0) / (withoutTaxesPresentValueOutputs.nvp - withoutTaxesAnnualWorthOutputsNVP)) * (withoutTaxesPresentValueOutputs.interestRate - withoutTaxesAnnualWorthOutputsInterestRate);
 
     return withoutTaxesPresentValueOutputs;
   }
 
 
-  calculateWithoutTaxesAnnualWorthOutputs(inputs: CashFlowForm, withoutTaxesPresentValueOutputs: WithoutTaxesOutputs): WithoutTaxesOutputs {
+  calculateWithoutTaxesAnnualWorthOutputs(inputs: CashFlowForm, withoutTaxesPresentValueOutputs: WithoutTaxesOutputs, bruteForceResults: Array<BruteForceResult>): WithoutTaxesOutputs {
 
     let withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs;
 
@@ -168,7 +182,15 @@ export class CashFlowService {
 
     withoutTaxesAnnualWorthOutputs.roi = -withoutTaxesAnnualWorthOutputs.net / withoutTaxesPresentValueOutputs.cashFlowOutputs.capitalExpenditures;
 
+    let sumIterationA: number = 0;
+    let sumIterationB: number = 0;
+    bruteForceResults.forEach(result => {
+      sumIterationA += result.iterationA;
+      sumIterationB += result.iterationB;
+    });
 
+    withoutTaxesAnnualWorthOutputs.interestRate = sumIterationA;
+    withoutTaxesAnnualWorthOutputs.nvp = sumIterationB;
 
     return withoutTaxesAnnualWorthOutputs;
 
@@ -198,27 +220,88 @@ export class CashFlowService {
       });
       results.total = total;
 
-      //TODO figure out what S35 is and S37
-      let previousContinueA  = 0;
-      let nextContinueA = 0;
-      results.continueA = total > 0 ? 0 : (previousContinueA === 0 ? interestRate : undefined);
-      results.iterationA = nextContinueA !== 0 ? (results.continueA === 0 ? interestRate : 0) : 0;
-
       bruteForceResults.push(results);
     }
 
+    let previousContinueA = 0;
+    bruteForceResults.forEach(results => {
+      results.continueA = results.total > 0 ? 0 : (previousContinueA === 0 ? results.interestRate : undefined);
+      results.continueB = results.total > 0 ? 0 : (previousContinueA === 0 ? results.total : undefined);
+      previousContinueA = results.continueA;
+    });
 
-
-
-
-
+    let index: number = 1;
+    bruteForceResults.forEach(results => {
+      let nextContinueA: number = bruteForceResults[index].continueA;
+      results.iterationA = nextContinueA !== 0 ? (results.continueA === 0 ? results.interestRate : 0) : 0;
+      results.iterationB = nextContinueA !== 0 ? (results.continueA === 0 ? results.total : 0) : 0;
+    });
 
     return bruteForceResults
+  }
 
+  calculatePresentValueCashFlowResults(withoutTaxesPresentValueOutputs: WithoutTaxesOutputs): CashFlowResults {
+
+    let presentValueCashFlowResults: CashFlowResults;
+
+    presentValueCashFlowResults.capital = withoutTaxesPresentValueOutputs.cashFlowOutputs.capitalExpenditures;
+    presentValueCashFlowResults.operating = withoutTaxesPresentValueOutputs.cashFlowOutputs.operationCost;
+    presentValueCashFlowResults.disposal = withoutTaxesPresentValueOutputs.cashFlowOutputs.disposal;
+    presentValueCashFlowResults.other = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow < 0 ? withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow : 0;
+
+    presentValueCashFlowResults.totalCosts = presentValueCashFlowResults.capital + presentValueCashFlowResults.operating + presentValueCashFlowResults.disposal + presentValueCashFlowResults.other;
+
+    presentValueCashFlowResults.energy = withoutTaxesPresentValueOutputs.cashFlowOutputs.energySavings;
+    presentValueCashFlowResults.otherCashFlow = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow > 0 ? withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow : 0;
+    presentValueCashFlowResults.salvage = withoutTaxesPresentValueOutputs.cashFlowOutputs.salvage;
+
+    presentValueCashFlowResults.totalSavings = presentValueCashFlowResults.energy + presentValueCashFlowResults.otherCashFlow + presentValueCashFlowResults.salvage;
+
+
+
+
+    return presentValueCashFlowResults;
   }
 
 
+  calculateAnnualWorthCashFlowResults(withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs): CashFlowResults {
 
+    let annualWorthCashFlowResults: CashFlowResults;
+
+    annualWorthCashFlowResults.capital = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.capitalExpenditures;
+    annualWorthCashFlowResults.operating = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.operationCost;
+    annualWorthCashFlowResults.disposal = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.disposal;
+    annualWorthCashFlowResults.other = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow < 0 ? withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow : 0;
+
+    annualWorthCashFlowResults.totalCosts = annualWorthCashFlowResults.capital + annualWorthCashFlowResults.operating + annualWorthCashFlowResults.disposal + annualWorthCashFlowResults.other;
+
+
+    annualWorthCashFlowResults.energy = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.energySavings;
+    annualWorthCashFlowResults.otherCashFlow = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow > 0 ? withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow : 0;
+    annualWorthCashFlowResults.salvage = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.salvage;
+
+    annualWorthCashFlowResults.totalSavings = annualWorthCashFlowResults.energy + annualWorthCashFlowResults.otherCashFlow + annualWorthCashFlowResults.salvage;
+
+
+
+    return annualWorthCashFlowResults;
+  }
+
+  calculateCashFlowFinalResults(presentValueCashFlowResults: CashFlowResults, annualWorthCashFlowResults: CashFlowResults, withoutTaxesPresentValueOutputs: WithoutTaxesOutputs, withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs): CashFlowFinalResults {
+
+    let fianlResults: CashFlowFinalResults;
+
+
+    fianlResults.netPresentValue = presentValueCashFlowResults.totalSavings - presentValueCashFlowResults.totalCosts;
+    fianlResults.annualWorth = annualWorthCashFlowResults.totalSavings - annualWorthCashFlowResults.totalCosts;
+    fianlResults.payback = withoutTaxesAnnualWorthOutputs.simplePayback;
+
+    fianlResults.sir = withoutTaxesAnnualWorthOutputs.sir;
+    fianlResults.irr = withoutTaxesPresentValueOutputs.irr;
+    fianlResults.roi = withoutTaxesAnnualWorthOutputs.roi;
+
+    return fianlResults;
+  }
 
 
 

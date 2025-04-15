@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { CashFlowForm, CashFlowResults } from './cash-flow';
+import { CashFlowForm, CashFlowOutputsAndResults, CashFlowResults } from './cash-flow';
 import { CashFlowService } from './cash-flow.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
@@ -35,6 +35,7 @@ export class CashFlowComponent implements OnInit {
   headerHeight: number;
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
+  cashFlowOutputsAndResults: CashFlowOutputsAndResults;
   constructor(private cashFlowService: CashFlowService, private settingsDbService: SettingsDbService,
     private analyticsService: AnalyticsService) {
   }
@@ -163,6 +164,18 @@ export class CashFlowComponent implements OnInit {
     // Payback
     this.cashFlowResults.payback = (this.cashFlowForm.installationCost * 12) / this.cashFlowForm.energySavings;
     this.toggleCalculate = !this.toggleCalculate;
+
+    // this.cashFlowOutputsAndResults.yearlyCashFlowOutputs = this.cashFlowService.calculateYearlyCashFlowOutputs(this.cashFlowForm);
+    // this.cashFlowOutputsAndResults.presentValueCashFlowOutputs = this.cashFlowService.calculatePresentValueCashFlowOutputs(this.cashFlowForm, this.cashFlowOutputsAndResults.yearlyCashFlowOutputs);
+    // this.cashFlowOutputsAndResults.bruteForceResults = this.cashFlowService.calculateBruteForceResults();
+    // this.cashFlowOutputsAndResults.withoutTaxesPresentValueOutputs = this.cashFlowService.calculateWithoutTaxesPresentValueOutputs();
+    // this.cashFlowOutputsAndResults.withoutTaxesAnnualWorthOutputs
+    // this.cashFlowOutputsAndResults.presentValueCashFlowResults
+    // this.cashFlowOutputsAndResults.annualWorthCashFlowResults
+    // this.cashFlowOutputsAndResults.cashFlowFianlResults
+
+
+
   }
 
   setSmallScreenTab(selectedTab: string) {

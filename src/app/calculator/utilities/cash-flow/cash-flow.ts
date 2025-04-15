@@ -29,14 +29,20 @@ export interface CashFlowResults {
   energy?: number;
   otherCashFlow?: number;
   salvage?: number;
-
-  netPresentValue?: number;
-  annualWorth?: number;
+  
   payback?: number;
-  sir?: number;
-  irr?: number;
-  roi?: number;
 }
+
+export interface CashFlowFinalResults {
+  netPresentValue: number;
+  annualWorth: number;
+  payback: number;
+  sir: number;
+  irr: number;
+  roi: number;
+}
+
+
 
 export interface Outputs {
   cashFlowOutputs: Array<CashFlowOutputs>;
@@ -74,6 +80,17 @@ export interface BruteForceResult {
   iterationA: number;
   continueB: number;
   iterationB: number;
+}
+
+export interface CashFlowOutputsAndResults {
+  yearlyCashFlowOutputs: Outputs;
+  presentValueCashFlowOutputs: Outputs;
+  withoutTaxesPresentValueOutputs: WithoutTaxesOutputs;
+  withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs;
+  bruteForceResults: Array<BruteForceResult>;
+  presentValueCashFlowResults: CashFlowResults;
+  annualWorthCashFlowResults: CashFlowResults;
+  cashFlowFianlResults: CashFlowFinalResults;
 }
 
 
