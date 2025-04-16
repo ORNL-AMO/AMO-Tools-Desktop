@@ -44,14 +44,14 @@ export class CashFlowComponent implements OnInit {
     this.analyticsService.sendEvent('calculator-UTIL-cash-flow');
     if (!this.cashFlowService.inputData) {
       this.cashFlowForm = {
-        lifeYears: 10,
-        energySavings: 1000,
-        salvageInput: 3000,
-        installationCost: 10000,
-        operationCost: 500,
-        otherCost: 500,
-        junkCost: 500,
-        otherSavings: 500,
+        lifeYears: 15,
+        energySavings: 50000,
+        salvageInput: 50000,
+        installationCost: 250000,
+        operationCost: 5000,
+        otherCost: 0,
+        junkCost: 100000,
+        otherSavings: 0,
         discountRate: 10,
         includeTaxes: 0,
         taxRate: 30,
@@ -60,13 +60,18 @@ export class CashFlowComponent implements OnInit {
           0,
           -1000,
           5000,
-          1000,
+          -1000,
           0,
           4000,
           0,
           -1000,
           5000,
-          -1000
+          -1000,
+          0,
+          4000,
+          0,
+          -1000,
+          5000
         ]
       };
     } else {
@@ -90,14 +95,14 @@ export class CashFlowComponent implements OnInit {
 
   btnGenerateExample() {
     this.cashFlowForm = {
-      lifeYears: 10,
-      energySavings: 1000,
-      salvageInput: 3000,
-      installationCost: 10000,
-      operationCost: 500,
-      otherCost: 500,
-      junkCost: 500,
-      otherSavings: 500,
+      lifeYears: 15,
+      energySavings: 50000,
+      salvageInput: 50000,
+      installationCost: 250000,
+      operationCost: 5000,
+      otherCost: 0,
+      junkCost: 100000,
+      otherSavings: 0,
       discountRate: 10,
       includeTaxes: 0,
       taxRate: 30,
@@ -106,13 +111,18 @@ export class CashFlowComponent implements OnInit {
         0,
         -1000,
         5000,
-        1000,
+        -1000,
         0,
         4000,
         0,
         -1000,
         5000,
-        -1000
+        -1000,
+        0,
+        4000,
+        0,
+        -1000,
+        5000
       ]
     };
     this.cashFlowService.inputData = this.cashFlowForm;
@@ -166,13 +176,13 @@ export class CashFlowComponent implements OnInit {
     this.toggleCalculate = !this.toggleCalculate;
 
     let yearlyCashFlowOutputs: Outputs = this.cashFlowService.calculateYearlyCashFlowOutputs(this.cashFlowForm);
-    let presentValueCashFlowOutputs: Outputs //= this.cashFlowService.calculatePresentValueCashFlowOutputs(this.cashFlowForm, yearlyCashFlowOutputs);
-    let bruteForceResults: Array<BruteForceResults> //= this.cashFlowService.calculateBruteForceResults(this.cashFlowForm, yearlyCashFlowOutputs);
-    let withoutTaxesPresentValueOutputs: WithoutTaxesOutputs //= this.cashFlowService.calculateWithoutTaxesPresentValueOutputs(presentValueCashFlowOutputs, bruteForceResults);
-    let withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs //= this.cashFlowService.calculateWithoutTaxesAnnualWorthOutputs(this.cashFlowForm, withoutTaxesPresentValueOutputs, bruteForceResults);
-    let presentValueCashFlowResults: CashFlowResults //= this.cashFlowService.calculatePresentValueCashFlowResults(withoutTaxesPresentValueOutputs);
-    let annualWorthCashFlowResults: CashFlowResults //= this.cashFlowService.calculateAnnualWorthCashFlowResults(withoutTaxesAnnualWorthOutputs);
-    let cashFlowFinalResults: CashFlowFinalResults //= this.cashFlowService.calculateCashFlowFinalResults(presentValueCashFlowResults, annualWorthCashFlowResults, withoutTaxesPresentValueOutputs, withoutTaxesAnnualWorthOutputs);
+    let presentValueCashFlowOutputs: Outputs = this.cashFlowService.calculatePresentValueCashFlowOutputs(this.cashFlowForm, yearlyCashFlowOutputs);
+    let bruteForceResults: Array<BruteForceResults> = this.cashFlowService.calculateBruteForceResults(this.cashFlowForm, yearlyCashFlowOutputs);
+    let withoutTaxesPresentValueOutputs: WithoutTaxesOutputs = this.cashFlowService.calculateWithoutTaxesPresentValueOutputs(presentValueCashFlowOutputs, bruteForceResults);
+    let withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs = this.cashFlowService.calculateWithoutTaxesAnnualWorthOutputs(this.cashFlowForm, withoutTaxesPresentValueOutputs, bruteForceResults);
+    let presentValueCashFlowResults: CashFlowResults = this.cashFlowService.calculatePresentValueCashFlowResults(withoutTaxesPresentValueOutputs);
+    let annualWorthCashFlowResults: CashFlowResults = this.cashFlowService.calculateAnnualWorthCashFlowResults(withoutTaxesAnnualWorthOutputs);
+    let cashFlowFinalResults: CashFlowFinalResults = this.cashFlowService.calculateCashFlowFinalResults(presentValueCashFlowResults, annualWorthCashFlowResults, withoutTaxesPresentValueOutputs, withoutTaxesAnnualWorthOutputs);
 
     this.cashFlowOutputsAndResults = {
       yearlyCashFlowOutputs: yearlyCashFlowOutputs,
@@ -184,9 +194,6 @@ export class CashFlowComponent implements OnInit {
       annualWorthCashFlowResults: annualWorthCashFlowResults,
       cashFlowFinalResults: cashFlowFinalResults,
     }
-
-    console.log(yearlyCashFlowOutputs);
-
 
   }
 

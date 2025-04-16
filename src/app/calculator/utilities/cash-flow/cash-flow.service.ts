@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { BruteForceResults, CashFlowFinalResults, CashFlowForm, CashFlowOutputs, CashFlowResults, Outputs, WithoutTaxesOutputs } from './cash-flow';
+import { BruteForceResults, CashFlowFinalResults, CashFlowForm, CashFlowOutputs, CashFlowResults, InterestRates, Outputs, WithoutTaxesOutputs } from './cash-flow';
 import { TraceData, SimpleChart } from '../../../shared/models/plotting';
 
 @Injectable()
@@ -284,20 +284,16 @@ export class CashFlowService {
 
     let bruteForceResults: Array<BruteForceResults> = this.getEmptybruteForceResults();
 
-    //let interestRate: number = 0;
-    let year: number = 0;
-
-
-    for (let interestRate = 0; interestRate < 0.4; interestRate + 0.005) {
+    InterestRates.forEach((rate, index) => {
       let results: BruteForceResults = this.getEmptybruteForceResult();
-      results.interestRate = interestRate;
+      results.interestRate = rate;
       let total: number = 0;
       yearlyCashFlowOutputs.cashFlowOutputs.forEach(cashflow => {
         let yearResult: number;
-        if (year == 0) {
-          yearResult = inputs.installationCost / ((1 + interestRate) ^ year);
+        if (index == 0) {
+          yearResult = inputs.installationCost / ((1 + rate) ^ index);
         } else {
-          yearResult = cashflow.cashFlow / ((1 + interestRate) ^ year);
+          yearResult = cashflow.cashFlow / ((1 + rate) ^ index);
         }
         total += yearResult;
         results.results.push(yearResult);
@@ -305,12 +301,13 @@ export class CashFlowService {
       results.total = total;
 
       bruteForceResults.push(results);
-    }
+
+    });
 
     let previousContinueA = 0;
     bruteForceResults.forEach(results => {
-      results.continueA = results.total > 0 ? 0 : (previousContinueA === 0 ? results.interestRate : undefined);
-      results.continueB = results.total > 0 ? 0 : (previousContinueA === 0 ? results.total : undefined);
+      results.continueA = results.total > 0 ? 0 : (previousContinueA === 0 ? results.interestRate : 0);
+      results.continueB = results.total > 0 ? 0 : (previousContinueA === 0 ? results.total : 0);
       previousContinueA = results.continueA;
     });
 
