@@ -6,6 +6,7 @@ import { ConvertAirLeakService } from './convert-air-leak.service';
 import { BehaviorSubject } from 'rxjs';
 import { AirLeakFormService } from './air-leak-form/air-leak-form.service';
 import { exampleLeakInputs } from '../compressed-air-constants';
+import { s } from '@angular/core/weak_ref.d-ttyj86RV';
 
 
 
@@ -107,6 +108,14 @@ export class AirLeakService {
 
   setLeakForModification(index: number, selected: boolean) {
     this.airLeakInput.value.compressedAirLeakSurveyInputVec[index].selected = selected;
+    this.airLeakInput.next(this.airLeakInput.value);
+  }
+
+
+  setLeakForModificationSelectAll(selectAll: boolean) {
+    this.airLeakInput.value.compressedAirLeakSurveyInputVec.forEach(leak => {
+      leak.selected = selectAll;
+    });
     this.airLeakInput.next(this.airLeakInput.value);
   }
 

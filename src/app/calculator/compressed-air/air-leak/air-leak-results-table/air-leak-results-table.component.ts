@@ -14,6 +14,7 @@ export class AirLeakResultsTableComponent implements OnInit {
 
   airLeakOutput: AirLeakSurveyOutput;
   airLeakOutputSub: Subscription;
+  allSelected: boolean = false;
 
   @Input()
   settings: Settings;
@@ -44,6 +45,11 @@ export class AirLeakResultsTableComponent implements OnInit {
 
   toggleSelected(index: number, selected: boolean) {
     this.airLeakService.setLeakForModification(index, selected);
+  }
+
+  toggleSelectAll(selectAll: boolean){
+    this.airLeakService.setLeakForModificationSelectAll(!selectAll);
+    this.allSelected = !this.allSelected;
   }
 
 }
