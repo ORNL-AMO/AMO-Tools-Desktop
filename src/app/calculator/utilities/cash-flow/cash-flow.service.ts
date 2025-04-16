@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { BruteForceResult, CashFlowFinalResults, CashFlowForm, CashFlowOutputs, CashFlowResults, Outputs, WithoutTaxesOutputs } from './cash-flow';
+import { BruteForceResults, CashFlowFinalResults, CashFlowForm, CashFlowOutputs, CashFlowResults, Outputs, WithoutTaxesOutputs } from './cash-flow';
 import { TraceData, SimpleChart } from '../../../shared/models/plotting';
 
 @Injectable()
@@ -66,11 +66,51 @@ export class CashFlowService {
     };
   }
 
+  getEmptyOutputs(): Outputs {
+    return {
+      cashFlowOutputs: [
+        {
+          cashFlow: 0,
+          capitalExpenditures: 0,
+          energySavings: 0,
+          salvage: 0,
+          operationCost: 0,
+          disposal: 0,
+          otherCashFlow: 0,
+          total: 0,
+        }
+      ],
+      totalOutputs: {
+        cashFlow: 0,
+        capitalExpenditures: 0,
+        energySavings: 0,
+        salvage: 0,
+        operationCost: 0,
+        disposal: 0,
+        otherCashFlow: 0,
+        total: 0,
+      }
+    }
+  }
+
+  getEmptyCashFlowOutputs(): CashFlowOutputs {
+    return {
+      cashFlow: 0,
+      capitalExpenditures: 0,
+      energySavings: 0,
+      salvage: 0,
+      operationCost: 0,
+      disposal: 0,
+      otherCashFlow: 0,
+      total: 0,
+    }
+  }
+
   calculateYearlyCashFlowOutputs(inputs: CashFlowForm): Outputs {
-    let outputs: Outputs;
+    let outputs: Outputs = this.getEmptyOutputs();
 
     inputs.advancedCashflows.forEach(cashFlow => {
-      let output: CashFlowOutputs;
+      let output: CashFlowOutputs = this.getEmptyCashFlowOutputs();
       output.energySavings = inputs.energySavings;
       output.operationCost = inputs.operationCost;
       output.otherCashFlow = cashFlow;
@@ -95,11 +135,11 @@ export class CashFlowService {
 
 
   calculatePresentValueCashFlowOutputs(inputs: CashFlowForm, yearlyCashFlowOutputs: Outputs): Outputs {
-    let outputs: Outputs;
+    let outputs: Outputs = this.getEmptyOutputs();
 
     let year = 1;
     yearlyCashFlowOutputs.cashFlowOutputs.forEach(cashFlow => {
-      let output: CashFlowOutputs;
+      let output: CashFlowOutputs = this.getEmptyCashFlowOutputs();
       output.total = cashFlow.cashFlow / ((1 + (inputs.discountRate / 100)) ^ year);
       output.energySavings = cashFlow.energySavings / ((1 + (inputs.discountRate / 100)) ^ year);
       output.operationCost = cashFlow.operationCost / ((1 + (inputs.discountRate / 100)) ^ year);
@@ -122,8 +162,23 @@ export class CashFlowService {
     return outputs;
   }
 
-  calculateWithoutTaxesPresentValueOutputs(presentValueCashFlowOutputs: Outputs, bruteForceResults: Array<BruteForceResult>): WithoutTaxesOutputs {
-    let withoutTaxesPresentValueOutputs: WithoutTaxesOutputs;
+  getEmptyWithoutTaxesOutputs(): WithoutTaxesOutputs {
+    return {
+      cashFlowOutputs: this.getEmptyCashFlowOutputs(),
+      net: 0,
+      simplePayback: 0,
+      simplePaybackWithCostsSavings: 0,
+      sir: 0,
+      roi: 0,
+      interestRate: 0,
+      nvp: 0,
+      irr: 0,
+    }
+
+  }
+
+  calculateWithoutTaxesPresentValueOutputs(presentValueCashFlowOutputs: Outputs, bruteForceResults: Array<BruteForceResults>): WithoutTaxesOutputs {
+    let withoutTaxesPresentValueOutputs: WithoutTaxesOutputs = this.getEmptyWithoutTaxesOutputs();
 
     withoutTaxesPresentValueOutputs.cashFlowOutputs.capitalExpenditures = presentValueCashFlowOutputs.totalOutputs.capitalExpenditures;
     withoutTaxesPresentValueOutputs.cashFlowOutputs.energySavings = presentValueCashFlowOutputs.totalOutputs.energySavings;
@@ -159,9 +214,9 @@ export class CashFlowService {
   }
 
 
-  calculateWithoutTaxesAnnualWorthOutputs(inputs: CashFlowForm, withoutTaxesPresentValueOutputs: WithoutTaxesOutputs, bruteForceResults: Array<BruteForceResult>): WithoutTaxesOutputs {
+  calculateWithoutTaxesAnnualWorthOutputs(inputs: CashFlowForm, withoutTaxesPresentValueOutputs: WithoutTaxesOutputs, bruteForceResults: Array<BruteForceResults>): WithoutTaxesOutputs {
 
-    let withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs;
+    let withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs = this.getEmptyWithoutTaxesOutputs();
 
     withoutTaxesAnnualWorthOutputs.cashFlowOutputs.capitalExpenditures = withoutTaxesPresentValueOutputs.cashFlowOutputs.capitalExpenditures * ((inputs.discountRate / 100) * ((1 + (inputs.discountRate / 100)) ^ inputs.lifeYears) / (((1 + (inputs.discountRate / 100)) ^ inputs.lifeYears) - 1));
     withoutTaxesAnnualWorthOutputs.cashFlowOutputs.energySavings = withoutTaxesPresentValueOutputs.cashFlowOutputs.energySavings * ((inputs.discountRate / 100) * ((1 + (inputs.discountRate / 100)) ^ inputs.lifeYears) / (((1 + (inputs.discountRate / 100)) ^ inputs.lifeYears) - 1));
@@ -196,16 +251,45 @@ export class CashFlowService {
 
   }
 
-  calculateBruteForceResults(inputs: CashFlowForm, yearlyCashFlowOutputs: Outputs): Array<BruteForceResult> {
+  getEmptybruteForceResults(): Array<BruteForceResults> {
+    return [
+      {
+        interestRate: 0,
+        results: [0],
+        total: 0,
+        continueA: 0,
+        iterationA: 0,
+        continueB: 0,
+        iterationB: 0,
+      }
+    ]
 
-    let bruteForceResults: Array<BruteForceResult>;
+  }
+
+  getEmptybruteForceResult(): BruteForceResults {
+    return {
+      interestRate: 0,
+      results: [0],
+      total: 0,
+      continueA: 0,
+      iterationA: 0,
+      continueB: 0,
+      iterationB: 0,
+    }
+
+
+  }
+
+  calculateBruteForceResults(inputs: CashFlowForm, yearlyCashFlowOutputs: Outputs): Array<BruteForceResults> {
+
+    let bruteForceResults: Array<BruteForceResults> = this.getEmptybruteForceResults();
 
     //let interestRate: number = 0;
     let year: number = 0;
 
 
     for (let interestRate = 0; interestRate < 0.4; interestRate + 0.005) {
-      let results: BruteForceResult;
+      let results: BruteForceResults = this.getEmptybruteForceResult();
       results.interestRate = interestRate;
       let total: number = 0;
       yearlyCashFlowOutputs.cashFlowOutputs.forEach(cashflow => {
@@ -240,9 +324,28 @@ export class CashFlowService {
     return bruteForceResults
   }
 
+  getEmptyCashFlowResults(): CashFlowResults {
+    return {
+      benefits: 0,
+      cost: 0,
+      results: 0,
+      totalCosts: 0,
+      capital: 0,
+      operating: 0,
+      disposal: 0,
+      other: 0,
+      totalSavings: 0,
+      energy: 0,
+      otherCashFlow: 0,
+      salvage: 0,
+      payback: 0,
+    }
+
+  }
+
   calculatePresentValueCashFlowResults(withoutTaxesPresentValueOutputs: WithoutTaxesOutputs): CashFlowResults {
 
-    let presentValueCashFlowResults: CashFlowResults;
+    let presentValueCashFlowResults: CashFlowResults = this.getEmptyCashFlowResults();
 
     presentValueCashFlowResults.capital = withoutTaxesPresentValueOutputs.cashFlowOutputs.capitalExpenditures;
     presentValueCashFlowResults.operating = withoutTaxesPresentValueOutputs.cashFlowOutputs.operationCost;
@@ -266,7 +369,7 @@ export class CashFlowService {
 
   calculateAnnualWorthCashFlowResults(withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs): CashFlowResults {
 
-    let annualWorthCashFlowResults: CashFlowResults;
+    let annualWorthCashFlowResults: CashFlowResults = this.getEmptyCashFlowResults();
 
     annualWorthCashFlowResults.capital = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.capitalExpenditures;
     annualWorthCashFlowResults.operating = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.operationCost;
@@ -287,9 +390,22 @@ export class CashFlowService {
     return annualWorthCashFlowResults;
   }
 
+
+  getEmptyCashFlowFinalResults(): CashFlowFinalResults {
+
+    return {
+      netPresentValue: 0,
+      annualWorth: 0,
+      payback: 0,
+      sir: 0,
+      irr: 0,
+      roi: 0,
+    }
+  }
+
   calculateCashFlowFinalResults(presentValueCashFlowResults: CashFlowResults, annualWorthCashFlowResults: CashFlowResults, withoutTaxesPresentValueOutputs: WithoutTaxesOutputs, withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs): CashFlowFinalResults {
 
-    let fianlResults: CashFlowFinalResults;
+    let fianlResults: CashFlowFinalResults = this.getEmptyCashFlowFinalResults();
 
 
     fianlResults.netPresentValue = presentValueCashFlowResults.totalSavings - presentValueCashFlowResults.totalCosts;

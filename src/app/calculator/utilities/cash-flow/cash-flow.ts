@@ -72,7 +72,7 @@ export interface WithoutTaxesOutputs {
   irr?: number;
 }
 
-export interface BruteForceResult {
+export interface BruteForceResults {
   interestRate: number;
   results: Array<number>;
   total: number;
@@ -87,10 +87,10 @@ export interface CashFlowOutputsAndResults {
   presentValueCashFlowOutputs: Outputs;
   withoutTaxesPresentValueOutputs: WithoutTaxesOutputs;
   withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs;
-  bruteForceResults: Array<BruteForceResult>;
+  bruteForceResults: Array<BruteForceResults>;
   presentValueCashFlowResults: CashFlowResults;
   annualWorthCashFlowResults: CashFlowResults;
-  cashFlowFianlResults: CashFlowFinalResults;
+  cashFlowFinalResults: CashFlowFinalResults;
 }
 
 

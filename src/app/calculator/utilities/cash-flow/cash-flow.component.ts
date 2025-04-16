@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { CashFlowForm, CashFlowOutputsAndResults, CashFlowResults } from './cash-flow';
+import { BruteForceResults, CashFlowFinalResults, CashFlowForm, CashFlowOutputsAndResults, CashFlowResults, Outputs, WithoutTaxesOutputs } from './cash-flow';
 import { CashFlowService } from './cash-flow.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-    selector: 'app-cash-flow',
-    templateUrl: './cash-flow.component.html',
-    styleUrls: ['./cash-flow.component.css'],
-    standalone: false
+  selector: 'app-cash-flow',
+  templateUrl: './cash-flow.component.html',
+  styleUrls: ['./cash-flow.component.css'],
+  standalone: false
 })
 export class CashFlowComponent implements OnInit {
   @Input()
@@ -88,7 +88,7 @@ export class CashFlowComponent implements OnInit {
     this.cashFlowService.inputData = this.cashFlowForm;
   }
 
-  btnGenerateExample(){
+  btnGenerateExample() {
     this.cashFlowForm = {
       lifeYears: 10,
       energySavings: 1000,
@@ -165,15 +165,27 @@ export class CashFlowComponent implements OnInit {
     this.cashFlowResults.payback = (this.cashFlowForm.installationCost * 12) / this.cashFlowForm.energySavings;
     this.toggleCalculate = !this.toggleCalculate;
 
-    // this.cashFlowOutputsAndResults.yearlyCashFlowOutputs = this.cashFlowService.calculateYearlyCashFlowOutputs(this.cashFlowForm);
-    // this.cashFlowOutputsAndResults.presentValueCashFlowOutputs = this.cashFlowService.calculatePresentValueCashFlowOutputs(this.cashFlowForm, this.cashFlowOutputsAndResults.yearlyCashFlowOutputs);
-    // this.cashFlowOutputsAndResults.bruteForceResults = this.cashFlowService.calculateBruteForceResults();
-    // this.cashFlowOutputsAndResults.withoutTaxesPresentValueOutputs = this.cashFlowService.calculateWithoutTaxesPresentValueOutputs();
-    // this.cashFlowOutputsAndResults.withoutTaxesAnnualWorthOutputs
-    // this.cashFlowOutputsAndResults.presentValueCashFlowResults
-    // this.cashFlowOutputsAndResults.annualWorthCashFlowResults
-    // this.cashFlowOutputsAndResults.cashFlowFianlResults
+    let yearlyCashFlowOutputs: Outputs = this.cashFlowService.calculateYearlyCashFlowOutputs(this.cashFlowForm);
+    let presentValueCashFlowOutputs: Outputs //= this.cashFlowService.calculatePresentValueCashFlowOutputs(this.cashFlowForm, yearlyCashFlowOutputs);
+    let bruteForceResults: Array<BruteForceResults> //= this.cashFlowService.calculateBruteForceResults(this.cashFlowForm, yearlyCashFlowOutputs);
+    let withoutTaxesPresentValueOutputs: WithoutTaxesOutputs //= this.cashFlowService.calculateWithoutTaxesPresentValueOutputs(presentValueCashFlowOutputs, bruteForceResults);
+    let withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs //= this.cashFlowService.calculateWithoutTaxesAnnualWorthOutputs(this.cashFlowForm, withoutTaxesPresentValueOutputs, bruteForceResults);
+    let presentValueCashFlowResults: CashFlowResults //= this.cashFlowService.calculatePresentValueCashFlowResults(withoutTaxesPresentValueOutputs);
+    let annualWorthCashFlowResults: CashFlowResults //= this.cashFlowService.calculateAnnualWorthCashFlowResults(withoutTaxesAnnualWorthOutputs);
+    let cashFlowFinalResults: CashFlowFinalResults //= this.cashFlowService.calculateCashFlowFinalResults(presentValueCashFlowResults, annualWorthCashFlowResults, withoutTaxesPresentValueOutputs, withoutTaxesAnnualWorthOutputs);
 
+    this.cashFlowOutputsAndResults = {
+      yearlyCashFlowOutputs: yearlyCashFlowOutputs,
+      presentValueCashFlowOutputs: presentValueCashFlowOutputs,
+      bruteForceResults: bruteForceResults,
+      withoutTaxesPresentValueOutputs: withoutTaxesPresentValueOutputs,
+      withoutTaxesAnnualWorthOutputs: withoutTaxesAnnualWorthOutputs,
+      presentValueCashFlowResults: presentValueCashFlowResults,
+      annualWorthCashFlowResults: annualWorthCashFlowResults,
+      cashFlowFinalResults: cashFlowFinalResults,
+    }
+
+    console.log(yearlyCashFlowOutputs);
 
 
   }
