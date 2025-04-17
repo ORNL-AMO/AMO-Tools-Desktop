@@ -8,9 +8,10 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 
 @Component({
-  selector: 'app-custom-solid-liquid-flue-gas-materials',
-  templateUrl: './custom-solid-liquid-flue-gas-materials.component.html',
-  styleUrls: ['./custom-solid-liquid-flue-gas-materials.component.css']
+    selector: 'app-custom-solid-liquid-flue-gas-materials',
+    templateUrl: './custom-solid-liquid-flue-gas-materials.component.html',
+    styleUrls: ['./custom-solid-liquid-flue-gas-materials.component.css'],
+    standalone: false
 })
 export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
   @Input()

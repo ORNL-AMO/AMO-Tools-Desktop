@@ -9,9 +9,10 @@ import { PumpStatusCatalogService } from './pump-status-catalog.service';
 import { priorityTypes, statusTypes } from '../../../../psat/psatConstants';
 
 @Component({
-  selector: 'app-pump-status-catalog',
-  templateUrl: './pump-status-catalog.component.html',
-  styleUrls: ['./pump-status-catalog.component.css']
+    selector: 'app-pump-status-catalog',
+    templateUrl: './pump-status-catalog.component.html',
+    styleUrls: ['./pump-status-catalog.component.css'],
+    standalone: false
 })
 export class PumpStatusCatalogComponent implements OnInit {
 

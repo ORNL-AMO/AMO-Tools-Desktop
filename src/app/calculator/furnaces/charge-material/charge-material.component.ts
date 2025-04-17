@@ -9,9 +9,10 @@ import { ChargeMaterialService } from './charge-material.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-charge-material',
-  templateUrl: './charge-material.component.html',
-  styleUrls: ['./charge-material.component.css']
+    selector: 'app-charge-material',
+    templateUrl: './charge-material.component.html',
+    styleUrls: ['./charge-material.component.css'],
+    standalone: false
 })
 export class ChargeMaterialComponent implements OnInit {
 

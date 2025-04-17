@@ -8,9 +8,10 @@ import { PumpSummaryGraphsService } from '../../../pump-inventory-summary/invent
 import { PumpInventoryData, PumpItem } from '../../../pump-inventory';
 
 @Component({
-  selector: 'app-pump-types-dropdown',
-  templateUrl: './pump-types-dropdown.component.html',
-  styleUrls: ['./pump-types-dropdown.component.css']
+    selector: 'app-pump-types-dropdown',
+    templateUrl: './pump-types-dropdown.component.html',
+    styleUrls: ['./pump-types-dropdown.component.css'],
+    standalone: false
 })
 export class PumpTypesDropdownComponent {
 

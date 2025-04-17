@@ -7,9 +7,10 @@ import { FormGroup } from '@angular/forms';
 import { WeatherBinsFormService } from '../weather-bins-form.service';
 
 @Component({
-  selector: 'app-bins-form',
-  templateUrl: './bins-form.component.html',
-  styleUrls: ['./bins-form.component.css']
+    selector: 'app-bins-form',
+    templateUrl: './bins-form.component.html',
+    styleUrls: ['./bins-form.component.css'],
+    standalone: false
 })
 export class BinsFormComponent implements OnInit {
   @Input()

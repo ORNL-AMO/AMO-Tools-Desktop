@@ -11,9 +11,10 @@ import { Subscription } from 'rxjs';
 import { MeasurHttpError } from '../errors/errors';
 
 @Component({
-  selector: 'app-weather-station-lookup',
-  templateUrl: './weather-station-lookup.component.html',
-  styleUrls: ['./weather-station-lookup.component.css']
+    selector: 'app-weather-station-lookup',
+    templateUrl: './weather-station-lookup.component.html',
+    styleUrls: ['./weather-station-lookup.component.css'],
+    standalone: false
 })
 export class WeatherStationLookupComponent implements OnInit {
   zipcode: string;

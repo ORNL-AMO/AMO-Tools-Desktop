@@ -6,9 +6,10 @@ import { PreAssessmentService, PreAssessmentResult } from '../../../calculator/u
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-pre-assessment-table',
-  templateUrl: './pre-assessment-table.component.html',
-  styleUrls: ['./pre-assessment-table.component.css']
+    selector: 'app-pre-assessment-table',
+    templateUrl: './pre-assessment-table.component.html',
+    styleUrls: ['./pre-assessment-table.component.css'],
+    standalone: false
 })
 export class PreAssessmentTableComponent implements OnInit {
   @Input()

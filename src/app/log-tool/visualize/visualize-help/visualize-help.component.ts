@@ -5,36 +5,29 @@ import { GraphInteractivity, GraphObj } from '../../log-tool-models';
 import { VisualizeService } from '../visualize.service';
 
 @Component({
-  selector: 'app-visualize-help',
-  templateUrl: './visualize-help.component.html',
-  styleUrls: ['./visualize-help.component.css'],
-  animations: [
-    trigger('focusedPanelState', [
-      state(
-        '*',
-        style({
-          backgroundColor: '#fff3cd'
-        })
-      ),
-      transition('* => highlight-performance-info', animate('1000ms linear',
-        keyframes([
-          style({ backgroundColor: '#fcc71e', 
-          offset: 0 }),
-          style({ backgroundColor: '#fff3cd',
-           offset: 1.0 }),
-        ]))),
-
-      transition('* => highlight-timeseries-info', animate('1000ms linear',
-      keyframes([
-        style({ backgroundColor: '#fcc71e', 
-        offset: 0 }),
-        style({ backgroundColor: '#fff3cd',
-         offset: 1.0 }),
-      ]))),
-        
-      
-    ])
-  ]
+    selector: 'app-visualize-help',
+    templateUrl: './visualize-help.component.html',
+    styleUrls: ['./visualize-help.component.css'],
+    animations: [
+        trigger('focusedPanelState', [
+            state('*', style({
+                backgroundColor: '#fff3cd'
+            })),
+            transition('* => highlight-performance-info', animate('1000ms linear', keyframes([
+                style({ backgroundColor: '#fcc71e',
+                    offset: 0 }),
+                style({ backgroundColor: '#fff3cd',
+                    offset: 1.0 }),
+            ]))),
+            transition('* => highlight-timeseries-info', animate('1000ms linear', keyframes([
+                style({ backgroundColor: '#fcc71e',
+                    offset: 0 }),
+                style({ backgroundColor: '#fff3cd',
+                    offset: 1.0 }),
+            ]))),
+        ])
+    ],
+    standalone: false
 })
 export class VisualizeHelpComponent implements OnInit {
   @Input()

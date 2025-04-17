@@ -26,9 +26,10 @@ import { Diagram } from '../models/diagram';
 import { WaterAssessmentConnectionsService } from '../../water/water-assessment-connections.service';
 
 @Component({
-  selector: 'app-create-assessment-modal',
-  templateUrl: './create-assessment-modal.component.html',
-  styleUrls: ['./create-assessment-modal.component.css']
+    selector: 'app-create-assessment-modal',
+    templateUrl: './create-assessment-modal.component.html',
+    styleUrls: ['./create-assessment-modal.component.css'],
+    standalone: false
 })
 export class CreateAssessmentModalComponent {
   @ViewChild('createModal', { static: false }) public createModal: ModalDirective;

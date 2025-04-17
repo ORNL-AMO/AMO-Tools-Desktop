@@ -4,9 +4,10 @@ import { DesignedEnergyElectricity, DesignedEnergyFuel, DesignedEnergySteam, Des
 
 import { Settings } from '../../../../../shared/models/settings';
 @Component({
-  selector: 'app-pre-assessment-designed',
-  templateUrl: './pre-assessment-designed.component.html',
-  styleUrls: ['./pre-assessment-designed.component.css']
+    selector: 'app-pre-assessment-designed',
+    templateUrl: './pre-assessment-designed.component.html',
+    styleUrls: ['./pre-assessment-designed.component.css'],
+    standalone: false
 })
 export class PreAssessmentDesignedComponent implements OnInit {
   @Input()

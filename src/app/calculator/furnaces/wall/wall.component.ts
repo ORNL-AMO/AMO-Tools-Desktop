@@ -10,9 +10,10 @@ import { WallService } from './wall.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: "app-wall",
-  templateUrl: "./wall.component.html",
-  styleUrls: ["./wall.component.css"],
+    selector: "app-wall",
+    templateUrl: "./wall.component.html",
+    styleUrls: ["./wall.component.css"],
+    standalone: false
 })
 export class WallComponent implements OnInit {
   @Input()

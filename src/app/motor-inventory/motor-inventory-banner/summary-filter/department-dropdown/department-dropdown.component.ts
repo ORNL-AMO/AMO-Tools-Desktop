@@ -6,9 +6,10 @@ import { InventorySummaryGraphsService } from '../../../motor-inventory-summary/
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-department-dropdown',
-  templateUrl: './department-dropdown.component.html',
-  styleUrls: ['./department-dropdown.component.css']
+    selector: 'app-department-dropdown',
+    templateUrl: './department-dropdown.component.html',
+    styleUrls: ['./department-dropdown.component.css'],
+    standalone: false
 })
 export class DepartmentDropdownComponent implements OnInit {
   

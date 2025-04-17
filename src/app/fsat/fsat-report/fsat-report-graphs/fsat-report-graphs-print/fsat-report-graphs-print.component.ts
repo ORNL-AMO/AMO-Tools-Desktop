@@ -4,9 +4,10 @@ import { Modification, FSAT } from '../../../../shared/models/fans';
 import { ScenarioSummary } from '../../../../shared/models/reports';
 
 @Component({
-  selector: 'app-fsat-report-graphs-print',
-  templateUrl: './fsat-report-graphs-print.component.html',
-  styleUrls: ['./fsat-report-graphs-print.component.css']
+    selector: 'app-fsat-report-graphs-print',
+    templateUrl: './fsat-report-graphs-print.component.html',
+    styleUrls: ['./fsat-report-graphs-print.component.css'],
+    standalone: false
 })
 export class FsatReportGraphsPrintComponent implements OnInit {
   @Input()

@@ -7,6 +7,7 @@ import { WaterDiagramOption, WaterDiagram } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-diagram-setup',
+  standalone: false,
   templateUrl: './water-diagram-setup.component.html',
   styleUrl: './water-diagram-setup.component.css'
 })

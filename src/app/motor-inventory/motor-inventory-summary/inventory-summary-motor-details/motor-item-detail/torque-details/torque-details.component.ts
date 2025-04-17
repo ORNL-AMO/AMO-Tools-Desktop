@@ -3,9 +3,10 @@ import { TorqueOptions, TorqueData } from '../../../../motor-inventory';
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-torque-details',
-  templateUrl: './torque-details.component.html',
-  styleUrls: ['./torque-details.component.css']
+    selector: 'app-torque-details',
+    templateUrl: './torque-details.component.html',
+    styleUrls: ['./torque-details.component.css'],
+    standalone: false
 })
 export class TorqueDetailsComponent implements OnInit {
   @Input()

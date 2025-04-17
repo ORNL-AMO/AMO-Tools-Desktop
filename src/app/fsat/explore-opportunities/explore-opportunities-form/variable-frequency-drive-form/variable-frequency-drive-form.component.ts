@@ -7,9 +7,10 @@ import { ModifyConditionsService } from '../../../modify-conditions/modify-condi
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-variable-frequency-drive-form',
-  templateUrl: './variable-frequency-drive-form.component.html',
-  styleUrls: ['./variable-frequency-drive-form.component.css']
+    selector: 'app-variable-frequency-drive-form',
+    templateUrl: './variable-frequency-drive-form.component.html',
+    styleUrls: ['./variable-frequency-drive-form.component.css'],
+    standalone: false
 })
 export class VariableFrequencyDriveFormComponent implements OnInit {
   @Input()

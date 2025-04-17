@@ -3,9 +3,10 @@ import { BagMethodInput, BagMethodOutput } from '../../../../shared/models/stand
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-bag-method-form',
-  templateUrl: './bag-method-form.component.html',
-  styleUrls: ['./bag-method-form.component.css']
+    selector: 'app-bag-method-form',
+    templateUrl: './bag-method-form.component.html',
+    styleUrls: ['./bag-method-form.component.css'],
+    standalone: false
 })
 export class BagMethodFormComponent implements OnInit {
   @Input()

@@ -12,9 +12,10 @@ import { PrintOptions } from '../../shared/models/printing';
 import { PsatService } from '../psat.service';
 
 @Component({
-  selector: 'app-psat-report',
-  templateUrl: './psat-report.component.html',
-  styleUrls: ['./psat-report.component.css']
+    selector: 'app-psat-report',
+    templateUrl: './psat-report.component.html',
+    styleUrls: ['./psat-report.component.css'],
+    standalone: false
 })
 export class PsatReportComponent implements OnInit {
 

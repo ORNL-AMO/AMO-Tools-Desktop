@@ -8,6 +8,7 @@ import { CoolingTower } from 'process-flow-lib';
 
 @Component({
   selector: 'app-cooling-tower',
+  standalone: false,
   templateUrl: './cooling-tower.component.html',
   styleUrl: './cooling-tower.component.css'
 })

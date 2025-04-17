@@ -14,6 +14,7 @@ import { flowDecimalPrecisionOptions, WaterAssessment, WaterSystemBasics } from 
 
 @Component({
   selector: 'app-system-basics',
+  standalone: false,
   templateUrl: './system-basics.component.html',
   styleUrls: ['./system-basics.component.css']
 })

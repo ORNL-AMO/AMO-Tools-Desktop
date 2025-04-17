@@ -10,6 +10,7 @@ import { MotorEnergy } from "process-flow-lib";
 
 @Component({
   selector: 'app-motor-energy',
+  standalone: false,
   templateUrl: './motor-energy.component.html',
   styleUrl: './motor-energy.component.css'
 })

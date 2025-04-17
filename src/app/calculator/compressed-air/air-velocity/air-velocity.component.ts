@@ -11,9 +11,10 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 
 @Component({
-  selector: 'app-air-velocity',
-  templateUrl: './air-velocity.component.html',
-  styleUrls: ['./air-velocity.component.css']
+    selector: 'app-air-velocity',
+    templateUrl: './air-velocity.component.html',
+    styleUrls: ['./air-velocity.component.css'],
+    standalone: false
 })
 export class AirVelocityComponent implements OnInit {
 

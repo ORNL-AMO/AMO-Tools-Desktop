@@ -8,9 +8,10 @@ import { FanAnalysisService } from '../../../fan-analysis.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-plane-info-form',
-  templateUrl: './plane-info-form.component.html',
-  styleUrls: ['./plane-info-form.component.css']
+    selector: 'app-plane-info-form',
+    templateUrl: './plane-info-form.component.html',
+    styleUrls: ['./plane-info-form.component.css'],
+    standalone: false
 })
 export class PlaneInfoFormComponent implements OnInit {
   @Input()

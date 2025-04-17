@@ -7,6 +7,7 @@ import { MonthlyFlowData } from 'process-flow-lib';
 
 @Component({
   selector: 'app-monthly-flow-modal',
+  standalone: false,
   templateUrl: './monthly-flow-modal.component.html',
   styleUrl: './monthly-flow-modal.component.css'
 })

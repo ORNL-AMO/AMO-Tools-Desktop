@@ -8,9 +8,10 @@ import { PumpCatalogService } from '../pump-catalog/pump-catalog.service';
 import { pumpTypesConstant, statusTypes } from '../../../psat/psatConstants';
 
 @Component({
-  selector: 'app-department-catalog-table',
-  templateUrl: './department-catalog-table.component.html',
-  styleUrls: ['./department-catalog-table.component.css']
+    selector: 'app-department-catalog-table',
+    templateUrl: './department-catalog-table.component.html',
+    styleUrls: ['./department-catalog-table.component.css'],
+    standalone: false
 })
 export class DepartmentCatalogTableComponent implements OnInit {
 

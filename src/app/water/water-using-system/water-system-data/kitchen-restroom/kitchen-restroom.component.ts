@@ -8,6 +8,7 @@ import { KitchenRestroom } from 'process-flow-lib';
 
 @Component({
   selector: 'app-kitchen-restroom',
+  standalone: false,
   templateUrl: './kitchen-restroom.component.html',
   styleUrl: './kitchen-restroom.component.css'
 })

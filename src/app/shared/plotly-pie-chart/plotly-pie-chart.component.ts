@@ -3,9 +3,10 @@ import { PlotlyService } from 'angular-plotly.js';
 import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
 
 @Component({
-  selector: 'app-plotly-pie-chart',
-  templateUrl: './plotly-pie-chart.component.html',
-  styleUrls: ['./plotly-pie-chart.component.css']
+    selector: 'app-plotly-pie-chart',
+    templateUrl: './plotly-pie-chart.component.html',
+    styleUrls: ['./plotly-pie-chart.component.css'],
+    standalone: false
 })
 export class PlotlyPieChartComponent implements OnInit {
   @Input()

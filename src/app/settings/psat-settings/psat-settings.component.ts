@@ -2,9 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { UntypedFormGroup } from '@angular/forms';
 @Component({
-  selector: 'app-psat-settings',
-  templateUrl: './psat-settings.component.html',
-  styleUrls: ['./psat-settings.component.css']
+    selector: 'app-psat-settings',
+    templateUrl: './psat-settings.component.html',
+    styleUrls: ['./psat-settings.component.css'],
+    standalone: false
 })
 export class PsatSettingsComponent implements OnInit {
   @Input()

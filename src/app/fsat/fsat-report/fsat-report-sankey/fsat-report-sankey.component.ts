@@ -4,9 +4,10 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 
 @Component({
-  selector: 'app-fsat-report-sankey',
-  templateUrl: './fsat-report-sankey.component.html',
-  styleUrls: ['./fsat-report-sankey.component.css']
+    selector: 'app-fsat-report-sankey',
+    templateUrl: './fsat-report-sankey.component.html',
+    styleUrls: ['./fsat-report-sankey.component.css'],
+    standalone: false
 })
 export class FsatReportSankeyComponent implements OnInit {
   @Input()

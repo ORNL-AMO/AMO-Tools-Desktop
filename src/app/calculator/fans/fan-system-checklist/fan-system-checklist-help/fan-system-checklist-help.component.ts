@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FanSystemChecklistService } from '../fan-system-checklist.service';
 
 @Component({
-  selector: 'app-fan-system-checklist-help',
-  templateUrl: './fan-system-checklist-help.component.html',
-  styleUrls: ['./fan-system-checklist-help.component.css']
+    selector: 'app-fan-system-checklist-help',
+    templateUrl: './fan-system-checklist-help.component.html',
+    styleUrls: ['./fan-system-checklist-help.component.css'],
+    standalone: false
 })
 export class FanSystemChecklistHelpComponent implements OnInit {
 

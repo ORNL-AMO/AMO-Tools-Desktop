@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { PumpInventoryService } from '../pump-inventory.service';
 
 @Component({
-  selector: 'app-help-panel',
-  templateUrl: './help-panel.component.html',
-  styleUrls: ['./help-panel.component.css']
+    selector: 'app-help-panel',
+    templateUrl: './help-panel.component.html',
+    styleUrls: ['./help-panel.component.css'],
+    standalone: false
 })
 export class HelpPanelComponent implements OnInit {
   displayHeader: boolean;

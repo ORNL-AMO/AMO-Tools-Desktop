@@ -7,6 +7,7 @@ import { BoilerWater } from 'process-flow-lib';
 
 @Component({
   selector: 'app-boiler-water',
+  standalone: false,
   templateUrl: './boiler-water.component.html',
   styleUrl: './boiler-water.component.css'
 })

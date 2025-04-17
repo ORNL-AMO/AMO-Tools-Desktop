@@ -4,9 +4,10 @@ import { WasteWater, WasteWaterData } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';
 
 @Component({
-  selector: 'app-add-modification-modal',
-  templateUrl: './add-modification-modal.component.html',
-  styleUrls: ['./add-modification-modal.component.css']
+    selector: 'app-add-modification-modal',
+    templateUrl: './add-modification-modal.component.html',
+    styleUrls: ['./add-modification-modal.component.css'],
+    standalone: false
 })
 export class AddModificationModalComponent implements OnInit {
 

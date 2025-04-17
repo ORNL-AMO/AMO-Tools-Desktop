@@ -3,8 +3,9 @@ import { OpportunitySummary } from '../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
 
 @Pipe({
-  name: 'sortSummaries',
-  pure: false
+    name: 'sortSummaries',
+    pure: false,
+    standalone: false
 })
 export class SortSummariesPipe implements PipeTransform {
 

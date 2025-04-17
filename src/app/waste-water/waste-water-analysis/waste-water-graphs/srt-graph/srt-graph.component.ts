@@ -7,9 +7,10 @@ import { DataTableVariable } from '../../dataTableVariables';
 import { PlotlyService } from 'angular-plotly.js';
 import * as Plotly from 'plotly.js-dist';
 @Component({
-  selector: 'app-srt-graph',
-  templateUrl: './srt-graph.component.html',
-  styleUrls: ['./srt-graph.component.css']
+    selector: 'app-srt-graph',
+    templateUrl: './srt-graph.component.html',
+    styleUrls: ['./srt-graph.component.css'],
+    standalone: false
 })
 export class SrtGraphComponent implements OnInit {
   @Input()

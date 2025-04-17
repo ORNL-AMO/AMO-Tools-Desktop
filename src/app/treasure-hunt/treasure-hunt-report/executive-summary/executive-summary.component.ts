@@ -6,9 +6,10 @@ import { OpportunityCardData } from '../../treasure-chest/opportunity-cards/oppo
 import { TreasureHuntReportService } from '../treasure-hunt-report.service';
 
 @Component({
-  selector: 'app-executive-summary',
-  templateUrl: './executive-summary.component.html',
-  styleUrls: ['./executive-summary.component.css']
+    selector: 'app-executive-summary',
+    templateUrl: './executive-summary.component.html',
+    styleUrls: ['./executive-summary.component.css'],
+    standalone: false
 })
 export class ExecutiveSummaryComponent implements OnInit {
   @Input()

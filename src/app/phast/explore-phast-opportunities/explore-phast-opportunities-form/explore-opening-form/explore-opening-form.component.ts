@@ -10,9 +10,10 @@ import { OpeningFormService, OpeningLossWarnings } from '../../../../calculator/
 import { OpeningService } from '../../../../calculator/furnaces/opening/opening.service';
 
 @Component({
-  selector: 'app-explore-opening-form',
-  templateUrl: './explore-opening-form.component.html',
-  styleUrls: ['./explore-opening-form.component.css']
+    selector: 'app-explore-opening-form',
+    templateUrl: './explore-opening-form.component.html',
+    styleUrls: ['./explore-opening-form.component.css'],
+    standalone: false
 })
 export class ExploreOpeningFormComponent implements OnInit {
   @Input()

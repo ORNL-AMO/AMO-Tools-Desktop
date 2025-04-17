@@ -3,9 +3,10 @@ import { SsmtService } from '../../ssmt.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-boiler-help',
-  templateUrl: './boiler-help.component.html',
-  styleUrls: ['./boiler-help.component.css']
+    selector: 'app-boiler-help',
+    templateUrl: './boiler-help.component.html',
+    styleUrls: ['./boiler-help.component.css'],
+    standalone: false
 })
 export class BoilerHelpComponent implements OnInit {
   @Input()

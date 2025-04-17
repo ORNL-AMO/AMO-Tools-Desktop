@@ -6,9 +6,10 @@ import { CompareService } from '../../compare.service';
 import { PsatReportRollupService } from '../../../report-rollup/psat-report-rollup.service';
 
 @Component({
-  selector: 'app-output-summary',
-  templateUrl: './output-summary.component.html',
-  styleUrls: ['./output-summary.component.css']
+    selector: 'app-output-summary',
+    templateUrl: './output-summary.component.html',
+    styleUrls: ['./output-summary.component.css'],
+    standalone: false
 })
 export class OutputSummaryComponent implements OnInit {
   @Input()

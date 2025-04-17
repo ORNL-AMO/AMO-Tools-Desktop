@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { LeakageService } from '../leakage.service';
 
 @Component({
-  selector: 'app-leakage-help',
-  templateUrl: './leakage-help.component.html',
-  styleUrls: ['./leakage-help.component.css']
+    selector: 'app-leakage-help',
+    templateUrl: './leakage-help.component.html',
+    styleUrls: ['./leakage-help.component.css'],
+    standalone: false
 })
 export class LeakageHelpComponent implements OnInit {
   @Input()

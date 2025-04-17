@@ -3,9 +3,10 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-auxiliary-power-summary',
-  templateUrl: './auxiliary-power-summary.component.html',
-  styleUrls: ['./auxiliary-power-summary.component.css']
+    selector: 'app-auxiliary-power-summary',
+    templateUrl: './auxiliary-power-summary.component.html',
+    styleUrls: ['./auxiliary-power-summary.component.css'],
+    standalone: false
 })
 export class AuxiliaryPowerSummaryComponent implements OnInit {
   @Input()

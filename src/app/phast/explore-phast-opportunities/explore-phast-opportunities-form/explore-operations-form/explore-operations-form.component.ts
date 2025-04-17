@@ -6,9 +6,10 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { LossesService } from '../../../losses/losses.service';
 
 @Component({
-  selector: 'app-explore-operations-form',
-  templateUrl: './explore-operations-form.component.html',
-  styleUrls: ['./explore-operations-form.component.css']
+    selector: 'app-explore-operations-form',
+    templateUrl: './explore-operations-form.component.html',
+    styleUrls: ['./explore-operations-form.component.css'],
+    standalone: false
 })
 export class ExploreOperationsFormComponent implements OnInit {
   @Input()

@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-auxiliary-power-losses-help',
-  templateUrl: './auxiliary-power-losses-help.component.html',
-  styleUrls: ['./auxiliary-power-losses-help.component.css']
+    selector: 'app-auxiliary-power-losses-help',
+    templateUrl: './auxiliary-power-losses-help.component.html',
+    styleUrls: ['./auxiliary-power-losses-help.component.css'],
+    standalone: false
 })
 export class AuxiliaryPowerLossesHelpComponent implements OnInit {
   @Input()

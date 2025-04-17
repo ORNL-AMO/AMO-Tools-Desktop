@@ -3,9 +3,10 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-opening-summary',
-  templateUrl: './opening-summary.component.html',
-  styleUrls: ['./opening-summary.component.css']
+    selector: 'app-opening-summary',
+    templateUrl: './opening-summary.component.html',
+    styleUrls: ['./opening-summary.component.css'],
+    standalone: false
 })
 export class OpeningSummaryComponent implements OnInit {
   @Input()

@@ -10,9 +10,10 @@ import { ChillerPerformanceService } from './chiller-performance.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-chiller-performance',
-  templateUrl: './chiller-performance.component.html',
-  styleUrls: ['./chiller-performance.component.css']
+    selector: 'app-chiller-performance',
+    templateUrl: './chiller-performance.component.html',
+    styleUrls: ['./chiller-performance.component.css'],
+    standalone: false
 })
 export class ChillerPerformanceComponent implements OnInit {
   @Input()

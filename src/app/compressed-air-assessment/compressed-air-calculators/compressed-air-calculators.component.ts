@@ -5,9 +5,10 @@ import { Settings } from '../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-compressed-air-calculators',
-  templateUrl: './compressed-air-calculators.component.html',
-  styleUrls: ['./compressed-air-calculators.component.css']
+    selector: 'app-compressed-air-calculators',
+    templateUrl: './compressed-air-calculators.component.html',
+    styleUrls: ['./compressed-air-calculators.component.css'],
+    standalone: false
 })
 export class CompressedAirCalculatorsComponent implements OnInit {
 

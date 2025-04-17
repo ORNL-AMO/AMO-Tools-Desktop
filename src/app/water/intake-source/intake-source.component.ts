@@ -12,6 +12,7 @@ import { IntakeSource, intakeSourceTypeOptions, MonthlyFlowData, MotorEnergy, Wa
 
 @Component({
   selector: 'app-intake-source',
+  standalone: false,
   templateUrl: './intake-source.component.html',
   styleUrl: './intake-source.component.css'
 })

@@ -1,8 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'optionDisplayValue',
-  pure: true
+    name: 'optionDisplayValue',
+    pure: true,
+    standalone: false
 })
 export class OptionDisplayValuePipe implements PipeTransform {
 

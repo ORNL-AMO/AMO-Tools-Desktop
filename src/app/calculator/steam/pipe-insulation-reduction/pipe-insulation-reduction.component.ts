@@ -9,9 +9,10 @@ import { PipeInsulationReductionTreasureHunt, Treasure } from '../../../shared/m
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-pipe-insulation-reduction',
-  templateUrl: './pipe-insulation-reduction.component.html',
-  styleUrls: ['./pipe-insulation-reduction.component.css']
+    selector: 'app-pipe-insulation-reduction',
+    templateUrl: './pipe-insulation-reduction.component.html',
+    styleUrls: ['./pipe-insulation-reduction.component.css'],
+    standalone: false
 })
 export class PipeInsulationReductionComponent implements OnInit {
   @Input()

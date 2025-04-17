@@ -9,9 +9,10 @@ import { WasteHeatService } from './waste-heat.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-waste-heat',
-  templateUrl: './waste-heat.component.html',
-  styleUrls: ['./waste-heat.component.css']
+    selector: 'app-waste-heat',
+    templateUrl: './waste-heat.component.html',
+    styleUrls: ['./waste-heat.component.css'],
+    standalone: false
 })
 export class WasteHeatComponent implements OnInit {
   @Input()

@@ -6,17 +6,18 @@ import { SwUpdate } from '@angular/service-worker';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
-  selector: 'app-update-application-toast',
-  templateUrl: './update-application-toast.component.html',
-  styleUrl: './update-application-toast.component.css',
-  animations: [
-      trigger('toastAnimate', [
-        state('show', style({ top: '0px' })),
-        state('hide', style({ top: '-300px' })),
-        transition('hide => show', animate('.5s ease')),
-        transition('show => hide', animate('.5s ease'))
-      ])
-    ]
+    selector: 'app-update-application-toast',
+    templateUrl: './update-application-toast.component.html',
+    styleUrl: './update-application-toast.component.css',
+    animations: [
+        trigger('toastAnimate', [
+            state('show', style({ top: '0px' })),
+            state('hide', style({ top: '-300px' })),
+            transition('hide => show', animate('.5s ease')),
+            transition('show => hide', animate('.5s ease'))
+        ])
+    ],
+    standalone: false
 })
 export class UpdateApplicationToastComponent {
   releaseData: ReleaseData;

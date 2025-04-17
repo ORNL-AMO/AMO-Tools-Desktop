@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { HeaderOutput, SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-header-results',
-  templateUrl: './header-results.component.html',
-  styleUrls: ['./header-results.component.css']
+    selector: 'app-header-results',
+    templateUrl: './header-results.component.html',
+    styleUrls: ['./header-results.component.css'],
+    standalone: false
 })
 export class HeaderResultsComponent implements OnInit {
   @Input()

@@ -8,9 +8,10 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-bag-method',
-  templateUrl: './bag-method.component.html',
-  styleUrls: ['./bag-method.component.css']
+    selector: 'app-bag-method',
+    templateUrl: './bag-method.component.html',
+    styleUrls: ['./bag-method.component.css'],
+    standalone: false
 })
 export class BagMethodComponent implements OnInit {
   @Input()

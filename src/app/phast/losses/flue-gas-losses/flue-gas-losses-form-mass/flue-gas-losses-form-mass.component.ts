@@ -14,9 +14,10 @@ import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid
 import { FlueGasCompareService } from '../flue-gas-compare.service';
 
 @Component({
-  selector: 'app-flue-gas-losses-form-mass',
-  templateUrl: './flue-gas-losses-form-mass.component.html',
-  styleUrls: ['./flue-gas-losses-form-mass.component.css']
+    selector: 'app-flue-gas-losses-form-mass',
+    templateUrl: './flue-gas-losses-form-mass.component.html',
+    styleUrls: ['./flue-gas-losses-form-mass.component.css'],
+    standalone: false
 })
 export class FlueGasLossesFormMassComponent implements OnInit {
   @Input()

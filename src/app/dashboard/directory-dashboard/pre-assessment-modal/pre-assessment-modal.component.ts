@@ -14,9 +14,10 @@ import { firstValueFrom } from 'rxjs';
 import { ShowPreAssessmentModalState } from '../../../shared/models/directory-dashboard';
 
 @Component({
-  selector: 'app-pre-assessment-modal',
-  templateUrl: './pre-assessment-modal.component.html',
-  styleUrls: ['./pre-assessment-modal.component.css']
+    selector: 'app-pre-assessment-modal',
+    templateUrl: './pre-assessment-modal.component.html',
+    styleUrls: ['./pre-assessment-modal.component.css'],
+    standalone: false
 })
 export class PreAssessmentModalComponent implements OnInit {
 

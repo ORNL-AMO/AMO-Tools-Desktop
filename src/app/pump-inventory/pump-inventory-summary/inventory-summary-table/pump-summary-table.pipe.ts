@@ -3,7 +3,8 @@ import { SummaryPumpData } from '../pump-inventory-summary.service';
 import * as _ from 'lodash';
 
 @Pipe({
-  name: 'pumpSummaryTable'
+    name: 'pumpSummaryTable',
+    standalone: false
 })
 export class PumpSummaryTablePipe implements PipeTransform {
 

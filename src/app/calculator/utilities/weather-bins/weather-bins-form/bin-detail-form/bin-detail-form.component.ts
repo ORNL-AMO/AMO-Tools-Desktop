@@ -5,9 +5,10 @@ import { Settings } from '../../../../../shared/models/settings';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-bin-detail-form',
-  templateUrl: './bin-detail-form.component.html',
-  styleUrl: './bin-detail-form.component.css'
+    selector: 'app-bin-detail-form',
+    templateUrl: './bin-detail-form.component.html',
+    styleUrl: './bin-detail-form.component.css',
+    standalone: false
 })
 export class BinDetailFormComponent {
   @Input()

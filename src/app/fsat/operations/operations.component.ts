@@ -13,9 +13,10 @@ import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-operations',
-  templateUrl: './operations.component.html',
-  styleUrls: ['./operations.component.css']
+    selector: 'app-operations',
+    templateUrl: './operations.component.html',
+    styleUrls: ['./operations.component.css'],
+    standalone: false
 })
 export class OperationsComponent implements OnInit {
   @Input()

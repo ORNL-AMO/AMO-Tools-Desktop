@@ -3,9 +3,10 @@ import { ImportBackupModalService } from './import-backup-modal.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
-  selector: 'app-import-backup-modal',
-  templateUrl: './import-backup-modal.component.html',
-  styleUrl: './import-backup-modal.component.css'
+    selector: 'app-import-backup-modal',
+    templateUrl: './import-backup-modal.component.html',
+    styleUrl: './import-backup-modal.component.css',
+    standalone: false
 })
 export class ImportBackupModalComponent {
 

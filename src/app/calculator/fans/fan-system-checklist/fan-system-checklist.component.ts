@@ -9,9 +9,10 @@ import { FanSystemChecklistService } from './fan-system-checklist.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-fan-system-checklist',
-  templateUrl: './fan-system-checklist.component.html',
-  styleUrls: ['./fan-system-checklist.component.css']
+    selector: 'app-fan-system-checklist',
+    templateUrl: './fan-system-checklist.component.html',
+    styleUrls: ['./fan-system-checklist.component.css'],
+    standalone: false
 })
 export class FanSystemChecklistComponent implements OnInit {
   @Input()

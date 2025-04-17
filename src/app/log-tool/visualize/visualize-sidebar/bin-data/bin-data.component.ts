@@ -5,9 +5,10 @@ import { VisualizeService } from '../../visualize.service';
 import * as _ from 'lodash';
 import { VisualizeSidebarService } from '../visualize-sidebar.service';
 @Component({
-  selector: 'app-bin-data',
-  templateUrl: './bin-data.component.html',
-  styleUrls: ['./bin-data.component.css']
+    selector: 'app-bin-data',
+    templateUrl: './bin-data.component.html',
+    styleUrls: ['./bin-data.component.css'],
+    standalone: false
 })
 export class BinDataComponent implements OnInit {
 

@@ -10,9 +10,10 @@ import { IntegrationStateService } from '../../../shared/connected-inventory/int
 import { ConnectedItem } from '../../../shared/connected-inventory/integrations';
 
 @Component({
-  selector: 'app-pump-catalog',
-  templateUrl: './pump-catalog.component.html',
-  styleUrls: ['./pump-catalog.component.css']
+    selector: 'app-pump-catalog',
+    templateUrl: './pump-catalog.component.html',
+    styleUrls: ['./pump-catalog.component.css'],
+    standalone: false
 })
 export class PumpCatalogComponent implements OnInit {
 

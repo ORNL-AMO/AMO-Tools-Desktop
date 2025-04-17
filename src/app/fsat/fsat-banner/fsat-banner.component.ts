@@ -7,9 +7,10 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
-  selector: 'app-fsat-banner',
-  templateUrl: './fsat-banner.component.html',
-  styleUrls: ['./fsat-banner.component.css']
+    selector: 'app-fsat-banner',
+    templateUrl: './fsat-banner.component.html',
+    styleUrls: ['./fsat-banner.component.css'],
+    standalone: false
 })
 export class FsatBannerComponent implements OnInit {
   @Input()

@@ -9,9 +9,10 @@ import {DeaeratorOutput} from '../../../shared/models/steam/steam-outputs';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-deaerator-calculator',
-  templateUrl: './deaerator.component.html',
-  styleUrls: ['./deaerator.component.css']
+    selector: 'app-deaerator-calculator',
+    templateUrl: './deaerator.component.html',
+    styleUrls: ['./deaerator.component.css'],
+    standalone: false
 })
 export class DeaeratorComponent implements OnInit {
   @Input()

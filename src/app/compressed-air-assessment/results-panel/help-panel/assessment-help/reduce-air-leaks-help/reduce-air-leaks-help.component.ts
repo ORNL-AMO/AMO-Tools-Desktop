@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-reduce-air-leaks-help',
-  templateUrl: './reduce-air-leaks-help.component.html',
-  styleUrls: ['./reduce-air-leaks-help.component.css']
+    selector: 'app-reduce-air-leaks-help',
+    templateUrl: './reduce-air-leaks-help.component.html',
+    styleUrls: ['./reduce-air-leaks-help.component.css'],
+    standalone: false
 })
 export class ReduceAirLeaksHelpComponent implements OnInit {
 

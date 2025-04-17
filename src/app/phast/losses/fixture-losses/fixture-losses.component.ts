@@ -8,9 +8,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { FixtureFormService } from '../../../calculator/furnaces/fixture/fixture-form.service';
 
 @Component({
-  selector: 'app-fixture-losses',
-  templateUrl: './fixture-losses.component.html',
-  styleUrls: ['./fixture-losses.component.css']
+    selector: 'app-fixture-losses',
+    templateUrl: './fixture-losses.component.html',
+    styleUrls: ['./fixture-losses.component.css'],
+    standalone: false
 })
 export class FixtureLossesComponent implements OnInit {
   @Input()

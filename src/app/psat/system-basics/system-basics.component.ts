@@ -13,9 +13,10 @@ import { firstValueFrom } from 'rxjs';
 import { IntegrationState } from '../../shared/connected-inventory/integrations';
 
 @Component({
-  selector: 'app-system-basics',
-  templateUrl: './system-basics.component.html',
-  styleUrls: ['./system-basics.component.css']
+    selector: 'app-system-basics',
+    templateUrl: './system-basics.component.html',
+    styleUrls: ['./system-basics.component.css'],
+    standalone: false
 })
 export class SystemBasicsComponent implements OnDestroy {
   @Input()

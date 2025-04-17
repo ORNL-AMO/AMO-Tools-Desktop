@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-batch-analysis-graphs',
-  templateUrl: './batch-analysis-graphs.component.html',
-  styleUrls: ['./batch-analysis-graphs.component.css']
+    selector: 'app-batch-analysis-graphs',
+    templateUrl: './batch-analysis-graphs.component.html',
+    styleUrls: ['./batch-analysis-graphs.component.css'],
+    standalone: false
 })
 export class BatchAnalysisGraphsComponent implements OnInit {
 

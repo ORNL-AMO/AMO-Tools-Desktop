@@ -6,9 +6,10 @@ import { LossTab } from '../../../tabs';
 import { ChargeMaterialService } from '../../../../calculator/furnaces/charge-material/charge-material.service';
 
 @Component({
-  selector: 'app-explore-charge-materials-form',
-  templateUrl: './explore-charge-materials-form.component.html',
-  styleUrls: ['./explore-charge-materials-form.component.css']
+    selector: 'app-explore-charge-materials-form',
+    templateUrl: './explore-charge-materials-form.component.html',
+    styleUrls: ['./explore-charge-materials-form.component.css'],
+    standalone: false
 })
 export class ExploreChargeMaterialsFormComponent implements OnInit {
   @Input()

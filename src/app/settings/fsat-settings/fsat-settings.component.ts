@@ -2,9 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
-  selector: 'app-fsat-settings',
-  templateUrl: './fsat-settings.component.html',
-  styleUrls: ['./fsat-settings.component.css']
+    selector: 'app-fsat-settings',
+    templateUrl: './fsat-settings.component.html',
+    styleUrls: ['./fsat-settings.component.css'],
+    standalone: false
 })
 export class FsatSettingsComponent implements OnInit {
   @Input()

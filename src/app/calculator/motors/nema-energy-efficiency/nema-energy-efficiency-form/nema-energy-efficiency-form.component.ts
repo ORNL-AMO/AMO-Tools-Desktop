@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { UntypedFormGroup, Validators } from '@angular/forms';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 @Component({
-  selector: 'app-nema-energy-efficiency-form',
-  templateUrl: './nema-energy-efficiency-form.component.html',
-  styleUrls: ['./nema-energy-efficiency-form.component.css']
+    selector: 'app-nema-energy-efficiency-form',
+    templateUrl: './nema-energy-efficiency-form.component.html',
+    styleUrls: ['./nema-energy-efficiency-form.component.css'],
+    standalone: false
 })
 export class NemaEnergyEfficiencyFormComponent implements OnInit {
   @Input()

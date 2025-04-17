@@ -15,9 +15,10 @@ import { InventoryItem } from '../../../../shared/models/inventory/inventory';
 import { Diagram } from '../../../../shared/models/diagram';
 
 @Component({
-  selector: 'app-directory-item',
-  templateUrl: './directory-item.component.html',
-  styleUrls: ['./directory-item.component.css']
+    selector: 'app-directory-item',
+    templateUrl: './directory-item.component.html',
+    styleUrls: ['./directory-item.component.css'],
+    standalone: false
 })
 export class DirectoryItemComponent implements OnInit {
   @Input()

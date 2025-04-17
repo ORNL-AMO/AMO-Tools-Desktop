@@ -10,9 +10,10 @@ import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-receiver-tank',
-  templateUrl: './receiver-tank.component.html',
-  styleUrls: ['./receiver-tank.component.css']
+    selector: 'app-receiver-tank',
+    templateUrl: './receiver-tank.component.html',
+    styleUrls: ['./receiver-tank.component.css'],
+    standalone: false
 })
 export class ReceiverTankComponent implements OnInit {
   @Input()

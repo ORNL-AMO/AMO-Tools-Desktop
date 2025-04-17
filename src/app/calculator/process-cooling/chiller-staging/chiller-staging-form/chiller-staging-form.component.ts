@@ -9,9 +9,10 @@ import { ChillerStagingFormService } from '../chiller-staging-form.service';
 import { ChillerStagingService } from '../chiller-staging.service';
 
 @Component({
-  selector: 'app-chiller-staging-form',
-  templateUrl: './chiller-staging-form.component.html',
-  styleUrls: ['./chiller-staging-form.component.css'],
+    selector: 'app-chiller-staging-form',
+    templateUrl: './chiller-staging-form.component.html',
+    styleUrls: ['./chiller-staging-form.component.css'],
+    standalone: false
 })
 export class ChillerStagingFormComponent implements OnInit {
   @Input()

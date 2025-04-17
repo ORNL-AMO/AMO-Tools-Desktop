@@ -13,9 +13,10 @@ import { DayTypeSetupService } from '../../end-uses/day-type-setup-form/day-type
 import { CompressedAirSankeyNode, CompressedAirSankeyResults, PowerSankeyService, SankeySystemInputs } from './power-sankey.service';
 
 @Component({
-  selector: 'app-power-sankey',
-  templateUrl: './power-sankey.component.html',
-  styleUrls: ['./power-sankey.component.css']
+    selector: 'app-power-sankey',
+    templateUrl: './power-sankey.component.html',
+    styleUrls: ['./power-sankey.component.css'],
+    standalone: false
 })
 export class PowerSankeyComponent implements OnInit {
   @Input()

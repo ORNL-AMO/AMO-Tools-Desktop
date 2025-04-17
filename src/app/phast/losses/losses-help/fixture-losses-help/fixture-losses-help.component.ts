@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-fixture-losses-help',
-  templateUrl: './fixture-losses-help.component.html',
-  styleUrls: ['./fixture-losses-help.component.css']
+    selector: 'app-fixture-losses-help',
+    templateUrl: './fixture-losses-help.component.html',
+    styleUrls: ['./fixture-losses-help.component.css'],
+    standalone: false
 })
 export class FixtureLossesHelpComponent implements OnInit {
   @Input()

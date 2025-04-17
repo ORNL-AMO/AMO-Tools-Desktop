@@ -6,9 +6,10 @@ import { FanAnalysisService } from '../../../fan-analysis.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-plane-three-form',
-  templateUrl: './plane-three-form.component.html',
-  styleUrls: ['./plane-three-form.component.css']
+    selector: 'app-plane-three-form',
+    templateUrl: './plane-three-form.component.html',
+    styleUrls: ['./plane-three-form.component.css'],
+    standalone: false
 })
 export class PlaneThreeFormComponent implements OnInit {
   @Input()

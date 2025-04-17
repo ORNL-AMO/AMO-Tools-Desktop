@@ -9,6 +9,7 @@ import { copyObject } from '../../shared/helperFunctions';
 
 @Component({
   selector: 'app-waste-water-treatment',
+  standalone: false,
   templateUrl: './waste-water-treatment.component.html',
   styleUrl: './waste-water-treatment.component.css'
 })

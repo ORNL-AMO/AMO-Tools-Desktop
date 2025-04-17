@@ -4,9 +4,10 @@ import { FSAT, FsatOperations } from '../../../../shared/models/fans';
 
 
 @Component({
-  selector: 'app-fan-operations-summary',
-  templateUrl: './fan-operations-summary.component.html',
-  styleUrls: ['./fan-operations-summary.component.css']
+    selector: 'app-fan-operations-summary',
+    templateUrl: './fan-operations-summary.component.html',
+    styleUrls: ['./fan-operations-summary.component.css'],
+    standalone: false
 })
 export class FanOperationsSummaryComponent implements OnInit {
 

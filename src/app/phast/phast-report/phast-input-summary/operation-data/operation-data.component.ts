@@ -3,9 +3,10 @@ import { PHAST } from "../../../../shared/models/phast/phast";
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-operation-data',
-  templateUrl: './operation-data.component.html',
-  styleUrls: ['./operation-data.component.css']
+    selector: 'app-operation-data',
+    templateUrl: './operation-data.component.html',
+    styleUrls: ['./operation-data.component.css'],
+    standalone: false
 })
 export class OperationDataComponent implements OnInit {
   @Input()

@@ -7,9 +7,10 @@ import { CoolingFormService } from '../cooling-form.service';
 import { CoolingService } from '../cooling.service';
 
 @Component({
-  selector: 'app-gas-cooling-form',
-  templateUrl: './gas-cooling-form.component.html',
-  styleUrls: ['./gas-cooling-form.component.css']
+    selector: 'app-gas-cooling-form',
+    templateUrl: './gas-cooling-form.component.html',
+    styleUrls: ['./gas-cooling-form.component.css'],
+    standalone: false
 })
 export class GasCoolingFormComponent implements OnInit {
   @Input()

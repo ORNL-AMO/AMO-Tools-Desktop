@@ -10,9 +10,10 @@ import { ExecutiveSummaryService } from '../executive-summary.service';
 import { ConvertPhastService } from '../../convert-phast.service';
 
 @Component({
-  selector: 'app-results-data',
-  templateUrl: './results-data.component.html',
-  styleUrls: ['./results-data.component.css']
+    selector: 'app-results-data',
+    templateUrl: './results-data.component.html',
+    styleUrls: ['./results-data.component.css'],
+    standalone: false
 })
 export class ResultsDataComponent implements OnInit {
 

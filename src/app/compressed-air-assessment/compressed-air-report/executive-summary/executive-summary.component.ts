@@ -6,9 +6,10 @@ import { Settings } from '../../../shared/models/settings';
 import { BaselineResults, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 
 @Component({
-  selector: 'app-executive-summary',
-  templateUrl: './executive-summary.component.html',
-  styleUrls: ['./executive-summary.component.css']
+    selector: 'app-executive-summary',
+    templateUrl: './executive-summary.component.html',
+    styleUrls: ['./executive-summary.component.css'],
+    standalone: false
 })
 export class ExecutiveSummaryComponent implements OnInit {
   @Input()

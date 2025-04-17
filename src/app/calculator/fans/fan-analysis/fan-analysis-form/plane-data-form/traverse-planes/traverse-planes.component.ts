@@ -7,9 +7,10 @@ import { FanAnalysisService } from '../../../fan-analysis.service';
 import { PlaneDataFormService } from '../plane-data-form.service';
 
 @Component({
-  selector: 'app-traverse-planes',
-  templateUrl: './traverse-planes.component.html',
-  styleUrls: ['./traverse-planes.component.css']
+    selector: 'app-traverse-planes',
+    templateUrl: './traverse-planes.component.html',
+    styleUrls: ['./traverse-planes.component.css'],
+    standalone: false
 })
 export class TraversePlanesComponent implements OnInit {
 

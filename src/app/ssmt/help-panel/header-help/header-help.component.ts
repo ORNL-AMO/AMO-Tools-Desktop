@@ -3,9 +3,10 @@ import { SsmtService } from '../../ssmt.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-header-help',
-  templateUrl: './header-help.component.html',
-  styleUrls: ['./header-help.component.css']
+    selector: 'app-header-help',
+    templateUrl: './header-help.component.html',
+    styleUrls: ['./header-help.component.css'],
+    standalone: false
 })
 export class HeaderHelpComponent implements OnInit {
   @Input()

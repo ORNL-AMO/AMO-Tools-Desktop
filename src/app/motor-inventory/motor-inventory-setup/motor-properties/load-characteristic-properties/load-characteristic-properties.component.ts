@@ -3,9 +3,10 @@ import { MotorInventoryData, LoadCharacteristicOptions } from '../../../motor-in
 import { MotorInventoryService } from '../../../motor-inventory.service';
 
 @Component({
-  selector: 'app-load-characteristic-properties',
-  templateUrl: './load-characteristic-properties.component.html',
-  styleUrls: ['./load-characteristic-properties.component.css']
+    selector: 'app-load-characteristic-properties',
+    templateUrl: './load-characteristic-properties.component.html',
+    styleUrls: ['./load-characteristic-properties.component.css'],
+    standalone: false
 })
 export class LoadCharacteristicPropertiesComponent implements OnInit {
 

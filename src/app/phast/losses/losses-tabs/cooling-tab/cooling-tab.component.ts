@@ -7,9 +7,10 @@ import { CoolingLossesCompareService } from '../../cooling-losses/cooling-losses
 import { Subscription } from 'rxjs';
 import { CoolingFormService, GasCoolingWarnings, LiquidCoolingWarnings } from '../../../../calculator/furnaces/cooling/cooling-form.service';
 @Component({
-  selector: 'app-cooling-tab',
-  templateUrl: './cooling-tab.component.html',
-  styleUrls: ['./cooling-tab.component.css']
+    selector: 'app-cooling-tab',
+    templateUrl: './cooling-tab.component.html',
+    styleUrls: ['./cooling-tab.component.css'],
+    standalone: false
 })
 export class CoolingTabComponent implements OnInit {
   @Input()

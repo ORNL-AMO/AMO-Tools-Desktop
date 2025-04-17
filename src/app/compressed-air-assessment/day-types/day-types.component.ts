@@ -9,9 +9,10 @@ import { InventoryService } from '../inventory/inventory.service';
 import { DayTypeService } from './day-type.service';
 
 @Component({
-  selector: 'app-day-types',
-  templateUrl: './day-types.component.html',
-  styleUrls: ['./day-types.component.css']
+    selector: 'app-day-types',
+    templateUrl: './day-types.component.html',
+    styleUrls: ['./day-types.component.css'],
+    standalone: false
 })
 export class DayTypesComponent implements OnInit {
 

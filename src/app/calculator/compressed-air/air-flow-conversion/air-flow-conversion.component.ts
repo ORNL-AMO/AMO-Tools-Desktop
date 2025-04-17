@@ -10,9 +10,10 @@ import { Assessment } from '../../../shared/models/assessment';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-air-flow-conversion',
-  templateUrl: './air-flow-conversion.component.html',
-  styleUrls: ['./air-flow-conversion.component.css']
+    selector: 'app-air-flow-conversion',
+    templateUrl: './air-flow-conversion.component.html',
+    styleUrls: ['./air-flow-conversion.component.css'],
+    standalone: false
 })
 export class AirFlowConversionComponent implements OnInit {
   @Input()

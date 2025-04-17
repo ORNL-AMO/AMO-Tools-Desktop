@@ -6,9 +6,10 @@ import { WasteWaterService } from '../waste-water.service';
 import { WasteWaterAnalysisService } from './waste-water-analysis.service';
 
 @Component({
-  selector: 'app-waste-water-analysis',
-  templateUrl: './waste-water-analysis.component.html',
-  styleUrls: ['./waste-water-analysis.component.css']
+    selector: 'app-waste-water-analysis',
+    templateUrl: './waste-water-analysis.component.html',
+    styleUrls: ['./waste-water-analysis.component.css'],
+    standalone: false
 })
 export class WasteWaterAnalysisComponent implements OnInit {
   @Input()

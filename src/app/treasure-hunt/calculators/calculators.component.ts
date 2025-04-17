@@ -8,9 +8,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TreasureHuntOpportunityService } from '../treasure-hunt-calculator-services/treasure-hunt-opportunity.service';
 
 @Component({
-  selector: 'app-calculators',
-  templateUrl: './calculators.component.html',
-  styleUrls: ['./calculators.component.css']
+    selector: 'app-calculators',
+    templateUrl: './calculators.component.html',
+    styleUrls: ['./calculators.component.css'],
+    standalone: false
 })
 export class CalculatorsComponent implements OnInit {
   @Input()

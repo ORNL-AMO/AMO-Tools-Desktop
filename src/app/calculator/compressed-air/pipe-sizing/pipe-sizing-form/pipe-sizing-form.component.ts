@@ -3,9 +3,10 @@ import {PipeSizingInput, PipeSizingOutput } from "../../../../shared/models/stan
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-pipe-sizing-form',
-  templateUrl: './pipe-sizing-form.component.html',
-  styleUrls: ['./pipe-sizing-form.component.css']
+    selector: 'app-pipe-sizing-form',
+    templateUrl: './pipe-sizing-form.component.html',
+    styleUrls: ['./pipe-sizing-form.component.css'],
+    standalone: false
 })
 export class PipeSizingFormComponent implements OnInit {
   @Input()

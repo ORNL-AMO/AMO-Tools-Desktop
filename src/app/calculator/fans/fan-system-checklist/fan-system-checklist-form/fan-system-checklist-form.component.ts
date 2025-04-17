@@ -8,9 +8,10 @@ import { FanSystemChecklistFormService } from '../fan-system-checklist-form.serv
 import { FanSystemChecklistService } from '../fan-system-checklist.service';
 
 @Component({
-  selector: 'app-fan-system-checklist-form',
-  templateUrl: './fan-system-checklist-form.component.html',
-  styleUrls: ['./fan-system-checklist-form.component.css']
+    selector: 'app-fan-system-checklist-form',
+    templateUrl: './fan-system-checklist-form.component.html',
+    styleUrls: ['./fan-system-checklist-form.component.css'],
+    standalone: false
 })
 export class FanSystemChecklistFormComponent implements OnInit {
   @Input()

@@ -7,9 +7,10 @@ import { SlagCompareService } from '../../slag/slag-compare.service';
 import { Slag } from '../../../../shared/models/phast/losses/slag';
 import { Subscription } from 'rxjs';
 @Component({
-  selector: 'app-slag-tab',
-  templateUrl: './slag-tab.component.html',
-  styleUrls: ['./slag-tab.component.css']
+    selector: 'app-slag-tab',
+    templateUrl: './slag-tab.component.html',
+    styleUrls: ['./slag-tab.component.css'],
+    standalone: false
 })
 export class SlagTabComponent implements OnInit {
   @Input()

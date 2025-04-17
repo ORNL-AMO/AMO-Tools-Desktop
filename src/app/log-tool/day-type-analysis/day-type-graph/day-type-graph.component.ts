@@ -8,9 +8,10 @@ import { PlotlyService } from 'angular-plotly.js';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { truncate } from '../../../shared/helperFunctions';
 @Component({
-  selector: 'app-day-type-graph',
-  templateUrl: './day-type-graph.component.html',
-  styleUrls: ['./day-type-graph.component.css']
+    selector: 'app-day-type-graph',
+    templateUrl: './day-type-graph.component.html',
+    styleUrls: ['./day-type-graph.component.css'],
+    standalone: false
 })
 export class DayTypeGraphComponent implements OnInit {
 

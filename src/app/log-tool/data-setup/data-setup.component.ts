@@ -10,9 +10,10 @@ import { ActivatedRoute, NavigationEnd, Router, RouterState } from '@angular/rou
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-data-setup',
-  templateUrl: './data-setup.component.html',
-  styleUrls: ['./data-setup.component.css'],
+    selector: 'app-data-setup',
+    templateUrl: './data-setup.component.html',
+    styleUrls: ['./data-setup.component.css'],
+    standalone: false
 })
 export class DataSetupComponent implements OnInit {
   isModalOpen: boolean;

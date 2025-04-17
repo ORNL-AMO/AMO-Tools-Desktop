@@ -7,6 +7,7 @@ import { HeatEnergy } from 'process-flow-lib';
 
 @Component({
   selector: 'app-heat-energy',
+  standalone: false,
   templateUrl: './heat-energy.component.html',
   styleUrl: './heat-energy.component.css'
 })

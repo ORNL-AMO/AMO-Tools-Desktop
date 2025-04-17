@@ -11,9 +11,10 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
-  selector: 'app-pump-inventory-banner',
-  templateUrl: './pump-inventory-banner.component.html',
-  styleUrls: ['./pump-inventory-banner.component.css']
+    selector: 'app-pump-inventory-banner',
+    templateUrl: './pump-inventory-banner.component.html',
+    styleUrls: ['./pump-inventory-banner.component.css'],
+    standalone: false
 })
 export class PumpInventoryBannerComponent implements OnInit {
   @Input()

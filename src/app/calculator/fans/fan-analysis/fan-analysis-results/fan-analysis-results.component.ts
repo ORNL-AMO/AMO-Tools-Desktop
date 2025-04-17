@@ -10,9 +10,10 @@ import { FanShaftPowerFormService } from '../fan-analysis-form/fan-shaft-power-f
 import { FanInfoFormService } from '../fan-analysis-form/fan-info-form/fan-info-form.service';
 
 @Component({
-  selector: 'app-fan-analysis-results',
-  templateUrl: './fan-analysis-results.component.html',
-  styleUrls: ['./fan-analysis-results.component.css']
+    selector: 'app-fan-analysis-results',
+    templateUrl: './fan-analysis-results.component.html',
+    styleUrls: ['./fan-analysis-results.component.css'],
+    standalone: false
 })
 export class FanAnalysisResultsComponent implements OnInit {
   @Input()

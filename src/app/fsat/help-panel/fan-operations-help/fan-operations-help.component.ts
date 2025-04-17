@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-fan-operations-help',
-  templateUrl: './fan-operations-help.component.html',
-  styleUrls: ['./fan-operations-help.component.css']
+    selector: 'app-fan-operations-help',
+    templateUrl: './fan-operations-help.component.html',
+    styleUrls: ['./fan-operations-help.component.css'],
+    standalone: false
 })
 export class FanOperationsHelpComponent implements OnInit {
   @Input()

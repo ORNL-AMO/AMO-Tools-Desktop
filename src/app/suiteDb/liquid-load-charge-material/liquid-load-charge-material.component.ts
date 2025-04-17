@@ -9,9 +9,10 @@ import * as _ from 'lodash';
 import { LiquidLoadMaterialDbService } from '../../indexedDb/liquid-load-material-db.service';
 
 @Component({
-  selector: 'app-liquid-load-charge-material',
-  templateUrl: './liquid-load-charge-material.component.html',
-  styleUrls: ['./liquid-load-charge-material.component.css']
+    selector: 'app-liquid-load-charge-material',
+    templateUrl: './liquid-load-charge-material.component.html',
+    styleUrls: ['./liquid-load-charge-material.component.css'],
+    standalone: false
 })
 export class LiquidLoadChargeMaterialComponent implements OnInit {
   @Output('closeModal')

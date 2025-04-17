@@ -18,6 +18,7 @@ import { Diagram } from '../../models/diagram';
 
 @Component({
   selector: 'app-create-diagram-modal',
+  standalone: false,
   templateUrl: './create-diagram-modal.component.html',
   styleUrl: './create-diagram-modal.component.css'
 })

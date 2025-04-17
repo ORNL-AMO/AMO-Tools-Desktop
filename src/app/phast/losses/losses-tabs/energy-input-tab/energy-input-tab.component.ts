@@ -11,9 +11,10 @@ import { PhastCompareService } from '../../../phast-compare.service';
 import { EnergyInputWarnings, PhastResultsService } from '../../../phast-results.service';
 
 @Component({
-  selector: 'app-energy-input-tab',
-  templateUrl: './energy-input-tab.component.html',
-  styleUrls: ['./energy-input-tab.component.css']
+    selector: 'app-energy-input-tab',
+    templateUrl: './energy-input-tab.component.html',
+    styleUrls: ['./energy-input-tab.component.css'],
+    standalone: false
 })
 export class EnergyInputTabComponent implements OnInit {
   @Input()

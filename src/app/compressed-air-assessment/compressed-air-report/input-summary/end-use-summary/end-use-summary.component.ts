@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-end-use-summary',
-  templateUrl: './end-use-summary.component.html',
-  styleUrls: ['./end-use-summary.component.css']
+    selector: 'app-end-use-summary',
+    templateUrl: './end-use-summary.component.html',
+    styleUrls: ['./end-use-summary.component.css'],
+    standalone: false
 })
 export class EndUseSummaryComponent implements OnInit {
   @Input()

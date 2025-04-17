@@ -3,9 +3,10 @@ import { O2EnrichmentService } from '../o2-enrichment.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-o2-enrichment-help',
-  templateUrl: './o2-enrichment-help.component.html',
-  styleUrls: ['./o2-enrichment-help.component.css']
+    selector: 'app-o2-enrichment-help',
+    templateUrl: './o2-enrichment-help.component.html',
+    styleUrls: ['./o2-enrichment-help.component.css'],
+    standalone: false
 })
 export class O2EnrichmentHelpComponent implements OnInit {
   currentField: string;

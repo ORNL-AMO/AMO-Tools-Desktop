@@ -4,17 +4,18 @@ import { SnackbarMessage, SnackbarService } from './snackbar.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-snackbar-notification',
-  templateUrl: './snackbar-notification.component.html',
-  styleUrl: './snackbar-notification.component.css',
+    selector: 'app-snackbar-notification',
+    templateUrl: './snackbar-notification.component.html',
+    styleUrl: './snackbar-notification.component.css',
     animations: [
-      trigger('snackbarState', [
-        state('show', style({ bottom: '25px' })),
-        state('hide', style({ bottom: '-100px' })),
-        transition('hide => show', animate('.5s ease')),
-        transition('show => hide', animate('.5s ease'))
-      ])
-    ]
+        trigger('snackbarState', [
+            state('show', style({ bottom: '25px' })),
+            state('hide', style({ bottom: '-100px' })),
+            transition('hide => show', animate('.5s ease')),
+            transition('show => hide', animate('.5s ease'))
+        ])
+    ],
+    standalone: false
 })
 export class SnackbarNotificationComponent {
   snackbarMessageSub: Subscription;

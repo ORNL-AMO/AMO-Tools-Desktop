@@ -9,9 +9,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FlueGasCompareService } from '../../flue-gas-losses/flue-gas-compare.service';
 
 @Component({
-  selector: 'app-flue-gas-tab',
-  templateUrl: './flue-gas-tab.component.html',
-  styleUrls: ['./flue-gas-tab.component.css']
+    selector: 'app-flue-gas-tab',
+    templateUrl: './flue-gas-tab.component.html',
+    styleUrls: ['./flue-gas-tab.component.css'],
+    standalone: false
 })
 export class FlueGasTabComponent implements OnInit {
   @Input()

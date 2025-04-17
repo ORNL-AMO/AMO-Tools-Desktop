@@ -7,9 +7,10 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
-  selector: 'app-atmosphere-summary',
-  templateUrl: './atmosphere-summary.component.html',
-  styleUrls: ['./atmosphere-summary.component.css']
+    selector: 'app-atmosphere-summary',
+    templateUrl: './atmosphere-summary.component.html',
+    styleUrls: ['./atmosphere-summary.component.css'],
+    standalone: false
 })
 export class AtmosphereSummaryComponent implements OnInit {
   @Input()

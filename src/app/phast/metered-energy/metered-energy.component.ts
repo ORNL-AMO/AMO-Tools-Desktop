@@ -7,9 +7,10 @@ import { Subscription } from 'rxjs';
 import { PhastService } from '../phast.service';
 
 @Component({
-  selector: 'app-metered-energy',
-  templateUrl: './metered-energy.component.html',
-  styleUrls: ['./metered-energy.component.css']
+    selector: 'app-metered-energy',
+    templateUrl: './metered-energy.component.html',
+    styleUrls: ['./metered-energy.component.css'],
+    standalone: false
 })
 export class MeteredEnergyComponent implements OnInit {
   @Input()

@@ -7,9 +7,10 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-operating-cost',
-  templateUrl: './operating-cost.component.html',
-  styleUrls: ['./operating-cost.component.css']
+    selector: 'app-operating-cost',
+    templateUrl: './operating-cost.component.html',
+    styleUrls: ['./operating-cost.component.css'],
+    standalone: false
 })
 export class OperatingCostComponent implements OnInit {
   @Input()

@@ -9,9 +9,10 @@ import { FullLoadAmpsService } from './full-load-amps.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-full-load-amps',
-  templateUrl: './full-load-amps.component.html',
-  styleUrls: ['./full-load-amps.component.css']
+    selector: 'app-full-load-amps',
+    templateUrl: './full-load-amps.component.html',
+    styleUrls: ['./full-load-amps.component.css'],
+    standalone: false
 })
 export class FullLoadAmpsComponent implements OnInit {
   @Input()

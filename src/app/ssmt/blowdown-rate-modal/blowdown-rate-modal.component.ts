@@ -4,18 +4,19 @@ import { UntypedFormGroup } from '@angular/forms';
 import { BoilerBlowdownRateService } from '../../calculator/steam/boiler-blowdown-rate/boiler-blowdown-rate.service';
 
 @Component({
-  selector: 'app-blowdown-rate-modal',
-  templateUrl: './blowdown-rate-modal.component.html',
-  styleUrls: ['./blowdown-rate-modal.component.css'],
-  animations: [
-    trigger('modal', [
-      state('show', style({
-        top: '50px'
-      })),
-      transition('hide => show', animate('.5s ease-in')),
-      transition('show => hide', animate('.5s ease-out'))
-    ])
-  ]
+    selector: 'app-blowdown-rate-modal',
+    templateUrl: './blowdown-rate-modal.component.html',
+    styleUrls: ['./blowdown-rate-modal.component.css'],
+    animations: [
+        trigger('modal', [
+            state('show', style({
+                top: '50px'
+            })),
+            transition('hide => show', animate('.5s ease-in')),
+            transition('show => hide', animate('.5s ease-out'))
+        ])
+    ],
+    standalone: false
 })
 export class BlowdownRateModalComponent implements OnInit {
   @Output('emitClose')

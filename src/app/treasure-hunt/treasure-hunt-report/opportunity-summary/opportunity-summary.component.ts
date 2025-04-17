@@ -4,9 +4,10 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 
 @Component({
-  selector: 'app-opportunity-summary',
-  templateUrl: './opportunity-summary.component.html',
-  styleUrls: ['./opportunity-summary.component.css']
+    selector: 'app-opportunity-summary',
+    templateUrl: './opportunity-summary.component.html',
+    styleUrls: ['./opportunity-summary.component.css'],
+    standalone: false
 })
 export class OpportunitySummaryComponent implements OnInit {
   @Input()

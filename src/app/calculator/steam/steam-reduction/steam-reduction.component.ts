@@ -8,9 +8,10 @@ import { SteamReductionTreasureHunt, Treasure } from '../../../shared/models/tre
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-steam-reduction',
-  templateUrl: './steam-reduction.component.html',
-  styleUrls: ['./steam-reduction.component.css']
+    selector: 'app-steam-reduction',
+    templateUrl: './steam-reduction.component.html',
+    styleUrls: ['./steam-reduction.component.css'],
+    standalone: false
 })
 export class SteamReductionComponent implements OnInit {
   @Input()

@@ -8,9 +8,10 @@ import { WallLoss } from '../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 @Component({
-  selector: 'app-extended-surface-losses',
-  templateUrl: './extended-surface-losses.component.html',
-  styleUrls: ['./extended-surface-losses.component.css']
+    selector: 'app-extended-surface-losses',
+    templateUrl: './extended-surface-losses.component.html',
+    styleUrls: ['./extended-surface-losses.component.css'],
+    standalone: false
 })
 export class ExtendedSurfaceLossesComponent implements OnInit {
   @Input()

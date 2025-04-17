@@ -7,9 +7,10 @@ import { AuxiliaryPowerCompareService } from '../../auxiliary-power-losses/auxil
 import { AuxiliaryPowerLoss } from '../../../../shared/models/phast/losses/auxiliaryPowerLoss';
 import { Subscription } from 'rxjs';
 @Component({
-  selector: 'app-auxiliary-power-tab',
-  templateUrl: './auxiliary-power-tab.component.html',
-  styleUrls: ['./auxiliary-power-tab.component.css']
+    selector: 'app-auxiliary-power-tab',
+    templateUrl: './auxiliary-power-tab.component.html',
+    styleUrls: ['./auxiliary-power-tab.component.css'],
+    standalone: false
 })
 export class AuxiliaryPowerTabComponent implements OnInit {
   @Input()

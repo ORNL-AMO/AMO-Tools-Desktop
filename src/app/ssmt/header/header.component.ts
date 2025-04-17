@@ -6,9 +6,10 @@ import { HeaderService } from './header.service';
 import { SsmtService } from '../ssmt.service';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.css'],
+    standalone: false
 })
 export class HeaderComponent implements OnInit {
   @Input()

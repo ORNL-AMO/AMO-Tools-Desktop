@@ -7,9 +7,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FlueGasService } from '../flue-gas.service';
 
 @Component({
-  selector: 'app-flue-gas-modal',
-  templateUrl: './flue-gas-modal.component.html',
-  styleUrls: ['./flue-gas-modal.component.css']
+    selector: 'app-flue-gas-modal',
+    templateUrl: './flue-gas-modal.component.html',
+    styleUrls: ['./flue-gas-modal.component.css'],
+    standalone: false
 })
 export class FlueGasModalComponent implements OnInit {
 

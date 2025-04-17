@@ -9,6 +9,7 @@ import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
   selector: 'app-water-summary-card',
+  standalone: false,
   templateUrl: './water-summary-card.component.html',
   styleUrl: './water-summary-card.component.css'
 })

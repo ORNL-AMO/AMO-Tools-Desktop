@@ -10,9 +10,10 @@ import { MaterialInputProperties } from '../../../../../shared/models/phast/loss
 import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
-  selector: 'app-stack-loss-by-mass',
-  templateUrl: './stack-loss-by-mass.component.html',
-  styleUrls: ['./stack-loss-by-mass.component.css']
+    selector: 'app-stack-loss-by-mass',
+    templateUrl: './stack-loss-by-mass.component.html',
+    styleUrls: ['./stack-loss-by-mass.component.css'],
+    standalone: false
 })
 export class StackLossByMassComponent implements OnChanges {
   @Input()

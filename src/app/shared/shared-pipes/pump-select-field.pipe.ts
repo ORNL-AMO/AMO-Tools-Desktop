@@ -4,7 +4,8 @@ import { pumpInventoryDriveConstants, pumpInventoryShaftOrientations, pumpInvent
 
 
 @Pipe({
-  name: 'pumpSelectField'
+    name: 'pumpSelectField',
+    standalone: false
 })
 export class PumpSelectFieldPipe implements PipeTransform {
 

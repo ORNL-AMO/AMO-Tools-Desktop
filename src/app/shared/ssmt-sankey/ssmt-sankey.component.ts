@@ -11,10 +11,11 @@ import { SankeyNode } from "../models/sankey";
 
 
 @Component({
-  selector: 'app-ssmt-sankey',
-  templateUrl: './ssmt-sankey.component.html',
-  styleUrls: ['./ssmt-sankey.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-ssmt-sankey',
+    templateUrl: './ssmt-sankey.component.html',
+    styleUrls: ['./ssmt-sankey.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
   @Input()

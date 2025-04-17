@@ -5,9 +5,10 @@ import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
 import { SsmtService } from '../ssmt.service';
 
 @Component({
-  selector: 'app-ssmt-diagram-tab',
-  templateUrl: './ssmt-diagram-tab.component.html',
-  styleUrls: ['./ssmt-diagram-tab.component.css']
+    selector: 'app-ssmt-diagram-tab',
+    templateUrl: './ssmt-diagram-tab.component.html',
+    styleUrls: ['./ssmt-diagram-tab.component.css'],
+    standalone: false
 })
 export class SsmtDiagramTabComponent implements OnInit {
   @Input()

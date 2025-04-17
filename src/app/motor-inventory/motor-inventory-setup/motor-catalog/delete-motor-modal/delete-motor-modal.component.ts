@@ -3,9 +3,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 
 @Component({
-  selector: 'app-delete-motor-modal',
-  templateUrl: './delete-motor-modal.component.html',
-  styleUrls: ['./delete-motor-modal.component.css']
+    selector: 'app-delete-motor-modal',
+    templateUrl: './delete-motor-modal.component.html',
+    styleUrls: ['./delete-motor-modal.component.css'],
+    standalone: false
 })
 export class DeleteMotorModalComponent implements OnInit {
   @Output('emitClose')

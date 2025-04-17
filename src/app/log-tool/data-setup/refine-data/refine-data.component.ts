@@ -7,9 +7,10 @@ import { ExplorerData, ExplorerDataSet, LogToolField, StepMovement } from '../..
 import { LogToolService } from '../../log-tool.service';
 
 @Component({
-  selector: 'app-refine-data',
-  templateUrl: './refine-data.component.html',
-  styleUrls: ['./refine-data.component.css']
+    selector: 'app-refine-data',
+    templateUrl: './refine-data.component.html',
+    styleUrls: ['./refine-data.component.css'],
+    standalone: false
 })
 export class RefineDataComponent implements OnInit {
   explorerData: ExplorerData;

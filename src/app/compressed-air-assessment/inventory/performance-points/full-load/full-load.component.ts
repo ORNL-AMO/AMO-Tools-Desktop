@@ -10,9 +10,10 @@ import { FullLoadCalculationsService } from '../calculations/full-load-calculati
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 
 @Component({
-  selector: '[app-full-load]',
-  templateUrl: './full-load.component.html',
-  styleUrls: ['./full-load.component.css']
+    selector: '[app-full-load]',
+    templateUrl: './full-load.component.html',
+    styleUrls: ['./full-load.component.css'],
+    standalone: false
 })
 export class FullLoadComponent implements OnInit {
 

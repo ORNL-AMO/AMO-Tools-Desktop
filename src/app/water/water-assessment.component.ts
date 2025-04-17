@@ -16,6 +16,7 @@ import { ParentContainerDimensions, WasteWaterTreatment, WaterAssessment } from 
 
 @Component({
   selector: 'app-water-assessment',
+  standalone: false,
   templateUrl: './water-assessment.component.html',
   styleUrl: './water-assessment.component.css'
 })

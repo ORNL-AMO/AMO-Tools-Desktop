@@ -15,9 +15,10 @@ import { IntegrationStateService } from '../../../shared/connected-inventory/int
 
 
 @Component({
-  selector: 'app-plant-setup',
-  templateUrl: './plant-setup.component.html',
-  styleUrls: ['./plant-setup.component.css']
+    selector: 'app-plant-setup',
+    templateUrl: './plant-setup.component.html',
+    styleUrls: ['./plant-setup.component.css'],
+    standalone: false
 })
 export class PlantSetupComponent implements OnInit {
 

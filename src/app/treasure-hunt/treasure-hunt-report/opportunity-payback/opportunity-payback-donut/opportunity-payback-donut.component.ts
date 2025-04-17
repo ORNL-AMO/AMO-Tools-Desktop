@@ -4,9 +4,10 @@ import { graphColors } from '../../../../phast/phast-report/report-graphs/graphC
 import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 @Component({
-  selector: 'app-opportunity-payback-donut',
-  templateUrl: './opportunity-payback-donut.component.html',
-  styleUrls: ['./opportunity-payback-donut.component.css']
+    selector: 'app-opportunity-payback-donut',
+    templateUrl: './opportunity-payback-donut.component.html',
+    styleUrls: ['./opportunity-payback-donut.component.css'],
+    standalone: false
 })
 export class OpportunityPaybackDonutComponent implements OnInit {
   @Input()

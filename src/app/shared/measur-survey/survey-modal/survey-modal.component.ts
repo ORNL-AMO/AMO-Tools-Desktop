@@ -6,9 +6,10 @@ import { MeasurSurveyService } from '../measur-survey.service';
 import { ApplicationInstanceDbService } from '../../../indexedDb/application-instance-db.service';
 
 @Component({
-  selector: 'app-survey-modal',
-  templateUrl: './survey-modal.component.html',
-  styleUrl: './survey-modal.component.css'
+    selector: 'app-survey-modal',
+    templateUrl: './survey-modal.component.html',
+    styleUrl: './survey-modal.component.css',
+    standalone: false
 })
 export class SurveyModalComponent {
   @ViewChild('surveyModal', { static: false }) public surveyModal: ModalDirective;

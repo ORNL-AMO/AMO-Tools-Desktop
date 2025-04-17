@@ -9,9 +9,10 @@ import { CompareService } from '../compare.service';
 import { GasDensityFormService } from '../../calculator/fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 
 @Component({
-  selector: 'app-fsat-fluid',
-  templateUrl: './fsat-fluid.component.html',
-  styleUrls: ['./fsat-fluid.component.css']
+    selector: 'app-fsat-fluid',
+    templateUrl: './fsat-fluid.component.html',
+    styleUrls: ['./fsat-fluid.component.css'],
+    standalone: false
 })
 export class FsatFluidComponent implements OnInit {
   @Input()

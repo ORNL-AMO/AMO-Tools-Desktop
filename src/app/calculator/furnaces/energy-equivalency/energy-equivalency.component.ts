@@ -11,9 +11,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-energy-equivalency',
-  templateUrl: './energy-equivalency.component.html',
-  styleUrls: ['./energy-equivalency.component.css']
+    selector: 'app-energy-equivalency',
+    templateUrl: './energy-equivalency.component.html',
+    styleUrls: ['./energy-equivalency.component.css'],
+    standalone: false
 })
 export class EnergyEquivalencyComponent implements OnInit {
   @Input()

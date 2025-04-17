@@ -6,9 +6,10 @@ import { Settings } from '../../../../../shared/models/settings';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 
 @Component({
-  selector: 'app-motor-inventory-card',
-  templateUrl: './motor-inventory-card.component.html',
-  styleUrls: ['./motor-inventory-card.component.css']
+    selector: 'app-motor-inventory-card',
+    templateUrl: './motor-inventory-card.component.html',
+    styleUrls: ['./motor-inventory-card.component.css'],
+    standalone: false
 })
 export class MotorInventoryCardComponent implements OnInit {
   @Input()

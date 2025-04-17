@@ -8,9 +8,10 @@ import { Settings } from '../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-auxiliary-power-losses',
-  templateUrl: './auxiliary-power-losses.component.html',
-  styleUrls: ['./auxiliary-power-losses.component.css']
+    selector: 'app-auxiliary-power-losses',
+    templateUrl: './auxiliary-power-losses.component.html',
+    styleUrls: ['./auxiliary-power-losses.component.css'],
+    standalone: false
 })
 export class AuxiliaryPowerLossesComponent implements OnInit {
   @Input()

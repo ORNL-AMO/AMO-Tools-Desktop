@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-weather-bins-bar-chart',
-  templateUrl: './weather-bins-bar-chart.component.html',
-  styleUrls: ['./weather-bins-bar-chart.component.css']
+    selector: 'app-weather-bins-bar-chart',
+    templateUrl: './weather-bins-bar-chart.component.html',
+    styleUrls: ['./weather-bins-bar-chart.component.css'],
+    standalone: false
 })
 export class WeatherBinsBarChartComponent implements OnInit {
   @ViewChild('weatherBinsBarChart', { static: false }) weatherBinsBarChart: ElementRef;

@@ -8,9 +8,10 @@ import { MotorItem, BatchAnalysisOptions } from '../../../motor-inventory';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-batch-analysis-data',
-  templateUrl: './batch-analysis-data.component.html',
-  styleUrls: ['./batch-analysis-data.component.css']
+    selector: 'app-batch-analysis-data',
+    templateUrl: './batch-analysis-data.component.html',
+    styleUrls: ['./batch-analysis-data.component.css'],
+    standalone: false
 })
 export class BatchAnalysisDataComponent implements OnInit {
   settingsSub: Subscription;

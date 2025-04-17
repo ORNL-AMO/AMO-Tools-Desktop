@@ -13,6 +13,7 @@ import { WaterDiagram, ParentContainerDimensions } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-process-diagram',
+  standalone: false,
   templateUrl: './water-process-diagram.component.html',
   styleUrl: './water-process-diagram.component.css'
 })

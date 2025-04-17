@@ -5,9 +5,10 @@ import { SSMT, SsmtValid } from '../../../shared/models/steam/ssmt';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-ssmt-report-sankey',
-  templateUrl: './ssmt-report-sankey.component.html',
-  styleUrls: ['./ssmt-report-sankey.component.css']
+    selector: 'app-ssmt-report-sankey',
+    templateUrl: './ssmt-report-sankey.component.html',
+    styleUrls: ['./ssmt-report-sankey.component.css'],
+    standalone: false
 })
 export class SsmtReportSankeyComponent implements OnInit {
 @Input()

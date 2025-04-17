@@ -7,9 +7,10 @@ import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-s
 import { ReportUtilityTotal } from '../../report-rollup-models';
 
 @Component({
-  selector: 'app-ssmt-summary',
-  templateUrl: './ssmt-summary.component.html',
-  styleUrls: ['./ssmt-summary.component.css', '../report-summary.component.css']
+    selector: 'app-ssmt-summary',
+    templateUrl: './ssmt-summary.component.html',
+    styleUrls: ['./ssmt-summary.component.css', '../report-summary.component.css'],
+    standalone: false
 })
 export class SsmtSummaryComponent implements OnInit {
 

@@ -3,9 +3,10 @@ import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.se
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-system-and-equipment-curve-help',
-  templateUrl: './system-and-equipment-curve-help.component.html',
-  styleUrls: ['./system-and-equipment-curve-help.component.css']
+    selector: 'app-system-and-equipment-curve-help',
+    templateUrl: './system-and-equipment-curve-help.component.html',
+    styleUrls: ['./system-and-equipment-curve-help.component.css'],
+    standalone: false
 })
 export class SystemAndEquipmentCurveHelpComponent implements OnInit {
 

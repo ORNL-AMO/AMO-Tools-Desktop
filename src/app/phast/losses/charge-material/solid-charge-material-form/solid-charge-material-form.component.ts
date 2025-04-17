@@ -13,9 +13,10 @@ import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-mat
 import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-solid-charge-material-form',
-  templateUrl: './solid-charge-material-form.component.html',
-  styleUrls: ['./solid-charge-material-form.component.css']
+    selector: 'app-solid-charge-material-form',
+    templateUrl: './solid-charge-material-form.component.html',
+    styleUrls: ['./solid-charge-material-form.component.css'],
+    standalone: false
 })
 export class SolidChargeMaterialFormComponent implements OnInit {
   @Input()

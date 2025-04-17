@@ -5,9 +5,10 @@ import { StatePointAnalysisOutput } from '../../../../shared/models/waste-water'
 import { StatePointAnalysisService } from '../state-point-analysis.service';
 
 @Component({
-  selector: 'app-state-point-analysis-results',
-  templateUrl: './state-point-analysis-results.component.html',
-  styleUrls: ['./state-point-analysis-results.component.css']
+    selector: 'app-state-point-analysis-results',
+    templateUrl: './state-point-analysis-results.component.html',
+    styleUrls: ['./state-point-analysis-results.component.css'],
+    standalone: false
 })
 export class StatePointAnalysisResultsComponent implements OnInit {
 

@@ -4,9 +4,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { AuxiliaryPowerLossesService } from '../auxiliary-power-losses.service';
 import { AuxiliaryPowerLoss } from '../../../../shared/models/phast/losses/auxiliaryPowerLoss';
 @Component({
-  selector: 'app-auxiliary-power-losses-form',
-  templateUrl: './auxiliary-power-losses-form.component.html',
-  styleUrls: ['./auxiliary-power-losses-form.component.css']
+    selector: 'app-auxiliary-power-losses-form',
+    templateUrl: './auxiliary-power-losses-form.component.html',
+    styleUrls: ['./auxiliary-power-losses-form.component.css'],
+    standalone: false
 })
 export class AuxiliaryPowerLossesFormComponent implements OnInit {
   @Input()

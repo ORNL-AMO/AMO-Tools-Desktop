@@ -3,9 +3,10 @@ import { ChargeMaterialResult } from '../../../../shared/models/phast/losses/cha
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-material-loss-result',
-  templateUrl: './material-loss-result.component.html',
-  styleUrls: ['./material-loss-result.component.css']
+    selector: 'app-material-loss-result',
+    templateUrl: './material-loss-result.component.html',
+    styleUrls: ['./material-loss-result.component.css'],
+    standalone: false
 })
 export class MaterialLossResultComponent implements OnInit {
 

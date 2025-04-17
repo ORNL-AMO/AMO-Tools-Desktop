@@ -4,9 +4,10 @@ import { CoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss'
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-cooling-summary',
-  templateUrl: './cooling-summary.component.html',
-  styleUrls: ['./cooling-summary.component.css']
+    selector: 'app-cooling-summary',
+    templateUrl: './cooling-summary.component.html',
+    styleUrls: ['./cooling-summary.component.css'],
+    standalone: false
 })
 export class CoolingSummaryComponent implements OnInit {
   @Input()

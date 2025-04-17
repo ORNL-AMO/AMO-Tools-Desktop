@@ -5,9 +5,10 @@ import { VisualizeSidebarService } from '../visualize-sidebar.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-graph-series-management',
-  templateUrl: './graph-series-management.component.html',
-  styleUrls: ['./graph-series-management.component.css']
+    selector: 'app-graph-series-management',
+    templateUrl: './graph-series-management.component.html',
+    styleUrls: ['./graph-series-management.component.css'],
+    standalone: false
 })
 export class GraphSeriesManagementComponent {
   selectedGraphObj: GraphObj;

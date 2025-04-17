@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { WasteHeatService } from '../waste-heat.service';
 
 @Component({
-  selector: 'app-waste-heat-help',
-  templateUrl: './waste-heat-help.component.html',
-  styleUrls: ['./waste-heat-help.component.css']
+    selector: 'app-waste-heat-help',
+    templateUrl: './waste-heat-help.component.html',
+    styleUrls: ['./waste-heat-help.component.css'],
+    standalone: false
 })
 export class WasteHeatHelpComponent implements OnInit {
   @Input()

@@ -4,9 +4,10 @@ import { PumpInventoryService } from '../../pump-inventory.service';
 import { MotorIntegrationService } from '../../../shared/connected-inventory/motor-integration.service';
 
 @Component({
-  selector: 'app-department-setup',
-  templateUrl: './department-setup.component.html',
-  styleUrls: ['./department-setup.component.css']
+    selector: 'app-department-setup',
+    templateUrl: './department-setup.component.html',
+    styleUrls: ['./department-setup.component.css'],
+    standalone: false
 })
 export class DepartmentSetupComponent implements OnInit {
 

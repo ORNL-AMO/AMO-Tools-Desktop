@@ -3,9 +3,10 @@ import { NameplateDataOptions, PumpInventoryData } from '../../../pump-inventory
 import { PumpInventoryService } from '../../../pump-inventory.service';
 
 @Component({
-  selector: 'app-nameplate-data-properties',
-  templateUrl: './nameplate-data-properties.component.html',
-  styleUrls: ['./nameplate-data-properties.component.css']
+    selector: 'app-nameplate-data-properties',
+    templateUrl: './nameplate-data-properties.component.html',
+    styleUrls: ['./nameplate-data-properties.component.css'],
+    standalone: false
 })
 export class NameplateDataPropertiesComponent implements OnInit {
   displayForm: boolean;

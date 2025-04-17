@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { PreAssessment } from '../pre-assessment';
 
 @Component({
-  selector: 'app-pre-assessment-cost-form',
-  templateUrl: './pre-assessment-cost-form.component.html',
-  styleUrls: ['./pre-assessment-cost-form.component.css']
+    selector: 'app-pre-assessment-cost-form',
+    templateUrl: './pre-assessment-cost-form.component.html',
+    styleUrls: ['./pre-assessment-cost-form.component.css'],
+    standalone: false
 })
 export class PreAssessmentCostFormComponent implements OnInit {
   @Input()

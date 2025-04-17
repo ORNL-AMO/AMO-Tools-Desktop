@@ -6,9 +6,10 @@ import { ReceiverTankService } from '../receiver-tank.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-dedicated-storage-form',
-  templateUrl: './dedicated-storage-form.component.html',
-  styleUrls: ['./dedicated-storage-form.component.css']
+    selector: 'app-dedicated-storage-form',
+    templateUrl: './dedicated-storage-form.component.html',
+    styleUrls: ['./dedicated-storage-form.component.css'],
+    standalone: false
 })
 
 export class DedicatedStorageFormComponent implements OnInit {

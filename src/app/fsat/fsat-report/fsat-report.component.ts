@@ -13,9 +13,10 @@ import { FsatService } from '../fsat.service';
 
 
 @Component({
-  selector: 'app-fsat-report',
-  templateUrl: './fsat-report.component.html',
-  styleUrls: ['./fsat-report.component.css']
+    selector: 'app-fsat-report',
+    templateUrl: './fsat-report.component.html',
+    styleUrls: ['./fsat-report.component.css'],
+    standalone: false
 })
 export class FsatReportComponent implements OnInit {
   @Output('closeReport')

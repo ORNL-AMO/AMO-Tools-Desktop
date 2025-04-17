@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
 
 @Component({
-  selector: 'app-explore-system-efficiency-form',
-  templateUrl: './explore-system-efficiency-form.component.html',
-  styleUrls: ['./explore-system-efficiency-form.component.css']
+    selector: 'app-explore-system-efficiency-form',
+    templateUrl: './explore-system-efficiency-form.component.html',
+    styleUrls: ['./explore-system-efficiency-form.component.css'],
+    standalone: false
 })
 export class ExploreSystemEfficiencyFormComponent implements OnInit {
   @Input()

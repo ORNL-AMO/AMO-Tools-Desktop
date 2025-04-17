@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FeedwaterEconomizerService } from '../feedwater-economizer.service';
 
 @Component({
-  selector: 'app-feedwater-economizer-help',
-  templateUrl: './feedwater-economizer-help.component.html',
-  styleUrls: ['./feedwater-economizer-help.component.css']
+    selector: 'app-feedwater-economizer-help',
+    templateUrl: './feedwater-economizer-help.component.html',
+    styleUrls: ['./feedwater-economizer-help.component.css'],
+    standalone: false
 })
 export class FeedwaterEconomizerHelpComponent implements OnInit {
 

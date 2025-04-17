@@ -4,9 +4,10 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-psat-report-sankey',
-  templateUrl: './psat-report-sankey.component.html',
-  styleUrls: ['./psat-report-sankey.component.css']
+    selector: 'app-psat-report-sankey',
+    templateUrl: './psat-report-sankey.component.html',
+    styleUrls: ['./psat-report-sankey.component.css'],
+    standalone: false
 })
 export class PsatReportSankeyComponent implements OnInit {
   @Input()

@@ -4,9 +4,10 @@ import { CompressedAirAssessmentService } from '../../../../../compressed-air-as
 import { InventoryService } from '../../../../../inventory/inventory.service';
 
 @Component({
-  selector: 'app-full-load-help',
-  templateUrl: './full-load-help.component.html',
-  styleUrls: ['./full-load-help.component.css']
+    selector: 'app-full-load-help',
+    templateUrl: './full-load-help.component.html',
+    styleUrls: ['./full-load-help.component.css'],
+    standalone: false
 })
 export class FullLoadHelpComponent implements OnInit {
 

@@ -2,9 +2,10 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PreAssessment } from '../../pre-assessment';
 import { Settings } from '../../../../../shared/models/settings';
 @Component({
-  selector: 'app-pre-assessment-metered',
-  templateUrl: './pre-assessment-metered.component.html',
-  styleUrls: ['./pre-assessment-metered.component.css']
+    selector: 'app-pre-assessment-metered',
+    templateUrl: './pre-assessment-metered.component.html',
+    styleUrls: ['./pre-assessment-metered.component.css'],
+    standalone: false
 })
 export class PreAssessmentMeteredComponent implements OnInit {
   @Input()

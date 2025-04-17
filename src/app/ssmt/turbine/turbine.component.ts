@@ -6,9 +6,10 @@ import { TurbineService } from './turbine.service';
 import { SsmtService } from '../ssmt.service';
 
 @Component({
-  selector: 'app-turbine',
-  templateUrl: './turbine.component.html',
-  styleUrls: ['./turbine.component.css']
+    selector: 'app-turbine',
+    templateUrl: './turbine.component.html',
+    styleUrls: ['./turbine.component.css'],
+    standalone: false
 })
 export class TurbineComponent implements OnInit {
   @Input()
