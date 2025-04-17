@@ -68,18 +68,7 @@ export class CashFlowService {
 
   getEmptyOutputs(): Outputs {
     return {
-      cashFlowOutputs: [
-        {
-          cashFlow: 0,
-          capitalExpenditures: 0,
-          energySavings: 0,
-          salvage: 0,
-          operationCost: 0,
-          disposal: 0,
-          otherCashFlow: 0,
-          total: 0,
-        }
-      ],
+      cashFlowOutputs: [],
       totalOutputs: {
         cashFlow: 0,
         capitalExpenditures: 0,
@@ -112,22 +101,23 @@ export class CashFlowService {
     inputs.advancedCashflows.forEach(cashFlow => {
       let output: CashFlowOutputs = this.getEmptyCashFlowOutputs();
       output.energySavings = inputs.energySavings;
-      output.operationCost = inputs.operationCost;
+      output.operationCost = -inputs.operationCost;
       output.otherCashFlow = cashFlow;
-      output.cashFlow = inputs.energySavings + inputs.operationCost + cashFlow;
+      output.cashFlow = inputs.energySavings - inputs.operationCost + cashFlow;
       outputs.cashFlowOutputs.push(output);
     });
 
-    outputs.cashFlowOutputs.forEach(year => {
-      outputs.totalOutputs.cashFlow += year.cashFlow;
-      outputs.totalOutputs.energySavings += year.energySavings;
-      outputs.totalOutputs.operationCost += year.operationCost;
-      outputs.totalOutputs.otherCashFlow += year.otherCashFlow;
+    outputs.cashFlowOutputs.forEach(output => {
+      outputs.totalOutputs.cashFlow += output.cashFlow;
+      outputs.totalOutputs.energySavings += output.energySavings;
+      outputs.totalOutputs.operationCost += output.operationCost;
+      outputs.totalOutputs.otherCashFlow += output.otherCashFlow;
     });
 
-    outputs.totalOutputs.capitalExpenditures = inputs.installationCost;
+    outputs.totalOutputs.cashFlow = outputs.totalOutputs.cashFlow - inputs.installationCost;
+    outputs.totalOutputs.capitalExpenditures = -inputs.installationCost;
     outputs.totalOutputs.salvage = inputs.salvageInput;
-    outputs.totalOutputs.disposal = inputs.junkCost;
+    outputs.totalOutputs.disposal = -inputs.junkCost;
 
     return outputs;
   }
@@ -250,26 +240,12 @@ export class CashFlowService {
     return withoutTaxesAnnualWorthOutputs;
 
   }
-
-  getEmptybruteForceResults(): Array<BruteForceResults> {
-    return [
-      {
-        interestRate: 0,
-        results: [0],
-        total: 0,
-        continueA: 0,
-        iterationA: 0,
-        continueB: 0,
-        iterationB: 0,
-      }
-    ]
-
-  }
+ 
 
   getEmptybruteForceResult(): BruteForceResults {
     return {
       interestRate: 0,
-      results: [0],
+      results: [],
       total: 0,
       continueA: 0,
       iterationA: 0,
@@ -282,7 +258,7 @@ export class CashFlowService {
 
   calculateBruteForceResults(inputs: CashFlowForm, yearlyCashFlowOutputs: Outputs): Array<BruteForceResults> {
 
-    let bruteForceResults: Array<BruteForceResults> = this.getEmptybruteForceResults();
+    let bruteForceResults: Array<BruteForceResults> = [];
 
     InterestRates.forEach((rate, index) => {
       let results: BruteForceResults = this.getEmptybruteForceResult();
