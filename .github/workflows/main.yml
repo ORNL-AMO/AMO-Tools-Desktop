@@ -10,13 +10,13 @@ on:
 jobs:
   qa:
     if: github.event_name == 'workflow_dispatch'
-    uses: ./.github/workflows/release:qa.yml
+    uses: ./.github/workflows/release_qa.yml
 
   web:
     if: github.ref_name == 'develop' || github.ref_name == 'master'
-    uses: ./.github/workflows/release:web.yml
+    uses: ./.github/workflows/release_web.yml
 
   desktop:
     if: github.ref_name == 'master'
-    uses: ./.github/workflows/release:desktop.yml
+    uses: ./.github/workflows/release_desktop.yml
     secrets: inherit

@@ -6,7 +6,7 @@ on:
 jobs:
   call_build:
     if: github.ref_name != 'develop' || github.ref_name != 'master'
-    uses: ./.github/workflows/template:build.yml
+    uses: ./.github/workflows/template_build.yml
     with:
       artifact-name: dist
       artifact-path: dist
@@ -14,7 +14,7 @@ jobs:
   call_deploy-qa:
     if: github.ref_name != 'develop' || github.ref_name != 'master'
     needs: call_build
-    uses: ./.github/workflows/template:deploy.yml
+    uses: ./.github/workflows/template_deploy.yml
     with:
       app-dir: qa.measur
       artifact-name: dist
