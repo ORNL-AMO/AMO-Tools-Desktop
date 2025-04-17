@@ -9,9 +9,10 @@ import { Subscription } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-enrichment-graph',
-  templateUrl: './enrichment-graph.component.html',
-  styleUrls: ['./enrichment-graph.component.css']
+    selector: 'app-enrichment-graph',
+    templateUrl: './enrichment-graph.component.html',
+    styleUrls: ['./enrichment-graph.component.css'],
+    standalone: false
 })
 export class EnrichmentGraphComponent implements OnInit {
 

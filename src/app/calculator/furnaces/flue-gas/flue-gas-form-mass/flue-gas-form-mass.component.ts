@@ -12,9 +12,10 @@ import { FlueGasService } from '../flue-gas.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-flue-gas-form-mass',
-  templateUrl: './flue-gas-form-mass.component.html',
-  styleUrls: ['./flue-gas-form-mass.component.css']
+    selector: 'app-flue-gas-form-mass',
+    templateUrl: './flue-gas-form-mass.component.html',
+    styleUrls: ['./flue-gas-form-mass.component.css'],
+    standalone: false
 })
 export class FlueGasFormMassComponent implements OnInit {
   @Input()

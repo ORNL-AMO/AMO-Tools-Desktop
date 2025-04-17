@@ -8,9 +8,10 @@ import { PumpCatalogService } from '../pump-catalog.service';
 import { NameplateDataCatalogService } from './nameplate-data-catalog.service';
 
 @Component({
-  selector: 'app-nameplate-data-catalog',
-  templateUrl: './nameplate-data-catalog.component.html',
-  styleUrls: ['./nameplate-data-catalog.component.css']
+    selector: 'app-nameplate-data-catalog',
+    templateUrl: './nameplate-data-catalog.component.html',
+    styleUrls: ['./nameplate-data-catalog.component.css'],
+    standalone: false
 })
 export class NameplateDataCatalogComponent implements OnInit {
   settingsSub: Subscription;

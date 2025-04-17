@@ -22,9 +22,10 @@ import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-set
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-compressed-air-assessment',
-  templateUrl: './compressed-air-assessment.component.html',
-  styleUrls: ['./compressed-air-assessment.component.css']
+    selector: 'app-compressed-air-assessment',
+    templateUrl: './compressed-air-assessment.component.html',
+    styleUrls: ['./compressed-air-assessment.component.css'],
+    standalone: false
 })
 export class CompressedAirAssessmentComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;

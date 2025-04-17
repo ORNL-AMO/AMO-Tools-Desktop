@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-day-types-help',
-  templateUrl: './day-types-help.component.html',
-  styleUrls: ['./day-types-help.component.css']
+    selector: 'app-day-types-help',
+    templateUrl: './day-types-help.component.html',
+    styleUrls: ['./day-types-help.component.css'],
+    standalone: false
 })
 export class DayTypesHelpComponent implements OnInit {
 

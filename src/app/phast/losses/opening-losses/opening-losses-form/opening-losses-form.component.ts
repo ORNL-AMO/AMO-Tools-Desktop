@@ -9,9 +9,10 @@ import { OpeningFormService } from '../../../../calculator/furnaces/opening/open
 import { ViewFactorInput } from '../../../../shared/models/phast/losses/openingLoss';
 
 @Component({
-  selector: 'app-opening-losses-form',
-  templateUrl: './opening-losses-form.component.html',
-  styleUrls: ['./opening-losses-form.component.css']
+    selector: 'app-opening-losses-form',
+    templateUrl: './opening-losses-form.component.html',
+    styleUrls: ['./opening-losses-form.component.css'],
+    standalone: false
 })
 export class OpeningLossesFormComponent implements OnInit {
   @Input()

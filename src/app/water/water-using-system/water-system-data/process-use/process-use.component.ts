@@ -8,6 +8,7 @@ import { ProcessUse, FlowMetric, WaterUseUnit, waterFlowMetricOptions, MetricFlo
 
 @Component({
   selector: 'app-process-use',
+  standalone: false,
   templateUrl: './process-use.component.html',
   styleUrl: './process-use.component.css'
 })

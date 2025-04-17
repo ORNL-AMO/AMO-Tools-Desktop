@@ -9,9 +9,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { SortCardsService } from '../../opportunity-cards/sort-cards.service';
 import * as _ from 'lodash';
 @Component({
-  selector: 'app-utility-type-dropdown',
-  templateUrl: './utility-type-dropdown.component.html',
-  styleUrls: ['./utility-type-dropdown.component.css']
+    selector: 'app-utility-type-dropdown',
+    templateUrl: './utility-type-dropdown.component.html',
+    styleUrls: ['./utility-type-dropdown.component.css'],
+    standalone: false
 })
 export class UtilityTypeDropdownComponent implements OnInit {
   @Input()

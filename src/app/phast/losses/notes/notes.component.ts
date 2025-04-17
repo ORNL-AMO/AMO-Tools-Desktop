@@ -3,9 +3,10 @@ import { Notes } from '../../../shared/models/phast/phast';
 import { LossTab } from '../../tabs';
 
 @Component({
-  selector: 'app-notes',
-  templateUrl: './notes.component.html',
-  styleUrls: ['./notes.component.css']
+    selector: 'app-notes',
+    templateUrl: './notes.component.html',
+    styleUrls: ['./notes.component.css'],
+    standalone: false
 })
 export class NotesComponent implements OnInit {
   @Input()

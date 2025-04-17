@@ -8,9 +8,10 @@ import { FsatOutput, FSAT } from '../../../../../shared/models/fans';
 import { AssessmentService } from '../../../../assessment.service';
 
 @Component({
-  selector: 'app-fsat-summary-card',
-  templateUrl: './fsat-summary-card.component.html',
-  styleUrls: ['./fsat-summary-card.component.css']
+    selector: 'app-fsat-summary-card',
+    templateUrl: './fsat-summary-card.component.html',
+    styleUrls: ['./fsat-summary-card.component.css'],
+    standalone: false
 })
 export class FsatSummaryCardComponent implements OnInit {
   @Input()

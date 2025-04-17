@@ -9,9 +9,10 @@ import { SolidLoadMaterialDbService } from '../../indexedDb/solid-load-material-
 import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-solid-load-charge-material',
-  templateUrl: './solid-load-charge-material.component.html',
-  styleUrls: ['./solid-load-charge-material.component.css']
+    selector: 'app-solid-load-charge-material',
+    templateUrl: './solid-load-charge-material.component.html',
+    styleUrls: ['./solid-load-charge-material.component.css'],
+    standalone: false
 })
 export class SolidLoadChargeMaterialComponent implements OnInit {
 

@@ -1,9 +1,10 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-losses-splash-page',
-  templateUrl: './losses-splash-page.component.html',
-  styleUrls: ['./losses-splash-page.component.css']
+    selector: 'app-losses-splash-page',
+    templateUrl: './losses-splash-page.component.html',
+    styleUrls: ['./losses-splash-page.component.css'],
+    standalone: false
 })
 export class LossesSplashPageComponent implements OnInit {
   @Output('hidePage')

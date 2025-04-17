@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { WallService } from '../wall.service';
 
 @Component({
-  selector: 'app-wall-help',
-  templateUrl: './wall-help.component.html',
-  styleUrls: ['./wall-help.component.css']
+    selector: 'app-wall-help',
+    templateUrl: './wall-help.component.html',
+    styleUrls: ['./wall-help.component.css'],
+    standalone: false
 })
 export class WallHelpComponent implements OnInit {
   @Input()

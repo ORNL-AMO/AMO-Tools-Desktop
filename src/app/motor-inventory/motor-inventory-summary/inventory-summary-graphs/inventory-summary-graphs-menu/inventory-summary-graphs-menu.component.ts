@@ -7,9 +7,10 @@ import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import { MotorInventorySummaryService } from '../../motor-inventory-summary.service';
 @Component({
-  selector: 'app-inventory-summary-graphs-menu',
-  templateUrl: './inventory-summary-graphs-menu.component.html',
-  styleUrls: ['./inventory-summary-graphs-menu.component.css']
+    selector: 'app-inventory-summary-graphs-menu',
+    templateUrl: './inventory-summary-graphs-menu.component.html',
+    styleUrls: ['./inventory-summary-graphs-menu.component.css'],
+    standalone: false
 })
 export class InventorySummaryGraphsMenuComponent implements OnInit {
 

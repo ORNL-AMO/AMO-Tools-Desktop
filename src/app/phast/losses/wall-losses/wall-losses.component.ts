@@ -8,9 +8,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { WallFormService } from '../../../calculator/furnaces/wall/wall-form.service';
 
 @Component({
-  selector: 'app-wall-losses',
-  templateUrl: './wall-losses.component.html',
-  styleUrls: ['./wall-losses.component.css']
+    selector: 'app-wall-losses',
+    templateUrl: './wall-losses.component.html',
+    styleUrls: ['./wall-losses.component.css'],
+    standalone: false
 })
 export class WallLossesComponent implements OnInit {
   @Input()

@@ -9,9 +9,10 @@ import { CompressedAirAssessmentService } from '../../../compressed-air-assessme
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-filter-compressors',
-  templateUrl: './filter-compressors.component.html',
-  styleUrls: ['./filter-compressors.component.css']
+    selector: 'app-filter-compressors',
+    templateUrl: './filter-compressors.component.html',
+    styleUrls: ['./filter-compressors.component.css'],
+    standalone: false
 })
 export class FilterCompressorsComponent implements OnInit {
 

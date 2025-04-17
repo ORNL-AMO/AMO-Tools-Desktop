@@ -5,9 +5,10 @@ import { Settings } from '../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-operating-costs',
-  templateUrl: './operating-costs.component.html',
-  styleUrls: ['./operating-costs.component.css']
+    selector: 'app-operating-costs',
+    templateUrl: './operating-costs.component.html',
+    styleUrls: ['./operating-costs.component.css'],
+    standalone: false
 })
 export class OperatingCostsComponent implements OnInit {
   @Input()

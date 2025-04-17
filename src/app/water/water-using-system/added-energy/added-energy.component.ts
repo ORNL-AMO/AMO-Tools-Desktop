@@ -11,6 +11,7 @@ import { WaterAssessment } from 'process-flow-lib';
 
 @Component({
   selector: 'app-added-energy',
+  standalone: false,
   templateUrl: './added-energy.component.html',
   styleUrl: './added-energy.component.css'
 })

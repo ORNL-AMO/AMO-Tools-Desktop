@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 
 @Component({
-  selector: 'app-hover-steam-properties',
-  templateUrl: './hover-steam-properties.component.html',
-  styleUrls: ['./hover-steam-properties.component.css']
+    selector: 'app-hover-steam-properties',
+    templateUrl: './hover-steam-properties.component.html',
+    styleUrls: ['./hover-steam-properties.component.css'],
+    standalone: false
 })
 export class HoverSteamPropertiesComponent implements OnInit {
   @Input()

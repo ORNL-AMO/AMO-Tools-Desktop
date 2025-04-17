@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-turbine-connector',
-  templateUrl: './turbine-connector.component.html',
-  styleUrls: ['./turbine-connector.component.css']
+    selector: 'app-turbine-connector',
+    templateUrl: './turbine-connector.component.html',
+    styleUrls: ['./turbine-connector.component.css'],
+    standalone: false
 })
 export class TurbineConnectorComponent implements OnInit {
   @Input()

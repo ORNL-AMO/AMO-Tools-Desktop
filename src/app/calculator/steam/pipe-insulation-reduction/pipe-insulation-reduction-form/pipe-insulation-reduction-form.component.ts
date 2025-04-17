@@ -6,9 +6,10 @@ import { PipeInsulationReductionService } from '../pipe-insulation-reduction.ser
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
-  selector: 'app-pipe-insulation-reduction-form',
-  templateUrl: './pipe-insulation-reduction-form.component.html',
-  styleUrls: ['./pipe-insulation-reduction-form.component.css']
+    selector: 'app-pipe-insulation-reduction-form',
+    templateUrl: './pipe-insulation-reduction-form.component.html',
+    styleUrls: ['./pipe-insulation-reduction-form.component.css'],
+    standalone: false
 })
 export class PipeInsulationReductionFormComponent implements OnInit {
   @Input()

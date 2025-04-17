@@ -7,9 +7,10 @@ import { CompressedAirAssessmentService } from '../../../compressed-air-assessme
 import { ImproveEndUseEfficiencyService } from '../improve-end-use-efficiency.service';
 
 @Component({
-  selector: 'app-improve-end-use-efficiency-item',
-  templateUrl: './improve-end-use-efficiency-item.component.html',
-  styleUrls: ['./improve-end-use-efficiency-item.component.css']
+    selector: 'app-improve-end-use-efficiency-item',
+    templateUrl: './improve-end-use-efficiency-item.component.html',
+    styleUrls: ['./improve-end-use-efficiency-item.component.css'],
+    standalone: false
 })
 export class ImproveEndUseEfficiencyItemComponent implements OnInit {
   @Input()

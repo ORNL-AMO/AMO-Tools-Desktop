@@ -22,9 +22,10 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { getNewIdString } from '../shared/helperFunctions';
 
 @Component({
-  selector: 'app-phast',
-  templateUrl: './phast.component.html',
-  styleUrls: ['./phast.component.css'],
+    selector: 'app-phast',
+    templateUrl: './phast.component.html',
+    styleUrls: ['./phast.component.css'],
+    standalone: false
 })
 export class PhastComponent implements OnInit {
   @ViewChild('updateUnitsModal', { static: false }) public updateUnitsModal: ModalDirective;

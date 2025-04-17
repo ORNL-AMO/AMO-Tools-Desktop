@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-air-leak-copy-table',
-  templateUrl: './air-leak-copy-table.component.html',
-  styleUrls: ['./air-leak-copy-table.component.css']
+    selector: 'app-air-leak-copy-table',
+    templateUrl: './air-leak-copy-table.component.html',
+    styleUrls: ['./air-leak-copy-table.component.css'],
+    standalone: false
 })
 export class AirLeakCopyTableComponent implements OnInit {
   

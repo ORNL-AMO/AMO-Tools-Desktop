@@ -3,9 +3,10 @@ import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-flash-tank-diagram',
-  templateUrl: './flash-tank-diagram.component.html',
-  styleUrls: ['./flash-tank-diagram.component.css']
+    selector: 'app-flash-tank-diagram',
+    templateUrl: './flash-tank-diagram.component.html',
+    styleUrls: ['./flash-tank-diagram.component.css'],
+    standalone: false
 })
 export class FlashTankDiagramComponent implements OnInit {
   @Input()

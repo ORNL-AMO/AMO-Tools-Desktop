@@ -6,6 +6,7 @@ import { WaterUsingSystem, WaterSystemTypeEnum, WaterSystemTypeData } from 'proc
 
 @Component({
   selector: 'app-water-system-data-modal',
+  standalone: false,
   templateUrl: './water-system-data-modal.component.html',
   styleUrl: './water-system-data-modal.component.css'
 })

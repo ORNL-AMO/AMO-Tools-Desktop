@@ -7,9 +7,10 @@ import { LightingReplacementTreasureHunt, Treasure } from '../../../shared/model
 import { OperatingHours } from '../../../shared/models/operations';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 @Component({
-  selector: 'app-lighting-replacement',
-  templateUrl: './lighting-replacement.component.html',
-  styleUrls: ['./lighting-replacement.component.css']
+    selector: 'app-lighting-replacement',
+    templateUrl: './lighting-replacement.component.html',
+    styleUrls: ['./lighting-replacement.component.css'],
+    standalone: false
 })
 export class LightingReplacementComponent implements OnInit {
   @Input()

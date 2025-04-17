@@ -5,9 +5,10 @@ import { DataTableVariable } from '../../waste-water-analysis/dataTableVariables
 import { AnalysisGraphItem, WasteWaterAnalysisService } from '../../waste-water-analysis/waste-water-analysis.service';
 
 @Component({
-  selector: 'app-analysis-menu',
-  templateUrl: './analysis-menu.component.html',
-  styleUrls: ['./analysis-menu.component.css']
+    selector: 'app-analysis-menu',
+    templateUrl: './analysis-menu.component.html',
+    styleUrls: ['./analysis-menu.component.css'],
+    standalone: false
 })
 export class AnalysisMenuComponent implements OnInit {
 

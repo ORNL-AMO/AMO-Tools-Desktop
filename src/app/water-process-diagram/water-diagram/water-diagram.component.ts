@@ -5,6 +5,7 @@ import { WaterDiagram, ProcessFlowParentState } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-diagram',
+  standalone: false,
   templateUrl: './water-diagram.component.html',
   styleUrl: './water-diagram.component.css'
 })

@@ -12,6 +12,7 @@ import { DischargeOutlet, dischargeOutletTypeOptions, MonthlyFlowData, MotorEner
 
 @Component({
   selector: 'app-discharge-outlet',
+  standalone: false,
   templateUrl: './discharge-outlet.component.html',
   styleUrl: './discharge-outlet.component.css'
 })

@@ -3,9 +3,10 @@ import { PurchaseInformationOptions, MotorInventoryData } from '../../../motor-i
 import { MotorInventoryService } from '../../../motor-inventory.service';
 
 @Component({
-  selector: 'app-purchase-information-properties',
-  templateUrl: './purchase-information-properties.component.html',
-  styleUrls: ['./purchase-information-properties.component.css']
+    selector: 'app-purchase-information-properties',
+    templateUrl: './purchase-information-properties.component.html',
+    styleUrls: ['./purchase-information-properties.component.css'],
+    standalone: false
 })
 export class PurchaseInformationPropertiesComponent implements OnInit {
 

@@ -7,9 +7,10 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
 @Component({
-  selector: 'app-explore-opportunities-profile-table',
-  templateUrl: './explore-opportunities-profile-table.component.html',
-  styleUrls: ['./explore-opportunities-profile-table.component.css']
+    selector: 'app-explore-opportunities-profile-table',
+    templateUrl: './explore-opportunities-profile-table.component.html',
+    styleUrls: ['./explore-opportunities-profile-table.component.css'],
+    standalone: false
 })
 export class ExploreOpportunitiesProfileTableComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;

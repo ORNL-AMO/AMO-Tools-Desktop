@@ -8,6 +8,7 @@ import { Landscaping } from 'process-flow-lib';
 
 @Component({
   selector: 'app-landscaping',
+  standalone: false,
   templateUrl: './landscaping.component.html',
   styleUrl: './landscaping.component.css'
 })

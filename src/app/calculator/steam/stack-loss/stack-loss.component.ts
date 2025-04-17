@@ -8,9 +8,10 @@ import { Subscription } from 'rxjs';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-stack-loss-calculator',
-  templateUrl: './stack-loss.component.html',
-  styleUrls: ['./stack-loss.component.css']
+    selector: 'app-stack-loss-calculator',
+    templateUrl: './stack-loss.component.html',
+    styleUrls: ['./stack-loss.component.css'],
+    standalone: false
 })
 export class StackLossComponent implements OnInit {
   @Input()

@@ -4,9 +4,10 @@ import { HeaderNotHighestPressure, HeaderWithHighestPressure, SSMTInputs } from 
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-hover-header-table',
-  templateUrl: './hover-header-table.component.html',
-  styleUrls: ['./hover-header-table.component.css']
+    selector: 'app-hover-header-table',
+    templateUrl: './hover-header-table.component.html',
+    styleUrls: ['./hover-header-table.component.css'],
+    standalone: false
 })
 export class HoverHeaderTableComponent implements OnInit {
   @Input()

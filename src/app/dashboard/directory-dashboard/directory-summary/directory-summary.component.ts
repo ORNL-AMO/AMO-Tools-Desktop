@@ -27,9 +27,10 @@ import { WasteWaterResults } from '../../../shared/models/waste-water';
 import { BaselineResults, CompressedAirAssessmentResultsService } from '../../../compressed-air-assessment/compressed-air-assessment-results.service';
 
 @Component({
-  selector: 'app-directory-summary',
-  templateUrl: './directory-summary.component.html',
-  styleUrls: ['./directory-summary.component.css']
+    selector: 'app-directory-summary',
+    templateUrl: './directory-summary.component.html',
+    styleUrls: ['./directory-summary.component.css'],
+    standalone: false
 })
 export class DirectorySummaryComponent implements OnInit {
 

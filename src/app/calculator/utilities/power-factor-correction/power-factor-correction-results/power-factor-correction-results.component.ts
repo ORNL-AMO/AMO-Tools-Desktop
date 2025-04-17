@@ -2,9 +2,10 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from '../power-factor-correction.component';
 
 @Component({
-  selector: 'app-power-factor-correction-results',
-  templateUrl: './power-factor-correction-results.component.html',
-  styleUrls: ['./power-factor-correction-results.component.css']
+    selector: 'app-power-factor-correction-results',
+    templateUrl: './power-factor-correction-results.component.html',
+    styleUrls: ['./power-factor-correction-results.component.css'],
+    standalone: false
 })
 export class PowerFactorCorrectionResultsComponent implements OnInit {
   @Input()

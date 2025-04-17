@@ -11,9 +11,10 @@ import { ReportRollupService } from '../report-rollup.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-psat-rollup',
-  templateUrl: './psat-rollup.component.html',
-  styleUrls: ['./psat-rollup.component.css']
+    selector: 'app-psat-rollup',
+    templateUrl: './psat-rollup.component.html',
+    styleUrls: ['./psat-rollup.component.css'],
+    standalone: false
 })
 export class PsatRollupComponent implements OnInit {
   @Input()

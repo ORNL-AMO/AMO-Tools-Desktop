@@ -11,6 +11,7 @@ import { WaterProcessComponent, WaterProcessComponentType, getNewNodeId } from '
 
 @Component({
   selector: 'app-water-component-table',
+  standalone: false,
   templateUrl: './water-component-table.component.html',
   styleUrl: './water-component-table.component.css'
 })

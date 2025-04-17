@@ -9,6 +9,7 @@ import { Diagram } from '../../shared/models/diagram';
 
 @Component({
   selector: 'app-water-diagram-banner',
+  standalone: false,
   templateUrl: './water-diagram-banner.component.html',
   styleUrl: './water-diagram-banner.component.css'
 })

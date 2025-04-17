@@ -4,9 +4,10 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-system-capacity-modal',
-  templateUrl: './system-capacity-modal.component.html',
-  styleUrls: ['./system-capacity-modal.component.css']
+    selector: 'app-system-capacity-modal',
+    templateUrl: './system-capacity-modal.component.html',
+    styleUrls: ['./system-capacity-modal.component.css'],
+    standalone: false
 })
 export class SystemCapacityModalComponent implements OnInit {
   @Output('closeModal')

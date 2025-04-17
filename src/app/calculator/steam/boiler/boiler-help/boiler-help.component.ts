@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { BoilerRanges, BoilerService } from '../boiler.service';
 
 @Component({
-  selector: 'app-boiler-help',
-  templateUrl: './boiler-help.component.html',
-  styleUrls: ['./boiler-help.component.css']
+    selector: 'app-boiler-help',
+    templateUrl: './boiler-help.component.html',
+    styleUrls: ['./boiler-help.component.css'],
+    standalone: false
 })
 export class BoilerHelpComponent implements OnInit {
   @Input()

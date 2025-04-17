@@ -5,9 +5,10 @@ import { PhastService } from '../../phast.service';
 import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
-  selector: 'app-metered-steam-form',
-  templateUrl: './metered-steam-form.component.html',
-  styleUrls: ['./metered-steam-form.component.css']
+    selector: 'app-metered-steam-form',
+    templateUrl: './metered-steam-form.component.html',
+    styleUrls: ['./metered-steam-form.component.css'],
+    standalone: false
 })
 export class MeteredSteamFormComponent implements OnInit {
   @Input()

@@ -4,9 +4,10 @@ import { FanAnalysisService } from '../../../fan-analysis.service';
 import { PlaneDataFormService } from '../../../fan-analysis-form/plane-data-form/plane-data-form.service';
 
 @Component({
-  selector: 'app-fan-data-help',
-  templateUrl: './fan-data-help.component.html',
-  styleUrls: ['./fan-data-help.component.css']
+    selector: 'app-fan-data-help',
+    templateUrl: './fan-data-help.component.html',
+    styleUrls: ['./fan-data-help.component.css'],
+    standalone: false
 })
 export class FanDataHelpComponent implements OnInit {
 

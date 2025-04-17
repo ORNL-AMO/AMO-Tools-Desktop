@@ -6,9 +6,10 @@ import { graphColors } from '../../phast/phast-report/report-graphs/graphColors'
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-pre-assessment-print',
-  templateUrl: './pre-assessment-print.component.html',
-  styleUrls: ['./pre-assessment-print.component.css']
+    selector: 'app-pre-assessment-print',
+    templateUrl: './pre-assessment-print.component.html',
+    styleUrls: ['./pre-assessment-print.component.css'],
+    standalone: false
 })
 export class PreAssessmentPrintComponent implements OnInit {
   @Input()

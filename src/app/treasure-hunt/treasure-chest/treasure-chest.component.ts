@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
-  selector: 'app-treasure-chest',
-  templateUrl: './treasure-chest.component.html',
-  styleUrls: ['./treasure-chest.component.css']
+    selector: 'app-treasure-chest',
+    templateUrl: './treasure-chest.component.html',
+    styleUrls: ['./treasure-chest.component.css'],
+    standalone: false
 })
 export class TreasureChestComponent implements OnInit {
   @Input()

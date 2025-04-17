@@ -12,9 +12,10 @@ import { DashboardService } from '../dashboard.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-create-folder',
-  templateUrl: './create-folder.component.html',
-  styleUrls: ['./create-folder.component.css']
+    selector: 'app-create-folder',
+    templateUrl: './create-folder.component.html',
+    styleUrls: ['./create-folder.component.css'],
+    standalone: false
 })
 export class CreateFolderComponent implements OnInit {
 

@@ -11,9 +11,10 @@ import { firstValueFrom } from 'rxjs';
 import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
 
 @Component({
-  selector: 'app-wall-losses-form',
-  templateUrl: './wall-losses-form.component.html',
-  styleUrls: ['./wall-losses-form.component.css']
+    selector: 'app-wall-losses-form',
+    templateUrl: './wall-losses-form.component.html',
+    styleUrls: ['./wall-losses-form.component.css'],
+    standalone: false
 })
 export class WallLossesFormComponent implements OnInit {
   @Input()

@@ -11,9 +11,10 @@ import { MeasurSurveyService } from '../../shared/measur-survey/measur-survey.se
 import { UpdateApplicationService } from '../../shared/update-application/update-application.service';
 import { ElectronService } from '../../electron/electron.service';
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+    selector: 'app-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.css'],
+    standalone: false
 })
 export class SidebarComponent implements OnInit {
   @Output('openModal')

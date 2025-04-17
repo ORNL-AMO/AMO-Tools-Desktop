@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { CoolingTowerOutput } from '../../../../shared/models/chillers';
 
 @Component({
-  selector: 'app-cooling-tower-results',
-  templateUrl: './cooling-tower-results.component.html',
-  styleUrls: ['./cooling-tower-results.component.css']
+    selector: 'app-cooling-tower-results',
+    templateUrl: './cooling-tower-results.component.html',
+    styleUrls: ['./cooling-tower-results.component.css'],
+    standalone: false
 })
 export class CoolingTowerResultsComponent implements OnInit {
 

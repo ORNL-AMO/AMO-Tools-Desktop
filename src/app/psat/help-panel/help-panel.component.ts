@@ -7,9 +7,10 @@ import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatTabService } from '../psat-tab.service';
 @Component({
-  selector: 'app-help-panel',
-  templateUrl: './help-panel.component.html',
-  styleUrls: ['./help-panel.component.css']
+    selector: 'app-help-panel',
+    templateUrl: './help-panel.component.html',
+    styleUrls: ['./help-panel.component.css'],
+    standalone: false
 })
 export class HelpPanelComponent implements OnInit {
   @Input()

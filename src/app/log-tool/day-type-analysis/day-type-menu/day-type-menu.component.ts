@@ -8,9 +8,10 @@ import { LogToolDataService } from '../../log-tool-data.service';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-day-type-menu',
-  templateUrl: './day-type-menu.component.html',
-  styleUrls: ['./day-type-menu.component.css']
+    selector: 'app-day-type-menu',
+    templateUrl: './day-type-menu.component.html',
+    styleUrls: ['./day-type-menu.component.css'],
+    standalone: false
 })
 export class DayTypeMenuComponent implements OnInit {
 

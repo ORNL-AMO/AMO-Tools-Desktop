@@ -3,9 +3,10 @@ import { PowerFactorTriangleOutputs } from '../../../../shared/models/standalone
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-power-factor-triangle-results',
-  templateUrl: './power-factor-triangle-results.component.html',
-  styleUrls: ['./power-factor-triangle-results.component.css']
+    selector: 'app-power-factor-triangle-results',
+    templateUrl: './power-factor-triangle-results.component.html',
+    styleUrls: ['./power-factor-triangle-results.component.css'],
+    standalone: false
 })
 export class PowerFactorTriangleResultsComponent implements OnInit {
   @Input()

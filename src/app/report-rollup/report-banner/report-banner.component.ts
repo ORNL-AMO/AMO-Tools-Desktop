@@ -5,9 +5,10 @@ import { ReportRollupService } from '../report-rollup.service';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 
 @Component({
-  selector: 'app-report-banner',
-  templateUrl: './report-banner.component.html',
-  styleUrls: ['./report-banner.component.css']
+    selector: 'app-report-banner',
+    templateUrl: './report-banner.component.html',
+    styleUrls: ['./report-banner.component.css'],
+    standalone: false
 })
 export class ReportBannerComponent implements OnInit {
 

@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FixtureService } from '../fixture.service';
 
 @Component({
-  selector: 'app-fixture-help',
-  templateUrl: './fixture-help.component.html',
-  styleUrls: ['./fixture-help.component.css']
+    selector: 'app-fixture-help',
+    templateUrl: './fixture-help.component.html',
+    styleUrls: ['./fixture-help.component.css'],
+    standalone: false
 })
 export class FixtureHelpComponent implements OnInit {
   @Input()

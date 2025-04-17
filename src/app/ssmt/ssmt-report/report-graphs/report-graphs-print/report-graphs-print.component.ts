@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { SSMTLosses } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-report-graphs-print',
-  templateUrl: './report-graphs-print.component.html',
-  styleUrls: ['./report-graphs-print.component.css']
+    selector: 'app-report-graphs-print',
+    templateUrl: './report-graphs-print.component.html',
+    styleUrls: ['./report-graphs-print.component.css'],
+    standalone: false
 })
 export class ReportGraphsPrintComponent implements OnInit {
   @Input()

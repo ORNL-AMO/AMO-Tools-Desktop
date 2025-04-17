@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { ScenarioSummary } from '../../../../shared/models/reports';
 
 @Component({
-  selector: 'app-psat-report-graphs-print',
-  templateUrl: './psat-report-graphs-print.component.html',
-  styleUrls: ['./psat-report-graphs-print.component.css']
+    selector: 'app-psat-report-graphs-print',
+    templateUrl: './psat-report-graphs-print.component.html',
+    styleUrls: ['./psat-report-graphs-print.component.css'],
+    standalone: false
 })
 export class PsatReportGraphsPrintComponent implements OnInit {
   @Input()

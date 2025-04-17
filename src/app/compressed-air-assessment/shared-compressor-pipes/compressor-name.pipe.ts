@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { CompressorInventoryItem } from '../../shared/models/compressed-air-assessment';
 
 @Pipe({
-  name: 'compressorName'
+    name: 'compressorName',
+    standalone: false
 })
 export class CompressorNamePipe implements PipeTransform {
 

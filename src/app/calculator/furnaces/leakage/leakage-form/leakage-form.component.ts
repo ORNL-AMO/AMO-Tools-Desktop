@@ -11,9 +11,10 @@ import { LeakageFormService, LeakageWarnings } from '../leakage-form.service';
 import { LeakageService } from '../leakage.service';
 
 @Component({
-  selector: 'app-leakage-form',
-  templateUrl: './leakage-form.component.html',
-  styleUrls: ['./leakage-form.component.css']
+    selector: 'app-leakage-form',
+    templateUrl: './leakage-form.component.html',
+    styleUrls: ['./leakage-form.component.css'],
+    standalone: false
 })
 export class LeakageFormComponent implements OnInit {
   @Input()

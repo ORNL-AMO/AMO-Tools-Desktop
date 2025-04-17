@@ -6,9 +6,10 @@ import { PlaneResults, Fan203Inputs } from '../../../../../shared/models/fans';
 import { PlaneDataFormService } from '../../fan-analysis-form/plane-data-form/plane-data-form.service';
 
 @Component({
-  selector: 'app-planar-results',
-  templateUrl: './planar-results.component.html',
-  styleUrls: ['./planar-results.component.css']
+    selector: 'app-planar-results',
+    templateUrl: './planar-results.component.html',
+    styleUrls: ['./planar-results.component.css'],
+    standalone: false
 })
 export class PlanarResultsComponent implements OnInit {
   // @Input()

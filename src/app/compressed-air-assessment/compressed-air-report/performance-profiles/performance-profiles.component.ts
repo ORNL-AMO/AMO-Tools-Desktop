@@ -3,9 +3,10 @@ import { CompressedAirAssessment } from '../../../shared/models/compressed-air-a
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-performance-profiles',
-  templateUrl: './performance-profiles.component.html',
-  styleUrls: ['./performance-profiles.component.css']
+    selector: 'app-performance-profiles',
+    templateUrl: './performance-profiles.component.html',
+    styleUrls: ['./performance-profiles.component.css'],
+    standalone: false
 })
 export class PerformanceProfilesComponent implements OnInit {
   @Input()

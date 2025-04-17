@@ -5,9 +5,10 @@ import { FsatService } from '../fsat.service';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
-  selector: 'app-add-modification',
-  templateUrl: './add-modification.component.html',
-  styleUrls: ['./add-modification.component.css']
+    selector: 'app-add-modification',
+    templateUrl: './add-modification.component.html',
+    styleUrls: ['./add-modification.component.css'],
+    standalone: false
 })
 export class AddModificationComponent implements OnInit {
   @Input()

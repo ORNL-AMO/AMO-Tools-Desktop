@@ -8,9 +8,10 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surface-db.service';
 
 @Component({
-  selector: 'app-custom-wall-losses-surfaces',
-  templateUrl: './custom-wall-losses-surfaces.component.html',
-  styleUrls: ['./custom-wall-losses-surfaces.component.css']
+    selector: 'app-custom-wall-losses-surfaces',
+    templateUrl: './custom-wall-losses-surfaces.component.html',
+    styleUrls: ['./custom-wall-losses-surfaces.component.css'],
+    standalone: false
 })
 export class CustomWallLossesSurfacesComponent implements OnInit {
   @Input()

@@ -12,9 +12,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { PercentLoadEstimationService } from '../../../../calculator/motors/percent-load-estimation/percent-load-estimation.service';
 
 @Component({
-  selector: 'app-operations-data',
-  templateUrl: './operations-data.component.html',
-  styleUrls: ['./operations-data.component.css']
+    selector: 'app-operations-data',
+    templateUrl: './operations-data.component.html',
+    styleUrls: ['./operations-data.component.css'],
+    standalone: false
 })
 export class OperationsDataComponent implements OnInit {
 

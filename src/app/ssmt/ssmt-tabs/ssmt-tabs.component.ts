@@ -10,9 +10,10 @@ import { HeaderService } from '../header/header.service';
 import { OperationsService } from '../operations/operations.service';
 
 @Component({
-  selector: 'app-ssmt-tabs',
-  templateUrl: './ssmt-tabs.component.html',
-  styleUrls: ['./ssmt-tabs.component.css']
+    selector: 'app-ssmt-tabs',
+    templateUrl: './ssmt-tabs.component.html',
+    styleUrls: ['./ssmt-tabs.component.css'],
+    standalone: false
 })
 export class SsmtTabsComponent implements OnInit {
   @Input()

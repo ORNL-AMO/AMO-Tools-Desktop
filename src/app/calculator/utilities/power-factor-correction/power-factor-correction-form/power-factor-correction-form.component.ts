@@ -3,9 +3,10 @@ import { MonthyInputs, PowerFactorCorrectionInputs } from '../power-factor-corre
 import { PowerFactorCorrectionService } from '../power-factor-correction.service';
 
 @Component({
-  selector: 'app-power-factor-correction-form',
-  templateUrl: './power-factor-correction-form.component.html',
-  styleUrls: ['./power-factor-correction-form.component.css']
+    selector: 'app-power-factor-correction-form',
+    templateUrl: './power-factor-correction-form.component.html',
+    styleUrls: ['./power-factor-correction-form.component.css'],
+    standalone: false
 })
 export class PowerFactorCorrectionFormComponent implements OnInit {
   

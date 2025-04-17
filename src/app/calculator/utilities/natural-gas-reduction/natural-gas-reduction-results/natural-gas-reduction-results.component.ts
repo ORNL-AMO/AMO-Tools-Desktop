@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { NaturalGasReductionResults } from '../../../../shared/models/standalone';
 
 @Component({
-  selector: 'app-natural-gas-reduction-results',
-  templateUrl: './natural-gas-reduction-results.component.html',
-  styleUrls: ['./natural-gas-reduction-results.component.css']
+    selector: 'app-natural-gas-reduction-results',
+    templateUrl: './natural-gas-reduction-results.component.html',
+    styleUrls: ['./natural-gas-reduction-results.component.css'],
+    standalone: false
 })
 export class NaturalGasReductionResultsComponent implements OnInit {
   @Input()

@@ -9,9 +9,10 @@ import { SsmtService } from '../../../../../ssmt/ssmt.service';
 import { AssessmentService } from '../../../../assessment.service';
 
 @Component({
-  selector: 'app-ssmt-summary-card',
-  templateUrl: './ssmt-summary-card.component.html',
-  styleUrls: ['./ssmt-summary-card.component.css']
+    selector: 'app-ssmt-summary-card',
+    templateUrl: './ssmt-summary-card.component.html',
+    styleUrls: ['./ssmt-summary-card.component.css'],
+    standalone: false
 })
 export class SsmtSummaryCardComponent implements OnInit {
   @Input()

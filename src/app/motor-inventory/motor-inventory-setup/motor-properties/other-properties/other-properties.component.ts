@@ -3,9 +3,10 @@ import { OtherOptions, MotorInventoryData } from '../../../motor-inventory';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 
 @Component({
-  selector: 'app-other-properties',
-  templateUrl: './other-properties.component.html',
-  styleUrls: ['./other-properties.component.css']
+    selector: 'app-other-properties',
+    templateUrl: './other-properties.component.html',
+    styleUrls: ['./other-properties.component.css'],
+    standalone: false
 })
 export class OtherPropertiesComponent implements OnInit {
 

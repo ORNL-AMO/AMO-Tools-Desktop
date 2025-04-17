@@ -7,6 +7,7 @@ import { DischargeOutlet, IntakeSource, WaterAssessment, WaterProcessComponentTy
 
 @Component({
   selector: 'app-monthly-flow-chart',
+  standalone: false,
   templateUrl: './monthly-flow-chart.component.html',
   styleUrl: './monthly-flow-chart.component.css'
 })

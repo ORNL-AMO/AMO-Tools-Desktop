@@ -10,9 +10,10 @@ import { LeakageService } from './leakage.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-leakage',
-  templateUrl: './leakage.component.html',
-  styleUrls: ['./leakage.component.css']
+    selector: 'app-leakage',
+    templateUrl: './leakage.component.html',
+    styleUrls: ['./leakage.component.css'],
+    standalone: false
 })
 export class LeakageComponent implements OnInit {
   @Input()

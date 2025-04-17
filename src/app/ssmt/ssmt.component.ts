@@ -19,9 +19,10 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SnackbarService } from '../shared/snackbar-notification/snackbar.service';
 
 @Component({
-  selector: 'app-ssmt',
-  templateUrl: './ssmt.component.html',
-  styleUrls: ['./ssmt.component.css'],
+    selector: 'app-ssmt',
+    templateUrl: './ssmt.component.html',
+    styleUrls: ['./ssmt.component.css'],
+    standalone: false
 })
 export class SsmtComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;

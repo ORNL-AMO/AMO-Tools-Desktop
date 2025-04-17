@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-wall-losses-help',
-  templateUrl: './wall-losses-help.component.html',
-  styleUrls: ['./wall-losses-help.component.css']
+    selector: 'app-wall-losses-help',
+    templateUrl: './wall-losses-help.component.html',
+    styleUrls: ['./wall-losses-help.component.css'],
+    standalone: false
 })
 export class WallLossesHelpComponent implements OnInit {
   @Input()

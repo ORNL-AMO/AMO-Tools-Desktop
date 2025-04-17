@@ -5,9 +5,10 @@ import { TreasureHuntResultsData } from '../../report-rollup-models';
 import { TreasureHuntReportRollupService } from '../../treasure-hunt-report-rollup.service';
 
 @Component({
-  selector: 'app-treasure-hunt-summary',
-  templateUrl: './treasure-hunt-summary.component.html',
-  styleUrls: ['./treasure-hunt-summary.component.css', '../report-summary.component.css']
+    selector: 'app-treasure-hunt-summary',
+    templateUrl: './treasure-hunt-summary.component.html',
+    styleUrls: ['./treasure-hunt-summary.component.css', '../report-summary.component.css'],
+    standalone: false
 })
 export class TreasureHuntSummaryComponent implements OnInit {
   @Input()

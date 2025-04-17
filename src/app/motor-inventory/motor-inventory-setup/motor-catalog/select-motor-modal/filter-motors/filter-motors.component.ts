@@ -6,9 +6,10 @@ import { MotorCatalogService } from '../../motor-catalog.service';
 import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
-  selector: 'app-filter-motors',
-  templateUrl: './filter-motors.component.html',
-  styleUrls: ['./filter-motors.component.css']
+    selector: 'app-filter-motors',
+    templateUrl: './filter-motors.component.html',
+    styleUrls: ['./filter-motors.component.css'],
+    standalone: false
 })
 export class FilterMotorsComponent implements OnInit {
 

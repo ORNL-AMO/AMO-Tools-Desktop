@@ -12,9 +12,10 @@ import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-f
 import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
 
 @Component({
-  selector: 'app-fan-psychrometric-chart',
-  templateUrl: './fan-psychrometric-chart.component.html',
-  styleUrls: ['./fan-psychrometric-chart.component.css']
+    selector: 'app-fan-psychrometric-chart',
+    templateUrl: './fan-psychrometric-chart.component.html',
+    styleUrls: ['./fan-psychrometric-chart.component.css'],
+    standalone: false
 })
 export class FanPsychrometricChartComponent implements OnInit {
   @Input()

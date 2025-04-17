@@ -4,9 +4,10 @@ import { WasteWaterAnalysisService } from '../../waste-water-analysis.service';
 import { Settings } from '../../../../shared/models/settings'; 
 import { PlotlyService } from 'angular-plotly.js';
 @Component({
-  selector: 'app-energy-analysis-bar-chart',
-  templateUrl: './energy-analysis-bar-chart.component.html',
-  styleUrls: ['./energy-analysis-bar-chart.component.css']
+    selector: 'app-energy-analysis-bar-chart',
+    templateUrl: './energy-analysis-bar-chart.component.html',
+    styleUrls: ['./energy-analysis-bar-chart.component.css'],
+    standalone: false
 })
 export class EnergyAnalysisBarChartComponent implements OnInit {
   @Input()

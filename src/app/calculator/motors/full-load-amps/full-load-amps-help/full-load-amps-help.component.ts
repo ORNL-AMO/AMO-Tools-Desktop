@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { FullLoadAmpsService } from '../full-load-amps.service';
 
 @Component({
-  selector: 'app-full-load-amps-help',
-  templateUrl: './full-load-amps-help.component.html',
-  styleUrls: ['./full-load-amps-help.component.css']
+    selector: 'app-full-load-amps-help',
+    templateUrl: './full-load-amps-help.component.html',
+    styleUrls: ['./full-load-amps-help.component.css'],
+    standalone: false
 })
 export class FullLoadAmpsHelpComponent implements OnInit {
   currentField: string;

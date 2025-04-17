@@ -9,9 +9,10 @@ import { Subscription } from 'rxjs';
 import { FsatService } from '../../../../../../fsat/fsat.service';
 
 @Component({
-  selector: 'app-fan-data-form',
-  templateUrl: './fan-data-form.component.html',
-  styleUrls: ['./fan-data-form.component.css']
+    selector: 'app-fan-data-form',
+    templateUrl: './fan-data-form.component.html',
+    styleUrls: ['./fan-data-form.component.css'],
+    standalone: false
 })
 export class FanDataFormComponent implements OnInit, OnDestroy {
   @Input()

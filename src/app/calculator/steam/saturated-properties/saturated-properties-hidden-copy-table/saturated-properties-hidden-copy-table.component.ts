@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 
 @Component({
-  selector: 'app-saturated-properties-hidden-copy-table',
-  templateUrl: './saturated-properties-hidden-copy-table.component.html',
-  styleUrls: ['./saturated-properties-hidden-copy-table.component.css']
+    selector: 'app-saturated-properties-hidden-copy-table',
+    templateUrl: './saturated-properties-hidden-copy-table.component.html',
+    styleUrls: ['./saturated-properties-hidden-copy-table.component.css'],
+    standalone: false
 })
 export class SaturatedPropertiesHiddenCopyTableComponent implements OnInit {
  

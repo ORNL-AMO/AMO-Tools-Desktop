@@ -5,9 +5,10 @@ import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 
 @Component({
-  selector: 'app-add-pre-assessment-item',
-  templateUrl: './add-pre-assessment-item.component.html',
-  styleUrls: ['./add-pre-assessment-item.component.css']
+    selector: 'app-add-pre-assessment-item',
+    templateUrl: './add-pre-assessment-item.component.html',
+    styleUrls: ['./add-pre-assessment-item.component.css'],
+    standalone: false
 })
 export class AddPreAssessmentItemComponent implements OnInit {
 

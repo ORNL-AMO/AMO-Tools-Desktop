@@ -7,6 +7,7 @@ import { ProcessFlowNodeType } from 'process-flow-lib';
 
 @Component({
   selector: 'app-results-panel',
+  standalone: false,
   templateUrl: './results-panel.component.html',
   styleUrl: './results-panel.component.css'
 })

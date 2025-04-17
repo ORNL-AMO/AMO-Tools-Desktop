@@ -13,9 +13,10 @@ import { EndUseEnergyData, EndUsesService } from '../../end-uses/end-uses.servic
 import { AirflowSankeyService, CompressedAirSankeyNode, AirFlowSankeyResults } from './airflow-sankey.service';
 
 @Component({
-  selector: 'app-airflow-sankey',
-  templateUrl: './airflow-sankey.component.html',
-  styleUrls: ['./airflow-sankey.component.css']
+    selector: 'app-airflow-sankey',
+    templateUrl: './airflow-sankey.component.html',
+    styleUrls: ['./airflow-sankey.component.css'],
+    standalone: false
 })
 export class AirflowSankeyComponent implements OnInit {
 

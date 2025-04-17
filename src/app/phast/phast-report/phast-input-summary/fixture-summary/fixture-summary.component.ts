@@ -6,9 +6,10 @@ import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss'
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 @Component({
-  selector: 'app-fixture-summary',
-  templateUrl: './fixture-summary.component.html',
-  styleUrls: ['./fixture-summary.component.css']
+    selector: 'app-fixture-summary',
+    templateUrl: './fixture-summary.component.html',
+    styleUrls: ['./fixture-summary.component.css'],
+    standalone: false
 })
 export class FixtureSummaryComponent implements OnInit {
   @Input()

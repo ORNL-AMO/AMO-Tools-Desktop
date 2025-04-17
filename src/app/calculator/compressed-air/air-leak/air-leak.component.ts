@@ -13,9 +13,10 @@ import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-air-leak',
-  templateUrl: './air-leak.component.html',
-  styleUrls: ['./air-leak.component.css']
+    selector: 'app-air-leak',
+    templateUrl: './air-leak.component.html',
+    styleUrls: ['./air-leak.component.css'],
+    standalone: false
 })
 export class AirLeakComponent implements OnInit, AfterViewInit {
   @Input()

@@ -9,9 +9,10 @@ import { PerformancePointsFormService } from '../../inventory/performance-points
 import { SystemProfileService } from '../../system-profile/system-profile.service';
 
 @Component({
-  selector: 'app-inventory-table',
-  templateUrl: './inventory-table.component.html',
-  styleUrls: ['./inventory-table.component.css']
+    selector: 'app-inventory-table',
+    templateUrl: './inventory-table.component.html',
+    styleUrls: ['./inventory-table.component.css'],
+    standalone: false
 })
 export class InventoryTableComponent implements OnInit {
 

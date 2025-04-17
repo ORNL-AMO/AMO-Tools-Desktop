@@ -5,9 +5,10 @@ import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmospher
 import { LossTab } from '../../../tabs';
 import { AtmosphereFormService, AtmosphereLossWarnings } from '../../../../calculator/furnaces/atmosphere/atmosphere-form.service';
 @Component({
-  selector: 'app-explore-atmosphere-form',
-  templateUrl: './explore-atmosphere-form.component.html',
-  styleUrls: ['./explore-atmosphere-form.component.css']
+    selector: 'app-explore-atmosphere-form',
+    templateUrl: './explore-atmosphere-form.component.html',
+    styleUrls: ['./explore-atmosphere-form.component.css'],
+    standalone: false
 })
 export class ExploreAtmosphereFormComponent implements OnInit {
   @Input()

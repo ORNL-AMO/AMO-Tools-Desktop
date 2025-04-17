@@ -7,9 +7,10 @@ import * as _ from 'lodash';
 import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 
 @Component({
-  selector: 'app-modification-list-modal',
-  templateUrl: './modification-list-modal.component.html',
-  styleUrls: ['./modification-list-modal.component.css']
+    selector: 'app-modification-list-modal',
+    templateUrl: './modification-list-modal.component.html',
+    styleUrls: ['./modification-list-modal.component.css'],
+    standalone: false
 })
 export class ModificationListModalComponent implements OnInit {
 

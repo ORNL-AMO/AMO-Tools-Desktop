@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-compressor-cycle-help',
-  templateUrl: './compressor-cycle-help.component.html',
-  styleUrls: ['./compressor-cycle-help.component.css']
+    selector: 'app-compressor-cycle-help',
+    templateUrl: './compressor-cycle-help.component.html',
+    styleUrls: ['./compressor-cycle-help.component.css'],
+    standalone: false
 })
 export class CompressorCycleHelpComponent implements OnInit {
   @Input()

@@ -12,6 +12,7 @@ import { ConnectedFlowType, DiagramWaterSystemFlows, WaterAssessment, WaterProce
 
 @Component({
   selector: 'app-water-system-data',
+  standalone: false,
   templateUrl: './water-system-data.component.html',
   styleUrl: './water-system-data.component.css'
 })

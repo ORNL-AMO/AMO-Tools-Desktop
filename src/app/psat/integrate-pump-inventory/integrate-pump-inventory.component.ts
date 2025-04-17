@@ -9,9 +9,10 @@ import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
-  selector: 'app-integrate-pump-inventory',
-  templateUrl: './integrate-pump-inventory.component.html',
-  styleUrls: ['./integrate-pump-inventory.component.css']
+    selector: 'app-integrate-pump-inventory',
+    templateUrl: './integrate-pump-inventory.component.html',
+    styleUrls: ['./integrate-pump-inventory.component.css'],
+    standalone: false
 })
 export class IntegratePumpInventoryComponent {
   @Input()

@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { DayTypeAnalysisService } from '../../day-type-analysis.service';
 import * as _ from 'lodash';
 @Component({
-  selector: 'app-selected-data-table',
-  templateUrl: './selected-data-table.component.html',
-  styleUrls: ['./selected-data-table.component.css']
+    selector: 'app-selected-data-table',
+    templateUrl: './selected-data-table.component.html',
+    styleUrls: ['./selected-data-table.component.css'],
+    standalone: false
 })
 export class SelectedDataTableComponent implements OnInit {
 

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
+import { ErrorHandler, NgModule, inject, provideAppInitializer } from '@angular/core';
 import { AppComponent } from './app.component';
 
 import { CoreModule } from './core/core.module';
@@ -29,12 +29,10 @@ import { ElectronService } from './electron/electron.service';
   bootstrap: [AppComponent],
   providers: [
    {provide: ErrorHandler, useClass: MeasurErrorHandler},
-   {
-    provide: APP_INITIALIZER,
-    useFactory: initializeAppFactory,
-    deps: [ElectronService, SwUpdate],
-    multi: true
-   },
+   provideAppInitializer(() => {
+        const initializerFn = (initializeAppFactory)(inject(ElectronService), inject(SwUpdate));
+        return initializerFn();
+      }),
   ]
 })
 export class AppModule {}

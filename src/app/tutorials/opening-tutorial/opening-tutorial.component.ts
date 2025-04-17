@@ -5,9 +5,10 @@ import { firstValueFrom } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
-  selector: 'app-opening-tutorial',
-  templateUrl: './opening-tutorial.component.html',
-  styleUrls: ['./opening-tutorial.component.css']
+    selector: 'app-opening-tutorial',
+    templateUrl: './opening-tutorial.component.html',
+    styleUrls: ['./opening-tutorial.component.css'],
+    standalone: false
 })
 export class OpeningTutorialComponent implements OnInit {
   @Output('closeTutorial')

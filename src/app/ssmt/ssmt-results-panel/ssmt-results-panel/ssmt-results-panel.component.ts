@@ -9,9 +9,10 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { SteamService } from '../../../calculator/steam/steam.service';
 
 @Component({
-  selector: 'app-ssmt-results-panel',
-  templateUrl: './ssmt-results-panel.component.html',
-  styleUrls: ['./ssmt-results-panel.component.css']
+    selector: 'app-ssmt-results-panel',
+    templateUrl: './ssmt-results-panel.component.html',
+    styleUrls: ['./ssmt-results-panel.component.css'],
+    standalone: false
 })
 export class SsmtResultsPanelComponent implements OnInit {
   @Input()

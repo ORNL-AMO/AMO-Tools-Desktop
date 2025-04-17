@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-rollup-summary-table',
-  templateUrl: './rollup-summary-table.component.html',
-  styleUrls: ['./rollup-summary-table.component.css']
+    selector: 'app-rollup-summary-table',
+    templateUrl: './rollup-summary-table.component.html',
+    styleUrls: ['./rollup-summary-table.component.css'],
+    standalone: false
 })
 export class RollupSummaryTableComponent implements OnInit {
   @Input()

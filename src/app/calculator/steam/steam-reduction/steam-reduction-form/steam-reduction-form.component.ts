@@ -6,9 +6,10 @@ import { SteamReductionResult, SteamReductionData } from '../../../../shared/mod
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
-  selector: 'app-steam-reduction-form',
-  templateUrl: './steam-reduction-form.component.html',
-  styleUrls: ['./steam-reduction-form.component.css']
+    selector: 'app-steam-reduction-form',
+    templateUrl: './steam-reduction-form.component.html',
+    styleUrls: ['./steam-reduction-form.component.css'],
+    standalone: false
 })
 export class SteamReductionFormComponent implements OnInit {
   @Input()

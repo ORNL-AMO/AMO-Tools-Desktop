@@ -24,9 +24,10 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { copyObject } from '../shared/helperFunctions';
 
 @Component({
-  selector: 'app-fsat',
-  templateUrl: './fsat.component.html',
-  styleUrls: ['./fsat.component.css'],
+    selector: 'app-fsat',
+    templateUrl: './fsat.component.html',
+    styleUrls: ['./fsat.component.css'],
+    standalone: false
 })
 export class FsatComponent implements OnInit {
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;

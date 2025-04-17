@@ -4,9 +4,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-opening-losses-help',
-  templateUrl: './opening-losses-help.component.html',
-  styleUrls: ['./opening-losses-help.component.css']
+    selector: 'app-opening-losses-help',
+    templateUrl: './opening-losses-help.component.html',
+    styleUrls: ['./opening-losses-help.component.css'],
+    standalone: false
 })
 export class OpeningLossesHelpComponent implements OnInit {
   @Input()

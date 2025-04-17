@@ -6,9 +6,10 @@ import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-s
 import { ReportUtilityTotal } from '../../report-rollup-models';
 
 @Component({
-  selector: 'app-psat-summary',
-  templateUrl: './psat-summary.component.html',
-  styleUrls: ['./psat-summary.component.css', '../report-summary.component.css']
+    selector: 'app-psat-summary',
+    templateUrl: './psat-summary.component.html',
+    styleUrls: ['./psat-summary.component.css', '../report-summary.component.css'],
+    standalone: false
 })
 export class PsatSummaryComponent implements OnInit {
   @Input()

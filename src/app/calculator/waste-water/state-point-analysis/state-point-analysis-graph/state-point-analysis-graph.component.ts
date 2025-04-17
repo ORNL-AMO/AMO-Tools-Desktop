@@ -10,9 +10,10 @@ import { StatePointAnalysisOutput, StatePointAnalysisResults } from '../../../..
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-state-point-analysis-graph',
-  templateUrl: './state-point-analysis-graph.component.html',
-  styleUrls: ['./state-point-analysis-graph.component.css']
+    selector: 'app-state-point-analysis-graph',
+    templateUrl: './state-point-analysis-graph.component.html',
+    styleUrls: ['./state-point-analysis-graph.component.css'],
+    standalone: false
 })
 export class StatePointAnalysisGraphComponent implements OnInit {
 

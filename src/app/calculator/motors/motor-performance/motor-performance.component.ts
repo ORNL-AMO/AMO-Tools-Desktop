@@ -11,9 +11,10 @@ import { FSAT } from '../../../shared/models/fans';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-motor-performance',
-  templateUrl: './motor-performance.component.html',
-  styleUrls: ['./motor-performance.component.css']
+    selector: 'app-motor-performance',
+    templateUrl: './motor-performance.component.html',
+    styleUrls: ['./motor-performance.component.css'],
+    standalone: false
 })
 export class MotorPerformanceComponent implements OnInit {
   @Input()

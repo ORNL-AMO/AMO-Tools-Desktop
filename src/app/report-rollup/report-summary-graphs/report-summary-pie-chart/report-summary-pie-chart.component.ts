@@ -4,9 +4,10 @@ import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-report-summary-pie-chart',
-  templateUrl: './report-summary-pie-chart.component.html',
-  styleUrls: ['./report-summary-pie-chart.component.css']
+    selector: 'app-report-summary-pie-chart',
+    templateUrl: './report-summary-pie-chart.component.html',
+    styleUrls: ['./report-summary-pie-chart.component.css'],
+    standalone: false
 })
 export class ReportSummaryPieChartComponent implements OnInit {
 

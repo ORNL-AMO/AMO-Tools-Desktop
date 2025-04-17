@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from "angular-plotly.js";
 
 @Component({
-  selector: "app-opportunity-payback-bar-chart",
-  templateUrl: "./opportunity-payback-bar-chart.component.html",
-  styleUrls: ["./opportunity-payback-bar-chart.component.css"]
+    selector: "app-opportunity-payback-bar-chart",
+    templateUrl: "./opportunity-payback-bar-chart.component.html",
+    styleUrls: ["./opportunity-payback-bar-chart.component.css"],
+    standalone: false
 })
 export class OpportunityPaybackBarChartComponent implements OnInit {
   @Input()

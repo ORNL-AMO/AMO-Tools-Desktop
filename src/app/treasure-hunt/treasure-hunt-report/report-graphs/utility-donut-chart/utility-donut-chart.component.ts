@@ -5,9 +5,10 @@ import { graphColors } from '../../../../phast/phast-report/report-graphs/graphC
 import { SavingsItem } from '../../../../shared/models/treasure-hunt';
 
 @Component({
-  selector: 'app-utility-donut-chart',
-  templateUrl: './utility-donut-chart.component.html',
-  styleUrls: ['./utility-donut-chart.component.css']
+    selector: 'app-utility-donut-chart',
+    templateUrl: './utility-donut-chart.component.html',
+    styleUrls: ['./utility-donut-chart.component.css'],
+    standalone: false
 })
 export class UtilityDonutChartComponent implements OnInit {
   @Input()

@@ -37,9 +37,10 @@ import { Diagram } from '../../../shared/models/diagram';
 import { MockWaterdiagram, MockWaterDiagramSettings } from '../../../examples/mockWaterDiagram';
 
 @Component({
-  selector: 'app-reset-data-modal',
-  templateUrl: './reset-data-modal.component.html',
-  styleUrls: ['./reset-data-modal.component.css']
+    selector: 'app-reset-data-modal',
+    templateUrl: './reset-data-modal.component.html',
+    styleUrls: ['./reset-data-modal.component.css'],
+    standalone: false
 })
 export class ResetDataModalComponent implements OnInit {
   @Output('closeModal')

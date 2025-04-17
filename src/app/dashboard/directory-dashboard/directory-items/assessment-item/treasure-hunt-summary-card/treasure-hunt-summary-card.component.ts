@@ -8,9 +8,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AssessmentService } from '../../../../assessment.service';
 
 @Component({
-  selector: 'app-treasure-hunt-summary-card',
-  templateUrl: './treasure-hunt-summary-card.component.html',
-  styleUrls: ['./treasure-hunt-summary-card.component.css']
+    selector: 'app-treasure-hunt-summary-card',
+    templateUrl: './treasure-hunt-summary-card.component.html',
+    styleUrls: ['./treasure-hunt-summary-card.component.css'],
+    standalone: false
 })
 export class TreasureHuntSummaryCardComponent implements OnInit {
   @Input()

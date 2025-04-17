@@ -11,7 +11,8 @@ import { AssessmentService } from '../../../../assessment.service';
 @Component({
     selector: 'app-phast-summary-card',
     templateUrl: './phast-summary-card.component.html',
-    styleUrls: ['./phast-summary-card.component.css']
+    styleUrls: ['./phast-summary-card.component.css'],
+    standalone: false
 })
 export class PhastSummaryCardComponent implements OnInit {
     @Input()

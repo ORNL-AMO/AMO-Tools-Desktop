@@ -8,9 +8,10 @@ import { HeatCascadingService } from './heat-cascading.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-heat-cascading',
-  templateUrl: './heat-cascading.component.html',
-  styleUrls: ['./heat-cascading.component.css']
+    selector: 'app-heat-cascading',
+    templateUrl: './heat-cascading.component.html',
+    styleUrls: ['./heat-cascading.component.css'],
+    standalone: false
 })
 export class HeatCascadingComponent implements OnInit {
   @Input()

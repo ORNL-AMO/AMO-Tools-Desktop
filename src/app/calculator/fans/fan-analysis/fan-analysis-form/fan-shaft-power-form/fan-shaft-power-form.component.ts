@@ -12,9 +12,10 @@ import { GasDensityFormService } from '../gas-density-form/gas-density-form.serv
 import { FsatService } from '../../../../../fsat/fsat.service';
 
 @Component({
-  selector: 'app-fan-shaft-power-form',
-  templateUrl: './fan-shaft-power-form.component.html',
-  styleUrls: ['./fan-shaft-power-form.component.css']
+    selector: 'app-fan-shaft-power-form',
+    templateUrl: './fan-shaft-power-form.component.html',
+    styleUrls: ['./fan-shaft-power-form.component.css'],
+    standalone: false
 })
 export class FanShaftPowerFormComponent implements OnInit {
   @Input()

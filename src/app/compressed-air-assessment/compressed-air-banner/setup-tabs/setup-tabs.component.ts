@@ -8,9 +8,10 @@ import { InventoryService } from '../../inventory/inventory.service';
 import { SystemInformationFormService } from '../../system-information/system-information-form.service';
 
 @Component({
-  selector: 'app-setup-tabs',
-  templateUrl: './setup-tabs.component.html',
-  styleUrls: ['./setup-tabs.component.css']
+    selector: 'app-setup-tabs',
+    templateUrl: './setup-tabs.component.html',
+    styleUrls: ['./setup-tabs.component.css'],
+    standalone: false
 })
 export class SetupTabsComponent implements OnInit {
 

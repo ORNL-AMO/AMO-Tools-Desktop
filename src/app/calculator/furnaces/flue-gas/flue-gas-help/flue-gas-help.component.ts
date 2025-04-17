@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FlueGasService } from '../flue-gas.service';
 
 @Component({
-  selector: 'app-flue-gas-help',
-  templateUrl: './flue-gas-help.component.html',
-  styleUrls: ['./flue-gas-help.component.css']
+    selector: 'app-flue-gas-help',
+    templateUrl: './flue-gas-help.component.html',
+    styleUrls: ['./flue-gas-help.component.css'],
+    standalone: false
 })
 export class FlueGasHelpComponent implements OnInit {
   @Input()

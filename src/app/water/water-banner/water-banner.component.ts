@@ -9,6 +9,7 @@ import { Modification, WaterAssessment } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-banner',
+  standalone: false,
   templateUrl: './water-banner.component.html',
   styleUrl: './water-banner.component.css'
 })

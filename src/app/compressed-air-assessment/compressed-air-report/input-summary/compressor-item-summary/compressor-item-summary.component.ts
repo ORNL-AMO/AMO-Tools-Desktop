@@ -5,9 +5,10 @@ import { InventoryService } from '../../../inventory/inventory.service';
 import { PerformancePointsFormService } from '../../../inventory/performance-points/performance-points-form.service';
 
 @Component({
-  selector: 'app-compressor-item-summary',
-  templateUrl: './compressor-item-summary.component.html',
-  styleUrls: ['./compressor-item-summary.component.css']
+    selector: 'app-compressor-item-summary',
+    templateUrl: './compressor-item-summary.component.html',
+    styleUrls: ['./compressor-item-summary.component.css'],
+    standalone: false
 })
 export class CompressorItemSummaryComponent implements OnInit {
   @Input()

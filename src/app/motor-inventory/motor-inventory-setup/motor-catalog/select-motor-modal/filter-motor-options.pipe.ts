@@ -2,8 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { SuiteDbMotor } from '../../../../shared/models/materials';
 import * as _ from 'lodash';
 @Pipe({
-  name: 'filterMotorOptions',
-  pure: true
+    name: 'filterMotorOptions',
+    pure: true,
+    standalone: false
 })
 export class FilterMotorOptionsPipe implements PipeTransform {
 

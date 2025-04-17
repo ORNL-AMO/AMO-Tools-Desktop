@@ -4,8 +4,9 @@ import { Settings } from '../../../models/settings';
 @Component({
     selector: 'app-flue-gas-moisture-panel',
     templateUrl: './flue-gas-moisture-panel.component.html',
-    styleUrls: ['./flue-gas-moisture-panel.component.css']
-  })
+    styleUrls: ['./flue-gas-moisture-panel.component.css'],
+    standalone: false
+})
   
   export class FlueGasMoisturePanelComponent implements OnInit {
     @Input()

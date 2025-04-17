@@ -10,9 +10,10 @@ import { OpportunityCardsService, OpportunityCardData } from '../../opportunity-
 import { TreasureHuntService } from '../../../treasure-hunt.service';
 
 @Component({
-  selector: 'app-calculator-type-dropdown',
-  templateUrl: './calculator-type-dropdown.component.html',
-  styleUrls: ['./calculator-type-dropdown.component.css']
+    selector: 'app-calculator-type-dropdown',
+    templateUrl: './calculator-type-dropdown.component.html',
+    styleUrls: ['./calculator-type-dropdown.component.css'],
+    standalone: false
 })
 export class CalculatorTypeDropdownComponent implements OnInit {
   @Input()

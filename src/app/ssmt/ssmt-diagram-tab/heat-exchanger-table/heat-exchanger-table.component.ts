@@ -6,9 +6,10 @@ import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { SteamService } from '../../../calculator/steam/steam.service';
 
 @Component({
-  selector: 'app-heat-exchanger-table',
-  templateUrl: './heat-exchanger-table.component.html',
-  styleUrls: ['./heat-exchanger-table.component.css']
+    selector: 'app-heat-exchanger-table',
+    templateUrl: './heat-exchanger-table.component.html',
+    styleUrls: ['./heat-exchanger-table.component.css'],
+    standalone: false
 })
 export class HeatExchangerTableComponent implements OnInit {
   @Input()

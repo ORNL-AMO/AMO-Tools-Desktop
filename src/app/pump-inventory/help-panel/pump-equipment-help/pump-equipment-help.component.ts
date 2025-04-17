@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-pump-equipment-help',
-  templateUrl: './pump-equipment-help.component.html',
-  styleUrls: ['./pump-equipment-help.component.css']
+    selector: 'app-pump-equipment-help',
+    templateUrl: './pump-equipment-help.component.html',
+    styleUrls: ['./pump-equipment-help.component.css'],
+    standalone: false
 })
 export class PumpEquipmentHelpComponent {
 

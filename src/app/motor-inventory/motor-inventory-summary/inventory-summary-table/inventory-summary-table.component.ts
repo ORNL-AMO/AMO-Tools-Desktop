@@ -6,9 +6,10 @@ import { InventorySummaryTableService, InventorySummaryData } from './inventory-
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-inventory-summary-table',
-  templateUrl: './inventory-summary-table.component.html',
-  styleUrls: ['./inventory-summary-table.component.css']
+    selector: 'app-inventory-summary-table',
+    templateUrl: './inventory-summary-table.component.html',
+    styleUrls: ['./inventory-summary-table.component.css'],
+    standalone: false
 })
 export class InventorySummaryTableComponent implements OnInit {
   inventorySummaryData: InventorySummaryData;

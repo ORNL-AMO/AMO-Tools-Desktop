@@ -7,9 +7,10 @@ import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/sec
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 @Component({
-  selector: 'app-phast-banner',
-  templateUrl: './phast-banner.component.html',
-  styleUrls: ['./phast-banner.component.css']
+    selector: 'app-phast-banner',
+    templateUrl: './phast-banner.component.html',
+    styleUrls: ['./phast-banner.component.css'],
+    standalone: false
 })
 export class PhastBannerComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { ManualSpecificationOptions, MotorInventoryData } from '../../../motor-i
 import { MotorInventoryService } from '../../../motor-inventory.service';
 
 @Component({
-  selector: 'app-manual-specification-properties',
-  templateUrl: './manual-specification-properties.component.html',
-  styleUrls: ['./manual-specification-properties.component.css']
+    selector: 'app-manual-specification-properties',
+    templateUrl: './manual-specification-properties.component.html',
+    styleUrls: ['./manual-specification-properties.component.css'],
+    standalone: false
 })
 export class ManualSpecificationPropertiesComponent implements OnInit {
 

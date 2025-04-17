@@ -20,9 +20,10 @@ import { PumpInventoryService } from '../../pump-inventory/pump-inventory.servic
 import { AnalyticsService } from '../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-create-inventory',
-  templateUrl: './create-inventory.component.html',
-  styleUrls: ['./create-inventory.component.css']
+    selector: 'app-create-inventory',
+    templateUrl: './create-inventory.component.html',
+    styleUrls: ['./create-inventory.component.css'],
+    standalone: false
 })
 export class CreateInventoryComponent implements OnInit {
   @Input()

@@ -11,9 +11,10 @@ import { ChargeMaterialService } from '../charge-material.service';
 import { GasMaterialFormService } from './gas-material-form.service';
 
 @Component({
-  selector: 'app-gas-material-form',
-  templateUrl: './gas-material-form.component.html',
-  styleUrls: ['./gas-material-form.component.css']
+    selector: 'app-gas-material-form',
+    templateUrl: './gas-material-form.component.html',
+    styleUrls: ['./gas-material-form.component.css'],
+    standalone: false
 })
 export class GasMaterialFormComponent implements OnInit {
 

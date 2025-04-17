@@ -10,9 +10,10 @@ import _ from 'lodash';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
-  selector: 'app-motor-inventory-banner',
-  templateUrl: './motor-inventory-banner.component.html',
-  styleUrls: ['./motor-inventory-banner.component.css']
+    selector: 'app-motor-inventory-banner',
+    templateUrl: './motor-inventory-banner.component.html',
+    styleUrls: ['./motor-inventory-banner.component.css'],
+    standalone: false
 })
 export class MotorInventoryBannerComponent implements OnInit {
   @Input()

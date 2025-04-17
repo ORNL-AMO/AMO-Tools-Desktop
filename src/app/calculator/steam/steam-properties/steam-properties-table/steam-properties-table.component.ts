@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 
 @Component({
-  selector: 'app-steam-properties-table',
-  templateUrl: './steam-properties-table.component.html',
-  styleUrls: ['./steam-properties-table.component.css']
+    selector: 'app-steam-properties-table',
+    templateUrl: './steam-properties-table.component.html',
+    styleUrls: ['./steam-properties-table.component.css'],
+    standalone: false
 })
 export class SteamPropertiesTableComponent implements OnInit {
   @Input()

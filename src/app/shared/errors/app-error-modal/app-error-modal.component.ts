@@ -6,9 +6,10 @@ import { AppErrorService } from '../app-error.service';
 
 
 @Component({
-  selector: 'app-error-modal',
-  templateUrl: './app-error-modal.component.html',
-  styleUrl: './app-error-modal.component.css'
+    selector: 'app-error-modal',
+    templateUrl: './app-error-modal.component.html',
+    styleUrl: './app-error-modal.component.css',
+    standalone: false
 })
 export class AppErrorModalComponent {
   @Output('emitModalClosed')

@@ -8,9 +8,10 @@ import { StatePointAnalysisService } from './state-point-analysis.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-state-point-analysis',
-  templateUrl: './state-point-analysis.component.html',
-  styleUrls: ['./state-point-analysis.component.css']
+    selector: 'app-state-point-analysis',
+    templateUrl: './state-point-analysis.component.html',
+    styleUrls: ['./state-point-analysis.component.css'],
+    standalone: false
 })
 export class StatePointAnalysisComponent implements OnInit {
   @Input()

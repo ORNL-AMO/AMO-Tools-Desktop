@@ -6,9 +6,10 @@ import { BaseGasDensity, PsychrometricResults } from '../../../../shared/models/
 
 
 @Component({
-  selector: 'app-fan-psychrometric-table',
-  templateUrl: './fan-psychrometric-table.component.html',
-  styleUrls: ['./fan-psychrometric-table.component.css']
+    selector: 'app-fan-psychrometric-table',
+    templateUrl: './fan-psychrometric-table.component.html',
+    styleUrls: ['./fan-psychrometric-table.component.css'],
+    standalone: false
 })
 export class FanPsychrometricTableComponent implements OnInit {
   @Input()

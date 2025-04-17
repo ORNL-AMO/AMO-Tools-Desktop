@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FSAT, BaseGasDensity } from '../../../../shared/models/fans';
 
 @Component({
-  selector: 'app-base-gas-density-summary',
-  templateUrl: './base-gas-density-summary.component.html',
-  styleUrls: ['./base-gas-density-summary.component.css']
+    selector: 'app-base-gas-density-summary',
+    templateUrl: './base-gas-density-summary.component.html',
+    styleUrls: ['./base-gas-density-summary.component.css'],
+    standalone: false
 })
 export class BaseGasDensitySummaryComponent implements OnInit {
   @Input()

@@ -9,9 +9,10 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 import { TraceData } from '../../../shared/models/plotting';
 
 @Component({
-  selector: 'app-fan-psychrometric',
-  templateUrl: './fan-psychrometric.component.html',
-  styleUrls: ['./fan-psychrometric.component.css']
+    selector: 'app-fan-psychrometric',
+    templateUrl: './fan-psychrometric.component.html',
+    styleUrls: ['./fan-psychrometric.component.css'],
+    standalone: false
 })
 export class FanPsychrometricComponent implements OnInit {
 

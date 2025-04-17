@@ -5,10 +5,11 @@ import { LossTab } from '../../tabs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 
 @Component({
-  selector: 'app-losses-result-panel',
-  templateUrl: './losses-result-panel.component.html',
-  styleUrls: ['./losses-result-panel.component.css'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-losses-result-panel',
+    templateUrl: './losses-result-panel.component.html',
+    styleUrls: ['./losses-result-panel.component.css'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class LossesResultPanelComponent implements OnInit {
   @Input()

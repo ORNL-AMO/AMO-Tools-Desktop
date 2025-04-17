@@ -8,9 +8,10 @@ import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 import { firstValueFrom } from 'rxjs';
 @Component({
-  selector: 'app-solid-liquid-flue-gas-material',
-  templateUrl: './solid-liquid-flue-gas-material.component.html',
-  styleUrls: ['./solid-liquid-flue-gas-material.component.css']
+    selector: 'app-solid-liquid-flue-gas-material',
+    templateUrl: './solid-liquid-flue-gas-material.component.html',
+    styleUrls: ['./solid-liquid-flue-gas-material.component.css'],
+    standalone: false
 })
 export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   @Output('closeModal')

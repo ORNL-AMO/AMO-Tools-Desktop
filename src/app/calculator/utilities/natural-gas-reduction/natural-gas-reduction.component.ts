@@ -8,9 +8,10 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-natural-gas-reduction',
-  templateUrl: './natural-gas-reduction.component.html',
-  styleUrls: ['./natural-gas-reduction.component.css']
+    selector: 'app-natural-gas-reduction',
+    templateUrl: './natural-gas-reduction.component.html',
+    styleUrls: ['./natural-gas-reduction.component.css'],
+    standalone: false
 })
 export class NaturalGasReductionComponent implements OnInit {
   @Input()

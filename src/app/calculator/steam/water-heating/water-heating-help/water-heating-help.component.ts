@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { WaterHeatingService } from '../water-heating.service';
 
 @Component({
-  selector: 'app-water-heating-help',
-  templateUrl: './water-heating-help.component.html',
-  styleUrls: ['./water-heating-help.component.css']
+    selector: 'app-water-heating-help',
+    templateUrl: './water-heating-help.component.html',
+    styleUrls: ['./water-heating-help.component.css'],
+    standalone: false
 })
 export class WaterHeatingHelpComponent implements OnInit {
 

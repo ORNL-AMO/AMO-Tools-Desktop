@@ -3,9 +3,10 @@ import { DesignedEnergyResults } from '../../../shared/models/phast/designedEner
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-designed-energy-results',
-  templateUrl: './designed-energy-results.component.html',
-  styleUrls: ['./designed-energy-results.component.css']
+    selector: 'app-designed-energy-results',
+    templateUrl: './designed-energy-results.component.html',
+    styleUrls: ['./designed-energy-results.component.css'],
+    standalone: false
 })
 export class DesignedEnergyResultsComponent implements OnInit {
   @Input()

@@ -6,9 +6,10 @@ import { ReportUtilityTotal } from '../../report-rollup-models';
 import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
 
 @Component({
-  selector: 'app-compressed-air-summary',
-  templateUrl: './compressed-air-summary.component.html',
-  styleUrls: ['./compressed-air-summary.component.css', '../report-summary.component.css']
+    selector: 'app-compressed-air-summary',
+    templateUrl: './compressed-air-summary.component.html',
+    styleUrls: ['./compressed-air-summary.component.css', '../report-summary.component.css'],
+    standalone: false
 })
 export class CompressedAirSummaryComponent implements OnInit {
   @Input()

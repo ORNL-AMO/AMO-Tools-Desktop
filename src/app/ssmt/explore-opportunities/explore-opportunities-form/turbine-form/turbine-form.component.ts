@@ -6,9 +6,10 @@ import { TurbineService } from '../../../turbine/turbine.service';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-turbine-form',
-  templateUrl: './turbine-form.component.html',
-  styleUrls: ['./turbine-form.component.css']
+    selector: 'app-turbine-form',
+    templateUrl: './turbine-form.component.html',
+    styleUrls: ['./turbine-form.component.css'],
+    standalone: false
 })
 export class TurbineFormComponent implements OnInit {
   @Input()

@@ -11,9 +11,10 @@ import { FieldDataService } from './field-data.service';
 import { PsatService } from '../psat.service';
 
 @Component({
-  selector: 'app-field-data',
-  templateUrl: './field-data.component.html',
-  styleUrls: ['./field-data.component.css']
+    selector: 'app-field-data',
+    templateUrl: './field-data.component.html',
+    styleUrls: ['./field-data.component.css'],
+    standalone: false
 })
 export class FieldDataComponent implements OnInit {
   @Input()

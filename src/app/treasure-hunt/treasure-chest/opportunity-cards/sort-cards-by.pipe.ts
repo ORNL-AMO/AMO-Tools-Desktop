@@ -4,8 +4,9 @@ import { OpportunityCardData } from './opportunity-cards.service';
 import { SortCardsService } from './sort-cards.service';
 
 @Pipe({
-  name: 'sortCardsBy',
-  pure: true
+    name: 'sortCardsBy',
+    pure: true,
+    standalone: false
 })
 export class SortCardsByPipe implements PipeTransform {
 

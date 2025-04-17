@@ -7,9 +7,10 @@ import { MotorInventorySummaryService } from '../../../motor-inventory-summary/m
 import { InventorySummaryGraphsService } from '../../../motor-inventory-summary/inventory-summary-graphs/inventory-summary-graphs.service';
 import * as _ from 'lodash';
 @Component({
-  selector: 'app-rated-power-dropdown',
-  templateUrl: './rated-power-dropdown.component.html',
-  styleUrls: ['./rated-power-dropdown.component.css']
+    selector: 'app-rated-power-dropdown',
+    templateUrl: './rated-power-dropdown.component.html',
+    styleUrls: ['./rated-power-dropdown.component.css'],
+    standalone: false
 })
 export class RatedPowerDropdownComponent implements OnInit {
 

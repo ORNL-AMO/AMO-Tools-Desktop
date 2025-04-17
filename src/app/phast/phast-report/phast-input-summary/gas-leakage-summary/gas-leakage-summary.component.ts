@@ -2,9 +2,10 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
-  selector: 'app-gas-leakage-summary',
-  templateUrl: './gas-leakage-summary.component.html',
-  styleUrls: ['./gas-leakage-summary.component.css']
+    selector: 'app-gas-leakage-summary',
+    templateUrl: './gas-leakage-summary.component.html',
+    styleUrls: ['./gas-leakage-summary.component.css'],
+    standalone: false
 })
 export class GasLeakageSummaryComponent implements OnInit {
   @Input()

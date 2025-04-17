@@ -9,9 +9,10 @@ import { CoolingTowerMakeupWaterTreasureHunt, Treasure } from '../../../shared/m
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-cooling-tower',
-  templateUrl: './cooling-tower.component.html',
-  styleUrls: ['./cooling-tower.component.css']
+    selector: 'app-cooling-tower',
+    templateUrl: './cooling-tower.component.html',
+    styleUrls: ['./cooling-tower.component.css'],
+    standalone: false
 })
 export class CoolingTowerComponent implements OnInit {
 

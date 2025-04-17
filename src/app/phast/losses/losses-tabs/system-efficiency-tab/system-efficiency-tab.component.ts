@@ -5,9 +5,10 @@ import { HeatSystemEfficiencyCompareService } from '../../heat-system-efficiency
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-system-efficiency-tab',
-  templateUrl: './system-efficiency-tab.component.html',
-  styleUrls: ['./system-efficiency-tab.component.css']
+    selector: 'app-system-efficiency-tab',
+    templateUrl: './system-efficiency-tab.component.html',
+    styleUrls: ['./system-efficiency-tab.component.css'],
+    standalone: false
 })
 export class SystemEfficiencyTabComponent implements OnInit {
   @Input()

@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-slag-form',
-  templateUrl: './slag-form.component.html',
-  styleUrls: ['./slag-form.component.css']
+    selector: 'app-slag-form',
+    templateUrl: './slag-form.component.html',
+    styleUrls: ['./slag-form.component.css'],
+    standalone: false
 })
 export class SlagFormComponent implements OnInit {
   @Input()

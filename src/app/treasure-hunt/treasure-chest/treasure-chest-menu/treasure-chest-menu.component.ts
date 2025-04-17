@@ -6,19 +6,20 @@ import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
-  selector: 'app-treasure-chest-menu',
-  templateUrl: './treasure-chest-menu.component.html',
-  styleUrls: ['./treasure-chest-menu.component.css'],
-  animations: [
-    trigger('menuModal', [
-      state('show', style({
-        top: '20px',
-        bottom: '20px'
-      })),
-      transition('hide => show', animate('.5s ease-in')),
-      transition('show => hide', animate('.5s ease-out'))
-    ])
-  ]
+    selector: 'app-treasure-chest-menu',
+    templateUrl: './treasure-chest-menu.component.html',
+    styleUrls: ['./treasure-chest-menu.component.css'],
+    animations: [
+        trigger('menuModal', [
+            state('show', style({
+                top: '20px',
+                bottom: '20px'
+            })),
+            transition('hide => show', animate('.5s ease-in')),
+            transition('show => hide', animate('.5s ease-out'))
+        ])
+    ],
+    standalone: false
 })
 export class TreasureChestMenuComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { DeaeratorService, DeaeratorRanges } from '../deaerator.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-deaerator-help',
-  templateUrl: './deaerator-help.component.html',
-  styleUrls: ['./deaerator-help.component.css']
+    selector: 'app-deaerator-help',
+    templateUrl: './deaerator-help.component.html',
+    styleUrls: ['./deaerator-help.component.css'],
+    standalone: false
 })
 export class DeaeratorHelpComponent implements OnInit {
   @Input()

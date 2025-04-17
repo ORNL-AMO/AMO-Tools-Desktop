@@ -7,6 +7,7 @@ import { WaterAssessment } from 'process-flow-lib';
 
 @Component({
   selector: 'app-setup-tabs',
+  standalone: false,
   templateUrl: './setup-tabs.component.html',
   styleUrl: './setup-tabs.component.css'
 })

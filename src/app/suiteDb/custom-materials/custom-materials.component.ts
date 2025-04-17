@@ -6,9 +6,10 @@ import { ImportExportService } from '../../shared/import-export/import-export.se
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
-  selector: 'app-custom-materials',
-  templateUrl: './custom-materials.component.html',
-  styleUrls: ['./custom-materials.component.css']
+    selector: 'app-custom-materials',
+    templateUrl: './custom-materials.component.html',
+    styleUrls: ['./custom-materials.component.css'],
+    standalone: false
 })
 export class CustomMaterialsComponent implements OnInit {
 

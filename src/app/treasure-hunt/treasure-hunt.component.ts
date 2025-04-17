@@ -19,9 +19,10 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-treasure-hunt',
-  templateUrl: './treasure-hunt.component.html',
-  styleUrls: ['./treasure-hunt.component.css']
+    selector: 'app-treasure-hunt',
+    templateUrl: './treasure-hunt.component.html',
+    styleUrls: ['./treasure-hunt.component.css'],
+    standalone: false
 })
 export class TreasureHuntComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;

@@ -7,9 +7,10 @@ import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 
 @Component({
-  selector: 'app-report-rollup-modals',
-  templateUrl: './report-rollup-modals.component.html',
-  styleUrls: ['./report-rollup-modals.component.css']
+    selector: 'app-report-rollup-modals',
+    templateUrl: './report-rollup-modals.component.html',
+    styleUrls: ['./report-rollup-modals.component.css'],
+    standalone: false
 })
 export class ReportRollupModalsComponent implements OnInit {
 

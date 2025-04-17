@@ -8,9 +8,10 @@ import { WaterHeatingFormService, WaterHeatingWarnings } from '../water-heating-
 import { WaterHeatingService } from '../water-heating.service';
 
 @Component({
-  selector: 'app-water-heating-form',
-  templateUrl: './water-heating-form.component.html',
-  styleUrls: ['./water-heating-form.component.css']
+    selector: 'app-water-heating-form',
+    templateUrl: './water-heating-form.component.html',
+    styleUrls: ['./water-heating-form.component.css'],
+    standalone: false
 })
 export class WaterHeatingFormComponent implements OnInit {
   @Input()

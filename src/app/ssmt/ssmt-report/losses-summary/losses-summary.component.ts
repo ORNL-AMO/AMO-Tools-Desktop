@@ -8,9 +8,10 @@ import { SsmtReportRollupService } from '../../../report-rollup/ssmt-report-roll
 
 
 @Component({
-  selector: 'app-losses-summary',
-  templateUrl: './losses-summary.component.html',
-  styleUrls: ['./losses-summary.component.css']
+    selector: 'app-losses-summary',
+    templateUrl: './losses-summary.component.html',
+    styleUrls: ['./losses-summary.component.css'],
+    standalone: false
 })
 export class LossesSummaryComponent implements OnInit {
   @Input()

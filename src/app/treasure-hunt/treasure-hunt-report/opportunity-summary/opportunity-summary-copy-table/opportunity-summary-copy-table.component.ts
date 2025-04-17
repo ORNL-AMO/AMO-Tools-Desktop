@@ -9,9 +9,10 @@ import * as fs from 'file-saver';
 import * as betterPlantsImg from './better-plants-img.js';
 
 @Component({
-  selector: 'app-opportunity-summary-copy-table',
-  templateUrl: './opportunity-summary-copy-table.component.html',
-  styleUrls: ['./opportunity-summary-copy-table.component.css']
+    selector: 'app-opportunity-summary-copy-table',
+    templateUrl: './opportunity-summary-copy-table.component.html',
+    styleUrls: ['./opportunity-summary-copy-table.component.css'],
+    standalone: false
 })
 export class OpportunitySummaryCopyTableComponent implements OnInit {
   @Input()

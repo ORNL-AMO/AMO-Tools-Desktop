@@ -8,9 +8,10 @@ import { BatchAnalysisService } from '../../batch-analysis/batch-analysis.servic
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 
 @Component({
-  selector: 'app-department-catalog-table',
-  templateUrl: './department-catalog-table.component.html',
-  styleUrls: ['./department-catalog-table.component.css']
+    selector: 'app-department-catalog-table',
+    templateUrl: './department-catalog-table.component.html',
+    styleUrls: ['./department-catalog-table.component.css'],
+    standalone: false
 })
 export class DepartmentCatalogTableComponent implements OnInit {
 

@@ -6,9 +6,10 @@ import { Settings } from '../../../shared/models/settings';
 
 
 @Component({
-  selector: 'app-pump-inventory-summary-overview',
-  templateUrl: './inventory-summary-overview.component.html',
-  styleUrls: ['./inventory-summary-overview.component.css']
+    selector: 'app-pump-inventory-summary-overview',
+    templateUrl: './inventory-summary-overview.component.html',
+    styleUrls: ['./inventory-summary-overview.component.css'],
+    standalone: false
 })
 export class InventorySummaryOverviewComponent implements OnInit {
   filterInventorySummarySub: Subscription;

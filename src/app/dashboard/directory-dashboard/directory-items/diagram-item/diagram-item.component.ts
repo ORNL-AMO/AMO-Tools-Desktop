@@ -16,6 +16,7 @@ import { WaterDiagramConnectionsService } from '../../../../water-process-diagra
 
 @Component({
   selector: 'app-diagram-item',
+  standalone: false,
   templateUrl: './diagram-item.component.html',
   styleUrl: './diagram-item.component.css'
 })

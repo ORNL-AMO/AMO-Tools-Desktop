@@ -7,6 +7,7 @@ import { WaterUsingSystem, WaterAssessment, WaterProcessComponent, WaterTreatmen
 
 @Component({
   selector: 'app-water-using-system',
+  standalone: false,
   templateUrl: './water-using-system.component.html',
   styleUrl: './water-using-system.component.css'
 })

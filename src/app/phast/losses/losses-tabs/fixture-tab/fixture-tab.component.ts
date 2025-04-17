@@ -8,9 +8,10 @@ import { Subscription } from 'rxjs';
 import { FixtureFormService } from '../../../../calculator/furnaces/fixture/fixture-form.service';
 
 @Component({
-  selector: 'app-fixture-tab',
-  templateUrl: './fixture-tab.component.html',
-  styleUrls: ['./fixture-tab.component.css']
+    selector: 'app-fixture-tab',
+    templateUrl: './fixture-tab.component.html',
+    styleUrls: ['./fixture-tab.component.css'],
+    standalone: false
 })
 export class FixtureTabComponent implements OnInit {
   @Input()

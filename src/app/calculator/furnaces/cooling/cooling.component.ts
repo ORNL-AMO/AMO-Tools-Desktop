@@ -8,9 +8,10 @@ import { CoolingService } from './cooling.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-cooling',
-  templateUrl: './cooling.component.html',
-  styleUrls: ['./cooling.component.css']
+    selector: 'app-cooling',
+    templateUrl: './cooling.component.html',
+    styleUrls: ['./cooling.component.css'],
+    standalone: false
 })
 export class CoolingComponent implements OnInit {
 

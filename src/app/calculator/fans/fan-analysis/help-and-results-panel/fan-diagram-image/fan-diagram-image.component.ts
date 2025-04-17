@@ -5,9 +5,10 @@ import { FanAnalysisService } from '../../fan-analysis.service';
 import { PlaneDataFormService } from '../../fan-analysis-form/plane-data-form/plane-data-form.service';
 
 @Component({
-  selector: 'app-fan-diagram-image',
-  templateUrl: './fan-diagram-image.component.html',
-  styleUrls: ['./fan-diagram-image.component.css']
+    selector: 'app-fan-diagram-image',
+    templateUrl: './fan-diagram-image.component.html',
+    styleUrls: ['./fan-diagram-image.component.css'],
+    standalone: false
 })
 export class FanDiagramImageComponent implements OnInit {
   fanRatedInfo: FanRatedInfo;

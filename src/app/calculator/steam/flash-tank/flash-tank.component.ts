@@ -9,9 +9,10 @@ import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-flash-tank-calculator',
-  templateUrl: './flash-tank.component.html',
-  styleUrls: ['./flash-tank.component.css']
+    selector: 'app-flash-tank-calculator',
+    templateUrl: './flash-tank.component.html',
+    styleUrls: ['./flash-tank.component.css'],
+    standalone: false
 })
 export class FlashTankComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { OpportunitySheet } from '../../../../shared/models/treasure-hunt';
 import { processEquipmentOptions } from './processEquipmentOptions';
 
 @Component({
-  selector: 'app-general-details-form',
-  templateUrl: './general-details-form.component.html',
-  styleUrls: ['./general-details-form.component.css']
+    selector: 'app-general-details-form',
+    templateUrl: './general-details-form.component.html',
+    styleUrls: ['./general-details-form.component.css'],
+    standalone: false
 })
 export class GeneralDetailsFormComponent implements OnInit {
   @Input()

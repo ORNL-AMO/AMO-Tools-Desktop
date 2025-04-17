@@ -8,6 +8,7 @@ import { WaterBalanceResults, getWaterBalanceResults } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-balance-results-table',
+  standalone: false,
   templateUrl: './water-balance-results-table.component.html',
   styleUrl: './water-balance-results-table.component.css'
 })

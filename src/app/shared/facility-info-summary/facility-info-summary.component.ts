@@ -4,9 +4,10 @@ import { FacilityInfo } from '../models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
-  selector: 'app-facility-info-summary',
-  templateUrl: './facility-info-summary.component.html',
-  styleUrls: ['./facility-info-summary.component.css']
+    selector: 'app-facility-info-summary',
+    templateUrl: './facility-info-summary.component.html',
+    styleUrls: ['./facility-info-summary.component.css'],
+    standalone: false
 })
 export class FacilityInfoSummaryComponent implements OnInit {
   @Input()

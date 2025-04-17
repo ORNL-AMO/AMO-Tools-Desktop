@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-utility-bar-chart',
-  templateUrl: './utility-bar-chart.component.html',
-  styleUrls: ['./utility-bar-chart.component.css']
+    selector: 'app-utility-bar-chart',
+    templateUrl: './utility-bar-chart.component.html',
+    styleUrls: ['./utility-bar-chart.component.css'],
+    standalone: false
 })
 export class UtilityBarChartComponent implements OnInit {
   @Input()

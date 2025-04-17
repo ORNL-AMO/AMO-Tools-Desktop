@@ -12,9 +12,10 @@ import { O2EnrichmentFormService } from './o2-enrichment-form.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-o2-enrichment',
-  templateUrl: './o2-enrichment.component.html',
-  styleUrls: ['./o2-enrichment.component.css']
+    selector: 'app-o2-enrichment',
+    templateUrl: './o2-enrichment.component.html',
+    styleUrls: ['./o2-enrichment.component.css'],
+    standalone: false
 })
 export class O2EnrichmentComponent implements OnInit {
   @Input()
