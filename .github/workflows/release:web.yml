@@ -1,0 +1,34 @@
+name: "Release: Web"
+
+on:
+  workflow_call:
+
+jobs:
+  call_build:
+    if: github.ref_name == 'develop' || github.ref_name == 'master'
+    uses: ./.github/workflows/template:build.yml
+    with:
+      artifact-name: dist
+      artifact-path: dist
+
+  call_deploy-dev:
+    if: github.ref_name == 'develop'
+    needs: call_build
+    uses: ./.github/workflows/template:deploy.yml
+    with:
+      app-dir: measur
+      artifact-name: dist
+      backup-dir: /opt/actions-runner/backups
+      deploy-dir: /var/www/html
+      tag: dev
+
+  call_deploy-prod:
+    if: github.ref_name == 'master'
+    needs: call_build
+    uses: ./.github/workflows/template:deploy.yml
+    with:
+      app-dir: measur
+      artifact-name: dist
+      backup-dir: /opt/actions-runner/backups
+      deploy-dir: /var/www/html
+      tag: prod
