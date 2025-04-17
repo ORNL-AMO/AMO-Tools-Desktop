@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Settings } from '../shared/models/settings';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
-import { WaterDiagramConnectionsService } from './water-diagram-connections.service';
+import { UpdateDiagramFromAssessmentService } from './update-diagram-from-assessment.service';
 import { WaterDiagram, ParentContainerDimensions } from 'process-flow-lib';
 
 @Component({
@@ -42,7 +42,7 @@ export class WaterProcessDiagramComponent {
   
   constructor( 
     private waterProcessDiagramService: WaterProcessDiagramService,
-    private waterDiagramConnectionsService: WaterDiagramConnectionsService,
+    private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService,
     private diagramIdbService: DiagramIdbService,
     private settingsDbService: SettingsDbService, 
     private activatedRoute: ActivatedRoute,
@@ -86,7 +86,7 @@ export class WaterProcessDiagramComponent {
   async initDiagram(id: number) {
     this.diagram = this.diagramIdbService.findById(id);
     this.diagram.waterDiagram.assessmentId = this.diagram.assessmentId;
-    this.waterDiagramConnectionsService.syncDiagramToAssessment(this.diagram, this.integratedDiagram)
+    this.updateDiagramFromAssessmentService.syncDiagramToAssessment(this.diagram, this.integratedDiagram)
     this.setSettings();
     this.waterProcessDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
   }

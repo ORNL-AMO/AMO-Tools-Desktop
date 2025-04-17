@@ -8,7 +8,7 @@ import { WaterDiagramComponent } from './water-diagram/water-diagram.component';
 import { RouterModule } from '@angular/router';
 import { WaterProcessDiagramService } from './water-process-diagram.service';
 import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
-import { WaterDiagramConnectionsService } from './water-diagram-connections.service';
+import { UpdateDiagramFromAssessmentService } from './update-diagram-from-assessment.service';
 
 
 
@@ -30,7 +30,7 @@ import { WaterDiagramConnectionsService } from './water-diagram-connections.serv
   ],
   providers: [
     WaterProcessDiagramService,
-    WaterDiagramConnectionsService
+    UpdateDiagramFromAssessmentService
   ]
 })
 export class WaterProcessDiagramModule { }

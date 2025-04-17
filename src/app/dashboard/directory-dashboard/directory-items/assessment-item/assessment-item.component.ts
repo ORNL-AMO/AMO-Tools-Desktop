@@ -16,7 +16,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { PsatIntegrationService } from '../../../../shared/connected-inventory/psat-integration.service';
-import { WaterAssessmentConnectionsService } from '../../../../water/water-assessment-connections.service';
+import { UpdateAssessmentFromDiagramService } from '../../../../water/update-assessment-from-diagram.service';
 
 @Component({
     selector: 'app-assessment-item',
@@ -43,7 +43,7 @@ export class AssessmentItemComponent implements OnInit {
        private formBuilder: UntypedFormBuilder,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService,
-    private waterAssessmentConnectionsService: WaterAssessmentConnectionsService,
+    private updateAssessmentFromDiagramService: UpdateAssessmentFromDiagramService,
     private psatIntegrationService: PsatIntegrationService,
     private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService) { }
 
@@ -230,7 +230,7 @@ export class AssessmentItemComponent implements OnInit {
   removeDiagramConnection() {
     if (this.assessment.diagramId) {
       if (this.assessment.type === 'Water') {
-        this.waterAssessmentConnectionsService.disconnectDiagram(this.assessment.diagramId);
+        this.updateAssessmentFromDiagramService.disconnectDiagram(this.assessment.diagramId);
       } 
     }
   }

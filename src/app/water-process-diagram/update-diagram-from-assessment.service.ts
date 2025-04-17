@@ -11,7 +11,7 @@ import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { Assessment } from '../shared/models/assessment';
 
 @Injectable()
-export class WaterDiagramConnectionsService {
+export class UpdateDiagramFromAssessmentService {
 
   constructor(private diagramIdbService: DiagramIdbService,
     private settingsDbService: SettingsDbService,
@@ -49,7 +49,8 @@ export class WaterDiagramConnectionsService {
     );
 
     this.updateDiagramEdgesFromAssessment(diagram.waterDiagram, waterAssessment);
-    this.filterDeletedEdges(diagram.waterDiagram, waterAssessment, assessmentNodes);
+    // todo since water sources UI is not fully supported
+    // this.filterDeletedEdges(diagram.waterDiagram, waterAssessment, assessmentNodes);
 
     diagram.waterDiagram.flowDiagramData.nodes = assessmentNodes;
   }
