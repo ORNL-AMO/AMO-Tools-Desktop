@@ -1,0 +1,266 @@
+<div class="d-flex w-100 justify-content-center">
+    <table #copyTable1 class="table table-hover table-striped">
+        <thead>
+            <th></th>
+            <th class="bold text-center">Present Value</th>
+            <th class="bold text-center">Annual Worth</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="bold text-center">Total Costs</td>
+                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.totalCosts"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.totalCosts |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.totalCosts"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+                </td>
+                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.totalCosts"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.totalCosts |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.totalCosts"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center">Capital</td>
+                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.capital"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.capital |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.capital"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+                </td>
+                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.capital"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.capital |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.capital"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+            </tr>
+            <tr>
+                <td class="text-center">Operating</td>
+                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.operating"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.operating |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.operating"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+                </td>
+                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.operating"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.operating |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.operating"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+            </tr>
+            <tr>
+                <td class="text-center">Disposal</td>
+                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.disposal"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.disposal |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.disposal"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+                </td>
+                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.disposal"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.disposal |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.disposal"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+            </tr>
+            <tr>
+                <td class="text-center">Other Savings</td>
+                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.otherSavings"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.otherSavings |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.otherSavings"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+                </td>
+                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.otherSavings"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.otherSavings |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.otherSavings"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+            </tr>
+            <tr></tr>
+            <tr>
+                <td class="bold text-center">Total Savings</td>
+                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.totalSavings"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.totalSavings |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.totalSavings"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+                </td>
+                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.totalSavings"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.totalSavings |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.totalSavings"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+            </tr>
+            <tr>
+                <td class="text-center">Energy</td>
+                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.energy"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.energy |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.energy"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+                </td>
+                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.energy"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.energy |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.energy"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+            </tr>
+            <tr>
+                <td class="text-center">Other Costs</td>
+                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.otherCosts"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.otherCosts |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.otherCosts"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+                </td>
+                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.otherCosts"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.otherCosts |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.otherCosts"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+            </tr>
+            <tr>
+                <td class="text-center">Salvage</td>
+                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.salvage"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.salvage |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.salvage"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+                </td>
+                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.salvage"
+                    class="text-center text-center">
+                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.salvage |
+                    currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.salvage"
+                    class="text-center text-center">
+                    &mdash; &mdash;
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="d-flex w-100 justify-content-center">
+    <app-exportable-results-table [tableString]="tableString1" (updateTableString)="updateTableString1()">
+    </app-exportable-results-table>
+</div>
+
+<div class="d-flex w-100 justify-content-center">
+    <table #copyTable2 class="table table-hover table-striped">
+        <tbody>
+            <tr>
+                <td class="text-center w-50">Net Present Value</td>
+                <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.netPresentValue"
+                    class="text-center w-50 text-center">
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.netPresentValue | currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.netPresentValue"
+                    class="text-center w-50 text-center">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center w-50">Annual Worth</td>
+                <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth" class="text-center w-50">
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth | currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth"
+                    class="text-center w-50 text-center">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center w-50">Simple Payback</td>
+                <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.payback" class="text-center w-50">
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.payback}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.payback"
+                    class="text-center w-50 text-center">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center w-50">SIR</td>
+                <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.sir" class="text-center w-50">
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.sir}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.sir" class="text-center w-50 text-center">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center w-50">IRR</td>
+                <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.irr" class="text-center w-50">
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.irr}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.irr" class="text-center w-50 text-center">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center w-50">ROI</td>
+                <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.roi" class="text-center w-50">
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.roi}}
+                </td>
+                <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.roi" class="text-center w-50 text-center">
+                    &mdash; &mdash;
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="d-flex w-100 justify-content-center">
+    <app-exportable-results-table [tableString]="tableString2" (updateTableString)="updateTableString2()">
+    </app-exportable-results-table>
+</div>

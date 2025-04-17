@@ -40,6 +40,11 @@
       <div class="d-flex flex-wrap tabs primary sticky-top">
         <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
           <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+            <div>Results</div>
+          </a>
+        </div>
+        <div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'diagram'}">
+          <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('diagram')">
             <div>Diagram</div>
           </a>
         </div>
@@ -51,9 +56,12 @@
       </div>
       <div class="d-flex">
         <app-cash-flow-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-cash-flow-help>
-        <div class="d-flex flex-column w-100 align-items-center pt-4 mr-2 ml-2" *ngIf="tabSelect == 'results'">
+        <div class="d-flex flex-column w-100 align-items-center pt-4 mr-2 ml-2" *ngIf="tabSelect == 'diagram'">
           <app-cash-flow-diagram class="w-100" [toggleCalculate]="toggleCalculate" [cashFlowResults]="cashFlowResults"
             [cashFlowForm]="cashFlowForm"></app-cash-flow-diagram>
+        </div>
+        <div class="d-flex flex-column w-100 align-items-center pt-4 mr-2 ml-2" *ngIf="tabSelect == 'results'">
+          <app-cash-flow-results class="w-100" [cashFlowOutputsAndResults]="cashFlowOutputsAndResults"></app-cash-flow-results>
         </div>
       </div>
     </div>

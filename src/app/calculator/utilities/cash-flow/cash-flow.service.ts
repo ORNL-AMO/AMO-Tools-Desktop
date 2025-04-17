@@ -330,10 +330,10 @@ export class CashFlowService {
       capital: 0,
       operating: 0,
       disposal: 0,
-      other: 0,
+      otherCosts: 0,
       totalSavings: 0,
       energy: 0,
-      otherCashFlow: 0,
+      otherSavings: 0,
       salvage: 0,
       payback: 0,
     }
@@ -347,15 +347,15 @@ export class CashFlowService {
     presentValueCashFlowResults.capital = withoutTaxesPresentValueOutputs.cashFlowOutputs.capitalExpenditures;
     presentValueCashFlowResults.operating = withoutTaxesPresentValueOutputs.cashFlowOutputs.operationCost;
     presentValueCashFlowResults.disposal = withoutTaxesPresentValueOutputs.cashFlowOutputs.disposal;
-    presentValueCashFlowResults.other = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow < 0 ? withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow : 0;
+    presentValueCashFlowResults.otherCosts = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow < 0 ? withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow : 0;
 
-    presentValueCashFlowResults.totalCosts = presentValueCashFlowResults.capital + presentValueCashFlowResults.operating + presentValueCashFlowResults.disposal + presentValueCashFlowResults.other;
+    presentValueCashFlowResults.totalCosts = presentValueCashFlowResults.capital + presentValueCashFlowResults.operating + presentValueCashFlowResults.disposal + presentValueCashFlowResults.otherCosts;
 
     presentValueCashFlowResults.energy = withoutTaxesPresentValueOutputs.cashFlowOutputs.energySavings;
-    presentValueCashFlowResults.otherCashFlow = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow > 0 ? withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow : 0;
+    presentValueCashFlowResults.otherSavings = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow > 0 ? withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow : 0;
     presentValueCashFlowResults.salvage = withoutTaxesPresentValueOutputs.cashFlowOutputs.salvage;
 
-    presentValueCashFlowResults.totalSavings = presentValueCashFlowResults.energy + presentValueCashFlowResults.otherCashFlow + presentValueCashFlowResults.salvage;
+    presentValueCashFlowResults.totalSavings = presentValueCashFlowResults.energy + presentValueCashFlowResults.otherSavings + presentValueCashFlowResults.salvage;
 
 
 
@@ -371,16 +371,16 @@ export class CashFlowService {
     annualWorthCashFlowResults.capital = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.capitalExpenditures;
     annualWorthCashFlowResults.operating = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.operationCost;
     annualWorthCashFlowResults.disposal = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.disposal;
-    annualWorthCashFlowResults.other = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow < 0 ? withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow : 0;
+    annualWorthCashFlowResults.otherCosts = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow < 0 ? withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow : 0;
 
-    annualWorthCashFlowResults.totalCosts = annualWorthCashFlowResults.capital + annualWorthCashFlowResults.operating + annualWorthCashFlowResults.disposal + annualWorthCashFlowResults.other;
+    annualWorthCashFlowResults.totalCosts = annualWorthCashFlowResults.capital + annualWorthCashFlowResults.operating + annualWorthCashFlowResults.disposal + annualWorthCashFlowResults.otherCosts;
 
 
     annualWorthCashFlowResults.energy = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.energySavings;
-    annualWorthCashFlowResults.otherCashFlow = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow > 0 ? withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow : 0;
+    annualWorthCashFlowResults.otherSavings = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow > 0 ? withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow : 0;
     annualWorthCashFlowResults.salvage = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.salvage;
 
-    annualWorthCashFlowResults.totalSavings = annualWorthCashFlowResults.energy + annualWorthCashFlowResults.otherCashFlow + annualWorthCashFlowResults.salvage;
+    annualWorthCashFlowResults.totalSavings = annualWorthCashFlowResults.energy + annualWorthCashFlowResults.otherSavings + annualWorthCashFlowResults.salvage;
 
 
 

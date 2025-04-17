@@ -23,11 +23,11 @@ export interface CashFlowResults {
   capital?: number;
   operating?: number;
   disposal?: number;
-  other?: number;
+  otherCosts?: number;
 
   totalSavings?: number;
   energy?: number;
-  otherCashFlow?: number;
+  otherSavings?: number;
   salvage?: number;
 
   payback?: number;

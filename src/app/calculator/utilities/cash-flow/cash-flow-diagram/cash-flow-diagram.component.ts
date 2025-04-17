@@ -24,10 +24,6 @@ export class CashFlowDiagramComponent implements OnInit {
   @ViewChild("expandedChartDiv", { static: false })  expandedChartDiv: ElementRef;
   @ViewChild("panelChartDiv", { static: false })  panelChartDiv: ElementRef;
   
-  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-  tableString: any;
-
-
   
   expanded: boolean;
   hoverBtnExpand: boolean;
@@ -78,10 +74,6 @@ export class CashFlowDiagramComponent implements OnInit {
       traces.push(expenseTrace);
     });
     return traces;
-  }
-
-  updateTableString() {
-    this.tableString = this.copyTable.nativeElement.innerText;
   }
 
   compileGraphData() {

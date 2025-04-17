@@ -1,0 +1,52 @@
+.axis text {
+    font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.panel-chart-container {
+    background: white;
+}
+
+#cashFlowDl {
+    position: absolute;
+    z-index: 9999;
+    left: 30px
+}
+
+#cashFlowDl .fa-download {
+    position: absolute;
+    padding: 5px;
+    border-radius: 4px;
+    opacity: 0.6;
+    background-color: #dcdcdc;
+}
+
+#cashFlowDl .fa-download:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
+.expanded-chart {
+    padding: 5px;
+}
+
+td, th {
+    font-size: small;
+}
+
+td, th {
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+}
+
+tbody {
+    box-shadow: 0 4px 8px 0 grey
+}

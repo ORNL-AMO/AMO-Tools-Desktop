@@ -195,6 +195,8 @@ export class CashFlowComponent implements OnInit {
       cashFlowFinalResults: cashFlowFinalResults,
     }
 
+    console.log(this.cashFlowOutputsAndResults);
+
   }
 
   setSmallScreenTab(selectedTab: string) {
