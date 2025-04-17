@@ -8,9 +8,13 @@ on:
   workflow_dispatch:
 
 jobs:
+  qa-water:
+    if: github.event_name == 'workflow_dispatch' && github.ref_name == 'water-assessment'
+    uses: ./.github/workflows/release_qa_water.yml
+  
   qa:
-    if: github.event_name == 'workflow_dispatch'
-    uses: ./.github/workflows/release_qa.yml
+    if: github.event_name == 'workflow_dispatch' && github.ref_name != 'water-assessment'
+    uses: ./.github/workflows/release_qa.yml  
 
   web:
     if: github.ref_name == 'develop' || github.ref_name == 'master'

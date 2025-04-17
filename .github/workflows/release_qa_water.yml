@@ -1,0 +1,23 @@
+name: "Release: QA Water"
+
+on:
+  workflow_call:
+
+jobs:
+  call_install_diagram:
+    uses: ./.github/workflows/template_install_diagram.yml
+
+  call_build_measur:
+    needs: [call_install_diagram]
+    uses: ./.github/workflows/template_build.yml
+    with:
+      artifact-name: dist
+      artifact-path: dist
+
+  call_deploy-qa-water:
+    needs: [call_install_diagram, call_build_measur]
+    uses: ./.github/workflows/template_deploy.yml
+    with:
+      app-dir: qa.measur
+      artifact-name: dist
+      deploy-dir: /var/www/

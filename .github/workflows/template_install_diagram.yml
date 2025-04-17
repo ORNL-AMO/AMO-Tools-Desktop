@@ -1,0 +1,26 @@
+name: "Template: Install Diagram"
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Get Node version
+        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' ./process-flow-diagram-component/package.json)" >> $GITHUB_ENV
+      - name: Node setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.BUILD_NODE_VER }}
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('./process-flow-diagram-component/package-lock.json') }}
+          restore-keys: npm-
+      - name: Install dependencies
+        working-directory: ./process-flow-diagram-component
+        run: npm ci
