@@ -278,7 +278,7 @@ export class CashFlowService {
       yearlyCashFlowOutputs.cashFlowOutputs.forEach(cashflow => {
         let yearResult: number;
         if (index == 0) {
-          yearResult = inputs.installationCost / Math.pow((1 + rate), index);
+          yearResult = -inputs.installationCost / Math.pow((1 + rate), index);
         } else {
           yearResult = cashflow.cashFlow / Math.pow((1 + rate), index);
         }
@@ -397,8 +397,8 @@ export class CashFlowService {
     fianlResults.payback = withoutTaxesAnnualWorthOutputs.simplePayback;
 
     fianlResults.sir = withoutTaxesAnnualWorthOutputs.sir;
-    fianlResults.irr = withoutTaxesPresentValueOutputs.irr;
-    fianlResults.roi = withoutTaxesAnnualWorthOutputs.roi;
+    fianlResults.irr = withoutTaxesPresentValueOutputs.irr * 100; 
+    fianlResults.roi = withoutTaxesAnnualWorthOutputs.roi * 100;
 
     return fianlResults;
   }

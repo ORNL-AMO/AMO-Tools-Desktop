@@ -213,7 +213,7 @@
             <tr>
                 <td class="text-center w-50">Annual Worth</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth" class="text-center w-50">
-                    {{cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth | currency:'USD':'symbol':'1.0-2'}}
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth | currency:'USD':'symbol':'1.0-2'}} /yr
                 </td>
                 <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth"
                     class="text-center w-50 text-center">
@@ -223,7 +223,7 @@
             <tr>
                 <td class="text-center w-50">Simple Payback</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.payback" class="text-center w-50">
-                    {{cashFlowOutputsAndResults.cashFlowFinalResults.payback | number:'1.0-2'}}
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.payback | number:'1.0-2'}} yr
                 </td>
                 <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.payback"
                     class="text-center w-50 text-center">
@@ -242,7 +242,7 @@
             <tr>
                 <td class="text-center w-50">IRR</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.irr" class="text-center w-50">
-                    {{cashFlowOutputsAndResults.cashFlowFinalResults.irr | number:'1.0-2'}}
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.irr | number:'1.0-2'}}%
                 </td>
                 <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.irr" class="text-center w-50 text-center">
                     &mdash; &mdash;
@@ -251,7 +251,7 @@
             <tr>
                 <td class="text-center w-50">ROI</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.roi" class="text-center w-50">
-                    {{cashFlowOutputsAndResults.cashFlowFinalResults.roi | number:'1.0-2'}}
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.roi | number:'1.0-2'}}%
                 </td>
                 <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.roi" class="text-center w-50 text-center">
                     &mdash; &mdash;
