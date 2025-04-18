@@ -3,8 +3,8 @@
     <tbody>
       <tr class="bold text-center no-border">
         <td>Fix
-          <div class="">
-            <input type="checkbox" value="allSelected" (change)="toggleSelectAll(allSelected)" />
+          <div>
+            <input type="checkbox" [(ngModel)]="allSelected" (click)="toggleSelectAll()"/>
           </div>
         </td>
         <td class="w-25">Leak Name</td>
@@ -21,7 +21,7 @@
       </tr>
       <tr class="text-center" *ngFor="let leak of airLeakOutput.leakResults; let index = index">
         <td class="p-3">
-          <div class="">
+          <div>
             <input type="checkbox" [(ngModel)]="leak.selected" (change)="toggleSelected(index, leak.selected)" />
           </div>
         </td>

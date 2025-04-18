@@ -14,6 +14,8 @@ export class AirLeakResultsTableComponent implements OnInit {
 
   airLeakOutput: AirLeakSurveyOutput;
   airLeakOutputSub: Subscription;
+  
+  resetDataSub: Subscription;
   allSelected: boolean = false;
 
   @Input()
@@ -24,7 +26,12 @@ export class AirLeakResultsTableComponent implements OnInit {
   ngOnInit(): void {
     this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
       this.airLeakOutput = value;
-    })
+    });
+    this.resetDataSub = this.airLeakService.resetData.subscribe(value => {
+      if (value) {
+        this.allSelected = false;
+      } 
+    });
   }
   
   ngOnDestroy() {
@@ -47,8 +54,8 @@ export class AirLeakResultsTableComponent implements OnInit {
     this.airLeakService.setLeakForModification(index, selected);
   }
 
-  toggleSelectAll(selectAll: boolean){
-    this.airLeakService.setLeakForModificationSelectAll(!selectAll);
+  toggleSelectAll(){
+    this.airLeakService.setLeakForModificationSelectAll(!this.allSelected);
     this.allSelected = !this.allSelected;
   }
 

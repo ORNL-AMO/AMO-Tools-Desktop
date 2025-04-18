@@ -6,7 +6,6 @@ import { ConvertAirLeakService } from './convert-air-leak.service';
 import { BehaviorSubject } from 'rxjs';
 import { AirLeakFormService } from './air-leak-form/air-leak-form.service';
 import { exampleLeakInputs } from '../compressed-air-constants';
-import { s } from '@angular/core/weak_ref.d-ttyj86RV';
 
 
 
