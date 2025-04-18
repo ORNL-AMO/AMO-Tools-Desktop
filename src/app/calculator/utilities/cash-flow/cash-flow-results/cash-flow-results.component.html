@@ -88,22 +88,22 @@
                     &mdash; &mdash;
             </tr>
             <tr>
-                <td class="text-center">Other Savings</td>
-                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.otherSavings"
+                <td class="text-center">Other Costs</td>
+                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.otherCosts"
                     class="text-center text-center">
-                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.otherSavings |
+                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.otherCosts |
                     currency:'USD':'symbol':'1.0-0'}}
                 </td>
-                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.otherSavings"
+                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.otherCosts"
                     class="text-center text-center">
                     &mdash; &mdash;
                 </td>
-                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.otherSavings"
+                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.otherCosts"
                     class="text-center text-center">
-                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.otherSavings |
+                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.otherCosts |
                     currency:'USD':'symbol':'1.0-0'}}
                 </td>
-                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.otherSavings"
+                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.otherCosts"
                     class="text-center text-center">
                     &mdash; &mdash;
             </tr>
@@ -149,25 +149,25 @@
                     &mdash; &mdash;
             </tr>
             <tr>
-                <td class="text-center">Other Costs</td>
-                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.otherCosts"
+                <td class="text-center">Other Savings</td>
+                <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.otherSavings"
                     class="text-center text-center">
-                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.otherCosts |
+                    {{cashFlowOutputsAndResults.presentValueCashFlowResults.otherSavings |
                     currency:'USD':'symbol':'1.0-0'}}
                 </td>
-                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.otherCosts"
+                <td *ngIf="!cashFlowOutputsAndResults.presentValueCashFlowResults.otherSavings"
                     class="text-center text-center">
                     &mdash; &mdash;
                 </td>
-                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.otherCosts"
+                <td *ngIf="cashFlowOutputsAndResults.annualWorthCashFlowResults.otherSavings"
                     class="text-center text-center">
-                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.otherCosts |
+                    {{cashFlowOutputsAndResults.annualWorthCashFlowResults.otherSavings |
                     currency:'USD':'symbol':'1.0-0'}}
                 </td>
-                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.otherCosts"
+                <td *ngIf="!cashFlowOutputsAndResults.annualWorthCashFlowResults.otherSavings"
                     class="text-center text-center">
                     &mdash; &mdash;
-            </tr>
+            </tr>           
             <tr>
                 <td class="text-center">Salvage</td>
                 <td *ngIf="cashFlowOutputsAndResults.presentValueCashFlowResults.salvage"
@@ -213,7 +213,7 @@
             <tr>
                 <td class="text-center w-50">Annual Worth</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth" class="text-center w-50">
-                    {{cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth | currency:'USD':'symbol':'1.0-0'}}
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth | currency:'USD':'symbol':'1.0-2'}}
                 </td>
                 <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth"
                     class="text-center w-50 text-center">
@@ -223,7 +223,7 @@
             <tr>
                 <td class="text-center w-50">Simple Payback</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.payback" class="text-center w-50">
-                    {{cashFlowOutputsAndResults.cashFlowFinalResults.payback}}
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.payback | number:'1.0-2'}}
                 </td>
                 <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.payback"
                     class="text-center w-50 text-center">
@@ -233,7 +233,7 @@
             <tr>
                 <td class="text-center w-50">SIR</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.sir" class="text-center w-50">
-                    {{cashFlowOutputsAndResults.cashFlowFinalResults.sir}}
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.sir | number:'1.0-2'}}
                 </td>
                 <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.sir" class="text-center w-50 text-center">
                     &mdash; &mdash;
@@ -242,7 +242,7 @@
             <tr>
                 <td class="text-center w-50">IRR</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.irr" class="text-center w-50">
-                    {{cashFlowOutputsAndResults.cashFlowFinalResults.irr}}
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.irr | number:'1.0-2'}}
                 </td>
                 <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.irr" class="text-center w-50 text-center">
                     &mdash; &mdash;
@@ -251,7 +251,7 @@
             <tr>
                 <td class="text-center w-50">ROI</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.roi" class="text-center w-50">
-                    {{cashFlowOutputsAndResults.cashFlowFinalResults.roi}}
+                    {{cashFlowOutputsAndResults.cashFlowFinalResults.roi | number:'1.0-2'}}
                 </td>
                 <td *ngIf="!cashFlowOutputsAndResults.cashFlowFinalResults.roi" class="text-center w-50 text-center">
                     &mdash; &mdash;
