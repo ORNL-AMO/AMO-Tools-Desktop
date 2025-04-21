@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { BruteForceResults, CashFlowFinalResults, CashFlowForm, CashFlowOutputsAndResults, CashFlowResults, Outputs, WithoutTaxesOutputs } from './cash-flow';
+import { IRRBruteForceResults, CashFlowFinalResults, CashFlowForm, CashFlowOutputsAndResults, CashFlowResults, Outputs, WithoutTaxesOutputs } from './cash-flow';
 import { CashFlowService } from './cash-flow.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
@@ -177,7 +177,7 @@ export class CashFlowComponent implements OnInit {
 
     let yearlyCashFlowOutputs: Outputs = this.cashFlowService.calculateYearlyCashFlowOutputs(this.cashFlowForm);
     let presentValueCashFlowOutputs: Outputs = this.cashFlowService.calculatePresentValueCashFlowOutputs(this.cashFlowForm, yearlyCashFlowOutputs);
-    let bruteForceResults: Array<BruteForceResults> = this.cashFlowService.calculateBruteForceResults(this.cashFlowForm, yearlyCashFlowOutputs);
+    let bruteForceResults: Array<IRRBruteForceResults> = this.cashFlowService.calculateIRRBruteForceResults(this.cashFlowForm, yearlyCashFlowOutputs);
     let withoutTaxesPresentValueOutputs: WithoutTaxesOutputs = this.cashFlowService.calculateWithoutTaxesPresentValueOutputs(presentValueCashFlowOutputs, bruteForceResults);
     let withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs = this.cashFlowService.calculateWithoutTaxesAnnualWorthOutputs(this.cashFlowForm, withoutTaxesPresentValueOutputs, bruteForceResults);
     let presentValueCashFlowResults: CashFlowResults = this.cashFlowService.calculatePresentValueCashFlowResults(withoutTaxesPresentValueOutputs);
@@ -187,7 +187,7 @@ export class CashFlowComponent implements OnInit {
     this.cashFlowOutputsAndResults = {
       yearlyCashFlowOutputs: yearlyCashFlowOutputs,
       presentValueCashFlowOutputs: presentValueCashFlowOutputs,
-      bruteForceResults: bruteForceResults,
+      irrBruteForceResults: bruteForceResults,
       withoutTaxesPresentValueOutputs: withoutTaxesPresentValueOutputs,
       withoutTaxesAnnualWorthOutputs: withoutTaxesAnnualWorthOutputs,
       presentValueCashFlowResults: presentValueCashFlowResults,
@@ -195,7 +195,6 @@ export class CashFlowComponent implements OnInit {
       cashFlowFinalResults: cashFlowFinalResults,
     }
 
-    console.log(this.cashFlowOutputsAndResults);
 
   }
 

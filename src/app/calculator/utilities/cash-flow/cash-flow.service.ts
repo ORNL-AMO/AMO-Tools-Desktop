@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { BruteForceResults, CashFlowFinalResults, CashFlowForm, CashFlowOutputs, CashFlowResults, InterestRates, Outputs, WithoutTaxesOutputs } from './cash-flow';
+import { IRRBruteForceResults, CashFlowFinalResults, CashFlowForm, CashFlowOutputs, CashFlowResults, InterestRates, Outputs, WithoutTaxesOutputs } from './cash-flow';
 import { TraceData, SimpleChart } from '../../../shared/models/plotting';
 
 @Injectable()
@@ -178,7 +178,7 @@ export class CashFlowService {
 
   }
 
-  calculateWithoutTaxesPresentValueOutputs(presentValueCashFlowOutputs: Outputs, bruteForceResults: Array<BruteForceResults>): WithoutTaxesOutputs {
+  calculateWithoutTaxesPresentValueOutputs(presentValueCashFlowOutputs: Outputs, bruteForceResults: Array<IRRBruteForceResults>): WithoutTaxesOutputs {
     let withoutTaxesPresentValueOutputs: WithoutTaxesOutputs = this.getEmptyWithoutTaxesOutputs();
 
     withoutTaxesPresentValueOutputs.cashFlowOutputs.capitalExpenditures = presentValueCashFlowOutputs.totalOutputs.capitalExpenditures;
@@ -215,7 +215,7 @@ export class CashFlowService {
   }
 
 
-  calculateWithoutTaxesAnnualWorthOutputs(inputs: CashFlowForm, withoutTaxesPresentValueOutputs: WithoutTaxesOutputs, bruteForceResults: Array<BruteForceResults>): WithoutTaxesOutputs {
+  calculateWithoutTaxesAnnualWorthOutputs(inputs: CashFlowForm, withoutTaxesPresentValueOutputs: WithoutTaxesOutputs, bruteForceResults: Array<IRRBruteForceResults>): WithoutTaxesOutputs {
 
     let withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs = this.getEmptyWithoutTaxesOutputs();
 
@@ -255,7 +255,7 @@ export class CashFlowService {
   }
  
 
-  getEmptybruteForceResult(): BruteForceResults {
+  getEmptybruteForceResult(): IRRBruteForceResults {
     return {
       interestRate: 0,
       results: [],
@@ -269,12 +269,12 @@ export class CashFlowService {
 
   }
 
-  calculateBruteForceResults(inputs: CashFlowForm, yearlyCashFlowOutputs: Outputs): Array<BruteForceResults> {
+  calculateIRRBruteForceResults(inputs: CashFlowForm, yearlyCashFlowOutputs: Outputs): Array<IRRBruteForceResults> {
 
-    let bruteForceResults: Array<BruteForceResults> = [];
+    let irrBruteForceResults: Array<IRRBruteForceResults> = [];
 
     InterestRates.forEach((rate, index) => {
-      let results: BruteForceResults = this.getEmptybruteForceResult();
+      let results: IRRBruteForceResults = this.getEmptybruteForceResult();
       results.interestRate = rate;
       let total: number = 0;
       yearlyCashFlowOutputs.cashFlowOutputs.forEach(cashflow => {
@@ -289,25 +289,25 @@ export class CashFlowService {
       });
       results.total = total;
 
-      bruteForceResults.push(results);
+      irrBruteForceResults.push(results);
 
     });
 
     let previousContinueA = 0;
-    bruteForceResults.forEach(results => {
+    irrBruteForceResults.forEach(results => {
       results.continueA = results.total > 0 ? 0 : (previousContinueA === 0 ? results.interestRate : 0);
       results.continueB = results.total > 0 ? 0 : (previousContinueA === 0 ? results.total : 0);
       previousContinueA = results.continueA;
     });
 
     let index: number = 1;
-    bruteForceResults.forEach(results => {
-      let nextContinueA: number = bruteForceResults[index].continueA;
+    irrBruteForceResults.forEach(results => {
+      let nextContinueA: number = irrBruteForceResults[index].continueA;
       results.iterationA = nextContinueA !== 0 ? (results.continueA === 0 ? results.interestRate : 0) : 0;
       results.iterationB = nextContinueA !== 0 ? (results.continueA === 0 ? results.total : 0) : 0;
     });
 
-    return bruteForceResults
+    return irrBruteForceResults;
   }
 
   getEmptyCashFlowResults(): CashFlowResults {
