@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { ApplicationInstanceDbService } from '../../../indexedDb/application-instance-db.service';
 import { MeasurSurveyService } from '../measur-survey.service';
+import { EmailListSubscribeService } from '../../subscribe-toast/email-list-subscribe.service';
 
 @Component({
     selector: 'app-experience-survey',
@@ -22,6 +23,7 @@ export class ExperienceSurveyComponent {
   constructor(
     private measurSurveyService: MeasurSurveyService,
     private router: Router,
+    private emailSubscriberService: EmailListSubscribeService,
     private appInstanceDbService: ApplicationInstanceDbService, 
     private fb: FormBuilder) { }
 
@@ -76,7 +78,15 @@ export class ExperienceSurveyComponent {
   }
 
   sendAnswers() {
+    this.submitSubscriberEmail();
     this.measurSurveyService.sendAnswers();
+  }
+
+  submitSubscriberEmail() {
+    let measurUserSurvey: MeasurUserSurvey = this.measurSurveyService.userSurvey.getValue();
+    if (measurUserSurvey.shouldCreateSubscriber)  {
+      this.emailSubscriberService.submitSubscriberEmail(measurUserSurvey.email).subscribe();
+    }
   }
 
   getRemainingCharacters(controlName: string): number {

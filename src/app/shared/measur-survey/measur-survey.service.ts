@@ -70,12 +70,8 @@ export class MeasurSurveyService {
         'Content-Type': 'application/json',
       })
     };
-
+    
     let measurUserSurvey: MeasurUserSurvey = this.userSurvey.getValue();
-    if (measurUserSurvey.shouldCreateSubscriber)  {
-      this.emailSubscriberService.submitSubscriberEmail(measurUserSurvey.email).subscribe();
-    }
-    delete measurUserSurvey.shouldCreateSubscriber;
     this.completedStatus.next('sending');
     let url: string = environment.measurUtilitiesApi + 'measur-survey';
     this.httpClient.post(url, measurUserSurvey, httpOptions).subscribe({
