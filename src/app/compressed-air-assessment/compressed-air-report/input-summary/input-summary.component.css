@@ -1,6 +1,6 @@
 @media print {
     .break-before{
-        page-break-before: always !important;
+        break-before: always !important;
     }
 
     .print-page-title {

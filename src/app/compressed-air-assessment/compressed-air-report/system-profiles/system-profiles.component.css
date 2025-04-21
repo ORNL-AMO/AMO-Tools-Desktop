@@ -2,7 +2,7 @@
 @media print {
     .print-container {
         overflow: hidden;
-        page-break-before: always;
+        break-before: always;
     }
     
 }
