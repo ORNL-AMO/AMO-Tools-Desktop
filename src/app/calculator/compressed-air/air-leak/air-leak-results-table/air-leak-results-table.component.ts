@@ -35,7 +35,8 @@ export class AirLeakResultsTableComponent implements OnInit {
   }
   
   ngOnDestroy() {
-    this.airLeakOutputSub.unsubscribe();
+    this.airLeakOutputSub.unsubscribe();    
+    this.resetDataSub.unsubscribe();
   }
 
   editLeak(index: number) {
