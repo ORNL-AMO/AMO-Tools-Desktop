@@ -34,11 +34,3 @@ td {
     text-decoration: underline;
     cursor: pointer;
 }
-
-td.table-col-0:hover {
-    background-color: #aaa;
-}
-
-.table-col-0:hover {
-    background-color: #ccc;
-}

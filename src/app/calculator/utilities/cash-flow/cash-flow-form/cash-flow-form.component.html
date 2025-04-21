@@ -81,7 +81,7 @@
       <span class="input-group-addon units">%</span>
     </div>
   </div>
-<!-- *Code will be implemented in the future -->
+  <!-- *Code will be implemented in the future -->
   <!-- <br>
   <div class="form-group">
     <label class="small">Include Taxes?</label>
@@ -113,31 +113,33 @@
       </div>
     </div>
   </div> -->
-  <br>  
+  <br>
   <label class="group-label point-label">Advanced Cashflows</label>
   <div class="btn-group btn-group-sm">
-    <button type="button" class="btn btn-primary btn-sm m-2 btn-form" (click)="addCashflow()" [disabled]="disableAddBtn">+Add Cashflow</button>
+    <button type="button" class="btn btn-primary btn-sm m-2 btn-form" (click)="addCashflow()"
+    [disabled]="disableAddBtn">+Add Cashflow</button>
   </div>
-  <table class="data-table">
-    <thead>
-      <tr>
-        <th class="table-col-0">Year</th>
-        <th class="table-col-0">Cashflow</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of cashFlowForm.advancedCashflows; let i = index">
-        <td>
-          {{i+1}}
-        </td>
-        <td>
-          <input type="number" step="any" class="form-control addon-input" name="{{'cashFlowData'+i}}"
-            id="{{'cashFlowData'+i}}" [(ngModel)]="data" (focus)="focusField('cashFlowData')"
-            (input)="calculate()">
-        </td>
-        <td class="delete-row" (click)="deleteCashflow(i)">Delete</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="text-center">
+    <table class="data-table mx-auto w-75">
+      <thead>
+        <tr>
+          <th class="text-center">Year</th>
+          <th class="text-center">Cashflow</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of cashFlowForm.advancedCashflows; let i = index">
+          <td>
+            {{i+1}}
+          </td>
+          <td class="text-center">
+            <input type="number" step="any" class="addon-input text-center" name="{{'cashFlowData'+i}}"
+              id="{{'cashFlowData'+i}}" [(ngModel)]="data" (focus)="focusField('cashFlowData')" (input)="calculate()">
+          </td>
+          <td class="delete-row" (click)="deleteCashflow(i)">Delete</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </form>
