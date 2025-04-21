@@ -169,7 +169,7 @@ export const energy = {
         , plural: 'Quadrillions British Thermal Units',
         display: '(QBtu)'
       }
-      , to_anchor: 1000000000000
+      , to_anchor: 1_000_000_000_000_000
     }
     , quads: {
       name: {
@@ -177,7 +177,7 @@ export const energy = {
         , plural: 'Quadrillions British Thermal Units',
         display: '(quads)'
       }
-      , to_anchor: 1000000000000
+      , to_anchor: 1_000_000_000_000_000
     }
   }
   , _anchors: {
