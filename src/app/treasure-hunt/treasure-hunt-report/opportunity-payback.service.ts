@@ -19,7 +19,7 @@ export class OpportunityPaybackService {
     });
     let lessThanOneYear: { numOpportunities: number, totalSavings: number } = {
       numOpportunities: lessThanOneYearOpps.length,
-      totalSavings: _.sumBy(lessThanOneYearOpps, 'costSavings') + _.sumBy(lessThanOneYearOpps, 'opportunityCost.additionalAnnualSavings.cost') + lessThanOneYearOppsOtherCosts
+      totalSavings: _.sumBy(lessThanOneYearOpps, 'costSavings') + lessThanOneYearOppsOtherCosts
     };
 
     let oneToTwoYearsOpps: Array<OpportunitySummary> = _.filter(opportunitySummaries, (opp: OpportunitySummary) => { return opp.payback >= 1 && opp.payback < 2 && opp.selected == true });
