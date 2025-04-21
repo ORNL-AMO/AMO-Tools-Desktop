@@ -17,6 +17,7 @@ import { AirHeatingModule } from './air-heating/air-heating.module';
 import { CoolingModule } from './cooling/cooling.module';
 import { WasteHeatModule } from './waste-heat/waste-heat.module';
 import { HeatCascadingModule } from './heat-cascading/heat-cascading.module';
+import { PreAssessmentModule } from '../utilities/pre-assessment/pre-assessment.module';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { HeatCascadingModule } from './heat-cascading/heat-cascading.module';
     FixtureModule,
     WasteHeatModule,
     AirHeatingModule,
-    HeatCascadingModule
+    HeatCascadingModule,
+    PreAssessmentModule
   ],
   declarations: [
     FurnacesListComponent,
