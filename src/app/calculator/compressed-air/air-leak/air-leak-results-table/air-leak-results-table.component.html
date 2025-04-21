@@ -1,65 +1,69 @@
 <div *ngIf="airLeakOutput.leakResults.length > 0" class="mt-3">
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr class="bold text-center no-border">
-          <td>Fix</td>
-          <td class="w-25">Leak Name</td>
-          <td>Flow Rate
-            (<span *ngIf="settings.unitsOfMeasure != 'Metric'">scfm</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>) 
-          </td>
-          <td>Air Loss 
-            (<span *ngIf="settings.unitsOfMeasure != 'Metric'">kscf/yr</span>
-              <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>)  
-          </td>
-          <td *ngIf="airLeakOutput.facilityCompressorData.utilityType == 1">Electricity Consumption (kWh/yr)</td>
-          <td class="w-25"></td>
-        </tr>
-        <tr class="text-center" *ngFor="let leak of airLeakOutput.leakResults; let index = index">
-          <td class="p-3">
-            <div class="">
-              <input type="checkbox" [(ngModel)]="leak.selected" (change)="toggleSelected(index, leak.selected)" />
-            </div>
-          </td>
-          <td class="p-3 col-item-br">
-            <div >
-              <a (click)="editLeak(index)">
-                {{ leak.name }}
-              </a>
-            </div>
-          </td>
-          <td class="p-3 col-item-br">
-            <span *ngIf="leak.totalFlowRate">
-              {{ leak.totalFlowRate | number:'1.0-1'}}
-            </span>
-            <span *ngIf="!leak.totalFlowRate">
-              --
-            </span>
-          </td>
-          <td class="p-3 col-item-br">
-            <span *ngIf="leak.annualTotalFlowRate">
-              {{ leak.annualTotalFlowRate | number:'1.0-1'}}   
-            </span>
-            <span *ngIf="!leak.annualTotalFlowRate">
-              --
-            </span>
-          </td>
-          <td *ngIf="airLeakOutput.facilityCompressorData.utilityType == 1" class="p-3 col-item-br">
-            <span *ngIf="leak.annualTotalElectricity">
-              {{ leak.annualTotalElectricity | number:'1.0-0' }}
-            </span>
-            <span *ngIf="!leak.annualTotalElectricity">
-              --
-            </span>
-          </td>
-          <td class="pt-3 px-1 col-item-br">
-            <a class="click-link m-2" (click)="copyLeak(index)">Copy</a>
-            <hr class="vertical text-muted">
-            <a class="click-link m-2" (click)="editLeak(index)">Edit</a>
-            <hr class="vertical text-muted">
-            <a class="click-link m-2 text-danger" (click)="deleteLeak(index)">Delete</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr class="bold text-center no-border">
+        <td>Fix
+          <div>
+            <input type="checkbox" [(ngModel)]="allSelected" (click)="toggleSelectAll()"/>
+          </div>
+        </td>
+        <td class="w-25">Leak Name</td>
+        <td>Flow Rate
+          (<span *ngIf="settings.unitsOfMeasure != 'Metric'">scfm</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>)
+        </td>
+        <td>Air Loss
+          (<span *ngIf="settings.unitsOfMeasure != 'Metric'">kscf/yr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>)
+        </td>
+        <td *ngIf="airLeakOutput.facilityCompressorData.utilityType == 1">Electricity Consumption (kWh/yr)</td>
+        <td class="w-25"></td>
+      </tr>
+      <tr class="text-center" *ngFor="let leak of airLeakOutput.leakResults; let index = index">
+        <td class="p-3">
+          <div>
+            <input type="checkbox" [(ngModel)]="leak.selected" (change)="toggleSelected(index, leak.selected)" />
+          </div>
+        </td>
+        <td class="p-3 col-item-br">
+          <div>
+            <a (click)="editLeak(index)">
+              {{ leak.name }}
+            </a>
+          </div>
+        </td>
+        <td class="p-3 col-item-br">
+          <span *ngIf="leak.totalFlowRate">
+            {{ leak.totalFlowRate | number:'1.0-1'}}
+          </span>
+          <span *ngIf="!leak.totalFlowRate">
+            --
+          </span>
+        </td>
+        <td class="p-3 col-item-br">
+          <span *ngIf="leak.annualTotalFlowRate">
+            {{ leak.annualTotalFlowRate | number:'1.0-1'}}
+          </span>
+          <span *ngIf="!leak.annualTotalFlowRate">
+            --
+          </span>
+        </td>
+        <td *ngIf="airLeakOutput.facilityCompressorData.utilityType == 1" class="p-3 col-item-br">
+          <span *ngIf="leak.annualTotalElectricity">
+            {{ leak.annualTotalElectricity | number:'1.0-0' }}
+          </span>
+          <span *ngIf="!leak.annualTotalElectricity">
+            --
+          </span>
+        </td>
+        <td class="pt-3 px-1 col-item-br">
+          <a class="click-link m-2" (click)="copyLeak(index)">Copy</a>
+          <hr class="vertical text-muted">
+          <a class="click-link m-2" (click)="editLeak(index)">Edit</a>
+          <hr class="vertical text-muted">
+          <a class="click-link m-2 text-danger" (click)="deleteLeak(index)">Delete</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
