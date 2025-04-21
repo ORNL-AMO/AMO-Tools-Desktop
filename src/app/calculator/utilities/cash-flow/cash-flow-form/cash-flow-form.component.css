@@ -1,4 +1,36 @@
-
 .cash-flow-form {
     padding-top: 0px;
+}
+
+.delete-row {
+    color: red;
+}
+
+.btn-group .btn-sm {
+    font-size: small !important;
+}
+
+.data-table {
+    margin-top: 20px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.data-table th {
+    border-bottom: #2C3E50 solid 3px;
+}
+
+.data-table td {
+    border-bottom: #2C3E50 solid 1px;
+}
+
+.data-table th,
+td {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.delete-row:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
