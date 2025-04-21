@@ -403,6 +403,17 @@
         </table>
       </div>
     </div>
+
+    <div class="my-2" *ngIf="currentField == 'heatInput'">
+      <h6>
+        Fuel Consumption
+        <br>
+        <small class="text-muted">
+          Energy content of the fuel used by the system
+          <hr>
+        </small>
+      </h6>
+    </div>
   
     <div class="justify-content-center"
       *ngIf="currentField == 'fuelTemperature' || currentField == 'o2InFlueGas' || currentField == 'flueGasTemperature' || currentField == 'combustionAirTemperature'">
