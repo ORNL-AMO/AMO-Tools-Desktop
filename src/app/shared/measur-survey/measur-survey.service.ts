@@ -7,6 +7,7 @@ import { ApplicationInstanceData } from '../../indexedDb/application-instance-db
 import { MeasurUserSurvey } from './experience-survey/experience-survey.component';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { Directory } from '../models/directory';
+import { EmailListSubscribeService } from '../subscribe-toast/email-list-subscribe.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class MeasurSurveyService {
   showSurveyModal: BehaviorSubject<boolean>;
   userSurvey: BehaviorSubject<MeasurUserSurvey>;
 
-  constructor(private httpClient: HttpClient, private directoryDbService: DirectoryDbService) {
+  constructor(private httpClient: HttpClient, private directoryDbService: DirectoryDbService, private emailSubscriberService: EmailListSubscribeService) {
     this.showSurveyModal = new BehaviorSubject<boolean>(undefined);
     this.completedStatus = new BehaviorSubject<'sending' | 'success' | 'error'>(undefined);
     this.userSurvey = new BehaviorSubject<MeasurUserSurvey>(undefined);
@@ -32,8 +33,9 @@ export class MeasurSurveyService {
         dateDifference = currentDate.diff(firstAppInitDate, 'days');
         hasMetUsageThreshold = dateDifference >= 30 || applicationData.appOpenCount >= 10;
       } else {
-        dateDifference = currentDate.diff(firstAppInitDate, 'seconds');
-        hasMetUsageThreshold = dateDifference >= 120 || applicationData.appOpenCount >= 2;
+        // * develop debugging off 
+        // dateDifference = currentDate.diff(firstAppInitDate, 'seconds');
+        // hasMetUsageThreshold = dateDifference >= 120 || applicationData.appOpenCount >= 2;
       }
       
       return hasMetUsageThreshold;
@@ -53,8 +55,9 @@ export class MeasurSurveyService {
       dateDifference = currentDate.diff(topLevelDirInitDate, 'days');
       isExistingUser = dateDifference >= 30;
     } else {
-      dateDifference = currentDate.diff(topLevelDirInitDate, 'seconds');
-      isExistingUser = dateDifference >= 120;
+      // * develop debugging off
+      // dateDifference = currentDate.diff(topLevelDirInitDate, 'seconds');
+      // isExistingUser = dateDifference >= 120;
     }
 
     return isExistingUser;
@@ -68,8 +71,12 @@ export class MeasurSurveyService {
       })
     };
 
-    this.completedStatus.next('sending');
     let measurUserSurvey: MeasurUserSurvey = this.userSurvey.getValue();
+    if (measurUserSurvey.shouldCreateSubscriber)  {
+      this.emailSubscriberService.submitSubscriberEmail(measurUserSurvey.email).subscribe();
+    }
+    delete measurUserSurvey.shouldCreateSubscriber;
+    this.completedStatus.next('sending');
     let url: string = environment.measurUtilitiesApi + 'measur-survey';
     this.httpClient.post(url, measurUserSurvey, httpOptions).subscribe({
       next: (resp) => {

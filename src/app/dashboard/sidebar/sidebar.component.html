@@ -59,6 +59,14 @@
     </span>
   </div>
 
+  
+  <div *ngIf="showSubscribeLink" class="sidebar-group secondary">
+    <span routerLinkActive="selected" class="sidebar-item" (click)="showSubscribeModal()">
+      <span class="fa fa-info-circle mr-1 info-icon"></span>
+      Subscribe for MEASUR news 
+    </span>
+  </div>
+
   <div class="sidebar-group secondary" (click)="navigateWithSidebarOptions('/landing-screen')">
     <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
   </div>

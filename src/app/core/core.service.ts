@@ -73,6 +73,7 @@ export class CoreService {
       createVersionedBackups: false,
       isSurveyToastDone: false,
       isSurveyDone: false,
+      subscriberId: undefined,
       isAutomaticBackupOn: false,
       doSurveyReminder: false,
       appOpenCount: 0,

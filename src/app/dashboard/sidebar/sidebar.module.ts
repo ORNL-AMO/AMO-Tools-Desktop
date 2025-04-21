@@ -10,6 +10,7 @@ import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
 import { InventoryItemComponent } from './inventory-item/inventory-item.component';
 import { PreAssessmentItemComponent } from './pre-assessment-item/pre-assessment-item.component';
 import { UpdateApplicationModule } from '../../shared/update-application/update-application.module';
+import { EmailListSubscribeService } from '../../shared/subscribe-toast/email-list-subscribe.service';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { UpdateApplicationModule } from '../../shared/update-application/update-
   ],
   exports: [
     SidebarComponent
-  ]
+  ],
+  providers: [EmailListSubscribeService],
 })
 export class SidebarModule { }
