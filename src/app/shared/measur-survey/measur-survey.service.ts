@@ -22,7 +22,7 @@ export class MeasurSurveyService {
     this.userSurvey = new BehaviorSubject<MeasurUserSurvey>(undefined);
   }
 
- async getHasMetUsageRequirements(applicationData: ApplicationInstanceData) {
+ getHasMetUsageRequirements(applicationData: ApplicationInstanceData) {
       let firstAppInitDate = moment(new Date(applicationData.createdDate));
       let currentDate = moment(new Date());
   
@@ -33,11 +33,19 @@ export class MeasurSurveyService {
         hasMetUsageThreshold = dateDifference >= 30 || applicationData.appOpenCount >= 10;
       } else {
         dateDifference = currentDate.diff(firstAppInitDate, 'seconds');
-        hasMetUsageThreshold = dateDifference >= 120 || applicationData.appOpenCount >= 2;
+        hasMetUsageThreshold = dateDifference >= 120 || applicationData.appOpenCount >= 3;
       }
       
       return hasMetUsageThreshold;
   }
+
+  getCanShowToast(applicationData: ApplicationInstanceData) {
+    if (environment.production) {
+      return applicationData.appOpenCount >= 5;
+    } else {
+      return applicationData.appOpenCount >= 2;
+    }
+}
 
   /**
    * Check if is legacy user and has used app for 30 days 

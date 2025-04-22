@@ -175,7 +175,8 @@ export class CoreComponent implements OnInit {
           this.measurSurveyService.showSurveyModal.next(showModal);
         }, 5000);
         
-        if (!applicationData.isSurveyToastDone && !showModalToExistingUser) {
+        let canShowToast = this.measurSurveyService.getCanShowToast(applicationData);
+        if (canShowToast && !applicationData.isSurveyToastDone && !showModalToExistingUser) {
           setTimeout(() => {
             this.showSurveyToast = true;
           }, 5000);
