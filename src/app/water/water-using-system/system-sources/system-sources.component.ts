@@ -1,15 +1,15 @@
 import { Component, Input } from '@angular/core';
+import { WaterAssessment, EdgeFlowData } from 'process-flow-lib';
 import { WaterAssessmentService } from '../../water-assessment.service';
 import { Settings } from '../../../shared/models/settings';
-import { EdgeFlowData, WaterAssessment } from 'process-flow-lib';
 
 @Component({
-  selector: 'app-water-sources-wrapper',
+  selector: 'app-system-sources',
   standalone: false,
-  templateUrl: './water-sources-wrapper.component.html',
-  styleUrl: './water-sources-wrapper.component.css'
+  templateUrl: './system-sources.component.html',
+  styleUrl: './system-sources.component.css'
 })
-export class WaterSourcesWrapperComponent {
+export class SystemSourcesComponent {
   @Input()
   waterAssessment: WaterAssessment;
   @Input()
@@ -60,7 +60,6 @@ export class WaterSourcesWrapperComponent {
   }
 
   deleteConnectedSystemDischarge(systemFlowData: EdgeFlowData, sourceFlowIndex: number) {
-    // delete this.waterAssessment.connectedNodesMap[systemFlowData.target];
     let connectedSystemFlows = this.waterAssessment.diagramWaterSystemFlows.find(systemFlows => systemFlows.id === systemFlowData.source);
     if (connectedSystemFlows) {
       let deleteIndex = connectedSystemFlows.dischargeWater.flows.findIndex(systemFlow => systemFlow.diagramEdgeId === systemFlowData.diagramEdgeId);
