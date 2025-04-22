@@ -412,7 +412,6 @@ export const getWaterTrueCost = (
 * @param energyUnitCost Cost of energy per kWh or MMBTU / GJ
 */
 export const getMotorEnergyCost = (motorEnergy: MotorEnergy, energyUnitCost: number): number => {
-  debugger;
   const ratedPowerKW = motorEnergy.ratedPower * 0.7457; // convert HP to kW
   const energyKwPerYear = (motorEnergy.hoursPerYear * motorEnergy.loadFactor) / 100 * (ratedPowerKW * motorEnergy.systemEfficiency) / 100;
   const motorEnergyCost = energyKwPerYear * energyUnitCost;

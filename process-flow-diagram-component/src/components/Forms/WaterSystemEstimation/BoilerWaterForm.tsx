@@ -4,12 +4,13 @@ import { TextField, FormControl, InputAdornment, FormHelperText, Box } from '@mu
 import { useAppDispatch, useAppSelector } from '../../../hooks/state';
 import { RootState } from '../../Diagram/store';
 import { EstimateSystemContext, EstimateSystemState } from './EstimateWaterSystem';
-import EstimateResult from './EstimateResult';
 import HoursPerYearInputField from './HoursPerYearInputField';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
-import { getInitialValuesFromForm } from './SystemEstimationFormUtils';
-import { modalOpenChange } from '../../Diagram/diagramReducer';
+import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
+import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
 import { BoilerWaterResults, BoilerWater, calculateBoilerWaterResults, convertAnnualFlowResult } from 'process-flow-lib';
+import { TwoCellResultRow, TwoCellResultTable } from '../../StyledMUI/ResultTables';
+import FormActionGroupButtons from '../FormActionGroupButtons';
 
 const formLabelMapping: WaterSystemFormMapping = {
     power: { display: 'Power', initialValue: 0 },
@@ -25,7 +26,8 @@ const BoilerWaterForm = (props: BoilerWaterProps) => {
     const estimateSystemContext = useContext<EstimateSystemState>(EstimateSystemContext);
     const settings = useAppSelector((state: RootState) => state.diagram.settings);
     const dispatch = useAppDispatch();
-    const [ boilerWaterResults, setBoilerWaterResults ] = React.useState<BoilerWaterResults>(undefined);
+    const [estimatedFlowResults, setEstimatedFlowResults] = React.useState<EstimatedFlowResults>(undefined);
+
 
     const formik = useFormik({
         initialValues: getInitialValuesFromForm(formLabelMapping),
@@ -35,7 +37,7 @@ const BoilerWaterForm = (props: BoilerWaterProps) => {
 
     const handleInputChange = (e) => {
         formik.handleChange(e);
-        const values: {[key: string | number]: any} = { ...formik.values, [e.target.name]: Number(e.target.value) };
+        const values: { [key: string | number]: any } = { ...formik.values, [e.target.name]: Number(e.target.value) };
 
         const boilerWater: BoilerWater = {
             hoursPerYear: values.hoursPerYear,
@@ -45,8 +47,8 @@ const BoilerWaterForm = (props: BoilerWaterProps) => {
             feedwaterConductivity: values.feedwaterConductivity,
             makeupConductivity: values.makeupConductivity,
             blowdownConductivity: values.blowdownConductivity,
-          }
-          
+        }
+
 
         let boilerWaterResults: BoilerWaterResults = calculateBoilerWaterResults(boilerWater, formik.values.hoursPerYear);
         boilerWaterResults.cycleOfConcentration = convertAnnualFlowResult(boilerWaterResults.cycleOfConcentration, settings);
@@ -57,8 +59,14 @@ const BoilerWaterForm = (props: BoilerWaterProps) => {
         boilerWaterResults.condensateReturn = convertAnnualFlowResult(boilerWaterResults.condensateReturn, settings);
         boilerWaterResults.rateOfRecirculation = convertAnnualFlowResult(boilerWaterResults.rateOfRecirculation, settings);
 
-        console.log('boilerWaterResults', boilerWaterResults);
-        setBoilerWaterResults(boilerWaterResults);
+        const estimatedFlowResults = adaptEstimatedFlowResults(
+            boilerWaterResults.makeupWater,
+            boilerWaterResults.blowdownLoss,
+            boilerWaterResults.steamLoss,
+            0,
+            boilerWaterResults.grossWaterUse);
+        setEstimatedFlowResults(estimatedFlowResults);
+        console.log(estimatedFlowResults);
         estimateSystemContext.setEstimate(boilerWaterResults.grossWaterUse);
 
     };
@@ -66,12 +74,17 @@ const BoilerWaterForm = (props: BoilerWaterProps) => {
     const resetEstimate = () => {
         formik.resetForm();
         estimateSystemContext.setEstimate(0);
+        setEstimatedFlowResults(undefined);
     }
 
-    const applyEstimate = (estimate: number) => {
-        dispatch(modalOpenChange(false));
+    const applyEstimate = () => {
+        dispatch(applyEstimatedFlowResults(estimatedFlowResults));
     }
 
+    let estimatedResultsRows: TwoCellResultRow[] = getDefaultResultRows();
+    if (estimatedFlowResults) {
+        estimatedResultsRows = getEstimatedFlowResultRows(estimatedFlowResults);
+    }
 
     return (
         <Box component="form" onSubmit={formik.handleSubmit}>
@@ -201,8 +214,15 @@ const BoilerWaterForm = (props: BoilerWaterProps) => {
                     <FormHelperText>{String(formik.errors.blowdownConductivity)}</FormHelperText>
                 )}
             </FormControl>
-            <EstimateResult handleResetEstimate={resetEstimate} handleApplyEstimate={applyEstimate} />
-
+            <Box marginTop={'2rem'}>
+                <TwoCellResultTable
+                    headerTitle={'Boiler Results'}
+                    rows={estimatedResultsRows} />
+            </Box>
+            <FormActionGroupButtons
+                cancelContext={{ label: 'Reset', handler: resetEstimate }}
+                actionContext={{ label: 'Apply to Flows', handler: applyEstimate, isDisabled: estimatedFlowResults === undefined }}
+            />
         </Box>
     );
 };

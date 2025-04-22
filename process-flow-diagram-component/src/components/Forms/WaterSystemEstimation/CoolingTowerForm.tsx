@@ -4,12 +4,13 @@ import { TextField, FormControl, InputAdornment, FormHelperText, Box } from '@mu
 import { useAppDispatch, useAppSelector } from '../../../hooks/state';
 import { RootState } from '../../Diagram/store';
 import { EstimateSystemContext, EstimateSystemState } from './EstimateWaterSystem';
-import EstimateResult from './EstimateResult';
 import HoursPerYearInputField from './HoursPerYearInputField';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
-import { getInitialValuesFromForm } from './SystemEstimationFormUtils';
-import { modalOpenChange } from '../../Diagram/diagramReducer';
+import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
+import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
 import { CoolingTowerResults, CoolingTower, calculateCoolingTowerResults, convertAnnualFlowResult } from 'process-flow-lib';
+import { TwoCellResultRow, TwoCellResultTable } from '../../StyledMUI/ResultTables';
+import FormActionGroupButtons from '../FormActionGroupButtons';
 
 const formLabelMapping: WaterSystemFormMapping = {
     tonnage: { display: 'Cooling Tower Tonnage', initialValue: 0 },
@@ -25,17 +26,17 @@ const CoolingTowerForm = (props: CoolingTowerProps) => {
     const estimateSystemContext = useContext<EstimateSystemState>(EstimateSystemContext);
     const settings = useAppSelector((state: RootState) => state.diagram.settings);
     const dispatch = useAppDispatch();
-    const [coolingTowerResults, setCoolingTowerResults] = React.useState<CoolingTowerResults>(null);
-    
+    const [estimatedFlowResults, setEstimatedFlowResults] = React.useState<EstimatedFlowResults>(undefined);
+
     const formik = useFormik({
         initialValues: getInitialValuesFromForm(formLabelMapping),
         validationSchema: getEstimateSystemValidationSchema(formLabelMapping),
-        onSubmit: values => {},
+        onSubmit: values => { },
     });
 
     const handleInputChange = (e) => {
         formik.handleChange(e);
-        const values: {[key: string | number]: any} = { ...formik.values, [e.target.name]: Number(e.target.value) };
+        const values: { [key: string | number]: any } = { ...formik.values, [e.target.name]: Number(e.target.value) };
 
         const coolingTower: CoolingTower = {
             hoursPerYear: values.hoursPerYear,
@@ -54,23 +55,35 @@ const CoolingTowerForm = (props: CoolingTowerProps) => {
         coolingTowerResults.makeupWater = convertAnnualFlowResult(coolingTowerResults.makeupWater, settings);
         coolingTowerResults.blowdownLoss = convertAnnualFlowResult(coolingTowerResults.blowdownLoss, settings);
 
-        setCoolingTowerResults(coolingTowerResults);
+        const estimatedFlowResults = adaptEstimatedFlowResults(
+            coolingTowerResults.makeupWater, 
+            coolingTowerResults.blowdownLoss, 
+            coolingTowerResults.evaporationLoss, 
+            0, 
+            coolingTowerResults.grossWaterUse);
+        setEstimatedFlowResults(estimatedFlowResults);
+        console.log(estimatedFlowResults);
         estimateSystemContext.setEstimate(coolingTowerResults.grossWaterUse);
-        console.log(coolingTowerResults);
     };
 
     const resetEstimate = () => {
         formik.resetForm();
         estimateSystemContext.setEstimate(0);
+        setEstimatedFlowResults(undefined);
     }
 
-    const applyEstimate = (estimate: number) => {
-                dispatch(modalOpenChange(false));
+    const applyEstimate = () => {
+            dispatch(applyEstimatedFlowResults(estimatedFlowResults));
+    }
+
+    let estimatedResultsRows: TwoCellResultRow[] = getDefaultResultRows();
+    if (estimatedFlowResults) {
+        estimatedResultsRows = getEstimatedFlowResultRows(estimatedFlowResults);
     }
 
     return (
         <Box component="form" onSubmit={formik.handleSubmit}>
-            <HoursPerYearInputField formik={formik} handleInputChange={handleInputChange}/>
+            <HoursPerYearInputField formik={formik} handleInputChange={handleInputChange} />
             <FormControl fullWidth margin="normal" error={formik.touched.tonnage && Boolean(formik.errors.tonnage)}>
                 <TextField
                     id="tonnage"
@@ -196,7 +209,15 @@ const CoolingTowerForm = (props: CoolingTowerProps) => {
                     <FormHelperText>{String(formik.errors.blowdownConductivity)}</FormHelperText>
                 )}
             </FormControl>
-            <EstimateResult handleResetEstimate={resetEstimate} handleApplyEstimate={applyEstimate}/>
+            <Box marginTop={'2rem'}>
+                <TwoCellResultTable
+                    headerTitle={'Cooling Tower Results'}
+                    rows={estimatedResultsRows} />
+            </Box>
+            <FormActionGroupButtons 
+                    cancelContext={{label: 'Reset', handler: resetEstimate}}
+                    actionContext={{label: 'Apply to Flows', handler: applyEstimate, isDisabled: estimatedFlowResults === undefined}}
+                    />
         </Box>
     );
 };

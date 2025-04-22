@@ -4,12 +4,12 @@ import { TextField, FormControl, InputAdornment, FormHelperText, Box } from '@mu
 import { useAppDispatch, useAppSelector } from '../../../hooks/state';
 import { RootState } from '../../Diagram/store';
 import { EstimateSystemContext, EstimateSystemState } from './EstimateWaterSystem';
-import EstimateResult from './EstimateResult';
-import HoursPerYearInputField from './HoursPerYearInputField';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
-import { getInitialValuesFromForm } from './SystemEstimationFormUtils';
-import { modalOpenChange } from '../../Diagram/diagramReducer';
+import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
+import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
 import { KitchenRestroomResults, KitchenRestroom, calculateKitchenRestroomResults, convertAnnualFlowResult } from 'process-flow-lib';
+import { TwoCellResultRow, TwoCellResultTable } from '../../StyledMUI/ResultTables';
+import FormActionGroupButtons from '../FormActionGroupButtons';
 
 const formLabelMapping: WaterSystemFormMapping = {
     employeeCount: { display: 'Number of Employees', initialValue: 0 },
@@ -22,7 +22,8 @@ const KitchenRestroomForm = () => {
     const estimateSystemContext = useContext<EstimateSystemState>(EstimateSystemContext);
     const settings = useAppSelector((state: RootState) => state.diagram.settings);
     const dispatch = useAppDispatch();
-    const [kitchenRestroomResults, setKitchenRestroomResults] = React.useState<KitchenRestroomResults>(undefined);
+    const [estimatedFlowResults, setEstimatedFlowResults] = React.useState<EstimatedFlowResults>(undefined);
+
 
     const formik = useFormik({
         initialValues: getInitialValuesFromForm(formLabelMapping),
@@ -43,20 +44,30 @@ const KitchenRestroomForm = () => {
         const kitchenRestroomResults: KitchenRestroomResults = calculateKitchenRestroomResults(kitchenRestroom);
         kitchenRestroomResults.grossWaterUse = convertAnnualFlowResult(kitchenRestroomResults.grossWaterUse, settings);
 
-        setKitchenRestroomResults(kitchenRestroomResults);
+        const estimatedFlowResults = adaptEstimatedFlowResults(
+            kitchenRestroomResults.grossWaterUse,
+            kitchenRestroomResults.grossWaterUse,
+            0,
+            0,
+            kitchenRestroomResults.grossWaterUse);
+        setEstimatedFlowResults(estimatedFlowResults);
         console.log(kitchenRestroomResults);
     };
 
     const resetEstimate = () => {
         formik.resetForm();
         estimateSystemContext.setEstimate(0);
+        setEstimatedFlowResults(undefined);
     }
 
-    const applyEstimate = (estimate: number) => {
-        dispatch(modalOpenChange(false));
-
+    const applyEstimate = () => {
+        dispatch(applyEstimatedFlowResults(estimatedFlowResults));
     }
 
+    let estimatedResultsRows: TwoCellResultRow[] = getDefaultResultRows();
+    if (estimatedFlowResults) {
+        estimatedResultsRows = getEstimatedFlowResultRows(estimatedFlowResults);
+    }
     return (
         <Box component="form" onSubmit={formik.handleSubmit}>
             <FormControl fullWidth margin="normal" error={formik.touched.employeeCount && Boolean(formik.errors.employeeCount)}>
@@ -111,8 +122,15 @@ const KitchenRestroomForm = () => {
                     <FormHelperText>{String(formik.errors.dailyUsePerEmployee)}</FormHelperText>
                 )}
             </FormControl>
-
-            <EstimateResult handleResetEstimate={resetEstimate} handleApplyEstimate={applyEstimate} />
+            <Box marginTop={'2rem'}>
+                <TwoCellResultTable
+                    headerTitle={'Kitchen and Restroom Results'}
+                    rows={estimatedResultsRows} />
+            </Box>
+            <FormActionGroupButtons
+                cancelContext={{ label: 'Reset', handler: resetEstimate }}
+                actionContext={{ label: 'Apply to Flows', handler: applyEstimate, isDisabled: estimatedFlowResults === undefined }}
+            />
         </Box>
     );
 };
