@@ -5,7 +5,8 @@ import { CSSProperties } from 'react';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
 import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
-import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR } from './FlowUtils';
+import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
+import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 
 export interface DiagramState {
   nodes: Node[];
@@ -213,6 +214,18 @@ const nodeErrorsChangeReducer = (state: DiagramState, action: PayloadAction<{flo
   }
 }
 
+const applyEstimatedFlowResultsReducer = (state: DiagramState, action: PayloadAction<EstimatedFlowResults>) => {
+  const { totalSourceFlow, totalDischargeFlow, knownLosses, waterInProduct } = action.payload;
+  const updateNode = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId) as Node<ProcessFlowPart | undefined>;
+  if (updateNode) {
+    // * NAN not serializable, causing maximum call stack exceeded - should fix in estimate components once validation/precision is known
+    updateNode.data.userEnteredData.totalSourceFlow = Number(formatNumberValue(totalSourceFlow, 3));
+    updateNode.data.userEnteredData.totalDischargeFlow = Number(formatNumberValue(totalDischargeFlow, 3));
+    updateNode.data.userEnteredData.totalKnownLosses = Number(formatNumberValue(knownLosses, 3));
+    updateNode.data.userEnteredData.waterInProduct = Number(formatNumberValue(waterInProduct, 3));
+  }
+  state.isModalOpen = false;
+}
 
 const validationWindowOpenChangeReducer = (state: DiagramState, action: PayloadAction<ValidationWindowLocation>) => {
   state.validationWindowLocation = action.payload;
@@ -460,6 +473,7 @@ export const diagramSlice = createSlice({
     setDialogOpen: setDialogOpenReducer,
     conductivityUnitChange: conductivityUnitChangeReducer,
     modalOpenChange: modalOpenChangeReducer,
+    applyEstimatedFlowResults: applyEstimatedFlowResultsReducer
   }
 })
 
@@ -494,6 +508,7 @@ export const {
   diagramOptionsChange, 
   unitsOfMeasureChange,
   flowDecimalPrecisionChange,
+  applyEstimatedFlowResults,
   showMarkerEndArrows,
   toggleDrawer,
   setDialogOpen,

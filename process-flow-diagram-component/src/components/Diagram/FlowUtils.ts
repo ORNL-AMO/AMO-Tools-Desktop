@@ -262,10 +262,18 @@ export const formatNumberValue = (value: number | string, places: number): numbe
   if (value === undefined || value === null) {
     return '';
   }
-  if (!Number.isInteger(Number(value))) {
-    value = Number(formatDecimalPlaces(value, places));
+
+  const numericValue = Number(value);
+
+  if (isNaN(numericValue) || !isFinite(numericValue)) {
+    return 0;
   }
-  return value;
+
+  if (!Number.isInteger(numericValue)) {
+    return Number(formatDecimalPlaces(numericValue, places));
+  }
+  
+  return numericValue;
 }
 
 export const formatDataForMEASUR = (diagramData: FlowDiagramData): FlowDiagramData => {
@@ -283,7 +291,6 @@ export const formatDataForMEASUR = (diagramData: FlowDiagramData): FlowDiagramDa
 }
 
 export const getNodeSourceEdges = (edges: Edge[], nodeId: string) => edges.filter((edge) => edge.target === nodeId);
-
 export const getNodeTargetEdges = (edges: Edge[], nodeId: string) => edges.filter((edge) => edge.source === nodeId);
 
 

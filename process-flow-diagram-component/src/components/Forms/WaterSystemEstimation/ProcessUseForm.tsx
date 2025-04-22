@@ -4,12 +4,13 @@ import { TextField, FormControl, InputAdornment, FormHelperText, Box, MenuItem, 
 import { useAppDispatch, useAppSelector } from '../../../hooks/state';
 import { RootState } from '../../Diagram/store';
 import { EstimateSystemContext, EstimateSystemState } from './EstimateWaterSystem';
-import EstimateResult from './EstimateResult';
 import HoursPerYearInputField from './HoursPerYearInputField';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
-import { getInitialValuesFromForm } from './SystemEstimationFormUtils';
-import { modalOpenChange } from '../../Diagram/diagramReducer';
+import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
+import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
 import { calculateProcessUseResults, convertAnnualFlowResult, FlowMetric, ImperialFlowUnitMap, MetricFlowUnitMap, ProcessUse, ProcessUseResults, waterFlowMetricOptions } from 'process-flow-lib';
+import { TwoCellResultRow, TwoCellResultTable } from '../../StyledMUI/ResultTables';
+import FormActionGroupButtons from '../FormActionGroupButtons';
 
 const systemFormMapping: WaterSystemFormMapping = {
     fractionGrossWaterRecirculated: { display: 'Fraction of Gross Water Use Recirculated', initialValue: 0 },
@@ -40,7 +41,7 @@ const WaterMetricGroup = ({ formik, handleInputChange, inputUnitMap, options, me
 
     return (
         <Box margin="normal" className={'water-flow-metric-group'}>
-            <InputLabel id={`${metricControlId}-label`} sx={{marginBottom: '.5rem'}}>
+            <InputLabel id={`${metricControlId}-label`} sx={{ marginBottom: '.5rem' }}>
                 Water {metricNameCased} Metric
             </InputLabel>
             <Select
@@ -67,8 +68,10 @@ const WaterMetricGroup = ({ formik, handleInputChange, inputUnitMap, options, me
                 ))}
             </Select>
 
-
-            <FormControl fullWidth margin="normal" error={formik.touched[metricValueControlId] && Boolean(formik.errors[metricValueControlId])}>
+                {/* // todo need to support non-required fields in schema */}
+            <FormControl fullWidth margin="normal" 
+                // error={formik.touched[metricValueControlId] && Boolean(formik.errors[metricValueControlId])}
+                >
                 <TextField
                     id={metricValueControlId}
                     name={metricValueControlId}
@@ -84,9 +87,9 @@ const WaterMetricGroup = ({ formik, handleInputChange, inputUnitMap, options, me
                         }
                     }}
                 />
-                {formik.touched[metricValueControlId] && formik.errors[metricValueControlId] && (
+                {/* {formik.touched[metricValueControlId] && formik.errors[metricValueControlId] && (
                     <FormHelperText>{formik.errors[metricValueControlId]}</FormHelperText>
-                )}
+                )} */}
             </FormControl>
         </Box>
     );
@@ -99,9 +102,7 @@ const ProcessUseForm = (props: ProcessUseFormProps) => {
     const flowMetricOptions = waterFlowMetricOptions;
     const waterRequiredFlowMetricOptions = waterFlowMetricOptions.slice(0, 3);
     const inputUnitMap = settings.unitsOfMeasure === 'Imperial' ? ImperialFlowUnitMap : MetricFlowUnitMap;
-
-    const [processUseResults, setProcessUseResults] = React.useState<ProcessUseResults>(undefined);
-
+    const [estimatedFlowResults, setEstimatedFlowResults] = React.useState<EstimatedFlowResults>(undefined);
 
     const formik = useFormik({
         initialValues: getInitialValuesFromForm(systemFormMapping),
@@ -111,8 +112,8 @@ const ProcessUseForm = (props: ProcessUseFormProps) => {
 
     const handleInputChange = (e) => {
         formik.handleChange(e);
-        const values: {[key: string | number]: any} = { ...formik.values, [e.target.name]: Number(e.target.value) };
-        
+        const values: { [key: string | number]: any } = { ...formik.values, [e.target.name]: Number(e.target.value) };
+
         let processUse: ProcessUse = {
             hoursPerYear: values.hoursPerYear,
             fractionGrossWaterRecirculated: values.fractionGrossWaterRecirculated,
@@ -124,33 +125,48 @@ const ProcessUseForm = (props: ProcessUseFormProps) => {
             waterLossMetric: values.waterLossMetric,
             waterLossMetricValue: values.waterLossMetricValue
         };
-        
-      let processUseResults: ProcessUseResults = calculateProcessUseResults(processUse, formik.values.hoursPerYear);
-      processUseResults.incomingWater = convertAnnualFlowResult(processUseResults.incomingWater, settings);
-      processUseResults.recirculatedWater = convertAnnualFlowResult(processUseResults.recirculatedWater, settings);
-      processUseResults.wasteDischargedAndRecycledOther = convertAnnualFlowResult(processUseResults.wasteDischargedAndRecycledOther, settings);
-      processUseResults.waterConsumed = convertAnnualFlowResult(processUseResults.waterConsumed, settings);
-      processUseResults.waterLoss = convertAnnualFlowResult(processUseResults.waterLoss, settings);
-      processUseResults.grossWaterUse = convertAnnualFlowResult(processUseResults.grossWaterUse, settings);
-    
-      setProcessUseResults(processUseResults);
-      estimateSystemContext.setEstimate(processUseResults.grossWaterUse);
-      console.log('processUseResults', processUseResults);
+
+        let processUseResults: ProcessUseResults = calculateProcessUseResults(processUse, formik.values.hoursPerYear);
+        processUseResults.incomingWater = convertAnnualFlowResult(processUseResults.incomingWater, settings);
+        processUseResults.recirculatedWater = convertAnnualFlowResult(processUseResults.recirculatedWater, settings);
+        processUseResults.wasteDischargedAndRecycledOther = convertAnnualFlowResult(processUseResults.wasteDischargedAndRecycledOther, settings);
+        processUseResults.waterConsumed = convertAnnualFlowResult(processUseResults.waterConsumed, settings);
+        processUseResults.waterLoss = convertAnnualFlowResult(processUseResults.waterLoss, settings);
+        processUseResults.grossWaterUse = convertAnnualFlowResult(processUseResults.grossWaterUse, settings);
+
+        // * total source flow == grossWaterUse
+        // * total discharge flow == wasteDischargedAndRecycledOther
+        // * known losses == waterLoss
+        // * water in product == waterConsumed
+
+        const estimatedFlowResults = adaptEstimatedFlowResults(
+            processUseResults.grossWaterUse, 
+            processUseResults.wasteDischargedAndRecycledOther, 
+            processUseResults.waterLoss, 
+            processUseResults.waterConsumed, 
+            processUseResults.grossWaterUse);
+        setEstimatedFlowResults(estimatedFlowResults);
+        estimateSystemContext.setEstimate(processUseResults.grossWaterUse);
     };
 
     const resetEstimate = () => {
         formik.resetForm();
         estimateSystemContext.setEstimate(0);
+        setEstimatedFlowResults(undefined);
     }
 
-    const applyEstimate = (estimate: number) => {
-        // todo  dispatch - update populated field 
-        dispatch(modalOpenChange(false))
+    const applyEstimate = () => {
+        dispatch(applyEstimatedFlowResults(estimatedFlowResults));
+    }
+
+    let estimatedResultsRows: TwoCellResultRow[] = getDefaultResultRows();
+    if (estimatedFlowResults) {
+        estimatedResultsRows = getEstimatedFlowResultRows(estimatedFlowResults);
     }
 
     return (
         <Box component="form" onSubmit={formik.handleSubmit}>
-            <HoursPerYearInputField formik={formik} handleInputChange={handleInputChange}/>
+            <HoursPerYearInputField formik={formik} handleInputChange={handleInputChange} />
             <FormControl fullWidth margin="normal" error={formik.touched.fractionGrossWaterRecirculated && Boolean(formik.errors.fractionGrossWaterRecirculated)}>
                 <TextField
                     id="fractionGrossWaterRecirculated"
@@ -163,7 +179,7 @@ const ProcessUseForm = (props: ProcessUseFormProps) => {
                     value={formik.values.fractionGrossWaterRecirculated}
                 />
                 {formik.touched.fractionGrossWaterRecirculated && formik.errors.fractionGrossWaterRecirculated && (
-                    <FormHelperText>{typeof formik.errors.fractionGrossWaterRecirculated === 'string'? formik.errors.fractionGrossWaterRecirculated : ''}</FormHelperText>
+                    <FormHelperText>{typeof formik.errors.fractionGrossWaterRecirculated === 'string' ? formik.errors.fractionGrossWaterRecirculated : ''}</FormHelperText>
                 )}
             </FormControl>
 
@@ -179,7 +195,7 @@ const ProcessUseForm = (props: ProcessUseFormProps) => {
                     value={formik.values.annualProduction}
                 />
                 {formik.touched.annualProduction && formik.errors.annualProduction && (
-                    <FormHelperText>{typeof formik.errors.annualProduction === 'string'? formik.errors.annualProduction : ''}</FormHelperText>
+                    <FormHelperText>{typeof formik.errors.annualProduction === 'string' ? formik.errors.annualProduction : ''}</FormHelperText>
                 )}
             </FormControl>
 
@@ -187,8 +203,15 @@ const ProcessUseForm = (props: ProcessUseFormProps) => {
             <WaterMetricGroup formik={formik} handleInputChange={handleInputChange} inputUnitMap={inputUnitMap} options={flowMetricOptions} metricType={'consumed'} />
             <WaterMetricGroup formik={formik} handleInputChange={handleInputChange} inputUnitMap={inputUnitMap} options={flowMetricOptions} metricType={'loss'} />
 
-            <EstimateResult handleResetEstimate={resetEstimate} handleApplyEstimate={applyEstimate}/>
-
+            <Box marginTop={'2rem'}>
+                <TwoCellResultTable
+                    headerTitle={'Process Use Results'}
+                    rows={estimatedResultsRows} />
+            </Box>
+            <FormActionGroupButtons
+                cancelContext={{ label: 'Reset', handler: resetEstimate }}
+                actionContext={{ label: 'Apply to Flows', handler: applyEstimate, isDisabled: estimatedFlowResults === undefined }}
+            />
         </Box>
 
     );
@@ -196,4 +219,4 @@ const ProcessUseForm = (props: ProcessUseFormProps) => {
 
 export default ProcessUseForm;
 
-export interface ProcessUseFormProps {}
+export interface ProcessUseFormProps { }

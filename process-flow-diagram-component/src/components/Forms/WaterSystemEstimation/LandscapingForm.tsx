@@ -4,11 +4,12 @@ import { TextField, FormControl, InputAdornment, FormHelperText, Box } from '@mu
 import { useAppDispatch, useAppSelector } from '../../../hooks/state';
 import { RootState } from '../../Diagram/store';
 import { EstimateSystemContext, EstimateSystemState } from './EstimateWaterSystem';
-import EstimateResult from './EstimateResult';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
-import { getInitialValuesFromForm } from './SystemEstimationFormUtils';
-import { modalOpenChange } from '../../Diagram/diagramReducer';
+import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
+import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
 import { calculateLandscapingResults, convertAnnualFlowResult, convertLandscapingResults, convertLandscapingSuiteInput, Landscaping, LandscapingResults } from 'process-flow-lib';
+import { TwoCellResultRow, TwoCellResultTable } from '../../StyledMUI/ResultTables';
+import FormActionGroupButtons from '../FormActionGroupButtons';
 
 const formLabelMapping: WaterSystemFormMapping = {
     areaIrrigated: { display: 'Area of Land Irrigated', initialValue: 0 },
@@ -20,7 +21,8 @@ const LandscapingForm = (props: LandscapingProps) => {
     const estimateSystemContext = useContext<EstimateSystemState>(EstimateSystemContext);
     const settings = useAppSelector((state: RootState) => state.diagram.settings);
     const dispatch = useAppDispatch();
-    const [landscapingResults, setLandscapingResults] = React.useState<LandscapingResults>(undefined);
+    const [estimatedFlowResults, setEstimatedFlowResults] = React.useState<EstimatedFlowResults>(undefined);
+
 
     const formik = useFormik({
         initialValues: getInitialValuesFromForm(formLabelMapping),
@@ -42,7 +44,13 @@ const LandscapingForm = (props: LandscapingProps) => {
         landscapingResults = convertLandscapingResults(landscapingResults, settings.unitsOfMeasure);
         landscapingResults.grossWaterUse = convertAnnualFlowResult(landscapingResults.grossWaterUse, settings);
 
-        setLandscapingResults(landscapingResults);
+        const estimatedFlowResults = adaptEstimatedFlowResults(
+            landscapingResults.grossWaterUse,
+            0,
+            0,
+            0,
+            landscapingResults.grossWaterUse);
+        setEstimatedFlowResults(estimatedFlowResults);
         estimateSystemContext.setEstimate(landscapingResults.grossWaterUse);
         console.log(landscapingResults);
     };
@@ -50,12 +58,17 @@ const LandscapingForm = (props: LandscapingProps) => {
     const resetEstimate = () => {
         formik.resetForm();
         estimateSystemContext.setEstimate(0);
+        setEstimatedFlowResults(undefined);
     }
 
-    const applyEstimate = (estimate: number) => {
-        dispatch(modalOpenChange(false));
+    const applyEstimate = () => {
+        dispatch(applyEstimatedFlowResults(estimatedFlowResults));
     }
 
+    let estimatedResultsRows: TwoCellResultRow[] = getDefaultResultRows();
+    if (estimatedFlowResults) {
+        estimatedResultsRows = getEstimatedFlowResultRows(estimatedFlowResults);
+    }
     return (
         <Box component="form" onSubmit={formik.handleSubmit}>
             <FormControl fullWidth margin="normal" error={formik.touched.areaIrrigated && Boolean(formik.errors.areaIrrigated)}>
@@ -99,8 +112,15 @@ const LandscapingForm = (props: LandscapingProps) => {
                     <FormHelperText>{String(formik.errors.yearlyInchesIrrigated)}</FormHelperText>
                 )}
             </FormControl>
-
-            <EstimateResult handleResetEstimate={resetEstimate} handleApplyEstimate={applyEstimate} />
+            <Box marginTop={'2rem'}>
+                <TwoCellResultTable
+                    headerTitle={'Landscaping Results'}
+                    rows={estimatedResultsRows} />
+            </Box>
+            <FormActionGroupButtons
+                cancelContext={{ label: 'Reset', handler: resetEstimate }}
+                actionContext={{ label: 'Apply to Flows', handler: applyEstimate, isDisabled: estimatedFlowResults === undefined }}
+            />
         </Box>
     );
 };

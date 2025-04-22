@@ -25,6 +25,7 @@ const FormActionGroupButtons = (props: FormActionGroupButtonsProps) => {
                 type="button" 
                 variant="contained" 
                 color="primary" 
+                disabled={actionContext.isDisabled}
                 onClick={actionContext.handler}
                 sx={{ width: '50%' }}
             >
@@ -43,5 +44,6 @@ interface FormActionGroupButtonsProps {
     actionContext: {
         label: string;
         handler: () => void;
+        isDisabled?: boolean;
     };
 }
