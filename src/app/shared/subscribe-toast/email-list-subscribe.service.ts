@@ -21,26 +21,23 @@ export class EmailListSubscribeService {
   };
 
   API_URL = environment.measurUtilitiesApi + 'measur-email-subscriber';
-  constructor(private httpClient: HttpClient, 
+  constructor(private httpClient: HttpClient,
     private analyticsService: AnalyticsService,
     private appErrorService: AppErrorService,
-     private applicationInstanceDbService: ApplicationInstanceDbService) { 
+    private applicationInstanceDbService: ApplicationInstanceDbService) {
     this.submittedStatus = new BehaviorSubject<'error' | 'success' | 'sending'>(undefined);
     this.shouldShowToast = new BehaviorSubject<boolean>(false);
     this.isSubscribed = new BehaviorSubject<boolean>(false);
     this.showModal = new BehaviorSubject<boolean>(false);
   }
 
-    async setEmailSubscribeVisibility(applicationData: ApplicationInstanceData) {
-      const isEmailSubscriber: boolean = await this.checkSubscriberExists(applicationData);
-      const hasMetUsageRequirement : boolean = this.getHasMetUsageRequirements(applicationData);
-      console.log('!isEmailSubscriber', !isEmailSubscriber);
-      console.log('hasmetUsagREqs', hasMetUsageRequirement);
-      console.log('shouldShowToast', hasMetUsageRequirement && !isEmailSubscriber);
-      this.isSubscribed.next(isEmailSubscriber);
-      this.shouldShowToast.next(hasMetUsageRequirement && !isEmailSubscriber);
-    }
-  
+  async setEmailSubscribeVisibility(applicationData: ApplicationInstanceData) {
+    const isEmailSubscriber: boolean = await this.checkSubscriberExists(applicationData);
+    const hasMetUsageRequirement: boolean = this.getHasMetUsageRequirements(applicationData);
+    this.isSubscribed.next(isEmailSubscriber);
+    this.shouldShowToast.next(hasMetUsageRequirement && !isEmailSubscriber);
+  }
+
   submitSubscriberEmail(email: string): Observable<void> {
     this.submittedStatus.next('sending');
     const subscriber: Subscriber = {
@@ -69,22 +66,21 @@ export class EmailListSubscribeService {
     );
   }
 
-    // todo eventuually get subscriber exists from list as part of obs chain
-    // * if they have subscribed and unsubscribed we won't show the toast again.
+  // todo eventuually get subscriber exists from list as part of obs chain
   async checkSubscriberExists(applicationData?: ApplicationInstanceData) {
     if (!applicationData) {
       applicationData = await firstValueFrom(this.applicationInstanceDbService.getApplicationInstanceData());
     }
-    return Boolean(applicationData.subscriberId);
 
-    // try {
-    //   const resp = await firstValueFrom(this.httpClient.get(this.API_URL + `/${subscriberId}`));
-    //   this.setStatus(resp);
-    //   return resp === 'OK' ? true : false;
-    // } catch (error: any) {
-    //   this.setStatus(undefined, error);
-    //   return false;
-    // }
+    if (applicationData.subscriberId) {
+      try {
+        const resp = await firstValueFrom(this.httpClient.get(this.API_URL + `/${applicationData.subscriberId}`, { ...this.httpOptions, observe: 'response' }));
+        return resp.status === 200 ? true : false;
+      } catch (error: any) {
+        this.appErrorService.handleHttpError(error, 'checkSubscriberExists')
+      }
+    }
+    return false;
   }
 
   checkEmailValid(subscriberEmail: string): string {
@@ -127,5 +123,5 @@ interface Subscriber {
 }
 
 interface SubscriberResponse {
-    id: number;
+  id: number;
 }
