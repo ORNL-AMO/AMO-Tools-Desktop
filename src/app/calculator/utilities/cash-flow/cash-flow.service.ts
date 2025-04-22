@@ -106,16 +106,20 @@ export class CashFlowService {
       let output: CashFlowOutputs = this.getEmptyCashFlowOutputs();
       if (index != inputs.advancedCashflows.length - 1) {
         output.energySavings = inputs.energySavings;
-        output.operationCost = -inputs.operationCost;
+        output.operationCost = -inputs.operationCost;        
+        output.otherSavings = inputs.otherSavings;
+        output.otherCosts = -inputs.otherCost;
         output.otherCashFlow = cashFlow;
-        output.cashFlow = inputs.energySavings - inputs.operationCost + cashFlow;
+        output.cashFlow = inputs.energySavings - inputs.operationCost + cashFlow + inputs.otherSavings - inputs.otherCost;
       } else if (index == inputs.advancedCashflows.length - 1) {
         output.energySavings = inputs.energySavings;
-        output.salvage = inputs.salvageInput; 
+        output.salvage = inputs.salvageInput;                 
+        output.otherSavings = inputs.otherSavings;
+        output.otherCosts = -inputs.otherCost;
         output.operationCost = -inputs.operationCost;
         output.disposal = -inputs.junkCost;
         output.otherCashFlow = cashFlow;
-        output.cashFlow = inputs.energySavings - inputs.operationCost + cashFlow - inputs.junkCost + inputs.salvageInput;
+        output.cashFlow = inputs.energySavings - inputs.operationCost + cashFlow - inputs.junkCost + inputs.salvageInput + inputs.otherSavings - inputs.otherCost;
       }
       outputs.cashFlowOutputs.push(output);
     });
@@ -125,6 +129,8 @@ export class CashFlowService {
       outputs.totalOutputs.energySavings += output.energySavings;
       outputs.totalOutputs.operationCost += output.operationCost;
       outputs.totalOutputs.otherCashFlow += output.otherCashFlow;
+      outputs.totalOutputs.otherCosts += output.otherCosts;
+      outputs.totalOutputs.otherSavings += output.otherSavings;
       outputs.totalOutputs.capitalExpenditures += output.capitalExpenditures;
       outputs.totalOutputs.salvage += output.salvage;
       outputs.totalOutputs.disposal += output.disposal;
@@ -144,7 +150,9 @@ export class CashFlowService {
       output.total = cashFlow.cashFlow / Math.pow((1 + (inputs.discountRate / 100)), index);
       output.energySavings = cashFlow.energySavings / Math.pow((1 + (inputs.discountRate / 100)), index);
       output.operationCost = cashFlow.operationCost / Math.pow((1 + (inputs.discountRate / 100)), index);
-      output.otherCashFlow = cashFlow.otherCashFlow / Math.pow((1 + (inputs.discountRate / 100)), index);
+      output.otherCashFlow = cashFlow.otherCashFlow / Math.pow((1 + (inputs.discountRate / 100)), index);      
+      output.otherCosts = cashFlow.otherCosts / Math.pow((1 + (inputs.discountRate / 100)), index);
+      output.otherSavings = cashFlow.otherSavings / Math.pow((1 + (inputs.discountRate / 100)), index);
       outputs.cashFlowOutputs.push(output);
     });
 
@@ -153,6 +161,8 @@ export class CashFlowService {
       outputs.totalOutputs.energySavings += output.energySavings;
       outputs.totalOutputs.operationCost += output.operationCost;
       outputs.totalOutputs.otherCashFlow += output.otherCashFlow;
+      outputs.totalOutputs.otherCosts += output.otherCosts;
+      outputs.totalOutputs.otherSavings += output.otherSavings;
     });
 
     outputs.totalOutputs.capitalExpenditures = -inputs.installationCost;
@@ -185,9 +195,11 @@ export class CashFlowService {
     withoutTaxesPresentValueOutputs.cashFlowOutputs.salvage = presentValueCashFlowOutputs.totalOutputs.salvage;
     withoutTaxesPresentValueOutputs.cashFlowOutputs.operationCost = presentValueCashFlowOutputs.totalOutputs.operationCost;
     withoutTaxesPresentValueOutputs.cashFlowOutputs.disposal = presentValueCashFlowOutputs.totalOutputs.disposal;
-    withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow = presentValueCashFlowOutputs.totalOutputs.otherCashFlow;
+    withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow = presentValueCashFlowOutputs.totalOutputs.otherCashFlow;    
+    withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCosts = presentValueCashFlowOutputs.totalOutputs.otherCosts;
+    withoutTaxesPresentValueOutputs.cashFlowOutputs.otherSavings = presentValueCashFlowOutputs.totalOutputs.otherSavings;
 
-    withoutTaxesPresentValueOutputs.net = presentValueCashFlowOutputs.totalOutputs.capitalExpenditures + presentValueCashFlowOutputs.totalOutputs.energySavings + presentValueCashFlowOutputs.totalOutputs.salvage + presentValueCashFlowOutputs.totalOutputs.operationCost + presentValueCashFlowOutputs.totalOutputs.disposal + presentValueCashFlowOutputs.totalOutputs.otherCashFlow;
+    withoutTaxesPresentValueOutputs.net = presentValueCashFlowOutputs.totalOutputs.capitalExpenditures + presentValueCashFlowOutputs.totalOutputs.energySavings + presentValueCashFlowOutputs.totalOutputs.salvage + presentValueCashFlowOutputs.totalOutputs.operationCost + presentValueCashFlowOutputs.totalOutputs.disposal + presentValueCashFlowOutputs.totalOutputs.otherCashFlow + presentValueCashFlowOutputs.totalOutputs.otherCosts + presentValueCashFlowOutputs.totalOutputs.otherSavings;
 
 
     let sumContinueA: number = 0;
@@ -225,9 +237,10 @@ export class CashFlowService {
     withoutTaxesAnnualWorthOutputs.cashFlowOutputs.salvage = withoutTaxesPresentValueOutputs.cashFlowOutputs.salvage * factor;
     withoutTaxesAnnualWorthOutputs.cashFlowOutputs.operationCost = withoutTaxesPresentValueOutputs.cashFlowOutputs.operationCost * factor;
     withoutTaxesAnnualWorthOutputs.cashFlowOutputs.disposal = withoutTaxesPresentValueOutputs.cashFlowOutputs.disposal * factor;
-    withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow * factor;
-
-    withoutTaxesAnnualWorthOutputs.net = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.capitalExpenditures + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.energySavings + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.salvage + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.operationCost + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.disposal + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow;
+    withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow * factor;    
+    withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCosts = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCosts * factor;
+    withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherSavings = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherSavings * factor;
+    withoutTaxesAnnualWorthOutputs.net = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.capitalExpenditures + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.energySavings + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.salvage + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.operationCost + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.disposal + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCosts + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherSavings;  
 
     withoutTaxesAnnualWorthOutputs.simplePayback = inputs.installationCost / inputs.energySavings;
     withoutTaxesAnnualWorthOutputs.simplePaybackWithCostsSavings = -withoutTaxesPresentValueOutputs.cashFlowOutputs.capitalExpenditures / (withoutTaxesPresentValueOutputs.cashFlowOutputs.energySavings + withoutTaxesPresentValueOutputs.cashFlowOutputs.operationCost + withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow);

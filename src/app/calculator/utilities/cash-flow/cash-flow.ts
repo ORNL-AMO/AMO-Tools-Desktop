@@ -58,6 +58,8 @@ export interface CashFlowOutputs {
   disposal?: number;
   otherCashFlow?: number;
   total?: number;
+  otherSavings?: number;
+  otherCosts?: number;
 }
 
 export interface WithoutTaxesOutputs {
