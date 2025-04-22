@@ -49,7 +49,7 @@ export class SystemSourcesComponent {
 
   deleteConnection(systemFlowData: EdgeFlowData, sourceFlowIndex: number) {
     if (sourceFlowIndex !== 0) {
-      let componentWaterFlows = this.waterAssessment.diagramWaterSystemFlows.find(systemFlows => systemFlows.id === this.diagramNodeId);
+      let componentWaterFlows = this.waterAssessment.componentEdgeFlowData.find(systemFlows => systemFlows.id === this.diagramNodeId);
       let deleteIndex = componentWaterFlows.sourceWater.flows.findIndex(systemFlow => systemFlow.diagramEdgeId === systemFlowData.diagramEdgeId);
       componentWaterFlows.sourceWater.flows.splice(deleteIndex, 1);
       // delete this.waterAssessment.connectedNodesMap[systemFlowData.source]
@@ -60,7 +60,7 @@ export class SystemSourcesComponent {
   }
 
   deleteConnectedSystemDischarge(systemFlowData: EdgeFlowData, sourceFlowIndex: number) {
-    let connectedSystemFlows = this.waterAssessment.diagramWaterSystemFlows.find(systemFlows => systemFlows.id === systemFlowData.source);
+    let connectedSystemFlows = this.waterAssessment.componentEdgeFlowData.find(systemFlows => systemFlows.id === systemFlowData.source);
     if (connectedSystemFlows) {
       let deleteIndex = connectedSystemFlows.dischargeWater.flows.findIndex(systemFlow => systemFlow.diagramEdgeId === systemFlowData.diagramEdgeId);
       connectedSystemFlows.dischargeWater.flows.splice(deleteIndex, 1);

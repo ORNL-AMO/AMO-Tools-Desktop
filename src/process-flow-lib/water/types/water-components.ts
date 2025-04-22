@@ -265,7 +265,7 @@ export interface WaterSystemResults {
 * @property recycledDischargeFlows - discharges to another WaterUsingSystem. 
 * @property knownLossFlows - discharges to known loss, flow loss (this is 'water in product')
 */
-export interface DiagramWaterSystemFlows {
+export interface ComponentEdgeFlowData {
     id: string,
     componentName: string,
     sourceWater: {

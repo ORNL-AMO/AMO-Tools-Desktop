@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { OperatingHours } from '../../shared/models/operations';
-import { BoilerWater, ConnectedFlowType, CoolingTower, DiagramWaterSystemFlows, FlowMetric, getNewProcessComponent, getWaterFlowsFromSource, KitchenRestroom, KnownLoss, Landscaping, ProcessUse, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from 'process-flow-lib';
+import { BoilerWater, ConnectedFlowType, CoolingTower, ComponentEdgeFlowData, FlowMetric, getNewProcessComponent, getWaterFlowsFromSource, KitchenRestroom, KnownLoss, Landscaping, ProcessUse, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeData, WaterSystemTypeEnum, WaterUsingSystem } from 'process-flow-lib';
 
 @Injectable()
 export class WaterUsingSystemService {
@@ -68,10 +68,10 @@ export class WaterUsingSystemService {
     return knownLoss;
   }
 
-  getWaterUsingSystemForm(waterUsingSystem: WaterUsingSystem, diagramWaterSystemFlows: DiagramWaterSystemFlows): FormGroup {
+  getWaterUsingSystemForm(waterUsingSystem: WaterUsingSystem, componentEdgeFlowData: ComponentEdgeFlowData): FormGroup {
     let systemFlowTotals: WaterSystemFlowsTotals = waterUsingSystem.systemFlowTotals;
-    if (diagramWaterSystemFlows) {
-      systemFlowTotals = getWaterFlowsFromSource(waterUsingSystem, diagramWaterSystemFlows);
+    if (componentEdgeFlowData) {
+      systemFlowTotals = getWaterFlowsFromSource(waterUsingSystem, componentEdgeFlowData);
     }
     
     let form: FormGroup = this.formBuilder.group({

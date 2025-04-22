@@ -1,6 +1,6 @@
 import { Node, Edge } from "@xyflow/react";
 import { CustomEdgeData, DiagramSettings, NodeFlowData, NodeFlowProperty, ProcessFlowPart } from "../types/diagram";
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, EdgeFlowData, HeatEnergy, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, ComponentEdgeFlowData, EdgeFlowData, HeatEnergy, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor} from "./utils";
 import { getWaterFlowTotals } from "./water-components";
 
@@ -105,10 +105,10 @@ export const getBalancePercent = (total: number, segment: number) => {
   return 0;
 }
 
-export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], edges: Edge[]): DiagramWaterSystemFlows[] => {
-  let diagramWaterSystemFlows: DiagramWaterSystemFlows[] = []
+export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], edges: Edge[]): ComponentEdgeFlowData[] => {
+  let componentEdgeFlowData: ComponentEdgeFlowData[] = []
   waterUsingSystems = waterUsingSystems.map((system: WaterUsingSystem) => {
-    let componentFlows: DiagramWaterSystemFlows = {
+    let componentFlows: ComponentEdgeFlowData = {
       id: system.diagramNodeId,
       componentName: system.name,
       sourceWater: {total: 0, flows: []},
@@ -152,7 +152,7 @@ export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], 
     componentFlows.knownLosses.total = totalKnownLosses?? 0;
     // componentFlows.knownLosses.total = system.userEnteredData.totalKnownLosses? system.userEnteredData.totalKnownLosses : getTotalFlowValue(componentFlows.knownLosses.flows);
     componentFlows.waterInProduct.total = system.userEnteredData.waterInProduct?? 0;
-    diagramWaterSystemFlows.push(componentFlows);
+    componentEdgeFlowData.push(componentFlows);
 
     // todo override above values if user has entered their own
     // let waterFlows: WaterSystemFlowsTotals = getWaterFlowsFromSource(componentFlows);
@@ -162,7 +162,7 @@ export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], 
     return system;
   });
   
-  return diagramWaterSystemFlows;
+  return componentEdgeFlowData;
 }
 
 

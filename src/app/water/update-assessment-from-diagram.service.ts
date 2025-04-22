@@ -46,7 +46,7 @@ export class UpdateAssessmentFromDiagramService {
 
   async updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment, assessmentSettings: Settings) {
     this.updateAssessmentWaterComponents(diagram, assessment.water);
-    assessment.water.diagramWaterSystemFlows = setWaterUsingSystemFlows(assessment.water.waterUsingSystems, diagram.waterDiagram.flowDiagramData.edges);
+    assessment.water.componentEdgeFlowData = setWaterUsingSystemFlows(assessment.water.waterUsingSystems, diagram.waterDiagram.flowDiagramData.edges);
     this.setAssessmentSettingsFromDiagram(assessment, assessmentSettings, diagram);
     
     await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings));

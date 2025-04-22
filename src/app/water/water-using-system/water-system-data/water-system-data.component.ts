@@ -8,7 +8,7 @@ import { WaterSystemComponentService } from '../../water-system-component.servic
 import { WaterUsingSystemService } from '../water-using-system.service';
 import { copyObject } from '../../../shared/helperFunctions';
 import { OperatingHours } from '../../../shared/models/operations';
-import { ConnectedFlowType, DiagramWaterSystemFlows, WaterAssessment, WaterProcessComponent, WaterSystemResults, WaterUsingSystem, waterUsingSystemTypeOptions } from 'process-flow-lib';
+import { ConnectedFlowType, ComponentEdgeFlowData, WaterAssessment, WaterProcessComponent, WaterSystemResults, WaterUsingSystem, waterUsingSystemTypeOptions } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-system-data',
@@ -39,7 +39,7 @@ export class WaterSystemDataComponent {
   waterUsingSystemTabSub: Subscription;
   waterUsingSystemTab: string;
 
-  diagramWaterSystemFlows: DiagramWaterSystemFlows;
+  componentEdgeFlowData: ComponentEdgeFlowData;
   
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -85,11 +85,11 @@ export class WaterSystemDataComponent {
   }
 
   initForm() {
-    this.diagramWaterSystemFlows = this.waterAssessmentService.getDefaultDiagramWaterFlows();
-    if (this.waterAssessment.diagramWaterSystemFlows && this.waterAssessment.diagramWaterSystemFlows.length > 0) {
-      this.diagramWaterSystemFlows = this.waterAssessment.diagramWaterSystemFlows.find(componentFlows => componentFlows.id === this.selectedWaterUsingSystem.diagramNodeId);
+    this.componentEdgeFlowData = this.waterAssessmentService.getDefaultDiagramWaterFlows();
+    if (this.waterAssessment.componentEdgeFlowData && this.waterAssessment.componentEdgeFlowData.length > 0) {
+      this.componentEdgeFlowData = this.waterAssessment.componentEdgeFlowData.find(componentFlows => componentFlows.id === this.selectedWaterUsingSystem.diagramNodeId);
     } 
-    this.form = this.waterUsingSystemService.getWaterUsingSystemForm(this.selectedWaterUsingSystem, this.diagramWaterSystemFlows);
+    this.form = this.waterUsingSystemService.getWaterUsingSystemForm(this.selectedWaterUsingSystem, this.componentEdgeFlowData);
   }
 
 
@@ -104,11 +104,11 @@ export class WaterSystemDataComponent {
   }
 
   restoreAllToDiagramValues() {
-    if (this.diagramWaterSystemFlows) {
-      Object.keys(this.diagramWaterSystemFlows)
+    if (this.componentEdgeFlowData) {
+      Object.keys(this.componentEdgeFlowData)
       .filter(controlName => controlName !== 'id' && controlName !== 'componentName')
       .forEach((controlName: ConnectedFlowType) => {
-        this.form.get(controlName as string).setValue(this.diagramWaterSystemFlows[controlName].total);
+        this.form.get(controlName as string).setValue(this.componentEdgeFlowData[controlName].total);
         this.selectedWaterUsingSystem.userDiagramFlowOverrides[controlName] = undefined;
       });
       let updatedWaterUsingSystem: WaterUsingSystem = this.waterUsingSystemService.getWaterUsingSystemFromForm(this.form, this.selectedWaterUsingSystem);
@@ -123,8 +123,8 @@ export class WaterSystemDataComponent {
  * Restore sum totals from diagram user data-entry
  */
   restoreToDiagramValue(controlName: ConnectedFlowType) {
-    if (this.diagramWaterSystemFlows) {
-      this.form.get(controlName as string).setValue(this.diagramWaterSystemFlows[controlName].total);
+    if (this.componentEdgeFlowData) {
+      this.form.get(controlName as string).setValue(this.componentEdgeFlowData[controlName].total);
       let updatedWaterUsingSystem: WaterUsingSystem = this.waterUsingSystemService.getWaterUsingSystemFromForm(this.form, this.selectedWaterUsingSystem);
       updatedWaterUsingSystem.userDiagramFlowOverrides[controlName] = undefined;
       this.updateWaterUsingSystem(updatedWaterUsingSystem);
@@ -133,7 +133,7 @@ export class WaterSystemDataComponent {
 
   getIsDisabledRestore(connectedFlowType: ConnectedFlowType): boolean {
     let hasUserOverride: boolean = this.selectedWaterUsingSystem.userDiagramFlowOverrides && this.selectedWaterUsingSystem.userDiagramFlowOverrides[connectedFlowType] !== undefined;
-    let hasDiagramDefault: boolean = this.diagramWaterSystemFlows && this.diagramWaterSystemFlows[connectedFlowType].total !== undefined;
+    let hasDiagramDefault: boolean = this.componentEdgeFlowData && this.componentEdgeFlowData[connectedFlowType].total !== undefined;
     return (hasUserOverride && !hasDiagramDefault) || !hasUserOverride;
   }
 

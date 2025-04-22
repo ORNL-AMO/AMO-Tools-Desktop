@@ -1,7 +1,7 @@
 import { CustomNodeStyleMap } from "../constants";
 import { Connection, Edge, MarkerType, Node } from "@xyflow/react";
 import { DiagramSettings, Handles, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../types/diagram";
-import { ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, WasteWaterTreatment, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
+import { ConnectedFlowType, ComponentEdgeFlowData, DischargeOutlet, EdgeFlowData, IntakeSource, WasteWaterTreatment, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { getNewIdString } from "./utils";
 
  
@@ -383,34 +383,34 @@ export const getWasteWaterTreatmentComponent = (processFlowPart?: WaterProcessCo
     /**
  * Set flows from users values, or default to diagram values
  */
-  export const getWaterFlowsFromSource = (waterUsingSystem: WaterUsingSystem, diagramWaterSystemFlows: DiagramWaterSystemFlows): WaterSystemFlowsTotals => {
+  export const getWaterFlowsFromSource = (waterUsingSystem: WaterUsingSystem, componentEdgeFlowData: ComponentEdgeFlowData): WaterSystemFlowsTotals => {
     let systemFlowTotals: WaterSystemFlowsTotals = {
-      sourceWater: diagramWaterSystemFlows.sourceWater.total,
-      recirculatedWater: diagramWaterSystemFlows.recirculatedWater.total,
-      dischargeWater: diagramWaterSystemFlows.dischargeWater.total,
-      knownLosses: diagramWaterSystemFlows.knownLosses.total,
-      waterInProduct: diagramWaterSystemFlows.waterInProduct.total,
+      sourceWater: componentEdgeFlowData.sourceWater.total,
+      recirculatedWater: componentEdgeFlowData.recirculatedWater.total,
+      dischargeWater: componentEdgeFlowData.dischargeWater.total,
+      knownLosses: componentEdgeFlowData.knownLosses.total,
+      waterInProduct: componentEdgeFlowData.waterInProduct.total,
     };
     Object.keys(waterUsingSystem.userDiagramFlowOverrides).forEach((key: ConnectedFlowType) => {
-      systemFlowTotals[key] = waterUsingSystem.userDiagramFlowOverrides[key]?? diagramWaterSystemFlows[key].total;
+      systemFlowTotals[key] = waterUsingSystem.userDiagramFlowOverrides[key]?? componentEdgeFlowData[key].total;
     });
     return systemFlowTotals;
   }
 
-  export const getWaterFlowTotals = (diagramWaterSystemFlows: DiagramWaterSystemFlows): WaterSystemFlowsTotals => {
+  export const getWaterFlowTotals = (componentEdgeFlowData: ComponentEdgeFlowData): WaterSystemFlowsTotals => {
     let systemFlowTotals: WaterSystemFlowsTotals = {
-      sourceWater: diagramWaterSystemFlows.sourceWater.total,
-      recirculatedWater: diagramWaterSystemFlows.recirculatedWater.total,
-      dischargeWater: diagramWaterSystemFlows.dischargeWater.total,
-      knownLosses: diagramWaterSystemFlows.knownLosses.total,
-      waterInProduct: diagramWaterSystemFlows.waterInProduct.total,
+      sourceWater: componentEdgeFlowData.sourceWater.total,
+      recirculatedWater: componentEdgeFlowData.recirculatedWater.total,
+      dischargeWater: componentEdgeFlowData.dischargeWater.total,
+      knownLosses: componentEdgeFlowData.knownLosses.total,
+      waterInProduct: componentEdgeFlowData.waterInProduct.total,
     };
     return systemFlowTotals;
   }
 
 
-  export const getAssessmentWaterSystemFlowEdges = (diagramWaterSystemFlows: DiagramWaterSystemFlows[]): { source: string, target: string }[] => {
-    const waterSystemFlowEdges: { source: string, target: string }[] = diagramWaterSystemFlows.flatMap((systemFlow: DiagramWaterSystemFlows) => {
+  export const getAssessmentWaterSystemFlowEdges = (componentEdgeFlowData: ComponentEdgeFlowData[]): { source: string, target: string }[] => {
+    const waterSystemFlowEdges: { source: string, target: string }[] = componentEdgeFlowData.flatMap((systemFlow: ComponentEdgeFlowData) => {
       if (!systemFlow) {
         return [];
       }

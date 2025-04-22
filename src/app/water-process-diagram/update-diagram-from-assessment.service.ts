@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { WaterAssessment, WaterDiagram, WaterProcessComponent, WaterProcessComponentType, ProcessFlowPart, getNewNode, DiagramWaterSystemFlows, UserDiagramOptions, getEdgeFromConnection, EdgeFlowData, getAssessmentWaterSystemFlowEdges } from 'process-flow-lib';
+import { WaterAssessment, WaterDiagram, WaterProcessComponent, WaterProcessComponentType, ProcessFlowPart, getNewNode, ComponentEdgeFlowData, UserDiagramOptions, getEdgeFromConnection, EdgeFlowData, getAssessmentWaterSystemFlowEdges } from 'process-flow-lib';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { Assessment } from '../shared/models/assessment';
@@ -108,7 +108,7 @@ export class UpdateDiagramFromAssessmentService {
         nodeIds.add(node.id);
       });
     
-      const assessmentSystemFlowEdges = getAssessmentWaterSystemFlowEdges(waterAssessment.diagramWaterSystemFlows)
+      const assessmentSystemFlowEdges = getAssessmentWaterSystemFlowEdges(waterAssessment.componentEdgeFlowData)
 
       let updatedEdges = waterDiagram.flowDiagramData.edges.filter((edge) => {
         return nodeIds.has(edge.source) && nodeIds.has(edge.target) && this.getHasAssessmentEdgeFlow(assessmentSystemFlowEdges, edge);
@@ -125,16 +125,16 @@ export class UpdateDiagramFromAssessmentService {
     }
 
   updateDiagramEdgesFromAssessment(waterDiagram: WaterDiagram, waterAssessment: WaterAssessment) {
-    waterAssessment.diagramWaterSystemFlows.forEach((systemFlow: DiagramWaterSystemFlows) => {
-      systemFlow.sourceWater.flows.forEach((edgeFlow: EdgeFlowData) => this.updateDiagramEdge(waterDiagram, edgeFlow, waterAssessment.diagramWaterSystemFlows));
-      // systemFlow.dischargeWater.flows.forEach((edgeFlow: EdgeFlowData) => this.updateDiagramEdge(waterDiagram, edgeFlow, waterAssessment.diagramWaterSystemFlows));
+    waterAssessment.componentEdgeFlowData.forEach((systemFlow: ComponentEdgeFlowData) => {
+      systemFlow.sourceWater.flows.forEach((edgeFlow: EdgeFlowData) => this.updateDiagramEdge(waterDiagram, edgeFlow, waterAssessment.componentEdgeFlowData));
+      // systemFlow.dischargeWater.flows.forEach((edgeFlow: EdgeFlowData) => this.updateDiagramEdge(waterDiagram, edgeFlow, waterAssessment.componentEdgeFlowData));
     });
   }
 
-  updateDiagramEdge(waterDiagram: WaterDiagram, edgeFlow: EdgeFlowData, diagramWaterSystemFlows: DiagramWaterSystemFlows[]) {
+  updateDiagramEdge(waterDiagram: WaterDiagram, edgeFlow: EdgeFlowData, componentEdgeFlowData: ComponentEdgeFlowData[]) {
     let edgeIndex = waterDiagram.flowDiagramData.edges.findIndex((edge: Edge) => edge.id === edgeFlow.diagramEdgeId);
     let diagramEdge: Edge = this.getDiagramEdge(edgeFlow, waterDiagram.flowDiagramData.userDiagramOptions);
-    // let existsInAssesment: boolean = diagramWaterSystemFlows.sourceWater.flows.some((edgeFlow: EdgeFlowData) => edgeFlow.diagramEdgeId === diagramEdge.id);
+    // let existsInAssesment: boolean = componentEdgeFlowData.sourceWater.flows.some((edgeFlow: EdgeFlowData) => edgeFlow.diagramEdgeId === diagramEdge.id);
     console.log('adding/updating edge from assessment', diagramEdge);
     if (edgeIndex !== -1) {
       waterDiagram.flowDiagramData.edges[edgeIndex] = diagramEdge;

@@ -1,4 +1,4 @@
-import { DiagramWaterSystemFlows, DischargeOutlet, IntakeSource, KnownLoss, WasteWaterTreatment, WaterTreatment, WaterUsingSystem } from "./water-components";
+import { ComponentEdgeFlowData, DischargeOutlet, IntakeSource, KnownLoss, WasteWaterTreatment, WaterTreatment, WaterUsingSystem } from "./water-components";
 
 export interface WaterAssessment {
     name?: string;
@@ -12,7 +12,7 @@ export interface WaterAssessment {
     wasteWaterTreatments?: WasteWaterTreatment[],
     dischargeOutlets?: DischargeOutlet[],
     knownLosses?: KnownLoss[],
-    diagramWaterSystemFlows?: DiagramWaterSystemFlows[],
+    componentEdgeFlowData?: ComponentEdgeFlowData[],
     connectedNodesMap?: Record<string, string>,
     setupDone: boolean
 }

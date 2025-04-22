@@ -3,7 +3,7 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
-import { BoilerWater, convertFlowDiagramData, CoolingTower, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, KnownLoss, Landscaping, LandscapingResults, MAX_FLOW_DECIMALS, Modification, MotorEnergy, NodeFlowData, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { BoilerWater, convertFlowDiagramData, CoolingTower, ComponentEdgeFlowData, DischargeOutlet, EdgeFlowData, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, KnownLoss, Landscaping, LandscapingResults, MAX_FLOW_DECIMALS, Modification, MotorEnergy, NodeFlowData, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
 
 @Injectable({
   providedIn: 'root'
@@ -35,11 +35,11 @@ export class ConvertWaterAssessmentService {
     waterAssessment.waterTreatments = this.convertWaterTreatments(waterAssessment.waterTreatments, oldSettings, newSettings);
     waterAssessment.wasteWaterTreatments = this.convertWasteWaterTreatments(waterAssessment.wasteWaterTreatments, oldSettings, newSettings);
     waterAssessment.knownLosses = this.convertKnownLosses(waterAssessment.knownLosses, oldSettings, newSettings);
-    waterAssessment.diagramWaterSystemFlows = this.convertDiagramWaterSystemFlows(waterAssessment.diagramWaterSystemFlows, oldSettings, newSettings);
+    waterAssessment.componentEdgeFlowData = this.convertComponentEdgeFlowData(waterAssessment.componentEdgeFlowData, oldSettings, newSettings);
     return waterAssessment;
   }
 
-  convertDiagramWaterSystemFlows(systemFlows: DiagramWaterSystemFlows[], oldSettings: Settings, newSettings: Settings): DiagramWaterSystemFlows[] {
+  convertComponentEdgeFlowData(systemFlows: ComponentEdgeFlowData[], oldSettings: Settings, newSettings: Settings): ComponentEdgeFlowData[] {
     systemFlows.forEach(systemFlow => {
       systemFlow.sourceWater = this.convertWaterSystemFlowData(systemFlow.sourceWater, oldSettings, newSettings);
       systemFlow.recirculatedWater = this.convertWaterSystemFlowData(systemFlow.recirculatedWater, oldSettings, newSettings);
