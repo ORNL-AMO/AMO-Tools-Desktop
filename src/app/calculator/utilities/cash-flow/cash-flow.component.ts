@@ -3,7 +3,6 @@ import { IRRBruteForceResults, CashFlowFinalResults, CashFlowForm, CashFlowOutpu
 import { CashFlowService } from './cash-flow.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
-import { c } from '@angular/core/navigation_types.d-u4EOrrdZ';
 
 @Component({
   selector: 'app-cash-flow',

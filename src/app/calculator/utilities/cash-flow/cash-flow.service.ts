@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { IRRBruteForceResults, CashFlowFinalResults, CashFlowForm, CashFlowOutputs, CashFlowResults, InterestRates, Outputs, WithoutTaxesOutputs } from './cash-flow';
 import { TraceData, SimpleChart } from '../../../shared/models/plotting';
-import { sum } from 'lodash';
 
 @Injectable()
 export class CashFlowService {
