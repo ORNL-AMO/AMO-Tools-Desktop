@@ -20,6 +20,7 @@ export class CashFlowFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() { 
+    this.checkAdvancedCashflowLength();
     this.checkDisableAddBtn();
   }
 
@@ -28,7 +29,7 @@ export class CashFlowFormComponent implements OnInit {
   }
   
   calculate() {    
-    this.checkDisableAddBtn();
+    this.checkAdvancedCashflowLength();
     this.emitCalculate.emit(true);
   }
 
@@ -49,6 +50,17 @@ export class CashFlowFormComponent implements OnInit {
     } else {
       this.disableAddBtn = false;
     }
+  }
+
+  checkAdvancedCashflowLength(){
+    if (this.cashFlowForm.advancedCashflows.length > this.cashFlowForm.lifeYears) {
+      this.cashFlowForm.advancedCashflows.pop();
+      this.checkAdvancedCashflowLength();
+    }
+    if (this.cashFlowForm.advancedCashflows.length < this.cashFlowForm.lifeYears) {
+      this.cashFlowForm.advancedCashflows.push(0);
+      this.checkAdvancedCashflowLength();
+    } 
   }
 
 }
