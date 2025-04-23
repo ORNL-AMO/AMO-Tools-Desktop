@@ -342,15 +342,18 @@ export class CashFlowService {
 
     let presentValueCashFlowResults: CashFlowResults = this.getEmptyCashFlowResults();
 
+    let otherCosts: number = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow < 0 ? withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow : 0;
+    let otherSavings: number = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow > 0 ? withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow : 0;
+
     presentValueCashFlowResults.capital = -withoutTaxesPresentValueOutputs.cashFlowOutputs.capitalExpenditures;
     presentValueCashFlowResults.operating = -withoutTaxesPresentValueOutputs.cashFlowOutputs.operationCost;
     presentValueCashFlowResults.disposal = -withoutTaxesPresentValueOutputs.cashFlowOutputs.disposal;
-    presentValueCashFlowResults.otherCosts = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow < 0 ? withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow : 0;
+    presentValueCashFlowResults.otherCosts = otherCosts + withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCosts;
 
     presentValueCashFlowResults.totalCosts = presentValueCashFlowResults.capital + presentValueCashFlowResults.operating + presentValueCashFlowResults.disposal + presentValueCashFlowResults.otherCosts;
 
     presentValueCashFlowResults.energy = withoutTaxesPresentValueOutputs.cashFlowOutputs.energySavings;
-    presentValueCashFlowResults.otherSavings = withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow > 0 ? withoutTaxesPresentValueOutputs.cashFlowOutputs.otherCashFlow : 0;
+    presentValueCashFlowResults.otherSavings = otherSavings + withoutTaxesPresentValueOutputs.cashFlowOutputs.otherSavings;
     presentValueCashFlowResults.salvage = withoutTaxesPresentValueOutputs.cashFlowOutputs.salvage;
 
     presentValueCashFlowResults.totalSavings = presentValueCashFlowResults.energy + presentValueCashFlowResults.otherSavings + presentValueCashFlowResults.salvage;
@@ -366,16 +369,19 @@ export class CashFlowService {
 
     let annualWorthCashFlowResults: CashFlowResults = this.getEmptyCashFlowResults();
 
+    let otherCosts: number = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow < 0 ? withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow : 0;
+    let otherSavings: number = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow > 0 ? withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow : 0;
+
     annualWorthCashFlowResults.capital = -withoutTaxesAnnualWorthOutputs.cashFlowOutputs.capitalExpenditures;
     annualWorthCashFlowResults.operating = -withoutTaxesAnnualWorthOutputs.cashFlowOutputs.operationCost;
     annualWorthCashFlowResults.disposal = -withoutTaxesAnnualWorthOutputs.cashFlowOutputs.disposal;
-    annualWorthCashFlowResults.otherCosts = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow < 0 ? withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow : 0;
+    annualWorthCashFlowResults.otherCosts = otherCosts + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCosts;
 
     annualWorthCashFlowResults.totalCosts = annualWorthCashFlowResults.capital + annualWorthCashFlowResults.operating + annualWorthCashFlowResults.disposal + annualWorthCashFlowResults.otherCosts;
 
 
     annualWorthCashFlowResults.energy = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.energySavings;
-    annualWorthCashFlowResults.otherSavings = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow > 0 ? withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherCashFlow : 0;
+    annualWorthCashFlowResults.otherSavings = otherSavings + withoutTaxesAnnualWorthOutputs.cashFlowOutputs.otherSavings;
     annualWorthCashFlowResults.salvage = withoutTaxesAnnualWorthOutputs.cashFlowOutputs.salvage;
 
     annualWorthCashFlowResults.totalSavings = annualWorthCashFlowResults.energy + annualWorthCashFlowResults.otherSavings + annualWorthCashFlowResults.salvage;
