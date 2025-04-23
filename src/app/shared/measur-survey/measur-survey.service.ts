@@ -22,24 +22,15 @@ export class MeasurSurveyService {
     this.userSurvey = new BehaviorSubject<MeasurUserSurvey>(undefined);
   }
 
- getHasMetUsageRequirements(applicationData: ApplicationInstanceData) {
-      let firstAppInitDate = moment(new Date(applicationData.createdDate));
-      let currentDate = moment(new Date());
-  
-      let hasMetUsageThreshold: boolean;
-      let dateDifference;
+ getHasModalUsageRequirements(applicationData: ApplicationInstanceData) {
       if (environment.production) {
-        dateDifference = currentDate.diff(firstAppInitDate, 'days');
-        hasMetUsageThreshold = dateDifference >= 30 || applicationData.appOpenCount >= 10;
+        return applicationData.appOpenCount >= 10;
       } else {
-        dateDifference = currentDate.diff(firstAppInitDate, 'seconds');
-        hasMetUsageThreshold = dateDifference >= 120 || applicationData.appOpenCount >= 3;
+        return applicationData.appOpenCount >= 3;
       }
-      
-      return hasMetUsageThreshold;
   }
 
-  getCanShowToast(applicationData: ApplicationInstanceData) {
+  getHasToastUsageRequirements(applicationData: ApplicationInstanceData) {
     if (environment.production) {
       return applicationData.appOpenCount >= 5;
     } else {
@@ -47,27 +38,6 @@ export class MeasurSurveyService {
     }
 }
 
-  /**
-   * Check if is legacy user and has used app for 30 days 
-   */
-  async checkIsExistingUser() {
-    let currentDate = moment(new Date());
-    let allDirs: Directory[] = await firstValueFrom(this.directoryDbService.getAllDirectories());
-    let topLevelDirInitDate = allDirs.find(dir => dir.parentDirectoryId === null && dir.name === 'All Assessments')?.createdDate; 
-
-    let dateDifference;
-    let isExistingUser;
-    if (environment.production) {
-      dateDifference = currentDate.diff(topLevelDirInitDate, 'days');
-      isExistingUser = dateDifference >= 30;
-    } else {
-      dateDifference = currentDate.diff(topLevelDirInitDate, 'seconds');
-      isExistingUser = dateDifference >= 120;
-    }
-
-    return isExistingUser;
-  }
- 
   async sendAnswers() {
     let httpOptions = {
       responseType: 'text' as const,
