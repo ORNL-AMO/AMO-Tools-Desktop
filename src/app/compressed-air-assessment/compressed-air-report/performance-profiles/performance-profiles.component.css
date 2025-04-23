@@ -1,11 +1,11 @@
 @media print {
     .print-container {
-        page-break-before: always;
+        break-before: always;
         page-break-inside: avoid;
         overflow: hidden;
     }
     .page-break-before{
-        page-break-before: auto;
+        break-before: auto;
     }
     .print-avoid-break{
         page-break-inside: avoid;
