@@ -194,8 +194,6 @@ export class CashFlowComponent implements OnInit {
       annualWorthCashFlowResults: annualWorthCashFlowResults,
       cashFlowFinalResults: cashFlowFinalResults,
     }
-
-
   }
 
   setSmallScreenTab(selectedTab: string) {
