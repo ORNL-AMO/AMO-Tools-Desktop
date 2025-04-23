@@ -1,0 +1,84 @@
+.card.card-toast-notification {
+    position: fixed;
+    z-index: 9999;
+    right: 10px;
+    top: 0px;
+    margin: 10px;
+    width: 500px;
+    background: rgb(111, 113, 116);
+    color: #fff;
+    box-shadow: 0 6px 6px rgba(0, 0, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.4);
+    
+}
+
+.app-icon{
+    width: 2rem;
+    border-radius: 16px;
+  }
+
+.card-text-small {
+    font-size: 14px;
+}
+
+.alert {
+    padding: 0;
+}
+
+.info-icon {
+    font-size: 22px;
+}
+
+.close-button {
+    float: right;
+    font-size: 24px;
+}
+
+.close-button:hover {
+    cursor: pointer;
+}
+
+.card-header {
+    font-size: 18px;
+}
+
+.card-body {
+    font-size: 16px;
+}
+
+input, button {
+    height: unset;
+    line-height: .5;
+}
+
+
+a.click-link {
+    font-size: 16px;
+    text-decoration: underline;
+    color: #b5ffd6 !important;
+}
+
+.btn-primary {
+    background-color: #b5ffd6;
+    border-color: #b5ffd6;
+    color: #555;
+}
+
+
+.alert-danger {
+  width: unset;
+}
+
+.spinner-overlay {
+  height: 125px;
+  z-index: 999;
+}
+
+.spinner > div {
+  width: 25px;
+  height: 25px;
+  background-color: #b5ffd6;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}

@@ -41,11 +41,14 @@ import { SurveyToastModule } from '../shared/survey-toast/survey-toast.module';
 import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 import { UpdateApplicationModule } from '../shared/update-application/update-application.module';
+import { SubscribeToastComponent } from '../shared/subscribe-toast/subscribe-toast.component';
+import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-subscribe.service';
+import { SubscribeModalComponent } from '../shared/subscribe-modal/subscribe-modal.component';
 
 @NgModule({
   declarations: [
     CoreComponent,
-    NotFoundComponent,
+    NotFoundComponent
   ],
   imports: [
     CommonModule,
@@ -84,11 +87,14 @@ import { UpdateApplicationModule } from '../shared/update-application/update-app
     MeasurSurveyModule,
     SnackbarModule,
     UpdateApplicationModule,
+    SubscribeToastComponent,
+    SubscribeModalComponent
   ],
   providers: [
     AssessmentService,
     CoreService,
     WindowRefService,
+    EmailListSubscribeService
   ]
 })
 

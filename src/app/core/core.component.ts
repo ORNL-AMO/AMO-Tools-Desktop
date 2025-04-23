@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { catchError, firstValueFrom, merge, Subscription } from 'rxjs';
+import { catchError, first, firstValueFrom, merge, Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
@@ -18,6 +18,7 @@ import { ApplicationInstanceData, ApplicationInstanceDbService } from '../indexe
 import { ImportBackupModalService } from '../shared/import-backup-modal/import-backup-modal.service';
 import { MeasurSurveyService } from '../shared/measur-survey/measur-survey.service';
 import { UpdateApplicationService } from '../shared/update-application/update-application.service';
+import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-subscribe.service';
 
 @Component({
     selector: 'app-core',
@@ -36,6 +37,7 @@ export class CoreComponent implements OnInit {
   analyticsSessionId: string;
   applicationInstanceDataSubscription: Subscription;
   routerSubscription: Subscription;
+  showSubscribeModal: boolean = false;
 
   // * Modals
   modalOpenSub: Subscription;
@@ -48,8 +50,12 @@ export class CoreComponent implements OnInit {
   showSurveyModalSub: Subscription;
   showSurveyModal: boolean;
   showSurveyToast: boolean;
+  showSubscribeToast: boolean;
   showReleaseNotesModal: boolean;
   showReleaseNotesModalSub: Subscription;
+  showSubscribeToastSub: Subscription;
+  subscribeModalSub: Subscription;
+  emailVisibilitySubscription: Subscription;
 
   constructor(public electronService: ElectronService,
     private assessmentService: AssessmentService,
@@ -69,6 +75,7 @@ export class CoreComponent implements OnInit {
     private sqlDbApiService: SqlDbApiService,
     private measurSurveyService: MeasurSurveyService,
     private updateApplicationService: UpdateApplicationService,
+    private emailSubscribeService: EmailListSubscribeService,
     private inventoryDbService: InventoryDbService) {
   }
 
@@ -83,12 +90,20 @@ export class CoreComponent implements OnInit {
 
     this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
       if (applicationData) {
-          this.setAppOpenNotifications(applicationData);
+        this.setSurveyToastVisibility(applicationData);
         if (!this.automaticBackupService.observableDataChanges && applicationData.isAutomaticBackupOn) {
           this.automaticBackupService.subscribeToDataChanges();
         }
       }
     });
+
+    this.emailVisibilitySubscription = this.applicationInstanceDbService.applicationInstanceData
+      .pipe(
+        first(data => !!data)
+      )
+      .subscribe(applicationData => {
+        this.emailSubscribeService.setEmailSubscribeVisibility(applicationData);
+      });
 
     this.showSurveyModalSub = this.measurSurveyService.showSurveyModal.subscribe(val => {
       this.showSurveyModal = val;
@@ -96,6 +111,21 @@ export class CoreComponent implements OnInit {
         this.setSurveyDone();
       }
     });
+
+    this.showSubscribeToastSub = this.emailSubscribeService.shouldShowToast.subscribe((showSubscribeToast: boolean) => {
+      if (showSubscribeToast) {
+        setTimeout(() => {
+          this.showSubscribeToast = showSubscribeToast
+        }, 5000);
+      } else {
+        this.showSubscribeToast = false;
+      }
+    });
+
+    this.subscribeModalSub = this.emailSubscribeService.showModal.subscribe((isOpen: boolean) => {
+      this.showSubscribeModal = isOpen;
+    });
+
 
     this.showReleaseNotesModalSub = this.updateApplicationService.showReleaseNotesModal.subscribe(val => {
       this.showReleaseNotesModal = val;
@@ -138,6 +168,9 @@ export class CoreComponent implements OnInit {
     this.showEmailMeasurDataModalSub.unsubscribe();
     this.showImportBackupModalSubscription.unsubscribe();
     this.showSurveyModalSub.unsubscribe();
+    this.showSubscribeToastSub.unsubscribe();
+    this.subscribeModalSub.unsubscribe();
+    this.emailVisibilitySubscription.unsubscribe();
   }
 
   async initData() {
@@ -159,7 +192,7 @@ export class CoreComponent implements OnInit {
 
   }
 
-  async setAppOpenNotifications(applicationData: ApplicationInstanceData) {
+  async setSurveyToastVisibility(applicationData: ApplicationInstanceData) {
     if (!applicationData.isSurveyDone) {
       if (applicationData.doSurveyReminder) {
         setTimeout(() => {
@@ -225,6 +258,11 @@ export class CoreComponent implements OnInit {
 
   hideBrowsingDataToast() {
     this.showBrowsingDataToast = false;
+    this.changeDetectorRef.detectChanges();
+  }
+
+  hideSubscribeToast() {
+    this.showSubscribeToast = false;
     this.changeDetectorRef.detectChanges();
   }
 

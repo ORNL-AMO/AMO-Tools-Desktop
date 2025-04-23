@@ -1,12 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import moment from 'moment';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ApplicationInstanceData } from '../../indexedDb/application-instance-db.service';
 import { MeasurUserSurvey } from './experience-survey/experience-survey.component';
-import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import { Directory } from '../models/directory';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +13,7 @@ export class MeasurSurveyService {
   showSurveyModal: BehaviorSubject<boolean>;
   userSurvey: BehaviorSubject<MeasurUserSurvey>;
 
-  constructor(private httpClient: HttpClient, private directoryDbService: DirectoryDbService) {
+  constructor(private httpClient: HttpClient) {
     this.showSurveyModal = new BehaviorSubject<boolean>(undefined);
     this.completedStatus = new BehaviorSubject<'sending' | 'success' | 'error'>(undefined);
     this.userSurvey = new BehaviorSubject<MeasurUserSurvey>(undefined);
@@ -36,7 +33,7 @@ export class MeasurSurveyService {
     } else {
       return applicationData.appOpenCount >= 2;
     }
-}
+  }
 
   async sendAnswers() {
     let httpOptions = {
@@ -45,9 +42,9 @@ export class MeasurSurveyService {
         'Content-Type': 'application/json',
       })
     };
-
-    this.completedStatus.next('sending');
+    
     let measurUserSurvey: MeasurUserSurvey = this.userSurvey.getValue();
+    this.completedStatus.next('sending');
     let url: string = environment.measurUtilitiesApi + 'measur-survey';
     this.httpClient.post(url, measurUserSurvey, httpOptions).subscribe({
       next: (resp) => {
