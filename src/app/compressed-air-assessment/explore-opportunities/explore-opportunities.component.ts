@@ -214,4 +214,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
     }    
   }
 
+  focusedField(str: string) {
+    this.compressedAirAssessmentService.focusedField.next(str);
+  }
+
 }

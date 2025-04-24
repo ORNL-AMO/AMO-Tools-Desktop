@@ -347,6 +347,9 @@ export class CompressedAirAssessmentResultsService {
     if (modification.useAutomaticSequencer.order != 100) {
       implementationCost += modification.useAutomaticSequencer.implementationCost;
     }
+    if (modification.flowReallocation) {
+      implementationCost += modification.flowReallocation.implementationCost;
+    } 
     return implementationCost;
   }
 
@@ -435,9 +438,11 @@ export class CompressedAirAssessmentResultsService {
       dayTypeModificationResult.reduceRunTimeSavings.implementationCost = modificationResults.dayTypeModificationResults[0].reduceRunTimeSavings.implementationCost;
       dayTypeModificationResult.reduceSystemAirPressureSavings.implementationCost = modificationResults.dayTypeModificationResults[0].reduceSystemAirPressureSavings.implementationCost;
       dayTypeModificationResult.useAutomaticSequencerSavings.implementationCost = modificationResults.dayTypeModificationResults[0].useAutomaticSequencerSavings.implementationCost;
+           
+      dayTypeModificationResult.flowReallocationSavings.implementationCost = modificationResults.dayTypeModificationResults[0].flowReallocationSavings.implementationCost;
     }
 
-    dayTypeModificationResult.flowReallocationSavings.paybackPeriod = 0;
+    dayTypeModificationResult.flowReallocationSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.flowReallocationSavings);
     dayTypeModificationResult.addReceiverVolumeSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.addReceiverVolumeSavings);
     dayTypeModificationResult.adjustCascadingSetPointsSavings.paybackPeriod = this.getPaybackPeriod(dayTypeModificationResult.adjustCascadingSetPointsSavings);
     let improveEndUseEfficiencySavingsCpy: EemSavingsResults = JSON.parse(JSON.stringify(dayTypeModificationResult.improveEndUseEfficiencySavings));
@@ -504,7 +509,7 @@ export class CompressedAirAssessmentResultsService {
       adjustedProfileSummary = this.reallocateFlow(dayType, settings, baselineProfileSummary, adjustedCompressors, 0, totals, atmosphericPressure, totalAirStorage, systemInformation);
       flowAllocationProfileSummary = JSON.parse(JSON.stringify(adjustedProfileSummary));
       if (electricityCost) {
-        flowReallocationSavings = this.calculateSavings(baselineProfileSummary, adjustedProfileSummary, dayType, electricityCost, 0, numberOfSummaryIntervals);
+        flowReallocationSavings = this.calculateSavings(baselineProfileSummary, adjustedProfileSummary, dayType, electricityCost, modification.flowReallocation.implementationCost, numberOfSummaryIntervals);
       }
     }
     //2. iterate modification orders

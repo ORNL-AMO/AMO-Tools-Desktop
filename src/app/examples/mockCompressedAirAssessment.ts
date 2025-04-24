@@ -17,6 +17,9 @@ export const MockCompressedAirAssessment: Assessment =  {
             {
                 "name": "Scenario 1",
                 "modificationId": "wsth9ineg",
+                "flowReallocation": {
+                    "implementationCost": 10000,
+                },
                 "reduceAirLeaks": {
                     "leakFlow": 2000,
                     "leakReduction": 10,
@@ -6156,6 +6159,9 @@ export const MockCompressedAirAssessment: Assessment =  {
             {
                 "name": "Scenario 2",
                 "modificationId": "14hjlw1kc",
+                "flowReallocation": {
+                    "implementationCost": 10000,
+                },
                 "reduceAirLeaks": {
                     "leakFlow": 2000,
                     "leakReduction": 15,

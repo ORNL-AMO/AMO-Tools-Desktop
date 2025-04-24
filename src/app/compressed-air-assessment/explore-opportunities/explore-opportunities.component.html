@@ -26,6 +26,11 @@
                         <input name="modificatonName" type="text" id="modificatonName" class="form-control"
                             [(ngModel)]="modification.name" (input)="save()" />
                     </div>
+                    <div class="form-group group-name">
+                        <label for="flowReallocationImplementationCost">Flow Reallocation Implementation Cost</label>
+                        <input name="flowReallocationImplementationCost" type="text" id="flowReallocationImplementationCost" class="form-control"
+                            [(ngModel)]="modification.flowReallocation.implementationCost" (input)="save()" (focus)="focusedField('flowReallocationImplementationCost')"/>
+                    </div>
                     <hr>
                     <app-reduce-air-leaks [style.order]="modification.reduceAirLeaks.order"></app-reduce-air-leaks>
                     <app-improve-end-use-efficiency [style.order]="modification.improveEndUseEfficiency.order">
