@@ -4,7 +4,7 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { Settings } from '../shared/models/settings';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
-import { ComponentEdgeFlowData, DischargeOutlet, EdgeFlowData, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getWasteWaterTreatmentComponent, getWaterTreatmentComponent, getWaterUsingSystem, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { ComponentEdgeFlowData, ComponentFlowType, DischargeOutlet, EdgeFlowData, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getWasteWaterTreatmentComponent, getWaterTreatmentComponent, getWaterUsingSystem, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
 
 @Injectable({
   providedIn: 'root'
@@ -175,6 +175,11 @@ export class WaterAssessmentService {
     } else if (componentType === 'water-using-system') {
       deleteIndex = waterAssessment.waterUsingSystems.findIndex(component => component.diagramNodeId === deleteId);
       waterAssessment.waterUsingSystems.splice(deleteIndex, 1);
+      // todo must splice until water-assessment is subscribed to in waterusing system and other components
+      // waterAssessment.waterUsingSystems = waterAssessment.waterUsingSystems.filter(system => system.id !== deleteId);
+      deleteIndex = waterAssessment.componentEdgeFlowData.findIndex(component => component.id === deleteId);
+      waterAssessment.componentEdgeFlowData.splice(deleteIndex, 1);
+      // waterAssessment.componentEdgeFlowData = waterAssessment.componentEdgeFlowData.filter(component => component.id !== deleteId);
       updatedViewComponents = waterAssessment.waterUsingSystems;
     } else if (componentType === 'waste-water-treatment') {
       deleteIndex = waterAssessment.wasteWaterTreatments.findIndex(component => component.diagramNodeId === deleteId);
@@ -256,55 +261,6 @@ export class WaterAssessmentService {
       },
     }
   }
-
-  // todo rename componentEdgeFlowData
-  getSourceConnectionOptions(waterAssessment: WaterAssessment, diagramNodeId: string): {value: string, display: string}[] {
-    // find all components not already listed as a connected source in FlowData of diagramWaterSystemFlow
-    let connectionOptions = [].concat(
-      waterAssessment.intakeSources,
-      waterAssessment.waterUsingSystems,
-      waterAssessment.waterTreatments,
-    ).filter(component => component.diagramNodeId !== diagramNodeId).map(component => {
-      return {
-        value: component.diagramNodeId,
-        display: component.name,
-      };
-    });
-
-    return connectionOptions;
-  }
-
-  getSystemSourceFlows(waterAssessment: WaterAssessment, diagramNodeId: string): EdgeFlowData[] {
-    let componentWaterFlows: ComponentEdgeFlowData = waterAssessment.componentEdgeFlowData?.find(componentFlows => componentFlows.id === diagramNodeId);
-    if (!componentWaterFlows) {
-      return [];
-    }
-    return componentWaterFlows.sourceWater.flows.map(flow => flow);
-  }
-
-  updateSystemSourceFlowData(waterAssessment: WaterAssessment, flowData: EdgeFlowData): void {
-    // todo if is connected to water system need to also add to discharge of that system 
-    waterAssessment.componentEdgeFlowData = waterAssessment.componentEdgeFlowData.map(componentFlows => {
-      if (componentFlows.id === flowData.target) {
-        let existingFlowIndex = componentFlows.sourceWater.flows.findIndex(flow => flow.source !== undefined && flow.source === flowData.source);
-        if (existingFlowIndex >= 0) {
-          componentFlows.sourceWater.flows[existingFlowIndex] = flowData;
-        } else {
-          // todo map discharge also
-          // waterAssessment.connectedNodesMap[flowData.source] = flowData.target;
-          componentFlows.sourceWater.flows.push(flowData);
-        }
-      }
-      return componentFlows;
-    });
-  }
-
-  getAvailableConnectionOptions(existingFlows: EdgeFlowData[], connectionOptions:{value: string, display: string}[]): {value: string, display: string}[] {
-    const existingFlowIds: string[] = existingFlows.map(flow => flow.source);
-    connectionOptions = connectionOptions.filter(option => !existingFlowIds.includes(option.value));
-    return connectionOptions;
-  }
-  
 
 }
 

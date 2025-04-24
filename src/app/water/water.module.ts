@@ -54,7 +54,8 @@ import { MonthlyFlowModalComponent } from './monthly-flow-modal/monthly-flow-mod
 import { ConnectionFlowComponent } from './water-using-system/connection-flow/connection-flow.component';
 import { SystemTreatmentComponent } from './water-using-system/system-treatment/system-treatment.component';
 import { InSystemTreatmentTableComponent } from './results-panel/in-system-treatment-table/in-system-treatment-table.component';
-import { SystemSourcesComponent } from './water-using-system/system-sources/system-sources.component';
+import { ComponentEdgeFlowService } from './water-using-system/component-edge-flow.service';
+import { ComponentEdgeFlowComponent } from './water-using-system/component-edge-flow/component-edge-flow.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,7 @@ import { SystemSourcesComponent } from './water-using-system/system-sources/syst
     ConnectionFlowComponent,
     SystemTreatmentComponent,
     InSystemTreatmentTableComponent,
-    SystemSourcesComponent
+    ComponentEdgeFlowComponent
   ],
   imports: [
     CommonModule,
@@ -120,6 +121,7 @@ import { SystemSourcesComponent } from './water-using-system/system-sources/syst
     HeatEnergyService,
     MotorEnergyService,
     SystemBasicsService,
+    ComponentEdgeFlowService
   ]
 })
 export class WaterModule { }
