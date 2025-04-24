@@ -5,9 +5,10 @@ import { CompressedAirReductionService } from '../compressed-air-reduction.servi
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-compressed-air-reduction-results',
-  templateUrl: './compressed-air-reduction-results.component.html',
-  styleUrls: ['./compressed-air-reduction-results.component.css']
+    selector: 'app-compressed-air-reduction-results',
+    templateUrl: './compressed-air-reduction-results.component.html',
+    styleUrls: ['./compressed-air-reduction-results.component.css'],
+    standalone: false
 })
 export class CompressedAirReductionResultsComponent implements OnInit {
   @Input()

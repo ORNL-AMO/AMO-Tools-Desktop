@@ -9,9 +9,10 @@ import { WasteWaterService } from '../waste-water.service';
 import { AeratorPerformanceFormService, AeratorPerformanceWarnings } from './aerator-performance-form.service';
 
 @Component({
-  selector: 'app-aerator-performance-form',
-  templateUrl: './aerator-performance-form.component.html',
-  styleUrls: ['./aerator-performance-form.component.css']
+    selector: 'app-aerator-performance-form',
+    templateUrl: './aerator-performance-form.component.html',
+    styleUrls: ['./aerator-performance-form.component.css'],
+    standalone: false
 })
 export class AeratorPerformanceFormComponent implements OnInit {
   @Input()

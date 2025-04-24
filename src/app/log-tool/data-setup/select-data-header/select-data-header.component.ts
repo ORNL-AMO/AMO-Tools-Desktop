@@ -7,9 +7,10 @@ import { Router } from '@angular/router';
 import { CsvImportData, CsvToJsonService } from '../../../shared/helper-services/csv-to-json.service';
 
 @Component({
-  selector: 'app-select-data-header',
-  templateUrl: './select-data-header.component.html',
-  styleUrls: ['./select-data-header.component.css']
+    selector: 'app-select-data-header',
+    templateUrl: './select-data-header.component.html',
+    styleUrls: ['./select-data-header.component.css'],
+    standalone: false
 })
 export class SelectDataHeaderComponent implements OnInit {
   explorerData: ExplorerData;

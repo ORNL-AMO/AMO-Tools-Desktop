@@ -9,9 +9,10 @@ import { FlueGasMaterial } from '../../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
-  selector: 'app-stack-loss-by-volume',
-  templateUrl: './stack-loss-by-volume.component.html',
-  styleUrls: ['./stack-loss-by-volume.component.css']
+    selector: 'app-stack-loss-by-volume',
+    templateUrl: './stack-loss-by-volume.component.html',
+    styleUrls: ['./stack-loss-by-volume.component.css'],
+    standalone: false
 })
 export class StackLossByVolumeComponent implements OnChanges {
   @Input()

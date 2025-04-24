@@ -5,9 +5,10 @@ import { Losses, PHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { HeatSystemEfficiencyCompareService } from './heat-system-efficiency-compare.service';
 @Component({
-  selector: 'app-heat-system-efficiency',
-  templateUrl: './heat-system-efficiency.component.html',
-  styleUrls: ['./heat-system-efficiency.component.css']
+    selector: 'app-heat-system-efficiency',
+    templateUrl: './heat-system-efficiency.component.html',
+    styleUrls: ['./heat-system-efficiency.component.css'],
+    standalone: false
 })
 export class HeatSystemEfficiencyComponent implements OnInit {
   @Input()

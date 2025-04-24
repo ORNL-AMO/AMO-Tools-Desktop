@@ -8,9 +8,10 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AchievableEfficiencyService } from './achievable-efficiency.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 @Component({
-  selector: 'app-achievable-efficiency',
-  templateUrl: './achievable-efficiency.component.html',
-  styleUrls: ['./achievable-efficiency.component.css']
+    selector: 'app-achievable-efficiency',
+    templateUrl: './achievable-efficiency.component.html',
+    styleUrls: ['./achievable-efficiency.component.css'],
+    standalone: false
 })
 export class AchievableEfficiencyComponent implements OnInit {
   @Input()

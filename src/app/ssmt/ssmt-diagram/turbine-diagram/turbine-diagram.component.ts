@@ -3,9 +3,10 @@ import { TurbineOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-turbine-diagram',
-  templateUrl: './turbine-diagram.component.html',
-  styleUrls: ['./turbine-diagram.component.css']
+    selector: 'app-turbine-diagram',
+    templateUrl: './turbine-diagram.component.html',
+    styleUrls: ['./turbine-diagram.component.css'],
+    standalone: false
 })
 export class TurbineDiagramComponent implements OnInit {
   @Input()

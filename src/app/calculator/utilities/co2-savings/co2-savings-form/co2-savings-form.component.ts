@@ -7,9 +7,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { EGridService, SubRegionData, SubregionEmissions } from '../../../../shared/helper-services/e-grid.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 @Component({
-  selector: 'app-co2-savings-form',
-  templateUrl: './co2-savings-form.component.html',
-  styleUrls: ['./co2-savings-form.component.css']
+    selector: 'app-co2-savings-form',
+    templateUrl: './co2-savings-form.component.html',
+    styleUrls: ['./co2-savings-form.component.css'],
+    standalone: false
 })
 export class Co2SavingsFormComponent implements OnInit {
   @Input()

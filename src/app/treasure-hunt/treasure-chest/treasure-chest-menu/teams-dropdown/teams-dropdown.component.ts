@@ -10,9 +10,10 @@ import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-teams-dropdown',
-  templateUrl: './teams-dropdown.component.html',
-  styleUrls: ['./teams-dropdown.component.css']
+    selector: 'app-teams-dropdown',
+    templateUrl: './teams-dropdown.component.html',
+    styleUrls: ['./teams-dropdown.component.css'],
+    standalone: false
 })
 export class TeamsDropdownComponent implements OnInit {
   @Input()

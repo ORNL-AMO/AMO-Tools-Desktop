@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { driveConstants } from '../../psat/psatConstants';
 
 @Pipe({
-  name: 'motorDriveType'
+    name: 'motorDriveType',
+    standalone: false
 })
 export class MotorDriveTypePipe implements PipeTransform {
 

@@ -3,9 +3,10 @@ import { HeatLossOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-heat-loss-results',
-  templateUrl: './heat-loss-results.component.html',
-  styleUrls: ['./heat-loss-results.component.css']
+    selector: 'app-heat-loss-results',
+    templateUrl: './heat-loss-results.component.html',
+    styleUrls: ['./heat-loss-results.component.css'],
+    standalone: false
 })
 export class HeatLossResultsComponent implements OnInit {
   @Input()

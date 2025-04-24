@@ -10,9 +10,10 @@ import { MidTurndownCalculationService } from '../calculations/mid-turndown-calc
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 
 @Component({
-  selector: '[app-mid-turndown]',
-  templateUrl: './mid-turndown.component.html',
-  styleUrls: ['./mid-turndown.component.css']
+    selector: '[app-mid-turndown]',
+    templateUrl: './mid-turndown.component.html',
+    styleUrls: ['./mid-turndown.component.css'],
+    standalone: false
 })
 export class MidTurndownComponent implements OnInit {
 

@@ -11,9 +11,10 @@ import { Assessment } from '../../../shared/models/assessment';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-fan-efficiency',
-  templateUrl: './fan-efficiency.component.html',
-  styleUrls: ['./fan-efficiency.component.css']
+    selector: 'app-fan-efficiency',
+    templateUrl: './fan-efficiency.component.html',
+    styleUrls: ['./fan-efficiency.component.css'],
+    standalone: false
 })
 export class FanEfficiencyComponent implements OnInit {
   @Input()

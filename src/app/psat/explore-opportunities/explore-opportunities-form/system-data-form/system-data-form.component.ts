@@ -7,7 +7,8 @@ import { PSAT, Modification } from '../../../../shared/models/psat';
 @Component({
     selector: 'app-system-data-form',
     templateUrl: './system-data-form.component.html',
-    styleUrls: ['./system-data-form.component.css']
+    styleUrls: ['./system-data-form.component.css'],
+    standalone: false
 })
 export class SystemDataFormComponent implements OnInit {
     @Output('emitCalculate')

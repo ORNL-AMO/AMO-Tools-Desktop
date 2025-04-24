@@ -8,9 +8,10 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 
 @Component({
-  selector: 'app-metered-fuel-form',
-  templateUrl: './metered-fuel-form.component.html',
-  styleUrls: ['./metered-fuel-form.component.css']
+    selector: 'app-metered-fuel-form',
+    templateUrl: './metered-fuel-form.component.html',
+    styleUrls: ['./metered-fuel-form.component.css'],
+    standalone: false
 })
 export class MeteredFuelFormComponent implements OnInit {
   @Input()

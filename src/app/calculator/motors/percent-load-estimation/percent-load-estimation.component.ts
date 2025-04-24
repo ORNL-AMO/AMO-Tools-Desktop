@@ -5,9 +5,10 @@ import { FieldMeasurementInputs, FieldMeasurementOutputs, PercentLoadEstimationS
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-percent-load-estimation',
-  templateUrl: './percent-load-estimation.component.html',
-  styleUrls: ['./percent-load-estimation.component.css']
+    selector: 'app-percent-load-estimation',
+    templateUrl: './percent-load-estimation.component.html',
+    styleUrls: ['./percent-load-estimation.component.css'],
+    standalone: false
 })
 export class PercentLoadEstimationComponent implements OnInit {
   @Input()

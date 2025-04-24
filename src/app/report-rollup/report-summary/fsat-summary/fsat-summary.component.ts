@@ -6,9 +6,10 @@ import { ReportUtilityTotal } from '../../report-rollup-models';
 import { ReportSummaryGraphsService } from '../../report-summary-graphs/report-summary-graphs.service';
 
 @Component({
-  selector: 'app-fsat-summary',
-  templateUrl: './fsat-summary.component.html',
-  styleUrls: ['./fsat-summary.component.css', '../report-summary.component.css']
+    selector: 'app-fsat-summary',
+    templateUrl: './fsat-summary.component.html',
+    styleUrls: ['./fsat-summary.component.css', '../report-summary.component.css'],
+    standalone: false
 })
 export class FsatSummaryComponent implements OnInit {
   @Input()

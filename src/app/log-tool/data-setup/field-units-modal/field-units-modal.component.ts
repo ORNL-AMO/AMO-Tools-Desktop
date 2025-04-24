@@ -5,9 +5,10 @@ import { measurementOptions } from './field-unit-options';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-field-units-modal',
-  templateUrl: './field-units-modal.component.html',
-  styleUrls: ['./field-units-modal.component.css']
+    selector: 'app-field-units-modal',
+    templateUrl: './field-units-modal.component.html',
+    styleUrls: ['./field-units-modal.component.css'],
+    standalone: false
 })
 export class FieldUnitsModalComponent implements OnInit {
   @Input()

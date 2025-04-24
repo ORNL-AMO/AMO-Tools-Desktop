@@ -11,9 +11,10 @@ import { ExploreOpportunitiesValidationService } from '../explore-opportunities-
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-reduce-air-leaks',
-  templateUrl: './reduce-air-leaks.component.html',
-  styleUrls: ['./reduce-air-leaks.component.css']
+    selector: 'app-reduce-air-leaks',
+    templateUrl: './reduce-air-leaks.component.html',
+    styleUrls: ['./reduce-air-leaks.component.css'],
+    standalone: false
 })
 export class ReduceAirLeaksComponent implements OnInit {
 

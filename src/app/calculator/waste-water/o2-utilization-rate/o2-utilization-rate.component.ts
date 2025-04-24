@@ -6,9 +6,10 @@ import { O2UtilizationDataPoints, O2UtilizationRateService } from './o2-utilizat
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-o2-utilization-rate',
-  templateUrl: './o2-utilization-rate.component.html',
-  styleUrls: ['./o2-utilization-rate.component.css']
+    selector: 'app-o2-utilization-rate',
+    templateUrl: './o2-utilization-rate.component.html',
+    styleUrls: ['./o2-utilization-rate.component.css'],
+    standalone: false
 })
 export class O2UtilizationRateComponent implements OnInit {
   @Input()

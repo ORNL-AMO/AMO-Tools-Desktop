@@ -16,9 +16,10 @@ import { CompareService } from '../../../compare.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-boiler-form',
-  templateUrl: './boiler-form.component.html',
-  styleUrls: ['./boiler-form.component.css']
+    selector: 'app-boiler-form',
+    templateUrl: './boiler-form.component.html',
+    styleUrls: ['./boiler-form.component.css'],
+    standalone: false
 })
 export class BoilerFormComponent implements OnInit {
   @Input()

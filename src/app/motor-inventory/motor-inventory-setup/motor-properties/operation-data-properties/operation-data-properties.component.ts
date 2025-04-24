@@ -3,9 +3,10 @@ import { OperationDataOptions, MotorInventoryData } from '../../../motor-invento
 import { MotorInventoryService } from '../../../motor-inventory.service';
 
 @Component({
-  selector: 'app-operation-data-properties',
-  templateUrl: './operation-data-properties.component.html',
-  styleUrls: ['./operation-data-properties.component.css']
+    selector: 'app-operation-data-properties',
+    templateUrl: './operation-data-properties.component.html',
+    styleUrls: ['./operation-data-properties.component.css'],
+    standalone: false
 })
 export class OperationDataPropertiesComponent implements OnInit {
 

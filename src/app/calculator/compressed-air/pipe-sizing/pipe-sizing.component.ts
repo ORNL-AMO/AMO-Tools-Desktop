@@ -11,9 +11,10 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 
 @Component({
-  selector: 'app-pipe-sizing',
-  templateUrl: './pipe-sizing.component.html',
-  styleUrls: ['./pipe-sizing.component.css']
+    selector: 'app-pipe-sizing',
+    templateUrl: './pipe-sizing.component.html',
+    styleUrls: ['./pipe-sizing.component.css'],
+    standalone: false
 })
 export class PipeSizingComponent implements OnInit {
   

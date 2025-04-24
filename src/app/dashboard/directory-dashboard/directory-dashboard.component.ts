@@ -10,9 +10,10 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AssessmentService } from '../assessment.service';
 
 @Component({
-  selector: 'app-directory-dashboard',
-  templateUrl: './directory-dashboard.component.html',
-  styleUrls: ['./directory-dashboard.component.css']
+    selector: 'app-directory-dashboard',
+    templateUrl: './directory-dashboard.component.html',
+    styleUrls: ['./directory-dashboard.component.css'],
+    standalone: false
 })
 export class DirectoryDashboardComponent implements OnInit {
 

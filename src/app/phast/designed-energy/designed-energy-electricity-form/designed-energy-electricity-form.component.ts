@@ -4,9 +4,10 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { PhastService } from '../../phast.service';
 
 @Component({
-  selector: 'app-designed-energy-electricity-form',
-  templateUrl: './designed-energy-electricity-form.component.html',
-  styleUrls: ['./designed-energy-electricity-form.component.css']
+    selector: 'app-designed-energy-electricity-form',
+    templateUrl: './designed-energy-electricity-form.component.html',
+    styleUrls: ['./designed-energy-electricity-form.component.css'],
+    standalone: false
 })
 export class DesignedEnergyElectricityFormComponent implements OnInit {
   @Input()

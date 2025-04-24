@@ -7,9 +7,10 @@ import { ActivatedSludgeFormService } from '../../../activated-sludge-form/activ
 import { WasteWaterService } from '../../../waste-water.service';
 
 @Component({
-  selector: 'app-explore-activated-sludge-form',
-  templateUrl: './explore-activated-sludge-form.component.html',
-  styleUrls: ['./explore-activated-sludge-form.component.css']
+    selector: 'app-explore-activated-sludge-form',
+    templateUrl: './explore-activated-sludge-form.component.html',
+    styleUrls: ['./explore-activated-sludge-form.component.css'],
+    standalone: false
 })
 export class ExploreActivatedSludgeFormComponent implements OnInit {
 

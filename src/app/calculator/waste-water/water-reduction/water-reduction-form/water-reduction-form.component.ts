@@ -6,9 +6,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
-  selector: 'app-water-reduction-form',
-  templateUrl: './water-reduction-form.component.html',
-  styleUrls: ['./water-reduction-form.component.css']
+    selector: 'app-water-reduction-form',
+    templateUrl: './water-reduction-form.component.html',
+    styleUrls: ['./water-reduction-form.component.css'],
+    standalone: false
 })
 export class WaterReductionFormComponent implements OnInit {
   @Input()

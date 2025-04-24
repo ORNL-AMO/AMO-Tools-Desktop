@@ -3,9 +3,10 @@ import { ImportExportService } from '../../shared/import-export/import-export.se
 import { ExportService } from '../../shared/import-export/export.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 @Component({
-  selector: 'app-contact-page',
-  templateUrl: './contact-page.component.html',
-  styleUrls: ['./contact-page.component.css']
+    selector: 'app-contact-page',
+    templateUrl: './contact-page.component.html',
+    styleUrls: ['./contact-page.component.css'],
+    standalone: false
 })
 export class ContactPageComponent implements OnInit {
 

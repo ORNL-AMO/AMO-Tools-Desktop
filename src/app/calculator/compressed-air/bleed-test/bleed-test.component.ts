@@ -10,9 +10,10 @@ import { BleedTestService } from './bleed-test.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-bleed-test',
-  templateUrl: './bleed-test.component.html',
-  styleUrls: ['./bleed-test.component.css']
+    selector: 'app-bleed-test',
+    templateUrl: './bleed-test.component.html',
+    styleUrls: ['./bleed-test.component.css'],
+    standalone: false
 })
 export class BleedTestComponent implements OnInit {
 

@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { FanAnalysisService } from '../fan-analysis.service';
 
 @Component({
-  selector: 'app-help-and-results-panel',
-  templateUrl: './help-and-results-panel.component.html',
-  styleUrls: ['./help-and-results-panel.component.css']
+    selector: 'app-help-and-results-panel',
+    templateUrl: './help-and-results-panel.component.html',
+    styleUrls: ['./help-and-results-panel.component.css'],
+    standalone: false
 })
 export class HelpAndResultsPanelComponent implements OnInit {
   @Input()

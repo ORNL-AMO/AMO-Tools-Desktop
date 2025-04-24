@@ -4,9 +4,10 @@ import { StepTab, stepTabs, specTabs } from '../tabs';
 import { Subscription } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 @Component({
-  selector: 'app-phast-tabs',
-  templateUrl: './phast-tabs.component.html',
-  styleUrls: ['./phast-tabs.component.css']
+    selector: 'app-phast-tabs',
+    templateUrl: './phast-tabs.component.html',
+    styleUrls: ['./phast-tabs.component.css'],
+    standalone: false
 })
 export class PhastTabsComponent implements OnInit {
   //We use BehaviorSubjects for our step and spec tabs in phast.

@@ -9,9 +9,10 @@ import { SaturatedPropertiesService, IsothermCoordinates } from '../../saturated
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-saturated-properties-ph-chart',
-  templateUrl: './saturated-properties-ph-chart.component.html',
-  styleUrls: ['./saturated-properties-ph-chart.component.css']
+    selector: 'app-saturated-properties-ph-chart',
+    templateUrl: './saturated-properties-ph-chart.component.html',
+    styleUrls: ['./saturated-properties-ph-chart.component.css'],
+    standalone: false
 })
 export class SaturatedPropertiesPhChartComponent implements OnInit, OnChanges {
   @Input()

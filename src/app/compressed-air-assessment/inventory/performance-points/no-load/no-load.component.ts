@@ -10,9 +10,10 @@ import { CompressedAirDataManagementService } from '../../../compressed-air-data
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: '[app-no-load]',
-  templateUrl: './no-load.component.html',
-  styleUrls: ['./no-load.component.css']
+    selector: '[app-no-load]',
+    templateUrl: './no-load.component.html',
+    styleUrls: ['./no-load.component.css'],
+    standalone: false
 })
 export class NoLoadComponent implements OnInit {
 

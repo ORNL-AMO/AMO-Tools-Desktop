@@ -8,9 +8,10 @@ import { CoolingTowerFanFormService } from '../cooling-tower-fan-form.service';
 import { CoolingTowerFanService } from '../cooling-tower-fan.service';
 
 @Component({
-  selector: 'app-cooling-tower-fan-form',
-  templateUrl: './cooling-tower-fan-form.component.html',
-  styleUrls: ['./cooling-tower-fan-form.component.css']
+    selector: 'app-cooling-tower-fan-form',
+    templateUrl: './cooling-tower-fan-form.component.html',
+    styleUrls: ['./cooling-tower-fan-form.component.css'],
+    standalone: false
 })
 export class CoolingTowerFanFormComponent implements OnInit {
   @Input()

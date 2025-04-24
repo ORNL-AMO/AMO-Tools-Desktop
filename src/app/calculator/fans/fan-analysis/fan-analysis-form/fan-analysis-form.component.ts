@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-fan-analysis-form',
-  templateUrl: './fan-analysis-form.component.html',
-  styleUrls: ['./fan-analysis-form.component.css']
+    selector: 'app-fan-analysis-form',
+    templateUrl: './fan-analysis-form.component.html',
+    styleUrls: ['./fan-analysis-form.component.css'],
+    standalone: false
 })
 export class FanAnalysisFormComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { SteamPropertiesOutput, ProcessSteamUsage } from '../../../shared/models
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-header-diagram',
-  templateUrl: './header-diagram.component.html',
-  styleUrls: ['./header-diagram.component.css']
+    selector: 'app-header-diagram',
+    templateUrl: './header-diagram.component.html',
+    styleUrls: ['./header-diagram.component.css'],
+    standalone: false
 })
 export class HeaderDiagramComponent implements OnInit {
   @Input()

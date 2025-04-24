@@ -8,9 +8,10 @@ import { CompressedAirAssessmentService } from '../compressed-air-assessment.ser
 import { InventoryService } from '../inventory/inventory.service';
 
 @Component({
-  selector: 'app-centrifugal-graph',
-  templateUrl: './centrifugal-graph.component.html',
-  styleUrls: ['./centrifugal-graph.component.css']
+    selector: 'app-centrifugal-graph',
+    templateUrl: './centrifugal-graph.component.html',
+    styleUrls: ['./centrifugal-graph.component.css'],
+    standalone: false
 })
 export class CentrifugalGraphComponent implements OnInit {
 

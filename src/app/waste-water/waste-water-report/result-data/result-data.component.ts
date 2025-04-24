@@ -5,9 +5,10 @@ import { Settings } from '../../../shared/models/settings';
 import { WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
 
 @Component({
-  selector: 'app-result-data',
-  templateUrl: './result-data.component.html',
-  styleUrls: ['./result-data.component.css']
+    selector: 'app-result-data',
+    templateUrl: './result-data.component.html',
+    styleUrls: ['./result-data.component.css'],
+    standalone: false
 })
 export class ResultDataComponent implements OnInit {
   @Input()

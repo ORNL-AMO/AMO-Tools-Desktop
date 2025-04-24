@@ -9,9 +9,10 @@ import { ReportRollupService } from '../report-rollup.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-ssmt-rollup',
-  templateUrl: './ssmt-rollup.component.html',
-  styleUrls: ['./ssmt-rollup.component.css']
+    selector: 'app-ssmt-rollup',
+    templateUrl: './ssmt-rollup.component.html',
+    styleUrls: ['./ssmt-rollup.component.css'],
+    standalone: false
 })
 export class SsmtRollupComponent implements OnInit {
   @Input()

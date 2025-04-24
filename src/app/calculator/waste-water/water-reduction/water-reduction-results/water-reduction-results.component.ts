@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { WaterReductionResults } from '../../../../shared/models/standalone';
 
 @Component({
-  selector: 'app-water-reduction-results',
-  templateUrl: './water-reduction-results.component.html',
-  styleUrls: ['./water-reduction-results.component.css']
+    selector: 'app-water-reduction-results',
+    templateUrl: './water-reduction-results.component.html',
+    styleUrls: ['./water-reduction-results.component.css'],
+    standalone: false
 })
 export class WaterReductionResultsComponent implements OnInit {
   @Input()

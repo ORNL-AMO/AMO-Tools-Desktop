@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { GenericCompressorDbService } from '../generic-compressor-db.service';
 
 @Pipe({
-  name: 'controlType'
+    name: 'controlType',
+    standalone: false
 })
 export class ControlTypePipe implements PipeTransform {
   

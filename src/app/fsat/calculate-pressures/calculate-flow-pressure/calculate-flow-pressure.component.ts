@@ -9,9 +9,10 @@ import { PlaneDataFormService } from '../../../calculator/fans/fan-analysis/fan-
 import { FsatService } from '../../fsat.service';
 
 @Component({
-  selector: 'app-calculate-flow-pressure',
-  templateUrl: './calculate-flow-pressure.component.html',
-  styleUrls: ['./calculate-flow-pressure.component.css']
+    selector: 'app-calculate-flow-pressure',
+    templateUrl: './calculate-flow-pressure.component.html',
+    styleUrls: ['./calculate-flow-pressure.component.css'],
+    standalone: false
 })
 export class CalculateFlowPressureComponent implements OnInit {
   @Input()

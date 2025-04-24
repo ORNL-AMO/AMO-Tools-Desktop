@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { CoolingService } from '../cooling.service';
 
 @Component({
-  selector: 'app-cooling-help',
-  templateUrl: './cooling-help.component.html',
-  styleUrls: ['./cooling-help.component.css']
+    selector: 'app-cooling-help',
+    templateUrl: './cooling-help.component.html',
+    styleUrls: ['./cooling-help.component.css'],
+    standalone: false
 })
 export class CoolingHelpComponent implements OnInit {
   @Input()

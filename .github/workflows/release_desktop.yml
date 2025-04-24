@@ -1,4 +1,4 @@
-name: Electron
+name: "Release: Desktop"
 
 on:
   workflow_call:

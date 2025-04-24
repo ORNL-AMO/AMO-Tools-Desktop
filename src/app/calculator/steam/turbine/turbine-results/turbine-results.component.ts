@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { TurbineOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-turbine-results',
-  templateUrl: './turbine-results.component.html',
-  styleUrls: ['./turbine-results.component.css']
+    selector: 'app-turbine-results',
+    templateUrl: './turbine-results.component.html',
+    styleUrls: ['./turbine-results.component.css'],
+    standalone: false
 })
 export class TurbineResultsComponent implements OnInit {
   @Input()

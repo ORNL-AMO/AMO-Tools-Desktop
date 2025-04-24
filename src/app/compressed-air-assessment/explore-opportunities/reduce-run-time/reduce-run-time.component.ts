@@ -11,9 +11,10 @@ import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { ReduceRunTimeService } from './reduce-run-time.service';
 
 @Component({
-  selector: 'app-reduce-run-time',
-  templateUrl: './reduce-run-time.component.html',
-  styleUrls: ['./reduce-run-time.component.css']
+    selector: 'app-reduce-run-time',
+    templateUrl: './reduce-run-time.component.html',
+    styleUrls: ['./reduce-run-time.component.css'],
+    standalone: false
 })
 export class ReduceRunTimeComponent implements OnInit {
 

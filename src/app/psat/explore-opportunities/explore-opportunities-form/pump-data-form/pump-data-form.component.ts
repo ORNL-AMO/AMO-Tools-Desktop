@@ -7,9 +7,10 @@ import { PsatService } from '../../../psat.service';
 import { PsatOutputs, PSAT } from '../../../../shared/models/psat';
 
 @Component({
-  selector: 'app-pump-data-form',
-  templateUrl: './pump-data-form.component.html',
-  styleUrls: ['./pump-data-form.component.css']
+    selector: 'app-pump-data-form',
+    templateUrl: './pump-data-form.component.html',
+    styleUrls: ['./pump-data-form.component.css'],
+    standalone: false
 })
 export class PumpDataFormComponent implements OnInit {
   @Output('emitCalculate')

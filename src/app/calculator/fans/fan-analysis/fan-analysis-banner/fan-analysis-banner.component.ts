@@ -8,9 +8,10 @@ import { FanShaftPowerFormService } from '../fan-analysis-form/fan-shaft-power-f
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-fan-analysis-banner',
-  templateUrl: './fan-analysis-banner.component.html',
-  styleUrls: ['./fan-analysis-banner.component.css']
+    selector: 'app-fan-analysis-banner',
+    templateUrl: './fan-analysis-banner.component.html',
+    styleUrls: ['./fan-analysis-banner.component.css'],
+    standalone: false
 })
 export class FanAnalysisBannerComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { FieldMeasurementsOptions, PumpInventoryData } from '../../../pump-inven
 import { PumpInventoryService } from '../../../pump-inventory.service';
 
 @Component({
-  selector: 'app-field-measurements-properties',
-  templateUrl: './field-measurements-properties.component.html',
-  styleUrls: ['./field-measurements-properties.component.css']
+    selector: 'app-field-measurements-properties',
+    templateUrl: './field-measurements-properties.component.html',
+    styleUrls: ['./field-measurements-properties.component.css'],
+    standalone: false
 })
 export class FieldMeasurementsPropertiesComponent implements OnInit {
   displayForm: boolean;

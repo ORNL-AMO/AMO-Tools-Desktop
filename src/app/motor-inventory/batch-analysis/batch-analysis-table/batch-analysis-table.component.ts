@@ -6,9 +6,10 @@ import { MotorCatalogService } from '../../motor-inventory-setup/motor-catalog/m
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-batch-analysis-table',
-  templateUrl: './batch-analysis-table.component.html',
-  styleUrls: ['./batch-analysis-table.component.css']
+    selector: 'app-batch-analysis-table',
+    templateUrl: './batch-analysis-table.component.html',
+    styleUrls: ['./batch-analysis-table.component.css'],
+    standalone: false
 })
 export class BatchAnalysisTableComponent implements OnInit {
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;

@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-centrifugal-specifics-help',
-  templateUrl: './centrifugal-specifics-help.component.html',
-  styleUrls: ['./centrifugal-specifics-help.component.css']
+    selector: 'app-centrifugal-specifics-help',
+    templateUrl: './centrifugal-specifics-help.component.html',
+    styleUrls: ['./centrifugal-specifics-help.component.css'],
+    standalone: false
 })
 export class CentrifugalSpecificsHelpComponent implements OnInit {
 

@@ -11,9 +11,10 @@ import { VisualizeService } from '../../visualize/visualize.service';
 import { LogToolService } from '../../log-tool.service';
 
 @Component({
-  selector: 'app-import-data',
-  templateUrl: './import-data.component.html',
-  styleUrls: ['./import-data.component.css'],
+    selector: 'app-import-data',
+    templateUrl: './import-data.component.html',
+    styleUrls: ['./import-data.component.css'],
+    standalone: false
 })
 export class ImportDataComponent implements OnInit {
   invalidFileReferences: Array<InvalidFile> = [];

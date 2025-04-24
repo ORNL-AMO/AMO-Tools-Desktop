@@ -20,9 +20,10 @@ import { MotorIntegrationService } from '../../shared/connected-inventory/motor-
 
 
 @Component({
-  selector: 'app-copy-items',
-  templateUrl: './copy-items.component.html',
-  styleUrls: ['./copy-items.component.css']
+    selector: 'app-copy-items',
+    templateUrl: './copy-items.component.html',
+    styleUrls: ['./copy-items.component.css'],
+    standalone: false
 })
 export class CopyItemsComponent implements OnInit {
 

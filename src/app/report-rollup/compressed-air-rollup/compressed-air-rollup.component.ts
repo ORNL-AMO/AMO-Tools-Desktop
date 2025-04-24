@@ -9,9 +9,10 @@ import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
 
 @Component({
-  selector: 'app-compressed-air-rollup',
-  templateUrl: './compressed-air-rollup.component.html',
-  styleUrls: ['./compressed-air-rollup.component.css']
+    selector: 'app-compressed-air-rollup',
+    templateUrl: './compressed-air-rollup.component.html',
+    styleUrls: ['./compressed-air-rollup.component.css'],
+    standalone: false
 })
 export class CompressedAirRollupComponent implements OnInit {
   @Input()

@@ -10,9 +10,10 @@ import { FanMotorService } from '../../../fan-motor/fan-motor.service';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 
 @Component({
-  selector: 'app-rated-motor-form',
-  templateUrl: './rated-motor-form.component.html',
-  styleUrls: ['./rated-motor-form.component.css']
+    selector: 'app-rated-motor-form',
+    templateUrl: './rated-motor-form.component.html',
+    styleUrls: ['./rated-motor-form.component.css'],
+    standalone: false
 })
 export class RatedMotorFormComponent implements OnInit {
   @Input()

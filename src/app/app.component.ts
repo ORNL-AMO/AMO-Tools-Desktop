@@ -12,10 +12,11 @@ import { MeasurAppError } from './shared/errors/errors';
 declare let gtag: Function;
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class AppComponent {
   measurFormattedErrorSubscription: Subscription;

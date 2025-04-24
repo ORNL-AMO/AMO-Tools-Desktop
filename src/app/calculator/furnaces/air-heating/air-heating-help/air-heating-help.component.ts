@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { AirHeatingService } from '../air-heating.service';
 
 @Component({
-  selector: 'app-air-heating-help',
-  templateUrl: './air-heating-help.component.html',
-  styleUrls: ['./air-heating-help.component.css']
+    selector: 'app-air-heating-help',
+    templateUrl: './air-heating-help.component.html',
+    styleUrls: ['./air-heating-help.component.css'],
+    standalone: false
 })
 export class AirHeatingHelpComponent implements OnInit {
   @Input()

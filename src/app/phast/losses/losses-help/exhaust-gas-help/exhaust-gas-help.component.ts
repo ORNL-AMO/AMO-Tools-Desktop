@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-exhaust-gas-help',
-  templateUrl: './exhaust-gas-help.component.html',
-  styleUrls: ['./exhaust-gas-help.component.css']
+    selector: 'app-exhaust-gas-help',
+    templateUrl: './exhaust-gas-help.component.html',
+    styleUrls: ['./exhaust-gas-help.component.css'],
+    standalone: false
 })
 export class ExhaustGasHelpComponent implements OnInit {
   @Input()

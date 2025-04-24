@@ -10,9 +10,10 @@ import { OpeningService } from './opening.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-opening',
-  templateUrl: './opening.component.html',
-  styleUrls: ['./opening.component.css']
+    selector: 'app-opening',
+    templateUrl: './opening.component.html',
+    styleUrls: ['./opening.component.css'],
+    standalone: false
 })
 export class OpeningComponent implements OnInit {
   @Input()

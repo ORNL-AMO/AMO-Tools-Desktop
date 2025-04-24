@@ -8,9 +8,10 @@ import { Subscription } from 'rxjs';
 import { AtmosphereFormService, AtmosphereLossWarnings } from '../../../../calculator/furnaces/atmosphere/atmosphere-form.service';
 
 @Component({
-  selector: 'app-atmosphere-tab',
-  templateUrl: './atmosphere-tab.component.html',
-  styleUrls: ['./atmosphere-tab.component.css']
+    selector: 'app-atmosphere-tab',
+    templateUrl: './atmosphere-tab.component.html',
+    styleUrls: ['./atmosphere-tab.component.css'],
+    standalone: false
 })
 export class AtmosphereTabComponent implements OnInit {
   @Input()

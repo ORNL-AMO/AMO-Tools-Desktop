@@ -4,9 +4,10 @@ import { Settings } from '../../../shared/models/settings';
 import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 
 @Component({
-  selector: 'app-system-profiles',
-  templateUrl: './system-profiles.component.html',
-  styleUrls: ['./system-profiles.component.css']
+    selector: 'app-system-profiles',
+    templateUrl: './system-profiles.component.html',
+    styleUrls: ['./system-profiles.component.css'],
+    standalone: false
 })
 export class SystemProfilesComponent implements OnInit {
   @Input()

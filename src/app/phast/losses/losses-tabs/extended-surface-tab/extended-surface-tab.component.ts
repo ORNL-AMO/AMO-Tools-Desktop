@@ -7,9 +7,10 @@ import { ExtendedSurfaceCompareService } from '../../extended-surface-losses/ext
 import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
 import { Subscription } from 'rxjs';
 @Component({
-  selector: 'app-extended-surface-tab',
-  templateUrl: './extended-surface-tab.component.html',
-  styleUrls: ['./extended-surface-tab.component.css']
+    selector: 'app-extended-surface-tab',
+    templateUrl: './extended-surface-tab.component.html',
+    styleUrls: ['./extended-surface-tab.component.css'],
+    standalone: false
 })
 export class ExtendedSurfaceTabComponent implements OnInit {
   @Input()

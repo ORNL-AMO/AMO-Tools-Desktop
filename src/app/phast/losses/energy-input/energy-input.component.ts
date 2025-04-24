@@ -9,9 +9,10 @@ import { PhastResultsService, EnergyInputWarnings } from '../../phast-results.se
 import { PhastService } from '../../phast.service';
 
 @Component({
-  selector: 'app-energy-input',
-  templateUrl: './energy-input.component.html',
-  styleUrls: ['./energy-input.component.css']
+    selector: 'app-energy-input',
+    templateUrl: './energy-input.component.html',
+    styleUrls: ['./energy-input.component.css'],
+    standalone: false
 })
 export class EnergyInputComponent implements OnInit {
   @Input()

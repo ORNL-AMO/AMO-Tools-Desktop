@@ -3,9 +3,10 @@ import { BatchAnalysisOptions, MotorInventoryData } from '../../../motor-invento
 import { MotorInventoryService } from '../../../motor-inventory.service';
 
 @Component({
-  selector: 'app-batch-analysis-properties',
-  templateUrl: './batch-analysis-properties.component.html',
-  styleUrls: ['./batch-analysis-properties.component.css']
+    selector: 'app-batch-analysis-properties',
+    templateUrl: './batch-analysis-properties.component.html',
+    styleUrls: ['./batch-analysis-properties.component.css'],
+    standalone: false
 })
 export class BatchAnalysisPropertiesComponent implements OnInit {
 

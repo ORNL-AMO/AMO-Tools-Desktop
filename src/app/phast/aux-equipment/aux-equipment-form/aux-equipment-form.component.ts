@@ -2,9 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuxEquipment } from '../../../shared/models/phast/auxEquipment';
 import { Settings } from '../../../shared/models/settings';
 @Component({
-  selector: 'app-aux-equipment-form',
-  templateUrl: './aux-equipment-form.component.html',
-  styleUrls: ['./aux-equipment-form.component.css']
+    selector: 'app-aux-equipment-form',
+    templateUrl: './aux-equipment-form.component.html',
+    styleUrls: ['./aux-equipment-form.component.css'],
+    standalone: false
 })
 export class AuxEquipmentFormComponent implements OnInit {
   @Input()

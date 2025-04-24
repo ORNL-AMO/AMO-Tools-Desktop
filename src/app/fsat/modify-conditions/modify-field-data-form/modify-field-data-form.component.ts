@@ -5,9 +5,10 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { HelpPanelService } from '../../help-panel/help-panel.service';
 
 @Component({
-  selector: 'app-modify-field-data-form',
-  templateUrl: './modify-field-data-form.component.html',
-  styleUrls: ['./modify-field-data-form.component.css']
+    selector: 'app-modify-field-data-form',
+    templateUrl: './modify-field-data-form.component.html',
+    styleUrls: ['./modify-field-data-form.component.css'],
+    standalone: false
 })
 export class ModifyFieldDataFormComponent implements OnInit {
   @Input()

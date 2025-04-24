@@ -5,18 +5,19 @@ import { OperatingHoursModalService } from './operating-hours-modal.service';
 import { UntypedFormGroup, AbstractControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-operating-hours-modal',
-  templateUrl: './operating-hours-modal.component.html',
-  styleUrls: ['./operating-hours-modal.component.css'],
-  animations: [
-    trigger('modal', [
-      state('show', style({
-        top: '50px'
-      })),
-      transition('hide => show', animate('.5s ease-in')),
-      transition('show => hide', animate('.5s ease-out'))
-    ])
-  ]
+    selector: 'app-operating-hours-modal',
+    templateUrl: './operating-hours-modal.component.html',
+    styleUrls: ['./operating-hours-modal.component.css'],
+    animations: [
+        trigger('modal', [
+            state('show', style({
+                top: '50px'
+            })),
+            transition('hide => show', animate('.5s ease-in')),
+            transition('show => hide', animate('.5s ease-out'))
+        ])
+    ],
+    standalone: false
 })
 export class OperatingHoursModalComponent implements OnInit {
   @Output('emitClose')

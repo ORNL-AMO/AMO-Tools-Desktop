@@ -3,9 +3,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-internal-dimension-modal',
-  templateUrl: './internal-dimension-modal.component.html',
-  styleUrls: ['./internal-dimension-modal.component.css']
+    selector: 'app-internal-dimension-modal',
+    templateUrl: './internal-dimension-modal.component.html',
+    styleUrls: ['./internal-dimension-modal.component.css'],
+    standalone: false
 })
 export class InternalDimensionModalComponent implements OnInit {
 

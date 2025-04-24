@@ -3,9 +3,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { environment } from '../../../../environments/environment';
 
 @Component({
-  selector: 'app-release-notes-modal',
-  templateUrl: './release-notes-modal.component.html',
-  styleUrl: './release-notes-modal.component.css'
+    selector: 'app-release-notes-modal',
+    templateUrl: './release-notes-modal.component.html',
+    styleUrl: './release-notes-modal.component.css',
+    standalone: false
 })
 export class ReleaseNotesModalComponent {
 @Output('closeModal')

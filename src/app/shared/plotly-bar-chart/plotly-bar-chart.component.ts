@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 @Component({
-  selector: 'app-plotly-bar-chart',
-  templateUrl: './plotly-bar-chart.component.html',
-  styleUrls: ['./plotly-bar-chart.component.css']
+    selector: 'app-plotly-bar-chart',
+    templateUrl: './plotly-bar-chart.component.html',
+    styleUrls: ['./plotly-bar-chart.component.css'],
+    standalone: false
 })
 export class PlotlyBarChartComponent implements OnInit {
   @Input()

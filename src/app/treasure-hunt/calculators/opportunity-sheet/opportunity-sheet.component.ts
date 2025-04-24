@@ -3,9 +3,10 @@ import { OpportunitySheet } from '../../../shared/models/treasure-hunt';
 import { OpportunitySheetService } from '../standalone-opportunity-sheet/opportunity-sheet.service';
 
 @Component({
-  selector: 'app-opportunity-sheet',
-  templateUrl: './opportunity-sheet.component.html',
-  styleUrls: ['./opportunity-sheet.component.css']
+    selector: 'app-opportunity-sheet',
+    templateUrl: './opportunity-sheet.component.html',
+    styleUrls: ['./opportunity-sheet.component.css'],
+    standalone: false
 })
 export class OpportunitySheetComponent implements OnInit {
   @Input()

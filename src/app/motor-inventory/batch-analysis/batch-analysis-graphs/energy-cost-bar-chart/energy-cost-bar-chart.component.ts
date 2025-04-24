@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-energy-cost-bar-chart',
-  templateUrl: './energy-cost-bar-chart.component.html',
-  styleUrls: ['./energy-cost-bar-chart.component.css']
+    selector: 'app-energy-cost-bar-chart',
+    templateUrl: './energy-cost-bar-chart.component.html',
+    styleUrls: ['./energy-cost-bar-chart.component.css'],
+    standalone: false
 })
 export class EnergyCostBarChartComponent implements OnInit {
 

@@ -8,9 +8,10 @@ import { IntegrationStateService } from '../../shared/connected-inventory/integr
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
-  selector: 'app-psat-banner',
-  templateUrl: './psat-banner.component.html',
-  styleUrls: ['./psat-banner.component.css']
+    selector: 'app-psat-banner',
+    templateUrl: './psat-banner.component.html',
+    styleUrls: ['./psat-banner.component.css'],
+    standalone: false
 })
 export class PsatBannerComponent implements OnInit {
   @Input()

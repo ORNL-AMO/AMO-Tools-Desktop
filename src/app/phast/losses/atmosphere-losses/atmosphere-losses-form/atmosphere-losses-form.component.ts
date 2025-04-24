@@ -13,9 +13,10 @@ import { firstValueFrom } from 'rxjs';
 import { AtmosphereDbService } from '../../../../indexedDb/atmosphere-db.service';
 
 @Component({
-  selector: 'app-atmosphere-losses-form',
-  templateUrl: './atmosphere-losses-form.component.html',
-  styleUrls: ['./atmosphere-losses-form.component.css']
+    selector: 'app-atmosphere-losses-form',
+    templateUrl: './atmosphere-losses-form.component.html',
+    styleUrls: ['./atmosphere-losses-form.component.css'],
+    standalone: false
 })
 export class AtmosphereLossesFormComponent implements OnInit {
   @Input()

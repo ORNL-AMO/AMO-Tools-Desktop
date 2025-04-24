@@ -4,9 +4,10 @@ import { InventoryItem } from '../../../../../shared/models/inventory/inventory'
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-pump-inventory-card',
-  templateUrl: './pump-inventory-card.component.html',
-  styleUrls: ['./pump-inventory-card.component.css']
+    selector: 'app-pump-inventory-card',
+    templateUrl: './pump-inventory-card.component.html',
+    styleUrls: ['./pump-inventory-card.component.css'],
+    standalone: false
 })
 export class PumpInventoryCardComponent implements OnInit {
   @Input()

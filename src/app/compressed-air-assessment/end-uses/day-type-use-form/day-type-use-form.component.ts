@@ -9,9 +9,10 @@ import { EndUseResults, EndUsesService, UpdatedEndUseData } from '../end-uses.se
 import { DayTypeEndUseWarnings, DayTypeUseFormService } from './day-type-use-form.service';
 
 @Component({
-  selector: 'app-day-type-use-form',
-  templateUrl: './day-type-use-form.component.html',
-  styleUrls: ['./day-type-use-form.component.css']
+    selector: 'app-day-type-use-form',
+    templateUrl: './day-type-use-form.component.html',
+    styleUrls: ['./day-type-use-form.component.css'],
+    standalone: false
 })
 export class DayTypeUseFormComponent implements OnInit {
   settings: Settings;

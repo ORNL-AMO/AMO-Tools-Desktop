@@ -2,8 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
 
 @Pipe({
-  name: 'dayTypeFilter',
-  pure: true
+    name: 'dayTypeFilter',
+    pure: true,
+    standalone: false
 })
 export class DayTypeFilterPipe implements PipeTransform {
 

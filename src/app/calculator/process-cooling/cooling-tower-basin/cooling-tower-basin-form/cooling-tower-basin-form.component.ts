@@ -8,9 +8,10 @@ import { CoolingTowerBasinFormService, CoolingTowerBasinWarnings } from '../cool
 import { CoolingTowerBasinService } from '../cooling-tower-basin.service';
 
 @Component({
-  selector: 'app-cooling-tower-basin-form',
-  templateUrl: './cooling-tower-basin-form.component.html',
-  styleUrls: ['./cooling-tower-basin-form.component.css']
+    selector: 'app-cooling-tower-basin-form',
+    templateUrl: './cooling-tower-basin-form.component.html',
+    styleUrls: ['./cooling-tower-basin-form.component.css'],
+    standalone: false
 })
 export class CoolingTowerBasinFormComponent implements OnInit {
 

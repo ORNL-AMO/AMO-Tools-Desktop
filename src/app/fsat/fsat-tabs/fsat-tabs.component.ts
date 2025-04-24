@@ -14,9 +14,10 @@ import { OperationsService } from '../operations/operations.service';
 import _ from 'lodash';
 
 @Component({
-  selector: 'app-fsat-tabs',
-  templateUrl: './fsat-tabs.component.html',
-  styleUrls: ['./fsat-tabs.component.css']
+    selector: 'app-fsat-tabs',
+    templateUrl: './fsat-tabs.component.html',
+    styleUrls: ['./fsat-tabs.component.css'],
+    standalone: false
 })
 export class FsatTabsComponent implements OnInit {
   @Input()

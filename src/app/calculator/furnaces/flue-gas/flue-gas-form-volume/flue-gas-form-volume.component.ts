@@ -11,9 +11,10 @@ import { FlueGasService } from '../flue-gas.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-flue-gas-form-volume',
-  templateUrl: './flue-gas-form-volume.component.html',
-  styleUrls: ['./flue-gas-form-volume.component.css']
+    selector: 'app-flue-gas-form-volume',
+    templateUrl: './flue-gas-form-volume.component.html',
+    styleUrls: ['./flue-gas-form-volume.component.css'],
+    standalone: false
 })
 export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   @Input()

@@ -3,9 +3,10 @@ import { graphColors } from '../../../../phast/phast-report/report-graphs/graphC
 import * as _ from 'lodash';
 import { PlotlyService } from 'angular-plotly.js';
 @Component({
-  selector: 'app-team-summary-pie-chart',
-  templateUrl: './team-summary-pie-chart.component.html',
-  styleUrls: ['./team-summary-pie-chart.component.css']
+    selector: 'app-team-summary-pie-chart',
+    templateUrl: './team-summary-pie-chart.component.html',
+    styleUrls: ['./team-summary-pie-chart.component.css'],
+    standalone: false
 })
 export class TeamSummaryPieChartComponent implements OnInit {
   @Input()

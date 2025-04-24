@@ -3,9 +3,10 @@ import { MotorInventoryService } from '../motor-inventory.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-motor-inventory-summary',
-  templateUrl: './motor-inventory-summary.component.html',
-  styleUrls: ['./motor-inventory-summary.component.css']
+    selector: 'app-motor-inventory-summary',
+    templateUrl: './motor-inventory-summary.component.html',
+    styleUrls: ['./motor-inventory-summary.component.css'],
+    standalone: false
 })
 export class MotorInventorySummaryComponent implements OnInit {
   summaryTab: string;

@@ -11,9 +11,10 @@ import { Settings } from '../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-inventory-performance-profile',
-  templateUrl: './inventory-performance-profile.component.html',
-  styleUrls: ['./inventory-performance-profile.component.css']
+    selector: 'app-inventory-performance-profile',
+    templateUrl: './inventory-performance-profile.component.html',
+    styleUrls: ['./inventory-performance-profile.component.css'],
+    standalone: false
 })
 export class InventoryPerformanceProfileComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { UntypedFormGroup } from "@angular/forms";
 
 @Component({
-  selector: 'app-steam-settings',
-  templateUrl: './steam-settings.component.html',
-  styleUrls: ['./steam-settings.component.css']
+    selector: 'app-steam-settings',
+    templateUrl: './steam-settings.component.html',
+    styleUrls: ['./steam-settings.component.css'],
+    standalone: false
 })
 export class SteamSettingsComponent implements OnInit {
   @Input()

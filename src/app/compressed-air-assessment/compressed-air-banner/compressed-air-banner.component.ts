@@ -8,9 +8,10 @@ import { CompressedAirAssessmentService } from '../compressed-air-assessment.ser
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
-  selector: 'app-compressed-air-banner',
-  templateUrl: './compressed-air-banner.component.html',
-  styleUrls: ['./compressed-air-banner.component.css']
+    selector: 'app-compressed-air-banner',
+    templateUrl: './compressed-air-banner.component.html',
+    styleUrls: ['./compressed-air-banner.component.css'],
+    standalone: false
 })
 export class CompressedAirBannerComponent implements OnInit {
   @Input()

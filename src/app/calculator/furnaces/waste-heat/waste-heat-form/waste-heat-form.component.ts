@@ -11,9 +11,10 @@ import { WasteHeatFormService } from '../waste-heat-form.service';
 import { WasteHeatService } from '../waste-heat.service';
 
 @Component({
-  selector: 'app-waste-heat-form',
-  templateUrl: './waste-heat-form.component.html',
-  styleUrls: ['./waste-heat-form.component.css']
+    selector: 'app-waste-heat-form',
+    templateUrl: './waste-heat-form.component.html',
+    styleUrls: ['./waste-heat-form.component.css'],
+    standalone: false
 })
 export class WasteHeatFormComponent implements OnInit {
 

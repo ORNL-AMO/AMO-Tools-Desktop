@@ -5,9 +5,10 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
 import { GenericCompressorDbService } from '../../generic-compressor-db.service';
 
 @Component({
-  selector: 'app-generic-compressor-modal',
-  templateUrl: './generic-compressor-modal.component.html',
-  styleUrls: ['./generic-compressor-modal.component.css']
+    selector: 'app-generic-compressor-modal',
+    templateUrl: './generic-compressor-modal.component.html',
+    styleUrls: ['./generic-compressor-modal.component.css'],
+    standalone: false
 })
 export class GenericCompressorModalComponent implements OnInit {
   @Output('emitClose')

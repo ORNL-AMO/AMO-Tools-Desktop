@@ -8,9 +8,10 @@ import { CondensingEconomizerService } from './condensing-economizer.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-condensing-economizer',
-  templateUrl: './condensing-economizer.component.html',
-  styleUrls: ['./condensing-economizer.component.css']
+    selector: 'app-condensing-economizer',
+    templateUrl: './condensing-economizer.component.html',
+    styleUrls: ['./condensing-economizer.component.css'],
+    standalone: false
 })
 export class CondensingEconomizerComponent implements OnInit {
 

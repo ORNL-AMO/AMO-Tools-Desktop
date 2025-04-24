@@ -9,9 +9,10 @@ import { PlotlyService } from 'angular-plotly.js';
 
 
 @Component({
-  selector: 'app-motor-performance-chart',
-  templateUrl: './motor-performance-chart.component.html',
-  styleUrls: ['./motor-performance-chart.component.css']
+    selector: 'app-motor-performance-chart',
+    templateUrl: './motor-performance-chart.component.html',
+    styleUrls: ['./motor-performance-chart.component.css'],
+    standalone: false
 })
 export class MotorPerformanceChartComponent implements OnInit {
   @Input()

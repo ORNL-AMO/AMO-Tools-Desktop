@@ -5,9 +5,10 @@ import { Settings } from '../../shared/models/settings';
 import { SSMT } from '../../shared/models/steam/ssmt';
 
 @Component({
-  selector: 'app-help-panel',
-  templateUrl: './help-panel.component.html',
-  styleUrls: ['./help-panel.component.css']
+    selector: 'app-help-panel',
+    templateUrl: './help-panel.component.html',
+    styleUrls: ['./help-panel.component.css'],
+    standalone: false
 })
 export class HelpPanelComponent implements OnInit {
   @Input()

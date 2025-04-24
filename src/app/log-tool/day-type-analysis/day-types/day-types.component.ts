@@ -8,9 +8,10 @@ import { DayTypeGraphService } from '../day-type-graph/day-type-graph.service';
 import { DayType } from '../../log-tool-models';
 import { LogToolDbService } from '../../log-tool-db.service';
 @Component({
-  selector: 'app-day-types',
-  templateUrl: './day-types.component.html',
-  styleUrls: ['./day-types.component.css']
+    selector: 'app-day-types',
+    templateUrl: './day-types.component.html',
+    styleUrls: ['./day-types.component.css'],
+    standalone: false
 })
 export class DayTypesComponent implements OnInit {
 

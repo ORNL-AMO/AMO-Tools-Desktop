@@ -7,9 +7,10 @@ import { DataTableVariable, DataTableVariables } from '../dataTableVariables';
 import { WasteWaterAnalysisService } from '../waste-water-analysis.service';
 
 @Component({
-  selector: 'app-waste-water-calculations-table',
-  templateUrl: './waste-water-calculations-table.component.html',
-  styleUrls: ['./waste-water-calculations-table.component.css']
+    selector: 'app-waste-water-calculations-table',
+    templateUrl: './waste-water-calculations-table.component.html',
+    styleUrls: ['./waste-water-calculations-table.component.css'],
+    standalone: false
 })
 export class WasteWaterCalculationsTableComponent implements OnInit {
   @Input()

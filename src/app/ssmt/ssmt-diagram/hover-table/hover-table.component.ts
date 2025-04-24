@@ -4,9 +4,10 @@ import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 
 @Component({
-  selector: 'app-hover-table',
-  templateUrl: './hover-table.component.html',
-  styleUrls: ['./hover-table.component.css']
+    selector: 'app-hover-table',
+    templateUrl: './hover-table.component.html',
+    styleUrls: ['./hover-table.component.css'],
+    standalone: false
 })
 export class HoverTableComponent implements OnInit {
   @Input()

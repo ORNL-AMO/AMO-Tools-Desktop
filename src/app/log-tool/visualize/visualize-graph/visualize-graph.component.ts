@@ -11,9 +11,10 @@ import * as Plotly from 'plotly.js-dist';
 
 
 @Component({
-  selector: 'app-visualize-graph',
-  templateUrl: './visualize-graph.component.html',
-  styleUrls: ['./visualize-graph.component.css']
+    selector: 'app-visualize-graph',
+    templateUrl: './visualize-graph.component.html',
+    styleUrls: ['./visualize-graph.component.css'],
+    standalone: false
 })
 export class VisualizeGraphComponent implements OnInit {
 

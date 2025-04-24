@@ -15,9 +15,10 @@ import { Settings } from '../models/settings';
 import { CompressedAirReportRollupService } from '../../report-rollup/compressed-air-report-rollup.service';
 
 @Component({
-  selector: 'app-print-options-menu',
-  templateUrl: './print-options-menu.component.html',
-  styleUrls: ['./print-options-menu.component.css']
+    selector: 'app-print-options-menu',
+    templateUrl: './print-options-menu.component.html',
+    styleUrls: ['./print-options-menu.component.css'],
+    standalone: false
 })
 export class PrintOptionsMenuComponent implements OnInit {
 

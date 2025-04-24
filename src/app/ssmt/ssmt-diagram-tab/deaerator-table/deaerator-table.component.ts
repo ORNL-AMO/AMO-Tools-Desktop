@@ -5,9 +5,10 @@ import { SsmtDiagramTabService } from '../ssmt-diagram-tab.service';
 import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 
 @Component({
-  selector: 'app-deaerator-table',
-  templateUrl: './deaerator-table.component.html',
-  styleUrls: ['./deaerator-table.component.css']
+    selector: 'app-deaerator-table',
+    templateUrl: './deaerator-table.component.html',
+    styleUrls: ['./deaerator-table.component.css'],
+    standalone: false
 })
 export class DeaeratorTableComponent implements OnInit {
   @Input()

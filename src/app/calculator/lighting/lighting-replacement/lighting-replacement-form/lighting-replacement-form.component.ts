@@ -6,9 +6,10 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { LightingFixtureData, LightingFixtureCategories } from '../../lighting-fixture-data/lighting-data';
 
 @Component({
-  selector: 'app-lighting-replacement-form',
-  templateUrl: './lighting-replacement-form.component.html',
-  styleUrls: ['./lighting-replacement-form.component.css']
+    selector: 'app-lighting-replacement-form',
+    templateUrl: './lighting-replacement-form.component.html',
+    styleUrls: ['./lighting-replacement-form.component.css'],
+    standalone: false
 })
 export class LightingReplacementFormComponent implements OnInit {
   @Input()

@@ -2,10 +2,10 @@ import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@an
 import { MeasurMessageData } from '../models/utilities';
 
 @Component({
-  selector: 'app-user-message-overlay',
-  templateUrl: './user-message-overlay.component.html',
-  styleUrls: ['./user-message-overlay.component.css'],
-  // host: {'class': 'message-overlay'}
+    selector: 'app-user-message-overlay',
+    templateUrl: './user-message-overlay.component.html',
+    styleUrls: ['./user-message-overlay.component.css'],
+    standalone: false
 })
 export class UserMessageOverlayComponent implements OnInit {
   @Input()

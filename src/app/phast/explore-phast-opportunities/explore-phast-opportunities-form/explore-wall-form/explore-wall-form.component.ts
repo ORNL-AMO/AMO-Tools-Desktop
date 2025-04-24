@@ -5,9 +5,10 @@ import { LossTab } from '../../../tabs';
 import { WallFormService, WallLossWarnings } from '../../../../calculator/furnaces/wall/wall-form.service';
 
 @Component({
-  selector: 'app-explore-wall-form',
-  templateUrl: './explore-wall-form.component.html',
-  styleUrls: ['./explore-wall-form.component.css']
+    selector: 'app-explore-wall-form',
+    templateUrl: './explore-wall-form.component.html',
+    styleUrls: ['./explore-wall-form.component.css'],
+    standalone: false
 })
 export class ExploreWallFormComponent implements OnInit {
   @Input()

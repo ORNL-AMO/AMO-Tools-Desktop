@@ -3,9 +3,10 @@ import { BatchAnalysisOptions, BatchAnalysisData } from '../../../../motor-inven
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-batch-analysis-details',
-  templateUrl: './batch-analysis-details.component.html',
-  styleUrls: ['./batch-analysis-details.component.css']
+    selector: 'app-batch-analysis-details',
+    templateUrl: './batch-analysis-details.component.html',
+    styleUrls: ['./batch-analysis-details.component.css'],
+    standalone: false
 })
 export class BatchAnalysisDetailsComponent implements OnInit {
   @Input()

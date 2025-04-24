@@ -9,9 +9,10 @@ import { CompressorInventoryItemWarnings, InventoryService } from '../inventory.
 import { PerformancePointsFormService } from '../performance-points/performance-points-form.service';
 
 @Component({
-  selector: 'app-design-details',
-  templateUrl: './design-details.component.html',
-  styleUrls: ['./design-details.component.css']
+    selector: 'app-design-details',
+    templateUrl: './design-details.component.html',
+    styleUrls: ['./design-details.component.css'],
+    standalone: false
 })
 export class DesignDetailsComponent implements OnInit {
   settings: Settings;

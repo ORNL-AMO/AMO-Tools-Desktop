@@ -5,9 +5,10 @@ import { FsatWarningService } from '../../fsat-warning.service';
 import { FsatService, InletVelocityPressureInputs } from '../../fsat.service';
 
 @Component({
-  selector: 'app-calculate-inlet-pressure',
-  templateUrl: './calculate-inlet-pressure.component.html',
-  styleUrls: ['./calculate-inlet-pressure.component.css']
+    selector: 'app-calculate-inlet-pressure',
+    templateUrl: './calculate-inlet-pressure.component.html',
+    styleUrls: ['./calculate-inlet-pressure.component.css'],
+    standalone: false
 })
 export class CalculateInletPressureComponent implements OnInit {
   @Input()

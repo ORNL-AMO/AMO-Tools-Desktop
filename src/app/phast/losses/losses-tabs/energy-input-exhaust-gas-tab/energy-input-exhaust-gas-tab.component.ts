@@ -11,9 +11,10 @@ import { PhastResultsService } from '../../../phast-results.service';
 import { PhastService } from '../../../phast.service';
 import { PhastCompareService } from '../../../phast-compare.service';
 @Component({
-  selector: 'app-energy-input-exhaust-gas-tab',
-  templateUrl: './energy-input-exhaust-gas-tab.component.html',
-  styleUrls: ['./energy-input-exhaust-gas-tab.component.css']
+    selector: 'app-energy-input-exhaust-gas-tab',
+    templateUrl: './energy-input-exhaust-gas-tab.component.html',
+    styleUrls: ['./energy-input-exhaust-gas-tab.component.css'],
+    standalone: false
 })
 export class EnergyInputExhaustGasTabComponent implements OnInit {
   @Input()

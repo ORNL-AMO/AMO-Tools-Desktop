@@ -6,9 +6,10 @@ import { ReceiverTankService } from '../receiver-tank.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-delay-method-form',
-  templateUrl: './delay-method-form.component.html',
-  styleUrls: ['./delay-method-form.component.css']
+    selector: 'app-delay-method-form',
+    templateUrl: './delay-method-form.component.html',
+    styleUrls: ['./delay-method-form.component.css'],
+    standalone: false
 })
 export class DelayMethodFormComponent implements OnInit {
   @Input()

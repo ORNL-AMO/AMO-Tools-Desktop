@@ -6,9 +6,10 @@ import * as _ from 'lodash';
 import { VisualizeService } from '../../../visualize/visualize.service';
 
 @Component({
-  selector: 'app-individual-day-summary-table',
-  templateUrl: './individual-day-summary-table.component.html',
-  styleUrls: ['./individual-day-summary-table.component.css']
+    selector: 'app-individual-day-summary-table',
+    templateUrl: './individual-day-summary-table.component.html',
+    styleUrls: ['./individual-day-summary-table.component.css'],
+    standalone: false
 })
 export class IndividualDaySummaryTableComponent implements OnInit {
   @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;

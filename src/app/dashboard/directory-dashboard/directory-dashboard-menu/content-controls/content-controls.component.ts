@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { FilterDashboardBy } from '../../../../shared/models/directory-dashboard';
 
 @Component({
-  selector: 'app-content-controls',
-  templateUrl: './content-controls.component.html',
-  styleUrls: ['./content-controls.component.css']
+    selector: 'app-content-controls',
+    templateUrl: './content-controls.component.html',
+    styleUrls: ['./content-controls.component.css'],
+    standalone: false
 })
 export class ContentControlsComponent implements OnInit {
 

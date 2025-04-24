@@ -10,7 +10,8 @@ import { OperatingHours } from '../../../../shared/models/operations';
 @Component({
     selector: 'app-system-data-form',
     templateUrl: './system-data-form.component.html',
-    styleUrls: ['./system-data-form.component.css']
+    styleUrls: ['./system-data-form.component.css'],
+    standalone: false
 })
 export class SystemDataFormComponent implements OnInit {
     @Input()

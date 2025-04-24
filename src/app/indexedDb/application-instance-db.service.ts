@@ -48,6 +48,7 @@ export interface ApplicationInstanceData {
   isAutomaticBackupOn: boolean,
   isSurveyToastDone: boolean,
   isSurveyDone: boolean,
+  subscriberId: number,
   doSurveyReminder: boolean,
   appOpenCount: number,
   createVersionedBackups: boolean,

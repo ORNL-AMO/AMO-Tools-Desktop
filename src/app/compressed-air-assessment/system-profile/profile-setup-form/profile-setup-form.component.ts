@@ -8,9 +8,10 @@ import { PerformancePointsFormService } from '../../inventory/performance-points
 import { SystemProfileService } from '../system-profile.service';
 
 @Component({
-  selector: 'app-profile-setup-form',
-  templateUrl: './profile-setup-form.component.html',
-  styleUrls: ['./profile-setup-form.component.css']
+    selector: 'app-profile-setup-form',
+    templateUrl: './profile-setup-form.component.html',
+    styleUrls: ['./profile-setup-form.component.css'],
+    standalone: false
 })
 export class ProfileSetupFormComponent implements OnInit {
   settings: Settings;

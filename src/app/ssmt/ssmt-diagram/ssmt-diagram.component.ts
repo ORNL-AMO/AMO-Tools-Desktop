@@ -5,9 +5,10 @@ import { SSMTOutput } from '../../shared/models/steam/steam-outputs';
 import { Assessment } from '../../shared/models/assessment';
 
 @Component({
-  selector: 'app-ssmt-diagram',
-  templateUrl: './ssmt-diagram.component.html',
-  styleUrls: ['./ssmt-diagram.component.css']
+    selector: 'app-ssmt-diagram',
+    templateUrl: './ssmt-diagram.component.html',
+    styleUrls: ['./ssmt-diagram.component.css'],
+    standalone: false
 })
 export class SsmtDiagramComponent implements OnInit {
   @Input()

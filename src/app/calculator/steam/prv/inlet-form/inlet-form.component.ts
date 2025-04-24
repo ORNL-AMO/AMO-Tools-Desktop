@@ -5,9 +5,10 @@ import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-inlet-form',
-  templateUrl: './inlet-form.component.html',
-  styleUrls: ['./inlet-form.component.css']
+    selector: 'app-inlet-form',
+    templateUrl: './inlet-form.component.html',
+    styleUrls: ['./inlet-form.component.css'],
+    standalone: false
 })
 export class InletFormComponent implements OnInit {
   @Input()

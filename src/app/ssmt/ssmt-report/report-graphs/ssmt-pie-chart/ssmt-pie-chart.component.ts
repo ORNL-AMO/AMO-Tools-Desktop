@@ -6,9 +6,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-ssmt-pie-chart',
-  templateUrl: './ssmt-pie-chart.component.html',
-  styleUrls: ['./ssmt-pie-chart.component.css']
+    selector: 'app-ssmt-pie-chart',
+    templateUrl: './ssmt-pie-chart.component.html',
+    styleUrls: ['./ssmt-pie-chart.component.css'],
+    standalone: false
 })
 export class SsmtPieChartComponent implements OnInit {
   @Input()

@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-hover-makeup-water',
-  templateUrl: './hover-makeup-water.component.html',
-  styleUrls: ['./hover-makeup-water.component.css']
+    selector: 'app-hover-makeup-water',
+    templateUrl: './hover-makeup-water.component.html',
+    styleUrls: ['./hover-makeup-water.component.css'],
+    standalone: false
 })
 export class HoverMakeupWaterComponent implements OnInit {
   @Input()

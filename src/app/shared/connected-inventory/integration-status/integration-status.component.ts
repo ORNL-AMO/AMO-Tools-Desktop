@@ -4,9 +4,10 @@ import { IntegrationStateService } from '../integration-state.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-integration-status',
-  templateUrl: './integration-status.component.html',
-  styleUrls: ['./integration-status.component.css']
+    selector: 'app-integration-status',
+    templateUrl: './integration-status.component.html',
+    styleUrls: ['./integration-status.component.css'],
+    standalone: false
 })
 export class IntegrationStateComponent {
   integrationState: IntegrationState;

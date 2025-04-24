@@ -4,9 +4,10 @@ import { InventorySummaryOverviewService } from './inventory-summary-overview.se
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 @Component({
-  selector: 'app-inventory-summary-overview',
-  templateUrl: './inventory-summary-overview.component.html',
-  styleUrls: ['./inventory-summary-overview.component.css']
+    selector: 'app-inventory-summary-overview',
+    templateUrl: './inventory-summary-overview.component.html',
+    styleUrls: ['./inventory-summary-overview.component.css'],
+    standalone: false
 })
 export class InventorySummaryOverviewComponent implements OnInit {
 

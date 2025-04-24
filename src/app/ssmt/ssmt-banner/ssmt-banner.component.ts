@@ -7,9 +7,10 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
-  selector: 'app-ssmt-banner',
-  templateUrl: './ssmt-banner.component.html',
-  styleUrls: ['./ssmt-banner.component.css']
+    selector: 'app-ssmt-banner',
+    templateUrl: './ssmt-banner.component.html',
+    styleUrls: ['./ssmt-banner.component.css'],
+    standalone: false
 })
 export class SsmtBannerComponent implements OnInit {
   @Input()

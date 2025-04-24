@@ -4,9 +4,10 @@ import { WasteWater } from '../../../shared/models/waste-water';
 import { CompareService, WasteWaterDifferent } from '../../modify-conditions/compare.service';
 
 @Component({
-  selector: 'app-input-data',
-  templateUrl: './input-data.component.html',
-  styleUrls: ['./input-data.component.css']
+    selector: 'app-input-data',
+    templateUrl: './input-data.component.html',
+    styleUrls: ['./input-data.component.css'],
+    standalone: false
 })
 export class InputDataComponent implements OnInit {
   @Input()

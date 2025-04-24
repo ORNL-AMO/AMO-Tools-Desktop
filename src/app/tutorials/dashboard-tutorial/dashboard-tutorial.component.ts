@@ -5,9 +5,10 @@ import { firstValueFrom } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
-  selector: 'app-dashboard-tutorial',
-  templateUrl: './dashboard-tutorial.component.html',
-  styleUrls: ['./dashboard-tutorial.component.css']
+    selector: 'app-dashboard-tutorial',
+    templateUrl: './dashboard-tutorial.component.html',
+    styleUrls: ['./dashboard-tutorial.component.css'],
+    standalone: false
 })
 export class DashboardTutorialComponent implements OnInit {
   @Output('closeTutorial')

@@ -8,9 +8,10 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
-  selector: 'app-treasure-hunt-banner',
-  templateUrl: './treasure-hunt-banner.component.html',
-  styleUrls: ['./treasure-hunt-banner.component.css']
+    selector: 'app-treasure-hunt-banner',
+    templateUrl: './treasure-hunt-banner.component.html',
+    styleUrls: ['./treasure-hunt-banner.component.css'],
+    standalone: false
 })
 export class TreasureHuntBannerComponent implements OnInit {
   @Input()

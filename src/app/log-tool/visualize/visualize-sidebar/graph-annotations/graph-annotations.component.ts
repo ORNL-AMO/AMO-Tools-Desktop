@@ -6,9 +6,10 @@ import { VisualizeSidebarService } from '../visualize-sidebar.service';
 import { truncate } from '../../../../shared/helperFunctions';
 
 @Component({
-  selector: 'app-graph-annotations',
-  templateUrl: './graph-annotations.component.html',
-  styleUrls: ['./graph-annotations.component.css']
+    selector: 'app-graph-annotations',
+    templateUrl: './graph-annotations.component.html',
+    styleUrls: ['./graph-annotations.component.css'],
+    standalone: false
 })
 export class GraphAnnotationsComponent {
   annotateDataPointSub: Subscription;

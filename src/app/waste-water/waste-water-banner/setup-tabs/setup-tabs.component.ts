@@ -9,9 +9,10 @@ import { WasteWaterOperationsService } from '../../waste-water-operations/waste-
 import { WasteWaterService } from '../../waste-water.service';
 
 @Component({
-  selector: 'app-setup-tabs',
-  templateUrl: './setup-tabs.component.html',
-  styleUrls: ['./setup-tabs.component.css']
+    selector: 'app-setup-tabs',
+    templateUrl: './setup-tabs.component.html',
+    styleUrls: ['./setup-tabs.component.css'],
+    standalone: false
 })
 export class SetupTabsComponent implements OnInit {
 

@@ -4,9 +4,10 @@ import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import * as _ from 'lodash';
 @Component({
-  selector: 'app-compressor-ordering-table',
-  templateUrl: './compressor-ordering-table.component.html',
-  styleUrls: ['./compressor-ordering-table.component.css']
+    selector: 'app-compressor-ordering-table',
+    templateUrl: './compressor-ordering-table.component.html',
+    styleUrls: ['./compressor-ordering-table.component.css'],
+    standalone: false
 })
 export class CompressorOrderingTableComponent implements OnInit {
 

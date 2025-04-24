@@ -8,9 +8,10 @@ import { CurveDataService } from '../../curve-data.service';
 import { ByEquationInputs } from '../../../../shared/models/system-and-equipment-curve';
 
 @Component({
-  selector: 'app-by-equation-form',
-  templateUrl: './by-equation-form.component.html',
-  styleUrls: ['./by-equation-form.component.css']
+    selector: 'app-by-equation-form',
+    templateUrl: './by-equation-form.component.html',
+    styleUrls: ['./by-equation-form.component.css'],
+    standalone: false
 })
 export class ByEquationFormComponent implements OnInit {
   @Input()

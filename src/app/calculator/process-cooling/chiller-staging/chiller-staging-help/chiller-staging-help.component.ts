@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { ChillerStagingService } from '../chiller-staging.service';
 
 @Component({
-  selector: 'app-chiller-staging-help',
-  templateUrl: './chiller-staging-help.component.html',
-  styleUrls: ['./chiller-staging-help.component.css']
+    selector: 'app-chiller-staging-help',
+    templateUrl: './chiller-staging-help.component.html',
+    styleUrls: ['./chiller-staging-help.component.css'],
+    standalone: false
 })
 export class ChillerStagingHelpComponent implements OnInit {
   @Input()

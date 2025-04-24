@@ -7,9 +7,10 @@ import { CoolingFormService } from '../cooling-form.service';
 import { CoolingService } from '../cooling.service';
 
 @Component({
-  selector: 'app-loss-name-form',
-  templateUrl: './loss-name-form.component.html',
-  styleUrls: ['./loss-name-form.component.css']
+    selector: 'app-loss-name-form',
+    templateUrl: './loss-name-form.component.html',
+    styleUrls: ['./loss-name-form.component.css'],
+    standalone: false
 })
 export class LossNameFormComponent implements OnInit {
   @Input()

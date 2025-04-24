@@ -9,9 +9,10 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { LiquidLoadMaterialDbService } from '../../../indexedDb/liquid-load-material-db.service';
 @Component({
-  selector: 'app-custom-liquid-load-charge-materials',
-  templateUrl: './custom-liquid-load-charge-materials.component.html',
-  styleUrls: ['./custom-liquid-load-charge-materials.component.css']
+    selector: 'app-custom-liquid-load-charge-materials',
+    templateUrl: './custom-liquid-load-charge-materials.component.html',
+    styleUrls: ['./custom-liquid-load-charge-materials.component.css'],
+    standalone: false
 })
 export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   @Input()

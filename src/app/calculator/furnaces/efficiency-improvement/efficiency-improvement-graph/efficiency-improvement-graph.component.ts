@@ -7,9 +7,10 @@ import { Axis, DisplayPoint, EfficiencyImprovementGraphService } from '../effici
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-efficiency-improvement-graph',
-  templateUrl: './efficiency-improvement-graph.component.html',
-  styleUrls: ['./efficiency-improvement-graph.component.css']
+    selector: 'app-efficiency-improvement-graph',
+    templateUrl: './efficiency-improvement-graph.component.html',
+    styleUrls: ['./efficiency-improvement-graph.component.css'],
+    standalone: false
 })
 export class EfficiencyImprovementGraphComponent implements OnInit {
 

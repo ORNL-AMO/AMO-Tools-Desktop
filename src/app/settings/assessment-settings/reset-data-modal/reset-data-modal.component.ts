@@ -33,9 +33,10 @@ import { MockPumpInventory } from '../../../examples/mockPumpInventoryData';
 import { AppErrorService } from '../../../shared/errors/app-error.service';
 
 @Component({
-  selector: 'app-reset-data-modal',
-  templateUrl: './reset-data-modal.component.html',
-  styleUrls: ['./reset-data-modal.component.css']
+    selector: 'app-reset-data-modal',
+    templateUrl: './reset-data-modal.component.html',
+    styleUrls: ['./reset-data-modal.component.css'],
+    standalone: false
 })
 export class ResetDataModalComponent implements OnInit {
   @Output('closeModal')

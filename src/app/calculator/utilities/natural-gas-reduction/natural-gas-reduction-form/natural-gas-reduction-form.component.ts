@@ -6,9 +6,10 @@ import { NaturalGasReductionResult, NaturalGasReductionData } from '../../../../
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
-  selector: 'app-natural-gas-reduction-form',
-  templateUrl: './natural-gas-reduction-form.component.html',
-  styleUrls: ['./natural-gas-reduction-form.component.css']
+    selector: 'app-natural-gas-reduction-form',
+    templateUrl: './natural-gas-reduction-form.component.html',
+    styleUrls: ['./natural-gas-reduction-form.component.css'],
+    standalone: false
 })
 export class NaturalGasReductionFormComponent implements OnInit {
   @Input()

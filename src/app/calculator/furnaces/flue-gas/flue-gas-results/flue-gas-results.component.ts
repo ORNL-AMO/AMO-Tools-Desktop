@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FlueGasService } from '../flue-gas.service';
 
 @Component({
-  selector: 'app-flue-gas-results',
-  templateUrl: './flue-gas-results.component.html',
-  styleUrls: ['./flue-gas-results.component.css']
+    selector: 'app-flue-gas-results',
+    templateUrl: './flue-gas-results.component.html',
+    styleUrls: ['./flue-gas-results.component.css'],
+    standalone: false
 })
 export class FlueGasResultsComponent implements OnInit {
 

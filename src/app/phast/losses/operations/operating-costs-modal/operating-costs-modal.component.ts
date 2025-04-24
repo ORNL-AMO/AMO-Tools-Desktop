@@ -2,9 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-operating-costs-modal',
-  templateUrl: './operating-costs-modal.component.html',
-  styleUrls: ['./operating-costs-modal.component.css']
+    selector: 'app-operating-costs-modal',
+    templateUrl: './operating-costs-modal.component.html',
+    styleUrls: ['./operating-costs-modal.component.css'],
+    standalone: false
 })
 export class OperatingCostsModalComponent implements OnInit {
 

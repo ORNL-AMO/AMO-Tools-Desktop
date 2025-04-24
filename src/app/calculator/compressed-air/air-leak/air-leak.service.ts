@@ -110,6 +110,14 @@ export class AirLeakService {
     this.airLeakInput.next(this.airLeakInput.value);
   }
 
+
+  setLeakForModificationSelectAll(selectAll: boolean) {
+    this.airLeakInput.value.compressedAirLeakSurveyInputVec.forEach(leak => {
+      leak.selected = selectAll;
+    });
+    this.airLeakInput.next(this.airLeakInput.value);
+  }
+
   calculate(settings: Settings): AirLeakSurveyOutput {
     let airLeakSurveyInput = this.airLeakInput.value;
     if (airLeakSurveyInput != undefined) {

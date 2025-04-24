@@ -10,9 +10,10 @@ import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { UseAutomaticSequencerService } from './use-automatic-sequencer.service';
 
 @Component({
-  selector: 'app-use-automatic-sequencer',
-  templateUrl: './use-automatic-sequencer.component.html',
-  styleUrls: ['./use-automatic-sequencer.component.css']
+    selector: 'app-use-automatic-sequencer',
+    templateUrl: './use-automatic-sequencer.component.html',
+    styleUrls: ['./use-automatic-sequencer.component.css'],
+    standalone: false
 })
 export class UseAutomaticSequencerComponent implements OnInit {
 

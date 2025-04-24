@@ -2,9 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
-  selector: 'app-print-settings',
-  templateUrl: './print-settings.component.html',
-  styleUrls: ['./print-settings.component.css']
+    selector: 'app-print-settings',
+    templateUrl: './print-settings.component.html',
+    styleUrls: ['./print-settings.component.css'],
+    standalone: false
 })
 export class PrintSettingsComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-security-and-privacy-modal',
-  templateUrl: './security-and-privacy-modal.component.html',
-  styleUrls: ['./security-and-privacy-modal.component.css']
+    selector: 'app-security-and-privacy-modal',
+    templateUrl: './security-and-privacy-modal.component.html',
+    styleUrls: ['./security-and-privacy-modal.component.css'],
+    standalone: false
 })
 export class SecurityAndPrivacyModalComponent {
   @Output('emitModalClosed')

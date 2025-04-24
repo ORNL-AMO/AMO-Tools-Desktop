@@ -9,9 +9,10 @@ import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
-  selector: 'app-explore-flue-gas-form',
-  templateUrl: './explore-flue-gas-form.component.html',
-  styleUrls: ['./explore-flue-gas-form.component.css']
+    selector: 'app-explore-flue-gas-form',
+    templateUrl: './explore-flue-gas-form.component.html',
+    styleUrls: ['./explore-flue-gas-form.component.css'],
+    standalone: false
 })
 export class ExploreFlueGasFormComponent implements OnInit {
   @Input()

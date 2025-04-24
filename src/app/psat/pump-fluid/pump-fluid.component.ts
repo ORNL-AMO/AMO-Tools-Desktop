@@ -12,9 +12,10 @@ import { PumpFluidService } from './pump-fluid.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 
 @Component({
-  selector: 'app-pump-fluid',
-  templateUrl: './pump-fluid.component.html',
-  styleUrls: ['./pump-fluid.component.css']
+    selector: 'app-pump-fluid',
+    templateUrl: './pump-fluid.component.html',
+    styleUrls: ['./pump-fluid.component.css'],
+    standalone: false
 })
 export class PumpFluidComponent implements OnInit {
   @Input()

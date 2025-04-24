@@ -6,9 +6,10 @@ import { LossesService } from '../losses/losses.service';
 import { PhastService } from '../phast.service';
 
 @Component({
-  selector: 'app-modification-navbar',
-  templateUrl: './modification-navbar.component.html',
-  styleUrls: ['./modification-navbar.component.css']
+    selector: 'app-modification-navbar',
+    templateUrl: './modification-navbar.component.html',
+    styleUrls: ['./modification-navbar.component.css'],
+    standalone: false
 })
 export class ModificationNavbarComponent implements OnInit {
   @Input()

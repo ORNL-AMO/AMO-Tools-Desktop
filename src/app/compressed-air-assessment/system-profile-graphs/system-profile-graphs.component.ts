@@ -10,9 +10,10 @@ import { Settings } from '../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-system-profile-graphs',
-  templateUrl: './system-profile-graphs.component.html',
-  styleUrls: ['./system-profile-graphs.component.css']
+    selector: 'app-system-profile-graphs',
+    templateUrl: './system-profile-graphs.component.html',
+    styleUrls: ['./system-profile-graphs.component.css'],
+    standalone: false
 })
 export class SystemProfileGraphsComponent implements OnInit {
   @Input()

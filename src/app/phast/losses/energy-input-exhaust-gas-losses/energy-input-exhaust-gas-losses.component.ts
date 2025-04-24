@@ -10,9 +10,10 @@ import { EnergyInputWarnings, PhastResultsService } from '../../phast-results.se
 import { EnergyExhaustGasOutput } from '../../../tools-suite-api/process-heating-api.service';
 
 @Component({
-  selector: 'app-energy-input-exhaust-gas-losses',
-  templateUrl: './energy-input-exhaust-gas-losses.component.html',
-  styleUrls: ['./energy-input-exhaust-gas-losses.component.css']
+    selector: 'app-energy-input-exhaust-gas-losses',
+    templateUrl: './energy-input-exhaust-gas-losses.component.html',
+    styleUrls: ['./energy-input-exhaust-gas-losses.component.css'],
+    standalone: false
 })
 export class EnergyInputExhaustGasLossesComponent implements OnInit {
   @Input()

@@ -10,9 +10,10 @@ import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-specific-speed',
-  templateUrl: './specific-speed.component.html',
-  styleUrls: ['./specific-speed.component.css']
+    selector: 'app-specific-speed',
+    templateUrl: './specific-speed.component.html',
+    styleUrls: ['./specific-speed.component.css'],
+    standalone: false
 })
 export class SpecificSpeedComponent implements OnInit {
   @Input()

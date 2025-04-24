@@ -7,9 +7,10 @@ import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading'
 import { LossesService } from '../../losses.service';
 
 @Component({
-  selector: 'app-energy-input-exhaust-gas-form',
-  templateUrl: './energy-input-exhaust-gas-form.component.html',
-  styleUrls: ['./energy-input-exhaust-gas-form.component.css']
+    selector: 'app-energy-input-exhaust-gas-form',
+    templateUrl: './energy-input-exhaust-gas-form.component.html',
+    styleUrls: ['./energy-input-exhaust-gas-form.component.css'],
+    standalone: false
 })
 export class EnergyInputExhaustGasFormComponent implements OnInit {
   @Input()

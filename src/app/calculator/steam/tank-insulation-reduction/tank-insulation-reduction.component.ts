@@ -9,9 +9,10 @@ import { TankInsulationReductionTreasureHunt, Treasure } from '../../../shared/m
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-tank-insulation-reduction',
-  templateUrl: './tank-insulation-reduction.component.html',
-  styleUrls: ['./tank-insulation-reduction.component.css']
+    selector: 'app-tank-insulation-reduction',
+    templateUrl: './tank-insulation-reduction.component.html',
+    styleUrls: ['./tank-insulation-reduction.component.css'],
+    standalone: false
 })
 export class TankInsulationReductionComponent implements OnInit {
   @Input()

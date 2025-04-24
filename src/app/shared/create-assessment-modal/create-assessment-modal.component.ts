@@ -22,9 +22,10 @@ import { AnalyticsService } from '../analytics/analytics.service';
 import { PumpItem } from '../../pump-inventory/pump-inventory';
 
 @Component({
-  selector: 'app-create-assessment-modal',
-  templateUrl: './create-assessment-modal.component.html',
-  styleUrls: ['./create-assessment-modal.component.css']
+    selector: 'app-create-assessment-modal',
+    templateUrl: './create-assessment-modal.component.html',
+    styleUrls: ['./create-assessment-modal.component.css'],
+    standalone: false
 })
 export class CreateAssessmentModalComponent {
   @ViewChild('createModal', { static: false }) public createModal: ModalDirective;

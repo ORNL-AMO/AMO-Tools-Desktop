@@ -4,9 +4,10 @@ import { SettingsService } from '../../settings/settings.service';
 import { Settings } from '../models/settings';
 
 @Component({
-  selector: 'app-update-units-modal',
-  templateUrl: './update-units-modal.component.html',
-  styleUrls: ['./update-units-modal.component.css']
+    selector: 'app-update-units-modal',
+    templateUrl: './update-units-modal.component.html',
+    styleUrls: ['./update-units-modal.component.css'],
+    standalone: false
 })
 export class UpdateUnitsModalComponent implements OnInit {
 

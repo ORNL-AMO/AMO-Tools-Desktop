@@ -6,9 +6,10 @@ import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
-  selector: 'app-boiler-summary',
-  templateUrl: './boiler-summary.component.html',
-  styleUrls: ['./boiler-summary.component.css']
+    selector: 'app-boiler-summary',
+    templateUrl: './boiler-summary.component.html',
+    styleUrls: ['./boiler-summary.component.css'],
+    standalone: false
 })
 export class BoilerSummaryComponent implements OnInit {
   @Input()

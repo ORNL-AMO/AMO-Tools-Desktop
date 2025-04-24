@@ -12,9 +12,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-efficiency-improvement',
-  templateUrl: './efficiency-improvement.component.html',
-  styleUrls: ['./efficiency-improvement.component.css']
+    selector: 'app-efficiency-improvement',
+    templateUrl: './efficiency-improvement.component.html',
+    styleUrls: ['./efficiency-improvement.component.css'],
+    standalone: false
 })
 export class EfficiencyImprovementComponent implements OnInit {
   @Input()

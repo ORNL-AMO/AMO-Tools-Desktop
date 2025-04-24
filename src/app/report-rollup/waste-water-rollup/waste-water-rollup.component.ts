@@ -11,9 +11,10 @@ import { Settings } from '../../shared/models/settings';
 import { ReportRollupService } from '../report-rollup.service';
 
 @Component({
-  selector: 'app-waste-water-rollup',
-  templateUrl: './waste-water-rollup.component.html',
-  styleUrls: ['./waste-water-rollup.component.css']
+    selector: 'app-waste-water-rollup',
+    templateUrl: './waste-water-rollup.component.html',
+    styleUrls: ['./waste-water-rollup.component.css'],
+    standalone: false
 })
 export class WasteWaterRollupComponent implements OnInit {
   @Input()

@@ -10,9 +10,10 @@ import { pumpTypeRanges } from '../../../../psat/psatConstants';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-achievable-efficiency-graph',
-  templateUrl: './achievable-efficiency-graph.component.html',
-  styleUrls: ['./achievable-efficiency-graph.component.css']
+    selector: 'app-achievable-efficiency-graph',
+    templateUrl: './achievable-efficiency-graph.component.html',
+    styleUrls: ['./achievable-efficiency-graph.component.css'],
+    standalone: false
 })
 export class AchievableEfficiencyGraphComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { PumpInventoryService } from '../pump-inventory.service';
 
 @Component({
-  selector: 'app-pump-inventory-summary',
-  templateUrl: './pump-inventory-summary.component.html',
-  styleUrls: ['./pump-inventory-summary.component.css']
+    selector: 'app-pump-inventory-summary',
+    templateUrl: './pump-inventory-summary.component.html',
+    styleUrls: ['./pump-inventory-summary.component.css'],
+    standalone: false
 })
 export class PumpInventorySummaryComponent implements OnInit {
 

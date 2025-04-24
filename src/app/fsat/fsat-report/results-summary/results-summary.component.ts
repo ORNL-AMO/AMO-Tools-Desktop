@@ -6,9 +6,10 @@ import { CompareService } from '../../compare.service';
 import { FsatReportRollupService } from '../../../report-rollup/fsat-report-rollup.service';
 
 @Component({
-  selector: 'app-results-summary',
-  templateUrl: './results-summary.component.html',
-  styleUrls: ['./results-summary.component.css'],
+    selector: 'app-results-summary',
+    templateUrl: './results-summary.component.html',
+    styleUrls: ['./results-summary.component.css'],
+    standalone: false
 })
 export class ResultsSummaryComponent implements OnInit {
 
