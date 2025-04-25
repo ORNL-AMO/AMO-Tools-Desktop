@@ -137,7 +137,8 @@
         </span>
     </div>
 </form>
-<app-system-sources [waterAssessment]="waterAssessment" [diagramNodeId]="selectedWaterUsingSystem.diagramNodeId" [settings]="settings"></app-system-sources>
+<app-component-edge-flow [flowType]="'sourceWater'" [waterAssessment]="waterAssessment" [diagramNodeId]="selectedWaterUsingSystem.diagramNodeId" [settings]="settings"></app-component-edge-flow>
+<app-component-edge-flow [flowType]="'dischargeWater'" [waterAssessment]="waterAssessment" [diagramNodeId]="selectedWaterUsingSystem.diagramNodeId" [settings]="settings"></app-component-edge-flow>
 
 <!-- Outgoing water -->
 <form [formGroup]="form" *ngIf="!isCollapsed.waterFlows">

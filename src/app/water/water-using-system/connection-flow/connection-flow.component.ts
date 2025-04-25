@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EdgeFlowData } from 'process-flow-lib';
+import { ComponentFlowType, EdgeFlowData, getIsValidEdgeId, getNewEdgeId } from 'process-flow-lib';
 
 @Component({
   selector: 'app-connection-flow',
@@ -12,6 +12,8 @@ import { EdgeFlowData } from 'process-flow-lib';
 export class ConnectionFlowComponent implements OnChanges {
   @Input()
   edgeFlowData: EdgeFlowData;
+  @Input()
+  flowType: ComponentFlowType;
   @Input()
   settings: Settings;
   @Input()
@@ -24,7 +26,8 @@ export class ConnectionFlowComponent implements OnChanges {
 
   ngOnChanges() {
     let selectedConnection = this.connectionOptions.find(option => {
-      return option.value == this.edgeFlowData.source
+      let relatedId = this.flowType === 'sourceWater' ? this.edgeFlowData.source : this.edgeFlowData.target;
+      return option.value == relatedId;
     });
 
     this.form = this.fb.group({
@@ -34,14 +37,26 @@ export class ConnectionFlowComponent implements OnChanges {
   }
 
   updateFlowData() {
-    const updatedEdgeFlowData: EdgeFlowData = {
+    let updatedEdgeFlowData: EdgeFlowData = {
       ...this.edgeFlowData,
-      source: this.form.controls.selectedConnection.value,
       flowValue: this.form.controls.flowValue.value,
     };
-
     
-    if (updatedEdgeFlowData.source !== undefined) {
+    if (this.flowType === 'sourceWater') {
+      updatedEdgeFlowData.source = this.form.controls.selectedConnection.value;
+    } else {
+      updatedEdgeFlowData.target = this.form.controls.selectedConnection.value;
+    }
+
+    // todo e2 or should all edgeId creation happen here?
+    if (!getIsValidEdgeId(updatedEdgeFlowData.diagramEdgeId, updatedEdgeFlowData.source, updatedEdgeFlowData.target)) {
+      debugger;
+      console.log('invalidEdge: creating new edge id', updatedEdgeFlowData.source, updatedEdgeFlowData.target);
+      updatedEdgeFlowData.diagramEdgeId = getNewEdgeId(updatedEdgeFlowData.source, updatedEdgeFlowData.target);
+    }
+    
+    if (updatedEdgeFlowData.source && updatedEdgeFlowData.target) {
+      console.log('updatedEdgeFlowData', updatedEdgeFlowData);
       this.updateFlow.emit(updatedEdgeFlowData);
     }
   }

@@ -131,6 +131,7 @@ export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], 
       // replace assessment known losses empty array with actual data
       // const isKnownLossFlow = edge.source === system.diagramNodeId && getIsKnownLossFlow(edge.target, [])
       
+      debugger;
       if (system.diagramNodeId === edge.target && edge.source === edge.target) {
         componentFlows.recirculatedWater.flows.push(flowData)
       } 

@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { WaterAssessment, WaterDiagram, WaterProcessComponent, WaterProcessComponentType, ProcessFlowPart, getNewNode, ComponentEdgeFlowData, UserDiagramOptions, getEdgeFromConnection, EdgeFlowData, getAssessmentWaterSystemFlowEdges } from 'process-flow-lib';
+import { WaterAssessment, WaterDiagram, WaterProcessComponent, WaterProcessComponentType, ProcessFlowPart, getNewNode, ComponentEdgeFlowData, UserDiagramOptions, getEdgeFromConnection, EdgeFlowData, getAssessmentWaterSystemFlowEdges, ComponentFlowType, FlowTypeKeys, isComponentFlowType } from 'process-flow-lib';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { Assessment } from '../shared/models/assessment';
@@ -92,6 +92,7 @@ export class UpdateDiagramFromAssessmentService {
       let existingComponentIndex: number = componentTypeNodes.findIndex(node => node.data.diagramNodeId === component.diagramNodeId);
       if (existingComponentIndex === -1) {
         // * Assert as ProcessFlowPart (ignores type WaterUsingSystem-->IntakeSource)
+        // todo not needed anymore
         let processFlowPart = component as ProcessFlowPart;
         let newNode = getNewNode(component.processComponentType, processFlowPart);
         diagramNodes.push(newNode);
@@ -117,7 +118,6 @@ export class UpdateDiagramFromAssessmentService {
     }
     
     getHasAssessmentEdgeFlow(waterSystemFlowEdges: { source: string, target: string }[], edge: Edge) {
-      // todo Map  
       const hasAssessmentEdge = waterSystemFlowEdges.find((systemFlowEdge) => {
         return systemFlowEdge.source === edge.source && systemFlowEdge.target === edge.target;
       });
@@ -125,13 +125,20 @@ export class UpdateDiagramFromAssessmentService {
     }
 
   updateDiagramEdgesFromAssessment(waterDiagram: WaterDiagram, waterAssessment: WaterAssessment) {
-    waterAssessment.componentEdgeFlowData.forEach((systemFlow: ComponentEdgeFlowData) => {
-      systemFlow.sourceWater.flows.forEach((edgeFlow: EdgeFlowData) => this.updateDiagramEdge(waterDiagram, edgeFlow, waterAssessment.componentEdgeFlowData));
-      // systemFlow.dischargeWater.flows.forEach((edgeFlow: EdgeFlowData) => this.updateDiagramEdge(waterDiagram, edgeFlow, waterAssessment.componentEdgeFlowData));
+    waterAssessment.componentEdgeFlowData.forEach((componentFlows: ComponentEdgeFlowData) => {
+      Object.keys(componentFlows).forEach(key => {
+        if (isComponentFlowType(key, componentFlows)) {
+          componentFlows[key].flows.forEach((edgeFlow: EdgeFlowData) => this.updateDiagramEdge(waterDiagram, edgeFlow, waterAssessment.componentEdgeFlowData));
+        }
+      });
+      
     });
   }
 
+ 
+// todo needs work
   updateDiagramEdge(waterDiagram: WaterDiagram, edgeFlow: EdgeFlowData, componentEdgeFlowData: ComponentEdgeFlowData[]) {
+    debugger;
     let edgeIndex = waterDiagram.flowDiagramData.edges.findIndex((edge: Edge) => edge.id === edgeFlow.diagramEdgeId);
     let diagramEdge: Edge = this.getDiagramEdge(edgeFlow, waterDiagram.flowDiagramData.userDiagramOptions);
     // let existsInAssesment: boolean = componentEdgeFlowData.sourceWater.flows.some((edgeFlow: EdgeFlowData) => edgeFlow.diagramEdgeId === diagramEdge.id);
@@ -146,6 +153,7 @@ export class UpdateDiagramFromAssessmentService {
 
   getDiagramEdge(edgeFlow: EdgeFlowData, userDiagramOptions: UserDiagramOptions) {
     // todo 6906 check handle restrictions
+    // todo how does xyflow reconcile source and target handles
     let connectedParams: Connection = {
       source: edgeFlow.source,
       sourceHandle: "e",
@@ -153,7 +161,10 @@ export class UpdateDiagramFromAssessmentService {
       targetHandle: "a",
     }
 
-    let newEdge: Edge = getEdgeFromConnection(connectedParams, userDiagramOptions, true);
+    // todo e1 do existing id source and target need to match if they have changed?
+    let newEdge: Edge = getEdgeFromConnection(connectedParams, userDiagramOptions);
+    // let newEdge: Edge = getEdgeFromConnection(connectedParams, userDiagramOptions, true);
+    debugger;
     newEdge.data.flowValue = edgeFlow.flowValue;
 
     return newEdge;

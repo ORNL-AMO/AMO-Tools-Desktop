@@ -63,7 +63,7 @@ const Diagram = (props: DiagramProps) => {
   const defaultEdgeType: string = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
   const isDiagramValid = getIsDiagramValid(nodeErrors);
-
+  console.log(edges, '=== edges in diagram component');
   const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
 
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {

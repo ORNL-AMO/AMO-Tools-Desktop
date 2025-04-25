@@ -290,6 +290,9 @@ export interface ComponentEdgeFlowData {
     },
 }
 
+// todo may possibly be changed to Pick source/discharge only
+export type ComponentFlowType = keyof Omit<ComponentEdgeFlowData, 'id' | 'componentName'>;
+
 export interface WaterSystemFlowsTotals {
     sourceWater: number,
     recirculatedWater: number,

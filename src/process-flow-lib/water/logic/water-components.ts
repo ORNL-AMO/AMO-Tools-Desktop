@@ -1,7 +1,7 @@
 import { CustomNodeStyleMap } from "../constants";
 import { Connection, Edge, MarkerType, Node } from "@xyflow/react";
 import { DiagramSettings, Handles, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../types/diagram";
-import { ConnectedFlowType, ComponentEdgeFlowData, DischargeOutlet, EdgeFlowData, IntakeSource, WasteWaterTreatment, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
+import { ConnectedFlowType, ComponentEdgeFlowData, DischargeOutlet, EdgeFlowData, IntakeSource, WasteWaterTreatment, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem, ComponentFlowType } from "../types/water-components";
 import { getNewIdString } from "./utils";
 
  
@@ -435,7 +435,7 @@ export const getWasteWaterTreatmentComponent = (processFlowPart?: WaterProcessCo
 export const getEdgeFromConnection = (
   connectedParams: Connection | Edge, 
   userDiagramOptions: UserDiagramOptions,
-  shouldSetId: boolean = false
+  assessmentEdgeId?: string
   ) => {
     connectedParams = connectedParams as Edge;
     if (connectedParams.source === connectedParams.target) {
@@ -461,8 +461,11 @@ export const getEdgeFromConnection = (
       }
     }
 
-    if (shouldSetId) {
-      connectedParams.id = getNewEdgeId(connectedParams.source, connectedParams.target);
+    // if (shouldSetId) {
+    //   connectedParams.id = getNewEdgeId(connectedParams.source, connectedParams.target);
+    // }
+    if (assessmentEdgeId) {
+      connectedParams.id = assessmentEdgeId;
     }
 
     return connectedParams;
@@ -471,6 +474,52 @@ export const getEdgeFromConnection = (
   export const getNewEdgeId = (sourceId: string, targetId: string): string => {
     return `xy-edge__${sourceId}-${targetId}`;
   }
+
+  export const getIsValidEdgeId = (diagramEdgeId: string, sourceId: string, targetId: string): boolean => {
+    return diagramEdgeId === `xy-edge__${sourceId}-${targetId}`;
+  }
+
+  export const getHandlesFromEdgeId = (diagramEdgeId: string): {sourceHandle: string, targetHandle: string} => {
+    // sourceHandle and targetHandle are both a single character
+    // `xy-edge__${sourceId}${sourceHandle}-${targetId}${targetHandle}`;
+    const [sourcePart, targetPart] = diagramEdgeId.split('__')[1].split('-');
+    const sourceHandle = sourcePart.charAt(sourcePart.length - 1);
+    const targetHandle = targetPart.charAt(targetPart.length - 1);
+    return { sourceHandle, targetHandle };
+  }
+
+  
+  export const getAssessmentEdgeId = (sourceId: string, targetId: string, assessmentEdges: Edge[]): string => {
+    let allSourceHandleIds = ['a', 'b', 'c', 'd'];
+    let allTargetHandleIds = ['e', 'f', 'g', 'h'];
+    
+    const existingEdges = assessmentEdges.filter(edge => edge.source === sourceId && edge.target === targetId);
+
+    const usedSourceHandles = existingEdges.map(edge => edge.sourceHandle);
+    const usedTargetHandles = existingEdges.map(edge => edge.targetHandle);
+
+    const availableSourceHandle = allSourceHandleIds.find(handle => !usedSourceHandles.includes(handle)) || 'a';
+    const availableTargetHandle = allTargetHandleIds.find(handle => !usedTargetHandles.includes(handle)) || 'e';
+    return `xy-edge__${sourceId}${availableSourceHandle}-${targetId}${availableTargetHandle}`;
+  }
+
+
+  export const getAssessmentEdge = (edgeFlow: EdgeFlowData, userDiagramOptions: UserDiagramOptions) => {
+    let connectedParams: Connection = {
+      source: edgeFlow.source,
+      sourceHandle: "e",
+      target: edgeFlow.target,
+      targetHandle: "a",
+    }
+
+    let newEdge: Edge = getEdgeFromConnection(connectedParams, userDiagramOptions);
+    // let newEdge: Edge = getEdgeFromConnection(connectedParams, userDiagramOptions, true);
+    debugger;
+    newEdge.data.flowValue = edgeFlow.flowValue;
+
+    return newEdge;
+  }
+
 
   
 export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
@@ -499,3 +548,7 @@ export const getDefaultColorPalette = () => {
 }
 
 
+export const FlowTypeKeys = ['sourceWater', 'recirculatedWater', 'dischargeWater', 'knownLosses', 'waterInProduct'];
+export const isComponentFlowType = (key: string, component: ComponentEdgeFlowData): key is ComponentFlowType =>{
+    return key in component && FlowTypeKeys.includes(key);
+  }
