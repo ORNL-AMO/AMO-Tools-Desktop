@@ -200,7 +200,7 @@
     <table #copyTable2 class="table table-hover table-striped">
         <tbody>
             <tr>
-                <td class="text-center w-50">Net Present Value</td>
+                <td class="text-center w-50">Net Present Value (NPV)</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.netPresentValue"
                     class="text-center w-50 text-center">
                     {{cashFlowOutputsAndResults.cashFlowFinalResults.netPresentValue | currency:'USD':'symbol':'1.0-0'}}
@@ -211,7 +211,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="text-center w-50">Annual Worth</td>
+                <td class="text-center w-50">Annual Worth (AW)</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth" class="text-center w-50">
                     {{cashFlowOutputsAndResults.cashFlowFinalResults.annualWorth | currency:'USD':'symbol':'1.0-2'}} /yr
                 </td>
@@ -231,7 +231,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="text-center w-50">SIR</td>
+                <td class="text-center w-50">Savings-to-Investment Ratio (SIR)</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.sir" class="text-center w-50">
                     {{cashFlowOutputsAndResults.cashFlowFinalResults.sir | number:'1.0-2'}}
                 </td>
@@ -240,7 +240,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="text-center w-50">IRR</td>
+                <td class="text-center w-50">Internal Rate of Return (IRR)</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.irr" class="text-center w-50">
                     {{cashFlowOutputsAndResults.cashFlowFinalResults.irr | number:'1.0-2'}}%
                 </td>
@@ -249,7 +249,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="text-center w-50">ROI</td>
+                <td class="text-center w-50">Return on Investment (ROI)</td>
                 <td *ngIf="cashFlowOutputsAndResults.cashFlowFinalResults.roi" class="text-center w-50">
                     {{cashFlowOutputsAndResults.cashFlowFinalResults.roi | number:'1.0-2'}}%
                 </td>
