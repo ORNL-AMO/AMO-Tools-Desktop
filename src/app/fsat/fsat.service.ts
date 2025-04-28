@@ -31,7 +31,7 @@ export class FsatService {
   calculatorTab: BehaviorSubject<string>;
   showExportModal: BehaviorSubject<boolean>;
 
-  //system setup tabs
+  //Baseline tabs
   stepTabs: Array<string> = [
     'system-basics',
     'fan-operations',
@@ -48,7 +48,7 @@ export class FsatService {
 
 
   initData() {
-    this.mainTab = new BehaviorSubject<string>('system-setup');
+    this.mainTab = new BehaviorSubject<string>('baseline');
     this.stepTab = new BehaviorSubject<string>('system-basics');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
     this.calculatorTab = new BehaviorSubject<string>('fan-efficiency');
@@ -72,12 +72,12 @@ export class FsatService {
 
   back() {
     let tmpStepTab: string = this.stepTab.getValue();
-    if (tmpStepTab !== 'system-basics' && this.mainTab.getValue() == 'system-setup') {
+    if (tmpStepTab !== 'system-basics' && this.mainTab.getValue() == 'baseline') {
       let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
       let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
       this.stepTab.next(nextTab);
     } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('system-setup');
+      this.mainTab.next('baseline');
     }
   }
 

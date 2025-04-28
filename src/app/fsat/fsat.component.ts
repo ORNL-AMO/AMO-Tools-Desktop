@@ -463,7 +463,7 @@ export class FsatComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.fsatService.mainTab.next('system-setup');
+      this.fsatService.mainTab.next('baseline');
       this.fsatService.stepTab.next('system-basics');
     }
     this.showUpdateUnitsModal = false;

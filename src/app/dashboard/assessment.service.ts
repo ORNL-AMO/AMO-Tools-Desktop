@@ -31,7 +31,7 @@ export class AssessmentService {
     if (mainTab) {
       this.startingTab = mainTab;
     } else {
-      this.startingTab = 'system-setup';
+      this.startingTab = 'baseline';
     }
 
     if (subTab) {
