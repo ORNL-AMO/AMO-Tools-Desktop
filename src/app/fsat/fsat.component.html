@@ -7,7 +7,7 @@
   <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'baseline'">
     <div class="nav-item" (click)="setSmallScreenTab('form')"
       [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
-      <a class="nav-link" *ngIf="stepTab == 'system-basics'">Assessment Settings</a>
+      <a class="nav-link" *ngIf="stepTab == 'baseline'">Assessment Settings</a>
       <a class="nav-link" *ngIf="stepTab == 'fan-operations'">Operations</a>
       <a class="nav-link" *ngIf="stepTab == 'fan-setup'">Fan and Fluid</a>
       <a class="nav-link" *ngIf="stepTab == 'fan-motor'">Motor</a>
@@ -24,7 +24,7 @@
   <div *ngIf="mainTab == 'baseline'" class="assessment-container tab-content">
     <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}">
-      <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
+      <app-system-basics *ngIf="stepTab == 'baseline'" [(settings)]="settings" [assessment]="assessment"
         (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)"
         (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
   
@@ -114,7 +114,7 @@
   </div>
 
   <div #footer id="fsatFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'assessment' || mainTab == 'baseline'">
-    <div class="pull-left" *ngIf="stepTab != 'system-basics' || mainTab == 'assessment'">
+    <div class="pull-left" *ngIf="stepTab != 'baseline' || mainTab == 'assessment'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
     <div class="pull-right" *ngIf="mainTab == 'baseline' && mainTab != 'assessment'">

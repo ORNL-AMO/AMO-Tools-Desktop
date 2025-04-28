@@ -1,7 +1,7 @@
 <nav class="hide-print  d-none d-lg-block" *ngIf="mainTab == 'baseline'">
   <div class="d-flex tabs subtabs progress-tabs fsat flex-wrap">
     <div class="fixed-tab-size" [ngClass]="settingsClassStatus">
-      <a (click)="changeStepTab('system-basics')">
+      <a (click)="changeStepTab('baseline')">
         <span class="step-number">1</span> Assessment Settings</a>
     </div>
     <div class="fixed-tab-size" [ngClass]="operationsTabStatus">
@@ -38,12 +38,12 @@
 
 <nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs fsat flex-wrap flex-fill" *ngIf="mainTab == 'baseline'">
   <ul class="pagination d-flex justify-content-between tabs fsat subtabs progress-tabs flex-fill">
-    <li class="page-item" [ngClass]="{'disabled': stepTab == 'system-basics'}">
-      <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': stepTab == 'system-basics'}">
+    <li class="page-item" [ngClass]="{'disabled': stepTab == 'baseline'}">
+      <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': stepTab == 'baseline'}">
         <span class="fa fa-chevron-left"></span></a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'system-basics'}" *ngIf="stepTab == 'system-basics'">
-      <a class="nav-link small" (click)="changeStepTab('system-basics')" [ngClass]="settingsClassStatus">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'baseline'}" *ngIf="stepTab == 'baseline'">
+      <a class="nav-link small" (click)="changeStepTab('baseline')" [ngClass]="settingsClassStatus">
         <span class="step-number">1</span>Assessment Settings</a>
     </li>
     <li class="page-item" [ngClass]="{'active': stepTab == 'fan-operations'}" *ngIf="stepTab == 'fan-operations'">

@@ -147,7 +147,7 @@ export class FsatTabsComponent implements OnInit {
 
 
   checkSettingsStatus() {
-    if (this.stepTab === 'system-basics') {
+    if (this.stepTab === 'baseline') {
       this.settingsClassStatus = ['active', 'success'];
     } else {
       this.settingsClassStatus = ['success'];
@@ -267,7 +267,7 @@ export class FsatTabsComponent implements OnInit {
   }
 
   getCanContinue() {
-    if (this.stepTab === 'system-basics' || this.stepTab === 'fan-operations') {
+    if (this.stepTab === 'baseline' || this.stepTab === 'fan-operations') {
       return true;
     } else if (this.stepTab === 'fsat-fluid') {
       let isValid: boolean = this.fsatFluidService.isFanFluidValid(this.fsat.baseGasDensity, this.settings);
