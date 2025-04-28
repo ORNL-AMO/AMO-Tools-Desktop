@@ -184,14 +184,10 @@
     <div class="d-none d-md-flex tabs subtabs waste-water mr-auto">
         <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
             <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
-                <br>
-                <span class="help-text font-italic">Novice View</span>
             </a>
         </div>
         <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
-            <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
-                <br>
-                <span class="help-text font-italic">Expert View</span>
+            <a (click)="changeAssessmentTab('modify-conditions')">Expert View
             </a>
         </div>
     </div>
@@ -222,15 +218,11 @@
         <div class="assessment-tab"
             [ngClass]="{'active': assessmentTab == 'explore-opportunities', 'collapse': tabsCollapsed}">
             <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
-                <br>
-                <span class="help-text font-italic">Novice View</span>
             </a>
         </div>
         <div class="assessment-tab"
             [ngClass]="{'active': assessmentTab == 'modify-conditions', 'collapse': tabsCollapsed}">
-            <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
-                <br>
-                <span class="help-text font-italic">Expert View</span>
+            <a (click)="changeAssessmentTab('modify-conditions')">Expert View
             </a>
         </div>
     </div>
