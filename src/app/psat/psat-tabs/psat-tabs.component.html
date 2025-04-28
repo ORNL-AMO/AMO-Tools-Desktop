@@ -68,14 +68,10 @@
   <div class="d-none d-md-flex tabs subtabs psat mr-auto">
     <div class="assessment-tab" [ngClass]="{'active': currentTab == 'explore-opportunities'}">
       <a (click)="changeTab('explore-opportunities')">Explore Opportunities
-        <br>
-        <span class="help-text psat-view">Novice View</span>
       </a>
     </div>
     <div class="assessment-tab" [ngClass]="{'active': currentTab == 'modify-conditions'}">
-      <a (click)="changeTab('modify-conditions')">Modify All Conditions
-        <br>
-        <span class="help-text psat-view">Expert View</span>
+      <a (click)="changeTab('modify-conditions')">Expert View
       </a>
     </div>
   </div>
@@ -103,15 +99,11 @@
     <div class="assessment-tab flex-fill"
       [ngClass]="{'active': currentTab == 'explore-opportunities', 'collapse': tabsCollapsed}">
       <a (click)="changeTab('explore-opportunities')">Explore Opportunities
-        <br>
-        <span class="help-text psat-view">Novice View</span>
       </a>
     </div>
     <div class="assessment-tab flex-fill"
       [ngClass]="{'active': currentTab == 'modify-conditions', 'collapse': tabsCollapsed}">
-      <a (click)="changeTab('modify-conditions')">Modify All Conditions
-        <br>
-        <span class="help-text psat-view">Expert View</span>
+      <a (click)="changeTab('modify-conditions')">Expert View
       </a>
     </div>
   </div>
