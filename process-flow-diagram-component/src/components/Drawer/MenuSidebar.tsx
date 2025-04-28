@@ -1,10 +1,10 @@
 import React, { ChangeEvent, memo, useState } from 'react';
-import { Box, Button, Chip, Divider, Grid, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import { Box, Button, Chip, Divider, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
+import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, electricityCostChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
 import { RootState, selectHasAssessment } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
@@ -13,6 +13,7 @@ import { getIsDiagramValid } from '../../validation/Validation';
 import { blue } from '@mui/material/colors';
 import { ParentContainerDimensions, NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions } from 'process-flow-lib';
 import DiagramResults from './DiagramResults';
+import InputField from '../StyledMUI/InputField';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
@@ -43,6 +44,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   
   const flowDecimalPrecision = useAppSelector((state: RootState) => state.diagram.settings.flowDecimalPrecision);
   const unitsOfMeasure = useAppSelector((state: RootState) => state.diagram.settings.unitsOfMeasure);
+  const electricityUnitCost = useAppSelector((state: RootState) => state.diagram.settings.electricityCost);
   const conductivityUnit = useAppSelector((state: RootState) => state.diagram.settings.conductivityUnit);
   const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
@@ -73,6 +75,11 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
       updatedValue: event.target.checked,
       updateDependencies: updateDependencies
     }))
+  };
+
+  const handleElectricityCostChange = (event: any) => {
+          const updatedValue = event.target.value === "" ? null : Number(event.target.value);
+          dispatch(electricityCostChange(updatedValue));
   };
 
   const summingNode = processFlowParts.pop();
@@ -176,6 +183,24 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                     <option key={'metric'} value={'Metric'}>Metric</option>
                   </select>
                 </Box>
+
+              <Box className={'sidebar-option-container'} padding={'.5rem'}>
+                <InputField
+                  name={'electricityCost'}
+                  id={'electricityCost'}
+                  label={'Electricity Cost ($/kWh)'}
+                  type={'number'}
+                  size="small"
+                  value={electricityUnitCost ?? 0}
+                  onChange={(event) => handleElectricityCostChange(event)}
+                  sx={{ width: '100%' }}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                      <span style={{ zIndex: 1, background: 'white' }}>$/kWh</span>
+                    </InputAdornment>,
+                  }}
+                />
+              </Box>
                 
             <Box className={'sidebar-option-container'}>
                   <label htmlFor={'flowDecimalPrecision'}>Decimal Precision</label>

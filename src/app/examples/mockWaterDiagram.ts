@@ -19,6 +19,7 @@ export const MockWaterdiagram: Diagram =
             "recentEdgeColors": [],
             "recentNodeColors": [],
             "settings": {
+                "electricityCost": 1,
                 "flowDecimalPrecision": 2,
                 "unitsOfMeasure": 'Imperial',
                 "conductivityUnit": 'mmho',
