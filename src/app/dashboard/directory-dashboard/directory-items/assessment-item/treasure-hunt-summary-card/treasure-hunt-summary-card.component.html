@@ -66,7 +66,7 @@
   </tr>
   <tr>
     <td>
-      <a (click)="goToAssessment(assessment, 'system-setup')">System Setup</a>
+      <a (click)="goToAssessment(assessment, 'baseline')">System Setup</a>
     </td>
     <td>
       <a (click)="goToAssessment(assessment, 'treasure-chest')">Treasure Chest</a>
@@ -83,7 +83,7 @@
 </table>
 <div class="no-card-data" *ngIf="!setupDone">
   <p>This assessment is incomplete. Complete assessment to view results.</p>
-  <a (click)="goToAssessment(assessment, 'system-setup')">Finish Setup</a>
+  <a (click)="goToAssessment(assessment, 'baseline')">Finish Setup</a>
 </div>
 
 

@@ -57,7 +57,7 @@
     </tr>
     <tr>
         <td>
-            <a (click)="goToAssessment('system-setup')">System Setup</a>
+            <a (click)="goToAssessment('baseline')">System Setup</a>
         </td>
         <td>
             <a (click)="goToAssessment('assessment')">Assessment</a>
@@ -74,7 +74,7 @@
 </table>
 <div class="no-card-data" *ngIf="!setupDone">
     <p>This assessment is incomplete. Complete assessment to view results.</p>
-    <a (click)="goToAssessment('system-setup')">Finish Setup</a>
+    <a (click)="goToAssessment('baseline')">Finish Setup</a>
 </div>
 
 <div bsModal #reportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel"

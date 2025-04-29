@@ -74,7 +74,7 @@
                 <img *ngIf="assessment.type == 'CompressedAir'" class="icon-image pl-1 pr-1"
                     src="assets/images/ca-icon.png">
                 <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
-                <a (click)="goToAssessment(assessment, 'system-setup')" *ngIf="!isSetup">{{assessment.name}}</a>
+                <a (click)="goToAssessment(assessment, 'baseline')" *ngIf="!isSetup">{{assessment.name}}</a>
             </div>
             <div class="last-updated">Last updated {{assessment.modifiedDate | date }}</div>
         </div>
@@ -92,7 +92,7 @@
             </div>
         </div>
         <div class="actions pt-1 justify-content-end " *ngIf="isSetup">
-            <a (click)="goToAssessment(assessment, 'system-setup')">Equipment Setup</a>
+            <a (click)="goToAssessment(assessment, 'baseline')">Equipment Setup</a>
             <a (click)="goToAssessment(assessment, 'assessment')">Assessment</a>
             <a (click)="showReportModal()">Quick Report</a>
             <a class="mr-0" (click)="goToAssessment(assessment, 'report')">Assessment Report</a>
