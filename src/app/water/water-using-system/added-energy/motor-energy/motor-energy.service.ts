@@ -49,7 +49,7 @@ export class MotorEnergyService {
 
   getDefaultMotorEnergy(lastIndex: number): MotorEnergy {
     return {
-      name:`Motor Energy ${lastIndex + 1}`,
+      name:`Pump Energy ${lastIndex + 1}`,
       numberUnits: 1,
       hoursPerYear: 8760,
       loadFactor: null,

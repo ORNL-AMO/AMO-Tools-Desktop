@@ -116,7 +116,7 @@ export class DischargeOutletComponent {
 
   openConfirmDeleteModal(item: MotorEnergy, index: number) {
     this.confirmDeleteData = {
-      modalTitle: 'Delete Added Motor Energy',
+      modalTitle: 'Delete Added Pump Energy',
       confirmMessage: `Are you sure you want to delete '${item.name}'?`
     }
     this.showConfirmDeleteModal = true;
