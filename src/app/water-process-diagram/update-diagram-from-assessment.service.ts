@@ -108,10 +108,8 @@ export class UpdateDiagramFromAssessmentService {
         nodeIds.add(node.id);
       });
     
-      const assessmentSystemFlowEdges = getAssessmentWaterSystemFlowEdges(waterAssessment.diagramWaterSystemFlows)
-
       let updatedEdges = waterDiagram.flowDiagramData.edges.filter((edge) => {
-        return nodeIds.has(edge.source) && nodeIds.has(edge.target) && this.getHasAssessmentEdgeFlow(assessmentSystemFlowEdges, edge);
+        return nodeIds.has(edge.source) && nodeIds.has(edge.target);
       });
       waterDiagram.flowDiagramData.edges = updatedEdges;
     }
