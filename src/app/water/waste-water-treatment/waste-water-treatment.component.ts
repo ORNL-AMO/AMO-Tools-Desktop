@@ -53,6 +53,7 @@ export class WasteWaterTreatmentComponent {
 
   ngOnDestroy() {
     this.settingsSub.unsubscribe();
+    this.selectedComponentSub.unsubscribe();
   }
 
   initForm() {
