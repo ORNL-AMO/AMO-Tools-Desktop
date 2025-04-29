@@ -91,7 +91,7 @@ import { getNewIdString } from "./utils";
     },
     {
       processComponentType: 'waste-water-treatment',
-      name: 'Waste Treatment',
+      name: 'Wastewater Treatment',
       className: 'waste-water-treatment',
       cost: 0, 
       isValid: true,

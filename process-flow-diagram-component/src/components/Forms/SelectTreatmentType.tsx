@@ -15,7 +15,7 @@ const SelectedTreatmentType = (props: SelectedTreatmentTypeProps) => {
         <select className="form-control diagram-select" id={'treatmentType'} name="treatmentType"
             style={{...defaultStyle, ...style}}
             value={treatmentType}
-            onChange={(e) => handleTreatmentTypeChange(Number(e.target.value))}>
+            onChange={(e) => handleTreatmentTypeChange(e)}>
             {treatmentTypeOptions.map((option, index) => {
                 return (
                     <option key={option.display + '_' + index} value={option.value}>{option.display}</option>
@@ -31,7 +31,7 @@ export default memo(SelectedTreatmentType);
 export interface SelectedTreatmentTypeProps {
     treatmentType: number,
     treatmentOptions?: Array<{ value: number, display: string }>,
-    handleTreatmentTypeChange: (treatmentType: number) => void,
+    handleTreatmentTypeChange: (event) => void,
     style?: CSSProperties;
 }
 

@@ -54,8 +54,9 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     // todo for future diagrams - setComponentTypeData<T>
     let componentData: ProcessFlowPart = { ...selectedNode.data } as ProcessFlowPart;
     const isWaterTreatment = selectedNode.data.processComponentType === 'water-treatment';
-    const isWasteWaterTreatment = selectedNode.data.processComponentType === 'water-treatment';
+    const isWasteWaterTreatment = selectedNode.data.processComponentType === 'waste-water-treatment';
     const isWaterUsingSystem = selectedNode.data.processComponentType === 'water-using-system';
+    const isIntakeSource = selectedNode.data.processComponentType === 'water-intake';
     const isDischargeOutlet = selectedNode.data.processComponentType === 'water-discharge';
     const isKnownLoss = selectedNode.data.processComponentType === 'known-loss';
     let totalUnknownLoss: number = 0;
@@ -98,6 +99,16 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const invalidIconStyle = {
         marginRight: '.5rem',
         height: '24px',
+    }
+
+    let sourceName = 'Inflow';
+    let targetName = 'Outflow';
+
+    if (isIntakeSource) {
+        targetName = 'Intake';
+    }
+    if (isDischargeOutlet) {
+        sourceName = 'Discharge';
     }
 
     return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
@@ -213,7 +224,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     <AccordionSummary>
                         <span style={{ display: 'flex', alignSelf: 'center' }}>
                             <span>
-                                Source
+                                {sourceName}
                             </span>
                             {hasSourceErrors &&
                                 <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.source.level} sx={invalidIconStyle} /></span>
@@ -242,7 +253,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     <AccordionSummary>
                         <span style={{ display: 'flex', alignSelf: 'center' }}>
                             <span>
-                                Discharge
+                                {targetName}
                             </span>
                             {hasTargetErrors &&
                                 <span style={{ marginLeft: '.5rem' }}><InvalidIcon level={errors.discharge.level} sx={invalidIconStyle} /></span>

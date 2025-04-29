@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
 import { MotorEnergyService } from './motor-energy/motor-energy.service';
 import { WaterUsingSystemService } from '../water-using-system.service';
 import { WaterAssessmentService } from '../../water-assessment.service';

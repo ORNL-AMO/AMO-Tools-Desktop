@@ -46,4 +46,4 @@ scripts/download-stats
 .DS_Store
 Thumbs.db
 
-*ipynb
+*.ipynb

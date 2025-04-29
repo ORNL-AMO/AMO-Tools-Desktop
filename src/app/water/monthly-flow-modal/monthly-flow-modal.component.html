@@ -19,8 +19,8 @@
                                     <div class="input-group w-100">
                                         <input name="flow" formControlName="flow" type="number" step="any" class="form-control"
                                             id="flow" (input)="calculateAnnual()">
-                                            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
-                                            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                                            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal</span>
+                                            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup></span>
                                     </div>
                                 </div>
 
@@ -32,8 +32,8 @@
                         <div class="text-center small bold">
                             <span *ngIf="annualFlow">{{annualFlow | number}}</span>
                             <span *ngIf="!annualFlow">&mdash; &mdash;</span>
-                            <span class="pl-3" *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
-                            <span class="pl-3" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+                            <span class="pl-3" *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal</span>
+                            <span class="pl-3" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup></span>
                         </div>
                     </div>
 

@@ -48,9 +48,9 @@ export class UpdateDiagramFromAssessmentService {
       this.buildNodesFromWaterComponents(diagram.waterDiagram, waterAssessment.knownLosses, 'known-loss'),
     );
 
-    this.updateDiagramEdgesFromAssessment(diagram.waterDiagram, waterAssessment);
+    // this.updateDiagramEdgesFromAssessment(diagram.waterDiagram, waterAssessment);
     // todo since water sources UI is not fully supported
-    // this.filterDeletedEdges(diagram.waterDiagram, waterAssessment, assessmentNodes);
+    this.filterDeletedEdges(diagram.waterDiagram, waterAssessment, assessmentNodes);
 
     diagram.waterDiagram.flowDiagramData.nodes = assessmentNodes;
   }
