@@ -1,30 +1,43 @@
 import * as React from 'react';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { Box } from '@mui/material';
-import { CustomEdgeData, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getIntakeSource, getMotorEnergyCost, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterProcessComponent, WaterUsingSystem } from 'process-flow-lib';
-import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
+import { ComponentEdgeFlowConnectionCosts, CustomEdgeData, DiagramCalculatedData, DischargeOutlet, getComponentAncestorCosts, getComponentTypeTotalCost, getHeatEnergyCost, getMotorEnergyCost, getTrueCostOfSystems, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, NodeGraphIndex, ProcessFlowPart, setWaterUsingSystemFlows, TrueCostOfSystems, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
+import { selectCalculatedData, selectDischargeOutletNodes, selectEdges, selectGraphIndex, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
 import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
-import { TwoCellResultRow, TwoCellResultTable } from '../StyledMUI/ResultTables';
+import { TrueCostOfSystemResultTable, TwoCellResultRow } from '../StyledMUI/ResultTables';
+import { getIsDiagramValid } from '../../validation/Validation';
 
 
 const DiagramResults = () => {
   // todo - move results to store thunk Or less expensive to keep here?
   const edges: Edge<CustomEdgeData>[] = useAppSelector(selectEdges);
+  const nodes: Node[] = useAppSelector(selectNodes);
+  const validationErrors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
+
   const intakes: Node<ProcessFlowPart>[] = useAppSelector(selectIntakeSourceNodes);
   const discharges: Node<ProcessFlowPart>[] = useAppSelector(selectDischargeOutletNodes);
   const waterTreatmentNodes: Node<ProcessFlowPart>[] = useAppSelector(selectWaterTreatmentNodes);
   const wasteTreatmentNodes: Node<ProcessFlowPart>[] = useAppSelector(selectWasteTreatmentNodes);
   const waterUsingSystems: WaterUsingSystem[] = useAppSelector(selectNodesAsWaterUsingSystems);
+  const graph: NodeGraphIndex = useAppSelector(selectGraphIndex);
+  const calculatedNodeData: DiagramCalculatedData = useAppSelector(selectCalculatedData);
+  
+  let trueCostOfSystems: TrueCostOfSystems = {};
+  console.log(validationErrors);
+  if (getIsDiagramValid(validationErrors)) {
+    trueCostOfSystems = getTrueCostOfSystems(nodes, calculatedNodeData, graph);
+  }
+  console.log('trueCostOfSystems', trueCostOfSystems);
+
   setWaterUsingSystemFlows(waterUsingSystems, edges);
   const diagramResults: WaterBalanceResults = getWaterBalanceResults(waterUsingSystems); 
-  console.log('Diagram WB', diagramResults);
+  // console.log('Diagram WB', diagramResults);
   
   const costTitle = "Annual Costs";
   // direct costs
   const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow');
   const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow');
-
   // indirect costs
   const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow');
   const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow');
@@ -44,15 +57,16 @@ const DiagramResults = () => {
 
   const allMotorEnergy: MotorEnergy[] = systemMotorEnergyData.concat(intakeMotorEnergy, dischargeMotorEnergy);
   const motorEnergyCosts = allMotorEnergy.reduce((total, motorEnergy) => {
+    // todo bug hardcoded 1, get from settings unitCost?
     return total + getMotorEnergyCost(motorEnergy, 1);
   }, 0);
-  console.log('motorEnergyCosts', motorEnergyCosts);
+  // console.log('motorEnergyCosts', motorEnergyCosts);
 
   const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy);
   const heatEnergyCosts = systemHeatEnergyData.reduce((total, heatEnergy) => {
     return total + getHeatEnergyCost(heatEnergy, 1);
   }, 0);
-  console.log('heatEnergyCosts', heatEnergyCosts);
+  // console.log('heatEnergyCosts', heatEnergyCosts);
   
   const indirectCosts = treatmentCost + wasteTreatmentCost + motorEnergyCosts + heatEnergyCosts;
   const trueCost = getWaterTrueCost(intakeCost, dischargeCost, motorEnergyCosts, heatEnergyCosts, treatmentCost, wasteTreatmentCost);
@@ -94,10 +108,14 @@ const DiagramResults = () => {
 
   return (
     <Box sx={{marginX: '.5rem'}}>
-      <TwoCellResultTable headerTitle={costTitle} rows={costRows} style={{marginBottom: '1rem'}}/>
+      {/* <TwoCellResultTable headerTitle={costTitle} rows={costRows} style={{marginBottom: '1rem'}}/>
       <TwoCellResultTable headerTitle={intakeTitle} rows={intakeRows} />
       <TwoCellResultTable headerTitle={dischargeTitle} rows={dischargeRows} />
-      <TwoCellResultTable headerTitle={balanceTitle} rows={balanceRows} />
+      <TwoCellResultTable headerTitle={balanceTitle} rows={balanceRows} /> */}
+      <TrueCostOfSystemResultTable 
+        trueCostOfSystems={trueCostOfSystems} 
+        nodes={nodes} 
+        />
     </Box>
   );
 }

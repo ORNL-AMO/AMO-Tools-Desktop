@@ -7,13 +7,13 @@ import FlowValueDisplay from '../Diagram/FlowValueDisplay';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { toggleDrawer } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { selectNodeFlowData } from '../Diagram/store';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import { DiagramNode, NodeFlowData } from 'process-flow-lib';
+import { selectNodeCalculatedFlowData } from '../Diagram/store';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
-  const calculatedData: NodeFlowData = useAppSelector((state) => selectNodeFlowData(state, id));
+  const calculatedData: NodeFlowData = useAppSelector((state) => selectNodeCalculatedFlowData(state, id));
   let transformString = `translate(0%, 0%) translate(180px, -36px)`;
 
   const allowInflowOnly: boolean = data.disableInflowConnections; 
