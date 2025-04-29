@@ -45,3 +45,5 @@ scripts/download-stats
 #System Files
 .DS_Store
 Thumbs.db
+
+*.ipynb

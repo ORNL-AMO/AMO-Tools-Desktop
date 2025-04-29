@@ -27,7 +27,7 @@
     <li [ngClass]="wasteTreatmentClassStatus">
         <a (click)="changeSetupTab('waste-water-treatment')">
             <span (mouseenter)="showTooltip(wasteTreatmentBadge)" (mouseleave)="hideTooltip(wasteTreatmentBadge)"
-                class="step-number">6</span>Waste Water Treatment</a>
+                class="step-number">6</span>Wastewater</a>
     </li>
 </ul>
 
@@ -65,7 +65,7 @@
         <li class="page-item" [ngClass]="wasteTreatmentClassStatus" *ngIf="setupTab == 'waste-water-treatment'">
             <a class="nav-link small" (click)="changeSetupTab('waste-water-treatment')">
                 <span (mouseenter)="showTooltip(wasteTreatmentBadge)" (mouseleave)="hideTooltip(wasteTreatmentBadge)"
-                    class="step-number">6</span>Waste Water Treatment</a>
+                    class="step-number">6</span>Wastewater</a>
         </li>
         <li class="page-item" [ngClass]="{'disabled': !canContinue}">
             <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': !canContinue}">
