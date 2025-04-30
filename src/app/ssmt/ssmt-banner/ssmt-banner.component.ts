@@ -44,7 +44,7 @@ export class SsmtBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str === 'system-setup' || str === 'calculators') {
+    if (str === 'baseline' || str === 'calculators') {
       this.ssmtService.mainTab.next(str);
     } else if (this.assessment.ssmt.setupDone) {
       this.ssmtService.mainTab.next(str);
@@ -67,12 +67,12 @@ export class SsmtBannerComponent implements OnInit {
     } else if (this.mainTab == 'diagram') {
       this.ssmtService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
-      this.ssmtService.mainTab.next('system-setup');
+      this.ssmtService.mainTab.next('baseline');
     }
   }
 
   continue() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab == 'baseline') {
       this.ssmtService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
       this.ssmtService.mainTab.next('diagram');

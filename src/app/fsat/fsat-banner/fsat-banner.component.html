@@ -1,7 +1,7 @@
 <nav class="fsat navbar banner d-flex mr-auto p-0 flex-nowrap">
   <div class="d-block d-lg-none mr-0 mr-2 pl-2 h-100">
 		<div class="pr-2 border-right home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
-			<button type="button" class="btn chevron-btn p-0" (click)="back()" [disabled]="(!assessment.fsat.setupDone || mainTab == 'system-setup')">
+			<button type="button" class="btn chevron-btn p-0" (click)="back()" [disabled]="(!assessment.fsat.setupDone || mainTab == 'baseline')">
 				<span class="fa fa-chevron-left"></span>
 			</button>
 		</div>
@@ -40,8 +40,7 @@
 
   <div class="d-flex nav-pills nav-fill flex-wrap mx-auto d-none d-lg-inline-block">
     <div class="nav-item d-none d-lg-inline-block">
-      <a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">System
-        Setup</a>
+      <a class="nav-link" [ngClass]="{'active': mainTab == 'baseline'}" (click)="changeTab('baseline')">Baseline</a>
     </div>
     <div class="nav-item d-none d-lg-inline-block">
       <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.fsat.setupDone}"
@@ -67,8 +66,7 @@
 
   <div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">		
 		<div class="nav-item">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}" (click)="changeTab('system-setup')">System
-				Setup</a>
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'baseline'}" (click)="changeTab('baseline')">Baseline</a>
 		</div>
 		<div class="nav-item">
 			<a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.fsat.setupDone}"

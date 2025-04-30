@@ -20,7 +20,7 @@ export class HelpPanelComponent implements OnInit {
 
   ngOnInit(): void {
     this.mainTab = this.compressedAirService.mainTab.getValue();
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab == 'baseline') {
       this.selectedTabSub = this.compressedAirService.setupTab.subscribe(val => {
         this.selectedTab = val;
       });

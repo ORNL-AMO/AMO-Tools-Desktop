@@ -149,7 +149,7 @@ export class TreasureHuntComponent implements OnInit {
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.subTabSub.unsubscribe();
-    this.treasureHuntService.mainTab.next('system-setup');
+    this.treasureHuntService.mainTab.next('baseline');
     this.treasureHuntService.subTab.next('settings');
     this.modalOpenSub.unsubscribe();
     this.treasureHuntService.treasureHunt.next(undefined);
@@ -254,7 +254,7 @@ export class TreasureHuntComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.treasureHuntService.mainTab.next('system-setup');
+      this.treasureHuntService.mainTab.next('baseline');
       this.treasureHuntService.subTab.next('settings');
     }
     this.showUpdateUnitsModal = false;

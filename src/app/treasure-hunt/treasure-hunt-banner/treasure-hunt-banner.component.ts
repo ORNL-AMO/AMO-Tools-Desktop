@@ -61,7 +61,7 @@ export class TreasureHuntBannerComponent implements OnInit {
 
   changeTab(str: string) {
     if (this.disableTabs == false) {
-      if (str == 'system-setup') {
+      if (str == 'baseline') {
         this.treasureHuntService.mainTab.next(str);
       } else if (this.assessment.treasureHunt.setupDone == true) {
         this.treasureHuntService.mainTab.next(str);
@@ -89,8 +89,8 @@ export class TreasureHuntBannerComponent implements OnInit {
     } else if (this.mainTab == 'treasure-chest') {
       this.treasureHuntService.mainTab.next('find-treasure');
     } else if (this.mainTab == 'find-treasure') {
-      this.treasureHuntService.mainTab.next('system-setup');
-    } else if (this.mainTab == 'system-setup') {
+      this.treasureHuntService.mainTab.next('baseline');
+    } else if (this.mainTab == 'baseline') {
       if (this.subTab == 'operation-costs') {
         this.treasureHuntService.subTab.next('settings');
       } else if (this.subTab == 'settings') {
@@ -100,7 +100,7 @@ export class TreasureHuntBannerComponent implements OnInit {
   }
 
   continue() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab == 'baseline') {
       if (this.subTab == 'settings') {
         this.treasureHuntService.subTab.next('operation-costs');
       } else if (this.subTab == 'operation-costs') {

@@ -45,7 +45,7 @@ export class PhastBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str === 'system-setup' || str === 'calculators') {
+    if (str === 'baseline' || str === 'calculators') {
       this.phastService.mainTab.next(str);
     } else if (this.assessment.phast.setupDone) {
       this.phastService.mainTab.next(str);
@@ -68,12 +68,12 @@ export class PhastBannerComponent implements OnInit {
     } else if (this.mainTab == 'diagram') {
       this.phastService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
-      this.phastService.mainTab.next('system-setup');
+      this.phastService.mainTab.next('baseline');
     }
   }
 
   continue() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab == 'baseline') {
       this.phastService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
       this.phastService.mainTab.next('diagram');

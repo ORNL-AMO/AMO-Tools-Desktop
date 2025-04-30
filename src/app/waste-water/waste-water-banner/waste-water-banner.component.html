@@ -2,7 +2,7 @@
     <div class="d-block d-lg-none mr-0 mr-2 pl-2 h-100">
         <div class="pr-2 border-right home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
             <button type="button" class="btn chevron-btn p-0" (click)="back()"
-                [disabled]="(!assessment.wasteWater.setupDone || mainTab == 'system-setup')">
+                [disabled]="(!assessment.wasteWater.setupDone || mainTab == 'baseline')">
                 <span class="fa fa-chevron-left"></span>
             </button>
         </div>
@@ -40,8 +40,8 @@
 
     <div class="d-flex nav-pills nav-fill flex-wrap mx-auto d-none d-lg-inline-block">
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}"
-                (click)="changeTab('system-setup')">System Basics</a>
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'baseline'}"
+                (click)="changeTab('baseline')">Baseline</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
             <a class="nav-link"
@@ -68,9 +68,8 @@
 
     <div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}"
-                (click)="changeTab('system-setup')">System
-                Setup</a>
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'baseline'}"
+                (click)="changeTab('baseline')">Baseline</a>
         </div>
         <div class="nav-item">
             <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
@@ -176,7 +175,7 @@
 </nav>
 
 
-<app-setup-tabs *ngIf="mainTab == 'system-setup'"></app-setup-tabs>
+<app-setup-tabs *ngIf="mainTab == 'baseline'"></app-setup-tabs>
 <app-calculator-tabs *ngIf="mainTab == 'calculators'"></app-calculator-tabs>
 
 
@@ -184,14 +183,10 @@
     <div class="d-none d-md-flex tabs subtabs waste-water mr-auto">
         <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
             <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
-                <br>
-                <span class="help-text font-italic">Novice View</span>
             </a>
         </div>
         <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
-            <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
-                <br>
-                <span class="help-text font-italic">Expert View</span>
+            <a (click)="changeAssessmentTab('modify-conditions')">Expert View
             </a>
         </div>
     </div>
@@ -222,15 +217,11 @@
         <div class="assessment-tab"
             [ngClass]="{'active': assessmentTab == 'explore-opportunities', 'collapse': tabsCollapsed}">
             <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
-                <br>
-                <span class="help-text font-italic">Novice View</span>
             </a>
         </div>
         <div class="assessment-tab"
             [ngClass]="{'active': assessmentTab == 'modify-conditions', 'collapse': tabsCollapsed}">
-            <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
-                <br>
-                <span class="help-text font-italic">Expert View</span>
+            <a (click)="changeAssessmentTab('modify-conditions')">Expert View
             </a>
         </div>
     </div>
