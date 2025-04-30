@@ -18,7 +18,7 @@
             <tbody>
                 <tr *ngFor="let endUse of compressedAirAssessment.endUseData.endUses"
                     [ngClass]="{'selected-end-use': endUse.endUseId == selectedEndUse.endUseId,
-                    'invalid-end-use': !endUse.isValid}">
+                    'invalid-end-use': !endUse.isValid}" (click)="selectItem(endUse)">
                     <td>
                         <span *ngIf="endUse.endUseId == selectedEndUse.endUseId"
                             class="fa fa-chevron-right danger"></span>
