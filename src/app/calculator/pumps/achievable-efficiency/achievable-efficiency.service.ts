@@ -9,30 +9,49 @@ export class AchievableEfficiencyService {
 
   pumpType: number;
   flowRate: number;
+  pumpEfficiencyInputs: PumpEfficiencyInputs;
   efficiencyChart: BehaviorSubject<SimpleChart>;
   selectedDataPoints: BehaviorSubject<Array<EfficiencyPoint>>;
   dataPointTraces: BehaviorSubject<Array<EfficiencyTrace>>;
-  
+
   constructor(private formBuilder: UntypedFormBuilder) {
     this.initChartData();
-   }
+  }
 
-   initChartData() {
+  initChartData() {
     this.efficiencyChart = new BehaviorSubject<SimpleChart>(this.getEmptyChart());
     this.selectedDataPoints = new BehaviorSubject<Array<EfficiencyPoint>>([]);
     this.dataPointTraces = new BehaviorSubject<Array<EfficiencyTrace>>([]);
   }
 
 
-  getForm(pumpType: number, flowRate: number): UntypedFormGroup {
+  getForm(pumpEfficiencyInputs: PumpEfficiencyInputs): UntypedFormGroup {
     let form: UntypedFormGroup = this.formBuilder.group({
-      pumpType: [pumpType, Validators.required],
-      flowRate: [flowRate, [Validators.required, Validators.min(0)]]
+      pumpType: [pumpEfficiencyInputs.pumpType, Validators.required],
+      flowRate: [pumpEfficiencyInputs.flowRate, [Validators.required, Validators.min(0)]],
+      rpm: [pumpEfficiencyInputs.rpm, Validators.required],
+      kinematicViscosity: [pumpEfficiencyInputs.kinematicViscosity, Validators.required],
+      stageCount: [pumpEfficiencyInputs.stageCount, Validators.required],
+      head: [pumpEfficiencyInputs.head, Validators.required],
+      pumpEfficiency: [pumpEfficiencyInputs.pumpEfficiency, Validators.required],
     });
     if (form.controls.flowRate.value) {
       form.controls.flowRate.markAsDirty();
     }
     return form;
+  }
+
+  getObjectFromForm(form: UntypedFormGroup): PumpEfficiencyInputs {
+    let obj: PumpEfficiencyInputs = {
+      pumpType: form.controls.pumpType.value,
+      flowRate: form.controls.flowRate.value,
+      rpm: form.controls.rpm.value,
+      kinematicViscosity: form.controls.kinematicViscosity.value,
+      stageCount: form.controls.stageCount.value,
+      head: form.controls.head.value,
+      pumpEfficiency: form.controls.pumpEfficiency.value,
+    };
+    return obj;
   }
 
   getTraceDataFromPoint(selectedPoint: EfficiencyPoint): EfficiencyTrace {
@@ -56,7 +75,7 @@ export class AchievableEfficiencyService {
   getEmptyChart(): SimpleChart {
     let maxTemplate = 'Flow Rate' + ': %{x} <br>' + 'Maximum' + ': %{y:.2r}% <br>' + '<extra></extra>';
     let avgTemplate = 'Flow Rate' + ': %{x} <br>' + 'Average' + ': %{y:.2r}% <br>' + '<extra></extra>';
-    
+
     let showGrid = true;
     return {
       name: 'Achievable Efficiency',
@@ -124,7 +143,7 @@ export class AchievableEfficiencyService {
     };
   }
 
-  
+
 }
 
 
@@ -142,4 +161,14 @@ export interface EfficiencyPoint {
 
 export interface EfficiencyTrace extends TraceData {
   pairId: string,
+}
+
+export interface PumpEfficiencyInputs {
+  pumpType: number;
+  flowRate: number;
+  rpm: number;
+  kinematicViscosity: number;
+  stageCount: number;
+  head: number;
+  pumpEfficiency: number;
 }

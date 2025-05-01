@@ -22,4 +22,64 @@
     </span>
     <span class="alert-warning pull-right small" *ngIf="flowRateWarning !== null && !efficiencyForm.controls.flowRate.invalid && !efficiencyForm.controls.flowRate.pristine">{{flowRateWarning}}</span>
   </div>
+
+  <div class="form-group">
+    <label for="rpm">RPM</label>
+    <div class="input-group">
+      <input name="rpm" type="number" min="0" step="any" class="form-control" formControlName="rpm" id="rpm"
+        (input)="emitChange()" onfocus="this.select();" (focus)="focusField('rpm')">
+      <span class="input-group-addon units">rpm</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.rpm.invalid && !efficiencyForm.controls.rpm.pristine">
+      <span *ngIf="efficiencyForm.controls.rpm.errors.required">Value required.</span>         
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="kinematicViscosity">Kinematic Viscosity</label>
+    <div class="input-group">
+      <input name="kinematicViscosity" type="number" min="0" step="any" class="form-control" formControlName="kinematicViscosity" id="kinematicViscosity"
+        (input)="emitChange()" onfocus="this.select();" (focus)="focusField('kinematicViscosity')">
+      <span class="input-group-addon units">cSt</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.kinematicViscosity.invalid && !efficiencyForm.controls.kinematicViscosity.pristine">
+      <span *ngIf="efficiencyForm.controls.kinematicViscosity.errors.required">Value required.</span>         
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="stageCount">Stage Count</label>
+    <div class="input-group">
+      <input name="stageCount" type="number" min="0" step="any" class="form-control" formControlName="stageCount" id="stageCount"
+        (input)="emitChange()" onfocus="this.select();" (focus)="focusField('stageCount')">
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.stageCount.invalid && !efficiencyForm.controls.stageCount.pristine">
+      <span *ngIf="efficiencyForm.controls.stageCount.errors.required">Value required.</span>         
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="head">Head</label>
+    <div class="input-group">
+      <input name="head" type="number" min="0" step="any" class="form-control" formControlName="head" id="head"
+        (input)="emitChange()" onfocus="this.select();" (focus)="focusField('head')">
+      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.head.invalid && !efficiencyForm.controls.head.pristine">
+      <span *ngIf="efficiencyForm.controls.head.errors.required">Value required.</span>         
+    </span>
+  </div>
+
+  <div class="form-group">
+    <label for="pumpEfficiency">Pump Efficiency</label>
+    <div class="input-group">
+      <input name="pumpEfficiency" type="number" min="0" step="any" class="form-control" formControlName="pumpEfficiency" id="pumpEfficiency"
+        (input)="emitChange()" onfocus="this.select();" (focus)="focusField('pumpEfficiency')">
+      <span class="input-group-addon units">%</span>
+    </div>
+    <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.pumpEfficiency.invalid && !efficiencyForm.controls.pumpEfficiency.pristine">
+      <span *ngIf="efficiencyForm.controls.pumpEfficiency.errors.required">Value required.</span>         
+    </span>
+  </div>
+
 </form>
