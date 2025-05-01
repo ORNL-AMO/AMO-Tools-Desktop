@@ -109,7 +109,7 @@ export class AchievableEfficiencyComponent implements OnInit {
         kinematicViscosity: this.psat.inputs.kinematic_viscosity,
         stageCount: this.psat.inputs.stages,
         head: this.psat.inputs.head,
-        pumpEfficiency: 0,
+        pumpEfficiency: this.psat.outputs.pump_efficiency,
       };
       this.efficiencyForm = this.achievableEfficiencyService.getForm(inputs);
     }
@@ -146,7 +146,7 @@ export class AchievableEfficiencyComponent implements OnInit {
         kinematicViscosity: this.psat.inputs.kinematic_viscosity,
         stageCount: this.psat.inputs.stages,
         head: this.psat.inputs.head,
-        pumpEfficiency: 0,
+        pumpEfficiency: this.psat.outputs.pump_efficiency,
       };
       this.efficiencyForm = this.achievableEfficiencyService.getForm(inputs);
     }

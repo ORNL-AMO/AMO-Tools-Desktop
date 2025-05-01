@@ -309,6 +309,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       let tmpResults = this.psatService.pumpEfficiency(
         this.efficiencyForm.controls.pumpType.value,
         flow,
+        this.efficiencyForm.controls.rpm.value,
+        this.efficiencyForm.controls.kinematicViscosity.value,
+        this.efficiencyForm.controls.stageCount.value,
+        this.efficiencyForm.controls.head.value,
+        this.efficiencyForm.controls.pumpEfficiency.value,
         this.settings
       );
       return tmpResults.average;
@@ -320,6 +325,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       let tmpResults = this.psatService.pumpEfficiency(
         this.efficiencyForm.controls.pumpType.value,
         flow,
+        this.efficiencyForm.controls.rpm.value,
+        this.efficiencyForm.controls.kinematicViscosity.value,
+        this.efficiencyForm.controls.stageCount.value,
+        this.efficiencyForm.controls.head.value,
+        this.efficiencyForm.controls.pumpEfficiency.value,
         this.settings
       );
       return tmpResults.max;

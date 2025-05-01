@@ -158,7 +158,13 @@ export class PumpsSuiteApiService {
     return results;
   }
 
-  pumpEfficiency(pumpStyle: number, flowRate: number): { average: number, max: number } {
+  pumpEfficiency(pumpStyle: number,
+      flowRate: number,
+      rpm: number,
+      kinematicViscosity: number,
+      stageCount: number,
+      head: number,
+      pumpEfficiencyInput: number): { average: number, max: number } {
     let pumpStyleEnum = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
     let instance = new Module.PumpEfficiency(pumpStyleEnum, flowRate);
     let pumpEfficiency = instance.calculate();
