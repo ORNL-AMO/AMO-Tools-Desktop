@@ -102,14 +102,13 @@ export class AchievableEfficiencyComponent implements OnInit {
         this.efficiencyForm = this.achievableEfficiencyService.getForm(inputs);
       }
     } else {
-      //TODO get inputs from psat
       let inputs: PumpEfficiencyInputs = {
-        pumpType: 6,
-        flowRate: 2000,
-        rpm: 0,
-        kinematicViscosity: 0,
-        stageCount: 0,
-        head: 0,
+        pumpType: this.psat.inputs.pump_style,
+        flowRate: this.psat.inputs.flow_rate,
+        rpm: this.psat.inputs.pump_rated_speed,
+        kinematicViscosity: this.psat.inputs.kinematic_viscosity,
+        stageCount: this.psat.inputs.stages,
+        head: this.psat.inputs.head,
         pumpEfficiency: 0,
       };
       this.efficiencyForm = this.achievableEfficiencyService.getForm(inputs);
@@ -140,14 +139,13 @@ export class AchievableEfficiencyComponent implements OnInit {
         this.efficiencyForm = this.achievableEfficiencyService.getForm(inputs);
       }
     } else {
-      //TODO get inputs from psat
       let inputs: PumpEfficiencyInputs = {
-        pumpType: 6,
-        flowRate: 0,
-        rpm: 0,
-        kinematicViscosity: 0,
-        stageCount: 0,
-        head: 0,
+        pumpType: this.psat.inputs.pump_style,
+        flowRate: this.psat.inputs.flow_rate,
+        rpm: this.psat.inputs.pump_rated_speed,
+        kinematicViscosity: this.psat.inputs.kinematic_viscosity,
+        stageCount: this.psat.inputs.stages,
+        head: this.psat.inputs.head,
         pumpEfficiency: 0,
       };
       this.efficiencyForm = this.achievableEfficiencyService.getForm(inputs);
