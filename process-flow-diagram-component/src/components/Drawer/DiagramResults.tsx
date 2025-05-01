@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { Box } from '@mui/material';
-import { ComponentEdgeFlowConnectionCosts, CustomEdgeData, DiagramCalculatedData, DischargeOutlet, getComponentAncestorCosts, getComponentTypeTotalCost, getHeatEnergyCost, getMotorEnergyCost, getTrueCostOfSystems, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, NodeGraphIndex, ProcessFlowPart, setWaterUsingSystemFlows, TrueCostOfSystems, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
+import { ComponentEdgeFlowConnectionCosts, CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentAncestorCosts, getComponentTypeTotalCost, getHeatEnergyCost, getMotorEnergyCost, getTrueCostOfSystems, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, NodeGraphIndex, ProcessFlowPart, setWaterUsingSystemFlows, TrueCostOfSystems, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
 import { selectCalculatedData, selectDischargeOutletNodes, selectEdges, selectGraphIndex, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
 import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
@@ -22,11 +22,12 @@ const DiagramResults = () => {
   const waterUsingSystems: WaterUsingSystem[] = useAppSelector(selectNodesAsWaterUsingSystems);
   const graph: NodeGraphIndex = useAppSelector(selectGraphIndex);
   const calculatedNodeData: DiagramCalculatedData = useAppSelector(selectCalculatedData);
+  const settings: DiagramSettings = useAppSelector((state) => state.diagram.settings);
   
   let trueCostOfSystems: TrueCostOfSystems = {};
   console.log(validationErrors);
   if (getIsDiagramValid(validationErrors)) {
-    trueCostOfSystems = getTrueCostOfSystems(nodes, calculatedNodeData, graph);
+    trueCostOfSystems = getTrueCostOfSystems(nodes, calculatedNodeData, graph, settings);
   }
   console.log('trueCostOfSystems', trueCostOfSystems);
 

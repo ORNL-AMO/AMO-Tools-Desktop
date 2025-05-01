@@ -3,7 +3,7 @@ import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowData, N
 import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getWaterFlowTotals } from "./water-components";
-import { getAncestors, getDescendants, NodeGraphIndex } from "../../graph";
+import { getDescendants, NodeGraphIndex } from "../../graph";
 
 // * WASM Module with suite api
 declare var Module: any;
@@ -439,32 +439,45 @@ export const getHeatEnergyCost = (systemHeatEnergy: HeatEnergy, energyUnitCost: 
   return heatEnergyCost;
 }
 
-// todo unitCost from settings
-export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalculatedData, graph: NodeGraphIndex): TrueCostOfSystems => {
-  // const waterUsingSystems = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-using-system') as Node<WaterUsingSystem>[];
+export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalculatedData, graph: NodeGraphIndex, settings: DiagramSettings): TrueCostOfSystems => {
+  const nodeMap: Record<string, Node<ProcessFlowPart>> = Object.fromEntries(nodes.map((n) => [n.id, n as Node<ProcessFlowPart>]));
   const allComponentsSourceCosts: Record<string, ComponentEdgeFlowConnectionCosts> = {};
   const allComponentsDischargeCosts: Record<string, ComponentEdgeFlowConnectionCosts> = {};
   const nodeNameMap: Record<string, string> = {};
   const trueCostOfSystems: TrueCostOfSystems = {};
-
-  if (nodes.length > 0) {
-    nodes.forEach((node: Node<ProcessFlowPart>) => {
+  const waterUsingSystems = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-using-system') as Node<WaterUsingSystem>[];
+  
+  if (waterUsingSystems.length > 0) {
+    waterUsingSystems.forEach((node: Node<ProcessFlowPart>) => {
       // * TRAVERSE AND COLLECT COSTS
       let ancestorCosts: ComponentEdgeFlowConnectionCosts = {};
+      let descendantCosts: ComponentEdgeFlowConnectionCosts = {};
       if (node.data.processComponentType !== 'water-intake') {
-        ancestorCosts = getComponentAncestorCosts(node, calculatedData, nodes as Node<ProcessFlowPart>[], graph);
+        ancestorCosts = getComponentAncestorCosts(
+          node, 
+          calculatedData, 
+          nodeMap, 
+          graph, 
+          settings
+        );
       }
-      const descendentCosts: ComponentEdgeFlowConnectionCosts = getComponentDescendantCosts(node, calculatedData, nodes as Node<ProcessFlowPart>[], graph);
-      
-      // todo for debugging
+
+      if (node.data.processComponentType !== 'water-discharge') {
+        descendantCosts = getComponentDescendantCosts(
+          node, 
+          calculatedData, 
+          nodes as Node<ProcessFlowPart>[], 
+          graph,
+          settings
+        );
+      }
+
       nodeNameMap[node.data.diagramNodeId] = node.data.name;
       allComponentsSourceCosts[node.id] = ancestorCosts;
-      allComponentsDischargeCosts[node.id] = descendentCosts;
       console.log('allComponentsSourceCosts', allComponentsSourceCosts);
+      allComponentsDischargeCosts[node.id] = descendantCosts;
       console.log('allComponentsDischargeCosts', allComponentsDischargeCosts);
-      console.log('nodeNameMap', nodeNameMap);
 
-      // todo below what can be optimized into ancestorCosts method
       // * SUM TRUE COSTs SYSTEM 
       const systemCostContributions: SystemTrueCostContributions = {
         intake: 0,
@@ -480,8 +493,7 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
       if (node.data.processComponentType === 'water-using-system') {
         const waterUsingSystem = node.data as WaterUsingSystem;
         if (waterUsingSystem.heatEnergy) {
-          // todo unitCost from settings
-          systemCostContributions.heatEnergyWastewater = getHeatEnergyCost(waterUsingSystem.heatEnergy, 1); 
+          systemCostContributions.heatEnergyWastewater = getHeatEnergyCost(waterUsingSystem.heatEnergy, settings.electricityCost); 
         }
       }
 
@@ -491,8 +503,7 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
           const intakeSource: IntakeSource = nodes.find((n: Node<ProcessFlowPart>) => n.id === ancestorId)?.data as IntakeSource;
           if (intakeSource) {
             const costs = intakeSource.addedMotorEnergy?.reduce((total: number, motorEnergy: MotorEnergy) => {
-              // todo unitCost from settings
-              return total + getMotorEnergyCost(motorEnergy, 1);
+              return total + getMotorEnergyCost(motorEnergy, settings.electricityCost);
             }, 0);
             systemCostContributions.pumpAndMotorEnergy += costs ?? 0;
           }
@@ -501,14 +512,13 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
         }
       });
 
-      Object.entries(descendentCosts).forEach(([ancestorId, connectedAncestor]: [string, ConnectedCost]) => {
+      Object.entries(descendantCosts).forEach(([ancestorId, connectedAncestor]: [string, ConnectedCost]) => {
         if (connectedAncestor.componentType === 'water-discharge') {
           systemCostContributions.discharge += connectedAncestor.cost;
           const dischargeOutlet: DischargeOutlet = nodes.find((n: Node<ProcessFlowPart>) => n.id === ancestorId)?.data as DischargeOutlet;
           if (dischargeOutlet) {
             const costs = dischargeOutlet.addedMotorEnergy?.reduce((total: number, motorEnergy: MotorEnergy) => {
-              // todo unitCost from settings
-              return total + getMotorEnergyCost(motorEnergy, 1);
+              return total + getMotorEnergyCost(motorEnergy, settings.electricityCost);
             }, 0);
             systemCostContributions.pumpAndMotorEnergy += costs ?? 0;
           }
@@ -522,6 +532,9 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
       trueCostOfSystems[node.id] = systemCostContributions;
 
     });
+
+    console.log('nodeNameMap', nodeNameMap);
+
     
   }
 
@@ -530,99 +543,128 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
   return trueCostOfSystems;
 }
 
-// todo optimization don't need to get ancestor of water-discharge types
-// todo is incomingEdges made redunant by graph.parentMap?
-// todo is direct parent contribution useful?
-// todo eventually set ancestor costs as Record/Maps of <componentType, {id, data}>
+const setEdgeConnectionCosts = (
+  ancestorNode: Node<ProcessFlowPart>, 
+  nodeConnectionCosts: ComponentEdgeFlowConnectionCosts, 
+  ancestorCost: number, 
+  ancestorContributionPercent: number
+) => { 
+  if (!nodeConnectionCosts[ancestorNode.id]) {
+    nodeConnectionCosts[ancestorNode.id] = {
+      name: ancestorNode.data.name,
+      componentType: ancestorNode.data.processComponentType,
+      cost: ancestorCost,
+      percentOfFlow: ancestorContributionPercent
+    };
+  } else {
+    nodeConnectionCosts[ancestorNode.id].name = ancestorNode.data.name,
+    nodeConnectionCosts[ancestorNode.id].cost = ancestorCost;
+    nodeConnectionCosts[ancestorNode.id].percentOfFlow = ancestorContributionPercent;
+  }
+}
+
+/**
+* Get total inflow for a node. If user entered data is not available, use calculated data.
+*/
+const getTotalInflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalculatedData): number => {
+  let totalInflow = node.data.userEnteredData?.totalSourceFlow;
+  if (totalInflow === undefined || totalInflow === null) {
+    totalInflow = calculatedData.nodes[node.id]?.totalSourceFlow;
+  }
+  return totalInflow ?? 0;
+}
+
+/**
+* Get total outflow for a node. If user entered data is not available, use calculated data.
+*/
+const getTotalOutflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalculatedData): number => {
+  let totalOutflow = node.data.userEnteredData?.totalDischargeFlow;
+  if (totalOutflow === undefined || totalOutflow === null) {
+    totalOutflow = calculatedData.nodes[node.id]?.totalDischargeFlow;
+  }
+  return totalOutflow ?? 0;
+}
+
+
 export const getComponentAncestorCosts = (
   targetNode: Node<ProcessFlowPart>,
   calculatedData: DiagramCalculatedData,
-  nodes: Node<ProcessFlowPart>[],
-  graph: NodeGraphIndex
+  nodeMap: Record<string, Node<ProcessFlowPart>>,
+  graph: NodeGraphIndex,
+  settings: DiagramSettings
 ): ComponentEdgeFlowConnectionCosts => {
-  const nodeMap: Record<string, Node<ProcessFlowPart>> = Object.fromEntries(nodes.map((n) => [n.id, n]));
-  const incomingEdges: Edge[] = Object.values(graph.edgeMap).filter((e) => e.target === targetNode.id);
-  const targetNodeCalculatedData = calculatedData[targetNode.id] as NodeFlowData;
   const nodeSourceCosts: ComponentEdgeFlowConnectionCosts = {};
+  const targetNodeTotalInflow = getTotalInflow(targetNode, calculatedData);
 
-  let targetNodeTotalSourceFlow = targetNode.data.userEnteredData?.totalSourceFlow;
+  const ancestors: {
+    nodeId: string;
+    componentType: ProcessFlowNodeType;
+    flowValue: number;
+    targetNodeTotalInflow: number;
+  }[] = [];
 
-  console.log('targetNode', targetNode.data.name, targetNodeTotalSourceFlow);
-  console.log('incoming Edges', incomingEdges.map((e) => nodeMap[e.source].data?.name));
+  const incomingEdges = Object.values(graph.edgeMap).filter((e) => e.target === targetNode.id);
   incomingEdges.forEach((edge: Edge<CustomEdgeData>) => {
-    const targetSourceId = edge.source;
-    const targetSourceNode = nodeMap[targetSourceId];
-
-    const edgeFlowValue = edge.data.flowValue ?? 0;
-    const targetNodeSourceFlow = targetNode.data.userEnteredData.totalSourceFlow ?? 0;
-
-    const parentFlowFraction = edgeFlowValue / (targetNodeSourceFlow);
-    const parentCost = getKGalCost(targetSourceNode.data.cost ?? 0, targetSourceNode.data.userEnteredData.totalDischargeFlow ?? 0);
-
-    nodeSourceCosts[targetSourceId] = {
-      name: targetSourceNode.data.name,
-      componentType: targetSourceNode.data.processComponentType,
-      cost: parentFlowFraction * parentCost,
-      percentOfFlow: parentFlowFraction * 100,
-    };
-
-    const ancestors = getAncestors(targetSourceId, graph);
-    ancestors.forEach((ancestorId) => {
-      const ancestorNode = nodeMap[ancestorId];
-      if (!ancestorNode) return;
-
-      // todo what if multiple ancestors
-      const edgeFromAncestor: Edge<CustomEdgeData> = Object.values(graph.edgeMap).find((e) => e.source === ancestorId && e.target === targetSourceId);
-      const ancestorDischargeFlow = ancestorNode.data.userEnteredData.totalDischargeFlow ?? 0;
-
-      if (edgeFromAncestor && ancestorDischargeFlow) {
-        const ancestorFlowFraction = edgeFromAncestor.data.flowValue / ancestorDischargeFlow;
-        const percentAncestorFlowReceived  = ancestorDischargeFlow * ancestorFlowFraction;
-        const ancestorCost = getKGalCost(ancestorNode.data.cost ?? 0, percentAncestorFlowReceived);
-        
-        // const effectiveFraction = ancestorFlowFraction * parentFlowFraction;
-        // const combinedCost = effectiveFraction * ancestorCost;
-        if (ancestorCost) {
-          setTargetNodeAncestorCosts(ancestorNode, nodeSourceCosts, ancestorCost, ancestorFlowFraction);
-        }
-      }
-
+    const sourceNode = nodeMap[edge.source];
+    ancestors.push({
+      nodeId: edge.source,
+      componentType: sourceNode.data.processComponentType,
+      flowValue: edge.data.flowValue ?? 0,
+      targetNodeTotalInflow: targetNodeTotalInflow,
     });
   });
+
+  const visited = new Set<string>();
+  while (ancestors.length > 0) {
+    const { nodeId, flowValue, targetNodeTotalInflow } = ancestors.shift()!;
+    const node = nodeMap[nodeId];
+
+    // * outflow needs to be the specific edge flow value which goes from current node to target node
+    const outFlow = flowValue;
+    const inflow = getTotalInflow(node, calculatedData);
+    const flowFraction = flowValue / (targetNodeTotalInflow || 1);
+    const percentOfFlow = flowFraction * 100;
+    console.log(`${node.data.name} percentOfFlow ${targetNode.data.name}`, percentOfFlow);
+
+    const costPerKGal = node.data.cost ?? 0;
+    const costOfOutflow = getKGalCost(costPerKGal, outFlow);
+
+    setEdgeConnectionCosts(node, nodeSourceCosts, costOfOutflow, percentOfFlow);
+
+    if (visited.has(nodeId)) {
+      continue;
+    } else {
+      visited.add(nodeId);
+    }
+
+    const ancestorEdges = Object.values(graph.edgeMap).filter((e) => e.target === nodeId);
+    ancestorEdges.forEach((ancestorEdge) => {
+      const sourceNode = nodeMap[ancestorEdge.source];
+      ancestors.push({
+        nodeId: ancestorEdge.source,
+        componentType: sourceNode.data.processComponentType,
+        flowValue: ancestorEdge.data.flowValue ?? 0,
+        targetNodeTotalInflow: inflow,
+      });
+    });
+  }
 
   return nodeSourceCosts;
 };
 
-const setTargetNodeAncestorCosts = (
-  ancestorNode: Node<ProcessFlowPart>, 
-  nodeSourceCosts: ComponentEdgeFlowConnectionCosts, 
-  ancestorCost: number, 
-  ancestorFlowFraction: number
-) => { 
-  if (!nodeSourceCosts[ancestorNode.id]) {
-    nodeSourceCosts[ancestorNode.id] = {
-      name: ancestorNode.data.name,
-      componentType: ancestorNode.data.processComponentType,
-      cost: ancestorCost,
-      percentOfFlow: ancestorFlowFraction * 100,
-    };
-  } else {
-    nodeSourceCosts[ancestorNode.id].name = ancestorNode.data.name,
-    nodeSourceCosts[ancestorNode.id].cost = ancestorCost;
-    nodeSourceCosts[ancestorNode.id].percentOfFlow = ancestorFlowFraction * 100;
-  }
-}
+
 
 
 export const getComponentDescendantCosts = (
   sourceNode: Node<ProcessFlowPart>,
   calculatedData: DiagramCalculatedData,
   nodes: Node<ProcessFlowPart>[],
-  graph: NodeGraphIndex
+  graph: NodeGraphIndex,
+  settings: DiagramSettings
 ): ComponentEdgeFlowConnectionCosts => {
   const nodeMap: Record<string, Node<ProcessFlowPart>> = Object.fromEntries(nodes.map((n) => [n.id, n]));
   const outgoingEdges: Edge[] = Object.values(graph.edgeMap).filter((e) => e.source === sourceNode.id);
-  const sourceNodeTotalDischargeFlow = sourceNode.data.userEnteredData.totalDischargeFlow;
+  const sourceNodeTotalDischargeFlow = sourceNode.data.userEnteredData.totalDischargeFlow?? 0;
   
   const nodeTargetCosts: ComponentEdgeFlowConnectionCosts = {};
 
@@ -630,19 +672,21 @@ export const getComponentDescendantCosts = (
     const dischargeNodeId = edge.target;
     const dischargeTargetNode = nodeMap[dischargeNodeId];
 
-    const targetFlowFraction = edge.data.flowValue / sourceNodeTotalDischargeFlow;
-    const childCost = getKGalCost(dischargeTargetNode.data.cost ?? 0, dischargeTargetNode.data.userEnteredData.totalSourceFlow ?? 0);
+    const edgeFlowValue = edge.data.flowValue ?? 0;
+    const directTargetFlowFraction = edgeFlowValue / sourceNodeTotalDischargeFlow;
+    const directTargetCost = getKGalCost(dischargeTargetNode.data.cost ?? 0, dischargeTargetNode.data.userEnteredData.totalSourceFlow ?? 0);
+    const flowContributionCost = directTargetFlowFraction * directTargetCost
+    const flowContributionPercent = directTargetFlowFraction * 100
 
     // Direct contribution to immediate child
     nodeTargetCosts[dischargeNodeId] = {
       name: dischargeTargetNode.data.name,
       componentType: dischargeTargetNode.data.processComponentType,
-      cost: targetFlowFraction * childCost,
-      percentOfFlow: targetFlowFraction * 100,
+      cost: flowContributionCost,
+      percentOfFlow: flowContributionPercent,
     };
 
     const descendants = getDescendants(dischargeNodeId, graph);
-
     descendants.forEach((descendantId) => {
       const descendantNode = nodeMap[descendantId];
       if (!descendantNode) return;
@@ -656,34 +700,13 @@ export const getComponentDescendantCosts = (
         const descendantCost = getKGalCost(descendantNode.data.cost ?? 0, percentDescendantFlowReceived);
 
         if (descendantCost) {
-          setSourceNodeDescendantCosts(descendantNode, nodeTargetCosts, descendantCost, descendantFlowFraction);
+          setEdgeConnectionCosts(descendantNode, nodeTargetCosts, descendantCost, descendantFlowFraction);
         }
       }
     });
   });
 
   return nodeTargetCosts;
-};
-
-// todo likely combine with setTargetNodeancestorCosts
-const setSourceNodeDescendantCosts = (
-  descendantNode: Node<ProcessFlowPart>,
-  nodeTargetCosts: ComponentEdgeFlowConnectionCosts,
-  descendantCost: number,
-  descendantFlowFraction: number
-) => {
-  if (!nodeTargetCosts[descendantNode.id]) {
-    nodeTargetCosts[descendantNode.id] = {
-      name: descendantNode.data.name,
-      componentType: descendantNode.data.processComponentType,
-      cost: descendantCost,
-      percentOfFlow: descendantFlowFraction * 100,
-    };
-  } else {
-    nodeTargetCosts[descendantNode.id].name = descendantNode.data.name;
-    nodeTargetCosts[descendantNode.id].cost = descendantCost;
-    nodeTargetCosts[descendantNode.id].percentOfFlow = descendantFlowFraction * 100;
-  }
 };
 
 
