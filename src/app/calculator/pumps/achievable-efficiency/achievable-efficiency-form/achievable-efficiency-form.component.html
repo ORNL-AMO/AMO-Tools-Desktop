@@ -63,7 +63,7 @@
     <div class="input-group">
       <input name="head" type="number" min="0" step="any" class="form-control" formControlName="head" id="head"
         (input)="emitChange()" onfocus="this.select();" (focus)="focusField('head')">
-      <span class="input-group-addon units" [innerHTML]="getDisplayUnit(settings.flowMeasurement)"></span>
+      <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement"></span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.head.invalid && !efficiencyForm.controls.head.pristine">
       <span *ngIf="efficiencyForm.controls.head.errors.required">Value required.</span>         
