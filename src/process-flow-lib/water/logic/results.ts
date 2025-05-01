@@ -479,6 +479,7 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
         }
       }
 
+      // * targets own ancestor intake, water-treatment, waste-water-treatment (if recycled into their system)
       Object.entries(ancestorCosts).forEach(([ancestorId, connectedAncestor]: [string, ConnectedCost]) => {
         if (connectedAncestor.componentType === 'water-intake') {
           systemCostContributions.intake += connectedAncestor.cost;
@@ -491,9 +492,12 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
           }
         } else if (connectedAncestor.componentType === 'water-treatment') {
           systemCostContributions.treatment += connectedAncestor.cost;
+        } else if (connectedAncestor.componentType === 'waste-water-treatment') {
+          systemCostContributions.wasteTreatment += connectedAncestor.cost;
         }
       });
 
+      // * sources own descendant discharge, waste-water-treatment (if not recycled into another system)
       Object.entries(descendantCosts).forEach(([ancestorId, connectedAncestor]: [string, ConnectedCost]) => {
         if (connectedAncestor.componentType === 'water-discharge') {
           systemCostContributions.discharge += connectedAncestor.cost;
@@ -566,6 +570,18 @@ const getTotalOutflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCal
   return totalOutflow ?? 0;
 }
 
+const isRecycledWasteTreatment = (
+  node: Node<ProcessFlowPart>,
+  graph: NodeGraphIndex,
+  nodeMap: Record<string, Node<ProcessFlowPart>>
+): boolean => {
+  if (node.data.processComponentType !== 'waste-water-treatment') return false;
+  const wwtDescendants = getDescendants(node.id, graph);
+  return wwtDescendants.some((descendantId: string) => {
+    const descendantNode = nodeMap[descendantId];
+    return descendantNode.data.processComponentType === 'water-using-system';
+  });
+};
 
 export const getComponentAncestorCosts = (
   targetNode: Node<ProcessFlowPart>,
@@ -600,7 +616,6 @@ export const getComponentAncestorCosts = (
     const { nodeId, flowValue, targetNodeTotalInflow } = ancestors.shift()!;
     const node = nodeMap[nodeId];
 
-    // * outflow needs to be the specific edge flow value which goes from current node to target node
     const outFlow = flowValue;
     const inflow = getTotalInflow(node, calculatedData);
     const flowFraction = flowValue / (targetNodeTotalInflow || 1);
@@ -617,7 +632,6 @@ export const getComponentAncestorCosts = (
     } else {
       visited.add(nodeId);
     }
-
     const ancestorEdges = Object.values(graph.edgeMap).filter((e) => e.target === nodeId);
     ancestorEdges.forEach((ancestorEdge: Edge<CustomEdgeData>) => {
       const sourceNode = nodeMap[ancestorEdge.source];
@@ -651,12 +665,15 @@ export const getComponentDescendantCosts = (
     flowValue: number;
     sourceTotalOutflow: number;
   }[] = [];
-
+  
   const outgoingEdges = Object.values(graph.edgeMap).filter((e) => e.source === sourceNode.id);
   outgoingEdges.forEach((edge: Edge<CustomEdgeData>) => {
     const targetNode = nodeMap[edge.target];
-    // * ignore flows recycled into another system. Current system will not pay for that discharge
-    if (targetNode.data.processComponentType !== 'water-using-system') {
+    let hasRecycledWasteTreatment = isRecycledWasteTreatment(targetNode, graph, nodeMap);
+
+    // * ignore system flows recycled into another system. Current system will not pay for that discharge
+    // * ignore waste treatment recycled into another system. This has been already attributed during ancestor calculation
+    if (targetNode.data.processComponentType !== 'water-using-system' && !hasRecycledWasteTreatment) {
       descendants.push({
         nodeId: edge.target,
         componentType: targetNode.data.processComponentType,
@@ -688,7 +705,6 @@ export const getComponentDescendantCosts = (
     } else {
       visited.add(nodeId);
     }
-
     const descendantEdges = Object.values(graph.edgeMap).filter((e) => e.source === nodeId);
     descendantEdges.forEach((descendantEdge: Edge<CustomEdgeData>) => {
       const targetNode = nodeMap[descendantEdge.target];
