@@ -37,6 +37,10 @@ export class EndUseTableComponent implements OnInit {
         this.compressedAirAssessment = compressedAirAssessment;
         this.compressedAirAssessment.endUseData.endUses.forEach(endUse => {
           endUse.isValid = this.endUsesService.isEndUseValid(endUse, this.compressedAirAssessment, this.settings);
+          if (!endUse.endUseName) {
+            endUse.endUseName = 'End Use ' + (this.compressedAirAssessment.endUseData.endUses.indexOf(endUse) + 1).toString();
+            endUse.isValid = this.endUsesService.isEndUseValid(endUse, this.compressedAirAssessment, this.settings);
+          }
         });
         this.hasInvalidEndUses = this.compressedAirAssessment.endUseData.endUses.some(endUse => !endUse.isValid);
       }
