@@ -93,10 +93,10 @@ export class AchievableEfficiencyComponent implements OnInit {
         let inputs: PumpEfficiencyInputs = {
           pumpType: 6,
           flowRate: tmpFlowRate,
-          rpm: 1780,
-          kinematicViscosity: 1,
+          rpm: 2000,
+          kinematicViscosity: 1.107,
           stageCount: 1,
-          head: 277,
+          head: 137,
           pumpEfficiency: 90,
         };
         this.efficiencyForm = this.achievableEfficiencyService.getForm(inputs);
@@ -188,10 +188,10 @@ export class AchievableEfficiencyComponent implements OnInit {
     let inputs: PumpEfficiencyInputs = {
       pumpType: 6,
       flowRate: tmpFlowRate,
-      rpm: 1780,
-      kinematicViscosity: 1,
+      rpm: 2000,
+      kinematicViscosity: 1.107,
       stageCount: 1,
-      head: 277,
+      head: 137,
       pumpEfficiency: 90,
     };
     this.efficiencyForm = this.achievableEfficiencyService.getForm(inputs);

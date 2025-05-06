@@ -166,8 +166,7 @@ export class PumpsSuiteApiService {
       head: number,
       pumpEfficiencyInput: number): { average: number, max: number } {
     let pumpStyleEnum = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
-    //TODO add new inputs to send to wasm/suite api
-    let instance = new Module.PumpEfficiency(pumpStyleEnum, flowRate);
+    let instance = new Module.PumpEfficiency(pumpStyleEnum, pumpEfficiencyInput, rpm, kinematicViscosity, stageCount, flowRate, head);
     let pumpEfficiency = instance.calculate();
     let results: { average: number, max: number } = {
       average: pumpEfficiency.average,
