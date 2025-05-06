@@ -3,6 +3,9 @@ import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms
 import { SimpleChart, TraceData } from '../../../shared/models/plotting';
 import { BehaviorSubject } from 'rxjs';
 import { getNewIdString } from '../../../shared/helperFunctions';
+import { PSAT } from '../../../shared/models/psat';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Injectable()
 export class AchievableEfficiencyService {
@@ -14,7 +17,7 @@ export class AchievableEfficiencyService {
   selectedDataPoints: BehaviorSubject<Array<EfficiencyPoint>>;
   dataPointTraces: BehaviorSubject<Array<EfficiencyTrace>>;
 
-  constructor(private formBuilder: UntypedFormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) {
     this.initChartData();
   }
 
@@ -25,7 +28,7 @@ export class AchievableEfficiencyService {
   }
 
 
-  getForm(pumpEfficiencyInputs: PumpEfficiencyInputs): UntypedFormGroup {
+  getFormFromObj(pumpEfficiencyInputs: PumpEfficiencyInputs): UntypedFormGroup {
     let form: UntypedFormGroup = this.formBuilder.group({
       pumpType: [pumpEfficiencyInputs.pumpType, Validators.required],
       flowRate: [pumpEfficiencyInputs.flowRate, [Validators.required, Validators.min(0)]],
@@ -52,6 +55,42 @@ export class AchievableEfficiencyService {
       pumpEfficiency: form.controls.pumpEfficiency.value,
     };
     return obj;
+  }
+
+  getFormFromPSAT(psat: PSAT, settings: Settings): UntypedFormGroup {
+    let pumpEfficiency: number = 90;
+    if (psat.outputs) {
+      if (psat.outputs.pump_efficiency) {
+        pumpEfficiency = psat.outputs.pump_efficiency;
+      } 
+    }
+
+    let flowRate: number = 2000;
+    if (settings.flowMeasurement !== 'gpm') {
+      flowRate = Math.round(this.convertUnitsService.value(flowRate).from('gpm').to(settings.flowMeasurement) * 100) / 100;
+    }
+    if (psat.inputs.flow_rate) {
+      flowRate = psat.inputs.flow_rate;
+    } 
+
+    let head: number = 137;
+    if (psat.inputs.head) {
+      head = psat.inputs.head;
+    } 
+
+    let form: UntypedFormGroup = this.formBuilder.group({
+      pumpType: [psat.inputs.pump_style, Validators.required],
+      flowRate: [flowRate, [Validators.required, Validators.min(0)]],
+      rpm: [psat.inputs.pump_rated_speed, Validators.required],
+      kinematicViscosity: [psat.inputs.kinematic_viscosity, Validators.required],
+      stageCount: [psat.inputs.stages, Validators.required],
+      head: [head, Validators.required],
+      pumpEfficiency: [pumpEfficiency, Validators.required],
+    });
+    if (form.controls.flowRate.value) {
+      form.controls.flowRate.markAsDirty();
+    }
+    return form;
   }
 
   getTraceDataFromPoint(selectedPoint: EfficiencyPoint): EfficiencyTrace {
