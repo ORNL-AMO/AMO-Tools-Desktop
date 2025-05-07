@@ -74,6 +74,9 @@ export class AchievableEfficiencyService {
     } 
 
     let head: number = 137;
+    if (settings.distanceMeasurement !== 'ft') {
+      head = Math.round(this.convertUnitsService.value(head).from('ft').to(settings.distanceMeasurement) * 100) / 100;
+    }
     if (psat.inputs.head) {
       head = psat.inputs.head;
     } 

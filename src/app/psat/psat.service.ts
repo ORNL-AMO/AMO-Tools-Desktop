@@ -409,6 +409,9 @@ export class PsatService {
     if (settings.flowMeasurement != 'gpm') {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
+    if (settings.distanceMeasurement !== 'ft') {
+      head = this.convertUnitsService.value(head).from(settings.distanceMeasurement).to('ft');
+    }
     let pumpEfficiency: { average: number, max: number } = this.pumpsSuiteApiService.pumpEfficiency(pumpStyle, flowRate, rpm, kinematicViscosity, stageCount, head, pumpEfficiencyInput);
     let results = {
       average: this.roundVal(pumpEfficiency.average, 2),
