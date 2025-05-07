@@ -43,7 +43,9 @@
       <span class="input-group-addon units">cSt</span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.kinematicViscosity.invalid && !efficiencyForm.controls.kinematicViscosity.pristine">
-      <span *ngIf="efficiencyForm.controls.kinematicViscosity.errors.required">Value required.</span>         
+      <span *ngIf="efficiencyForm.controls.kinematicViscosity.errors.required">Value required.</span>       
+      <span *ngIf="efficiencyForm.controls.kinematicViscosity.errors.min">Value can't be less than
+        {{efficiencyForm.controls.kinematicViscosity.errors.min.min}} cSt.</span>  
     </span>
   </div>
 
@@ -54,7 +56,9 @@
         (input)="emitChange()" onfocus="this.select();" (focus)="focusField('stageCount')">
     </div>
     <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.stageCount.invalid && !efficiencyForm.controls.stageCount.pristine">
-      <span *ngIf="efficiencyForm.controls.stageCount.errors.required">Value required.</span>         
+      <span *ngIf="efficiencyForm.controls.stageCount.errors.required">Value required.</span>       
+      <span *ngIf="efficiencyForm.controls.stageCount.errors.min">Value can't be less than
+        {{efficiencyForm.controls.stageCount.errors.min.min}}.</span>  
     </span>
   </div>
 
@@ -66,7 +70,9 @@
       <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement"></span>
     </div>
     <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.head.invalid && !efficiencyForm.controls.head.pristine">
-      <span *ngIf="efficiencyForm.controls.head.errors.required">Value required.</span>         
+      <span *ngIf="efficiencyForm.controls.head.errors.required">Value required.</span>   
+      <span *ngIf="efficiencyForm.controls.head.errors.min">Value can't be less than
+        {{efficiencyForm.controls.head.errors.min.min}} <span [innerHTML]="settings.distanceMeasurement"></span>.</span>        
     </span>
   </div>
 

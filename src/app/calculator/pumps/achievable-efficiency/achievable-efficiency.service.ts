@@ -33,9 +33,9 @@ export class AchievableEfficiencyService {
       pumpType: [pumpEfficiencyInputs.pumpType, Validators.required],
       flowRate: [pumpEfficiencyInputs.flowRate, [Validators.required, Validators.min(0)]],
       rpm: [pumpEfficiencyInputs.rpm, Validators.required],
-      kinematicViscosity: [pumpEfficiencyInputs.kinematicViscosity, Validators.required],
-      stageCount: [pumpEfficiencyInputs.stageCount, Validators.required],
-      head: [pumpEfficiencyInputs.head, Validators.required],
+      kinematicViscosity: [pumpEfficiencyInputs.kinematicViscosity, [Validators.required, Validators.min(0)]],
+      stageCount: [pumpEfficiencyInputs.stageCount, [Validators.required, Validators.min(1)]],
+      head: [pumpEfficiencyInputs.head, [Validators.required, Validators.min(0.1)]],
       pumpEfficiency: [pumpEfficiencyInputs.pumpEfficiency, Validators.required],
     });
     if (form.controls.flowRate.value) {
