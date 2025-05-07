@@ -369,6 +369,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (
       this.efficiencyForm.controls.pumpType.status === 'VALID' &&
       this.efficiencyForm.controls.flowRate.status === 'VALID' &&
+      this.efficiencyForm.controls.rpm.status === 'VALID' &&
+      this.efficiencyForm.controls.kinematicViscosity.status === 'VALID' &&
+      this.efficiencyForm.controls.stageCount.status === 'VALID' &&
+      this.efficiencyForm.controls.head.status === 'VALID' &&
+      this.efficiencyForm.controls.pumpEfficiency.status === 'VALID' &&
       this.efficiencyForm.controls.pumpType.value !== 'Specified Optimal Efficiency'
     ) {
       return true;

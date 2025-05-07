@@ -84,6 +84,7 @@ export class AchievableEfficiencyComponent implements OnInit {
         let tmpHead: number = 137;
         if (this.settings.distanceMeasurement !== 'ft') {
           tmpHead = this.convertUnitsService.value(tmpHead).from('ft').to(this.settings.distanceMeasurement);
+          tmpHead = this.psatService.roundVal(tmpHead, 2);
         }
         let inputs: PumpEfficiencyInputs = {
           pumpType: 6,
@@ -107,9 +108,10 @@ export class AchievableEfficiencyComponent implements OnInit {
       tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement);
       tmpFlowRate = this.psatService.roundVal(tmpFlowRate, 2);
     }
-    let tmpHead: number = 137;
+    let tmpHead: number = 0;
     if (this.settings.distanceMeasurement !== 'ft') {
       tmpHead = this.convertUnitsService.value(tmpHead).from('ft').to(this.settings.distanceMeasurement);
+      tmpHead = this.psatService.roundVal(tmpHead, 2);
     }
     let inputs: PumpEfficiencyInputs = {
       pumpType: 6,
