@@ -93,7 +93,7 @@ export class AchievableEfficiencyComponent implements OnInit {
           kinematicViscosity: 1.107,
           stageCount: 1,
           head: tmpHead,
-          pumpEfficiency: 90,
+          pumpEfficiency: 100,
         };
         this.efficiencyForm = this.achievableEfficiencyService.getFormFromObj(inputs);
       }
@@ -120,7 +120,7 @@ export class AchievableEfficiencyComponent implements OnInit {
       kinematicViscosity: 0,
       stageCount: 0,
       head: tmpHead,
-      pumpEfficiency: 0,
+      pumpEfficiency: 100,
     };
     if (!this.psat) {
       //patch default/starter values for stand alone calculator
@@ -180,7 +180,7 @@ export class AchievableEfficiencyComponent implements OnInit {
         kinematicViscosity: 1.107,
         stageCount: 1,
         head: tmpHead,
-        pumpEfficiency: 90,
+        pumpEfficiency: 100,
       };
       this.efficiencyForm = this.achievableEfficiencyService.getFormFromObj(inputs);
     } else {

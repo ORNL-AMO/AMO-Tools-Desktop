@@ -121,7 +121,7 @@ export class PumpDataFormComponent implements OnInit {
 
 
   getPumpEfficiency() {
-    let tmpEfficiency: number = this.psatService.pumpEfficiency(this.modificationForm.controls.pumpType.value, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.psat.modifications[this.exploreModIndex].psat.inputs.pump_rated_speed, this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity, this.psat.modifications[this.exploreModIndex].psat.inputs.stages, this.psat.modifications[this.exploreModIndex].psat.inputs.head, this.psat.modifications[this.exploreModIndex].psat.outputs.pump_efficiency ,this.settings).max;
+    let tmpEfficiency: number = this.psatService.pumpEfficiency(this.modificationForm.controls.pumpType.value, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.psat.modifications[this.exploreModIndex].psat.inputs.pump_rated_speed, this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity, this.psat.modifications[this.exploreModIndex].psat.inputs.stages, this.psat.modifications[this.exploreModIndex].psat.inputs.head, 100, this.settings).max;
     this.modificationForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency);
     this.calculate();
   }

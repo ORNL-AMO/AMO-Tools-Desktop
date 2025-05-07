@@ -154,7 +154,7 @@ export class PumpFluidComponent implements OnInit {
 
 
   getPumpEfficiency() {
-    let tmpEfficiency: number = this.psatService.pumpEfficiency(this.psatForm.controls.pumpType.value, this.psat.inputs.flow_rate, this.psat.inputs.pump_rated_speed, this.psat.inputs.kinematic_viscosity, this.psat.inputs.stages, this.psat.inputs.head, this.psat.outputs.pump_efficiency, this.settings).max;
+    let tmpEfficiency: number = this.psatService.pumpEfficiency(this.psatForm.controls.pumpType.value, this.psat.inputs.flow_rate, this.psat.inputs.pump_rated_speed, this.psat.inputs.kinematic_viscosity, this.psat.inputs.stages, this.psat.inputs.head, 100, this.settings).max;
     this.psatForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency);
     this.save();
   }

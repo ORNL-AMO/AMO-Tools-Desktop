@@ -58,12 +58,12 @@ export class AchievableEfficiencyService {
   }
 
   getFormFromPSAT(psat: PSAT, settings: Settings): UntypedFormGroup {
-    let pumpEfficiency: number = 90;
-    if (psat.outputs) {
-      if (psat.outputs.pump_efficiency) {
-        pumpEfficiency = psat.outputs.pump_efficiency;
-      } 
-    }
+    let pumpEfficiency: number = 100;
+    // if (psat.outputs) {
+    //   if (psat.outputs.pump_efficiency) {
+    //     pumpEfficiency = psat.outputs.pump_efficiency;
+    //   } 
+    // }
 
     let flowRate: number = 2000;
     if (settings.flowMeasurement !== 'gpm') {

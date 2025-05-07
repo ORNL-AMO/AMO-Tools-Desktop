@@ -316,7 +316,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.efficiencyForm.controls.pumpEfficiency.value,
         this.settings
       );
-      return tmpResults.average;
+      return tmpResults.average * 100;
     } else { return 0; }
   }
 
@@ -332,7 +332,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.efficiencyForm.controls.pumpEfficiency.value,
         this.settings
       );
-      return tmpResults.max;
+      return tmpResults.max * 100;
     } else { return 0; }
   }
 
