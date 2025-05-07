@@ -181,11 +181,11 @@
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
     <div class="d-none d-md-flex tabs subtabs waste-water mr-auto">
-        <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
+        <div class="assessment-tab p-2" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
             <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
             </a>
         </div>
-        <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+        <div class="assessment-tab p-2" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
             <a (click)="changeAssessmentTab('modify-conditions')">Expert View
             </a>
         </div>
@@ -214,12 +214,12 @@
     <div *ngIf="!tabsCollapsed"
         class="d-flex d-md-none flex-fill align-items-center justify-content-center tabs subtabs waste-water"
         [ngClass]="{'collapse': tabsCollapsed}">
-        <div class="assessment-tab"
+        <div class="assessment-tab p-2"
             [ngClass]="{'active': assessmentTab == 'explore-opportunities', 'collapse': tabsCollapsed}">
             <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
             </a>
         </div>
-        <div class="assessment-tab"
+        <div class="assessment-tab p-2"
             [ngClass]="{'active': assessmentTab == 'modify-conditions', 'collapse': tabsCollapsed}">
             <a (click)="changeAssessmentTab('modify-conditions')">Expert View
             </a>
