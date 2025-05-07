@@ -480,6 +480,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   }
 
   getAvgMaxEffColumn(avg: number, max: number) {
+    avg = this.psatService.roundVal(avg, 2);
+    max = this.psatService.roundVal(max, 2);
     return `${avg} - ${max}`;
   }
 

@@ -414,8 +414,8 @@ export class PsatService {
     }
     let pumpEfficiency: { average: number, max: number } = this.pumpsSuiteApiService.pumpEfficiency(pumpStyle, flowRate, rpm, kinematicViscosity, stageCount, head, pumpEfficiencyInput);
     let results = {
-      average: this.roundVal(pumpEfficiency.average, 2),
-      max: this.roundVal(pumpEfficiency.max, 2)
+      average: this.roundVal(pumpEfficiency.average, 4),
+      max: this.roundVal(pumpEfficiency.max, 4)
     }
     return results;
   }
