@@ -145,6 +145,16 @@ export class UpdateDataService {
             }
         }
 
+        if (assessment.compressedAirAssessment.modifications && assessment.compressedAirAssessment.modifications.length > 0) {
+            assessment.compressedAirAssessment.modifications.forEach(mod => {
+                if (mod.flowReallocation === undefined || mod.flowReallocation === null) {
+                    mod.flowReallocation = {
+                        implementationCost: 0
+                    }
+                }
+            });
+        }
+
         return assessment;
     }
     
