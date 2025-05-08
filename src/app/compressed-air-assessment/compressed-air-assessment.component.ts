@@ -154,7 +154,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.showAddModificationSub.unsubscribe();
     this.showModificationListSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
-    this.compressedAirAssessmentService.mainTab.next('system-setup');
+    this.compressedAirAssessmentService.mainTab.next('baseline');
     this.compressedAirAssessmentService.setupTab.next('system-basics');
     this.compressedAirAssessmentService.profileTab.next('setup');
     this.inventoryService.selectedCompressor.next(undefined);
@@ -275,7 +275,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.compressedAirAssessmentService.mainTab.next('system-setup');
+      this.compressedAirAssessmentService.mainTab.next('baseline');
       this.compressedAirAssessmentService.setupTab.next('system-basics');
     }
     this.showUpdateUnitsModal = false;

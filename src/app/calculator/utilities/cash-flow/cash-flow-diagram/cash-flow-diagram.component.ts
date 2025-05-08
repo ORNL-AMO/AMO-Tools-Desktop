@@ -82,21 +82,21 @@ export class CashFlowDiagramComponent implements OnInit {
     let operationCost = new Array<any>();
     let junkCost = new Array<any>();
     let salvageSavings = new Array<any>();
-    let otherCost = new Array<any>();
+    let advancedCashflows = new Array<any>();
     let installationCost = new Array<any>();
     this.years = new Array<any>();
 
     annualSavings.push("Energy Savings");
     operationCost.push("Operation Cost");
     junkCost.push("Disposal Cost");
-    otherCost.push("Fuel Cost");
+    advancedCashflows.push("Additional Cash Flow");
     installationCost.push("Installation Cost");
     salvageSavings.push("Salvage");
 
     for (let i: number = 0; i <= this.cashFlowForm.lifeYears; i++) {
       annualSavings.push(this.cashFlowForm.energySavings);
       operationCost.push(0 - this.cashFlowForm.operationCost);
-      otherCost.push(0 - this.cashFlowForm.otherCost);
+      advancedCashflows.push(this.cashFlowForm.advancedCashflows[i]);
       this.years.push(`${i}`);
       if (i === 0) {
         installationCost.push(0 - this.cashFlowForm.installationCost);
@@ -113,7 +113,7 @@ export class CashFlowDiagramComponent implements OnInit {
         junkCost.push(0);
       }
     }
-    this.cashFlowData.push(salvageSavings, otherCost, annualSavings, operationCost, installationCost, junkCost);
+    this.cashFlowData.push(salvageSavings, advancedCashflows, annualSavings, operationCost, installationCost, junkCost);
   }
 
   expandChart() {

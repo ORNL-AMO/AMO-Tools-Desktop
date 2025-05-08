@@ -11,7 +11,7 @@
       </app-plotly-pie-chart>
     </div>
     <div *ngIf="!selectedBaselineData.isValid" class="alert-danger">
-      Invalid System Setup
+      Invalid Baseline
     </div>
   </div>
   <div *ngIf="selectedModificationData" class="d-flex col-12 col-lg-6 flex-column">
@@ -27,7 +27,7 @@
     </div>
 
     <div *ngIf="!selectedModificationData.isValid" class="alert-danger">
-      Invalid System Setup
+      Invalid Baseline
     </div>
   </div>
   <div *ngIf="selectedModificationData && selectedModificationData.isValid" class="w-100">

@@ -6,7 +6,7 @@
   </div>
   <!--end header-->
 
-  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'system-setup'">
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'baseline'">
     <div class="nav-item" (click)="setSmallScreenTab('form')"
       [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
       <a class="nav-link" *ngIf="subTab == 'settings'">Assessment Basics</a>
@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
+  <div *ngIf="mainTab == 'baseline'" class="assessment-container tab-content">
     <div class="assessment-panel-container lookup-form modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="subTab == 'settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)" [(settings)]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()">
@@ -51,7 +51,7 @@
 
   <!--footer-->
   <div #footer id="thuntFooter" class="footer hide-print d-none d-lg-block"
-    *ngIf="mainTab == 'system-setup' && selectedCalc == 'none'">
+    *ngIf="mainTab == 'baseline' && selectedCalc == 'none'">
     <div class="pull-left" *ngIf="subTab != 'settings'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>

@@ -2,7 +2,7 @@
     <div class="d-block d-lg-none mr-0 mr-2 pl-2 h-100">
         <div class="pr-2 border-right home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
             <button type="button" class="btn chevron-btn p-0" (click)="back()"
-                [disabled]="(!assessment.compressedAirAssessment.setupDone || mainTab == 'system-setup')">
+                [disabled]="(!assessment.compressedAirAssessment.setupDone || mainTab == 'baseline')">
                 <span class="fa fa-chevron-left"></span>
             </button>
         </div>
@@ -41,8 +41,8 @@
 
     <div class="d-flex nav-pills nav-fill flex-wrap mx-auto d-none d-lg-inline-block">
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}"
-                (click)="changeTab('system-setup')">System Basics</a>
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'baseline'}"
+                (click)="changeTab('baseline')">Baseline</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
             <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
@@ -67,8 +67,8 @@
 
     <div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup'}"
-                (click)="changeTab('system-setup')">System Basics</a>
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'baseline'}"
+                (click)="changeTab('baseline')">Baseline</a>
         </div>
         <div class="nav-item">
             <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
@@ -167,14 +167,14 @@
 </nav>
 
 
-<app-setup-tabs *ngIf="mainTab == 'system-setup'"></app-setup-tabs>
+<app-setup-tabs *ngIf="mainTab == 'baseline'"></app-setup-tabs>
 <app-calculator-tabs *ngIf="mainTab == 'calculators'"></app-calculator-tabs>
 
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
-    <ul class="h-100 tabs subtabs progress-tabs compressed-air d-none d-lg-block">
+    <ul class="h-100 tabs subtabs progress-tabs compressed-air d-none d-lg-block p-2">
         <li [ngClass]="{'active': secondaryAssessmentTab == 'modifications'}">
-            <a (click)="changeSecondaryAssessmentTab('modifications')">Setup Profile</a>
+            <a (click)="changeSecondaryAssessmentTab('modifications')">Explore Opportunities</a>
         </li>
         <li [ngClass]="{'active': secondaryAssessmentTab == 'table', 'disabled': !selectedModification}">
             <a (click)="changeSecondaryAssessmentTab('table')">Profile Summary Table</a>
@@ -231,7 +231,7 @@
                     <span class="fa fa-chevron-left"></span></a>
             </li>
             <li class="page-item" [ngClass]="{'active': secondaryAssessmentTab == 'modifications'}" *ngIf="secondaryAssessmentTab == 'modifications'">
-                <a class="nav-link small" (click)="changeSecondaryAssessmentTab('modifications')">Setup Profile</a>
+                <a class="nav-link small" (click)="changeSecondaryAssessmentTab('modifications')">Explore Opportunities</a>
             </li>
             <li class="page-item" [ngClass]="{'active': secondaryAssessmentTab == 'table', 'disabled': !selectedModification}" *ngIf="secondaryAssessmentTab == 'table'">
                 <a class="nav-link small" (click)="changeSecondaryAssessmentTab('table')">Profile Summary Table</a>

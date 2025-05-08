@@ -27,7 +27,7 @@
         0%
       </span>
       <div class="alert-danger small" *ngIf="!psat.modifications[exploreModIndex].psat.valid.isValid">
-        Invalid System Setup:<br>
+        Invalid Baseline:<br>
         <span *ngIf="!psat.modifications[exploreModIndex].psat.valid.pumpFluidValid">Errors found in Pump Fluid
           Data<br></span>
         <span *ngIf="!psat.modifications[exploreModIndex].psat.valid.motorValid">Errors found in Motor Data<br></span>
@@ -39,7 +39,7 @@
       <app-percent-graph *ngIf="percentSavings && psat.modifications[exploreModIndex].psat.valid.isValid"
         [value]="percentSavings"></app-percent-graph>
       <div class="alert-danger small" *ngIf="!psat.modifications[exploreModIndex].psat.valid.isValid">
-        Invalid System Setup:<br>
+        Invalid Baseline:<br>
         <span *ngIf="!psat.modifications[exploreModIndex].psat.valid.pumpFluidValid">Errors found in Pump Fluid
           Data<br></span>
         <span *ngIf="!psat.modifications[exploreModIndex].psat.valid.motorValid">Errors found in Motor Data<br></span>

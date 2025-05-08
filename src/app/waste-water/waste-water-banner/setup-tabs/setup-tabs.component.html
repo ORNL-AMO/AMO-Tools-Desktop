@@ -1,7 +1,7 @@
 <nav class="hide-print d-none d-lg-block">
     <ul class="tabs subtabs progress-tabs waste-water">
         <li [ngClass]="systemBasicsClassStatus">
-            <a (click)="changeSetupTab('system-basics')">
+            <a (click)="changeSetupTab('baseline')">
                 <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
                     class="step-number">1</span>Assessment Basics</a>
             <app-tabs-tooltip [badgeClass]="systemBasicsClassStatus[0]" [reveal]="systemBasicsBadge.display"
@@ -34,12 +34,12 @@
 
 <nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs waste-water flex-wrap flex-fill">
     <ul class="pagination d-flex justify-content-between tabs waste-water subtabs progress-tabs flex-fill">
-        <li class="page-item" [ngClass]="{'disabled': setupTab == 'system-basics'}">
-            <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': setupTab == 'system-basics'}">
+        <li class="page-item" [ngClass]="{'disabled': setupTab == 'baseline'}">
+            <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': setupTab == 'baseline'}">
                 <span class="fa fa-chevron-left"></span></a>
         </li>
-        <li class="page-item" [ngClass]="{'active': setupTab == 'system-basics'}" *ngIf="setupTab == 'system-basics'">
-            <a class="nav-link small" (click)="changeSetupTab('system-basics')" [ngClass]="systemBasicsClassStatus">
+        <li class="page-item" [ngClass]="{'active': setupTab == 'baseline'}" *ngIf="setupTab == 'baseline'">
+            <a class="nav-link small" (click)="changeSetupTab('baseline')" [ngClass]="systemBasicsClassStatus">
                 <span class="step-number">1</span>Assessment Basics
             </a>
         </li>

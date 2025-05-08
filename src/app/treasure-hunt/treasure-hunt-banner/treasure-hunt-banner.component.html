@@ -38,8 +38,8 @@
 
 	<div class="d-flex nav-pills nav-fill flex-wrap mx-auto d-none d-lg-inline-block">
 		<div class="nav-item d-none d-lg-inline-block">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup', 'disabled':disableTabs == true}"
-				(click)="changeTab('system-setup')">Facility Basics</a>
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'baseline', 'disabled':disableTabs == true}"
+				(click)="changeTab('baseline')">Facility Basics</a>
 		</div>
 		<div class="nav-item d-none d-lg-inline-block">
 			<a class="nav-link"
@@ -60,8 +60,8 @@
 
 	<div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
 		<div class="nav-item">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'system-setup', 'disabled':disableTabs == true}"
-				(click)="changeTab('system-setup')">Facility Basics</a>
+			<a class="nav-link" [ngClass]="{'active': mainTab == 'baseline', 'disabled':disableTabs == true}"
+				(click)="changeTab('baseline')">Facility Basics</a>
 		</div>
 		<div class="nav-item">
 			<a class="nav-link"
@@ -155,7 +155,7 @@
 
 
 
-<ul class="tabs subtabs progress-tabs treasure-hunt" *ngIf="mainTab == 'system-setup'">
+<ul class="tabs subtabs progress-tabs treasure-hunt" *ngIf="mainTab == 'baseline'">
 	<li [ngClass]="{'active': subTab == 'settings'}">
 		<a (click)="changeSubTab('settings')">Assessment Basics</a>
 	</li>

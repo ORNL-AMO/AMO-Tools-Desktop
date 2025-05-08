@@ -17,7 +17,7 @@
     </div>
     <div class="pr-1 pl-2 help-panel" *ngIf="inSetup && !showResults || tabSelect == 'help'">
         <app-pump-operations-help *ngIf="currentTab == 'operations'"></app-pump-operations-help>
-        <app-system-basics-help *ngIf="currentTab == 'system-basics'"></app-system-basics-help>
+        <app-system-basics-help *ngIf="currentTab == 'baseline'"></app-system-basics-help>
         <app-pump-fluid-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'pump-fluid'"></app-pump-fluid-help>
 
         <app-motor-help [settings]="settings" [psat]="psat" *ngIf="currentTab == 'motor'"></app-motor-help>

@@ -5,7 +5,7 @@
 <div class="no-data no-data-phast no-data-no-add"
   *ngIf="(_slagLosses.length == 0 && lossesLocked) || (_slagLosses.length == 0 && !inSetup)">
   <h3>You have no slag losses</h3>
-  <h4>To add slag losses you will need to delete your current modifications and return to system setup.</h4>
+  <h4>To add slag losses you will need to delete your current modifications and return to baseline.</h4>
 </div>
 
 <div class="card-form d-flex flex-column" *ngFor="let loss of _slagLosses; let lossIndex = index;">

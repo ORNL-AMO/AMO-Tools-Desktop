@@ -21,7 +21,7 @@
         <h3>Baseline</h3>
       </div>
       <div class="psat-losses-container">
-        <!--<app-system-basics *ngIf="modifyTab == 'system-basics'"></app-system-basics>-->
+        <!--<app-system-basics *ngIf="modifyTab == 'baseline'"></app-system-basics>-->
         <app-pump-operations *ngIf="modifyTab == 'operations'" [selected]="baselineSelected" [(psat)]="psat"
           (saved)="save()" [settings]="settings" (saved)="save()" [settings]="settings" [baseline]="true"
           [assessment]="assessment"></app-pump-operations>
@@ -94,7 +94,7 @@
           <h3>Help</h3>
         </div>
         <div class="p-4">
-          <p>Use a form similar to System Setup to explore potential opportunities for energy and cost savings within
+          <p>Use a form similar to Baseline to explore potential opportunities for energy and cost savings within
             your system.
             First determine if your pump’s operating conditions (head, flow) are correct for your system needs. If they
             are not, consider the effects of changing your pump’s operating conditions to meet demand, using your

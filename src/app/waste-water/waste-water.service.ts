@@ -30,9 +30,9 @@ export class WasteWaterService {
   focusedField: BehaviorSubject<string>;
   showExportModal: BehaviorSubject<boolean>;
 
-  //system setup tabs
+  //baseline tabs
   setupTabs: Array<string> = [
-    'system-basics',
+    'baseline',
     'operations',
     'activated-sludge',
     'aerator-performance'
@@ -44,8 +44,8 @@ export class WasteWaterService {
     private wasteWaterApiService: WasteWaterSuiteApiService,
     private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private convertWasteWaterService: ConvertWasteWaterService, private convertUnitsService: ConvertUnitsService, private operationsService: WasteWaterOperationsService) {
-    this.mainTab = new BehaviorSubject<string>('system-setup');
-    this.setupTab = new BehaviorSubject<string>('system-basics');
+    this.mainTab = new BehaviorSubject<string>('baseline');
+    this.setupTab = new BehaviorSubject<string>('baseline');
     this.assessmentTab = new BehaviorSubject<string>('modify-conditions');
     this.calcTab = new BehaviorSubject<string>('o2-utilization-rate');
     this.settings = new BehaviorSubject<Settings>(undefined);
@@ -464,12 +464,12 @@ export class WasteWaterService {
 
   back() {
     let tmpStepTab: string = this.setupTab.getValue();
-    if (tmpStepTab !== 'system-basics' && this.mainTab.getValue() == 'system-setup') {
+    if (tmpStepTab !== 'baseline' && this.mainTab.getValue() == 'baseline') {
       let assessmentTabIndex: number = this.setupTabs.indexOf(tmpStepTab);
       let nextTab: string = this.setupTabs[assessmentTabIndex - 1];
       this.setupTab.next(nextTab);
     } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('system-setup');
+      this.mainTab.next('baseline');
     }
   }
 }

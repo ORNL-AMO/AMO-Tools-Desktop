@@ -59,7 +59,7 @@ export class SetupTabsComponent implements OnInit {
   }
 
   changeSetupTab(str: string) {
-    if (str == 'system-basics') {
+    if (str == 'baseline') {
       this.wasteWaterService.setupTab.next(str);
     } else if (str == 'activated-sludge') {
       let canChange: boolean = (this.activatedSludgeClassStatus.includes("disabled") == false);
@@ -87,7 +87,7 @@ export class SetupTabsComponent implements OnInit {
     } else {
       this.systemBasicsClassStatus = ['success'];
     }
-    if (this.setupTab == 'system-basics') {
+    if (this.setupTab == 'baseline') {
       this.systemBasicsClassStatus.push('active');
     }
   }
@@ -169,7 +169,7 @@ export class SetupTabsComponent implements OnInit {
   }
 
   getCanContinue(): boolean {
-    if (this.setupTab === 'system-basics') {
+    if (this.setupTab === 'baseline') {
       this.canContinue = true;
     } else if (this.setupTab === 'operations') {
       this.canContinue = (this.operationsClassStatus.includes("missing-data") == false);

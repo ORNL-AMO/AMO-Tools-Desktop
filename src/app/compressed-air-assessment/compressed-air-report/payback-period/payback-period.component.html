@@ -33,10 +33,10 @@
                             &mdash;
                         </td>
                         <td>
-                            &mdash;
+                            {{result.combinedResults.flowReallocationSavings.implementationCost | number:'1.0-0'}}
                         </td>
                         <td>
-                            &mdash;
+                            {{result.combinedResults.flowReallocationSavings.paybackPeriod | number:'1.0-2'}}
                         </td>
                     </tr>
                     <tr *ngIf="result.combinedResults.addReceiverVolumeSavings.savings.cost">

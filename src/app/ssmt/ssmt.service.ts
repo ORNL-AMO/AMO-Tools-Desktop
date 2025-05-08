@@ -36,9 +36,9 @@ export class SsmtService {
 
   iterationCount: number;
 
-   //system setup tabs
+   //baseline tabs
    stepTabs: Array<string> = [
-    'system-basics',
+    'baseline',
     'operations',
     'boiler',
     'header',
@@ -48,8 +48,8 @@ export class SsmtService {
   constructor(private steamService: SteamService, 
     private assessmentCo2SavingsService: AssessmentCo2SavingsService, private convertSteamService: ConvertSteamService, private boilerService: BoilerService, private headerService: HeaderService,
     private turbineService: TurbineService, private operationsService: OperationsService, private convertUnitsService: ConvertUnitsService) {
-    this.mainTab = new BehaviorSubject<string>('system-setup');
-    this.stepTab = new BehaviorSubject<string>('system-basics');
+    this.mainTab = new BehaviorSubject<string>('baseline');
+    this.stepTab = new BehaviorSubject<string>('baseline');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
     this.steamModelTab = new BehaviorSubject<string>('operations');
     this.currentField = new BehaviorSubject<string>('default');
@@ -405,12 +405,12 @@ export class SsmtService {
 
   back() {
     let tmpStepTab: string = this.stepTab.getValue();
-    if (tmpStepTab !== 'system-basics' && this.mainTab.getValue() == 'system-setup') {
+    if (tmpStepTab !== 'baseline' && this.mainTab.getValue() == 'baseline') {
       let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
       let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
       this.stepTab.next(nextTab);
     } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('system-setup');
+      this.mainTab.next('baseline');
     }
   }  
 
