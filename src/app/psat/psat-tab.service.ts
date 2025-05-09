@@ -10,9 +10,9 @@ export class PsatTabService {
   calcTab: BehaviorSubject<string>;
   showExportModal: BehaviorSubject<boolean>;
 
-  //system setup tabs
+  //baseline tabs
   stepTabs: Array<string> = [
-    'system-basics',
+    'baseline',
     'operations',
     'pump-fluid',
     'motor',
@@ -20,11 +20,11 @@ export class PsatTabService {
   ];
 
   constructor() {
-    this.mainTab = new BehaviorSubject<string>('system-setup');
+    this.mainTab = new BehaviorSubject<string>('baseline');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
     this.calcTab = new BehaviorSubject<string>('achievable-efficiency');
     this.modifyConditionsTab = new BehaviorSubject<string>('pump-fluid');
-    this.stepTab = new BehaviorSubject<string>('system-basics');
+    this.stepTab = new BehaviorSubject<string>('baseline');
     this.showExportModal = new BehaviorSubject<boolean>(false);
   }
 
@@ -42,7 +42,7 @@ export class PsatTabService {
 
   back() {
     if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('system-setup')
+      this.mainTab.next('baseline')
     } else {
       let tmpStepTab: string = this.stepTab.getValue();
       let currentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab })

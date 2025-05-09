@@ -24,10 +24,6 @@ export class CashFlowDiagramComponent implements OnInit {
   @ViewChild("expandedChartDiv", { static: false })  expandedChartDiv: ElementRef;
   @ViewChild("panelChartDiv", { static: false })  panelChartDiv: ElementRef;
   
-  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-  tableString: any;
-
-
   
   expanded: boolean;
   hoverBtnExpand: boolean;
@@ -80,31 +76,27 @@ export class CashFlowDiagramComponent implements OnInit {
     return traces;
   }
 
-  updateTableString() {
-    this.tableString = this.copyTable.nativeElement.innerText;
-  }
-
   compileGraphData() {
     this.cashFlowData = new Array<any>();
     let annualSavings = new Array<any>();
     let operationCost = new Array<any>();
     let junkCost = new Array<any>();
     let salvageSavings = new Array<any>();
-    let fuelCost = new Array<any>();
+    let advancedCashflows = new Array<any>();
     let installationCost = new Array<any>();
     this.years = new Array<any>();
 
     annualSavings.push("Energy Savings");
     operationCost.push("Operation Cost");
     junkCost.push("Disposal Cost");
-    fuelCost.push("Fuel Cost");
+    advancedCashflows.push("Additional Cash Flow");
     installationCost.push("Installation Cost");
     salvageSavings.push("Salvage");
 
     for (let i: number = 0; i <= this.cashFlowForm.lifeYears; i++) {
       annualSavings.push(this.cashFlowForm.energySavings);
       operationCost.push(0 - this.cashFlowForm.operationCost);
-      fuelCost.push(0 - this.cashFlowForm.fuelCost);
+      advancedCashflows.push(this.cashFlowForm.advancedCashflows[i]);
       this.years.push(`${i}`);
       if (i === 0) {
         installationCost.push(0 - this.cashFlowForm.installationCost);
@@ -121,7 +113,7 @@ export class CashFlowDiagramComponent implements OnInit {
         junkCost.push(0);
       }
     }
-    this.cashFlowData.push(salvageSavings, fuelCost, annualSavings, operationCost, installationCost, junkCost);
+    this.cashFlowData.push(salvageSavings, advancedCashflows, annualSavings, operationCost, installationCost, junkCost);
   }
 
   expandChart() {

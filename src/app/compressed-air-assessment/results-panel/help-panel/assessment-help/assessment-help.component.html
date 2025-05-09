@@ -10,9 +10,31 @@
     <div class="my-2">
         <h6>
             <small class="text-muted">
-                MEASUR will automatically reallocate your system's flow to match the compressor ordering established in the baseline, either via automatic cascading (according to the full load pressure of each compressor) or sequenced within the system profile. 
+                MEASUR will automatically reallocate your system's flow to match the compressor ordering established in
+                the baseline, either via automatic cascading (according to the full load pressure of each compressor) or
+                sequenced within the system profile.
                 Each compressor is fully loaded before turning on the next in the sequence.
-                The <i>flow reallocation savings</i> is the savings that would be realized if the compressors were operating as described in the baseline.
+                The <i>flow reallocation savings</i> is the savings that would be realized if the compressors were
+                operating as described in the baseline.
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'flowReallocationImplementationCost'">
+        <h6>
+            Flow Reallocation Implementation Cost
+            <br>
+            <small class="text-muted">
+                Estimated cost to implement flow reallocation.
+                Flow reallocation is the first step before any EEM will be applied. The total of the flow for the system
+                (for each hour) is distributed to the compressors based on the ordering in the baseline.
+                For example, compressor 1 will be loaded 100%, the remaining flow would go to compressor 2, then so on
+                until the original flow is fully distributed. If the baseline utilizes a base/trim sequencing, the trim
+                compressor will be loaded last. This usually results in some sort of savings (though in some scenarios
+                could cost more energy if compressor 1 is the most inefficient or if there isn’t a shutdown timer).
+                These savings may reflect the need to re-sequence the system's controls with a vendor or technician to
+                avoid part-loaded compressors or installing advance system controls.
+                <hr>
             </small>
         </h6>
     </div>
@@ -25,6 +47,7 @@
     <app-use-automatic-sequencer-help *ngIf="focusedField == 'useAutomaticSequencer'">
     </app-use-automatic-sequencer-help>
     <app-reduce-run-time-help *ngIf="focusedField == 'reduceRuntime'"></app-reduce-run-time-help>
-    <app-add-receiver-volume-help *ngIf="focusedField == 'addPrimaryReceiverVolume'"></app-add-receiver-volume-help> 
-    <app-adjust-cascading-set-points-help *ngIf="focusedField == 'adjustCascadingSetPoints'"></app-adjust-cascading-set-points-help>  
+    <app-add-receiver-volume-help *ngIf="focusedField == 'addPrimaryReceiverVolume'"></app-add-receiver-volume-help>
+    <app-adjust-cascading-set-points-help
+        *ngIf="focusedField == 'adjustCascadingSetPoints'"></app-adjust-cascading-set-points-help>
 </div>

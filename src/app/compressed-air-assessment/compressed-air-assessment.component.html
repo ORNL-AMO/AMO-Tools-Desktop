@@ -5,7 +5,7 @@
   </div>
   <!--end header-->
 
-  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'system-setup' && setupTab != 'system-profile'">
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'baseline' && setupTab != 'system-profile'">
     <div class="nav-item" (click)="setSmallScreenTab('form')"
       [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
       <a class="nav-link" *ngIf="setupTab == 'system-basics'">Assessment Basics</a>
@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
+  <div *ngIf="mainTab == 'baseline'" class="assessment-container tab-content">
     <div class="assessment-panel-container lookup-form modification scroll-item" *ngIf="setupTab !='system-profile'"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}"
       [ngStyle]="{'height.px': containerHeight}">
@@ -82,7 +82,7 @@
 
 
   <!--footer-->
-  <div #footer id="compressedAirFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'system-setup'">
+  <div #footer id="compressedAirFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'baseline'">
     <div class="pull-left">
       <button class="btn btn-default" [disabled]="setupTab == 'system-basics'" (click)="back()">Back</button>
     </div>

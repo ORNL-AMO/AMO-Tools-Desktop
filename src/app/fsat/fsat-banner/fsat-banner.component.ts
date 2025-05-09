@@ -34,7 +34,7 @@ export class FsatBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str === 'system-setup' || str === 'calculators') {
+    if (str === 'baseline' || str === 'calculators') {
       this.fsatService.mainTab.next(str);
     } else if (this.assessment.fsat.setupDone) {
       this.fsatService.mainTab.next(str);
@@ -66,12 +66,12 @@ export class FsatBannerComponent implements OnInit {
     } else if (this.mainTab == 'diagram') {
       this.fsatService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
-      this.fsatService.mainTab.next('system-setup');
+      this.fsatService.mainTab.next('baseline');
     }
   }
 
   continue() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab == 'baseline') {
       this.fsatService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
       this.fsatService.mainTab.next('diagram');

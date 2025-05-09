@@ -63,7 +63,7 @@ const DiagramResults = () => {
   }, 0);
   // console.log('motorEnergyCosts', motorEnergyCosts);
 
-  const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy);
+  const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy).filter((heatEnergy: HeatEnergy) => heatEnergy !== undefined);
   const heatEnergyCosts = systemHeatEnergyData.reduce((total, heatEnergy) => {
     return total + getHeatEnergyCost(heatEnergy, 1);
   }, 0);

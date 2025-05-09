@@ -146,11 +146,11 @@ export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], 
       }
     });
 
-    componentFlows.sourceWater.total = getTotalFlowValue(componentFlows.sourceWater.flows) ?? 0;
-    componentFlows.recirculatedWater.total = getTotalFlowValue(componentFlows.recirculatedWater.flows) ?? 0;
-    componentFlows.dischargeWater.total = getTotalFlowValue(componentFlows.dischargeWater.flows) ?? 0;
-    const totalKnownLosses = system.userEnteredData.totalKnownLosses ?? system.userDiagramFlowOverrides.knownLosses;
-    componentFlows.knownLosses.total = totalKnownLosses ?? 0;
+    componentFlows.sourceWater.total = getTotalFlowValue(componentFlows.sourceWater.flows)?? 0;
+    componentFlows.recirculatedWater.total = getTotalFlowValue(componentFlows.recirculatedWater.flows)?? 0;
+    componentFlows.dischargeWater.total = getTotalFlowValue(componentFlows.dischargeWater.flows)?? 0;
+    const totalKnownLosses = system.userEnteredData.totalKnownLosses?? system.userDiagramFlowOverrides?.knownLosses;
+    componentFlows.knownLosses.total = totalKnownLosses?? 0;
     // componentFlows.knownLosses.total = system.userEnteredData.totalKnownLosses? system.userEnteredData.totalKnownLosses : getTotalFlowValue(componentFlows.knownLosses.flows);
     componentFlows.waterInProduct.total = system.userEnteredData.waterInProduct ?? 0;
     diagramWaterSystemFlows.push(componentFlows);

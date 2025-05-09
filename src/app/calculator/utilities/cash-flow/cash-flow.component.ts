@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { CashFlowForm, CashFlowResults } from './cash-flow';
+import { IRRBruteForceResults, CashFlowFinalResults, CashFlowForm, CashFlowOutputsAndResults, CashFlowResults, Outputs, WithoutTaxesOutputs } from './cash-flow';
 import { CashFlowService } from './cash-flow.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-    selector: 'app-cash-flow',
-    templateUrl: './cash-flow.component.html',
-    styleUrls: ['./cash-flow.component.css'],
-    standalone: false
+  selector: 'app-cash-flow',
+  templateUrl: './cash-flow.component.html',
+  styleUrls: ['./cash-flow.component.css'],
+  standalone: false
 })
 export class CashFlowComponent implements OnInit {
   @Input()
@@ -35,6 +35,7 @@ export class CashFlowComponent implements OnInit {
   headerHeight: number;
   toggleCalculate: boolean = true;
   tabSelect: string = 'results';
+  cashFlowOutputsAndResults: CashFlowOutputsAndResults;
   constructor(private cashFlowService: CashFlowService, private settingsDbService: SettingsDbService,
     private analyticsService: AnalyticsService) {
   }
@@ -43,13 +44,35 @@ export class CashFlowComponent implements OnInit {
     this.analyticsService.sendEvent('calculator-UTIL-cash-flow');
     if (!this.cashFlowService.inputData) {
       this.cashFlowForm = {
-        lifeYears: 10,
-        energySavings: 1000,
-        salvageInput: 3000,
-        installationCost: 10000,
-        operationCost: 500,
-        fuelCost: 500,
-        junkCost: 500
+        lifeYears: 15,
+        energySavings: 50000,
+        salvageInput: 50000,
+        installationCost: 250000,
+        operationCost: 5000,
+        otherCost: 0,
+        junkCost: 100000,
+        otherSavings: 0,
+        discountRate: 10,
+        includeTaxes: 0,
+        taxRate: 30,
+        depreciationMethod: 0,
+        advancedCashflows: [
+          0,
+          -1000,
+          5000,
+          -1000,
+          0,
+          4000,
+          0,
+          -1000,
+          5000,
+          -1000,
+          0,
+          4000,
+          0,
+          -1000,
+          5000
+        ]
       };
     } else {
       this.cashFlowForm = this.cashFlowService.inputData;
@@ -70,15 +93,37 @@ export class CashFlowComponent implements OnInit {
     this.cashFlowService.inputData = this.cashFlowForm;
   }
 
-  btnGenerateExample(){
+  btnGenerateExample() {
     this.cashFlowForm = {
-      lifeYears: 10,
-      energySavings: 1000,
-      salvageInput: 3000,
-      installationCost: 10000,
-      operationCost: 500,
-      fuelCost: 500,
-      junkCost: 500
+      lifeYears: 15,
+      energySavings: 50000,
+      salvageInput: 50000,
+      installationCost: 250000,
+      operationCost: 5000,
+      otherCost: 0,
+      junkCost: 100000,
+      otherSavings: 0,
+      discountRate: 10,
+      includeTaxes: 0,
+      taxRate: 30,
+      depreciationMethod: 0,
+      advancedCashflows: [
+        0,
+        -1000,
+        5000,
+        -1000,
+        0,
+        4000,
+        0,
+        -1000,
+        5000,
+        -1000,
+        0,
+        4000,
+        0,
+        -1000,
+        5000
+      ]
     };
     this.cashFlowService.inputData = this.cashFlowForm;
     this.calculate();
@@ -91,8 +136,14 @@ export class CashFlowComponent implements OnInit {
       salvageInput: 0,
       installationCost: 0,
       operationCost: 0,
-      fuelCost: 0,
-      junkCost: 0
+      otherCost: 0,
+      junkCost: 0,
+      otherSavings: 0,
+      discountRate: 0,
+      includeTaxes: 1,
+      taxRate: 0,
+      depreciationMethod: 0,
+      advancedCashflows: []
     };
     this.cashFlowService.inputData = this.cashFlowForm;
     this.calculate();
@@ -119,10 +170,30 @@ export class CashFlowComponent implements OnInit {
   calculate() {
     // Benefits/Cost Ratio
     this.cashFlowResults.results = ((this.cashFlowForm.energySavings * this.cashFlowForm.lifeYears) + this.cashFlowForm.salvageInput) /
-      (((this.cashFlowForm.installationCost + this.cashFlowForm.junkCost) + (this.cashFlowForm.operationCost + this.cashFlowForm.fuelCost)) * this.cashFlowForm.lifeYears);
+      (((this.cashFlowForm.installationCost + this.cashFlowForm.junkCost) + (this.cashFlowForm.operationCost + this.cashFlowForm.otherCost)) * this.cashFlowForm.lifeYears);
     // Payback
     this.cashFlowResults.payback = (this.cashFlowForm.installationCost * 12) / this.cashFlowForm.energySavings;
     this.toggleCalculate = !this.toggleCalculate;
+
+    let yearlyCashFlowOutputs: Outputs = this.cashFlowService.calculateYearlyCashFlowOutputs(this.cashFlowForm);
+    let presentValueCashFlowOutputs: Outputs = this.cashFlowService.calculatePresentValueCashFlowOutputs(this.cashFlowForm, yearlyCashFlowOutputs);
+    let bruteForceResults: Array<IRRBruteForceResults> = this.cashFlowService.calculateIRRBruteForceResults(this.cashFlowForm, yearlyCashFlowOutputs);
+    let withoutTaxesPresentValueOutputs: WithoutTaxesOutputs = this.cashFlowService.calculateWithoutTaxesPresentValueOutputs(presentValueCashFlowOutputs, bruteForceResults);
+    let withoutTaxesAnnualWorthOutputs: WithoutTaxesOutputs = this.cashFlowService.calculateWithoutTaxesAnnualWorthOutputs(this.cashFlowForm, withoutTaxesPresentValueOutputs, bruteForceResults);
+    let presentValueCashFlowResults: CashFlowResults = this.cashFlowService.calculatePresentValueCashFlowResults(withoutTaxesPresentValueOutputs);
+    let annualWorthCashFlowResults: CashFlowResults = this.cashFlowService.calculateAnnualWorthCashFlowResults(withoutTaxesAnnualWorthOutputs);
+    let cashFlowFinalResults: CashFlowFinalResults = this.cashFlowService.calculateCashFlowFinalResults(presentValueCashFlowResults, annualWorthCashFlowResults, withoutTaxesPresentValueOutputs, withoutTaxesAnnualWorthOutputs);
+
+    this.cashFlowOutputsAndResults = {
+      yearlyCashFlowOutputs: yearlyCashFlowOutputs,
+      presentValueCashFlowOutputs: presentValueCashFlowOutputs,
+      irrBruteForceResults: bruteForceResults,
+      withoutTaxesPresentValueOutputs: withoutTaxesPresentValueOutputs,
+      withoutTaxesAnnualWorthOutputs: withoutTaxesAnnualWorthOutputs,
+      presentValueCashFlowResults: presentValueCashFlowResults,
+      annualWorthCashFlowResults: annualWorthCashFlowResults,
+      cashFlowFinalResults: cashFlowFinalResults,
+    }
   }
 
   setSmallScreenTab(selectedTab: string) {

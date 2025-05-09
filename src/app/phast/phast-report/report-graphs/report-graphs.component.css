@@ -38,7 +38,7 @@ ul {
 
 
     .print-graphs-container {
-        page-break-before: always;
+        break-before: always;
         page-break-inside: avoid;
     }
 

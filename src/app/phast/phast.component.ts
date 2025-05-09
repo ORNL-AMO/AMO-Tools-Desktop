@@ -59,7 +59,7 @@ export class PhastComponent implements OnInit {
   tab1Status: string;
   tab2Status: string;
 
-  mainTab: string = 'system-setup';
+  mainTab: string = 'baseline';
   specTab: StepTab;
   isModalOpen: boolean = false;
   selectedLossTab: LossTab;
@@ -380,7 +380,7 @@ export class PhastComponent implements OnInit {
   }
   //logic for previous step
   lastStep() {
-    if (this.mainTab === 'system-setup') {
+    if (this.mainTab === 'baseline') {
       if (this.stepTab.step === 1) {
         if (this.specTab.back) {
           this.phastService.goToSpec(this.specTab.back);
@@ -399,12 +399,12 @@ export class PhastComponent implements OnInit {
         if (this.selectedLossTab.back) {
           this.lossesService.lossesTab.next(this.selectedLossTab.back);
         } else {
-          this.phastService.mainTab.next('system-setup');
+          this.phastService.mainTab.next('baseline');
         }
       } else {
-        this.phastService.mainTab.next('system-setup');
+        this.phastService.mainTab.next('baseline');
       }
-    } else if (this.mainTab === 'system-setup') {
+    } else if (this.mainTab === 'baseline') {
       if (this.stepTab.back) {
         this.phastService.goToStep(this.stepTab.back);
       }
@@ -531,7 +531,7 @@ export class PhastComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.phastService.mainTab.next('system-setup');
+      this.phastService.mainTab.next('baseline');
       this.phastService.stepTab.next(stepTabs[0]);
     }
     this.showUpdateUnitsModal = false;
@@ -551,7 +551,7 @@ export class PhastComponent implements OnInit {
     if (this._phast.losses) {
       this._phast = this.convertPhastService.convertExistingData(this._phast, this.oldSettings, this.settings);
       this.saveDb();
-      // Get updated settings passed down to system-basics
+      // Get updated settings passed down to baseline
       this.getSettings();
       this._phast.lossDataUnits = this.settings.unitsOfMeasure;
     }

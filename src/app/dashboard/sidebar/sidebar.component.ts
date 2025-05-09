@@ -10,6 +10,7 @@ import { ApplicationInstanceData, ApplicationInstanceDbService } from '../../ind
 import { MeasurSurveyService } from '../../shared/measur-survey/measur-survey.service';
 import { UpdateApplicationService } from '../../shared/update-application/update-application.service';
 import { ElectronService } from '../../electron/electron.service';
+import { EmailListSubscribeService } from '../../shared/subscribe-toast/email-list-subscribe.service';
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
@@ -36,12 +37,16 @@ export class SidebarComponent implements OnInit {
   expandedXWidth: number = 300;
   applicationInstanceDataSubscription: Subscription;
   showSurveyLink: boolean;
+  showSubscribeLink: boolean;
+  isEmailSubscriberSub: Subscription;
+
   constructor(private directoryDbService: DirectoryDbService,
     private exportService: ExportService,
     private updateApplicationService: UpdateApplicationService,
     private measurSurveyService: MeasurSurveyService,
     private applicationInstanceDbService: ApplicationInstanceDbService,
     private electronService: ElectronService,
+    private emailSubscribeService: EmailListSubscribeService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private cd: ChangeDetectorRef) { }
 
@@ -76,6 +81,10 @@ export class SidebarComponent implements OnInit {
       this.showSurveyLink = !applicationData?.isSurveyDone;
     });
 
+    this.isEmailSubscriberSub = this.emailSubscribeService.isSubscribed.subscribe((isSubscribed: boolean) => {
+      this.showSubscribeLink = !isSubscribed;
+    });
+
     this.collapseSidebarSub = this.dashboardService.collapseSidebar.subscribe(shouldCollapse => {
       if (shouldCollapse !== undefined) {
         this.collapseSidebar(shouldCollapse);
@@ -91,6 +100,7 @@ export class SidebarComponent implements OnInit {
     this.selectedDirectoryIdSub.unsubscribe();
     this.collapseSidebarSub.unsubscribe();
     this.applicationInstanceDataSubscription.unsubscribe();
+    this.isEmailSubscriberSub.unsubscribe();
   }
 
   downloadData() {
@@ -130,6 +140,10 @@ export class SidebarComponent implements OnInit {
 
   showSurvey() {
     this.measurSurveyService.showSurveyModal.next(true);
+  }
+
+  showSubscribeModal() {
+    this.emailSubscribeService.showModal.next(true);
   }
 
   initSidebarView() {

@@ -11,7 +11,7 @@ import { WaterUsingSystemService } from './water-using-system/water-using-system
 import { WaterSystemComponentService } from './water-system-component.service';
 import { Edge, Node } from '@xyflow/react';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { WaterAssessment, WaterUsingSystem, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, setWaterUsingSystemFlows, getIntakeSource, getDischargeOutlet, EdgeFlowData, getWasteWaterTreatmentComponent } from 'process-flow-lib';
+import { WaterAssessment, WaterUsingSystem, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, setWaterUsingSystemFlows, getIntakeSource, getDischargeOutlet, EdgeFlowData, getWasteWaterTreatmentComponent, getWaterTreatmentComponent } from 'process-flow-lib';
 
 @Injectable()
 export class UpdateAssessmentFromDiagramService {
@@ -123,7 +123,7 @@ export class UpdateAssessmentFromDiagramService {
       if (waterProcessComponent.processComponentType === 'water-treatment') {
         let waterTreatment: WaterTreatment;
         if (!waterProcessComponent.createdByAssessment) {
-          waterTreatment = this.waterComponentService.addWaterTreatmentComponent(waterProcessComponent);
+          waterTreatment = getWaterTreatmentComponent(waterProcessComponent as WaterTreatment);
         } else {
           waterTreatment = waterProcessComponent as WaterTreatment;
         }

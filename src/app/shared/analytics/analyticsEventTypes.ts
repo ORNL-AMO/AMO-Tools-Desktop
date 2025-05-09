@@ -115,5 +115,6 @@ export type AnalyticsEventString = 'page_view' |
     'sent-email-PUMP-inventory'|
     'sent-email-MOTOR-inventory'|
     'sent-email-WW'|
-    'sent-email-CA';
+    'sent-email-CA'|
+    'email-list-subscribe';
 

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import _ from 'lodash';
-import { WaterUsingSystem, WaterAssessment, WaterTreatment, waterTreatmentTypeOptions, getWaterTreatmentComponent } from 'process-flow-lib';
+import { WaterUsingSystem, WaterAssessment, WaterTreatment, waterTreatmentTypeOptions, getNewWaterTreatmentComponent } from 'process-flow-lib';
 import { Subscription } from 'rxjs';
 import { copyObject } from '../../../shared/helperFunctions';
 import { WaterAssessmentService } from '../../water-assessment.service';
@@ -40,7 +40,6 @@ export class SystemTreatmentComponent {
   ngOnInit() {
     this.settings = this.waterAssessmentService.settings.getValue();
     this.waterTreatmentOptions = copyObject(waterTreatmentTypeOptions);
-        
     this.selectedComponentSub = this.waterSystemComponentService.selectedInSystemTreatment.subscribe(selectedComponent => {
         this.selectedWaterTreatment = selectedComponent as WaterTreatment;
         this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
@@ -54,13 +53,16 @@ export class SystemTreatmentComponent {
   }
 
   ngOnDestroy() {
+    this.waterSystemComponentService.selectedInSystemTreatment.next(undefined);
     this.selectedComponentSub.unsubscribe();
   }
 
   setDefaultSelectedComponent() {
     if (this.waterSystem.inSystemTreatment.length > 0) {
       if (!this.selectedWaterTreatment) {
-        let lastModified: WaterTreatment = _.maxBy(this.waterSystem.inSystemTreatment, 'modifiedDate');
+        // todo broken
+        // let lastModified: WaterTreatment = _.maxBy(this.waterSystem.inSystemTreatment, 'modifiedDate');
+        let lastModified = this.waterSystem.inSystemTreatment[0];
         this.waterSystemComponentService.selectedInSystemTreatment.next(lastModified);
       }
     } else {
@@ -82,7 +84,7 @@ export class SystemTreatmentComponent {
   }
 
   addWaterTreatment() {
-    let newWaterTreatment = getWaterTreatmentComponent(undefined, false, true);
+    let newWaterTreatment = getNewWaterTreatmentComponent(false, true);
     this.waterSystem.inSystemTreatment ? this.waterSystem.inSystemTreatment.push(newWaterTreatment) : this.waterSystem.inSystemTreatment = [newWaterTreatment];
     this.emitInSystemUpdate.emit(this.waterSystem);
     this.waterSystemComponentService.selectedInSystemTreatment.next(newWaterTreatment);

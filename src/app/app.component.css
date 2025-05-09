@@ -1645,7 +1645,7 @@ No Data Messaging
 
   /* debug trying something */
   .print-assessment-page {
-    page-break-before: always;
+    break-before: always;
     page-break-inside: avoid;
   }
 
@@ -1681,7 +1681,7 @@ No Data Messaging
   }
 
   .report-in-rollup {
-    page-break-before: always;
+    break-before: always;
   }
 
   .report-cover {
@@ -1720,7 +1720,7 @@ No Data Messaging
   }
 
   .break-before {
-    page-break-before: always;
+    break-before: always;
   }
 
   /* .output-summary table td {

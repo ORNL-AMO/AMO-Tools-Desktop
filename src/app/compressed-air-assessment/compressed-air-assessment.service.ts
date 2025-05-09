@@ -39,7 +39,7 @@ export class CompressedAirAssessmentService {
   constructor(private systemInformationFormService: SystemInformationFormService, private convertUnitsService: ConvertUnitsService, private inventoryService: InventoryService,
     private dayTypeService: DayTypeService) {
     this.settings = new BehaviorSubject<Settings>(undefined);
-    this.mainTab = new BehaviorSubject<string>('system-setup');
+    this.mainTab = new BehaviorSubject<string>('baseline');
     this.setupTab = new BehaviorSubject<string>('system-basics');
     this.focusedField = new BehaviorSubject<string>('default');
     this.helpTextField = new BehaviorSubject<string>('default');
@@ -362,12 +362,12 @@ export class CompressedAirAssessmentService {
 
   back() {
     let tmpSetupTab: string = this.setupTab.getValue();
-    if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'system-setup') {
+    if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'baseline') {
       let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
       let nextTab: string = this.setupTabs[assessmentTabIndex - 1];
       this.setupTab.next(nextTab);
     } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('system-setup');
+      this.mainTab.next('baseline');
     }
   }
 

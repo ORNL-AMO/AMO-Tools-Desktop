@@ -347,6 +347,40 @@ export class TreasureHuntPptService {
         }
         slideTeamTopOpps.addTable(rows, { x: 0.14, y: 2.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
 
+        let slideTeam3TopOppsCostSaving = pptx.addSlide({ masterName: "Title Only" });
+        slideTeam3TopOppsCostSaving.addText('Team ' + team.team + ' - Top 3 Opportunities by Total Cost Saving', {placeholder: 'title'});
+        slideTeam3TopOppsCostSaving.addText(
+          "additional notes here",
+          { x: 2.17, y: 6, w: 9, h: 1, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+        );
+        let teamTop3Opportunities: OpportunitySummary[] = [];
+        treasureHuntResults.opportunitySummaries.forEach(teamOpp => {
+          if (teamOpp.team == team.team) {
+            teamTop3Opportunities.push(teamOpp);
+          }
+        });
+        teamTop3Opportunities = _.orderBy(teamTop3Opportunities, 'costSavings', 'asc');
+        let top3Rows = [];
+        top3Rows.push([
+          { text: "Opportunity Name", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Energy Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Unit", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Cost Saving", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Material Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Labor Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Other Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Total Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
+        ]);
+        for (let i = 0; i < 3; i++) {
+          let x: OpportunitySummary = teamTop3Opportunities[i];
+          if (x) {
+            top3Rows = this.treasureHuntPptTableService.getOpportunityTableRows(top3Rows, x, settings);
+          }
+        }
+        slideTeam3TopOppsCostSaving.addTable(top3Rows, { x: 0.14, y: 2.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
+      
         let slideTeamSummary = pptx.addSlide({ masterName: "Two Content" });
         slideTeamSummary.addText('Team ' + team.team, {placeholder: 'title'});
         slideTeamSummary.addText('Team Members:', {placeholder: 'body1'});
@@ -401,6 +435,41 @@ export class TreasureHuntPptService {
           }
         }
         slideTeamAllOpps.addTable(rows, { x: 0.14, y: 1.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
+
+
+        let slideTeamOppsCostSaving = pptx.addSlide({ masterName: "Title Only" });
+        slideTeamOppsCostSaving.addText('Team ' + team.team + ' - Top Opportunities by Total Cost Saving', {placeholder: 'title'});
+        slideTeamOppsCostSaving.addText(
+          "additional notes here",
+          { x: 2.17, y: 6, w: 9, h: 1, margin: .25, align: 'left', color: 'ABABAB', fontSize: 18, fontFace: 'Arial (Body)', valign: 'top', bullet: true }
+        );
+        let teamOpportunitiesCostSaving: OpportunitySummary[] = [];
+        treasureHuntResults.opportunitySummaries.forEach(teamOpp => {
+          if (teamOpp.team == team.team) {
+            teamOpportunitiesCostSaving.push(teamOpp);
+          }
+        });
+        teamOpportunitiesCostSaving = _.orderBy(teamOpportunitiesCostSaving, 'costSavings', 'asc');
+        let costSavingRows = [];
+        costSavingRows.push([
+          { text: "Opportunity Name", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Utility", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Energy Savings", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Unit", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Cost Saving", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Material Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Labor Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Other Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Total Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
+          { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
+        ]);
+        
+        teamOpportunitiesCostSaving.forEach(teamOpp => {
+          costSavingRows = this.treasureHuntPptTableService.getOpportunityTableRows(costSavingRows, teamOpp, settings);
+        });
+
+        slideTeamOppsCostSaving.addTable(costSavingRows, { x: 0.14, y: 1.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
+
 
         let slideTeamBestPractices = pptx.addSlide({ masterName: "Title and Content" });
         slideTeamBestPractices.addText('Team ' + team.team + ' - Best Practices', {placeholder: 'title'});

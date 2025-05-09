@@ -1,7 +1,7 @@
-<nav class="hide-print d-none d-lg-block" *ngIf="mainTab == 'system-setup'">
+<nav class="hide-print d-none d-lg-block" *ngIf="mainTab == 'baseline'">
   <div class="d-flex tabs subtabs progress-tabs ssmt flex-wrap">
     <div class="fixed-tab-size" [ngClass]="settingsStatus">
-      <a (click)="changeStepTab('system-basics')">
+      <a (click)="changeStepTab('baseline')">
         <span (mouseenter)="showTooltip(settingsBadge)" (mouseleave)="hideTooltip(settingsBadge)" class="step-number">1</span> Assessment Settings</a>
         <app-tabs-tooltip [badgeClass]="settingsStatus[0]" [reveal]="settingsBadge.display" [display]="settingsBadge.hover"></app-tabs-tooltip>
     </div>
@@ -28,14 +28,14 @@
   </div>
 </nav>
 
-<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs ssmt flex-wrap flex-fill" *ngIf="mainTab == 'system-setup'">
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs ssmt flex-wrap flex-fill" *ngIf="mainTab == 'baseline'">
   <ul class="pagination d-flex justify-content-between tabs ssmt subtabs progress-tabs flex-fill">
-    <li class="page-item" [ngClass]="{'disabled': stepTab == 'system-basics'}">
-      <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': stepTab == 'system-basics'}">
+    <li class="page-item" [ngClass]="{'disabled': stepTab == 'baseline'}">
+      <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': stepTab == 'baseline'}">
         <span class="fa fa-chevron-left"></span></a>
     </li>
-    <li class="page-item" [ngClass]="{'active': stepTab == 'system-basics'}" *ngIf="stepTab == 'system-basics'">
-      <a class="nav-link small" (click)="changeStepTab('system-basics')" [ngClass]="settingsStatus">
+    <li class="page-item" [ngClass]="{'active': stepTab == 'baseline'}" *ngIf="stepTab == 'baseline'">
+      <a class="nav-link small" (click)="changeStepTab('baseline')" [ngClass]="settingsStatus">
         <span class="step-number">1</span>Assessment Settings</a>
     </li>
     <li class="page-item" [ngClass]="{'active': stepTab == 'operations'}" *ngIf="stepTab == 'operations'">
@@ -66,16 +66,12 @@
 
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
   <div class="d-none d-md-flex tabs subtabs ssmt mr-auto">
-    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
+    <div class="assessment-tab p-2" [ngClass]="{'active': assessmentTab == 'explore-opportunities'}">
       <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
-        <br>
-        <span class="help-text ssmt-view">Novice View</span>
       </a>
     </div>
-    <div class="assessment-tab" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
-      <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
-        <br>
-        <span class="help-text ssmt-view">Expert View</span>
+    <div class="assessment-tab p-2" [ngClass]="{'active': assessmentTab == 'modify-conditions'}">
+      <a (click)="changeAssessmentTab('modify-conditions')">Expert View
       </a>
     </div>
   </div>
@@ -100,18 +96,14 @@
   </div>
 
   <div *ngIf="!tabsCollapsed" class="d-flex d-md-none flex-fill align-items-center justify-content-center tabs subtabs ssmt" [ngClass]="{'collapse': tabsCollapsed}">
-    <div class="assessment-tab flex-fill"
+    <div class="assessment-tab flex-fill p-2"
       [ngClass]="{'active': assessmentTab == 'explore-opportunities', 'collapse': tabsCollapsed}">
       <a (click)="changeAssessmentTab('explore-opportunities')">Explore Opportunities
-        <br>
-        <span class="help-text ssmt-view">Novice View</span>
       </a>
     </div>
-    <div class="assessment-tab flex-fill"
+    <div class="assessment-tab flex-fill p-2"
       [ngClass]="{'active': assessmentTab == 'modify-conditions', 'collapse': tabsCollapsed}">
-      <a (click)="changeAssessmentTab('modify-conditions')">Modify All Conditions
-        <br>
-        <span class="help-text ssmt-view">Expert View</span>
+      <a (click)="changeAssessmentTab('modify-conditions')">Expert View
       </a>
     </div>
   </div>
@@ -149,7 +141,7 @@
 </div>
 
 
-<nav class="hide-print w-100" *ngIf="assessmentTab == 'modify-conditions' && mainTab =='assessment' || stepTab == 'steam-model' && mainTab == 'system-setup'">
+<nav class="hide-print w-100" *ngIf="assessmentTab == 'modify-conditions' && mainTab =='assessment' || stepTab == 'steam-model' && mainTab == 'baseline'">
   <app-modify-conditions-tabs [settings]="settings"></app-modify-conditions-tabs>
 </nav>
 
