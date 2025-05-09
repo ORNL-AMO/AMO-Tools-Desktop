@@ -3,6 +3,10 @@
     <div class="form-group">
         <label>Compressor Name</label>
         <input class="form-control" type="text" id="name" formControlName="name" (input)="save()">
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.name.invalid && !form.controls.name.pristine">
+            <span *ngIf="form.controls.name.errors.required">Value Required</span>
+        </span>
     </div>
     <!--description-->
     <div class="form-group">
