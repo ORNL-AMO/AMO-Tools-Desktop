@@ -50,14 +50,14 @@
     </div>
 
     <div class="text-center small help-text" *ngIf="psatForm.controls.pumpType.value == 11 && !baseline">
-      The efficiency of your pump has been calculated based on your system setup. Either directly modify your
+      The efficiency of your pump has been calculated based on your baseline. Either directly modify your
       efficiency or click <strong>"Optimize Pump"</strong> to estimate your pump efficiency based on a different pump
       type.
     </div>
     <div class="text-center small help-text" *ngIf="psatForm.controls.pumpType.value != 11 && !baseline">
       The efficiency of your pump has been calculated based on your <strong>flow rate</strong> and selected <strong>pump
         type</strong>. Click <strong>"Known Efficiency"</strong>
-      to use the efficiency calculated by your system setup.
+      to use the efficiency calculated by your baseline.
     </div>
 
     <div class="form-group"

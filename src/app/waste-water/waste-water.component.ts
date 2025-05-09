@@ -102,7 +102,7 @@ export class WasteWaterComponent implements OnInit {
 
     this.mainTabSub = this.wasteWaterService.mainTab.subscribe(val => {
       this.mainTab = val;
-      if (this.mainTab == 'system-setup') {
+      if (this.mainTab == 'baseline') {
         this.compareService.setWasteWaterDifferent(this.assessment.wasteWater.baselineData);
       }
       this.getContainerHeight();
@@ -146,7 +146,7 @@ export class WasteWaterComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.wasteWaterService.setupTab.next('system-basics');
+    this.wasteWaterService.setupTab.next('baseline');
     this.mainTabSub.unsubscribe();
     this.setupTabSub.unsubscribe();
     this.wasteWaterSub.unsubscribe();
@@ -220,7 +220,7 @@ export class WasteWaterComponent implements OnInit {
     let operationsForm: UntypedFormGroup = this.wasteWaterOperationsService.getFormFromObj(this.assessment.wasteWater.baselineData.operations);
     let aeratorPerformanceForm: UntypedFormGroup = this.aeratorPerformanceFormService.getFormFromObj(this.assessment.wasteWater.baselineData.aeratorPerformanceData);
     let activatedSludgeForm: UntypedFormGroup = this.activatedSludgeFormService.getFormFromObj(this.assessment.wasteWater.baselineData.activatedSludgeData);
-    if (this.setupTab == 'system-basics') {
+    if (this.setupTab == 'baseline') {
       this.disableNext = systemBasicsForm.valid;
       return systemBasicsForm.valid;
     } else if (this.setupTab == 'operations') {
@@ -236,7 +236,7 @@ export class WasteWaterComponent implements OnInit {
   }
 
   continue() {
-    if (this.setupTab == 'system-basics') {
+    if (this.setupTab == 'baseline') {
       this.wasteWaterService.setupTab.next('operations');
     } else if (this.setupTab == 'operations') {
       this.wasteWaterService.setupTab.next('activated-sludge');
@@ -249,7 +249,7 @@ export class WasteWaterComponent implements OnInit {
 
   back() {
     if (this.setupTab == 'activated-sludge') {
-      this.wasteWaterService.setupTab.next('system-basics');
+      this.wasteWaterService.setupTab.next('baseline');
     } else if (this.setupTab == 'aerator-performance') {
       this.wasteWaterService.setupTab.next('activated-sludge');
     }
@@ -263,8 +263,8 @@ export class WasteWaterComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.wasteWaterService.mainTab.next('system-setup');
-      this.wasteWaterService.setupTab.next('system-basics');
+      this.wasteWaterService.mainTab.next('baseline');
+      this.wasteWaterService.setupTab.next('baseline');
     }
     this.showUpdateUnitsModal = false;
     this.cd.detectChanges();

@@ -28,12 +28,12 @@ export class PsatService {
   modalOpen: BehaviorSubject<boolean>;
   constructor(
     private pumpsSuiteApiService: PumpsSuiteApiService,
-    private convertUnitsService: ConvertUnitsService, 
-    private assessmentCo2Service: AssessmentCo2SavingsService, 
+    private convertUnitsService: ConvertUnitsService,
+    private assessmentCo2Service: AssessmentCo2SavingsService,
     private pumpFluidService: PumpFluidService,
-    private motorService: MotorService, 
+    private motorService: MotorService,
     private fieldDataService: FieldDataService
-    ) {
+  ) {
     this.getResults = new BehaviorSubject<boolean>(true);
     this.modalOpen = new BehaviorSubject<boolean>(true);
 
@@ -65,7 +65,7 @@ export class PsatService {
     if (settings.powerMeasurement != 'hp') {
       psatOutputs.motor_rated_power = this.convertUnitsService.value(psatOutputs.motor_rated_power).from('hp').to(settings.powerMeasurement);
       psatOutputs.motor_shaft_power = this.convertUnitsService.value(psatOutputs.motor_shaft_power).from('hp').to(settings.powerMeasurement);
-      psatOutputs.pump_shaft_power = this.convertUnitsService.value(psatOutputs.pump_shaft_power).from('hp').to(settings.powerMeasurement);
+      psatOutputs.mover_shaft_power = this.convertUnitsService.value(psatOutputs.mover_shaft_power).from('hp').to(settings.powerMeasurement);
     }
     if (settings.currency !== "$") {
       psatOutputs.annual_cost = this.convertUnitsService.value(psatOutputs.annual_cost).from('$').to(settings.currency);
@@ -114,7 +114,7 @@ export class PsatService {
     let baselineOutputs: PsatOutputs = this.resultsExisting(psat.inputs, settings);
     baselineOutputs.annual_energy = this.convertUnitsService.value(baselineOutputs.annual_energy).from('MWh').to('kWh');
     baselineOutputs.annual_energy = this.convertUnitsService.roundVal(baselineOutputs.annual_energy, 0)
-    
+
     energyOptions.baseline = {
       name: psat.name,
       annualEnergy: baselineOutputs.annual_energy,
@@ -137,7 +137,7 @@ export class PsatService {
         let modificationOutputs = this.resultsModified(modification.psat.inputs, settings);
         modificationOutputs.annual_energy = this.convertUnitsService.value(modificationOutputs.annual_energy).from('MWh').to('kWh');
         modificationOutputs.annual_energy = this.convertUnitsService.roundVal(modificationOutputs.annual_energy, 0);
-        
+
         energyOptions.modifications.push({
           name: modification.psat.name,
           annualEnergy: modificationOutputs.annual_energy,
@@ -157,20 +157,20 @@ export class PsatService {
             modificationId: modification.id,
             energies: [modificationEnergy]
           })
-        });
-        integratedAssessment.modificationEnergyUseItems = modificationEnergyOptions;
+      });
+      integratedAssessment.modificationEnergyUseItems = modificationEnergyOptions;
     }
 
     integratedAssessment.assessmentType = 'PSAT';
     integratedAssessment.baselineEnergyUseItems = [baselineEnergy];
-    integratedAssessment.energyOptions = energyOptions; 
+    integratedAssessment.energyOptions = energyOptions;
     integratedAssessment.thEquipmentType = 'pump';
     integratedAssessment.navigation = {
       queryParams: undefined,
       url: '/psat/' + integratedAssessment.assessment.id
     }
   }
-  
+
 
   setCo2SavingsEmissionsResult(psatInputs: PsatInputs, psatOutputs: PsatOutputs, settings: Settings): PsatOutputs {
     if (psatInputs.co2SavingsData) {
@@ -190,7 +190,7 @@ export class PsatService {
       pump_efficiency: 0,
       motor_rated_power: 0,
       motor_shaft_power: 0,
-      pump_shaft_power: 0,
+      mover_shaft_power: 0,
       motor_efficiency: 0,
       motor_power_factor: 0,
       motor_current: 0,
@@ -210,7 +210,7 @@ export class PsatService {
       pump_efficiency: this.roundVal(psatResults.pump_efficiency, 2),
       motor_rated_power: this.roundVal(psatResults.motor_rated_power, 2),
       motor_shaft_power: this.roundVal(psatResults.motor_shaft_power, 2),
-      pump_shaft_power: this.roundVal(psatResults.pump_shaft_power, 2),
+      mover_shaft_power: this.roundVal(psatResults.mover_shaft_power, 2),
       motor_efficiency: this.roundVal(psatResults.motor_efficiency, 2),
       motor_power_factor: this.roundVal(psatResults.motor_power_factor, 2),
       motor_current: this.roundVal(psatResults.motor_current, 2),
@@ -398,16 +398,24 @@ export class PsatService {
   pumpEfficiency(
     pumpStyle: number,
     flowRate: number,
+    rpm: number,
+    kinematicViscosity: number,
+    stageCount: number,
+    head: number,
+    pumpEfficiencyInput: number,
     settings: Settings
   ) {
     //flow rate = 'gpm'
     if (settings.flowMeasurement != 'gpm') {
       flowRate = this.convertUnitsService.value(flowRate).from(settings.flowMeasurement).to('gpm');
     }
-    let pumpEfficiency: { average: number, max: number } = this.pumpsSuiteApiService.pumpEfficiency(pumpStyle, flowRate);
+    if (settings.distanceMeasurement !== 'ft') {
+      head = this.convertUnitsService.value(head).from(settings.distanceMeasurement).to('ft');
+    }
+    let pumpEfficiency: { average: number, max: number } = this.pumpsSuiteApiService.pumpEfficiency(pumpStyle, flowRate, rpm, kinematicViscosity, stageCount, head, pumpEfficiencyInput);
     let results = {
-      average: this.roundVal(pumpEfficiency.average, 2),
-      max: this.roundVal(pumpEfficiency.max, 2)
+      average: this.roundVal(pumpEfficiency.average, 4),
+      max: this.roundVal(pumpEfficiency.max, 4)
     }
     return results;
   }
@@ -452,12 +460,12 @@ export class PsatService {
     return this.roundVal(motorEfficiency, 2);
   }
 
-   /**
- * Getet Motor efficiency (nema without hard coded load factor)
- *
- * @param {number} efficiency - as percent
- * @returns {number} motorEfficiency (as percent)
- */
+  /**
+* Getet Motor efficiency (nema without hard coded load factor)
+*
+* @param {number} efficiency - as percent
+* @returns {number} motorEfficiency (as percent)
+*/
   motorEfficiency(
     lineFreq: number,
     motorRPM: number,

@@ -32,7 +32,7 @@ export const stepTabs: Array<StepTab> = [
 export const specTabs: Array<StepTab> = [
     {
         step: 1,
-        tabName: 'System Basics'
+        tabName: 'Baseline'
     }
     // {
     //     step: 2,

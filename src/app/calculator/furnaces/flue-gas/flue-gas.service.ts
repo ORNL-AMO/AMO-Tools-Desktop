@@ -56,6 +56,8 @@ export class FlueGasService {
     if (modificationFlueGas && modificationEnergyData) {
       let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, modificationEnergyData, settings, inModal, isStandAlone);
       output.modification = modificationResults;
+      let baselineHeatInput: number = baselineFlueGas.flueGasType === 'By Volume' ? baselineFlueGas.flueGasByVolume.heatInput : baselineFlueGas.flueGasByMass.heatInput;
+      output.modification.heatInput = (output.baseline.availableHeat / output.modification.availableHeat) * baselineHeatInput;
       
       output.fuelSavings = baselineResults.fuelUse - modificationResults.fuelUse;
       output.costSavings = baselineResults.fuelCost - modificationResults.fuelCost;
@@ -72,6 +74,7 @@ export class FlueGasService {
       calculatedFlueGasO2: 0,
       calculatedExcessAir: 0,
       availableHeat: 0,
+      heatInput: 0,
       availableHeatError: undefined,
       flueGasLosses: 0,
       fuelCost: 0,

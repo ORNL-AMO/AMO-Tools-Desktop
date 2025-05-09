@@ -6,6 +6,7 @@ import { MeasurSurveyService } from '../../measur-survey/measur-survey.service';
     selector: 'app-survey-toast',
     templateUrl: './survey-toast.component.html',
     styleUrl: './survey-toast.component.css',
+    standalone: false,
     animations: [
         trigger('toast', [
             state('show', style({ top: '0px' })),
@@ -14,7 +15,6 @@ import { MeasurSurveyService } from '../../measur-survey/measur-survey.service';
             transition('show => hide', animate('.5s ease'))
         ])
     ],
-    standalone: false
 })
 export class SurveyToastComponent {
   @Output('emitCloseToast')
@@ -24,7 +24,8 @@ export class SurveyToastComponent {
   constructor(private cd: ChangeDetectorRef, 
     private measurSurveyService: MeasurSurveyService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   showSurvey() {
     this.measurSurveyService.showSurveyModal.next(true);

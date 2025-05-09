@@ -1,0 +1,57 @@
+<div bsModal #subscribeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="deleteModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header p-2">
+          <span class="card-header-text">
+            Stay Up to Date!
+          </span>
+          <button class="close" aria-label="Close" (click)="close()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="card-block p-3">
+
+          <div class="card-body" *ngIf="!submittedStatus || submittedStatus === 'error'">
+            <p class="card-text mb-2">
+              Subscribe for MEASUR news on releases, webinars, and training events.
+            </p>
+            <form class="card-text my-2 d-flex w-100">
+                <input name="subscriberEmail" class="form-control" type="text" [(ngModel)]="subscriberEmail"
+                    id="subscriberEmail" (input)="checkValid()">
+              <button class="btn btn-primary btn-sm ml-2" (click)="submitSubscriber()" type="button">Subscribe</button>
+            </form>
+            <div class="alert-danger px-4 py-2 mx-auto" *ngIf="invalidEmailMessage">{{ invalidEmailMessage }}</div>
+          </div>
+
+          <div *ngIf="submittedStatus === 'success'" class="card-body alert-success card-text p-3 text-center">
+            <span>A confirmation email has been sent to {{subscriberEmail}}.</span><br><br>
+            Please <span class="bold">click the opt-in link in the email to complete your subscription</span>. If you don't see the email within a few minutes, please check your spam or junk folder.
+        </div>
+
+          <div *ngIf="submittedStatus === 'error'" class="card-body alert-danger small mx-2 px-3 py-2">
+            <span>Please verify your network connection and try again.</span>
+          </div>
+
+          <div class="card-body" *ngIf="submittedStatus === 'sending'">
+            <div class="spinner-overlay align-items-center w-100 text-center">
+              <div class="spinner mt-2 w-100">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+
+        <div class="modal-footer p-2 d-flex flex-row justify-content-between">
+            <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="privacyNotice()">Privacy
+              Notice</button>
+            <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

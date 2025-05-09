@@ -89,7 +89,6 @@ export const energy = {
       }
       , to_anchor: 4184
     }
-
     , kgce: {
       name: {
         singular: 'Kilogram of coal equivalent '
@@ -105,7 +104,31 @@ export const energy = {
         display: '(kgoe)'
       }
       , to_anchor: 41868000
-    }
+    },
+    TJ: {
+      name: {
+        singular: 'Terajoule'
+        , plural: 'Terajoules',
+        display: '(TJ)'
+      }
+      , to_anchor: 1000000000000
+    },
+    PJ: {
+      name: {
+        singular: 'Petajoule'
+        , plural: 'Petajoules',
+        display: '(PJ)'
+      }
+      , to_anchor: 1000000000000000
+    },
+    EJ: {
+      name: {
+        singular: 'Exajoule'
+        , plural: 'Exajoules',
+        display: '(EJ)'
+      }
+      , to_anchor: 1000000000000000000
+    },
   },
   imperial: {
     Btu: {
@@ -123,6 +146,38 @@ export const energy = {
         display: '(MMBtu)'
       }
       , to_anchor: 1000000
+    },
+    BBtu: {
+      name: {
+        singular: 'Billion British Thermal Units'
+        , plural: 'Billions British Thermal Units',
+        display: '(BBtu)'
+      }
+      , to_anchor: 1000000000
+    }
+    , TBtu: {
+      name: {
+        singular: 'Trillion British Thermal Units'
+        , plural: 'Trillions British Thermal Units',
+        display: '(TBtu)'
+      }
+      , to_anchor: 1000000000000
+    }
+    , QBtu: {
+      name: {
+        singular: 'Quadrillion British Thermal Units'
+        , plural: 'Quadrillions British Thermal Units',
+        display: '(QBtu)'
+      }
+      , to_anchor: 1_000_000_000_000_000
+    }
+    , quads: {
+      name: {
+        singular: 'Quadrillion British Thermal Units'
+        , plural: 'Quadrillions British Thermal Units',
+        display: '(quads)'
+      }
+      , to_anchor: 1_000_000_000_000_000
     }
   }
   , _anchors: {

@@ -148,6 +148,17 @@
 					<!-- Mod results -->
 					<div class="d-flex flex-column mt-3 mb-2">
 						<div class="form-group m-0">
+							<label class="bold">Fuel Consumption</label>
+							<div *ngIf="output.modification.heatInput" class="text-center bold small">
+								{{output.modification.heatInput | number:'0.1-2'}} 
+								<span><span
+									[innerHTML]="settings.energyResultUnit | settingsLabel"></span>/hr</span>
+							</div>
+							<div *ngIf="!output.modification.heatInput" class="text-center bold small">
+								&mdash; &mdash;
+							</div>
+						</div>
+						<div class="form-group m-0">
 							<label class="bold">O<sub>2</sub> In Flue Gas</label>
 							<div *ngIf="output.modification.calculatedFlueGasO2" class="text-center bold small">
 								{{output.modification.calculatedFlueGasO2 | number:'0.1-2'}} %

@@ -355,7 +355,7 @@ export class FsatComponent implements OnInit {
   }
 
   getCanContinue() {
-    if (this.stepTab === 'system-basics' ) {
+    if (this.stepTab === 'baseline' ) {
       return true;
     } else if (this.stepTab === 'fan-operations'){
       let tmpForm = this.fsatOperationsService.getFormFromObj(this._fsat.fsatOperations);
@@ -463,8 +463,8 @@ export class FsatComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.fsatService.mainTab.next('system-setup');
-      this.fsatService.stepTab.next('system-basics');
+      this.fsatService.mainTab.next('baseline');
+      this.fsatService.stepTab.next('baseline');
     }
     this.showUpdateUnitsModal = false;
     this.cd.detectChanges();

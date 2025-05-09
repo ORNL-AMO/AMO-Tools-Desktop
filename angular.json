@@ -32,7 +32,7 @@
               "src/favicon.ico",
               {
                 "glob": "**/*",
-                "input": "./node_modules/amo-tools-suite/bin/",
+                "input": "./node_modules/measur-tools-suite/bin/",
                 "output": "."
               },
               {
@@ -180,7 +180,7 @@
               "src/favicon.ico",
               {
                 "glob": "**/*",
-                "input": "./node_modules/amo-tools-suite/bin/",
+                "input": "./node_modules/measur-tools-suite/bin/",
                 "output": "./assets/"
               },
               "src/manifest.webmanifest"

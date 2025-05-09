@@ -4,10 +4,10 @@
     <app-ssmt-tabs [settings]="settings" [ssmt]="_ssmt"></app-ssmt-tabs>
   </div>
 
-  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'system-setup'">
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'baseline'">
     <div class="nav-item" (click)="setSmallScreenTab('form')"
       [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
-      <a class="nav-link" *ngIf="stepTab == 'system-basics'">Assessment Settings</a>
+      <a class="nav-link" *ngIf="stepTab == 'baseline'">Assessment Settings</a>
       <a class="nav-link" *ngIf="stepTab == 'operations'">Operations</a>
       <a class="nav-link" *ngIf="stepTab == 'boiler'">Boiler</a>
       <a class="nav-link" *ngIf="stepTab == 'header'">Header</a>
@@ -19,10 +19,10 @@
     </div>
   </div>
   <!--Setup-->
-  <div *ngIf="mainTab == 'system-setup'" class="assessment-container tab-content">
+  <div *ngIf="mainTab == 'baseline'" class="assessment-container tab-content">
     <div class="assessment-panel-container lookup-form modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}"
       [ngStyle]="{'height.px': containerHeight}">
-      <app-system-basics *ngIf="stepTab == 'system-basics'" [(settings)]="settings" [assessment]="assessment"
+      <app-system-basics *ngIf="stepTab == 'baseline'" [(settings)]="settings" [assessment]="assessment"
         (emitSave)="saveSettings($event)" (emitSaveSsmt)="saveSetup($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
       <app-operations *ngIf="stepTab == 'operations'" [ssmt]="_ssmt" [settings]="settings"
         (emitSave)="saveSetup($event)" [selected]="true" [inSetup]="true" [isBaseline]="true"></app-operations>
@@ -108,11 +108,11 @@
 
 
 
-  <div #footer id="ssmtFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'assessment' || mainTab == 'system-setup'">
-    <div class="pull-left" *ngIf="stepTab != 'system-basics'">
+  <div #footer id="ssmtFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'assessment' || mainTab == 'baseline'">
+    <div class="pull-left" *ngIf="stepTab != 'baseline'">
       <button class="btn btn-default" (click)="back()">Back</button>
     </div>
-    <div class="pull-right" *ngIf="mainTab == 'system-setup' && mainTab != 'assessment'">
+    <div class="pull-right" *ngIf="mainTab == 'baseline' && mainTab != 'assessment'">
       <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Next</button>
     </div>
     <div class="pull-right" *ngIf="mainTab == 'assessment'">

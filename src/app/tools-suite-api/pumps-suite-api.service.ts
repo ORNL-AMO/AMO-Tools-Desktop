@@ -21,7 +21,7 @@ export class PumpsSuiteApiService {
       pump_efficiency: calculatedResults.pump_efficiency,
       motor_rated_power: calculatedResults.motor_rated_power,
       motor_shaft_power: calculatedResults.motor_shaft_power,
-      pump_shaft_power: calculatedResults.pump_shaft_power,
+      mover_shaft_power: calculatedResults.mover_shaft_power,
       motor_efficiency: calculatedResults.motor_efficiency,
       motor_power_factor: calculatedResults.motor_power_factor,
       motor_current: calculatedResults.motor_current,
@@ -35,6 +35,7 @@ export class PumpsSuiteApiService {
       percent_annual_savings: calculatedResults.percent_annual_savings,
       co2EmissionsOutput: calculatedResults.co2EmissionsOutput,
     }
+
     calculatedResults.delete();
     psatWasmModule.delete();
     output = this.convertResultsToPercentages(output);
@@ -48,7 +49,7 @@ export class PumpsSuiteApiService {
       pump_efficiency: calculatedResults.pump_efficiency,
       motor_rated_power: calculatedResults.motor_rated_power,
       motor_shaft_power: calculatedResults.motor_shaft_power,
-      pump_shaft_power: calculatedResults.pump_shaft_power,
+      mover_shaft_power: calculatedResults.mover_shaft_power,
       motor_efficiency: calculatedResults.motor_efficiency,
       motor_power_factor: calculatedResults.motor_power_factor,
       motor_current: calculatedResults.motor_current,
@@ -87,7 +88,7 @@ export class PumpsSuiteApiService {
     let stageCount = psatInput.stages;
     let speed = this.suiteApiHelperService.getFixedSpeedEnum(psatInput.fixed_speed);
     let specifiedDriveEfficiency = psatInput.specifiedDriveEfficiency / 100;
-    let pumpInput = new Module.PsatInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedDriveEfficiency);
+    let pumpInput = new Module.PumpResultInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedDriveEfficiency);
     //motor
     let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(psatInput.line_frequency);
     let motorRatedPower = psatInput.motor_rated_power;
@@ -109,7 +110,7 @@ export class PumpsSuiteApiService {
     let operating_hours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.operating_hours);
     let cost_kw_hour = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.cost_kw_hour);
     let fieldData = new Module.PumpFieldData(flowRate, head, loadEstimationMethod, motorPower, motorAmps, voltage);
-    let psat = new Module.PSAT(pumpInput, motor, fieldData, operating_hours, cost_kw_hour);
+    let psat = new Module.PumpResult(pumpInput, motor, fieldData, operating_hours, cost_kw_hour);
     fieldData.delete();
     motor.delete();
     pumpInput.delete();
@@ -157,9 +158,15 @@ export class PumpsSuiteApiService {
     return results;
   }
 
-  pumpEfficiency(pumpStyle: number, flowRate: number): { average: number, max: number } {
+  pumpEfficiency(pumpStyle: number,
+      flowRate: number,
+      rpm: number,
+      kinematicViscosity: number,
+      stageCount: number,
+      head: number,
+      pumpEfficiencyInput: number): { average: number, max: number } {
     let pumpStyleEnum = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
-    let instance = new Module.PumpEfficiency(pumpStyleEnum, flowRate);
+    let instance = new Module.PumpEfficiency(pumpStyleEnum, pumpEfficiencyInput, rpm, kinematicViscosity, stageCount, flowRate, head);
     let pumpEfficiency = instance.calculate();
     let results: { average: number, max: number } = {
       average: pumpEfficiency.average,
