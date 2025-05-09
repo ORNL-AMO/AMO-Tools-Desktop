@@ -16,7 +16,7 @@ export class HelpPanelComponent implements OnInit {
 
   ngOnInit(): void {
     let mainTab: string = this.wasteWaterService.mainTab.getValue();
-    if (mainTab == 'system-setup') {
+    if (mainTab == 'baseline') {
       this.selectedTabSub = this.wasteWaterService.setupTab.subscribe(val => {
         this.selectedTab = val;
       });

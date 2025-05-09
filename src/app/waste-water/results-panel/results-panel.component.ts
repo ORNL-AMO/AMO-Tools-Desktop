@@ -50,7 +50,7 @@ export class ResultsPanelComponent implements OnInit {
   }
 
   checkDisplayTabs() {
-    this.displayTabs = ((this.setupTab == 'aerator-performance' && this.mainTab == 'system-setup') || this.mainTab == 'assessment')
+    this.displayTabs = ((this.setupTab == 'aerator-performance' && this.mainTab == 'baseline') || this.mainTab == 'assessment')
   }
 
 }

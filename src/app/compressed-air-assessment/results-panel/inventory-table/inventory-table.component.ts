@@ -41,6 +41,10 @@ export class InventoryTableComponent implements OnInit {
         this.compressorInventoryItems = val.compressorInventoryItems;
         this.compressorInventoryItems.forEach(compressor => {
           compressor.isValid = this.inventoryService.isCompressorValid(compressor, val.systemInformation);
+          if (!compressor.name) {
+            compressor.name = 'Compressor ' + (this.compressorInventoryItems.indexOf(compressor) + 1).toString();
+            compressor.isValid = this.inventoryService.isCompressorValid(compressor, val.systemInformation);
+          }
         });
         this.hasInvalidCompressors = this.compressorInventoryItems.some(compressor => !compressor.isValid);
       }

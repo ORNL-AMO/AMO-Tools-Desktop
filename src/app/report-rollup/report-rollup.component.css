@@ -95,7 +95,7 @@
 @media print {
 
     .print-break-before {
-        page-break-before: always;
+        break-before: always;
         page-break-inside: avoid;
     }
 
@@ -137,7 +137,7 @@
     }
 
     .assessment-item{
-        page-break-before: always;
+        break-before: always;
         padding-top: 0px !important;
     }
     .print-div{

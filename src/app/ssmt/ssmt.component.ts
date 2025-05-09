@@ -41,7 +41,7 @@ export class SsmtComponent implements OnInit {
   oldSettings: Settings;
 
   stepTabs: Array<string> = [
-    'system-basics',
+    'baseline',
     'operations',
     'boiler',
     'header',
@@ -205,8 +205,8 @@ export class SsmtComponent implements OnInit {
     this.openModificationSelectSubscription.unsubscribe();
     this.modalOpenSubscription.unsubscribe();
     this.addNewModificationSubscription.unsubscribe();
-    this.ssmtService.mainTab.next('system-setup');
-    this.ssmtService.stepTab.next('system-basics');
+    this.ssmtService.mainTab.next('baseline');
+    this.ssmtService.stepTab.next('baseline');
     this.ssmtService.assessmentTab.next('explore-opportunities');
     this.ssmtService.steamModelTab.next('operations');
     this.calcTabSubscription.unsubscribe();
@@ -343,14 +343,14 @@ export class SsmtComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab === 'system-setup') {
-      if (this.stepTab !== 'system-basics') {
+    if (this.mainTab === 'baseline') {
+      if (this.stepTab !== 'baseline') {
         let assessmentTabIndex: number = this.stepTabIndex - 1;
         let nextTab: string = this.stepTabs[assessmentTabIndex];
         this.ssmtService.stepTab.next(nextTab);
       }
     } else if (this.mainTab === 'assessment') {
-      this.ssmtService.mainTab.next('system-setup');
+      this.ssmtService.mainTab.next('baseline');
     }
   }
 
@@ -371,7 +371,7 @@ export class SsmtComponent implements OnInit {
   getCanContinue() {
     let ssmtValid: SsmtValid = this.ssmtService.checkValid(this._ssmt, this.settings);
 
-    if (this.stepTab === 'system-basics') {
+    if (this.stepTab === 'baseline') {
       return true;
     } else if (this.stepTab === 'operations') {
       if (ssmtValid.operationsValid) {
@@ -508,8 +508,8 @@ export class SsmtComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.ssmtService.mainTab.next('system-setup');
-      this.ssmtService.stepTab.next('system-basics');
+      this.ssmtService.mainTab.next('baseline');
+      this.ssmtService.stepTab.next('baseline');
     }
     this.showUpdateUnitsModal = false;
     this.cd.detectChanges();

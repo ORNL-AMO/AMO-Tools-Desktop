@@ -78,7 +78,7 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   getModificationNotes(modification: Modification): Array<string> {
     let notes: Array<string> = new Array();
     if (modification.notes.systemBasicsNotes) {
-      notes.push("System Basics - " + modification.notes.systemBasicsNotes);
+      notes.push("Baseline - " + modification.notes.systemBasicsNotes);
     } else if (modification.notes.pumpFluidNotes) {
       notes.push("Pump Fluid - " + modification.notes.pumpFluidNotes);
 

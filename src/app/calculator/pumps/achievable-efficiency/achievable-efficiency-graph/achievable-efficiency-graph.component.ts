@@ -309,9 +309,14 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       let tmpResults = this.psatService.pumpEfficiency(
         this.efficiencyForm.controls.pumpType.value,
         flow,
+        this.efficiencyForm.controls.rpm.value,
+        this.efficiencyForm.controls.kinematicViscosity.value,
+        this.efficiencyForm.controls.stageCount.value,
+        this.efficiencyForm.controls.head.value,
+        this.efficiencyForm.controls.pumpEfficiency.value,
         this.settings
       );
-      return tmpResults.average;
+      return tmpResults.average * 100;
     } else { return 0; }
   }
 
@@ -320,9 +325,14 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       let tmpResults = this.psatService.pumpEfficiency(
         this.efficiencyForm.controls.pumpType.value,
         flow,
+        this.efficiencyForm.controls.rpm.value,
+        this.efficiencyForm.controls.kinematicViscosity.value,
+        this.efficiencyForm.controls.stageCount.value,
+        this.efficiencyForm.controls.head.value,
+        this.efficiencyForm.controls.pumpEfficiency.value,
         this.settings
       );
-      return tmpResults.max;
+      return tmpResults.max * 100;
     } else { return 0; }
   }
 
@@ -359,6 +369,11 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (
       this.efficiencyForm.controls.pumpType.status === 'VALID' &&
       this.efficiencyForm.controls.flowRate.status === 'VALID' &&
+      this.efficiencyForm.controls.rpm.status === 'VALID' &&
+      this.efficiencyForm.controls.kinematicViscosity.status === 'VALID' &&
+      this.efficiencyForm.controls.stageCount.status === 'VALID' &&
+      this.efficiencyForm.controls.head.status === 'VALID' &&
+      this.efficiencyForm.controls.pumpEfficiency.status === 'VALID' &&
       this.efficiencyForm.controls.pumpType.value !== 'Specified Optimal Efficiency'
     ) {
       return true;
@@ -465,6 +480,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   }
 
   getAvgMaxEffColumn(avg: number, max: number) {
+    avg = this.psatService.roundVal(avg, 2);
+    max = this.psatService.roundVal(max, 2);
     return `${avg} - ${max}`;
   }
 

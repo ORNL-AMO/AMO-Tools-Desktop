@@ -7,7 +7,7 @@
 <div class="no-data no-data-phast no-data-no-add"
   *ngIf="(_chargeMaterial.length == 0 && lossesLocked) || (_chargeMaterial.length == 0 && !inSetup)">
   <h3>You have no Charge Material</h3>
-  <h4>To add Charge Material you will need to delete your current modifications and return to system setup.</h4>
+  <h4>To add Charge Material you will need to delete your current modifications and return to baseline.</h4>
 </div>
 
 <div class="card-form d-flex flex-column" *ngFor="let material of _chargeMaterial; let lossIndex = index">

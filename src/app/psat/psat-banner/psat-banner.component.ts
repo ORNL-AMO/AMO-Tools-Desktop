@@ -55,7 +55,7 @@ export class PsatBannerComponent implements OnInit {
   }
   
   changeTab(str: string) {
-    if (str == 'system-setup' || str == 'calculators') {
+    if (str == 'baseline' || str == 'calculators') {
       this.psatTabService.mainTab.next(str);
     } else if (this.assessment.psat.setupDone) {
       this.psatTabService.mainTab.next(str);
@@ -77,12 +77,12 @@ export class PsatBannerComponent implements OnInit {
     } else if (this.mainTab == 'diagram') {
       this.psatTabService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
-      this.psatTabService.mainTab.next('system-setup');
+      this.psatTabService.mainTab.next('baseline');
     }
   }
 
   continue() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab == 'baseline') {
       this.psatTabService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
       this.psatTabService.mainTab.next('diagram');

@@ -91,10 +91,10 @@ export class SelectAssessmentModalComponent implements OnInit {
     await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
-    this.compressedAirAssessmentService.mainTab.next('system-setup');
+    this.compressedAirAssessmentService.mainTab.next('baseline');
     this.compressedAirAssessmentService.setupTab.next('day-types');
     // this.router.navigateByUrl('/compressed-air/' + assessment.id);
-    this.assessmentService.goToAssessment(assessment, 'system-setup', 'day-types');
+    this.assessmentService.goToAssessment(assessment, 'baseline', 'day-types');
 
   }
 

@@ -6,7 +6,7 @@
 <div class="no-data no-data-phast no-data-no-add"
   *ngIf="(_flueGasLosses.length == 0 && lossesLocked) || (_flueGasLosses.length == 0 && !inSetup)">
   <h3>You have no Flue Gas Losses</h3>
-  <h4>To add Flue Gas Losses you will need to delete your current modifications and return to system setup.</h4>
+  <h4>To add Flue Gas Losses you will need to delete your current modifications and return to baseline.</h4>
 </div>
 
 <div class="card-form d-flex flex-column" *ngFor="let loss of _flueGasLosses; let lossIndex = index;">

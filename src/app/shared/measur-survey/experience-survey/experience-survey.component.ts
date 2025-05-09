@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { ApplicationInstanceDbService } from '../../../indexedDb/application-instance-db.service';
 import { MeasurSurveyService } from '../measur-survey.service';
+import { EmailListSubscribeService } from '../../subscribe-toast/email-list-subscribe.service';
 
 @Component({
     selector: 'app-experience-survey',
@@ -22,6 +23,7 @@ export class ExperienceSurveyComponent {
   constructor(
     private measurSurveyService: MeasurSurveyService,
     private router: Router,
+    private emailSubscriberService: EmailListSubscribeService,
     private appInstanceDbService: ApplicationInstanceDbService, 
     private fb: FormBuilder) { }
 
@@ -47,6 +49,7 @@ export class ExperienceSurveyComponent {
       companyName: [defaultFormData.companyName, []],
       contactName: [defaultFormData.contactName, []],
       usefulRating: [defaultFormData.usefulRating, []],
+      shouldCreateSubscriber: [defaultFormData.shouldCreateSubscriber, []],
       recommendRating: [defaultFormData.recommendRating, []],
       questionDescribeSuccess: [defaultFormData.questionDescribeSuccess, [Validators.maxLength(2048)]],
       hasProfilingInterest: [defaultFormData.hasProfilingInterest, []],
@@ -75,7 +78,15 @@ export class ExperienceSurveyComponent {
   }
 
   sendAnswers() {
+    this.submitSubscriberEmail();
     this.measurSurveyService.sendAnswers();
+  }
+
+  submitSubscriberEmail() {
+    let measurUserSurvey: MeasurUserSurvey = this.measurSurveyService.userSurvey.getValue();
+    if (measurUserSurvey.shouldCreateSubscriber)  {
+      this.emailSubscriberService.submitSubscriberEmail(measurUserSurvey.email).subscribe();
+    }
   }
 
   getRemainingCharacters(controlName: string): number {
@@ -91,6 +102,7 @@ export class ExperienceSurveyComponent {
       contactName: undefined,
       usefulRating: 0,
       recommendRating: 0,
+      shouldCreateSubscriber: false,
       questionDescribeSuccess: undefined,
       hasProfilingInterest: false,
       questionFeedback: undefined, 
@@ -103,6 +115,7 @@ export class ExperienceSurveyComponent {
       companyName: this.userSurveyForm.controls.companyName.value,
       contactName: this.userSurveyForm.controls.contactName.value,
       usefulRating: this.userSurveyForm.controls.usefulRating.value,
+      shouldCreateSubscriber: this.userSurveyForm.controls.shouldCreateSubscriber.value,
       recommendRating: this.userSurveyForm.controls.recommendRating.value,
       questionDescribeSuccess: this.userSurveyForm.controls.questionDescribeSuccess.value,
       hasProfilingInterest: this.userSurveyForm.controls.hasProfilingInterest.value,
@@ -124,6 +137,7 @@ export interface MeasurUserSurvey {
   contactName: string,
   usefulRating: number,
   recommendRating: number,
+  shouldCreateSubscriber: boolean,
   questionDescribeSuccess: string,
   hasProfilingInterest: boolean,
   questionFeedback: string, 

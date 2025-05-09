@@ -126,7 +126,7 @@ export class CreateAssessmentModalComponent {
 
   async createAssessment() {
     if (this.newAssessmentForm.valid) {
-      this.assessmentService.startingTab = 'system-setup';
+      this.assessmentService.startingTab = 'baseline';
       if (this.newAssessmentForm.controls.assessmentType.value === 'Pump') {
         this.analyticsService.sendEvent('create-assessment', undefined);
         let psatAssessment: Assessment = this.assessmentService.getNewAssessment('PSAT');
