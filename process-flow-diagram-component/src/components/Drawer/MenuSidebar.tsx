@@ -118,7 +118,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 
         <TabPanel value={selectedTab} index={0} >
           <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', padding: '.5rem', marginTop: '.5rem', whiteSpace: "normal" }}>
-            Drag plant water system components into the pane
+            Drag site water system components into the pane
           </Typography>
           <Box sx={{ flexGrow: 1, paddingY: '1rem', paddingX: '.5rem' }}>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
