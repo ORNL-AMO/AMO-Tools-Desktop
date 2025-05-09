@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CompressedAirItem } from '../../../compressed-air-inventory';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class CompressedAirBasicsService {
 
   getFormFromCompressedAirItem(compressedAirItem: CompressedAirItem): FormGroup {
     return this.formBuilder.group({
-      name: [compressedAirItem.name],
+      name: [compressedAirItem.name, Validators.required],
       description: [compressedAirItem.description],
       notes: [compressedAirItem.notes],
     });
