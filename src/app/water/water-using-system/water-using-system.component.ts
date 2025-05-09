@@ -49,6 +49,7 @@ export class WaterUsingSystemComponent {
 
 
   ngOnDestroy() {
+    this.waterSystemComponentService.selectedComponent.next(undefined);
     this.selectedComponentSub.unsubscribe();
     this.waterUsingSystemTabSub.unsubscribe();
   }

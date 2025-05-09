@@ -4,7 +4,7 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { Settings } from '../shared/models/settings';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
-import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getWasteWaterTreatmentComponent, getWaterTreatmentComponent, getWaterUsingSystem, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getNewWaterTreatmentComponent, getWasteWaterTreatmentComponent, getWaterUsingSystem, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
 
 @Injectable({
   providedIn: 'root'
@@ -123,7 +123,7 @@ export class WaterAssessmentService {
       waterAssessment.diagramWaterSystemFlows.push(componentWaterFlows);
       newComponent = newWaterUsingSystem;
     } else if (componentType === 'water-treatment') {
-      let newWaterTreatment = getWaterTreatmentComponent(undefined, false, true);
+      let newWaterTreatment = getNewWaterTreatmentComponent(false, true);
       waterAssessment.waterTreatments? waterAssessment.waterTreatments.push(newWaterTreatment) : waterAssessment.waterTreatments = [newWaterTreatment];
       newComponent = newWaterTreatment;
     } else if (componentType === 'waste-water-treatment') {

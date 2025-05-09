@@ -1,8 +1,8 @@
 import * as React from 'react';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { Box } from '@mui/material';
-import { CustomEdgeData, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getIntakeSource, getMotorEnergyCost, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterProcessComponent, WaterUsingSystem } from 'process-flow-lib';
-import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
+import { CustomEdgeData, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getMotorEnergyCost, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterProcessComponent, WaterUsingSystem } from 'process-flow-lib';
+import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
 import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
 import { TwoCellResultRow, TwoCellResultTable } from '../StyledMUI/ResultTables';
@@ -48,7 +48,7 @@ const DiagramResults = () => {
   }, 0);
   console.log('motorEnergyCosts', motorEnergyCosts);
 
-  const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy);
+  const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy).filter((heatEnergy: HeatEnergy) => heatEnergy !== undefined);
   const heatEnergyCosts = systemHeatEnergyData.reduce((total, heatEnergy) => {
     return total + getHeatEnergyCost(heatEnergy, 1);
   }, 0);

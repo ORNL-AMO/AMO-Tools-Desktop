@@ -1,16 +1,18 @@
 import { memo, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { Box, Select, MenuItem, IconButton, TextField, Button, Divider } from "@mui/material";
+import { useAppDispatch, useAppSelector, } from "../../hooks/state";
+import { Box, IconButton, TextField, Button, Divider, InputAdornment } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getStoreSerializedDate, nodeDataPropertyChange } from "../Diagram/diagramReducer";
+import { nodeDataPropertyChange } from "../Diagram/diagramReducer";
 import SelectTreatmentType from "./SelectTreatmentType";
 import {
     type Node,
   } from '@xyflow/react';
-import { WaterTreatment, getWaterTreatmentComponent, ProcessFlowPart } from "process-flow-lib";
+import { WaterTreatment, ProcessFlowPart, getNewWaterTreatmentComponent } from "process-flow-lib";
+import InputField from "../StyledMUI/InputField";
 
 const InSystemTreatmentForm = (props: InSystemTreatmentFormProps) => {
     const dispatch = useAppDispatch();
+    const settings = useAppSelector((state) => state.diagram.settings);
     const [treatments, setTreatments] = useState<Array<WaterTreatment>>(props.selectedNode.data.inSystemTreatment || []);
 
     useEffect(() => {
@@ -18,13 +20,39 @@ const InSystemTreatmentForm = (props: InSystemTreatmentFormProps) => {
     }, [treatments]);
 
     const addTreatment = () => {
-        const newTreatment = getWaterTreatmentComponent(undefined, true);
+        const newTreatment = getNewWaterTreatmentComponent(true);
         const updatedTreatments = [...treatments, newTreatment];
         setTreatments(updatedTreatments);
     };
 
-    const handleTreatmentChange = (id: string, field: 'name' | 'treatmentType', value: string | number) => {
-        const updatedTreatments = treatments.map((treatment: WaterTreatment) => treatment.diagramNodeId === id ? { ...treatment, [field]: value } : treatment);
+    const handleTreatmentNameChange = (id: string, value: string) => {
+        const updatedTreatments = treatments.map((treatment: WaterTreatment) => 
+            treatment.diagramNodeId === id ? { 
+                ...treatment, 
+                name: value 
+            } : treatment
+        );
+        setTreatments(updatedTreatments);
+    };
+
+    
+    const handleTreatmentTypeChange = (id: string, value: string) => {
+        const updatedTreatments = treatments.map((treatment: WaterTreatment) => 
+            treatment.diagramNodeId === id ? { 
+                ...treatment, 
+                treatmentType: Number(value)
+            } : treatment
+        );
+        setTreatments(updatedTreatments);
+    };
+
+    const handleTreatmentCostChange = (id: string, value) => {
+        const updatedTreatments = treatments.map((treatment: WaterTreatment) => 
+            treatment.diagramNodeId === id ? { 
+                ...treatment, 
+                cost: value === "" ? null : Number(value)
+            } : treatment
+        );
         setTreatments(updatedTreatments);
     };
 
@@ -38,32 +66,45 @@ const InSystemTreatmentForm = (props: InSystemTreatmentFormProps) => {
         <Button sx={{ width: '100%', marginBottom: '.5rem'}} variant="contained" color="primary" onClick={addTreatment}>Add Treatment</Button>
         <Divider />
         {treatments.map((treatment: WaterTreatment) => (
-            <Box key={treatment.diagramNodeId} display="flex" alignItems="center" gap={1} marginY={'1rem'}>
+            <Box key={`${treatment.diagramNodeId}-box`}>
+            <Box display="flex" flexDirection={'column'} alignItems="center" gap={1} marginY={'1rem'}>
+                <Box display="flex" alignItems="center" gap={1} marginY={'.5rem'}>
                 <TextField
                     label="Treatment Name"
                     value={treatment.name}
-                    onChange={(e) => handleTreatmentChange(treatment.diagramNodeId, 'name', e.target.value)}
+                    onChange={(event) => handleTreatmentNameChange(treatment.diagramNodeId, event.target.value)}
                     size="small"
-                />
-                {/* <select className="form-control diagram-select" id={'treatmentType'} name="treatmentType"
-                    style={{ width: '50%', height: '2.25rem' }}    
-                    value={treatment.treatmentType}
-                    onChange={(e) => handleTreatmentChange(treatment.diagramNodeId, 'treatmentType', Number(e.target.value))}>
-                    {treatmentTypeOptions.map((option, index) => {
-                        return (
-                            <option key={option.display + '_' + index} value={option.value}>{option.display}</option>
-                        )
-                    })
-                    }
-                </select> */}
+                    />
                 <SelectTreatmentType 
                     style={{ width: '50%' }}
                     treatmentType={treatment.treatmentType}
-                    handleTreatmentTypeChange={(value: number) => handleTreatmentChange(treatment.diagramNodeId, 'treatmentType', value)}
-                ></SelectTreatmentType>
+                    handleTreatmentTypeChange={(event) => handleTreatmentTypeChange(treatment.diagramNodeId, event.target.value)}
+                    ></SelectTreatmentType>
                 <IconButton onClick={() => removeTreatment(treatment.diagramNodeId)} size="small" color="error">
                     <DeleteIcon />
                 </IconButton>
+                </Box>
+                <InputField
+                    label={'Cost'}
+                    id={`${treatment.diagramNodeId}-cost`}
+                    name={`cost`}
+                    type={'number'}
+                    size="small"
+                    value={treatment.cost?? ''}
+                    onChange={(event) => handleTreatmentCostChange(treatment.diagramNodeId, event.target.value)}
+                    sx={{ m: '1 0', width: '100%' }}
+                    InputProps={{
+                        endAdornment:
+                        <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                {settings.unitsOfMeasure === 'Imperial' ?
+                                    <span style={{ zIndex: 1, background: 'white' }}>$/kgal</span>
+                                    : <span style={{ zIndex: 1, background: 'white' }}>$/kL</span>
+                                }
+                            </InputAdornment>,
+                    }}
+                    />
+            </Box>
+            <Divider sx={{ width: '100%' }} />
             </Box>
         ))}
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { getNewNodeId, getWaterTreatmentComponent, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { getNewNodeId, getNewWaterTreatmentComponent, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { Settings } from '../../../shared/models/settings';
@@ -60,7 +60,7 @@ export class InSystemTreatmentTableComponent {
   }
 
   addNewComponent() {
-    let newWaterTreatment = getWaterTreatmentComponent(undefined, false, true);
+    let newWaterTreatment = getNewWaterTreatmentComponent(false, true);
     let selectedSystem: WaterUsingSystem = this.waterSystemComponentService.selectedComponent.getValue() as WaterUsingSystem;
     selectedSystem.inSystemTreatment ? selectedSystem.inSystemTreatment.push(newWaterTreatment) : selectedSystem.inSystemTreatment = [newWaterTreatment];
     
