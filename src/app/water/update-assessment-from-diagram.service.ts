@@ -45,7 +45,6 @@ export class UpdateAssessmentFromDiagramService {
   }
 
   async updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment, assessmentSettings: Settings) {
-    debugger;
     this.updateAssessmentWaterComponents(diagram, assessment.water);
     assessment.water.diagramWaterSystemFlows = setWaterUsingSystemFlows(assessment.water.waterUsingSystems, diagram.waterDiagram.flowDiagramData.edges);
     this.setAssessmentSettingsFromDiagram(assessment, assessmentSettings, diagram);
