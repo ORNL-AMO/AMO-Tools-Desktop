@@ -13,6 +13,7 @@ import { IntegrationStateService } from '../../../shared/connected-inventory/int
 import _ from 'lodash';
 import { AltitudeCorrectionService } from '../../../calculator/utilities/altitude-correction/altitude-correction.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ConvertCompressedAirInventoryService } from '../../convert-compressed-air-inventory.service';
 
 @Component({
   selector: 'app-plant-setup',
@@ -43,7 +44,8 @@ export class PlantSetupComponent implements OnInit {
     private assessmentCo2SavingsService: AssessmentCo2SavingsService,
     private compressedAirInventoryService: CompressedAirInventoryService,
     private integrationStateService: IntegrationStateService,
-    private altitudeCorrectionService: AltitudeCorrectionService) { }
+    private altitudeCorrectionService: AltitudeCorrectionService,
+    private convertCompressedAirInventoryService: ConvertCompressedAirInventoryService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirInventoryService.settings.getValue();
@@ -153,8 +155,7 @@ export class PlantSetupComponent implements OnInit {
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     let compressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
 
-
-    //compressedAirInventoryData = this.convertPumpInventoryService.convertInventoryData(compressedAirInventoryData, this.oldSettings, newSettings);
+    compressedAirInventoryData = this.convertCompressedAirInventoryService.convertInventoryData(compressedAirInventoryData, this.oldSettings, newSettings);
     this.showUpdateDataReminder = false;
     compressedAirInventoryData.existingDataUnits = newSettings.unitsOfMeasure;
     this.compressedAirInventoryService.compressedAirInventoryData.next(compressedAirInventoryData);

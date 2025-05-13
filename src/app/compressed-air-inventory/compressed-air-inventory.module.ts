@@ -16,6 +16,7 @@ import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { ExistingCompressorDbService } from './existing-compressor-db.service';
 import { CompressorDataManagementService } from './compressor-data-management.service';
+import { ConvertCompressedAirInventoryService } from './convert-compressed-air-inventory.service';
 
 
 
@@ -42,7 +43,8 @@ import { CompressorDataManagementService } from './compressor-data-management.se
   providers: [
     CompressedAirInventoryService,
     ExistingCompressorDbService,
-    CompressorDataManagementService
+    CompressorDataManagementService,
+    ConvertCompressedAirInventoryService
   ]
 })
 export class CompressedAirInventoryModule { }
