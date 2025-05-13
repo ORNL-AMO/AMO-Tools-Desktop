@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WaterAssessmentComponent } from './water-assessment.component';
-import { WaterReportComponent } from './water-report/water-report.component';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { WaterBannerComponent } from './water-banner/water-banner.component';
@@ -55,11 +54,11 @@ import { WaterSourcesWrapperComponent } from './water-using-system/water-sources
 import { ConnectionFlowComponent } from './water-using-system/connection-flow/connection-flow.component';
 import { SystemTreatmentComponent } from './water-using-system/system-treatment/system-treatment.component';
 import { InSystemTreatmentTableComponent } from './results-panel/in-system-treatment-table/in-system-treatment-table.component';
+import { WaterReportModule } from './water-report/water-report.module';
 
 @NgModule({
   declarations: [
     WaterAssessmentComponent,
-    WaterReportComponent,
     ResultsPanelComponent,
     WaterBannerComponent,
     SetupTabsComponent,
@@ -108,7 +107,8 @@ import { InSystemTreatmentTableComponent } from './results-panel/in-system-treat
     OperatingHoursModalModule,
     ConfirmDeleteModalModule, 
     PercentLoadEstimationModule,
-    StackLossModule
+    StackLossModule,
+    WaterReportModule
   ],
   providers: [
     WaterAssessmentService,

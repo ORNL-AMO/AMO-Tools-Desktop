@@ -4,6 +4,7 @@ import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, Dia
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getWaterFlowTotals } from "./water-components";
 import { getAncestors, getAncestorsDFS, getDescendants, getDescendantsDFS, NodeGraphIndex } from "../../graph";
+import { PlantResults, PlantSystemSummaryResults, SystemAnnualSummaryResults } from "../types/results";
 
 // * WASM Module with suite api
 declare var Module: any;
@@ -40,7 +41,6 @@ export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[]): W
     return systemResult;
   });
 
-  // console.log('Water Balance Results', plantBalanceResults);
   return plantBalanceResults;
 }
 
@@ -381,6 +381,19 @@ export const getComponentTypeTotalCost = (components: Node<ProcessFlowPart>[], n
   }, 0);
 }
 
+/**
+* Get annual total flow of all components for a given type
+* @param components WaterProcessComponent/ProcessFlowPart 
+* @param nodeFlowProperty NodeFlowData property that represents flow cost, i.e. totalDischargeflow for intakes, totalSourceflow for discharges
+* 
+*/
+export const getComponentTypeTotalFlow = (components: Node<ProcessFlowPart>[], nodeFlowProperty: NodeFlowProperty) => {
+  return components.reduce((total: number, component: Node<ProcessFlowPart>) => {
+    const flow = component.data.userEnteredData[nodeFlowProperty] ?? 0;
+    return total + flow;
+  }, 0);
+}
+
 
 export const getKGalCost = (kGalUnitCost: number, flowMgal: number): number => {
   return kGalUnitCost * (flowMgal * 1000);
@@ -466,7 +479,13 @@ const setRecycledFlowData = (node: Node<ProcessFlowPart>, graph: NodeGraphIndex,
   });
 }
 
-export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalculatedData, graph: NodeGraphIndex, settings: DiagramSettings): TrueCostOfSystems => {
+export const getPlantSummaryResults = (
+  nodes: Node[], 
+  calculatedData: DiagramCalculatedData, 
+  graph: NodeGraphIndex, 
+  electricityCost: number, 
+  settings?: DiagramSettings
+): PlantResults => {
   const nodeMap: Record<string, Node<ProcessFlowPart>> = Object.fromEntries(nodes.map((n) => [n.id, n as Node<ProcessFlowPart>]));
   const nodeNameMap: Record<string, string> = {};
   const trueCostOfSystems: TrueCostOfSystems = {};
@@ -492,12 +511,24 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
     }
   }).filter(node => Boolean(node)) as Node<WaterUsingSystem>[];
 
+  let plantSystemSummaryResults: PlantSystemSummaryResults = {
+    id: '1',
+    name: 'all',
+    sourceWaterIntake: 0,
+    dischargeWater: 0,
+    directCostPerYear: 0,
+    directCostPerUnit: 0,
+    trueCostPerYear: 0,
+    trueCostPerUnit: 0,
+    trueOverDirectResult: 0,
+    allSystemResults: []
+  }
   
   if (waterUsingSystems.length > 0) {
     waterUsingSystems.forEach((currentSystem: Node<ProcessFlowPart>) => {
-      const ancestorCosts: ConnectedCost[] = getComponentAncestorCosts(currentSystem, calculatedData, nodeMap, graph, settings);
-      const descendantCosts: ConnectedCost[] = getComponentDescendantCosts(currentSystem, calculatedData, nodeMap, graph, settings);
-      const systemCostContributions: SystemTrueCostContributions = {
+      const ancestorCosts: ConnectedCost[] = getComponentAncestorCosts(currentSystem, calculatedData, nodeMap, graph);
+      const descendantCosts: ConnectedCost[] = getComponentDescendantCosts(currentSystem, calculatedData, nodeMap, graph);
+      let systemCostContributions: SystemTrueCostContributions = {
         intake: 0,
         discharge: 0,
         thirdParty: 0,
@@ -508,11 +539,24 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
         total: 0
       };
 
+      let systemAnnualSummaryResults: SystemAnnualSummaryResults = {
+        id: currentSystem.id,
+        name: currentSystem.data.name,
+        sourceWaterIntake: 0,
+        dischargeWater: 0,
+        directCostPerYear: 0,
+        directCostPerUnit: 0,
+        trueCostPerYear: 0,
+        trueCostPerUnit: 0,
+        trueOverDirectResult: 0,
+    }
+
+
       const waterUsingSystem = currentSystem.data as WaterUsingSystem;
       if (waterUsingSystem.heatEnergy) {
-        systemCostContributions.heatEnergyWastewater = getHeatEnergyCost(waterUsingSystem.heatEnergy, settings.electricityCost);
+        systemCostContributions.heatEnergyWastewater = getHeatEnergyCost(waterUsingSystem.heatEnergy, electricityCost);
       }
-      systemCostContributions.systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, settings);
+      systemCostContributions.systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, electricityCost);
 
       // * Current system owns costs for intake, water-treatment, and waste-water-treatment (if recycled into their system)
         ancestorCosts.forEach((connectedAncestorCost: ConnectedCost) => {
@@ -531,9 +575,11 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
             if (!isIntakeInRecycledFlow || isImmediateAncestor) {
               const intake = ancestorNode.data as IntakeSource;
               systemCostContributions.intake += connectedAncestorCost.cost;
-              const pumpAndMotorEnergy = getPumpAndMotorEnergyContribution(intake, settings);
+              const pumpAndMotorEnergy = getPumpAndMotorEnergyContribution(intake, electricityCost);
               const energyCost = pumpAndMotorEnergy * (connectedAncestorCost.percentSelfTotalFlow / 100);
               systemCostContributions.intake += energyCost;
+
+              systemAnnualSummaryResults.sourceWaterIntake += connectedAncestorCost.flow;
             }
             break;
           }
@@ -569,9 +615,12 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
 
             if (!isDischargeFromRecycledFlow || isImmediateDescendant) {
               systemCostContributions.discharge += connectedDescendantCost.cost;
-              const pumpAndMotorEnergy = getPumpAndMotorEnergyContribution(discharge, settings);
+              const pumpAndMotorEnergy = getPumpAndMotorEnergyContribution(discharge, electricityCost);
               const energyCost = pumpAndMotorEnergy * (connectedDescendantCost.percentSelfTotalFlow / 100);
               systemCostContributions.discharge += energyCost;
+
+              systemAnnualSummaryResults.dischargeWater += connectedDescendantCost.flow;
+
             }
             break;
           }
@@ -591,19 +640,48 @@ export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalcu
         }
       });
 
+      const trueCost = getWaterTrueCost(
+        systemCostContributions.intake, 
+        systemCostContributions.discharge, 
+        systemCostContributions.systemPumpAndMotorEnergy, 
+        systemCostContributions.heatEnergyWastewater, 
+        systemCostContributions.treatment, 
+        systemCostContributions.wasteTreatment
+      );
+
+      const directFlowTotal = systemAnnualSummaryResults.sourceWaterIntake + systemAnnualSummaryResults.dischargeWater;
+      systemAnnualSummaryResults.directCostPerYear = systemCostContributions.intake + systemCostContributions.discharge;
+      systemAnnualSummaryResults.directCostPerUnit = systemAnnualSummaryResults.directCostPerYear / (directFlowTotal * 1000);
+      systemAnnualSummaryResults.trueCostPerYear = trueCost;
+      // todo true cost per unit
+      // systemAnnualSummaryResults.trueCostPerUnit = systemAnnualSummaryResults.trueCostPerYear / (directFlowTotal * 1000);
+      systemAnnualSummaryResults.trueOverDirectResult = trueCost / systemAnnualSummaryResults.directCostPerYear;
+      systemAnnualSummaryResults.trueCostPerUnit = systemAnnualSummaryResults.trueCostPerUnit;
+
+
+      plantSystemSummaryResults.sourceWaterIntake += systemAnnualSummaryResults.sourceWaterIntake;
+      plantSystemSummaryResults.dischargeWater += systemAnnualSummaryResults.dischargeWater;
+      plantSystemSummaryResults.directCostPerYear += systemAnnualSummaryResults.directCostPerYear;
+      plantSystemSummaryResults.trueCostPerYear += systemAnnualSummaryResults.trueCostPerYear;
+      plantSystemSummaryResults.trueOverDirectResult += systemAnnualSummaryResults.trueOverDirectResult;
+
+      plantSystemSummaryResults.allSystemResults.push(systemAnnualSummaryResults)
+
+      
       systemCostContributions.total = Object.values(systemCostContributions).reduce((total: number, cost: number) => total + cost, 0);
       trueCostOfSystems[currentSystem.id] = systemCostContributions;
     });
   }
 
-  return trueCostOfSystems;
+  return {trueCostOfSystems, plantSystemSummaryResults};
 }
 
-const getPumpAndMotorEnergyContribution = (component: IntakeSource | DischargeOutlet | WaterUsingSystem, settings: DiagramSettings): number => {
+
+const getPumpAndMotorEnergyContribution = (component: IntakeSource | DischargeOutlet | WaterUsingSystem, electricityCost: number): number => {
   let pumpAndMotorEnergy = 0;
   if (component.addedMotorEnergy?.length) {
     pumpAndMotorEnergy = component.addedMotorEnergy.reduce(
-      (sum, motor) => sum + getMotorEnergyCost(motor, settings.electricityCost)
+      (sum, motor) => sum + getMotorEnergyCost(motor, electricityCost)
       , 0);
   }
   return pumpAndMotorEnergy;
@@ -638,7 +716,6 @@ export const getComponentAncestorCosts = (
   calculatedData: DiagramCalculatedData,
   nodeMap: Record<string, Node<ProcessFlowPart>>,
   graph: NodeGraphIndex,
-  settings: DiagramSettings
 ): Array<ConnectedCost> => {
   let systemConnectedCosts: ConnectedCost[] = [];
   const targetNodeTotalInflow = getTotalInflow(targetNode, calculatedData);
@@ -680,6 +757,7 @@ export const getComponentAncestorCosts = (
     systemConnectedCosts.push({
       name: node.data.name,
       componentType: node.data.processComponentType,
+      flow: flowValue,
       cost: costOfOutflow,
       percentSelfTotalFlow: percentSelfTotalFlow,
       percentDestinationInflow: percentDestinationInflow,
@@ -723,7 +801,6 @@ export const getComponentDescendantCosts = (
   calculatedData: DiagramCalculatedData,
   nodeMap: Record<string, Node<ProcessFlowPart>>,
   graph: NodeGraphIndex,
-  settings: DiagramSettings
 ): Array<ConnectedCost> => {
   let systemConnectedCosts: ConnectedCost[] = [];
   const sourceNodeTotalOutflow = getTotalOutflow(sourceNode, calculatedData);
@@ -772,6 +849,7 @@ export const getComponentDescendantCosts = (
       name: node.data.name,
       componentType: node.data.processComponentType,
       cost: costOfInflow,
+      flow: flowValue,
       percentSelfTotalFlow: percentSelfTotalFlow,
       percentDestinationInflow: percentSourceOutflow,
       sourceId: sourceId,
@@ -809,6 +887,7 @@ export interface ConnectedCost {
   name: string,
   componentType: ProcessFlowNodeType,
   cost: number,
+  flow: number,
   percentDestinationInflow: number,
   percentSelfTotalFlow: number,
   sourceId?: string,
@@ -830,8 +909,15 @@ export interface SystemTrueCostContributions {
   heatEnergyWastewater: number,
   total: number
 }
+
 export interface RecycledFlowData {
   recycledSourceName: string;
   recycledDestinationId: string;
   recycledDestinationName: string;
+}
+
+export interface SystemTrueCostTableData {
+  label: string;
+  results: number[];
+  unit: string;
 }

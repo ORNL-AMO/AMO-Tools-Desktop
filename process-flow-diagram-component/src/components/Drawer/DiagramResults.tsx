@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { Box } from '@mui/material';
-import { ComponentEdgeFlowConnectionCosts, CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentAncestorCosts, getComponentTypeTotalCost, getHeatEnergyCost, getMotorEnergyCost, getTrueCostOfSystems, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, NodeGraphIndex, ProcessFlowPart, setWaterUsingSystemFlows, TrueCostOfSystems, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
+import { ComponentEdgeFlowConnectionCosts, CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentAncestorCosts, getComponentTypeTotalCost, getHeatEnergyCost, getMotorEnergyCost, getPlantSummaryResults, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, NodeGraphIndex, PlantResults, ProcessFlowPart, setWaterUsingSystemFlows, TrueCostOfSystems, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
 import { selectCalculatedData, selectDischargeOutletNodes, selectEdges, selectGraphIndex, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
 import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
@@ -25,15 +25,18 @@ const DiagramResults = () => {
   const settings: DiagramSettings = useAppSelector((state) => state.diagram.settings);
   
   let trueCostOfSystems: TrueCostOfSystems = {};
-  console.log(validationErrors);
+  let plantResults: PlantResults;
+  console.log('errors', validationErrors);
   if (getIsDiagramValid(validationErrors)) {
-    trueCostOfSystems = getTrueCostOfSystems(nodes, calculatedNodeData, graph, settings);
+    plantResults = getPlantSummaryResults(nodes, calculatedNodeData, graph, settings.electricityCost);
+    trueCostOfSystems = plantResults.trueCostOfSystems;
+    
   }
+  console.log('plantResults', plantResults);
   console.log('trueCostOfSystems', trueCostOfSystems);
 
   setWaterUsingSystemFlows(waterUsingSystems, edges);
   const diagramResults: WaterBalanceResults = getWaterBalanceResults(waterUsingSystems); 
-  // console.log('Diagram WB', diagramResults);
   
   const costTitle = "Annual Costs";
   // direct costs
@@ -42,7 +45,6 @@ const DiagramResults = () => {
   // indirect costs
   const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow');
   const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow');
-  // todo make assessment settings available in diagram
   const systemMotorEnergyData: MotorEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.addedMotorEnergy || []).flat();
   const intakeMotorEnergy = intakes
     .map((intake: Node<ProcessFlowPart>) => {
@@ -58,16 +60,13 @@ const DiagramResults = () => {
 
   const allMotorEnergy: MotorEnergy[] = systemMotorEnergyData.concat(intakeMotorEnergy, dischargeMotorEnergy);
   const motorEnergyCosts = allMotorEnergy.reduce((total, motorEnergy) => {
-    // todo bug hardcoded 1, get from settings unitCost?
-    return total + getMotorEnergyCost(motorEnergy, 1);
+    return total + getMotorEnergyCost(motorEnergy, settings.electricityCost);
   }, 0);
-  // console.log('motorEnergyCosts', motorEnergyCosts);
 
   const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy).filter((heatEnergy: HeatEnergy) => heatEnergy !== undefined);
   const heatEnergyCosts = systemHeatEnergyData.reduce((total, heatEnergy) => {
-    return total + getHeatEnergyCost(heatEnergy, 1);
+    return total + getHeatEnergyCost(heatEnergy, settings.electricityCost);
   }, 0);
-  // console.log('heatEnergyCosts', heatEnergyCosts);
   
   const indirectCosts = treatmentCost + wasteTreatmentCost + motorEnergyCosts + heatEnergyCosts;
   const trueCost = getWaterTrueCost(intakeCost, dischargeCost, motorEnergyCosts, heatEnergyCosts, treatmentCost, wasteTreatmentCost);

@@ -115,7 +115,7 @@ export class WaterBannerComponent {
   }
 
   changeTab(str: string) {
-    if (str == 'system-setup' || str == 'diagram' || this.isBaselineValid) {
+    if (str == 'system-setup' || str == 'diagram' || str == 'report') {
       this.waterAssessmentService.mainTab.next(str);
     }
     this.collapseBanner();
