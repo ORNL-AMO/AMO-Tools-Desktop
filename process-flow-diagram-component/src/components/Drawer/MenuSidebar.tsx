@@ -375,7 +375,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 
         <Box>
           <Divider sx={{ margin: '1rem' }} />
-          <DiagramResults />
+          {/* <DiagramResults /> */}
         </Box>
       </Box>
     </Box>

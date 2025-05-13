@@ -23,99 +23,102 @@ const DiagramResults = () => {
   const graph: NodeGraphIndex = useAppSelector(selectGraphIndex);
   const calculatedNodeData: DiagramCalculatedData = useAppSelector(selectCalculatedData);
   const settings: DiagramSettings = useAppSelector((state) => state.diagram.settings);
-  
+  const isDiagramValid = getIsDiagramValid(validationErrors);
   let trueCostOfSystems: TrueCostOfSystems = {};
   let plantResults: PlantResults;
-  console.log('errors', validationErrors);
-  if (getIsDiagramValid(validationErrors)) {
+
+  if (isDiagramValid) {
     plantResults = getPlantSummaryResults(nodes, calculatedNodeData, graph, settings.electricityCost);
     trueCostOfSystems = plantResults.trueCostOfSystems;
-    
-  }
-  console.log('plantResults', plantResults);
-  console.log('trueCostOfSystems', trueCostOfSystems);
 
-  setWaterUsingSystemFlows(waterUsingSystems, edges);
-  const diagramResults: WaterBalanceResults = getWaterBalanceResults(waterUsingSystems); 
-  
-  const costTitle = "Annual Costs";
-  // direct costs
-  const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow');
-  const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow');
-  // indirect costs
-  const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow');
-  const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow');
-  const systemMotorEnergyData: MotorEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.addedMotorEnergy || []).flat();
-  const intakeMotorEnergy = intakes
-    .map((intake: Node<ProcessFlowPart>) => {
-      const intakeSource = intake.data as IntakeSource;
-      return intakeSource.addedMotorEnergy || [];
-    })
-    .flat();
+    console.log('plantResults', plantResults);
+    console.log('trueCostOfSystems', trueCostOfSystems);
 
-  const dischargeMotorEnergy = discharges.map((discharge: Node<ProcessFlowPart>) => {
-    const dischargeSource = discharge.data as DischargeOutlet;
-    return dischargeSource.addedMotorEnergy || [];
-  }).flat();
+    setWaterUsingSystemFlows(waterUsingSystems, edges);
+    const diagramResults: WaterBalanceResults = getWaterBalanceResults(waterUsingSystems);
 
-  const allMotorEnergy: MotorEnergy[] = systemMotorEnergyData.concat(intakeMotorEnergy, dischargeMotorEnergy);
-  const motorEnergyCosts = allMotorEnergy.reduce((total, motorEnergy) => {
-    return total + getMotorEnergyCost(motorEnergy, settings.electricityCost);
-  }, 0);
+    const costTitle = "Annual Costs";
+    // direct costs
+    const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow');
+    const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow');
+    // indirect costs
+    const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow');
+    const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow');
+    const systemMotorEnergyData: MotorEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.addedMotorEnergy || []).flat();
+    const intakeMotorEnergy = intakes
+      .map((intake: Node<ProcessFlowPart>) => {
+        const intakeSource = intake.data as IntakeSource;
+        return intakeSource.addedMotorEnergy || [];
+      })
+      .flat();
 
-  const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy).filter((heatEnergy: HeatEnergy) => heatEnergy !== undefined);
-  const heatEnergyCosts = systemHeatEnergyData.reduce((total, heatEnergy) => {
-    return total + getHeatEnergyCost(heatEnergy, settings.electricityCost);
-  }, 0);
-  
-  const indirectCosts = treatmentCost + wasteTreatmentCost + motorEnergyCosts + heatEnergyCosts;
-  const trueCost = getWaterTrueCost(intakeCost, dischargeCost, motorEnergyCosts, heatEnergyCosts, treatmentCost, wasteTreatmentCost);
+    const dischargeMotorEnergy = discharges.map((discharge: Node<ProcessFlowPart>) => {
+      const dischargeSource = discharge.data as DischargeOutlet;
+      return dischargeSource.addedMotorEnergy || [];
+    }).flat();
 
-  const currency = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD'
-  });
-  const costRows = [
-    { label: 'Intake Costs', result: currency.format(intakeCost), unit: '$'},
-    { label: 'Discharge Costs', result: currency.format(dischargeCost), unit: '$' },
-    { label: 'Indirect Costs', result: currency.format(indirectCosts), unit: '$' },
-    { label: 'True Cost', result: currency.format(trueCost), unit: '$' },
-  ];
-  
-  const intakeTitle = "Annual Intake";
-  let intakeRows = intakes.map((intake: Node<ProcessFlowPart>) => {
-      return { label: intake.data.name, result: intake.data.userEnteredData.totalDischargeFlow, unit: <FlowDisplayUnit/> };
-    }
-  );
-  intakeRows.push(
-    { label: 'Total Intake', result: diagramResults.incomingWater, unit: <FlowDisplayUnit/> },
-  );
+    const allMotorEnergy: MotorEnergy[] = systemMotorEnergyData.concat(intakeMotorEnergy, dischargeMotorEnergy);
+    const motorEnergyCosts = allMotorEnergy.reduce((total, motorEnergy) => {
+      return total + getMotorEnergyCost(motorEnergy, settings.electricityCost);
+    }, 0);
 
-  const dischargeTitle = "Annual Discharge";
-  let dischargeRows: TwoCellResultRow[] = discharges.map((discharge: Node<ProcessFlowPart>) => {
-      return { label: discharge.data.name, result: discharge.data.userEnteredData.totalSourceFlow, unit: <FlowDisplayUnit/> };
+    const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy).filter((heatEnergy: HeatEnergy) => heatEnergy !== undefined);
+    const heatEnergyCosts = systemHeatEnergyData.reduce((total, heatEnergy) => {
+      return total + getHeatEnergyCost(heatEnergy, settings.electricityCost);
+    }, 0);
+
+    const indirectCosts = treatmentCost + wasteTreatmentCost + motorEnergyCosts + heatEnergyCosts;
+    const trueCost = getWaterTrueCost(intakeCost, dischargeCost, motorEnergyCosts, heatEnergyCosts, treatmentCost, wasteTreatmentCost);
+
+    const currency = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
     });
-  dischargeRows.push(
-    { label: 'Total Known Loss', result: diagramResults.totalKnownLosses, unit:   <FlowDisplayUnit/>},
-    { label: 'Estimated Unknown Loss', result: diagramResults.estimatedUnknownLosses, unit:   <FlowDisplayUnit/>},
-    { label: 'Total Discharge', result: diagramResults.outgoingWater, unit:   <FlowDisplayUnit/>},
-  )
+    const costRows = [
+      { label: 'Intake Costs', result: currency.format(intakeCost), unit: '$' },
+      { label: 'Discharge Costs', result: currency.format(dischargeCost), unit: '$' },
+      { label: 'Indirect Costs', result: currency.format(indirectCosts), unit: '$' },
+      { label: 'True Cost', result: currency.format(trueCost), unit: '$' },
+    ];
 
-  const balanceTitle = "Annual Imbalance";
-  const balanceRows = [
-    { label: 'Total Imbalance', result: diagramResults.waterBalance, unit: <FlowDisplayUnit/> },
-  ]
+    const intakeTitle = "Annual Intake";
+    let intakeRows = intakes.map((intake: Node<ProcessFlowPart>) => {
+      return { label: intake.data.name, result: intake.data.userEnteredData.totalDischargeFlow, unit: <FlowDisplayUnit /> };
+    }
+    );
+    intakeRows.push(
+      { label: 'Total Intake', result: diagramResults.incomingWater, unit: <FlowDisplayUnit /> },
+    );
 
+    const dischargeTitle = "Annual Discharge";
+    let dischargeRows: TwoCellResultRow[] = discharges.map((discharge: Node<ProcessFlowPart>) => {
+      return { label: discharge.data.name, result: discharge.data.userEnteredData.totalSourceFlow, unit: <FlowDisplayUnit /> };
+    });
+    dischargeRows.push(
+      { label: 'Total Known Loss', result: diagramResults.totalKnownLosses, unit: <FlowDisplayUnit /> },
+      { label: 'Estimated Unknown Loss', result: diagramResults.estimatedUnknownLosses, unit: <FlowDisplayUnit /> },
+      { label: 'Total Discharge', result: diagramResults.outgoingWater, unit: <FlowDisplayUnit /> },
+    )
+
+    const balanceTitle = "Annual Imbalance";
+    const balanceRows = [
+      { label: 'Total Imbalance', result: diagramResults.waterBalance, unit: <FlowDisplayUnit /> },
+    ]
+
+  } else {
+  console.log('errors', validationErrors);
+
+  }
+
+  {/* <TwoCellResultTable headerTitle={costTitle} rows={costRows} style={{marginBottom: '1rem'}}/>
+    <TwoCellResultTable headerTitle={intakeTitle} rows={intakeRows} />
+    <TwoCellResultTable headerTitle={dischargeTitle} rows={dischargeRows} />
+    <TwoCellResultTable headerTitle={balanceTitle} rows={balanceRows} /> */}
   return (
-    <Box sx={{marginX: '.5rem'}}>
-      {/* <TwoCellResultTable headerTitle={costTitle} rows={costRows} style={{marginBottom: '1rem'}}/>
-      <TwoCellResultTable headerTitle={intakeTitle} rows={intakeRows} />
-      <TwoCellResultTable headerTitle={dischargeTitle} rows={dischargeRows} />
-      <TwoCellResultTable headerTitle={balanceTitle} rows={balanceRows} /> */}
-      <TrueCostOfSystemResultTable 
-        trueCostOfSystems={trueCostOfSystems} 
-        nodes={nodes} 
-        />
+    <Box sx={{ marginX: '.5rem' }}>
+      {isDiagramValid? 
+        <TrueCostOfSystemResultTable trueCostOfSystems={trueCostOfSystems} nodes={nodes} /> : <></>
+        }
     </Box>
   );
 }
