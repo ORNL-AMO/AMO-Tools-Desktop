@@ -136,7 +136,7 @@ export class WaterAssessmentComponent {
     this.showAddModificationSub.unsubscribe();
     this.showModificationListSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
-    this.waterAssessmentService.mainTab.next('system-setup');
+    this.waterAssessmentService.mainTab.next('baseline');
     this.waterAssessmentService.setupTab.next('system-basics');
     this.waterAssessmentService.waterAssessment.next(undefined);
     this.waterSystemComponentService.selectedComponent.next(undefined);
@@ -261,7 +261,7 @@ export class WaterAssessmentComponent {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.waterAssessmentService.mainTab.next('system-setup');
+      this.waterAssessmentService.mainTab.next('baseline');
       this.waterAssessmentService.setupTab.next('system-basics');
     }
     this.showUpdateUnitsModal = false;
