@@ -5,9 +5,9 @@ import { Button } from '@mui/material';
 import { useAppSelector } from '../../hooks/state';
 import { selectNodes } from '../Diagram/store';
 
-function downloadImage(dataUrl) {
+function downloadImage(dataUrl, name: string) {
   const a = document.createElement('a');
-  a.setAttribute('download', 'reactflow.png');
+  a.setAttribute('download', `${name? name : 'Water Process Diagram'}.png`);
   // a.setAttribute('download', 'reactflow.svg');
   a.setAttribute('href', dataUrl);
   a.click();
@@ -18,6 +18,8 @@ const imageHeight = 768;
 
 function DownloadButton(props: DownloadProps) {
   const nodes = useAppSelector(selectNodes);
+  const diagramName = useAppSelector((state) => state.diagram.name);
+  
   const onClick = () => {
     const nodesBounds = getNodesBounds(nodes);
     const transform: {x: number, y: number, zoom: number} = getViewportForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2, 0);
@@ -37,7 +39,7 @@ function DownloadButton(props: DownloadProps) {
         height: String(imageHeight),
         transform: `translate(${transform.x}px, ${transform.y}px) scale(${transform.zoom})`,
       },
-    }).then(downloadImage);
+    }).then((url) => downloadImage(url, diagramName));
   
   };
 

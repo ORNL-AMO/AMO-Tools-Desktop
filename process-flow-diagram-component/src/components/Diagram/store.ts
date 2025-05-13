@@ -2,15 +2,16 @@ import { configureStore, createListenerMiddleware, createSelector, isAnyOf } fro
 import diagramReducer, { addNode, DiagramState, saveDiagramState } from './diagramReducer'
 import { addEdge, Edge, getConnectedEdges, Node } from '@xyflow/react';
 import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
-import { createGraphIndex, CustomEdgeData, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterProcessComponent } from 'process-flow-lib';
+import { createGraphIndex, CustomEdgeData, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
 
 
-export function configureAppStore() {
+export function configureAppStore(waterDiagram: WaterDiagram) {
   const store = configureStore({
     reducer: { diagram: diagramReducer },
     preloadedState: {
       // diagram: getResetData(),
       diagram: {
+        name: waterDiagram.flowDiagramData.name,
         nodes: [],
         edges: [],
         composedNodeData: [],

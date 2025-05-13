@@ -32,6 +32,7 @@ export class WaterProcessDiagramService {
     return {
       isValid: true,
       flowDiagramData: {
+        name: 'Water Process Diagram',
         nodes: [],
         edges: [],
         nodeErrors: {},

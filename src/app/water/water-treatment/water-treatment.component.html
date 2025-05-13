@@ -64,8 +64,8 @@
             <div class="input-group">
                 <input name="flowValue" type="number" class="form-control" id="flowValue" formControlName="flowValue"
                     (input)="save()" (focus)="focusField('flowValue')">
-                <span class="units input-group-addon">Mgal</span>
-
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.flowValue.invalid && !form.controls.flowValue.pristine">
