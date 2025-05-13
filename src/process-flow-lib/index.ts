@@ -1,6 +1,7 @@
 export * from './water/types/assessment';
 export * from './water/types/diagram';
 export * from './water/types/water-components';
+export * from './water/types/results';
 
 export * from './water/constants';
 

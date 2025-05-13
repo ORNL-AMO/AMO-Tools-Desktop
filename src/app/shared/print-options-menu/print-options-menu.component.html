@@ -80,6 +80,15 @@
                         Treasure Hunt Rollup Summary
                     </div>
                 </div>
+                <div class="row toggle-btn pad-top-10" *ngIf="showWaterOptions && showRollupReportOptions">
+                    <div class="col-2">
+                        <app-animated-checkmark [active]="printOptions.printWaterRollup">
+                        </app-animated-checkmark>
+                    </div>
+                    <div class="col-8 bold-bottom-divider">
+                        Water Rollup Summary
+                    </div>
+                </div>
                 <div class="row toggle-btn pad-top-10" *ngIf="showWasteWaterOptions && showRollupReportOptions"
                     (click)="togglePrint('printWasteWaterRollup')">
                     <div class="col-2">
