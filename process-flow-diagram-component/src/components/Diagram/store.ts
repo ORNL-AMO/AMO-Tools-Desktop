@@ -2,7 +2,7 @@ import { configureStore, createListenerMiddleware, createSelector, isAnyOf } fro
 import diagramReducer, { addNode, DiagramState, saveDiagramState } from './diagramReducer'
 import { addEdge, Edge, getConnectedEdges, Node } from '@xyflow/react';
 import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
-import { CustomEdgeData, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterProcessComponent } from 'process-flow-lib';
+import { createGraphIndex, CustomEdgeData, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterProcessComponent } from 'process-flow-lib';
 
 
 export function configureAppStore() {
@@ -82,13 +82,18 @@ export const selectNodeValidation = (state: RootState) => {
   return state.diagram.nodeErrors[state.diagram.selectedDataId]
 };
 
-export const selectNodeFlowData = (state: RootState, nodeId: string) => {
+export const selectNodeCalculatedFlowData = (state: RootState, nodeId: string) => {
   return state.diagram.calculatedData.nodes[nodeId]};
 export const selectNodeId = (state: RootState, nodeId?: number) => {
   return nodeId ? nodeId : state.diagram.selectedDataId;
 } 
 
 // * MEMOIZED SELECTORS
+export const selectGraphIndex = createSelector(
+  [selectNodes, selectEdges],
+  (nodes, edges) => createGraphIndex(nodes, edges)
+);
+
 export const selectNodeSourceEdges = createSelector([selectEdges, selectNodeId], (edges: Edge[], nodeId?: string) => {
   return getNodeSourceEdges(edges, nodeId);
 });
@@ -157,9 +162,6 @@ export const selectWasteTreatmentNodes = createSelector(
 );
 
 
-
-
-
 // todo use FlowUtils helper instead when possible, this may be more expensive than passing in state to utils
 export const selectNodeFlowTotals = (state: RootState, node: Node<ProcessFlowPart>) => {
   const connectedEdges = getConnectedEdges([node], state.diagram.edges);
@@ -176,5 +178,3 @@ export const selectNodeFlowTotals = (state: RootState, node: Node<ProcessFlowPar
 
   return { totalCalculatedSourceFlow, totalCalculatedDischargeFlow };
 }
-
-

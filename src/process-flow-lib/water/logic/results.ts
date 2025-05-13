@@ -1,8 +1,9 @@
 import { Node, Edge } from "@xyflow/react";
-import { CustomEdgeData, DiagramSettings, NodeFlowData, NodeFlowProperty, ProcessFlowPart } from "../types/diagram";
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, EdgeFlowData, HeatEnergy, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
-import { convertAnnualFlow, convertNullInputValueForObjectConstructor} from "./utils";
+import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowData, NodeFlowProperty, ProcessFlowNodeType, ProcessFlowPart } from "../types/diagram";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WasteWaterTreatment, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
+import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getWaterFlowTotals } from "./water-components";
+import { getAncestors, getAncestorsDFS, getDescendants, getDescendantsDFS, NodeGraphIndex } from "../../graph";
 
 // * WASM Module with suite api
 declare var Module: any;
@@ -10,7 +11,7 @@ declare var Module: any;
 export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[]): WaterBalanceResults => {
   let allSystemBalanceResults = [];
   let allSystemsTotalBalance = 0;
-  
+
   waterUsingSystems.forEach(system => {
     let systemBalanceResults: SystemBalanceResults = getSystemBalanceResults(system);
     allSystemBalanceResults.push(systemBalanceResults);
@@ -39,7 +40,7 @@ export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[]): W
     return systemResult;
   });
 
-  console.log('Water Balance Results', plantBalanceResults);
+  // console.log('Water Balance Results', plantBalanceResults);
   return plantBalanceResults;
 }
 
@@ -65,33 +66,33 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem): SystemBa
   // * recycled removed 7423
   // systemBalanceResults.incomingWater = waterSystem.systemFlowTotals.sourceWater + waterSystem.systemFlowTotals.recycledSourceWater;
   // systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct + waterSystem.systemFlowTotals.dischargeWater + waterSystem.systemFlowTotals.dischargeWaterRecycled + consumptiveIrrigationLoss;
-  
+
   const estimatedUnknownLosses = getSystemEstimatedUnknownLosses(waterSystem, waterSystem.userEnteredData.totalSourceFlow, waterSystem.userEnteredData.totalDischargeFlow);
   systemBalanceResults.incomingWater = waterSystem.systemFlowTotals.sourceWater;
-  systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct 
-    + waterSystem.systemFlowTotals.dischargeWater 
-    + waterSystem.systemFlowTotals.knownLosses 
+  systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct
+    + waterSystem.systemFlowTotals.dischargeWater
+    + waterSystem.systemFlowTotals.knownLosses
     + estimatedUnknownLosses
     + consumptiveIrrigationLoss;
-  
+
   systemBalanceResults.totalKnownLosses = waterSystem.systemFlowTotals.knownLosses;
   systemBalanceResults.waterBalance = systemBalanceResults.incomingWater - systemBalanceResults.outgoingWater;
   systemBalanceResults.percentIncomingWater = getBalancePercent(systemBalanceResults.incomingWater, systemBalanceResults.waterBalance);
-  console.log('SystemBalanceResults', waterSystem.name, systemBalanceResults);
+  // console.log('SystemBalanceResults', waterSystem.name, systemBalanceResults);
   return systemBalanceResults;
 }
 
 export const getSystemEstimatedUnknownLosses = (
-  componentData: WaterUsingSystem, 
-  systemTotalSourceFlow: number, 
+  componentData: WaterUsingSystem,
+  systemTotalSourceFlow: number,
   systemTotalDischargeFlow: number
 ): number => {
-  systemTotalDischargeFlow = systemTotalDischargeFlow?? 0;
-  systemTotalSourceFlow = systemTotalSourceFlow?? 0; 
-  const totalKnownLosses = componentData.userEnteredData.totalKnownLosses?? 0;
-  const waterInProduct = componentData.userEnteredData.waterInProduct?? 0;
+  systemTotalDischargeFlow = systemTotalDischargeFlow ?? 0;
+  systemTotalSourceFlow = systemTotalSourceFlow ?? 0;
+  const totalKnownLosses = componentData.userEnteredData.totalKnownLosses ?? 0;
+  const waterInProduct = componentData.userEnteredData.waterInProduct ?? 0;
   const allKnownLosses = totalKnownLosses + waterInProduct;
-  const unknownLoss: number = systemTotalSourceFlow - systemTotalDischargeFlow; 
+  const unknownLoss: number = systemTotalSourceFlow - systemTotalDischargeFlow;
   const totalUnknownLoss = unknownLoss - allKnownLosses;
   return totalUnknownLoss;
 }
@@ -111,11 +112,11 @@ export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], 
     let componentFlows: DiagramWaterSystemFlows = {
       id: system.diagramNodeId,
       componentName: system.name,
-      sourceWater: {total: 0, flows: []},
-      recirculatedWater: {total: 0, flows: []},
-      dischargeWater: {total: 0, flows: []},
-      knownLosses: {total: 0, flows: []},
-      waterInProduct: {total: 0, flows: []},
+      sourceWater: { total: 0, flows: [] },
+      recirculatedWater: { total: 0, flows: [] },
+      dischargeWater: { total: 0, flows: [] },
+      knownLosses: { total: 0, flows: [] },
+      waterInProduct: { total: 0, flows: [] },
     }
 
     edges.forEach((edge: Edge<CustomEdgeData>) => {
@@ -130,10 +131,10 @@ export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], 
       // * Users may have crated known loss components - these are currently just for visual representation
       // replace assessment known losses empty array with actual data
       // const isKnownLossFlow = edge.source === system.diagramNodeId && getIsKnownLossFlow(edge.target, [])
-      
+
       if (system.diagramNodeId === edge.target && edge.source === edge.target) {
         componentFlows.recirculatedWater.flows.push(flowData)
-      } 
+      }
       // else if (isKnownLossFlow) {
       //   componentFlows.knownLosses.flows.push(flowData);
       //   componentFlows.waterInProduct.flows.push(flowData);
@@ -142,7 +143,7 @@ export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], 
         componentFlows.dischargeWater.flows.push(flowData);
       } else if (edge.target === system.diagramNodeId) {
         componentFlows.sourceWater.flows.push(flowData);
-      } 
+      }
     });
 
     componentFlows.sourceWater.total = getTotalFlowValue(componentFlows.sourceWater.flows)?? 0;
@@ -151,7 +152,7 @@ export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], 
     const totalKnownLosses = system.userEnteredData.totalKnownLosses?? system.userDiagramFlowOverrides?.knownLosses;
     componentFlows.knownLosses.total = totalKnownLosses?? 0;
     // componentFlows.knownLosses.total = system.userEnteredData.totalKnownLosses? system.userEnteredData.totalKnownLosses : getTotalFlowValue(componentFlows.knownLosses.flows);
-    componentFlows.waterInProduct.total = system.userEnteredData.waterInProduct?? 0;
+    componentFlows.waterInProduct.total = system.userEnteredData.waterInProduct ?? 0;
     diagramWaterSystemFlows.push(componentFlows);
 
     // todo override above values if user has entered their own
@@ -161,7 +162,7 @@ export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], 
 
     return system;
   });
-  
+
   return diagramWaterSystemFlows;
 }
 
@@ -365,18 +366,18 @@ export const getUnknownLossees = (totalSourceFlow: number, totalDischargeFlow: n
   return totalSourceFlow - totalDischargeFlow - knownLosses - waterInProduct;
 }
 
-     /**
- * Get annual cost of all components for a given type
- * @param components WaterProcessComponent/ProcessFlowPart 
- * @param nodeFlowProperty NodeFlowData property that represents flow cost, i.e. totalDischargeflow for intakes, totalSourceflow for discharges
- * 
- */
+/**
+* Get annual cost of all components for a given type
+* @param components WaterProcessComponent/ProcessFlowPart 
+* @param nodeFlowProperty NodeFlowData property that represents flow cost, i.e. totalDischargeflow for intakes, totalSourceflow for discharges
+* 
+*/
 export const getComponentTypeTotalCost = (components: Node<ProcessFlowPart>[], nodeFlowProperty: NodeFlowProperty) => {
   return components.reduce((total: number, component: Node<ProcessFlowPart>) => {
-    const flowMgal = component.data.userEnteredData[nodeFlowProperty]?? 0;
-    const cost = component.data.cost?? 0;
-    let acc = getKGalCost(cost, flowMgal);
-    return total + acc; 
+    const flowMgal = component.data.userEnteredData[nodeFlowProperty] ?? 0;
+    const unitCost = component.data.cost ?? 0;
+    let cost = getKGalCost(unitCost, flowMgal);
+    return total + cost;
   }, 0);
 }
 
@@ -386,23 +387,23 @@ export const getKGalCost = (kGalUnitCost: number, flowMgal: number): number => {
 }
 
 
-     /**
- * Get annual true cost. Direct costs (intake and discharges) + indirect costs (energy, treatment, etc.)
- */
+/**
+* Get annual true cost. Direct costs (intake and discharges) + indirect costs (energy, treatment, etc.)
+*/
 export const getWaterTrueCost = (
-  intakeCost: number, 
+  intakeCost: number,
   dischargeCost: number,
   motorEnergyCost?: number,
   heatEnergyCost?: number,
   waterTreatmentCost?: number,
   wasteTreatmentCost?: number,
-  ): number => {
-    let energyCosts = motorEnergyCost + heatEnergyCost;
-    energyCosts = energyCosts ?? 0;
-    const directCosts = intakeCost + dischargeCost;
-    const indirectCost = waterTreatmentCost + wasteTreatmentCost + energyCosts;
-    const trueCost =  directCosts + indirectCost;
-    console.log('direct costs, indirect costs, true cost', directCosts, indirectCost, trueCost); 
+): number => {
+  let energyCosts = motorEnergyCost + heatEnergyCost;
+  energyCosts = energyCosts ?? 0;
+  const directCosts = intakeCost + dischargeCost;
+  const indirectCost = waterTreatmentCost + wasteTreatmentCost + energyCosts;
+  const trueCost = directCosts + indirectCost;
+  // console.log('direct costs, indirect costs, true cost', directCosts, indirectCost, trueCost);
   return trueCost;
 }
 
@@ -426,14 +427,411 @@ export const getMotorEnergyCost = (motorEnergy: MotorEnergy, energyUnitCost: num
 */
 export const getHeatEnergyCost = (systemHeatEnergy: HeatEnergy, energyUnitCost: number): number => {
   const heatEnergy: HeatEnergy = {
-    incomingTemp: systemHeatEnergy.incomingTemp?? 0,
-    outgoingTemp: systemHeatEnergy.outgoingTemp?? 0,
-    heaterEfficiency: systemHeatEnergy.heaterEfficiency?? 0,
-    wasteWaterDischarge: systemHeatEnergy.wasteWaterDischarge?? 0,
-    hoursPerYear: systemHeatEnergy.hoursPerYear?? 0,
-    heatingFuelType: systemHeatEnergy.heatingFuelType?? 0,
+    incomingTemp: systemHeatEnergy.incomingTemp ?? 0,
+    outgoingTemp: systemHeatEnergy.outgoingTemp ?? 0,
+    heaterEfficiency: systemHeatEnergy.heaterEfficiency ?? 0,
+    wasteWaterDischarge: systemHeatEnergy.wasteWaterDischarge ?? 0,
+    hoursPerYear: systemHeatEnergy.hoursPerYear ?? 0,
+    heatingFuelType: systemHeatEnergy.heatingFuelType ?? 0,
   }
   const energy = heatEnergy.wasteWaterDischarge * (heatEnergy.outgoingTemp - heatEnergy.incomingTemp) * 1 * 8.3454 * heatEnergy.heaterEfficiency / 1000000
   const heatEnergyCost = energy * energyUnitCost;
   return heatEnergyCost;
+}
+
+const setRecycledFlowData = (node: Node<ProcessFlowPart>, graph: NodeGraphIndex, nodeMap: Record<string, Node<ProcessFlowPart>>, recycledSourcesMap: Record<string, RecycledFlowData>)=> {
+  const incomingEdges = Object.values(graph.edgeMap).filter((e) => e.target === node.id);
+  incomingEdges.forEach((edge: Edge<CustomEdgeData>) => {
+    const sourceNode = nodeMap[edge.source];
+    if (sourceNode.data.processComponentType === 'water-using-system' || sourceNode.data.processComponentType === 'waste-water-treatment') {
+      recycledSourcesMap[sourceNode.id] = {
+        recycledSourceName: sourceNode.data.name,
+        recycledDestinationId: node.id,
+        recycledDestinationName: node.data.name,
+      };
+    } else {
+      const ancestors = getAncestors(sourceNode.id, graph);
+      ancestors.forEach((ancestorId: string) => {
+        const ancestorNode = nodeMap[ancestorId];
+        if (ancestorNode.data.processComponentType === 'water-using-system' || ancestorNode.data.processComponentType === 'waste-water-treatment') {
+          recycledSourcesMap[ancestorNode.id] = {
+            recycledSourceName: ancestorNode.data.name,
+            recycledDestinationId: node.id,
+            recycledDestinationName: node.data.name,
+          };
+        }
+      });
+
+    }
+  });
+}
+
+export const getTrueCostOfSystems = (nodes: Node[], calculatedData: DiagramCalculatedData, graph: NodeGraphIndex, settings: DiagramSettings): TrueCostOfSystems => {
+  const nodeMap: Record<string, Node<ProcessFlowPart>> = Object.fromEntries(nodes.map((n) => [n.id, n as Node<ProcessFlowPart>]));
+  const nodeNameMap: Record<string, string> = {};
+  const trueCostOfSystems: TrueCostOfSystems = {};
+  const recycledSourcesMap: Record<string, RecycledFlowData> = {};
+
+  // ! debugging
+  const debugname = 'CTB';
+  nodes.forEach((flowNode) => {
+    const node = nodeMap[flowNode.id];
+    if (node) {
+      nodeNameMap[node.id] = node.data.name;
+    }
+  });
+  console.log('nodeNameMap', nodeNameMap);
+
+  const waterUsingSystems = nodes.map((node: Node<ProcessFlowPart>) => {
+    if (node.data.processComponentType === 'water-using-system') {
+      // * Important: preprocess recycled nodes
+      setRecycledFlowData(node, graph, nodeMap, recycledSourcesMap);
+      return node;
+    } else {
+      return undefined;
+    }
+  }).filter(node => Boolean(node)) as Node<WaterUsingSystem>[];
+
+  
+  if (waterUsingSystems.length > 0) {
+    waterUsingSystems.forEach((currentSystem: Node<ProcessFlowPart>) => {
+      const ancestorCosts: ConnectedCost[] = getComponentAncestorCosts(currentSystem, calculatedData, nodeMap, graph, settings);
+      const descendantCosts: ConnectedCost[] = getComponentDescendantCosts(currentSystem, calculatedData, nodeMap, graph, settings);
+      const systemCostContributions: SystemTrueCostContributions = {
+        intake: 0,
+        discharge: 0,
+        thirdParty: 0,
+        treatment: 0,
+        wasteTreatment: 0,
+        systemPumpAndMotorEnergy: 0,
+        heatEnergyWastewater: 0,
+        total: 0
+      };
+
+      const waterUsingSystem = currentSystem.data as WaterUsingSystem;
+      if (waterUsingSystem.heatEnergy) {
+        systemCostContributions.heatEnergyWastewater = getHeatEnergyCost(waterUsingSystem.heatEnergy, settings.electricityCost);
+      }
+      systemCostContributions.systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, settings);
+
+      // * Current system owns costs for intake, water-treatment, and waste-water-treatment (if recycled into their system)
+        ancestorCosts.forEach((connectedAncestorCost: ConnectedCost) => {
+        const ancestorId = connectedAncestorCost.sourceId;
+        const ancestorNode = nodeMap[ancestorId];
+        switch (connectedAncestorCost.componentType) {
+          case 'water-intake': {
+            // * ignore costs of intake descendants flowing into a recycled flow into the current system
+            const directPathDescendants = getDescendantsDFS(ancestorId, graph, currentSystem.id);
+            const isIntakeInRecycledFlow = directPathDescendants.some((descendantId: string) => Boolean(recycledSourcesMap[descendantId]));
+
+            const isImmediateAncestor = graph.edgesByNode[ancestorId]?.some((edge: Edge<CustomEdgeData>) => {
+              return edge.target === currentSystem.id;
+            });
+
+            if (!isIntakeInRecycledFlow || isImmediateAncestor) {
+              const intake = ancestorNode.data as IntakeSource;
+              systemCostContributions.intake += connectedAncestorCost.cost;
+              const pumpAndMotorEnergy = getPumpAndMotorEnergyContribution(intake, settings);
+              const energyCost = pumpAndMotorEnergy * (connectedAncestorCost.percentSelfTotalFlow / 100);
+              systemCostContributions.intake += energyCost;
+            }
+            break;
+          }
+          case 'water-treatment':
+                 systemCostContributions.treatment += connectedAncestorCost.cost;
+            break;
+          case 'waste-water-treatment':
+            systemCostContributions.wasteTreatment += connectedAncestorCost.cost;
+            break;
+        }
+      });
+
+
+      // * Current system owns costs for discharge (if not recycled to another system) and waste-water-treatment (if not recycled to another system)
+      descendantCosts.forEach((connectedDescendantCost: ConnectedCost) => {
+        const descendantId = connectedDescendantCost.targetId;
+        const descendantNode = nodeMap[descendantId];
+        switch (connectedDescendantCost.componentType) {
+          case 'water-discharge': {
+            const discharge = descendantNode.data as DischargeOutlet;
+
+            // * ignore costs of discharge ancestors recycling flow into current path
+            const directPathAncestors = getAncestorsDFS(connectedDescendantCost.sourceId, graph, currentSystem.id);
+            const debugDirectPathAncestorNames = directPathAncestors.map((ancestorId: string) => nodeMap[ancestorId]?.data.name);
+            const isDischargeFromRecycledFlow = directPathAncestors.some((ancestorId: string) => {
+              const recycledData = recycledSourcesMap[ancestorId];
+              return recycledData && directPathAncestors.includes(recycledData.recycledDestinationId);
+            });
+
+            const isImmediateDescendant = graph.edgesByNode[descendantId]?.some((edge: Edge<CustomEdgeData>) => {
+              return edge.source === currentSystem.id;
+            });
+
+            if (!isDischargeFromRecycledFlow || isImmediateDescendant) {
+              systemCostContributions.discharge += connectedDescendantCost.cost;
+              const pumpAndMotorEnergy = getPumpAndMotorEnergyContribution(discharge, settings);
+              const energyCost = pumpAndMotorEnergy * (connectedDescendantCost.percentSelfTotalFlow / 100);
+              systemCostContributions.discharge += energyCost;
+            }
+            break;
+          }
+          case 'waste-water-treatment':
+            // * ignore costs for descendant who is a recycled source or has a descendant who is a recycled source
+            // todo has unsupported cases
+            let hasRecycledSource = Boolean(recycledSourcesMap[descendantId]);
+            if (!hasRecycledSource) {
+              const descendants = getDescendants(descendantId, graph);
+              hasRecycledSource = descendants.some((subDescId: string) => Boolean(recycledSourcesMap[subDescId]));
+            }
+
+            if (!hasRecycledSource) {
+              systemCostContributions.wasteTreatment += connectedDescendantCost.cost;
+            }
+            break;
+        }
+      });
+
+      systemCostContributions.total = Object.values(systemCostContributions).reduce((total: number, cost: number) => total + cost, 0);
+      trueCostOfSystems[currentSystem.id] = systemCostContributions;
+    });
+  }
+
+  return trueCostOfSystems;
+}
+
+const getPumpAndMotorEnergyContribution = (component: IntakeSource | DischargeOutlet | WaterUsingSystem, settings: DiagramSettings): number => {
+  let pumpAndMotorEnergy = 0;
+  if (component.addedMotorEnergy?.length) {
+    pumpAndMotorEnergy = component.addedMotorEnergy.reduce(
+      (sum, motor) => sum + getMotorEnergyCost(motor, settings.electricityCost)
+      , 0);
+  }
+  return pumpAndMotorEnergy;
+}
+
+
+/**
+* Get total inflow for a node. If user entered data is not available, use calculated data.
+*/
+const getTotalInflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalculatedData): number => {
+  let totalInflow = node.data.userEnteredData?.totalSourceFlow;
+  if (totalInflow === undefined || totalInflow === null) {
+    totalInflow = calculatedData.nodes[node.id]?.totalSourceFlow;
+  }
+  return totalInflow ?? 0;
+}
+
+/**
+* Get total outflow for a node. If user entered data is not available, use calculated data.
+*/
+const getTotalOutflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalculatedData): number => {
+  let totalOutflow = node.data.userEnteredData?.totalDischargeFlow;
+  if (totalOutflow === undefined || totalOutflow === null) {
+    totalOutflow = calculatedData.nodes[node.id]?.totalDischargeFlow;
+  }
+  return totalOutflow ?? 0;
+}
+
+
+export const getComponentAncestorCosts = (
+  targetNode: Node<ProcessFlowPart>,
+  calculatedData: DiagramCalculatedData,
+  nodeMap: Record<string, Node<ProcessFlowPart>>,
+  graph: NodeGraphIndex,
+  settings: DiagramSettings
+): Array<ConnectedCost> => {
+  let systemConnectedCosts: ConnectedCost[] = [];
+  const targetNodeTotalInflow = getTotalInflow(targetNode, calculatedData);
+  
+  const ancestors: {
+    nodeId: string;
+    componentType: ProcessFlowNodeType;
+    flowValue: number;
+    targetNodeTotalInflow: number;
+  }[] = [];
+  
+  const incomingEdges = Object.values(graph.edgeMap).filter((e) => e.target === targetNode.id);
+  incomingEdges.forEach((edge: Edge<CustomEdgeData>) => {
+    const sourceNode = nodeMap[edge.source];
+    ancestors.push({
+      nodeId: edge.source,
+      componentType: sourceNode.data.processComponentType,
+      flowValue: edge.data.flowValue ?? 0,
+      targetNodeTotalInflow: targetNodeTotalInflow,
+    });
+  });
+
+
+  const visited = new Set<string>();
+  while (ancestors.length > 0) {
+    const { nodeId, flowValue, targetNodeTotalInflow } = ancestors.shift()!;
+    const node = nodeMap[nodeId];
+    const selfTotalFlow = getTotalOutflow(node, calculatedData);
+
+    const outFlow = flowValue;
+    const inflow = getTotalInflow(node, calculatedData);
+    const flowFraction = flowValue / (targetNodeTotalInflow || 1);
+    const percentDestinationInflow = flowFraction * 100;
+    const percentSelfTotalFlow = (flowValue / (selfTotalFlow || 1)) * 100;
+
+    const costPerKGal = node.data.cost ?? 0;
+    const costOfOutflow = getKGalCost(costPerKGal, outFlow);
+
+    systemConnectedCosts.push({
+      name: node.data.name,
+      componentType: node.data.processComponentType,
+      cost: costOfOutflow,
+      percentSelfTotalFlow: percentSelfTotalFlow,
+      percentDestinationInflow: percentDestinationInflow,
+      sourceId: node.id,
+      targetId: targetNode.id
+    });
+
+    // * Don't observe costs of recycled system flows,
+    // * but still need to observe costs for recycled waste-water-treatment flows. In some cases multiple WWT are chained together.
+    const ignoreRecycledSystemFlow = node.data.processComponentType === 'water-using-system';
+    if (visited.has(nodeId) || ignoreRecycledSystemFlow) {
+      continue;
+    } else {
+      visited.add(nodeId);
+    }
+    
+    // * add ancestors of current ancestor to visit
+    const ancestorEdges = Object.values(graph.edgeMap).filter((e) => e.target === nodeId);
+    ancestorEdges.forEach((ancestorEdge: Edge<CustomEdgeData>) => {
+      const sourceNode = nodeMap[ancestorEdge.source];
+      ancestors.push({
+        nodeId: ancestorEdge.source,
+        componentType: sourceNode.data.processComponentType,
+        flowValue: ancestorEdge.data.flowValue ?? 0,
+        targetNodeTotalInflow: inflow,
+      });
+    });
+  }
+
+  return systemConnectedCosts;
+};
+
+
+/**
+* Get costs for component target descendants. 
+* Handles Water Using System flows being recycled into other systems. These flows are ignored as the current system does not pay for end of line discharge 
+* Handles Waste Water Treatment flows being recycled into other systems. This has been already attributed during ancestor calculation
+*/
+export const getComponentDescendantCosts = (
+  sourceNode: Node<ProcessFlowPart>,
+  calculatedData: DiagramCalculatedData,
+  nodeMap: Record<string, Node<ProcessFlowPart>>,
+  graph: NodeGraphIndex,
+  settings: DiagramSettings
+): Array<ConnectedCost> => {
+  let systemConnectedCosts: ConnectedCost[] = [];
+  const sourceNodeTotalOutflow = getTotalOutflow(sourceNode, calculatedData);
+
+  const descendants: {
+    nodeId: string;
+    sourceId?: string;
+    componentType: ProcessFlowNodeType;
+    flowValue: number;
+    sourceTotalOutflow: number;
+  }[] = [];
+
+  const outgoingEdges = Object.values(graph.edgeMap).filter((e) => e.source === sourceNode.id);
+  outgoingEdges.forEach((edge: Edge<CustomEdgeData>) => { 
+    const targetNode = nodeMap[edge.target];
+    if (targetNode.data.processComponentType !== 'water-using-system') {
+      descendants.push({
+        nodeId: edge.target,
+        sourceId: edge.source,
+        componentType: targetNode.data.processComponentType,
+        flowValue: edge.data.flowValue ?? 0,
+        sourceTotalOutflow: sourceNodeTotalOutflow,
+      });
+    }
+  });
+
+  const visited = new Set<string>();
+
+  while (descendants.length > 0) {
+    const { nodeId, sourceId, flowValue, sourceTotalOutflow } = descendants.shift()!;
+    const node = nodeMap[nodeId];
+    const selfTotalFlow = getTotalInflow(node, calculatedData);
+
+
+    const inflow = flowValue;
+    const outflow = getTotalOutflow(node, calculatedData);
+    const flowFraction = flowValue / (sourceTotalOutflow || 1);
+    const percentSourceOutflow = flowFraction * 100;
+    const percentSelfTotalFlow = (flowValue / (selfTotalFlow || 1)) * 100;
+
+    const costPerKGal = node.data.cost ?? 0;
+    const costOfInflow = getKGalCost(costPerKGal, inflow);
+
+    // * note sourceId used here is edge source not system source
+    systemConnectedCosts.push({
+      name: node.data.name,
+      componentType: node.data.processComponentType,
+      cost: costOfInflow,
+      percentSelfTotalFlow: percentSelfTotalFlow,
+      percentDestinationInflow: percentSourceOutflow,
+      sourceId: sourceId,
+      targetId: node.id
+    });
+
+
+    if (visited.has(nodeId)) {
+      continue;
+    } else {
+      visited.add(nodeId);
+    }
+    const descendantEdges = Object.values(graph.edgeMap).filter((e) => e.source === nodeId);
+    descendantEdges.forEach((descendantEdge: Edge<CustomEdgeData>) => {
+      const targetNode = nodeMap[descendantEdge.target];
+      descendants.push({
+        nodeId: descendantEdge.target,
+        sourceId: descendantEdge.source,
+        componentType: targetNode.data.processComponentType,
+        flowValue: descendantEdge.data.flowValue ?? 0,
+        sourceTotalOutflow: outflow,
+      });
+    });
+  }
+
+  return systemConnectedCosts;
+};
+
+
+export interface ComponentEdgeFlowConnectionCosts {
+  [connectionKey: string]: ConnectedCost;
+}
+
+export interface ConnectedCost {
+  name: string,
+  componentType: ProcessFlowNodeType,
+  cost: number,
+  percentDestinationInflow: number,
+  percentSelfTotalFlow: number,
+  sourceId?: string,
+  targetId?: string,
+}
+
+export interface TrueCostOfSystems {
+  [connectedId: string]: SystemTrueCostContributions
+}
+
+// each property = total cost vs. flow proportion for all connected to system
+export interface SystemTrueCostContributions {
+  intake: number,
+  discharge: number,
+  thirdParty: number
+  treatment: number,
+  wasteTreatment: number,
+  systemPumpAndMotorEnergy: number,
+  heatEnergyWastewater: number,
+  total: number
+}
+export interface RecycledFlowData {
+  recycledSourceName: string;
+  recycledDestinationId: string;
+  recycledDestinationName: string;
 }

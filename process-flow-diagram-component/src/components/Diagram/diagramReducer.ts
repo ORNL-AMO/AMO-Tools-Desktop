@@ -238,8 +238,9 @@ const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) 
 
 const nodeDataPropertyChangeReducer = <K extends keyof ProcessFlowPart, T extends keyof WaterTreatment>(state: DiagramState, action: PayloadAction<NodeDataPayload<K> | NodeTreatmentDataPayload<T>>) => {
   const updateNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId) as Node<ProcessFlowPart>;
-  if (updateNode && action.payload.optionsProp in updateNode.data) {
-    updateNode.data[action.payload.optionsProp] = action.payload.updatedValue;
+  const { optionsProp, updatedValue } = action.payload;
+  if (updateNode && optionsProp in updateNode.data) {
+    updateNode.data[optionsProp] = updatedValue;
   }
 }
 
@@ -363,6 +364,10 @@ const conductivityUnitChangeReducer = (state: DiagramState, action: PayloadActio
   state.settings.conductivityUnit = action.payload;
 }
 
+const electricityCostChangeReducer = (state: DiagramState, action: PayloadAction<number>) => {
+  state.settings.electricityCost = action.payload;
+}
+
 /**
  * Update diagram options by key as well as affected nodes and edges
  * @param state 
@@ -472,6 +477,7 @@ export const diagramSlice = createSlice({
     toggleDrawer: toggleDrawerReducer,
     setDialogOpen: setDialogOpenReducer,
     conductivityUnitChange: conductivityUnitChangeReducer,
+    electricityCostChange: electricityCostChangeReducer,
     modalOpenChange: modalOpenChangeReducer,
     applyEstimatedFlowResults: applyEstimatedFlowResultsReducer
   }
@@ -514,6 +520,7 @@ export const {
   setDialogOpen,
   modalOpenChange,
   conductivityUnitChange,
+  electricityCostChange
 } = diagramSlice.actions
 export default diagramSlice.reducer
 

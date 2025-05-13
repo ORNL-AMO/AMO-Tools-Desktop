@@ -121,6 +121,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   export interface DiagramSettings {
     flowDecimalPrecision: number,
     unitsOfMeasure: string,
+    electricityCost: number,
     conductivityUnit: string,
   }
   

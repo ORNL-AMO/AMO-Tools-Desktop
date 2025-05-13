@@ -37,6 +37,7 @@ export class WaterProcessDiagramService {
         nodeErrors: {},
         userDiagramOptions: getDefaultUserDiagramOptions(),
         settings: {
+          electricityCost: settings.electricityCost,
           flowDecimalPrecision: settings.flowDecimalPrecision,
           unitsOfMeasure: settings.unitsOfMeasure,
           conductivityUnit: 'mmho',

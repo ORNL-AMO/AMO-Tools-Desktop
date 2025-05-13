@@ -58,6 +58,7 @@ export class UpdateAssessmentFromDiagramService {
   setAssessmentSettingsFromDiagram(assessment: Assessment, settings: Settings, diagram: Diagram) {
     settings.unitsOfMeasure = diagram.waterDiagram.flowDiagramData.settings.unitsOfMeasure;
     settings.flowDecimalPrecision = diagram.waterDiagram.flowDiagramData.settings.flowDecimalPrecision;
+    assessment.water.systemBasics.electricityCost = diagram.waterDiagram.flowDiagramData.settings.electricityCost;
     assessment.water.systemBasics.conductivityUnit = diagram.waterDiagram.flowDiagramData.settings.conductivityUnit;
   }
 

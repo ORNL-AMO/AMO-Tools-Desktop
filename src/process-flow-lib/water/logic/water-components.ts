@@ -484,6 +484,7 @@ export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
 export const getDefaultSettings = (): DiagramSettings => {
   return {
     unitsOfMeasure: 'Imperial',
+    electricityCost: .066,
     flowDecimalPrecision: 2,
     conductivityUnit: 'mmho',
   }
