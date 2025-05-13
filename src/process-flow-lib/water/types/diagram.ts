@@ -81,6 +81,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   
   
   export interface FlowDiagramData {
+    name: string,
     nodes: Node[],
     edges: Edge[],
     nodeErrors: NodeErrors,

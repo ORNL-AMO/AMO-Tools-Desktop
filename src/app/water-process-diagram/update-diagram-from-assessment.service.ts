@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { WaterAssessment, WaterDiagram, WaterProcessComponent, WaterProcessComponentType, ProcessFlowPart, getNewNode, DiagramWaterSystemFlows, UserDiagramOptions, getEdgeFromConnection, EdgeFlowData, getAssessmentWaterSystemFlowEdges } from 'process-flow-lib';
+import { WaterAssessment, WaterDiagram, WaterProcessComponent, WaterProcessComponentType, ProcessFlowPart, getNewNode, DiagramWaterSystemFlows, UserDiagramOptions, getEdgeFromConnection, EdgeFlowData, getAssessmentWaterSystemFlowEdges, WaterSystemFlowsTotals, WaterUsingSystem } from 'process-flow-lib';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { Assessment } from '../shared/models/assessment';
@@ -81,7 +81,32 @@ export class UpdateDiagramFromAssessmentService {
     let diagramNodes: Node[] = this.updateExistingDiagramNodes(componentTypeNodes, assessmentComponents);
     this.addNewDiagramNodes(componentTypeNodes, assessmentComponents, diagramNodes);
     // console.log(`***Assessment Synced ${componentType} nodes`, diagramNodes);
+    this.updateDiagramNodesFromAssessmentOverrides(diagramNodes, assessmentComponents);
     return diagramNodes;
+  }
+
+  /**
+  * Only supports WaterUsingSystem for now
+  * @param diagramNodes 
+  * @param waterAssessment
+  */
+  updateDiagramNodesFromAssessmentOverrides(diagramNodes: Node[], assessmentComponents: WaterProcessComponent[]) {
+    diagramNodes.map((node: Node<ProcessFlowPart>) => {
+
+      if (node.data.processComponentType === 'water-using-system') {
+        let systemMatch: WaterUsingSystem = assessmentComponents.find((component: WaterProcessComponent) => component.diagramNodeId === node.data.diagramNodeId && component.processComponentType === 'water-using-system') as WaterUsingSystem;
+        if (systemMatch && systemMatch.userDiagramFlowOverrides) {
+          let overrides: WaterSystemFlowsTotals = systemMatch.userDiagramFlowOverrides;
+          node.data.userEnteredData.totalSourceFlow = overrides.sourceWater !== undefined ? overrides.sourceWater : node.data.userEnteredData.totalSourceFlow;
+          node.data.userEnteredData.totalDischargeFlow = overrides.dischargeWater !== undefined ? overrides.dischargeWater : node.data.userEnteredData.totalDischargeFlow;
+          node.data.userEnteredData.totalKnownLosses = overrides.knownLosses !== undefined ? overrides.knownLosses : node.data.userEnteredData.totalKnownLosses;
+          node.data.userEnteredData.waterInProduct = overrides.waterInProduct !== undefined ? overrides.waterInProduct : node.data.userEnteredData.waterInProduct;
+        }
+      }
+
+      // todo other component types
+      return node;
+    });
   }
 
   /**

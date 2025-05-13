@@ -9,6 +9,7 @@ import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNode
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 
 export interface DiagramState {
+  name: string,
   nodes: Node[];
   edges: Edge[];
   // * Owned or managed by another node. Does not display in the diagram
@@ -32,6 +33,7 @@ export interface DiagramState {
 
 export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState => {
   return {
+    name: undefined,
     nodes: [],
     edges: [],
     composedNodeData: [],
@@ -404,6 +406,8 @@ const diagramOptionsChangeReducer = <K extends keyof UserDiagramOptions>(state: 
           },
         };
       }
+
+      return edge;
     });
   }
 }
@@ -545,9 +549,10 @@ export const saveDiagramState = createAsyncThunk(
   'diagram/save',
   async (_, { getState }) => {
     const diagramState = getState() as DiagramState;
-    const { nodes, edges, nodeErrors, settings, diagramOptions, calculatedData, recentNodeColors, recentEdgeColors } = diagramState;
+    const { name, nodes, edges, nodeErrors, settings, diagramOptions, calculatedData, recentNodeColors, recentEdgeColors } = diagramState;
     const userDiagramOptions = diagramOptions;
     const updatedDiagramData: FlowDiagramData = {
+      name: name,
       nodes: nodes,
       nodeErrors: nodeErrors,
       edges: edges,

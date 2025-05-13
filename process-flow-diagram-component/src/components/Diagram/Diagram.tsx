@@ -98,6 +98,7 @@ const Diagram = (props: DiagramProps) => {
   useEffect(() => {
     if (assessmentCreatedNodes.length === 0) {
       const updatedDiagramData: FlowDiagramData = {
+        name: props.processDiagram.flowDiagramData.name,
         nodes: nodes,
         nodeErrors: nodeErrors,
         edges: debouncedEdges,
@@ -220,7 +221,7 @@ export default (props: DiagramProps) => {
   // * prevent multiple store instances on parent re-renders. Could also be lifted to AppWebComponent.tsx if needed
   const storeRef = useRef<AppStore | null>(null);
   if (!storeRef.current) {
-    storeRef.current = configureAppStore();
+    storeRef.current = configureAppStore(props.processDiagram);
   }
   // const storeRef = useMemo(() => configureAppStore(), []);
 
