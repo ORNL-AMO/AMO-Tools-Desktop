@@ -79,12 +79,12 @@ export class WaterBannerComponent {
     // } else if (this.mainTab == 'diagram') {
     //   this.waterAssessmentService.mainTab.next('assessment');
     // } else if (this.mainTab == 'assessment') {
-    //   this.waterAssessmentService.mainTab.next('system-setup');
+    //   this.waterAssessmentService.mainTab.next('baseline');
     // }
   }
 
   continue() {
-    // if (this.mainTab == 'system-setup') {
+    // if (this.mainTab == 'baseline') {
     //   this.waterAssessmentService.mainTab.next('assessment');
     // } else if (this.mainTab == 'assessment') {
     //   this.waterAssessmentService.mainTab.next('diagram');
@@ -115,7 +115,7 @@ export class WaterBannerComponent {
   }
 
   changeTab(str: string) {
-    if (str == 'system-setup' || str == 'diagram' || str == 'report') {
+    if (str == 'baseline' || str == 'diagram' || str == 'report') {
       this.waterAssessmentService.mainTab.next(str);
     }
     this.collapseBanner();

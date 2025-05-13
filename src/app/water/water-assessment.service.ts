@@ -37,7 +37,7 @@ export class WaterAssessmentService {
     private waterUsingSystemService: WaterUsingSystemService,
     private convertUnitsService: ConvertUnitsService) {
     this.settings = new BehaviorSubject<Settings>(undefined);
-    this.mainTab = new BehaviorSubject<string>('system-setup');
+    this.mainTab = new BehaviorSubject<string>('baseline');
     this.setupTab = new BehaviorSubject<WaterSetupTabString>('system-basics');
     this.waterUsingSystemTab = new BehaviorSubject<WaterUsingSystemTabString>('system');
     this.intakeSourceTab = new BehaviorSubject<PlantIntakeDischargeTab>('data');
@@ -198,12 +198,12 @@ export class WaterAssessmentService {
 
   back() {
     let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
-    if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'system-setup') {
+    if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'baseline') {
       let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
       let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex - 1];
       this.setupTab.next(nextTab);
     } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('system-setup');
+      this.mainTab.next('baseline');
     }
   }
 
