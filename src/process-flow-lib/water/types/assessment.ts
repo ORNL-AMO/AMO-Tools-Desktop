@@ -30,7 +30,17 @@ export interface WaterSystemBasics {
     notes: string
 }
 
+export interface WaterResults {
+    executiveSummary: ExecutiveSummaryReport,
+    systemSummary: SystemSummaryReport,
+}
 
+export interface ExecutiveSummaryReport {
+}
+
+export interface SystemSummaryReport {
+
+}
 
 
 

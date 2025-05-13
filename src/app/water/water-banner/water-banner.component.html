@@ -52,17 +52,9 @@
             <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">Diagram</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': false}"
                 (click)="changeTab('report')">Report</a>
         </div>
-        <!-- <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !isBaselineValid}"
-                (click)="changeTab('sankey')">Sankey</a>
-        </div> -->
-        <!-- <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !isBaselineValid}"
-                (click)="changeTab('calculators')">Calculators</a>
-        </div> -->
     </div>
 
     <div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
@@ -81,14 +73,6 @@
             <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !isBaselineValid}"
                 (click)="changeTab('report')">Report</a>
         </div>
-        <!-- <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !isBaselineValid}"
-                (click)="changeTab('sankey')">Sankey</a>
-        </div> -->
-        <!-- <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !isBaselineValid}"
-                (click)="changeTab('calculators')">Calculators</a>
-        </div> -->
     </div>
 
 

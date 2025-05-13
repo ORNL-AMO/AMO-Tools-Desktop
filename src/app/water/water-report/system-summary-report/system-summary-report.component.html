@@ -1,0 +1,123 @@
+<div class="output-summary w-75 mx-auto">
+    <h4 class="show-print print-section-header">System Annual Water Use and Cost Summary</h4>
+
+ <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr class="text-center header-highlight">
+                    <th rowspan="2">
+                        System
+                    </th>
+                    <th colspan="1">
+                        Source Water Intake 
+                    </th>
+                    <th colspan="2">
+                        Direct Costs 
+                    </th>
+                    <th colspan="2">
+                        True Cost of Water
+                    </th>
+                    <th rowspan="2" colspan="2">
+                        True Cost/Direct Cost of Water
+                    </th>
+                </tr>
+                <tr class="text-center header-highlight remove-border">
+                    <th>
+                        Mgal/yr
+                    </th>
+                    <th>
+                        $/yr
+                    </th>
+                    <th>
+                        $/kGal
+                    </th>
+                    <th>
+                        $/yr
+                    </th>
+                    <th>
+                        $/kGal
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="item-row text-center" *ngFor="let systemResult of plantSummaryResults.allSystemResults"
+                [ngClass]="{'selected-highlight': selectedSystemId === systemResult.id}">
+                    <td>
+                        <span *ngIf="selectedSystemId === systemResult.id"
+                            class="fa fa-chevron-right"></span>
+                        {{systemResult.name}}
+                    </td>
+                    <td>
+                        <span *ngIf="systemResult.sourceWaterIntake">{{systemResult.sourceWaterIntake | number:'1.0-2'}}</span>
+                        <span *ngIf="!systemResult.sourceWaterIntake">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemResult.directCostPerYear">${{systemResult.directCostPerYear | number:'1.0-2'}}</span>
+                        <span *ngIf="!systemResult.directCostPerYear">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemResult.directCostPerUnit">${{systemResult.directCostPerUnit | number:'1.0-2'}}</span>
+                        <span *ngIf="!systemResult.directCostPerUnit">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemResult.trueCostPerYear">${{systemResult.trueCostPerYear | number:'1.0-2'}}</span>
+                        <span *ngIf="!systemResult.trueCostPerYear">&mdash;</span>
+                    </td>
+                     <td>
+                        <span *ngIf="systemResult.trueCostPerUnit">${{systemResult.trueCostPerUnit | number:'1.0-2'}}</span>
+                        <span *ngIf="!systemResult.trueCostPerUnit">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemResult.trueOverDirectResult">{{systemResult.trueOverDirectResult | number:'1.0-2'}}</span>
+                        <span *ngIf="!systemResult.trueOverDirectResult">&mdash;</span>
+                    </td>
+                    
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="bold text-center footer-row">
+                    <td>
+                        Plant Total
+                    </td>
+                     <td>
+                        <span *ngIf="plantSummaryResults.sourceWaterIntake">{{plantSummaryResults.sourceWaterIntake | number:'1.0-2'}}</span>
+                        <span *ngIf="!plantSummaryResults.sourceWaterIntake">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="plantSummaryResults.directCostPerYear">${{plantSummaryResults.directCostPerYear | number:'1.0-2'}}</span>
+                        <span *ngIf="!plantSummaryResults.directCostPerYear">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="plantSummaryResults.directCostPerUnit">${{plantSummaryResults.directCostPerUnit | number:'1.0-2'}}</span>
+                        <span *ngIf="!plantSummaryResults.directCostPerUnit">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="plantSummaryResults.trueCostPerYear">${{plantSummaryResults.trueCostPerYear | number:'1.0-2'}}</span>
+                        <span *ngIf="!plantSummaryResults.trueCostPerYear">&mdash;</span>
+                    </td>
+                     <td>
+                        <span *ngIf="plantSummaryResults.trueCostPerUnit">${{plantSummaryResults.trueCostPerUnit | number:'1.0-2'}}</span>
+                        <span *ngIf="!plantSummaryResults.trueCostPerUnit">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="plantSummaryResults.trueOverDirectResult">{{plantSummaryResults.trueOverDirectResult | number:'1.0-2'}}</span>
+                        <span *ngIf="!plantSummaryResults.trueOverDirectResult">&mdash;</span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+
+
+    <!-- <div class="row" *ngIf="notes.length != 0">
+        <div class="col">
+            <h5>Modification Notes</h5>
+            <p>
+                <small>
+                    <span *ngFor="let note of notes">
+                        <b>{{note.modificationName}}:</b> {{note.note}}
+                        <br>
+                    </span>
+                </small>
+            </p>
+        </div>
+    </div> -->
+</div> 

@@ -1,15 +1,19 @@
-.table {
-    font-size: 12px;
-    background: #fff;
-}
-
 
 .selected-highlight {
     border: 2px solid #3055cf !important;
 }
 
-.footer-row {
-    border-top: 2px solid #8f8f8f;
+thead {
+    background-color: #3055cf !important;
+    color: #fff;
+}
+
+th {
+    padding: 1rem !important;
+}
+
+th, td {
+    padding: .5rem 1rem !important;
 }
 
 .table-striped tbody tr:nth-of-type(odd) > td {
@@ -20,3 +24,4 @@
 .table-bordered th, .table-bordered td {
     border-bottom: none;
 }
+

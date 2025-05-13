@@ -29,6 +29,7 @@ import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import { getIsDiagramValid } from '../../validation/Validation';
 import StaticModal from '../Forms/StaticModal';
 import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors } from 'process-flow-lib';
+import ResultsPanel from './ResultsPanel';
 
 
 export interface DiagramProps {
@@ -160,6 +161,7 @@ const Diagram = (props: DiagramProps) => {
       {!isDiagramValid && validationWindowLocation === 'diagram' &&
         <ValidationWindow></ValidationWindow>
       }
+        <ResultsPanel></ResultsPanel>
       <ReactFlowProvider>
         <div className={'flow-wrapper'} style={{ height: props.height }}>
           <ReactFlow

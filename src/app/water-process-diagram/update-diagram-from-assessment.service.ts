@@ -36,6 +36,15 @@ export class UpdateDiagramFromAssessmentService {
     }
   }
 
+  getDiagramFromAssessment(assessment: Assessment): Diagram {
+    let diagram = this.diagramIdbService.findById(assessment.diagramId);
+    diagram.waterDiagram.assessmentId = diagram.assessmentId;
+    let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+    this.setDiagramSettingsFromAssessment(assessment, assessmentSettings, diagram);
+    this.updateDiagramFromAssessment(diagram, assessment.water);
+    return diagram;
+  }
+
   updateDiagramFromAssessment(diagram: Diagram, waterAssessment: WaterAssessment) {
     let assessmentNodes: Node[] = [];
     assessmentNodes = assessmentNodes.concat(
