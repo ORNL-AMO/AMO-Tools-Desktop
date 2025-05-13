@@ -158,6 +158,7 @@ export class PlantSetupComponent implements OnInit {
     compressedAirInventoryData = this.convertCompressedAirInventoryService.convertInventoryData(compressedAirInventoryData, this.oldSettings, newSettings);
     this.showUpdateDataReminder = false;
     compressedAirInventoryData.existingDataUnits = newSettings.unitsOfMeasure;
+    this.plantSetupForm = this.compressedAirInventoryService.getFormFromObj(this.compressedAirInventoryData.systemInformation, newSettings);
     this.compressedAirInventoryService.compressedAirInventoryData.next(compressedAirInventoryData);
     this.oldSettings = newSettings;
   }
