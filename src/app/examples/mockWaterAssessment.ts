@@ -18,6 +18,8 @@ export const MockWaterAssessment: Assessment = {
             "utilityType": "Electricity",
             "electricityCost": 0.066,
             "conductivityUnit": "mmho",
+            "productionUnit": "lb",
+            "annualProduction": 0,
             "notes": ""
         },
         "intakeSources": [

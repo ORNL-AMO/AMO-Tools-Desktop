@@ -373,7 +373,9 @@ export class AssessmentService {
         utilityType: 'Electricity',
         electricityCost: settings.electricityCost,
         notes: undefined,
-        conductivityUnit: 'mmho'
+        conductivityUnit: 'mmho',
+        productionUnit: 'lb',
+        annualProduction: undefined
       },
       diagramWaterSystemFlows:[],
       intakeSources: [],

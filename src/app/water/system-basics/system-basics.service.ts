@@ -15,6 +15,8 @@ export class SystemBasicsService {
       utilityType: [obj.utilityType],
       electricityCost: [obj.electricityCost],
       conductivityUnit: [obj.conductivityUnit],
+      productionUnit: [obj.productionUnit],
+      annualProduction: [obj.annualProduction],
     });
     return form;
   }
@@ -25,6 +27,8 @@ export class SystemBasicsService {
       electricityCost: form.controls.electricityCost.value,
       utilityType: form.controls.utilityType.value,
       conductivityUnit: form.controls.conductivityUnit.value,
+      productionUnit: form.controls.productionUnit.value,
+      annualProduction: form.controls.annualProduction.value,
     }
   }
 }
