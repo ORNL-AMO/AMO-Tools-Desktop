@@ -657,20 +657,26 @@ export const getPlantSummaryResults = (
         systemCostContributions.wasteTreatment
       );
 
+      const totalFlows = systemCostContributions.intake
+      + systemCostContributions.discharge 
+      + systemCostContributions.systemPumpAndMotorEnergy 
+      + systemCostContributions.heatEnergyWastewater 
+      + systemCostContributions.treatment 
+      + systemCostContributions.wasteTreatment;
+
       const directFlowTotal = systemAnnualSummaryResults.sourceWaterIntake + systemAnnualSummaryResults.dischargeWater;
       systemAnnualSummaryResults.directCostPerYear = systemCostContributions.intake + systemCostContributions.discharge;
       systemAnnualSummaryResults.directCostPerUnit = systemAnnualSummaryResults.directCostPerYear / (directFlowTotal * 1000);
       systemAnnualSummaryResults.trueCostPerYear = trueCost;
-      // todo true cost per unit
-      // systemAnnualSummaryResults.trueCostPerUnit = systemAnnualSummaryResults.trueCostPerYear / (directFlowTotal * 1000);
+      systemAnnualSummaryResults.trueCostPerUnit = systemAnnualSummaryResults.trueCostPerYear / (totalFlows * 1000);
       systemAnnualSummaryResults.trueOverDirectResult = trueCost / systemAnnualSummaryResults.directCostPerYear;
-      systemAnnualSummaryResults.trueCostPerUnit = systemAnnualSummaryResults.trueCostPerUnit;
-
-
+      
+      
       plantSystemSummaryResults.sourceWaterIntake += systemAnnualSummaryResults.sourceWaterIntake;
-      plantSystemSummaryResults.dischargeWater += systemAnnualSummaryResults.dischargeWater;
       plantSystemSummaryResults.directCostPerYear += systemAnnualSummaryResults.directCostPerYear;
+      plantSystemSummaryResults.directCostPerUnit += systemAnnualSummaryResults.directCostPerUnit
       plantSystemSummaryResults.trueCostPerYear += systemAnnualSummaryResults.trueCostPerYear;
+      plantSystemSummaryResults.trueCostPerUnit += systemAnnualSummaryResults.trueCostPerUnit;
       plantSystemSummaryResults.trueOverDirectResult += systemAnnualSummaryResults.trueOverDirectResult;
 
       plantSystemSummaryResults.allSystemResults.push(systemAnnualSummaryResults)

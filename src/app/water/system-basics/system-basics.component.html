@@ -46,6 +46,23 @@
     </div>
 
     <div class="form-group">
+      <label for="productionUnit">Production Unit</label>
+      <div class="input-group">
+       <input name="productionUnit" type="text" class="form-control" id="productionUnit"
+          formControlName="productionUnit" (change)="saveSystemBasics()" (focus)="focusField('productionUnit')">
+      </div>
+    </div>
+
+    
+    <div class="form-group">
+      <label for="annualProduction">Annual Production (per 1,000 units)</label>
+      <div class="input-group">
+       <input name="annualProduction" type="number" class="form-control" id="annualProduction"
+          formControlName="annualProduction" (change)="saveSystemBasics()" (focus)="focusField('annualProduction')">
+      </div>
+    </div>
+
+    <div class="form-group">
       <label for="conductivityUnit">Conductivity Unit</label>
       <div class="input-group">
         <select class="form-control" id="conductivityUnit" formControlName="conductivityUnit" (change)="saveSystemBasics()"

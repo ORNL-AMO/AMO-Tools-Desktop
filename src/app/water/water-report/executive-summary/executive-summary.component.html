@@ -1,10 +1,10 @@
 <div class="output-summary w-75 mx-auto">
     <ng-container *ngIf="baselineResults && modificationResults">
         <h4 class="show-print print-section-header">Plant Annual Water Use and Cost Summary</h4>
-        <table class="table table-hover">
-            <thead>
+        <table class="table table-striped table-hover">
+              <thead>
                 <tr>
-                    <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}"></th>
+                    <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">Facility-wide Source Water Intake</th>
                     <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}"
                         [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
                     <th *ngFor="let result of modificationResults; let index = index;"
@@ -13,9 +13,6 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bold-row">
-                    <th colspan="4">Facility-wide Source Water Intake</th>
-                </tr>
                 <tr>
                     <td>Intake (Million Gallons)</td>
                     <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
@@ -30,7 +27,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Intake (kGal per 1000 lb)</td>
+                    <td>Intake (kGal per 1000 {{assessment.water.systemBasics.productionUnit? assessment.water.systemBasics.productionUnit : 'lbs' }})</td>
                     <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                         <span *ngIf="baselineResults.totalPerProductionUnit">{{baselineResults.totalPerProductionUnit | number:'1.0-2'}}</span>
                         <span *ngIf="!baselineResults.totalPerProductionUnit">&mdash;&mdash;</span>
@@ -43,9 +40,6 @@
                     </td>
                 </tr>
 
-                <tr>
-                    <td colspan="4">&nbsp;</td>
-                </tr>
                 <tr class="bold-row">
                     <td>Direct Cost of Water ($)</td>
                     <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
@@ -60,13 +54,22 @@
                     </td>
                 </tr>
 
+            </tbody>
+        </table>
 
+
+         <table class="table table-striped table-hover mt-5">
+            <thead>
                 <tr>
-                    <td colspan="4">&nbsp;</td>
+                    <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">True Cost of Water</th>
+                    <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}"
+                        [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
+                    <th *ngFor="let result of modificationResults; let index = index;"
+                        [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">
+                        {{result.name}}</th>
                 </tr>
-                <tr class="bold-row">
-                    <th colspan="4">True Cost of Water</th>
-                </tr>
+            </thead>
+            <tbody>
                 <tr>
                     <td>True Cost ($)</td>
                     <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
@@ -81,7 +84,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>True Cost ($ per 1000 lb)</td>
+                    <td>True Cost ($ per 1000 {{assessment.water.systemBasics.productionUnit? assessment.water.systemBasics.productionUnit : 'lbs'}})</td>
                     <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                         <span *ngIf="baselineResults.trueCostPerProductionUnit">${{baselineResults.trueCostPerProductionUnit | number:'1.0-2'}}</span>
                         <span *ngIf="!baselineResults.trueCostPerProductionUnit">&mdash;&mdash;</span>
@@ -92,11 +95,6 @@
                         <span *ngIf="!result.trueCostPerProductionUnit">&mdash;
                             &mdash;</span>
                     </td>
-                </tr>
-
-
-                <tr>
-                    <td colspan="4">&nbsp;</td>
                 </tr>
                 <tr class="bold-row">
                     <td>True Cost / Direct Cost</td>

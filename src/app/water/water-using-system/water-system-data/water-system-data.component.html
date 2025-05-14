@@ -35,29 +35,6 @@
         </span>
     </div>
 
-    <div class="form-group">
-        <label for="systemType">System Type</label>
-        <select class="form-control" id="systemType" formControlName="systemType" (change)="saveForm()"
-            (focus)="focusField('systemType')">
-            <option *ngFor="let systemType of systemTypeOptions" [ngValue]="systemType.value">
-                {{systemType.display}}
-            </option>
-        </select>
-    </div>
-
-    <div (click)="focusField('grossWaterUse')" class="form-group">
-        <label for="grossWaterUse">System Gross Water Use</label>
-        <div class="text-center small bold">
-            <span *ngIf="waterSystemResults">{{waterSystemResults.grossWaterUse | number}}
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
-            </span>
-            <span *ngIf="!waterSystemResults">&mdash; &mdash;</span>
-        </div>
-        <a class="form-text small click-link text-left" (click)="openWaterSystemDataModal()">Estimate With System
-            Data</a>
-    </div>
-
 </form>
 
 <div class="header mr-2 ml-2 mt-3">
@@ -216,6 +193,19 @@
                 <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
             </span>
         </span>
+    </div>
+
+        <div (click)="focusField('grossWaterUse')" class="form-group">
+        <label for="grossWaterUse">System Gross Water Use</label>
+        <div class="text-center small bold">
+            <span *ngIf="waterSystemResults">{{waterSystemResults.grossWaterUse | number}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+            </span>
+            <span *ngIf="!waterSystemResults">&mdash; &mdash;</span>
+        </div>
+        <a class="form-text small click-link text-left" (click)="openWaterSystemDataModal()">Estimate With System
+            Data</a>
     </div>
 </form>
 

@@ -22,6 +22,7 @@ function DownloadButton(props: DownloadProps) {
   
   const onClick = () => {
     const nodesBounds = getNodesBounds(nodes);
+    // todo bounds are not correct (ex. showing 1024 x768 when full screen)
     const transform: {x: number, y: number, zoom: number} = getViewportForBounds(nodesBounds, imageWidth, imageHeight, 0.5, 2, 0);
 
     // https://www.npmjs.com/package/save-html-as-image
