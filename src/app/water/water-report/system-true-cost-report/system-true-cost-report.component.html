@@ -1,6 +1,6 @@
 <div class="output-summary w-75 mx-auto">
     <h4 class="show-print print-section-header">True Cost of Water by System</h4>
-
+    <app-system-true-cost-bar></app-system-true-cost-bar>
     <table class="table table-bordered table-striped table-hover">
         <thead>
             <tr class="text-center header-highlight">
@@ -38,7 +38,7 @@
                 <td>
                     {{systemCosts.label}}
                 </td>
-                <ng-container *ngFor="let result of systemCosts.results">
+                <ng-container *ngFor="let result of systemCosts.connectionCostByType">
                     <td>
                         <span *ngIf="result">${{result | number:'1.0-2'}}</span>
                         <span *ngIf="!result">&mdash;&mdash;</span>

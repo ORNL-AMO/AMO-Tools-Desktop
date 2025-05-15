@@ -929,9 +929,3 @@ export interface RecycledFlowData {
   recycledDestinationId: string;
   recycledDestinationName: string;
 }
-
-export interface SystemTrueCostTableData {
-  label: string;
-  results: number[];
-  unit: string;
-}

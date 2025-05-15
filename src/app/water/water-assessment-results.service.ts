@@ -157,7 +157,7 @@ export class WaterAssessmentResultsService {
     return results;
   }
 
-  getTrueCostOfSystemsReport(assessment: Assessment, settings: Settings) {
+  getTrueCostOfSystemsReport(assessment: Assessment, settings: Settings): SystemTrueCostData[] {
     let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
     let graph = createGraphIndex(diagram.waterDiagram.flowDiagramData.nodes, diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[]);
 
@@ -168,12 +168,12 @@ export class WaterAssessmentResultsService {
       assessment.water.systemBasics.electricityCost
     )
 
-    let systemTrueCostReport = this.getTrueCostOfSystemsTableReportData(plantResults.trueCostOfSystems, diagram.waterDiagram.flowDiagramData.nodes);
-    console.log('systemTrueCostReport', systemTrueCostReport);
+    let systemTrueCostReport = this.getSystemTrueCostData(plantResults.trueCostOfSystems, diagram.waterDiagram.flowDiagramData.nodes);
+    console.log('trueCostOfSystems', plantResults.trueCostOfSystems);
     return systemTrueCostReport;
   }
 
-  getTrueCostOfSystemsTableReportData(trueCostOfSystems: TrueCostOfSystems, nodes: Node[]): TrueCostTableData[] {
+  getSystemTrueCostData(trueCostOfSystems: TrueCostOfSystems, nodes: Node[]): SystemTrueCostData[] {
     let systemCosts = [];
     Object.entries(trueCostOfSystems).forEach(([key, systemCostContributions]: [key: string, systemCostContributions: SystemTrueCostContributions]) => {
       const systemKey = key as keyof TrueCostOfSystems;
@@ -186,7 +186,7 @@ export class WaterAssessmentResultsService {
       });
       systemCosts.push({
         label: component.name,
-        results: results,
+        connectionCostByType: results,
         unit: 'currency',
       });
     });
@@ -195,9 +195,9 @@ export class WaterAssessmentResultsService {
 
 }
 
-export interface TrueCostTableData {
+export interface SystemTrueCostData {
   label: string,
-  results: Array<string>,
+  connectionCostByType: Array<string>,
   unit: string,
 }
 
