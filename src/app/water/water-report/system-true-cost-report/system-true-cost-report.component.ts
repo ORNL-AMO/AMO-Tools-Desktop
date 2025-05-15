@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { TrueCostOfSystems } from 'process-flow-lib';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { TrueCostTableData, WaterAssessmentResultsService } from '../../water-assessment-results.service';
+import { SystemTrueCostData } from '../../water-assessment-results.service';
+import { WaterReportService } from '../water-report.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-system-true-cost-report',
@@ -24,16 +25,19 @@ export class SystemTrueCostReportComponent {
     note: string
   }>;
   selectedModificationIndex: number = 1;
-  trueCostOfSystemsReport: TrueCostTableData[] = [];
+  trueCostOfSystemsReport: SystemTrueCostData[] = [];
+  systemTrueCostReportSubscription: any;
   
 
   constructor(
-    private waterAssessmentResultsService: WaterAssessmentResultsService,
+    private waterReportService: WaterReportService,
     // private waterRollupService: WaterRollupService
   ) { }
 
   ngOnInit(): void {
-    this.trueCostOfSystemsReport = this.waterAssessmentResultsService.getTrueCostOfSystemsReport(this.assessment, this.settings);
+    this.systemTrueCostReportSubscription = this.waterReportService.systemTrueCostReport.subscribe(report => {
+      this.trueCostOfSystemsReport = this.waterReportService.getSortedTrueCostReport(report);
+    });
 
     if (this.inRollup) {
       // this.waterRollupService.selectedAssessments.forEach(val => {
@@ -48,10 +52,13 @@ export class SystemTrueCostReportComponent {
     }
   }
 
+   ngOnDestroy() {
+    this.systemTrueCostReportSubscription.unsubscribe();
+  }
+
  getFlowDecimalPrecisionPipeValue(): string {
     let pipeVal = `1.0-${this.settings.flowDecimalPrecision}`;
     return pipeVal;
   }
 
 }
-

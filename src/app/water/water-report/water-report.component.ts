@@ -8,6 +8,8 @@ import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { Settings } from '../../shared/models/settings';
 import { WaterAssessmentService } from '../water-assessment.service';
+import { WaterReportService } from './water-report.service';
+import { WaterAssessmentResultsService } from '../water-assessment-results.service';
 
 @Component({
   selector: 'app-water-report',
@@ -44,9 +46,12 @@ export class WaterReportComponent {
 
   // assessmentResults: WaterResults;
   tabsCollapsed: boolean = true;
+  systemTrueCostReportSubscription: Subscription;
   constructor(private settingsDbService: SettingsDbService, 
     private printOptionsMenuService: PrintOptionsMenuService, 
     private directoryDbService: DirectoryDbService,
+    private waterReportService: WaterReportService,
+    private waterAssessmentResultsService: WaterAssessmentResultsService,
     private waterAssessmentService: WaterAssessmentService) { }
 
   ngOnInit(): void {
@@ -55,7 +60,9 @@ export class WaterReportComponent {
     if (this.assessment) {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
-      // this.assessmentResults = new Array();
+
+      let systemTrueCostReport = this.waterAssessmentResultsService.getTrueCostOfSystemsReport(this.assessment, this.settings);
+      this.waterReportService.systemTrueCostReport.next(systemTrueCostReport);
     }
 
     if (!this.inRollup) {
