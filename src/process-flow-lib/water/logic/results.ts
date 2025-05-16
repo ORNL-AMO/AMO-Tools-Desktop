@@ -666,9 +666,13 @@ export const getPlantSummaryResults = (
 
       const directFlowTotal = systemAnnualSummaryResults.sourceWaterIntake + systemAnnualSummaryResults.dischargeWater;
       systemAnnualSummaryResults.directCostPerYear = systemCostContributions.intake + systemCostContributions.discharge;
-      systemAnnualSummaryResults.directCostPerUnit = systemAnnualSummaryResults.directCostPerYear / (directFlowTotal * 1000);
+
+      let flowperKUnit = (directFlowTotal / 1000);
+      systemAnnualSummaryResults.directCostPerUnit = systemAnnualSummaryResults.directCostPerYear / flowperKUnit;
       systemAnnualSummaryResults.trueCostPerYear = trueCost;
-      systemAnnualSummaryResults.trueCostPerUnit = systemAnnualSummaryResults.trueCostPerYear / (totalFlows * 1000);
+
+      flowperKUnit = (totalFlows / 1000);
+      systemAnnualSummaryResults.trueCostPerUnit = systemAnnualSummaryResults.trueCostPerYear / flowperKUnit;
       systemAnnualSummaryResults.trueOverDirectResult = trueCost / systemAnnualSummaryResults.directCostPerYear;
       
       

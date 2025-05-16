@@ -140,10 +140,9 @@ export class WaterAssessmentResultsService {
     }, 0);
     const directCosts = intakeCost + dischargeCost;
 
-
     const trueCost = getWaterTrueCost(intakeCost, dischargeCost, motorEnergyCosts, heatEnergyCosts, treatmentCost, wasteTreatmentCost);
 
-    // * annualProduction should be entered as 1000 units
+    // * annualProduction should already be entered as 1000 units
     const totalPerProductionUnit = (totalSourceWaterIntake / assessment.water.systemBasics.annualProduction);
     const totalCostPerProductionUnit = (trueCost / assessment.water.systemBasics.annualProduction);
     let results: ExecutiveSummaryResults = {
