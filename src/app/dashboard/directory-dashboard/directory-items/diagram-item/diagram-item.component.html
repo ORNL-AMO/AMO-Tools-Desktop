@@ -5,7 +5,7 @@
     [ngClass]="{'water-header': diagram.waterDiagram}">
         <input type="checkbox" [(ngModel)]="diagram.selected" (change)="updateSelectedStatus()">
         <div class="d-flex align-items-center">
-            <img class="icon-image pl-1 pr-1" *ngIf="diagram.waterDiagram" src="assets/images/water-process-diagram-icon.png">
+            <img class="icon-image pl-1 pr-1" *ngIf="diagram.waterDiagram" src="assets/images/water-process-diagram-small.png">
             <a (click)="goToDiagram()">{{diagram.name}}</a>
         </div>
         <div class="btn-group">
@@ -36,7 +36,7 @@
         </div>
         <div class="d-flex flex-column">
             <div class="d-flex">
-                <img class="icon-image pl-1 pr-1" *ngIf="diagram.waterDiagram" src="assets/images/water-process-diagram-icon.png">
+                <img class="icon-image pl-1 pr-1" *ngIf="diagram.waterDiagram" src="assets/images/water-process-diagram-small.png">
                 <a (click)="goToDiagram()">{{diagram.name}}</a>
             </div>
             <div class="last-updated">Last updated {{diagram.modifiedDate | date }}</div>

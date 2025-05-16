@@ -20,7 +20,7 @@
             <img *ngIf="assessment.type == 'CompressedAir'" class="icon-image pl-1 pr-1"
                 src="assets/images/ca-icon.png">
                 <img *ngIf="assessment.type == 'Water'" class="icon-image pl-1 pr-1"
-                src="assets/images/water-assessment-icon.png">
+                src="assets/images/water-assessment-small.png">
             <a (click)="goToAssessment(assessment)">{{assessment.name}}</a>
         </div>
         <!-- <i class="fa fa-edit pull-right" (click)="showEditModal()"></i> -->
@@ -78,7 +78,7 @@
                 <img *ngIf="assessment.type == 'CompressedAir'" class="icon-image pl-1 pr-1"
                     src="assets/images/ca-icon.png">
                     <img *ngIf="assessment.type == 'Water'" class="icon-image pl-1 pr-1"
-                    src="assets/images/water-assessment-icon.png">
+                    src="assets/images/water-assessment-small.png">
                 <a (click)="goToAssessment(assessment, 'assessment')" *ngIf="isSetup">{{assessment.name}}</a>
                 <a (click)="goToAssessment(assessment, 'baseline')" *ngIf="!isSetup">{{assessment.name}}</a>
             </div>
