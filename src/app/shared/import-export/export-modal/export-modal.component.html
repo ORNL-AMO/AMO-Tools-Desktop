@@ -44,7 +44,7 @@
                                             <img *ngIf="assessmentItem.assessment.type == 'WasteWater'" class="icon"
                                                 src="assets/images/waste-water-icon.png">
                                             <img *ngIf="assessmentItem.assessment.type == 'Water'" class="icon"
-                                            src="assets/images/water-assessment-icon.png">
+                                            src="assets/images/water-assessment-small.png">
                                         </span>
                                         <span class="p-1">
                                             {{assessmentItem.assessment.name}}
@@ -60,7 +60,7 @@
                                     <div class="d-flex align-items-center"
                                         [ngClass]="{ 'water' : diagramExport.diagram.water}">
                                         <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                                            <img class="icon" src="assets/images/water-process-diagram-icon.png">
+                                            <img class="icon" src="assets/images/water-process-diagram-small.png">
                                         </span>
                                         <span class="p-1">
                                             {{diagramExport.diagram.name}}
