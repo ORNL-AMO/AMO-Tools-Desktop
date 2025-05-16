@@ -42,7 +42,7 @@ export class MonthlyFlowChartComponent {
   setPlantMonthlyFlowData() {
     this.plantMonthlyFlowTraces = [];
     if (this.settings.unitsOfMeasure == 'Metric') {
-      this.flowUnits = 'm<sup>3</sup>/yr';
+      this.flowUnits = 'm<sup>3</sup>';
     }
 
     if (this.componentType === 'water-intake') {

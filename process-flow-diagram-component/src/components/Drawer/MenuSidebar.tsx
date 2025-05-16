@@ -96,11 +96,11 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
     }}>
       <Box sx={{ 
         padding: '0rem .5rem 2rem 0rem',
-        height: '40%',
         }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
           <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
             <Tab sx={{ fontSize: '.75rem' }} label="Build" />
+            <Tab sx={{ fontSize: '.75rem' }} label="Results" />
             <Tab sx={{ fontSize: '.75rem' }} label="Options" />
             <Tab sx={{ fontSize: '.75rem' }} label="Help" />
             {!isDiagramValid && validationWindowLocation === 'alerts-tab'? 
@@ -108,12 +108,12 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 <Box display={'block'}>
                   <Chip
                     icon={
-                      <NotificationsIcon sx={{ width: '.75em', color: selectedTab === 3? `${theme.palette.primary.main} !important` : 'inherit' }} />}
-                    sx={{ backgroundColor: selectedTab === 3 ? blue[50] : '#ececec'}
+                      <NotificationsIcon sx={{ width: '.75em', color: selectedTab === 4? `${theme.palette.primary.main} !important` : 'inherit' }} />}
+                    sx={{ backgroundColor: selectedTab === 4 ? blue[50] : '#ececec'}
                     }
-                    label={<Typography variant="subtitle1" component={'span'} sx={{fontSize: '.75rem',  color: selectedTab === 3? `${theme.palette.primary.main} !important` : '#616161' }}>{alertsCount}</Typography>}
+                    label={<Typography variant="subtitle1" component={'span'} sx={{fontSize: '.75rem',  color: selectedTab === 4? `${theme.palette.primary.main} !important` : '#616161' }}>{alertsCount}</Typography>}
                   />
-                <Typography variant="subtitle1" component={'span'} sx={{fontSize: '.75rem', marginLeft: '.25rem', color: selectedTab === 3? `${theme.palette.primary.main} !important` : '#inherit'}}>Alerts</Typography>
+                <Typography variant="subtitle1" component={'span'} sx={{fontSize: '.75rem', marginLeft: '.25rem', color: selectedTab === 4? `${theme.palette.primary.main} !important` : '#inherit'}}>Alerts</Typography>
                 </Box>
               } />
               : 
@@ -170,7 +170,15 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={1} diagramParentDimensions={diagramParentDimensions}>
+        <TabPanel value={selectedTab} index={1}>
+          <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
+            <Box display={'flex'} >
+              <DiagramResults />
+            </Box>
+          </Box>
+        </TabPanel>
+
+        <TabPanel value={selectedTab} index={2} diagramParentDimensions={diagramParentDimensions}>
           <Box paddingX={'.5rem'}>
             <div className="sidebar-options">
             <Box className={'sidebar-option-container'}>
@@ -336,7 +344,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={2}>
+        <TabPanel value={selectedTab} index={3}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
             <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', paddingTop: '.5rem' }}>
               Many diagram actions support keyboard input and key combinations:
@@ -365,7 +373,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={3}>
+        <TabPanel value={selectedTab} index={4}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
                 {!isDiagramValid && validationWindowLocation === 'alerts-tab' &&
                   <ValidationWindow></ValidationWindow>
@@ -373,10 +381,6 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <Box>
-          <Divider sx={{ margin: '1rem' }} />
-          {/* <DiagramResults /> */}
-        </Box>
       </Box>
     </Box>
   );

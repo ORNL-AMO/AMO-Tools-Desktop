@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import DiagramResults from "../Drawer/DiagramResults";
+import DebugResults from "../Drawer/DebugResults";
 
 // todo TESTING
 const ResultsPanel = () => {
@@ -13,7 +13,7 @@ const ResultsPanel = () => {
         width: '70%',
         zIndex: 999,
       }}>
-    <DiagramResults />
+    <DebugResults />
     </Box>
   );
 };
