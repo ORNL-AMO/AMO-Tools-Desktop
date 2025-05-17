@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { WaterProcessDiagramService } from './water-process-diagram.service';
 import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
 import { UpdateDiagramFromAssessmentService } from './update-diagram-from-assessment.service';
+import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
 
 
 
@@ -23,7 +24,8 @@ import { UpdateDiagramFromAssessmentService } from './update-diagram-from-assess
     CommonModule,
     ProcessFlowDiagramWrapperModule,
     RouterModule,
-    CreateAssessmentModalModule
+    CreateAssessmentModalModule,
+    AlertBadgeComponent
   ],
   exports: [
     WaterProcessDiagramComponent

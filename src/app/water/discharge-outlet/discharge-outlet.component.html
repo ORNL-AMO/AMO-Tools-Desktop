@@ -68,7 +68,12 @@
                     Data</a>
             </div>
         </form>
+        <app-alert-info-container class="m-3"
+[header]="'Coming Soon: Inflow and Outflow Management'" 
+[content]="'Inflow and outflow data can currently be managed by visiting the Diagram, then selecting and editing a system component'" ></app-alert-info-container>
+
     </ng-container>
+
 
     <div class="px-2" *ngIf="dischargeOutletTab === 'added-energy'">
         <ng-container *ngIf="!isMotorEnergyCollapsed">

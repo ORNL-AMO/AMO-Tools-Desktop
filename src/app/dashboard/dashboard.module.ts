@@ -28,6 +28,7 @@ import { CreateDiagramModalModule } from '../shared/create-diagram-modal/create-
 import { DataAndBackupComponent } from './data-and-backup/data-and-backup.component';
 import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
+import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module'
     CreateAssessmentModalModule,
     AppErrorModule,
     CreateDiagramModalModule,
-    MeasurSurveyModule
+    MeasurSurveyModule,
+    AlertBadgeComponent
   ],
   providers: [
     DashboardService,
