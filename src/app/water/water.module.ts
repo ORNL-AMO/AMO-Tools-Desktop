@@ -55,6 +55,8 @@ import { ConnectionFlowComponent } from './water-using-system/connection-flow/co
 import { SystemTreatmentComponent } from './water-using-system/system-treatment/system-treatment.component';
 import { InSystemTreatmentTableComponent } from './results-panel/in-system-treatment-table/in-system-treatment-table.component';
 import { WaterReportModule } from './water-report/water-report.module';
+import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
+import { AlertInfoContainerComponent } from '../shared/alert-info-container/alert-info-container.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +87,7 @@ import { WaterReportModule } from './water-report/water-report.module';
     WaterSourcesWrapperComponent,
     ConnectionFlowComponent,
     SystemTreatmentComponent,
-    InSystemTreatmentTableComponent
+    InSystemTreatmentTableComponent,
   ],
   imports: [
     CommonModule,
@@ -108,7 +110,9 @@ import { WaterReportModule } from './water-report/water-report.module';
     ConfirmDeleteModalModule, 
     PercentLoadEstimationModule,
     StackLossModule,
-    WaterReportModule
+    WaterReportModule,
+    AlertBadgeComponent,
+    AlertInfoContainerComponent
   ],
   providers: [
     WaterAssessmentService,

@@ -204,6 +204,7 @@ const Diagram = (props: DiagramProps) => {
 
         <SideDrawer
           anchor={'left'}
+          assessmentId={props.processDiagram.assessmentId}
           shadowRootRef={props.shadowRoot}
         ></SideDrawer>
 

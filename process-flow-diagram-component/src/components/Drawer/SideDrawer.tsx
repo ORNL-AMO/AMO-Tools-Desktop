@@ -11,6 +11,7 @@ import DrawerToggleButton from './DrawerToggleButton';
 import { useAppSelector } from '../../hooks/state';
 import { selectHasAssessment } from '../Diagram/store';
 import { ParentContainerDimensions } from 'process-flow-lib';
+import { BetaChip } from './BetaChip';
 
 const drawerWidth = 525;
 
@@ -111,7 +112,6 @@ export const SideDrawer = (props: SideDrawerProps) => {
   const drawerChevron = (<DrawerToggleButton toggleSidebarDrawer={toggleDrawerOpen} side={'left'}></DrawerToggleButton>);
   const toggleButton = open? drawerChevron : closedButton;
 
-  
   return (
     <>
       <CssBaseline />
@@ -122,7 +122,10 @@ export const SideDrawer = (props: SideDrawerProps) => {
         anchor={props.anchor}
       >
         <DrawerHeader justifyContent={justifyContent}>
-        {toggleButton}
+          {/* {props.assessmentId === undefined &&
+            <BetaChip alertText={'Beta'} />
+          } */}
+          {toggleButton}
         </DrawerHeader>
         <Box paddingBottom={'1rem'} paddingTop={0} paddingX={'.5rem'} height={'100%'}>
           {open &&
@@ -137,6 +140,7 @@ export const SideDrawer = (props: SideDrawerProps) => {
 export interface SideDrawerProps {
     anchor: 'left' | 'right',
     shadowRootRef: any,
+    assessmentId?: number,
 }
 
 

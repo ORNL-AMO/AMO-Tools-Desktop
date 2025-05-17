@@ -73,6 +73,10 @@
                 <span *ngIf="form.controls.flowValue.errors.required">Value Required</span>
             </span>
         </div>
+        <app-alert-info-container class="m-3"
+[header]="'Coming Soon: Inflow and Outflow Management'" 
+[content]="'Inflow and outflow data can currently be managed by visiting the Diagram, then selecting and editing a system component'" ></app-alert-info-container>
+
     </form>
     }
 </div>
