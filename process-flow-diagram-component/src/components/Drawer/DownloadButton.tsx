@@ -28,7 +28,7 @@ function DownloadButton(props: DownloadProps) {
     // https://www.npmjs.com/package/save-html-as-image
     // * access shadowDom in place of document
     const viewPortObject = props.shadowRoot.querySelector('.react-flow__viewport');
-    console.log('imgdownload props: w,h,z', imageWidth, imageHeight, transform.zoom);
+    // console.log('imgdownload props: w,h,z', imageWidth, imageHeight, transform.zoom);
     // todo try changing scale tansofrm zoom
     toPng(viewPortObject, {
       // toSvg(viewPortObject, {

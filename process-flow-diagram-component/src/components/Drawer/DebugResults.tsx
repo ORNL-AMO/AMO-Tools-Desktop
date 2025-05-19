@@ -24,11 +24,8 @@ const DiagramResults = () => {
     let plantResults: PlantResults;
 
     if (isDiagramValid) {
-        plantResults = getPlantSummaryResults(nodes, calculatedNodeData, graph, settings.electricityCost, undefined, waterTreatmentNodes, wasteTreatmentNodes);
+        plantResults = getPlantSummaryResults(nodes, calculatedNodeData, graph, settings.electricityCost, waterTreatmentNodes, wasteTreatmentNodes, undefined);
         trueCostOfSystems = plantResults.trueCostOfSystems;
-
-        console.log('plantResults', plantResults);
-        console.log('trueCostOfSystems', trueCostOfSystems);
     } else {
         console.log('errors', validationErrors);
     }

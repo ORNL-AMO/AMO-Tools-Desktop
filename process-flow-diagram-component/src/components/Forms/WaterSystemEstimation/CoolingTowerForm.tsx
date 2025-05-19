@@ -62,7 +62,6 @@ const CoolingTowerForm = (props: CoolingTowerProps) => {
             0, 
             coolingTowerResults.grossWaterUse);
         setEstimatedFlowResults(estimatedFlowResults);
-        console.log(estimatedFlowResults);
         estimateSystemContext.setEstimate(coolingTowerResults.grossWaterUse);
     };
 

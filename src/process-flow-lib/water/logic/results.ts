@@ -581,9 +581,9 @@ export const getPlantSummaryResults = (
   calculatedData: DiagramCalculatedData,
   graph: NodeGraphIndex,
   electricityCost: number,
-  settings?: DiagramSettings,
-  waterTreatmentNodes?: Node<ProcessFlowPart>[],
-  wasteTreatmentNodes?: Node<ProcessFlowPart>[],
+  waterTreatmentNodes: Node<ProcessFlowPart>[],
+  wasteTreatmentNodes: Node<ProcessFlowPart>[],
+  settings: DiagramSettings,
 ): PlantResults => {
   const nodeMap: Record<string, Node<ProcessFlowPart>> = Object.fromEntries(nodes.map((n) => [n.id, n as Node<ProcessFlowPart>]));
   const nodeNameMap: Record<string, string> = {};
@@ -635,6 +635,7 @@ export const getPlantSummaryResults = (
     });
   }
 
+  console.log('treatmentBlockCosts', treatmentBlockCosts);
 
   const systemCostContributionsResultsMap: Record<string, SystemTrueCostContributions> = {};
   const systemAnnualSummaryResultsMap: Record<string, SystemAnnualSummaryResults> = {};

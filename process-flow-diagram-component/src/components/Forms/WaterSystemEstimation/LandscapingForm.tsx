@@ -52,7 +52,6 @@ const LandscapingForm = (props: LandscapingProps) => {
             landscapingResults.grossWaterUse);
         setEstimatedFlowResults(estimatedFlowResults);
         estimateSystemContext.setEstimate(landscapingResults.grossWaterUse);
-        console.log(landscapingResults);
     };
 
     const resetEstimate = () => {
