@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import _ from 'lodash';
-import { WaterUsingSystem, WaterAssessment, WaterTreatment, waterTreatmentTypeOptions, getNewWaterTreatmentComponent } from 'process-flow-lib';
+import { WaterUsingSystem, WaterAssessment, WaterTreatment, getNewWaterTreatmentComponent, inSystemTreatmentTypeOptions } from 'process-flow-lib';
 import { Subscription } from 'rxjs';
 import { copyObject } from '../../../shared/helperFunctions';
 import { WaterAssessmentService } from '../../water-assessment.service';
@@ -39,7 +39,7 @@ export class SystemTreatmentComponent {
 
   ngOnInit() {
     this.settings = this.waterAssessmentService.settings.getValue();
-    this.waterTreatmentOptions = copyObject(waterTreatmentTypeOptions);
+    this.waterTreatmentOptions = copyObject(inSystemTreatmentTypeOptions);
     this.selectedComponentSub = this.waterSystemComponentService.selectedInSystemTreatment.subscribe(selectedComponent => {
         this.selectedWaterTreatment = selectedComponent as WaterTreatment;
         this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();

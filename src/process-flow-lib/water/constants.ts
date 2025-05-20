@@ -1,7 +1,31 @@
 import { CSSProperties } from "react";
 import { WaterProcessComponentType } from "./types/diagram";
 
+// * standalone treatment options
 export const waterTreatmentTypeOptions: {value: number, display: string}[] = [
+    {value: 0, display: 'Screens/Grit Removal'},
+    {value: 1, display: 'Sand Filtration'},
+    {value: 2, display: 'Chemical Addition'},
+    {value: 3, display: 'Lime Softening'},
+    // {value: 1, display: 'Bag Filtration'},
+    // {value: 2, display: 'Cartridge Filtration'},
+    // {value: 3, display: 'Chemical Treatment of Cooling Tower Makeup Water'},
+    // {value: 4, display: 'Sand Granular Activated Carbon Absorption (GAC)'},
+    // {value: 5, display: 'Chlorination'},
+    // {value: 6, display: 'Ozonization'},
+    // {value: 7, display: 'UV Filtration'},
+    {value: 4, display: 'Ion Exchange'},
+    {value: 5, display: 'Activated Carbon'},
+    {value: 6, display: 'Reverse Osmosis'},
+    {value: 7, display: 'Membrane Filtration'},
+    {value: 8, display: 'Disinfection'},
+    // {value: 12, display: 'Ultrafiltration'},
+    // {value: 14, display: 'NanoFiltration'},
+    {value: 9, display: 'Other'},
+];
+
+
+export const inSystemTreatmentTypeOptions: {value: number, display: string}[] = [
     {value: 0, display: 'Sand Filtration'},
     {value: 1, display: 'Bag Filtration'},
     {value: 2, display: 'Cartridge Filtration'},
@@ -19,6 +43,8 @@ export const waterTreatmentTypeOptions: {value: number, display: string}[] = [
     {value: 14, display: 'NanoFiltration'},
     {value: 15, display: 'Other'},
 ]
+
+
 
 
 export const wasteWaterTreatmentTypeOptions: {value: number, display: string}[] = [

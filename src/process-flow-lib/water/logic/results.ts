@@ -1,6 +1,6 @@
 import { Node, Edge } from "@xyflow/react";
 import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowData, NodeFlowProperty, ProcessFlowNodeType, ProcessFlowPart } from "../types/diagram";
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WasteWaterTreatment, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterUsingSystem } from "../types/water-components";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WasteWaterTreatment, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getWaterFlowTotals } from "./water-components";
 import { getAncestors, getAncestorsDFS, getDescendants, getDescendantsDFS, NodeGraphIndex } from "../../graph";
@@ -402,6 +402,20 @@ export const getComponentTypeTotalFlow = (components: Node<ProcessFlowPart>[], n
   }, 0);
 }
 
+/**
+* Get annual total flow of all in-system treatment for a component. 
+* @param components inSystemTreatment property of WaterUsingSystem 
+* @param totalSystemInflow Total of parent system inflow (total source flow). In-system treatment is assumed to treat 100% of this flow through each instance.
+* 
+*/
+export const getInSystemTreatmentCost = (components: WaterTreatment[], totalSystemInflow: number) => {
+  return components.reduce((total: number, component: WaterTreatment) => {
+    const unitCost = component.cost ?? 0;
+    let cost = getKGalCost(unitCost, totalSystemInflow);
+    return total + cost;
+  }, 0);
+}
+
 
 export const getKGalCost = (kGalUnitCost: number, flowMgal: number): number => {
   return kGalUnitCost * (flowMgal * 1000);
@@ -673,6 +687,13 @@ export const getPlantSummaryResults = (
       const waterUsingSystem = currentSystem.data as WaterUsingSystem;
       if (waterUsingSystem.heatEnergy) {
         systemCostContributionsResultsMap[currentSystem.id].heatEnergyWastewater = getHeatEnergyCost(waterUsingSystem.heatEnergy, electricityCost);
+      }
+      systemCostContributionsResultsMap[currentSystem.id].systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, electricityCost);
+
+      if (waterUsingSystem.inSystemTreatment && waterUsingSystem.inSystemTreatment.length > 0) {
+        const totalSystemInflow = getTotalInflow(currentSystem, calculatedData);
+        const inSystemTreatmentCost = getInSystemTreatmentCost(waterUsingSystem.inSystemTreatment, totalSystemInflow);
+        systemCostContributionsResultsMap[currentSystem.id].treatment = inSystemTreatmentCost;
       }
       systemCostContributionsResultsMap[currentSystem.id].systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, electricityCost);
 
