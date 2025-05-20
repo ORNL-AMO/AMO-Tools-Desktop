@@ -98,6 +98,14 @@ export class PrintOptionsMenuService {
         currentPrintOptions.printWasteWaterRollup = !currentPrintOptions.printWasteWaterRollup;
         break;
       }
+      case "printWaterSystemCostReport": {
+        currentPrintOptions.printWaterSystemCostReport = !currentPrintOptions.printWaterSystemCostReport;
+        break;
+      }
+      case "printWaterSystemSummary": {
+        currentPrintOptions.printWaterSystemSummary = !currentPrintOptions.printWaterSystemSummary;
+        break;
+      }
       case "detailedResults": {
         currentPrintOptions.printDetailedResults = !currentPrintOptions.printDetailedResults;
         break;
@@ -135,6 +143,8 @@ export class PrintOptionsMenuService {
       printResults: settings.printResults,
       printInputData: settings.printInputData,
       printExecutiveSummary: settings.printExecutiveSummary,
+      printWaterSystemSummary: settings.printWaterSystemSummary,
+      printWaterSystemCostReport: settings.printWaterSystemCostReport,
       printEnergySummary: settings.printEnergySummary,
       printLossesSummary: settings.printLossesSummary,
       printReportOpportunityPayback: settings.printReportOpportunityPayback,
@@ -161,6 +171,8 @@ export class PrintOptionsMenuService {
       printResults: bool,
       printInputData: bool,
       printExecutiveSummary: bool,
+      printWaterSystemCostReport: bool,
+      printWaterSystemSummary: bool,
       printEnergySummary: bool,
       printLossesSummary: bool,
       printReportOpportunityPayback: bool,

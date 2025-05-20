@@ -104,12 +104,12 @@
             <app-executive-summary [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-executive-summary>
         </div>
         <div class="results scroll-item print-height page-break-before"
-            *ngIf="(currentTab == 'systemSummary' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)"
+            *ngIf="(currentTab == 'systemSummary' && !showPrintView) || (showPrintView && printOptions.printWaterSystemSummary)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-system-summary-report [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-system-summary-report>
         </div>
         <div class="results scroll-item print-height page-break-before"
-            *ngIf="(currentTab == 'systemTrueCost' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)"
+            *ngIf="(currentTab == 'systemTrueCost' && !showPrintView) || (showPrintView && printOptions.printWaterSystemCostReport)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-system-true-cost-report [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-system-true-cost-report>
         </div>
