@@ -25,3 +25,20 @@ th, td {
     border-bottom: none;
 }
 
+
+@media print {
+    .show-print{
+        display: inline !important;
+    }
+    .hide-print{
+        display: none !important;
+    }
+
+    .chart-row{
+        padding: 0px !important;
+    }
+}
+
+.show-print{
+    display: none;
+}

@@ -1,8 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
 import { WaterReportService } from '../water-report.service';
 import * as _ from 'lodash';
+import { PrintOptionsMenuService } from '../../../shared/print-options-menu/print-options-menu.service';
 
 @Component({
   selector: 'app-system-true-cost-bar',
@@ -11,15 +12,26 @@ import * as _ from 'lodash';
   styleUrl: './system-true-cost-bar.component.css'
 })
 export class SystemTrueCostBarComponent {
-
+  printView: boolean;
   @ViewChild('systemTrueCostBarChart', { static: false }) systemTrueCostBarChart: ElementRef;
 
   systemTrueCostReportSubscription: Subscription;
+  showPrintViewSub: Subscription;
   constructor(
     private waterReportService: WaterReportService,
+    private printOptionsMenuService: PrintOptionsMenuService,
     private plotlyService: PlotlyService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+      this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
+      this.printView = val;
+    });
+  }
+
+  ngOnDestroy() {
+      this.systemTrueCostReportSubscription.unsubscribe();
+      this.showPrintViewSub.unsubscribe();
+  }
 
   ngAfterViewInit() {
     // todo needs print logic, programmatic colors
@@ -68,6 +80,7 @@ export class SystemTrueCostBarComponent {
         title: 'True Cost of Water Systems',
         barmode: 'stack',
         height: 500,
+        width: this.printView? 800 : undefined,
         autosize: true,
         margin: { l: 140, r: 150, t: 80, b: 50 },
         xaxis: {
@@ -93,7 +106,7 @@ export class SystemTrueCostBarComponent {
         modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
         displaylogo: false,
         displayModeBar: true,
-        responsive: true
+        responsive: this.printView? false : true
       };
       this.plotlyService.newPlot(this.systemTrueCostBarChart.nativeElement, chartData, layout, configOptions);
 
@@ -101,8 +114,5 @@ export class SystemTrueCostBarComponent {
     });
   }
 
-  ngOnDestroy() {
-    this.systemTrueCostReportSubscription.unsubscribe();
-  }
 
 }

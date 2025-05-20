@@ -10,6 +10,8 @@ export interface PrintOptions {
     printResults: boolean;
     printInputData: boolean;
     printExecutiveSummary: boolean;
+    printWaterSystemCostReport: boolean;
+    printWaterSystemSummary: boolean;
     printEnergySummary: boolean;
     printLossesSummary: boolean;
     printReportOpportunityPayback: boolean;
