@@ -22,6 +22,7 @@ export class ResultsPanelComponent {
   selectedComponentType: ProcessFlowNodeType;
   settings: Settings;
   waterUsingSystemTabSub: Subscription;
+  showResultsContext: WaterSetupTabString[] = ['water-using-system', 'water-intake', 'water-discharge'];
   constructor(private waterAssessmentService: WaterAssessmentService,
     private waterSystemComponentService: WaterSystemComponentService
   ) { }

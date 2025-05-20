@@ -83,7 +83,10 @@ const WaterMetricGroup = ({ formik, handleInputChange, inputUnitMap, options, me
                     value={formik.values[metricValueControlId]}
                     slotProps={{
                         input: {
-                            endAdornment: <InputAdornment position="end">{inputUnitMap[formik.values[metricControlId]]}</InputAdornment>
+                            endAdornment: <InputAdornment position="end">
+                                <span dangerouslySetInnerHTML={{ __html: inputUnitMap[formik.values[metricControlId]] }}></span>
+                            </InputAdornment>
+                            // endAdornment: <InputAdornment position="end">{inputUnitMap[formik.values[metricControlId]]}</InputAdornment>
                         }
                     }}
                 />
@@ -101,7 +104,12 @@ const ProcessUseForm = (props: ProcessUseFormProps) => {
     const settings = useAppSelector((state: RootState) => state.diagram.settings);
     const flowMetricOptions = waterFlowMetricOptions;
     const waterRequiredFlowMetricOptions = waterFlowMetricOptions.slice(0, 3);
-    const inputUnitMap = settings.unitsOfMeasure === 'Imperial' ? ImperialFlowUnitMap : MetricFlowUnitMap;
+    // const inputUnitMap = settings.unitsOfMeasure === 'Imperial' ? ImperialFlowUnitMap : MetricFlowUnitMap;
+    let inputUnitMap = ImperialFlowUnitMap;
+    if (settings.unitsOfMeasure !== 'Imperial') {
+        inputUnitMap = MetricFlowUnitMap;
+    }
+
     const [estimatedFlowResults, setEstimatedFlowResults] = React.useState<EstimatedFlowResults>(undefined);
 
     const formik = useFormik({

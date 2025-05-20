@@ -106,7 +106,9 @@ export class WaterReportComponent {
   }
 
   ngOnDestroy() {
-    if (this.showPrintMenuSub) this.showPrintMenuSub.unsubscribe();
+    if (this.showPrintMenuSub) {
+      this.showPrintMenuSub.unsubscribe();
+    }
     this.showPrintViewSub.unsubscribe();
   }
 

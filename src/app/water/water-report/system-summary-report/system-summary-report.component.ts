@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { PlantSystemSummaryResults } from 'process-flow-lib';
+import { NodeErrors, PlantSystemSummaryResults } from 'process-flow-lib';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class SystemSummaryReportComponent {
   @Input()
   settings: Settings;
   
-
+  errors: NodeErrors;
   notes: Array<{
     modificationName: string,
     note: string
@@ -33,6 +33,7 @@ export class SystemSummaryReportComponent {
 
   ngOnInit(): void {
     this.plantSummaryResults = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
+
 
     if (this.inRollup) {
       // this.waterRollupService.selectedAssessments.forEach(val => {

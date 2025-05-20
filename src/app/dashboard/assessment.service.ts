@@ -76,8 +76,9 @@ export class AssessmentService {
       }
       itemSegment = '/compressed-air/';
     } else if (assessment.type == 'Water') {
-      if (assessment.water.setupDone && !mainTab && !assessment.isExample) {
-        this.startingTab = 'assessment';
+      // todo check setupDone or validation
+      if (assessment.water && !mainTab && !assessment.isExample) {
+        this.startingTab = 'baseline';
       }
       itemSegment = '/water/';
     }

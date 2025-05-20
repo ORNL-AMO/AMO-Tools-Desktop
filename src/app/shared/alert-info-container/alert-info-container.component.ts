@@ -18,6 +18,13 @@ export class AlertInfoContainerComponent {
   navigateToLink: string = undefined;
   @Input()
   navigateToText: string = '';
+  @Input()
+  bootstrapLevel: string = undefined;
+  @Input()
+  showIcon: boolean = true;
+  @Input()
+  style: { [klass: string]: any };
+  
 
   constructor(private router: Router) { }
 

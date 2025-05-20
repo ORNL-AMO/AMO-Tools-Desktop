@@ -85,10 +85,21 @@ export class WaterProcessDiagramComponent {
 
   async initDiagram(id: number) {
     this.diagram = this.diagramIdbService.findById(id);
-    this.diagram.waterDiagram.assessmentId = this.diagram.assessmentId;
-    this.updateDiagramFromAssessmentService.syncDiagramToAssessment(this.diagram, this.integratedDiagram)
-    this.setSettings();
-    this.waterProcessDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
+    if (!this.diagram) {
+      this.createAssessmentDiagram()
+    } else {
+      this.diagram.waterDiagram.assessmentId = this.diagram.assessmentId;
+      this.updateDiagramFromAssessmentService.syncDiagramToAssessment(this.diagram, this.integratedDiagram)
+      this.setSettings();
+      this.waterProcessDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
+    }
+  }
+
+  createAssessmentDiagram() {
+    // todo implement fallback and messaging for disconnected/lost diagrams
+    // await this.updateAssessmentFromDiagramService.createAssesmentDiagram(this.integratedDiagram.assessment, assessment settings);
+    // todo save assessment
+    // todo this.save
   }
 
   async save(waterDiagram: WaterDiagram) {
