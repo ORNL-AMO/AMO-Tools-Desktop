@@ -51,7 +51,6 @@ const KitchenRestroomForm = () => {
             0,
             kitchenRestroomResults.grossWaterUse);
         setEstimatedFlowResults(estimatedFlowResults);
-        console.log(kitchenRestroomResults);
     };
 
     const resetEstimate = () => {

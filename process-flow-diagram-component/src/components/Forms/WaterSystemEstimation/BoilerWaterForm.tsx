@@ -66,7 +66,6 @@ const BoilerWaterForm = (props: BoilerWaterProps) => {
             0,
             boilerWaterResults.grossWaterUse);
         setEstimatedFlowResults(estimatedFlowResults);
-        console.log(estimatedFlowResults);
         estimateSystemContext.setEstimate(boilerWaterResults.grossWaterUse);
 
     };

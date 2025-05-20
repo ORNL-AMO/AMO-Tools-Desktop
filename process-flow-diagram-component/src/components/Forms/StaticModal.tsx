@@ -42,8 +42,6 @@ export default function StaticModal(props: StaticModalProps) {
         container={() => {
 
           let container = shadowRootRef.getElementById('modal-container');
-          console.log(container);
-          console.log(shadowRootRef);
           return container;
         }}
         aria-labelledby="modal-modal-title"

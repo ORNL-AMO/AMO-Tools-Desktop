@@ -7,13 +7,14 @@ import SelectTreatmentType from "./SelectTreatmentType";
 import {
     type Node,
   } from '@xyflow/react';
-import { WaterTreatment, ProcessFlowPart, getNewWaterTreatmentComponent } from "process-flow-lib";
+import { WaterTreatment, ProcessFlowPart, getNewWaterTreatmentComponent, inSystemTreatmentTypeOptions } from "process-flow-lib";
 import InputField from "../StyledMUI/InputField";
 
 const InSystemTreatmentForm = (props: InSystemTreatmentFormProps) => {
     const dispatch = useAppDispatch();
     const settings = useAppSelector((state) => state.diagram.settings);
     const [treatments, setTreatments] = useState<Array<WaterTreatment>>(props.selectedNode.data.inSystemTreatment || []);
+    const treatmentTypeOptions = inSystemTreatmentTypeOptions;
 
     useEffect(() => {
         dispatch(nodeDataPropertyChange({ optionsProp: 'inSystemTreatment', updatedValue: treatments }));
@@ -78,6 +79,7 @@ const InSystemTreatmentForm = (props: InSystemTreatmentFormProps) => {
                 <SelectTreatmentType 
                     style={{ width: '50%' }}
                     treatmentType={treatment.treatmentType}
+                    treatmentOptions={treatmentTypeOptions}
                     handleTreatmentTypeChange={(event) => handleTreatmentTypeChange(treatment.diagramNodeId, event.target.value)}
                     ></SelectTreatmentType>
                 <IconButton onClick={() => removeTreatment(treatment.diagramNodeId)} size="small" color="error">

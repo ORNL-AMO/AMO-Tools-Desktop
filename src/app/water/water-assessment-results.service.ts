@@ -83,11 +83,17 @@ export class WaterAssessmentResultsService {
   getPlantSummaryReport(assessment: Assessment, settings: Settings): PlantSystemSummaryResults {
     let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
     let graph = createGraphIndex(diagram.waterDiagram.flowDiagramData.nodes, diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[]);
+
+    let waterTreatmentNodes: Node<ProcessFlowPart>[] = diagram.waterDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-treatment') as Node<ProcessFlowPart>[];
+    let wasteTreatmentNodes: Node<ProcessFlowPart>[] = diagram.waterDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment') as Node<ProcessFlowPart>[];
     let plantResults = getPlantSummaryResults(
       diagram.waterDiagram.flowDiagramData.nodes,
       diagram.waterDiagram.flowDiagramData.calculatedData,
       graph,
-      settings.electricityCost
+      settings.electricityCost,
+      waterTreatmentNodes,  
+      wasteTreatmentNodes,
+      undefined
     )
 
     return plantResults.plantSystemSummaryResults;
@@ -160,12 +166,19 @@ export class WaterAssessmentResultsService {
     let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
     let graph = createGraphIndex(diagram.waterDiagram.flowDiagramData.nodes, diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[]);
 
+    let waterTreatmentNodes: Node<ProcessFlowPart>[] = diagram.waterDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-treatment') as Node<ProcessFlowPart>[];
+    let wasteTreatmentNodes: Node<ProcessFlowPart>[] = diagram.waterDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment') as Node<ProcessFlowPart>[];
     let plantResults = getPlantSummaryResults(
       diagram.waterDiagram.flowDiagramData.nodes,
       diagram.waterDiagram.flowDiagramData.calculatedData,
       graph,
-      assessment.water.systemBasics.electricityCost
+      assessment.water.systemBasics.electricityCost,
+      waterTreatmentNodes, 
+      wasteTreatmentNodes,
+      undefined
     )
+
+
 
     let systemTrueCostReport = this.getSystemTrueCostData(plantResults.trueCostOfSystems, diagram.waterDiagram.flowDiagramData.nodes);
     console.log('trueCostOfSystems', plantResults.trueCostOfSystems);

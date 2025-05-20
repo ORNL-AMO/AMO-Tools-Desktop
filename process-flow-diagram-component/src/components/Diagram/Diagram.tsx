@@ -109,10 +109,11 @@ const Diagram = (props: DiagramProps) => {
         recentEdgeColors,
       };
 
+      // console.log('=== SAVED FlowDiagramData', JSON.parse(JSON.stringify(updatedDiagramData)));
       formatDataForMEASUR(updatedDiagramData);
 
       props.saveFlowDiagramData(updatedDiagramData);
-      // console.log('=== SAVED FlowDiagramData', updatedDiagramData);
+      // console.log('=== SAVED FORMATTED FlowDiagramData', updatedDiagramData);
     }
   }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings]);
 
@@ -222,6 +223,7 @@ export default (props: DiagramProps) => {
   // * prevent multiple store instances on parent re-renders. Could also be lifted to AppWebComponent.tsx if needed
   const storeRef = useRef<AppStore | null>(null);
   if (!storeRef.current) {
+    console.log('=== configureAppStore ===', props.processDiagram);
     storeRef.current = configureAppStore(props.processDiagram);
   }
   // const storeRef = useMemo(() => configureAppStore(), []);

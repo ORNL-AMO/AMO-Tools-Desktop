@@ -148,6 +148,7 @@ export const TrueCostOfSystemResultTable = (props: TrueCostOfSystemTableProps) =
 
   return (
     <TableContainer component={Paper} sx={{ ...props.style }}>
+      <h2 style={{color: 'red', fontWeight: 'bold'}}>This table is for development cost checking only</h2>
       <Table sx={{ minWidth: 300 }} size="small" aria-label="customized table">
         <TableHead>
           <StyledHeadTableRow>

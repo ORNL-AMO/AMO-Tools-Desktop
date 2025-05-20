@@ -22,7 +22,7 @@ const EstimateWaterSystem = (props: EstimateWaterSystemProps) => {
 
     const applyEstimate = (estimate: number): void => {
         // todo set flows
-        console.log('apply estimate to flows')
+        // console.log('apply estimate to flows')
     }
 
     
