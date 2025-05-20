@@ -53,7 +53,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     },
     isDialogOpen: false,
     assessmentId: undefined,
-    validationWindowLocation: 'alerts-tab',
+    validationWindowLocation: 'diagram',
     isModalOpen: false
   }
 }
@@ -83,7 +83,7 @@ const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{
   state.selectedDataId = undefined;
   state.diagramParentDimensions = { ...parentContainer };
   state.isDialogOpen = false;
-  state.validationWindowLocation = 'alerts-tab';
+  state.validationWindowLocation = 'diagram';
   state.assessmentId = assessmentId
 }
 

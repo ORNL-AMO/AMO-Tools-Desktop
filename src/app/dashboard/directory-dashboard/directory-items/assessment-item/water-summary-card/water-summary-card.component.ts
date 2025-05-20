@@ -6,6 +6,7 @@ import { WaterAssessmentService } from '../../../../../water/water-assessment.se
 import { AssessmentService } from '../../../../assessment.service';
 import { WaterAssessmentResultsService } from '../../../../../water/water-assessment-results.service';
 import { Settings } from '../../../../../shared/models/settings';
+import { ExecutiveSummaryResults } from 'process-flow-lib';
 
 @Component({
   selector: 'app-water-summary-card',
@@ -19,7 +20,7 @@ export class WaterSummaryCardComponent {
 
   @ViewChild('reportModal', { static: false }) public reportModal: ModalDirective;
 
-  // baselineResults: WaterAssessmentResults;
+  baselineResults: ExecutiveSummaryResults;
   // modificationResults: WaterAssessmentResults;
   setupDone: boolean;
   numMods: number = 0;
@@ -31,8 +32,10 @@ export class WaterSummaryCardComponent {
 
   ngOnInit(): void {
     // this.setupDone = this.waterService.checkWaterValid(this.assessment.water.baselineData.activatedSludgeData, this.assessment.water.baselineData.aeratorPerformanceData, this.assessment.water.baselineData.operations).isValid;
+    let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
+    this.baselineResults = this.waterResultsService.getExecutiveSummaryReport(this.assessment, settings);
+
     if (this.setupDone) {
-      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment);
       // this.baselineResults = this.waterResultsService.calculateResults(this.assessment.water.baselineData.activatedSludgeData, this.assessment.water.baselineData.aeratorPerformanceData, this.assessment.water.baselineData.operations, this.assessment.water.baselineData.co2SavingsData, settings, false);
       // this.numMods = this.assessment.water.modifications.length;
       // this.assessment.water.modifications.forEach(modification => {

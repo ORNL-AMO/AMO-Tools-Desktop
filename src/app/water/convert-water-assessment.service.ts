@@ -9,7 +9,6 @@ import { BoilerWater, convertFlowDiagramData, CoolingTower, DiagramWaterSystemFl
   providedIn: 'root'
 })
 export class ConvertWaterAssessmentService {
-  MAX_FLOW_DECIMALS: number = MAX_FLOW_DECIMALS;
   constructor(private convertUnitsService: ConvertUnitsService, private diagramIdbService: DiagramIdbService) { }
 
   convertWaterAssessment(waterAssessment: WaterAssessment, oldSettings: Settings, newSettings: Settings): WaterAssessment {
@@ -57,7 +56,7 @@ export class ConvertWaterAssessmentService {
   }, oldSettings: Settings, newSettings: Settings) {
 
     systemFlowData.total = this.convertFlowValue(systemFlowData.total, oldSettings, newSettings);
-    systemFlowData.total = this.convertUnitsService.roundVal(systemFlowData.total, this.MAX_FLOW_DECIMALS);
+    systemFlowData.total = this.convertUnitsService.roundVal(systemFlowData.total, newSettings.flowDecimalPrecision);
     systemFlowData.flows.forEach(flow => {
       flow.flowValue = this.convertFlowValue(flow.flowValue, oldSettings, newSettings);
     });
@@ -72,7 +71,7 @@ export class ConvertWaterAssessmentService {
       } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
         intakeSource.annualUse = this.convertUnitsService.value(intakeSource.annualUse).from('m3').to('Mgal');
       }
-      intakeSource.annualUse = this.convertUnitsService.roundVal(intakeSource.annualUse, this.MAX_FLOW_DECIMALS);
+      intakeSource.annualUse = this.convertUnitsService.roundVal(intakeSource.annualUse, newSettings.flowDecimalPrecision);
       intakeSource.userEnteredData = this.convertUserEnteredFlowData(intakeSource.userEnteredData, oldSettings, newSettings);
     });
     return intakeSources;
@@ -81,9 +80,12 @@ export class ConvertWaterAssessmentService {
   convertUserEnteredFlowData(userEnteredData: NodeFlowData, oldSettings: Settings, newSettings: Settings) {
     if (userEnteredData.totalSourceFlow) {
       userEnteredData.totalSourceFlow = this.convertFlowValue(userEnteredData.totalSourceFlow, oldSettings, newSettings);
+      userEnteredData.totalSourceFlow = this.convertUnitsService.roundVal(userEnteredData.totalSourceFlow, newSettings.flowDecimalPrecision);
+
     }
     if (userEnteredData.totalDischargeFlow) {
       userEnteredData.totalDischargeFlow = this.convertFlowValue(userEnteredData.totalDischargeFlow, oldSettings, newSettings);
+      userEnteredData.totalDischargeFlow = this.convertUnitsService.roundVal(userEnteredData.totalDischargeFlow, newSettings.flowDecimalPrecision);
     }
     return userEnteredData;
   }
@@ -96,7 +98,7 @@ export class ConvertWaterAssessmentService {
         dischargeOutlet.annualUse = this.convertUnitsService.value(dischargeOutlet.annualUse).from('m3').to('Mgal');
   
       }
-      dischargeOutlet.annualUse = this.convertUnitsService.roundVal(dischargeOutlet.annualUse, this.MAX_FLOW_DECIMALS);
+      dischargeOutlet.annualUse = this.convertUnitsService.roundVal(dischargeOutlet.annualUse, newSettings.flowDecimalPrecision);
       dischargeOutlet.userEnteredData = this.convertUserEnteredFlowData(dischargeOutlet.userEnteredData, oldSettings, newSettings);
     });
     return dischargeOutlet;
@@ -131,7 +133,7 @@ export class ConvertWaterAssessmentService {
         waterTreatment.flowValue = this.convertUnitsService.value(waterTreatment.flowValue).from('m3').to('Mgal');
   
       }
-      waterTreatment.flowValue = this.convertUnitsService.roundVal(waterTreatment.flowValue, this.MAX_FLOW_DECIMALS);
+      waterTreatment.flowValue = this.convertUnitsService.roundVal(waterTreatment.flowValue, newSettings.flowDecimalPrecision);
       waterTreatment.userEnteredData = this.convertUserEnteredFlowData(waterTreatment.userEnteredData, oldSettings, newSettings);
 
     });
@@ -145,7 +147,7 @@ export class ConvertWaterAssessmentService {
       } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
         wasteWaterTreatment.flowValue = this.convertUnitsService.value(wasteWaterTreatment.flowValue).from('m3').to('Mgal');
       }
-      wasteWaterTreatment.flowValue = this.convertUnitsService.roundVal(wasteWaterTreatment.flowValue, this.MAX_FLOW_DECIMALS);
+      wasteWaterTreatment.flowValue = this.convertUnitsService.roundVal(wasteWaterTreatment.flowValue, newSettings.flowDecimalPrecision);
       wasteWaterTreatment.userEnteredData = this.convertUserEnteredFlowData(wasteWaterTreatment.userEnteredData, oldSettings, newSettings);
 
     });
@@ -159,7 +161,7 @@ export class ConvertWaterAssessmentService {
       } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
         knownLoss.flowValue = this.convertUnitsService.value(knownLoss.flowValue).from('m3').to('Mgal');
       }
-      knownLoss.flowValue = this.convertUnitsService.roundVal(knownLoss.flowValue, this.MAX_FLOW_DECIMALS);
+      knownLoss.flowValue = this.convertUnitsService.roundVal(knownLoss.flowValue, newSettings.flowDecimalPrecision);
       knownLoss.userEnteredData = this.convertUserEnteredFlowData(knownLoss.userEnteredData, oldSettings, newSettings);
 
     });
@@ -181,11 +183,11 @@ export class ConvertWaterAssessmentService {
       systemFlowTotals.waterInProduct = this.convertUnitsService.value(systemFlowTotals.waterInProduct).from('m3').to('Mgal');
       
     }
-    systemFlowTotals.sourceWater = this.convertUnitsService.roundVal(systemFlowTotals.sourceWater, this.MAX_FLOW_DECIMALS);
-    systemFlowTotals.recirculatedWater = this.convertUnitsService.roundVal(systemFlowTotals.recirculatedWater, this.MAX_FLOW_DECIMALS);
-    systemFlowTotals.dischargeWater = this.convertUnitsService.roundVal(systemFlowTotals.dischargeWater, this.MAX_FLOW_DECIMALS);
-    systemFlowTotals.knownLosses = this.convertUnitsService.roundVal(systemFlowTotals.knownLosses, this.MAX_FLOW_DECIMALS);
-    systemFlowTotals.waterInProduct = this.convertUnitsService.roundVal(systemFlowTotals.waterInProduct, this.MAX_FLOW_DECIMALS);
+    systemFlowTotals.sourceWater = this.convertUnitsService.roundVal(systemFlowTotals.sourceWater, newSettings.flowDecimalPrecision);
+    systemFlowTotals.recirculatedWater = this.convertUnitsService.roundVal(systemFlowTotals.recirculatedWater, newSettings.flowDecimalPrecision);
+    systemFlowTotals.dischargeWater = this.convertUnitsService.roundVal(systemFlowTotals.dischargeWater, newSettings.flowDecimalPrecision);
+    systemFlowTotals.knownLosses = this.convertUnitsService.roundVal(systemFlowTotals.knownLosses, newSettings.flowDecimalPrecision);
+    systemFlowTotals.waterInProduct = this.convertUnitsService.roundVal(systemFlowTotals.waterInProduct, newSettings.flowDecimalPrecision);
     return systemFlowTotals;
   }
 
@@ -202,9 +204,9 @@ export class ConvertWaterAssessmentService {
       processUse.waterLossMetricValue = this.convertUnitsService.value(processUse.waterLossMetricValue).from('m3').to('Mgal');
     }
 
-    processUse.waterRequiredMetricValue = this.convertUnitsService.roundVal(processUse.waterRequiredMetricValue, this.MAX_FLOW_DECIMALS);
-    processUse.waterConsumedMetricValue = this.convertUnitsService.roundVal(processUse.waterConsumedMetricValue, this.MAX_FLOW_DECIMALS);
-    processUse.waterLossMetricValue = this.convertUnitsService.roundVal(processUse.waterLossMetricValue, this.MAX_FLOW_DECIMALS);
+    processUse.waterRequiredMetricValue = this.convertUnitsService.roundVal(processUse.waterRequiredMetricValue, newSettings.flowDecimalPrecision);
+    processUse.waterConsumedMetricValue = this.convertUnitsService.roundVal(processUse.waterConsumedMetricValue, newSettings.flowDecimalPrecision);
+    processUse.waterLossMetricValue = this.convertUnitsService.roundVal(processUse.waterLossMetricValue, newSettings.flowDecimalPrecision);
 
     return processUse;
   }
@@ -218,11 +220,11 @@ export class ConvertWaterAssessmentService {
       coolingTower.temperatureDrop = this.convertUnitsService.value(coolingTower.temperatureDrop).from('C').to('F');
     }
 
-    coolingTower.tonnage = this.convertUnitsService.roundVal(coolingTower.tonnage, this.MAX_FLOW_DECIMALS);
-    coolingTower.loadFactor = this.convertUnitsService.roundVal(coolingTower.loadFactor, this.MAX_FLOW_DECIMALS);
-    coolingTower.temperatureDrop = this.convertUnitsService.roundVal(coolingTower.temperatureDrop, this.MAX_FLOW_DECIMALS);
-    coolingTower.makeupConductivity = this.convertUnitsService.roundVal(coolingTower.makeupConductivity, this.MAX_FLOW_DECIMALS);
-    coolingTower.blowdownConductivity = this.convertUnitsService.roundVal(coolingTower.blowdownConductivity, this.MAX_FLOW_DECIMALS);
+    coolingTower.tonnage = this.convertUnitsService.roundVal(coolingTower.tonnage, newSettings.flowDecimalPrecision);
+    coolingTower.loadFactor = this.convertUnitsService.roundVal(coolingTower.loadFactor, newSettings.flowDecimalPrecision);
+    coolingTower.temperatureDrop = this.convertUnitsService.roundVal(coolingTower.temperatureDrop, newSettings.flowDecimalPrecision);
+    coolingTower.makeupConductivity = this.convertUnitsService.roundVal(coolingTower.makeupConductivity, newSettings.flowDecimalPrecision);
+    coolingTower.blowdownConductivity = this.convertUnitsService.roundVal(coolingTower.blowdownConductivity, newSettings.flowDecimalPrecision);
 
     return coolingTower;
   }
@@ -239,12 +241,12 @@ export class ConvertWaterAssessmentService {
       // boilerWater.steamPerPower = this.convertUnitsService.value(boilerWater.steamPerPower).from('F').to('C');
     }
 
-    boilerWater.power = this.convertUnitsService.roundVal(boilerWater.power, this.MAX_FLOW_DECIMALS); 
-    boilerWater.loadFactor = this.convertUnitsService.roundVal(boilerWater.loadFactor, this.MAX_FLOW_DECIMALS); 
-    boilerWater.steamPerPower = this.convertUnitsService.roundVal(boilerWater.steamPerPower, this.MAX_FLOW_DECIMALS); 
-    boilerWater.feedwaterConductivity = this.convertUnitsService.roundVal(boilerWater.feedwaterConductivity, this.MAX_FLOW_DECIMALS); 
-    boilerWater.makeupConductivity = this.convertUnitsService.roundVal(boilerWater.makeupConductivity, this.MAX_FLOW_DECIMALS); 
-    boilerWater.blowdownConductivity = this.convertUnitsService.roundVal(boilerWater.blowdownConductivity, this.MAX_FLOW_DECIMALS); 
+    boilerWater.power = this.convertUnitsService.roundVal(boilerWater.power, newSettings.flowDecimalPrecision); 
+    boilerWater.loadFactor = this.convertUnitsService.roundVal(boilerWater.loadFactor, newSettings.flowDecimalPrecision); 
+    boilerWater.steamPerPower = this.convertUnitsService.roundVal(boilerWater.steamPerPower, newSettings.flowDecimalPrecision); 
+    boilerWater.feedwaterConductivity = this.convertUnitsService.roundVal(boilerWater.feedwaterConductivity, newSettings.flowDecimalPrecision); 
+    boilerWater.makeupConductivity = this.convertUnitsService.roundVal(boilerWater.makeupConductivity, newSettings.flowDecimalPrecision); 
+    boilerWater.blowdownConductivity = this.convertUnitsService.roundVal(boilerWater.blowdownConductivity, newSettings.flowDecimalPrecision); 
 
     return boilerWater;
   }
@@ -256,7 +258,7 @@ export class ConvertWaterAssessmentService {
       kitchenRestroom.dailyUsePerEmployee = this.convertUnitsService.value(kitchenRestroom.dailyUsePerEmployee).from('m3').to('Mgal');
     }
 
-    kitchenRestroom.dailyUsePerEmployee = this.convertUnitsService.roundVal(kitchenRestroom.dailyUsePerEmployee, this.MAX_FLOW_DECIMALS); 
+    kitchenRestroom.dailyUsePerEmployee = this.convertUnitsService.roundVal(kitchenRestroom.dailyUsePerEmployee, newSettings.flowDecimalPrecision); 
 
     return kitchenRestroom;
   }
@@ -270,8 +272,8 @@ export class ConvertWaterAssessmentService {
       landscaping.yearlyInchesIrrigated = this.convertUnitsService.value(landscaping.yearlyInchesIrrigated).from('cm').to('in');
     }
 
-    landscaping.areaIrrigated = this.convertUnitsService.roundVal(landscaping.areaIrrigated, this.MAX_FLOW_DECIMALS); 
-    landscaping.yearlyInchesIrrigated = this.convertUnitsService.roundVal(landscaping.yearlyInchesIrrigated, this.MAX_FLOW_DECIMALS); 
+    landscaping.areaIrrigated = this.convertUnitsService.roundVal(landscaping.areaIrrigated, newSettings.flowDecimalPrecision); 
+    landscaping.yearlyInchesIrrigated = this.convertUnitsService.roundVal(landscaping.yearlyInchesIrrigated, newSettings.flowDecimalPrecision); 
 
     return landscaping;
   }
@@ -287,9 +289,9 @@ export class ConvertWaterAssessmentService {
       heatEnergy.wasteWaterDischarge = this.convertUnitsService.value(heatEnergy.wasteWaterDischarge).from('m3').to('Mgal'); 
     }
 
-    heatEnergy.incomingTemp = this.convertUnitsService.roundVal(heatEnergy.incomingTemp, this.MAX_FLOW_DECIMALS); 
-    heatEnergy.outgoingTemp = this.convertUnitsService.roundVal(heatEnergy.outgoingTemp, this.MAX_FLOW_DECIMALS); 
-    heatEnergy.wasteWaterDischarge = this.convertUnitsService.roundVal(heatEnergy.wasteWaterDischarge, this.MAX_FLOW_DECIMALS); 
+    heatEnergy.incomingTemp = this.convertUnitsService.roundVal(heatEnergy.incomingTemp, newSettings.flowDecimalPrecision); 
+    heatEnergy.outgoingTemp = this.convertUnitsService.roundVal(heatEnergy.outgoingTemp, newSettings.flowDecimalPrecision); 
+    heatEnergy.wasteWaterDischarge = this.convertUnitsService.roundVal(heatEnergy.wasteWaterDischarge, newSettings.flowDecimalPrecision); 
     return heatEnergy;
   }
 
@@ -299,7 +301,7 @@ export class ConvertWaterAssessmentService {
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       motorEnergy.ratedPower = this.convertUnitsService.value(motorEnergy.ratedPower).from('kW').to('hp');
     }
-    motorEnergy.ratedPower = this.convertUnitsService.roundVal(motorEnergy.ratedPower, this.MAX_FLOW_DECIMALS); 
+    motorEnergy.ratedPower = this.convertUnitsService.roundVal(motorEnergy.ratedPower, newSettings.flowDecimalPrecision); 
     return motorEnergy;
   }
 

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, memo, useState } from 'react';
-import { Box, Button, Chip, Divider, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import { Badge, Box, Button, Chip, Divider, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
@@ -106,14 +106,11 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             {!isDiagramValid && validationWindowLocation === 'alerts-tab'? 
               <Tab sx={{ fontSize: '.75rem' }} label={
                 <Box display={'block'}>
-                  <Chip
-                    icon={
-                      <NotificationsIcon sx={{ width: '.75em', color: selectedTab === 4? `${theme.palette.primary.main} !important` : 'inherit' }} />}
-                    sx={{ backgroundColor: selectedTab === 4 ? blue[50] : '#ececec'}
-                    }
-                    label={<Typography variant="subtitle1" component={'span'} sx={{fontSize: '.75rem',  color: selectedTab === 4? `${theme.palette.primary.main} !important` : '#616161' }}>{alertsCount}</Typography>}
-                  />
-                <Typography variant="subtitle1" component={'span'} sx={{fontSize: '.75rem', marginLeft: '.25rem', color: selectedTab === 4? `${theme.palette.primary.main} !important` : '#inherit'}}>Alerts</Typography>
+                  <Badge badgeContent={Boolean(nodeErrors)? Object.keys(nodeErrors).length : 0} color="error" sx={{ paddingRight: '.25rem' }}>
+                        <NotificationsIcon sx={{ width: '.75em', color: selectedTab === 4 ? `${theme.palette.primary.main} !important` : 'inherit' }} />
+                      </Badge>
+
+                <Typography variant="subtitle1" component={'span'} sx={{fontSize: '.75rem', marginLeft: '.5rem', color: selectedTab === 4? `${theme.palette.primary.main} !important` : '#inherit'}}>Alerts</Typography>
                 </Box>
               } />
               : 

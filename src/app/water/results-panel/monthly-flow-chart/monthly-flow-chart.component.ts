@@ -81,6 +81,7 @@ export class MonthlyFlowChartComponent {
 
     let yTitle = `${this.flowLabel} (${this.flowUnits})`;
     let layout = {
+      title: `Monthly ${this.flowLabel} Flow`,
       showlegend: true,
       barmode: 'stack',
       xaxis: {},
@@ -95,8 +96,11 @@ export class MonthlyFlowChartComponent {
         hoverformat: ",.2f",
       },
       margin: {
-        t: 20,
+        t: 50,
         r: 20
+      },
+      padding: {
+        t: 25
       },
       legend: {
         orientation: "h",

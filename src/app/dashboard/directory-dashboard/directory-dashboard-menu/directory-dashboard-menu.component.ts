@@ -95,9 +95,10 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.directory.inventories.forEach(inventory => {
       inventory.selected = this.isAllSelected;
     }); 
-    this.directory.diagrams.forEach(diagram => {
-      diagram.selected = this.isAllSelected;
-    });  
+    // todo hide until copy and move is implemented
+    // this.directory.diagrams.forEach(diagram => {
+    //   diagram.selected = this.isAllSelected;
+    // });  
     this.setSelectedStatus();
   }
 
@@ -109,7 +110,8 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   setSelectedStatus() {
     let hasAssessmentSelected: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
     let hasDirectorySelected: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
-    let hasDiagramSelected: Diagram = _.find(this.directory.diagrams, (value) => { return value.selected == true });
+    let hasDiagramSelected = false;
+    // let hasDiagramSelected: Diagram = _.find(this.directory.diagrams, (value) => { return value.selected == true });
     let hasInventorySelected: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
     let hasCalculatorSelected: Calculator;
     if (this.directory.calculators) {

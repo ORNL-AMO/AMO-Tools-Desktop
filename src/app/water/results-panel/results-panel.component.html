@@ -9,7 +9,7 @@
                             <div>Components</div>
                         </a>
                     </div>
-                    <div *ngIf="setupTab !== 'system-basics'" 
+                    <div *ngIf="showResultsContext.includes(setupTab)" 
                         class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': panelTabSelect == 'results'}">
                         <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
                             <div>Results</div>

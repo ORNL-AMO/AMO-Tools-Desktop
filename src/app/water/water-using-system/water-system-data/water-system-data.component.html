@@ -49,12 +49,12 @@
         </p>
     </div> -->
     <div class="form-group my-2 px-2 d-flex justify-content-end">
-        <div class="btn-group btn-group-sm pull-right">
+        <!-- <div class="btn-group btn-group-sm pull-right">
             <button type="button" class="btn btn-primary btn-sm py-1 px-2 small mx-2"
                 [ngClass]="{'disabled': getIsDisabledRestoreAll()}" (click)="restoreAllToDiagramValues()">
                 <span class="fa fa-refresh pr-2"></span>
                 Restore All to Diagram</button>
-        </div>
+        </div> -->
     </div>
     <app-water-system-data-modal *ngIf="showWaterSystemDataModal" [settings]="settings"
         [waterUsingSystem]="selectedWaterUsingSystem" [systemType]="form.controls.systemType.value"
@@ -68,11 +68,11 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.sourceWater.invalid}">
         <label for="sourceWater">Total Source Water</label>
         <div class="input-group">
-            <span class="input-group-addon calc-addon units">
+            <!-- <span class="input-group-addon calc-addon units">
                 <a class="click-link" (click)="restoreToDiagramValue('sourceWater')"
                     [ngClass]="{'disabled': getIsDisabledRestore('sourceWater')}"><span class="fa fa-refresh"></span>
                 </a>
-            </span>
+            </span> -->
             <input name="sourceWater" type="number" class="form-control" id="sourceWater" formControlName="sourceWater"
                 (input)="saveWithUserOverride('sourceWater')" (focus)="focusField('sourceWater')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
@@ -92,12 +92,12 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.recirculatedWater.invalid}">
         <label for="recirculatedWater">Recirculated Water</label>
         <div class="input-group">
-            <span class="input-group-addon calc-addon units">
+            <!-- <span class="input-group-addon calc-addon units">
                 <a class="click-link" (click)="restoreToDiagramValue('recirculatedWater')"
                     [ngClass]="{'disabled': getIsDisabledRestore('recirculatedWater')}"><span
                         class="fa fa-refresh"></span>
                 </a>
-            </span>
+            </span> -->
             <input name="recirculatedWater" type="number" class="form-control" id="recirculatedWater"
                 formControlName="recirculatedWater" (input)="saveWithUserOverride('recirculatedWater')"
                 (focus)="focusField('recirculatedWater')">
@@ -123,11 +123,11 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.dischargeWater.invalid}">
         <label for="dischargeWater">Total Discharge Water</label>
         <div class="input-group">
-            <span class="input-group-addon calc-addon units">
+            <!-- <span class="input-group-addon calc-addon units">
                 <a class="click-link" (click)="restoreToDiagramValue('dischargeWater')"
                     [ngClass]="{'disabled': getIsDisabledRestore('dischargeWater')}"><span class="fa fa-refresh"></span>
                 </a>
-            </span>
+            </span> -->
             <input name="dischargeWater" type="number" class="form-control" id="dischargeWater"
                 formControlName="dischargeWater" (input)="saveWithUserOverride('dischargeWater')"
                 (focus)="focusField('dischargeWater')">
@@ -148,11 +148,11 @@
     <div class="form-group" [ngClass]="{'invalid': form.controls.knownLosses.invalid}">
         <label for="knownLosses">Known Losses</label>
         <div class="input-group">
-            <span class="input-group-addon calc-addon units">
+            <!-- <span class="input-group-addon calc-addon units">
                 <a class="click-link" (click)="restoreToDiagramValue('knownLosses')"
                     [ngClass]="{'disabled': getIsDisabledRestore('knownLosses')}"><span class="fa fa-refresh"></span>
                 </a>
-            </span>
+            </span> -->
             <input name="knownLosses" type="number" class="form-control" id="knownLosses" formControlName="knownLosses"
                 (input)="saveWithUserOverride('knownLosses')" (focus)="focusField('knownLosses')">
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
@@ -173,11 +173,11 @@
         [ngClass]="{'invalid': form.controls.waterInProduct.invalid}">
         <label for="waterInProduct">Water In Product</label>
         <div class="input-group">
-            <span class="input-group-addon calc-addon units">
+            <!-- <span class="input-group-addon calc-addon units">
                 <a class="click-link" (click)="restoreToDiagramValue('waterInProduct')"
                     [ngClass]="{'disabled': getIsDisabledRestore('waterInProduct')}"><span class="fa fa-refresh"></span>
                 </a>
-            </span>
+            </span> -->
             <input name="waterInProduct" type="number" class="form-control" id="waterInProduct"
                 formControlName="waterInProduct" (input)="saveWithUserOverride('waterInProduct')"
                 (focus)="focusField('waterInProduct')">

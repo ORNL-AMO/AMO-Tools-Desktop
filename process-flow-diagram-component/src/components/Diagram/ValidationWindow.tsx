@@ -34,7 +34,7 @@ const ValidationWindow = () => {
 
   let windowPositionProps = {
     position: "absolute",
-    left: 525,
+    left: 550,
     top: 90,
     width: 400,
     zIndex: 999,
