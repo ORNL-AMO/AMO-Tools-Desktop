@@ -27,6 +27,7 @@ export interface HeatEnergy {
     heaterEfficiency: number,
     heatingFuelType: number,
     wasteWaterDischarge: number
+    systemWaterUse?: number,
 }
 
 export interface HeatEnergyResults {

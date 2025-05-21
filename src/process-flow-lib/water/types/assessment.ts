@@ -25,6 +25,7 @@ export interface Modification {
 
 export interface WaterSystemBasics {
     utilityType: string,
+    fuelCost: number,
     electricityCost: number,
     conductivityUnit: string,
     productionUnit: string,

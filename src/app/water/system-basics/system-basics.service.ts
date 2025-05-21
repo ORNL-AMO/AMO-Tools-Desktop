@@ -14,6 +14,7 @@ export class SystemBasicsService {
       notes: [obj.notes],
       utilityType: [obj.utilityType],
       electricityCost: [obj.electricityCost],
+      fuelCost: [obj.fuelCost],
       conductivityUnit: [obj.conductivityUnit],
       productionUnit: [obj.productionUnit],
       annualProduction: [obj.annualProduction],
@@ -25,6 +26,7 @@ export class SystemBasicsService {
     return {    
       notes: form.controls.notes.value,
       electricityCost: form.controls.electricityCost.value,
+      fuelCost: form.controls.fuelCost.value,
       utilityType: form.controls.utilityType.value,
       conductivityUnit: form.controls.conductivityUnit.value,
       productionUnit: form.controls.productionUnit.value,

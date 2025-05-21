@@ -375,6 +375,7 @@ export class AssessmentService {
         electricityCost: settings.electricityCost,
         notes: undefined,
         conductivityUnit: 'mmho',
+        fuelCost: settings.fuelCost,
         productionUnit: 'lb',
         annualProduction: undefined
       },

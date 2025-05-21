@@ -123,6 +123,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     flowDecimalPrecision: number,
     unitsOfMeasure: string,
     electricityCost: number,
+    fuelCost: number,
     conductivityUnit: string,
   }
   

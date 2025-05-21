@@ -47,12 +47,13 @@ const DiagramResults = () => {
 
   const allMotorEnergy: MotorEnergy[] = systemMotorEnergyData.concat(intakeMotorEnergy, dischargeMotorEnergy);
   const motorEnergyCosts = allMotorEnergy.reduce((total, motorEnergy) => {
-    return total + getMotorEnergyCost(motorEnergy, settings.electricityCost);
+    return total + getMotorEnergyCost(motorEnergy, settings.electricityCost, settings.unitsOfMeasure);
   }, 0);
 
   const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy).filter((heatEnergy: HeatEnergy) => heatEnergy !== undefined);
   const heatEnergyCosts = systemHeatEnergyData.reduce((total, heatEnergy) => {
-    return total + getHeatEnergyCost(heatEnergy, settings.electricityCost);
+    const unitCost = heatEnergy.heatingFuelType === 0? settings.electricityCost : settings.fuelCost;
+    return total + getHeatEnergyCost(heatEnergy, unitCost, settings.unitsOfMeasure);
   }, 0);
 
   const indirectCosts = treatmentCost + wasteTreatmentCost + motorEnergyCosts + heatEnergyCosts;

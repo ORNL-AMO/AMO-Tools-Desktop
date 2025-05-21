@@ -17,10 +17,11 @@ export const MockWaterAssessment: Assessment = {
         "setupDone": false,
         "systemBasics": {
             "notes": null,
-            "electricityCost": 1,
+            "electricityCost": .66,
             "utilityType": "Electricity",
             "conductivityUnit": "mmho",
             "productionUnit": "lb",
+            "fuelCost": 3.99,
             "annualProduction": 200
         },
         "diagramWaterSystemFlows": [
