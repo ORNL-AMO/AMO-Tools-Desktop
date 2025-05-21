@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { WaterSuiteApiService } from '../tools-suite-api/water-suite-api.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
-import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults } from 'process-flow-lib';
+import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults, getTotalInflow } from 'process-flow-lib';
 import { UpdateDiagramFromAssessmentService } from '../water-process-diagram/update-diagram-from-assessment.service';
 import { Assessment } from '../shared/models/assessment';
 import { Edge, Node } from '@xyflow/react';
@@ -93,7 +93,7 @@ export class WaterAssessmentResultsService {
       settings.electricityCost,
       waterTreatmentNodes,  
       wasteTreatmentNodes,
-      undefined
+      diagram.waterDiagram.flowDiagramData.settings
     )
 
     return plantResults.plantSystemSummaryResults;
@@ -137,15 +137,23 @@ export class WaterAssessmentResultsService {
 
     const allMotorEnergy: MotorEnergy[] = systemMotorEnergyData.concat(intakeMotorEnergy, dischargeMotorEnergy);
     const motorEnergyCosts = allMotorEnergy.reduce((total, motorEnergy) => {
-      return total + getMotorEnergyCost(motorEnergy, settings.electricityCost);
+      return total + getMotorEnergyCost(motorEnergy, settings.electricityCost, settings.unitsOfMeasure);
     }, 0);
 
-    const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy).filter((heatEnergy: HeatEnergy) => heatEnergy !== undefined);
+    // todo rough quick fix for beta
+    const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => {
+      const node: Node<ProcessFlowPart> = diagram.waterDiagram.flowDiagramData.nodes.map(node => node).find((node: Node<ProcessFlowPart>) => node.data.diagramNodeId === system.diagramNodeId) as Node<ProcessFlowPart>;
+      const totalInflow = getTotalInflow(node, diagram.waterDiagram.flowDiagramData.calculatedData);
+      system.heatEnergy.systemWaterUse = totalInflow;
+      return system.heatEnergy;
+    }).filter((heatEnergy: HeatEnergy) => heatEnergy !== undefined);
+    
     const heatEnergyCosts = systemHeatEnergyData.reduce((total, heatEnergy) => {
-      return total + getHeatEnergyCost(heatEnergy, 1);
+      const unitCost = heatEnergy.heatingFuelType === 0? settings.electricityCost : settings.fuelCost;
+      return total + getHeatEnergyCost(heatEnergy, unitCost, settings.unitsOfMeasure);
     }, 0);
-    const directCosts = intakeCost + dischargeCost;
 
+    const directCosts = intakeCost + dischargeCost;
     const trueCost = getWaterTrueCost(intakeCost, dischargeCost, motorEnergyCosts, heatEnergyCosts, treatmentCost, wasteTreatmentCost);
 
     // * annualProduction should already be entered as 1000 units
@@ -175,10 +183,8 @@ export class WaterAssessmentResultsService {
       assessment.water.systemBasics.electricityCost,
       waterTreatmentNodes, 
       wasteTreatmentNodes,
-      undefined
+      diagram.waterDiagram.flowDiagramData.settings
     )
-
-
 
     let systemTrueCostReport = this.getSystemTrueCostData(plantResults.trueCostOfSystems, diagram.waterDiagram.flowDiagramData.nodes);
     console.log('trueCostOfSystems', plantResults.trueCostOfSystems);

@@ -46,6 +46,22 @@
     </div>
 
     <div class="form-group">
+      <label for="fuelCost">Fuel Cost</label>
+      <div class="input-group">
+        <input name="fuelCost" type="number" step="0.01" class="form-control" id="fuelCost"
+          formControlName="fuelCost" (change)="saveSystemBasics()" (focus)="focusField('fuelCost')">
+        <span class="units input-group-addon">MMBtu</span>
+        <span class="units input-group-addon">GJ</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="systemBasicsForm.controls.fuelCost.invalid && !systemBasicsForm.controls.fuelCost.pristine">
+        <span *ngIf="systemBasicsForm.controls.fuelCost.errors.required">Value Required</span>
+        <span *ngIf="systemBasicsForm.controls.fuelCost.errors.min">Value can't be less than
+          {{systemBasicsForm.controls.fuelCost.errors.min.min}} $/kWh.</span>
+      </span>
+    </div>
+
+    <div class="form-group">
       <label for="productionUnit">Production Unit</label>
       <div class="input-group">
        <input name="productionUnit" type="text" class="form-control" id="productionUnit"

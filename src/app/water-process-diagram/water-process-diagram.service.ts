@@ -39,6 +39,7 @@ export class WaterProcessDiagramService {
         userDiagramOptions: getDefaultUserDiagramOptions(),
         settings: {
           electricityCost: settings.electricityCost,
+          fuelCost: settings.fuelCost,
           flowDecimalPrecision: settings.flowDecimalPrecision,
           unitsOfMeasure: settings.unitsOfMeasure,
           conductivityUnit: 'mmho',

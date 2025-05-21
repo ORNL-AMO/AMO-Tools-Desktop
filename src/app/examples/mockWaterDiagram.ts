@@ -1427,7 +1427,8 @@ export const MockWaterdiagram: Diagram =
                 }
             ],
             "settings": {
-                "electricityCost": 1,
+                "electricityCost": .66,
+                "fuelCost": 3.99,
                 "flowDecimalPrecision": 2,
                 "unitsOfMeasure": "Imperial",
                 "conductivityUnit": "mmho"

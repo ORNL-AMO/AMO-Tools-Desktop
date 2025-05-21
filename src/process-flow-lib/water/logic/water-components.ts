@@ -294,14 +294,14 @@ export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): Wa
       areaIrrigated: undefined,
       yearlyInchesIrrigated: undefined,
     },
-    heatEnergy: {
+    addedMotorEnergy: waterProcessComponent.addedMotorEnergy || [],
+    heatEnergy: waterProcessComponent.heatEnergy || {
       incomingTemp: undefined,
       outgoingTemp: undefined,
       heaterEfficiency: undefined,
       heatingFuelType: 0,
       wasteWaterDischarge: undefined
     },
-    addedMotorEnergy: waterProcessComponent.addedMotorEnergy || [],
     systemFlowTotals: {
       sourceWater: waterProcessComponent.systemFlowTotals?.sourceWater,
       recirculatedWater: waterProcessComponent.systemFlowTotals?.recirculatedWater,
@@ -485,6 +485,7 @@ export const getDefaultSettings = (): DiagramSettings => {
   return {
     unitsOfMeasure: 'Imperial',
     electricityCost: .066,
+    fuelCost: 3.99,
     flowDecimalPrecision: 2,
     conductivityUnit: 'mmho',
   }

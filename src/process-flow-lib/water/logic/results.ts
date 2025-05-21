@@ -445,32 +445,60 @@ export const getWaterTrueCost = (
 /**
 * Get cost for MotorEnergy
 * @param motorEnergy MotorEnergy object
-* @param energyUnitCost Cost of energy per kWh or MMBTU / GJ
+* @param energyUnitCost 
 */
-export const getMotorEnergyCost = (motorEnergy: MotorEnergy, energyUnitCost: number): number => {
-  const ratedPowerKW = motorEnergy.ratedPower * 0.7457; // convert HP to kW
-  const energyKwPerYear = (motorEnergy.hoursPerYear * motorEnergy.loadFactor) / 100 * (ratedPowerKW * motorEnergy.systemEfficiency) / 100;
-  const motorEnergyCost = energyKwPerYear * energyUnitCost;
+export const getMotorEnergyCost = (motorEnergy: MotorEnergy, energyUnitCost: number, unitsOfMeasure: string): number => {
+  //  N = Number of pumps, fans or motors.
+  // H = Hours of Operation per Year
+  // L = Load Factor
+  // hp = Horsepowe
+  // h = Efficiency
+  // E = Pump Energy Use (kWh)
+
+  // E = (0.746 * hp * N * L / h) * H
+  let motorEnergyCost = 0;
+  if (motorEnergy.systemEfficiency) {
+    const ratedPowerKW = unitsOfMeasure === 'Imperial' ? motorEnergy.ratedPower * 0.7457 : motorEnergy.ratedPower;
+    motorEnergyCost = energyUnitCost * ((ratedPowerKW * motorEnergy.numberUnits * motorEnergy.loadFactor / motorEnergy.systemEfficiency) * motorEnergy.hoursPerYear);
+  }
   return motorEnergyCost;
 }
-
 
 /**
 * Get Cost for HeatEnergy
 * @param heatEnergy HeatEnergy object
 * @param energyUnitCost Cost of energy per kWh or MMBTU / GJ
 */
-export const getHeatEnergyCost = (systemHeatEnergy: HeatEnergy, energyUnitCost: number): number => {
-  const heatEnergy: HeatEnergy = {
-    incomingTemp: systemHeatEnergy.incomingTemp ?? 0,
-    outgoingTemp: systemHeatEnergy.outgoingTemp ?? 0,
-    heaterEfficiency: systemHeatEnergy.heaterEfficiency ?? 0,
-    wasteWaterDischarge: systemHeatEnergy.wasteWaterDischarge ?? 0,
-    hoursPerYear: systemHeatEnergy.hoursPerYear ?? 0,
-    heatingFuelType: systemHeatEnergy.heatingFuelType ?? 0,
+export const getHeatEnergyCost = (systemHeatEnergy: HeatEnergy, energyUnitCost: number, unitsOfMeasure: string): number => {
+  let heatEnergyCost = 0;
+  if (systemHeatEnergy.heaterEfficiency) {
+    const heatEnergy: HeatEnergy = {
+      incomingTemp: systemHeatEnergy.incomingTemp ?? 0,
+      outgoingTemp: systemHeatEnergy.outgoingTemp ?? 0,
+      heaterEfficiency: systemHeatEnergy.heaterEfficiency ?? 0,
+      wasteWaterDischarge: systemHeatEnergy.wasteWaterDischarge ?? 0,
+      hoursPerYear: systemHeatEnergy.hoursPerYear ?? 0,
+      heatingFuelType: systemHeatEnergy.heatingFuelType ?? 0,
+      systemWaterUse: systemHeatEnergy.systemWaterUse ?? 0,
+    }
+    const densityOfWater = unitsOfMeasure === 'Imperial'? 8.345385 : 1000;
+    const specificHeatWater = unitsOfMeasure === 'Imperial'? 1.00 : 4.1868/1000000; // GJ/kg-°C
+
+    //  V = Quantity of water used by system (Million Gallon ; m^3) (from water balance)
+    // r = Density of Water = 8.345385 lb/gal = 8.345385 million lb/ million gal (constant)
+    // r = 1000 kg/m3  (metrics units)
+    // Cp = Specific Heat of Water = 1.00 Btu/lb-°F = 1.0 MMBtu/million lb-°F (constant)
+    // Cp = 4.1868 kJ/kg-°C or 4.1868/1000000 GJ/kg-°C (metrics units)
+    // Ti = Average Temperature of Source Water (°F ; °C) (user input)
+    // To = Average Temperature of Leaving Wastewater (°F ; °C) (user input)
+    // h = Heating Efficiency = 0.78 (default) (user input)
+    // Q = Heat Energy in Wastewater (Million Btu ; GJ) (calculated)
+    
+    // Q = [V*r*Cp*(To-Ti)]/h
+    
+    const energy = (heatEnergy.systemWaterUse * densityOfWater * specificHeatWater * (heatEnergy.outgoingTemp - heatEnergy.incomingTemp)) / (heatEnergy.heaterEfficiency / 100);
+    heatEnergyCost = energy * energyUnitCost;
   }
-  const energy = heatEnergy.wasteWaterDischarge * (heatEnergy.outgoingTemp - heatEnergy.incomingTemp) * 1 * 8.3454 * heatEnergy.heaterEfficiency / 1000000
-  const heatEnergyCost = energy * energyUnitCost;
   return heatEnergyCost;
 }
 
@@ -686,16 +714,18 @@ export const getPlantSummaryResults = (
 
       const waterUsingSystem = currentSystem.data as WaterUsingSystem;
       if (waterUsingSystem.heatEnergy) {
-        systemCostContributionsResultsMap[currentSystem.id].heatEnergyWastewater = getHeatEnergyCost(waterUsingSystem.heatEnergy, electricityCost);
+        const totalInflow = getTotalInflow(currentSystem, calculatedData);
+        waterUsingSystem.heatEnergy.systemWaterUse = totalInflow;
+        const unitCost = waterUsingSystem.heatEnergy.heatingFuelType === 0? settings.electricityCost : settings.fuelCost;
+        systemCostContributionsResultsMap[currentSystem.id].heatEnergyWastewater = getHeatEnergyCost(waterUsingSystem.heatEnergy, unitCost, settings.unitsOfMeasure);
       }
-      systemCostContributionsResultsMap[currentSystem.id].systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, electricityCost);
 
       if (waterUsingSystem.inSystemTreatment && waterUsingSystem.inSystemTreatment.length > 0) {
         const totalSystemInflow = getTotalInflow(currentSystem, calculatedData);
         const inSystemTreatmentCost = getInSystemTreatmentCost(waterUsingSystem.inSystemTreatment, totalSystemInflow);
         systemCostContributionsResultsMap[currentSystem.id].treatment = inSystemTreatmentCost;
       }
-      systemCostContributionsResultsMap[currentSystem.id].systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, electricityCost);
+      systemCostContributionsResultsMap[currentSystem.id].systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, electricityCost, settings.unitsOfMeasure);
 
       // * Current system owns costs for intake, water-treatment, and waste-water-treatment (if recycled into their system)
       ancestorCostsMap[currentSystem.id].forEach((connectedAncestorCost: ConnectedCost) => {
@@ -715,11 +745,11 @@ export const getPlantSummaryResults = (
             if (!isIntakeInRecycledFlow || isImmediateAncestor) {
               const intake = ancestorNode.data as IntakeSource;
               systemCostContributionsResultsMap[currentSystem.id].intake += connectedAncestorCost.cost;
-              const pumpAndMotorEnergy = getPumpAndMotorEnergyContribution(intake, electricityCost);
-              const energyCost = pumpAndMotorEnergy * (connectedAncestorCost.percentSelfTotalFlow / 100);
-              systemCostContributionsResultsMap[currentSystem.id].intake += energyCost;
-
               systemAnnualSummaryResultsMap[currentSystem.id].sourceWaterIntake += connectedAncestorCost.flow;
+              
+              const pumpAndMotorEnergy = getPumpAndMotorEnergyContribution(intake, electricityCost, settings.unitsOfMeasure);
+              const energyCost = pumpAndMotorEnergy * (connectedAncestorCost.percentSelfTotalFlow / 100);
+              systemCostContributionsResultsMap[currentSystem.id].systemPumpAndMotorEnergy += energyCost;
             }
             break;
           }
@@ -781,11 +811,12 @@ export const getPlantSummaryResults = (
             const isImmediateDescendant = getIsImmediateDescendant(descendantId, graph, currentSystem.id);
             if (!isDischargeFromRecycledFlow || isImmediateDescendant) {
               systemCostContributionsResultsMap[currentSystem.id].discharge += connectedDescendantCost.cost;
-              const pumpAndMotorEnergy = getPumpAndMotorEnergyContribution(discharge, electricityCost);
-              const energyCost = pumpAndMotorEnergy * (connectedDescendantCost.percentSelfTotalFlow / 100);
-              systemCostContributionsResultsMap[currentSystem.id].discharge += energyCost;
-
               systemAnnualSummaryResultsMap[currentSystem.id].dischargeWater += connectedDescendantCost.flow;
+              
+              const pumpAndMotorEnergy = getPumpAndMotorEnergyContribution(discharge, electricityCost, settings.unitsOfMeasure);
+              const energyCost = pumpAndMotorEnergy * (connectedDescendantCost.percentSelfTotalFlow / 100);
+              systemCostContributionsResultsMap[currentSystem.id].systemPumpAndMotorEnergy += energyCost;
+
 
             }
             break;
@@ -868,11 +899,11 @@ export const getPlantSummaryResults = (
 }
 
 
-const getPumpAndMotorEnergyContribution = (component: IntakeSource | DischargeOutlet | WaterUsingSystem, electricityCost: number): number => {
+const getPumpAndMotorEnergyContribution = (component: IntakeSource | DischargeOutlet | WaterUsingSystem, electricityCost: number, unitsOfMeasure: string): number => {
   let pumpAndMotorEnergy = 0;
   if (component.addedMotorEnergy?.length) {
     pumpAndMotorEnergy = component.addedMotorEnergy.reduce(
-      (sum, motor) => sum + getMotorEnergyCost(motor, electricityCost)
+      (sum, motor) => sum + getMotorEnergyCost(motor, electricityCost, unitsOfMeasure)
       , 0);
   }
   return pumpAndMotorEnergy;
@@ -882,7 +913,7 @@ const getPumpAndMotorEnergyContribution = (component: IntakeSource | DischargeOu
 /**
 * Get total inflow for a node. If user entered data is not available, use calculated data.
 */
-const getTotalInflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalculatedData): number => {
+export const getTotalInflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalculatedData): number => {
   let totalInflow = node.data.userEnteredData?.totalSourceFlow;
   if (totalInflow === undefined || totalInflow === null) {
     totalInflow = calculatedData.nodes[node.id]?.totalSourceFlow;
@@ -893,7 +924,7 @@ const getTotalInflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalc
 /**
 * Get total outflow for a node. If user entered data is not available, use calculated data.
 */
-const getTotalOutflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalculatedData): number => {
+export const getTotalOutflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalculatedData): number => {
   let totalOutflow = node.data.userEnteredData?.totalDischargeFlow;
   if (totalOutflow === undefined || totalOutflow === null) {
     totalOutflow = calculatedData.nodes[node.id]?.totalDischargeFlow;

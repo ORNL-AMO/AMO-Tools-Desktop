@@ -55,8 +55,8 @@
         <div class="input-group">
             <input name="ratedPower" type="number" class="form-control" id="ratedPower" formControlName="ratedPower"
                 (input)="save()" (focus)="focusField('ratedPower')">
-            <span class="input-group-addon units">hp</span>
-            <!-- <span class="input-group-addon units">{{settings.powerMeasurement}}</span> -->
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">hp</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kW</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.ratedPower.invalid && !form.controls.ratedPower.pristine">
