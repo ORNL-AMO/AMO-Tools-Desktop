@@ -232,10 +232,10 @@ async resetAllExampleAssessments(dirId: number) {
   this.inventoryDbService.setAll(updatedInventoryItems);
   let exampleInventories: Array<InventoryItem> = this.inventoryDbService.allInventoryItems.filter(item => { return item.isExample && item.directoryId === dirId});
   let allInventoryItems: Array<InventoryItem[]> = await firstValueFrom(this.inventoryDbService.bulkDeleteWithObservable(exampleInventories.map(inventory => inventory.id)));
-
-
+  
+  
   let updatedDiagrams: Array<Diagram> = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
-  this.diagramIdbService.setAll(updatedInventoryItems);
+  this.diagramIdbService.setAll(updatedDiagrams);
   let exampleDiagrams: Array<Diagram> = updatedDiagrams.filter(diagram => { return diagram.isExample && diagram.directoryId === dirId});
   let allDiagrams: Array<Diagram[]> = await firstValueFrom(this.diagramIdbService.bulkDeleteWithObservable(exampleDiagrams.map(diagram => diagram.id)));
 
@@ -295,7 +295,8 @@ async resetAllExampleAssessments(dirId: number) {
   await firstValueFrom(this.settingsDbService.addWithObservable(MockWaterAssessmentSettings));
 
   MockWaterdiagram.directoryId = dirId;
-  MockWaterdiagram.assessmentId = createdWater.id
+  MockWaterdiagram.assessmentId = createdWater.id;
+  
   let createdWaterDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(MockWaterdiagram));
   createdWater.diagramId = createdWaterDiagram.id;
   await firstValueFrom(this.assessmentDbService.updateWithObservable(createdWater));

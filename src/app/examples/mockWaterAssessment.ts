@@ -8,6 +8,7 @@ export const MockWaterAssessment: Assessment = {
     "createdDate": new Date("2025-04-29T13:39:17.170Z"),
     "modifiedDate": new Date("2025-04-29T13:39:17.170Z"),
     "type": "Water",
+    "isExample": true,
     "appVersion": "1.5.12",
     "directoryId": 2,
     "water": {
@@ -1172,7 +1173,6 @@ export const MockWaterAssessment: Assessment = {
     },
     "diagramId": 1,
     "selected": false,
-    "id": 75
 }
 
 

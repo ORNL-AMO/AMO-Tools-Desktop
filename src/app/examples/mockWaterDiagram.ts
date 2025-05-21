@@ -10,8 +10,8 @@ export const MockWaterdiagram: Diagram =
     "modifiedDate": new Date("2025-04-29T13:39:17.170Z"),
     "name": "Water Example Diagram",
     "appVersion": "1.5.12",
+    "isExample": true,
     "type": "Water",
-    "directoryId": 2,
     "waterDiagram": {
         "isValid": true,
         "flowDiagramData": {
