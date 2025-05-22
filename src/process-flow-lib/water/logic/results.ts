@@ -711,13 +711,14 @@ export const getPlantSummaryResults = (
         trueOverDirectResult: 0,
       }
 
-
-      const waterUsingSystem = currentSystem.data as WaterUsingSystem;
+      let waterUsingSystem = currentSystem.data as WaterUsingSystem;
       if (waterUsingSystem.heatEnergy) {
+        // todo cleanup implementation
         const totalInflow = getTotalInflow(currentSystem, calculatedData);
-        waterUsingSystem.heatEnergy.systemWaterUse = totalInflow;
-        const unitCost = waterUsingSystem.heatEnergy.heatingFuelType === 0? settings.electricityCost : settings.fuelCost;
-        systemCostContributionsResultsMap[currentSystem.id].heatEnergyWastewater = getHeatEnergyCost(waterUsingSystem.heatEnergy, unitCost, settings.unitsOfMeasure);
+        let heatEnergy = JSON.parse(JSON.stringify(waterUsingSystem.heatEnergy));
+        heatEnergy.systemWaterUse = totalInflow;
+        const unitCost = heatEnergy.heatingFuelType === 0 ? settings.electricityCost : settings.fuelCost;
+        systemCostContributionsResultsMap[currentSystem.id].heatEnergyWastewater = getHeatEnergyCost(heatEnergy, unitCost, settings.unitsOfMeasure);
       }
 
       if (waterUsingSystem.inSystemTreatment && waterUsingSystem.inSystemTreatment.length > 0) {
