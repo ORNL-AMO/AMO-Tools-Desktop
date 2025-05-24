@@ -103,29 +103,127 @@ export const getDescendantsDFS = (
   return result;
 };
 
-export const getAncestorsDFS = (
+
+export const getAncestorPathToNode = (
   nodeId: string,
   graph: NodeGraphIndex,
   searchAncestorId?: string
 ): string[] => {
   const visited = new Set<string>();
-  const result: string[] = [];
-  let found = false;
+  const path: string[] = [];
 
-  const dfs = (current: string) => {
-    if (!visited.has(current) && !found) {
-      visited.add(current);
-      result.push(current);
-      if (current === searchAncestorId) {
-        found = true;
-        return;
-      }
-      for (const parent of graph.parentMap[current] || []) {
-        dfs(parent);
+  const dfs = (current: string): boolean => {
+    if (visited.has(current)) {
+      return false;
+    }
+    
+    visited.add(current);
+    path.push(current);
+    
+    if (current === searchAncestorId) {
+      return true;
+    }
+    
+    // Try each parent path
+    for (const parent of graph.parentMap[current] || []) {
+      if (dfs(parent)) {
+        return true; 
       }
     }
+    
+    path.pop();
+    return false;
   };
 
   dfs(nodeId);
-  return result;
+  return path;
+};
+
+export const getAncestorTreatmentChain = (
+  nodeId: string,
+  graph: NodeGraphIndex,
+  nodeMap: Record<string, Node>,
+  processComponentType: string
+): string[] => {
+  const visited = new Set<string>();
+  const path: string[] = [];
+
+  const dfs = (current: string): boolean => {
+    if (visited.has(current)) {
+      return false;
+    }
+
+    visited.add(current);
+
+    const node = nodeMap[current] as Node | undefined;
+    if (!node || node.data.processComponentType !== processComponentType) {
+      return true;
+    }
+
+    path.push(current);
+
+    for (const parent of graph.parentMap[current] || []) {
+      if (dfs(parent)) {
+        return true;
+      }
+    }
+
+    path.pop();
+    return false;
+  };
+
+  dfs(nodeId);
+  return path;
+};
+
+// todo combine with getancestorTreatmentChain, abstract graph child/parent map
+export const getDescendantTreatmentChain = (
+  nodeId: string,
+  graph: NodeGraphIndex,
+  nodeMap: Record<string, Node>,
+  processComponentType: string
+): string[] => {
+  const visited = new Set<string>();
+  const path: string[] = [];
+
+  const dfs = (current: string): boolean => {
+    if (visited.has(current)) {
+      return false;
+    }
+
+    visited.add(current);
+
+    const node = nodeMap[current] as Node | undefined;
+    if (!node || node.data.processComponentType !== processComponentType) {
+      return true;
+    }
+
+    path.push(current);
+
+    for (const child of graph.childMap[current] || []) {
+      if (dfs(child)) {
+        return true;
+      }
+    }
+
+    path.pop();
+    return false;
+  };
+
+  dfs(nodeId);
+  return path;
+};
+
+export const getDescendantHasSystem = (
+  nodeId: string,
+  graph: NodeGraphIndex,
+  nodeMap: Record<string, Node>,
+): boolean => {
+  for (const childId of graph.childMap[nodeId] || []) {
+    const childNode = nodeMap[childId] as Node | undefined;
+    if (childNode && childNode.data.processComponentType === 'water-using-system') {
+      return true;
+    }
+  }
+  return false;
 };
