@@ -124,7 +124,6 @@ export const getAncestorPathToNode = (
       return true;
     }
     
-    // Try each parent path
     for (const parent of graph.parentMap[current] || []) {
       if (dfs(parent)) {
         return true; 
@@ -138,6 +137,74 @@ export const getAncestorPathToNode = (
   dfs(nodeId);
   return path;
 };
+
+
+
+export const getDescendantPathToNode = (
+  nodeId: string,
+  graph: NodeGraphIndex,
+  searchDescendantId?: string
+): string[] => {
+  const visited = new Set<string>();
+  const path: string[] = [];
+
+  const dfs = (current: string): boolean => {
+    if (visited.has(current)) {
+      return false;
+    }
+
+    visited.add(current);
+
+    if (current === searchDescendantId) {
+      path.push(current);
+      return true;
+    }
+
+    path.push(current);
+
+    for (const child of graph.childMap[current] || []) {
+      if (dfs(child)) {
+        return true;
+      }
+    }
+
+    path.pop();
+    return false;
+  };
+
+  dfs(nodeId);
+  return path;
+};
+
+
+export const getAllDescendantPathsToNode = (
+  nodeId: string,
+  graph: NodeGraphIndex,
+  searchDescendantId?: string
+): string[][] => {
+  const allPaths: string[][] = [];
+  const path: string[] = [];
+
+  const dfs = (current: string) => {
+    path.push(current);
+
+    if (current === searchDescendantId) {
+      allPaths.push([...path]);
+      path.pop();
+      return;
+    }
+
+    for (const child of graph.childMap[current] || []) {
+      dfs(child);
+    }
+
+    path.pop();
+  };
+
+  dfs(nodeId);
+  return allPaths;
+};
+
 
 export const getAncestorTreatmentChain = (
   nodeId: string,
@@ -176,7 +243,6 @@ export const getAncestorTreatmentChain = (
   return path;
 };
 
-// todo combine with getancestorTreatmentChain, abstract graph child/parent map
 export const getDescendantTreatmentChain = (
   nodeId: string,
   graph: NodeGraphIndex,
@@ -206,7 +272,11 @@ export const getDescendantTreatmentChain = (
       }
     }
 
-    path.pop();
+    const lastNode = nodeMap[path[path.length - 1]] as Node | undefined;
+    if (path.length > 1 && lastNode?.data.processComponentType !== processComponentType) {
+      path.pop();
+    }
+
     return false;
   };
 

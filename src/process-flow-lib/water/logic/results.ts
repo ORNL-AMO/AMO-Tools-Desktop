@@ -3,7 +3,7 @@ import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowData, N
 import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WasteWaterTreatment, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getWaterFlowTotals } from "./water-components";
-import { getAncestors, getAncestorPathToNode, getDescendants, getDescendantsDFS, NodeGraphIndex, getAncestorTreatmentChain, getDescendantTreatmentChain, getDescendantHasSystem } from "../../graph";
+import { getAncestors, getAncestorPathToNode, getDescendants, getDescendantsDFS, NodeGraphIndex, getAncestorTreatmentChain, getDescendantTreatmentChain, getDescendantHasSystem, getDescendantPathToNode, getAllDescendantPathsToNode } from "../../graph";
 import { PlantResults, PlantSystemSummaryResults, SystemAnnualSummaryResults } from "../types/results";
 
 // * WASM Module with suite api
@@ -555,17 +555,17 @@ const getAncestorTreatmentCosts = (
   const ancestorId = connectedAncestorCost.sourceId;
   const treatmentChainPath = getAncestorTreatmentChain(ancestorId, graph, nodeMap, connectedAncestorCost.componentType);
   const debuggingNames = treatmentChainPath.map(id => nodeNameMap[id]);
-  
+
   let totalTreatmentCosts = 0;
   for (const chainedAncestorId of treatmentChainPath) {
-      const chainAncestorTreatmentComponent = treatmentBlockCosts[chainedAncestorId];
-       if (chainAncestorTreatmentComponent) {
-        const remainingBlockCostPortion = chainAncestorTreatmentComponent.totalBlockCost * (connectedAncestorCost.flow / chainAncestorTreatmentComponent.totalInflow);
-        let chainAncestorTreatmentCost = remainingBlockCostPortion?? 0;
-        treatmentBlockCosts[chainedAncestorId].unpaidCostRemaining -= chainAncestorTreatmentCost;
-        treatmentBlockCosts[chainedAncestorId].unpaidInflowRemaining -= connectedAncestorCost.flow;
-        totalTreatmentCosts += chainAncestorTreatmentCost;
-      }
+    const chainAncestorTreatmentComponent = treatmentBlockCosts[chainedAncestorId];
+    if (chainAncestorTreatmentComponent) {
+      const remainingBlockCostPortion = chainAncestorTreatmentComponent.totalBlockCost * (connectedAncestorCost.flow / chainAncestorTreatmentComponent.totalInflow);
+      let chainAncestorTreatmentCost = remainingBlockCostPortion ?? 0;
+      treatmentBlockCosts[chainedAncestorId].unpaidCostRemaining -= chainAncestorTreatmentCost;
+      treatmentBlockCosts[chainedAncestorId].unpaidInflowRemaining -= connectedAncestorCost.flow;
+      totalTreatmentCosts += chainAncestorTreatmentCost;
+    }
 
   }
   return totalTreatmentCosts;
@@ -589,23 +589,24 @@ const getDescendantTreatmentCosts = (
   // * IF the chain DOES have systems (recycled flows) we debit cost attribution from the unpaidCostRemaining  
   let endOfChain = treatmentChainPath[treatmentChainPath.length - 1];
   let chainIsRecycled = getDescendantHasSystem(endOfChain, graph, nodeMap);
-  
+
   let totalTreatmentCosts = 0;
   for (const chainedDescendantId of treatmentChainPath) {
-      const chainDescendantTreatmentComponentCosts = treatmentBlockCosts[chainedDescendantId];
-      if (chainDescendantTreatmentComponentCosts) {
-        let totalBlockCost = chainIsRecycled ? chainDescendantTreatmentComponentCosts.unpaidCostRemaining : chainDescendantTreatmentComponentCosts.totalBlockCost;
-        const remainingBlockCostPortion = totalBlockCost * (connectedDescendantCost.flow / chainDescendantTreatmentComponentCosts.totalInflow);
-        let chainDescendantTreatmentCost = remainingBlockCostPortion?? 0;
-        treatmentBlockCosts[chainedDescendantId].unpaidCostRemaining -= chainDescendantTreatmentCost;
-        treatmentBlockCosts[chainedDescendantId].unpaidInflowRemaining -= connectedDescendantCost.flow;
-        totalTreatmentCosts += chainDescendantTreatmentCost;
-      }
+    const chainDescendantTreatmentComponentCosts = treatmentBlockCosts[chainedDescendantId];
+    if (chainDescendantTreatmentComponentCosts) {
+      let totalBlockCost = chainIsRecycled ? chainDescendantTreatmentComponentCosts.unpaidCostRemaining : chainDescendantTreatmentComponentCosts.totalBlockCost;
+      const remainingBlockCostPortion = totalBlockCost * (connectedDescendantCost.flow / chainDescendantTreatmentComponentCosts.totalInflow);
+      let chainDescendantTreatmentCost = remainingBlockCostPortion ?? 0;
+      treatmentBlockCosts[chainedDescendantId].unpaidCostRemaining -= chainDescendantTreatmentCost;
+      treatmentBlockCosts[chainedDescendantId].unpaidInflowRemaining -= connectedDescendantCost.flow;
+      totalTreatmentCosts += chainDescendantTreatmentCost;
+    }
   }
   return totalTreatmentCosts;
 }
 
 
+// * Fine for beta - refactor to mimick method for discharge proportion
 const getIntakeFlowProportionCost = (
   graph: NodeGraphIndex,
   currentSystem: Node<ProcessFlowPart>,
@@ -620,17 +621,6 @@ const getIntakeFlowProportionCost = (
 
   if (intakeSources && intakeSources.length > 1) {
     // * Handle multiple intakes, split intakes, todo losses
-    let intakePortionMap: Record<string, {
-      intakeName: string;
-      flowPortionSent: number;
-      fractionTargetTotalInflow: number;
-      sourceToSystemName: string;
-      targetName: string;
-      systemCostAttribution: Record<string, {
-        flowValue: number;
-        portionCost: number;
-      }>
-    }> = {};
 
     intakeNodes.forEach((intakeNode: Node<ProcessFlowPart>) => {
       const intakeId = intakeNode.id;
@@ -644,39 +634,25 @@ const getIntakeFlowProportionCost = (
         // * act as if every path is a chain with N components in between
         if (directPathAncestors.length > 0) {
           const [system, immediateAncestor] = directPathAncestors;
-          const intake: string = directPathAncestors[directPathAncestors.length - 1];
-          
-          // todo assuming only one edge for each intake. duplicate paths from the same intake not handled yet. Use filter inplace of find
+          const intakeSourceId: string = directPathAncestors[directPathAncestors.length - 1];
           const immediateReceiver: string = directPathAncestors[directPathAncestors.length - 2];
-          const intakeToReceiver: Edge<CustomEdgeData> = Object.values(graph.edgeMap).find((e) => e.target === immediateReceiver && e.source === intake);
-          
+          const intakeToReceiver: Edge<CustomEdgeData> = Object.values(graph.edgeMap).find((e) => e.target === immediateReceiver && e.source === intakeSourceId);
           const immediateAncestorToSystem: Edge<CustomEdgeData> = Object.values(graph.edgeMap).find((e) => e.target === system && e.source === immediateAncestor);
-          const immediateFlowValue = immediateAncestorToSystem.data?.flowValue?? 0;
-          // const immediateReceiverTotalInflow = getTotalInflow(nodeMap[immediateReceiver], calculatedData)?? 0;
-          const immediateReceiverTotalOutflow = getTotalOutflow(nodeMap[immediateReceiver], calculatedData)?? 0;
+          const immediateFlowValue = immediateAncestorToSystem.data?.flowValue ?? 0;
+
+          let totalFlowResponsiblity = getTotalOutflow(nodeMap[immediateReceiver], calculatedData) ?? 0;
+            const isDirectIntakeToFlow = directPathAncestors.length === 2;
+            if (isDirectIntakeToFlow) {
+              totalFlowResponsiblity = immediateFlowValue;
+            }
 
           // todo prevent dividing by 0
-          const fractionImmediateReceiverTotalInflow = immediateFlowValue / immediateReceiverTotalOutflow;
-          
+          const fractionImmediateReceiverTotalInflow = immediateFlowValue / totalFlowResponsiblity;
           const targetFlowReceived = intakeToReceiver.data.flowValue ?? 0;
           const targetPortion = targetFlowReceived * fractionImmediateReceiverTotalInflow;
-
           const targetPortionFractionOfInitialFlowSent = (targetPortion / connectedAncestorCost.selfTotalFlow);
           const targetPortionCost = targetPortionFractionOfInitialFlowSent * connectedAncestorCost.selfTotalCost;
 
-          intakePortionMap[intakeId] = {
-            intakeName: nodeNameMap[intakeId],
-            sourceToSystemName: nodeNameMap[immediateAncestor],
-            flowPortionSent: immediateFlowValue,
-            fractionTargetTotalInflow: fractionImmediateReceiverTotalInflow,
-            targetName: nodeNameMap[immediateReceiver],
-            systemCostAttribution: {
-              [system]: {
-                flowValue: targetPortion,
-                portionCost: targetPortionCost,
-              }
-            }
-          };
           portionIntakeCosts += targetPortionCost;
         }
       }
@@ -705,6 +681,73 @@ const getIntakeFlowProportionCost = (
 
   return portionIntakeCosts;
 }
+
+
+// V4
+// * mirror this for intake costs
+const getDischargeFlowProportionCost = (
+  graph: NodeGraphIndex,
+  currentSystem: Node<ProcessFlowPart>,
+  descendantCostMap: Record<string, ConnectedCost[]>,
+  calculatedData: DiagramCalculatedData,
+  nodeMap: Record<string, Node<ProcessFlowPart>>,
+  nodeNameMap: Record<string, string>,
+) => {
+  let portionDischargeCosts = 0;
+  let dischargeOutlets = descendantCostMap[currentSystem.id]?.filter(cost => cost.componentType === 'water-discharge');
+
+  if (dischargeOutlets) {
+    // * Handle multiple discharge, split discharge, todo losses
+      const distinctDischargeIds = Array.from(new Set(dischargeOutlets.map(d => d.targetId)));
+      let allDirectDescendantPaths: Array<string[]> = [];
+
+      distinctDischargeIds.forEach((dischargeId: string) => {
+       let allPossiblePaths: Array<string[]> = getAllDescendantPathsToNode(currentSystem.id, graph, dischargeId);
+       allDirectDescendantPaths = allDirectDescendantPaths.concat(allPossiblePaths);
+      });
+      // let allDirectPathDescendantsDebuggingNames: Array<string[]> = allDirectDescendantPaths.map(path => path.map(id => nodeNameMap[id]));
+      
+      if (allDirectDescendantPaths.length > 0) {
+        allDirectDescendantPaths.forEach((directPathDescendants: string[]) => {
+          let descendantTypes = directPathDescendants.map((descendantId) => nodeMap[descendantId]?.data.processComponentType);
+          descendantTypes.shift();
+          const recyclesToSystem = descendantTypes.some((descendantType) => descendantType === 'water-using-system');
+
+          if (!recyclesToSystem) {
+            const [systemId, systemImmediateDescendantId] = directPathDescendants;
+            const dischargeDestinationId: string = directPathDescendants[directPathDescendants.length - 1];
+            const dischargeImmediateAncestor: string = directPathDescendants[directPathDescendants.length - 2];
+            const immediateAncestorToDischarge: Edge<CustomEdgeData> = Object.values(graph.edgeMap).find((e) => e.target === dischargeDestinationId && e.source === dischargeImmediateAncestor);
+            const systemToImmediateDescendant: Edge<CustomEdgeData> = Object.values(graph.edgeMap).find((e) => e.source === systemId && e.target === systemImmediateDescendantId);
+            const immediateFlowValue = systemToImmediateDescendant.data?.flowValue ?? 0;
+            // const debugName = `immediateAncestorToDischarge: ${nodeNameMap[dischargeImmediateAncestor]} -> ${nodeNameMap[dischargeDestinationId]}, systemToImmediateDescendant: ${nodeNameMap[system]} -> ${nodeNameMap[systemImmediateDescendantId]}`;
+            // const debugName2 = `systemToImmediateDescendant: ${nodeNameMap[systemId]} -> ${nodeNameMap[systemImmediateDescendantId]}`;
+            
+            let totalFlowResponsiblity = getTotalOutflow(nodeMap[dischargeImmediateAncestor], calculatedData) ?? 0;
+            const isDirectFlowToDischarge = directPathDescendants.length === 2;
+            if (isDirectFlowToDischarge) {
+              totalFlowResponsiblity = immediateFlowValue;
+            }
+
+            // todo prevent dividing by 0
+            const fractionImmediateReceiverTotalOutflow = immediateFlowValue / totalFlowResponsiblity;
+            const targetFlowReceived = immediateAncestorToDischarge.data.flowValue ?? 0;
+            const targetPortion = targetFlowReceived * fractionImmediateReceiverTotalOutflow;
+            const totalDischargeFlow = getTotalInflow(nodeMap[dischargeDestinationId], calculatedData) ?? 0;
+            const totalDischargeCost = descendantCostMap[systemId].find((cost) => cost.targetId === dischargeDestinationId)?.selfTotalCost ?? 0;
+
+            const targetPortionFractionOfInitialFlowSent = (targetPortion / totalDischargeFlow);
+            const targetPortionCost = targetPortionFractionOfInitialFlowSent * totalDischargeCost;
+            portionDischargeCosts += targetPortionCost;
+          }
+        });
+
+      }
+  } 
+
+  return portionDischargeCosts;
+}
+
 
 
 export const getPlantSummaryResults = (
@@ -774,7 +817,6 @@ export const getPlantSummaryResults = (
   const descendantCostsMap: Record<string, ConnectedCost[]> = {};
   const intakeNodes: Node[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-intake');
 
-
   if (waterUsingSystems.length > 0) {
     // * IMPORTANT: all ancestor costs for WT/WWT specifically should be calculated first so that the system can deduct descendant costs
     waterUsingSystems.forEach((currentSystem: Node<ProcessFlowPart>) => {
@@ -830,8 +872,18 @@ export const getPlantSummaryResults = (
         nodeMap,
         nodeNameMap
       );
-
       systemCostContributionsResultsMap[currentSystem.id].intake += intakeCosts;
+
+      let dischargeCosts = getDischargeFlowProportionCost(
+        graph,
+        currentSystem,
+        descendantCostsMap,
+        calculatedData,
+        nodeMap,
+        nodeNameMap
+      );
+      systemCostContributionsResultsMap[currentSystem.id].discharge += dischargeCosts;
+
 
       // * Current system owns costs for intake, water-treatment, and waste-water-treatment (if recycled into their system)
       ancestorCostsMap[currentSystem.id].forEach((connectedAncestorCost: ConnectedCost) => {
@@ -844,8 +896,8 @@ export const getPlantSummaryResults = (
             // * ignore costs of intake descendants flowing into a recycled flow into the current system
             const directPathDescendants = getDescendantsDFS(ancestorId, graph, currentSystem.id);
             const isIntakeInRecycledFlow = directPathDescendants.some((descendantId: string) => Boolean(recycledSourcesMap[descendantId]));
-            const isImmediateAncestor = graph.edgesByNode[ancestorId]?.some((edge: Edge<CustomEdgeData>) =>  edge.target === currentSystem.id);
-            
+            const isImmediateAncestor = getIsImmediateAncestor(ancestorId, graph, currentSystem.id);
+
             if (!isIntakeInRecycledFlow || isImmediateAncestor) {
               const intake = ancestorNode.data as IntakeSource;
               systemAnnualSummaryResultsMap[currentSystem.id].sourceWaterIntake += connectedAncestorCost.flow;
@@ -898,7 +950,6 @@ export const getPlantSummaryResults = (
         let isImmediateDescendant = false;
         switch (connectedDescendantCost.componentType) {
           case 'water-discharge': {
-            const discharge = descendantNode.data as DischargeOutlet;
 
             // * ignore costs of discharge ancestors recycling flow into current path
             const directPathAncestors = getAncestorPathToNode(connectedDescendantCost.sourceId, graph, currentSystem.id);
@@ -906,24 +957,15 @@ export const getPlantSummaryResults = (
               const recycledData = recycledSourcesMap[ancestorId];
               return recycledData && directPathAncestors.includes(recycledData.recycledDestinationId);
             });
-
             const isImmediateDescendant = getIsImmediateDescendant(descendantId, graph, currentSystem.id);
+
             if (!isDischargeFromRecycledFlow || isImmediateDescendant) {
-
-              systemCostContributionsResultsMap[currentSystem.id].discharge += connectedDescendantCost.cost;
+              const discharge = descendantNode.data as DischargeOutlet;
               systemAnnualSummaryResultsMap[currentSystem.id].dischargeWater += connectedDescendantCost.flow;
-              // console.log('============ system', currentSystem.data.name);
-              // console.log('discharge descendant connectedAncestorCost', connectedDescendantCost);
-              // console.log('discharge descendant cost', connectedDescendantCost.cost);
-              // console.log('discharge descendant flow', connectedDescendantCost.flow);
-              // console.log('discharge descendant fractionSelfTotalFlowToTarget', connectedDescendantCost.fractionSelfTotalFlowToTarget);
-
               const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(discharge, electricityCost, settings.unitsOfMeasure);
               // todo wrong fraction?
               const energyCost = pumpAndMotorEnergyCost * connectedDescendantCost.fractionSelfTotalFlowToTarget;
               systemCostContributionsResultsMap[currentSystem.id].systemPumpAndMotorEnergy += energyCost;
-
-
             }
             break;
           }
