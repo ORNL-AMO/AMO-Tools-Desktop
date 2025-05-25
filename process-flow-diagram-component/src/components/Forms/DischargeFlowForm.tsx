@@ -34,6 +34,7 @@ const DischargeFlowForm = () => {
     const [inPercent, setInPercent] = useState<boolean>(false);
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
     const selectedNode = useAppSelector(selectCurrentNode);
+    const settings = useAppSelector((state) => state.diagram.settings);
     // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
     // const handleFieldState = (edgeId: string, stateProp: string, val: boolean) => {
     //     if (stateProp === 'focused') {
@@ -83,7 +84,7 @@ const DischargeFlowForm = () => {
     // todo 7339 - don't validate when flows dont exist
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentDischargeEdges, nodes, selectedDataId);
     const totalKnownLosses = getKnownLossComponentTotals(componentDischargeEdges, nodes, selectedDataId);
-    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', componentDischargeEdges, totalCalculatedDischargeFlow, totalKnownLosses);
+    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', componentDischargeEdges, totalCalculatedDischargeFlow, settings.flowDecimalPrecision, totalKnownLosses);
 
     return (
         <Formik

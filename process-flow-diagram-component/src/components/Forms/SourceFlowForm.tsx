@@ -30,6 +30,7 @@ const SourceFlowForm = () => {
     const selectedDataId = useAppSelector((state) => state.diagram.selectedDataId);
     const [inPercent, setInPercent] = useState<boolean>(false);
     const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
+    const settings = useAppSelector((state) => state.diagram.settings);
     // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
     // const handleFieldState = (edgeId: string, stateProp: string, val: boolean) => {
     //     if (stateProp === 'focused') {
@@ -57,7 +58,7 @@ const SourceFlowForm = () => {
     }
 
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentSourceEdges, nodes, selectedDataId);
-    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Source', componentSourceEdges, totalCalculatedSourceFlow);
+    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Source', componentSourceEdges, totalCalculatedSourceFlow, settings.flowDecimalPrecision);
 
     return (
         <Formik
