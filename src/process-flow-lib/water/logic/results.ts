@@ -544,7 +544,6 @@ const setBlockCosts = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalcu
   };
 }
 
-// * v3
 const getAncestorTreatmentCosts = (
   treatmentBlockCosts: Record<string, BlockCosts>,
   connectedAncestorCost: ConnectedCost,
@@ -572,7 +571,6 @@ const getAncestorTreatmentCosts = (
 }
 
 
-// * V3
 // todo handle case where there is WWT chain of two or more and the beginning of the chain recycles to another system
 const getDescendantTreatmentCosts = (
   treatmentBlockCosts: Record<string, BlockCosts>,
@@ -614,6 +612,10 @@ const getIntakeFlowProportionCost = (
   ancestorCostsMap: Record<string, ConnectedCost[]>,
   calculatedData: DiagramCalculatedData,
   nodeMap: Record<string, Node<ProcessFlowPart>>,
+  systemAnnualSummaryResults: SystemAnnualSummaryResults,
+  systemCostContributionsResults: SystemTrueCostContributions,
+  electricityCost: number,
+  settings: DiagramSettings,
   nodeNameMap: Record<string, string>,
 ) => {
   let portionIntakeCosts = 0;
@@ -646,6 +648,7 @@ const getIntakeFlowProportionCost = (
               totalFlowResponsiblity = immediateFlowValue;
             }
 
+          systemAnnualSummaryResults.sourceWaterIntake += immediateFlowValue;
           // todo prevent dividing by 0
           const fractionImmediateReceiverTotalInflow = immediateFlowValue / totalFlowResponsiblity;
           const targetFlowReceived = intakeToReceiver.data.flowValue ?? 0;
@@ -654,6 +657,11 @@ const getIntakeFlowProportionCost = (
           const targetPortionCost = targetPortionFractionOfInitialFlowSent * connectedAncestorCost.selfTotalCost;
 
           portionIntakeCosts += targetPortionCost;
+
+          // * Apply pump energy costs
+          const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(intakeNode.data as IntakeSource, electricityCost, settings.unitsOfMeasure);
+          const energyCost = pumpAndMotorEnergyCost * targetPortionFractionOfInitialFlowSent;
+          systemCostContributionsResults.systemPumpAndMotorEnergy += energyCost;
         }
       }
     });
@@ -671,9 +679,17 @@ const getIntakeFlowProportionCost = (
 
         receivingEdges.forEach((edge: Edge<CustomEdgeData>) => {
           const flowValue = edge.data.flowValue ?? 0;
-          const percentAncestorFlowReceived = flowValue / connectedAncestorCost.selfTotalFlow;
-          const costAttributed = percentAncestorFlowReceived * connectedAncestorCost.selfTotalCost;
+          systemAnnualSummaryResults.sourceWaterIntake += flowValue;
+
+          const fractionAncestorFlowReceived = flowValue / connectedAncestorCost.selfTotalFlow;
+          const costAttributed = fractionAncestorFlowReceived * connectedAncestorCost.selfTotalCost;
           portionIntakeCosts += costAttributed;
+
+          // * Apply pump energy costs
+          const intakeNode = nodeMap[connectedAncestorCost.sourceId];
+          const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(intakeNode.data as IntakeSource, electricityCost, settings.unitsOfMeasure);
+          const energyCost = pumpAndMotorEnergyCost * fractionAncestorFlowReceived;
+          systemCostContributionsResults.systemPumpAndMotorEnergy += energyCost;
         });
       }
     }
@@ -683,14 +699,17 @@ const getIntakeFlowProportionCost = (
 }
 
 
-// V4
-// * mirror this for intake costs
+// * mirror this for intake costs refactor
 const getDischargeFlowProportionCost = (
   graph: NodeGraphIndex,
   currentSystem: Node<ProcessFlowPart>,
   descendantCostMap: Record<string, ConnectedCost[]>,
   calculatedData: DiagramCalculatedData,
   nodeMap: Record<string, Node<ProcessFlowPart>>,
+  systemAnnualSummaryResults: SystemAnnualSummaryResults,
+  systemCostContributionsResults: SystemTrueCostContributions,
+  electricityCost: number,
+  settings: DiagramSettings,
   nodeNameMap: Record<string, string>,
 ) => {
   let portionDischargeCosts = 0;
@@ -729,6 +748,7 @@ const getDischargeFlowProportionCost = (
               totalFlowResponsiblity = immediateFlowValue;
             }
 
+            systemAnnualSummaryResults.dischargeWater += immediateFlowValue;
             // todo prevent dividing by 0
             const fractionImmediateReceiverTotalOutflow = immediateFlowValue / totalFlowResponsiblity;
             const targetFlowReceived = immediateAncestorToDischarge.data.flowValue ?? 0;
@@ -739,6 +759,13 @@ const getDischargeFlowProportionCost = (
             const targetPortionFractionOfInitialFlowSent = (targetPortion / totalDischargeFlow);
             const targetPortionCost = targetPortionFractionOfInitialFlowSent * totalDischargeCost;
             portionDischargeCosts += targetPortionCost;
+
+            // * Apply pump energy costs
+            const dischargeNode = nodeMap[dischargeDestinationId];
+            const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(dischargeNode.data as DischargeOutlet, electricityCost, settings.unitsOfMeasure);
+            const energyCost = pumpAndMotorEnergyCost * targetPortionFractionOfInitialFlowSent;
+            systemCostContributionsResults.systemPumpAndMotorEnergy += energyCost;
+
           }
         });
 
@@ -809,8 +836,6 @@ export const getPlantSummaryResults = (
     });
   }
 
-  console.log('treatmentBlockCosts', treatmentBlockCosts);
-
   const systemCostContributionsResultsMap: Record<string, SystemTrueCostContributions> = {};
   const systemAnnualSummaryResultsMap: Record<string, SystemAnnualSummaryResults> = {};
   const ancestorCostsMap: Record<string, ConnectedCost[]> = {};
@@ -862,7 +887,6 @@ export const getPlantSummaryResults = (
       }
       systemCostContributionsResultsMap[currentSystem.id].systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, electricityCost, settings.unitsOfMeasure);
 
-      // todo note this is happening for every ancestor cost - redundant, move to outside ancestorcost map
       let intakeCosts = getIntakeFlowProportionCost(
         graph,
         currentSystem,
@@ -870,6 +894,10 @@ export const getPlantSummaryResults = (
         ancestorCostsMap,
         calculatedData,
         nodeMap,
+        systemAnnualSummaryResultsMap[currentSystem.id],
+        systemCostContributionsResultsMap[currentSystem.id],
+        electricityCost,
+        settings,
         nodeNameMap
       );
       systemCostContributionsResultsMap[currentSystem.id].intake += intakeCosts;
@@ -880,33 +908,21 @@ export const getPlantSummaryResults = (
         descendantCostsMap,
         calculatedData,
         nodeMap,
+        systemAnnualSummaryResultsMap[currentSystem.id],
+        systemCostContributionsResultsMap[currentSystem.id],
+        electricityCost,
+        settings,
         nodeNameMap
       );
       systemCostContributionsResultsMap[currentSystem.id].discharge += dischargeCosts;
 
 
-      // * Current system owns costs for intake, water-treatment, and waste-water-treatment (if recycled into their system)
+      // * Current system owns costs for water-treatment, and waste-water-treatment (if recycled into their system)
       ancestorCostsMap[currentSystem.id].forEach((connectedAncestorCost: ConnectedCost) => {
         const ancestorId = connectedAncestorCost.sourceId;
-        const ancestorNode = nodeMap[ancestorId];
 
         let isImmediateAncestor = false;
         switch (connectedAncestorCost.componentType) {
-          case 'water-intake': {
-            // * ignore costs of intake descendants flowing into a recycled flow into the current system
-            const directPathDescendants = getDescendantsDFS(ancestorId, graph, currentSystem.id);
-            const isIntakeInRecycledFlow = directPathDescendants.some((descendantId: string) => Boolean(recycledSourcesMap[descendantId]));
-            const isImmediateAncestor = getIsImmediateAncestor(ancestorId, graph, currentSystem.id);
-
-            if (!isIntakeInRecycledFlow || isImmediateAncestor) {
-              const intake = ancestorNode.data as IntakeSource;
-              systemAnnualSummaryResultsMap[currentSystem.id].sourceWaterIntake += connectedAncestorCost.flow;
-              const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(intake, electricityCost, settings.unitsOfMeasure);
-              const energyCost = pumpAndMotorEnergyCost * connectedAncestorCost.fractionSelfTotalFlowToTarget;
-              systemCostContributionsResultsMap[currentSystem.id].systemPumpAndMotorEnergy += energyCost;
-            }
-            break;
-          }
           case 'water-treatment':
             // * only apply cost while visiting immediate ancestor so we can manage recycled flows
             isImmediateAncestor = getIsImmediateAncestor(ancestorId, graph, currentSystem.id);
@@ -942,33 +958,12 @@ export const getPlantSummaryResults = (
 
 
     waterUsingSystems.forEach((currentSystem: Node<ProcessFlowPart>) => {
-      // * Current system owns costs for discharge (if not recycled to another system) and waste-water-treatment (if not recycled to another system)
+      // * Current system owns costs for water-treatment waste-water-treatment (if not recycled to another system)
       descendantCostsMap[currentSystem.id].forEach((connectedDescendantCost: ConnectedCost) => {
         const descendantId = connectedDescendantCost.targetId;
-        const descendantNode = nodeMap[descendantId];
 
         let isImmediateDescendant = false;
         switch (connectedDescendantCost.componentType) {
-          case 'water-discharge': {
-
-            // * ignore costs of discharge ancestors recycling flow into current path
-            const directPathAncestors = getAncestorPathToNode(connectedDescendantCost.sourceId, graph, currentSystem.id);
-            const isDischargeFromRecycledFlow = directPathAncestors.some((ancestorId: string) => {
-              const recycledData = recycledSourcesMap[ancestorId];
-              return recycledData && directPathAncestors.includes(recycledData.recycledDestinationId);
-            });
-            const isImmediateDescendant = getIsImmediateDescendant(descendantId, graph, currentSystem.id);
-
-            if (!isDischargeFromRecycledFlow || isImmediateDescendant) {
-              const discharge = descendantNode.data as DischargeOutlet;
-              systemAnnualSummaryResultsMap[currentSystem.id].dischargeWater += connectedDescendantCost.flow;
-              const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(discharge, electricityCost, settings.unitsOfMeasure);
-              // todo wrong fraction?
-              const energyCost = pumpAndMotorEnergyCost * connectedDescendantCost.fractionSelfTotalFlowToTarget;
-              systemCostContributionsResultsMap[currentSystem.id].systemPumpAndMotorEnergy += energyCost;
-            }
-            break;
-          }
           case 'water-treatment':
             // * only apply cost at immediate descendant so we can manage recycled flows
             isImmediateDescendant = getIsImmediateDescendant(descendantId, graph, currentSystem.id);
