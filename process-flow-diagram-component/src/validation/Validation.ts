@@ -33,7 +33,7 @@ export const getEstimateSystemValidationSchema = (
     );
 };
 
-export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge', connectedEdges: Edge[], totalCalculatedFlow: number, sumUserKnownLosses?: number): Yup.ObjectSchema<FlowForm> => {
+export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge', connectedEdges: Edge[], totalCalculatedFlow: number, decimalPrecision: number, sumUserKnownLosses?: number): Yup.ObjectSchema<FlowForm> => {
     const totalFlowError = flowLabel === 'Source' ? TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR : TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR;
     let defaultSchema = {
         totalFlow: Yup.number()
@@ -44,7 +44,7 @@ export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge'
                     return `Total ${flowLabel} Flow must equal the sum of all flow values`
                 },
                 (value) => {
-                    const isValid = validateTotalFlowValue(connectedEdges, totalCalculatedFlow, value);
+                    const isValid = validateTotalFlowValue(connectedEdges, totalCalculatedFlow, value, decimalPrecision);
                     return isValid;
                 },
             ),
@@ -81,12 +81,14 @@ export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge'
    * @param calculatedValue retrived from getNodeFlowTotals()
    * @param userEnteredTotalFlow componentData.userEnteredData.totalSourceFlow or componentData.userEnteredData.totalSourceFlow 
    */
-export const validateTotalFlowValue = (connectedEdges: Edge[], calculatedTotalFlow: number, userEnteredTotalFlow: number) => {
+export const validateTotalFlowValue = (connectedEdges: Edge[], calculatedTotalFlow: number, userEnteredTotalFlow: number, precision: number) => {
     let shouldValidate = connectedEdges.length > 0 && calculatedTotalFlow !== null && calculatedTotalFlow !== undefined;
     // *If a user entered value exists, check that our calculated total does not differ with component saved value (useEnteredValue)
     if (shouldValidate) {
         // console.log(`## validate totalFlow computed: ${calculatedTotalFlow} vs userEntered: ${userEnteredTotalFlow}`);
-        if (userEnteredTotalFlow !== undefined && userEnteredTotalFlow !== null && userEnteredTotalFlow !== calculatedTotalFlow) {
+        const calculatedTotalFlowToPrecision = Number(calculatedTotalFlow?.toFixed(precision));
+        const userEnteredFlowToPrecision = Number(userEnteredTotalFlow?.toFixed(precision));
+        if (userEnteredFlowToPrecision !== undefined && userEnteredFlowToPrecision !== null && userEnteredFlowToPrecision !== calculatedTotalFlowToPrecision) {
             // console.log('## totalFlow invalid');
             return false;
         }
