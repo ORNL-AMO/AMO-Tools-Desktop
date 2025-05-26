@@ -5,16 +5,17 @@ import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./
 import { getWaterFlowTotals } from "./water-components";
 import { getAncestors, getAncestorPathToNode, getDescendants, getDescendantsDFS, NodeGraphIndex, getAncestorTreatmentChain, getDescendantTreatmentChain, getDescendantHasSystem, getDescendantPathToNode, getAllDescendantPathsToNode } from "../../graph";
 import { PlantResults, PlantSystemSummaryResults, SystemAnnualSummaryResults } from "../types/results";
+import { WaterAssessment } from "../types/assessment";
 
 // * WASM Module with suite api
 declare var Module: any;
 
-export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[]): WaterBalanceResults => {
+export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[], calculatedData: DiagramCalculatedData): WaterBalanceResults => {
   let allSystemBalanceResults = [];
   let allSystemsTotalBalance = 0;
-
+  
   waterUsingSystems.forEach(system => {
-    let systemBalanceResults: SystemBalanceResults = getSystemBalanceResults(system);
+    let systemBalanceResults: SystemBalanceResults = getSystemBalanceResults(system, calculatedData);
     allSystemBalanceResults.push(systemBalanceResults);
     allSystemsTotalBalance += systemBalanceResults.waterBalance;
   });
@@ -44,7 +45,7 @@ export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[]): W
   return plantBalanceResults;
 }
 
-export const getSystemBalanceResults = (waterSystem: WaterUsingSystem): SystemBalanceResults => {
+export const getSystemBalanceResults = (waterSystem: WaterUsingSystem, calculatedData: DiagramCalculatedData): SystemBalanceResults => {
   let systemBalanceResults: SystemBalanceResults = {
     id: waterSystem.diagramNodeId,
     name: waterSystem.name,
@@ -67,10 +68,15 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem): SystemBa
   // systemBalanceResults.incomingWater = waterSystem.systemFlowTotals.sourceWater + waterSystem.systemFlowTotals.recycledSourceWater;
   // systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct + waterSystem.systemFlowTotals.dischargeWater + waterSystem.systemFlowTotals.dischargeWaterRecycled + consumptiveIrrigationLoss;
 
-  const estimatedUnknownLosses = getSystemEstimatedUnknownLosses(waterSystem, waterSystem.userEnteredData.totalSourceFlow, waterSystem.userEnteredData.totalDischargeFlow);
-  systemBalanceResults.incomingWater = waterSystem.systemFlowTotals.sourceWater;
-  systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct
-    + waterSystem.systemFlowTotals.dischargeWater
+  // * reconcile assessment value waterSystem.systemFlowTotals.sourceWater
+  const totalSourceFlow = calculatedData? getAssessmentNodeTotalInflow(waterSystem, calculatedData): waterSystem.userEnteredData.totalSourceFlow ?? 0;
+  // * reconcile asessment value waterSystem.systemFlowTotals.dischargeWater
+  const totalDischargeFlow = calculatedData? getAssessmentNodeTotalOutflow(waterSystem, calculatedData): waterSystem.userEnteredData.totalDischargeFlow ?? 0;
+  const estimatedUnknownLosses = getSystemEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow);
+
+    systemBalanceResults.incomingWater = totalSourceFlow;
+    systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct
+    + totalDischargeFlow
     + waterSystem.systemFlowTotals.knownLosses
     + estimatedUnknownLosses
     + consumptiveIrrigationLoss;
@@ -80,6 +86,22 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem): SystemBa
   systemBalanceResults.percentIncomingWater = getBalancePercent(systemBalanceResults.incomingWater, systemBalanceResults.waterBalance);
   // console.log('SystemBalanceResults', waterSystem.name, systemBalanceResults);
   return systemBalanceResults;
+}
+
+// todo duplicated from results, join after beta
+const getAssessmentNodeTotalInflow = (node: WaterProcessComponent, calculatedData: DiagramCalculatedData): number => {
+  let totalInflow = node.userEnteredData?.totalSourceFlow;
+  if (totalInflow === undefined || totalInflow === null) {
+      totalInflow = calculatedData.nodes[node.diagramNodeId]?.totalSourceFlow;
+  }
+  return totalInflow ?? 0;
+}
+const getAssessmentNodeTotalOutflow = (node: WaterProcessComponent, calculatedData: DiagramCalculatedData): number => {
+  let totalOutflow = node.userEnteredData?.totalDischargeFlow;
+  if (totalOutflow === undefined || totalOutflow === null) {
+    totalOutflow = calculatedData.nodes[node.diagramNodeId]?.totalDischargeFlow;
+  }
+  return totalOutflow ?? 0;
 }
 
 export const getSystemEstimatedUnknownLosses = (
@@ -380,11 +402,16 @@ export const getUnknownLossees = (totalSourceFlow: number, totalDischargeFlow: n
 * @param nodeFlowProperty NodeFlowData property that represents flow cost, i.e. totalDischargeflow for intakes, totalSourceflow for discharges
 * 
 */
-export const getComponentTypeTotalCost = (components: Node<ProcessFlowPart>[], nodeFlowProperty: NodeFlowProperty) => {
+export const getComponentTypeTotalCost = (components: Node<ProcessFlowPart>[], nodeFlowProperty: NodeFlowProperty, calculatedData: DiagramCalculatedData) => {
   return components.reduce((total: number, component: Node<ProcessFlowPart>) => {
-    const flowMgal = component.data.userEnteredData[nodeFlowProperty] ?? 0;
+    let totalFlow = 0;
+    if (nodeFlowProperty === 'totalSourceFlow') {
+      totalFlow = getTotalInflow(component, calculatedData)
+    } else if (nodeFlowProperty === 'totalDischargeFlow') {
+      totalFlow = getTotalOutflow(component, calculatedData)
+    }
     const unitCost = component.data.cost ?? 0;
-    let cost = getKGalCost(unitCost, flowMgal);
+    let cost = getKGalCost(unitCost, totalFlow);
     return total + cost;
   }, 0);
 }
@@ -395,10 +422,15 @@ export const getComponentTypeTotalCost = (components: Node<ProcessFlowPart>[], n
 * @param nodeFlowProperty NodeFlowData property that represents flow cost, i.e. totalDischargeflow for intakes, totalSourceflow for discharges
 * 
 */
-export const getComponentTypeTotalFlow = (components: Node<ProcessFlowPart>[], nodeFlowProperty: NodeFlowProperty) => {
+export const getComponentTypeTotalFlow = (components: Node<ProcessFlowPart>[], nodeFlowProperty: NodeFlowProperty, calculatedData: DiagramCalculatedData) => {
   return components.reduce((total: number, component: Node<ProcessFlowPart>) => {
-    const flow = component.data.userEnteredData[nodeFlowProperty] ?? 0;
-    return total + flow;
+    let totalFlow = 0;
+    if (nodeFlowProperty === 'totalSourceFlow') {
+      totalFlow = getTotalInflow(component, calculatedData)
+    } else if (nodeFlowProperty === 'totalDischargeFlow') {
+      totalFlow = getTotalOutflow(component, calculatedData)
+    }
+    return total + totalFlow;
   }, 0);
 }
 
@@ -1059,7 +1091,7 @@ const getPumpAndMotorEnergyContribution = (component: IntakeSource | DischargeOu
 export const getTotalInflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalculatedData): number => {
   let totalInflow = node.data.userEnteredData?.totalSourceFlow;
   if (totalInflow === undefined || totalInflow === null) {
-    totalInflow = calculatedData.nodes[node.id]?.totalSourceFlow;
+      totalInflow = calculatedData.nodes[node.id]?.totalSourceFlow;
   }
   return totalInflow ?? 0;
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { Box } from '@mui/material';
-import { CustomEdgeData, DiagramSettings, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getMotorEnergyCost, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
+import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getMotorEnergyCost, getTotalInflow, getTotalOutflow, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
 import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
 import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
@@ -20,19 +20,22 @@ const DiagramResults = () => {
   const wasteTreatmentNodes: Node<ProcessFlowPart>[] = useAppSelector(selectWasteTreatmentNodes);
   const waterUsingSystems: WaterUsingSystem[] = useAppSelector(selectNodesAsWaterUsingSystems);
   const settings: DiagramSettings = useAppSelector((state) => state.diagram.settings);
+  const calculatedData: DiagramCalculatedData = useAppSelector((state) => state.diagram.calculatedData);
+
   const isDiagramValid = getIsDiagramValid(validationErrors);
 
   setWaterUsingSystemFlows(waterUsingSystems, edges);
-  const diagramResults: WaterBalanceResults = getWaterBalanceResults(waterUsingSystems);
+  const diagramResults: WaterBalanceResults = getWaterBalanceResults(waterUsingSystems, calculatedData);
 
   const costTitle = "Annual Costs";
   // direct costs
-  const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow');
-  const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow');
+  const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow', calculatedData);
+  const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow', calculatedData);
   // indirect costs
-  const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow');
-  const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow');
+  const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow', calculatedData);
+  const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow', calculatedData);
   const systemMotorEnergyData: MotorEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.addedMotorEnergy || []).flat();
+
   const intakeMotorEnergy = intakes
     .map((intake: Node<ProcessFlowPart>) => {
       const intakeSource = intake.data as IntakeSource;
@@ -73,9 +76,9 @@ const DiagramResults = () => {
   const intakeTitle = "Annual Intake";
   let totalIntake = 0;
   let intakeRows = intakes.map((intake: Node<ProcessFlowPart>) => {
-    totalIntake += intake.data.userEnteredData.totalDischargeFlow;
-    // todo check for calculated data?
-    return { label: intake.data.name, result: intake.data.userEnteredData.totalDischargeFlow, unit: <FlowDisplayUnit /> };
+    let totalOutflow = getTotalOutflow(intake, calculatedData);
+    totalIntake += totalOutflow;
+    return { label: intake.data.name, result: totalOutflow, unit: <FlowDisplayUnit /> };
   });
   intakeRows.push(
     { label: 'Total Intake', result: totalIntake, unit: <FlowDisplayUnit /> },
@@ -84,17 +87,21 @@ const DiagramResults = () => {
   const dischargeTitle = "Annual Discharge";
   let totalDischarge = 0;
   let dischargeRows: TwoCellResultRow[] = discharges.map((discharge: Node<ProcessFlowPart>) => {
-    // todo check for calculated data?
-    totalDischarge += discharge.data.userEnteredData.totalSourceFlow;
-    return { label: discharge.data.name, result: discharge.data.userEnteredData.totalSourceFlow, unit: <FlowDisplayUnit /> };
+    let totalInflow = getTotalInflow(discharge, calculatedData);
+    totalDischarge += totalInflow;
+    return { label: discharge.data.name, result: totalInflow, unit: <FlowDisplayUnit /> };
   });
+
+  const estimatedUnknownLosses = diagramResults.estimatedUnknownLosses || 0;
+  const totalFacilityDischarge = totalDischarge + diagramResults.totalKnownLosses + estimatedUnknownLosses;
+
   dischargeRows.push(
     { label: 'Total Known Loss', result: diagramResults.totalKnownLosses, unit: <FlowDisplayUnit /> },
     { label: 'Estimated Unknown Loss', result: diagramResults.estimatedUnknownLosses, unit: <FlowDisplayUnit /> },
-    { label: 'Total Discharge', result: totalDischarge, unit: <FlowDisplayUnit /> },
+    { label: 'Total Discharge', result: totalFacilityDischarge, unit: <FlowDisplayUnit /> },
   )
   
-  const facilityImbalance = totalIntake - totalDischarge - diagramResults.totalKnownLosses - diagramResults.estimatedUnknownLosses;
+  const facilityImbalance = totalIntake - totalFacilityDischarge;
   const balanceTitle = "Facility Level Imbalance";
   const balanceRows = [
     { label: 'Total Imbalance', result: facilityImbalance, unit: <FlowDisplayUnit /> },

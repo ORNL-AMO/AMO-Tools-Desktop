@@ -1,3 +1,4 @@
+import { DiagramCalculatedData } from "./diagram";
 import { DiagramWaterSystemFlows, DischargeOutlet, IntakeSource, KnownLoss, WasteWaterTreatment, WaterTreatment, WaterUsingSystem } from "./water-components";
 
 export interface WaterAssessment {
@@ -14,6 +15,7 @@ export interface WaterAssessment {
     knownLosses?: KnownLoss[],
     diagramWaterSystemFlows?: DiagramWaterSystemFlows[],
     connectedNodesMap?: Record<string, string>,
+    calculatedData?: DiagramCalculatedData,
     setupDone: boolean
 }
 
