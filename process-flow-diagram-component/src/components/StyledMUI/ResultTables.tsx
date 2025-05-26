@@ -1,5 +1,5 @@
 import { Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableContainerProps, TableHead, TableRow } from "@mui/material";
-import { ProcessFlowPart, SystemTrueCostContributions, TrueCostOfSystems } from "process-flow-lib";
+import { DiagramCalculatedData, ProcessFlowPart, SystemTrueCostContributions, TrueCostOfSystems } from "process-flow-lib";
 import { JSX } from "react";
 import { Node } from "@xyflow/react";
 

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { WaterSystemComponentService } from '../../water-system-component.service';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { WaterBalanceResults, getWaterBalanceResults } from 'process-flow-lib';
+import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
 
 @Component({
   selector: 'app-water-balance-results-table',
@@ -23,6 +24,7 @@ export class WaterBalanceResultsTableComponent {
   
   constructor(private waterAssessmentService: WaterAssessmentService, 
     private waterSystemComponentService: WaterSystemComponentService,
+    private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService,
     private waterAssessmentResultsService: WaterAssessmentResultsService) { }
 
   ngOnInit(): void {
@@ -32,7 +34,7 @@ export class WaterBalanceResultsTableComponent {
 
     this.waterAssessmentSub = this.waterAssessmentService.waterAssessment.subscribe(waterAssessment => {
       if (waterAssessment) {
-        this.waterBalanceResults = getWaterBalanceResults(waterAssessment.waterUsingSystems);
+        this.waterBalanceResults = getWaterBalanceResults(waterAssessment.waterUsingSystems, waterAssessment.calculatedData);
         console.log('Water Balance Results:', this.waterBalanceResults);
       }
     })

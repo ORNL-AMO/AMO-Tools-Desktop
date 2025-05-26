@@ -122,13 +122,13 @@ export class WaterAssessmentResultsService {
         });
 
       // direct costs
-      const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow');
-      const totalSourceWaterIntake = getComponentTypeTotalFlow(intakes, 'totalDischargeFlow');
+      const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow', diagram.waterDiagram.flowDiagramData.calculatedData);
+      const totalSourceWaterIntake = getComponentTypeTotalFlow(intakes, 'totalDischargeFlow', diagram.waterDiagram.flowDiagramData.calculatedData);
 
       // indirect costs
-      const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow');
-      const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow');
-      const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow');
+      const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow', diagram.waterDiagram.flowDiagramData.calculatedData);
+      const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow', diagram.waterDiagram.flowDiagramData.calculatedData);
+      const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow', diagram.waterDiagram.flowDiagramData.calculatedData);
 
       const systemMotorEnergyData: MotorEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.addedMotorEnergy || []).flat();
       const intakeMotorEnergy = intakes
