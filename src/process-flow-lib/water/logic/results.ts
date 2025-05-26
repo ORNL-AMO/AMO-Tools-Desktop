@@ -27,7 +27,9 @@ export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[], ca
     percentIncomingWater: 0,
     percentTotalBalance: 0,
     totalKnownLosses: 0,
-    estimatedUnknownLosses: allSystemsTotalBalance >= 0 ? allSystemsTotalBalance : 0,
+    estimatedUnknownLosses: 0,
+    // todo when was below done
+    // estimatedUnknownLosses: allSystemsTotalBalance >= 0 ? allSystemsTotalBalance : 0,
     allSystemBalanceResults: []
   }
 
@@ -37,6 +39,7 @@ export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[], ca
     plantBalanceResults.waterBalance += systemResult.waterBalance;
     plantBalanceResults.totalKnownLosses += systemResult.totalKnownLosses;
     plantBalanceResults.percentTotalBalance += systemResult.percentTotalBalance;
+    plantBalanceResults.estimatedUnknownLosses += systemResult.estimatedUnknownLosses;
 
     systemResult.percentTotalBalance = getBalancePercent(allSystemsTotalBalance, systemResult.waterBalance);
     return systemResult;
@@ -81,6 +84,7 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem, calculate
     + estimatedUnknownLosses
     + consumptiveIrrigationLoss;
 
+  // todo estimatedUnknownLosses absorbed by mistake?
   systemBalanceResults.totalKnownLosses = waterSystem.systemFlowTotals.knownLosses;
   systemBalanceResults.waterBalance = systemBalanceResults.incomingWater - systemBalanceResults.outgoingWater;
   systemBalanceResults.percentIncomingWater = getBalancePercent(systemBalanceResults.incomingWater, systemBalanceResults.waterBalance);
@@ -113,9 +117,7 @@ export const getSystemEstimatedUnknownLosses = (
   systemTotalSourceFlow = systemTotalSourceFlow ?? 0;
   const totalKnownLosses = componentData.userEnteredData.totalKnownLosses ?? 0;
   const waterInProduct = componentData.userEnteredData.waterInProduct ?? 0;
-  const allKnownLosses = totalKnownLosses + waterInProduct;
-  const unknownLoss: number = systemTotalSourceFlow - systemTotalDischargeFlow;
-  const totalUnknownLoss = unknownLoss - allKnownLosses;
+  const totalUnknownLoss = systemTotalSourceFlow - systemTotalDischargeFlow - totalKnownLosses - waterInProduct;
   return totalUnknownLoss;
 }
 
