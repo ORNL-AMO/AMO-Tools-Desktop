@@ -214,6 +214,8 @@ const nodeErrorsChangeReducer = (state: DiagramState, action: PayloadAction<{flo
   } else if (state.nodeErrors[state.selectedDataId]) {
     removeFlowErrors(state, flowType);
   }
+
+  // todo set validation based on connected edges that now have calculated flow values
 }
 
 const applyEstimatedFlowResultsReducer = (state: DiagramState, action: PayloadAction<EstimatedFlowResults>) => {

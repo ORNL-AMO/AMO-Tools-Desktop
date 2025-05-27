@@ -12,8 +12,8 @@ export const getIsDiagramValid = (nodeErrors: NodeErrors) => {
    * @param userEnteredTotalFlow componentData.userEnteredData.totalSourceFlow or componentData.userEnteredData.totalSourceFlow 
    */
 export const validateTotalFlowValue = (connectedEdges: Edge[], calculatedTotalFlow: number, userEnteredTotalFlow: number, precision: number) => {
-    let shouldValidate = connectedEdges.length > 0 && calculatedTotalFlow !== null && calculatedTotalFlow !== undefined;
-    // *If a user entered value exists, check that our calculated total does not differ with component saved value (useEnteredValue)
+    let shouldValidate = connectedEdges.length > 0 && calculatedTotalFlow !== null && calculatedTotalFlow !== undefined && userEnteredTotalFlow !== null && userEnteredTotalFlow !== undefined;
+    // *If a user entered value exists, check that our calculated total does not differ with component saved value (useEnteredValue)\
     if (shouldValidate) {
         // console.log(`## validate totalFlow computed: ${calculatedTotalFlow} vs userEntered: ${userEnteredTotalFlow}`);
         const calculatedTotalFlowToPrecision = Number(calculatedTotalFlow?.toFixed(precision));

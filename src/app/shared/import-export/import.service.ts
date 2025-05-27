@@ -42,11 +42,11 @@ export class ImportService {
     this.nonDirectoryInventories = new Array<ImportExportInventory>();
     this.nonDirectoryDiagrams = new Array<ImportExportDiagram>();
 
-    exportedData.assessments.map(item => item.assessment.selected = false);
-    exportedData.inventories.map(item => item.inventoryItem.selected = false);
-    exportedData.calculators.map(item => item.selected = false);
-    exportedData.directories.map(item => item.directory.selected = false);
-    exportedData.diagrams.map(item => item.diagram.selected = false);
+    exportedData.assessments?.forEach(item => item.assessment.selected = false);
+    exportedData.inventories?.forEach(item => item.inventoryItem.selected = false);
+    exportedData.calculators?.forEach(item => item.selected = false);
+    exportedData.directories?.forEach(item => item.directory.selected = false);
+    exportedData.diagrams?.forEach(item => item.diagram.selected = false);
 
     if (exportedData.directories.length !== 0) {
       // This is the wrapping directory for all exported data (i.e. the current working dir items were exported from)

@@ -106,9 +106,12 @@ const DiagramResults = () => {
   )
   
   const facilityImbalance = totalIntake - totalFacilityDischarge;
+  // const intakeDeliveredToSystems = totalIntake - diagramResults.intakeDeliveredToSystems;
+
   const balanceTitle = "Facility Level Imbalance";
   const balanceRows = [
-    { label: 'Total Imbalance', result: facilityImbalance, unit: <FlowDisplayUnit /> },
+    { label: 'Net Intake Minus Discharge', result: facilityImbalance, unit: <FlowDisplayUnit /> },
+    // { label: 'Net Intake Minus System Intake', result: facilityImbalance, unit: <FlowDisplayUnit /> },
   ]
 
   const style: React.CSSProperties = { 

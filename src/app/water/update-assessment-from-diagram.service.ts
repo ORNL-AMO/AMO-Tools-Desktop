@@ -11,7 +11,7 @@ import { WaterUsingSystemService } from './water-using-system/water-using-system
 import { WaterSystemComponentService } from './water-system-component.service';
 import { Edge, Node } from '@xyflow/react';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { WaterAssessment, WaterUsingSystem, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, setWaterUsingSystemFlows, getIntakeSource, getDischargeOutlet, EdgeFlowData, getWasteWaterTreatmentComponent, getWaterTreatmentComponent } from 'process-flow-lib';
+import { WaterAssessment, WaterUsingSystem, KnownLoss, WaterProcessComponent, IntakeSource, DischargeOutlet, WaterTreatment, WasteWaterTreatment, getWaterUsingSystem, setWaterUsingSystemFlows, getIntakeSource, getDischargeOutlet, EdgeFlowData, getWasteWaterTreatmentComponent, getWaterTreatmentComponent, DiagramCalculatedData } from 'process-flow-lib';
 
 @Injectable()
 export class UpdateAssessmentFromDiagramService {
@@ -45,7 +45,7 @@ export class UpdateAssessmentFromDiagramService {
   }
 
   async updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment, assessmentSettings: Settings) {
-    this.updateAssessmentWaterComponents(diagram, assessment.water);
+    this.updateAssessmentWaterComponents(diagram, assessment.water, diagram.waterDiagram.flowDiagramData.calculatedData);
     assessment.water.diagramWaterSystemFlows = setWaterUsingSystemFlows(assessment.water.waterUsingSystems, diagram.waterDiagram.flowDiagramData.edges);
     assessment.water.calculatedData = diagram.waterDiagram.flowDiagramData.calculatedData;
     
@@ -84,7 +84,7 @@ export class UpdateAssessmentFromDiagramService {
   }
 
 
-  updateAssessmentWaterComponents(diagram: Diagram, waterAssessment: WaterAssessment) {
+  updateAssessmentWaterComponents(diagram: Diagram, waterAssessment: WaterAssessment, calculatedData: DiagramCalculatedData) {
     let intakeSources = [];
     let dischargeOutlets = [];
     let waterUsingSystems = [];
@@ -94,6 +94,17 @@ export class UpdateAssessmentFromDiagramService {
 
     diagram.waterDiagram.flowDiagramData.nodes.forEach((waterDiagramNode: Node) => {
       const waterProcessComponent = waterDiagramNode.data as WaterProcessComponent;
+      const diagramCalculatedData = calculatedData.nodes[waterProcessComponent.diagramNodeId];
+
+      if (diagramCalculatedData && waterProcessComponent.userEnteredData) {
+        waterProcessComponent.userEnteredData = {
+          totalSourceFlow: waterProcessComponent.userEnteredData.totalSourceFlow !== undefined? waterProcessComponent.userEnteredData.totalSourceFlow : diagramCalculatedData.totalSourceFlow,
+          totalDischargeFlow: waterProcessComponent.userEnteredData.totalDischargeFlow !== undefined? waterProcessComponent.userEnteredData.totalDischargeFlow : diagramCalculatedData.totalDischargeFlow,
+          totalKnownLosses: waterProcessComponent.userEnteredData.totalKnownLosses !== undefined? waterProcessComponent.userEnteredData.totalKnownLosses : diagramCalculatedData.totalKnownLosses,
+          waterInProduct: waterProcessComponent.userEnteredData.waterInProduct !== undefined? waterProcessComponent.userEnteredData.waterInProduct : diagramCalculatedData.waterInProduct,
+        };
+        waterProcessComponent.userEnteredData = diagramCalculatedData;
+      }
       if (waterProcessComponent.processComponentType === 'water-intake') {
         let intakeSource: IntakeSource;
         if (!waterProcessComponent.createdByAssessment) {

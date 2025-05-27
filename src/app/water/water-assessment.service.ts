@@ -148,6 +148,12 @@ export class WaterAssessmentService {
     } else if (componentType === 'water-using-system') {
       copiedComponent = copiedComponent as WaterUsingSystem;
       waterAssessment.waterUsingSystems? waterAssessment.waterUsingSystems.push(copiedComponent) : waterAssessment.waterUsingSystems = [copiedComponent];
+    } else if (componentType === 'water-treatment') {
+      copiedComponent = copiedComponent as WaterTreatment;
+      waterAssessment.waterTreatments? waterAssessment.waterTreatments.push(copiedComponent) : waterAssessment.waterTreatments = [copiedComponent];
+    } else if (componentType === 'waste-water-treatment') {
+      copiedComponent = copiedComponent as WasteWaterTreatment;
+      waterAssessment.wasteWaterTreatments? waterAssessment.wasteWaterTreatments.push(copiedComponent) : waterAssessment.wasteWaterTreatments = [copiedComponent];
     } 
 
     this.updateWaterAssessment(waterAssessment);
@@ -171,7 +177,7 @@ export class WaterAssessmentService {
     } else if (componentType === 'water-treatment') {
       deleteIndex = waterAssessment.waterTreatments.findIndex(component => component.diagramNodeId === deleteId);
       waterAssessment.waterTreatments.splice(deleteIndex, 1);
-      updatedViewComponents = waterAssessment.wasteWaterTreatments;
+      updatedViewComponents = waterAssessment.waterTreatments;
     } else if (componentType === 'water-using-system') {
       deleteIndex = waterAssessment.waterUsingSystems.findIndex(component => component.diagramNodeId === deleteId);
       waterAssessment.waterUsingSystems.splice(deleteIndex, 1);
