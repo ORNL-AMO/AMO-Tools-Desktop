@@ -26,9 +26,8 @@ import { AppStore, configureAppStore, RootState, selectEdges, selectIsDrawerOpen
 import { Provider } from 'react-redux';
 import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, keyboardDeleteNode, nodesChange } from './diagramReducer';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
-import { getIsDiagramValid } from '../../validation/Validation';
 import StaticModal from '../Forms/StaticModal';
-import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors } from 'process-flow-lib';
+import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, checkDiagramNodeErrors, getIsDiagramValid } from 'process-flow-lib';
 import ResultsPanel from './ResultsPanel';
 
 
@@ -62,16 +61,20 @@ const Diagram = (props: DiagramProps) => {
   const minimapVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.minimapVisible);
   const controlsVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.controlsVisible);
   const defaultEdgeType: string = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
-  const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
-  const isDiagramValid = getIsDiagramValid(nodeErrors);
-
   const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
-
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {
     return getEdgeTypesFromString(state.diagram.diagramOptions.edgeType, edgeTypes);
   });
+  
+  const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
+  
+  // const newNodeErrors = checkDiagramNodeErrors(nodes, edges, calculatedData, settings);
+  // const isDiagramValid = getIsDiagramValid(newNodeErrors);
+  // console.log('=== newNodeErrors', newNodeErrors);
+  const isDiagramValid = getIsDiagramValid(nodeErrors);
+  console.log('=== isDiagramValid', isDiagramValid);
 
   // * on xyFlow instance ready
   useEffect(() => {

@@ -1,19 +1,18 @@
 import * as React from 'react';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { Box } from '@mui/material';
-import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getMotorEnergyCost, getTotalInflow, getTotalOutflow, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
-import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
+import { checkDiagramNodeErrors, CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getIsDiagramValid, getMotorEnergyCost, getTotalInflow, getTotalOutflow, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
+import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
 import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
 import { TwoCellResultRow, TwoCellResultTable } from '../StyledMUI/ResultTables';
-import { getIsDiagramValid } from '../../validation/Validation';
+import { Alert } from '@mui/material';
 
 
 const DiagramResults = () => {
   // todo - move results to store thunk Or less expensive to keep here?
   const edges: Edge<CustomEdgeData>[] = useAppSelector(selectEdges);
-  const validationErrors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
-
+  const nodes: Node[] = useAppSelector(selectNodes);
   const intakes: Node<ProcessFlowPart>[] = useAppSelector(selectIntakeSourceNodes);
   const discharges: Node<ProcessFlowPart>[] = useAppSelector(selectDischargeOutletNodes);
   const waterTreatmentNodes: Node<ProcessFlowPart>[] = useAppSelector(selectWaterTreatmentNodes);
@@ -21,8 +20,13 @@ const DiagramResults = () => {
   const waterUsingSystems: WaterUsingSystem[] = useAppSelector(selectNodesAsWaterUsingSystems);
   const settings: DiagramSettings = useAppSelector((state) => state.diagram.settings);
   const calculatedData: DiagramCalculatedData = useAppSelector((state) => state.diagram.calculatedData);
-
+  
+  const validationErrors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
+  const nodeErrors: NodeErrors = checkDiagramNodeErrors(nodes, edges, calculatedData, settings);
+  console.log('NEWnodeErrors', nodeErrors);
+  console.log('OLDnodeErrors', validationErrors);
   const isDiagramValid = getIsDiagramValid(validationErrors);
+  console.log(isDiagramValid);
 
   setWaterUsingSystemFlows(waterUsingSystems, edges);
   const diagramResults: WaterBalanceResults = getWaterBalanceResults(waterUsingSystems, calculatedData);
@@ -111,11 +115,20 @@ const DiagramResults = () => {
     marginBottom: '1rem',
   };
   return (
-    <Box sx={{ marginX: '.5rem', width: '100%'}}>
-      <TwoCellResultTable headerTitle={costTitle} rows={costRows} style={style} />
-      <TwoCellResultTable headerTitle={intakeTitle} rows={intakeRows} style={style}/>
-      <TwoCellResultTable headerTitle={dischargeTitle} rows={dischargeRows} style={style}/>
-      <TwoCellResultTable headerTitle={balanceTitle} rows={balanceRows} style={style}/>
+    <Box sx={{ marginX: '.5rem', width: '100%' }}>
+      {isDiagramValid ?
+        <>
+          <TwoCellResultTable headerTitle={costTitle} rows={costRows} style={style} />
+          <TwoCellResultTable headerTitle={intakeTitle} rows={intakeRows} style={style} />
+          <TwoCellResultTable headerTitle={dischargeTitle} rows={dischargeRows} style={style} />
+          <TwoCellResultTable headerTitle={balanceTitle} rows={balanceRows} style={style} />
+        </>
+        : <>
+          <Alert severity="error">
+            Diagram flow data contains errors. View diagram alerts to fix issues and ensure entered flow values are valid.
+          </Alert>
+        </>
+      }
     </Box>
   );
 }

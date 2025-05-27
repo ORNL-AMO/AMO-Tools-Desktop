@@ -4,6 +4,9 @@ import { Settings } from '../../../shared/models/settings';
 import { SystemTrueCostData } from '../../water-assessment-results.service';
 import { WaterReportService } from '../water-report.service';
 import * as _ from 'lodash';
+import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
+import { Diagram } from '../../../shared/models/diagram';
+import { checkDiagramNodeErrors, getIsDiagramValid, NodeErrors } from 'process-flow-lib';
 
 @Component({
   selector: 'app-system-true-cost-report',
@@ -12,13 +15,13 @@ import * as _ from 'lodash';
   styleUrl: './system-true-cost-report.component.css'
 })
 export class SystemTrueCostReportComponent {
-@Input()
+  @Input()
   inRollup: boolean;
   @Input()
   assessment: Assessment;
   @Input()
   settings: Settings;
-  
+
 
   notes: Array<{
     modificationName: string,
@@ -27,36 +30,37 @@ export class SystemTrueCostReportComponent {
   selectedModificationIndex: number = 1;
   trueCostOfSystemsReport: SystemTrueCostData[] = [];
   systemTrueCostReportSubscription: any;
-  
+  isDiagramValid: boolean;
+
 
   constructor(
     private waterReportService: WaterReportService,
-    // private waterRollupService: WaterRollupService
+    private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService
   ) { }
 
   ngOnInit(): void {
+    let diagram: Diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(this.assessment);
+    // let nodeErrors: NodeErrors = checkDiagramNodeErrors(
+    //   diagram.waterDiagram.flowDiagramData.nodes,
+    //   diagram.waterDiagram.flowDiagramData.edges,
+    //   diagram.waterDiagram.flowDiagramData.calculatedData,
+    //   diagram.waterDiagram.flowDiagramData.settings);
+    let nodeErrors: NodeErrors = diagram.waterDiagram.flowDiagramData.nodeErrors;
     this.systemTrueCostReportSubscription = this.waterReportService.systemTrueCostReport.subscribe(report => {
-      this.trueCostOfSystemsReport = this.waterReportService.getSortedTrueCostReport(report);
+      this.isDiagramValid = getIsDiagramValid(nodeErrors);
+      if (this.isDiagramValid) {
+        this.trueCostOfSystemsReport = this.waterReportService.getSortedTrueCostReport(report);
+      } else {
+        this.trueCostOfSystemsReport = [];
+      }
     });
-
-    if (this.inRollup) {
-      // this.waterRollupService.selectedAssessments.forEach(val => {
-      //   if (val) {
-      //     val.forEach(assessment => {
-      //       if (assessment.assessmentId == this.assessment.id) {
-      //         this.selectedModificationIndex = assessment.selectedIndex;
-      //       }
-      //     })
-      //   }
-      // })
-    }
   }
 
-   ngOnDestroy() {
+  ngOnDestroy() {
     this.systemTrueCostReportSubscription.unsubscribe();
   }
 
- getFlowDecimalPrecisionPipeValue(): string {
+  getFlowDecimalPrecisionPipeValue(): string {
     let pipeVal = `1.0-${this.settings.flowDecimalPrecision}`;
     return pipeVal;
   }

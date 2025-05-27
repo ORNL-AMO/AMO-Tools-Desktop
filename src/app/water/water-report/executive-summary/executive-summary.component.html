@@ -1,118 +1,128 @@
 <div class="output-summary w-75 mx-auto">
-    <ng-container *ngIf="baselineResults && modificationResults">
-        <h4 class="show-print print-section-header">Plant Annual Water Use and Cost Summary</h4>
-        <table class="table table-striped table-hover">
-              <thead>
-                <tr>
-                    <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">Facility-wide Source Water Intake</th>
-                    <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}"
-                        [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
-                    <th *ngFor="let result of modificationResults; let index = index;"
-                        [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">
-                        {{result.name}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Intake (Million Gallons)</td>
-                    <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                        <span *ngIf="baselineResults.totalSourceWaterIntake">{{baselineResults.totalSourceWaterIntake | number:'1.0-2'}}</span>
-                        <span *ngIf="!baselineResults.totalSourceWaterIntake">&mdash;&mdash;</span>
-                    </td>
-                    <td *ngFor="let result of modificationResults; let index = index;">
-                        <span *ngIf="result.totalSourceWaterIntake">{{result.value
-                            | number:'1.0-2'}}</span>
-                        <span *ngIf="!result.totalSourceWaterIntake">&mdash;
-                            &mdash;</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Intake (kGal per 1000 {{assessment.water.systemBasics.productionUnit? assessment.water.systemBasics.productionUnit : 'lbs' }})</td>
-                    <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                        <span *ngIf="baselineResults.totalPerProductionUnit">{{baselineResults.totalPerProductionUnit | number:'1.0-2'}}</span>
-                        <span *ngIf="!baselineResults.totalPerProductionUnit">&mdash;&mdash;</span>
-                    </td>
-                    <td *ngFor="let result of modificationResults; let index = index;">
-                        <span *ngIf="result.totalPerProductionUnit">{{result.value
-                            | number:'1.0-2'}}</span>
-                        <span *ngIf="!result.totalPerProductionUnit">&mdash;
-                            &mdash;</span>
-                    </td>
-                </tr>
+    @if (!isDiagramValid) {
+    <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
+        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
+        [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
+    } @else if (baselineResults && modificationResults) {
+    <h4 class="show-print print-section-header">Plant Annual Water Use and Cost Summary</h4>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">Facility-wide Source Water Intake</th>
+                <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}"
+                    [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
+                <th *ngFor="let result of modificationResults; let index = index;"
+                    [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">
+                    {{result.name}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Intake (Million Gallons)</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="baselineResults.totalSourceWaterIntake">{{baselineResults.totalSourceWaterIntake |
+                        number:'1.0-2'}}</span>
+                    <span *ngIf="!baselineResults.totalSourceWaterIntake">&mdash;&mdash;</span>
+                </td>
+                <td *ngFor="let result of modificationResults; let index = index;">
+                    <span *ngIf="result.totalSourceWaterIntake">{{result.value
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.totalSourceWaterIntake">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr>
+                <td>Intake (kGal per 1000 {{assessment.water.systemBasics.productionUnit?
+                    assessment.water.systemBasics.productionUnit : 'lbs' }})</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="baselineResults.totalPerProductionUnit">{{baselineResults.totalPerProductionUnit |
+                        number:'1.0-2'}}</span>
+                    <span *ngIf="!baselineResults.totalPerProductionUnit">&mdash;&mdash;</span>
+                </td>
+                <td *ngFor="let result of modificationResults; let index = index;">
+                    <span *ngIf="result.totalPerProductionUnit">{{result.value
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.totalPerProductionUnit">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
 
-                <tr class="bold-row">
-                    <td>Direct Cost of Water ($)</td>
-                    <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                        <span *ngIf="baselineResults.directCost">${{baselineResults.directCost | number:'1.0-2'}}</span>
-                        <span *ngIf="!baselineResults.directCost">&mdash;&mdash;</span>
-                    </td>
-                    <td *ngFor="let result of modificationResults; let index = index;">
-                        <span *ngIf="result.directCost">${{result.value
-                            | number:'1.0-2'}}</span>
-                        <span *ngIf="!result.directCost">&mdash;
-                            &mdash;</span>
-                    </td>
-                </tr>
+            <tr class="bold-row">
+                <td>Direct Cost of Water ($)</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="baselineResults.directCost">${{baselineResults.directCost | number:'1.0-2'}}</span>
+                    <span *ngIf="!baselineResults.directCost">&mdash;&mdash;</span>
+                </td>
+                <td *ngFor="let result of modificationResults; let index = index;">
+                    <span *ngIf="result.directCost">${{result.value
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.directCost">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
 
-         <table class="table table-striped table-hover mt-5">
-            <thead>
-                <tr>
-                    <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">True Cost of Water</th>
-                    <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}"
-                        [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
-                    <th *ngFor="let result of modificationResults; let index = index;"
-                        [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">
-                        {{result.name}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>True Cost ($)</td>
-                    <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                        <span *ngIf="baselineResults.trueCost">${{baselineResults.trueCost | number:'1.0-2'}}</span>
-                        <span *ngIf="!baselineResults.trueCost">&mdash;&mdash;</span>
-                    </td>
-                    <td *ngFor="let result of modificationResults; let index = index;">
-                        <span *ngIf="result.trueCost">${{result.value
-                            | number:'1.0-2'}}</span>
-                        <span *ngIf="!result.trueCost">&mdash;
-                            &mdash;</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>True Cost ($ per 1000 {{assessment.water.systemBasics.productionUnit? assessment.water.systemBasics.productionUnit : 'lbs'}})</td>
-                    <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                        <span *ngIf="baselineResults.trueCostPerProductionUnit">${{baselineResults.trueCostPerProductionUnit | number:'1.0-2'}}</span>
-                        <span *ngIf="!baselineResults.trueCostPerProductionUnit">&mdash;&mdash;</span>
-                    </td>
-                    <td *ngFor="let result of modificationResults; let index = index;">
-                        <span *ngIf="result.trueCostPerProductionUnit">${{result.value
-                            | number:'1.0-2'}}</span>
-                        <span *ngIf="!result.trueCostPerProductionUnit">&mdash;
-                            &mdash;</span>
-                    </td>
-                </tr>
-                <tr class="bold-row">
-                    <td>True Cost / Direct Cost</td>
-                    <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                        <span *ngIf="baselineResults.trueOverDirectResult">${{baselineResults.trueOverDirectResult | number:'1.0-2'}}</span>
-                        <span *ngIf="!baselineResults.trueOverDirectResult">&mdash;&mdash;</span>
-                    </td>
-                    <td *ngFor="let result of modificationResults; let index = index;">
-                        <span *ngIf="result.trueOverDirectResult">${{result.value
-                            | number:'1.0-2'}}</span>
-                        <span *ngIf="!result.trueOverDirectResult">&mdash;
-                            &mdash;</span>
-                    </td>
-                </tr>
+    <table class="table table-striped table-hover mt-5">
+        <thead>
+            <tr>
+                <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">True Cost of Water</th>
+                <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}"
+                    [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
+                <th *ngFor="let result of modificationResults; let index = index;"
+                    [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">
+                    {{result.name}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>True Cost ($)</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="baselineResults.trueCost">${{baselineResults.trueCost | number:'1.0-2'}}</span>
+                    <span *ngIf="!baselineResults.trueCost">&mdash;&mdash;</span>
+                </td>
+                <td *ngFor="let result of modificationResults; let index = index;">
+                    <span *ngIf="result.trueCost">${{result.value
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.trueCost">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr>
+                <td>True Cost ($ per 1000 {{assessment.water.systemBasics.productionUnit?
+                    assessment.water.systemBasics.productionUnit : 'lbs'}})</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="baselineResults.trueCostPerProductionUnit">${{baselineResults.trueCostPerProductionUnit
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!baselineResults.trueCostPerProductionUnit">&mdash;&mdash;</span>
+                </td>
+                <td *ngFor="let result of modificationResults; let index = index;">
+                    <span *ngIf="result.trueCostPerProductionUnit">${{result.value
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.trueCostPerProductionUnit">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr class="bold-row">
+                <td>True Cost / Direct Cost</td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    <span *ngIf="baselineResults.trueOverDirectResult">${{baselineResults.trueOverDirectResult |
+                        number:'1.0-2'}}</span>
+                    <span *ngIf="!baselineResults.trueOverDirectResult">&mdash;&mdash;</span>
+                </td>
+                <td *ngFor="let result of modificationResults; let index = index;">
+                    <span *ngIf="result.trueOverDirectResult">${{result.value
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.trueOverDirectResult">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-    </ng-container>
+    }
 
 </div>
