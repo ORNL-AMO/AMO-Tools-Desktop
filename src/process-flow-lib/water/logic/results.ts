@@ -84,7 +84,6 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem, calculate
     + estimatedUnknownLosses
     + consumptiveIrrigationLoss;
 
-  // todo estimatedUnknownLosses absorbed by mistake?
   systemBalanceResults.totalKnownLosses = waterSystem.systemFlowTotals.knownLosses;
   systemBalanceResults.waterBalance = systemBalanceResults.incomingWater - systemBalanceResults.outgoingWater;
   systemBalanceResults.percentIncomingWater = getBalancePercent(systemBalanceResults.incomingWater, systemBalanceResults.waterBalance);
@@ -677,25 +676,27 @@ const getIntakeFlowProportionCost = (
           const immediateFlowValue = immediateAncestorToSystem.data?.flowValue ?? 0;
 
           let totalFlowResponsiblity = getTotalOutflow(nodeMap[immediateReceiver], calculatedData) ?? 0;
-            const isDirectIntakeToFlow = directPathAncestors.length === 2;
-            if (isDirectIntakeToFlow) {
-              totalFlowResponsiblity = immediateFlowValue;
-            }
+          const isDirectIntakeToFlow = directPathAncestors.length === 2;
+          if (isDirectIntakeToFlow) {
+            totalFlowResponsiblity = immediateFlowValue;
+          }
 
           systemAnnualSummaryResults.sourceWaterIntake += immediateFlowValue;
-          // todo prevent dividing by 0
-          const fractionImmediateReceiverTotalInflow = immediateFlowValue / totalFlowResponsiblity;
-          const targetFlowReceived = intakeToReceiver.data.flowValue ?? 0;
-          const targetPortion = targetFlowReceived * fractionImmediateReceiverTotalInflow;
-          const targetPortionFractionOfInitialFlowSent = (targetPortion / connectedAncestorCost.selfTotalFlow);
-          const targetPortionCost = targetPortionFractionOfInitialFlowSent * connectedAncestorCost.selfTotalCost;
+          
+          if (totalFlowResponsiblity) {
+            const fractionImmediateReceiverTotalInflow = immediateFlowValue / totalFlowResponsiblity;
+            const targetFlowReceived = intakeToReceiver.data.flowValue ?? 0;
+            const targetPortion = targetFlowReceived * fractionImmediateReceiverTotalInflow;
+            const targetPortionFractionOfInitialFlowSent = (targetPortion / connectedAncestorCost.selfTotalFlow);
+            const targetPortionCost = targetPortionFractionOfInitialFlowSent * connectedAncestorCost.selfTotalCost;
 
-          portionIntakeCosts += targetPortionCost;
+            portionIntakeCosts += targetPortionCost;
 
-          // * Apply pump energy costs
-          const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(intakeNode.data as IntakeSource, electricityCost, settings.unitsOfMeasure);
-          const energyCost = pumpAndMotorEnergyCost * targetPortionFractionOfInitialFlowSent;
-          systemCostContributionsResults.systemPumpAndMotorEnergy += energyCost;
+            // * Apply pump energy costs
+            const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(intakeNode.data as IntakeSource, electricityCost, settings.unitsOfMeasure);
+            const energyCost = pumpAndMotorEnergyCost * targetPortionFractionOfInitialFlowSent;
+            systemCostContributionsResults.systemPumpAndMotorEnergy += energyCost;
+          }
         }
       }
     });
@@ -783,23 +784,25 @@ const getDischargeFlowProportionCost = (
             }
 
             systemAnnualSummaryResults.dischargeWater += immediateFlowValue;
-            // todo prevent dividing by 0
-            const fractionImmediateReceiverTotalOutflow = immediateFlowValue / totalFlowResponsiblity;
-            const targetFlowReceived = immediateAncestorToDischarge.data.flowValue ?? 0;
-            const targetPortion = targetFlowReceived * fractionImmediateReceiverTotalOutflow;
-            const totalDischargeFlow = getTotalInflow(nodeMap[dischargeDestinationId], calculatedData) ?? 0;
-            const totalDischargeCost = descendantCostMap[systemId].find((cost) => cost.targetId === dischargeDestinationId)?.selfTotalCost ?? 0;
+            
+            if (totalFlowResponsiblity) {
 
-            const targetPortionFractionOfInitialFlowSent = (targetPortion / totalDischargeFlow);
-            const targetPortionCost = targetPortionFractionOfInitialFlowSent * totalDischargeCost;
-            portionDischargeCosts += targetPortionCost;
-
-            // * Apply pump energy costs
-            const dischargeNode = nodeMap[dischargeDestinationId];
-            const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(dischargeNode.data as DischargeOutlet, electricityCost, settings.unitsOfMeasure);
-            const energyCost = pumpAndMotorEnergyCost * targetPortionFractionOfInitialFlowSent;
-            systemCostContributionsResults.systemPumpAndMotorEnergy += energyCost;
-
+              const fractionImmediateReceiverTotalOutflow = immediateFlowValue / totalFlowResponsiblity;
+              const targetFlowReceived = immediateAncestorToDischarge.data.flowValue ?? 0;
+              const targetPortion = targetFlowReceived * fractionImmediateReceiverTotalOutflow;
+              const totalDischargeFlow = getTotalInflow(nodeMap[dischargeDestinationId], calculatedData) ?? 0;
+              const totalDischargeCost = descendantCostMap[systemId].find((cost) => cost.targetId === dischargeDestinationId)?.selfTotalCost ?? 0;
+              
+              const targetPortionFractionOfInitialFlowSent = (targetPortion / totalDischargeFlow);
+              const targetPortionCost = targetPortionFractionOfInitialFlowSent * totalDischargeCost;
+              portionDischargeCosts += targetPortionCost;
+              
+              // * Apply pump energy costs
+              const dischargeNode = nodeMap[dischargeDestinationId];
+              const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(dischargeNode.data as DischargeOutlet, electricityCost, settings.unitsOfMeasure);
+              const energyCost = pumpAndMotorEnergyCost * targetPortionFractionOfInitialFlowSent;
+              systemCostContributionsResults.systemPumpAndMotorEnergy += energyCost;
+            }
           }
         });
 

@@ -167,7 +167,7 @@ const Diagram = (props: DiagramProps) => {
         <ValidationWindow></ValidationWindow>
       }
       {/* // * Only for development result checking */}
-        <ResultsPanel></ResultsPanel>
+        {/* <ResultsPanel></ResultsPanel> */}
       <ReactFlowProvider>
         <div className={'flow-wrapper'} style={{ height: props.height }}>
           <ReactFlow
