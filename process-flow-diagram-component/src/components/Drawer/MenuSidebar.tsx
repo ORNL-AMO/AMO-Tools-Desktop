@@ -9,9 +9,8 @@ import { RootState, selectHasAssessment } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { getIsDiagramValid } from '../../validation/Validation';
 import { blue } from '@mui/material/colors';
-import { ParentContainerDimensions, NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions } from 'process-flow-lib';
+import { ParentContainerDimensions, NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getIsDiagramValid } from 'process-flow-lib';
 import DiagramResults from './DiagramResults';
 import InputField from '../StyledMUI/InputField';
 
