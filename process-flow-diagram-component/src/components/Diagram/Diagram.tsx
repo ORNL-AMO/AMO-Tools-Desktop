@@ -70,10 +70,10 @@ const Diagram = (props: DiagramProps) => {
   const nodes: Node[] = useAppSelector(selectNodes);
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
   
-  // const newNodeErrors = checkDiagramNodeErrors(nodes, edges, calculatedData, settings);
-  // const isDiagramValid = getIsDiagramValid(newNodeErrors);
   // console.log('=== newNodeErrors', newNodeErrors);
-  const isDiagramValid = getIsDiagramValid(nodeErrors);
+  // const isDiagramValid = getIsDiagramValid(nodeErrors);
+  const updatedNodeErrors = useMemo(() => checkDiagramNodeErrors(nodes, edges, calculatedData, settings), [nodes, edges, calculatedData, settings]);
+  const isDiagramValid = getIsDiagramValid(updatedNodeErrors);
   console.log('=== isDiagramValid', isDiagramValid);
 
   // * on xyFlow instance ready
