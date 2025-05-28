@@ -1322,5 +1322,6 @@ export const MockPhastSettings: Settings = {
     fansRollupUnit: "MWh",
     steamRollupUnit: "MMBtu",
     wasteWaterRollupUnit: "MWh",
-    compressedAirRollupUnit: "MWh"
+    compressedAirRollupUnit: "MWh",
+    flowDecimalPrecision: 2
 };

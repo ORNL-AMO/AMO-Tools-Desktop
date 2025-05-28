@@ -2,6 +2,7 @@
 export type AnalyticsEventString = 'page_view' |
     'measur_app_open_v2' |
     'create-assessment' |
+    'create-water-diagram' |
     'view-pump-assessment' |
     'view-process-heating-assessment' |
     'view-fan-assessment' |
@@ -9,9 +10,11 @@ export type AnalyticsEventString = 'page_view' |
     'view-treasure-hunt-assessment' |
     'view-waste-water-assessment' |
     'view-compressed-air-assessment' |
+    'view-water-assessment' |
     'create-inventory' |
     'view-motor-inventory' |
     'view-pump-inventory' |
+    'view-water-diagram' |
     'use-data-exporation' |
     'run-day-type-analysis' |
 

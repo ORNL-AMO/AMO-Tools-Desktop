@@ -1,0 +1,33 @@
+<app-heat-energy *ngIf="selectedWaterUsingSystem.heatEnergy" [heatEnergy]="selectedWaterUsingSystem.heatEnergy"
+    (updateHeatEnergy)="saveHeatEnergy($event)">
+</app-heat-energy>
+<label class="group-label pl-3">
+    Added Pump Energy
+</label>
+<div class="form-group my-2 px-2 d-flex justify-content-end">
+    <div class="btn-group btn-group-sm pull-right">
+        <button type="button" disabled id="motorEnergyMethod_from" class="btn btn-secondary btn-sm py-1 px-2 mx-2 small"
+            (click)="addMotorEnergyFromInventory()">Add From
+            Inventory</button>
+        <button type="button" id="motorEnergyMethod_add" class="btn btn-primary btn-sm py-1 px-2 small mx-2"
+            (click)="addNewMotorEnergy()">Add New
+            Pump Energy</button>
+    </div>
+</div>
+
+<div class="motor-equipment">
+    <div class="form-section"
+        *ngFor="let motorEquipment of selectedWaterUsingSystem.addedMotorEnergy; let i = index">
+        <app-motor-energy [motorEnergy]="motorEquipment" (updateMotorEnergy)="saveMotorEnergy($event, i)">
+        </app-motor-energy>
+        <div class="text-center">
+            <a class="click-link delete small" (click)="openConfirmDeleteModal(motorEquipment, i)">Delete
+                {{motorEquipment.name}}</a>
+        </div>
+    </div>
+</div>
+
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteData"
+    (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>

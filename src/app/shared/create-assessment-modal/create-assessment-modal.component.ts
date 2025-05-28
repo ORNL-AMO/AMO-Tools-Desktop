@@ -20,6 +20,10 @@ import { IntegrationStateService } from '../connected-inventory/integration-stat
 import { SettingsService } from '../../settings/settings.service';
 import { AnalyticsService } from '../analytics/analytics.service';
 import { PumpItem } from '../../pump-inventory/pump-inventory';
+import { getNameDateString } from '../helperFunctions';
+import { WaterProcessDiagramService } from '../../water-process-diagram/water-process-diagram.service';
+import { Diagram } from '../models/diagram';
+import { UpdateAssessmentFromDiagramService } from '../../water/update-assessment-from-diagram.service';
 
 @Component({
     selector: 'app-create-assessment-modal',
@@ -31,6 +35,8 @@ export class CreateAssessmentModalComponent {
   @ViewChild('createModal', { static: false }) public createModal: ModalDirective;
   @Input()
   connectedInventoryItem: ConnectedItem;
+  @Input()
+  diagram: Diagram;
   @Input() 
   integratedCreateType: string;
   @Output('onClose')
@@ -51,6 +57,8 @@ export class CreateAssessmentModalComponent {
     private directoryDashboardService: DirectoryDashboardService,
     private dashboardService: DashboardService,
     private convertFanAnalysisService: ConvertFanAnalysisService,
+    private waterDiagramService: WaterProcessDiagramService,
+    private updateAssessmentFromDiagramService: UpdateAssessmentFromDiagramService,
     private psatIntegrationService: PsatIntegrationService,
     private integrationStateService: IntegrationStateService,
     private settingsService: SettingsService,
@@ -105,14 +113,12 @@ export class CreateAssessmentModalComponent {
 
   getAssessmentName(assessmentType: string) {
     let assessmentName: string = 'New Assessment';
-
+    let currentDate = new Date();
     if (this.connectedInventoryItem) {
       let connectedInventoryData: ConnectedInventoryData = this.getConnectedInventoryData();
       if (assessmentType === 'Pump') {
         let selectedPumpItem: PumpItem = this.psatIntegrationService.getConnectedPumpItem(connectedInventoryData.connectedItem);
-        let currentDate = new Date();
-        const dateStr = (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + '-' + currentDate.getFullYear();
-        assessmentName = `${selectedPumpItem.name}_${dateStr}`;
+        assessmentName = `${selectedPumpItem.name}_${getNameDateString(currentDate)}`;
       }
     }
     return assessmentName;
@@ -193,6 +199,20 @@ export class CreateAssessmentModalComponent {
         tmpAssessment.compressedAirAssessment = this.assessmentService.getNewCompressedAirAssessment(this.settings);
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
         this.finishAndNavigate(createdAssessment, '/compressed-air/' + createdAssessment.id);
+      } else if (this.newAssessmentForm.controls.assessmentType.value == 'Water') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
+        let tmpAssessment = this.assessmentService.getNewAssessment('Water');
+        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
+        tmpAssessment.water = this.assessmentService.getNewWaterAssessment(this.settings);
+        let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+        let queryParams;
+
+        if (this.diagram && this.diagram.waterDiagram) {
+          await this.createFromWaterDiagram(createdAssessment);
+          queryParams = { connectedWaterDiagram: true };
+        }
+        this.finishAndNavigate(createdAssessment, '/water/' + createdAssessment.id, queryParams);
       }
     }
   }
@@ -214,6 +234,22 @@ export class CreateAssessmentModalComponent {
     await this.saveAssessmentAndSettings(newSettings, createdAssessment)
   }
 
+  async createFromWaterDiagram(createdAssessment: Assessment) {
+    let assessmentSettings = this.settingsDbService.getByAssessmentId(createdAssessment, false);
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
+    newSettings.assessmentId = createdAssessment.id;
+    this.updateAssessmentFromDiagramService.updateAssessmentWithDiagram(this.diagram, createdAssessment, newSettings);
+    this.diagram.assessmentId = createdAssessment.id;
+    createdAssessment.diagramId = this.diagram.id;
+    this.waterDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
+    
+    await firstValueFrom(this.assessmentDbService.updateWithObservable(createdAssessment));
+    let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(allAssessments);
+  }
+
+  // todo 6893 - Not sure why this was needed for assessment creation from an inventory. It looks 
+  // todo like assessments create their own settings on first init
   async saveAssessmentAndSettings(settings: Settings, assessment: Assessment) {
     let settingsForm = this.settingsService.getFormFromSettings(settings);
     settingsForm = this.settingsService.setUnits(settingsForm);

@@ -103,6 +103,7 @@ export class ExportModalComponent implements OnInit {
       assessments: this.exportData.assessments.filter(assessment => assessment.assessment.directoryId === this.workingDirectoryId),
       inventories: this.exportData.inventories.filter(inventory => inventory.inventoryItem.directoryId === this.workingDirectoryId),
       calculators: this.exportData.calculators.filter(calculator => calculator.directoryId === this.workingDirectoryId),
+      diagrams: this.exportData.diagrams.filter(diagram => diagram.diagram.directoryId === this.workingDirectoryId),
       directories: this.exportData.directories.filter(directory => {
         let isNotCurrentDirectory: boolean = directory.directory.id !== this.workingDirectoryId;
         let inCurrentDirectory: boolean = directory.directory.parentDirectoryId === this.workingDirectoryId;
@@ -115,6 +116,7 @@ export class ExportModalComponent implements OnInit {
     let hasAssessments: boolean = this.exportData.assessments.length != 0;
     let hasInventories: boolean = this.exportData.inventories.length != 0;
     let hasCalculators: boolean = this.exportData.calculators.length != 0;
+    let hasDiagrams: boolean = this.exportData.diagrams.length != 0;
     let hasMultipleItemTypes: boolean = [
       hasAssessments, 
       hasInventories, 
@@ -135,6 +137,8 @@ export class ExportModalComponent implements OnInit {
       this.exportName = this.exportData.inventories[0].inventoryItem.name;
     } else if (hasCalculators) {
       this.exportName = this.exportData.calculators[0].name;
+    } else if (hasDiagrams) {
+      this.exportName = this.exportData.diagrams[0].diagram.name;
     }
 }
 

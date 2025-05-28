@@ -1,0 +1,50 @@
+<form [formGroup]="form">
+    <div class="form-group" [ngClass]="{'invalid': form.controls.employeeCount.invalid}">
+        <label for="employeeCount">Number of Employees
+        </label>
+        <div class="input-group">
+            <input name="employeeCount" type="number" class="form-control" id="employeeCount"
+                formControlName="employeeCount" (input)="save()" (focus)="focusField('employeeCount')">
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.employeeCount.invalid && !form.controls.employeeCount.pristine">
+            <span *ngIf="form.controls.employeeCount.errors.required">Value Required</span>
+            <span *ngIf="form.controls.employeeCount.errors.min">Value can't be less than</span>
+        </span>
+    </div>
+
+    <div class="form-group" [ngClass]="{'invalid': form.controls.workdaysPerYear.invalid}">
+        <label for="workdaysPerYear">Workdays Per Year</label>
+        <div class="input-group">
+            <input name="workdaysPerYear" type="number" class="form-control" id="workdaysPerYear"
+                formControlName="workdaysPerYear" (input)="save()" (focus)="focusField('workdaysPerYear')">
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.workdaysPerYear.invalid && !form.controls.workdaysPerYear.pristine">
+            <span *ngIf="form.controls.workdaysPerYear.errors.required">Value Required</span>
+            <span *ngIf="form.controls.workdaysPerYear.errors.min">Value can't be less than
+                {{form.controls.workdaysPerYear.errors.min.min}}
+            </span>
+        </span>
+    </div>
+
+    <div class="form-group" [ngClass]="{'invalid': form.controls.dailyUsePerEmployee.invalid}">
+        <label for="dailyUsePerEmployee">Daily Water Use per Employee</label>
+        <div class="input-group">
+            <input name="dailyUsePerEmployee" type="number" class="form-control" id="dailyUsePerEmployee"
+                formControlName="dailyUsePerEmployee" (input)="save()" (focus)="focusField('dailyUsePerEmployee')">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.dailyUsePerEmployee.invalid && !form.controls.dailyUsePerEmployee.pristine">
+            <span *ngIf="form.controls.dailyUsePerEmployee.errors.required">Value Required</span>
+            <span *ngIf="form.controls.dailyUsePerEmployee.errors.min">Value can't be less than
+                {{form.controls.dailyUsePerEmployee.errors.min.min}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+            </span>
+        </span>
+    </div>
+</form>
+

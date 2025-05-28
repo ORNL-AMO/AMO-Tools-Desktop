@@ -13,19 +13,25 @@ import { InventoryItem } from '../shared/models/inventory/inventory';
 import { InventoryDbService } from './inventory-db.service';
 import { firstValueFrom } from 'rxjs';
 import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
+import { DiagramIdbService } from './diagram-idb.service';
+import { Diagram } from '../shared/models/diagram';
 @Injectable()
 export class DeleteDataService {
 
   constructor(   private calculatorDbService: CalculatorDbService, 
-    private psatIntegrationService: PsatIntegrationService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
+    private psatIntegrationService: PsatIntegrationService, 
+    private diagramIdbService: DiagramIdbService,
+    private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
     private inventoryDbService: InventoryDbService) { }
 
   async deleteDirectory(directory: Directory, isWorkingDir?: boolean) {
     let assessments: Array<Assessment> =  [];
     let inventories: Array<InventoryItem> = [];
+    let diagrams: Array<Diagram> = [];
     if (!isWorkingDir) {
       assessments = this.assessmentDbService.getByDirectoryId(directory.id);
       inventories = this.inventoryDbService.getByDirectoryId(directory.id);
+      diagrams = this.diagramIdbService.getByDirectoryId(directory.id);
     } else {
       if (directory.assessments) {
         assessments = _.filter(directory.assessments, (assessment) => { return assessment.selected === true; });
@@ -33,7 +39,11 @@ export class DeleteDataService {
       if (directory.inventories) {
         inventories = _.filter(directory.inventories, (inventory) => { return inventory.selected === true; });
       }
+      if (directory.diagrams) {
+        diagrams = _.filter(directory.diagrams, (diagram) => { return diagram.selected === true; });
+      }
     }
+
     if (assessments.length !== 0) {
       for (let i = 0; i < assessments.length; i++) {
         await this.deleteAssessment(assessments[i]);
@@ -43,6 +53,12 @@ export class DeleteDataService {
     if(inventories.length !== 0){
       for (let i = 0; i < inventories.length; i++) {
         await this.deleteInventory(inventories[i])
+      }
+    }
+
+    if(diagrams.length !== 0){
+      for (let i = 0; i < diagrams.length; i++) {
+        await this.deleteDiagram(diagrams[i])
       }
     }
 
@@ -116,6 +132,16 @@ export class DeleteDataService {
     }
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.deleteByIdWithObservable(inventory.id));
     this.inventoryDbService.setAll(updatedInventoryItems);
+  }
+
+  async deleteDiagram(diagram: Diagram){
+    let settings: Settings = this.settingsDbService.getByDiagramId(diagram);
+    if (settings && settings.diagramId === diagram.id) {
+      let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.deleteByIdWithObservable(settings.id));
+      this.settingsDbService.setAll(updatedSettings);
+    }
+    let updatedDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.deleteByIdWithObservable(diagram.id));
+    this.diagramIdbService.setAll(updatedDiagrams);
   }
 
 }

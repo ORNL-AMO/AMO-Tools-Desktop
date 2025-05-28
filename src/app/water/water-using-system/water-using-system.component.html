@@ -1,0 +1,22 @@
+<div class="d-flex flex-column panel-container pb-4">
+    <div class="header mr-2 ml-2">
+        <h3>{{waterSystemTabTitle}}</h3>
+        <br>
+    </div>
+
+    @if (!selectedWaterUsingSystem) {
+    <div class="p-3 align-self-center">
+        <button type="button" class="btn btn-primary active" (click)="addWaterUsingSystem()">
+            Add {{waterSystemTabTitle}}
+        </button>
+    </div>
+    }
+    @else {
+        <app-water-system-data *ngIf="waterUsingSystemTab === 'system'" class="mx-2"></app-water-system-data>
+        <app-added-energy *ngIf="waterUsingSystemTab === 'added-energy'" class="mx-2"></app-added-energy>
+        <app-system-treatment *ngIf="waterUsingSystemTab === 'water-treatment'" 
+            [waterSystem]="selectedWaterUsingSystem" 
+            (emitInSystemUpdate)="saveWaterTreatment($event)" >
+        </app-system-treatment>
+    }
+</div>

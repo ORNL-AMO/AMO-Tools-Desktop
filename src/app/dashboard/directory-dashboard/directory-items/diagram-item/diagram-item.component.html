@@ -1,0 +1,153 @@
+<!--grid view-->
+<div *ngIf="dashboardView == 'grid'" class="card card-item"
+    [ngClass]="{'water-diagram': diagram.waterDiagram}">
+    <div class="summary-card-header d-flex justify-content-between align-items-center"
+    [ngClass]="{'water-header': diagram.waterDiagram}">
+        <input type="checkbox" [(ngModel)]="diagram.selected" (change)="updateSelectedStatus()">
+        <div class="d-flex align-items-center">
+            <img class="icon-image pl-1 pr-1" *ngIf="diagram.waterDiagram" src="assets/images/water-process-diagram-small.png">
+            <a (click)="goToDiagram()">{{diagram.name}}</a>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()" 
+            [ngClass]="{'water-primary': diagram.waterDiagram}">
+            </button>
+            <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
+                <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
+                <span class="dropdown-item" (click)="showDeleteModal()">Delete</span>
+                <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span>
+            </div>
+        </div>
+    </div>
+    <div class="card-body scroll-item summary-card-body">
+       <!-- todo 6770 summary data - see assessment-item cards -->
+    </div>
+    <div class="card-footer summary-card-footer">
+        <div class="last-updated pull-right">Last updated {{diagram.modifiedDate | date }}</div>
+    </div>
+</div>
+
+<!--list view-->
+<div *ngIf="dashboardView == 'list'" class="list-row d-flex w-100"
+[ngClass]="{'water-row': diagram.waterDiagram}">
+    <div class="d-flex">
+        <div class="p-1">
+            <input type="checkbox" [(ngModel)]="diagram.selected" (change)="updateSelectedStatus()"/>
+        </div>
+        <div class="d-flex flex-column">
+            <div class="d-flex">
+                <img class="icon-image pl-1 pr-1" *ngIf="diagram.waterDiagram" src="assets/images/water-process-diagram-small.png">
+                <a (click)="goToDiagram()">{{diagram.name}}</a>
+            </div>
+            <div class="last-updated">Last updated {{diagram.modifiedDate | date }}</div>
+        </div>
+    </div>
+    <div class="d-flex flex-column flex-fill">
+        <div class="actions justify-content-end">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown()" 
+                [ngClass]="{'water-primary': diagram.waterDiagram}">
+                </button>
+                <div class="dropdown-menu" [ngClass]="{'shown': dropdownOpen}">
+                    <span class="dropdown-item" (click)="showEditModal()">Rename / Move</span>
+                    <span class="dropdown-item" (click)="showDeleteModal()">Delete</span>
+                    <span class="dropdown-item" (click)="showCopyModal()">Create Copy</span>
+                </div>
+            </div>
+        </div>
+        <div class="actions pt-1 justify-content-end">
+            <!--  todo go to specific diagram tabs -->
+        </div>
+    </div>
+</div>
+
+<!--edit modal-->
+<div bsModal #editModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" *ngIf="editForm">
+            <div class="modal-header">
+                Edit {{diagram.name}} Properties
+                <button class="close" (click)="hideEditModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="editForm">
+                    <div class="form-group">
+                        <label>Edit Diagram Name</label>
+                        <input type="text" class="form-control w-100" formControlName="name" class="form-control w-100">
+                    </div>
+                    <div class="form-group" *ngIf="allDirectories">
+                        <label>Move Diagram to Different Folder</label>
+                        <select class="form-control w-100" formControlName="directoryId">
+                            <option *ngFor="let dir of allDirectories" [ngValue]="dir.id">
+                                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                                <span class="bold">{{dir.name}}/</span>
+                            </option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" (click)="save()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--copy modal-->
+<div bsModal #copyModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copyModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" *ngIf="copyForm">
+            <div class="modal-header">
+                Create {{diagram.name}} Copy
+                <button class="close" (click)="hideCopyModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="copyForm">
+                    <div class="form-group">
+                        <label>Copy Diagram Name</label>
+                        <input type="text" class="form-control w-100" formControlName="name">
+                    </div>
+                    <div class="form-group" *ngIf="allDirectories">
+                        <label>Move Diagram to Different Folder</label>
+                        <select class="form-control w-100" formControlName="directoryId">
+                            <option *ngFor="let dir of allDirectories" [ngValue]="dir.id">
+                                <span *ngIf="dir.parentDirectoryId">{{getParentDirStr(dir.parentDirectoryId)}}</span>
+                                <span class="bold">{{dir.name}}/</span>
+                            </option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" (click)="createCopy()">Create Copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--delete modal-->
+<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                Delete {{diagram.name}}
+                <button class="close" (click)="hideDeleteModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center small">Are you sure you want to delete this diagram? This
+                    <span class="danger">cannot</span> be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" (click)="deleteDiagram()">Delete Diagram</button>
+            </div>
+        </div>
+    </div>
+</div>

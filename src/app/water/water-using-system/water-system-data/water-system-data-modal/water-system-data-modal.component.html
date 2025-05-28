@@ -1,0 +1,101 @@
+<div bsModal #waterSystemDataModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="waterSystemDataModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header p-2">
+                    <span class="card-header-text">
+                       Estimate {{systemTypeName}} Water Flow
+                    </span>
+                    <button class="close" aria-label="Close" (click)="hideModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-block">
+                    <div #contentContainer class="calculator-container modify-conditions water standalone-calculator">
+                        <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+                            <div class="nav-item" (click)="setSmallScreenTab('form')"
+                                [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+                                <a class="nav-link">{{systemTypeName}}</a>
+                            </div>
+                            <div class="nav-item" (click)="setSmallScreenTab('details')"
+                                [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+                                <a class="nav-link">Details</a>
+                            </div>
+                        </div>
+                        <div class="panel-group">
+                            <div class="calculator-panel-container modification"
+                                [ngStyle]="{'height.px': containerHeight}"
+                                [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+                                <div class="d-flex flex-column m-4">
+                                    <div class="form-section">
+                                        @if(systemType === WaterSystemTypeEnum.PROCESS) {
+                                        <app-process-use [processUse]="waterUsingSystem.processUse"
+                                            (updateProcessUse)="updateSystemTypeData($event)"></app-process-use>
+                                        } @else if (systemType === WaterSystemTypeEnum.COOLINGTOWER) {
+                                        <app-cooling-tower [coolingTower]="waterUsingSystem.coolingTower"
+                                            (updateCoolingTower)="updateSystemTypeData($event)"></app-cooling-tower>
+                                        } @else if (systemType === WaterSystemTypeEnum.BOILER) {
+                                        <app-boiler-water [boilerWater]="waterUsingSystem.boilerWater"
+                                            (updateBoilerWater)="updateSystemTypeData($event)"></app-boiler-water>
+                                        } @else if (systemType === WaterSystemTypeEnum.KITCHEN) {
+                                        <app-kitchen-restroom [kitchenRestroom]="waterUsingSystem.kitchenRestroom"
+                                            (updateKitchenRestroom)="updateSystemTypeData($event)"></app-kitchen-restroom>
+                                        } @else if (systemType === WaterSystemTypeEnum.LANDSCAPING) {
+                                        <app-landscaping [landscaping]="waterUsingSystem.landscaping"
+                                            (updateLandscaping)="updateSystemTypeData($event)"></app-landscaping>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="calculator-panel-container help-panel"
+                                [ngStyle]="{'height.px': containerHeight}"
+                                [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+                                <div class="d-flex flex-wrap tabs primary sticky-top">
+                                    <div class="flex-fill panel-tab-item h-100"
+                                        [ngClass]="{'active': tabSelect == 'results'}">
+                                        <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+                                            (click)="setTab('results')">
+                                            <div>Results</div>
+                                        </a>
+                                    </div>
+                                    <div class="flex-fill panel-tab-item h-100"
+                                        [ngClass]="{'active': tabSelect == 'help'}">
+                                        <a class="h-100 d-flex justify-content-center align-items-center"
+                                            (click)="setTab('help')">
+                                            <div>Help</div>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <div *ngIf="tabSelect == 'help'" class="p-4 pt-2 d-flex flex-column help-info">
+
+                                    </div>
+
+                                    <div class="d-flex flex-column w-100 align-items-center pt-3"
+                                        *ngIf="tabSelect == 'results'">
+
+                                        <div class="d-flex flex-column w-100 justify-content-center">
+                                            <h3 class="text-center mb-0">Gross Use Results</h3>
+                                            <!-- todo graph?  -->
+
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column w-100 align-items-center pt-2"
+                                        *ngIf="tabSelect == 'results'">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer p-2">
+                    <button class="btn btn-secondary pull-right btn-margin" (click)="hideModal()">Cancel</button>
+                    <button class="btn btn-primary pull-right" [disabled]="!waterUsingSystem.isValid" (click)="save()">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

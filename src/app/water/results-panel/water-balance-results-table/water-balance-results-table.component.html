@@ -1,0 +1,95 @@
+<div class="card p-2">
+    <div class="card-body p-0">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr class="text-center header-highlight">
+                    <th rowspan="2">
+                        System
+                    </th>
+                    <th colspan="2">
+                        Total System Water (Mgal/yr)
+                    </th>
+                    <th colspan="3">
+                        Water Imbalance
+                    </th>
+                </tr>
+                <tr class="text-center header-highlight remove-border">
+                    <th>
+                        Incoming Water
+                    </th>
+                    <th>
+                        Outgoing Water
+                    </th>
+                    <th>
+                        Net Imbalance
+                    </th>
+                    <th>
+                        Percent of Incoming Water
+                    </th>
+                    <th>
+                        Percent of Total Plant Balance
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="item-row text-center" *ngFor="let systemBalance of waterBalanceResults.allSystemBalanceResults"
+                [ngClass]="{'selected-highlight': selectedSystemId === systemBalance.id}">
+                    <td>
+                        <span *ngIf="selectedSystemId === systemBalance.id"
+                            class="fa fa-chevron-right"></span>
+                        {{systemBalance.name}}
+                    </td>
+                    <td>
+                        <span *ngIf="systemBalance.incomingWater">{{systemBalance.incomingWater | number:getFlowDecimalPrecisionPipeValue()}}</span>
+                        <span *ngIf="!systemBalance.incomingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemBalance.outgoingWater">{{systemBalance.outgoingWater | number:getFlowDecimalPrecisionPipeValue()}}</span>
+                        <span *ngIf="!systemBalance.outgoingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemBalance.waterBalance">{{systemBalance.waterBalance | number:getFlowDecimalPrecisionPipeValue()}}</span>
+                        <span *ngIf="!systemBalance.waterBalance">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemBalance.percentIncomingWater">{{systemBalance.percentIncomingWater | number:getFlowDecimalPrecisionPipeValue()}}%</span>
+                        <span *ngIf="!systemBalance.percentIncomingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="systemBalance.percentTotalBalance">{{systemBalance.percentTotalBalance | number:getFlowDecimalPrecisionPipeValue()}}%</span>
+                        <span *ngIf="!systemBalance.percentTotalBalance">&mdash;</span>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="bold text-center footer-row">
+                    <td>
+                        Annual Total
+                    </td>
+                    <td>
+                        <span *ngIf="waterBalanceResults.incomingWater">{{waterBalanceResults.incomingWater | number:getFlowDecimalPrecisionPipeValue()}}</span>
+                        <span *ngIf="!waterBalanceResults.incomingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="waterBalanceResults.outgoingWater">{{waterBalanceResults.outgoingWater | number:getFlowDecimalPrecisionPipeValue()}}</span>
+                        <span *ngIf="!waterBalanceResults.outgoingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span *ngIf="waterBalanceResults.waterBalance">{{waterBalanceResults.waterBalance | number:getFlowDecimalPrecisionPipeValue()}}</span>
+                        <span *ngIf="!waterBalanceResults.waterBalance">&mdash;</span>
+                    </td>
+                    <td>
+                        <span
+                            *ngIf="waterBalanceResults.percentIncomingWater">{{waterBalanceResults.percentIncomingWater | number: getFlowDecimalPrecisionPipeValue() }}%</span>
+                        <span *ngIf="!waterBalanceResults.percentIncomingWater">&mdash;</span>
+                    </td>
+                    <td>
+                        <span
+                            *ngIf="waterBalanceResults.percentTotalBalance">{{waterBalanceResults.percentTotalBalance | number:getFlowDecimalPrecisionPipeValue()}}%</span>
+                        <span *ngIf="!waterBalanceResults.percentTotalBalance">&mdash;</span>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

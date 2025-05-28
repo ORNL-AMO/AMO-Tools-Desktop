@@ -1,0 +1,25 @@
+.alert.alert-success {
+    background-color: #ecf7ef !important;
+    border-color: #156739 !important;
+    color: #047334 !important;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    align-items: center;
+        flex-wrap: wrap;
+}
+
+.app-icon{
+    height: 28px;
+    border-radius: 8px;
+    margin: .5rem;
+    /* margin-right: .25rem; */
+  }
+
+.h5 {
+    font-size: 1rem;
+}
+
+/* .content {
+    max-width: 75%;
+} */

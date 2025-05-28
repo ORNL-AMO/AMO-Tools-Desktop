@@ -20,5 +20,8 @@
       "es2022",
       "dom"
     ],
+    "paths": {
+      "process-flow-lib": ["./src/process-flow-lib"],
+    }
   }
 }

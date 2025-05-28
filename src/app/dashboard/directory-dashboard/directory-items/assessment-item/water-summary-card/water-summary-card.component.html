@@ -1,0 +1,109 @@
+<table class="table">
+    <tr>
+        <td class="bold no-border-top" colspan="2">Baseline Data:</td>
+    </tr>
+    <tr>
+        <td>
+            Intake (Million Gallons):
+        </td>
+        <td>
+            <span *ngIf="baselineResults.totalSourceWaterIntake">{{baselineResults.totalSourceWaterIntake |
+                number:'1.0-2'}}</span>
+            <span *ngIf="!baselineResults.totalSourceWaterIntake">&mdash;&mdash;</span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Intake (kGal per 1000 {{assessment.water.systemBasics.productionUnit?
+            assessment.water.systemBasics.productionUnit : 'lbs' }})
+        </td>
+        <td>
+            <span *ngIf="baselineResults.totalPerProductionUnit">{{baselineResults.totalPerProductionUnit |
+                number:'1.0-2'}}</span>
+            <span *ngIf="!baselineResults.totalPerProductionUnit">&mdash;&mdash;</span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Direct Cost of Water ($)
+        </td>
+        <td>
+            <span *ngIf="baselineResults.directCost">${{baselineResults.directCost | number:'1.0-2'}}</span>
+            <span *ngIf="!baselineResults.directCost">&mdash;&mdash;</span>
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            True Cost:
+        </td>
+        <td>
+            <span *ngIf="baselineResults.trueCost">${{baselineResults.trueCost | number:'1.0-2'}}</span>
+            <span *ngIf="!baselineResults.trueCost">&mdash;&mdash;</span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            True Cost ($ per 1000 {{assessment.water.systemBasics.productionUnit ?
+            assessment.water.systemBasics.productionUnit : 'lbs'}}):
+        </td>
+        <td>
+            <span *ngIf="baselineResults.trueCostPerProductionUnit">${{baselineResults.trueCostPerProductionUnit |
+                number:'1.0-2'}}</span>
+            <span *ngIf="!baselineResults.trueCostPerProductionUnit">&mdash;&mdash;</span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            True Cost / Direct Cost :
+        </td>
+        <td>
+            <span *ngIf="baselineResults.trueOverDirectResult">${{baselineResults.trueOverDirectResult |
+                number:'1.0-2'}}</span>
+            <span *ngIf="!baselineResults.trueOverDirectResult">&mdash;&mdash;</span>
+        </td>
+    </tr>
+</table>
+<table class="table">
+    <tr>
+        <td class="bold" colspan="2">
+            Actions:
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <a (click)="goToAssessment('baseline')">Baseline</a>
+        </td>
+        <!-- <td>
+            <a (click)="goToAssessment('assessment')">Assessment</a>
+        </td> -->
+    </tr>
+    <tr>
+        <td>
+            <a (click)="goToAssessment('report')">Assessment Report</a>
+        </td>
+        <!-- <td>
+            <a (click)="showReportModal()">Quick Report</a>
+        </td> -->
+    </tr>
+</table>
+<!-- <div class="no-card-data" *ngIf="!setupDone">
+    <p>This assessment is incomplete. Complete assessment to view results.</p>
+    <a (click)="goToAssessment('system-setup')">Finish Setup</a>
+</div> -->
+
+<!-- <div bsModal #reportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <button class="close pull-right" (click)="hideReportModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body scroll-item" *ngIf="showReport">
+                <app-waste-water-report [assessment]="assessment" [quickReport]="true"></app-waste-water-report>
+            </div>
+        </div>
+    </div>
+</div> -->

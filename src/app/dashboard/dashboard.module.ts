@@ -24,9 +24,11 @@ import { DisclaimerComponent } from './disclaimer/disclaimer.component';
 import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/security-and-privacy.module';
 import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
 import { AppErrorModule } from '../shared/errors/app-error.module';
+import { CreateDiagramModalModule } from '../shared/create-diagram-modal/create-diagram-modal.module';
 import { DataAndBackupComponent } from './data-and-backup/data-and-backup.component';
 import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
+import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,9 @@ import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module'
     SecurityAndPrivacyModule,
     CreateAssessmentModalModule,
     AppErrorModule,
-    MeasurSurveyModule
+    CreateDiagramModalModule,
+    MeasurSurveyModule,
+    AlertBadgeComponent
   ],
   providers: [
     DashboardService,

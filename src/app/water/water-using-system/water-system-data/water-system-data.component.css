@@ -1,0 +1,65 @@
+.collapsed-border {
+    border-bottom: none;
+}
+
+.group-label:hover {
+    cursor: pointer;
+}
+
+.form-card {
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 20px 0 grey;
+}
+
+/*  */
+
+.secondary-group{
+    width: auto;
+    text-transform: none;
+    letter-spacing: 2px;;
+    padding-bottom: 0px;
+}
+
+.group-label:hover:not(.secondary-group){
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.fa-exclamation-circle {
+    color: red !important;
+    font-size: .75rem;
+    padding-right: .5rem;
+}
+
+.click-link.delete {
+    color: red !important;
+}
+
+.input-group-addon.calc-addon.units {
+    border-left: 2px solid;
+}
+
+a.click-link.disabled {
+    color:gray !important;
+    cursor: default !important; 
+    pointer-events: none;
+}
+
+a.click-link.disabled:hover {
+    cursor: default !important;
+    pointer-events: none;
+}
+
+.small {
+    font-size: 85%;
+}
+
+.form-section {
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
+}
+
+.motor-equipment {
+    border-top: 1px solid;
+}

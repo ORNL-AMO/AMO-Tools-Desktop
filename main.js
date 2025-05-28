@@ -10,6 +10,9 @@ function isDev() {
   return require.main.filename.indexOf('app.asar') === -1;
 };
 
+// * If left enabled, causes flashing on app first rendering. Likely caused by some dependency of the process-flow-diagram
+app.disableHardwareAcceleration();
+
 app.allowRendererProcessReuse = false
 // Logger for autoUpdater
 autoUpdater.logger = log;

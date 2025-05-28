@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ImportExportData, ImportExportAssessment, ImportExportDirectory, ImportExportInventory } from './importExportModel';
+import { ImportExportData, ImportExportAssessment, ImportExportDirectory, ImportExportInventory, ImportExportDiagram } from './importExportModel';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
@@ -13,29 +13,40 @@ import { Settings } from '../../shared/models/settings';
 import { Calculator } from '../../shared/models/calculators';
 import { Directory } from '../../shared/models/directory';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
+import { DiagramIdbService } from '../../indexedDb/diagram-idb.service';
+import { Diagram } from '../models/diagram';
 
 @Injectable()
 export class ImportService {
 
   directoryItems: Array<ImportExportDirectory>;
   addedDirIds: Array<number>;
-  // get new import directory id from old
+  // get new import ids from old
   importDirectoryIdMap: { [oldId: number]: number };
-  // assessments not exported from a select all dir, or sub dir
+  newDiagramIdMap: { [oldId: number]: number };
+
+  // entities that are not exported from a select all dir, or sub dir
   nonDirectoryAssessments: Array<ImportExportAssessment>;
   nonDirectoryInventories: Array<ImportExportInventory>;
-  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
+  nonDirectoryDiagrams: Array<ImportExportDiagram>;
+
+  
+  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private diagramIdbService: DiagramIdbService, private calculatorDbService: CalculatorDbService,
     private assessmentDbService: AssessmentDbService, private inventoryDbService: InventoryDbService) { }
 
   async importData(exportedData: ImportExportData, workingDirectoryId: number) {
     this.addedDirIds = new Array<number>();
     this.importDirectoryIdMap = {};
+    this.newDiagramIdMap = {};
     this.nonDirectoryAssessments = new Array<ImportExportAssessment>();
     this.nonDirectoryInventories = new Array<ImportExportInventory>();
-    exportedData.assessments.map(item => item.assessment.selected = false);
-    exportedData.inventories.map(item => item.inventoryItem.selected = false);
-    exportedData.calculators.map(item => item.selected = false);
-    exportedData.directories.map(item => item.directory.selected = false);
+    this.nonDirectoryDiagrams = new Array<ImportExportDiagram>();
+
+    exportedData.assessments?.forEach(item => item.assessment.selected = false);
+    exportedData.inventories?.forEach(item => item.inventoryItem.selected = false);
+    exportedData.calculators?.forEach(item => item.selected = false);
+    exportedData.directories?.forEach(item => item.directory.selected = false);
+    exportedData.diagrams?.forEach(item => item.diagram.selected = false);
 
     if (exportedData.directories.length !== 0) {
       // This is the wrapping directory for all exported data (i.e. the current working dir items were exported from)
@@ -45,7 +56,8 @@ export class ImportService {
         directoryItem: undefined,
         assessments: new Array(),
         subDirectories: new Array(),
-        inventories: new Array()
+        inventories: new Array(),
+        diagrams: new Array()
       };
       newImportDirectory = this.buildDir(newImportDirectory, exportedData);
       newImportDirectory.subDirectories.forEach(dir => {
@@ -54,6 +66,7 @@ export class ImportService {
       await this.addDirectory(newImportDirectory);
       await this.addAssessments(this.nonDirectoryAssessments, workingDirectoryId);
       await this.addInventories(this.nonDirectoryInventories, workingDirectoryId);
+      await this.addDiagrams(this.nonDirectoryDiagrams, workingDirectoryId);
 
     } else {
       if (exportedData.assessments && exportedData.assessments.length !== 0) {
@@ -61,6 +74,9 @@ export class ImportService {
       }
       if (exportedData.inventories && exportedData.inventories.length !== 0) {
         await this.addInventories(exportedData.inventories, workingDirectoryId);
+      }
+      if (exportedData.diagrams && exportedData.diagrams.length !== 0) {
+        await this.addDiagrams(exportedData.diagrams, workingDirectoryId);
       }
     }
 
@@ -99,20 +115,24 @@ export class ImportService {
         directoryItem: dir,
         subDirectories: new Array(),
         assessments: new Array(),
-        inventories: new Array()
+        inventories: new Array(),
+        diagrams: new Array()
       };
       subDir = this.buildDir(subDir, exportedData);
       subDirs.push(subDir);
     });
     let dirAssessments = _.filter(exportedData.assessments, (assessmentItem) => { return assessmentItem.assessment.directoryId === newImportDirectory.id; });
-    let dirInventory = _.filter(exportedData.inventories, (inventory) => { return inventory.inventoryItem.directoryId == newImportDirectory.id });
+    let dirInventorys = _.filter(exportedData.inventories, (inventory) => { return inventory.inventoryItem.directoryId == newImportDirectory.id });
+    let dirDiagrams = _.filter(exportedData.diagrams, (importDiagram) => { return importDiagram.diagram.directoryId == newImportDirectory.id });
 
     if (!newImportDirectory.directoryItem) {
       this.nonDirectoryAssessments = dirAssessments;
-      this.nonDirectoryInventories = dirInventory;
+      this.nonDirectoryDiagrams = dirDiagrams;
+      this.nonDirectoryInventories = dirInventorys;
     }
     newImportDirectory.assessments = dirAssessments;
-    newImportDirectory.inventories = dirInventory;
+    newImportDirectory.inventories = dirInventorys;
+    newImportDirectory.diagrams = dirDiagrams;
     newImportDirectory.subDirectories = subDirs;
     return newImportDirectory;
   }
@@ -137,6 +157,9 @@ export class ImportService {
       }
       if (importDir.inventories.length > 0) {
         await this.addImportDirectoryInventories(importDir, newDirectory.id);
+      }
+      if (importDir.diagrams.length > 0) {
+        await this.addImportDirectoryDiagrams(importDir, newDirectory.id);
       }
 
       for await (let subDir of importDir.subDirectories) {
@@ -166,10 +189,28 @@ export class ImportService {
         delete item.calculator.id;
         await firstValueFrom(this.calculatorDbService.addWithObservable(item.calculator));
       }
+
+      // * Add connected diagram. addDiagrams() will check for existence 
+      if (item.diagram) {
+        let importedFromConnectedAssessment = this.newDiagramIdMap[item.diagram.id] !== undefined;
+        if (!importedFromConnectedAssessment) {
+          item.diagram.assessmentId = addedAssessment.id;
+          let oldDiagramId = item.diagram.id;
+          delete item.diagram.id;
+          item.diagram.directoryId = newDirectoryId;
+          let newDiagram = await firstValueFrom(this.diagramIdbService.addWithObservable(item.diagram));
+          this.newDiagramIdMap[oldDiagramId] = newDiagram.id;
+          
+          addedAssessment.diagramId = newDiagram.id;
+          await firstValueFrom(this.assessmentDbService.updateWithObservable(addedAssessment));
+        }
+      }
     }
 
     let updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(updatedAssessments);
+    let allDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
+    this.diagramIdbService.setAll(allDiagrams);
     let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     let allCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
@@ -195,6 +236,40 @@ export class ImportService {
 
   }
 
+  async addImportDirectoryDiagrams(importDir: ImportDirectory, newDirectoryId: number) {
+    for await (const importDiagram of importDir.diagrams) {
+      let importedFromConnectedAssessment = this.newDiagramIdMap[importDiagram.diagram.id] !== undefined;
+      if (!importedFromConnectedAssessment) {
+        importDiagram.diagram.selected = false;
+        delete importDiagram.diagram.id;
+        importDiagram.diagram.directoryId = newDirectoryId;
+
+        let newDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(importDiagram.diagram));
+        delete importDiagram.settings.id;
+        importDiagram.settings.diagramId = newDiagram.id;
+        await firstValueFrom(this.settingsDbService.addWithObservable(importDiagram.settings));
+
+        if (importDiagram.assessment) {
+          importDiagram.assessment.diagramId = newDiagram.id;
+          delete importDiagram.assessment.id;
+          importDiagram.assessment.directoryId = newDirectoryId;
+          let newAssessment = await firstValueFrom(this.assessmentDbService.addWithObservable(importDiagram.assessment));
+
+          newDiagram.assessmentId = newAssessment.id;
+          await firstValueFrom(this.diagramIdbService.updateWithObservable(newDiagram));
+        }
+      }
+    }
+
+    let updateDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(allAssessments);
+    this.diagramIdbService.setAll(updateDiagrams);
+    this.settingsDbService.setAll(updatedSettings);
+
+  }
+
   async addAssessments(assessments: Array<ImportExportAssessment>, workingDirectoryId: number) {
     for await (let assessment of assessments) {
       delete assessment.assessment.id;
@@ -209,6 +284,21 @@ export class ImportService {
         this.calculatorDbService.setAll(allCalculators);
       }
 
+      // * Add connected diagram. addDiagrams() will check for existence 
+      if (assessment.diagram) {
+        assessment.diagram.assessmentId = newAssessment.id;
+        let oldDiagramId = assessment.diagram.id; 
+        delete assessment.diagram.id;
+        assessment.diagram.directoryId = workingDirectoryId;
+        let newDiagram = await firstValueFrom(this.diagramIdbService.addWithObservable(assessment.diagram));
+        let allDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
+        this.diagramIdbService.setAll(allDiagrams);
+        this.newDiagramIdMap[oldDiagramId] = newDiagram.id; 
+        
+        newAssessment.diagramId = newDiagram.id;
+        await firstValueFrom(this.assessmentDbService.updateWithObservable(newAssessment));
+      }
+
       let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
       this.assessmentDbService.setAll(allAssessments);
 
@@ -218,6 +308,41 @@ export class ImportService {
       await firstValueFrom(this.settingsDbService.addWithObservable(assessment.settings));
       let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
       this.settingsDbService.setAll(allSettings);
+    }
+  }
+
+  
+  async addDiagrams(diagrams: Array<ImportExportDiagram>, workingDirectoryId: number) {
+    for await (let diagramImport of diagrams) {
+      let importedFromConnectedAssessment = this.newDiagramIdMap[diagramImport.diagram.id] !== undefined;
+      if (!importedFromConnectedAssessment) {
+        delete diagramImport.diagram.id;
+        diagramImport.diagram.directoryId = workingDirectoryId;
+
+        let newDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(diagramImport.diagram));
+
+        if (diagramImport.assessment) {
+          diagramImport.assessment.diagramId = newDiagram.id;
+          delete diagramImport.assessment.id;
+          diagramImport.assessment.directoryId = workingDirectoryId;
+          let newAssessment = await firstValueFrom(this.assessmentDbService.addWithObservable(diagramImport.assessment));
+          let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+          this.assessmentDbService.setAll(allAssessments);
+          
+          newDiagram.assessmentId = newAssessment.id;
+          await firstValueFrom(this.diagramIdbService.updateWithObservable(newDiagram));
+        }
+
+        let allDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
+        this.diagramIdbService.setAll(allDiagrams);
+
+        diagramImport.settings.diagramId = newDiagram.id;
+        delete diagramImport.settings.id;
+
+        await firstValueFrom(this.settingsDbService.addWithObservable(diagramImport.settings));
+        let allSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+        this.settingsDbService.setAll(allSettings);
+      }
     }
   }
 
@@ -246,4 +371,5 @@ export interface ImportDirectory {
   subDirectories: Array<ImportDirectory>;
   assessments: Array<ImportExportAssessment>;
   inventories: Array<ImportExportInventory>;
+  diagrams: Array<ImportExportDiagram>;
 }

@@ -29,7 +29,6 @@ import { AeratorPerformanceHelpComponent } from './results-panel/help-panel/aera
 import { ActivatedSludgeHelpComponent } from './results-panel/help-panel/activated-sludge-help/activated-sludge-help.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
-import { SetupTabsComponent } from './waste-water-banner/setup-tabs/setup-tabs.component';
 import { AnalysisMenuComponent } from './waste-water-banner/analysis-menu/analysis-menu.component';
 import { WasteWaterAnalysisModule } from './waste-water-analysis/waste-water-analysis.module';
 import { ExploreOpportunitiesFormComponent } from './explore-opportunities/explore-opportunities-form/explore-opportunities-form.component';
@@ -50,6 +49,7 @@ import { WasteWaterCalculatorsComponent } from './waste-water-calculators/waste-
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { SetupTabsComponent } from './waste-water-banner/setup-tabs/setup-tabs.component';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 
 @NgModule({

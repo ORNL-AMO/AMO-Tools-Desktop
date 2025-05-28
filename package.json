@@ -12,13 +12,17 @@
     "npm": "10.9.2"
   },
   "scripts": {
-    "start": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng serve",
-    "build": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href .",
+    "start": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng serve --live-reload",
+    "build:process-flow-lib": "tsc -p src/process-flow-lib/tsconfig.json",
+    "build": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href .",
     "build-watch": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --watch",
-    "build-prod-desktop": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
-    "build-prod-desktop-ci": "node --max_old_space_size=16000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
-    "build-prod-web": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration production-web",
-    "build-dev-web": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration development-web",
+    "build-diagram": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development --watch",
+    "start-diagram-watch": "concurrently --kill-others \"npm run build-diagram\" \"npm run start\"",
+    "build-diagram-watch": "concurrently --kill-others \"npm run build-diagram\" \"npm run build-watch\"",
+    "build-prod-desktop": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
+    "build-prod-web": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration production-web",
+    "build-prod-desktop-ci": "node --max_old_space_size=16000 ./node_modules/webpack/bin/webpack.js build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
+    "build-dev-web": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration development-web",
     "clean": "rm -rf node_modules && rm -rf dist && rm -f package-lock.json",
     "windows-clean": "powershell Remove-Item -Path \"package-lock.json\" && powershell Remove-Item -Path \"node_modules\", \"dist\" -Recurse",
     "electron": "electron .",
@@ -27,7 +31,10 @@
     "test": "ng test",
     "postinstall": "electron-builder install-app-deps",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "build:stats": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --stats-json",
+    "analyze": "webpack-bundle-analyzer dist/stats.json",
+    "download-stats": "node scripts/download-stats.js"
   },
   "private": true,
   "dependencies": {
@@ -42,7 +49,7 @@
     "@angular/platform-browser-dynamic": "19.2.2",
     "@angular/platform-server": "19.2.2",
     "@angular/router": "19.2.2",
-    "@angular/service-worker": "^19.2.2",
+    "@angular/service-worker": "19.2.2",
     "@ng-bootstrap/ng-bootstrap": "^18.0.0",
     "@popperjs/core": "^2.11.2",
     "billboard.js": "^3.14.0",
@@ -58,6 +65,8 @@
     "ngx-indexed-db": "^16.0.0",
     "pako": "^2.1.0",
     "pptxgenjs": "^3.10.0",
+    "process-flow-diagram-component": "file:process-flow-diagram-component",
+    "process-flow-lib": "file:src/process-flow-lib",
     "regression": "^2.0.0",
     "rxjs": "^7.5.5",
     "rxjs-compat": "6.6.3",
@@ -74,7 +83,8 @@
     },
     "files": [
       "!**/.angular",
-      "!.travis.yml"
+      "!.travis.yml",
+      "!./process-flow-diagram-component"
     ],
     "win": {
       "target": "nsis",
@@ -124,6 +134,7 @@
     }
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "19.0.1",
     "@angular-devkit/build-angular": "19.2.3",
     "@angular-devkit/core": "19.2.3",
     "@angular-devkit/schematics": "19.2.3",
@@ -131,11 +142,18 @@
     "@types/jasmine": "~3.6.0",
     "@types/lodash": "4.14.100",
     "@types/node": "^22.13.10",
+    "@types/react": "^19.0.11",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@xyflow/react": "^12.4.4",
     "angular-plotly.js": "^5.2.1",
+    "axios": "^1.7.4",
+    "concurrently": "^8.2.2",
     "electron": "^27.1.3",
     "electron-builder": "^24.13.3",
     "electron-download-tf": "^4.3.4",
     "electron-packager": "^17.1.2",
+    "eslint": "^8.57.0",
     "jasmine-spec-reporter": "~5.0.0",
     "jquery": "3.5.0",
     "karma": "^6.4.2",
@@ -151,9 +169,15 @@
     "ngx-clipboard": "15.0.1",
     "nodemon": "^3.0.1",
     "papaparse": "^5.1.0",
+    "path": "^0.12.7",
     "plotly.js-dist": "^2.9.0",
-    "ts-node": "8.0.3",
+    "react": "^19.0.0",
+    "ts-loader": "^9.5.2",
     "tslint": "^6.1.3",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "webpack": "^5.91.0",
+    "webpack-bundle-analyzer": "^4.4.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
   }
 }

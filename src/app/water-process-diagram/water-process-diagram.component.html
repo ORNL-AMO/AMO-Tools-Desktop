@@ -1,0 +1,26 @@
+<div #content class="water-process-diagram-container water-process-diagram d-flex flex-column">
+    <div #header *ngIf="!integratedDiagram" class="w-100 hide-print sticky-top">
+        <app-water-diagram-banner [diagram]="diagram"></app-water-diagram-banner>
+    </div>
+    <div class="assessment-container" [ngStyle]="{'height.px': containerHeight}"
+        [ngClass]="{'scroll-item': mainTab == 'summary' || mainTab == 'analysis'}">
+        <div class="w-100" [ngClass]="{'modal-open': isModalOpen == true}">
+            <!-- <app-water-diagram-setup *ngIf="mainTab == 'setup'"></app-water-diagram-setup> -->
+            <app-water-diagram *ngIf="mainTab == 'diagram'"></app-water-diagram>
+        </div>
+    </div>
+
+    <div #footer *ngIf="!integratedDiagram" id="waterProcessDiagramFooter" class="footer d-lg-block d-none hide-print">
+        <div class="w-100">
+            <!-- <button class="btn btn-default" (click)="back()" [disabled]="mainTab === 'setup'">Back</button> -->
+            <!-- <button *ngIf="mainTab == 'setup'" class="btn btn-primary pull-right" (click)="continue()">Next</button> -->
+            <button *ngIf="mainTab == 'diagram' && diagram.assessmentId === undefined" class="btn btn-primary pull-right" (click)="createAssessment()">Create Assessment</button>
+            <button *ngIf="mainTab == 'diagram' && diagram.assessmentId !== undefined" class="btn btn-primary pull-right" (click)="goToAssessment()">Go To Assessment</button>
+        </div>
+    </div>
+</div>
+
+<app-create-assessment-modal *ngIf="displayCreateAssessmentModal" 
+[diagram]="diagram" 
+[integratedCreateType]="'Water'"
+(onClose)="hideCreateAssessmentModal()"></app-create-assessment-modal>

@@ -36,6 +36,8 @@ import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/securit
 import { BrowsingDataToastModule } from '../shared/browsing-data-toast/browsing-data-toast.module';
 import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
 import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-data.module';
+import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
+import { WaterModule } from '../water/water.module';
 import { ImportBackupModalModule } from '../shared/import-backup-modal/import-backup-modal.module';
 import { SurveyToastModule } from '../shared/survey-toast/survey-toast.module';
 import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
@@ -82,6 +84,8 @@ import { SubscribeModalComponent } from '../shared/subscribe-modal/subscribe-mod
     BrowsingDataToastModule,
     AnalyticsModule,
     EmailMeasurDataModule,
+    WaterProcessDiagramModule,
+    WaterModule,
     ImportBackupModalModule,
     SurveyToastModule,
     MeasurSurveyModule,

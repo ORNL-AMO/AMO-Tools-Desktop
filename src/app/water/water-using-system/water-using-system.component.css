@@ -1,0 +1,33 @@
+.collapsed-border {
+    border-bottom: none;
+}
+
+.group-label:hover {
+    cursor: pointer;
+}
+
+/*  */
+
+.secondary-group{
+    width: auto;
+    text-transform: none;
+    letter-spacing: 2px;;
+    padding-bottom: 0px;
+}
+
+.group-label:hover:not(.secondary-group){
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.fa-exclamation-circle {
+    color: red !important;
+    font-size: .75rem;
+    padding-right: .5rem;
+}
+
+
+
+.small {
+    font-size: 85%;
+}
