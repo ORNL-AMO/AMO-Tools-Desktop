@@ -144,7 +144,7 @@ export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], calculat
         }
     });
 
-    console.timeEnd('checkDiagramNodeErrors');
+    // console.timeEnd('checkDiagramNodeErrors');
     return diagramNodeErrors;
 }
 

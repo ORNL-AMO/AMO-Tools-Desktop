@@ -1040,6 +1040,8 @@ export const getPlantSummaryResults = (
         systemCostContributionsResultsMap[currentSystem.id].treatment,
         systemCostContributionsResultsMap[currentSystem.id].wasteTreatment
       );
+      systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerYear = trueCost;
+
 
       const totalFlows = systemCostContributionsResultsMap[currentSystem.id].intake
         + systemCostContributionsResultsMap[currentSystem.id].discharge
@@ -1050,15 +1052,25 @@ export const getPlantSummaryResults = (
 
       const directFlowTotal = systemAnnualSummaryResultsMap[currentSystem.id].sourceWaterIntake + systemAnnualSummaryResultsMap[currentSystem.id].dischargeWater;
       systemAnnualSummaryResultsMap[currentSystem.id].directCostPerYear = systemCostContributionsResultsMap[currentSystem.id].intake + systemCostContributionsResultsMap[currentSystem.id].discharge;
+      
+      let flowperKUnit = directFlowTotal / 1000;
+      let directCostPerKUnit = 0;
+      if (flowperKUnit) {
+        directCostPerKUnit = systemAnnualSummaryResultsMap[currentSystem.id].directCostPerYear / flowperKUnit;
+      }
+      systemAnnualSummaryResultsMap[currentSystem.id].directCostPerUnit = directCostPerKUnit;
 
-      let flowperKUnit = (directFlowTotal / 1000);
-      systemAnnualSummaryResultsMap[currentSystem.id].directCostPerUnit = systemAnnualSummaryResultsMap[currentSystem.id].directCostPerYear / flowperKUnit;
-      systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerYear = trueCost;
+      flowperKUnit = totalFlows / 1000;
+      let trueCostPerUnit = 0;
+      if (flowperKUnit) {
+        trueCostPerUnit = systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerYear / flowperKUnit;
+      }
+      systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerUnit = trueCostPerUnit;
 
-      flowperKUnit = (totalFlows / 1000);
-      systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerUnit = systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerYear / flowperKUnit;
-      systemAnnualSummaryResultsMap[currentSystem.id].trueOverDirectResult = trueCost / systemAnnualSummaryResultsMap[currentSystem.id].directCostPerYear;
-
+      systemAnnualSummaryResultsMap[currentSystem.id].trueOverDirectResult = 0;
+      if (trueCost && systemAnnualSummaryResultsMap[currentSystem.id].directCostPerYear) {
+        systemAnnualSummaryResultsMap[currentSystem.id].trueOverDirectResult = trueCost / systemAnnualSummaryResultsMap[currentSystem.id].directCostPerYear;
+      } 
 
       plantSystemSummaryResults.sourceWaterIntake += systemAnnualSummaryResultsMap[currentSystem.id].sourceWaterIntake;
       plantSystemSummaryResults.directCostPerYear += systemAnnualSummaryResultsMap[currentSystem.id].directCostPerYear;

@@ -25,7 +25,7 @@ const DiagramResults = () => {
   // console.log('NEWnodeErrors', nodeErrors);
   // console.log('OLDnodeErrors', validationErrors);
   const isDiagramValid = getIsDiagramValid(validationErrors);
-  console.log(isDiagramValid);
+  // console.log(isDiagramValid);
 
   setWaterUsingSystemFlows(waterUsingSystems, edges);
   const diagramResults: WaterBalanceResults = getWaterBalanceResults(waterUsingSystems, calculatedData);
