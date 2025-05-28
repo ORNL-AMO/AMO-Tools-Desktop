@@ -163,6 +163,16 @@ img.treasure-hunt-image {
 	padding-top: 6px;
 }
 
+.water-background{
+    background-image: linear-gradient(#D4E2F4, #306DBE);
+    border-radius: 12px;
+    padding: 3px;
+    box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
+	width: 80px;
+	height: 70px;
+}
+
+
 .assessment-block{
 	width: 160px;
     height: 160px;
