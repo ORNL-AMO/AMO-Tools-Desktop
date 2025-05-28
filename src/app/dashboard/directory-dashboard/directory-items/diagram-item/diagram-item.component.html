@@ -127,27 +127,37 @@
             <div class="modal-footer">
                 <button class="btn btn-primary" (click)="createCopy()">Create Copy</button>
             </div>
-        </div>
-    </div>
-</div>
-<!--delete modal-->
-<div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
-    aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header">
-                Delete {{diagram.name}}
-                <button class="close" (click)="hideDeleteModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
-            <div class="modal-body">
-                <p class="text-center small">Are you sure you want to delete this diagram? This
-                    <span class="danger">cannot</span> be undone.</p>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-danger" (click)="deleteDiagram()">Delete Diagram</button>
             </div>
-        </div>
-    </div>
-</div>
+            <!--delete modal-->
+            <div bsModal #deleteModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+                aria-hidden="true" [config]="{backdrop: 'static'}">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Delete {{diagram.name}}
+                            <button class="close" (click)="hideDeleteModal()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @if (diagram.assessmentId !== undefined) {
+                        <div class="modal-body alert alert-danger p-3">
+                                <p class="text-center "><span class="bold">Warning:</span> This diagram is connected to an assessment.
+                                    <br><br>
+                                    <span>If deleted, the assessment will no longer be able to access data related to flow connections.</span> 
+                                </p>
+                        </div>
+                        } @else {
+                            <div class="modal-body">
+                                <p class="text-center small">Are you sure you want to delete this diagram? This
+                                    <span class="danger">cannot</span> be undone.
+                                </p>
+                            </div>
+                        }
+                        <div class="modal-footer">
+                            <button class="btn btn-danger" (click)="deleteDiagram()">Delete Diagram</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
