@@ -28,7 +28,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const diagramParentDimensions: ParentContainerDimensions = useAppSelector((state: RootState) => state.diagram.diagramParentDimensions);
+  const { diagramParentDimensions } = props;
   const hasAssessment = useAppSelector(selectHasAssessment);
   
   const edgeType = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
@@ -82,7 +82,6 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   };
 
   const summingNode = processFlowParts.pop();
-  const alertsCount = Object.entries(nodeErrors).length > 0 ? Object.entries(nodeErrors).length : '';
 
   return (
     <Box sx={{
@@ -120,7 +119,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Tabs>
         </Box>
 
-        <TabPanel value={selectedTab} index={0} >
+        <TabPanel value={selectedTab} index={0}>
           <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', padding: '.5rem', marginTop: '.5rem', whiteSpace: "normal" }}>
             Drag site water system components into the pane
           </Typography>
@@ -167,7 +166,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={1}>
+        <TabPanel value={selectedTab} index={1} diagramParentDimensions={diagramParentDimensions}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
             <Box display={'flex'} >
               <DiagramResults />
@@ -341,7 +340,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={3}>
+        <TabPanel value={selectedTab} index={3} diagramParentDimensions={diagramParentDimensions}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
             <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', paddingTop: '.5rem' }}>
               Many diagram actions support keyboard input and key combinations:
@@ -370,7 +369,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={4}>
+        <TabPanel value={selectedTab} index={4} diagramParentDimensions={diagramParentDimensions}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
                 {!isDiagramValid && validationWindowLocation === 'alerts-tab' &&
                   <ValidationWindow></ValidationWindow>
@@ -386,6 +385,7 @@ export default MenuSidebar;
 
 export interface MenuSidebarProps {
   shadowRootRef: any;
+  diagramParentDimensions: ParentContainerDimensions;
 }
 
 const keyInputDirections = [

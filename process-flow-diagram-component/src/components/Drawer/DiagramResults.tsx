@@ -10,7 +10,6 @@ import { Alert } from '@mui/material';
 
 
 const DiagramResults = () => {
-  // todo - move results to store thunk Or less expensive to keep here?
   const edges: Edge<CustomEdgeData>[] = useAppSelector(selectEdges);
   const nodes: Node[] = useAppSelector(selectNodes);
   const intakes: Node<ProcessFlowPart>[] = useAppSelector(selectIntakeSourceNodes);
@@ -23,8 +22,8 @@ const DiagramResults = () => {
   
   const validationErrors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
   const nodeErrors: NodeErrors = checkDiagramNodeErrors(nodes, edges, calculatedData, settings);
-  console.log('NEWnodeErrors', nodeErrors);
-  console.log('OLDnodeErrors', validationErrors);
+  // console.log('NEWnodeErrors', nodeErrors);
+  // console.log('OLDnodeErrors', validationErrors);
   const isDiagramValid = getIsDiagramValid(validationErrors);
   console.log(isDiagramValid);
 
