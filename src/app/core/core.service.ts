@@ -19,6 +19,10 @@ import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService } from '../electron/electron.service';
 import { MockPumpInventory } from '../examples/mockPumpInventoryData';
+import { MockWaterAssessment, MockWaterAssessmentSettings } from '../examples/mockWaterAssessment';
+import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
+import { MockWaterdiagram } from '../examples/mockWaterDiagram';
+import { Diagram } from '../shared/models/diagram';
 import { ApplicationInstanceDbService, ApplicationInstanceData } from '../indexedDb/application-instance-db.service';
 import { MockCompressedAirInventory } from '../examples/mockCompressedAirInventoryData';
 @Injectable()
@@ -36,13 +40,15 @@ export class CoreService {
   examplePumpInventoryId: number;
   exampleCompressedAirAssessmentId: number;
   exampleCompressedAirInventoryId: number;
+  exampleWaterAssessmentId: number;
+  exampleWaterDiagramId: number;
   constructor(
     private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,
     private assessmentDbService: AssessmentDbService,
     private inventoryDbService: InventoryDbService,
     private electronService: ElectronService,
-    private securityAndPrivacyService: SecurityAndPrivacyService,
+    private diagramIdbService: DiagramIdbService,
     private applicationDataService: ApplicationInstanceDbService,
     private directoryDbService: DirectoryDbService) {
   }
@@ -62,6 +68,7 @@ export class CoreService {
     let initializedAppData = {
       directories: this.directoryDbService.getAllDirectories(),
       assessments: this.assessmentDbService.getAllAssessments(),
+      diagrams: this.diagramIdbService.getAllDiagrams(),
       settings: this.settingsDbService.getAllSettings(),
       calculators: this.calculatorDbService.getAllCalculators(),
       inventoryItems: this.inventoryDbService.getAllInventory(),
@@ -75,6 +82,7 @@ export class CoreService {
       createVersionedBackups: false,
       isSurveyToastDone: false,
       isSurveyDone: false,
+      subscriberId: undefined,
       isAutomaticBackupOn: false,
       doSurveyReminder: false,
       appOpenCount: 0,
@@ -129,6 +137,8 @@ export class CoreService {
     MockWasteWater.directoryId = this.exampleDirectoryId;
     MockCompressedAirAssessment.directoryId = this.exampleDirectoryId;
     MockCompressedAirInventory.directoryId = this.exampleDirectoryId;
+    MockWaterAssessment.directoryId = this.exampleDirectoryId;
+    MockWaterdiagram.directoryId = this.exampleDirectoryId;
 
     let examplePhast: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPhast));
     let exampleSsmt: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockSsmt));
@@ -142,6 +152,13 @@ export class CoreService {
     let exampleCompressedAirInventory: Assessment = await firstValueFrom(this.inventoryDbService.addWithObservable(MockCompressedAirInventory));
     
 
+    let exampleWaterDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(MockWaterdiagram));
+    MockWaterAssessment.diagramId = exampleWaterDiagram.id;
+    let exampleWaterAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockWaterAssessment));
+    exampleWaterDiagram.assessmentId = exampleWaterAssessment.id;
+    await firstValueFrom(this.diagramIdbService.updateWithObservable(exampleWaterDiagram));
+
+
     this.examplePhastId = examplePhast.id;
     this.exampleSsmtId = exampleSsmt.id;
     this.exampleTreasureHuntId = exampleTreasureHunt.id;
@@ -149,6 +166,8 @@ export class CoreService {
     this.examplePumpInventoryId = examplePumpInventory.id;
     this.exampleWasteWaterId = exampleWasteWater.id;
     this.exampleCompressedAirAssessmentId = exampleCompressedAirAssessment.id;
+    this.exampleWaterAssessmentId = exampleWaterAssessment.id;
+    this.exampleWaterDiagramId = exampleWaterDiagram.id;
     this.examplePsatId = examplePsat.id;
     this.exampleFsatId = exampleFsat.id
     this.exampleCompressedAirInventoryId = exampleCompressedAirInventory.id;
@@ -206,5 +225,7 @@ export class CoreService {
 
     // TODO MockCompressedAirSettings.inventoryId = this.exampleCompressedAirInventoryId;
     // await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
+    MockWaterAssessmentSettings.assessmentId = this.exampleWaterAssessmentId;
+    await firstValueFrom(this.settingsDbService.addWithObservable(MockWaterAssessmentSettings));
   }
 }

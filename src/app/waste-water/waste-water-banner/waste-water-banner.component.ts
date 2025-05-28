@@ -8,9 +8,10 @@ import { WasteWaterService } from '../waste-water.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
-  selector: 'app-waste-water-banner',
-  templateUrl: './waste-water-banner.component.html',
-  styleUrls: ['./waste-water-banner.component.css']
+    selector: 'app-waste-water-banner',
+    templateUrl: './waste-water-banner.component.html',
+    styleUrls: ['./waste-water-banner.component.css'],
+    standalone: false
 })
 export class WasteWaterBannerComponent implements OnInit {
   @Input()
@@ -68,7 +69,7 @@ export class WasteWaterBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str == 'system-setup' || this.isBaselineValid) {
+    if (str == 'baseline' || this.isBaselineValid) {
       this.wasteWaterService.mainTab.next(str);
     }
     this.collapseBanner();
@@ -99,12 +100,12 @@ export class WasteWaterBannerComponent implements OnInit {
     } else if (this.mainTab == 'analysis') {
       this.wasteWaterService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
-      this.wasteWaterService.mainTab.next('system-setup');
+      this.wasteWaterService.mainTab.next('baseline');
     }
   }
 
   continue() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab == 'baseline') {
       this.wasteWaterService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
       this.wasteWaterService.mainTab.next('analysis');

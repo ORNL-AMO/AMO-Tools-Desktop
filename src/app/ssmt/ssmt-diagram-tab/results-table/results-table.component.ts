@@ -4,9 +4,10 @@ import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 
 @Component({
-  selector: 'app-results-table',
-  templateUrl: './results-table.component.html',
-  styleUrls: ['./results-table.component.css']
+    selector: 'app-results-table',
+    templateUrl: './results-table.component.html',
+    styleUrls: ['./results-table.component.css'],
+    standalone: false
 })
 export class ResultsTableComponent implements OnInit {
   @Input()

@@ -12,9 +12,10 @@ import { InventoryOption, InventorySelectOptions, ConnectedInventoryData } from 
 import { IntegrationStateService } from '../../../../shared/connected-inventory/integration-state.service';
 
 @Component({
-  selector: 'app-pump-motor-catalog',
-  templateUrl: './pump-motor-catalog.component.html',
-  styleUrls: ['./pump-motor-catalog.component.css']
+    selector: 'app-pump-motor-catalog',
+    templateUrl: './pump-motor-catalog.component.html',
+    styleUrls: ['./pump-motor-catalog.component.css'],
+    standalone: false
 })
 export class PumpMotorCatalogComponent implements OnInit {
 

@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FSAT, FieldData } from '../../../../shared/models/fans';
 
 @Component({
-  selector: 'app-field-data-summary',
-  templateUrl: './field-data-summary.component.html',
-  styleUrls: ['./field-data-summary.component.css']
+    selector: 'app-field-data-summary',
+    templateUrl: './field-data-summary.component.html',
+    styleUrls: ['./field-data-summary.component.css'],
+    standalone: false
 })
 export class FieldDataSummaryComponent implements OnInit {
   @Input()

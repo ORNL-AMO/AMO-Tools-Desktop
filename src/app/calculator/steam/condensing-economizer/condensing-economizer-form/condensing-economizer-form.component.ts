@@ -13,9 +13,10 @@ import { CondensingEconomizerFormService, CondensingEconomizerWarnings } from '.
 import { CondensingEconomizerService } from '../condensing-economizer.service';
 
 @Component({
-  selector: 'app-condensing-economizer-form',
-  templateUrl: './condensing-economizer-form.component.html',
-  styleUrls: ['./condensing-economizer-form.component.css']
+    selector: 'app-condensing-economizer-form',
+    templateUrl: './condensing-economizer-form.component.html',
+    styleUrls: ['./condensing-economizer-form.component.css'],
+    standalone: false
 })
 export class CondensingEconomizerFormComponent implements OnInit {
   @Input()

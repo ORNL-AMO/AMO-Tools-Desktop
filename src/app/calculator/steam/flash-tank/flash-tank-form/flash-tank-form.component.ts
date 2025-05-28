@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
 
 @Component({
-  selector: 'app-flash-tank-form',
-  templateUrl: './flash-tank-form.component.html',
-  styleUrls: ['./flash-tank-form.component.css']
+    selector: 'app-flash-tank-form',
+    templateUrl: './flash-tank-form.component.html',
+    styleUrls: ['./flash-tank-form.component.css'],
+    standalone: false
 })
 export class FlashTankFormComponent implements OnInit {
   @Input()

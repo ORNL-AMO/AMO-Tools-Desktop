@@ -7,9 +7,10 @@ import { InventorySummaryGraphsService } from '../../../motor-inventory-summary/
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-efficiency-class-dropdown',
-  templateUrl: './efficiency-class-dropdown.component.html',
-  styleUrls: ['./efficiency-class-dropdown.component.css']
+    selector: 'app-efficiency-class-dropdown',
+    templateUrl: './efficiency-class-dropdown.component.html',
+    styleUrls: ['./efficiency-class-dropdown.component.css'],
+    standalone: false
 })
 export class EfficiencyClassDropdownComponent implements OnInit {
 

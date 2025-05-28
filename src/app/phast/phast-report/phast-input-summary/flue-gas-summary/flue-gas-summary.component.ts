@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 @Component({
-  selector: 'app-flue-gas-summary',
-  templateUrl: './flue-gas-summary.component.html',
-  styleUrls: ['./flue-gas-summary.component.css']
+    selector: 'app-flue-gas-summary',
+    templateUrl: './flue-gas-summary.component.html',
+    styleUrls: ['./flue-gas-summary.component.css'],
+    standalone: false
 })
 export class FlueGasSummaryComponent implements OnInit {
   @Input()

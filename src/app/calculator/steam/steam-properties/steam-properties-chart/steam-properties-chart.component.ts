@@ -11,9 +11,10 @@ import { PlotlyService } from 'angular-plotly.js';
 
 
 @Component({
-  selector: 'app-steam-properties-chart',
-  templateUrl: './steam-properties-chart.component.html',
-  styleUrls: ['./steam-properties-chart.component.css']
+    selector: 'app-steam-properties-chart',
+    templateUrl: './steam-properties-chart.component.html',
+    styleUrls: ['./steam-properties-chart.component.css'],
+    standalone: false
 })
 export class SteamPropertiesChartComponent implements OnChanges {
 

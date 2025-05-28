@@ -6,9 +6,10 @@ import { Subscription } from 'rxjs';
 import { TreasureHuntService } from '../treasure-hunt.service';
 
 @Component({
-  selector: 'app-find-treasure',
-  templateUrl: './find-treasure.component.html',
-  styleUrls: ['./find-treasure.component.css']
+    selector: 'app-find-treasure',
+    templateUrl: './find-treasure.component.html',
+    styleUrls: ['./find-treasure.component.css'],
+    standalone: false
 })
 export class FindTreasureComponent implements OnInit {
   @Input()

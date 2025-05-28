@@ -1,16 +1,17 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, EventEmitter, input } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../../psat/psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { AchievableEfficiencyService } from './achievable-efficiency.service';
+import { AchievableEfficiencyService, PumpEfficiencyInputs } from './achievable-efficiency.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 @Component({
   selector: 'app-achievable-efficiency',
   templateUrl: './achievable-efficiency.component.html',
-  styleUrls: ['./achievable-efficiency.component.css']
+  styleUrls: ['./achievable-efficiency.component.css'],
+  standalone: false
 })
 export class AchievableEfficiencyComponent implements OnInit {
   @Input()
@@ -40,6 +41,8 @@ export class AchievableEfficiencyComponent implements OnInit {
   toggleExampleData: boolean = true;
   tabSelect: string = 'results';
 
+  pumpEfficiencyInputs: PumpEfficiencyInputs;
+
   containerHeight: number;
   smallScreenTab: string = 'form';
 
@@ -66,18 +69,11 @@ export class AchievableEfficiencyComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy() {
-    if (!this.psat) {
-      this.achievableEfficiencyService.flowRate = this.efficiencyForm.controls.flowRate.value;
-      this.achievableEfficiencyService.pumpType = this.efficiencyForm.controls.pumpType.value;
-    }
-  }
-
   initForm() {
     if (!this.psat) {
       //patch default/starter values for stand alone calculator
       if (this.achievableEfficiencyService.flowRate && this.achievableEfficiencyService.pumpType) {
-        this.efficiencyForm = this.achievableEfficiencyService.getForm(this.achievableEfficiencyService.pumpType, this.achievableEfficiencyService.flowRate);
+        this.efficiencyForm = this.achievableEfficiencyService.getFormFromObj(this.achievableEfficiencyService.pumpEfficiencyInputs);
       }
       else {
         let tmpFlowRate: number = 2000;
@@ -85,29 +81,57 @@ export class AchievableEfficiencyComponent implements OnInit {
           tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement);
           tmpFlowRate = this.psatService.roundVal(tmpFlowRate, 2);
         }
-        this.efficiencyForm = this.achievableEfficiencyService.getForm(6, tmpFlowRate);
+        let tmpHead: number = 137;
+        if (this.settings.distanceMeasurement !== 'ft') {
+          tmpHead = this.convertUnitsService.value(tmpHead).from('ft').to(this.settings.distanceMeasurement);
+          tmpHead = this.psatService.roundVal(tmpHead, 2);
+        }
+        let inputs: PumpEfficiencyInputs = {
+          pumpType: 6,
+          flowRate: tmpFlowRate,
+          rpm: 2000,
+          kinematicViscosity: 1.107,
+          stageCount: 1,
+          head: tmpHead,
+          pumpEfficiency: 100,
+        };
+        this.efficiencyForm = this.achievableEfficiencyService.getFormFromObj(inputs);
       }
     } else {
-      this.efficiencyForm = this.achievableEfficiencyService.getForm(this.psat.inputs.pump_style, this.psat.inputs.flow_rate);
+      this.efficiencyForm = this.achievableEfficiencyService.getFormFromPSAT(this.psat, this.settings);
     }
   }
 
   resetForm() {
+    let tmpFlowRate: number = 0;
+    if (this.settings.flowMeasurement !== 'gpm') {
+      tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement);
+      tmpFlowRate = this.psatService.roundVal(tmpFlowRate, 2);
+    }
+    let tmpHead: number = 0;
+    if (this.settings.distanceMeasurement !== 'ft') {
+      tmpHead = this.convertUnitsService.value(tmpHead).from('ft').to(this.settings.distanceMeasurement);
+      tmpHead = this.psatService.roundVal(tmpHead, 2);
+    }
+    let inputs: PumpEfficiencyInputs = {
+      pumpType: 6,
+      flowRate: tmpFlowRate,
+      rpm: 0,
+      kinematicViscosity: 0,
+      stageCount: 0,
+      head: tmpHead,
+      pumpEfficiency: 100,
+    };
     if (!this.psat) {
       //patch default/starter values for stand alone calculator
       if (this.achievableEfficiencyService.flowRate && this.achievableEfficiencyService.pumpType) {
-        this.efficiencyForm = this.achievableEfficiencyService.getForm(this.achievableEfficiencyService.pumpType, this.achievableEfficiencyService.flowRate);
+        this.efficiencyForm = this.achievableEfficiencyService.getFormFromObj(this.achievableEfficiencyService.pumpEfficiencyInputs);
       }
       else {
-        let tmpFlowRate: number = 0;
-        if (this.settings.flowMeasurement !== 'gpm') {
-          tmpFlowRate = this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement);
-          tmpFlowRate = this.psatService.roundVal(tmpFlowRate, 2);
-        }
-        this.efficiencyForm = this.achievableEfficiencyService.getForm(0, tmpFlowRate);
+        this.efficiencyForm = this.achievableEfficiencyService.getFormFromObj(inputs);
       }
     } else {
-      this.efficiencyForm = this.achievableEfficiencyService.getForm(this.psat.inputs.pump_style, this.psat.inputs.flow_rate);
+      this.efficiencyForm = this.achievableEfficiencyService.getFormFromObj(inputs);
     }
   }
 
@@ -140,11 +164,29 @@ export class AchievableEfficiencyComponent implements OnInit {
   }
 
   generateExample() {
-    let tmpFlowRate = 2000;
-    if (this.settings.flowMeasurement !== 'gpm') {
-      tmpFlowRate = Math.round(this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement) * 100) / 100;
+    if (!this.inPsat) {
+      let tmpFlowRate = 2000;
+      if (this.settings.flowMeasurement !== 'gpm') {
+        tmpFlowRate = Math.round(this.convertUnitsService.value(tmpFlowRate).from('gpm').to(this.settings.flowMeasurement) * 100) / 100;
+      }
+      let tmpHead: number = 137;
+      if (this.settings.distanceMeasurement !== 'ft') {
+        tmpHead = Math.round(this.convertUnitsService.value(tmpHead).from('ft').to(this.settings.distanceMeasurement) * 100) / 100;
+      }
+      let inputs: PumpEfficiencyInputs = {
+        pumpType: 6,
+        flowRate: tmpFlowRate,
+        rpm: 2000,
+        kinematicViscosity: 1.107,
+        stageCount: 1,
+        head: tmpHead,
+        pumpEfficiency: 100,
+      };
+      this.efficiencyForm = this.achievableEfficiencyService.getFormFromObj(inputs);
+    } else {
+      this.efficiencyForm = this.achievableEfficiencyService.getFormFromPSAT(this.psat, this.settings);
     }
-    this.efficiencyForm = this.achievableEfficiencyService.getForm(0, tmpFlowRate);
+
   }
 
   btnGenerateExample() {

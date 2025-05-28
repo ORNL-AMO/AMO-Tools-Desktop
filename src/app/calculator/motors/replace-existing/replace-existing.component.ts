@@ -9,9 +9,10 @@ import { ReplaceExistingMotorTreasureHunt, Treasure } from '../../../shared/mode
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-replace-existing',
-  templateUrl: './replace-existing.component.html',
-  styleUrls: ['./replace-existing.component.css']
+    selector: 'app-replace-existing',
+    templateUrl: './replace-existing.component.html',
+    styleUrls: ['./replace-existing.component.css'],
+    standalone: false
 })
 export class ReplaceExistingComponent implements OnInit {
   @Input()

@@ -5,8 +5,6 @@
 <div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
   <span class="sidebar-item" [routerLink]="['/calculators/general-list']" routerLinkActive="selected">General</span>
   <div class="directory-item">
-    <span (click)="navigateWithSidebarOptions('/calculators/pre-assessment')" class="sidebar-item">Pre-Assessment
-      Screening</span>
     <span (click)="navigateWithSidebarOptions('/calculators/unit-converter')" routerLinkActive="selected" class="sidebar-item">Unit
       Converter</span>
     <span (click)="navigateWithSidebarOptions('/calculators/combined-heat-power')" routerLinkActive="selected" class="sidebar-item">Combined
@@ -121,6 +119,8 @@
   <span class="sidebar-item" [routerLink]="['/calculators/process-heating-list']" routerLinkActive="selected">Process
     Heating</span>
   <div class="directory-item">
+    <span (click)="navigateWithSidebarOptions('/calculators/pre-assessment')" class="sidebar-item">Pre-Assessment
+      Screening</span>
     <span (click)="navigateWithSidebarOptions('/calculators/flue-gas')" routerLinkActive="selected" class="sidebar-item">Flue Gas Loss</span>
     <span (click)="navigateWithSidebarOptions('/calculators/charge-material')" routerLinkActive="selected" class="sidebar-item">Charge
       Material</span>

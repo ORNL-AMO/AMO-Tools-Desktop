@@ -5,9 +5,10 @@ import { CondensingEconomizerOutput } from '../../../../shared/models/steam/cond
 import { CondensingEconomizerService } from '../condensing-economizer.service';
 
 @Component({
-  selector: 'app-condensing-economizer-results',
-  templateUrl: './condensing-economizer-results.component.html',
-  styleUrls: ['./condensing-economizer-results.component.css']
+    selector: 'app-condensing-economizer-results',
+    templateUrl: './condensing-economizer-results.component.html',
+    styleUrls: ['./condensing-economizer-results.component.css'],
+    standalone: false
 })
 export class CondensingEconomizerResultsComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { SteamPropertiesOutput, FlashTankOutput, DeaeratorOutput } from '../../.
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-return-condensate-header',
-  templateUrl: './return-condensate-header.component.html',
-  styleUrls: ['./return-condensate-header.component.css']
+    selector: 'app-return-condensate-header',
+    templateUrl: './return-condensate-header.component.html',
+    styleUrls: ['./return-condensate-header.component.css'],
+    standalone: false
 })
 export class ReturnCondensateHeaderComponent implements OnInit {
   @Input()

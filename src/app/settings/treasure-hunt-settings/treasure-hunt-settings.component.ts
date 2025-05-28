@@ -2,9 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-treasure-hunt-settings',
-  templateUrl: './treasure-hunt-settings.component.html',
-  styleUrls: ['./treasure-hunt-settings.component.css']
+    selector: 'app-treasure-hunt-settings',
+    templateUrl: './treasure-hunt-settings.component.html',
+    styleUrls: ['./treasure-hunt-settings.component.css'],
+    standalone: false
 })
 export class TreasureHuntSettingsComponent implements OnInit {
   @Input()

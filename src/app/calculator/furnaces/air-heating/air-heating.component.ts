@@ -8,9 +8,10 @@ import { AirHeatingService } from './air-heating.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-air-heating',
-  templateUrl: './air-heating.component.html',
-  styleUrls: ['./air-heating.component.css']
+    selector: 'app-air-heating',
+    templateUrl: './air-heating.component.html',
+    styleUrls: ['./air-heating.component.css'],
+    standalone: false
 })
 export class AirHeatingComponent implements OnInit {
   @Input()

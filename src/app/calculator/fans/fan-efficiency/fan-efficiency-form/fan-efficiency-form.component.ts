@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-fan-efficiency-form',
-  templateUrl: './fan-efficiency-form.component.html',
-  styleUrls: ['./fan-efficiency-form.component.css']
+    selector: 'app-fan-efficiency-form',
+    templateUrl: './fan-efficiency-form.component.html',
+    styleUrls: ['./fan-efficiency-form.component.css'],
+    standalone: false
 })
 export class FanEfficiencyFormComponent implements OnInit {
   @Input()

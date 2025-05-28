@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
-  selector: 'app-energy-input-summary',
-  templateUrl: './energy-input-summary.component.html',
-  styleUrls: ['./energy-input-summary.component.css']
+    selector: 'app-energy-input-summary',
+    templateUrl: './energy-input-summary.component.html',
+    styleUrls: ['./energy-input-summary.component.css'],
+    standalone: false
 })
 export class EnergyInputSummaryComponent implements OnInit {
   @Input()

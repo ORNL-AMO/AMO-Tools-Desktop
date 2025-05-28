@@ -7,9 +7,10 @@ import { Settings } from '../../../../../shared/models/settings';
 import { WeatherDbService } from '../../weather-db.service';
 
 @Component({
-  selector: 'app-data-setup-form',
-  templateUrl: './data-setup-form.component.html',
-  styleUrls: ['./data-setup-form.component.css']
+    selector: 'app-data-setup-form',
+    templateUrl: './data-setup-form.component.html',
+    styleUrls: ['./data-setup-form.component.css'],
+    standalone: false
 })
 export class DataSetupFormComponent implements OnInit {
   @Input()

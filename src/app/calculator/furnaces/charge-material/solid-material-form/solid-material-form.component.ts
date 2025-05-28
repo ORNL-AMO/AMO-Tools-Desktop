@@ -11,9 +11,10 @@ import { ChargeMaterialService } from '../charge-material.service';
 import { SolidMaterialFormService, SolidMaterialWarnings } from './solid-material-form.service';
 
 @Component({
-  selector: 'app-solid-material-form',
-  templateUrl: './solid-material-form.component.html',
-  styleUrls: ['./solid-material-form.component.css']
+    selector: 'app-solid-material-form',
+    templateUrl: './solid-material-form.component.html',
+    styleUrls: ['./solid-material-form.component.css'],
+    standalone: false
 })
 export class SolidMaterialFormComponent implements OnInit {
   @Input()

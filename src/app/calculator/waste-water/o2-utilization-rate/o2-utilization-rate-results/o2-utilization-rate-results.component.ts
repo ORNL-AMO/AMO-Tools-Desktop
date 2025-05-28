@@ -4,9 +4,10 @@ import { O2UtilizationRateService } from '../o2-utilization-rate.service';
 import * as regression from 'regression';
 
 @Component({
-  selector: 'app-o2-utilization-rate-results',
-  templateUrl: './o2-utilization-rate-results.component.html',
-  styleUrls: ['./o2-utilization-rate-results.component.css']
+    selector: 'app-o2-utilization-rate-results',
+    templateUrl: './o2-utilization-rate-results.component.html',
+    styleUrls: ['./o2-utilization-rate-results.component.css'],
+    standalone: false
 })
 export class O2UtilizationRateResultsComponent implements OnInit {
 

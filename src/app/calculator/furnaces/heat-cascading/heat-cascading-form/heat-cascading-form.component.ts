@@ -13,9 +13,10 @@ import { HeatCascadingFormService } from '../heat-cascading-form.service';
 import { HeatCascadingService } from '../heat-cascading.service';
 
 @Component({
-  selector: 'app-heat-cascading-form',
-  templateUrl: './heat-cascading-form.component.html',
-  styleUrls: ['./heat-cascading-form.component.css']
+    selector: 'app-heat-cascading-form',
+    templateUrl: './heat-cascading-form.component.html',
+    styleUrls: ['./heat-cascading-form.component.css'],
+    standalone: false
 })
 export class HeatCascadingFormComponent implements OnInit {
   @Input()

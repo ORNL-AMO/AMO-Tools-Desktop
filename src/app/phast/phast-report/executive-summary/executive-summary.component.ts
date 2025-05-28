@@ -9,9 +9,10 @@ import { PhastReportRollupService } from '../../../report-rollup/phast-report-ro
 import { PhastResultsService } from '../../phast-results.service';
 
 @Component({
-  selector: 'app-executive-summary',
-  templateUrl: './executive-summary.component.html',
-  styleUrls: ['./executive-summary.component.css']
+    selector: 'app-executive-summary',
+    templateUrl: './executive-summary.component.html',
+    styleUrls: ['./executive-summary.component.css'],
+    standalone: false
 })
 export class ExecutiveSummaryComponent implements OnInit {
   @Input()

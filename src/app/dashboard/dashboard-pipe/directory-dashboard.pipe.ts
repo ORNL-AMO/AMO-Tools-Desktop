@@ -3,8 +3,9 @@ import { DirectoryItem, FilterDashboardBy } from '../../shared/models/directory-
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 
 @Pipe({
-  name: 'directoryDashboardFilter',
-  pure: false
+    name: 'directoryDashboardFilter',
+    pure: false,
+    standalone: false
 })
 export class DirectoryDashboardPipe implements PipeTransform {
 

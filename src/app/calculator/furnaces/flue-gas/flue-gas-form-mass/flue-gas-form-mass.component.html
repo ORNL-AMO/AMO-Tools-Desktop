@@ -180,8 +180,8 @@
     </div>
   </div>
   
-  <div *ngIf="!inModal" class="form-group">
-    <label class="small" for="heatInput">Heat Delivered</label>
+  <div *ngIf="!inModal && isBaseline" class="form-group">
+    <label class="small" for="heatInput">Fuel Consumption</label>
     <div class="input-group">
       <input name="heatInput" type="number" step="10" class="form-control"
         formControlName="heatInput" id="heatInput" onfocus="this.select();"

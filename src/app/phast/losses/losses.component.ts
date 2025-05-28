@@ -9,9 +9,10 @@ import { PhastCompareService } from '../phast-compare.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-losses',
-  templateUrl: 'losses.component.html',
-  styleUrls: ['losses.component.css']
+    selector: 'app-losses',
+    templateUrl: 'losses.component.html',
+    styleUrls: ['losses.component.css'],
+    standalone: false
 })
 export class LossesComponent implements OnInit {
   @Input()

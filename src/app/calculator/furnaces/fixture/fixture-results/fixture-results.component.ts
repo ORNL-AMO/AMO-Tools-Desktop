@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FixtureService } from '../fixture.service';
 
 @Component({
-  selector: 'app-fixture-results',
-  templateUrl: './fixture-results.component.html',
-  styleUrls: ['./fixture-results.component.css']
+    selector: 'app-fixture-results',
+    templateUrl: './fixture-results.component.html',
+    styleUrls: ['./fixture-results.component.css'],
+    standalone: false
 })
 export class FixtureResultsComponent implements OnInit {
 

@@ -5,9 +5,10 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-select-motor-modal',
-  templateUrl: './select-motor-modal.component.html',
-  styleUrls: ['./select-motor-modal.component.css']
+    selector: 'app-select-motor-modal',
+    templateUrl: './select-motor-modal.component.html',
+    styleUrls: ['./select-motor-modal.component.css'],
+    standalone: false
 })
 export class SelectMotorModalComponent implements OnInit {
   @Output('emitClose')

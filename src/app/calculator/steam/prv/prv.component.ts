@@ -10,9 +10,10 @@ import { PrvOutput } from '../../../shared/models/steam/steam-outputs';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-prv-calculator',
-  templateUrl: './prv.component.html',
-  styleUrls: ['./prv.component.css']
+    selector: 'app-prv-calculator',
+    templateUrl: './prv.component.html',
+    styleUrls: ['./prv.component.css'],
+    standalone: false
 })
 export class PrvComponent implements OnInit {
   @Input()

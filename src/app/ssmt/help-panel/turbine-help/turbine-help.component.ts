@@ -3,9 +3,10 @@ import { SsmtService } from '../../ssmt.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-turbine-help',
-  templateUrl: './turbine-help.component.html',
-  styleUrls: ['./turbine-help.component.css']
+    selector: 'app-turbine-help',
+    templateUrl: './turbine-help.component.html',
+    styleUrls: ['./turbine-help.component.css'],
+    standalone: false
 })
 export class TurbineHelpComponent implements OnInit {
   @Input()

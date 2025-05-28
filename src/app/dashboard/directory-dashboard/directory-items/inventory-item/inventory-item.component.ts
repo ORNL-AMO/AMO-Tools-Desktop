@@ -19,9 +19,10 @@ import { MotorIntegrationService } from '../../../../shared/connected-inventory/
 import { CompressedAirInventoryService } from '../../../../compressed-air-inventory/compressed-air-inventory.service';
 
 @Component({
-  selector: 'app-inventory-item',
-  templateUrl: './inventory-item.component.html',
-  styleUrls: ['./inventory-item.component.css']
+    selector: 'app-inventory-item',
+    templateUrl: './inventory-item.component.html',
+    styleUrls: ['./inventory-item.component.css'],
+    standalone: false
 })
 export class InventoryItemComponent implements OnInit {
   @Input()

@@ -4,9 +4,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { PowerFactorTriangleService } from '../power-factor-triangle.service';
 
 @Component({
-  selector: 'app-power-factor-triangle-form',
-  templateUrl: './power-factor-triangle-form.component.html',
-  styleUrls: ['./power-factor-triangle-form.component.css']
+    selector: 'app-power-factor-triangle-form',
+    templateUrl: './power-factor-triangle-form.component.html',
+    styleUrls: ['./power-factor-triangle-form.component.css'],
+    standalone: false
 })
 export class PowerFactorTriangleFormComponent implements OnInit {
 

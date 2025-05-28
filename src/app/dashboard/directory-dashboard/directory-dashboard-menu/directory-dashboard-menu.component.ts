@@ -11,11 +11,13 @@ import { DashboardService } from '../../dashboard.service';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import { Subscription } from 'rxjs';
+import { Diagram } from '../../../shared/models/diagram';
 
 @Component({
-  selector: 'app-directory-dashboard-menu',
-  templateUrl: './directory-dashboard-menu.component.html',
-  styleUrls: ['./directory-dashboard-menu.component.css']
+    selector: 'app-directory-dashboard-menu',
+    templateUrl: './directory-dashboard-menu.component.html',
+    styleUrls: ['./directory-dashboard-menu.component.css'],
+    standalone: false
 })
 export class DirectoryDashboardMenuComponent implements OnInit { 
 
@@ -92,7 +94,11 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     });
     this.directory.inventories.forEach(inventory => {
       inventory.selected = this.isAllSelected;
-    });    
+    }); 
+    // todo hide until copy and move is implemented
+    // this.directory.diagrams.forEach(diagram => {
+    //   diagram.selected = this.isAllSelected;
+    // });  
     this.setSelectedStatus();
   }
 
@@ -104,24 +110,27 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   setSelectedStatus() {
     let hasAssessmentSelected: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == true });
     let hasDirectorySelected: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == true });
+    let hasDiagramSelected = false;
+    // let hasDiagramSelected: Diagram = _.find(this.directory.diagrams, (value) => { return value.selected == true });
     let hasInventorySelected: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == true });
     let hasCalculatorSelected: Calculator;
     if (this.directory.calculators) {
       hasCalculatorSelected = _.find(this.directory.calculators, (value) => { return value.selected == true });
     }
-    this.hasSelectedItem = hasAssessmentSelected != undefined || hasDirectorySelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined;
-    this.canCopyItem = hasAssessmentSelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined || hasDirectorySelected != undefined;
+    this.hasSelectedItem = hasAssessmentSelected != undefined || hasDirectorySelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined || hasDiagramSelected != undefined;
+    this.canCopyItem = this.hasSelectedItem;
   }
   
   setIsAllSelected() {
     let hasAssessmentUnselected: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == false });
     let hasDirUnselected: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == false });
     let hasInventoryUnselected: InventoryItem = _.find(this.directory.inventories, (value) => { return value.selected == false });
+    let hasDiagramUnselected: Diagram = _.find(this.directory.diagrams, (value) => { return value.selected == false });
     let hasCalculatorUnselected: Calculator;
     if (this.directory.calculators) {
       hasCalculatorUnselected = _.find(this.directory.calculators, (value) => { return value.selected == false });
     }
-    this.isAllSelected = hasAssessmentUnselected == undefined && hasDirUnselected == undefined && hasInventoryUnselected == undefined && hasCalculatorUnselected == undefined;
+    this.isAllSelected = hasAssessmentUnselected == undefined && hasDirUnselected == undefined && hasInventoryUnselected == undefined && hasCalculatorUnselected == undefined && hasDiagramUnselected == undefined;
     this.directory.selected = this.isAllSelected;
   }
 
@@ -155,6 +164,10 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
   showAddInventory() {
     this.dashboardService.showCreateInventory.next('motorInventory');
+  }
+
+  showAddDiagram() {
+    this.dashboardService.showCreateDiagram.next(true);
   }
 
   showExportModal() {

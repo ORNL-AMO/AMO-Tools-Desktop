@@ -3,9 +3,10 @@ import { FluidPropertiesOptions, PumpInventoryData } from '../../../pump-invento
 import { PumpInventoryService } from '../../../pump-inventory.service';
 
 @Component({
-  selector: 'app-fluid-properties',
-  templateUrl: './fluid-properties.component.html',
-  styleUrls: ['./fluid-properties.component.css']
+    selector: 'app-fluid-properties',
+    templateUrl: './fluid-properties.component.html',
+    styleUrls: ['./fluid-properties.component.css'],
+    standalone: false
 })
 export class FluidPropertiesComponent implements OnInit {
   displayForm: boolean;

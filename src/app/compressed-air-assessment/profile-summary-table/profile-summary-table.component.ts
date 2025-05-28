@@ -3,9 +3,10 @@ import { CompressorInventoryItem, ProfileSummary, ProfileSummaryTotal, SystemInf
 import { Settings } from '../../shared/models/settings';
 
 @Component({
-  selector: 'app-profile-summary-table',
-  templateUrl: './profile-summary-table.component.html',
-  styleUrls: ['./profile-summary-table.component.css']
+    selector: 'app-profile-summary-table',
+    templateUrl: './profile-summary-table.component.html',
+    styleUrls: ['./profile-summary-table.component.css'],
+    standalone: false
 })
 export class ProfileSummaryTableComponent implements OnInit {
   @Input()

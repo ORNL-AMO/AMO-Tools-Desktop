@@ -5,9 +5,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { EnergyInputService } from '../energy-input.service';
 
 @Component({
-  selector: 'app-energy-input-form',
-  templateUrl: './energy-input-form.component.html',
-  styleUrls: ['./energy-input-form.component.css']
+    selector: 'app-energy-input-form',
+    templateUrl: './energy-input-form.component.html',
+    styleUrls: ['./energy-input-form.component.css'],
+    standalone: false
 })
 export class EnergyInputFormComponent implements OnInit {
   @Input()

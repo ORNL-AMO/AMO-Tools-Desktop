@@ -5,9 +5,10 @@ import { WallLossesSurface } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 
 @Component({
-  selector: 'app-wall-summary',
-  templateUrl: './wall-summary.component.html',
-  styleUrls: ['./wall-summary.component.css']
+    selector: 'app-wall-summary',
+    templateUrl: './wall-summary.component.html',
+    styleUrls: ['./wall-summary.component.css'],
+    standalone: false
 })
 export class WallSummaryComponent implements OnInit {
   @Input()

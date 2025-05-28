@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ImportExportAssessment, ImportExportDirectory, ImportExportData, ImportExportInventory } from './importExportModel';
+import { ImportExportAssessment, ImportExportDirectory, ImportExportData, ImportExportInventory, ImportExportDiagram } from './importExportModel';
 import { Directory } from '../../shared/models/directory';
 import { Assessment } from '../../shared/models/assessment';
 import * as _ from 'lodash';
@@ -13,21 +13,29 @@ import { SSMT } from '../../shared/models/steam/ssmt';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { InventoryDbService } from '../../indexedDb/inventory-db.service';
 import { DayTypeSummary } from '../../log-tool/log-tool-models';
+import { Diagram } from '../models/diagram';
+import { DiagramIdbService } from '../../indexedDb/diagram-idb.service';
 @Injectable()
 export class ExportService {
   exportAll: boolean = false;
   exportData: ImportExportData;
   exportDirectories: Array<ImportExportDirectory>;
   exportAssessments: Array<ImportExportAssessment>;
+  exportDiagrams: Array<ImportExportDiagram>;
   exportPreAssessments: Array<Calculator>;
   exportInventories: Array<ImportExportInventory>;
   directoryAssessments: Array<ImportExportAssessment>;
   directoryInventories: Array<ImportExportInventory>;
-  constructor(private settingsDbService: SettingsDbService, private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private calculatorDbService: CalculatorDbService,
+  constructor(private settingsDbService: SettingsDbService, 
+    private assessmentDbService: AssessmentDbService, 
+    private directoryDbService: DirectoryDbService,
+    private diagramDbService: DiagramIdbService, 
+    private calculatorDbService: CalculatorDbService,
     private inventoryDbService: InventoryDbService) {
   }
   getSelected(dir: Directory, isSelectAll: boolean): ImportExportData {
     this.exportAssessments = new Array<ImportExportAssessment>();
+    this.exportDiagrams = new Array<ImportExportDiagram>();
     this.exportDirectories = new Array<ImportExportDirectory>();
     this.exportInventories = new Array<ImportExportInventory>();
     this.exportPreAssessments = new Array<Calculator>();
@@ -36,11 +44,14 @@ export class ExportService {
     let selectedDirectories: Array<Directory>;
     let preAssessments: Array<Calculator> = new Array<Calculator>();
     let inventories: Array<InventoryItem> = new Array<InventoryItem>();
+    let diagrams: Array<Diagram> = new Array<Diagram>();
+
     if (!isSelectAll) {
       assessments = _.filter(dir.assessments, (assessment) => { return assessment.selected === true; });
       selectedDirectories = _.filter(dir.subDirectory, (subDir) => { return subDir.selected === true; });
       preAssessments = _.filter(dir.calculators, (calc) => { return calc.preAssessments && calc.selected === true; });
       inventories = _.filter(dir.inventories, (inventory) => { return inventory.selected === true });
+      diagrams = _.filter(dir.diagrams, (diagram) => { return diagram.selected === true });
     } else {
       selectedDirectories = [dir];
     }
@@ -55,12 +66,12 @@ export class ExportService {
     if (preAssessments) {
       this.exportPreAssessments = preAssessments;
     }
-    // todo change order
     if (selectedDirectories) {
       selectedDirectories.forEach(dir => {
         this.addDirectoryObj(dir);
         this.setDirectoryExportAssessments(dir);
-        this.setDirectoryExportedInventories(dir)
+        this.setDirectoryExportedInventories(dir);
+        this.setDirectoryExportedDiagrams(dir);
         this.setDirectoryExportPreAssessmentCalcs(dir);
       });
     }
@@ -70,11 +81,19 @@ export class ExportService {
         this.exportInventories.push(obj);
       });
     }
+
+    if (diagrams) {
+      diagrams.forEach(diagram => {
+        let obj = this.getDiagramObj(diagram);
+        this.exportDiagrams.push(obj);
+      });
+    }
     this.exportData = {
       directories: this.exportDirectories,
       assessments: this.exportAssessments,
       calculators: this.exportPreAssessments,
-      inventories: this.exportInventories
+      inventories: this.exportInventories,
+      diagrams: this.exportDiagrams
     };
     return this.exportData;
   }
@@ -83,6 +102,7 @@ export class ExportService {
     this.exportAssessments = new Array<ImportExportAssessment>();
     this.exportDirectories = new Array<ImportExportDirectory>();
     this.exportInventories = new Array<ImportExportInventory>();
+    this.exportDiagrams = new Array<ImportExportDiagram>();
     this.exportPreAssessments = new Array<Calculator>(); 
 
     if (assessment) {
@@ -94,7 +114,8 @@ export class ExportService {
       directories: this.exportDirectories,
       assessments: this.exportAssessments,
       calculators: this.exportPreAssessments,
-      inventories: this.exportInventories
+      inventories: this.exportInventories,
+      diagrams: this.exportDiagrams
     };
     return this.exportData;
   }
@@ -104,6 +125,7 @@ export class ExportService {
     this.exportDirectories = new Array<ImportExportDirectory>();
     this.exportInventories = new Array<ImportExportInventory>();
     this.exportPreAssessments = new Array<Calculator>(); 
+    this.exportDiagrams = new Array<ImportExportDiagram>();
 
     if (inventoryItem) {
       let obj = this.getInventoryObj(inventoryItem);
@@ -114,11 +136,23 @@ export class ExportService {
       directories: this.exportDirectories,
       assessments: this.exportAssessments,
       calculators: this.exportPreAssessments,
-      inventories: this.exportInventories
+      inventories: this.exportInventories,
+      diagrams: this.exportDiagrams
     };
     return this.exportData;
   }
 
+  
+  getDiagramObj(diagram: Diagram): ImportExportDiagram {
+    let settings: Settings = this.settingsDbService.getByDiagramId(diagram);
+    let assessment: Assessment = this.assessmentDbService.findById(diagram.assessmentId);
+    let importExportDiagram: ImportExportDiagram = {
+      diagram: diagram,
+      settings: settings,
+      assessment: assessment
+    };
+    return importExportDiagram;
+  }
 
   
   getAssessmentObj(assessment: Assessment): ImportExportAssessment {
@@ -130,10 +164,12 @@ export class ExportService {
     }
     let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
     let calculator: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
+    let diagram: Diagram = this.diagramDbService.findById(assessment.diagramId);
     let model: ImportExportAssessment = {
       assessment: assessment,
       settings: settings,
-      calculator: calculator
+      calculator: calculator,
+      diagram: diagram
     };
     return model;
   }
@@ -156,6 +192,7 @@ export class ExportService {
     }
     return ssmt;
   }
+
   removeDataExplorerData(assessment: Assessment): Assessment {
     if (assessment.compressedAirAssessment.logToolData) {
       let excludedDayTypeIndex: number;
@@ -206,6 +243,23 @@ export class ExportService {
       subDirs.forEach(subDir => {
         this.addDirectoryObj(subDir);
         this.setDirectoryExportAssessments(subDir);
+      });
+    }
+  }
+
+  setDirectoryExportedDiagrams(dir: Directory) {
+    let diagrams = this.diagramDbService.getByDirectoryId(dir.id);
+    if (diagrams) {
+      diagrams.forEach(assessment => {
+        let obj = this.getDiagramObj(assessment);
+        this.exportDiagrams.push(obj);
+      });
+    }
+    let subDirs = this.directoryDbService.getSubDirectoriesById(dir.id);
+    if (subDirs) {
+      subDirs.forEach(subDir => {
+        this.addDirectoryObj(subDir);
+        this.setDirectoryExportedDiagrams(subDir);
       });
     }
   }

@@ -3,9 +3,10 @@ import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-rollup-summary-energy-table',
-  templateUrl: './rollup-summary-energy-table.component.html',
-  styleUrls: ['./rollup-summary-energy-table.component.css']
+    selector: 'app-rollup-summary-energy-table',
+    templateUrl: './rollup-summary-energy-table.component.html',
+    styleUrls: ['./rollup-summary-energy-table.component.css'],
+    standalone: false
 })
 export class RollupSummaryEnergyTableComponent implements OnInit {
   @Input()

@@ -4,9 +4,10 @@ import { SSMTInputs, BoilerInput } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-hover-deaerator-table',
-  templateUrl: './hover-deaerator-table.component.html',
-  styleUrls: ['./hover-deaerator-table.component.css']
+    selector: 'app-hover-deaerator-table',
+    templateUrl: './hover-deaerator-table.component.html',
+    styleUrls: ['./hover-deaerator-table.component.css'],
+    standalone: false
 })
 export class HoverDeaeratorTableComponent implements OnInit {
   @Input()

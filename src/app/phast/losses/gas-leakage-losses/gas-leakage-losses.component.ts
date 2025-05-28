@@ -8,9 +8,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { LeakageFormService } from '../../../calculator/furnaces/leakage/leakage-form.service';
 
 @Component({
-  selector: 'app-gas-leakage-losses',
-  templateUrl: './gas-leakage-losses.component.html',
-  styleUrls: ['./gas-leakage-losses.component.css']
+    selector: 'app-gas-leakage-losses',
+    templateUrl: './gas-leakage-losses.component.html',
+    styleUrls: ['./gas-leakage-losses.component.css'],
+    standalone: false
 })
 export class GasLeakageLossesComponent implements OnInit {
   @Input()

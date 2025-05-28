@@ -9,9 +9,10 @@ import { LeakageFormService, LeakageWarnings } from '../../../../calculator/furn
 
 
 @Component({
-  selector: 'app-gas-leakage-tab',
-  templateUrl: './gas-leakage-tab.component.html',
-  styleUrls: ['./gas-leakage-tab.component.css']
+    selector: 'app-gas-leakage-tab',
+    templateUrl: './gas-leakage-tab.component.html',
+    styleUrls: ['./gas-leakage-tab.component.css'],
+    standalone: false
 })
 export class GasLeakageTabComponent implements OnInit {
   @Input()

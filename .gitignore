@@ -1,12 +1,14 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
+**/dist
 /tmp
 .angular
 
+*.tsbuildinfo
+
 # dependencies
-/node_modules
+**/node_modules
 
 # IDEs and editors
 /.idea
@@ -24,6 +26,7 @@
 .vscode/extensions.json
 
 # misc
+/docker
 /.sass-cache
 /connect.lock
 /coverage/*
@@ -33,6 +36,7 @@ testem.log
 /typings
 /db/*.db
 scripts/download-stats
+/docker
 
 # e2e
 /e2e/*.js
@@ -41,3 +45,5 @@ scripts/download-stats
 #System Files
 .DS_Store
 Thumbs.db
+
+*.ipynb

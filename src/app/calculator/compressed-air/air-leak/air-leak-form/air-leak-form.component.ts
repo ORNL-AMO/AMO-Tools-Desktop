@@ -7,9 +7,10 @@ import { Subscription } from 'rxjs';
 import { AirLeakFormService } from './air-leak-form.service';
 
 @Component({
-  selector: 'app-air-leak-form',
-  templateUrl: './air-leak-form.component.html',
-  styleUrls: ['./air-leak-form.component.css']
+    selector: 'app-air-leak-form',
+    templateUrl: './air-leak-form.component.html',
+    styleUrls: ['./air-leak-form.component.css'],
+    standalone: false
 })
 export class AirLeakFormComponent implements OnInit {
 

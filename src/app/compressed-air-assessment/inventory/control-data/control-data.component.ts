@@ -9,9 +9,10 @@ import { InventoryService } from '../inventory.service';
 import { ControlTypes } from '../inventoryOptions';
 
 @Component({
-  selector: 'app-control-data',
-  templateUrl: './control-data.component.html',
-  styleUrls: ['./control-data.component.css']
+    selector: 'app-control-data',
+    templateUrl: './control-data.component.html',
+    styleUrls: ['./control-data.component.css'],
+    standalone: false
 })
 export class ControlDataComponent implements OnInit {
   settings: Settings;

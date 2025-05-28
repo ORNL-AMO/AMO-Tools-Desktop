@@ -6,9 +6,10 @@ import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-
 import { RollupSummaryTableData } from '../../rollup-summary-table/rollup-summary-table.component';
 
 @Component({
-  selector: 'app-psat-rollup-print',
-  templateUrl: './psat-rollup-print.component.html',
-  styleUrls: ['./psat-rollup-print.component.css']
+    selector: 'app-psat-rollup-print',
+    templateUrl: './psat-rollup-print.component.html',
+    styleUrls: ['./psat-rollup-print.component.css'],
+    standalone: false
 })
 export class PsatRollupPrintComponent implements OnInit {
   @Input()

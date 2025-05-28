@@ -9,9 +9,10 @@ import { OperationsService } from '../operations.service';
 import { BoilerWarnings } from '../../boiler/boiler.service';
 
 @Component({
-  selector: 'app-general-operations',
-  templateUrl: './general-operations.component.html',
-  styleUrls: ['./general-operations.component.css']
+    selector: 'app-general-operations',
+    templateUrl: './general-operations.component.html',
+    styleUrls: ['./general-operations.component.css'],
+    standalone: false
 })
 export class GeneralOperationsComponent implements OnInit {
   @Input()

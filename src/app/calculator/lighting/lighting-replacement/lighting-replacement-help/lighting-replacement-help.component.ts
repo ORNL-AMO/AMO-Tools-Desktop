@@ -4,9 +4,10 @@ import { LightingReplacementService } from '../lighting-replacement.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-lighting-replacement-help',
-  templateUrl: './lighting-replacement-help.component.html',
-  styleUrls: ['./lighting-replacement-help.component.css']
+    selector: 'app-lighting-replacement-help',
+    templateUrl: './lighting-replacement-help.component.html',
+    styleUrls: ['./lighting-replacement-help.component.css'],
+    standalone: false
 })
 export class LightingReplacementHelpComponent implements OnInit {
   @Input()

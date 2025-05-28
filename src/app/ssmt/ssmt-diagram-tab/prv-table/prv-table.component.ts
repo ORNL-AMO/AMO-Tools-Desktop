@@ -5,9 +5,10 @@ import { SSMTInputs } from '../../../shared/models/steam/ssmt';
 import { SsmtDiagramTabService } from '../ssmt-diagram-tab.service';
 
 @Component({
-  selector: 'app-prv-table',
-  templateUrl: './prv-table.component.html',
-  styleUrls: ['./prv-table.component.css']
+    selector: 'app-prv-table',
+    templateUrl: './prv-table.component.html',
+    styleUrls: ['./prv-table.component.css'],
+    standalone: false
 })
 export class PrvTableComponent implements OnInit {
   @Input()

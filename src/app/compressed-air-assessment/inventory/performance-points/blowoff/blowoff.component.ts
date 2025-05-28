@@ -10,9 +10,10 @@ import { BlowoffCalculationsService } from '../calculations/blowoff-calculations
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 
 @Component({
-  selector: '[app-blowoff]',
-  templateUrl: './blowoff.component.html',
-  styleUrls: ['./blowoff.component.css']
+    selector: '[app-blowoff]',
+    templateUrl: './blowoff.component.html',
+    styleUrls: ['./blowoff.component.css'],
+    standalone: false
 })
 export class BlowoffComponent implements OnInit {
 

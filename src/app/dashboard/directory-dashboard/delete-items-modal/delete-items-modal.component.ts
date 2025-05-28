@@ -7,9 +7,10 @@ import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { DashboardService } from '../../dashboard.service';
 
 @Component({
-  selector: 'app-delete-items-modal',
-  templateUrl: './delete-items-modal.component.html',
-  styleUrls: ['./delete-items-modal.component.css']
+    selector: 'app-delete-items-modal',
+    templateUrl: './delete-items-modal.component.html',
+    styleUrls: ['./delete-items-modal.component.css'],
+    standalone: false
 })
 export class DeleteItemsModalComponent implements OnInit {
 

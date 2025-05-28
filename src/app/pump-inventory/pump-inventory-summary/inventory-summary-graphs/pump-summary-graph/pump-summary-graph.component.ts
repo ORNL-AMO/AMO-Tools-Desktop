@@ -5,9 +5,10 @@ import { PlotlyService } from 'angular-plotly.js';
 import { PumpInventoryService } from '../../../pump-inventory.service';
 
 @Component({
-  selector: 'app-pump-summary-graph',
-  templateUrl: './pump-summary-graph.component.html',
-  styleUrls: ['./pump-summary-graph.component.css']
+    selector: 'app-pump-summary-graph',
+    templateUrl: './pump-summary-graph.component.html',
+    styleUrls: ['./pump-summary-graph.component.css'],
+    standalone: false
 })
 export class PumpSummaryGraphComponent {
 

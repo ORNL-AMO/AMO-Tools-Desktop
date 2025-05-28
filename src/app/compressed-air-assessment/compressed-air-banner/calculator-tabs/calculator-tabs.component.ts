@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-calculator-tabs',
-  templateUrl: './calculator-tabs.component.html',
-  styleUrls: ['./calculator-tabs.component.css']
+    selector: 'app-calculator-tabs',
+    templateUrl: './calculator-tabs.component.html',
+    styleUrls: ['./calculator-tabs.component.css'],
+    standalone: false
 })
 export class CalculatorTabsComponent implements OnInit {
   calcTabSub: Subscription;

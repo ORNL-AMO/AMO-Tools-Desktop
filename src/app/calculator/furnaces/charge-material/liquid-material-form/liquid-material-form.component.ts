@@ -11,9 +11,10 @@ import { ChargeMaterialService } from '../charge-material.service';
 import { LiquidMaterialFormService, LiquidMaterialWarnings } from './liquid-material-form.service';
 
 @Component({
-  selector: 'app-liquid-material-form',
-  templateUrl: './liquid-material-form.component.html',
-  styleUrls: ['./liquid-material-form.component.css']
+    selector: 'app-liquid-material-form',
+    templateUrl: './liquid-material-form.component.html',
+    styleUrls: ['./liquid-material-form.component.css'],
+    standalone: false
 })
 export class LiquidMaterialFormComponent implements OnInit {
   @Input()

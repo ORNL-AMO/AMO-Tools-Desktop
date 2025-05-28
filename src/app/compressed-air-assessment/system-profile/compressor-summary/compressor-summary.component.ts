@@ -5,9 +5,10 @@ import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-compressor-summary',
-  templateUrl: './compressor-summary.component.html',
-  styleUrls: ['./compressor-summary.component.css']
+    selector: 'app-compressor-summary',
+    templateUrl: './compressor-summary.component.html',
+    styleUrls: ['./compressor-summary.component.css'],
+    standalone: false
 })
 export class CompressorSummaryComponent implements OnInit {
   @Input()

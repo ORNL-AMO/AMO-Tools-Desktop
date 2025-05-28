@@ -11,9 +11,10 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
 
 @Component({
-  selector: 'app-custom-flue-gas-materials',
-  templateUrl: './custom-flue-gas-materials.component.html',
-  styleUrls: ['./custom-flue-gas-materials.component.css']
+    selector: 'app-custom-flue-gas-materials',
+    templateUrl: './custom-flue-gas-materials.component.html',
+    styleUrls: ['./custom-flue-gas-materials.component.css'],
+    standalone: false
 })
 export class CustomFlueGasMaterialsComponent implements OnInit {
   @Input()

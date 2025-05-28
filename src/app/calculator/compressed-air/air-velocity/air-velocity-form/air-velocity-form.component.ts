@@ -3,9 +3,10 @@ import { AirVelocityInput, PipeSizes } from "../../../../shared/models/standalon
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-air-velocity-form',
-  templateUrl: './air-velocity-form.component.html',
-  styleUrls: ['./air-velocity-form.component.css']
+    selector: 'app-air-velocity-form',
+    templateUrl: './air-velocity-form.component.html',
+    styleUrls: ['./air-velocity-form.component.css'],
+    standalone: false
 })
 export class AirVelocityFormComponent implements OnInit {
   @Input()

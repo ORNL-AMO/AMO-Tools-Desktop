@@ -9,9 +9,10 @@ import { Settings } from '../../shared/models/settings';
 import { DayTypeSetupService } from './day-type-setup-form/day-type-setup.service';
 
 @Component({
-  selector: 'app-end-uses',
-  templateUrl: './end-uses.component.html',
-  styleUrls: ['./end-uses.component.css']
+    selector: 'app-end-uses',
+    templateUrl: './end-uses.component.html',
+    styleUrls: ['./end-uses.component.css'],
+    standalone: false
 })
 export class EndUsesComponent implements OnInit {
   hasEndUses: boolean;

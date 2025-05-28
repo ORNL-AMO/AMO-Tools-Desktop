@@ -8,9 +8,10 @@ import { InventoryService } from '../../inventory.service';
 import { FilterCompressorOptions, FilterCompressorsPipe } from '../filter-compressors.pipe';
 
 @Component({
-  selector: 'app-compressor-options-table',
-  templateUrl: './compressor-options-table.component.html',
-  styleUrls: ['./compressor-options-table.component.css']
+    selector: 'app-compressor-options-table',
+    templateUrl: './compressor-options-table.component.html',
+    styleUrls: ['./compressor-options-table.component.css'],
+    standalone: false
 })
 export class CompressorOptionsTableComponent implements OnInit {
   @Output('emitClose')

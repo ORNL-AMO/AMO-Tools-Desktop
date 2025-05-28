@@ -6,9 +6,10 @@ import { LossTab } from '../../tabs';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-explore-phast-opportunities-form',
-  templateUrl: './explore-phast-opportunities-form.component.html',
-  styleUrls: ['./explore-phast-opportunities-form.component.css']
+    selector: 'app-explore-phast-opportunities-form',
+    templateUrl: './explore-phast-opportunities-form.component.html',
+    styleUrls: ['./explore-phast-opportunities-form.component.css'],
+    standalone: false
 })
 export class ExplorePhastOpportunitiesFormComponent implements OnInit {
   @Input()

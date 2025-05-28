@@ -4,9 +4,10 @@ import { PhastService } from '../../phast.service';
 import { OperatingHours } from '../../../shared/models/operations';
 
 @Component({
-  selector: 'app-metered-electricity-form',
-  templateUrl: './metered-electricity-form.component.html',
-  styleUrls: ['./metered-electricity-form.component.css']
+    selector: 'app-metered-electricity-form',
+    templateUrl: './metered-electricity-form.component.html',
+    styleUrls: ['./metered-electricity-form.component.css'],
+    standalone: false
 })
 export class MeteredElectricityFormComponent implements OnInit {
   @Input()

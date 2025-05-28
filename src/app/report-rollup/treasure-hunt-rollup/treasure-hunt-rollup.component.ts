@@ -11,9 +11,10 @@ import { TreasureHuntReportRollupService } from '../treasure-hunt-report-rollup.
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-treasure-hunt-rollup',
-  templateUrl: './treasure-hunt-rollup.component.html',
-  styleUrls: ['./treasure-hunt-rollup.component.css']
+    selector: 'app-treasure-hunt-rollup',
+    templateUrl: './treasure-hunt-rollup.component.html',
+    styleUrls: ['./treasure-hunt-rollup.component.css'],
+    standalone: false
 })
 export class TreasureHuntRollupComponent implements OnInit {
 

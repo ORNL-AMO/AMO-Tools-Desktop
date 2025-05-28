@@ -8,9 +8,10 @@ import { OpportunityCardsService } from '../opportunity-cards/opportunity-cards.
 import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
 
 @Component({
-  selector: 'app-import-opportunities',
-  templateUrl: './import-opportunities.component.html',
-  styleUrls: ['./import-opportunities.component.css']
+    selector: 'app-import-opportunities',
+    templateUrl: './import-opportunities.component.html',
+    styleUrls: ['./import-opportunities.component.css'],
+    standalone: false
 })
 export class ImportOpportunitiesComponent implements OnInit {
 

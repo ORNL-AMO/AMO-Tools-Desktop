@@ -12,9 +12,10 @@ import { PumpOperationsService } from '../../pump-operations/pump-operations.ser
 import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
 import { ConnectedInventoryData } from '../../../shared/connected-inventory/integrations';
 @Component({
-  selector: 'app-explore-opportunities-form',
-  templateUrl: './explore-opportunities-form.component.html',
-  styleUrls: ['./explore-opportunities-form.component.css']
+    selector: 'app-explore-opportunities-form',
+    templateUrl: './explore-opportunities-form.component.html',
+    styleUrls: ['./explore-opportunities-form.component.css'],
+    standalone: false
 })
 export class ExploreOpportunitiesFormComponent implements OnInit {
   @Input()

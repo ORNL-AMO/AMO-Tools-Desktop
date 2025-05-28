@@ -19,9 +19,10 @@ export interface ChartOpportunity {
 };
 
 @Component({
-  selector: 'app-effort-savings-chart',
-  templateUrl: './effort-savings-chart.component.html',
-  styleUrls: ['./effort-savings-chart.component.css']
+    selector: 'app-effort-savings-chart',
+    templateUrl: './effort-savings-chart.component.html',
+    styleUrls: ['./effort-savings-chart.component.css'],
+    standalone: false
 })
 export class EffortSavingsChartComponent implements OnInit {
 

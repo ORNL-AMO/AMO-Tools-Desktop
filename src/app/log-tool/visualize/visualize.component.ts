@@ -6,9 +6,10 @@ import { VisualizeService } from './visualize.service';
 import { VisualizeSidebarService } from './visualize-sidebar/visualize-sidebar.service';
 
 @Component({
-  selector: 'app-visualize',
-  templateUrl: './visualize.component.html',
-  styleUrls: ['./visualize.component.css']
+    selector: 'app-visualize',
+    templateUrl: './visualize.component.html',
+    styleUrls: ['./visualize.component.css'],
+    standalone: false
 })
 export class VisualizeComponent implements OnInit {
 

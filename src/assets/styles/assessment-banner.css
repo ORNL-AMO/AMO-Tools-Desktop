@@ -1,167 +1,261 @@
-.banner .img-col{
-    padding-right: 0px;
+.banner .img-col {
+  padding-right: 0px;
 }
 
 .banner .nav-link.disabled {
-    color: #ABB2B9;
+  color: #ABB2B9;
 }
 
-.banner .home-nav-item:hover, .banner .home-nav-item:hover a{
-    cursor: pointer;
-    font-weight: bolder;
-    color: #808B96;
+.banner .home-nav-item:hover,
+.banner .home-nav-item:hover a {
+  cursor: pointer;
+  font-weight: bolder;
+  color: #808B96;
 }
 
-.banner .nav-link{
-    padding: 6px;
-    font-size: medium;
-    color: #000;
+.banner .nav-link {
+  padding: 6px;
+  font-size: medium;
+  color: #000;
 }
 
-.banner .nav-link:not(.disabled):hover{
-    cursor: pointer;
-    background-color: #808B96;
-}
-.banner .nav-link.disabled:hover{
-    cursor: default;
-    color: initial;
-}
-.banner .nav-link.active{
-    background: #fff;
-    font-weight: bold;
-    color: black;
-  }
-
-.banner .nav-item{
-    margin: .1rem;
+.banner .nav-link:not(.disabled):hover {
+  cursor: pointer;
+  background-color: #808B96;
 }
 
-.banner .nav-link.active{
-    background: #fff;
-    font-weight: bold;
-    color: black;
-  }
+.banner .nav-link.disabled:hover {
+  cursor: default;
+  color: initial;
+}
 
-.banner{
-    font-size: 28px;
-    background: #2c2c2c;
-    color: #fff;
-  }
-    .banner h1 {
-      font-size: 22px;
-      margin-bottom: -14px;
-      color: rgba(255,255,255,1);
-    }
-    .banner small {
-      font-size: 12px;
-      color: rgba(255,255,255,0.7);
-    }
-    .banner.psat {
-      background: #2980b9;
-      margin-left: 0px;
-      margin-right: 0px;
-    }
-    .banner.phast {
-      background: #BF3D00;
-    }
-    .banner.fsat{
-      background: #FFE400;
-    }
-  
-    .banner.ssmt{
-      background:#F39C12;
-      color: black;
-    }
-  
-    .banner.treasure-hunt{
-      background: #2E4053;
-      color: white;
-    }
-  
-    .banner.log-tool{
-      background: #117A65;
-      color: white;
-    }
-  
-    .banner.motor-inventory{
-      background: #84b641;
-    }
+.banner .nav-link.active {
+  background: #fff;
+  font-weight: bold;
+  color: black;
+}
 
-    .banner.pump-inventory{
-      background: #2980b9;
-    }
+.banner .nav-item {
+  margin: .1rem;
+}
 
-    .banner.compressed-air-inventory{
-      background: #7030A0;
-    }
-  
-    .banner.waste-water{
-      background: #003087;
-      color: white;
-    }
+.banner .nav-link.active {
+  background: #fff;
+  font-weight: bold;
+  color: black;
+}
 
-    .banner.compressed-air{
-        background-color: #7030A0;
-    }
-    
-    .banner.fsat .btn-dashboard, .banner.fsat .title, 
-    .banner.fsat .settings, .banner.fsat h1, .banner.fsat small{
-      color: #000;
-    }
-    .banner.ssmt .btn-dashboard, .banner.ssmt .title, 
-    .banner.ssmt .settings, .banner.ssmt h1, .banner.ssmt small{
-      color: #000;
-    }
-  .banner:after {
-    display: table;
-    content: "";
-    clear: both;
-  }
-  
-  .banner .btn-dashboard, .banner .title, .banner .settings {
-    display: inline-block;
-    padding: 7px 10px;
-    color: #fff;
-  }
-  .banner .btn-dashboard {
-    float: right;
-    font-size: 13px;
-    padding: 12px 20px;
-  }
-    .banner .btn-dashboard span {
-      font-size: 23px;
-      font-weight: bold;
-    }
-  
-    .banner.psat .btn-dashboard:hover {
-       background-color: #0063a4;
-    }
-    .banner.phast .btn-dashboard:hover {
-      background-color: #a83600;
-    }
-  
-  .banner .btn-dashboard:hover {
-    text-decoration: none;
-    cursor: pointer;
-  }
-  .banner .title {
-    padding: 0 10px;
-  }
+.banner {
+  font-size: 28px;
+  background: #2c2c2c;
+  color: #fff;
+}
 
-  .banner .pills-nav {
+.banner h1 {
+  font-size: 22px;
+  margin-bottom: -14px;
+  color: rgba(255, 255, 255, 1);
+}
+
+.banner small {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.banner.psat {
+  background: #2980b9;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.banner.phast {
+  background: #BF3D00;
+}
+
+.banner.fsat {
+  background: #FFE400;
+}
+
+.banner.ssmt {
+  background: #F39C12;
+  color: black;
+}
+
+.banner.treasure-hunt {
+  background: #2E4053;
+  color: white;
+}
+
+.banner.log-tool {
+  background: #117A65;
+  color: white;
+}
+
+.banner.motor-inventory {
+  background: #84b641;
+}
+
+.banner.pump-inventory {
+  background: #2980b9;
+}
+
+.banner.compressed-air-inventory {
+  background: #7030A0;
+}
+
+
+.banner.water-process-diagram {
+  background: #3055cf;
+}
+
+
+.banner.waste-water {
+  background: #003087;
+  color: white;
+}
+
+.banner.compressed-air {
+  background-color: #7030A0;
+}
+
+.banner.water-assessment {
+  background-color: #3055cf;
+}
+
+
+.banner.fsat .btn-dashboard,
+.banner.fsat .title,
+.banner.fsat .settings,
+.banner.fsat h1,
+.banner.fsat small {
+  color: #000;
+}
+
+.banner.ssmt .btn-dashboard,
+.banner.ssmt .title,
+.banner.ssmt .settings,
+.banner.ssmt h1,
+.banner.ssmt small {
+  color: #000;
+}
+
+.banner:after {
+  display: table;
+  content: "";
+  clear: both;
+}
+
+.banner .btn-dashboard,
+.banner .title,
+.banner .settings {
+  display: inline-block;
+  padding: 7px 10px;
+  color: #fff;
+}
+
+.banner .btn-dashboard {
+  float: right;
+  font-size: 13px;
+  padding: 12px 20px;
+}
+
+.banner .btn-dashboard span {
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.banner.psat .btn-dashboard:hover {
+  background-color: #0063a4;
+}
+
+.banner.phast .btn-dashboard:hover {
+  background-color: #a83600;
+}
+
+.banner .btn-dashboard:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.banner .title {
+  padding: 0 10px;
+}
+
+.banner .pills-nav {
   margin-bottom: 0px;
-  }
-  .banner.psat .title {
-    color: #fff;
-    padding-left: 58px;
-    background: url('/assets/images/pump-icon.png') no-repeat 14px;
-    background-size: 31px;
-  }
+}
 
-  .banner-border{
-    border-bottom: solid;
-    border-width: 1px;
-    border-color: slategray;
-  }
+.banner.psat .title {
+  color: #fff;
+  padding-left: 58px;
+  background: url('/assets/images/pump-icon.png') no-repeat 14px;
+  background-size: 31px;
+}
 
+.banner.fsat .btn-dashboard,
+.banner.fsat .title,
+.banner.fsat .settings,
+.banner.fsat h1,
+.banner.fsat small {
+  color: #000;
+}
 
+.banner.ssmt .btn-dashboard,
+.banner.ssmt .title,
+.banner.ssmt .settings,
+.banner.ssmt h1,
+.banner.ssmt small {
+  color: #000;
+}
+
+.banner:after {
+  display: table;
+  content: "";
+  clear: both;
+}
+
+.banner .btn-dashboard,
+.banner .title,
+.banner .settings {
+  display: inline-block;
+  padding: 7px 10px;
+  color: #fff;
+}
+
+.banner .btn-dashboard {
+  float: right;
+  font-size: 13px;
+  padding: 12px 20px;
+}
+
+.banner .btn-dashboard span {
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.banner.psat .btn-dashboard:hover {
+  background-color: #0063a4;
+}
+
+.banner.phast .btn-dashboard:hover {
+  background-color: #a83600;
+}
+
+.banner .btn-dashboard:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.banner .title {
+  padding: 0 10px;
+}
+
+.banner .pills-nav {
+  margin-bottom: 0px;
+}
+
+.banner-border {
+  border-bottom: solid;
+  border-width: 1px;
+  border-color: slategray;
+}

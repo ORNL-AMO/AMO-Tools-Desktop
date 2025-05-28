@@ -5,9 +5,10 @@ import { Settings } from '../../shared/models/settings';
 import { WasteWaterService } from '../waste-water.service';
 
 @Component({
-  selector: 'app-results-panel',
-  templateUrl: './results-panel.component.html',
-  styleUrls: ['./results-panel.component.css']
+    selector: 'app-results-panel',
+    templateUrl: './results-panel.component.html',
+    styleUrls: ['./results-panel.component.css'],
+    standalone: false
 })
 export class ResultsPanelComponent implements OnInit {
 
@@ -49,7 +50,7 @@ export class ResultsPanelComponent implements OnInit {
   }
 
   checkDisplayTabs() {
-    this.displayTabs = ((this.setupTab == 'aerator-performance' && this.mainTab == 'system-setup') || this.mainTab == 'assessment')
+    this.displayTabs = ((this.setupTab == 'aerator-performance' && this.mainTab == 'baseline') || this.mainTab == 'assessment')
   }
 
 }

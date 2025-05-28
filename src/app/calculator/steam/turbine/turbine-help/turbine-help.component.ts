@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { TurbineRanges, TurbineService } from '../turbine.service';
 
 @Component({
-  selector: 'app-turbine-help',
-  templateUrl: './turbine-help.component.html',
-  styleUrls: ['./turbine-help.component.css']
+    selector: 'app-turbine-help',
+    templateUrl: './turbine-help.component.html',
+    styleUrls: ['./turbine-help.component.css'],
+    standalone: false
 })
 export class TurbineHelpComponent implements OnInit {
   @Input()

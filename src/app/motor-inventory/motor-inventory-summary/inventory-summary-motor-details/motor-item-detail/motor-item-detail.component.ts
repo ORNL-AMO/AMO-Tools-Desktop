@@ -3,9 +3,10 @@ import { MotorInventoryDepartment, MotorItem, MotorPropertyDisplayOptions } from
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-motor-item-detail',
-  templateUrl: './motor-item-detail.component.html',
-  styleUrls: ['./motor-item-detail.component.css']
+    selector: 'app-motor-item-detail',
+    templateUrl: './motor-item-detail.component.html',
+    styleUrls: ['./motor-item-detail.component.css'],
+    standalone: false
 })
 export class MotorItemDetailComponent implements OnInit {
   @Input()

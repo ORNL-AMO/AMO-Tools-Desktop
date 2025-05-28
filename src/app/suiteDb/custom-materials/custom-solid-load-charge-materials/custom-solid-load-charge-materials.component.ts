@@ -8,9 +8,10 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
 @Component({
-  selector: 'app-custom-solid-load-charge-materials',
-  templateUrl: './custom-solid-load-charge-materials.component.html',
-  styleUrls: ['./custom-solid-load-charge-materials.component.css']
+    selector: 'app-custom-solid-load-charge-materials',
+    templateUrl: './custom-solid-load-charge-materials.component.html',
+    styleUrls: ['./custom-solid-load-charge-materials.component.css'],
+    standalone: false
 })
 export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   @Input()

@@ -166,7 +166,7 @@
           <br>
           Measure flue gas temperature by using "proper" temperature probe. 
           Type of temperature probe depends on flue gas temperature and composition at the point of measurement. 
-          In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the system setup.
+          In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the baseline.
         </small>
       </h6>
     </div>
@@ -182,7 +182,7 @@
           <br>
           Measure flue gas temperature by using "proper" temperature probe. 
           Type of temperature probe depends on flue gas temperature and composition at the point of measurement. 
-          In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the system setup.
+          In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the baseline.
         </small>
       </h6>
     </div>
@@ -402,6 +402,17 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'heatInput'">
+      <h6>
+        Fuel Consumption
+        <br>
+        <small class="text-muted">
+          Energy content of the fuel used by the system
+          <hr>
+        </small>
+      </h6>
     </div>
   
     <div class="justify-content-center"

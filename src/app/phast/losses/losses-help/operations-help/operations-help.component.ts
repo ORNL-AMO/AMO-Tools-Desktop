@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-operations-help',
-  templateUrl: './operations-help.component.html',
-  styleUrls: ['./operations-help.component.css']
+    selector: 'app-operations-help',
+    templateUrl: './operations-help.component.html',
+    styleUrls: ['./operations-help.component.css'],
+    standalone: false
 })
 export class OperationsHelpComponent implements OnInit {
   @Input()

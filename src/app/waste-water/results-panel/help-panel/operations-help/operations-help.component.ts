@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { WasteWaterService } from '../../../waste-water.service';
 
 @Component({
-  selector: 'app-operations-help',
-  templateUrl: './operations-help.component.html',
-  styleUrls: ['./operations-help.component.css']
+    selector: 'app-operations-help',
+    templateUrl: './operations-help.component.html',
+    styleUrls: ['./operations-help.component.css'],
+    standalone: false
 })
 export class OperationsHelpComponent implements OnInit {
 

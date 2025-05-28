@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { InventoryService } from '../../../inventory/inventory.service';
 
 @Component({
-  selector: 'app-adjust-sequencer-profile',
-  templateUrl: './adjust-sequencer-profile.component.html',
-  styleUrls: ['./adjust-sequencer-profile.component.css']
+    selector: 'app-adjust-sequencer-profile',
+    templateUrl: './adjust-sequencer-profile.component.html',
+    styleUrls: ['./adjust-sequencer-profile.component.css'],
+    standalone: false
 })
 export class AdjustSequencerProfileComponent implements OnInit {
   @Input()

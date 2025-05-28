@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { DashboardService } from '../../dashboard.service';
 
 @Component({
-  selector: 'app-inventory-item',
-  templateUrl: './inventory-item.component.html',
-  styleUrls: ['./inventory-item.component.css']
+    selector: 'app-inventory-item',
+    templateUrl: './inventory-item.component.html',
+    styleUrls: ['./inventory-item.component.css'],
+    standalone: false
 })
 export class InventoryItemComponent implements OnInit {
   @Input()

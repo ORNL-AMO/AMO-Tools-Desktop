@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-total-motors-bar-chart',
-  templateUrl: './total-motors-bar-chart.component.html',
-  styleUrls: ['./total-motors-bar-chart.component.css']
+    selector: 'app-total-motors-bar-chart',
+    templateUrl: './total-motors-bar-chart.component.html',
+    styleUrls: ['./total-motors-bar-chart.component.css'],
+    standalone: false
 })
 export class TotalMotorsBarChartComponent implements OnInit {
 

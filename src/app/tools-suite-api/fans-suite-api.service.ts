@@ -176,7 +176,6 @@ export class FansSuiteApiService {
     let traversePlaneTraverseData = new Module.DoubleVector2D();
     let doubleVector;
 
-    //  TODO pressure-readings-form.ts save() should change to Number
     let traverseData: Array<Array<number>> = inputs.traverseData.map(row => {
       return row.map(columnVal => Number(columnVal));
     });
@@ -200,7 +199,19 @@ export class FansSuiteApiService {
     let planeDataInstance = this.getPlaneDataInstance(input);
     //BaseGasDensity
     let gasType = this.suiteApiHelperService.getGasTypeEnum(input.BaseGasDensity.gasType);
-    let baseGasDensityInstance = new Module.BaseGasDensity(input.BaseGasDensity.dryBulbTemp, input.BaseGasDensity.staticPressure, input.BaseGasDensity.barometricPressure, input.BaseGasDensity.gasDensity, gasType);
+
+    let dryBulbTemp = input.BaseGasDensity.dryBulbTemp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.BaseGasDensity.dryBulbTemp); 
+    let staticPressure = input.BaseGasDensity.staticPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.BaseGasDensity.staticPressure); 
+    let barometricPressure = input.BaseGasDensity.barometricPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.BaseGasDensity.barometricPressure); 
+    let gasDensity = input.BaseGasDensity.gasDensity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.BaseGasDensity.gasDensity); 
+    
+    let baseGasDensityInstance = new Module.BaseGasDensity(
+      dryBulbTemp, 
+      staticPressure, 
+      barometricPressure, 
+      gasDensity, 
+      gasType
+    );
     let output = Module.PlaneDataNodeBindingCalculate(planeDataInstance, baseGasDensityInstance);
     let AddlTraversePlanes: Array<PlaneResult> = new Array();
     for (let i = 0; i < output.addlTravPlanes.size(); i++) { // error: length = 0, was .size
@@ -321,7 +332,11 @@ export class FansSuiteApiService {
     //FlowTraverse
     let traversePlaneTraverseData = new Module.DoubleVector2D();
     let doubleVector;
-    input.PlaneData.FlowTraverse.traverseData.forEach(dataRow => {
+
+    let traverseData: Array<Array<number>> = input.PlaneData.FlowTraverse.traverseData.map(row => {
+      return row.map(columnVal => Number(columnVal));
+    });
+    traverseData.forEach(dataRow => {
       doubleVector = this.suiteApiHelperService.returnDoubleVector(dataRow);
       traversePlaneTraverseData.push_back(doubleVector);
       doubleVector.delete();

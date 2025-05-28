@@ -24,9 +24,10 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { copyObject } from '../shared/helperFunctions';
 
 @Component({
-  selector: 'app-fsat',
-  templateUrl: './fsat.component.html',
-  styleUrls: ['./fsat.component.css'],
+    selector: 'app-fsat',
+    templateUrl: './fsat.component.html',
+    styleUrls: ['./fsat.component.css'],
+    standalone: false
 })
 export class FsatComponent implements OnInit {
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
@@ -354,7 +355,7 @@ export class FsatComponent implements OnInit {
   }
 
   getCanContinue() {
-    if (this.stepTab === 'system-basics' ) {
+    if (this.stepTab === 'baseline' ) {
       return true;
     } else if (this.stepTab === 'fan-operations'){
       let tmpForm = this.fsatOperationsService.getFormFromObj(this._fsat.fsatOperations);
@@ -462,8 +463,8 @@ export class FsatComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.fsatService.mainTab.next('system-setup');
-      this.fsatService.stepTab.next('system-basics');
+      this.fsatService.mainTab.next('baseline');
+      this.fsatService.stepTab.next('baseline');
     }
     this.showUpdateUnitsModal = false;
     this.cd.detectChanges();

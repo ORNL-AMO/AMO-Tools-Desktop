@@ -6,9 +6,10 @@ import { CompressedAirPressureReductionService } from '../compressed-air-pressur
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
-  selector: 'app-compressed-air-pressure-reduction-form',
-  templateUrl: './compressed-air-pressure-reduction-form.component.html',
-  styleUrls: ['./compressed-air-pressure-reduction-form.component.css']
+    selector: 'app-compressed-air-pressure-reduction-form',
+    templateUrl: './compressed-air-pressure-reduction-form.component.html',
+    styleUrls: ['./compressed-air-pressure-reduction-form.component.css'],
+    standalone: false
 })
 export class CompressedAirPressureReductionFormComponent implements OnInit {
   @Input()

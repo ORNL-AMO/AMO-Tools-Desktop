@@ -10,9 +10,10 @@ import { Settings } from '../../../../shared/models/settings';
 
 
 @Component({
-  selector: 'app-operations-tab',
-  templateUrl: './operations-tab.component.html',
-  styleUrls: ['./operations-tab.component.css']
+    selector: 'app-operations-tab',
+    templateUrl: './operations-tab.component.html',
+    styleUrls: ['./operations-tab.component.css'],
+    standalone: false
 })
 export class OperationsTabComponent implements OnInit {
   @Input()

@@ -8,9 +8,10 @@ import { aerationRanges, AerationRanges, getSOTRDefaults, aeratorTypes } from '.
 import { WasteWaterService } from '../../../waste-water.service';
 
 @Component({
-  selector: 'app-explore-aerator-form',
-  templateUrl: './explore-aerator-form.component.html',
-  styleUrls: ['./explore-aerator-form.component.css']
+    selector: 'app-explore-aerator-form',
+    templateUrl: './explore-aerator-form.component.html',
+    styleUrls: ['./explore-aerator-form.component.css'],
+    standalone: false
 })
 export class ExploreAeratorFormComponent implements OnInit {
 

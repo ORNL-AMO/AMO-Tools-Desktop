@@ -6,9 +6,10 @@ import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-
 import { BarChartDataItem } from '../../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 
 @Component({
-  selector: 'app-fsat-rollup-print',
-  templateUrl: './fsat-rollup-print.component.html',
-  styleUrls: ['./fsat-rollup-print.component.css']
+    selector: 'app-fsat-rollup-print',
+    templateUrl: './fsat-rollup-print.component.html',
+    styleUrls: ['./fsat-rollup-print.component.css'],
+    standalone: false
 })
 export class FsatRollupPrintComponent implements OnInit {
   @Input()

@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-atmosphere-losses-help',
-  templateUrl: './atmosphere-losses-help.component.html',
-  styleUrls: ['./atmosphere-losses-help.component.css']
+    selector: 'app-atmosphere-losses-help',
+    templateUrl: './atmosphere-losses-help.component.html',
+    styleUrls: ['./atmosphere-losses-help.component.css'],
+    standalone: false
 })
 export class AtmosphereLossesHelpComponent implements OnInit {
   @Input()

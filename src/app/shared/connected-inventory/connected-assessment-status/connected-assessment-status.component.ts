@@ -5,9 +5,10 @@ import { IntegrationStateService } from '../integration-state.service';
 import { IntegrationFormGroupString, IntegrationState, ConnectedInventoryData } from '../integrations';
 
 @Component({
-  selector: 'app-connected-assessment-status',
-  templateUrl: './connected-assessment-status.component.html',
-  styleUrls: ['./connected-assessment-status.component.css']
+    selector: 'app-connected-assessment-status',
+    templateUrl: './connected-assessment-status.component.html',
+    styleUrls: ['./connected-assessment-status.component.css'],
+    standalone: false
 })
 export class ConnectedAssessmentStatusComponent {
   @Input()

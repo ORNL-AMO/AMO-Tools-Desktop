@@ -6,9 +6,10 @@ import { GasCoolingLoss } from '../../../../shared/models/phast/losses/coolingLo
 import { CoolingFormService, GasCoolingWarnings } from '../../../../calculator/furnaces/cooling/cooling-form.service';
 
 @Component({
-  selector: 'app-gas-cooling-losses-form',
-  templateUrl: './gas-cooling-losses-form.component.html',
-  styleUrls: ['./gas-cooling-losses-form.component.css']
+    selector: 'app-gas-cooling-losses-form',
+    templateUrl: './gas-cooling-losses-form.component.html',
+    styleUrls: ['./gas-cooling-losses-form.component.css'],
+    standalone: false
 })
 export class GasCoolingLossesFormComponent implements OnInit {
   @Input()

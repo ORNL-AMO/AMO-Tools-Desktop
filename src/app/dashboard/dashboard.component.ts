@@ -12,9 +12,10 @@ import { ImportExportService } from '../shared/import-export/import-export.servi
 
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.css'],
+    standalone: false
 })
 export class DashboardComponent implements OnInit {
 
@@ -63,6 +64,8 @@ export class DashboardComponent implements OnInit {
   showPrintViewSub: Subscription;
   exportInProgressSub: Subscription;
   showExportInProgress: boolean;
+  showCreateDiagramSub: Subscription;
+  showCreateDiagram: boolean;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -92,6 +95,10 @@ export class DashboardComponent implements OnInit {
     });
     this.createAssessmentSub = this.dashboardService.createAssessment.subscribe(val => {
       this.createAssessment = val;
+    });
+
+    this.showCreateDiagramSub = this.dashboardService.showCreateDiagram.subscribe(val => {
+      this.showCreateDiagram = val;
     });
 
     this.moveItemsSub = this.dashboardService.moveItems.subscribe(val => {

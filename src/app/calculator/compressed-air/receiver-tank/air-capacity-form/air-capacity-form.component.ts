@@ -7,9 +7,10 @@ import { ReceiverTankService } from '../receiver-tank.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-air-capacity-form',
-  templateUrl: './air-capacity-form.component.html',
-  styleUrls: ['./air-capacity-form.component.css']
+    selector: 'app-air-capacity-form',
+    templateUrl: './air-capacity-form.component.html',
+    styleUrls: ['./air-capacity-form.component.css'],
+    standalone: false
 })
 export class AirCapacityFormComponent implements OnInit {
   @Input()

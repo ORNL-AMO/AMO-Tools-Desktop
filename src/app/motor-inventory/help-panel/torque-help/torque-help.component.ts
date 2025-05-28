@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { Subscription } from 'rxjs';
 @Component({
-  selector: 'app-torque-help',
-  templateUrl: './torque-help.component.html',
-  styleUrls: ['./torque-help.component.css']
+    selector: 'app-torque-help',
+    templateUrl: './torque-help.component.html',
+    styleUrls: ['./torque-help.component.css'],
+    standalone: false
 })
 export class TorqueHelpComponent implements OnInit {
 

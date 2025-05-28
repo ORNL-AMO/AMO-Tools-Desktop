@@ -12,9 +12,10 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { PhastValidService } from '../phast-valid.service';
 
 @Component({
-  selector: 'app-phast-report',
-  templateUrl: './phast-report.component.html',
-  styleUrls: ['./phast-report.component.css']
+    selector: 'app-phast-report',
+    templateUrl: './phast-report.component.html',
+    styleUrls: ['./phast-report.component.css'],
+    standalone: false
 })
 export class PhastReportComponent implements OnInit {
 

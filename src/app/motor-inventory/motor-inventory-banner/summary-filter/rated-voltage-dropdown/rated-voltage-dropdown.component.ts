@@ -7,9 +7,10 @@ import { InventorySummaryGraphsService } from '../../../motor-inventory-summary/
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-rated-voltage-dropdown',
-  templateUrl: './rated-voltage-dropdown.component.html',
-  styleUrls: ['./rated-voltage-dropdown.component.css']
+    selector: 'app-rated-voltage-dropdown',
+    templateUrl: './rated-voltage-dropdown.component.html',
+    styleUrls: ['./rated-voltage-dropdown.component.css'],
+    standalone: false
 })
 export class RatedVoltageDropdownComponent implements OnInit {
 

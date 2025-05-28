@@ -20,9 +20,10 @@ import { Directory } from '../../shared/models/directory';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 
 @Component({
-  selector: 'app-assessment-reports',
-  templateUrl: './assessment-reports.component.html',
-  styleUrls: ['./assessment-reports.component.css']
+    selector: 'app-assessment-reports',
+    templateUrl: './assessment-reports.component.html',
+    styleUrls: ['./assessment-reports.component.css'],
+    standalone: false
 })
 export class AssessmentReportsComponent implements OnInit {
 

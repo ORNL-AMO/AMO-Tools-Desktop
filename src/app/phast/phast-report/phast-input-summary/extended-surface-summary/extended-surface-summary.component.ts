@@ -2,9 +2,10 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
-  selector: 'app-extended-surface-summary',
-  templateUrl: './extended-surface-summary.component.html',
-  styleUrls: ['./extended-surface-summary.component.css']
+    selector: 'app-extended-surface-summary',
+    templateUrl: './extended-surface-summary.component.html',
+    styleUrls: ['./extended-surface-summary.component.css'],
+    standalone: false
 })
 export class ExtendedSurfaceSummaryComponent implements OnInit {
   @Input()

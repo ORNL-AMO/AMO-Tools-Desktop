@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-heat-system-efficiency-help',
-  templateUrl: './heat-system-efficiency-help.component.html',
-  styleUrls: ['./heat-system-efficiency-help.component.css']
+    selector: 'app-heat-system-efficiency-help',
+    templateUrl: './heat-system-efficiency-help.component.html',
+    styleUrls: ['./heat-system-efficiency-help.component.css'],
+    standalone: false
 })
 export class HeatSystemEfficiencyHelpComponent implements OnInit {
   @Input()

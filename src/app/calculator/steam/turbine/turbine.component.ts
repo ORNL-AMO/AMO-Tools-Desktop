@@ -9,9 +9,10 @@ import {TurbineOutput} from '../../../shared/models/steam/steam-outputs';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-turbine-calculator',
-  templateUrl: './turbine.component.html',
-  styleUrls: ['./turbine.component.css']
+    selector: 'app-turbine-calculator',
+    templateUrl: './turbine.component.html',
+    styleUrls: ['./turbine.component.css'],
+    standalone: false
 })
 export class TurbineComponent implements OnInit {
   @Input()

@@ -17,9 +17,10 @@ import { copyObject } from '../../shared/helperFunctions';
 
 
 @Component({
-  selector: 'app-operations',
-  templateUrl: './operations.component.html',
-  styleUrls: ['./operations.component.css']
+    selector: 'app-operations',
+    templateUrl: './operations.component.html',
+    styleUrls: ['./operations.component.css'],
+    standalone: false
 })
 export class OperationsComponent implements OnInit {
   @Input()

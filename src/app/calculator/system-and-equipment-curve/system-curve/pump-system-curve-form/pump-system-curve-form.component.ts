@@ -8,9 +8,10 @@ import { CurveDataService } from '../../curve-data.service';
 import { PumpSystemCurveData, ModificationEquipment } from '../../../../shared/models/system-and-equipment-curve';
 
 @Component({
-  selector: 'app-pump-system-curve-form',
-  templateUrl: './pump-system-curve-form.component.html',
-  styleUrls: ['./pump-system-curve-form.component.css']
+    selector: 'app-pump-system-curve-form',
+    templateUrl: './pump-system-curve-form.component.html',
+    styleUrls: ['./pump-system-curve-form.component.css'],
+    standalone: false
 })
 export class PumpSystemCurveFormComponent implements OnInit {
   @Input()

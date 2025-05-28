@@ -6,9 +6,10 @@ import { Assessment } from '../../models/assessment';
 import { AssessmentType, ConnectedItem } from '../integrations';
 
 @Component({
-  selector: 'app-connected-assessment',
-  templateUrl: './connected-assessment.component.html',
-  styleUrls: ['./connected-assessment.component.css']
+    selector: 'app-connected-assessment',
+    templateUrl: './connected-assessment.component.html',
+    styleUrls: ['./connected-assessment.component.css'],
+    standalone: false
 })
 export class ConnectedAssessmentComponent {
   @Input()

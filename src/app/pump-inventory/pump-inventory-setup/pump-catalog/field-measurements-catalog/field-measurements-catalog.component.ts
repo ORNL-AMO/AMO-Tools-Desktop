@@ -9,9 +9,10 @@ import { PumpCatalogService } from '../pump-catalog.service';
 import { FieldMeasurementsCatalogService } from './field-measurements-catalog.service';
 
 @Component({
-  selector: 'app-field-measurements-catalog',
-  templateUrl: './field-measurements-catalog.component.html',
-  styleUrls: ['./field-measurements-catalog.component.css']
+    selector: 'app-field-measurements-catalog',
+    templateUrl: './field-measurements-catalog.component.html',
+    styleUrls: ['./field-measurements-catalog.component.css'],
+    standalone: false
 })
 export class FieldMeasurementsCatalogComponent implements OnInit {
 

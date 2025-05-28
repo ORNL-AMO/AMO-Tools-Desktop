@@ -2,9 +2,10 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { LightingReplacementData, LightingReplacementResults } from '../../../../shared/models/lighting';
 
 @Component({
-  selector: 'app-lighting-replacement-results',
-  templateUrl: './lighting-replacement-results.component.html',
-  styleUrls: ['./lighting-replacement-results.component.css']
+    selector: 'app-lighting-replacement-results',
+    templateUrl: './lighting-replacement-results.component.html',
+    styleUrls: ['./lighting-replacement-results.component.css'],
+    standalone: false
 })
 export class LightingReplacementResultsComponent implements OnInit {
   @Input()

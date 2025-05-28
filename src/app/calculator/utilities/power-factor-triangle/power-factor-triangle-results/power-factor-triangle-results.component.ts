@@ -3,9 +3,10 @@ import { PowerFactorTriangleOutputs } from '../../../../shared/models/standalone
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-power-factor-triangle-results',
-  templateUrl: './power-factor-triangle-results.component.html',
-  styleUrls: ['./power-factor-triangle-results.component.css']
+    selector: 'app-power-factor-triangle-results',
+    templateUrl: './power-factor-triangle-results.component.html',
+    styleUrls: ['./power-factor-triangle-results.component.css'],
+    standalone: false
 })
 export class PowerFactorTriangleResultsComponent implements OnInit {
   @Input()
@@ -95,7 +96,7 @@ export class PowerFactorTriangleResultsComponent implements OnInit {
         range: [-1, 1.05 * this.results.reactivePower],
         scaleratio: 1,
       },
-      margin: { t: 25, b: 25, l: 25, r: 25 },
+      margin: { t: 25, b: 25, l: 50, r: 25 },
     };
 
     var modebarBtns = {

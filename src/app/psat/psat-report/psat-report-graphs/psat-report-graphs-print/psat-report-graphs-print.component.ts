@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { ScenarioSummary } from '../../../../shared/models/reports';
 
 @Component({
-  selector: 'app-psat-report-graphs-print',
-  templateUrl: './psat-report-graphs-print.component.html',
-  styleUrls: ['./psat-report-graphs-print.component.css']
+    selector: 'app-psat-report-graphs-print',
+    templateUrl: './psat-report-graphs-print.component.html',
+    styleUrls: ['./psat-report-graphs-print.component.css'],
+    standalone: false
 })
 export class PsatReportGraphsPrintComponent implements OnInit {
   @Input()
@@ -77,7 +78,7 @@ export class PsatReportGraphsPrintComponent implements OnInit {
   getModificationNotes(modification: Modification): Array<string> {
     let notes: Array<string> = new Array();
     if (modification.notes.systemBasicsNotes) {
-      notes.push("System Basics - " + modification.notes.systemBasicsNotes);
+      notes.push("Baseline - " + modification.notes.systemBasicsNotes);
     } else if (modification.notes.pumpFluidNotes) {
       notes.push("Pump Fluid - " + modification.notes.pumpFluidNotes);
 

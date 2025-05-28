@@ -25,9 +25,10 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { copyObject, getNewIdString } from '../shared/helperFunctions';
 
 @Component({
-  selector: 'app-psat',
-  templateUrl: './psat.component.html',
-  styleUrls: ['./psat.component.css'],
+    selector: 'app-psat',
+    templateUrl: './psat.component.html',
+    styleUrls: ['./psat.component.css'],
+    standalone: false
 })
 export class PsatComponent implements OnInit {
   @ViewChild('changeModificationModal', { static: false }) public changeModificationModal: ModalDirective;
@@ -50,7 +51,7 @@ export class PsatComponent implements OnInit {
   }
   
   assessment: Assessment;
-  currentTab: string = 'system-setup';
+  currentTab: string = 'baseline';
   
   psatOptions: Array<any>;
   psatOptionsLength: number;
@@ -63,7 +64,7 @@ export class PsatComponent implements OnInit {
   _psat: PSAT;
   settings: Settings;
   isModalOpen: boolean = false;
-  mainTab: string = 'system-setup';
+  mainTab: string = 'baseline';
   calcTab: string;
   modificationIndex: number = 0;
   selectedModSubscription: Subscription;
@@ -223,8 +224,8 @@ export class PsatComponent implements OnInit {
     if (this.stepTabSubscription) this.stepTabSubscription.unsubscribe();    
     this.showExportModalSub.unsubscribe();
     this.psatTabService.secondaryTab.next('explore-opportunities');
-    this.psatTabService.mainTab.next('system-setup');
-    this.psatTabService.stepTab.next('system-basics');
+    this.psatTabService.mainTab.next('baseline');
+    this.psatTabService.stepTab.next('baseline');
     this.psatTabService.modifyConditionsTab.next('pump-fluid');
     this.compareService.selectedModification.next(undefined);
     this.connectedInventoryDataSub.unsubscribe();
@@ -239,7 +240,7 @@ export class PsatComponent implements OnInit {
 
   
   redirectFromConnectedInventory() {
-    this.psatTabService.mainTab.next('system-setup');
+    this.psatTabService.mainTab.next('baseline');
     this.psatTabService.stepTab.next('motor');
   }
 
@@ -311,7 +312,7 @@ export class PsatComponent implements OnInit {
   }
 
   getCanContinue() {
-    if (this.stepTab == 'system-basics') {
+    if (this.stepTab == 'baseline') {
       return true;
     }
     else if (this.stepTab == 'operations') {
@@ -477,8 +478,8 @@ export class PsatComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.psatTabService.mainTab.next('system-setup');
-      this.psatTabService.stepTab.next('system-basics');
+      this.psatTabService.mainTab.next('baseline');
+      this.psatTabService.stepTab.next('baseline');
     }
     this.showUpdateUnitsModal = false;
     this.cd.detectChanges();

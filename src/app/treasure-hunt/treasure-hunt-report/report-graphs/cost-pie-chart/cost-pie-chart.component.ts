@@ -6,9 +6,10 @@ import { PlotlyService } from 'angular-plotly.js';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-cost-pie-chart',
-  templateUrl: './cost-pie-chart.component.html',
-  styleUrls: ['./cost-pie-chart.component.css']
+    selector: 'app-cost-pie-chart',
+    templateUrl: './cost-pie-chart.component.html',
+    styleUrls: ['./cost-pie-chart.component.css'],
+    standalone: false
 })
 export class CostPieChartComponent implements OnInit {
   @Input()

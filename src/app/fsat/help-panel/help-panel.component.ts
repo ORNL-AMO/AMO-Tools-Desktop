@@ -8,9 +8,10 @@ import { FSAT } from '../../shared/models/fans';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
-  selector: 'app-help-panel',
-  templateUrl: './help-panel.component.html',
-  styleUrls: ['./help-panel.component.css']
+    selector: 'app-help-panel',
+    templateUrl: './help-panel.component.html',
+    styleUrls: ['./help-panel.component.css'],
+    standalone: false
 })
 export class HelpPanelComponent implements OnInit {
   @Input()

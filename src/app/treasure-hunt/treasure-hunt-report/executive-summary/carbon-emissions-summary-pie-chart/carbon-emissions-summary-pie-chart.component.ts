@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { TreasureHuntCo2EmissionsResults, TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 
 @Component({
-  selector: 'app-carbon-emissions-summary-pie-chart',
-  templateUrl: './carbon-emissions-summary-pie-chart.component.html',
-  styleUrls: ['./carbon-emissions-summary-pie-chart.component.css']
+    selector: 'app-carbon-emissions-summary-pie-chart',
+    templateUrl: './carbon-emissions-summary-pie-chart.component.html',
+    styleUrls: ['./carbon-emissions-summary-pie-chart.component.css'],
+    standalone: false
 })
 export class CarbonEmissionsSummaryPieChartComponent implements OnInit {
   @Input()

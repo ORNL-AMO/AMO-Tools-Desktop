@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { HeatExchangerInput } from '../../../../shared/models/steam/steam-inputs';
 
 @Component({
-  selector: 'app-hover-heat-exchanger',
-  templateUrl: './hover-heat-exchanger.component.html',
-  styleUrls: ['./hover-heat-exchanger.component.css']
+    selector: 'app-hover-heat-exchanger',
+    templateUrl: './hover-heat-exchanger.component.html',
+    styleUrls: ['./hover-heat-exchanger.component.css'],
+    standalone: false
 })
 export class HoverHeatExchangerComponent implements OnInit {
   @Input()

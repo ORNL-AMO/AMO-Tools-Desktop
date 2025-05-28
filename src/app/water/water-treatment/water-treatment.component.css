@@ -1,0 +1,15 @@
+.secondary-group{
+    width: auto;
+    text-transform: none;
+    padding-bottom: 0px;
+}
+
+.group-label:hover:not(.secondary-group){
+    cursor: pointer;
+    background-color: lightgray;
+}
+
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+  }

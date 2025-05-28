@@ -8,9 +8,10 @@ import { TreasureHuntService } from '../../treasure-hunt.service';
 import { copyObject } from '../../../shared/helperFunctions';
 
 @Component({
-  selector: 'app-assessment-opportunity',
-  templateUrl: './assessment-opportunity.component.html',
-  styleUrls: ['./assessment-opportunity.component.css']
+    selector: 'app-assessment-opportunity',
+    templateUrl: './assessment-opportunity.component.html',
+    styleUrls: ['./assessment-opportunity.component.css'],
+    standalone: false
 })
 export class AssessmentOpportunityComponent {
   @Output('emitCancel')

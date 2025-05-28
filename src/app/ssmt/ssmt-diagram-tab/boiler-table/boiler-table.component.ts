@@ -5,9 +5,10 @@ import { Settings } from '../../../shared/models/settings';
 import { SsmtDiagramTabService } from '../ssmt-diagram-tab.service';
 
 @Component({
-  selector: 'app-boiler-table',
-  templateUrl: './boiler-table.component.html',
-  styleUrls: ['./boiler-table.component.css']
+    selector: 'app-boiler-table',
+    templateUrl: './boiler-table.component.html',
+    styleUrls: ['./boiler-table.component.css'],
+    standalone: false
 })
 export class BoilerTableComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { NameplateDataOptions, MotorInventoryData } from '../../../motor-invento
 import { MotorInventoryService } from '../../../motor-inventory.service';
 
 @Component({
-  selector: 'app-nameplate-data-properties',
-  templateUrl: './nameplate-data-properties.component.html',
-  styleUrls: ['./nameplate-data-properties.component.css']
+    selector: 'app-nameplate-data-properties',
+    templateUrl: './nameplate-data-properties.component.html',
+    styleUrls: ['./nameplate-data-properties.component.css'],
+    standalone: false
 })
 export class NameplateDataPropertiesComponent implements OnInit {
 

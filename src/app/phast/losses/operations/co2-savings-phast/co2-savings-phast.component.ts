@@ -12,9 +12,10 @@ import { LossesService } from '../../losses.service';
 import { Co2SavingsPhastService, PhastCo2SavingsDifferent } from './co2-savings-phast.service';
 
 @Component({
-  selector: 'app-co2-savings-phast',
-  templateUrl: './co2-savings-phast.component.html',
-  styleUrls: ['./co2-savings-phast.component.css']
+    selector: 'app-co2-savings-phast',
+    templateUrl: './co2-savings-phast.component.html',
+    styleUrls: ['./co2-savings-phast.component.css'],
+    standalone: false
 })
 export class Co2SavingsPhastComponent implements OnInit {
 

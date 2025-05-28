@@ -9,9 +9,10 @@ import { copyObject } from '../../../../shared/helperFunctions';
 
 
 @Component({
-  selector: 'app-weather-bins-heat-map',
-  templateUrl: './weather-bins-heat-map.component.html',
-  styleUrl: './weather-bins-heat-map.component.css'
+    selector: 'app-weather-bins-heat-map',
+    templateUrl: './weather-bins-heat-map.component.html',
+    styleUrl: './weather-bins-heat-map.component.css',
+    standalone: false
 })
 export class WeatherBinsHeatMapComponent {
   @ViewChild('weatherBinsHeatMap', { static: false }) weatherBinsHeatMap: ElementRef;

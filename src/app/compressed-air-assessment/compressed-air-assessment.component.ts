@@ -22,9 +22,10 @@ import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-set
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-compressed-air-assessment',
-  templateUrl: './compressed-air-assessment.component.html',
-  styleUrls: ['./compressed-air-assessment.component.css']
+    selector: 'app-compressed-air-assessment',
+    templateUrl: './compressed-air-assessment.component.html',
+    styleUrls: ['./compressed-air-assessment.component.css'],
+    standalone: false
 })
 export class CompressedAirAssessmentComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
@@ -153,7 +154,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.showAddModificationSub.unsubscribe();
     this.showModificationListSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
-    this.compressedAirAssessmentService.mainTab.next('system-setup');
+    this.compressedAirAssessmentService.mainTab.next('baseline');
     this.compressedAirAssessmentService.setupTab.next('system-basics');
     this.compressedAirAssessmentService.profileTab.next('setup');
     this.inventoryService.selectedCompressor.next(undefined);
@@ -274,7 +275,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.compressedAirAssessmentService.mainTab.next('system-setup');
+      this.compressedAirAssessmentService.mainTab.next('baseline');
       this.compressedAirAssessmentService.setupTab.next('system-basics');
     }
     this.showUpdateUnitsModal = false;

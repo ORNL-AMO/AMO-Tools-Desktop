@@ -8,9 +8,10 @@ import { CompressedAirAssessmentService, ProfileSummaryValid, } from '../../../c
 import { SystemProfileService } from '../../system-profile.service';
 
 @Component({
-  selector: 'app-operating-profile-table',
-  templateUrl: './operating-profile-table.component.html',
-  styleUrls: ['./operating-profile-table.component.css']
+    selector: 'app-operating-profile-table',
+    templateUrl: './operating-profile-table.component.html',
+    styleUrls: ['./operating-profile-table.component.css'],
+    standalone: false
 })
 export class OperatingProfileTableComponent implements OnInit {
 

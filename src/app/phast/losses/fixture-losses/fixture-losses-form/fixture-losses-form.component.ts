@@ -11,9 +11,10 @@ import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-mat
 import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-fixture-losses-form',
-  templateUrl: './fixture-losses-form.component.html',
-  styleUrls: ['./fixture-losses-form.component.css']
+    selector: 'app-fixture-losses-form',
+    templateUrl: './fixture-losses-form.component.html',
+    styleUrls: ['./fixture-losses-form.component.css'],
+    standalone: false
 })
 export class FixtureLossesFormComponent implements OnInit {
   @Input()

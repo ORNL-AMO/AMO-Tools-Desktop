@@ -11,9 +11,10 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 
 @Component({
-  selector: 'app-steam-properties-calculator',
-  templateUrl: './steam-properties.component.html',
-  styleUrls: ['./steam-properties.component.css']
+    selector: 'app-steam-properties-calculator',
+    templateUrl: './steam-properties.component.html',
+    styleUrls: ['./steam-properties.component.css'],
+    standalone: false
 })
 export class SteamPropertiesComponent implements OnInit {
   @Input()

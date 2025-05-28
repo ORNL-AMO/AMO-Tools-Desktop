@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { SSMTInputs } from '../../../../shared/models/steam/ssmt';
 
 @Component({
-  selector: 'app-hover-prv-table',
-  templateUrl: './hover-prv-table.component.html',
-  styleUrls: ['./hover-prv-table.component.css']
+    selector: 'app-hover-prv-table',
+    templateUrl: './hover-prv-table.component.html',
+    styleUrls: ['./hover-prv-table.component.css'],
+    standalone: false
 })
 export class HoverPrvTableComponent implements OnInit {
   @Input()

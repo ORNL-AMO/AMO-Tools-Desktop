@@ -4,9 +4,10 @@ import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from './opportunity-sheet.service';
 
 @Component({
-  selector: 'app-standalone-opportunity-sheet',
-  templateUrl: './standalone-opportunity-sheet.component.html',
-  styleUrls: ['./standalone-opportunity-sheet.component.css']
+    selector: 'app-standalone-opportunity-sheet',
+    templateUrl: './standalone-opportunity-sheet.component.html',
+    styleUrls: ['./standalone-opportunity-sheet.component.css'],
+    standalone: false
 })
 export class StandaloneOpportunitySheetComponent implements OnInit {
   @Output('emitCancel')

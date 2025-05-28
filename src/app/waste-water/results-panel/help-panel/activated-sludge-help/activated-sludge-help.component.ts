@@ -4,9 +4,10 @@ import { WasteWaterService } from '../../../waste-water.service';
 import { concentrationRows } from './concentrationHelp';
 
 @Component({
-  selector: 'app-activated-sludge-help',
-  templateUrl: './activated-sludge-help.component.html',
-  styleUrls: ['./activated-sludge-help.component.css']
+    selector: 'app-activated-sludge-help',
+    templateUrl: './activated-sludge-help.component.html',
+    styleUrls: ['./activated-sludge-help.component.css'],
+    standalone: false
 })
 export class ActivatedSludgeHelpComponent implements OnInit {
 

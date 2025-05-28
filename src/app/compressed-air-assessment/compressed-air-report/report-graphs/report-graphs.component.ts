@@ -6,9 +6,10 @@ import { PlotlyService } from 'angular-plotly.js';
 import { CompressedAirModificationValid } from '../../explore-opportunities/explore-opportunities-validation.service';
 
 @Component({
-  selector: 'app-report-graphs',
-  templateUrl: './report-graphs.component.html',
-  styleUrls: ['./report-graphs.component.css']
+    selector: 'app-report-graphs',
+    templateUrl: './report-graphs.component.html',
+    styleUrls: ['./report-graphs.component.css'],
+    standalone: false
 })
 export class ReportGraphsComponent implements OnInit {
   @Input()

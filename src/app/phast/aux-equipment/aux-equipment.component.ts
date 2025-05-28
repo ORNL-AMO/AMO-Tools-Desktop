@@ -5,9 +5,10 @@ import { AuxEquipmentService } from './aux-equipment.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Settings } from '../../shared/models/settings';
 @Component({
-  selector: 'app-aux-equipment',
-  templateUrl: 'aux-equipment.component.html',
-  styleUrls: ['aux-equipment.component.css', '../../psat/explore-opportunities/explore-opportunities.component.css']
+    selector: 'app-aux-equipment',
+    templateUrl: 'aux-equipment.component.html',
+    styleUrls: ['aux-equipment.component.css', '../../psat/explore-opportunities/explore-opportunities.component.css'],
+    standalone: false
 })
 export class AuxEquipmentComponent implements OnInit {
   @Input()

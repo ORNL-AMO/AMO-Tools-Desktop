@@ -3,9 +3,10 @@ import { FlashTankOutput, SSMTOutput } from '../../../../shared/models/steam/ste
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-hover-flash-tank-table',
-  templateUrl: './hover-flash-tank-table.component.html',
-  styleUrls: ['./hover-flash-tank-table.component.css']
+    selector: 'app-hover-flash-tank-table',
+    templateUrl: './hover-flash-tank-table.component.html',
+    styleUrls: ['./hover-flash-tank-table.component.css'],
+    standalone: false
 })
 export class HoverFlashTankTableComponent implements OnInit {
   @Input()

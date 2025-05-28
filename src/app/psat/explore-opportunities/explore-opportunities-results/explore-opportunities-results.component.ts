@@ -3,9 +3,10 @@ import { PsatOutputs, PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-explore-opportunities-results',
-  templateUrl: './explore-opportunities-results.component.html',
-  styleUrls: ['./explore-opportunities-results.component.css']
+    selector: 'app-explore-opportunities-results',
+    templateUrl: './explore-opportunities-results.component.html',
+    styleUrls: ['./explore-opportunities-results.component.css'],
+    standalone: false
 })
 export class ExploreOpportunitiesResultsComponent implements OnInit {
   @Input()

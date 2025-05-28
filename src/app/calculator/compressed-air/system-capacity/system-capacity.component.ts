@@ -12,9 +12,10 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
  
 
 @Component({
-  selector: 'app-system-capacity',
-  templateUrl: './system-capacity.component.html',
-  styleUrls: ['./system-capacity.component.css']
+    selector: 'app-system-capacity',
+    templateUrl: './system-capacity.component.html',
+    styleUrls: ['./system-capacity.component.css'],
+    standalone: false
 })
 export class SystemCapacityComponent implements OnInit {
   @Input()

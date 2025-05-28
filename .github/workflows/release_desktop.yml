@@ -1,4 +1,4 @@
-name: Electron
+name: "Release: Desktop"
 
 on:
   workflow_call:
@@ -33,7 +33,11 @@ jobs:
           cp "$WIN_CERT_PATH" ./wincert.pem
           echo -n "${{ secrets.APPLE_PROV_PROF_BASE64 }}" | base64 --decode -o $PROV_PROF_PATH &&
           cp "$PROV_PROF_PATH" ./embedded.provisionprofile
-          npm ci &&
+          find . -name "package-lock.json" -not -path "*/node_modules/*" -not -path "*/dist/*" -exec dirname {} \; | sort -u |
+          while read dir; do
+            echo "Installing dependencies for: $dir"
+            (cd $dir && npm ci $dir);
+          done
           security -v unlock-keychain -p "${{ secrets.KC_SECRET }}" ~/Library/Keychains/login.keychain-db
       - name: Build
         run: npm run build-prod-desktop-ci

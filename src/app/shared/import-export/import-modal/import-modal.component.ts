@@ -7,9 +7,10 @@ import { DashboardService } from '../../../dashboard/dashboard.service';
 import * as pako from 'pako';
 
 @Component({
-  selector: 'app-import-modal',
-  templateUrl: './import-modal.component.html',
-  styleUrls: ['./import-modal.component.css']
+    selector: 'app-import-modal',
+    templateUrl: './import-modal.component.html',
+    styleUrls: ['./import-modal.component.css'],
+    standalone: false
 })
 export class ImportModalComponent implements OnInit {
 

@@ -13,9 +13,10 @@ import { FixtureFormService } from '../fixture-form.service';
 import { FixtureService } from '../fixture.service';
 
 @Component({
-  selector: 'app-fixture-form',
-  templateUrl: './fixture-form.component.html',
-  styleUrls: ['./fixture-form.component.css']
+    selector: 'app-fixture-form',
+    templateUrl: './fixture-form.component.html',
+    styleUrls: ['./fixture-form.component.css'],
+    standalone: false
 })
 export class FixtureFormComponent implements OnInit {
   @Input()

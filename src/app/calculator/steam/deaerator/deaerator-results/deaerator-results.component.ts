@@ -3,9 +3,10 @@ import { DeaeratorOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-deaerator-results',
-  templateUrl: './deaerator-results.component.html',
-  styleUrls: ['./deaerator-results.component.css']
+    selector: 'app-deaerator-results',
+    templateUrl: './deaerator-results.component.html',
+    styleUrls: ['./deaerator-results.component.css'],
+    standalone: false
 })
 export class DeaeratorResultsComponent implements OnInit {
   @Input()

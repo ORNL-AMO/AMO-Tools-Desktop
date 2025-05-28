@@ -3,9 +3,10 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-slag-summary',
-  templateUrl: './slag-summary.component.html',
-  styleUrls: ['./slag-summary.component.css']
+    selector: 'app-slag-summary',
+    templateUrl: './slag-summary.component.html',
+    styleUrls: ['./slag-summary.component.css'],
+    standalone: false
 })
 export class SlagSummaryComponent implements OnInit {
   @Input()

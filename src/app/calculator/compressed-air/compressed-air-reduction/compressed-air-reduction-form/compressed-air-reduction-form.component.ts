@@ -8,9 +8,10 @@ import { ConvertCompressedAirReductionService } from '../convert-compressed-air-
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-compressed-air-reduction-form',
-  templateUrl: './compressed-air-reduction-form.component.html',
-  styleUrls: ['./compressed-air-reduction-form.component.css']
+    selector: 'app-compressed-air-reduction-form',
+    templateUrl: './compressed-air-reduction-form.component.html',
+    styleUrls: ['./compressed-air-reduction-form.component.css'],
+    standalone: false
 })
 export class CompressedAirReductionFormComponent implements OnInit {
   @Input()

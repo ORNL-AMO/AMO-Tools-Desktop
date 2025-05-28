@@ -10,9 +10,10 @@ import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 @Component({
-  selector: 'app-energy-used',
-  templateUrl: './energy-used.component.html',
-  styleUrls: ['./energy-used.component.css']
+    selector: 'app-energy-used',
+    templateUrl: './energy-used.component.html',
+    styleUrls: ['./energy-used.component.css'],
+    standalone: false
 })
 export class EnergyUsedComponent implements OnInit {
   @Input()

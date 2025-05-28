@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-reduce-run-time-help',
-  templateUrl: './reduce-run-time-help.component.html',
-  styleUrls: ['./reduce-run-time-help.component.css']
+    selector: 'app-reduce-run-time-help',
+    templateUrl: './reduce-run-time-help.component.html',
+    styleUrls: ['./reduce-run-time-help.component.css'],
+    standalone: false
 })
 export class ReduceRunTimeHelpComponent implements OnInit {
 

@@ -4,9 +4,10 @@ import { GraphObj, YAxisDataOption } from '../../../log-tool-models';
 import { VisualizeSidebarService } from '../visualize-sidebar.service';
 
 @Component({
-  selector: 'app-graph-series',
-  templateUrl: './graph-series.component.html',
-  styleUrls: ['./graph-series.component.css']
+    selector: 'app-graph-series',
+    templateUrl: './graph-series.component.html',
+    styleUrls: ['./graph-series.component.css'],
+    standalone: false
 })
 export class GraphSeriesComponent {
   @Input()

@@ -11,9 +11,10 @@ import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { AdjustCascadingSetPointsService, CompressorForm } from './adjust-cascading-set-points.service';
 
 @Component({
-  selector: 'app-adjust-cascading-set-points',
-  templateUrl: './adjust-cascading-set-points.component.html',
-  styleUrls: ['./adjust-cascading-set-points.component.css']
+    selector: 'app-adjust-cascading-set-points',
+    templateUrl: './adjust-cascading-set-points.component.html',
+    styleUrls: ['./adjust-cascading-set-points.component.css'],
+    standalone: false
 })
 export class AdjustCascadingSetPointsComponent implements OnInit {
 

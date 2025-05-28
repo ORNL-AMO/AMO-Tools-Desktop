@@ -5,9 +5,10 @@ import { EfficiencyImprovementService } from '../efficiency-improvement.service'
 import { AbstractControl, UntypedFormGroup } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 @Component({
-  selector: 'app-efficiency-improvement-form',
-  templateUrl: './efficiency-improvement-form.component.html',
-  styleUrls: ['./efficiency-improvement-form.component.css']
+    selector: 'app-efficiency-improvement-form',
+    templateUrl: './efficiency-improvement-form.component.html',
+    styleUrls: ['./efficiency-improvement-form.component.css'],
+    standalone: false
 })
 export class EfficiencyImprovementFormComponent implements OnInit {
   @Input()

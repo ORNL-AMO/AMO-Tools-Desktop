@@ -7,9 +7,10 @@ import { PumpCatalogService } from '../pump-catalog.service';
 import { PumpBasicsService } from './pump-basics.service';
 
 @Component({
-  selector: 'app-pump-basics',
-  templateUrl: './pump-basics.component.html',
-  styleUrls: ['./pump-basics.component.css']
+    selector: 'app-pump-basics',
+    templateUrl: './pump-basics.component.html',
+    styleUrls: ['./pump-basics.component.css'],
+    standalone: false
 })
 export class PumpBasicsComponent implements OnInit {
 

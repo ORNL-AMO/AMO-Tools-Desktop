@@ -7,9 +7,10 @@ import { motorEfficiencyConstants } from '../../../psatConstants';
 import { PsatService } from '../../../psat.service';
 import { Modification } from '../../../../shared/models/psat';
 @Component({
-  selector: 'app-rated-motor-form',
-  templateUrl: './rated-motor-form.component.html',
-  styleUrls: ['./rated-motor-form.component.css']
+    selector: 'app-rated-motor-form',
+    templateUrl: './rated-motor-form.component.html',
+    styleUrls: ['./rated-motor-form.component.css'],
+    standalone: false
 })
 export class RatedMotorFormComponent implements OnInit {
   @Output('emitCalculate')

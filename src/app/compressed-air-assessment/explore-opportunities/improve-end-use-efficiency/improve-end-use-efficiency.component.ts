@@ -10,9 +10,10 @@ import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { ImproveEndUseEfficiencyService } from './improve-end-use-efficiency.service';
 
 @Component({
-  selector: 'app-improve-end-use-efficiency',
-  templateUrl: './improve-end-use-efficiency.component.html',
-  styleUrls: ['./improve-end-use-efficiency.component.css']
+    selector: 'app-improve-end-use-efficiency',
+    templateUrl: './improve-end-use-efficiency.component.html',
+    styleUrls: ['./improve-end-use-efficiency.component.css'],
+    standalone: false
 })
 export class ImproveEndUseEfficiencyComponent implements OnInit {
 

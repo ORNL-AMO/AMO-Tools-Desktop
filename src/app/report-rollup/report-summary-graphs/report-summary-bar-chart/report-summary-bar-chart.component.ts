@@ -3,9 +3,10 @@ import { PlotlyService } from 'angular-plotly.js';
 import { BarChartDataItem } from '../../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 
 @Component({
-  selector: 'app-report-summary-bar-chart',
-  templateUrl: './report-summary-bar-chart.component.html',
-  styleUrls: ['./report-summary-bar-chart.component.css']
+    selector: 'app-report-summary-bar-chart',
+    templateUrl: './report-summary-bar-chart.component.html',
+    styleUrls: ['./report-summary-bar-chart.component.css'],
+    standalone: false
 })
 export class ReportSummaryBarChartComponent implements OnInit {
   @Input()

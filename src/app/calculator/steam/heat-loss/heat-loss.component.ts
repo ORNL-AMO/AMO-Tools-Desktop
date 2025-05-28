@@ -9,9 +9,10 @@ import { HeatLossOutput } from '../../../shared/models/steam/steam-outputs';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-heat-loss-calculator',
-  templateUrl: './heat-loss.component.html',
-  styleUrls: ['./heat-loss.component.css']
+    selector: 'app-heat-loss-calculator',
+    templateUrl: './heat-loss.component.html',
+    styleUrls: ['./heat-loss.component.css'],
+    standalone: false
 })
 export class HeatLossComponent implements OnInit {
   @Input()

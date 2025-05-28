@@ -12,9 +12,10 @@ import { PumpFluidService } from './pump-fluid.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 
 @Component({
-  selector: 'app-pump-fluid',
-  templateUrl: './pump-fluid.component.html',
-  styleUrls: ['./pump-fluid.component.css']
+    selector: 'app-pump-fluid',
+    templateUrl: './pump-fluid.component.html',
+    styleUrls: ['./pump-fluid.component.css'],
+    standalone: false
 })
 export class PumpFluidComponent implements OnInit {
   @Input()
@@ -153,8 +154,8 @@ export class PumpFluidComponent implements OnInit {
 
 
   getPumpEfficiency() {
-    let tmpEfficiency: number = this.psatService.pumpEfficiency(this.psatForm.controls.pumpType.value, this.psat.inputs.flow_rate, this.settings).max;
-    this.psatForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency);
+    let tmpEfficiency: number = this.psatService.pumpEfficiency(this.psatForm.controls.pumpType.value, this.psat.inputs.flow_rate, this.psat.inputs.pump_rated_speed, this.psat.inputs.kinematic_viscosity, this.psat.inputs.stages, this.psat.inputs.head, 100, this.settings).max;
+    this.psatForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency * 100);
     this.save();
   }
 

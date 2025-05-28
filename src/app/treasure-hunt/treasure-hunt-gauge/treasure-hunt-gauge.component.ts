@@ -2,9 +2,10 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleCh
 import bb, {gauge} from "billboard.js";
 
 @Component({
-  selector: 'app-treasure-hunt-gauge',
-  templateUrl: './treasure-hunt-gauge.component.html',
-  styleUrls: ['./treasure-hunt-gauge.component.css']
+    selector: 'app-treasure-hunt-gauge',
+    templateUrl: './treasure-hunt-gauge.component.html',
+    styleUrls: ['./treasure-hunt-gauge.component.css'],
+    standalone: false
 })
 export class TreasureHuntGaugeComponent implements OnInit {
   @Input()

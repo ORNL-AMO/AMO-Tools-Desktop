@@ -6,9 +6,10 @@ import { Quantity, ThermodynamicQuantityOptions } from '../../../../shared/model
 import { SteamService } from '../../steam.service';
 
 @Component({
-  selector: 'app-heat-loss-form',
-  templateUrl: './heat-loss-form.component.html',
-  styleUrls: ['./heat-loss-form.component.css']
+    selector: 'app-heat-loss-form',
+    templateUrl: './heat-loss-form.component.html',
+    styleUrls: ['./heat-loss-form.component.css'],
+    standalone: false
 })
 export class HeatLossFormComponent implements OnInit {
   @Input()

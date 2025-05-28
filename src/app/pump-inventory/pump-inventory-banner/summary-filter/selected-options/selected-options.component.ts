@@ -6,9 +6,10 @@ import { PumpInventoryData, PumpInventoryDepartment } from '../../../pump-invent
 import { PumpSummaryGraphsService } from '../../../pump-inventory-summary/inventory-summary-graphs/pump-summary-graphs.service';
 
 @Component({
-  selector: 'app-selected-options',
-  templateUrl: './selected-options.component.html',
-  styleUrls: ['./selected-options.component.css']
+    selector: 'app-selected-options',
+    templateUrl: './selected-options.component.html',
+    styleUrls: ['./selected-options.component.css'],
+    standalone: false
 })
 export class SelectedOptionsComponent {
 

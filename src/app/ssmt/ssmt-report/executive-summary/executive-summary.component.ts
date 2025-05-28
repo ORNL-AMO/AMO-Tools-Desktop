@@ -7,9 +7,10 @@ import { CompareService } from '../../compare.service';
 import { SsmtReportRollupService } from '../../../report-rollup/ssmt-report-rollup.service';
 
 @Component({
-  selector: 'app-executive-summary',
-  templateUrl: './executive-summary.component.html',
-  styleUrls: ['./executive-summary.component.css']
+    selector: 'app-executive-summary',
+    templateUrl: './executive-summary.component.html',
+    styleUrls: ['./executive-summary.component.css'],
+    standalone: false
 })
 export class ExecutiveSummaryComponent implements OnInit {
   @Input()

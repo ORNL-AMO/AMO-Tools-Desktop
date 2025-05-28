@@ -2,8 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import * as _ from 'lodash';
 import { BatchAnalysisSettings, BatchAnalysisResults } from '../batch-analysis.service';
 @Pipe({
-  name: 'batchAnalysisTable',
-  pure: false
+    name: 'batchAnalysisTable',
+    pure: false,
+    standalone: false
 })
 export class BatchAnalysisTablePipe implements PipeTransform {
 

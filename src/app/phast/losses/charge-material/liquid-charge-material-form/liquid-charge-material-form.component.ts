@@ -12,9 +12,10 @@ import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service'
 import { firstValueFrom } from 'rxjs';
 import { LiquidLoadMaterialDbService } from '../../../../indexedDb/liquid-load-material-db.service';
 @Component({
-  selector: 'app-liquid-charge-material-form',
-  templateUrl: './liquid-charge-material-form.component.html',
-  styleUrls: ['./liquid-charge-material-form.component.css']
+    selector: 'app-liquid-charge-material-form',
+    templateUrl: './liquid-charge-material-form.component.html',
+    styleUrls: ['./liquid-charge-material-form.component.css'],
+    standalone: false
 })
 export class LiquidChargeMaterialFormComponent implements OnInit {
   @Input()

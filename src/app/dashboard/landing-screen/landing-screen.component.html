@@ -113,6 +113,21 @@
 						<a (click)="createAssessment('WasteWater')" class="click-link home-link-text">
 							Wastewater<br> Assessment</a>
 					</div>
+					<div class="assessment-block">
+						<div class="icon-block">
+							<div class="water-background">
+								<app-alert-badge [alertText]="'Beta'" [style]="{ 
+									position: 'fixed',
+    								'margin-left': '-68px',
+    								'margin-top': '-14px',
+									border: '2px solid #047334'
+									}"></app-alert-badge>
+								<img class="water-image align-self-center" src="assets/images/water-assessment-large.png" (click)="createAssessment('Water')">
+							</div>
+						</div>
+						<a (click)="createAssessment('Water')" class="click-link home-link-text">
+							Water<br> Assessment</a>
+					</div>
 
 					<div class="assessment-block">
 						<div class="icon-block">
@@ -152,6 +167,21 @@
 						</div>
 						<a routerLink="/log-tool" class="click-link home-link-text">
 							Data <br> Exploration</a>
+					</div>
+					<div class="assessment-block">
+						<div class="icon-block">
+							<div class="water-background">
+								<app-alert-badge [alertText]="'Beta'" [style]="{ 
+									position: 'fixed',
+    								'margin-left': '-68px',
+    								'margin-top': '-14px',
+									border: '2px solid #047334'
+									}"></app-alert-badge>
+								<img class="water-diagram-image align-self-center" src="assets/images/water-process-diagram-large.png" (click)="createAssessment('Water')">
+							</div>
+						</div>
+						<a (click)="createDiagram('Water')" class="click-link home-link-text">
+							Water<br> Diagram</a>
 					</div>
 				</div>
 			</div>

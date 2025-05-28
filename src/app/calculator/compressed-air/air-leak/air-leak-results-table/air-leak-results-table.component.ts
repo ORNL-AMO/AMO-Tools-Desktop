@@ -5,14 +5,18 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-air-leak-results-table',
-  templateUrl: './air-leak-results-table.component.html',
-  styleUrls: ['./air-leak-results-table.component.css']
+    selector: 'app-air-leak-results-table',
+    templateUrl: './air-leak-results-table.component.html',
+    styleUrls: ['./air-leak-results-table.component.css'],
+    standalone: false
 })
 export class AirLeakResultsTableComponent implements OnInit {
 
   airLeakOutput: AirLeakSurveyOutput;
   airLeakOutputSub: Subscription;
+  
+  resetDataSub: Subscription;
+  allSelected: boolean = false;
 
   @Input()
   settings: Settings;
@@ -22,11 +26,17 @@ export class AirLeakResultsTableComponent implements OnInit {
   ngOnInit(): void {
     this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
       this.airLeakOutput = value;
-    })
+    });
+    this.resetDataSub = this.airLeakService.resetData.subscribe(value => {
+      if (value) {
+        this.allSelected = false;
+      } 
+    });
   }
   
   ngOnDestroy() {
-    this.airLeakOutputSub.unsubscribe();
+    this.airLeakOutputSub.unsubscribe();    
+    this.resetDataSub.unsubscribe();
   }
 
   editLeak(index: number) {
@@ -43,6 +53,11 @@ export class AirLeakResultsTableComponent implements OnInit {
 
   toggleSelected(index: number, selected: boolean) {
     this.airLeakService.setLeakForModification(index, selected);
+  }
+
+  toggleSelectAll(){
+    this.airLeakService.setLeakForModificationSelectAll(!this.allSelected);
+    this.allSelected = !this.allSelected;
   }
 
 }

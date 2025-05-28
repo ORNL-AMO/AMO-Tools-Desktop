@@ -10,9 +10,10 @@ import { HeaderService } from '../header/header.service';
 import { OperationsService } from '../operations/operations.service';
 
 @Component({
-  selector: 'app-ssmt-tabs',
-  templateUrl: './ssmt-tabs.component.html',
-  styleUrls: ['./ssmt-tabs.component.css']
+    selector: 'app-ssmt-tabs',
+    templateUrl: './ssmt-tabs.component.html',
+    styleUrls: ['./ssmt-tabs.component.css'],
+    standalone: false
 })
 export class SsmtTabsComponent implements OnInit {
   @Input()
@@ -105,7 +106,7 @@ export class SsmtTabsComponent implements OnInit {
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
     let headerValid: boolean = this.headerService.isHeaderValid(this.ssmt.headerInput, this.ssmt, this.settings, this.ssmt.boilerInput);
     let operationsValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
-    if (str === 'system-basics' || str === 'operations') {
+    if (str === 'baseline' || str === 'operations') {
       this.ssmtService.stepTab.next(str);
     }
     else if (str === 'boiler') {
@@ -147,7 +148,7 @@ export class SsmtTabsComponent implements OnInit {
   }
 
   checkSettingsStatus() {
-    if (this.stepTab === 'system-basics') {
+    if (this.stepTab === 'baseline') {
       this.settingsStatus = ['success', 'active'];
     } else {
       this.settingsStatus = ['success'];
@@ -252,7 +253,7 @@ export class SsmtTabsComponent implements OnInit {
   }
 
   getCanContinue() {
-    if (this.stepTab === 'system-basics') {
+    if (this.stepTab === 'baseline') {
       return true;
     } else if (this.stepTab === 'operations') {
       let isValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;

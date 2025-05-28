@@ -9,9 +9,10 @@ import * as _ from 'lodash';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 
 @Component({
-  selector: 'app-flue-gas-material',
-  templateUrl: './flue-gas-material.component.html',
-  styleUrls: ['./flue-gas-material.component.css']
+    selector: 'app-flue-gas-material',
+    templateUrl: './flue-gas-material.component.html',
+    styleUrls: ['./flue-gas-material.component.css'],
+    standalone: false
 })
 export class FlueGasMaterialComponent implements OnInit {
   @Output('closeModal')

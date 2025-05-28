@@ -19,9 +19,10 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-treasure-hunt',
-  templateUrl: './treasure-hunt.component.html',
-  styleUrls: ['./treasure-hunt.component.css']
+    selector: 'app-treasure-hunt',
+    templateUrl: './treasure-hunt.component.html',
+    styleUrls: ['./treasure-hunt.component.css'],
+    standalone: false
 })
 export class TreasureHuntComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
@@ -148,7 +149,7 @@ export class TreasureHuntComponent implements OnInit {
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.subTabSub.unsubscribe();
-    this.treasureHuntService.mainTab.next('system-setup');
+    this.treasureHuntService.mainTab.next('baseline');
     this.treasureHuntService.subTab.next('settings');
     this.modalOpenSub.unsubscribe();
     this.treasureHuntService.treasureHunt.next(undefined);
@@ -253,7 +254,7 @@ export class TreasureHuntComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.treasureHuntService.mainTab.next('system-setup');
+      this.treasureHuntService.mainTab.next('baseline');
       this.treasureHuntService.subTab.next('settings');
     }
     this.showUpdateUnitsModal = false;

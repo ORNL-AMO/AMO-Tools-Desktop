@@ -7,9 +7,10 @@ import { ExplorerData, ExplorerDataSet, StepMovement } from '../../log-tool-mode
 import { WindowRefService } from '../../../indexedDb/window-ref.service';
 
 @Component({
-  selector: 'app-map-time-data',
-  templateUrl: './map-time-data.component.html',
-  styleUrls: ['./map-time-data.component.css']
+    selector: 'app-map-time-data',
+    templateUrl: './map-time-data.component.html',
+    styleUrls: ['./map-time-data.component.css'],
+    standalone: false
 })
 export class MapTimeDataComponent implements OnInit {
   explorerData: ExplorerData;

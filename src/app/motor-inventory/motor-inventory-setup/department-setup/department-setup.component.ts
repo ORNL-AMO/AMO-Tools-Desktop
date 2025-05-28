@@ -3,9 +3,10 @@ import { MotorInventoryService } from '../../motor-inventory.service';
 import { MotorInventoryData, MotorInventoryDepartment } from '../../motor-inventory';
 
 @Component({
-  selector: 'app-department-setup',
-  templateUrl: './department-setup.component.html',
-  styleUrls: ['./department-setup.component.css']
+    selector: 'app-department-setup',
+    templateUrl: './department-setup.component.html',
+    styleUrls: ['./department-setup.component.css'],
+    standalone: false
 })
 export class DepartmentSetupComponent implements OnInit {
 

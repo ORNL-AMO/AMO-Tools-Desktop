@@ -5,9 +5,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { EnergyEquivalencyService } from '../energy-equivalency.service';
 
 @Component({
-  selector: 'app-energy-equivalency-form',
-  templateUrl: './energy-equivalency-form.component.html',
-  styleUrls: ['./energy-equivalency-form.component.css']
+    selector: 'app-energy-equivalency-form',
+    templateUrl: './energy-equivalency-form.component.html',
+    styleUrls: ['./energy-equivalency-form.component.css'],
+    standalone: false
 })
 export class EnergyEquivalencyFormComponent implements OnInit {
   @Input()

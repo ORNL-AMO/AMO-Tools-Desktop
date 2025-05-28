@@ -4,9 +4,10 @@ import { BoilerInput, SSMTInputs } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-hover-boiler-table',
-  templateUrl: './hover-boiler-table.component.html',
-  styleUrls: ['./hover-boiler-table.component.css']
+    selector: 'app-hover-boiler-table',
+    templateUrl: './hover-boiler-table.component.html',
+    styleUrls: ['./hover-boiler-table.component.css'],
+    standalone: false
 })
 export class HoverBoilerTableComponent implements OnInit {
   @Input()

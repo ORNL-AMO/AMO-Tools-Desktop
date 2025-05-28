@@ -15,9 +15,10 @@ import { Settings } from '../models/settings';
 import { CompressedAirReportRollupService } from '../../report-rollup/compressed-air-report-rollup.service';
 
 @Component({
-  selector: 'app-print-options-menu',
-  templateUrl: './print-options-menu.component.html',
-  styleUrls: ['./print-options-menu.component.css']
+    selector: 'app-print-options-menu',
+    templateUrl: './print-options-menu.component.html',
+    styleUrls: ['./print-options-menu.component.css'],
+    standalone: false
 })
 export class PrintOptionsMenuComponent implements OnInit {
 
@@ -34,6 +35,7 @@ export class PrintOptionsMenuComponent implements OnInit {
   showTHReportOptions: boolean = false;
   showWasteWaterOptions: boolean = false;
   showCompressedAirOptions: boolean = false;
+  showWaterOptions: boolean = false;
   isPowerSankeyPrintViewReadySub: Subscription;
   caSankeyAwaitTimeout;
   constructor(private printOptionsMenuService: PrintOptionsMenuService, private windowRefService: WindowRefService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
@@ -83,6 +85,8 @@ export class PrintOptionsMenuComponent implements OnInit {
       this.showWasteWaterOptions = true;
     } else if (printContext == 'compressedAir') {
       this.showCompressedAirOptions = true;
+    } else if (printContext == 'water') {
+      this.showWaterOptions = true
     } else if (printContext == 'reportRollup') {
       this.showRollupReportOptions = true;
       this.showPsatReportOptions = (this.psatReportRollupService.psatAssessments.getValue().length != 0);
@@ -92,6 +96,7 @@ export class PrintOptionsMenuComponent implements OnInit {
       this.showTHReportOptions = (this.treasureHuntReportRollupService.treasureHuntAssessments.getValue().length != 0);
       this.showWasteWaterOptions = (this.wasteWaterReportRollupService.wasteWaterAssessments.getValue().length != 0);
       this.showCompressedAirOptions = (this.compressedAirReportRollupService.compressedAirAssessments.getValue().length != 0)
+      // todo implement water rollup service
     }
   }
 

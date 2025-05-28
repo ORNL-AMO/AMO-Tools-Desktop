@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { FlashTankRanges, FlashTankService } from '../flash-tank.service';
 
 @Component({
-  selector: 'app-flash-tank-help',
-  templateUrl: './flash-tank-help.component.html',
-  styleUrls: ['./flash-tank-help.component.css']
+    selector: 'app-flash-tank-help',
+    templateUrl: './flash-tank-help.component.html',
+    styleUrls: ['./flash-tank-help.component.css'],
+    standalone: false
 })
 export class FlashTankHelpComponent implements OnInit {
   @Input()

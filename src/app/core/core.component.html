@@ -14,10 +14,12 @@
 <app-email-measur-data-modal *ngIf="showEmailMeasurDataModal === true" 
 (emitModalClosed)="closeEmailModal($event)"></app-email-measur-data-modal>
 <app-survey-modal *ngIf="showSurveyModal"></app-survey-modal>
+<app-subscribe-modal *ngIf="showSubscribeModal"></app-subscribe-modal>
 <app-release-notes-modal *ngIf="showReleaseNotesModal" (closeModal)="closeReleaseNotes()"></app-release-notes-modal>
 
 <app-update-application-toast></app-update-application-toast>
-
 <app-browsing-data-toast *ngIf="showBrowsingDataToast" (emitClose)="hideBrowsingDataToast()"></app-browsing-data-toast>
 <app-survey-toast *ngIf="showSurveyToast" (emitCloseToast)="hideSurveyToast()"></app-survey-toast>
+<app-subscribe-toast *ngIf="showSubscribeToast" (emitCloseToast)="hideSubscribeToast()"></app-subscribe-toast>
+
 <app-snackbar-notification></app-snackbar-notification>

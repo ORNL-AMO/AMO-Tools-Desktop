@@ -6,9 +6,10 @@ import { LiquidCoolingLoss } from '../../../../shared/models/phast/losses/coolin
 import { CoolingFormService, LiquidCoolingWarnings } from '../../../../calculator/furnaces/cooling/cooling-form.service';
 
 @Component({
-  selector: 'app-liquid-cooling-losses-form',
-  templateUrl: './liquid-cooling-losses-form.component.html',
-  styleUrls: ['./liquid-cooling-losses-form.component.css']
+    selector: 'app-liquid-cooling-losses-form',
+    templateUrl: './liquid-cooling-losses-form.component.html',
+    styleUrls: ['./liquid-cooling-losses-form.component.css'],
+    standalone: false
 })
 export class LiquidCoolingLossesFormComponent implements OnInit {
   @Input()

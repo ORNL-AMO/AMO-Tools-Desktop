@@ -21,9 +21,10 @@ import { AnalyticsService } from '../../shared/analytics/analytics.service';
 import { CompressedAirInventoryService } from '../../compressed-air-inventory/compressed-air-inventory.service';
 
 @Component({
-  selector: 'app-create-inventory',
-  templateUrl: './create-inventory.component.html',
-  styleUrls: ['./create-inventory.component.css']
+    selector: 'app-create-inventory',
+    templateUrl: './create-inventory.component.html',
+    styleUrls: ['./create-inventory.component.css'],
+    standalone: false
 })
 export class CreateInventoryComponent implements OnInit {
   @Input()

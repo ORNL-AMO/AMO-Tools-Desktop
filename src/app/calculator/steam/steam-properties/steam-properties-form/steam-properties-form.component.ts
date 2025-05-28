@@ -4,9 +4,10 @@ import { Settings } from "../../../../shared/models/settings";
 import { SteamPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
 
 @Component({
-  selector: 'app-steam-properties-form',
-  templateUrl: './steam-properties-form.component.html',
-  styleUrls: ['./steam-properties-form.component.css']
+    selector: 'app-steam-properties-form',
+    templateUrl: './steam-properties-form.component.html',
+    styleUrls: ['./steam-properties-form.component.css'],
+    standalone: false
 })
 export class SteamPropertiesFormComponent implements OnInit {
   @Input()

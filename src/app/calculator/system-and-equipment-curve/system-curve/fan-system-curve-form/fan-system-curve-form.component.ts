@@ -8,9 +8,10 @@ import { CurveDataService } from '../../curve-data.service';
 import { FanSystemCurveData, ModificationEquipment } from '../../../../shared/models/system-and-equipment-curve';
 
 @Component({
-  selector: 'app-fan-system-curve-form',
-  templateUrl: './fan-system-curve-form.component.html',
-  styleUrls: ['./fan-system-curve-form.component.css']
+    selector: 'app-fan-system-curve-form',
+    templateUrl: './fan-system-curve-form.component.html',
+    styleUrls: ['./fan-system-curve-form.component.css'],
+    standalone: false
 })
 export class FanSystemCurveFormComponent implements OnInit {
   @Input()

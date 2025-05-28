@@ -3,9 +3,10 @@ import { Co2SavingsData } from '../co2-savings.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-co2-savings-results',
-  templateUrl: './co2-savings-results.component.html',
-  styleUrls: ['./co2-savings-results.component.css']
+    selector: 'app-co2-savings-results',
+    templateUrl: './co2-savings-results.component.html',
+    styleUrls: ['./co2-savings-results.component.css'],
+    standalone: false
 })
 export class Co2SavingsResultsComponent implements OnInit {
   @Input()

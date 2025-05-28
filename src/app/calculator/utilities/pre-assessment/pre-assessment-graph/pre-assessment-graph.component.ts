@@ -7,9 +7,10 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-pre-assessment-graph',
-  templateUrl: './pre-assessment-graph.component.html',
-  styleUrls: ['./pre-assessment-graph.component.css']
+    selector: 'app-pre-assessment-graph',
+    templateUrl: './pre-assessment-graph.component.html',
+    styleUrls: ['./pre-assessment-graph.component.css'],
+    standalone: false
 })
 export class PreAssessmentGraphComponent implements OnInit, OnChanges {
   @Input()

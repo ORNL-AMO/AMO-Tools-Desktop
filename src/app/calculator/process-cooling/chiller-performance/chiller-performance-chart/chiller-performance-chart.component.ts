@@ -6,9 +6,10 @@ import { ChillerPerformanceOutput } from '../../../../shared/models/chillers';
 
 
 @Component({
-  selector: "app-chiller-performance-chart",
-  templateUrl: "./chiller-performance-chart.component.html",
-  styleUrls: ["./chiller-performance-chart.component.css"],
+    selector: "app-chiller-performance-chart",
+    templateUrl: "./chiller-performance-chart.component.html",
+    styleUrls: ["./chiller-performance-chart.component.css"],
+    standalone: false
 })
 export class ChillerPerformanceChartComponent implements OnInit {
   @Input()

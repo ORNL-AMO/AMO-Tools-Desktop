@@ -1,0 +1,22 @@
+name: "Release: QA"
+
+on:
+  workflow_call:
+
+jobs:
+  call_build:
+    if: github.ref_name != 'develop' || github.ref_name != 'master'
+    uses: ./.github/workflows/template_build.yml
+    with:
+      artifact-name: dist
+      artifact-path: dist
+
+  call_deploy-qa:
+    if: github.ref_name != 'develop' || github.ref_name != 'master'
+    needs: call_build
+    uses: ./.github/workflows/template_deploy.yml
+    with:
+      app-dir: qa.measur
+      artifact-name: dist
+      deploy-dir: /var/www/html
+      tag: dev

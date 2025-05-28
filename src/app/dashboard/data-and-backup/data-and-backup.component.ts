@@ -7,9 +7,10 @@ import { ApplicationInstanceData, ApplicationInstanceDbService } from '../../ind
 import { ImportBackupService } from '../../shared/import-backup.service';
 
 @Component({
-  selector: 'app-data-and-backup',
-  templateUrl: './data-and-backup.component.html',
-  styleUrl: './data-and-backup.component.css'
+    selector: 'app-data-and-backup',
+    templateUrl: './data-and-backup.component.html',
+    styleUrl: './data-and-backup.component.css',
+    standalone: false
 })
 export class DataAndBackupComponent {
 

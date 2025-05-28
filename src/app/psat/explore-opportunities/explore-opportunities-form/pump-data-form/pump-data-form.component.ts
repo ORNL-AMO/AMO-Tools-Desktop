@@ -7,9 +7,10 @@ import { PsatService } from '../../../psat.service';
 import { PsatOutputs, PSAT } from '../../../../shared/models/psat';
 
 @Component({
-  selector: 'app-pump-data-form',
-  templateUrl: './pump-data-form.component.html',
-  styleUrls: ['./pump-data-form.component.css']
+    selector: 'app-pump-data-form',
+    templateUrl: './pump-data-form.component.html',
+    styleUrls: ['./pump-data-form.component.css'],
+    standalone: false
 })
 export class PumpDataFormComponent implements OnInit {
   @Output('emitCalculate')
@@ -120,8 +121,8 @@ export class PumpDataFormComponent implements OnInit {
 
 
   getPumpEfficiency() {
-    let tmpEfficiency: number = this.psatService.pumpEfficiency(this.modificationForm.controls.pumpType.value, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.settings).max;
-    this.modificationForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency);
+    let tmpEfficiency: number = this.psatService.pumpEfficiency(this.modificationForm.controls.pumpType.value, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.psat.modifications[this.exploreModIndex].psat.inputs.pump_rated_speed, this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity, this.psat.modifications[this.exploreModIndex].psat.inputs.stages, this.psat.modifications[this.exploreModIndex].psat.inputs.head, 100, this.settings).max;
+    this.modificationForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency * 100);
     this.calculate();
   }
 

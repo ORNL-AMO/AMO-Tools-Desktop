@@ -119,6 +119,7 @@ export interface FlueGasResult {
     calculatedFlueGasO2?: number;
     calculatedExcessAir?: number;
     availableHeat?: number;
+    heatInput?: number;
     availableHeatError?: string;
     flueGasLosses?: number;
     fuelUse?: number;

@@ -8,9 +8,10 @@ import { CompressedAirAssessmentService } from '../compressed-air-assessment.ser
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 
 @Component({
-  selector: 'app-compressed-air-banner',
-  templateUrl: './compressed-air-banner.component.html',
-  styleUrls: ['./compressed-air-banner.component.css']
+    selector: 'app-compressed-air-banner',
+    templateUrl: './compressed-air-banner.component.html',
+    styleUrls: ['./compressed-air-banner.component.css'],
+    standalone: false
 })
 export class CompressedAirBannerComponent implements OnInit {
   @Input()
@@ -73,12 +74,12 @@ export class CompressedAirBannerComponent implements OnInit {
     } else if (this.mainTab == 'diagram') {
       this.compressedAirAssessmentService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
-      this.compressedAirAssessmentService.mainTab.next('system-setup');
+      this.compressedAirAssessmentService.mainTab.next('baseline');
     }
   }
 
   continue() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab == 'baseline') {
       this.compressedAirAssessmentService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
       this.compressedAirAssessmentService.mainTab.next('diagram');
@@ -109,7 +110,7 @@ export class CompressedAirBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str == 'system-setup' || str == 'diagram' || this.isBaselineValid) {
+    if (str == 'baseline' || str == 'diagram' || this.isBaselineValid) {
       this.compressedAirAssessmentService.mainTab.next(str);
     }
     this.collapseBanner();

@@ -6,9 +6,10 @@ import { ElectricityReductionResult, ElectricityReductionData } from '../../../.
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
-  selector: 'app-electricity-reduction-form',
-  templateUrl: './electricity-reduction-form.component.html',
-  styleUrls: ['./electricity-reduction-form.component.css']
+    selector: 'app-electricity-reduction-form',
+    templateUrl: './electricity-reduction-form.component.html',
+    styleUrls: ['./electricity-reduction-form.component.css'],
+    standalone: false
 })
 export class ElectricityReductionFormComponent implements OnInit {
   @Input()

@@ -5,9 +5,10 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { OperatingCostService } from '../operating-cost.service';
 
 @Component({
-  selector: 'app-operating-cost-form',
-  templateUrl: './operating-cost-form.component.html',
-  styleUrls: ['./operating-cost-form.component.css']
+    selector: 'app-operating-cost-form',
+    templateUrl: './operating-cost-form.component.html',
+    styleUrls: ['./operating-cost-form.component.css'],
+    standalone: false
 })
 export class OperatingCostFormComponent implements OnInit {
   @Input()

@@ -9,7 +9,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { DashboardPipeModule } from '../dashboard-pipe/dashboard-pipe.module';
 import { InventoryItemComponent } from './inventory-item/inventory-item.component';
 import { PreAssessmentItemComponent } from './pre-assessment-item/pre-assessment-item.component';
+import { DiagramItemComponent } from './diagram-item/diagram-item.component';
 import { UpdateApplicationModule } from '../../shared/update-application/update-application.module';
+import { EmailListSubscribeService } from '../../shared/subscribe-toast/email-list-subscribe.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { UpdateApplicationModule } from '../../shared/update-application/update-
     CalculatorListComponent,
     DirectoryItemComponent,
     InventoryItemComponent,
-    PreAssessmentItemComponent
+    PreAssessmentItemComponent,
+    DiagramItemComponent,
   ],
   imports: [
     CommonModule,
@@ -29,6 +32,7 @@ import { UpdateApplicationModule } from '../../shared/update-application/update-
   ],
   exports: [
     SidebarComponent
-  ]
+  ],
+  providers: [EmailListSubscribeService],
 })
 export class SidebarModule { }

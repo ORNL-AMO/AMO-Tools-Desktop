@@ -12,9 +12,10 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { PrintOptions } from '../../shared/models/printing';
 
 @Component({
-  selector: 'app-ssmt-report',
-  templateUrl: './ssmt-report.component.html',
-  styleUrls: ['./ssmt-report.component.css']
+    selector: 'app-ssmt-report',
+    templateUrl: './ssmt-report.component.html',
+    styleUrls: ['./ssmt-report.component.css'],
+    standalone: false
 })
 export class SsmtReportComponent implements OnInit {
   @Input()
