@@ -65,6 +65,9 @@ const Diagram = (props: DiagramProps) => {
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {
     return getEdgeTypesFromString(state.diagram.diagramOptions.edgeType, edgeTypes);
   });
+  // const diagramParentDimensions = useAppSelector((state) => state.diagram.diagramParentDimensions);
+  const diagramParentDimensions = props.parentContainer;
+  
   
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
@@ -74,7 +77,7 @@ const Diagram = (props: DiagramProps) => {
   // const isDiagramValid = getIsDiagramValid(newNodeErrors);
   // console.log('=== newNodeErrors', newNodeErrors);
   const isDiagramValid = getIsDiagramValid(nodeErrors);
-  console.log('=== isDiagramValid', isDiagramValid);
+  // console.log('=== isDiagramValid', isDiagramValid);
 
   // * on xyFlow instance ready
   useEffect(() => {
@@ -207,11 +210,13 @@ const Diagram = (props: DiagramProps) => {
           </ReactFlow>
         </div>
 
-        <SideDrawer
-          anchor={'left'}
-          assessmentId={props.processDiagram.assessmentId}
-          shadowRootRef={props.shadowRoot}
-        ></SideDrawer>
+          {diagramParentDimensions.height &&
+            <SideDrawer
+              anchor={'left'}
+              diagramParentDimensions={diagramParentDimensions}
+              shadowRootRef={props.shadowRoot}
+            ></SideDrawer>
+          }
 
         <StaticModal shadowRootRef={props.shadowRoot}/>
 

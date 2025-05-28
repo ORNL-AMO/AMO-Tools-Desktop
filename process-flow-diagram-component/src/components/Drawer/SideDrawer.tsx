@@ -8,10 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import MenuSidebar from './MenuSidebar';
 import { Box } from '@mui/material';
 import DrawerToggleButton from './DrawerToggleButton';
-import { useAppSelector } from '../../hooks/state';
-import { selectHasAssessment } from '../Diagram/store';
 import { ParentContainerDimensions } from 'process-flow-lib';
-import { BetaChip } from './BetaChip';
 
 const drawerWidth = 525;
 
@@ -29,6 +26,8 @@ const openedMixin = (theme: Theme, parentContainer: ParentContainerDimensions, a
   zIndex: 'auto',
   top: parentContainer.headerHeight,
   height: parentContainer.height - parentContainer.headerHeight - parentContainer.footerHeight,
+  // height: '100%',
+
   boxShadow: '0 0 5px 0 rgba(136, 136, 136, .6)',
   overflow: 'hidden'
 });
@@ -97,9 +96,8 @@ const Drawer = styled(MuiDrawer, {
 
 
 export const SideDrawer = (props: SideDrawerProps) => {
-  const diagramParentDimensions = useAppSelector((state) => state.diagram.diagramParentDimensions);
-  const hasAssessment = useAppSelector(selectHasAssessment);
-  const [open, setOpen] = React.useState(!hasAssessment);
+  const { diagramParentDimensions, anchor, shadowRootRef } = props;
+  const [open, setOpen] = React.useState(true);
 
   const toggleDrawerOpen = () => {
     setOpen(!open)
@@ -117,19 +115,16 @@ export const SideDrawer = (props: SideDrawerProps) => {
       <CssBaseline />
       <Drawer variant={'permanent'}
         parentContainer={diagramParentDimensions}
-        animationProps={{ anchor: props.anchor }}
+        animationProps={{ anchor: anchor }}
         open={open}
-        anchor={props.anchor}
+        anchor={anchor}
       >
         <DrawerHeader justifyContent={justifyContent}>
-          {/* {props.assessmentId === undefined &&
-            <BetaChip alertText={'Beta'} />
-          } */}
           {toggleButton}
         </DrawerHeader>
         <Box paddingBottom={'1rem'} paddingTop={0} paddingX={'.5rem'} height={'100%'}>
           {open &&
-            <MenuSidebar shadowRootRef={props.shadowRootRef} />
+            <MenuSidebar shadowRootRef={shadowRootRef} diagramParentDimensions={diagramParentDimensions}/>
           }
         </Box>
       </Drawer>
@@ -140,7 +135,7 @@ export const SideDrawer = (props: SideDrawerProps) => {
 export interface SideDrawerProps {
     anchor: 'left' | 'right',
     shadowRootRef: any,
-    assessmentId?: number,
+    diagramParentDimensions: ParentContainerDimensions
 }
 
 
