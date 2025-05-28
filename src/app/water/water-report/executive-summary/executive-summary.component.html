@@ -108,12 +108,12 @@
             <tr class="bold-row">
                 <td>True Cost / Direct Cost</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="baselineResults.trueOverDirectResult">${{baselineResults.trueOverDirectResult |
+                    <span *ngIf="baselineResults.trueOverDirectResult">{{baselineResults.trueOverDirectResult |
                         number:'1.0-2'}}</span>
                     <span *ngIf="!baselineResults.trueOverDirectResult">&mdash;&mdash;</span>
                 </td>
                 <td *ngFor="let result of modificationResults; let index = index;">
-                    <span *ngIf="result.trueOverDirectResult">${{result.value
+                    <span *ngIf="result.trueOverDirectResult">{{result.value
                         | number:'1.0-2'}}</span>
                     <span *ngIf="!result.trueOverDirectResult">&mdash;
                         &mdash;</span>

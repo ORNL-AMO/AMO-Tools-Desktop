@@ -50,8 +50,8 @@
       <div class="input-group">
         <input name="fuelCost" type="number" step="0.01" class="form-control" id="fuelCost"
           formControlName="fuelCost" (change)="saveSystemBasics()" (focus)="focusField('fuelCost')">
-        <span class="units input-group-addon">MMBtu</span>
-        <span class="units input-group-addon">GJ</span>
+        <span *ngIf="settingsForm.controls.unitsOfMeasure.value === 'Imperial'" class="units input-group-addon">$/MMBtu</span>
+        <span *ngIf="settingsForm.controls.unitsOfMeasure.value === 'Metric'" class="units input-group-addon">$/GJ</span>
       </div>
       <span class="alert-danger pull-right small"
         *ngIf="systemBasicsForm.controls.fuelCost.invalid && !systemBasicsForm.controls.fuelCost.pristine">
