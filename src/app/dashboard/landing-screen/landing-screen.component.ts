@@ -27,6 +27,10 @@ export class LandingScreenComponent implements OnInit {
     this.dashboardService.createAssessment.next(true);
   }
 
+  createDiagram(str?: string) {
+    this.dashboardService.showCreateDiagram.next(true);
+  }
+
   showCreateInventory(inventoryType: string) {
     this.dashboardService.showCreateInventory.next(inventoryType);
   }

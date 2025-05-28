@@ -153,7 +153,9 @@ export class SettingsService {
       'fansRollupUnit': settings.fansRollupUnit,
       'steamRollupUnit': settings.steamRollupUnit,
       'wasteWaterRollupUnit': settings.wasteWaterRollupUnit,
-      'compressedAirRollupUnit': settings.compressedAirRollupUnit
+      'compressedAirRollupUnit': settings.compressedAirRollupUnit,
+      'flowDecimalPrecision': settings.flowDecimalPrecision
+
     
     });
   }
@@ -260,7 +262,8 @@ export class SettingsService {
       fansRollupUnit: form.controls.fansRollupUnit.value,
       steamRollupUnit: form.controls.steamRollupUnit.value,
       wasteWaterRollupUnit: form.controls.wasteWaterRollupUnit.value,
-      compressedAirRollupUnit: form.controls.compressedAirRollupUnit.value
+      compressedAirRollupUnit: form.controls.compressedAirRollupUnit.value,
+      flowDecimalPrecision: form.controls.flowDecimalPrecision.value
     };
     return tmpSettings;
   }
@@ -366,7 +369,8 @@ export class SettingsService {
       fansRollupUnit: settings.fansRollupUnit,
       steamRollupUnit: settings.steamRollupUnit,
       wasteWaterRollupUnit: settings.wasteWaterRollupUnit,
-      compressedAirRollupUnit: settings.compressedAirRollupUnit
+      compressedAirRollupUnit: settings.compressedAirRollupUnit,
+      flowDecimalPrecision: settings.flowDecimalPrecision
     }
     return newSettings;
   }
@@ -381,6 +385,8 @@ export class SettingsService {
 
 
   setUnits(settingsForm: UntypedFormGroup): UntypedFormGroup {
+    let flowDecimalPrecision = settingsForm.controls.flowDecimalPrecision.value !== null ? settingsForm.controls.flowDecimalPrecision.value : 2;
+
     if (settingsForm.controls.unitsOfMeasure.value === 'Imperial') {
       settingsForm.patchValue({
         powerMeasurement: PumpImperialDefaults.powerMeasurement,
@@ -437,6 +443,7 @@ export class SettingsService {
         userEnteredBaselineEmissions: false,
         userEnteredModificationEmissions: false,
         zipcode: '00000',
+        flowDecimalPrecision: flowDecimalPrecision
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'
@@ -496,7 +503,8 @@ export class SettingsService {
         fansRollupUnit: 'MWh',
         steamRollupUnit: 'GJ',
         wasteWaterRollupUnit: 'MWh',
-        compressedAirRollupUnit: 'MWh'
+        compressedAirRollupUnit: 'MWh',
+        flowDecimalPrecision: flowDecimalPrecision,
         // currentMeasurement: 'A',
         // viscosityMeasurement: 'cST',
         // voltageMeasurement: 'V'

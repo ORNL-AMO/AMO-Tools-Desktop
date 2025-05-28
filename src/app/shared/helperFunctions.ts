@@ -22,3 +22,8 @@ export function roundVal(val: number, places: number): number {
 export function getNewIdString() {
     return Math.random().toString(36).substr(2, 9);
 }
+
+export function getNameDateString(currentDate: Date) {
+    const dateStr = (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + '-' + currentDate.getFullYear();
+    return dateStr;
+}

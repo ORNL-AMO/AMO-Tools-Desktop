@@ -1,0 +1,22 @@
+.table {
+    font-size: 12px;
+    background: #fff;
+}
+
+
+.selected-highlight {
+    border: 2px solid #3055cf !important;
+}
+
+.footer-row {
+    border-top: 2px solid #8f8f8f;
+}
+
+.table-striped tbody tr:nth-of-type(odd) > td {
+    border-left: 1px solid #bababa !important;
+    border-right: 1px solid #bababa !important;
+}
+
+.table-bordered th, .table-bordered td {
+    border-bottom: none;
+}

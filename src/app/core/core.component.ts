@@ -13,6 +13,7 @@ import { SecurityAndPrivacyService } from '../shared/security-and-privacy/securi
 import { ElectronService, ReleaseData } from '../electron/electron.service';
 import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur-data.service';
 import { AppErrorService } from '../shared/errors/app-error.service';
+import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { AutomaticBackupService } from '../electron/automatic-backup.service';
 import { ApplicationInstanceData, ApplicationInstanceDbService } from '../indexedDb/application-instance-db.service';
 import { ImportBackupModalService } from '../shared/import-backup-modal/import-backup-modal.service';
@@ -61,6 +62,7 @@ export class CoreComponent implements OnInit {
     private assessmentService: AssessmentService,
     private changeDetectorRef: ChangeDetectorRef,
     private assessmentDbService: AssessmentDbService,
+    private diagramIdbService: DiagramIdbService,
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private calculatorDbService: CalculatorDbService,
@@ -228,6 +230,7 @@ export class CoreComponent implements OnInit {
           this.directoryDbService.setAll(initializedData.directories);
           this.settingsDbService.setAll(initializedData.settings);
           this.assessmentDbService.setAll(initializedData.assessments);
+          this.diagramIdbService.setAll(initializedData.diagrams);
           this.calculatorDbService.setAll(initializedData.calculators);
           this.inventoryDbService.setAll(initializedData.inventoryItems);
           this.idbStarted = true;

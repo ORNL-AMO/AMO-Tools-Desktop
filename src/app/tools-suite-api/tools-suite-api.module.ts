@@ -12,6 +12,7 @@ import { CalculatorSuiteApiService } from './calculator-suite-api.service';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { CompressedAirSuiteApiService } from './compressed-air-suite-api.service';
 import { SviSuiteApiService } from './svi-suite-api.service';
+import { WaterSuiteApiService } from './water-suite-api.service';
 
 
 
@@ -32,7 +33,8 @@ import { SviSuiteApiService } from './svi-suite-api.service';
     SteamSuiteApiService,
     CalculatorSuiteApiService,
     CompressedAirSuiteApiService,
-    SviSuiteApiService
+    SviSuiteApiService,
+    WaterSuiteApiService,
   ]
 })
 export class ToolsSuiteApiModule { }

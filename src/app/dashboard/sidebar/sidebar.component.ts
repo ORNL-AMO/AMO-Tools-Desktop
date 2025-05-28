@@ -122,6 +122,15 @@ export class SidebarComponent implements OnInit {
     this.dashboardService.showCreateInventory.next('motorInventory');
   }
 
+  showCreateDiagram(){
+    this.dashboardService.createAssessment.next(false);
+    this.directoryDashboardService.createFolder.next(false);
+    this.dashboardService.showCreateInventory.next(undefined);
+    this.showNewDropdown = false;
+    this.dashboardService.showCreateDiagram.next(true);
+  }
+
+
   showCreateFolder(){
     this.dashboardService.createAssessment.next(false);
     this.dashboardService.showCreateInventory.next(undefined);

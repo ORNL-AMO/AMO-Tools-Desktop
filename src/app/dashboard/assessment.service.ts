@@ -12,6 +12,7 @@ import { CompressedAirAssessment } from '../shared/models/compressed-air-assessm
 import { environment } from '../../environments/environment';
 
 import { DashboardService } from './dashboard.service';
+import { WaterAssessment } from 'process-flow-lib';
 
 @Injectable()
 export class AssessmentService {
@@ -74,6 +75,12 @@ export class AssessmentService {
         this.startingTab = 'assessment';
       }
       itemSegment = '/compressed-air/';
+    } else if (assessment.type == 'Water') {
+      // todo check setupDone or validation
+      if (assessment.water && !mainTab && !assessment.isExample) {
+        this.startingTab = 'baseline';
+      }
+      itemSegment = '/water/';
     }
 
     this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, {shouldCollapse: true})
@@ -354,6 +361,31 @@ export class AssessmentService {
       systemBasics: {
         equipmentNotes: ''
       }
+    }
+  }
+
+  
+  getNewWaterAssessment(settings: Settings): WaterAssessment {
+    return {
+      name: 'Baseline',
+      modifications: new Array(),
+      setupDone: false,
+      systemBasics: {
+        utilityType: 'Electricity',
+        electricityCost: settings.electricityCost,
+        notes: undefined,
+        conductivityUnit: 'mmho',
+        fuelCost: settings.fuelCost,
+        productionUnit: 'lb',
+        annualProduction: undefined
+      },
+      diagramWaterSystemFlows:[],
+      intakeSources: [],
+      dischargeOutlets: [],
+      waterUsingSystems: [],
+      waterTreatments: [],
+      wasteWaterTreatments: [],
+      knownLosses: []
     }
   }
 

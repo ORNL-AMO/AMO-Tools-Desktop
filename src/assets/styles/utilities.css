@@ -87,6 +87,11 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     background-color: #7030A0;
 }
 
+.water-assessment .btn-primary {
+    background-color: #3055cf;
+}
+
+
 .fan-block i {
     color: #FFE400
 }
@@ -317,6 +322,12 @@ a:not([href]):not([tabindex]).disabled-link:hover {
 .compressed-air .calc-icon-div,
 .icon-compressed-air {
     background: linear-gradient(#ffffff, #6f42c1);
+}
+
+
+.water-assessment .calc-icon-div,
+.icon-water {
+    background: linear-gradient(#ffffff, #3055cf);
 }
 
 .process-cooling .calc-icon-div,
