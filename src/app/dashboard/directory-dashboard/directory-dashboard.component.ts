@@ -10,10 +10,10 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AssessmentService } from '../assessment.service';
 
 @Component({
-    selector: 'app-directory-dashboard',
-    templateUrl: './directory-dashboard.component.html',
-    styleUrls: ['./directory-dashboard.component.css'],
-    standalone: false
+  selector: 'app-directory-dashboard',
+  templateUrl: './directory-dashboard.component.html',
+  styleUrls: ['./directory-dashboard.component.css'],
+  standalone: false
 })
 export class DirectoryDashboardComponent implements OnInit {
 
@@ -36,7 +36,8 @@ export class DirectoryDashboardComponent implements OnInit {
   sortBySub: Subscription;
 
   dashboardCollapsed: boolean = false;
-
+  showExportToJustifiModal: boolean = false;
+  showExportToJustifiModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
@@ -78,8 +79,11 @@ export class DirectoryDashboardComponent implements OnInit {
     this.sortBySub = this.directoryDashboardService.sortBy.subscribe(val => {
       this.sortBy = val;
     });
+    this.showExportToJustifiModalSub = this.directoryDashboardService.showExportToJustifiModal.subscribe(val => {
+      this.showExportToJustifiModal = val;
+    });
 
-    if(!this.settingsDbService.globalSettings.disableDashboardTutorial){
+    if (!this.settingsDbService.globalSettings.disableDashboardTutorial) {
       this.assessmentService.showTutorial.next('dashboard-tutorial');
     }
   }
@@ -91,6 +95,7 @@ export class DirectoryDashboardComponent implements OnInit {
     this.updateDashboardDataSub.unsubscribe();
     this.filterDashboardBySub.unsubscribe();
     this.sortBySub.unsubscribe();
+    this.showExportToJustifiModalSub.unsubscribe();
   }
 
   setDirectory() {

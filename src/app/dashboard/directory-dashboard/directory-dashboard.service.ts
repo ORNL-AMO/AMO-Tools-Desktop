@@ -21,6 +21,7 @@ export class DirectoryDashboardService {
   showPreAssessmentModalIndex: BehaviorSubject<ShowPreAssessmentModalState>;
   filterDashboardBy: BehaviorSubject<FilterDashboardBy>;
   sortBy: BehaviorSubject<{ value: string, direction: string }>;
+  showExportToJustifiModal: BehaviorSubject<boolean>;
   constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService) {
     this.dashboardView = new BehaviorSubject<string>('grid');
     this.createFolder = new BehaviorSubject<boolean>(false);
@@ -46,6 +47,7 @@ export class DirectoryDashboardService {
     });
 
     this.sortBy = new BehaviorSubject<{ value: string, direction: string }>({ value: 'modifiedDate', direction: 'desc' });
+    this.showExportToJustifiModal = new BehaviorSubject<boolean>(false);
   }
 
   getDirectoryItems(directory: Directory): Array<DirectoryItem> {
