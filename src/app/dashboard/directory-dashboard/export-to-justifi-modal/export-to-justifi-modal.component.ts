@@ -1,6 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DirectoryDashboardService } from '../directory-dashboard.service';
+import { ExportToJustifiTemplateService } from './export-to-justifi-template.service';
+import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
+import { Directory } from '../../../shared/models/directory';
+import { Assessment } from '../../../shared/models/assessment';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-export-to-justifi-modal',
@@ -11,9 +17,24 @@ import { DirectoryDashboardService } from '../directory-dashboard.service';
 export class ExportToJustifiModalComponent {
 
   @ViewChild('exportToJustifiModal', { static: false }) public exportToJustifiModal: ModalDirective;
-  constructor(private directoryDashboardService: DirectoryDashboardService) { }
+  directory: Directory;
+  selectedAssessments: Array<Assessment> = [];
+  settings: Settings;
+  constructor(private directoryDashboardService: DirectoryDashboardService,
+    private exportToJustifiTemplateService: ExportToJustifiTemplateService,
+    private directoryDbService: DirectoryDbService,
+    private settingsDbService: SettingsDbService
+  ) { }
 
   ngOnInit() {
+    let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
+    this.directory = this.directoryDbService.getById(directoryId);
+    this.settings = this.settingsDbService.getByDirectoryId(this.directory.id);
+    this.directory.assessments.forEach(assessment => {
+      if (assessment.selected) {
+        this.selectedAssessments.push(assessment);
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -29,6 +50,10 @@ export class ExportToJustifiModalComponent {
     this.exportToJustifiModal.onHidden.subscribe(val => {
       this.directoryDashboardService.showExportToJustifiModal.next(false);
     });
+  }
+
+  async exportToJustifi() {
+    this.exportToJustifiTemplateService.exportData(this.settings, this.selectedAssessments);
   }
 
 

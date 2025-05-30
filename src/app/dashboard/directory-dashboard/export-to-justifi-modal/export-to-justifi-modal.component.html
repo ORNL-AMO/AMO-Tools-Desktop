@@ -9,7 +9,46 @@
                 </button>
             </div>
             <div class="modal-body">
-               
+                <table class="table table-sm table-bordered">
+                    <tbody>
+                        <tr>
+                            <td>
+                                Facility Name
+                            </td>
+                            <td>
+                                {{settings.facilityInfo.facilityName}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Assessments
+                            </td>
+                            <td>
+                                <ng-container *ngFor="let assessment of selectedAssessments">
+                                    <img *ngIf="assessment.type == 'PSAT'" class="icon"
+                                        src="assets/images/pump-icon.png">
+                                    <img *ngIf="assessment.type == 'PHAST'" class="icon"
+                                        src="assets/images/ico-phast-diagram.png">
+                                    <img *ngIf="assessment.type == 'FSAT'" class="icon"
+                                        src="assets/images/ico-fsat-diagram.png">
+                                    <img *ngIf="assessment.type == 'SSMT'" class="icon"
+                                        src="assets/images/ico-ssmt-diagram.png">
+                                    <img *ngIf="assessment.type == 'TreasureHunt'" class="icon"
+                                        src="assets/images/treasure-hunt.png">
+                                    <img *ngIf="assessment.type == 'CompressedAir'" class="icon"
+                                        src="assets/images/ca-icon.png">
+                                    <img *ngIf="assessment.type == 'WasteWater'" class="icon"
+                                        src="assets/images/waste-water-icon.png">
+                                    {{assessment.name}}<br>
+                                </ng-container>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="hideModal()">Close</button>
+                <button type="button" class="btn btn-primary" (click)="exportToJustifi()">Export</button>
             </div>
         </div>
     </div>
