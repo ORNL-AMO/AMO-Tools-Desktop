@@ -125,6 +125,16 @@ export class MapTimeDataComponent implements OnInit {
   }
 
   updateExplorerData() {
+    if (this.selectedDataSet.hasDateField) {
+      let secondsInterval = this.logToolDataService.getSecondsIntervalDifference(this.selectedDataSet);
+      if (secondsInterval != undefined) {
+        let selectedInterval = this.dataCollectionIntervalOptions.find(option => option.value === secondsInterval);
+        if (selectedInterval) {
+          this.selectedDataSet.dataCollectionInterval = selectedInterval.value;
+        }
+      }
+    }
+
     this.explorerData.datasets.map((dataset, index) => {
       if (index === this.selectedDataSetIndex) {
         dataset = this.selectedDataSet;
@@ -135,16 +145,6 @@ export class MapTimeDataComponent implements OnInit {
       }
       return dataset;
     });
-
-    if (this.selectedDataSet.hasDateField) {
-      let secondsInterval = this.logToolDataService.getSecondsIntervalDifference(this.selectedDataSet);
-      if (secondsInterval != undefined) {
-        let selectedInterval = this.dataCollectionIntervalOptions.find(option => option.value === secondsInterval);
-        if (selectedInterval) {
-          this.selectedDataSet.dataCollectionInterval = selectedInterval.value;
-        }
-      }
-    }
 
 
     if (this.applyToAll) {
@@ -171,7 +171,6 @@ export class MapTimeDataComponent implements OnInit {
     dataSet.hasTimeField = dataSet.timeField != undefined;
     return dataSet;
   }
-
   updateDateField() {
     this.selectedDataSet = this.setDateField(this.selectedDataSet);
     this.updateExplorerData();
