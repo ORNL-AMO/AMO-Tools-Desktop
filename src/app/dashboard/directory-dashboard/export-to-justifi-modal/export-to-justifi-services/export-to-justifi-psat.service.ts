@@ -49,43 +49,43 @@ export class ExportToJustifiPsatService {
       //TODO: add EEMs if Explore opps
       if (modification.exploreOppsShowVfd && modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowVfd.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowVfd.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowMotorDrive && modification.exploreOppsShowMotorDrive.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowMotorDrive.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowMotorDrive.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowPumpType && modification.exploreOppsShowPumpType.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowPumpType.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowPumpType.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowRatedMotorData && modification.exploreOppsShowRatedMotorData.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowRatedMotorData.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowRatedMotorData.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowSystemData && modification.exploreOppsShowSystemData.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowSystemData.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowSystemData.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowFlowRate && modification.exploreOppsShowFlowRate.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowFlowRate.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowFlowRate.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowHead && modification.exploreOppsShowHead.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowHead.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowHead.display;
         eemRowIndex++;
       }
     }

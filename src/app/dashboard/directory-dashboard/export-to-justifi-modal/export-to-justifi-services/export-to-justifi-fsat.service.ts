@@ -44,43 +44,43 @@ constructor(private fsatService: FsatService,
       //TODO: add EEMs if Explore opps
       if (modification.exploreOppsShowVfd && modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowVfd.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowVfd.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowDrive && modification.exploreOppsShowDrive.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowDrive.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowDrive.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowFanType && modification.exploreOppsShowFanType.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowFanType.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowFanType.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowMotor && modification.exploreOppsShowMotor.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowMotor.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowMotor.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowFlowRate && modification.exploreOppsShowFlowRate.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowFlowRate.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowFlowRate.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowReducePressure && modification.exploreOppsShowReducePressure.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowReducePressure.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowReducePressure.display;
         eemRowIndex++;
       }
 
       if (modification.exploreOppsShowOpData && modification.exploreOppsShowOpData.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
         eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
-        eemWorksheet.getCell('B' + eemRowIndex).value = modification.exploreOppsShowOpData.display;
+        eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowOpData.display;
         eemRowIndex++;
       }
     }

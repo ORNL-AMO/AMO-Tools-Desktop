@@ -5,6 +5,8 @@ import { ExportToJustifiPsatService } from './export-to-justifi-psat.service';
 import { Assessment } from '../../../../shared/models/assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { ExportToJustifiFsatService } from './export-to-justifi-fsat.service';
+import { ExportToJustifiSsmtService } from './export-to-justifi-ssmt.service';
+import { ExportToJustifiPhastService } from './export-to-justifi-phast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,9 @@ import { ExportToJustifiFsatService } from './export-to-justifi-fsat.service';
 export class ExportToJustifiTemplateService {
 
   constructor(private exportToJustifiPsatService: ExportToJustifiPsatService,
-    private exportToJustifiFsatService: ExportToJustifiFsatService
+    private exportToJustifiFsatService: ExportToJustifiFsatService,
+    private exportToJustifiSsmtService: ExportToJustifiSsmtService,
+    private exportToJustifiPhastService: ExportToJustifiPhastService
   ) { }
 
   exportData(settings: Settings, assessments: Array<Assessment>) {
@@ -133,6 +137,10 @@ export class ExportToJustifiTemplateService {
         eemRowIndex = this.exportToJustifiPsatService.fillPSATWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
       } else if (assessment.type == 'FSAT') {
         eemRowIndex = this.exportToJustifiFsatService.fillFSATWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
+      } else if (assessment.type == 'SSMT') {
+        eemRowIndex = this.exportToJustifiSsmtService.fillSSMTWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
+      } else if (assessment.type == 'PHAST') {
+        eemRowIndex = this.exportToJustifiPhastService.fillPHASTWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
       }
 
       //E: implementation costs
@@ -157,7 +165,7 @@ export class ExportToJustifiTemplateService {
       //x: steam use
       //Y: steam unit
       //Z: steam savings
-      
+
       assessmentRowIndex++;
     })
   }
