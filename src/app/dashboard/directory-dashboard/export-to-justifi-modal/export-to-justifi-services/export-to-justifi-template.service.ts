@@ -1,17 +1,19 @@
 import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import * as ExcelJS from 'exceljs';
-import { Settings } from '../../../shared/models/settings';
-import { Assessment } from '../../../shared/models/assessment';
-import { PSAT } from '../../../shared/models/psat';
 import { ExportToJustifiPsatService } from './export-to-justifi-psat.service';
+import { Assessment } from '../../../../shared/models/assessment';
+import { Settings } from '../../../../shared/models/settings';
+import { ExportToJustifiFsatService } from './export-to-justifi-fsat.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExportToJustifiTemplateService {
 
-  constructor(private exportToJustifiPsatService: ExportToJustifiPsatService) { }
+  constructor(private exportToJustifiPsatService: ExportToJustifiPsatService,
+    private exportToJustifiFsatService: ExportToJustifiFsatService
+  ) { }
 
   exportData(settings: Settings, assessments: Array<Assessment>) {
     let workbook = new ExcelJS.Workbook();
@@ -129,8 +131,9 @@ export class ExportToJustifiTemplateService {
 
       if (assessment.type == 'PSAT') {
         eemRowIndex = this.exportToJustifiPsatService.fillPSATWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
+      } else if (assessment.type == 'FSAT') {
+        eemRowIndex = this.exportToJustifiFsatService.fillFSATWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
       }
-
 
       //E: implementation costs
       //F: electricity use
@@ -154,6 +157,8 @@ export class ExportToJustifiTemplateService {
       //x: steam use
       //Y: steam unit
       //Z: steam savings
+      
+      assessmentRowIndex++;
     })
   }
 

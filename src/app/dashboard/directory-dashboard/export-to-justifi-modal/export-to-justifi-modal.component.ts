@@ -1,12 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { DirectoryDashboardService } from '../directory-dashboard.service';
-import { ExportToJustifiTemplateService } from './export-to-justifi-template.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Directory } from '../../../shared/models/directory';
 import { Assessment } from '../../../shared/models/assessment';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
+import { ExportToJustifiTemplateService } from './export-to-justifi-services/export-to-justifi-template.service';
 
 @Component({
   selector: 'app-export-to-justifi-modal',
