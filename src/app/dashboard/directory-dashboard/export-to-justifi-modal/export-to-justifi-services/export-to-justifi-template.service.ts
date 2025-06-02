@@ -7,6 +7,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { ExportToJustifiFsatService } from './export-to-justifi-fsat.service';
 import { ExportToJustifiSsmtService } from './export-to-justifi-ssmt.service';
 import { ExportToJustifiPhastService } from './export-to-justifi-phast.service';
+import { ExportToJustifiCompressedAirService } from './export-to-justifi-compressed-air.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class ExportToJustifiTemplateService {
   constructor(private exportToJustifiPsatService: ExportToJustifiPsatService,
     private exportToJustifiFsatService: ExportToJustifiFsatService,
     private exportToJustifiSsmtService: ExportToJustifiSsmtService,
-    private exportToJustifiPhastService: ExportToJustifiPhastService
+    private exportToJustifiPhastService: ExportToJustifiPhastService,
+    private exportToJustifiCompressedAirService: ExportToJustifiCompressedAirService
   ) { }
 
   exportData(settings: Settings, assessments: Array<Assessment>) {
@@ -141,6 +143,8 @@ export class ExportToJustifiTemplateService {
         eemRowIndex = this.exportToJustifiSsmtService.fillSSMTWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
       } else if (assessment.type == 'PHAST') {
         eemRowIndex = this.exportToJustifiPhastService.fillPHASTWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
+      } else if(assessment.type == 'CompressedAir'){
+        eemRowIndex = this.exportToJustifiCompressedAirService.fillCompressedAirWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
       }
 
       //E: implementation costs
