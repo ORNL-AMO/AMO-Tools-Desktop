@@ -157,6 +157,7 @@ export class DayTypeAnalysisComponent implements OnInit {
     this.loadingSpinner = {show: true, msg: `Calculating Day Types. This may take a moment
     depending on the amount of data you have supplied.`};
     setTimeout(() => {
+      console.time('runDayTypeAnalysis');
       this.analyticsService.sendEvent('run-day-type-analysis');
       this.logToolDataService.setLogToolDays();
       this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
@@ -164,6 +165,7 @@ export class DayTypeAnalysisComponent implements OnInit {
       this.dayTypeAnalysisService.setDayTypeSummaries();
       this.dayTypeGraphService.setDayTypeScatterPlotData();
       this.dayTypeGraphService.setIndividualDayScatterPlotData();
+      console.timeEnd('runDayTypeAnalysis');
       this.dayTypeAnalysisService.dayTypesCalculated = true;
       this.hasRunDayTypeAnalysis = true;
       this.loadingSpinner = {show: false}

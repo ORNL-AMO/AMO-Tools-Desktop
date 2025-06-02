@@ -332,6 +332,7 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
   }
 
   formatDates(dataset: ExplorerDataSet) {
+    console.time('formatDates');
     dataset.csvImportData.data.map(dataItem => {
       let validDate: boolean = this.isValidDate(dataItem[dataset.dateField.fieldName]);
       let dateMoment: Moment;
@@ -342,10 +343,12 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
       }
       dataItem[dataset.dateField.fieldName] = dateMoment.format('YYYY-MM-DD HH:mm:ss');
     });
+    console.timeEnd('formatDates');
   }
   
 
   prepareDateAndTimeData(explorerDatasets: Array<IndividualDataFromCsv>, valid: ExplorerDataValid) {
+    console.time('prepareDateAndTimeData');
     explorerDatasets.forEach((dataset: ExplorerDataSet, index) => {
       let unProcessedDataCopy: Array<any> = JSON.parse(JSON.stringify(dataset.csvImportData.data));
         if (dataset.hasTimeField == true) {
@@ -374,9 +377,11 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
           valid.detailHTML = 'Please verify your date/time setup and file data are formatted correctly for the datasets below:';
         }
     });
+    console.timeEnd('prepareDateAndTimeData');
   }
 
   joinDateAndTimeFields(dataset: ExplorerDataSet) {
+    console.time('joinDateAndTimeFields');
     dataset.csvImportData.data.map(dataItem => {
       if (dataItem[dataset.dateField.fieldName]) {
         dataItem[dataset.dateField.fieldName] = moment(dataItem[dataset.dateField.fieldName].toString().split(" ")[0] + " " + dataItem[dataset.timeField.fieldName]).format('YYYY-MM-DD HH:mm:ss');
@@ -389,6 +394,7 @@ getCurrentIntervalStrings(currentInterval: number, useDayStartEndOffset: boolean
     dataset.hasTimeField = false;
     let timeIndex = dataset.fields.indexOf(dataset.timeField);
     dataset.fields.splice(timeIndex, 1);
+    console.timeEnd('joinDateAndTimeFields');
     return dataset;
   }
 
