@@ -12,6 +12,7 @@ import { OpeningService } from '../opening.service';
 import * as _ from 'lodash';
 import { treasureHuntUtilityOptions } from '../../furnace-defaults';
 import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
+import { OpportunityUtilityType } from '../../../../shared/models/treasure-hunt';
 
 @Component({
     selector: 'app-opening-form',
@@ -59,7 +60,7 @@ export class OpeningFormComponent implements OnInit {
   canCalculateViewFactor: boolean;
   calculateVFWarning: string;
 
-  treasureHuntUtilityOptions: Array<string>;
+  treasureHuntUtilityOptions: Array<OpportunityUtilityType>;
 
   constructor(private openingFormService: OpeningFormService,
               private convertUnitsService: ConvertUnitsService,

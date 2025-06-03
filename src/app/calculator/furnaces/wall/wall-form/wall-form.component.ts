@@ -11,6 +11,7 @@ import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service'
 import { treasureHuntUtilityOptions } from '../../furnace-defaults';
 import { WallFormService } from '../wall-form.service';
 import { WallService } from '../wall.service';
+import { OpportunityUtilityType } from '../../../../shared/models/treasure-hunt';
 
 @Component({
     selector: 'app-wall-form',
@@ -40,7 +41,7 @@ export class WallFormComponent implements OnInit {
   }
   
   surfaceOptions: Array<WallLossesSurface>;
-  treasureHuntUtilityOptions: Array<string>;
+  treasureHuntUtilityOptions: Array<OpportunityUtilityType>;
   showSurfaceModal: boolean = false;
   
   wallLossesForm: UntypedFormGroup;

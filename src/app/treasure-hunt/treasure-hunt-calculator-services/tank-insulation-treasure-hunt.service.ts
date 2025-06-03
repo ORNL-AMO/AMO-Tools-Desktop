@@ -47,7 +47,7 @@ export class TankInsulationTreasureHuntService {
       energySavings: results.annualHeatSavings,
       baselineCost: results.baselineResults.energyCost,
       modificationCost: results.modificationResults.energyCost,
-      utilityType: '',
+      utilityType: 'Electricity',
     }
 
     if (tankInsulationReduction.baseline.utilityType == 0) {
