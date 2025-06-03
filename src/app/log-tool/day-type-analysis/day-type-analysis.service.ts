@@ -204,6 +204,7 @@ export class DayTypeAnalysisService {
   setDayTypeSummaries() {
     let dayTypeSummaries: Array<DayTypeSummary> = new Array();
     let dayTypes = this.dayTypes.getValue();
+    console.time('setDayTypeSummaries');
     dayTypes.forEach(dayType => {
       if (dayType.logToolDays.length != 0) {
         let dayTypeSummary: DayTypeSummary = this.getDayTypeSummary(dayType);
@@ -211,6 +212,8 @@ export class DayTypeAnalysisService {
       }
     });
     this.dayTypeSummaries.next(dayTypeSummaries);
+    console.log('Day Type Summaries: ', dayTypeSummaries);
+    console.timeEnd('setDayTypeSummaries');
   }
 
   // * each day type's average by interval
@@ -219,6 +222,8 @@ export class DayTypeAnalysisService {
     let intervalAveragesForAllDayTypeDays: Array<{interval: number, allDayTypeDayAverages: Array<AverageByInterval>}>;
     // * Below just populating arrays intervalAveragesForAllDayTypeDays and summedDayAveragesByInterval from first index
     
+    console.time('getDayTypeSummary');
+    console.time('getDayTypeSummary intervalAveragesForAllDayTypeDays');
     intervalAveragesForAllDayTypeDays = dayType.logToolDays[0].dayAveragesByInterval.map(dayAverage => {
       summedDayAveragesByInterval.push(
         {
@@ -236,9 +241,14 @@ export class DayTypeAnalysisService {
         intervalAveragesForAllDayTypeDays[intervalIndex].allDayTypeDayAverages.push(intervalAverage);
       });
     });
+    console.timeEnd('getDayTypeSummary intervalAveragesForAllDayTypeDays');
 
+    console.time('dayAveragesByInterval');
     let dayAveragesByInterval: Array<AverageByInterval> = this.getCombinedDayTypeAverages(intervalAveragesForAllDayTypeDays, summedDayAveragesByInterval);
+    console.timeEnd('dayAveragesByInterval');
 
+
+    console.timeEnd('getDayTypeSummary');
     return {
       dayType: dayType,
       data: [],
@@ -272,13 +282,13 @@ export class DayTypeAnalysisService {
     });
 
     _.remove(allFieldValuesForInterval, (averageObj) => {
-      if (averageObj.field.fieldName == field.fieldName && averageObj.value == undefined || averageObj.field.fieldName != field.fieldName) {
+      if ((averageObj.field.fieldId == field.fieldId && averageObj.value == undefined) || averageObj.field.fieldId != field.fieldId) {
         return true;
       }
     });
 
     let intervalAverage: number = _.meanBy(allFieldValuesForInterval, (averageObj) => {
-      if (averageObj.field.fieldName == field.fieldName) {
+      if (averageObj.field.fieldId == field.fieldId) {
         return averageObj.value
       }
     });

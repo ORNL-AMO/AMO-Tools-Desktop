@@ -53,7 +53,7 @@ export class SelectedDataTableComponent implements OnInit {
   }
 
   getAverageValue(averages: Array<{ value: number, field: LogToolField }>): number {
-    let average = _.find(averages, (average) => { return average.field.fieldName == this.selectedDataField.fieldName });
+    let average = _.find(averages, (average) => { return average.field.fieldId == this.selectedDataField.fieldId; });
     if (average) {
       return average.value;
     }
