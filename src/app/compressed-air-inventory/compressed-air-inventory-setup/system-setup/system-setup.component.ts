@@ -7,7 +7,8 @@ import { Settings } from '../../../shared/models/settings';
 @Component({
   selector: 'app-system-setup',
   templateUrl: './system-setup.component.html',
-  styleUrl: './system-setup.component.css'
+  styleUrl: './system-setup.component.css',
+  standalone: false
 })
 export class SystemSetupComponent implements OnInit {
 

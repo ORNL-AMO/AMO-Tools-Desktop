@@ -9,7 +9,8 @@ import { CompressedAirBasicsService } from './compressed-air-basics.service';
 @Component({
   selector: 'app-compressed-air-basics',
   templateUrl: './compressed-air-basics.component.html',
-  styleUrl: './compressed-air-basics.component.css'
+  styleUrl: './compressed-air-basics.component.css',
+  standalone: false
 })
 export class CompressedAirBasicsComponent implements OnInit {
 

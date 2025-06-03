@@ -10,7 +10,8 @@ import { CompressedAirItem } from '../../../compressed-air-inventory';
 @Component({
   selector: 'app-centrifugal-specifics-catalog',
   templateUrl: './centrifugal-specifics-catalog.component.html',
-  styleUrl: './centrifugal-specifics-catalog.component.css'
+  styleUrl: './centrifugal-specifics-catalog.component.css',
+  standalone: false
 })
 export class CentrifugalSpecificsCatalogComponent implements OnInit {
 

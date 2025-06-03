@@ -11,7 +11,8 @@ import { UnloadPointCatalogService } from './unload-point-catalog.service';
 @Component({
   selector: '[app-unload-point-catalog]',
   templateUrl: './unload-point-catalog.component.html',
-  styleUrl: './unload-point-catalog.component.css'
+  styleUrl: './unload-point-catalog.component.css',
+  standalone: false
 })
 export class UnloadPointCatalogComponent implements OnInit {
 

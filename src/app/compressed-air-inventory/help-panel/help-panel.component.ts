@@ -5,7 +5,8 @@ import { CompressedAirInventoryService } from '../compressed-air-inventory.servi
 @Component({
   selector: 'app-help-panel',
   templateUrl: './help-panel.component.html',
-  styleUrl: './help-panel.component.css'
+  styleUrl: './help-panel.component.css',
+  standalone: false
 })
 export class HelpPanelComponent implements OnInit {
 

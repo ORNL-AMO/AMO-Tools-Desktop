@@ -10,7 +10,8 @@ import { CompressedAirCatalogService } from './compressed-air-catalog.service';
 @Component({
   selector: 'app-compressed-air-catalog',
   templateUrl: './compressed-air-catalog.component.html',
-  styleUrl: './compressed-air-catalog.component.css'
+  styleUrl: './compressed-air-catalog.component.css',
+  standalone: false
 })
 export class CompressedAirCatalogComponent implements OnInit {
 

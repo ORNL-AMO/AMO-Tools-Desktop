@@ -11,7 +11,8 @@ import { FullLoadCatalogService } from './full-load-catalog.service';
 @Component({
   selector: '[app-full-load-catalog]',
   templateUrl: './full-load-catalog.component.html',
-  styleUrl: './full-load-catalog.component.css'
+  styleUrl: './full-load-catalog.component.css',
+  standalone: false
 })
 export class FullLoadCatalogComponent implements OnInit {
 

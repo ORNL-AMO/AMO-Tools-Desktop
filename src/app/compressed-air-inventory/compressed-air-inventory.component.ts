@@ -15,7 +15,8 @@ import { environment } from '../../environments/environment';
 @Component({
   selector: 'app-compressed-air-inventory',
   templateUrl: './compressed-air-inventory.component.html',
-  styleUrl: './compressed-air-inventory.component.css'
+  styleUrl: './compressed-air-inventory.component.css',
+  standalone: false
 })
 export class CompressedAirInventoryComponent implements OnInit {
 

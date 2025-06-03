@@ -10,7 +10,8 @@ import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-performance-points-catalog',
   templateUrl: './performance-points-catalog.component.html',
-  styleUrl: './performance-points-catalog.component.css'
+  styleUrl: './performance-points-catalog.component.css',
+  standalone: false
 })
 export class PerformancePointsCatalogComponent implements OnInit {
   settingsSub: Subscription;

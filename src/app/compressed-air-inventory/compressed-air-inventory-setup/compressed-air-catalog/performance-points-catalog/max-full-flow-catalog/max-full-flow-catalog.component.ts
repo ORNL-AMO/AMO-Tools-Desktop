@@ -11,7 +11,8 @@ import { Settings } from '../../../../../shared/models/settings';
 @Component({
   selector: '[app-max-full-flow-catalog]',
   templateUrl: './max-full-flow-catalog.component.html',
-  styleUrl: './max-full-flow-catalog.component.css'
+  styleUrl: './max-full-flow-catalog.component.css',
+  standalone: false
 })
 export class MaxFullFlowCatalogComponent implements OnInit {
 

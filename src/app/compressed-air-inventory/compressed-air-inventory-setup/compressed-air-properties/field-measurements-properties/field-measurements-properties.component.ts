@@ -5,7 +5,8 @@ import { CompressedAirInventoryService } from '../../../compressed-air-inventory
 @Component({
   selector: 'app-field-measurements-properties',
   templateUrl: './field-measurements-properties.component.html',
-  styleUrl: './field-measurements-properties.component.css'
+  styleUrl: './field-measurements-properties.component.css',
+  standalone: false
 })
 export class FieldMeasurementsPropertiesComponent implements OnInit {
 

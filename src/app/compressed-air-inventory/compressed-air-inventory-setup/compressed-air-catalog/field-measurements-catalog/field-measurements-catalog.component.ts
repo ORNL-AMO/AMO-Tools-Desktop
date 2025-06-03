@@ -11,7 +11,8 @@ import { OperatingHours } from '../../../../shared/models/operations';
 @Component({
   selector: 'app-field-measurements-catalog',
   templateUrl: './field-measurements-catalog.component.html',
-  styleUrl: './field-measurements-catalog.component.css'
+  styleUrl: './field-measurements-catalog.component.css',
+  standalone: false
 })
 export class FieldMeasurementsCatalogComponent implements OnInit {
   settingsSub: Subscription;

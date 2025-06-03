@@ -17,7 +17,8 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 @Component({
   selector: 'app-plant-setup',
   templateUrl: './plant-setup.component.html',
-  styleUrl: './plant-setup.component.css'
+  styleUrl: './plant-setup.component.css',
+  standalone: false
 })
 export class PlantSetupComponent implements OnInit {
 

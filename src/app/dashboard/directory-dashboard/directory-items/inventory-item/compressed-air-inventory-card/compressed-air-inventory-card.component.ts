@@ -4,7 +4,8 @@ import { InventoryItem } from '../../../../../shared/models/inventory/inventory'
 @Component({
   selector: 'app-compressed-air-inventory-card',
   templateUrl: './compressed-air-inventory-card.component.html',
-  styleUrl: './compressed-air-inventory-card.component.css'
+  styleUrl: './compressed-air-inventory-card.component.css',
+  standalone: false
 })
 export class CompressedAirInventoryCardComponent implements OnInit {
 

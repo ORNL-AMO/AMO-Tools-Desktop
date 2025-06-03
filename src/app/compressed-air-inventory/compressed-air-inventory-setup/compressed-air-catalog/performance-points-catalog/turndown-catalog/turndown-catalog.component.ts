@@ -11,7 +11,8 @@ import { Settings } from '../../../../../shared/models/settings';
 @Component({
   selector: '[app-turndown-catalog]',
   templateUrl: './turndown-catalog.component.html',
-  styleUrl: './turndown-catalog.component.css'
+  styleUrl: './turndown-catalog.component.css',
+  standalone: false
 })
 export class TurndownCatalogComponent implements OnInit {
 

@@ -11,7 +11,8 @@ import { NoLoadCatalogService } from './no-load-catalog.service';
 @Component({
   selector: '[app-no-load-catalog]',
   templateUrl: './no-load-catalog.component.html',
-  styleUrl: './no-load-catalog.component.css'
+  styleUrl: './no-load-catalog.component.css',
+  standalone: false
 })
 export class NoLoadCatalogComponent implements OnInit {
 

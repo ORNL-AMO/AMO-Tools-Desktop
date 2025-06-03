@@ -13,7 +13,8 @@ import _ from 'lodash';
 @Component({
   selector: 'app-compressed-air-inventory-banner',
   templateUrl: './compressed-air-inventory-banner.component.html',
-  styleUrl: './compressed-air-inventory-banner.component.css'
+  styleUrl: './compressed-air-inventory-banner.component.css',
+  standalone: false
 })
 export class CompressedAirInventoryBannerComponent implements OnInit {
 

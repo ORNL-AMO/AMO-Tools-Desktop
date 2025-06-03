@@ -11,7 +11,8 @@ import { BlowoffCatalogService } from './blowoff-catalog.service';
 @Component({
   selector: '[app-blowoff-catalog]',
   templateUrl: './blowoff-catalog.component.html',
-  styleUrl: './blowoff-catalog.component.css'
+  styleUrl: './blowoff-catalog.component.css',
+  standalone: false
 })
 export class BlowoffCatalogComponent implements OnInit {
 

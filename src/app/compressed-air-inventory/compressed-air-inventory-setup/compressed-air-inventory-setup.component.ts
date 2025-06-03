@@ -7,7 +7,8 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-compressed-air-inventory-setup',
   templateUrl: './compressed-air-inventory-setup.component.html',
-  styleUrl: './compressed-air-inventory-setup.component.css'
+  styleUrl: './compressed-air-inventory-setup.component.css',
+  standalone: false
 })
 export class CompressedAirInventorySetupComponent implements OnInit {
 

@@ -5,7 +5,8 @@ import { CompressedAirInventoryService } from '../../../compressed-air-inventory
 @Component({
   selector: 'app-performance-points-properties',
   templateUrl: './performance-points-properties.component.html',
-  styleUrl: './performance-points-properties.component.css'
+  styleUrl: './performance-points-properties.component.css',
+  standalone: false
 })
 export class PerformancePointsPropertiesComponent implements OnInit {
 

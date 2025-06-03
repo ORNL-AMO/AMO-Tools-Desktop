@@ -9,7 +9,8 @@ import { CompressedAirInventoryService } from '../../../compressed-air-inventory
 @Component({
   selector: 'app-nameplate-data-catalog',
   templateUrl: './nameplate-data-catalog.component.html',
-  styleUrl: './nameplate-data-catalog.component.css'
+  styleUrl: './nameplate-data-catalog.component.css',
+  standalone: false
 })
 export class NameplateDataCatalogComponent implements OnInit {
   settingsSub: Subscription;

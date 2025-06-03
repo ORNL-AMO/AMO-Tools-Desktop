@@ -5,7 +5,8 @@ import { CompressedAirInventoryService } from '../../../compressed-air-inventory
 @Component({
   selector: 'app-design-details-properties',
   templateUrl: './design-details-properties.component.html',
-  styleUrl: './design-details-properties.component.css'
+  styleUrl: './design-details-properties.component.css',
+  standalone: false
 })
 export class DesignDetailsPropertiesComponent implements OnInit {
 

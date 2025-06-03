@@ -11,7 +11,8 @@ import { MidTurndownCatalogService } from './mid-turndown-catalog.service';
 @Component({
   selector: '[app-mid-turndown-catalog]',
   templateUrl: './mid-turndown-catalog.component.html',
-  styleUrl: './mid-turndown-catalog.component.css'
+  styleUrl: './mid-turndown-catalog.component.css',
+  standalone: false
 })
 export class MidTurndownCatalogComponent implements OnInit {
 

@@ -10,7 +10,8 @@ import { DesignDetailsCatalogService } from './design-details-catalog.service';
 @Component({
   selector: 'app-design-details-catalog',
   templateUrl: './design-details-catalog.component.html',
-  styleUrl: './design-details-catalog.component.css'
+  styleUrl: './design-details-catalog.component.css',
+  standalone: false
 })
 export class DesignDetailsCatalogComponent implements OnInit {
   settingsSub: Subscription;

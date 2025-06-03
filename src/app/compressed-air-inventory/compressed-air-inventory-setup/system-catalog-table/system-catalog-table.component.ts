@@ -10,7 +10,8 @@ import { PerformancePointsCatalogService } from '../compressed-air-catalog/perfo
 @Component({
   selector: 'app-system-catalog-table',
   templateUrl: './system-catalog-table.component.html',
-  styleUrl: './system-catalog-table.component.css'
+  styleUrl: './system-catalog-table.component.css',
+  standalone: false
 })
 export class SystemCatalogTableComponent implements OnInit {
 

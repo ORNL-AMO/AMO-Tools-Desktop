@@ -10,7 +10,8 @@ import { CompressedAirMotorCatalogService } from './compressed-air-motor-catalog
 @Component({
   selector: 'app-compressed-air-motor-catalog',
   templateUrl: './compressed-air-motor-catalog.component.html',
-  styleUrl: './compressed-air-motor-catalog.component.css'
+  styleUrl: './compressed-air-motor-catalog.component.css',
+  standalone: false
 })
 export class CompressedAirMotorCatalogComponent implements OnInit {
   settingsSub: Subscription;

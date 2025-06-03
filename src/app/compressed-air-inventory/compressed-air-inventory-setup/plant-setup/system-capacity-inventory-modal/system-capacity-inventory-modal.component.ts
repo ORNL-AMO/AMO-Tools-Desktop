@@ -5,7 +5,8 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 @Component({
   selector: 'app-system-capacity-inventory-modal',
   templateUrl: './system-capacity-inventory-modal.component.html',
-  styleUrl: './system-capacity-inventory-modal.component.css'
+  styleUrl: './system-capacity-inventory-modal.component.css',
+  standalone: false
 })
 export class SystemCapacityInventoryModalComponent implements OnInit {
   @Output('closeModal')

@@ -5,7 +5,8 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-compressed-air-inventory-summary',
   templateUrl: './compressed-air-inventory-summary.component.html',
-  styleUrl: './compressed-air-inventory-summary.component.css'
+  styleUrl: './compressed-air-inventory-summary.component.css',
+  standalone: false
 })
 export class CompressedAirInventorySummaryComponent implements OnInit {
   summaryTab: string;

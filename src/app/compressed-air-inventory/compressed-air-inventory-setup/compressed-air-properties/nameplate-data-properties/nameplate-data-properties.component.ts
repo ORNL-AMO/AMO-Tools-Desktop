@@ -5,7 +5,8 @@ import { CompressedAirInventoryService } from '../../../compressed-air-inventory
 @Component({
   selector: 'app-nameplate-data-properties',
   templateUrl: './nameplate-data-properties.component.html',
-  styleUrl: './nameplate-data-properties.component.css'
+  styleUrl: './nameplate-data-properties.component.css',
+  standalone: false
 })
 export class NameplateDataPropertiesComponent implements OnInit {
 
