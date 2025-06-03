@@ -9,6 +9,7 @@ import { ExportToJustifiSsmtService } from './export-to-justifi-ssmt.service';
 import { ExportToJustifiPhastService } from './export-to-justifi-phast.service';
 import { ExportToJustifiCompressedAirService } from './export-to-justifi-compressed-air.service';
 import { ExportToJustifiTreasureHuntService } from './export-to-justifi-treasure-hunt.service';
+import { ExportToJustifiWasteWaterService } from './export-to-justifi-waste-water.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,8 @@ export class ExportToJustifiTemplateService {
     private exportToJustifiSsmtService: ExportToJustifiSsmtService,
     private exportToJustifiPhastService: ExportToJustifiPhastService,
     private exportToJustifiCompressedAirService: ExportToJustifiCompressedAirService,
-    private exportToJustifiTreasureHuntService: ExportToJustifiTreasureHuntService
+    private exportToJustifiTreasureHuntService: ExportToJustifiTreasureHuntService,
+    private exportToJustifiWasteWaterService: ExportToJustifiWasteWaterService
   ) { }
 
   exportData(settings: Settings, assessments: Array<Assessment>) {
@@ -38,10 +40,6 @@ export class ExportToJustifiTemplateService {
           a.href = url;
           let date = new Date();
           let datePipe = new DatePipe('en-us');
-          // let account: IdbAccount = this.accountDbService.selectedAccount.getValue();
-          // let accountName: string = account.name;
-          // accountName = accountName.replaceAll(' ', '-');
-          // accountName = accountName.replaceAll('.', '_');
           a.download = "MEASUR_To_JUSTIFI" + "-" + datePipe.transform(date, 'MM-dd-yyyy');
           document.body.appendChild(a);
           a.click();
@@ -129,14 +127,6 @@ export class ExportToJustifiTemplateService {
       //C: date
       //assessment date not a thing
 
-      //D: savings data level
-      //Individual or Assessment
-      // if (assessment.type == 'CompressedAir' || assessment.type == 'TreasureHunt') {
-      //   assessmentWorksheet.getCell('D' + assessmentRowIndex).value = 'Individual';
-      // } else {
-      //   assessmentWorksheet.getCell('D' + assessmentRowIndex).value = 'Assessment';
-      // }
-
       if (assessment.type == 'PSAT') {
         eemRowIndex = this.exportToJustifiPsatService.fillPSATWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
       } else if (assessment.type == 'FSAT') {
@@ -145,46 +135,14 @@ export class ExportToJustifiTemplateService {
         eemRowIndex = this.exportToJustifiSsmtService.fillSSMTWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
       } else if (assessment.type == 'PHAST') {
         eemRowIndex = this.exportToJustifiPhastService.fillPHASTWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
-      } else if(assessment.type == 'CompressedAir'){
+      } else if (assessment.type == 'CompressedAir') {
         eemRowIndex = this.exportToJustifiCompressedAirService.fillCompressedAirWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
-      } else if(assessment.type == 'TreasureHunt'){
+      } else if (assessment.type == 'TreasureHunt') {
         eemRowIndex = this.exportToJustifiTreasureHuntService.fillTreasureHuntWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
+      } else if (assessment.type == 'WasteWater') {
+        eemRowIndex = this.exportToJustifiWasteWaterService.fillWasteWaterWorksheet(workbook, assessment, assessmentRowIndex, eemRowIndex);
       }
-
-      //E: implementation costs
-      //F: electricity use
-      //G: Electricity unit
-      //H: electricity savings
-      //I: NG use
-      //J: NG unit
-      //K: NG savings
-      //L: Other fuels use
-      //M: Other fuels unit
-      //N: Other fuels savings
-      //O: water use
-      //P: water unit
-      //Q: water savings
-      //R: waste water use
-      //S: waste water unit
-      //T: waste water savings
-      //U: compressed air use
-      //V: compressed air unit
-      //W: compressed air savings
-      //x: steam use
-      //Y: steam unit
-      //Z: steam savings
-
       assessmentRowIndex++;
     })
   }
-
-  // PHAST
-  // FSAT 
-  // SSMT 
-  // TreasureHunt
-  // WasteWater
-  // Water
-  // CompressedAir
-
-
 }

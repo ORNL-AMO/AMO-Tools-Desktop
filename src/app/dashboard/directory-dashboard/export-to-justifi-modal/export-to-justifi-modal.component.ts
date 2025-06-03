@@ -31,7 +31,7 @@ export class ExportToJustifiModalComponent {
     this.directory = this.directoryDbService.getById(directoryId);
     this.settings = this.settingsDbService.getByDirectoryId(this.directory.id);
     this.directory.assessments.forEach(assessment => {
-      if (assessment.selected) {
+      if (assessment.selected && assessment.type != 'Water') {
         this.selectedAssessments.push(assessment);
       }
     });
