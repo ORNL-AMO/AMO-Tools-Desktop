@@ -10,6 +10,9 @@
         </div>
 
         <div class="py-2 px-0 mx-auto" *ngIf="selectedDataSet">
+            <div *ngIf="applyAllError" class="alert alert-danger">
+                <span class="small">Unable to apply selections to all datasets. Please make selections manually.</span>
+            </div>
             <div *ngIf="explorerData.datasets.length > 1" class="d-flex flex-row mb-2">
                 <input class="mb-0 mt-1" type="checkbox" id="applyToAll" [(ngModel)]="applyToAll" (change)="updateExplorerData()">
                 <label for="applyToAll">Apply my selections for all datasets</label>
