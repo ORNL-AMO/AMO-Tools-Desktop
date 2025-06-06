@@ -13,3 +13,18 @@
 .modal-dialog{
     top: .75rem;
 }
+
+.spinner-overlay {
+  height: 75px;
+  z-index: 999;
+}
+
+.spinner > div {
+  width: 25px;
+  height: 25px;
+  background-color: #117A65;
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
