@@ -6,6 +6,7 @@ import { AutomaticBackupService } from '../../electron/automatic-backup.service'
 import { ApplicationInstanceData, ApplicationInstanceDbService } from '../../indexedDb/application-instance-db.service';
 import { ImportBackupService } from '../../shared/import-backup.service';
 import { FileImportStatus, ImportService } from '../../shared/import-export/import.service';
+import { AnalyticsService } from '../../shared/analytics/analytics.service';
 
 @Component({
     selector: 'app-data-and-backup',
@@ -33,6 +34,7 @@ export class DataAndBackupComponent {
     private applicationInstanceDbService: ApplicationInstanceDbService,
     private automaticBackupService: AutomaticBackupService,
     private importService: ImportService,
+    private analyticsService: AnalyticsService,
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -72,6 +74,14 @@ export class DataAndBackupComponent {
     let newBackupFile = await this.backupDataService.getBackupFile();
     this.electronService.openDialog(newBackupFile);
   }
+
+  async toggleAutomaticBackup() {
+    if (this.applicationInstanceData && this.applicationInstanceData.isAutomaticBackupOn) {
+      this.analyticsService.sendEvent('measur-auto-backup-on');
+    }
+    this.saveAutomaticBackupSettings();
+  }
+
 
   async saveAutomaticBackupSettings() {
     await firstValueFrom(this.applicationInstanceDbService.updateWithObservable(this.applicationInstanceData));
