@@ -1,12 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { DirectoryDashboardService } from '../directory-dashboard.service';
-import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
-import { Directory } from '../../../shared/models/directory';
-import { Assessment } from '../../../shared/models/assessment';
-import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { Settings } from '../../../shared/models/settings';
 import { ExportToJustifiTemplateService } from './export-to-justifi-services/export-to-justifi-template.service';
+import { Directory } from '../models/directory';
+import { Assessment } from '../models/assessment';
+import { Settings } from '../models/settings';
+import { DirectoryDashboardService } from '../../dashboard/directory-dashboard/directory-dashboard.service';
+import { DirectoryDbService } from '../../indexedDb/directory-db.service';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
 
 @Component({
   selector: 'app-export-to-justifi-modal',
@@ -48,7 +48,7 @@ export class ExportToJustifiModalComponent {
   hideModal() {
     this.exportToJustifiModal.hide();
     this.exportToJustifiModal.onHidden.subscribe(val => {
-      this.directoryDashboardService.showExportToJustifiModal.next(false);
+      this.exportToJustifiTemplateService.showExportToJustifiModal.next(false);
     });
   }
 

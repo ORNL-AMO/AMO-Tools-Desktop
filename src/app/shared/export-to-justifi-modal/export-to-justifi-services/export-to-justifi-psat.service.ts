@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as ExcelJS from 'exceljs';
-import { PsatService } from '../../../../psat/psat.service';
-import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
-import { Assessment } from '../../../../shared/models/assessment';
-import { Settings } from '../../../../shared/models/settings';
-import { PsatOutputs } from '../../../../shared/models/psat';
+import { PsatService } from '../../../psat/psat.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Assessment } from '../../models/assessment';
+import { Settings } from '../../models/settings';
+import { PsatOutputs } from '../../models/psat';
 
 @Injectable({
   providedIn: 'root'

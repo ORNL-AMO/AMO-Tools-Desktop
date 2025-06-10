@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { FsatService } from '../../../../fsat/fsat.service';
-import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import * as ExcelJS from 'exceljs';
-import { Assessment } from '../../../../shared/models/assessment';
-import { Settings } from '../../../../shared/models/settings';
-import { FsatOutput } from '../../../../shared/models/fans';
+import { FsatService } from '../../../fsat/fsat.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Assessment } from '../../models/assessment';
+import { Settings } from '../../models/settings';
+import { FsatOutput } from '../../models/fans';
 
 @Injectable({
   providedIn: 'root'

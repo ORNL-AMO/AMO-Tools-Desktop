@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Assessment } from '../../../../shared/models/assessment';
 import * as ExcelJS from 'exceljs';
-import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
-import { Settings } from '../../../../shared/models/settings';
-import { ExecutiveSummaryService } from '../../../../phast/phast-report/executive-summary.service';
-import { ExecutiveSummary } from '../../../../shared/models/phast/phast';
-
+import { ExecutiveSummaryService } from '../../../phast/phast-report/executive-summary.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Assessment } from '../../models/assessment';
 @Injectable({
   providedIn: 'root'
 })

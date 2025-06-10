@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import * as ExcelJS from 'exceljs';
-import { Assessment } from '../../../../shared/models/assessment';
-import { Settings } from '../../../../shared/models/settings';
-import { SsmtService } from '../../../../ssmt/ssmt.service';
-import { SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
-import { Modification, SSMTInputs } from '../../../../shared/models/steam/ssmt';
+import { SsmtService } from '../../../ssmt/ssmt.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Assessment } from '../../models/assessment';
+import { Settings } from '../../models/settings';
+import { Modification, SSMTInputs } from '../../models/steam/ssmt';
+import { SSMTOutput } from '../../models/steam/steam-outputs';
 
 @Injectable({
   providedIn: 'root'

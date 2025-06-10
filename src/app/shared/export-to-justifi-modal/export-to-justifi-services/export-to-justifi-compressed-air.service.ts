@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import * as ExcelJS from 'exceljs';
-import { Assessment } from '../../../../shared/models/assessment';
-import { Settings } from '../../../../shared/models/settings';
-import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../../../compressed-air-assessment/compressed-air-assessment-results.service';
+import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../../compressed-air-assessment/compressed-air-assessment-results.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Settings } from '../../models/settings';
+import { Assessment } from '../../models/assessment';
 
 @Injectable({
   providedIn: 'root'

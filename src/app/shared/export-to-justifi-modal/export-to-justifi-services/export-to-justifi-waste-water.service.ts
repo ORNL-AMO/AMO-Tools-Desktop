@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as ExcelJS from 'exceljs';
-import { Assessment } from '../../../../shared/models/assessment';
-import { Settings } from '../../../../shared/models/settings';
-import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
-import { WasteWaterService } from '../../../../waste-water/waste-water.service';
-import { WasteWaterData, WasteWaterResults } from '../../../../shared/models/waste-water';
+import { WasteWaterService } from '../../../waste-water/waste-water.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Assessment } from '../../models/assessment';
+import { Settings } from '../../models/settings';
+import { WasteWaterData, WasteWaterResults } from '../../models/waste-water';
 
 @Injectable({
   providedIn: 'root'

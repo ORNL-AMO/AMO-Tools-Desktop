@@ -18,37 +18,49 @@
     </app-treasure-chest-menu>
 
     <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
-    
-     <!-- Assessment view -->
-     <div *ngIf="assessment && !inRollup" class="row">
-      <div class="col-12 p-2">
-              <span class="ml-3 pl-2" *ngFor="let directory of assessmentDirectories">
-                  {{directory.name}} / {{assessment.name}}
-              </span>
-              <span class="ml-3 date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
-              <button class="mt-0 mr-3 btn btn-secondary pull-right hide-print" (click)="print()">Print</button>
-              <button class="mt-0 mr-3 btn btn-secondary pull-right hide-print" (click)="showExportModal()">Export to PPT</button>
-      </div>
-  </div>
-  <!-- Rollup view -->
-  <div *ngIf="assessment && inRollup" class="row assessment-name">
-      <div class="col-12">
-          <h2 class="assessment-title">
-              <div class="d-flex">
-                  <span class="pl-2" *ngFor="let directory of assessmentDirectories">
-                      {{directory.name}} /
-                  </span>
-              </div>
-              {{assessment.name}}
 
-          </h2>
+    <!-- Assessment view -->
+    <div *ngIf="assessment && !inRollup" class="row">
+      <div class="col-12 p-2">
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <div class="mt-auto ml-3">
+              <ng-container class="ml-3 pl-2" *ngFor="let directory of assessmentDirectories">
+                {{directory.name}} /
+              </ng-container>
+              {{assessment.name}}
+            </div>
+            <span class="ml-3 mt-auto date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
+          </div>
+          <div>
+            <button class="mt-0 mr-3 btn btn-secondary hide-print" (click)="showExportModal()">Export to
+              JUSTIFI</button>
+            <button class="mt-0 mr-3 btn btn-secondary hide-print" (click)="showExportModal()">Export to
+              PPT</button>
+            <button class="mt-0 mr-3 btn btn-secondary hide-print" (click)="print()">Print</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Rollup view -->
+    <div *ngIf="assessment && inRollup" class="row assessment-name">
+      <div class="col-12">
+        <h2 class="assessment-title">
+          <div class="d-flex">
+            <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+              {{directory.name}} /
+            </span>
+          </div>
+          {{assessment.name}}
+
+        </h2>
       </div>
       <div class="col-12">
-          <h2 class="date-modified">
-              <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
-          </h2>
+        <h2 class="date-modified">
+          <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
+        </h2>
       </div>
-  </div>
+    </div>
   </div>
   <!-- End .report-header -->
 
@@ -187,7 +199,8 @@
         <div class="d-flex justify-content-center w-100">
           <div class="form-group d-flex mr-2">
             <label for="pptThemeOption">PowerPoint Theme</label>
-            <select id="pptThemeOption" name="pptThemeOption" class="form-control" [(ngModel)]="pptThemeOption" (change)="changePptTheme(pptThemeOption)">
+            <select id="pptThemeOption" name="pptThemeOption" class="form-control" [(ngModel)]="pptThemeOption"
+              (change)="changePptTheme(pptThemeOption)">
               <option *ngFor="let theme of pptThemeOptions" [ngValue]="theme.value">{{theme.name}}</option>
             </select>
           </div>

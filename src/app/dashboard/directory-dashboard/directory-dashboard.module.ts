@@ -38,7 +38,6 @@ import { CompressedAirReportModule } from '../../compressed-air-assessment/compr
 import { PumpInventoryCardComponent } from './directory-items/inventory-item/pump-inventory-card/pump-inventory-card.component';
 import { WaterSummaryCardComponent } from './directory-items/assessment-item/water-summary-card/water-summary-card.component';
 import { DiagramItemComponent } from './directory-items/diagram-item/diagram-item.component';
-import { ExportToJustifiModalComponent } from './export-to-justifi-modal/export-to-justifi-modal.component';
 
 @NgModule({
   declarations: [
@@ -64,8 +63,7 @@ import { ExportToJustifiModalComponent } from './export-to-justifi-modal/export-
     CompressedAirAssessmentCardComponent,
     PumpInventoryCardComponent,
     WaterSummaryCardComponent,
-    DiagramItemComponent,
-    ExportToJustifiModalComponent
+    DiagramItemComponent
   ],
   imports: [
     CommonModule,

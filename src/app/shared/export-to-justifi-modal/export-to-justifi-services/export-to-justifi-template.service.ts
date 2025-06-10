@@ -2,20 +2,23 @@ import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import * as ExcelJS from 'exceljs';
 import { ExportToJustifiPsatService } from './export-to-justifi-psat.service';
-import { Assessment } from '../../../../shared/models/assessment';
-import { Settings } from '../../../../shared/models/settings';
 import { ExportToJustifiFsatService } from './export-to-justifi-fsat.service';
 import { ExportToJustifiSsmtService } from './export-to-justifi-ssmt.service';
 import { ExportToJustifiPhastService } from './export-to-justifi-phast.service';
 import { ExportToJustifiCompressedAirService } from './export-to-justifi-compressed-air.service';
 import { ExportToJustifiTreasureHuntService } from './export-to-justifi-treasure-hunt.service';
 import { ExportToJustifiWasteWaterService } from './export-to-justifi-waste-water.service';
+import { BehaviorSubject } from 'rxjs';
+import { Settings } from '../../models/settings';
+import { Assessment } from '../../models/assessment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExportToJustifiTemplateService {
 
+
+  showExportToJustifiModal: BehaviorSubject<boolean>;
   constructor(private exportToJustifiPsatService: ExportToJustifiPsatService,
     private exportToJustifiFsatService: ExportToJustifiFsatService,
     private exportToJustifiSsmtService: ExportToJustifiSsmtService,
@@ -23,7 +26,9 @@ export class ExportToJustifiTemplateService {
     private exportToJustifiCompressedAirService: ExportToJustifiCompressedAirService,
     private exportToJustifiTreasureHuntService: ExportToJustifiTreasureHuntService,
     private exportToJustifiWasteWaterService: ExportToJustifiWasteWaterService
-  ) { }
+  ) { 
+    this.showExportToJustifiModal = new BehaviorSubject<boolean>(false);
+  }
 
   exportData(settings: Settings, assessments: Array<Assessment>) {
     let workbook = new ExcelJS.Workbook();

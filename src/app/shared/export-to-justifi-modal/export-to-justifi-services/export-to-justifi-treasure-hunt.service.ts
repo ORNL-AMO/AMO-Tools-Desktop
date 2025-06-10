@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import * as ExcelJS from 'exceljs';
-import { Assessment } from '../../../../shared/models/assessment';
-import { Settings } from '../../../../shared/models/settings';
-import { TreasureHuntReportService } from '../../../../treasure-hunt/treasure-hunt-report/treasure-hunt-report.service';
-import { OpportunitySummary, OpportunityUtilityType, TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
+import { TreasureHuntReportService } from '../../../treasure-hunt/treasure-hunt-report/treasure-hunt-report.service';
+import { SettingsDbService } from '../../../indexedDb/settings-db.service';
+import { Assessment } from '../../models/assessment';
+import { Settings } from '../../models/settings';
+import { OpportunitySummary, OpportunityUtilityType, TreasureHuntResults } from '../../models/treasure-hunt';
 
 @Injectable({
   providedIn: 'root'

@@ -12,6 +12,7 @@ import { ReportRollupService } from '../../../report-rollup/report-rollup.servic
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import { Subscription } from 'rxjs';
 import { Diagram } from '../../../shared/models/diagram';
+import { ExportToJustifiTemplateService } from '../../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 
 @Component({
   selector: 'app-directory-dashboard-menu',
@@ -36,7 +37,9 @@ export class DirectoryDashboardMenuComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
     private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
-    private exportService: ExportService, private dashboardService: DashboardService, private reportRollupService: ReportRollupService, private router: Router) { }
+    private exportService: ExportService, private dashboardService: DashboardService,
+    private reportRollupService: ReportRollupService, private router: Router,
+    private exportToJustifiTemplateService: ExportToJustifiTemplateService) { }
 
   ngOnInit() {
     this.activatedRouteSub = this.activatedRoute.params.subscribe(params => {
@@ -193,6 +196,6 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   }
 
   exportToJustifi() {
-    this.directoryDashboardService.showExportToJustifiModal.next(true)
+    this.exportToJustifiTemplateService.showExportToJustifiModal.next(true)
   }
 }
