@@ -1,0 +1,13 @@
+.modal-dialog {
+    max-width: 98vw;
+    height: 99vh;
+    top: 0;
+    margin-left: 1vw;
+    margin-top: .5vh;
+    margin-bottom: 0;
+    margin-right: 0;
+}
+
+.modal-content{
+    height: 100%;
+}

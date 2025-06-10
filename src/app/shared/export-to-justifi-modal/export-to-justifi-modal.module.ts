@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ExportToJustifiModalComponent } from './export-to-justifi-modal.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -11,7 +12,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
   ],
   imports: [
     CommonModule,
-    ModalModule
+    ModalModule,
+    FormsModule
   ],
   exports: [
     ExportToJustifiModalComponent]

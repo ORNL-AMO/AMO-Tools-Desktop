@@ -69,14 +69,16 @@ export class ExportToJustifiTreasureHuntService {
     let eemWorksheet = workbook.getWorksheet('Energy_Efficiency_Measures');
     //Flow Reallocation
     results.opportunitySummaries.forEach(opportunity => {
-      if (opportunity.utilityType == 'Mixed') {
-        opportunity.mixedIndividualResults.forEach(mixedOpportunity => {
-          this.addOpportunityToWorksheet(eemWorksheet, mixedOpportunity, eemRowIndex, assessment.name, true, settings);
+      if (opportunity.selected) {
+        if (opportunity.utilityType == 'Mixed') {
+          opportunity.mixedIndividualResults.forEach(mixedOpportunity => {
+            this.addOpportunityToWorksheet(eemWorksheet, mixedOpportunity, eemRowIndex, assessment.name, true, settings);
+            eemRowIndex++;
+          })
+        } else {
+          this.addOpportunityToWorksheet(eemWorksheet, opportunity, eemRowIndex, assessment.name, false, settings);
           eemRowIndex++;
-        })
-      } else {
-        this.addOpportunityToWorksheet(eemWorksheet, opportunity, eemRowIndex, assessment.name, false, settings);
-        eemRowIndex++;
+        }
       }
     })
 

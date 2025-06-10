@@ -2,24 +2,143 @@
     aria-labelledby="exportToJustifiModal" aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3>Export Content to JUSTIFI Template</h3>
-                <button class="close" aria-label="Close" (click)="hideModal()">
+            <div class="modal-header p-2">
+                <h5 class="mt-auto">Export Content to JUSTIFI Template</h5>
+                <button class="close p-0 m-0" aria-label="Close" (click)="hideModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <table class="table table-sm table-bordered">
-                    <tbody>
-                        <tr>
+            <div class="modal-body p-2">
+                <p class="fw-light">
+                    This will export the selected assessments to the JUSTIFI template. The template will be downloaded
+                    as an excel file.
+                    The excel file can then be uploaded to the JUSTIFI platform. JUSTIFI is a platform that helps find
+                    Non-energy Benefits (NEBs) of energy efficiency projects, like those identified in the
+                    assessments.
+                </p>
+                <form>
+                    <table class="table table-sm table-bordered mb-0">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Assessment Type
+                                </th>
+                                <th>
+                                    Assessment Name
+                                </th>
+                                <th>
+                                    Select Modification
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let assessment of selectedAssessments">
+                                <td>
+                                    {{assessment.type}}
+                                </td>
+                                <td>
+                                    {{assessment.name}}
+                                </td>
+                                <td>
+                                    <ng-container *ngIf="assessment.type === 'PSAT'">
+                                        <ng-template [ngIf]="assessment.psat.modifications.length > 0"
+                                            [ngIfElse]="noModificationsBlock">
+                                            <select class="form-select w-100"
+                                                [(ngModel)]="assessment.psat.selectedModificationId"
+                                                name="{{'psatModification' + assessment.id}}"
+                                                id="{{'psatModification' + assessment.id}}">
+                                                <option *ngFor="let modification of assessment.psat.modifications"
+                                                    [ngValue]="modification.id">{{modification.psat.name}}</option>
+                                            </select>
+                                        </ng-template>
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type === 'FSAT'">
+                                        <ng-template [ngIf]="assessment.fsat.modifications.length > 0"
+                                            [ngIfElse]="noModificationsBlock">
+                                            <select class="form-select w-100"
+                                                [(ngModel)]="assessment.fsat.selectedModificationId"
+                                                name="{{'fsatModification' + assessment.id}}"
+                                                id="{{'fsatModification' + assessment.id}}">
+                                                <option *ngFor="let modification of assessment.fsat.modifications"
+                                                    [ngValue]="modification.id">{{modification.fsat.name}}</option>
+                                            </select>
+                                        </ng-template>
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type === 'PHAST'">
+                                        <ng-template [ngIf]="assessment.phast.modifications.length > 0"
+                                            [ngIfElse]="noModificationsBlock">
+                                            <select class="form-select w-100"
+                                                [(ngModel)]="assessment.phast.selectedModificationId"
+                                                name="{{'phastModification' + assessment.id}}"
+                                                id="{{'phastModification' + assessment.id}}">
+                                                <option *ngFor="let modification of assessment.phast.modifications"
+                                                    [ngValue]="modification.id">{{modification.phast.name}}</option>
+                                            </select>
+                                        </ng-template>
+
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type === 'SSMT'">
+                                        <ng-template [ngIf]="assessment.ssmt.modifications.length > 0"
+                                            [ngIfElse]="noModificationsBlock">
+                                            <select class="form-select w-100"
+                                                [(ngModel)]="assessment.ssmt.selectedModificationId"
+                                                name="{{'ssmtModification' + assessment.id}}"
+                                                id="{{'ssmtModification' + assessment.id}}">
+                                                <option *ngFor="let modification of assessment.ssmt.modifications"
+                                                    [ngValue]="modification.modificationId">{{modification.ssmt.name}}
+                                                </option>
+                                            </select>
+                                        </ng-template>
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type === 'TreasureHunt'">
+                                        &mdash;
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type === 'WasteWater'">
+                                        <ng-template [ngIf]="assessment.wasteWater.modifications.length > 0"
+                                            [ngIfElse]="noModificationsBlock">
+                                            <select class="form-select w-100"
+                                                [(ngModel)]="assessment.wasteWater.selectedModificationId"
+                                                name="{{'wwModification' + assessment.id}}"
+                                                id="{{'wwModification' + assessment.id}}">
+                                                <option *ngFor="let modification of assessment.wasteWater.modifications"
+                                                    [ngValue]="modification.id">{{modification.name}}</option>
+                                            </select>
+                                        </ng-template>
+
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type === 'CompressedAir'">
+                                        <ng-template
+                                            [ngIf]="assessment.compressedAirAssessment.modifications.length > 0"
+                                            [ngIfElse]="noModificationsBlock">
+                                            <select class="form-select w-100"
+                                                [(ngModel)]="assessment.compressedAirAssessment.selectedModificationId"
+                                                name="{{'caModification' + assessment.id}}"
+                                                id="{{'caModification' + assessment.id}}">
+                                                <option
+                                                    *ngFor="let modification of assessment.compressedAirAssessment.modifications"
+                                                    [ngValue]="modification.modificationId">{{modification.name}}
+                                                </option>
+                                            </select>
+                                        </ng-template>
+                                    </ng-container>
+                                </td>
+                            </tr>
+
+
+                            <!-- <tr>
                             <td>
                                 Facility Name
                             </td>
                             <td>
-                                {{settings.facilityInfo.facilityName}}
+                                <ng-template [ngIf]="settings.facilityInfo" [ngIfElse]="noFacilityName">
+                                    {{settings.facilityInfo.facilityName}}
+                                </ng-template>
+                                <ng-template #noFacilityName>
+                                    &mdash;
+                                </ng-template>
                             </td>
-                        </tr>
-                        <tr>
+                        </tr> -->
+                            <!-- <tr>
                             <td>
                                 Assessments
                             </td>
@@ -38,18 +157,23 @@
                                     <img *ngIf="assessment.type == 'CompressedAir'" class="icon"
                                         src="assets/images/ca-icon.png">
                                     <img *ngIf="assessment.type == 'WasteWater'" class="icon"
-                                        src="assets/images/waste-water-icon.png"> -->
+                                        src="assets/images/waste-water-icon.png"> --
                                     {{assessment.name}}<br>
                                 </ng-container>
                             </td>
-                        </tr>
-                    </tbody>
-                </table>
+                        </tr> -->
+                        </tbody>
+                    </table>
+                </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" (click)="hideModal()">Close</button>
-                <button type="button" class="btn btn-primary" (click)="exportToJustifi()">Export</button>
+            <div class="modal-footer p-2">
+                <button type="button" class="btn btn-secondary p-1 small" (click)="hideModal()">Close</button>
+                <button type="button" class="btn btn-primary p-1 small" (click)="exportToJustifi()">Export</button>
             </div>
         </div>
     </div>
 </div>
+
+<ng-template #noModificationsBlock>
+    <span class="text-muted">No modifications available</span>
+</ng-template>
