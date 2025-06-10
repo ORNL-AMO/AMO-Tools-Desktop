@@ -4,7 +4,8 @@ import _ from 'lodash';
 
 @Pipe({
   name: 'filterCompressorsPipe',
-  pure: false
+  pure: false,
+  standalone: false
 })
 export class FilterCompressorsPipePipe implements PipeTransform {
 
