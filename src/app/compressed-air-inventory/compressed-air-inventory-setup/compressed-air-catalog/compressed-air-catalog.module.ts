@@ -39,6 +39,12 @@ import { NoLoadCatalogService } from './performance-points-catalog/no-load-catal
 import { BlowoffCatalogService } from './performance-points-catalog/blowoff-catalog/blowoff-catalog.service';
 import { FieldMeasurementsCatalogComponent } from './field-measurements-catalog/field-measurements-catalog.component';
 import { FieldMeasurementsCatalogService } from './field-measurements-catalog/field-measurements-catalog.service';
+import { ExistingCompressorModalComponent } from './existing-compressor-modal/existing-compressor-modal.component';
+import { FilterCompressorsPipePipe } from './existing-compressor-modal/filter-compressors-pipe.pipe';
+import { CompressorOptionsTableComponent } from './existing-compressor-modal/compressor-options-table/compressor-options-table.component';
+import { FilterCompressorsComponent } from './existing-compressor-modal/filter-compressors/filter-compressors.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { PerformancePointsCalculationsService } from './performance-points-catalog/calculations/performance-points-calculations.service';
 
 
 
@@ -59,7 +65,11 @@ import { FieldMeasurementsCatalogService } from './field-measurements-catalog/fi
     TurndownCatalogComponent,
     UnloadPointCatalogComponent,
     CentrifugalSpecificsCatalogComponent,
-    FieldMeasurementsCatalogComponent
+    FieldMeasurementsCatalogComponent,
+    ExistingCompressorModalComponent,
+    FilterCompressorsPipePipe,
+    CompressorOptionsTableComponent,
+    FilterCompressorsComponent
   ],
   imports: [
     CommonModule,
@@ -70,7 +80,8 @@ import { FieldMeasurementsCatalogService } from './field-measurements-catalog/fi
     OperatingHoursModalModule,
     ConfirmDeleteModalModule,
     ConnectedInventoryModule,
-    RouterModule
+    RouterModule,
+    NgbModule,
   ],
   providers: [
     CompressedAirCatalogService,
@@ -88,7 +99,8 @@ import { FieldMeasurementsCatalogService } from './field-measurements-catalog/fi
     TurndownCatalogService,
     NoLoadCatalogService,
     BlowoffCatalogService,
-    FieldMeasurementsCatalogService
+    FieldMeasurementsCatalogService,
+    PerformancePointsCalculationsService,
   ],
   exports: [
     CompressedAirCatalogComponent

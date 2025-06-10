@@ -82,8 +82,8 @@
                 <span *ngIf="form.controls.power.errors.greaterThan !== undefined">Value must be greater than
                     {{form.controls.power.errors.greaterThan}} kW.</span>
             </span>
-            <!-- <span class="alert-warning pull-right small"
-                *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span> -->
+            <span class="alert-warning pull-right small"
+                *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span>
         </div>
     </form>
 </td>

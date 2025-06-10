@@ -143,16 +143,16 @@
             (click)="setSetupTab('compressor-properties')">
             <a><span class="step-number">3</span>Compressor Properties</a>
         </div>
-        <!-- <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'compressed-air-catalog' && compressedAirInventoryData && compressedAirInventoryData.isValid}"
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'compressed-air-catalog' && compressedAirInventoryData && compressedAirInventoryData.isValid}"
             (click)="setSetupTab('compressed-air-catalog')">
             <a><span class="step-number" [ngClass]="{'missing-data-tab': compressedAirInventoryData && !compressedAirInventoryData.isValid}">4</span>Catalog</a>
-        </div> -->
-        <div class="fixed-tab-size"
+        </div>
+        <!-- <div class="fixed-tab-size"
             [ngClass]="{'active': setupTab == 'compressed-air-catalog' && compressedAirInventoryData}"
             (click)="setSetupTab('compressed-air-catalog')">
             <a><span class="step-number"
                     [ngClass]="{'missing-data-tab': compressedAirInventoryData}">4</span>Catalog</a>
-        </div>
+        </div> -->
         <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'end-uses'}" (click)="setSetupTab('end-uses')">
             <a><span class="step-number">5</span>End Uses</a>
         </div>
@@ -196,18 +196,18 @@
     </div>
 </nav>
 
-<nav class="hide-print" *ngIf="setupTab == 'compressed-air-catalog' && mainTab == 'setup'">
+<nav class="hide-print" *ngIf="(setupTab == 'compressed-air-catalog' || setupTab == 'end-uses') && mainTab == 'setup'">
     <div class="d-lg-flex d-none tabs subtabs progress-tabs flex-wrap compressed-air-inventory">
         <div *ngFor="let system of compressedAirInventoryData.systems"
             [ngClass]="{'active': selectedSystemId == system.id}" (click)="selectedSystem(system.id)">
             <a>{{system.name}}
-                <!-- <span class="badge gray-badge" [ngClass]="{'missing-data': !system.isValid}">
+                <span class="badge gray-badge" [ngClass]="{'missing-data': !system.isValid}">
                     <strong>{{system.catalog.length}}</strong>
                 </span> 
-                -->
-                <span class="badge gray-badge">
+               
+                <!-- <span class="badge gray-badge">
                     <strong>{{system.catalog.length}}</strong>
-                </span>
+                </span> -->
 
             </a>
         </div>

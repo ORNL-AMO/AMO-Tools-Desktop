@@ -22,10 +22,13 @@ export interface SystemInformation {
 export interface CompressedAirInventorySystem {
   name: string,
   operatingHours: number,
-  totalAirStorage: number,
+  totalAirStorage: number,    
+  averageLeakRate: number,
+  knownTotalAirflow: number
   description: string,
   id: string,
-  catalog: Array<CompressedAirItem>,
+  catalog: Array<CompressedAirItem>,  
+  endUses: Array<EndUse>,
   isValid?: boolean,
 }
 
@@ -50,7 +53,8 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties,
   centrifugalSpecifics: CentrifugalSpecifics,
   fieldMeasurements: FieldMeasurements;
-  validCompressedAir?: ValidCompressedAir
+  validCompressedAir?: ValidCompressedAir,
+  compressorLibId?: number,
 }
 
 export interface ValidCompressedAir {
@@ -59,7 +63,9 @@ export interface ValidCompressedAir {
   compressedAirMotorValid: boolean,
   compressedAirControlsValid: boolean,
   compressedAirDesignDetailsValid: boolean,
-  compressedAirPerformancePointsValid: boolean
+  compressedAirCentrifugalSpecifics: boolean,
+  compressedAirPerformancePointsValid: boolean,
+  compressedAirFieldMeasurementsValid: boolean,
 }
 
 export interface CompressedAirPropertyDisplayOptions {
@@ -93,7 +99,7 @@ export interface CentrifugalSpecifics {
   minFullLoadCapacity: number
 }
 
-export interface FieldMeasurements {  
+export interface FieldMeasurements {
   yearlyOperatingHours: number,
   operatingHours?: OperatingHours,
 
@@ -202,6 +208,24 @@ export interface CompressorTypeOption {
   lubricantTypeEnumValue: number,
   stageTypeEnumValue: number
 }
+
+export interface EndUse {
+  endUseId: string,
+  modifiedDate: Date,
+  endUseName: string,
+  location?: string,
+  endUseDescription: string,
+  isValid?: boolean,
+  averageRequiredPressure?: number,
+  averageAirflow?: number,
+  averagePercentCapacity?: number,
+  regulated?: boolean,
+  averageMeasuredPressure?: number,
+  averageExcessPressure?: number,
+
+}
+
+
 export const CompressorTypeOptions: Array<CompressorTypeOption> = [
   {
     value: 1,
@@ -322,3 +346,7 @@ export const ControlTypes: Array<ControlType> = [
     enumValue: 7
   },
 ]
+
+export interface CompressorInventoryItemWarnings {
+  serviceFactor?: string;
+}

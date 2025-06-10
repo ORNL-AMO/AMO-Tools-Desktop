@@ -44,8 +44,8 @@
                     formControlName="power" (input)="savePower()" (focus)="focusField('turndownPower')">
                 <span class="units input-group-addon">kW</span>
             </div>
-            <!-- <span class="alert-warning pull-right small"
-                *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span> -->
+            <span class="alert-warning pull-right small"
+                *ngIf="warnings.motorServiceFactorExceeded !== null">{{warnings.motorServiceFactorExceeded}}</span>
         </div>
     </form>
 </td>

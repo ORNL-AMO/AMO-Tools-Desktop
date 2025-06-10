@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirItem } from '../../../../compressed-air-inventory';
+import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
 import { Settings } from '../../../../../shared/models/settings';
 import { PerformancePointsCatalogService } from '../performance-points-catalog.service';
 import * as regression from 'regression';
@@ -9,6 +9,12 @@ export class FullLoadCatalogService {
 
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService) { }
 
+  setFullLoad(selectedCompressor: CompressedAirItem, atmosphericPressure: number, settings: Settings): PerformancePoint {
+    selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.dischargePressure = this.getFullLoadDischargePressure(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.isDefaultPressure, settings);
+    selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.airflow = this.getFullLoadAirFlow(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.isDefaultAirFlow, atmosphericPressure, settings);
+    selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.power = this.getFullLoadPower(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.isDefaultPower, atmosphericPressure, settings);
+    return selectedCompressor.compressedAirPerformancePointsProperties.fullLoad;
+  }
 
   getFullLoadAirFlow(selectedCompressor: CompressedAirItem, isDefault: boolean, atmosphericPressure: number, settings: Settings): number {
     if (isDefault) {

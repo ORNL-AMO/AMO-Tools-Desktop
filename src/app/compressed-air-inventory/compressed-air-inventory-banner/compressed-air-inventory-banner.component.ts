@@ -55,11 +55,6 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
 
     this.compressedAirInventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(val => {
       this.compressedAirInventoryData = val;
-      // if (!this.pumpInventoryData.isValid) {
-      //   this.hasInvalidPumpItem = true;
-      // } else {
-      //   this.hasInvalidPumpItem = false;
-      // }
     });
 
     this.selectedSystemIdSub = this.compressedAirCatalogService.selectedSystemId.subscribe(val => {
@@ -78,7 +73,7 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   ngOnDestroy() {
     this.setupTabSub.unsubscribe();
     this.compressedAirInventoryDataSub.unsubscribe();
-    //this.selectedSystemIdSub.unsubscribe();
+    this.selectedSystemIdSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.summaryTabSub.unsubscribe();
     //this.connectedInventoryDataSub.unsubscribe();

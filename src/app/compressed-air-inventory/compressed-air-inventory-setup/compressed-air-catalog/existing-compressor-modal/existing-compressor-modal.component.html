@@ -1,0 +1,21 @@
+<div bsModal #compressorModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="compressorModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header p-2">
+                    <span class="card-header-text">
+                        Select Compressor
+                    </span>
+                    <button class="close" aria-label="Close" (click)="close()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-block scroll-item">
+                    <app-filter-compressors-inventory></app-filter-compressors-inventory>
+                    <app-compressor-options-table-inventory (emitClose)="close()"></app-compressor-options-table-inventory>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

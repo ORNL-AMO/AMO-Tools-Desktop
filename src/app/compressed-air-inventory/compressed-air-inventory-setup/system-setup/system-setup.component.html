@@ -28,7 +28,28 @@
                     <input class="form-control" type="number" step="10" id="totalAirStorage" name="totalAirStorage"
                         [(ngModel)]="system.totalAirStorage" (input)="save()">
                     <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-                    <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                    <span class="input-group-addon units"
+                        *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Average Leak Rate</label>
+                <div class="input-group">
+                    <input class="form-control" type="number" step="10" id="averageLeakRate" name="averageLeakRate"
+                        [(ngModel)]="system.averageLeakRate" (input)="save()">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'"
+                        class="units input-group-addon">m<sup>3</sup>/min</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Known Total Air Flow</label>
+                <div class="input-group">
+                    <input class="form-control" type="number" step="10" id="knownTotalAirflow" name="knownTotalAirflow"
+                        [(ngModel)]="system.knownTotalAirflow" (input)="save()">
+                    <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">acfm</span>
+                    <span *ngIf="settings.unitsOfMeasure == 'Metric'"
+                        class="units input-group-addon">m<sup>3</sup>/min</span>
                 </div>
             </div>
 

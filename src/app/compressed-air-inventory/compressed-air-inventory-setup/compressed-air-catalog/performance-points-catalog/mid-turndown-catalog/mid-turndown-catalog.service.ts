@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirItem } from '../../../../compressed-air-inventory';
+import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
 import { Settings } from '../../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
 
@@ -7,6 +7,13 @@ import { ConvertUnitsService } from '../../../../../shared/convert-units/convert
 export class MidTurndownCatalogService {
 
   constructor(private convertUnitsService: ConvertUnitsService) { }
+
+  setMidTurndown(selectedCompressor: CompressedAirItem, settings: Settings): PerformancePoint {
+    selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.airflow = this.getMidTurndownAirflow(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.isDefaultAirFlow, settings);
+    selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.dischargePressure = this.getMidTurndownPressure(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.isDefaultPressure, settings);
+    selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.power = this.getMidTurndownPower(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.isDefaultPower);
+    return selectedCompressor.compressedAirPerformancePointsProperties.midTurndown;
+  }
 
   getMidTurndownAirflow(selectedCompressor: CompressedAirItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {
