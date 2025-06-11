@@ -49,7 +49,7 @@ export class ExportToJustifiModalComponent {
       let id = this.activatedRoute.firstChild.snapshot.paramMap.get('id')
       let assessmentId: number = Number(id);
       let assessment: Assessment = this.assessmentDbService.findById(assessmentId);
-      this.selectedAssessments.push(assessment);
+      this.addAssessment(assessment)
       this.settings = this.settingsDbService.getByAssessmentId(assessment, true);
     }
   }

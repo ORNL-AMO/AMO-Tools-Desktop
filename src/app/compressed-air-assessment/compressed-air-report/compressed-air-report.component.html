@@ -17,11 +17,23 @@
         <!-- Assessment view -->
         <div *ngIf="assessment && inAssessment" class="row">
             <div class="col-12 p-2">
-                    <span class="pl-2" *ngFor="let directory of assessmentDirectories">
-                        {{directory.name}} / {{assessment.name}}
-                    </span>
-                    <span class="ml-3 date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
-                    <button class="mt-0 btn btn-secondary pull-right hide-print" (click)="print()">Print</button>
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex">
+                        <div class="mt-auto ml-3">
+                            <ng-container class="ml-3 pl-2" *ngFor="let directory of assessmentDirectories">
+                                {{directory.name}} /
+                            </ng-container>
+                            {{assessment.name}}
+                        </div>
+                        <span class="ml-3 mt-auto date-modified">Last Modified {{assessment.modifiedDate |
+                            date:'short'}}</span>
+                    </div>
+                    <div>
+                        <button class="mt-0 mr-3 btn btn-secondary hide-print" (click)="showExportToJustifi()">Export to
+                            JUSTIFI</button>
+                        <button class="mt-0 mr-3 btn btn-secondary hide-print" (click)="print()">Print</button>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- Rollup view -->
@@ -98,32 +110,39 @@
                     <span *ngIf="tabsCollapsed" class="fa fa-caret-down pr-2"></span>
                     <span class="small text-uppercase">Menu</span>
                 </div>
-                <div (click)="setTab('executiveSummary')" [ngClass]="{'active': currentTab == 'executiveSummary', 'collapse': tabsCollapsed}">
+                <div (click)="setTab('executiveSummary')"
+                    [ngClass]="{'active': currentTab == 'executiveSummary', 'collapse': tabsCollapsed}">
                     <a>Executive Summary</a>
                 </div>
-                <div (click)="setTab('paybackPeriod')" [ngClass]="{'active': currentTab == 'paybackPeriod', 'collapse': tabsCollapsed}">
+                <div (click)="setTab('paybackPeriod')"
+                    [ngClass]="{'active': currentTab == 'paybackPeriod', 'collapse': tabsCollapsed}">
                     <a>Payback Details</a>
                 </div>
-                <div (click)="setTab('performanceProfile')" [ngClass]="{'active': currentTab == 'performanceProfile', 'collapse': tabsCollapsed}">
+                <div (click)="setTab('performanceProfile')"
+                    [ngClass]="{'active': currentTab == 'performanceProfile', 'collapse': tabsCollapsed}">
                     <a>Performance Profiles</a>
                 </div>
-                <div (click)="setTab('systemProfiles')" [ngClass]="{'active': currentTab == 'systemProfiles', 'collapse': tabsCollapsed}">
+                <div (click)="setTab('systemProfiles')"
+                    [ngClass]="{'active': currentTab == 'systemProfiles', 'collapse': tabsCollapsed}">
                     <a>System Profiles</a>
                 </div>
-                <div (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs', 'collapse': tabsCollapsed}">
+                <div (click)="setTab('reportGraphs')"
+                    [ngClass]="{'active': currentTab == 'reportGraphs', 'collapse': tabsCollapsed}">
                     <a>Report Graphs</a>
                 </div>
-                <div (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey', 'collapse': tabsCollapsed}">
+                <div (click)="setTab('reportSankey')"
+                    [ngClass]="{'active': currentTab == 'reportSankey', 'collapse': tabsCollapsed}">
                     <a>Sankey</a>
                 </div>
-                <div (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData', 'collapse': tabsCollapsed}">
+                <div (click)="setTab('inputData')"
+                    [ngClass]="{'active': currentTab == 'inputData', 'collapse': tabsCollapsed}">
                     <a>Input Summary</a>
                 </div>
-                <div (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
+                <div (click)="setTab('facilityInfo')"
+                    [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
                     <a>Facility Info</a>
                 </div>
-                <div (click)="print()" class="hide-print"
-                    [ngClass]="{'collapse': tabsCollapsed}">
+                <div (click)="print()" class="hide-print" [ngClass]="{'collapse': tabsCollapsed}">
                     <a>Print</a>
                 </div>
             </div>
@@ -157,12 +176,14 @@
         <div class="results scroll-item print-height page-break-before"
             *ngIf="(currentTab == 'reportSankey' && !showPrintView) || (showPrintView && printOptions.printReportSankey)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-compressed-air-sankey [inReport]="true" [assessment]="assessment" [showPrintView]="showPrintView"></app-compressed-air-sankey>
+            <app-compressed-air-sankey [inReport]="true" [assessment]="assessment"
+                [showPrintView]="showPrintView"></app-compressed-air-sankey>
         </div>
         <div class="print-height page-break-before" [ngClass]="{'results scroll-item':!showPrintView}"
             *ngIf="(currentTab == 'systemProfiles' && !showPrintView) || (showPrintView && printOptions.printSystemProfiles)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-system-profiles [printView]="showPrintView" [compressedAirAssessment]="assessment.compressedAirAssessment"
+            <app-system-profiles [printView]="showPrintView"
+                [compressedAirAssessment]="assessment.compressedAirAssessment"
                 [baselineProfileSummaries]="baselineProfileSummaries" [assessmentResults]="assessmentResults"
                 [settings]="settings">
             </app-system-profiles>
@@ -173,10 +194,11 @@
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-payback-period [combinedDayTypeResults]="combinedDayTypeResults"></app-payback-period>
         </div>
-        <div class="results scroll-item print-height page-break-before" 
+        <div class="results scroll-item print-height page-break-before"
             *ngIf="(currentTab == 'performanceProfile' && !showPrintView) || (showPrintView && printOptions.printPerformanceProfiles)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-performance-profiles [inReport]="true" [printView]="showPrintView" [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings">
+            <app-performance-profiles [inReport]="true" [printView]="showPrintView"
+                [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings">
             </app-performance-profiles>
         </div>
     </div>

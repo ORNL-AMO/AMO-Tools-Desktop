@@ -19,14 +19,26 @@
     <!-- Assessment view -->
     <div *ngIf="assessment && !inRollup" class="row">
       <div class="col-12 p-2">
-              <span class="pl-2" *ngFor="let directory of assessmentDirectories">
-                  {{directory.name}} / {{assessment.name}}
-              </span>
-              <span class="ml-3 date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
-              <button class="mt-0 btn btn-secondary pull-right hide-print" (click)="print()">Print</button>
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <div class="mt-auto ml-3">
+              <ng-container class="ml-3 pl-2" *ngFor="let directory of assessmentDirectories">
+                {{directory.name}} /
+              </ng-container>
+              {{assessment.name}}
+            </div>
+            <span class="ml-3 mt-auto date-modified">Last Modified {{assessment.modifiedDate |
+              date:'short'}}</span>
+          </div>
+          <div>
+            <button class="mt-0 mr-3 btn btn-secondary hide-print" (click)="showExportToJustifi()">Export to
+              JUSTIFI</button>
+            <button class="mt-0 mr-3 btn btn-secondary hide-print" (click)="print()">Print</button>
+          </div>
+        </div>
       </div>
-  </div>
-  <!-- Rollup view -->
+    </div>
+    <!-- Rollup view -->
     <div *ngIf="assessment && inRollup" class="row assessment-name">
       <div class="col-12">
         <h2 class="assessment-title">
@@ -98,14 +110,16 @@
     <div class="d-flex d-lg-none flex-column">
       <div #reportBtns class="tabs primary hide-print">
         <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
-            <span *ngIf="!tabsCollapsed" class="fa fa-caret-up pr-2"></span>
-            <span *ngIf="tabsCollapsed" class="fa fa-caret-down pr-2"></span>
-            <span class="small text-uppercase">Menu</span>
+          <span *ngIf="!tabsCollapsed" class="fa fa-caret-up pr-2"></span>
+          <span *ngIf="tabsCollapsed" class="fa fa-caret-down pr-2"></span>
+          <span class="small text-uppercase">Menu</span>
         </div>
-        <div (click)="setTab('executiveSummary')" [ngClass]="{'active': currentTab == 'executiveSummary', 'collapse': tabsCollapsed}">
+        <div (click)="setTab('executiveSummary')"
+          [ngClass]="{'active': currentTab == 'executiveSummary', 'collapse': tabsCollapsed}">
           <a>Executive Summary</a>
         </div>
-        <div (click)="setTab('energySummary')" [ngClass]="{'active': currentTab == 'energySummary', 'collapse': tabsCollapsed}">
+        <div (click)="setTab('energySummary')"
+          [ngClass]="{'active': currentTab == 'energySummary', 'collapse': tabsCollapsed}">
           <a>Energy Summary</a>
         </div>
         <div (click)="setTab('losses')" [ngClass]="{'active': currentTab == 'losses', 'collapse': tabsCollapsed}">
@@ -114,22 +128,25 @@
         <div (click)="setTab('diagram')" [ngClass]="{'active': currentTab == 'diagram', 'collapse': tabsCollapsed}">
           <a>Diagram</a>
         </div>
-        <div (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs', 'collapse': tabsCollapsed}">
+        <div (click)="setTab('reportGraphs')"
+          [ngClass]="{'active': currentTab == 'reportGraphs', 'collapse': tabsCollapsed}">
           <a>Report Graphs</a>
         </div>
         <div (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData', 'collapse': tabsCollapsed}">
           <a>Input Summary</a>
         </div>
-        <div (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
+        <div (click)="setTab('facilityInfo')"
+          [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
           <a>Facility Info</a>
         </div>
-        <div (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey', 'collapse': tabsCollapsed}">
+        <div (click)="setTab('reportSankey')"
+          [ngClass]="{'active': currentTab == 'reportSankey', 'collapse': tabsCollapsed}">
           <a>Sankey</a>
         </div>
         <div (click)="print()" class="hide-print" [ngClass]="{'collapse': tabsCollapsed}">
           <a>Print</a>
         </div>
-      </div>      
+      </div>
     </div>
 
     <div class="results scroll-item print-height"
@@ -159,17 +176,19 @@
         [settings]="settings" [numberOfHeaders]="baselineInputData.headerInput.numberOfHeaders"
         [tableCellWidth]="tableCellWidth" [inRollup]="inRollup" [assessment]="assessment"></app-losses-summary>
     </div>
-    <div class="results scroll-item report-diagrams hide-print" 
+    <div class="results scroll-item report-diagrams hide-print"
       *ngIf="((currentTab == 'diagram' && !showPrintView) || (showPrintView && printOptions.printReportDiagram)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}" [ngClass]="{'report-diagrams': inRollup}">
       <app-report-diagram [baselineOutput]="baselineOutput" [inputData]="baselineInputData" [settings]="settings"
-        [modificationOutputs]="modificationOutputs" [assessment]="assessment" [modificationInputData]="modificationInputData">
+        [modificationOutputs]="modificationOutputs" [assessment]="assessment"
+        [modificationInputData]="modificationInputData">
       </app-report-diagram>
       <div class="d-flex d-md-none">
         <span class="alert-warning pull-right small">
-          Steam Diagram is unavailable to view on your current device. 
-          Please export the assessment and upload to a desktop or a device with a screen size of at least 768px to view the Steam Diagram.
-        </span>          
+          Steam Diagram is unavailable to view on your current device.
+          Please export the assessment and upload to a desktop or a device with a screen size of at least 768px to view
+          the Steam Diagram.
+        </span>
       </div>
     </div>
     <div class="results scroll-item print-height"
@@ -180,13 +199,13 @@
         [printGraphs]="printOptions.printReportGraphs">
       </app-report-graphs>
     </div>
-    <div class="results scroll-item print-height" 
+    <div class="results scroll-item print-height"
       *ngIf="((currentTab == 'reportSankey' && !showPrintView) || (showPrintView && printOptions.printReportSankey)) && dataCalculated"
-            [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-ssmt-report-sankey [settings]="settings" [assessment]="assessment" [baselineOutput]="baselineOutput"
-            [modificationOutputs]="modificationOutputs">
-            </app-ssmt-report-sankey>
-        </div>
+      [ngStyle]="{'height.px':reportContainerHeight}">
+      <app-ssmt-report-sankey [settings]="settings" [assessment]="assessment" [baselineOutput]="baselineOutput"
+        [modificationOutputs]="modificationOutputs">
+      </app-ssmt-report-sankey>
+    </div>
     <div class="results scroll-item input-data print-height print-break-before"
       *ngIf="((currentTab == 'inputData' && !showPrintView) || (showPrintView && printOptions.printInputData)) && dataCalculated"
       [ngStyle]="{'height.px':reportContainerHeight}">
