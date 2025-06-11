@@ -24,64 +24,64 @@ export class ExportToJustifiTreasureHuntService {
     assessmentWorksheet.getCell('D' + assessmentRowIndex).value = 'Individual';
     assessmentWorksheet.getCell('B' + assessmentRowIndex).value = 'Treasure Hunt';
 
-    //TODO: need to check assessment is valid...
-    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-    let results: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(assessment.treasureHunt, settings);
+    if (assessment.treasureHunt.setupDone) {
+      let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+      let results: TreasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(assessment.treasureHunt, settings);
 
-    //G: Electricity unit
-    assessmentWorksheet.getCell('G' + assessmentRowIndex).value = 'kWh';
-    //J: NG unit
-    assessmentWorksheet.getCell('J' + assessmentRowIndex).value = this.getUnit(settings, 'Natural Gas');
-    //M: Other fuels unit
-    assessmentWorksheet.getCell('M' + assessmentRowIndex).value = this.getUnit(settings, 'Other Fuel');
-    //P: water unit
-    assessmentWorksheet.getCell('P' + assessmentRowIndex).value = this.getUnit(settings, 'Water');
-    //S: waste water unit
-    assessmentWorksheet.getCell('S' + assessmentRowIndex).value = this.getUnit(settings, 'Waste Water');
-    //V: compressed air unit
-    assessmentWorksheet.getCell('V' + assessmentRowIndex).value = this.getUnit(settings, 'Compressed Air');
-    //Y: steam unit
-    assessmentWorksheet.getCell('Y' + assessmentRowIndex).value = this.getUnit(settings, 'Steam');
+      //G: Electricity unit
+      assessmentWorksheet.getCell('G' + assessmentRowIndex).value = 'kWh';
+      //J: NG unit
+      assessmentWorksheet.getCell('J' + assessmentRowIndex).value = this.getUnit(settings, 'Natural Gas');
+      //M: Other fuels unit
+      assessmentWorksheet.getCell('M' + assessmentRowIndex).value = this.getUnit(settings, 'Other Fuel');
+      //P: water unit
+      assessmentWorksheet.getCell('P' + assessmentRowIndex).value = this.getUnit(settings, 'Water');
+      //S: waste water unit
+      assessmentWorksheet.getCell('S' + assessmentRowIndex).value = this.getUnit(settings, 'Waste Water');
+      //V: compressed air unit
+      assessmentWorksheet.getCell('V' + assessmentRowIndex).value = this.getUnit(settings, 'Compressed Air');
+      //Y: steam unit
+      assessmentWorksheet.getCell('Y' + assessmentRowIndex).value = this.getUnit(settings, 'Steam');
 
 
-    //F: electricity use
-    assessmentWorksheet.getCell('F' + assessmentRowIndex).value = results.electricity.baselineEnergyUsage;
-    //H: electricity savings;
-    //I: NG use
-    assessmentWorksheet.getCell('I' + assessmentRowIndex).value = results.naturalGas.baselineEnergyUsage;
-    //K: NG savings
-    //L: Other fuels use
-    assessmentWorksheet.getCell('L' + assessmentRowIndex).value = results.otherFuel.baselineEnergyUsage;
-    //N: Other fuels savings
-    //O: water use
-    assessmentWorksheet.getCell('O' + assessmentRowIndex).value = results.water.baselineEnergyUsage;
-    //Q: water savings
-    //R: waste water use
-    assessmentWorksheet.getCell('R' + assessmentRowIndex).value = results.wasteWater.baselineEnergyUsage;
-    //T: waste water savings
-    //U: compressed air use
-    assessmentWorksheet.getCell('U' + assessmentRowIndex).value = results.compressedAir.baselineEnergyUsage;
-    //W: compressed air savings
-    //x: steam use
-    assessmentWorksheet.getCell('X' + assessmentRowIndex).value = results.steam.baselineEnergyUsage;
-    //Z: steam savings
+      //F: electricity use
+      assessmentWorksheet.getCell('F' + assessmentRowIndex).value = results.electricity.baselineEnergyUsage;
+      //H: electricity savings;
+      //I: NG use
+      assessmentWorksheet.getCell('I' + assessmentRowIndex).value = results.naturalGas.baselineEnergyUsage;
+      //K: NG savings
+      //L: Other fuels use
+      assessmentWorksheet.getCell('L' + assessmentRowIndex).value = results.otherFuel.baselineEnergyUsage;
+      //N: Other fuels savings
+      //O: water use
+      assessmentWorksheet.getCell('O' + assessmentRowIndex).value = results.water.baselineEnergyUsage;
+      //Q: water savings
+      //R: waste water use
+      assessmentWorksheet.getCell('R' + assessmentRowIndex).value = results.wasteWater.baselineEnergyUsage;
+      //T: waste water savings
+      //U: compressed air use
+      assessmentWorksheet.getCell('U' + assessmentRowIndex).value = results.compressedAir.baselineEnergyUsage;
+      //W: compressed air savings
+      //x: steam use
+      assessmentWorksheet.getCell('X' + assessmentRowIndex).value = results.steam.baselineEnergyUsage;
+      //Z: steam savings
 
-    let eemWorksheet = workbook.getWorksheet('Energy_Efficiency_Measures');
-    //Flow Reallocation
-    results.opportunitySummaries.forEach(opportunity => {
-      if (opportunity.selected) {
-        if (opportunity.utilityType == 'Mixed') {
-          opportunity.mixedIndividualResults.forEach(mixedOpportunity => {
-            this.addOpportunityToWorksheet(eemWorksheet, mixedOpportunity, eemRowIndex, assessment.name, true, settings);
+      let eemWorksheet = workbook.getWorksheet('Energy_Efficiency_Measures');
+      //Flow Reallocation
+      results.opportunitySummaries.forEach(opportunity => {
+        if (opportunity.selected) {
+          if (opportunity.utilityType == 'Mixed') {
+            opportunity.mixedIndividualResults.forEach(mixedOpportunity => {
+              this.addOpportunityToWorksheet(eemWorksheet, mixedOpportunity, eemRowIndex, assessment.name, true, settings);
+              eemRowIndex++;
+            })
+          } else {
+            this.addOpportunityToWorksheet(eemWorksheet, opportunity, eemRowIndex, assessment.name, false, settings);
             eemRowIndex++;
-          })
-        } else {
-          this.addOpportunityToWorksheet(eemWorksheet, opportunity, eemRowIndex, assessment.name, false, settings);
-          eemRowIndex++;
+          }
         }
-      }
-    })
-
+      })
+    }
     return eemRowIndex;
   }
 
