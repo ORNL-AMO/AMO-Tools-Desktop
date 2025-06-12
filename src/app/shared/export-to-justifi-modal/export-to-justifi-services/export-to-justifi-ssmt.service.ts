@@ -20,7 +20,7 @@ export class ExportToJustifiSsmtService {
   fillSSMTWorksheet(workbook: ExcelJS.Workbook, assessment: Assessment, assessmentRowIndex: number, eemRowIndex: number): number {
     let assessmentWorksheet = workbook.getWorksheet('Assessments');
 
-    assessmentWorksheet.getCell('D' + assessmentRowIndex).value = 'Assessment';
+    assessmentWorksheet.getCell('C' + assessmentRowIndex).value = 'Assessment';
     assessmentWorksheet.getCell('B' + assessmentRowIndex).value = 'Steam';
 
     if (assessment.ssmt.setupDone) {
@@ -29,55 +29,52 @@ export class ExportToJustifiSsmtService {
 
       let baselineElectricityUse: number = baselineResults.outputData.operationsOutput.sitePowerImport *
         baselineResults.inputData.operationsInput.operatingHoursPerYear;
-      //F: electricity use
-      assessmentWorksheet.getCell('F' + assessmentRowIndex).value = baselineElectricityUse;
-      //G: Electricity unit
-      assessmentWorksheet.getCell('G' + assessmentRowIndex).value = 'kWh';
+      //E: electricity use
+      assessmentWorksheet.getCell('E' + assessmentRowIndex).value = baselineElectricityUse;
+      //F: Electricity unit
+      assessmentWorksheet.getCell('F' + assessmentRowIndex).value = 'kWh';
       if (assessment.ssmt.co2SavingsData.fuelType == 'Natural Gas') {
-        //I: NG use
-        assessmentWorksheet.getCell('I' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.boilerFuelUsage;
-        //J: NG unit
-        assessmentWorksheet.getCell('J' + assessmentRowIndex).value = settings.steamEnergyMeasurement;
+        //H: NG use
+        assessmentWorksheet.getCell('H' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.boilerFuelUsage;
+        //I: NG unit
+        assessmentWorksheet.getCell('I' + assessmentRowIndex).value = settings.steamEnergyMeasurement;
       } else {
-        //L: Other fuels use
-        assessmentWorksheet.getCell('L' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.boilerFuelUsage;
-        //M: Other fuels unit
-        assessmentWorksheet.getCell('J' + assessmentRowIndex).value = settings.steamEnergyMeasurement;
+        //K: Other fuels use
+        assessmentWorksheet.getCell('K' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.boilerFuelUsage;
+        //I: Other fuels unit
+        assessmentWorksheet.getCell('I' + assessmentRowIndex).value = settings.steamEnergyMeasurement;
       }
-      //O: water use
-      assessmentWorksheet.getCell('O' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.makeupWaterVolumeFlowAnnual;
-      //P: water unit
-      assessmentWorksheet.getCell('P' + assessmentRowIndex).value = settings.steamVolumeMeasurement;
+      //N: water use
+      assessmentWorksheet.getCell('N' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.makeupWaterVolumeFlowAnnual;
+      //O: water unit
+      assessmentWorksheet.getCell('O' + assessmentRowIndex).value = settings.steamVolumeMeasurement;
 
-      //TODO: select modification
-      let modification: Modification = assessment.ssmt.modifications[0];
-      console.log(assessment.ssmt.selectedModificationId);
+      let modification: Modification;
       if (assessment.ssmt.selectedModificationId) {
         modification = assessment.ssmt.modifications.find(mod => mod.modificationId === assessment.ssmt.selectedModificationId);
       } else if (assessment.ssmt.modifications && assessment.ssmt.modifications.length > 0) {
         modification = assessment.ssmt.modifications[0];
       }
-      console.log(modification)
       if (modification) {
         let modResults: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModificationModel(modification.ssmt, settings, baselineResults.outputData);
-        //E: implementation costs
-        assessmentWorksheet.getCell('E' + assessmentRowIndex).value = modification.ssmt.operatingCosts.implementationCosts;
+        //D: implementation costs
+        assessmentWorksheet.getCell('D' + assessmentRowIndex).value = modification.ssmt.operatingCosts.implementationCosts;
         let modElectricityUse: number = modResults.outputData.operationsOutput.sitePowerImport *
           modResults.inputData.operationsInput.operatingHoursPerYear;
-        //H: electricity savings
-        assessmentWorksheet.getCell('H' + assessmentRowIndex).value = baselineElectricityUse - modElectricityUse;
+        //G: electricity savings
+        assessmentWorksheet.getCell('G' + assessmentRowIndex).value = baselineElectricityUse - modElectricityUse;
 
 
         if (assessment.ssmt.co2SavingsData.fuelType == 'Natural Gas') {
-          //K: NG savings
-          assessmentWorksheet.getCell('K' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.boilerFuelUsage - modResults.outputData.operationsOutput.boilerFuelUsage;
+          //J: NG savings
+          assessmentWorksheet.getCell('J' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.boilerFuelUsage - modResults.outputData.operationsOutput.boilerFuelUsage;
         } else {
-          //N: Other fuels savings      
-          assessmentWorksheet.getCell('N' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.boilerFuelUsage - modResults.outputData.operationsOutput.boilerFuelUsage;
+          //M: Other fuels savings      
+          assessmentWorksheet.getCell('M' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.boilerFuelUsage - modResults.outputData.operationsOutput.boilerFuelUsage;
         }
 
-        //Q: water savings
-        assessmentWorksheet.getCell('Q' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.makeupWaterVolumeFlowAnnual - modResults.outputData.operationsOutput.makeupWaterVolumeFlowAnnual;
+        //P: water savings
+        assessmentWorksheet.getCell('P' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.makeupWaterVolumeFlowAnnual - modResults.outputData.operationsOutput.makeupWaterVolumeFlowAnnual;
 
         if (modification.exploreOpportunities) {
           let eemWorksheet = workbook.getWorksheet('Energy_Efficiency_Measures');

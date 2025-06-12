@@ -11,3 +11,11 @@
 .modal-content{
     height: 100%;
 }
+
+th, td {
+    vertical-align: middle;
+}
+
+.icon-image{
+    width: 33px;
+}

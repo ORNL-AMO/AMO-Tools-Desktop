@@ -9,14 +9,26 @@
                 </button>
             </div>
             <div class="modal-body p-2">
-                <p class="fw-light">
-                    This will export the selected assessments to the JUSTIFI template. The template will be downloaded
-                    as an excel file.
-                    The excel file can then be uploaded to the JUSTIFI platform. JUSTIFI is a platform that helps find
-                    Non-energy Benefits (NEBs) of energy efficiency projects, like those identified in the
-                    assessments.
+                <p class="mb-0">
+                    The all new <u class="bold">JUSTIFI</u> platform can help you find Non-Energy Benefits (NEBs) of your energy efficiency projects!
                 </p>
-                <form>
+                <ol>
+                    <li>
+                        Clicking "Export" below to download the selected assessments
+                        to a JUSTIFI excel template.
+                    </li>
+                    <li>
+                        Navigate to the JUSTIFI platform at
+                        <a href="https://justifi.ornl.gov" target="_blank">https://justifi.ornl.gov</a>.
+                    </li>
+                    <li>
+                        Upload the downloaded JUSTIFI template file to the platform.
+                    </li>
+                    <li>
+                        Work through the JUSTIFI platform to find NEBs for your energy efficiency projects!
+                    </li>
+                </ol>
+                <form *ngIf="!exportDone">
                     <table class="table table-sm table-bordered mb-0">
                         <thead>
                             <tr>
@@ -34,7 +46,36 @@
                         <tbody>
                             <tr *ngFor="let assessment of selectedAssessments">
                                 <td>
-                                    {{assessment.type}}
+                                    <ng-container *ngIf="assessment.type == 'PSAT'">
+                                        <img class="icon-image pl-1 pr-1" src="assets/images/pump-icon.png"> Pump
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type == 'PHAST'">
+                                        <img class="icon-image pl-1 pr-1" src="assets/images/ico-phast-diagram.png">
+                                        Process Heating
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type == 'FSAT'">
+                                        <img class="icon-image pl-1 pr-1" src="assets/images/ico-fsat-diagram.png"> Fan
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type == 'SSMT'">
+                                        <img class="icon-image pl-1 pr-1" src="assets/images/ico-ssmt-diagram.png">
+                                        Steam System
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type == 'TreasureHunt'">
+                                        <img class="icon-image pl-1 pr-1" src="assets/images/treasure-hunt.png">
+                                        Treasure Hunt
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type == 'WasteWater'">
+                                        <img class="icon-image pl-1 pr-1" src="assets/images/waste-water-icon.png">
+                                        Waste Water
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type == 'CompressedAir'">
+                                        <img class="icon-image pl-1 pr-1" src="assets/images/ca-icon.png"> Compressed
+                                        Air
+                                    </ng-container>
+                                    <ng-container *ngIf="assessment.type == 'Water'">
+                                        <img class="icon-image pl-1 pr-1"
+                                            src="assets/images/water-assessment-small.png"> Water
+                                    </ng-container>
                                 </td>
                                 <td>
                                     {{assessment.name}}
@@ -126,10 +167,15 @@
                         </tbody>
                     </table>
                 </form>
+                <div *ngIf="exportDone" class="text-center mt-3">
+                    <p class="text-success">Export completed successfully!</p>
+                    <p class="text-muted">You can now upload the downloaded file to the JUSTIFI platform.</p>
+                </div>
             </div>
             <div class="modal-footer p-2">
                 <button type="button" class="btn btn-secondary" (click)="hideModal()">Close</button>
-                <button type="button" class="btn btn-primary" (click)="exportToJustifi()">Export</button>
+                <button type="button" class="btn btn-primary" (click)="exportToJustifi()"
+                    *ngIf="!exportDone">Export</button>
             </div>
         </div>
     </div>

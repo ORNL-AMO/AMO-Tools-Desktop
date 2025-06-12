@@ -24,6 +24,7 @@ export class ExportToJustifiModalComponent {
   settings: Settings;
 
   context: 'assessment' | 'directory' = 'directory';
+  exportDone: boolean = false;
   constructor(private directoryDashboardService: DirectoryDashboardService,
     private exportToJustifiTemplateService: ExportToJustifiTemplateService,
     private directoryDbService: DirectoryDbService,
@@ -70,13 +71,9 @@ export class ExportToJustifiModalComponent {
   }
 
   async exportToJustifi() {
-    this.exportToJustifiTemplateService.exportData(this.settings, this.selectedAssessments);
+    await this.exportToJustifiTemplateService.exportData(this.settings, this.selectedAssessments);
+    this.exportDone = true;
   }
-
-  setValue() {
-    console.log(this.selectedAssessments)
-  }
-
 
   addAssessment(assessment: Assessment) {
     if (assessment.type == 'PSAT') {

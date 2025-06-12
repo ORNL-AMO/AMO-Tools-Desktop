@@ -22,7 +22,7 @@ export class ExportToJustifiCompressedAirService {
   fillCompressedAirWorksheet(workbook: ExcelJS.Workbook, assessment: Assessment, assessmentRowIndex: number, eemRowIndex: number): number {
     let assessmentWorksheet = workbook.getWorksheet('Assessments');
 
-    assessmentWorksheet.getCell('D' + assessmentRowIndex).value = 'Individual';
+    assessmentWorksheet.getCell('C' + assessmentRowIndex).value = 'Individual';
     assessmentWorksheet.getCell('B' + assessmentRowIndex).value = 'Compressed Air';
 
 
@@ -31,12 +31,12 @@ export class ExportToJustifiCompressedAirService {
       let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
       let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(assessment.compressedAirAssessment, settings);
 
-      //E: implementation costs not at assessment level for CA
-      //F: electricity use
-      assessmentWorksheet.getCell('F' + assessmentRowIndex).value = baselineResults.total.energyUse;
-      //G: Electricity unit
+      //D: implementation costs not at assessment level for CA
+      //E: electricity use
+      assessmentWorksheet.getCell('E' + assessmentRowIndex).value = baselineResults.total.energyUse;
+      //F: Electricity unit
       //TODO: always MWh?
-      assessmentWorksheet.getCell('G' + assessmentRowIndex).value = 'kWh';
+      assessmentWorksheet.getCell('F' + assessmentRowIndex).value = 'kWh';
       //H: electricity saving not at assessment level for CA
 
       let modification: Modification;

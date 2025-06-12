@@ -20,17 +20,17 @@ export class ExportToJustifiFsatService {
   fillFSATWorksheet(workbook: ExcelJS.Workbook, assessment: Assessment, assessmentRowIndex: number, eemRowIndex: number): number {
     let assessmentWorksheet = workbook.getWorksheet('Assessments');
 
-    assessmentWorksheet.getCell('D' + assessmentRowIndex).value = 'Assessment';
+    assessmentWorksheet.getCell('C' + assessmentRowIndex).value = 'Assessment';
     assessmentWorksheet.getCell('B' + assessmentRowIndex).value = 'Fan';
 
     if (assessment.fsat.setupDone) {
       let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
       let baselineResults: FsatOutput = this.fsatService.getResults(JSON.parse(JSON.stringify(assessment.fsat)), true, settings);
-      //F: electricity use
-      assessmentWorksheet.getCell('F' + assessmentRowIndex).value = baselineResults.annualEnergy;
-      //G: Electricity unit
+      //E: electricity use
+      assessmentWorksheet.getCell('E' + assessmentRowIndex).value = baselineResults.annualEnergy;
+      //F: Electricity unit
       //TODO: always MWh?
-      assessmentWorksheet.getCell('G' + assessmentRowIndex).value = 'MWh';
+      assessmentWorksheet.getCell('F' + assessmentRowIndex).value = 'MWh';
       //set modification
       let modification: Modification
       if (assessment.fsat.selectedModificationId) {
@@ -41,10 +41,10 @@ export class ExportToJustifiFsatService {
 
       if (modification) {
         let modResults: FsatOutput = this.fsatService.getResults(JSON.parse(JSON.stringify(modification.fsat)), false, settings);
-        //E: implementation costs
-        assessmentWorksheet.getCell('E' + assessmentRowIndex).value = modification.fsat.implementationCosts;
-        //H: electricity savings
-        assessmentWorksheet.getCell('H' + assessmentRowIndex).value = baselineResults.annualEnergy - modResults.annualEnergy;
+        //D: implementation costs
+        assessmentWorksheet.getCell('D' + assessmentRowIndex).value = modification.fsat.implementationCosts;
+        //G: electricity savings
+        assessmentWorksheet.getCell('G' + assessmentRowIndex).value = baselineResults.annualEnergy - modResults.annualEnergy;
         if (modification.exploreOpportunities) {
           let eemWorksheet = workbook.getWorksheet('Energy_Efficiency_Measures');
           //TODO: add EEMs if Explore opps

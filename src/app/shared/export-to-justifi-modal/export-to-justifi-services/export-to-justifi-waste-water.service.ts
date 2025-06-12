@@ -19,18 +19,17 @@ export class ExportToJustifiWasteWaterService {
   fillWasteWaterWorksheet(workbook: ExcelJS.Workbook, assessment: Assessment, assessmentRowIndex: number, eemRowIndex: number): number {
     let assessmentWorksheet = workbook.getWorksheet('Assessments');
 
-    assessmentWorksheet.getCell('D' + assessmentRowIndex).value = 'Assessment';
+    assessmentWorksheet.getCell('C' + assessmentRowIndex).value = 'Assessment';
     assessmentWorksheet.getCell('B' + assessmentRowIndex).value = 'Waste Water';
 
     if (assessment.wasteWater.setupDone) {
       let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
       let baselineResults: WasteWaterResults = this.wasteWaterService.calculateResults(assessment.wasteWater.baselineData.activatedSludgeData, assessment.wasteWater.baselineData.aeratorPerformanceData, assessment.wasteWater.baselineData.operations, assessment.wasteWater.baselineData.co2SavingsData, settings, false);
-      //F: electricity use
-      assessmentWorksheet.getCell('F' + assessmentRowIndex).value = baselineResults.AeEnergyAnnual;
-      //G: Electricity unit
-
+      //E: electricity use
+      assessmentWorksheet.getCell('E' + assessmentRowIndex).value = baselineResults.AeEnergyAnnual;
+      //F: Electricity unit
       //TODO: always MWh?
-      assessmentWorksheet.getCell('G' + assessmentRowIndex).value = 'MWh';
+      assessmentWorksheet.getCell('F' + assessmentRowIndex).value = 'MWh';
       //set modification
       let modification: WasteWaterData;
       if (assessment.wasteWater.selectedModificationId) {
@@ -40,10 +39,10 @@ export class ExportToJustifiWasteWaterService {
       }
       if (modification) {
         let modResults: WasteWaterResults = this.wasteWaterService.calculateResults(modification.activatedSludgeData, modification.aeratorPerformanceData, modification.operations, modification.co2SavingsData, settings, false, baselineResults);
-        //E: implementation costs
-        assessmentWorksheet.getCell('E' + assessmentRowIndex).value = modification.operations.implementationCosts;
-        //H: electricity savings
-        assessmentWorksheet.getCell('H' + assessmentRowIndex).value = baselineResults.AeEnergyAnnual - modResults.AeEnergyAnnual;
+        //D: implementation costs
+        assessmentWorksheet.getCell('D' + assessmentRowIndex).value = modification.operations.implementationCosts;
+        //G: electricity savings
+        assessmentWorksheet.getCell('G' + assessmentRowIndex).value = baselineResults.AeEnergyAnnual - modResults.AeEnergyAnnual;
 
         if (modification.exploreOpportunities) {
           let eemWorksheet = workbook.getWorksheet('Energy_Efficiency_Measures');

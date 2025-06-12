@@ -20,17 +20,17 @@ export class ExportToJustifiPsatService {
   fillPSATWorksheet(workbook: ExcelJS.Workbook, assessment: Assessment, assessmentRowIndex: number, eemRowIndex: number): number {
     let assessmentWorksheet = workbook.getWorksheet('Assessments');
 
-    assessmentWorksheet.getCell('D' + assessmentRowIndex).value = 'Assessment';
+    assessmentWorksheet.getCell('C' + assessmentRowIndex).value = 'Assessment';
     assessmentWorksheet.getCell('B' + assessmentRowIndex).value = 'Pump';
 
     if (assessment.psat.setupDone == true) {
       let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
       let baselineResults: PsatOutputs = this.psatService.resultsExisting(JSON.parse(JSON.stringify(assessment.psat.inputs)), settings);
-      //F: electricity use
-      assessmentWorksheet.getCell('F' + assessmentRowIndex).value = baselineResults.annual_energy;
-      //G: Electricity unit
+      //E: electricity use
+      assessmentWorksheet.getCell('E' + assessmentRowIndex).value = baselineResults.annual_energy;
+      //F: Electricity unit
       //TODO: always MWh?
-      assessmentWorksheet.getCell('G' + assessmentRowIndex).value = 'MWh';
+      assessmentWorksheet.getCell('F' + assessmentRowIndex).value = 'MWh';
 
       //set modification
       let modification: Modification = assessment.psat.modifications[0];
@@ -45,11 +45,11 @@ export class ExportToJustifiPsatService {
           modResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(assessment.psat.inputs)), settings);
         } else {
           modResults = this.psatService.resultsModified(JSON.parse(JSON.stringify(modification.psat.inputs)), settings);
-          //H: electricity savings
-          assessmentWorksheet.getCell('H' + assessmentRowIndex).value = baselineResults.annual_energy - modResults.annual_energy;
         }
-        //E: implementation costs
-        assessmentWorksheet.getCell('E' + assessmentRowIndex).value = modification.psat.inputs.implementationCosts;
+        //G: electricity savings
+        assessmentWorksheet.getCell('G' + assessmentRowIndex).value = baselineResults.annual_energy - modResults.annual_energy;
+        //D: implementation costs
+        assessmentWorksheet.getCell('D' + assessmentRowIndex).value = modification.psat.inputs.implementationCosts;
         if (modification.exploreOpportunities) {
           let eemWorksheet = workbook.getWorksheet('Energy_Efficiency_Measures');
           //TODO: add EEMs if Explore opps
