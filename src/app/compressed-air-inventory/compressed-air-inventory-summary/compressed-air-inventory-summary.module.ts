@@ -14,6 +14,9 @@ import { CompressedAirInventorySummaryOverviewService } from './compressed-air-i
 import { CompressedAirInventoryOverviewTableComponent } from './compressed-air-inventory-summary-overview/compressed-air-inventory-overview-table/compressed-air-inventory-overview-table.component';
 import { CompressedAirInventoryOverviewBarChartComponent } from './compressed-air-inventory-summary-overview/compressed-air-inventory-overview-bar-chart/compressed-air-inventory-overview-bar-chart.component';
 import { CompressedAirInventoryOverviewPieChartComponent } from './compressed-air-inventory-summary-overview/compressed-air-inventory-overview-pie-chart/compressed-air-inventory-overview-pie-chart.component';
+import { CompressedAirInventorySummaryTableService } from './compressed-air-inventory-summary-table/compressed-air-inventory-summary-table.service';
+import { CompressedAirInventorySummaryTablePipe } from './compressed-air-inventory-summary-table/compressed-air-inventory-summary-table.pipe';
+import { SettingsLabelPipe } from '../../shared/shared-pipes/settings-label.pipe';
 
 
 
@@ -27,7 +30,8 @@ import { CompressedAirInventoryOverviewPieChartComponent } from './compressed-ai
     CompressedAirSummaryGraphsMenuComponent,
     CompressedAirInventoryOverviewTableComponent,
     CompressedAirInventoryOverviewBarChartComponent,
-    CompressedAirInventoryOverviewPieChartComponent
+    CompressedAirInventoryOverviewPieChartComponent,
+    CompressedAirInventorySummaryTablePipe
 
   ],
   imports: [
@@ -38,7 +42,9 @@ import { CompressedAirInventoryOverviewPieChartComponent } from './compressed-ai
   providers: [
     CompressedAirSummaryService,
     CompressedAirInventorySummaryGraphsService,
-    CompressedAirInventorySummaryOverviewService
+    CompressedAirInventorySummaryOverviewService,
+    CompressedAirInventorySummaryTableService,
+    SettingsLabelPipe
 
   ],
   exports: [
