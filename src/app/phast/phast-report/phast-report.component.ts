@@ -10,12 +10,13 @@ import { Subscription } from 'rxjs';
 import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { PhastValidService } from '../phast-valid.service';
+import { ExportToJustifiTemplateService } from '../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 
 @Component({
-    selector: 'app-phast-report',
-    templateUrl: './phast-report.component.html',
-    styleUrls: ['./phast-report.component.css'],
-    standalone: false
+  selector: 'app-phast-report',
+  templateUrl: './phast-report.component.html',
+  styleUrls: ['./phast-report.component.css'],
+  standalone: false
 })
 export class PhastReportComponent implements OnInit {
 
@@ -51,11 +52,12 @@ export class PhastReportComponent implements OnInit {
   printOptions: PrintOptions;
   showPrintViewSub: Subscription;
   tabsCollapsed: boolean = true;
-  constructor(private settingsDbService: SettingsDbService, 
-              private directoryDbService: DirectoryDbService, 
-              private printOptionsMenuService: PrintOptionsMenuService, 
-              private phastValidService: PhastValidService,
-              private settingsService: SettingsService) { }
+  constructor(private settingsDbService: SettingsDbService,
+    private directoryDbService: DirectoryDbService,
+    private printOptionsMenuService: PrintOptionsMenuService,
+    private phastValidService: PhastValidService,
+    private settingsService: SettingsService,
+    private exportToJustifiTemplateService: ExportToJustifiTemplateService) { }
 
   ngOnInit() {
     // this.initPrintLogic();
@@ -176,5 +178,9 @@ export class PhastReportComponent implements OnInit {
   }
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
+  }
+
+  showExportToJustifi() {
+    this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
   }
 }
