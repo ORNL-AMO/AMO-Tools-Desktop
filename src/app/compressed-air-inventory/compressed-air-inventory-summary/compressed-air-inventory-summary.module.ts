@@ -10,6 +10,10 @@ import { CompressedAirInventorySummaryTableComponent } from './compressed-air-in
 import { CompressedAirInventorySummaryGraphsService } from './compressed-air-inventory-summary-graphs/compressed-air-inventory-summary-graphs.service';
 import { CompressedAirSummaryGraphComponent } from './compressed-air-inventory-summary-graphs/compressed-air-summary-graph/compressed-air-summary-graph.component';
 import { CompressedAirSummaryGraphsMenuComponent } from './compressed-air-inventory-summary-graphs/compressed-air-summary-graphs-menu/compressed-air-summary-graphs-menu.component';
+import { CompressedAirInventorySummaryOverviewService } from './compressed-air-inventory-summary-overview/compressed-air-inventory-summary-overview.service';
+import { CompressedAirInventoryOverviewTableComponent } from './compressed-air-inventory-summary-overview/compressed-air-inventory-overview-table/compressed-air-inventory-overview-table.component';
+import { CompressedAirInventoryOverviewBarChartComponent } from './compressed-air-inventory-summary-overview/compressed-air-inventory-overview-bar-chart/compressed-air-inventory-overview-bar-chart.component';
+import { CompressedAirInventoryOverviewPieChartComponent } from './compressed-air-inventory-summary-overview/compressed-air-inventory-overview-pie-chart/compressed-air-inventory-overview-pie-chart.component';
 
 
 
@@ -20,7 +24,11 @@ import { CompressedAirSummaryGraphsMenuComponent } from './compressed-air-invent
     CompressedAirInventorySummaryOverviewComponent,
     CompressedAirInventorySummaryTableComponent,
     CompressedAirSummaryGraphComponent,
-    CompressedAirSummaryGraphsMenuComponent
+    CompressedAirSummaryGraphsMenuComponent,
+    CompressedAirInventoryOverviewTableComponent,
+    CompressedAirInventoryOverviewBarChartComponent,
+    CompressedAirInventoryOverviewPieChartComponent
+
   ],
   imports: [
     CommonModule,
@@ -29,7 +37,8 @@ import { CompressedAirSummaryGraphsMenuComponent } from './compressed-air-invent
   ],
   providers: [
     CompressedAirSummaryService,
-    CompressedAirInventorySummaryGraphsService
+    CompressedAirInventorySummaryGraphsService,
+    CompressedAirInventorySummaryOverviewService
 
   ],
   exports: [
