@@ -7,6 +7,9 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
 import { CompressedAirInventorySummaryGraphsComponent } from './compressed-air-inventory-summary-graphs/compressed-air-inventory-summary-graphs.component';
 import { CompressedAirInventorySummaryOverviewComponent } from './compressed-air-inventory-summary-overview/compressed-air-inventory-summary-overview.component';
 import { CompressedAirInventorySummaryTableComponent } from './compressed-air-inventory-summary-table/compressed-air-inventory-summary-table.component';
+import { CompressedAirInventorySummaryGraphsService } from './compressed-air-inventory-summary-graphs/compressed-air-inventory-summary-graphs.service';
+import { CompressedAirSummaryGraphComponent } from './compressed-air-inventory-summary-graphs/compressed-air-summary-graph/compressed-air-summary-graph.component';
+import { CompressedAirSummaryGraphsMenuComponent } from './compressed-air-inventory-summary-graphs/compressed-air-summary-graphs-menu/compressed-air-summary-graphs-menu.component';
 
 
 
@@ -15,7 +18,9 @@ import { CompressedAirInventorySummaryTableComponent } from './compressed-air-in
     CompressedAirInventorySummaryComponent,
     CompressedAirInventorySummaryGraphsComponent,
     CompressedAirInventorySummaryOverviewComponent,
-    CompressedAirInventorySummaryTableComponent
+    CompressedAirInventorySummaryTableComponent,
+    CompressedAirSummaryGraphComponent,
+    CompressedAirSummaryGraphsMenuComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +28,8 @@ import { CompressedAirInventorySummaryTableComponent } from './compressed-air-in
     ExportableResultsTableModule,
   ],
   providers: [
-    CompressedAirSummaryService
+    CompressedAirSummaryService,
+    CompressedAirInventorySummaryGraphsService
 
   ],
   exports: [
