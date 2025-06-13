@@ -26,7 +26,7 @@ export class ExportToJustifiTemplateService {
     private exportToJustifiCompressedAirService: ExportToJustifiCompressedAirService,
     private exportToJustifiTreasureHuntService: ExportToJustifiTreasureHuntService,
     private exportToJustifiWasteWaterService: ExportToJustifiWasteWaterService
-  ) { 
+  ) {
     this.showExportToJustifiModal = new BehaviorSubject<boolean>(false);
   }
 
@@ -67,19 +67,21 @@ export class ExportToJustifiTemplateService {
   fillFacilityWorksheet(workbook: ExcelJS.Workbook, settings: Settings) {
 
     let facilityWorksheet = workbook.getWorksheet('Facility');
-    //name: B2
-    facilityWorksheet.getCell('B2').value = settings.facilityInfo.facilityName;
+    if (settings.facilityInfo) {
+      //name: B2
+      facilityWorksheet.getCell('B2').value = settings.facilityInfo.facilityName;
 
-    //address b4
-    facilityWorksheet.getCell('B4').value = settings.facilityInfo.address.street;
-    //country b5
-    facilityWorksheet.getCell('B5').value = settings.facilityInfo.address.country;
-    //state b6
-    facilityWorksheet.getCell('B6').value = settings.facilityInfo.address.state;
-    //city b7
-    facilityWorksheet.getCell('B7').value = settings.facilityInfo.address.city;
-    //zip b8
-    facilityWorksheet.getCell('B8').value = settings.facilityInfo.address.zip;
+      //address b4
+      facilityWorksheet.getCell('B4').value = settings.facilityInfo.address.street;
+      //country b5
+      facilityWorksheet.getCell('B5').value = settings.facilityInfo.address.country;
+      //state b6
+      facilityWorksheet.getCell('B6').value = settings.facilityInfo.address.state;
+      //city b7
+      facilityWorksheet.getCell('B7').value = settings.facilityInfo.address.city;
+      //zip b8
+      facilityWorksheet.getCell('B8').value = settings.facilityInfo.address.zip;
+    }
 
 
     //TODO: fill out use from assessments?
