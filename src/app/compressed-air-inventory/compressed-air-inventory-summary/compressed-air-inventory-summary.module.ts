@@ -4,12 +4,18 @@ import { CompressedAirInventorySummaryComponent } from './compressed-air-invento
 import { CompressedAirSummaryService } from './compressed-air-inventory-summary.service';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { CompressedAirInventorySummaryGraphsComponent } from './compressed-air-inventory-summary-graphs/compressed-air-inventory-summary-graphs.component';
+import { CompressedAirInventorySummaryOverviewComponent } from './compressed-air-inventory-summary-overview/compressed-air-inventory-summary-overview.component';
+import { CompressedAirInventorySummaryTableComponent } from './compressed-air-inventory-summary-table/compressed-air-inventory-summary-table.component';
 
 
 
 @NgModule({
   declarations: [
-    CompressedAirInventorySummaryComponent
+    CompressedAirInventorySummaryComponent,
+    CompressedAirInventorySummaryGraphsComponent,
+    CompressedAirInventorySummaryOverviewComponent,
+    CompressedAirInventorySummaryTableComponent
   ],
   imports: [
     CommonModule,
