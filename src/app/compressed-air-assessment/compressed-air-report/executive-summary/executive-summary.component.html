@@ -1,6 +1,6 @@
 <div class="output-summary">
     <h4 class="show-print print-section-header">Assessment Executive Summary</h4>
-    <table class="table table-hover">
+    <table #copyTable class="table table-hover">
         <thead>
             <tr>
                 <th [ngStyle]="{'width.%': 100 /(combinedDayTypeResults.length+2)}"></th>
@@ -578,3 +578,6 @@
         </div>
     </div>
 </div>
+
+<app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
