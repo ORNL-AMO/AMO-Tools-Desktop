@@ -249,9 +249,8 @@ export class StandaloneSuiteApiService {
 
   bagMethod(input: BagMethodInput): BagMethodOutput {
     input.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagFillTime);
-    input.diameterOfBag = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.diameterOfBag);
-    input.heightOfBag = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.heightOfBag);
-    let BagMethod = new Module.BagMethod(input.operatingTime, input.bagFillTime, input.heightOfBag, input.diameterOfBag, input.numberOfUnits);
+    input.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagVolume);
+    let BagMethod = new Module.BagMethod(input.operatingTime, input.bagFillTime, input.bagVolume, input.numberOfUnits);
     let rawOutput = BagMethod.calculate();
     let output: BagMethodOutput = {
       flowRate: isNaN(rawOutput.flowRate) ? undefined : rawOutput.flowRate,

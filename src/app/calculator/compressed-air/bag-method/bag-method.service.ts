@@ -29,9 +29,8 @@ export class BagMethodService {
     let input: BagMethodInput = {
       operatingTime: 0,
       bagFillTime: 0,
-      heightOfBag: 0,
-      diameterOfBag: 0,
-      numberOfUnits: 0
+      bagVolume: 0,
+      numberOfUnits: 1
     };
     inputsArray.push(input);
     return {
@@ -45,20 +44,18 @@ export class BagMethodService {
     operatingHours: number
   } {
     return {
-      operatingHours: 5000,
+      operatingHours: 8760,
       inputsArray: [
         {
-          operatingTime: 5000,
-          bagFillTime: 300,
-          heightOfBag: 50,
-          diameterOfBag: 40,
+          operatingTime: 8760,
+          bagFillTime: 50,
+          bagVolume: 45,
           numberOfUnits: 1
         },
         {
-          operatingTime: 5000,
+          operatingTime: 8760,
           bagFillTime: 360,
-          heightOfBag: 50,
-          diameterOfBag: 48,
+          bagVolume: 60,
           numberOfUnits: 1
         }
       ]
@@ -69,8 +66,7 @@ export class BagMethodService {
     let tmpInputs: Array<BagMethodInput> = inputs;
     if (settings.unitsOfMeasure == 'Metric') {
       for (let i = 0; i < tmpInputs.length; i++) {
-        tmpInputs[i].diameterOfBag = Math.round(this.convertUnitsService.value(tmpInputs[i].diameterOfBag).from('in').to('cm') * 100) / 100;
-        tmpInputs[i].heightOfBag = Math.round(this.convertUnitsService.value(tmpInputs[i].heightOfBag).from('in').to('cm') * 100) / 100;
+        tmpInputs[i].bagVolume = Math.round(this.convertUnitsService.value(tmpInputs[i].bagVolume).from('L').to('gal'));
       }
       return tmpInputs;
     }

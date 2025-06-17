@@ -205,8 +205,7 @@ export interface PipeSizingOutput {
 export interface BagMethodInput {
   operatingTime: number;
   bagFillTime: number;
-  heightOfBag: number;
-  diameterOfBag: number;
+  bagVolume: number;
   numberOfUnits: number;
 }
 

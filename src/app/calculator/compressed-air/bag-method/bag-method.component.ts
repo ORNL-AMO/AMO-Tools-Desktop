@@ -98,7 +98,6 @@ export class BagMethodComponent implements OnInit {
     for (let i = 0; i < this.inputs.inputsArray.length; i++) {
       this.inputs.inputsArray[i].operatingTime = JSON.parse(JSON.stringify(this.inputs.operatingHours));
       let outputs = this.standaloneService.bagMethod(this.inputs.inputsArray[i], this.settings);
-      outputs.annualConsumption = this.inputs.operatingHours * outputs.flowRate * 60;
       this.outputsArray.push(outputs);
       this.outputs.flowRate += outputs.flowRate;
       this.outputs.annualConsumption += outputs.annualConsumption;
@@ -109,8 +108,7 @@ export class BagMethodComponent implements OnInit {
     let input: BagMethodInput = {
       operatingTime: JSON.parse(JSON.stringify(this.inputs.operatingHours)),
       bagFillTime: 0,
-      heightOfBag: 0,
-      diameterOfBag: 0,
+      bagVolume: 0,
       numberOfUnits: 0
     };
 

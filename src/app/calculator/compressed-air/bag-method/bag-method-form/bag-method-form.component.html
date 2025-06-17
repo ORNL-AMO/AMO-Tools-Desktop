@@ -19,22 +19,12 @@
       </div>
 
       <div class="form-group">
-        <label for="height">Height of Bag</label>
+        <label for="bagVolume">Bag Volume</label>
         <div class="input-group">
-          <input name="height" class="form-control" type="number" step="any" [(ngModel)]="inputs.heightOfBag" id="height" (input)="emitChange()"
-            onfocus="this.select();" (focus)="changeField('height')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="diameter">Diameter of Bag</label>
-        <div class="input-group">
-          <input name="diameter" class="form-control" type="number" step="any" [(ngModel)]="inputs.diameterOfBag" id="diameter" (input)="emitChange()"
-            onfocus="this.select();" (focus)="changeField('diameter')">
-          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">in</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">cm</span>
+          <input name="bagVolume" class="form-control" type="number" step="any" [(ngModel)]="inputs.bagVolume" id="bagVolume" (input)="emitChange()"
+            onfocus="this.select();" (focus)="changeField('bagVolume')">
+          <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">gal</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">L</span>
         </div>
       </div>
 
