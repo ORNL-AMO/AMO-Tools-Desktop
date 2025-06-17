@@ -29,7 +29,6 @@ export class ExportToJustifiFsatService {
       //E: electricity use
       assessmentWorksheet.getCell('E' + assessmentRowIndex).value = baselineResults.annualEnergy;
       //F: Electricity unit
-      //TODO: always MWh?
       assessmentWorksheet.getCell('F' + assessmentRowIndex).value = 'MWh';
       //set modification
       let modification: Modification

@@ -181,6 +181,7 @@ export class CoreComponent implements OnInit {
     this.showSubscribeToastSub.unsubscribe();
     this.subscribeModalSub.unsubscribe();
     this.emailVisibilitySubscription.unsubscribe();
+    this.showExportToJustifiModalSub.unsubscribe();
   }
 
   async initData() {

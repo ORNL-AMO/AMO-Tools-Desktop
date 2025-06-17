@@ -35,7 +35,6 @@ export class ExportToJustifiCompressedAirService {
       //E: electricity use
       assessmentWorksheet.getCell('E' + assessmentRowIndex).value = baselineResults.total.energyUse;
       //F: Electricity unit
-      //TODO: always MWh?
       assessmentWorksheet.getCell('F' + assessmentRowIndex).value = 'kWh';
       //H: electricity saving not at assessment level for CA
 

@@ -28,7 +28,6 @@ export class ExportToJustifiWasteWaterService {
       //E: electricity use
       assessmentWorksheet.getCell('E' + assessmentRowIndex).value = baselineResults.AeEnergyAnnual;
       //F: Electricity unit
-      //TODO: always MWh?
       assessmentWorksheet.getCell('F' + assessmentRowIndex).value = 'MWh';
       //set modification
       let modification: WasteWaterData;

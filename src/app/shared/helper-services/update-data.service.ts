@@ -379,14 +379,12 @@ export class UpdateDataService {
     }
 
     updateSSMT(assessment: Assessment): Assessment {
-        console.log(assessment);
         assessment.appVersion = environment.version;
         assessment.ssmt = this.updateHeaders(assessment.ssmt);
         if (assessment.ssmt.modifications) {
             assessment.ssmt.modifications.forEach(mod => {
                 if(!mod.modificationId){
                     mod.modificationId = getNewIdString();
-                    console.log(mod.modificationId)
                 }
                 mod.ssmt = this.updateHeaders(mod.ssmt);
             })

@@ -83,8 +83,8 @@ export class ExportToJustifiTemplateService {
       facilityWorksheet.getCell('B8').value = settings.facilityInfo.address.zip;
     }
 
+    //Currently only track electricity, natural gas, steam price per unit
 
-    //TODO: fill out use from assessments?
     //electricity
     //use b11
     //unit c11 Imperial/Metric
@@ -96,7 +96,6 @@ export class ExportToJustifiTemplateService {
     //use b12
     //unit c12
     //price d12
-    //TODO: fuel cost?
     facilityWorksheet.getCell('D12').value = settings.fuelCost;
 
     //water

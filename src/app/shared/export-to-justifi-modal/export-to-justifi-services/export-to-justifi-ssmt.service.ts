@@ -78,7 +78,7 @@ export class ExportToJustifiSsmtService {
 
         if (modification.exploreOpportunities) {
           let eemWorksheet = workbook.getWorksheet('Energy_Efficiency_Measures');
-          //TODO: add EEMs if Explore opps
+          //add EEMs if Explore opps
           if (modification.exploreOppsShowOperationsData && modification.exploreOppsShowOperationsData.hasOpportunity) {
             eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
             eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowOperationsData.display;

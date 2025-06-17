@@ -29,7 +29,6 @@ export class ExportToJustifiPsatService {
       //E: electricity use
       assessmentWorksheet.getCell('E' + assessmentRowIndex).value = baselineResults.annual_energy;
       //F: Electricity unit
-      //TODO: always MWh?
       assessmentWorksheet.getCell('F' + assessmentRowIndex).value = 'MWh';
 
       //set modification
@@ -52,7 +51,7 @@ export class ExportToJustifiPsatService {
         assessmentWorksheet.getCell('D' + assessmentRowIndex).value = modification.psat.inputs.implementationCosts;
         if (modification.exploreOpportunities) {
           let eemWorksheet = workbook.getWorksheet('Energy_Efficiency_Measures');
-          //TODO: add EEMs if Explore opps
+          //add EEMs if Explore opps
           if (modification.exploreOppsShowVfd && modification.exploreOppsShowVfd.hasOpportunity) {
             eemWorksheet.getCell('A' + eemRowIndex).value = assessment.name;
             eemWorksheet.getCell('D' + eemRowIndex).value = modification.exploreOppsShowVfd.display;
