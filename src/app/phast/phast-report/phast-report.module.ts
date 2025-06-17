@@ -19,6 +19,7 @@ import { SimpleTooltipModule } from '../../shared/simple-tooltip/simple-tooltip.
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { InvalidPhastModule } from '../invalid-phast/invalid-phast.module';
 import { PhastSankeyModule } from '../../shared/phast-sankey/phast-sankey.module';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { PhastSankeyModule } from '../../shared/phast-sankey/phast-sankey.module
     SimpleTooltipModule,
     SharedPipesModule,
     InvalidPhastModule,
-    PhastSankeyModule
+    PhastSankeyModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     PhastReportComponent, 

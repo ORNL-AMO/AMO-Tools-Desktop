@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { PHAST, PhastResults, CalculatedByPhast, EnergyUseReportData } from '../../../shared/models/phast/phast';
 import { MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
@@ -74,6 +74,13 @@ export class EnergyUsedComponent implements OnInit {
   electricityHeatingValue: number;
 
   phastResults: PhastResults;
+
+  @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;  
+  copyTable1String: any;
+
+   @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;  
+    copyTable2String: any;
+
   constructor(private designedEnergyService: DesignedEnergyService, 
     private meteredEnergyService: MeteredEnergyService, 
     private phastResultsService: PhastResultsService, 
@@ -138,6 +145,14 @@ export class EnergyUsedComponent implements OnInit {
         this.meteredResults = this.meteredEnergyService.calculateMeteredEnergy(this.phast, this.settings);
       }
     }
+  }
+
+  updateCopyTable1String() {
+    this.copyTable1String = this.copyTable1.nativeElement.innerText;
+  }
+
+  updateCopyTable2String() {
+    this.copyTable2String = this.copyTable2.nativeElement.innerText;
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
@@ -49,6 +49,10 @@ export class FlueGasSummaryComponent implements OnInit {
   so2Diff: Array<boolean>;
 
   numMods: number = 0;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(private cd: ChangeDetectorRef, private sqlDbApiService: SqlDbApiService) { }
 
   ngOnInit() {
@@ -195,6 +199,11 @@ export class FlueGasSummaryComponent implements OnInit {
     };
     return tmpSummaryData;
   }
+  
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+  
 }
 
 
