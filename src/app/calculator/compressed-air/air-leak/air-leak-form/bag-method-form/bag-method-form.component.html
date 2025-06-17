@@ -1,17 +1,17 @@
     <form [formGroup]="bagMethodForm">
         <div class="form-group">
-          <label for="fillTime">Bag Fill Time</label>
+          <label for="bagFillTime">Bag Fill Time</label>
           <div class="input-group">
-            <input name="fillTime" class="form-control" type="number" step="any"
-              formControlName="fillTime" id="fillTime" onfocus="this.select();"
+            <input name="bagFillTime" class="form-control" type="number" step="any"
+              formControlName="bagFillTime" id="bagFillTime" onfocus="this.select();"
               (input)="save()"
-              (focus)="changeField('fillTime')">
+              (focus)="changeField('bagFillTime')">
             <span class="input-group-addon units">s</span>
             <span class="alert-danger pull-right small"
-            *ngIf="bagMethodForm.controls.fillTime.invalid && !bagMethodForm.controls.fillTime.pristine">
-            <span *ngIf="bagMethodForm.controls.fillTime.errors.required">Value required.</span>
-            <span *ngIf="bagMethodForm.controls.fillTime.errors.min">Value can't be less than
-              {{bagMethodForm.controls.fillTime.errors.min.min}}.</span>
+            *ngIf="bagMethodForm.controls.bagFillTime.invalid && !bagMethodForm.controls.bagFillTime.pristine">
+            <span *ngIf="bagMethodForm.controls.bagFillTime.errors.required">Value required.</span>
+            <span *ngIf="bagMethodForm.controls.bagFillTime.errors.min">Value can't be less than
+              {{bagMethodForm.controls.bagFillTime.errors.min.min}}.</span>
           </span>
           </div>
         </div>

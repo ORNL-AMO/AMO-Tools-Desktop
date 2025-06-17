@@ -126,9 +126,7 @@ export class AirLeakTreasureHuntService {
   
   convertAirLeakSurveyInput(survey: AirLeakSurveyInput, oldSettings: Settings, newSettings: Settings): AirLeakSurveyInput {
     survey.compressedAirLeakSurveyInputVec.forEach(input => {
-      //cm, in
-      input.bagMethodData.height = this.convertUnitsService.convertInAndCmValue(input.bagMethodData.height, oldSettings, newSettings);
-      input.bagMethodData.diameter = this.convertUnitsService.convertInAndCmValue(input.bagMethodData.diameter, oldSettings, newSettings);
+      input.bagMethodData.bagVolume = this.convertUnitsService.convertGalAndLiterValue(input.bagMethodData.bagVolume, oldSettings, newSettings);
       //ft3 m3 
       input.estimateMethodData.leakRateEstimate = this.convertUnitsService.convertFt3AndM3Value(input.estimateMethodData.leakRateEstimate, oldSettings, newSettings);
       //psig kPag

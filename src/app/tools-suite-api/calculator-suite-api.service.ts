@@ -210,9 +210,9 @@ export class CalculatorSuiteApiService {
       input.utilityCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.utilityCost);
 
       // TODO all methods should not calculate if missing required props
-      input.bagMethodData.diameter = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.diameter);
-      input.bagMethodData.fillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.fillTime);
-      input.bagMethodData.height = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.height);
+      input.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.bagFillTime);
+      input.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.bagVolume);
+      
       // estimate method
       input.estimateMethodData.leakRateEstimate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.estimateMethodData.leakRateEstimate);
       // orifice method
@@ -237,10 +237,15 @@ export class CalculatorSuiteApiService {
     });
     let inputs = new Module.CompressedAirLeakSurveyInputV();
 
-    convertedInput.forEach(airLeakSurvey => {
+    convertedInput.forEach((airLeakSurvey: AirLeakSurveyData) => {
       let EstimateMethodData = new Module.EstimateMethodData(airLeakSurvey.estimateMethodData.leakRateEstimate);
+      airLeakSurvey.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.bagMethodData.bagFillTime);
+      airLeakSurvey.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.bagMethodData.bagVolume);
 
-      let BagMethodData = new Module.BagMethodData(airLeakSurvey.bagMethodData.height, airLeakSurvey.bagMethodData.diameter, airLeakSurvey.bagMethodData.fillTime);
+
+      // hardcoded 1 - always calculate as single unit
+      let BagMethod = new Module.BagMethod(airLeakSurvey.bagMethodData.operatingTime, airLeakSurvey.bagMethodData.bagFillTime, airLeakSurvey.bagMethodData.bagVolume, 1);
+
       let DecibelsMethodData = new Module.DecibelsMethodData(airLeakSurvey.decibelsMethodData.linePressure,
         airLeakSurvey.decibelsMethodData.decibels, airLeakSurvey.decibelsMethodData.decibelRatingA, airLeakSurvey.decibelsMethodData.pressureA,
         airLeakSurvey.decibelsMethodData.firstFlowA, airLeakSurvey.decibelsMethodData.secondFlowA, airLeakSurvey.decibelsMethodData.decibelRatingB,
@@ -259,7 +264,7 @@ export class CalculatorSuiteApiService {
         airLeakSurvey.measurementMethod,
         EstimateMethodData,
         DecibelsMethodData,
-        BagMethodData,
+        BagMethod,
         OrificeMethodData,
         CompressorElectricityData,
         airLeakSurvey.units
@@ -269,7 +274,7 @@ export class CalculatorSuiteApiService {
       wasmConvertedInput.delete();
       EstimateMethodData.delete();
       DecibelsMethodData.delete();
-      BagMethodData.delete();
+      BagMethod.delete();
       OrificeMethodData.delete();
       CompressorElectricityData.delete();
     });

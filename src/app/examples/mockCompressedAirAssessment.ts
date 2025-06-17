@@ -17518,10 +17518,11 @@ export const MockCompressedAirCalculator: Calculator = {
                 "estimateMethodData": {
                     "leakRateEstimate": 0
                 },
-                "bagMethodData": {
-                    "height": 15,
-                    "diameter": 10,
-                    "fillTime": 12
+                bagMethodData: {
+                    operatingTime: 8760,
+                    bagVolume: .6817,
+                    bagFillTime: 12,
+                    numberOfUnits: 1
                 },
                 "decibelsMethodData": {
                     "linePressure": 0,
@@ -17553,11 +17554,12 @@ export const MockCompressedAirCalculator: Calculator = {
                 "estimateMethodData": {
                     "leakRateEstimate": 0.1
                 },
-                "bagMethodData": {
-                    "height": 0,
-                    "diameter": 0,
-                    "fillTime": 0
-                },
+                bagMethodData: {
+                    operatingTime: 0,
+                    bagVolume: 0,
+                    bagFillTime: 0,
+                    numberOfUnits: 0
+                    },
                 "decibelsMethodData": {
                     "linePressure": 0,
                     "decibels": 0,
@@ -17585,10 +17587,11 @@ export const MockCompressedAirCalculator: Calculator = {
                 "leakDescription": "Enter notes about the leak here.",
                 "selected": false,
                 "measurementMethod": 3,
-                "bagMethodData": {
-                    "height": 0,
-                    "diameter": 0,
-                    "fillTime": 0
+                bagMethodData: {
+                    operatingTime: 0,
+                    bagVolume: 0,
+                    bagFillTime: 0,
+                    numberOfUnits: 0
                 },
                 "estimateMethodData": {
                     "leakRateEstimate": 0
@@ -17623,10 +17626,11 @@ export const MockCompressedAirCalculator: Calculator = {
                 "estimateMethodData": {
                     "leakRateEstimate": 0
                 },
-                "bagMethodData": {
-                    "height": 0,
-                    "diameter": 0,
-                    "fillTime": 0
+                bagMethodData: {
+                    operatingTime: 0,
+                    bagVolume: 0,
+                    bagFillTime: 0,
+                    numberOfUnits: 0
                 },
                 "decibelsMethodData": {
                     "linePressure": 130,

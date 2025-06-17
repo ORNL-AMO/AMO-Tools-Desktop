@@ -432,7 +432,7 @@ export interface AirLeakSurveyData {
   leakDescription: string,
   measurementMethod: number;
   compressorElectricityData?: CompressorElectricityData,
-  bagMethodData: BagMethodData,
+  bagMethodData: BagMethodInput,
   estimateMethodData: EstimateMethodData,
   orificeMethodData: OrificeMethodData,
   decibelsMethodData: DecibelsMethodData,

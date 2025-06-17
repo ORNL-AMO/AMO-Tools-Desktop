@@ -12,8 +12,7 @@ export class ConvertAirLeakService {
   convertInputs(inputArray: Array<AirLeakSurveyData>, settings: Settings): Array<AirLeakSurveyData> {
     if (settings.unitsOfMeasure == 'Metric') {
       for (let i = 0; i < inputArray.length; i++) {
-        inputArray[i].bagMethodData.height = this.convertUnitsService.value(inputArray[i].bagMethodData.height).from('cm').to('in');
-        inputArray[i].bagMethodData.diameter = this.convertUnitsService.value(inputArray[i].bagMethodData.diameter).from('cm').to('in');
+        inputArray[i].bagMethodData.bagVolume = this.convertUnitsService.value(inputArray[i].bagMethodData.bagVolume).from('L').to('gal');
 
         inputArray[i].estimateMethodData.leakRateEstimate = this.convertUnitsService.value(inputArray[i].estimateMethodData.leakRateEstimate).from('m3').to('ft3');
 
@@ -59,10 +58,8 @@ export class ConvertAirLeakService {
 
 
   convertInputDataImperialToMetric(inputData: AirLeakSurveyData): AirLeakSurveyData {
-    inputData.bagMethodData.height = this.convertUnitsService.value(inputData.bagMethodData.height).from('in').to('cm');
-    inputData.bagMethodData.diameter = this.convertUnitsService.value(inputData.bagMethodData.diameter).from('in').to('cm');
-    inputData.bagMethodData.height = this.roundVal(inputData.bagMethodData.height);
-    inputData.bagMethodData.diameter = this.roundVal(inputData.bagMethodData.diameter);
+    inputData.bagMethodData.bagVolume = this.convertUnitsService.value(inputData.bagMethodData.bagVolume).from('gal').to('L');
+    inputData.bagMethodData.bagVolume = this.roundVal(inputData.bagMethodData.bagVolume);
 
     inputData.estimateMethodData.leakRateEstimate = this.convertUnitsService.value(inputData.estimateMethodData.leakRateEstimate).from('ft3').to('m3');
     inputData.estimateMethodData.leakRateEstimate = this.roundVal(inputData.estimateMethodData.leakRateEstimate);
