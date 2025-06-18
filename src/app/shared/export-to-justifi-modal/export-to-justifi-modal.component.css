@@ -6,7 +6,25 @@
     margin-top: .5vh;
     margin-bottom: 0;
     margin-right: 0;
+    /* margin: 1rem auto; */
 }
+
+
+/* Large screens (≥1200px) */
+@media (min-width: 1200px) {
+  .modal-dialog {
+    max-width: 75vw;
+    margin-left: 12.5vw;
+    /* margin: 3rem auto; */
+  }
+}
+
+
+
+
+
+
+
 
 .modal-content{
     height: 100%;
