@@ -1,5 +1,5 @@
 <div class="d-flex flex-column output-summary align-items-center">
-  <table class="table table-striped table-hover">
+  <table #copyTable class="table table-striped table-hover">
     <tbody>
       <tr class="bold">
         <td>
@@ -84,4 +84,6 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 </div>
