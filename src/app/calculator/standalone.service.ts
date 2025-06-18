@@ -11,6 +11,7 @@ import {
   PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput, SteamReductionOutput, SteamReductionResult,
   PowerFactorTriangleModeInputs,
   PowerFactorTriangleOutputs,
+  ReceiverTankMeteredResults,
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -102,7 +103,7 @@ export class StandaloneService {
     }
   }
 
-  receiverTankSizeMeteredStorage(input: ReceiverTankMeteredStorage, settings: Settings): number {
+  receiverTankSizeMeteredStorage(input: ReceiverTankMeteredStorage, settings: Settings): ReceiverTankMeteredResults {
     let inputCpy: ReceiverTankMeteredStorage = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure === 'Metric') {
       //metric: m imperial: ft
@@ -114,11 +115,12 @@ export class StandaloneService {
       inputCpy.initialTankPressure = this.convertUnitsService.value(inputCpy.initialTankPressure).from('kPa').to('psi');
       inputCpy.finalTankPressure = this.convertUnitsService.value(inputCpy.finalTankPressure).from('kPa').to('psi');
       //metric: m3 imperial: gal
-      let calcVolume: number = this.standaloneSuiteApiService.receiverTankSizeMeteredStorage(inputCpy);
-      calcVolume = this.convertUnitsService.value(calcVolume).from('gal').to('m3');
-      return calcVolume;
+      let results: ReceiverTankMeteredResults = this.standaloneSuiteApiService.receiverTankSizeMeteredStorage(inputCpy);
+      results.volume = this.convertUnitsService.value(results.volume).from('gal').to('m3');
+      return results;
     } else {
-      return this.standaloneSuiteApiService.receiverTankSizeMeteredStorage(inputCpy);
+      let results: ReceiverTankMeteredResults = this.standaloneSuiteApiService.receiverTankSizeMeteredStorage(inputCpy)
+      return results;
     }
   }
 
