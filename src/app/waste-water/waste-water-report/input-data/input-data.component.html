@@ -2,7 +2,7 @@
 
   <h4 class="show-print">Assessment Input Data</h4>
 
-  <table class="table table-hover table-striped">
+  <table #copyTable class="table table-hover table-striped">
     <thead>
       <tr>
         <th [ngStyle]="{'width.%': 100 /(wasteWater.modifications.length+2)}"></th>
@@ -516,4 +516,6 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 </div>

@@ -10,6 +10,7 @@ import { WasteWaterAnalysisModule } from '../waste-water-analysis/waste-water-an
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { FormsModule } from '@angular/forms';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
     WasteWaterAnalysisModule,
     PrintOptionsMenuModule,
     FormsModule,
-    SharedPipesModule
+    SharedPipesModule,
+    ExportableResultsTableModule
   ],
   exports: [
     WasteWaterReportComponent
