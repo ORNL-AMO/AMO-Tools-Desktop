@@ -16,7 +16,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-redux": "9.2.0",
-    "webpack": "^5.91.0",
+    "webpack": "^5.99.9",
     "webpack-dev-server": "^5.2.1",
     "yup": "1.6.1"
   },
