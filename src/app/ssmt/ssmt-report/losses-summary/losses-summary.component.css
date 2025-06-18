@@ -33,3 +33,12 @@ tr > th:not(:first-child){
     z-index: 2;
     background: #e5efe9;
 }
+
+.hidden-copy-table {
+    z-index: -10;
+    position: fixed;
+    opacity: 0;
+    top: -1000px;
+    height: 0;
+    width: 0;
+}
