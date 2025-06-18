@@ -9,6 +9,7 @@ import { SystemTrueCostBarComponent } from './system-true-cost-bar/system-true-c
 import { WaterReportService } from './water-report.service';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { AlertInfoContainerComponent } from '../../shared/alert-info-container/alert-info-container.component';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { AlertInfoContainerComponent } from '../../shared/alert-info-container/a
     CommonModule,
     SharedPipesModule,
     PrintOptionsMenuModule,
-    AlertInfoContainerComponent
+    AlertInfoContainerComponent,
+    ExportableResultsTableModule
   ],
   exports: [
     WaterReportComponent,
