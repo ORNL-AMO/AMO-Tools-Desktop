@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { SteamService } from '../steam.service';
 import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 import { OperatingHours } from '../../../shared/models/operations';
+import { OpportunityUtilityType } from '../../../shared/models/treasure-hunt';
 
 @Injectable()
 export class BoilerBlowdownRateService {
@@ -296,7 +297,7 @@ export interface BoilerBlowdownRateInputs {
   waterCost: number,
   operatingHours: number,
   boilerEfficiency: number,
-  boilerUtilityType: string
+  boilerUtilityType: OpportunityUtilityType
 }
 
 

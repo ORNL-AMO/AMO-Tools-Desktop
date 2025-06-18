@@ -38,6 +38,7 @@ export interface PHAST {
   lossDataUnits?: string;
   valid?: PhastValid;
   co2SavingsData?: PhastCo2SavingsData;
+  selectedModificationId?: string 
 }
 
 

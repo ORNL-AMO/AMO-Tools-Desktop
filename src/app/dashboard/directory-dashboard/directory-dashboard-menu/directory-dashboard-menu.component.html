@@ -41,6 +41,11 @@
                 <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkReport()" type="button"
                     (click)="generateReport()">Generate Report</button>
                 <button class="btn btn-secondary action-btn menu-btn" [disabled]="!hasSelectedItem" type="button"
+                    (click)="exportToJustifi()">
+                    <span class="fa fa-scale-unbalanced"></span>    
+                    Export To JUSTIFI
+                </button>
+                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!hasSelectedItem" type="button"
                     (click)="showDeleteItemsModal()">Delete</button>
                 <button class="btn btn-secondary action-btn menu-btn" [disabled]="!hasSelectedItem" type="button"
                     (click)="showExportModal()">Export</button>

@@ -1,4 +1,5 @@
-<div class="assessment-report report-in-fsat fsat" [ngClass]="{'assessment-report-padding': inFsat, 'report-in-rollup': inRollup}">
+<div class="assessment-report report-in-fsat fsat"
+    [ngClass]="{'assessment-report-padding': inFsat, 'report-in-rollup': inRollup}">
     <div *ngIf="inFsat" class="report-cover">
         <img src="assets/images/DOE-banner-color.svg" class="doe-logo">
 
@@ -14,14 +15,26 @@
     <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': inFsat}">
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
 
-         <!-- Assessment view -->
-         <div *ngIf="assessment && inFsat" class="row">
+        <!-- Assessment view -->
+        <div *ngIf="assessment && inFsat" class="row">
             <div class="col-12 p-2">
-                    <span class="pl-2" *ngFor="let directory of assessmentDirectories">
-                        {{directory.name}} / {{assessment.name}}
-                    </span>
-                    <span class="ml-3 date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
-                    <button class="mt-0 btn btn-secondary pull-right hide-print" (click)="print()">Print</button>
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex">
+                        <div class="mt-auto ml-3">
+                            <ng-container class="ml-3 pl-2" *ngFor="let directory of assessmentDirectories">
+                                {{directory.name}} /
+                            </ng-container>
+                            {{assessment.name}}
+                        </div>
+                        <span class="ml-3 mt-auto date-modified">Last Modified {{assessment.modifiedDate |
+                            date:'short'}}</span>
+                    </div>
+                    <div>
+                        <button class="mt-0 mr-3 btn btn-secondary hide-print" (click)="showExportToJustifi()">Export to
+                            JUSTIFI</button>
+                        <button class="mt-0 mr-3 btn btn-secondary hide-print" (click)="print()">Print</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -92,29 +105,31 @@
                     <span *ngIf="tabsCollapsed" class="fa fa-caret-down pr-2"></span>
                     <span class="small text-uppercase">Menu</span>
                 </div>
-                <div (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results', 'collapse': tabsCollapsed}">
+                <div (click)="setTab('results')"
+                    [ngClass]="{'active': currentTab == 'results', 'collapse': tabsCollapsed}">
                     <a>Result Data</a>
                 </div>
                 <div (click)="setTab('reportGraphs')"
                     [ngClass]="{'active': currentTab == 'reportGraphs', 'collapse': tabsCollapsed}">
                     <a>Report Graphs</a>
                 </div>
-                <div (click)="setTab('detailedResults')" [ngClass]="{'active': currentTab == 'detailedResults', 'collapse': tabsCollapsed}">
+                <div (click)="setTab('detailedResults')"
+                    [ngClass]="{'active': currentTab == 'detailedResults', 'collapse': tabsCollapsed}">
                     <a>Detailed Results</a>
                 </div>
                 <div (click)="setTab('reportSankey')"
                     [ngClass]="{'active': currentTab == 'reportSankey', 'collapse': tabsCollapsed}">
                     <a>Sankey</a>
                 </div>
-                <div (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData', 'collapse': tabsCollapsed}">
+                <div (click)="setTab('inputData')"
+                    [ngClass]="{'active': currentTab == 'inputData', 'collapse': tabsCollapsed}">
                     <a>Input Summary</a>
                 </div>
                 <div (click)="setTab('facilityInfo')"
                     [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
                     <a>Facility Info</a>
                 </div>
-                <div (click)="print()" class="hide-print"
-                    [ngClass]="{'collapse': tabsCollapsed}">
+                <div (click)="print()" class="hide-print" [ngClass]="{'collapse': tabsCollapsed}">
                     <a>Print</a>
                 </div>
             </div>

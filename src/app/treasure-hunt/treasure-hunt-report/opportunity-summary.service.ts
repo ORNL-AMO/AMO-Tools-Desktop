@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OpportunitySheetService } from '../calculators/standalone-opportunity-sheet/opportunity-sheet.service';
-import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, TreasureHuntOpportunity, TreasureHuntResults, OpportunitySheetResult, TreasureHuntOpportunityResults, Treasure, FlueGasTreasureHunt, WallLossTreasureHunt, LeakageLossTreasureHunt, WasteHeatTreasureHunt, OpeningLossTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt, PowerFactorCorrectionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { OpportunityCost, OpportunitySummary, TreasureHunt, ElectricityReductionTreasureHunt, MotorDriveInputsTreasureHunt, ReplaceExistingMotorTreasureHunt, LightingReplacementTreasureHunt, NaturalGasReductionTreasureHunt, OpportunitySheetResults, OpportunitySheet, CompressedAirReductionTreasureHunt, WaterReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, TreasureHuntOpportunity, TreasureHuntResults, OpportunitySheetResult, TreasureHuntOpportunityResults, Treasure, FlueGasTreasureHunt, WallLossTreasureHunt, LeakageLossTreasureHunt, WasteHeatTreasureHunt, OpeningLossTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt, PowerFactorCorrectionTreasureHunt, OpportunityUtilityType } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { processEquipmentOptions } from '../calculators/opportunity-sheet/general-details-form/processEquipmentOptions';
 import { AirLeakTreasureHuntService } from '../treasure-hunt-calculator-services/air-leak-treasure-hunt.service';
@@ -325,7 +325,7 @@ export class OpportunitySummaryService {
         energySavings: undefined,
         baselineCost: undefined,
         modificationCost: undefined,
-        utilityType: '',
+        utilityType: undefined,
       }; 
     }
     
@@ -365,7 +365,7 @@ export class OpportunitySummaryService {
       let mixedIndividualSummaries: Array<OpportunitySummary> = new Array<OpportunitySummary>();
       let oppSheetResults: OpportunitySheetResults = this.assessmentOpportunityService.getResults(oppSheet, settings);
       let totalEnergySavings: number = 0;
-      let energyTypeLabel: string;
+      let energyTypeLabel: OpportunityUtilityType;
       let opportunityMetaData: OpportunityMetaData = {
         name: oppSheet.name,
         team: oppSheet.owner,
@@ -451,7 +451,7 @@ export class OpportunitySummaryService {
       let oppSheetResults: OpportunitySheetResults = this.opportunitySheetService.getResults(oppSheet, settings);
       
       let totalEnergySavings: number = 0;
-      let energyTypeLabel: string;
+      let energyTypeLabel: OpportunityUtilityType;
       let opportunityMetaData: OpportunityMetaData = {
         name: oppSheet.name,
         team: oppSheet.owner,
@@ -540,13 +540,13 @@ export class OpportunitySummaryService {
       return oppSummary;
     }
 
-    setResultsFromOppSheet(sheetResults: OpportunitySheetResult, utilityType: string): TreasureHuntOpportunityResults {
+    setResultsFromOppSheet(sheetResults: OpportunitySheetResult, utilityType: OpportunityUtilityType): TreasureHuntOpportunityResults {
       let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
         costSavings: 0,
         energySavings: 0,
         baselineCost: 0,
         modificationCost: 0,
-        utilityType: 'None',
+        utilityType: 'Other',
       }
 
       treasureHuntOpportunityResults.baselineCost = sheetResults.baselineEnergyCost;

@@ -21,9 +21,11 @@ export interface Assessment {
   compressedAirAssessment?: CompressedAirAssessment,
   createdDate?: Date,
   modifiedDate?: Date,
-  type: string;
+  type: AssessmentType;
   name: string;
   selected?: boolean;
   appVersion?: string;
   isExample?: boolean;
 }
+
+export type AssessmentType = 'PSAT' | 'PHAST' | 'FSAT' | 'SSMT' | 'TreasureHunt' | 'WasteWater' | 'Water' | 'CompressedAir';

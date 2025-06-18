@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Assessment } from '../models/assessment';
+import { Assessment, AssessmentType } from '../models/assessment';
 import { EnergyUseItem } from '../models/treasure-hunt';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import * as _ from 'lodash';
-import { AssessmentOption, AssessmentType } from '../connected-inventory/integrations';
+import { AssessmentOption } from '../connected-inventory/integrations';
 import { PsatService } from '../../psat/psat.service';
 import { Settings } from '../models/settings';
 import { firstValueFrom } from 'rxjs';

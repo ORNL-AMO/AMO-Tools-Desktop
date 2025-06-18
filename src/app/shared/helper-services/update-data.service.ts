@@ -383,6 +383,9 @@ export class UpdateDataService {
         assessment.ssmt = this.updateHeaders(assessment.ssmt);
         if (assessment.ssmt.modifications) {
             assessment.ssmt.modifications.forEach(mod => {
+                if(!mod.modificationId){
+                    mod.modificationId = getNewIdString();
+                }
                 mod.ssmt = this.updateHeaders(mod.ssmt);
             })
         };

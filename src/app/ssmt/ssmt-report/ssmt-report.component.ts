@@ -10,12 +10,13 @@ import { SsmtService } from '../ssmt.service';
 import { Subscription } from 'rxjs';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { PrintOptions } from '../../shared/models/printing';
+import { ExportToJustifiTemplateService } from '../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 
 @Component({
-    selector: 'app-ssmt-report',
-    templateUrl: './ssmt-report.component.html',
-    styleUrls: ['./ssmt-report.component.css'],
-    standalone: false
+  selector: 'app-ssmt-report',
+  templateUrl: './ssmt-report.component.html',
+  styleUrls: ['./ssmt-report.component.css'],
+  standalone: false
 })
 export class SsmtReportComponent implements OnInit {
   @Input()
@@ -46,13 +47,15 @@ export class SsmtReportComponent implements OnInit {
   modificationOutputs: Array<{ name: string, outputData: SSMTOutput, valid: SsmtValid }>;
   modificationInputData: Array<{ name: string, inputData: SSMTInputs, valid: SsmtValid }>;
   dataCalculated: boolean;
-  modificationLosses: Array<{ name: string, outputData: SSMTLosses, valid: SsmtValid}>;
+  modificationLosses: Array<{ name: string, outputData: SSMTLosses, valid: SsmtValid }>;
   tableCellWidth: number;
   assessmentDirectories: Directory[];
   printOptions: PrintOptions;
   tabsCollapsed: boolean = true;
 
-  constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService, private directoryDbService: DirectoryDbService, private printOptionsMenuService: PrintOptionsMenuService) { }
+  constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService,
+    private directoryDbService: DirectoryDbService, private printOptionsMenuService: PrintOptionsMenuService,
+    private exportToJustifiTemplateService: ExportToJustifiTemplateService) { }
 
   ngOnInit() {
     if (this.assessment.ssmt.setupDone) {
@@ -61,35 +64,35 @@ export class SsmtReportComponent implements OnInit {
         let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateBaselineModel(this.assessment.ssmt, this.settings);
         this.assessment.ssmt.name = 'Baseline';
         if (!resultData.outputData.hasSteamModelerError) {
-        resultData.outputData = this.calculateResultsWithMarginalCosts(this.assessment.ssmt, resultData.outputData);
-        this.assessment.ssmt.outputData = resultData.outputData;
-        this.baselineOutput = resultData.outputData;
-        this.baselineInputData = resultData.inputData;
-        this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputData, this.settings, this.assessment.ssmt);
-        this.modificationOutputs = new Array<{ name: string, outputData: SSMTOutput, valid: SsmtValid }>();
-        this.modificationInputData = new Array<{ name: string, inputData: SSMTInputs,valid: SsmtValid }>();
-        this.modificationLosses = new Array<{ name: string, outputData: SSMTLosses, valid: SsmtValid }>();
-        if (this.assessment.ssmt.modifications) {
-          this.assessment.ssmt.modifications.forEach(modification => {
+          resultData.outputData = this.calculateResultsWithMarginalCosts(this.assessment.ssmt, resultData.outputData);
+          this.assessment.ssmt.outputData = resultData.outputData;
+          this.baselineOutput = resultData.outputData;
+          this.baselineInputData = resultData.inputData;
+          this.baselineLosses = this.calculateLossesService.calculateLosses(this.baselineOutput, this.baselineInputData, this.settings, this.assessment.ssmt);
+          this.modificationOutputs = new Array<{ name: string, outputData: SSMTOutput, valid: SsmtValid }>();
+          this.modificationInputData = new Array<{ name: string, inputData: SSMTInputs, valid: SsmtValid }>();
+          this.modificationLosses = new Array<{ name: string, outputData: SSMTLosses, valid: SsmtValid }>();
+          if (this.assessment.ssmt.modifications) {
+            this.assessment.ssmt.modifications.forEach(modification => {
               modification.ssmt.valid = this.ssmtService.checkValid(modification.ssmt, this.settings);
               let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModificationModel(modification.ssmt, this.settings, this.baselineOutput);
               if (modification.ssmt.valid.isValid) {
                 resultData.outputData = this.calculateResultsWithMarginalCosts(modification.ssmt, resultData.outputData, this.baselineOutput);
                 modification.ssmt.outputData = resultData.outputData;
-                this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData, valid: modification.ssmt.valid});
+                this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData, valid: modification.ssmt.valid });
                 this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData, valid: modification.ssmt.valid });
                 let modLosses: SSMTLosses = this.calculateLossesService.calculateLosses(resultData.outputData, resultData.inputData, this.settings, modification.ssmt);
                 this.modificationLosses.push({ outputData: modLosses, name: modification.ssmt.name, valid: modification.ssmt.valid });
               } else {
-                this.modificationOutputs.push({ name: modification.ssmt.name, outputData: undefined,valid: modification.ssmt.valid});
+                this.modificationOutputs.push({ name: modification.ssmt.name, outputData: undefined, valid: modification.ssmt.valid });
                 this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData, valid: modification.ssmt.valid });
                 this.modificationLosses.push({ outputData: undefined, name: modification.ssmt.name, valid: modification.ssmt.valid });
               }
-          });
+            });
+          }
+          this.getTableCellWidth();
+          this.dataCalculated = true;
         }
-        this.getTableCellWidth();
-        this.dataCalculated = true;
-      }
       }, 10);
     } else {
       this.dataCalculated = true;
@@ -175,7 +178,7 @@ export class SsmtReportComponent implements OnInit {
     if (ssmt.name == 'Baseline') {
       marginalCosts = this.ssmtService.calculateBaselineMarginalCosts(ssmt, outputData, this.settings);
     } else {
-        marginalCosts = this.ssmtService.calculateModificationMarginalCosts(ssmt, outputData, baselineResults, this.settings);
+      marginalCosts = this.ssmtService.calculateModificationMarginalCosts(ssmt, outputData, baselineResults, this.settings);
     }
 
     outputData.marginalHPCost = marginalCosts.marginalHPCost;
@@ -186,6 +189,10 @@ export class SsmtReportComponent implements OnInit {
 
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
+  }
+
+  showExportToJustifi() {
+    this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
   }
 
 }
