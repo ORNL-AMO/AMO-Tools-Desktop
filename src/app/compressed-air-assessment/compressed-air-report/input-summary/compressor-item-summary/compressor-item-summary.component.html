@@ -9,7 +9,7 @@
     <div *ngIf="!collapse || printView">
         <div class="card-body">
             <div class="output-summary">
-                <table class="table table-hover table-striped">
+                <table #copyTable class="table table-hover table-striped">
                     <tbody>
                         <tr>
                             <th>
@@ -647,6 +647,8 @@
                         </tr>
                     </tbody>
                 </table>
+                <app-exportable-results-table [tableString]="copyTableString"
+                    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
             </div>
         </div>
     </div>

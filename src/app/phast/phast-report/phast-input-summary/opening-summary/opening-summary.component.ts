@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -33,6 +33,10 @@ export class OpeningSummaryComponent implements OnInit {
   emissivityDiff: Array<boolean>;
   percentTimeOpenDiff: Array<boolean>;
   numMods: number = 0;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(private cd: ChangeDetectorRef) { }
 
   //debug trying something
@@ -112,6 +116,11 @@ export class OpeningSummaryComponent implements OnInit {
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
+  
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+  
 
   //TODO: Calculate Area for Total Area
 }

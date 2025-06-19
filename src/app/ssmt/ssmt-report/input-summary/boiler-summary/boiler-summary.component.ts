@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Input, ViewChild, ElementRef } from '@angular/core';
 import { SSMTInputs, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
@@ -20,6 +20,9 @@ export class BoilerSummaryComponent implements OnInit {
   settings: Settings;
   @Input()
   printView: boolean
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   collapse: boolean = true;
   numMods: number = 0;
@@ -101,6 +104,10 @@ export class BoilerSummaryComponent implements OnInit {
     } else if (fuelType === 1) {
       return _.find(this.gasFuelTypes, (gasFuel) => {return gasFuel.id === fuel; }).substance;
     }
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 
 }

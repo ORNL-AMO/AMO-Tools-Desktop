@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import {FanMotor, FSAT} from '../../../../shared/models/fans';
 import { Settings } from '../../../../shared/models/settings';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
@@ -36,6 +36,9 @@ export class FanMotorSummaryComponent implements OnInit {
   //sizeMarginDiff: Array<boolean>;
 
   efficiencyClasses: Array<{ value: number, display: string }>;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   constructor(private cd: ChangeDetectorRef) { }
 
@@ -108,5 +111,9 @@ export class FanMotorSummaryComponent implements OnInit {
     } else {
       return;
     }
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

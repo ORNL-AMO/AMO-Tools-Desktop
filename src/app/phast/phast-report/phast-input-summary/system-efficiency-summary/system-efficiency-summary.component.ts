@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 
 @Component({
@@ -15,6 +15,10 @@ export class SystemEfficiencySummaryComponent implements OnInit {
 
   collapse: boolean = true;
   numMods: number = 0;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor() { }
 
   ngOnInit() {
@@ -28,4 +32,9 @@ export class SystemEfficiencySummaryComponent implements OnInit {
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
+  
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+  
 }

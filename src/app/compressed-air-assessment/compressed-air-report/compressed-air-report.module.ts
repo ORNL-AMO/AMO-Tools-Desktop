@@ -22,6 +22,7 @@ import { PerformanceProfilesComponent } from './performance-profiles/performance
 import { CentrifugalGraphModule } from '../centrifugal-graph/centrifugal-graph.module';
 import { EndUseSummaryComponent } from './input-summary/end-use-summary/end-use-summary.component';
 import { CompressedAirSankeyModule } from '../compressed-air-sankey/compressed-air-sankey.module';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { CompressedAirSankeyModule } from '../compressed-air-sankey/compressed-a
     SystemProfileGraphsModule,
     InventoryPerformanceProfileModule,
     CentrifugalGraphModule,
-    CompressedAirSankeyModule
+    CompressedAirSankeyModule,
+    ExportableResultsTableModule
   ],
   exports: [
     CompressedAirReportComponent

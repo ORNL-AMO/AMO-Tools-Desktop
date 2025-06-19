@@ -27,6 +27,7 @@ import { SsmtPieChartComponent } from './report-graphs/ssmt-pie-chart/ssmt-pie-c
 import { SsmtWaterfallComponent } from './report-graphs/ssmt-waterfall/ssmt-waterfall.component';
 import { SsmtReportSankeyComponent } from './ssmt-report-sankey/ssmt-report-sankey.component';
 import { SsmtSankeyModule } from '../../shared/ssmt-sankey/ssmt-sankey.module';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -38,7 +39,8 @@ import { SsmtSankeyModule } from '../../shared/ssmt-sankey/ssmt-sankey.module';
     PercentGraphModule,
     PieChartModule,
     SharedPipesModule,
-    SsmtSankeyModule
+    SsmtSankeyModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     SsmtReportComponent,

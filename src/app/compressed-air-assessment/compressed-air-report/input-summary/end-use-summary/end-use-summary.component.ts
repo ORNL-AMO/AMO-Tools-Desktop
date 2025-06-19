@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CompressedAirAssessment, CompressedAirDayType, DayTypeEndUse, EndUse, EndUseData, EndUseDayTypeSetup } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
@@ -20,6 +20,10 @@ export class EndUseSummaryComponent implements OnInit {
   dayTypeEndUseData: { [daytypeId: string]: Array<DayTypeEndUse> } = {}; 
   compressedAirDayTypes: Array<CompressedAirDayType> = []
   collapse: boolean = false;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+  
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
@@ -48,5 +52,9 @@ export class EndUseSummaryComponent implements OnInit {
 
   getDayTypeEndUses(daytype: CompressedAirDayType): Array<DayTypeEndUse> {
     return this.dayTypeEndUseData[daytype.dayTypeId];
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }
