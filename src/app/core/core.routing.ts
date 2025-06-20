@@ -118,6 +118,7 @@ import { WaterProcessDiagramComponent } from '../water-process-diagram/water-pro
 import { WaterAssessmentComponent } from '../water/water-assessment.component';
 import { DataAndBackupComponent } from '../dashboard/data-and-backup/data-and-backup.component';
 import { PowerFactorTriangleComponent } from '../calculator/utilities/power-factor-triangle/power-factor-triangle.component';
+import { ProcessCoolingComponent } from '../process-cooling/process-cooling.component';
 
 export const coreRoutes: Routes = [
   {
@@ -607,6 +608,10 @@ export const coreRoutes: Routes = [
   {
     path: 'process-flow-diagram/:id',
     component: WaterProcessDiagramComponent,
+  },
+  {
+    path: 'process-cooling/:id',
+    component: ProcessCoolingComponent,
   },
   { 
     path: '**', 

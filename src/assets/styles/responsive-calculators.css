@@ -67,6 +67,10 @@
 	background-color: #7030A0;
 }
 
+.process-cooling-assessment .calculator-panel-container::-webkit-scrollbar-thumb{
+    background-color: #009885;
+}
+
 .water-assessment .calculator-panel-container::-webkit-scrollbar-thumb{
 	background-color: #3055cf;
 }

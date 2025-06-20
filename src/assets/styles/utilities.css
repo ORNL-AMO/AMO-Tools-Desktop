@@ -87,6 +87,10 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     background-color: #7030A0;
 }
 
+.process-cooling .btn-primary {
+    background-color: #009885;
+}
+
 .water-assessment .btn-primary {
     background-color: #3055cf;
 }
@@ -252,7 +256,6 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     font-weight: bold;
 }
 
-
 .inlet-pressure {
     color: #3498DB;
     font-weight: bold;
@@ -324,6 +327,11 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     background: linear-gradient(#ffffff, #6f42c1);
 }
 
+.process-cooling .calc-icon-div,
+.icon-process-cooling {
+    background: linear-gradient(#ffffff, #009885);
+}
+
 
 .water-assessment .calc-icon-div,
 .icon-water {
@@ -358,8 +366,6 @@ a:not([href]):not([tabindex]).disabled-link:hover {
 .calc-img {
     width: 90%;
 }
-
-
 
 
 .standalone-calculator .pressure-readings-array .ng-invalid:not(form, .form-array), 

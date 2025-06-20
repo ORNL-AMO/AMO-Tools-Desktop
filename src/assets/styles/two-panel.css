@@ -120,6 +120,9 @@
 .compressed-air .header{
     border-bottom: #7030A0 solid 2px;
 }
+.process-cooling-assessment .header{
+    border-bottom: #009885 solid 2px;
+}
 
 .water-assessment .header{
     border-bottom: #3055cf solid 2px;
@@ -206,6 +209,11 @@
 
 .compressed-air .btn-secondary:not([disabled]):not(.disabled).active{
     background-origin: #7030A0;
+    transition: all .5s ease-in-out;
+}
+
+.process-cooling-assessment .btn-secondary:not([disabled]):not(.disabled).active{
+    background-origin: #009885;
     transition: all .5s ease-in-out;
 }
 
@@ -559,6 +567,10 @@
 
 .compressed-air .scroll-item::-webkit-scrollbar-thumb{
 	background-color: #7030A0;
+}
+
+.process-cooling-assessment .scroll-item::-webkit-scrollbar-thumb{
+    background-color: #009885;
 }
 
 .water-assessment .scroll-item::-webkit-scrollbar-thumb{

@@ -1,5 +1,5 @@
 <span class="sidebar-item assessment-item sidebar-truncate" [ngClass]="{ 'phast' : assessment.type == 'PHAST', 'psat': assessment.type == 'PSAT', 'fsat': assessment.type == 'FSAT',  
-	'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt' }"
+	'ssmt': assessment.type == 'SSMT', 'treasure-hunt': assessment.type == 'TreasureHunt', 'process-cooling': assessment.type == 'ProcessCooling', 'waste-water': assessment.type == 'WasteWater', 'compressed-air': assessment.type == 'CompressedAir', 'water': assessment.type == 'Water' }"
 	(click)="goToAssessment(assessment)">
 	<!-- <i class="fa fa-file" aria-hidden="true"></i> -->
 	<img *ngIf="assessment.type == 'FSAT'" src="assets/images/small-icons/small-fsat.png" class="sidebar-icon">
@@ -9,6 +9,7 @@
 	<img *ngIf="assessment.type == 'TreasureHunt'" src="assets/images/small-icons/small-treasure-hunt.png" class="sidebar-icon">
 	<img *ngIf="assessment.type == 'WasteWater'" src="assets/images/waste-water-icon.png" class="waste-water-icon">
 	<img *ngIf="assessment.type == 'CompressedAir'" src="assets/images/ca-icon.png" class="compressed-air-icon">
+	<img *ngIf="assessment.type == 'ProcessCooling'" src="assets/images/process-cooling-icon.png" class="process-cooling-icon">
 	<img *ngIf="assessment.type == 'Water'" src="assets/images/water-assessment-small.png" class="water-assessment-icon">
 	{{assessment.name}}
 </span>
