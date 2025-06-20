@@ -31,6 +31,12 @@
 	height:70px;
 }
 
+.process-cooling-image {
+	width:70px;
+	height:70px;
+}
+
+
 .water-diagram-image {
 	width:60px;
 	height:50px;
@@ -171,6 +177,17 @@ img.treasure-hunt-image {
 	width: 80px;
 	height: 70px;
 }
+
+
+.process-cooling-background{
+    background-image: linear-gradient(#D4E2F4, #009885);
+    border-radius: 12px;
+    padding: 3px;
+    box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
+	width: 80px;
+	height: 70px;
+}
+
 
 
 .assessment-block{

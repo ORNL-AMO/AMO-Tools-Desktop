@@ -24,6 +24,7 @@ import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { MockWaterdiagram } from '../examples/mockWaterDiagram';
 import { Diagram } from '../shared/models/diagram';
 import { ApplicationInstanceDbService, ApplicationInstanceData } from '../indexedDb/application-instance-db.service';
+import { MockProcessCoolingAssessment, MockProcessCoolingSettings } from '../examples/mockProcessCooling';
 @Injectable()
 export class CoreService {
 
@@ -40,6 +41,7 @@ export class CoreService {
   exampleCompressedAirAssessmentId: number;
   exampleWaterAssessmentId: number;
   exampleWaterDiagramId: number;
+  exampleProcessCoolingId: number;
   constructor(
     private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,
@@ -135,6 +137,7 @@ export class CoreService {
     MockWasteWater.directoryId = this.exampleDirectoryId;
     MockCompressedAirAssessment.directoryId = this.exampleDirectoryId;
     MockWaterAssessment.directoryId = this.exampleDirectoryId;
+    MockProcessCoolingAssessment.directoryId = this.exampleDirectoryId;
     MockWaterdiagram.directoryId = this.exampleDirectoryId;
 
     let examplePhast: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPhast));
@@ -146,6 +149,7 @@ export class CoreService {
     let exampleCompressedAirAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockCompressedAirAssessment));
     let examplePsat: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPsat));
     let exampleFsat: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockFsat));
+    let exampleProcessCoolingAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockProcessCoolingAssessment));
 
     let exampleWaterDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(MockWaterdiagram));
     MockWaterAssessment.diagramId = exampleWaterDiagram.id;
@@ -162,6 +166,7 @@ export class CoreService {
     this.exampleWasteWaterId = exampleWasteWater.id;
     this.exampleCompressedAirAssessmentId = exampleCompressedAirAssessment.id;
     this.exampleWaterAssessmentId = exampleWaterAssessment.id;
+    this.exampleProcessCoolingId = exampleProcessCoolingAssessment.id;
     this.exampleWaterDiagramId = exampleWaterDiagram.id;
     this.examplePsatId = examplePsat.id;
     this.exampleFsatId = exampleFsat.id
@@ -219,5 +224,8 @@ export class CoreService {
 
     MockWaterAssessmentSettings.assessmentId = this.exampleWaterAssessmentId;
     await firstValueFrom(this.settingsDbService.addWithObservable(MockWaterAssessmentSettings));
+
+    MockProcessCoolingSettings.assessmentId = this.exampleProcessCoolingId;
+    await firstValueFrom(this.settingsDbService.addWithObservable(MockProcessCoolingAssessment));
   }
 }

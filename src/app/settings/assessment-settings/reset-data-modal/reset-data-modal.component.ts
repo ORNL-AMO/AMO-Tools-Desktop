@@ -35,6 +35,7 @@ import { AppErrorService } from '../../../shared/errors/app-error.service';
 import { DiagramIdbService } from '../../../indexedDb/diagram-idb.service';
 import { Diagram } from '../../../shared/models/diagram';
 import { MockWaterdiagram, MockWaterDiagramSettings } from '../../../examples/mockWaterDiagram';
+import { MockProcessCoolingAssessment, MockProcessCoolingSettings } from '../../../examples/mockProcessCooling';
 
 @Component({
     selector: 'app-reset-data-modal',
@@ -266,6 +267,12 @@ async resetAllExampleAssessments(dirId: number) {
   let createdWasteWater: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockWasteWater));
   MockWasteWaterSettings.assessmentId = createdWasteWater.id;
   await firstValueFrom(this.settingsDbService.addWithObservable(MockWasteWaterSettings));
+
+  MockProcessCoolingSettings.facilityInfo.date = new Date().toDateString();
+  MockProcessCoolingAssessment.directoryId = dirId;
+  let createdProcessCooling: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockProcessCoolingAssessment));
+  MockProcessCoolingSettings.assessmentId = createdProcessCooling.id;
+  await firstValueFrom(this.settingsDbService.addWithObservable(MockProcessCoolingSettings));
 
   MockPhast.directoryId = dirId;
   let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPhast));

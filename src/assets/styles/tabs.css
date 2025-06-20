@@ -86,6 +86,11 @@ Tabs
     border-bottom:   #3055cf groove 3px;
   }
 
+  .process-cooling-assessment .tabs.primary .active a {
+    border: none;
+    border-bottom:   #009885 groove 3px;
+  }
+
   .process-cooling .tabs.primary .active a {
     border: none;
     border-bottom:   #ADC8E2 groove 3px;
@@ -200,6 +205,10 @@ Tabs
     border-bottom: #7030A0 solid 3px;
   }
 
+  .tabs.tabs.subtabs.process-cooling-assessment {
+    border-bottom: #009885 solid 3px;
+  }
+
   .tabs.subtabs.water-assessment {
     border-bottom: #3055cf solid 3px;
   }
@@ -247,6 +256,8 @@ Tabs
     .tabs.subtabs.compressed-air .active.missing-data .step-number,
     .tabs.subtabs.water-assessment .missing-data .step-number,
     .tabs.subtabs.water-assessment .active.missing-data .step-number,
+    .tabs.subtabs.process-cooling-assessment .missing-data .step-number,
+    .tabs.subtabs.process-cooling-assessment .active.missing-data .step-number,
     .tabs.subtabs.progress-tabs.pump-inventory.missing-data {
       background: red;
     }
@@ -262,7 +273,9 @@ Tabs
     .tabs.subtabs.waste-water .active.input-error .step-number,
     .tabs.subtabs.waste-water .input-error .step-number,
     .tabs.subtabs.compressed-air .active.input-error .step-number,
-    .tabs.subtabs.compressed-air .input-error .step-number,  
+    .tabs.subtabs.compressed-air .input-error .step-number, 
+    .tabs.subtabs.process-cooling-assessment .active.input-error .step-number,
+    .tabs.subtabs.process-cooling-assessment .input-error .step-number,  
     .tabs.subtabs.water-assessment .active.input-error .step-number,
     .tabs.subtabs.water-assessment .input-error .step-number
     {
@@ -281,6 +294,8 @@ Tabs
     .tabs.subtabs.waste-water .success .step-number,
     .tabs.subtabs.compressed-air.active.success .step-number,
     .tabs.subtabs.compressed-air .success .step-number,
+    .tabs.subtabs.process-cooling-assessment.active.success .step-number,
+    .tabs.subtabs.process-cooling-assessment .success .step-number,
     .tabs.subtabs.water-assessment.active.success .step-number,
     .tabs.subtabs.water-assessment .success .step-number  {
       background: green;
@@ -315,6 +330,10 @@ Tabs
 
       .tabs.subtabs.compressed-air .active .step-number {
         background: #7030A0;
+      }
+
+      .tabs.subtabs.process-cooling-assessment .active .step-number {
+        background: #009885;
       }
 
       .tabs.subtabs.water-assessment .active .step-number {

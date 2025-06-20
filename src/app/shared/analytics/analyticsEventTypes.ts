@@ -11,6 +11,7 @@ export type AnalyticsEventString = 'page_view' |
     'view-waste-water-assessment' |
     'view-compressed-air-assessment' |
     'view-water-assessment' |
+    'view-process-cooling-assessment' |
     'create-inventory' |
     'view-motor-inventory' |
     'view-pump-inventory' |

@@ -13,6 +13,7 @@ import { environment } from '../../environments/environment';
 
 import { DashboardService } from './dashboard.service';
 import { WaterAssessment } from 'process-flow-lib';
+import { ProcessCoolingAssessment } from '../shared/models/process-cooling-assessment';
 
 @Injectable()
 export class AssessmentService {
@@ -75,6 +76,11 @@ export class AssessmentService {
         this.startingTab = 'assessment';
       }
       itemSegment = '/compressed-air/';
+    } else if (assessment.type == 'ProcessCooling') {
+      if (assessment.processCooling.setupDone && !mainTab && !assessment.isExample) {
+        this.startingTab = 'assessment';
+      }
+      itemSegment = '/process-cooling/';
     } else if (assessment.type == 'Water') {
       // todo check setupDone or validation
       if (assessment.water && !mainTab && !assessment.isExample) {
@@ -440,6 +446,22 @@ export class AssessmentService {
         numberOfDays: 365,
         profileDataType: "percentCapacity"
       }]
+    }
+  }
+
+    getNewProcessCoolingAssessment(settings: Settings): ProcessCoolingAssessment {
+    return {
+      name: 'Baseline',
+      modifications: new Array(),
+      setupDone: false,
+      systemBasics: {
+        utilityType: 'Electricity',
+        electricityCost: settings.electricityCost,
+        notes: undefined
+      },
+      systemInformation: {
+      },
+      inventory: new Array(),
     }
   }
 
