@@ -42,7 +42,6 @@ export class CoreComponent implements OnInit {
   showSubscribeModal: boolean = false;
 
   // * Modals
-  modalOpenSub: Subscription;
   showEmailMeasurDataModalSub: Subscription;
   showEmailMeasurDataModal: boolean;
   showImportBackupModalSubscription: Subscription;
@@ -60,6 +59,8 @@ export class CoreComponent implements OnInit {
   emailVisibilitySubscription: Subscription;
   showExportToJustifiModal: boolean = false;
   showExportToJustifiModalSub: Subscription;
+  showShareDataModal: boolean = false;
+  showShareDataModalSub: Subscription;
 
   constructor(public electronService: ElectronService,
     private assessmentService: AssessmentService,
@@ -163,6 +164,10 @@ export class CoreComponent implements OnInit {
     this.showExportToJustifiModalSub = this.exportToJustifiTemplateService.showExportToJustifiModal.subscribe(val => {
       this.showExportToJustifiModal = val;
     });
+
+    this.showShareDataModalSub = this.coreService.showShareDataModal.subscribe((showShareDataModal: boolean) => {
+      this.showShareDataModal = showShareDataModal;
+    });
   }
 
 
@@ -182,6 +187,7 @@ export class CoreComponent implements OnInit {
     this.subscribeModalSub.unsubscribe();
     this.emailVisibilitySubscription.unsubscribe();
     this.showExportToJustifiModalSub.unsubscribe();
+    this.showShareDataModalSub.unsubscribe();
   }
 
   async initData() {

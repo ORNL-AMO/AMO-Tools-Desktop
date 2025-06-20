@@ -10,7 +10,6 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { Subscription } from 'rxjs';
 import { PrintOptions } from '../../shared/models/printing';
 import { PsatService } from '../psat.service';
-import { ExportToJustifiTemplateService } from '../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 
 @Component({
     selector: 'app-psat-report',
@@ -55,7 +54,7 @@ export class PsatReportComponent implements OnInit {
 
   constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private settingsService: SettingsService, private printOptionsMenuService: PrintOptionsMenuService,
-    private psatService: PsatService, private exportToJustifiTemplateService: ExportToJustifiTemplateService) { }
+    private psatService: PsatService) { }
 
   ngOnInit() {
     this.createdDate = new Date();
@@ -183,9 +182,5 @@ export class PsatReportComponent implements OnInit {
 
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
-  }
-
-  showExportToJustifi() {
-    this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { FSAT, FsatOutput } from '../../shared/models/fans';
+import { FSAT } from '../../shared/models/fans';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
@@ -10,8 +10,6 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { Subscription } from 'rxjs';
 import { PrintOptions } from '../../shared/models/printing';
 import { FsatService } from '../fsat.service';
-import { ExportToJustifiTemplateService } from '../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
-
 
 @Component({
   selector: 'app-fsat-report',
@@ -57,7 +55,7 @@ export class FsatReportComponent implements OnInit {
 
   constructor(private fsatService: FsatService, private printOptionsMenuService: PrintOptionsMenuService,
     private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
-    private settingsService: SettingsService, private exportToJustifiTemplateService: ExportToJustifiTemplateService) { }
+    private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.createdDate = new Date();
@@ -182,9 +180,5 @@ export class FsatReportComponent implements OnInit {
 
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
-  }
-
-  showExportToJustifi() {
-    this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
   }
 }

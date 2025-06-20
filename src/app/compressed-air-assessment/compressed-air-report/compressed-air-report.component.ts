@@ -11,7 +11,6 @@ import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-o
 import { CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, BaselineResults, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../explore-opportunities/explore-opportunities-validation.service';
-import { ExportToJustifiTemplateService } from '../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 
 @Component({
   selector: 'app-compressed-air-report',
@@ -53,7 +52,7 @@ export class CompressedAirReportComponent implements OnInit {
   tabsCollapsed: boolean = true;
   constructor(private settingsDbService: SettingsDbService, private printOptionsMenuService: PrintOptionsMenuService, private directoryDbService: DirectoryDbService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService, private exportToJustifiTemplateService: ExportToJustifiTemplateService) { }
+    private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -165,9 +164,5 @@ export class CompressedAirReportComponent implements OnInit {
 
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
-  }
-
-  showExportToJustifi() {
-    this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
   }
 }
