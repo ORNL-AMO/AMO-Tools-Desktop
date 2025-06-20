@@ -10,7 +10,6 @@ import { Subscription } from 'rxjs';
 import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { PhastValidService } from '../phast-valid.service';
-import { ExportToJustifiTemplateService } from '../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 
 @Component({
   selector: 'app-phast-report',
@@ -56,8 +55,7 @@ export class PhastReportComponent implements OnInit {
     private directoryDbService: DirectoryDbService,
     private printOptionsMenuService: PrintOptionsMenuService,
     private phastValidService: PhastValidService,
-    private settingsService: SettingsService,
-    private exportToJustifiTemplateService: ExportToJustifiTemplateService) { }
+    private settingsService: SettingsService) { }
 
   ngOnInit() {
     // this.initPrintLogic();
@@ -178,9 +176,5 @@ export class PhastReportComponent implements OnInit {
   }
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
-  }
-
-  showExportToJustifi() {
-    this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
   }
 }

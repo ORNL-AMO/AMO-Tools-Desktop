@@ -40,6 +40,8 @@ export class CoreService {
   exampleCompressedAirAssessmentId: number;
   exampleWaterAssessmentId: number;
   exampleWaterDiagramId: number;
+
+  showShareDataModal: BehaviorSubject<boolean>;
   constructor(
     private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,
@@ -49,6 +51,7 @@ export class CoreService {
     private diagramIdbService: DiagramIdbService,
     private applicationDataService: ApplicationInstanceDbService,
     private directoryDbService: DirectoryDbService) {
+      this.showShareDataModal = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultSettingsObject(): Settings {

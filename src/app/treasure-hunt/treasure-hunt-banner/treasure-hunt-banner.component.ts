@@ -6,6 +6,7 @@ import { CalculatorsService } from '../calculators/calculators.service';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
+import { CoreService } from '../../core/core.service';
 
 @Component({
     selector: 'app-treasure-hunt-banner',
@@ -27,7 +28,8 @@ export class TreasureHuntBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   constructor(private treasureHuntService: TreasureHuntService, 
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private calculatorsService: CalculatorsService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+    private dashboardService: DashboardService, private calculatorsService: CalculatorsService, 
+    private securityAndPrivacyService: SecurityAndPrivacyService, private coreService: CoreService) { }
 
   ngOnInit() {
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
@@ -119,14 +121,13 @@ export class TreasureHuntBannerComponent implements OnInit {
     this.treasureHuntService.showExportModal.next(true);
   }
 
-  emailTreasureHuntData() {
+  openShareDataModal() {
     this.emailMeasurDataService.measurItemAttachment = {
       itemType: 'assessment',
       itemName: this.assessment.name,
       itemData: this.assessment
     }
     this.emailMeasurDataService.emailItemType.next('TreasureHunt');
-    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
+    this.coreService.showShareDataModal.next(true);
   }
-
 }

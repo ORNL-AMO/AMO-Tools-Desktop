@@ -47,6 +47,7 @@ import { SubscribeToastComponent } from '../shared/subscribe-toast/subscribe-toa
 import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-subscribe.service';
 import { SubscribeModalComponent } from '../shared/subscribe-modal/subscribe-modal.component';
 import { ExportToJustifiModalModule } from '../shared/export-to-justifi-modal/export-to-justifi-modal.module';
+import { ShareDataModalModule } from '../shared/share-data-modal/share-data-modal.module';
 
 @NgModule({
   declarations: [
@@ -94,7 +95,8 @@ import { ExportToJustifiModalModule } from '../shared/export-to-justifi-modal/ex
     UpdateApplicationModule,
     SubscribeToastComponent,
     SubscribeModalComponent,
-    ExportToJustifiModalModule
+    ExportToJustifiModalModule,
+    ShareDataModalModule
   ],
   providers: [
     AssessmentService,
