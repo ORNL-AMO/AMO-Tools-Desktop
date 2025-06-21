@@ -77,6 +77,12 @@
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
       </td>
     </tr>
+    <tr *ngIf="compressorControlAdjustment">
+      <td class="bold w-50">Compressor Control Adjustment</td>
+      <td class="text-center w-50">
+        {{compressorControlAdjustment | number:'1.0-1'}}%
+      </td>
+    </tr>
     <tr>
       <td class="bold w-50">Compressed Air Use</td>
       <td class="text-center w-50">
