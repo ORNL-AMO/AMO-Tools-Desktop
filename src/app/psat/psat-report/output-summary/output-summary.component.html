@@ -2,7 +2,7 @@
 
   <h4 class="show-print">Report Results</h4>
 
-  <table class="table table-hover table-striped">
+  <table #copyTable class="table table-hover table-striped">
     <thead>
       <tr>
         <th [ngStyle]="{'width.%': 100 /(psat.modifications.length+2)}"></th>
@@ -341,3 +341,6 @@
     </div>   
   </div> 
 </div>
+
+<app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>

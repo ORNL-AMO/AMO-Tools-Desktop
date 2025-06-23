@@ -57,7 +57,7 @@ export const MockPumpInventory: InventoryItem = {
                             "pumpType": 6,
                             "shaftOrientation": 0,
                             "shaftSealType": 0,
-                            "numStages": 33,
+                            "numStages": 1,
                             "inletDiameter": 30,
                             "outletDiameter": 32,
                             "maxWorkingPressure": 33,

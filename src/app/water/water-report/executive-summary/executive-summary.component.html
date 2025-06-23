@@ -5,7 +5,7 @@
         [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
     } @else if (baselineResults && modificationResults) {
     <h4 class="show-print print-section-header">Plant Annual Water Use and Cost Summary</h4>
-    <table class="table table-striped table-hover">
+    <table #copyTable1 class="table table-striped table-hover">
         <thead>
             <tr>
                 <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">Facility-wide Source Water Intake</th>
@@ -63,9 +63,11 @@
 
         </tbody>
     </table>
+    <app-exportable-results-table [tableString]="copyTable1String"
+    (updateTableString)="updateCopyTable1String()"></app-exportable-results-table>
 
 
-    <table class="table table-striped table-hover mt-5">
+    <table #copyTable2 class="table table-striped table-hover mt-5">
         <thead>
             <tr>
                 <th [ngStyle]="{'width.%': 100 /(modificationResults.length+2)}">True Cost of Water</th>
@@ -108,12 +110,12 @@
             <tr class="bold-row">
                 <td>True Cost / Direct Cost</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    <span *ngIf="baselineResults.trueOverDirectResult">${{baselineResults.trueOverDirectResult |
+                    <span *ngIf="baselineResults.trueOverDirectResult">{{baselineResults.trueOverDirectResult |
                         number:'1.0-2'}}</span>
                     <span *ngIf="!baselineResults.trueOverDirectResult">&mdash;&mdash;</span>
                 </td>
                 <td *ngFor="let result of modificationResults; let index = index;">
-                    <span *ngIf="result.trueOverDirectResult">${{result.value
+                    <span *ngIf="result.trueOverDirectResult">{{result.value
                         | number:'1.0-2'}}</span>
                     <span *ngIf="!result.trueOverDirectResult">&mdash;
                         &mdash;</span>
@@ -122,6 +124,8 @@
 
         </tbody>
     </table>
+    <app-exportable-results-table [tableString]="copyTable2String"
+    (updateTableString)="updateCopyTable2String()"></app-exportable-results-table>
 
     }
 

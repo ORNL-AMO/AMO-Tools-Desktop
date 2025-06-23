@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT, FsatOperations } from '../../../../shared/models/fans';
 
@@ -20,7 +20,8 @@ export class FanOperationsSummaryComponent implements OnInit {
 
   fsatOperations: { baseline: FsatOperations, modifications: Array<FsatOperations> };
 
-
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any; 
 
 
   collapse: boolean = true;
@@ -80,4 +81,7 @@ export class FanOperationsSummaryComponent implements OnInit {
     this.collapse = !this.collapse;
   }
 
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
 }

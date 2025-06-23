@@ -6,7 +6,7 @@
         [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
         [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
     } @else {
-    <table class="table table-bordered table-striped table-hover">
+    <table #copyTable class="table table-bordered table-striped table-hover">
         <thead>
             <tr class="text-center header-highlight">
                 <th rowspan="2">
@@ -119,6 +119,8 @@
             </tr>
         </tfoot>
     </table>
+    <app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
     }
 
 

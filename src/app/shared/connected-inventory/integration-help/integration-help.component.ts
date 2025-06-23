@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { AssessmentType, InventoryType } from '../integrations';
+import { InventoryType } from '../integrations';
+import { AssessmentType } from '../../models/assessment';
 
 @Component({
     selector: 'app-integration-help',

@@ -27,11 +27,14 @@ export class DayTypeGraphService {
   setDayTypeScatterPlotData() {
     let dayTypeScatterPlotData = new Array();
     let dayTypeSummaries = this.dayTypeAnalysisService.dayTypeSummaries.getValue();
+    console.time("dayTypeSummaries");
     dayTypeSummaries.forEach(summary => {
       let dayAveragesGraphData: DayTypeGraphItem = this.getDayTypeSummaryAvgGraphData(summary);
       dayTypeScatterPlotData.push(dayAveragesGraphData);
     });
     this.dayTypeScatterPlotData.next(dayTypeScatterPlotData);
+    console.log("dayTypeScatterPlotData", dayTypeScatterPlotData);
+    console.timeEnd("dayTypeSummaries");
   }
 
   getDayTypeSummaryAvgGraphData(dayTypeSummary: DayTypeSummary): DayTypeGraphItem {
@@ -39,7 +42,7 @@ export class DayTypeGraphService {
     let yData: Array<number> = new Array();
     let selectedDataField: LogToolField = this.dayTypeAnalysisService.selectedDataField.getValue();
     dayTypeSummary.dayAveragesByInterval.forEach(intervalAverage => {
-      let currentFieldAverageValue: number = _.find(intervalAverage.averages, (averageObj) => { return averageObj.field.fieldName == selectedDataField.fieldName }).value;
+      let currentFieldAverageValue: number = _.find(intervalAverage.averages, (averageObj) => { return averageObj.field.fieldId == selectedDataField.fieldId }).value;
         xData.push(intervalAverage.intervalDisplayString);
       yData.push(currentFieldAverageValue);
     });
@@ -50,11 +53,13 @@ export class DayTypeGraphService {
 
   setIndividualDayScatterPlotData() {
     let individualDayScatterPlotData = new Array();
+    console.time("individualDayScatterPlotData");
     this.logToolDataService.logToolDays.forEach((logToolDay) => {
       let dayAverages: DayTypeGraphItem = this.getGraphDayAverages(logToolDay);
       individualDayScatterPlotData.push(dayAverages);
     });
     this.individualDayScatterPlotData.next(individualDayScatterPlotData);
+    console.timeEnd("individualDayScatterPlotData");
   }
 
   updateIndividualDayScatterPlotDataColors() {

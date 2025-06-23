@@ -7,6 +7,7 @@ export interface WasteWater {
     systemBasics: SystemBasics,
     setupDone?: boolean,
     existingDataUnits?: string
+    selectedModificationId?: string
 }
 
 export interface WasteWaterOperations {
@@ -43,7 +44,7 @@ export interface ActivatedSludgeData {
     Temperature: number,
     So: number,
     isUserDefinedSo: boolean,
-    influentCBODBefore : number,
+    influentCBODBefore: number,
     clarifierEfficiency: number,
     Volume: number,
     FlowRate: number,

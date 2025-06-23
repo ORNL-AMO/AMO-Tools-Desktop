@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
@@ -29,6 +29,12 @@ export class ExecutiveSummaryComponent {
   baselineResults: ExecutiveSummaryResults;
   modificationResults: ExecutiveSummaryResults[] = [];
   isDiagramValid: boolean;
+
+  @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;  
+  copyTable1String: any;
+
+  @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;  
+  copyTable2String: any;
 
   constructor(
     private waterAssessmentResultsService: WaterAssessmentResultsService,
@@ -61,6 +67,14 @@ export class ExecutiveSummaryComponent {
   getFlowDecimalPrecisionPipeValue(): string {
     let pipeVal = `1.0-${this.settings.flowDecimalPrecision}`;
     return pipeVal;
+  }
+
+  updateCopyTable1String() {
+    this.copyTable1String = this.copyTable1.nativeElement.innerText;
+  }
+  
+   updateCopyTable2String() {
+    this.copyTable2String = this.copyTable2.nativeElement.innerText;
   }
 
 }

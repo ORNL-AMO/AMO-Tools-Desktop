@@ -22,6 +22,7 @@ export interface SSMT {
     outputData?: SSMTOutput;
     valid?: SsmtValid;
     existingDataUnits?: string;
+    selectedModificationId?: string
 }
 
 export interface SSMTInputs {
@@ -111,6 +112,7 @@ export interface GeneralSteamOperations {
 
 export interface Modification {
     ssmt?: SSMT;
+    modificationId?: string;
     exploreOpportunities?: boolean;
     exploreOppsShowOperationsData?: SavingsOpportunity,
     exploreOppsShowUnitCosts?: SavingsOpportunity,
@@ -190,17 +192,16 @@ export interface SsmtValid {
     headerValid: boolean;
     turbineValid: boolean;
     operationsValid: boolean;
-  } 
-  
-  export interface DiagramData
-{
-  name: string,
-  inputData: SSMTInputs,
-  outputData: SSMTOutput,
-  valid: SsmtValid
+}
+
+export interface DiagramData {
+    name: string,
+    inputData: SSMTInputs,
+    outputData: SSMTOutput,
+    valid: SsmtValid
 };
 
-export interface SSMTResults { 
-    inputData: SSMTInputs, 
-    outputData: SSMTOutput 
+export interface SSMTResults {
+    inputData: SSMTInputs,
+    outputData: SSMTOutput
 }

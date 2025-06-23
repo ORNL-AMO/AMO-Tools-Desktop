@@ -1,4 +1,6 @@
-export const treasureHuntUtilityOptions: Array<string> = [
+import { OpportunityUtilityType } from "../../shared/models/treasure-hunt";
+
+export const treasureHuntUtilityOptions: Array<OpportunityUtilityType> = [
   'Natural Gas',
   'Other Fuel',
   'Electricity',
