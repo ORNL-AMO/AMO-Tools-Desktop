@@ -17,6 +17,7 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
 import { ExistingCompressorDbService } from './existing-compressor-db.service';
 import { CompressorDataManagementService } from './compressor-data-management.service';
 import { ConvertCompressedAirInventoryService } from './convert-compressed-air-inventory.service';
+import { SummaryFilterComponent } from './compressed-air-inventory-banner/summary-filter/summary-filter.component';
 
 
 
@@ -24,6 +25,7 @@ import { ConvertCompressedAirInventoryService } from './convert-compressed-air-i
   declarations: [
     CompressedAirInventoryComponent,
     CompressedAirInventoryBannerComponent,
+    SummaryFilterComponent
   ],
   imports: [
     CommonModule,
