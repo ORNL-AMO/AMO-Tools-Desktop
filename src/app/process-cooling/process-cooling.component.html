@@ -23,8 +23,8 @@
       [ngStyle]="{'height.px': containerHeight}">
       <app-system-basics *ngIf="setupTab == 'assessment-settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
         [assessment]="assessment"></app-system-basics>
-      <!-- <app-system-information *ngIf="setupTab == 'system-information'"></app-system-information> -->
-      <!-- <app-inventory *ngIf="setupTab == 'inventory'"></app-inventory> -->
+      <app-system-information *ngIf="setupTab == 'system-information'"></app-system-information>
+      <app-chiller-inventory *ngIf="setupTab == 'inventory'"></app-chiller-inventory>
     </div>
     <!-- <div *ngIf="setupTab != 'system-profile'" class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
       <app-results-panel></app-results-panel>

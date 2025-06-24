@@ -23,6 +23,11 @@ import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
 import { ProcessCoolingReportComponent } from './process-cooling-report/process-cooling-report.component';
 import { ProcessCoolingReportService } from './process-cooling-report/process-cooling-report.service';
+import { ChillerInventoryService } from './chiller-inventory/chiller-inventory.service';
+import { ResultsPanelComponent } from './results-panel/results-panel.component';
+import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
+import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
+import { ChillerInventoryComponent } from './chiller-inventory/chiller-inventory.component';
 
 
 
@@ -32,7 +37,11 @@ import { ProcessCoolingReportService } from './process-cooling-report/process-co
     SetupTabsComponent,
     ProcessCoolingBannerComponent,
     SystemBasicsComponent,
-    ProcessCoolingReportComponent
+    ProcessCoolingReportComponent,
+    ChillerInventoryComponent,
+    ResultsPanelComponent,
+    HelpPanelComponent,
+    InventoryTableComponent
   ],
   imports: [
     CommonModule,
@@ -56,7 +65,8 @@ import { ProcessCoolingReportService } from './process-cooling-report/process-co
     ProcessCoolingService,
     SystemBasicsFormService,
     ConvertProcessCoolingService,
-    ProcessCoolingReportService
+    ProcessCoolingReportService,
+    ChillerInventoryService
   ]
 })
 export class ProcessCoolingModule { }

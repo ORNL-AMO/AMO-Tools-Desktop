@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { ProcessCoolingService, ProcessCoolingSetupTabString } from '../../process-cooling.service';
+import { ChillerInventoryService } from '../../chiller-inventory/chiller-inventory.service';
 
 @Component({
   selector: 'app-setup-tabs',
@@ -26,7 +27,8 @@ export class SetupTabsComponent {
   processCoolingAssessmentSub: Subscription;
   settingsSub: Subscription;
   settings: Settings;
-  constructor(private processCoolingAssessmentService: ProcessCoolingService) { }
+  constructor(private processCoolingAssessmentService: ProcessCoolingService,
+    private inventoryService: ChillerInventoryService) { }
 
   ngOnInit(): void {
     this.settingsSub = this.processCoolingAssessmentService.settings.subscribe(val => {
@@ -49,20 +51,19 @@ export class SetupTabsComponent {
   }
 
   setTabStatus() {
-    let hasValidSystemBasics: boolean = false;
-    let hasValidInventory: boolean = false;
-    let canViewInventory: boolean = false;
-
+    let hasValidInventory: boolean = this.inventoryService.hasValidChillers(this.processCoolingAssessmentService.processCooling.getValue());
+    let hasValidSystemInformation: boolean = true;
+    let canViewInventory: boolean = true;
 
     let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
     if (processCoolingAssessment && this.settings) {
-      canViewInventory = hasValidSystemBasics;
+      canViewInventory = hasValidSystemInformation;
     }
     this.setSystemBasicsStatus();
     this.setInventoryStatus(hasValidInventory, canViewInventory);
 
 
-    if ((hasValidInventory || hasValidSystemBasics) || (this.setupTab == 'assessment-settings')) {
+    if ((hasValidInventory || hasValidSystemInformation) || (this.setupTab == 'assessment-settings')) {
       this.canContinue = true;
     } else {
       this.canContinue = false;
@@ -90,13 +91,13 @@ export class SetupTabsComponent {
     }
   }
 
-    setInventoryStatus(hasValidCompressors: boolean, canViewInventory: boolean) {
+  setInventoryStatus(hasValidInventory: boolean, canViewInventory: boolean) {
     this.inventoryStatus = [];
     if (!canViewInventory) {
       this.inventoryStatus.push('disabled');
       this.disabledSetupTabs.push('inventory')
     }
-    if (canViewInventory && !hasValidCompressors) {
+    if (canViewInventory && !hasValidInventory) {
       this.inventoryStatus.push("missing-data");
     }
     if (this.setupTab == "inventory") {

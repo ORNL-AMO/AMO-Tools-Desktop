@@ -16,7 +16,7 @@
     <li [ngClass]="inventoryStatus">
         <a (click)="changeSetupTab('inventory')">
             <span (mouseenter)="showTooltip(inventoryBadge)" (mouseleave)="hideTooltip(inventoryBadge)"
-                class="step-number">3</span>Inventory</a>
+                class="step-number">3</span>Chiller Inventory</a>
         <!-- <app-tabs-tooltip [badgeClass]="aeratorPerformanceClassStatus[0]" [reveal]="aeratorPerformanceBadge.display"
             [display]="aeratorPerformanceBadge.hover"></app-tabs-tooltip> -->
     </li>
@@ -41,12 +41,12 @@
                 Information</a> 
 
         </li>
-        <!-- <li class="page-item" [ngClass]="inventoryStatus" *ngIf="setupTab == 'inventory'">
+        <li class="page-item" [ngClass]="inventoryStatus" *ngIf="setupTab == 'inventory'">
             <a class="nav-link small" (click)="changeSetupTab('inventory')">
                 <span (mouseenter)="showTooltip(inventoryBadge)" (mouseleave)="hideTooltip(inventoryBadge)"
-                    class="step-number">3</span>Inventory</a>
+                    class="step-number">3</span>Chiller Inventory</a>
 
-        </li> -->
+        </li>
         <!-- <li class="page-item" [ngClass]="dayTypesClassStatus" *ngIf="setupTab == 'day-types'">
             <a class="nav-link small" (click)="changeSetupTab('day-types')">
                 <span (mouseenter)="showTooltip(dayTypesBadge)" (mouseleave)="hideTooltip(dayTypesBadge)"

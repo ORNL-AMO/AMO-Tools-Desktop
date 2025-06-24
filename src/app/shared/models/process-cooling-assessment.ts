@@ -7,7 +7,7 @@ export interface ProcessCoolingAssessment {
     selected?: boolean;
     systemBasics: ProcessCoolingSystemBasics,
     systemInformation: any,
-    inventory: Array<any>,
+    inventory: Array<ChillerInventoryItem>,
     modifications: Array<Modification>;
 }
 
@@ -31,6 +31,13 @@ export interface ProcessCoolingSystemBasics {
 
 export interface ProcessCoolingAssessmentResults {
 
+}
+
+export interface ChillerInventoryItem {
+    itemId: string;
+    name: string;
+    description?: string;
+    modifiedDate: Date;
 }
 
 export type CoolingMethodString = 'air' | 'water' ;
