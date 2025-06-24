@@ -1,0 +1,22 @@
+.nav-btn:hover {
+    background-color: #808B96;
+}
+
+.nav-btn {
+    background: #7030A0;
+    color: white;
+    border: none;
+    line-height: 2;
+}
+
+.nav-btn-clear {
+    background: #6D757C;
+    color: white;
+    border: none;
+    line-height: 2;
+}
+
+
+.nav-item {
+    margin-left: .2rem;
+}
