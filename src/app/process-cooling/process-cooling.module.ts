@@ -18,6 +18,11 @@ import { ProcessCoolingBannerComponent } from './process-cooling-banner/process-
 import { SetupTabsComponent } from './process-cooling-banner/setup-tabs/setup-tabs.component';
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 import { CommonModule } from '@angular/common';
+import { SystemBasicsFormService } from './system-basics/system-basics-form.service';
+import { SystemBasicsComponent } from './system-basics/system-basics.component';
+import { ConvertProcessCoolingService } from './convert-process-cooling.service';
+import { ProcessCoolingReportComponent } from './process-cooling-report/process-cooling-report.component';
+import { ProcessCoolingReportService } from './process-cooling-report/process-cooling-report.service';
 
 
 
@@ -25,7 +30,9 @@ import { CommonModule } from '@angular/common';
    declarations: [
     ProcessCoolingComponent,
     SetupTabsComponent,
-    ProcessCoolingBannerComponent
+    ProcessCoolingBannerComponent,
+    SystemBasicsComponent,
+    ProcessCoolingReportComponent
   ],
   imports: [
     CommonModule,
@@ -47,6 +54,9 @@ import { CommonModule } from '@angular/common';
   ],
   providers: [
     ProcessCoolingService,
+    SystemBasicsFormService,
+    ConvertProcessCoolingService,
+    ProcessCoolingReportService
   ]
 })
 export class ProcessCoolingModule { }

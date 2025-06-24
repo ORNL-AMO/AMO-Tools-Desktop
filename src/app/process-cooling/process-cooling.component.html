@@ -18,15 +18,15 @@
   </div>
 
   <div *ngIf="mainTab == 'baseline'" class="assessment-container tab-content">
-    <!-- <div class="assessment-panel-container lookup-form modification scroll-item" *ngIf="setupTab !='system-profile'"
+    <div class="assessment-panel-container lookup-form modification scroll-item" *ngIf="setupTab !='operating-schedule'"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}"
       [ngStyle]="{'height.px': containerHeight}">
-      <app-system-basics *ngIf="setupTab == 'system-basics'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
+      <app-system-basics *ngIf="setupTab == 'assessment-settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
         [assessment]="assessment"></app-system-basics>
-      <app-system-information *ngIf="setupTab == 'system-information'"></app-system-information>
-      <app-inventory *ngIf="setupTab == 'inventory'"></app-inventory>
+      <!-- <app-system-information *ngIf="setupTab == 'system-information'"></app-system-information> -->
+      <!-- <app-inventory *ngIf="setupTab == 'inventory'"></app-inventory> -->
     </div>
-    <div *ngIf="setupTab != 'system-profile'" class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+    <!-- <div *ngIf="setupTab != 'system-profile'" class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
       <app-results-panel></app-results-panel>
     </div> -->
     <!-- <div *ngIf="setupTab == 'system-profile'" class="w-100 scroll-item bg-white"
@@ -48,22 +48,18 @@
 
 
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment' && !showModificationList" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
+  <!-- <div *ngIf="mainTab == 'assessment' && !showModificationList" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
     class="assessment-tab-container tab-content">
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight">
     </app-explore-opportunities>
-  </div>
+  </div> -->
 
   <!--Report-->
   <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
       <app-process-cooling-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
       </app-process-cooling-report>
   </div>
-  <!--calculators-->
-  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
-    <app-process-cooling-calculators [assessment]="assessment">
-    </app-process-cooling-calculators>
-  </div>
+
 
 
   <!--footer-->
