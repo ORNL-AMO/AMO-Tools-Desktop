@@ -19,7 +19,12 @@ export const MockProcessCoolingAssessment: Assessment =  {
         "systemBasics": {
             "utilityType": "Electricity",
             "electricityCost": 0.066,
-            "notes": undefined
+            "fuelCost": 3.99,
+            "notes": undefined,
+            "location": 53704,
+            "numberOfChillers": 1,
+            "waterSupplyTemperature": 50,
+            "condenserCoolingMethod": 'air',
         },
         "systemInformation": {
             "co2SavingsData": {

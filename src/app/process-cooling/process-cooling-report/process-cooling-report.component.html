@@ -1,0 +1,126 @@
+<div class="assessment-report report-in-process-cooling process-cooling"
+    [ngClass]="{'assessment-report-padding': inAssessment, 'report-in-rollup': inRollup}">
+    <div *ngIf="inAssessment" class="report-cover">
+        <img src="assets/images/DOE-banner-color.svg" class="doe-logo">
+
+        <div class="report-title">
+            <h4>Process Cooling Report:</h4>
+            <h4>{{assessment.name}}</h4>
+            <h5>{{createdDate| date:'short'}}</h5>
+        </div>
+
+        <p class="report-notes">{{reportNotes}}</p>
+    </div>
+
+    <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': inAssessment}">
+        <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
+        
+        <!-- Assessment view -->
+        <div *ngIf="assessment && inAssessment" class="row">
+            <div class="col-12 p-2">
+                    <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+                        {{directory.name}} / {{assessment.name}}
+                    </span>
+                    <span class="ml-3 date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
+                    <button class="mt-0 btn btn-secondary pull-right hide-print" (click)="print()">Print</button>
+            </div>
+        </div>
+
+        <!-- Rollup view -->
+        <div *ngIf="assessment && !inAssessment" class="row assessment-name">
+            <div class="col-12">
+                <h2 class="assessment-title">
+                    <div class="d-flex">
+                        <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+                            {{directory.name}} /
+                        </span>
+                    </div>
+                    {{assessment.name}}
+
+                </h2>
+            </div>
+            <div class="col-12">
+                <h2 class="date-modified">
+                    <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="showPrintDiv && !inRollup" class="hide-print print-div row justify-content-center">
+        <div class="col-12 print-col">
+            <h4>Building Print View</h4>
+            <h5>One Moment Please</h5>
+            <span class="fa fa-print"></span>
+            <div class="spinner">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="report-data" *ngIf="assessment.processCooling">
+        <div class="d-none d-lg-flex">
+            <ul #reportBtns class="tabs primary hide-print">
+                <li (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary'}">
+                    <a>Executive Summary</a>
+                </li>
+                <li (click)="setTab('pump-summary')" [ngClass]="{'active': currentTab == 'pump-summary'}">
+                    <a>Pump Summary</a>
+                </li>
+                <li (click)="setTab('tower-summary')" [ngClass]="{'active': currentTab == 'tower-summary'}">
+                    <a>Tower Summary</a>
+                </li>
+                <li (click)="setTab('graphs')" [ngClass]="{'active': currentTab == 'graphs'}">
+                    <a>Graphs</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="d-flex d-lg-none flex-column">
+            <div #reportBtns class="tabs primary hide-print">
+                <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
+                    <span *ngIf="!tabsCollapsed" class="fa fa-caret-up pr-2"></span>
+                    <span *ngIf="tabsCollapsed" class="fa fa-caret-down pr-2"></span>
+                    <span class="small text-uppercase">Menu</span>
+                </div>
+                <div (click)="setTab('executive-summary')" [ngClass]="{'active': currentTab == 'executive-summary', 'collapse': tabsCollapsed}">
+                    <a>Executive Summary</a>
+                </div>
+                <div (click)="setTab('pump-summary')" [ngClass]="{'active': currentTab == 'pump-summary', 'collapse': tabsCollapsed}">
+                    <a>Pump Summary</a>
+                </div>
+                <div (click)="setTab('tower-summary')" [ngClass]="{'active': currentTab == 'tower-summary', 'collapse': tabsCollapsed}">
+                    <a>Tower Summary</a>
+                </div>
+                <div (click)="setTab('graphs')" [ngClass]="{'active': currentTab == 'graphs', 'collapse': tabsCollapsed}">
+                    <a>Graphs</a>
+                </div>
+                <div (click)="print()" class="hide-print"
+                    [ngClass]="{'collapse': tabsCollapsed}">
+                    <a>Print</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="(currentTab == 'executive-summary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-executive-summary [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-executive-summary>
+        </div>
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="(currentTab == 'pump-summary' && !showPrintView) || (showPrintView && printOptions.printPumpSummaryReport)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-pump-summary-report [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-pump-summary-report>
+        </div>
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="(currentTab == 'tower-summary' && !showPrintView) || (showPrintView && printOptions.printTowerSummaryReport)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-tower-summary-report [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-tower-summary-report>
+        </div>
+    </div>
+
+</div>
+
+<app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu>

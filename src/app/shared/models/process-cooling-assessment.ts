@@ -20,6 +20,11 @@ export interface Modification {
 export interface ProcessCoolingSystemBasics {
     utilityType: string,
     electricityCost: number,
+    fuelCost: number,
+    location: number,
+    numberOfChillers: number,
+    waterSupplyTemperature: number,
+    condenserCoolingMethod: CoolingMethodString,
     notes: string
 }
 
@@ -27,3 +32,5 @@ export interface ProcessCoolingSystemBasics {
 export interface ProcessCoolingAssessmentResults {
 
 }
+
+export type CoolingMethodString = 'air' | 'water' ;

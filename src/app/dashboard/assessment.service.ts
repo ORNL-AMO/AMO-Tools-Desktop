@@ -457,7 +457,12 @@ export class AssessmentService {
       systemBasics: {
         utilityType: 'Electricity',
         electricityCost: settings.electricityCost,
-        notes: undefined
+        notes: undefined,
+        fuelCost: settings.fuelCost,
+        location: 53704,
+        numberOfChillers: 1,
+        waterSupplyTemperature: 50,
+        condenserCoolingMethod: 'air',
       },
       systemInformation: {
       },
