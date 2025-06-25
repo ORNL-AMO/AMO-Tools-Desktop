@@ -1,6 +1,7 @@
 import { getNewIdString } from "../shared/helperFunctions";
 import { Assessment } from "../shared/models/assessment";
 import { Calculator } from "../shared/models/calculators";
+import { CompressorChillerTypeEnum } from "../shared/models/process-cooling-assessment";
 import { Settings } from "../shared/models/settings";
 
 
@@ -49,6 +50,9 @@ export const MockProcessCoolingAssessment: Assessment =  {
                   name: 'New Chiller',
                   description: undefined,
                   modifiedDate: new Date(),
+                  compressorChillerType: 0,
+                  fullLoadEfficiency: 0,
+                  chillerCapacity: 0,
             
             }
         ],

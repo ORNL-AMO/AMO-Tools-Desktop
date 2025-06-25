@@ -29,12 +29,14 @@ export class ChillerInventoryComponent {
     // todo 7607 or initialize from parent
     this.initializeInventory();
     this.selectedChillerSub = this.inventoryService.selectedChiller.subscribe(val => {
-      if (val) {
         this.selectedChiller = val;
-        this.form = this.inventoryService.getFormFromChiller(val);
-        this.hasInventoryItems = true;
+        if (val) {
+          this.form = this.inventoryService.getFormFromChiller(val);
+          this.hasInventoryItems = true;
+        } else {
+          this.hasInventoryItems = false;
+        }
         // this.hasValidChillers = this.inventoryService.hasValidChillers(processCoolingAssessment);
-      }
     });
   }
 
@@ -67,9 +69,7 @@ export class ChillerInventoryComponent {
     // todo 7607 eventually process inventory item, do sideffects
     // let result: { newInventoryItem: ChillerInventoryItem, processCoolingAssessment: ProcessCoolingAssessment } = this.inventoryService.AddChillerToAssessment(processCoolingAssessment);
     let newInventoryItem = this.inventoryService.getNewInventoryItem();
-    newInventoryItem.modifiedDate = new Date();
     processCoolingAssessment.inventory.push(newInventoryItem);
-
     this.processCoolingService.updateProcessCooling(processCoolingAssessment, true);
     this.inventoryService.selectedChiller.next(newInventoryItem);
     this.hasInventoryItems = true;

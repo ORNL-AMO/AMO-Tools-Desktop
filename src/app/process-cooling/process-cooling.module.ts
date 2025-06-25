@@ -28,7 +28,10 @@ import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { ChillerInventoryComponent } from './chiller-inventory/chiller-inventory.component';
-
+import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
+import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
+import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
+import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe';
 
 
 @NgModule({
@@ -41,7 +44,11 @@ import { ChillerInventoryComponent } from './chiller-inventory/chiller-inventory
     ChillerInventoryComponent,
     ResultsPanelComponent,
     HelpPanelComponent,
-    InventoryTableComponent
+    InventoryTableComponent,
+    SystemBasicsHelpComponent,
+    InventoryHelpComponent,
+    SystemInformationHelpComponent,
+    ChillerCompressorTypePipe
   ],
   imports: [
     CommonModule,
@@ -66,7 +73,7 @@ import { ChillerInventoryComponent } from './chiller-inventory/chiller-inventory
     SystemBasicsFormService,
     ConvertProcessCoolingService,
     ProcessCoolingReportService,
-    ChillerInventoryService
+    ChillerInventoryService,
   ]
 })
 export class ProcessCoolingModule { }

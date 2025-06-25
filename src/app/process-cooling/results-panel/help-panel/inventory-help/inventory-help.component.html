@@ -1,0 +1,34 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        Inventory Help
+        <br>
+        <small class="text-muted">Enter data relating to all individual chillers within the system
+        </small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2" *ngIf="focusedField == 'chiller-name'">
+        <h6>
+           Chiller Name
+            <br>
+            <small class="text-muted">
+                The identifier for the chiller
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField == 'chiller-description'">
+        <h6>
+            Description
+            <br>
+            <small class="text-muted">
+                Give a short description about the chiller
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+
+
+</div>

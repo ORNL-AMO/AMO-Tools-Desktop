@@ -487,7 +487,9 @@ export class AssessmentService {
               name: 'New Chiller',
               description: undefined,
               modifiedDate: new Date(),
-        
+              compressorChillerType: 0,
+              fullLoadEfficiency: 0,
+              chillerCapacity: 0,
         }
       ],
     }
