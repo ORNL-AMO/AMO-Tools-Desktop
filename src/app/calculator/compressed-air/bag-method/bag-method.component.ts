@@ -131,7 +131,7 @@ export class BagMethodComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.inputs = this.bagMethodService.getExample();
+    this.inputs = this.bagMethodService.getExample(this.settings);
     this.calculateAnnualConsumption();
   }
   openOperatingHoursModal() {

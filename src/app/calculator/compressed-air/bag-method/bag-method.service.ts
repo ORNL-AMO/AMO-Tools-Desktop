@@ -39,11 +39,11 @@ export class BagMethodService {
     }
   }
 
-  getExample(): {
+  getExample(settings: Settings): {
     inputsArray: Array<BagMethodInput>,
     operatingHours: number
   } {
-    return {
+    let example = {
       operatingHours: 8760,
       inputsArray: [
         {
@@ -60,17 +60,19 @@ export class BagMethodService {
         }
       ]
     }
+
+    example.inputsArray = this.convertLeakLossEstimatorExample(example.inputsArray, settings); 
+    return example;
   }
 
   convertLeakLossEstimatorExample(inputs: Array<BagMethodInput>, settings: Settings) {
-    let tmpInputs: Array<BagMethodInput> = inputs;
     if (settings.unitsOfMeasure == 'Metric') {
-      for (let i = 0; i < tmpInputs.length; i++) {
-        tmpInputs[i].bagVolume = Math.round(this.convertUnitsService.value(tmpInputs[i].bagVolume).from('L').to('gal'));
+      for (let i = 0; i < inputs.length; i++) {
+        inputs[i].bagVolume = Math.round(this.convertUnitsService.value(inputs[i].bagVolume).from('L').to('gal'));
       }
-      return tmpInputs;
+      return inputs;
     }
-    return tmpInputs;
+    return inputs;
   }
 
 }

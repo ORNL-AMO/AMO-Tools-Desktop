@@ -199,12 +199,6 @@ export class CalculatorSuiteApiService {
       consumption: output.consumption
     }
 
-    console.log('reduction output.energyUse', output.energyUse );
-    console.log('reduction output.energyCost', output.energyCost);
-    console.log('reduction output.flowRate', output.flowRate);
-    console.log('reduction output.singleNozzeFlowRate', output.singleNozzeFlowRate);
-    console.log('reduction output.consumption', output.consumption);
-
     output.delete();
     CompressedAirReductionCalculator.delete();
     inputs.delete();
@@ -293,10 +287,6 @@ export class CalculatorSuiteApiService {
       annualTotalElectricity: output.annualTotalElectricity,
       annualTotalElectricityCost: output.annualTotalElectricityCost,
     }
-    console.log('leak output.totalFlowRate', output.totalFlowRate );
-    console.log('leak output.annualTotalFlowRate', output.annualTotalFlowRate);
-    console.log('leak output.annualTotalElectricity', output.annualTotalElectricity);
-    console.log('leak output.annualTotalElectricityCost', output.annualTotalElectricityCost);
 
     output.delete();
     CompressedAirLeakSurveyCalculator.delete();
