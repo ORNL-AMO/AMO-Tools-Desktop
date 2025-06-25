@@ -29,9 +29,8 @@ export class BagMethodService {
     let input: BagMethodInput = {
       operatingTime: 0,
       bagFillTime: 0,
-      heightOfBag: 0,
-      diameterOfBag: 0,
-      numberOfUnits: 0
+      bagVolume: 0,
+      numberOfUnits: 1
     };
     inputsArray.push(input);
     return {
@@ -40,41 +39,40 @@ export class BagMethodService {
     }
   }
 
-  getExample(): {
+  getExample(settings: Settings): {
     inputsArray: Array<BagMethodInput>,
     operatingHours: number
   } {
-    return {
-      operatingHours: 5000,
+    let example = {
+      operatingHours: 8760,
       inputsArray: [
         {
-          operatingTime: 5000,
-          bagFillTime: 300,
-          heightOfBag: 50,
-          diameterOfBag: 40,
+          operatingTime: 8760,
+          bagFillTime: 50,
+          bagVolume: 45,
           numberOfUnits: 1
         },
         {
-          operatingTime: 5000,
+          operatingTime: 8760,
           bagFillTime: 360,
-          heightOfBag: 50,
-          diameterOfBag: 48,
+          bagVolume: 60,
           numberOfUnits: 1
         }
       ]
     }
+
+    example.inputsArray = this.convertLeakLossEstimatorExample(example.inputsArray, settings); 
+    return example;
   }
 
   convertLeakLossEstimatorExample(inputs: Array<BagMethodInput>, settings: Settings) {
-    let tmpInputs: Array<BagMethodInput> = inputs;
     if (settings.unitsOfMeasure == 'Metric') {
-      for (let i = 0; i < tmpInputs.length; i++) {
-        tmpInputs[i].diameterOfBag = Math.round(this.convertUnitsService.value(tmpInputs[i].diameterOfBag).from('in').to('cm') * 100) / 100;
-        tmpInputs[i].heightOfBag = Math.round(this.convertUnitsService.value(tmpInputs[i].heightOfBag).from('in').to('cm') * 100) / 100;
+      for (let i = 0; i < inputs.length; i++) {
+        inputs[i].bagVolume = Math.round(this.convertUnitsService.value(inputs[i].bagVolume).from('L').to('gal'));
       }
-      return tmpInputs;
+      return inputs;
     }
-    return tmpInputs;
+    return inputs;
   }
 
 }

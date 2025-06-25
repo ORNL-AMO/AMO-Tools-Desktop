@@ -13,8 +13,7 @@ export class ConvertCompressedAirReductionService {
     if (settings.unitsOfMeasure != 'Imperial') {
       for (let i = 0; i < inputArray.length; i++) {
         inputArray[i].flowMeterMethodData.meterReading = this.convertUnitsService.value(inputArray[i].flowMeterMethodData.meterReading).from('m3').to('ft3');
-        inputArray[i].bagMethodData.height = this.convertUnitsService.value(inputArray[i].bagMethodData.height).from('cm').to('in');
-        inputArray[i].bagMethodData.diameter = this.convertUnitsService.value(inputArray[i].bagMethodData.diameter).from('cm').to('in');
+        inputArray[i].bagMethodData.bagVolume = this.convertUnitsService.value(inputArray[i].bagMethodData.bagVolume).from('L').to('ft3');
         inputArray[i].pressureMethodData.supplyPressure = this.convertUnitsService.value(inputArray[i].pressureMethodData.supplyPressure).from('barg').to('psig');
         inputArray[i].otherMethodData.consumption = this.convertUnitsService.value(inputArray[i].otherMethodData.consumption).from('m3').to('ft3');
         let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
@@ -29,6 +28,7 @@ export class ConvertCompressedAirReductionService {
       }
     } else {
       for (let i = 0; i < inputArray.length; i++) {
+        inputArray[i].bagMethodData.bagVolume = this.convertUnitsService.value(inputArray[i].bagMethodData.bagVolume).from('gal').to('ft3');
         inputArray[i].otherMethodData.consumption = inputArray[i].otherMethodData.consumption * 1000;
         //per issue-4091 /100
         inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / 100;
@@ -53,11 +53,8 @@ export class ConvertCompressedAirReductionService {
     inputData.flowMeterMethodData.meterReading = this.convertUnitsService.value(inputData.flowMeterMethodData.meterReading).from('ft3').to('m3');
     inputData.flowMeterMethodData.meterReading = this.roundVal(inputData.flowMeterMethodData.meterReading);
 
-    inputData.bagMethodData.height = this.convertUnitsService.value(inputData.bagMethodData.height).from('in').to('cm');
-    inputData.bagMethodData.height = this.roundVal(inputData.bagMethodData.height);
-
-    inputData.bagMethodData.diameter = this.convertUnitsService.value(inputData.bagMethodData.diameter).from('in').to('cm');
-    inputData.bagMethodData.diameter = this.roundVal(inputData.bagMethodData.diameter);
+    inputData.bagMethodData.bagVolume = this.convertUnitsService.value(inputData.bagMethodData.bagVolume).from('gal').to('L');
+    inputData.bagMethodData.bagVolume = this.roundVal(inputData.bagMethodData.bagVolume);
 
     inputData.pressureMethodData.supplyPressure = this.convertUnitsService.value(inputData.pressureMethodData.supplyPressure).from('psig').to('barg');
     inputData.pressureMethodData.supplyPressure = this.roundVal(inputData.pressureMethodData.supplyPressure);

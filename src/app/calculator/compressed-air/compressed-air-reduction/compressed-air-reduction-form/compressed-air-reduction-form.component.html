@@ -121,51 +121,34 @@
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
 
       <div class="form-group">
-        <label class="small" for="{{'height_'+idString}}">Height of Bag</label>
+        <label class="small" for="{{'bagVolume_'+idString}}">Bag Volume</label>
         <div class="input-group">
-          <input class="form-control" name="height" id="{{'height_'+idString}}" formControlName="height" type="number"
-            (input)="calculate()" (focus)="focusField('height')" (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">cm</span>
+          <input class="form-control" name="bagVolume" id="{{'bagVolume_'+idString}}" formControlName="bagVolume" type="number"
+            (input)="calculate()" (focus)="focusField('bagVolume')" (blur)="focusOut()" onfocus="this.select();">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">L</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.height.invalid && !form.controls.height.pristine">
-          <span *ngIf="form.controls.height.errors.required">Value required.</span>
-          <span *ngIf="form.controls.height.errors.greaterThan">Value must be greater than
-            {{form.controls.height.errors.greaterThan}}.</span>
+          *ngIf="form.controls.bagVolume.invalid && !form.controls.bagVolume.pristine">
+          <span *ngIf="form.controls.bagVolume.errors.required">Value required.</span>
+          <span *ngIf="form.controls.bagVolume.errors.greaterThan">Value must be greater than
+            {{form.controls.bagVolume.errors.greaterThan}}.</span>
         </span>
       </div>
 
       <div class="form-group">
-        <label class="small" for="{{'diameter_'+idString}}">Diameter of Bag</label>
+        <label class="small" for="{{'bagFillTime_'+idString}}">Bag Fill Time</label>
         <div class="input-group">
-          <input class="form-control" name="diameter" id="{{'diameter_'+idString}}" formControlName="diameter"
-            type="number" (input)="calculate()" (focus)="focusField('diameter')" (blur)="focusOut()"
-            onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">cm</span>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.diameter.invalid && !form.controls.diameter.pristine">
-          <span *ngIf="form.controls.diameter.errors.required">Value required.</span>
-          <span *ngIf="form.controls.diameter.errors.greaterThan">Value must be greater than
-            {{form.controls.diameter.errors.greaterThan}}.</span>
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label class="small" for="{{'fillTime_'+idString}}">Bag Fill Time</label>
-        <div class="input-group">
-          <input class="form-control" name="fillTime" id="{{'fillTime_'+idString}}" formControlName="fillTime"
-            type="number" (input)="calculate()" (focus)="focusField('fillTime')" (blur)="focusOut()"
+          <input class="form-control" name="bagFillTime" id="{{'bagFillTime_'+idString}}" formControlName="bagFillTime"
+            type="number" (input)="calculate()" (focus)="focusField('bagFillTime')" (blur)="focusOut()"
             onfocus="this.select();">
           <span class="units input-group-addon">s</span>
         </div>
         <span class="alert-danger pull-right small"
-          *ngIf="form.controls.fillTime.invalid && !form.controls.fillTime.pristine">
-          <span *ngIf="form.controls.fillTime.errors.required">Value required.</span>
-          <span *ngIf="form.controls.fillTime.errors.greaterThan">Value must be greater than
-            {{form.controls.fillTime.errors.greaterThan}}.</span>
+          *ngIf="form.controls.bagFillTime.invalid && !form.controls.bagFillTime.pristine">
+          <span *ngIf="form.controls.bagFillTime.errors.required">Value required.</span>
+          <span *ngIf="form.controls.bagFillTime.errors.greaterThan">Value must be greater than
+            {{form.controls.bagFillTime.errors.greaterThan}}.</span>
         </span>
       </div>
 
