@@ -363,7 +363,7 @@ export interface CompressedAirReductionData {
   electricityCost: number,
   measurementMethod: number,
   flowMeterMethodData: CompressedAirFlowMeterMethodData,
-  bagMethodData: BagMethodData,
+  bagMethodData: BagMethodInput,
   pressureMethodData: PressureMethodData,
   otherMethodData: CompressedAirOtherMethodData,
   compressorElectricityData: CompressorElectricityData,
@@ -372,12 +372,6 @@ export interface CompressedAirReductionData {
 
 export interface CompressedAirFlowMeterMethodData {
   meterReading: number
-};
-
-export interface BagMethodData {
-  height: number,
-  diameter: number,
-  fillTime: number
 };
 
 export interface PressureMethodData {

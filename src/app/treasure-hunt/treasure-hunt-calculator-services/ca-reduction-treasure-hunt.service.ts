@@ -131,10 +131,7 @@ export class CaReductionTreasureHuntService {
 
     //imperial: scf/min, metric: m3/min
     reduction.flowMeterMethodData.meterReading = this.convertUnitsService.convertFt3AndM3Value(reduction.flowMeterMethodData.meterReading, oldSettings, newSettings);
-    //imperial: in, metric: cm
-    reduction.bagMethodData.height = this.convertUnitsService.convertInAndCmValue(reduction.bagMethodData.height, oldSettings, newSettings);
-    //imperial: in, metric: cm
-    reduction.bagMethodData.diameter = this.convertUnitsService.convertInAndCmValue(reduction.bagMethodData.diameter, oldSettings, newSettings);
+    reduction.bagMethodData.bagVolume = this.convertUnitsService.convertFt3AndM3Value(reduction.bagMethodData.bagVolume, oldSettings, newSettings);
     //imperial: psig, metric: barg
     reduction.pressureMethodData.supplyPressure = this.convertUnitsService.convertPsigAndBargValue(reduction.pressureMethodData.supplyPressure, oldSettings, newSettings);
     //imperial: kscf/yr, metric: m3/yr
