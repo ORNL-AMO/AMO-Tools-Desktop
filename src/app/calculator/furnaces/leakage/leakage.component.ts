@@ -4,16 +4,16 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
 import { LeakageLoss, LeakageLossOutput } from '../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../shared/models/settings';
-import { LeakageLossTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { LeakageLossTreasureHunt, OpportunityUtilityType, Treasure } from '../../../shared/models/treasure-hunt';
 import { FlueGasService } from '../flue-gas/flue-gas.service';
 import { LeakageService } from './leakage.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-    selector: 'app-leakage',
-    templateUrl: './leakage.component.html',
-    styleUrls: ['./leakage.component.css'],
-    standalone: false
+  selector: 'app-leakage',
+  templateUrl: './leakage.component.html',
+  styleUrls: ['./leakage.component.css'],
+  standalone: false
 })
 export class LeakageComponent implements OnInit {
   @Input()
@@ -26,7 +26,7 @@ export class LeakageComponent implements OnInit {
   emitCancel = new EventEmitter<boolean>();
   @Input()
   operatingHours: OperatingHours;
-  
+
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
@@ -51,9 +51,9 @@ export class LeakageComponent implements OnInit {
   modificationExists: boolean = false;
   smallScreenTab: string = 'baseline';
 
-  constructor(private settingsDbService: SettingsDbService, private flueGasService: FlueGasService, 
-              private leakageService: LeakageService,
-              private analyticsService: AnalyticsService) { }
+  constructor(private settingsDbService: SettingsDbService, private flueGasService: FlueGasService,
+    private leakageService: LeakageService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('calculator-PH-leakage');
@@ -65,11 +65,11 @@ export class LeakageComponent implements OnInit {
     }
 
     let existingInputs = this.leakageService.baselineData.getValue();
-    if(!existingInputs) {
+    if (!existingInputs) {
       this.resetLeakageInputs();
     }
     this.initSubscriptions();
-    if(this.modificationData) {
+    if (this.modificationData) {
       this.modificationExists = true;
     }
   }
@@ -104,7 +104,7 @@ export class LeakageComponent implements OnInit {
       }
     });
   }
-  
+
   setTab(str: string) {
     this.tabSelect = str;
   }
@@ -121,9 +121,9 @@ export class LeakageComponent implements OnInit {
     this.leakageService.initModification();
     this.modificationExists = true;
     this.setModificationSelected();
-   }
+  }
 
-   btnResetData() {
+  btnResetData() {
     this.modificationExists = false;
     this.leakageService.initDefaultEmptyInputs();
     this.leakageService.resetData.next(true);
@@ -145,7 +145,7 @@ export class LeakageComponent implements OnInit {
   focusField(str: string) {
     this.leakageService.currentField.next(str);
   }
-  
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
@@ -160,14 +160,16 @@ export class LeakageComponent implements OnInit {
       }
     }
   }
-  
+
   save() {
     let output: LeakageLossOutput = this.leakageService.output.getValue();
+    //energySourceType is OpportunityUtilityType when in treasure hunt
+    let opportunityUtilityType: OpportunityUtilityType = this.baselineData[0].energySourceType as OpportunityUtilityType;
     this.emitSave.emit({
       baseline: this.baselineData,
       modification: this.modificationData,
       energySourceData: {
-        energySourceType: this.baselineData[0].energySourceType,
+        energySourceType: opportunityUtilityType,
         unit: output.energyUnit,
       },
       opportunityType: Treasure.leakageLoss

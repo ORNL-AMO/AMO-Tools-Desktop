@@ -17,7 +17,7 @@
                 {{modificationWarnings.modificationName}} {{ modificationWarnings.resultSaturationPressure }}
             </span>
            </div>
-    <table class="table table-hover table-striped">
+    <table #copyTable class="table table-hover table-striped">
         <thead>
             <tr>
               <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"></th>
@@ -348,3 +348,7 @@
         </div>
     </div>
 </ng-container>
+
+
+<app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>

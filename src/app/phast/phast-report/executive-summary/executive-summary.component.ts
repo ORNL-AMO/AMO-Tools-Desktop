@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { PHAST, ExecutiveSummary, PhastResults } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
@@ -38,6 +38,19 @@ export class ExecutiveSummaryComponent implements OnInit {
   //percent graph variables
   unit: string;
   titlePlacement: string;
+  
+  @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;  
+  copyTable1String: any;
+  
+  @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;  
+  copyTable2String: any;
+  
+  @ViewChild('copyTable3', { static: false }) copyTable3: ElementRef;  
+  copyTable3String: any;
+  
+  @ViewChild('copyTable4', { static: false }) copyTable4: ElementRef;  
+  copyTable4String: any;
+
   constructor(private executiveSummaryService: ExecutiveSummaryService,
     private phastResultsService: PhastResultsService, private phastReportRollupService: PhastReportRollupService, private compareService: PhastCompareService) { }
 
@@ -100,6 +113,23 @@ export class ExecutiveSummaryComponent implements OnInit {
 
   useModification() {
     this.phastReportRollupService.updateSelectedPhasts({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+  }
+
+  
+  updateCopyTable1String() {
+    this.copyTable1String = this.copyTable1.nativeElement.innerText;
+  }
+  
+  updateCopyTable2String() {
+    this.copyTable2String = this.copyTable2.nativeElement.innerText;
+  }
+  
+  updateCopyTable3String() {
+    this.copyTable3String = this.copyTable3.nativeElement.innerText;
+  }
+  
+  updateCopyTable4String() {
+    this.copyTable4String = this.copyTable4.nativeElement.innerText;
   }
 
 }

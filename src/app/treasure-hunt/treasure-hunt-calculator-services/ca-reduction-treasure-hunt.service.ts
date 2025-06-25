@@ -50,7 +50,7 @@ export class CaReductionTreasureHuntService {
       energySavings: results.annualEnergySavings,
       baselineCost: results.baselineAggregateResults.energyCost,
       modificationCost: results.modificationAggregateResults.energyCost,
-      utilityType: '',
+      utilityType: 'Electricity',
     }
 
     if (compressedAirReduction.baseline[0].utilityType == 0) {

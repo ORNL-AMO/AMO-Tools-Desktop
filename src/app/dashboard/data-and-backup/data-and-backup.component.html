@@ -7,18 +7,29 @@
             <div class="card-body">
                 <div class="desc-text mb-2">
                     <p *ngIf="electronService.isElectron">
-                        <b class="bold">MEASUR data is managed internally by the application and is not accessible to users through the operating system or local machine</b>. For greater control of application data, the MEASUR team recommends that users take advantage of the automatic backup feature (below). 
+                        <b class="bold">MEASUR data is managed internally by the application and is not accessible to
+                            users through the operating system or local machine</b>. For greater control of application
+                        data, the MEASUR team recommends that users take advantage of the automatic backup feature
+                        (below).
                         <br><br>
-                        Users can still create manual backups or export data as needed. These features are available in the <a [routerLink]="['/directory-dashboard', 1]">MEASUR dashboard</a>, as well as in the header of assessments, inventories, and treasure hunts.
+                        Users can still create manual backups or export data as needed. These features are available in
+                        the <a [routerLink]="['/directory-dashboard', 1]">MEASUR dashboard</a>, as well as in the header
+                        of assessments, inventories, and treasure hunts.
                     </p>
                     <p *ngIf="!electronService.isElectron">
-                        <b class="bold">MEASUR data is managed internally by the browser, is unique to each browser (Chrome, Firefox, Edge), and is only accessible through exported files and backup files. </b>
-                        For example, user data created while working in Chrome will not be reflected in Edge, nor in the desktop version of the application and vice-versa. For greater control of application data, the MEASUR team recommends that users take advantage of the automatic backup feature (below). 
+                        <b class="bold">MEASUR data is managed internally by the browser, is unique to each browser
+                            (Chrome, Firefox, Edge), and is only accessible through exported files and backup files.
+                        </b>
+                        For example, user data created while working in Chrome will not be reflected in Edge, nor in the
+                        desktop version of the application and vice-versa. For greater control of application data, the
+                        MEASUR team recommends that users take advantage of the automatic backup feature (below).
                         <br><br>
-                        Users can still create manual backups or export data as needed. These features are available in the <a [routerLink]="['/directory-dashboard', 1]">MEASUR dashboard</a>, as well as in the header of assessments, inventories, and treasure hunts.
+                        Users can still create manual backups or export data as needed. These features are available in
+                        the <a [routerLink]="['/directory-dashboard', 1]">MEASUR dashboard</a>, as well as in the header
+                        of assessments, inventories, and treasure hunts.
                     </p>
                     <p>
-                        For more information on data storage and collection, please view the 
+                        For more information on data storage and collection, please view the
                         <a [routerLink]="['/privacy']">privacy notice</a>
                     </p>
                     <hr>
@@ -47,20 +58,20 @@
                     </div>
                 </div>
 
-                <div *ngIf="applicationInstanceData.isAutomaticBackupOn" class="d-flex flex-row desc-text" >
-                    <div class="w-50 px-3" [ngClass]="{'disabled': !applicationInstanceData.dataBackupFilePath}" >
-                            <div class="checkbox">
-                                <label for="versionedBackups">
-                                    <input type="checkbox" [(ngModel)]="applicationInstanceData.createVersionedBackups"
+                <div *ngIf="applicationInstanceData.isAutomaticBackupOn" class="d-flex flex-row desc-text">
+                    <div class="w-50 px-3" [ngClass]="{'disabled': !applicationInstanceData.dataBackupFilePath}">
+                        <div class="checkbox">
+                            <label for="versionedBackups">
+                                <input type="checkbox" [(ngModel)]="applicationInstanceData.createVersionedBackups"
                                     [disabled]="!applicationInstanceData.dataBackupFilePath"
-                                    name="createVersionedBackups"
-                                    id="createVersionedBackups" (input)="saveAutomaticBackupSettings()">
-                                    <span class="ml-2">Create versioned backups</span>
-                                </label>
-                            </div>
-                            <p class="small">
-                                Create a time-stamped backup file at every application startup
-                            </p>
+                                    name="createVersionedBackups" id="createVersionedBackups"
+                                    (input)="saveAutomaticBackupSettings()">
+                                <span class="ml-2">Create versioned backups</span>
+                            </label>
+                        </div>
+                        <p class="small">
+                            Create a time-stamped backup file at every application startup
+                        </p>
                     </div>
                     <div class="d-flex flex-column w-50 px-3">
 
@@ -69,12 +80,14 @@
                             Select Backup File Location
                         </button>
                         <p *ngIf="!applicationInstanceData.dataBackupFilePath" class="alert alert-info small p-2">
-                            Note: selected file-system locations <b class="bold">should not</b> be cloud-synced or <b class="bold">simultaneously accessed by other users</b> (ex. shared network files)
+                            Note: selected file-system locations <b class="bold">should not</b> be cloud-synced or <b
+                                class="bold">simultaneously accessed by other users</b> (ex. shared network files)
                         </p>
                         <p *ngIf="applicationInstanceData.dataBackupFilePath" class="mb-3">
                             Backup files will be saved to this location:
                             <br>
-                            <a class="click-link file-path" (click)="changeAutomaticBackupLocation()">{{applicationInstanceData.dataBackupFilePath}}</a>
+                            <a class="click-link file-path"
+                                (click)="changeAutomaticBackupLocation()">{{applicationInstanceData.dataBackupFilePath}}</a>
                         </p>
                     </div>
                 </div>
@@ -98,18 +111,39 @@
                     including assessments, inventories, calculators, and settings.
                 </p>
                 <div class="d-flex w-100 alert feature-action justify-content-between">
-                    <div>
                         <input type="file" #importFileRef id="importFileRef" (input)="selectImportFile($event.target)"
-                        accept=".json">
-                        <p class="alert alert-danger" *ngIf="selectImportFileError">
-                            {{selectImportFileError}}
-                        </p>
-                    </div>
-                    <button [disabled]="!selectedImportFile"
-                    class="btn-primary btn-sm select-folder" (click)="importBackupFile()">
-                    Import Selected File
-                </button>
+                            accept=".json">
+                        <button 
+                        [disabled]="!fileImportStatus || fileImportStatus.isValid == false"
+                        class="btn-primary btn-sm select-folder"
+                            (click)="importBackupFile()">
+                            Import Selected File
+                        </button>
                 </div>
+                <ng-container *ngIf="fileImportStatus">
+                    <div class="alert alert-danger small p-3"
+                        *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'AMO-TOOLS-DESKTOP-OPPORTUNITIES'">
+                        Invalid File Destination - This is a Treasure Hunt opportunites file and must be imported
+                        from within a
+                        Treasure Hunt.</div>
+                    <div class="alert alert-danger small p-3"
+                        *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'AMO-TOOLS-DESKTOP'">
+                        Invalid File Destination - This is a MEASUR directory item and should be imported by visiting the directory and file dashboard</div>
+                    <div class="alert alert-danger small p-3"
+                        *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'MEASUR-BACKUP'">
+                        Invalid File Destination - This is a MEASUR backup file and should be imported by visiting
+                        Data Storage and
+                        Backup.</div>
+                    <div class="alert alert-danger small p-3"
+                        *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'AMO-LOG-TOOL-DATA'">
+                        Invalid File Destination - This is a Data Explorer export file and should be imported by
+                        visiting Data
+                        Explorer.</div>
+                    <div class="alert alert-danger small p-3"
+                        *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'UNKNOWN'">Invalid
+                        File Type -
+                        This file is not recognized by MEASUR</div>
+                </ng-container>
             </div>
 
         </div>

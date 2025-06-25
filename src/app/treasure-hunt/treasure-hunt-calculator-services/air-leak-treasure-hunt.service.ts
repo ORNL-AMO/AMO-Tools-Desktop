@@ -50,7 +50,7 @@ export class AirLeakTreasureHuntService {
       energySavings: 0,
       baselineCost: results.baselineData.annualTotalElectricityCost,
       modificationCost: results.modificationData.annualTotalElectricityCost,
-      utilityType: '',
+      utilityType: 'Electricity',
     }
 
     // utility type: 0 = compressed air, 1 = electric

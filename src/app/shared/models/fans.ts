@@ -22,6 +22,7 @@ export interface FSAT {
   modalFieldData?: FieldData;
   existingDataUnits?: string;
   whatIfScenario?: boolean;
+  selectedModificationId?: string 
 }
 
 export interface FsatOperations {

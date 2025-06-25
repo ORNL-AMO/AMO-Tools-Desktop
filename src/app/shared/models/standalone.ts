@@ -67,6 +67,11 @@ export interface ReceiverTankMeteredStorage extends ReceiverTankDedicatedStorage
   meteredControl: number;
 }
 
+export interface ReceiverTankMeteredResults {
+  volume: number;
+  refillTime: number;
+}
+
 export interface ReceiverTankCompressorCycle extends ReceiverTank {
   loadTime: number;
   unloadTime: number;

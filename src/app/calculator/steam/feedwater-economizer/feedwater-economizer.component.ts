@@ -98,7 +98,7 @@ export class FeedwaterEconomizerComponent implements OnInit {
     this.emitSave.emit({
       inputData: inputData,
       energySourceData: {
-        energySourceType: 'Fuel',  
+        energySourceType: 'Other Fuel',  
         unit: 'MMBtu'
       },
       opportunityType: Treasure.feedwaterEconomizer

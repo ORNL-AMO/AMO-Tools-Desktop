@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { getIsDiagramValid, NodeErrors, PlantSystemSummaryResults } from 'process-flow-lib';
@@ -28,6 +28,9 @@ export class SystemSummaryReportComponent {
   selectedModificationIndex: number = 1;
   plantSummaryResults: PlantSystemSummaryResults;
   isDiagramValid: boolean;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   constructor(
     private waterAssessmentResultsService: WaterAssessmentResultsService,
@@ -64,6 +67,10 @@ export class SystemSummaryReportComponent {
   getFlowDecimalPrecisionPipeValue(): string {
     let pipeVal = `1.0-${this.settings.flowDecimalPrecision}`;
     return pipeVal;
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 
 }

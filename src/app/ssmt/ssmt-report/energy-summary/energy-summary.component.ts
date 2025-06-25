@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
@@ -25,6 +25,8 @@ export class EnergySummaryComponent implements OnInit {
   @Input()
   assessment:Assessment;
 
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   numberOfHeaders: number;
   selectedModificationIndex: number;
@@ -47,5 +49,9 @@ export class EnergySummaryComponent implements OnInit {
 
   useModification() {
     this.ssmtReportRollupService.updateSelectedSsmt({assessment: this.assessment, settings: this.settings}, this.selectedModificationIndex);
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

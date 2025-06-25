@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Assessment } from '../../../shared/models/assessment';
@@ -29,6 +29,9 @@ export class ExecutiveSummaryComponent implements OnInit {
   printView: boolean;
   @Input()
   ssmt: SSMT;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   selectedModificationIndex: number;
   constructor(private ssmtReportRollupService: SsmtReportRollupService,
@@ -89,6 +92,10 @@ export class ExecutiveSummaryComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT, BaseGasDensity } from '../../../../shared/models/fans';
 
@@ -37,6 +37,9 @@ export class BaseGasDensitySummaryComponent implements OnInit {
   wetBulbTempDiff: Array<boolean>;
   specificHeatGasDiff: Array<boolean>;
   specificHeatRatioDiff: Array<boolean>;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   constructor(private cd: ChangeDetectorRef) { }
 
@@ -133,5 +136,9 @@ export class BaseGasDensitySummaryComponent implements OnInit {
     else {
       return type;
     }
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }
