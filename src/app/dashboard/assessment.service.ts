@@ -14,6 +14,7 @@ import { environment } from '../../environments/environment';
 import { DashboardService } from './dashboard.service';
 import { WaterAssessment } from 'process-flow-lib';
 import { ProcessCoolingAssessment } from '../shared/models/process-cooling-assessment';
+import { getNewIdString } from '../shared/helperFunctions';
 
 @Injectable()
 export class AssessmentService {
@@ -459,14 +460,38 @@ export class AssessmentService {
         electricityCost: settings.electricityCost,
         notes: undefined,
         fuelCost: settings.fuelCost,
-        location: 53704,
+        location: undefined,
         numberOfChillers: 1,
         waterSupplyTemperature: 50,
         condenserCoolingMethod: 'air',
       },
       systemInformation: {
+        co2SavingsData: {
+                energyType: "electricity",
+                totalEmissionOutputRate: 430.78,
+                electricityUse: 6309742.399999998,
+                energySource: "Natural Gas",
+                fuelType: "Natural Gas",
+                eGridRegion: "",
+                eGridSubregion: "SRTV",
+                totalEmissionOutput: 0,
+                totalFuelEmissionOutputRate: null,
+                userEnteredBaselineEmissions: false,
+                userEnteredModificationEmissions: false,
+                zipcode: "37830"
+            },
       },
-      inventory: new Array(),
+      inventory: [
+        {
+              itemId: getNewIdString(),
+              name: 'New Chiller',
+              description: undefined,
+              modifiedDate: new Date(),
+              compressorChillerType: 0,
+              fullLoadEfficiency: 0,
+              chillerCapacity: 0,
+        }
+      ],
     }
   }
 

@@ -8,12 +8,12 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { Assessment } from '../shared/models/assessment';
 import { ActivatedRoute } from '@angular/router';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { InventoryService } from '../dashboard/inventory.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { Settings } from '../shared/models/settings';
+import { ChillerInventoryService } from './chiller-inventory/chiller-inventory.service';
 
 @Component({
   selector: 'app-process-cooling',
@@ -59,7 +59,7 @@ export class ProcessCoolingComponent {
     private processCoolingService: ProcessCoolingService,
     private egridService: EGridService,
     // private defaultChillerDbService: DefaultChillerDbService, 
-    private inventoryService: InventoryService,
+    private inventoryService: ChillerInventoryService,
     private assessmentService: AssessmentService,
     private analyticsService: AnalyticsService) { }
 
@@ -78,6 +78,10 @@ export class ProcessCoolingComponent {
         // this.defaultChillerDbService.getAllCompressors(this.settings);
       }
       this.processCoolingService.updateProcessCooling(this.assessment.processCooling, false);
+
+      if (!this.inventoryService.selectedChiller.getValue()) {
+        this.inventoryService.setDefaultSelectedChiller(this.assessment.processCooling.inventory);
+      }
     });
 
     this.processCoolingSub = this.processCoolingService.processCooling.subscribe(val => {
@@ -85,7 +89,8 @@ export class ProcessCoolingComponent {
         this.save(val);
         this.setDisableNext();
       }
-    })
+    });
+
     let tmpTab: ProcessCoolingMainTabString = this.assessmentService.getStartingTab() as ProcessCoolingMainTabString;
     if (tmpTab) {
       this.processCoolingService.mainTab.next(tmpTab);
@@ -127,6 +132,7 @@ export class ProcessCoolingComponent {
     this.processCoolingService.setupTab.next('assessment-settings');
     // this.inventoryService.selectedChiller.next(undefined);
     this.processCoolingService.processCooling.next(undefined);
+    this.inventoryService.selectedChiller.next(undefined); 
   }
 
   ngAfterViewInit() {

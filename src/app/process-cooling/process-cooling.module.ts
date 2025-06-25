@@ -23,7 +23,15 @@ import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
 import { ProcessCoolingReportComponent } from './process-cooling-report/process-cooling-report.component';
 import { ProcessCoolingReportService } from './process-cooling-report/process-cooling-report.service';
-
+import { ChillerInventoryService } from './chiller-inventory/chiller-inventory.service';
+import { ResultsPanelComponent } from './results-panel/results-panel.component';
+import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
+import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
+import { ChillerInventoryComponent } from './chiller-inventory/chiller-inventory.component';
+import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
+import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
+import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
+import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe';
 
 
 @NgModule({
@@ -32,7 +40,15 @@ import { ProcessCoolingReportService } from './process-cooling-report/process-co
     SetupTabsComponent,
     ProcessCoolingBannerComponent,
     SystemBasicsComponent,
-    ProcessCoolingReportComponent
+    ProcessCoolingReportComponent,
+    ChillerInventoryComponent,
+    ResultsPanelComponent,
+    HelpPanelComponent,
+    InventoryTableComponent,
+    SystemBasicsHelpComponent,
+    InventoryHelpComponent,
+    SystemInformationHelpComponent,
+    ChillerCompressorTypePipe
   ],
   imports: [
     CommonModule,
@@ -56,7 +72,8 @@ import { ProcessCoolingReportService } from './process-cooling-report/process-co
     ProcessCoolingService,
     SystemBasicsFormService,
     ConvertProcessCoolingService,
-    ProcessCoolingReportService
+    ProcessCoolingReportService,
+    ChillerInventoryService,
   ]
 })
 export class ProcessCoolingModule { }

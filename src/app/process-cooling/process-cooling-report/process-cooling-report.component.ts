@@ -60,7 +60,7 @@ export class ProcessCoolingReportComponent {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
 
-      // todo set up subs for graph/bar components
+      // todo 6706 set up subs for graph/bar components
       // let systemTrueCostReport = this.waterAssessmentResultsService.getTrueCostOfSystemsReport(this.assessment, this.settings);
       // this.processCoolingReporService.systemTrueCostReport.next(systemTrueCostReport);
     }
