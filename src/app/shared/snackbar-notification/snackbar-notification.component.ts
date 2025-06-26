@@ -1,7 +1,9 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, } from '@angular/core';
-import { SnackbarMessage, SnackbarService } from './snackbar.service';
+import { AppDefaultNotification, SnackbarMessage, SnackbarService } from './snackbar.service';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
     selector: 'app-snackbar-notification',
@@ -22,7 +24,9 @@ export class SnackbarNotificationComponent {
   snackbarState: string = 'hide';
   snackbarMessage: SnackbarMessage;
   dismissTimeRemaining: number;
-  constructor(private snackbarService: SnackbarService) { }
+  constructor(private snackbarService: SnackbarService, 
+    private router: Router, 
+    private localStorageService: LocalStorageService) { }
 
   ngOnInit() {
     this.snackbarMessageSub = this.snackbarService.snackbarMessage.subscribe(message => {
@@ -33,6 +37,24 @@ export class SnackbarNotificationComponent {
         this.closeSnackbar();
       }
     });
+  }
+
+  navigateToLink(link: { label: string, uri: string }) {
+      this.router.navigateByUrl(link.uri);
+  }
+
+  disableDefaultNotification() {
+    let disabledDefaultNotifications: any = this.localStorageService.retrieve('disableDefaultNotifications');
+    // let disabledDefaultNotifications: Array<AppDefaultNotification> = this.localStorageService.retrieve('disableDefaultNotifications');
+    debugger;
+    if (!disabledDefaultNotifications) {
+      disabledDefaultNotifications = [];
+    }
+    if (!disabledDefaultNotifications.includes(this.snackbarMessage.appDefaultNotification)) {
+      disabledDefaultNotifications.push(this.snackbarMessage.appDefaultNotification);
+    }
+    this.localStorageService.store('disableDefaultNotification', disabledDefaultNotifications);
+    this.closeSnackbar();
   }
 
   ngOnDestroy() {
