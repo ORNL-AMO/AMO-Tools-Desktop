@@ -13,15 +13,12 @@
         </div>
         <div class="card-body">
           <p class="card-text">
-            MEASUR helps manufacturers increase industrial energy efficiency at the plant-level and in specific systems.
-            Learn step-by-step
-            ways to identify opportunities, monitor progress, and improve efficiency in any facility.
-            Some tools help facilities implement an energy management system and prepare to become ISO 50001 and
-            Superior Energy Performance certified. Based on
-            older Department of Energy (DOE) tools, the Advanced Manufacturing Office (AMO) has undertaken this effort
-            to refactor the legacy tools into a modern environment.
-            The suite includes 7 energy system assessment modules, a Data Exploration Module, extensive help text,
-            comprehensive reports, data visualization, and 80 calculators!
+            MEASUR helps manufacturers increase industrial energy efficiency at the plant-level and in specific systems. 
+            Learn step-by-step ways to identify opportunities, monitor progress, and improve efficiency in any facility. 
+            Some tools help facilities implement an energy management system and prepare to become ISO 50001 and Superior Energy Performance certified. 
+            Based on older Department of Energy (DOE) tools, the Industrial Technologies office (ITO, formerlly the Advanced Manufacturing Office, AMO) 
+            has undertaken this effort to refactor the legacy tools into a modern environment. 
+            The suite includes 8 assessment modules (6 energy system, the treasure hunt, and the water balance modules), a Data Exploration Module, extensive help text, comprehensive reports, data visualization, and 80 calculators!
           </p>
           <p class="card-text-small">
             MEASUR is a supported application, updates are expected and may impact previously created assessments.
@@ -38,7 +35,45 @@
               not be available.</li>
           </ul>
 
-           <label class="header-label">Here are the details of what's new in version 1.6.0:</label>
+           <label class="header-label">Here are the details of what's new in version 1.6.1:</label>
+          <br>
+
+          <label>Application</label>
+          <ul>
+            <li>Enhanced: Add detection and warning messages for incorrect imported MEASUR file types (importing into the wrong MEASUR location)</li>
+            <li>Enhanced: Added or updated copy table functionality for all reports</li>
+            <li>Enhanced: Updated project README with more detail on process-flow-diagram-component dependency</li>
+            <li>Enhanced: Added NEB (JUSTIFI) tool integration for all assessments</li>
+          </ul>
+
+          <label>Treasure Hunt</label>
+          <ul>
+            <li>Fixed: Treasure Hunt Opportunities export showing groups with no opportunities</li>
+          </ul>
+
+          <label>Compressed Air</label>
+
+          <ul>
+            <li>Enhanced: Added refill time result to Receiver Tank Sizing calculator</li>
+            <li>Fixed: Compressed Air tab name in Baseline reads "Explore opportunities", should say "Setup Profile"</li>
+            <li>Enhanced: Bag method updated to use bag volume in place of height and diameter for calculators Leak Loss Estimator, Air Leak Survey, and Compressed Air Reduction</li>
+          </ul>
+
+          <label>Data Explorer</label>
+          <ul>
+            <li>Fixed: Imports for large datasets where errors are thrown while processing Day Type Analysis</li>
+            <li>Enhanced: Large DE exports are now zipped to reduce long processing during export.</li>
+            <li>Fixed: In Refine Data, display error message if fields between 2 or more files do not match and "Apply my selections for all datasets" is checked</li>
+            <li>Fixed: Plotly.js custom modebar button function does not serialize properly</li>
+          </ul>
+
+          <label>Steam</label>
+          <ul>
+            <li>Fixed: Steam Reduction using incorrect validation for quality</li>
+          </ul>
+
+          <!--  Include prev version -->
+          <label class="header-label">Here are the details of what's new in version 1.6.0:</label>
           <br>
 
           <label>Application</label>
@@ -53,32 +88,6 @@
             <li>New Feature: Enter data regarding water ancillary costs and estimate the true cost of water</li>
             <li>New Feature: Tables and graphs to understand water flows and true cost of water</li>
             <li>Coming Soon: Dashboard support for water, rollup support for water, water flow data input in assessment</li>
-          </ul>
-
-          <label class="header-label">Here are the details of what's new in version 1.5.12:</label>
-          <br>
-
-          <label>Application</label>
-          <ul>
-            <li>Enhanced - Updated assessment naming scheme to replace references to “System setup” with “Baseline”. Modified description for EEMs</li>
-            <li>Enhanced - Updated assessment view contexts to “Explore Opportunities” and “Expert View”</li>
-          </ul>
-
-          <label>Compressed Air</label>
-          <ul>
-            <li>Enhanced - Added Implementation Cost for Flow Reallocation EEM in Compressed Air Assessment</li>
-            <li>Fixed - Compressed Air assessment End Uses and Inventory became unreachable if item name was empty</li>
-          </ul>
-
-          <label>Pumps</label>
-          <ul>
-            <li>Enhanced - Updated Pump Achievable Efficiency calculator to use MEASUR Tools Suite algorithm for optimal pump efficiency, including additional pump metrics</li>
-          </ul>
-
-          <label>Calculators</label>
-          <ul>
-            <li>Fixed - Added "Additional Cash Flows" to graph </li>
-            <li>Updated - Cash Flow Calculator added full names for results in table </li>
           </ul>
 
           <label>Known Issues</label>
