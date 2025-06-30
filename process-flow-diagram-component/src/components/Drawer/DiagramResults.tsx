@@ -7,6 +7,7 @@ import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
 import { TwoCellResultRow, TwoCellResultTable } from '../StyledMUI/ResultTables';
 import { Alert } from '@mui/material';
+import { formatDecimalPlaces } from '../Diagram/FlowUtils';
 
 
 const DiagramResults = () => {
@@ -69,11 +70,17 @@ const DiagramResults = () => {
     style: 'currency',
     currency: 'USD'
   });
+
+  const intakeCostFormatted = currency.format(formatDecimalPlaces(intakeCost, settings.flowDecimalPrecision));
+  const dischargeCostFormatted = currency.format(formatDecimalPlaces(dischargeCost, settings.flowDecimalPrecision));
+  const indirectCostsFormatted = currency.format(formatDecimalPlaces(indirectCosts, settings.flowDecimalPrecision));
+  const trueCostFormatted = currency.format(formatDecimalPlaces(trueCost, settings.flowDecimalPrecision));
+
   const costRows = [
-    { label: 'Intake Costs', result: currency.format(intakeCost), unit: '$' },
-    { label: 'Discharge Costs', result: currency.format(dischargeCost), unit: '$' },
-    { label: 'Indirect Costs', result: currency.format(indirectCosts), unit: '$' },
-    { label: 'True Cost', result: currency.format(trueCost), unit: '$' },
+    { label: 'Intake Costs', result: intakeCostFormatted, unit: '$' },
+    { label: 'Discharge Costs', result: dischargeCostFormatted, unit: '$' },
+    { label: 'Indirect Costs', result: indirectCostsFormatted, unit: '$' },
+    { label: 'True Cost', result: trueCostFormatted, unit: '$' },
   ];
 
   const intakeTitle = "Annual Intake";
@@ -81,10 +88,13 @@ const DiagramResults = () => {
   let intakeRows = intakes.map((intake: Node<ProcessFlowPart>) => {
     let totalOutflow = getTotalOutflow(intake, calculatedData);
     totalIntake += totalOutflow;
-    return { label: intake.data.name, result: totalOutflow, unit: <FlowDisplayUnit /> };
+    const totalOutflowFormatted = formatDecimalPlaces(totalOutflow, settings.flowDecimalPrecision);
+    return { label: intake.data.name, result: totalOutflowFormatted, unit: <FlowDisplayUnit /> };
   });
+
+  const totalIntakeFormatted = formatDecimalPlaces(totalIntake, settings.flowDecimalPrecision);
   intakeRows.push(
-    { label: 'Total Intake', result: totalIntake, unit: <FlowDisplayUnit /> },
+    { label: 'Total Intake', result: totalIntakeFormatted, unit: <FlowDisplayUnit /> },
   );
 
   const dischargeTitle = "Annual Discharge";
@@ -92,24 +102,29 @@ const DiagramResults = () => {
   let dischargeRows: TwoCellResultRow[] = discharges.map((discharge: Node<ProcessFlowPart>) => {
     let totalInflow = getTotalInflow(discharge, calculatedData);
     totalDischarge += totalInflow;
-    return { label: discharge.data.name, result: totalInflow, unit: <FlowDisplayUnit /> };
+    const totalInflowFormatted = formatDecimalPlaces(totalInflow, settings.flowDecimalPrecision);
+    return { label: discharge.data.name, result: totalInflowFormatted, unit: <FlowDisplayUnit /> };
   });
 
   const estimatedUnknownLosses = diagramResults.estimatedUnknownLosses || 0;
-  const totalFacilityDischarge = totalDischarge + diagramResults.totalKnownLosses + estimatedUnknownLosses;
+  const totalFacilityDischarge = totalDischarge + diagramResults.totalKnownLosses + estimatedUnknownLosses
 
+  const totalKnownLossesFormatted = formatDecimalPlaces(diagramResults.totalKnownLosses, settings.flowDecimalPrecision);
+  const estimatedUnknownLossesFormatted = formatDecimalPlaces(estimatedUnknownLosses, settings.flowDecimalPrecision);
+  const totalFacilityDischargeFormatted = formatDecimalPlaces(totalFacilityDischarge, settings.flowDecimalPrecision);
   dischargeRows.push(
-    { label: 'Total Known Loss', result: diagramResults.totalKnownLosses, unit: <FlowDisplayUnit /> },
-    { label: 'Estimated Unknown Loss', result: diagramResults.estimatedUnknownLosses, unit: <FlowDisplayUnit /> },
-    { label: 'Total Discharge', result: totalFacilityDischarge, unit: <FlowDisplayUnit /> },
+    { label: 'Total Known Loss', result: totalKnownLossesFormatted, unit: <FlowDisplayUnit /> },
+    { label: 'Estimated Unknown Loss', result: estimatedUnknownLossesFormatted, unit: <FlowDisplayUnit /> },
+    { label: 'Total Discharge', result: totalFacilityDischargeFormatted, unit: <FlowDisplayUnit /> },
   )
   
   const facilityImbalance = totalIntake - totalFacilityDischarge;
   // const intakeDeliveredToSystems = totalIntake - diagramResults.intakeDeliveredToSystems;
 
+  const facilityImbalanceFormatted = formatDecimalPlaces(facilityImbalance, settings.flowDecimalPrecision);
   const balanceTitle = "Facility Level Imbalance";
   const balanceRows = [
-    { label: 'Net Intake Minus Discharge', result: facilityImbalance, unit: <FlowDisplayUnit /> },
+    { label: 'Net Intake Minus Discharge', result: facilityImbalanceFormatted, unit: <FlowDisplayUnit /> },
     // { label: 'Net Intake Minus System Intake', result: facilityImbalance, unit: <FlowDisplayUnit /> },
   ]
 
