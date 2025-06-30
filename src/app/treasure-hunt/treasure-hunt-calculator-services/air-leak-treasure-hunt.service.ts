@@ -45,6 +45,20 @@ export class AirLeakTreasureHuntService {
 
   getTreasureHuntOpportunityResults(airLeakSurveyTreasureHunt: AirLeakSurveyTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
     let results: AirLeakSurveyOutput = this.airLeakService.getResults(settings, airLeakSurveyTreasureHunt.airLeakSurveyInput);
+
+    // 7419 temporary patch results
+    results.baselineData.annualTotalElectricity = results.savingsData.annualTotalElectricity;
+    results.baselineData.annualTotalElectricityCost = results.savingsData.annualTotalElectricityCost;
+    results.baselineData.annualTotalFlowRate = results.savingsData.annualTotalFlowRate;
+    results.baselineData.totalFlowRate = results.savingsData.totalFlowRate;
+
+    results.modificationData.annualTotalElectricity = 0;
+    results.modificationData.annualTotalElectricityCost = 0;
+    results.modificationData.annualTotalFlowRate = 0;
+    results.modificationData.totalFlowRate = 0;
+    // end 7419 patch
+
+
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: results.savingsData.annualTotalElectricityCost,
       energySavings: 0,

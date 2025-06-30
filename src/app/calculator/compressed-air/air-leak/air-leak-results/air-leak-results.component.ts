@@ -49,10 +49,12 @@ export class AirLeakSurveyResultsComponent implements OnInit {
   }
 
   updateTableString() {
-    this.allTablesString = 
-    this.baselineTable.nativeElement.innerText + '\n' +
-    this.modTable.nativeElement.innerText + '\n' +
-    this.savingsTable.nativeElement.innerText;
+    // altered 7419
+    // this.allTablesString = 
+    // this.baselineTable.nativeElement.innerText + '\n' +
+    // this.modTable.nativeElement.innerText + '\n' +
+    // this.savingsTable.nativeElement.innerText;
+    this.allTablesString = this.savingsTable.nativeElement.innerText;
   }
 
 }
