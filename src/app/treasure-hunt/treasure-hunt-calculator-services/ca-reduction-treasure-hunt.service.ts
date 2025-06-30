@@ -45,6 +45,21 @@ export class CaReductionTreasureHuntService {
   getTreasureHuntOpportunityResults(compressedAirReduction: CompressedAirReductionTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
     this.compressedAirReductionService.calculateResults(settings, compressedAirReduction.baseline, compressedAirReduction.modification);
     let results: CompressedAirReductionResults = this.compressedAirReductionService.compressedAirResults.getValue(); 
+
+
+    // 7419 temporary patch results
+    results.baselineAggregateResults.consumption = results.annualConsumptionReduction;
+    results.baselineAggregateResults.energyCost = results.annualCostSavings;
+    results.baselineAggregateResults.energyUse = results.annualEnergySavings;
+    results.baselineAggregateResults.flowRate = results.annualFlowRateReduction;
+
+    results.modificationAggregateResults.consumption = 0;
+    results.modificationAggregateResults.energyCost = 0;
+    results.modificationAggregateResults.energyUse = 0;
+    results.modificationAggregateResults.flowRate = 0;
+    results.modificationAggregateResults.singleNozzeFlowRate = 0;
+    // end 7419 patch
+
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: results.annualCostSavings,
       energySavings: results.annualEnergySavings,
