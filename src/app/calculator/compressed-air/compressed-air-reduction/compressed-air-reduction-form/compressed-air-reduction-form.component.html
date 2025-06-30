@@ -266,7 +266,7 @@
     <!-- electricity form -->
     <div class="pb-1" *ngIf="form.controls.utilityType.value == 1">
       <div class="form-group">
-        <label class="small" for="{{'compressorControl_'+idString}}">Compressor Control</label>
+        <label class="small" for="{{'compressorControl_'+idString}}">Trim Compressor Control</label>
         <div class="input-group">
           <select class="form-control" name="compressorControl" id="{{'compressorControl_'+idString}}"
             formControlName="compressorControl" (change)="changeCompressorControl()"
