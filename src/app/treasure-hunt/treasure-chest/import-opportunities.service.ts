@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirPressureReductionTreasureHunt, ImportExportOpportunities, Treasure, TreasureHunt } from '../../shared/models/treasure-hunt';
+import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ImportExportOpportunities, Treasure, TreasureHunt } from '../../shared/models/treasure-hunt';
+import { UpdateDataService } from '../../shared/helper-services/update-data.service';
 
 @Injectable()
 export class ImportOpportunitiesService {
 
-  constructor() { }
+  constructor(private updateDataService: UpdateDataService) { }
 
   importData(data: ImportExportOpportunities, treasureHunt: TreasureHunt): TreasureHunt {
     if (data.compressedAirReductions) {
@@ -217,6 +218,14 @@ export class ImportOpportunitiesService {
       if (opportunityType == Treasure.compressedAirPressure) {
         this.updateCompressedAirPressureFields(opp);
       }
+
+      if (opportunityType == Treasure.compressedAir) {
+        this.updateCompressedAirReduction(opp);
+      }
+
+        if (opportunityType == Treasure.airLeak) {
+        this.updateAirLeak(opp);
+      }
     })
   }
 
@@ -246,6 +255,25 @@ export class ImportOpportunitiesService {
       });
     }
     return compressedAirPressureReductionTH;
+  }
+
+  updateCompressedAirReduction(compressedAirReductionTH: CompressedAirReductionTreasureHunt) {
+    compressedAirReductionTH.baseline.map(baselineInput => {
+      return this.updateDataService.updateCompressedAirReduction(baselineInput);
+    });
+    compressedAirReductionTH.modification.map(modInput => {
+      return this.updateDataService.updateCompressedAirReduction(modInput);
+    });
+
+    return compressedAirReductionTH;
+  }
+
+   updateAirLeak(airLeakSurvey: AirLeakSurveyTreasureHunt) {
+    airLeakSurvey.airLeakSurveyInput.compressedAirLeakSurveyInputVec.map(input => {
+      return this.updateDataService.updateAirLeakSurvey(input);
+    });
+
+    return airLeakSurvey;
   }
   
 }
