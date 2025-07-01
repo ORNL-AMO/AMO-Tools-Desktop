@@ -19,8 +19,6 @@ import { formatDataForMEASUR, getEdgeTypesFromString, updateAssessmentCreatedNod
 import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
-import { SideDrawer } from '../Drawer/SideDrawer';
-import DataDrawer from '../Drawer/DataDrawer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { AppStore, configureAppStore, RootState, selectEdges, selectIsDrawerOpen, selectNodes } from './store';
 import { Provider } from 'react-redux';
@@ -28,7 +26,9 @@ import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, keybo
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
 import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, checkDiagramNodeErrors, getIsDiagramValid } from 'process-flow-lib';
-import ResultsPanel from './ResultsPanel';
+import { SharedDrawer } from '../Drawer/SharedDrawer';
+import MenuSidebar from '../Drawer/MenuSidebar';
+import DataSidebar from '../Drawer/DataSidebar';
 
 
 export interface DiagramProps {
@@ -67,12 +67,12 @@ const Diagram = (props: DiagramProps) => {
   });
   // const diagramParentDimensions = useAppSelector((state) => state.diagram.diagramParentDimensions);
   const diagramParentDimensions = props.parentContainer;
-  
-  
+
+
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
-  
+
   // const newNodeErrors = checkDiagramNodeErrors(nodes, edges, calculatedData, settings);
   // const isDiagramValid = getIsDiagramValid(newNodeErrors);
   // console.log('=== newNodeErrors', newNodeErrors);
@@ -170,7 +170,7 @@ const Diagram = (props: DiagramProps) => {
         <ValidationWindow></ValidationWindow>
       }
       {/* // * Only for development result checking */}
-        {/* <ResultsPanel></ResultsPanel> */}
+      {/* <ResultsPanel></ResultsPanel> */}
       <ReactFlowProvider>
         <div className={'flow-wrapper'} style={{ height: props.height }}>
           <ReactFlow
@@ -210,19 +210,27 @@ const Diagram = (props: DiagramProps) => {
           </ReactFlow>
         </div>
 
-          {diagramParentDimensions.height &&
-            <SideDrawer
-              anchor={'left'}
-              diagramParentDimensions={diagramParentDimensions}
-              shadowRootRef={props.shadowRoot}
-            ></SideDrawer>
-          }
+        {diagramParentDimensions.height && (
+          <SharedDrawer
+            diagramParentDimensions={diagramParentDimensions}
+            shadowRootRef={props.shadowRoot}
+            anchor={'left'}
+          >
+              <MenuSidebar shadowRootRef={props.shadowRoot} diagramParentDimensions={diagramParentDimensions}/>
+          </SharedDrawer>
+        )}
 
-        <StaticModal shadowRootRef={props.shadowRoot}/>
+        {diagramParentDimensions.height && (
+          <SharedDrawer
+            diagramParentDimensions={diagramParentDimensions}
+            shadowRootRef={props.shadowRoot}
+            anchor={'right'}
+          >
+            <DataSidebar />
+          </SharedDrawer>
+        )}
 
-        {isDataDrawerOpen &&
-          <DataDrawer />
-        }
+        <StaticModal shadowRootRef={props.shadowRoot} />
       </ReactFlowProvider>
     </div>
   );
