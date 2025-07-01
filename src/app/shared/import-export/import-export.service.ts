@@ -25,21 +25,19 @@ export class ImportExportService {
 
    }
 
-  testIfOverLimit(data: any) { 
-    data.origin = 'AMO-TOOLS-DESKTOP';
+  testIsOverLimit(data: any): boolean { 
     let stringifyData = JSON.stringify(data);
-    let doc = this.windowRefService.getDoc();
-    let dlLink = doc.createElement("a");
     let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringifyData);
-    if (dataStr.length > 2090000) {
-      return false;
-    }else {
+    
+    const maxSafeDownload = 15 * 1024 * 1024; 
+    if (dataStr.length > maxSafeDownload) {
       return true;
+    }else {
+      return false;
     }
   }
 
   downloadData(data: any, name: string) {
-    data.origin = 'AMO-TOOLS-DESKTOP';
     let stringifyData = JSON.stringify(data);
     let doc = this.windowRefService.getDoc();
     let dlLink = doc.createElement("a");
@@ -55,7 +53,6 @@ export class ImportExportService {
   }
 
   downloadZipData(data: any, name: string) {
-    data.origin = 'AMO-TOOLS-DESKTOP';
     let stringifyData = JSON.stringify(data);
     let gzip = pako.gzip(stringifyData);
     let blob = new Blob([gzip], { type: 'application/gzip' });

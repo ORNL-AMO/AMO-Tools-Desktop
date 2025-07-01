@@ -1,0 +1,41 @@
+<div bsModal #shareDataModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="shareDataModal"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header p-2">
+                <h5 class="mt-auto">
+                    <span class="fa fa-share-square-o"></span>
+                    Share MEASUR Data
+                </h5>
+                <button class="close p-0 m-0" aria-label="Close" (click)="hideModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-2">
+                <div class="d-flex w-100">
+                    <div class="w-50 m-2">
+                        <button class="btn btn-secondary w-100" (click)="showEmailMeasurDataModal()">
+                            <span class="fa fa-envelope"></span><br><br>
+                            Email MEASUR Data
+                        </button>
+                        <p class="small text-center">
+                            Share your MEASUR assessment data with others by emailing it to them.
+                        </p>
+                    </div>
+                    <div class="w-50 m-2">
+                        <button class="btn btn-secondary w-100" (click)="showExportToJustifiModal()">
+                            <span class="fa fa-file-excel-o"> </span><br><br>
+                            Export to JUSTIFI
+                        </button>
+                        <p class="small text-center">
+                            Export your MEASUR assessment data to an excel file and upload it to JUSTIFI.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-2">
+                <button type="button" class="btn btn-secondary" (click)="hideModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

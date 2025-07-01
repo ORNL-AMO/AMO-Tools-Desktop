@@ -21,6 +21,7 @@ import { DetailedResultsComponent } from './detailed-results/detailed-results.co
 import { TraverseResultsComponent } from './detailed-results/traverse-results/traverse-results.component';
 import { FanOperationsSummaryComponent } from './input-summary/fan-operations-summary/fan-operations-summary.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     PercentGraphModule,
     PieChartModule,
     SharedPipesModule,
+    ExportableResultsTableModule
   ],
   declarations: [FsatReportComponent, FsatReportGraphsComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent, DetailedResultsComponent, TraverseResultsComponent, FanOperationsSummaryComponent],
   exports: [FsatReportComponent]

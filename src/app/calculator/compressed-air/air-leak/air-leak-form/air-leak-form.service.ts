@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FacilityCompressorData, AirLeakSurveyData, OrificeMethodData, DecibelsMethodData, BagMethodData, EstimateMethodData, AirLeakSurveyInput } from '../../../../shared/models/standalone';
+import { FacilityCompressorData, AirLeakSurveyData, OrificeMethodData, DecibelsMethodData, EstimateMethodData, AirLeakSurveyInput, BagMethodInput } from '../../../../shared/models/standalone';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 import { Settings } from '../../../../shared/models/settings';
@@ -33,9 +33,10 @@ export class AirLeakFormService {
       leakDescription: [inputObj.leakDescription, [Validators.required]],
       measurementMethod: [inputObj.measurementMethod],
       // bag method data
-      height: [inputObj.bagMethodData.height],
-      diameter: [inputObj.bagMethodData.diameter],
-      fillTime: [inputObj.bagMethodData.fillTime],
+      bagFillTime: [inputObj.bagMethodData.bagFillTime],
+      bagVolume: [inputObj.bagMethodData.bagVolume],
+      operatingTime: [inputObj.bagMethodData.operatingTime],
+      numberOfUnits: [inputObj.bagMethodData.numberOfUnits],
       // decibelsMethodData
       linePressure: [inputObj.decibelsMethodData.linePressure],
       decibels: [inputObj.decibelsMethodData.decibels],
@@ -70,9 +71,10 @@ export class AirLeakFormService {
         leakRateEstimate: 0.1
       },
       bagMethodData: {
-        height: 0,
-        diameter: 0,
-        fillTime: 0
+        operatingTime: 0,
+        bagVolume: 0,
+        bagFillTime: 0,
+        numberOfUnits: 1
       },
       decibelsMethodData: {
         linePressure: 0,
@@ -100,10 +102,11 @@ export class AirLeakFormService {
   }
 
   getAirLeakObjFromForm(form: UntypedFormGroup): AirLeakSurveyData {
-    let bagMethodObj: BagMethodData = {
-      height: form.controls.height.value,
-      diameter: form.controls.diameter.value,
-      fillTime: form.controls.fillTime.value
+    let bagMethodObj: BagMethodInput = {
+      operatingTime: form.controls.operatingTime.value,
+      bagVolume: form.controls.bagVolume.value,
+      bagFillTime: form.controls.bagFillTime.value,
+      numberOfUnits: form.controls.numberOfUnits.value
     };
     let decibelsMethodData: DecibelsMethodData = {
       linePressure: form.controls.linePressure.value,
@@ -307,29 +310,30 @@ export class AirLeakFormService {
     return form;
   }
 
-  getBagFormFromObj(inputObj: AirLeakSurveyData): UntypedFormGroup {
+  getBagFormFromObj(inputObj: AirLeakSurveyData, operatingHours: number): UntypedFormGroup {
     let form: UntypedFormGroup = this.formBuilder.group({
-      height: [inputObj.bagMethodData.height],
-      diameter: [inputObj.bagMethodData.diameter],
-      fillTime: [inputObj.bagMethodData.fillTime],
+      operatingTime: [operatingHours],
+      numberOfUnits: [inputObj.bagMethodData.numberOfUnits],
+      bagVolume: [inputObj.bagMethodData.bagVolume],
+      bagFillTime: [inputObj.bagMethodData.bagFillTime],
     });
     form = this.setBagValidators(form);
     return form;
   }
 
-  getBagObjFromForm(form: UntypedFormGroup): BagMethodData {
-    let bagMethodObj: BagMethodData = {
-      height: form.controls.height.value,
-      diameter: form.controls.diameter.value,
-      fillTime: form.controls.fillTime.value
-    };
+  getBagObjFromForm(form: UntypedFormGroup, operatingHours: number): BagMethodInput {
+    let bagMethodObj: BagMethodInput = {
+      operatingTime: operatingHours,
+      bagFillTime: form.controls.bagFillTime.value,
+      bagVolume: form.controls.bagVolume.value,
+      numberOfUnits: form.controls.numberOfUnits.value,
+    }
     return bagMethodObj;
   }
 
   setBagValidators(form: UntypedFormGroup): UntypedFormGroup {
-    form.controls.height.setValidators([Validators.required, Validators.min(0)]);
-    form.controls.diameter.setValidators([Validators.required, Validators.min(0)]);
-    form.controls.fillTime.setValidators([Validators.required, Validators.min(0)]);
+    form.controls.bagVolume.setValidators([Validators.required, Validators.min(0)]);
+    form.controls.bagFillTime.setValidators([Validators.required, Validators.min(0)]);
     return form;
   }
 

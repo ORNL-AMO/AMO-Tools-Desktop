@@ -1,5 +1,7 @@
+import { OpportunityUtilityType } from "../treasure-hunt"
+
 export interface AirHeatingInput {
-    utilityType?: string,
+    utilityType?: OpportunityUtilityType,
     operatingHours: number,
     gasFuelType: boolean,
     fuelCost: number,

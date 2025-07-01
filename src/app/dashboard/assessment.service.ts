@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PSAT, PsatInputs } from '../shared/models/psat';
-import { Assessment } from '../shared/models/assessment';
+import { Assessment, AssessmentType } from '../shared/models/assessment';
 import { PHAST } from '../shared/models/phast/phast';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
@@ -87,7 +87,7 @@ export class AssessmentService {
 
   }
 
-  getNewAssessment(assessmentType: string): Assessment {
+  getNewAssessment(assessmentType: AssessmentType): Assessment {
     let newAssessment: Assessment = {
       name: null,
       createdDate: new Date(),

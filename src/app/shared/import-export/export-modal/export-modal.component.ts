@@ -46,7 +46,7 @@ export class ExportModalComponent implements OnInit {
     } else {
       this.exportDirectoryData();
     }
-    this.canExportJson = this.importExportService.testIfOverLimit(this.exportData);
+    this.canExportJson = !this.importExportService.testIsOverLimit(this.exportData);
   }
 
   ngAfterViewInit() {
@@ -144,6 +144,7 @@ export class ExportModalComponent implements OnInit {
 
 
   buildExportJSON() {
+    this.exportData.origin = 'AMO-TOOLS-DESKTOP';
     this.importExportService.exportInProgress.next(true);
     setTimeout(() => {
       this.importExportService.downloadData(this.exportData, this.exportName);
@@ -152,6 +153,7 @@ export class ExportModalComponent implements OnInit {
   }
 
   buildExportZip() {
+    this.exportData.origin = 'AMO-TOOLS-DESKTOP';
     this.importExportService.exportInProgress.next(true);
     setTimeout(() => {
       this.importExportService.downloadZipData(this.exportData, this.exportName);

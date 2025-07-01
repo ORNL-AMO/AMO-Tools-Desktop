@@ -409,7 +409,7 @@ export interface PowerFactorCorrectionTreasureHunt extends TreasureHuntOpportuni
 
 
 export interface EnergySourceData {
-    energySourceType: string,
+    energySourceType: OpportunityUtilityType,
     fuelCost?: {
         baseline: number,
         modification: number
@@ -430,7 +430,7 @@ export interface TreasureHuntOpportunityResults {
     energySavings: number,
     baselineCost: number,
     modificationCost: number,
-    utilityType: string,
+    utilityType: OpportunityUtilityType,
   }
 
 export interface OpportunitySheetResults {
@@ -547,7 +547,7 @@ export interface TreasureHuntResults {
 export interface OpportunitySummary {
     opportunityName: string,
     isAssessmentOpportunity?: boolean,
-    utilityType: string,
+    utilityType: OpportunityUtilityType,
     costSavings: number,
     totalCost: number,
     totalEnergySavings: number,
@@ -561,6 +561,9 @@ export interface OpportunitySummary {
     equipment: string,
     owner: string
 }
+
+//TODO: WHAT IS OTHER?
+export type OpportunityUtilityType = 'Electricity' | 'Natural Gas' | 'Water' | 'Waste Water' | 'Other Fuel' | 'Compressed Air' | 'Steam' | 'Mixed' | 'Other';
 
 
 export interface SavingsItem { 

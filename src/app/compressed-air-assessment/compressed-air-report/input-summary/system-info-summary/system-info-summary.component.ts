@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { SystemInformation } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -17,6 +17,10 @@ export class SystemInfoSummaryComponent implements OnInit {
   settings: Settings;
   
   collapse: boolean = false;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+  
   constructor() { }
 
   ngOnInit(): void {
@@ -24,6 +28,10 @@ export class SystemInfoSummaryComponent implements OnInit {
 
   toggleCollapse() {
     this.collapse = !this.collapse;
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../psat.service';
 import { Settings } from '../../../shared/models/settings';
@@ -42,6 +42,11 @@ export class InputSummaryComponent implements OnInit {
   ampsDiff: boolean = false;
   kwDiff: boolean = false;
   fieldVoltageDiff: boolean = false;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
+
   constructor(private psatService: PsatService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -167,6 +172,10 @@ export class InputSummaryComponent implements OnInit {
         }
       })
     }
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }
 

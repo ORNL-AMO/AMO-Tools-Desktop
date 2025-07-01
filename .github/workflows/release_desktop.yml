@@ -54,7 +54,12 @@ jobs:
               $EXE_PATH &&
             (OLD_HASH=$(ggrep -o -P -m 1 '(?<=sha512:\s).*' ../output/latest.yml) &
             NEW_HASH=$(node ~/gen_hash.js -f $EXE_PATH)) &&
-            fndrep $OLD_HASH $NEW_HASH ../output/latest.yml) &
+            docker run \
+              --env OLD_HASH="$OLD_HASH" \
+              --env NEW_HASH="$NEW_HASH" \
+              -v ../output:/output \
+              ubuntu:latest \
+              sed -i "s|$OLD_HASH|$NEW_HASH|g" /output/latest.yml) &
           node ./node_modules/.bin/electron-builder --linux --x64 --publish never
       - name: Prepare output
         id: output

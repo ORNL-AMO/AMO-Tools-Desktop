@@ -23,6 +23,8 @@ export class RefineDataComponent implements OnInit {
   changeStepSub: Subscription;
   applyToAll: boolean = false;
 
+  applyAllError: boolean = false;
+
   constructor(
     private cd: ChangeDetectorRef,
     private router: Router,
@@ -118,13 +120,17 @@ export class RefineDataComponent implements OnInit {
   applySelectionsToAll(dataSet: ExplorerDataSet) {
     dataSet.refineDataTabVisited = true;
     dataSet.fields.map((field, i) => {
-      // Only if fields have same original name
-      if (field.fieldName === this.selectedDataSet.fields[i].fieldName) {
-        field.alias = this.selectedDataSet.fields[i].alias;
+      if (!this.selectedDataSet.fields[i]) {
+        this.applyAllError = true;
+        this.applyToAll = false;
+      } else {
+        if (field.fieldName === this.selectedDataSet.fields[i].fieldName) {
+          field.alias = this.selectedDataSet.fields[i].alias;
+        }
+        field.useForDayTypeAnalysis = this.selectedDataSet.fields[i].useField;
+        field.useField = this.selectedDataSet.fields[i].useField;
+        field.unit = this.selectedDataSet.fields[i].unit;
       }
-      field.useForDayTypeAnalysis = this.selectedDataSet.fields[i].useField;
-      field.useField = this.selectedDataSet.fields[i].useField;
-      field.unit = this.selectedDataSet.fields[i].unit;
     })
   }
 

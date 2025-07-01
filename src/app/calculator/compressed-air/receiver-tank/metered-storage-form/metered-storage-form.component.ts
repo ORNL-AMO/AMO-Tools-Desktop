@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ReceiverTankMeteredStorage } from "../../../../shared/models/standalone";
+import { ReceiverTankMeteredResults, ReceiverTankMeteredStorage } from "../../../../shared/models/standalone";
 import { StandaloneService } from '../../../standalone.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ReceiverTankService } from '../receiver-tank.service';
@@ -17,6 +17,7 @@ export class MeteredStorageFormComponent implements OnInit {
 
   inputs: ReceiverTankMeteredStorage;
   totalReceiverVolume: number;
+  results: ReceiverTankMeteredResults;
   setFormSub: Subscription;
   constructor(private receiverTankService: ReceiverTankService, private standaloneService: StandaloneService) {
   }
@@ -34,7 +35,7 @@ export class MeteredStorageFormComponent implements OnInit {
   }
 
   getTotalReceiverVolume() {
-    this.totalReceiverVolume = this.standaloneService.receiverTankSizeMeteredStorage(this.inputs, this.settings);
+    this.results = this.standaloneService.receiverTankSizeMeteredStorage(this.inputs, this.settings);
     if (this.receiverTankService.inAssessmentCalculator) {
       this.updateInputsForAssessmentCalculator();
     }

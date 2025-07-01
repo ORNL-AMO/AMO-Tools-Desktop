@@ -9,12 +9,14 @@ import { DayTypeAnalysisService } from '../../day-type-analysis/day-type-analysi
 import { DayTypeGraphService } from '../../day-type-analysis/day-type-graph/day-type-graph.service';
 import { VisualizeService } from '../../visualize/visualize.service';
 import { LogToolService } from '../../log-tool.service';
+import * as pako from 'pako';
+
 
 @Component({
-    selector: 'app-import-data',
-    templateUrl: './import-data.component.html',
-    styleUrls: ['./import-data.component.css'],
-    standalone: false
+  selector: 'app-import-data',
+  templateUrl: './import-data.component.html',
+  styleUrls: ['./import-data.component.css'],
+  standalone: false
 })
 export class ImportDataComponent implements OnInit {
   invalidFileReferences: Array<InvalidFile> = [];
@@ -60,10 +62,10 @@ export class ImportDataComponent implements OnInit {
 
   finishUpload() {
     this.explorerData.isStepFileUploadComplete = this.explorerData.fileData.length !== 0 && this.invalidFileReferences.length === 0;
-    this.logToolDataService.loadingSpinner.next({show: false, msg: 'Uploading File Data...'});
+    this.logToolDataService.loadingSpinner.next({ show: false, msg: 'Uploading File Data...' });
     this.logToolDataService.explorerData.next(this.explorerData);
   }
-  
+
   setImportFiles(files: FileList) {
     if (files.length !== 0) {
       this.logToolDataService.loadingSpinner.next({ show: true, msg: 'Uploading File Data...' });
@@ -121,22 +123,22 @@ export class ImportDataComponent implements OnInit {
         let xlsxRows = XLSX.utils.sheet_to_csv(workBook.Sheets[selectedSheet], { dateNF: "mm/dd/yyyy hh:mm:ss" });
         let importData: CsvImportData = await this.csvToJsonService.parseCsvWithoutHeaders(xlsxRows);
         let xlsxPreviewData = importData.data;
-        this.explorerData.fileData.push({ 
-          dataSetId: this.logToolDataService.getUniqueId(), 
+        this.explorerData.fileData.push({
+          dataSetId: this.logToolDataService.getUniqueId(),
           fileType: '.xlsx',
-          name: fileReference.name, 
+          name: fileReference.name,
           workSheets: workSheets,
           workBook: workBook,
           selectedSheet: selectedSheet,
           data: xlsxRows,
           previewData: xlsxPreviewData,
-         });
+        });
         resolve(xlsxPreviewData);
       }
 
       fr.onerror = () => {
         this.invalidFileReferences.push({ name: fileReference.name, message: 'XLSX file cannot be processed. Check your data and try again.' });
-          reject(fr);
+        reject(fr);
       };
     });
   }
@@ -149,8 +151,8 @@ export class ImportDataComponent implements OnInit {
         let fileImportData = JSON.parse(JSON.stringify(fr.result));
         let importData: CsvImportData = await this.csvToJsonService.parseCsvWithoutHeaders(fileImportData);
         let csvFileData = importData.data;
-        this.explorerData.fileData.push({ 
-          dataSetId: this.logToolDataService.getUniqueId(), 
+        this.explorerData.fileData.push({
+          dataSetId: this.logToolDataService.getUniqueId(),
           fileType: '.csv',
           name: fileReference.name,
           data: fileImportData,
@@ -167,23 +169,25 @@ export class ImportDataComponent implements OnInit {
 
   }
 
-  importExistingExplorerJson(files: FileList) {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: 'Uploading File Data...'});
+  importExistingExplorerExport(files: FileList) {
+    this.logToolDataService.loadingSpinner.next({ show: true, msg: 'Uploading File Data...' });
     this.dayTypeAnalysisService.resetData();
     this.visualizeService.resetData();
     this.dayTypeGraphService.resetData();
     this.invalidFileReferences = new Array();
     if (files[0]) {
-        let extensionPattern: string = '.(json|JSON)$';
-        let validExtensions: RegExp = new RegExp(extensionPattern, 'i');
-        if (validExtensions.test(files[0].name)) {
-              let fileReaderPromise: Promise<any> = this.setJSONImportFile(files[0]);
-              fileReaderPromise.then((logToolDbData) => {
-                // noDayTypeAnalysis removal
-                this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis)
-                this.finishUpload();
-              });
-        } 
+      let isValidJson: RegExp = new RegExp('.(json|JSON)$', 'i');
+      let isValidZipped: RegExp = new RegExp('.(gz)$', 'i');
+      let fileReaderPromise: Promise<any>;
+      if (isValidJson.test(files[0].name)) {
+        fileReaderPromise = this.setJSONImportFile(files[0]);
+      } else if (isValidZipped.test(files[0].name)) {
+        fileReaderPromise = this.setGZippedImportFile(files[0]);
+      }
+      fileReaderPromise.then((logToolDbData) => {
+        this.setExistingDataComplete(!logToolDbData.setupData.noDayTypeAnalysis)
+        this.finishUpload();
+      });
     }
   }
 
@@ -191,17 +195,17 @@ export class ImportDataComponent implements OnInit {
     return new Promise((resolve, reject) => {
       let fr: FileReader = new FileReader();
       fr.readAsText(fileReference);
-      fr.onloadend = (e) => {
+      fr.onload = (e) => {
         let jsonData = JSON.parse(JSON.stringify(fr.result));
         let importData: LogToolDbData = JSON.parse(jsonData);
         if (importData.origin === "AMO-LOG-TOOL-DATA") {
           this.explorerData.isExistingImport = true;
           this.logToolDbService.logToolDbData = [importData];
           this.logToolDbService.setDataFromImport(importData);
-          this.explorerData.fileData.push({ 
-            dataSetId: this.logToolDataService.getUniqueId(), 
+          this.explorerData.fileData.push({
+            dataSetId: this.logToolDataService.getUniqueId(),
             fileType: '.json',
-            name: fileReference.name, 
+            name: fileReference.name,
             data: importData.setupData.individualDataFromCsv,
             previewData: importData.setupData.individualDataFromCsv
           });
@@ -218,7 +222,45 @@ export class ImportDataComponent implements OnInit {
         reject(fr);
       };
     });
+  }
 
+
+  setGZippedImportFile(fileReference: any) {
+    return new Promise((resolve, reject) => {
+      let fileReader = new FileReader();
+      let blob = new Blob([fileReference], { type: 'application/gzip' });
+      fileReader.onload = () => {
+        let arrayBuffer = fileReader.result as ArrayBuffer;
+        let result = pako.ungzip(new Uint8Array(arrayBuffer), { to: 'string' });
+        let jsonData = JSON.parse(JSON.stringify(result));
+        let importData: LogToolDbData = JSON.parse(jsonData);
+
+        if (importData.origin === "AMO-LOG-TOOL-DATA") {
+          this.explorerData.isExistingImport = true;
+          this.logToolDbService.logToolDbData = [importData];
+          this.logToolDbService.setDataFromImport(importData);
+          this.explorerData.fileData.push({
+            dataSetId: this.logToolDataService.getUniqueId(),
+            fileType: '.json',
+            name: fileReference.name,
+            data: importData.setupData.individualDataFromCsv,
+            previewData: importData.setupData.individualDataFromCsv
+          });
+          this.logToolDataService.importExistingDataSets(importData);
+          resolve(importData);
+        } else {
+          let name = importData.name ? importData.name : undefined;
+          this.invalidFileReferences.push({ name: name, message: 'The uploaded JSON file does not contain AMO-Tools Data Explorer data' });
+          resolve(importData);
+        }
+      };
+        fileReader.readAsArrayBuffer(blob);
+
+
+      fileReader.onerror = function () {
+        reject(fileReader);
+      };
+    });
   }
 
   removefileReference(index) {
@@ -241,14 +283,14 @@ export class ImportDataComponent implements OnInit {
     this.explorerData.datasets.splice(dataSetIndex, 1);
     this.logToolService.individualDataFromCsv.splice(dataSetIndex, 1);
     if (this.explorerData.isSetupDone) {
-      this.logToolDataService.loadingSpinner.next({show: true, msg: 'Re-calculating Data. This may take a moment depending on the amount of data you have supplied.'});
+      this.logToolDataService.loadingSpinner.next({ show: true, msg: 'Re-calculating Data. This may take a moment depending on the amount of data you have supplied.' });
       // set delay to display spinner before blocked thread
       setTimeout(async () => {
         // need to pull out existing data sets
         await this.finalizeDataSetup();
         if (this.dayTypeAnalysisService.dayTypesCalculated) {
           this.runDayTypeAnalysis();
-          this.logToolDataService.loadingSpinner.next({show: false, msg: 'Re-calculating Data. This may take a moment depending on the amount of data you have supplied.'});
+          this.logToolDataService.loadingSpinner.next({ show: false, msg: 'Re-calculating Data. This may take a moment depending on the amount of data you have supplied.' });
         }
       }, 25);
     }
@@ -261,13 +303,13 @@ export class ImportDataComponent implements OnInit {
 
 
   async useExampleData() {
-    this.logToolDataService.loadingSpinner.next({show: true, msg: 'Loading Example...'});
+    this.logToolDataService.loadingSpinner.next({ show: true, msg: 'Loading Example...' });
     let exampleDataSet: CsvImportData = await this.csvToJsonService.parseExampleCSV();
     let exampleName: string = 'Example Data';
-    this.explorerData.fileData.push({ 
+    this.explorerData.fileData.push({
       dataSetId: 'example',
       fileType: 'example',
-      name: exampleName, 
+      name: exampleName,
       data: exampleDataSet.data,
       previewData: exampleDataSet
     });
@@ -277,7 +319,7 @@ export class ImportDataComponent implements OnInit {
     this.runDayTypeAnalysis(true);
     this.setExistingDataComplete();
     this.logToolDataService.explorerData.next(this.explorerData);
-    this.logToolDataService.loadingSpinner.next({show: false, msg: 'Loading Example...'});
+    this.logToolDataService.loadingSpinner.next({ show: false, msg: 'Loading Example...' });
   }
 
   runDayTypeAnalysis(setDisplayTotalAggregatedId?: boolean) {

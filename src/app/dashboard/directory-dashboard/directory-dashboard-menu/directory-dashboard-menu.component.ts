@@ -12,18 +12,19 @@ import { ReportRollupService } from '../../../report-rollup/report-rollup.servic
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import { Subscription } from 'rxjs';
 import { Diagram } from '../../../shared/models/diagram';
+import { ExportToJustifiTemplateService } from '../../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 
 @Component({
-    selector: 'app-directory-dashboard-menu',
-    templateUrl: './directory-dashboard-menu.component.html',
-    styleUrls: ['./directory-dashboard-menu.component.css'],
-    standalone: false
+  selector: 'app-directory-dashboard-menu',
+  templateUrl: './directory-dashboard-menu.component.html',
+  styleUrls: ['./directory-dashboard-menu.component.css'],
+  standalone: false
 })
-export class DirectoryDashboardMenuComponent implements OnInit { 
+export class DirectoryDashboardMenuComponent implements OnInit {
 
   @Input()
   dashboardCollapsed: boolean;
-  
+
   breadCrumbs: Array<Directory>;
   directory: Directory;
   view: string = 'grid';
@@ -33,10 +34,12 @@ export class DirectoryDashboardMenuComponent implements OnInit {
   activatedRouteSub: Subscription;
   updateSelectedStatusSub: Subscription;
   updateDashboardDataSub: Subscription;
-  
-  constructor(private activatedRoute: ActivatedRoute, 
+
+  constructor(private activatedRoute: ActivatedRoute,
     private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
-    private exportService: ExportService, private dashboardService: DashboardService, private reportRollupService: ReportRollupService, private router: Router) { }
+    private exportService: ExportService, private dashboardService: DashboardService,
+    private reportRollupService: ReportRollupService, private router: Router,
+    private exportToJustifiTemplateService: ExportToJustifiTemplateService) { }
 
   ngOnInit() {
     this.activatedRouteSub = this.activatedRoute.params.subscribe(params => {
@@ -53,9 +56,9 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     });
 
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
-      this.directory = this.directoryDbService.getById(this.directory.id); 
-      if (this.directory){
-        this.directory.selected = false;    
+      this.directory = this.directoryDbService.getById(this.directory.id);
+      if (this.directory) {
+        this.directory.selected = false;
         this.isAllSelected = false;
         this.setSelectedStatus();
       }
@@ -94,7 +97,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     });
     this.directory.inventories.forEach(inventory => {
       inventory.selected = this.isAllSelected;
-    }); 
+    });
     // todo hide until copy and move is implemented
     // this.directory.diagrams.forEach(diagram => {
     //   diagram.selected = this.isAllSelected;
@@ -120,7 +123,7 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.hasSelectedItem = hasAssessmentSelected != undefined || hasDirectorySelected != undefined || hasInventorySelected != undefined || hasCalculatorSelected != undefined || hasDiagramSelected != undefined;
     this.canCopyItem = this.hasSelectedItem;
   }
-  
+
   setIsAllSelected() {
     let hasAssessmentUnselected: Assessment = _.find(this.directory.assessments, (value) => { return value.selected == false });
     let hasDirUnselected: Directory = _.find(this.directory.subDirectory, (value) => { return value.selected == false });
@@ -184,11 +187,15 @@ export class DirectoryDashboardMenuComponent implements OnInit {
     this.router.navigateByUrl('/report-rollup');
   }
 
-  showCopyItems(){
+  showCopyItems() {
     this.dashboardService.copyItems.next(true);
   }
 
   moveToFolder() {
     this.dashboardService.moveItems.next(true);
+  }
+
+  exportToJustifi() {
+    this.exportToJustifiTemplateService.showExportToJustifiModal.next(true)
   }
 }

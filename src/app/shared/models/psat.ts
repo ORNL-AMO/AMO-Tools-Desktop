@@ -16,6 +16,7 @@ export interface PSAT {
   connectedItem?: ConnectedItem,
   valid?: PsatValid;
   existingDataUnits?: string;
+  selectedModificationId?: string 
 }
 
 export interface PsatValid {

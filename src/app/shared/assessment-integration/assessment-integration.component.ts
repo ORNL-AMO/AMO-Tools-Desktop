@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { AssessmentIntegrationService, ExistingIntegrationData, IntegratedAssessment } from './assessment-integration.service';
 import { FormControl, FormGroup } from '@angular/forms';
-import { AssessmentOption, AssessmentType } from '../connected-inventory/integrations';
-import { Assessment } from '../models/assessment';
+import { AssessmentOption } from '../connected-inventory/integrations';
+import { Assessment, AssessmentType } from '../models/assessment';
 import * as _ from 'lodash';
 import { Settings } from '../models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';

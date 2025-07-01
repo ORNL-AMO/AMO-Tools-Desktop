@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "main": "main.js",
   "license": "MIT",
   "description": "MEASUR",
@@ -12,13 +12,12 @@
     "npm": "10.9.2"
   },
   "scripts": {
-    "start": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng serve --live-reload",
+    "install-node-deps": "bash scripts/install-node-dependencies.sh",
+    "build-diagram": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development --watch",
     "build:process-flow-lib": "tsc -p src/process-flow-lib/tsconfig.json",
     "build": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href .",
-    "build-watch": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --watch",
-    "build-diagram": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development --watch",
-    "start-diagram-watch": "concurrently --kill-others \"npm run build-diagram\" \"npm run start\"",
-    "build-diagram-watch": "concurrently --kill-others \"npm run build-diagram\" \"npm run build-watch\"",
+    "start": "concurrently --kill-others \"npm run build-diagram\" \"node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng serve --live-reload\"",
+    "build-watch": "concurrently --kill-others \"npm run build-diagram\" \"node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --watch\"",
     "build-prod-desktop": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
     "build-prod-web": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration production-web",
     "build-prod-desktop-ci": "node --max_old_space_size=16000 ./node_modules/webpack/bin/webpack.js build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href . --configuration desktop",
@@ -135,7 +134,7 @@
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "19.0.1",
-    "@angular-devkit/build-angular": "19.2.3",
+    "@angular-devkit/build-angular": "19.2.14",
     "@angular-devkit/core": "19.2.3",
     "@angular-devkit/schematics": "19.2.3",
     "@angular/cli": "19.2.3",
@@ -145,7 +144,6 @@
     "@types/react": "^19.0.11",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
-    "@xyflow/react": "^12.4.4",
     "angular-plotly.js": "^5.2.1",
     "axios": "^1.7.4",
     "concurrently": "^8.2.2",
