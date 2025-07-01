@@ -21,42 +21,42 @@
 
         </thead>
         <tbody>
-            <!-- <tr class="department-item-row"
-                *ngFor="let departmentSummaryItem of inventorySummary.departmentSummaryItems"
-                [ngStyle]="{'background-color': 'rgb('+departmentSummaryItem.departmentColor+')'}">
+            <tr class="system-item-row"
+                *ngFor="let systemSummaryItem of inventorySummary.systemSummaryItems"
+                [ngStyle]="{'background-color': 'rgb('+systemSummaryItem.systemColor+')'}">
                 <td>
-                    {{departmentSummaryItem.departmentName}}
+                    {{systemSummaryItem.systemName}}
                 </td>
                 <td>
-                    {{departmentSummaryItem.numberOfPumps}}
+                    {{systemSummaryItem.numberOfPumps}}
                 </td>
                 <td>
-                    <span *ngIf="departmentSummaryItem.energyUse">
-                        {{departmentSummaryItem.energyUse | number:'1.0-0'}} kWh/yr
+                    <span *ngIf="systemSummaryItem.energyUse">
+                        {{systemSummaryItem.energyUse | number:'1.0-0'}} kWh/yr
                     </span>
-                    <span *ngIf="!departmentSummaryItem.energyUse">
+                    <span *ngIf="!systemSummaryItem.energyUse">
                         &mdash; kWh/yr
                     </span>
                 </td>
                 <td>
-                    <span *ngIf="departmentSummaryItem.energyCost">
-                        {{departmentSummaryItem.energyCost | currency:'USD':'symbol':'2.0-0'}}
+                    <span *ngIf="systemSummaryItem.energyCost">
+                        {{systemSummaryItem.energyCost | currency:'USD':'symbol':'2.0-0'}}
                     </span>
-                    <span *ngIf="!departmentSummaryItem.energyCost">
+                    <span *ngIf="!systemSummaryItem.energyCost">
                         $ &mdash;
                     </span>
                 </td>
                 <td>
-                    <span *ngIf="departmentSummaryItem.co2EmissionOutput">
-                        {{departmentSummaryItem.co2EmissionOutput | number :'1.0-0'}}
+                    <span *ngIf="systemSummaryItem.co2EmissionOutput">
+                        {{systemSummaryItem.co2EmissionOutput | number :'1.0-0'}}
                     </span>
-                    <span *ngIf="!departmentSummaryItem.co2EmissionOutput">
+                    <span *ngIf="!systemSummaryItem.co2EmissionOutput">
                         &mdash;
                     </span>
                     <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
                     <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
                 </td>
-            </tr> -->
+            </tr>
         </tbody>
         <tfoot>
             <tr class="bold">
