@@ -1,1 +1,30 @@
-<p>selected-options works!</p>
+<div class="d-flex flex-wrap">
+    <div class="nav-item" *ngFor="let systemId of filterInventorySummary.selectedSystemsIds; let index = index;">
+        <button type="button" class="nav-btn" (click)="removeSystem(index)">
+            <span aria-hidden="true" class="pr-1">&times;
+            </span>{{getSystemName(systemId)}}
+        </button>
+    </div>
+
+    <!-- <div class="nav-item" *ngFor="let pumpType of filterInventorySummary.pumpTypes; let index = index;">
+        <button type="button" class="nav-btn" (click)="removePumpTypes(index)"><span aria-hidden="true"
+                class="pr-1">&times;</span>{{pumpType | pumpSelectField:'pumpType'}}</button>
+    </div> -->
+
+    <!-- <div class="nav-item" *ngFor="let power of filterInventorySummary.motorRatedPowerValues; let index = index;">
+        <button type="button" class="nav-btn" (click)="removeRatedPower(index)"><span aria-hidden="true"
+                class="pr-1">&times;</span>{{power}}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
+        </button>
+    </div> -->
+
+    <!-- <div class="nav-item" *ngFor="let status of filterInventorySummary.statusValues; let index = index;">
+        <button type="button" class="nav-btn" (click)="removeStatus(index)"><span aria-hidden="true"
+                class="pr-1">&times;</span>{{status | pumpSelectField:'statusType'}} </button>
+    </div> -->
+
+    <div class="nav-item pull-right">
+        <button class="nav-btn-clear pull-right" (click)="clearAllFilters()">Clear All</button>
+    </div>
+</div>

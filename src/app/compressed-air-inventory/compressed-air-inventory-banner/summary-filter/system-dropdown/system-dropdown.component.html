@@ -1,1 +1,21 @@
-<p>system-dropdown works!</p>
+<div class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleSystems()">
+        System
+    </a>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': systemsDropdown == true}">
+        <div class="list-group">
+            <a class="list-group-item list-group-item-action"
+                [ngClass]="{'active': filterInventorySummary.selectedSystemsIds.length == 0}"
+                (click)="selectAllSystems()">
+                All
+            </a>
+            <a class="list-group-item list-group-item-action" *ngFor="let system of compressedAirInventoryData.systems"
+                [ngClass]="{'active': checkActive(system.id)}" (click)="selectSystem(system.id)">
+                {{system.name}}
+                <span class="pull-right pl-2 pr-2 badge badge-pill">
+                    {{system.catalog.length}}
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
