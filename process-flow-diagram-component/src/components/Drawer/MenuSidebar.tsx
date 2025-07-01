@@ -1,5 +1,5 @@
 import React, { ChangeEvent, memo, useState } from 'react';
-import { Badge, Box, Button, Chip, Divider, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
@@ -126,7 +126,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           <Box sx={{ flexGrow: 1, paddingY: '1rem', paddingX: '.5rem' }}>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
               {processFlowParts.map((part: ProcessFlowPart) => (
-                <Grid item xs={1} sm={2} md={2} key={part.processComponentType}>
+                <Grid size={{ xs: 1, sm: 2, md: 2 }}  key={part.processComponentType}>
                   <WaterComponent className={`dndnode ${part.processComponentType}`}
                     onDragStart={(event) => onDragStart(event, part.processComponentType)}
                     draggable={true}>
