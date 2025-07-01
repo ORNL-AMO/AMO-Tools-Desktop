@@ -23,14 +23,14 @@ export class CompressedAirInventoryOverviewPieChartComponent implements OnInit {
 
   ngAfterViewInit() {
     this.invetorySummarySub = this.inventorySummaryOverviewService.inventorySummary.subscribe(inventorySummary => {
-      let pumpItemData: Array<{ energyCost: number, pumpName: string, color: string }> = this.getCompresedAirItemDataFromSummary(inventorySummary);
+      let compressedAirItemData: Array<{ energyCost: number, compressedAirName: string, color: string }> = this.getCompresedAirItemDataFromSummary(inventorySummary);
       var data = [{
-        values: pumpItemData.map(val => { return val.energyCost }),
-        labels: pumpItemData.map(val => { return val.pumpName }),
+        values: compressedAirItemData.map(val => { return val.energyCost }),
+        labels: compressedAirItemData.map(val => { return val.compressedAirName }),
         marker: {
-          colors: pumpItemData.map(val => { return 'rgb(' + val.color + ')' }),
+          colors: compressedAirItemData.map(val => { return 'rgb(' + val.color + ')' }),
           line: {
-            width: pumpItemData.map(val => { return 2 }),
+            width: compressedAirItemData.map(val => { return 2 }),
             color: '#fff'
           }
         },
@@ -69,13 +69,13 @@ export class CompressedAirInventoryOverviewPieChartComponent implements OnInit {
   }
 
 
-  getCompresedAirItemDataFromSummary(inventorySummary: InventorySummary): Array<{ energyCost: number, pumpName: string, color: string }> {
-    let compressedAirItemData = new Array<{ energyCost: number, pumpName: string, color: string }>();
+  getCompresedAirItemDataFromSummary(inventorySummary: InventorySummary): Array<{ energyCost: number, compressedAirName: string, color: string }> {
+    let compressedAirItemData = new Array<{ energyCost: number, compressedAirName: string, color: string }>();
     inventorySummary.systemSummaryItems.forEach(systemSummaryItem => {
-      systemSummaryItem.pumpItemResults.forEach(pumpItem => {
+      systemSummaryItem.compressedAirItemResults.forEach(compressedAirItem => {
         compressedAirItemData.push({
-          energyCost: pumpItem.results.energyCost,
-          pumpName: pumpItem.name,
+          energyCost: compressedAirItem.results.energyCost,
+          compressedAirName: compressedAirItem.name,
           color: systemSummaryItem.systemColor
         })
       })

@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { PumpInventoryService } from '../../../pump-inventory/pump-inventory.service';
-import { ConvertPumpInventoryService } from '../../../pump-inventory/convert-pump-inventory.service';
-import { PsatService } from '../../../psat/psat.service';
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
 import { ConvertCompressedAirInventoryService } from '../../convert-compressed-air-inventory.service';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment/compressed-air-assessment.service';
@@ -39,16 +36,16 @@ export interface InventorySummary {
 
 export interface SystemSummaryItem {
   systemName: string;
-  numberOfPumps: number;
+  numberOfCompressors: number;
   energyUse: number;
   energyCost: number;
   systemColor: string;
   co2EmissionOutput: number,
-  pumpItemResults: Array<{ data: CompressedAirItem, results: PumpInventoryResults, name: string }>;
+  compressedAirItemResults: Array<{ data: CompressedAirItem, results: CompressedAirItemResults, name: string }>;
 }
 
 
-export interface PumpInventoryResults {
+export interface CompressedAirItemResults {
   energyUse: number;
   emissionOutput?: number;
   energyCost: number;
