@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { Box } from '@mui/material';
-import { checkDiagramNodeErrors, CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getIsDiagramValid, getMotorEnergyCost, getTotalInflow, getTotalOutflow, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
+import { checkDiagramNodeErrors, CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getInSystemTreatmentCost, getIsDiagramValid, getMotorEnergyCost, getTotalInflow, getTotalOutflow, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
 import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
 import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
@@ -36,7 +36,21 @@ const DiagramResults = () => {
   const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow', calculatedData);
   const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow', calculatedData);
   // indirect costs
-  const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow', calculatedData);
+  let treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow', calculatedData);
+  const inSystemTreatmentCosts = nodes.reduce((total: number, node: Node<ProcessFlowPart>) => {
+    if (node.data.processComponentType === 'water-using-system') {
+      let inSystemTreatmentCost = 0;
+      const system = node.data as WaterUsingSystem;
+      if (system.inSystemTreatment && system.inSystemTreatment.length > 0) {
+        const totalSystemInflow = getTotalInflow(node, calculatedData);
+        inSystemTreatmentCost = getInSystemTreatmentCost(system.inSystemTreatment, totalSystemInflow);
+        return total + inSystemTreatmentCost;
+      } 
+    }
+    return total;
+  }, 0);
+  treatmentCost += inSystemTreatmentCosts;
+  
   const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow', calculatedData);
   const systemMotorEnergyData: MotorEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.addedMotorEnergy || []).flat();
 
