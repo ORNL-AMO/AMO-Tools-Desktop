@@ -96,7 +96,7 @@
 
 <ul *ngIf="setupTab == 'system-profile'" class="tabs subtabs progress-tabs compressed-air d-none d-lg-block">
     <li [ngClass]="{'active': profileTab == 'setup'}">
-        <a (click)="changeProfileTab('setup')">Explore Opportunities</a>
+        <a (click)="changeProfileTab('setup')">Setup Profile</a>
     </li>
     <li [ngClass]="{'active': profileTab == 'summary'}">
         <a (click)="changeProfileTab('summary')">Profile Summary</a>
@@ -119,7 +119,7 @@
                 <span class="fa fa-chevron-left"></span></a>
         </li>
         <li [ngClass]="{'active': profileTab == 'setup'}" *ngIf="profileTab == 'setup'">
-            <a (click)="changeProfileTab('setup')">Explore Opportunities</a>
+            <a (click)="changeProfileTab('setup')">Setup Profile</a>
         </li>
         <li [ngClass]="{'active': profileTab == 'summary'}" *ngIf="profileTab == 'summary'">
             <a (click)="changeProfileTab('summary')">Profile Summary</a>

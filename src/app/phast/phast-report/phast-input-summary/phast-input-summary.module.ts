@@ -18,10 +18,12 @@ import { OtherSummaryComponent } from './other-summary/other-summary.component';
 import { SlagSummaryComponent } from './slag-summary/slag-summary.component';
 import { WallSummaryComponent } from './wall-summary/wall-summary.component';
 import { OperationDataComponent } from './operation-data/operation-data.component';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    ExportableResultsTableModule
   ],
   declarations: [
     PhastInputSummaryComponent,

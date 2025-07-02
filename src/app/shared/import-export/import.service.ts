@@ -362,7 +362,47 @@ export class ImportService {
       this.settingsDbService.setAll(updatedSettings);
     }
   }
+
+  
+  getIsValidImportType(rawImport: any, currentType: ImportExportTypes): FileImportStatus {
+    if (rawImport && rawImport.dataBackupId && (rawImport.origin === "AMO-TOOLS-DESKTOP" || rawImport.origin === "MEASUR-BACKUP")) {
+      let fileType: ImportExportTypes = 'MEASUR-BACKUP';
+      return {isValid: fileType === currentType, fileType: fileType};
+    } else if (rawImport.origin === "AMO-TOOLS-DESKTOP-OPPORTUNITIES") {
+      let fileType: ImportExportTypes = 'AMO-TOOLS-DESKTOP-OPPORTUNITIES';
+      return {isValid: fileType === currentType, fileType: fileType};
+    } else if (rawImport.origin === "AMO-TOOLS-DESKTOP") {
+      let fileType: ImportExportTypes = 'AMO-TOOLS-DESKTOP';
+      return {isValid: fileType === currentType, fileType: fileType};
+    } else if (rawImport.origin === "AMO-LOG-TOOL-DATA") {
+      let fileType: ImportExportTypes = 'AMO-LOG-TOOL-DATA';
+      return {isValid: fileType === currentType, fileType: fileType};
+    } else {
+      return {isValid: false, fileType: "UNKNOWN"};
+    }
+  }
+
+  readFileAsText(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsText(file);
+  });
 }
+
+readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as ArrayBuffer);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+}
+
+
 
 
 export interface ImportDirectory {
@@ -373,3 +413,7 @@ export interface ImportDirectory {
   inventories: Array<ImportExportInventory>;
   diagrams: Array<ImportExportDiagram>;
 }
+
+export interface FileImportStatus { isValid: boolean, fileType: ImportExportTypes }
+
+export type ImportExportTypes =  "AMO-TOOLS-DESKTOP" | "AMO-TOOLS-DESKTOP-OPPORTUNITIES" | "MEASUR-BACKUP" | "AMO-LOG-TOOL-DATA" | "UNKNOWN";

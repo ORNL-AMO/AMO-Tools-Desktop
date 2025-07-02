@@ -2,7 +2,7 @@
 
   <h4 class="show-print">Losses Summary</h4>
 
-  <table class="table table-hover table-striped" *ngIf="baselineLosses">
+  <table #copyTable class="table table-hover table-striped" *ngIf="baselineLosses">
     <thead>
       <tr>
         <td [ngStyle]="{'width.%': 15}" class="border-0"></td>
@@ -647,4 +647,6 @@
       </tr> -->
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 </div>

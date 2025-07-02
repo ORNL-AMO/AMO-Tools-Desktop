@@ -55,14 +55,26 @@
 </div>
 <div class="form-section">
   <div class="form-group">
+    <label class="bold">Refill Time</label>
+    <div class="text-center small">
+      <span *ngIf="results.refillTime">
+        <strong>{{results.refillTime | number:'1.0-1'}} </strong>
+        <strong>seconds</strong>
+      </span>
+      <span *ngIf="!results.refillTime">
+        <strong>&mdash; &mdash;</strong>
+      </span>
+    </div>
+  </div>
+  <div class="form-group">
     <label class="bold">Receiver Volume</label>
     <div class="text-center small">
-      <span *ngIf="totalReceiverVolume">
-        <strong>{{totalReceiverVolume | number:'1.0-2'}} </strong>
+      <span *ngIf="results.volume">
+        <strong>{{results.volume | number:'1.0-2'}} </strong>
         <strong *ngIf="settings.unitsOfMeasure != 'Metric'">gal</strong>
         <strong *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup></strong>
       </span>
-      <span *ngIf="!totalReceiverVolume">
+      <span *ngIf="!results.volume">
         <strong>&mdash; &mdash;</strong>
       </span>
     </div>

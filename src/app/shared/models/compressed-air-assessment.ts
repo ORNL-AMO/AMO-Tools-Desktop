@@ -19,6 +19,7 @@ export interface CompressedAirAssessment {
     endUseData: EndUseData,
     compressedAirDayTypes: Array<CompressedAirDayType>,
     setupDone: boolean
+    selectedModificationId?: string
 }
 
 export interface Modification {

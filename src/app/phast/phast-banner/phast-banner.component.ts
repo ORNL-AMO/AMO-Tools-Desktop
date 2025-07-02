@@ -6,11 +6,12 @@ import { Subscription } from 'rxjs';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
+import { CoreService } from '../../core/core.service';
 @Component({
-    selector: 'app-phast-banner',
-    templateUrl: './phast-banner.component.html',
-    styleUrls: ['./phast-banner.component.css'],
-    standalone: false
+  selector: 'app-phast-banner',
+  templateUrl: './phast-banner.component.html',
+  styleUrls: ['./phast-banner.component.css'],
+  standalone: false
 })
 export class PhastBannerComponent implements OnInit {
   @Input()
@@ -23,7 +24,8 @@ export class PhastBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   constructor(private phastService: PhastService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
+    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
+    private coreService: CoreService) { }
 
   ngOnInit() {
     this.mainTabSub = this.phastService.mainTab.subscribe(val => {
@@ -36,7 +38,7 @@ export class PhastBannerComponent implements OnInit {
   }
 
   navigateHome() {
-    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', { shouldCollapse: false });
   }
 
   showSecurityAndPrivacyModal() {
@@ -58,7 +60,7 @@ export class PhastBannerComponent implements OnInit {
     window.dispatchEvent(new Event("resize"));
   }
 
-  back(){
+  back() {
     if (this.mainTab == 'calculators') {
       this.phastService.mainTab.next('sankey');
     } else if (this.mainTab == 'sankey') {
@@ -86,17 +88,17 @@ export class PhastBannerComponent implements OnInit {
     }
   }
 
-  openExportModal(){
+  openExportModal() {
     this.phastService.showExportModal.next(true);
   }
-
-  emailTreasureHuntData() {
+  
+  openShareDataModal() {
     this.emailMeasurDataService.measurItemAttachment = {
       itemType: 'assessment',
       itemName: this.assessment.name,
       itemData: this.assessment
     }
     this.emailMeasurDataService.emailItemType.next('PHAST');
-    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
+    this.coreService.showShareDataModal.next(true);
   }
 }

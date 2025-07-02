@@ -1,6 +1,6 @@
 <div *ngIf="planeResults && !planeResults.error">
     <label>{{fsatName}} Plane Data Table</label>
-    <table class="table table-hover table-striped">
+    <table #copyTable class="table table-hover table-striped">
         <tbody>
             <tr>
                 <td><span>Plane #</span></td>
@@ -206,3 +206,6 @@
         </tbody>
     </table>
 </div>
+
+<app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>

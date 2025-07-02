@@ -1,4 +1,5 @@
 import { FluidProperties, PumpMotorProperties, PumpProperties, SystemProperties } from "../../pump-inventory/pump-inventory";
+import { AssessmentType } from "../models/assessment";
 import { PsatInputs } from "../models/psat";
 
 export interface InventorySelectOptions {
@@ -74,8 +75,4 @@ export interface AssessmentOption {
 export type IntegrationStatusString = 'settings-differ' | 'connected-to-inventory';
 export type AssessmentStatusString = 'connected-to-assessment' | 'connected-assessment-differs' | 'three-way-connected' | 'invalid';
 export type InventoryType = 'motor' | 'pump' | 'compressed-air';
-// Do we have this anywhere else? create intern issue to force existing assessment.types throughout app to use type
-
-export type AssessmentType = 'PSAT' | 'PHAST' | 'FSAT' | 'SSMT' | 'TreasureHunt' | 'WasteWater' | 'CompressedAir';
-// export type AssessmentType = 'psat';
 export type IntegrationFormGroupString = 'fluid' | 'pump' | 'motor' | 'system';

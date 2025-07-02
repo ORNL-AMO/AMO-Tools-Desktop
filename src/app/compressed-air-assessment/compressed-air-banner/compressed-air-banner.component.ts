@@ -6,12 +6,13 @@ import { CompressedAirAssessment, Modification } from '../../shared/models/compr
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
+import { CoreService } from '../../core/core.service';
 
 @Component({
-    selector: 'app-compressed-air-banner',
-    templateUrl: './compressed-air-banner.component.html',
-    styleUrls: ['./compressed-air-banner.component.css'],
-    standalone: false
+  selector: 'app-compressed-air-banner',
+  templateUrl: './compressed-air-banner.component.html',
+  styleUrls: ['./compressed-air-banner.component.css'],
+  standalone: false
 })
 export class CompressedAirBannerComponent implements OnInit {
   @Input()
@@ -30,7 +31,8 @@ export class CompressedAirBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
+    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
+    private coreService: CoreService) { }
 
   ngOnInit(): void {
     this.mainTabSub = this.compressedAirAssessmentService.mainTab.subscribe(val => {
@@ -64,7 +66,7 @@ export class CompressedAirBannerComponent implements OnInit {
     window.dispatchEvent(new Event("resize"));
   }
 
-  back(){
+  back() {
     if (this.mainTab == 'calculators') {
       this.compressedAirAssessmentService.mainTab.next('sankey');
     } else if (this.mainTab == 'sankey') {
@@ -101,7 +103,7 @@ export class CompressedAirBannerComponent implements OnInit {
   }
 
   navigateHome() {
-    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', { shouldCollapse: false });
   }
 
   showSecurityAndPrivacyModal() {
@@ -130,7 +132,7 @@ export class CompressedAirBannerComponent implements OnInit {
     }
   }
 
-  backAssessmentTab(){
+  backAssessmentTab() {
     if (this.selectedModification) {
       if (this.secondaryAssessmentTab == 'graphs') {
         this.compressedAirAssessmentService.secondaryAssessmentTab.next('table');
@@ -150,17 +152,17 @@ export class CompressedAirBannerComponent implements OnInit {
     }
   }
 
-  openExportModal(){
+  openExportModal() {
     this.compressedAirAssessmentService.showExportModal.next(true);
   }
 
-  emailTreasureHuntData() {
+  openShareDataModal() {
     this.emailMeasurDataService.measurItemAttachment = {
       itemType: 'assessment',
       itemName: this.assessment.name,
       itemData: this.assessment
     }
     this.emailMeasurDataService.emailItemType.next('CompressedAir');
-    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
+    this.coreService.showShareDataModal.next(true);
   }
 }

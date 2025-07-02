@@ -47,6 +47,8 @@ import { CompressedAirInventoryModule } from '../compressed-air-inventory/compre
 import { SubscribeToastComponent } from '../shared/subscribe-toast/subscribe-toast.component';
 import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-subscribe.service';
 import { SubscribeModalComponent } from '../shared/subscribe-modal/subscribe-modal.component';
+import { ExportToJustifiModalModule } from '../shared/export-to-justifi-modal/export-to-justifi-modal.module';
+import { ShareDataModalModule } from '../shared/share-data-modal/share-data-modal.module';
 
 @NgModule({
   declarations: [
@@ -94,7 +96,9 @@ import { SubscribeModalComponent } from '../shared/subscribe-modal/subscribe-mod
     UpdateApplicationModule,
     CompressedAirInventoryModule,
     SubscribeToastComponent,
-    SubscribeModalComponent
+    SubscribeModalComponent,
+    ExportToJustifiModalModule,
+    ShareDataModalModule
   ],
   providers: [
     AssessmentService,

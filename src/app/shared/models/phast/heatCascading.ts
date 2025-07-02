@@ -1,5 +1,7 @@
+import { OpportunityUtilityType } from "../treasure-hunt"
+
 export interface HeatCascadingInput {
-    utilityType?: string,
+    utilityType?: OpportunityUtilityType,
     priFiringRate: number,
     priExhaustTemperature: number,
     priExhaustO2: number,

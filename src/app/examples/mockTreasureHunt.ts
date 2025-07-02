@@ -753,9 +753,10 @@ export const MockTreasureHunt: Assessment = {
                     "meterReading": 0.2
                 },
                 "bagMethodData": {
-                    "height": 46,
-                    "diameter": 40,
-                    "fillTime": 10
+                    "operatingTime": 8760,
+                    "bagVolume": 250.23,
+                    "bagFillTime": 80,
+                    "numberOfUnits": 1
                 },
                 "pressureMethodData": {
                     "nozzleType": 0,
@@ -785,9 +786,10 @@ export const MockTreasureHunt: Assessment = {
                     "meterReading": 0.2
                 },
                 "bagMethodData": {
-                    "height": 8,
-                    "diameter": 12,
-                    "fillTime": 80
+                    "operatingTime": 8760,
+                    "bagVolume": 3.92,
+                    "bagFillTime": 80,
+                    "numberOfUnits": 1
                 },
                 "pressureMethodData": {
                     "nozzleType": 0,
@@ -844,9 +846,10 @@ export const MockTreasureHunt: Assessment = {
                     "meterReading": 6000
                 },
                 "bagMethodData": {
-                    "height": 8,
-                    "diameter": 12,
-                    "fillTime": 80
+                    "operatingTime": 8760,
+                    "bagVolume": 3.92,
+                    "bagFillTime": 80,
+                    "numberOfUnits": 1
                 },
                 "pressureMethodData": {
                     "nozzleType": 0,
@@ -876,9 +879,10 @@ export const MockTreasureHunt: Assessment = {
                     "meterReading": 5600
                 },
                 "bagMethodData": {
-                    "height": 8,
-                    "diameter": 12,
-                    "fillTime": 80
+                    "operatingTime": 8760,
+                    "bagVolume": 3.92,
+                    "bagFillTime": 80,
+                    "numberOfUnits": 1
                 },
                 "pressureMethodData": {
                     "nozzleType": 0,

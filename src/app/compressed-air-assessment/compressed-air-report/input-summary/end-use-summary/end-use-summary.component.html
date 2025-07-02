@@ -10,7 +10,7 @@
             <div class="card-body">
             <div class="output-summary">
                 <!-- <div class="output-summary pl-2 pt-3 pr-2"> -->
-                <table #profileTable class="table table-hover bg-white">
+                <table #copyTable #profileTable class="table table-hover bg-white">
                     <thead>
                         <tr>
                             <th></th>
@@ -111,6 +111,8 @@
 
                     </tbody>
                 </table>
+                <app-exportable-results-table [tableString]="copyTableString"
+                    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
             </div>
         </div>
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
+import { OpportunityUtilityType } from '../../../shared/models/treasure-hunt';
 
 @Injectable()
 export class EnergyFormService {
@@ -45,7 +46,7 @@ export class EnergyFormService {
 export interface FlueGasEnergyData {
   energySourceType?: string;
   fuelCost?: number;
-  utilityType?: string;
+  utilityType?: OpportunityUtilityType;
   hoursPerYear?: number;
   availableHeat?: number;
 }

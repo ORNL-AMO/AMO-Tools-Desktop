@@ -56,51 +56,12 @@ export class ImportBackupService {
     private atmosphereDbService: AtmosphereDbService,
     private inventoryDbService: InventoryDbService,
     private manageAppDataService: ManageAppDataService,
-    private backupDataService: BackupDataService,
-    private electronService: ElectronService,
     private sqlDbApiService: SqlDbApiService,
     private dashboardService: DashboardService,
   ) {
 
     this.showImportBackupModal = new BehaviorSubject<boolean>(undefined);
   }
-
-  setImportFile(event: EventTarget): Promise<MeasurBackupFile> {
-    return new Promise((resolve, reject) => {
-      let files: FileList = (event as HTMLInputElement).files;
-      if (files) {
-        if (files.length !== 0) {
-          let fr: FileReader = new FileReader();
-          fr.readAsText(files[0]);
-          fr.onloadend = (e) => {
-            try {
-              this.selectedImportFile = JSON.parse(JSON.stringify(fr.result));
-              let testBackup = JSON.parse(this.selectedImportFile as any)
-              if (!testBackup.origin || testBackup.origin != "AMO-TOOLS-DESKTOP") {
-                this.backupFileError = "Selected file does not come from MEASUR and cannot be imported."
-              } else {
-                this.importName = testBackup.name;
-                this.backupFileError = undefined;
-                resolve(this.selectedImportFile)
-              }
-            } catch (err) {
-              console.log(err);
-              reject(fr);
-            }
-          };
-
-          fr.onerror = () => {
-            reject(fr);
-          };
-        }
-      } else {
-        reject(undefined);
-      }
-    });
-
-
-  }
-
 
   getImportDate(date: Date): Date {
     //date imported with timestap cause problems.
@@ -130,12 +91,11 @@ export class ImportBackupService {
     this.importInventorySettingsIdMap = {};
 
     try {
-      let backupFile: MeasurBackupFile = JSON.parse(this.selectedImportFile as any);
-      // this.backupExistingData();
       await this.manageAppDataService.deleteAllAppData();
-      await this.importMeasurBackupFile(backupFile);
+      await this.importMeasurBackupFile(this.selectedImportFile);
       this.dashboardService.updateDashboardData.next(true);
     } catch (err) {
+      console.log('Error importing backup file:', err);
       // todo 6925 eventually fallback to original data
     }
   }

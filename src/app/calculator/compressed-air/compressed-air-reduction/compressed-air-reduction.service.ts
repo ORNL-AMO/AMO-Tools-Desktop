@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
-import { CompressedAirReductionData, CompressedAirFlowMeterMethodData, BagMethodData, PressureMethodData, CompressedAirOtherMethodData, CompressorElectricityData, CompressedAirReductionResults, CompressedAirReductionInput, CompressedAirReductionResult } from '../../../shared/models/standalone';
+import { CompressedAirReductionData, CompressedAirFlowMeterMethodData, PressureMethodData, CompressedAirOtherMethodData, CompressorElectricityData, CompressedAirReductionResults, CompressedAirReductionInput, CompressedAirReductionResult, BagMethodInput } from '../../../shared/models/standalone';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 import { OperatingHours } from '../../../shared/models/operations';
 import { ConvertCompressedAirReductionService } from './convert-compressed-air-reduction.service';
@@ -24,10 +24,11 @@ export class CompressedAirReductionService {
     let defaultFlowMeterObj: CompressedAirFlowMeterMethodData = {
       meterReading: 0.2
     };
-    let defaultBagMethodObj: BagMethodData = {
-      height: 8,
-      diameter: 12,
-      fillTime: 80
+    let defaultBagMethodObj: BagMethodInput = {
+      bagVolume: 3.92,
+      operatingTime: 0,
+      numberOfUnits: 1,
+      bagFillTime: 80
     };
     let defaultPressureMethodObj: PressureMethodData = {
       nozzleType: 0,
@@ -91,9 +92,10 @@ export class CompressedAirReductionService {
         meterReading: meterReading
       },
       bagMethodData: {
-        height: 0,
-        diameter: 0,
-        fillTime: 0
+          operatingTime: 0,
+          bagVolume: 0,
+          bagFillTime: 0,
+          numberOfUnits: 1
       },
       pressureMethodData: {
         nozzleType: 0,
@@ -128,9 +130,10 @@ export class CompressedAirReductionService {
       meterReading: [inputObj.flowMeterMethodData.meterReading],
 
       // bag method data
-      height: [inputObj.bagMethodData.height],
-      diameter: [inputObj.bagMethodData.diameter],
-      fillTime: [inputObj.bagMethodData.fillTime],
+      bagVolume: [inputObj.bagMethodData.bagVolume],
+      bagFillTime: [inputObj.bagMethodData.bagFillTime],
+      operatingTime: [inputObj.bagMethodData.operatingTime],
+      numberOfUnits: [inputObj.bagMethodData.numberOfUnits],
 
       // orifice/pressure method data
       nozzleType: [inputObj.pressureMethodData.nozzleType],
@@ -166,9 +169,8 @@ export class CompressedAirReductionService {
         form.controls.meterReading.setValidators([Validators.required, Validators.min(0)]);
         break;
       case 1:
-        form.controls.height.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
-        form.controls.diameter.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
-        form.controls.fillTime.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
+        form.controls.bagVolume.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
+        form.controls.bagFillTime.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
         break;
       case 2:
         form.controls.nozzleType.setValidators([Validators.required]);
@@ -200,10 +202,11 @@ export class CompressedAirReductionService {
     let flowMeterObj: CompressedAirFlowMeterMethodData = {
       meterReading: form.controls.meterReading.value
     };
-    let bagMethodObj: BagMethodData = {
-      height: form.controls.height.value,
-      diameter: form.controls.diameter.value,
-      fillTime: form.controls.fillTime.value
+    let bagMethodObj: BagMethodInput = {
+      bagVolume: form.controls.bagVolume.value,
+      bagFillTime: form.controls.bagFillTime.value,
+      operatingTime: form.controls.hoursPerYear.value,
+      numberOfUnits: form.controls.numberOfUnits.value
     };
     let pressureMethodObj: PressureMethodData = {
       nozzleType: form.controls.nozzleType.value,

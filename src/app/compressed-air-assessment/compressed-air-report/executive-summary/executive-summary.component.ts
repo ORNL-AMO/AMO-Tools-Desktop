@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CompressedAirReportRollupService } from '../../../report-rollup/compressed-air-report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Modification } from '../../../shared/models/compressed-air-assessment';
@@ -40,6 +40,10 @@ export class ExecutiveSummaryComponent implements OnInit {
   displayUseAutomaticSequencer: boolean;
   displayAuxiliaryPower: boolean;
   selectedModificationIndex: number;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(private compressedAirReportRollupService: CompressedAirReportRollupService) { }
 
   ngOnInit(): void {
@@ -153,5 +157,9 @@ export class ExecutiveSummaryComponent implements OnInit {
 
   useModification() {
     this.compressedAirReportRollupService.updateSelectedCompressorAssessments({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

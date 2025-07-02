@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
-import { TreasureHunt, ImportExportOpportunities, LightingReplacementTreasureHunt, ReplaceExistingMotorTreasureHunt, OpportunitySheet, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, NaturalGasReductionTreasureHunt, MotorDriveInputsTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, WaterHeatingTreasureHunt, HeatCascadingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, BoilerBlowdownRateTreasureHunt, AssessmentOpportunity, PowerFactorCorrectionTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, ImportExportOpportunities, TreasureHuntOpportunity } from '../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
 import { ImportExportService } from '../../../shared/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
@@ -49,232 +49,44 @@ export class ExportOpportunitiesComponent implements OnInit {
   }
   setImportExportData() {
     this.exportOpportunities = {
-      lightingReplacements: this.getSelectedLighting(this.treasureHunt.lightingReplacements),
-      opportunitySheets: this.getSelectedOpportunities(this.treasureHunt.opportunitySheets),
-      assessmentOpportunities: this.getSelectedAssessmentOpportunities(this.treasureHunt.assessmentOpportunities),
-      replaceExistingMotors: this.getSelectedReplaceExistingMotors(this.treasureHunt.replaceExistingMotors),
-      motorDrives: this.getSelectedMotorDrives(this.treasureHunt.motorDrives),
-      naturalGasReductions: this.getSelectedNgReductions(this.treasureHunt.naturalGasReductions),
-      electricityReductions: this.getSelectedElectricityReductions(this.treasureHunt.electricityReductions),
-      compressedAirReductions: this.getSelectedCompressedAirReductions(this.treasureHunt.compressedAirReductions),
-      compressedAirPressureReductions: this.getSelectedCompressedAirPressureReductions(this.treasureHunt.compressedAirPressureReductions),
-      steamReductions: this.getSelectedSteamReductions(this.treasureHunt.steamReductions),
-      waterReductions: this.getSelectedWaterReductions(this.treasureHunt.waterReductions),
-      pipeInsulationReductions: this.getSelectedPipeInsulationReductions(this.treasureHunt.pipeInsulationReductions),
-      tankInsulationReductions: this.getSelectedTankInsulationReductions(this.treasureHunt.tankInsulationReductions),
-      airLeakSurveys: this.getSelectedAirLeakSurveys(this.treasureHunt.airLeakSurveys),
-      airHeatingOpportunities: this.getSelectedAirHeatingOpportunities(this.treasureHunt.airHeatingOpportunities),
-      openingLosses: this.getSelectedOpeningLosses(this.treasureHunt.openingLosses),
-      wallLosses: this.getSelectedWallLosses(this.treasureHunt.wallLosses),
-      leakageLosses: this.getSelectedLeakageLosses(this.treasureHunt.leakageLosses),
-      flueGasLosses: this.getSelectedFlueGasLosses(this.treasureHunt.flueGasLosses),
-      wasteHeatReductions: this.getSelectedWasteHeatReductions(this.treasureHunt.wasteHeatReductions),
-      heatCascadingOpportunities: this.getHeatCascadingOpportunities(this.treasureHunt.heatCascadingOpportunities),
-      waterHeatingOpportunities: this.getWaterHeatingOpportunities(this.treasureHunt.waterHeatingOpportunities),
-      coolingTowerMakeupOpportunities: this.getCoolingTowerMakeupOpportunities(this.treasureHunt.coolingTowerMakeupOpportunities),
-      chillerStagingOpportunities: this.getChillerStagingOpportunities(this.treasureHunt.chillerStagingOpportunities),
-      chillerPerformanceOpportunities: this.getChillerPerformanceOpportunities(this.treasureHunt.chillerPerformanceOpportunities),
-      coolingTowerFanOpportunities: this.getCoolingTowerFanOpportunities(this.treasureHunt.coolingTowerFanOpportunities),
-      coolingTowerBasinOpportunities: this.getCoolingTowerBasinOpportunities(this.treasureHunt.coolingTowerBasinOpportunities),
-      boilerBlowdownRateOpportunities: this.getBoilerBlowdownRateOpportunities(this.treasureHunt.boilerBlowdownRateOpportunities),
-      powerFactorCorrectionOpportunities: this.getPowerFactorCorrectionOpportunities(this.treasureHunt.powerFactorCorrectionOpportunities)
+      lightingReplacements: this.getSelectedOpportunitiesGeneric(this.treasureHunt.lightingReplacements),
+      opportunitySheets: this.getSelectedOpportunitiesGeneric(this.treasureHunt.opportunitySheets),
+      assessmentOpportunities: this.getSelectedOpportunitiesGeneric(this.treasureHunt.assessmentOpportunities),
+      replaceExistingMotors: this.getSelectedOpportunitiesGeneric(this.treasureHunt.replaceExistingMotors),
+      motorDrives: this.getSelectedOpportunitiesGeneric(this.treasureHunt.motorDrives),
+      naturalGasReductions: this.getSelectedOpportunitiesGeneric(this.treasureHunt.naturalGasReductions),
+      electricityReductions: this.getSelectedOpportunitiesGeneric(this.treasureHunt.electricityReductions),
+      compressedAirReductions: this.getSelectedOpportunitiesGeneric(this.treasureHunt.compressedAirReductions),
+      compressedAirPressureReductions: this.getSelectedOpportunitiesGeneric(this.treasureHunt.compressedAirPressureReductions),
+      steamReductions: this.getSelectedOpportunitiesGeneric(this.treasureHunt.steamReductions),
+      waterReductions: this.getSelectedOpportunitiesGeneric(this.treasureHunt.waterReductions),
+      pipeInsulationReductions: this.getSelectedOpportunitiesGeneric(this.treasureHunt.pipeInsulationReductions),
+      tankInsulationReductions: this.getSelectedOpportunitiesGeneric(this.treasureHunt.tankInsulationReductions),
+      airLeakSurveys: this.getSelectedOpportunitiesGeneric(this.treasureHunt.airLeakSurveys),
+      airHeatingOpportunities: this.getSelectedOpportunitiesGeneric(this.treasureHunt.airHeatingOpportunities),
+      openingLosses: this.getSelectedOpportunitiesGeneric(this.treasureHunt.openingLosses),
+      wallLosses: this.getSelectedOpportunitiesGeneric(this.treasureHunt.wallLosses),
+      leakageLosses: this.getSelectedOpportunitiesGeneric(this.treasureHunt.leakageLosses),
+      flueGasLosses: this.getSelectedOpportunitiesGeneric(this.treasureHunt.flueGasLosses),
+      wasteHeatReductions: this.getSelectedOpportunitiesGeneric(this.treasureHunt.wasteHeatReductions),
+      heatCascadingOpportunities: this.getSelectedOpportunitiesGeneric(this.treasureHunt.heatCascadingOpportunities),
+      waterHeatingOpportunities: this.getSelectedOpportunitiesGeneric(this.treasureHunt.waterHeatingOpportunities),
+      coolingTowerMakeupOpportunities: this.getSelectedOpportunitiesGeneric(this.treasureHunt.coolingTowerMakeupOpportunities),
+      chillerStagingOpportunities: this.getSelectedOpportunitiesGeneric(this.treasureHunt.chillerStagingOpportunities),
+      chillerPerformanceOpportunities: this.getSelectedOpportunitiesGeneric(this.treasureHunt.chillerPerformanceOpportunities),
+      coolingTowerFanOpportunities: this.getSelectedOpportunitiesGeneric(this.treasureHunt.coolingTowerFanOpportunities),
+      coolingTowerBasinOpportunities: this.getSelectedOpportunitiesGeneric(this.treasureHunt.coolingTowerBasinOpportunities),
+      boilerBlowdownRateOpportunities: this.getSelectedOpportunitiesGeneric(this.treasureHunt.boilerBlowdownRateOpportunities),
+      powerFactorCorrectionOpportunities: this.getSelectedOpportunitiesGeneric(this.treasureHunt.powerFactorCorrectionOpportunities)
     }
-  }
-  getSelectedLighting(lightingReplacements: Array<LightingReplacementTreasureHunt>): Array<LightingReplacementTreasureHunt> {
-    if (lightingReplacements) {
-      return _.filter(lightingReplacements, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
   }
 
-  getSelectedReplaceExistingMotors(motors: Array<ReplaceExistingMotorTreasureHunt>): Array<ReplaceExistingMotorTreasureHunt> {
-    if (motors) {
-      return _.filter(motors, (opportunity) => { return opportunity.selected });
+  private getSelectedOpportunitiesGeneric<T extends TreasureHuntOpportunity>(opportunities: Array<T>): Array<T> | undefined {
+    if (opportunities && opportunities.length > 0) {
+      return _.filter(opportunities, (opportunity) => opportunity.selected);
     }
     return undefined;
   }
-
-  getSelectedMotorDrives(drives: Array<MotorDriveInputsTreasureHunt>): Array<MotorDriveInputsTreasureHunt> {
-    if (drives) {
-      return _.filter(drives, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedNgReductions(reductions: Array<NaturalGasReductionTreasureHunt>): Array<NaturalGasReductionTreasureHunt> {
-    if (reductions) {
-      return _.filter(reductions, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedElectricityReductions(reductions: Array<ElectricityReductionTreasureHunt>): Array<ElectricityReductionTreasureHunt> {
-    if (reductions) {
-      return _.filter(reductions, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedCompressedAirReductions(reductions: Array<CompressedAirReductionTreasureHunt>): Array<CompressedAirReductionTreasureHunt> {
-    if (reductions) {
-      return _.filter(reductions, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedOpportunities(opportunities: Array<OpportunitySheet>): Array<OpportunitySheet> {
-    if (opportunities) {
-      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedAssessmentOpportunities(opportunities: Array<AssessmentOpportunity>): Array<AssessmentOpportunity> {
-    if (opportunities) {
-      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedCompressedAirPressureReductions(reductions: Array<CompressedAirPressureReductionTreasureHunt>): Array<CompressedAirPressureReductionTreasureHunt> {
-    if (reductions) {
-      return _.filter(reductions, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedWaterReductions(reductions: Array<WaterReductionTreasureHunt>): Array<WaterReductionTreasureHunt> {
-    if (reductions) {
-      return _.filter(reductions, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedSteamReductions(reductions: Array<SteamReductionTreasureHunt>): Array<SteamReductionTreasureHunt> {
-    if (reductions) {
-      return _.filter(reductions, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedPipeInsulationReductions(reductions: Array<PipeInsulationReductionTreasureHunt>): Array<PipeInsulationReductionTreasureHunt> {
-    if (reductions) {
-      return _.filter(reductions, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-  getSelectedTankInsulationReductions(reductions: Array<TankInsulationReductionTreasureHunt>): Array<TankInsulationReductionTreasureHunt> {
-    if (reductions) {
-      return _.filter(reductions, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedFlueGasLosses(losses: Array<FlueGasTreasureHunt>): Array<FlueGasTreasureHunt> {
-    if (losses) {
-      return _.filter(losses, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedAirLeakSurveys(reductions: Array<AirLeakSurveyTreasureHunt>): Array<AirLeakSurveyTreasureHunt> {
-    if (reductions) {
-      return _.filter(reductions, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-  getSelectedOpeningLosses(losses: Array<OpeningLossTreasureHunt>): Array<OpeningLossTreasureHunt> {
-    if (losses) {
-      return _.filter(losses, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-  getSelectedWallLosses(losses: Array<WallLossTreasureHunt>): Array<WallLossTreasureHunt> {
-    if (losses) {
-      return _.filter(losses, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-  getSelectedAirHeatingOpportunities(airHeating: Array<AirHeatingTreasureHunt>): Array<AirHeatingTreasureHunt> {
-    if (airHeating) {
-      return _.filter(airHeating, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getSelectedLeakageLosses(losses: Array<LeakageLossTreasureHunt>): Array<LeakageLossTreasureHunt> {
-    if (losses) {
-      return _.filter(losses, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-  getSelectedWasteHeatReductions(reductions: Array<WasteHeatTreasureHunt>): Array<WasteHeatTreasureHunt> {
-    if (reductions) {
-      return _.filter(reductions, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-  getHeatCascadingOpportunities(opportunities: Array<HeatCascadingTreasureHunt>): Array<HeatCascadingTreasureHunt> {
-    if (opportunities) {
-      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-  getWaterHeatingOpportunities(opportunities: Array<WaterHeatingTreasureHunt>): Array<WaterHeatingTreasureHunt> {
-    if (opportunities) {
-      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-  getCoolingTowerMakeupOpportunities(opportunities: Array<CoolingTowerMakeupWaterTreasureHunt>): Array<CoolingTowerMakeupWaterTreasureHunt> {
-    if (opportunities) {
-      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getChillerStagingOpportunities(opportunities: Array<ChillerStagingTreasureHunt>): Array<ChillerStagingTreasureHunt> {
-    if (opportunities) {
-      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getChillerPerformanceOpportunities(opportunities: Array<ChillerPerformanceTreasureHunt>): Array<ChillerPerformanceTreasureHunt> {
-    if (opportunities) {
-      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getCoolingTowerFanOpportunities(opportunities: Array<CoolingTowerFanTreasureHunt>): Array<CoolingTowerFanTreasureHunt> {
-    if (opportunities) {
-      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getCoolingTowerBasinOpportunities(opportunities: Array<CoolingTowerBasinTreasureHunt>): Array<CoolingTowerBasinTreasureHunt> {
-    if (opportunities) {
-      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getBoilerBlowdownRateOpportunities(opportunities: Array<BoilerBlowdownRateTreasureHunt>): Array<BoilerBlowdownRateTreasureHunt> {
-    if (opportunities) {
-      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
-  getPowerFactorCorrectionOpportunities(opportunities: Array<PowerFactorCorrectionTreasureHunt>): Array<PowerFactorCorrectionTreasureHunt> {
-    if (opportunities) {
-      return _.filter(opportunities, (opportunity) => { return opportunity.selected });
-    }
-    return undefined;
-  }
-
 
   exportData() {
     this.importExportService.downloadOpportunities(this.exportOpportunities, this.exportName);

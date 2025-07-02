@@ -477,7 +477,7 @@ export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
     directionalArrowsVisible: true,
     showFlowLabels: true,
     flowLabelSize: 1,
-    animated: true,
+    animated: false,
   }
 }
 

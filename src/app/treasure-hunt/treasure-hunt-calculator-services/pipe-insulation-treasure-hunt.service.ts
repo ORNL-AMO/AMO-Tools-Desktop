@@ -46,7 +46,7 @@ export class PipeInsulationTreasureHuntService {
       energySavings: results.annualHeatSavings,
       baselineCost: results.baselineResults.energyCost,
       modificationCost: results.modificationResults.energyCost,
-      utilityType: '',
+      utilityType: 'Electricity',
     }
 
     if (pipeInsulationReduction.baseline.utilityType == 0) {

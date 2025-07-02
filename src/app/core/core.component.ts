@@ -20,12 +20,13 @@ import { ImportBackupModalService } from '../shared/import-backup-modal/import-b
 import { MeasurSurveyService } from '../shared/measur-survey/measur-survey.service';
 import { UpdateApplicationService } from '../shared/update-application/update-application.service';
 import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-subscribe.service';
+import { ExportToJustifiTemplateService } from '../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 
 @Component({
-    selector: 'app-core',
-    templateUrl: './core.component.html',
-    styleUrls: ['./core.component.css'],
-    standalone: false
+  selector: 'app-core',
+  templateUrl: './core.component.html',
+  styleUrls: ['./core.component.css'],
+  standalone: false
 })
 
 export class CoreComponent implements OnInit {
@@ -41,7 +42,6 @@ export class CoreComponent implements OnInit {
   showSubscribeModal: boolean = false;
 
   // * Modals
-  modalOpenSub: Subscription;
   showEmailMeasurDataModalSub: Subscription;
   showEmailMeasurDataModal: boolean;
   showImportBackupModalSubscription: Subscription;
@@ -57,6 +57,10 @@ export class CoreComponent implements OnInit {
   showSubscribeToastSub: Subscription;
   subscribeModalSub: Subscription;
   emailVisibilitySubscription: Subscription;
+  showExportToJustifiModal: boolean = false;
+  showExportToJustifiModalSub: Subscription;
+  showShareDataModal: boolean = false;
+  showShareDataModalSub: Subscription;
 
   constructor(public electronService: ElectronService,
     private assessmentService: AssessmentService,
@@ -78,7 +82,8 @@ export class CoreComponent implements OnInit {
     private measurSurveyService: MeasurSurveyService,
     private updateApplicationService: UpdateApplicationService,
     private emailSubscribeService: EmailListSubscribeService,
-    private inventoryDbService: InventoryDbService) {
+    private inventoryDbService: InventoryDbService,
+    private exportToJustifiTemplateService: ExportToJustifiTemplateService) {
   }
 
   ngOnInit() {
@@ -155,6 +160,14 @@ export class CoreComponent implements OnInit {
     this.showImportBackupModalSubscription = this.importBackupModalService.showImportBackupModal.subscribe(showModal => {
       this.showImportBackupModal = showModal;
     });
+
+    this.showExportToJustifiModalSub = this.exportToJustifiTemplateService.showExportToJustifiModal.subscribe(val => {
+      this.showExportToJustifiModal = val;
+    });
+
+    this.showShareDataModalSub = this.coreService.showShareDataModal.subscribe((showShareDataModal: boolean) => {
+      this.showShareDataModal = showShareDataModal;
+    });
   }
 
 
@@ -173,6 +186,8 @@ export class CoreComponent implements OnInit {
     this.showSubscribeToastSub.unsubscribe();
     this.subscribeModalSub.unsubscribe();
     this.emailVisibilitySubscription.unsubscribe();
+    this.showExportToJustifiModalSub.unsubscribe();
+    this.showShareDataModalSub.unsubscribe();
   }
 
   async initData() {
@@ -203,11 +218,11 @@ export class CoreComponent implements OnInit {
         await firstValueFrom(this.applicationInstanceDbService.setSurveyDone());
       } else {
         let hasMetModalRequirements = this.measurSurveyService.getHasModalUsageRequirements(applicationData);
-        
+
         setTimeout(() => {
           this.measurSurveyService.showSurveyModal.next(hasMetModalRequirements);
         }, 5000);
-        
+
         let canShowToast = this.measurSurveyService.getHasToastUsageRequirements(applicationData);
         if (canShowToast && !applicationData.isSurveyToastDone && !hasMetModalRequirements) {
           setTimeout(() => {
@@ -224,7 +239,7 @@ export class CoreComponent implements OnInit {
   }
 
   setAllDbData() {
-      this.coreService.getAllAppData()
+    this.coreService.getAllAppData()
       .pipe(catchError(error => this.appErrorService.handleObservableAppError('Error loading MEASUR database', error))).subscribe({
         next: (initializedData) => {
           this.directoryDbService.setAll(initializedData.directories);
@@ -240,13 +255,13 @@ export class CoreComponent implements OnInit {
             this.automaticBackupService.saveVersionedBackup();
           }
         },
-        error: (error) => {}
+        error: (error) => { }
       });
   }
 
   async hideSurveyToast() {
     this.setSurveyToastDone();
-  }  
+  }
 
   async setSurveyToastDone() {
     this.showSurveyToast = false;
