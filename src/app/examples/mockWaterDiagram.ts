@@ -985,7 +985,7 @@ export const MockWaterdiagram: Diagram =
             "nodeErrors": {},
             "edges": [
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_5dbkq13",
                     "sourceHandle": "e",
@@ -1006,7 +1006,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_5dbkq13e-n_f17xaj2a"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_5dbkq13",
                     "sourceHandle": "e",
@@ -1027,7 +1027,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_5dbkq13e-n_l5at36ga"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_l5at36g",
                     "sourceHandle": "e",
@@ -1048,7 +1048,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_l5at36ge-n_6tg6mura"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_5dbkq13",
                     "sourceHandle": "f",
@@ -1069,7 +1069,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_5dbkq13f-n_tgz44lna"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_f17xaj2",
                     "sourceHandle": "e",
@@ -1090,7 +1090,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_f17xaj2e-n_2xhp9n6a"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_6tg6mur",
                     "sourceHandle": "e",
@@ -1111,7 +1111,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_6tg6mure-n_zs0izqwa"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_tgz44ln",
                     "sourceHandle": "e",
@@ -1132,7 +1132,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_tgz44lne-n_j3ewboda"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_5dbkq13",
                     "sourceHandle": "f",
@@ -1153,7 +1153,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_5dbkq13f-n_2sjnlila"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_2sjnlil",
                     "sourceHandle": "e",
@@ -1174,7 +1174,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_2sjnlile-n_eg0ir4ya"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_j3ewbod",
                     "sourceHandle": "e",
@@ -1195,7 +1195,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_j3ewbode-n_dy755kla"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_dy755kl",
                     "sourceHandle": "e",
@@ -1216,7 +1216,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_dy755kle-n_u3srsoca"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_2xhp9n6",
                     "sourceHandle": "e",
@@ -1237,7 +1237,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_2xhp9n6e-n_u3srsocb"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_w73lf6y",
                     "sourceHandle": "f",
@@ -1258,7 +1258,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_w73lf6yf-n_j3ewbodb"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_eg0ir4y",
                     "sourceHandle": "e",
@@ -1279,7 +1279,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_eg0ir4ye-n_w73lf6ya"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_w73lf6y",
                     "sourceHandle": "e",
@@ -1300,7 +1300,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_w73lf6ye-n_u3srsoca"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_wu9uibb",
                     "sourceHandle": "e",
@@ -1321,7 +1321,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_wu9uibbe-n_d7xoxtba"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_wu9uibb",
                     "sourceHandle": "f",
@@ -1342,7 +1342,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_wu9uibbf-n_hfbkilca"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_w73lf6y",
                     "sourceHandle": "e",
@@ -1363,7 +1363,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_w73lf6ye-n_yhhvgv7b"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_d7xoxtb",
                     "sourceHandle": "e",
@@ -1384,7 +1384,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_d7xoxtbe-n_yhhvgv7a"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_hfbkilc",
                     "sourceHandle": "e",
@@ -1405,7 +1405,7 @@ export const MockWaterdiagram: Diagram =
                     "id": "xy-edge__n_hfbkilce-n_yhhvgv7a"
                 },
                 {
-                    "animated": true,
+                    "animated": false,
                     "type": "smoothstep",
                     "source": "n_wu9uibb",
                     "sourceHandle": "e",
@@ -1441,7 +1441,7 @@ export const MockWaterdiagram: Diagram =
                 "directionalArrowsVisible": true,
                 "showFlowLabels": true,
                 "flowLabelSize": 1,
-                "animated": true
+                "animated": false
             },
             "calculatedData": {
                 "nodes": {
