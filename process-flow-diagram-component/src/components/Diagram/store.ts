@@ -74,6 +74,7 @@ export type AppDispatch = AppStore['dispatch']
 // * may also use globalized selectors
 export const selectEdges = (state: RootState) => state.diagram.edges as Edge<CustomEdgeData>[];
 export const selectNodes = (state: RootState) => state.diagram.nodes;
+export const selectNodeErrors = (state: RootState) => state.diagram.nodeErrors;
 export const selectIsDrawerOpen = (state: RootState) => state.diagram.isDrawerOpen;
 export const selectIsModalOpen = (state: RootState) => state.diagram.isModalOpen;
 export const selectHasAssessment = (state: RootState) => state.diagram.assessmentId !== undefined;
@@ -90,6 +91,16 @@ export const selectNodeId = (state: RootState, nodeId?: number) => {
 } 
 
 // * MEMOIZED SELECTORS
+// export const selectNodesMemo = createSelector(
+//   [selectNodes],
+//   (nodes) => [...nodes]
+// );
+
+// export const selectNodeErrorsMemo = createSelector(
+//   [selectNodeErrors],
+//   (nodeErrors) => ({ ...nodeErrors })
+// );
+
 export const selectGraphIndex = createSelector(
   [selectNodes, selectEdges],
   (nodes, edges) => createGraphIndex(nodes, edges)

@@ -431,10 +431,17 @@ const showMarkerEndArrowsReducer = (state: DiagramState, action: PayloadAction<b
 
 const toggleDrawerReducer = (state: DiagramState, action?: PayloadAction<string>) => {
   state.isDrawerOpen = !state.isDrawerOpen;
-  state.selectedDataId = action.payload ? action.payload : undefined;
+};
+
+const openDrawerWithSelectedReducer = (state: DiagramState, action?: PayloadAction<string>) => {
   if (!state.isDrawerOpen) {
-    state.focusedEdgeId = undefined;
+    state.isDrawerOpen = true;
   }
+  state.selectedDataId = action.payload ? action.payload : undefined;
+};
+
+const selectedIdChangeReducer = (state: DiagramState, action?: PayloadAction<string>) => {
+  state.selectedDataId = action.payload ? action.payload : undefined;
 };
 
 const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<DiagramCalculatedData>) => {
@@ -485,7 +492,9 @@ export const diagramSlice = createSlice({
     conductivityUnitChange: conductivityUnitChangeReducer,
     electricityCostChange: electricityCostChangeReducer,
     modalOpenChange: modalOpenChangeReducer,
-    applyEstimatedFlowResults: applyEstimatedFlowResultsReducer
+    applyEstimatedFlowResults: applyEstimatedFlowResultsReducer,
+    selectedIdChange: selectedIdChangeReducer,
+    openDrawerWithSelected: openDrawerWithSelectedReducer
   }
 })
 
@@ -526,7 +535,9 @@ export const {
   setDialogOpen,
   modalOpenChange,
   conductivityUnitChange,
-  electricityCostChange
+  electricityCostChange,
+  selectedIdChange,
+  openDrawerWithSelected
 } = diagramSlice.actions
 export default diagramSlice.reducer
 

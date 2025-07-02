@@ -1,6 +1,6 @@
 import { Alert, Box, Button, Chip, createTheme, FormControl, InputAdornment, InputLabel, MenuItem, Select, Typography, useTheme, } from "@mui/material";
 import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
-import { Edge, Node } from "@xyflow/react";
+import { Edge, getConnectedEdges, Node } from "@xyflow/react";
 
 import React, { memo, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/AccordianComponents";
@@ -28,7 +28,10 @@ const theme = createTheme({
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
     // const theme = useTheme();
-    const {selectedNode, connectedEdges} = props;
+    const {selectedNode } = props;
+    const edges = useAppSelector((state) => state.diagram.edges);
+    const connectedEdges = getConnectedEdges([selectedNode], edges);
+
     const dispatch = useAppDispatch();
     const nodes = useAppSelector(selectNodes);
     const errors = useAppSelector(selectNodeValidation);
@@ -287,7 +290,6 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
 export default memo(ComponentDataForm);
 
 export interface ComponentDataFormProps {
-    connectedEdges: Edge[];
     selectedNode: Node<ProcessFlowPart>;
 }
 
