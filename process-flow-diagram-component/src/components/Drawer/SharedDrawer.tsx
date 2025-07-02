@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer, { DrawerProps } from '@mui/material/Drawer';
@@ -8,7 +8,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Box } from '@mui/material';
 import DrawerToggleButton from './DrawerToggleButton';
 import { ParentContainerDimensions } from 'process-flow-lib';
-
+import { toggleDrawer } from '../Diagram/diagramReducer';
+import { useAppDispatch, useAppSelector } from '../../hooks/state';
 const drawerWidth = 525;
 
 const openedMixin = (theme: Theme, parentContainer: ParentContainerDimensions, anchorProps): CSSObject => ({
@@ -81,13 +82,22 @@ const Drawer = styled(MuiDrawer, {
 );
 
 
-export const SharedDrawer = (props: SharedDrawerProps) => {
+const SharedDrawer = (props: SharedDrawerProps) => {
     const { diagramParentDimensions, anchor, shadowRootRef } = props;
-    const [open, setOpen] = React.useState(true);
-
-    const toggleDrawerOpen = () => {
-        setOpen(!open)
-    };
+    const dispatch = useAppDispatch();
+    let [open, setOpen] = React.useState(true);
+    let toggleDrawerOpen: () => void;
+    
+    if (anchor === 'right') { 
+        open = useAppSelector((state) => state.diagram.isDrawerOpen);
+        toggleDrawerOpen = () => {
+            dispatch(toggleDrawer());
+        };
+    } else {
+        toggleDrawerOpen = () => {
+            setOpen(!open);
+        };
+    }
 
     let justifyContent = anchor === 'left' ? 'flex-end' : 'flex-start';
     const closedButton = (<IconButton onClick={toggleDrawerOpen}>
@@ -117,6 +127,8 @@ export const SharedDrawer = (props: SharedDrawerProps) => {
         </>
     );
 }
+
+export default memo(SharedDrawer);
 
 export interface SharedDrawerProps {
     anchor: 'left' | 'right',

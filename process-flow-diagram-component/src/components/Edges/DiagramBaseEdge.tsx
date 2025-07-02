@@ -4,7 +4,7 @@ import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
 import FlowValueDisplay from '../Diagram/FlowValueDisplay';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { toggleDrawer } from '../Diagram/diagramReducer';
+import { openDrawerWithSelected } from '../Diagram/diagramReducer';
 import { RootState } from '../Diagram/store';
 import { CustomEdgeData } from 'process-flow-lib';
 
@@ -94,9 +94,9 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
     }
   }
 
-  const onEditEdge = () => {
-    dispatch(toggleDrawer(props.id));
-  }
+  // const onEditEdge = () => {
+  //   dispatch(openDrawerWithSelected(props.id));
+  // }
 
   const connections = useNodeConnections({ handleType: 'target', handleId: props.targetHandleId, id: props.target });
 
@@ -119,10 +119,10 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
       <EdgeLabelRenderer>
         <Fragment>
 
-          <EditDataDrawerButton 
+          {/* <EditDataDrawerButton 
             onEdit={onEditEdge}
             selected={props.selected}
-            transformLocation={editButtonTransform}/>
+            transformLocation={editButtonTransform}/> */}
 
         {showFlowLabels && Boolean(customEdgeData.flowValue) &&
             <EdgeFlowValueLabel

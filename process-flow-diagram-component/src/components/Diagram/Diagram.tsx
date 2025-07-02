@@ -20,15 +20,15 @@ import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { AppStore, configureAppStore, RootState, selectEdges, selectIsDrawerOpen, selectNodes } from './store';
+import { AppStore, configureAppStore, RootState, selectEdges, selectNodes } from './store';
 import { Provider } from 'react-redux';
-import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, keyboardDeleteNode, nodesChange } from './diagramReducer';
+import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, keyboardDeleteNode, nodesChange, openDrawerWithSelected } from './diagramReducer';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
-import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, checkDiagramNodeErrors, getIsDiagramValid } from 'process-flow-lib';
-import { SharedDrawer } from '../Drawer/SharedDrawer';
+import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, getIsDiagramValid } from 'process-flow-lib';
 import MenuSidebar from '../Drawer/MenuSidebar';
 import DataSidebar from '../Drawer/DataSidebar';
+import SharedDrawer from '../Drawer/SharedDrawer';
 
 
 export interface DiagramProps {
@@ -50,7 +50,6 @@ const Diagram = (props: DiagramProps) => {
   const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const isDialogOpen = useAppSelector((state: RootState) => state.diagram.isDialogOpen);
-  const isDataDrawerOpen: boolean = useAppSelector(selectIsDrawerOpen)
   const edges: Edge[] = useAppSelector(selectEdges);
   const userDiagramOptions: UserDiagramOptions = useAppSelector((state: RootState) => state.diagram.diagramOptions);
   const settings: DiagramSettings = useAppSelector((state: RootState) => state.diagram.settings);
@@ -76,7 +75,7 @@ const Diagram = (props: DiagramProps) => {
   // const newNodeErrors = checkDiagramNodeErrors(nodes, edges, calculatedData, settings);
   // const isDiagramValid = getIsDiagramValid(newNodeErrors);
   // console.log('=== newNodeErrors', newNodeErrors);
-  const isDiagramValid = getIsDiagramValid(nodeErrors);
+  const isDiagramValid = useMemo(() => getIsDiagramValid(nodeErrors), [nodeErrors]);
   // console.log('=== isDiagramValid', isDiagramValid);
 
   // * on xyFlow instance ready
@@ -167,7 +166,7 @@ const Diagram = (props: DiagramProps) => {
       }
 
       {!isDiagramValid && validationWindowLocation === 'diagram' &&
-        <ValidationWindow></ValidationWindow>
+        <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation}/>
       }
       {/* // * Only for development result checking */}
       {/* <ResultsPanel></ResultsPanel> */}
@@ -189,6 +188,8 @@ const Diagram = (props: DiagramProps) => {
             }}
             defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
             connectionLineType={ConnectionLineType.Bezier}
+            onNodeClick={(_, node) => dispatch(openDrawerWithSelected(node.id))}
+            onEdgeClick={(_, edge) => dispatch(openDrawerWithSelected(edge.id))}
             onDrop={onDrop}
             // onError={onErrorWithSuppressed}
             onBeforeDelete={onBeforeDelete}

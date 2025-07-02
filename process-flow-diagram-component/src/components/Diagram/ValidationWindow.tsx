@@ -1,21 +1,18 @@
 import { Paper, Typography, Stack, Alert, Button, Box, Collapse } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { Node } from '@xyflow/react';
-import { selectNodes } from "./store";
-import { toggleDrawer, validationWindowOpenChange } from "./diagramReducer";
+import { openDrawerWithSelected, validationWindowOpenChange } from "./diagramReducer";
 import InvalidIcon from "../../validation/InvalidIcon";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { useState } from "react";
+import { memo, useState } from "react";
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
 import { getHasErrorLevel, getHasFlowError, getHasTotalFlowError, NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "process-flow-lib";
 
-const ValidationWindow = () => {
+const ValidationWindow = (props) => {
   const dispatch = useAppDispatch();
-  const nodes: Node[] = useAppSelector(selectNodes);
-  const errors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
-  const openLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
+  const {nodes, errors, openLocation} = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleSetOpenLocation = (state: ValidationWindowLocation) => {
@@ -23,7 +20,7 @@ const ValidationWindow = () => {
   }
 
   const handleFixIssue = (nodeId: string) => {
-      dispatch(toggleDrawer(nodeId));
+      dispatch(openDrawerWithSelected(nodeId));
   }
 
 
@@ -157,5 +154,10 @@ const ValidationWindow = () => {
   );
 };
 
-export default ValidationWindow;
-export type ValidationWindowLocation = 'diagram' | 'alerts-tab' ;
+export default memo(ValidationWindow);
+export interface ValidationWindowProps {
+  errors: NodeErrors;
+  nodes: Node[];
+  openLocation: ValidationWindowLocation;
+}
+export type ValidationWindowLocation = 'diagram' | 'alerts-tab';

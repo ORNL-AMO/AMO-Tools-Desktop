@@ -5,7 +5,7 @@ import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, electricityCostChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
-import { RootState, selectHasAssessment } from '../Diagram/store';
+import { RootState, selectHasAssessment, selectNodes } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -13,6 +13,7 @@ import { blue } from '@mui/material/colors';
 import { ParentContainerDimensions, NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getIsDiagramValid } from 'process-flow-lib';
 import DiagramResults from './DiagramResults';
 import InputField from '../StyledMUI/InputField';
+import { Node } from '@xyflow/react';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
@@ -47,6 +48,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const conductivityUnit = useAppSelector((state: RootState) => state.diagram.settings.conductivityUnit);
   const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
+  const nodes: Node[] = useAppSelector(selectNodes);
   const isDiagramValid = getIsDiagramValid(nodeErrors);
 
   const [selectedTab, setSelectedTab] = useState(0);
@@ -372,7 +374,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
         <TabPanel value={selectedTab} index={4} diagramParentDimensions={diagramParentDimensions}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
                 {!isDiagramValid && validationWindowLocation === 'alerts-tab' &&
-                  <ValidationWindow></ValidationWindow>
+                  <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation} />
                 }
           </Box>
         </TabPanel>
