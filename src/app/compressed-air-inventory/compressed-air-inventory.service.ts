@@ -11,6 +11,8 @@ import { DesignDetailsCatalogService } from './compressed-air-inventory-setup/co
 import { FieldMeasurementsCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/field-measurements-catalog/field-measurements-catalog.service';
 import { NameplateDataCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/nameplate-data-catalog/nameplate-data-catalog.service';
 import { PerformancePointsCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/performance-points-catalog/performance-points-catalog.service';
+import _ from 'lodash';
+import { copyObject } from '../shared/helperFunctions';
 
 @Injectable()
 export class CompressedAirInventoryService {
@@ -26,6 +28,7 @@ export class CompressedAirInventoryService {
   helpPanelTab: BehaviorSubject<string>;
   showExportModal: BehaviorSubject<boolean>;
   currentInventoryId: number;
+  filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
 
   constructor(private formBuilder: UntypedFormBuilder,
     private convertUnitsService: ConvertUnitsService,
@@ -49,12 +52,9 @@ export class CompressedAirInventoryService {
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.helpPanelTab = new BehaviorSubject<string>(undefined);
     this.showExportModal = new BehaviorSubject<boolean>(false);
-    // this.filterInventorySummary = new BehaviorSubject({
-    //   selectedSystemIds: new Array(),
-    //   pumpTypes: new Array(),
-    //   motorRatedPowerValues: new Array(),
-    //   statusValues: new Array()
-    // });
+    this.filterInventorySummary = new BehaviorSubject({
+      selectedSystemsIds: new Array(),
+    });
   }
 
   initInventoryData(): CompressedAirInventoryData {
@@ -365,6 +365,40 @@ export class CompressedAirInventoryService {
   }
 
 
+  filterCompressedAirInventoryData(inventoryData: CompressedAirInventoryData, filterInventorySummary: FilterInventorySummary): CompressedAirInventoryData {
+    let filteredInventoryData: CompressedAirInventoryData = copyObject(inventoryData);
+    if (filterInventorySummary.selectedSystemsIds.length != 0) {
+      filteredInventoryData.systems = _.filter(filteredInventoryData.systems, (department) => {
+        return _.find(filterInventorySummary.selectedSystemsIds, (id) => { return department.id == id }) != undefined;
+      });
+    }
+    // if (filterInventorySummary.pumpTypes.length != 0) {
+    //   filteredInventoryData.departments.forEach(department => {
+    //     department.catalog = _.filter(department.catalog, (pumpItem) => {
+    //       return _.includes(filterInventorySummary.pumpTypes, pumpItem.pumpEquipment.pumpType);
+    //     })
+    //   });
+    // }
+    // if (filterInventorySummary.motorRatedPowerValues.length != 0) {
+    //   filteredInventoryData.departments.forEach(department => {
+    //     department.catalog = _.filter(department.catalog, (pumpItem) => {
+    //       return _.includes(filterInventorySummary.motorRatedPowerValues, pumpItem.pumpMotor.motorRatedPower);
+    //     })
+    //   });
+    // }
+    // if (filterInventorySummary.statusValues.length != 0) {
+    //   filteredInventoryData.departments.forEach(department => {
+    //     department.catalog = _.filter(department.catalog, (pumpItem) => {
+    //       return _.includes(filterInventorySummary.statusValues, pumpItem.pumpStatus.status);
+    //     })
+    //   });
+    // }
+    return filteredInventoryData;
+  }
 
 
+}
+
+export interface FilterInventorySummary {
+  selectedSystemsIds: Array<string>,
 }

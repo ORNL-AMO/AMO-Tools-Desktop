@@ -1,0 +1,14 @@
+.navbar {
+    border-bottom: solid 4px #7030A0;
+    font-size: small;
+    background-color: #ececec;
+}
+
+.nav-item .dropdown-toggle {
+    color: white;
+    background: #7030A0;
+}
+
+.nav-link {
+    padding: 4px;
+}

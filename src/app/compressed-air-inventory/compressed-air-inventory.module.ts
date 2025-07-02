@@ -18,6 +18,8 @@ import { ExistingCompressorDbService } from './existing-compressor-db.service';
 import { CompressorDataManagementService } from './compressor-data-management.service';
 import { ConvertCompressedAirInventoryService } from './convert-compressed-air-inventory.service';
 import { SummaryFilterComponent } from './compressed-air-inventory-banner/summary-filter/summary-filter.component';
+import { SelectedOptionsComponent } from './compressed-air-inventory-banner/summary-filter/selected-options/selected-options.component';
+import { SystemDropdownComponent } from './compressed-air-inventory-banner/summary-filter/system-dropdown/system-dropdown.component';
 
 
 
@@ -25,7 +27,9 @@ import { SummaryFilterComponent } from './compressed-air-inventory-banner/summar
   declarations: [
     CompressedAirInventoryComponent,
     CompressedAirInventoryBannerComponent,
-    SummaryFilterComponent
+    SummaryFilterComponent,
+    SelectedOptionsComponent,
+    SystemDropdownComponent
   ],
   imports: [
     CommonModule,

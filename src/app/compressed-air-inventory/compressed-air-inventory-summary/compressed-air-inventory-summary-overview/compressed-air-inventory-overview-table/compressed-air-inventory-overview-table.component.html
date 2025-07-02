@@ -1,1 +1,100 @@
-<p>compressed-air-inventory-overview-table works!</p>
+<div class="p-2">
+    <table #copyTable class="table table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Systems
+                </th>
+                <th>
+                    Num. Compressors
+                </th>
+                <th>
+                    Annual Energy Use
+                </th>
+                <th>
+                    Annual Energy Cost
+                </th>
+                <th>
+                    Emissions Output
+                </th>
+            </tr>
+
+        </thead>
+        <tbody>
+            <tr class="system-item-row"
+                *ngFor="let systemSummaryItem of inventorySummary.systemSummaryItems"
+                [ngStyle]="{'background-color': 'rgb('+systemSummaryItem.systemColor+')'}">
+                <td>
+                    {{systemSummaryItem.systemName}}
+                </td>
+                <td>
+                    {{systemSummaryItem.numberOfCompressors}}
+                </td>
+                <td>
+                    <span *ngIf="systemSummaryItem.energyUse">
+                        {{systemSummaryItem.energyUse | number:'1.0-0'}} kWh/yr
+                    </span>
+                    <span *ngIf="!systemSummaryItem.energyUse">
+                        &mdash; kWh/yr
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="systemSummaryItem.energyCost">
+                        {{systemSummaryItem.energyCost | currency:'USD':'symbol':'2.0-0'}}
+                    </span>
+                    <span *ngIf="!systemSummaryItem.energyCost">
+                        $ &mdash;
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="systemSummaryItem.co2EmissionOutput">
+                        {{systemSummaryItem.co2EmissionOutput | number :'1.0-0'}}
+                    </span>
+                    <span *ngIf="!systemSummaryItem.co2EmissionOutput">
+                        &mdash;
+                    </span>
+                    <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                    <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="bold">
+                <td>
+                    Total Inventory
+                </td>
+                <td>
+                    {{inventorySummary.totalCompressors}}
+                </td>
+                <td>
+                    <span *ngIf="inventorySummary.totalEnergyUse">
+                        {{inventorySummary.totalEnergyUse | number:'1.0-0'}} kWh/yr
+                    </span>
+                    <span *ngIf="!inventorySummary.totalEnergyUse">
+                        &mdash; kWh/yr
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="inventorySummary.totalEnergyCost">
+                        {{inventorySummary.totalEnergyCost | currency:'USD':'symbol':'2.0-0'}}
+                    </span>
+                    <span *ngIf="!inventorySummary.totalEnergyCost">
+                        $ &mdash;
+                    </span>
+                </td>
+                <td>
+                    <span *ngIf="inventorySummary.totalEmissions">
+                        {{inventorySummary.totalEmissions | number :'1.0-0'}}
+                    </span>
+                    <span *ngIf="!inventorySummary.totalEmissions">
+                        &mdash;
+                    </span>
+                    <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+                    <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>

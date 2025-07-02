@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { Settings } from '../../../shared/models/settings';
+import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
+import { CompressedAirInventorySummaryOverviewService } from './compressed-air-inventory-summary-overview.service';
 
 @Component({
   selector: 'app-compressed-air-inventory-summary-overview',
@@ -7,5 +11,19 @@ import { Component } from '@angular/core';
   standalone: false
 })
 export class CompressedAirInventorySummaryOverviewComponent {
+  filterInventorySummarySub: Subscription;
+  settings: Settings;
+  constructor(private compressedAirInventoryService: CompressedAirInventoryService, private compressedAirInventorySummaryOverviewService: CompressedAirInventorySummaryOverviewService) { }
+
+  ngOnInit(): void {
+    this.settings = this.compressedAirInventoryService.settings.getValue();
+    this.filterInventorySummarySub = this.compressedAirInventoryService.filterInventorySummary.subscribe(val => {
+      //this.compressedAirInventorySummaryOverviewService.setDepartmentSummaryItems();
+    });
+  }
+
+  ngOnDestroy() {
+    this.filterInventorySummarySub.unsubscribe();
+  }
 
 }

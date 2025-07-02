@@ -1,1 +1,13 @@
-<p>compressed-air-inventory-summary-overview works!</p>
+<div class="row no-gutters w-100 h-50 min-row-height">
+    <div class="col-lg-6 col-12">
+        <app-compressed-air-inventory-overview-table [settings]="settings"></app-compressed-air-inventory-overview-table>
+    </div>
+    <div class="col-lg-6 col-12 min-row-height">
+        <app-compressed-air-inventory-overview-pie-chart></app-compressed-air-inventory-overview-pie-chart>
+    </div>
+</div>
+<div class="row no-gutters w-100 h-50 min-row-height">
+    <div class="col-12">
+        <app-compressed-air-inventory-overview-bar-chart></app-compressed-air-inventory-overview-bar-chart>
+    </div>
+</div>
