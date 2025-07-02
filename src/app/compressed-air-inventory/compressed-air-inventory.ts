@@ -1,5 +1,5 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
-import { AssessmentType, ConnectedFromState, InventoryType } from "../shared/connected-inventory/integrations";
+import { ConnectedFromState, InventoryType } from "../shared/connected-inventory/integrations";
 import { OperatingHours } from "../shared/models/operations";
 
 export interface CompressedAirInventoryData {
@@ -84,7 +84,6 @@ export interface ConnectedItem {
   inventoryName?: string,
   systemId?: string,
   inventoryType?: InventoryType,
-  assessmentType?: AssessmentType,
   assessmentId?: number,
   assessmentName?: string,
   connectedFromState?: ConnectedFromState,
