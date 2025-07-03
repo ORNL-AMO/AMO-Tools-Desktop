@@ -110,7 +110,7 @@ const ValidationWindow = (props) => {
                                 size="small"
                                 sx={{ fontSize: '.75rem', marginRight: '1rem', color: `${currentAlertLevel}.dark` }}
                                 onClick={() => handleFixIssue(key)}>
-                                Fix Issue
+                                Go To Issue
                               </Button>
                             }>
                             <Typography variant="body2" fontWeight="bold" sx={{ color: `${currentAlertLevel}.dark`, fontSize: '.75rem' }}>

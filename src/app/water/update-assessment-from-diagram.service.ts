@@ -103,7 +103,6 @@ export class UpdateAssessmentFromDiagramService {
           totalKnownLosses: waterProcessComponent.userEnteredData.totalKnownLosses !== undefined? waterProcessComponent.userEnteredData.totalKnownLosses : diagramCalculatedData.totalKnownLosses,
           waterInProduct: waterProcessComponent.userEnteredData.waterInProduct !== undefined? waterProcessComponent.userEnteredData.waterInProduct : diagramCalculatedData.waterInProduct,
         };
-        waterProcessComponent.userEnteredData = diagramCalculatedData;
       }
       if (waterProcessComponent.processComponentType === 'water-intake') {
         let intakeSource: IntakeSource;

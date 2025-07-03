@@ -134,8 +134,6 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     totalDischargeFlow?: number,
     totalKnownLosses?: number,
     waterInProduct?: number,
-    // * summing node total divided by active handle connections
-    summingFlowEvenlyDivided?: number,
   }
 
   
