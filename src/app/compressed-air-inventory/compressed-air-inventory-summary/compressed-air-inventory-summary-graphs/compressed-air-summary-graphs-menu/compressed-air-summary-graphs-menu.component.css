@@ -1,0 +1,38 @@
+.field-item {
+    border-bottom: solid 1px;
+    padding: .5rem;
+    font-size: 12px
+}
+
+.field-item:hover,
+.group-item:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    background-color: #7030A0;
+}
+
+
+.group-item {
+    padding: .25rem;
+    font-size: 16px;
+    border-bottom: groove 4px;
+    font-weight: bold;
+}
+
+.fa {
+    font-size: 12px;
+}
+
+.field-item.active,
+.btn.active {
+    background-color: #7030A0;
+    color: white;
+}
+
+.btn-group {
+    padding: .75rem;
+}
+
+.btn-group .btn-sm {
+    font-size: small;
+}

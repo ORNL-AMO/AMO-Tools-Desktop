@@ -1,1 +1,23 @@
-<p>compressed-air-summary-graphs-menu works!</p>
+<div class="w-100 justify-content-center btn-group btn-group-sm">
+    <button type="button" class="btn btn-sm" (click)="setGraphType('bar')" [ngClass]="{'active': graphType == 'bar'}">
+        Bar
+    </button>
+    <button type="button" class="btn btn-sm" (click)="setGraphType('pie')" [ngClass]="{'active': graphType == 'pie'}">
+        Pie
+    </button>
+</div>
+<div class="d-flex flex-column" *ngFor="let group of groups">
+    <div class="d-flex flex-column" *ngIf="group.options.length != 0; let index=index;">
+        <div class="group-item" (click)="toggleShow(group)">
+            <span class="fa"
+                [ngClass]="{'fa-chevron-right': !group.showGroup, 'fa-chevron-down': group.showGroup}"></span>
+            {{group.groupLabel}}
+        </div>
+        <div class="d-flex flex-column" *ngIf="group.showGroup">
+            <div class="field-item" *ngFor="let option of group.options" (click)="setSelectedField(option)"
+                [ngClass]="{'active': selectedField.value == option.value}">
+                {{option.display}}
+            </div>
+        </div>
+    </div>
+</div>

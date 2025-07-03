@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-compressed-air-inventory-summary-graphs',
@@ -6,6 +6,11 @@ import { Component } from '@angular/core';
   styleUrl: './compressed-air-inventory-summary-graphs.component.css',
   standalone: false
 })
-export class CompressedAirInventorySummaryGraphsComponent {
+export class CompressedAirInventorySummaryGraphsComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
 
 }
