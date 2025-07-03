@@ -115,7 +115,7 @@ const SharedDrawer = (props: SharedDrawerProps) => {
                 open={open}
                 anchor={anchor}
                 sx={{
-                    zIndex: 1,
+                    zIndex: 0,
                 }}
             >
                 <DrawerHeader justifyContent={justifyContent}>
