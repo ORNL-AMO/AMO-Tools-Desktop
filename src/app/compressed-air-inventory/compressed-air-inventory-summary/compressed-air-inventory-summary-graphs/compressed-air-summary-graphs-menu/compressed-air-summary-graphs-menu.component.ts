@@ -31,7 +31,6 @@ export class CompressedAirSummaryGraphsMenuComponent {
       if (val) {
         this.selectedField = val;
       } else {
-        // todo 6232 use named default if we end up having required fields to display
         let defaultOption = this.groups[0].options[0];
         this.setSelectedField(defaultOption);
       }
@@ -50,11 +49,11 @@ export class CompressedAirSummaryGraphsMenuComponent {
     this.groups = new Array();
     let settings: Settings = this.compressedAirInventoryService.settings.getValue();
     let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
-    // this.groups.push({
-    //   options: this.compressedAirSummaryService.getNameplateDataFields(pumpInventoryData.displayOptions.nameplateDataOptions, settings),
-    //   groupLabel: 'Nameplate Data',
-    //   showGroup: true
-    // });
+    this.groups.push({
+      options: this.compressedAirSummaryService.getNameplateDataFields(compressedAirInventoryData.displayOptions.nameplateDataOptions, settings),
+      groupLabel: 'Nameplate Data',
+      showGroup: true
+    });
     // this.groups.push({
     //   options: this.compressedAirSummaryService.getPumpPropertiesFields(pumpInventoryData.displayOptions.pumpPropertiesOptions, settings),
     //   groupLabel: 'Pump',

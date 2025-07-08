@@ -28,10 +28,10 @@ export class CompressedAirSummaryGraphComponent {
   ngAfterViewInit() {
     this.selectedFieldSub = this.compressedAirInventorySummaryGraphsService.selectedField.subscribe(selectedField => {
       if (selectedField) {
-        let pumpInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
+        let compressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
         let filterInventorySummary = this.compressedAirInventoryService.filterInventorySummary.getValue();
-        let filteredPumpInventoryData = this.compressedAirInventoryService.filterCompressedAirInventoryData(pumpInventoryData, filterInventorySummary);
-        let chartData = this.compressedAirInventorySummaryGraphsService.getBinData(filteredPumpInventoryData, selectedField);
+        let filteredCompressedAirInventoryData = this.compressedAirInventoryService.filterCompressedAirInventoryData(compressedAirInventoryData, filterInventorySummary);
+        let chartData = this.compressedAirInventorySummaryGraphsService.getBinData(filteredCompressedAirInventoryData, selectedField);
         let type: string = this.compressedAirInventorySummaryGraphsService.graphType.getValue();
 
         let ticksuffix: string;
@@ -74,7 +74,7 @@ export class CompressedAirSummaryGraphComponent {
         }
         let layout = {
           title: {
-            text: 'Pump Inventory',
+            text: 'Compressed Air Inventory',
             font: {
               family: 'Roboto',
               size: 22
@@ -83,7 +83,7 @@ export class CompressedAirSummaryGraphComponent {
           yaxis: {
             // hoverformat: '.3r',
             title: {
-              text: '# of Pumps',
+              text: '# of Compressors',
               font: {
                 family: 'Roboto',
                 size: 16

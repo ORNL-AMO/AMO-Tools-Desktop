@@ -26,23 +26,23 @@ export class CompressedAirInventorySummaryGraphsService {
   }
 
 
-  getLabel(key: string, pumpField: CompressedAirField): string {
+  getLabel(key: string, compressedAirField: CompressedAirField): string {
     let label = key;
-    // if (pumpField.value == 'motorEfficiencyClass') {
+    // if (compressedAirField.value == 'motorEfficiencyClass') {
     //   let motorEfficiencyClass = motorEfficiencyConstants.find(constant => { return constant.value == Number(key) });
     //   if (motorEfficiencyClass) {
     //     label = motorEfficiencyClass.display;
     //   } else {
     //     label = 'N/A';
     //   }
-    // } else if (pumpField.value == 'driveType') {
+    // } else if (compressedAirField.value == 'driveType') {
     //   let driveType = pumpInventoryDriveConstants.find(constant => { return constant.value == Number(key) });
     //   if (driveType) {
     //     label = driveType.display;
     //   } else {
     //     label = 'N/A';
     //   }
-    // } else if (pumpField.value == 'pumpType') {
+    // } else if (compressedAirField.value == 'pumpType') {
     //   let pumpType = pumpTypesConstant.find(constant => { return constant.value == Number(key) });
     //   if (pumpType) {
     //     label = pumpType.display;
@@ -50,7 +50,7 @@ export class CompressedAirInventorySummaryGraphsService {
     //     label = 'N/A';
     //   }
     // }
-    // else if (pumpField.value == 'shaftOrientation') {
+    // else if (compressedAirField.value == 'shaftOrientation') {
     //   let shaftOrientation = pumpInventoryShaftOrientations.find(constant => { return constant.value == Number(key) });
     //   if (shaftOrientation) {
     //     label = shaftOrientation.display;
@@ -58,7 +58,7 @@ export class CompressedAirInventorySummaryGraphsService {
     //     label = 'N/A';
     //   }
     // }
-    // else if (pumpField.value == 'shaftSealType') {
+    // else if (compressedAirField.value == 'shaftSealType') {
     //   let shaftSealType = pumpInventoryShaftSealTypes.find(constant => { return constant.value == Number(key) });
     //   if (shaftSealType) {
     //     label = shaftSealType.display;
@@ -66,7 +66,7 @@ export class CompressedAirInventorySummaryGraphsService {
     //     label = 'N/A';
     //   }
     // }
-    // else if (pumpField.value == 'priority') {
+    // else if (compressedAirField.value == 'priority') {
     //   let priority = priorityTypes.find(constant => { return constant.value == Number(key) });
     //   if (priority) {
     //     label = priority.display;
@@ -74,7 +74,7 @@ export class CompressedAirInventorySummaryGraphsService {
     //     label = 'N/A';
     //   }
     // }
-    // else if (pumpField.value == 'status') {
+    // else if (compressedAirField.value == 'status') {
     //   let status = statusTypes.find(constant => { return constant.value == Number(key) });
     //   if (status) {
     //     label = status.display;
