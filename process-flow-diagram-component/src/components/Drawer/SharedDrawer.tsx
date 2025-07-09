@@ -114,6 +114,9 @@ const SharedDrawer = (props: SharedDrawerProps) => {
                 anchorProps={{ anchor: anchor }}
                 open={open}
                 anchor={anchor}
+                sx={{
+                    zIndex: 0,
+                }}
             >
                 <DrawerHeader justifyContent={justifyContent}>
                     {toggleButton}
