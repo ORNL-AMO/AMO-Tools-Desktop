@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { CompressedAirInventoryService } from '../../../compressed-air-inventory.service';
 import { CompressedAirInventorySummaryGraphsService } from '../compressed-air-inventory-summary-graphs.service';
-import { CompressedAirSummaryService } from '../../compressed-air-inventory-summary.service';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirInventoryData } from '../../../compressed-air-inventory';
+import { CompressedAirInventorySummaryService } from '../../compressed-air-inventory-summary.service';
 
 @Component({
   selector: 'app-compressed-air-summary-graphs-menu',
@@ -23,7 +23,7 @@ export class CompressedAirSummaryGraphsMenuComponent {
     groupLabel: string,
     showGroup: boolean
   }>
-  constructor(private compressedAirInventoryService: CompressedAirInventoryService, private compressedAirInventorySummaryGraphsService: CompressedAirInventorySummaryGraphsService, private compressedAirSummaryService: CompressedAirSummaryService) { }
+  constructor(private compressedAirInventoryService: CompressedAirInventoryService, private compressedAirInventorySummaryGraphsService: CompressedAirInventorySummaryGraphsService, private compressedAirInventorySummaryService: CompressedAirInventorySummaryService) { }
 
   ngOnInit(): void {
     this.setOptions();
@@ -50,37 +50,37 @@ export class CompressedAirSummaryGraphsMenuComponent {
     let settings: Settings = this.compressedAirInventoryService.settings.getValue();
     let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
     this.groups.push({
-      options: this.compressedAirSummaryService.getNameplateDataFields(compressedAirInventoryData.displayOptions.nameplateDataOptions, settings),
+      options: this.compressedAirInventorySummaryService.getNameplateDataFields(compressedAirInventoryData.displayOptions.nameplateDataOptions, settings),
       groupLabel: 'Nameplate Data',
       showGroup: true
     });
     // this.groups.push({
-    //   options: this.compressedAirSummaryService.getPumpPropertiesFields(pumpInventoryData.displayOptions.pumpPropertiesOptions, settings),
+    //   options: this.compressedAirInventorySummaryService.getPumpPropertiesFields(pumpInventoryData.displayOptions.pumpPropertiesOptions, settings),
     //   groupLabel: 'Pump',
     //   showGroup: false
     // });
     // this.groups.push({
-    //   options: this.compressedAirSummaryService.getFluidPropertiesFields(pumpInventoryData.displayOptions.fluidPropertiesOptions, settings),
+    //   options: this.compressedAirInventorySummaryService.getFluidPropertiesFields(pumpInventoryData.displayOptions.fluidPropertiesOptions, settings),
     //   groupLabel: 'Fluid',
     //   showGroup: false
     // });
     // this.groups.push({
-    //   options: this.compressedAirSummaryService.getFieldMeasurementsFields(pumpInventoryData.displayOptions.fieldMeasurementOptions, settings),
+    //   options: this.compressedAirInventorySummaryService.getFieldMeasurementsFields(pumpInventoryData.displayOptions.fieldMeasurementOptions, settings),
     //   groupLabel: 'Field Measurements',
     //   showGroup: false
     // });
     // this.groups.push({
-    //   options: this.compressedAirSummaryService.getPumpMotorFields(pumpInventoryData.displayOptions.pumpMotorPropertiesOptions, settings),
+    //   options: this.compressedAirInventorySummaryService.getPumpMotorFields(pumpInventoryData.displayOptions.pumpMotorPropertiesOptions, settings),
     //   groupLabel: 'Motor',
     //   showGroup: false
     // });
     // this.groups.push({
-    //   options: this.compressedAirSummaryService.getPumpStatusFields(pumpInventoryData.displayOptions.pumpStatusOptions, settings),
+    //   options: this.compressedAirInventorySummaryService.getPumpStatusFields(pumpInventoryData.displayOptions.pumpStatusOptions, settings),
     //   groupLabel: 'Status',
     //   showGroup: false
     // });
     // this.groups.push({
-    //   options: this.compressedAirSummaryService.getSystemPropertiesFields(pumpInventoryData.displayOptions.systemPropertiesOptions, settings),
+    //   options: this.compressedAirInventorySummaryService.getSystemPropertiesFields(pumpInventoryData.displayOptions.systemPropertiesOptions, settings),
     //   groupLabel: 'System',
     //   showGroup: false
     // });

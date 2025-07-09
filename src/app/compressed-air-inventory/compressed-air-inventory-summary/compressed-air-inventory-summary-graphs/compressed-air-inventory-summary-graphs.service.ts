@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CompressedAirField, CompressedAirSummaryService } from '../compressed-air-inventory-summary.service';
+import { CompressedAirField, CompressedAirInventorySummaryService } from '../compressed-air-inventory-summary.service';
 import { CompressedAirInventoryData, CompressedAirItem } from '../../compressed-air-inventory';
 import _ from 'lodash';
 
@@ -8,12 +8,12 @@ import _ from 'lodash';
 export class CompressedAirInventorySummaryGraphsService {
   selectedField: BehaviorSubject<CompressedAirField>;
   graphType: BehaviorSubject<string>;
-  constructor(private compressedAirSummaryService: CompressedAirSummaryService) {
+  constructor(private compressedAirInventorySummaryService: CompressedAirInventorySummaryService) {
     this.selectedField = new BehaviorSubject(undefined);
     this.graphType = new BehaviorSubject<string>('bar');
   }
   getBinData(compressedAirInventoryData: CompressedAirInventoryData, compressedAirField: CompressedAirField): { xData: Array<any>, yData: Array<number> } {
-    let compressors: Array<CompressedAirItem> = this.compressedAirSummaryService.getAllCompressors(compressedAirInventoryData);
+    let compressors: Array<CompressedAirItem> = this.compressedAirInventorySummaryService.getAllCompressors(compressedAirInventoryData);
     let fieldCount: _.Dictionary<number> = _.countBy(compressors, (compresser) => { return compresser[compressedAirField.group][compressedAirField.value] });
     let xData: Array<any> = new Array();
     let yData: Array<any> = new Array();
