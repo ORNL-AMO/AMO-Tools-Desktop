@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType, useNodeConnections, HandleType } from '@xyflow/react';
+import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CSSProperties } from 'react';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
@@ -59,9 +59,6 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     isModalOpen: false,
     diagramAlert: {
       open: false,
-      alertMessage: '',
-      alertSeverity: 'warning',
-      dismissMS: 10000
     }
   }
 }
@@ -318,7 +315,7 @@ const connectEdgeReducer = (state: DiagramState, action: PayloadAction<Connectio
       open: true,
       alertMessage: DiagramAlertMessages.EdgeConnectionLimit,
       alertSeverity: 'warning',
-      dismissMS: 10000
+      dismissMS: 6000
     };
   }
   
