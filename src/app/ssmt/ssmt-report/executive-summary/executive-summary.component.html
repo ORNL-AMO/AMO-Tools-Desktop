@@ -1,7 +1,7 @@
 <div class="d-flex flex-column output-summary">
   <h4 class="show-print">Executive Summary</h4>
 
-  <table class="table table-striped table-hover">
+  <table #copyTable class="table table-striped table-hover">
     <thead>
       <tr>
         <td [ngStyle]="{ 'width.%': 15 }" class="border-0"></td>
@@ -320,4 +320,6 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 </div>

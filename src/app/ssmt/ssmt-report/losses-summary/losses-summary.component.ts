@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService } from '../../../report-rollup/report-rollup.service';
@@ -28,6 +28,9 @@ export class LossesSummaryComponent implements OnInit {
   inRollup: boolean;
   @Input()
   assessment: Assessment;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   selectedModificationIndex: number;
   showCondensingTurbine: boolean;
@@ -119,5 +122,9 @@ export class LossesSummaryComponent implements OnInit {
     if (loss.lowPressureVentLoss) {
       this.showLowPressureVentedSteam = true;
     }
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

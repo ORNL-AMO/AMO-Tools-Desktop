@@ -77,17 +77,29 @@ export class ExportToJustifiModalComponent {
 
   addAssessment(assessment: Assessment) {
     if (assessment.type == 'PSAT') {
-      assessment.psat.selectedModificationId = assessment.psat.modifications[0]?.id;
+      if (assessment.psat.modifications && assessment.psat.modifications.length > 0) {
+        assessment.psat.selectedModificationId = assessment.psat.modifications[0].id;
+      }
     } else if (assessment.type == 'FSAT') {
-      assessment.fsat.selectedModificationId = assessment.fsat.modifications[0]?.id;
+      if (assessment.fsat.modifications && assessment.fsat.modifications.length > 0) {
+        assessment.fsat.selectedModificationId = assessment.fsat.modifications[0].id;
+      }
     } else if (assessment.type == 'PHAST') {
-      assessment.phast.selectedModificationId = assessment.phast.modifications[0]?.id;
+      if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+        assessment.phast.selectedModificationId = assessment.phast.modifications[0].id;
+      }
     } else if (assessment.type == 'SSMT') {
-      assessment.ssmt.selectedModificationId = assessment.ssmt.modifications[0]?.modificationId;
+      if (assessment.ssmt.modifications && assessment.ssmt.modifications.length > 0) {
+        assessment.ssmt.selectedModificationId = assessment.ssmt.modifications[0].modificationId;
+      }
     } else if (assessment.type == 'WasteWater') {
-      assessment.wasteWater.selectedModificationId = assessment.wasteWater.modifications[0]?.id;
+      if (assessment.wasteWater.modifications && assessment.wasteWater.modifications.length > 0) {
+        assessment.wasteWater.selectedModificationId = assessment.wasteWater.modifications[0].id;
+      }
     } else if (assessment.type == 'CompressedAir') {
-      assessment.compressedAirAssessment.selectedModificationId = assessment.compressedAirAssessment.modifications[0]?.modificationId;
+      if (assessment.compressedAirAssessment.modifications && assessment.compressedAirAssessment.modifications.length > 0) {
+        assessment.compressedAirAssessment.selectedModificationId = assessment.compressedAirAssessment.modifications[0].modificationId;
+      }
     }
 
     if (assessment.type != 'Water') {

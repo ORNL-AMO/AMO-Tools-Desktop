@@ -9,7 +9,6 @@ import { Settings } from '../../shared/models/settings';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { WasteWaterAnalysisService } from '../waste-water-analysis/waste-water-analysis.service';
 import { WasteWaterService } from '../waste-water.service';
-import { ExportToJustifiTemplateService } from '../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 
 @Component({
   selector: 'app-waste-water-report',
@@ -45,8 +44,7 @@ export class WasteWaterReportComponent implements OnInit {
   printOptions: PrintOptions;
   tabsCollapsed: boolean = true;
   constructor(private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService,
-    private wasteWaterAnalysisService: WasteWaterAnalysisService, private printOptionsMenuService: PrintOptionsMenuService,
-    private exportToJustifiTemplateService: ExportToJustifiTemplateService) { }
+    private wasteWaterAnalysisService: WasteWaterAnalysisService, private printOptionsMenuService: PrintOptionsMenuService) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -133,9 +131,5 @@ export class WasteWaterReportComponent implements OnInit {
 
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
-  }
-
-  showExportToJustifi() {
-    this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
   }
 }

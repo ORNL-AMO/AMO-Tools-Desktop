@@ -502,13 +502,26 @@ export class VisualizeSidebarService {
     }
     selectedGraphObj.bins = new Array();
     let maxValue = Number(_.max(selectedGraphObj.selectedXAxisDataOption.data));
+
+    // todo 7573 Bug ' bin size out of range' - cannot reproduce, adding logging below 
+    console.log('maxValue', maxValue);
+    console.log('binlength', selectedGraphObj.bins.length);
+    console.log('binSize', selectedGraphObj.binSize);
+    console.log('starting maxValue, lowerbound', maxValue, lowerBound);
+
     if (selectedGraphObj.binningMethod == 'binSize') {
-      for (lowerBound; lowerBound <= maxValue; lowerBound += selectedGraphObj.binSize) {
-        selectedGraphObj.bins.push({
-          min: Math.floor(lowerBound),
-          max: Math.floor(lowerBound + selectedGraphObj.binSize)
-        })
-      };
+      try {
+        for (lowerBound; lowerBound <= maxValue; lowerBound += selectedGraphObj.binSize) {
+          selectedGraphObj.bins.push({
+            min: Math.floor(lowerBound),
+            max: Math.floor(lowerBound + selectedGraphObj.binSize)
+          })
+        };
+      } catch (e) {
+        console.error(e);
+        console.log('error maxValue, lowerbound', maxValue, lowerBound);
+        console.log('error binlength', selectedGraphObj.bins.length);
+      }
       selectedGraphObj.numberOfBins = selectedGraphObj.bins.length;
     } else {
       for (let binNum = 0; binNum < selectedGraphObj.numberOfBins; binNum++) {

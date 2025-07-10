@@ -33,7 +33,7 @@ export class ExportToJustifiSsmtService {
       assessmentWorksheet.getCell('E' + assessmentRowIndex).value = baselineElectricityUse;
       //F: Electricity unit
       assessmentWorksheet.getCell('F' + assessmentRowIndex).value = 'kWh';
-      if (assessment.ssmt.co2SavingsData.fuelType == 'Natural Gas') {
+      if (assessment.ssmt.co2SavingsData && assessment.ssmt.co2SavingsData.fuelType == 'Natural Gas') {
         //H: NG use
         assessmentWorksheet.getCell('H' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.boilerFuelUsage;
         //I: NG unit
@@ -65,7 +65,7 @@ export class ExportToJustifiSsmtService {
         assessmentWorksheet.getCell('G' + assessmentRowIndex).value = baselineElectricityUse - modElectricityUse;
 
 
-        if (assessment.ssmt.co2SavingsData.fuelType == 'Natural Gas') {
+        if (assessment.ssmt.co2SavingsData && assessment.ssmt.co2SavingsData.fuelType == 'Natural Gas') {
           //J: NG savings
           assessmentWorksheet.getCell('J' + assessmentRowIndex).value = baselineResults.outputData.operationsOutput.boilerFuelUsage - modResults.outputData.operationsOutput.boilerFuelUsage;
         } else {

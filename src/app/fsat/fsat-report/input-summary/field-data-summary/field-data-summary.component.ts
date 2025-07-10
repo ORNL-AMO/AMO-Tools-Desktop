@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT, FieldData } from '../../../../shared/models/fans';
 
@@ -21,7 +21,8 @@ export class FieldDataSummaryComponent implements OnInit {
   fieldData: { baseline: FieldData, modifications: Array<FieldData> };
 
 
-
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   collapse: boolean = true;
   numMods: number = 0;
@@ -105,5 +106,9 @@ export class FieldDataSummaryComponent implements OnInit {
 
   toggleCollapse() {
     this.collapse = !this.collapse;
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

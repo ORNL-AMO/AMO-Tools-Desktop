@@ -8,7 +8,7 @@
 
   <div *ngIf="!collapse || printView">
     <div class="card-body">
-      <div class="output-summary">
+      <div #copyTable class="output-summary">
         <table class="table table-hover table-striped">
           <thead>
             <tr>
@@ -42,6 +42,8 @@
           [modificationTurbines]="modificationMediumToLowTurbineData" [numMods]="numMods" [turbineType]="'mediumToLow'"
           [settings]="settings"></app-turbine-input-table>
       </div>
+      <app-exportable-results-table [tableString]="copyTableString"
+        (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
     </div>
   </div>
 

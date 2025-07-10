@@ -53,6 +53,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     name: 'Water Using System',
     className: 'water-using-system',
     cost: 0,
+    systemType: 0,
     isValid: true,
     inSystemTreatment: [],
     userEnteredData: {
@@ -477,7 +478,7 @@ export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
     directionalArrowsVisible: true,
     showFlowLabels: true,
     flowLabelSize: 1,
-    animated: true,
+    animated: false,
   }
 }
 

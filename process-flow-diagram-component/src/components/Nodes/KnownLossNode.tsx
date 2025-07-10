@@ -4,7 +4,7 @@ import { Typography } from "@mui/material";
 import CustomHandle from "./CustomHandle";
 import EditDataDrawerButton from "../Drawer/EditDataDrawerButton";
 import { useAppDispatch } from "../../hooks/state";
-import { toggleDrawer } from "../Diagram/diagramReducer";
+import { openDrawerWithSelected } from "../Diagram/diagramReducer";
 import { DiagramNode } from "process-flow-lib";
 import React from "react";
 
@@ -18,7 +18,7 @@ const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   };
 
   const onEditNode = () => {
-    dispatch(toggleDrawer(id));
+    dispatch(openDrawerWithSelected(id));
 }
 
   return (

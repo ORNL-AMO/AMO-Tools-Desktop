@@ -210,8 +210,7 @@ export interface PipeSizingOutput {
 export interface BagMethodInput {
   operatingTime: number;
   bagFillTime: number;
-  heightOfBag: number;
-  diameterOfBag: number;
+  bagVolume: number;
   numberOfUnits: number;
 }
 
@@ -369,7 +368,7 @@ export interface CompressedAirReductionData {
   electricityCost: number,
   measurementMethod: number,
   flowMeterMethodData: CompressedAirFlowMeterMethodData,
-  bagMethodData: BagMethodData,
+  bagMethodData: BagMethodInput,
   pressureMethodData: PressureMethodData,
   otherMethodData: CompressedAirOtherMethodData,
   compressorElectricityData: CompressorElectricityData,
@@ -378,12 +377,6 @@ export interface CompressedAirReductionData {
 
 export interface CompressedAirFlowMeterMethodData {
   meterReading: number
-};
-
-export interface BagMethodData {
-  height: number,
-  diameter: number,
-  fillTime: number
 };
 
 export interface PressureMethodData {
@@ -438,7 +431,7 @@ export interface AirLeakSurveyData {
   leakDescription: string,
   measurementMethod: number;
   compressorElectricityData?: CompressorElectricityData,
-  bagMethodData: BagMethodData,
+  bagMethodData: BagMethodInput,
   estimateMethodData: EstimateMethodData,
   orificeMethodData: OrificeMethodData,
   decibelsMethodData: DecibelsMethodData,

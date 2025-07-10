@@ -1,6 +1,6 @@
 <div class="output-summary">
   <h4 class="show-print print-section-header">Results Data</h4>
-  <table class="table table-hover table-striped" [ngClass]="{'panel-table': !inReport}">
+  <table #copyTable class="table table-hover table-striped" [ngClass]="{'panel-table': !inReport}">
     <thead>
       <tr>
         <th>Hourly Energy Loss/Use</th>
@@ -452,3 +452,6 @@
 
   </table>
 </div>
+
+<app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>

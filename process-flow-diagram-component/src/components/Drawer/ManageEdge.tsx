@@ -28,7 +28,6 @@ const ManageEdge = (props: ManageEdgeProps) => {
     return (
         <>
             <Box display="flex" alignItems={'center'} sx={{ margin: '1rem' }}>
-                <DrawerToggleButton side={'right'}></DrawerToggleButton>
                 <FlowConnectionText source={source.data} 
                     target={target.data} 
                     style={{

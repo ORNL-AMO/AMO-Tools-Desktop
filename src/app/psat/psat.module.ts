@@ -62,6 +62,7 @@ import { ConnectedInventoryModule } from '../shared/connected-inventory/connecte
 import { IntegratePumpInventoryComponent } from './integrate-pump-inventory/integrate-pump-inventory.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
+import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 
 @NgModule({
   declarations: [
@@ -120,7 +121,8 @@ import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module'
     AssessmentCo2SavingsModule,
     ConnectedInventoryModule,    
     ImportExportModule,
-    SnackbarModule
+    SnackbarModule,
+    ExportableResultsTableModule
   ],
   providers: [
     PsatService,

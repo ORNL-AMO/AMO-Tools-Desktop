@@ -1,4 +1,5 @@
-<label class="group-label">Baseline Results</label>
+<!-- Hidden for 7419 -->
+<!-- <label class="group-label">Baseline Results</label>
 <table #copyTable0 class="table table-hover table-striped">
   <tbody>
     <tr *ngIf="utilityType == 1">
@@ -33,7 +34,6 @@
     
   </tbody>
 </table>
-<!-- export table component -->
 <app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
 </app-exportable-results-table>
 
@@ -74,7 +74,7 @@
   </tbody>
 </table>
 <app-exportable-results-table *ngIf="modificationExists" [tableString]="table1String"
-  (updateTableString)="updateTable1String()"></app-exportable-results-table>
+  (updateTableString)="updateTable1String()"></app-exportable-results-table> -->
 
 <label class="group-label" *ngIf="modificationExists">Savings</label>
 <table *ngIf="modificationExists" #copyTable2 class="table table-hover table-striped">

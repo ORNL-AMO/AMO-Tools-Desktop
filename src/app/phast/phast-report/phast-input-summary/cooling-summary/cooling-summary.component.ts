@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { CoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
 import { Settings } from '../../../../shared/models/settings';
@@ -29,6 +29,10 @@ export class CoolingSummaryComponent implements OnInit {
   outletTemperatureDiff: Array<boolean>;
   correctionFactorDiff: Array<boolean>;
   numMods: number = 0;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -130,6 +134,11 @@ export class CoolingSummaryComponent implements OnInit {
     };
     return tmpCoolingLossData;
   }
+  
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+  
 }
 
 
