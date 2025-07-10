@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CompressedAirInventorySummaryComponent } from './compressed-air-inventory-summary.component';
-import { CompressedAirSummaryService } from './compressed-air-inventory-summary.service';
+import { CompressedAirInventorySummaryService } from './compressed-air-inventory-summary.service';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { CompressedAirInventorySummaryGraphsComponent } from './compressed-air-inventory-summary-graphs/compressed-air-inventory-summary-graphs.component';
@@ -40,7 +40,7 @@ import { SettingsLabelPipe } from '../../shared/shared-pipes/settings-label.pipe
     ExportableResultsTableModule,
   ],
   providers: [
-    CompressedAirSummaryService,
+    CompressedAirInventorySummaryService,
     CompressedAirInventorySummaryGraphsService,
     CompressedAirInventorySummaryOverviewService,
     CompressedAirInventorySummaryTableService,
