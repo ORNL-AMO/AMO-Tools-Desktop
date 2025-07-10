@@ -153,11 +153,9 @@ export class CalculatorSuiteApiService {
       compressedAirReduction.utilityCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.utilityCost);
 
       compressedAirReduction.flowMeterMethodData.meterReading = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.flowMeterMethodData.meterReading);
-
-      compressedAirReduction.bagMethodData.height = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.height);
-      compressedAirReduction.bagMethodData.diameter = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.diameter);
-      compressedAirReduction.bagMethodData.fillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.fillTime);
-
+      compressedAirReduction.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.bagFillTime);
+      compressedAirReduction.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.bagVolume);
+      
       compressedAirReduction.pressureMethodData.nozzleType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.nozzleType);
       compressedAirReduction.pressureMethodData.numberOfNozzles = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.numberOfNozzles);
       compressedAirReduction.pressureMethodData.supplyPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.supplyPressure);
@@ -167,24 +165,25 @@ export class CalculatorSuiteApiService {
       compressedAirReduction.compressorElectricityData.compressorSpecificPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.compressorElectricityData.compressorSpecificPower);
 
       let CompressedAirFlowMeterMethodData = new Module.CompressedAirFlowMeterMethodData(compressedAirReduction.flowMeterMethodData.meterReading);
-      let BagMethodData = new Module.BagMethodData(compressedAirReduction.bagMethodData.height, compressedAirReduction.bagMethodData.diameter, compressedAirReduction.bagMethodData.fillTime);
+       // hardcoded 1 - always calculate as single unit
+      let BagMethod = new Module.BagMethod(compressedAirReduction.bagMethodData.operatingTime, compressedAirReduction.bagMethodData.bagFillTime, compressedAirReduction.bagMethodData.bagVolume, 1);
       let PressureMethodData = new Module.PressureMethodData(compressedAirReduction.pressureMethodData.nozzleType, compressedAirReduction.pressureMethodData.numberOfNozzles,
         compressedAirReduction.pressureMethodData.supplyPressure);
       let CompressedAirOtherMethodData = new Module.CompressedAirOtherMethodData(compressedAirReduction.otherMethodData.consumption);
       let CompressorElectricityData = new Module.CompressorElectricityData(compressedAirReduction.compressorElectricityData.compressorControlAdjustment,
         compressedAirReduction.compressorElectricityData.compressorSpecificPower);
-
+      
       let wasmConvertedInput = new Module.CompressedAirReductionInput(
         compressedAirReduction.hoursPerYear,
         compressedAirReduction.utilityType,
         compressedAirReduction.utilityCost,
         compressedAirReduction.measurementMethod,
-        CompressedAirFlowMeterMethodData, BagMethodData, PressureMethodData, CompressedAirOtherMethodData, CompressorElectricityData, compressedAirReduction.units);
+        CompressedAirFlowMeterMethodData, BagMethod, PressureMethodData, CompressedAirOtherMethodData, CompressorElectricityData, compressedAirReduction.units);
       inputs.push_back(wasmConvertedInput);
 
       wasmConvertedInput.delete();
       CompressedAirFlowMeterMethodData.delete();
-      BagMethodData.delete();
+      BagMethod.delete();
       PressureMethodData.delete();
       CompressedAirOtherMethodData.delete();
       CompressorElectricityData.delete();
@@ -199,6 +198,7 @@ export class CalculatorSuiteApiService {
       singleNozzeFlowRate: output.singleNozzeFlowRate,
       consumption: output.consumption
     }
+
     output.delete();
     CompressedAirReductionCalculator.delete();
     inputs.delete();
@@ -210,9 +210,9 @@ export class CalculatorSuiteApiService {
       input.utilityCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.utilityCost);
 
       // TODO all methods should not calculate if missing required props
-      input.bagMethodData.diameter = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.diameter);
-      input.bagMethodData.fillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.fillTime);
-      input.bagMethodData.height = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.height);
+      input.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.bagFillTime);
+      input.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.bagVolume);
+      
       // estimate method
       input.estimateMethodData.leakRateEstimate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.estimateMethodData.leakRateEstimate);
       // orifice method
@@ -237,10 +237,15 @@ export class CalculatorSuiteApiService {
     });
     let inputs = new Module.CompressedAirLeakSurveyInputV();
 
-    convertedInput.forEach(airLeakSurvey => {
+    convertedInput.forEach((airLeakSurvey: AirLeakSurveyData) => {
       let EstimateMethodData = new Module.EstimateMethodData(airLeakSurvey.estimateMethodData.leakRateEstimate);
+      airLeakSurvey.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.bagMethodData.bagFillTime);
+      airLeakSurvey.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.bagMethodData.bagVolume);
 
-      let BagMethodData = new Module.BagMethodData(airLeakSurvey.bagMethodData.height, airLeakSurvey.bagMethodData.diameter, airLeakSurvey.bagMethodData.fillTime);
+      // make TH backwards compatible. hours are undefined in update-data service. There is probably a bug in TH init for air leak daa 
+      let operatingTime = airLeakSurvey.bagMethodData.operatingTime? airLeakSurvey.bagMethodData.operatingTime : airLeakSurvey.hoursPerYear;
+      // hardcoded 1 - always calculate as single unit
+      let BagMethod = new Module.BagMethod(operatingTime, airLeakSurvey.bagMethodData.bagFillTime, airLeakSurvey.bagMethodData.bagVolume, 1);
       let DecibelsMethodData = new Module.DecibelsMethodData(airLeakSurvey.decibelsMethodData.linePressure,
         airLeakSurvey.decibelsMethodData.decibels, airLeakSurvey.decibelsMethodData.decibelRatingA, airLeakSurvey.decibelsMethodData.pressureA,
         airLeakSurvey.decibelsMethodData.firstFlowA, airLeakSurvey.decibelsMethodData.secondFlowA, airLeakSurvey.decibelsMethodData.decibelRatingB,
@@ -259,7 +264,7 @@ export class CalculatorSuiteApiService {
         airLeakSurvey.measurementMethod,
         EstimateMethodData,
         DecibelsMethodData,
-        BagMethodData,
+        BagMethod,
         OrificeMethodData,
         CompressorElectricityData,
         airLeakSurvey.units
@@ -269,7 +274,7 @@ export class CalculatorSuiteApiService {
       wasmConvertedInput.delete();
       EstimateMethodData.delete();
       DecibelsMethodData.delete();
-      BagMethodData.delete();
+      BagMethod.delete();
       OrificeMethodData.delete();
       CompressorElectricityData.delete();
     });
@@ -282,6 +287,7 @@ export class CalculatorSuiteApiService {
       annualTotalElectricity: output.annualTotalElectricity,
       annualTotalElectricityCost: output.annualTotalElectricityCost,
     }
+
     output.delete();
     CompressedAirLeakSurveyCalculator.delete();
     inputs.delete();

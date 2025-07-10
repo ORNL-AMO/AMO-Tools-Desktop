@@ -1,11 +1,10 @@
-import { Fragment, memo, useContext } from 'react';
+import { memo } from 'react';
 import { Position, NodeProps } from '@xyflow/react';
 import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
-import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
 import FlowValueDisplay from '../Diagram/FlowValueDisplay';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
-import { toggleDrawer } from '../Diagram/diagramReducer';
+import { openDrawerWithSelected } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import { DiagramNode, NodeFlowData } from 'process-flow-lib';
@@ -38,7 +37,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
   }
 
   const onEditNode = () => {
-    dispatch(toggleDrawer(id));
+    dispatch(openDrawerWithSelected(id));
   }
 
   return (
@@ -116,10 +115,10 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           </div>
         }
       
-        <EditDataDrawerButton 
+        {/* <EditDataDrawerButton 
           onEdit={onEditNode}
           selected={selected}
-          transformLocation={transformString}/>
+          transformLocation={transformString}/> */}
 
         <Typography sx={{ width: '100%' }} >
           {data.name}

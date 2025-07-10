@@ -1,7 +1,7 @@
 <div class="output-summary">
   <div class="summary-table">
     <h5 class="print-section-header">Summary of Energy Sources Used</h5>
-    <table class="table table-hover table-striped">
+    <table #copyTable1 class="table table-hover table-striped">
       <thead>
         <tr>
           <th>Energy Name</th>
@@ -92,6 +92,10 @@
         </tr>
       </tbody>
     </table>
+
+    <app-exportable-results-table [tableString]="copyTable1String"
+    (updateTableString)="updateCopyTable1String()"></app-exportable-results-table>
+
     <div class="row" *ngIf="phast.equipmentNotes">
       <div class="col">
         <p>
@@ -112,7 +116,7 @@
     </div>
   </div>
   <h5 class="print-section-header">Compare PHA Calculations</h5>
-  <table class="table table-hover table-striped">
+  <table #copyTable2 class="table table-hover table-striped">
     <thead>
       <tr>
         <th></th>
@@ -169,6 +173,8 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="copyTable2String"
+    (updateTableString)="updateCopyTable2String()"></app-exportable-results-table>
   <div class="row">
     <div class="col">
       <p>

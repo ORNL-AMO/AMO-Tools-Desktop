@@ -1,4 +1,5 @@
-<label class="group-label">Baseline Results</label>
+<!--  Hidden for 7419 -->
+<!-- <label class="group-label">Baseline Results</label>
 <table #baselineTable class="table table-hover table-striped">
   <tbody>
     <tr>
@@ -64,7 +65,7 @@
       </td>
     </tr>
   </tbody>
-</table>
+</table> -->
 
 <label class="group-label">Savings</label>
 <table #savingsTable class="table table-hover table-striped">
@@ -75,6 +76,12 @@
         {{airLeakOutput.savingsData.totalFlowRate | number:'1.0-1'}}
         <span *ngIf="settings.unitsOfMeasure != 'Metric'">scfm</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
+      </td>
+    </tr>
+    <tr *ngIf="compressorControlAdjustment">
+      <td class="bold w-50">Compressor Control Adjustment</td>
+      <td class="text-center w-50">
+        {{compressorControlAdjustment | number:'1.0-1'}}%
       </td>
     </tr>
     <tr>

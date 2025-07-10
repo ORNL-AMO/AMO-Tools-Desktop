@@ -6,6 +6,7 @@ import { LogToolDay, LogToolField, IndividualDataFromCsv, ExplorerData, Explorer
 import { BehaviorSubject } from 'rxjs';
 import { CsvImportData, CsvToJsonService } from '../shared/helper-services/csv-to-json.service';
 import { MeasurMessageData } from '../shared/models/utilities';
+import { copyObject } from '../shared/helperFunctions';
 
 @Injectable()
 export class LogToolDataService {
@@ -69,7 +70,14 @@ export class LogToolDataService {
   }
 
   setLogToolDays() {
-    let explorerDatasets: Array<ExplorerDataSet> = JSON.parse(JSON.stringify(this.logToolService.individualDataFromCsv));
+    // this.logToolService.individualDataFromCsv.forEach((dataset: ExplorerDataSet) => {
+    //   let stringData = JSON.stringify(dataset);
+    //   let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringData);
+    //   const dataMB = dataStr.length / 1024 / 1024; 
+    //   console.log(dataStr.length, dataMB);
+    // });
+    
+    let explorerDatasets: Array<ExplorerDataSet> = copyObject(this.logToolService.individualDataFromCsv);
     this.logToolDays = new Array();
     explorerDatasets.forEach((dataset: ExplorerDataSet) => {
       let dataForDays: Array<{ date: Date, data: Array<any> }> = this.divideDataIntoDays(dataset.csvImportData.data, dataset.dateField.fieldName);

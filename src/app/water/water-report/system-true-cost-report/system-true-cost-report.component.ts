@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { SystemTrueCostData } from '../../water-assessment-results.service';
@@ -32,6 +32,8 @@ export class SystemTrueCostReportComponent {
   systemTrueCostReportSubscription: any;
   isDiagramValid: boolean;
 
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   constructor(
     private waterReportService: WaterReportService,
@@ -63,6 +65,10 @@ export class SystemTrueCostReportComponent {
   getFlowDecimalPrecisionPipeValue(): string {
     let pipeVal = `1.0-${this.settings.flowDecimalPrecision}`;
     return pipeVal;
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 
 }

@@ -254,8 +254,8 @@ export const getEdgeTypesFromString = (newDefaultType: string, currentEdgeTypes?
 };
 
 
-export const formatDecimalPlaces = (value: number | string, decimalPlaces: number) => {
-  return Number(value).toFixed(decimalPlaces);
+export const formatDecimalPlaces = (value: number | string, decimalPlaces: number): number => {
+  return Number(Number(value).toFixed(decimalPlaces));
 }
 
 export const formatNumberValue = (value: number | string, places: number): number | string => {

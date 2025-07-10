@@ -12,7 +12,7 @@
 
     } @else {
     <app-system-true-cost-bar class="print-width"></app-system-true-cost-bar>
-    <table class="table table-bordered table-striped table-hover">
+    <table #copyTable class="table table-bordered table-striped table-hover">
         <thead>
             <tr class="text-center header-highlight">
                 <th>
@@ -58,6 +58,8 @@
             </tr>
         </tbody>
     </table>
+    <app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
     }
 
 

@@ -289,16 +289,19 @@ export class StandaloneService {
   bagMethod(input: BagMethodInput, settings: Settings): BagMethodOutput {
     let inputCpy: BagMethodInput = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure === 'Metric') {
-      //metric: cm imperial: in
-      inputCpy.heightOfBag = this.convertUnitsService.value(inputCpy.heightOfBag).from('cm').to('in');
-      inputCpy.diameterOfBag = this.convertUnitsService.value(inputCpy.diameterOfBag).from('cm').to('in');
+      inputCpy.bagVolume = this.convertUnitsService.value(inputCpy.bagVolume).from('L').to('ft3');
       let results: BagMethodOutput = this.standaloneSuiteApiService.bagMethod(inputCpy);
-      //metric: m3 imperial: ft3
       results.flowRate = this.convertUnitsService.value(results.flowRate).from('ft3').to('m3');
+      // convert kscfm to scfm
+      results.annualConsumption = results.annualConsumption * 1000;
       results.annualConsumption = this.convertUnitsService.value(results.annualConsumption).from('ft3').to('m3');
       return results;
     } else {
-      return this.standaloneSuiteApiService.bagMethod(inputCpy);
+      inputCpy.bagVolume = this.convertUnitsService.value(inputCpy.bagVolume).from('gal').to('ft3');
+      let results: BagMethodOutput = this.standaloneSuiteApiService.bagMethod(inputCpy);
+      // convert kscf to scf
+      results.annualConsumption = results.annualConsumption * 1000;
+      return results;
     }
   }
 

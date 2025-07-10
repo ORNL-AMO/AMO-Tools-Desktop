@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TreasureHuntPptService } from './treasure-hunt-ppt/treasure-hunt-ppt.service';
-import { ExportToJustifiTemplateService } from '../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
+
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
@@ -78,8 +78,7 @@ export class TreasureHuntReportComponent implements OnInit {
     private opportunityCardsService: OpportunityCardsService, private treasureChestMenuService: TreasureChestMenuService,
     private sortCardsService: SortCardsService, private directoryDbService: DirectoryDbService, private cd: ChangeDetectorRef,
     private treasureHuntReportRollupService: TreasureHuntReportRollupService,
-    private settingsDbService: SettingsDbService, private treasureHuntPPTService: TreasureHuntPptService,
-    private exportToJustifiTemplateService: ExportToJustifiTemplateService) { }
+    private settingsDbService: SettingsDbService, private treasureHuntPPTService: TreasureHuntPptService) { }
 
   ngOnInit() {
     if (this.assessment) {
@@ -223,9 +222,4 @@ export class TreasureHuntReportComponent implements OnInit {
   changePptTheme(option: number) {
     this.pptThemeOption = option;
   }
-
-  showExportToJustifi() {
-    this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
-  }
-
 }

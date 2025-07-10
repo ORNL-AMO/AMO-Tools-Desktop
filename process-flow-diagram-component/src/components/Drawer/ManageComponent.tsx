@@ -17,19 +17,18 @@ import { ProcessFlowPart } from 'process-flow-lib';
 
 const ManageComponent = (props: ManageComponentProps) => {
     const dispatch = useAppDispatch();
-    const edges = useAppSelector((state) => state.diagram.edges);
     const { selectedNode } = props;
     const isWaterUsingSystem = props.selectedNode.type === 'waterUsingSystem';
-
-    
-    const allNodeEdges = getConnectedEdges([selectedNode], edges);
-    const [connectedEdges, setConnectedEdges] = useState<Edge[]>(allNodeEdges);
     const [selectedTab, setSelectedTab] = useState(0);
     const [name, setName] = useState<string>(selectedNode.data.name);
     const debounceRef = useRef(null);
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setSelectedTab(newValue);
     };
+
+    useEffect(() => {
+        setName(selectedNode.data.name);
+    }, [selectedNode]);
 
     useEffect(() => {
         debounceRef.current = setTimeout(() => {
@@ -49,13 +48,6 @@ const ManageComponent = (props: ManageComponentProps) => {
     return (
         <>
             <Box display="flex" alignItems={'center'} sx={{ margin: '1rem' }}>
-                <DrawerToggleButton side={'right'}></DrawerToggleButton>
-                <Typography variant="h6" gutterBottom
-                    sx={{
-                        marginTop: '0',
-                        marginBottom: '0',
-                        fontSize: '1rem',
-                    }}>
                     <TextField
                         label={'Component Name'}
                         id={'component_name'}
@@ -65,7 +57,6 @@ const ManageComponent = (props: ManageComponentProps) => {
                         onChange={evt => setName(evt.target.value)}
                         sx={{ paddingRight: '1rem', margin: 0, width: '100%' }}
                     />
-                </Typography>
             </Box>
 
             <Box sx={{
@@ -88,7 +79,6 @@ const ManageComponent = (props: ManageComponentProps) => {
 
                 <TabPanel value={selectedTab} index={0}>
                     <ComponentDataForm
-                        connectedEdges={connectedEdges}
                         selectedNode={selectedNode} />
                 </TabPanel>
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { WallLossesSurface } from '../../../../shared/models/materials';
@@ -35,6 +35,10 @@ export class WallSummaryComponent implements OnInit {
   conditionFactorDiff: Array<boolean>;
   emissivityDiff: Array<boolean>;
   numMods: number = 0;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(
     private sqlDbApiService: SqlDbApiService,
     private cd: ChangeDetectorRef) { }
@@ -133,5 +137,9 @@ export class WallSummaryComponent implements OnInit {
   //function called from html for collapsing
   toggleCollapse() {
     this.collapse = !this.collapse;
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

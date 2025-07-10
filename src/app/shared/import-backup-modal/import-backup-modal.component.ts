@@ -19,31 +19,31 @@ export class ImportBackupModalComponent {
 
 
   constructor(
-    private importBackupModalService: ImportBackupModalService,
+    // private importBackupModalService: ImportBackupModalService,
   ) { }
 
   ngOnInit(): void {}
 
-  ngAfterViewInit() {
-    // this.importBackupModal.show();
-  }
+  // ngAfterViewInit() {
+  //   // this.importBackupModal.show();
+  // }
 
-  close() {
-    this.importBackupModal.hide();
-    this.importBackupModalService.showImportBackupModal.next(false);
-  }
+  // close() {
+  //   this.importBackupModal.hide();
+  //   this.importBackupModalService.showImportBackupModal.next(false);
+  // }
 
-  cancelImportBackup() {
-    this.importBackupModal.hide();
-    this.importBackupModalService.showImportBackupModal.next(false);
-  }
+  // cancelImportBackup() {
+  //   this.importBackupModal.hide();
+  //   this.importBackupModalService.showImportBackupModal.next(false);
+  // }
 
-  setImportFile(event: EventTarget) {
-    this.setImportFile(event)
-  }
+  // setImportFile(event: EventTarget) {
+  //   this.setImportFile(event)
+  // }
 
-  async importBackupFile() {
-    // this.importBackupModalService.importBackupFile();
-  }
+  // async importBackupFile() {
+  //   // this.importBackupModalService.importBackupFile();
+  // }
 
 }

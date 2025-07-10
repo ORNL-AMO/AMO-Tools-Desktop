@@ -1,6 +1,7 @@
 
 export type AnalyticsEventString = 'page_view' |
     'measur_app_open_v2' |
+    'measur-auto-backup-on' |
     'create-assessment' |
     'create-water-diagram' |
     'view-pump-assessment' |

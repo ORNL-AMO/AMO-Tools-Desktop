@@ -129,12 +129,12 @@ export class ExportToJustifiPhastService {
 
   setNonEAFResults(assessmentWorksheet: ExcelJS.Worksheet, assessmentRowIndex: number, baselineResults: PhastResults, modResults: PhastResults, modification: Modification, phast: PHAST, settings: Settings) {
     let baselineSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(phast, false, settings, phast, undefined, baselineResults);
-    if (phast.co2SavingsData.fuelType == 'Steam & Hot Water') {
+    if (phast.co2SavingsData && phast.co2SavingsData.fuelType == 'Steam & Hot Water') {
       //W: steam use
       assessmentWorksheet.getCell('W' + assessmentRowIndex).value = baselineSummary.annualEnergyUsed;
       //X: steam unit
       assessmentWorksheet.getCell('X' + assessmentRowIndex).value = settings.energyResultUnit;
-    } else if (phast.co2SavingsData.fuelType == 'Natural Gas') {
+    } else if (phast.co2SavingsData && phast.co2SavingsData.fuelType == 'Natural Gas') {
       //H: NG use
       assessmentWorksheet.getCell('H' + assessmentRowIndex).value = baselineSummary.annualEnergyUsed;
       //I: NG unit
@@ -147,11 +147,10 @@ export class ExportToJustifiPhastService {
     }
     if (modification) {
       let modSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(modification.phast, true, settings, phast, baselineSummary, modResults);
-      if (modification.phast.co2SavingsData.fuelType == 'Steam & Hot Water') {
+      if (modification.phast.co2SavingsData && modification.phast.co2SavingsData.fuelType == 'Steam & Hot Water') {
         //Y: steam savings
         assessmentWorksheet.getCell('Y' + assessmentRowIndex).value = baselineSummary.annualEnergyUsed - modSummary.annualEnergyUsed;
-      }
-      else if (modification.phast.co2SavingsData.fuelType == 'Natural Gas') {
+      } else if (modification.phast.co2SavingsData && modification.phast.co2SavingsData.fuelType == 'Natural Gas') {
         //J: NG savings
         assessmentWorksheet.getCell('J' + assessmentRowIndex).value = baselineSummary.annualEnergyUsed - modSummary.annualEnergyUsed;
       }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CompressorInventoryItem } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { InventoryService } from '../../../inventory/inventory.service';
@@ -24,6 +24,10 @@ export class CompressorItemSummaryComponent implements OnInit {
   showUnloadPoint: boolean = false;
   showNoLoad: boolean = false;
   showBlowoff: boolean = false;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+  
   constructor(private inventoryService: InventoryService, private performancePointsFormService: PerformancePointsFormService) { }
 
   ngOnInit(): void {
@@ -113,5 +117,8 @@ export class CompressorItemSummaryComponent implements OnInit {
     return this.performancePointsFormService.checkShowBlowoffPerformancePoint(compressorType, controlType)
   }
 
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
 
 }

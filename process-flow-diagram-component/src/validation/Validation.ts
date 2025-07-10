@@ -42,7 +42,7 @@ export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge'
             .moreThan(0, totalFlowError)
             .test('sum-differs',
                 (d) => {
-                    return `Total ${flowLabel} Flow must equal the sum of all flow values`
+                    return `Total ${flowLabel} Flow must equal the sum of all flow values (${totalCalculatedFlow})`
                 },
                 (value) => {
                     const isValid = validateTotalFlowValue(connectedEdges, totalCalculatedFlow, value, decimalPrecision);

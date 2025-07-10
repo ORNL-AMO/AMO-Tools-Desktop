@@ -1,6 +1,6 @@
 <div class="output-summary">
     <h4 class="show-print print-section-header">Payback Period Details</h4>
-    <div class="d-flex flex-column" *ngIf="combinedDayTypeResults.length != 0">
+    <div #copyTable class="d-flex flex-column" *ngIf="combinedDayTypeResults.length != 0">
         <div class="p-2" *ngFor="let result of combinedDayTypeResults">
             <label class="group-label">{{result.modification.name}}</label>
             <table class="table table-hover table-striped">
@@ -225,3 +225,6 @@
 <div class="alert alert-warning p-2" *ngIf="combinedDayTypeResults && combinedDayTypeResults.length == 0">
     No modifications found. Create a modification to see payback details.
 </div>
+
+<app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>

@@ -10,7 +10,6 @@ import { SsmtService } from '../ssmt.service';
 import { Subscription } from 'rxjs';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { PrintOptions } from '../../shared/models/printing';
-import { ExportToJustifiTemplateService } from '../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 
 @Component({
   selector: 'app-ssmt-report',
@@ -54,8 +53,7 @@ export class SsmtReportComponent implements OnInit {
   tabsCollapsed: boolean = true;
 
   constructor(private ssmtService: SsmtService, private calculateLossesService: CalculateLossesService,
-    private directoryDbService: DirectoryDbService, private printOptionsMenuService: PrintOptionsMenuService,
-    private exportToJustifiTemplateService: ExportToJustifiTemplateService) { }
+    private directoryDbService: DirectoryDbService, private printOptionsMenuService: PrintOptionsMenuService) { }
 
   ngOnInit() {
     if (this.assessment.ssmt.setupDone) {
@@ -190,9 +188,4 @@ export class SsmtReportComponent implements OnInit {
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
   }
-
-  showExportToJustifi() {
-    this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
-  }
-
 }
