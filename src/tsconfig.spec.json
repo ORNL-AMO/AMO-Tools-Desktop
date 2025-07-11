@@ -5,6 +5,8 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "lib": [
       "es2016",
       "dom"
@@ -19,10 +21,8 @@
     ],
     "useDefineForClassFields": false
   },
-  "files": [
-    "test.ts"
-  ],
   "include": [
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "src/**/*.d.ts"
   ]
 }
