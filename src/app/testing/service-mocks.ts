@@ -19,7 +19,9 @@ export class MockUpdateApplicationService {
   webUpdateAvailable = new BehaviorSubject<boolean>(false);
 }
 
-
-
 const routerEventsMock = new BehaviorSubject<any>(null);
 
+export class MockAnalyticsDataIdbService {
+    getAppAnalyticsData = jasmine.createSpy('getAppAnalyticsData').and.returnValue(of([]));
+    addWithObservable = jasmine.createSpy('addWithObservable').and.returnValue(of(undefined));
+}
