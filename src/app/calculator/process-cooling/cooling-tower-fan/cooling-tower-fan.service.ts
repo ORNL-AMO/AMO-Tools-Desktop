@@ -4,8 +4,8 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { CoolingTowerFanInput, CoolingTowerFanOutput } from '../../../shared/models/chillers';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
-import { ChillersSuiteApiService } from '../../../tools-suite-api/chillers-suite-api.service';
 import { CoolingTowerFanFormService } from './cooling-tower-fan-form.service';
+import { ChillerCalculatorSuiteApiService } from '../../../tools-suite-api/chiller-calculator-suite-api.service';
 
 @Injectable()
 export class CoolingTowerFanService {
@@ -19,7 +19,7 @@ export class CoolingTowerFanService {
 
   operatingHours: OperatingHours;
   constructor(private convertUnitsService: ConvertUnitsService, 
-    private chillersSuiteApiService: ChillersSuiteApiService,
+    private chillersSuiteApiService: ChillerCalculatorSuiteApiService,
     private coolingTowerFanFormService: CoolingTowerFanFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.coolingTowerFanInput = new BehaviorSubject<CoolingTowerFanInput>(undefined);

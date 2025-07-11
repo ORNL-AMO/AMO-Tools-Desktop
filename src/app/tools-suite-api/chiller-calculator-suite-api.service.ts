@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ChillerPerformanceInput, ChillerPerformanceOutput, ChillerStagingInput, ChillerStagingOutput, CoolingTowerBasinInput, CoolingTowerBasinOutput, CoolingTowerBasinResult, CoolingTowerFanInput, CoolingTowerFanOutput, CoolingTowerInput, CoolingTowerOutput } from '../shared/models/chillers';
-// import { ChillerPerformanceInput, ChillerPerformanceOutput, ChillerStagingInput, ChillerStagingOutput, CoolingTowerBasinInput, CoolingTowerBasinOutput, CoolingTowerFanInput, CoolingTowerFanOutput, CoolingTowerInput, CoolingTowerOutput } from '../shared/models/chillers';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
 
 @Injectable()
-export class ChillersSuiteApiService {
+export class ChillerCalculatorSuiteApiService {
 
   constructor(private suiteApiHelperService: SuiteApiHelperService) { }
 

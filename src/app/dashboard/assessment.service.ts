@@ -90,7 +90,7 @@ export class AssessmentService {
       itemSegment = '/water/';
     }
 
-    this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, {shouldCollapse: true})
+    this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, { shouldCollapse: true })
 
   }
 
@@ -371,7 +371,7 @@ export class AssessmentService {
     }
   }
 
-  
+
   getNewWaterAssessment(settings: Settings): WaterAssessment {
     return {
       name: 'Baseline',
@@ -386,7 +386,7 @@ export class AssessmentService {
         productionUnit: 'lb',
         annualProduction: undefined
       },
-      diagramWaterSystemFlows:[],
+      diagramWaterSystemFlows: [],
       intakeSources: [],
       dischargeOutlets: [],
       waterUsingSystems: [],
@@ -450,7 +450,7 @@ export class AssessmentService {
     }
   }
 
-    getNewProcessCoolingAssessment(settings: Settings): ProcessCoolingAssessment {
+  getNewProcessCoolingAssessment(settings: Settings): ProcessCoolingAssessment {
     return {
       name: 'Baseline',
       modifications: new Array(),
@@ -467,31 +467,40 @@ export class AssessmentService {
       },
       systemInformation: {
         co2SavingsData: {
-                energyType: "electricity",
-                totalEmissionOutputRate: 430.78,
-                electricityUse: 6309742.399999998,
-                energySource: "Natural Gas",
-                fuelType: "Natural Gas",
-                eGridRegion: "",
-                eGridSubregion: "SRTV",
-                totalEmissionOutput: 0,
-                totalFuelEmissionOutputRate: null,
-                userEnteredBaselineEmissions: false,
-                userEnteredModificationEmissions: false,
-                zipcode: "37830"
-            },
+          energyType: "electricity",
+          totalEmissionOutputRate: 430.78,
+          electricityUse: 6309742.399999998,
+          energySource: "Natural Gas",
+          fuelType: "Natural Gas",
+          eGridRegion: "",
+          eGridSubregion: "SRTV",
+          totalEmissionOutput: 0,
+          totalFuelEmissionOutputRate: null,
+          userEnteredBaselineEmissions: false,
+          userEnteredModificationEmissions: false,
+          zipcode: "37830"
+        },
       },
       inventory: [
         {
-              itemId: getNewIdString(),
-              name: 'New Chiller',
-              description: undefined,
-              modifiedDate: new Date(),
-              compressorChillerType: 0,
-              fullLoadEfficiency: 0,
-              chillerCapacity: 0,
+          itemId: getNewIdString(),
+          name: 'New Chiller',
+          description: undefined,
+          modifiedDate: new Date(),
+          compressorChillerType: 0,
+          fullLoadEfficiency: 0,
+          chillerCapacity: 0,
         }
       ],
+      selectedModificationId: '',
+      existingDataUnits: '',
+      selected: false,
+      airCooledSystemInput: undefined,
+      waterCooledSystemInput: undefined,
+      chillerInput: undefined,
+      pumpInput: undefined,
+      towerInput: undefined,
+      processCoolingInput: undefined
     }
   }
 
