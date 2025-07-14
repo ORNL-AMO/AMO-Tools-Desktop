@@ -7,6 +7,7 @@ import { CompressedAirCatalogService } from '../../compressed-air-catalog.servic
 import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-catalog.service';
 import { Settings } from '../../../../../shared/models/settings';
 import { BlowoffCatalogService } from './blowoff-catalog.service';
+import { CompressorDataManagementService } from '../../../../compressor-data-management.service';
 
 @Component({
   selector: '[app-blowoff-catalog]',
@@ -32,7 +33,9 @@ export class BlowoffCatalogComponent implements OnInit {
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService,
     private compressedAirCatalogService: CompressedAirCatalogService,
     private compressedAirInventoryService: CompressedAirInventoryService,
-    private blowoffCatalogService: BlowoffCatalogService) { }
+    private blowoffCatalogService: BlowoffCatalogService,
+    private compressedAirDataManagementService: CompressorDataManagementService,
+  ) { }
 
 
   ngOnInit(): void {
@@ -63,8 +66,7 @@ export class BlowoffCatalogComponent implements OnInit {
   save() {
     this.isFormChange = true;
     let blowoff: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
-    //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateBlowoff(blowoff);
+    this.compressedAirDataManagementService.updateBlowoff(blowoff);
   }
 
   focusField(str: string) {

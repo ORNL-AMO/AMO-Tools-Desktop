@@ -226,7 +226,7 @@ export class CompressedAirInventoryService {
           dischargePressure: undefined,
         },
         noLoad: {
-          dischargePressure: 15,
+          dischargePressure: 150,
           isDefaultPower: true,
           airflow: 0,
           isDefaultAirFlow: true,

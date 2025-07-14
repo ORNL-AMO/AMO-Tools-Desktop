@@ -7,6 +7,7 @@ import { CompressedAirCatalogService } from '../../compressed-air-catalog.servic
 import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-catalog.service';
 import { Settings } from '../../../../../shared/models/settings';
 import { MidTurndownCatalogService } from './mid-turndown-catalog.service';
+import { CompressorDataManagementService } from '../../../../compressor-data-management.service';
 
 @Component({
   selector: '[app-mid-turndown-catalog]',
@@ -34,7 +35,8 @@ export class MidTurndownCatalogComponent implements OnInit {
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService,
     private compressedAirCatalogService: CompressedAirCatalogService,
     private compressedAirInventoryService: CompressedAirInventoryService,
-    private midTurndownCatalogService: MidTurndownCatalogService) { }
+    private midTurndownCatalogService: MidTurndownCatalogService,
+    private compressedAirDataManagementService: CompressorDataManagementService) { }
 
 
   ngOnInit(): void {
@@ -74,8 +76,7 @@ export class MidTurndownCatalogComponent implements OnInit {
   save() {
     this.isFormChange = true;
     let midTurndown: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
-    //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateMidturndown(midTurndown);
+    this.compressedAirDataManagementService.updateMidturndown(midTurndown);
   }
 
   focusField(str: string) {

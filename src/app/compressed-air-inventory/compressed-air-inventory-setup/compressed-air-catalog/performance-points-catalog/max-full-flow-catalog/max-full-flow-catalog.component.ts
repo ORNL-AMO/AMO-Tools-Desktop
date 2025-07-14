@@ -7,6 +7,7 @@ import { CompressedAirCatalogService } from '../../compressed-air-catalog.servic
 import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-catalog.service';
 import { MaxFullFlowCatalogService } from './max-full-flow-catalog.service';
 import { Settings } from '../../../../../shared/models/settings';
+import { CompressorDataManagementService } from '../../../../compressor-data-management.service';
 
 @Component({
   selector: '[app-max-full-flow-catalog]',
@@ -36,7 +37,8 @@ export class MaxFullFlowCatalogComponent implements OnInit {
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService,
     private compressedAirCatalogService: CompressedAirCatalogService,
     private compressedAirInventoryService: CompressedAirInventoryService,
-    private maxFullFlowCatalogService: MaxFullFlowCatalogService) { }
+    private maxFullFlowCatalogService: MaxFullFlowCatalogService,
+    private compressedAirDataManagementService: CompressorDataManagementService) { }
 
 
 
@@ -101,8 +103,7 @@ export class MaxFullFlowCatalogComponent implements OnInit {
   save() {
     this.isFormChange = true;
     let maxFullFlow: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
-    //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateMaxFullFlow(maxFullFlow);
+    this.compressedAirDataManagementService.updateMaxFullFlow(maxFullFlow);
   }
 
   focusField(str: string) {

@@ -7,6 +7,7 @@ import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMe
 import { CompressedAirCatalogService } from '../../compressed-air-catalog.service';
 import { CompressedAirInventoryService } from '../../../../compressed-air-inventory.service';
 import { FullLoadCatalogService } from './full-load-catalog.service';
+import { CompressorDataManagementService } from '../../../../compressor-data-management.service';
 
 @Component({
   selector: '[app-full-load-catalog]',
@@ -35,7 +36,8 @@ export class FullLoadCatalogComponent implements OnInit {
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService,
     private compressedAirCatalogService: CompressedAirCatalogService,
     private compressedAirInventoryService: CompressedAirInventoryService,
-    private fullLoadCatalogService: FullLoadCatalogService) { }
+    private fullLoadCatalogService: FullLoadCatalogService,
+    private compressedAirDataManagementService: CompressorDataManagementService) { }
 
 
 
@@ -75,8 +77,7 @@ export class FullLoadCatalogComponent implements OnInit {
   save() {
     this.isFormChange = true;
     let fullLoad: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
-    //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateFullLoad(fullLoad);
+    this.compressedAirDataManagementService.updateFullLoad(fullLoad);
   }
 
   focusField(str: string) {
