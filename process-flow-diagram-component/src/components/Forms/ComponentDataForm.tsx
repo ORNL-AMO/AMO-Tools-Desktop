@@ -39,10 +39,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
     const settings = useAppSelector((state) => state.diagram.settings);
 
-    const [systemType, setSystemType] = React.useState<number>(selectedNode.data.systemType);
-
     const handleSystemTypeChange = (systemType: number): void => {
-        setSystemType(systemType);
         dispatch(nodeDataPropertyChange({ optionsProp: "systemType", updatedValue: systemType }));
     }
 
@@ -137,8 +134,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             name={'systemType'}
                             size='small'
                             fullWidth
-                            value={systemType}
-                            onChange={(e) => handleSystemTypeChange(Number(e.target.value))}
+                        value={selectedNode.data.systemType}
+                        onChange={(e) => handleSystemTypeChange(Number(e.target.value))}
                             MenuProps={{
                                 disablePortal: true,
                                 anchorOrigin: {
