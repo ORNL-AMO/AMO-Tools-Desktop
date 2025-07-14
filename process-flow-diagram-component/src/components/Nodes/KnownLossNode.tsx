@@ -37,7 +37,6 @@ const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
         type="target"
         position={Position.Top}
         className={'knownLoss-handle'}
-        connectionLimit={1}
       />
     </div>
   );

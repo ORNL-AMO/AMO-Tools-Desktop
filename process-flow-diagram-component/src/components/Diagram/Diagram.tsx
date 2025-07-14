@@ -11,6 +11,7 @@ import {
   type Node,
   Edge,
   EdgeTypes,
+  reconnectEdge,
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
@@ -22,13 +23,14 @@ import WarningDialog from './WarningDialog';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { AppStore, configureAppStore, RootState, selectEdges, selectNodes } from './store';
 import { Provider } from 'react-redux';
-import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, keyboardDeleteNode, nodesChange, openDrawerWithSelected } from './diagramReducer';
+import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected } from './diagramReducer';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
 import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, getIsDiagramValid } from 'process-flow-lib';
 import MenuSidebar from '../Drawer/MenuSidebar';
 import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer from '../Drawer/SharedDrawer';
+import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
 
 
 export interface DiagramProps {
@@ -66,6 +68,8 @@ const Diagram = (props: DiagramProps) => {
   });
   // const diagramParentDimensions = useAppSelector((state) => state.diagram.diagramParentDimensions);
   const diagramParentDimensions = props.parentContainer;
+  const diagramAlertState: DiagramAlertState = useAppSelector((state) => state.diagram.diagramAlert);
+
 
 
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
@@ -148,6 +152,14 @@ const Diagram = (props: DiagramProps) => {
     [userDiagramOptions]
   );
 
+    const onReconnect = useCallback(
+    (oldEdge, newConnection) => {
+      let newEdges = reconnectEdge(oldEdge, newConnection, edges);
+      dispatch(edgesUpdate(newEdges));
+    },
+    [edges],
+  );
+
 
   const onBeforeDelete = useCallback(
     async ({ nodes: nds, edges: eds }: { nodes: Node[]; edges: Edge[] }) => {
@@ -175,8 +187,10 @@ const Diagram = (props: DiagramProps) => {
           <ReactFlow
             nodes={nodes}
             edges={edges}
+            edgesReconnectable={true}
             onNodesChange={(e) => dispatch(nodesChange(e))}
             onEdgesChange={(e) => dispatch(edgesChange(e))}
+            onReconnect={onReconnect}
             onConnect={onConnect}
             // onReconnect={onReconnect}
             onInit={setReactFlowInstance}
@@ -231,6 +245,9 @@ const Diagram = (props: DiagramProps) => {
           </SharedDrawer>
         )}
 
+          {diagramAlertState &&
+            <DiagramAlert diagramAlertState={diagramAlertState} />
+          }
         <StaticModal shadowRootRef={props.shadowRoot} />
       </ReactFlowProvider>
     </div>
