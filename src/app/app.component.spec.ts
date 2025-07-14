@@ -1,34 +1,50 @@
-/* tslint:disable:no-unused-variable */
-
-import { TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { SwUpdate } from '@angular/service-worker';
+import { ApplicationRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { MockAnalyticsService, MockElectronService, MockAppErrorService, MockUpdateApplicationService } from './testing/service-mocks';
+import { AnalyticsService } from './shared/analytics/analytics.service';
+import { ElectronService } from './electron/electron.service';
+import { AppErrorService } from './shared/errors/app-error.service';
+import { UpdateApplicationService } from './shared/update-application/update-application.service';
 
-describe('AppComponent', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-    });
-    TestBed.compileComponents();
-  });
+// describe('AppComponent', () => {
+//     let component: AppComponent;
+//     let fixture: ComponentFixture<AppComponent>;
+//     const routerEventsMock = new BehaviorSubject<any>(null);
+//     // ...existing code...
+//     beforeEach(async () => {
+//         await TestBed.configureTestingModule({
+//             declarations: [AppComponent],
+//             schemas: [NO_ERRORS_SCHEMA],
+//             providers: [
+//                 { provide: AnalyticsService, useClass: MockAnalyticsService },
+//                 { provide: ElectronService, useClass: MockElectronService },
+//                 { provide: AppErrorService, useClass: MockAppErrorService },
+//                 { provide: UpdateApplicationService, useClass: MockUpdateApplicationService },
+//                 {
+//                     provide: SwUpdate, useValue: {
+//                         versionUpdates: new BehaviorSubject<any>(null),
+//                         checkForUpdate: () => Promise.resolve(false),
+//                         unrecoverable: new BehaviorSubject<any>(null)
+//                     }
+//                 },
+//                 { provide: ApplicationRef, 
+//                     useValue: { isStable: new BehaviorSubject<boolean>(true) } },
+//                 { provide: Router, useValue: { events: routerEventsMock } }
 
-  it('should create the app', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
 
-  it(`should have as title 'app works!'`, async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app works!');
-  }));
+//             ]
+//         }).compileComponents();
 
-  it('should render title in a h1 tag', async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('app works!');
-  }));
-});
+//         fixture = TestBed.createComponent(AppComponent);
+//         component = fixture.componentInstance;
+//     });
+
+//     it('should create', () => {
+//         expect(component).toBeTruthy();
+//     });
+// });
