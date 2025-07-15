@@ -53,6 +53,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     name: 'Water Using System',
     className: 'water-using-system',
     cost: 0,
+    systemType: 0,
     isValid: true,
     inSystemTreatment: [],
     userEnteredData: {

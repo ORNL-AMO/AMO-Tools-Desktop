@@ -177,3 +177,8 @@ export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties
     color: "#000"
   }
 };
+
+
+export enum DiagramAlertMessages {
+    EdgeConnectionLimit = "Connecting more than 2 edges to the same handle can reduce connection visibility"
+}
