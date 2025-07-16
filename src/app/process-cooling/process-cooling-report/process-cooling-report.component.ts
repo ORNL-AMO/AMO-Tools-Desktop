@@ -11,6 +11,7 @@ import { WaterAssessmentService } from '../../water/water-assessment.service';
 import { Settings } from '../../shared/models/settings';
 import { ProcessCoolingReportService } from './process-cooling-report.service';
 import { ProcessCoolingService } from '../process-cooling.service';
+import { ProcessCoolingResultsService } from '../process-cooling-results.service';
 
 @Component({
   selector: 'app-process-cooling-report',
@@ -51,6 +52,7 @@ export class ProcessCoolingReportComponent {
     private printOptionsMenuService: PrintOptionsMenuService, 
     private directoryDbService: DirectoryDbService,
     private processCoolingReportService: ProcessCoolingReportService,
+    private processCoolingResultsService: ProcessCoolingResultsService,
     private processCoolingService: ProcessCoolingService) { }
 
   ngOnInit(): void {
@@ -60,9 +62,11 @@ export class ProcessCoolingReportComponent {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
 
+      let debugResults = this.processCoolingResultsService.getResults(this.assessment.processCooling); 
+      console.log('[ProcessCoolingReportComponent] Debug Results:', debugResults);
       // todo 6706 set up subs for graph/bar components
       // let systemTrueCostReport = this.waterAssessmentResultsService.getTrueCostOfSystemsReport(this.assessment, this.settings);
-      // this.processCoolingReporService.systemTrueCostReport.next(systemTrueCostReport);
+      // this.processCoolingReportService.systemTrueCostReport.next(systemTrueCostReport);
     }
 
     if (!this.inRollup) {

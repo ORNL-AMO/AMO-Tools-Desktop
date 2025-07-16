@@ -398,6 +398,28 @@ export class SuiteApiHelperService {
     return doubleVector;
   }
 
+  returnIntVector(intsArray: Array<number>) {
+    let intVector = new Module.IntVector();
+    intsArray.forEach(x => {
+      intVector.push_back(x);
+    });
+    return intVector;
+  }
+
+
+  returnDoubleVector2d(doubles2dArray: Array<Array<number>>) {
+    let doubleVector2d = new Module.DoubleVector2D();
+    let doubleVector;
+
+    for (let i = 0; i < doubles2dArray.length; i++) {
+      let innerArray = doubles2dArray[i];
+      doubleVector = this.returnDoubleVector(innerArray);
+      doubleVector2d.push_back(doubleVector);
+      doubleVector.delete(); 
+    }
+    return doubleVector2d;
+  }
+
   convertNullInputsForObjectConstructor(inputObj: Object, inputField?: number | string) {
     for (var prop in inputObj) {
       if (inputObj.hasOwnProperty(prop) && inputObj[prop] === null || inputObj[prop] === undefined) {
@@ -452,5 +474,57 @@ export class SuiteApiHelperService {
         return Module.PowerFactorModeType.ReactivePower_PowerFactor;
     }
   }
+
+  getProcessCoolingFanTypeEnum(fanType: number | string) {
+    if (fanType === 0 || fanType === 'AxialFan') return Module.CellFanType.AxialFan;
+    if (fanType === 1 || fanType === 'CentrifugalFan') return Module.CellFanType.CentrifugalFan;
+  }
+
+  getProcessCoolingRefrigerantTypeEnum(type: number | string) {
+    switch (type) {
+      case 0:
+      case 'R_11': return Module.RefrigerantType.R_11;
+      case 1:
+      case 'R_123': return Module.RefrigerantType.R_123;
+      case 2:
+      case 'R_12': return Module.RefrigerantType.R_12;
+      case 3:
+      case 'R_134a': return Module.RefrigerantType.R_134a;
+      case 4:
+      case 'R_22': return Module.RefrigerantType.R_22;
+      case 5:
+      case 'R_717': return Module.RefrigerantType.R_717;
+    }
+  }
+
+  getProcessCoolingCoolingAirSourceEnum(loc: number | string) {
+    if (loc === 0 || loc === 'Inside') return Module.ACSourceLocation.Inside;
+    if (loc === 1 || loc === 'Outside') return Module.ACSourceLocation.Outside;
+  }
+
+  getProcessCoolingCoolingSystemTypeEnum(type: number | string) {
+    if (type === 0 || type === 'Water') return Module.CoolingSystemType.Water;
+    if (type === 1 || type === 'Air') return Module.CoolingSystemType.Air;
+  }
+
+  getProcessCoolingTowerSizedByEnum(val: number | string) {
+    if (val === 0 || val === 'Tonnage') return Module.TowerSizedBy.Tonnage;
+    if (val === 1 || val === 'Fan_HP') return Module.TowerSizedBy.Fan_HP;
+  }
+
+  getProcessCoolingChillerCompressorTypeEnum(type: number | string) {
+    if (type === 0 || type === 'Centrifugal') return Module.ChillerCompressorType.Centrifugal;
+    if (type === 1 || type === 'Screw') return Module.ChillerCompressorType.Screw;
+    if (type === 2 || type === 'Reciprocating') return Module.ChillerCompressorType.Reciprocating;
+  }
+
+  getProcessCoolingFanMotorSpeedTypeEnum(type: number | string) {
+    if (type === 0 || type === 'One') return Module.FanMotorSpeedType.One;
+    if (type === 1 || type === 'Two') return Module.FanMotorSpeedType.Two;
+    if (type === 2 || type === 'Variable') return Module.FanMotorSpeedType.Variable;
+  }
+
+
+
 
 }

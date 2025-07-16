@@ -32,6 +32,7 @@ import { InventoryHelpComponent } from './results-panel/help-panel/inventory-hel
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
 import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe';
+import { ChillerSchedulingService } from './chiller-scheduling.service';
 
 
 @NgModule({
@@ -74,6 +75,7 @@ import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe'
     ConvertProcessCoolingService,
     ProcessCoolingReportService,
     ChillerInventoryService,
+    ChillerSchedulingService
   ]
 })
 export class ProcessCoolingModule { }
