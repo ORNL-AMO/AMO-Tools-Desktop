@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { Position, NodeProps } from '@xyflow/react';
-import { Chip, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
 import FlowValueDisplay from '../Diagram/FlowValueDisplay';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
@@ -13,25 +13,8 @@ import { selectNodeCalculatedFlowData } from '../Diagram/store';
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
   const calculatedData: NodeFlowData = useAppSelector((state) => selectNodeCalculatedFlowData(state, id));
-  let transformString = `translate(0%, 0%) translate(180px, -36px)`;
-
-  const allowInflowOnly: boolean = data.disableInflowConnections; 
-  const allowOutflowOnly: boolean = data.disableOutflowConnections; 
-  const allowAllHandles: boolean = !allowInflowOnly && !allowOutflowOnly;
-  let plantLevelFlow: number | string;
-  let condensedPadding: boolean;
+  // let transformString = `translate(0%, 0%) translate(180px, -36px)`;
   let showInSystemTreatment: boolean;
-  
-  if (data.processComponentType === 'water-intake') {
-    plantLevelFlow = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : calculatedData && calculatedData.totalDischargeFlow;
-    condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
-    transformString = `translate(0%, 0%) translate(188px, -25px)`;
-  }
-  if (data.processComponentType === 'water-discharge') {
-    plantLevelFlow = data.userEnteredData.totalSourceFlow? data.userEnteredData.totalSourceFlow : calculatedData && calculatedData.totalSourceFlow;
-    condensedPadding = plantLevelFlow !== undefined && plantLevelFlow !== null;
-    transformString = `translate(0%, 0%) translate(188px, -25px)`;
-  }
   if (data.processComponentType === 'water-using-system' && data.inSystemTreatment.length > 0) {
     showInSystemTreatment = true;
   }
@@ -42,7 +25,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
 
   return (
     <>
-    {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.a &&
+    {data.handles.inflowHandles.a &&
       <CustomHandle
         type="target"
         position={Position.Left}
@@ -60,7 +43,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           justifyContent: 'space-around',
         }}
       >
-        {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.b &&
+        {data.handles.inflowHandles.b &&
           <CustomHandle
             type="target"
             position={Position.Top}
@@ -68,7 +51,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           />
         }
 
-        {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.c &&
+        {data.handles.inflowHandles.c &&
           <CustomHandle
             type="target"
             position={Position.Top}
@@ -76,7 +59,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           />
         }
 
-        {(allowAllHandles || allowOutflowOnly) && data.handles.inflowHandles.d &&
+        {data.handles.inflowHandles.d &&
           <CustomHandle
             type="target"
             position={Position.Top}
@@ -85,9 +68,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         }
       </div>
 
-      <div className="node-inner-input" style={{
-        padding: condensedPadding? '0' : undefined
-      }}>
+      <div className="node-inner-input">
         {showInSystemTreatment &&
           <div style={{
             position: 'absolute',
@@ -124,20 +105,9 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           {data.name}
         </Typography>
 
-        {plantLevelFlow !== undefined && plantLevelFlow !== null &&
-            <Chip label={
-              <>
-              <FlowValueDisplay flowValue={plantLevelFlow}/>
-              <FlowDisplayUnit/>
-              </>
-          } 
-            variant="outlined" 
-            sx={{background: '#fff', borderRadius: '8px', marginTop: '.25rem'}}
-            />
-        }
       </div>
 
-      {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.e &&
+      {data.handles.outflowHandles.e &&
         <CustomHandle
           type="source"
           position={Position.Right}
@@ -156,7 +126,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         }}
       >
 
-        {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.f &&
+        {data.handles.outflowHandles.f &&
           <CustomHandle
             type="source"
             position={Position.Bottom}
@@ -164,7 +134,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           />
         }
 
-        {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.g &&
+        {data.handles.outflowHandles.g &&
           <CustomHandle
             type="source"
             position={Position.Bottom}
@@ -172,7 +142,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           />
         }
 
-        {(allowAllHandles || allowInflowOnly) && data.handles.outflowHandles.h &&
+        {data.handles.outflowHandles.h &&
           <CustomHandle
             type="source"
             position={Position.Bottom}

@@ -4,7 +4,7 @@ import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange,
 import { CSSProperties } from 'react';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
+import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
 import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
@@ -30,6 +30,7 @@ export interface DiagramState {
   assessmentId: number,
   validationWindowLocation: ValidationWindowLocation,
   isModalOpen: boolean,
+  manageDataTabs: ManageDataTab[],
   diagramAlert: DiagramAlertState
 }
 
@@ -57,6 +58,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     assessmentId: undefined,
     validationWindowLocation: 'diagram',
     isModalOpen: false,
+    manageDataTabs: [],
     diagramAlert: {
       open: false,
     }
@@ -469,10 +471,12 @@ const openDrawerWithSelectedReducer = (state: DiagramState, action?: PayloadActi
     state.isDrawerOpen = true;
   }
   state.selectedDataId = action.payload ? action.payload : undefined;
-};
+  const componentTabs = ComponentManageDataTabs[state.nodes.find((n: Node<ProcessFlowPart>) => n.id === action.payload)?.data.processComponentType as WaterProcessComponentType];
+  if (componentTabs) {
+    // * is component, not edge
+    state.manageDataTabs = componentTabs;
+  }
 
-const selectedIdChangeReducer = (state: DiagramState, action?: PayloadAction<string>) => {
-  state.selectedDataId = action.payload ? action.payload : undefined;
 };
 
 const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<DiagramCalculatedData>) => {
@@ -529,7 +533,6 @@ export const diagramSlice = createSlice({
     electricityCostChange: electricityCostChangeReducer,
     modalOpenChange: modalOpenChangeReducer,
     applyEstimatedFlowResults: applyEstimatedFlowResultsReducer,
-    selectedIdChange: selectedIdChangeReducer,
     openDrawerWithSelected: openDrawerWithSelectedReducer,
     diagramAlertChange: diagramAlertChangeReducer
   }
@@ -574,7 +577,6 @@ export const {
   modalOpenChange,
   conductivityUnitChange,
   electricityCostChange,
-  selectedIdChange,
   openDrawerWithSelected,
   diagramAlertChange
 } = diagramSlice.actions
