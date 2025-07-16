@@ -409,14 +409,14 @@ export class SuiteApiHelperService {
 
   returnDoubleVector2d(doubles2dArray: Array<Array<number>>) {
     let doubleVector2d = new Module.DoubleVector2D();
-    let doubleVector;
-
+    let doubleVectors: Array<any> = [];
     for (let i = 0; i < doubles2dArray.length; i++) {
       let innerArray = doubles2dArray[i];
-      doubleVector = this.returnDoubleVector(innerArray);
+      let doubleVector = this.returnDoubleVector(innerArray);
       doubleVector2d.push_back(doubleVector);
-      doubleVector.delete(); 
+      doubleVectors.push(doubleVector);
     }
+    doubleVectors.forEach(vector => vector.delete());
     return doubleVector2d;
   }
 
