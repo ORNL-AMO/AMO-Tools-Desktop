@@ -42,28 +42,6 @@ export class ProcessCoolingSuiteApiService {
       airCooledSystemInputInstance
     );
 
-    // console.log('chillerInputVector type:', typeof chillerInputVector, 'constructor:', chillerInputVector && chillerInputVector.constructor && chillerInputVector.constructor.name);
-    // console.log('chillerInputVector size:', chillerInputVector && chillerInputVector.size && chillerInputVector.size());
-
-    // const onHoursArray = Array(8760).fill(1);
-    // const dryBulbHourlyTemp = Array(8760).fill(43);
-    // const wetBulbHourlyTemp = Array(8760).fill(35);
-
-    // const onHoursVector = this.suiteApiHelperService.returnIntVector(onHoursArray);
-    // const dryBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(dryBulbHourlyTemp);
-    // const wetBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(wetBulbHourlyTemp);
-
-    // console.log('onHoursVector type:', typeof onHoursVector, 'constructor:', onHoursVector && onHoursVector.constructor && onHoursVector.constructor.name);
-    // console.log('onHoursVector size:', onHoursVector && onHoursVector.size && onHoursVector.size());
-
-    // console.log('dryBulbHourlyTempVector type:', typeof dryBulbHourlyTempVector, 'constructor:', dryBulbHourlyTempVector && dryBulbHourlyTempVector.constructor && dryBulbHourlyTempVector.constructor.name);
-    // console.log('dryBulbHourlyTempVector size:', dryBulbHourlyTempVector && dryBulbHourlyTempVector.size && dryBulbHourlyTempVector.size());
-
-    // console.log('wetBulbHourlyTempVector type:', typeof wetBulbHourlyTempVector, 'constructor:', wetBulbHourlyTempVector && wetBulbHourlyTempVector.constructor && wetBulbHourlyTempVector.constructor.name);
-    // console.log('wetBulbHourlyTempVector size:', wetBulbHourlyTempVector && wetBulbHourlyTempVector.size && wetBulbHourlyTempVector.size());
-
-    console.log('ProcessCooling instance created:', processCoolingInstance);
-
     const chillerOutput = processCoolingInstance.calculateChillerEnergy();
     const result: ProcessCoolingChillerOutput[] = [];
     const numChillers = chillerOutput.efficiency.size();
@@ -79,7 +57,6 @@ export class ProcessCoolingSuiteApiService {
     processCoolingInstance.delete();
     chillerInputVector.delete();
     airCooledSystemInputInstance.delete();
-    console.log('[ProcessCoolingSuiteApiService] runAirCooledChillerEnergy result:', result);
     return result;
   }
 
@@ -123,7 +100,6 @@ export class ProcessCoolingSuiteApiService {
     chillerInputVector.delete();
     waterCooledSystemInputInstance.delete();
     towerInputInstance.delete();
-    console.log('[ProcessCoolingSuiteApiService] runWaterCooledChillerEnergy result:', result);
     return result;
   }
 
@@ -169,7 +145,6 @@ export class ProcessCoolingSuiteApiService {
     processCoolingInstance.delete();
     chillerInputVector.delete();
     pumpInputInstance.delete();
-    console.log('[ProcessCoolingSuiteApiService] runPumpEnergy result:', result);
     return result;
   }
 
@@ -202,7 +177,6 @@ export class ProcessCoolingSuiteApiService {
     chillerInputVector.delete();
     waterCooledSystemInputInstance.delete();
     towerInputInstance.delete();
-    console.log('[ProcessCoolingSuiteApiService] runTowerEnergy result:', result);
     return result;
   }
 
