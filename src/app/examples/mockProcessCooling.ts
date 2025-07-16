@@ -1,12 +1,19 @@
 import { getNewIdString } from "../shared/helperFunctions";
 import { Assessment } from "../shared/models/assessment";
-import { Calculator } from "../shared/models/calculators";
 import { CompressorChillerTypeEnum } from "../shared/models/process-cooling-assessment";
+import {
+  EXAMPLE_AIR_COOLED_SYSTEM_INPUT,
+  EXAMPLE_WATER_COOLED_SYSTEM_INPUT,
+  EXAMPLE_PUMP_INPUT,
+  EXAMPLE_TOWER_INPUT,
+  EXAMPLE_SYSTEM_BASICS,
+  EXAMPLE_SYSTEM_INFORMATION_OPERATIONS,
+  EXAMPLE_CO2_SAVINGS_DATA,
+  EXAMPLE_INVENTORY
+} from './exampleProcessCoolingConstants';
 import { Settings } from "../shared/models/settings";
 
-
-
-export const MockProcessCoolingAssessment: Assessment =  {
+export const MockProcessCoolingAssessment: Assessment = {
     "name": "Process Cooling Example",
     "createdDate": new Date('2025-06-18T13:39:17.170Z'),
     "modifiedDate": new Date('2025-06-18T13:39:17.170Z'),
@@ -15,47 +22,21 @@ export const MockProcessCoolingAssessment: Assessment =  {
     "appVersion": "1.6.1",
     "directoryId": 2,
     "processCooling": {
-        "name": "Baseline",
-        "modifications": [],
-        "setupDone": true,
-        "systemBasics": {
-            "utilityType": "Electricity",
-            "electricityCost": 0.066,
-            "fuelCost": 3.99,
-            "notes": undefined,
-            "location": 53704,
-            "numberOfChillers": 1,
-            "waterSupplyTemperature": 50,
-            "condenserCoolingMethod": 'air',
+        name: "Baseline",
+        modifications: [],
+        setupDone: true,
+        systemBasics: { ...EXAMPLE_SYSTEM_BASICS },
+        systemInformation: {
+            operations: { ...EXAMPLE_SYSTEM_INFORMATION_OPERATIONS, co2SavingsData: EXAMPLE_CO2_SAVINGS_DATA },
+            airCooledSystemInput: { ...EXAMPLE_AIR_COOLED_SYSTEM_INPUT },
+            waterCooledSystemInput: { ...EXAMPLE_WATER_COOLED_SYSTEM_INPUT },
+            pumpInput: { ...EXAMPLE_PUMP_INPUT },
+            towerInput: { ...EXAMPLE_TOWER_INPUT }
         },
-        "systemInformation": {
-            "co2SavingsData": {
-                "energyType": "electricity",
-                "totalEmissionOutputRate": 430.78,
-                "electricityUse": 6309742.399999998,
-                "energySource": "Natural Gas",
-                "fuelType": "Natural Gas",
-                "eGridRegion": "",
-                "eGridSubregion": "SRTV",
-                "totalEmissionOutput": 0,
-                "totalFuelEmissionOutputRate": null,
-                "userEnteredBaselineEmissions": false,
-                "userEnteredModificationEmissions": false,
-                "zipcode": "37830"
-            },
-        },
-        "inventory": [
-            {
-                  itemId: getNewIdString(),
-                  name: 'New Chiller',
-                  description: undefined,
-                  modifiedDate: new Date(),
-                  compressorChillerType: 0,
-                  fullLoadEfficiency: 0,
-                  chillerCapacity: 0,
-            
-            }
-        ],
+        inventory: [ ...EXAMPLE_INVENTORY ],
+        selectedModificationId: null,
+        selected: false,
+        existingDataUnits: 'Imperial'
     },
     "selected": false,
 }
@@ -187,5 +168,3 @@ export const MockProcessCoolingSettings: Settings = {
         date: "Tue Dec 04 2018"
     },
 };
-
-

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { getNewIdString } from '../../shared/helperFunctions';
-import { ChillerInventoryItem, CompressorChillerTypeEnum, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
+import { ChillerInventoryItem, CompressorChillerTypeEnum, getDefaultInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Injectable({
@@ -16,16 +16,7 @@ export class ChillerInventoryService {
 
 
   getNewInventoryItem(): ChillerInventoryItem {
-    return {
-      itemId: getNewIdString(),
-      name: 'New Chiller',
-      description: undefined,
-      modifiedDate: new Date(),
-      // Add type values form cwsat
-      compressorChillerType: 0,
-      fullLoadEfficiency: 0,
-      chillerCapacity: 0,
-    }
+    return getDefaultInventoryItem();
   }
 
   setDefaultSelectedChiller(inventory: ChillerInventoryItem[]) {

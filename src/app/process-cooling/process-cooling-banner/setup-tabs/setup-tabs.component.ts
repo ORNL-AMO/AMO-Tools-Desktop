@@ -60,6 +60,7 @@ export class SetupTabsComponent {
       canViewInventory = hasValidSystemInformation;
     }
     this.setSystemBasicsStatus();
+    this.setSystemInformationClassStatus();
     this.setInventoryStatus(hasValidInventory, canViewInventory);
 
 
@@ -88,6 +89,14 @@ export class SetupTabsComponent {
       this.assessmentSettingsClassStatus = ["active"];
     } else {
       this.assessmentSettingsClassStatus = [];
+    }
+  }
+
+  setSystemInformationClassStatus() {
+    if (this.setupTab == "system-information") {
+      this.systemInformationClassStatus = ["active"];
+    } else {
+      this.systemInformationClassStatus = [];
     }
   }
 

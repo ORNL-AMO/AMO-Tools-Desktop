@@ -13,7 +13,7 @@ import { environment } from '../../environments/environment';
 
 import { DashboardService } from './dashboard.service';
 import { WaterAssessment } from 'process-flow-lib';
-import { ProcessCoolingAssessment } from '../shared/models/process-cooling-assessment';
+import { getDefaultInventoryItem, ProcessCoolingAssessment } from '../shared/models/process-cooling-assessment';
 import { getNewIdString } from '../shared/helperFunctions';
 
 @Injectable()
@@ -90,7 +90,7 @@ export class AssessmentService {
       itemSegment = '/water/';
     }
 
-    this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, {shouldCollapse: true})
+    this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, { shouldCollapse: true })
 
   }
 
@@ -371,7 +371,7 @@ export class AssessmentService {
     }
   }
 
-  
+
   getNewWaterAssessment(settings: Settings): WaterAssessment {
     return {
       name: 'Baseline',
@@ -386,7 +386,7 @@ export class AssessmentService {
         productionUnit: 'lb',
         annualProduction: undefined
       },
-      diagramWaterSystemFlows:[],
+      diagramWaterSystemFlows: [],
       intakeSources: [],
       dischargeOutlets: [],
       waterUsingSystems: [],
@@ -450,7 +450,7 @@ export class AssessmentService {
     }
   }
 
-    getNewProcessCoolingAssessment(settings: Settings): ProcessCoolingAssessment {
+  getNewProcessCoolingAssessment(settings: Settings): ProcessCoolingAssessment {
     return {
       name: 'Baseline',
       modifications: new Array(),
@@ -466,32 +466,67 @@ export class AssessmentService {
         condenserCoolingMethod: 'air',
       },
       systemInformation: {
-        co2SavingsData: {
-                energyType: "electricity",
-                totalEmissionOutputRate: 430.78,
-                electricityUse: 6309742.399999998,
-                energySource: "Natural Gas",
-                fuelType: "Natural Gas",
-                eGridRegion: "",
-                eGridSubregion: "SRTV",
-                totalEmissionOutput: 0,
-                totalFuelEmissionOutputRate: null,
-                userEnteredBaselineEmissions: false,
-                userEnteredModificationEmissions: false,
-                zipcode: "37830"
-            },
+        operations: {
+          annualOperatingHours: 8760,
+          numberOfChillers: 1,
+          geographicLocation: 53704,
+          chilledWaterSupplyTemp: 44,
+          condenserCoolingMethod: 0, // 0 for air, 1 for water
+          co2SavingsData: {
+            energyType: "electricity",
+            totalEmissionOutputRate: 430.78,
+            electricityUse: 6309742.4,
+            energySource: "Natural Gas",
+            fuelType: "Natural Gas",
+            eGridRegion: "",
+            eGridSubregion: "SRTV",
+            totalEmissionOutput: 0,
+            totalFuelEmissionOutputRate: null,
+            userEnteredBaselineEmissions: false,
+            userEnteredModificationEmissions: false,
+            zipcode: "37830"
+          },
+        },
+        airCooledSystemInput: {
+          CHWT: 44,
+          OADT: 54,
+          ACSource: 0,
+          indoorTemp: 95,
+          CWTFollow: 0
+        },
+        waterCooledSystemInput: {
+          CHWT: 0, 
+          useFreeCooling: true, 
+          HEXApproachTemp: 0, 
+          constantCWT: true, 
+          CWT: 0, 
+          CWVariableFlow: true, 
+          CWFlowRate: 0, 
+          CWTFollow: 0, 
+        },
+         towerInput: {
+          numTowers: 1,
+          numFanPerTowerCells: 1,
+          fanSpeedType: 0,
+          towerSizing: 0,
+          towerCellFanType: 0,
+          cellFanHP: 1,
+          tonnage: 78
+        },
+        pumpInput: {
+          variableFlow: true,
+          flowRate: 500,
+          efficiency: 0.8,
+          motorSize: 0,
+          motorEfficiency: 0,
+        },
       },
       inventory: [
-        {
-              itemId: getNewIdString(),
-              name: 'New Chiller',
-              description: undefined,
-              modifiedDate: new Date(),
-              compressorChillerType: 0,
-              fullLoadEfficiency: 0,
-              chillerCapacity: 0,
-        }
+        getDefaultInventoryItem()
       ],
+      selectedModificationId: '',
+      existingDataUnits: '',
+      selected: false,
     }
   }
 
