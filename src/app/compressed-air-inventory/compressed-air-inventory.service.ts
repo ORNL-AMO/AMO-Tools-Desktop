@@ -401,4 +401,5 @@ export class CompressedAirInventoryService {
 
 export interface FilterInventorySummary {
   selectedSystemsIds: Array<string>,
+  compressorTypes?: Array<number>,
 }
