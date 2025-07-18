@@ -63,12 +63,14 @@ export class NoLoadCatalogComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   save() {
     this.isFormChange = true;
     let noLoad: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
     this.compressedAirDataManagementService.updateNoLoad(noLoad);
+    this.compressedAirInventoryService.updateCompressedAirItem(this.selectedCompressor);
   }
 
   focusField(str: string) {
