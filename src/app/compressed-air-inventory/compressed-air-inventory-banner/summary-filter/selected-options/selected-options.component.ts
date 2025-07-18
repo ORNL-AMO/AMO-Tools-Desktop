@@ -78,12 +78,6 @@ export class SelectedOptionsComponent {
     this.save();
   }
 
-  // getHorsepowerTypeName(horsepowerType: number): string {
-  //   let horsepowerTypeOption = this.compressorTypeOptions.find(option => option.value === horsepowerType);
-  //   return horsepowerTypeOption.label;
-  // }
-
-
   clearAllFilters() {
     this.filterInventorySummary = {
       selectedSystemsIds: [],
