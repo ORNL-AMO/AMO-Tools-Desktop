@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CompressedAirInventoryData, CompressedAirItem } from '../../../compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirItem, CompressorTypeOptions } from '../../../compressed-air-inventory';
 import { CompressedAirInventoryService, FilterInventorySummary } from '../../../compressed-air-inventory.service';
 import { CompressedAirInventorySummaryService } from '../../../compressed-air-inventory-summary/compressed-air-inventory-summary.service';
 import { CompressedAirInventorySummaryGraphsService } from '../../../compressed-air-inventory-summary/compressed-air-inventory-summary-graphs/compressed-air-inventory-summary-graphs.service';
@@ -15,10 +15,11 @@ import _ from 'lodash';
 })
 export class CompressorTypeDropdownComponent {
   settings: Settings;
-  compressorTypes: Array<{ value: number, count: number }>;
+  compressorTypes: Array<{ value: number, count: number, label: string }>;
   filterInventorySummarySub: Subscription;
   filterInventorySummary: FilterInventorySummary;
   showDropdown: boolean;
+  compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
 
   constructor(private compressedAirInventoryService: CompressedAirInventoryService, private compressedAirInventorySummaryService: CompressedAirInventorySummaryService, private compressedAirInventorySummaryGraphsService: CompressedAirInventorySummaryGraphsService) { }
 
@@ -38,9 +39,11 @@ export class CompressorTypeDropdownComponent {
     let allCompressors: Array<CompressedAirItem> = this.compressedAirInventorySummaryService.getAllCompressors(compressedAirInventoryData);
     let options = _.countBy(allCompressors, (compressor: CompressedAirItem) => { return compressor.nameplateData.compressorType });
     Object.keys(options).forEach((key, index) => {
+      let label = this.compressorTypeOptions.find(option => option.value === Number(key))?.label || key;
       this.compressorTypes.push({
         value: Number(key),
-        count: options[key]
+        count: options[key],
+        label: label
       });
     });
   }

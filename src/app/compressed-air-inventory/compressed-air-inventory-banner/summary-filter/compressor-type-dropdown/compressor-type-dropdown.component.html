@@ -10,7 +10,7 @@
             </a>
             <a class="list-group-item list-group-item-action" *ngFor="let option of compressorTypes"
                 [ngClass]="{'active': checkActive(option.value)}" (click)="select(option.value)">
-                {{option.value}}
+                {{option.label}}
                 <span class="pull-right pl-2 pr-2 badge badge-pill">
                     {{option.count}}
                 </span>
