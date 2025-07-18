@@ -53,7 +53,8 @@ export class SelectedOptionsComponent {
   clearAllFilters() {
     this.filterInventorySummary = {
       selectedSystemsIds: [],
-      compressorTypes: []
+      compressorTypes: [],
+      controlTypes: []
     }
     this.save();
   }

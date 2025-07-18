@@ -55,6 +55,7 @@ export class CompressedAirInventoryService {
     this.filterInventorySummary = new BehaviorSubject({
       selectedSystemsIds: new Array(),
       compressorTypes: new Array<number>(),
+      controlTypes: new Array<number>(),
     });
   }
 
@@ -403,4 +404,5 @@ export class CompressedAirInventoryService {
 export interface FilterInventorySummary {
   selectedSystemsIds: Array<string>,
   compressorTypes: Array<number>,
+  controlTypes: Array<number>,
 }
