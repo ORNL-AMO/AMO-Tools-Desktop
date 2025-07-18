@@ -70,7 +70,6 @@ export class NoLoadCatalogComponent implements OnInit {
     this.isFormChange = true;
     let noLoad: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
     this.compressedAirDataManagementService.updateNoLoad(noLoad);
-    this.compressedAirInventoryService.updateCompressedAirItem(this.selectedCompressor);
   }
 
   focusField(str: string) {
