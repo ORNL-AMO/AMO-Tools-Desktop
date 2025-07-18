@@ -63,18 +63,18 @@ export class ControlTypeDropdownComponent {
     return isActive;
   }
 
-  select(compressorType: number) {
-    let classIndex: number = this.filterInventorySummary.compressorTypes.findIndex(value => { return value == compressorType });
+  select(controlType: number) {
+    let classIndex: number = this.filterInventorySummary.controlTypes.findIndex(value => { return value == controlType });
     if (classIndex == -1) {
-      this.filterInventorySummary.compressorTypes.push(compressorType);
+      this.filterInventorySummary.controlTypes.push(controlType);
     } else {
-      this.filterInventorySummary.compressorTypes.splice(classIndex, 1);
+      this.filterInventorySummary.controlTypes.splice(classIndex, 1);
     }
     this.save();
   }
 
   selectAll() {
-    this.filterInventorySummary.compressorTypes = new Array();
+    this.filterInventorySummary.controlTypes = new Array();
     this.save();
   }
 

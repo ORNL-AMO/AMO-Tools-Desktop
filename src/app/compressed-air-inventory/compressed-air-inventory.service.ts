@@ -56,6 +56,7 @@ export class CompressedAirInventoryService {
       selectedSystemsIds: new Array(),
       compressorTypes: new Array<number>(),
       controlTypes: new Array<number>(),
+      horsepowerTypes: new Array<number>(),
     });
   }
 
@@ -405,4 +406,5 @@ export interface FilterInventorySummary {
   selectedSystemsIds: Array<string>,
   compressorTypes: Array<number>,
   controlTypes: Array<number>,
+  horsepowerTypes: Array<number>,
 }
