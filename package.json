@@ -79,7 +79,7 @@
     "copyright": "Copyright 2017 ORNL. All rights reserved.",
     "productName": "MEASUR",
     "directories": {
-      "output": "../output/"
+      "output": "output/"
     },
     "files": [
       "!**/.angular",
