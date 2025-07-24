@@ -66,6 +66,7 @@ jobs:
           name: sign-win-artifact
           path: |
             output/*.exe
+            output/latest.yml
           compression-level: 1
           if-no-files-found: error
           retention-days: 1
@@ -77,8 +78,8 @@ jobs:
             output/*.AppImage
             output/*.blockmap
             output/*.tar.gz
-            output/*.yml
             output/*.zip
+            output/latest-*.yml
           compression-level: 1
           if-no-files-found: error
           retention-days: 1
@@ -136,9 +137,10 @@ jobs:
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release-2-artifact
+          name: release-3-artifact
           path: |
             output/*.exe
+            output/latest.yml
 
   release:
     if: github.ref_name == 'master'
