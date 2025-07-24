@@ -16,9 +16,6 @@ import { CompressorDataManagementService } from '../../../../compressor-data-man
   standalone: false
 })
 export class FullLoadCatalogComponent implements OnInit {
-
-
-  settingsSub: Subscription;
   settings: Settings;
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
@@ -41,17 +38,14 @@ export class FullLoadCatalogComponent implements OnInit {
 
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.inventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(inventoryData => {
       if (inventoryData) {
         this.atmosphericPressure = inventoryData.systemInformation.atmosphericPressure;
       }
     });
 
-    this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
-      this.settings = val;
-    });
-    //this.settings = this.compressedAirAssessmentService.settings.getValue();
+    this.settings = this.compressedAirInventoryService.settings.getValue();
     this.selectedCompressorSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;

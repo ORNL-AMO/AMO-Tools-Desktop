@@ -16,9 +16,6 @@ import { CompressorDataManagementService } from '../../../../compressor-data-man
   standalone: false
 })
 export class MidTurndownCatalogComponent implements OnInit {
-
-
-  settingsSub: Subscription;
   settings: Settings;
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
@@ -39,7 +36,7 @@ export class MidTurndownCatalogComponent implements OnInit {
     private compressedAirDataManagementService: CompressorDataManagementService) { }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     
     this.inventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(inventoryData => {
       if (inventoryData) {
@@ -48,10 +45,7 @@ export class MidTurndownCatalogComponent implements OnInit {
     });
 
 
-    this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
-      this.settings = val;
-    });
-    //this.settings = this.compressedAirAssessmentService.settings.getValue();
+    this.settings = this.compressedAirInventoryService.settings.getValue();
     this.selectedCompressorSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;

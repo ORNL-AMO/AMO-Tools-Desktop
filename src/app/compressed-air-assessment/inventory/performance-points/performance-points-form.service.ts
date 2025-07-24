@@ -138,6 +138,7 @@ export class PerformancePointsFormService {
       switch (pointName) {
         case 'fullLoad':
           if (systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
+            console.log("systemInformation.plantMaxPressure ", systemInformation.plantMaxPressure);
             pressureValidators.push(Validators.min(systemInformation.plantMaxPressure));
           } else {
             pressureValidators.push(Validators.min(0));

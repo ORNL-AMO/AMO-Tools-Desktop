@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CompressedAirItem, CompressedAirPerformancePointsPropertiesOptions } from '../../../compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirItem, CompressedAirPerformancePointsPropertiesOptions } from '../../../compressed-air-inventory';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirInventoryService } from '../../../compressed-air-inventory.service';
@@ -28,6 +28,9 @@ export class PerformancePointsCatalogComponent implements OnInit {
   showNoLoad: boolean;
   showBlowoff: boolean;
   hasValidPerformancePoints: boolean = true;
+  
+  compressedAirInventoryDataSub: Subscription;
+  compressedAirInventoryData: CompressedAirInventoryData;
 
 
   constructor(private compressedAirCatalogService: CompressedAirCatalogService, private compressedAirInventoryService: CompressedAirInventoryService,
@@ -37,10 +40,14 @@ export class PerformancePointsCatalogComponent implements OnInit {
     this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
       this.settings = val;
     });
+    this.compressedAirInventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(inventoryData => {
+      if (inventoryData) {
+        this.compressedAirInventoryData = inventoryData;
+      }
+    }); 
     this.selectedCompressedAirItemSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(selectedCompressedAir => {
       if (selectedCompressedAir) {
-        //this.form = this.nameplateDataCatalogService.getFormFromNameplateData(selectedCompressedAir.nameplateData);
-        //this.hasValidPerformancePoints = this.performancePointsCatalogService.checkPerformancePointsValid(selectedCompressedAir, selectedCompressedAir.systemInformation);
+        this.hasValidPerformancePoints = this.performancePointsCatalogService.checkPerformancePointsValid(selectedCompressedAir, this.compressedAirInventoryData.systemInformation);
         this.setShowMidTurndown(selectedCompressedAir);
         this.setShowTurndown(selectedCompressedAir);
         this.setShowMaxFlow(selectedCompressedAir);
@@ -56,16 +63,16 @@ export class PerformancePointsCatalogComponent implements OnInit {
   ngOnDestroy() {
     this.selectedCompressedAirItemSub.unsubscribe();
     this.settingsSub.unsubscribe();
+    this.compressedAirInventoryDataSub.unsubscribe();
   }
 
   save() {
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    //selectedCompressedAir.nameplateData = this.nameplateDataCatalogService.updateNameplateDataFromForm(this.form, selectedCompressedAir.nameplateData);
     this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
   }
 
   focusField(str: string) {
-    this.compressedAirInventoryService.focusedDataGroup.next('nameplate-data');
+    this.compressedAirInventoryService.focusedDataGroup.next('performance-points');
     this.compressedAirInventoryService.focusedField.next(str);
   }
 

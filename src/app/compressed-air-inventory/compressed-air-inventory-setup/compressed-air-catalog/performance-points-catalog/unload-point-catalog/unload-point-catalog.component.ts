@@ -16,8 +16,6 @@ import { CompressorDataManagementService } from '../../../../compressor-data-man
   standalone: false
 })
 export class UnloadPointCatalogComponent implements OnInit {
-
-  settingsSub: Subscription;
   settings: Settings;
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
@@ -37,11 +35,8 @@ export class UnloadPointCatalogComponent implements OnInit {
     private compressedAirDataManagementService: CompressorDataManagementService) { }
 
 
-  ngOnInit(): void {
-    this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
-      this.settings = val;
-    });
-    //this.settings = this.compressedAirAssessmentService.settings.getValue();
+  ngOnInit() {
+    this.settings = this.compressedAirInventoryService.settings.getValue();
     this.selectedCompressorSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
