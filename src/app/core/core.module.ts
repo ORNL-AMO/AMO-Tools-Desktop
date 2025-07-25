@@ -33,7 +33,6 @@ import { PlotlyViaWindowModule } from 'angular-plotly.js';
 import { IndexedDbModule } from '../indexedDb/indexed-db.module';
 import { AnalyticsModule } from '../shared/analytics/analytics.module';
 import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/security-and-privacy.module';
-import { BrowsingDataToastModule } from '../shared/browsing-data-toast/browsing-data-toast.module';
 import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
 import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-data.module';
 import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
@@ -83,7 +82,6 @@ import { ShareDataModalModule } from '../shared/share-data-modal/share-data-moda
     PlotlyViaWindowModule,
     IndexedDbModule,
     SecurityAndPrivacyModule,
-    BrowsingDataToastModule,
     AnalyticsModule,
     EmailMeasurDataModule,
     WaterProcessDiagramModule,

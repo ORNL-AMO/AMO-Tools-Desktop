@@ -31,7 +31,6 @@ import { SnackbarService } from '../shared/snackbar-notification/snackbar.servic
 })
 
 export class CoreComponent implements OnInit {
-  showBrowsingDataToast: boolean;
   hideTutorial: boolean = true;
   openingTutorialSub: Subscription;
   idbStarted: boolean = false;
@@ -89,9 +88,6 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!window.navigator.cookieEnabled) {
-      this.showBrowsingDataToast = true;
-    }
 
     if (this.electronService.isElectron) {
       this.electronService.sendAppReady('ready');
@@ -281,11 +277,6 @@ export class CoreComponent implements OnInit {
   async setSurveyDone() {
     let appData = await firstValueFrom(this.applicationInstanceDbService.setSurveyDone());
     this.applicationInstanceDbService.applicationInstanceData.next(appData);
-  }
-
-  hideBrowsingDataToast() {
-    this.showBrowsingDataToast = false;
-    this.changeDetectorRef.detectChanges();
   }
 
   hideSubscribeToast() {
