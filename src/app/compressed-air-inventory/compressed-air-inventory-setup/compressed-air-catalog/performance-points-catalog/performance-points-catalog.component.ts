@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CompressedAirItem, CompressedAirPerformancePointsPropertiesOptions } from '../../../compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirItem, CompressedAirPerformancePointsPropertiesOptions } from '../../../compressed-air-inventory';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirInventoryService } from '../../../compressed-air-inventory.service';
@@ -27,7 +27,8 @@ export class PerformancePointsCatalogComponent implements OnInit {
   showUnload: boolean;
   showNoLoad: boolean;
   showBlowoff: boolean;
-  hasValidPerformancePoints: boolean = true;
+  hasValidPerformancePoints: boolean = true;  
+  compressedAirInventoryData: CompressedAirInventoryData;
 
 
   constructor(private compressedAirCatalogService: CompressedAirCatalogService, private compressedAirInventoryService: CompressedAirInventoryService,
@@ -39,8 +40,8 @@ export class PerformancePointsCatalogComponent implements OnInit {
     });
     this.selectedCompressedAirItemSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(selectedCompressedAir => {
       if (selectedCompressedAir) {
-        //this.form = this.nameplateDataCatalogService.getFormFromNameplateData(selectedCompressedAir.nameplateData);
-        //this.hasValidPerformancePoints = this.performancePointsCatalogService.checkPerformancePointsValid(selectedCompressedAir, selectedCompressedAir.systemInformation);
+        this.compressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
+        this.hasValidPerformancePoints = this.performancePointsCatalogService.checkPerformancePointsValid(selectedCompressedAir, this.compressedAirInventoryData.systemInformation);
         this.setShowMidTurndown(selectedCompressedAir);
         this.setShowTurndown(selectedCompressedAir);
         this.setShowMaxFlow(selectedCompressedAir);
@@ -60,12 +61,11 @@ export class PerformancePointsCatalogComponent implements OnInit {
 
   save() {
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    //selectedCompressedAir.nameplateData = this.nameplateDataCatalogService.updateNameplateDataFromForm(this.form, selectedCompressedAir.nameplateData);
     this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
   }
 
   focusField(str: string) {
-    this.compressedAirInventoryService.focusedDataGroup.next('nameplate-data');
+    this.compressedAirInventoryService.focusedDataGroup.next('performance-points');
     this.compressedAirInventoryService.focusedField.next(str);
   }
 

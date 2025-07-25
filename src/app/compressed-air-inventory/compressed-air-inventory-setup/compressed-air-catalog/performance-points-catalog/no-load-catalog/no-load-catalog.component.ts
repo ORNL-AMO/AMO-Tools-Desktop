@@ -7,6 +7,7 @@ import { CompressedAirInventoryService } from '../../../../compressed-air-invent
 import { CompressedAirCatalogService } from '../../compressed-air-catalog.service';
 import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-catalog.service';
 import { NoLoadCatalogService } from './no-load-catalog.service';
+import { CompressorDataManagementService } from '../../../../compressor-data-management.service';
 
 @Component({
   selector: '[app-no-load-catalog]',
@@ -15,9 +16,6 @@ import { NoLoadCatalogService } from './no-load-catalog.service';
   standalone: false
 })
 export class NoLoadCatalogComponent implements OnInit {
-
-
-  settingsSub: Subscription;
   settings: Settings;
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
@@ -33,15 +31,13 @@ export class NoLoadCatalogComponent implements OnInit {
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService,
     private compressedAirCatalogService: CompressedAirCatalogService,
     private compressedAirInventoryService: CompressedAirInventoryService,
+    private compressedAirDataManagementService: CompressorDataManagementService,
     private noLoadCatalogService: NoLoadCatalogService) { }
 
 
 
-  ngOnInit(): void {
-    this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
-      this.settings = val;
-    });
-    //this.settings = this.compressedAirAssessmentService.settings.getValue();
+  ngOnInit() {
+    this.settings = this.compressedAirInventoryService.settings.getValue();
     this.selectedCompressorSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
@@ -66,8 +62,7 @@ export class NoLoadCatalogComponent implements OnInit {
   save() {
     this.isFormChange = true;
     let noLoad: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
-    //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateNoLoad(noLoad);
+    this.compressedAirDataManagementService.updateNoLoad(noLoad);
   }
 
   focusField(str: string) {

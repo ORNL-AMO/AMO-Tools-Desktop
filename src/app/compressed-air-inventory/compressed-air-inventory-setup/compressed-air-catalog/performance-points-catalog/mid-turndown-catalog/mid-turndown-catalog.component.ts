@@ -7,6 +7,7 @@ import { CompressedAirCatalogService } from '../../compressed-air-catalog.servic
 import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-catalog.service';
 import { Settings } from '../../../../../shared/models/settings';
 import { MidTurndownCatalogService } from './mid-turndown-catalog.service';
+import { CompressorDataManagementService } from '../../../../compressor-data-management.service';
 
 @Component({
   selector: '[app-mid-turndown-catalog]',
@@ -15,9 +16,6 @@ import { MidTurndownCatalogService } from './mid-turndown-catalog.service';
   standalone: false
 })
 export class MidTurndownCatalogComponent implements OnInit {
-
-
-  settingsSub: Subscription;
   settings: Settings;
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
@@ -34,10 +32,11 @@ export class MidTurndownCatalogComponent implements OnInit {
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService,
     private compressedAirCatalogService: CompressedAirCatalogService,
     private compressedAirInventoryService: CompressedAirInventoryService,
-    private midTurndownCatalogService: MidTurndownCatalogService) { }
+    private midTurndownCatalogService: MidTurndownCatalogService,
+    private compressedAirDataManagementService: CompressorDataManagementService) { }
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     
     this.inventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(inventoryData => {
       if (inventoryData) {
@@ -46,10 +45,7 @@ export class MidTurndownCatalogComponent implements OnInit {
     });
 
 
-    this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
-      this.settings = val;
-    });
-    //this.settings = this.compressedAirAssessmentService.settings.getValue();
+    this.settings = this.compressedAirInventoryService.settings.getValue();
     this.selectedCompressorSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
@@ -74,8 +70,7 @@ export class MidTurndownCatalogComponent implements OnInit {
   save() {
     this.isFormChange = true;
     let midTurndown: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
-    //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateMidturndown(midTurndown);
+    this.compressedAirDataManagementService.updateMidturndown(midTurndown);
   }
 
   focusField(str: string) {

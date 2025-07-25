@@ -43,7 +43,7 @@ export class CompressedAirInventoryService {
   ) {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
-    let inventoryData: CompressedAirInventoryData; //= this.initInventoryData();
+    let inventoryData: CompressedAirInventoryData;
     this.compressedAirInventoryData = new BehaviorSubject<CompressedAirInventoryData>(inventoryData);
     this.focusedField = new BehaviorSubject<string>('default');
     this.focusedDataGroup = new BehaviorSubject<string>(undefined);
@@ -229,7 +229,7 @@ export class CompressedAirInventoryService {
           dischargePressure: undefined,
         },
         noLoad: {
-          dischargePressure: 15,
+          dischargePressure: 150,
           isDefaultPower: true,
           airflow: 0,
           isDefaultAirFlow: true,

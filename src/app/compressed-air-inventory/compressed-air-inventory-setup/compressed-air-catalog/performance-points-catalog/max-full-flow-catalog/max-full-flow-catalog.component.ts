@@ -7,6 +7,7 @@ import { CompressedAirCatalogService } from '../../compressed-air-catalog.servic
 import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-catalog.service';
 import { MaxFullFlowCatalogService } from './max-full-flow-catalog.service';
 import { Settings } from '../../../../../shared/models/settings';
+import { CompressorDataManagementService } from '../../../../compressor-data-management.service';
 
 @Component({
   selector: '[app-max-full-flow-catalog]',
@@ -15,9 +16,6 @@ import { Settings } from '../../../../../shared/models/settings';
   standalone: false
 })
 export class MaxFullFlowCatalogComponent implements OnInit {
-
-
-  settingsSub: Subscription;
   settings: Settings;
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
@@ -36,22 +34,19 @@ export class MaxFullFlowCatalogComponent implements OnInit {
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService,
     private compressedAirCatalogService: CompressedAirCatalogService,
     private compressedAirInventoryService: CompressedAirInventoryService,
-    private maxFullFlowCatalogService: MaxFullFlowCatalogService) { }
+    private maxFullFlowCatalogService: MaxFullFlowCatalogService,
+    private compressedAirDataManagementService: CompressorDataManagementService) { }
 
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.inventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(inventoryData => {
       if (inventoryData) {
         this.atmosphericPressure = inventoryData.systemInformation.atmosphericPressure;
       }
     });
 
-    this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
-      this.settings = val;
-    });
-
-    //this.settings = this.compressedAirAssessmentService.settings.getValue();
+    this.settings = this.compressedAirInventoryService.settings.getValue();
     this.selectedCompressorSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
@@ -60,7 +55,7 @@ export class MaxFullFlowCatalogComponent implements OnInit {
         if (this.isFormChange == false) {
           this.setMaxFullFlowLabel(compressor.compressedAirControlsProperties.controlType);
           this.form = this.performancePointsCatalogService.getPerformancePointFormFromObj(compressor.compressedAirPerformancePointsProperties.maxFullFlow, compressor, 'maxFullFlow')
-          this.validationMessages = this.performancePointsCatalogService.validationMessageMap.getValue();
+          this.validationMessages = this.performancePointsCatalogService.validationMessageMap.getValue();          
         } else {
           this.updateForm(compressor.compressedAirPerformancePointsProperties.maxFullFlow);
           this.isFormChange = false;
@@ -101,8 +96,7 @@ export class MaxFullFlowCatalogComponent implements OnInit {
   save() {
     this.isFormChange = true;
     let maxFullFlow: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
-    //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateMaxFullFlow(maxFullFlow);
+    this.compressedAirDataManagementService.updateMaxFullFlow(maxFullFlow);
   }
 
   focusField(str: string) {

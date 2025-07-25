@@ -7,6 +7,7 @@ import { PerformancePointsCatalogService, PerformancePointWarnings, ValidationMe
 import { CompressedAirCatalogService } from '../../compressed-air-catalog.service';
 import { CompressedAirInventoryService } from '../../../../compressed-air-inventory.service';
 import { FullLoadCatalogService } from './full-load-catalog.service';
+import { CompressorDataManagementService } from '../../../../compressor-data-management.service';
 
 @Component({
   selector: '[app-full-load-catalog]',
@@ -15,9 +16,6 @@ import { FullLoadCatalogService } from './full-load-catalog.service';
   standalone: false
 })
 export class FullLoadCatalogComponent implements OnInit {
-
-
-  settingsSub: Subscription;
   settings: Settings;
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
@@ -35,21 +33,19 @@ export class FullLoadCatalogComponent implements OnInit {
   constructor(private performancePointsCatalogService: PerformancePointsCatalogService,
     private compressedAirCatalogService: CompressedAirCatalogService,
     private compressedAirInventoryService: CompressedAirInventoryService,
-    private fullLoadCatalogService: FullLoadCatalogService) { }
+    private fullLoadCatalogService: FullLoadCatalogService,
+    private compressedAirDataManagementService: CompressorDataManagementService) { }
 
 
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.inventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(inventoryData => {
       if (inventoryData) {
         this.atmosphericPressure = inventoryData.systemInformation.atmosphericPressure;
       }
     });
 
-    this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
-      this.settings = val;
-    });
-    //this.settings = this.compressedAirAssessmentService.settings.getValue();
+    this.settings = this.compressedAirInventoryService.settings.getValue();
     this.selectedCompressorSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
@@ -75,8 +71,7 @@ export class FullLoadCatalogComponent implements OnInit {
   save() {
     this.isFormChange = true;
     let fullLoad: PerformancePoint = this.performancePointsCatalogService.getPerformancePointObjFromForm(this.form);
-    //TODO: CA Inventory
-    //this.compressedAirDataManagementService.updateFullLoad(fullLoad);
+    this.compressedAirDataManagementService.updateFullLoad(fullLoad);
   }
 
   focusField(str: string) {

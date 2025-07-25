@@ -117,7 +117,7 @@ export class PerformancePointsCatalogService {
   }
 
   getPerformancePointFormFromObj(performancePoint: PerformancePoint, compressor: CompressedAirItem, pointName: 'fullLoad' | 'maxFullFlow' | 'noLoad' | 'blowoff' | 'unloadPoint' | 'midTurndown' | 'turndown', systemInformation?: SystemInformation): UntypedFormGroup {
-    let dischargePressureValidators: Array<ValidatorFn> = this.setDischargePressureValidators(performancePoint, compressor, pointName);
+    let dischargePressureValidators: Array<ValidatorFn> = this.setDischargePressureValidators(performancePoint, compressor, pointName, systemInformation);
     let airflowValidators: Array<ValidatorFn> = this.setAirFlowValidators(performancePoint, compressor, pointName);
     let powerValidators: Array<ValidatorFn> = this.setPowerValidators(performancePoint, compressor, pointName);
 

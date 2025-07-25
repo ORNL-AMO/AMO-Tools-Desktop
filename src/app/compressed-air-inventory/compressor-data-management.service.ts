@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GenericCompressor } from './existing-compressor-db.service';
 import { CompressedAirInventoryService } from './compressed-air-inventory.service';
 import { CompressedAirCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
-import { CompressedAirInventoryData, CompressedAirItem } from './compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirItem, PerformancePoint } from './compressed-air-inventory';
 import { Settings } from '../shared/models/settings';
 import { PerformancePointsCalculationsService } from './compressed-air-inventory-setup/compressed-air-catalog/performance-points-catalog/calculations/performance-points-calculations.service';
 
@@ -84,7 +84,7 @@ export class CompressorDataManagementService {
     this.updateCatalogFromDependentCompressorItem(selectedCompressor, true)
   }
 
-  updateCatalogFromDependentCompressorItem(selectedCompressor: CompressedAirItem,performancePointUpdateNeeded: boolean) {
+  updateCatalogFromDependentCompressorItem(selectedCompressor: CompressedAirItem, performancePointUpdateNeeded: boolean) {
     //update performance points
     if (performancePointUpdateNeeded) {
       let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
@@ -100,7 +100,7 @@ export class CompressorDataManagementService {
     let itemIndex: number = compressedAirInventoryData.systems[systemIndex].catalog.findIndex(item => { return item.id == selectedCompressedAirItem.id });
 
     compressedAirInventoryData.systems[systemIndex].catalog[itemIndex] = selectedCompressor;
-     
+
     // //update assessment
     // this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     // //update selected compressor
@@ -116,6 +116,56 @@ export class CompressorDataManagementService {
 
   roundVal(val: number, digits: number) {
     return Number((Math.round(val * 100) / 100).toFixed(digits));
+  }
+
+
+  updateBlowoff(blowoff: PerformancePoint) {
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    selectedCompressor.compressedAirPerformancePointsProperties.blowoff = blowoff;
+    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
+  }
+
+  updateFullLoad(fullLoad: PerformancePoint) {
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    selectedCompressor.compressedAirPerformancePointsProperties.fullLoad = fullLoad;
+    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
+  }
+
+  updateMaxFullFlow(maxFullFlow: PerformancePoint) {
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    selectedCompressor.compressedAirPerformancePointsProperties.maxFullFlow = maxFullFlow;
+    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
+  }
+
+  updateMidturndown(midTurndown: PerformancePoint) {
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    selectedCompressor.compressedAirPerformancePointsProperties.midTurndown = midTurndown;
+    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
+  }
+
+  updateTurndown(turndown: PerformancePoint) {
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    selectedCompressor.compressedAirPerformancePointsProperties.turndown = turndown;
+    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
+  }
+
+  updateNoLoad(noLoad: PerformancePoint) {
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    selectedCompressor.compressedAirPerformancePointsProperties.noLoad = noLoad;
+    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
+  }
+
+  updateUnloadPoint(unloadPoint: PerformancePoint) {
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint = unloadPoint;
+    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
   }
 
 }
