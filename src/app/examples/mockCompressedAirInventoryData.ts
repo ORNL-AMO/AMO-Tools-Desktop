@@ -8,8 +8,6 @@ export const MockCompressedAirInventory: InventoryItem = {
             "systemElevation": null,
             "atmosphericPressure": 14.7,
             "atmosphericPressureKnown": true,
-            //"plantMaxPressure": number,
-            //"multiCompressorSystemControls": 'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim',
         },
         "systems": [
             {
