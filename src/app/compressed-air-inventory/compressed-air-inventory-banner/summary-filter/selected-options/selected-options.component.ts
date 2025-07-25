@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CompressedAirInventoryService, FilterInventorySummary } from '../../../compressed-air-inventory.service';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
-import { CompressedAirInventoryData, CompressedAirInventorySystem } from '../../../compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressorTypeOptions, ControlTypes } from '../../../compressed-air-inventory';
 
 @Component({
   selector: 'app-selected-options',
@@ -15,6 +15,9 @@ export class SelectedOptionsComponent {
   settings: Settings;
   filterInventorySummarySub: Subscription;
   filterInventorySummary: FilterInventorySummary;
+  compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
+
+  controlTypesOptions: Array<{ value: number, label: string }> = ControlTypes;
 
   compressedAirInventoryData: CompressedAirInventoryData;
   constructor(
@@ -44,15 +47,43 @@ export class SelectedOptionsComponent {
     this.filterInventorySummary.selectedSystemsIds.splice(index, 1);
     this.save();
   }
-  
+
   getSystemName(id: string): string {
     let system: CompressedAirInventorySystem = this.compressedAirInventoryData.systems.find(system => { return system.id == id });
     return system.name;
   }
 
+  removeCompressorType(index: number) {
+    this.filterInventorySummary.compressorTypes.splice(index, 1);
+    this.save();
+  }
+
+  getCompressorTypeName(compressorType: number): string {
+    let compressorTypeOption = this.compressorTypeOptions.find(option => option.value === compressorType);
+    return compressorTypeOption.label;
+  }
+
+  removeControlType(index: number) {
+    this.filterInventorySummary.controlTypes.splice(index, 1);
+    this.save();
+  }
+
+  getControlTypeName(controlType: number): string {
+    let controlTypeOption = this.controlTypesOptions.find(option => option.value === controlType);
+    return controlTypeOption.label;
+  }
+
+  removeHorsepowerType(index: number) {
+    this.filterInventorySummary.horsepowerTypes.splice(index, 1);
+    this.save();
+  }
+
   clearAllFilters() {
     this.filterInventorySummary = {
       selectedSystemsIds: [],
+      compressorTypes: [],
+      controlTypes: [],
+      horsepowerTypes: [],
     }
     this.save();
   }

@@ -6,23 +6,28 @@
         </button>
     </div>
 
-    <!-- <div class="nav-item" *ngFor="let pumpType of filterInventorySummary.pumpTypes; let index = index;">
-        <button type="button" class="nav-btn" (click)="removePumpTypes(index)"><span aria-hidden="true"
-                class="pr-1">&times;</span>{{pumpType | pumpSelectField:'pumpType'}}</button>
-    </div> -->
+    <div class="nav-item" *ngFor="let compressorType of filterInventorySummary.compressorTypes; let index = index;">
+        <button type="button" class="nav-btn" (click)="removeCompressorType(index)">
+            <span aria-hidden="true" class="pr-1">&times;
+            </span>{{getCompressorTypeName(compressorType)}}
+        </button>
+    </div>
 
-    <!-- <div class="nav-item" *ngFor="let power of filterInventorySummary.motorRatedPowerValues; let index = index;">
-        <button type="button" class="nav-btn" (click)="removeRatedPower(index)"><span aria-hidden="true"
-                class="pr-1">&times;</span>{{power}}
+    <div class="nav-item" *ngFor="let control of filterInventorySummary.controlTypes; let index = index;">
+        <button type="button" class="nav-btn" (click)="removeControlType(index)">
+            <span aria-hidden="true" class="pr-1">&times;
+            </span>{{getControlTypeName(control)}}
+        </button>
+    </div>
+
+    <div class="nav-item" *ngFor="let horsepower of filterInventorySummary.horsepowerTypes; let index = index;">
+        <button type="button" class="nav-btn" (click)="removeHorsepowerType(index)">
+            <span aria-hidden="true" class="pr-1">&times;
+            </span>{{horsepower}}
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
         </button>
-    </div> -->
-
-    <!-- <div class="nav-item" *ngFor="let status of filterInventorySummary.statusValues; let index = index;">
-        <button type="button" class="nav-btn" (click)="removeStatus(index)"><span aria-hidden="true"
-                class="pr-1">&times;</span>{{status | pumpSelectField:'statusType'}} </button>
-    </div> -->
+    </div>
 
     <div class="nav-item pull-right">
         <button class="nav-btn-clear pull-right" (click)="clearAllFilters()">Clear All</button>

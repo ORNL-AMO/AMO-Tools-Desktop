@@ -20,6 +20,9 @@ import { ConvertCompressedAirInventoryService } from './convert-compressed-air-i
 import { SummaryFilterComponent } from './compressed-air-inventory-banner/summary-filter/summary-filter.component';
 import { SelectedOptionsComponent } from './compressed-air-inventory-banner/summary-filter/selected-options/selected-options.component';
 import { SystemDropdownComponent } from './compressed-air-inventory-banner/summary-filter/system-dropdown/system-dropdown.component';
+import { HorsepowerDropdownComponent } from './compressed-air-inventory-banner/summary-filter/horsepower-dropdown/horsepower-dropdown.component';
+import { CompressorTypeDropdownComponent } from './compressed-air-inventory-banner/summary-filter/compressor-type-dropdown/compressor-type-dropdown.component';
+import { ControlTypeDropdownComponent } from './compressed-air-inventory-banner/summary-filter/control-type-dropdown/control-type-dropdown.component';
 
 
 
@@ -29,7 +32,10 @@ import { SystemDropdownComponent } from './compressed-air-inventory-banner/summa
     CompressedAirInventoryBannerComponent,
     SummaryFilterComponent,
     SelectedOptionsComponent,
-    SystemDropdownComponent
+    SystemDropdownComponent,
+    CompressorTypeDropdownComponent,
+    ControlTypeDropdownComponent,
+    HorsepowerDropdownComponent
   ],
   imports: [
     CommonModule,
