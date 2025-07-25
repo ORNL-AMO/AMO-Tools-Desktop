@@ -463,7 +463,7 @@ export class AssessmentService {
         location: undefined,
         numberOfChillers: 1,
         waterSupplyTemperature: 50,
-        condenserCoolingMethod: 'air',
+        condenserCoolingMethod: 0,
       },
       systemInformation: {
         operations: {
@@ -471,7 +471,7 @@ export class AssessmentService {
           numberOfChillers: 1,
           geographicLocation: 53704,
           chilledWaterSupplyTemp: 44,
-          condenserCoolingMethod: 0, // 0 for air, 1 for water
+          condenserCoolingMethod: 0, // water
           co2SavingsData: {
             energyType: "electricity",
             totalEmissionOutputRate: 430.78,
@@ -519,6 +519,11 @@ export class AssessmentService {
           efficiency: 0.8,
           motorSize: 0,
           motorEfficiency: 0,
+          variableFlowCW: true,
+          flowRateCW: 0,
+          efficiencyCW: 0,
+          motorSizeCW: 0,
+          motorEfficiencyCW: 0,
         },
       },
       inventory: [

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ProcessCoolingSuiteApiService } from '../tools-suite-api/process-cooling-suite-api.service';
-import { ProcessCoolingAssessment, ProcessCoolingChillerOutput, ProcessCoolingPumpOutput, ProcessCoolingTowerOutput } from '../shared/models/process-cooling-assessment';
+import { ProcessCoolingAssessment, ProcessCoolingResults } from '../shared/models/process-cooling-assessment';
 
 @Injectable({
   providedIn: 'root'
@@ -8,22 +8,14 @@ import { ProcessCoolingAssessment, ProcessCoolingChillerOutput, ProcessCoolingPu
 export class ProcessCoolingResultsService {
   constructor(private suiteApi: ProcessCoolingSuiteApiService) { }
 
-  /**
-   * Calls all suite API methods and returns a composed ProcessCoolingResults object.
-   * @param assessment The input assessment object
-   */
-  getResults(assessment: ProcessCoolingAssessment): any {
-    console.log('[ProcessCoolingResultsService] getResults called with assessment:', assessment);
-    const airCooledChiller = this.suiteApi.runAirCooledChillerEnergy(assessment);
-    const waterCooledChiller = this.suiteApi.runWaterCooledChillerEnergy(assessment);
-    const pump = this.suiteApi.runPumpEnergy(assessment);
-    const tower = this.suiteApi.runTowerEnergy(assessment);
-    const results = {
-      airCooledChiller,
-      waterCooledChiller,
-      pump,
-      tower
-    };
+  getResults(assessment: ProcessCoolingAssessment) {
+    console.log('[ProcessCoolingResultsService]  assessment:', assessment);
+    let results: ProcessCoolingResults;
+    if (assessment.systemBasics.condenserCoolingMethod === 0) {
+      results = this.suiteApi.getWaterCooledResults(assessment);
+    } else {
+      results = this.suiteApi.getAirCooledResults(assessment);
+    }
     console.log('[ProcessCoolingResultsService] getResults:', results);
     return results;
   }
