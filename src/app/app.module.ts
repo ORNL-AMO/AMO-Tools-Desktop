@@ -10,7 +10,7 @@ import { MeasurErrorHandler } from './shared/errors/MeasurErrorHandler';
 import { MeasurAppError } from './shared/errors/errors';
 import { AppErrorModule } from './shared/errors/app-error.module';
 import { ElectronService } from './electron/electron.service';
-
+import {provideNgxWebstorage, withLocalStorage, withNgxWebstorageConfig, withSessionStorage} from 'ngx-webstorage';
 
 @NgModule({
   declarations: [
@@ -28,12 +28,18 @@ import { ElectronService } from './electron/electron.service';
   ],
   bootstrap: [AppComponent],
   providers: [
-   {provide: ErrorHandler, useClass: MeasurErrorHandler},
-   provideAppInitializer(() => {
-        const initializerFn = (initializeAppFactory)(inject(ElectronService), inject(SwUpdate));
-        return initializerFn();
-      }),
-  ]
+    { provide: ErrorHandler, useClass: MeasurErrorHandler },
+    provideAppInitializer(() => {
+      const initializerFn = (initializeAppFactory)(inject(ElectronService), inject(SwUpdate));
+      return initializerFn();
+    }),
+    // provideNgxWebstorage()
+    provideNgxWebstorage(
+		withNgxWebstorageConfig({ separator: ':', caseSensitive: true }),
+		withLocalStorage(),
+		withSessionStorage()
+	)
+  ],
 })
 export class AppModule {}
 

@@ -8,13 +8,22 @@ export class SnackbarService {
     this.snackbarMessage = new BehaviorSubject<SnackbarMessage>(undefined);
   }
 
-  setSnackbarMessage(messageOrDefault: string, level: MessageLevel = 'info', timeoutType: TimeoutType = 'none') {
-    let message = MEASURDefaultNotifications[messageOrDefault]?  MEASURDefaultNotifications[messageOrDefault] : messageOrDefault;
+  setSnackbarMessage(messageOrDefault: string, level: MessageLevel = 'info', timeoutType: TimeoutType = 'none', links?: {label: string, uri: string}[]) {
     let snackbar: SnackbarMessage = {
-      msg: message,
+      msg: undefined,
       level: level,
-      timeoutMS: DismissTimeoutsMS[timeoutType]
+      timeoutMS: DismissTimeoutsMS[timeoutType],
+      links: links
     }
+    let defaultMessage: string = MEASURDefaultNotifications[messageOrDefault];
+    if (defaultMessage) {
+      snackbar.msg = defaultMessage;
+      snackbar.appDefaultNotification = messageOrDefault as AppDefaultNotification;
+    } else {
+      snackbar.msg = messageOrDefault;
+    }
+
+
     this.snackbarMessage.next(snackbar)
   }
 }
@@ -22,7 +31,9 @@ export class SnackbarService {
 export interface SnackbarMessage {
   level: MessageLevel,
   msg: string,
-  timeoutMS?: number
+  appDefaultNotification?: AppDefaultNotification,
+  timeoutMS?: number,
+  links?: {label: string, uri: string}[]
 }
 
 type MessageLevel = 'danger' | 'info';
@@ -32,6 +43,11 @@ const DismissTimeoutsMS = {
   long: 10000
 }
 
-const MEASURDefaultNotifications: Record<string, string> = {
-  exploreOpportunities: '<b class="bold title">Explore Opportunities</b>: The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.'
+const MEASURDefaultNotifications: Record<AppDefaultNotification, string> = {
+  exploreOpportunities: `<b class="bold title">Explore Opportunities</b>: The selected modification was created using the expert view. 
+  There may be changes to the modification that are not visible from this screen.`,
+  appDataStorageNotice: `<b class="bold title">You are running MEASUR in a web browser</b>. <br>Disabling browser local storage, cookies, or cache for this website can result in data loss. DOE and MEASUR support staff do not have access to your data. 
+  `
 }
+
+export type AppDefaultNotification = 'exploreOpportunities' | 'appDataStorageNotice';

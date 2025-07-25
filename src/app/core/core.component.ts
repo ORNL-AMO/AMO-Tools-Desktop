@@ -21,6 +21,7 @@ import { MeasurSurveyService } from '../shared/measur-survey/measur-survey.servi
 import { UpdateApplicationService } from '../shared/update-application/update-application.service';
 import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-subscribe.service';
 import { ExportToJustifiTemplateService } from '../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
+import { SnackbarService } from '../shared/snackbar-notification/snackbar.service';
 
 @Component({
   selector: 'app-core',
@@ -83,6 +84,7 @@ export class CoreComponent implements OnInit {
     private updateApplicationService: UpdateApplicationService,
     private emailSubscribeService: EmailListSubscribeService,
     private inventoryDbService: InventoryDbService,
+    private snackBarService: SnackbarService,
     private exportToJustifiTemplateService: ExportToJustifiTemplateService) {
   }
 
@@ -93,6 +95,13 @@ export class CoreComponent implements OnInit {
 
     if (this.electronService.isElectron) {
       this.electronService.sendAppReady('ready');
+    } else {
+      setTimeout(() => {
+        this.snackBarService.setSnackbarMessage('appDataStorageNotice', 'info', 'none', [
+          { label: 'Data Storage and Backup', uri: '/data-and-backup' },
+          { label: 'Privacy', uri: '/privacy' }
+        ]);
+      }, 1000);
     }
 
     this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
