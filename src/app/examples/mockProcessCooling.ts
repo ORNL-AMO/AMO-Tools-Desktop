@@ -1,6 +1,5 @@
-import { getNewIdString } from "../shared/helperFunctions";
 import { Assessment } from "../shared/models/assessment";
-import { CompressorChillerTypeEnum } from "../shared/models/process-cooling-assessment";
+
 import {
   EXAMPLE_AIR_COOLED_SYSTEM_INPUT,
   EXAMPLE_WATER_COOLED_SYSTEM_INPUT,
@@ -10,7 +9,8 @@ import {
   EXAMPLE_SYSTEM_INFORMATION_OPERATIONS,
   EXAMPLE_CO2_SAVINGS_DATA,
   EXAMPLE_INVENTORY
-} from './exampleProcessCoolingConstants';
+// } from './CWSATExampleAirCooledConstant';
+} from './CWSATExampleVINPLTConstants';
 import { Settings } from "../shared/models/settings";
 
 export const MockProcessCoolingAssessment: Assessment = {
@@ -40,6 +40,7 @@ export const MockProcessCoolingAssessment: Assessment = {
     },
     "selected": false,
 }
+
 
 
 export const MockProcessCoolingSettings: Settings = {

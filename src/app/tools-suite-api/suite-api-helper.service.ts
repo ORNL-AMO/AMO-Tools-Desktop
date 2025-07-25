@@ -512,8 +512,23 @@ export class SuiteApiHelperService {
     if (val === 1 || val === 'Fan_HP') return Module.TowerSizedBy.Fan_HP;
   }
 
+  
+  /**
+   * Returns the corresponding `ChillerCompressorType` enum value from the provided type.
+   *
+   * @param type - The compressor type, either as a numeric code or a string label.
+   *   - `0` or `'Centrifugal'` returns `ChillerCompressorType.Centrifugal`
+   *   - `1` or `'Screw'` returns `ChillerCompressorType.Screw`
+   *   - `2` or `'Reciprocating'` returns `ChillerCompressorType.Reciprocating`
+   *
+   * @remarks
+   * In the CWSAT, the value `1` represents the "RECIPROCATING" compressor type.
+   * In the suite API, RECIPROCATING is value `2`. Use "Screw" or `1` for HELICAL ROTARY
+   * until the suite API is updated to reflect this distinction.
+   */
   getProcessCoolingChillerCompressorTypeEnum(type: number | string) {
     if (type === 0 || type === 'Centrifugal') return Module.ChillerCompressorType.Centrifugal;
+    // This is actually HELICAL ROTARY in the old app but is referenced as 'Screw' in the suite
     if (type === 1 || type === 'Screw') return Module.ChillerCompressorType.Screw;
     if (type === 2 || type === 'Reciprocating') return Module.ChillerCompressorType.Reciprocating;
   }

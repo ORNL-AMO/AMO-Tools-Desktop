@@ -11,11 +11,19 @@ export interface ProcessCoolingChillerOutput {
 
 export interface ProcessCoolingPumpOutput {
     chillerPumpingEnergy: number[];
+    // only appears for water cooled systems
+    condenserPumpingEnergy?: number[];
 }
 
 export interface ProcessCoolingTowerOutput {
     hours: number[];
     energy: number[];
+}
+
+export interface ProcessCoolingResults {
+    chiller: ProcessCoolingChillerOutput[];
+    pump: ProcessCoolingPumpOutput;
+    tower?: ProcessCoolingTowerOutput;
 }
 
 export interface ProcessCoolingAssessment {
@@ -37,7 +45,7 @@ export interface ProcessCoolingSystemBasics {
     location: number,
     numberOfChillers: number,
     waterSupplyTemperature: number,
-    condenserCoolingMethod: CoolingMethodString,
+    condenserCoolingMethod: number,
     notes: string
 }
 
@@ -90,14 +98,15 @@ export interface AirCooledSystemInput {
     * @param CWTFollow double, units F, when CW temperature not constant
     */
 export interface WaterCooledSystemInput {
+    constantCWT: boolean, // * "Is the CWT Constant?"
     CHWT: number,  // ? Operations.chilledWaterSupplyTemp
     useFreeCooling: boolean, // ? TowerInput "System with Free Cooling"
     HEXApproachTemp: number,  // ? from TowerInput if useFreeCooling and HEX required are true
-    constantCWT: boolean, // * "Is the CWT Constant?"
-    CWT: number, 
-    CWVariableFlow: boolean, // ! not in UI
-    CWFlowRate: number, // ? from PumpInput?
-    CWTFollow: number, // * "CWT follows ambient wet-bulb plus"
+    CWT: number,  // * if is constantCWT
+    CWTFollow: number, // * if not constantCWT "CWT follows ambient wet-bulb plus"
+    // ? below fields set by Pump CW
+    CWVariableFlow: boolean, // ! CW field from pump
+    CWFlowRate: number, // !  CW field from pump
 }
 
 /**
@@ -112,10 +121,11 @@ export interface WaterCooledSystemInput {
      */
 export interface TowerInput {
     numTowers: number;
-    numFanPerTowerCells: number; // * if Fan type is Centrifugal otherwise may be set by tower type?
-    fanSpeedType: number; // ???? may be set by tower type?
+    towerType?: number; 
+    numFanPerTowerCells: number; // * set by towerType choice - number of cells/fans
+    fanSpeedType: number; // * set by towerType choice - 1 = Two Speed, 2 = Variable Speed
     towerSizing: number; // * Size Tower By change to "Tower Size units" or other
-    towerCellFanType: number; 
+    towerCellFanType: number; // * "Fan Type"
     cellFanHP: number; // * if size tower by hp hp/fan
     tonnage: number; // * if Size tower by tons
 }
@@ -136,6 +146,11 @@ export interface PumpInput {
     efficiency: number; // * Pump Efficiency
     motorSize: number;
     motorEfficiency: number;
+    variableFlowCW: boolean;
+    flowRateCW: number;
+    efficiencyCW: number; // * Pump Efficiency
+    motorSizeCW: number;
+    motorEfficiencyCW: number;
 }
 
 
@@ -165,7 +180,7 @@ export interface ChillerInventoryItem {
     age: number;
     installVSD: boolean;
     useARIMonthlyLoadSchedule: boolean;
-    monthlyLoads?: number[][];
+    monthlyLoads?: number[][]; // * This is hours per percent load for each month
 }
 
 export interface Modification {
@@ -200,19 +215,19 @@ export interface ProcessCoolingAssessmentResults {
 
 export enum CompressorChillerTypeEnum {
     CENTRIFUGAL = 0,
-    RECIPROCATING = 1,
-    //helical rotary
-    HELICAL = 2,
+    //helical rotary, see SuiteApiHelperService.ts note
+    SCREW = 1,
+    RECIPROCATING = 2,
 }
 
 export const CompressorChillerTypes =
 {
     [CompressorChillerTypeEnum.CENTRIFUGAL]: 'Centrifugal',
     [CompressorChillerTypeEnum.RECIPROCATING]: 'Reciprocating',
-    [CompressorChillerTypeEnum.HELICAL]: 'Helical Rotary'
+    [CompressorChillerTypeEnum.SCREW]: 'Helical Rotary'
 }
 
-export type CoolingMethodString = 'air' | 'water';
+export type CoolingMethodString = 'water' | 'air';
 export type CompressorChillerType = 'centrifugal' | 'reciprocating' | 'helical-rotary';
 
 export const getDefaultInventoryItem = (): ChillerInventoryItem => {

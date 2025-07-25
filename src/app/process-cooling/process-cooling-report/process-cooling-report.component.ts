@@ -62,8 +62,7 @@ export class ProcessCoolingReportComponent {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
 
-      let debugResults = this.processCoolingResultsService.getResults(this.assessment.processCooling); 
-      console.log('[ProcessCoolingReportComponent] Debug Results:', debugResults);
+      this.processCoolingResultsService.getResults(this.assessment.processCooling);
       // todo 6706 set up subs for graph/bar components
       // let systemTrueCostReport = this.waterAssessmentResultsService.getTrueCostOfSystemsReport(this.assessment, this.settings);
       // this.processCoolingReportService.systemTrueCostReport.next(systemTrueCostReport);
