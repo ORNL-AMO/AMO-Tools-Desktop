@@ -27,9 +27,7 @@ export class PerformancePointsCatalogComponent implements OnInit {
   showUnload: boolean;
   showNoLoad: boolean;
   showBlowoff: boolean;
-  hasValidPerformancePoints: boolean = true;
-  
-  compressedAirInventoryDataSub: Subscription;
+  hasValidPerformancePoints: boolean = true;  
   compressedAirInventoryData: CompressedAirInventoryData;
 
 
@@ -40,13 +38,9 @@ export class PerformancePointsCatalogComponent implements OnInit {
     this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
       this.settings = val;
     });
-    this.compressedAirInventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(inventoryData => {
-      if (inventoryData) {
-        this.compressedAirInventoryData = inventoryData;
-      }
-    }); 
     this.selectedCompressedAirItemSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(selectedCompressedAir => {
       if (selectedCompressedAir) {
+        this.compressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
         this.hasValidPerformancePoints = this.performancePointsCatalogService.checkPerformancePointsValid(selectedCompressedAir, this.compressedAirInventoryData.systemInformation);
         this.setShowMidTurndown(selectedCompressedAir);
         this.setShowTurndown(selectedCompressedAir);
@@ -63,7 +57,6 @@ export class PerformancePointsCatalogComponent implements OnInit {
   ngOnDestroy() {
     this.selectedCompressedAirItemSub.unsubscribe();
     this.settingsSub.unsubscribe();
-    this.compressedAirInventoryDataSub.unsubscribe();
   }
 
   save() {
