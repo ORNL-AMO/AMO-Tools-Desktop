@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ProcessCoolingMainTabString, ProcessCoolingService, ProcessCoolingSetupTabString } from '../process-cooling.service';
+import { Component, computed, effect, signal, Signal, WritableSignal } from '@angular/core';
+import { ProcessCoolingMainTabString, ProcessCoolingSetupTabString, ProcessCoolingUiService } from '../process-cooling-ui.service';
 
 @Component({
   selector: 'app-results-panel',
@@ -10,38 +9,26 @@ import { ProcessCoolingMainTabString, ProcessCoolingService, ProcessCoolingSetup
 })
 export class ResultsPanelComponent {
 
-  setupTabSub: Subscription;
-  mainTabSub: Subscription;
-  mainTab: ProcessCoolingMainTabString;
-  panelTabSelect: PanelTab = 'help';
-  displayInventory: boolean;
-  constructor(private processCoolingService: ProcessCoolingService) { }
+  mainTab: WritableSignal<ProcessCoolingMainTabString>;
+  setupTab: WritableSignal<ProcessCoolingSetupTabString>;
+  displayInventory: Signal<boolean> = computed(() => {
+    return this.setupTab() == 'inventory'
+  });
+  panelTabSelect: WritableSignal<PanelTab> = signal<PanelTab>('help');
 
-  ngOnInit(): void {
-    this.setupTabSub = this.processCoolingService.setupTab.subscribe(val => {
-      this.displayInventory = val == 'inventory';
-      if(this.displayInventory){
-        this.panelTabSelect = val as PanelTab;
-      } else {
-        this.panelTabSelect = 'help';
-      }
+  constructor(private processCoolingUiService: ProcessCoolingUiService) {
+    this.mainTab = this.processCoolingUiService.mainTabSignal;
+    this.setupTab = this.processCoolingUiService.setupTabSignal;
 
+    effect(() => {
+      this.panelTabSelect.set(this.displayInventory() ? this.setupTab() as PanelTab : 'help');
     });
-
-    this.mainTabSub = this.processCoolingService.mainTab.subscribe(val => {
-      this.mainTab = val;
-    });
-  }
-
-  ngOnDestroy() {
-    this.setupTabSub.unsubscribe();
-    this.mainTabSub.unsubscribe();
   }
 
   setTab(str: PanelTab) {
-    this.panelTabSelect = str;
+    this.panelTabSelect.set(str);
   }
 }
 
 
-  export type PanelTab = ProcessCoolingSetupTabString | 'help' | 'results';
+export type PanelTab = ProcessCoolingSetupTabString | 'help' | 'results';

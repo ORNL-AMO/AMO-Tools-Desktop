@@ -12,7 +12,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsModule } from '../settings/settings.module';
 import { RouterModule } from '@angular/router';
-import { ProcessCoolingService } from './process-cooling.service';
 import { ProcessCoolingComponent } from './process-cooling.component';
 import { ProcessCoolingBannerComponent } from './process-cooling-banner/process-cooling-banner.component';
 import { SetupTabsComponent } from './process-cooling-banner/setup-tabs/setup-tabs.component';
@@ -32,6 +31,8 @@ import { InventoryHelpComponent } from './results-panel/help-panel/inventory-hel
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
 import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe';
+import { ProcessCoolingUiService } from './process-cooling-ui.service';
+import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 
 
 @NgModule({
@@ -69,7 +70,8 @@ import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe'
     PercentGraphModule,
   ],
   providers: [
-    ProcessCoolingService,
+    ProcessCoolingAssessmentService,
+    ProcessCoolingUiService,
     SystemBasicsFormService,
     ConvertProcessCoolingService,
     ProcessCoolingReportService,

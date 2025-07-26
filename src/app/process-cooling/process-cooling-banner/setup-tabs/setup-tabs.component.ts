@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, computed, Signal, WritableSignal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
 import { Settings } from '../../../shared/models/settings';
-import { ProcessCoolingService, ProcessCoolingSetupTabString } from '../../process-cooling.service';
 import { ChillerInventoryService } from '../../chiller-inventory/chiller-inventory.service';
+import { ProcessCoolingSetupTabString, ProcessCoolingUiService } from '../../process-cooling-ui.service';
+import { ProcessCoolingAssessmentService } from '../../process-cooling-assessment.service';
+import { get } from 'lodash';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-setup-tabs',
@@ -13,44 +16,58 @@ import { ChillerInventoryService } from '../../chiller-inventory/chiller-invento
 })
 export class SetupTabsComponent {
 
-  setupTabSub: Subscription;
-  setupTab: ProcessCoolingSetupTabString;
+  setupTab: WritableSignal<ProcessCoolingSetupTabString>;
+  assessmentSettingsClassStatus: Signal<Array<string>> = computed(() => {
+    return this.setupTab() === 'assessment-settings' ? ['active'] : [];
+  });
+  systemInformationClassStatus: Signal<Array<string>> = computed(() => {
+    return this.setupTab() === 'system-information' ? ['active'] : [];
+  });
+  inventoryClassStatus: Signal<Array<string>> = computed(() => {
+    // todo 'disabled' if cannot view inventory
+    // todo 'missing-data' when inventory invalid and canView
+
+    return this.setupTab() === 'inventory' ? ['active'] : [];
+  });
+
+  canContinue: Signal<boolean> = computed(() => {
+    return this.getCanContinue();
+  });
+
   disabledSetupTabs: Array<ProcessCoolingSetupTabString>;
   disableTabs: boolean;
-  canContinue: boolean;
-  assessmentSettingsClassStatus: Array<string> = [];
   assessmentSettingsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
-  systemInformationClassStatus: Array<string> = [];
   systemInformationBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
-  inventoryStatus: Array<string> = [];
   inventoryBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
-  processCoolingAssessmentSub: Subscription;
-  settingsSub: Subscription;
   settings: Settings;
-  constructor(private processCoolingAssessmentService: ProcessCoolingService,
-    private inventoryService: ChillerInventoryService) { }
 
-  ngOnInit(): void {
-    this.settingsSub = this.processCoolingAssessmentService.settings.subscribe(val => {
-      this.settings = val;
-      this.disabledSetupTabs = [];
-      this.setTabStatus();
-    });
+  constructor(
+    private processCoolingUiService: ProcessCoolingUiService,
+    private processCoolingAssessmentService: ProcessCoolingAssessmentService,
+    private inventoryService: ChillerInventoryService) {
 
+    this.setupTab = this.processCoolingUiService.setupTabSignal;
+    this.processCoolingAssessmentService.settings
+      .pipe(takeUntilDestroyed())
+      .subscribe(val => {
+        this.settings = val;
+        this.disabledSetupTabs = [];
+        this.getCanContinue();
+      });
 
-    this.setupTabSub = this.processCoolingAssessmentService.setupTab.subscribe(val => {
-      this.setupTab = val;
-      this.disabledSetupTabs = [];
-      this.setTabStatus();
-    });
+    this.processCoolingAssessmentService.processCooling
+      .pipe(takeUntilDestroyed())
+      .subscribe(val => {
+        this.disabledSetupTabs = [];
+        this.getCanContinue();
+      });
 
-    this.processCoolingAssessmentSub = this.processCoolingAssessmentService.processCooling.subscribe(val => {
-      this.disabledSetupTabs = [];
-      this.setTabStatus();
-    });
   }
 
-  setTabStatus() {
+  ngOnInit(): void {}
+
+  // todo breakout validity state as signal
+  getCanContinue(): boolean {
     let hasValidInventory: boolean = this.inventoryService.hasValidChillers(this.processCoolingAssessmentService.processCooling.getValue());
     let hasValidSystemInformation: boolean = true;
     let canViewInventory: boolean = true;
@@ -59,49 +76,16 @@ export class SetupTabsComponent {
     if (processCoolingAssessment && this.settings) {
       canViewInventory = hasValidSystemInformation;
     }
-    this.setSystemBasicsStatus();
-    this.setInventoryStatus(hasValidInventory, canViewInventory);
-
-
-    if ((hasValidInventory || hasValidSystemInformation) || (this.setupTab == 'assessment-settings')) {
-      this.canContinue = true;
+    if ((hasValidInventory || hasValidSystemInformation) || (this.setupTab() == 'assessment-settings')) {
+      return true;
     } else {
-      this.canContinue = false;
+      return false;
     }
-
-  }
-
-  ngOnDestroy() {
-    this.setupTabSub.unsubscribe();
-    this.processCoolingAssessmentSub.unsubscribe();
-    this.settingsSub.unsubscribe();
   }
 
   changeSetupTab(str: ProcessCoolingSetupTabString) {
     if (!this.disabledSetupTabs.includes(str)) {
-      this.processCoolingAssessmentService.setupTab.next(str);
-    }
-  }
-
-  setSystemBasicsStatus() {
-    if (this.setupTab == "assessment-settings") {
-      this.assessmentSettingsClassStatus = ["active"];
-    } else {
-      this.assessmentSettingsClassStatus = [];
-    }
-  }
-
-  setInventoryStatus(hasValidInventory: boolean, canViewInventory: boolean) {
-    this.inventoryStatus = [];
-    if (!canViewInventory) {
-      this.inventoryStatus.push('disabled');
-      this.disabledSetupTabs.push('inventory')
-    }
-    if (canViewInventory && !hasValidInventory) {
-      this.inventoryStatus.push("missing-data");
-    }
-    if (this.setupTab == "inventory") {
-      this.inventoryStatus.push("active");
+      this.setupTab.set(str);
     }
   }
 
@@ -127,11 +111,11 @@ export class SetupTabsComponent {
   }
 
   continue() {
-    this.processCoolingAssessmentService.continue();
+    this.processCoolingUiService.continue();
   }
 
   back() {
-    this.processCoolingAssessmentService.back();
+    this.processCoolingUiService.back();
   }
 
 }

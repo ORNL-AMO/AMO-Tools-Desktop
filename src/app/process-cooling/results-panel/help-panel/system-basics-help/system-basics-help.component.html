@@ -17,7 +17,7 @@
         </h6>
     </div>
 
-    <div class="my-2" *ngIf="focusedField == 'utilityType'">
+    <div class="my-2" *ngIf="focusedField() == 'utilityType'">
         <h6>
             Utility Type
             <br>
@@ -28,7 +28,7 @@
         </h6>
     </div>
 
-    <div class="my-2" *ngIf="focusedField == 'electricityCost'">
+    <div class="my-2" *ngIf="focusedField() == 'electricityCost'">
         <h6>
             Electricity Cost
             <br>
@@ -39,7 +39,7 @@
         </h6>
     </div>
 
-    <div class="my-2" *ngIf="focusedField == 'equipmentNotes'">
+    <div class="my-2" *ngIf="focusedField() == 'equipmentNotes'">
         <h6>
             Equipment Notes
             <br>

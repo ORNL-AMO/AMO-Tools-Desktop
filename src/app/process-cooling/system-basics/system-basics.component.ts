@@ -8,9 +8,10 @@ import { Assessment } from '../../shared/models/assessment';
 import { SystemBasicsFormService } from './system-basics-form.service';
 import { ProcessCoolingAssessment, ProcessCoolingSystemBasics } from '../../shared/models/process-cooling-assessment';
 import { ConvertProcessCoolingService } from '../convert-process-cooling.service';
-import { ProcessCoolingService } from '../process-cooling.service';
 import { Settings } from '../../shared/models/settings';
 import { copyObject } from '../../shared/helperFunctions';
+import { ProcessCoolingAssessmentService } from '../process-cooling-assessment.service';
+import { ProcessCoolingUiService } from '../process-cooling-ui.service';
 
 @Component({
   selector: 'app-system-basics',
@@ -24,23 +25,23 @@ export class SystemBasicsComponent {
   @Output('openUpdateUnitsModal') 
   openUpdateUnitsModal = new EventEmitter<Settings>();
   
-  
   settingsForm: UntypedFormGroup;
   oldSettings: Settings;
   systemBasicsForm: UntypedFormGroup;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
   constructor(private settingsService: SettingsService,
-    private processCoolingService: ProcessCoolingService,
+    private processCoolingAssessmentService: ProcessCoolingAssessmentService,
+    private processCoolingUiService: ProcessCoolingUiService,
     private convertProcessCoolingService: ConvertProcessCoolingService,
     private settingsDbService: SettingsDbService,
     private systemBasicsFormService: SystemBasicsFormService) { }
 
 
   ngOnInit() {
-    let processCooling: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
+    let processCooling: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
     this.systemBasicsForm = this.systemBasicsFormService.getFormFromObj(processCooling.systemBasics);
-    let settings: Settings = this.processCoolingService.settings.getValue();
+    let settings: Settings = this.processCoolingAssessmentService.settings.getValue();
     this.settingsForm = this.settingsService.getFormFromSettings(settings);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
 
@@ -57,23 +58,23 @@ export class SystemBasicsComponent {
   }
 
   saveSystemBasics() {
-    let processCooling: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
+    let processCooling: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
     let systemBasics: ProcessCoolingSystemBasics = this.systemBasicsFormService.getObjFromForm(this.systemBasicsForm);
     processCooling.systemBasics = systemBasics;
-    this.processCoolingService.updateProcessCooling(processCooling, true);
+    this.processCoolingAssessmentService.updateProcessCooling(processCooling, true);
   }
 
   async saveSettings() {
-    let currentSettings: Settings = this.processCoolingService.settings.getValue();
+    let currentSettings: Settings = this.processCoolingAssessmentService.settings.getValue();
     let id = currentSettings.id;
     let createdDate = currentSettings.createdDate;
     let assessmentId = currentSettings.assessmentId;
 
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     if (newSettings.unitsOfMeasure != this.oldSettings.unitsOfMeasure) {
-      let processCooling: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
+      let processCooling: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
       processCooling.existingDataUnits = this.oldSettings.unitsOfMeasure;
-      this.processCoolingService.updateProcessCooling(processCooling, true);
+      this.processCoolingAssessmentService.updateProcessCooling(processCooling, true);
       this.showUpdateDataReminder = true;
     }
 
@@ -87,7 +88,7 @@ export class SystemBasicsComponent {
     await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
     let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
-    this.processCoolingService.settings.next(newSettings);
+    this.processCoolingAssessmentService.settings.next(newSettings);
   }
 
   updateData(showSuccess?: boolean) {
@@ -95,16 +96,16 @@ export class SystemBasicsComponent {
       this.initSuccessMessage();
     }
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    let processCooling: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
+    let processCooling: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
     processCooling = this.convertProcessCoolingService.convertProcessCooling(processCooling, this.oldSettings, newSettings);
     this.showUpdateDataReminder = false;
     processCooling.existingDataUnits = newSettings.unitsOfMeasure;
-    this.processCoolingService.updateProcessCooling(processCooling, true);
+    this.processCoolingAssessmentService.updateProcessCooling(processCooling, true);
     this.oldSettings = newSettings;
   }
 
   focusField(str: string) {
-    this.processCoolingService.focusedField.next(str);
+    this.processCoolingUiService.focusedFieldSignal.set(str);
   }
 
   getExistingDataSettings(processCooling: ProcessCoolingAssessment): Settings {

@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ProcessCoolingService } from '../../../process-cooling.service';
+import { Component, WritableSignal } from '@angular/core';
+import { ProcessCoolingUiService } from '../../../process-cooling-ui.service';
 
 @Component({
   selector: 'app-inventory-help',
@@ -9,18 +8,9 @@ import { ProcessCoolingService } from '../../../process-cooling.service';
   styleUrl: './inventory-help.component.css'
 })
 export class InventoryHelpComponent {
-  focusedField: string;
-  focusedFieldSub: Subscription;
-  constructor(private processCoolingService: ProcessCoolingService) { }
-
-  ngOnInit(): void {
-    this.focusedFieldSub = this.processCoolingService.focusedField.subscribe(val => {
-      this.focusedField = val;
-    });
-  }
-
-  ngOnDestroy(){
-    this.focusedFieldSub.unsubscribe();
+  focusedField: WritableSignal<string>;
+  constructor(private processCoolingService: ProcessCoolingUiService) { 
+    this.focusedField = this.processCoolingService.focusedFieldSignal;
   }
 
 }

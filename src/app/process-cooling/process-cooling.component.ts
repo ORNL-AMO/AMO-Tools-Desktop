@@ -1,9 +1,5 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, ElementRef, HostListener, Input, Signal, ViewChild } from '@angular/core';
 import { Modification, ProcessCoolingAssessment } from '../shared/models/process-cooling-assessment';
-import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
-import { DashboardService } from '../dashboard/dashboard.service';
-import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur-data.service';
-import { ProcessCoolingMainTabString, ProcessCoolingService, ProcessCoolingSetupTabString } from './process-cooling.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { Assessment } from '../shared/models/assessment';
 import { ActivatedRoute } from '@angular/router';
@@ -14,6 +10,10 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { Settings } from '../shared/models/settings';
 import { ChillerInventoryService } from './chiller-inventory/chiller-inventory.service';
+import { signal, WritableSignal } from '@angular/core';
+import { ProcessCoolingMainTabString, ProcessCoolingSetupTabString, ProcessCoolingUiService } from './process-cooling-ui.service';
+import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-process-cooling',
@@ -34,38 +34,71 @@ export class ProcessCoolingComponent {
 
   assessment: Assessment;
   settings: Settings;
-  showUpdateUnitsModal: boolean = false;
   oldSettings: Settings;
-  mainTab: string;
-  mainTabSub: Subscription;
-  setupTab: ProcessCoolingSetupTabString;
-  setupTabSub: Subscription;
+  
+  mainTab: WritableSignal<string>;
+  setupTab: WritableSignal<ProcessCoolingSetupTabString>;
+  isModalOpen: WritableSignal<boolean>;
+  showExportModal: WritableSignal<boolean>;
+  assessmentTab: WritableSignal<string> ;
+  
+  // todo similar logic in banner/setup tabs.. breakout validity logic
+  disableNext: Signal<boolean> = computed(() => {
+    let processCooling: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
+    let hasValidInventory: boolean = true;
+    let hasValidSystemInformation: boolean = true;
 
-  processCoolingSub: Subscription;
-  disableNext: boolean = false;
+    if (this.setupTab() == 'system-information' && !hasValidSystemInformation) {
+      return true;
+    } else if (this.setupTab() != 'assessment-settings' && this.setupTab() != 'system-information') {
+      return true;
+    } else {
+      return false;
+    }
+  });
 
-  isModalOpen: boolean;
-  modalOpenSub: Subscription;
-  assessmentTab: string;
-  assessmentTabSub: Subscription;
   showWelcomeScreen: boolean = false;
   smallScreenTab: string = 'form';
-  showExportModal: boolean = false;
-  showExportModalSub: Subscription;
+  showUpdateUnitsModal: boolean = false;
+
   constructor(private activatedRoute: ActivatedRoute,
     private assessmentDbService: AssessmentDbService, 
     private cd: ChangeDetectorRef, 
     private settingsDbService: SettingsDbService, 
-    private processCoolingService: ProcessCoolingService,
+    private processCoolingUiService: ProcessCoolingUiService,
+    private processCoolingAssessmentService: ProcessCoolingAssessmentService,
     private egridService: EGridService,
     // private defaultChillerDbService: DefaultChillerDbService, 
     private inventoryService: ChillerInventoryService,
     private assessmentService: AssessmentService,
-    private analyticsService: AnalyticsService) { }
+    private analyticsService: AnalyticsService) {
+
+    effect(() => {
+      const mainTab = this.mainTab();
+      const setupTab = this.setupTab();
+      this.setContainerHeight();
+    });
+
+    this.processCoolingAssessmentService.processCooling
+      .pipe(takeUntilDestroyed())
+      .subscribe(val => {
+        if (val && this.assessment) {
+          this.save(val);
+          this.disableNext();
+        }
+      });
+  }
 
   ngOnInit() {
+    this.mainTab = this.processCoolingUiService.mainTabSignal;
+    this.setupTab = this.processCoolingUiService.setupTabSignal;
+
+    this.isModalOpen = this.processCoolingUiService.modalOpenSignal;
+    this.showExportModal = this.processCoolingUiService.showExportModalSignal;
+
     this.analyticsService.sendEvent('view-process-cooling-assessment', undefined);
     this.egridService.getAllSubRegions();
+
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -74,64 +107,27 @@ export class ProcessCoolingComponent {
         this.addSettings(settings);
       } else {
         this.settings = settings;
-        this.processCoolingService.settings.next(settings);
+        this.processCoolingAssessmentService.settings.next(settings);
         // this.defaultChillerDbService.getAllCompressors(this.settings);
       }
-      this.processCoolingService.updateProcessCooling(this.assessment.processCooling, false);
+      this.processCoolingAssessmentService.updateProcessCooling(this.assessment.processCooling, false);
 
       if (!this.inventoryService.selectedChiller.getValue()) {
         this.inventoryService.setDefaultSelectedChiller(this.assessment.processCooling.inventory);
       }
     });
 
-    this.processCoolingSub = this.processCoolingService.processCooling.subscribe(val => {
-      if (val && this.assessment) {
-        this.save(val);
-        this.setDisableNext();
-      }
-    });
-
-    let tmpTab: ProcessCoolingMainTabString = this.assessmentService.getStartingTab() as ProcessCoolingMainTabString;
-    if (tmpTab) {
-      this.processCoolingService.mainTab.next(tmpTab);
+    let recentTab: ProcessCoolingMainTabString = this.assessmentService.getStartingTab() as ProcessCoolingMainTabString;
+    if (recentTab) {
+      this.mainTab.set(recentTab);
     }
-
-    this.mainTabSub = this.processCoolingService.mainTab.subscribe(val => {
-      this.mainTab = val;
-      this.setContainerHeight();
-    });
-
-    this.setupTabSub = this.processCoolingService.setupTab.subscribe(val => {
-      this.setupTab = val;
-      this.setDisableNext();
-      this.setContainerHeight();
-    });
-
-    this.modalOpenSub = this.processCoolingService.modalOpen.subscribe(val => {
-      this.isModalOpen = val;
-    });
-
-    // this.assessmentTabSub = this.processCoolingService.assessmentTab.subscribe(val => {
-    //   this.assessmentTab = val;
-    // });
-
-    this.showExportModalSub = this.processCoolingService.showExportModal.subscribe(val => {
-      this.showExportModal = val;
-    });
 
     this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {    
-    this.mainTabSub.unsubscribe();
-    this.setupTabSub.unsubscribe();
-    this.processCoolingSub.unsubscribe();
-    this.modalOpenSub.unsubscribe();
-    this.showExportModalSub.unsubscribe();
-    this.processCoolingService.mainTab.next('baseline');
-    this.processCoolingService.setupTab.next('assessment-settings');
-    // this.inventoryService.selectedChiller.next(undefined);
-    this.processCoolingService.processCooling.next(undefined);
+    this.mainTab.set('baseline');
+    this.processCoolingAssessmentService.processCooling.next(undefined);
     this.inventoryService.selectedChiller.next(undefined); 
   }
 
@@ -155,39 +151,39 @@ export class ProcessCoolingComponent {
       // this.assessment.processCooling = this.convertCompressedAirService.convertCompressedAir(this.assessment.processCooling, oldSettings, this.settings);
     }
     // this.defaultChillerDbService.getAllCompressors(this.settings);
-    this.processCoolingService.settings.next(this.settings);
+    this.processCoolingAssessmentService.settings.next(this.settings);
   }
 
-  setDisableNext() {
-    let processCooling: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
+  getDisableNext() {
+    let processCooling: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
     let hasValidInventory: boolean = true;
-    let hasValidSystemInformation: boolean = true
+    let hasValidSystemInformation: boolean = true;
 
-    if (this.setupTab == 'system-information' && !hasValidSystemInformation) {
-      this.disableNext = true;
-    } else if (this.setupTab != 'assessment-settings' && this.setupTab != 'system-information') {
-      this.disableNext = true;
+    if (this.setupTab() == 'system-information' && !hasValidSystemInformation) {
+      return true;
+    } else if (this.setupTab() != 'assessment-settings' && this.setupTab() != 'system-information') {
+      return true;
     } else {
-      this.disableNext = false;
+      return false;
     }
   }
 
   next() {
-    if (this.setupTab == 'assessment-settings') {
-      this.processCoolingService.setupTab.next('system-information');
-    } else if (this.setupTab == 'system-information') {
-      this.processCoolingService.setupTab.next('inventory');
-    } else if (this.setupTab == 'inventory') {
-      this.processCoolingService.mainTab.next('assessment');
+    if (this.setupTab() == 'assessment-settings') {
+      this.setupTab.set('system-information');
+    } else if (this.setupTab() == 'system-information') {
+      this.setupTab.set('inventory');
+    } else if (this.setupTab() == 'inventory') {
+      this.mainTab.set('assessment');
     }
   }
 
   back() {
-    if (this.setupTab == 'system-information') {
-      this.processCoolingService.setupTab.next('assessment-settings');
-    } else if (this.setupTab == 'inventory') {
-      this.processCoolingService.setupTab.next('system-information');
-    } 
+    if (this.setupTab() == 'system-information') {
+      this.setupTab.set('assessment-settings');
+    } else if (this.setupTab() == 'inventory') {
+      this.setupTab.set('system-information');
+    }
   }
 
   setContainerHeight() {
@@ -222,8 +218,8 @@ export class ProcessCoolingComponent {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.processCoolingService.mainTab.next('baseline');
-      this.processCoolingService.setupTab.next('assessment-settings');
+      this.mainTab.set('baseline');
+      this.setupTab.set('assessment-settings');
     }
     this.showUpdateUnitsModal = false;
     this.cd.detectChanges();
@@ -246,7 +242,7 @@ export class ProcessCoolingComponent {
   checkShowWelcomeScreen() {
     if (!this.settingsDbService.globalSettings.disableCompressedAirTutorial) {
       this.showWelcomeScreen = true;
-      this.processCoolingService.modalOpen.next(true);
+      this.isModalOpen.set(true);
     }
   }
 
@@ -256,7 +252,7 @@ export class ProcessCoolingComponent {
     let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
-    this.processCoolingService.modalOpen.next(false);
+    this.isModalOpen.set(false);
   }
 
   setSmallScreenTab(selectedTab: string) {
@@ -264,6 +260,6 @@ export class ProcessCoolingComponent {
   }
 
   closeExportModal(input: boolean){
-    this.processCoolingService.showExportModal.next(input);
+    this.showExportModal.set(input);
   }
 }

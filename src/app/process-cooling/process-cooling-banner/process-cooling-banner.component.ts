@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, WritableSignal } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
-import { Subscription } from 'rxjs';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
-import { ProcessCoolingMainTabString, ProcessCoolingService } from '../process-cooling.service';
+import { ProcessCoolingAssessmentService } from '../process-cooling-assessment.service';
+import { ProcessCoolingMainTabString, ProcessCoolingUiService } from '../process-cooling-ui.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-process-cooling-banner',
@@ -17,24 +18,24 @@ export class ProcessCoolingBannerComponent {
   assessment: Assessment;
 
   isBaselineValid: boolean = false;
-  mainTab: ProcessCoolingMainTabString;
-  mainTabSub: Subscription;
-  compresssedAirAssessmentSub: Subscription;
+  mainTab: WritableSignal<ProcessCoolingMainTabString>;
   bannerCollapsed: boolean = true;
-  constructor(private processCoolingService: ProcessCoolingService,
+  constructor(
+    private processCoolingService: ProcessCoolingAssessmentService,
+    private processCoolingUiService: ProcessCoolingUiService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
+    private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { 
+    this.processCoolingService.processCooling
+      .pipe(takeUntilDestroyed())
+      .subscribe(val => {
+        if (val) {
+          this.isBaselineValid = val.setupDone;
+        }
+      });
+    }
 
   ngOnInit(): void {
-    this.mainTabSub = this.processCoolingService.mainTab.subscribe(val => {
-      this.mainTab = val;
-    });
-
-    this.compresssedAirAssessmentSub = this.processCoolingService.processCooling.subscribe(val => {
-      if (val) {
-        this.isBaselineValid = val.setupDone;
-      }
-    });
+    this.mainTab = this.processCoolingUiService.mainTabSignal;
   }
 
   collapseBanner() {
@@ -43,24 +44,19 @@ export class ProcessCoolingBannerComponent {
   }
 
   back(){
-    if (this.mainTab == 'report') {
-      this.processCoolingService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.processCoolingService.mainTab.next('baseline');
+    if (this.mainTab() == 'report') {
+      this.mainTab.set('assessment');
+    } else if (this.mainTab() == 'assessment') {
+      this.mainTab.set('baseline');
     }
   }
 
   continue() {
-    if (this.mainTab == 'baseline') {
-      this.processCoolingService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.processCoolingService.mainTab.next('report');
+    if (this.mainTab() == 'baseline') {
+      this.mainTab.set('assessment');
+    } else if (this.mainTab() == 'assessment') {
+      this.mainTab.set('report');
     }
-  }
-
-  ngOnDestroy() {
-    this.mainTabSub.unsubscribe();
-    this.compresssedAirAssessmentSub.unsubscribe();
   }
 
   navigateHome() {
@@ -74,17 +70,17 @@ export class ProcessCoolingBannerComponent {
 
   changeTab(str: ProcessCoolingMainTabString) {
     if (str == 'baseline' || str == 'diagram' || this.isBaselineValid) {
-      this.processCoolingService.mainTab.next(str);
+      this.mainTab.set(str);
     }
     this.collapseBanner();
   }
 
   selectModification() {
-    this.processCoolingService.showModificationListModal.next(true);
+    this.processCoolingUiService.showModificationListModalSignal.set(true);
   }
   
   openExportModal(){
-    this.processCoolingService.showExportModal.next(true);
+    this.processCoolingUiService.showExportModalSignal.set(true);
   }
 
   emailAssessment() {

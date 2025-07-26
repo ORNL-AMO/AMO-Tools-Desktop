@@ -2,9 +2,10 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import _ from 'lodash';
 import { Subscription } from 'rxjs';
-import { ProcessCoolingService } from '../process-cooling.service';
 import { ChillerInventoryService } from './chiller-inventory.service';
 import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
+import { ProcessCoolingUiService } from '../process-cooling-ui.service';
+import { ProcessCoolingAssessmentService } from '../process-cooling-assessment.service';
 
 @Component({
   selector: 'app-chiller-inventory',
@@ -20,7 +21,9 @@ export class ChillerInventoryComponent {
   showChillerModal: boolean = false;
   hasValidChillers: boolean = true;
   selectedChiller: ChillerInventoryItem;
-  constructor(private processCoolingService: ProcessCoolingService,
+  constructor(
+    private processCoolingUiService: ProcessCoolingUiService,
+    private processCoolingAssessmentService: ProcessCoolingAssessmentService,
     private inventoryService: ChillerInventoryService, private cd: ChangeDetectorRef,
     // private compressedAirDataManagementService: CompressedAirDataManagementService
   ) { }
@@ -65,26 +68,26 @@ export class ChillerInventoryComponent {
   }
 
   addInventoryItem() {
-    let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
+    let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
     // todo 7607 eventually process inventory item, do sideffects
     // let result: { newInventoryItem: ChillerInventoryItem, processCoolingAssessment: ProcessCoolingAssessment } = this.inventoryService.AddChillerToAssessment(processCoolingAssessment);
     let newInventoryItem = this.inventoryService.getNewInventoryItem();
     processCoolingAssessment.inventory.push(newInventoryItem);
-    this.processCoolingService.updateProcessCooling(processCoolingAssessment, true);
+    this.processCoolingAssessmentService.updateProcessCooling(processCoolingAssessment, true);
     this.inventoryService.selectedChiller.next(newInventoryItem);
     this.hasInventoryItems = true;
   }
 
   save() {
     const updatedChiller: ChillerInventoryItem = this.inventoryService.getChillerFromForm(this.form, this.selectedChiller);
-    let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
+    let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
     processCoolingAssessment.inventory = processCoolingAssessment.inventory.map(item => {
       if (item.itemId === updatedChiller.itemId) {
         return { ...updatedChiller, modifiedDate: new Date() };
       }
       return item;
     });
-    this.processCoolingService.updateProcessCooling(processCoolingAssessment, true);
+    this.processCoolingAssessmentService.updateProcessCooling(processCoolingAssessment, true);
   }
 
   openChillerModal() {
@@ -98,6 +101,6 @@ export class ChillerInventoryComponent {
   }
 
   focusField(str: string) {
-    this.processCoolingService.focusedField.next(str);
+    this.processCoolingUiService.focusedFieldSignal.set(str);
   }
 }

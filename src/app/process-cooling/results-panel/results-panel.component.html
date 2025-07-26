@@ -4,18 +4,18 @@
             <div class="col-12">
                 <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
                     <div *ngIf="displayInventory"
-                        class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': panelTabSelect == 'inventory'}">
+                        class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': panelTabSelect() == 'inventory'}">
                         <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('inventory')">
                             <div>Inventory</div>
                         </a>
                     </div>
-                    <div *ngIf="mainTab == 'assessment'" 
-                        class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': panelTabSelect == 'results'}">
+                    <div *ngIf="mainTab() == 'assessment'" 
+                        class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': panelTabSelect() == 'results'}">
                         <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
                             <div>Results</div>
                         </a>
                     </div>
-                    <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': panelTabSelect == 'help'}">
+                    <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': panelTabSelect() == 'help'}">
                         <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
                             <div>Help</div>
                         </a>
@@ -25,12 +25,12 @@
         </div>
         <div class="row no-gutters">
             <div class="col-12 pr-2 pl-2 pb-4 mt-1">
-                <ng-container *ngIf="panelTabSelect == 'inventory'">
+                <ng-container *ngIf="panelTabSelect() == 'inventory'">
                     <app-inventory-table ></app-inventory-table>
                     <!-- results -->
                 </ng-container>
 
-                <app-help-panel *ngIf="panelTabSelect == 'help'">
+                <app-help-panel *ngIf="panelTabSelect() == 'help'">
                 </app-help-panel>
                 <!-- <app-results-table *ngIf="tabSelect == 'results'">
                 </app-results-table> -->

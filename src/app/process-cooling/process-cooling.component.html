@@ -3,33 +3,33 @@
     <app-process-cooling-banner [assessment]="assessment"></app-process-cooling-banner>
   </div>
 
-  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'baseline' && setupTab != 'system-profile'">
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab() == 'baseline' && setupTab() != 'system-profile'">
     <div class="nav-item" (click)="setSmallScreenTab('form')"
       [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
-      <a class="nav-link" *ngIf="setupTab == 'system-basics'">Assessment Basics</a>
-      <a class="nav-link" *ngIf="setupTab == 'system-information'">System Information</a>
-      <a class="nav-link" *ngIf="setupTab == 'inventory'">Inventory</a>
+      <a class="nav-link" *ngIf="setupTab() == 'system-basics'">Assessment Basics</a>
+      <a class="nav-link" *ngIf="setupTab() == 'system-information'">System Information</a>
+      <a class="nav-link" *ngIf="setupTab() == 'inventory'">Inventory</a>
     </div>
     <div class="nav-item" (click)="setSmallScreenTab('details')"
       [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
-      <a class="nav-link" *ngIf="setupTab != 'inventory' && setupTab != 'end-uses'">Help</a>
-      <a class="nav-link" *ngIf="setupTab == 'inventory' || setupTab == 'end-uses'">Details</a>
+      <a class="nav-link" *ngIf="setupTab() != 'inventory' && setupTab() != 'end-uses'">Help</a>
+      <a class="nav-link" *ngIf="setupTab() == 'inventory' || setupTab() == 'end-uses'">Details</a>
     </div>
   </div>
 
-  <div *ngIf="mainTab == 'baseline'" class="assessment-container tab-content">
-    <div class="assessment-panel-container lookup-form modification scroll-item" *ngIf="setupTab !='operating-schedule'"
+  <div *ngIf="mainTab() == 'baseline'" class="assessment-container tab-content">
+    <div class="assessment-panel-container lookup-form modification scroll-item" *ngIf="setupTab() !='operating-schedule'"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}"
       [ngStyle]="{'height.px': containerHeight}">
-      <app-system-basics *ngIf="setupTab == 'assessment-settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
+      <app-system-basics *ngIf="setupTab() == 'assessment-settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
         [assessment]="assessment"></app-system-basics>
-      <app-system-information *ngIf="setupTab == 'system-information'"></app-system-information>
-      <app-chiller-inventory *ngIf="setupTab == 'inventory'"></app-chiller-inventory>
+      <app-system-information *ngIf="setupTab() == 'system-information'"></app-system-information>
+      <app-chiller-inventory *ngIf="setupTab() == 'inventory'"></app-chiller-inventory>
     </div>
     <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
       <app-results-panel></app-results-panel>
     </div>
-    <!-- <div *ngIf="setupTab == 'system-profile'" class="w-100 scroll-item bg-white"
+    <!-- <div *ngIf="setupTab() == 'system-profile'" class="w-100 scroll-item bg-white"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
       [ngStyle]="{'height.px': containerHeight}">
       <app-profile-setup-form *ngIf="profileTab != 'annual-summary' && profileTab != 'compressor-summary'"></app-profile-setup-form>
@@ -55,7 +55,7 @@
   </div> -->
 
   <!--Report-->
-  <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
+  <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab() == 'report'">
       <app-process-cooling-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
       </app-process-cooling-report>
   </div>
@@ -63,14 +63,14 @@
 
 
   <!--footer-->
-  <div #footer id="processCoolingFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'baseline'">
+  <div #footer id="processCoolingFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab() == 'baseline'">
     <div class="pull-left">
-      <button class="btn btn-default" [disabled]="setupTab == 'system-basics'" (click)="back()">Back</button>
+      <button class="btn btn-default" [disabled]="setupTab() == 'system-basics'" (click)="back()">Back</button>
     </div>
     <div class="pull-right">
       <button class="btn btn-primary" [disabled]="disableNext" (click)="next()">
-        <span *ngIf="setupTab != 'end-uses'">Next</span>
-        <span *ngIf="setupTab == 'end-uses'">Go To Assessment</span>
+        <span *ngIf="setupTab() != 'end-uses'">Next</span>
+        <span *ngIf="setupTab() == 'end-uses'">Go To Assessment</span>
       </button>
     </div>
   </div>

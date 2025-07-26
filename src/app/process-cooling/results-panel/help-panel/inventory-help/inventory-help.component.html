@@ -7,7 +7,7 @@
     </h5>
     <hr class="my-1 hr-spacer">
 
-    <div class="my-2" *ngIf="focusedField == 'chiller-name'">
+    <div class="my-2" *ngIf="focusedField() == 'chiller-name'">
         <h6>
            Chiller Name
             <br>
@@ -18,7 +18,7 @@
         </h6>
     </div>
 
-    <div class="my-2" *ngIf="focusedField == 'chiller-description'">
+    <div class="my-2" *ngIf="focusedField() == 'chiller-description'">
         <h6>
             Description
             <br>

@@ -6,11 +6,9 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Directory } from '../../shared/models/directory';
 import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
-import { WaterAssessmentResultsService } from '../../water/water-assessment-results.service';
-import { WaterAssessmentService } from '../../water/water-assessment.service';
 import { Settings } from '../../shared/models/settings';
 import { ProcessCoolingReportService } from './process-cooling-report.service';
-import { ProcessCoolingService } from '../process-cooling.service';
+import { ProcessCoolingAssessmentService } from '../process-cooling-assessment.service';
 
 @Component({
   selector: 'app-process-cooling-report',
@@ -51,7 +49,7 @@ export class ProcessCoolingReportComponent {
     private printOptionsMenuService: PrintOptionsMenuService, 
     private directoryDbService: DirectoryDbService,
     private processCoolingReportService: ProcessCoolingReportService,
-    private processCoolingService: ProcessCoolingService) { }
+    private processCoolingAssessmentService: ProcessCoolingAssessmentService) { }
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -70,13 +68,13 @@ export class ProcessCoolingReportComponent {
         this.showPrintMenu = val;
       });
     } else {
-      this.processCoolingService.processCooling.next(this.assessment.processCooling);
-      this.processCoolingService.settings.next(this.settings);
+      this.processCoolingAssessmentService.processCooling.next(this.assessment.processCooling);
+      this.processCoolingAssessmentService.settings.next(this.settings);
     }
 
     if (this.quickReport) {
-      this.processCoolingService.processCooling.next(this.assessment.processCooling);
-      this.processCoolingService.settings.next(this.settings);
+      this.processCoolingAssessmentService.processCooling.next(this.assessment.processCooling);
+      this.processCoolingAssessmentService.settings.next(this.settings);
     }
 
     this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
