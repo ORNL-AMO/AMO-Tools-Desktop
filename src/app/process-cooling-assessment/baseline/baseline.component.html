@@ -1,0 +1,30 @@
+  
+<!-- <app-setup-tabs *ngIf="mainView() == 'baseline'"></app-setup-tabs> -->
+
+<div class="small-tab-select nav-pills nav-fill" #smallTabSelect
+    *ngIf="mainView() == 'baseline' && setupView() != 'load-profile'">
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+        [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+        <a class="nav-link" *ngFor="let link of SETUP_VIEW_LINKS"
+            [routerLink]="['/' + ROUTE_TOKENS.baseline, link.view]"
+            routerLinkActive="router-link-active">{{link.description}}</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+        [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+        <a class="nav-link" *ngIf="setupView() != 'inventory' && setupView() != 'end-uses'">Help</a>
+        <a class="nav-link" *ngIf="setupView() == 'inventory' || setupView() == 'end-uses'">Details</a>
+    </div>
+</div>
+
+<div class="assessment-container tab-content">
+    <div class="assessment-panel-container lookup-form modification scroll-item"
+        *ngIf="setupView() !='operating-schedule'"
+        [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}"
+        [ngStyle]="{'height.px': containerHeight}">
+        <router-outlet></router-outlet>
+    </div>
+    <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
+        [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+        <app-results-panel></app-results-panel>
+    </div>
+</div>

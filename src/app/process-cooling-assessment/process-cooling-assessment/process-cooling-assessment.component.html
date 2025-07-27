@@ -1,0 +1,35 @@
+<div #content class="process-cooling-container process-cooling d-flex flex-column">
+  <div #header class="w-100 hide-print sticky-top" id="processCoolingBanner">
+    <app-process-cooling-banner></app-process-cooling-banner>
+  </div>
+
+  <router-outlet></router-outlet>
+<!-- 
+  <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
+    [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+    <app-results-panel></app-results-panel>
+  </div>
+   -->
+  <div #footer id="processCoolingFooter" class="footer hide-print d-none d-lg-block">
+    <!-- <div #footer id="processCoolingFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainView() == 'baseline'"> -->
+    <div class="pull-left">
+      <button class="btn btn-default">Back</button>
+      <!-- <button class="btn btn-default" [disabled]="setupView() == 'system-basics'" (click)="back()">Back</button> -->
+    </div>
+    <div class="pull-right">
+      <!-- <button class="btn btn-primary" [disabled]="disableNext" (click)="next()">
+        <span *ngIf="setupView() != 'end-uses'">Next</span>
+        <span *ngIf="setupView() == 'end-uses'">Go To Assessment</span>
+      </button> -->
+    </div>
+  </div>
+
+</div>
+
+
+<!-- <app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()"
+  [assessmentType]="'process-cooling'" (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings">
+</app-update-units-modal> -->
+
+<!-- <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen> -->
+<!-- <app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal> -->
