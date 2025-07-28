@@ -3,8 +3,8 @@ import { Component, } from '@angular/core';
 import { AppDefaultNotification, SnackbarMessage, SnackbarService } from './snackbar.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { LocalStorageService } from 'ngx-webstorage';
 import { DISABLED__DEFAULT_NOTIFICATIONS_KEY } from '../models/app';
+import { LocalStorageService } from '../local-storage.service';
 
 const snackbarHiddenStyle = { bottom: '-300px', pointerEvents: 'none' };
 const snackbarVisibleStyle = { bottom: '25px', pointerEvents: 'auto' };
@@ -23,61 +23,72 @@ const snackbarVisibleStyle = { bottom: '25px', pointerEvents: 'auto' };
     standalone: false
 })
 export class SnackbarNotificationComponent {
-  snackbarMessageSub: Subscription;
-  snackbarState: string = 'hide';
-  snackbarMessage: SnackbarMessage;
-  dismissTimeRemaining: number;
+    snackbarMessageSub: Subscription;
+    snackbarState: string = 'hide';
+    snackbarMessage: SnackbarMessage;
+    dismissTimeRemaining: number;
 
-  disabledDefaultNotifications: Array<AppDefaultNotification> = [];
-  constructor(private snackbarService: SnackbarService, 
-    private router: Router, 
-    private localStorageService: LocalStorageService) { }
+    disabledDefaultNotifications: Array<AppDefaultNotification> = [];
+    constructor(private snackbarService: SnackbarService,
+        private router: Router,
+        private localStorageService: LocalStorageService) { }
 
-  ngOnInit() {
-    this.snackbarMessageSub = this.snackbarService.snackbarMessage.subscribe(message => {
-      this.snackbarMessage = message;
-      this.disabledDefaultNotifications = this.localStorageService.retrieve(DISABLED__DEFAULT_NOTIFICATIONS_KEY) || [];
-      let isMessageDisabled = this.disabledDefaultNotifications.includes(this.snackbarMessage?.appDefaultNotification);
-      if (this.snackbarMessage && !isMessageDisabled) {
-        this.showSnackbar();
-      } else if (this.snackbarState === 'show') {
-        this.closeSnackbar();
-      }
-    });
-  }
+    ngOnInit() {
+        this.snackbarMessageSub = this.snackbarService.snackbarMessage.subscribe(message => {
+            this.snackbarMessage = message;
+            try {
+                this.disabledDefaultNotifications = this.localStorageService.retrieve(DISABLED__DEFAULT_NOTIFICATIONS_KEY) || [];
+            } catch (e) {
+                console.error('Error retrieving disabled notifications', e);
+                this.disabledDefaultNotifications = [];
+            }
 
-  navigateToLink(link: { label: string, uri: string }) {
-      this.router.navigateByUrl(link.uri);
-  }
-
-  disableDefaultNotification() {
-    if (!this.disabledDefaultNotifications.includes(this.snackbarMessage.appDefaultNotification)) {
-      this.disabledDefaultNotifications.push(this.snackbarMessage.appDefaultNotification);
+            let isMessageDisabled = this.disabledDefaultNotifications.includes(this.snackbarMessage?.appDefaultNotification);
+            if (this.snackbarMessage && !isMessageDisabled) {
+                this.showSnackbar();
+            } else if (this.snackbarState === 'show') {
+                this.closeSnackbar();
+            }
+        });
     }
-    this.localStorageService.store(DISABLED__DEFAULT_NOTIFICATIONS_KEY, this.disabledDefaultNotifications);
-    this.closeSnackbar();
-  }
 
-  ngOnDestroy() {
-    this.snackbarState = 'hide';
-    this.snackbarService.snackbarMessage.next(undefined);
-    this.snackbarMessageSub.unsubscribe();
-  }
-
-  showSnackbar() {
-    this.snackbarState = 'show';
-    if (this.snackbarMessage.timeoutMS) {
-      setTimeout(() => {
-        this.closeSnackbar();
-      }, this.snackbarMessage.timeoutMS);
+    navigateToLink(link: { label: string, uri: string }) {
+        this.router.navigateByUrl(link.uri);
     }
-    
-  }
 
-  closeSnackbar() {
-    this.snackbarState = 'hide';
-    setTimeout(() => {
-      this.snackbarService.snackbarMessage.next(undefined);
-    }, 500);
-  }
+    disableDefaultNotification() {
+        if (!this.disabledDefaultNotifications.includes(this.snackbarMessage.appDefaultNotification)) {
+            this.disabledDefaultNotifications.push(this.snackbarMessage.appDefaultNotification);
+        }
+
+        try {
+            this.localStorageService.store(DISABLED__DEFAULT_NOTIFICATIONS_KEY, this.disabledDefaultNotifications);
+        } catch (e) {
+            console.error('Error storing disabled notifications', e);
+        }
+        this.closeSnackbar();
+    }
+
+    ngOnDestroy() {
+        this.snackbarState = 'hide';
+        this.snackbarService.snackbarMessage.next(undefined);
+        this.snackbarMessageSub.unsubscribe();
+    }
+
+    showSnackbar() {
+        this.snackbarState = 'show';
+        if (this.snackbarMessage.timeoutMS) {
+            setTimeout(() => {
+                this.closeSnackbar();
+            }, this.snackbarMessage.timeoutMS);
+        }
+
+    }
+
+    closeSnackbar() {
+        this.snackbarState = 'hide';
+        setTimeout(() => {
+            this.snackbarService.snackbarMessage.next(undefined);
+        }, 500);
+    }
 }

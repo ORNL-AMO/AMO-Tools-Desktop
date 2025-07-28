@@ -23,7 +23,6 @@ export class SnackbarService {
       snackbar.msg = messageOrDefault;
     }
 
-
     this.snackbarMessage.next(snackbar)
   }
 }
@@ -43,11 +42,15 @@ const DismissTimeoutsMS = {
   long: 10000
 }
 
+export const CORE_DATA_WARNING = `<b class="bold title">MEASUR has detected browser storage restrictions that disable core functionality.</b></br>To use MEASUR, follow browser instructions to enable data storage for this site. DOE and MEASUR support staff <b>do not</b> have access to your data.`;
+export const SECONDARY_DATA_WARNING =  `<b class="bold title">Non-essential storage options have been disabled for this browser</b>.<br>Core MEASUR functionality will continue, but some features may be limited or unavailable.`;
+
 const MEASURDefaultNotifications: Record<AppDefaultNotification, string> = {
   exploreOpportunities: `<b class="bold title">Explore Opportunities</b>: The selected modification was created using the expert view. 
   There may be changes to the modification that are not visible from this screen.`,
-  appDataStorageNotice: `<b class="bold title">You are running MEASUR in a web browser</b>. <br>Disabling browser local storage, cookies, or cache for this website can result in data loss. DOE and MEASUR support staff do not have access to your data. 
-  `
+  appDataStorageNotice: `<b class="bold title">MEASUR data are stored in this browser on your local machine</b>. 
+  <br>Performing operations that delete browsing data for this website can result in data loss. 
+  DOE and MEASUR support staff do not have access to your data.`
 }
 
 export type AppDefaultNotification = 'exploreOpportunities' | 'appDataStorageNotice';
