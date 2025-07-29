@@ -4,12 +4,11 @@ import {
     type Node,
     Edge,
 } from '@xyflow/react';
-import { Box, Button, Divider, Tab, Tabs, TextField, Typography } from "@mui/material";
+import { Box, Button, Tab, Tabs, TextField } from "@mui/material";
 import ComponentDataForm from "../Forms/ComponentDataForm";
 import ComponentHandles from "./ComponentHandles";
 import CustomizeNode from "./CustomizeNode";
 import TabPanel from "./TabPanel";
-import DrawerToggleButton from "./DrawerToggleButton";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { deleteNode, setNodeName } from "../Diagram/diagramReducer";
 import InSystemTreatmentForm from "../Forms/InSystemTreatmentForm";
@@ -18,19 +17,19 @@ import { ProcessFlowPart } from 'process-flow-lib';
 const ManageComponent = (props: ManageComponentProps) => {
     const dispatch = useAppDispatch();
     const { selectedNode } = props;
+    const componentTabs = useAppSelector(state => state.diagram.manageDataTabs);
     const isWaterUsingSystem = props.selectedNode.type === 'waterUsingSystem';
-    // todo 7593 move tabs to redux and control on selectedId change
-    const validTabs = isWaterUsingSystem ? [0, 1, 2] : [0, 1];
     const [selectedTab, setSelectedTab] = useState(0);
     const [name, setName] = useState<string>(selectedNode.data.name);
     const debounceRef = useRef(null);
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
         setSelectedTab(newValue);
     };
-
+    
+    const validSelectedTab = componentTabs.map((tab, index) => index).includes(selectedTab)
     useEffect(() => {
         setName(selectedNode.data.name);
-        if (!validTabs.includes(selectedTab)) {
+        if (!validSelectedTab) {
             setSelectedTab(0);
         }
     }, [selectedNode]);
@@ -63,7 +62,7 @@ const ManageComponent = (props: ManageComponentProps) => {
                 />
             </Box>
 
-            {validTabs.includes(selectedTab) &&
+            {validSelectedTab &&
 
                 <Box sx={{
                     width: '100%',
@@ -75,11 +74,9 @@ const ManageComponent = (props: ManageComponentProps) => {
                 }}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
                         <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
-                            <Tab sx={{ fontSize: '.75rem' }} label="Flows" />
-                            {isWaterUsingSystem &&
-                                <Tab sx={{ fontSize: '.75rem' }} label="Treatment" />
-                            }
-                            <Tab sx={{ fontSize: '.75rem' }} label="Manage" />
+                            {componentTabs.map((tab, index) => (
+                                <Tab key={index + tab.label} sx={{ fontSize: '.75rem' }} label={tab.label} />
+                            ))}
                         </Tabs>
                     </Box>
 

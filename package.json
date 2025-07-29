@@ -62,6 +62,7 @@
     "font-awesome": "^4.7.0",
     "fs-jetpack": "^5.1.0",
     "ngx-indexed-db": "^16.0.0",
+    "ngx-webstorage": "^19.0.1",
     "pako": "^2.1.0",
     "pptxgenjs": "^3.10.0",
     "process-flow-diagram-component": "file:process-flow-diagram-component",

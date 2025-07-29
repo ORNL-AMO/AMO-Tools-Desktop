@@ -8,11 +8,13 @@ import { EdgeTypes, NodeTypes } from "@xyflow/react";
 import KnownLossNode from "../Nodes/KnownLossNode";
 import SummingNode from "../Nodes/SummingNode";
 import React from "react";
+import IntakeSourceNode from "../Nodes/IntakeSourceNode";
+import DischargeOutletNode from "../Nodes/DischargeOutletNode";
 
 export const nodeTypes: NodeTypes = {
-  waterIntake: ProcessFlowComponentNode,
+  waterIntake: IntakeSourceNode,
   waterUsingSystem: ProcessFlowComponentNode,
-  waterDischarge: ProcessFlowComponentNode,
+  waterDischarge: DischargeOutletNode,
   waterTreatment: ProcessFlowComponentNode,
   wasteWaterTreatment: ProcessFlowComponentNode,
   summingNode: SummingNode,

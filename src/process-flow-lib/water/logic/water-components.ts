@@ -146,6 +146,59 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
   }
 ];
 
+export interface ManageDataTab {
+  label: string;
+  index: number;
+}
+
+const defaultTabs: ManageDataTab[] = [
+  {
+    label: 'Flows',
+    index: 0
+  },
+  {
+    label: 'Manage',
+    index: 1
+  },
+]
+
+export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDataTab[]> = {
+  "water-intake": [
+    {
+      label: 'Flows',
+      index: 0
+    },
+  ],
+  "water-discharge": [
+    {
+      label: 'Flows',
+      index: 0
+    },
+  ],
+  "water-using-system":
+    [
+      {
+        label: 'Flows',
+        index: 0
+      },
+      {
+        label: 'Treatment',
+        index: 1
+      },
+      {
+        label: 'Manage',
+        index: 2
+      }
+    ],
+  "summing-node": defaultTabs,
+  "water-treatment": defaultTabs,
+  "waste-water-treatment": defaultTabs,
+  "known-loss": defaultTabs
+};
+
+
+
+
 
 export const getComponentNameFromType = (componentType) => {
   let component = processFlowDiagramParts.find(part => part.processComponentType === componentType);
@@ -259,7 +312,7 @@ export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): Wa
       dischargeWater: waterProcessComponent.userDiagramFlowOverrides?.dischargeWater,
       knownLosses: waterProcessComponent.userDiagramFlowOverrides?.knownLosses,
       waterInProduct: waterProcessComponent.userDiagramFlowOverrides?.waterInProduct,
-    }, 
+    },
     processUse: {
       waterRequiredMetric: 0,
       waterRequiredMetricValue: undefined,

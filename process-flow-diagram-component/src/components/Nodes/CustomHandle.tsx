@@ -45,7 +45,7 @@ const CustomHandle = (props: HandleProps) => {
     let { className, collapsedStyle } = props;
 
     let style: CSSProperties = {};
-    if (!className) {
+    
     switch (position) {
         case Position.Left:
             style = mainTargetHandleStyle;
@@ -64,10 +64,13 @@ const CustomHandle = (props: HandleProps) => {
             break;
       }
 
-        className = 'custom-handle source-handle'
-        if (type === 'target') {
+      if (!className) {
+        if (type === 'source') {
+          className = 'custom-handle source-handle'
+        } else if (type === 'target') {
           className = 'custom-handle target-handle';
         }
+      }
 
         if (collapsedStyle) {
           style = {
@@ -78,7 +81,6 @@ const CustomHandle = (props: HandleProps) => {
             visibility: collapsedStyle.visibility,
           }
         }
-    }
 
 
   return (
