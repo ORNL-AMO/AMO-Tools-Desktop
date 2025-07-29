@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import { BehaviorSubject, Observable, from } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 @Injectable({
@@ -7,22 +7,24 @@ import { map, tap } from 'rxjs/operators';
 })
 export class BrowserStorageService {
 
-  // browserStorageAvailable: BehaviorSubject<BrowserStorageAvailable>;
-  constructor() { }
+  browserStorageAvailable: BehaviorSubject<BrowserStorageAvailable>;
+  constructor() {
+    this.browserStorageAvailable = new BehaviorSubject<BrowserStorageAvailable>(undefined);
+  }
 
 
   detectAppStorageOptions(): Observable<BrowserStorageAvailable> {
-  return from(this.isIndexedDBAvailable()).pipe(
-    map(indexedDB => ({
-      localStorage: this.isLocalStorageAvailable(),
-      indexedDB,
-      cookies: {
-        navigatorEnabled: navigator.cookieEnabled,
-        successfulWrite: this.canWriteCookie()
-      }
-    }))
-  );
-}
+    return from(this.isIndexedDBAvailable()).pipe(
+      map(indexedDBResult => ({
+        localStorage: this.isLocalStorageAvailable(),
+        indexedDB: indexedDBResult,
+        cookies: {
+          navigatorEnabled: navigator.cookieEnabled,
+          successfulWrite: this.canWriteCookie()
+        }
+      }))
+    );
+  }
 
   isLocalStorageAvailable() {
     try {
@@ -34,58 +36,59 @@ export class BrowserStorageService {
       return false;
     }
   }
-  
-  isIndexedDBAvailable(): Promise<boolean> {
-  return new Promise((resolve) => {
-    if (!window.indexedDB) {
-      resolve(false);
-      return;
-    }
 
-    let dbOperationsResolved = false;
+  isIndexedDBAvailable(): Promise<{ success: boolean; failType: string }> {
+    return new Promise((resolve) => {
+      if (!window.indexedDB) {
+        resolve({ success: false, failType: 'not_supported' });
+        return;
+      }
 
-    try {
-      const request = indexedDB.open('__test_db__', 1);
+      let dbOperationsResolved = false;
 
-      request.onerror = () => {
-        dbOperationsResolved = true;
-        resolve(false);
-      };
+      try {
+        const request = indexedDB.open('__test_db__', 1);
 
-      request.onblocked = () => {
-        dbOperationsResolved = true;
-        resolve(false);
-      };
+        request.onerror = () => {
+          dbOperationsResolved = true;
+          resolve({ success: false, failType: 'open_error' });
+        };
 
-      request.onsuccess = () => {
-        dbOperationsResolved = true;
-        try {
-          const db = request.result;
-          db.close();
-          const deleteRequest = indexedDB.deleteDatabase('__test_db__');
-          deleteRequest.onsuccess = () => resolve(true);
-          deleteRequest.onerror = () => resolve(true); 
-        } catch (e) {
-          resolve(false);
-        }
-      };
+        request.onblocked = () => {
+          dbOperationsResolved = true;
+          resolve({ success: false, failType: 'blocked' });
+        };
 
-      // * Firefox/SAfari may not throw exception on open, nor execute callbacks immediately
-      setTimeout(() => {
-        if (!dbOperationsResolved) {
-          const userAgent = navigator.userAgent;
-          const isFirefox = userAgent.includes('Firefox');
-          if (isFirefox) {
-            console.log('Firefox detected, IndexedDB fail');
-            resolve(false);
+        request.onsuccess = () => {
+          dbOperationsResolved = true;
+          try {
+            const db = request.result;
+            db.close();
+            const deleteRequest = indexedDB.deleteDatabase('__test_db__');
+            deleteRequest.onsuccess = () => resolve({ success: true, failType: '' });
+            deleteRequest.onerror = () => resolve({ success: true, failType: '' });
+          } catch (e) {
+            resolve({ success: false, failType: 'close_or_delete_error' });
           }
-        }
-      }, 1000);
-    } catch (e) {
-      resolve(false);
-    }
-  });
-}
+        };
+
+        // * Firefox/Safari may not throw exception on open, nor execute callbacks immediately
+        setTimeout(() => {
+          if (!dbOperationsResolved) {
+            const userAgent = navigator.userAgent;
+            const isFirefox = userAgent.includes('Firefox');
+            if (isFirefox) {
+              resolve({ success: false, failType: 'firefox_timeout' });
+            } else {
+              resolve({ success: false, failType: 'timeout' });
+            }
+          }
+        }, 1000);
+      } catch (e) {
+        resolve({ success: false, failType: 'exception' });
+      }
+    });
+  }
 
   // * navigatorEnabled not well documented or reliable, so test writes also
   canWriteCookie() {
@@ -113,7 +116,10 @@ export class BrowserStorageService {
 
 export interface BrowserStorageAvailable {
   localStorage: boolean;
-  indexedDB: boolean;
+  indexedDB: {
+    success: boolean;
+    failType: string;
+  };
   cookies: {
     navigatorEnabled: boolean;
     successfulWrite: boolean;

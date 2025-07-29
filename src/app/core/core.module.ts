@@ -54,6 +54,7 @@ import { ShareDataModalModule } from '../shared/share-data-modal/share-data-moda
     NotFoundComponent
   ],
   imports: [
+    IndexedDbModule,
     CommonModule,
     RouterModule,
     PsatModule,
@@ -80,7 +81,6 @@ import { ShareDataModalModule } from '../shared/share-data-modal/share-data-moda
     ToolsSuiteApiModule,
     CompressedAirAssessmentModule,
     PlotlyViaWindowModule,
-    IndexedDbModule,
     SecurityAndPrivacyModule,
     AnalyticsModule,
     EmailMeasurDataModule,

@@ -10,7 +10,9 @@ import { MeasurErrorHandler } from './shared/errors/MeasurErrorHandler';
 import { MeasurAppError } from './shared/errors/errors';
 import { AppErrorModule } from './shared/errors/app-error.module';
 import { ElectronService } from './electron/electron.service';
-import {provideNgxWebstorage, withLocalStorage, withNgxWebstorageConfig, withSessionStorage} from 'ngx-webstorage';
+import { BrowserStorageAvailable, BrowserStorageService } from './shared/browser-storage.service';
+import { CORE_DATA_WARNING } from './shared/snackbar-notification/snackbar.service';
+import { filter, take } from 'rxjs/operators';
 
 @NgModule({
   declarations: [
@@ -30,18 +32,12 @@ import {provideNgxWebstorage, withLocalStorage, withNgxWebstorageConfig, withSes
   providers: [
     { provide: ErrorHandler, useClass: MeasurErrorHandler },
     provideAppInitializer(() => {
-      const initializerFn = (initializeAppFactory)(inject(ElectronService), inject(SwUpdate));
+      const initializerFn = (initializeAppFactory)(inject(ElectronService), inject(SwUpdate), inject(BrowserStorageService));
       return initializerFn();
     }),
-    // provideNgxWebstorage()
-    provideNgxWebstorage(
-		withNgxWebstorageConfig({ separator: ':', caseSensitive: true }),
-		withLocalStorage(),
-		withSessionStorage()
-	)
   ],
 })
-export class AppModule {}
+export class AppModule { }
 
 
 export function loadScriptFromPath(id: string, url: string): Promise<void> {
@@ -67,59 +63,22 @@ export function loadScriptFromPath(id: string, url: string): Promise<void> {
 
 
 
-export function initializeAppFactory(electronService: ElectronService, serviceWorkerUpdates: SwUpdate) {
+export function initializeAppFactory(
+  electronService: ElectronService,
+  serviceWorkerUpdates: SwUpdate,
+  browserStorageService: BrowserStorageService
+) {
   console.log('MEASUR version', environment.version);
   console.time('initializeAppFactory');
-  
+
   return async () => {
     const MAX_RELOAD_TRIES = 2;
     const RELOAD_TRIES = 'measur_reload_tries';
     const RELOAD_REASON = 'measur_reload_reason';
     const LOAD_ERROR = 'measur_loading_error';
 
-    // * Use for debugging
-    // * prevent infinite reloads
-    // function checkReloadApp(reason: string, err?: any) {
-    //   console.log('--- checkReloadApp');
-    //   const reloads = Number(sessionStorage.getItem(RELOAD_TRIES) || '0');
-    //   console.log('--- reload tries', reloads);
-
-    //   if (reloads < MAX_RELOAD_TRIES) {
-    //     console.log('--- reloading app, setting tries to', reloads + 1);
-    //     sessionStorage.setItem(RELOAD_TRIES, (reloads + 1).toString());
-    //     sessionStorage.setItem(`${RELOAD_REASON}_${reloads + 1}`, reason);
-    //     if (err) {
-    //       sessionStorage.setItem(`${LOAD_ERROR}_${reloads + 1}`, err.toString());
-    //     }
-    //     window.location.reload();
-    //   }
-    // }
-
-    // * Use for debugging
-    // * Turned off due to reload here may be problematic during version change. Currently causing mismatched state/assets
-    // async function checkWebUpdate(): Promise<void> {
-    //   return Promise.resolve();
-    //   return serviceWorkerUpdates.checkForUpdate()
-    //     .then(updateFound => {
-    //       if (updateFound) {
-    //         console.log('SW Updates found, reloading');
-    //         console.log('--- reloading app after SW update found');
-    //         checkReloadApp('sw update'); 
-    //       } else {
-    //         console.log('NO SW Updates found, continue to load script');
-    //       }
-    //       return Promise.resolve();
-    //     })
-    //     .catch(err => {
-    //       console.error('Error checking for SW update', err);
-    //       checkReloadApp('err checking for sw update', err); 
-    //       return Promise.resolve();
-    //     });
-    // }
-
     function initializeWASMScript() {
       return new Promise((resolve, reject) => {
-        // * No changes
         // Prepare global objects 
         console.log('=== Initializing MEASUR Tools Suite module ===');
         window['dbInstance'] = undefined;
@@ -132,7 +91,6 @@ export function initializeAppFactory(electronService: ElectronService, serviceWo
           },
           onAbort: function (err) {
             new MeasurAppError('Error occurred in MEASUR Tools Suite', undefined);
-            // checkReloadApp('error tools suite onabort', err); 
           }
         };
 
@@ -144,10 +102,46 @@ export function initializeAppFactory(electronService: ElectronService, serviceWo
           })
           .catch(err => {
             reject(new MeasurAppError('Unable to load MEASUR Tools Suite', err));
-            // checkReloadApp('unable to load tools suite clientjs', err);
           });
       });
     }
+
+    browserStorageService.detectAppStorageOptions().pipe(
+      filter((val: BrowserStorageAvailable) => val !== undefined),
+      take(1)
+    ).subscribe((browserStorageOptions: BrowserStorageAvailable) => {
+      browserStorageService.browserStorageAvailable.next(browserStorageOptions);
+
+      if (browserStorageOptions.indexedDB.success === false && browserStorageOptions.indexedDB.failType === 'exception') {
+        // * Display message - Browser is likely firefox or safari. app module imports will fail, snackbar warning will not load (unlike chrome or edge)
+        const warningDiv = document.createElement('div');
+        warningDiv.id = 'core-support-warning';
+        warningDiv.style.cssText = `
+          background: #ffcccc;
+          color: #900;
+          padding: 2em 1em 1.5em 1em;
+          font-family: sans-serif;
+          text-align: center;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          max-width: 90vw;
+          width: 75%;
+          border-radius: 12px;
+          z-index: 9999;
+        `;
+        warningDiv.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:center;margin-bottom:0.75em;">
+            <img src='assets/images/app-icon.png' alt='MEASUR Icon' style='height:2.2em;width:2.2em;margin-right:0.7em;vertical-align:middle;'/>
+            <h2 style="margin:0;font-size:1.5em;color:#900;display:inline-block;vertical-align:middle;">MEASUR Error</h2>
+          </div>
+          <div>${CORE_DATA_WARNING}</div>
+        `;
+        document.body.appendChild(warningDiv);
+      }
+    });
+
 
     if ((!electronService.isElectron && serviceWorkerUpdates.isEnabled)) {
       console.log('=== Initialize for production web');
@@ -155,18 +149,5 @@ export function initializeAppFactory(electronService: ElectronService, serviceWo
       console.log('=== Initialize for electron or dev web');
     }
     return initializeWASMScript();
-
-    // * Use for debugging
-    // * Turned off due to reload here may be problematic during version change. Currently causing mismatched state/assets
-    // if ((!electronService.isElectron && serviceWorkerUpdates.isEnabled)) {
-    //   console.log('=== Initialize for production web');
-    //   return checkWebUpdate().then(() => {
-    //     console.log('=== Web update checked')
-    //     return initializeWASMScript();
-    //   });
-    // } else {
-    //   console.log('=== Initialize for electron or dev web');
-    //   return initializeWASMScript();
-    // }
   }
 }
