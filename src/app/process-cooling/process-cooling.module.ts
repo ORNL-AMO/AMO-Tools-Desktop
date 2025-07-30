@@ -33,6 +33,14 @@ import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-bas
 import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
 import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe';
 import { ChillerSchedulingService } from './chiller-scheduling.service';
+import { SystemInformationComponent } from './system-information/system-information.component';
+import { OperationsComponent } from './system-information/operations/operations.component';
+import { SystemInformationFormService } from './system-information/system-information-form.service';
+import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
+import { FormControlRequiredComponent } from '../shared/form-control-required.component';
+import { InputUnitComponent } from '../shared/input-unit.component';
+import { OperatingHoursModalComponent } from '../shared/operating-hours-modal/operating-hours-modal.component';
+import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 
 
 @NgModule({
@@ -48,7 +56,9 @@ import { ChillerSchedulingService } from './chiller-scheduling.service';
     InventoryTableComponent,
     SystemBasicsHelpComponent,
     InventoryHelpComponent,
+    SystemInformationComponent,
     SystemInformationHelpComponent,
+    OperationsComponent,
     ChillerCompressorTypePipe
   ],
   imports: [
@@ -68,6 +78,10 @@ import { ChillerSchedulingService } from './chiller-scheduling.service';
     Co2HelpTextModule,
     ImportExportModule,
     PercentGraphModule,
+    FormControlErrorsComponent,
+    FormControlRequiredComponent,
+    InputUnitComponent,
+    OperatingHoursModalModule
   ],
   providers: [
     ProcessCoolingService,
@@ -75,7 +89,8 @@ import { ChillerSchedulingService } from './chiller-scheduling.service';
     ConvertProcessCoolingService,
     ProcessCoolingReportService,
     ChillerInventoryService,
-    ChillerSchedulingService
+    ChillerSchedulingService,
+    SystemInformationFormService
   ]
 })
 export class ProcessCoolingModule { }

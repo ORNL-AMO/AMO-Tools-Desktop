@@ -125,6 +125,7 @@ export class CreateAssessmentModalComponent {
   }
 
   async createAssessment() {
+    // todo should we be using settings to get co2savingsData for these assessments?
     if (this.newAssessmentForm.valid) {
       this.assessmentService.startingTab = 'baseline';
       if (this.newAssessmentForm.controls.assessmentType.value === 'Pump') {

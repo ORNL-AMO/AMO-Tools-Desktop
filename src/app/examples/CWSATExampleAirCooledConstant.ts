@@ -16,21 +16,13 @@ export const EXAMPLE_CO2_SAVINGS_DATA = {
 };
 export const EXAMPLE_SYSTEM_BASICS = {
   utilityType: 'electric',
-  electricityCost: 0.06,
-  fuelCost: 6,
-  location: 1,
-  numberOfChillers: 3,
-  waterSupplyTemperature: 44,
-  // condenserCoolingMethod: 'water' as CoolingMethodString,
-  // water == 0, air == 1
-  condenserCoolingMethod: 1,
   notes: ''
 };
 
 export const EXAMPLE_SYSTEM_INFORMATION_OPERATIONS = {
   annualOperatingHours: 8760,
-  numberOfChillers: 3,
-  // TODO ST Louis
+  electricityCost: 0.06,
+  fuelCost: 6,
   geographicLocation: 1,
   chilledWaterSupplyTemp: 44,
   // water == 0, air == 1

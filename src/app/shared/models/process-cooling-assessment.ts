@@ -40,17 +40,12 @@ export interface ProcessCoolingAssessment {
 
 export interface ProcessCoolingSystemBasics {
     utilityType: string,
-    electricityCost: number,
-    fuelCost: number,
-    location: number,
-    numberOfChillers: number,
-    waterSupplyTemperature: number,
-    condenserCoolingMethod: number,
     notes: string
 }
 
 export interface SystemInformation {
     operations: Operations;
+    co2SavingsData: Co2SavingsData;
     airCooledSystemInput: AirCooledSystemInput;
     waterCooledSystemInput: WaterCooledSystemInput;
     pumpInput: PumpInput;
@@ -59,11 +54,11 @@ export interface SystemInformation {
 
 export interface Operations {
     annualOperatingHours: number;
-    numberOfChillers: number;
+    fuelCost: number;
+    electricityCost: number;
     geographicLocation: number;
     chilledWaterSupplyTemp: number;
     condenserCoolingMethod: number;
-    co2SavingsData: Co2SavingsData;
 }
 
 // ? comment == is in different form section of origin UI

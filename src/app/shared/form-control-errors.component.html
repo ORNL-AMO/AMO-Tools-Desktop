@@ -1,0 +1,7 @@
+@if (showError) {
+  <span class="alert-danger pull-right small">
+    @for (msg of errorMessages; track $index) {
+      <span>{{ msg }}</span>
+    }
+  </span>
+}
