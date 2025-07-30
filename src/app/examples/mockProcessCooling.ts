@@ -27,7 +27,8 @@ export const MockProcessCoolingAssessment: Assessment = {
         setupDone: true,
         systemBasics: { ...EXAMPLE_SYSTEM_BASICS },
         systemInformation: {
-            operations: { ...EXAMPLE_SYSTEM_INFORMATION_OPERATIONS, co2SavingsData: EXAMPLE_CO2_SAVINGS_DATA },
+            co2SavingsData: {...EXAMPLE_CO2_SAVINGS_DATA},
+            operations: { ...EXAMPLE_SYSTEM_INFORMATION_OPERATIONS },
             airCooledSystemInput: { ...EXAMPLE_AIR_COOLED_SYSTEM_INPUT },
             waterCooledSystemInput: { ...EXAMPLE_WATER_COOLED_SYSTEM_INPUT },
             pumpInput: { ...EXAMPLE_PUMP_INPUT },

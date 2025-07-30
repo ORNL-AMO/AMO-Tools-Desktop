@@ -6,7 +6,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SettingsService } from '../../settings/settings.service';
 import { Assessment } from '../../shared/models/assessment';
 import { SystemBasicsFormService } from './system-basics-form.service';
-import { ProcessCoolingAssessment, ProcessCoolingSystemBasics } from '../../shared/models/process-cooling-assessment';
+import { ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { ConvertProcessCoolingService } from '../convert-process-cooling.service';
 import { ProcessCoolingService } from '../process-cooling.service';
 import { Settings } from '../../shared/models/settings';
@@ -39,7 +39,7 @@ export class SystemBasicsComponent {
 
   ngOnInit() {
     let processCooling: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
-    this.systemBasicsForm = this.systemBasicsFormService.getFormFromObj(processCooling.systemBasics);
+    // this.systemBasicsForm = this.systemBasicsFormService.getFormFromObj(processCooling.systemBasics);
     let settings: Settings = this.processCoolingService.settings.getValue();
     this.settingsForm = this.settingsService.getFormFromSettings(settings);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
@@ -56,12 +56,13 @@ export class SystemBasicsComponent {
     }
   }
 
-  saveSystemBasics() {
-    let processCooling: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
-    let systemBasics: ProcessCoolingSystemBasics = this.systemBasicsFormService.getObjFromForm(this.systemBasicsForm);
-    processCooling.systemBasics = systemBasics;
-    this.processCoolingService.updateProcessCooling(processCooling, true);
-  }
+  // * 7/30 currently not used, may come back
+  // saveSystemBasics() {
+  //   let processCooling: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
+  //   let systemBasics: ProcessCoolingSystemBasics = this.systemBasicsFormService.getObjFromForm(this.systemBasicsForm);
+  //   processCooling.systemBasics = systemBasics;
+  //   this.processCoolingService.updateProcessCooling(processCooling, true);
+  // }
 
   async saveSettings() {
     let currentSettings: Settings = this.processCoolingService.settings.getValue();

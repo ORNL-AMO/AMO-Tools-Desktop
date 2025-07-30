@@ -457,24 +457,13 @@ export class AssessmentService {
       setupDone: false,
       systemBasics: {
         utilityType: 'Electricity',
-        electricityCost: settings.electricityCost,
         notes: undefined,
-        fuelCost: settings.fuelCost,
-        location: undefined,
-        numberOfChillers: 1,
-        waterSupplyTemperature: 50,
-        condenserCoolingMethod: 0,
       },
       systemInformation: {
-        operations: {
-          annualOperatingHours: 8760,
-          numberOfChillers: 1,
-          geographicLocation: 53704,
-          chilledWaterSupplyTemp: 44,
-          condenserCoolingMethod: 0, // water
           co2SavingsData: {
             energyType: "electricity",
             totalEmissionOutputRate: 430.78,
+            // todo where is this from
             electricityUse: 6309742.4,
             energySource: "Natural Gas",
             fuelType: "Natural Gas",
@@ -486,6 +475,13 @@ export class AssessmentService {
             userEnteredModificationEmissions: false,
             zipcode: "37830"
           },
+        operations: {
+          annualOperatingHours: 8760,
+          fuelCost: settings.fuelCost || 3.99,
+          electricityCost: settings.electricityCost || 0.066,
+          geographicLocation: 53704,
+          chilledWaterSupplyTemp: 44,
+          condenserCoolingMethod: 0, // water
         },
         airCooledSystemInput: {
           CHWT: 44,

@@ -11,7 +11,7 @@ export class ProcessCoolingResultsService {
   getResults(assessment: ProcessCoolingAssessment) {
     console.log('[ProcessCoolingResultsService]  assessment:', assessment);
     let results: ProcessCoolingResults;
-    if (assessment.systemBasics.condenserCoolingMethod === 0) {
+    if (assessment.systemInformation.operations.condenserCoolingMethod === 0) {
       results = this.suiteApi.getWaterCooledResults(assessment);
     } else {
       results = this.suiteApi.getAirCooledResults(assessment);

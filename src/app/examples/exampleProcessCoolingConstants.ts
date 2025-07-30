@@ -19,7 +19,6 @@ export const EXAMPLE_SYSTEM_BASICS = {
   electricityCost: 0.1,
   fuelCost: 0,
   location: 1,
-  numberOfChillers: 1,
   waterSupplyTemperature: 44,
   condenserCoolingMethod: 'water' as CoolingMethodString,
   notes: ''
@@ -27,7 +26,6 @@ export const EXAMPLE_SYSTEM_BASICS = {
 
 export const EXAMPLE_SYSTEM_INFORMATION_OPERATIONS = {
   annualOperatingHours: 2,
-  numberOfChillers: 1,
   geographicLocation: 1,
   chilledWaterSupplyTemp: 44,
   condenserCoolingMethod: 0,
