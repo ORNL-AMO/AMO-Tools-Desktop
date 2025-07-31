@@ -48,7 +48,8 @@ export interface SystemInformation {
     co2SavingsData: Co2SavingsData;
     airCooledSystemInput: AirCooledSystemInput;
     waterCooledSystemInput: WaterCooledSystemInput;
-    pumpInput: PumpInput;
+    chilledWaterPumpInput: PumpInput;
+    condenserWaterPumpInput: PumpInput;
     towerInput: TowerInput;
 }
 
@@ -56,102 +57,100 @@ export interface Operations {
     annualOperatingHours: number;
     fuelCost: number;
     electricityCost: number;
-    geographicLocation: number;
+    zipcode: number;
     chilledWaterSupplyTemp: number;
     condenserCoolingMethod: number;
 }
 
-// ? comment == is in different form section of origin UI
-// * comment == name differs, could be improved, or other
-// ! other
 
 /**
-    *
-    * @param CHWT double, units F, 35 - 55 Default 44, Chilled Water Supply Temperature
-    * @param OADT double, units F, 80 - 110 Standard 95, Outdoor Air Design Temperature
-    * @param ACSource Enumeration ACSourceLocation, Cooling Air Source, Indoor or Outside
-    * @param indoorTemp double, units F, if Air Source Indoor 60 - 90
-    * @param CWTFollow double, units F, if Air Source Outside 5 - 20
+    * UI Model for Air Cooled System Input
+     * 
+     * MEASUR Tool Suite and CWSAT original input mapping and info
+    * @property (in Operations) CHWT double, units F, 35 - 55 Default 44, Chilled Water Supply Temperature
+    * @property outdoorAirTemp - OADT double, units F, 80 - 110 Standard 95, Outdoor Air Design Temperature
+    * @property airCoolingSource - ACSource Enumeration ACSourceLocation, Cooling Air Source, Indoor or Outside
+    * @property indoorTemp double, units F, if Air Source Indoor 60 - 90
+    * @property followingTempDifferential - CWTFollow double, units F, if Air Source Outside 5 - 20
     */
 export interface AirCooledSystemInput {
-    CHWT: number,
-    OADT: number,
-    ACSource: number,
+    outdoorAirTemp: number,
+    airCoolingSource: number,
     indoorTemp: number,
-    CWTFollow: number
+    followingTempDifferential: number
 }
 
 /**
-    *
-    * @param CHWT double, units F, 35 - 55 Default 44, Chilled Water Supply Temperature
-    * @param useFreeCooling boolean
-    * @param HEXApproachTemp double, units F,  5 - 20, heat exchange temp when free cooling and heat exchanger used
-    * @param constantCWT boolean, Is CW temperature constant
-    * @param CWT double, units F, 70 - 90, CW temperature constant
-    * @param CWVariableFlow boolean
-    * @param CWFlowRate double, units gpm/ton
-    * @param CWTFollow double, units F, when CW temperature not constant
+    * UI Model for Water Cooled System Input
+     * 
+     * MEASUR Tool Suite and CWSAT original input mapping and info
+    * @property (in Operations) CHWT double, units F, 35 - 55 Default 44, Chilled Water Supply Temperature
+    * @property (in Tower) useFreeCooling boolean
+    * @property (in Tower) HEXApproachTemp double, units F,  5 - 20, heat exchange temp when free cooling and heat exchanger used
+    * @property isConstantCondenserWaterTemp - constantCWT boolean, Is CW temperature constant
+    * @property condenserWaterTemp - CWT double, units F, 70 - 90, CW temperature constant
+    * @property (in Pump Condenser Water) CWVariableFlow boolean
+    * @property (in Pump Condenser Water) CWFlowRate double, units gpm/ton
+    * @property followingTempDifferential CWTFollow double, units F, when CW temperature not constant
     */
 export interface WaterCooledSystemInput {
-    constantCWT: boolean, // * "Is the CWT Constant?"
-    CHWT: number,  // ? Operations.chilledWaterSupplyTemp
-    useFreeCooling: boolean, // ? TowerInput "System with Free Cooling"
-    HEXApproachTemp: number,  // ? from TowerInput if useFreeCooling and HEX required are true
-    CWT: number,  // * if is constantCWT
-    CWTFollow: number, // * if not constantCWT "CWT follows ambient wet-bulb plus"
-    // ? below fields set by Pump CW
-    CWVariableFlow: boolean, // ! CW field from pump
-    CWFlowRate: number, // !  CW field from pump
+    isConstantCondenserWaterTemp: boolean,
+    condenserWaterTemp: number, 
+    followingTempDifferential: number, // * if not constantCWT "CWT follows ambient wet-bulb plus"
 }
 
 /**
-     *
-     * @param numTower integer, # of Towers
-     * @param numFanPerTower_Cells integer, # Cells
-     * @param fanSpeedType Enumeration FanMotorSpeedType
-     * @param towerSizing Enumeration TowerSizedBy, sized by tonnage or fan hp
-     * @param towerCellFanType Enumeration CellFanType
-     * @param cellFanHP double, units hp, 1 -100 hp
-     * @param tonnage double, units ton, 20 - 3000
+     * UI Model for Tower Input
+     * 
+     * MEASUR Tool Suite and CWSAT original input mapping and info
+     * @property numberOfTowers - numTower integer, # of Towers
+     * @property numberOfFans - numFanPerTower_Cells integer, # Cells
+     * @property fanSpeedType Enumeration FanMotorSpeedType
+     * @property towerSizeMetric - towerSizing Enumeration TowerSizedBy, sized by tonnage or fan hp
+     * @property fanType - towerCellFanType Enumeration CellFanType
+     * @property towerSize - (redundant fields) cellFanHP double, units hp, 1 -100 hp
+     * @property towerSize - (redundant fields) tonnage double, units ton, 20 - 3000
      */
 export interface TowerInput {
-    numTowers: number;
-    towerType?: number; 
-    numFanPerTowerCells: number; // * set by towerType choice - number of cells/fans
+    usesFreeCooling: boolean,
+    isHEXRequired: boolean,
+    HEXApproachTemp: number,  
+    numberOfTowers: number;
+    // todo make towerType required once logic to populate tower fields from type is known
+    towerType?: number;
+    numberOfFans: number; // * set by towerType choice - number of cells/fans
     fanSpeedType: number; // * set by towerType choice - 1 = Two Speed, 2 = Variable Speed
-    towerSizing: number; // * Size Tower By change to "Tower Size units" or other
-    towerCellFanType: number; // * "Fan Type"
-    cellFanHP: number; // * if size tower by hp hp/fan
-    tonnage: number; // * if Size tower by tons
+    towerSizeMetric: number; 
+    fanType: number; 
+    towerSize: number;
 }
 
 
-// ! missing CW column inputs If CHW vs CW. Need to set values for CW as well
 // System Information
 /** 
-     * @param variableFlow boolean
-     * @param flowRate double, units gpm/ton
-     * @param efficiency double, percentage as fraction
-     * @param motorSize double, units hp
-     * @param motorEfficiency double, percentage as fraction
+    * UI Model for Chilled Water Pump or Condenser Water Pump 
+    * 
+    * MEASUR Tool Suite and CWSAT original input mapping and info
+     * @property variableFlow boolean
+     * @property flowRate double, units gpm/ton
+     * @property efficiency double, percentage as fraction
+     * @property motorSize double, units hp
+     * @property motorEfficiency double, percentage as fraction
      */
 export interface PumpInput {
     variableFlow: boolean;
     flowRate: number;
-    efficiency: number; // * Pump Efficiency
+    efficiency: number; 
     motorSize: number;
     motorEfficiency: number;
-    variableFlowCW: boolean;
-    flowRateCW: number;
-    efficiencyCW: number; // * Pump Efficiency
-    motorSizeCW: number;
-    motorEfficiencyCW: number;
 }
 
 
 // todo variable fields
 /**
-     *
+     *UI Model for Chiller Inventory Item
+
+    * MEASUR Tool Suite and CWSAT original input mapping and info
      * @param chillerType Enumeration ChillerCompressorType
      * @param capacity double, units ton
      * @param isFullLoadEffKnown boolean, Is full load efficiency known? for this Chiller
@@ -167,11 +166,10 @@ export interface ChillerInventoryItem {
     description?: string;
     modifiedDate: Date;
     isValid?: boolean;
-    // * suite ChillerInput
     chillerType: number;
     capacity: number;
-    isFullLoadEffKnown: boolean;
-    fullLoadEff: number;
+    isFullLoadEfficiencyKnown: boolean;
+    fullLoadEfficiency: number;
     age: number;
     installVSD: boolean;
     useARIMonthlyLoadSchedule: boolean;
@@ -184,60 +182,9 @@ export interface Modification {
     notes?: string
 }
 
-export interface ProcessCoolingInputWaterCooled extends ProcessCoolingInput {
-    towerInput: TowerInput;
-    waterCooledSystemInput: WaterCooledSystemInput;
-}
 
-export interface ProcessCoolingInputAirCooled extends ProcessCoolingInput{
-    airCooledSystemInput: AirCooledSystemInput;
-}
-
-export interface ProcessCoolingInput {
-    // Suite will generate the array needed for calculation
-    systemOperationAnnualHours: number[];
-    // Pulled from weather?
-    weatherDryBulbHourlyTemp: number[];
-    weatherWetBulbHourlyTemp: number[];
-    chillerInputList: ChillerInventoryItem[];
-}
+export interface ProcessCoolingAssessmentResults { }
 
 
-export interface ProcessCoolingAssessmentResults {
 
-}
-
-
-export enum CompressorChillerTypeEnum {
-    CENTRIFUGAL = 0,
-    //helical rotary, see SuiteApiHelperService.ts note
-    SCREW = 1,
-    RECIPROCATING = 2,
-}
-
-export const CompressorChillerTypes =
-{
-    [CompressorChillerTypeEnum.CENTRIFUGAL]: 'Centrifugal',
-    [CompressorChillerTypeEnum.RECIPROCATING]: 'Reciprocating',
-    [CompressorChillerTypeEnum.SCREW]: 'Helical Rotary'
-}
-
-export type CoolingMethodString = 'water' | 'air';
 export type CompressorChillerType = 'centrifugal' | 'reciprocating' | 'helical-rotary';
-
-export const getDefaultInventoryItem = (): ChillerInventoryItem => {
-    return {
-        itemId: getNewIdString(),
-        name: 'New Chiller',
-        description: undefined,
-        modifiedDate: new Date(),
-        chillerType: CompressorChillerTypeEnum.CENTRIFUGAL,
-        capacity: 0,
-        isFullLoadEffKnown: false,
-        fullLoadEff: 0,
-        age: 0,
-        installVSD: false,
-        useARIMonthlyLoadSchedule: false,
-        monthlyLoads: Array(12).fill(Array(11).fill(0)),
-    };
-}

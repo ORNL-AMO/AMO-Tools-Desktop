@@ -3,12 +3,13 @@ import { Assessment } from "../shared/models/assessment";
 import {
   EXAMPLE_AIR_COOLED_SYSTEM_INPUT,
   EXAMPLE_WATER_COOLED_SYSTEM_INPUT,
-  EXAMPLE_PUMP_INPUT,
   EXAMPLE_TOWER_INPUT,
   EXAMPLE_SYSTEM_BASICS,
   EXAMPLE_SYSTEM_INFORMATION_OPERATIONS,
   EXAMPLE_CO2_SAVINGS_DATA,
-  EXAMPLE_INVENTORY
+  EXAMPLE_INVENTORY,
+  EXAMPLE_PUMP_INPUT_CONDENSER,
+  EXAMPLE_PUMP_INPUT_CHILLED
 // } from './CWSATExampleAirCooledConstant';
 } from './CWSATExampleVINPLTConstants';
 import { Settings } from "../shared/models/settings";
@@ -31,7 +32,8 @@ export const MockProcessCoolingAssessment: Assessment = {
             operations: { ...EXAMPLE_SYSTEM_INFORMATION_OPERATIONS },
             airCooledSystemInput: { ...EXAMPLE_AIR_COOLED_SYSTEM_INPUT },
             waterCooledSystemInput: { ...EXAMPLE_WATER_COOLED_SYSTEM_INPUT },
-            pumpInput: { ...EXAMPLE_PUMP_INPUT },
+            chilledWaterPumpInput: { ...EXAMPLE_PUMP_INPUT_CHILLED },
+            condenserWaterPumpInput: { ...EXAMPLE_PUMP_INPUT_CONDENSER },
             towerInput: { ...EXAMPLE_TOWER_INPUT }
         },
         inventory: [ ...EXAMPLE_INVENTORY ],

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { getNewIdString } from '../../shared/helperFunctions';
-import { ChillerInventoryItem, CompressorChillerTypeEnum, getDefaultInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
+import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { getDefaultInventoryItem } from '../process-cooling-constants';
 
 @Injectable({
   providedIn: 'root'

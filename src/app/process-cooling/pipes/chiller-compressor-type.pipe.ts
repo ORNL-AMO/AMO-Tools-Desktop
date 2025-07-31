@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { CompressorChillerTypeEnum, CompressorChillerTypes } from '../../shared/models/process-cooling-assessment';
+import { CompressorChillerTypeEnum, CompressorChillerTypes } from '../process-cooling-constants';
 
 @Pipe({
   name: 'chillerCompressorType',
