@@ -1,3 +1,6 @@
+import { CompressorChillerTypeEnum } from "../process-cooling/process-cooling-constants";
+import { AirCooledSystemInput, ChillerInventoryItem, Operations, PumpInput, TowerInput, WaterCooledSystemInput } from "../shared/models/process-cooling-assessment";
+
 export const EXAMPLE_CO2_SAVINGS_DATA = {
   energyType: 'fuel',
   totalEmissionOutputRate: 401.07,
@@ -19,86 +22,67 @@ export const EXAMPLE_SYSTEM_BASICS = {
   notes: ''
 };
 
-export const EXAMPLE_SYSTEM_INFORMATION_OPERATIONS = {
+export const EXAMPLE_SYSTEM_INFORMATION_OPERATIONS: Operations = {
   annualOperatingHours: 8760,
   electricityCost: 0.06,
   fuelCost: 6,
-  geographicLocation: 1,
+  zipcode: 1,
   chilledWaterSupplyTemp: 44,
   // water == 0, air == 1
   condenserCoolingMethod: 1,
-  co2SavingsData: {} as any
 };
 
 
-// testProcessCoolingConstants.ts
-// Shared test constants for process cooling API/service tests and mocks
-
-import { CompressorChillerTypeEnum, CoolingMethodString } from '../shared/models/process-cooling-assessment';
-
-export const EXAMPLE_AIR_COOLED_SYSTEM_INPUT = {
-  CHWT: 44,
-  OADT: 80,
-  ACSource: 1,
+export const EXAMPLE_AIR_COOLED_SYSTEM_INPUT: AirCooledSystemInput = {
+  outdoorAirTemp: 80,
+  airCoolingSource: 1,
   indoorTemp: 0,
-  CWTFollow: 5
+  followingTempDifferential: 5
 };
 
 // * not used
-export const EXAMPLE_WATER_COOLED_SYSTEM_INPUT = {
-  CHWT: 44,
-  useFreeCooling: false,
-  HEXApproachTemp: 0,
-  constantCWT: true,
-  CWT: 85,
-  CWTFollow: 0,
-  // ? below fields set by Pump CW
-  CWVariableFlow: false,
-  CWFlowRate: 0,
+export const EXAMPLE_WATER_COOLED_SYSTEM_INPUT: WaterCooledSystemInput = {
+  isConstantCondenserWaterTemp: true,
+  condenserWaterTemp: 85,
+  followingTempDifferential: 0,
 };
 
-// *not used
-export const EXAMPLE_TOWER_INPUT = {
-  numTowers: 1,
-  numFanPerTowerCells: 2,
+export const EXAMPLE_TOWER_INPUT: TowerInput = {
+  numberOfTowers: 1,
+  isHEXRequired: false,
+  usesFreeCooling: false,
+  HEXApproachTemp: 0, // * if useFreeCooling and HEX required are true
+  numberOfFans: 2,
   fanSpeedType: 0, // * 1 speed
-  towerSizing: 0,
-  towerCellFanType: 0, // * axial
-  cellFanHP: 0,
-  tonnage: 2000
+  towerSizeMetric: 0,
+  fanType: 0, // * axial
+  towerSize: 2000
 };
 
 
 // * example CHW
-export const EXAMPLE_PUMP_INPUT = {
+export const EXAMPLE_PUMP_INPUT_CHILLED: PumpInput = {
   variableFlow: false,
   flowRate: 2.4,
   efficiency: 0.75,
   motorSize: 5,
   motorEfficiency: 0.85,
-  variableFlowCW: undefined,
-  flowRateCW: undefined,
-  efficiencyCW: undefined,
-  motorSizeCW: undefined,
-  motorEfficiencyCW: undefined
 };
 
-// // todo "CW" does not seem to be included in suite
-// // * results seem to be calculated the same as CHW
-// // * Condenser Water Pump
-// export const EXAMPLE_PUMP_INPUT_CW = {
-//   variableFlow: false,
-//   flowRate: 3,
-//   efficiency: 0.75,
-//   motorSize: 25,
-//   motorEfficiency: 0.85
-// };
+export const EXAMPLE_PUMP_INPUT_CONDENSER: PumpInput = {
+  variableFlow: undefined,
+  flowRate: undefined,
+  efficiency: undefined,
+  motorSize: undefined,
+  motorEfficiency: undefined
+};
+
 
 //* does the system load vary according to the ari 550/590? no
 // * does the chiller loading vary month to month? yes
 // * does the chiller loading vary from chiller to chiller? yes
 
-export const EXAMPLE_INVENTORY = [
+export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
   {
   itemId: '1',
   name: 'GVG',
@@ -106,8 +90,8 @@ export const EXAMPLE_INVENTORY = [
   // What to do with custom compressors
   chillerType: CompressorChillerTypeEnum.RECIPROCATING,
   capacity: 100,
-  isFullLoadEffKnown: true,
-  fullLoadEff: 1.0048,
+  isFullLoadEfficiencyKnown: true,
+  fullLoadEfficiency: 1.0048,
   age: 1,
   installVSD: false,
   useARIMonthlyLoadSchedule: false,
@@ -133,8 +117,8 @@ export const EXAMPLE_INVENTORY = [
   modifiedDate: new Date(),
   chillerType: CompressorChillerTypeEnum.RECIPROCATING,
   capacity: 75,
-  isFullLoadEffKnown: true,
-  fullLoadEff: 1.02,
+  isFullLoadEfficiencyKnown: true,
+  fullLoadEfficiency: 1.02,
   age: 2,
   installVSD: false,
   useARIMonthlyLoadSchedule: false,
@@ -160,8 +144,8 @@ export const EXAMPLE_INVENTORY = [
   modifiedDate: new Date(),
   chillerType: CompressorChillerTypeEnum.RECIPROCATING,
   capacity: 250,
-  isFullLoadEffKnown: true,
-  fullLoadEff: 1,
+  isFullLoadEfficiencyKnown: true,
+  fullLoadEfficiency: 1,
   age: 3,
   installVSD: false,
   useARIMonthlyLoadSchedule: false,

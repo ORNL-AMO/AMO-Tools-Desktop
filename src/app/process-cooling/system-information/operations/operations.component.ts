@@ -84,7 +84,7 @@ export class OperationsComponent {
   }
 
   observeZipCodeChanges() {
-    this.geographicLocation.valueChanges.pipe(
+    this.zipcode.valueChanges.pipe(
       debounceTime(150),
       distinctUntilChanged(),
       switchMap(zipcode => this.processZipcodeChange(zipcode)),
@@ -145,8 +145,8 @@ export class OperationsComponent {
     return this.form.get('electricityCost');
   }
 
-  get geographicLocation() {
-    return this.form.get('geographicLocation');
+  get zipcode() {
+    return this.form.get('zipcode');
   }
 
   get chilledWaterSupplyTemp() {

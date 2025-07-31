@@ -37,13 +37,13 @@
     </div>
 
     <div class="form-group">
-        <label for="{{controlIds.geographicLocation}}">Zipcode</label>
+        <label for="{{controlIds.zipcode}}">Zipcode</label>
         <div class="input-group">
-            <input name="geographicLocation" type="number" step="any" class="form-control"
-                id="{{controlIds.geographicLocation}}" formControlName="geographicLocation"
-                (focus)="focusField('geographicLocation')">
+            <input name="zipcode" type="number" step="any" class="form-control"
+                id="{{controlIds.zipcode}}" formControlName="zipcode"
+                (focus)="focusField('zipcode')">
         </div>
-        <app-form-control-required [control]="geographicLocation"></app-form-control-required>
+        <app-form-control-required [control]="zipcode"></app-form-control-required>
     </div>
 
     <div class="form-group">

@@ -41,8 +41,8 @@ export class ProcessCoolingSuiteApiService {
     };
 
     const chillerInputVector = this._createChillerInputVector(assessment.inventory);
-    const waterCooledSystemInputInstance = this._createWaterCooledSystemInput(assessment.systemInformation.waterCooledSystemInput, assessment.systemInformation.operations, assessment.systemInformation.pumpInput);
     const towerInputInstance = this._createTowerInput(assessment.systemInformation.towerInput);
+    const waterCooledSystemInputInstance = this._createWaterCooledSystemInput(assessment.systemInformation.waterCooledSystemInput, assessment.systemInformation.operations, assessment.systemInformation.condenserWaterPumpInput, assessment.systemInformation.towerInput);
     const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, waterCooledSystemInputInstance, towerInputInstance);
 
     results.chiller = this._getChillerOutput(processCoolingInstance);
@@ -92,9 +92,10 @@ export class ProcessCoolingSuiteApiService {
    *   - condenserPumpingEnergy: number[] (kWh)
    */
   getWaterCooledPumpEnergy(assessment: ProcessCoolingAssessment, processCoolingInstance: any): ProcessCoolingPumpOutput {
-    const pumpInputCWInstance = this._createPumpCWInput(assessment.systemInformation.pumpInput);
+    debugger;
+    const pumpInputCWInstance = this._createPumpInput(assessment.systemInformation.condenserWaterPumpInput);
     const pumpCWOutput = processCoolingInstance.calculatePumpEnergy(pumpInputCWInstance);
-    const pumpInputCHWInstance = this._createPumpCHWInput(assessment.systemInformation.pumpInput);
+    const pumpInputCHWInstance = this._createPumpInput(assessment.systemInformation.chilledWaterPumpInput);
     const pumpCWHOutput = processCoolingInstance.calculatePumpEnergy(pumpInputCHWInstance);
 
     const result: ProcessCoolingPumpOutput = {
@@ -117,9 +118,9 @@ export class ProcessCoolingSuiteApiService {
    *   - chillerPumpingEnergy: number[] (kWh)
    */
   getAirCooledPumpEnergy(assessment: ProcessCoolingAssessment, processCoolingInstance: any): ProcessCoolingPumpOutput {
-    assessment.systemInformation.pumpInput.variableFlowCW = false; // used in water-cooled systems only
-    assessment.systemInformation.pumpInput.flowRateCW = 0; // used in water-cooled systems only
-    const pumpInputCHWInstance = this._createPumpCHWInput(assessment.systemInformation.pumpInput);
+    // assessment.systemInformation.condenserWaterPumpInput.variableFlow = false; // used in water-cooled systems only
+    // assessment.systemInformation.condenserWaterPumpInput.flowRate = 0; // used in water-cooled systems only
+    const pumpInputCHWInstance = this._createPumpInput(assessment.systemInformation.chilledWaterPumpInput);
     const pumpCWHOutput = processCoolingInstance.calculatePumpEnergy(pumpInputCHWInstance);
     const result: ProcessCoolingPumpOutput = {
       chillerPumpingEnergy: this._extractArray(pumpCWHOutput.chillerPumpingEnergy),
@@ -161,8 +162,8 @@ export class ProcessCoolingSuiteApiService {
       console.log('ChillerInventoryItem input:', input);
       console.log('  chillerType:', input.chillerType);
       console.log('  capacity:', input.capacity);
-      console.log('  isFullLoadEffKnown:', input.isFullLoadEffKnown);
-      console.log('  fullLoadEff:', input.fullLoadEff);
+      console.log('  isFullLoadEfficiencyKnown:', input.isFullLoadEfficiencyKnown);
+      console.log('  fullLoadEfficiency:', input.fullLoadEfficiency);
       console.log('  age:', input.age);
       console.log('  installVSD:', input.installVSD);
       console.log('  useARIMonthlyLoadSchedule:', input.useARIMonthlyLoadSchedule);
@@ -172,8 +173,8 @@ export class ProcessCoolingSuiteApiService {
       const chiller = this._createChillerInput(
         this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
         input.capacity,
-        input.isFullLoadEffKnown,
-        input.fullLoadEff,
+        input.isFullLoadEfficiencyKnown,
+        input.fullLoadEfficiency,
         input.age,
         input.installVSD,
         input.useARIMonthlyLoadSchedule,
@@ -230,6 +231,7 @@ export class ProcessCoolingSuiteApiService {
    * @param input {WaterCooledSystemInput} - Water cooled system input object.
    * @param operations {Operations} - Operations object, provides chilledWaterSupplyTemp
    * @param pumpInput {PumpInput} - Pump input object for condenser water
+   * @param towerInput {TowerInput} - Tower input object
    *   @property CHWT {number} Chilled Water Supply Temperature (°F), 35-55, default 44
    *   @property useFreeCooling {boolean} Use free cooling
    *   @property HEXApproachTemp {number} Heat exchanger approach temp (°F), 5-20, default 0
@@ -240,17 +242,17 @@ export class ProcessCoolingSuiteApiService {
    *   @property CWTFollow {number} If condenser water temp not constant, 5-20, default 0
    * @returns {any} Module.WaterCooledSystemInput instance
    */
-  private _createWaterCooledSystemInput(input: WaterCooledSystemInput, operations: Operations, pumpInput: PumpInput): any {
+  private _createWaterCooledSystemInput(input: WaterCooledSystemInput, operations: Operations, condenserPumpInput: PumpInput, towerInput: TowerInput): any {
     return new Module.WaterCooledSystemInput(
       operations.chilledWaterSupplyTemp,
-      input.useFreeCooling,
-      input.HEXApproachTemp,
-      input.constantCWT,
-      input.CWT,
+      towerInput.usesFreeCooling,
+      towerInput.HEXApproachTemp,
+      input.isConstantCondenserWaterTemp,
+      input.condenserWaterTemp,
       // todo 7655 2 pumpInputs need defaults?
-      pumpInput.variableFlowCW,
-      pumpInput.flowRateCW,
-      input.CWTFollow,
+      condenserPumpInput.variableFlow,
+      condenserPumpInput.flowRate,
+      input.followingTempDifferential,
     );
   }
 
@@ -266,20 +268,20 @@ export class ProcessCoolingSuiteApiService {
    * @returns {any} Module.AirCooledSystemInput instance
    */
   private _createAirCooledSystemInput(input: AirCooledSystemInput, operations: Operations): any {
-    const ACSource = this.suiteApiHelperService.getProcessCoolingCoolingAirSourceEnum(input.ACSource);
+    const ACSource = this.suiteApiHelperService.getProcessCoolingCoolingAirSourceEnum(input.airCoolingSource);
     console.log('AirCooledSystemInput Inputs:');
     console.log('chilledWaterSupplyTemp:', operations.chilledWaterSupplyTemp);
-    console.log('OADT (Outdoor Air Design Temp):', input.OADT);
+    console.log('outdoorAirTemp (Outdoor Air Design Temp):', input.outdoorAirTemp);
     console.log('ACSource (Cooling Air Source):', ACSource);
     console.log('indoorTemp (Average Indoor Temp):', input.indoorTemp);
-    console.log('CWTFollow:', input.CWTFollow);
+    console.log('followingTempDifferential:', input.followingTempDifferential);
 
     return new Module.AirCooledSystemInput(
       operations.chilledWaterSupplyTemp,
-      input.OADT,
+      input.outdoorAirTemp,
       ACSource,
       input.indoorTemp,
-      input.CWTFollow
+      input.followingTempDifferential
     );
   }
 
@@ -386,7 +388,7 @@ export class ProcessCoolingSuiteApiService {
   }
 
   /**
-   * Creates a Module.PumpInput instance for chilled water.
+   * Creates a Module.PumpInput instance for chilled water or condenser water.
    * 
    * @param input {PumpInput} - Pump input object.
    * 
@@ -398,7 +400,7 @@ export class ProcessCoolingSuiteApiService {
    * @property motorEfficiency {number} Pump motor efficiency (fraction)
    * @returns {any} Module.PumpInput instance
    */
-  private _createPumpCHWInput(input: PumpInput): any {
+  private _createPumpInput(input: PumpInput): any {
     return new Module.PumpInput(
       input.variableFlow,
       input.flowRate,
@@ -408,27 +410,6 @@ export class ProcessCoolingSuiteApiService {
     );
   }
 
-  /**
-   * Creates a Module.PumpInput instance for condenser water.
-   * @param input {PumpInput} - Pump input object.
-   * 
-   * @author Suite constructor param names
-   * @property variableFlowCW {boolean} Variable flow for condenser water
-   * @property flowRateCW {number} Flow rate for condenser water (gpm/ton)
-   * @property efficiencyCW {number} Pump efficiency for condenser water (fraction)
-   * @property motorSizeCW {number} Pump motor size for condenser water (hp)
-   * @property motorEfficiencyCW {number} Pump motor efficiency for condenser water (fraction)
-   * @returns {any} Module.PumpInput instance
-   */
-  private _createPumpCWInput(input: PumpInput): any {
-    return new Module.PumpInput(
-      input.variableFlowCW,
-      input.flowRateCW,
-      input.efficiencyCW,
-      input.motorSizeCW,
-      input.motorEfficiencyCW
-    );
-  }
 
   /**
    * Creates a Module.TowerInput instance.
@@ -446,17 +427,17 @@ export class ProcessCoolingSuiteApiService {
    */
   private _createTowerInput(input: TowerInput): any {
     const fanSpeedTypeEnum = this.suiteApiHelperService.getProcessCoolingFanMotorSpeedTypeEnum(input.fanSpeedType)
-    const towerSizingEnum = this.suiteApiHelperService.getProcessCoolingTowerSizedByEnum(input.towerSizing)
-    const towerCellFanTypeEnum = this.suiteApiHelperService.getProcessCoolingFanTypeEnum(input.towerCellFanType)
+    const towerSizingEnum = this.suiteApiHelperService.getProcessCoolingTowerSizedByEnum(input.towerSizeMetric)
+    const towerCellFanTypeEnum = this.suiteApiHelperService.getProcessCoolingFanTypeEnum(input.fanType)
 
     return new Module.TowerInput(
-      input.numTowers,
-      input.numFanPerTowerCells,
+      input.numberOfTowers,
+      input.numberOfFans,
       fanSpeedTypeEnum,
       towerSizingEnum,
       towerCellFanTypeEnum,
-      input.cellFanHP,
-      input.tonnage
+      input.towerSize,
+      input.towerSize
     );
   }
 
