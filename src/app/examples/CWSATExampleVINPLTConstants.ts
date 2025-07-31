@@ -1,3 +1,5 @@
+import { CompressorChillerTypeEnum } from "../process-cooling/process-cooling-constants";
+
 export const EXAMPLE_CO2_SAVINGS_DATA = {
   energyType: 'fuel',
   totalEmissionOutputRate: 401.07,
@@ -36,7 +38,6 @@ export const EXAMPLE_SYSTEM_INFORMATION_OPERATIONS = {
 // testProcessCoolingConstants.ts
 // Shared test constants for process cooling API/service tests and mocks
 
-import { CompressorChillerTypeEnum, CoolingMethodString } from '../shared/models/process-cooling-assessment';
 
 // * Not air cooled
 export const EXAMPLE_AIR_COOLED_SYSTEM_INPUT = {

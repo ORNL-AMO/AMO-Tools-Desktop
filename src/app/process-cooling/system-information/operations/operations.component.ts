@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, HostListener, inject, Signal, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, Signal, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-savings.service';
 import { FormControlIds, generateFormControlIds, ProcessCoolingService } from '../../process-cooling.service';
@@ -8,8 +8,8 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { debounceTime, distinctUntilChanged, of, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
-import { CONDENSER_COOLING_METHODS } from '../../process-cooling-constants';
 import { TEMPERATURE_HTML } from '../../../shared/app-constants';
+import { getCondenserCoolingMethods } from '../../process-cooling-constants';
 
 
 // * outline changes from typical MEASUR patterns
@@ -30,7 +30,7 @@ export class OperationsComponent {
 
   TEMPERATURE_HTML = TEMPERATURE_HTML;
   showOperatingHoursModal: boolean;
-  condenserCoolingMethods = CONDENSER_COOLING_METHODS;
+  condenserCoolingMethods = getCondenserCoolingMethods();
   controlIds: FormControlIds<OperationsForm>;
   formWidth: number = 0;
 
