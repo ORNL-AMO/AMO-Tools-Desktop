@@ -15,6 +15,7 @@ import { DashboardService } from './dashboard.service';
 import { WaterAssessment } from 'process-flow-lib';
 import { ProcessCoolingAssessment } from '../shared/models/process-cooling-assessment';
 import { getNewIdString } from '../shared/helperFunctions';
+import { getDefaultInventoryItem } from '../process-cooling-assessment/process-cooling-constants';
 
 @Injectable()
 export class AssessmentService {
@@ -90,7 +91,7 @@ export class AssessmentService {
       itemSegment = '/water/';
     }
 
-    this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, {shouldCollapse: true})
+    this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, { shouldCollapse: true })
 
   }
 
@@ -371,7 +372,7 @@ export class AssessmentService {
     }
   }
 
-  
+
   getNewWaterAssessment(settings: Settings): WaterAssessment {
     return {
       name: 'Baseline',
@@ -386,7 +387,7 @@ export class AssessmentService {
         productionUnit: 'lb',
         annualProduction: undefined
       },
-      diagramWaterSystemFlows:[],
+      diagramWaterSystemFlows: [],
       intakeSources: [],
       dischargeOutlets: [],
       waterUsingSystems: [],
@@ -450,48 +451,82 @@ export class AssessmentService {
     }
   }
 
-    getNewProcessCoolingAssessment(settings: Settings): ProcessCoolingAssessment {
+  getNewProcessCoolingAssessment(settings: Settings): ProcessCoolingAssessment {
     return {
       name: 'Baseline',
       modifications: new Array(),
       setupDone: false,
       systemBasics: {
         utilityType: 'Electricity',
-        electricityCost: settings.electricityCost,
         notes: undefined,
-        fuelCost: settings.fuelCost,
-        location: undefined,
-        numberOfChillers: 1,
-        waterSupplyTemperature: 50,
-        condenserCoolingMethod: 'air',
       },
       systemInformation: {
-        co2SavingsData: {
-                energyType: "electricity",
-                totalEmissionOutputRate: 430.78,
-                electricityUse: 6309742.399999998,
-                energySource: "Natural Gas",
-                fuelType: "Natural Gas",
-                eGridRegion: "",
-                eGridSubregion: "SRTV",
-                totalEmissionOutput: 0,
-                totalFuelEmissionOutputRate: null,
-                userEnteredBaselineEmissions: false,
-                userEnteredModificationEmissions: false,
-                zipcode: "37830"
-            },
+          co2SavingsData: {
+            energyType: "electricity",
+            totalEmissionOutputRate: 430.78,
+            // todo where is this from
+            electricityUse: 6309742.4,
+            energySource: "Natural Gas",
+            fuelType: "Natural Gas",
+            eGridRegion: "",
+            eGridSubregion: "SRTV",
+            totalEmissionOutput: 0,
+            totalFuelEmissionOutputRate: null,
+            userEnteredBaselineEmissions: false,
+            userEnteredModificationEmissions: false,
+            zipcode: "37830"
+          },
+        operations: {
+          annualOperatingHours: 8760,
+          fuelCost: settings.fuelCost || 3.99,
+          electricityCost: settings.electricityCost || 0.066,
+          zipcode: 53704,
+          chilledWaterSupplyTemp: 44,
+          condenserCoolingMethod: 0, // water
+        },
+        airCooledSystemInput: {
+          outdoorAirTemp: 54,
+          airCoolingSource: 0,
+          indoorTemp: 95,
+          followingTempDifferential: 0
+        },
+        waterCooledSystemInput: {
+          isConstantCondenserWaterTemp: true, 
+          condenserWaterTemp: 0, 
+          followingTempDifferential: 0, 
+        },
+         towerInput: {
+          usesFreeCooling: true,
+          isHEXRequired: false,
+          HEXApproachTemp: 0, 
+          numberOfTowers: 1,
+          numberOfFans: 1,
+          fanSpeedType: 0,
+          towerSizeMetric: 0,
+          fanType: 0,
+          towerSize: 78
+        },
+        chilledWaterPumpInput: {
+          variableFlow: true,
+          flowRate: 500,
+          efficiency: 0.8,
+          motorSize: 0,
+          motorEfficiency: 0,
+        },
+        condenserWaterPumpInput: {
+          variableFlow: true,
+          flowRate: 0,
+          efficiency: 0,
+          motorSize: 0,
+          motorEfficiency: 0,
+        },
       },
       inventory: [
-        {
-              itemId: getNewIdString(),
-              name: 'New Chiller',
-              description: undefined,
-              modifiedDate: new Date(),
-              compressorChillerType: 0,
-              fullLoadEfficiency: 0,
-              chillerCapacity: 0,
-        }
+        getDefaultInventoryItem()
       ],
+      selectedModificationId: '',
+      existingDataUnits: '',
+      selected: false,
     }
   }
 

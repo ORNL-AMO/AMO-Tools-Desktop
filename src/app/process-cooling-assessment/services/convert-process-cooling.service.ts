@@ -19,7 +19,7 @@ constructor(private convertUnitsService: ConvertUnitsService) { }
   }
 
   convertProcessCoolingAssessmentData(processCooling: ProcessCoolingAssessment, oldSettings: Settings, newSettings: Settings): ProcessCoolingAssessment {
-    processCooling.systemInformation = this.convertSystemInformation(processCooling.systemInformation, oldSettings, newSettings);
+    // processCooling.systemInformation = this.convertSystemInformation(processCooling.systemInformation, oldSettings, newSettings);
     return processCooling;
   }
 

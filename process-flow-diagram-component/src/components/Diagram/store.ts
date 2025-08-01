@@ -32,8 +32,11 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
         isDialogOpen: false,
         assessmentId: undefined,
         validationWindowLocation: 'diagram',
-        isModalOpen: false
-      }
+        isModalOpen: false,
+        diagramAlert: {
+          open: false,
+        }
+      },
     },
     middleware: (getDefaultMiddleware) => {
       const listenerMiddleware = createListenerMiddleware();
