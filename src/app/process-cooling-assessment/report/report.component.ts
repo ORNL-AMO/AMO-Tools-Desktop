@@ -1,9 +1,10 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PrintOptions } from '../../shared/models/printing';
 import { Directory } from '../../shared/models/directory';
 import { REPORT_VIEW_LINKS } from '../services/process-cooling-ui.service';
+import { ProcessCoolingResultsService } from '../services/process-cooling-results.service';
 
 @Component({
   selector: 'app-report',
@@ -12,6 +13,7 @@ import { REPORT_VIEW_LINKS } from '../services/process-cooling-ui.service';
   styleUrl: './report.component.css'
 })
 export class ReportComponent {
+  private readonly processCoolingResultsService = inject(ProcessCoolingResultsService);
 @Input()
   assessment: Assessment;
   @Input()
@@ -54,6 +56,8 @@ export class ReportComponent {
     if (this.assessment) {
       this.assessmentDirectories = new Array();
       // this.getDirectoryList(this.assessment.directoryId);
+      this.processCoolingResultsService.getResults(this.assessment.processCooling);
+
 
       // todo 6706 set up subs for graph/bar components
       // let systemTrueCostReport = this.waterAssessmentResultsService.getTrueCostOfSystemsReport(this.assessment, this.settings);
@@ -140,4 +144,5 @@ export class ReportComponent {
     this.tabsCollapsed = !this.tabsCollapsed;
   }
 }
+
 

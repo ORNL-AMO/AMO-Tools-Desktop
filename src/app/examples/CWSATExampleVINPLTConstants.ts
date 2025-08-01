@@ -1,5 +1,5 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
-import { CompressorChillerTypeEnum } from "../process-cooling/process-cooling-constants";
+import { CompressorChillerTypeEnum } from "../process-cooling-assessment/process-cooling-constants";
 import { AirCooledSystemInput, ChillerInventoryItem, Operations, ProcessCoolingSystemBasics, PumpInput, SystemInformation, WaterCooledSystemInput } from "../shared/models/process-cooling-assessment";
 
 export const EXAMPLE_CO2_SAVINGS_DATA: Co2SavingsData = {

@@ -1,15 +1,16 @@
-import { Component, DestroyRef, ElementRef, inject, Signal, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-savings.service';
-import { FormControlIds, generateFormControlIds, ProcessCoolingService } from '../../process-cooling.service';
-import { Settings } from '../../../shared/models/settings';
-import { OperationsForm, SystemInformationFormService } from '../system-information-form.service';
-import { OperatingHours } from '../../../shared/models/operations';
-import { debounceTime, distinctUntilChanged, of, switchMap, tap } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
-import { TEMPERATURE_HTML } from '../../../shared/app-constants';
-import { getCondenserCoolingMethods } from '../../process-cooling-constants';
+import { Component, DestroyRef, ElementRef, inject, Signal, ViewChild } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { FormGroup } from "@angular/forms";
+import { tap, debounceTime, distinctUntilChanged, switchMap, of } from "rxjs";
+import { Co2SavingsData } from "../../../calculator/utilities/co2-savings/co2-savings.service";
+import { TEMPERATURE_HTML } from "../../../shared/app-constants";
+import { OperatingHours } from "../../../shared/models/operations";
+import { ProcessCoolingAssessment } from "../../../shared/models/process-cooling-assessment";
+import { getCondenserCoolingMethods } from "../../process-cooling-constants";
+import { FormControlIds, generateFormControlIds, ProcessCoolingAssessmentService } from "../../services/process-cooling-asessment.service";
+import { OperationsForm, SystemInformationFormService } from "../system-information-form.service";
+import { Settings } from "../../../shared/models/settings";
+import { ProcessCoolingUiService } from "../../services/process-cooling-ui.service";
 
 
 // * outline changes from typical MEASUR patterns
@@ -20,6 +21,12 @@ import { getCondenserCoolingMethods } from '../../process-cooling-constants';
   styleUrl: './operations.component.css'
 })
 export class OperationsComponent {
+    // * prefer inject() syntax for DI so can expose service signals to template props. inject() is modern and more compatible with unit testing - should we need it
+  private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private processCoolingUiService = inject(ProcessCoolingUiService);
+  private systemInformationFormService = inject(SystemInformationFormService);
+  private destroyRef = inject(DestroyRef);
+
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   // * prefer resizeObserver over onResize - only triggers on element change, not viewport
   private resizeObserver: ResizeObserver;
@@ -33,11 +40,6 @@ export class OperationsComponent {
   condenserCoolingMethods = getCondenserCoolingMethods();
   controlIds: FormControlIds<OperationsForm>;
   formWidth: number = 0;
-
-  // * prefer inject() syntax for DI so can expose service signals to template props. inject() is modern and more compatible with unit testing - should we need it
-  private processCoolingAssessmentService = inject(ProcessCoolingService);
-  private systemInformationFormService = inject(SystemInformationFormService);
-  private destroyRef = inject(DestroyRef);
 
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
   settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
@@ -112,19 +114,19 @@ export class OperationsComponent {
   }
 
   focusField(str: string) {
-    this.processCoolingAssessmentService.focusedField.next(str);
+    this.processCoolingUiService.focusedFieldSignal.set(str);
   }
 
   closeOperatingHoursModal() {
     // can remove flag when is signal
     this.showOperatingHoursModal = false;
-    this.processCoolingAssessmentService.modalOpen.next(false);
+    this.processCoolingUiService.modalOpenSignal.set(false);
   }
 
   openOperatingHoursModal() {
     // can remove flag when is signal
     this.showOperatingHoursModal = true;
-    this.processCoolingAssessmentService.modalOpen.next(true);
+    this.processCoolingUiService.modalOpenSignal.set(true);
   }
 
   updateOperatingHours(oppHours: OperatingHours) {

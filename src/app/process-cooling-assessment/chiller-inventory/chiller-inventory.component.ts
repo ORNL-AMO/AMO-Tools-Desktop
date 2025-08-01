@@ -5,6 +5,7 @@ import { ChillerInventoryItem } from '../../shared/models/process-cooling-assess
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 import { ChillerInventoryService } from './chiller-inventory.service';
+import { getDefaultInventoryItem } from '../process-cooling-constants';
 
 @Component({
   selector: 'app-chiller-inventory',
@@ -70,7 +71,7 @@ export class ChillerInventoryComponent {
     // let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
     // todo 7607 eventually process inventory item, do sideffects
     // let result: { newInventoryItem: ChillerInventoryItem, processCoolingAssessment: ProcessCoolingAssessment } = this.inventoryService.AddChillerToAssessment(processCoolingAssessment);
-    let newInventoryItem = this.inventoryService.getNewInventoryItem();
+    let newInventoryItem = getDefaultInventoryItem();
     // processCoolingAssessment.inventory.push(newInventoryItem);
     // this.processCoolingAssessmentService.updateProcessCooling(processCoolingAssessment, true);
     this.inventoryService.selectedChiller.next(newInventoryItem);

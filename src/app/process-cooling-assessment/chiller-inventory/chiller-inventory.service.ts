@@ -15,19 +15,6 @@ export class ChillerInventoryService {
   }
 
 
-  getNewInventoryItem(): ChillerInventoryItem {
-    return {
-      itemId: getNewIdString(),
-      name: 'New Chiller',
-      description: undefined,
-      modifiedDate: new Date(),
-      // Add type values form cwsat
-      compressorChillerType: 0,
-      fullLoadEfficiency: 0,
-      chillerCapacity: 0,
-    }
-  }
-
   setDefaultSelectedChiller(inventory: ChillerInventoryItem[]) {
     if (inventory && inventory.length > 0) {
       let lastItemModified: ChillerInventoryItem = this.getLastModifiedInventory(inventory);

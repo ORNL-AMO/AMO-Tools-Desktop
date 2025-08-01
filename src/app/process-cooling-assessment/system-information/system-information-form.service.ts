@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { Operations } from '../../shared/models/process-cooling-assessment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SystemInformationFormService {
 
   constructor(private formBuilder: FormBuilder) { }

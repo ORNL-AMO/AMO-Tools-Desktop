@@ -15,9 +15,9 @@ import { MAIN_VIEW_LINKS, ProcessCoolingUiService, SETUP_VIEW_LINKS, ViewLink } 
   styleUrl: './process-cooling-assessment.component.css'
 })
 export class ProcessCoolingAssessmentComponent {
-  @ViewChild('header', { static: false }) header: ElementRef;
-  @ViewChild('footer', { static: false }) footer: ElementRef;
-  @ViewChild('content', { static: false }) content: ElementRef;
+  // @ViewChild('header', { static: false }) header: ElementRef;
+  // @ViewChild('footer', { static: false }) footer: ElementRef;
+  // @ViewChild('content', { static: false }) content: ElementRef;
   // containerHeight: number;
   // @HostListener('window:resize', ['$event'])
   // onResize(event) {
@@ -51,22 +51,12 @@ export class ProcessCoolingAssessmentComponent {
       tap(id => {
         let assessment = this.assessmentDbService.findById(Number(id));
         this.processCoolingAssessmentService.setAssessment(assessment);
-        console.log('processCooling assessment', assessment);
+        this.processCoolingAssessmentService.setProcessCooling(assessment.processCooling);
 
         this.analyticsService.sendEvent('view-process-cooling-assessment', undefined);
         // todo handle concurrently 
         this.egridService.getAllSubRegions();
-
-        // todo get settings
-        // let settings: Settings = this.settingsDbService.getByAssessmentId(assessment, true);
-        // if (!settings) {
-        //   settings = this.settingsDbService.getByAssessmentId(assessment, false);
-        //   this.addSettings(settings);
-        // } else {
-        //   this.settings = settings;
-        //   this.processCoolingAssessmentService.settings.next(settings);
-        //   // this.defaultChillerDbService.getAllCompressors(this.settings);
-        // }
+        this.processCoolingAssessmentService.initAssessmentSettings(assessment);
 
         // todo move to child set default chiller
         // if (!this.inventoryService.selectedChiller.getValue()) {

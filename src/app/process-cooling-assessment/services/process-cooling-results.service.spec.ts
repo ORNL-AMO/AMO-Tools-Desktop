@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { ProcessCoolingResultsService } from './process-cooling-results.service';
 
 describe('ProcessCoolingResultsService', () => {

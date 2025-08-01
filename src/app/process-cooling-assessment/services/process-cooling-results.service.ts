@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ProcessCoolingSuiteApiService } from '../tools-suite-api/process-cooling-suite-api.service';
-import { ProcessCoolingAssessment, ProcessCoolingResults } from '../shared/models/process-cooling-assessment';
+import { ProcessCoolingSuiteApiService } from '../../tools-suite-api/process-cooling-suite-api.service';
+import { ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ProcessCoolingResultsService {
   constructor(private suiteApi: ProcessCoolingSuiteApiService) { }
 

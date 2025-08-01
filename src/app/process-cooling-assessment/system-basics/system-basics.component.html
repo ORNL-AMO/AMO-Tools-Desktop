@@ -1,8 +1,25 @@
-<!--  todo remove placeholder component -->
-<div class="d-flex flex-column panel-container">
-    <div class="header mr-2 ml-2">
-        <h3>Assessment Settings</h3>
-        <br>
+<div *ngIf="assessment$ | async as assessment" class="d-flex flex-column panel-container">
+  <div class="header mr-2 ml-2">
+    <h3>{{assessment.name}} Settings</h3>
+    <br>
+  </div>
+  <div class="alert-warning mt-3 small mx-auto" *ngIf="showUpdateDataReminder">
+    <div>Units of measure were changed after assessment data was entered.
+      <br>Please update your assessment data for accurate results.
     </div>
+    <a class="click-link" (click)="updateData(true)">Update Data</a>
+  </div>
+  <div class="alert-success mt-3 py-3 small mx-auto w-75 text-center" *ngIf="showSuccessMessage">
+    <div>
+      Data updated successfully!
+    </div>
+    <a class="click-link" (click)="dismissSuccessMessage()">Dismiss</a>
+  </div>
+  <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveSettings()" [inPhast]="true"
+    [inTreasureHunt]="true">
+  </app-application-settings>
+
 </div>
 
+  <app-update-units-modal *ngIf="showUpdateUnitsModal" [assessmentType]="'process-cooling'" (emitClose)="closeUpdateUnitsModal()" (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings">
+</app-update-units-modal>

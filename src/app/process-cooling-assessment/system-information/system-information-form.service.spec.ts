@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SystemInformationFormService } from './system-information-form.service';
+import { SystemInformationFormService } from '../../process-cooling-assessment/system-information/system-information-form.service';
 
 describe('SystemInformationFormService', () => {
   let service: SystemInformationFormService;

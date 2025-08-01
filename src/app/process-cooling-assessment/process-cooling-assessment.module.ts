@@ -30,6 +30,13 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { ConvertProcessCoolingService } from './services/convert-process-cooling.service';
+import { ProcessCoolingResultsService } from './services/process-cooling-results.service';
+import { SystemInformationFormService } from './system-information/system-information-form.service';
+import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
+import { FormControlRequiredComponent } from '../shared/form-control-required.component';
+import { InputUnitComponent } from '../shared/input-unit.component';
+import { OperationsComponent } from './system-information/operations/operations.component';
+import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 
 
 export const ROUTE_TOKENS = {
@@ -123,6 +130,7 @@ const ROUTES: Route[] = [
   declarations: [
     ProcessCoolingAssessmentComponent,
     ProcessCoolingBannerComponent,
+    OperationsComponent,
     SystemBasicsComponent,
     SystemInformationComponent,
     ChillerInventoryComponent,
@@ -152,10 +160,16 @@ const ROUTES: Route[] = [
     PercentGraphModule,
     ModalModule,
     NgbModule,
+    FormControlErrorsComponent,
+    FormControlRequiredComponent,
+    InputUnitComponent,
+    OperatingHoursModalModule
   ],
   providers: [
     ProcessCoolingAssessmentService,
     ProcessCoolingUiService,
+    ProcessCoolingResultsService,
+    SystemInformationFormService,
     ConvertProcessCoolingService,
     AssessmentRedirectGuard
   ],
