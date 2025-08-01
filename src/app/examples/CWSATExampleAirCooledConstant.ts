@@ -1,4 +1,4 @@
-import { CompressorChillerTypeEnum } from "../process-cooling/process-cooling-constants";
+import { CompressorChillerTypeEnum } from "../process-cooling-assessment/process-cooling-constants";
 import { AirCooledSystemInput, ChillerInventoryItem, Operations, PumpInput, TowerInput, WaterCooledSystemInput } from "../shared/models/process-cooling-assessment";
 
 export const EXAMPLE_CO2_SAVINGS_DATA = {

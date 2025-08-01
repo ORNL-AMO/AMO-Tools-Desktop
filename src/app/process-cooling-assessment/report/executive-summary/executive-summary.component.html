@@ -1,0 +1,31 @@
+<!--  todo show print view -->
+<div class="results scroll-item print-height page-break-before">
+    <div class="output-summary w-75 mx-auto">
+    @if (!isValid) {
+    <!-- <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
+        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
+        [bootstrapLevel]="'alert-danger'"></app-alert-info-container> -->
+    } @else if (baselineResults && modificationResults) {
+    <h4 class="show-print print-section-header">Executive Summary Table</h4>
+
+    <app-exportable-results-table [tableString]="copyTable1String"
+    (updateTableString)="updateCopyTable1String()"></app-exportable-results-table>
+    }
+
+</div>
+
+
+
+</div>
+<!-- <div class="results scroll-item print-height page-break-before"
+            *ngIf="(currentTab == 'pump-summary' && !showPrintView) || (showPrintView && printOptions.printPumpSummaryReport)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-pump-summary-report [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-pump-summary-report>
+        </div>
+        <div class="results scroll-item print-height page-break-before"
+            *ngIf="(currentTab == 'tower-summary' && !showPrintView) || (showPrintView && printOptions.printTowerSummaryReport)"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-tower-summary-report [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-tower-summary-report>
+        </div> -->
+
+    

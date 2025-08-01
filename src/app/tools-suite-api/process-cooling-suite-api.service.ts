@@ -92,7 +92,6 @@ export class ProcessCoolingSuiteApiService {
    *   - condenserPumpingEnergy: number[] (kWh)
    */
   getWaterCooledPumpEnergy(assessment: ProcessCoolingAssessment, processCoolingInstance: any): ProcessCoolingPumpOutput {
-    debugger;
     const pumpInputCWInstance = this._createPumpInput(assessment.systemInformation.condenserWaterPumpInput);
     const pumpCWOutput = processCoolingInstance.calculatePumpEnergy(pumpInputCWInstance);
     const pumpInputCHWInstance = this._createPumpInput(assessment.systemInformation.chilledWaterPumpInput);

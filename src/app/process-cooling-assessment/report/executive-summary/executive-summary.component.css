@@ -1,0 +1,53 @@
+
+.selected-highlight {
+    border: 2px solid var(--process-cooling-assessment) !important;
+}
+
+thead {
+    background-color: var(--process-cooling-assessment) !important;
+    color: #fff;
+}
+
+th {
+    padding: 1rem !important;
+}
+
+th, td {
+    padding: .5rem 1rem !important;
+}
+
+.table-striped tbody tr:nth-of-type(odd) > td {
+    border-left: 1px solid #bababa !important;
+    border-right: 1px solid #bababa !important;
+}
+
+.table-bordered th, .table-bordered td {
+    border-bottom: none;
+}
+
+
+@media print {
+    .show-print{
+        display: inline !important;
+    }
+    .hide-print{
+        display: none !important;
+    }
+
+    .chart-row{
+        padding: 0px !important;
+    }
+}
+
+.show-print{
+    display: none;
+}
+
+.hidden-copy-table {
+    z-index: -10;
+    position: fixed;
+    opacity: 0;
+    top: -1000px;
+    height: 0;
+    width: 0;
+}

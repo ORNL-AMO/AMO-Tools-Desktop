@@ -1,0 +1,16 @@
+<div class="d-flex flex-column h-100 w-100">
+    <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+        <div class="nav-item" (click)="setSmallScreenTab('form')"
+            [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+            <a>Explore Opportunities</a>
+        </div>
+        <div class="nav-item" (click)="setSmallScreenTab('details')"
+            [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+            <a>Details</a>
+        </div>
+    </div>
+    <div class="assessment-container process-cooling-assessment modify-conditions panel-container">
+        
+    </div>
+
+</div>

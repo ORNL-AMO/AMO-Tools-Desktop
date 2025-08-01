@@ -39,6 +39,7 @@ export class AppComponent {
         this.analyticsService.sendEvent('measur_app_open_v2');
       }
       this.router.events.subscribe(event => {
+        console.log(event)
         if (event instanceof NavigationEnd) {
           let path: string = environment.production ? event.urlAfterRedirects : 'testing-web';
           path = this.analyticsService.getPageWithoutId(path);
