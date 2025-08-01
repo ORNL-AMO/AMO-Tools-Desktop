@@ -5,9 +5,7 @@ import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
 import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ProcessCoolingUiService {
   private router = inject(Router);
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);

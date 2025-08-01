@@ -3,9 +3,7 @@ import { Settings } from '../../shared/models/settings';
 import { ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ConvertProcessCoolingService {
 
 constructor(private convertUnitsService: ConvertUnitsService) { }

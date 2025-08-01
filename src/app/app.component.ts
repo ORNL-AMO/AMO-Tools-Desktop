@@ -30,9 +30,7 @@ export class AppComponent {
     private electronService: ElectronService,
     private appErrorService: AppErrorService,
     private router: Router) {
-    this.router.events.subscribe(event => {
-      console.log('=====', event)
-    });
+
     if (environment.production) {
       // analytics handled through gatg() automatically manages sessions, visits, clicks, etc
       gtag('config', 'G-EEHE8GEBH4');

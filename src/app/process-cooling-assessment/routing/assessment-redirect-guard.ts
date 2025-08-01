@@ -1,9 +1,9 @@
 import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from "@angular/router";
 import { Observable, of } from "rxjs";
 import { AssessmentDbService } from "../../indexedDb/assessment-db.service";
-import { ROUTE_TOKENS } from "../../process-cooling/process-cooling.module";
 import { Assessment } from "../../shared/models/assessment";
 import { Injectable } from "@angular/core";
+import { ROUTE_TOKENS } from "../process-cooling-assessment.module";
 
 @Injectable()
 export class AssessmentRedirectGuard implements CanActivate {

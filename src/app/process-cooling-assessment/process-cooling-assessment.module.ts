@@ -29,6 +29,7 @@ import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { ConvertProcessCoolingService } from './services/convert-process-cooling.service';
 
 
 export const ROUTE_TOKENS = {
@@ -133,6 +134,7 @@ const ROUTES: Route[] = [
     BaselineTabsComponent
   ],
   imports: [
+    RouterModule.forChild(ROUTES),
     CommonModule,
     AsyncPipe,
     RouterModule,
@@ -150,11 +152,11 @@ const ROUTES: Route[] = [
     PercentGraphModule,
     ModalModule,
     NgbModule,
-    RouterModule.forChild(ROUTES),
   ],
   providers: [
     ProcessCoolingAssessmentService,
     ProcessCoolingUiService,
+    ConvertProcessCoolingService,
     AssessmentRedirectGuard
   ],
 })

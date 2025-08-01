@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { ChillerInventoryService } from '../../process-cooling/chiller-inventory/chiller-inventory.service';
-import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
+import { ChillerInventoryItem } from '../../shared/models/process-cooling-assessment';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { ChillerInventoryService } from './chiller-inventory.service';
 
 @Component({
   selector: 'app-chiller-inventory',

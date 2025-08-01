@@ -2,8 +2,6 @@ import { Component, inject, Signal } from '@angular/core';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
 import { map, Observable } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
 import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
 import { MAIN_VIEW_LINKS, MainView, ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 import { DashboardService } from '../../dashboard/dashboard.service';

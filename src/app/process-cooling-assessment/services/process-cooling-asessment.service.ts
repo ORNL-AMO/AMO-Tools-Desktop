@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, map } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class ProcessCoolingAssessmentService {
   private readonly assessment = new BehaviorSubject<Assessment>(undefined);
   readonly assessment$ = this.assessment.asObservable();
