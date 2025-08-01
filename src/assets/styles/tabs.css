@@ -1,4 +1,8 @@
 
+:root {
+  --process-cooling-assessment: #009885;
+}
+
 /*
 Tabs
 ========================================== */
@@ -88,7 +92,7 @@ Tabs
 
   .process-cooling-assessment .tabs.primary .active a {
     border: none;
-    border-bottom:   #009885 groove 3px;
+    border-bottom:   var(--process-cooling-assessment) groove 3px;
   }
 
   .process-cooling .tabs.primary .active a {
@@ -205,7 +209,7 @@ Tabs
     border-bottom: #7030A0 solid 3px;
   }
 
-  .tabs.tabs.subtabs.process-cooling-assessment {
+  .tabs.subtabs.process-cooling-assessment {
     border-bottom: #009885 solid 3px;
   }
 

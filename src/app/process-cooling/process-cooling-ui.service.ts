@@ -50,3 +50,40 @@ export class ProcessCoolingUiService {
 export type ProcessCoolingMainTabString = 'baseline' | 'assessment' | 'diagram' | 'report' | 'calculators';
 export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-information' | 'inventory' | 'operating-schedule' | 'load-schedule';
 export type ProcessCoolingAssessmentTabString = 'explore-opportunities';
+
+
+export enum SetupView {
+  ASSESSMENT_SETTINGS = 'assessment-settings',
+  SYSTEM_INFORMATION = 'system-information',
+  INVENTORY = 'chiller-inventory',
+  OPERATING_SCHEDULE = 'operating-schedule',
+  LOAD_SCHEDULE = 'load-schedule',
+}
+
+export interface SetupViewLink {
+  setupView: SetupView;
+  label: string;
+}
+
+export const LINKS: SetupViewLink[] = [
+  {
+    setupView: SetupView.ASSESSMENT_SETTINGS,
+    label: 'Assessment Settings',
+  },
+  {
+    setupView: SetupView.SYSTEM_INFORMATION,
+    label: 'System Information',
+  },
+  {
+    setupView: SetupView.INVENTORY,
+    label: 'Inventory',
+  },
+  {
+    setupView: SetupView.OPERATING_SCHEDULE,
+    label: 'Operating Schedule',
+  },
+  {
+    setupView: SetupView.LOAD_SCHEDULE,
+    label: 'Load Schedule',
+  },
+]

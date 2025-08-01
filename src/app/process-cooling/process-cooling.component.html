@@ -1,14 +1,20 @@
 <div #content class="process-cooling-container process-cooling d-flex flex-column" *ngIf="settings && assessment">
   <div #header class="w-100 hide-print sticky-top" id="processCoolingBanner">
-    <app-process-cooling-banner [assessment]="assessment"></app-process-cooling-banner>
+    <!-- <app-process-cooling-banner [assessment]="assessment"></app-process-cooling-banner> -->
   </div>
 
   <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab() == 'baseline' && setupTab() != 'system-profile'">
-    <div class="nav-item" (click)="setSmallScreenTab('form')"
+    <!-- <div class="nav-item" (click)="setSmallScreenTab('form')"
       [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
       <a class="nav-link" *ngIf="setupTab() == 'system-basics'">Assessment Basics</a>
       <a class="nav-link" *ngIf="setupTab() == 'system-information'">System Information</a>
       <a class="nav-link" *ngIf="setupTab() == 'inventory'">Inventory</a>
+    </div> -->
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link" *ngFor="let link of LINKS" [routerLink]="['/' + ROUTE_TOKENS.baseline, link.setupView]"
+        routerLinkActive="router-link-active">{{link.description}}</a>
+    
     </div>
     <div class="nav-item" (click)="setSmallScreenTab('details')"
       [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
@@ -21,10 +27,11 @@
     <div class="assessment-panel-container lookup-form modification scroll-item" *ngIf="setupTab() !='operating-schedule'"
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}"
       [ngStyle]="{'height.px': containerHeight}">
-      <app-system-basics *ngIf="setupTab() == 'assessment-settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
+      <!-- <app-system-basics *ngIf="setupTab() == 'assessment-settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
         [assessment]="assessment"></app-system-basics>
       <app-system-information *ngIf="setupTab() == 'system-information'"></app-system-information>
-      <app-chiller-inventory *ngIf="setupTab() == 'inventory'"></app-chiller-inventory>
+      <app-chiller-inventory *ngIf="setupTab() == 'inventory'"></app-chiller-inventory> -->
+      <router-outlet ></router-outlet>
     </div>
     <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
       <app-results-panel></app-results-panel>
@@ -83,4 +90,4 @@
 </app-update-units-modal>
 
 <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
-<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal>
+<!-- <app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal> -->

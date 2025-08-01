@@ -1,5 +1,5 @@
 import { Component, WritableSignal } from '@angular/core';
-import { ProcessCoolingUiService } from '../../../process-cooling-ui.service';
+import { ProcessCoolingUiService } from '../../../services/process-cooling-ui.service';
 
 @Component({
   selector: 'app-system-information-help',

@@ -1,0 +1,100 @@
+<div class="assessment-tab-container report-container mx-0">
+    <div class="assessment-report report-in-process-cooling process-cooling"
+        [ngClass]="{'assessment-report-padding': inAssessment, 'report-in-rollup': inRollup}">
+        <div *ngIf="inAssessment" class="report-cover">
+            <img src="assets/images/DOE-banner-color.svg" class="doe-logo">
+
+            <div class="report-title">
+                <h4>Process Cooling Report:</h4>
+                <h4>{{assessment.name}}</h4>
+                <h5>{{createdDate| date:'short'}}</h5>
+            </div>
+
+            <p class="report-notes">{{reportNotes}}</p>
+        </div>
+
+        <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': inAssessment}">
+            <!-- <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2> -->
+
+            <div *ngIf="assessment && inAssessment" class="row">
+                <div class="col-12 p-2">
+                    <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+                        {{directory.name}} / {{assessment.name}}
+                    </span>
+                    <span class="ml-3 date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
+                    <button class="mt-0 btn btn-secondary pull-right hide-print" (click)="print()">Print</button>
+                </div>
+            </div>
+            <div *ngIf="assessment && !inAssessment" class="row assessment-name">
+                <div class="col-12">
+                    <h2 class="assessment-title">
+                        <div class="d-flex">
+                            <span class="pl-2" *ngFor="let directory of assessmentDirectories">
+                                {{directory.name}} /
+                            </span>
+                        </div>
+                        {{assessment.name}}
+
+                    </h2>
+                </div>
+                <div class="col-12">
+                    <h2 class="date-modified">
+                        <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="showPrintDiv && !inRollup" class="hide-print print-div row justify-content-center">
+            <div class="col-12 print-col">
+                <h4>Building Print View</h4>
+                <h5>One Moment Please</h5>
+                <span class="fa fa-print"></span>
+                <div class="spinner">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-data">
+            <div class="d-none d-lg-flex">
+                <ul #reportBtns class="tabs primary hide-print">
+                    @for (link of REPORT_VIEW_LINKS; track $index) {
+                    <li routerLinkActive="active" [routerLink]="[link.view]">
+                        <a [routerLink]="[link.view]">
+                            {{link.label}}
+                        </a>
+                    </li>
+                    }
+                </ul>
+            </div>
+
+            <!--  SMALL SCREEN STYLE -->
+            <div class="d-flex d-lg-none flex-column">
+                <div #reportBtns class="tabs primary hide-print">
+                    <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
+                        <span *ngIf="!tabsCollapsed" class="fa fa-caret-up pr-2"></span>
+                        <span *ngIf="tabsCollapsed" class="fa fa-caret-down pr-2"></span>
+                        <span class="small text-uppercase">Menu</span>
+                    </div>
+                    @for (link of REPORT_VIEW_LINKS; track $index) {
+                    <div routerLinkActive="active" [routerLink]="[link.view]">
+                        <a [routerLink]="[link.view]">
+                            {{link.label}}
+                        </a>
+                    </div>
+                    }
+                    <div (click)="print()" class="hide-print" [ngClass]="{'collapse': tabsCollapsed}">
+                        <a>Print</a>
+                    </div>
+                </div>
+            </div>
+
+            <router-outlet></router-outlet>
+
+        </div>
+    </div>
+    <!-- <app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu> -->
+</div>

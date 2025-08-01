@@ -30,7 +30,9 @@ export class AppComponent {
     private electronService: ElectronService,
     private appErrorService: AppErrorService,
     private router: Router) {
-
+    this.router.events.subscribe(event => {
+      console.log('=====', event)
+    });
     if (environment.production) {
       // analytics handled through gatg() automatically manages sessions, visits, clicks, etc
       gtag('config', 'G-EEHE8GEBH4');
@@ -39,6 +41,7 @@ export class AppComponent {
         this.analyticsService.sendEvent('measur_app_open_v2');
       }
       this.router.events.subscribe(event => {
+        console.log(event)
         if (event instanceof NavigationEnd) {
           let path: string = environment.production ? event.urlAfterRedirects : 'testing-web';
           path = this.analyticsService.getPageWithoutId(path);

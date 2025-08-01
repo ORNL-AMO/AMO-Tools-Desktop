@@ -11,7 +11,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsModule } from '../settings/settings.module';
-import { RouterModule } from '@angular/router';
+import { Route, RouterModule } from '@angular/router';
 import { ProcessCoolingComponent } from './process-cooling.component';
 import { ProcessCoolingBannerComponent } from './process-cooling-banner/process-cooling-banner.component';
 import { SetupTabsComponent } from './process-cooling-banner/setup-tabs/setup-tabs.component';
@@ -27,13 +27,49 @@ import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { ChillerInventoryComponent } from './chiller-inventory/chiller-inventory.component';
-import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
-import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
-import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
-import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe';
+import { InventoryHelpComponent } from '../process-cooling-assessment/results-panel/help-panel/inventory-help/inventory-help.component';
+import { SystemBasicsHelpComponent } from '../process-cooling-assessment/results-panel/help-panel/system-basics-help/system-basics-help.component';
+import { SystemInformationHelpComponent } from '../process-cooling-assessment/results-panel/help-panel/system-information-help/system-information-help.component';
+import { ChillerCompressorTypePipe } from '../process-cooling-assessment/pipes/chiller-compressor-type.pipe';
 import { ProcessCoolingUiService } from './process-cooling-ui.service';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 
+// todo combine with view enums?
+export const ROUTE_TOKENS = {
+  baseline: 'baseline',
+  assessment: 'explore-opportunities',
+  report: 'report',
+  assessmentBasics: 'assessment-basics',
+  systemInformation: 'system-information',
+  chillerInventory: 'chiller-inventory',
+
+};
+
+
+const ROUTES: Route[] = [
+  {
+    path: ':assessmentId',
+    component: ProcessCoolingComponent,
+    children: [
+      {
+        path: ROUTE_TOKENS.assessmentBasics,
+        component: SystemBasicsComponent,
+      },
+      // {
+      //   path: ROUTE_TOKENS.systemInformation,
+      //   component: ,
+      // },
+      {
+        path: ROUTE_TOKENS.chillerInventory,
+        component: ChillerInventoryComponent,
+      }
+    ]
+  },
+  {
+    path: ROUTE_TOKENS.report,
+    component: ProcessCoolingReportComponent,
+  },
+]
 
 @NgModule({
    declarations: [
@@ -68,6 +104,7 @@ import { ProcessCoolingAssessmentService } from './process-cooling-assessment.se
     Co2HelpTextModule,
     ImportExportModule,
     PercentGraphModule,
+    // RouterModule.forChild(ROUTES)
   ],
   providers: [
     ProcessCoolingAssessmentService,

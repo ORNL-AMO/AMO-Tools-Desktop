@@ -87,7 +87,7 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     background-color: #7030A0;
 }
 
-.process-cooling .btn-primary {
+.process-cooling-assessment .btn-primary {
     background-color: #009885;
 }
 

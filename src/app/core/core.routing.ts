@@ -610,8 +610,8 @@ export const coreRoutes: Routes = [
     component: WaterProcessDiagramComponent,
   },
   {
-    path: 'process-cooling/:id',
-    component: ProcessCoolingComponent,
+    path: 'process-cooling/:assessmentId',
+    loadChildren: () => import('../process-cooling-assessment/process-cooling-assessment.module').then(m => m.ProcessCoolingAssessmentModule),
   },
   { 
     path: '**', 

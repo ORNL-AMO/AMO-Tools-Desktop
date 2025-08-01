@@ -1,0 +1,90 @@
+
+<div class="navbar assessment-bar">
+    <ul class="h-100 tabs subtabs progress-tabs process-cooling-assessment d-none d-lg-block p-2">
+        @for (link of ASSESSMENT_VIEW_LINKS; track $index) {
+                    <li routerLinkActive="active" [routerLink]="[link.view]">
+                        <a [routerLink]="[link.view]">
+                            {{link.label}}
+                        </a>
+                    </li>
+      }
+    </ul>
+    
+    <div class="d-lg-flex d-none align-items-center tabs subtabs process-cooling-assessment ml-auto"
+        [ngClass]="{'br-color-white': selectedModification}">
+        <div class="mod-name active border-right" *ngIf="selectedModification">
+            <a>{{selectedModification.name}}
+                <br>
+                <span class="help-text">Selected Scenario</span>
+            </a>
+        </div>
+        <div class="mod-name border-right" *ngIf="!selectedModification">
+            <a>&mdash; &mdash;
+                <br>
+                <span class="help-text">Selected Scenario</span>
+            </a>
+        </div>
+        <div class="pl-2 pr-2">
+            <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add
+                Scenarios</button>
+        </div>
+    </div>
+
+    <!--  MOBILE STYLES -->
+    <div class="d-lg-none d-flex flex-column flex-fill">
+        <div class="d-flex d-lg-none flex-fill align-items-center justify-content-center tabs subtabs process-cooling-assessment"
+            [ngClass]="{'br-color-white': selectedModification}">
+            <div class="mod-name active border-right flex-fill" *ngIf="selectedModification">
+                <a>{{selectedModification.name}}
+                    <br>
+                    <span class="help-text">Selected Scenario</span>
+                </a>
+            </div>
+            <div class="mod-name border-right flex-fill" *ngIf="!selectedModification">
+                <a>&mdash; &mdash;
+                    <br>
+                    <span class="help-text">Selected Scenario</span>
+                </a>
+            </div>
+            <div class="pl-2 pr-2 flex-fill">
+                <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add
+                    Scenarios</button>
+            </div>
+        </div>
+        
+        <ul class="pagination d-flex d-lg-none justify-content-between tabs subtabs progress-tabs flex-fill process-cooling-assessment">
+            <li class="page-item" [ngClass]="{'disabled': assessmentView() == ROUTE_TOKENS.exploreOpportunities}">
+                <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': assessmentView() == ROUTE_TOKENS.exploreOpportunities}">
+                    <span class="fa fa-chevron-left"></span></a>
+            </li>
+            @for (link of ASSESSMENT_VIEW_LINKS; track $index) {
+                    <li routerLinkActive="active" [routerLink]="[link.view]">
+                        <a class="nav-link small" [routerLink]="[link.view]">
+                            {{link.label}}
+                        </a>
+                    </li>
+            }
+            <li class="page-item" [ngClass]="{'disabled': assessmentView() == ROUTE_TOKENS.modificationGraphs || !selectedModification}">
+                <a class="nav-link small" (click)="next()" [ngClass]="{'disabled': assessmentView() == ROUTE_TOKENS.modificationGraphs || !selectedModification}">
+                    <span class="fa fa-chevron-right"></span></a>
+            </li>
+        </ul>
+        
+        <!-- <div class="alert alert-info d-lg-none p-1 m-1 small">
+            This page is optimized to be viewed on a tablet-sized device or larger.
+        </div> -->
+    </div>
+    
+</div>
+
+<div [ngClass]="{'modal-open': isModalOpen == true}"
+    class="assessment-tab-container tab-content">
+    <router-outlet></router-outlet>
+  </div>
+
+  <!--  todo use different results componet or modify styles (see compressed air) -->
+  <!-- <div class="assessment-panel-container scroll-item"
+    [ngClass]="{'small-screen-tab': smallScreenPanelTab === 'details'}">
+    <app-results-panel></app-results-panel>
+  </div>
+   -->

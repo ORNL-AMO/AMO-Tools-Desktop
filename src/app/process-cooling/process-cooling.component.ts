@@ -11,9 +11,10 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
 import { Settings } from '../shared/models/settings';
 import { ChillerInventoryService } from './chiller-inventory/chiller-inventory.service';
 import { signal, WritableSignal } from '@angular/core';
-import { ProcessCoolingMainTabString, ProcessCoolingSetupTabString, ProcessCoolingUiService } from './process-cooling-ui.service';
+import { LINKS, ProcessCoolingMainTabString, ProcessCoolingSetupTabString, ProcessCoolingUiService, SetupView, SetupViewLink } from './process-cooling-ui.service';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ROUTE_TOKENS } from './process-cooling.module';
 
 @Component({
   selector: 'app-process-cooling',
@@ -22,19 +23,49 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './process-cooling.component.css'
 })
 export class ProcessCoolingComponent {
+  // @Input() set assessmentId(id: number) {
+  //   //   this.productsService.setSelectedCategory(val);
+  //   // // TODO: comment out productsService and uncomment the line below
+  //   // // this.productsSignals.selectedCategory.set(val);
+
+  //   let assessment = this.assessmentDbService.findById(id);
+  //   this.processCoolingAssessmentService.setAssessment(assessment);
+
+  //   // todo move
+  //   // let settings: Settings = this.settingsDbService.getByAssessmentId(assessment, true);
+  //   // if (!settings) {
+  //   //   settings = this.settingsDbService.getByAssessmentId(assessment, false);
+  //   //   this.addSettings(settings);
+  //   // } else {
+  //   //   this.settings = settings;
+  //   //   this.processCoolingAssessmentService.settings.next(settings);
+  //   //   // this.defaultChillerDbService.getAllCompressors(this.settings);
+  //   // }
+
+  //   // // todo move
+  //   // if (!this.inventoryService.selectedChiller.getValue()) {
+  //   //   this.inventoryService.setDefaultSelectedChiller(assessment.processCooling.inventory);
+  //   // }
+
+  // }
+
  @ViewChild('header', { static: false }) header: ElementRef;
-  @ViewChild('footer', { static: false }) footer: ElementRef;
-  @ViewChild('content', { static: false }) content: ElementRef;
-  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
-  containerHeight: number;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setContainerHeight();
-  }
+ @ViewChild('footer', { static: false }) footer: ElementRef;
+ @ViewChild('content', { static: false }) content: ElementRef;
+ @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
+ containerHeight: number;
+ @HostListener('window:resize', ['$event'])
+ onResize(event) {
+   this.setContainerHeight();
+ }
 
   assessment: Assessment;
   settings: Settings;
   oldSettings: Settings;
+
+  readonly LINKS: SetupViewLink[] = LINKS;
+  readonly ROUTE_TOKENS = ROUTE_TOKENS;
+
   
   mainTab: WritableSignal<string>;
   setupTab: WritableSignal<ProcessCoolingSetupTabString>;
@@ -79,50 +110,50 @@ export class ProcessCoolingComponent {
       this.setContainerHeight();
     });
 
-    this.processCoolingAssessmentService.processCooling
-      .pipe(takeUntilDestroyed())
-      .subscribe(val => {
-        if (val && this.assessment) {
-          this.save(val);
-          this.disableNext();
-        }
-      });
+    // this.processCoolingAssessmentService.processCooling
+    //   .pipe(takeUntilDestroyed())
+    //   .subscribe(val => {
+    //     if (val && this.assessment) {
+    //       this.save(val);
+    //       this.disableNext();
+    //     }
+    //   });
   }
 
   ngOnInit() {
-    this.mainTab = this.processCoolingUiService.mainTabSignal;
-    this.setupTab = this.processCoolingUiService.setupTabSignal;
+    // this.mainTab = this.processCoolingUiService.mainTabSignal;
+    // this.setupTab = this.processCoolingUiService.setupTabSignal;
 
-    this.isModalOpen = this.processCoolingUiService.modalOpenSignal;
-    this.showExportModal = this.processCoolingUiService.showExportModalSignal;
+    // this.isModalOpen = this.processCoolingUiService.modalOpenSignal;
+    // this.showExportModal = this.processCoolingUiService.showExportModalSignal;
 
-    this.analyticsService.sendEvent('view-process-cooling-assessment', undefined);
-    this.egridService.getAllSubRegions();
+    // this.analyticsService.sendEvent('view-process-cooling-assessment', undefined);
+    // this.egridService.getAllSubRegions();
 
-    this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
-      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-      if (!settings) {
-        settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-        this.addSettings(settings);
-      } else {
-        this.settings = settings;
-        this.processCoolingAssessmentService.settings.next(settings);
-        // this.defaultChillerDbService.getAllCompressors(this.settings);
-      }
-      this.processCoolingAssessmentService.updateProcessCooling(this.assessment.processCooling, false);
+    // this.activatedRoute.params.subscribe(params => {
+    //   this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
+    //   let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+    //   if (!settings) {
+    //     settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
+    //     this.addSettings(settings);
+    //   } else {
+    //     this.settings = settings;
+    //     this.processCoolingAssessmentService.settings.next(settings);
+    //     // this.defaultChillerDbService.getAllCompressors(this.settings);
+    //   }
+    //   this.processCoolingAssessmentService.updateProcessCooling(this.assessment.processCooling, false);
 
-      if (!this.inventoryService.selectedChiller.getValue()) {
-        this.inventoryService.setDefaultSelectedChiller(this.assessment.processCooling.inventory);
-      }
-    });
+    //   if (!this.inventoryService.selectedChiller.getValue()) {
+    //     this.inventoryService.setDefaultSelectedChiller(this.assessment.processCooling.inventory);
+    //   }
+    // });
 
-    let recentTab: ProcessCoolingMainTabString = this.assessmentService.getStartingTab() as ProcessCoolingMainTabString;
-    if (recentTab) {
-      this.mainTab.set(recentTab);
-    }
+    // let recentTab: ProcessCoolingMainTabString = this.assessmentService.getStartingTab() as ProcessCoolingMainTabString;
+    // if (recentTab) {
+    //   this.mainTab.set(recentTab);
+    // }
 
-    this.checkShowWelcomeScreen();
+    // this.checkShowWelcomeScreen();
   }
 
   ngOnDestroy() {    
@@ -240,10 +271,10 @@ export class ProcessCoolingComponent {
   }
 
   checkShowWelcomeScreen() {
-    if (!this.settingsDbService.globalSettings.disableCompressedAirTutorial) {
-      this.showWelcomeScreen = true;
-      this.isModalOpen.set(true);
-    }
+    // if (!this.settingsDbService.globalSettings.disableProcessCoolingTutorial) {
+    //   this.showWelcomeScreen = true;
+    //   this.isModalOpen.set(true);
+    // }
   }
 
   async closeWelcomeScreen() {
