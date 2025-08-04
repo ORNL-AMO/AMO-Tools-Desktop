@@ -48,7 +48,6 @@ import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-
 import { SubscribeModalComponent } from '../shared/subscribe-modal/subscribe-modal.component';
 import { ExportToJustifiModalModule } from '../shared/export-to-justifi-modal/export-to-justifi-modal.module';
 import { ShareDataModalModule } from '../shared/share-data-modal/share-data-modal.module';
-import { ProcessCoolingAssessmentModule } from '../process-cooling-assessment/process-cooling-assessment.module';
 
 @NgModule({
   declarations: [

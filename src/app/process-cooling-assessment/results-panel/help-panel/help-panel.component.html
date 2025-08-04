@@ -1,1 +1,3 @@
-<p>help-panel works!</p>
+<app-system-basics-help *ngIf="setupView() == ROUTE_TOKENS.assessmentSettings"></app-system-basics-help>
+<app-system-information-help *ngIf="setupView() == ROUTE_TOKENS.systemInformation"></app-system-information-help>
+<app-inventory-help *ngIf="setupView() == ROUTE_TOKENS.chillerInventory"></app-inventory-help>

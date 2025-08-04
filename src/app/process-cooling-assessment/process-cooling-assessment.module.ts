@@ -37,6 +37,12 @@ import { FormControlRequiredComponent } from '../shared/form-control-required.co
 import { InputUnitComponent } from '../shared/input-unit.component';
 import { OperationsComponent } from './system-information/operations/operations.component';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
+import { ProcessCoolingAssessmentResolver } from './routing/process-cooling-assessment-resolver.resolver';
+import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
+import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
+import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
+import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
+import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
 
 
 export const ROUTE_TOKENS = {
@@ -66,6 +72,9 @@ const ROUTES: Route[] = [
   {
     path: '',
     component: ProcessCoolingAssessmentComponent,
+     resolve: { 
+      processCoolingData: ProcessCoolingAssessmentResolver 
+    },
     children: [
       { path: '', redirectTo: ROUTE_TOKENS.baseline, pathMatch: 'full' },
       {
@@ -139,7 +148,12 @@ const ROUTES: Route[] = [
     ExploreOpportunitiesComponent,
     BaselineComponent,
     ResultsPanelComponent,
-    BaselineTabsComponent
+    BaselineTabsComponent,
+    HelpPanelComponent,
+    SystemBasicsHelpComponent,
+    SystemInformationHelpComponent,
+    InventoryHelpComponent,
+    InventoryTableComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -171,7 +185,8 @@ const ROUTES: Route[] = [
     ProcessCoolingResultsService,
     SystemInformationFormService,
     ConvertProcessCoolingService,
-    AssessmentRedirectGuard
-  ],
+    AssessmentRedirectGuard,
+    ProcessCoolingAssessmentResolver
+  ]
 })
 export class ProcessCoolingAssessmentModule { }

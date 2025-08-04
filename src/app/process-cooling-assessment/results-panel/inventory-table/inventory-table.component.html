@@ -1,1 +1,57 @@
-<p>inventory-table works!</p>
+<div class="card p-2">
+    <div class="card-body p-0">
+        <span class="alert-danger pull-right small" *ngIf="hasInvalidChillers">
+            One or more chiller is invalid - Review inventory and make changes to continue
+        </span>
+        <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedChiller && chillerInventoryItems">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>Compressor / Chiller Type</th>
+                    <th>Full Load Efficiency</th>
+                    <th>Chiller Capacity</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let chillerInventoryItem of chillerInventoryItems"
+                    [ngClass]="{'selected-item':chillerInventoryItem.itemId == selectedChiller.itemId,
+                                'invalid-item': !chillerInventoryItem.isValid}">
+                    <td>
+                        <span *ngIf="chillerInventoryItem.itemId == selectedChiller.itemId"
+                            class="fa fa-chevron-right danger"></span>
+                        <a class="click-link"
+                            (click)="selectItem(chillerInventoryItem)">{{chillerInventoryItem.name}}</a>
+                    </td>
+                    <td>
+                        {{chillerInventoryItem.compressorChillerType | chillerCompressorType}}
+                    </td>
+                    <td>
+                        {{chillerInventoryItem.fullLoadEfficiency}}
+                    </td>
+                    <td>
+                        {{chillerInventoryItem.chillerCapacity}}
+
+                    </td>
+                    <td>
+                        <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(chillerInventoryItem)"></a>
+                        
+                    </td>
+                    <td>
+                        <a class="fa fa-copy" (click)="createCopy(chillerInventoryItem)"></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="w-100 text-right">
+            <a class="click-link small" (click)="addNewChiller()">+Add New Chiller</a>
+        </div>
+    </div>
+</div>
+
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+</app-confirm-delete-modal>
