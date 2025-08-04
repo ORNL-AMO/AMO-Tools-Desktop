@@ -44,6 +44,7 @@ export const getDefaultInventoryItem = (): ChillerInventoryItem => {
 export const getDefaultProcessCoolingAssessment = (settings: Settings ): ProcessCoolingAssessment => {
         return {
           name: 'Baseline',
+          isValid: false,
           modifications: new Array(),
           setupDone: false,
           systemBasics: {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { Operations } from '../../shared/models/process-cooling-assessment';
+import { Operations, PumpInput } from '../../shared/models/process-cooling-assessment';
 
 @Injectable()
 export class SystemInformationFormService {
@@ -18,15 +18,33 @@ export class SystemInformationFormService {
     });
   }
 
+  getPumpInputForm(pumpInput: PumpInput): FormGroup<PumpInputForm> {
+    return this.formBuilder.group({
+      variableFlow: [pumpInput.variableFlow, Validators.required],
+      flowRate: [pumpInput.flowRate, [Validators.required, Validators.min(0)]],
+      efficiency: [pumpInput.efficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+      motorSize: [pumpInput.motorSize, [Validators.required, Validators.min(0)]],
+      motorEfficiency: [pumpInput.motorEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+    });
+  }
+
   // * spread all current values of operations and then apply the new values from the form, 
   // * since it is only a partial object
-   getOperations(formValue: Partial<Operations>, currentOperations: Operations): Operations {
+  getOperations(formValue: Partial<Operations>, currentOperations: Operations): Operations {
     return {
       ...currentOperations,
       ...formValue,
     };
   }
+
+  getPumpInput(formValue: Partial<PumpInput>, currentPumpInput: PumpInput): PumpInput {
+    return {
+      ...currentPumpInput,
+      ...formValue,
+    };
+  }
 }
+
 
 export interface OperationsForm {
   annualOperatingHours: FormControl<number>;
@@ -35,4 +53,12 @@ export interface OperationsForm {
   zipcode: FormControl<number>;
   chilledWaterSupplyTemp: FormControl<number>;
   condenserCoolingMethod: FormControl<number>;
+}
+
+export interface PumpInputForm {
+  variableFlow: FormControl<boolean>;
+  flowRate: FormControl<number>;
+  efficiency: FormControl<number>;
+  motorSize: FormControl<number>;
+  motorEfficiency: FormControl<number>;
 }

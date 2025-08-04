@@ -43,6 +43,10 @@ import { InventoryTableComponent } from './results-panel/inventory-table/invento
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
 import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
+import { WaterPumpComponent } from './system-information/pump-wrapper/water-pump/water-pump.component';
+import { PumpWrapperComponent } from './system-information/pump-wrapper/pump-wrapper.component';
+import { WaterPumpHelpComponent } from './results-panel/help-panel/water-pump-help/water-pump-help.component';
+import { OperationsHelpComponent } from './results-panel/help-panel/operations-help/operations-help.component';
 
 
 export const ROUTE_TOKENS = {
@@ -54,6 +58,8 @@ export const ROUTE_TOKENS = {
   // Baseline sub-tabs
   assessmentSettings: 'assessment-settings',
   systemInformation: 'system-information',
+  operations: 'operations',
+  waterPump: 'pump',
   chillerInventory: 'chiller-inventory',
 
   // Assessment sub-tabs
@@ -89,6 +95,17 @@ const ROUTES: Route[] = [
           {
             path: ROUTE_TOKENS.systemInformation,
             component: SystemInformationComponent,
+            children: [
+              { path: '', redirectTo: ROUTE_TOKENS.operations, pathMatch: 'full' },
+              {
+                path: ROUTE_TOKENS.operations,
+                component: OperationsComponent,
+              },
+              {
+                path: ROUTE_TOKENS.waterPump,
+                component: PumpWrapperComponent,
+              }
+            ]
           },
           {
             path: ROUTE_TOKENS.chillerInventory,
@@ -153,7 +170,12 @@ const ROUTES: Route[] = [
     SystemBasicsHelpComponent,
     SystemInformationHelpComponent,
     InventoryHelpComponent,
-    InventoryTableComponent
+    InventoryTableComponent,
+    WaterPumpComponent,
+    PumpWrapperComponent,
+    WaterPumpHelpComponent,
+    OperationsHelpComponent,
+    ExecutiveSummaryComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),

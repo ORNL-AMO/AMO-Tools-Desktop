@@ -1,8 +1,7 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { BehaviorSubject, firstValueFrom, map } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
-import { getNewIdString } from '../../shared/helperFunctions';
-import { ProcessCoolingAssessment, SystemInformation } from '../../shared/models/process-cooling-assessment';
+import { ProcessCoolingAssessment, ProcessCoolingDataProperty, ProcessCoolingSystemInformationProperty, SystemInformation } from '../../shared/models/process-cooling-assessment';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
@@ -51,7 +50,7 @@ export class ProcessCoolingAssessmentService {
     this.settingsSignal.set(settings);
   }
 
-  // * prefer immutability, don't mutate the current object, return new (like React )
+  // * prefer immutability, don't mutate the current object, return new (like React patterns )
   updateProcessCoolingProperty<K extends ProcessCoolingDataProperty>(key: K, value: ProcessCoolingAssessment[K]) {
     if (this.processCooling.getValue()) {
       let updatedProcessCooling = { ...this.processCooling.getValue() };
@@ -59,6 +58,7 @@ export class ProcessCoolingAssessmentService {
       this.setProcessCooling(updatedProcessCooling);
     }
   }
+
 
   updateSystemInformation<K extends ProcessCoolingSystemInformationProperty>(key: K, value: SystemInformation[K]) {
     let updatedProcessCooling = { ...this.processCooling.getValue() };
@@ -112,25 +112,6 @@ export class ProcessCoolingAssessmentService {
     return Promise.resolve();
   }
 
-  // async addNewAssessmentSettings(settings: Settings) {
-  //     delete settings.id;
-  //     delete settings.directoryId;
-  //     settings.assessmentId = this.assessment.id;
-  //     await firstValueFrom(this.settingsDbService.addWithObservable(settings));
-  //     let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
-  //     this.settingsDbService.setAll(updatedSettings);
-  //     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-
-  //     if (this.settings.unitsOfMeasure == 'Metric') {
-  //       let oldSettings: Settings = JSON.parse(JSON.stringify(this.settings));
-  //       oldSettings.unitsOfMeasure = 'Imperial';
-  //       this.assessment.compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(this.assessment.compressedAirAssessment, oldSettings, this.settings);
-  //     }
-  //     // todo find out why we need settings for getting compressors
-  //     // this.genericCompressorDbService.getAllCompressors(this.settings);
-  //     this.compressedAirAssessmentService.settings.next(this.settings);
-  //   }
-
   readonly isBaselineValid$ = this.assessment$.pipe(
     map((assessment: Assessment) => assessment ? assessment.processCooling.setupDone : false)
   );
@@ -146,26 +127,4 @@ export class ProcessCoolingAssessmentService {
   isChillerInventoryValid(): boolean {
     return true;
   }
-}
-
-export type ProcessCoolingMainTabString = 'baseline' | 'assessment' | 'diagram' | 'report' | 'calculators';
-export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-information' | 'inventory' | 'operating-schedule' | 'load-schedule';
-
-export type ProcessCoolingDataProperty = keyof Pick<ProcessCoolingAssessment, 'systemBasics' | 'systemInformation' | 'inventory' | 'modifications'>;
-export type ProcessCoolingSystemInformationProperty = keyof Pick<SystemInformation, 'operations' | 'co2SavingsData' | 'airCooledSystemInput' | 'chilledWaterPumpInput' | 'condenserWaterPumpInput' | 'towerInput' | 'waterCooledSystemInput'>;
-
-export type FormControlIds<T> = {
-  [K in keyof T]: string;
-};
-
-
-export const generateFormControlIds = <T extends Record<string, any>>(obj: T): FormControlIds<T> => {
-  const result = {} as FormControlIds<T>;
-  const idString = getNewIdString();
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      result[key] = `${idString}_${key}`;
-    }
-  }
-  return result;
 }

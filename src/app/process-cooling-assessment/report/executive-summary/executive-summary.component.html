@@ -1,23 +1,100 @@
 <!--  todo show print view -->
-<div class="results scroll-item print-height page-break-before">
-    <div class="output-summary w-75 mx-auto">
-    @if (!isValid) {
-    <!-- <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
+<!-- DEBUG: Show raw results for easier testing -->
+<ng-container *ngIf="results$ | async as results">
+
+    <div class="debug-results" style="background: #f8f9fa; border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem;">
+        <h5>DEVELOPMENT Debug Results</h5>
+
+        <!-- Example: Render as tables for easier visual debugging -->
+        <div *ngIf="results">
+            <div *ngFor="let chiller of results.chiller; let i = index">
+                <strong>Chiller {{i + 1}}</strong>
+                <table class="table table-sm table-bordered mb-2">
+                    <thead>
+                        <tr>
+                            <th>Bin</th>
+                            <th>Efficiency</th>
+                            <th>Hours</th>
+                            <th>Power</th>
+                            <th>Energy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let bin of chiller.efficiency; let j = index">
+                            <td>{{j}}</td>
+                            <td>{{chiller.efficiency[j]}}</td>
+                            <td>{{chiller.hours[j]}}</td>
+                            <td>{{chiller.power[j]}}</td>
+                            <td>{{chiller.energy[j]}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h6>Pump</h6>
+            <table class="table table-sm table-bordered mb-2">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th *ngFor="let idx of results.pump.chillerPumpingEnergy; let i = index">{{i}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Chiller Pumping Energy</th>
+                        <td *ngFor="let val of results.pump.chillerPumpingEnergy">{{val}}</td>
+                    </tr>
+                    <tr>
+                        <th>Condenser Pumping Energy</th>
+                        <td *ngFor="let val of results.pump.condenserPumpingEnergy">{{val}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h6>Tower</h6>
+            <table class="table table-sm table-bordered mb-2">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th *ngFor="let idx of results.tower.hours; let i = index">{{i}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Hours</th>
+                        <td *ngFor="let val of results.tower.hours">{{val}}</td>
+                    </tr>
+                    <tr>
+                        <th>Energy</th>
+                        <td *ngFor="let val of results.tower.energy">{{val}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--  End DEBUGGING -->
+
+
+    <div class="results scroll-item print-height page-break-before">
+        <div class="output-summary w-75 mx-auto">
+            @if (!isValid) {
+            <!-- <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
         [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
         [bootstrapLevel]="'alert-danger'"></app-alert-info-container> -->
-    } @else if (baselineResults && modificationResults) {
-    <h4 class="show-print print-section-header">Executive Summary Table</h4>
-
-    <app-exportable-results-table [tableString]="copyTable1String"
-    (updateTableString)="updateCopyTable1String()"></app-exportable-results-table>
-    }
-
-</div>
+            } @else if (baselineResults && modificationResults) {
+            <h4 class="show-print print-section-header">Executive Summary Table</h4>
+            <app-exportable-results-table [tableString]="copyTable1String"
+                (updateTableString)="updateCopyTable1String()"></app-exportable-results-table>
+            }
 
 
 
-</div>
-<!-- <div class="results scroll-item print-height page-break-before"
+
+
+        </div>
+
+
+
+    </div>
+    <!-- <div class="results scroll-item print-height page-break-before"
             *ngIf="(currentTab == 'pump-summary' && !showPrintView) || (showPrintView && printOptions.printPumpSummaryReport)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-pump-summary-report [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-pump-summary-report>
@@ -28,4 +105,4 @@
             <app-tower-summary-report [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-tower-summary-report>
         </div> -->
 
-    
+</ng-container>

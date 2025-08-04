@@ -1,0 +1,56 @@
+
+<div class="header mr-2 ml-2">
+    <h3>
+        {{ pumpFormType === 'chilledWaterPumpInput' ? 'Chilled Water Pump' : 'Condenser Water Pump' }}
+    </h3>
+    <br>
+</div>
+<form class="pl-3 pr-3" [formGroup]="form" #formElement>
+    <div class="form-group">
+        <label for="{{controlIds.variableFlow}}">Variable Flow</label>
+        <select class="form-control" id="{{controlIds.variableFlow}}" formControlName="variableFlow" (focus)="focusField('variableFlow')">
+            <option [ngValue]="true">Yes</option>
+            <option [ngValue]="false">No</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="{{controlIds.flowRate}}">Flow Rate</label>
+        <div class="input-group">
+            <input name="flowRate" type="number" step="any" class="form-control" id="{{controlIds.flowRate}}"
+                formControlName="flowRate" (focus)="focusField('flowRate')">
+            <app-input-unit [defaultUnit]="'gpm/ton'"></app-input-unit>
+        </div>
+        <app-form-control-errors [control]="flowRate"></app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+        <label for="{{controlIds.efficiency}}">Pump Efficiency</label>
+        <div class="input-group">
+            <input name="efficiency" type="number" step="0.01" class="form-control" id="{{controlIds.efficiency}}"
+                formControlName="efficiency" (focus)="focusField('efficiency')">
+            <app-input-unit [defaultUnit]="'%'"></app-input-unit>
+        </div>
+        <app-form-control-errors [control]="efficiency"></app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+        <label for="{{controlIds.motorSize}}">Motor Size</label>
+        <div class="input-group">
+            <input name="motorSize" type="number" step="any" class="form-control" id="{{controlIds.motorSize}}"
+                formControlName="motorSize" (focus)="focusField('motorSize')">
+            <app-input-unit [defaultUnit]="'hp'"></app-input-unit>
+        </div>
+        <app-form-control-errors [control]="motorSize"></app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+        <label for="{{controlIds.motorEfficiency}}">Motor Efficiency</label>
+        <div class="input-group">
+            <input name="motorEfficiency" type="number" step="0.01" class="form-control" id="{{controlIds.motorEfficiency}}"
+                formControlName="motorEfficiency" (focus)="focusField('motorEfficiency')">
+            <app-input-unit [defaultUnit]="'%'"></app-input-unit>
+        </div>
+        <app-form-control-errors [control]="motorEfficiency"></app-form-control-errors>
+    </div>
+</form>

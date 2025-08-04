@@ -1,5 +1,12 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
-import { getNewIdString } from "../helperFunctions";
+
+export type ProcessCoolingMainTabString = 'baseline' | 'assessment' | 'diagram' | 'report' | 'calculators';
+export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-information' | 'inventory' | 'operating-schedule' | 'load-schedule';
+
+export type ProcessCoolingDataProperty = keyof Pick<ProcessCoolingAssessment, 'systemBasics' | 'systemInformation' | 'inventory' | 'modifications'>;
+export type ProcessCoolingSystemInformationProperty = keyof Pick<SystemInformation, 'operations' | 'co2SavingsData' | 'airCooledSystemInput' | 'chilledWaterPumpInput' | 'condenserWaterPumpInput' | 'towerInput' | 'waterCooledSystemInput'>;
+export type CoolingWaterPumpType = keyof Pick<SystemInformation, 'chilledWaterPumpInput' | 'condenserWaterPumpInput'>;
+
 
 // Output interfaces for process cooling API service
 export interface ProcessCoolingChillerOutput {
@@ -29,6 +36,7 @@ export interface ProcessCoolingResults {
 export interface ProcessCoolingAssessment {
     name: string;
     setupDone: boolean;
+    isValid: boolean;
     selectedModificationId: string;
     existingDataUnits: string;
     selected: boolean;

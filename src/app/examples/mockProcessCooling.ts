@@ -24,6 +24,7 @@ export const MockProcessCoolingAssessment: Assessment = {
     "directoryId": 2,
     "processCooling": {
         name: "Baseline",
+        isValid: true,
         modifications: [],
         setupDone: true,
         systemBasics: { ...EXAMPLE_SYSTEM_BASICS },

@@ -68,17 +68,17 @@ export const EXAMPLE_TOWER_INPUT = {
 export const EXAMPLE_PUMP_INPUT_CHILLED: PumpInput = {
   variableFlow: false,
   flowRate: 2.4,
-  efficiency: 0.75,
+  efficiency: 75,
   motorSize: 20,
-  motorEfficiency: 0.85,
+  motorEfficiency: 85,
 };
 
 export const EXAMPLE_PUMP_INPUT_CONDENSER: PumpInput = {
   variableFlow: false,
   flowRate: 3,
-  efficiency: 0.75,
+  efficiency: 75,
   motorSize: 25,
-  motorEfficiency: 0.85
+  motorEfficiency: 85
 };
 
 //* does the system load vary according to the ari 550/590? no

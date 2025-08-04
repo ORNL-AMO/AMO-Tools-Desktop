@@ -27,3 +27,20 @@ export function getNameDateString(currentDate: Date) {
     const dateStr = (currentDate.getMonth() + 1) + '-' + currentDate.getDate() + '-' + currentDate.getFullYear();
     return dateStr;
 }
+
+
+export type FormControlIds<T> = {
+  [K in keyof T]: string;
+};
+
+
+export const generateFormControlIds = <T extends Record<string, any>>(obj: T): FormControlIds<T> => {
+  const result = {} as FormControlIds<T>;
+  const idString = getNewIdString();
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      result[key] = `${idString}_${key}`;
+    }
+  }
+  return result;
+}
