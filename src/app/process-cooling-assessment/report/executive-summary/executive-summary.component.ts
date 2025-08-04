@@ -1,11 +1,14 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { Settings } from 'http2';
 import { ExecutiveSummaryResults } from 'process-flow-lib';
 import { Assessment } from '../../../shared/models/assessment';
+import { ProcessCoolingResults } from '../../../shared/models/process-cooling-assessment';
+import { ProcessCoolingResultsService } from '../../services/process-cooling-results.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-executive-summary',
-  imports: [],
+  standalone: false,
   templateUrl: './executive-summary.component.html',
   styleUrl: './executive-summary.component.css'
 })
@@ -17,6 +20,8 @@ export class ExecutiveSummaryComponent {
   @Input()
   settings: Settings;
 
+  private resultsService = inject(ProcessCoolingResultsService);
+
   notes: Array<{
     modificationName: string,
     note: string
@@ -27,12 +32,15 @@ export class ExecutiveSummaryComponent {
   modificationResults: ExecutiveSummaryResults[] = [];
   isValid: boolean;
 
+  results$: Observable<ProcessCoolingResults> = this.resultsService.results$;
+
   @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;
   copyTable1String: any;
 
 
 
   ngOnInit(): void {
+
     // let diagram: Diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(this.assessment);
     // let nodeErrors: NodeErrors = checkDiagramNodeErrors(
     //   diagram.waterDiagram.flowDiagramData.nodes,

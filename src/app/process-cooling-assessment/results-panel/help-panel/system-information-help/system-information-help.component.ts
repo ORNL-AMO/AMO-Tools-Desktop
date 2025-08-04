@@ -1,5 +1,6 @@
-import { Component, WritableSignal } from '@angular/core';
+import { Component, inject, Signal, WritableSignal } from '@angular/core';
 import { ProcessCoolingUiService } from '../../../services/process-cooling-ui.service';
+import { ROUTE_TOKENS } from '../../../process-cooling-assessment.module';
 
 @Component({
   selector: 'app-system-information-help',
@@ -8,10 +9,9 @@ import { ProcessCoolingUiService } from '../../../services/process-cooling-ui.se
   styleUrl: './system-information-help.component.css'
 })
 export class SystemInformationHelpComponent {
-  focusedField: WritableSignal<string>;
-  constructor(private processCoolingService: ProcessCoolingUiService) { 
-    this.focusedField = this.processCoolingService.focusedFieldSignal;
-  }
-
+  private readonly processCoolingUiService = inject(ProcessCoolingUiService);
+  readonly ROUTE_TOKENS = ROUTE_TOKENS;
+  focusedField: WritableSignal<string> = this.processCoolingUiService.focusedFieldSignal;
+  setupSubView: Signal<string> = this.processCoolingUiService.setupSubView;
 
 }

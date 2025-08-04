@@ -7,10 +7,11 @@ import { TEMPERATURE_HTML } from "../../../shared/app-constants";
 import { OperatingHours } from "../../../shared/models/operations";
 import { ProcessCoolingAssessment } from "../../../shared/models/process-cooling-assessment";
 import { getCondenserCoolingMethods } from "../../process-cooling-constants";
-import { FormControlIds, generateFormControlIds, ProcessCoolingAssessmentService } from "../../services/process-cooling-asessment.service";
+import { ProcessCoolingAssessmentService } from "../../services/process-cooling-asessment.service";
 import { OperationsForm, SystemInformationFormService } from "../system-information-form.service";
 import { Settings } from "../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../services/process-cooling-ui.service";
+import { FormControlIds, generateFormControlIds } from "../../../shared/helperFunctions";
 
 
 // * outline changes from typical MEASUR patterns

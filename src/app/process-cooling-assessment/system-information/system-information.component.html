@@ -1,8 +1,37 @@
+<!-- LARGE VIEWPORT TABS -->
+<ul class="tabs subtabs progress-tabs process-cooling-assessment d-none d-lg-block">
+        @for (link of SYSTEM_INFORMATION_VIEW_LINKS; track $index) {
+        <li routerLinkActive="active" [routerLink]="[link.view]">
+            <a routerLinkActive="active" [routerLink]="[link.view]">
+                {{link.label}}
+            </a>
+        </li>
+        }
+</ul>
+<!--  SMALL SCREEN TABS -->
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs process-cooling-assessment flex-wrap flex-fill">
+    <ul class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill process-cooling-assessment">
+        <li class="page-item">
+            <a class="nav-link small" (click)="back()">
+                <span class="fa fa-chevron-left"></span></a>
+        </li>
+        @for (link of SYSTEM_INFORMATION_VIEW_LINKS; track $index) {
+            @if (setupSubView() == link.view) {
+            <li class="page-item" routerLinkActive="active" [routerLink]="[link.view]">
+                <a class="nav-link small" routerLinkActive="active" [routerLink]="[link.view]">
+                    {{link.label}}
+                </a>
+            </li>
+            }
+        }
+        <li class="page-item" >
+            <a class="nav-link small" (click)="continue()">
+                <span class="fa fa-chevron-right"></span></a>
+        </li>
+    </ul>
+</nav>
+
 <div class="d-flex flex-column panel-container">
-    <div class="header mr-2 ml-2">
-        <h3>System Information</h3>
-        <br>
-    </div>
-    <app-operations></app-operations>
+    <router-outlet></router-outlet>
 </div>
 

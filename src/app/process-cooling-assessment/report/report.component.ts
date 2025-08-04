@@ -40,15 +40,8 @@ export class ReportComponent {
   printOptions: PrintOptions;
 
   tabsCollapsed: boolean = true;
-
   REPORT_VIEW_LINKS = REPORT_VIEW_LINKS;
-  constructor(
-    // private settingsDbService: SettingsDbService, 
-    // private printOptionsMenuService: PrintOptionsMenuService, 
-    // private directoryDbService: DirectoryDbService,
-    // private processCoolingReportService: ProcessCoolingReportService,
-    // private processCoolingAssessmentService: ProcessCoolingAssessmentService
-  ) { }
+
 
   ngOnInit(): void {
     // this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -56,7 +49,7 @@ export class ReportComponent {
     if (this.assessment) {
       this.assessmentDirectories = new Array();
       // this.getDirectoryList(this.assessment.directoryId);
-      this.processCoolingResultsService.getResults(this.assessment.processCooling);
+      // this.processCoolingResultsService.getResults(this.processCoolingAssessmentService.processCooling);
 
 
       // todo 6706 set up subs for graph/bar components

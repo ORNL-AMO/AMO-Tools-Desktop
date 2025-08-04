@@ -400,12 +400,14 @@ export class ProcessCoolingSuiteApiService {
    * @returns {any} Module.PumpInput instance
    */
   private _createPumpInput(input: PumpInput): any {
+    const efficiencyFraction = input.efficiency / 100;
+    const motorEfficiencyFraction = input.motorEfficiency / 100;
     return new Module.PumpInput(
       input.variableFlow,
       input.flowRate,
-      input.efficiency,
+      efficiencyFraction,
       input.motorSize,
-      input.motorEfficiency
+      motorEfficiencyFraction
     );
   }
 

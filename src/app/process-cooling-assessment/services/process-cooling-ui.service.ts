@@ -22,7 +22,8 @@ export class ProcessCoolingUiService {
     assessmentURL: 0,
     assessmentId: 1,
     main: 2,
-    setup: 3
+    setup: 3,
+    subview: 4
   };
 
   private readonly STEPPED_ROUTES = [
@@ -75,6 +76,19 @@ export class ProcessCoolingUiService {
     { initialValue: '' }
   );
 
+  readonly setupSubView: Signal<string> = toSignal(
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(() => {
+        const subView = this.getSetupSubView();
+        console.log('subView:', subView);
+        return subView;
+      }),
+      startWith(this.getCurrentChildView())
+    ),
+    { initialValue: '' }
+  );
+
 
   // * return full route without process-cooling/assessmentId:
   readonly fullSubroute: Signal<string> = toSignal(
@@ -97,6 +111,11 @@ export class ProcessCoolingUiService {
   private getCurrentChildView(): string {
     const urlSegments = this.router.url.split('/').filter(s => s);
     return urlSegments[this.urlSegmentIndex.setup] || '';
+  }
+
+   private getSetupSubView(): string {
+    const urlSegments = this.router.url.split('/').filter(s => s);
+    return urlSegments[this.urlSegmentIndex.subview] || '';
   }
 
   private getFullSubroute(): string {
@@ -172,6 +191,11 @@ export enum SetupView {
   LOAD_SCHEDULE = 'load-schedule',
 }
 
+export enum SystemInformationView {
+  OPERATIONS = 'operations',
+  PUMP = 'pump',
+}
+
 export enum AssessmentView {
  EXPLORE_OPPORTUNITIES = 'explore-opportunities',
 }
@@ -185,7 +209,7 @@ export enum ReportView {
 
 
 export interface ViewLink {
-  view: SetupView | MainView | ReportView | AssessmentView;
+  view: SetupView | MainView | ReportView | AssessmentView | SystemInformationView;
   label: string;
 }
 
@@ -225,6 +249,18 @@ export const SETUP_VIEW_LINKS: ViewLink[] = [
     view: SetupView.LOAD_SCHEDULE,
     label: 'Load Schedule',
   },
+]
+
+export const SYSTEM_INFORMATION_VIEW_LINKS: ViewLink[] = [
+  {
+    view: SystemInformationView.OPERATIONS,
+    label: 'Operations',
+  },
+  {
+    view: SystemInformationView.PUMP,
+    label: 'Pump',
+  },
+
 ]
 
 export const ASSESSMENT_VIEW_LINKS: ViewLink[] = [

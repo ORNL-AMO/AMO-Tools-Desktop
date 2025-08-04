@@ -1,10 +1,22 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ProcessCoolingSuiteApiService } from '../../tools-suite-api/process-cooling-suite-api.service';
 import { ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
+import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
+import { BehaviorSubject, map } from 'rxjs';
 
 @Injectable()
 export class ProcessCoolingResultsService {
-  constructor(private suiteApi: ProcessCoolingSuiteApiService) { }
+  private readonly processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private readonly suiteApi = inject(ProcessCoolingSuiteApiService);
+
+  readonly results$ = this.processCoolingAssessmentService.assessment$.pipe(
+    map(assessment => {
+      if (assessment && assessment.processCooling && assessment.processCooling.isValid) {
+        return this.getResults(assessment.processCooling);
+      }
+      return undefined;
+    })
+  );
 
   getResults(assessment: ProcessCoolingAssessment) {
     console.log('[ProcessCoolingResultsService]  assessment:', assessment);

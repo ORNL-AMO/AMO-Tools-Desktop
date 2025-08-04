@@ -1,0 +1,61 @@
+<h5>
+    Pump Help
+    <br>
+    <small class="text-muted">Enter data related to the pump
+    </small>
+</h5>
+<hr class="my-1 hr-spacer">
+<div class="my-2" *ngIf="focusedField() == 'variableFlow'">
+    <h6>
+        Variable Flow
+        <br>
+        <small class="text-muted">
+            Indicates if the flow rate is variable
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField() == 'flowRate'">
+    <h6>
+        Flow Rate
+        <br>
+        <small class="text-muted">
+            Indicates the flow rate of the system
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField() == 'efficiency'">
+    <h6>
+        Pump Efficiency
+        <br>
+        <small class="text-muted">
+            Enter the efficiency of the pump as a percentage.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField() == 'motorSize'">
+    <h6>
+        Motor Size
+        <br>
+        <small class="text-muted">
+            Specify the rated power of the pump motor.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField() == 'motorEfficiency'">
+    <h6>
+        Motor Efficiency
+        <br>
+        <small class="text-muted">
+            Enter the efficiency of the motor as a percentage.
+            <hr>
+        </small>
+    </h6>
+</div>

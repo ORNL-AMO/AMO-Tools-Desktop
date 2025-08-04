@@ -1,13 +1,4 @@
 <div class="pt-2 d-flex flex-column help-info">
-    <h5>
-        System Information Help
-        <br>
-        <small class="text-muted">Enter data related to entire system
-        </small>
-    </h5>
-    <hr class="my-1 hr-spacer">
-
-    <app-co2-help-text [currentField]="focusedField"></app-co2-help-text>
-
-
+    <app-operations-help *ngIf="setupSubView() == ROUTE_TOKENS.operations"></app-operations-help>
+    <app-water-pump-help *ngIf="setupSubView() == ROUTE_TOKENS.waterPump"></app-water-pump-help>
 </div>
