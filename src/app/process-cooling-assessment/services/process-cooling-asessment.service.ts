@@ -14,11 +14,11 @@ export class ProcessCoolingAssessmentService {
 
   private readonly assessment = new BehaviorSubject<Assessment>(undefined);
   readonly assessment$ = this.assessment.asObservable();
-  
+
   private readonly processCooling: BehaviorSubject<ProcessCoolingAssessment> = new BehaviorSubject<ProcessCoolingAssessment>(undefined);
   readonly processCooling$ = this.processCooling.asObservable();
   processCoolingSignal: WritableSignal<ProcessCoolingAssessment> = signal<ProcessCoolingAssessment>(undefined);
-  
+
   private readonly settings: BehaviorSubject<Settings> = new BehaviorSubject<Settings>(undefined);
   readonly settings$ = this.settings.asObservable();
   settingsSignal: WritableSignal<Settings> = signal<Settings>(undefined);
@@ -28,6 +28,14 @@ export class ProcessCoolingAssessmentService {
     this.assessment.next(assessment);
   }
 
+  get assessmentValue(): Assessment {
+    return this.assessment.getValue();
+  }
+
+  get settingsValue(): Settings {
+    return this.settings.getValue();
+  }
+
   setProcessCooling(processCooling: ProcessCoolingAssessment) {
     // todo may not need this pattern
     //  if (isBaselineChange) {
@@ -35,7 +43,7 @@ export class ProcessCoolingAssessmentService {
     // }
     console.log('[ProcessCoolingService] processCooling:', processCooling);
     this.processCooling.next(processCooling);
-    this.processCoolingSignal.set(processCooling);    
+    this.processCoolingSignal.set(processCooling);
   }
 
   setSettings(settings: Settings) {
@@ -66,8 +74,17 @@ export class ProcessCoolingAssessmentService {
     assessment.setupDone = hasValidSystemSetup && hasValidInventory;
   }
 
-  // * previous logic used in every top level assessment component
+  // * logic used in every top level assessment component
   // todo move to assessments.service, return the new settings, if changed then handle assessment conversion in component
+    /**
+   * Initializes the settings for a given assessment.
+   * 
+   * If settings for the assessment already exist, they are loaded and set.
+   * If not, default settings are created, associated with the assessment, and persisted.
+   * If the settings use 'Metric' units, the process cooling data is converted from 'Imperial' to 'Metric'.
+   * 
+   * @returns A promise that resolves when initialization is complete.
+   */
   async initAssessmentSettings(assessment: Assessment) {
     let settings: Settings = this.settingsDbService.getByAssessmentId(assessment, true);
     if (settings) {
@@ -92,6 +109,7 @@ export class ProcessCoolingAssessmentService {
       // this.genericCompressorDbService.getAllCompressors(this.settings);
       this.setSettings(settings);
     }
+    return Promise.resolve();
   }
 
   // async addNewAssessmentSettings(settings: Settings) {
@@ -102,7 +120,7 @@ export class ProcessCoolingAssessmentService {
   //     let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
   //     this.settingsDbService.setAll(updatedSettings);
   //     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-      
+
   //     if (this.settings.unitsOfMeasure == 'Metric') {
   //       let oldSettings: Settings = JSON.parse(JSON.stringify(this.settings));
   //       oldSettings.unitsOfMeasure = 'Imperial';
