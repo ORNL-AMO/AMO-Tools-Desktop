@@ -1,6 +1,7 @@
+// (TowerForm and methods moved into class below)
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput } from '../../shared/models/process-cooling-assessment';
+import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput } from '../../shared/models/process-cooling-assessment';
 
 
 @Injectable()
@@ -76,6 +77,40 @@ export class SystemInformationFormService {
     };
   }
 
+  public getTowerForm(input: TowerInput): FormGroup<TowerForm> {
+    return this.formBuilder.group({
+      usesFreeCooling: [input.usesFreeCooling, Validators.required],
+      isHEXRequired: [input.isHEXRequired],
+      HEXApproachTemp: [input.HEXApproachTemp, [Validators.required, Validators.min(0)]],
+      numberOfTowers: [input.numberOfTowers, [Validators.required, Validators.min(1)]],
+      towerType: [input.towerType],
+      numberOfFans: [input.numberOfFans, [Validators.required, Validators.min(1)]],
+      fanSpeedType: [input.fanSpeedType],
+      towerSizeMetric: [input.towerSizeMetric],
+      fanType: [input.fanType],
+      towerSize: [input.towerSize, [Validators.required, Validators.min(0)]],
+    });
+  }
+
+  public getTowerInput(formValue: Partial<TowerInput>, currentInput: TowerInput): TowerInput {
+    return {
+      ...currentInput,
+      ...formValue,
+    };
+  }
+}
+
+export interface TowerForm {
+  usesFreeCooling: FormControl<boolean>;
+  isHEXRequired: FormControl<boolean>;
+  HEXApproachTemp: FormControl<number>;
+  numberOfTowers: FormControl<number>;
+  towerType: FormControl<number | null>;
+  numberOfFans: FormControl<number>;
+  fanSpeedType: FormControl<number>;
+  towerSizeMetric: FormControl<number>;
+  fanType: FormControl<number>;
+  towerSize: FormControl<number>;
 }
 
 

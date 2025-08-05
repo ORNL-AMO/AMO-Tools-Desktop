@@ -1,0 +1,106 @@
+<h5>
+    Tower Help
+    <br>
+    <small class="text-muted">Enter data related to the tower cooling system</small>
+</h5>
+<hr class="my-1 hr-spacer">
+
+<div class="my-2" *ngIf="focusedField() == 'usesFreeCooling'">
+    <h6>
+        Uses Free Cooling
+        <br>
+        <small class="text-muted">
+            Indicates if the cooling tower system uses free cooling (heat exchanger bypass). Select <em>Yes</em> if the
+            system is designed to use ambient conditions for cooling when possible.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'isHEXRequired'">
+    <h6>
+        Is HEX Required
+        <br>
+        <small class="text-muted">
+            Specifies if a heat exchanger (HEX) is required for free cooling operation. Select <em>Yes</em> if a HEX is
+            present or required for your system's free cooling mode.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'HEXApproachTemp'">
+    <h6>
+        HEX Approach Temp
+        <br>
+        <small class="text-muted">
+            The temperature difference (in °F) between the process fluid and the cooling medium in the heat exchanger
+            during free cooling. Typical range: 5–20°F.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'numberOfTowers'">
+    <h6>
+        Number of Towers
+        <br>
+        <small class="text-muted">
+            The total number of cooling towers in the system. Enter an integer value (e.g., 1, 2, 3).
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'towerType'">
+    <h6>
+        Tower Type
+        <br>
+        <small class="text-muted">
+            The type or configuration of the cooling tower. This may correspond to a specific design, manufacturer, or
+            internal code. (If unsure, consult system documentation.)
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'numberOfFans'">
+    <h6>
+        Number of Fans
+        <br>
+        <small class="text-muted">
+            The number of fans or cells per tower. This is typically set by the tower type or design. Enter an integer
+            value.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'fanSpeedType'">
+    <h6>
+        Fan Speed Type
+        <br>
+        <small class="text-muted">
+            The speed control type for the tower fans. Common values: 1 = Two Speed, 2 = Variable Speed. Refer to your
+            system's fan control method.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'towerSizeMetric'">
+    <h6>
+        Tower Size Metric
+        <br>
+        <small class="text-muted">
+            Indicates how the tower is sized (e.g., by tonnage or fan horsepower). This is often an enumeration or code;
+            see your system documentation for details.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'fanType'">
+    <h6>
+        Fan Type
+        <br>
+        <small class="text-muted">
+            The type of fan used in the tower cells. This may refer to blade design, drive type, or manufacturer
+            specification.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'towerSize'">
+    <h6>
+        Tower Size
+        <br>
+        <small class="text-muted">
+            The size of the tower, either in horsepower (hp) or tonnage (tons), depending on the sizing metric. Enter a
+            numeric value (e.g., 50 hp or 500 tons).
+        </small>
+    </h6>
+</div>

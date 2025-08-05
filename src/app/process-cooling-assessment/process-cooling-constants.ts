@@ -1,8 +1,7 @@
 import { getNewIdString } from "../shared/helperFunctions";
-import { ChillerInventoryItem, ProcessCoolingAssessment } from "../shared/models/process-cooling-assessment";
+import { ChillerInventoryItem, CompressorChillerTypeEnum, FanType, ProcessCoolingAssessment, TowerSizeMetric, TowerType } from "../shared/models/process-cooling-assessment";
 import { Settings } from "../shared/models/settings";
 
-// * avoid accidental mutation, ex. we pop, shift options
 export const getCondenserCoolingMethods = () => {
     return [
         { value: 0, name: 'Water' },
@@ -10,18 +9,49 @@ export const getCondenserCoolingMethods = () => {
     ] as const;
 };
 
-export enum CompressorChillerTypeEnum {
-    CENTRIFUGAL = 0,
-    //helical rotary, see SuiteApiHelperService.ts note
-    SCREW = 1,
-    RECIPROCATING = 2,
+export const getTowerSizeMetrics = () => {
+    return [
+        { value: TowerSizeMetric.Tonnes, name: 'Tonnes' },
+        { value: TowerSizeMetric.HP, name: 'HP' },
+    ] as const;
+};
+
+export const getFanType = () => {
+  return [
+        { value: FanType.Axial, name: 'Axial' },
+        { value: FanType.Centrifugal, name: 'Centrifugal' },
+        { value: FanType.Unknown, name: 'Unknown' }
+  ] as const;
 }
+
+export const getTowerTypes = () => {
+    return [
+        { value: TowerType.OneCellOneSpeed, name: TowerTypes[TowerType.OneCellOneSpeed] },
+        { value: TowerType.OneCellTwoSpeed, name: TowerTypes[TowerType.OneCellTwoSpeed] },
+        { value: TowerType.TwoCellOneSpeed, name: TowerTypes[TowerType.TwoCellOneSpeed] },
+        { value: TowerType.TwoCellTwoSpeed, name: TowerTypes[TowerType.TwoCellTwoSpeed] },
+        { value: TowerType.ThreeCellOneSpeed, name: TowerTypes[TowerType.ThreeCellOneSpeed] },
+        { value: TowerType.ThreeCellTwoSpeed, name: TowerTypes[TowerType.ThreeCellTwoSpeed] },
+        { value: TowerType.VariableSpeed, name: TowerTypes[TowerType.VariableSpeed] },
+    ] as const;
+};
 
 export const CompressorChillerTypes =
 {
     [CompressorChillerTypeEnum.CENTRIFUGAL]: 'Centrifugal',
     [CompressorChillerTypeEnum.RECIPROCATING]: 'Reciprocating',
     [CompressorChillerTypeEnum.SCREW]: 'Helical Rotary'
+}
+
+export const TowerTypes =
+{
+    [TowerType.OneCellOneSpeed]: '1-Cell With 1-Speed Motor',
+    [TowerType.OneCellTwoSpeed]: '1-Cell With 2-Speed Motor',
+    [TowerType.TwoCellOneSpeed]: '2-Cell With 1-Speed Motors',
+    [TowerType.TwoCellTwoSpeed]: '2-Cell With 2-Speed Motors',
+    [TowerType.ThreeCellOneSpeed]: '3-Cell With 1-Speed Motors',
+    [TowerType.ThreeCellTwoSpeed]: '3-Cell With 2-Speed Motors',
+    [TowerType.VariableSpeed]: 'Tower With Variable Speed Motor(s)',
 }
 
 export const getDefaultInventoryItem = (): ChillerInventoryItem => {

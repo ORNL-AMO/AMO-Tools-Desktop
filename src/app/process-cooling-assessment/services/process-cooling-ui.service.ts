@@ -194,7 +194,8 @@ export enum SetupView {
 export enum SystemInformationView {
   OPERATIONS = 'operations',
   PUMP = 'pump',
-  CONDENSER_COOLING_SYSTEM_INPUT = 'condenser-cooling-system'
+  CONDENSER_COOLING_SYSTEM_INPUT = 'condenser-cooling-system',
+  TOWER = 'tower',
 }
 
 export enum AssessmentView {
@@ -265,6 +266,10 @@ export const SYSTEM_INFORMATION_VIEW_LINKS: ViewLink[] = [
   {
     view: SystemInformationView.CONDENSER_COOLING_SYSTEM_INPUT,
     label: 'Condenser Cooling'
+  },
+  {
+    view: SystemInformationView.TOWER,
+    label: 'Tower',
   },
 
 ]
