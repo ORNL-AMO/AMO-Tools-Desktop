@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { SettingsLabelPipe } from "../../shared/shared-pipes/settings-label.pipe";
-import { CompressedAirInventoryData, CompressedAirItem, CompressedAirPropertyDisplayOptions, NameplateDataOptions } from "../compressed-air-inventory";
+import { CompressedAirControlsPropertiesOptions, CompressedAirDesignDetailsPropertiesOptions, CompressedAirInventoryData, CompressedAirItem, CompressedAirMotorPropertiesOptions, CompressedAirPropertyDisplayOptions, FieldMeasurementsOptions, NameplateDataOptions } from "../compressed-air-inventory";
 import _ from "lodash";
 import { Settings } from "../../shared/models/settings";
 
@@ -13,6 +13,30 @@ export class CompressedAirInventorySummaryService {
   getAllCompressors(inventoryData: CompressedAirInventoryData): Array<CompressedAirItem> {
     let allCompressors: Array<CompressedAirItem> = _.flatMap(inventoryData.systems, (system) => { return system.catalog });
     return allCompressors;
+  }
+
+  getFields(displayOptions: CompressedAirPropertyDisplayOptions, settings: Settings): Array<CompressedAirField> {
+    let fields: Array<CompressedAirField> = [{
+      display: 'Name',
+      value: 'name',
+      group: 'nameplateData'
+    }, {
+      display: 'System',
+      value: 'system',
+      group: 'nameplateData'
+    }];
+    //nameplate
+    let nameplateFields: Array<CompressedAirField> = this.getNameplateDataFields(displayOptions.nameplateDataOptions, settings);
+    fields = fields.concat(nameplateFields);
+    let controlFields: Array<CompressedAirField> = this.getControlsPropertiesFields(displayOptions.compressedAirControlsPropertiesOptions, settings);
+    fields = fields.concat(controlFields);
+    let fieldMeasurementFields: Array<CompressedAirField> = this.getFieldMeasurementsFields(displayOptions.fieldMeasurementsOptions, settings);
+    fields = fields.concat(fieldMeasurementFields);
+    let motorPropertiesFields: Array<CompressedAirField> = this.getMotorFields(displayOptions.compressedAirMotorPropertiesOptions, settings);
+    fields = fields.concat(motorPropertiesFields);
+    let designDetailsPropertiesFields: Array<CompressedAirField> = this.getDesignDetailsFields(displayOptions.compressedAirDesignDetailsPropertiesOptions, settings);
+    fields = fields.concat(designDetailsPropertiesFields);
+    return fields;
   }
 
   getNameplateDataFields(nameplateDataOptions: NameplateDataOptions, settings: Settings): Array<CompressedAirField> {
@@ -32,31 +56,44 @@ export class CompressedAirInventorySummaryService {
     return fields;
   }
 
-  getFields(displayOptions: CompressedAirPropertyDisplayOptions, settings: Settings): Array<CompressedAirField> {
-    let fields: Array<CompressedAirField> = [{
-      display: 'Name',
-      value: 'name',
-      group: 'nameplateData'
-    }, {
-      display: 'Department',
-      value: 'department',
-      group: 'nameplateData'
-    }];
-    //nameplate
-    let nameplateFields: Array<CompressedAirField> = this.getNameplateDataFields(displayOptions.nameplateDataOptions, settings);
-    fields = fields.concat(nameplateFields);
-    // let pumpPropertiesFields: Array<CompressedAirField> = this.getPumpPropertiesFields(displayOptions.pumpPropertiesOptions, settings);
-    // fields = fields.concat(pumpPropertiesFields);
-    // let fluidPropertiesFields: Array<CompressedAirField> = this.getFluidPropertiesFields(displayOptions.fluidPropertiesOptions, settings);
-    // fields = fields.concat(fluidPropertiesFields);
-    // let fieldMeasurementFields: Array<CompressedAirField> = this.getFieldMeasurementsFields(displayOptions.fieldMeasurementOptions, settings);
-    // fields = fields.concat(fieldMeasurementFields);
-    // let pumpMotorPropertiesFields: Array<CompressedAirField> = this.getPumpMotorFields(displayOptions.pumpMotorPropertiesOptions, settings);
-    // fields = fields.concat(pumpMotorPropertiesFields);
-    // let pumpStatusFields: Array<CompressedAirField> = this.getPumpStatusFields(displayOptions.pumpStatusOptions, settings);
-    // fields = fields.concat(pumpStatusFields);
-    // let systemPropertiesFields: Array<CompressedAirField> = this.getSystemPropertiesFields(displayOptions.systemPropertiesOptions, settings);
-    // fields = fields.concat(systemPropertiesFields);
+  getFieldMeasurementsFields(fieldMeasurementsOptions: FieldMeasurementsOptions, settings: Settings): Array<CompressedAirField> {
+    let fields: Array<CompressedAirField> = [];
+    if (fieldMeasurementsOptions.yearlyOperatingHours) {
+      fields.push({ display: 'Yearly Operating Hours', value: 'yearlyOperatingHours', group: 'fieldMeasurements' });
+    }
+    return fields;
+  }
+
+  getMotorFields(compressedAirMotorPropertiesOptions: CompressedAirMotorPropertiesOptions, settings: Settings): Array<CompressedAirField> {
+    let fields: Array<CompressedAirField> = [];
+    if (compressedAirMotorPropertiesOptions.motorPower) {
+      fields.push({ display: 'Motor Power', value: 'motorPower', group: 'compressedAirMotorProperties' });
+    }
+    if (compressedAirMotorPropertiesOptions.motorFullLoadAmps) {
+      fields.push({ display: 'Motor Full Load Amps', value: 'motorFullLoadAmps', group: 'compressedAirMotorProperties' });
+    }
+    return fields;
+  }
+
+  getControlsPropertiesFields(compressedAirControlsPropertiesOptions: CompressedAirControlsPropertiesOptions, settings: Settings): Array<CompressedAirField> {
+    let fields: Array<CompressedAirField> = [];
+    if (compressedAirControlsPropertiesOptions.controlType) {
+      fields.push({ display: 'Control Type', value: 'controlType', group: 'compressedAirControlsProperties' });
+    }
+    return fields;
+  }
+
+  getDesignDetailsFields(compressedAirDesignDetailsPropertiesOptions: CompressedAirDesignDetailsPropertiesOptions, settings: Settings): Array<CompressedAirField> {
+    let fields: Array<CompressedAirField> = [];
+    if (compressedAirDesignDetailsPropertiesOptions.inputPressure) {
+      fields.push({ display: 'Design Inlet Pressure', value: 'designInletPressure', group: 'compressedAirDesignDetails' });
+    }
+    if (compressedAirDesignDetailsPropertiesOptions.designEfficiency) {
+      fields.push({ display: 'Motor Design Efficiency', value: 'motorDesignEfficiency', group: 'compressedAirDesignDetails' });
+    }
+    if (compressedAirDesignDetailsPropertiesOptions.serviceFactor) {
+      fields.push({ display: 'Motor Service Factor', value: 'motorServiceFactor', group: 'compressedAirDesignDetails' });
+    }
     return fields;
   }
 
