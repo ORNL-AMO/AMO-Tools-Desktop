@@ -1,6 +1,5 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
-import { CompressorChillerTypeEnum } from "../process-cooling-assessment/process-cooling-constants";
-import { AirCooledSystemInput, ChillerInventoryItem, Operations, ProcessCoolingSystemBasics, PumpInput, SystemInformation, WaterCooledSystemInput } from "../shared/models/process-cooling-assessment";
+import { AirCooledSystemInput, ChillerInventoryItem, CompressorChillerTypeEnum, FanSpeedType, FanType, Operations, ProcessCoolingSystemBasics, PumpInput, SystemInformation, TowerInput, TowerType, WaterCooledSystemInput } from "../shared/models/process-cooling-assessment";
 
 export const EXAMPLE_CO2_SAVINGS_DATA: Co2SavingsData = {
   energyType: 'fuel',
@@ -52,15 +51,16 @@ export const EXAMPLE_WATER_COOLED_SYSTEM_INPUT: WaterCooledSystemInput = {
   followingTempDifferential: 0,
 };
 
-export const EXAMPLE_TOWER_INPUT = {
+export const EXAMPLE_TOWER_INPUT: TowerInput = {
+  towerType: TowerType.TwoCellOneSpeed,
   usesFreeCooling: false,
   isHEXRequired: false,
   HEXApproachTemp: 0, // * if useFreeCooling and HEX required are true
   numberOfTowers: 1,
   numberOfFans: 2,
-  fanSpeedType: 0, // * 1 speed
+  fanSpeedType: FanSpeedType.OneSpeed, // * 1 speed
   towerSizeMetric: 0,
-  fanType: 0, // * axial
+  fanType: FanType.Axial, // * axial
   towerSize: 2000
 };
 

@@ -193,6 +193,41 @@ export enum AirCoolingSource {
     Outdoor = 1
 }
 
+export enum TowerSizeMetric {
+    Tonnes = 0,
+    HP = 1
+}
+
+export enum FanSpeedType {
+    OneSpeed = 0,
+    TwoSpeed = 1,
+    Variable = 2,
+}
+
+export enum FanType {
+    Axial = 0,
+    Centrifugal = 1,
+    Unknown = 2
+}
+
+export enum CompressorChillerTypeEnum {
+    CENTRIFUGAL = 0,
+    //helical rotary, see SuiteApiHelperService.ts note
+    SCREW = 1,
+    RECIPROCATING = 2,
+}
+
+export enum TowerType {
+    OneCellOneSpeed = 0,
+    OneCellTwoSpeed = 1,
+    TwoCellOneSpeed = 2,
+    TwoCellTwoSpeed = 3,
+    ThreeCellOneSpeed = 4,
+    ThreeCellTwoSpeed = 5,
+    VariableSpeed = 6
+}
+
+
 export interface ProcessCoolingAssessmentResults { }
 export type CompressorChillerType = 'centrifugal' | 'reciprocating' | 'helical-rotary';
 
