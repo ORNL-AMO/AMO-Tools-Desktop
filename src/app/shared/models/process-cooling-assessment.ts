@@ -1,13 +1,5 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 
-export type ProcessCoolingMainTabString = 'baseline' | 'assessment' | 'diagram' | 'report' | 'calculators';
-export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-information' | 'inventory' | 'operating-schedule' | 'load-schedule';
-
-export type ProcessCoolingDataProperty = keyof Pick<ProcessCoolingAssessment, 'systemBasics' | 'systemInformation' | 'inventory' | 'modifications'>;
-export type ProcessCoolingSystemInformationProperty = keyof Pick<SystemInformation, 'operations' | 'co2SavingsData' | 'airCooledSystemInput' | 'chilledWaterPumpInput' | 'condenserWaterPumpInput' | 'towerInput' | 'waterCooledSystemInput'>;
-export type CoolingWaterPumpType = keyof Pick<SystemInformation, 'chilledWaterPumpInput' | 'condenserWaterPumpInput'>;
-
-
 // Output interfaces for process cooling API service
 export interface ProcessCoolingChillerOutput {
     efficiency: number[];
@@ -191,8 +183,22 @@ export interface Modification {
 }
 
 
+export enum CondenserCoolingMethod {
+    Water = 0,
+    Air = 1
+}
+
+export enum AirCoolingSource {
+    Indoor = 0,
+    Outdoor = 1
+}
+
 export interface ProcessCoolingAssessmentResults { }
-
-
-
 export type CompressorChillerType = 'centrifugal' | 'reciprocating' | 'helical-rotary';
+
+export type ProcessCoolingMainTabString = 'baseline' | 'assessment' | 'diagram' | 'report' | 'calculators';
+export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-information' | 'inventory' | 'operating-schedule' | 'load-schedule';
+
+export type ProcessCoolingDataProperty = keyof Pick<ProcessCoolingAssessment, 'systemBasics' | 'systemInformation' | 'inventory' | 'modifications'>;
+export type ProcessCoolingSystemInformationProperty = keyof Pick<SystemInformation, 'operations' | 'co2SavingsData' | 'airCooledSystemInput' | 'chilledWaterPumpInput' | 'condenserWaterPumpInput' | 'towerInput' | 'waterCooledSystemInput'>;
+export type CoolingWaterPumpType = keyof Pick<SystemInformation, 'chilledWaterPumpInput' | 'condenserWaterPumpInput'>;

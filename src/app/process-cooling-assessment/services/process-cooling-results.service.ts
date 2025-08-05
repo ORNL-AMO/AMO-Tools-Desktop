@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ProcessCoolingSuiteApiService } from '../../tools-suite-api/process-cooling-suite-api.service';
-import { ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
+import { CondenserCoolingMethod, ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
 import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
 import { BehaviorSubject, map } from 'rxjs';
 
@@ -21,7 +21,7 @@ export class ProcessCoolingResultsService {
   getResults(assessment: ProcessCoolingAssessment) {
     console.log('[ProcessCoolingResultsService]  assessment:', assessment);
     let results: ProcessCoolingResults;
-    if (assessment.systemInformation.operations.condenserCoolingMethod === 0) {
+    if (assessment.systemInformation.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
       results = this.suiteApi.getWaterCooledResults(assessment);
     } else {
       results = this.suiteApi.getAirCooledResults(assessment);

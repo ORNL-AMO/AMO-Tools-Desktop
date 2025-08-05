@@ -6,7 +6,7 @@
     </div>
     <div class="p-3 no-data" *ngIf="!hasInventoryItems">
         <h3>Add your Chiller Inventory for analysis..</h3>
-        <button type="button" class="btn btn-primary active" (click)="addInventoryItem()">+Add Chiller</button>
+        <button type="button" class="btn btn-primary" (click)="addInventoryItem()">Add Chiller</button>
     </div>
     <div class="mr-2 ml-2" *ngIf="hasInventoryItems">
         <form [formGroup]="form">

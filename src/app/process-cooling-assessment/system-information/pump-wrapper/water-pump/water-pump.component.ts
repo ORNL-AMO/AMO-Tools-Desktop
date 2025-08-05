@@ -33,7 +33,6 @@ export class WaterPumpComponent {
 
   ngOnInit(): void {
     const pumpInput = this.processCooling().systemInformation[this.pumpFormType];
-    debugger;
     this.form = this.systemInformationFormService.getPumpInputForm(pumpInput);
     this.controlIds = generateFormControlIds(this.form.controls);
     this.observeFormChanges();
