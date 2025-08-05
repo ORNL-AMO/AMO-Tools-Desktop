@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { SettingsLabelPipe } from "../../shared/shared-pipes/settings-label.pipe";
 import { CompressedAirControlsPropertiesOptions, CompressedAirDesignDetailsPropertiesOptions, CompressedAirInventoryData, CompressedAirItem, CompressedAirMotorPropertiesOptions, CompressedAirPropertyDisplayOptions, FieldMeasurementsOptions, NameplateDataOptions } from "../compressed-air-inventory";
 import _ from "lodash";
 import { Settings } from "../../shared/models/settings";
@@ -7,7 +6,7 @@ import { Settings } from "../../shared/models/settings";
 @Injectable()
 export class CompressedAirInventorySummaryService {
 
-  constructor(private settingsLabelPipe: SettingsLabelPipe) {
+  constructor() {
   }
 
   getAllCompressors(inventoryData: CompressedAirInventoryData): Array<CompressedAirItem> {
