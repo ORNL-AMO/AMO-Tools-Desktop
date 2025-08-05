@@ -1,0 +1,74 @@
+<h5>
+    {{ condenserCoolingMethod === CondenserCoolingMethod.Water ? 'Water Cooled Condenser' : 'Air Cooled Condenser' }} Help
+    <br>
+    <small class="text-muted">Enter data related to the condenser cooling system</small>
+</h5>
+<hr class="my-1 hr-spacer">
+
+<!-- Air Cooled Fields -->
+<div class="my-2" *ngIf="focusedField() == 'outdoorAirTemp'">
+    <h6>
+        Outdoor Air Temperature
+        <br>
+        <small class="text-muted">
+            Enter the average outdoor air temperature used for cooling. This affects condenser performance.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'airCoolingSource'">
+    <h6>
+        Air Cooling Source
+        <br>
+        <small class="text-muted">
+            Select whether the cooling air source is indoor or outdoor. This determines which temperature input is required.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'indoorTemp'">
+    <h6>
+        Average Indoor Temperature
+        <br>
+        <small class="text-muted">
+            Enter the average indoor air temperature if the air cooling source is indoor.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'followingTempDifferential'">
+    <h6>
+        Following Temperature Differential
+        <br>
+        <small class="text-muted">
+            Enter the temperature differential to use when the air cooling source is outdoor. This is the difference between outdoor air and condenser water temperature.
+        </small>
+    </h6>
+</div>
+
+<!-- Water Cooled Fields -->
+<div class="my-2" *ngIf="focusedField() == 'isConstantCondenserWaterTemp'">
+    <h6>
+        Is Condenser Water Temp Constant
+        <br>
+        <small class="text-muted">
+            Select whether the condenser water temperature is held constant (e.g., by a control system) or allowed to vary with ambient conditions.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'condenserWaterTemp'">
+    <h6>
+        Condenser Water Temperature
+        <br>
+        <small class="text-muted">
+            Enter the setpoint temperature for the condenser water if it is held constant.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'followingTempDifferential'">
+    <h6>
+        Following Temperature Differential
+        <br>
+        <small class="text-muted">
+            Enter the temperature differential to use when the condenser water temperature is not constant. This is the difference between ambient wet-bulb temperature and condenser water temperature.
+        </small>
+    </h6>
+</div>
+

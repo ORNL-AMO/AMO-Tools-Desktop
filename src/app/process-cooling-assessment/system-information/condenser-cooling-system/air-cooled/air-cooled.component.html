@@ -1,0 +1,57 @@
+<div class="header mr-2 ml-2">
+  <h3>
+    Air Cooled Condenser
+  </h3>
+  <br>
+</div>
+<form class="pl-3 pr-3" [formGroup]="form" #formElement>
+  <div class="form-group">
+    <label for="{{controlIds.outdoorAirTemp}}">Outdoor Air Temperature</label>
+    <div class="input-group">
+      <input name="outdoorAirTemp" type="number" step="any" class="form-control" id="{{controlIds.outdoorAirTemp}}"
+        formControlName="outdoorAirTemp" (focus)="focusField('outdoorAirTemp')">
+      <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
+        [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="outdoorAirTemp"></app-form-control-errors>
+  </div>
+
+  <div class="form-group">
+    <label for="{{controlIds.airCoolingSource}}">Air Cooling Source</label>
+    <div class="input-group">
+      <select class="form-control" id="{{controlIds.airCoolingSource}}" formControlName="airCoolingSource"
+        (focus)="focusField('airCoolingSource')">
+        <option [ngValue]="0">Indoor</option>
+        <option [ngValue]="1">Outdoor</option>
+      </select>
+    </div>
+    <app-form-control-errors [control]="airCoolingSource"></app-form-control-errors>
+  </div>
+
+  @if (airCoolingSource.value === AirCoolingSource.Indoor) {
+  <div class="form-group">
+    <label for="{{controlIds.indoorTemp}}">Average Indoor Temperature</label>
+    <div class="input-group">
+      <input name="indoorTemp" type="number" step="any" class="form-control" id="{{controlIds.indoorTemp}}"
+        formControlName="indoorTemp" (focus)="focusField('indoorTemp')">
+      <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
+        [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="indoorTemp"></app-form-control-errors>
+  </div>
+
+  } @else {
+  <div class="form-group">
+    <label for="{{controlIds.followingTempDifferential}}">Following Temperature Differential</label>
+    <div class="input-group">
+      <input name="followingTempDifferential" type="number" step="any" class="form-control"
+        id="{{controlIds.followingTempDifferential}}" formControlName="followingTempDifferential"
+        (focus)="focusField('followingTempDifferential')">
+      <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
+        [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="followingTempDifferential"></app-form-control-errors>
+  </div>
+  }
+
+</form>

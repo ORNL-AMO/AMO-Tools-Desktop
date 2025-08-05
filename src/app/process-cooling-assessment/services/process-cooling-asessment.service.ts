@@ -116,6 +116,10 @@ export class ProcessCoolingAssessmentService {
     map((assessment: Assessment) => assessment ? assessment.processCooling.setupDone : false)
   );
 
+  get condenserCoolingMethod(): number {
+    return this.processCoolingSignal()?.systemInformation.operations.condenserCoolingMethod;
+  }
+
   get assessmentId(): number | undefined {
     const assessment = this.assessment.getValue();
     return assessment ? assessment.id : undefined;

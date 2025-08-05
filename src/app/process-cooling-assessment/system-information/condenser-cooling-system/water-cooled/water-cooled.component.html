@@ -1,0 +1,42 @@
+<div class="header mr-2 ml-2">
+  <h3>
+    Water Cooled Condenser
+  </h3>
+  <br>
+</div>
+<form class="pl-3 pr-3" [formGroup]="form" #formElement>
+  <div class="form-group">
+    <label for="{{controlIds.isConstantCondenserWaterTemp}}">Is Condenser Water Temp Constant</label>
+    <select class="form-control" id="{{controlIds.isConstantCondenserWaterTemp}}"
+      formControlName="isConstantCondenserWaterTemp" (focus)="focusField('isConstantCondenserWaterTemp')">
+      <option [ngValue]="true">Yes</option>
+      <option [ngValue]="false">No</option>
+    </select>
+  </div>
+  @if (isConstantCondenserWaterTemp.value === true) {
+  <div class="form-group">
+    <label for="{{controlIds.condenserWaterTemp}}">Condenser Water Temperature</label>
+    <div class="input-group">
+      <input name="condenserWaterTemp" type="number" step="any" class="form-control"
+        id="{{controlIds.condenserWaterTemp}}" formControlName="condenserWaterTemp"
+        (focus)="focusField('condenserWaterTemp')">
+      <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
+        [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="condenserWaterTemp"></app-form-control-errors>
+  </div>
+  } @else {
+  <div class="form-group">
+    <label for="{{controlIds.followingTempDifferential}}">Following Temperature Differential</label>
+    <div class="input-group">
+      <input name="followingTempDifferential" type="number" step="any" class="form-control"
+        id="{{controlIds.followingTempDifferential}}" formControlName="followingTempDifferential"
+        (focus)="focusField('followingTempDifferential')">
+      <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
+        [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="followingTempDifferential"></app-form-control-errors>
+  </div>
+  }
+
+</form>

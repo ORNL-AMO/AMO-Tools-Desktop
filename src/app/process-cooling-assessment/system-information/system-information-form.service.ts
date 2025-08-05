@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { Operations, PumpInput } from '../../shared/models/process-cooling-assessment';
+import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput } from '../../shared/models/process-cooling-assessment';
+
 
 @Injectable()
 export class SystemInformationFormService {
@@ -18,6 +19,15 @@ export class SystemInformationFormService {
     });
   }
 
+  // * spread all current values of operations and then apply the new values from the form, 
+  // * since it is only a partial object
+  getOperations(formValue: Partial<Operations>, currentOperations: Operations): Operations {
+    return {
+      ...currentOperations,
+      ...formValue,
+    };
+  }
+
   getPumpInputForm(pumpInput: PumpInput): FormGroup<PumpInputForm> {
     return this.formBuilder.group({
       variableFlow: [pumpInput.variableFlow, Validators.required],
@@ -28,21 +38,44 @@ export class SystemInformationFormService {
     });
   }
 
-  // * spread all current values of operations and then apply the new values from the form, 
-  // * since it is only a partial object
-  getOperations(formValue: Partial<Operations>, currentOperations: Operations): Operations {
-    return {
-      ...currentOperations,
-      ...formValue,
-    };
-  }
-
   getPumpInput(formValue: Partial<PumpInput>, currentPumpInput: PumpInput): PumpInput {
     return {
       ...currentPumpInput,
       ...formValue,
     };
   }
+
+  getAirCooledSystemInputForm(input: AirCooledSystemInput): FormGroup<AirCooledSystemInputForm> {
+    return this.formBuilder.group({
+      outdoorAirTemp: [input.outdoorAirTemp, [Validators.required]],
+      airCoolingSource: [input.airCoolingSource, [Validators.required]],
+      indoorTemp: [input.indoorTemp, [Validators.required]],
+      followingTempDifferential: [input.followingTempDifferential, [Validators.required]],
+    });
+  }
+
+  getAirCooledSystemInput(formValue: Partial<AirCooledSystemInput>, currentInput: AirCooledSystemInput): AirCooledSystemInput {
+    return {
+      ...currentInput,
+      ...formValue,
+    };
+  }
+
+  getWaterCooledSystemInputForm(input: WaterCooledSystemInput): FormGroup<WaterCooledSystemInputForm> {
+    return this.formBuilder.group({
+      isConstantCondenserWaterTemp: [input.isConstantCondenserWaterTemp, [Validators.required]],
+      condenserWaterTemp: [input.condenserWaterTemp, [Validators.required]],
+      followingTempDifferential: [input.followingTempDifferential, [Validators.required]],
+    });
+  }
+
+  getWaterCooledSystemInput(formValue: Partial<WaterCooledSystemInput>, currentInput: WaterCooledSystemInput): WaterCooledSystemInput {
+    return {
+      ...currentInput,
+      ...formValue,
+    };
+  }
+
 }
 
 
@@ -61,4 +94,17 @@ export interface PumpInputForm {
   efficiency: FormControl<number>;
   motorSize: FormControl<number>;
   motorEfficiency: FormControl<number>;
+}
+
+export interface AirCooledSystemInputForm {
+  outdoorAirTemp: FormControl<number>;
+  airCoolingSource: FormControl<number>;
+  indoorTemp: FormControl<number>;
+  followingTempDifferential: FormControl<number>;
+}
+
+export interface WaterCooledSystemInputForm {
+  isConstantCondenserWaterTemp: FormControl<boolean>;
+  condenserWaterTemp: FormControl<number>;
+  followingTempDifferential: FormControl<number>;
 }

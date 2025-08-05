@@ -84,7 +84,7 @@ export class ProcessCoolingUiService {
         console.log('subView:', subView);
         return subView;
       }),
-      startWith(this.getCurrentChildView())
+      startWith(this.getSetupSubView())
     ),
     { initialValue: '' }
   );
@@ -194,6 +194,7 @@ export enum SetupView {
 export enum SystemInformationView {
   OPERATIONS = 'operations',
   PUMP = 'pump',
+  CONDENSER_COOLING_SYSTEM_INPUT = 'condenser-cooling-system'
 }
 
 export enum AssessmentView {
@@ -251,6 +252,7 @@ export const SETUP_VIEW_LINKS: ViewLink[] = [
   },
 ]
 
+// todo get is route available via filter pipe
 export const SYSTEM_INFORMATION_VIEW_LINKS: ViewLink[] = [
   {
     view: SystemInformationView.OPERATIONS,
@@ -259,6 +261,10 @@ export const SYSTEM_INFORMATION_VIEW_LINKS: ViewLink[] = [
   {
     view: SystemInformationView.PUMP,
     label: 'Pump',
+  },
+  {
+    view: SystemInformationView.CONDENSER_COOLING_SYSTEM_INPUT,
+    label: 'Condenser Cooling'
   },
 
 ]

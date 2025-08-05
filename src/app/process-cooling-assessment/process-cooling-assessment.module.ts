@@ -47,6 +47,10 @@ import { WaterPumpComponent } from './system-information/pump-wrapper/water-pump
 import { PumpWrapperComponent } from './system-information/pump-wrapper/pump-wrapper.component';
 import { WaterPumpHelpComponent } from './results-panel/help-panel/water-pump-help/water-pump-help.component';
 import { OperationsHelpComponent } from './results-panel/help-panel/operations-help/operations-help.component';
+import { AirCooledComponent } from './system-information/condenser-cooling-system/air-cooled/air-cooled.component';
+import { WaterCooledComponent } from './system-information/condenser-cooling-system/water-cooled/water-cooled.component';
+import { CondenserCoolingSystemComponent } from './system-information/condenser-cooling-system/condenser-cooling-system.component';
+import { CondenserCoolingHelpComponent } from './results-panel/help-panel/condenser-cooling-help/condenser-cooling-help.component';
 
 
 export const ROUTE_TOKENS = {
@@ -60,6 +64,7 @@ export const ROUTE_TOKENS = {
   systemInformation: 'system-information',
   operations: 'operations',
   waterPump: 'pump',
+  condenserCoolingSystem: 'condenser-cooling-system',
   chillerInventory: 'chiller-inventory',
 
   // Assessment sub-tabs
@@ -104,6 +109,10 @@ const ROUTES: Route[] = [
               {
                 path: ROUTE_TOKENS.waterPump,
                 component: PumpWrapperComponent,
+              },
+              {
+                path: ROUTE_TOKENS.condenserCoolingSystem,
+                component: CondenserCoolingSystemComponent
               }
             ]
           },
@@ -175,7 +184,11 @@ const ROUTES: Route[] = [
     PumpWrapperComponent,
     WaterPumpHelpComponent,
     OperationsHelpComponent,
-    ExecutiveSummaryComponent
+    ExecutiveSummaryComponent,
+    AirCooledComponent,
+    WaterCooledComponent,
+    CondenserCoolingSystemComponent,
+    CondenserCoolingHelpComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
