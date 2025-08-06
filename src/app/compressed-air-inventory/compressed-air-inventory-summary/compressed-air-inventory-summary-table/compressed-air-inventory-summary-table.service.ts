@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CompressedAirInventorySummaryService } from '../compressed-air-inventory-summary.service';
 import { Settings } from '../../../shared/models/settings';
-import { CompressedAirControlsProperties, CompressedAirControlsPropertiesOptions, CompressedAirDesignDetailsProperties, CompressedAirDesignDetailsPropertiesOptions, CompressedAirInventoryData, CompressedAirItem, CompressedAirMotorProperties, CompressedAirMotorPropertiesOptions, CompressedAirPerformancePointsProperties, CompressedAirPerformancePointsPropertiesOptions, CompressedAirPropertyDisplayOptions, NameplateData, NameplateDataOptions } from '../../compressed-air-inventory';
+import { CompressedAirControlsProperties, CompressedAirControlsPropertiesOptions, CompressedAirDesignDetailsProperties, CompressedAirDesignDetailsPropertiesOptions, CompressedAirInventoryData, CompressedAirItem, CompressedAirMotorProperties, CompressedAirMotorPropertiesOptions, CompressedAirPerformancePointsProperties, CompressedAirPerformancePointsPropertiesOptions, CompressedAirPropertyDisplayOptions, CompressorTypeOptions, ControlTypes, FieldMeasurements, FieldMeasurementsOptions, NameplateData, NameplateDataOptions } from '../../compressed-air-inventory';
 
 @Injectable()
 export class CompressedAirInventorySummaryTableService {
@@ -10,7 +10,6 @@ export class CompressedAirInventorySummaryTableService {
 
   getInventorySummaryData(compressedAirInventoryData: CompressedAirInventoryData, settings: Settings): InventorySummaryData {
     let compressedAirData: Array<Array<SummaryCompressedAirData>> = new Array();
-    // let fields: Array<PumpField>;
     let fields: Array<CompressedAirField> = this.compressedAirInventorySummaryService.getFields(compressedAirInventoryData.displayOptions, settings);
     compressedAirInventoryData.systems.forEach(system => {
       system.catalog.forEach(item => {
@@ -26,101 +25,105 @@ export class CompressedAirInventorySummaryTableService {
 
   getCompressedAirData(item: CompressedAirItem, systemName: string, displayOptions: CompressedAirPropertyDisplayOptions, settings: Settings): Array<SummaryCompressedAirData> {
     let compressedAirData: Array<SummaryCompressedAirData> = new Array();
-    // pumpData = [{ value: pumpItem.name, fieldStr: 'name' }, { value: systemName, fieldStr: 'systemName' }];
-    // let nameplateData = this.getNameplateData(pumpItem.nameplateData, displayOptions.nameplateDataOptions);
-    // pumpData = pumpData.concat(nameplateData);
-    // let pumpProperties = this.getPumpPropertiesData(pumpItem.pumpEquipment, displayOptions.pumpPropertiesOptions, settings);
-    // pumpData = pumpData.concat(pumpProperties);
-    // let fluidProperties = this.getFluidPropertiesData(pumpItem.fluid, displayOptions.fluidPropertiesOptions, settings);
-    // pumpData = pumpData.concat(fluidProperties);
-    // let fieldMeasurements = this.getFieldMeasurementsData(pumpItem.fieldMeasurements, displayOptions.fieldMeasurementOptions, settings);
-    // pumpData = pumpData.concat(fieldMeasurements);
-    // let pumpMotorProperties = this.getPumpMotorData(pumpItem.pumpMotor, displayOptions.pumpMotorPropertiesOptions, settings);
-    // pumpData = pumpData.concat(pumpMotorProperties);
-    // let pumpStatus = this.getPumpStatusData(pumpItem.pumpStatus, displayOptions.pumpStatusOptions);
-    // pumpData = pumpData.concat(pumpStatus);
-    // let systemProperties = this.getSystemPropertiesData(pumpItem.systemProperties, displayOptions.systemPropertiesOptions, settings);
-    // pumpData = pumpData.concat(systemProperties);
+    compressedAirData = [{ value: item.name, fieldStr: 'name' }, { value: systemName, fieldStr: 'systemName' }];
+    let nameplateData = this.getNameplateData(item.nameplateData, displayOptions.nameplateDataOptions, settings);
+    compressedAirData = compressedAirData.concat(nameplateData);
+    let controlProperties = this.getControlsPropertiesData(item.compressedAirControlsProperties, displayOptions.compressedAirControlsPropertiesOptions);
+    compressedAirData = compressedAirData.concat(controlProperties);
+    let fieldMeasurements = this.getFieldMeasurementsData(item.fieldMeasurements, displayOptions.fieldMeasurementsOptions);
+    compressedAirData = compressedAirData.concat(fieldMeasurements);
+    let motorProperties = this.getMotorPropertiesData(item.compressedAirMotor, displayOptions.compressedAirMotorPropertiesOptions, settings);
+    compressedAirData = compressedAirData.concat(motorProperties);
+    let designDetailsProperties = this.getDesignDetailsData(item.compressedAirDesignDetailsProperties, displayOptions.compressedAirDesignDetailsPropertiesOptions, settings);
+    compressedAirData = compressedAirData.concat(designDetailsProperties);
 
     return compressedAirData;
   }
 
   //nameplate data
-  getNameplateData(nameplateData: NameplateData, nameplateDataOptions: NameplateDataOptions): Array<SummaryCompressedAirData> {
+  getNameplateData(nameplateData: NameplateData, nameplateDataOptions: NameplateDataOptions, settings: Settings): Array<SummaryCompressedAirData> {
     let compressedAirData: Array<SummaryCompressedAirData> = [];
+
+    let fullLoadOperatingPressureUnit: string = 'psig';
+    let fullLoadRatedCapacityUnit: string = 'acfm';
+    if (settings.unitsOfMeasure === 'Metric') {
+      fullLoadOperatingPressureUnit = 'barg';
+      fullLoadRatedCapacityUnit = 'm³/min'; 
+    } 
+    
     if (nameplateDataOptions.compressorType) {
-      compressedAirData.push({ value: nameplateData.compressorType, fieldStr: 'compressorType' });
+      let compressorType = CompressorTypeOptions.find(type => type.value == nameplateData.compressorType).label;
+      compressedAirData.push({ value: compressorType, fieldStr: 'compressorType' });
     }
     if (nameplateDataOptions.fullLoadOperatingPressure) {
-      compressedAirData.push({ value: nameplateData.fullLoadOperatingPressure, fieldStr: 'fullLoadOperatingPressure' });
+      compressedAirData.push({ value: nameplateData.fullLoadOperatingPressure, fieldStr: 'fullLoadOperatingPressure', unit: fullLoadOperatingPressureUnit });
     }
     if (nameplateDataOptions.fullLoadRatedCapacity) {
-      compressedAirData.push({ value: nameplateData.fullLoadRatedCapacity, fieldStr: 'fullLoadRatedCapacity' });
+      compressedAirData.push({ value: nameplateData.fullLoadRatedCapacity, fieldStr: 'fullLoadRatedCapacity', unit: fullLoadRatedCapacityUnit });
     }
     if (nameplateDataOptions.totalPackageInputPower) {
-      compressedAirData.push({ value: nameplateData.totalPackageInputPower, fieldStr: 'totalPackageInputPower' });
+      compressedAirData.push({ value: nameplateData.totalPackageInputPower, fieldStr: 'totalPackageInputPower', unit: 'kW' });
     }
+    return compressedAirData;
+  }
+
+  getFieldMeasurementsData(fieldMeasurements: FieldMeasurements, fieldMeasurementsOptions: FieldMeasurementsOptions): Array<SummaryCompressedAirData> {
+    let compressedAirData: Array<SummaryCompressedAirData> = [];
+
+    if (fieldMeasurementsOptions.yearlyOperatingHours) {
+      compressedAirData.push({ value: fieldMeasurements.yearlyOperatingHours, fieldStr: 'yearlyOperatingHours', unit: 'hrs/yr' });
+    }
+
     return compressedAirData;
   }
 
   getMotorPropertiesData(motorProperties: CompressedAirMotorProperties, motorPropertiesOptions: CompressedAirMotorPropertiesOptions, settings: Settings): Array<SummaryCompressedAirData> {
-    //let units = settings.unitsOfMeasure === 'Imperial' ? PumpSummaryUnitsImperial.pumpEquipment : PumpSummaryUnitsMetric.pumpEquipment;
+    let motorPowerUnit: string = 'hp';
+    if (settings.unitsOfMeasure === 'Metric') {
+      motorPowerUnit = 'kW';
+    }
 
     let compressedAirData: Array<SummaryCompressedAirData> = [];
-    // if (pumpPropertiesOptions.pumpType) {
-    //   pumpData.push({ value: pumpProperties.pumpType, fieldStr: 'pumpType', pipe: 'pumpType' });
-    // }
-    // if (pumpPropertiesOptions.shaftOrientation) {
-    //   pumpData.push({ value: pumpProperties.shaftOrientation, fieldStr: 'shaftOrientation', pipe: 'shaftOrientation' });
-    // }
-    // if (pumpPropertiesOptions.shaftSealType) {
-    //   pumpData.push({ value: pumpProperties.shaftSealType, fieldStr: 'shaftSealType', pipe: 'shaftSealType' });
-    // }
-   
+    if (motorPropertiesOptions.motorPower) {
+      compressedAirData.push({ value: motorProperties.motorPower, fieldStr: 'motorPower', unit: motorPowerUnit });
+    }
+    if (motorPropertiesOptions.motorFullLoadAmps) {
+      compressedAirData.push({ value: motorProperties.motorFullLoadAmps, fieldStr: 'motorFullLoadAmps', unit: 'amps' });
+    }
+
 
     return compressedAirData;
   }
 
-  getControlsPropertiesData(controlsProperties: CompressedAirControlsProperties, controlsPropertiesOptions: CompressedAirControlsPropertiesOptions, settings: Settings): Array<SummaryCompressedAirData> {
+  getControlsPropertiesData(controlsProperties: CompressedAirControlsProperties, controlsPropertiesOptions: CompressedAirControlsPropertiesOptions): Array<SummaryCompressedAirData> {
     let compressedAirData: Array<SummaryCompressedAirData> = [];
-    // let units = settings.unitsOfMeasure === 'Imperial' ? PumpSummaryUnitsImperial.fluid : PumpSummaryUnitsMetric.fluid;
 
-    // if (fluidPropertiesOptions.fluidType) {
-    //   pumpData.push({ value: fluidProperties.fluidType, fieldStr: 'fluidType' });
-    // }
-    // if (fluidPropertiesOptions.fluidDensity) {
-    //   pumpData.push({ value: fluidProperties.fluidDensity, fieldStr: 'fluidDensity', unit: units.fluidDensity });
-    // }
-
+    if (controlsPropertiesOptions.controlType) {
+      let controlType = ControlTypes.find(type => type.value == controlsProperties.controlType).label;
+      compressedAirData.push({ value: controlType, fieldStr: 'controlType' });
+    }
     return compressedAirData;
   }
 
   getDesignDetailsData(designDetailsProperties: CompressedAirDesignDetailsProperties, designDetailsPropertiesOptions: CompressedAirDesignDetailsPropertiesOptions, settings: Settings): Array<SummaryCompressedAirData> {
     let compressedAirData: Array<SummaryCompressedAirData> = [];
-    // let units = settings.unitsOfMeasure === 'Imperial' ? PumpSummaryUnitsImperial.fieldMeasurements : PumpSummaryUnitsMetric.fieldMeasurements;
+    let inletPressureUnit: string = 'psia';
+    if (settings.unitsOfMeasure === 'Metric') {
+      inletPressureUnit = 'bara';
+    }
 
-    // if (fieldMeasurementsOptions.pumpSpeed) {
-    //   pumpData.push({ value: fieldMeasurements.pumpSpeed, fieldStr: 'pumpSpeed', unit: units.pumpSpeed });
-    // }
-    
-
-    return compressedAirData;
-  }
-
-  getPerformancePointsData(performancePointsProperties: CompressedAirPerformancePointsProperties, performancePointsPropertiesOptions: CompressedAirPerformancePointsPropertiesOptions, settings: Settings): Array<SummaryCompressedAirData> {
-    let compressedAirData: Array<SummaryCompressedAirData> = [];
-    // let units = settings.unitsOfMeasure === 'Imperial' ? PumpSummaryUnitsImperial.pumpMotor : PumpSummaryUnitsMetric.pumpMotor;
-
-    // if (pumpMotorPropertiesOptions.motorRPM) {
-    //   pumpData.push({ value: pumpMotor.motorRPM, fieldStr: 'motorRPM', unit: units.motorRPM });
-    // }
-    // if (pumpMotorPropertiesOptions.lineFrequency) {
-    //   pumpData.push({ value: pumpMotor.lineFrequency, fieldStr: 'lineFrequency' });
-    // }
+    if (designDetailsProperties.inputPressure) {
+      compressedAirData.push({ value: designDetailsProperties.inputPressure, fieldStr: 'motorInputPressure', unit: inletPressureUnit });
+    }
+    if (designDetailsProperties.designEfficiency) {
+      compressedAirData.push({ value: designDetailsProperties.designEfficiency, fieldStr: 'motorDesignEfficiency', unit: '%' });
+    }
+    if (designDetailsProperties.serviceFactor) {
+      compressedAirData.push({ value: designDetailsProperties.serviceFactor, fieldStr: 'motorServiceFactor' });
+    }
 
     return compressedAirData;
   }
-
 
 }
 
