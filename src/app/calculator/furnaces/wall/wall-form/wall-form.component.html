@@ -183,7 +183,7 @@
             New Surface</a>
         </label>
         <select name="{{'surfaceShape'+idString}}" class="form-control" id="{{'surfaceShape'+idString}}"
-          formControlName="surfaceShape" (change)="setProperties()" (focus)="focusField('surfaceShape')">
+          formControlName="surfaceShape" (change)="setConditionFactor()" (focus)="focusField('surfaceShape')">
           <option *ngFor="let option of surfaceOptions" [ngValue]="option.id">{{option.surface}}</option>
         </select>
       </div>

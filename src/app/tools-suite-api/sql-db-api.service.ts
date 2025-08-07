@@ -6,8 +6,7 @@ import { GasLoadMaterialDbService } from '../indexedDb/gas-load-material-db.serv
 import { LiquidLoadMaterialDbService } from '../indexedDb/liquid-load-material-db.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.service';
-import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
-import { AtmosphereSpecificHeat, FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, SuiteDbMotor, SuiteDbPump, WallLossesSurface } from '../shared/models/materials';
+import { AtmosphereSpecificHeat, FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
@@ -16,7 +15,6 @@ declare var dbInstance: any;
 export class SqlDbApiService {
 
   constructor(private suiteApiHelperService: SuiteApiHelperService,
-    private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
     private gasLoadMaterialDbService: GasLoadMaterialDbService,
     private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
     private solidLoadMaterialDbService: SolidLoadMaterialDbService,
@@ -46,11 +44,6 @@ export class SqlDbApiService {
     let atmosphereMaterials: AtmosphereSpecificHeat[] = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
     atmosphereMaterials.forEach(material => {
       let suiteResult = this.insertAtmosphereSpecificHeat(material);
-    });
-
-    let wallMaterials: WallLossesSurface[] = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
-    wallMaterials.forEach(material => {
-      let suiteResult = this.insertWallLossesSurface(material);
     });
 
    let flueGasMaterials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
@@ -258,94 +251,6 @@ export class SqlDbApiService {
       return false;
     }
   }
-
-  selectWallLossesSurface(): Array<WallLossesSurface> {
-    try {
-      let wallLossesSurfaces: Array<WallLossesSurface> = new Array();
-      let items = dbInstance.getWallLossesSurface();
-      for (let index = 0; index < items.size(); index++) {
-        let wallLossesSurfacePointer = items.get(index);
-        let wallLossesSurface: WallLossesSurface = this.getWallLossesSurfaceFromWASM(wallLossesSurfacePointer);
-        wallLossesSurfaces.push(wallLossesSurface);
-        wallLossesSurfacePointer.delete();
-      }
-      items.delete();
-      return wallLossesSurfaces;
-    }
-    catch (err) {
-      console.log(err);
-      return [];
-    }
-  }
-
-  getWallLossesSurfaceFromWASM(wallLossesSurfacePointer): WallLossesSurface {
-    return {
-      id: wallLossesSurfacePointer.getID(),
-      selected: false,
-      surface: wallLossesSurfacePointer.getSurface(),
-      conditionFactor: wallLossesSurfacePointer.getConditionFactor(),
-    };
-  }
-
-
-  selectWallLossesSurfaceById(id: number): WallLossesSurface {
-    try {
-      let wallLossesSurfacePointer = dbInstance.getWallLossesSurfaceById(id);
-      let wallLossesSurface: WallLossesSurface = this.getWallLossesSurfaceFromWASM(wallLossesSurfacePointer);
-      wallLossesSurfacePointer.delete();
-      return wallLossesSurface;
-    }
-    catch (err) {
-      console.log(err);
-      return undefined;
-    }
-  }
-
-  insertWallLossesSurface(surface: WallLossesSurface): boolean {
-    try {
-      let WallLoss = this.getWallLoss(surface);
-      dbInstance.insertWallLossesSurface(WallLoss);
-      WallLoss.delete();
-      return true;
-    }
-    catch (err) {
-      console.log(err);
-      return undefined;
-    }
-  }
-
-  updateWallLossesSurface(material: WallLossesSurface): boolean {
-    try {
-      let WallLoss = this.getWallLoss(material);
-      dbInstance.updateWallLossesSurface(WallLoss);
-      WallLoss.delete();
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
-
-  getWallLoss(wallLossesSurface: WallLossesSurface) {
-    let WallLoss = new Module.WallLosses();
-    WallLoss.setConditionFactor(wallLossesSurface.conditionFactor);
-    WallLoss.setSurface(wallLossesSurface.surface);
-    if (wallLossesSurface.id !== undefined) {
-      WallLoss.setID(wallLossesSurface.id);
-    }
-    return WallLoss;
-  }
-
-  deleteWallLossesSurface(id: number): boolean {
-    try {
-      let success = dbInstance.deleteWallLossesSurface(id);
-      return success;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
-
 
   selectSolidLiquidFlueGasMaterials(): Array<SolidLiquidFlueGasMaterial> {
     try {

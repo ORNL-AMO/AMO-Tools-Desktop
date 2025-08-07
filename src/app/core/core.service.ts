@@ -24,6 +24,7 @@ import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { MockWaterdiagram } from '../examples/mockWaterDiagram';
 import { Diagram } from '../shared/models/diagram';
 import { ApplicationInstanceDbService, ApplicationInstanceData } from '../indexedDb/application-instance-db.service';
+import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
 @Injectable()
 export class CoreService {
 
@@ -50,6 +51,7 @@ export class CoreService {
     private electronService: ElectronService,
     private diagramIdbService: DiagramIdbService,
     private applicationDataService: ApplicationInstanceDbService,
+    private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
     private directoryDbService: DirectoryDbService) {
       this.showShareDataModal = new BehaviorSubject<boolean>(false);
   }
@@ -174,6 +176,12 @@ export class CoreService {
 
     MockFsatCalculator.assessmentId = this.exampleFsatId;
     await firstValueFrom(this.calculatorDbService.addWithObservable(MockFsatCalculator));
+  }
+
+    async createDefaultProcessHeatingMaterials(): Promise<void> {
+      let updatedIds = await firstValueFrom(this.wallLossesSurfaceDbService.insertDefaultMaterials());
+
+      return Promise.resolve();
   }
 
   async createDirectorySettings() {
