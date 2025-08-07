@@ -46,7 +46,7 @@ export class WallLossesSurfaceComponent implements OnInit {
 
   async initMaterials() {
     this.allMaterials = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
-    this.originalMaterial = this.allMaterials[0];
+    this.originalMaterial = this.allMaterials?.[0];
     if (this.existingMaterial) {
       this.setActiveMaterial();
     }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as _ from 'lodash';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { GasLoadChargeMaterial, FlueGasMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, WallLossesSurface, SolidLoadChargeMaterial, AtmosphereSpecificHeat } from '../../shared/models/materials';
 import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
@@ -210,8 +209,8 @@ export class CustomMaterialsService {
       let material: AtmosphereSpecificHeat = data[i];
       let materials: Array<AtmosphereSpecificHeat> = await firstValueFrom(this.atmosphereDbService.deleteByIdWithObservable(material.id));
       this.atmosphereDbService.dbAtmospherSpecificHeatMaterials.next(materials);
-      
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteAtmosphereSpecificHeat(sdbId);
     };
   }
@@ -223,7 +222,7 @@ export class CustomMaterialsService {
       let materials = await firstValueFrom(this.flueGasMaterialDbService.deleteByIdWithObservable(material.id));
       this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
 
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteGasFlueGasMaterial(sdbId);
     };
   }
@@ -235,7 +234,7 @@ export class CustomMaterialsService {
       let materials = await firstValueFrom(this.gasLoadDbService.deleteByIdWithObservable(material.id));
       this.gasLoadDbService.dbGasLoadChargeMaterials.next(materials);
 
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteGasLoadChargeMaterial(sdbId);
     };
   }
@@ -247,7 +246,7 @@ export class CustomMaterialsService {
       let materials = await firstValueFrom(this.liquidLoadMaterialDbService.deleteByIdWithObservable(material.id));
       this.liquidLoadMaterialDbService.dbLiquidLoadChargeMaterials.next(materials);
 
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteLiquidLoadChargeMaterial(sdbId);
     };
   }
@@ -259,7 +258,7 @@ export class CustomMaterialsService {
       let materials = await firstValueFrom(this.solidLiquidMaterialDbService.deleteByIdWithObservable(material.id));
       this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.next(materials);
 
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteSolidLiquidFlueGasMaterial(sdbId);
     };
   }
@@ -271,7 +270,7 @@ export class CustomMaterialsService {
       let materials = await firstValueFrom(this.solidLoadMaterialDbService.deleteByIdWithObservable(material.id));
       this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials.next(materials);
 
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteSolidLoadChargeMaterial(sdbId);
     };
   }
@@ -287,7 +286,7 @@ export class CustomMaterialsService {
 
     getMaterialNameError(existingMaterials: MeasurPHMaterial[], newMaterialId: number, newMaterialName: string, nameKey: 'substance' | 'surface'): string {
       let materialNameError = undefined;
-      let hasDuplicateName = _.filter(existingMaterials, (material) => {
+      let hasDuplicateName = existingMaterials.filter((material) => {
         if (material.id !== newMaterialId) {
           return this.getCleanedMaterialName(material[nameKey]) === this.getCleanedMaterialName(newMaterialName);
         }
