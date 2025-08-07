@@ -14,7 +14,7 @@ export class CompressedAirInventorySummaryGraphsService {
   }
   getBinData(compressedAirInventoryData: CompressedAirInventoryData, compressedAirField: CompressedAirField): { xData: Array<any>, yData: Array<number> } {
     let compressors: Array<CompressedAirItem> = this.compressedAirInventorySummaryService.getAllCompressors(compressedAirInventoryData);
-    let fieldCount: _.Dictionary<number> = _.countBy(compressors, (compressor) => { return compressor[compressedAirField.group][compressedAirField.value] });
+    let fieldCount: _.Dictionary<number> = _.countBy(compressors, (compresser) => { return compresser[compressedAirField.group][compressedAirField.value] });
     let xData: Array<any> = new Array();
     let yData: Array<any> = new Array();
     Object.keys(fieldCount).forEach((fieldValue: string, index: number) => {
