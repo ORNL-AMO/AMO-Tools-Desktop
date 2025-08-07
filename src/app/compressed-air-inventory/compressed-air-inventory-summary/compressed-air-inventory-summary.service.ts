@@ -85,13 +85,13 @@ export class CompressedAirInventorySummaryService {
   getDesignDetailsFields(compressedAirDesignDetailsPropertiesOptions: CompressedAirDesignDetailsPropertiesOptions, settings: Settings): Array<CompressedAirField> {
     let fields: Array<CompressedAirField> = [];
     if (compressedAirDesignDetailsPropertiesOptions.inputPressure) {
-      fields.push({ display: 'Design Inlet Pressure', value: 'designInletPressure', group: 'compressedAirDesignDetails' });
+      fields.push({ display: 'Design Inlet Pressure', value: 'inputPressure', group: 'compressedAirDesignDetails' });
     }
     if (compressedAirDesignDetailsPropertiesOptions.designEfficiency) {
-      fields.push({ display: 'Motor Design Efficiency', value: 'motorDesignEfficiency', group: 'compressedAirDesignDetails' });
+      fields.push({ display: 'Motor Design Efficiency', value: 'designEfficiency', group: 'compressedAirDesignDetails' });
     }
     if (compressedAirDesignDetailsPropertiesOptions.serviceFactor) {
-      fields.push({ display: 'Motor Service Factor', value: 'motorServiceFactor', group: 'compressedAirDesignDetails' });
+      fields.push({ display: 'Motor Service Factor', value: 'serviceFactor', group: 'compressedAirDesignDetails' });
     }
     return fields;
   }
