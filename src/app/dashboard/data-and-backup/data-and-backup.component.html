@@ -6,9 +6,13 @@
             </div>
             <div class="card-body">
                 <div class="desc-text mb-2">
+                    <div *ngIf="electronService.isElectron" class="alert alert-info w-100 text-center jumbo">
+                        <div class="w-75 mx-auto">
+                            MEASUR data is stored and managed internally by the application. DOE and MEASUR support staff do not have access to your data.
+                        </div>
+                    </div>
                     <p *ngIf="electronService.isElectron">
-                        <b class="bold">MEASUR data is managed internally by the application and is not accessible to
-                            users through the operating system or local machine</b>. For greater control of application
+                        <b class="bold">Data is not accessible to users through the operating system or local machine</b>. For greater control of application
                         data, the MEASUR team recommends that users take advantage of the automatic backup feature
                         (below).
                         <br><br>
@@ -16,9 +20,14 @@
                         the <a [routerLink]="['/directory-dashboard', 1]">MEASUR dashboard</a>, as well as in the header
                         of assessments, inventories, and treasure hunts.
                     </p>
+                    <div *ngIf="!electronService.isElectron" class="alert alert-info w-100 text-center jumbo">
+                        <div class="w-75 mx-auto">
+                        MEASUR data is stored and managed internally by your browser*. DOE and MEASUR support staff do not have access to your data.
+                        </div>
+                    </div>
                     <p *ngIf="!electronService.isElectron">
-                        <b class="bold">MEASUR data is managed internally by the browser, is unique to each browser
-                            (Chrome, Firefox, Edge), and is only accessible through exported files and backup files.
+                        <b class="bold">Data is unique to each browser
+                            (Chrome, Firefox, Edge), and is only accessible through exported files and backup files created within the application.
                         </b>
                         For example, user data created while working in Chrome will not be reflected in Edge, nor in the
                         desktop version of the application and vice-versa. For greater control of application data, the
@@ -27,6 +36,11 @@
                         Users can still create manual backups or export data as needed. These features are available in
                         the <a [routerLink]="['/directory-dashboard', 1]">MEASUR dashboard</a>, as well as in the header
                         of assessments, inventories, and treasure hunts.
+
+                        <br><br>
+                        <b class="bold">* NOTE: If you have enabled browser settings which disable "site data," "cookies," or similar browser storage, MEASUR may lose functionality or be unable to run entirely.</b>
+                        For more information, consult your browser's help documentation or visit <a href="{{MEASUR_RESOURCES_URL}}" target="_blank">{{MEASUR_RESOURCES_URL}}</a>
+                        <br><br>
                     </p>
                     <p>
                         For more information on data storage and collection, please view the

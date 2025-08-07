@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { MEASUR_RESOURCES_URL } from '../models/utilities';
 
 @Injectable()
 export class SnackbarService {
@@ -42,8 +43,9 @@ const DismissTimeoutsMS = {
   long: 10000
 }
 
-export const CORE_DATA_WARNING = `<b class="bold title">MEASUR has detected browser storage restrictions that disable core functionality.</b></br>To use MEASUR, follow browser instructions to enable data storage for this site. DOE and MEASUR support staff <b>do not</b> have access to your data.`;
-export const SECONDARY_DATA_WARNING =  `<b class="bold title">Non-essential storage options have been disabled for this browser</b>.<br>Core MEASUR functionality will continue, but some features may be limited or unavailable.`;
+export const CORE_DATA_WARNING = `<b class="bold title">MEASUR has detected browser storage restrictions and cannot run the application</b></br>To use MEASUR, 
+        follow your browser's instructions to enable data storage for this site. For more information, visit: <a href="${MEASUR_RESOURCES_URL}" target="_blank">${MEASUR_RESOURCES_URL}</a>`;
+export const SECONDARY_DATA_WARNING =  `<b class="bold title">Non-essential storage options have been disabled for this browser</b>.<br>Core MEASUR functionality will continue, but some features may be limited or unavailable. For more information, visit: <a href="${MEASUR_RESOURCES_URL}" target="_blank">${MEASUR_RESOURCES_URL}</a>`;
 
 const MEASURDefaultNotifications: Record<AppDefaultNotification, string> = {
   exploreOpportunities: `<b class="bold title">Explore Opportunities</b>: The selected modification was created using the expert view. 
