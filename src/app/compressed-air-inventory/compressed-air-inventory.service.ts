@@ -375,27 +375,27 @@ export class CompressedAirInventoryService {
         return _.find(filterInventorySummary.selectedSystemsIds, (id) => { return department.id == id }) != undefined;
       });
     }
-    // if (filterInventorySummary.pumpTypes.length != 0) {
-    //   filteredInventoryData.departments.forEach(department => {
-    //     department.catalog = _.filter(department.catalog, (pumpItem) => {
-    //       return _.includes(filterInventorySummary.pumpTypes, pumpItem.pumpEquipment.pumpType);
-    //     })
-    //   });
-    // }
-    // if (filterInventorySummary.motorRatedPowerValues.length != 0) {
-    //   filteredInventoryData.departments.forEach(department => {
-    //     department.catalog = _.filter(department.catalog, (pumpItem) => {
-    //       return _.includes(filterInventorySummary.motorRatedPowerValues, pumpItem.pumpMotor.motorRatedPower);
-    //     })
-    //   });
-    // }
-    // if (filterInventorySummary.statusValues.length != 0) {
-    //   filteredInventoryData.departments.forEach(department => {
-    //     department.catalog = _.filter(department.catalog, (pumpItem) => {
-    //       return _.includes(filterInventorySummary.statusValues, pumpItem.pumpStatus.status);
-    //     })
-    //   });
-    // }
+    if (filterInventorySummary.compressorTypes.length != 0) {
+      filteredInventoryData.systems.forEach(system => {
+        system.catalog = _.filter(system.catalog, (compressorItem) => {
+          return _.includes(filterInventorySummary.compressorTypes, compressorItem.nameplateData.compressorType);
+        })
+      });
+    }
+    if (filterInventorySummary.controlTypes.length != 0) {
+      filteredInventoryData.systems.forEach(system => {
+        system.catalog = _.filter(system.catalog, (compressorItem) => {
+          return _.includes(filterInventorySummary.controlTypes, compressorItem.compressedAirControlsProperties.controlType);
+        })
+      });
+    }
+    if (filterInventorySummary.horsepowerTypes.length != 0) {
+      filteredInventoryData.systems.forEach(system => {
+        system.catalog = _.filter(system.catalog, (compressorItem) => {
+          return _.includes(filterInventorySummary.horsepowerTypes, compressorItem.compressedAirMotor.motorPower);
+        })
+      });
+    }
     return filteredInventoryData;
   }
 

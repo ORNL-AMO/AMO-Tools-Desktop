@@ -54,36 +54,26 @@ export class CompressedAirSummaryGraphsMenuComponent {
       groupLabel: 'Nameplate Data',
       showGroup: true
     });
-    // this.groups.push({
-    //   options: this.compressedAirInventorySummaryService.getPumpPropertiesFields(pumpInventoryData.displayOptions.pumpPropertiesOptions, settings),
-    //   groupLabel: 'Pump',
-    //   showGroup: false
-    // });
-    // this.groups.push({
-    //   options: this.compressedAirInventorySummaryService.getFluidPropertiesFields(pumpInventoryData.displayOptions.fluidPropertiesOptions, settings),
-    //   groupLabel: 'Fluid',
-    //   showGroup: false
-    // });
-    // this.groups.push({
-    //   options: this.compressedAirInventorySummaryService.getFieldMeasurementsFields(pumpInventoryData.displayOptions.fieldMeasurementOptions, settings),
-    //   groupLabel: 'Field Measurements',
-    //   showGroup: false
-    // });
-    // this.groups.push({
-    //   options: this.compressedAirInventorySummaryService.getPumpMotorFields(pumpInventoryData.displayOptions.pumpMotorPropertiesOptions, settings),
-    //   groupLabel: 'Motor',
-    //   showGroup: false
-    // });
-    // this.groups.push({
-    //   options: this.compressedAirInventorySummaryService.getPumpStatusFields(pumpInventoryData.displayOptions.pumpStatusOptions, settings),
-    //   groupLabel: 'Status',
-    //   showGroup: false
-    // });
-    // this.groups.push({
-    //   options: this.compressedAirInventorySummaryService.getSystemPropertiesFields(pumpInventoryData.displayOptions.systemPropertiesOptions, settings),
-    //   groupLabel: 'System',
-    //   showGroup: false
-    // });
+    this.groups.push({
+      options: this.compressedAirInventorySummaryService.getFieldMeasurementsFields(compressedAirInventoryData.displayOptions.fieldMeasurementsOptions, settings),
+      groupLabel: 'Field Measurements',
+      showGroup: false
+    });
+    this.groups.push({
+      options: this.compressedAirInventorySummaryService.getMotorFields(compressedAirInventoryData.displayOptions.compressedAirMotorPropertiesOptions, settings),
+      groupLabel: 'Motor',
+      showGroup: false
+    });
+    this.groups.push({
+      options: this.compressedAirInventorySummaryService.getControlsPropertiesFields(compressedAirInventoryData.displayOptions.compressedAirControlsPropertiesOptions, settings),
+      groupLabel: 'Controls',
+      showGroup: false
+    });
+    this.groups.push({
+      options: this.compressedAirInventorySummaryService.getDesignDetailsFields(compressedAirInventoryData.displayOptions.compressedAirDesignDetailsPropertiesOptions, settings),
+      groupLabel: 'Design Details',
+      showGroup: false
+    });
 
   }
 
