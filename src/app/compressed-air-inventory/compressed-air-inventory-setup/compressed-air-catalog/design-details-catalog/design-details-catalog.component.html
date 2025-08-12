@@ -153,4 +153,59 @@
             </span>
         </span>
     </div>
+
+    <div class="form-group" [ngClass]="{'invalid': form.controls.estimatedTimeLoaded.invalid}">
+        <label for="estimatedTimeLoaded">Estimated Time Loaded</label>
+        <div class="input-group">
+            <input name="estimatedTimeLoaded" type="number" step="any" class="form-control" id="estimatedTimeLoaded"
+                formControlName="estimatedTimeLoaded" (input)="save(true)" (focus)="focusField('estimatedTimeLoaded')">
+            <span class="units input-group-addon">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.estimatedTimeLoaded.invalid && !form.controls.estimatedTimeLoaded.pristine">
+            <span *ngIf="form.controls.estimatedTimeLoaded.errors.required">Value Required</span>
+            <span *ngIf="form.controls.estimatedTimeLoaded.errors.greaterThan !== undefined">Value must be greater than
+                {{form.controls.estimatedTimeLoaded.errors.greaterThan}}%</span>
+            <span *ngIf="form.controls.estimatedTimeLoaded.errors.max">Value can't be greater than
+                {{form.controls.estimatedTimeLoaded.errors.max.max}}</span>
+        </span>
+    </div>
+
+    <div class="form-group" *ngIf="displayAverageLoadFactorAndMotorEfficiency"
+        [ngClass]="{'invalid': form.controls.averageLoadFactor.invalid}">
+        <label for="averageLoadFactor">Average Load Factor</label>
+        <div class="input-group">
+            <input name="averageLoadFactor" type="number" step="any" class="form-control" id="averageLoadFactor"
+                formControlName="averageLoadFactor" (input)="save(true)" (focus)="focusField('averageLoadFactor')">
+            <span class="units input-group-addon">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.averageLoadFactor.invalid && !form.controls.averageLoadFactor.pristine">
+            <span *ngIf="form.controls.averageLoadFactor.errors.required">Value Required</span>
+            <span *ngIf="form.controls.averageLoadFactor.errors.min">Value can't be less than
+                {{form.controls.averageLoadFactor.errors.min.min}} %.</span>
+            <span *ngIf="form.controls.averageLoadFactor.errors.max">Value can't be greater than
+                {{form.controls.averageLoadFactor.errors.max.max}}</span>
+        </span>
+    </div>
+
+    <div class="form-group" *ngIf="displayAverageLoadFactorAndMotorEfficiency"
+        [ngClass]="{'invalid': form.controls.motorEfficiencyAtLoad.invalid}">
+        <label for="motorEfficiencyAtLoad">Motor Efficiency at Load</label>
+        <div class="input-group">
+            <input name="motorEfficiencyAtLoad" type="number" step="any" class="form-control" id="motorEfficiencyAtLoad"
+                formControlName="motorEfficiencyAtLoad" (input)="save(true)"
+                (focus)="focusField('motorEfficiencyAtLoad')">
+            <span class="units input-group-addon">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.motorEfficiencyAtLoad.invalid && !form.controls.motorEfficiencyAtLoad.pristine">
+            <span *ngIf="form.controls.motorEfficiencyAtLoad.errors.required">Value Required</span>
+            <span *ngIf="form.controls.motorEfficiencyAtLoad.errors.min">Value can't be less than
+                {{form.controls.motorEfficiencyAtLoad.errors.min.min}} %.</span>
+            <span *ngIf="form.controls.motorEfficiencyAtLoad.errors.max">Value can't be greater than
+                {{form.controls.motorEfficiencyAtLoad.errors.max.max}}</span>
+        </span>
+    </div>
+
 </form>

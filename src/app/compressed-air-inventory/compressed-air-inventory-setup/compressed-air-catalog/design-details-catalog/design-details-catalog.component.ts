@@ -26,6 +26,7 @@ export class DesignDetailsCatalogComponent implements OnInit {
   displayNoLoadPowerFM: boolean;
   displayNoLoadPowerUL: boolean;
   displayMaxFullFlow: boolean;
+  displayAverageLoadFactorAndMotorEfficiency: boolean;
   warnings: CompressorInventoryItemWarnings;
 
   compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
@@ -47,6 +48,7 @@ export class DesignDetailsCatalogComponent implements OnInit {
         this.setDisplayMaxFullFlow(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
         this.setDisplayNoLoadPowerFM(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
         this.setDisplayNoLoadPowerUL(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
+        this.setDisplayAverageLoadFactorAndMotorEfficiencyAtLoad(selectedCompressedAir.compressedAirControlsProperties.controlType);
         this.setCalculatedModulatingPressureRange(selectedCompressedAir);
       }
     });
@@ -91,6 +93,10 @@ export class DesignDetailsCatalogComponent implements OnInit {
 
   setDisplayMaxFullFlow(compressorType: number, controlType: number) {
     this.displayMaxFullFlow = this.designDetailsCatalogService.checkShowMaxFlowPerformancePoint(compressorType, controlType);
+  }
+
+  setDisplayAverageLoadFactorAndMotorEfficiencyAtLoad(controlType: number) {
+    this.displayAverageLoadFactorAndMotorEfficiency = this.designDetailsCatalogService.checkShowAverageLoadFactorAndMotorEfficiency(controlType);
   }
 
   setCalculatedModulatingPressureRange(selectedCompressor: CompressedAirItem) {
