@@ -79,5 +79,29 @@
             Max Full Flow Pressure
         </label>
     </div>
+    <div class="checkbox" (mouseenter)="focusField('estimatedTimeLoaded')">
+        <label>
+            <input type="checkbox" (change)="save()"
+                [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.estimatedTimeLoaded" name="estimatedTimeLoaded"
+                id="estimatedTimeLoaded" disabled>
+            Estimated Time Loaded 
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('averageLoadFactor')">
+        <label>
+            <input type="checkbox" (change)="save()"
+                [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.averageLoadFactor" name="averageLoadFactor"
+                id="averageLoadFactor" disabled>
+            Average Load Factor
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('motorEfficiencyAtLoad')">
+        <label>
+            <input type="checkbox" (change)="save()"
+                [(ngModel)]="compressedAirDesignDetailsPropertiesOptions.motorEfficiencyAtLoad" name="motorEfficiencyAtLoad"
+                id="motorEfficiencyAtLoad" disabled>
+            Motor Efficiency at Load
+        </label>
+    </div>
 
 </form>

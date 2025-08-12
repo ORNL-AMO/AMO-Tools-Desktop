@@ -201,7 +201,10 @@ export class CompressedAirInventoryService {
         serviceFactor: 1.15,
         noLoadPowerFM: 20,
         noLoadPowerUL: 20,
-        maxFullFlowPressure: 110
+        maxFullFlowPressure: 110,
+        estimatedTimeLoaded: 100,
+        averageLoadFactor: 100,
+        motorEfficiencyAtLoad: 0
       },
       compressedAirPerformancePointsProperties: {
         fullLoad: {
@@ -300,7 +303,10 @@ export class CompressedAirInventoryService {
         serviceFactor: true,
         noLoadPowerFM: true,
         noLoadPowerUL: true,
-        maxFullFlowPressure: true
+        maxFullFlowPressure: true,
+        estimatedTimeLoaded: true,
+        averageLoadFactor: true,
+        motorEfficiencyAtLoad: true
       },
       compressedAirPerformancePointsPropertiesOptions: {
         displayCompressedAirPerformancePointsProperties: true
