@@ -32,7 +32,8 @@ const ManageEdge = (props: ManageEdgeProps) => {
                     target={target.data} 
                     style={{
                         padding: '0.5rem 0.5rem',
-                        fontSize: '16px'}} 
+                        fontSize: '20px'
+                    }} 
                         />
             </Box>
 
