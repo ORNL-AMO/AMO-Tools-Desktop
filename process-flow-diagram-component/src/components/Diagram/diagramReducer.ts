@@ -470,13 +470,20 @@ const openDrawerWithSelectedReducer = (state: DiagramState, action?: PayloadActi
   if (!state.isDrawerOpen) {
     state.isDrawerOpen = true;
   }
+  setSelectedId(state, action);
+};
+
+const selectedIdChangeReducer = (state: DiagramState, action?: PayloadAction<string>) => {
+  setSelectedId(state, action);
+};
+
+const setSelectedId = (state: DiagramState, action: PayloadAction<string>) => {
   state.selectedDataId = action.payload ? action.payload : undefined;
   const componentTabs = ComponentManageDataTabs[state.nodes.find((n: Node<ProcessFlowPart>) => n.id === action.payload)?.data.processComponentType as WaterProcessComponentType];
   if (componentTabs) {
     // * is component, not edge
     state.manageDataTabs = componentTabs;
   }
-
 };
 
 const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<DiagramCalculatedData>) => {
@@ -534,6 +541,7 @@ export const diagramSlice = createSlice({
     modalOpenChange: modalOpenChangeReducer,
     applyEstimatedFlowResults: applyEstimatedFlowResultsReducer,
     openDrawerWithSelected: openDrawerWithSelectedReducer,
+    selectedIdChange: selectedIdChangeReducer,
     diagramAlertChange: diagramAlertChangeReducer
   }
 })
@@ -578,6 +586,7 @@ export const {
   conductivityUnitChange,
   electricityCostChange,
   openDrawerWithSelected,
+  selectedIdChange,
   diagramAlertChange
 } = diagramSlice.actions
 export default diagramSlice.reducer

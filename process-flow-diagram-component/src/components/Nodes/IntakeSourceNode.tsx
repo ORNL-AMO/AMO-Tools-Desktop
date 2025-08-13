@@ -4,20 +4,22 @@ import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
 import FlowValueDisplay from '../Diagram/FlowValueDisplay';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
-import { useAppSelector } from '../../hooks/state';
-import { DiagramNode, NodeFlowData } from 'process-flow-lib';
+import { useAppDispatch, useAppSelector } from '../../hooks/state';
+import { DiagramNode, NodeFlowData, ProcessFlowPart } from 'process-flow-lib';
 import { selectNodeCalculatedFlowData } from '../Diagram/store';
+import CustomNodeToolbar from './CustomNodeToolbar';
+import { openDrawerWithSelected } from '../Diagram/diagramReducer';
 
 const IntakeSourceNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
+  const dispatch = useAppDispatch();
   const calculatedData: NodeFlowData = useAppSelector((state) => selectNodeCalculatedFlowData(state, id));
-//   let transformString = `translate(0%, 0%) translate(188px, -25px)`;
   let plantLevelFlow: number | string = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : calculatedData && calculatedData.totalDischargeFlow;
   let condensedPadding: boolean = plantLevelFlow !== undefined && plantLevelFlow !== null;
   
 
-//   const onEditNode = () => {
-//     dispatch(openDrawerWithSelected(id));
-//   }
+  const onEditNode = () => {
+    dispatch(openDrawerWithSelected(id));
+  }
 
   return (
     <>
@@ -54,10 +56,7 @@ const IntakeSourceNode = ({ data, id, isConnectable, selected }: NodeProps<Diagr
       <div className="node-inner-input" style={{
         padding: condensedPadding? '0' : undefined
       }}>
-        {/* <EditDataDrawerButton 
-          onEdit={onEditNode}
-          selected={selected}
-          transformLocation={transformString}/> */}
+        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
 
         <Typography sx={{ width: '100%' }} >
           {data.name}
