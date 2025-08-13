@@ -145,7 +145,7 @@ jobs:
   release:
     if: github.ref_name == 'master'
     runs-on: ubuntu-22.04
-    needs: [build,notarize]
+    needs: [build,notarize,sign]
     env:
       VERSION: ${{ needs.build.outputs.BUILD_VERSION }}
     steps:
