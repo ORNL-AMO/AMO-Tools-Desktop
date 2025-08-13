@@ -84,7 +84,7 @@ export function initializeAppFactory(
         window['dbInstance'] = undefined;
         window['Module'] = {
           onRuntimeInitialized: function () {
-            window['dbInstance'] = new window['Module'].SQLite(":memory:", true);
+            // window['dbInstance'] = new window['Module'].SQLite(":memory:", true);
             console.log('=== MEASUR Tools Suite module initialized ===');
             console.timeEnd('initializeAppFactory');
             resolve(module);

@@ -4,6 +4,7 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { WallLossesSurface } from '../shared/models/materials';
 import { WallLossesSurfaceStoreMeta } from './dbConfig';
 
+declare var Module: any;
 @Injectable()
 export class WallLossesSurfaceDbService {
 
@@ -16,20 +17,17 @@ export class WallLossesSurfaceDbService {
   }
 
   insertDefaultMaterials(): Observable<number[]> {
-    // todo will get from MEASUR-Tool-suite defaultProcessHeatingMaterialsApi
-    let defaultMaterials: WallLossesSurface[] = [
-      { surface: "Horizontal cylinders", conditionFactor: 1.016 },
-      { surface: "Longer vertical cylinders", conditionFactor: 1.235 },
-      { surface: "Vertical plates", conditionFactor: 1.394 },
-      { surface: "Horizontal plate facing up, warmer than air", conditionFactor: 1.79 },
-      { surface: "Horizontal plate facing down, warmer than air", conditionFactor: 0.89 },
-      { surface: "Horizontal plate facing up, cooler than air", conditionFactor: 0.89 },
-      { surface: "Horizontal plate facing down, cooler than air", conditionFactor: 1.79 },
-    ];
-
-    defaultMaterials = defaultMaterials.map(material => {
-      return { ...material, isDefault: true };
-    });
+    let DefaultData = new Module.DefaultData();
+    let suiteDefaultMaterials = DefaultData.getWallLossesSurface();
+    
+    let defaultMaterials: Array<WallLossesSurface> = [];
+    for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
+      let wasmClass = suiteDefaultMaterials.get(i);
+      defaultMaterials.push({ 
+        surface: wasmClass.getSurface(), 
+        conditionFactor: wasmClass.getConditionFactor(),
+        isDefault: true });
+    }
     return this.dbService.bulkAdd(this.storeName, defaultMaterials);
   }
 
