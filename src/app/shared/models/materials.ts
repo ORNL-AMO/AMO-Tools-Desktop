@@ -71,6 +71,7 @@ export interface AtmosphereSpecificHeat {
 export interface WallLossesSurface {
     conditionFactor: number;
     id?: number;
+    isDefault?: boolean;
     selected?: boolean;
     surface: string;
 }

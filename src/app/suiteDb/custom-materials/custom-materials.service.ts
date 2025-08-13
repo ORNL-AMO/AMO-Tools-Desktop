@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as _ from 'lodash';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { GasLoadChargeMaterial, FlueGasMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, WallLossesSurface, SolidLoadChargeMaterial, AtmosphereSpecificHeat } from '../../shared/models/materials';
 import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
@@ -173,12 +172,9 @@ export class CustomMaterialsService {
         let material: WallLossesSurface = data[i]
         material.selected = false;
         delete material.id;
-        let test: boolean = this.sqlDbApiService.insertWallLossesSurface(material);
-        if (test === true) {
-          await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(material));
-          let materials = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
-          this.wallLossesSurfaceDbService.dbWallLossesSurfaceMaterials.next(materials);
-        }
+        await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(material));
+        let materials = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+        this.wallLossesSurfaceDbService.dbWallLossesSurfaceMaterials.next(materials);
       }
   }
 
@@ -213,8 +209,8 @@ export class CustomMaterialsService {
       let material: AtmosphereSpecificHeat = data[i];
       let materials: Array<AtmosphereSpecificHeat> = await firstValueFrom(this.atmosphereDbService.deleteByIdWithObservable(material.id));
       this.atmosphereDbService.dbAtmospherSpecificHeatMaterials.next(materials);
-      
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteAtmosphereSpecificHeat(sdbId);
     };
   }
@@ -226,7 +222,7 @@ export class CustomMaterialsService {
       let materials = await firstValueFrom(this.flueGasMaterialDbService.deleteByIdWithObservable(material.id));
       this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
 
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteGasFlueGasMaterial(sdbId);
     };
   }
@@ -238,7 +234,7 @@ export class CustomMaterialsService {
       let materials = await firstValueFrom(this.gasLoadDbService.deleteByIdWithObservable(material.id));
       this.gasLoadDbService.dbGasLoadChargeMaterials.next(materials);
 
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteGasLoadChargeMaterial(sdbId);
     };
   }
@@ -250,7 +246,7 @@ export class CustomMaterialsService {
       let materials = await firstValueFrom(this.liquidLoadMaterialDbService.deleteByIdWithObservable(material.id));
       this.liquidLoadMaterialDbService.dbLiquidLoadChargeMaterials.next(materials);
 
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteLiquidLoadChargeMaterial(sdbId);
     };
   }
@@ -262,7 +258,7 @@ export class CustomMaterialsService {
       let materials = await firstValueFrom(this.solidLiquidMaterialDbService.deleteByIdWithObservable(material.id));
       this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.next(materials);
 
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteSolidLiquidFlueGasMaterial(sdbId);
     };
   }
@@ -274,22 +270,40 @@ export class CustomMaterialsService {
       let materials = await firstValueFrom(this.solidLoadMaterialDbService.deleteByIdWithObservable(material.id));
       this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials.next(materials);
 
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
+      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
       this.sqlDbApiService.deleteSolidLoadChargeMaterial(sdbId);
     };
   }
 
   async deleteWallLossSurfaces(data: Array<WallLossesSurface>) {
-    let sdbMaterials: Array<WallLossesSurface> = this.sqlDbApiService.selectWallLossesSurface();
+    let sdbMaterials: Array<WallLossesSurface> = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
     for (let i = 0; i < data.length; i++) {
       let material: WallLossesSurface = data[i]
       let materials = await firstValueFrom(this.wallLossesSurfaceDbService.deleteByIdWithObservable(material.id));
       this.wallLossesSurfaceDbService.dbWallLossesSurfaceMaterials.next(materials);
-
-      let sdbId: number = _.find(sdbMaterials, (sdbMaterial) => { return material.surface === sdbMaterial.surface; }).id;
-      this.sqlDbApiService.deleteWallLossesSurface(sdbId);
     };
   }
+
+    getMaterialNameError(existingMaterials: MeasurPHMaterial[], newMaterialId: number, newMaterialName: string, nameKey: 'substance' | 'surface'): string {
+      let materialNameError = undefined;
+      let hasDuplicateName = existingMaterials.filter((material) => {
+        if (material.id !== newMaterialId) {
+          return this.getCleanedMaterialName(material[nameKey]) === this.getCleanedMaterialName(newMaterialName);
+        }
+      });
+
+      if (hasDuplicateName.length > 0) {
+        materialNameError = 'This name is in use by another material';
+      }
+      else if (this.getCleanedMaterialName(newMaterialName) === '') {
+        materialNameError = 'The material must have a name';
+      }
+      return materialNameError;
+    }
+
+    getCleanedMaterialName(name: string): string {
+      return name.toLowerCase().trim();
+    }
 
 }
 
@@ -303,3 +317,6 @@ export interface MaterialData {
   solidLoadChargeMaterial: Array<SolidLoadChargeMaterial>;
   wallLossesSurface: Array<WallLossesSurface>;
 }
+
+
+export type MeasurPHMaterial = WallLossesSurface | GasLoadChargeMaterial | LiquidLoadChargeMaterial | SolidLiquidFlueGasMaterial | SolidLoadChargeMaterial | AtmosphereSpecificHeat | FlueGasMaterial;
