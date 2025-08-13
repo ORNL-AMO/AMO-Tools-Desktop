@@ -2,18 +2,16 @@ import { memo } from 'react';
 import { Position, NodeProps } from '@xyflow/react';
 import { Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
-import FlowValueDisplay from '../Diagram/FlowValueDisplay';
-import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { openDrawerWithSelected } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
-import { DiagramNode, NodeFlowData } from 'process-flow-lib';
+import { DiagramNode, NodeFlowData, ProcessFlowPart } from 'process-flow-lib';
 import { selectNodeCalculatedFlowData } from '../Diagram/store';
+import CustomNodeToolbar from './CustomNodeToolbar';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
   const calculatedData: NodeFlowData = useAppSelector((state) => selectNodeCalculatedFlowData(state, id));
-  // let transformString = `translate(0%, 0%) translate(180px, -36px)`;
   let showInSystemTreatment: boolean;
   if (data.processComponentType === 'water-using-system' && data.inSystemTreatment.length > 0) {
     showInSystemTreatment = true;
@@ -95,11 +93,8 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
             </span>
           </div>
         }
-      
-        {/* <EditDataDrawerButton 
-          onEdit={onEditNode}
-          selected={selected}
-          transformLocation={transformString}/> */}
+
+        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
 
         <Typography sx={{ width: '100%' }} >
           {data.name}

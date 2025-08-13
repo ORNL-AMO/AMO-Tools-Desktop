@@ -2,11 +2,11 @@ import { NodeProps, Position } from "@xyflow/react";
 import { CSSProperties } from "react";
 import { Typography } from "@mui/material";
 import CustomHandle from "./CustomHandle";
-import EditDataDrawerButton from "../Drawer/EditDataDrawerButton";
 import { useAppDispatch } from "../../hooks/state";
 import { openDrawerWithSelected } from "../Diagram/diagramReducer";
-import { DiagramNode } from "process-flow-lib";
+import { DiagramNode, ProcessFlowPart } from "process-flow-lib";
 import React from "react";
+import CustomNodeToolbar from "./CustomNodeToolbar";
 
 const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
@@ -24,10 +24,7 @@ const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   return (
     <div>
       <div className="node-inner-input" style={lossInnerStyle}>
-      <EditDataDrawerButton 
-          onEdit={onEditNode}
-          selected={selected}
-          transformLocation={transformString}/>
+        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
         <Typography sx={{ width: '100%' }} >
           {data.name}
         </Typography>

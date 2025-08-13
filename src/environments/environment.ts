@@ -13,6 +13,6 @@ export const environment = {
   name: 'development',
   version: packageInfo.version,
   useServiceWorker: false,
-  measurWeatherApi: 'https://weather.ornl.gov/',
+  measurWeatherApi: 'https://ir-utilities.ornl.gov/',
   measurUtilitiesApi: 'http://127.0.0.1:3000/'
 };

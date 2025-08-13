@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
-import { BackupDataService, MeasurBackupFile } from './backup-data.service';
-import { ElectronService } from '../electron/electron.service';
+import { MeasurBackupFile } from './backup-data.service';
 import { ManageAppDataService } from './manage-app-data.service';
 import { DashboardService } from '../dashboard/dashboard.service';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
@@ -22,6 +21,8 @@ import { InventoryItem } from './models/inventory/inventory';
 import { Settings } from './models/settings';
 import { Calculator } from './models/calculators';
 import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
+import { Diagram } from './models/diagram';
+import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,10 +35,14 @@ export class ImportBackupService {
   importDirectoryIdMap: { [oldId: number]: number };
   // get new assessmentId from old
   importAssessmentIdMap: { [oldId: number]: number };
+  // get new diagramId from old
+  importDiagramIdMap: { [oldId: number]: number };
   // get new settings id from old directory id
   importDirectorySettingsIdMap: { [oldId: number]: number };
   // get new settings id from old assessment id
   importAssessmentSettingsIdMap: { [oldId: number]: number };
+  // get new settings id from old diagram id
+  importDiagramSettingsIdMap: { [oldId: number]: number };  
   // get new settings id from old inventory id
   importInventorySettingsIdMap: { [oldId: number]: number };
 
@@ -57,6 +62,7 @@ export class ImportBackupService {
     private inventoryDbService: InventoryDbService,
     private manageAppDataService: ManageAppDataService,
     private sqlDbApiService: SqlDbApiService,
+    private diagramDbService: DiagramIdbService,
     private dashboardService: DashboardService,
   ) {
 
@@ -86,8 +92,10 @@ export class ImportBackupService {
   async importBackupFile() {
     this.importDirectoryIdMap = {};
     this.importAssessmentIdMap = {};
+    this.importDiagramIdMap = {};
     this.importDirectorySettingsIdMap = {};
     this.importAssessmentSettingsIdMap = {};
+    this.importDiagramSettingsIdMap = {};
     this.importInventorySettingsIdMap = {};
 
     try {
@@ -112,10 +120,12 @@ export class ImportBackupService {
     for await (let settings of measurBackupFile.settings) {
       let oldDirectoryId = settings.directoryId;
       let oldAssessmentId = settings.assessmentId;
+      let oldDiagramId = settings.diagramId;
       let oldInventoryid = settings.inventoryId;
       delete settings.id;
       delete settings.assessmentId;
       delete settings.directoryId;
+      delete settings.diagramId;
       delete settings.inventoryId;
 
       // * set reassign imported root settings to current root directory
@@ -128,6 +138,11 @@ export class ImportBackupService {
       if (oldAssessmentId !== undefined && oldAssessmentId !== null) {
         this.importAssessmentSettingsIdMap[oldAssessmentId] = newSettings.id;
       }
+
+      if (oldDiagramId !== undefined && oldDiagramId !== null) {
+        this.importDiagramSettingsIdMap[oldDiagramId] = newSettings.id;
+      }
+
       if (oldDirectoryId !== undefined && oldDirectoryId !== null) {
         this.importDirectorySettingsIdMap[oldDirectoryId] = newSettings.id;
       }
@@ -164,6 +179,28 @@ export class ImportBackupService {
       this.importAssessmentIdMap[oldAssessmentId] = newAssessment.id;
     };
     let assessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(assessments);
+
+    for await (let diagram of measurBackupFile.diagrams) {
+      diagram.selected = false;
+      let oldDiagramId = diagram.id;
+      delete diagram.id;
+      diagram.directoryId = diagram.directoryId === 1 ? diagram.directoryId : this.importDirectoryIdMap[diagram.directoryId];
+      diagram.assessmentId = this.importAssessmentIdMap[diagram.assessmentId];
+      let newDiagram = await firstValueFrom(this.diagramDbService.addWithObservable(diagram));
+
+      await this.updateRelatedDiagramSettings(newDiagram, oldDiagramId);
+      this.importDiagramIdMap[oldDiagramId] = newDiagram.id;
+    };
+    let diagrams = await firstValueFrom(this.diagramDbService.getAllDiagrams());
+    this.diagramDbService.setAll(diagrams);
+
+    // * patch assessment diagram id
+    for await (let assessment of this.assessmentDbService.dbAssessments.getValue()) {
+      assessment.diagramId = this.importDiagramIdMap[assessment.diagramId];
+      await firstValueFrom(this.settingsDbService.updateWithObservable(assessment));
+    };
+    assessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
 
 
@@ -259,6 +296,14 @@ export class ImportBackupService {
     if (this.importDirectorySettingsIdMap[oldDirId] !== undefined) {
       let settings: Settings = this.settingsDbService.findById(this.importDirectorySettingsIdMap[oldDirId]);
       settings.directoryId = newDirectory.id;
+      await firstValueFrom(this.settingsDbService.updateWithObservable(settings));
+    }
+  }
+
+    async updateRelatedDiagramSettings(newDiagram: Diagram, oldDiagramId: number) {
+    if (this.importDiagramSettingsIdMap[oldDiagramId] !== undefined) {
+      let settings: Settings = this.settingsDbService.findById(this.importDiagramSettingsIdMap[oldDiagramId]);
+      settings.diagramId = newDiagram.id;
       await firstValueFrom(this.settingsDbService.updateWithObservable(settings));
     }
   }

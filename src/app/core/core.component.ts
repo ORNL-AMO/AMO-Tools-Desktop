@@ -139,7 +139,7 @@ export class CoreComponent implements OnInit {
 
     this.browserStorageService.detectAppStorageOptions().subscribe((browserStorageOptions: BrowserStorageAvailable) => {
       if (browserStorageOptions.indexedDB.success) {
-        let cookiesFunction = browserStorageOptions.cookies.navigatorEnabled && browserStorageOptions.cookies.successfulWrite;
+        let cookiesFunction = browserStorageOptions.cookies.navigatorEnabled && (browserStorageOptions.cookies.successfulWrite || (this.electronService.isElectron && !browserStorageOptions.cookies.successfulWrite));
         if (!browserStorageOptions.localStorage || !cookiesFunction) {
           this.snackBarService.setSnackbarMessage(SECONDARY_DATA_WARNING, 'info', 'none', [
             { label: 'Data Storage and Backup', uri: '/data-and-backup' },
