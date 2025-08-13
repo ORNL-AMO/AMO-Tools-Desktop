@@ -6,6 +6,6 @@ export const environment = {
   name: 'production-web',
   version: packageInfo.version,
   useServiceWorker: true,
-  measurWeatherApi: 'https://weather.ornl.gov/',
-  measurUtilitiesApi: 'https://weather.ornl.gov/'
+  measurWeatherApi: 'https://ir-utilities.ornl.gov/',
+  measurUtilitiesApi: 'https://ir-utilities.ornl.gov/'
 };
