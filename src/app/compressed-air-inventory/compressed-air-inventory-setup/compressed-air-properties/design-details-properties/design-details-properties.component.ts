@@ -38,7 +38,10 @@ export class DesignDetailsPropertiesComponent implements OnInit {
     this.compressedAirDesignDetailsPropertiesOptions.serviceFactor = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
     this.compressedAirDesignDetailsPropertiesOptions.noLoadPowerFM = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
     this.compressedAirDesignDetailsPropertiesOptions.noLoadPowerUL = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
-    this.compressedAirDesignDetailsPropertiesOptions.maxFullFlowPressure = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
+    this.compressedAirDesignDetailsPropertiesOptions.maxFullFlowPressure = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;    
+    this.compressedAirDesignDetailsPropertiesOptions.estimatedTimeLoaded = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
+    this.compressedAirDesignDetailsPropertiesOptions.averageLoadFactor = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
+    this.compressedAirDesignDetailsPropertiesOptions.motorEfficiencyAtLoad = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
     this.save();
   }
 
@@ -51,7 +54,10 @@ export class DesignDetailsPropertiesComponent implements OnInit {
       this.compressedAirDesignDetailsPropertiesOptions.serviceFactor||
       this.compressedAirDesignDetailsPropertiesOptions.noLoadPowerFM||
       this.compressedAirDesignDetailsPropertiesOptions.noLoadPowerUL||
-      this.compressedAirDesignDetailsPropertiesOptions.maxFullFlowPressure
+      this.compressedAirDesignDetailsPropertiesOptions.maxFullFlowPressure ||
+      this.compressedAirDesignDetailsPropertiesOptions.estimatedTimeLoaded ||
+      this.compressedAirDesignDetailsPropertiesOptions.averageLoadFactor ||
+      this.compressedAirDesignDetailsPropertiesOptions.motorEfficiencyAtLoad
     );
   }
   focusField(str: string) {

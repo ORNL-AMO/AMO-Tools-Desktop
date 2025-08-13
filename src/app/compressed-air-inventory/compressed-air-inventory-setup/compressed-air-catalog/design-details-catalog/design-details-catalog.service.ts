@@ -38,6 +38,12 @@ export class DesignDetailsCatalogService {
       noLoadPowerULValidators = [Validators.required];
     }
 
+    let averageLoadFactorAndMotorEfficiencyValidators: Array<Validators> = [];
+    let displayAverageLoadFactor: boolean = this.checkShowAverageLoadFactorAndMotorEfficiency(controlType);
+    if (displayAverageLoadFactor) {
+      averageLoadFactorAndMotorEfficiencyValidators = [Validators.required, Validators.min(0), Validators.max(100)];
+    }
+
 
     //todo set validators based on control and comp type
     let form: FormGroup = this.formBuilder.group({
@@ -48,7 +54,10 @@ export class DesignDetailsCatalogService {
       serviceFactor: [designDetails.serviceFactor, [Validators.required, Validators.min(1)]],
       noLoadPowerFM: [designDetails.noLoadPowerFM, noLoadPowerFMValidators],
       noLoadPowerUL: [designDetails.noLoadPowerUL, noLoadPowerULValidators],
-      maxFullFlowPressure: [designDetails.maxFullFlowPressure, maxFullFlowValidators]
+      maxFullFlowPressure: [designDetails.maxFullFlowPressure, maxFullFlowValidators],
+      estimatedTimeLoaded: [designDetails.estimatedTimeLoaded, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]],
+      averageLoadFactor: [designDetails.averageLoadFactor, averageLoadFactorAndMotorEfficiencyValidators],
+      motorEfficiencyAtLoad: [designDetails.motorEfficiencyAtLoad, averageLoadFactorAndMotorEfficiencyValidators]
     });
     this.markFormDirtyToDisplayValidation(form);
     form.controls.modulatingPressureRange.disable();
@@ -64,6 +73,9 @@ export class DesignDetailsCatalogService {
     designDetails.noLoadPowerFM = form.controls.noLoadPowerFM.value;
     designDetails.noLoadPowerUL = form.controls.noLoadPowerUL.value;
     designDetails.maxFullFlowPressure = form.controls.maxFullFlowPressure.value;
+    designDetails.estimatedTimeLoaded = form.controls.estimatedTimeLoaded.value;
+    designDetails.averageLoadFactor = form.controls.averageLoadFactor.value;
+    designDetails.motorEfficiencyAtLoad = form.controls.motorEfficiencyAtLoad.value;
     return designDetails;
   }
 
@@ -143,6 +155,13 @@ export class DesignDetailsCatalogService {
       return false;
     }
     return true;
+  }
+
+  checkShowAverageLoadFactorAndMotorEfficiency(controlType: number): boolean {
+    if (controlType == 11) {
+      return true
+    }
+    return false;
   }
 
 

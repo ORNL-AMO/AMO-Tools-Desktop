@@ -22,12 +22,12 @@ export interface SystemInformation {
 export interface CompressedAirInventorySystem {
   name: string,
   operatingHours: number,
-  totalAirStorage: number,    
+  totalAirStorage: number,
   averageLeakRate: number,
   knownTotalAirflow: number
   description: string,
   id: string,
-  catalog: Array<CompressedAirItem>,  
+  catalog: Array<CompressedAirItem>,
   endUses: Array<EndUse>,
   isValid?: boolean,
 }
@@ -164,7 +164,10 @@ export interface CompressedAirDesignDetailsProperties {
   serviceFactor: number,
   noLoadPowerFM: number,
   noLoadPowerUL: number,
-  maxFullFlowPressure: number
+  maxFullFlowPressure: number,
+  estimatedTimeLoaded: number,
+  averageLoadFactor: number,
+  motorEfficiencyAtLoad: number
 }
 export interface CompressedAirDesignDetailsPropertiesOptions {
   displayCompressedAirDesignDetailsProperties: boolean,
@@ -175,7 +178,10 @@ export interface CompressedAirDesignDetailsPropertiesOptions {
   serviceFactor: boolean,
   noLoadPowerFM: boolean,
   noLoadPowerUL: boolean,
-  maxFullFlowPressure: boolean
+  maxFullFlowPressure: boolean,
+  estimatedTimeLoaded: boolean,
+  averageLoadFactor: boolean,
+  motorEfficiencyAtLoad: boolean
 }
 
 export interface CompressedAirPerformancePointsProperties {
