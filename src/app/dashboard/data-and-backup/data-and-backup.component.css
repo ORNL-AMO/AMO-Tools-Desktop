@@ -42,3 +42,12 @@ label, .desc-text {
 .click-link.disabled{
     color: gray !important;
 }
+
+.jumbo {
+    font-size: 24px;
+    padding: 1.5rem;
+    font-weight: 600;
+    color: #156739 !important;
+    background-color: #fff;
+    border: 1px solid #156739 !important;
+}
