@@ -7,9 +7,8 @@ const jetpack = require('fs-jetpack');
 
 
 function isDev() {
-  return require.main.filename.indexOf('app.asar') === -1;
+    return app.isPackaged === false;
 };
-
 // * If left enabled, causes flashing on app first rendering. Likely caused by some dependency of the process-flow-diagram
 app.disableHardwareAcceleration();
 
