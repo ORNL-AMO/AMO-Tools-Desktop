@@ -104,14 +104,14 @@ export class CompressedAirInventoryService {
     let controlsForm: FormGroup = this.compressedAirControlsCatalogService.getFormFromControlsProperties(compressor.compressedAirControlsProperties, compressor.nameplateData.compressorType);
     let designDetailsForm: FormGroup = this.designDetailsCatalogService.getFormFromDesignDetails(compressor.compressedAirDesignDetailsProperties, compressor.nameplateData.compressorType, compressor.compressedAirControlsProperties.controlType);
     let fieldMeasurementsForm: FormGroup = this.fieldMeasurementsCatalogService.getFormFromFieldMeasurements(compressor.fieldMeasurements);
-    let centrifugalSpecificsFormIsValid: boolean
+    let performancePointsIsValid: boolean = this.performancePointsCatalogService.checkPerformancePointsValid(compressor, compressedAirInventoryData.systemInformation);
     let centrifugalSpecificsForm: UntypedFormGroup = this.centrifugalSpecificsCatalogService.getCentrifugalFormFromObj(compressor);
+    let centrifugalSpecificsFormIsValid: boolean
     if (compressor.nameplateData.compressorType == 6) {
       centrifugalSpecificsFormIsValid = centrifugalSpecificsForm.valid;
     } else {
       centrifugalSpecificsFormIsValid = true;
     }
-    let performancePointsIsValid: boolean = this.performancePointsCatalogService.checkPerformancePointsValid(compressor, compressedAirInventoryData.systemInformation);
 
     return {
       isValid: nameplateDataForm.valid && compressedAirMotorForm.valid && controlsForm.valid && designDetailsForm.valid && centrifugalSpecificsFormIsValid && fieldMeasurementsForm.valid && performancePointsIsValid,
