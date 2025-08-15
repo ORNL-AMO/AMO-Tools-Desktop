@@ -18,7 +18,7 @@ export class CompressedAirInventorySummaryOverviewComponent {
   ngOnInit(): void {
     this.settings = this.compressedAirInventoryService.settings.getValue();
     this.filterInventorySummarySub = this.compressedAirInventoryService.filterInventorySummary.subscribe(val => {
-      //this.compressedAirInventorySummaryOverviewService.setDepartmentSummaryItems();
+      this.compressedAirInventorySummaryOverviewService.setSystemSummaryItems();
     });
   }
 
