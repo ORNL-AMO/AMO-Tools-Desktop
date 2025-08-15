@@ -363,9 +363,6 @@ export class CalculatorSuiteApiService {
         MassFlowMeasuredData, MassFlowNameplateData,
         steamReduction.airMassFlowMethodData.inletTemperature, steamReduction.airMassFlowMethodData.outletTemperature);
 
-      MassFlowMeasuredData = new Module.SteamMassFlowMeasuredData(steamReduction.waterMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
-        steamReduction.waterMassFlowMethodData.massFlowMeasuredData.airVelocity);
-      MassFlowNameplateData = new Module.SteamMassFlowNameplateData(steamReduction.waterMassFlowMethodData.massFlowNameplateData.flowRate);
       let WaterMassFlowMethodData = new Module.SteamMassFlowMethodData(steamReduction.waterMassFlowMethodData.isNameplate,
         MassFlowMeasuredData, MassFlowNameplateData,
         steamReduction.waterMassFlowMethodData.inletTemperature, steamReduction.waterMassFlowMethodData.outletTemperature);
