@@ -84,14 +84,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const summingNode = processFlowParts.pop();
 
   return (
-    <Box sx={{
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      paddingX: '1rem'
-    }}>
+    <>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
           <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
             <Tab sx={{ fontSize: '.75rem' }} label="Build" />
@@ -372,15 +365,13 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 }
           </Box>
         </TabPanel>
-
-    </Box>
+      </>
   );
 });
 export default MenuSidebar;
 
 export interface MenuSidebarProps {
   shadowRootRef: any;
-  diagramParentDimensions: ParentContainerDimensions;
 }
 
 const keyInputDirections = [

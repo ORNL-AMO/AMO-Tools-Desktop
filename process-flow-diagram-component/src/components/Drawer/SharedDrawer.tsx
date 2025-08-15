@@ -125,7 +125,10 @@ const SharedDrawer = (props: SharedDrawerProps) => {
                     zIndex: 0,
                     '& .MuiPaper-root.MuiDrawer-paperAnchorRight': {
                         borderLeft: borderLeft,
-                        paddingX: open ? '1rem' : '0'
+                        paddingX: open ? '1rem' : '0',
+                    },
+                    '& .MuiPaper-root.MuiDrawer-paperAnchorLeft': {
+                        paddingX: open ? '1rem' : '0',
                     },
                 }}
             >
