@@ -1,21 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CompressedAirInventoryService, FilterInventorySummary } from '../../compressed-air-inventory.service';
-import { CompressedAirAssessmentService } from '../../../compressed-air-assessment/compressed-air-assessment.service';
-import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { CompressedAirInventoryData, CompressedAirItem } from '../../compressed-air-inventory';
 import { Settings } from '../../../shared/models/settings';
-import _, { set } from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import _ from 'lodash';
 @Injectable()
 export class CompressedAirInventorySummaryOverviewService {
   inventorySummary: BehaviorSubject<InventorySummary>;
 
   constructor(
     private compressedAirInventoryService: CompressedAirInventoryService,
-    private convertUnitsService: ConvertUnitsService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private assessmentCo2SavingsService: AssessmentCo2SavingsService
+    private convertUnitsService: ConvertUnitsService
   ) {
     this.inventorySummary = new BehaviorSubject<InventorySummary>({
       totalEnergyUse: 0,
@@ -68,8 +64,6 @@ export class CompressedAirInventorySummaryOverviewService {
       totalEmissions: totalEmissions,
       systemSummaryItems: systemSummaryItems
     });
-
-    console.log('Inventory Summary:', this.inventorySummary.getValue());
   }
 
 
@@ -132,7 +126,7 @@ export class CompressedAirInventorySummaryOverviewService {
   checkShowNoLoadPerformancePoint(compressorType: number, controlType: number): boolean {
     if (compressorType == 6) {
       if (controlType == 7 || controlType == 9) {
-        return false
+        return false;
       }
     }
     return true;
