@@ -89,8 +89,8 @@ const SharedDrawer = (props: SharedDrawerProps) => {
     const selectedDataTypeColor = useAppSelector(selectedDataColor);
     let [open, setOpen] = React.useState(true);
     let toggleDrawerOpen: () => void;
-    
-    if (anchor === 'right') { 
+
+    if (anchor === 'right') {
         open = useAppSelector((state) => state.diagram.isDrawerOpen);
         toggleDrawerOpen = () => {
             dispatch(toggleDrawer());
@@ -123,16 +123,18 @@ const SharedDrawer = (props: SharedDrawerProps) => {
                 anchor={anchor}
                 sx={{
                     zIndex: 0,
+                    '& .MuiPaper-root.MuiDrawer-paperAnchorRight': {
+                        borderLeft: borderLeft,
+                        paddingX: open ? '1rem' : '0'
+                    },
                 }}
             >
-                <DrawerHeader justifyContent={justifyContent} sx={{ borderLeft: borderLeft }}>
+                <DrawerHeader justifyContent={justifyContent}>
                     {toggleButton}
                 </DrawerHeader>
-                <Box paddingBottom={'1rem'} paddingTop={0} paddingX={'.5rem'} height={'100%'} borderLeft={borderLeft}>
-                    {open &&
-                        props.children
-                    }
-                </Box>
+                {open &&
+                    props.children
+                }
             </Drawer>
         </>
     );
