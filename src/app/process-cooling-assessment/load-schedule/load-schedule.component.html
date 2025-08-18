@@ -1,0 +1,52 @@
+<label class="group-label w-100">
+    Profile Data
+</label>
+<div class="scroll-item">
+      <form [formGroup]="loadForm">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th *ngFor="let load of loadPercentages">{{ load }}% Load</th>
+                <th>Total % Load</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td *ngFor="let load of loadPercentages" class="input-cell">
+                  <!--  todo id name -->
+                  <input 
+                    type="number" 
+                    class="form-control"
+                    [ngClass]="{'invalid': getFieldControl('load' + load)?.invalid && getFieldControl('load' + load)?.touched}"
+                    [formControlName]="'load' + load"
+                    step="1">
+
+                  <div class="invalid-feedback" 
+                       *ngIf="getFieldControl('load' + load)?.invalid && getFieldControl('load' + load)?.touched">
+                    <small *ngIf="getFieldControl('load' + load)?.errors?.['required']">Required</small>
+                    <small *ngIf="getFieldControl('load' + load)?.errors?.['min']">Min 0%</small>
+                    <small *ngIf="getFieldControl('load' + load)?.errors?.['max']">Max 100%</small>
+                  </div>
+                </td>
+                <td>
+                  <span class="font-weight-bold" 
+                        [class.text-danger]="totalPercentLoad > 100"
+                        [class.text-success]="totalPercentLoad === 100">
+                    {{ totalPercentLoad.toFixed(1) }}%
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="alert alert-danger" *ngIf="loadForm.errors?.['totalExceedsHundred'] && loadForm.touched">
+          Total percentage cannot exceed 100%
+        </div>
+        
+        <div class="alert alert-warning" *ngIf="loadForm.errors?.['totalLessThanHundred'] && loadForm.touched">
+          Total percentage should equal 100% for complete data
+        </div>
+      </form>
+    </div>

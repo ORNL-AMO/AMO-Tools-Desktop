@@ -1,5 +1,6 @@
-import { Component, effect, inject, Signal } from '@angular/core';
+import { Component, computed, effect, inject, Signal } from '@angular/core';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
 
 @Component({
   selector: 'app-baseline',
@@ -11,10 +12,16 @@ import { ProcessCoolingUiService } from '../services/process-cooling-ui.service'
 export class BaselineComponent {
   private readonly processCoolingUiService = inject(ProcessCoolingUiService);
   smallScreenPanelTab: string = 'help';
+  readonly ROUTE_TOKENS = ROUTE_TOKENS;
+
 
   isModalOpen: boolean = false;
   mainView: Signal<string> = this.processCoolingUiService.mainView;
   setupView: Signal<string> = this.processCoolingUiService.childView;
+  showResultsPanel: Signal<boolean> = computed(() => {
+    console.log('showResultsPanel', this.setupView());
+    return this.setupView() !== this.ROUTE_TOKENS.loadSchedule;
+  });
 
   constructor() {
     effect(() => {

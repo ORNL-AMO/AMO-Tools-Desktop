@@ -53,6 +53,7 @@ import { CondenserCoolingSystemComponent } from './system-information/condenser-
 import { CondenserCoolingHelpComponent } from './results-panel/help-panel/condenser-cooling-help/condenser-cooling-help.component';
 import { TowerComponent } from './system-information/tower/tower.component';
 import { TowerHelpComponent } from './results-panel/help-panel/tower-help/tower-help.component';
+import { LoadScheduleComponent } from './load-schedule/load-schedule.component';
 
 
 export const ROUTE_TOKENS = {
@@ -69,6 +70,7 @@ export const ROUTE_TOKENS = {
   condenserCoolingSystem: 'condenser-cooling-system',
   tower: 'tower',
   chillerInventory: 'chiller-inventory',
+  loadSchedule: 'load-schedule',
 
   // Assessment sub-tabs
   exploreOpportunities: 'explore-opportunities',
@@ -127,6 +129,10 @@ const ROUTES: Route[] = [
             path: ROUTE_TOKENS.chillerInventory,
             component: ChillerInventoryComponent,
           },
+          { 
+            path: ROUTE_TOKENS.loadSchedule,
+            component: LoadScheduleComponent
+          }
         ]
       },
       {
@@ -197,7 +203,8 @@ const ROUTES: Route[] = [
     CondenserCoolingSystemComponent,
     CondenserCoolingHelpComponent,
     TowerComponent,
-    TowerHelpComponent
+    TowerHelpComponent,
+    LoadScheduleComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),

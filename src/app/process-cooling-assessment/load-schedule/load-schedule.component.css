@@ -1,0 +1,30 @@
+
+td, th{
+    font-size: small;
+    border-right: solid 1px darkgray;
+    border-left: solid 1px darkgray;
+    padding: 3px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  
+  table {
+    /* box-shadow: 0 4px 8px 0 grey */
+    margin-bottom: 0px;
+    border-bottom: solid 1px;
+  }
+  
+
+  input.form-control{
+      width: 100%;
+      min-width: 50px;
+  }
+
+  .input-cell{
+    width: 60px;
+  }
+
+  .invalid {
+    border-color: red;
+    border-width: 2px;
+  }

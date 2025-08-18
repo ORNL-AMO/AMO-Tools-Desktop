@@ -1,14 +1,25 @@
 <app-baseline-tabs></app-baseline-tabs>
 <!--  todo small-screen-tab still needed? use media query or other-->
-  <!-- todo modal open here or elsewhere -->
+<!-- todo modal open here or elsewhere -->
 <div class="assessment-container tab-content">
-    <div class="assessment-panel-container lookup-form modification scroll-item"
+    <!-- <div class="lookup-form modification scroll-item"
+        [ngClass]="{
+            'modal-open': isModalOpen == true,
+            'assessment-panel-container': showResultsPanel(),
+            'assessment-panel-full-width': !showResultsPanel()
+            }">
+        <router-outlet></router-outlet>
+    </div> -->
+
+     <div class="assessment-panel-container lookup-form modification scroll-item"
         [ngClass]="{'modal-open': isModalOpen == true}">
         <router-outlet></router-outlet>
     </div>
 
+    <!-- @if (showResultsPanel()) { -->
     <div class="assessment-panel-container scroll-item"
         [ngClass]="{'small-screen-tab': smallScreenPanelTab === 'details'}">
         <app-results-panel></app-results-panel>
     </div>
+    <!-- } -->
 </div>
