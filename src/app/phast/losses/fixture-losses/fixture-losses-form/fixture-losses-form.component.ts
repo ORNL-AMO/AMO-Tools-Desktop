@@ -6,15 +6,15 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-material-db.service';
 import { firstValueFrom } from 'rxjs';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
-    selector: 'app-fixture-losses-form',
-    templateUrl: './fixture-losses-form.component.html',
-    styleUrls: ['./fixture-losses-form.component.css'],
-    standalone: false
+  selector: 'app-fixture-losses-form',
+  templateUrl: './fixture-losses-form.component.html',
+  styleUrls: ['./fixture-losses-form.component.css'],
+  standalone: false
 })
 export class FixtureLossesFormComponent implements OnInit {
   @Input()
@@ -43,10 +43,10 @@ export class FixtureLossesFormComponent implements OnInit {
   hasDeletedCustomMaterial: boolean = false;
   editExistingMaterial: boolean;
   existingMaterial: SolidLoadChargeMaterial;
-  materials: Array<SolidLoadChargeMaterial>;
+  materials: Array<SolidLoadChargeMaterial> = [];
   showModal: boolean = false;
   idString: string;
-  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private sqlDbApiService: SqlDbApiService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private solidLoadMaterialDbService: SolidLoadMaterialDbService) { }
+  constructor(private fixtureLossesCompareService: FixtureLossesCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private solidLoadMaterialDbService: SolidLoadMaterialDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -54,7 +54,7 @@ export class FixtureLossesFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
-          this.materials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+          this.setMaterials();
           this.enableForm();
         }
       }
@@ -68,7 +68,7 @@ export class FixtureLossesFormComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.materials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+    this.setMaterials();
     if (this.lossesForm) {
       if (this.lossesForm.controls.materialName.value && this.lossesForm.controls.materialName.value !== '') {
         if (this.lossesForm.controls.specificHeat.value === '') {
@@ -81,6 +81,10 @@ export class FixtureLossesFormComponent implements OnInit {
     if (!this.baselineSelected) {
       this.disableForm();
     }
+  }
+
+  async setMaterials() {
+    this.materials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable())
   }
 
   disableForm() {
@@ -99,27 +103,28 @@ export class FixtureLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  setSpecificHeat() {
-    let tmpMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+  async setSpecificHeat() {
+    let tmpMaterial: SolidLoadChargeMaterial = this.getSelectedMaterial();
     if (tmpMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         tmpMaterial.specificHeatSolid = this.convertUnitsService.value(tmpMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
       }
       this.lossesForm.patchValue({
-        specificHeat: this.roundVal(tmpMaterial.specificHeatSolid, 3)
+        specificHeat: roundVal(tmpMaterial.specificHeatSolid, 3)
       });
     }
     this.save();
   }
+
   checkSpecificHeat() {
     if (this.lossesForm.controls.materialName.value) {
-      let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+      let material: SolidLoadChargeMaterial = this.getSelectedMaterial();
       if (material) {
         let val = material.specificHeatSolid;
         if (this.settings.unitsOfMeasure === 'Metric') {
           val = this.convertUnitsService.value(val).from('btulbF').to('kJkgC');
         }
-        material.specificHeatSolid = this.roundVal(val, 3);
+        material.specificHeatSolid = roundVal(val, 3);
         if (material.specificHeatSolid !== this.lossesForm.controls.specificHeat.value) {
           return true;
         } else {
@@ -137,7 +142,7 @@ export class FixtureLossesFormComponent implements OnInit {
   }
 
   checkForDeletedMaterial() {
-    let selectedMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+    let selectedMaterial: SolidLoadChargeMaterial = this.getSelectedMaterial();
     if (!selectedMaterial) {
       this.hasDeletedCustomMaterial = true;
       this.restoreMaterial();
@@ -153,29 +158,26 @@ export class FixtureLossesFormComponent implements OnInit {
       specificHeatSolid: this.lossesForm.controls.specificHeat.value,
       substance: "Custom Fixture Material"
     };
-    let suiteDbResult = this.sqlDbApiService.insertSolidLoadChargeMaterial(customMaterial);
-    if (suiteDbResult === true) {
-      await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(customMaterial));
-    }
-    this.materials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+    await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(customMaterial));
+    await this.setMaterials();
     let newMaterial: SolidLoadChargeMaterial = this.materials.find(material => { return material.substance === customMaterial.substance; });
     this.lossesForm.patchValue({
       materialName: newMaterial.id
     });
   }
-  
+
   setProperties() {
-    let selectedMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.lossesForm.controls.materialName.value);
+    let selectedMaterial: SolidLoadChargeMaterial = this.getSelectedMaterial();
     if (selectedMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
         selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
         selectedMaterial.meltingPoint = this.convertUnitsService.value(selectedMaterial.meltingPoint).from('F').to('C');
-        selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');      
+        selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
       }
 
       this.lossesForm.patchValue({
-        specificHeat: this.roundVal(selectedMaterial.specificHeatSolid, 4),
+        specificHeat: roundVal(selectedMaterial.specificHeatSolid, 4),
         meltingPoint: selectedMaterial.meltingPoint,
         specificHeatLiquid: selectedMaterial.specificHeatLiquid,
         latentHeat: selectedMaterial.latentHeat
@@ -183,13 +185,10 @@ export class FixtureLossesFormComponent implements OnInit {
     }
     this.save();
   }
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
-  }
+
   showMaterialModal(editExistingMaterial: boolean) {
     this.editExistingMaterial = editExistingMaterial;
-    if(editExistingMaterial === true) {
+    if (editExistingMaterial === true) {
       this.existingMaterial = {
         id: this.lossesForm.controls.materialName.value,
         latentHeat: this.lossesForm.controls.latentHeat.value,
@@ -203,9 +202,9 @@ export class FixtureLossesFormComponent implements OnInit {
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
-  hideMaterialModal(event?: any) {
+  async hideMaterialModal(event?: any) {
     if (event) {
-      this.materials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+      await this.setMaterials();
       let newMaterial: SolidLoadChargeMaterial = this.materials.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.lossesForm.patchValue({
@@ -263,5 +262,13 @@ export class FixtureLossesFormComponent implements OnInit {
   }
   dismissMessage() {
     this.hasDeletedCustomMaterial = false;
+  }
+
+  getSelectedMaterial(): SolidLoadChargeMaterial {
+    let selectedMaterial: SolidLoadChargeMaterial = this.materials.find(material => {
+      return material.id == this.lossesForm.controls.materialName.value
+    });
+    return selectedMaterial;
+
   }
 }

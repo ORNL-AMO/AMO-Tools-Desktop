@@ -26,6 +26,7 @@ import { Diagram } from '../shared/models/diagram';
 import { ApplicationInstanceDbService, ApplicationInstanceData } from '../indexedDb/application-instance-db.service';
 import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
 import { AtmosphereDbService } from '../indexedDb/atmosphere-db.service';
+import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.service';
 @Injectable()
 export class CoreService {
 
@@ -54,7 +55,8 @@ export class CoreService {
     private applicationDataService: ApplicationInstanceDbService,
     private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
     private directoryDbService: DirectoryDbService,
-    private atmosphereDbService: AtmosphereDbService) {
+    private atmosphereDbService: AtmosphereDbService,
+    private solidLoadMaterialDbService: SolidLoadMaterialDbService) {
     this.showShareDataModal = new BehaviorSubject<boolean>(false);
   }
 
@@ -183,7 +185,7 @@ export class CoreService {
   async createDefaultProcessHeatingMaterials(): Promise<void> {
     await firstValueFrom(this.wallLossesSurfaceDbService.insertDefaultMaterials());
     await firstValueFrom(this.atmosphereDbService.insertDefaultMaterials());
-
+    await firstValueFrom(this.solidLoadMaterialDbService.insertDefaultMaterials())
     return Promise.resolve();
   }
 

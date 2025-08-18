@@ -5,11 +5,13 @@ import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-material-db.service';
+import { firstValueFrom } from 'rxjs';
 @Component({
-    selector: 'app-fixture-summary',
-    templateUrl: './fixture-summary.component.html',
-    styleUrls: ['./fixture-summary.component.css'],
-    standalone: false
+  selector: 'app-fixture-summary',
+  templateUrl: './fixture-summary.component.html',
+  styleUrls: ['./fixture-summary.component.css'],
+  standalone: false
 })
 export class FixtureSummaryComponent implements OnInit {
   @Input()
@@ -31,13 +33,15 @@ export class FixtureSummaryComponent implements OnInit {
   finalTemperatureDiff: Array<boolean>;
   correctionFactorDiff: Array<boolean>;
   numMods: number = 0;
-  
-  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   copyTableString: any;
 
-  constructor(private sqlDbApiService: SqlDbApiService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService,
+    private solidLoadMaterialDbService: SolidLoadMaterialDbService
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.materialNameDiff = new Array();
     this.specificHeatDiff = new Array();
     this.feedRateDiff = new Array();
@@ -45,7 +49,7 @@ export class FixtureSummaryComponent implements OnInit {
     this.finalTemperatureDiff = new Array();
     this.correctionFactorDiff = new Array();
 
-    this.materialOptions = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+    this.materialOptions = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.modifications) {
@@ -112,7 +116,7 @@ export class FixtureSummaryComponent implements OnInit {
   }
 
   checkSpecificHeat(loss: FixtureLoss) {
-    let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(loss.materialName);
+    let material: SolidLoadChargeMaterial = this.materialOptions.find(val => { return val.id === loss.materialName; });
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
@@ -132,9 +136,9 @@ export class FixtureSummaryComponent implements OnInit {
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
-  
+
   updateCopyTableString() {
     this.copyTableString = this.copyTable.nativeElement.innerText;
   }
-  
+
 }

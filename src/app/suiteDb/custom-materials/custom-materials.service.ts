@@ -155,12 +155,9 @@ export class CustomMaterialsService {
       let material: SolidLoadChargeMaterial = data[i];
       material.selected = false;
       delete material.id;
-      let test: boolean = this.sqlDbApiService.insertSolidLoadChargeMaterial(material);
-      if (test === true) {
-        await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(material));
-        let materials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
-        this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials.next(materials);
-      }
+      await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(material));
+      let materials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+      this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials.next(materials);
     }
   }
 
@@ -257,15 +254,12 @@ export class CustomMaterialsService {
   }
 
   async deleteSolidLoadChargeMaterial(data: Array<SolidLoadChargeMaterial>) {
-    let sdbMaterials: Array<SolidLoadChargeMaterial> = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+    let materials: Array<SolidLoadChargeMaterial> = [];
     for (let i = 0; i < data.length; i++) {
       let material: SolidLoadChargeMaterial = data[i];
-      let materials = await firstValueFrom(this.solidLoadMaterialDbService.deleteByIdWithObservable(material.id));
-      this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials.next(materials);
-
-      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.sqlDbApiService.deleteSolidLoadChargeMaterial(sdbId);
+      materials = await firstValueFrom(this.solidLoadMaterialDbService.deleteByIdWithObservable(material.id));
     };
+    this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials.next(materials);
   }
 
   async deleteWallLossSurfaces(data: Array<WallLossesSurface>) {
