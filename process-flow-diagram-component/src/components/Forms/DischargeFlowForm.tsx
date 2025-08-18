@@ -51,7 +51,7 @@ const DischargeFlowForm = () => {
     const onFlowValueInputChange = (event, dischargeEdgeId: string, handleChange: (event: React.ChangeEvent<any>) => void) => {
         handleChange(event);
         let flowValue = event.target.value === "" ? null : Number(event.target.value);
-        if (inPercent) {
+        if (inPercent && flowValue) {
             flowValue = getFlowValueFromPercent(flowValue, totalDischargeFlow);
         }
         dispatch(dischargeFlowValueChange({ dischargeEdgeId, flowValue }));

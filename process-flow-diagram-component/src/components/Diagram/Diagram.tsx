@@ -231,7 +231,7 @@ const Diagram = (props: DiagramProps) => {
             shadowRootRef={props.shadowRoot}
             anchor={'left'}
           >
-              <MenuSidebar shadowRootRef={props.shadowRoot} diagramParentDimensions={diagramParentDimensions}/>
+              <MenuSidebar shadowRootRef={props.shadowRoot}/>
           </SharedDrawer>
         )}
 

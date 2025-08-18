@@ -33,17 +33,10 @@ const ComponentNameHeader = (props: { selectedNode: Node<ProcessFlowPart> }) => 
 
     const componentTypeLabel = processFlowDiagramParts.find(part => part.processComponentType === selectedNode.data.processComponentType)?.name;
     return (
-        <Box display="flex" alignItems={'center'} sx={{ margin: '0 1rem' }}>
-            <Box
-                display="flex"
-                alignItems="center"
-                width="100%"
-            >
                 <Box
-                    component="span"
+                    component="div"
                     sx={{
-                        flexGrow: 1,
-                        py: 1,
+                        marginX: '.5rem',
                         borderRadius: 4
                     }}
                 >
@@ -70,8 +63,7 @@ const ComponentNameHeader = (props: { selectedNode: Node<ProcessFlowPart> }) => 
                         }}
                     />
                 </Box>
-            </Box>
-        </Box>
+
     );
 
 }
