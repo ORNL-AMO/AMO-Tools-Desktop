@@ -23,7 +23,7 @@ export class CustomMaterialsService {
 
   getSelected: BehaviorSubject<boolean>;
   selectAll: BehaviorSubject<boolean>;
-  constructor( 
+  constructor(
     private sqlDbApiService: SqlDbApiService,
     private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
     private gasLoadDbService: GasLoadMaterialDbService,
@@ -32,7 +32,7 @@ export class CustomMaterialsService {
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private atmosphereDbService: AtmosphereDbService,
-    ) {
+  ) {
     this.selectedAtmosphere = new Array<AtmosphereSpecificHeat>();
     this.selectedFlueGas = new Array<FlueGasMaterial>();
     this.selectedGasLoadCharge = new Array<GasLoadChargeMaterial>();
@@ -88,12 +88,9 @@ export class CustomMaterialsService {
       let material: AtmosphereSpecificHeat = data[i];
       delete material.id;
       material.selected = false;
-      let test: boolean = this.sqlDbApiService.insertAtmosphereSpecificHeat(material);
-      if (test === true) {
-        await firstValueFrom(this.atmosphereDbService.addWithObservable(material));
-        let materials = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
-        this.atmosphereDbService.dbAtmospherSpecificHeatMaterials.next(materials);
-      }
+      await firstValueFrom(this.atmosphereDbService.addWithObservable(material));
+      let materials = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
+      this.atmosphereDbService.dbAtmospherSpecificHeatMaterials.next(materials);
     };
   }
 
@@ -154,28 +151,28 @@ export class CustomMaterialsService {
   }
 
   async importSolidLoadChargeMaterial(data: Array<SolidLoadChargeMaterial>) {
-      for (let i = 0; i < data.length; i++) {
-        let material: SolidLoadChargeMaterial = data[i];
-        material.selected = false;
-        delete material.id;
-        let test: boolean = this.sqlDbApiService.insertSolidLoadChargeMaterial(material);
-        if (test === true) {
-          await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(material));
-          let materials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
-          this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials.next(materials);
-        }
+    for (let i = 0; i < data.length; i++) {
+      let material: SolidLoadChargeMaterial = data[i];
+      material.selected = false;
+      delete material.id;
+      let test: boolean = this.sqlDbApiService.insertSolidLoadChargeMaterial(material);
+      if (test === true) {
+        await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(material));
+        let materials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+        this.solidLoadMaterialDbService.dbSolidLoadChargeMaterials.next(materials);
       }
+    }
   }
 
   async importWallLossSurfaces(data: Array<WallLossesSurface>) {
     for (let i = 0; i < data.length; i++) {
-        let material: WallLossesSurface = data[i]
-        material.selected = false;
-        delete material.id;
-        await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(material));
-        let materials = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
-        this.wallLossesSurfaceDbService.dbWallLossesSurfaceMaterials.next(materials);
-      }
+      let material: WallLossesSurface = data[i]
+      material.selected = false;
+      delete material.id;
+      await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(material));
+      let materials = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+      this.wallLossesSurfaceDbService.dbWallLossesSurfaceMaterials.next(materials);
+    }
   }
 
   deleteSelected(data: MaterialData) {
@@ -202,17 +199,13 @@ export class CustomMaterialsService {
     }
   }
 
-
   async deleteAtmosphere(data: Array<AtmosphereSpecificHeat>) {
-    let sdbMaterials: Array<AtmosphereSpecificHeat> = this.sqlDbApiService.selectAtmosphereSpecificHeat();
+    let materials: Array<AtmosphereSpecificHeat>;
     for (let i = 0; i < data.length; i++) {
       let material: AtmosphereSpecificHeat = data[i];
-      let materials: Array<AtmosphereSpecificHeat> = await firstValueFrom(this.atmosphereDbService.deleteByIdWithObservable(material.id));
-      this.atmosphereDbService.dbAtmospherSpecificHeatMaterials.next(materials);
-
-      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.sqlDbApiService.deleteAtmosphereSpecificHeat(sdbId);
+      materials = await firstValueFrom(this.atmosphereDbService.deleteByIdWithObservable(material.id));
     };
+    this.atmosphereDbService.dbAtmospherSpecificHeatMaterials.next(materials);
   }
 
   async deleteFlueGas(data: Array<FlueGasMaterial>) {
@@ -251,7 +244,7 @@ export class CustomMaterialsService {
     };
   }
 
- async deleteSolidLiquidFlueGas(data: Array<SolidLiquidFlueGasMaterial>) {
+  async deleteSolidLiquidFlueGas(data: Array<SolidLiquidFlueGasMaterial>) {
     let sdbMaterials: Array<SolidLiquidFlueGasMaterial> = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     for (let i = 0; i < data.length; i++) {
       let material: SolidLiquidFlueGasMaterial = data[i];
@@ -284,26 +277,26 @@ export class CustomMaterialsService {
     };
   }
 
-    getMaterialNameError(existingMaterials: MeasurPHMaterial[], newMaterialId: number, newMaterialName: string, nameKey: 'substance' | 'surface'): string {
-      let materialNameError = undefined;
-      let hasDuplicateName = existingMaterials.filter((material) => {
-        if (material.id !== newMaterialId) {
-          return this.getCleanedMaterialName(material[nameKey]) === this.getCleanedMaterialName(newMaterialName);
-        }
-      });
-
-      if (hasDuplicateName.length > 0) {
-        materialNameError = 'This name is in use by another material';
+  getMaterialNameError(existingMaterials: MeasurPHMaterial[], newMaterialId: number, newMaterialName: string, nameKey: 'substance' | 'surface'): string {
+    let materialNameError = undefined;
+    let hasDuplicateName = existingMaterials.filter((material) => {
+      if (material.id !== newMaterialId) {
+        return this.getCleanedMaterialName(material[nameKey]) === this.getCleanedMaterialName(newMaterialName);
       }
-      else if (this.getCleanedMaterialName(newMaterialName) === '') {
-        materialNameError = 'The material must have a name';
-      }
-      return materialNameError;
-    }
+    });
 
-    getCleanedMaterialName(name: string): string {
-      return name.toLowerCase().trim();
+    if (hasDuplicateName.length > 0) {
+      materialNameError = 'This name is in use by another material';
     }
+    else if (this.getCleanedMaterialName(newMaterialName) === '') {
+      materialNameError = 'The material must have a name';
+    }
+    return materialNameError;
+  }
+
+  getCleanedMaterialName(name: string): string {
+    return name.toLowerCase().trim();
+  }
 
 }
 

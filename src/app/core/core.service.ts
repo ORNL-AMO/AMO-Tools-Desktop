@@ -25,6 +25,7 @@ import { MockWaterdiagram } from '../examples/mockWaterDiagram';
 import { Diagram } from '../shared/models/diagram';
 import { ApplicationInstanceDbService, ApplicationInstanceData } from '../indexedDb/application-instance-db.service';
 import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
+import { AtmosphereDbService } from '../indexedDb/atmosphere-db.service';
 @Injectable()
 export class CoreService {
 
@@ -52,8 +53,9 @@ export class CoreService {
     private diagramIdbService: DiagramIdbService,
     private applicationDataService: ApplicationInstanceDbService,
     private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
-    private directoryDbService: DirectoryDbService) {
-      this.showShareDataModal = new BehaviorSubject<boolean>(false);
+    private directoryDbService: DirectoryDbService,
+    private atmosphereDbService: AtmosphereDbService) {
+    this.showShareDataModal = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultSettingsObject(): Settings {
@@ -63,7 +65,7 @@ export class CoreService {
     return defaultSettings;
   }
 
-  relaunchApp(){
+  relaunchApp() {
     this.electronService.sendAppRelaunch();
   }
 
@@ -111,22 +113,22 @@ export class CoreService {
   }
 
   async createDefaultDirectories() {
-      let allAssessmentsDir: Directory = {
-        name: 'All Assessments',
-        createdDate: new Date(),
-        modifiedDate: new Date(),
-        parentDirectoryId: null,
-      };
-      let allDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(allAssessmentsDir));
-      let exampleAssessmentsDir: Directory = {
-        name: 'Examples',
-        createdDate: new Date(),
-        modifiedDate: new Date(),
-        parentDirectoryId: allDirectory.id,
-        isExample: true
-      };
-      let exampleDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(exampleAssessmentsDir));
-      this.exampleDirectoryId = exampleDirectory.id;
+    let allAssessmentsDir: Directory = {
+      name: 'All Assessments',
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+      parentDirectoryId: null,
+    };
+    let allDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(allAssessmentsDir));
+    let exampleAssessmentsDir: Directory = {
+      name: 'Examples',
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+      parentDirectoryId: allDirectory.id,
+      isExample: true
+    };
+    let exampleDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(exampleAssessmentsDir));
+    this.exampleDirectoryId = exampleDirectory.id;
   }
 
   async createExamples() {
@@ -178,10 +180,11 @@ export class CoreService {
     await firstValueFrom(this.calculatorDbService.addWithObservable(MockFsatCalculator));
   }
 
-    async createDefaultProcessHeatingMaterials(): Promise<void> {
-      let updatedIds = await firstValueFrom(this.wallLossesSurfaceDbService.insertDefaultMaterials());
+  async createDefaultProcessHeatingMaterials(): Promise<void> {
+    await firstValueFrom(this.wallLossesSurfaceDbService.insertDefaultMaterials());
+    await firstValueFrom(this.atmosphereDbService.insertDefaultMaterials());
 
-      return Promise.resolve();
+    return Promise.resolve();
   }
 
   async createDirectorySettings() {
@@ -194,7 +197,7 @@ export class CoreService {
     MockPhastSettings.facilityInfo.date = new Date().toDateString();
     MockPhastSettings.directoryId = this.exampleDirectoryId;
     await firstValueFrom(this.settingsDbService.addWithObservable(MockPhastSettings));
-    
+
     // Add settings for PHAST
     delete MockPhastSettings.directoryId;
     MockPhastSettings.assessmentId = this.examplePhastId;

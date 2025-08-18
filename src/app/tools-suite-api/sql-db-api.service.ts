@@ -19,9 +19,8 @@ export class SqlDbApiService {
     private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
     private solidLoadMaterialDbService: SolidLoadMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
-    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
-    private atmosphereDbService: AtmosphereDbService,
-    ) { }
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService
+  ) { }
 
 
   async initCustomDbMaterials() {
@@ -41,13 +40,8 @@ export class SqlDbApiService {
       let suiteResult = this.insertSolidLoadChargeMaterial(material);
     });
 
-    let atmosphereMaterials: AtmosphereSpecificHeat[] = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
-    atmosphereMaterials.forEach(material => {
-      let suiteResult = this.insertAtmosphereSpecificHeat(material);
-    });
-
-   let flueGasMaterials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-   flueGasMaterials.forEach(material => {
+    let flueGasMaterials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+    flueGasMaterials.forEach(material => {
       let suiteResult = this.insertGasFlueGasMaterial(material);
     });
 
@@ -158,94 +152,6 @@ export class SqlDbApiService {
   deleteGasFlueGasMaterial(id: number): boolean {
     try {
       return dbInstance.deleteGasFlueGasMaterial(id);
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
-
-
-  selectAtmosphereSpecificHeat(): Array<AtmosphereSpecificHeat> {
-    try {
-      let atmosphereSpecificHeatMaterials: Array<AtmosphereSpecificHeat> = new Array();
-      let items = dbInstance.getAtmosphereSpecificHeat();
-      for (let index = 0; index < items.size(); index++) {
-        let atmosphereSpecificHeatPointer = items.get(index);
-        let atmosphereSpecificHeat: AtmosphereSpecificHeat = this.getAtmosphereSpecificHeatFromWASM(atmosphereSpecificHeatPointer);
-        atmosphereSpecificHeatMaterials.push(atmosphereSpecificHeat);
-        atmosphereSpecificHeatPointer.delete();
-      }
-      items.delete();
-      return atmosphereSpecificHeatMaterials;
-    }
-    catch (err) {
-      console.log(err);
-      return [];
-    }
-  }
-
-  getAtmosphereSpecificHeatFromWASM(atmosphereSpecificHeatPointer): AtmosphereSpecificHeat {
-    return {
-      id: atmosphereSpecificHeatPointer.getID(),
-      selected: false,
-      specificHeat: atmosphereSpecificHeatPointer.getSpecificHeat(),
-      substance: atmosphereSpecificHeatPointer.getSubstance(),
-    };
-  }
-
-
-  selectAtmosphereSpecificHeatById(id: number): AtmosphereSpecificHeat {
-    try {
-      let atmosphereSpecificHeatPointer = dbInstance.getAtmosphereSpecificHeatById(id);
-      let atmosphereSpecificHeat: AtmosphereSpecificHeat = this.getAtmosphereSpecificHeatFromWASM(atmosphereSpecificHeatPointer);
-      atmosphereSpecificHeatPointer.delete();
-      return atmosphereSpecificHeat;
-    }
-    catch (err) {
-      console.log(err);
-      return undefined;
-    }
-  }
-
-  insertAtmosphereSpecificHeat(material: AtmosphereSpecificHeat): boolean {
-    try {
-      let Atmosphere = this.getAtmosphere(material);
-      dbInstance.insertAtmosphereSpecificHeat(Atmosphere);
-      Atmosphere.delete();
-      return true;
-    }
-    catch (err) {
-      console.log(err);
-      return undefined;
-    }
-  }
-
-  updateAtmosphereSpecificHeat(material: AtmosphereSpecificHeat): boolean {
-    try {
-      let Atmosphere = this.getAtmosphere(material);
-      dbInstance.updateAtmosphereSpecificHeat(Atmosphere);
-      Atmosphere.delete();
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
-
-  getAtmosphere(material: AtmosphereSpecificHeat) {
-    let Atmosphere = new Module.Atmosphere();
-    Atmosphere.setSubstance(material.substance);
-    Atmosphere.setSpecificHeat(material.specificHeat);
-    if (material.id !== undefined) {
-      Atmosphere.setID(material.id);
-    }
-    return Atmosphere;
-  }
-
-  deleteAtmosphereSpecificHeat(id: number): boolean {
-    try {
-      let success = dbInstance.deleteAtmosphereSpecificHeat(id);
-      return success;
     } catch (err) {
       console.log(err);
       return false;

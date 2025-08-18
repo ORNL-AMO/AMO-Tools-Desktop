@@ -74,7 +74,7 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   }
 
   async getCustomMaterials() {
-    this.atmosphereSpecificHeatMaterials = await firstValueFrom(this.atmospherDbService.getAllWithObservable());
+    this.atmosphereSpecificHeatMaterials = await firstValueFrom(this.atmospherDbService.getAllCustomMaterials());
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }
