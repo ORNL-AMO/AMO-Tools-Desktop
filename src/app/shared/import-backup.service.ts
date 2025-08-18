@@ -42,7 +42,7 @@ export class ImportBackupService {
   // get new settings id from old assessment id
   importAssessmentSettingsIdMap: { [oldId: number]: number };
   // get new settings id from old diagram id
-  importDiagramSettingsIdMap: { [oldId: number]: number };  
+  importDiagramSettingsIdMap: { [oldId: number]: number };
   // get new settings id from old inventory id
   importInventorySettingsIdMap: { [oldId: number]: number };
 
@@ -130,8 +130,8 @@ export class ImportBackupService {
 
       // * set reassign imported root settings to current root directory
       if (oldDirectoryId === 1) {
-          settings.directoryId = 1;
-          oldDirectoryId = undefined;
+        settings.directoryId = 1;
+        oldDirectoryId = undefined;
       }
 
       let newSettings: Settings = await firstValueFrom(this.settingsDbService.addWithObservable(settings));
@@ -261,10 +261,7 @@ export class ImportBackupService {
     for await (let material of measurBackupFile.atmosphereSpecificHeats) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertAtmosphereSpecificHeat(material);
-      if (isAdded) {
-        await firstValueFrom(this.atmosphereDbService.addWithObservable(material));
-      }
+      await firstValueFrom(this.atmosphereDbService.addWithObservable(material));
     };
 
     for await (let material of measurBackupFile.wallLossesSurfaces) {
@@ -300,7 +297,7 @@ export class ImportBackupService {
     }
   }
 
-    async updateRelatedDiagramSettings(newDiagram: Diagram, oldDiagramId: number) {
+  async updateRelatedDiagramSettings(newDiagram: Diagram, oldDiagramId: number) {
     if (this.importDiagramSettingsIdMap[oldDiagramId] !== undefined) {
       let settings: Settings = this.settingsDbService.findById(this.importDiagramSettingsIdMap[oldDiagramId]);
       settings.diagramId = newDiagram.id;

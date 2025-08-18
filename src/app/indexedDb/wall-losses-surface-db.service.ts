@@ -19,15 +19,19 @@ export class WallLossesSurfaceDbService {
   insertDefaultMaterials(): Observable<number[]> {
     let DefaultData = new Module.DefaultData();
     let suiteDefaultMaterials = DefaultData.getWallLossesSurface();
-    
+
     let defaultMaterials: Array<WallLossesSurface> = [];
     for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
       let wasmClass = suiteDefaultMaterials.get(i);
-      defaultMaterials.push({ 
-        surface: wasmClass.getSurface(), 
+      defaultMaterials.push({
+        surface: wasmClass.getSurface(),
         conditionFactor: wasmClass.getConditionFactor(),
-        isDefault: true });
+        isDefault: true
+      });
+      wasmClass.delete();
     }
+    DefaultData.delete();
+    suiteDefaultMaterials.delete();
     return this.dbService.bulkAdd(this.storeName, defaultMaterials);
   }
 
@@ -60,5 +64,4 @@ export class WallLossesSurfaceDbService {
   clearWallLossesSurface(): Observable<boolean> {
     return this.dbService.clear(this.storeName);
   }
-
 }

@@ -65,6 +65,7 @@ export interface AtmosphereSpecificHeat {
     selected?: boolean;
     specificHeat: number;
     substance: string;
+    isDefault?: boolean
 }
 
 
