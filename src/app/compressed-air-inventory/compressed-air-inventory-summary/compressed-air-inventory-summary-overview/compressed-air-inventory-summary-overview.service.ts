@@ -46,7 +46,7 @@ export class CompressedAirInventorySummaryOverviewService {
         let results = this.getCompressedAirItemResults(compressedAirItem, filteredCompressedAirInventoryData, system.operatingHours, settings);
         systemSummaryItem.energyUse += results.energyUse;
         systemSummaryItem.energyCost += results.energyCost;
-        systemSummaryItem.co2EmissionOutput += results.emissionOutput;
+        systemSummaryItem.co2EmissionOutput += results.emissionsOutput;
         systemSummaryItem.compressedAirItemResults.push({ data: compressedAirItem, results: results, name: compressedAirItem.name });
       });
       systemSummaryItems.push(systemSummaryItem);
@@ -70,7 +70,6 @@ export class CompressedAirInventorySummaryOverviewService {
   getCompressedAirItemResults(compressedAirItem: CompressedAirItem, compressedAirInventoryData: CompressedAirInventoryData, operatingHours: number, settings: Settings): CompressedAirItemResults {
     let results: CompressedAirItemResults = {
       energyUse: 0,
-      emissionOutput: 0,
       energyCost: 0,
       emissionsOutput: 0,
     };
@@ -101,7 +100,6 @@ export class CompressedAirInventorySummaryOverviewService {
 
     results.energyUse = (power * percentTimeLoaded * averageLoadFactor + percentUnloadPower * power * (1 - percentTimeLoaded)) * operatingHours / efficiency;
 
-    results.emissionOutput = results.energyUse * emissionsFactor;
     results.emissionsOutput = results.energyUse * emissionsFactor;
 
     results.energyCost = results.energyUse * settings.electricityCost;
@@ -157,7 +155,6 @@ export interface SystemSummaryItem {
 
 export interface CompressedAirItemResults {
   energyUse: number;
-  emissionOutput?: number;
   energyCost: number;
   emissionsOutput: number;
 }
