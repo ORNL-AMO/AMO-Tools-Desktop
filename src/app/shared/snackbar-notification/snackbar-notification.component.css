@@ -58,7 +58,7 @@
     text-align: left;
 }
 
-.card-msg > a.click-link
+.card-msg > a.click-link,
 .card-links > a.click-link,
 .card-actions > a.click-link {
     font-size: 16px;
