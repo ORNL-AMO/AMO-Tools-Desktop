@@ -179,26 +179,6 @@ export class AtmosphereFormComponent implements OnInit {
     this.atmosphereService.removeLoss(this.index);
   }
 
-  async checkSpecificHeat() {
-    if (this.atmosphereLossForm.controls.atmosphereGas.value) {
-      let material: AtmosphereSpecificHeat = await firstValueFrom(this.atmosphereDbService.getByIdWithObservable(this.atmosphereLossForm.controls.atmosphereGas.value));
-      if (material) {
-        let val = material.specificHeat;
-        if (this.settings.unitsOfMeasure === 'Metric') {
-          val = this.convertUnitsService.value(val).from('btuScfF').to('kJm3C');
-        }
-        material.specificHeat = roundVal(val, 4);
-        if (material.specificHeat !== this.atmosphereLossForm.controls.specificHeat.value) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    } else {
-      return false;
-    }
-  }
-
   setEnergySource(energySourceType: string) {
     this.atmosphereLossForm.patchValue({
       energySourceType: energySourceType

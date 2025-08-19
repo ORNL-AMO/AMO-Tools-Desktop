@@ -23,6 +23,7 @@ export interface GasLoadChargeMaterial {
     selected?: boolean;
     specificHeatVapor: number;
     substance: string;
+    isDefault?: boolean
 }
 
 export interface LiquidLoadChargeMaterial {
@@ -58,6 +59,7 @@ export interface SolidLoadChargeMaterial {
     specificHeatLiquid: number;
     specificHeatSolid: number;
     substance: string;
+    isDefault?: boolean;
 }
 
 export interface AtmosphereSpecificHeat {

@@ -252,10 +252,7 @@ export class ImportBackupService {
     for await (let material of measurBackupFile.solidLoadChargeMaterials) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertSolidLoadChargeMaterial(material);
-      if (isAdded) {
-        await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(material));
-      }
+      await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(material));
     };
 
     for await (let material of measurBackupFile.atmosphereSpecificHeats) {

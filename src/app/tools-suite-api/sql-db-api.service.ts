@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { AtmosphereDbService } from '../indexedDb/atmosphere-db.service';
 import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
 import { GasLoadMaterialDbService } from '../indexedDb/gas-load-material-db.service';
 import { LiquidLoadMaterialDbService } from '../indexedDb/liquid-load-material-db.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
-import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.service';
-import { AtmosphereSpecificHeat, FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
+import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
@@ -17,11 +15,9 @@ export class SqlDbApiService {
   constructor(private suiteApiHelperService: SuiteApiHelperService,
     private gasLoadMaterialDbService: GasLoadMaterialDbService,
     private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
-    private solidLoadMaterialDbService: SolidLoadMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService
   ) { }
-
 
   async initCustomDbMaterials() {
     let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
@@ -29,15 +25,9 @@ export class SqlDbApiService {
       let suiteResult = this.insertGasLoadChargeMaterial(material);
     });
 
-
     let customLiquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
     customLiquidLoadChargeMaterials.forEach(material => {
       let suiteResult = this.insertLiquidLoadChargeMaterial(material);
-    });
-
-    let solidLoadChargeMaterials: SolidLoadChargeMaterial[] = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
-    solidLoadChargeMaterials.forEach(material => {
-      let suiteResult = this.insertSolidLoadChargeMaterial(material);
     });
 
     let flueGasMaterials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
@@ -433,103 +423,6 @@ export class SqlDbApiService {
   deleteLiquidLoadChargeMaterial(id: number): boolean {
     try {
       let success = dbInstance.deleteLiquidLoadChargeMaterial(id);
-      return success;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
-
-
-
-  selectSolidLoadChargeMaterials(): Array<SolidLoadChargeMaterial> {
-    try {
-      let solidLoadChargeMaterials: Array<SolidLoadChargeMaterial> = new Array();
-      let items = dbInstance.getSolidLoadChargeMaterials();
-      for (let index = 0; index < items.size(); index++) {
-        let solidLoadChargeMaterialPointer = items.get(index);
-        let solidLoadChargeMaterial: SolidLoadChargeMaterial = this.getSolidLoadChargeMaterialFromWASM(solidLoadChargeMaterialPointer);
-        solidLoadChargeMaterials.push(solidLoadChargeMaterial);
-        solidLoadChargeMaterialPointer.delete();
-      }
-      items.delete();
-      return solidLoadChargeMaterials;
-    }
-    catch (err) {
-      console.log(err);
-      return [];
-    }
-  }
-
-  getSolidLoadChargeMaterialFromWASM(solidLoadChargeMaterialPointer): SolidLoadChargeMaterial {
-    return {
-      id: solidLoadChargeMaterialPointer.getID(),
-      selected: false,
-      latentHeat: solidLoadChargeMaterialPointer.getLatentHeat(),
-      meltingPoint: solidLoadChargeMaterialPointer.getMeltingPoint(),
-      specificHeatLiquid: solidLoadChargeMaterialPointer.getSpecificHeatLiquid(),
-      specificHeatSolid: solidLoadChargeMaterialPointer.getSpecificHeatSolid(),
-      substance: solidLoadChargeMaterialPointer.getSubstance(),
-    };
-  }
-
-
-  selectSolidLoadChargeMaterialById(id: number): SolidLoadChargeMaterial {
-    try {
-      let solidLoadChargeMaterialPointer = dbInstance.getSolidLoadChargeMaterialById(id);
-      let solidLoadChargeMaterial: SolidLoadChargeMaterial = this.getSolidLoadChargeMaterialFromWASM(solidLoadChargeMaterialPointer);
-      solidLoadChargeMaterialPointer.delete();
-      return solidLoadChargeMaterial;
-    }
-    catch (err) {
-      console.log(err);
-      return undefined;
-    }
-  }
-
-  insertSolidLoadChargeMaterial(surface: SolidLoadChargeMaterial): boolean {
-    try {
-      let SolidLoadChargeMaterial = this.getSolidLoadChargeMaterial(surface);
-      dbInstance.insertSolidLoadChargeMaterials(SolidLoadChargeMaterial);
-      SolidLoadChargeMaterial.delete();
-      return true;
-    }
-    catch (err) {
-      console.log(err);
-      return undefined;
-    }
-  }
-
-  updateSolidLoadChargeMaterial(material: SolidLoadChargeMaterial): boolean {
-    try {
-      let SolidLoadChargeMaterial = this.getSolidLoadChargeMaterial(material);
-      dbInstance.updateSolidLoadChargeMaterial(SolidLoadChargeMaterial);
-      SolidLoadChargeMaterial.delete();
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
-
-  getSolidLoadChargeMaterial(solidLoadChargeMaterial: SolidLoadChargeMaterial) {
-    let SolidLoadChargeMaterial = new Module.SolidLoadChargeMaterial();
-    SolidLoadChargeMaterial.selected = false;
-    SolidLoadChargeMaterial.setLatentHeat(solidLoadChargeMaterial.latentHeat);
-    SolidLoadChargeMaterial.setMeltingPoint(solidLoadChargeMaterial.meltingPoint);
-    SolidLoadChargeMaterial.setSpecificHeatLiquid(solidLoadChargeMaterial.specificHeatLiquid);
-    SolidLoadChargeMaterial.setSpecificHeatSolid(solidLoadChargeMaterial.specificHeatSolid);
-    SolidLoadChargeMaterial.setSubstance(solidLoadChargeMaterial.substance);
-
-    if (solidLoadChargeMaterial.id !== undefined) {
-      SolidLoadChargeMaterial.setID(solidLoadChargeMaterial.id);
-    }
-    return SolidLoadChargeMaterial;
-  }
-
-  deleteSolidLoadChargeMaterial(id: number): boolean {
-    try {
-      let success = dbInstance.deleteSolidLoadChargeMaterial(id);
       return success;
     } catch (err) {
       console.log(err);
