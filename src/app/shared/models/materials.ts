@@ -34,6 +34,7 @@ export interface LiquidLoadChargeMaterial {
     specificHeatVapor: number;
     substance: string;
     vaporizationTemperature: number;
+    isDefault?: boolean;
 }
 
 

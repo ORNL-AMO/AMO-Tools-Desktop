@@ -240,10 +240,7 @@ export class ImportBackupService {
     for await (let material of measurBackupFile.liquidLoadChargeMaterials) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertLiquidLoadChargeMaterial(material);
-      if (isAdded) {
-        await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(material));
-      }
+      await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(material));
     };
 
     for await (let material of measurBackupFile.solidLoadChargeMaterials) {

@@ -124,12 +124,9 @@ export class CustomMaterialsService {
       let material: LiquidLoadChargeMaterial = data[i];
       material.selected = false;
       delete material.id;
-      let test: boolean = this.sqlDbApiService.insertLiquidLoadChargeMaterial(material);
-      if (test === true) {
-        await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(material));
-        let materials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
-        this.liquidLoadMaterialDbService.dbLiquidLoadChargeMaterials.next(materials);
-      }
+      await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(material));
+      let materials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+      this.liquidLoadMaterialDbService.dbLiquidLoadChargeMaterials.next(materials);
     };
   }
 
@@ -222,14 +219,10 @@ export class CustomMaterialsService {
   }
 
   async deleteLiquidLoadCharge(data: Array<LiquidLoadChargeMaterial>) {
-    let sdbMaterials: Array<LiquidLoadChargeMaterial> = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
     for (let i = 0; i < data.length; i++) {
       let material: LiquidLoadChargeMaterial = data[i];
       let materials = await firstValueFrom(this.liquidLoadMaterialDbService.deleteByIdWithObservable(material.id));
       this.liquidLoadMaterialDbService.dbLiquidLoadChargeMaterials.next(materials);
-
-      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.sqlDbApiService.deleteLiquidLoadChargeMaterial(sdbId);
     };
   }
 

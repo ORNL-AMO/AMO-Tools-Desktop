@@ -41,7 +41,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   hasDeletedCustomMaterial: boolean = false;
   editExistingMaterial: boolean;
   existingMaterial: GasLoadChargeMaterial;
-  materialTypes: Array<GasLoadChargeMaterial>;
+  materialTypes: Array<GasLoadChargeMaterial> = [];
   showModal: boolean = false;
   idString: string;
   constructor(private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private gasLoadMaterialDbService: GasLoadMaterialDbService) { }
