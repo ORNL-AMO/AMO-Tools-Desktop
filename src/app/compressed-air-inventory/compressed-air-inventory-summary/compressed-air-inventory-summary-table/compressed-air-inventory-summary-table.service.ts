@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirInventorySummaryService } from '../compressed-air-inventory-summary.service';
+import { CompressedAirInventorySummaryService, CompressorSummaryUnitsImperial, CompressorSummaryUnitsMetric } from '../compressed-air-inventory-summary.service';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirControlsProperties, CompressedAirControlsPropertiesOptions, CompressedAirDesignDetailsProperties, CompressedAirDesignDetailsPropertiesOptions, CompressedAirInventoryData, CompressedAirItem, CompressedAirMotorProperties, CompressedAirMotorPropertiesOptions, CompressedAirPerformancePointsProperties, CompressedAirPerformancePointsPropertiesOptions, CompressedAirPropertyDisplayOptions, CompressorTypeOptions, ControlTypes, FieldMeasurements, FieldMeasurementsOptions, NameplateData, NameplateDataOptions } from '../../compressed-air-inventory';
 
@@ -30,7 +30,7 @@ export class CompressedAirInventorySummaryTableService {
     compressedAirData = compressedAirData.concat(nameplateData);
     let controlProperties = this.getControlsPropertiesData(item.compressedAirControlsProperties, displayOptions.compressedAirControlsPropertiesOptions);
     compressedAirData = compressedAirData.concat(controlProperties);
-    let fieldMeasurements = this.getFieldMeasurementsData(item.fieldMeasurements, displayOptions.fieldMeasurementsOptions);
+    let fieldMeasurements = this.getFieldMeasurementsData(item.fieldMeasurements, displayOptions.fieldMeasurementsOptions, settings);
     compressedAirData = compressedAirData.concat(fieldMeasurements);
     let motorProperties = this.getMotorPropertiesData(item.compressedAirMotor, displayOptions.compressedAirMotorPropertiesOptions, settings);
     compressedAirData = compressedAirData.concat(motorProperties);
@@ -43,52 +43,41 @@ export class CompressedAirInventorySummaryTableService {
   //nameplate data
   getNameplateData(nameplateData: NameplateData, nameplateDataOptions: NameplateDataOptions, settings: Settings): Array<SummaryCompressedAirData> {
     let compressedAirData: Array<SummaryCompressedAirData> = [];
-
-    let fullLoadOperatingPressureUnit: string = 'psig';
-    let fullLoadRatedCapacityUnit: string = 'acfm';
-    if (settings.unitsOfMeasure === 'Metric') {
-      fullLoadOperatingPressureUnit = 'barg';
-      fullLoadRatedCapacityUnit = 'm³/min'; 
-    } 
-    
+    let units = settings.unitsOfMeasure === 'Imperial' ? CompressorSummaryUnitsImperial.nameplateData : CompressorSummaryUnitsMetric.nameplateData;
     if (nameplateDataOptions.compressorType) {
       let compressorType = CompressorTypeOptions.find(type => type.value == nameplateData.compressorType).label;
       compressedAirData.push({ value: compressorType, fieldStr: 'compressorType' });
     }
     if (nameplateDataOptions.fullLoadOperatingPressure) {
-      compressedAirData.push({ value: nameplateData.fullLoadOperatingPressure, fieldStr: 'fullLoadOperatingPressure', unit: fullLoadOperatingPressureUnit });
+      compressedAirData.push({ value: nameplateData.fullLoadOperatingPressure, fieldStr: 'fullLoadOperatingPressure', unit: units.fullLoadOpPressure });
     }
     if (nameplateDataOptions.fullLoadRatedCapacity) {
-      compressedAirData.push({ value: nameplateData.fullLoadRatedCapacity, fieldStr: 'fullLoadRatedCapacity', unit: fullLoadRatedCapacityUnit });
+      compressedAirData.push({ value: nameplateData.fullLoadRatedCapacity, fieldStr: 'fullLoadRatedCapacity', unit: units.ratedCapFullLoad });
     }
     if (nameplateDataOptions.totalPackageInputPower) {
-      compressedAirData.push({ value: nameplateData.totalPackageInputPower, fieldStr: 'totalPackageInputPower', unit: 'kW' });
+      compressedAirData.push({ value: nameplateData.totalPackageInputPower, fieldStr: 'totalPackageInputPower', unit: units.totalInputPower });
     }
     return compressedAirData;
   }
 
-  getFieldMeasurementsData(fieldMeasurements: FieldMeasurements, fieldMeasurementsOptions: FieldMeasurementsOptions): Array<SummaryCompressedAirData> {
+  getFieldMeasurementsData(fieldMeasurements: FieldMeasurements, fieldMeasurementsOptions: FieldMeasurementsOptions, settings: Settings): Array<SummaryCompressedAirData> {
     let compressedAirData: Array<SummaryCompressedAirData> = [];
-
+    let units = settings.unitsOfMeasure === 'Imperial' ? CompressorSummaryUnitsImperial.fieldMeasurements : CompressorSummaryUnitsMetric.fieldMeasurements;
     if (fieldMeasurementsOptions.yearlyOperatingHours) {
-      compressedAirData.push({ value: fieldMeasurements.yearlyOperatingHours, fieldStr: 'yearlyOperatingHours', unit: 'hrs/yr' });
+      compressedAirData.push({ value: fieldMeasurements.yearlyOperatingHours, fieldStr: 'yearlyOperatingHours', unit: units.opHours });
     }
 
     return compressedAirData;
   }
 
   getMotorPropertiesData(motorProperties: CompressedAirMotorProperties, motorPropertiesOptions: CompressedAirMotorPropertiesOptions, settings: Settings): Array<SummaryCompressedAirData> {
-    let motorPowerUnit: string = 'hp';
-    if (settings.unitsOfMeasure === 'Metric') {
-      motorPowerUnit = 'kW';
-    }
-
     let compressedAirData: Array<SummaryCompressedAirData> = [];
+    let units = settings.unitsOfMeasure === 'Imperial'? CompressorSummaryUnitsImperial.motor : CompressorSummaryUnitsMetric.motor;
     if (motorPropertiesOptions.motorPower) {
-      compressedAirData.push({ value: motorProperties.motorPower, fieldStr: 'motorPower', unit: motorPowerUnit });
+      compressedAirData.push({ value: motorProperties.motorPower, fieldStr: 'motorPower', unit: units.motorPower });
     }
     if (motorPropertiesOptions.motorFullLoadAmps) {
-      compressedAirData.push({ value: motorProperties.motorFullLoadAmps, fieldStr: 'motorFullLoadAmps', unit: 'amps' });
+      compressedAirData.push({ value: motorProperties.motorFullLoadAmps, fieldStr: 'motorFullLoadAmps', unit: units.motorFullLoadAmps });
     }
 
 
@@ -107,18 +96,14 @@ export class CompressedAirInventorySummaryTableService {
 
   getDesignDetailsData(designDetailsProperties: CompressedAirDesignDetailsProperties, designDetailsPropertiesOptions: CompressedAirDesignDetailsPropertiesOptions, settings: Settings): Array<SummaryCompressedAirData> {
     let compressedAirData: Array<SummaryCompressedAirData> = [];
-    let inletPressureUnit: string = 'psia';
-    if (settings.unitsOfMeasure === 'Metric') {
-      inletPressureUnit = 'bara';
+    let units = settings.unitsOfMeasure === 'Imperial'? CompressorSummaryUnitsImperial.designDetails : CompressorSummaryUnitsMetric.designDetails;
+    if (designDetailsPropertiesOptions.inputPressure) {
+      compressedAirData.push({ value: designDetailsProperties.inputPressure, fieldStr: 'motorInputPressure', unit: units.inletPressure });
     }
-
-    if (designDetailsProperties.inputPressure) {
-      compressedAirData.push({ value: designDetailsProperties.inputPressure, fieldStr: 'motorInputPressure', unit: inletPressureUnit });
+    if (designDetailsPropertiesOptions.designEfficiency) {
+      compressedAirData.push({ value: designDetailsProperties.designEfficiency, fieldStr: 'motorDesignEfficiency', unit: units.designEfficiency });
     }
-    if (designDetailsProperties.designEfficiency) {
-      compressedAirData.push({ value: designDetailsProperties.designEfficiency, fieldStr: 'motorDesignEfficiency', unit: '%' });
-    }
-    if (designDetailsProperties.serviceFactor) {
+    if (designDetailsPropertiesOptions.serviceFactor) {
       compressedAirData.push({ value: designDetailsProperties.serviceFactor, fieldStr: 'motorServiceFactor' });
     }
 
