@@ -1,7 +1,5 @@
-
-:root {
-  --process-cooling-assessment: #009885;
-}
+@import "variables.css";
+@import "variables.css";
 
 /*
 Tabs
