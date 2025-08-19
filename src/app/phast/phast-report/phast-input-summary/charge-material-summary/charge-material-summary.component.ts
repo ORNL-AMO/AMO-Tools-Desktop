@@ -177,11 +177,12 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     if (loss.materialType === 'Solid') {
       let material: SolidLoadChargeMaterial = this.solidMaterialTypes.find(val => { return val.substance === loss.materialName; });
       if (material) {
+        let specificHeatSolid: number = material.specificHeatSolid;
         if (this.settings.unitsOfMeasure === 'Metric') {
-          material.specificHeatSolid = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
+          specificHeatSolid = this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
         }
-        material.specificHeatSolid = roundVal(material.specificHeatSolid, 4);
-        if (material.specificHeatSolid !== loss.specificHeatSolid) {
+        specificHeatSolid = roundVal(specificHeatSolid, 4);
+        if (specificHeatSolid !== loss.specificHeatSolid) {
           return true;
         }
       }
@@ -200,12 +201,13 @@ export class ChargeMaterialSummaryComponent implements OnInit {
       material = liquidOptions.find(val => { return val.substance === loss.materialName; });
     }
     if (material) {
+      let specificHeatLiquid: number = material.specificHeatLiquid;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        material.specificHeatLiquid = this.convertUnitsService.value(material.specificHeatLiquid).from('btulbF').to('kJkgC');
+        specificHeatLiquid = this.convertUnitsService.value(specificHeatLiquid).from('btulbF').to('kJkgC');
       }
-      material.specificHeatLiquid = roundVal(material.specificHeatLiquid, 4);
+      specificHeatLiquid = roundVal(specificHeatLiquid, 4);
 
-      if (material.specificHeatLiquid !== loss.specificHeatLiquid) {
+      if (specificHeatLiquid !== loss.specificHeatLiquid) {
         return true;
       }
     }
@@ -216,11 +218,12 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     if (loss.materialType === 'Solid') {
       let material: SolidLoadChargeMaterial = this.solidMaterialTypes.find(val => { return val.substance === loss.materialName; });
       if (material) {
+        let meltingPoint: number = material.meltingPoint;
         if (this.settings.unitsOfMeasure === 'Metric') {
-          material.meltingPoint = this.convertUnitsService.value(material.meltingPoint).from('F').to('C');
+          meltingPoint = this.convertUnitsService.value(meltingPoint).from('F').to('C');
         }
-        material.meltingPoint = roundVal(material.meltingPoint, 4);
-        if (material.meltingPoint !== loss.meltingPoint) {
+        meltingPoint = roundVal(meltingPoint, 4);
+        if (meltingPoint !== loss.meltingPoint) {
           return true;
         }
       }
@@ -239,11 +242,12 @@ export class ChargeMaterialSummaryComponent implements OnInit {
       material = liquidOptions.find(val => { return val.substance === loss.materialName; });
     }
     if (material) {
+      let latentHeat: number = material.latentHeat;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        material.latentHeat = this.convertUnitsService.value(material.latentHeat).from('btuLb').to('kJkg');
+        latentHeat = this.convertUnitsService.value(latentHeat).from('btuLb').to('kJkg');
       }
-      material.latentHeat = roundVal(material.latentHeat, 4);
-      if (material.latentHeat !== loss.latentHeat) {
+      latentHeat = roundVal(latentHeat, 4);
+      if (latentHeat !== loss.latentHeat) {
         return true;
       }
     }

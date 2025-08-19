@@ -106,11 +106,12 @@ export class FixtureLossesFormComponent implements OnInit {
   async setSpecificHeat() {
     let tmpMaterial: SolidLoadChargeMaterial = this.getSelectedMaterial();
     if (tmpMaterial) {
+      let specificHeatSolid: number = tmpMaterial.specificHeatSolid;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        tmpMaterial.specificHeatSolid = this.convertUnitsService.value(tmpMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+        specificHeatSolid = this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
       }
       this.lossesForm.patchValue({
-        specificHeat: roundVal(tmpMaterial.specificHeatSolid, 3)
+        specificHeat: roundVal(specificHeatSolid, 3)
       });
     }
     this.save();
@@ -120,11 +121,11 @@ export class FixtureLossesFormComponent implements OnInit {
     if (this.lossesForm.controls.materialName.value) {
       let material: SolidLoadChargeMaterial = this.getSelectedMaterial();
       if (material) {
-        let val = material.specificHeatSolid;
+        let specificHeatSolid: number = material.specificHeatSolid;
         if (this.settings.unitsOfMeasure === 'Metric') {
-          val = this.convertUnitsService.value(val).from('btulbF').to('kJkgC');
+          specificHeatSolid = this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
         }
-        material.specificHeatSolid = roundVal(val, 3);
+        material.specificHeatSolid = roundVal(specificHeatSolid, 3);
         if (material.specificHeatSolid !== this.lossesForm.controls.specificHeat.value) {
           return true;
         } else {
@@ -169,18 +170,22 @@ export class FixtureLossesFormComponent implements OnInit {
   setProperties() {
     let selectedMaterial: SolidLoadChargeMaterial = this.getSelectedMaterial();
     if (selectedMaterial) {
+      let specificHeatSolid: number = selectedMaterial.specificHeatSolid;
+      let latentHeat: number = selectedMaterial.latentHeat;
+      let meltingPoint: number = selectedMaterial.meltingPoint;
+      let specificHeatLiquid: number = selectedMaterial.specificHeatLiquid;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
-        selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
-        selectedMaterial.meltingPoint = this.convertUnitsService.value(selectedMaterial.meltingPoint).from('F').to('C');
-        selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
+        specificHeatSolid = this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
+        latentHeat = this.convertUnitsService.value(latentHeat).from('btuLb').to('kJkg');
+        meltingPoint = this.convertUnitsService.value(meltingPoint).from('F').to('C');
+        specificHeatLiquid = this.convertUnitsService.value(specificHeatLiquid).from('btulbF').to('kJkgC');
       }
 
       this.lossesForm.patchValue({
-        specificHeat: roundVal(selectedMaterial.specificHeatSolid, 4),
-        meltingPoint: selectedMaterial.meltingPoint,
-        specificHeatLiquid: selectedMaterial.specificHeatLiquid,
-        latentHeat: selectedMaterial.latentHeat
+        specificHeat: roundVal(specificHeatSolid, 4),
+        meltingPoint: meltingPoint,
+        specificHeatLiquid: specificHeatLiquid,
+        latentHeat: latentHeat
       });
     }
     this.save();

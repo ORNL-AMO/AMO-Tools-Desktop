@@ -4,9 +4,9 @@ import { Settings } from '../../../../shared/models/settings';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-material-db.service';
 import { firstValueFrom } from 'rxjs';
+import { roundVal } from '../../../../shared/helperFunctions';
 @Component({
   selector: 'app-fixture-summary',
   templateUrl: './fixture-summary.component.html',
@@ -118,21 +118,19 @@ export class FixtureSummaryComponent implements OnInit {
   checkSpecificHeat(loss: FixtureLoss) {
     let material: SolidLoadChargeMaterial = this.materialOptions.find(val => { return val.id === loss.materialName; });
     if (material) {
+      let specificHeatSolid: number = material.specificHeatSolid;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
-        material.specificHeatSolid = this.roundVal(val, 4);
+        specificHeatSolid= this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
+        specificHeatSolid = roundVal(specificHeatSolid, 4);
       }
-      if (material.specificHeatSolid !== loss.specificHeat) {
+      if (specificHeatSolid !== loss.specificHeat) {
         return true;
       } else {
         return false;
       }
     }
   }
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
-  }
+
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
