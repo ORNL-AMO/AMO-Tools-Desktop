@@ -10,10 +10,10 @@ import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 @Component({
-    selector: 'app-energy-used',
-    templateUrl: './energy-used.component.html',
-    styleUrls: ['./energy-used.component.css'],
-    standalone: false
+  selector: 'app-energy-used',
+  templateUrl: './energy-used.component.html',
+  styleUrls: ['./energy-used.component.css'],
+  standalone: false
 })
 export class EnergyUsedComponent implements OnInit {
   @Input()
@@ -30,14 +30,14 @@ export class EnergyUsedComponent implements OnInit {
       annualElectricity: 0,
       energyIntensity: 0,
     },
-      byPhast: {
+    byPhast: {
       hourlyEnergy: 0,
       annualEnergy: 0,
       annualElectricity: 0,
       energyIntensity: 0,
     }
   };
-  
+
   meteredResults: MeteredEnergyResults = {
     metered: {
       hourlyEnergy: 0,
@@ -46,7 +46,7 @@ export class EnergyUsedComponent implements OnInit {
       annualElectricity: 0,
       energyIntensity: 0,
     },
-      byPhast: {
+    byPhast: {
       hourlyEnergy: 0,
       annualEnergy: 0,
       annualElectricity: 0,
@@ -75,15 +75,15 @@ export class EnergyUsedComponent implements OnInit {
 
   phastResults: PhastResults;
 
-  @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;  
+  @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;
   copyTable1String: any;
 
-   @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;  
-    copyTable2String: any;
+  @ViewChild('copyTable2', { static: false }) copyTable2: ElementRef;
+  copyTable2String: any;
 
-  constructor(private designedEnergyService: DesignedEnergyService, 
-    private meteredEnergyService: MeteredEnergyService, 
-    private phastResultsService: PhastResultsService, 
+  constructor(private designedEnergyService: DesignedEnergyService,
+    private meteredEnergyService: MeteredEnergyService,
+    private phastResultsService: PhastResultsService,
     private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -91,17 +91,20 @@ export class EnergyUsedComponent implements OnInit {
     this.calculatedResults = this.phastResultsService.calculatedByPhast(this.phast, this.settings);
     this.electricityHeatingValue = this.convertUnitsService.value(9800).from('Btu').to(this.settings.energyResultUnit);
     this.getUnits();
-
-    this.energyUsed = this.phastResultsService.getEnergyUseReportData(this.phast, this.phastResults, this.settings);
+    this.setEnergyUsed();
     this.baseEnergyUnit = this.energyUsed.baseEnergyUnit;
     this.energyPerMassUnit = this.energyUsed.energyPerMassUnit;
-      
+
     this.setMeteredEnergyVals();
     if (this.phast.designedEnergy) {
       if (this.phast.designedEnergy) {
         this.designedResults = this.designedEnergyService.calculateDesignedEnergy(this.phast, this.settings);
       }
     }
+  }
+
+  async setEnergyUsed() {
+    this.energyUsed = await this.phastResultsService.getEnergyUseReportData(this.phast, this.phastResults, this.settings);
   }
 
   getUnits() {

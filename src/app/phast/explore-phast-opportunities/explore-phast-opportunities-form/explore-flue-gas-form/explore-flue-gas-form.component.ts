@@ -7,12 +7,14 @@ import { PhastService } from '../../../phast.service';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
-    selector: 'app-explore-flue-gas-form',
-    templateUrl: './explore-flue-gas-form.component.html',
-    styleUrls: ['./explore-flue-gas-form.component.css'],
-    standalone: false
+  selector: 'app-explore-flue-gas-form',
+  templateUrl: './explore-flue-gas-form.component.html',
+  styleUrls: ['./explore-flue-gas-form.component.css'],
+  standalone: false
 })
 export class ExploreFlueGasFormComponent implements OnInit {
   @Input()
@@ -42,7 +44,8 @@ export class ExploreFlueGasFormComponent implements OnInit {
 
   baselineWarnings: FlueGasWarnings;
   modificationWarnings: FlueGasWarnings;
-  constructor(private phastService: PhastService, private flueGasFormService: FlueGasFormService, private sqlDbApiService: SqlDbApiService
+  constructor(private phastService: PhastService, private flueGasFormService: FlueGasFormService, private sqlDbApiService: SqlDbApiService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService
   ) { }
 
   ngOnInit() {
@@ -157,11 +160,11 @@ export class ExploreFlueGasFormComponent implements OnInit {
     this.calculate();
   }
 
-  calculateExcessAir(loss: FlueGasByMass | FlueGasByVolume, num: number) {
+  async calculateExcessAir(loss: FlueGasByMass | FlueGasByVolume, num: number) {
     if (loss.o2InFlueGas < 0 || loss.o2InFlueGas > 20.99999) {
       loss.excessAirPercentage = 0.0;
     } else {
-      let input: MaterialInputProperties = this.buildInput(loss);
+      let input: MaterialInputProperties = await this.buildInput(loss);
       loss.excessAirPercentage = this.phastService.flueGasCalculateExcessAir(input);
     }
     if (num === 1) {
@@ -171,11 +174,11 @@ export class ExploreFlueGasFormComponent implements OnInit {
     }
   }
 
-  calculateO2(loss: FlueGasByMass | FlueGasByVolume, num: number) {
+  async calculateO2(loss: FlueGasByMass | FlueGasByVolume, num: number) {
     if (loss.excessAirPercentage < 0) {
       loss.o2InFlueGas = 0.0;
     } else {
-      let input: MaterialInputProperties = this.buildInput(loss);
+      let input: MaterialInputProperties = await this.buildInput(loss);
       loss.o2InFlueGas = this.phastService.flueGasCalculateO2(input);
     }
     if (num === 1) {
@@ -202,8 +205,8 @@ export class ExploreFlueGasFormComponent implements OnInit {
     this.calculate();
   }
 
-  buildInput(loss: FlueGasByMass | FlueGasByVolume): MaterialInputProperties {
-    let tmpFlueGas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(loss.gasTypeId);
+  async buildInput(loss: FlueGasByMass | FlueGasByVolume): Promise<MaterialInputProperties> {
+    let tmpFlueGas: FlueGasMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(loss.gasTypeId));
     let input: MaterialInputProperties;
     if (tmpFlueGas) {
       input = {

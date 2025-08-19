@@ -6,6 +6,7 @@ import { HeatCascadingInput, HeatCascadingOutput } from '../../../shared/models/
 import { Settings } from '../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { HeatCascadingFormService } from './heat-cascading-form.service';
+import { roundVal } from '../../../shared/helperFunctions';
 
 
 @Injectable()
@@ -38,10 +39,10 @@ export class HeatCascadingService {
 
     if (settings.unitsOfMeasure != 'Imperial') {
       fuelTempf = this.convertUnitsService.value(fuelTempf).from('F').to('C');
-      fuelTempf = this.roundVal(fuelTempf, 2);
+      fuelTempf = roundVal(fuelTempf, 2);
 
       ambientAirTempF = this.convertUnitsService.value(ambientAirTempF).from('F').to('C');
-      ambientAirTempF = this.roundVal(ambientAirTempF, 2);
+      ambientAirTempF = roundVal(ambientAirTempF, 2);
     }
     let emptyInput: HeatCascadingInput = {
       utilityType: 'Natural Gas',
@@ -187,32 +188,32 @@ export class HeatCascadingService {
 
   convertExampleUnits(input: HeatCascadingInput): HeatCascadingInput {
     input.priExhaustTemperature = this.convertUnitsService.value(input.priExhaustTemperature).from('F').to('C');
-    input.priExhaustTemperature = this.roundVal(input.priExhaustTemperature, 2);
+    input.priExhaustTemperature = roundVal(input.priExhaustTemperature, 2);
 
     input.priCombAirTemperature = this.convertUnitsService.value(input.priCombAirTemperature).from('F').to('C');
-    input.priCombAirTemperature = this.roundVal(input.priCombAirTemperature, 2);
+    input.priCombAirTemperature = roundVal(input.priCombAirTemperature, 2);
 
     input.secExhaustTemperature = this.convertUnitsService.value(input.secExhaustTemperature).from('F').to('C');
-    input.secExhaustTemperature = this.roundVal(input.secExhaustTemperature, 2);
+    input.secExhaustTemperature = roundVal(input.secExhaustTemperature, 2);
 
     input.secCombAirTemperature = this.convertUnitsService.value(input.secCombAirTemperature).from('F').to('C');
-    input.secCombAirTemperature = this.roundVal(input.secCombAirTemperature, 2);
+    input.secCombAirTemperature = roundVal(input.secCombAirTemperature, 2);
 
     input.fuelTempF = this.convertUnitsService.value(input.fuelTempF).from('F').to('C');
-    input.fuelTempF = this.roundVal(input.fuelTempF, 2);
+    input.fuelTempF = roundVal(input.fuelTempF, 2);
 
     input.ambientAirTempF = this.convertUnitsService.value(input.ambientAirTempF).from('F').to('C');
-    input.ambientAirTempF = this.roundVal(input.ambientAirTempF, 2);
+    input.ambientAirTempF = roundVal(input.ambientAirTempF, 2);
 
     input.priFiringRate = this.convertUnitsService.value(input.priFiringRate).from('MMBtu').to('GJ');
-    input.priFiringRate = this.roundVal(input.priFiringRate, 2);
+    input.priFiringRate = roundVal(input.priFiringRate, 2);
 
     input.secFiringRate = this.convertUnitsService.value(input.secFiringRate).from('MMBtu').to('GJ');
-    input.secFiringRate = this.roundVal(input.secFiringRate, 2);
+    input.secFiringRate = roundVal(input.secFiringRate, 2);
 
     //kJNm3?
     input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('btuscf').to('MJNm3');
-    input.fuelHV = this.roundVal(input.fuelHV, 2);
+    input.fuelHV = roundVal(input.fuelHV, 2);
 
     return input;
   }
@@ -220,32 +221,32 @@ export class HeatCascadingService {
   convertInputUnits(input: HeatCascadingInput, settings: Settings): HeatCascadingInput {
     if (settings.unitsOfMeasure == "Metric") {
       input.priExhaustTemperature = this.convertUnitsService.value(input.priExhaustTemperature).from('C').to('F');
-      input.priExhaustTemperature = this.roundVal(input.priExhaustTemperature, 2);
+      input.priExhaustTemperature = roundVal(input.priExhaustTemperature, 2);
 
       input.priCombAirTemperature = this.convertUnitsService.value(input.priCombAirTemperature).from('C').to('F');
-      input.priCombAirTemperature = this.roundVal(input.priCombAirTemperature, 2);
+      input.priCombAirTemperature = roundVal(input.priCombAirTemperature, 2);
 
       input.secExhaustTemperature = this.convertUnitsService.value(input.secExhaustTemperature).from('C').to('F');
-      input.secExhaustTemperature = this.roundVal(input.secExhaustTemperature, 2);
+      input.secExhaustTemperature = roundVal(input.secExhaustTemperature, 2);
 
       input.secCombAirTemperature = this.convertUnitsService.value(input.secCombAirTemperature).from('C').to('F');
-      input.secCombAirTemperature = this.roundVal(input.secCombAirTemperature, 2);
+      input.secCombAirTemperature = roundVal(input.secCombAirTemperature, 2);
 
       input.priFiringRate = this.convertUnitsService.value(input.priFiringRate).from('GJ').to('MMBtu');
-      input.priFiringRate = this.roundVal(input.priFiringRate, 2);
+      input.priFiringRate = roundVal(input.priFiringRate, 2);
 
       input.secFiringRate = this.convertUnitsService.value(input.secFiringRate).from('GJ').to('MMBtu');
-      input.secFiringRate = this.roundVal(input.secFiringRate, 2);
+      input.secFiringRate = roundVal(input.secFiringRate, 2);
 
       input.fuelTempF = this.convertUnitsService.value(input.fuelTempF).from('C').to('F');
-      input.fuelTempF = this.roundVal(input.fuelTempF, 2);
+      input.fuelTempF = roundVal(input.fuelTempF, 2);
 
       input.ambientAirTempF = this.convertUnitsService.value(input.ambientAirTempF).from('C').to('F');
-      input.ambientAirTempF = this.roundVal(input.ambientAirTempF, 2);
+      input.ambientAirTempF = roundVal(input.ambientAirTempF, 2);
 
       //kJNm3?
       input.fuelHV = this.convertUnitsService.value(input.fuelHV).from('MJNm3').to('btuscf');
-      input.fuelHV = this.roundVal(input.fuelHV, 2);
+      input.fuelHV = roundVal(input.fuelHV, 2);
 
     }
     return input;
@@ -254,26 +255,20 @@ export class HeatCascadingService {
   convertResultUnits(output: HeatCascadingOutput, settings: Settings): HeatCascadingOutput {
     if(settings.phastRollupUnit != 'MMBtu'){
       output.energySavings = this.convertUnitsService.value(output.energySavings).from('MMBtu').to(settings.phastRollupUnit);
-      output.energySavings = this.roundVal(output.energySavings, 2);
+      output.energySavings = roundVal(output.energySavings, 2);
   
       output.hxEnergyRate = this.convertUnitsService.value(output.hxEnergyRate).from('MMBtu').to(settings.phastRollupUnit);
-      output.hxEnergyRate = this.roundVal(output.hxEnergyRate, 2);
+      output.hxEnergyRate = roundVal(output.hxEnergyRate, 2);
   
       output.eqEnergySupply = this.convertUnitsService.value(output.eqEnergySupply).from('MMBtu').to(settings.phastRollupUnit);
-      output.eqEnergySupply = this.roundVal(output.eqEnergySupply, 2);
+      output.eqEnergySupply = roundVal(output.eqEnergySupply, 2);
 
     }
 
     if (settings.unitsOfMeasure == "Metric") {
       output.priFlueVolume = this.convertUnitsService.value(output.priFlueVolume).from('ft3').to('m3');
-      output.priFlueVolume = this.roundVal(output.priFlueVolume, 4);
+      output.priFlueVolume = roundVal(output.priFlueVolume, 4);
     }
     return output;
   }
-
-  roundVal(val: number, digits: number): number {
-    let rounded = Number(val.toFixed(digits));
-    return rounded;
-  }
-
 }

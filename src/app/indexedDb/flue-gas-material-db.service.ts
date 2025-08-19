@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { FlueGasMaterial } from '../shared/models/materials';
 import { FlueGasMaterialStoreMeta } from './dbConfig';
+declare var Module: any;
 
 @Injectable()
 export class FlueGasMaterialDbService {
@@ -13,8 +14,46 @@ export class FlueGasMaterialDbService {
     this.dbFlueGasMaterials = new BehaviorSubject<Array<FlueGasMaterial>>([]);
 
   }
+  insertDefaultMaterials(): Observable<number[]> {
+    let DefaultData = new Module.DefaultData();
+    let suiteDefaultMaterials = DefaultData.getGasFlueGasMaterials();
 
- 
+    let defaultMaterials: Array<FlueGasMaterial> = [];
+    for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
+      //GasComposition
+      let wasmClass = suiteDefaultMaterials.get(i);
+      defaultMaterials.push({
+        substance: wasmClass.getSubstance(),
+        C2H6: wasmClass.getGasByVol("C2H6"),
+        C3H8: wasmClass.getGasByVol("C3H8"),
+        C4H10_CnH2n: wasmClass.getGasByVol("C4H10_CnH2n"),
+        CH4: wasmClass.getGasByVol("CH4"),
+        CO: wasmClass.getGasByVol("CO"),
+        CO2: wasmClass.getGasByVol("CO2"),
+        H2: wasmClass.getGasByVol("H2"),
+        H2O: wasmClass.getGasByVol("H2O"),
+        N2: wasmClass.getGasByVol("N2"),
+        O2: wasmClass.getGasByVol("O2"),
+        SO2: wasmClass.getGasByVol("SO2"),
+        heatingValue: wasmClass.getHeatingValue(),
+        heatingValueVolume: wasmClass.getHeatingValueVolume(),
+        specificGravity: wasmClass.getSpecificGravity(),
+        isDefault: true
+      });
+      wasmClass.delete();
+    }
+    DefaultData.delete();
+    suiteDefaultMaterials.delete();
+    return this.dbService.bulkAdd(this.storeName, defaultMaterials);
+  }
+
+  getAllCustomMaterials(): Observable<Array<FlueGasMaterial>> {
+    return this.dbService.getAll(this.storeName).pipe(
+      map((materials: FlueGasMaterial[]) => materials.filter((material: FlueGasMaterial) => !material.isDefault))
+    );
+  }
+
+
   getAllWithObservable(): Observable<Array<FlueGasMaterial>> {
     return this.dbService.getAll(this.storeName);
   }

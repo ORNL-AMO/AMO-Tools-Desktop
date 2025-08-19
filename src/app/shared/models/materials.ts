@@ -16,6 +16,7 @@ export interface FlueGasMaterial {
     selected?: boolean;
     specificGravity: number;
     substance: string;
+    isDefault?: boolean
 }
 
 export interface GasLoadChargeMaterial {

@@ -4,6 +4,8 @@ import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
+import { firstValueFrom } from 'rxjs';
 @Component({
     selector: 'app-flue-gas-summary',
     templateUrl: './flue-gas-summary.component.html',
@@ -53,7 +55,9 @@ export class FlueGasSummaryComponent implements OnInit {
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
   copyTableString: any;
 
-  constructor(private cd: ChangeDetectorRef, private sqlDbApiService: SqlDbApiService) { }
+  constructor(private cd: ChangeDetectorRef, private sqlDbApiService: SqlDbApiService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService
+  ) { }
 
   ngOnInit() {
     this.typeDiff = new Array();
@@ -79,7 +83,7 @@ export class FlueGasSummaryComponent implements OnInit {
     this.o2Diff = new Array();
     this.so2Diff = new Array();
   
-    this.volumeOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
+    this.setOptions();
     this.massOptions = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {
@@ -129,6 +133,10 @@ export class FlueGasSummaryComponent implements OnInit {
         });
       }
     }
+  }
+
+  async setOptions(){
+    this.volumeOptions = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
   }
 
   //function used to check if baseline and modification values are different

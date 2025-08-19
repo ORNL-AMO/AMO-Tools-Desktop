@@ -4,6 +4,8 @@ import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-boiler-summary',
@@ -40,11 +42,12 @@ export class BoilerSummaryComponent implements OnInit {
 
   solidLiquidFuelTypes: Array<SolidLiquidFlueGasMaterial>;
   gasFuelTypes: Array<FlueGasMaterial>;
-  constructor(private cd: ChangeDetectorRef, private sqlDbApiService: SqlDbApiService) { }
+  constructor(private cd: ChangeDetectorRef, private sqlDbApiService: SqlDbApiService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService
+  ) { }
 
   ngOnInit() {
     this.solidLiquidFuelTypes = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
-    this.gasFuelTypes = this.sqlDbApiService.selectGasFlueGasMaterials();
 
 
     this.fuelTypeDiff = new Array<boolean>();
@@ -73,6 +76,10 @@ export class BoilerSummaryComponent implements OnInit {
         this.approachTemperatureDiff.push(false);
       });
     }
+  }
+
+  async setOptions(){
+    this.gasFuelTypes = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
   }
 
   //function used to check if baseline and modification values are different

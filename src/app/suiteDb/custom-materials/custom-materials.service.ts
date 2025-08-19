@@ -99,12 +99,9 @@ export class CustomMaterialsService {
       let material: FlueGasMaterial = data[i];
       delete material.id;
       material.selected = false;
-      let test: boolean = this.sqlDbApiService.insertGasFlueGasMaterial(material);
-      if (test === true) {
-        await firstValueFrom(this.flueGasMaterialDbService.addWithObservable(material));
-        let materials = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-        this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
-      }
+      await firstValueFrom(this.flueGasMaterialDbService.addWithObservable(material));
+      let materials: Array<FlueGasMaterial> = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+      this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
     };
   }
 
@@ -199,14 +196,10 @@ export class CustomMaterialsService {
   }
 
   async deleteFlueGas(data: Array<FlueGasMaterial>) {
-    let sdbMaterials: Array<FlueGasMaterial> = this.sqlDbApiService.selectGasFlueGasMaterials();
     for (let i = 0; i < data.length; i++) {
       let material: FlueGasMaterial = data[i];
-      let materials = await firstValueFrom(this.flueGasMaterialDbService.deleteByIdWithObservable(material.id));
+      let materials: Array<FlueGasMaterial> = await firstValueFrom(this.flueGasMaterialDbService.deleteByIdWithObservable(material.id));
       this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
-
-      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.sqlDbApiService.deleteGasFlueGasMaterial(sdbId);
     };
   }
 

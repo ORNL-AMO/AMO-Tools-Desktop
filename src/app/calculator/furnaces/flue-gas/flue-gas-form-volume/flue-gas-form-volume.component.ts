@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { FlueGas, FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
@@ -9,12 +9,14 @@ import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service'
 import { FlueGasFormService } from '../flue-gas-form.service';
 import { FlueGasService } from '../flue-gas.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
-    selector: 'app-flue-gas-form-volume',
-    templateUrl: './flue-gas-form-volume.component.html',
-    styleUrls: ['./flue-gas-form-volume.component.css'],
-    standalone: false
+  selector: 'app-flue-gas-form-volume',
+  templateUrl: './flue-gas-form-volume.component.html',
+  styleUrls: ['./flue-gas-form-volume.component.css'],
+  standalone: false
 })
 export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   @Input()
@@ -46,7 +48,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   calculationMethods: Array<string> = [
     'Excess Air',
     'Oxygen In Flue Gas'
-    ];
+  ];
   calculationExcessAir: number = 0.0;
   calculationFlueGasO2: number = 0.0;
   calcMethodExcessAir: boolean;
@@ -59,11 +61,11 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   constructor(private flueGasService: FlueGasService,
     private convertUnitsService: ConvertUnitsService,
     private flueGasFormService: FlueGasFormService,
-    private sqlDbApiService: SqlDbApiService) {
+    private flueGasMaterialDbService: FlueGasMaterialDbService) {
   }
 
   ngOnInit() {
-    this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
+    this.setOptions();
     this.initSubscriptions();
   }
 
@@ -77,9 +79,13 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
-      this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
+      this.setOptions();
       this.setFormState();
     }
+  }
+
+  async setOptions() {
+    this.options = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
   }
 
   initSubscriptions() {
@@ -92,7 +98,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     if (!this.isBaseline) {
       this.baselineDataSub = this.flueGasService.baselineData.subscribe(baselineData => {
         if (baselineData && baselineData.flueGasByVolume) {
-          this.byVolumeForm.patchValue({gasTypeId: baselineData.flueGasByVolume.gasTypeId});
+          this.byVolumeForm.patchValue({ gasTypeId: baselineData.flueGasByVolume.gasTypeId });
           this.calculate();
         }
       })
@@ -173,12 +179,13 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.byVolumeForm = this.flueGasFormService.setValidators(this.byVolumeForm);
     this.checkWarnings();
     let currentDataByVolume: FlueGas = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm)
-    let tmpFlueGas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(currentDataByVolume.flueGasByVolume.gasTypeId);
+    let tmpFlueGas: FlueGasMaterial = this.options.find(material => material.id === currentDataByVolume.flueGasByVolume.gasTypeId);
+    let heatingValue: number = tmpFlueGas.heatingValue;
     if (this.settings.unitsOfMeasure === 'Metric') {
-      tmpFlueGas.heatingValue = this.convertUnitsService.value(tmpFlueGas.heatingValue).from('btuLb').to('kJkg');
+      heatingValue = this.convertUnitsService.value(heatingValue).from('btuLb').to('kJkg');
     }
-    this.higherHeatingValue = tmpFlueGas.heatingValue;
-    
+    this.higherHeatingValue = heatingValue;
+
     if (this.isBaseline) {
       this.flueGasService.baselineData.next(currentDataByVolume);
     } else {
@@ -213,33 +220,29 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     if (treasureHuntEnergySource) {
       if (treasureHuntEnergySource === 'Natural Gas' || treasureHuntEnergySource === 'Steam') {
         currentMaterial = 1;
-        this.byVolumeForm.patchValue({gasTypeId: currentMaterial});
+        this.byVolumeForm.patchValue({ gasTypeId: currentMaterial });
       } else if (treasureHuntEnergySource === 'Other Fuel') {
         currentMaterial = 2;
-        this.byVolumeForm.patchValue({gasTypeId: currentMaterial});
+        this.byVolumeForm.patchValue({ gasTypeId: currentMaterial });
       }
-    } 
-    let tmpFlueGas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(currentMaterial);
+    }
+    let tmpFlueGas: FlueGasMaterial = this.options.find(material => material.id === currentMaterial);
     if (tmpFlueGas) {
       this.byVolumeForm.patchValue({
-        CH4: this.roundVal(tmpFlueGas.CH4, 4),
-        C2H6: this.roundVal(tmpFlueGas.C2H6, 4),
-        N2: this.roundVal(tmpFlueGas.N2, 4),
-        H2: this.roundVal(tmpFlueGas.H2, 4),
-        C3H8: this.roundVal(tmpFlueGas.C3H8, 4),
-        C4H10_CnH2n: this.roundVal(tmpFlueGas.C4H10_CnH2n, 4),
-        H2O: this.roundVal(tmpFlueGas.H2O, 4),
-        CO: this.roundVal(tmpFlueGas.CO, 4),
-        CO2: this.roundVal(tmpFlueGas.CO2, 4),
-        SO2: this.roundVal(tmpFlueGas.SO2, 4),
-        O2: this.roundVal(tmpFlueGas.O2, 4)
+        CH4: roundVal(tmpFlueGas.CH4, 4),
+        C2H6: roundVal(tmpFlueGas.C2H6, 4),
+        N2: roundVal(tmpFlueGas.N2, 4),
+        H2: roundVal(tmpFlueGas.H2, 4),
+        C3H8: roundVal(tmpFlueGas.C3H8, 4),
+        C4H10_CnH2n: roundVal(tmpFlueGas.C4H10_CnH2n, 4),
+        H2O: roundVal(tmpFlueGas.H2O, 4),
+        CO: roundVal(tmpFlueGas.CO, 4),
+        CO2: roundVal(tmpFlueGas.CO2, 4),
+        SO2: roundVal(tmpFlueGas.SO2, 4),
+        O2: roundVal(tmpFlueGas.O2, 4)
       });
     }
     this.calculate();
-  }
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
   }
 
   showMaterialModal() {
@@ -263,10 +266,10 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.flueGasService.modalOpen.next(false);
     this.calculate();
   }
-  
-  hideMaterialModal(event?: any) {
+
+  async hideMaterialModal(event?: any) {
     if (event) {
-      this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
+      await this.setOptions();
       let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.byVolumeForm.patchValue({

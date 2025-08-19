@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -11,12 +11,14 @@ import { Settings } from '../../../../shared/models/settings';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { AirHeatingFormService } from '../air-heating-form.service';
 import { AirHeatingService } from '../air-heating.service';
+import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
-    selector: 'app-air-heating-form',
-    templateUrl: './air-heating-form.component.html',
-    styleUrls: ['./air-heating-form.component.css'],
-    standalone: false
+  selector: 'app-air-heating-form',
+  templateUrl: './air-heating-form.component.html',
+  styleUrls: ['./air-heating-form.component.css'],
+  standalone: false
 })
 export class AirHeatingFormComponent implements OnInit {
   @Input()
@@ -53,10 +55,11 @@ export class AirHeatingFormComponent implements OnInit {
   o2Warning: string;
 
   constructor(
-              private airHeatingService: AirHeatingService, 
-              private airHeatingFormService: AirHeatingFormService,
-              private phastService: PhastService,
-              private sqlDbApiService: SqlDbApiService) { }
+    private airHeatingService: AirHeatingService,
+    private airHeatingFormService: AirHeatingFormService,
+    private phastService: PhastService,
+    private sqlDbApiService: SqlDbApiService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService) { }
 
   ngOnInit() {
     this.initSubscriptions();
@@ -99,7 +102,8 @@ export class AirHeatingFormComponent implements OnInit {
     this.calcExcessAir();
   }
 
-  changeFuelType() { {}
+  changeFuelType() {
+    { }
     let currentInput: AirHeatingInput;
     this.setFuelOptions();
     this.form.controls.materialTypeId.patchValue(this.fuelOptions[0].id);
@@ -116,13 +120,13 @@ export class AirHeatingFormComponent implements OnInit {
   setTreasureHuntFuelCost() {
     let energySourceType = this.form.controls.utilityType.value;
     let treasureHuntFuelCost = this.airHeatingService.getTreasureHuntFuelCost(energySourceType, this.settings);
-    this.form.patchValue({fuelCost: treasureHuntFuelCost});
+    this.form.patchValue({ fuelCost: treasureHuntFuelCost });
     this.calculate();
   }
 
-  setFuelOptions() {
+  async setFuelOptions() {
     if (this.form.controls.gasFuelType.value == true) {
-      this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
+      this.fuelOptions = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
     } else {
       this.fuelOptions = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     }
@@ -185,33 +189,35 @@ export class AirHeatingFormComponent implements OnInit {
     this.setCalcMethod();
   }
 
-  setMaterialProperties() {
+  async setMaterialProperties() {
     if (this.form.controls.gasFuelType.value == true) {
-      let material = this.sqlDbApiService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
-      this.form.patchValue({
-        CH4: this.airHeatingService.roundVal(material.CH4, 4),
-        C2H6: this.airHeatingService.roundVal(material.C2H6, 4),
-        N2: this.airHeatingService.roundVal(material.N2, 4),
-        H2: this.airHeatingService.roundVal(material.H2, 4),
-        C3H8: this.airHeatingService.roundVal(material.C3H8, 4),
-        C4H10_CnH2n: this.airHeatingService.roundVal(material.C4H10_CnH2n, 4),
-        H2O: this.airHeatingService.roundVal(material.H2O, 4),
-        CO: this.airHeatingService.roundVal(material.CO, 4),
-        CO2: this.airHeatingService.roundVal(material.CO2, 4),
-        SO2: this.airHeatingService.roundVal(material.SO2, 4),
-        O2: this.airHeatingService.roundVal(material.O2, 4),
-        substance: material.substance
-      });
+      let material: FlueGasMaterial = this.fuelOptions.find(option => { return option.id == this.form.controls.materialTypeId.value; }) as FlueGasMaterial;
+      if (material) {
+        this.form.patchValue({
+          CH4: roundVal(material.CH4, 4),
+          C2H6: roundVal(material.C2H6, 4),
+          N2: roundVal(material.N2, 4),
+          H2: roundVal(material.H2, 4),
+          C3H8: roundVal(material.C3H8, 4),
+          C4H10_CnH2n: roundVal(material.C4H10_CnH2n, 4),
+          H2O: roundVal(material.H2O, 4),
+          CO: roundVal(material.CO, 4),
+          CO2: roundVal(material.CO2, 4),
+          SO2: roundVal(material.SO2, 4),
+          O2: roundVal(material.O2, 4),
+          substance: material.substance
+        });
+      }
     } else {
       let material = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.form.controls.materialTypeId.value);
       this.form.patchValue({
-        carbon: this.airHeatingService.roundVal(material.carbon, 4),
-        hydrogen: this.airHeatingService.roundVal(material.hydrogen, 4),
-        sulphur: this.airHeatingService.roundVal(material.sulphur, 4),
-        inertAsh: this.airHeatingService.roundVal(material.inertAsh, 4),
-        o2: this.airHeatingService.roundVal(material.o2, 4),
-        moisture: this.airHeatingService.roundVal(material.moisture, 4),
-        nitrogen: this.airHeatingService.roundVal(material.nitrogen, 4),
+        carbon: roundVal(material.carbon, 4),
+        hydrogen: roundVal(material.hydrogen, 4),
+        sulphur: roundVal(material.sulphur, 4),
+        inertAsh: roundVal(material.inertAsh, 4),
+        o2: roundVal(material.o2, 4),
+        moisture: roundVal(material.moisture, 4),
+        nitrogen: roundVal(material.nitrogen, 4),
         substance: material.substance
       });
     }

@@ -7,6 +7,9 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { StackLossService } from '../../stack-loss.service';
 import { FlueGasMaterial } from '../../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
+import { FlueGasMaterialDbService } from '../../../../../indexedDb/flue-gas-material-db.service';
+import { firstValueFrom } from 'rxjs';
+import { roundVal } from '../../../../../shared/helperFunctions';
 
 @Component({
     selector: 'app-stack-loss-by-volume',
@@ -39,10 +42,10 @@ export class StackLossByVolumeComponent implements OnChanges {
   stackTemperatureWarning: boolean = false;
   tempMin: number;
 
-  constructor(private sqlDbApiService: SqlDbApiService, private stackLossService: StackLossService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private flueGasMaterialDbService: FlueGasMaterialDbService, private stackLossService: StackLossService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
+    this.setOptions();
     if (this.stackLossForm) {
       if (this.stackLossForm.controls.gasTypeId.value && this.stackLossForm.controls.gasTypeId.value !== '') {
         if (this.stackLossForm.controls.CH4.value === '' || !this.stackLossForm.controls.CH4.value) {
@@ -59,6 +62,10 @@ export class StackLossByVolumeComponent implements OnChanges {
     this.checkStackLossTemp();
   }
 
+  async setOptions(){
+    this.options = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+  }
+
   focusOut() {
     this.changeField.emit('default');
   }
@@ -71,13 +78,13 @@ export class StackLossByVolumeComponent implements OnChanges {
     this.materialModal.show();
   }
 
-  hideMaterialModal(event?: any) {
+  async hideMaterialModal(event?: any) {
     if (event) {
-      this.options = this.sqlDbApiService.selectGasFlueGasMaterials();
-      let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      await this.setOptions();
+      let newMaterial = this.options.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.stackLossForm.patchValue({
-          gasTypeId: newMaterial[0].id
+          gasTypeId: newMaterial.id
         });
         this.setProperties();
       }
@@ -122,27 +129,23 @@ export class StackLossByVolumeComponent implements OnChanges {
   }
 
   setProperties() {
-    let tmpFlueGas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(this.stackLossForm.controls.gasTypeId.value);
+    let tmpFlueGas: FlueGasMaterial = this.options.find(option => option.id === this.stackLossForm.controls.gasTypeId.value);
     if (tmpFlueGas) {
       this.stackLossForm.patchValue({
-        CH4: this.roundVal(tmpFlueGas.CH4, 4),
-        C2H6: this.roundVal(tmpFlueGas.C2H6, 4),
-        N2: this.roundVal(tmpFlueGas.N2, 4),
-        H2: this.roundVal(tmpFlueGas.H2, 4),
-        C3H8: this.roundVal(tmpFlueGas.C3H8, 4),
-        C4H10_CnH2n: this.roundVal(tmpFlueGas.C4H10_CnH2n, 4),
-        H2O: this.roundVal(tmpFlueGas.H2O, 4),
-        CO: this.roundVal(tmpFlueGas.CO, 4),
-        CO2: this.roundVal(tmpFlueGas.CO2, 4),
-        SO2: this.roundVal(tmpFlueGas.SO2, 4),
-        O2: this.roundVal(tmpFlueGas.O2, 4)
+        CH4: roundVal(tmpFlueGas.CH4, 4),
+        C2H6: roundVal(tmpFlueGas.C2H6, 4),
+        N2: roundVal(tmpFlueGas.N2, 4),
+        H2: roundVal(tmpFlueGas.H2, 4),
+        C3H8: roundVal(tmpFlueGas.C3H8, 4),
+        C4H10_CnH2n: roundVal(tmpFlueGas.C4H10_CnH2n, 4),
+        H2O: roundVal(tmpFlueGas.H2O, 4),
+        CO: roundVal(tmpFlueGas.CO, 4),
+        CO2: roundVal(tmpFlueGas.CO2, 4),
+        SO2: roundVal(tmpFlueGas.SO2, 4),
+        O2: roundVal(tmpFlueGas.O2, 4)
       });
     }
     this.calculate();
-  }
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
   }
 
   calculate() {
