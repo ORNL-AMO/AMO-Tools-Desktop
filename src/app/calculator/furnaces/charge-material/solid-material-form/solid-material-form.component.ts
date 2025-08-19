@@ -162,19 +162,23 @@ export class SolidMaterialFormComponent implements OnInit {
   }
 
   async setProperties() {
-    let selectedMaterial: SolidLoadChargeMaterial = await firstValueFrom(this.solidLoadMaterialDbService.getByIdWithObservable(this.chargeMaterialForm.controls.materialId.value));
+    let selectedMaterial: SolidLoadChargeMaterial = this.materialTypes.find(material => { return material.id === this.chargeMaterialForm.controls.materialId.value; });
     if (selectedMaterial) {
+      let latentHeat: number = selectedMaterial.latentHeat;
+      let meltingPoint: number = selectedMaterial.meltingPoint;
+      let specificHeatLiquid: number = selectedMaterial.specificHeatLiquid;
+      let specificHeatSolid: number = selectedMaterial.specificHeatSolid;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
-        selectedMaterial.meltingPoint = this.convertUnitsService.value(selectedMaterial.meltingPoint).from('F').to('C');
-        selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
-        selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+        latentHeat = this.convertUnitsService.value(latentHeat).from('btuLb').to('kJkg');
+        meltingPoint = this.convertUnitsService.value(meltingPoint).from('F').to('C');
+        specificHeatLiquid = this.convertUnitsService.value(specificHeatLiquid).from('btulbF').to('kJkgC');
+        specificHeatSolid = this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
       }
       this.chargeMaterialForm.patchValue({
-        materialLatentHeatOfFusion: roundVal(selectedMaterial.latentHeat, 4),
-        materialMeltingPoint: roundVal(selectedMaterial.meltingPoint, 4),
-        materialHeatOfLiquid: roundVal(selectedMaterial.specificHeatLiquid, 4),
-        materialSpecificHeatOfSolidMaterial: roundVal(selectedMaterial.specificHeatSolid, 4)
+        materialLatentHeatOfFusion: roundVal(latentHeat, 4),
+        materialMeltingPoint: roundVal(meltingPoint, 4),
+        materialHeatOfLiquid: roundVal(specificHeatLiquid, 4),
+        materialSpecificHeatOfSolidMaterial: roundVal(specificHeatSolid, 4)
       });
     }
     this.calculate();
