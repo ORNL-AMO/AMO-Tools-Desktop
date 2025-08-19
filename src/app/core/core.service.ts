@@ -16,7 +16,6 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
-import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService } from '../electron/electron.service';
 import { MockPumpInventory } from '../examples/mockPumpInventoryData';
 import { MockWaterAssessment, MockWaterAssessmentSettings } from '../examples/mockWaterAssessment';
@@ -27,6 +26,7 @@ import { ApplicationInstanceDbService, ApplicationInstanceData } from '../indexe
 import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
 import { AtmosphereDbService } from '../indexedDb/atmosphere-db.service';
 import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.service';
+import { GasLoadMaterialDbService } from '../indexedDb/gas-load-material-db.service';
 @Injectable()
 export class CoreService {
 
@@ -56,7 +56,8 @@ export class CoreService {
     private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
     private directoryDbService: DirectoryDbService,
     private atmosphereDbService: AtmosphereDbService,
-    private solidLoadMaterialDbService: SolidLoadMaterialDbService) {
+    private solidLoadMaterialDbService: SolidLoadMaterialDbService,
+    private gasLoadMaterialDbService: GasLoadMaterialDbService) {
     this.showShareDataModal = new BehaviorSubject<boolean>(false);
   }
 
@@ -185,7 +186,8 @@ export class CoreService {
   async createDefaultProcessHeatingMaterials(): Promise<void> {
     await firstValueFrom(this.wallLossesSurfaceDbService.insertDefaultMaterials());
     await firstValueFrom(this.atmosphereDbService.insertDefaultMaterials());
-    await firstValueFrom(this.solidLoadMaterialDbService.insertDefaultMaterials())
+    await firstValueFrom(this.solidLoadMaterialDbService.insertDefaultMaterials());
+    await firstValueFrom(this.gasLoadMaterialDbService.insertDefaultMaterials());
     return Promise.resolve();
   }
 
