@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { GasLoadChargeMaterial } from '../shared/models/materials';
 import { GasLoadMaterialStoreMeta } from './dbConfig';
+declare var Module: any;
+
 
 @Injectable()
 export class GasLoadMaterialDbService {
@@ -12,6 +14,31 @@ export class GasLoadMaterialDbService {
   constructor(private dbService: NgxIndexedDBService) {
     this.dbGasLoadChargeMaterials = new BehaviorSubject<Array<GasLoadChargeMaterial>>([]);
 
+  }
+
+  insertDefaultMaterials(): Observable<number[]> {
+    let DefaultData = new Module.DefaultData();
+    let suiteDefaultMaterials = DefaultData.getGasLoadChargeMaterials();
+
+    let defaultMaterials: Array<GasLoadChargeMaterial> = [];
+    for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
+      let wasmClass = suiteDefaultMaterials.get(i);
+      defaultMaterials.push({
+        specificHeatVapor: wasmClass.getSpecificHeatVapor(),
+        substance: wasmClass.getSubstance(),
+        isDefault: true
+      });
+      wasmClass.delete();
+    }
+    DefaultData.delete();
+    suiteDefaultMaterials.delete();
+    return this.dbService.bulkAdd(this.storeName, defaultMaterials);
+  }
+
+  getAllCustomMaterials(): Observable<Array<GasLoadChargeMaterial>> {
+    return this.dbService.getAll(this.storeName).pipe(
+      map((materials: GasLoadChargeMaterial[]) => materials.filter((material: GasLoadChargeMaterial) => !material.isDefault))
+    );
   }
 
   getAllWithObservable(): Observable<Array<GasLoadChargeMaterial>> {

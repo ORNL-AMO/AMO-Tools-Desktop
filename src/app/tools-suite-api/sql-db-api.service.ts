@@ -4,7 +4,7 @@ import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.serv
 import { GasLoadMaterialDbService } from '../indexedDb/gas-load-material-db.service';
 import { LiquidLoadMaterialDbService } from '../indexedDb/liquid-load-material-db.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
-import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
+import { FlueGasMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
@@ -13,18 +13,12 @@ declare var dbInstance: any;
 export class SqlDbApiService {
 
   constructor(private suiteApiHelperService: SuiteApiHelperService,
-    private gasLoadMaterialDbService: GasLoadMaterialDbService,
     private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService
   ) { }
 
   async initCustomDbMaterials() {
-    let customGasLoadChargeMaterials: GasLoadChargeMaterial[] = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
-    customGasLoadChargeMaterials.forEach(material => {
-      let suiteResult = this.insertGasLoadChargeMaterial(material);
-    });
-
     let customLiquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
     customLiquidLoadChargeMaterials.forEach(material => {
       let suiteResult = this.insertLiquidLoadChargeMaterial(material);
@@ -246,97 +240,7 @@ export class SqlDbApiService {
       return false;
     }
   }
-
-
-  selectGasLoadChargeMaterials(): Array<GasLoadChargeMaterial> {
-    try {
-      let gasLoadChargeMaterials: Array<GasLoadChargeMaterial> = new Array();
-      let items = dbInstance.getGasLoadChargeMaterials();
-      for (let index = 0; index < items.size(); index++) {
-        let gasLoadChargeMaterialPointer = items.get(index);
-        let gasLoadChargeMaterial: GasLoadChargeMaterial = this.getGasLoadChargeMaterialFromWASM(gasLoadChargeMaterialPointer);
-        gasLoadChargeMaterials.push(gasLoadChargeMaterial);
-        gasLoadChargeMaterialPointer.delete();
-      }
-      items.delete();
-      return gasLoadChargeMaterials;
-    }
-    catch (err) {
-      console.log(err);
-      return [];
-    }
-  }
-
-  getGasLoadChargeMaterialFromWASM(gasLoadChargeMaterialPointer): GasLoadChargeMaterial {
-    return {
-      id: gasLoadChargeMaterialPointer.getID(),
-      selected: false,
-      specificHeatVapor: gasLoadChargeMaterialPointer.getSpecificHeatVapor(),
-      substance: gasLoadChargeMaterialPointer.getSubstance()
-    };
-  }
-
-
-  selectGasLoadChargeMaterialById(id: number): GasLoadChargeMaterial {
-    try {
-      let gasLoadChargeMaterialPointer = dbInstance.getGasLoadChargeMaterialById(id);
-      let gasLoadChargeMaterial: GasLoadChargeMaterial = this.getGasLoadChargeMaterialFromWASM(gasLoadChargeMaterialPointer);
-      gasLoadChargeMaterialPointer.delete();
-      return gasLoadChargeMaterial;
-    }
-    catch (err) {
-      console.log(err);
-      return undefined;
-    }
-  }
-
-  insertGasLoadChargeMaterial(surface: GasLoadChargeMaterial): boolean {
-    try {
-      let GasLoadChargeMaterial = this.getGasLoadChargeMaterial(surface);
-      dbInstance.insertGasLoadChargeMaterials(GasLoadChargeMaterial);
-      GasLoadChargeMaterial.delete();
-      return true;
-    }
-    catch (err) {
-      console.log(err);
-      return undefined;
-    }
-  }
-
-  updateGasLoadChargeMaterial(material: GasLoadChargeMaterial): boolean {
-    try {
-      let GasLoadChargeMaterial = this.getGasLoadChargeMaterial(material);
-      dbInstance.updateGasLoadChargeMaterial(GasLoadChargeMaterial);
-      GasLoadChargeMaterial.delete();
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
-
-  getGasLoadChargeMaterial(gasLoadChargeMaterial: GasLoadChargeMaterial) {
-    let GasLoadChargeMaterial = new Module.GasLoadChargeMaterial();
-    GasLoadChargeMaterial.setSubstance(gasLoadChargeMaterial.substance);
-    GasLoadChargeMaterial.setSpecificHeatVapor(gasLoadChargeMaterial.specificHeatVapor);
-    if (gasLoadChargeMaterial.id !== undefined) {
-      GasLoadChargeMaterial.setID(gasLoadChargeMaterial.id);
-    }
-    return GasLoadChargeMaterial;
-  }
-
-  deleteGasLoadChargeMaterial(id: number): boolean {
-    try {
-      let success = dbInstance.deleteGasLoadChargeMaterial(id);
-      return success;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
-
-
-
+  
   selectLiquidLoadChargeMaterials(): Array<LiquidLoadChargeMaterial> {
     try {
       let liquidLoadChargeMaterials: Array<LiquidLoadChargeMaterial> = new Array();
