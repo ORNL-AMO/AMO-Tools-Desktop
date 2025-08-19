@@ -18,7 +18,7 @@
             <tbody>
                 <tr *ngFor="let data of inventorySummaryData.compressedAirData | compressedAirInventorySummaryTable:sortByField:sortByDirection">
                     <td *ngFor="let d of data; let index = index;" [ngClass]="{'sticky-left name-cell': index == 0}">
-                        <span *ngIf="!d.pipe">{{d.value}} <span *ngIf="d.unit" [innerHTML]="d.unit"></span></span>
+                        <span>{{d.value}} <span *ngIf="d.unit" [innerHTML]="d.unit"></span></span>
                     </td>
                 </tr>
             </tbody>

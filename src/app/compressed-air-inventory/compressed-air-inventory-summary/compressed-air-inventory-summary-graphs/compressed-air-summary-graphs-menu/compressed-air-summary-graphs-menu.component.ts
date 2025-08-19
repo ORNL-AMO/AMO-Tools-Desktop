@@ -65,7 +65,7 @@ export class CompressedAirSummaryGraphsMenuComponent {
       showGroup: false
     });
     this.groups.push({
-      options: this.compressedAirInventorySummaryService.getControlsPropertiesFields(compressedAirInventoryData.displayOptions.compressedAirControlsPropertiesOptions, settings),
+      options: this.compressedAirInventorySummaryService.getControlsPropertiesFields(compressedAirInventoryData.displayOptions.compressedAirControlsPropertiesOptions),
       groupLabel: 'Controls',
       showGroup: false
     });
