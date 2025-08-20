@@ -104,6 +104,7 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings ): Process
               zipcode: 53704,
               chilledWaterSupplyTemp: 44,
               condenserCoolingMethod: 0, // water
+              doChillerLoadSchedulesVary: undefined
             },
             airCooledSystemInput: {
               outdoorAirTemp: 54,

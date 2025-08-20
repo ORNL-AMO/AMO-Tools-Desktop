@@ -1,0 +1,96 @@
+    <ng-container *ngIf="useSameMonthlyLoading">
+      <div class="group-label mb-2">Chiller Loading: All Months</div>
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <small class="form-text text-muted">Enter the percentage of hours the chiller operates at a given load. Total should
+          be 100%.</small>
+        <button class="btn btn-link p-0 ml-2" (click)="toggleUseSameLoading()">
+          <span>Enter different schedule for each month</span>
+        </button>
+      </div>
+      <form [formGroup]="form">
+        <div formArrayName="allMonths" class="table-responsive">
+          <table class="table table-bordered table-sm mb-0">
+            <thead class="thead-light">
+              <tr>
+                <th colspan="2" class="text-center"></th>
+                <th *ngFor="let label of loadLabels; let i = index" class="text-center">{{ label }}</th>
+                <th class="text-center">Total %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr [formGroupName]="0">
+                <td colspan="2" class="text-left" style="font-size:14px;">All months</td>
+                <ng-container *ngFor="let label of loadLabels; let loadIndex = index">
+                  <td>
+                    <input type="number" id="{{'all-months-load-' + loadIndex}}" class="form-control text-center" formControlName="{{loadIndex}}" min="0" max="100">
+                  </td>
+                </ng-container>
+                <td class="text-center font-weight-bold"
+                  [ngClass]="{'text-danger': !isRowValid(allMonthsArray.at(0)), 'text-success': isRowValid(allMonthsArray.at(0))}">
+                  {{ getTotal(allMonthsArray.at(0)) }}
+                </td>
+              <tr *ngIf="!isRowValid(allMonthsArray.at(0))">
+                <td colspan="100" class="alert alert-danger small pt-1 pb-2">
+                  Total must equal 100%.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </ng-container>
+
+    <ng-container *ngIf="!useSameMonthlyLoading">
+      <div class="group-label mb-2">Chiller Loading: By Month</div>
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <small class="form-text text-muted">Enter the percentage of hours the chiller operates at a given load each month. Each row should
+          total 100%.</small>
+        <button class="btn btn-link p-0 ml-2" (click)="toggleUseSameLoading()">
+          <span>Use same schedule for all months</span>
+        </button>
+      </div>
+      <form [formGroup]="form">
+        <div formArrayName="months" class="table-responsive">
+          <table class="table table-bordered table-sm mb-0">
+            <thead class="thead-light">
+              <tr>
+                <th>Month</th>
+                <th *ngFor="let label of loadLabels" class="text-center">{{ label }}</th>
+                <th class="text-center">Total %</th>
+                <th></th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let rowControl of monthsArray.controls; let monthIndex = index">
+                <tr [formGroupName]="monthIndex">
+                  <td class="text-left">{{ months[monthIndex] }}</td>
+                  <ng-container *ngFor="let label of loadLabels; let loadIndex = index">
+                    <td>
+                      <input type="number" id="{{'month-' + monthIndex + '-load-' + loadIndex}}" class="form-control text-center" formControlName="{{loadIndex}}" min="0" max="100">
+                    </td>
+                  </ng-container>
+                  <td class="text-center font-weight-bold"
+                    [ngClass]="{'text-danger': !isRowValid(rowControl), 'text-success': isRowValid(rowControl)}">
+                    {{ getTotal(rowControl) }}
+                  </td>
+                  <td class="copy-paste-cell" style="min-width:36px;">
+                    <button type="button" class="btn btn-link p-0 mr-1 copy-btn" title="Copy row" (click)="copyRow(monthIndex)">
+                      <i class="fa fa-copy"></i>
+                    </button>
+                    <button type="button" class="btn btn-link p-0 paste-btn" title="Paste row" (click)="pasteRow(monthIndex)">
+                      <i class="fa fa-paste"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="!isRowValid(rowControl)">
+                  <td colspan="100" class="alert alert-danger small pt-1 pb-2">
+                    Total must equal 100%.
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </form>
+    </ng-container>

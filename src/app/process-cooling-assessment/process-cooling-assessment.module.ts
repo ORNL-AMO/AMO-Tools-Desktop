@@ -55,6 +55,8 @@ import { TowerComponent } from './system-information/tower/tower.component';
 import { TowerHelpComponent } from './results-panel/help-panel/tower-help/tower-help.component';
 import { LoadScheduleComponent } from './load-schedule/load-schedule.component';
 
+import { ChillerLoadScheduleComponent } from './load-schedule/chiller-load-schedule.component';
+
 
 export const ROUTE_TOKENS = {
   // Main tabs
@@ -131,7 +133,7 @@ const ROUTES: Route[] = [
           },
           { 
             path: ROUTE_TOKENS.loadSchedule,
-            component: LoadScheduleComponent
+            component: ChillerLoadScheduleComponent
           }
         ]
       },
@@ -205,6 +207,7 @@ const ROUTES: Route[] = [
     TowerComponent,
     TowerHelpComponent,
     LoadScheduleComponent
+  ,ChillerLoadScheduleComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -212,7 +215,7 @@ const ROUTES: Route[] = [
     AsyncPipe,
     RouterModule,
     SettingsModule,
-    ReactiveFormsModule,
+  ReactiveFormsModule,
     FormsModule,
     TabsTooltipModule,
     ConfirmDeleteModalModule,

@@ -159,4 +159,8 @@ export class OperationsComponent {
   get condenserCoolingMethod() {
     return this.form.get('condenserCoolingMethod');
   }
+
+  get doChillerLoadSchedulesVary() {
+    return this.form.get('doChillerLoadSchedulesVary');
+  }
 }
