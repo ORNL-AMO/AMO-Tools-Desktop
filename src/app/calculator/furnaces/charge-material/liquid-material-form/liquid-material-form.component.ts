@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { firstValueFrom, Subscription } from 'rxjs';
@@ -6,7 +6,6 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { LiquidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { ChargeMaterial, ChargeMaterialOutput, ChargeMaterialResult, LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { ChargeMaterialService } from '../charge-material.service';
 import { LiquidMaterialFormService, LiquidMaterialWarnings } from './liquid-material-form.service';
 import { LiquidLoadMaterialDbService } from '../../../../indexedDb/liquid-load-material-db.service';

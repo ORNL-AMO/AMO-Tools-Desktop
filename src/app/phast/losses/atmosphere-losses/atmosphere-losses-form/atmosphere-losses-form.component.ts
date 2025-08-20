@@ -8,7 +8,6 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { UntypedFormGroup } from '@angular/forms';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { AtmosphereFormService, AtmosphereLossWarnings } from '../../../../calculator/furnaces/atmosphere/atmosphere-form.service';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { firstValueFrom } from 'rxjs';
 import { AtmosphereDbService } from '../../../../indexedDb/atmosphere-db.service';
 import { roundVal } from '../../../../shared/helperFunctions';
@@ -52,7 +51,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   showModal: boolean = false;
   idString: string;
   constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService,
-    private sqlDbApiService: SqlDbApiService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereFormService: AtmosphereFormService, private atmosphereDbService: AtmosphereDbService) { }
+    private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereFormService: AtmosphereFormService, private atmosphereDbService: AtmosphereDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {

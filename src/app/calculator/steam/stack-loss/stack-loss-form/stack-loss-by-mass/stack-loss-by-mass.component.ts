@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef, OnChanges } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ViewChild, OnChanges } from '@angular/core';
 import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { PhastService } from '../../../../../phast/phast.service';
@@ -7,7 +7,6 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { StackLossService } from '../../stack-loss.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../../shared/models/materials';
 import { MaterialInputProperties } from '../../../../../shared/models/phast/losses/flueGas';
-import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
 import { SolidLiquidMaterialDbService } from '../../../../../indexedDb/solid-liquid-material-db.service';
 import { roundVal } from '../../../../../shared/helperFunctions';
 import { Subscription } from 'rxjs';
