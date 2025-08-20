@@ -8,114 +8,220 @@ permissions:
 
 jobs:
   build:
-    if: github.ref_name == 'master'
-    runs-on: [self-hosted, build]
+    if: github.ref_name == "master"
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-      - name: Get Node version
-        run: echo "BUILD_NODE_VER=$(ggrep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> "$GITHUB_ENV"
-      - name: Node setup
-        run: source ~/load_nvm.sh && nvm install ${{ env.BUILD_NODE_VER }}
-      - name: Cache setup
+      - name: Setup outputs
+        id: output
+        run: |
+          _NODE_VERSION=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)
+          _BUILD_VERSION=$(grep '"version"' package.json | head -n1 | sed -E 's/.*"version": *"([^"]+)".*/\1/')
+          echo "NODE_VERSION=$_NODE_VERSION" >> "$GITHUB_OUTPUT"
+          echo "BUILD_VERSION=$_BUILD_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.output.outputs.NODE_VERSION }}
+      - name: Setup cache
         uses: actions/cache@v4
         with:
           path: ~/.npm
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
-      - name: Dependency setup
+      - &npm-setup
+        name: Setup dependencies
         run: |
-          PROV_PROF_PATH=$RUNNER_TEMP/embedded.provisionprofile
-          WIN_CERT_PATH=$RUNNER_TEMP/wincert.pem
-          echo -n "${{ secrets.WIN_CERT_BASE64 }}" | base64 --decode -o $WIN_CERT_PATH &&
-          cp "$WIN_CERT_PATH" ./wincert.pem
-          echo -n "${{ secrets.APPLE_PROV_PROF_BASE64 }}" | base64 --decode -o $PROV_PROF_PATH &&
-          cp "$PROV_PROF_PATH" ./embedded.provisionprofile
           find . -name "package-lock.json" -not -path "*/node_modules/*" -not -path "*/dist/*" -exec dirname {} \; | sort -u |
           while read dir; do
             echo "Installing dependencies for: $dir"
             (cd $dir && npm ci $dir);
           done
-          security -v unlock-keychain -p "${{ secrets.KC_SECRET }}" ~/Library/Keychains/login.keychain-db
       - name: Build
         run: npm run build-prod-desktop-ci
-      - name: Package
-        run: |
-          node ./node_modules/.bin/electron-builder --mac --universal --publish never &
-          node ./node_modules/.bin/electron-builder --win --x64 --publish never &
-          node ./node_modules/.bin/electron-builder --linux --x64 --publish never
-      - name: Prepare output
-        id: output
-        run: |
-          VERSION=$(ggrep -A3 'version:' output/latest-mac.yml | head -n1 | awk '{print $2}')
-          echo "BUILD_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
-      - name: Upload notarization artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: notarize-mac-artifact
+          name: build-artifact
           path: |
-            output/*.dmg
-          compression-level: 1
+            dist
+          compression-level: 6
           if-no-files-found: error
           retention-days: 1
-      - name: Upload signing artifact
+    outputs:
+      NODE_VERSION: ${{ steps.output.outputs.NODE_VERSION }}
+      BUILD_VERSION: ${{ steps.output.outputs.BUILD_VERSION }}
+
+  bundle_macos:
+    if: github.ref_name == "master"
+    runs-on: macos-13
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: dist/
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ needs.build.outputs.NODE_VERSION }}
+      - name: Setup cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+      - *npm-setup
+      - name: Setup codesigning
+        env:
+          APPLE_CERT_A_BASE64: ${{ secrets.APPLE_CERT_A_BASE64 }}
+          APPLE_CERT_I_BASE64: ${{ secrets.APPLE_CERT_I_BASE64 }}
+          APPLE_PROV_PROF_BASE64: ${{ secrets.APPLE_PROV_PROF_BASE64 }}
+          APPLE_CERT_SECRET: ${{ secrets.APPLE_CERT_SECRET }}
+          APPLE_KEYCHAIN_SECRET: ${{ secrets.APPLE_KEYCHAIN_SECRET }}
+        run: |
+          CERT_A_PATH=$RUNNER_TEMP/app_certificate.p12
+          CERT_I_PATH=$RUNNER_TEMP/ins_certificate.p12
+          PROV_PROF_PATH=$RUNNER_TEMP/embedded.provisionprofile
+          KEYCHAIN_PATH=$RUNNER_TEMP/build.keychain
+
+          echo -n "$APPLE_CERT_A_BASE64" | base64 --decode -o $CERT_A_PATH
+          echo -n "$APPLE_CERT_I_BASE64" | base64 --decode -o $CERT_I_PATH
+          echo -n "$APPLE_PROV_PROF_BASE64" | base64 --decode -o $PROV_PROF_PATH
+
+          security -v create-keychain -p "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security -v default-keychain -s $KEYCHAIN_PATH
+          security -v unlock-keychain -p "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
+
+          security -v import $CERT_A_PATH -P "$APPLE_CERT_SECRET" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security -v import $CERT_I_PATH -P "$APPLE_CERT_SECRET" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
+
+          cp "$PROV_PROF_PATH" ./embedded.provisionprofile
+      - name: Bundle
+        run: npm run dist -- --mac --universal --publish never
+      - name: Notarize
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SECRET: ${{ secrets.APPLE_APP_SECRET }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          BUNDLE_PATH=$(find output -name "MEASUR-*.*.*.dmg")
+          xcrun notarytool submit --wait --apple-id "${{ secrets.APPLE_ID }}" --password "${{ secrets.APPLE_APP_SECRET }}" --team-id "${{ secrets.APPLE_TEAM_ID }}" $BUNDLE_PATH &&
+          xcrun stapler staple $BUNDLE_PATH
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-macos-artifact
+          path: |
+            output/*.zip
+            output/*.zip.blockmap
+            output/*.dmg
+            output/*.dmg.blockmap
+            output/latest*.yml
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 1
+
+  bundle_win:
+    if: github.ref_name == "master"
+    runs-on: windows-2025
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifact
+          path: dist/
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ needs.build.outputs.NODE_VERSION }}
+      - name: Setup cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+      - *npm-setup
+      - name: Bundle
+        run: npm run dist -- --win --x64 --publish never
+      - name: Upload codesign artifact
         uses: actions/upload-artifact@v4
         with:
           name: sign-win-artifact
           path: |
             output/*.exe
             output/latest.yml
-          compression-level: 1
+          compression-level: 0
           if-no-files-found: error
           retention-days: 1
-      - name: Upload remaining artifacts
+      - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release-1-output
+          name: release-win-partial-artifact
           path: |
-            output/*.AppImage
-            output/*.blockmap
-            output/*.tar.gz
-            output/*.zip
-            output/latest-*.yml
-          compression-level: 1
+            output/*.exe.blockmap
+          compression-level: 0
           if-no-files-found: error
           retention-days: 1
-    outputs:
-      BUILD_VERSION: ${{ steps.output.outputs.BUILD_VERSION }}
 
-  notarize:
-    if: github.ref_name == 'master'
-    runs-on: macos-13
+  bundle_linux:
+    if: github.ref_name == "master"
+    runs-on: ubuntu-24.04
     needs: [build]
     steps:
-      - name: Get artifacts
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: notarize-mac-artifact
-          path: output/
-      - name: Notarize
-        run: |
-          BUNDLE_PATH=$(find output -name "MEASUR-*.*.*.dmg")
-          xcrun notarytool submit --wait --apple-id "${{ secrets.APPLE_ID }}" --password "${{ secrets.APPLE_APP_SECRET }}" --team-id "${{ secrets.APPLE_TEAM_ID }}" $BUNDLE_PATH &&
-          sleep 60 &&
-          xcrun stapler staple $BUNDLE_PATH
-      - name: Upload notarized artifact
+          name: build-artifact
+          path: dist/
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ needs.build.outputs.NODE_VERSION }}
+      - name: Setup cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+      - *npm-setup
+      - name: Bundle
+        run: npm run dist -- --linux --x64 --publish never
+      - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release-2-artifact
+          name: release-linux-artifact
           path: |
-            output/*.dmg
-          compression-level: 1
+            output/*.AppImage
+            output/latest-linux.yml
+            output/*.tar.gz
+          compression-level: 0
           if-no-files-found: error
           retention-days: 1
 
-  sign:
-    if: github.ref_name == 'master'
+  sign_win:
+    if: github.ref_name == "master"
     runs-on: [self-hosted, cs]
-    needs: [build]
+    needs: [bundle_win]
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -141,20 +247,20 @@ jobs:
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release-3-artifact
+          name: release-win-artifact
           path: |
             output/*.exe
             output/latest.yml
-          compression-level: 1
+          compression-level: 0
           if-no-files-found: error
           retention-days: 1
       - name: Cleanup
         run: rm -rf ./output
 
   release:
-    if: github.ref_name == 'master'
+    if: github.ref_name == "master"
     runs-on: ubuntu-22.04
-    needs: [build,notarize,sign]
+    needs: [build,bundle_macos,bundle_linux,sign_win]
     env:
       VERSION: ${{ needs.build.outputs.BUILD_VERSION }}
     steps:
