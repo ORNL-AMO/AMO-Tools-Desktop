@@ -73,16 +73,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     else {
       this.idString = 'phast_baseline_solid_' + this.lossIndex;
     }
-    this.setMaterialTypes();
-    if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
-        if (this.chargeMaterialForm.controls.materialLatentHeat.value === '') {
-          this.setProperties();
-        } else {
-          this.checkForDeletedMaterial();
-        }
-      }
-    }
+    this.setMaterialTypes(true);
     this.checkWarnings();
     if (!this.baselineSelected) {
       this.disableForm();
@@ -93,8 +84,17 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     this.lossesService.modalOpen.next(false);
   }
 
-  async setMaterialTypes() {
-    this.materialTypes = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable())
+  async setMaterialTypes(onInit?: boolean) {
+    this.materialTypes = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+    if (onInit && this.chargeMaterialForm) {
+      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
+        if (this.chargeMaterialForm.controls.materialLatentHeat.value === '') {
+          this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
+        }
+      }
+    }
   }
 
   disableForm() {
