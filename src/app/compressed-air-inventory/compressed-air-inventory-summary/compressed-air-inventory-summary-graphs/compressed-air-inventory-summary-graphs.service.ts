@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CompressedAirField, CompressedAirInventorySummaryService } from '../compressed-air-inventory-summary.service';
-import { CompressedAirInventoryData, CompressedAirItem } from '../../compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirItem, CompressorTypeOptions, ControlTypes } from '../../compressed-air-inventory';
 import _ from 'lodash';
 
 @Injectable()
@@ -28,67 +28,22 @@ export class CompressedAirInventorySummaryGraphsService {
 
   getLabel(key: string, compressedAirField: CompressedAirField): string {
     let label = key;
-    // if (compressedAirField.value == 'motorEfficiencyClass') {
-    //   let motorEfficiencyClass = motorEfficiencyConstants.find(constant => { return constant.value == Number(key) });
-    //   if (motorEfficiencyClass) {
-    //     label = motorEfficiencyClass.display;
-    //   } else {
-    //     label = 'N/A';
-    //   }
-    // } else if (compressedAirField.value == 'driveType') {
-    //   let driveType = pumpInventoryDriveConstants.find(constant => { return constant.value == Number(key) });
-    //   if (driveType) {
-    //     label = driveType.display;
-    //   } else {
-    //     label = 'N/A';
-    //   }
-    // } else if (compressedAirField.value == 'pumpType') {
-    //   let pumpType = pumpTypesConstant.find(constant => { return constant.value == Number(key) });
-    //   if (pumpType) {
-    //     label = pumpType.display;
-    //   } else {
-    //     label = 'N/A';
-    //   }
-    // }
-    // else if (compressedAirField.value == 'shaftOrientation') {
-    //   let shaftOrientation = pumpInventoryShaftOrientations.find(constant => { return constant.value == Number(key) });
-    //   if (shaftOrientation) {
-    //     label = shaftOrientation.display;
-    //   } else {
-    //     label = 'N/A';
-    //   }
-    // }
-    // else if (compressedAirField.value == 'shaftSealType') {
-    //   let shaftSealType = pumpInventoryShaftSealTypes.find(constant => { return constant.value == Number(key) });
-    //   if (shaftSealType) {
-    //     label = shaftSealType.display;
-    //   } else {
-    //     label = 'N/A';
-    //   }
-    // }
-    // else if (compressedAirField.value == 'priority') {
-    //   let priority = priorityTypes.find(constant => { return constant.value == Number(key) });
-    //   if (priority) {
-    //     label = priority.display;
-    //   } else {
-    //     label = 'N/A';
-    //   }
-    // }
-    // else if (compressedAirField.value == 'status') {
-    //   let status = statusTypes.find(constant => { return constant.value == Number(key) });
-    //   if (status) {
-    //     label = status.display;
-    //   } else {
-    //     label = 'N/A';
-    //   }
-    // }
-    // else if (key == 'null' || key == 'undefined') {
-    //   label = 'N/A';
-    // } else if (key == 'true') {
-    //   label = 'Yes';
-    // } else if (key == 'false') {
-    //   label = 'No';
-    // }
+    if (compressedAirField.value == 'controlType') {
+      let controlType = ControlTypes.find(constant => { return constant.value == Number(key) });
+      if (controlType) {
+        label = controlType.label;
+      } else {
+        label = 'N/A';
+      }
+    }
+    else if (compressedAirField.value == 'compressorType') {
+      let compressorType = CompressorTypeOptions.find(constant => { return constant.value == Number(key) });
+      if (compressorType) {
+        label = compressorType.label;
+      } else {
+        label = 'N/A';
+      }
+    }
     return label;
   }
 
