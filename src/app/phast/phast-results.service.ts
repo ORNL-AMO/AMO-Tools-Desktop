@@ -317,7 +317,7 @@ export class PhastResultsService {
           energyUseReportData.fuelName = gas.substance;
         }
       } else if (phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-        let gas: FlueGasMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId));
+        let gas: FlueGasMaterial = this.flueGasMaterialDbService.getById(phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
         if (gas) {
           energyUseReportData.fuelHeatingValue = gas.heatingValue;
           energyUseReportData.fuelName = gas.substance;

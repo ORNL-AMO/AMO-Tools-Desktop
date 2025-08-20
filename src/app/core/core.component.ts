@@ -24,6 +24,7 @@ import { ExportToJustifiTemplateService } from '../shared/export-to-justifi-moda
 import { CORE_DATA_WARNING, SECONDARY_DATA_WARNING, SnackbarService } from '../shared/snackbar-notification/snackbar.service';
 import { BrowserStorageAvailable, BrowserStorageService } from '../shared/browser-storage.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
+import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
 
 @Component({
   selector: 'app-core',
@@ -87,7 +88,8 @@ export class CoreComponent implements OnInit {
     private snackBarService: SnackbarService,
     private browserStorageService: BrowserStorageService,
     private exportToJustifiTemplateService: ExportToJustifiTemplateService,
-    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService
   ) {
   }
 
@@ -231,6 +233,7 @@ export class CoreComponent implements OnInit {
       //initialize db Behavior Subjects
       //data initialized in createDefaultProcessHeatingMaterials on startup
       await this.solidLiquidMaterialDbService.asyncSetAllMaterialsFromDb();
+      await this.flueGasMaterialDbService.asyncSetAllMaterialsFromDb();
     }
   }
 

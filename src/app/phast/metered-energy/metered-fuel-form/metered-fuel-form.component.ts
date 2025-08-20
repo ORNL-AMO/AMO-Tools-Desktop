@@ -11,10 +11,10 @@ import { firstValueFrom } from 'rxjs';
 import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 
 @Component({
-    selector: 'app-metered-fuel-form',
-    templateUrl: './metered-fuel-form.component.html',
-    styleUrls: ['./metered-fuel-form.component.css'],
-    standalone: false
+  selector: 'app-metered-fuel-form',
+  templateUrl: './metered-fuel-form.component.html',
+  styleUrls: ['./metered-fuel-form.component.css'],
+  standalone: false
 })
 export class MeteredFuelFormComponent implements OnInit {
   @Input()
@@ -55,9 +55,10 @@ export class MeteredFuelFormComponent implements OnInit {
   ngAfterViewInit() {
     this.setOpHoursModalWidth();
   }
-  async getFuelTypes(bool?: boolean) {
+
+  getFuelTypes(bool?: boolean) {
     if (this.inputs.fuelDescription === 'gas') {
-      this.fuelTypes = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+      this.fuelTypes = this.flueGasMaterialDbService.getAllMaterials();
     } else if (this.inputs.fuelDescription === 'solidLiquid') {
       this.fuelTypes = this.solidLiquidMaterialDbService.getAllMaterials();
     }

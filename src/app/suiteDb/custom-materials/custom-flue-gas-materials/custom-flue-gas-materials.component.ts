@@ -77,22 +77,22 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   }
 
 
-  async getCustomMaterials() {
-    this.flueGasMaterials = await firstValueFrom(this.flueGasMaterialDbService.getAllCustomMaterials());
+  getCustomMaterials() {
+    this.flueGasMaterials = this.flueGasMaterialDbService.getAllCustomMaterials();
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }
     this.emitNumMaterials.emit(this.flueGasMaterials.length);
   }
 
-  async editMaterial(id: number) {
-    this.existingMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(id));
+  editMaterial(id: number) {
+    this.existingMaterial = this.flueGasMaterialDbService.getById(id);
     this.editExistingMaterial = true;
     this.showMaterialModal();
   }
 
-  async deleteMaterial(id: number) {
-    this.existingMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(id));
+  deleteMaterial(id: number) {
+    this.existingMaterial = this.flueGasMaterialDbService.getById(id);
     this.editExistingMaterial = true;
     this.deletingMaterial = true;
     this.showMaterialModal();

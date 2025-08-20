@@ -77,8 +77,8 @@ export class BoilerSummaryComponent implements OnInit {
     }
   }
 
-  async setOptions(){
-    this.gasFuelTypes = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+  setOptions(){
+    this.gasFuelTypes = this.flueGasMaterialDbService.getAllMaterials();
     this.solidLiquidFuelTypes = this.solidLiquidMaterialDbService.getAllMaterials();
   }
 

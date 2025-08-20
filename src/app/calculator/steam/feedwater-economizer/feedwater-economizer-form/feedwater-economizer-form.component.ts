@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -52,6 +52,7 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
   calcMethodExcessAir: boolean;
 
   fuelOptions: Array<FlueGasMaterial>;
+  fuelOptionsSub: Subscription;
 
   constructor(private feedwaterEconomizerService: FeedwaterEconomizerService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
@@ -64,6 +65,9 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
   }
 
   initSubscriptions() {
+    this.fuelOptionsSub = this.flueGasMaterialDbService.dbFlueGasMaterials.subscribe(val => {
+      this.fuelOptions = val;
+    });
     this.resetDataSub = this.feedwaterEconomizerService.resetData.subscribe(value => {
       this.initForm();
     });
@@ -81,12 +85,12 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
+    this.fuelOptionsSub.unsubscribe();
   }
 
-  async initForm() {
+  initForm() {
     let feedwaterEconomizerInput: FeedwaterEconomizerInput = this.feedwaterEconomizerService.feedwaterEconomizerInput.getValue();
     this.form = this.feedwaterEconomizerFormService.getFeedwaterEconomizerForm(feedwaterEconomizerInput, this.settings);
-    this.fuelOptions = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
     this.setMaterialProperties();
     this.setCalcMethod();
     this.calcExcessAir();
@@ -219,15 +223,13 @@ export class FeedwaterEconomizerFormComponent implements OnInit {
     this.calculate();
   }
 
-
   showMaterialModal() {
     this.feedwaterEconomizerService.modalOpen.next(true);
     this.gasMaterialModal.show();
   }
 
-  async hideMaterialModal(event?: any) {
+  hideMaterialModal(event?: any) {
     if (event) {
-      this.fuelOptions = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
       let newMaterial: FlueGasMaterial = this.fuelOptions.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.form.patchValue({

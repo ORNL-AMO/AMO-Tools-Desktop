@@ -41,13 +41,7 @@ export class SolidLiquidMaterialDbService {
     await this.asyncSetAllMaterialsFromDb();
     return;
   }
-
-  getAllCustomMaterialsWithObservable(): Observable<Array<SolidLiquidFlueGasMaterial>> {
-    return this.dbService.getAll(this.storeName).pipe(
-      map((materials: SolidLiquidFlueGasMaterial[]) => materials.filter((material: SolidLiquidFlueGasMaterial) => !material.isDefault))
-    );
-  }
-
+  
   private getAllWithObservable(): Observable<Array<SolidLiquidFlueGasMaterial>> {
     return this.dbService.getAll(this.storeName);
   }

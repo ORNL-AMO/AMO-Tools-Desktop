@@ -49,7 +49,7 @@ export class CondensingEconomizerFormComponent implements OnInit {
   calcMethodExcessAir: boolean;
 
   fuelOptions: Array<FlueGasMaterial>;
-
+  fuelOptionsSub: Subscription;
   constructor(private condensingEconomizerService: CondensingEconomizerService,
     private phastService: PhastService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
@@ -61,6 +61,9 @@ export class CondensingEconomizerFormComponent implements OnInit {
   }
 
   initSubscriptions() {
+    this.fuelOptionsSub = this.flueGasMaterialDbService.dbFlueGasMaterials.subscribe(val => {
+      this.fuelOptions = val;
+    });
     this.resetDataSub = this.condensingEconomizerService.resetData.subscribe(value => {
       this.initForm();
     });
@@ -78,13 +81,13 @@ export class CondensingEconomizerFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
+    this.fuelOptionsSub.unsubscribe();
   }
 
   async initForm() {
     let condensingEconomizerInput: CondensingEconomizerInput = this.condensingEconomizerService.condensingEconomizerInput.getValue();
     this.form = this.condensingEconomizerFormService.getCondensingEconomizerForm(condensingEconomizerInput, this.settings);
     this.form.controls.oxygenCalculationMethod.disable();
-    this.fuelOptions = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
     this.setMaterialProperties();
     this.setCalcMethod();
     this.calcExcessAir();
@@ -195,9 +198,8 @@ export class CondensingEconomizerFormComponent implements OnInit {
     this.materialModal.show();
   }
 
-  async hideMaterialModal(event?: any) {
+  hideMaterialModal(event?: any) {
     if (event) {
-    this.fuelOptions = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
       let newMaterial = this.fuelOptions.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.form.patchValue({

@@ -1,14 +1,13 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { FlueGasModalData, HeatCascadingInput, HeatCascadingOutput } from '../../../../shared/models/phast/heatCascading';
 import { FlueGasHeatingValue } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { HeatCascadingFormService } from '../heat-cascading-form.service';
 import { HeatCascadingService } from '../heat-cascading.service';
 import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
@@ -36,7 +35,8 @@ export class HeatCascadingFormComponent implements OnInit {
     this.setOpHoursModalWidth();
   }
   form: UntypedFormGroup;
-  fuelOptions: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
+  fuelOptions: Array<FlueGasMaterial>;
+  fuelOptionsSub: Subscription;
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
@@ -51,7 +51,7 @@ export class HeatCascadingFormComponent implements OnInit {
   outputSubscription: Subscription;
   output: HeatCascadingOutput;
 
-  constructor(private sqlDbApiService: SqlDbApiService,
+  constructor(
     private heatCascadingService: HeatCascadingService,
     private phastService: PhastService,
     private heatCascadingFormService: HeatCascadingFormService,
@@ -62,6 +62,9 @@ export class HeatCascadingFormComponent implements OnInit {
   }
 
   initSubscriptions() {
+    this.fuelOptionsSub = this.flueGasMaterialDbService.dbFlueGasMaterials.subscribe(val => {
+      this.fuelOptions = val;
+    });
     this.resetDataSub = this.heatCascadingService.resetData.subscribe(value => {
       this.initForm();
     })
@@ -84,17 +87,12 @@ export class HeatCascadingFormComponent implements OnInit {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
     this.outputSubscription.unsubscribe();
+    this.fuelOptionsSub.unsubscribe();
   }
 
   initForm() {
     let heatCascadingInput: HeatCascadingInput = this.heatCascadingService.heatCascadingInput.getValue();
     this.form = this.heatCascadingFormService.getHeatCascadingForm(heatCascadingInput);
-    this.initFormSetup();
-  }
-
-  async initFormSetup() {
-    this.fuelOptions = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-
     if (this.form.controls.materialTypeId.value && this.form.controls.materialTypeId.value !== '') {
       if (this.form.controls.CH4.value === '' || !this.form.controls.CH4.value) {
         this.setMaterialProperties();
@@ -103,7 +101,7 @@ export class HeatCascadingFormComponent implements OnInit {
   }
 
   setMaterialProperties() {
-    let material: FlueGasMaterial = this.fuelOptions.find(option => { option.id === this.form.controls.materialTypeId.value }) as FlueGasMaterial;
+    let material: FlueGasMaterial = this.fuelOptions.find(option => { option.id === this.form.controls.materialTypeId.value });
     if (material) {
       this.selectedFuelId = this.form.controls.materialTypeId.value;
       let flueGasMaterialHeatingValue: FlueGasHeatingValue = this.phastService.flueGasByVolumeCalculateHeatingValue(material);
@@ -195,9 +193,8 @@ export class HeatCascadingFormComponent implements OnInit {
     this.gasMaterialModal.show();
   }
 
-  async hideMaterialModal(event?: any) {
+  hideMaterialModal(event?: any) {
     if (event) {
-      this.fuelOptions = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
       let newMaterial: FlueGasMaterial | SolidLiquidFlueGasMaterial = this.fuelOptions.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.form.patchValue({

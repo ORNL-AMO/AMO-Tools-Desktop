@@ -195,7 +195,7 @@ export class CoreService {
     await firstValueFrom(this.solidLoadMaterialDbService.insertDefaultMaterials());
     await firstValueFrom(this.gasLoadMaterialDbService.insertDefaultMaterials());
     await firstValueFrom(this.liquidLoadMaterialDbService.insertDefaultMaterials());
-    await firstValueFrom(this.flueGasMaterialDbService.insertDefaultMaterials());
+    await this.flueGasMaterialDbService.insertDefaultMaterials();
     await this.solidLiquidMaterialDbService.insertDefaultMaterials();
     return Promise.resolve();
   }

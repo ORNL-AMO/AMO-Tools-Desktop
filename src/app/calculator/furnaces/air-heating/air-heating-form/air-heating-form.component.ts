@@ -103,7 +103,6 @@ export class AirHeatingFormComponent implements OnInit {
   }
 
   changeFuelType() {
-    { }
     let currentInput: AirHeatingInput;
     this.setFuelOptions();
     this.form.controls.materialTypeId.patchValue(this.fuelOptions[0].id);
@@ -124,9 +123,9 @@ export class AirHeatingFormComponent implements OnInit {
     this.calculate();
   }
 
-  async setFuelOptions() {
+  setFuelOptions() {
     if (this.form.controls.gasFuelType.value == true) {
-      this.fuelOptions = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+      this.fuelOptions = this.flueGasMaterialDbService.getAllMaterials();
     } else {
       this.fuelOptions = this.solidLiquidMaterialDbService.getAllMaterials();
     }

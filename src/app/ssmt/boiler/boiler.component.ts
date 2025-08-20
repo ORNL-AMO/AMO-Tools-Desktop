@@ -104,11 +104,11 @@ export class BoilerComponent implements OnInit {
     this.setPressureForms(this.boilerInput);
   }
 
-  async setFuelTypes() {
+  setFuelTypes() {
     if (this.boilerForm.controls.fuelType.value === 0) {
       this.options = this.solidLiquidMaterialDbService.getAllMaterials();
     } else if (this.boilerForm.controls.fuelType.value === 1) {
-      this.options = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+      this.options = this.flueGasMaterialDbService.getAllMaterials();
     }
   }
 

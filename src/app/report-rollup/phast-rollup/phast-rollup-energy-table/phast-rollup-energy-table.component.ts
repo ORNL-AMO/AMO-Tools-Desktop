@@ -124,7 +124,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   }
 
 
-  async getFuel(resultsData: PhastResultsData): Promise<PhastRollupEnergySummaryItem> {
+  getFuel(resultsData: PhastResultsData): PhastRollupEnergySummaryItem {
     let rollupEnergyItem: PhastRollupEnergySummaryItem = {
       name: '',
       energyUsed: 0,
@@ -157,7 +157,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
           rollupEnergyItem.hhv = this.convertHHV(gas.heatingValue, resultsData.settings);
         }
       } else if (resultsData.assessment.phast.losses.flueGasLosses && resultsData.assessment.phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-        let gas: FlueGasMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId));
+        let gas: FlueGasMaterial = this.flueGasMaterialDbService.getById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
         if (gas) {
           rollupEnergyItem.name = gas.substance;
           let heatingValue: number = gas.heatingValue;

@@ -263,7 +263,7 @@ export class ImportBackupService {
     for await (let material of measurBackupFile.flueGasMaterials) {
       material.selected = false;
       delete material.id;
-      await firstValueFrom(this.flueGasMaterialDbService.addWithObservable(material));
+      await this.flueGasMaterialDbService.asyncAddMaterial(material);
     };
 
     for await (let material of measurBackupFile.solidLiquidFlueGasMaterials) {

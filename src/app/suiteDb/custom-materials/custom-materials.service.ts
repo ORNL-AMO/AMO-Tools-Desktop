@@ -97,9 +97,7 @@ export class CustomMaterialsService {
       let material: FlueGasMaterial = data[i];
       delete material.id;
       material.selected = false;
-      await firstValueFrom(this.flueGasMaterialDbService.addWithObservable(material));
-      let materials: Array<FlueGasMaterial> = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-      this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
+      await this.flueGasMaterialDbService.asyncAddMaterial(material);
     };
   }
 
@@ -191,8 +189,7 @@ export class CustomMaterialsService {
   async deleteFlueGas(data: Array<FlueGasMaterial>) {
     for (let i = 0; i < data.length; i++) {
       let material: FlueGasMaterial = data[i];
-      let materials: Array<FlueGasMaterial> = await firstValueFrom(this.flueGasMaterialDbService.deleteByIdWithObservable(material.id));
-      this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
+      this.flueGasMaterialDbService.asyncDeleteMaterial(material.id);
     };
   }
 

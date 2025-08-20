@@ -61,7 +61,6 @@ export class FlueGasMaterialComponent implements OnInit {
   constructor(private flueGasMaterialDbService: FlueGasMaterialDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
-
     if (this.editExistingMaterial) {
       this.idbEditMaterialId = this.existingMaterial.id;
       this.setAllMaterials();
@@ -77,9 +76,9 @@ export class FlueGasMaterialComponent implements OnInit {
     }
   }
 
-  async setAllMaterials() {
-    this.allMaterials = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-    this.allCustomMaterials = await firstValueFrom(this.flueGasMaterialDbService.getAllCustomMaterials());
+  setAllMaterials() {
+    this.allMaterials = this.flueGasMaterialDbService.getAllMaterials();
+    this.allCustomMaterials = this.flueGasMaterialDbService.getAllCustomMaterials();
     this.setExisting();
   }
 
@@ -122,9 +121,7 @@ export class FlueGasMaterialComponent implements OnInit {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
         this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('kJNm3').to('btuscf');
       }
-      await firstValueFrom(this.flueGasMaterialDbService.addWithObservable(this.newMaterial));
-      let materials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-      this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
+      await this.flueGasMaterialDbService.asyncAddMaterial(this.newMaterial);
       this.closeModal.emit(this.newMaterial);
     }
   }
@@ -136,17 +133,13 @@ export class FlueGasMaterialComponent implements OnInit {
     }
     //need to set id for idb to put updates
     this.newMaterial.id = this.idbEditMaterialId;
-    await firstValueFrom(this.flueGasMaterialDbService.updateWithObservable(this.newMaterial));
-    let materials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-    this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
+    await this.flueGasMaterialDbService.asyncUpdateMaterial(this.newMaterial);
     this.closeModal.emit(this.newMaterial);
   }
 
   async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      await firstValueFrom(this.flueGasMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
-      let materials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-      this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
+      await this.flueGasMaterialDbService.asyncDeleteMaterial(this.idbEditMaterialId);
       this.closeModal.emit(this.newMaterial);
     }
   }

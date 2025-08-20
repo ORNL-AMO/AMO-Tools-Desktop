@@ -55,8 +55,8 @@ export class StackLossByVolumeComponent implements OnChanges {
     this.checkStackLossTemp();
   }
 
-  async setOptions(){
-    this.options = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+  setOptions(){
+    this.options = this.flueGasMaterialDbService.getAllMaterials();
     if (this.stackLossForm) {
       if (this.stackLossForm.controls.gasTypeId.value && this.stackLossForm.controls.gasTypeId.value !== '') {
         if (this.stackLossForm.controls.CH4.value === '' || !this.stackLossForm.controls.CH4.value) {

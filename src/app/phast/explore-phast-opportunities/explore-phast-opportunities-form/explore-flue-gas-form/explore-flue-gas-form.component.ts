@@ -6,7 +6,6 @@ import { LossTab } from '../../../tabs';
 import { PhastService } from '../../../phast.service';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
 import { firstValueFrom } from 'rxjs';
 
@@ -44,7 +43,7 @@ export class ExploreFlueGasFormComponent implements OnInit {
 
   baselineWarnings: FlueGasWarnings;
   modificationWarnings: FlueGasWarnings;
-  constructor(private phastService: PhastService, private flueGasFormService: FlueGasFormService, private sqlDbApiService: SqlDbApiService,
+  constructor(private phastService: PhastService, private flueGasFormService: FlueGasFormService,
     private flueGasMaterialDbService: FlueGasMaterialDbService
   ) { }
 
@@ -205,8 +204,8 @@ export class ExploreFlueGasFormComponent implements OnInit {
     this.calculate();
   }
 
-  async buildInput(loss: FlueGasByMass | FlueGasByVolume): Promise<MaterialInputProperties> {
-    let tmpFlueGas: FlueGasMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(loss.gasTypeId));
+  buildInput(loss: FlueGasByMass | FlueGasByVolume): MaterialInputProperties {
+    let tmpFlueGas: FlueGasMaterial = this.flueGasMaterialDbService.getById(loss.gasTypeId);
     let input: MaterialInputProperties;
     if (tmpFlueGas) {
       input = {

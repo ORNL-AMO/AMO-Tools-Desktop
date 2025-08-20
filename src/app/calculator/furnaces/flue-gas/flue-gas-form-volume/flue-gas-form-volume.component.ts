@@ -57,7 +57,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   higherHeatingValue: number;
   showMoisture: boolean;
-
+  materialsSub: Subscription;
   constructor(private flueGasService: FlueGasService,
     private convertUnitsService: ConvertUnitsService,
     private flueGasFormService: FlueGasFormService,
@@ -65,7 +65,9 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.setOptions(true);
+    this.materialsSub = this.flueGasMaterialDbService.dbFlueGasMaterials.subscribe(val => {
+      this.options = val;
+    });
     this.initSubscriptions();
   }
 
@@ -75,19 +77,12 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     if (!this.isBaseline) {
       this.baselineDataSub.unsubscribe();
     }
+    this.materialsSub.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
-      this.setOptions();
       this.setFormState();
-    }
-  }
-
-  async setOptions(onInit?: boolean) {
-    this.options = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-    if (onInit) {
-      this.initForm();
     }
   }
 
@@ -272,9 +267,8 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.calculate();
   }
 
-  async hideMaterialModal(event?: any) {
+  hideMaterialModal(event?: any) {
     if (event) {
-      await this.setOptions();
       let newMaterial: FlueGasMaterial = this.options.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.byVolumeForm.patchValue({

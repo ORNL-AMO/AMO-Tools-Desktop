@@ -7,7 +7,7 @@ import { FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phas
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
-import { firstValueFrom } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { FlueGasCompareService } from '../flue-gas-compare.service';
 import { roundVal } from '../../../../shared/helperFunctions';
 
@@ -56,6 +56,8 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   existingMaterial: FlueGasMaterial;
   editExistingMaterial: boolean;
   hasDeletedCustomMaterial: boolean = false;
+
+  optionsSub: Subscription
   constructor(
     private flueGasCompareService: FlueGasCompareService,
     private flueGasFormService: FlueGasFormService,
@@ -69,7 +71,19 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.setOptions(true);
+    this.optionsSub = this.flueGasMaterialDbService.dbFlueGasMaterials.subscribe(val => {
+      this.options = val;
+    });
+    if (this.flueGasLossForm) {
+      if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value !== '') {
+        if (this.flueGasLossForm.controls.CH4.value === '' || !this.flueGasLossForm.controls.CH4.value) {
+          this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
+        }
+      }
+    }
+
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -83,21 +97,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
-          this.setOptions();
           this.enableForm();
-        }
-      }
-    }
-  }
-
-  async setOptions(onInit?: boolean) {
-    this.options = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-    if (onInit && this.flueGasLossForm) {
-      if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value !== '') {
-        if (this.flueGasLossForm.controls.CH4.value === '' || !this.flueGasLossForm.controls.CH4.value) {
-          this.setProperties();
-        } else {
-          this.checkForDeletedMaterial();
         }
       }
     }
@@ -178,9 +178,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       specificGravity: this.flueGasLossForm.controls.specificGravity.value,
       substance: "Custom Material"
     };
-    await firstValueFrom(this.flueGasMaterialDbService.addWithObservable(customMaterial));
-
-    this.setOptions();
+    await this.flueGasMaterialDbService.asyncAddMaterial(customMaterial);
     let newMaterial: FlueGasMaterial = this.options.find(material => { return material.substance === customMaterial.substance; });
     this.flueGasLossForm.patchValue({
       gasTypeId: newMaterial.id
@@ -244,9 +242,8 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     this.materialModal.show();
   }
 
-  async hideMaterialModal(event?: any) {
+  hideMaterialModal(event?: any) {
     if (event) {
-      await this.setOptions();
       let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.flueGasLossForm.patchValue({

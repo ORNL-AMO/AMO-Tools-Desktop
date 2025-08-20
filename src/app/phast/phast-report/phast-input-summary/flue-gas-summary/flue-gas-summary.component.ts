@@ -84,17 +84,8 @@ export class FlueGasSummaryComponent implements OnInit {
     this.o2Diff = new Array();
     this.so2Diff = new Array();
 
-    this.setOptions();
-
-  }
-
-  async setOptions() {
-    this.volumeOptions = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+    this.volumeOptions = this.flueGasMaterialDbService.getAllMaterials();
     this.massOptions = this.solidLiquidMaterialDbService.getAllMaterials();
-    this.setLossData();
-  }
-
-  setLossData() {
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.modifications) {
@@ -144,7 +135,6 @@ export class FlueGasSummaryComponent implements OnInit {
       }
     }
   }
-
 
   //function used to check if baseline and modification values are different
   //called from html

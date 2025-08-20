@@ -115,7 +115,7 @@ export class BackupDataService {
     backupFile.solidLoadChargeMaterials = await firstValueFrom(this.solidLoadMaterialDbService.getAllCustomMaterials());
     backupFile.atmosphereSpecificHeats = await firstValueFrom(this.atmosphereDbService.getAllCustomMaterials());
     backupFile.wallLossesSurfaces = await firstValueFrom(this.wallLossesSurfaceDbService.getAllCustomMaterials());
-    backupFile.flueGasMaterials = await firstValueFrom(this.flueGasMaterialDbService.getAllCustomMaterials());
+    backupFile.flueGasMaterials = this.flueGasMaterialDbService.getAllCustomMaterials();
     backupFile.solidLiquidFlueGasMaterials = this.solidLiquidMaterialDbService.getAllCustomMaterials();
   }
   
