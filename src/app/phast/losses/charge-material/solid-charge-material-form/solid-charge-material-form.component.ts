@@ -79,17 +79,7 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     else {
       this.idString = 'phast_baseline_solid_' + this.lossIndex;
     }
-    //get material types from ToolSuiteDb
-    this.setMaterialTypes();
-    if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
-        if (this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value === '') {
-          this.setProperties();
-        } else {
-          this.checkForDeletedMaterial();
-        }
-      }
-    }
+    this.setMaterialTypes(true);
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -100,8 +90,17 @@ export class SolidChargeMaterialFormComponent implements OnInit {
     this.lossesService.modalOpen.next(false);
   }
 
-  async setMaterialTypes() {
-    this.materialTypes = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable())
+  async setMaterialTypes(onInit?: boolean) {
+    this.materialTypes = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+    if (onInit && this.chargeMaterialForm) {
+      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
+        if (this.chargeMaterialForm.controls.materialLatentHeatOfFusion.value === '') {
+          this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
+        }
+      }
+    }
   }
 
   disableForm() {

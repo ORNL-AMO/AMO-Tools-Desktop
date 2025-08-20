@@ -74,8 +74,16 @@ export class AtmosphereLossesFormComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.setMaterialTypes();
-    if (this.atmosphereLossForm) {
+    this.setMaterialTypes(true);
+    if (!this.baselineSelected) {
+      this.disableForm();
+    }
+    this.checkWarnings();
+  }
+
+  async setMaterialTypes(onInit?: boolean) {
+    this.materialTypes = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
+    if (onInit && this.atmosphereLossForm) {
       if (this.atmosphereLossForm.controls.atmosphereGas.value && this.atmosphereLossForm.controls.atmosphereGas.value !== '') {
         if (this.atmosphereLossForm.controls.specificHeat.value === '') {
           this.setProperties();
@@ -84,14 +92,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
         }
       }
     }
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
-    this.checkWarnings();
-  }
-
-  async setMaterialTypes() {
-    this.materialTypes = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
   }
 
   async checkForDeletedMaterial() {
