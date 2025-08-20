@@ -43,7 +43,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
   inputError = new EventEmitter<boolean>();
 
   firstChange: boolean = true;
-  options: Array<FlueGasMaterial>;
+  options: Array<FlueGasMaterial> = [];
   calculationMethods: Array<string> = [
     'Excess Air',
     'Oxygen in Flue Gas'
@@ -69,16 +69,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.setOptions();
-    if (this.flueGasLossForm) {
-      if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value !== '') {
-        if (this.flueGasLossForm.controls.CH4.value === '' || !this.flueGasLossForm.controls.CH4.value) {
-          this.setProperties();
-        } else {
-          this.checkForDeletedMaterial();
-        }
-      }
-    }
+    this.setOptions(true);
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -99,8 +90,17 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     }
   }
 
-  async setOptions() {
+  async setOptions(onInit?: boolean) {
     this.options = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+    if (onInit && this.flueGasLossForm) {
+      if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value !== '') {
+        if (this.flueGasLossForm.controls.CH4.value === '' || !this.flueGasLossForm.controls.CH4.value) {
+          this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
+        }
+      }
+    }
   }
 
 

@@ -92,8 +92,6 @@ export class EnergyUsedComponent implements OnInit {
     this.electricityHeatingValue = this.convertUnitsService.value(9800).from('Btu').to(this.settings.energyResultUnit);
     this.getUnits();
     this.setEnergyUsed();
-    this.baseEnergyUnit = this.energyUsed.baseEnergyUnit;
-    this.energyPerMassUnit = this.energyUsed.energyPerMassUnit;
 
     this.setMeteredEnergyVals();
     if (this.phast.designedEnergy) {
@@ -105,6 +103,8 @@ export class EnergyUsedComponent implements OnInit {
 
   async setEnergyUsed() {
     this.energyUsed = await this.phastResultsService.getEnergyUseReportData(this.phast, this.phastResults, this.settings);
+    this.baseEnergyUnit = this.energyUsed.baseEnergyUnit;
+    this.energyPerMassUnit = this.energyUsed.energyPerMassUnit;
   }
 
   getUnits() {

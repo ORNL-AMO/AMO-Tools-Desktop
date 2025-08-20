@@ -31,7 +31,7 @@ export class StackLossByVolumeComponent implements OnChanges {
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
-  options: Array<FlueGasMaterial>;
+  options: Array<FlueGasMaterial> = [];
   calculationMethods: Array<string> = [
     'Excess Air',
     'Oxygen in Flue Gas'
@@ -46,13 +46,6 @@ export class StackLossByVolumeComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.setOptions();
-    if (this.stackLossForm) {
-      if (this.stackLossForm.controls.gasTypeId.value && this.stackLossForm.controls.gasTypeId.value !== '') {
-        if (this.stackLossForm.controls.CH4.value === '' || !this.stackLossForm.controls.CH4.value) {
-          this.setProperties();
-        }
-      }
-    }
     this.setCalcMethod();
     this.setCombustionValidation();
     this.setFuelTempValidation();
@@ -64,6 +57,13 @@ export class StackLossByVolumeComponent implements OnChanges {
 
   async setOptions(){
     this.options = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+    if (this.stackLossForm) {
+      if (this.stackLossForm.controls.gasTypeId.value && this.stackLossForm.controls.gasTypeId.value !== '') {
+        if (this.stackLossForm.controls.CH4.value === '' || !this.stackLossForm.controls.CH4.value) {
+          this.setProperties();
+        }
+      }
+    }
   }
 
   focusOut() {

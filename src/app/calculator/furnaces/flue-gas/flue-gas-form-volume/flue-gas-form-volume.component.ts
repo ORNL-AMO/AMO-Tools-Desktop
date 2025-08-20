@@ -44,7 +44,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
 
   byVolumeForm: UntypedFormGroup;
 
-  options: Array<FlueGasMaterial>;
+  options: Array<FlueGasMaterial> = [];
   calculationMethods: Array<string> = [
     'Excess Air',
     'Oxygen In Flue Gas'
@@ -65,7 +65,7 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.setOptions();
+    this.setOptions(true);
     this.initSubscriptions();
   }
 
@@ -84,8 +84,11 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     }
   }
 
-  async setOptions() {
+  async setOptions(onInit?: boolean) {
     this.options = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+    if (onInit) {
+      this.initForm();
+    }
   }
 
   initSubscriptions() {
@@ -180,11 +183,13 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
     this.checkWarnings();
     let currentDataByVolume: FlueGas = this.flueGasFormService.buildByVolumeLossFromForm(this.byVolumeForm)
     let tmpFlueGas: FlueGasMaterial = this.options.find(material => material.id === currentDataByVolume.flueGasByVolume.gasTypeId);
-    let heatingValue: number = tmpFlueGas.heatingValue;
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      heatingValue = this.convertUnitsService.value(heatingValue).from('btuLb').to('kJkg');
+    if (tmpFlueGas) {
+      let heatingValue: number = tmpFlueGas.heatingValue;
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        heatingValue = this.convertUnitsService.value(heatingValue).from('btuLb').to('kJkg');
+      }
+      this.higherHeatingValue = heatingValue;
     }
-    this.higherHeatingValue = heatingValue;
 
     if (this.isBaseline) {
       this.flueGasService.baselineData.next(currentDataByVolume);
@@ -270,10 +275,10 @@ export class FlueGasFormVolumeComponent implements OnInit, OnDestroy {
   async hideMaterialModal(event?: any) {
     if (event) {
       await this.setOptions();
-      let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: FlueGasMaterial = this.options.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.byVolumeForm.patchValue({
-          gasTypeId: newMaterial[0].id
+          gasTypeId: newMaterial.id
         });
         this.setProperties();
       }
