@@ -95,16 +95,19 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: notarize-mac-artifact
+          path: output/
       - name: Notarize
         run: |
-          xcrun notarytool submit --wait --apple-id "${{ secrets.APPLE_ID }}" --password "${{ secrets.APPLE_APP_SECRET }}" --team-id "${{ secrets.APPLE_TEAM_ID }}" $(find ./ -name "MEASUR-*.*.*.dmg") &&
+          BUNDLE_PATH=$(find output -name "MEASUR-*.*.*.dmg")
+          xcrun notarytool submit --wait --apple-id "${{ secrets.APPLE_ID }}" --password "${{ secrets.APPLE_APP_SECRET }}" --team-id "${{ secrets.APPLE_TEAM_ID }}" $BUNDLE_PATH &&
           sleep 60 &&
-          xcrun stapler staple $(find ./ -name "MEASUR-*.*.*.dmg")
+          xcrun stapler staple $BUNDLE_PATH
       - name: Upload notarized artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-2-artifact
-          path: ./*.dmg
+          path: |
+            output/*.dmg
           compression-level: 1
           if-no-files-found: error
           retention-days: 1
@@ -118,12 +121,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: sign-win-artifact
+          path: output/
       - name: Codesign
         run: |
           TMP_CERT_PATH="$RUNNER_TEMP/cert.pem"
           BUNDLE_PATH=$(find output -name "MEASUR-Setup-*.*.*.exe")
 
-          echo -n "${{ secrets.WIN_CERT_BASE64 }}" | base64 --decode $TMP_CERT_PATH
+          echo -n "${{ secrets.WIN_CERT_BASE64 }}" | base64 --decode > $TMP_CERT_PATH
 
           jsign --storetype "${{ secrets.WIN_STORE_TYPE }}" \
                 --storepass "${{ secrets.WIN_STORE_SECRET }}" \
@@ -133,7 +137,7 @@ jobs:
 
           OLD_HASH=$(grep -o -P -m 1 '(?<=sha512:\s).*' ./output/latest.yml)
           NEW_HASH=$(gen_hash -f "$BUNDLE_PATH")
-          sed -i "s|$OLD_HASH|$NEW_HASH|g" output/latest.yml
+          sed -i "s|$OLD_HASH|$NEW_HASH|g" ./output/latest.yml
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
@@ -141,6 +145,11 @@ jobs:
           path: |
             output/*.exe
             output/latest.yml
+          compression-level: 1
+          if-no-files-found: error
+          retention-days: 1
+      - name: Cleanup
+        run: rm -rf ./output
 
   release:
     if: github.ref_name == 'master'
