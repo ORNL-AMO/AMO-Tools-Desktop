@@ -8,11 +8,11 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { AirHeatingInput } from '../../../../shared/models/phast/airHeating';
 import { MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { AirHeatingFormService } from '../air-heating-form.service';
 import { AirHeatingService } from '../air-heating.service';
 import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
 import { roundVal } from '../../../../shared/helperFunctions';
+import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid-material-db.service';
 
 @Component({
   selector: 'app-air-heating-form',
@@ -58,7 +58,7 @@ export class AirHeatingFormComponent implements OnInit {
     private airHeatingService: AirHeatingService,
     private airHeatingFormService: AirHeatingFormService,
     private phastService: PhastService,
-    private sqlDbApiService: SqlDbApiService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService) { }
 
   ngOnInit() {
@@ -128,7 +128,7 @@ export class AirHeatingFormComponent implements OnInit {
     if (this.form.controls.gasFuelType.value == true) {
       this.fuelOptions = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
     } else {
-      this.fuelOptions = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
+      this.fuelOptions = this.solidLiquidMaterialDbService.getAllMaterials();
     }
   }
 
@@ -209,7 +209,7 @@ export class AirHeatingFormComponent implements OnInit {
         });
       }
     } else {
-      let material = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.form.controls.materialTypeId.value);
+      let material = this.solidLiquidMaterialDbService.getById(this.form.controls.materialTypeId.value);
       this.form.patchValue({
         carbon: roundVal(material.carbon, 4),
         hydrogen: roundVal(material.hydrogen, 4),

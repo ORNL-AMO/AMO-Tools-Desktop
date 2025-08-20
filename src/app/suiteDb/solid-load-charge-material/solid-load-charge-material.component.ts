@@ -44,7 +44,6 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   nameError: string = null;
   canAdd: boolean;
   idbEditMaterialId: number;
-  sdbEditMaterialId: number;
   currentField: string = 'selectedMaterial';
   constructor(private settingsDbService: SettingsDbService, private solidLoadMaterialDbService: SolidLoadMaterialDbService, private convertUnitsService: ConvertUnitsService) { }
 
@@ -65,7 +64,6 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
   async setAllMaterials() {
     this.allMaterials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
     this.allCustomMaterials = await firstValueFrom(this.solidLoadMaterialDbService.getAllCustomMaterials());
-    this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial?.substance === material.substance; })?.id;
     this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial?.substance === material.substance; })?.id;
     this.setExisting();
   }
@@ -93,7 +91,6 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
       this.newMaterial.specificHeatSolid = this.convertUnitsService.value(this.newMaterial.specificHeatSolid).from('kJkgC').to('btulbF');
       this.newMaterial.latentHeat = this.convertUnitsService.value(this.newMaterial.latentHeat).from('kJkg').to('btuLb');
     }
-    this.newMaterial.id = this.sdbEditMaterialId;
     //need to set id for idb to put updates
     this.newMaterial.id = this.idbEditMaterialId;
     await firstValueFrom(this.solidLoadMaterialDbService.updateWithObservable(this.newMaterial))
@@ -159,7 +156,7 @@ export class SolidLoadChargeMaterialComponent implements OnInit {
 
   checkEditMaterialName() {
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id !== this.sdbEditMaterialId) {
+      if (material.id !== this.idbEditMaterialId) {
         return material.substance.toLowerCase().trim() === this.newMaterial.substance.toLowerCase().trim();
       }
     });

@@ -11,6 +11,7 @@ import { PhastReportRollupService } from '../../phast-report-rollup.service';
 import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
 import { firstValueFrom } from 'rxjs';
+import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 
 @Component({
   selector: 'app-phast-rollup-energy-table',
@@ -32,7 +33,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   energyPerMassUnit: string;
   energyPerTimeUnit: string;
   constructor(private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService,
-    private phastReportRollupService: PhastReportRollupService, private sqlDbApiService: SqlDbApiService,
+    private phastReportRollupService: PhastReportRollupService, private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService) { }
 
   ngOnInit() {
@@ -150,7 +151,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       rollupEnergyItem.energyUsed = resultsData.baselineResultData.grossHeatInput;
 
       if (resultsData.assessment.phast.losses.flueGasLosses && resultsData.assessment.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
-        let gas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+        let gas: SolidLiquidFlueGasMaterial = this.solidLiquidMaterialDbService.getById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
         if (gas) {
           rollupEnergyItem.name = gas.substance;
           rollupEnergyItem.hhv = this.convertHHV(gas.heatingValue, resultsData.settings);

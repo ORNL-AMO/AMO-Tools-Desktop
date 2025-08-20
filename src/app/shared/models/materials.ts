@@ -51,6 +51,7 @@ export interface SolidLiquidFlueGasMaterial {
     substance: string;
     sulphur: number;
     heatingValue: number;
+    isDefault?: boolean;
 }
 
 export interface SolidLoadChargeMaterial {

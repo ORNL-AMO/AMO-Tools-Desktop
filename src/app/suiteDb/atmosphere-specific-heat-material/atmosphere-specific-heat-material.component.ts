@@ -38,7 +38,6 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   canAdd: boolean;
   currentField: string = "selectedMaterial";
   idbEditMaterialId: number;
-  sdbEditMaterialId: number;
   constructor(private settingsDbService: SettingsDbService, private atmosphereDbService: AtmosphereDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -59,7 +58,6 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
   async setAllMaterials() {
     this.allMaterials = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
     this.allCustomMaterials = await firstValueFrom(this.atmosphereDbService.getAllCustomMaterials());
-    this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial?.substance === material.substance; })?.id;
     this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial?.substance === material.substance; })?.id;
     this.setExisting();
   }
@@ -81,7 +79,6 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.newMaterial.specificHeat = this.convertUnitsService.value(this.newMaterial.specificHeat).from('kJkgC').to('btulbF');
     }
-    this.newMaterial.id = this.sdbEditMaterialId;
     //need to set id for idb to put updates
     this.newMaterial.id = this.idbEditMaterialId;
     await firstValueFrom(this.atmosphereDbService.updateWithObservable(this.newMaterial));
@@ -137,7 +134,7 @@ export class AtmosphereSpecificHeatMaterialComponent implements OnInit {
 
   checkEditMaterialName() {
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id !== this.sdbEditMaterialId) {
+      if (material.id !== this.idbEditMaterialId) {
         return material.substance.toLowerCase().trim() === this.newMaterial.substance.toLowerCase().trim();
       }
     });

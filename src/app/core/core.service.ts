@@ -29,6 +29,7 @@ import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.
 import { GasLoadMaterialDbService } from '../indexedDb/gas-load-material-db.service';
 import { LiquidLoadMaterialDbService } from '../indexedDb/liquid-load-material-db.service';
 import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
+import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 @Injectable()
 export class CoreService {
 
@@ -61,7 +62,8 @@ export class CoreService {
     private solidLoadMaterialDbService: SolidLoadMaterialDbService,
     private gasLoadMaterialDbService: GasLoadMaterialDbService,
     private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
-    private flueGasMaterialDbService: FlueGasMaterialDbService) {
+    private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService) {
     this.showShareDataModal = new BehaviorSubject<boolean>(false);
   }
 
@@ -194,6 +196,7 @@ export class CoreService {
     await firstValueFrom(this.gasLoadMaterialDbService.insertDefaultMaterials());
     await firstValueFrom(this.liquidLoadMaterialDbService.insertDefaultMaterials());
     await firstValueFrom(this.flueGasMaterialDbService.insertDefaultMaterials());
+    await this.solidLiquidMaterialDbService.insertDefaultMaterials();
     return Promise.resolve();
   }
 

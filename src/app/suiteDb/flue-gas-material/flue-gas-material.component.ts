@@ -58,7 +58,6 @@ export class FlueGasMaterialComponent implements OnInit {
   difference: number = 0;
   differenceError: boolean = false;
   idbEditMaterialId: number;
-  sdbEditMaterialId: number;
   constructor(private flueGasMaterialDbService: FlueGasMaterialDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
@@ -81,7 +80,6 @@ export class FlueGasMaterialComponent implements OnInit {
   async setAllMaterials() {
     this.allMaterials = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
     this.allCustomMaterials = await firstValueFrom(this.flueGasMaterialDbService.getAllCustomMaterials());
-    this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial?.substance == material.substance })?.id;
     this.setExisting();
   }
 
@@ -136,7 +134,6 @@ export class FlueGasMaterialComponent implements OnInit {
       this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
       this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('kJNm3').to('btuscf');
     }
-    this.newMaterial.id = this.sdbEditMaterialId;
     //need to set id for idb to put updates
     this.newMaterial.id = this.idbEditMaterialId;
     await firstValueFrom(this.flueGasMaterialDbService.updateWithObservable(this.newMaterial));
@@ -256,7 +253,7 @@ export class FlueGasMaterialComponent implements OnInit {
 
   checkEditMaterialName() {
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id != this.sdbEditMaterialId) {
+      if (material.id != this.idbEditMaterialId) {
         return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
       }
     });

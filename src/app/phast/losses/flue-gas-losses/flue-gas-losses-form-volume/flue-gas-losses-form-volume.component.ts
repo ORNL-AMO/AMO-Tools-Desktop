@@ -103,7 +103,6 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     }
   }
 
-
   focusOut() {
     this.changeField.emit('default');
   }

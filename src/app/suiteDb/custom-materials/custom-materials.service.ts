@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { GasLoadChargeMaterial, FlueGasMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, WallLossesSurface, SolidLoadChargeMaterial, AtmosphereSpecificHeat } from '../../shared/models/materials';
-import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 import { WallLossesSurfaceDbService } from '../../indexedDb/wall-losses-surface-db.service';
 import { GasLoadMaterialDbService } from '../../indexedDb/gas-load-material-db.service';
 import { LiquidLoadMaterialDbService } from '../../indexedDb/liquid-load-material-db.service';
@@ -24,7 +23,6 @@ export class CustomMaterialsService {
   getSelected: BehaviorSubject<boolean>;
   selectAll: BehaviorSubject<boolean>;
   constructor(
-    private sqlDbApiService: SqlDbApiService,
     private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
     private gasLoadDbService: GasLoadMaterialDbService,
     private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
@@ -132,12 +130,7 @@ export class CustomMaterialsService {
       let material: SolidLiquidFlueGasMaterial = data[i];
       material.selected = false;
       delete material.id;
-      let test: boolean = this.sqlDbApiService.insertSolidLiquidFlueGasMaterial(material);
-      if (test === true) {
-        await firstValueFrom(this.solidLiquidMaterialDbService.addWithObservable(material));
-        let materials = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
-        this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.next(materials);
-      }
+      await this.solidLiquidMaterialDbService.asyncAddMaterial(material);
     };
   }
 
@@ -220,14 +213,9 @@ export class CustomMaterialsService {
   }
 
   async deleteSolidLiquidFlueGas(data: Array<SolidLiquidFlueGasMaterial>) {
-    let sdbMaterials: Array<SolidLiquidFlueGasMaterial> = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
     for (let i = 0; i < data.length; i++) {
       let material: SolidLiquidFlueGasMaterial = data[i];
-      let materials = await firstValueFrom(this.solidLiquidMaterialDbService.deleteByIdWithObservable(material.id));
-      this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.next(materials);
-
-      let sdbId: number = sdbMaterials.find((sdbMaterial) => { return material.substance === sdbMaterial.substance; }).id;
-      this.sqlDbApiService.deleteSolidLiquidFlueGasMaterial(sdbId);
+      await this.solidLiquidMaterialDbService.asyncDeleteMaterial(material.id);
     };
   }
 

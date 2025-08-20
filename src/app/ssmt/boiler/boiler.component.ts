@@ -9,9 +9,9 @@ import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
 import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
-import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
-import { firstValueFrom } from 'rxjs';
+import { first, firstValueFrom } from 'rxjs';
+import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 
 @Component({
     selector: 'app-boiler',
@@ -58,7 +58,7 @@ export class BoilerComponent implements OnInit {
   constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService, 
     private stackLossService: StackLossService,
-    private sqlDbApiService: SqlDbApiService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService
   ) { }
 
@@ -106,7 +106,7 @@ export class BoilerComponent implements OnInit {
 
   async setFuelTypes() {
     if (this.boilerForm.controls.fuelType.value === 0) {
-      this.options = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
+      this.options = this.solidLiquidMaterialDbService.getAllMaterials();
     } else if (this.boilerForm.controls.fuelType.value === 1) {
       this.options = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
     }

@@ -8,6 +8,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
 import { firstValueFrom } from 'rxjs';
+import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 
 @Component({
     selector: 'app-metered-fuel-form',
@@ -44,7 +45,7 @@ export class MeteredFuelFormComponent implements OnInit {
   setMeteredEnergy: boolean;
 
   constructor(private convertPhastService: ConvertPhastService, private phastService: PhastService,
-    private sqlDbApiService: SqlDbApiService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService) { }
 
   ngOnInit() {
@@ -58,7 +59,7 @@ export class MeteredFuelFormComponent implements OnInit {
     if (this.inputs.fuelDescription === 'gas') {
       this.fuelTypes = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
     } else if (this.inputs.fuelDescription === 'solidLiquid') {
-      this.fuelTypes = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
+      this.fuelTypes = this.solidLiquidMaterialDbService.getAllMaterials();
     }
     if (!bool) {
       this.inputs.fuelType = undefined;
@@ -88,7 +89,7 @@ export class MeteredFuelFormComponent implements OnInit {
         this.inputs.heatingValue = heatingValueVolume;
       }
     } else {
-      let fuel: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.inputs.fuelType);
+      let fuel: SolidLiquidFlueGasMaterial = this.solidLiquidMaterialDbService.getById(this.inputs.fuelType);
       if (fuel) {
         let heatingVal = this.phastService.flueGasByMassCalculateHeatingValue(fuel);
         if (this.settings.unitsOfMeasure === 'Metric') {
