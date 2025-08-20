@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
-import { GasLoadMaterialDbService } from '../indexedDb/gas-load-material-db.service';
-import { LiquidLoadMaterialDbService } from '../indexedDb/liquid-load-material-db.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
-import { FlueGasMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
+import { FlueGasMaterial, SolidLiquidFlueGasMaterial, SuiteDbMotor, SuiteDbPump } from '../shared/models/materials';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 
 declare var Module: any;
@@ -13,17 +11,11 @@ declare var dbInstance: any;
 export class SqlDbApiService {
 
   constructor(private suiteApiHelperService: SuiteApiHelperService,
-    private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService
   ) { }
 
   async initCustomDbMaterials() {
-    let customLiquidLoadChargeMaterials: LiquidLoadChargeMaterial[] = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
-    customLiquidLoadChargeMaterials.forEach(material => {
-      let suiteResult = this.insertLiquidLoadChargeMaterial(material);
-    });
-
     let flueGasMaterials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
     flueGasMaterials.forEach(material => {
       let suiteResult = this.insertGasFlueGasMaterial(material);
@@ -241,99 +233,6 @@ export class SqlDbApiService {
     }
   }
   
-  selectLiquidLoadChargeMaterials(): Array<LiquidLoadChargeMaterial> {
-    try {
-      let liquidLoadChargeMaterials: Array<LiquidLoadChargeMaterial> = new Array();
-      let items = dbInstance.getLiquidLoadChargeMaterials();
-      for (let index = 0; index < items.size(); index++) {
-        let liquidLoadChargeMaterialPointer = items.get(index);
-        let liquidLoadChargeMaterial: LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterialFromWASM(liquidLoadChargeMaterialPointer);
-        liquidLoadChargeMaterials.push(liquidLoadChargeMaterial);
-        liquidLoadChargeMaterialPointer.delete();
-      }
-      items.delete();
-      return liquidLoadChargeMaterials;
-    }
-    catch (err) {
-      console.log(err);
-      return [];
-    }
-  }
-
-  getLiquidLoadChargeMaterialFromWASM(liquidLoadChargeMaterialPointer): LiquidLoadChargeMaterial {
-    return {
-      id: liquidLoadChargeMaterialPointer.getID(),
-      selected: false,
-      latentHeat: liquidLoadChargeMaterialPointer.getLatentHeat(),
-      specificHeatLiquid: liquidLoadChargeMaterialPointer.getSpecificHeatLiquid(),
-      specificHeatVapor: liquidLoadChargeMaterialPointer.getSpecificHeatVapor(),
-      substance: liquidLoadChargeMaterialPointer.getSubstance(),
-      vaporizationTemperature: liquidLoadChargeMaterialPointer.getVaporizingTemperature()
-    };
-  }
-
-
-  selectLiquidLoadChargeMaterialById(id: number): LiquidLoadChargeMaterial {
-    try {
-      let liquidLoadChargeMaterialPointer = dbInstance.getLiquidLoadChargeMaterialById(id);
-      let liquidLoadChargeMaterial: LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterialFromWASM(liquidLoadChargeMaterialPointer);
-      liquidLoadChargeMaterialPointer.delete();
-      return liquidLoadChargeMaterial;
-    }
-    catch (err) {
-      console.log(err);
-      return undefined;
-    }
-  }
-
-  insertLiquidLoadChargeMaterial(surface: LiquidLoadChargeMaterial): boolean {
-    try {
-      let LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterial(surface);
-      dbInstance.insertLiquidLoadChargeMaterials(LiquidLoadChargeMaterial);
-      LiquidLoadChargeMaterial.delete();
-      return true;
-    }
-    catch (err) {
-      console.log(err);
-      return undefined;
-    }
-  }
-
-  updateLiquidLoadChargeMaterial(material: LiquidLoadChargeMaterial): boolean {
-    try {
-      let LiquidLoadChargeMaterial = this.getLiquidLoadChargeMaterial(material);
-      dbInstance.updateLiquidLoadChargeMaterial(LiquidLoadChargeMaterial);
-      LiquidLoadChargeMaterial.delete();
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
-
-  getLiquidLoadChargeMaterial(liquidLoadChargeMaterial: LiquidLoadChargeMaterial) {
-    let LiquidLoadChargeMaterial = new Module.LiquidLoadChargeMaterial();
-    LiquidLoadChargeMaterial.setLatentHeat(liquidLoadChargeMaterial.latentHeat),
-      LiquidLoadChargeMaterial.setSpecificHeatLiquid(liquidLoadChargeMaterial.specificHeatLiquid),
-      LiquidLoadChargeMaterial.setSpecificHeatVapor(liquidLoadChargeMaterial.specificHeatVapor),
-      LiquidLoadChargeMaterial.setSubstance(liquidLoadChargeMaterial.substance),
-      LiquidLoadChargeMaterial.setVaporizingTemperature(liquidLoadChargeMaterial.vaporizationTemperature)
-    if (liquidLoadChargeMaterial.id !== undefined) {
-      LiquidLoadChargeMaterial.setID(liquidLoadChargeMaterial.id);
-    }
-    return LiquidLoadChargeMaterial;
-  }
-
-  deleteLiquidLoadChargeMaterial(id: number): boolean {
-    try {
-      let success = dbInstance.deleteLiquidLoadChargeMaterial(id);
-      return success;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
-
   selectMotors(): Array<SuiteDbMotor> {
     try {
       let suiteDbMotors: Array<SuiteDbMotor> = new Array();

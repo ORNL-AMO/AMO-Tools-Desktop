@@ -41,7 +41,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
   hasDeletedCustomMaterial: boolean = false;
   editExistingMaterial: boolean;
   existingMaterial: GasLoadChargeMaterial;
-  materialTypes: Array<GasLoadChargeMaterial>;
+  materialTypes: Array<GasLoadChargeMaterial> = [];
   showModal: boolean = false;
   idString: string;
   constructor(private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private gasLoadMaterialDbService: GasLoadMaterialDbService) { }
@@ -65,16 +65,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
     }
   }
   ngOnInit() {
-    this.setMaterials();
-    if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
-        if (this.chargeMaterialForm.controls.materialSpecificHeat.value === '') {
-          this.setProperties();
-        } else {
-          this.checkForDeletedMaterial();
-        }
-      }
-    }
+    this.setMaterials(true);
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -84,8 +75,17 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.lossesService.modalOpen.next(false);
   }
 
-  async setMaterials() {
+  async setMaterials(onInit?: boolean) {
     this.materialTypes = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+    if (onInit && this.chargeMaterialForm) {
+      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
+        if (this.chargeMaterialForm.controls.materialSpecificHeat.value === '') {
+          this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
+        }
+      }
+    }
   }
 
   checkMaterialValues() {
