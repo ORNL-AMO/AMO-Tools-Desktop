@@ -30,6 +30,7 @@ export const EXAMPLE_SYSTEM_INFORMATION_OPERATIONS: Operations = {
   chilledWaterSupplyTemp: 44,
   // water == 0, air == 1
   condenserCoolingMethod: 0,
+  doChillerLoadSchedulesVary: false
 };
 
 

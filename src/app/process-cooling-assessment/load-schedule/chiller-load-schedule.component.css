@@ -1,0 +1,44 @@
+
+.copy-btn, .paste-btn {
+  color: var(--process-cooling-assessment) !important;
+}
+
+.table thead th, .table thead.thead-light th {
+  background-color: var(--process-cooling-assessment) !important;
+  color: #fff !important;
+}
+
+.copy-paste-cell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+input[type="number"] {
+  display: inline-block;
+  text-align: center;
+  font-size: 13px;
+  height: 21px;
+  padding: 1px 4px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+  min-width: 40px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-size: 14px;
+  height: 32px;
+}
+
+.table th {
+  white-space: nowrap;
+  font-weight: bold;
+}
+

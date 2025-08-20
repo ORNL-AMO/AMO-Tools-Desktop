@@ -17,6 +17,7 @@ export class SystemInformationFormService {
       zipcode: [operations.zipcode, Validators.required],
       chilledWaterSupplyTemp: [operations.chilledWaterSupplyTemp, Validators.required],
       condenserCoolingMethod: [operations.condenserCoolingMethod, Validators.required],
+      doChillerLoadSchedulesVary: [operations.doChillerLoadSchedulesVary, Validators.required],
     });
   }
 
@@ -121,6 +122,7 @@ export interface OperationsForm {
   zipcode: FormControl<number>;
   chilledWaterSupplyTemp: FormControl<number>;
   condenserCoolingMethod: FormControl<number>;
+  doChillerLoadSchedulesVary: FormControl<boolean>;
 }
 
 export interface PumpInputForm {

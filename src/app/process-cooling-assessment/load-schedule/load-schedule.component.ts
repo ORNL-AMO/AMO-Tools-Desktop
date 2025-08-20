@@ -15,7 +15,7 @@ export class LoadScheduleComponent {
 private processCoolingAssessmentService: ProcessCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
 destroyRef: DestroyRef = inject(DestroyRef);
 // form type
-controlIds: FormControlIds<LoadForm>;
+// controlIds: FormControlIds<LoadForm>;
 
 
 loadForm: FormGroup;
@@ -30,7 +30,7 @@ loadPercentages = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
   ngOnInit(): void {
     this.initializeForm();
-    this.controlIds = generateFormControlIds(this.loadForm.controls);
+    // this.controlIds = generateFormControlIds(this.loadForm.controls);
     this.observeFormChanges();
   }
 
@@ -117,3 +117,16 @@ loadPercentages = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 
 }
+
+// export interface LoadScheduleForm {
+//   usesFreeCooling: FormControl<boolean>;
+//   isHEXRequired: FormControl<boolean>;
+//   HEXApproachTemp: FormControl<number>;
+//   numberOfTowers: FormControl<number>;
+//   towerType: FormControl<number | null>;
+//   numberOfFans: FormControl<number>;
+//   fanSpeedType: FormControl<number>;
+//   towerSizeMetric: FormControl<number>;
+//   fanType: FormControl<number>;
+//   towerSize: FormControl<number>;
+// }

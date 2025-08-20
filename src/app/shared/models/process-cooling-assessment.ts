@@ -60,6 +60,7 @@ export interface Operations {
     zipcode: number;
     chilledWaterSupplyTemp: number;
     condenserCoolingMethod: number;
+    doChillerLoadSchedulesVary: boolean;
 }
 
 

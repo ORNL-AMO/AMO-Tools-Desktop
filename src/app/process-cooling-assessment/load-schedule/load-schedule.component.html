@@ -1,5 +1,5 @@
-<label class="group-label w-100">
-    Profile Data
+<label for="loading-schedule" class="group-label w-100">
+    Loading Schedule
 </label>
 <div class="scroll-item">
       <form [formGroup]="loadForm">
@@ -7,8 +7,8 @@
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th *ngFor="let load of loadPercentages">{{ load }}% Load</th>
-                <th>Total % Load</th>
+                <th *ngFor="let load of loadPercentages">{{ load }}%</th>
+                <th>Total Load (%)</th>
               </tr>
             </thead>
             <tbody>
@@ -17,6 +17,7 @@
                   <!--  todo id name -->
                   <input 
                     type="number" 
+                    
                     class="form-control"
                     [ngClass]="{'invalid': getFieldControl('load' + load)?.invalid && getFieldControl('load' + load)?.touched}"
                     [formControlName]="'load' + load"
