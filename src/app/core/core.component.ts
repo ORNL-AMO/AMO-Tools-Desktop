@@ -21,6 +21,8 @@ import { MeasurSurveyService } from '../shared/measur-survey/measur-survey.servi
 import { UpdateApplicationService } from '../shared/update-application/update-application.service';
 import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-subscribe.service';
 import { ExportToJustifiTemplateService } from '../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
+import { CORE_DATA_WARNING, SECONDARY_DATA_WARNING, SnackbarService } from '../shared/snackbar-notification/snackbar.service';
+import { BrowserStorageAvailable, BrowserStorageService } from '../shared/browser-storage.service';
 
 @Component({
   selector: 'app-core',
@@ -30,7 +32,6 @@ import { ExportToJustifiTemplateService } from '../shared/export-to-justifi-moda
 })
 
 export class CoreComponent implements OnInit {
-  showBrowsingDataToast: boolean;
   hideTutorial: boolean = true;
   openingTutorialSub: Subscription;
   idbStarted: boolean = false;
@@ -83,18 +84,16 @@ export class CoreComponent implements OnInit {
     private updateApplicationService: UpdateApplicationService,
     private emailSubscribeService: EmailListSubscribeService,
     private inventoryDbService: InventoryDbService,
+    private snackBarService: SnackbarService,
+    private browserStorageService: BrowserStorageService,
     private exportToJustifiTemplateService: ExportToJustifiTemplateService) {
   }
 
   ngOnInit() {
-    if (!window.navigator.cookieEnabled) {
-      this.showBrowsingDataToast = true;
-    }
 
     if (this.electronService.isElectron) {
       this.electronService.sendAppReady('ready');
-    }
-
+    } 
     this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
       if (applicationData) {
         this.setSurveyToastVisibility(applicationData);
@@ -138,6 +137,28 @@ export class CoreComponent implements OnInit {
       this.showReleaseNotesModal = val;
     });
 
+    this.browserStorageService.detectAppStorageOptions().subscribe((browserStorageOptions: BrowserStorageAvailable) => {
+      if (browserStorageOptions.indexedDB.success) {
+        let cookiesFunction = browserStorageOptions.cookies.navigatorEnabled && (browserStorageOptions.cookies.successfulWrite || (this.electronService.isElectron && !browserStorageOptions.cookies.successfulWrite));
+        if (!browserStorageOptions.localStorage || !cookiesFunction) {
+          this.snackBarService.setSnackbarMessage(SECONDARY_DATA_WARNING, 'info', 'none', [
+            { label: 'Data Storage and Backup', uri: '/data-and-backup' },
+            { label: 'Privacy', uri: '/privacy' }
+          ]);
+        } else if (!this.electronService.isElectron)  {
+           setTimeout(() => {
+              this.snackBarService.setSnackbarMessage('appDataStorageNotice', 'info', 'none', [
+                { label: 'Data Storage and Backup', uri: '/data-and-backup' },
+                { label: 'Privacy', uri: '/privacy' }
+              ]);
+            }, 3000);
+        }
+        this.initData();
+      } else {
+        this.snackBarService.setSnackbarMessage(CORE_DATA_WARNING, 'danger', 'none');
+      }
+    });
+
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
       this.inTutorialsView = (this.router.url === '/tutorials');
       if (val && !this.assessmentService.tutorialShown) {
@@ -146,8 +167,6 @@ export class CoreComponent implements OnInit {
         this.changeDetectorRef.detectChanges();
       }
     });
-
-    this.initData();
 
     this.showSecurityAndPrivacyModalSub = this.securityAndPrivacyService.showSecurityAndPrivacyModal.subscribe(showSecurityAndPrivacyModal => {
       this.showSecurityAndPrivacyModal = showSecurityAndPrivacyModal;
@@ -191,6 +210,7 @@ export class CoreComponent implements OnInit {
   }
 
   async initData() {
+    console.log('=== IndexedDB Initializing data...');
     const isFirstStartup = await this.getIsFirstStartup();
     if (isFirstStartup) {
       try {
@@ -206,7 +226,6 @@ export class CoreComponent implements OnInit {
       await this.coreService.setApplicationInstanceData();
       this.setAllDbData();
     }
-
   }
 
   async setSurveyToastVisibility(applicationData: ApplicationInstanceData) {
@@ -272,11 +291,6 @@ export class CoreComponent implements OnInit {
   async setSurveyDone() {
     let appData = await firstValueFrom(this.applicationInstanceDbService.setSurveyDone());
     this.applicationInstanceDbService.applicationInstanceData.next(appData);
-  }
-
-  hideBrowsingDataToast() {
-    this.showBrowsingDataToast = false;
-    this.changeDetectorRef.detectChanges();
   }
 
   hideSubscribeToast() {

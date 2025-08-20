@@ -4,9 +4,8 @@ import {
 } from '@xyflow/react';
 import { Box, Button, Tab, Tabs } from "@mui/material";
 import React, { memo, useState } from 'react';
-import TabPanel, { TabPanelBox } from "./TabPanel";
+import TabPanel from "./TabPanel";
 import CustomizeEdge from "./CustomizeEdge";
-import DrawerToggleButton from "./DrawerToggleButton";
 import FlowConnectionText from "./FlowConnectionText";
 import { deleteEdge } from "../Diagram/diagramReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
@@ -28,12 +27,12 @@ const ManageEdge = (props: ManageEdgeProps) => {
     return (
         <>
             <Box display="flex" alignItems={'center'} sx={{ margin: '1rem' }}>
-                <DrawerToggleButton side={'right'}></DrawerToggleButton>
                 <FlowConnectionText source={source.data} 
                     target={target.data} 
                     style={{
                         padding: '0.5rem 0.5rem',
-                        fontSize: '16px'}} 
+                        fontSize: '20px'
+                    }} 
                         />
             </Box>
 
@@ -47,19 +46,13 @@ const ManageEdge = (props: ManageEdgeProps) => {
             }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
                     <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
-                        <Tab sx={{fontSize: '.75rem'}} label="Customize" />
+                        <Tab sx={{fontSize: '.75rem'}} label="Manage" />
                     </Tabs>
                 </Box>
 
                 <TabPanel value={selectedTab} index={0}>
-                    <TabPanelBox>
-                        <Box>
-                            <CustomizeEdge edge={selectedEdge}></CustomizeEdge>
-                        </Box>
-                    </TabPanelBox>
-                    <TabPanelBox>
+                        <CustomizeEdge edge={selectedEdge}></CustomizeEdge>
                         <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" color="error" onClick={() => dispatch(deleteEdge(selectedEdge.id))}>Delete Selected Connection</Button>
-                    </TabPanelBox>
                 </TabPanel>
             </Box>
             </>

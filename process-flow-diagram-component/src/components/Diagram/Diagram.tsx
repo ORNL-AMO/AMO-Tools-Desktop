@@ -11,6 +11,7 @@ import {
   type Node,
   Edge,
   EdgeTypes,
+  reconnectEdge,
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
@@ -19,16 +20,17 @@ import { formatDataForMEASUR, getEdgeTypesFromString, updateAssessmentCreatedNod
 import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
-import { SideDrawer } from '../Drawer/SideDrawer';
-import DataDrawer from '../Drawer/DataDrawer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { AppStore, configureAppStore, RootState, selectEdges, selectIsDrawerOpen, selectNodes } from './store';
+import { AppStore, configureAppStore, RootState, selectEdges, selectNodes } from './store';
 import { Provider } from 'react-redux';
-import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, keyboardDeleteNode, nodesChange } from './diagramReducer';
+import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected, selectedIdChange } from './diagramReducer';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
-import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, checkDiagramNodeErrors, getIsDiagramValid } from 'process-flow-lib';
-import ResultsPanel from './ResultsPanel';
+import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, getIsDiagramValid } from 'process-flow-lib';
+import MenuSidebar from '../Drawer/MenuSidebar';
+import DataSidebar from '../Drawer/DataSidebar';
+import SharedDrawer from '../Drawer/SharedDrawer';
+import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
 
 
 export interface DiagramProps {
@@ -50,7 +52,6 @@ const Diagram = (props: DiagramProps) => {
   const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const isDialogOpen = useAppSelector((state: RootState) => state.diagram.isDialogOpen);
-  const isDataDrawerOpen: boolean = useAppSelector(selectIsDrawerOpen)
   const edges: Edge[] = useAppSelector(selectEdges);
   const userDiagramOptions: UserDiagramOptions = useAppSelector((state: RootState) => state.diagram.diagramOptions);
   const settings: DiagramSettings = useAppSelector((state: RootState) => state.diagram.settings);
@@ -67,16 +68,18 @@ const Diagram = (props: DiagramProps) => {
   });
   // const diagramParentDimensions = useAppSelector((state) => state.diagram.diagramParentDimensions);
   const diagramParentDimensions = props.parentContainer;
-  
-  
+  const diagramAlertState: DiagramAlertState = useAppSelector((state) => state.diagram.diagramAlert);
+
+
+
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
-  
+
   // const newNodeErrors = checkDiagramNodeErrors(nodes, edges, calculatedData, settings);
   // const isDiagramValid = getIsDiagramValid(newNodeErrors);
   // console.log('=== newNodeErrors', newNodeErrors);
-  const isDiagramValid = getIsDiagramValid(nodeErrors);
+  const isDiagramValid = useMemo(() => getIsDiagramValid(nodeErrors), [nodeErrors]);
   // console.log('=== isDiagramValid', isDiagramValid);
 
   // * on xyFlow instance ready
@@ -149,6 +152,14 @@ const Diagram = (props: DiagramProps) => {
     [userDiagramOptions]
   );
 
+    const onReconnect = useCallback(
+    (oldEdge, newConnection) => {
+      let newEdges = reconnectEdge(oldEdge, newConnection, edges);
+      dispatch(edgesUpdate(newEdges));
+    },
+    [edges],
+  );
+
 
   const onBeforeDelete = useCallback(
     async ({ nodes: nds, edges: eds }: { nodes: Node[]; edges: Edge[] }) => {
@@ -167,17 +178,19 @@ const Diagram = (props: DiagramProps) => {
       }
 
       {!isDiagramValid && validationWindowLocation === 'diagram' &&
-        <ValidationWindow></ValidationWindow>
+        <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation}/>
       }
       {/* // * Only for development result checking */}
-        {/* <ResultsPanel></ResultsPanel> */}
+      {/* <ResultsPanel></ResultsPanel> */}
       <ReactFlowProvider>
         <div className={'flow-wrapper'} style={{ height: props.height }}>
           <ReactFlow
             nodes={nodes}
             edges={edges}
+            edgesReconnectable={true}
             onNodesChange={(e) => dispatch(nodesChange(e))}
             onEdgesChange={(e) => dispatch(edgesChange(e))}
+            onReconnect={onReconnect}
             onConnect={onConnect}
             // onReconnect={onReconnect}
             onInit={setReactFlowInstance}
@@ -189,6 +202,8 @@ const Diagram = (props: DiagramProps) => {
             }}
             defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
             connectionLineType={ConnectionLineType.Bezier}
+            onNodeClick={(_, node) => dispatch(selectedIdChange(node.id))}
+            onEdgeClick={(_, edge) => dispatch(openDrawerWithSelected(edge.id))}
             onDrop={onDrop}
             // onError={onErrorWithSuppressed}
             onBeforeDelete={onBeforeDelete}
@@ -210,19 +225,30 @@ const Diagram = (props: DiagramProps) => {
           </ReactFlow>
         </div>
 
-          {diagramParentDimensions.height &&
-            <SideDrawer
-              anchor={'left'}
-              diagramParentDimensions={diagramParentDimensions}
-              shadowRootRef={props.shadowRoot}
-            ></SideDrawer>
+        {diagramParentDimensions.height && (
+          <SharedDrawer
+            diagramParentDimensions={diagramParentDimensions}
+            shadowRootRef={props.shadowRoot}
+            anchor={'left'}
+          >
+              <MenuSidebar shadowRootRef={props.shadowRoot}/>
+          </SharedDrawer>
+        )}
+
+        {diagramParentDimensions.height && (
+          <SharedDrawer
+            diagramParentDimensions={diagramParentDimensions}
+            shadowRootRef={props.shadowRoot}
+            anchor={'right'}
+          >
+            <DataSidebar />
+          </SharedDrawer>
+        )}
+
+          {diagramAlertState &&
+            <DiagramAlert diagramAlertState={diagramAlertState} />
           }
-
-        <StaticModal shadowRootRef={props.shadowRoot}/>
-
-        {isDataDrawerOpen &&
-          <DataDrawer />
-        }
+        <StaticModal shadowRootRef={props.shadowRoot} />
       </ReactFlowProvider>
     </div>
   );

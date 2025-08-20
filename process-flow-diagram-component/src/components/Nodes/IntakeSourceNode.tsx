@@ -1,21 +1,21 @@
 import { memo } from 'react';
 import { Position, NodeProps } from '@xyflow/react';
-import { Typography } from '@mui/material';
+import { Chip, Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
-import { openDrawerWithSelected } from '../Diagram/diagramReducer';
+import FlowValueDisplay from '../Diagram/FlowValueDisplay';
+import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import { DiagramNode, NodeFlowData, ProcessFlowPart } from 'process-flow-lib';
 import { selectNodeCalculatedFlowData } from '../Diagram/store';
 import CustomNodeToolbar from './CustomNodeToolbar';
+import { openDrawerWithSelected } from '../Diagram/diagramReducer';
 
-const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
+const IntakeSourceNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
   const calculatedData: NodeFlowData = useAppSelector((state) => selectNodeCalculatedFlowData(state, id));
-  let showInSystemTreatment: boolean;
-  if (data.processComponentType === 'water-using-system' && data.inSystemTreatment.length > 0) {
-    showInSystemTreatment = true;
-  }
+  let plantLevelFlow: number | string = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : calculatedData && calculatedData.totalDischargeFlow;
+  let condensedPadding: boolean = plantLevelFlow !== undefined && plantLevelFlow !== null;
+  
 
   const onEditNode = () => {
     dispatch(openDrawerWithSelected(id));
@@ -23,14 +23,6 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
 
   return (
     <>
-    {data.handles.inflowHandles.a &&
-      <CustomHandle
-        type="target"
-        position={Position.Left}
-        id="a"
-      />
-    }
-
       <div
         style={{
           display: 'flex',
@@ -41,75 +33,55 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           justifyContent: 'space-around',
         }}
       >
-        {data.handles.inflowHandles.b &&
           <CustomHandle
-            type="target"
+            type="source"
             position={Position.Top}
             id="b"
+            className='custom-handle source-handle'
           />
-        }
-
-        {data.handles.inflowHandles.c &&
           <CustomHandle
-            type="target"
+            type="source"
             position={Position.Top}
             id="c"
+            className='custom-handle source-handle'
           />
-        }
-
-        {data.handles.inflowHandles.d &&
           <CustomHandle
-            type="target"
+            type="source"
             position={Position.Top}
             id="d"
+            className='custom-handle source-handle'
           />
-        }
       </div>
 
-      <div className="node-inner-input">
-        {showInSystemTreatment &&
-          <div style={{
-            position: 'absolute',
-            display: 'flex',
-            width: '100px',
-            height: '20px',
-            left: '-12px',
-            top: '-12px',
-            background: 'rgb(0, 147, 134)',
-            borderTopLeftRadius: '6px',
-            borderBottomRightRadius: '6px'
-          }} >
-            <WaterDropIcon style={{
-              fontSize: '12px',
-              color: '#fff',
-              marginRight: '.25rem',
-              marginLeft: '.25rem',
-              alignSelf: 'center'
-            }} />
-            <span style={{
-              alignSelf: 'center'
-            }}>
-              Treatment
-            </span>
-          </div>
-        }
-
+      <div className="node-inner-input" style={{
+        padding: condensedPadding? '0' : undefined
+      }}>
         <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
 
         <Typography sx={{ width: '100%' }} >
           {data.name}
         </Typography>
 
+        {plantLevelFlow !== undefined && plantLevelFlow !== null &&
+            <Chip label={
+              <>
+              <FlowValueDisplay flowValue={plantLevelFlow}/>
+              <FlowDisplayUnit/>
+              </>
+          } 
+            variant="outlined" 
+            sx={{background: '#fff', borderRadius: '8px', marginTop: '.25rem'}}
+            />
+        }
       </div>
 
-      {data.handles.outflowHandles.e &&
         <CustomHandle
           type="source"
           position={Position.Right}
           id="e"
+          className='custom-handle source-handle'
         />
-      }
-
+        
       <div
         style={{
           display: 'flex',
@@ -120,33 +92,27 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
           justifyContent: 'space-around',
         }}
       >
-
-        {data.handles.outflowHandles.f &&
           <CustomHandle
             type="source"
             position={Position.Bottom}
             id="f"
+            className='custom-handle source-handle'
           />
-        }
-
-        {data.handles.outflowHandles.g &&
           <CustomHandle
             type="source"
             position={Position.Bottom}
             id="g"
+            className='custom-handle source-handle'
           />
-        }
-
-        {data.handles.outflowHandles.h &&
           <CustomHandle
             type="source"
             position={Position.Bottom}
             id="h"
+            className='custom-handle source-handle'
           />
-        }
       </div>
     </>
   );
 };
 
-export default memo(ProcessFlowComponentNode);
+export default memo(IntakeSourceNode);

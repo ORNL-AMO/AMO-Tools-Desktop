@@ -1,11 +1,11 @@
 import React, { ChangeEvent, memo, useState } from 'react';
-import { Badge, Box, Button, Chip, Divider, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, electricityCostChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
-import { RootState, selectHasAssessment } from '../Diagram/store';
+import { RootState, selectHasAssessment, selectNodes } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -13,6 +13,7 @@ import { blue } from '@mui/material/colors';
 import { ParentContainerDimensions, NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getIsDiagramValid } from 'process-flow-lib';
 import DiagramResults from './DiagramResults';
 import InputField from '../StyledMUI/InputField';
+import { Node } from '@xyflow/react';
 
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
@@ -28,9 +29,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const { diagramParentDimensions } = props;
   const hasAssessment = useAppSelector(selectHasAssessment);
-  
   const edgeType = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
   const strokeWidth = useAppSelector((state: RootState) => state.diagram.diagramOptions.strokeWidth);
   const flowLabelSize = useAppSelector((state: RootState) => state.diagram.diagramOptions.flowLabelSize);
@@ -47,6 +46,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const conductivityUnit = useAppSelector((state: RootState) => state.diagram.settings.conductivityUnit);
   const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
+  const nodes: Node[] = useAppSelector(selectNodes);
   const isDiagramValid = getIsDiagramValid(nodeErrors);
 
   const [selectedTab, setSelectedTab] = useState(0);
@@ -84,18 +84,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const summingNode = processFlowParts.pop();
 
   return (
-    <Box sx={{
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      paddingX: 0
-    }}>
-      <Box sx={{ 
-        padding: '0rem .5rem 2rem 0rem',
-        // overflowY: 'auto',
-        }}>
+    <>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
           <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
             <Tab sx={{ fontSize: '.75rem' }} label="Build" />
@@ -126,7 +115,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           <Box sx={{ flexGrow: 1, paddingY: '1rem', paddingX: '.5rem' }}>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
               {processFlowParts.map((part: ProcessFlowPart) => (
-                <Grid item xs={1} sm={2} md={2} key={part.processComponentType}>
+                <Grid size={{ xs: 1, sm: 2, md: 2 }}  key={part.processComponentType}>
                   <WaterComponent className={`dndnode ${part.processComponentType}`}
                     onDragStart={(event) => onDragStart(event, part.processComponentType)}
                     draggable={true}>
@@ -158,7 +147,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             </Grid>
           </Box> */}
 
-          <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingTop={'1rem'}>
+          <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} paddingY={'1rem'}>
             <DownloadButton shadowRoot={props.shadowRootRef} />
             {!hasAssessment &&
               <Button variant="outlined" color="error" sx={{ width: '100%' }} onClick={() => dispatch(setDialogOpen())}>Reset Diagram</Button>
@@ -166,7 +155,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={1} diagramParentDimensions={diagramParentDimensions}>
+        <TabPanel value={selectedTab} index={1}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
             <Box display={'flex'} >
               <DiagramResults />
@@ -174,7 +163,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={2} diagramParentDimensions={diagramParentDimensions}>
+        <TabPanel value={selectedTab} index={2}>
           <Box paddingX={'.5rem'}>
             <div className="sidebar-options">
             <Box className={'sidebar-option-container'}>
@@ -340,7 +329,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={3} diagramParentDimensions={diagramParentDimensions}>
+        <TabPanel value={selectedTab} index={3}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
             <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', paddingTop: '.5rem' }}>
               Many diagram actions support keyboard input and key combinations:
@@ -369,23 +358,20 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={4} diagramParentDimensions={diagramParentDimensions}>
+        <TabPanel value={selectedTab} index={4}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
                 {!isDiagramValid && validationWindowLocation === 'alerts-tab' &&
-                  <ValidationWindow></ValidationWindow>
+                  <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation} />
                 }
           </Box>
         </TabPanel>
-
-      </Box>
-    </Box>
+      </>
   );
 });
 export default MenuSidebar;
 
 export interface MenuSidebarProps {
   shadowRootRef: any;
-  diagramParentDimensions: ParentContainerDimensions;
 }
 
 const keyInputDirections = [

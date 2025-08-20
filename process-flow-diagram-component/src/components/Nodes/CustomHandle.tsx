@@ -41,17 +41,11 @@ const mainTargetHandleStyle: CSSProperties = {
 
   
 const CustomHandle = (props: HandleProps) => {
-    const { type, position, id, connectionLimit } = props;
+    const { type, position, id } = props;
     let { className, collapsedStyle } = props;
-    const maxConnections = connectionLimit === undefined? 2 : connectionLimit;
-    const connections = useNodeConnections({
-      handleType: props.type,
-      handleId: id,
-    });
-    const blockConnections: boolean = connections.length >= maxConnections;
 
     let style: CSSProperties = {};
-    if (!className) {
+    
     switch (position) {
         case Position.Left:
             style = mainTargetHandleStyle;
@@ -70,14 +64,13 @@ const CustomHandle = (props: HandleProps) => {
             break;
       }
 
-        className = 'custom-handle source-handle'
-        if (type === 'target') {
+      if (!className) {
+        if (type === 'source') {
+          className = 'custom-handle source-handle'
+        } else if (type === 'target') {
           className = 'custom-handle target-handle';
         }
-  
-        if (blockConnections) {
-          className += ' limit-connection';
-        }
+      }
 
         if (collapsedStyle) {
           style = {
@@ -88,7 +81,6 @@ const CustomHandle = (props: HandleProps) => {
             visibility: collapsedStyle.visibility,
           }
         }
-    }
 
 
   return (
@@ -98,7 +90,7 @@ const CustomHandle = (props: HandleProps) => {
           position={position}
           id={id}
           style={style}
-          isConnectable={!blockConnections}
+          isConnectable={true}
           />
         // {blockConnections && 
         //   <BlockIcon className="block-connection-icon"/>
@@ -113,6 +105,5 @@ export interface HandleProps {
     position: Position,
     className?: string,
     collapsedStyle?: CSSProperties,
-    connectionLimit?: number,
     id: string,
 }

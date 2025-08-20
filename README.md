@@ -35,7 +35,7 @@ Change directory to `/AMO-Tools-Desktop`
 - Build the desktop installer:
     - `npm run build-prod-desktop` 
     - `npm run dist`
-    - The package will be placed in `../output`
+    - The package will be placed in `output`
 - Build the web dist:
     - `npm run build-prod-web` 
 

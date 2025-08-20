@@ -7,6 +7,7 @@ import { ApplicationInstanceData, ApplicationInstanceDbService } from '../../ind
 import { ImportBackupService } from '../../shared/import-backup.service';
 import { FileImportStatus, ImportService } from '../../shared/import-export/import.service';
 import { AnalyticsService } from '../../shared/analytics/analytics.service';
+import { MEASUR_RESOURCES_URL } from '../../shared/models/utilities';
 
 @Component({
     selector: 'app-data-and-backup',
@@ -23,6 +24,8 @@ export class DataAndBackupComponent {
   dataBackupFilePath: string;
   isAutomaticBackupOn: boolean = false;
   fileImportStatus: FileImportStatus;
+
+  MEASUR_RESOURCES_URL = MEASUR_RESOURCES_URL;
   
 
   @ViewChild('importFileRef', { static: false }) importFileRef: ElementRef;
