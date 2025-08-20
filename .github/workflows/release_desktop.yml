@@ -34,6 +34,7 @@ jobs:
           restore-keys: npm-
       - &npm-setup
         name: Setup dependencies
+        shell: bash
         run: |
           find . -name "package-lock.json" -not -path "*/node_modules/*" -not -path "*/dist/*" -exec dirname {} \; | sort -u |
           while read dir; do
