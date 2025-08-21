@@ -260,7 +260,10 @@ export class FlueGasFormService {
         CO: form.controls.CO.value,
         CO2: form.controls.CO2.value,
         SO2: form.controls.SO2.value,
-        O2: form.controls.O2.value
+        O2: form.controls.O2.value,
+        heatingValue: form.controls.heatingValue.value,
+        heatingValueVolume: form.controls.heatingValueVolume.value,
+        specificGravity: form.controls.specificGravity.value
       }
     }
 

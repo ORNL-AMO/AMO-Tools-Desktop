@@ -215,11 +215,12 @@ export class FlueGasMaterialComponent implements OnInit {
     this.getTotalOfFlueGasses();
     this.isValidForm = true;
     for (let property in this.newMaterial) {
-      if (this.newMaterial[property] === null) {
-        this.isValidForm = false;
+      if(property != 'heatingValue' && property != 'heatingValueVolume' && property != 'specificGravity') {
+        if (this.newMaterial[property] === null) {
+          this.isValidForm = false;
+        }
       }
     }
-
     if (this.isValidForm) {
       const vals = this.phastService.flueGasByVolumeCalculateHeatingValue(this.newMaterial);
       if (isNaN(vals.heatingValue) === false && isNaN(vals.specificGravity) === false && isNaN(vals.heatingValueVolume) === false) {
