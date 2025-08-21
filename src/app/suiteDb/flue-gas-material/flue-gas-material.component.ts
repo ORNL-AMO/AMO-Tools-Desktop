@@ -121,7 +121,7 @@ export class FlueGasMaterialComponent implements OnInit {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
         this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('kJNm3').to('btuscf');
       }
-      await this.flueGasMaterialDbService.asyncAddMaterial(this.newMaterial);
+      await this.flueGasMaterialDbService.addMaterial(this.newMaterial);
       this.closeModal.emit(this.newMaterial);
     }
   }
@@ -133,13 +133,13 @@ export class FlueGasMaterialComponent implements OnInit {
     }
     //need to set id for idb to put updates
     this.newMaterial.id = this.idbEditMaterialId;
-    await this.flueGasMaterialDbService.asyncUpdateMaterial(this.newMaterial);
+    await this.flueGasMaterialDbService.updateMaterial(this.newMaterial);
     this.closeModal.emit(this.newMaterial);
   }
 
   async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      await this.flueGasMaterialDbService.asyncDeleteMaterial(this.idbEditMaterialId);
+      await this.flueGasMaterialDbService.deleteMaterial(this.idbEditMaterialId);
       this.closeModal.emit(this.newMaterial);
     }
   }

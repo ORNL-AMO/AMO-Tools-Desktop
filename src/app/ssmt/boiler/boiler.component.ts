@@ -10,7 +10,6 @@ import { HeaderService } from '../header/header.service';
 import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
-import { first, firstValueFrom } from 'rxjs';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 
 @Component({

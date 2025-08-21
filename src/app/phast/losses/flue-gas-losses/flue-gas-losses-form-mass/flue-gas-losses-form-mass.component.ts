@@ -214,7 +214,7 @@ export class FlueGasLossesFormMassComponent implements OnInit {
       heatingValue: this.flueGasLossForm.controls.heatingValue.value,
       substance: "Custom Material"
     };
-    await this.solidLiquidMaterialDbService.asyncAddMaterial(customMaterial);
+    await this.solidLiquidMaterialDbService.addMaterial(customMaterial);
     let newMaterial: SolidLiquidFlueGasMaterial = this.options.find(material => { return material.substance === customMaterial.substance; });
     this.flueGasLossForm.patchValue({
       gasTypeId: newMaterial.id

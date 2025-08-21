@@ -178,7 +178,7 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
       specificGravity: this.flueGasLossForm.controls.specificGravity.value,
       substance: "Custom Material"
     };
-    await this.flueGasMaterialDbService.asyncAddMaterial(customMaterial);
+    await this.flueGasMaterialDbService.addMaterial(customMaterial);
     let newMaterial: FlueGasMaterial = this.options.find(material => { return material.substance === customMaterial.substance; });
     this.flueGasLossForm.patchValue({
       gasTypeId: newMaterial.id

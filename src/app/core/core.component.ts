@@ -232,8 +232,8 @@ export class CoreComponent implements OnInit {
       this.setAllDbData();
       //initialize db Behavior Subjects
       //data initialized in createDefaultProcessHeatingMaterials on startup
-      await this.solidLiquidMaterialDbService.asyncSetAllMaterialsFromDb();
-      await this.flueGasMaterialDbService.asyncSetAllMaterialsFromDb();
+      await this.solidLiquidMaterialDbService.setAllMaterialsFromDb();
+      await this.flueGasMaterialDbService.setAllMaterialsFromDb();
     }
   }
 
