@@ -159,6 +159,7 @@ jobs:
           restore-keys: npm-
       - *npm-setup
       - name: Bundle
+        shell: bash
         run: npm run dist -- --win --x64 --publish never
       - name: Upload codesign artifact
         uses: actions/upload-artifact@v4
