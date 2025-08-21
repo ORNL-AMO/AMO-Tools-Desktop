@@ -55,7 +55,9 @@ import { TowerComponent } from './system-information/tower/tower.component';
 import { TowerHelpComponent } from './results-panel/help-panel/tower-help/tower-help.component';
 import { LoadScheduleComponent } from './load-schedule/load-schedule.component';
 
-import { ChillerLoadScheduleComponent } from './load-schedule/chiller-load-schedule.component';
+import { ChillerLoadScheduleComponent } from './chiller-load-schedule/chiller-load-schedule.component';
+import { WeatherComponent } from './weather/weather.component';
+import { ChillerInventoryService } from './services/chiller-inventory.service';
 
 
 export const ROUTE_TOKENS = {
@@ -68,6 +70,7 @@ export const ROUTE_TOKENS = {
   assessmentSettings: 'assessment-settings',
   systemInformation: 'system-information',
   operations: 'operations',
+  weather: 'weather',
   waterPump: 'pump',
   condenserCoolingSystem: 'condenser-cooling-system',
   tower: 'tower',
@@ -114,6 +117,10 @@ const ROUTES: Route[] = [
                 component: OperationsComponent,
               },
               {
+                path: ROUTE_TOKENS.weather,
+                component: WeatherComponent
+              },
+              {
                 path: ROUTE_TOKENS.waterPump,
                 component: PumpWrapperComponent,
               },
@@ -133,7 +140,7 @@ const ROUTES: Route[] = [
           },
           { 
             path: ROUTE_TOKENS.loadSchedule,
-            component: ChillerLoadScheduleComponent
+            component: LoadScheduleComponent
           }
         ]
       },
@@ -206,8 +213,9 @@ const ROUTES: Route[] = [
     CondenserCoolingHelpComponent,
     TowerComponent,
     TowerHelpComponent,
-    LoadScheduleComponent
-  ,ChillerLoadScheduleComponent
+    LoadScheduleComponent,
+    ChillerLoadScheduleComponent,
+    WeatherComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -240,7 +248,8 @@ const ROUTES: Route[] = [
     SystemInformationFormService,
     ConvertProcessCoolingService,
     AssessmentRedirectGuard,
-    ProcessCoolingAssessmentResolver
+    ProcessCoolingAssessmentResolver,
+    ChillerInventoryService
   ]
 })
 export class ProcessCoolingAssessmentModule { }

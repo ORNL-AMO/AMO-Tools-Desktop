@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, WritableSignal } from '@angular/core';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 
 @Component({
   selector: 'app-load-schedule',
@@ -9,6 +10,7 @@ import { ProcessCoolingAssessmentService } from '../services/process-cooling-ase
 })
 export class LoadScheduleComponent {
   private processCoolingAssessmentService: ProcessCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  processCooling: WritableSignal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
 
   constructor() { }
 

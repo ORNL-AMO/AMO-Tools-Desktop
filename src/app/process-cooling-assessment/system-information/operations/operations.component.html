@@ -1,94 +1,94 @@
-<form class="px-3" [formGroup]="form" #formElement>
-    <div class="form-group">
-        <label for="{{controlIds.annualOperatingHours}}">Operating Hours</label>
-        <div class="input-group">
-            <span class="input-group-addon op-hour-addon units">
-                <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
-            </span>
-            <input name="annualOperatingHours" type="number" step="10" class="form-control"
-                formControlName="annualOperatingHours" id="{{controlIds.annualOperatingHours}}"
-                (focus)="focusField('annualOperatingHours')">
-            <app-input-unit [defaultUnit]="'hrs/yr'"></app-input-unit>
+<div #wrapperElement>
+    <form class="px-3" [formGroup]="form">
+        <div class="form-group">
+            <label for="{{controlIds.annualOperatingHours}}">Operating Hours</label>
+            <div class="input-group">
+                <span class="input-group-addon op-hour-addon units">
+                    <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+                </span>
+                <input name="annualOperatingHours" type="number" step="10" class="form-control"
+                    formControlName="annualOperatingHours" id="{{controlIds.annualOperatingHours}}"
+                    (focus)="focusField('annualOperatingHours')">
+                <app-input-unit [defaultUnit]="'hrs/yr'"></app-input-unit>
+            </div>
+            <app-form-control-errors [control]="annualOperatingHours" [settings]="settings"
+                [defaultUnit]="'hrs/yr'"></app-form-control-errors>
         </div>
-        <app-form-control-errors [control]="annualOperatingHours" [settings]="settings"
-            [defaultUnit]="'hrs/yr'"></app-form-control-errors>
-    </div>
 
-    <div class="form-group">
-        <label for="electricityCost">Electricity Cost</label>
-        <div class="input-group">
-            <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost"
-                formControlName="electricityCost" (focus)="focusField('electricityCost')">
-            <app-input-unit [defaultUnit]="'$/kWh'"></app-input-unit>
+        <div class="form-group">
+            <label for="electricityCost">Electricity Cost</label>
+            <div class="input-group">
+                <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost"
+                    formControlName="electricityCost" (focus)="focusField('electricityCost')">
+                <app-input-unit [defaultUnit]="'$/kWh'"></app-input-unit>
+            </div>
+            <app-form-control-errors [control]="electricityCost" [settings]="settings"
+                [defaultUnit]="'$/kWh'"></app-form-control-errors>
         </div>
-        <app-form-control-errors [control]="electricityCost" [settings]="settings"
-            [defaultUnit]="'$/kWh'"></app-form-control-errors>
-    </div>
 
-    <div class="form-group">
-        <label for="fuelCost">Fuel Cost</label>
-        <div class="input-group">
-            <input name="fuelCost" type="number" step="0.01" class="form-control" id="fuelCost"
-                formControlName="fuelCost" (focus)="focusField('fuelCost')">
-            <app-input-unit [settings]="settings()" [imperialUnit]="'$/MMBtu'" [metricUnit]="'$/GJ'"></app-input-unit>
+        <div class="form-group">
+            <label for="fuelCost">Fuel Cost</label>
+            <div class="input-group">
+                <input name="fuelCost" type="number" step="0.01" class="form-control" id="fuelCost"
+                    formControlName="fuelCost" (focus)="focusField('fuelCost')">
+                <app-input-unit [settings]="settings()" [imperialUnit]="'$/MMBtu'"
+                    [metricUnit]="'$/GJ'"></app-input-unit>
+            </div>
+            <app-form-control-errors [control]="fuelCost" [settings]="settings" [imperialUnit]="'$/MMBtu'"
+                [metricUnit]="'$/GJ'"></app-form-control-errors>
         </div>
-        <app-form-control-errors [control]="fuelCost" [settings]="settings" [imperialUnit]="'$/MMBtu'"
-            [metricUnit]="'$/GJ'"></app-form-control-errors>
-    </div>
+    </form>
 
-    <div class="form-group">
-        <label for="doChillerLoadSchedulesVary">Do chiller load schedules vary?</label>
-        <select class="form-control" id="doChillerLoadSchedulesVary" formControlName="doChillerLoadSchedulesVary" (focus)="focusField('doChillerLoadSchedulesVary')">
-            <option [ngValue]="true">Yes</option>
-            <option [ngValue]="false">No</option>
-        </select>
-        <span class="alert-danger pull-right small" *ngIf="doChillerLoadSchedulesVary.invalid">
-            Selection is required to determine chiller load scheduling input. Select 'No' if the system employs a single chiller</span>
+    <div class="header mr-2 ml-2">
+        <h3>Chiller Setup</h3>
+        <br>
     </div>
-
-    <div class="form-group">
-        <label for="{{controlIds.zipcode}}">Zipcode</label>
-        <div class="input-group">
-            <input name="zipcode" type="number" step="any" class="form-control"
-                id="{{controlIds.zipcode}}" formControlName="zipcode"
-                (focus)="focusField('zipcode')">
+    <form [formGroup]="form">
+        <div class="form-group">
+            <label for="doChillerLoadSchedulesVary">Do load schedules vary from chiller to chiller?</label>
+            <select class="form-control" id="doChillerLoadSchedulesVary" formControlName="doChillerLoadSchedulesVary"
+                (focus)="focusField('doChillerLoadSchedulesVary')">
+                <option [ngValue]="true">Yes</option>
+                <option [ngValue]="false">No</option>
+            </select>
+            <span class="alert-danger pull-right small" *ngIf="doChillerLoadSchedulesVary.invalid">
+                Selection is required to determine chiller load scheduling input. Select 'No' if the system employs a
+                single chiller</span>
         </div>
-        <app-form-control-required [control]="zipcode"></app-form-control-required>
-    </div>
 
-    <div class="form-group">
-        <label for="{{controlIds.chilledWaterSupplyTemp}}">Chilled Water Supply Temperature</label>
-        <div class="input-group">
-            <input name="chilledWaterSupplyTemp" type="number" step="any" class="form-control"
-                id="{{controlIds.chilledWaterSupplyTemp}}" formControlName="chilledWaterSupplyTemp"
-                (focus)="focusField('chilledWaterSupplyTemp')">
-            <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
-                [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+        <div class="form-group">
+            <label for="{{controlIds.chilledWaterSupplyTemp}}">Chilled Water Supply Temperature</label>
+            <div class="input-group">
+                <input name="chilledWaterSupplyTemp" type="number" step="any" class="form-control"
+                    id="{{controlIds.chilledWaterSupplyTemp}}" formControlName="chilledWaterSupplyTemp"
+                    (focus)="focusField('chilledWaterSupplyTemp')">
+                <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
+                    [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+            </div>
+            <app-form-control-required [control]="chilledWaterSupplyTemp"></app-form-control-required>
         </div>
-        <app-form-control-required [control]="chilledWaterSupplyTemp"></app-form-control-required>
+
+        <div class="form-group">
+            <label for="{{controlIds.condenserCoolingMethod}}">Condenser Cooling Method</label>
+            <select class="form-control" id="{{controlIds.condenserCoolingMethod}}"
+                formControlName="condenserCoolingMethod" (focus)="focusField('condenserCoolingMethod')">
+                @for (method of condenserCoolingMethods; track method.value) {
+                <option [ngValue]="method.value">{{ method.name }}</option>
+                }
+            </select>
+        </div>
+    </form>
+
+    <div class="header mr-2 ml-2">
+        <h3>Carbon Emissions</h3>
+        <br>
     </div>
 
-    <div class="form-group">
-        <label for="{{controlIds.condenserCoolingMethod}}">Condenser Cooling Method</label>
-        <select class="form-control" id="{{controlIds.condenserCoolingMethod}}" formControlName="condenserCoolingMethod"
-            (focus)="focusField('condenserCoolingMethod')">
-            @for (method of condenserCoolingMethods; track method.value) {
-            <option [ngValue]="method.value">{{ method.name }}</option>
-            }
-        </select>
+    <div>
+        <app-assessment-co2-savings [co2SavingsData]="co2SavingsData" [isFormDisabled]="false" [inBaseline]="true"
+            (emitCurrentField)="focusField($event)"
+            (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)"></app-assessment-co2-savings>
     </div>
-    
-</form>
-
-<div class="header mr-2 ml-2">
-    <h3>Carbon Emissions</h3>
-    <br>
-</div>
-
-<div>
-    <app-assessment-co2-savings [co2SavingsData]="co2SavingsData" [isFormDisabled]="false" [inBaseline]="true"
-        (emitCurrentField)="focusField($event)"
-        (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)"></app-assessment-co2-savings>
 </div>
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"

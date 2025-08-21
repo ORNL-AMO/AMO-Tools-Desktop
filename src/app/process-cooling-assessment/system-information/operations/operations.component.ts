@@ -28,7 +28,7 @@ export class OperationsComponent {
   private systemInformationFormService = inject(SystemInformationFormService);
   private destroyRef = inject(DestroyRef);
 
-  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @ViewChild('wrapperElement', { static: false }) wrapperElement: ElementRef;
   // * prefer resizeObserver over onResize - only triggers on element change, not viewport
   private resizeObserver: ResizeObserver;
 
@@ -60,14 +60,14 @@ export class OperationsComponent {
     this.resizeObserver = new ResizeObserver(entries => {
         this.formWidth = entries[0].contentRect.width;
     });
-    if (this.formElement?.nativeElement) {
-      this.resizeObserver.observe(this.formElement.nativeElement);
+    if (this.wrapperElement?.nativeElement) {
+      this.resizeObserver.observe(this.wrapperElement.nativeElement);
     }
   }
 
   ngOnDestroy() {
-    if (this.resizeObserver && this.formElement?.nativeElement) {
-      this.resizeObserver.unobserve(this.formElement.nativeElement);
+    if (this.resizeObserver && this.wrapperElement?.nativeElement) {
+      this.resizeObserver.unobserve(this.wrapperElement.nativeElement);
     }
   }
 
