@@ -85,7 +85,6 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
       }
       let newMaterialId: number = await this.solidLiquidMaterialDbService.addMaterial(this.newMaterial)
-      console.log(this.newMaterial.substance);
       this.closeModal.emit(newMaterialId);
     }
   }
