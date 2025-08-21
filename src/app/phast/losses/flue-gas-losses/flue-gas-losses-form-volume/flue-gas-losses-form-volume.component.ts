@@ -74,13 +74,12 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     this.optionsSub = this.flueGasMaterialDbService.dbFlueGasMaterials.subscribe(val => {
       this.options = val;
     });
-    if (this.flueGasLossForm) {
-      if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value !== '') {
-        if (this.flueGasLossForm.controls.CH4.value === '' || !this.flueGasLossForm.controls.CH4.value) {
-          this.setProperties();
-        } else {
-          this.checkForDeletedMaterial();
-        }
+    if (this.flueGasLossForm && this.flueGasLossForm.controls.gasTypeId.valid) {
+      //required
+      if (this.flueGasLossForm.controls.CH4.invalid) {
+        this.setProperties();
+      } else {
+        this.checkForDeletedMaterial();
       }
     }
 
@@ -242,9 +241,9 @@ export class FlueGasLossesFormVolumeComponent implements OnInit {
     this.materialModal.show();
   }
 
-  hideMaterialModal(event?: any) {
-    if (event) {
-      let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
+  hideMaterialModal(newMaterialId: number) {
+    if (newMaterialId != undefined) {
+      let newMaterial = this.options.filter(material => { return material.id === newMaterialId; });
       if (newMaterial.length !== 0) {
         this.flueGasLossForm.patchValue({
           gasTypeId: newMaterial[0].id

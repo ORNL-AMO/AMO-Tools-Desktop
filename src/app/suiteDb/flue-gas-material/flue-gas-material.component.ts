@@ -3,7 +3,6 @@ import { FlueGasMaterial } from '../../shared/models/materials';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PhastService } from '../../phast/phast.service';
-import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 
@@ -15,7 +14,7 @@ import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.s
 })
 export class FlueGasMaterialComponent implements OnInit {
   @Output('closeModal')
-  closeModal = new EventEmitter<FlueGasMaterial>();
+  closeModal = new EventEmitter<number>();
   @Input()
   settings: Settings;
   @Input()
@@ -121,8 +120,8 @@ export class FlueGasMaterialComponent implements OnInit {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
         this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('kJNm3').to('btuscf');
       }
-      await this.flueGasMaterialDbService.addMaterial(this.newMaterial);
-      this.closeModal.emit(this.newMaterial);
+      let newMaterialId: number = await this.flueGasMaterialDbService.addMaterial(this.newMaterial);
+      this.closeModal.emit(newMaterialId);
     }
   }
 
@@ -134,13 +133,13 @@ export class FlueGasMaterialComponent implements OnInit {
     //need to set id for idb to put updates
     this.newMaterial.id = this.idbEditMaterialId;
     await this.flueGasMaterialDbService.updateMaterial(this.newMaterial);
-    this.closeModal.emit(this.newMaterial);
+    this.closeModal.emit(this.newMaterial.id);
   }
 
   async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       await this.flueGasMaterialDbService.deleteMaterial(this.idbEditMaterialId);
-      this.closeModal.emit(this.newMaterial);
+      this.closeModal.emit(undefined);
     }
   }
 

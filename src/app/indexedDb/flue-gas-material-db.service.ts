@@ -102,9 +102,10 @@ export class FlueGasMaterialDbService {
     await this.setAllMaterialsFromDb();
   }
 
-  async addMaterial(material: FlueGasMaterial): Promise<void> {
-    await firstValueFrom(this.addWithObservable(material));
+  async addMaterial(material: FlueGasMaterial): Promise<number> {
+    material = await firstValueFrom(this.addWithObservable(material));
     await this.setAllMaterialsFromDb();
+    return material.id;
   }
 
 }

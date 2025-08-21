@@ -4,9 +4,8 @@ import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { PhastService } from '../../phast/phast.service';
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
-import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-solid-liquid-flue-gas-material',
   templateUrl: './solid-liquid-flue-gas-material.component.html',
@@ -15,7 +14,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 })
 export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   @Output('closeModal')
-  closeModal = new EventEmitter<SolidLiquidFlueGasMaterial>();
+  closeModal = new EventEmitter<number>();
   @Input()
   settings: Settings;
   @Input()
@@ -85,8 +84,9 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
       }
-      await this.solidLiquidMaterialDbService.addMaterial(this.newMaterial)
-      this.closeModal.emit(this.newMaterial);
+      let newMaterialId: number = await this.solidLiquidMaterialDbService.addMaterial(this.newMaterial)
+      console.log(this.newMaterial.substance);
+      this.closeModal.emit(newMaterialId);
     }
   }
 
@@ -98,13 +98,13 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     //need to set id for idb to put updates
     this.newMaterial.id = this.idbEditMaterialId;
     await this.solidLiquidMaterialDbService.updateMaterial(this.newMaterial);
-    this.closeModal.emit(this.newMaterial);
+    this.closeModal.emit(this.newMaterial.id);
   }
 
   async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
       await this.solidLiquidMaterialDbService.deleteMaterial(this.idbEditMaterialId);
-      this.closeModal.emit(this.newMaterial);
+      this.closeModal.emit(undefined);
     }
   }
 
@@ -221,7 +221,6 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   checkMaterialName() {
     this.isNameValid = true;
     this.nameError = null;
-
     let uniqueName = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
     if (uniqueName.length > 0) {
       this.nameError = 'Cannot have same name as existing material';

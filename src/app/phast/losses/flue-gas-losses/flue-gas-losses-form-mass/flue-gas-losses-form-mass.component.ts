@@ -90,18 +90,16 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    
+
     this.optionsSub = this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.subscribe(val => {
       this.options = val;
     });
 
-    if (this.flueGasLossForm) {
-      if (this.flueGasLossForm.controls.gasTypeId.value && this.flueGasLossForm.controls.gasTypeId.value !== '') {
-        if (this.flueGasLossForm.controls.carbon.value === 0) {
-          this.setProperties();
-        } else {
-          this.checkForDeletedMaterial();
-        }
+    if (this.flueGasLossForm && this.flueGasLossForm.controls.gasTypeId.valid) {
+      if (this.flueGasLossForm.controls.carbon.invalid) {
+        this.setProperties();
+      } else {
+        this.checkForDeletedMaterial();
       }
     }
     if (!this.baselineSelected) {
@@ -284,12 +282,12 @@ export class FlueGasLossesFormMassComponent implements OnInit {
     this.moistureModal.show();
   }
 
-  hideMaterialModal(event?: any) {
-    if (event) {
-      let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+  hideMaterialModal(newMaterialId: number) {
+    if (newMaterialId != undefined) {
+      let newMaterial: SolidLiquidFlueGasMaterial = this.options.find(material => { return material.id === newMaterialId; });
+      if (newMaterial) {
         this.flueGasLossForm.patchValue({
-          gasTypeId: newMaterial[0].id
+          gasTypeId: newMaterial.id
         });
         this.setProperties();
       }

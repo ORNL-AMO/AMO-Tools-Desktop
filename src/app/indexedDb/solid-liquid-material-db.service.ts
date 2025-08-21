@@ -94,8 +94,9 @@ export class SolidLiquidMaterialDbService {
     await this.setAllMaterialsFromDb();
   }
 
-  async addMaterial(material: SolidLiquidFlueGasMaterial): Promise<void> {
-    await firstValueFrom(this.addWithObservable(material));
+  async addMaterial(material: SolidLiquidFlueGasMaterial): Promise<number> {
+    material = await firstValueFrom(this.addWithObservable(material));
     await this.setAllMaterialsFromDb();
+    return material.id;
   }
 }
