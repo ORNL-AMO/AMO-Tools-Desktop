@@ -1,0 +1,81 @@
+<!-- cut-in -->
+<div class="my-2"
+    *ngIf="(focusedField == 'fullLoadDischargePressure' && fullLoadLabel == '(cut-in)')">
+    <h6>
+        Discharge Pressure
+        <br>
+        <small class="text-muted">
+            The pressure at which the air compressor begins to deliver air; at this point, the compressor may reload
+            or turn on, and is delivering full flow.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2"
+    *ngIf="(focusedField == 'fullLoadAirflow' && fullLoadLabel == '(cut-in)')">
+    <h6>
+        Air Flow
+        <br>
+        <small class="text-muted">
+            The maximum operating airflow delivered by the air compressor at full load operating pressure, as
+            specified on the air compressor nameplate.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2"
+    *ngIf="(focusedField == 'fullLoadPower' && fullLoadLabel == '(cut-in)')">
+    <h6>
+        Power
+        <br>
+        <small class="text-muted">
+            Power required when a compressor is at capacity (maximum airflow) and full load pressure; it is the
+            maximum power experienced by the compressor. Full load discharge pressure must be achieved before full
+            load power can be measured.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<!-- no label -->
+<div class="my-2"
+    *ngIf="(focusedField == 'fullLoadDischargePressure' && fullLoadLabel == '')">
+    <h6>
+        Discharge Pressure
+        <br>
+        <small class="text-muted">
+            The rated discharge pressure, or operating pressure, at which the air compressor’s rated capacity is
+            measured, as specified on the nameplate of the air compressor. Same as “full load operating pressure.”
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2"
+    *ngIf="(focusedField == 'fullLoadAirflow' && fullLoadLabel == '')">
+    <h6>
+        Air Flow
+        <br>
+        <small class="text-muted">
+            The maximum operating airflow delivered by the air compressor at full load operating pressure, as
+            specified on the air compressor nameplate.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2"
+    *ngIf="(focusedField == 'fullLoadPower' && fullLoadLabel == '')">
+    <h6>
+        Power
+        <br>
+        <small class="text-muted">
+            Power required when a compressor is at capacity (maximum airflow) and full load pressure; it is the
+            maximum power experienced by the compressor. Full load discharge pressure must be achieved before full
+            load power can be measured.
+            <hr>
+        </small>
+    </h6>
+</div>

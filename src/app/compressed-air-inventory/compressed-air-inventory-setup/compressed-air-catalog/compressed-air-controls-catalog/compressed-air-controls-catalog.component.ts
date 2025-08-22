@@ -92,7 +92,7 @@ export class CompressedAirControlsCatalogComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.compressedAirInventoryService.focusedDataGroup.next('nameplate-data');
+    this.compressedAirInventoryService.focusedDataGroup.next('controls');
     this.compressedAirInventoryService.focusedField.next(str);
   }
 
