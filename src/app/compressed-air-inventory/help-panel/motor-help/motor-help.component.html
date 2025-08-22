@@ -1,1 +1,25 @@
-<p>motor-help works!</p>
+<div class="my-2" *ngIf="focusedField == 'motorPower'">
+    <h6>
+        Motor Power
+        <br>
+        <small class="text-muted">
+            Either Motor Power (kW) or Motor Current (amps) will be displayed, depending on the Load Estimation
+            Method selected. Power is the preferred measurement, but unless a permanently-installed power meter is
+            available, it is much more intrusive and challenging.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+
+<div class="my-2" *ngIf="focusedField == 'motorFullLoadAmps'">
+    <h6>
+        Full Load Amps
+        <br>
+        <small class="text-muted">
+            The maximum current that the motor can draw/supply safely by meeting (either supplying or consuming) the
+            full-load conditions.
+            <hr>
+        </small>
+    </h6>
+</div>

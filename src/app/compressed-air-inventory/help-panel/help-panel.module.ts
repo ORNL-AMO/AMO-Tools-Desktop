@@ -9,6 +9,11 @@ import { FieldMeasurementsHelpComponent } from './field-measurements-help/field-
 import { DesignDetailsHelpComponent } from './design-details-help/design-details-help.component';
 import { ControlsHelpComponent } from './controls-help/controls-help.component';
 import { CentrifugalHelpComponent } from './centrifugal-help/centrifugal-help.component';
+import { BlowOffHelpComponent } from './performance-points-help/blow-off-help/blow-off-help.component';
+import { FullLoadHelpComponent } from './performance-points-help/full-load-help/full-load-help.component';
+import { MaxFullFlowHelpComponent } from './performance-points-help/max-full-flow-help/max-full-flow-help.component';
+import { NoLoadHelpComponent } from './performance-points-help/no-load-help/no-load-help.component';
+import { UnloadPointHelpComponent } from './performance-points-help/unload-point-help/unload-point-help.component';
 
 
 
@@ -21,7 +26,12 @@ import { CentrifugalHelpComponent } from './centrifugal-help/centrifugal-help.co
     FieldMeasurementsHelpComponent,
     DesignDetailsHelpComponent,
     ControlsHelpComponent,
-    CentrifugalHelpComponent
+    CentrifugalHelpComponent,
+    BlowOffHelpComponent,
+    FullLoadHelpComponent,
+    MaxFullFlowHelpComponent,
+    NoLoadHelpComponent,
+    UnloadPointHelpComponent
   ],
   imports: [
     CommonModule,    

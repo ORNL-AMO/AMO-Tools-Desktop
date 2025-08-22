@@ -1,1 +1,60 @@
-<p>controls-help works!</p>
+<!-- Controls Help -->
+
+<div class="my-2" *ngIf="focusedField == 'controlType'">
+    <h6>
+        Control Type
+        <br>
+        <small class="text-muted">
+            A general description of the air compressor’s unloading controls. Each compressor type can only have
+            specific control types.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'unloadPointCapacity'">
+    <h6>
+        Unload Point Capacity
+        <br>
+        <small class="text-muted">
+            The operating pressure point where a compressor unloads. For centrifugal compresors, this is the surge
+            point. This value can range from 0 to 100 percent of capacity
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'numberOfUnloadSteps'">
+    <h6>
+        # of Unloading Steps
+        <br>
+        <small class="text-muted">
+            Steps in the load control strategy, or discrete points at which the compressor can operate
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'automaticShutdown'">
+    <h6>
+        Automatic Shutdown Timer
+        <br>
+        <small class="text-muted">
+            A device that turns off a compressor after it has operated at no load for a specified
+            length of time. This is different than on-off control, which turns off an air compressor
+            when the full load discharge pressure is reached.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'unloadSumpPressure'">
+    <h6>
+        Unload Sump Pressure
+        <br>
+        <small class="text-muted">
+            The residual pressure in the lubricant sump when the air compressor is completely unloaded.
+            <hr>
+        </small>
+    </h6>
+</div>

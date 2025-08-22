@@ -1,1 +1,50 @@
-<p>nameplate-help works!</p>
+<!-- Nameplate Data Help  -->
+<div class="my-2" *ngIf="focusedField == 'compressorType'">
+    <h6>
+        Compressor Type
+        <br>
+        <small class="text-muted">
+            A general description of the air compressor design and style. The compressor type options in MEASUR are:
+            single stage lubricant-injected rotary screw, two stage lubricant-injected rotary screw, two stage
+            lubricant-free rotary screw, single stage reciprocating, two stage reciprocating, and centrifugal.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+
+<div class="my-2" *ngIf="focusedField == 'fullLoadOperatingPressure'">
+    <h6>
+        Full Load Operating Pressure
+        <br>
+        <small class="text-muted">
+            The pressure at which the air compressor begins to deliver air; at this point, the compressor may reload
+            or turn on, and is delivering full flow.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'fullLoadRatedCapacity'">
+    <h6>
+        Rated Capacity at Full Load Pressure
+        <br>
+        <small class="text-muted">
+            The designed flow for the compressor at full load preassure
+            <hr>
+        </small>
+    </h6>
+</div>
+
+
+<div class="my-2" *ngIf="focusedField == 'totalPackageInputPower'">
+    <h6>
+        Total Package Input Power
+        <br>
+        <small class="text-muted">
+            The total electrical power (in kilowatts) input to an air compressor under rated conditions, including
+            drive motor, cooling fan, auxiliary motors, and controls.
+            <hr>
+        </small>
+    </h6>
+</div>
