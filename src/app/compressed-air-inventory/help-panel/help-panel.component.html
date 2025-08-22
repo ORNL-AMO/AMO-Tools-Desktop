@@ -4,7 +4,7 @@
             Help
         </div>
     </div>
-    <div class="p-2 pt-3" *ngIf="setupTab == 'compressor-properties' || setupTab == 'compressor-catalog'">
+    <div class="p-2 pt-3" *ngIf="setupTab == 'compressor-properties' || setupTab == 'compressed-air-catalog'">
         <h5 *ngIf="setupTab == 'compressed-air-catalog'">
             Compressor Catalog Help
             <br>
@@ -20,14 +20,13 @@
 
         <!-- <app-integration-help *ngIf="focusedDataGroup == 'motor-integration'" [connectionType]="'motor'"
             [focusedField]="focusedField"></app-integration-help> -->
-        <app-nameplate-help></app-nameplate-help>
-        <app-pump-field-help></app-pump-field-help>
-        <app-motor-help></app-motor-help>
-        <app-field-measurements-help></app-field-measurements-help>
-        <app-controls-help></app-controls-help>
-        <app-design-details-help></app-design-details-help>
-        <app-performance-points-help></app-performance-points-help>
-        <app-centrifugal-help></app-centrifugal-help>
+        <app-nameplate-help *ngIf="focusedDataGroup == 'nameplate-data'"></app-nameplate-help>
+        <app-motor-help *ngIf="focusedDataGroup == 'compressed-air-motor'"></app-motor-help>
+        <app-field-measurements-help *ngIf="focusedDataGroup == 'field-measurements'"></app-field-measurements-help>
+        <app-controls-help *ngIf="focusedDataGroup == 'controls'"></app-controls-help>
+        <app-design-details-help *ngIf="focusedDataGroup == 'design-details'"></app-design-details-help>
+        <app-performance-points-help *ngIf="focusedDataGroup == 'performance-points'"></app-performance-points-help>
+        <app-centrifugal-help *ngIf="focusedDataGroup == 'centrifugal-specifics'"></app-centrifugal-help>
     </div>
     <div class="p-2 pt-3" *ngIf="setupTab == 'system-setup'">
         <h5>
