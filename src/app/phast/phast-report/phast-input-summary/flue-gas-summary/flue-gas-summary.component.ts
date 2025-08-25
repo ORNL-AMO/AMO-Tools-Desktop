@@ -4,11 +4,14 @@ import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
+import { firstValueFrom } from 'rxjs';
+import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid-material-db.service';
 @Component({
-    selector: 'app-flue-gas-summary',
-    templateUrl: './flue-gas-summary.component.html',
-    styleUrls: ['./flue-gas-summary.component.css'],
-    standalone: false
+  selector: 'app-flue-gas-summary',
+  templateUrl: './flue-gas-summary.component.html',
+  styleUrls: ['./flue-gas-summary.component.css'],
+  standalone: false
 })
 export class FlueGasSummaryComponent implements OnInit {
   @Input()
@@ -17,10 +20,10 @@ export class FlueGasSummaryComponent implements OnInit {
   settings: Settings;
   @Input()
   printView: boolean;
-  
+
   lossData: Array<any>;
-  volumeOptions: Array<FlueGasMaterial>;
-  massOptions: Array<SolidLiquidFlueGasMaterial>;
+  volumeOptions: Array<FlueGasMaterial> = [];
+  massOptions: Array<SolidLiquidFlueGasMaterial> = [];
   numLosses: number = 0;
   collapse: boolean = true;
 
@@ -49,11 +52,13 @@ export class FlueGasSummaryComponent implements OnInit {
   so2Diff: Array<boolean>;
 
   numMods: number = 0;
-  
-  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   copyTableString: any;
 
-  constructor(private cd: ChangeDetectorRef, private sqlDbApiService: SqlDbApiService) { }
+  constructor(private cd: ChangeDetectorRef, private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService
+  ) { }
 
   ngOnInit() {
     this.typeDiff = new Array();
@@ -78,9 +83,9 @@ export class FlueGasSummaryComponent implements OnInit {
     this.n2Diff = new Array();
     this.o2Diff = new Array();
     this.so2Diff = new Array();
-  
-    this.volumeOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
-    this.massOptions = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
+
+    this.volumeOptions = this.flueGasMaterialDbService.getAllMaterials();
+    this.massOptions = this.solidLiquidMaterialDbService.getAllMaterials();
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.modifications) {
@@ -199,11 +204,11 @@ export class FlueGasSummaryComponent implements OnInit {
     };
     return tmpSummaryData;
   }
-  
+
   updateCopyTableString() {
     this.copyTableString = this.copyTable.nativeElement.innerText;
   }
-  
+
 }
 
 

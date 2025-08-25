@@ -23,6 +23,8 @@ import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-
 import { ExportToJustifiTemplateService } from '../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 import { CORE_DATA_WARNING, SECONDARY_DATA_WARNING, SnackbarService } from '../shared/snackbar-notification/snackbar.service';
 import { BrowserStorageAvailable, BrowserStorageService } from '../shared/browser-storage.service';
+import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
+import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
 
 @Component({
   selector: 'app-core',
@@ -79,21 +81,23 @@ export class CoreComponent implements OnInit {
     private automaticBackupService: AutomaticBackupService,
     private applicationInstanceDbService: ApplicationInstanceDbService,
     private importBackupModalService: ImportBackupModalService,
-    private sqlDbApiService: SqlDbApiService,
     private measurSurveyService: MeasurSurveyService,
     private updateApplicationService: UpdateApplicationService,
     private emailSubscribeService: EmailListSubscribeService,
     private inventoryDbService: InventoryDbService,
     private snackBarService: SnackbarService,
     private browserStorageService: BrowserStorageService,
-    private exportToJustifiTemplateService: ExportToJustifiTemplateService) {
+    private exportToJustifiTemplateService: ExportToJustifiTemplateService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService
+  ) {
   }
 
   ngOnInit() {
 
     if (this.electronService.isElectron) {
       this.electronService.sendAppReady('ready');
-    } 
+    }
     this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
       if (applicationData) {
         this.setSurveyToastVisibility(applicationData);
@@ -145,13 +149,13 @@ export class CoreComponent implements OnInit {
             { label: 'Data Storage and Backup', uri: '/data-and-backup' },
             { label: 'Privacy', uri: '/privacy' }
           ]);
-        } else if (!this.electronService.isElectron)  {
-           setTimeout(() => {
-              this.snackBarService.setSnackbarMessage('appDataStorageNotice', 'info', 'none', [
-                { label: 'Data Storage and Backup', uri: '/data-and-backup' },
-                { label: 'Privacy', uri: '/privacy' }
-              ]);
-            }, 3000);
+        } else if (!this.electronService.isElectron) {
+          setTimeout(() => {
+            this.snackBarService.setSnackbarMessage('appDataStorageNotice', 'info', 'none', [
+              { label: 'Data Storage and Backup', uri: '/data-and-backup' },
+              { label: 'Privacy', uri: '/privacy' }
+            ]);
+          }, 3000);
         }
         this.initData();
       } else {
@@ -226,6 +230,10 @@ export class CoreComponent implements OnInit {
     } else {
       await this.coreService.setApplicationInstanceData();
       this.setAllDbData();
+      //initialize db Behavior Subjects
+      //data initialized in createDefaultProcessHeatingMaterials on startup
+      await this.solidLiquidMaterialDbService.setAllMaterialsFromDb();
+      await this.flueGasMaterialDbService.setAllMaterialsFromDb();
     }
   }
 
@@ -269,7 +277,6 @@ export class CoreComponent implements OnInit {
           this.calculatorDbService.setAll(initializedData.calculators);
           this.inventoryDbService.setAll(initializedData.inventoryItems);
           this.idbStarted = true;
-          this.sqlDbApiService.initCustomDbMaterials();
           this.changeDetectorRef.detectChanges();
           if (this.electronService.isElectron) {
             this.automaticBackupService.saveVersionedBackup();

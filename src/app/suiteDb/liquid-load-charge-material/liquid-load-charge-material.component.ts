@@ -44,7 +44,6 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   nameError: string = null;
   canAdd: boolean;
   idbEditMaterialId: number;
-  sdbEditMaterialId: number;
   constructor(private settingsDbService: SettingsDbService, private liquidLoadMaterialDbService: LiquidLoadMaterialDbService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -62,7 +61,6 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
   async setAllMaterials() {
     this.allMaterials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
     this.allCustomMaterials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllCustomMaterials());
-    this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial?.substance == material.substance })?.id;
     this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial?.substance == material.substance })?.id;
     this.setExisting();
   }
@@ -90,7 +88,6 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
       this.newMaterial.specificHeatLiquid = this.convertUnitsService.value(this.newMaterial.specificHeatLiquid).from('kJkgC').to('btulbF');
       this.newMaterial.specificHeatVapor = this.convertUnitsService.value(this.newMaterial.specificHeatVapor).from('kJkgC').to('btulbF');
     }
-    this.newMaterial.id = this.sdbEditMaterialId;
     //need to set id for idb to put updates
     this.newMaterial.id = this.idbEditMaterialId;
     await firstValueFrom(this.liquidLoadMaterialDbService.updateWithObservable(this.newMaterial));
@@ -156,7 +153,7 @@ export class LiquidLoadChargeMaterialComponent implements OnInit {
 
   checkEditMaterialName() {
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id != this.sdbEditMaterialId) {
+      if (material.id != this.idbEditMaterialId) {
         return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
       }
     });

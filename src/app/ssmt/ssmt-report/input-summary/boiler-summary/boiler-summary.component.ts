@@ -4,6 +4,9 @@ import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
+import { firstValueFrom } from 'rxjs';
+import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid-material-db.service';
 
 @Component({
     selector: 'app-boiler-summary',
@@ -38,15 +41,14 @@ export class BoilerSummaryComponent implements OnInit {
   deaeratorPressureDiff: Array<boolean>;
   approachTemperatureDiff: Array<boolean>;
 
-  solidLiquidFuelTypes: Array<SolidLiquidFlueGasMaterial>;
-  gasFuelTypes: Array<FlueGasMaterial>;
-  constructor(private cd: ChangeDetectorRef, private sqlDbApiService: SqlDbApiService) { }
+  solidLiquidFuelTypes: Array<SolidLiquidFlueGasMaterial> = [];
+  gasFuelTypes: Array<FlueGasMaterial> = [];
+  constructor(private cd: ChangeDetectorRef, private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService
+  ) { }
 
   ngOnInit() {
-    this.solidLiquidFuelTypes = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
-    this.gasFuelTypes = this.sqlDbApiService.selectGasFlueGasMaterials();
-
-
+    this.setOptions();
     this.fuelTypeDiff = new Array<boolean>();
     this.fuelDiff = new Array<boolean>();
     this.combustionEfficiencyDiff = new Array<boolean>();
@@ -73,6 +75,11 @@ export class BoilerSummaryComponent implements OnInit {
         this.approachTemperatureDiff.push(false);
       });
     }
+  }
+
+  setOptions(){
+    this.gasFuelTypes = this.flueGasMaterialDbService.getAllMaterials();
+    this.solidLiquidFuelTypes = this.solidLiquidMaterialDbService.getAllMaterials();
   }
 
   //function used to check if baseline and modification values are different

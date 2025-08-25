@@ -61,7 +61,6 @@ export class ImportBackupService {
     private atmosphereDbService: AtmosphereDbService,
     private inventoryDbService: InventoryDbService,
     private manageAppDataService: ManageAppDataService,
-    private sqlDbApiService: SqlDbApiService,
     private diagramDbService: DiagramIdbService,
     private dashboardService: DashboardService,
   ) {
@@ -264,19 +263,13 @@ export class ImportBackupService {
     for await (let material of measurBackupFile.flueGasMaterials) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertGasFlueGasMaterial(material);
-      if (isAdded) {
-        await firstValueFrom(this.flueGasMaterialDbService.addWithObservable(material));
-      }
+      await this.flueGasMaterialDbService.addMaterial(material);
     };
 
     for await (let material of measurBackupFile.solidLiquidFlueGasMaterials) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertSolidLiquidFlueGasMaterial(material);
-      if (isAdded) {
-        await firstValueFrom(this.solidLiquidMaterialDbService.addWithObservable(material));
-      }
+      await this.solidLiquidMaterialDbService.addMaterial(material);
     };
   }
 

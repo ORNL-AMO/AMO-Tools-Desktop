@@ -6,9 +6,9 @@ import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { OperatingHours } from '../../../shared/models/operations';
 import { FlueGas, FlueGasByVolumeSuiteResults, FlueGasOutput, FlueGasResult, MaterialInputProperties } from '../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../shared/models/settings';
-import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 import { FlueGasEnergyData } from './energy-form.service';
 import { FlueGasFormService } from './flue-gas-form.service';
+import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 
 @Injectable()
 export class FlueGasService {
@@ -26,7 +26,7 @@ export class FlueGasService {
   modalOpen: BehaviorSubject<boolean>;
   constructor(private convertUnitsService: ConvertUnitsService, 
               private phastService: PhastService,
-              private sqlDbApiService: SqlDbApiService,
+              private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
               private flueGasFormService: FlueGasFormService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
@@ -123,8 +123,7 @@ export class FlueGasService {
         result.flueGasLosses = flueGasLosses;
         result.fuelCost = result.flueGasLosses * energyData.hoursPerYear * fuelCost;
         result.fuelUse = flueGasLosses * energyData.hoursPerYear;
-        let gases: Array<SolidLiquidFlueGasMaterial> = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
-        let selectedGas: SolidLiquidFlueGasMaterial = gases.find(gas => { return gas.id == flueGasData.flueGasByMass.gasTypeId });
+        let selectedGas: SolidLiquidFlueGasMaterial = this.solidLiquidMaterialDbService.getById(flueGasData.flueGasByMass.gasTypeId);
         if (flueGasData.flueGasByMass.oxygenCalculationMethod == 'Excess Air' && selectedGas) {
           result.calculatedExcessAir = flueGasData.flueGasByMass.excessAirPercentage;
           let fluGasCo2Inputs: MaterialInputProperties = {

@@ -16,6 +16,7 @@ export interface FlueGasMaterial {
     selected?: boolean;
     specificGravity: number;
     substance: string;
+    isDefault?: boolean
 }
 
 export interface GasLoadChargeMaterial {
@@ -50,6 +51,7 @@ export interface SolidLiquidFlueGasMaterial {
     substance: string;
     sulphur: number;
     heatingValue: number;
+    isDefault?: boolean;
 }
 
 export interface SolidLoadChargeMaterial {
