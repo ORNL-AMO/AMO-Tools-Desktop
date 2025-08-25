@@ -14,6 +14,7 @@ import { FullLoadHelpComponent } from './performance-points-help/full-load-help/
 import { MaxFullFlowHelpComponent } from './performance-points-help/max-full-flow-help/max-full-flow-help.component';
 import { NoLoadHelpComponent } from './performance-points-help/no-load-help/no-load-help.component';
 import { UnloadPointHelpComponent } from './performance-points-help/unload-point-help/unload-point-help.component';
+import { EndUsesHelpComponent } from './end-uses-help/end-uses-help.component';
 
 
 
@@ -31,7 +32,8 @@ import { UnloadPointHelpComponent } from './performance-points-help/unload-point
     FullLoadHelpComponent,
     MaxFullFlowHelpComponent,
     NoLoadHelpComponent,
-    UnloadPointHelpComponent
+    UnloadPointHelpComponent,
+    EndUsesHelpComponent
   ],
   imports: [
     CommonModule,    

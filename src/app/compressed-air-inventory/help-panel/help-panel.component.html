@@ -47,4 +47,15 @@
         <hr class="my-1 hr-spacer">
         <app-co2-help-text [currentField]="focusedField"></app-co2-help-text>
     </div>
+    <div class="p-2 pt-3" *ngIf="setupTab == 'end-uses'">
+        <h5>
+            End Use Help
+            <br>
+            <small class="text-muted">Enter data regarding the demand side of your compressed air system. This could include pneumatic tools,
+                air driven equipment, or any other process that is receiving compressed air.
+            </small>
+        </h5>
+        <hr class="my-1 hr-spacer">
+        <app-end-uses-help></app-end-uses-help>
+    </div>
 </div>
