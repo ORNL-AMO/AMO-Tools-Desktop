@@ -9,10 +9,10 @@ export class ProcessCoolingResultsService {
   private readonly processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
   private readonly suiteApi = inject(ProcessCoolingSuiteApiService);
 
-  readonly results$ = this.processCoolingAssessmentService.assessment$.pipe(
-    map(assessment => {
-      if (assessment && assessment.processCooling && assessment.processCooling.isValid) {
-        return this.getResults(assessment.processCooling);
+  readonly results$ = this.processCoolingAssessmentService.processCooling$.pipe(
+    map(processCooling => {
+      if (processCooling && processCooling.isValid) {
+        return this.getResults(processCooling);
       }
       return undefined;
     })

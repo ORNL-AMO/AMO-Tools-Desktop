@@ -1,0 +1,12 @@
+<ng-container *ngIf="chillerInventory.length > 0; else noChillers">
+  <div class="load-schedule-chillers p-3">
+    <app-chiller-load-schedule 
+      *ngFor="let chillerInventoryItem of chillerInventory;" 
+      [chiller]="chillerInventoryItem">
+    </app-chiller-load-schedule>
+  </div>
+</ng-container>
+
+<ng-template #noChillers>
+  <p>No chillers found. Visit the inventory tab to add chillers.</p>
+</ng-template>

@@ -38,14 +38,15 @@ export class AirCooledComponent {
 
   observeFormChanges() {
     this.form.valueChanges.pipe(
-      tap(formValue => {
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(
+      (formValue) => {
         const processCooling = this.processCooling();
         const currentInput: AirCooledSystemInput = processCooling.systemInformation.airCooledSystemInput;
         const airCooledInput = this.systemInformationFormService.getAirCooledSystemInput(this.form.getRawValue(), currentInput);
         this.processCoolingAssessmentService.updateSystemInformation('airCooledSystemInput', airCooledInput);
-      }),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe();
+      }
+    );
   }
 
   focusField(str: string) {

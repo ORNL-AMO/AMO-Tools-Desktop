@@ -6,5 +6,16 @@
 </h5>
 <hr class="my-1 hr-spacer">
 
+    <div class="my-2" *ngIf="focusedField() == 'doChillerLoadSchedulesVary'">
+        <h6>
+            Do chiller load schedules vary?
+            <br>
+            <small class="text-muted">
+                Select the appropriate option to determine if chiller load schedules vary. This question is relevant for multi-chiller systems that operate for extended periods with unequal chiller loading. 
+                Select 'No' if the system employs a single chiller
+                <hr>
+            </small>
+        </h6>
+    </div>
 
 <app-co2-help-text [currentField]="focusedField()"></app-co2-help-text>

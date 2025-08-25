@@ -40,14 +40,15 @@ export class WaterPumpComponent {
 
   observeFormChanges() {
     this.form.valueChanges.pipe(
-      tap(formValue => {
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(
+      (formValue) => {
         const processCooling = this.processCooling();
         const currentPumpInput = processCooling?.systemInformation[this.pumpFormType];
-        const pumpInput = this.systemInformationFormService.getPumpInput(this.form.getRawValue(), currentPumpInput);
+        const pumpInput = this.systemInformationFormService.getPumpInput(formValue, currentPumpInput);
         this.processCoolingAssessmentService.updateSystemInformation(this.pumpFormType, pumpInput);
-      }),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe();
+      }
+    );
   }
 
   focusField(str: string) {

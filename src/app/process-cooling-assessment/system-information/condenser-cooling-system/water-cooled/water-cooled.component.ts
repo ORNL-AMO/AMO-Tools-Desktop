@@ -37,14 +37,15 @@ export class WaterCooledComponent {
 
   observeFormChanges() {
     this.form.valueChanges.pipe(
-      tap(formValue => {
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(
+      (formValue) => {
         const processCooling = this.processCooling();
         const currentInput: WaterCooledSystemInput = processCooling.systemInformation.waterCooledSystemInput;
         const waterCooledInput = this.systemInformationFormService.getWaterCooledSystemInput(this.form.getRawValue(), currentInput);
         this.processCoolingAssessmentService.updateSystemInformation('waterCooledSystemInput', waterCooledInput);
-      }),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe();
+      }
+    );
   }
   focusField(str: string) {
     this.processCoolingUiService.focusedFieldSignal.set(str);

@@ -66,8 +66,10 @@ export const getDefaultInventoryItem = (): ChillerInventoryItem => {
         fullLoadEfficiency: 0,
         age: 0,
         installVSD: false,
-        useARIMonthlyLoadSchedule: false,
-        monthlyLoads: Array(12).fill(Array(11).fill(0)),
+        useARIloadScheduleByMonthchedule: false,
+        useSameMonthlyLoading: false,
+        loadScheduleAllMonths: undefined,
+        loadScheduleByMonth: Array(12).fill(Array(11).fill(0)),
     };
 }
 
@@ -104,6 +106,7 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings ): Process
               zipcode: 53704,
               chilledWaterSupplyTemp: 44,
               condenserCoolingMethod: 0, // water
+              doChillerLoadSchedulesVary: undefined
             },
             airCooledSystemInput: {
               outdoorAirTemp: 54,
@@ -150,3 +153,7 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings ): Process
           selected: false,
         }
       }
+
+
+export const LOAD_LABELS = ['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'];
+export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

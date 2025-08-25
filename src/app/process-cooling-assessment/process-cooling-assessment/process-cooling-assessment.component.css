@@ -1,13 +1,17 @@
 .process-cooling-container {
     height: 100vh;
-    background: #ececec
+    background: #ececec;
+    display: flex;
+    flex-direction: column;
 }
 
-/* .process-cooling-assessment-container div#processCoolingFooter.footer {
+div#processCoolingFooter.footer {
     position: relative;
-} */
+    flex: 0 0 auto;
+}
 
 #processCoolingBanner {
+    flex: 0 0 auto;
     z-index: 0;
 }
 

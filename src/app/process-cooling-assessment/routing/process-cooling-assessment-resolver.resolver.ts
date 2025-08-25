@@ -3,12 +3,12 @@ import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
 import { Injectable } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
-import { catchError, defer, forkJoin, from, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { catchError, forkJoin, from, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { EGridService } from '../../shared/helper-services/e-grid.service';
 import { Settings } from '../../shared/models/settings';
 import { MeasurAppError } from '../../shared/errors/errors';
-import { MeasurErrorHandler } from '../../shared/errors/MeasurErrorHandler';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { ChillerInventoryService } from '../services/chiller-inventory.service';
 
 export interface ProcessCoolingResolverData {
   assessment: Assessment;
@@ -22,6 +22,7 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
     private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService,
     private processCoolingAssessmentService: ProcessCoolingAssessmentService,
+    private inventoryService: ChillerInventoryService,
     private egridService: EGridService,
     private router: Router
   ) { }
@@ -37,18 +38,18 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
     const assessmentValue = this.processCoolingAssessmentService.assessmentValue;
     const settingsValue = this.processCoolingAssessmentService.settingsValue;
     if (assessmentValue && settingsValue) {
-    console.timeEnd('ProcessCoolingAssessmentResolver.resolve');
+      console.timeEnd('ProcessCoolingAssessmentResolver.resolve');
       return of({
         assessment: assessmentValue,
         settings: settingsValue
       }).pipe(
         map(data => ({ assessment: data.assessment, settings: data.settings }))
       );
-      
+
     }
 
-    let getAssessment$: Observable<Assessment>;
     let assessment = this.assessmentDbService.findById(Number(id));
+    let getAssessment$: Observable<Assessment>;
     if (assessment) {
       // * is first load
       getAssessment$ = of(assessment);
@@ -56,7 +57,7 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
       // * is refresh or direct route access
       // todo This getAssessment$ block is a workaround for an old pattern - core.service init db logic should be refactored so it's in an appInitializer and we don't set all data here
       getAssessment$ = forkJoin([
-        this.assessmentDbService.setAll(), 
+        this.assessmentDbService.setAll(),
         this.settingsDbService.setAll()
       ]).pipe(
         map(() => {
@@ -76,6 +77,7 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
         if (!this.egridService.subRegionsByZipcode) {
           this.egridService.getAllSubRegions();
         }
+        this.inventoryService.setDefaultSelectedChiller(assessment.processCooling.inventory);
 
         return from(this.processCoolingAssessmentService.initAssessmentSettings(assessment)).pipe(
           switchMap(() =>

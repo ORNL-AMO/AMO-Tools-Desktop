@@ -1,15 +1,23 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { BehaviorSubject, firstValueFrom, map } from 'rxjs';
+import { BehaviorSubject, debounceTime, firstValueFrom, map, tap } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
-import { ProcessCoolingAssessment, ProcessCoolingDataProperty, ProcessCoolingSystemInformationProperty, SystemInformation } from '../../shared/models/process-cooling-assessment';
+import { ChillerInventoryItem, ProcessCoolingAssessment, ProcessCoolingDataProperty, ProcessCoolingSystemInformationProperty, SystemInformation } from '../../shared/models/process-cooling-assessment';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
+import { getDefaultInventoryItem } from '../process-cooling-constants';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 
+/**
+ * Service currently uses both signals and observables for the same state. This is a prototype, 
+ * we should pick one or the other when it becomes clear which fit better with existing MEASUR patterns
+ */
 @Injectable()
 export class ProcessCoolingAssessmentService {
   private readonly settingsDbService = inject(SettingsDbService);
   private readonly convertProcessCoolingService = inject(ConvertProcessCoolingService);
+  private readonly assessmentDbService = inject(AssessmentDbService);
 
   private readonly assessment = new BehaviorSubject<Assessment>(undefined);
   readonly assessment$ = this.assessment.asObservable();
@@ -22,6 +30,21 @@ export class ProcessCoolingAssessmentService {
   readonly settings$ = this.settings.asObservable();
   settingsSignal: WritableSignal<Settings> = signal<Settings>(undefined);
 
+  constructor() {
+    // * keep DB updates in service as a side-effect of state changes (instead of top-level component)
+    this.assessment$.pipe(
+      debounceTime(300),
+      tap(assessment => {
+        if (assessment) {
+          this.assessmentDbService.updateWithObservable(assessment).subscribe(
+            () => { console.log('Updated assessment in db'); },
+            (error) => { console.error('Error updating assessment in db', error); }
+          );
+        }
+      }),
+      takeUntilDestroyed()
+    ).subscribe();
+  }
 
   setAssessment(assessment: Assessment) {
     this.assessment.next(assessment);
@@ -35,14 +58,14 @@ export class ProcessCoolingAssessmentService {
     return this.settings.getValue();
   }
 
+  // todo too many sources of truth
   setProcessCooling(processCooling: ProcessCoolingAssessment) {
-    // todo may not need this pattern
-    //  if (isBaselineChange) {
-    //   this.setIsSetupDone(assessment)
-    // }
     console.log('[ProcessCoolingService] processCooling:', processCooling);
     this.processCooling.next(processCooling);
     this.processCoolingSignal.set(processCooling);
+
+    const updatedAssessment = { ...this.assessmentValue, processCooling };
+    this.setAssessment(updatedAssessment);
   }
 
   setSettings(settings: Settings) {
@@ -59,10 +82,46 @@ export class ProcessCoolingAssessmentService {
     }
   }
 
-
   updateSystemInformation<K extends ProcessCoolingSystemInformationProperty>(key: K, value: SystemInformation[K]) {
     let updatedProcessCooling = { ...this.processCooling.getValue() };
     updatedProcessCooling.systemInformation[key] = value;
+    this.setProcessCooling(updatedProcessCooling);
+  }
+  
+    /**
+   * Adds new default chiller
+   * @returns The new chiller.
+   */
+  addNewChillerToAssessment(): ChillerInventoryItem {
+    let newChiller: ChillerInventoryItem = getDefaultInventoryItem();
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    updatedProcessCooling.inventory.push(newChiller);
+    this.setProcessCooling(updatedProcessCooling);
+    return newChiller;
+  }
+
+  /**
+   * Deletes a chiller from the assessment.
+   * @returns The updated inventory after deletion.
+   */
+  deleteChillerFromAssessment(id: string) {
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    let itemIndex: number = updatedProcessCooling.inventory.findIndex(inventoryItem => { return inventoryItem.itemId == id });
+    if (itemIndex !== -1) {
+      updatedProcessCooling.inventory.splice(itemIndex, 1);
+      this.setProcessCooling(updatedProcessCooling);
+    }
+    return updatedProcessCooling.inventory;
+  }
+
+  updateAssessmentChiller(updatedChiller: ChillerInventoryItem) {
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    updatedProcessCooling.inventory = updatedProcessCooling.inventory.map(chiller => {
+      if (chiller.itemId === updatedChiller.itemId) {
+        return { ...updatedChiller};
+      }
+      return chiller;
+    });
     this.setProcessCooling(updatedProcessCooling);
   }
 
@@ -112,8 +171,8 @@ export class ProcessCoolingAssessmentService {
     return Promise.resolve();
   }
 
-  readonly isBaselineValid$ = this.assessment$.pipe(
-    map((assessment: Assessment) => assessment ? assessment.processCooling.setupDone : false)
+  readonly isBaselineValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => processCooling ? processCooling.setupDone : false)
   );
 
   get condenserCoolingMethod(): number {

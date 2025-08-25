@@ -4,16 +4,12 @@
         </h3>
         <br>
     </div>
-    <div class="p-3 no-data" *ngIf="!hasInventoryItems">
-        <h3>Add your Chiller Inventory for analysis..</h3>
-        <button type="button" class="btn btn-primary" (click)="addInventoryItem()">Add Chiller</button>
-    </div>
-    <div class="mr-2 ml-2" *ngIf="hasInventoryItems">
+    <div class="mr-2 ml-2" *ngIf="selectedChiller$ | async as selectedChiller; else hasNoChiller">
         <form [formGroup]="form">
             <div class="form-group" [ngClass]="{'invalid': form.controls.name.invalid}">
                 <label for="name">Chiller Name</label>
-                <input type="text" class="form-control" name="name" formControlName="name" (focus)="focusField('chiller-name')"
-                    (input)="save()" />
+                <input type="text" class="form-control" name="name" formControlName="name"
+                    (focus)="focusField('chiller-name')" />
                 <span class="alert-danger pull-right small"
                     *ngIf="form.controls.name.invalid && !form.controls.name.pristine">
                     <span *ngIf="form.controls.name.errors.required">Value Required</span>
@@ -22,12 +18,19 @@
             <div class="form-group">
                 <label>Description</label>
                 <textarea class="form-control" type="text" id="description" formControlName="description"
-                (focus)="focusField('chiller-description')" (input)="save()"></textarea>
+                    (focus)="focusField('chiller-description')"></textarea>
             </div>
             <a class="click-link small pull-right" (click)="openChillerModal()">Set Data From Existing Chiller</a>
+
+            
         </form>
-        
     </div>
+    <ng-template #hasNoChiller>
+        <div class="p-3 no-data">
+            <h3>Add your Chiller Inventory for analysis..</h3>
+            <button type="button" class="btn btn-primary" (click)="addInventoryItem()">Add Chiller</button>
+        </div>
+    </ng-template>
 </div>
 
 <!-- <app-generic-chiller-modal *ngIf="showChillerModal" (emitClose)="closeChillerModal()">

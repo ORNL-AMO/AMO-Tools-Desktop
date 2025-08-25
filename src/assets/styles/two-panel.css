@@ -1,3 +1,4 @@
+@import "variables.css";
 
 .panel-column{
 	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
@@ -333,6 +334,10 @@
 }
 .process-cooling .group-label{
     border-bottom: #ADC8E2 groove 2px;
+}
+
+.process-cooling-assessment .group-label{
+    border-bottom: var(--process-cooling-assessment) groove 2px;
 }
 
 .general .group-label{

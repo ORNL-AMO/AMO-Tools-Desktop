@@ -40,7 +40,7 @@ export class ProcessCoolingSuiteApiService {
       tower: undefined as ProcessCoolingTowerOutput
     };
 
-    const chillerInputVector = this._createChillerInputVector(assessment.inventory);
+    const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary);
     const towerInputInstance = this._createTowerInput(assessment.systemInformation.towerInput);
     const waterCooledSystemInputInstance = this._createWaterCooledSystemInput(assessment.systemInformation.waterCooledSystemInput, assessment.systemInformation.operations, assessment.systemInformation.condenserWaterPumpInput, assessment.systemInformation.towerInput);
     const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, waterCooledSystemInputInstance, towerInputInstance);
@@ -70,7 +70,7 @@ export class ProcessCoolingSuiteApiService {
       pump: undefined as ProcessCoolingPumpOutput,
     };
 
-    const chillerInputVector = this._createChillerInputVector(assessment.inventory);
+    const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary);
     const airCooledSystemInputInstance = this._createAirCooledSystemInput(assessment.systemInformation.airCooledSystemInput, assessment.systemInformation.operations);
     const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, airCooledSystemInputInstance);
 
@@ -154,20 +154,22 @@ export class ProcessCoolingSuiteApiService {
    * @param chillerInventoryItems {ChillerInventoryItem[]} - Array of chiller inventory items.
    * @returns {any} Module.ChillerInputV instance
    */
-  private _createChillerInputVector(chillerInventoryItems: ChillerInventoryItem[]): any {
+  private _createChillerInputVector(chillerInventoryItems: ChillerInventoryItem[], doChillerLoadSchedulesVary: boolean): any {
     const chillers = new Module.ChillerInputV();
 
     for (const input of chillerInventoryItems as ChillerInventoryItem[]) {
-      console.log('ChillerInventoryItem input:', input);
-      console.log('  chillerType:', input.chillerType);
-      console.log('  capacity:', input.capacity);
-      console.log('  isFullLoadEfficiencyKnown:', input.isFullLoadEfficiencyKnown);
-      console.log('  fullLoadEfficiency:', input.fullLoadEfficiency);
-      console.log('  age:', input.age);
-      console.log('  installVSD:', input.installVSD);
-      console.log('  useARIMonthlyLoadSchedule:', input.useARIMonthlyLoadSchedule);
-      console.log('  monthlyLoads:', input.monthlyLoads);
-      const chillerMonthlyLoad2D = this.suiteApiHelperService.returnDoubleVector2d(input.monthlyLoads);
+      // console.log('ChillerInventoryItem input:', input);
+      // console.log('  chillerType:', input.chillerType);
+      // console.log('  capacity:', input.capacity);
+      // console.log('  isFullLoadEfficiencyKnown:', input.isFullLoadEfficiencyKnown);
+      // console.log('  fullLoadEfficiency:', input.fullLoadEfficiency);
+      // console.log('  age:', input.age);
+      // console.log('  installVSD:', input.installVSD);
+      // console.log('  useARIloadScheduleByMonthchedule:', input.useARIloadScheduleByMonthchedule);
+      // console.log('  loadScheduleByMonth:', input.loadScheduleByMonth);
+
+      const loadSchedule = input.useSameMonthlyLoading ? [input.loadScheduleAllMonths] : input.loadScheduleByMonth;
+      const chillerMonthlyLoading = this.suiteApiHelperService.returnDoubleVector2d(loadSchedule);
 
       const chiller = this._createChillerInput(
         this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
@@ -176,13 +178,13 @@ export class ProcessCoolingSuiteApiService {
         input.fullLoadEfficiency,
         input.age,
         input.installVSD,
-        input.useARIMonthlyLoadSchedule,
-        chillerMonthlyLoad2D,
+        input.useARIloadScheduleByMonthchedule,
+        chillerMonthlyLoading,
       );
 
       chillers.push_back(chiller);
       chiller.delete();
-      chillerMonthlyLoad2D.delete();
+      chillerMonthlyLoading.delete();
     }
     return chillers;
   }
@@ -363,8 +365,8 @@ export class ProcessCoolingSuiteApiService {
   * @property fullLoadEff double, fraction, 0.2 - 2.5 increments of .01
   * @property age double # of years, 0 - 20, (can be 1.5 for eighteen months), assumption chiller efficiency is degraded by 1% / year
   * @property installVSD boolean, Install a VSD on each Centrifugal Compressor Motor
-  * @property useARIMonthlyLoadSchedule boolean, if true monthlyLoads not needed and can be set to empty
-  * @property monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar months
+  * @property useARIloadScheduleByMonthchedule boolean, if true loadScheduleByMonth not needed and can be set to empty
+  * @property loadScheduleByMonth double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar months
   */
   private _createChillerInput(chillerInputType,
         capacity,
@@ -372,7 +374,7 @@ export class ProcessCoolingSuiteApiService {
         fullLoadEff,
         age,
         installVSD,
-        useARIMonthlyLoadSchedule,
+        useARIloadScheduleByMonthchedule,
         chillerMonthlyLoad2D): any {
     return new Module.ChillerInput(
       chillerInputType,
@@ -381,7 +383,7 @@ export class ProcessCoolingSuiteApiService {
       fullLoadEff,
       age,
       installVSD,
-      useARIMonthlyLoadSchedule,
+      useARIloadScheduleByMonthchedule,
       chillerMonthlyLoad2D
     );
   }

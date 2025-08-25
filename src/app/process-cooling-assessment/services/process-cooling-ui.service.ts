@@ -193,6 +193,7 @@ export enum SetupView {
 
 export enum SystemInformationView {
   OPERATIONS = 'operations',
+  WEATHER = 'weather',
   PUMP = 'pump',
   CONDENSER_COOLING_SYSTEM_INPUT = 'condenser-cooling-system',
   TOWER = 'tower',
@@ -213,6 +214,7 @@ export enum ReportView {
 export interface ViewLink {
   view: SetupView | MainView | ReportView | AssessmentView | SystemInformationView;
   label: string;
+  param?: string | number;
 }
 
 export const MAIN_VIEW_LINKS: ViewLink[] = [
@@ -258,6 +260,10 @@ export const SYSTEM_INFORMATION_VIEW_LINKS: ViewLink[] = [
   {
     view: SystemInformationView.OPERATIONS,
     label: 'Operations',
+  },
+  {
+    view: SystemInformationView.WEATHER,
+    label: 'Weather',
   },
   {
     view: SystemInformationView.PUMP,

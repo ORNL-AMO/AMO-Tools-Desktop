@@ -30,6 +30,7 @@ export const EXAMPLE_SYSTEM_INFORMATION_OPERATIONS: Operations = {
   chilledWaterSupplyTemp: 44,
   // water == 0, air == 1
   condenserCoolingMethod: 0,
+  doChillerLoadSchedulesVary: true
 };
 
 
@@ -87,6 +88,7 @@ export const EXAMPLE_PUMP_INPUT_CONDENSER: PumpInput = {
 export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
   {
   itemId: '1',
+  isValid: true,
   name: 'Chiller1',
   modifiedDate: new Date(),
   chillerType: CompressorChillerTypeEnum.CENTRIFUGAL,
@@ -95,8 +97,10 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
   fullLoadEfficiency: 0.65,
   age: 10,
   installVSD: false,
-  useARIMonthlyLoadSchedule: false,
-  monthlyLoads: [
+  useARIloadScheduleByMonthchedule: false,
+  useSameMonthlyLoading: false,
+  loadScheduleAllMonths: undefined,
+  loadScheduleByMonth: [
     [5, 0, 0, 0, 10, 20, 20, 20, 15, 10, 0],
     [5, 0, 0, 0, 10, 20, 20, 20, 15, 10, 0],
     [5, 0, 0, 0, 10, 20, 20, 20, 15, 10, 0],
@@ -114,7 +118,8 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
 },
   {
   itemId: '2',
-  name: 'Chiller1',
+  isValid: true,
+  name: 'Chiller2',
   modifiedDate: new Date(),
   chillerType: CompressorChillerTypeEnum.CENTRIFUGAL,
   capacity: 1000,
@@ -122,8 +127,10 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
   fullLoadEfficiency: 0.65,
   age: 10,
   installVSD: false,
-  useARIMonthlyLoadSchedule: false,
-  monthlyLoads: [
+  useARIloadScheduleByMonthchedule: false,
+  useSameMonthlyLoading: false,
+  loadScheduleAllMonths: undefined,
+  loadScheduleByMonth: [
     [5, 0, 0, 0, 10, 20, 20, 20, 15, 10, 0],
     [5, 0, 0, 0, 10, 20, 20, 20, 15, 10, 0],
     [5, 0, 0, 0, 10, 20, 20, 20, 15, 10, 0],
@@ -141,7 +148,8 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
 },
 {
   itemId: '3',
-  name: 'Chiller1',
+  isValid: true,
+  name: 'Chiller3',
   modifiedDate: new Date(),
   chillerType: CompressorChillerTypeEnum.SCREW,
   capacity: 350,
@@ -149,8 +157,10 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
   fullLoadEfficiency: 0.75,
   age: 10,
   installVSD: false,
-  useARIMonthlyLoadSchedule: false,
-  monthlyLoads: [
+  useARIloadScheduleByMonthchedule: false,
+  useSameMonthlyLoading: false,
+  loadScheduleAllMonths: undefined,
+  loadScheduleByMonth: [
     [30, 0, 0, 30, 0, 30, 0, 0, 0, 0, 10],
     [30, 0, 0, 30, 0, 30, 0, 0, 0, 0, 10],
     [30, 0, 0, 30, 0, 30, 0, 0, 0, 0, 10],

@@ -28,7 +28,7 @@ export class OperationsComponent {
   private systemInformationFormService = inject(SystemInformationFormService);
   private destroyRef = inject(DestroyRef);
 
-  @ViewChild('formElement', { static: false }) formElement: ElementRef;
+  @ViewChild('wrapperElement', { static: false }) wrapperElement: ElementRef;
   // * prefer resizeObserver over onResize - only triggers on element change, not viewport
   private resizeObserver: ResizeObserver;
 
@@ -49,6 +49,7 @@ export class OperationsComponent {
     const operations = this.processCooling().systemInformation.operations;
     this.co2SavingsData = this.processCooling().systemInformation.co2SavingsData;
     this.form = this.systemInformationFormService.getOperationsForm(operations);
+    this.doChillerLoadSchedulesVary.disable();
     // * new getter for form control ids to create unique id srings when multiple instances of one component (should move to global helpersor global ng service). We need to standardize this across app
     this.controlIds = generateFormControlIds(this.form.controls);
 
@@ -60,14 +61,14 @@ export class OperationsComponent {
     this.resizeObserver = new ResizeObserver(entries => {
         this.formWidth = entries[0].contentRect.width;
     });
-    if (this.formElement?.nativeElement) {
-      this.resizeObserver.observe(this.formElement.nativeElement);
+    if (this.wrapperElement?.nativeElement) {
+      this.resizeObserver.observe(this.wrapperElement.nativeElement);
     }
   }
 
   ngOnDestroy() {
-    if (this.resizeObserver && this.formElement?.nativeElement) {
-      this.resizeObserver.unobserve(this.formElement.nativeElement);
+    if (this.resizeObserver && this.wrapperElement?.nativeElement) {
+      this.resizeObserver.unobserve(this.wrapperElement.nativeElement);
     }
   }
 
@@ -76,14 +77,14 @@ export class OperationsComponent {
   // * can use various rxjs handlers to debounce, filter and run ops
   observeFormChanges() {
     this.form.valueChanges.pipe(
-      tap(formValue => {
-        let systemInformation = this.processCooling().systemInformation;
-        // * use getRawValue (includes disabled fields)
-        const operations = this.systemInformationFormService.getOperations(this.form.getRawValue(), systemInformation.operations);
-        this.processCoolingAssessmentService.updateSystemInformation('operations', operations);
-      }),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe();
+    ).subscribe(() => {
+          let systemInformation = this.processCooling().systemInformation;
+          // * use getRawValue (includes disabled fields)
+          const operations = this.systemInformationFormService.getOperations(this.form.getRawValue(), systemInformation.operations);
+          this.processCoolingAssessmentService.updateSystemInformation('operations', operations);
+        }
+    );
   }
 
   observeZipCodeChanges() {
@@ -158,5 +159,9 @@ export class OperationsComponent {
 
   get condenserCoolingMethod() {
     return this.form.get('condenserCoolingMethod');
+  }
+
+  get doChillerLoadSchedulesVary() {
+    return this.form.get('doChillerLoadSchedulesVary');
   }
 }

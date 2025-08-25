@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, Signal } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { ChillerInventoryItem } from '../../shared/models/process-cooling-assessment';
+import { debounceTime, Observable, tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
-import { ChillerInventoryService } from './chiller-inventory.service';
-import { getDefaultInventoryItem } from '../process-cooling-constants';
+import { ChillerInventoryService } from '../services/chiller-inventory.service';
 
 @Component({
   selector: 'app-chiller-inventory',
@@ -13,91 +13,54 @@ import { getDefaultInventoryItem } from '../process-cooling-constants';
   templateUrl: './chiller-inventory.component.html',
   styleUrl: './chiller-inventory.component.css'
 })
-export class ChillerInventoryComponent {
+export class ChillerInventoryComponent implements OnInit {
+  private processCoolingUiService = inject(ProcessCoolingUiService);
+  private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private inventoryService = inject(ChillerInventoryService);
+  private destroyRef = inject(DestroyRef);
 
-  hasInventoryItems: boolean;
+  processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
   form: UntypedFormGroup;
-  selectedChillerSub: Subscription;
-  showChillerModal: boolean = false;
-  hasValidChillers: boolean = true;
-  selectedChiller: ChillerInventoryItem;
-  constructor(
-    private processCoolingUiService: ProcessCoolingUiService,
-    private processCoolingAssessmentService: ProcessCoolingAssessmentService,
-    private inventoryService: ChillerInventoryService, private cd: ChangeDetectorRef,
-    // private compressedAirDataManagementService: CompressedAirDataManagementService
-  ) { }
+  showChillerModal = false;
+  selectedChiller$: Observable<ChillerInventoryItem> = this.inventoryService.selectedChiller$;
 
   ngOnInit(): void {
-    // todo 7607 or initialize from parent
-    this.initializeInventory();
-    this.selectedChillerSub = this.inventoryService.selectedChiller.subscribe(val => {
-        this.selectedChiller = val;
-        if (val) {
-          this.form = this.inventoryService.getFormFromChiller(val);
-          this.hasInventoryItems = true;
+    this.form = this.inventoryService.getChillerForm(this.inventoryService.selectedChillerValue);
+    this.observeFormChanges();
+    this.inventoryService.selectedChiller$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((chiller) => {
+        if (chiller) {
+          this.inventoryService.patchChillerForm(this.form, chiller);
         } else {
-          this.hasInventoryItems = false;
+          this.inventoryService.setDefaultSelectedChiller(this.processCooling().inventory);
         }
-        // this.hasValidChillers = this.inventoryService.hasValidChillers(processCoolingAssessment);
+      }
+    );
+  }
+
+  observeFormChanges() {
+    this.form.valueChanges.pipe(
+      debounceTime(100),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
+      const updatedChiller: ChillerInventoryItem = this.inventoryService.getChiller(this.form.getRawValue(), this.inventoryService.selectedChillerValue);
+      this.processCoolingAssessmentService.updateAssessmentChiller(updatedChiller);
+      this.inventoryService.setSelectedChiller(updatedChiller);
     });
   }
 
-  ngOnDestroy() {
-    this.selectedChillerSub.unsubscribe();
-  }
-
-  // todo 7607 may not be needed
-  initializeInventory() {
-    // let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
-    // this.hasInventoryItems = (processCoolingAssessment.inventory.length != 0);
-    // if (this.hasInventoryItems) {
-    //   this.hasValidChillers = this.inventoryService.hasValidChillers(processCoolingAssessment);
-    //   let selectedChiller: ChillerInventoryItem = this.inventoryService.selectedChiller.getValue();
-    //   if (selectedChiller) {
-    //     let chillerExist: ChillerInventoryItem = processCoolingAssessment.inventory.find(item => { return item.itemId == selectedChiller.itemId });
-    //     if (!chillerExist) {
-    //       let lastItemModified: ChillerInventoryItem = _.maxBy(processCoolingAssessment.inventory, 'modifiedDate');
-    //       this.inventoryService.selectedChiller.next(lastItemModified);
-    //     }
-    //   } else {
-    //     let lastItemModified: ChillerInventoryItem = _.maxBy(processCoolingAssessment.inventory, 'modifiedDate');
-    //     this.inventoryService.selectedChiller.next(lastItemModified);
-    //   }
-    // }
-  }
-
   addInventoryItem() {
-    // let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
-    // todo 7607 eventually process inventory item, do sideffects
-    // let result: { newInventoryItem: ChillerInventoryItem, processCoolingAssessment: ProcessCoolingAssessment } = this.inventoryService.AddChillerToAssessment(processCoolingAssessment);
-    let newInventoryItem = getDefaultInventoryItem();
-    // processCoolingAssessment.inventory.push(newInventoryItem);
-    // this.processCoolingAssessmentService.updateProcessCooling(processCoolingAssessment, true);
-    this.inventoryService.selectedChiller.next(newInventoryItem);
-    this.hasInventoryItems = true;
-  }
-
-  save() {
-    const updatedChiller: ChillerInventoryItem = this.inventoryService.getChillerFromForm(this.form, this.selectedChiller);
-    // let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingAssessmentService.processCooling.getValue();
-    // processCoolingAssessment.inventory = processCoolingAssessment.inventory.map(item => {
-    //   if (item.itemId === updatedChiller.itemId) {
-    //     return { ...updatedChiller, modifiedDate: new Date() };
-    //   }
-    //   return item;
-    // });
-    // this.processCoolingAssessmentService.updateProcessCooling(processCoolingAssessment, true);
+    let newChiller = this.processCoolingAssessmentService.addNewChillerToAssessment();
+    this.inventoryService.setSelectedChiller(newChiller);
   }
 
   openChillerModal() {
     this.showChillerModal = true;
-    this.cd.detectChanges();
   }
 
   closeChillerModal() {
     this.showChillerModal = false;
-    this.cd.detectChanges();
   }
 
   focusField(str: string) {
