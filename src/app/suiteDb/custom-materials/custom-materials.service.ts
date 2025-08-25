@@ -97,7 +97,7 @@ export class CustomMaterialsService {
       let material: FlueGasMaterial = data[i];
       delete material.id;
       material.selected = false;
-      await this.flueGasMaterialDbService.asyncAddMaterial(material);
+      await this.flueGasMaterialDbService.addMaterial(material);
     };
   }
 
@@ -128,7 +128,7 @@ export class CustomMaterialsService {
       let material: SolidLiquidFlueGasMaterial = data[i];
       material.selected = false;
       delete material.id;
-      await this.solidLiquidMaterialDbService.asyncAddMaterial(material);
+      await this.solidLiquidMaterialDbService.addMaterial(material);
     };
   }
 
@@ -189,7 +189,7 @@ export class CustomMaterialsService {
   async deleteFlueGas(data: Array<FlueGasMaterial>) {
     for (let i = 0; i < data.length; i++) {
       let material: FlueGasMaterial = data[i];
-      this.flueGasMaterialDbService.asyncDeleteMaterial(material.id);
+      this.flueGasMaterialDbService.deleteMaterial(material.id);
     };
   }
 
@@ -212,7 +212,7 @@ export class CustomMaterialsService {
   async deleteSolidLiquidFlueGas(data: Array<SolidLiquidFlueGasMaterial>) {
     for (let i = 0; i < data.length; i++) {
       let material: SolidLiquidFlueGasMaterial = data[i];
-      await this.solidLiquidMaterialDbService.asyncDeleteMaterial(material.id);
+      await this.solidLiquidMaterialDbService.deleteMaterial(material.id);
     };
   }
 
@@ -225,7 +225,6 @@ export class CustomMaterialsService {
   }
 
   async deleteWallLossSurfaces(data: Array<WallLossesSurface>) {
-    let sdbMaterials: Array<WallLossesSurface> = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
     for (let i = 0; i < data.length; i++) {
       let material: WallLossesSurface = data[i]
       let materials = await firstValueFrom(this.wallLossesSurfaceDbService.deleteByIdWithObservable(material.id));

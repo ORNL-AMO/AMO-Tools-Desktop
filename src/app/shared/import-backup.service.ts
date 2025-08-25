@@ -262,13 +262,13 @@ export class ImportBackupService {
     for await (let material of measurBackupFile.flueGasMaterials) {
       material.selected = false;
       delete material.id;
-      await this.flueGasMaterialDbService.asyncAddMaterial(material);
+      await this.flueGasMaterialDbService.addMaterial(material);
     };
 
     for await (let material of measurBackupFile.solidLiquidFlueGasMaterials) {
       material.selected = false;
       delete material.id;
-      await this.solidLiquidMaterialDbService.asyncAddMaterial(material);
+      await this.solidLiquidMaterialDbService.addMaterial(material);
     };
   }
 

@@ -38,8 +38,7 @@ export class SolidLiquidMaterialDbService {
     DefaultData.delete();
     suiteDefaultMaterials.delete();
     await firstValueFrom(this.dbService.bulkAdd(this.storeName, defaultMaterials));
-    await this.asyncSetAllMaterialsFromDb();
-    return;
+    await this.setAllMaterialsFromDb();
   }
   
   private getAllWithObservable(): Observable<Array<SolidLiquidFlueGasMaterial>> {
@@ -80,23 +79,24 @@ export class SolidLiquidMaterialDbService {
     return allMaterials.filter(material => !material.isDefault);
   }
 
-  async asyncSetAllMaterialsFromDb(): Promise<void> {
+  async setAllMaterialsFromDb(): Promise<void> {
     let allMaterials: Array<SolidLiquidFlueGasMaterial> = await firstValueFrom(this.getAllWithObservable());
     this.dbSolidLiquidFlueGasMaterials.next(allMaterials);
   }
 
-  async asyncUpdateMaterial(material: SolidLiquidFlueGasMaterial): Promise<void> {
+  async updateMaterial(material: SolidLiquidFlueGasMaterial): Promise<void> {
     await firstValueFrom(this.updateWithObservable(material));
-    await this.asyncSetAllMaterialsFromDb();
+    await this.setAllMaterialsFromDb();
   }
 
-  async asyncDeleteMaterial(materialId: number): Promise<void> {
+  async deleteMaterial(materialId: number): Promise<void> {
     await firstValueFrom(this.deleteByIdWithObservable(materialId));
-    await this.asyncSetAllMaterialsFromDb();
+    await this.setAllMaterialsFromDb();
   }
 
-  async asyncAddMaterial(material: SolidLiquidFlueGasMaterial): Promise<void> {
-    await firstValueFrom(this.addWithObservable(material));
-    await this.asyncSetAllMaterialsFromDb();
+  async addMaterial(material: SolidLiquidFlueGasMaterial): Promise<number> {
+    material = await firstValueFrom(this.addWithObservable(material));
+    await this.setAllMaterialsFromDb();
+    return material.id;
   }
 }

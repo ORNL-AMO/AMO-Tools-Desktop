@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   @Output('closeModal')
-  closeModal = new EventEmitter<SolidLiquidFlueGasMaterial>();
+  closeModal = new EventEmitter<number>();
   @Input()
   settings: Settings;
   @Input()
@@ -84,8 +84,8 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
       }
-      await this.solidLiquidMaterialDbService.asyncAddMaterial(this.newMaterial)
-      this.closeModal.emit(this.newMaterial);
+      let newMaterialId: number = await this.solidLiquidMaterialDbService.addMaterial(this.newMaterial)
+      this.closeModal.emit(newMaterialId);
     }
   }
 
@@ -96,14 +96,14 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
     }
     //need to set id for idb to put updates
     this.newMaterial.id = this.idbEditMaterialId;
-    await this.solidLiquidMaterialDbService.asyncUpdateMaterial(this.newMaterial);
-    this.closeModal.emit(this.newMaterial);
+    await this.solidLiquidMaterialDbService.updateMaterial(this.newMaterial);
+    this.closeModal.emit(this.newMaterial.id);
   }
 
   async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      await this.solidLiquidMaterialDbService.asyncDeleteMaterial(this.idbEditMaterialId);
-      this.closeModal.emit(this.newMaterial);
+      await this.solidLiquidMaterialDbService.deleteMaterial(this.idbEditMaterialId);
+      this.closeModal.emit(undefined);
     }
   }
 
@@ -220,7 +220,6 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   checkMaterialName() {
     this.isNameValid = true;
     this.nameError = null;
-
     let uniqueName = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
     if (uniqueName.length > 0) {
       this.nameError = 'Cannot have same name as existing material';

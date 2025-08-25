@@ -197,7 +197,6 @@ export class CoreService {
     await firstValueFrom(this.liquidLoadMaterialDbService.insertDefaultMaterials());
     await this.flueGasMaterialDbService.insertDefaultMaterials();
     await this.solidLiquidMaterialDbService.insertDefaultMaterials();
-    return Promise.resolve();
   }
 
   async createDirectorySettings() {
