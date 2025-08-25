@@ -3,6 +3,7 @@ import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/mod
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { getDefaultInventoryItem } from '../process-cooling-constants';
+import { emit } from 'process';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +51,13 @@ export class ChillerInventoryService {
       description: [chiller.description]
     });
     return form;
+  }
+
+  patchChillerForm(form: UntypedFormGroup, chiller: ChillerInventoryItem) {
+    form.patchValue({
+      name: chiller.name,
+      description: chiller.description
+    }, { emitEvent: false });
   }
 
   getChiller(formValue: Partial<ChillerInventoryItem>, currentChiller: ChillerInventoryItem): ChillerInventoryItem {

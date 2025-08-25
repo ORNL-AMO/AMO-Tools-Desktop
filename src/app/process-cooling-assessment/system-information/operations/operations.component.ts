@@ -77,14 +77,14 @@ export class OperationsComponent {
   // * can use various rxjs handlers to debounce, filter and run ops
   observeFormChanges() {
     this.form.valueChanges.pipe(
-      tap(formValue => {
-        let systemInformation = this.processCooling().systemInformation;
-        // * use getRawValue (includes disabled fields)
-        const operations = this.systemInformationFormService.getOperations(this.form.getRawValue(), systemInformation.operations);
-        this.processCoolingAssessmentService.updateSystemInformation('operations', operations);
-      }),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe();
+    ).subscribe(() => {
+          let systemInformation = this.processCooling().systemInformation;
+          // * use getRawValue (includes disabled fields)
+          const operations = this.systemInformationFormService.getOperations(this.form.getRawValue(), systemInformation.operations);
+          this.processCoolingAssessmentService.updateSystemInformation('operations', operations);
+        }
+    );
   }
 
   observeZipCodeChanges() {

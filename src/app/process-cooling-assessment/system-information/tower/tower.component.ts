@@ -44,20 +44,17 @@ export class TowerComponent {
   }
 
   observeFormChanges() {
-    this.form.valueChanges.pipe(
-      tap(formValue => {
-        this.updateAssessment();
-      }),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe();
+    this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((formValue) => this.updateAssessment());
   }
 
   observeTowerTypeChange() {
     this.towerType.valueChanges.pipe(
-      tap((towerType: number) => {
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(
+      (towerType) => {
         switch(towerType) {
-          case TowerType.OneCellOneSpeed:
-            this.numberOfFans.patchValue(1, { emitEvent: false });
+            case TowerType.OneCellOneSpeed:
+              this.numberOfFans.patchValue(1, { emitEvent: false });
             this.fanSpeedType.patchValue(1, { emitEvent: false });
             break;
           case TowerType.OneCellTwoSpeed:
@@ -88,9 +85,8 @@ export class TowerComponent {
         console.log('Number of Fans:', this.numberOfFans.value);
         console.log('Fan Speed Type:', this.fanSpeedType.value);
         this.updateAssessment();
-      }),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe();
+      }
+    );
   }
 
   updateAssessment() {

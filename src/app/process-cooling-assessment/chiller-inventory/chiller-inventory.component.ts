@@ -22,33 +22,32 @@ export class ChillerInventoryComponent implements OnInit {
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
   form: UntypedFormGroup;
   showChillerModal = false;
-  selectedChiller$: Observable<ChillerInventoryItem>;
+  selectedChiller$: Observable<ChillerInventoryItem> = this.inventoryService.selectedChiller$;
 
   ngOnInit(): void {
-    this.selectedChiller$ = this.inventoryService.selectedChiller$.pipe(
-      tap((chiller) => {
+    this.form = this.inventoryService.getChillerForm(this.inventoryService.selectedChillerValue);
+    this.observeFormChanges();
+    this.inventoryService.selectedChiller$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((chiller) => {
         if (chiller) {
-          this.form = this.inventoryService.getChillerForm(chiller);
-          this.observeFormChanges();
+          this.inventoryService.patchChillerForm(this.form, chiller);
         } else {
           this.inventoryService.setDefaultSelectedChiller(this.processCooling().inventory);
         }
-      }),
-      takeUntilDestroyed(this.destroyRef)
+      }
     );
   }
 
   observeFormChanges() {
-    if (!this.form) return;
     this.form.valueChanges.pipe(
       debounceTime(100),
-      tap(() => {
-        const updatedChiller: ChillerInventoryItem = this.inventoryService.getChiller(this.form.getRawValue(), this.inventoryService.selectedChillerValue);
-        this.processCoolingAssessmentService.updateAssessmentChiller(updatedChiller);
-        this.inventoryService.setSelectedChiller(updatedChiller);
-      }),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe();
+    ).subscribe(() => {
+      const updatedChiller: ChillerInventoryItem = this.inventoryService.getChiller(this.form.getRawValue(), this.inventoryService.selectedChillerValue);
+      this.processCoolingAssessmentService.updateAssessmentChiller(updatedChiller);
+      this.inventoryService.setSelectedChiller(updatedChiller);
+    });
   }
 
   addInventoryItem() {
