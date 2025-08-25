@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ChillerInventoryService } from '../../chiller-inventory/chiller-inventory.service';
+import { Component, DestroyRef, inject, WritableSignal } from '@angular/core';
+import { combineLatest, Observable } from 'rxjs';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
 import { ChillerInventoryItem } from '../../../shared/models/process-cooling-assessment';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { Settings } from '../../../shared/models/settings';
+import { ChillerInventoryService, InventoryValidState } from '../../services/chiller-inventory.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-inventory-table',
@@ -13,67 +15,48 @@ import { Settings } from '../../../shared/models/settings';
   styleUrl: './inventory-table.component.css'
 })
 export class InventoryTableComponent {
+  private inventoryService: ChillerInventoryService = inject(ChillerInventoryService);
+  private processCoolingService: ProcessCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private destroyRef = inject(DestroyRef);
 
-  processCoolingAssessmentSub: Subscription;
-  chillerInventoryItems: Array<ChillerInventoryItem>;
-
-  selectedChiller: ChillerInventoryItem;
-  selectedChillerSub: Subscription;
+  inventoryState$: Observable<InventoryState>;
+  inventoryValidState: WritableSignal<InventoryValidState> = this.inventoryService.inventoryValidState;
 
   showConfirmDeleteModal: boolean = false;
   deleteSelectedId: string;
-  hasInvalidChillers: boolean = false;
   confirmDeleteData: ConfirmDeleteData;
   settings: Settings;
-
-  constructor(private inventoryService: ChillerInventoryService, private processCoolingService: ProcessCoolingAssessmentService) { }
-
+  
   ngOnInit(): void {
-    this.settings = this.processCoolingService.settingsValue;
-    // this.selectedChillerSub = this.inventoryService.selectedChiller.subscribe(val => {
-    //   this.selectedChiller = val;
-    // })
-    // this.processCoolingAssessmentSub = this.processCoolingService.processCooling.subscribe(val => {
-    //   if (val) {
-    //     this.chillerInventoryItems = val.inventory;
-    //     this.chillerInventoryItems.forEach(chiller => {
-    //       chiller.isValid = this.inventoryService.isValidChiller(chiller);
-    //       if (!chiller.name) {
-    //         chiller.name = 'Chiller ' + (this.chillerInventoryItems.indexOf(chiller) + 1).toString();
-    //         chiller.isValid = this.inventoryService.isValidChiller(chiller);
-    //       }
-    //     });
-    //     this.hasInvalidChillers = this.chillerInventoryItems.some(chiller => !chiller.isValid);
-    //   }
-    // });
+    this.inventoryState$ = combineLatest({
+      processCooling: this.processCoolingService.processCooling$,
+      selectedChiller: this.inventoryService.selectedChiller$,
+    }).pipe(
+      map(({ processCooling, selectedChiller }) => {
+        this.inventoryService.setInventoryValidState(processCooling.inventory);
+        return {
+          inventory: processCooling.inventory && processCooling.inventory.length > 0 ? processCooling.inventory : [],
+          selectedChillerId: selectedChiller?.itemId ?? null,
+        };
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    );
   }
 
-  // ngOnDestroy() {
-  //   this.selectedChillerSub.unsubscribe();
-  //   this.processCoolingAssessmentSub.unsubscribe();
-  // }
-
   selectItem(item: ChillerInventoryItem) {
-    this.inventoryService.selectedChiller.next(item);
+    this.inventoryService.setSelectedChiller(item);
   }
 
   addNewChiller() {
-    // let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
-    // let newInventoryItem = this.inventoryService.getNewInventoryItem();
-    // processCoolingAssessment.inventory.push(newInventoryItem);
-    // this.processCoolingService.updateProcessCooling(processCoolingAssessment, true);
-    // this.inventoryService.selectedChiller.next(newInventoryItem);
+    let newChiller = this.processCoolingService.addNewChillerToAssessment();
+    this.inventoryService.setSelectedChiller(newChiller);
   }
 
   deleteItem() {
-    // let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
-    // let itemIndex: number = processCoolingAssessment.inventory.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId });
-    // if (itemIndex !== -1) {
-    //   processCoolingAssessment.inventory.splice(itemIndex, 1);
-    //   this.processCoolingService.updateProcessCooling(processCoolingAssessment, true);
-    //   this.inventoryService.selectedChiller.next(processCoolingAssessment.inventory[0]);
-    // }
+    let updatedInventory = this.processCoolingService.deleteChillerFromAssessment(this.deleteSelectedId);
+    this.inventoryService.setSelectedChiller(updatedInventory[0]);
   }
+
 
   openConfirmDeleteModal(item: ChillerInventoryItem) {
     // this.confirmDeleteData = {
@@ -105,4 +88,10 @@ export class InventoryTableComponent {
     // this.inventoryService.selectedChiller.next(chillerCpy);
     // this.processCoolingService.updateProcessCooling(processCoolingAssessment, true);
   }
+}
+
+interface InventoryState {
+  inventory: ChillerInventoryItem[];
+  selectedChillerId: string | null;
+  hasValidChillers?: boolean;
 }

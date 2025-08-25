@@ -1,5 +1,4 @@
-import { CompressorChillerTypeEnum } from "../process-cooling-assessment/process-cooling-constants";
-import { AirCooledSystemInput, ChillerInventoryItem, Operations, PumpInput, TowerInput, WaterCooledSystemInput } from "../shared/models/process-cooling-assessment";
+import { AirCooledSystemInput, ChillerInventoryItem, CompressorChillerTypeEnum, Operations, PumpInput, TowerInput, WaterCooledSystemInput } from "../shared/models/process-cooling-assessment";
 
 export const EXAMPLE_CO2_SAVINGS_DATA = {
   energyType: 'fuel',
@@ -30,6 +29,7 @@ export const EXAMPLE_SYSTEM_INFORMATION_OPERATIONS: Operations = {
   chilledWaterSupplyTemp: 44,
   // water == 0, air == 1
   condenserCoolingMethod: 1,
+  doChillerLoadSchedulesVary: true
 };
 
 
@@ -85,6 +85,7 @@ export const EXAMPLE_PUMP_INPUT_CONDENSER: PumpInput = {
 export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
   {
   itemId: '1',
+  isValid: true,
   name: 'GVG',
   modifiedDate: new Date(),
   // What to do with custom compressors
@@ -94,8 +95,10 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
   fullLoadEfficiency: 1.0048,
   age: 1,
   installVSD: false,
-  useARIMonthlyLoadSchedule: false,
-  monthlyLoads: [
+  useARIloadScheduleByMonthchedule: false,
+  useSameMonthlyLoading: false,
+  loadScheduleAllMonths: undefined,
+  loadScheduleByMonth: [
     [0, 0, 0, 0, 30, 30, 10, 10, 10, 5, 5],
     [0, 0, 0, 0, 30, 30, 10, 10, 10, 5, 5],
     [0, 0, 0, 0, 30, 30, 10, 10, 10, 5, 5],
@@ -113,6 +116,7 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
 },
   {
   itemId: '2',
+  isValid: true,
   name: 'Reciprocating',
   modifiedDate: new Date(),
   chillerType: CompressorChillerTypeEnum.RECIPROCATING,
@@ -121,8 +125,10 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
   fullLoadEfficiency: 1.02,
   age: 2,
   installVSD: false,
-  useARIMonthlyLoadSchedule: false,
-  monthlyLoads: [
+  useARIloadScheduleByMonthchedule: false,
+  useSameMonthlyLoading: false,
+  loadScheduleAllMonths: undefined,
+  loadScheduleByMonth: [
     [0, 0, 0, 30, 40, 15, 10, 5, 0, 0, 0],
     [0, 0, 0, 30, 40, 15, 10, 5, 0, 0, 0],
     [0, 0, 0, 30, 40, 15, 10, 5, 0, 0, 0],
@@ -140,6 +146,7 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
 },
 {
   itemId: '3',
+  isValid: true,
   name: 'Recipexp',
   modifiedDate: new Date(),
   chillerType: CompressorChillerTypeEnum.RECIPROCATING,
@@ -148,8 +155,10 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
   fullLoadEfficiency: 1,
   age: 3,
   installVSD: false,
-  useARIMonthlyLoadSchedule: false,
-  monthlyLoads: [
+  useARIloadScheduleByMonthchedule: false,
+  useSameMonthlyLoading: false,
+  loadScheduleAllMonths: undefined,
+  loadScheduleByMonth: [
     [0, 0, 10, 10, 10, 10, 10, 10, 10, 10, 20],
     [0, 0, 10, 10, 10, 10, 10, 10, 10, 10, 20],
     [0, 0, 10, 10, 10, 10, 10, 10, 10, 10, 20],

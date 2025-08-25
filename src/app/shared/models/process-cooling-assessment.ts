@@ -158,8 +158,8 @@ export interface PumpInput {
      * @param fullLoadEff double, fraction, 0.2 - 2.5 increments of .01
      * @param age double # of years, 0 - 20, (can be 1.5 for eighteen months), assumption chiller efficiency is degraded by 1% / year
      * @param installVSD boolean, Install a VSD on each Centrifugal Compressor Motor
-     * @param useARIMonthlyLoadSchedule boolean, if true monthlyLoads not needed and can be set to empty
-     * @param monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar months
+     * @param useARIloadScheduleByMonthchedule boolean, if true loadScheduleByMonth not needed and can be set to empty
+     * @param loadScheduleByMonth double, 12x11 array or 1x11 of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar months
      */
 export interface ChillerInventoryItem {
     itemId: string;
@@ -173,8 +173,10 @@ export interface ChillerInventoryItem {
     fullLoadEfficiency: number;
     age: number;
     installVSD: boolean;
-    useARIMonthlyLoadSchedule: boolean;
-    monthlyLoads?: number[][]; // * This is hours per percent load for each month
+    useARIloadScheduleByMonthchedule: boolean;
+    loadScheduleByMonth?: number[][]; // * This is hours per percent load for each month
+    loadScheduleAllMonths?: number[]; 
+    useSameMonthlyLoading: boolean;
 }
 
 export interface Modification {

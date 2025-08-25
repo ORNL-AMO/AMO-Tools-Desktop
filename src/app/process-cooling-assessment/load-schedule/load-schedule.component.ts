@@ -1,6 +1,6 @@
-import { Component, computed, inject, WritableSignal } from '@angular/core';
+import { Component, inject, WritableSignal } from '@angular/core';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
-import { ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
+import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 
 @Component({
   selector: 'app-load-schedule',
@@ -12,8 +12,11 @@ export class LoadScheduleComponent {
   private processCoolingAssessmentService: ProcessCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
   processCooling: WritableSignal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
 
+  chillerInventory: Array<ChillerInventoryItem> = this.processCooling().inventory;
+
   constructor() { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+  }
 
 }

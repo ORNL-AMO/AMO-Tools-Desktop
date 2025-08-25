@@ -58,6 +58,8 @@ import { LoadScheduleComponent } from './load-schedule/load-schedule.component';
 import { ChillerLoadScheduleComponent } from './chiller-load-schedule/chiller-load-schedule.component';
 import { WeatherComponent } from './weather/weather.component';
 import { ChillerInventoryService } from './services/chiller-inventory.service';
+import { ChillerLoadScheduleService } from './services/chiller-load-schedule.service';
+import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe';
 
 
 export const ROUTE_TOKENS = {
@@ -215,7 +217,8 @@ const ROUTES: Route[] = [
     TowerHelpComponent,
     LoadScheduleComponent,
     ChillerLoadScheduleComponent,
-    WeatherComponent
+    WeatherComponent,
+    ChillerCompressorTypePipe
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -239,7 +242,7 @@ const ROUTES: Route[] = [
     FormControlErrorsComponent,
     FormControlRequiredComponent,
     InputUnitComponent,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
   ],
   providers: [
     ProcessCoolingAssessmentService,
@@ -249,7 +252,8 @@ const ROUTES: Route[] = [
     ConvertProcessCoolingService,
     AssessmentRedirectGuard,
     ProcessCoolingAssessmentResolver,
-    ChillerInventoryService
+    ChillerInventoryService,
+    ChillerLoadScheduleService
   ]
 })
 export class ProcessCoolingAssessmentModule { }

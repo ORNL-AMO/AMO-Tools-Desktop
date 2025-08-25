@@ -49,6 +49,7 @@ export class OperationsComponent {
     const operations = this.processCooling().systemInformation.operations;
     this.co2SavingsData = this.processCooling().systemInformation.co2SavingsData;
     this.form = this.systemInformationFormService.getOperationsForm(operations);
+    this.doChillerLoadSchedulesVary.disable();
     // * new getter for form control ids to create unique id srings when multiple instances of one component (should move to global helpersor global ng service). We need to standardize this across app
     this.controlIds = generateFormControlIds(this.form.controls);
 

@@ -1,8 +1,10 @@
 <div #content class="process-cooling-container process-cooling-assessment d-flex flex-column">
-  <div #header class="w-100 hide-print sticky-top" id="processCoolingBanner">
+  <div #header class="w-100 hide-print" id="processCoolingBanner">
     <app-process-cooling-banner></app-process-cooling-banner>
   </div>
+
   <router-outlet></router-outlet>
+
   <div #footer id="processCoolingFooter" class="footer hide-print d-none d-lg-block">
     <div class="pull-left">
       <button class="btn btn-default" (click)="back()" [disabled]="!canGoBack">Back</button>

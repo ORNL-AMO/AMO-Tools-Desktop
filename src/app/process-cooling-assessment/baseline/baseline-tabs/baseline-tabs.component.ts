@@ -22,8 +22,8 @@ export class BaselineTabsComponent {
   constructor() {
     effect(() => {
 
-      console.log('Main View:', this.mainView());
-      console.log('Setup View:', this.setupView());
+      // console.log('Main View:', this.mainView());
+      // console.log('Setup View:', this.setupView());
     });
   }
 

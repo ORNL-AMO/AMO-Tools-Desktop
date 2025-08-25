@@ -7,7 +7,7 @@ import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
   standalone: false,
   templateUrl: './baseline.component.html',
   styleUrl: './baseline.component.css',
-  host: { style: 'height: 100%;' }
+  host: { style: 'height: 100%; display: flex; flex-direction: column; overflow: hidden;' }
 })
 export class BaselineComponent {
   private readonly processCoolingUiService = inject(ProcessCoolingUiService);

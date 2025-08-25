@@ -1,9 +1,9 @@
-<div class="card p-2">
-    <div class="card-body p-0">
-        <span class="alert-danger pull-right small" *ngIf="hasInvalidChillers">
+<div *ngIf="inventoryState$ | async as inventoryState" class="card p-2">
+    <div class="card-body p-0" *ngIf="inventoryState.inventory && inventoryState.inventory.length > 0">
+        <span class="alert-danger pull-right small" *ngIf="!inventoryValidState().isValid">
             One or more chiller is invalid - Review inventory and make changes to continue
         </span>
-        <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedChiller && chillerInventoryItems">
+        <table class="table table-sm table-striped table-hover mb-0">
             <thead>
                 <tr>
                     <th>
@@ -17,23 +17,23 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let chillerInventoryItem of chillerInventoryItems"
-                    [ngClass]="{'selected-item':chillerInventoryItem.itemId == selectedChiller.itemId,
-                                'invalid-item': !chillerInventoryItem.isValid}">
+                <tr *ngFor="let chillerInventoryItem of inventoryState.inventory"
+                    [ngClass]="{'selected-item':chillerInventoryItem.itemId == inventoryState.selectedChillerId,
+                                'invalid-item': !inventoryValidState().items[chillerInventoryItem.itemId]}">
                     <td>
-                        <span *ngIf="chillerInventoryItem.itemId == selectedChiller.itemId"
+                        <span *ngIf="chillerInventoryItem.itemId == inventoryState.selectedChillerId"
                             class="fa fa-chevron-right danger"></span>
                         <a class="click-link"
                             (click)="selectItem(chillerInventoryItem)">{{chillerInventoryItem.name}}</a>
                     </td>
                     <td>
-                        {{chillerInventoryItem.compressorChillerType | chillerCompressorType}}
+                        {{chillerInventoryItem.chillerType | chillerCompressorType}}
                     </td>
                     <td>
                         {{chillerInventoryItem.fullLoadEfficiency}}
                     </td>
                     <td>
-                        {{chillerInventoryItem.chillerCapacity}}
+                        {{chillerInventoryItem.capacity}}
 
                     </td>
                     <td>
@@ -51,6 +51,7 @@
         </div>
     </div>
 </div>
+
 
 
 <app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteData" (emitShouldDelete)="onConfirmDeleteClose($event)">

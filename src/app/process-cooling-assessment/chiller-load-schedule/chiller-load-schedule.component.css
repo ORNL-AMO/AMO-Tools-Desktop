@@ -1,10 +1,18 @@
+.card-header {
+  cursor: pointer;
+}
 
 .copy-btn, .paste-btn {
-  color: var(--process-cooling-assessment) !important;
+  color: var(--process-cooling-assessment);
+}
+
+.disabled {
+  color: #6c757d;
+  pointer-events: none;
 }
 
 .table thead th, .table thead.thead-light th {
-  background-color: var(--process-cooling-assessment) !important;
+  background-color: var(--process-cooling-assessment);
   color: #fff !important;
 }
 
