@@ -8,9 +8,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { PhastResultsData } from '../../report-rollup-models';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
-import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
-import { firstValueFrom } from 'rxjs';
 import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 
 @Component({

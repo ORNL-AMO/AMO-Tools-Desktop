@@ -20,7 +20,6 @@ import { Assessment } from './models/assessment';
 import { InventoryItem } from './models/inventory/inventory';
 import { Settings } from './models/settings';
 import { Calculator } from './models/calculators';
-import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 import { Diagram } from './models/diagram';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 

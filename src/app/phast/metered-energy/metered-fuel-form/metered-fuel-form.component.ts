@@ -5,9 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ConvertPhastService } from '../../convert-phast.service';
 import { PhastService } from "../../phast.service";
 import { OperatingHours } from '../../../shared/models/operations';
-import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
-import { firstValueFrom } from 'rxjs';
 import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 
 @Component({

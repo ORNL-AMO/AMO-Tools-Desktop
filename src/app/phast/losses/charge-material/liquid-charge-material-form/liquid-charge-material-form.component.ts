@@ -8,7 +8,6 @@ import { UntypedFormGroup } from '@angular/forms';
 import { LiquidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { LiquidMaterialFormService, LiquidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { firstValueFrom } from 'rxjs';
 import { LiquidLoadMaterialDbService } from '../../../../indexedDb/liquid-load-material-db.service';
 import { roundVal } from '../../../../shared/helperFunctions';

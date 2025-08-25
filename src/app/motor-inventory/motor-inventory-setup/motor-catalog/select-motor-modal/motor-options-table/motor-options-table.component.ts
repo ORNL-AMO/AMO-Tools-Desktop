@@ -3,7 +3,7 @@ import { SuiteDbMotor } from '../../../../../shared/models/materials';
 import { MotorCatalogService } from '../../motor-catalog.service';
 import { FilterMotorOptions } from '../filter-motor-options.pipe';
 import { Subscription } from 'rxjs';
-import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
+import { MotorDataApiService } from '../../../../../tools-suite-api/motor-data-api.service';
 
 @Component({
     selector: 'app-motor-options-table',
@@ -18,10 +18,10 @@ export class MotorOptionsTableComponent implements OnInit {
   motorOptions: Array<SuiteDbMotor>;
   filterMotorOptions: FilterMotorOptions;
   filterMotorOptionsSub: Subscription;
-  constructor(private sqlDbApiService: SqlDbApiService, private motorCatalogService: MotorCatalogService) { }
+  constructor(private motorDataApiService: MotorDataApiService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
-    this.motorOptions = this.sqlDbApiService.selectMotors();
+    this.motorOptions = this.motorDataApiService.getMotors();
     this.filterMotorOptionsSub = this.motorCatalogService.filterMotorOptions.subscribe(val => {
       this.filterMotorOptions = val;
       this.motorOptions = Array.from(this.motorOptions);

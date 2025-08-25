@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 import { SolidLoadMaterialDbService } from '../../indexedDb/solid-load-material-db.service';
 import { firstValueFrom } from 'rxjs';
 

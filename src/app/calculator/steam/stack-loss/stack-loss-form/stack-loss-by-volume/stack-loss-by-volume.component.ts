@@ -6,9 +6,7 @@ import { ConvertUnitsService } from '../../../../../shared/convert-units/convert
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { StackLossService } from '../../stack-loss.service';
 import { FlueGasMaterial } from '../../../../../shared/models/materials';
-import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
 import { FlueGasMaterialDbService } from '../../../../../indexedDb/flue-gas-material-db.service';
-import { firstValueFrom } from 'rxjs';
 import { roundVal } from '../../../../../shared/helperFunctions';
 
 @Component({
