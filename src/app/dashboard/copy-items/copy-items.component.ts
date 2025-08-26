@@ -16,7 +16,7 @@ import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { Settings } from '../../shared/models/settings';
 import { DashboardService } from '../dashboard.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
-import { MotorIntegrationService } from '../../shared/connected-inventory/motor-integration.service';
+import { PumpMotorIntegrationService } from '../../shared/connected-inventory/pump-motor-integration.service';
 
 
 @Component({
@@ -46,7 +46,7 @@ export class CopyItemsComponent implements OnInit {
     private formBuilder: UntypedFormBuilder,
       
     private assessmentDbService: AssessmentDbService,
-    private motorIntegrationService: MotorIntegrationService,
+    private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private calculatorDbService: CalculatorDbService,
     private inventoryDbService: InventoryDbService,
     private settingsDbService: SettingsDbService) { }
@@ -310,9 +310,9 @@ export class CopyItemsComponent implements OnInit {
           let settingsCopy: Settings = JSON.parse(JSON.stringify(tmpSettings));
           delete settingsCopy.id;
           if (inventoryCopy.motorInventoryData) {
-            this.motorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
+            this.pumpMotorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
           } else if (inventoryCopy.pumpInventoryData) {
-            this.motorIntegrationService.removeAllPumpConnectedItems(inventoryCopy);
+            this.pumpMotorIntegrationService.removeAllPumpConnectedItems(inventoryCopy);
           }
 
           inventoryCopy.selected = false;
