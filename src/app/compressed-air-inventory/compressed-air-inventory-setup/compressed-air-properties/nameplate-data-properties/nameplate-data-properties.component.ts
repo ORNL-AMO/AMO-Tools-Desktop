@@ -20,39 +20,39 @@ export class NameplateDataPropertiesComponent implements OnInit {
   }
 
   save() {
-      let compressedAirInventoryService: CompressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
-      this.checkDisplayFields();
-      compressedAirInventoryService.displayOptions.nameplateDataOptions = this.nameplateDataOptions;
-      this.compressedAirInventoryService.compressedAirInventoryData.next(compressedAirInventoryService);
-    }
-  
-    toggleForm() {
-      this.displayForm = !this.displayForm;
-    }
-  
-    setAll() {
-      this.nameplateDataOptions.compressorType = this.nameplateDataOptions.displayNameplateData;
-      this.nameplateDataOptions.fullLoadOperatingPressure = this.nameplateDataOptions.displayNameplateData;
-      this.nameplateDataOptions.fullLoadRatedCapacity = this.nameplateDataOptions.displayNameplateData;      
-      this.nameplateDataOptions.totalPackageInputPower = this.nameplateDataOptions.displayNameplateData;
-      this.save();
-    }
-  
-    checkDisplayFields() {
-      this.nameplateDataOptions.displayNameplateData = (
-        this.nameplateDataOptions.compressorType ||
-        this.nameplateDataOptions.fullLoadOperatingPressure ||
-        this.nameplateDataOptions.fullLoadRatedCapacity||
-        this.nameplateDataOptions.totalPackageInputPower
-      );
-    }
-    focusField(str: string){
-      this.focusGroup();
-      this.compressedAirInventoryService.focusedField.next(str);
-    }
-  
-    focusGroup(){
-      this.compressedAirInventoryService.focusedDataGroup.next('nameplate-data');
-    }
+    let compressedAirInventoryService: CompressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
+    this.checkDisplayFields();
+    compressedAirInventoryService.displayOptions.nameplateDataOptions = this.nameplateDataOptions;
+    this.compressedAirInventoryService.compressedAirInventoryData.next(compressedAirInventoryService);
+  }
+
+  toggleForm() {
+    this.displayForm = !this.displayForm;
+  }
+
+  setAll() {
+    this.nameplateDataOptions.compressorType = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.fullLoadOperatingPressure = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.fullLoadRatedCapacity = this.nameplateDataOptions.displayNameplateData;
+    this.nameplateDataOptions.totalPackageInputPower = this.nameplateDataOptions.displayNameplateData;
+    this.save();
+  }
+
+  checkDisplayFields() {
+    this.nameplateDataOptions.displayNameplateData = (
+      this.nameplateDataOptions.compressorType ||
+      this.nameplateDataOptions.fullLoadOperatingPressure ||
+      this.nameplateDataOptions.fullLoadRatedCapacity ||
+      this.nameplateDataOptions.totalPackageInputPower
+    );
+  }
+  focusField(str: string) {
+    this.focusGroup();
+    this.compressedAirInventoryService.focusedField.next(str);
+  }
+
+  focusGroup() {
+    this.compressedAirInventoryService.focusedDataGroup.next('nameplate-data');
+  }
 
 }

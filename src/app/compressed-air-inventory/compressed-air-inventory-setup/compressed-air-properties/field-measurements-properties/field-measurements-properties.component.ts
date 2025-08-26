@@ -20,34 +20,34 @@ export class FieldMeasurementsPropertiesComponent implements OnInit {
   }
 
   save() {
-      let compressedAirInventoryService: CompressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
-      this.checkDisplayFields();
-      compressedAirInventoryService.displayOptions.fieldMeasurementsOptions = this.fieldMeasurementsOptions;
-      this.compressedAirInventoryService.compressedAirInventoryData.next(compressedAirInventoryService);
-    }
-  
-    toggleForm() {
-      this.displayForm = !this.displayForm;
-    }
-  
-    setAll() {
-      this.fieldMeasurementsOptions.yearlyOperatingHours = this.fieldMeasurementsOptions.displayFieldMeasurements;
-      this.save();
-    }
-  
-    checkDisplayFields() {
-      this.fieldMeasurementsOptions.displayFieldMeasurements = (
-        this.fieldMeasurementsOptions.yearlyOperatingHours 
-      );
-    }
-    focusField(str: string){
-      this.focusGroup();
-      this.compressedAirInventoryService.focusedField.next(str);
-    }
-  
-    focusGroup(){
-      this.compressedAirInventoryService.focusedDataGroup.next('field-measurements');
-    }
+    let compressedAirInventoryService: CompressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
+    this.checkDisplayFields();
+    compressedAirInventoryService.displayOptions.fieldMeasurementsOptions = this.fieldMeasurementsOptions;
+    this.compressedAirInventoryService.compressedAirInventoryData.next(compressedAirInventoryService);
+  }
+
+  toggleForm() {
+    this.displayForm = !this.displayForm;
+  }
+
+  setAll() {
+    this.fieldMeasurementsOptions.yearlyOperatingHours = this.fieldMeasurementsOptions.displayFieldMeasurements;
+    this.save();
+  }
+
+  checkDisplayFields() {
+    this.fieldMeasurementsOptions.displayFieldMeasurements = (
+      this.fieldMeasurementsOptions.yearlyOperatingHours
+    );
+  }
+  focusField(str: string) {
+    this.focusGroup();
+    this.compressedAirInventoryService.focusedField.next(str);
+  }
+
+  focusGroup() {
+    this.compressedAirInventoryService.focusedDataGroup.next('field-measurements');
+  }
 
 
 }
