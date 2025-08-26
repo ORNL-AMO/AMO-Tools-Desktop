@@ -10,6 +10,7 @@ import DrawerToggleButton from './DrawerToggleButton';
 import { ParentContainerDimensions } from 'process-flow-lib';
 import { toggleDrawer } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
+import { selectedDataColor } from '../Diagram/store';
 const drawerWidth = 525;
 
 const openedMixin = (theme: Theme, parentContainer: ParentContainerDimensions, anchorProps): CSSObject => ({
@@ -85,10 +86,11 @@ const Drawer = styled(MuiDrawer, {
 const SharedDrawer = (props: SharedDrawerProps) => {
     const { diagramParentDimensions, anchor, shadowRootRef } = props;
     const dispatch = useAppDispatch();
+    const selectedDataTypeColor = useAppSelector(selectedDataColor);
     let [open, setOpen] = React.useState(true);
     let toggleDrawerOpen: () => void;
-    
-    if (anchor === 'right') { 
+
+    if (anchor === 'right') {
         open = useAppSelector((state) => state.diagram.isDrawerOpen);
         toggleDrawerOpen = () => {
             dispatch(toggleDrawer());
@@ -106,6 +108,11 @@ const SharedDrawer = (props: SharedDrawerProps) => {
     const drawerChevron = (<DrawerToggleButton toggleSidebarDrawer={toggleDrawerOpen} side={anchor}></DrawerToggleButton>);
     const toggleButton = open ? drawerChevron : closedButton;
 
+    let borderLeft: string;
+    if (anchor === 'right' && open) {
+        borderLeft = `8px solid ${selectedDataTypeColor}`;
+    }
+
     return (
         <>
             <CssBaseline />
@@ -116,16 +123,21 @@ const SharedDrawer = (props: SharedDrawerProps) => {
                 anchor={anchor}
                 sx={{
                     zIndex: 0,
+                    '& .MuiPaper-root.MuiDrawer-paperAnchorRight': {
+                        borderLeft: borderLeft,
+                        paddingX: open ? '1rem' : '0',
+                    },
+                    '& .MuiPaper-root.MuiDrawer-paperAnchorLeft': {
+                        paddingX: open ? '1rem' : '0',
+                    },
                 }}
             >
                 <DrawerHeader justifyContent={justifyContent}>
                     {toggleButton}
                 </DrawerHeader>
-                <Box paddingBottom={'1rem'} paddingTop={0} paddingX={'.5rem'} height={'100%'}>
-                    {open &&
-                        props.children
-                    }
-                </Box>
+                {open &&
+                    props.children
+                }
             </Drawer>
         </>
     );

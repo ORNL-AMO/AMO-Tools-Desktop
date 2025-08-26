@@ -11,3 +11,5 @@ export interface MeasurObjectRef {
     id: string, 
     name: string
 }
+
+export const MEASUR_RESOURCES_URL = 'https://industrialresources.ornl.gov/measur/user-guides/view-guide/MEASUR-tips-tricks';

@@ -23,7 +23,7 @@ import WarningDialog from './WarningDialog';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { AppStore, configureAppStore, RootState, selectEdges, selectNodes } from './store';
 import { Provider } from 'react-redux';
-import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected } from './diagramReducer';
+import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected, selectedIdChange } from './diagramReducer';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
 import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, getIsDiagramValid } from 'process-flow-lib';
@@ -202,7 +202,7 @@ const Diagram = (props: DiagramProps) => {
             }}
             defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
             connectionLineType={ConnectionLineType.Bezier}
-            onNodeClick={(_, node) => dispatch(openDrawerWithSelected(node.id))}
+            onNodeClick={(_, node) => dispatch(selectedIdChange(node.id))}
             onEdgeClick={(_, edge) => dispatch(openDrawerWithSelected(edge.id))}
             onDrop={onDrop}
             // onError={onErrorWithSuppressed}
@@ -231,7 +231,7 @@ const Diagram = (props: DiagramProps) => {
             shadowRootRef={props.shadowRoot}
             anchor={'left'}
           >
-              <MenuSidebar shadowRootRef={props.shadowRoot} diagramParentDimensions={diagramParentDimensions}/>
+              <MenuSidebar shadowRootRef={props.shadowRoot}/>
           </SharedDrawer>
         )}
 
