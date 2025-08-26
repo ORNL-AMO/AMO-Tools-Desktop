@@ -8,7 +8,6 @@ import { DesignedEnergyService } from '../../designed-energy/designed-energy.ser
 import { PhastResultsService } from '../../phast-results.service';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 @Component({
   selector: 'app-energy-used',
   templateUrl: './energy-used.component.html',
