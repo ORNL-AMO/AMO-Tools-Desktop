@@ -8,6 +8,7 @@ import { ElectronService } from './electron/electron.service';
 import { AppErrorService } from './shared/errors/app-error.service';
 import { UpdateApplicationService } from './shared/update-application/update-application.service';
 import { MeasurAppError } from './shared/errors/errors';
+import { ToolsSuiteApiService } from './tools-suite-api/tools-suite-api.service';
 // declare ga as a function to access the JS code in TS
 declare let gtag: Function;
 
@@ -29,7 +30,8 @@ export class AppComponent {
     private updateApplicationService: UpdateApplicationService,
     private electronService: ElectronService,
     private appErrorService: AppErrorService,
-    private router: Router) {
+    private router: Router,
+    private toolsSuiteApiService: ToolsSuiteApiService) {
 
     if (environment.production) {
       // analytics handled through gatg() automatically manages sessions, visits, clicks, etc
@@ -98,6 +100,7 @@ export class AppComponent {
   }
 
   ngOnInit() {
+    this.initializeToolsSuiteApi();
     this.measurFormattedErrorSubscription = this.appErrorService.measurFormattedError.subscribe(error => {
       this.showAppErrorModal = (error !== undefined);
     });
@@ -111,5 +114,10 @@ export class AppComponent {
     this.appErrorService.measurFormattedError.next(undefined);
   }
 
+  async initializeToolsSuiteApi(){
+    console.log('initializing Tools Suite API...');
+    await this.toolsSuiteApiService.initializeModule();
+    console.log('Tools Suite API initialized');
+  }
 
 }

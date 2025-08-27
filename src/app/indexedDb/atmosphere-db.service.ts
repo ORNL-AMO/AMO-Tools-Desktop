@@ -3,19 +3,21 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { AtmosphereSpecificHeat } from '../shared/models/materials';
 import { AtmosphereStoreMeta } from './dbConfig';
-declare var Module: any;
+import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
 @Injectable()
 export class AtmosphereDbService {
   storeName: string = AtmosphereStoreMeta.store;
   dbAtmospherSpecificHeatMaterials: BehaviorSubject<Array<AtmosphereSpecificHeat>>;
 
-  constructor(private dbService: NgxIndexedDBService) {
+  constructor(private dbService: NgxIndexedDBService,
+    private toolsSuiteApiService: ToolsSuiteApiService
+  ) {
     this.dbAtmospherSpecificHeatMaterials = new BehaviorSubject<Array<AtmosphereSpecificHeat>>([]);
   }
 
   insertDefaultMaterials(): Observable<number[]> {
-    let DefaultData = new Module.DefaultData();
+    let DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
     let suiteDefaultMaterials = DefaultData.getAtmosphereSpecificHeat();
 
     let defaultMaterials: Array<AtmosphereSpecificHeat> = [];

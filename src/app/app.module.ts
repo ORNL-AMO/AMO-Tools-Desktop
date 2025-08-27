@@ -39,30 +39,6 @@ import { filter, take } from 'rxjs/operators';
 })
 export class AppModule { }
 
-
-export function loadScriptFromPath(id: string, url: string): Promise<void> {
-  let script = <HTMLScriptElement>document.getElementById(id);
-  if (script) {
-    return Promise.resolve();
-  }
-
-  return new Promise<void>((resolve, reject) => {
-    script = document.createElement("script");
-    document.body.appendChild(script);
-    script.onload = () => {
-      resolve()
-    };
-    script.onerror = (ev: ErrorEvent) => {
-      reject(ev.error);
-    };
-    script.id = id;
-    script.async = true;
-    script.src = url;
-  });
-}
-
-
-
 export function initializeAppFactory(
   electronService: ElectronService,
   serviceWorkerUpdates: SwUpdate,
@@ -76,35 +52,6 @@ export function initializeAppFactory(
     const RELOAD_TRIES = 'measur_reload_tries';
     const RELOAD_REASON = 'measur_reload_reason';
     const LOAD_ERROR = 'measur_loading_error';
-
-    function initializeWASMScript() {
-      return new Promise((resolve, reject) => {
-        // Prepare global objects 
-        console.log('=== Initializing MEASUR Tools Suite module ===');
-        window['dbInstance'] = undefined;
-        window['Module'] = {
-          onRuntimeInitialized: function () {
-            // window['dbInstance'] = new window['Module'].SQLite(":memory:", true);
-            console.log('=== MEASUR Tools Suite module initialized ===');
-            console.timeEnd('initializeAppFactory');
-            resolve(module);
-          },
-          onAbort: function (err) {
-            new MeasurAppError('Error occurred in MEASUR Tools Suite', undefined);
-          }
-        };
-
-        // Load client.js, ensure module created before app init
-        loadScriptFromPath('wasmClient', `client.js`)
-          .then(() => {
-            console.log('=== Loading MEASUR Tools Suite client.js ===');
-            const module = <any>{ locateFile: (file: string) => { } };
-          })
-          .catch(err => {
-            reject(new MeasurAppError('Unable to load MEASUR Tools Suite', err));
-          });
-      });
-    }
 
     browserStorageService.detectAppStorageOptions().pipe(
       filter((val: BrowserStorageAvailable) => val !== undefined),
@@ -148,6 +95,6 @@ export function initializeAppFactory(
     } else {
       console.log('=== Initialize for electron or dev web');
     }
-    return initializeWASMScript();
+    return;
   }
 }

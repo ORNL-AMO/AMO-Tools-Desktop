@@ -3,18 +3,19 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, firstValueFrom, map, Observable } from 'rxjs';
 import { SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { SolidLiquidFlueGasMaterialStoreMeta } from './dbConfig';
-declare var Module: any;
+import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
 @Injectable()
 export class SolidLiquidMaterialDbService {
   storeName: string = SolidLiquidFlueGasMaterialStoreMeta.store;
   dbSolidLiquidFlueGasMaterials: BehaviorSubject<Array<SolidLiquidFlueGasMaterial>>;
 
-  constructor(private dbService: NgxIndexedDBService) {
+  constructor(private dbService: NgxIndexedDBService,
+    private toolsSuiteApiService: ToolsSuiteApiService) {
     this.dbSolidLiquidFlueGasMaterials = new BehaviorSubject<Array<SolidLiquidFlueGasMaterial>>([]);
   }
   async insertDefaultMaterials(): Promise<void> {
-    let DefaultData = new Module.DefaultData();
+    let DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
     let suiteDefaultMaterials = DefaultData.getSolidLiquidFlueGasMaterials();
 
     let defaultMaterials: Array<SolidLiquidFlueGasMaterial> = [];

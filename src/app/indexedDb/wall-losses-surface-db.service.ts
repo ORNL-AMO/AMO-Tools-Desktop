@@ -3,21 +3,23 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { WallLossesSurface } from '../shared/models/materials';
 import { WallLossesSurfaceStoreMeta } from './dbConfig';
+import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
-declare var Module: any;
 @Injectable()
 export class WallLossesSurfaceDbService {
 
   storeName: string = WallLossesSurfaceStoreMeta.store;
   dbWallLossesSurfaceMaterials: BehaviorSubject<Array<WallLossesSurface>>;
 
-  constructor(private dbService: NgxIndexedDBService) {
+  constructor(private dbService: NgxIndexedDBService,
+    private toolsSuiteApiService: ToolsSuiteApiService
+  ) {
     this.dbWallLossesSurfaceMaterials = new BehaviorSubject<Array<WallLossesSurface>>([]);
 
   }
 
   insertDefaultMaterials(): Observable<number[]> {
-    let DefaultData = new Module.DefaultData();
+    let DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
     let suiteDefaultMaterials = DefaultData.getWallLossesSurface();
 
     let defaultMaterials: Array<WallLossesSurface> = [];

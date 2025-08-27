@@ -3,7 +3,7 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { LiquidLoadChargeMaterial } from '../shared/models/materials';
 import { LiquidLoadMaterialStoreMeta } from './dbConfig';
-declare var Module: any;
+import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
 
 @Injectable()
@@ -11,12 +11,13 @@ export class LiquidLoadMaterialDbService {
   storeName: string = LiquidLoadMaterialStoreMeta.store;
   dbLiquidLoadChargeMaterials: BehaviorSubject<Array<LiquidLoadChargeMaterial>>;
 
-  constructor(private dbService: NgxIndexedDBService) {
+  constructor(private dbService: NgxIndexedDBService,
+    private toolsSuiteApiService: ToolsSuiteApiService) {
     this.dbLiquidLoadChargeMaterials = new BehaviorSubject<Array<LiquidLoadChargeMaterial>>([]);
   }
 
   insertDefaultMaterials(): Observable<number[]> {
-    let DefaultData = new Module.DefaultData();
+    let DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
     let suiteDefaultMaterials = DefaultData.getLiquidLoadChargeMaterials();
 
     let defaultMaterials: Array<LiquidLoadChargeMaterial> = [];

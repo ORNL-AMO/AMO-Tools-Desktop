@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { SuiteDbMotor } from '../shared/models/materials';
 import { SuiteApiHelperService } from './suite-api-helper.service';
-declare var Module: any;
+import { ToolsSuiteApiService } from './tools-suite-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MotorDataApiService {
 
-  constructor(private suiteApiHelperService: SuiteApiHelperService
+  constructor(private suiteApiHelperService: SuiteApiHelperService,
+    private toolsSuiteApiService: ToolsSuiteApiService
   ) { }
 
   getMotors(): Array<SuiteDbMotor> {
-    let DefaultData = new Module.DefaultData();
+    let DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
     let suiteDefaultMaterials = DefaultData.getMotorData();
 
     let defaultMotors: Array<SuiteDbMotor> = [];

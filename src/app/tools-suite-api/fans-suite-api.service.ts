@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.service';
 import { BaseGasDensity, CompressibilityFactor, Fan203Inputs, Fan203Results, FsatInput, FsatOutput, Plane, PlaneResult, PlaneResults, PsychrometricResults } from '../shared/models/fans';
 import { SuiteApiHelperService } from './suite-api-helper.service';
-
-declare var Module: any;
+import { ToolsSuiteApiService } from './tools-suite-api.service';
 @Injectable()
 export class FansSuiteApiService {
 
-  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService,
+    private toolsSuiteApiService: ToolsSuiteApiService
+  ) { }
 
   //results
   calculateExisting(input: FsatInput): FsatOutput {
@@ -19,10 +20,10 @@ export class FansSuiteApiService {
     //convert from percent to fraction
     let specifiedDriveEfficiencyFraction: number = input.specifiedDriveEfficiency / 100;
     input.compressibilityFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.compressibilityFactor);
-    let fanInput = new Module.FanInput(input.fanSpeed, input.airDensity, driveEnum, specifiedDriveEfficiencyFraction);
-    let motor = new Module.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, input.specifiedEfficiency, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
-    let baselineFieldData = new Module.FieldDataBaseline(input.measuredPower, input.measuredVoltage, input.measuredAmps, input.flowRate, input.inletPressure, input.outletPressure, input.compressibilityFactor, loadEstimationMethodEnum, input.velocityPressure);
-    let fanResult = new Module.FanResult(fanInput, motor, input.operatingHours, input.unitCost);
+    let fanInput = new this.toolsSuiteApiService.ToolsSuiteModule.FanInput(input.fanSpeed, input.airDensity, driveEnum, specifiedDriveEfficiencyFraction);
+    let motor = new this.toolsSuiteApiService.ToolsSuiteModule.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, input.specifiedEfficiency, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
+    let baselineFieldData = new this.toolsSuiteApiService.ToolsSuiteModule.FieldDataBaseline(input.measuredPower, input.measuredVoltage, input.measuredAmps, input.flowRate, input.inletPressure, input.outletPressure, input.compressibilityFactor, loadEstimationMethodEnum, input.velocityPressure);
+    let fanResult = new this.toolsSuiteApiService.ToolsSuiteModule.FanResult(fanInput, motor, input.operatingHours, input.unitCost);
     let output = fanResult.calculateExisting(baselineFieldData);
     let results: FsatOutput = {
       fanEfficiency: output.fanEfficiency,
@@ -66,12 +67,12 @@ export class FansSuiteApiService {
     let specifiedDriveEfficiencyFraction: number = input.specifiedDriveEfficiency / 100;
     let fanEfficiencyFraction: number = input.fanEfficiency / 100;
 
-    let fanInput = new Module.FanInput(input.fanSpeed, input.airDensity, driveEnum, specifiedDriveEfficiencyFraction);
+    let fanInput = new this.toolsSuiteApiService.ToolsSuiteModule.FanInput(input.fanSpeed, input.airDensity, driveEnum, specifiedDriveEfficiencyFraction);
     // No default on new modification
     input.compressibilityFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.compressibilityFactor);
-    let fanFieldData = new Module.FieldDataModified(input.measuredVoltage, input.measuredAmps, input.flowRate, input.inletPressure, input.outletPressure, input.compressibilityFactor, input.velocityPressure);
-    let motor = new Module.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, input.specifiedEfficiency, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
-    let fanResult = new Module.FanResult(fanInput, motor, input.operatingHours, input.unitCost);
+    let fanFieldData = new this.toolsSuiteApiService.ToolsSuiteModule.FieldDataModified(input.measuredVoltage, input.measuredAmps, input.flowRate, input.inletPressure, input.outletPressure, input.compressibilityFactor, input.velocityPressure);
+    let motor = new this.toolsSuiteApiService.ToolsSuiteModule.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, input.specifiedEfficiency, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
+    let fanResult = new this.toolsSuiteApiService.ToolsSuiteModule.FanResult(fanInput, motor, input.operatingHours, input.unitCost);
     let output = fanResult.calculateModified(fanFieldData, fanEfficiencyFraction);
     let results: FsatOutput = {
       fanEfficiency: output.fanEfficiency,
@@ -122,7 +123,7 @@ export class FansSuiteApiService {
     let inputType = this.suiteApiHelperService.getBasGensityInputTypeEnum(inputs.inputType);
     let result: PsychrometricResults;
     if (inputs.dryBulbTemp != undefined && inputs.staticPressure != undefined && inputs.barometricPressure != undefined && inputs.dewPoint != undefined && gasType != undefined && inputType != undefined && inputs.specificGravity != undefined) {
-      let dewPointInstance = new Module.BaseGasDensity(inputs.dryBulbTemp, inputs.staticPressure, inputs.barometricPressure, inputs.dewPoint, gasType, inputType, inputs.specificGravity);
+      let dewPointInstance = new this.toolsSuiteApiService.ToolsSuiteModule.BaseGasDensity(inputs.dryBulbTemp, inputs.staticPressure, inputs.barometricPressure, inputs.dewPoint, gasType, inputType, inputs.specificGravity);
       result = this.getGasDensityPsychometricResults(dewPointInstance);
       dewPointInstance.delete();
     }
@@ -134,7 +135,7 @@ export class FansSuiteApiService {
     let inputType = this.suiteApiHelperService.getBasGensityInputTypeEnum(inputs.inputType);
     let result: PsychrometricResults;
     if (inputs.dryBulbTemp != undefined && inputs.staticPressure != undefined && inputs.barometricPressure != undefined && inputs.relativeHumidity != undefined && gasType != undefined && inputType != undefined && inputs.specificGravity != undefined) {
-      let relativeHumidityInstance = new Module.BaseGasDensity(inputs.dryBulbTemp, inputs.staticPressure, inputs.barometricPressure, inputs.relativeHumidity, gasType, inputType, inputs.specificGravity);
+      let relativeHumidityInstance = new this.toolsSuiteApiService.ToolsSuiteModule.BaseGasDensity(inputs.dryBulbTemp, inputs.staticPressure, inputs.barometricPressure, inputs.relativeHumidity, gasType, inputType, inputs.specificGravity);
       result = this.getGasDensityPsychometricResults(relativeHumidityInstance);
       relativeHumidityInstance.delete();
     }
@@ -146,7 +147,7 @@ export class FansSuiteApiService {
     let inputType = this.suiteApiHelperService.getBasGensityInputTypeEnum(inputs.inputType);
     let result: PsychrometricResults;
     if (inputs.dryBulbTemp != undefined && inputs.staticPressure != undefined && inputs.barometricPressure != undefined && inputs.wetBulbTemp != undefined && gasType != undefined && inputType != undefined && inputs.specificGravity != undefined && inputs.specificHeatGas != undefined) {
-      let wetBulbInstance = new Module.BaseGasDensity(inputs.dryBulbTemp, inputs.staticPressure, inputs.barometricPressure, inputs.wetBulbTemp, gasType, inputType, inputs.specificGravity, inputs.specificHeatGas);
+      let wetBulbInstance = new this.toolsSuiteApiService.ToolsSuiteModule.BaseGasDensity(inputs.dryBulbTemp, inputs.staticPressure, inputs.barometricPressure, inputs.wetBulbTemp, gasType, inputType, inputs.specificGravity, inputs.specificHeatGas);
       result = this.getGasDensityPsychometricResults(wetBulbInstance);
       wetBulbInstance.delete();
     }
@@ -173,7 +174,7 @@ export class FansSuiteApiService {
 
 
   getVelocityPressureData(inputs: Plane): { pv3: number, percent75Rule: number } {
-    let traversePlaneTraverseData = new Module.DoubleVector2D();
+    let traversePlaneTraverseData = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector2D();
     let doubleVector;
 
     let traverseData: Array<Array<number>> = inputs.traverseData.map(row => {
@@ -184,7 +185,7 @@ export class FansSuiteApiService {
       traversePlaneTraverseData.push_back(doubleVector);
       doubleVector.delete();
     });
-    let traversePlaneInstance = new Module.TraversePlane(inputs.area, inputs.dryBulbTemp, inputs.barometricPressure, inputs.staticPressure, inputs.pitotTubeCoefficient, traversePlaneTraverseData);
+    let traversePlaneInstance = new this.toolsSuiteApiService.ToolsSuiteModule.TraversePlane(inputs.area, inputs.dryBulbTemp, inputs.barometricPressure, inputs.staticPressure, inputs.pitotTubeCoefficient, traversePlaneTraverseData);
 
     let pv3 = traversePlaneInstance.getPv3Value();
     let percent75Rule = traversePlaneInstance.get75percentRule() * 100; // Convert to percentage
@@ -205,14 +206,14 @@ export class FansSuiteApiService {
     let barometricPressure = input.BaseGasDensity.barometricPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.BaseGasDensity.barometricPressure); 
     let gasDensity = input.BaseGasDensity.gasDensity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.BaseGasDensity.gasDensity); 
     
-    let baseGasDensityInstance = new Module.BaseGasDensity(
+    let baseGasDensityInstance = new this.toolsSuiteApiService.ToolsSuiteModule.BaseGasDensity(
       dryBulbTemp, 
       staticPressure, 
       barometricPressure, 
       gasDensity, 
       gasType
     );
-    let output = Module.PlaneDataNodeBindingCalculate(planeDataInstance, baseGasDensityInstance);
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.PlaneDataNodeBindingCalculate(planeDataInstance, baseGasDensityInstance);
     let AddlTraversePlanes: Array<PlaneResult> = new Array();
     for (let i = 0; i < output.addlTravPlanes.size(); i++) { // error: length = 0, was .size
       let traversPlane = output.addlTravPlanes.get(i)
@@ -284,16 +285,16 @@ export class FansSuiteApiService {
 
   fan203(input: Fan203Inputs): Fan203Results {
     //FanRatedInfo
-    let fanRatedInfoInstance = new Module.FanRatedInfo(input.FanRatedInfo.fanSpeed, input.FanRatedInfo.motorSpeed, input.FanRatedInfo.fanSpeedCorrected, input.FanRatedInfo.densityCorrected, input.FanRatedInfo.pressureBarometricCorrected);
+    let fanRatedInfoInstance = new this.toolsSuiteApiService.ToolsSuiteModule.FanRatedInfo(input.FanRatedInfo.fanSpeed, input.FanRatedInfo.motorSpeed, input.FanRatedInfo.fanSpeedCorrected, input.FanRatedInfo.densityCorrected, input.FanRatedInfo.pressureBarometricCorrected);
     //BaseGasDensity
     let gasType = this.suiteApiHelperService.getGasTypeEnum(input.BaseGasDensity.gasType);
-    let baseGasDensityInstance = new Module.BaseGasDensity(input.BaseGasDensity.dryBulbTemp, input.BaseGasDensity.staticPressure, input.BaseGasDensity.barometricPressure, input.BaseGasDensity.gasDensity, gasType);
+    let baseGasDensityInstance = new this.toolsSuiteApiService.ToolsSuiteModule.BaseGasDensity(input.BaseGasDensity.dryBulbTemp, input.BaseGasDensity.staticPressure, input.BaseGasDensity.barometricPressure, input.BaseGasDensity.gasDensity, gasType);
     //FanShaftPower
-    let fanShaftPowerInstance = new Module.FanShaftPower(input.FanShaftPower.motorShaftPower, input.FanShaftPower.efficiencyMotor, input.FanShaftPower.efficiencyVFD, input.FanShaftPower.efficiencyBelt, input.FanShaftPower.sumSEF);
+    let fanShaftPowerInstance = new this.toolsSuiteApiService.ToolsSuiteModule.FanShaftPower(input.FanShaftPower.motorShaftPower, input.FanShaftPower.efficiencyMotor, input.FanShaftPower.efficiencyVFD, input.FanShaftPower.efficiencyBelt, input.FanShaftPower.sumSEF);
     //plane data instance
     let planeDataInstance = this.getPlaneDataInstance(input);
     //Calculation procedure
-    let fan203Instance = new Module.Fan203(fanRatedInfoInstance, planeDataInstance, baseGasDensityInstance, fanShaftPowerInstance);
+    let fan203Instance = new this.toolsSuiteApiService.ToolsSuiteModule.Fan203(fanRatedInfoInstance, planeDataInstance, baseGasDensityInstance, fanShaftPowerInstance);
     let fan203Output = fan203Instance.calculate();
     let results: Fan203Results = {
       fanEfficiencyTotalPressure: fan203Output.fanEfficiencyTotalPressure,
@@ -324,13 +325,13 @@ export class FansSuiteApiService {
   getPlaneDataInstance(input: Fan203Inputs) {
     //FlangePlane
     //FanInletFlange
-    let flangePlaneInstance = new Module.FlangePlane(input.PlaneData.FanInletFlange.area, input.PlaneData.FanInletFlange.dryBulbTemp, input.PlaneData.FanInletFlange.barometricPressure);
+    let flangePlaneInstance = new this.toolsSuiteApiService.ToolsSuiteModule.FlangePlane(input.PlaneData.FanInletFlange.area, input.PlaneData.FanInletFlange.dryBulbTemp, input.PlaneData.FanInletFlange.barometricPressure);
     //FanEvaseOrOutletFlange
-    let flangePlaneInstance2 = new Module.FlangePlane(input.PlaneData.FanEvaseOrOutletFlange.area, input.PlaneData.FanEvaseOrOutletFlange.dryBulbTemp, input.PlaneData.FanEvaseOrOutletFlange.barometricPressure);
+    let flangePlaneInstance2 = new this.toolsSuiteApiService.ToolsSuiteModule.FlangePlane(input.PlaneData.FanEvaseOrOutletFlange.area, input.PlaneData.FanEvaseOrOutletFlange.dryBulbTemp, input.PlaneData.FanEvaseOrOutletFlange.barometricPressure);
 
     //TraversePlane
     //FlowTraverse
-    let traversePlaneTraverseData = new Module.DoubleVector2D();
+    let traversePlaneTraverseData = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector2D();
     let doubleVector;
 
     let traverseData: Array<Array<number>> = input.PlaneData.FlowTraverse.traverseData.map(row => {
@@ -341,15 +342,15 @@ export class FansSuiteApiService {
       traversePlaneTraverseData.push_back(doubleVector);
       doubleVector.delete();
     });
-    let traversePlaneInstance = new Module.TraversePlane(input.PlaneData.FlowTraverse.area, input.PlaneData.FlowTraverse.dryBulbTemp, input.PlaneData.FlowTraverse.barometricPressure, input.PlaneData.FlowTraverse.staticPressure, input.PlaneData.FlowTraverse.pitotTubeCoefficient, traversePlaneTraverseData);
+    let traversePlaneInstance = new this.toolsSuiteApiService.ToolsSuiteModule.TraversePlane(input.PlaneData.FlowTraverse.area, input.PlaneData.FlowTraverse.dryBulbTemp, input.PlaneData.FlowTraverse.barometricPressure, input.PlaneData.FlowTraverse.staticPressure, input.PlaneData.FlowTraverse.pitotTubeCoefficient, traversePlaneTraverseData);
     // Release memory
     traversePlaneTraverseData.delete();
 
     //AddlTraversePlanes
     //traverse_plane_vector
-    let addlTraversePlanes = new Module.TraversePlaneVector();
+    let addlTraversePlanes = new this.toolsSuiteApiService.ToolsSuiteModule.TraversePlaneVector();
     if (input.FanRatedInfo.traversePlanes > 1) {
-      traversePlaneTraverseData = new Module.DoubleVector2D();
+      traversePlaneTraverseData = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector2D();
       let traversePlane: Plane = input.PlaneData.AddlTraversePlanes[0];
 
       let doubleVector;
@@ -358,7 +359,7 @@ export class FansSuiteApiService {
         traversePlaneTraverseData.push_back(doubleVector);
         doubleVector.delete();
       });
-      let traversePlaneInstance2 = new Module.TraversePlane(traversePlane.area, traversePlane.dryBulbTemp, traversePlane.barometricPressure, traversePlane.staticPressure, traversePlane.pitotTubeCoefficient, traversePlaneTraverseData);
+      let traversePlaneInstance2 = new this.toolsSuiteApiService.ToolsSuiteModule.TraversePlane(traversePlane.area, traversePlane.dryBulbTemp, traversePlane.barometricPressure, traversePlane.staticPressure, traversePlane.pitotTubeCoefficient, traversePlaneTraverseData);
       addlTraversePlanes.push_back(traversePlaneInstance2);
       traversePlaneInstance2.delete();
       traversePlaneTraverseData.delete();
@@ -366,7 +367,7 @@ export class FansSuiteApiService {
 
     //addlTraversePlane2
     if (input.FanRatedInfo.traversePlanes == 3) {
-      traversePlaneTraverseData = new Module.DoubleVector2D();
+      traversePlaneTraverseData = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector2D();
       let traversePlane: Plane = input.PlaneData.AddlTraversePlanes[1];
       let doubleVector;
       traversePlane.traverseData.forEach(dataRow => {
@@ -374,7 +375,7 @@ export class FansSuiteApiService {
         traversePlaneTraverseData.push_back(doubleVector);
         doubleVector.delete();
       });
-      let traversePlaneInstance3 = new Module.TraversePlane(traversePlane.area, traversePlane.dryBulbTemp, traversePlane.barometricPressure, traversePlane.staticPressure, traversePlane.pitotTubeCoefficient, traversePlaneTraverseData);
+      let traversePlaneInstance3 = new this.toolsSuiteApiService.ToolsSuiteModule.TraversePlane(traversePlane.area, traversePlane.dryBulbTemp, traversePlane.barometricPressure, traversePlane.staticPressure, traversePlane.pitotTubeCoefficient, traversePlaneTraverseData);
       addlTraversePlanes.push_back(traversePlaneInstance3);
       traversePlaneInstance3.delete();
       // Release memory
@@ -383,16 +384,16 @@ export class FansSuiteApiService {
 
     //MstPlane
     //InletMstPlane
-    let mstPlaneInstance = new Module.MstPlane(input.PlaneData.InletMstPlane.area, input.PlaneData.InletMstPlane.dryBulbTemp, input.PlaneData.InletMstPlane.barometricPressure, input.PlaneData.InletMstPlane.staticPressure);
+    let mstPlaneInstance = new this.toolsSuiteApiService.ToolsSuiteModule.MstPlane(input.PlaneData.InletMstPlane.area, input.PlaneData.InletMstPlane.dryBulbTemp, input.PlaneData.InletMstPlane.barometricPressure, input.PlaneData.InletMstPlane.staticPressure);
 
     //OutletMstPlane
-    let mstPlaneInstance2 = new Module.MstPlane(input.PlaneData.OutletMstPlane.area, input.PlaneData.OutletMstPlane.dryBulbTemp, input.PlaneData.OutletMstPlane.barometricPressure, input.PlaneData.OutletMstPlane.staticPressure);
+    let mstPlaneInstance2 = new this.toolsSuiteApiService.ToolsSuiteModule.MstPlane(input.PlaneData.OutletMstPlane.area, input.PlaneData.OutletMstPlane.dryBulbTemp, input.PlaneData.OutletMstPlane.barometricPressure, input.PlaneData.OutletMstPlane.staticPressure);
 
     //getPlaneData()
     let totalPressureLossBtwnPlanes1and4 = input.PlaneData.totalPressureLossBtwnPlanes1and4;
     let totalPressureLossBtwnPlanes2and5 = input.PlaneData.totalPressureLossBtwnPlanes2and5;
     let plane5upstreamOfPlane2 = input.PlaneData.plane5upstreamOfPlane2;
-    let planeDataInstance = new Module.PlaneData(flangePlaneInstance, flangePlaneInstance2, traversePlaneInstance, addlTraversePlanes, mstPlaneInstance, mstPlaneInstance2, totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5, plane5upstreamOfPlane2);
+    let planeDataInstance = new this.toolsSuiteApiService.ToolsSuiteModule.PlaneData(flangePlaneInstance, flangePlaneInstance2, traversePlaneInstance, addlTraversePlanes, mstPlaneInstance, mstPlaneInstance2, totalPressureLossBtwnPlanes1and4, totalPressureLossBtwnPlanes2and5, plane5upstreamOfPlane2);
 
     // Release memory
     flangePlaneInstance.delete();
@@ -408,7 +409,7 @@ export class FansSuiteApiService {
     let fanType = this.suiteApiHelperService.getFanTypeEnum(inputs.fanType);
     // No default on new modification
     inputs.compressibility = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.compressibility);
-    let optimalEfficiencyFactor = new Module.OptimalFanEfficiency(fanType, inputs.fanSpeed, inputs.flowRate, inputs.inletPressure, inputs.outletPressure, inputs.compressibility);
+    let optimalEfficiencyFactor = new this.toolsSuiteApiService.ToolsSuiteModule.OptimalFanEfficiency(fanType, inputs.fanSpeed, inputs.flowRate, inputs.inletPressure, inputs.outletPressure, inputs.compressibility);
     let optimalEfficiencyFactorResult = optimalEfficiencyFactor.calculate();
     let result = optimalEfficiencyFactorResult * 100;
     optimalEfficiencyFactor.delete();
@@ -423,7 +424,7 @@ export class FansSuiteApiService {
     inputs.specificHeatRatio = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.specificHeatRatio);
     inputs.barometricPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputs.barometricPressure);
     
-    let compressibilityFactor = new Module.CompressibilityFactor(inputs.moverShaftPower, inputs.inletPressure, inputs.outletPressure, inputs.barometricPressure, inputs.flowRate, inputs.specificHeatRatio);
+    let compressibilityFactor = new this.toolsSuiteApiService.ToolsSuiteModule.CompressibilityFactor(inputs.moverShaftPower, inputs.inletPressure, inputs.outletPressure, inputs.barometricPressure, inputs.flowRate, inputs.specificHeatRatio);
     let compressibilityFactorResult = compressibilityFactor.calculate();
     compressibilityFactor.delete();
     return compressibilityFactorResult;
