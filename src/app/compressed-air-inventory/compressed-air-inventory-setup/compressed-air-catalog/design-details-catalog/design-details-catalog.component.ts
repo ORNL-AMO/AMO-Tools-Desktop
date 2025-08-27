@@ -67,7 +67,7 @@ export class DesignDetailsCatalogComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.compressedAirInventoryService.focusedDataGroup.next('nameplate-data');
+    this.compressedAirInventoryService.focusedDataGroup.next('design-details');
     this.compressedAirInventoryService.focusedField.next(str);
   }
 

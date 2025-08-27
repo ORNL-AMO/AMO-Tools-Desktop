@@ -38,7 +38,7 @@ export class DesignDetailsPropertiesComponent implements OnInit {
     this.compressedAirDesignDetailsPropertiesOptions.serviceFactor = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
     this.compressedAirDesignDetailsPropertiesOptions.noLoadPowerFM = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
     this.compressedAirDesignDetailsPropertiesOptions.noLoadPowerUL = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
-    this.compressedAirDesignDetailsPropertiesOptions.maxFullFlowPressure = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;    
+    this.compressedAirDesignDetailsPropertiesOptions.maxFullFlowPressure = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
     this.compressedAirDesignDetailsPropertiesOptions.estimatedTimeLoaded = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
     this.compressedAirDesignDetailsPropertiesOptions.averageLoadFactor = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
     this.compressedAirDesignDetailsPropertiesOptions.motorEfficiencyAtLoad = this.compressedAirDesignDetailsPropertiesOptions.displayCompressedAirDesignDetailsProperties;
@@ -51,9 +51,9 @@ export class DesignDetailsPropertiesComponent implements OnInit {
       this.compressedAirDesignDetailsPropertiesOptions.modulatingPressureRange ||
       this.compressedAirDesignDetailsPropertiesOptions.inputPressure ||
       this.compressedAirDesignDetailsPropertiesOptions.designEfficiency ||
-      this.compressedAirDesignDetailsPropertiesOptions.serviceFactor||
-      this.compressedAirDesignDetailsPropertiesOptions.noLoadPowerFM||
-      this.compressedAirDesignDetailsPropertiesOptions.noLoadPowerUL||
+      this.compressedAirDesignDetailsPropertiesOptions.serviceFactor ||
+      this.compressedAirDesignDetailsPropertiesOptions.noLoadPowerFM ||
+      this.compressedAirDesignDetailsPropertiesOptions.noLoadPowerUL ||
       this.compressedAirDesignDetailsPropertiesOptions.maxFullFlowPressure ||
       this.compressedAirDesignDetailsPropertiesOptions.estimatedTimeLoaded ||
       this.compressedAirDesignDetailsPropertiesOptions.averageLoadFactor ||

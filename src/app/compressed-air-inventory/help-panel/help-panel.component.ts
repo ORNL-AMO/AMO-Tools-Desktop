@@ -23,7 +23,7 @@ export class HelpPanelComponent implements OnInit {
   ngOnInit(): void {
     this.setupTabSubscription = this.compressedAirInventoryService.setupTab.subscribe(val => {
       this.setupTab = val;
-      this.displayHeader = this.setupTab != 'pump-catalog';
+      this.displayHeader = this.setupTab != 'compressed-air-catalog';
     });
     this.focusedFieldSub = this.compressedAirInventoryService.focusedField.subscribe(val => {
       this.focusedField = val;
