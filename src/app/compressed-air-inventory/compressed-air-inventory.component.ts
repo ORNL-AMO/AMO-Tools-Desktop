@@ -7,7 +7,6 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { ActivatedRoute } from '@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { MotorIntegrationService } from '../shared/connected-inventory/motor-integration.service';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirInventoryData } from './compressed-air-inventory';
 import { environment } from '../../environments/environment';

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CompressedAirInventoryData, CompressedAirInventorySystem } from '../../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
-import { MotorIntegrationService } from '../../../shared/connected-inventory/motor-integration.service';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
@@ -16,7 +15,7 @@ export class SystemSetupComponent implements OnInit {
   settings: Settings;
 
   compressedAirInventoryData: CompressedAirInventoryData;
-  constructor(private compressedAirInventoryService: CompressedAirInventoryService, private motorIntegrationService: MotorIntegrationService) { }
+  constructor(private compressedAirInventoryService: CompressedAirInventoryService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirInventoryService.settings.getValue();
