@@ -15,7 +15,7 @@ import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
 import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
-import { MotorIntegrationService } from '../../../../shared/connected-inventory/motor-integration.service';
+import { PumpMotorIntegrationService } from '../../../../shared/connected-inventory/pump-motor-integration.service';
 import { CompressedAirInventoryService } from '../../../../compressed-air-inventory/compressed-air-inventory.service';
 
 @Component({
@@ -48,7 +48,7 @@ export class InventoryItemComponent implements OnInit {
     private directoryDbService: DirectoryDbService, 
     private settingsDbService: SettingsDbService,
     private motorInventoryService: MotorInventoryService,
-    private motorIntegrationService: MotorIntegrationService,
+    private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private pumpInventoryService: PumpInventoryService,
     private compressedAirInventoryService: CompressedAirInventoryService) { }
 
@@ -172,11 +172,9 @@ export class InventoryItemComponent implements OnInit {
     let settingsCopy: Settings = JSON.parse(JSON.stringify(tmpSettings));
     delete settingsCopy.id;
     if (inventoryCopy.motorInventoryData) {
-      this.motorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
+      this.pumpMotorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
     } else if (inventoryCopy.pumpInventoryData) {
-      this.motorIntegrationService.removeAllPumpConnectedItems(inventoryCopy);
-    } else if (inventoryCopy.compressedAirInventoryData) {
-      this.motorIntegrationService.removeAllCompressedAirConnectedItems(inventoryCopy);
+      this.pumpMotorIntegrationService.removeAllPumpConnectedItems(inventoryCopy);
     }
     
     inventoryCopy.name = this.copyForm.controls.name.value;
