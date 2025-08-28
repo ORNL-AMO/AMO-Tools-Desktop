@@ -220,7 +220,6 @@ export class CoreComponent implements OnInit {
         await this.coreService.setNewApplicationInstanceData();
         await this.coreService.createDefaultDirectories();
         await this.coreService.createExamples();
-        await this.coreService.createDefaultProcessHeatingMaterials();
         await this.coreService.createDirectorySettings();
       } catch (e) {
         this.appErrorService.handleAppError(e, 'Error creating MEASUR database');

@@ -3,38 +3,17 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { LiquidLoadChargeMaterial } from '../shared/models/materials';
 import { LiquidLoadMaterialStoreMeta } from './dbConfig';
-import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
-
 
 @Injectable()
 export class LiquidLoadMaterialDbService {
   storeName: string = LiquidLoadMaterialStoreMeta.store;
   dbLiquidLoadChargeMaterials: BehaviorSubject<Array<LiquidLoadChargeMaterial>>;
 
-  constructor(private dbService: NgxIndexedDBService,
-    private toolsSuiteApiService: ToolsSuiteApiService) {
+  constructor(private dbService: NgxIndexedDBService) {
     this.dbLiquidLoadChargeMaterials = new BehaviorSubject<Array<LiquidLoadChargeMaterial>>([]);
   }
 
-  insertDefaultMaterials(): Observable<number[]> {
-    let DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
-    let suiteDefaultMaterials = DefaultData.getLiquidLoadChargeMaterials();
-
-    let defaultMaterials: Array<LiquidLoadChargeMaterial> = [];
-    for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-      let wasmClass = suiteDefaultMaterials.get(i);
-      defaultMaterials.push({
-        latentHeat: wasmClass.getLatentHeat(),
-        specificHeatLiquid: wasmClass.getSpecificHeatLiquid(),
-        specificHeatVapor: wasmClass.getSpecificHeatVapor(),
-        vaporizationTemperature: wasmClass.getVaporizingTemperature(),
-        substance: wasmClass.getSubstance(),
-        isDefault: true
-      });
-      wasmClass.delete();
-    }
-    DefaultData.delete();
-    suiteDefaultMaterials.delete();
+  insertDefaultMaterials(defaultMaterials: Array<LiquidLoadChargeMaterial>): Observable<number[]> {
     return this.dbService.bulkAdd(this.storeName, defaultMaterials);
   }
 

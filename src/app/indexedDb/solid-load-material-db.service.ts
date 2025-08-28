@@ -3,38 +3,17 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { SolidLoadChargeMaterial } from '../shared/models/materials';
 import { SolidLoadMaterialStoreMeta } from './dbConfig';
-import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
 @Injectable()
 export class SolidLoadMaterialDbService {
   storeName: string = SolidLoadMaterialStoreMeta.store;
   dbSolidLoadChargeMaterials: BehaviorSubject<Array<SolidLoadChargeMaterial>>;
 
-  constructor(private dbService: NgxIndexedDBService,
-    private toolsSuiteApiService: ToolsSuiteApiService) {
+  constructor(private dbService: NgxIndexedDBService) {
     this.dbSolidLoadChargeMaterials = new BehaviorSubject<Array<SolidLoadChargeMaterial>>([]);
-
   }
 
-  insertDefaultMaterials(): Observable<number[]> {
-    let DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
-    let suiteDefaultMaterials = DefaultData.getSolidLoadChargeMaterials();
-
-    let defaultMaterials: Array<SolidLoadChargeMaterial> = [];
-    for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-      let wasmClass = suiteDefaultMaterials.get(i);
-      defaultMaterials.push({
-        latentHeat: wasmClass.getLatentHeat(),
-        meltingPoint: wasmClass.getMeltingPoint(),
-        specificHeatLiquid: wasmClass.getSpecificHeatLiquid(),
-        specificHeatSolid: wasmClass.getSpecificHeatSolid(),
-        substance: wasmClass.getSubstance(),
-        isDefault: true
-      });
-      wasmClass.delete();
-    }
-    DefaultData.delete();
-    suiteDefaultMaterials.delete();
+  insertDefaultMaterials(defaultMaterials: Array<SolidLoadChargeMaterial>): Observable<number[]> {
     return this.dbService.bulkAdd(this.storeName, defaultMaterials);
   }
 

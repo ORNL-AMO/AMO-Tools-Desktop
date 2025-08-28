@@ -3,36 +3,18 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { GasLoadChargeMaterial } from '../shared/models/materials';
 import { GasLoadMaterialStoreMeta } from './dbConfig';
-import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
 @Injectable()
 export class GasLoadMaterialDbService {
   storeName: string = GasLoadMaterialStoreMeta.store;
   dbGasLoadChargeMaterials: BehaviorSubject<Array<GasLoadChargeMaterial>>;
 
-  constructor(private dbService: NgxIndexedDBService,
-    private toolsSuiteApiService: ToolsSuiteApiService
+  constructor(private dbService: NgxIndexedDBService
   ) {
     this.dbGasLoadChargeMaterials = new BehaviorSubject<Array<GasLoadChargeMaterial>>([]);
-
   }
 
-  insertDefaultMaterials(): Observable<number[]> {
-    let DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
-    let suiteDefaultMaterials = DefaultData.getGasLoadChargeMaterials();
-
-    let defaultMaterials: Array<GasLoadChargeMaterial> = [];
-    for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-      let wasmClass = suiteDefaultMaterials.get(i);
-      defaultMaterials.push({
-        specificHeatVapor: wasmClass.getSpecificHeatVapor(),
-        substance: wasmClass.getSubstance(),
-        isDefault: true
-      });
-      wasmClass.delete();
-    }
-    DefaultData.delete();
-    suiteDefaultMaterials.delete();
+  insertDefaultMaterials(defaultMaterials: Array<GasLoadChargeMaterial>): Observable<number[]> {
     return this.dbService.bulkAdd(this.storeName, defaultMaterials);
   }
 

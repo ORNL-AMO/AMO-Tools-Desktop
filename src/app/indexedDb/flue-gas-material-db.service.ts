@@ -3,49 +3,18 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, firstValueFrom, map, Observable } from 'rxjs';
 import { FlueGasMaterial } from '../shared/models/materials';
 import { FlueGasMaterialStoreMeta } from './dbConfig';
-import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
 @Injectable()
 export class FlueGasMaterialDbService {
   storeName: string = FlueGasMaterialStoreMeta.store;
   dbFlueGasMaterials: BehaviorSubject<Array<FlueGasMaterial>>;
 
-  constructor(private dbService: NgxIndexedDBService,
-    private toolsSuiteApiService: ToolsSuiteApiService
+  constructor(private dbService: NgxIndexedDBService
   ) {
     this.dbFlueGasMaterials = new BehaviorSubject<Array<FlueGasMaterial>>([]);
 
   }
-  async insertDefaultMaterials(): Promise<void> {
-    let DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
-    let suiteDefaultMaterials = DefaultData.getGasFlueGasMaterials();
-
-    let defaultMaterials: Array<FlueGasMaterial> = [];
-    for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-      //GasComposition
-      let wasmClass = suiteDefaultMaterials.get(i);
-      defaultMaterials.push({
-        substance: wasmClass.getSubstance(),
-        C2H6: wasmClass.getGasByVol("C2H6"),
-        C3H8: wasmClass.getGasByVol("C3H8"),
-        C4H10_CnH2n: wasmClass.getGasByVol("C4H10_CnH2n"),
-        CH4: wasmClass.getGasByVol("CH4"),
-        CO: wasmClass.getGasByVol("CO"),
-        CO2: wasmClass.getGasByVol("CO2"),
-        H2: wasmClass.getGasByVol("H2"),
-        H2O: wasmClass.getGasByVol("H2O"),
-        N2: wasmClass.getGasByVol("N2"),
-        O2: wasmClass.getGasByVol("O2"),
-        SO2: wasmClass.getGasByVol("SO2"),
-        heatingValue: wasmClass.getHeatingValue(),
-        heatingValueVolume: wasmClass.getHeatingValueVolume(),
-        specificGravity: wasmClass.getSpecificGravity(),
-        isDefault: true
-      });
-      wasmClass.delete();
-    }
-    DefaultData.delete();
-    suiteDefaultMaterials.delete();
+  async insertDefaultMaterials(defaultMaterials: Array<FlueGasMaterial>): Promise<void> {
     await firstValueFrom(this.dbService.bulkAdd(this.storeName, defaultMaterials));
     await this.setAllMaterialsFromDb();
   }

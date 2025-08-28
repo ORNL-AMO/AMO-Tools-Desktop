@@ -7,7 +7,7 @@ import { MockFsat, MockFsatSettings, MockFsatCalculator } from '../examples/mock
 import { MockSsmt, MockSsmtSettings } from '../examples/mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from '../examples/mockTreasureHunt';
 import { MockMotorInventory } from '../examples/mockMotorInventoryData';
-import { BehaviorSubject, firstValueFrom, forkJoin, Observable, ObservableInput } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, forkJoin } from 'rxjs';
 import { MockWasteWater, MockWasteWaterSettings } from '../examples/mockWasteWater';
 import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../examples/mockCompressedAirAssessment';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
@@ -23,13 +23,6 @@ import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { MockWaterdiagram } from '../examples/mockWaterDiagram';
 import { Diagram } from '../shared/models/diagram';
 import { ApplicationInstanceDbService, ApplicationInstanceData } from '../indexedDb/application-instance-db.service';
-import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
-import { AtmosphereDbService } from '../indexedDb/atmosphere-db.service';
-import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.service';
-import { GasLoadMaterialDbService } from '../indexedDb/gas-load-material-db.service';
-import { LiquidLoadMaterialDbService } from '../indexedDb/liquid-load-material-db.service';
-import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
-import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 @Injectable()
 export class CoreService {
 
@@ -56,14 +49,7 @@ export class CoreService {
     private electronService: ElectronService,
     private diagramIdbService: DiagramIdbService,
     private applicationDataService: ApplicationInstanceDbService,
-    private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
-    private directoryDbService: DirectoryDbService,
-    private atmosphereDbService: AtmosphereDbService,
-    private solidLoadMaterialDbService: SolidLoadMaterialDbService,
-    private gasLoadMaterialDbService: GasLoadMaterialDbService,
-    private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
-    private flueGasMaterialDbService: FlueGasMaterialDbService,
-    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService) {
+    private directoryDbService: DirectoryDbService,) {
     this.showShareDataModal = new BehaviorSubject<boolean>(false);
   }
 
@@ -189,16 +175,6 @@ export class CoreService {
     await firstValueFrom(this.calculatorDbService.addWithObservable(MockFsatCalculator));
   }
 
-  async createDefaultProcessHeatingMaterials(): Promise<void> {
-    await firstValueFrom(this.wallLossesSurfaceDbService.insertDefaultMaterials());
-    await firstValueFrom(this.atmosphereDbService.insertDefaultMaterials());
-    await firstValueFrom(this.solidLoadMaterialDbService.insertDefaultMaterials());
-    await firstValueFrom(this.gasLoadMaterialDbService.insertDefaultMaterials());
-    await firstValueFrom(this.liquidLoadMaterialDbService.insertDefaultMaterials());
-    await this.flueGasMaterialDbService.insertDefaultMaterials();
-    await this.solidLiquidMaterialDbService.insertDefaultMaterials();
-  }
-
   async createDirectorySettings() {
     // Add settings for 'All Assessments'
     let defaultSettings: Settings = this.getDefaultSettingsObject();
@@ -245,5 +221,7 @@ export class CoreService {
 
     MockWaterAssessmentSettings.assessmentId = this.exampleWaterAssessmentId;
     await firstValueFrom(this.settingsDbService.addWithObservable(MockWaterAssessmentSettings));
+
+    await this.settingsDbService.setAll();
   }
 }

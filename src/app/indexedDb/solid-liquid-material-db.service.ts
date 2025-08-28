@@ -1,43 +1,18 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, firstValueFrom, map, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { SolidLiquidFlueGasMaterialStoreMeta } from './dbConfig';
-import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
 @Injectable()
 export class SolidLiquidMaterialDbService {
   storeName: string = SolidLiquidFlueGasMaterialStoreMeta.store;
   dbSolidLiquidFlueGasMaterials: BehaviorSubject<Array<SolidLiquidFlueGasMaterial>>;
 
-  constructor(private dbService: NgxIndexedDBService,
-    private toolsSuiteApiService: ToolsSuiteApiService) {
+  constructor(private dbService: NgxIndexedDBService) {
     this.dbSolidLiquidFlueGasMaterials = new BehaviorSubject<Array<SolidLiquidFlueGasMaterial>>([]);
   }
-  async insertDefaultMaterials(): Promise<void> {
-    let DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
-    let suiteDefaultMaterials = DefaultData.getSolidLiquidFlueGasMaterials();
-
-    let defaultMaterials: Array<SolidLiquidFlueGasMaterial> = [];
-    for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-      //GasComposition
-      let wasmClass = suiteDefaultMaterials.get(i);
-      defaultMaterials.push({
-        substance: wasmClass.getSubstance(),
-        carbon: wasmClass.getCarbon(),
-        hydrogen: wasmClass.getHydrogen(),
-        inertAsh: wasmClass.getInertAsh(),
-        moisture: wasmClass.getMoisture(),
-        nitrogen: wasmClass.getNitrogen(),
-        o2: wasmClass.getO2(),
-        sulphur: wasmClass.getSulphur(),
-        heatingValue: wasmClass.getHeatingValueFuel(),
-        isDefault: true
-      });
-      wasmClass.delete();
-    }
-    DefaultData.delete();
-    suiteDefaultMaterials.delete();
+  async insertDefaultMaterials(defaultMaterials: Array<SolidLiquidFlueGasMaterial>): Promise<void> {
     await firstValueFrom(this.dbService.bulkAdd(this.storeName, defaultMaterials));
     await this.setAllMaterialsFromDb();
   }
