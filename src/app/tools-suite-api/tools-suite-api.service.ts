@@ -34,7 +34,6 @@ export class ToolsSuiteApiService {
             locateFile: (path: string) => `/${path}`
         });
         console.log('=== Tools Suite Module initialized');
-        await this.initializeDefaultDbData();
         return;
     }
 
@@ -59,7 +58,7 @@ export class ToolsSuiteApiService {
         }
     }
 
-    async insertAtmosphereData(DefaultData: any) {
+    private async insertAtmosphereData(DefaultData: any) {
         let suiteDefaultMaterials = DefaultData.getAtmosphereSpecificHeat();
         let defaultMaterials: Array<AtmosphereSpecificHeat> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
@@ -75,7 +74,7 @@ export class ToolsSuiteApiService {
         await firstValueFrom(this.atmosphereDbService.insertDefaultMaterials(defaultMaterials));
     }
 
-    async insertFlueGasMaterials(DefaultData: any) {
+    private async insertFlueGasMaterials(DefaultData: any) {
         let suiteDefaultMaterials = DefaultData.getGasFlueGasMaterials();
         let defaultMaterials: Array<FlueGasMaterial> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
@@ -105,7 +104,7 @@ export class ToolsSuiteApiService {
         await this.flueGasMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    async insertGasLoadMaterials(DefaultData: any) {
+    private async insertGasLoadMaterials(DefaultData: any) {
         let suiteDefaultMaterials = DefaultData.getGasLoadChargeMaterials();
         let defaultMaterials: Array<GasLoadChargeMaterial> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
@@ -120,7 +119,7 @@ export class ToolsSuiteApiService {
         await this.gasLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    async insertLiquidLoadMaterials(DefaultData: any) {
+    private async insertLiquidLoadMaterials(DefaultData: any) {
         let suiteDefaultMaterials = DefaultData.getLiquidLoadChargeMaterials();
 
         let defaultMaterials: Array<LiquidLoadChargeMaterial> = [];
@@ -140,7 +139,7 @@ export class ToolsSuiteApiService {
         await this.liquidLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    async insertSolidLiquidFlueGasMaterials(DefaultData: any) {
+    private async insertSolidLiquidFlueGasMaterials(DefaultData: any) {
         let suiteDefaultMaterials = DefaultData.getSolidLiquidFlueGasMaterials();
         let defaultMaterials: Array<SolidLiquidFlueGasMaterial> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
@@ -164,7 +163,7 @@ export class ToolsSuiteApiService {
         await this.solidLiquidMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    async insertSolidLoadMaterials(DefaultData: any) {
+    private async insertSolidLoadMaterials(DefaultData: any) {
         let suiteDefaultMaterials = DefaultData.getSolidLoadChargeMaterials();
 
         let defaultMaterials: Array<SolidLoadChargeMaterial> = [];
@@ -184,15 +183,15 @@ export class ToolsSuiteApiService {
         await this.solidLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    async insertWallLossSurfaces(DefaultData: any) {
+    private async insertWallLossSurfaces(DefaultData: any) {
         let suiteDefaultMaterials = DefaultData.getWallLossesSurface();
 
         let defaultMaterials: Array<WallLossesSurface> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
             let wasmClass = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
-                surface: wasmClass.getSurface(),
-                conditionFactor: wasmClass.getConditionFactor(),
+                surface: wasmClass.surfaceDescription(),
+                conditionFactor: wasmClass.shapeFactor(),
                 isDefault: true
             });
             wasmClass.delete();
@@ -202,7 +201,7 @@ export class ToolsSuiteApiService {
     }
 
     //quick test module works
-    // testModule() {
+    // private testModule() {
     //     var inletTemperature = 100.0
     //     var outletTemperature = 1400.0;
     //     var flowRate = 1200.0;

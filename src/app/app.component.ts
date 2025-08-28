@@ -115,9 +115,7 @@ export class AppComponent {
   }
 
   async initializeToolsSuiteApi(){
-    console.log('initializing Tools Suite API...');
     await this.toolsSuiteApiService.initializeModule();
-    console.log('Tools Suite API initialized');
   }
 
 }

@@ -24,6 +24,7 @@ import { CORE_DATA_WARNING, SECONDARY_DATA_WARNING, SnackbarService } from '../s
 import { BrowserStorageAvailable, BrowserStorageService } from '../shared/browser-storage.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
+import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
 @Component({
   selector: 'app-core',
@@ -88,7 +89,8 @@ export class CoreComponent implements OnInit {
     private browserStorageService: BrowserStorageService,
     private exportToJustifiTemplateService: ExportToJustifiTemplateService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
-    private flueGasMaterialDbService: FlueGasMaterialDbService
+    private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private toolsSuiteApiService: ToolsSuiteApiService
   ) {
   }
 
@@ -274,6 +276,7 @@ export class CoreComponent implements OnInit {
           this.diagramIdbService.setAll(initializedData.diagrams);
           this.calculatorDbService.setAll(initializedData.calculators);
           this.inventoryDbService.setAll(initializedData.inventoryItems);
+          this.toolsSuiteApiService.initializeDefaultDbData();
           this.idbStarted = true;
           this.changeDetectorRef.detectChanges();
           if (this.electronService.isElectron) {

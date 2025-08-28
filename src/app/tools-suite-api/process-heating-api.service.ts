@@ -9,7 +9,6 @@ import { AuxiliaryPowerLoss } from '../shared/models/phast/losses/auxiliaryPower
 import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
 import { GasCoolingLoss, LiquidCoolingLoss } from '../shared/models/phast/losses/coolingLoss';
 import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
-import { EnergyInputExhaustGasLoss } from '../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
 import { FlueGasByMass, FlueGasByVolume, FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
