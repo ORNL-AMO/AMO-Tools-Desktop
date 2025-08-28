@@ -199,7 +199,7 @@ export class ProcessHeatingApiService {
       input.windVelocity, input.surfaceEmissivity, input.conditionFactor,
       input.correctionFactor
     );
-    let output: number = WallLossesInstance.getHeatLoss();
+    let output: number = WallLossesInstance.totalHeatLoss();
     WallLossesInstance.delete();
     return output;
   }
