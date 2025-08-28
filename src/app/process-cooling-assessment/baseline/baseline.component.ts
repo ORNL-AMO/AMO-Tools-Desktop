@@ -18,15 +18,17 @@ export class BaselineComponent {
   isModalOpen: boolean = false;
   mainView: Signal<string> = this.processCoolingUiService.mainView;
   setupView: Signal<string> = this.processCoolingUiService.childView;
+  setupSubView: Signal<string> = this.processCoolingUiService.setupSubView;
+
   showResultsPanel: Signal<boolean> = computed(() => {
-    console.log('showResultsPanel', this.setupView());
-    return this.setupView() !== this.ROUTE_TOKENS.loadSchedule;
+    return this.setupSubView() !== this.ROUTE_TOKENS.weather;
   });
 
   constructor() {
     effect(() => {
       console.log('Main View:', this.mainView());
       console.log('Setup View:', this.setupView());
+      console.log('Setup Sub View:', this.setupSubView());
     });
   }
 }

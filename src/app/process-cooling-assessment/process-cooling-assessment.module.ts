@@ -60,6 +60,7 @@ import { WeatherComponent } from './weather/weather.component';
 import { ChillerInventoryService } from './services/chiller-inventory.service';
 import { ChillerLoadScheduleService } from './services/chiller-load-schedule.service';
 import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe';
+import { WeatherDataModule } from '../shared/modules/weather-data/weather-data.module';
 
 
 export const ROUTE_TOKENS = {
@@ -120,7 +121,14 @@ const ROUTES: Route[] = [
               },
               {
                 path: ROUTE_TOKENS.weather,
-                component: WeatherComponent
+                component: WeatherComponent,
+                children: [
+                  { path: '', redirectTo: 'weather-data', pathMatch: 'full' },
+                  {
+                    path: 'weather-data',
+                   loadChildren: () => import('../shared/modules/weather-data/weather-data.module').then(m => m.WeatherDataModule)
+                 }
+                ]
               },
               {
                 path: ROUTE_TOKENS.waterPump,
@@ -243,6 +251,7 @@ const ROUTES: Route[] = [
     FormControlRequiredComponent,
     InputUnitComponent,
     OperatingHoursModalModule,
+    WeatherDataModule
   ],
   providers: [
     ProcessCoolingAssessmentService,
