@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, forkJoin } from 'rxjs';
+import { Observable, throwError, forkJoin, firstValueFrom, of } from 'rxjs';
 import { catchError, retry, timeout, switchMap, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
@@ -22,12 +22,26 @@ export class WeatherApiService {
     'Accept': 'application/json'
   });
 
+  selectedStation: WeatherStation | null = null;
+  addressSearchStr: string;
+
   /**
-   * Get weather data for a specific station (POST to api/data)
+   * Get hourly weather data for a specific station (POST to api/data)
    * @returns Observable<WeatherDataResponse>
    */
-  getStationWeatherData(request: WeatherDataRequest): Observable<WeatherDataResponse> {
-    return this.http.post<WeatherDataResponse>(this.DATA_URL, request, {
+  getStationWeatherData(stationId: string, startDate: Date, endDate: Date): Observable<WeatherDataResponse> {
+    let monthAfterEndDate: Date = new Date(endDate);
+    monthAfterEndDate.setMonth(monthAfterEndDate.getMonth() + 1);
+
+   const stationDataRequest: WeatherDataRequest = {
+    station_id: stationId,
+    start_date: this.getWeatherDataDate(startDate),
+    end_date: this.getWeatherDataDate(monthAfterEndDate),
+    parameters: ['dry_bulb_temp', 'wet_bulb_temp'],
+    cumulative: undefined
+  };
+
+    return this.http.post<WeatherDataResponse>(this.DATA_URL, stationDataRequest, {
       headers: this.defaultHeaders
     }).pipe(
       timeout(this.defaultTimeout),
@@ -37,65 +51,81 @@ export class WeatherApiService {
   }
 
   /**
-   * Search for weather stations near a ZIP code (POST to api/stations)
+   * Search for weather stations by ZIP code or LAT/LONG (POST to api/stations)
    * @returns Observable<StationSearchResponse>
    */
-  searchStations(request: StationSearchRequest): Observable<StationSearchResponse> {
+  searchStations(request: StationSearchRequest): Observable<WeatherStation[]> {
     return this.http.post<StationSearchResponse>(this.STATIONS_URL, request, {
       headers: this.defaultHeaders
     }).pipe(
+      map(response => {
+        return this.mapWeatherStationsRequest(response);
+      }),
       timeout(this.defaultTimeout),
       retry(this.maxRetries),
-      //   this.appErrorService.handleHttpError(error, 'getCSV')
       catchError(this.handleError)
     );
   }
 
+    // todo move to WeatherApiService
+  getLocation(addressString: string): Observable<Array<NominatimLocation>> {
+    const qp = encodeURIComponent(addressString);
+    let url = `https://nominatim.openstreetmap.org/search?q=${qp}&format=json`;
+    return this.http.get<Array<NominatimLocation>>(url)
+      .pipe(
+        map(response => {
+          return response.map(loc => ({
+            ...loc,
+            lat: Number(loc.lat),
+            lon: Number(loc.lon)
+          }));
+        }),
+        timeout(this.defaultTimeout),
+        retry(this.maxRetries),
+        catchError(this.handleError)
+      )
+  }
+
+  getWeatherDataDate(date: Date): string {
+    return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+  }
 
   /**
-   * Find stations and get their weather data
-   * @param radialDistance - Search radius in miles
-   * @param parameters - Weather parameters to retrieve
-   * @param cumulative - optional -  period - default is hourly
-   * @returns Observable with stations and their weather data
+   * The weather API dataset currently hardcodes all TMY station data to year 2000
+   * @returns The TMY year
    */
-  getStationsWithWeatherData(
-    zip: string,
-    radialDistance: number,
-    startDate: string,
-    endDate: string,
-    parameters: WeatherParameter[],
-    cumulative?: CumulativePeriod
-  ): Observable<{ stations: WeatherStation[], weatherData: WeatherDataResponse[] }> {
-
-    return this.searchStations({
-      zip,
-      radial_distance: radialDistance,
-      start_date: startDate,
-      end_date: endDate
-    }).pipe(
-      switchMap(stationResponse => {
-        const weatherRequests: Observable<WeatherDataResponse>[] = stationResponse.stations.map(station => {
-          const body: WeatherDataRequest = {
-            station_id: station.station_id,
-            start_date: startDate,
-            end_date: endDate,
-            parameters,
-            cumulative
-          };
-          return this.getStationWeatherData(body);
-        });
-
-        return forkJoin(weatherRequests).pipe(
-          map(weatherData => ({
-            stations: stationResponse.stations,
-            weatherData
-          }))
-        );
-      }),
-      catchError(this.handleError)
-    );
+  getTMYYear(): number {
+    return 2000;
   }
+  
+    /**
+   * Set the date range for requests where range doesn't matter
+   * @param request - The station search request
+   */
+  setDefaultDates(request: StationSearchRequest) {
+    const currentDate = new Date();
+    request.start_date = "1500-01-01";
+    request.end_date = currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate();
+  }
+
+
+  mapWeatherStationsRequest(response: StationSearchResponse): WeatherStation[] {
+    return response.stations.map(station => ({
+      name: station.name,
+      lat: station.lat,
+      long: station.lon,
+      distance: station.distance,
+      country: station.country,
+      state: station.state,
+      stationId: station.station_id,
+      beginDate: new Date(station.data_begin_date),
+      endDate: new Date(station.data_end_date),
+      isTMYData: station.is_tmy_data,
+      ratingPercent: station.rating_percent
+    }));
+  }
+
+
 
   /**
    * @param error - HTTP error response
@@ -113,14 +143,6 @@ export class WeatherApiService {
         case 400:
           errorMessage = 'Bad Request - Please check your parameters';
           errorCode = 'BAD_REQUEST';
-          break;
-        case 401:
-          errorMessage = 'Unauthorized - Invalid API key or authentication';
-          errorCode = 'UNAUTHORIZED';
-          break;
-        case 403:
-          errorMessage = 'Forbidden - Access denied';
-          errorCode = 'FORBIDDEN';
           break;
         case 404:
           errorMessage = 'Weather data not found for the specified location';
@@ -151,8 +173,8 @@ export class WeatherApiService {
 
 export interface WeatherDataRequest {
   station_id: string;
-  start_date: string; // YYYY-MM-DD
-  end_date: string;   // YYYY-MM-DD
+  start_date: string; 
+  end_date: string;  
   parameters: WeatherParameter[];
   cumulative: CumulativePeriod;
 }
@@ -161,6 +183,7 @@ export type CumulativePeriod = 'hour' | 'day' | 'month' | 'year';
 
 export type WeatherParameter =
   | 'dry_bulb_temp'
+  | 'wet_bulb_temp'
   | 'humidity'
   | 'wind_speed'
   | 'wind_direction'
@@ -186,13 +209,41 @@ export interface WeatherDataPoint {
 
 
 export interface WeatherStation {
+  stationId: string;
+  name: string;
+  beginDate: Date;
+  endDate: Date;
+  distance?: number;
+  lat: number;
+  long: number;
+  country?: string;
+  state?: string;
+  ratingPercent: number;
+  isTMYData: boolean;
+  selected?: boolean; // MEASUR prop only
+}
+
+/*
+  Search by Zip OR lat/long
+*/
+export interface StationSearchRequest {
+  zip?: string;
+  latitude?: number;
+  longitude?: number;
+  radial_distance: number; // Distance in miles
+  start_date: string;      // YYYY-MM-DD
+  end_date: string;        // YYYY-MM-DD
+  country?: string;
+}
+
+export interface WeatherStationResponse {
   station_id: string;
   name: string;
   data_begin_date: string;
   data_end_date: string;
   distance?: number;
   lat: number;
-  long: number;
+  lon: number;
   country?: string;
   state?: string;
   rating_percent: number;
@@ -200,20 +251,20 @@ export interface WeatherStation {
   selected?: boolean; // MEASUR prop only
 }
 
-export interface StationSearchRequest {
-  zip: string;
-  radial_distance: number; // Distance in miles
-  start_date: string;      // YYYY-MM-DD
-  end_date: string;        // YYYY-MM-DD
-  country?: string;
-}
-
 export interface StationSearchResponse {
-  stations: WeatherStation[];
+  stations: WeatherStationResponse[];
 }
 
 export interface WeatherApiError {
   message: string;
   code: string;
   timestamp: string;
+}
+
+export interface NominatimLocation {
+  addresstype: string,
+  display_name: string,
+  lat: number,
+  lon: number,
+  place_id: number
 }

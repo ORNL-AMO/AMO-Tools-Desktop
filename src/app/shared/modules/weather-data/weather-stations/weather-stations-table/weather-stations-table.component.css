@@ -1,0 +1,8 @@
+thead.sortable th:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+th.active {
+    text-decoration: underline;
+}

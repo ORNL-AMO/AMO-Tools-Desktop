@@ -1,0 +1,64 @@
+<div class="d-flex w-100 justify-content-end pb-2">
+    <!-- <app-table-items-dropdown></app-table-items-dropdown> -->
+</div>
+<table class="table table-sm table-bordered table-hover">
+    <thead class="sortable">
+        <tr>
+            <th (click)="setOrderDataField('name')" [ngClass]="{'active': orderDataField == 'name'}">Station Name</th>
+            <th (click)="setOrderDataField('state')" [ngClass]="{'active': orderDataField == 'state'}">State</th>
+            <th (click)="setOrderDataField('distanceFrom')" [ngClass]="{'active': orderDataField == 'distanceFrom'}">
+                Distance Away</th>
+            <th (click)="setOrderDataField('beginDate')" [ngClass]="{'active': orderDataField == 'beginDate'}">Data
+                Start</th>
+            <th (click)="setOrderDataField('endDate')" [ngClass]="{'active': orderDataField == 'endDate'}">Data End</th>
+            <th (click)="setOrderDataField('ratingPercent')" [ngClass]="{'active': orderDataField == 'ratingPercent'}">
+                &percnt; Hourly Coverage
+            </th>
+            <th>
+                TMY Available
+            </th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        <tr
+            *ngFor="let station of stations| orderBy: orderDataField: orderByDirection| slice: ((currentPageNumber-1) * itemsPerPage): currentPageNumber * itemsPerPage">
+            <td>
+                <a class="click-link" (click)="selectStation(station)">{{station.name}} ({{station.lat}},
+                    {{station.lon}})</a>
+            </td>
+            <td>
+                {{station.state}}
+            </td>
+            <td>
+                {{station.distance | number}} miles
+            </td>
+            <td>
+                @if(station.isTMYData) {
+                TMY
+                } @else {
+                {{station.beginDate | date }}
+                }
+            </td>
+            <td>
+                @if(station.isTMYData) {
+                TMY
+                } @else {
+                {{station.endDate | date }}
+                }
+            </td>
+            <td>
+                {{station.ratingPercent}} &percnt;
+            </td>
+            <td>
+                {{station.isTMYData? 'Yes' : 'No'}}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<div class="d-flex w-100 justify-content-end">
+    <!-- <ngb-pagination [collectionSize]="stations.length" [(page)]="currentPageNumber" [pageSize]="itemsPerPage"
+        [maxSize]="5" [rotate]="true" aria-label="Pagination">
+    </ngb-pagination> -->
+</div>
