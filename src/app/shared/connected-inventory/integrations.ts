@@ -1,3 +1,4 @@
+import { CompressedAirMotorProperties } from "../../compressed-air-inventory/compressed-air-inventory";
 import { FluidProperties, PumpMotorProperties, PumpProperties, SystemProperties } from "../../pump-inventory/pump-inventory";
 import { AssessmentType } from "../models/assessment";
 import { PsatInputs } from "../models/psat";
@@ -46,12 +47,14 @@ export interface ConnectedItem {
 }
 
 // inventory values at time of assessment filled/connected
+//TODO rename this for pumps and create new for compressors
 export interface ConnectedFromState {
   psatInputs?: PsatInputs;
   pumpMotor: PumpMotorProperties,
   pumpEquipment: PumpProperties,
   pumpSystem: SystemProperties,
-  pumpFluid: FluidProperties
+  pumpFluid: FluidProperties,
+  compressorMotor?: CompressedAirMotorProperties
 }
 
 export interface ConnectedInventoryData {

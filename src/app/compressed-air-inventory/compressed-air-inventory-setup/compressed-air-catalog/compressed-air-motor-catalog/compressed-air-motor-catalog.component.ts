@@ -53,7 +53,7 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
     this.connectedInventoryDataSub.unsubscribe();
   }
 
-  save() {
+  async save() {
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressedAir.compressedAirMotor = this.compressedAirMotorCatalogService.updateMotorPropertiesFromForm(this.form, selectedCompressedAir.compressedAirMotor);
     this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
@@ -66,6 +66,23 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
 
   toggleForm() {
     this.displayForm = !this.displayForm;
+  }
+
+  initSelectedCompressor(selectedCompressor: CompressedAirItem) {
+    if (selectedCompressor.connectedItem) {
+      this.compressedAirMotorIntegrationService.setFromConnectedMotorItem(selectedCompressor, this.compressedAirInventoryService.currentInventoryId, this.settings);
+      this.form = this.compressedAirMotorCatalogService.getFormFromMotorProperties(selectedCompressor.compressedAirMotor);
+      if (this.integrationStateService.connectedInventoryData.getValue()?.isConnected) {
+        this.form.disable();
+      } else {
+        this.form.enable();
+      }
+    } else {
+      this.form = this.compressedAirMotorCatalogService.getFormFromMotorProperties(selectedCompressor.compressedAirMotor);
+      this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
+    }
+    //this.motorWarnings = this.pumpCatalogService.checkMotorWarnings(selectedCompressor, this.settings);
+    this.integrationStateService.integrationState.next(this.integrationStateService.getEmptyIntegrationState());
   }
 
   async initConnectedInventory() {
@@ -86,18 +103,30 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
   }
 
   handleConnectedInventoryEvents(connectedInventoryData: ConnectedInventoryData) {
-    // let selectedPump: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
-    // if (!connectedInventoryData.isConnected) {
-    //   if (connectedInventoryData.canConnect || connectedInventoryData.shouldConvertItemUnits) {
-    //     this.connectInventoryItem(connectedInventoryData);
-    //     this.pumpInventoryService.updatePumpItem(selectedPump);
-    //   }
-    // }
-    // if (connectedInventoryData.shouldDisconnect) {
-    //   this.compressedAirMotorIntegrationService.removePumpConnectedItem(selectedPump, connectedInventoryData);
-    //   this.form.enable();
-    //   this.pumpInventoryService.updatePumpItem(selectedPump);
-    // }
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    if (!connectedInventoryData.isConnected) {
+      if (connectedInventoryData.canConnect || connectedInventoryData.shouldConvertItemUnits) {
+        this.connectInventoryItem(connectedInventoryData);
+        this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+      }
+    }
+    if (connectedInventoryData.shouldDisconnect) {
+      this.compressedAirMotorIntegrationService.removeCompressorConnectedItem(selectedCompressor, connectedInventoryData);
+      this.form.enable();
+      this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    }
+  }
+
+  connectInventoryItem(connectedInventoryData: ConnectedInventoryData) {
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    selectedCompressor.compressedAirMotor = this.compressedAirMotorCatalogService.updateMotorPropertiesFromForm(this.form, selectedCompressor.compressedAirMotor);
+    connectedInventoryData.ownerInventoryId = this.compressedAirInventoryService.currentInventoryId;
+    this.compressedAirMotorIntegrationService.setCompressedAirMotorConnectedItem(selectedCompressor, connectedInventoryData, this.settings);
+
+    this.form = this.compressedAirMotorCatalogService.getFormFromMotorProperties(selectedCompressor.compressedAirMotor);
+    if (connectedInventoryData.isConnected) {
+      this.form.disable();
+    }
   }
 
 }
