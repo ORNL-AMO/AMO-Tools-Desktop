@@ -6,6 +6,7 @@ import { SpecificSpeedModule } from './specific-speed/specific-speed.module';
 import { SystemAndEquipmentCurveModule } from '../system-and-equipment-curve/system-and-equipment-curve.module';
 import { PumpsListComponent } from './pumps-list/pumps-list.component';
 import { RouterModule } from '@angular/router';
+import { ValveEnergyLossModule } from './valve-energy-loss/valve-energy-loss.module';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { RouterModule } from '@angular/router';
         HeadToolModule,
         AchievableEfficiencyModule,
         SystemAndEquipmentCurveModule,
-        RouterModule
+        RouterModule,
+        ValveEnergyLossModule
     ]
 })
 
