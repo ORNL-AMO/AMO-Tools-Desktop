@@ -54,6 +54,7 @@ export interface Calculator {
     selected?: boolean;
     systemAndEquipmentCurveData?: SystemAndEquipmentCurveData,
     bleedTestInputs?: BleedTestInputs;
+    valveEnergyLossInputs?: ValveEnergyLossInputs;
 }
 
 export interface HeadToolSuction {
@@ -222,4 +223,29 @@ export interface DriveResult {
     annualEnergyUse: number;
     energyCost: number;
     driveEfficiency: number;
+}
+
+export interface ValveEnergyLossInputs {
+   hoursOperation: number;
+   electricalRate: number;
+   efficiencyPump: number;
+   efficiencyMotor: number;
+   SG: number;
+   flowRate: number;
+   upstreamPressure: number;
+   upstreamDiameter: number;
+   upstreamHeight: number;
+   valveDiameter: number;
+   downstreamPressure: number;
+   downstreamDiameter: number;
+   downstreamHeight: number;
+   pipeSizeFactor: number;
+}
+
+export interface ValveEnergyLossResults {
+    headLoss: number;
+    powerLossFrictional: number;
+    powerLossElectrical: number;
+    annualEnergyLoss: number;
+    annualEnergyCost: number;
 }
