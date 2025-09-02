@@ -23,7 +23,6 @@ declare let gtag: Function;
 export class AppComponent {
   measurFormattedErrorSubscription: Subscription;
   showAppErrorModal: boolean;
-  toolsSuiteModuleInitialized: boolean = false;
   constructor(
     private analyticsService: AnalyticsService,
     private appRef: ApplicationRef,
