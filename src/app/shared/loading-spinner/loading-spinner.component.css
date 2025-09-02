@@ -1,9 +1,9 @@
 
-.loading-screen{
+.loading-spinner {
     text-align: center;
 }
 
-.loading-screen .spinner {
+.loading-spinner .spinner {
     width: 70px;
     margin: auto;
     text-align: center;
@@ -28,6 +28,10 @@
 .spinner .bounce2 {
     -webkit-animation-delay: -0.16s;
     animation-delay: -0.16s;
+}
+
+h3 {
+    font-size: 1.25rem;
 }
 
 @-webkit-keyframes sk-bouncedelay {

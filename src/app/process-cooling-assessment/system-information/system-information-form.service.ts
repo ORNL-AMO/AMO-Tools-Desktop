@@ -14,7 +14,6 @@ export class SystemInformationFormService {
       annualOperatingHours: [operations.annualOperatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       fuelCost: [operations.fuelCost, [Validators.required, Validators.min(0)]],
       electricityCost: [operations.electricityCost, [Validators.required, Validators.min(0)]],
-      zipcode: [operations.zipcode, Validators.required],
       chilledWaterSupplyTemp: [operations.chilledWaterSupplyTemp, Validators.required],
       condenserCoolingMethod: [operations.condenserCoolingMethod, Validators.required],
       doChillerLoadSchedulesVary: [operations.doChillerLoadSchedulesVary, Validators.required],
@@ -119,7 +118,6 @@ export interface OperationsForm {
   annualOperatingHours: FormControl<number>;
   fuelCost: FormControl<number>;
   electricityCost: FormControl<number>;
-  zipcode: FormControl<number>;
   chilledWaterSupplyTemp: FormControl<number>;
   condenserCoolingMethod: FormControl<number>;
   doChillerLoadSchedulesVary: FormControl<boolean>;

@@ -26,9 +26,9 @@ export class BaselineComponent {
 
   constructor() {
     effect(() => {
-      console.log('Main View:', this.mainView());
-      console.log('Setup View:', this.setupView());
-      console.log('Setup Sub View:', this.setupSubView());
+      // console.log('Main View:', this.mainView());
+      // console.log('Setup View:', this.setupView());
+      // console.log('Setup Sub View:', this.setupSubView());
     });
   }
 }

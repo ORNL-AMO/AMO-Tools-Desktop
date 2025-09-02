@@ -4,11 +4,13 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
 import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
+import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
 
 @Injectable()
 export class ProcessCoolingUiService {
   private router = inject(Router);
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private weatherContextService = inject(WEATHER_CONTEXT);
 
   focusedFieldSignal: WritableSignal<string> = signal<string>('default');
   helpTextFieldSignal: WritableSignal<string> = signal<string>('default');
@@ -26,14 +28,30 @@ export class ProcessCoolingUiService {
     subview: 4
   };
 
-  private readonly STEPPED_ROUTES = [
+    private readonly STEPPED_ROUTES = [
     {
       view: ROUTE_TOKENS.assessmentSettings,
       path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.assessmentSettings}`
     },
     {
-      view: ROUTE_TOKENS.systemInformation,
-      path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.systemInformation}`
+      view: ROUTE_TOKENS.operations,
+      path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.systemInformation}/${ROUTE_TOKENS.operations}`
+    },
+    {
+      view: ROUTE_TOKENS.weather,
+      path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.systemInformation}/${ROUTE_TOKENS.weather}`
+    },
+    {
+      view: ROUTE_TOKENS.waterPump,
+      path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.systemInformation}/${ROUTE_TOKENS.waterPump}`
+    },
+    {
+      view: ROUTE_TOKENS.condenserCoolingSystem,
+      path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.systemInformation}/${ROUTE_TOKENS.condenserCoolingSystem}`
+    },
+     {
+      view: ROUTE_TOKENS.tower,
+      path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.systemInformation}/${ROUTE_TOKENS.tower}`
     },
     {
       view: ROUTE_TOKENS.chillerInventory,
@@ -55,7 +73,7 @@ export class ProcessCoolingUiService {
       filter(event => event instanceof NavigationEnd),
       map(() => {
         const mainView = this.getCurrentMainView();
-        console.log('mainView:', mainView);
+        // console.log('mainView:', mainView);
         return mainView;
       }),
       startWith(this.getCurrentMainView())
@@ -68,7 +86,7 @@ export class ProcessCoolingUiService {
       filter(event => event instanceof NavigationEnd),
       map(() => {
         const childView = this.getCurrentChildView();
-        console.log('childView:', childView);
+        // console.log('childView:', childView);
         return childView;
       }),
       startWith(this.getCurrentChildView())
@@ -81,7 +99,7 @@ export class ProcessCoolingUiService {
       filter(event => event instanceof NavigationEnd),
       map(() => {
         const subView = this.getSetupSubView();
-        console.log('subView:', subView);
+        // console.log('subView:', subView);
         return subView;
       }),
       startWith(this.getSetupSubView())
@@ -131,7 +149,14 @@ export class ProcessCoolingUiService {
   }
 
   getCurrentStepIndex(): number {
-    return this.STEPPED_ROUTES.findIndex(route => this.fullSubroute() === route.path);
+    const fullSubroute = this.getFullSubroute();
+    return this.STEPPED_ROUTES.findIndex(route => {
+      const isWeatherRouteMatch = fullSubroute.includes(ROUTE_TOKENS.weather) && route.path.includes(ROUTE_TOKENS.weather);
+      if (isWeatherRouteMatch) {
+        return true;
+      }
+      return fullSubroute === route.path;
+    });
   }
 
   canContinue(): boolean {
@@ -142,6 +167,7 @@ export class ProcessCoolingUiService {
   canGoBack(): boolean {
     return this.getCurrentStepIndex() > 0;
   }
+
 
   continue(): void {
     const currentIndex = this.getCurrentStepIndex();
@@ -165,10 +191,23 @@ export class ProcessCoolingUiService {
     switch (index) {
       case 0: return true;
       case 1: return true;
-      case 2: return this.processCoolingAssessmentService.isSystemInformationValid();
-      case 3: return this.processCoolingAssessmentService.isChillerInventoryValid();
+      case 2: return true;
+      case 3: return this.weatherContextService.isValidWeatherData();
+      case 4: return true;
+      case 5: return true;
+      case 6: return this.processCoolingAssessmentService.isSystemInformationValid();
+      case 7: return this.processCoolingAssessmentService.isChillerInventoryValid();
+      case 8: return this.weatherContextService.isValidWeatherData();
       default: return false;
     }
+  }
+
+  canVisitTab(view: ProcessCoolingView): boolean {
+      let steppedViewIndex = this.STEPPED_ROUTES.findIndex(route => route.view === view);
+      console.log('steppedViewIndex', steppedViewIndex);
+      const canVisit = this.canVisitView(steppedViewIndex);
+      console.log('canVisit', canVisit);
+      return canVisit;
   }
 
 }
@@ -176,6 +215,7 @@ export class ProcessCoolingUiService {
 export type ProcessCoolingMainTabString = 'baseline' | 'assessment' | 'diagram' | 'report' | 'calculators';
 export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-information' | 'inventory' | 'operating-schedule' | 'load-schedule';
 export type ProcessCoolingAssessmentTabString = 'explore-opportunities';
+export type ProcessCoolingView = SetupView | MainView | ReportView | AssessmentView | SystemInformationView;
 
 export enum MainView {
   BASELINE = 'baseline',
@@ -212,7 +252,7 @@ export enum ReportView {
 
 
 export interface ViewLink {
-  view: SetupView | MainView | ReportView | AssessmentView | SystemInformationView;
+  view: ProcessCoolingView;
   label: string;
   param?: string | number;
 }

@@ -10,9 +10,11 @@ import { WeatherStationsMapComponent } from './weather-stations/weather-stations
 import { OrderByPipe } from '../../shared-pipes/order-by.pipe';
 import { AnnualStationDataComponent } from './annual-station-data/annual-station-data.component';
 import { LoadingSpinnerComponent } from '../../loading-spinner/loading-spinner.component';
-import { AnnualStationTableComponent } from './annual-station-data/annual-station-table/annual-station-table.component';
+import { WeatherApiService } from '../../weather-api.service';
+import { AnnualStationGraphComponent } from './annual-station-data/annual-station-graph/annual-station-graph.component';
 
 export const ROUTES: Route[] = [
+  //  working
   {
     path: "",
     component: WeatherDataComponent,
@@ -32,7 +34,7 @@ export const ROUTES: Route[] = [
     WeatherStationsTableComponent,
     WeatherStationsMapComponent,
     AnnualStationDataComponent,
-    AnnualStationTableComponent,
+    AnnualStationGraphComponent
   ],
    exports: [
     WeatherDataComponent
@@ -45,5 +47,8 @@ export const ROUTES: Route[] = [
     OrderByPipe,
     LoadingSpinnerComponent
   ],
+  providers: [
+    WeatherApiService
+  ]
 })
 export class WeatherDataModule { }

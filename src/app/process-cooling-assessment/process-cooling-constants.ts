@@ -103,7 +103,6 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings ): Process
               annualOperatingHours: 8760,
               fuelCost: settings.fuelCost || 3.99,
               electricityCost: settings.electricityCost || 0.066,
-              zipcode: 53704,
               chilledWaterSupplyTemp: 44,
               condenserCoolingMethod: 0, // water
               doChillerLoadSchedulesVary: undefined

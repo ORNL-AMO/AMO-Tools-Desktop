@@ -1,9 +1,9 @@
 <div class="d-flex w-100 justify-content-between">
     <div class="mt-auto">
-        <label class="semibold">
+        <label class="semibold form-section-label mb-2">
             Search For Weather Stations
         </label>
-        <ol>
+        <ol class="small">
             <ng-template [ngIf]="isLocationSearch" [ngIfElse]="notLocationSearchBlock">
                 <li>
                     Use the location search below to find latitude and longitude associated with a location.
@@ -44,24 +44,22 @@
             <ng-template [ngIf]="isLocationSearch" [ngIfElse]="latLongSearchBlock">
                 <div class="row">
                     <div class="col-12">
-                        <label class="semibold w-100" for="address">Location Search</label>
+                        <label class="w-100 form-section-label" for="address">Location Search</label>
                         <p class="fw-light mb-0 small">
                             Use the Lat/Long search to find locations.
                         </p>
-
-                        <input type="text" class="form-control" name="addressString" id="addressString"
-                            [(ngModel)]="addressString" [disabled]="fetchingData">
-
+                            <input type="text" class="form-control" name="addressString" id="addressString" [(ngModel)]="addressString"
+                                [disabled]="fetchingData">
                     </div>
                     <div class="col-12 mt-3">
-                        <div class="float-end" *ngIf="!fetchingData">
-                            <button class="btn action-btn" (click)="searchLatLong()"
+                        <div class="pull-right" *ngIf="!fetchingData">
+                            <button class="btn action-btn btn-sm btn-primary" (click)="searchLatLong()"
                                 [disabled]="!addressString && !searchingLatLong">
                                 <span class="fa fa-search"></span> Search
                             </button>
                         </div>
                     </div>
-                </div>
+                    </div>
             </ng-template>
             <ng-template #latLongSearchBlock>
                 <div class="col-12">
@@ -77,16 +75,16 @@
             </ng-template>
         </div>
         <div class="col-6">
-            <label class="semibold w-100">
-                Select Location to Search For Stations
+            <label class="w-100 form-section-label">
+                Select Location
             </label>
-            <p class="fw-light mb-0">
+            <p class="fw-light mb-0 small">
                 Weather stations can be found using geocoordinates.
             </p>
             <ng-template [ngIf]="!searchingLatLong" [ngIfElse]="searchingLatLongBlock">
                 <ng-template [ngIf]="isLocationSearch">
-                    <table class="table table-sm table-bordered">
-                        <thead>
+                    <table class="table table-sm table-bordered w-100">
+                        <thead class="small">
                             <tr>
                                 <th>
 
@@ -98,13 +96,13 @@
                                     Display Name
                                 </th>
                                 <th>
-                                    (Lat, Long)
+                                    (Latitude, Longitude)
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <ng-template [ngIf]="addressLookupItems.length > 0" [ngIfElse]="noItemsBlock">
-                                <tr *ngFor="let item of addressLookupItems">
+                                <tr class="small" *ngFor="let item of addressLookupItems">
                                     <td>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="selectedLocationId"
@@ -112,7 +110,7 @@
                                                 [value]="item.place_id" (change)="setLatLongFromItem(item)">
                                         </div>
                                     </td>
-                                    <td>
+                                    <td>    
                                         {{item.addresstype}}
                                     </td>
                                     <td>
@@ -125,7 +123,7 @@
                             </ng-template>
                             <ng-template #noItemsBlock>
                                 <tr>
-                                    <td colspan="4">
+                                    <td colspan="4" class="small text-center">
                                         Use search to the left to find list of corresponding locations to choose from.
                                     </td>
                                 </tr>
@@ -134,20 +132,19 @@
                     </table>
                     <hr class="my-1">
                 </ng-template>
-                <div class="col-12">
+                <div>
                     <label class="semibold" for="furthestDistance">Furthest Distance</label>
                     <div class="input-group mb-3">
                         <input type="number" class="form-control" name="furthestDistance" id="furthestDistance"
-                            [(ngModel)]="furthestDistance" (input)="clearStations()" [disabled]="fetchingData"
-                            [max]="150">
-                        <span class="input-group-text">miles</span>
+                            [(ngModel)]="furthestDistance" (input)="clearStations()" [disabled]="fetchingData" [max]="150">
+                        <span class="input-group-addon units">miles</span>
                     </div>
                     <div class="alert-danger alert" *ngIf="furthestDistance > 150">
                         For performance reasons we cannot map further then 150 miles.</div>
                 </div>
-                <div class="col-12">
-                    <div class="float-end" *ngIf="!fetchingData">
-                        <button class="btn action-btn" (click)="setStations()"
+                <div>
+                    <div class="pull-right" *ngIf="!fetchingData">
+                        <button class="btn action-btn btn-sm btn-primary" (click)="setStations()"
                             [disabled]="furthestDistance > 150 || addressLatLong.latitude == undefined|| addressLatLong.longitude == undefined">
                             Fetch Stations
                         </button>
@@ -155,9 +152,11 @@
                 </div>
             </ng-template>
             <ng-template #searchingLatLongBlock>
-                <div class="col-12 text-center pb-4 small">
+                <!-- <div class="col-12 text-center pb-4 small">
                     <app-loading-spinner [message]="'Searching Lat/Lng Locations...'"></app-loading-spinner>
-                </div>
+                </div> -->
+                    <app-loading-spinner [message]="'Searching Locations...'"></app-loading-spinner>
+
             </ng-template>
         </div>
     </div>
@@ -175,14 +174,14 @@
 </ng-template>
 <ng-template #noStationsBlock>
     <ng-template [ngIf]="!stationSearchError" [ngIfElse]="stationSearchErrorBlock">
-        <div class="alert alert-info p-2" *ngIf="!fetchingData">
+        <div class="alert alert-info p-2 small" *ngIf="!fetchingData">
             Set or search for the latitude and longitude of a location and then click "Fetch Stations" to get a list of
             weather stations with
             hourly weather data.
         </div>
     </ng-template>
     <ng-template #stationSearchErrorBlock>
-        <div class="alert alert-danger p-1">
+        <div class="alert alert-danger p-1 small">
             An error occured while searching for stations. Please make sure the Lat/Long selection is correct. Notify
             the MEASUR team if this error persists.
         </div>

@@ -5,3 +5,22 @@
 .btn-margin{
     margin-top: 20px;
 }
+
+
+.form-section-label {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.form-control {
+    height: 1.5rem;
+}
+
+input[type="radio"]:hover {
+    cursor: pointer;
+}
+
+form {
+    /*  override inherited panel styles */
+    padding-top: 0; 
+}

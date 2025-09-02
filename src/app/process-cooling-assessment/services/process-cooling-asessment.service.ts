@@ -8,6 +8,7 @@ import { ConvertProcessCoolingService } from './convert-process-cooling.service'
 import { getDefaultInventoryItem } from '../process-cooling-constants';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
+import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
 
 /**
  * Service currently uses both signals and observables for the same state. This is a prototype, 
@@ -18,7 +19,8 @@ export class ProcessCoolingAssessmentService {
   private readonly settingsDbService = inject(SettingsDbService);
   private readonly convertProcessCoolingService = inject(ConvertProcessCoolingService);
   private readonly assessmentDbService = inject(AssessmentDbService);
-
+  private readonly processCoolingWeatherContextService = inject(WEATHER_CONTEXT);
+  
   private readonly assessment = new BehaviorSubject<Assessment>(undefined);
   readonly assessment$ = this.assessment.asObservable();
 
@@ -40,6 +42,16 @@ export class ProcessCoolingAssessmentService {
             () => { console.log('Updated assessment in db'); },
             (error) => { console.error('Error updating assessment in db', error); }
           );
+        }
+      }),
+      takeUntilDestroyed()
+    ).subscribe();
+
+    this.processCoolingWeatherContextService.weatherContextData$.pipe(
+      tap(weatherData => {
+        const isValidWeatherData = this.processCoolingWeatherContextService.isValidWeatherData();
+        if (isValidWeatherData) {
+          this.setProcessCoolingWeatherData(weatherData);
         }
       }),
       takeUntilDestroyed()
@@ -122,6 +134,12 @@ export class ProcessCoolingAssessmentService {
       }
       return chiller;
     });
+    this.setProcessCooling(updatedProcessCooling);
+  }
+
+  setProcessCoolingWeatherData(data: WeatherContextData) {
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    updatedProcessCooling.weatherData = data;
     this.setProcessCooling(updatedProcessCooling);
   }
 

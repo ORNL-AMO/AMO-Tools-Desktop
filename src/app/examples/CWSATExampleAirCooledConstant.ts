@@ -25,7 +25,6 @@ export const EXAMPLE_SYSTEM_INFORMATION_OPERATIONS: Operations = {
   annualOperatingHours: 8760,
   electricityCost: 0.06,
   fuelCost: 6,
-  zipcode: 1,
   chilledWaterSupplyTemp: 44,
   // water == 0, air == 1
   condenserCoolingMethod: 1,
