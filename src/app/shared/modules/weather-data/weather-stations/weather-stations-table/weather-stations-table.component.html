@@ -8,19 +8,19 @@
             <th (click)="setOrderDataField('state')" [ngClass]="{'active': orderDataField == 'state'}">State</th>
             <th (click)="setOrderDataField('distanceFrom')" [ngClass]="{'active': orderDataField == 'distanceFrom'}">
                 Distance Away</th>
-            <th (click)="setOrderDataField('beginDate')" [ngClass]="{'active': orderDataField == 'beginDate'}">Data
+            <!-- <th (click)="setOrderDataField('beginDate')" [ngClass]="{'active': orderDataField == 'beginDate'}">Data
                 Start</th>
             <th (click)="setOrderDataField('endDate')" [ngClass]="{'active': orderDataField == 'endDate'}">Data End</th>
             <th (click)="setOrderDataField('ratingPercent')" [ngClass]="{'active': orderDataField == 'ratingPercent'}">
                 &percnt; Hourly Coverage
             </th>
             <th>
-                TMY Available
-            </th>
+                TMY3 Available
+            </th> -->
         </tr>
     </thead>
     <tbody class="table-group-divider">
-        <tr
+        <tr class="small"
             *ngFor="let station of stations| orderBy: orderDataField: orderByDirection| slice: ((currentPageNumber-1) * itemsPerPage): currentPageNumber * itemsPerPage">
             <td>
                 <a class="click-link" (click)="selectStation(station)">{{station.name}} ({{station.lat}},
@@ -32,7 +32,7 @@
             <td>
                 {{station.distance | number}} miles
             </td>
-            <td>
+            <!-- <td>
                 @if(station.isTMYData) {
                 TMY
                 } @else {
@@ -45,13 +45,13 @@
                 } @else {
                 {{station.endDate | date }}
                 }
-            </td>
-            <td>
+            </td> -->
+            <!-- <td>
                 {{station.ratingPercent}} &percnt;
-            </td>
-            <td>
+            </td> -->
+            <!-- <td>
                 {{station.isTMYData? 'Yes' : 'No'}}
-            </td>
+            </td> -->
         </tr>
     </tbody>
 </table>

@@ -35,7 +35,9 @@ export class WeatherStationsTableComponent {
   // }
 
   selectStation(station: WeatherStation) {
-    this.weatherApiService.selectedStation = station;
+    const weatherData = {...this.weatherApiService.getWeatherData()};
+    weatherData.selectedStation = station;
+    this.weatherApiService.setWeatherData(weatherData);
     this.router.navigate(['../annual-station'], { relativeTo: this.route });
   }
 

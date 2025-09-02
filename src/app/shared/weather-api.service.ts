@@ -1,16 +1,16 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, forkJoin, firstValueFrom, of } from 'rxjs';
-import { catchError, retry, timeout, switchMap, map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, retry, timeout, map, filter } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { WEATHER_CONTEXT, WeatherContextData } from './modules/weather-data/weather-context.token';
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class WeatherApiService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.measurWeatherApi;
+  private readonly weatherContextService = inject(WEATHER_CONTEXT);
 
   private readonly DATA_URL = `${this.baseUrl}/data`;
   private readonly STATIONS_URL = `${this.baseUrl}/stations`;
@@ -22,21 +22,44 @@ export class WeatherApiService {
     'Accept': 'application/json'
   });
 
-  selectedStation: WeatherStation | null = null;
-  addressSearchStr: string;
+
+  /**
+   * Set the weather data context on injected service for use elsewhere in the app
+   * @param data - The weather context data
+   */
+  setWeatherData(data: WeatherContextData): void {
+    if (this.weatherContextService) {
+      this.weatherContextService.setWeatherData(data);
+    } else {
+      throw new Error('Weather context service not available');
+    }
+  }
+
+  getWeatherData(): WeatherContextData | undefined {
+    if (this.weatherContextService) {
+      return this.weatherContextService.getWeatherData();
+    } else {
+      throw new Error('Weather context service not available');
+    }
+  }
+
+  getFinishedRoute(): string {
+    if (this.weatherContextService) {
+      return this.weatherContextService.finishedRoute();
+    } else {
+      throw new Error('Weather context service not available');
+    }
+  }
 
   /**
    * Get hourly weather data for a specific station (POST to api/data)
    * @returns Observable<WeatherDataResponse>
    */
   getStationWeatherData(stationId: string, startDate: Date, endDate: Date): Observable<WeatherDataResponse> {
-    let monthAfterEndDate: Date = new Date(endDate);
-    monthAfterEndDate.setMonth(monthAfterEndDate.getMonth() + 1);
-
    const stationDataRequest: WeatherDataRequest = {
     station_id: stationId,
     start_date: this.getWeatherDataDate(startDate),
-    end_date: this.getWeatherDataDate(monthAfterEndDate),
+    end_date: this.getWeatherDataDate(endDate),
     parameters: ['dry_bulb_temp', 'wet_bulb_temp'],
     cumulative: undefined
   };
@@ -59,7 +82,9 @@ export class WeatherApiService {
       headers: this.defaultHeaders
     }).pipe(
       map(response => {
-        return this.mapWeatherStationsRequest(response);
+        // * filter out non-TMY stations until we do algorithmic replacement on missing data
+        const stations = response.stations.filter(station => station.is_tmy_data);
+        return this.mapWeatherStationsRequest({ ...response, stations });
       }),
       timeout(this.defaultTimeout),
       retry(this.maxRetries),
@@ -86,12 +111,25 @@ export class WeatherApiService {
       )
   }
 
+  getStationSearchRequest(latitude: number, longitude: number, radial_distance: number): StationSearchRequest {
+    const stationSearchRequest: StationSearchRequest = {
+      latitude,
+      longitude,
+      radial_distance,
+      start_date: undefined,
+      end_date: undefined
+    };
+    this.setDefaultDates(stationSearchRequest);
+
+    return stationSearchRequest;
+  }
+
   getWeatherDataDate(date: Date): string {
     return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
   }
 
   /**
-   * The weather API dataset currently hardcodes all TMY station data to year 2000
+   * The weather API dataset currently hardcodes all TMY station data to year 2000. Current TMY data IS aggregated to 2000
    * @returns The TMY year
    */
   getTMYYear(): number {

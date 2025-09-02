@@ -10,12 +10,12 @@
         <div class="row">
             <div class="col-1 btn-col">
                 <div class="btn-margin">
-                    <button class="btn nav-btn" (click)="goToStations()">
+                    <button class="btn nav-btn btn-secondary" (click)="goToStations()">
                         <span class="fa fa-chevron-left"></span>
                     </button>
                 </div>
             </div>
-            @if(!weatherStation.isTMYData) {
+            <!-- @if(!weatherStation.isTMYData) {
             <div class="col-lg-2 col-md-12 col-sm-12">
                 <label class="semibold" for="selectedYear">Select Year</label>
                 <select id="selectedYear" [(ngModel)]="selectedYear" class="form-select" name="selectedYear"
@@ -27,10 +27,10 @@
             </div>
             } @else {
                 TMY Data
-            }
+            } -->
             <div class="col">
                 <div class="btn-margin">
-                    <button class="btn action-btn" (click)="useDataset()">
+                    <button class="btn action-btn btn-primary" [disabled]="(!stationWeatherData || stationWeatherData.length === 0) || hasGapsInData" (click)="useDataset()">
                         Use Dataset
                     </button>
                 </div>
@@ -45,20 +45,14 @@
     </div>
     <div class="row" *ngIf="hasGapsInData">
         <div class="col-12">
-            <div class="alert alert-warning text-center">
-                One or more months have gaps of more then twelve hours in their data. Click the month with an <span
-                    class="fa fa-exclamation-circle"></span> for more details.
+            <div class="alert alert-danger text-center">
+                The selected year does not contain valid entries for all year hours (8760 hours) and cannot be used. Please select a different year.
             </div>
         </div>
     </div>
-    <div class="row" *ngIf="yearSummaryData && yearSummaryData.length != 0">
-        <!-- <div class="col-lg-6 col-md-12 col-sm-12">
-            <app-annual-station-graph [yearSummaryData]="yearSummaryData" [selectedYear]="selectedYear"
-                [weatherDataSelection]="weatherDataSelection"></app-annual-station-graph>
-        </div> -->
-        <!-- <div class="col-lg-6 col-md-12 col-sm-12">
-            <app-annual-station-table [yearSummaryData]="yearSummaryData"
-                [weatherDataSelection]="weatherDataSelection"></app-annual-station-table>
-        </div> -->
+    <div class="row" *ngIf="stationWeatherData && stationWeatherData.length != 0">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <app-annual-station-graph [annualHourlyWeather]="stationWeatherData"></app-annual-station-graph>
+        </div>
     </div>
 </ng-container>

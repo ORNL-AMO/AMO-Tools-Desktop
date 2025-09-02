@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import { WeatherApiService, WeatherStation } from '../../../weather-api.service';
+import { WeatherApiService, WeatherDataPoint, WeatherDataResponse, WeatherStation } from '../../../weather-api.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -13,10 +13,10 @@ import { firstValueFrom } from 'rxjs';
 export class AnnualStationDataComponent {
 
   weatherStation: WeatherStation;
+  stationWeatherData: WeatherDataPoint[];
   selectedYear: number;
   years: Array<number> = [];
   
-  yearSummaryData: Array<AnnualStationDataSummary>;
   calculating: boolean;
   hasGapsInData: boolean;
   constructor(private router: Router,
@@ -28,23 +28,19 @@ export class AnnualStationDataComponent {
   }
 
   ngOnInit() {
-    this.weatherStation = this.weatherApiService.selectedStation;
+    const weatherData = {...this.weatherApiService.getWeatherData()};
+    this.weatherStation = weatherData.selectedStation;
+
     if (!this.weatherStation) {
       this.goToStations();
+    } else { 
+      if (!this.weatherStation?.isTMYData) {
+        this.setYears();
+      } else {
+        this.selectedYear = this.weatherApiService.getTMYYear();
+      }
+      this.setWeatherData();
     }
-
-
-    if (this.weatherStation.isTMYData) {
-      this.setYears();
-    } else {
-      this.selectedYear = this.weatherApiService.getTMYYear();
-    }
-
-    // todo get data from context, initialize as if just visited 
-    // this.selectedYear = this.weatherApiService.selectedYear;
-    // this.heatingTemp = this.weatherApiService.heatingTemp;
-    // this.coolingTemp = this.weatherApiService.coolingTemp;
-    // this.setDegreeDays();
   }
 
 
@@ -60,23 +56,26 @@ export class AnnualStationDataComponent {
     }
   }
 
-  // todo we will actually set weather data from the process cooling api service (or other module service)
-  // todo encapsulate input selection, dates, stationId, tmy, etc into process cooling model
+
   async setWeatherData() {
+    this.hasGapsInData = false;
     this.calculating = true;
     let startDate: Date = new Date(this.selectedYear, 0, 1)
     let endDate: Date = new Date(this.selectedYear + 1, 0, 1);
 
-    console.log('Start Date:', startDate);
-    console.log('End Date:', endDate);
     try {
-      let stationData = await firstValueFrom(this.weatherApiService.getStationWeatherData(
+      const stationWeatherDataResponse: WeatherDataResponse = await firstValueFrom(this.weatherApiService.getStationWeatherData(
         this.weatherStation.stationId,
         startDate,
         endDate
       ));
-      // todo set data for annual table/graphs
-      console.log(stationData);
+      if (stationWeatherDataResponse) {
+        if (stationWeatherDataResponse.hourly_data.length < 8760) {
+          this.hasGapsInData = true;
+        }
+        this.stationWeatherData = stationWeatherDataResponse.hourly_data;
+        console.log('stationWeatherData:', this.stationWeatherData);
+      }
     } catch (error) {
       console.error('Error fetching station weather data:', error);
       //   this.toastNotificationService.weatherDataErrorToast();
@@ -84,8 +83,18 @@ export class AnnualStationDataComponent {
     this.calculating = false;
   }
 
-  useDataset() {
-    // todo set context data
+  async useDataset() {
+    let updatedData = { ...this.weatherApiService.getWeatherData()};
+    updatedData.selectedStation = this.weatherStation;
+    updatedData.weatherDataPoints = this.stationWeatherData;
+    this.weatherApiService.setWeatherData(updatedData);
+    this.goToFinishedRoute();
+  }
+
+  goToFinishedRoute() {
+    const finishedRoute = this.weatherApiService.getFinishedRoute();
+    console.log(finishedRoute);
+    this.router.navigate([finishedRoute]);
   }
 
   goToStations() {
