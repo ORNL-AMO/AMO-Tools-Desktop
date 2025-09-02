@@ -9,6 +9,7 @@ import { AppErrorService } from './shared/errors/app-error.service';
 import { UpdateApplicationService } from './shared/update-application/update-application.service';
 import { MeasurAppError } from './shared/errors/errors';
 import { ToolsSuiteApiService } from './tools-suite-api/tools-suite-api.service';
+import { CoreService } from './core/core.service';
 // declare ga as a function to access the JS code in TS
 declare let gtag: Function;
 
@@ -22,7 +23,7 @@ declare let gtag: Function;
 export class AppComponent {
   measurFormattedErrorSubscription: Subscription;
   showAppErrorModal: boolean;
-
+  toolsSuiteModuleInitialized: boolean = false;
   constructor(
     private analyticsService: AnalyticsService,
     private appRef: ApplicationRef,
@@ -31,7 +32,8 @@ export class AppComponent {
     private electronService: ElectronService,
     private appErrorService: AppErrorService,
     private router: Router,
-    private toolsSuiteApiService: ToolsSuiteApiService) {
+    private toolsSuiteApiService: ToolsSuiteApiService,
+    private coreService: CoreService) {
 
     if (environment.production) {
       // analytics handled through gatg() automatically manages sessions, visits, clicks, etc
@@ -116,6 +118,7 @@ export class AppComponent {
 
   async initializeToolsSuiteApi(){
     await this.toolsSuiteApiService.initializeModule();
+    this.coreService.initializedToolsSuiteModule.next(true);
   }
 
 }

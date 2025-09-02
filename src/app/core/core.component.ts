@@ -65,6 +65,9 @@ export class CoreComponent implements OnInit {
   showShareDataModal: boolean = false;
   showShareDataModalSub: Subscription;
 
+  toolsSuiteInitialized: boolean;
+  toolsSuiteInitializedSub: Subscription;
+  loadingMessage: string;
   constructor(public electronService: ElectronService,
     private assessmentService: AssessmentService,
     private changeDetectorRef: ChangeDetectorRef,
@@ -95,6 +98,10 @@ export class CoreComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setLoadingMessage();
+    this.toolsSuiteInitializedSub = this.coreService.initializedToolsSuiteModule.subscribe(val => {
+      this.toolsSuiteInitialized = val;
+    });
 
     if (this.electronService.isElectron) {
       this.electronService.sendAppReady('ready');
@@ -212,6 +219,7 @@ export class CoreComponent implements OnInit {
     this.emailVisibilitySubscription.unsubscribe();
     this.showExportToJustifiModalSub.unsubscribe();
     this.showShareDataModalSub.unsubscribe();
+    this.toolsSuiteInitializedSub.unsubscribe();
   }
 
   async initData() {
@@ -324,6 +332,28 @@ export class CoreComponent implements OnInit {
 
   closeReleaseNotes() {
     this.updateApplicationService.showReleaseNotesModal.next(false);
+  }
+
+  setLoadingMessage() {
+    const messages = [
+      "Loading... I hope you're having a nice day!",
+      "Just a moment, wishing you a wonderful day!",
+      "Preparing things for you. Hope your day is going well!",
+      "Hang tight! I hope you're having a fantastic day!",
+      "Almost there—hope your day is as great as you are!",
+      "Setting things up. I hope you're enjoying your day!",
+      "Loading your experience. Have a nice day!",
+      "Good things are coming. Hope your day is pleasant!",
+      "Getting ready... I hope you're having a nice day!",
+      "Thanks for your patience. Wishing you a great day!",
+      "Just a sec! I hope your day is going smoothly!",
+      "Loading magic. Hope you're having a nice day!",
+      "Almost done! I hope your day is wonderful!",
+      "Preparing your app. Have a fantastic day!",
+      "One moment please. I hope you're having a nice day!"
+    ];
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    this.loadingMessage = messages[randomIndex];
   }
 
 }
