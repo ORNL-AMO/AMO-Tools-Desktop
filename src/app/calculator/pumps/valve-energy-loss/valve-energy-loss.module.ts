@@ -5,12 +5,18 @@ import { ValveEnergyLossService } from './valve-energy-loss.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SettingsModule } from '../../../settings/settings.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+import { ValveEnergyLossFormComponent } from './valve-energy-loss-form/valve-energy-loss-form.component';
+import { ValveEnergyLossHelpComponent } from './valve-energy-loss-help/valve-energy-loss-help.component';
+import { ValveEnergyLossResultsComponent } from './valve-energy-loss-results/valve-energy-loss-results.component';
 
 
 
 @NgModule({
   declarations: [
-    ValveEnergyLossComponent
+    ValveEnergyLossComponent,
+    ValveEnergyLossFormComponent,
+    ValveEnergyLossHelpComponent,
+    ValveEnergyLossResultsComponent
   ],
   imports: [
     CommonModule,
