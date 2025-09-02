@@ -13,6 +13,7 @@ export const environment = {
   name: 'development',
   version: packageInfo.version,
   useServiceWorker: false,
-  measurWeatherApi: 'https://weather.ornl.gov/',
+  measurWeatherApi: 'https://lcd.ornl.gov/api',
+  measurWeatherApiLegacy: 'https://dev.weather.ornl.gov/',
   measurUtilitiesApi: 'http://127.0.0.1:3000/'
 };

@@ -1,7 +1,7 @@
 import { ActivatedRouteSnapshot, Resolve, ResolveFn, Router } from '@angular/router';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { catchError, forkJoin, from, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { EGridService } from '../../shared/helper-services/e-grid.service';
@@ -9,6 +9,7 @@ import { Settings } from '../../shared/models/settings';
 import { MeasurAppError } from '../../shared/errors/errors';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ChillerInventoryService } from '../services/chiller-inventory.service';
+import { WEATHER_CONTEXT, WeatherContext } from '../../shared/modules/weather-data/weather-context.token';
 
 export interface ProcessCoolingResolverData {
   assessment: Assessment;
@@ -22,13 +23,14 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
     private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService,
     private processCoolingAssessmentService: ProcessCoolingAssessmentService,
+    @Inject(WEATHER_CONTEXT) private processCoolingWeatherContextService: WeatherContext,
     private inventoryService: ChillerInventoryService,
     private egridService: EGridService,
     private router: Router
   ) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<ProcessCoolingResolverData> {
-    console.time('ProcessCoolingAssessmentResolver.resolve');
+    // console.time('ProcessCoolingAssessmentResolver.resolve');
     const id = route.paramMap.get('assessmentId');
     if (!id || isNaN(Number(id))) {
       this.router.navigate(['/error']);
@@ -38,7 +40,7 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
     const assessmentValue = this.processCoolingAssessmentService.assessmentValue;
     const settingsValue = this.processCoolingAssessmentService.settingsValue;
     if (assessmentValue && settingsValue) {
-      console.timeEnd('ProcessCoolingAssessmentResolver.resolve');
+      // console.timeEnd('ProcessCoolingAssessmentResolver.resolve');
       return of({
         assessment: assessmentValue,
         settings: settingsValue
@@ -74,6 +76,8 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
       switchMap(assessment => {
         this.processCoolingAssessmentService.setAssessment(assessment);
         this.processCoolingAssessmentService.setProcessCooling(assessment.processCooling);
+        this.processCoolingWeatherContextService.setWeatherData(assessment.processCooling.weatherData);
+
         if (!this.egridService.subRegionsByZipcode) {
           this.egridService.getAllSubRegions();
         }
@@ -97,7 +101,7 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
       })
     );
 
-    console.timeEnd('ProcessCoolingAssessmentResolver.resolve');
+    // console.timeEnd('ProcessCoolingAssessmentResolver.resolve');
 
     return initializedModuleData$;
   }

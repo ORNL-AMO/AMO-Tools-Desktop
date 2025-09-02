@@ -19,14 +19,6 @@ export class BaselineTabsComponent {
   mainView: Signal<string> = this.processCoolingUiService.mainView;
   setupView: Signal<string> = this.processCoolingUiService.childView;
 
-  constructor() {
-    effect(() => {
-
-      // console.log('Main View:', this.mainView());
-      // console.log('Setup View:', this.setupView());
-    });
-  }
-
   continue() {
     this.processCoolingUiService.continue();
   }

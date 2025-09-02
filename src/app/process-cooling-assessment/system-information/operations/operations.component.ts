@@ -1,7 +1,7 @@
 import { Component, DestroyRef, ElementRef, inject, Signal, ViewChild } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
-import { tap, debounceTime, distinctUntilChanged, switchMap, of } from "rxjs";
+import { of } from "rxjs";
 import { Co2SavingsData } from "../../../calculator/utilities/co2-savings/co2-savings.service";
 import { TEMPERATURE_HTML } from "../../../shared/app-constants";
 import { OperatingHours } from "../../../shared/models/operations";
@@ -54,7 +54,6 @@ export class OperationsComponent {
     this.controlIds = generateFormControlIds(this.form.controls);
 
     this.observeFormChanges();
-    this.observeZipCodeChanges();
   }
 
   ngAfterViewInit() {
@@ -85,19 +84,6 @@ export class OperationsComponent {
           this.processCoolingAssessmentService.updateSystemInformation('operations', operations);
         }
     );
-  }
-
-  observeZipCodeChanges() {
-    this.zipcode.valueChanges.pipe(
-      debounceTime(150),
-      distinctUntilChanged(),
-      switchMap(zipcode => this.processZipcodeChange(zipcode)),
-      tap(result => {
-        console.log('Zipcode processing result:', result);
-        this.setLocationData(result);
-      }),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe();
   }
 
   updateCo2SavingsData(co2SavingsData: Co2SavingsData) {

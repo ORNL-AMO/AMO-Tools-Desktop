@@ -1,4 +1,5 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
+import { WeatherContextData } from "../modules/weather-data/weather-context.token";
 
 // Output interfaces for process cooling API service
 export interface ProcessCoolingChillerOutput {
@@ -36,6 +37,7 @@ export interface ProcessCoolingAssessment {
     systemInformation: SystemInformation;
     inventory: Array<ChillerInventoryItem>;
     modifications: Array<Modification>;
+    weatherData?: WeatherContextData;
 }
 
 export interface ProcessCoolingSystemBasics {
@@ -57,7 +59,6 @@ export interface Operations {
     annualOperatingHours: number;
     fuelCost: number;
     electricityCost: number;
-    zipcode: number;
     chilledWaterSupplyTemp: number;
     condenserCoolingMethod: number;
     doChillerLoadSchedulesVary: boolean;

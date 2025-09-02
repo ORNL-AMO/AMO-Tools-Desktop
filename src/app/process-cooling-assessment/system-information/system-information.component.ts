@@ -15,11 +15,6 @@ export class SystemInformationComponent {
   setupSubView: Signal<string> = this.processCoolingUiService.setupSubView;
 
   SYSTEM_INFORMATION_VIEW_LINKS = SYSTEM_INFORMATION_VIEW_LINKS;
-  constructor() {
-    effect(() => {
-      console.log('Setup Sub View:', this.setupSubView());
-    });
-  }
 
   back() {
     this.processCoolingUiService.back();

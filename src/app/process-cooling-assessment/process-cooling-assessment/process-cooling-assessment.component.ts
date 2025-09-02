@@ -12,15 +12,9 @@ export class ProcessCoolingAssessmentComponent {
   private readonly processCoolingUiService = inject(ProcessCoolingUiService);
   private readonly analyticsService = inject(AnalyticsService);
 
-  mainView: Signal<string> = this.processCoolingUiService.mainView;
-  setupView: Signal<string> = this.processCoolingUiService.childView;
-
   showWelcomeScreen: boolean = false;
   smallScreenTab: string = 'form';
   showUpdateUnitsModal: boolean = false;
-
-  readonly MAIN_VIEW_LINKS: ViewLink[] = MAIN_VIEW_LINKS;
-  readonly SETUP_VIEW_LINKS: ViewLink[] = SETUP_VIEW_LINKS;
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-process-cooling-assessment', undefined);

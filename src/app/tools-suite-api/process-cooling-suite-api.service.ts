@@ -16,6 +16,7 @@ import { SuiteApiHelperService } from './suite-api-helper.service';
 import { HttpClient } from '@angular/common/http';
 // import { drybulbValues, wetbulbValues, systemOnHoursYearly } from '../examples/CWSATExampleAirCooledConstant';
 import { drybulbValues, wetbulbValues, systemOnHoursYearly } from '../examples/CWSATExampleVINPLTConstants';
+import { WeatherContextData } from '../shared/modules/weather-data/weather-context.token';
 
 declare var Module: any;
 
@@ -33,7 +34,7 @@ export class ProcessCoolingSuiteApiService {
  *   - pump: ProcessCoolingPumpOutput - Pump energy outputs
  *   - tower: ProcessCoolingTowerOutput - Tower energy outputs
  */
-  getWaterCooledResults(assessment: ProcessCoolingAssessment): ProcessCoolingResults {
+  getWaterCooledResults(assessment: ProcessCoolingAssessment, weatherData: WeatherContextData): ProcessCoolingResults {
     let results: ProcessCoolingResults = {
       chiller: undefined as ProcessCoolingChillerOutput[],
       pump: undefined as ProcessCoolingPumpOutput,
@@ -43,7 +44,7 @@ export class ProcessCoolingSuiteApiService {
     const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary);
     const towerInputInstance = this._createTowerInput(assessment.systemInformation.towerInput);
     const waterCooledSystemInputInstance = this._createWaterCooledSystemInput(assessment.systemInformation.waterCooledSystemInput, assessment.systemInformation.operations, assessment.systemInformation.condenserWaterPumpInput, assessment.systemInformation.towerInput);
-    const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, waterCooledSystemInputInstance, towerInputInstance);
+    const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, waterCooledSystemInputInstance, weatherData, towerInputInstance);
 
     results.chiller = this._getChillerOutput(processCoolingInstance);
     results.tower = this.getTowerEnergy(processCoolingInstance);
@@ -64,7 +65,7 @@ export class ProcessCoolingSuiteApiService {
    *  - chiller: ProcessCoolingChillerOutput[] - Array of chiller outputs
    *  - pump: ProcessCoolingPumpOutput - Pump energy outputs
    */
-  getAirCooledResults(assessment: ProcessCoolingAssessment): ProcessCoolingResults {
+  getAirCooledResults(assessment: ProcessCoolingAssessment, weatherData: WeatherContextData): ProcessCoolingResults {
     let results: ProcessCoolingResults = {
       chiller: undefined as ProcessCoolingChillerOutput[],
       pump: undefined as ProcessCoolingPumpOutput,
@@ -72,7 +73,7 @@ export class ProcessCoolingSuiteApiService {
 
     const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary);
     const airCooledSystemInputInstance = this._createAirCooledSystemInput(assessment.systemInformation.airCooledSystemInput, assessment.systemInformation.operations);
-    const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, airCooledSystemInputInstance);
+    const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, airCooledSystemInputInstance, weatherData);
 
     results.chiller = this._getChillerOutput(processCoolingInstance);
     results.pump = this.getAirCooledPumpEnergy(assessment, processCoolingInstance);
@@ -197,14 +198,48 @@ export class ProcessCoolingSuiteApiService {
    * @param towerInputInstance {any} - (Optional) Tower input (Module.TowerInput)
    * @returns A new `ProcessCooling` instance 
    */
-  private _createProcessCoolingInput(chillerInputVector: any, coolingMethodSystemInputInstance: any, towerInputInstance?: any): any {
+  private _createProcessCoolingInput(chillerInputVector: any, coolingMethodSystemInputInstance: any, weatherData: WeatherContextData, towerInputInstance?: any): any {
+    const dryBulbHourly: (number)[] = [];
+    const wetBulbHourly: (number)[] = [];
+
+    // * keep below for debugging future implementation with interpolation of missign data
+    // let wetbulbUndefined = 0;
+    // let dryBulbUndefined = 0;
+    
+    // for (const hour of weatherData.weatherDataPoints) {
+    //   if (hour.wet_bulb_temp == undefined) {
+    //     console.log('hour undefined', hour);
+    //     wetbulbUndefined++;
+    //     hour.wet_bulb_temp = 0;
+    //   } else if (hour.dry_bulb_temp == undefined) {
+    //     console.log('hour undefined', hour);
+    //     dryBulbUndefined++;
+    //     hour.dry_bulb_temp = 0;
+    //   }
+    //   dryBulbHourly.push(hour.dry_bulb_temp);
+    //   wetBulbHourly.push(hour.wet_bulb_temp);
+    // }
+
+    // console.log('wetbulbUndefined', wetbulbUndefined);
+    // console.log('dryBulbUndefined', dryBulbUndefined);
 
     let onHoursVector = new Module.IntVector();
     let dryBulbHourlyTempVector = new Module.DoubleVector();
     let wetBulbHourlyTempVector = new Module.DoubleVector();
     onHoursVector = this.suiteApiHelperService.returnIntVector(systemOnHoursYearly);
-    dryBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(drybulbValues);
-    wetBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(wetbulbValues);
+    
+    dryBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(dryBulbHourly);
+    wetBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(wetBulbHourly);
+
+    console.log(dryBulbHourly);
+    console.log(wetBulbHourly);
+
+    // console.log(dryBulbHourlyTempVector.size());
+    // let debug = this._extractArray(dryBulbHourlyTempVector);
+    // console.log(debug);
+
+    // dryBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(drybulbValues);
+    // wetBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(wetbulbValues);
 
     if (!towerInputInstance) {
       return this.createProcessCoolingAirCooled(
