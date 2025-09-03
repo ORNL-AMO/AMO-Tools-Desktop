@@ -3,7 +3,7 @@ import { ValveEnergyLossService } from './valve-energy-loss.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Subscription } from 'rxjs';
-import { ValveEnergyLossResults } from '../../../shared/models/calculators';
+import { ValveEnergyLossInputs, ValveEnergyLossResults } from '../../../shared/models/calculators';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 
@@ -25,8 +25,6 @@ export class ValveEnergyLossComponent implements OnInit {
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
-  baselineEnergySub: Subscription;
-  modificationEnergySub: Subscription;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -37,11 +35,10 @@ export class ValveEnergyLossComponent implements OnInit {
   containerHeight: number;
   isModalOpen: boolean;
   modalSubscription: Subscription;
-  results: { baseline: number, modification: number };
   baselineDataSub: Subscription;
   modificationDataSub: Subscription;
-  outputSubscription: Subscription;
-  output: ValveEnergyLossResults;
+  resultsSubscription: Subscription;
+  results: ValveEnergyLossResults;
 
   currentField: string;
   tabSelect: string = 'results';
@@ -64,64 +61,49 @@ export class ValveEnergyLossComponent implements OnInit {
       this.settings = this.settingsDbService.globalSettings;
     }
 
-    // let existingInputs = this.flueGasService.baselineData.getValue();
-    // if (!existingInputs) {
-    //   let treasureHuntHours: number;
-    //   if (this.inTreasureHunt) {
-    //     treasureHuntHours = this.operatingHours.hoursPerYear;
-    //     this.method = 'By Volume';
-    //   }
-    //   this.flueGasService.initDefaultEmptyOutput();
-    //   this.flueGasService.initDefaultEmptyInputs(treasureHuntHours);
-    // } else {
-    //   this.method = existingInputs.flueGasType;
-    // }
-    // this.initSubscriptions();
-    // if (this.flueGasService.modificationData.getValue()) {
-    //   this.modificationExists = true;
-    // }
+    let existingInputs = this.valveEnergyLossService.baselineData.getValue();
+    if (!existingInputs) {
+      let treasureHuntHours: number;
+      if (this.inTreasureHunt) {
+        treasureHuntHours = this.operatingHours.hoursPerYear;
+      }
+      this.valveEnergyLossService.initDefaultEmptyOutput();
+      this.valveEnergyLossService.initDefaultEmptyInputs(treasureHuntHours);
+    }
+    this.initSubscriptions();
+    if (this.valveEnergyLossService.modificationData.getValue()) {
+      this.modificationExists = true;
+    }
   }
 
   ngOnDestroy() {
     this.modalSubscription.unsubscribe();
     this.baselineDataSub.unsubscribe();
     this.modificationDataSub.unsubscribe();
-    this.baselineEnergySub.unsubscribe();
-    this.modificationEnergySub.unsubscribe();
-    this.outputSubscription.unsubscribe();
+    this.resultsSubscription.unsubscribe();
   }
 
   initSubscriptions() {
-    // this.modalSubscription = this.flueGasService.modalOpen.subscribe(modalOpen => {
-    //   this.isModalOpen = modalOpen;
-    // });
+    this.modalSubscription = this.valveEnergyLossService.modalOpen.subscribe(modalOpen => {
+      this.isModalOpen = modalOpen;
+    });
 
-    // this.baselineDataSub = this.flueGasService.baselineData.subscribe(baselineData => {
-    //   if (baselineData) {
-    //     this.setBaselineSelected();
-    //     this.flueGasService.calculate(this.settings, false, true);
-    //   }
-    // });
-    // this.modificationDataSub = this.flueGasService.modificationData.subscribe(modificationData => {
-    //   if (modificationData) {
-    //     this.flueGasService.calculate(this.settings, false, true);
-    //   }
-    // });
-    // this.outputSubscription = this.flueGasService.output.subscribe(val => {
-    //   if (val) {
-    //     this.output = val;
-    //   }
-    // });
-    // this.baselineEnergySub = this.flueGasService.baselineEnergyData.subscribe(baselineEnergyData => {
-    //   if (baselineEnergyData) {
-    //     this.flueGasService.calculate(this.settings, false, true);
-    //   }
-    // });
-    // this.modificationEnergySub = this.flueGasService.modificationEnergyData.subscribe(modificationEnergyData => {
-    //   if (modificationEnergyData) {
-    //     this.flueGasService.calculate(this.settings, false, true);
-    //   }
-    // });
+    this.baselineDataSub = this.valveEnergyLossService.baselineData.subscribe(baselineData => {
+      if (baselineData) {
+        this.setBaselineSelected();
+        //this.valveEnergyLossService.calculate(this.settings, false, true);
+      }
+    });
+    this.modificationDataSub = this.valveEnergyLossService.modificationData.subscribe(modificationData => {
+      if (modificationData) {
+        //this.valveEnergyLossService.calculate(this.settings, false, true);
+      }
+    });
+    this.resultsSubscription = this.valveEnergyLossService.results.subscribe(val => {
+      if (val) {
+        this.results = val;
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -131,7 +113,7 @@ export class ValveEnergyLossComponent implements OnInit {
   }
 
   createModification() {
-    //this.flueGasService.initModification();
+    this.valveEnergyLossService.initModification();
     this.modificationExists = true;
     this.setModificationSelected();
     // this.flueGasService.calculate(this.settings, false, true);
@@ -139,24 +121,24 @@ export class ValveEnergyLossComponent implements OnInit {
 
   btnResetData() {
     this.modificationExists = false;
-    //this.flueGasService.initDefaultEmptyInputs();
-    //this.flueGasService.resetData.next(true);
+    this.valveEnergyLossService.initDefaultEmptyInputs();
+    this.valveEnergyLossService.resetData.next(true);
     this.baselineSelected = true;
-    //this.flueGasService.modificationData.next(undefined);
+    this.valveEnergyLossService.modificationData.next(undefined);
   }
 
   btnGenerateExample() {
     this.modificationExists = true;
-    //this.flueGasService.generateExampleData(this.settings);
+    this.valveEnergyLossService.generateExampleData(this.settings);
+    this.valveEnergyLossService.generateExampleResults();
     this.baselineSelected = true;
   }
 
 
   save() {
-    // let baselineData: FlueGas = this.flueGasService.baselineData.getValue();
-    // let baselineEnergyData: FlueGasEnergyData = this.flueGasService.baselineEnergyData.getValue();
-    // let modificationData: FlueGas = this.flueGasService.modificationData.getValue();
-    // let modificationEnergyData: FlueGasEnergyData = this.flueGasService.modificationEnergyData.getValue();
+    //TODO save for when in TH
+    // let baselineData: ValveEnergyLossInputs = this.valveEnergyLossService.baselineData.getValue();
+    // let modificationData: ValveEnergyLossInputs = this.valveEnergyLossService.modificationData.getValue();
 
   }
 
