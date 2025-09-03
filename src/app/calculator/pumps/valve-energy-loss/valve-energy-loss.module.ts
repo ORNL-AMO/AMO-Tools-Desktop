@@ -8,6 +8,7 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 import { ValveEnergyLossFormComponent } from './valve-energy-loss-form/valve-energy-loss-form.component';
 import { ValveEnergyLossHelpComponent } from './valve-energy-loss-help/valve-energy-loss-help.component';
 import { ValveEnergyLossResultsComponent } from './valve-energy-loss-results/valve-energy-loss-results.component';
+import { ValveEnergyLossFormService } from './valve-energy-loss-form/valve-energy-loss-form.service';
 
 
 
@@ -27,6 +28,9 @@ import { ValveEnergyLossResultsComponent } from './valve-energy-loss-results/val
   exports: [
     ValveEnergyLossComponent
   ],
-  providers: [ValveEnergyLossService]
+  providers: [
+    ValveEnergyLossService,
+    ValveEnergyLossFormService
+  ]
 })
 export class ValveEnergyLossModule { }
