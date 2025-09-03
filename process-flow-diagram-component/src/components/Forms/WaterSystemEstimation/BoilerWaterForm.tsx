@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { TextField, FormControl, InputAdornment, FormHelperText, Box } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../hooks/state';
 import { RootState } from '../../Diagram/store';
-import { EstimateSystemContext, EstimateSystemState } from './EstimateWaterSystem';
+import { EstimateSystemContext, EstimateSystemState, WaterAssessmentModuleConsumer } from './EstimateWaterSystem';
 import HoursPerYearInputField from './HoursPerYearInputField';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
 import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
@@ -50,7 +50,7 @@ const BoilerWaterForm = (props: BoilerWaterProps) => {
         }
 
 
-        let boilerWaterResults: BoilerWaterResults = calculateBoilerWaterResults(boilerWater, formik.values.hoursPerYear);
+        let boilerWaterResults: BoilerWaterResults = calculateBoilerWaterResults(boilerWater, formik.values.hoursPerYear, props.WaterAssessmentModule);
         boilerWaterResults.cycleOfConcentration = convertAnnualFlowResult(boilerWaterResults.cycleOfConcentration, settings);
         boilerWaterResults.grossWaterUse = convertAnnualFlowResult(boilerWaterResults.grossWaterUse, settings);
         boilerWaterResults.makeupWater = convertAnnualFlowResult(boilerWaterResults.makeupWater, settings);
@@ -228,4 +228,4 @@ const BoilerWaterForm = (props: BoilerWaterProps) => {
 
 export default BoilerWaterForm;
 
-export interface BoilerWaterProps { }
+export interface BoilerWaterProps extends WaterAssessmentModuleConsumer{ }
