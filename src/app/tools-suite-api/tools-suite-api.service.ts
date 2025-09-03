@@ -33,7 +33,7 @@ export class ToolsSuiteApiService {
         this.ToolsSuiteModule = await moduleFactory.default({
             locateFile: (path: string) => `/${path}`
         });
-        console.log('=== Tools Suite Module initialized');
+        console.log('=== Tools Suite Module initialized ===');
         return;
     }
 

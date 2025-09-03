@@ -68,6 +68,7 @@ export class CoreComponent implements OnInit {
   toolsSuiteInitialized: boolean;
   toolsSuiteInitializedSub: Subscription;
   loadingMessage: string;
+  defaultDbDataInitialized: boolean = false;
   constructor(public electronService: ElectronService,
     private assessmentService: AssessmentService,
     private changeDetectorRef: ChangeDetectorRef,
@@ -101,6 +102,7 @@ export class CoreComponent implements OnInit {
     this.setLoadingMessage();
     this.toolsSuiteInitializedSub = this.coreService.initializedToolsSuiteModule.subscribe(val => {
       this.toolsSuiteInitialized = val;
+      this.initializeDefaultDbData();
     });
 
     if (this.electronService.isElectron) {
@@ -223,7 +225,7 @@ export class CoreComponent implements OnInit {
   }
 
   async initData() {
-    console.log('=== IndexedDB Initializing data...');
+    console.log('=== IndexedDB Initializing data ===');
     const isFirstStartup = await this.getIsFirstStartup();
     if (isFirstStartup) {
       try {
@@ -284,8 +286,8 @@ export class CoreComponent implements OnInit {
           this.diagramIdbService.setAll(initializedData.diagrams);
           this.calculatorDbService.setAll(initializedData.calculators);
           this.inventoryDbService.setAll(initializedData.inventoryItems);
-          this.toolsSuiteApiService.initializeDefaultDbData();
           this.idbStarted = true;
+          this.initializeDefaultDbData();
           this.changeDetectorRef.detectChanges();
           if (this.electronService.isElectron) {
             this.automaticBackupService.saveVersionedBackup();
@@ -308,6 +310,14 @@ export class CoreComponent implements OnInit {
   async setSurveyDone() {
     let appData = await firstValueFrom(this.applicationInstanceDbService.setSurveyDone());
     this.applicationInstanceDbService.applicationInstanceData.next(appData);
+  }
+
+  async initializeDefaultDbData() {
+    if (this.toolsSuiteInitialized && this.idbStarted && !this.defaultDbDataInitialized) {
+      console.log('==== Initialize Default DB Data ====');
+      await this.toolsSuiteApiService.initializeDefaultDbData();
+      this.defaultDbDataInitialized = true;
+    }
   }
 
   hideSubscribeToast() {
