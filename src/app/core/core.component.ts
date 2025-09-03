@@ -24,6 +24,7 @@ import { CORE_DATA_WARNING, SECONDARY_DATA_WARNING, SnackbarService } from '../s
 import { BrowserStorageAvailable, BrowserStorageService } from '../shared/browser-storage.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
+import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
 @Component({
   selector: 'app-core',
@@ -64,6 +65,9 @@ export class CoreComponent implements OnInit {
   showShareDataModal: boolean = false;
   showShareDataModalSub: Subscription;
 
+  toolsSuiteInitialized: boolean;
+  toolsSuiteInitializedSub: Subscription;
+  loadingMessage: string;
   constructor(public electronService: ElectronService,
     private assessmentService: AssessmentService,
     private changeDetectorRef: ChangeDetectorRef,
@@ -88,11 +92,16 @@ export class CoreComponent implements OnInit {
     private browserStorageService: BrowserStorageService,
     private exportToJustifiTemplateService: ExportToJustifiTemplateService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
-    private flueGasMaterialDbService: FlueGasMaterialDbService
+    private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private toolsSuiteApiService: ToolsSuiteApiService
   ) {
   }
 
   ngOnInit() {
+    this.setLoadingMessage();
+    this.toolsSuiteInitializedSub = this.coreService.initializedToolsSuiteModule.subscribe(val => {
+      this.toolsSuiteInitialized = val;
+    });
 
     if (this.electronService.isElectron) {
       this.electronService.sendAppReady('ready');
@@ -210,6 +219,7 @@ export class CoreComponent implements OnInit {
     this.emailVisibilitySubscription.unsubscribe();
     this.showExportToJustifiModalSub.unsubscribe();
     this.showShareDataModalSub.unsubscribe();
+    this.toolsSuiteInitializedSub.unsubscribe();
   }
 
   async initData() {
@@ -220,7 +230,6 @@ export class CoreComponent implements OnInit {
         await this.coreService.setNewApplicationInstanceData();
         await this.coreService.createDefaultDirectories();
         await this.coreService.createExamples();
-        await this.coreService.createDefaultProcessHeatingMaterials();
         await this.coreService.createDirectorySettings();
       } catch (e) {
         this.appErrorService.handleAppError(e, 'Error creating MEASUR database');
@@ -275,6 +284,7 @@ export class CoreComponent implements OnInit {
           this.diagramIdbService.setAll(initializedData.diagrams);
           this.calculatorDbService.setAll(initializedData.calculators);
           this.inventoryDbService.setAll(initializedData.inventoryItems);
+          this.toolsSuiteApiService.initializeDefaultDbData();
           this.idbStarted = true;
           this.changeDetectorRef.detectChanges();
           if (this.electronService.isElectron) {
@@ -322,6 +332,28 @@ export class CoreComponent implements OnInit {
 
   closeReleaseNotes() {
     this.updateApplicationService.showReleaseNotesModal.next(false);
+  }
+
+  setLoadingMessage() {
+    const messages = [
+      "Loading... I hope you're having a nice day!",
+      "Just a moment, wishing you a wonderful day!",
+      "Preparing things for you. Hope your day is going well!",
+      "Hang tight! I hope you're having a fantastic day!",
+      "Almost there—hope your day is as great as you are!",
+      "Setting things up. I hope you're enjoying your day!",
+      "Loading your experience. Have a nice day!",
+      "Good things are coming. Hope your day is pleasant!",
+      "Getting ready... I hope you're having a nice day!",
+      "Thanks for your patience. Wishing you a great day!",
+      "Just a sec! I hope your day is going smoothly!",
+      "Loading magic. Hope you're having a nice day!",
+      "Almost done! I hope your day is wonderful!",
+      "Preparing your app. Have a fantastic day!",
+      "One moment please. I hope you're having a nice day!"
+    ];
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    this.loadingMessage = messages[randomIndex];
   }
 
 }
