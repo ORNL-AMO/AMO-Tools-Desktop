@@ -7,8 +7,6 @@ import { getAncestors, getAncestorPathToNode, getDescendants, getDescendantsDFS,
 import { PlantResults, PlantSystemSummaryResults, SystemAnnualSummaryResults } from "../types/results";
 import { WaterAssessment } from "../types/assessment";
 
-// * WASM Module with suite api
-declare var Module: any;
 
 export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[], calculatedData: DiagramCalculatedData): WaterBalanceResults => {
   let allSystemBalanceResults = [];
@@ -239,9 +237,8 @@ export const getTotalFlowValue = (flows: Array<EdgeFlowData>) => {
   return flows.reduce((total, flow) => total + flow.flowValue, 0);
 }
 
-export const calculateBoilerWaterResults = (inputData: BoilerWater, hoursPerYear: number): BoilerWaterResults => {
+export const calculateBoilerWaterResults = (inputData: BoilerWater, hoursPerYear: number, WaterAssessmentInstance): BoilerWaterResults => {
   const suiteApiInputData = JSON.parse(JSON.stringify(inputData));
-  let instance = new Module.WaterAssessment();
   hoursPerYear = convertNullInputValueForObjectConstructor(hoursPerYear);
   suiteApiInputData.power = convertNullInputValueForObjectConstructor(suiteApiInputData.power);
   suiteApiInputData.loadFactor = convertNullInputValueForObjectConstructor(suiteApiInputData.loadFactor);
@@ -250,7 +247,7 @@ export const calculateBoilerWaterResults = (inputData: BoilerWater, hoursPerYear
   suiteApiInputData.feedwaterConductivity = convertNullInputValueForObjectConstructor(suiteApiInputData.feedwaterConductivity);
   suiteApiInputData.makeupConductivity = convertNullInputValueForObjectConstructor(suiteApiInputData.makeupConductivity);
   suiteApiInputData.blowdownConductivity = convertNullInputValueForObjectConstructor(suiteApiInputData.blowdownConductivity);
-  let output = instance.calculateBoilerWaterLosses(
+  let output = WaterAssessmentInstance.calculateBoilerWaterLosses(
     hoursPerYear,
     suiteApiInputData.power,
     suiteApiInputData.loadFactor,
@@ -270,15 +267,13 @@ export const calculateBoilerWaterResults = (inputData: BoilerWater, hoursPerYear
     rateOfRecirculation: output.rateOfRecirculation,
   }
 
-  instance.delete();
   output.delete();
 
   return results;
 }
 
-export const calculateCoolingTowerResults = (inputData: CoolingTower, hoursPerYear: number): CoolingTowerResults => {
+export const calculateCoolingTowerResults = (inputData: CoolingTower, hoursPerYear: number, WaterAssessmentInstance): CoolingTowerResults => {
   const suiteApiInputData = JSON.parse(JSON.stringify(inputData));
-  let instance = new Module.WaterAssessment();
   hoursPerYear = convertNullInputValueForObjectConstructor(hoursPerYear);
   suiteApiInputData.tonnage = convertNullInputValueForObjectConstructor(suiteApiInputData.tonnage);
   suiteApiInputData.loadFactor = convertNullInputValueForObjectConstructor(suiteApiInputData.loadFactor);
@@ -289,7 +284,7 @@ export const calculateCoolingTowerResults = (inputData: CoolingTower, hoursPerYe
   suiteApiInputData.makeupConductivity = convertNullInputValueForObjectConstructor(suiteApiInputData.makeupConductivity);
   suiteApiInputData.blowdownConductivity = convertNullInputValueForObjectConstructor(suiteApiInputData.blowdownConductivity);
 
-  let output = instance.calculateCoolingTowerLoss(
+  let output = WaterAssessmentInstance.calculateCoolingTowerLoss(
     hoursPerYear,
     suiteApiInputData.tonnage,
     suiteApiInputData.loadFactor,
@@ -307,20 +302,18 @@ export const calculateCoolingTowerResults = (inputData: CoolingTower, hoursPerYe
     blowdownLoss: output.blowdownLoss,
   }
 
-  instance.delete();
   output.delete();
 
   return results;
 
 }
 
-export const calculateKitchenRestroomResults = (inputData: KitchenRestroom): KitchenRestroomResults => {
+export const calculateKitchenRestroomResults = (inputData: KitchenRestroom, WaterAssessmentInstance): KitchenRestroomResults => {
   const suiteApiInputData = JSON.parse(JSON.stringify((inputData)));
-  let instance = new Module.WaterAssessment();
   suiteApiInputData.employeeCount = convertNullInputValueForObjectConstructor(suiteApiInputData.employeeCount);
   suiteApiInputData.workdaysPerYear = convertNullInputValueForObjectConstructor(suiteApiInputData.workdaysPerYear);
   suiteApiInputData.dailyUsePerEmployee = convertNullInputValueForObjectConstructor(suiteApiInputData.dailyUsePerEmployee);
-  let grossWaterUse = instance.calculateKitchenRestroomGrossWaterUse(
+  let grossWaterUse = WaterAssessmentInstance.calculateKitchenRestroomGrossWaterUse(
     suiteApiInputData.employeeCount,
     suiteApiInputData.workdaysPerYear,
     suiteApiInputData.dailyUsePerEmployee,
@@ -328,9 +321,8 @@ export const calculateKitchenRestroomResults = (inputData: KitchenRestroom): Kit
 
   let results: KitchenRestroomResults = {
     grossWaterUse: grossWaterUse
-  }
+  };
 
-  instance.delete();
 
   return results;
 }
@@ -352,13 +344,12 @@ export const convertLandscapingSuiteInput = (landscaping: Landscaping, unitsOfMe
 }
 
 
-export const calculateLandscapingResults = (inputData: Landscaping): LandscapingResults => {
+export const calculateLandscapingResults = (inputData: Landscaping, WaterAssessmentInstance): LandscapingResults => {
   const suiteApiInputData = JSON.parse(JSON.stringify((inputData)));
-  let instance = new Module.WaterAssessment();
   suiteApiInputData.areaIrrigated = convertNullInputValueForObjectConstructor(suiteApiInputData.areaIrrigated);
   suiteApiInputData.yearlyInchesIrrigated = convertNullInputValueForObjectConstructor(suiteApiInputData.yearlyInchesIrrigated);
 
-  let grossWaterUse = instance.calculateLandscapingGrossWaterUse(
+  let grossWaterUse = WaterAssessmentInstance.calculateLandscapingGrossWaterUse(
     suiteApiInputData.areaIrrigated,
     suiteApiInputData.yearlyInchesIrrigated,
   );
@@ -367,7 +358,6 @@ export const calculateLandscapingResults = (inputData: Landscaping): Landscaping
     grossWaterUse: grossWaterUse
   }
 
-  instance.delete();
   return results;
 }
 

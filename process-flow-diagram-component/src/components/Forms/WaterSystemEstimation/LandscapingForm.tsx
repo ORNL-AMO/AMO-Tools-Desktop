@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { TextField, FormControl, InputAdornment, FormHelperText, Box } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../hooks/state';
 import { RootState } from '../../Diagram/store';
-import { EstimateSystemContext, EstimateSystemState } from './EstimateWaterSystem';
+import { EstimateSystemContext, EstimateSystemState, WaterAssessmentModuleConsumer } from './EstimateWaterSystem';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
 import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
 import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
@@ -40,7 +40,7 @@ const LandscapingForm = (props: LandscapingProps) => {
         }
 
         landscaping = convertLandscapingSuiteInput(landscaping, settings.unitsOfMeasure);
-        let landscapingResults: LandscapingResults = calculateLandscapingResults(landscaping);
+        let landscapingResults: LandscapingResults = calculateLandscapingResults(landscaping, props.WaterAssessmentModule);
         landscapingResults = convertLandscapingResults(landscapingResults, settings.unitsOfMeasure);
         landscapingResults.grossWaterUse = convertAnnualFlowResult(landscapingResults.grossWaterUse, settings);
 
@@ -126,6 +126,6 @@ const LandscapingForm = (props: LandscapingProps) => {
 
 export default LandscapingForm;
 
-export interface LandscapingProps {
+export interface LandscapingProps extends WaterAssessmentModuleConsumer {
     // settings: any;
 }
