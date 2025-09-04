@@ -203,25 +203,25 @@ export class ProcessCoolingSuiteApiService {
     const wetBulbHourly: (number)[] = [];
 
     // * keep below for debugging future implementation with interpolation of missign data
-    // let wetbulbUndefined = 0;
-    // let dryBulbUndefined = 0;
+    let wetbulbUndefined = 0;
+    let dryBulbUndefined = 0;
     
-    // for (const hour of weatherData.weatherDataPoints) {
-    //   if (hour.wet_bulb_temp == undefined) {
-    //     console.log('hour undefined', hour);
-    //     wetbulbUndefined++;
-    //     hour.wet_bulb_temp = 0;
-    //   } else if (hour.dry_bulb_temp == undefined) {
-    //     console.log('hour undefined', hour);
-    //     dryBulbUndefined++;
-    //     hour.dry_bulb_temp = 0;
-    //   }
-    //   dryBulbHourly.push(hour.dry_bulb_temp);
-    //   wetBulbHourly.push(hour.wet_bulb_temp);
-    // }
+    for (const hour of weatherData.weatherDataPoints) {
+      if (hour.wet_bulb_temp == undefined) {
+        console.log('hour undefined', hour);
+        wetbulbUndefined++;
+        hour.wet_bulb_temp = 0;
+      } else if (hour.dry_bulb_temp == undefined) {
+        console.log('hour undefined', hour);
+        dryBulbUndefined++;
+        hour.dry_bulb_temp = 0;
+      }
+      dryBulbHourly.push(hour.dry_bulb_temp);
+      wetBulbHourly.push(hour.wet_bulb_temp);
+    }
 
-    // console.log('wetbulbUndefined', wetbulbUndefined);
-    // console.log('dryBulbUndefined', dryBulbUndefined);
+    console.log('wetbulbUndefined', wetbulbUndefined);
+    console.log('dryBulbUndefined', dryBulbUndefined);
 
     let onHoursVector = new Module.IntVector();
     let dryBulbHourlyTempVector = new Module.DoubleVector();
