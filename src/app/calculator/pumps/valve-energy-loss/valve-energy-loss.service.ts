@@ -129,22 +129,42 @@ export class ValveEnergyLossService {
     this.results.next(results);
   }
 
-  initDefaultEmptyInputs(treasureHuntHours?: number) {
+  initDefaultInputs(treasureHuntHours?: number) {
     let emptyInputs: ValveEnergyLossInputs = {
       hoursOperation: treasureHuntHours ? treasureHuntHours : 8760,
-      electricalRate: 0,
-      efficiencyPump: 0,
-      efficiencyMotor: 0,
-      SG: 0,
-      flowRate: 0,
-      upstreamPressure: 0,
-      upstreamDiameter: 0,
-      upstreamHeight: 0,
-      valveDiameter: 0,
-      downstreamPressure: 0,
-      downstreamDiameter: 0,
-      downstreamHeight: 0,
-      pipeSizeFactor: 0,
+      electricalRate: 0.05,
+      efficiencyPump: 85,
+      efficiencyMotor: 95,
+      SG: 1,
+      flowRate: 5000,
+      upstreamPressure: 50,
+      upstreamDiameter: 5,
+      upstreamHeight: 5,
+      valveDiameter: 8,
+      downstreamPressure: 45,
+      downstreamDiameter: 6,
+      downstreamHeight: 4,
+      pipeSizeFactor: 1.5,
+    };
+    this.baselineData.next(emptyInputs);
+  }
+
+  initEmptyInputs(treasureHuntHours?: number) {
+    let emptyInputs: ValveEnergyLossInputs = {
+      hoursOperation: treasureHuntHours ? treasureHuntHours : 8760,
+      electricalRate: 0.05,
+      efficiencyPump: 85,
+      efficiencyMotor: 95,
+      SG: 1,
+      flowRate: 5000,
+      upstreamPressure: 50,
+      upstreamDiameter: 5,
+      upstreamHeight: 5,
+      valveDiameter: 8,
+      downstreamPressure: 45,
+      downstreamDiameter: 6,
+      downstreamHeight: 4,
+      pipeSizeFactor: 1.5,
     };
     this.baselineData.next(emptyInputs);
   }
