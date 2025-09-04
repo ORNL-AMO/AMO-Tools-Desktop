@@ -129,8 +129,7 @@ export class ValveEnergyLossComponent implements OnInit {
   }
 
   btnGenerateExample() {
-    this.valveEnergyLossService.generateBLExampleData(this.settings);    
-    this.valveEnergyLossService.generateModExampleData(this.settings);
+    this.valveEnergyLossService.generateExampleData(this.settings);
     this.valveEnergyLossService.generateExampleResults();
     this.modificationExists = true;
     this.baselineSelected = true;

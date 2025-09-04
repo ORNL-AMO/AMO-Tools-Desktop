@@ -54,8 +54,7 @@ export class ValveEnergyLossService {
     return results;
   }
 
-  generateBLExampleData(settings: Settings) {
-    console.log('generateBLExampleData');
+  generateExampleData(settings: Settings) {
     // Generate example data based on the provided settings
     let baselineExampleInputs: ValveEnergyLossInputs = {
       hoursOperation: 8760,
@@ -73,9 +72,6 @@ export class ValveEnergyLossService {
       downstreamHeight: 4,
       pipeSizeFactor: 1.5,
     };
-    this.baselineData.next(baselineExampleInputs);
-  }
-  generateModExampleData(settings: Settings) {
     let modificationExampleInputs: ValveEnergyLossInputs = {
       hoursOperation: 6140,
       electricalRate: 0.07,
@@ -93,6 +89,7 @@ export class ValveEnergyLossService {
       pipeSizeFactor: 1.5,
     };
     this.modificationData.next(modificationExampleInputs);
+    this.baselineData.next(baselineExampleInputs);
   }
 
   generateExampleResults() {
