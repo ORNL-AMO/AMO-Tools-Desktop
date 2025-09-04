@@ -18,31 +18,29 @@
             <span *ngIf="form.controls.hoursOperation.errors.min">Value can't be less than
                 {{form.controls.hoursOperation.errors.min.min}}.</span>
         </span> -->
-    </div> 
+    </div>
 
     <div class="form-group">
         <label class="small" for="{{'electricalRate_'+idString}}">
             Electrical Cost
         </label>
         <div class="input-group">
-            <input name="electricalRate" type="number" class="form-control" formControlName="electricalRate" id="{{'electricalRate_'+idString}}"
-                onfocus="this.select();" (input)="calculate()" (focus)="focusField('electricalRate')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
+            <input name="electricalRate" type="number" class="form-control" formControlName="electricalRate"
+                id="{{'electricalRate_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('electricalRate')">
+            <span class="input-group-addon units">$/kWh</span>
         </div>
     </div>
 
     <div class="form-group">
         <label class="small" for="{{'efficiencyPump_'+idString}}">
-            Pump Efficiency 
+            Pump Efficiency
         </label>
         <div class="input-group">
-            <input name="efficiencyPump" type="number" class="form-control" formControlName="efficiencyPump" id="{{'efficiencyPump_'+idString}}"
-                onfocus="this.select();" (input)="calculate()" (focus)="focusField('efficiencyPump')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
+            <input name="efficiencyPump" type="number" class="form-control" formControlName="efficiencyPump"
+                id="{{'efficiencyPump_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('efficiencyPump')">
+            <span class="input-group-addon units">%</span>
         </div>
     </div>
 
@@ -51,11 +49,10 @@
             Motor Efficiency
         </label>
         <div class="input-group">
-            <input name="efficiencyMotor" type="number" class="form-control" formControlName="efficiencyMotor" id="{{'efficiencyMotor_'+idString}}"
-                onfocus="this.select();" (input)="calculate()" (focus)="focusField('efficiencyMotor')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
+            <input name="efficiencyMotor" type="number" class="form-control" formControlName="efficiencyMotor"
+                id="{{'efficiencyMotor_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('efficiencyMotor')">
+            <span class="input-group-addon units">%</span>
         </div>
     </div>
 
@@ -66,9 +63,6 @@
         <div class="input-group">
             <input name="SG" type="number" class="form-control" formControlName="SG" id="{{'SG_'+idString}}"
                 onfocus="this.select();" (input)="calculate()" (focus)="focusField('SG')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
         </div>
     </div>
 
@@ -77,11 +71,11 @@
             Flow Rate
         </label>
         <div class="input-group">
-            <input name="flowRate" type="number" class="form-control" formControlName="flowRate" id="{{'flowRate_'+idString}}"
-                onfocus="this.select();" (input)="calculate()" (focus)="focusField('flowRate')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
+            <input name="flowRate" type="number" class="form-control" formControlName="flowRate"
+                id="{{'flowRate_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('flowRate')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">gpm</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">L/m</span>
         </div>
     </div>
 
@@ -90,104 +84,102 @@
             Upstream Pressure
         </label>
         <div class="input-group">
-            <input name="upstreamPressure" type="number" class="form-control" formControlName="upstreamPressure" id="{{'upstreamPressure_'+idString}}"
-                onfocus="this.select();" (input)="calculate()" (focus)="focusField('upstreamPressure')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
+            <input name="upstreamPressure" type="number" class="form-control" formControlName="upstreamPressure"
+                id="{{'upstreamPressure_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('upstreamPressure')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">psi</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">bar</span>
         </div>
     </div>
 
-    <div class="form-group">
+    <!-- * per Kristina hiding inputs that are not currently used in the math -->
+    <!-- <div class="form-group">
         <label class="small" for="{{'upstreamDiameter_'+idString}}">
             Upstream Pipe Inner Diameter
         </label>
         <div class="input-group">
             <input name="upstreamDiameter" type="number" class="form-control" formControlName="upstreamDiameter" id="{{'upstreamDiameter_'+idString}}"
                 onfocus="this.select();" (input)="calculate()" (focus)="focusField('upstreamDiameter')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">in</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">cm</span>
         </div>
-    </div>
+    </div> -->
 
     <div class="form-group">
         <label class="small" for="{{'upstreamHeight_'+idString}}">
             Upstream Gage Elevation
         </label>
         <div class="input-group">
-            <input name="upstreamHeight" type="number" class="form-control" formControlName="upstreamHeight" id="{{'upstreamHeight_'+idString}}"
-                onfocus="this.select();" (input)="calculate()" (focus)="focusField('upstreamHeight')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
+            <input name="upstreamHeight" type="number" class="form-control" formControlName="upstreamHeight"
+                id="{{'upstreamHeight_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('upstreamHeight')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">ft</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">m</span>
         </div>
     </div>
 
-    <div class="form-group">
+    <!-- * per Kristina hiding inputs that are not currently used in the math -->
+    <!-- <div class="form-group">
         <label class="small" for="{{'valveDiameter_'+idString}}">
             Valve Diameter
         </label>
         <div class="input-group">
             <input name="valveDiameter" type="number" class="form-control" formControlName="valveDiameter" id="{{'valveDiameter_'+idString}}"
                 onfocus="this.select();" (input)="calculate()" (focus)="focusField('valveDiameter')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">in</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">cm</span>
         </div>
-    </div>
+    </div> -->
 
     <div class="form-group">
         <label class="small" for="{{'downstreamPressure_'+idString}}">
             Downstream Pressure
         </label>
         <div class="input-group">
-            <input name="downstreamPressure" type="number" class="form-control" formControlName="downstreamPressure" id="{{'downstreamPressure_'+idString}}"
-                onfocus="this.select();" (input)="calculate()" (focus)="focusField('downstreamPressure')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
+            <input name="downstreamPressure" type="number" class="form-control" formControlName="downstreamPressure"
+                id="{{'downstreamPressure_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('downstreamPressure')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">psi</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">bar</span>
         </div>
     </div>
 
-    <div class="form-group">
+    <!-- * per Kristina hiding inputs that are not currently used in the math -->
+    <!-- <div class="form-group">
         <label class="small" for="{{'downstreamDiameter_'+idString}}">
             Downstream Pipe Inner Diameter
         </label>
         <div class="input-group">
             <input name="downstreamDiameter" type="number" class="form-control" formControlName="downstreamDiameter" id="{{'downstreamDiameter_'+idString}}"
                 onfocus="this.select();" (input)="calculate()" (focus)="focusField('downstreamDiameter')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">in</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">cm</span>
         </div>
-    </div>
+    </div> -->
 
     <div class="form-group">
         <label class="small" for="{{'downstreamHeight_'+idString}}">
             Downstream Height
         </label>
         <div class="input-group">
-            <input name="downstreamHeight" type="number" class="form-control" formControlName="downstreamHeight" id="{{'downstreamHeight_'+idString}}"
-                onfocus="this.select();" (input)="calculate()" (focus)="focusField('downstreamHeight')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
+            <input name="downstreamHeight" type="number" class="form-control" formControlName="downstreamHeight"
+                id="{{'downstreamHeight_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('downstreamHeight')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">ft</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">m</span>
         </div>
     </div>
 
-    <div class="form-group">
+    <!-- * per Kristina hiding inputs that are not currently used in the math -->
+    <!-- <div class="form-group">
         <label class="small" for="{{'pipeSizeFactor_'+idString}}">
             Pipe Sizing Geometry Factor
         </label>
         <div class="input-group">
             <input name="pipeSizeFactor" type="number" class="form-control" formControlName="pipeSizeFactor" id="{{'pipeSizeFactor_'+idString}}"
                 onfocus="this.select();" (input)="calculate()" (focus)="focusField('pipeSizeFactor')">
-            <!-- <span class="input-group-addon units">$/<span
-                    [innerHTML]="settings.energyResultUnit | settingsLabel"></span>
-            </span> -->
         </div>
-    </div>
+    </div> -->
 
 </form>
 

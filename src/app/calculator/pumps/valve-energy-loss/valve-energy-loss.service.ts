@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ValveEnergyLossInputs, ValveEnergyLossResults } from '../../../shared/models/calculators';
+import { ValveEnergyLossInputs, ValveEnergyLossOutputs, ValveEnergyLossResults } from '../../../shared/models/calculators';
 import { OperatingHours } from '../../../shared/models/operations';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
@@ -32,13 +32,25 @@ export class ValveEnergyLossService {
 
   calculateEnergyLoss(inputs: ValveEnergyLossInputs): ValveEnergyLossResults {
     // TODO call to suite API 
-    let results: ValveEnergyLossResults = {
-      headLoss: 0,
-      powerLossFrictional: 0,
-      powerLossElectrical: 0,
-      annualEnergyLoss: 0,
-      annualEnergyCost: 0,
+    let baselineOutputs: ValveEnergyLossOutputs = {
+      headLoss: 14.54,
+      powerLossFrictional: 18.38,
+      powerLossElectrical: 16.97,
+      annualEnergyLoss: 148657,
+      annualEnergyCost: 7433.83,
     };
+    let modificationOutputs: ValveEnergyLossOutputs = {
+      headLoss: 37.31,
+      powerLossFrictional: 38.04,
+      powerLossElectrical: 33.96,
+      annualEnergyLoss: 208540,
+      annualEnergyCost: 14597.79,
+    };
+    let results: ValveEnergyLossResults = {
+      baselineOutputs: baselineOutputs,
+      modificationOutputs: modificationOutputs,
+    };
+    this.results.next(results);
     return results;
   }
 
@@ -60,49 +72,62 @@ export class ValveEnergyLossService {
       downstreamHeight: 4,
       pipeSizeFactor: 1.5,
     };
-    this.baselineData.next(baselineExampleInputs);
-
     let modificationExampleInputs: ValveEnergyLossInputs = {
-      hoursOperation: 8760,
-      electricalRate: 0.05,
-      efficiencyPump: 85,
-      efficiencyMotor: 95,
+      hoursOperation: 6140,
+      electricalRate: 0.07,
+      efficiencyPump: 87,
+      efficiencyMotor: 96,
       SG: 1,
-      flowRate: 5000,
-      upstreamPressure: 50,
+      flowRate: 4000,
+      upstreamPressure: 60,
       upstreamDiameter: 5,
       upstreamHeight: 5,
       valveDiameter: 8,
       downstreamPressure: 45,
       downstreamDiameter: 6,
-      downstreamHeight: 4,
+      downstreamHeight: 2,
       pipeSizeFactor: 1.5,
     };
-    this.baselineData.next(modificationExampleInputs);
+    this.baselineData.next(baselineExampleInputs);
+    this.modificationData.next(modificationExampleInputs);
   }
 
   generateExampleResults() {
-    let results: ValveEnergyLossResults = {
+    let baselineOutputs: ValveEnergyLossOutputs = {
       headLoss: 14.54,
       powerLossFrictional: 18.38,
       powerLossElectrical: 16.97,
       annualEnergyLoss: 148657,
       annualEnergyCost: 7433.83,
     };
+    let modificationOutputs: ValveEnergyLossOutputs = {
+      headLoss: 37.31,
+      powerLossFrictional: 38.04,
+      powerLossElectrical: 33.96,
+      annualEnergyLoss: 208540,
+      annualEnergyCost: 14597.79,
+    };
+    let results: ValveEnergyLossResults = {
+      baselineOutputs: baselineOutputs,
+      modificationOutputs: modificationOutputs,
+    };
     this.results.next(results);
   }
 
   initDefaultEmptyOutput() {
-    let result: ValveEnergyLossResults = {
+    let emptyOutputs: ValveEnergyLossOutputs = {
       headLoss: 0,
       powerLossFrictional: 0,
       powerLossElectrical: 0,
       annualEnergyLoss: 0,
       annualEnergyCost: 0,
     };
-    this.results.next(result);
+    let results: ValveEnergyLossResults = {
+      baselineOutputs: emptyOutputs,
+      modificationOutputs: emptyOutputs,
+    };
+    this.results.next(results);
   }
-
 
   initDefaultEmptyInputs(treasureHuntHours?: number) {
     let emptyInputs: ValveEnergyLossInputs = {

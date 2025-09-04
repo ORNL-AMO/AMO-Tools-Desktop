@@ -10,6 +10,7 @@ import { ValveEnergyLossHelpComponent } from './valve-energy-loss-help/valve-ene
 import { ValveEnergyLossResultsComponent } from './valve-energy-loss-results/valve-energy-loss-results.component';
 import { ValveEnergyLossFormService } from './valve-energy-loss-form/valve-energy-loss-form.service';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 
 
 
@@ -25,7 +26,8 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
     ReactiveFormsModule,
     SettingsModule,
     ExportableResultsTableModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    SharedPipesModule
   ],
   exports: [
     ValveEnergyLossComponent

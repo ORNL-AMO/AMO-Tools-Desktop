@@ -243,6 +243,11 @@ export interface ValveEnergyLossInputs {
 }
 
 export interface ValveEnergyLossResults {
+    baselineOutputs: ValveEnergyLossOutputs;
+    modificationOutputs: ValveEnergyLossOutputs;
+}
+
+export interface ValveEnergyLossOutputs {
     headLoss: number;
     powerLossFrictional: number;
     powerLossElectrical: number;
