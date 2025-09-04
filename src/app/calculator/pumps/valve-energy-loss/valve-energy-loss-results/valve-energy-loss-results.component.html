@@ -5,6 +5,8 @@
             <td class="bold w-50">Head Loss</td>
             <td *ngIf="output.baselineOutputs.headLoss" class="text-center w-50">
                 {{output.baselineOutputs.headLoss | number:'1.0-2'}}
+                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">ft</span>
+                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">m</span>
             </td>
             <td *ngIf="!output.baselineOutputs.headLoss" class="text-center w-50">
                 &mdash; &mdash;
@@ -14,6 +16,8 @@
             <td class="bold w-50">Friction Losses</td>
             <td *ngIf="output.baselineOutputs.powerLossFrictional" class="text-center w-50">
                 {{output.baselineOutputs.powerLossFrictional | number:'1.0-2'}}
+                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">hp</span>
+                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">kW</span>
             </td>
             <td *ngIf="!output.baselineOutputs.powerLossFrictional" class="text-center w-50">
                 &mdash; &mdash;
@@ -23,6 +27,7 @@
             <td class="bold w-50">Electrical Loss</td>
             <td *ngIf="output.baselineOutputs.powerLossElectrical" class="text-center w-50">
                 {{output.baselineOutputs.powerLossElectrical | number:'1.0-2'}}
+                <span class="input-group-addon">kW</span>
             </td>
             <td *ngIf="!output.baselineOutputs.powerLossElectrical" class="text-center w-50">
                 &mdash; &mdash;
@@ -32,6 +37,7 @@
             <td class="bold w-50">Annual Energy Usage</td>
             <td *ngIf="output.baselineOutputs.annualEnergyLoss" class="text-center w-50">
                 {{output.baselineOutputs.annualEnergyLoss | number:'1.0-2'}}
+                <span class="input-group-addon">kWh</span>
             </td>
             <td *ngIf="!output.baselineOutputs.annualEnergyLoss" class="text-center w-50">
                 &mdash; &mdash;
@@ -40,7 +46,7 @@
         <tr>
             <td class="bold w-50">Annual Energy Cost</td>
             <td *ngIf="output.baselineOutputs.annualEnergyCost" class="text-center w-50">
-                {{output.baselineOutputs.annualEnergyCost | number:'1.0-2'}}
+                {{output.baselineOutputs.annualEnergyCost | currency:'USD':'symbol':'1.2-2'}}
             </td>
             <td *ngIf="!output.baselineOutputs.annualEnergyCost" class="text-center w-50">
                 &mdash; &mdash;
@@ -60,6 +66,8 @@
             <td class="bold w-50">Head Loss</td>
             <td *ngIf="output.modificationOutputs.headLoss" class="text-center w-50">
                 {{output.modificationOutputs.headLoss | number:'1.0-2'}}
+                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">ft</span>
+                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">m</span>
             </td>
             <td *ngIf="!output.modificationOutputs.headLoss" class="text-center w-50">
                 &mdash; &mdash;
@@ -69,6 +77,8 @@
             <td class="bold w-50">Friction Losses</td>
             <td *ngIf="output.modificationOutputs.powerLossFrictional" class="text-center w-50">
                 {{output.modificationOutputs.powerLossFrictional | number:'1.0-2'}}
+                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">hp</span>
+                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">kW</span>
             </td>
             <td *ngIf="!output.modificationOutputs.powerLossFrictional" class="text-center w-50">
                 &mdash; &mdash;
@@ -78,6 +88,7 @@
             <td class="bold w-50">Electrical Loss</td>
             <td *ngIf="output.modificationOutputs.powerLossElectrical" class="text-center w-50">
                 {{output.modificationOutputs.powerLossElectrical | number:'1.0-2'}}
+                <span class="input-group-addon">kW</span>
             </td>
             <td *ngIf="!output.modificationOutputs.powerLossElectrical" class="text-center w-50">
                 &mdash; &mdash;
@@ -87,6 +98,7 @@
             <td class="bold w-50">Annual Energy Usage</td>
             <td *ngIf="output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
                 {{output.modificationOutputs.annualEnergyLoss | number:'1.0-2'}}
+                <span class="input-group-addon">kWh</span>
             </td>
             <td *ngIf="!output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
                 &mdash; &mdash;
@@ -95,7 +107,7 @@
         <tr>
             <td class="bold w-50">Annual Energy Cost</td>
             <td *ngIf="output.modificationOutputs.annualEnergyCost" class="text-center w-50">
-                {{output.modificationOutputs.annualEnergyCost | number:'1.0-2'}}
+                {{output.modificationOutputs.annualEnergyCost | currency:'USD':'symbol':'1.2-2'}}
             </td>
             <td *ngIf="!output.modificationOutputs.annualEnergyCost" class="text-center w-50">
                 &mdash; &mdash;
@@ -113,6 +125,8 @@
             <td class="bold w-50">Head Loss</td>
             <td *ngIf="output.modificationOutputs.headLoss" class="text-center w-50">
                 {{output.baselineOutputs.headLoss - output.modificationOutputs.headLoss | number:'1.0-2'}}
+                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">ft</span>
+                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">m</span>
             </td>
             <td *ngIf="!output.modificationOutputs.headLoss" class="text-center w-50">
                 &mdash; &mdash;
@@ -123,6 +137,8 @@
             <td *ngIf="output.modificationOutputs.powerLossFrictional" class="text-center w-50">
                 {{output.baselineOutputs.powerLossFrictional - output.modificationOutputs.powerLossFrictional |
                 number:'1.0-2'}}
+                <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon">hp</span>
+                <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon">kW</span>
             </td>
             <td *ngIf="!output.modificationOutputs.powerLossFrictional" class="text-center w-50">
                 &mdash; &mdash;
@@ -133,6 +149,7 @@
             <td *ngIf="output.modificationOutputs.powerLossElectrical" class="text-center w-50">
                 {{output.baselineOutputs.powerLossElectrical - output.modificationOutputs.powerLossElectrical |
                 number:'1.0-2'}}
+                <span class="input-group-addon">kW</span>
             </td>
             <td *ngIf="!output.modificationOutputs.powerLossElectrical" class="text-center w-50">
                 &mdash; &mdash;
@@ -141,7 +158,9 @@
         <tr>
             <td class="bold w-50">Annual Energy Usage</td>
             <td *ngIf="output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
-                {{output.baselineOutputs.annualEnergyLoss - output.modificationOutputs.annualEnergyLoss | number:'1.0-2'}}
+                {{output.baselineOutputs.annualEnergyLoss - output.modificationOutputs.annualEnergyLoss |
+                number:'1.0-2'}}
+                <span class="input-group-addon">kWh</span>
             </td>
             <td *ngIf="!output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
                 &mdash; &mdash;
@@ -150,7 +169,8 @@
         <tr>
             <td class="bold w-50">Annual Energy Cost</td>
             <td *ngIf="output.modificationOutputs.annualEnergyCost" class="text-center w-50">
-                {{output.baselineOutputs.annualEnergyCost - output.modificationOutputs.annualEnergyCost | number:'1.0-2'}}
+                {{output.baselineOutputs.annualEnergyCost - output.modificationOutputs.annualEnergyCost |
+                currency:'USD':'symbol':'1.2-2'}}
             </td>
             <td *ngIf="!output.modificationOutputs.annualEnergyCost" class="text-center w-50">
                 &mdash; &mdash;
