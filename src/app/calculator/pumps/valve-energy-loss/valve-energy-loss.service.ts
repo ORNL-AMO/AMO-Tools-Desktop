@@ -54,7 +54,8 @@ export class ValveEnergyLossService {
     return results;
   }
 
-  generateExampleData(settings: Settings) {
+  generateBLExampleData(settings: Settings) {
+    console.log('generateBLExampleData');
     // Generate example data based on the provided settings
     let baselineExampleInputs: ValveEnergyLossInputs = {
       hoursOperation: 8760,
@@ -72,6 +73,9 @@ export class ValveEnergyLossService {
       downstreamHeight: 4,
       pipeSizeFactor: 1.5,
     };
+    this.baselineData.next(baselineExampleInputs);
+  }
+  generateModExampleData(settings: Settings) {
     let modificationExampleInputs: ValveEnergyLossInputs = {
       hoursOperation: 6140,
       electricalRate: 0.07,
@@ -88,7 +92,6 @@ export class ValveEnergyLossService {
       downstreamHeight: 2,
       pipeSizeFactor: 1.5,
     };
-    this.baselineData.next(baselineExampleInputs);
     this.modificationData.next(modificationExampleInputs);
   }
 
@@ -152,19 +155,19 @@ export class ValveEnergyLossService {
   initEmptyInputs(treasureHuntHours?: number) {
     let emptyInputs: ValveEnergyLossInputs = {
       hoursOperation: treasureHuntHours ? treasureHuntHours : 8760,
-      electricalRate: 0.05,
-      efficiencyPump: 85,
-      efficiencyMotor: 95,
+      electricalRate: 0,
+      efficiencyPump: 0,
+      efficiencyMotor: 0,
       SG: 1,
-      flowRate: 5000,
-      upstreamPressure: 50,
-      upstreamDiameter: 5,
-      upstreamHeight: 5,
-      valveDiameter: 8,
-      downstreamPressure: 45,
-      downstreamDiameter: 6,
-      downstreamHeight: 4,
-      pipeSizeFactor: 1.5,
+      flowRate: 0,
+      upstreamPressure: 0,
+      upstreamDiameter: 0,
+      upstreamHeight: 0,
+      valveDiameter: 0,
+      downstreamPressure: 0,
+      downstreamDiameter: 0,
+      downstreamHeight: 0,
+      pipeSizeFactor: 0,
     };
     this.baselineData.next(emptyInputs);
   }

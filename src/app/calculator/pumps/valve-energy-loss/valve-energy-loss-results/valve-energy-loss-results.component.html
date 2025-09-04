@@ -1,1 +1,162 @@
-<p>valve-energy-loss-results works!</p>
+<label class="group-label">Baseline Results</label>
+<table #copyTable0 class="table table-hover table-striped">
+    <tbody>
+        <tr>
+            <td class="bold w-50">Head Loss</td>
+            <td *ngIf="output.baselineOutputs.headLoss" class="text-center w-50">
+                {{output.baselineOutputs.headLoss | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.baselineOutputs.headLoss" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Friction Losses</td>
+            <td *ngIf="output.baselineOutputs.powerLossFrictional" class="text-center w-50">
+                {{output.baselineOutputs.powerLossFrictional | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.baselineOutputs.powerLossFrictional" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Electrical Loss</td>
+            <td *ngIf="output.baselineOutputs.powerLossElectrical" class="text-center w-50">
+                {{output.baselineOutputs.powerLossElectrical | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.baselineOutputs.powerLossElectrical" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Annual Energy Usage</td>
+            <td *ngIf="output.baselineOutputs.annualEnergyLoss" class="text-center w-50">
+                {{output.baselineOutputs.annualEnergyLoss | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.baselineOutputs.annualEnergyLoss" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Annual Energy Cost</td>
+            <td *ngIf="output.baselineOutputs.annualEnergyCost" class="text-center w-50">
+                {{output.baselineOutputs.annualEnergyCost | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.baselineOutputs.annualEnergyCost" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!-- export table component -->
+<app-exportable-results-table [tableString]="table0String" (updateTableString)="updateTable0String()">
+</app-exportable-results-table>
+
+
+<label class="group-label" *ngIf="modificationExists">Modification Results</label>
+<table *ngIf="modificationExists" #copyTable1 class="table table-hover table-striped">
+    <tbody>
+        <tr>
+            <td class="bold w-50">Head Loss</td>
+            <td *ngIf="output.modificationOutputs.headLoss" class="text-center w-50">
+                {{output.modificationOutputs.headLoss | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.modificationOutputs.headLoss" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Friction Losses</td>
+            <td *ngIf="output.modificationOutputs.powerLossFrictional" class="text-center w-50">
+                {{output.modificationOutputs.powerLossFrictional | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.modificationOutputs.powerLossFrictional" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Electrical Loss</td>
+            <td *ngIf="output.modificationOutputs.powerLossElectrical" class="text-center w-50">
+                {{output.modificationOutputs.powerLossElectrical | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.modificationOutputs.powerLossElectrical" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Annual Energy Usage</td>
+            <td *ngIf="output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
+                {{output.modificationOutputs.annualEnergyLoss | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Annual Energy Cost</td>
+            <td *ngIf="output.modificationOutputs.annualEnergyCost" class="text-center w-50">
+                {{output.modificationOutputs.annualEnergyCost | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.modificationOutputs.annualEnergyCost" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+    </tbody>
+</table>
+<app-exportable-results-table *ngIf="modificationExists" [tableString]="table1String"
+    (updateTableString)="updateTable1String()"></app-exportable-results-table>
+
+<label class="group-label" *ngIf="modificationExists">Savings</label>
+<table *ngIf="modificationExists" #copyTable2 class="table table-hover table-striped">
+    <tbody>
+        <tr>
+            <td class="bold w-50">Head Loss</td>
+            <td *ngIf="output.modificationOutputs.headLoss" class="text-center w-50">
+                {{output.baselineOutputs.headLoss - output.modificationOutputs.headLoss | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.modificationOutputs.headLoss" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Friction Losses</td>
+            <td *ngIf="output.modificationOutputs.powerLossFrictional" class="text-center w-50">
+                {{output.baselineOutputs.powerLossFrictional - output.modificationOutputs.powerLossFrictional |
+                number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.modificationOutputs.powerLossFrictional" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Electrical Loss</td>
+            <td *ngIf="output.modificationOutputs.powerLossElectrical" class="text-center w-50">
+                {{output.baselineOutputs.powerLossElectrical - output.modificationOutputs.powerLossElectrical |
+                number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.modificationOutputs.powerLossElectrical" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Annual Energy Usage</td>
+            <td *ngIf="output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
+                {{output.baselineOutputs.annualEnergyLoss - output.modificationOutputs.annualEnergyLoss | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.modificationOutputs.annualEnergyLoss" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+        <tr>
+            <td class="bold w-50">Annual Energy Cost</td>
+            <td *ngIf="output.modificationOutputs.annualEnergyCost" class="text-center w-50">
+                {{output.baselineOutputs.annualEnergyCost - output.modificationOutputs.annualEnergyCost | number:'1.0-2'}}
+            </td>
+            <td *ngIf="!output.modificationOutputs.annualEnergyCost" class="text-center w-50">
+                &mdash; &mdash;
+            </td>
+        </tr>
+    </tbody>
+</table>
+<app-exportable-results-table *ngIf="modificationExists" [tableString]="table2String"
+    (updateTableString)="updateTable2String()"></app-exportable-results-table>

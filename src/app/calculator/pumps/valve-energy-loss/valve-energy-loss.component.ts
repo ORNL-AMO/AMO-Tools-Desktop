@@ -67,7 +67,7 @@ export class ValveEnergyLossComponent implements OnInit {
       if (this.inTreasureHunt) {
         treasureHuntHours = this.operatingHours.hoursPerYear;
       }
-      this.valveEnergyLossService.initDefaultInputs(treasureHuntHours);
+      this.valveEnergyLossService.initEmptyInputs(treasureHuntHours);
       this.valveEnergyLossService.initDefaultEmptyOutput();
     }
     this.initSubscriptions();
@@ -120,17 +120,19 @@ export class ValveEnergyLossComponent implements OnInit {
   }
 
   btnResetData() {
-    this.modificationExists = false;
     this.valveEnergyLossService.initEmptyInputs();
+    this.valveEnergyLossService.initDefaultEmptyOutput();
+    this.modificationExists = false;
     this.valveEnergyLossService.resetData.next(true);
     this.baselineSelected = true;
     this.valveEnergyLossService.modificationData.next(undefined);
   }
 
   btnGenerateExample() {
-    this.modificationExists = true;
-    this.valveEnergyLossService.generateExampleData(this.settings);
+    this.valveEnergyLossService.generateBLExampleData(this.settings);    
+    this.valveEnergyLossService.generateModExampleData(this.settings);
     this.valveEnergyLossService.generateExampleResults();
+    this.modificationExists = true;
     this.baselineSelected = true;
   }
 

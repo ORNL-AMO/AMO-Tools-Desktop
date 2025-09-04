@@ -105,7 +105,7 @@
 				</div>
 
 				<div class="p-2">
-					<app-valve-energy-loss-results *ngIf="tabSelect == 'results'"></app-valve-energy-loss-results>
+					<app-valve-energy-loss-results *ngIf="tabSelect == 'results'" [settings]="settings" [modificationExists]="modificationExists"></app-valve-energy-loss-results>
 					<app-valve-energy-loss-help *ngIf="tabSelect == 'help'"></app-valve-energy-loss-help>
 				</div>
 			</div>
