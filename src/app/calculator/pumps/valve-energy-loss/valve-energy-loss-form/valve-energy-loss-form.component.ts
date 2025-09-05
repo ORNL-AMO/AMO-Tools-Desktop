@@ -70,12 +70,12 @@ export class ValveEnergyLossFormComponent implements OnInit {
     this.generateExampleSub = this.valveEnergyLossService.generateExample.subscribe(value => {
       this.initForm();
     });
-    this.baselineDataSub = this.valveEnergyLossService.baselineData.subscribe(baselineData => {
-      if (baselineData) {
-        this.initForm(baselineData);
-        //this.valveEnergyLossService.calculate(this.settings, false, true);
-      }
-    });
+    // this.baselineDataSub = this.valveEnergyLossService.baselineData.subscribe(baselineData => {
+    //   if (baselineData) {
+    //     this.initForm(baselineData);
+    //     //this.valveEnergyLossService.calculate(this.settings, false, true);
+    //   }
+    // });
   }
 
   setFormState() {
@@ -112,12 +112,12 @@ export class ValveEnergyLossFormComponent implements OnInit {
   }
 
   calculate() {
-    // let currentEnergyData: ValveEnergyLossInputs = this.valveEnergyLossFormService.getObjFromForm(this.form);
-    // if (this.isBaseline) {
-    //   this.valveEnergyLossService.baselineData.next(currentEnergyData);
-    // } else {
-    //   this.valveEnergyLossService.modificationData.next(currentEnergyData);
-    // }
+    let currentEnergyData: ValveEnergyLossInputs = this.valveEnergyLossFormService.getObjFromForm(this.form);
+    if (this.isBaseline) {
+      this.valveEnergyLossService.baselineData.next(currentEnergyData);
+    } else {
+      this.valveEnergyLossService.modificationData.next(currentEnergyData);
+    }
   }
 
   closeOperatingHoursModal() {

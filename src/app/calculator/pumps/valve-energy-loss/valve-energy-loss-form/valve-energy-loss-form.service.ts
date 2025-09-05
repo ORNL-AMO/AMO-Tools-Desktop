@@ -48,22 +48,22 @@ export class ValveEnergyLossFormService {
     return formGroup;
   }
 
-  getObjFromForm(formGroup: UntypedFormGroup): ValveEnergyLossInputs {
+  getObjFromForm(form: UntypedFormGroup): ValveEnergyLossInputs {
     let inputs: ValveEnergyLossInputs = {
-      hoursOperation: formGroup['hoursOperation'].value,
-      electricalRate: formGroup['electricalRate'].value,
-      efficiencyPump: formGroup['efficiencyPump'].value,
-      efficiencyMotor: formGroup['efficiencyMotor'].value,
-      SG: formGroup['SG'].value,
-      flowRate: formGroup['flowRate'].value,
-      upstreamPressure: formGroup['upstreamPressure'].value,
-      upstreamDiameter: formGroup['upstreamDiameter'].value,
-      upstreamHeight: formGroup['upstreamHeight'].value,
-      valveDiameter: formGroup['valveDiameter'].value,
-      downstreamPressure: formGroup['downstreamPressure'].value,
-      downstreamDiameter: formGroup['downstreamDiameter'].value,
-      downstreamHeight: formGroup['downstreamHeight'].value,
-      pipeSizeFactor: formGroup['pipeSizeFactor'].value,
+      hoursOperation: form.controls.hoursOperation.value,
+      electricalRate: form.controls.electricalRate.value,
+      efficiencyPump: form.controls.efficiencyPump.value,
+      efficiencyMotor: form.controls.efficiencyMotor.value,
+      SG: form.controls.SG.value,
+      flowRate: form.controls.flowRate.value,
+      upstreamPressure: form.controls.upstreamPressure.value,
+      upstreamDiameter: form.controls.upstreamDiameter.value,
+      upstreamHeight: form.controls.upstreamHeight.value,
+      valveDiameter: form.controls.valveDiameter.value,
+      downstreamPressure: form.controls.downstreamPressure.value,
+      downstreamDiameter: form.controls.downstreamDiameter.value,
+      downstreamHeight: form.controls.downstreamHeight.value,
+      pipeSizeFactor: form.controls.pipeSizeFactor.value,
     };
     return inputs;
   }
