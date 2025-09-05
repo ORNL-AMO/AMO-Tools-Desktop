@@ -10,6 +10,7 @@ import { LiquidLoadMaterialDbService } from '../indexedDb/liquid-load-material-d
 import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
+import { ElectronService } from '../electron/electron.service';
 
 @Injectable({
     providedIn: 'root'
@@ -23,7 +24,8 @@ export class ToolsSuiteApiService {
         private liquidLoadMaterialDbService: LiquidLoadMaterialDbService,
         private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
         private solidLoadMaterialDbService: SolidLoadMaterialDbService,
-        private wallLossesSurfaceDbService: WallLossesSurfaceDbService
+        private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
+        private electronService: ElectronService
     ) { }
 
     async initializeModule(): Promise<any> {
@@ -31,7 +33,13 @@ export class ToolsSuiteApiService {
         const moduleFactory = await import('measur-tools-suite/bin/client.js');
         // Initialize the module, specifying where to find the WASM file
         this.ToolsSuiteModule = await moduleFactory.default({
-            locateFile: (path: string) => `/${path}`
+            locateFile: (path: string) => {
+                if (this.electronService.isElectron) {
+                    return `${path}`
+                } else {
+                    return `/${path}`
+                }
+            }
         });
         console.log('=== Tools Suite Module initialized');
         return;
