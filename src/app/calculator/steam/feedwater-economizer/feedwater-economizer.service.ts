@@ -6,6 +6,7 @@ import { Settings } from '../../../shared/models/settings';
 import { FeedwaterEconomizerInput, FeedwaterEconomizerOutput, FeedwaterEconomizerSuiteInput } from '../../../shared/models/steam/feedwaterEconomizer';
 import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { FeedwaterEconomizerFormService } from './feedwater-economizer-form.service';
+import { roundVal } from '../../../shared/helperFunctions';
 
 @Injectable()
 export class FeedwaterEconomizerService {
@@ -36,7 +37,7 @@ export class FeedwaterEconomizerService {
 
     if (settings.unitsOfMeasure != 'Imperial') {
       fuelTemp = this.convertUnitsService.value(fuelTemp).from('F').to('C');
-      fuelTemp = this.roundVal(fuelTemp, 2);
+      fuelTemp = roundVal(fuelTemp, 2);
     }
 
     let emptyInput: FeedwaterEconomizerInput = {
@@ -215,64 +216,59 @@ export class FeedwaterEconomizerService {
     output.effBoiler = output.effBoiler > 0 ? output.effBoiler * 100 : output.effBoiler;
     if (settings.unitsOfMeasure == 'Imperial') {
       output.tempSteamSat = this.convertUnitsService.value(output.tempSteamSat).from('K').to('F');
-      output.tempSteamSat = this.roundVal(output.tempSteamSat, 2);
+      output.tempSteamSat = roundVal(output.tempSteamSat, 2);
 
       output.enthalpySteam = this.convertUnitsService.value(output.enthalpySteam).from('kJkg').to('btuLb');
-      output.enthalpySteam = this.roundVal(output.enthalpySteam, 2);
+      output.enthalpySteam = roundVal(output.enthalpySteam, 2);
 
       output.enthalpyFW = this.convertUnitsService.value(output.enthalpyFW).from('kJkg').to('btuLb');
-      output.enthalpyFW = this.roundVal(output.enthalpyFW, 2);
+      output.enthalpyFW = roundVal(output.enthalpyFW, 2);
 
       output.flowSteam = this.convertUnitsService.value(output.flowSteam).from('kg').to('lb');
-      output.flowSteam = this.roundVal(output.flowSteam, 2);
+      output.flowSteam = roundVal(output.flowSteam, 2);
 
       output.flowFW = this.convertUnitsService.value(output.flowFW).from('kg').to('lb');
-      output.flowFW = this.roundVal(output.flowFW, 2);
+      output.flowFW = roundVal(output.flowFW, 2);
 
       output.flowFlueGas = this.convertUnitsService.value(output.flowFlueGas).from('kg').to('lb');
-      output.flowFlueGas = this.roundVal(output.flowFlueGas, 2);
+      output.flowFlueGas = roundVal(output.flowFlueGas, 2);
 
       output.heatCapacityFG = this.convertUnitsService.value(output.heatCapacityFG).from('kJ').to('Btu');
-      output.heatCapacityFG = this.roundVal(output.heatCapacityFG, 2);
+      output.heatCapacityFG = roundVal(output.heatCapacityFG, 2);
 
       output.specHeatFG = this.convertUnitsService.value(output.specHeatFG).from('kJkgK').to('btulbF');
-      output.specHeatFG = this.roundVal(output.specHeatFG, 2);
+      output.specHeatFG = roundVal(output.specHeatFG, 2);
 
       output.specHeatFW = this.convertUnitsService.value(output.specHeatFW).from('kJkgK').to('btulbF');
-      output.specHeatFW = this.roundVal(output.specHeatFW, 2);
+      output.specHeatFW = roundVal(output.specHeatFW, 2);
 
       output.heatCapacityFW = this.convertUnitsService.value(output.heatCapacityFW).from('kJ').to('Btu');
-      output.heatCapacityFW = this.roundVal(output.heatCapacityFW, 2);
+      output.heatCapacityFW = roundVal(output.heatCapacityFW, 2);
 
       output.ratingHeatRecFW = this.convertUnitsService.value(output.ratingHeatRecFW).from('kJ').to('Btu');
-      output.ratingHeatRecFW = this.roundVal(output.ratingHeatRecFW, 2);
+      output.ratingHeatRecFW = roundVal(output.ratingHeatRecFW, 2);
 
       output.tempFlueGasOut = this.convertUnitsService.value(output.tempFlueGasOut).from('K').to('F');
-      output.tempFlueGasOut = this.roundVal(output.tempFlueGasOut, 2);
+      output.tempFlueGasOut = roundVal(output.tempFlueGasOut, 2);
 
       output.tempFWOut = this.convertUnitsService.value(output.tempFWOut).from('K').to('F');
-      output.tempFWOut = this.roundVal(output.tempFWOut, 2);
+      output.tempFWOut = roundVal(output.tempFWOut, 2);
     }
 
     if (settings.unitsOfMeasure == "Metric") {
       output.tempSteamSat = this.convertUnitsService.value(output.tempSteamSat).from('K').to('C');
-      output.tempSteamSat = this.roundVal(output.tempSteamSat, 2);
+      output.tempSteamSat = roundVal(output.tempSteamSat, 2);
 
       output.tempFlueGasOut = this.convertUnitsService.value(output.tempFlueGasOut).from('K').to('C');
-      output.tempFlueGasOut = this.roundVal(output.tempFlueGasOut, 2);
+      output.tempFlueGasOut = roundVal(output.tempFlueGasOut, 2);
 
       output.tempFWOut = this.convertUnitsService.value(output.tempFWOut).from('K').to('C');
-      output.tempFWOut = this.roundVal(output.tempFWOut, 2);
+      output.tempFWOut = roundVal(output.tempFWOut, 2);
 
       output.energySavingsBoiler = this.convertUnitsService.value(output.energySavingsBoiler).from('MMBtu').to('GJ');
-      output.energySavingsBoiler = this.roundVal(output.energySavingsBoiler, 2);
+      output.energySavingsBoiler = roundVal(output.energySavingsBoiler, 2);
     }
     return output;
-  }
-
-  roundVal(val: number, digits: number): number {
-    let rounded = Number(val.toFixed(digits));
-    return rounded;
   }
 
   getTreasureHuntFuelCost(energySourceType: string, settings: Settings) {

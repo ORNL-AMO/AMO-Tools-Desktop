@@ -5,42 +5,37 @@
         <div class="row phast align-items-top">
           <div class="col-12">
             <div class="header card-header">
-              <h3 *ngIf="!editExistingMaterial">Create Surface Material</h3>
-              <h3 *ngIf="editExistingMaterial">Edit Surface Material</h3>
+              <h3 *ngIf="!existingMaterial">Create Surface Material</h3>
+              <h3 *ngIf="existingMaterial">Edit Surface Material</h3>
             </div>
           </div>
         </div>
         <form>
-          <div class="form-section" *ngIf="!editExistingMaterial">
+          <div class="form-section" *ngIf="!existingMaterial">
             <div class="form-group">
-              <label class="small" for="selectedMaterial">Start with existing surface</label>
-              <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"
+              <label class="small" for="originalMaterial">Start with existing surface</label>
+              <select name="originalMaterial" class="form-control" id="originalMaterial" (change)="setActiveMaterial()" [(ngModel)]="originalMaterial"
                 (focus)="focusField('selectedMaterial')">
                 <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.surface}}</option>
-                <option [ngValue]="null"></option>
               </select>
             </div>
           </div>
           <div class="form-section">
             <label>
-              <h6 *ngIf="!editExistingMaterial">New Surface:</h6>
-              <h6 *ngIf="editExistingMaterial">Edit Surface:</h6>
+              <h6 *ngIf="!existingMaterial">New Surface:</h6>
+              <h6 *ngIf="existingMaterial">Edit Surface:</h6>
             </label>
             <div class="form-group">
               <label class="small" for="surface">Surface Name</label>
-              <div class="input-group" *ngIf="!editExistingMaterial">
-                <input type="text" id="surface" name="surface" class="form-control" [(ngModel)]="newMaterial.surface" (input)="checkMaterialName()"
+              <div class="input-group">
+                <input type="text" id="surface" name="surface" class="form-control" [(ngModel)]="activeMaterial.surface" (input)="setMaterialNameError()"
                   (focus)="focusField('substance')" />
               </div>
-              <div class="input-group" *ngIf="editExistingMaterial">
-                <input type="text" id="surface" name="surface" class="form-control" [(ngModel)]="newMaterial.surface" (input)="checkEditMaterialName()"
-                />
-              </div>
-              <span class="alert-warning pull-right small" *ngIf="nameError !== null">{{nameError}}</span>
+              <span class="alert-danger pull-right small" *ngIf="nameError">{{nameError}}</span>
             </div>
             <div class="form-group" *ngIf="settings">
               <label class="small" for="conditionFactor">Surface Shape / Orientation Factor</label>
-              <input type="number" id="conditionFactor" name="conditionFactor" class="form-control" [(ngModel)]="newMaterial.conditionFactor"
+              <input type="number" id="conditionFactor" name="conditionFactor" class="form-control" [(ngModel)]="activeMaterial.conditionFactor"
                 (focus)="focusField('conditionFactor')" />
             </div>
           </div>
@@ -65,7 +60,7 @@
           <div class="delete-warning-container">
             <div class="row">
               <div class="col-12">
-                Material Name: {{newMaterial.substance}}
+                Material Name: {{activeMaterial.surface}}
               </div>
             </div>
             <div class="row">
@@ -84,11 +79,12 @@
     </div>
     <div class="modal-btn-container">
       <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
-      <button *ngIf="!editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()"
-        [disabled]="!isValidMaterialName">Submit</button>
-      <button *ngIf="editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()"
-        [disabled]="!isValidMaterialName">Submit</button>
-      <button *ngIf="deletingMaterial" type="button" class="btn btn-danger btn-sm modal-btn" (click)="deleteMaterial()">Delete</button>
+      @if (!deletingMaterial) {
+        <button type="button" class="btn btn-primary btn-sm modal-btn" (click)="saveMaterial()"
+          [disabled]="nameError">Submit</button>
+      } @else {
+        <button type="button" class="btn btn-danger btn-sm modal-btn" (click)="deleteMaterial()">Delete</button>
+      }
     </div>
   </div>
 </div>

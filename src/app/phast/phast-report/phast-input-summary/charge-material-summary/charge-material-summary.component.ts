@@ -3,13 +3,17 @@ import { PHAST } from '../../../../shared/models/phast/phast';
 import { ChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial } from '../../../../shared/models/materials';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial } from '../../../../shared/models/materials';
+import { roundVal } from '../../../../shared/helperFunctions';
+import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-material-db.service';
+import { firstValueFrom } from 'rxjs';
+import { GasLoadMaterialDbService } from '../../../../indexedDb/gas-load-material-db.service';
+import { LiquidLoadMaterialDbService } from '../../../../indexedDb/liquid-load-material-db.service';
 @Component({
-    selector: 'app-charge-material-summary',
-    templateUrl: './charge-material-summary.component.html',
-    styleUrls: ['./charge-material-summary.component.css'],
-    standalone: false
+  selector: 'app-charge-material-summary',
+  templateUrl: './charge-material-summary.component.html',
+  styleUrls: ['./charge-material-summary.component.css'],
+  standalone: false
 })
 export class ChargeMaterialSummaryComponent implements OnInit {
   @Input()
@@ -20,8 +24,9 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   printView: boolean;
 
   lossData: Array<any>;
-  volumeOptions: Array<FlueGasMaterial>;
-  massOptions: Array<SolidLiquidFlueGasMaterial>;
+  solidMaterialTypes: Array<SolidLoadChargeMaterial> = [];
+  gasMaterialTypes: Array<GasLoadChargeMaterial> = [];
+  liquidMaterialTypes: Array<LiquidLoadChargeMaterial> = [];
   numLosses: number = 0;
   collapse: boolean = true;
   materialTypeDiff: Array<boolean>;
@@ -46,14 +51,17 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   vaporizingTemperatureDiff: Array<boolean>;
   chargeMeltedDiff: Array<boolean>;
   numMods: number = 0;
-  
-  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   copyTableString: any;
 
   constructor(private convertUnitsService: ConvertUnitsService, private cd: ChangeDetectorRef,
-    private sqlDbApiService: SqlDbApiService) { }
+    private solidLoadMaterialDbService: SolidLoadMaterialDbService,
+    private gasLoadMaterialDbService: GasLoadMaterialDbService,
+    private liquidLoadMaterialDbService: LiquidLoadMaterialDbService) { }
 
   ngOnInit() {
+    this.setMaterialTypes();
     this.materialTypeDiff = new Array();
     this.materialNameDiff = new Array();
     this.reactionTypeDiff = new Array();
@@ -76,8 +84,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     this.vaporizingTemperatureDiff = new Array();
     this.chargeMeltedDiff = new Array();
 
-    this.volumeOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
-    this.massOptions = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
+
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.modifications) {
@@ -127,6 +134,12 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     }
   }
 
+  async setMaterialTypes() {
+    this.solidMaterialTypes = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+    this.gasMaterialTypes = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+    this.liquidMaterialTypes = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+  }
+
   //function used to check if baseline and modification values are different
   //called from html
   //diffBool is name of corresponding input boolean to indicate different
@@ -150,20 +163,19 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
-  }
+
   checkSpecificHeatGas(loss: ChargeMaterialSummaryData) {
     if (loss.materialType === 'Gas') {
-      let gasOptions: Array<GasLoadChargeMaterial> = this.sqlDbApiService.selectGasLoadChargeMaterials();
-      let material = gasOptions.find(val => { return val.substance === loss.materialName; });
-      if (material && this.settings.unitsOfMeasure === 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC');
-        material.specificHeatVapor = this.roundVal(val, 4);
-      }
-      if (material && material.specificHeatVapor !== loss.specificHeatGas) {
-        return true;
+      let material: GasLoadChargeMaterial = this.gasMaterialTypes.find(material => { return material.substance === loss.materialName; });
+      if (material) {
+        let specificHeatVapor: number = material.specificHeatVapor;
+        if (this.settings.unitsOfMeasure === 'Metric') {
+          specificHeatVapor = this.convertUnitsService.value(specificHeatVapor).from('btulbF').to('kJkgC');
+          specificHeatVapor = roundVal(specificHeatVapor, 4);
+        }
+        if (material && specificHeatVapor !== loss.specificHeatGas) {
+          return true;
+        }
       }
     }
     return false;
@@ -171,14 +183,14 @@ export class ChargeMaterialSummaryComponent implements OnInit {
 
   checkSpecificHeatSolid(loss: ChargeMaterialSummaryData) {
     if (loss.materialType === 'Solid') {
-      let solidOptions: Array<SolidLoadChargeMaterial> = this.sqlDbApiService.selectSolidLoadChargeMaterials();
-      let material: SolidLoadChargeMaterial = solidOptions.find(val => { return val.substance === loss.materialName; });
+      let material: SolidLoadChargeMaterial = this.solidMaterialTypes.find(val => { return val.substance === loss.materialName; });
       if (material) {
+        let specificHeatSolid: number = material.specificHeatSolid;
         if (this.settings.unitsOfMeasure === 'Metric') {
-          material.specificHeatSolid = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
+          specificHeatSolid = this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
         }
-        material.specificHeatSolid = this.roundVal(material.specificHeatSolid, 4);
-        if (material.specificHeatSolid !== loss.specificHeatSolid) {
+        specificHeatSolid = roundVal(specificHeatSolid, 4);
+        if (specificHeatSolid !== loss.specificHeatSolid) {
           return true;
         }
       }
@@ -189,21 +201,20 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   checkSpecificHeatLiquid(loss: ChargeMaterialSummaryData) {
     let material: SolidLoadChargeMaterial | LiquidLoadChargeMaterial;
     if (loss.materialType === 'Solid') {
-      let solidOptions: Array<SolidLoadChargeMaterial> = this.sqlDbApiService.selectSolidLoadChargeMaterials();
-      material = solidOptions.find(val => { return val.substance === loss.materialName; });
+      material = this.solidMaterialTypes.find(val => { return val.substance === loss.materialName; });
     }
 
     if (loss.materialType === 'Liquid') {
-      let liquidOptions: Array<LiquidLoadChargeMaterial> = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
-      material = liquidOptions.find(val => { return val.substance === loss.materialName; });
+      material = this.liquidMaterialTypes.find(val => { return val.substance === loss.materialName; });
     }
     if (material) {
+      let specificHeatLiquid: number = material.specificHeatLiquid;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        material.specificHeatLiquid = this.convertUnitsService.value(material.specificHeatLiquid).from('btulbF').to('kJkgC');
+        specificHeatLiquid = this.convertUnitsService.value(specificHeatLiquid).from('btulbF').to('kJkgC');
       }
-      material.specificHeatLiquid = this.roundVal(material.specificHeatLiquid, 4);
+      specificHeatLiquid = roundVal(specificHeatLiquid, 4);
 
-      if (material.specificHeatLiquid !== loss.specificHeatLiquid) {
+      if (specificHeatLiquid !== loss.specificHeatLiquid) {
         return true;
       }
     }
@@ -212,14 +223,14 @@ export class ChargeMaterialSummaryComponent implements OnInit {
 
   checkMeltingPoint(loss: ChargeMaterialSummaryData) {
     if (loss.materialType === 'Solid') {
-      let solidOptions: Array<SolidLoadChargeMaterial> = this.sqlDbApiService.selectSolidLoadChargeMaterials();
-      let material: SolidLoadChargeMaterial = solidOptions.find(val => { return val.substance === loss.materialName; });
+      let material: SolidLoadChargeMaterial = this.solidMaterialTypes.find(val => { return val.substance === loss.materialName; });
       if (material) {
+        let meltingPoint: number = material.meltingPoint;
         if (this.settings.unitsOfMeasure === 'Metric') {
-          material.meltingPoint = this.convertUnitsService.value(material.meltingPoint).from('F').to('C');
+          meltingPoint = this.convertUnitsService.value(meltingPoint).from('F').to('C');
         }
-        material.meltingPoint = this.roundVal(material.meltingPoint, 4);
-        if (material.meltingPoint !== loss.meltingPoint) {
+        meltingPoint = roundVal(meltingPoint, 4);
+        if (meltingPoint !== loss.meltingPoint) {
           return true;
         }
       }
@@ -230,20 +241,19 @@ export class ChargeMaterialSummaryComponent implements OnInit {
   checkLatentHeat(loss: ChargeMaterialSummaryData) {
     let material: SolidLoadChargeMaterial | LiquidLoadChargeMaterial;
     if (loss.materialType === 'Solid') {
-      let solidOptions: Array<SolidLoadChargeMaterial> = this.sqlDbApiService.selectSolidLoadChargeMaterials();
-      material = solidOptions.find(val => { return val.substance === loss.materialName; });
+      material = this.solidMaterialTypes.find(val => { return val.substance === loss.materialName; });
     }
 
     if (loss.materialType === 'Liquid') {
-      let liquidOptions: Array<LiquidLoadChargeMaterial> = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
-      material = liquidOptions.find(val => { return val.substance === loss.materialName; });
+      material = this.liquidMaterialTypes.find(val => { return val.substance === loss.materialName; });
     }
     if (material) {
+      let latentHeat: number = material.latentHeat;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        material.latentHeat = this.convertUnitsService.value(material.latentHeat).from('btuLb').to('kJkg');
+        latentHeat = this.convertUnitsService.value(latentHeat).from('btuLb').to('kJkg');
       }
-      material.latentHeat = this.roundVal(material.latentHeat, 4);
-      if (material.latentHeat !== loss.latentHeat) {
+      latentHeat = roundVal(latentHeat, 4);
+      if (latentHeat !== loss.latentHeat) {
         return true;
       }
     }
@@ -252,13 +262,12 @@ export class ChargeMaterialSummaryComponent implements OnInit {
 
   checkVaporizingTemp(loss: ChargeMaterialSummaryData) {
     if (loss.materialType === 'Liquid') {
-      let liquidOptions: Array<LiquidLoadChargeMaterial> = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
-      let material: LiquidLoadChargeMaterial = liquidOptions.find(val => { return val.substance === loss.materialName; });
+      let material: LiquidLoadChargeMaterial = this.liquidMaterialTypes.find(val => { return val.substance === loss.materialName; });
       if (material) {
         if (this.settings.unitsOfMeasure === 'Metric') {
           material.vaporizationTemperature = this.convertUnitsService.value(material.vaporizationTemperature).from('F').to('C');
         }
-        material.vaporizationTemperature = this.roundVal(material.vaporizationTemperature, 4);
+        material.vaporizationTemperature = roundVal(material.vaporizationTemperature, 4);
         if (material.vaporizationTemperature !== loss.vaporizingTemperature) {
           return true;
         }
@@ -271,14 +280,13 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     let material: LiquidLoadChargeMaterial;
 
     if (loss.materialType === 'Liquid') {
-      let liquidOptions: Array<LiquidLoadChargeMaterial> = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
-      material = liquidOptions.find(val => { return val.substance === loss.materialName; });
+      material = this.liquidMaterialTypes.find(val => { return val.substance === loss.materialName; });
     }
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         material.specificHeatVapor = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC');
       }
-      material.specificHeatVapor = this.roundVal(material.specificHeatVapor, 4);
+      material.specificHeatVapor = roundVal(material.specificHeatVapor, 4);
       if (material.specificHeatVapor !== loss.specificHeatVapor) {
         return true;
       } else {
@@ -297,8 +305,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
 
 
     if (loss.chargeMaterialType === 'Gas') {
-      let gasOptions: Array<GasLoadChargeMaterial> = this.sqlDbApiService.selectGasLoadChargeMaterials();
-      let material: GasLoadChargeMaterial = gasOptions.find(val => { return val.id === loss.gasChargeMaterial.materialId; });
+      let material: GasLoadChargeMaterial = this.gasMaterialTypes.find(val => { return val.id === loss.gasChargeMaterial.materialId; });
       if (material) { tmpMaterialName = material.substance; }
       tmpReactionType = 'Endothermic';
       if (loss.gasChargeMaterial.thermicReactionType !== 0) {
@@ -316,8 +323,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
       tmpAdditionalHeat = loss.gasChargeMaterial.additionalHeat;
     }
     else if (loss.chargeMaterialType === 'Solid') {
-      let gasOptions: Array<SolidLoadChargeMaterial> = this.sqlDbApiService.selectSolidLoadChargeMaterials();
-      let material: SolidLoadChargeMaterial = gasOptions.find(val => { return val.id === loss.solidChargeMaterial.materialId; });
+      let material: SolidLoadChargeMaterial = this.solidMaterialTypes.find(val => { return val.id === loss.solidChargeMaterial.materialId; });
       if (material) { tmpMaterialName = material.substance; }
       tmpReactionType = 'Endothermic';
       if (loss.solidChargeMaterial.thermicReactionType !== 0) {
@@ -340,8 +346,7 @@ export class ChargeMaterialSummaryComponent implements OnInit {
       tmpVaporDischargedTemp = loss.solidChargeMaterial.waterVaporDischargeTemperature;
     }
     else if (loss.chargeMaterialType === 'Liquid') {
-      let gasOptions: Array<LiquidLoadChargeMaterial> = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
-      let material: LiquidLoadChargeMaterial = gasOptions.find(val => { return val.id === loss.liquidChargeMaterial.materialId; });
+      let material: LiquidLoadChargeMaterial = this.liquidMaterialTypes.find(val => { return val.id === loss.liquidChargeMaterial.materialId; });
       if (material) { tmpMaterialName = material.substance; }
       tmpReactionType = 'Endothermic';
       if (loss.liquidChargeMaterial.thermicReactionType !== 0) {
@@ -388,11 +393,11 @@ export class ChargeMaterialSummaryComponent implements OnInit {
     };
     return tmpSummaryData;
   }
-  
+
   updateCopyTableString() {
     this.copyTableString = this.copyTable.nativeElement.innerText;
   }
-  
+
 }
 
 

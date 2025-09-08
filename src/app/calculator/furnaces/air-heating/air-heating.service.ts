@@ -6,6 +6,7 @@ import { AirHeatingInput, AirHeatingOutput } from '../../../shared/models/phast/
 import { Settings } from '../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { AirHeatingFormService } from './air-heating-form.service';
+import { roundVal } from '../../../shared/helperFunctions';
 
 
 @Injectable()
@@ -156,16 +157,16 @@ export class AirHeatingService {
   
   convertExampleUnits(input: AirHeatingInput): AirHeatingInput {
     input.flueTemperature = this.convertUnitsService.value(input.flueTemperature).from('F').to('C');
-    input.flueTemperature = this.roundVal(input.flueTemperature, 2);
+    input.flueTemperature = roundVal(input.flueTemperature, 2);
 
     input.fireRate = this.convertUnitsService.value(input.fireRate).from('MMBtu').to('GJ');
-    input.fireRate = this.roundVal(input.fireRate, 2);
+    input.fireRate = roundVal(input.fireRate, 2);
 
     input.airflow = this.convertUnitsService.value(input.airflow).from('ft3').to('m3');
-    input.airflow = this.roundVal(input.airflow, 2);
+    input.airflow = roundVal(input.airflow, 2);
 
     input.inletTemperature = this.convertUnitsService.value(input.inletTemperature).from('F').to('C');
-    input.inletTemperature = this.roundVal(input.inletTemperature, 2);
+    input.inletTemperature = roundVal(input.inletTemperature, 2);
   
     return input;
   }
@@ -173,16 +174,16 @@ export class AirHeatingService {
   convertInputUnits(input: AirHeatingInput, settings: Settings): AirHeatingInput {
     if (settings.unitsOfMeasure == "Metric") {
       input.flueTemperature = this.convertUnitsService.value(input.flueTemperature).from('C').to('F');
-      input.flueTemperature = this.roundVal(input.flueTemperature, 2);
+      input.flueTemperature = roundVal(input.flueTemperature, 2);
 
       input.fireRate = this.convertUnitsService.value(input.fireRate).from('GJ').to('MMBtu');
-      input.fireRate = this.roundVal(input.fireRate, 2);
+      input.fireRate = roundVal(input.fireRate, 2);
 
       input.airflow = this.convertUnitsService.value(input.airflow).from('m3').to('ft3');
-      input.airflow = this.roundVal(input.airflow, 2);
+      input.airflow = roundVal(input.airflow, 2);
 
       input.inletTemperature = this.convertUnitsService.value(input.inletTemperature).from('C').to('F');
-      input.inletTemperature = this.roundVal(input.inletTemperature, 2);
+      input.inletTemperature = roundVal(input.inletTemperature, 2);
     }
 
     if (input.gasFuelType) {
@@ -194,27 +195,22 @@ export class AirHeatingService {
   convertResultUnits(output: AirHeatingOutput, settings: Settings): AirHeatingOutput {
 
     output.energySavings = this.convertUnitsService.value(output.energySavings).from('MMBtu').to(settings.phastRollupUnit);
-    output.energySavings = this.roundVal(output.energySavings, 2);
+    output.energySavings = roundVal(output.energySavings, 2);
 
     if (settings.unitsOfMeasure == "Metric") {
       output.hxColdAir = this.convertUnitsService.value(output.hxColdAir).from('btuhr').to('kJh');
-      output.hxColdAir = this.roundVal(output.hxColdAir, 2);
+      output.hxColdAir = roundVal(output.hxColdAir, 2);
 
       output.hxOutletExhaust = this.convertUnitsService.value(output.hxOutletExhaust).from('F').to('C');
-      output.hxOutletExhaust = this.roundVal(output.hxOutletExhaust, 2);
+      output.hxOutletExhaust = roundVal(output.hxOutletExhaust, 2);
 
       output.heatCapacityFlue = this.convertUnitsService.value(output.heatCapacityFlue).from('Btu/F').to('J/C');
-      output.heatCapacityFlue = this.roundVal(output.heatCapacityFlue, 4);
+      output.heatCapacityFlue = roundVal(output.heatCapacityFlue, 4);
       
       output.heatCapacityAir = this.convertUnitsService.value(output.heatCapacityAir).from('Btu/F').to('J/C');
-      output.heatCapacityAir = this.roundVal(output.heatCapacityAir, 4);
+      output.heatCapacityAir = roundVal(output.heatCapacityAir, 4);
     }
     return output;
-  }
-
-  roundVal(val: number, digits: number): number {
-    let rounded = Number(val.toFixed(digits));
-    return rounded;
   }
 
   getTreasureHuntFuelCost(energySourceType: string, settings: Settings) {

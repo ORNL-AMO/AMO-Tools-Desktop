@@ -75,7 +75,7 @@ export class CustomSolidLoadChargeMaterialsComponent implements OnInit {
   }
 
   async getCustomMaterials() {
-    this.solidChargeMaterials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+    this.solidChargeMaterials = await firstValueFrom(this.solidLoadMaterialDbService.getAllCustomMaterials());
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }

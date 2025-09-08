@@ -125,6 +125,9 @@ export interface Settings {
     steamRollupUnit?: string,
     wasteWaterRollupUnit?: string,
     compressedAirRollupUnit?: string,
+
+    //global
+    suiteDbItemsInitialized?: boolean;
 }
 
 
