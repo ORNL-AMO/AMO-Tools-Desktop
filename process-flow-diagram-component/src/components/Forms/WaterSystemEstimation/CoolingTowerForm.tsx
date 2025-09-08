@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { TextField, FormControl, InputAdornment, FormHelperText, Box } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../hooks/state';
 import { RootState } from '../../Diagram/store';
-import { EstimateSystemContext, EstimateSystemState } from './EstimateWaterSystem';
+import { EstimateSystemContext, EstimateSystemState, WaterAssessmentModuleConsumer } from './EstimateWaterSystem';
 import HoursPerYearInputField from './HoursPerYearInputField';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
 import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
@@ -48,7 +48,7 @@ const CoolingTowerForm = (props: CoolingTowerProps) => {
             blowdownConductivity: values.blowdownConductivity,
         }
 
-        const coolingTowerResults: CoolingTowerResults = calculateCoolingTowerResults(coolingTower, coolingTower.hoursPerYear);
+        const coolingTowerResults: CoolingTowerResults = calculateCoolingTowerResults(coolingTower, coolingTower.hoursPerYear, props.WaterAssessmentModule);
         coolingTowerResults.grossWaterUse = convertAnnualFlowResult(coolingTowerResults.grossWaterUse, settings);
         coolingTowerResults.evaporationLoss = convertAnnualFlowResult(coolingTowerResults.evaporationLoss, settings);
         coolingTowerResults.cycleOfConcentration = convertAnnualFlowResult(coolingTowerResults.cycleOfConcentration, settings);
@@ -223,6 +223,6 @@ const CoolingTowerForm = (props: CoolingTowerProps) => {
 
 export default CoolingTowerForm;
 
-export interface CoolingTowerProps {
-
+export interface CoolingTowerProps extends WaterAssessmentModuleConsumer {
+    
 }
