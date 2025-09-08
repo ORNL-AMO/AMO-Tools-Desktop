@@ -49,7 +49,7 @@ export class ToolsSuiteApiService {
             await this.insertLiquidLoadMaterials(DefaultData);
             await this.insertSolidLiquidFlueGasMaterials(DefaultData);
             await this.insertSolidLoadMaterials(DefaultData);
-            await this.insertWallLossSurfaces(DefaultData);
+            await this.insertWallLossSurfaces();
             DefaultData.delete();
             globalSettings.suiteDbItemsInitialized = true;
             this.settingsDbService.globalSettings = await firstValueFrom(this.settingsDbService.updateWithObservable(globalSettings));
@@ -183,18 +183,16 @@ export class ToolsSuiteApiService {
         await this.solidLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    private async insertWallLossSurfaces(DefaultData: any) {
-        let suiteDefaultMaterials = DefaultData.getWallLossesSurface();
-
+    private async insertWallLossSurfaces() {
+        let suiteDefaultMaterials = this.ToolsSuiteModule.wallShapeFactors();
         let defaultMaterials: Array<WallLossesSurface> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-            let wasmClass = suiteDefaultMaterials.get(i);
+            let shapeFactor = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
-                surface: wasmClass.surfaceDescription(),
-                conditionFactor: wasmClass.shapeFactor(),
+                surface: shapeFactor.surfaceConfiguration,
+                conditionFactor: shapeFactor.value,
                 isDefault: true
             });
-            wasmClass.delete();
         }
         suiteDefaultMaterials.delete();
         await this.wallLossesSurfaceDbService.insertDefaultMaterials(defaultMaterials);

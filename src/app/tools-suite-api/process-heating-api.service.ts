@@ -185,7 +185,6 @@ export class ProcessHeatingApiService {
     return output;
   }
 
-
   wallLosses(input: WallLoss): number {
     input.surfaceArea = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.surfaceArea);
     input.ambientTemperature = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.ambientTemperature);
@@ -195,13 +194,12 @@ export class ProcessHeatingApiService {
     input.conditionFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.conditionFactor);
     input.correctionFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.correctionFactor);
 
-    let WallLossesInstance = new this.toolsSuiteApiService.ToolsSuiteModule.WallLosses(
+    //surfaceArea, ambientTemperature, surfaceTemperature, windSpeed, surfaceEmissivity, shapeFactor, correctionFactor
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.wallTotalHeatLoss(
       input.surfaceArea, input.ambientTemperature, input.surfaceTemperature,
       input.windVelocity, input.surfaceEmissivity, input.conditionFactor,
       input.correctionFactor
     );
-    let output: number = WallLossesInstance.totalHeatLoss();
-    WallLossesInstance.delete();
     return output;
   }
 
