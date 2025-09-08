@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MotorIntegrationService } from './motor-integration.service';
+import { PumpMotorIntegrationService } from './pump-motor-integration.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InventoryIntegrationComponent } from './inventory-integration/inventory-integration.component';
 import { IntegrationStateComponent } from './integration-status/integration-status.component';
@@ -27,7 +27,7 @@ import { ConnectedAssessmentStatusComponent } from './connected-assessment-statu
     CreateAssessmentModalModule
   ],
   providers: [
-    MotorIntegrationService,
+    PumpMotorIntegrationService,
     PsatIntegrationService,
     IntegrationStateService
   ],

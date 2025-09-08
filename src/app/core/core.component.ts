@@ -286,6 +286,7 @@ export class CoreComponent implements OnInit {
           this.diagramIdbService.setAll(initializedData.diagrams);
           this.calculatorDbService.setAll(initializedData.calculators);
           this.inventoryDbService.setAll(initializedData.inventoryItems);
+          this.toolsSuiteApiService.initializeDefaultDbData();
           this.idbStarted = true;
           this.initializeDefaultDbData();
           this.changeDetectorRef.detectChanges();

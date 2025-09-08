@@ -357,18 +357,18 @@ export class CalculatorSuiteApiService {
     inputObj.steamReductionInputVec.forEach(steamReduction => {
       let FlowMeterMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamFlowMeterMethodData(steamReduction.flowMeterMethodData.flowRate);
 
-      let MassFlowMeasuredData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMeasuredData(steamReduction.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
+      let AirMassFlowMeasuredData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMeasuredData(steamReduction.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
         steamReduction.airMassFlowMethodData.massFlowMeasuredData.airVelocity);
-      let MassFlowNameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowNameplateData(steamReduction.airMassFlowMethodData.massFlowNameplateData.flowRate);
+      let AirMassFlowNameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowNameplateData(steamReduction.airMassFlowMethodData.massFlowNameplateData.flowRate);
       let AirMassFlowMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMethodData(steamReduction.airMassFlowMethodData.isNameplate,
-        MassFlowMeasuredData, MassFlowNameplateData,
+        AirMassFlowMeasuredData, AirMassFlowNameplateData,
         steamReduction.airMassFlowMethodData.inletTemperature, steamReduction.airMassFlowMethodData.outletTemperature);
 
-      MassFlowMeasuredData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMeasuredData(steamReduction.waterMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
+      let WaterMassFlowMeasuredData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMeasuredData(steamReduction.waterMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
         steamReduction.waterMassFlowMethodData.massFlowMeasuredData.airVelocity);
-      MassFlowNameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowNameplateData(steamReduction.waterMassFlowMethodData.massFlowNameplateData.flowRate);
+      let WaterMassFlowNameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowNameplateData(steamReduction.waterMassFlowMethodData.massFlowNameplateData.flowRate);
       let WaterMassFlowMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMethodData(steamReduction.waterMassFlowMethodData.isNameplate,
-        MassFlowMeasuredData, MassFlowNameplateData,
+        WaterMassFlowMeasuredData, WaterMassFlowNameplateData,
         steamReduction.waterMassFlowMethodData.inletTemperature, steamReduction.waterMassFlowMethodData.outletTemperature);
 
       let OtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamOffsheetMethodData(steamReduction.otherMethodData.consumption);
@@ -397,8 +397,10 @@ export class CalculatorSuiteApiService {
       OtherMethodData.delete();
       WaterMassFlowMethodData.delete();
       AirMassFlowMethodData.delete();
-      MassFlowNameplateData.delete();
-      MassFlowMeasuredData.delete();
+      AirMassFlowMeasuredData.delete();
+      AirMassFlowNameplateData.delete();
+      WaterMassFlowMeasuredData.delete();
+      WaterMassFlowNameplateData.delete();
       FlowMeterMethodData.delete();
     });
 
