@@ -47,7 +47,7 @@ const SourceFlowForm = () => {
     const onFlowValueInputChange = (event, sourceEdgeId: string, handleChange: (event: React.ChangeEvent<any>) => void) => {
         handleChange(event);
         let flowValue = event.target.value === "" ? null : Number(event.target.value);
-        if (inPercent) {
+        if (inPercent && flowValue) {
             flowValue = getFlowValueFromPercent(flowValue, totalSourceFlow);
         }
         dispatch(sourceFlowValueChange({ sourceEdgeId, flowValue }));

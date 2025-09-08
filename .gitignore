@@ -4,6 +4,7 @@
 **/dist
 /tmp
 .angular
+/output
 
 *.tsbuildinfo
 

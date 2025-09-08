@@ -31,18 +31,17 @@
       Accawi, Gina, Root, Robert Mark, Blondheim, Nick, Howard, Dmitry, Stone, Rachel, Armstrong, Kristina,
       Cranfill, Kita, Dawn, Shires, Preston, Kaminski, Michal, Hadden, Jon, DePauw, Josh, Sakovets, Yevi, Causey, Colin,
       Beanblossom, Kyle, Whitmer, Michael, Ledbetter, Allie, Rappoport, Ben, Saravanan, Shiva, Merchant, Charlotte,
-      Kokul, Shubham, Fontenot, Zach, Vance, David, Worley, Andrew, Aziz, Omer, Ferree, Autumn, Rosser, Noah, Jensen, Jeff,
+      Kokul, Shubham, Fontenot, Zach, Vance, David, Worley, Andrew, Aziz, Omer, Ferree, Autumn, Rosser, Noah, Jensen,
+      Jeff,
       Adams, Mark, Rios, Raul, Wenning, Thomas, Armstrong, Kristina, Nimbalkar, Sachin, Accawi, Gina, Abbas, Ahmad,
       Chaudhari, Subodh, Sundaramoorthy, Senthil Kumar, Botts, Alex, Cox, Daryl, Casada, Don, Thekdi, Arvind,
       Martin, Vern, Martin, Donovan, Falk, Mats, Wroblewski, Ron, Harrell, Greg, Cunningham, Glenn, Papar, Riyaz,
       Brockway, Walt, Guo, Wei, & USDOE Office of Energy Efficiency and Renewable Energy. (2022, March 22).
       <br>
       MEASUR - Manufacturing Energy Assessment Software for Utility Reduction [Computer software].
-      <a target="_blank"
-        href="https://www.osti.gov//servlets/purl/1856108"
+      <a target="_blank" href="https://www.osti.gov//servlets/purl/1856108"
         alt="https://www.osti.gov//servlets/purl/1856108">https://www.osti.gov//servlets/purl/1856108</a>
-        <a target="_blank"
-        href="https://doi.org/10.11578/dc.20220107.3"
+      <a target="_blank" href="https://doi.org/10.11578/dc.20220107.3"
         alt="https://doi.org/10.11578/dc.20220107.3">https://doi.org/10.11578/dc.20220107.3</a>
     </p>
 
@@ -334,6 +333,79 @@
           <li>Estimated energy use in “what-if” scenarios</li>
           <li>System annual energy use and costs</li>
           <li>Potential annual energy savings</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header bold" (click)="toggleWasteWater()">
+        Waste Water
+        <span class="pull-right" *ngIf="!showWasteWater"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showWasteWater"><i class="fa fa-chevron-down"></i></span>
+      </div>
+      <div *ngIf="showWasteWater" class="card-body small">
+        <p>The Bio-Tiger Model was originally developed developed by Dr. Larry Moore of the University of Memphis, with
+          biokinetic equations found in Wastewater Engineering Treatment and Reuse (4th edition, 2003) by Metcalf &
+          Eddy.
+        </p>
+        <hr>
+        <p>
+          The MEASUR Wastewater module helps users identify and evaluate the potential energy savings opportunities in
+          the aeration stage of large-scale wastewater treatment systems. The tool helps users estimate the current
+          oxygen requirements, supply, and aeration operating conditions of the system: the aeration tank and secondary
+          clarifier. Additionally, the tool helps users understand the Monod kinetics and mass balances of the activated
+          sludge process and test "what-if" scenarios for various opportunities to reduce energy use.
+        </p>
+        <hr>
+        <div class="content-subheader">Inputs</div>
+        <p>To use the Wastewater module, users need actual system data:</p>
+        <ul>
+          <li>Field Data (temperature, influent CBOD, volume, flow rate, concentrations)</li>
+          <li>Aeration Equipment data (operating DO, SOTR, equipment power, operating time)</li>
+        </ul>
+        <div class="content-subheader">Outputs</div>
+        <p>Based on inputs, the Wastewater module will provide the following:</p>
+        <ul>
+          <li>The oxygen requirements of their biological process</li>
+          <li>The oxygen supplied by aeration equipment</li>
+          <li>The quantity and cost of energy consumed by the aeration equipment</li>
+          <li>The impact of using alternate operating strategies or systems to meet biological demands more efficiently</li>
+          <li>The impact of alternate scenarios on system energy use and cost</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header bold" (click)="toggleWater()">
+        Water
+        <span class="pull-right" *ngIf="!showWater"><i class="fa fa-chevron-up"></i></span>
+        <span class="pull-right" *ngIf="showWater"><i class="fa fa-chevron-down"></i></span>
+      </div>
+      <div *ngIf="showWater" class="card-body small">
+        <p>The Plant Water Profiler was originally developed by Mini Malhotra, Sachin Nimbalkar, Asha Shibu,
+          and Kristina Armstrong of Oak Ridge National Laboratory as an Excel-based tool to create a water balance and
+          estimate the true cost of water.
+        </p>
+        <hr>
+        <p>
+          The MEASUR Water module helps users create a water flow diagram and water balance, as well as calculate the
+          true cost of water for a facility. This can help users identify systems that contribute the most toward waster
+          intake and the true cost to target for water efficiency measures. Further analysis options, including
+          "what-if" analysis functionality are coming soon.
+        </p>
+        <hr>
+        <div class="content-subheader">Inputs</div>
+        <p>To use the Water module, users need actual system data:</p>
+        <ul>
+          <li>Water flow data (source, discharge, between systems)</li>
+          <li>Unit costs (energy, water and wastewater treatment)</li>
+          <li>Unit costs (energy, water and wastewater treatment)</li>
+        </ul>
+        <div class="content-subheader">Outputs</div>
+        <p>Based on inputs, the Water module will provide the following:</p>
+        <ul>
+          <li>Comprehensive water balance</li>
+          <li>True cost of water</li>
+          <li>Water use and costs for different systems within the facility</li>
+          <li>Key areas for targeted water efficiency projects</li>
         </ul>
       </div>
     </div>

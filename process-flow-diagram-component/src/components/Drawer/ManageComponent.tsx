@@ -39,18 +39,10 @@ const ManageComponent = (props: ManageComponentProps) => {
     return (
         <>
             <ComponentNameHeader selectedNode={selectedNode} />
-
             {validSelectedTab &&
-                <Box sx={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    paddingX: '1rem'
-                }}>
+                <>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
-                        <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
+                        <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs" sx={{ width: '100%', px: 1 }}>
                             {componentTabs.map((tab, index) => (
                                 <Tab key={index + tab.label} sx={{ fontSize: '.75rem' }} label={tab.label} />
                             ))}
@@ -58,29 +50,28 @@ const ManageComponent = (props: ManageComponentProps) => {
                     </Box>
 
                     <TabPanel value={selectedTab} index={0}>
-                        <ComponentDataForm
-                            selectedNode={selectedNode} />
+                        <Box>
+                            <ComponentDataForm
+                                selectedNode={selectedNode} />
+                        </Box>
                     </TabPanel>
 
                     {isWaterUsingSystem &&
                         <TabPanel value={selectedTab} index={1}>
-                            <Box sx={{ paddingY: '1rem' }}>
-                                <InSystemTreatmentForm selectedNode={selectedNode}></InSystemTreatmentForm>
-                            </Box>
+                            <InSystemTreatmentForm selectedNode={selectedNode}></InSystemTreatmentForm>
                         </TabPanel>
                     }
 
                     <TabPanel value={selectedTab} index={isWaterUsingSystem ? 2 : 1}>
-                        <Box sx={{ paddingY: '1rem' }}>
+                        <Box>
                             <ComponentHandles node={selectedNode}></ComponentHandles>
                             <CustomizeNode node={selectedNode}></CustomizeNode>
                             <Button sx={{ width: '100%', marginY: 2 }} color="error" variant="outlined" onClick={() => dispatch(deleteNode())}>Delete Component</Button>
                         </Box>
                     </TabPanel>
 
-                </Box>
+                </>
             }
-
         </>
     );
 

@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { PumpInventoryData, PumpInventoryDepartment, PumpItem, PumpPropertyDisplayOptions, ValidPump } from './pump-inventory';
 import * as _ from 'lodash';
-import { MotorIntegrationService } from '../shared/connected-inventory/motor-integration.service';
+import { PumpMotorIntegrationService } from '../shared/connected-inventory/pump-motor-integration.service';
 import { FieldMeasurementsCatalogService } from './pump-inventory-setup/pump-catalog/field-measurements-catalog/field-measurements-catalog.service';
 import { PumpEquipmentCatalogService } from './pump-inventory-setup/pump-catalog/pump-equipment-catalog/pump-equipment-catalog.service';
 import { UntypedFormGroup } from '@angular/forms';
@@ -31,7 +31,7 @@ export class PumpInventoryService {
     private fieldCatalogService: FieldMeasurementsCatalogService,
     private motorCatalogService: PumpMotorCatalogService,
     private pumpEquipmentService: PumpEquipmentCatalogService,
-    private motorIntegrationService: MotorIntegrationService) { 
+    private pumpMotorIntegrationService: PumpMotorIntegrationService) {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
     let inventoryData: PumpInventoryData = this.initInventoryData();
@@ -79,7 +79,7 @@ export class PumpInventoryService {
     let pumpItemIndex: number = pumpInventoryData.departments[selectedDepartmentIndex].catalog.findIndex(pumpItem => {return pumpItem.id == selectedPump.id});
     pumpInventoryData.departments[selectedDepartmentIndex].catalog.splice(pumpItemIndex, 1);
     if (selectedPump.connectedItem) {
-     await this.motorIntegrationService.removeMotorConnectedItem(selectedPump);
+     await this.pumpMotorIntegrationService.removeMotorConnectedItem(selectedPump);
      pumpInventoryData.hasConnectedInventoryItems = false;
     }
     this.setIsValidInventory(pumpInventoryData);
