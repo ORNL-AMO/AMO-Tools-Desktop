@@ -1,5 +1,5 @@
 import { Alert, Box, Button, Chip, createTheme, FormControl, InputAdornment, InputLabel, MenuItem, Select, Typography, useTheme, } from "@mui/material";
-import { getEdgeSourceAndTarget, getNodeFlowTotals } from "../Diagram/FlowUtils";
+import { getEdgeSourceAndTarget } from "../Diagram/FlowUtils";
 import { Edge, getConnectedEdges, Node } from "@xyflow/react";
 
 import React, { memo, useState } from "react";
@@ -28,7 +28,7 @@ const theme = createTheme({
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
     // const theme = useTheme();
-    const {selectedNode } = props;
+    const { selectedNode } = props;
     const edges = useAppSelector((state) => state.diagram.edges);
     const connectedEdges = getConnectedEdges([selectedNode], edges);
 
@@ -62,7 +62,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
 
     let defaultSelectedTreatmentType: number = 0;
     let treatmentTypeOptions: Array<{ value: number, display: string }> = [];
-    
+
     if (isWaterTreatment) {
         componentData = componentData as WaterTreatment;
         defaultSelectedTreatmentType = componentData.treatmentType !== undefined ? Number(componentData.treatmentType) : 0;
@@ -74,7 +74,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     } else if (isWaterUsingSystem) {
         const waterSystem = componentData as WaterUsingSystem;
         totalUnknownLoss = getSystemEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow);
-    } 
+    }
 
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
         setExpanded(newExpanded);
@@ -82,7 +82,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
 
     const handleNodePropertyNumber = (nodeProp: string, event: any) => {
         const updatedValue = event.target.value === "" ? null : Number(event.target.value);
-        dispatch(nodeDataPropertyChange({ optionsProp: nodeProp, updatedValue: updatedValue  }));
+        dispatch(nodeDataPropertyChange({ optionsProp: nodeProp, updatedValue: updatedValue }));
     };
     const hasSources = connectedEdges.some((edge: Edge<CustomEdgeData>) => {
         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
@@ -110,13 +110,13 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         sourceName = 'Discharge';
     }
 
-    return (<Box sx={{ paddingY: '.25rem', width: '100%' }} role="presentation" >
-        <Box sx={{ marginTop: 1, display: 'flex', justifyContent: 'space-evenly', flexDirection: 'row', flexWrap: 'wrap', flexBasis: '100%' }}>
+    return (
+        <>
             {isWaterUsingSystem && totalDischargeFlow > totalSourceFlow && totalUnknownLoss !== 0 &&
-                <Alert severity="warning" sx={{marginBottom: '1rem', width: '100%'}}>
+                <Alert severity="warning" sx={{ marginBottom: '1rem', width: '100%' }}>
                     <span>System Imbalance: </span>
                     <span>{totalUnknownLoss}</span>
-                    <FlowDisplayUnit  />
+                    <FlowDisplayUnit />
                 </Alert>
             }
 
@@ -134,8 +134,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             name={'systemType'}
                             size='small'
                             fullWidth
-                        value={selectedNode.data.systemType}
-                        onChange={(e) => handleSystemTypeChange(Number(e.target.value))}
+                            value={selectedNode.data.systemType}
+                            onChange={(e) => handleSystemTypeChange(Number(e.target.value))}
                             MenuProps={{
                                 disablePortal: true,
                                 anchorOrigin: {
@@ -193,29 +193,29 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
             }
 
             {!isWaterUsingSystem && !isKnownLoss &&
-            <Box display={'flex'} marginBottom={'1rem'} width={'100%'}>
-                <InputField
-                    label={'Cost'}
-                    id={`${selectedNode.id}-cost`}
-                    name={`cost`}
-                    type={'number'}
-                    size="small"
-                    value={componentData.cost?? ''}
-                    // warning={hasWarning}
-                    // helperText={hasWarning ? String(errors.flows[index]) : ""}
-                    onChange={(event) => handleNodePropertyNumber('cost', event)}
-                    sx={{ m: '1 0', width: '100%' }}
-                    InputProps={{
-                        endAdornment:
-                        <InputAdornment position="end" sx={{ zIndex: 1 }}>
-                                {settings.unitsOfMeasure === 'Imperial' ?
-                                    <span style={{ zIndex: 1, background: 'white' }}>$/kgal</span>
-                                    : <span style={{ zIndex: 1, background: 'white' }}>$/kL</span>
-                                }
-                            </InputAdornment>,
-                    }}
+                <Box display={'flex'} marginBottom={'1rem'} width={'100%'}>
+                    <InputField
+                        label={'Cost'}
+                        id={`${selectedNode.id}-cost`}
+                        name={`cost`}
+                        type={'number'}
+                        size="small"
+                        value={componentData.cost ?? ''}
+                        // warning={hasWarning}
+                        // helperText={hasWarning ? String(errors.flows[index]) : ""}
+                        onChange={(event) => handleNodePropertyNumber('cost', event)}
+                        sx={{ m: '1 0', width: '100%' }}
+                        InputProps={{
+                            endAdornment:
+                                <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                    {settings.unitsOfMeasure === 'Imperial' ?
+                                        <span style={{ zIndex: 1, background: 'white' }}>$/kgal</span>
+                                        : <span style={{ zIndex: 1, background: 'white' }}>$/kL</span>
+                                    }
+                                </InputAdornment>,
+                        }}
                     />
-            </Box>
+                </Box>
             }
 
             {hasSources &&
@@ -270,18 +270,18 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                     </AccordionSummary>
                     <AccordionDetails>
                         {isWaterUsingSystem && totalSourceFlow > totalDischargeFlow && totalUnknownLoss !== 0 &&
-                            <Alert severity="warning" sx={{marginBottom: '1rem', width: '100%'}}>
-                            <span>Estimated Unknown Loss: </span>
-                            <span>{Math.abs(totalUnknownLoss)}</span>
-                            <FlowDisplayUnit />
-                        </Alert>
+                            <Alert severity="warning" sx={{ marginBottom: '1rem', width: '100%' }}>
+                                <span>Estimated Unknown Loss: </span>
+                                <span>{Math.abs(totalUnknownLoss)}</span>
+                                <FlowDisplayUnit />
+                            </Alert>
                         }
                         <DischargeFlowForm></DischargeFlowForm>
                     </AccordionDetails>
                 </Accordion>
             }
-        </Box>
-    </Box>);
+        </>
+    );
 }
 
 export default memo(ComponentDataForm);
