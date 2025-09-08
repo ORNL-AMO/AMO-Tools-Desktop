@@ -4,6 +4,7 @@ import { ValveEnergyLossInputs, ValveEnergyLossOutputs, ValveEnergyLossResults }
 import { OperatingHours } from '../../../shared/models/operations';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
+import { StandaloneService } from '../../standalone.service';
 
 @Injectable()
 export class ValveEnergyLossService {
@@ -17,7 +18,7 @@ export class ValveEnergyLossService {
   operatingHours: OperatingHours;
   modalOpen: BehaviorSubject<boolean>;
 
-  constructor(private convertUnitsService: ConvertUnitsService) {
+  constructor(private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
     this.baselineData = new BehaviorSubject<ValveEnergyLossInputs>(undefined);
@@ -30,26 +31,29 @@ export class ValveEnergyLossService {
     this.generateExample = new BehaviorSubject<boolean>(undefined);
   }
 
-  calculateEnergyLoss(inputs: ValveEnergyLossInputs): ValveEnergyLossResults {
-    // TODO call to suite API 
-    let baselineOutputs: ValveEnergyLossOutputs = {
-      headLoss: 14.54,
-      powerLossFrictional: 18.38,
-      powerLossElectrical: 16.97,
-      annualEnergyLoss: 148657,
-      annualEnergyCost: 7433.83,
-    };
-    let modificationOutputs: ValveEnergyLossOutputs = {
-      headLoss: 37.31,
-      powerLossFrictional: 38.04,
-      powerLossElectrical: 33.96,
-      annualEnergyLoss: 208540,
-      annualEnergyCost: 14597.79,
-    };
-    let results: ValveEnergyLossResults = {
-      baselineOutputs: baselineOutputs,
-      modificationOutputs: modificationOutputs,
-    };
+  calculateEnergyLoss(baselineInputs: ValveEnergyLossInputs, modificationInputs: ValveEnergyLossInputs): ValveEnergyLossResults {
+     
+
+    let results: ValveEnergyLossResults  = this.standaloneService.valveEnergyLossCalc(baselineInputs, modificationInputs);
+
+    // let baselineOutputs: ValveEnergyLossOutputs = {
+    //   headLoss: 14.54,
+    //   powerLossFrictional: 18.38,
+    //   powerLossElectrical: 16.97,
+    //   annualEnergyLoss: 148657,
+    //   annualEnergyCost: 7433.83,
+    // };
+    // let modificationOutputs: ValveEnergyLossOutputs = {
+    //   headLoss: 37.31,
+    //   powerLossFrictional: 38.04,
+    //   powerLossElectrical: 33.96,
+    //   annualEnergyLoss: 208540,
+    //   annualEnergyCost: 14597.79,
+    // };
+    // let results: ValveEnergyLossResults = {
+    //   baselineOutputs: baselineOutputs,
+    //   modificationOutputs: modificationOutputs,
+    // };
     this.results.next(results);
     return results;
   }

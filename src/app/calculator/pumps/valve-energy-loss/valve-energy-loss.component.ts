@@ -91,12 +91,12 @@ export class ValveEnergyLossComponent implements OnInit {
     this.baselineDataSub = this.valveEnergyLossService.baselineData.subscribe(baselineData => {
       if (baselineData) {
         this.setBaselineSelected();
-        //this.valveEnergyLossService.calculate(this.settings, false, true);
+        this.calculate();
       }
     });
     this.modificationDataSub = this.valveEnergyLossService.modificationData.subscribe(modificationData => {
       if (modificationData) {
-        //this.valveEnergyLossService.calculate(this.settings, false, true);
+        this.calculate();
       }
     });
     this.resultsSubscription = this.valveEnergyLossService.results.subscribe(val => {
@@ -104,6 +104,13 @@ export class ValveEnergyLossComponent implements OnInit {
         this.results = val;
       }
     });
+  }
+
+
+  calculate(){
+    let baselineData: ValveEnergyLossInputs = this.valveEnergyLossService.baselineData.getValue();
+    let modificationData: ValveEnergyLossInputs = this.valveEnergyLossService.modificationData.getValue();
+    this.valveEnergyLossService.calculateEnergyLoss(baselineData, modificationData);
   }
 
   ngAfterViewInit() {

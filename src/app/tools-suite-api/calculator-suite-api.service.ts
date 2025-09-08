@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, PowerFactorTriangleModeInputs, PowerFactorTriangleOutputs, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
 import { SuiteApiHelperService } from './suite-api-helper.service';
+import { ValveEnergyLossInputs, ValveEnergyLossOutputs, ValveEnergyLossResults } from '../shared/models/calculators';
 
 declare var Module: any;
 
@@ -501,6 +502,39 @@ export class CalculatorSuiteApiService {
     rawOutput.delete();
     PowerFactor.delete();
     return powerFactorTriangleOutputs;
+  }
+
+  valveEnergyLossCalc(baselineInputs: ValveEnergyLossInputs, modificationInputs: ValveEnergyLossInputs): ValveEnergyLossResults {
+    let PumpValvePowerLoss = new Module.PumpValvePowerLoss();
+    let baselineRawOutputs = PumpValvePowerLoss.calculate(baselineInputs.hoursOperation, baselineInputs.efficiencyPump, baselineInputs.efficiencyMotor, baselineInputs.SG, baselineInputs.flowRate, baselineInputs.upstreamPressure, baselineInputs.upstreamHeight, baselineInputs.downstreamPressure, baselineInputs.downstreamHeight);
+    let modificationRawOutputs = PumpValvePowerLoss.calculate(modificationInputs.hoursOperation, modificationInputs.efficiencyPump, modificationInputs.efficiencyMotor, modificationInputs.SG, modificationInputs.flowRate, modificationInputs.upstreamPressure, modificationInputs.upstreamHeight, modificationInputs.downstreamPressure, modificationInputs.downstreamHeight);
+
+    let baselineOutputs: ValveEnergyLossOutputs = {
+      headLoss: baselineRawOutputs.head_loss,
+      powerLossFrictional: baselineRawOutputs.power_loss_frictional,
+      powerLossElectrical: baselineRawOutputs.power_loss_electrical,
+      annualEnergyLoss: baselineRawOutputs.annual_energy_loss,
+      annualEnergyCost: baselineRawOutputs.annual_energy_loss * baselineInputs.electricalRate,
+    };
+
+    let modificationOutputs: ValveEnergyLossOutputs = {
+      headLoss: modificationRawOutputs.head_loss,
+      powerLossFrictional: modificationRawOutputs.power_loss_frictional,
+      powerLossElectrical: modificationRawOutputs.power_loss_electrical,
+      annualEnergyLoss: modificationRawOutputs.annual_energy_loss,
+      annualEnergyCost: modificationRawOutputs.annual_energy_loss * modificationInputs.electricalRate,
+    };
+
+    let valveEnergyLossOutputs: ValveEnergyLossResults = {
+      baselineOutputs: baselineOutputs,
+      modificationOutputs: modificationOutputs,
+    };
+
+    baselineRawOutputs.delete();
+    modificationRawOutputs.delete();
+    PumpValvePowerLoss.delete();
+
+    return valveEnergyLossOutputs;
   }
   
 }
