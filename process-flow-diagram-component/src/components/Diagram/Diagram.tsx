@@ -66,10 +66,9 @@ const Diagram = (props: DiagramProps) => {
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {
     return getEdgeTypesFromString(state.diagram.diagramOptions.edgeType, edgeTypes);
   });
-  // const diagramParentDimensions = useAppSelector((state) => state.diagram.diagramParentDimensions);
   const diagramParentDimensions = props.parentContainer;
   const diagramAlertState: DiagramAlertState = useAppSelector((state) => state.diagram.diagramAlert);
-
+  const isMenuDrawerOpen = useAppSelector((state) => state.diagram.isMenuDrawerOpen);
 
 
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
@@ -219,7 +218,13 @@ const Diagram = (props: DiagramProps) => {
               <MiniMap zoomable pannable nodeClassName={(node: Node) => node.type} />
             }
             {controlsVisible &&
-              <Controls />
+            // * Styles needed for Drawer operation no longer all constrain canvas width. We need to explicitly style controls or they are hidden
+            <Controls
+              style={{
+                left: isMenuDrawerOpen ? '540px' : '75px',
+                transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+            />
             }
             <Background />
           </ReactFlow>

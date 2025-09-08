@@ -168,12 +168,20 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
       label: 'Flows',
       index: 0
     },
+    {
+        label: 'Manage',
+        index: 1
+      }
   ],
   "water-discharge": [
     {
       label: 'Flows',
       index: 0
     },
+    {
+        label: 'Manage',
+        index: 1
+      }
   ],
   "water-using-system":
     [

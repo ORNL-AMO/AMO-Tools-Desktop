@@ -17,7 +17,8 @@ export interface DiagramState {
   composedNodeData: ProcessFlowPart[];
   settings: DiagramSettings,
   diagramOptions: UserDiagramOptions,
-  isDrawerOpen: boolean,
+  isDataDrawerOpen: boolean,
+  isMenuDrawerOpen: boolean,
   // * Selected node or edge 
   selectedDataId: string,
   calculatedData: DiagramCalculatedData,
@@ -42,7 +43,8 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     composedNodeData: [],
     settings: getDefaultSettings(),
     diagramOptions: getDefaultUserDiagramOptions(),
-    isDrawerOpen: false,
+    isDataDrawerOpen: false,
+    isMenuDrawerOpen: false,
     selectedDataId: undefined,
     focusedEdgeId: undefined,
     calculatedData: { nodes: {} },
@@ -85,7 +87,8 @@ const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{
   state.nodeErrors = diagramData.nodeErrors ? { ...diagramData.nodeErrors } : {};
   state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();
   state.recentEdgeColors = diagramData.recentEdgeColors.length !== 0 ? { ...diagramData.recentEdgeColors } : getDefaultColorPalette();
-  state.isDrawerOpen = false;
+  state.isDataDrawerOpen = false;
+  state.isMenuDrawerOpen = false;
   state.focusedEdgeId = undefined;
   state.selectedDataId = undefined;
   state.diagramParentDimensions = { ...parentContainer };
@@ -275,7 +278,7 @@ const setNodeStyleReducer = (state: DiagramState, action: PayloadAction<CSSPrope
 const deleteNodeReducer = (state: DiagramState, action: PayloadAction<string>) => {
   state.nodes = state.nodes.filter((nd) => nd.id !== state.selectedDataId);
   state.edges = state.edges.filter((edge) => edge.source !== state.selectedDataId && edge.target !== state.selectedDataId);
-  state.isDrawerOpen = !state.isDrawerOpen;
+  state.isDataDrawerOpen = !state.isDataDrawerOpen;
   delete state.nodeErrors[state.selectedDataId];
   state.selectedDataId = action.payload ? action.payload : undefined;
 };
@@ -338,7 +341,7 @@ const edgesUpdateReducer = (state: DiagramState, action: PayloadAction<Edge[]>) 
 const deleteEdgeReducer = (state: DiagramState, action: PayloadAction<string>) => {
   state.edges = state.edges.filter((edg) => edg.id !== action.payload);
 
-  state.isDrawerOpen = !state.isDrawerOpen;
+  state.isDataDrawerOpen = !state.isDataDrawerOpen;
   state.selectedDataId = action.payload ? action.payload : undefined;
 }
 
@@ -463,12 +466,16 @@ const showMarkerEndArrowsReducer = (state: DiagramState, action: PayloadAction<b
 }
 
 const toggleDrawerReducer = (state: DiagramState, action?: PayloadAction<string>) => {
-  state.isDrawerOpen = !state.isDrawerOpen;
+  state.isDataDrawerOpen = !state.isDataDrawerOpen;
+};
+
+const toggleMenuDrawerReducer = (state: DiagramState, action?: PayloadAction<string>) => {
+  state.isMenuDrawerOpen = !state.isMenuDrawerOpen;
 };
 
 const openDrawerWithSelectedReducer = (state: DiagramState, action?: PayloadAction<string>) => {
-  if (!state.isDrawerOpen) {
-    state.isDrawerOpen = true;
+  if (!state.isDataDrawerOpen) {
+    state.isDataDrawerOpen = true;
   }
   setSelectedId(state, action);
 };
@@ -542,7 +549,8 @@ export const diagramSlice = createSlice({
     applyEstimatedFlowResults: applyEstimatedFlowResultsReducer,
     openDrawerWithSelected: openDrawerWithSelectedReducer,
     selectedIdChange: selectedIdChangeReducer,
-    diagramAlertChange: diagramAlertChangeReducer
+    diagramAlertChange: diagramAlertChangeReducer,
+    toggleMenuDrawer: toggleMenuDrawerReducer,
   }
 })
 
@@ -587,7 +595,8 @@ export const {
   electricityCostChange,
   openDrawerWithSelected,
   selectedIdChange,
-  diagramAlertChange
+  diagramAlertChange,
+  toggleMenuDrawer
 } = diagramSlice.actions
 export default diagramSlice.reducer
 

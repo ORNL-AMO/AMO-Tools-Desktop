@@ -17,7 +17,7 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
         composedNodeData: [],
         settings: {},
         diagramOptions: {},
-        isDrawerOpen: false,
+        isDataDrawerOpen: false,
         selectedDataId: undefined,
         focusedEdgeId: undefined,
         calculatedData: {nodes: {}},
@@ -78,7 +78,7 @@ export type AppDispatch = AppStore['dispatch']
 export const selectEdges = (state: RootState) => state.diagram.edges as Edge<CustomEdgeData>[];
 export const selectNodes = (state: RootState) => state.diagram.nodes;
 export const selectNodeErrors = (state: RootState) => state.diagram.nodeErrors;
-export const selectIsDrawerOpen = (state: RootState) => state.diagram.isDrawerOpen;
+export const selectisDataDrawerOpen = (state: RootState) => state.diagram.isDataDrawerOpen;
 export const selectIsModalOpen = (state: RootState) => state.diagram.isModalOpen;
 export const selectHasAssessment = (state: RootState) => state.diagram.assessmentId !== undefined;
 export const selectCurrentNode = (state: RootState) => state.diagram.nodes.find((node: Node<ProcessFlowPart>) => node.id === state.diagram.selectedDataId) as Node<ProcessFlowPart>;
