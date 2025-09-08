@@ -7,7 +7,7 @@ import { DirectoryDbService } from './directory-db.service';
 import { Directory } from '../shared/models/directory';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, combineLatestWith, firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { SettingsStoreMeta } from './dbConfig';
 import { environment } from '../../environments/environment';
 import { Diagram } from '../shared/models/diagram';

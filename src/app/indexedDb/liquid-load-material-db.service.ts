@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { LiquidLoadChargeMaterial } from '../shared/models/materials';
 import { LiquidLoadMaterialStoreMeta } from './dbConfig';
 
@@ -11,6 +11,16 @@ export class LiquidLoadMaterialDbService {
 
   constructor(private dbService: NgxIndexedDBService) {
     this.dbLiquidLoadChargeMaterials = new BehaviorSubject<Array<LiquidLoadChargeMaterial>>([]);
+  }
+
+  insertDefaultMaterials(defaultMaterials: Array<LiquidLoadChargeMaterial>): Observable<number[]> {
+    return this.dbService.bulkAdd(this.storeName, defaultMaterials);
+  }
+
+  getAllCustomMaterials(): Observable<Array<LiquidLoadChargeMaterial>> {
+    return this.dbService.getAll(this.storeName).pipe(
+      map((materials: LiquidLoadChargeMaterial[]) => materials.filter((material: LiquidLoadChargeMaterial) => !material.isDefault))
+    );
   }
 
   getAllWithObservable(): Observable<Array<LiquidLoadChargeMaterial>> {

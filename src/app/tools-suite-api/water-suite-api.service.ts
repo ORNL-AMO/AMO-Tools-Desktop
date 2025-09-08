@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { copyObject } from '../shared/helperFunctions';
 import { HeatEnergy, HeatEnergyResults, MotorEnergy, MotorEnergyResults } from 'process-flow-lib';
-
-declare var Module: any;
+import { ToolsSuiteApiService } from './tools-suite-api.service';
 
 /**
  * Water system estimation methods are defined in shared-process-flow-logic.ts
@@ -11,11 +10,13 @@ declare var Module: any;
 @Injectable()
 export class WaterSuiteApiService {
 
-  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService,
+    private toolsSuiteApiService: ToolsSuiteApiService
+  ) { }
 
   calculateHeatEnergy(inputData: HeatEnergy): HeatEnergyResults {
     inputData = copyObject(inputData)
-    let instance = new Module.WaterAssessment();
+    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.WaterAssessment();
     inputData.incomingTemp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.incomingTemp); 
     inputData.outgoingTemp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.outgoingTemp); 
     inputData.heaterEfficiency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.heaterEfficiency); 
@@ -37,7 +38,7 @@ export class WaterSuiteApiService {
 
   calculateMotorEnergy(inputData: MotorEnergy): MotorEnergyResults {
     inputData = copyObject(inputData)
-    let instance = new Module.WaterAssessment();
+    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.WaterAssessment();
     inputData.numberUnits = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.numberUnits);
     inputData.hoursPerYear = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.hoursPerYear);
     inputData.ratedPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.ratedPower);

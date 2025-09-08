@@ -8,15 +8,16 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { FlueGasModalData, HeatCascadingInput, HeatCascadingOutput } from '../../../../shared/models/phast/heatCascading';
 import { FlueGasHeatingValue } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { HeatCascadingFormService } from '../heat-cascading-form.service';
 import { HeatCascadingService } from '../heat-cascading.service';
+import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
-    selector: 'app-heat-cascading-form',
-    templateUrl: './heat-cascading-form.component.html',
-    styleUrls: ['./heat-cascading-form.component.css'],
-    standalone: false
+  selector: 'app-heat-cascading-form',
+  templateUrl: './heat-cascading-form.component.html',
+  styleUrls: ['./heat-cascading-form.component.css'],
+  standalone: false
 })
 export class HeatCascadingFormComponent implements OnInit {
   @Input()
@@ -34,31 +35,36 @@ export class HeatCascadingFormComponent implements OnInit {
     this.setOpHoursModalWidth();
   }
   form: UntypedFormGroup;
-  fuelOptions: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
-  
+  fuelOptions: Array<FlueGasMaterial>;
+  fuelOptionsSub: Subscription;
+
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
   selectedFuelId: number;
-  
+
   formWidth: number;
-  
+
   showPriOpHoursModal: boolean = false;
   showSecOpHoursModal: boolean = false;
   showFlueGasModal: boolean = false;
 
   outputSubscription: Subscription;
   output: HeatCascadingOutput;
-  
-  constructor(private sqlDbApiService: SqlDbApiService,
-              private heatCascadingService: HeatCascadingService, 
-              private phastService: PhastService,
-              private heatCascadingFormService: HeatCascadingFormService) { }
+
+  constructor(
+    private heatCascadingService: HeatCascadingService,
+    private phastService: PhastService,
+    private heatCascadingFormService: HeatCascadingFormService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService) { }
 
   ngOnInit() {
     this.initSubscriptions();
   }
 
   initSubscriptions() {
+    this.fuelOptionsSub = this.flueGasMaterialDbService.dbFlueGasMaterials.subscribe(val => {
+      this.fuelOptions = val;
+    });
     this.resetDataSub = this.heatCascadingService.resetData.subscribe(value => {
       this.initForm();
     })
@@ -81,17 +87,12 @@ export class HeatCascadingFormComponent implements OnInit {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
     this.outputSubscription.unsubscribe();
+    this.fuelOptionsSub.unsubscribe();
   }
 
   initForm() {
     let heatCascadingInput: HeatCascadingInput = this.heatCascadingService.heatCascadingInput.getValue();
     this.form = this.heatCascadingFormService.getHeatCascadingForm(heatCascadingInput);
-    this.initFormSetup();
-  }
-
-  initFormSetup() {
-    this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
-    
     if (this.form.controls.materialTypeId.value && this.form.controls.materialTypeId.value !== '') {
       if (this.form.controls.CH4.value === '' || !this.form.controls.CH4.value) {
         this.setMaterialProperties();
@@ -100,27 +101,27 @@ export class HeatCascadingFormComponent implements OnInit {
   }
 
   setMaterialProperties() {
-    let material = this.sqlDbApiService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
-    this.selectedFuelId = this.form.controls.materialTypeId.value;
-    let flueGasMaterialHeatingValue: FlueGasHeatingValue = this.phastService.flueGasByVolumeCalculateHeatingValue(material);
-    this.form.controls.fuelHV.patchValue(this.heatCascadingService.roundVal(flueGasMaterialHeatingValue.heatingValueVolume, 2));
-  
-    this.form.patchValue({
-      CH4: this.heatCascadingService.roundVal(material.CH4, 4),
-      C2H6: this.heatCascadingService.roundVal(material.C2H6, 4),
-      N2: this.heatCascadingService.roundVal(material.N2, 4),
-      H2: this.heatCascadingService.roundVal(material.H2, 4),
-      C3H8: this.heatCascadingService.roundVal(material.C3H8, 4),
-      C4H10_CnH2n: this.heatCascadingService.roundVal(material.C4H10_CnH2n, 4),
-      H2O: this.heatCascadingService.roundVal(material.H2O, 4),
-      CO: this.heatCascadingService.roundVal(material.CO, 4),
-      CO2: this.heatCascadingService.roundVal(material.CO2, 4),
-      SO2: this.heatCascadingService.roundVal(material.SO2, 4),
-      O2: this.heatCascadingService.roundVal(material.O2, 4),
-      substance: material.substance
-    });
-  
-    this.calculate();
+    let material: FlueGasMaterial = this.fuelOptions.find(option => { option.id === this.form.controls.materialTypeId.value });
+    if (material) {
+      this.selectedFuelId = this.form.controls.materialTypeId.value;
+      let flueGasMaterialHeatingValue: FlueGasHeatingValue = this.phastService.flueGasByVolumeCalculateHeatingValue(material);
+      this.form.controls.fuelHV.patchValue(roundVal(flueGasMaterialHeatingValue.heatingValueVolume, 2));
+      this.form.patchValue({
+        CH4: roundVal(material.CH4, 4),
+        C2H6: roundVal(material.C2H6, 4),
+        N2: roundVal(material.N2, 4),
+        H2: roundVal(material.H2, 4),
+        C3H8: roundVal(material.C3H8, 4),
+        C4H10_CnH2n: roundVal(material.C4H10_CnH2n, 4),
+        H2O: roundVal(material.H2O, 4),
+        CO: roundVal(material.CO, 4),
+        CO2: roundVal(material.CO2, 4),
+        SO2: roundVal(material.SO2, 4),
+        O2: roundVal(material.O2, 4),
+        substance: material.substance
+      });
+      this.calculate();
+    }
   }
 
   focusField(str: string) {
@@ -144,7 +145,7 @@ export class HeatCascadingFormComponent implements OnInit {
 
   hideFlueGasModal(flueGasModalData?: FlueGasModalData) {
     if (flueGasModalData) {
-      flueGasModalData.calculatedAvailableHeat = this.heatCascadingService.roundVal(flueGasModalData.calculatedAvailableHeat, 1);
+      flueGasModalData.calculatedAvailableHeat = roundVal(flueGasModalData.calculatedAvailableHeat, 1);
       this.form.patchValue({
         secAvailableHeat: flueGasModalData.calculatedAvailableHeat,
         fuelTempF: flueGasModalData.fuelTempF,
@@ -194,7 +195,6 @@ export class HeatCascadingFormComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
       let newMaterial: FlueGasMaterial | SolidLiquidFlueGasMaterial = this.fuelOptions.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.form.patchValue({

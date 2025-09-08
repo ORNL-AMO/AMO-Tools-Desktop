@@ -8,15 +8,15 @@ import { ConvertUnitsService } from '../../../../shared/convert-units/convert-un
 import { UntypedFormGroup } from '@angular/forms';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { AtmosphereFormService, AtmosphereLossWarnings } from '../../../../calculator/furnaces/atmosphere/atmosphere-form.service';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { firstValueFrom } from 'rxjs';
 import { AtmosphereDbService } from '../../../../indexedDb/atmosphere-db.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
-    selector: 'app-atmosphere-losses-form',
-    templateUrl: './atmosphere-losses-form.component.html',
-    styleUrls: ['./atmosphere-losses-form.component.css'],
-    standalone: false
+  selector: 'app-atmosphere-losses-form',
+  templateUrl: './atmosphere-losses-form.component.html',
+  styleUrls: ['./atmosphere-losses-form.component.css'],
+  standalone: false
 })
 export class AtmosphereLossesFormComponent implements OnInit {
   @Input()
@@ -50,8 +50,8 @@ export class AtmosphereLossesFormComponent implements OnInit {
   materialTypes: Array<AtmosphereSpecificHeat>;
   showModal: boolean = false;
   idString: string;
-  constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService, 
-    private sqlDbApiService: SqlDbApiService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereFormService: AtmosphereFormService, private atmosphereDbService: AtmosphereDbService) { }
+  constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService,
+    private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereFormService: AtmosphereFormService, private atmosphereDbService: AtmosphereDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -59,7 +59,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
-          this.materialTypes = this.sqlDbApiService.selectAtmosphereSpecificHeat();
+          this.setMaterialTypes();
           this.enableForm();
         }
       }
@@ -73,8 +73,16 @@ export class AtmosphereLossesFormComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.materialTypes = this.sqlDbApiService.selectAtmosphereSpecificHeat();
-    if (this.atmosphereLossForm) {
+    this.setMaterialTypes(true);
+    if (!this.baselineSelected) {
+      this.disableForm();
+    }
+    this.checkWarnings();
+  }
+
+  async setMaterialTypes(onInit?: boolean) {
+    this.materialTypes = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
+    if (onInit && this.atmosphereLossForm) {
       if (this.atmosphereLossForm.controls.atmosphereGas.value && this.atmosphereLossForm.controls.atmosphereGas.value !== '') {
         if (this.atmosphereLossForm.controls.specificHeat.value === '') {
           this.setProperties();
@@ -83,14 +91,10 @@ export class AtmosphereLossesFormComponent implements OnInit {
         }
       }
     }
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
-    this.checkWarnings();
   }
 
-  checkForDeletedMaterial() {
-    let selectedMaterial: AtmosphereSpecificHeat = this.sqlDbApiService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
+  async checkForDeletedMaterial() {
+    let selectedMaterial: AtmosphereSpecificHeat = await firstValueFrom(this.atmosphereDbService.getByIdWithObservable(this.atmosphereLossForm.controls.atmosphereGas.value));
     if (!selectedMaterial) {
       this.hasDeletedCustomMaterial = true;
       this.restoreMaterial();
@@ -103,40 +107,37 @@ export class AtmosphereLossesFormComponent implements OnInit {
       specificHeat: this.atmosphereLossForm.controls.specificHeat.value,
       substance: "Custom Material"
     };
-    let suiteDbResult = this.sqlDbApiService.insertAtmosphereSpecificHeat(customMaterial);
-    if (suiteDbResult === true) {
-      await firstValueFrom(this.atmosphereDbService.addWithObservable(customMaterial));
-    }
-    this.materialTypes = this.sqlDbApiService.selectAtmosphereSpecificHeat();
+    await firstValueFrom(this.atmosphereDbService.addWithObservable(customMaterial));
+    await this.setMaterialTypes();
     let newMaterial: AtmosphereSpecificHeat = this.materialTypes.find(material => { return material.substance === customMaterial.substance; });
     this.atmosphereLossForm.patchValue({
       atmosphereGas: newMaterial.id
     });
   }
 
-  setProperties() {
-    let selectedMaterial: AtmosphereSpecificHeat = this.sqlDbApiService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
+  async setProperties() {
+    let selectedMaterial: AtmosphereSpecificHeat = await firstValueFrom(this.atmosphereDbService.getByIdWithObservable(this.atmosphereLossForm.controls.atmosphereGas.value));
     if (selectedMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
       }
 
       this.atmosphereLossForm.patchValue({
-        specificHeat: this.roundVal(selectedMaterial.specificHeat, 4)
+        specificHeat: roundVal(selectedMaterial.specificHeat, 4)
       });
     }
     this.save();
   }
 
-  checkSpecificHeat() {
+  async checkSpecificHeat() {
     if (this.atmosphereLossForm.controls.atmosphereGas.value) {
-      let material: AtmosphereSpecificHeat = this.sqlDbApiService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
+      let material: AtmosphereSpecificHeat = await firstValueFrom(this.atmosphereDbService.getByIdWithObservable(this.atmosphereLossForm.controls.atmosphereGas.value));
       if (material) {
         let val = material.specificHeat;
         if (this.settings.unitsOfMeasure === 'Metric') {
           val = this.convertUnitsService.value(val).from('btuScfF').to('kJm3C');
         }
-        material.specificHeat = this.roundVal(val, 4);
+        material.specificHeat = roundVal(val, 4);
         if (material.specificHeat !== this.atmosphereLossForm.controls.specificHeat.value) {
           return true;
         } else {
@@ -150,11 +151,6 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   disableForm() {
     this.atmosphereLossForm.controls.atmosphereGas.disable();
-  }
-
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
   }
 
   enableForm() {
@@ -235,7 +231,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
 
   showMaterialModal(editExistingMaterial: boolean) {
     this.editExistingMaterial = editExistingMaterial;
-    if(editExistingMaterial === true) {
+    if (editExistingMaterial === true) {
       this.existingMaterial = {
         id: this.atmosphereLossForm.controls.atmosphereGas.value,
         specificHeat: this.atmosphereLossForm.controls.specificHeat.value,
@@ -247,9 +243,9 @@ export class AtmosphereLossesFormComponent implements OnInit {
     this.materialModal.show();
   }
 
-  hideMaterialModal(event?: any) {
+  async hideMaterialModal(event?: any) {
     if (event) {
-      this.materialTypes = this.sqlDbApiService.selectAtmosphereSpecificHeat();
+      await this.setMaterialTypes();
       let newMaterial: AtmosphereSpecificHeat = this.materialTypes.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.atmosphereLossForm.patchValue({

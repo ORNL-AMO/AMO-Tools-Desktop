@@ -1,5 +1,3 @@
-declare var Module: any;
-
 export const pumpTypesConstant: Array<{ value: number, display: string }> = [
     {
         value: 0,

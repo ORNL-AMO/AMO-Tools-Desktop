@@ -73,7 +73,7 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   }
 
   async getCustomMaterials() {
-    this.gasChargeMaterials = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+    this.gasChargeMaterials = await firstValueFrom(this.gasLoadMaterialDbService.getAllCustomMaterials());
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }

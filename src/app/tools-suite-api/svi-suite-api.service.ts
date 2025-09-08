@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { StatePointAnalysisInput, StatePointAnalysisResults } from '../shared/models/waste-water';
-declare var Module: any;
+import { ToolsSuiteApiService } from './tools-suite-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SviSuiteApiService {
 
-  constructor() { }
+  constructor(private toolsSuiteApiService: ToolsSuiteApiService) { }
 
   svi(inputs: StatePointAnalysisInput): StatePointAnalysisResults {
     let sviParamEnum = this.getParameter(inputs.sviParameter);
-    let instance = new Module.SludgeVolumeIndex(sviParamEnum, inputs.sviValue, inputs.numberOfClarifiers, inputs.areaOfClarifier, inputs.MLSS, inputs.influentFlow, inputs.rasFlow, inputs.sludgeSettlingVelocity);
+    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.SludgeVolumeIndex(sviParamEnum, inputs.sviValue, inputs.numberOfClarifiers, inputs.areaOfClarifier, inputs.MLSS, inputs.influentFlow, inputs.rasFlow, inputs.sludgeSettlingVelocity);
     let results = instance.calculate();
     let graphData: Array<Array<number>> = new Array();
     for (let i = 0; i < results.GraphData.size(); i++) {
@@ -41,15 +41,15 @@ export class SviSuiteApiService {
 
   getParameter(sviParameter: number) {
     if (sviParameter == 0) {
-      return Module.SVIParameter.SVISN;
+      return this.toolsSuiteApiService.ToolsSuiteModule.SVIParameter.SVISN;
     } else if (sviParameter == 1) {
-      return Module.SVIParameter.SVIGN;
+      return this.toolsSuiteApiService.ToolsSuiteModule.SVIParameter.SVIGN;
     } else if (sviParameter == 2) {
-      return Module.SVIParameter.SVIGS;
+      return this.toolsSuiteApiService.ToolsSuiteModule.SVIParameter.SVIGS;
     } else if (sviParameter == 3) {
-      return Module.SVIParameter.SVISS;
+      return this.toolsSuiteApiService.ToolsSuiteModule.SVIParameter.SVISS;
     } else if (sviParameter == 4) {
-      return Module.SVIParameter.VoK;
+      return this.toolsSuiteApiService.ToolsSuiteModule.SVIParameter.VoK;
     }
   }
 }

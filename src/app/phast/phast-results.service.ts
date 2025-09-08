@@ -10,10 +10,12 @@ import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-for
 import { Co2SavingsPhastService } from './losses/operations/co2-savings-phast/co2-savings-phast.service';
 import { EnergyInputEAF } from '../shared/models/phast/losses/energyInputEAF';
 import { FlueGasByVolumeSuiteResults, MaterialInputProperties } from '../shared/models/phast/losses/flueGas';
-import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 
 import { EnergyExhaustGasOutput } from '../tools-suite-api/process-heating-api.service';
+import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
+import { firstValueFrom } from 'rxjs';
+import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 
 
 @Injectable()
@@ -25,9 +27,10 @@ export class PhastResultsService {
     private convertUnitsService: ConvertUnitsService,
     private energyInputExhaustGasService: EnergyInputExhaustGasService,
     private energyInputService: EnergyInputService,
-    private sqlDbApiService: SqlDbApiService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private co2SavingPhastService: Co2SavingsPhastService,
-    ) { }
+    private flueGasMaterialDbService: FlueGasMaterialDbService
+  ) { }
   checkLoss(loss: any) {
     if (!loss) {
       return false;
@@ -182,7 +185,7 @@ export class PhastResultsService {
         } else {
           kWTotalAdditionalFuelHeat = this.convertUnitsService.value(phast.losses.energyInputExhaustGasLoss[0].totalHeatInput).from('GJ').to(settings.energyResultUnit);
         }
-        
+
         results.totalAdditionalFuelHeat = kWTotalAdditionalFuelHeat;
         results.totalProvidedElectricalHeat = results.electricalHeatDelivered + results.electricalHeaterLosses;
         results.grossHeatInput = results.totalInput - Math.abs(results.exothermicHeat) + energyInputResults.exhaustGasLosses + results.electricalHeaterLosses;
@@ -202,8 +205,7 @@ export class PhastResultsService {
         if (tmpFlueGas.flueGasType === 'By Mass') {
           let tmpForm = this.flueGasFormService.initByMassFormFromLoss(tmpFlueGas, true);
           if (tmpForm.status === 'VALID') {
-            let gases: Array<SolidLiquidFlueGasMaterial> = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
-            let selectedGas: SolidLiquidFlueGasMaterial = gases.find(gas => { return gas.id == tmpFlueGas.flueGasByMass.gasTypeId });
+            let selectedGas: SolidLiquidFlueGasMaterial =  this.solidLiquidMaterialDbService.getById(tmpFlueGas.flueGasByMass.gasTypeId);
             let availableHeat: number = this.phastService.flueGasByMass(tmpFlueGas.flueGasByMass, settings);
             if (tmpFlueGas.flueGasByMass.oxygenCalculationMethod == 'Excess Air' && selectedGas) {
               results.calculatedExcessAir = tmpFlueGas.flueGasByMass.excessAirPercentage;
@@ -261,19 +263,19 @@ export class PhastResultsService {
     }
 
     if (phast.co2SavingsData) {
-      results.co2EmissionsOutput = this.co2SavingPhastService.setCo2EmissionsResults(phast, results, settings);  
-    } 
+      results.co2EmissionsOutput = this.co2SavingPhastService.setCo2EmissionsResults(phast, results, settings);
+    }
 
     // * IMPORTANT - grossHeatInput is in differing units/time depending on energy source type.
     // Electrotech (non -eaf) - kWh/hr
     // EAF - kWh/yr
     // fuel fired / steam - MMBtu/hr
-    
+
     return results;
   }
 
-  
-  getEnergyUseReportData(phast: PHAST, phastResults: PhastResults, settings: Settings): EnergyUseReportData {
+
+  async getEnergyUseReportData(phast: PHAST, phastResults: PhastResults, settings: Settings): Promise<EnergyUseReportData> {
     let energyUseReportData: EnergyUseReportData = {
       fuelName: undefined,
       fuelEnergyUsed: undefined,
@@ -303,19 +305,19 @@ export class PhastResultsService {
       }
     } else if (settings.energySourceType === 'Steam') {
       energyUseReportData.steamEnergyUsed = phastResults.grossHeatInput;
-    } else { 
+    } else {
       energyUseReportData.fuelEnergyUsed = phastResults.grossHeatInput;
     }
 
     if (phast.losses.flueGasLosses) {
       if (phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
-        let gas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+        let gas: SolidLiquidFlueGasMaterial = this.solidLiquidMaterialDbService.getById(phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
         if (gas) {
           energyUseReportData.fuelHeatingValue = gas.heatingValue;
           energyUseReportData.fuelName = gas.substance;
         }
       } else if (phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-        let gas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+        let gas: FlueGasMaterial = this.flueGasMaterialDbService.getById(phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
         if (gas) {
           energyUseReportData.fuelHeatingValue = gas.heatingValue;
           energyUseReportData.fuelName = gas.substance;
@@ -330,7 +332,7 @@ export class PhastResultsService {
     }
 
     return energyUseReportData;
-  }  
+  }
 
 
 
@@ -339,7 +341,7 @@ export class PhastResultsService {
     let naturalGasHeatingValue: number = 22030.7;
     if (settings.unitsOfMeasure === 'Metric') {
       naturalGasHeatingValue = this.convertUnitsService.value(naturalGasHeatingValue).from('Btu').to('kJ');
-    } 
+    }
     let eafResults: EAFResults = {
       naturalGasUsed: EAFInputs.naturalGasHeatInput,
       electricEnergyUsed: EAFInputs.electricityInput,
@@ -353,14 +355,14 @@ export class PhastResultsService {
       otherFuelUsed: EAFInputs.otherFuels,
       naturalGasHeatingValue: naturalGasHeatingValue
     };
-     if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure == 'Metric') {
       eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('kJ').to('GJ');
       eafResults.electrodeEnergyUsed = this.convertUnitsService.value(eafResults.electrodeEnergyUsed).from('kJ').to('GJ');
     } else {
       eafResults.coalCarbonUsed = this.convertUnitsService.value(eafResults.coalCarbonUsed).from('Btu').to('MMBtu');
       eafResults.electrodeEnergyUsed = this.convertUnitsService.value(eafResults.electrodeEnergyUsed).from('Btu').to('MMBtu');
     }
-    
+
     eafResults.totalFuelEnergyUsed = eafResults.naturalGasUsed + eafResults.coalCarbonUsed + eafResults.electrodeEnergyUsed + eafResults.otherFuelUsed;
     phastResults.hourlyEAFResults = eafResults;
 
@@ -427,7 +429,7 @@ export class PhastResultsService {
     return tmpResultCategories;
   }
 
-  calculatedByPhast(phast: PHAST, settings: Settings) {
+  calculatedByPhast(phast: PHAST, settings: Settings): CalculatedByPhast {
     let sumFeedRate = 0;
     let phastResults = this.initResults();
     if (phast.losses) {
