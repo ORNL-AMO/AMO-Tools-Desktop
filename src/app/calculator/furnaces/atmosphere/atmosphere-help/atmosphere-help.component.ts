@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { AtmosphereService } from '../atmosphere.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-atmosphere-help',
@@ -17,7 +18,7 @@ export class AtmosphereHelpComponent implements OnInit {
   currentField: string;
   displaySuggestions: boolean;
 
-
+  docsLink: string = environment.measurDocsUrl;
   constructor(private atmosphereService: AtmosphereService) { }
 
   ngOnInit(): void {

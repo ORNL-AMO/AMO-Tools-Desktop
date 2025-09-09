@@ -37,10 +37,8 @@ export class ProcessHeatingApiService {
     input.flowRate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.flowRate);
     input.correctionFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.correctionFactor);
     input.specificHeat = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.specificHeat);
-
-    let AtmosphereInstance = new this.toolsSuiteApiService.ToolsSuiteModule.Atmosphere(input.inletTemperature, input.outletTemperature, input.flowRate, input.correctionFactor, input.specificHeat);
-    let output = AtmosphereInstance.getTotalHeat();
-    AtmosphereInstance.delete();
+    //flow_rate specific_heat inlet_temperature outlet_temperature correction_factor
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.atmosphereTotalHeatLoss(input.flowRate, input.specificHeat, input.inletTemperature, input.outletTemperature, input.correctionFactor);
     return output;
   }
 

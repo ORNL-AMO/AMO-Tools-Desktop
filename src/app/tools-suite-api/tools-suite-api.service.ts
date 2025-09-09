@@ -51,7 +51,7 @@ export class ToolsSuiteApiService {
             console.log('==== Initializing default database items');
             // Initialize default data here
             let DefaultData = new this.ToolsSuiteModule.DefaultData();
-            await this.insertAtmosphereData(DefaultData);
+            await this.insertAtmosphereData();
             await this.insertFlueGasMaterials(DefaultData);
             await this.insertGasLoadMaterials(DefaultData);
             await this.insertLiquidLoadMaterials(DefaultData);
@@ -66,17 +66,16 @@ export class ToolsSuiteApiService {
         }
     }
 
-    private async insertAtmosphereData(DefaultData: any) {
-        let suiteDefaultMaterials = DefaultData.getAtmosphereSpecificHeat();
+    private async insertAtmosphereData() {
+        let suiteDefaultMaterials = this.ToolsSuiteModule.atmosphereGasTypes();
         let defaultMaterials: Array<AtmosphereSpecificHeat> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
             let wasmClass = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
-                substance: wasmClass.getSubstance(),
-                specificHeat: wasmClass.getSpecificHeat(),
+                substance: wasmClass.gasDescription,
+                specificHeat: wasmClass.specificHeat,
                 isDefault: true
             });
-            wasmClass.delete();
         }
         suiteDefaultMaterials.delete();
         await firstValueFrom(this.atmosphereDbService.insertDefaultMaterials(defaultMaterials));
@@ -192,13 +191,13 @@ export class ToolsSuiteApiService {
     }
 
     private async insertWallLossSurfaces() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.wallShapeFactors();
+        let suiteDefaultMaterials = this.ToolsSuiteModule.wallTypes();
         let defaultMaterials: Array<WallLossesSurface> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
             let shapeFactor = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
-                surface: shapeFactor.surfaceConfiguration,
-                conditionFactor: shapeFactor.value,
+                surface: shapeFactor.wallDescription,
+                conditionFactor: shapeFactor.shapeFactor,
                 isDefault: true
             });
         }
