@@ -34,26 +34,26 @@ export class ValveEnergyLossService {
   calculateEnergyLoss(baselineInputs: ValveEnergyLossInputs, modificationInputs: ValveEnergyLossInputs): ValveEnergyLossResults {
      
 
-    let results: ValveEnergyLossResults  = this.standaloneService.valveEnergyLossCalc(baselineInputs, modificationInputs);
+    //let results: ValveEnergyLossResults  = this.standaloneService.valveEnergyLossCalc(baselineInputs, modificationInputs);
 
-    // let baselineOutputs: ValveEnergyLossOutputs = {
-    //   headLoss: 14.54,
-    //   powerLossFrictional: 18.38,
-    //   powerLossElectrical: 16.97,
-    //   annualEnergyLoss: 148657,
-    //   annualEnergyCost: 7433.83,
-    // };
-    // let modificationOutputs: ValveEnergyLossOutputs = {
-    //   headLoss: 37.31,
-    //   powerLossFrictional: 38.04,
-    //   powerLossElectrical: 33.96,
-    //   annualEnergyLoss: 208540,
-    //   annualEnergyCost: 14597.79,
-    // };
-    // let results: ValveEnergyLossResults = {
-    //   baselineOutputs: baselineOutputs,
-    //   modificationOutputs: modificationOutputs,
-    // };
+    let baselineOutputs: ValveEnergyLossOutputs = {
+      headLoss: 14.54,
+      powerLossFrictional: 18.38,
+      powerLossElectrical: 16.97,
+      annualEnergyLoss: 148657,
+      annualEnergyCost: 7433.83,
+    };
+    let modificationOutputs: ValveEnergyLossOutputs = {
+      headLoss: 37.31,
+      powerLossFrictional: 38.04,
+      powerLossElectrical: 33.96,
+      annualEnergyLoss: 208540,
+      annualEnergyCost: 14597.79,
+    };
+    let results: ValveEnergyLossResults = {
+      baselineOutputs: baselineOutputs,
+      modificationOutputs: modificationOutputs,
+    };
     this.results.next(results);
     return results;
   }
