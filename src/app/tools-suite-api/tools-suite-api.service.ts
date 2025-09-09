@@ -191,13 +191,13 @@ export class ToolsSuiteApiService {
     }
 
     private async insertWallLossSurfaces() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.wallShapeFactors();
+        let suiteDefaultMaterials = this.ToolsSuiteModule.wallTypes();
         let defaultMaterials: Array<WallLossesSurface> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
             let shapeFactor = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
-                surface: shapeFactor.surfaceConfiguration,
-                conditionFactor: shapeFactor.value,
+                surface: shapeFactor.wallDescription,
+                conditionFactor: shapeFactor.shapeFactor,
                 isDefault: true
             });
         }
