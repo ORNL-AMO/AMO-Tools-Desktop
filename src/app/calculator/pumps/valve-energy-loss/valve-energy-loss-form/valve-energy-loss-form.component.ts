@@ -60,7 +60,7 @@ export class ValveEnergyLossFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
-    this.baselineDataSub.unsubscribe();
+    //this.baselineDataSub.unsubscribe();
   }
 
   initSubscriptions() {
