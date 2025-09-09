@@ -127,8 +127,8 @@ const DiagramResults = () => {
   const estimatedUnknownLossesFormatted = formatDecimalPlaces(estimatedUnknownLosses, settings.flowDecimalPrecision);
   const totalFacilityDischargeFormatted = formatDecimalPlaces(totalFacilityDischarge, settings.flowDecimalPrecision);
   dischargeRows.push(
-    { label: 'Total Known Loss', result: totalKnownLossesFormatted, unit: <FlowDisplayUnit /> },
-    { label: 'Estimated Unknown Loss', result: estimatedUnknownLossesFormatted, unit: <FlowDisplayUnit /> },
+    { label: 'Total Known Loss (water users)', result: totalKnownLossesFormatted, unit: <FlowDisplayUnit /> },
+    { label: 'Estimated Unknown Loss (water users)', result: estimatedUnknownLossesFormatted, unit: <FlowDisplayUnit /> },
     { label: 'Total Discharge', result: totalFacilityDischargeFormatted, unit: <FlowDisplayUnit /> },
   )
   

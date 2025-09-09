@@ -85,9 +85,9 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem, calculate
     + consumptiveIrrigationLoss;
 
   systemBalanceResults.totalKnownLosses = waterSystem.systemFlowTotals.knownLosses;
+  systemBalanceResults.estimatedUnknownLosses = estimatedUnknownLosses;
   systemBalanceResults.waterBalance = systemBalanceResults.incomingWater - systemBalanceResults.outgoingWater;
   systemBalanceResults.percentIncomingWater = getBalancePercent(systemBalanceResults.incomingWater, systemBalanceResults.waterBalance);
-  // console.log('SystemBalanceResults', waterSystem.name, systemBalanceResults);
   return systemBalanceResults;
 }
 
@@ -1060,11 +1060,12 @@ export const getPlantSummaryResults = (
       }
       systemAnnualSummaryResultsMap[currentSystem.id].directCostPerUnit = directCostPerKUnit;
 
-      flowperKUnit = totalFlows / 1000;
+      flowperKUnit = systemAnnualSummaryResultsMap[currentSystem.id].sourceWaterIntake * 1000;
       let trueCostPerUnit = 0;
       if (flowperKUnit) {
         trueCostPerUnit = systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerYear / flowperKUnit;
       }
+      
       systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerUnit = trueCostPerUnit;
 
       systemAnnualSummaryResultsMap[currentSystem.id].trueOverDirectResult = 0;
