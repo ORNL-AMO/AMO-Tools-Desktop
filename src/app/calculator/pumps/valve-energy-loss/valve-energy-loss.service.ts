@@ -31,7 +31,9 @@ export class ValveEnergyLossService {
     this.generateExample = new BehaviorSubject<boolean>(undefined);
   }
 
-  calculateEnergyLoss(baselineInputs: ValveEnergyLossInputs, modificationInputs: ValveEnergyLossInputs): ValveEnergyLossResults {
+  calculateEnergyLoss(): ValveEnergyLossResults {
+    let baselineInputs: ValveEnergyLossInputs = this.baselineData.getValue();
+    let modificationInputs: ValveEnergyLossInputs = this.modificationData.getValue();
     let results: ValveEnergyLossResults  = this.standaloneService.valveEnergyLossCalc(baselineInputs, modificationInputs);
     this.results.next(results);
     return results;
@@ -73,6 +75,7 @@ export class ValveEnergyLossService {
     };
     this.modificationData.next(modificationExampleInputs);
     this.baselineData.next(baselineExampleInputs);
+    this.generateExample.next(true);
   }
 
   generateExampleResults() {
