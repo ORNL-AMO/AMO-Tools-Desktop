@@ -5,6 +5,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
 import { StandaloneService } from '../../standalone.service';
+import { ValveEnergyLossFormService } from './valve-energy-loss-form/valve-energy-loss-form.service';
 
 @Injectable()
 export class ValveEnergyLossService {
@@ -18,7 +19,7 @@ export class ValveEnergyLossService {
   operatingHours: OperatingHours;
   modalOpen: BehaviorSubject<boolean>;
 
-  constructor(private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) {
+  constructor(private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService, private valveEnergyLossFormService: ValveEnergyLossFormService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
 
     this.baselineData = new BehaviorSubject<ValveEnergyLossInputs>(undefined);
@@ -34,7 +35,7 @@ export class ValveEnergyLossService {
   calculateEnergyLoss(): ValveEnergyLossResults {
     let baselineInputs: ValveEnergyLossInputs = this.baselineData.getValue();
     let modificationInputs: ValveEnergyLossInputs = this.modificationData.getValue();
-    let results: ValveEnergyLossResults  = this.standaloneService.valveEnergyLossCalc(baselineInputs, modificationInputs);
+    let results: ValveEnergyLossResults = this.standaloneService.valveEnergyLossCalc(baselineInputs, modificationInputs);
     this.results.next(results);
     return results;
   }

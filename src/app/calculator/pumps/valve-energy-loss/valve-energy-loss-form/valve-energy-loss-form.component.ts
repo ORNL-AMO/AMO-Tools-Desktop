@@ -29,7 +29,6 @@ export class ValveEnergyLossFormComponent implements OnInit {
 
   resetDataSub: Subscription;
   generateExampleSub: Subscription;
-  baselineDataSub: Subscription;
 
   formWidth: number;
   index: number = 0;
@@ -60,7 +59,6 @@ export class ValveEnergyLossFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
-    //this.baselineDataSub.unsubscribe();
   }
 
   initSubscriptions() {
@@ -70,12 +68,6 @@ export class ValveEnergyLossFormComponent implements OnInit {
     this.generateExampleSub = this.valveEnergyLossService.generateExample.subscribe(value => {
       this.initForm();
     });
-    // this.baselineDataSub = this.valveEnergyLossService.baselineData.subscribe(baselineData => {
-    //   if (baselineData) {
-    //     this.initForm(baselineData);
-    //     //this.valveEnergyLossService.calculate(this.settings, false, true);
-    //   }
-    // });
   }
 
   setFormState() {
@@ -112,10 +104,11 @@ export class ValveEnergyLossFormComponent implements OnInit {
   }
 
   calculate() {
+    this.form = this.valveEnergyLossFormService.setValidators(this.form);
     let currentEnergyData: ValveEnergyLossInputs = this.valveEnergyLossFormService.getObjFromForm(this.form);
-    if (this.isBaseline) {
+    if (this.isBaseline && this.form.valid) {
       this.valveEnergyLossService.baselineData.next(currentEnergyData);
-    } else {
+    } else if (!this.isBaseline && this.form.valid) {
       this.valveEnergyLossService.modificationData.next(currentEnergyData);
     }
   }

@@ -40,7 +40,7 @@ export class ValveEnergyLossFormService {
       'upstreamDiameter': [inputs.upstreamDiameter],
       'upstreamHeight': [inputs.upstreamHeight, Validators.required],
       'valveDiameter': [inputs.valveDiameter],
-      'downstreamPressure': [inputs.downstreamPressure, [Validators.required, Validators.min(0), Validators.max(inputs.upstreamDiameter)]],
+      'downstreamPressure': [inputs.downstreamPressure, [Validators.required, Validators.min(0), Validators.max(inputs.upstreamPressure)]],
       'downstreamDiameter': [inputs.downstreamDiameter],
       'downstreamHeight': [inputs.downstreamHeight, Validators.required],
       'pipeSizeFactor': [inputs.pipeSizeFactor],
@@ -66,6 +66,12 @@ export class ValveEnergyLossFormService {
       pipeSizeFactor: form.controls.pipeSizeFactor.value,
     };
     return inputs;
+  }
+
+  setValidators(formGroup: UntypedFormGroup): UntypedFormGroup {
+    formGroup.controls.downstreamPressure.setValidators([Validators.required, Validators.min(0), Validators.max(formGroup.controls.upstreamPressure.value)]);
+    formGroup.controls.downstreamPressure.updateValueAndValidity();
+    return formGroup;
   }
 
 
