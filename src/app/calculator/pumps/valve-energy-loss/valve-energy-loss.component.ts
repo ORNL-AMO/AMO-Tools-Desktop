@@ -110,7 +110,9 @@ export class ValveEnergyLossComponent implements OnInit {
   calculate(){
     let baselineData: ValveEnergyLossInputs = this.valveEnergyLossService.baselineData.getValue();
     let modificationData: ValveEnergyLossInputs = this.valveEnergyLossService.modificationData.getValue();
-    this.valveEnergyLossService.calculateEnergyLoss(baselineData, modificationData);
+    if (this.modificationExists && modificationData) {      
+      this.valveEnergyLossService.calculateEnergyLoss(baselineData, modificationData);
+    }
   }
 
   ngAfterViewInit() {
