@@ -1,1 +1,206 @@
-<p>valve-energy-loss-help works!</p>
+<div class="p-2 pt-3 d-flex flex-column help-info">
+    <h5>
+        Valve Energy Loss Help
+    </h5>
+    <br>
+    <small class="text-muted">
+        Commonly, pumping systems are designed with an oversized pump which then has its flow restricted via valve
+        to achieve the necessary flow rate. These valves are necessarily bleeding off fluid power to reduce the flow
+        rate. As variable speed drives (VSD) are capable of adjusting the input energy of a pump and thusly
+        adjusting the flow rate, there is potential to open a throttled valve and adjust fluid flow with VSD
+        instead, thereby saving the energy that would’ve been lost through the valve.
+
+        This calculator is intended to provide an estimate of electrical power loss incurred by throttled valves.
+    </small>
+
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2" *ngIf="currentField == 'hoursOperation'">
+        <h6>
+            Annual Operating Hours
+            <small class="text-muted">
+                <br>
+                Number of hours per year the lighting is on. This is not necessarily how many hours the facility
+                is
+                operating.
+                Be sure to include normally scheduled overtime.
+                <hr>
+            </small>
+        </h6>
+        <div class="w-100 justify-content-center">
+            <table class="table table-hover table-striped">
+                <tbody>
+                    <tr>
+                        <th class="text-center">Minimum</th>
+                        <th class="text-center">Maximum</th>
+                    </tr>
+                    <tr>
+                        <td class="text-center">0 hrs/yr</td>
+                        <td class="text-center">8760 hrs/yr</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'electricalRate'">
+        <h6>
+            Electrical Cost
+            <small class="text-muted">
+                <br>
+                The cost of electricity per kilowatt-hour (kWh) used by the facility.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'efficiencyPump'">
+        <h6>
+            Pump Efficiency
+            <small class="text-muted">
+                <br>
+                The hydraulic efficiency of the pump, or how effectively it pumps fluid. 85% is typical. Value should
+                range from 1 – 100%.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'efficiencyMotor'">
+        <h6>
+            Motor Efficiency
+            <small class="text-muted">
+                <br>
+                The electrical efficiency of the motor driving the pump. If the motor hasn’t been through rewind, this
+                is the efficiency listed on the nameplate. 95% can be used as a default if unknown. Value should range
+                from 1 – 100%.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'SG'">
+        <h6>
+            Specific Gravity
+            <small class="text-muted">
+                <br>
+                Density of the working fluid relative to water, with water itself as 1. A fluid which is twice as dense
+                as water has a specific gravity of 2. Value cannot be equal to or less than 0.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'flowRate'">
+        <h6>
+            Flow Rate
+            <small class="text-muted">
+                <br>
+                Volume of fluid flow through the valve. Best taken from immediately upstream of the valve assuming there
+                are no branches downstream of measurement location. Value cannot be equal to or less than 0
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'upstreamPressure'">
+        <h6>
+            Upstream Pressure
+            <small class="text-muted">
+                <br>
+                Gauge pressure *before* the valve.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'upstreamDiameter'">
+        <h6>
+            Upstream Diameter
+            <small class="text-muted">
+                <br>
+                Inner diameter of the pipe that feeds into the valve. If a reducer is present, use the size prior to
+                the reducer.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'upstreamHeight'">
+        <h6>
+            Upstream Gage Elevation
+            <small class="text-muted">
+                <br>
+                Height difference of the pressure gauge from the valve. Can be negative, zero, or positive as the
+                position is relative to the valve.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'valveDiameter'">
+        <h6>
+            Valve Diameter
+            <small class="text-muted">
+                <br>
+                Inner diameter of the valve itself. If a reducer is present, use the size prior to the reducer.
+                the reducer.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'downstreamPressure'">
+        <h6>
+            Downstream Pressure
+            <small class="text-muted">
+                <br>
+                Gauge pressure *after* the valve
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'downstreamDiameter'">
+        <h6>
+            Downstream Pipe Inner Diameter
+            <small class="text-muted">
+                <br>
+                Inner diameter of the pipe that exits the valve. If an expander is present, use the size after the
+                expander.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'downstreamHeight'">
+        <h6>
+            Downstream Height
+            <small class="text-muted">
+                <br>
+                Height difference of the pressure gauge from the valve. Can be negative, zero, or positive as the
+                position is relative to the valve.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'pipeSizeFactor'">
+        <h6>
+            Pipe Sizing Geometry Factor
+            <small class="text-muted">
+                <br>
+                This is a unitless term that influences the expressed flow resistance of the fittings and pipe geometry
+                around the valve. For piping of the same diameter as the valve both in and out, Pipe Sizing Factor is 1.
+                Typically, this value ranges only from 0.9 to 1.1, though extreme reductions or expansions can exceed
+                this range. Derive experimentally if possible, else use 1.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+
+
+
+
+</div>
