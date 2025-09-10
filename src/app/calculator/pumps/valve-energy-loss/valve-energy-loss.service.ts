@@ -32,10 +32,13 @@ export class ValveEnergyLossService {
     this.generateExample = new BehaviorSubject<boolean>(undefined);
   }
 
-  calculateEnergyLoss(): ValveEnergyLossResults {
+  calculateEnergyLoss(settings: Settings): ValveEnergyLossResults {
     let baselineInputs: ValveEnergyLossInputs = this.baselineData.getValue();
     let modificationInputs: ValveEnergyLossInputs = this.modificationData.getValue();
+    baselineInputs = this.convertInputs(baselineInputs, settings);
+    modificationInputs = this.convertInputs(modificationInputs, settings);
     let results: ValveEnergyLossResults = this.standaloneService.valveEnergyLossCalc(baselineInputs, modificationInputs);
+    this.convertResults(results, settings);
     this.results.next(results);
     return results;
   }
@@ -160,4 +163,36 @@ export class ValveEnergyLossService {
     let currentBaseline: ValveEnergyLossInputs = this.baselineData.getValue();
     this.modificationData.next(currentBaseline);
   }
+
+  convertInputs(inputs: ValveEnergyLossInputs, settings: Settings): ValveEnergyLossInputs {
+    let convertedInputs: ValveEnergyLossInputs = { ...inputs };
+    if (settings.unitsOfMeasure === 'Metric') {
+      convertedInputs.flowRate = this.convertUnitsService.value(inputs.flowRate).from('L/min').to('gpm');
+
+      convertedInputs.upstreamPressure = this.convertUnitsService.value(inputs.upstreamPressure).from('bar').to('psi');
+      convertedInputs.downstreamPressure = this.convertUnitsService.value(inputs.downstreamPressure).from('bar').to('psi');
+
+      convertedInputs.upstreamDiameter = this.convertUnitsService.value(inputs.upstreamDiameter).from('cm').to('in');
+      convertedInputs.downstreamDiameter = this.convertUnitsService.value(inputs.downstreamDiameter).from('cm').to('in');
+
+      convertedInputs.upstreamHeight = this.convertUnitsService.value(inputs.upstreamHeight).from('m').to('ft');
+      convertedInputs.downstreamHeight = this.convertUnitsService.value(inputs.downstreamHeight).from('m').to('ft');
+      
+      convertedInputs.valveDiameter = this.convertUnitsService.value(inputs.valveDiameter).from('cm').to('in');
+    }
+    return convertedInputs;
+  }
+
+  convertResults(results: ValveEnergyLossResults, settings: Settings): ValveEnergyLossResults {
+    let convertedResults: ValveEnergyLossResults = { ...results };
+    if (settings.unitsOfMeasure === 'Metric') {
+      convertedResults.baselineOutputs.headLoss = this.convertUnitsService.value(results.baselineOutputs.headLoss).from('ft').to('m');
+      convertedResults.modificationOutputs.headLoss = this.convertUnitsService.value(results.modificationOutputs.headLoss).from('ft').to('m');
+
+      convertedResults.baselineOutputs.powerLossFrictional = this.convertUnitsService.value(results.baselineOutputs.powerLossFrictional).from('hp').to('kW');
+      convertedResults.modificationOutputs.powerLossFrictional = this.convertUnitsService.value(results.modificationOutputs.powerLossFrictional).from('hp').to('kW');
+    }
+    return convertedResults;
+  }
+
 }

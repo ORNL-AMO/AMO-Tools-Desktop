@@ -103,7 +103,7 @@
                 id="{{'flowRate_'+idString}}" onfocus="this.select();" (input)="calculate()"
                 (focus)="focusField('flowRate')">
             <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">gpm</span>
-            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">L/m</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">L/min</span>
         </div>
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.flowRate.invalid && !form.controls.flowRate.pristine">

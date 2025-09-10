@@ -111,7 +111,7 @@ export class ValveEnergyLossComponent implements OnInit {
     let baselineData: ValveEnergyLossInputs = this.valveEnergyLossService.baselineData.getValue();
     let modificationData: ValveEnergyLossInputs = this.valveEnergyLossService.modificationData.getValue();
     if (this.modificationExists && modificationData && baselineData) {      
-      this.valveEnergyLossService.calculateEnergyLoss();
+      this.valveEnergyLossService.calculateEnergyLoss(this.settings);
     }
   }
 
@@ -125,7 +125,7 @@ export class ValveEnergyLossComponent implements OnInit {
     this.valveEnergyLossService.initModification();
     this.modificationExists = true;
     this.setModificationSelected();
-    this.valveEnergyLossService.calculateEnergyLoss();
+    this.valveEnergyLossService.calculateEnergyLoss(this.settings);
   }
 
   btnResetData() {
@@ -142,7 +142,7 @@ export class ValveEnergyLossComponent implements OnInit {
     this.valveEnergyLossService.generateExampleResults();
     this.modificationExists = true;
     this.baselineSelected = true;
-    this.valveEnergyLossService.calculateEnergyLoss();
+    this.valveEnergyLossService.calculateEnergyLoss(this.settings);
   }
 
 
