@@ -58,7 +58,7 @@ export class ValveEnergyLossService {
       valveDiameter: 8,
       downstreamPressure: 45,
       downstreamDiameter: 6,
-      downstreamHeight: 4,
+      downstreamHeight: 2,
       pipeSizeFactor: 1.5,
     };
     let modificationExampleInputs: ValveEnergyLossInputs = {
@@ -133,7 +133,7 @@ export class ValveEnergyLossService {
       valveDiameter: 8,
       downstreamPressure: 45,
       downstreamDiameter: 6,
-      downstreamHeight: 4,
+      downstreamHeight: 2,
       pipeSizeFactor: 1.5,
     };
     this.baselineData.next(emptyInputs);
