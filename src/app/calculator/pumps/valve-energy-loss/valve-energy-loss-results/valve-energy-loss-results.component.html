@@ -26,7 +26,7 @@
         <tr>
             <td class="bold w-50">Electrical Loss</td>
             <td *ngIf="output.baselineOutputs.powerLossElectrical" class="text-center w-50">
-                {{output.baselineOutputs.powerLossElectrical | number:'1.0-4'}}
+                {{output.baselineOutputs.powerLossElectrical | number:'1.0-2'}}
                 <span class="input-group-addon">kW</span>
             </td>
             <td *ngIf="!output.baselineOutputs.powerLossElectrical" class="text-center w-50">
@@ -87,7 +87,7 @@
         <tr>
             <td class="bold w-50">Electrical Loss</td>
             <td *ngIf="output.modificationOutputs.powerLossElectrical" class="text-center w-50">
-                {{output.modificationOutputs.powerLossElectrical | number:'1.0-4'}}
+                {{output.modificationOutputs.powerLossElectrical | number:'1.0-2'}}
                 <span class="input-group-addon">kW</span>
             </td>
             <td *ngIf="!output.modificationOutputs.powerLossElectrical" class="text-center w-50">
