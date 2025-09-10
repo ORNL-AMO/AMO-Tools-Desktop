@@ -86,6 +86,8 @@ export class WaterAssessmentResultsService {
 
     let waterTreatmentNodes: Node<ProcessFlowPart>[] = diagram.waterDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-treatment') as Node<ProcessFlowPart>[];
     let wasteTreatmentNodes: Node<ProcessFlowPart>[] = diagram.waterDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment') as Node<ProcessFlowPart>[];
+    
+    // todo why not use assessment calculatedData here?
     let plantResults = getPlantSummaryResults(
       diagram.waterDiagram.flowDiagramData.nodes,
       diagram.waterDiagram.flowDiagramData.calculatedData,
@@ -122,14 +124,12 @@ export class WaterAssessmentResultsService {
         });
 
       // direct costs
-      const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow', diagram.waterDiagram.flowDiagramData.calculatedData);
+      const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow', diagram.waterDiagram.flowDiagramData.calculatedData, settings.unitsOfMeasure);
       const totalSourceWaterIntake = getComponentTypeTotalFlow(intakes, 'totalDischargeFlow', diagram.waterDiagram.flowDiagramData.calculatedData);
-
       // indirect costs
-      const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow', diagram.waterDiagram.flowDiagramData.calculatedData);
-      const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow', diagram.waterDiagram.flowDiagramData.calculatedData);
-      const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow', diagram.waterDiagram.flowDiagramData.calculatedData);
-
+      const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow', diagram.waterDiagram.flowDiagramData.calculatedData, settings.unitsOfMeasure);
+      const treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow', diagram.waterDiagram.flowDiagramData.calculatedData, settings.unitsOfMeasure);
+      const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow', diagram.waterDiagram.flowDiagramData.calculatedData, settings.unitsOfMeasure);
       const systemMotorEnergyData: MotorEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.addedMotorEnergy || []).flat();
       const intakeMotorEnergy = intakes
         .map((intake: Node<ProcessFlowPart>) => {

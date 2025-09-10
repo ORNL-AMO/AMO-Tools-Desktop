@@ -64,11 +64,6 @@ export class ExecutiveSummaryComponent {
     }
   }
 
-  getFlowDecimalPrecisionPipeValue(): string {
-    let pipeVal = `1.0-${this.settings.flowDecimalPrecision}`;
-    return pipeVal;
-  }
-
   updateCopyTable1String() {
     this.copyTable1String = this.copyTable1.nativeElement.innerText;
   }

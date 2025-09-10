@@ -33,25 +33,24 @@ const DiagramResults = () => {
 
   const costTitle = "Annual Costs";
   // direct costs
-  const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow', calculatedData);
-  const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow', calculatedData);
+  const intakeCost = getComponentTypeTotalCost(intakes, 'totalDischargeFlow', calculatedData, settings.unitsOfMeasure);
+  const dischargeCost = getComponentTypeTotalCost(discharges, 'totalSourceFlow', calculatedData, settings.unitsOfMeasure);
   // indirect costs
-  let treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow', calculatedData);
+  let treatmentCost = getComponentTypeTotalCost(waterTreatmentNodes, 'totalSourceFlow', calculatedData, settings.unitsOfMeasure);
   const inSystemTreatmentCosts = nodes.reduce((total: number, node: Node<ProcessFlowPart>) => {
     if (node.data.processComponentType === 'water-using-system') {
       let inSystemTreatmentCost = 0;
       const system = node.data as WaterUsingSystem;
       if (system.inSystemTreatment && system.inSystemTreatment.length > 0) {
         const totalSystemInflow = getTotalInflow(node, calculatedData);
-        inSystemTreatmentCost = getInSystemTreatmentCost(system.inSystemTreatment, totalSystemInflow);
+        inSystemTreatmentCost = getInSystemTreatmentCost(system.inSystemTreatment, totalSystemInflow, settings.unitsOfMeasure);
         return total + inSystemTreatmentCost;
       } 
     }
     return total;
   }, 0);
   treatmentCost += inSystemTreatmentCosts;
-  
-  const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow', calculatedData);
+  const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow', calculatedData, settings.unitsOfMeasure);
   const systemMotorEnergyData: MotorEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.addedMotorEnergy || []).flat();
 
   const intakeMotorEnergy = intakes

@@ -76,6 +76,7 @@ export class ConvertWaterAssessmentService {
       }
       intakeSource.annualUse = this.convertUnitsService.roundVal(intakeSource.annualUse, newSettings.flowDecimalPrecision);
       intakeSource.userEnteredData = this.convertUserEnteredFlowData(intakeSource.userEnteredData, oldSettings, newSettings);
+      intakeSource.cost = this.convertUnitCost(intakeSource.cost, oldSettings, newSettings);
     });
     return intakeSources;
   }
@@ -106,6 +107,8 @@ export class ConvertWaterAssessmentService {
       }
       dischargeOutlet.annualUse = this.convertUnitsService.roundVal(dischargeOutlet.annualUse, newSettings.flowDecimalPrecision);
       dischargeOutlet.userEnteredData = this.convertUserEnteredFlowData(dischargeOutlet.userEnteredData, oldSettings, newSettings);
+      dischargeOutlet.cost = this.convertUnitCost(dischargeOutlet.cost, oldSettings, newSettings);
+
     });
     return dischargeOutlet;
   }
@@ -149,6 +152,7 @@ export class ConvertWaterAssessmentService {
       }
       waterTreatment.flowValue = this.convertUnitsService.roundVal(waterTreatment.flowValue, newSettings.flowDecimalPrecision);
       waterTreatment.userEnteredData = this.convertUserEnteredFlowData(waterTreatment.userEnteredData, oldSettings, newSettings);
+      waterTreatment.cost = this.convertUnitCost(waterTreatment.cost, oldSettings, newSettings);
 
     });
     return waterTreatments;
@@ -163,6 +167,7 @@ export class ConvertWaterAssessmentService {
       }
       wasteWaterTreatment.flowValue = this.convertUnitsService.roundVal(wasteWaterTreatment.flowValue, newSettings.flowDecimalPrecision);
       wasteWaterTreatment.userEnteredData = this.convertUserEnteredFlowData(wasteWaterTreatment.userEnteredData, oldSettings, newSettings);
+      wasteWaterTreatment.cost = this.convertUnitCost(wasteWaterTreatment.cost, oldSettings, newSettings);
 
     });
     return wasteWaterTreatment;
@@ -177,7 +182,7 @@ export class ConvertWaterAssessmentService {
       }
       knownLoss.flowValue = this.convertUnitsService.roundVal(knownLoss.flowValue, newSettings.flowDecimalPrecision);
       knownLoss.userEnteredData = this.convertUserEnteredFlowData(knownLoss.userEnteredData, oldSettings, newSettings);
-
+      knownLoss.cost = this.convertUnitCost(knownLoss.cost, oldSettings, newSettings);
     });
     return knownLoss;
   }
@@ -366,6 +371,17 @@ export class ConvertWaterAssessmentService {
         val = this.convertUnitsService.value(val).from('Mgal').to('m3');
       } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
         val = this.convertUnitsService.value(val).from('m3').to('Mgal');
+      }
+    }
+    return val;
+  }
+
+   convertUnitCost(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (val) {
+      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        val = val / 3785.41;
+      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        val = val * 3785.41;
       }
     }
     return val;
