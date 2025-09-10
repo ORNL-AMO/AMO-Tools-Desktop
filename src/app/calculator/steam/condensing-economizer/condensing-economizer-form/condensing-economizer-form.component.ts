@@ -1,22 +1,23 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { PhastService } from '../../../../phast/phast.service';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { CondensingEconomizerInput } from '../../../../shared/models/steam/condensingEconomizer';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { CondensingEconomizerFormService, CondensingEconomizerWarnings } from '../condensing-economizer-form.service';
 import { CondensingEconomizerService } from '../condensing-economizer.service';
+import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
-    selector: 'app-condensing-economizer-form',
-    templateUrl: './condensing-economizer-form.component.html',
-    styleUrls: ['./condensing-economizer-form.component.css'],
-    standalone: false
+  selector: 'app-condensing-economizer-form',
+  templateUrl: './condensing-economizer-form.component.html',
+  styleUrls: ['./condensing-economizer-form.component.css'],
+  standalone: false
 })
 export class CondensingEconomizerFormComponent implements OnInit {
   @Input()
@@ -48,10 +49,10 @@ export class CondensingEconomizerFormComponent implements OnInit {
   calcMethodExcessAir: boolean;
 
   fuelOptions: Array<FlueGasMaterial>;
-
-  constructor(private condensingEconomizerService: CondensingEconomizerService, 
+  fuelOptionsSub: Subscription;
+  constructor(private condensingEconomizerService: CondensingEconomizerService,
     private phastService: PhastService,
-    private sqlDbApiService: SqlDbApiService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService,
     private condensingEconomizerFormService: CondensingEconomizerFormService) { }
 
   ngOnInit() {
@@ -60,6 +61,9 @@ export class CondensingEconomizerFormComponent implements OnInit {
   }
 
   initSubscriptions() {
+    this.fuelOptionsSub = this.flueGasMaterialDbService.dbFlueGasMaterials.subscribe(val => {
+      this.fuelOptions = val;
+    });
     this.resetDataSub = this.condensingEconomizerService.resetData.subscribe(value => {
       this.initForm();
     });
@@ -77,13 +81,13 @@ export class CondensingEconomizerFormComponent implements OnInit {
   ngOnDestroy() {
     this.resetDataSub.unsubscribe();
     this.generateExampleSub.unsubscribe();
+    this.fuelOptionsSub.unsubscribe();
   }
 
-  initForm() {
+  async initForm() {
     let condensingEconomizerInput: CondensingEconomizerInput = this.condensingEconomizerService.condensingEconomizerInput.getValue();
     this.form = this.condensingEconomizerFormService.getCondensingEconomizerForm(condensingEconomizerInput, this.settings);
     this.form.controls.oxygenCalculationMethod.disable();
-    this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
     this.setMaterialProperties();
     this.setCalcMethod();
     this.calcExcessAir();
@@ -94,7 +98,7 @@ export class CondensingEconomizerFormComponent implements OnInit {
 
     if (!this.calcMethodExcessAir) {
       if (this.form.controls.flueGasO2.status === 'VALID') {
-          this.calculationExcessAir = this.phastService.flueGasCalculateExcessAir(input);
+        this.calculationExcessAir = this.phastService.flueGasCalculateExcessAir(input);
         this.form.patchValue({
           excessAir: this.calculationExcessAir,
         });
@@ -131,22 +135,24 @@ export class CondensingEconomizerFormComponent implements OnInit {
   }
 
   setMaterialProperties() {
-    let material = this.sqlDbApiService.selectGasFlueGasMaterialById(this.form.controls.materialTypeId.value);
-    this.form.patchValue({
-      CH4: this.condensingEconomizerService.roundVal(material.CH4, 4),
-      C2H6: this.condensingEconomizerService.roundVal(material.C2H6, 4),
-      N2: this.condensingEconomizerService.roundVal(material.N2, 4),
-      H2: this.condensingEconomizerService.roundVal(material.H2, 4),
-      C3H8: this.condensingEconomizerService.roundVal(material.C3H8, 4),
-      C4H10_CnH2n: this.condensingEconomizerService.roundVal(material.C4H10_CnH2n, 4),
-      H2O: this.condensingEconomizerService.roundVal(material.H2O, 4),
-      CO: this.condensingEconomizerService.roundVal(material.CO, 4),
-      CO2: this.condensingEconomizerService.roundVal(material.CO2, 4),
-      SO2: this.condensingEconomizerService.roundVal(material.SO2, 4),
-      O2: this.condensingEconomizerService.roundVal(material.O2, 4),
-      substance: material.substance
-    });
-    this.calculate();
+    let material: FlueGasMaterial = this.fuelOptions.find(option => { return option.id === this.form.controls.materialTypeId.value });
+    if (material) {
+      this.form.patchValue({
+        CH4: roundVal(material.CH4, 4),
+        C2H6: roundVal(material.C2H6, 4),
+        N2: roundVal(material.N2, 4),
+        H2: roundVal(material.H2, 4),
+        C3H8: roundVal(material.C3H8, 4),
+        C4H10_CnH2n: roundVal(material.C4H10_CnH2n, 4),
+        H2O: roundVal(material.H2O, 4),
+        CO: roundVal(material.CO, 4),
+        CO2: roundVal(material.CO2, 4),
+        SO2: roundVal(material.SO2, 4),
+        O2: roundVal(material.O2, 4),
+        substance: material.substance
+      });
+      this.calculate();
+    }
   }
 
   focusField(str: string) {
@@ -194,11 +200,10 @@ export class CondensingEconomizerFormComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.fuelOptions = this.sqlDbApiService.selectGasFlueGasMaterials();
-      let newMaterial = this.fuelOptions.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      let newMaterial = this.fuelOptions.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.form.patchValue({
-          gasTypeId: newMaterial[0].id
+          gasTypeId: newMaterial.id
         });
         this.setMaterialProperties();
       }

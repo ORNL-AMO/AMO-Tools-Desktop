@@ -6,6 +6,7 @@ import { Settings } from '../../../shared/models/settings';
 import { CondensingEconomizerInput, CondensingEconomizerOutput, CondensingEconomizerSuiteInput } from '../../../shared/models/steam/condensingEconomizer';
 import { ProcessHeatingApiService } from '../../../tools-suite-api/process-heating-api.service';
 import { CondensingEconomizerFormService } from './condensing-economizer-form.service';
+import { roundVal } from '../../../shared/helperFunctions';
 
 @Injectable()
 export class CondensingEconomizerService {
@@ -36,7 +37,7 @@ export class CondensingEconomizerService {
 
     if (settings.unitsOfMeasure != 'Imperial') {
       fuelTemp = this.convertUnitsService.value(fuelTemp).from('F').to('C');
-      fuelTemp = this.roundVal(fuelTemp, 2);
+      fuelTemp = roundVal(fuelTemp, 2);
     }
 
     let emptyInput: CondensingEconomizerInput = {
@@ -224,23 +225,17 @@ export class CondensingEconomizerService {
 
     if (settings.unitsOfMeasure == "Metric") {
       output.flowFlueGas = this.convertUnitsService.value(output.flowFlueGas).from('lb').to('kg');
-      output.flowFlueGas = this.roundVal(output.flowFlueGas, 2);
+      output.flowFlueGas = roundVal(output.flowFlueGas, 2);
 
       output.effThermal = this.convertUnitsService.value(output.effThermal).from('MMBtu').to('MJ');
-      output.effThermal = this.roundVal(output.effThermal, 2);
+      output.effThermal = roundVal(output.effThermal, 2);
 
       output.effThermalLH = this.convertUnitsService.value(output.effThermalLH).from('MMBtu').to('MJ');
-      output.effThermalLH = this.roundVal(output.effThermalLH, 2);
+      output.effThermalLH = roundVal(output.effThermalLH, 2);
 
       output.heatRecovery = this.convertUnitsService.value(output.heatRecovery).from('MMBtu').to('MJ');
-      output.heatRecovery = this.roundVal(output.heatRecovery, 2);
+      output.heatRecovery = roundVal(output.heatRecovery, 2);
     }
     return output;
   }
-
-  roundVal(val: number, digits: number): number {
-    let rounded = Number(val.toFixed(digits));
-    return rounded;
-  }
-
 }

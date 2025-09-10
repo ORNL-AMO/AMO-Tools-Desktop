@@ -7,7 +7,7 @@ import { MockFsat, MockFsatSettings, MockFsatCalculator } from '../examples/mock
 import { MockSsmt, MockSsmtSettings } from '../examples/mockSsmt';
 import { MockTreasureHunt, MockTreasureHuntSettings } from '../examples/mockTreasureHunt';
 import { MockMotorInventory } from '../examples/mockMotorInventoryData';
-import { BehaviorSubject, firstValueFrom, forkJoin, Observable, ObservableInput } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, forkJoin } from 'rxjs';
 import { MockWasteWater, MockWasteWaterSettings } from '../examples/mockWasteWater';
 import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../examples/mockCompressedAirAssessment';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
@@ -16,7 +16,6 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { Assessment } from '../shared/models/assessment';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
-import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService } from '../electron/electron.service';
 import { MockPumpInventory } from '../examples/mockPumpInventoryData';
 import { MockWaterAssessment, MockWaterAssessmentSettings } from '../examples/mockWaterAssessment';
@@ -44,6 +43,7 @@ export class CoreService {
   exampleWaterDiagramId: number;
 
   showShareDataModal: BehaviorSubject<boolean>;
+  initializedToolsSuiteModule: BehaviorSubject<boolean>;
   constructor(
     private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,
@@ -53,7 +53,8 @@ export class CoreService {
     private diagramIdbService: DiagramIdbService,
     private applicationDataService: ApplicationInstanceDbService,
     private directoryDbService: DirectoryDbService) {
-      this.showShareDataModal = new BehaviorSubject<boolean>(false);
+    this.showShareDataModal = new BehaviorSubject<boolean>(false);
+    this.initializedToolsSuiteModule = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultSettingsObject(): Settings {
@@ -63,7 +64,7 @@ export class CoreService {
     return defaultSettings;
   }
 
-  relaunchApp(){
+  relaunchApp() {
     this.electronService.sendAppRelaunch();
   }
 
@@ -111,22 +112,22 @@ export class CoreService {
   }
 
   async createDefaultDirectories() {
-      let allAssessmentsDir: Directory = {
-        name: 'All Assessments',
-        createdDate: new Date(),
-        modifiedDate: new Date(),
-        parentDirectoryId: null,
-      };
-      let allDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(allAssessmentsDir));
-      let exampleAssessmentsDir: Directory = {
-        name: 'Examples',
-        createdDate: new Date(),
-        modifiedDate: new Date(),
-        parentDirectoryId: allDirectory.id,
-        isExample: true
-      };
-      let exampleDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(exampleAssessmentsDir));
-      this.exampleDirectoryId = exampleDirectory.id;
+    let allAssessmentsDir: Directory = {
+      name: 'All Assessments',
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+      parentDirectoryId: null,
+    };
+    let allDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(allAssessmentsDir));
+    let exampleAssessmentsDir: Directory = {
+      name: 'Examples',
+      createdDate: new Date(),
+      modifiedDate: new Date(),
+      parentDirectoryId: allDirectory.id,
+      isExample: true
+    };
+    let exampleDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(exampleAssessmentsDir));
+    this.exampleDirectoryId = exampleDirectory.id;
   }
 
   async createExamples() {
@@ -192,7 +193,7 @@ export class CoreService {
     MockPhastSettings.facilityInfo.date = new Date().toDateString();
     MockPhastSettings.directoryId = this.exampleDirectoryId;
     await firstValueFrom(this.settingsDbService.addWithObservable(MockPhastSettings));
-    
+
     // Add settings for PHAST
     delete MockPhastSettings.directoryId;
     MockPhastSettings.assessmentId = this.examplePhastId;
@@ -230,5 +231,7 @@ export class CoreService {
     // await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));
     MockWaterAssessmentSettings.assessmentId = this.exampleWaterAssessmentId;
     await firstValueFrom(this.settingsDbService.addWithObservable(MockWaterAssessmentSettings));
+
+    await this.settingsDbService.setAll();
   }
 }

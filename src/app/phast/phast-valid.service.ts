@@ -52,7 +52,7 @@ export class PhastValidService {
 
 
 
-  checkValid(phast: PHAST, settings: Settings): PhastValid {
+ checkValid(phast: PHAST, settings: Settings): PhastValid {
     let isChargeMaterialValid: boolean = this.checkChargeMaterialValid(phast);
     let isFlueGasValid: boolean = this.checkFlueGasValid(phast);
     let isFixtureValid: boolean = this.checkFixtureValid(phast);

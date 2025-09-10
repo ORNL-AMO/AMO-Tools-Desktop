@@ -6,6 +6,7 @@ import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeE
 import { UpdateDiagramFromAssessmentService } from '../water-process-diagram/update-diagram-from-assessment.service';
 import { Assessment } from '../shared/models/assessment';
 import { Edge, Node } from '@xyflow/react';
+import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class WaterAssessmentResultsService {
 
   constructor(private waterSuiteApiService: WaterSuiteApiService,
     private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService,
+    private toolsSuiteApiService: ToolsSuiteApiService,
     private convertWaterAssessmentService: ConvertWaterAssessmentService) {
   }
 
@@ -28,6 +30,7 @@ export class WaterAssessmentResultsService {
       motorEnergyResults: []
     }
 
+    const WaterAssessmentModule = new this.toolsSuiteApiService.ToolsSuiteModule.WaterAssessment();
     if (waterSystem.systemType === WaterSystemTypeEnum.PROCESS && waterSystem.processUse) {
       waterSystemResults.processUseResults = calculateProcessUseResults(waterSystem.processUse, waterSystem.hoursPerYear);
       waterSystemResults.processUseResults.incomingWater = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.processUseResults.incomingWater, settings.unitsOfMeasure);
@@ -39,7 +42,7 @@ export class WaterAssessmentResultsService {
       waterSystemResults.grossWaterUse = waterSystemResults.processUseResults.grossWaterUse;
     }
     if (waterSystem.systemType === WaterSystemTypeEnum.COOLINGTOWER && waterSystem.coolingTower) {
-      waterSystemResults.coolingTowerResults = calculateCoolingTowerResults(waterSystem.coolingTower, waterSystem.hoursPerYear);
+      waterSystemResults.coolingTowerResults = calculateCoolingTowerResults(waterSystem.coolingTower, waterSystem.hoursPerYear, WaterAssessmentModule);
       waterSystemResults.coolingTowerResults.blowdownLoss = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.coolingTowerResults.blowdownLoss, settings.unitsOfMeasure);
       waterSystemResults.coolingTowerResults.evaporationLoss = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.coolingTowerResults.evaporationLoss, settings.unitsOfMeasure);
       waterSystemResults.coolingTowerResults.makeupWater = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.coolingTowerResults.makeupWater, settings.unitsOfMeasure);
@@ -47,7 +50,7 @@ export class WaterAssessmentResultsService {
       waterSystemResults.grossWaterUse = waterSystemResults.coolingTowerResults.grossWaterUse;
     }
     if (waterSystem.systemType === WaterSystemTypeEnum.BOILER && waterSystem.boilerWater) {
-      waterSystemResults.boilerWaterResults = calculateBoilerWaterResults(waterSystem.boilerWater, waterSystem.hoursPerYear);
+      waterSystemResults.boilerWaterResults = calculateBoilerWaterResults(waterSystem.boilerWater, waterSystem.hoursPerYear, WaterAssessmentModule);
       waterSystemResults.boilerWaterResults.blowdownLoss = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.boilerWaterResults.blowdownLoss, settings.unitsOfMeasure);
       waterSystemResults.boilerWaterResults.condensateReturn = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.boilerWaterResults.condensateReturn, settings.unitsOfMeasure);
       waterSystemResults.boilerWaterResults.makeupWater = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.boilerWaterResults.makeupWater, settings.unitsOfMeasure);
@@ -56,13 +59,13 @@ export class WaterAssessmentResultsService {
       waterSystemResults.grossWaterUse = waterSystemResults.boilerWaterResults.grossWaterUse;
     }
     if (waterSystem.systemType === WaterSystemTypeEnum.KITCHEN && waterSystem.kitchenRestroom) {
-      waterSystemResults.kitchenRestroomResults = calculateKitchenRestroomResults(waterSystem.kitchenRestroom);
+      waterSystemResults.kitchenRestroomResults = calculateKitchenRestroomResults(waterSystem.kitchenRestroom, WaterAssessmentModule);
       waterSystemResults.kitchenRestroomResults.grossWaterUse = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.kitchenRestroomResults.grossWaterUse, settings.unitsOfMeasure);
       waterSystemResults.grossWaterUse = waterSystemResults.kitchenRestroomResults.grossWaterUse;
     }
     if (waterSystem.systemType === WaterSystemTypeEnum.LANDSCAPING && waterSystem.landscaping) {
       let landscapingInput = this.convertWaterAssessmentService.convertLandscapingSuiteInput(waterSystem.landscaping, settings.unitsOfMeasure);
-      waterSystemResults.landscapingResults = calculateLandscapingResults(landscapingInput);
+      waterSystemResults.landscapingResults = calculateLandscapingResults(landscapingInput, WaterAssessmentModule);
       waterSystemResults.landscapingResults = this.convertWaterAssessmentService.convertLandscapingResults(waterSystemResults.landscapingResults, settings.unitsOfMeasure);
       waterSystemResults.landscapingResults.grossWaterUse = this.convertWaterAssessmentService.convertAnnualFlowResult(waterSystemResults.landscapingResults.grossWaterUse, settings.unitsOfMeasure);
       console.log(waterSystemResults.landscapingResults);
@@ -76,6 +79,7 @@ export class WaterAssessmentResultsService {
       waterSystemResults.motorEnergyResults.push(this.waterSuiteApiService.calculateMotorEnergy(motorEnergy))
     });
 
+    WaterAssessmentModule.delete();
     return waterSystemResults;
   }
 
