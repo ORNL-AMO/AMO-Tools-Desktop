@@ -243,5 +243,5 @@
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
     (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
-    [operatingHours]="flueGasService.operatingHours">
+    [operatingHours]="valveEnergyLossService.operatingHours">
 </app-operating-hours-modal>

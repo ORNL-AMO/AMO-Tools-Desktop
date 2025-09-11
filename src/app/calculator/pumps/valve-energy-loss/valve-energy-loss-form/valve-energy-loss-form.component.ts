@@ -123,7 +123,7 @@ export class ValveEnergyLossFormComponent implements OnInit {
 
   updateOperatingHours(oppHours: OperatingHours) {
     this.valveEnergyLossService.operatingHours = oppHours;
-    this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
+    this.form.controls.hoursOperation.patchValue(oppHours.hoursPerYear);
     this.calculate();
     this.closeOperatingHoursModal();
   }
