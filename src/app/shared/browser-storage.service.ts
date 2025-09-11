@@ -65,25 +65,24 @@ export class BrowserStorageService {
             const db = request.result;
             db.close();
             const deleteRequest = indexedDB.deleteDatabase('__test_db__');
-            deleteRequest.onsuccess = () => resolve({ success: true, failType: '' });
-            deleteRequest.onerror = () => resolve({ success: true, failType: '' });
+            deleteRequest.onsuccess = () => {
+              resolve({ success: true, failType: '' });
+            };
+            deleteRequest.onerror = () => {
+              resolve({ success: true, failType: '' });
+            };
           } catch (e) {
             resolve({ success: false, failType: 'close_or_delete_error' });
           }
         };
 
-        // * Firefox/Safari may not throw exception on open, nor execute callbacks immediately
+        // * Firefox/Safari/Edge may not throw exception on open, nor execute callbacks immediately
         setTimeout(() => {
           if (!dbOperationsResolved) {
             const userAgent = navigator.userAgent;
-            const isFirefox = userAgent.includes('Firefox');
-            if (isFirefox) {
-              resolve({ success: false, failType: 'firefox_timeout' });
-            } else {
-              resolve({ success: false, failType: 'timeout' });
-            }
+            resolve({ success: false, failType: `timeout_${userAgent}` });
           }
-        }, 1000);
+        }, 10000);
       } catch (e) {
         resolve({ success: false, failType: 'exception' });
       }
