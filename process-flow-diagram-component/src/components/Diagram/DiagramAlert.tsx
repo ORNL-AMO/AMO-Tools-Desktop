@@ -9,7 +9,7 @@ export default function DiagramAlert(props: DiagramAlertProps) {
         diagramAlertState
     } = props;
     const dispatch = useAppDispatch();
-    const isDrawerOpen = useAppSelector(state => state.diagram.isDrawerOpen);
+    const isDrawerOpen = useAppSelector(state => state.diagram.isDataDrawerOpen);
 
     React.useEffect(() => {
         if (diagramAlertState.dismissMS > 0) {
