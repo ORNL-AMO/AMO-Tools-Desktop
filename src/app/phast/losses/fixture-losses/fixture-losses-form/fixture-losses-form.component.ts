@@ -54,7 +54,7 @@ export class FixtureLossesFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
-          this.setMaterials();
+          this.setMaterials(false);
           this.enableForm();
         }
       }
@@ -68,23 +68,32 @@ export class FixtureLossesFormComponent implements OnInit {
     else {
       this.idString = '_baseline_' + this.lossIndex;
     }
-    this.setMaterials();
-    if (this.lossesForm) {
-      if (this.lossesForm.controls.materialName.value && this.lossesForm.controls.materialName.value !== '') {
-        if (this.lossesForm.controls.specificHeat.value === '') {
-          this.setProperties();
-        } else {
-          this.checkForDeletedMaterial();
-        }
-      }
-    }
+    this.setMaterials(true);
+    // if (this.lossesForm) {
+    //   if (this.lossesForm.controls.materialName.value && this.lossesForm.controls.materialName.value !== '') {
+    //     if (this.lossesForm.controls.specificHeat.value === '') {
+    //       this.setProperties();
+    //     } else {
+    //       this.checkForDeletedMaterial();
+    //     }
+    //   }
+    // }
     if (!this.baselineSelected) {
       this.disableForm();
     }
   }
 
-  async setMaterials() {
+  async setMaterials(onInit) {
     this.materials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable())
+    if (this.lossesForm) {
+      if (this.lossesForm.controls.materialName.value && this.lossesForm.controls.materialName.value !== '') {
+        if (this.lossesForm.controls.specificHeat.value === '') {
+          await this.setProperties();
+        } else if (onInit) {
+          this.checkForDeletedMaterial();
+        }
+      }
+    }
   }
 
   disableForm() {
@@ -103,20 +112,6 @@ export class FixtureLossesFormComponent implements OnInit {
     this.changeField.emit('default');
   }
 
-  async setSpecificHeat() {
-    let tmpMaterial: SolidLoadChargeMaterial = this.getSelectedMaterial();
-    if (tmpMaterial) {
-      let specificHeatSolid: number = tmpMaterial.specificHeatSolid;
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        specificHeatSolid = this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
-      }
-      this.lossesForm.patchValue({
-        specificHeat: roundVal(specificHeatSolid, 3)
-      });
-    }
-    this.save();
-  }
-
   checkSpecificHeat() {
     if (this.lossesForm.controls.materialName.value) {
       let material: SolidLoadChargeMaterial = this.getSelectedMaterial();
@@ -125,8 +120,8 @@ export class FixtureLossesFormComponent implements OnInit {
         if (this.settings.unitsOfMeasure === 'Metric') {
           specificHeatSolid = this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
         }
-        material.specificHeatSolid = roundVal(specificHeatSolid, 3);
-        if (material.specificHeatSolid !== this.lossesForm.controls.specificHeat.value) {
+        specificHeatSolid = roundVal(specificHeatSolid, 4);
+        if (specificHeatSolid !== this.lossesForm.controls.specificHeat.value) {
           return true;
         } else {
           return false;
@@ -148,7 +143,6 @@ export class FixtureLossesFormComponent implements OnInit {
       this.hasDeletedCustomMaterial = true;
       this.restoreMaterial();
     }
-    this.save();
   }
 
   async restoreMaterial() {
@@ -160,14 +154,15 @@ export class FixtureLossesFormComponent implements OnInit {
       substance: "Custom Fixture Material"
     };
     await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(customMaterial));
-    await this.setMaterials();
+    await this.setMaterials(false);
     let newMaterial: SolidLoadChargeMaterial = this.materials.find(material => { return material.substance === customMaterial.substance; });
     this.lossesForm.patchValue({
       materialName: newMaterial.id
     });
+    await this.save();
   }
 
-  setProperties() {
+  async setProperties() {
     let selectedMaterial: SolidLoadChargeMaterial = this.getSelectedMaterial();
     if (selectedMaterial) {
       let specificHeatSolid: number = selectedMaterial.specificHeatSolid;
@@ -188,7 +183,7 @@ export class FixtureLossesFormComponent implements OnInit {
         latentHeat: latentHeat
       });
     }
-    this.save();
+    await this.save();
   }
 
   showMaterialModal(editExistingMaterial: boolean) {
@@ -209,7 +204,7 @@ export class FixtureLossesFormComponent implements OnInit {
   }
   async hideMaterialModal(event?: any) {
     if (event) {
-      await this.setMaterials();
+      await this.setMaterials(false);
       let newMaterial: SolidLoadChargeMaterial = this.materials.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.lossesForm.patchValue({
