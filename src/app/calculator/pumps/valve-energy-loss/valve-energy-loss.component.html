@@ -1,0 +1,117 @@
+<div class="calculator-container modify-conditions psat standalone-calculator" #contentContainer>
+	<div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
+		[ngClass]="{'justify-content-between': inTreasureHunt}">
+		<div class="d-flex pl-2 align-items-center">
+			<div class="calc-icon-header icon-psat d-none d-sm-flex" [ngClass]="{'in-treasure-hunt': inTreasureHunt}">
+				<img src="assets/images/calculator-icons/pump-icons/valve.png">
+			</div>
+			<div class="mx-auto">
+				<h3>Valve Energy Loss</h3>
+			</div>
+		</div>
+		<div class="d-flex pr-2 pl-2" *ngIf="inTreasureHunt">
+			<div class="d-none d-lg-flex help-holder">
+				<p class="help-text treasure-hunt-help">Click the save icon to add the
+					treasure to your chest! Click cancel to discard the opportunity and return
+					to method selection.
+				</p>
+			</div>
+			<div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
+				<span class="fa fa-save"></span>
+			</div>
+			<div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+				<span class="fa fa-times"></span>
+			</div>
+		</div>
+	</div>
+
+	<div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+		<div class="nav-item" (click)="setSmallScreenTab('baseline')"
+			[ngClass]="{'small-screen-active': smallScreenTab === 'baseline'}">
+			<a class="nav-link">Baseline</a>
+		</div>
+		<div class="nav-item" (click)="setSmallScreenTab('modification')"
+			[ngClass]="{'small-screen-active': smallScreenTab === 'modification'}">
+			<a class="nav-link">Modification</a>
+		</div>
+		<div class="nav-item" (click)="setSmallScreenTab('details')"
+			[ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+			<a class="nav-link">Details</a>
+		</div>
+	</div>
+
+	<div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
+		<div class="calculator-panel-container" (click)="setBaselineSelected()"
+			[ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true, 'active': smallScreenTab === 'baseline', 'small-screen-tab': smallScreenTab === 'baseline'}"
+			[ngStyle]="{'height.px': containerHeight}">
+			<div class="header mx-2 mb-4">
+				<h3>Baseline</h3>
+			</div>
+			<div class="d-flex flex-column mx-2 mb-4">
+				<app-valve-energy-loss-form [selected]="baselineSelected" [isBaseline]="true" [settings]="settings"></app-valve-energy-loss-form>
+
+				<div class="w-100 justify content-center btn-group btn-group-sm">
+					<button type="button" class="btn btn-secondary pull-right btn-sm btn-margin-10"
+						(click)="btnResetData()">
+						Reset Data
+					</button>
+					<button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"
+						(click)="btnGenerateExample()">
+						Generate Example
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modification -->
+		<div class="calculator-panel-container panel-column modification" (click)="setModificationSelected()"
+			[ngClass]="{'disabled': baselineSelected == true, 'modal-open': isModalOpen == true,'small-screen-tab': smallScreenTab === 'modification'}">
+			<div class="header mx-2 mb-4">
+				<h3>Modification</h3>
+			</div>
+			<ng-container *ngIf="modificationExists">
+				<div class="d-flex flex-column ml-2 mr-2 mb-4">
+					<app-valve-energy-loss-form [selected]="!baselineSelected" [isBaseline]="false" [settings]="settings"></app-valve-energy-loss-form>
+				</div>
+			</ng-container>
+
+			<div *ngIf="!modificationExists" (click)="setModificationSelected()"
+				[ngClass]="{'disabled': baselineSelected == true}">
+				<div class="p-3 no-data">
+					<h3>Once you have set up your baseline..</h3>
+					<button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
+						Condition</button>
+					<p>Data will be copied from your current baseline condition.</p>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="calculator-panel-container help-panel" [ngClass]="{'small-screen-tab': smallScreenTab === 'details', 'modal-open': isModalOpen == true}"
+			[ngStyle]="{'height.px': containerHeight}">
+			<div class="d-flex flex-column mh-100">
+				<div class="d-flex flex-wrap tabs primary sticky-top">
+					<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'results'}">
+						<a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
+							(click)="setTab('results')">
+							<div>Results</div>
+						</a>
+					</div>
+					<div class="flex-fill panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'help'}">
+						<a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+							<div>Help</div>
+						</a>
+					</div>
+				</div>
+
+				<div class="p-2">
+					<app-valve-energy-loss-results *ngIf="tabSelect == 'results'" [settings]="settings" [modificationExists]="modificationExists"></app-valve-energy-loss-results>
+					<app-valve-energy-loss-help *ngIf="tabSelect == 'help'"></app-valve-energy-loss-help>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+</div>
