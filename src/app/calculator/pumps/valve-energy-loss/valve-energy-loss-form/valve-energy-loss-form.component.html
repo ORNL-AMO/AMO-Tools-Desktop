@@ -119,7 +119,7 @@
         </label>
         <div class="input-group">
             <input name="upstreamPressure" type="number" class="form-control" formControlName="upstreamPressure"
-                id="{{'upstreamPressure_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                id="{{'upstreamPressure_'+idString}}" onfocus="this.select();" (input)="setValidators()"
                 (focus)="focusField('upstreamPressure')">
             <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">psi</span>
             <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">bar</span>

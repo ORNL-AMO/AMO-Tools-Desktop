@@ -66,13 +66,5 @@ export class ValveEnergyLossFormService {
       pipeSizeFactor: form.controls.pipeSizeFactor.value,
     };
     return inputs;
-  }
-
-  setValidators(formGroup: UntypedFormGroup): UntypedFormGroup {
-    formGroup.controls.downstreamPressure.setValidators([Validators.required, Validators.min(0), Validators.max(formGroup.controls.upstreamPressure.value)]);
-    formGroup.controls.downstreamPressure.updateValueAndValidity();
-    return formGroup;
-  }
-
-
+  }  
 }

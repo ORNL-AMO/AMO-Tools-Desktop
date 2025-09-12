@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, Input } from '@angular/core';
 import { ValveEnergyLossService } from './valve-energy-loss.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -48,7 +48,6 @@ export class ValveEnergyLossComponent implements OnInit {
 
   constructor(private valveEnergyLossService: ValveEnergyLossService,
     private settingsDbService: SettingsDbService,
-    private cd: ChangeDetectorRef,
     private analyticsService: AnalyticsService
   ) { }
 

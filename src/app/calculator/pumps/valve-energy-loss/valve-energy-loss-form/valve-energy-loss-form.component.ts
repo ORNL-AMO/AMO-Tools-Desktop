@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ValveEnergyLossFormService } from './valve-energy-loss-form.service';
-import { UntypedFormGroup } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { ValveEnergyLossService } from '../valve-energy-loss.service';
@@ -103,8 +103,13 @@ export class ValveEnergyLossFormComponent implements OnInit {
     this.valveEnergyLossService.currentField.next(str);
   }
 
+  setValidators() {
+    this.form.controls.downstreamPressure.setValidators([Validators.required, Validators.min(0), Validators.max(this.form.controls.upstreamPressure.value)]);
+    this.form.controls.downstreamPressure.updateValueAndValidity();
+    this.calculate();
+  }
+
   calculate() {
-    this.form = this.valveEnergyLossFormService.setValidators(this.form);
     let currentEnergyData: ValveEnergyLossInputs = this.valveEnergyLossFormService.getObjFromForm(this.form);
     if (this.isBaseline && this.form.valid) {
       this.valveEnergyLossService.baselineData.next(currentEnergyData);
