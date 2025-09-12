@@ -69,15 +69,6 @@ export class FixtureLossesFormComponent implements OnInit {
       this.idString = '_baseline_' + this.lossIndex;
     }
     this.setMaterials(true);
-    // if (this.lossesForm) {
-    //   if (this.lossesForm.controls.materialName.value && this.lossesForm.controls.materialName.value !== '') {
-    //     if (this.lossesForm.controls.specificHeat.value === '') {
-    //       this.setProperties();
-    //     } else {
-    //       this.checkForDeletedMaterial();
-    //     }
-    //   }
-    // }
     if (!this.baselineSelected) {
       this.disableForm();
     }
