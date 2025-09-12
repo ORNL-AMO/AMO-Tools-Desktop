@@ -50,6 +50,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   materialTypes: Array<AtmosphereSpecificHeat>;
   showModal: boolean = false;
   idString: string;
+  selectedMaterial: AtmosphereSpecificHeat;
   constructor(private atmosphereLossesCompareService: AtmosphereLossesCompareService,
     private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private atmosphereFormService: AtmosphereFormService, private atmosphereDbService: AtmosphereDbService) { }
 
@@ -81,6 +82,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   async setMaterialTypes(onInit?: boolean) {
+    console.log('set types')
     this.materialTypes = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
     if (onInit && this.atmosphereLossForm) {
       if (this.atmosphereLossForm.controls.atmosphereGas.value && this.atmosphereLossForm.controls.atmosphereGas.value !== '') {
@@ -89,6 +91,7 @@ export class AtmosphereLossesFormComponent implements OnInit {
         } else {
           this.checkForDeletedMaterial();
         }
+        this.setSelectedMaterial();
       }
     }
   }
@@ -129,24 +132,21 @@ export class AtmosphereLossesFormComponent implements OnInit {
     this.save();
   }
 
-  async checkSpecificHeat() {
+  setSelectedMaterial() {
+    this.selectedMaterial = this.materialTypes.find(material => { return material.id === this.atmosphereLossForm.controls.atmosphereGas.value; });
+  }
+
+  checkSpecificHeat(): boolean {
     if (this.atmosphereLossForm.controls.atmosphereGas.value) {
-      let material: AtmosphereSpecificHeat = await firstValueFrom(this.atmosphereDbService.getByIdWithObservable(this.atmosphereLossForm.controls.atmosphereGas.value));
-      if (material) {
-        let val = material.specificHeat;
+      if (this.selectedMaterial) {
+        let val = this.selectedMaterial.specificHeat;
         if (this.settings.unitsOfMeasure === 'Metric') {
           val = this.convertUnitsService.value(val).from('btuScfF').to('kJm3C');
         }
-        material.specificHeat = roundVal(val, 4);
-        if (material.specificHeat !== this.atmosphereLossForm.controls.specificHeat.value) {
-          return true;
-        } else {
-          return false;
-        }
+        return roundVal(val, 4) !== this.atmosphereLossForm.controls.specificHeat.value;
       }
-    } else {
-      return false;
     }
+    return false;
   }
 
   disableForm() {
