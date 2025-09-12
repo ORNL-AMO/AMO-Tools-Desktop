@@ -31,6 +31,7 @@ import MenuSidebar from '../Drawer/MenuSidebar';
 import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer from '../Drawer/SharedDrawer';
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
+import { FlowServiceProvider } from '../../services/FlowService';
 
 
 export interface DiagramProps {
@@ -270,7 +271,9 @@ export default (props: DiagramProps) => {
 
   return (
     <Provider store={storeRef.current}>
-      <Diagram {...props} />
+      <FlowServiceProvider>
+        <Diagram {...props} />
+      </FlowServiceProvider>
     </Provider>
   );
 }

@@ -146,6 +146,7 @@ const sourceFlowValueChangeReducer = (state: DiagramState, action: PayloadAction
       // * update discharge edges of the node.id calculated data being set
       const nodeDischargeEdges = getNodeTargetEdges(state.edges, node.id);
       const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeDischargeEdges, state.nodes, node.id);
+      // console.log('sourceFlowValueChange --> setCalculatedNodeDataProperty', totalCalculatedDischargeFlow)
       setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalDischargeFlow', totalCalculatedDischargeFlow);
     }
   });
@@ -169,6 +170,7 @@ const dischargeFlowValueChangeReducer = (state: DiagramState, action: PayloadAct
       // * update source edges of the node.id calculated data being set
       const nodeSourceEdges = getNodeSourceEdges(state.edges, node.id);
       const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeSourceEdges, state.nodes, node.id);
+      // console.log('dischargeFlowValueChange --> setCalculatedNodeDataProperty', totalCalculatedSourceFlow)
       setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalSourceFlow', totalCalculatedSourceFlow);
     }
   });
@@ -337,6 +339,35 @@ const edgesUpdateReducer = (state: DiagramState, action: PayloadAction<Edge[]>) 
   state.edges = action.payload;
 };
 
+/**
+ * @param action  Map of edgeId to flow value>
+ */
+const edgesChangeFromPropagationReducer = (state: DiagramState, action: PayloadAction<{
+  flowUpdates: Record<string, number>, 
+  startingNodeId: string
+}>) => {
+  const {flowUpdates, startingNodeId} = action.payload;
+  const updatedEdges: Edge[] = state.edges.map((edge) => {
+    const newFlow = flowUpdates[edge.id];
+    if (newFlow !== undefined) {
+      edge.data.flowValue = newFlow;
+    }
+    return edge;
+  });
+
+   if (flowUpdates) {
+    const sourceNode = state.nodes.find(node => node.id === startingNodeId);
+    const initialValue: number = Object.entries(flowUpdates)[0][1];
+
+    state.diagramAlert = {
+      open: true,
+      alertMessage: `Successfully set all path flows from ${sourceNode?.data.name || sourceNode.id} (${initialValue} Mgal) to end of path`,
+      alertSeverity: 'success',
+      dismissMS: 10000
+    };
+  }
+  state.edges = updatedEdges;
+};
 
 const deleteEdgeReducer = (state: DiagramState, action: PayloadAction<string>) => {
   state.edges = state.edges.filter((edg) => edg.id !== action.payload);
@@ -493,10 +524,6 @@ const setSelectedId = (state: DiagramState, action: PayloadAction<string>) => {
   }
 };
 
-const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<DiagramCalculatedData>) => {
-  state.calculatedData = action.payload;
-}
-
 const modalOpenChangeReducer = (state: DiagramState, action: PayloadAction<boolean>) => {
   state.isModalOpen = action.payload;
 }
@@ -533,7 +560,6 @@ export const diagramSlice = createSlice({
     focusedEdgeChange: focusedEdgeChangeReducer,
     defaultEdgeTypeChange: defaultEdgeTypeChangeReducer,
     customEdgeTypeChange: customEdgeTypeChangeReducer,
-    calculatedDataUpdate: calculatedDataUpdateReducer,
     diagramOptionsChange: diagramOptionsChangeReducer,
     unitsOfMeasureChange: unitsOfMeasureChangeReducer,
     flowDecimalPrecisionChange: flowDecimalPrecisionChangeReducer,
@@ -551,6 +577,7 @@ export const diagramSlice = createSlice({
     selectedIdChange: selectedIdChangeReducer,
     diagramAlertChange: diagramAlertChangeReducer,
     toggleMenuDrawer: toggleMenuDrawerReducer,
+    edgesChangeFromPropagation: edgesChangeFromPropagationReducer
   }
 })
 
@@ -582,7 +609,6 @@ export const {
   setNodeColor,
   setEdgeStrokeColor,
   resetDiagram,
-  calculatedDataUpdate,
   diagramOptionsChange,
   unitsOfMeasureChange,
   flowDecimalPrecisionChange,
@@ -596,7 +622,8 @@ export const {
   openDrawerWithSelected,
   selectedIdChange,
   diagramAlertChange,
-  toggleMenuDrawer
+  toggleMenuDrawer,
+  edgesChangeFromPropagation
 } = diagramSlice.actions
 export default diagramSlice.reducer
 

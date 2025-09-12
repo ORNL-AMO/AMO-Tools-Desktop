@@ -519,16 +519,38 @@ export const getEdgeFromConnection = (
   }
 
   if (shouldSetId) {
-    connectedParams.id = getNewEdgeId(connectedParams.source, connectedParams.target);
+    connectedParams.id = getNewEdgeId(connectedParams);
   }
 
   return connectedParams;
 }
 
-export const getNewEdgeId = (sourceId: string, targetId: string): string => {
-  return `xy-edge__${sourceId}-${targetId}`;
+export const getNewEdgeId = (connectedParams: Connection | Edge): string => {
+  // todo check existing
+  const handleFrom = connectedParams.sourceHandle ? connectedParams.sourceHandle : 'e';
+  const handleTo = connectedParams.targetHandle ? connectedParams.targetHandle : 'a';
+  return `xy-edge__${connectedParams.source}${handleFrom}-${connectedParams.target}${handleTo}`;
 }
 
+export const getConnectionFromEdgeId = (edgeId: string): Connection | undefined => {
+  // Ex: xy-edge__sourceA-targetB
+  const doubleUnderscoreIdx = edgeId.indexOf("__");
+  if (doubleUnderscoreIdx === -1) return undefined;
+  const idPart = edgeId.substring(doubleUnderscoreIdx + 2);
+  const dashIdx = idPart.indexOf("-");
+  if (dashIdx === -1) return undefined;
+
+  // after '__' up to one char before '-'
+  const source = idPart.substring(0, dashIdx - 1);
+  // char before '-'
+  const sourceHandle = idPart.substring(dashIdx - 1, dashIdx);
+  // after '-' up to one char before end
+  const target = idPart.substring(dashIdx + 1, idPart.length - 1);
+  // last char
+  const targetHandle = idPart.substring(idPart.length - 1);
+
+  return { source, sourceHandle, target, targetHandle };
+}
 
 export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
   return {

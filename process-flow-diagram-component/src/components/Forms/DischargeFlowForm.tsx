@@ -1,4 +1,4 @@
-import { List, TextField, InputAdornment, ListItem, Divider, Button, useTheme, Box, Input, Typography } from "@mui/material";
+import { List, TextField, InputAdornment, ListItem, Button, useTheme, Box, Typography } from "@mui/material";
 import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getKnownLossComponentTotals, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
@@ -19,6 +19,8 @@ import { ObjectSchema } from "yup";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
 import { blue } from "@mui/material/colors";
 import { CustomEdgeData } from "process-flow-lib";
+import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
+import { useFlowService } from "../../services/FlowService";
 
 const blueBackground = blue[50];
 /**
@@ -28,6 +30,8 @@ const blueBackground = blue[50];
 const DischargeFlowForm = () => {
     const theme = useTheme();
     const dispatch = useAppDispatch();
+    const flowService = useFlowService();
+
     const nodes: Node[] = useAppSelector(selectNodes);
     const componentDischargeEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeTargetEdges) as Edge<CustomEdgeData>[];
     const selectedDataId = useAppSelector((state) => state.diagram.selectedDataId);
@@ -80,6 +84,10 @@ const DischargeFlowForm = () => {
         setInPercent(!inPercent);
     }
 
+    const onPropogateFlow = (edge: Edge<CustomEdgeData>) => {
+        flowService.propagateFlowFromNode(selectedNode.id, edge);
+    }
+
 
     // todo 7339 - don't validate when flows dont exist
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentDischargeEdges, nodes, selectedDataId);
@@ -123,9 +131,11 @@ const DischargeFlowForm = () => {
                                                 if (edge.data.flowValue !== null) {
                                                     currentValue = inPercent ? getFlowValuePercent(edge.data.flowValue, totalDischargeFlow) : edge.data.flowValue;
                                                 }
+
+                                                const canPropogate = edge.data.flowValue === null || edge.data.flowValue === undefined || edge.data.flowValue === 0;
                                                 return (
                                                     <ListItem
-                                                        sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: '.5rem' }}
+                                                        sx={{ display: 'flex', alignItems: 'center', width: '100%', marginBottom: '.5rem' }}
                                                         key={edge.id}
                                                         disablePadding>
                                                         <InputField
@@ -136,8 +146,6 @@ const DischargeFlowForm = () => {
                                                             type={'number'}
                                                             size="small"
                                                             value={currentValue}
-                                                            // onFocus={() => handleFieldState(edge.id, 'focused', true )}
-                                                            // onBlur={() => handleFieldState(edge.id, 'touched', true )}
                                                             warning={hasWarning}
                                                             helperText={hasWarning ? String(errors.flows[index]) : ""}
                                                             FormHelperTextProps={{
@@ -160,6 +168,21 @@ const DischargeFlowForm = () => {
                                                                 </InputAdornment>,
                                                             }}
                                                         />
+                                                        {/* `Populate ${currentValue} through all flows to end of path` */}
+                                                        <SmallTooltip title={`Set all flow values to the end of path`}
+                                                            slotProps={{
+                                                                popper: {
+                                                                    disablePortal: true,
+                                                                }
+                                                            }}>
+                                                            <span>
+                                                                <Button variant="outlined" aria-label="populate" 
+                                                                    disabled={canPropogate}
+                                                                    size="small" sx={{ ml: 1 }} onClick={() => onPropogateFlow(edge)}>
+                                                                    <AirlineStopsIcon fontSize="small" />
+                                                                </Button>
+                                                            </span>
+                                                        </SmallTooltip>
                                                     </ListItem>
                                                 );
                                             })}
