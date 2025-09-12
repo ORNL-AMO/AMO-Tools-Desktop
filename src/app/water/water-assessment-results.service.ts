@@ -82,19 +82,13 @@ export class WaterAssessmentResultsService {
 
   getPlantSummaryReport(assessment: Assessment, settings: Settings): PlantSystemSummaryResults {
     let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
-    let graph = createGraphIndex(diagram.waterDiagram.flowDiagramData.nodes, diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[]);
-
-    let waterTreatmentNodes: Node<ProcessFlowPart>[] = diagram.waterDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-treatment') as Node<ProcessFlowPart>[];
-    let wasteTreatmentNodes: Node<ProcessFlowPart>[] = diagram.waterDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment') as Node<ProcessFlowPart>[];
     
     // todo why not use assessment calculatedData here?
     let plantResults = getPlantSummaryResults(
       diagram.waterDiagram.flowDiagramData.nodes,
       diagram.waterDiagram.flowDiagramData.calculatedData,
-      graph,
+      diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[],
       settings.electricityCost,
-      waterTreatmentNodes,
-      wasteTreatmentNodes,
       diagram.waterDiagram.flowDiagramData.settings
     )
 
@@ -181,17 +175,11 @@ export class WaterAssessmentResultsService {
 
   getTrueCostOfSystemsReport(assessment: Assessment, settings: Settings): SystemTrueCostData[] {
     let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
-    let graph = createGraphIndex(diagram.waterDiagram.flowDiagramData.nodes, diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[]);
-
-    let waterTreatmentNodes: Node<ProcessFlowPart>[] = diagram.waterDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-treatment') as Node<ProcessFlowPart>[];
-    let wasteTreatmentNodes: Node<ProcessFlowPart>[] = diagram.waterDiagram.flowDiagramData.nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment') as Node<ProcessFlowPart>[];
     let plantResults = getPlantSummaryResults(
       diagram.waterDiagram.flowDiagramData.nodes,
       diagram.waterDiagram.flowDiagramData.calculatedData,
-      graph,
+      diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[],
       assessment.water.systemBasics.electricityCost,
-      waterTreatmentNodes,
-      wasteTreatmentNodes,
       diagram.waterDiagram.flowDiagramData.settings
     )
 

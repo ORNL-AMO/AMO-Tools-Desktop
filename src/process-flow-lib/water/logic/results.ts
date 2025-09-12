@@ -3,7 +3,7 @@ import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowData, N
 import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WasteWaterTreatment, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getWaterFlowTotals } from "./water-components";
-import { getAncestors, getAncestorPathToNode, getDescendants, getDescendantsDFS, NodeGraphIndex, getAncestorTreatmentChain, getDescendantTreatmentChain, getDescendantHasSystem, getDescendantPathToNode, getAllDescendantPathsToNode } from "../../graph";
+import { getAncestors, getAncestorPathToNode, getDescendants, getDescendantsDFS, NodeGraphIndex, getAncestorTreatmentChain, getDescendantTreatmentChain, getDescendantHasSystem, getDescendantPathToNode, getAllDescendantPathsToNode, createGraphIndex } from "../../graph";
 import { PlantResults, PlantSystemSummaryResults, SystemAnnualSummaryResults } from "../types/results";
 import { WaterAssessment } from "../types/assessment";
 
@@ -827,12 +827,13 @@ const getDischargeFlowProportionCost = (
 export const getPlantSummaryResults = (
   nodes: Node[],
   calculatedData: DiagramCalculatedData,
-  graph: NodeGraphIndex,
+  edges: Edge<CustomEdgeData>[],
   electricityCost: number,
-  waterTreatmentNodes: Node<ProcessFlowPart>[],
-  wasteTreatmentNodes: Node<ProcessFlowPart>[],
   settings: DiagramSettings,
 ): PlantResults => {
+  const graph = createGraphIndex(nodes, edges as Edge<CustomEdgeData>[]);
+  const waterTreatmentNodes: Node<ProcessFlowPart>[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-treatment') as Node<ProcessFlowPart>[];
+  const wasteTreatmentNodes: Node<ProcessFlowPart>[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment') as Node<ProcessFlowPart>[];
   const nodeMap: Record<string, Node<ProcessFlowPart>> = Object.fromEntries(nodes.map((n) => [n.id, n as Node<ProcessFlowPart>]));
   const nodeNameMap: Record<string, string> = {};
   const trueCostOfSystems: TrueCostOfSystems = {};
@@ -1076,16 +1077,19 @@ export const getPlantSummaryResults = (
 
       plantSystemSummaryResults.sourceWaterIntake += systemAnnualSummaryResultsMap[currentSystem.id].sourceWaterIntake;
       plantSystemSummaryResults.directCostPerYear += systemAnnualSummaryResultsMap[currentSystem.id].directCostPerYear;
-      plantSystemSummaryResults.directCostPerUnit += systemAnnualSummaryResultsMap[currentSystem.id].directCostPerUnit
       plantSystemSummaryResults.trueCostPerYear += systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerYear;
-      plantSystemSummaryResults.trueCostPerUnit += systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerUnit;
       plantSystemSummaryResults.trueOverDirectResult += systemAnnualSummaryResultsMap[currentSystem.id].trueOverDirectResult;
-
       plantSystemSummaryResults.allSystemResults.push(systemAnnualSummaryResultsMap[currentSystem.id])
 
       systemCostContributionsResultsMap[currentSystem.id].total = Object.values(systemCostContributionsResultsMap[currentSystem.id]).reduce((total: number, cost: number) => total + cost, 0);
       trueCostOfSystems[currentSystem.id] = systemCostContributionsResultsMap[currentSystem.id];
     });
+
+    const plantSourceWaterIntake = getComponentTypeTotalFlow(intakeNodes as Node<ProcessFlowPart>[], 'totalDischargeFlow', calculatedData);
+    if (plantSourceWaterIntake > 0) {
+      plantSystemSummaryResults.directCostPerUnit = plantSystemSummaryResults.directCostPerYear / (plantSourceWaterIntake * 1000);
+      plantSystemSummaryResults.trueCostPerUnit = plantSystemSummaryResults.trueCostPerYear / (plantSourceWaterIntake * 1000);
+    }
   }
 
   return { trueCostOfSystems, plantSystemSummaryResults };
