@@ -82,16 +82,15 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   async setMaterialTypes(onInit?: boolean) {
-    console.log('set types')
     this.materialTypes = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
     if (onInit && this.atmosphereLossForm) {
       if (this.atmosphereLossForm.controls.atmosphereGas.value && this.atmosphereLossForm.controls.atmosphereGas.value !== '') {
+        this.setSelectedMaterial();
         if (this.atmosphereLossForm.controls.specificHeat.value === '') {
           this.setProperties();
         } else {
           this.checkForDeletedMaterial();
         }
-        this.setSelectedMaterial();
       }
     }
   }
@@ -119,17 +118,21 @@ export class AtmosphereLossesFormComponent implements OnInit {
   }
 
   async setProperties() {
-    let selectedMaterial: AtmosphereSpecificHeat = await firstValueFrom(this.atmosphereDbService.getByIdWithObservable(this.atmosphereLossForm.controls.atmosphereGas.value));
-    if (selectedMaterial) {
+    if (this.selectedMaterial) {
+      let specificHeat: number = this.selectedMaterial.specificHeat;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
+        specificHeat = this.convertUnitsService.value(specificHeat).from('btuScfF').to('kJm3C');
       }
-
       this.atmosphereLossForm.patchValue({
-        specificHeat: roundVal(selectedMaterial.specificHeat, 4)
+        specificHeat: roundVal(specificHeat, 4)
       });
     }
-    this.save();
+    await this.save();
+  }
+
+  async changeMaterial() {
+    this.setSelectedMaterial();
+    await this.setProperties();
   }
 
   setSelectedMaterial() {
