@@ -196,6 +196,7 @@ export class CondensingEconomizerFormComponent implements OnInit {
 
   showMaterialModal() {
     this.materialModal.show();
+    this.condensingEconomizerService.modalOpen.next(true);
   }
 
   hideMaterialModal(event?: any) {
@@ -209,6 +210,7 @@ export class CondensingEconomizerFormComponent implements OnInit {
       }
     }
     this.materialModal.hide();
+    this.condensingEconomizerService.modalOpen.next(false);
     this.calculate();
   }
 
