@@ -39,6 +39,7 @@ const DischargeFlowForm = () => {
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
     const selectedNode = useAppSelector(selectCurrentNode);
     const settings = useAppSelector((state) => state.diagram.settings);
+    const isIntakeSource = selectedNode.type === 'waterIntake';
     // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
     // const handleFieldState = (edgeId: string, stateProp: string, val: boolean) => {
     //     if (stateProp === 'focused') {
@@ -70,6 +71,15 @@ const DischargeFlowForm = () => {
         dispatch(nodeDataPropertyChange({ optionsProp: 'userEnteredData', updatedValue: updated }));
     }
 
+    const onUnaccountedFlowChange = (event, handleChange: (event: React.ChangeEvent<any>) => void) => {
+        handleChange(event);
+        const updated = {
+            ...selectedNode.data.userEnteredData,
+            intakeUnaccounted: event.target.value === "" ? null : Number(event.target.value)
+        }
+        dispatch(nodeDataPropertyChange({ optionsProp: 'userEnteredData', updatedValue: updated }));
+    }
+
     const onWaterInProductChange = (event, handleChange: (event: React.ChangeEvent<any>) => void) => {
         handleChange(event);
         const updated = {
@@ -92,7 +102,7 @@ const DischargeFlowForm = () => {
     // todo 7339 - don't validate when flows dont exist
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentDischargeEdges, nodes, selectedDataId);
     const totalKnownLosses = getKnownLossComponentTotals(componentDischargeEdges, nodes, selectedDataId);
-    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', componentDischargeEdges, totalCalculatedDischargeFlow, settings.flowDecimalPrecision, totalKnownLosses);
+    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', componentDischargeEdges, totalCalculatedDischargeFlow, selectedNode.data.userEnteredData.intakeUnaccounted, settings, totalKnownLosses);
 
     return (
         <Formik
@@ -260,6 +270,41 @@ const DischargeFlowForm = () => {
                                         }}
                                     />
                                 }
+                            </Box>
+                        }
+
+                        {isIntakeSource &&
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                marginTop: '1rem',
+                                padding: '1rem',
+                                border: `1px solid ${theme.palette.primary.main}`,
+                                borderRadius: '8px'
+                            }}>
+                                <InputField
+                                    name={'intakeUnaccounted'}
+                                    id={'intakeUnaccounted'}
+                                    label={'Unaccounted Flow'}
+                                    type={'number'}
+                                    size="small"
+                                    value={selectedNode.data.userEnteredData.intakeUnaccounted ?? ''}
+                                    onChange={(event) => onUnaccountedFlowChange(event, handleChange)}
+                                    sx={{ marginBottom: '1rem', width: '100%' }}
+                                    // warning={Boolean(errors.unaccountedFlow)}
+                                    // helperText={Boolean(errors.unaccountedFlow) ? String(errors.unaccountedFlow) : ""}
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                            <span style={{ zIndex: 1, background: 'white' }}>
+                                                {inPercent ?
+                                                    <span>%</span>
+                                                    :
+                                                    <FlowDisplayUnit />
+                                                }
+                                            </span>
+                                        </InputAdornment>,
+                                    }}
+                                />
                             </Box>
                         }
                     </Form>

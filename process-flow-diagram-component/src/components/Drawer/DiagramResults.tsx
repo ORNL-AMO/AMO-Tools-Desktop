@@ -53,15 +53,19 @@ const DiagramResults = () => {
   const wasteTreatmentCost = getComponentTypeTotalCost(wasteTreatmentNodes, 'totalSourceFlow', calculatedData, settings.unitsOfMeasure);
   const systemMotorEnergyData: MotorEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.addedMotorEnergy || []).flat();
 
+  let intakeUnaccounted = 0;
   const intakeMotorEnergy = intakes
     .map((intake: Node<ProcessFlowPart>) => {
       const intakeSource = intake.data as IntakeSource;
+      intakeUnaccounted += intakeSource.userEnteredData.intakeUnaccounted || 0;
       return intakeSource.addedMotorEnergy || [];
     })
     .flat();
 
+  let dischargeUnaccounted = 0;
   const dischargeMotorEnergy = discharges.map((discharge: Node<ProcessFlowPart>) => {
     const dischargeSource = discharge.data as DischargeOutlet;
+    dischargeUnaccounted += dischargeSource.userEnteredData.dischargeUnaccounted || 0;
     return dischargeSource.addedMotorEnergy || [];
   }).flat();
 
@@ -119,11 +123,14 @@ const DiagramResults = () => {
     return { label: discharge.data.name, result: totalInflowFormatted, unit: <FlowDisplayUnit /> };
   });
 
-  const estimatedUnknownLosses = diagramResults.estimatedUnknownLosses || 0;
+  let estimatedUnknownLosses = diagramResults.estimatedUnknownLosses || 0;
   const totalFacilityDischarge = totalDischarge + diagramResults.totalKnownLosses + estimatedUnknownLosses
 
-  const totalKnownLossesFormatted = formatDecimalPlaces(diagramResults.totalKnownLosses, settings.flowDecimalPrecision);
+  estimatedUnknownLosses = estimatedUnknownLosses + dischargeUnaccounted;
+
   const estimatedUnknownLossesFormatted = formatDecimalPlaces(estimatedUnknownLosses, settings.flowDecimalPrecision);
+  const estimatedUnknownWaterUses = formatDecimalPlaces(intakeUnaccounted, settings.flowDecimalPrecision);
+  const totalKnownLossesFormatted = formatDecimalPlaces(diagramResults.totalKnownLosses, settings.flowDecimalPrecision);
   const totalFacilityDischargeFormatted = formatDecimalPlaces(totalFacilityDischarge, settings.flowDecimalPrecision);
   dischargeRows.push(
     { label: 'Total Known Loss (water users)', result: totalKnownLossesFormatted, unit: <FlowDisplayUnit /> },
@@ -138,6 +145,7 @@ const DiagramResults = () => {
   const balanceTitle = "Facility Level Imbalance";
   const balanceRows = [
     { label: 'Net Intake Minus Discharge', result: facilityImbalanceFormatted, unit: <FlowDisplayUnit /> },
+    { label: 'Estimated Unknown Water Uses', result: estimatedUnknownWaterUses, unit: <FlowDisplayUnit /> },
     // { label: 'Net Intake Minus System Intake', result: facilityImbalance, unit: <FlowDisplayUnit /> },
   ]
 

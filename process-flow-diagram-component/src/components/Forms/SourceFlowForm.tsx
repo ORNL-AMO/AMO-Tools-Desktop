@@ -8,16 +8,16 @@ import FlowConnectionText from "../Drawer/FlowConnectionText";
 import InputField from "../StyledMUI/InputField";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { distributeTotalSourceFlow, modalOpenChange, focusedEdgeChange, sourceFlowValueChange, totalFlowChange } from "../Diagram/diagramReducer";
+import { distributeTotalSourceFlow, modalOpenChange, focusedEdgeChange, sourceFlowValueChange, totalFlowChange, nodeDataPropertyChange } from "../Diagram/diagramReducer";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
-import { selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
+import { selectCurrentNode, selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
 import { Formik, Form, FieldArray, useFormikContext } from 'formik';
 import { FlowForm, getDefaultFlowValidationSchema, TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR } from "../../validation/Validation";
 import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
 import { ObjectSchema } from "yup";
-import { CustomEdgeData } from "process-flow-lib";
+import { CustomEdgeData, NodeFlowData } from "process-flow-lib";
 /**
    * Formik is used for validation only, while source of truth for values is redux store. This avoids state race conditions when rendering.
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility
@@ -31,6 +31,9 @@ const SourceFlowForm = () => {
     const [inPercent, setInPercent] = useState<boolean>(false);
     const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
     const settings = useAppSelector((state) => state.diagram.settings);
+    const selectedNode = useAppSelector(selectCurrentNode);
+    const isDischargeOutlet = selectedNode.type === 'waterDischarge';
+
     // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
     // const handleFieldState = (edgeId: string, stateProp: string, val: boolean) => {
     //     if (stateProp === 'focused') {
@@ -53,12 +56,22 @@ const SourceFlowForm = () => {
         dispatch(sourceFlowValueChange({ sourceEdgeId, flowValue }));
     }
 
+    const onUnaccountedFlowChange = (event, handleChange: (event: React.ChangeEvent<any>) => void) => {
+            handleChange(event);
+            const updated: NodeFlowData = {
+                ...selectedNode.data.userEnteredData,
+                dischargeUnaccounted: event.target.value === "" ? null : Number(event.target.value)
+            }
+            dispatch(nodeDataPropertyChange({ optionsProp: 'userEnteredData', updatedValue: updated }));
+        }
+    
+
     const onToggleDataEntryUnit = () => {
         setInPercent(!inPercent);
     }
 
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentSourceEdges, nodes, selectedDataId);
-    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Source', componentSourceEdges, totalCalculatedSourceFlow, settings.flowDecimalPrecision);
+    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Source', componentSourceEdges, totalCalculatedSourceFlow,  selectedNode.data.userEnteredData.dischargeUnaccounted, settings);
 
     return (
         <Formik
@@ -140,6 +153,41 @@ const SourceFlowForm = () => {
                                 )}
                             </FieldArray>
                         </Box>
+
+                        {isDischargeOutlet &&
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                marginTop: '1rem',
+                                padding: '1rem',
+                                border: `1px solid ${theme.palette.primary.main}`,
+                                borderRadius: '8px'
+                            }}>
+                                <InputField
+                                    name={'dischargeUnaccounted'}
+                                    id={'dischargeUnaccounted'}
+                                    label={'Unaccounted Flow'}
+                                    type={'number'}
+                                    size="small"
+                                    value={selectedNode.data.userEnteredData.dischargeUnaccounted ?? ''}
+                                    onChange={(event) => onUnaccountedFlowChange(event, handleChange)}
+                                    sx={{ marginBottom: '1rem', width: '100%' }}
+                                    // warning={Boolean(errors.unaccountedFlow)}
+                                    // helperText={Boolean(errors.unaccountedFlow) ? String(errors.unaccountedFlow) : ""}
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                            <span style={{ zIndex: 1, background: 'white' }}>
+                                                {inPercent ?
+                                                    <span>%</span>
+                                                    :
+                                                    <FlowDisplayUnit />
+                                                }
+                                            </span>
+                                        </InputAdornment>,
+                                    }}
+                                />
+                            </Box>
+                        }
 
                     </Form>
                 );

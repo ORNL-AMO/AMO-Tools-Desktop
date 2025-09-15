@@ -226,7 +226,9 @@ export const getNewProcessComponent = (processComponentType: WaterProcessCompone
     disableOutflowConnections: diagramComponent.disableOutflowConnections,
     userEnteredData: {
       totalDischargeFlow: diagramComponent.totalDischargeFlow as number,
-      totalSourceFlow: diagramComponent.totalSourceFlow as number
+      totalSourceFlow: diagramComponent.totalSourceFlow as number,
+      intakeUnaccounted: diagramComponent.intakeUnaccounted as number,
+      dischargeUnaccounted: diagramComponent.dischargeUnaccounted as number,
     },
     diagramNodeId: getNewNodeId(),
     modifiedDate: new Date(),
