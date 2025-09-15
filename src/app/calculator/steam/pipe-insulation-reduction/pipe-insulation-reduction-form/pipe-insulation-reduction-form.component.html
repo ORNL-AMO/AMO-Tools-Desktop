@@ -38,8 +38,8 @@
         <div class="form-group">
             <label class="small" for="{{'heatedOrChilled_'+idString}}">Heated or Chilled</label>
             <select class="form-control" name="heatedOrChilled" id="{{'heatedOrChilled_'+idString}}"
-                formControlName="heatedOrChilled" (change)="updateHeatedOrChill()" (focus)="focusField('heatedOrChilled')"
-                (blur)="focusOut()">
+                formControlName="heatedOrChilled" (change)="updateHeatedOrChill()"
+                (focus)="focusField('heatedOrChilled')" (blur)="focusOut()">
                 <option *ngFor="let option of heatedOrChilledOptions" [ngValue]="option.value">{{option.name}}</option>
             </select>
         </div>
@@ -48,9 +48,9 @@
         <div class="form-group">
             <label class="small" for="{{'utilityCost_'+idString}}">Utility Cost</label>
             <div class="input-group">
-                <input class="form-control" name="utilityCost" id="{{'utilityCost_'+idString}}" formControlName="utilityCost"
-                    type="number" (input)="calculate()" (focus)="focusField('utilityCost')" (blur)="focusOut()"
-                    onfocus="this.select();">
+                <input class="form-control" name="utilityCost" id="{{'utilityCost_'+idString}}"
+                    formControlName="utilityCost" type="number" (input)="calculate()"
+                    (focus)="focusField('utilityCost')" (blur)="focusOut()" onfocus="this.select();">
                 <span class="input-group-addon units">$/{{energyUnit}}</span>
             </div>
             <span class="alert-danger pull-right small"
@@ -131,7 +131,7 @@
             <label class="small" for="{{'pipeTemperature_'+idString}}">Pipe Temperature</label>
             <div class="input-group">
                 <input class="form-control" name="pipeTemperature" id="{{'pipeTemperature_'+idString}}"
-                    formControlName="pipeTemperature" type="number" (input)="calculate()"
+                    formControlName="pipeTemperature" type="number" (input)="updateAverageTempValidation()"
                     (focus)="focusField('pipeTemperature')" (blur)="focusOut()" onfocus="this.select();">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">&#8457;</span>
                 <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">&#8451;</span>
@@ -151,7 +151,7 @@
             <label class="small" for="{{'ambientTemperature_'+idString}}">Average Ambient Temperature</label>
             <div class="input-group">
                 <input class="form-control" name="ambientTemperature" id="{{'ambientTemperature_'+idString}}"
-                    formControlName="ambientTemperature" type="number" (input)="calculate()"
+                    formControlName="ambientTemperature" type="number" (input)="updateAverageTempValidation()"
                     (focus)="focusField('ambientTemperature')" (blur)="focusOut()" onfocus="this.select();">
                 <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">&#8457;</span>
                 <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="units input-group-addon">&#8451;</span>
@@ -162,6 +162,14 @@
                 <span *ngIf="form.controls.ambientTemperature.errors.min">Value can't be less than
                     {{form.controls.ambientTemperature.errors.min.min}}.</span>
             </span>
+        </div>
+        <div class="alert alert-danger small p-1 mb-3" *ngIf="form.controls.averageTemperature.errors">
+            <span *ngIf="form.controls.averageTemperature.errors.max">The average of the ambient temperature and pipe
+                temperature must be less than
+                {{form.controls.averageTemperature.errors.max.max}}
+                <ng-container *ngIf="settings.unitsOfMeasure == 'Imperial'">&#8457;</ng-container>
+                <ng-container *ngIf="settings.unitsOfMeasure != 'Imperial'">&#8451;</ng-container> for the selected
+                insulation material.</span>
         </div>
 
         <!-- Pipe Base Material -->
