@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, HostListener, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { PipeInsulationReductionInput, PipeInsulationReductionResult } from '../../../../shared/models/standalone';
-import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
+import { PipeInsulationReductionInput } from '../../../../shared/models/standalone';
+import { UntypedFormGroup } from '@angular/forms';
 import { PipeInsulationReductionService } from '../pipe-insulation-reduction.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 
