@@ -1,15 +1,15 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, HostListener, ElementRef, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { PipeInsulationReductionInput, PipeInsulationReductionResult } from '../../../../shared/models/standalone';
-import { UntypedFormGroup } from '@angular/forms';
+import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { PipeInsulationReductionService } from '../pipe-insulation-reduction.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
-    selector: 'app-pipe-insulation-reduction-form',
-    templateUrl: './pipe-insulation-reduction-form.component.html',
-    styleUrls: ['./pipe-insulation-reduction-form.component.css'],
-    standalone: false
+  selector: 'app-pipe-insulation-reduction-form',
+  templateUrl: './pipe-insulation-reduction-form.component.html',
+  styleUrls: ['./pipe-insulation-reduction-form.component.css'],
+  standalone: false
 })
 export class PipeInsulationReductionFormComponent implements OnInit {
   @Input()
@@ -150,7 +150,7 @@ export class PipeInsulationReductionFormComponent implements OnInit {
     this.calculate();
   }
 
-  updateHeatedOrChill(){
+  updateHeatedOrChill() {
     this.form = this.pipeInsulationReductionService.updateFormValidators(this.form.controls.heatedOrChilled.value, this.form);
     this.calculate();
   }
@@ -162,6 +162,17 @@ export class PipeInsulationReductionFormComponent implements OnInit {
     } else {
       this.form.controls.pipeJacketMaterialSelection.enable();
     }
+    this.updateAverageTempValidation();
+  }
+
+  updateAverageTempValidation() {
+    let obj: PipeInsulationReductionInput;
+    if (this.isBaseline) {
+      obj = this.pipeInsulationReductionService.getObjFromForm(this.form, this.pipeInsulationReductionService.baselineData);
+    } else {
+      obj = this.pipeInsulationReductionService.getObjFromForm(this.form, this.pipeInsulationReductionService.modificationData);
+    }
+    this.pipeInsulationReductionService.setAverageTemperatureValidation(this.form, obj, this.settings);
     this.calculate();
   }
 
