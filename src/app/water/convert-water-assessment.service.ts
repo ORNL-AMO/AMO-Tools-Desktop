@@ -256,8 +256,8 @@ export class ConvertWaterAssessmentService {
       // * lb/hr/BHP
       // boilerWater.steamPerPower = this.convertUnitsService.value(boilerWater.steamPerPower).from('F').to('C');
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      boilerWater.power = this.convertUnitsService.value(boilerWater.power).from('C').to('F');
-      boilerWater.loadFactor = this.convertUnitsService.value(boilerWater.loadFactor).from('C').to('F');
+      boilerWater.power = this.convertUnitsService.value(boilerWater.power).from('MW').to('hp');
+      boilerWater.loadFactor = this.convertUnitsService.value(boilerWater.loadFactor).from('kW').to('hp');
       // boilerWater.steamPerPower = this.convertUnitsService.value(boilerWater.steamPerPower).from('F').to('C');
     }
 
