@@ -5,9 +5,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 export class WeeklyOperatingScheduleService {
   constructor(private fb: FormBuilder) {}
 
-
-  getWeeklyScheduleForm(initial?: Array<WeeklyScheduleData>): FormGroup<WeeklyScheduleForm> {
-    const dayData = initial ?? this.getDefaultDays();
+  getWeeklyScheduleForm(scheduleData: WeeklyOperatingSchedule): FormGroup<WeeklyOperatingScheduleForm> {
+    const dayData = scheduleData.days;
     const dayGroups = dayData.map(day =>
       this.fb.group({
         off: [day.off],
@@ -17,20 +16,15 @@ export class WeeklyOperatingScheduleService {
       })
     );
     const days = this.fb.array(dayGroups);
-    return this.fb.group({ days }) as FormGroup<WeeklyScheduleForm>;
+    const formGroup: FormGroup<WeeklyOperatingScheduleForm> = this.fb.group({
+      days,
+      useSameSchedule: [scheduleData.useSameSchedule ?? false]
+    });
+    return formGroup;
   }
 
-
-  getWeeklySchedule(formValue: Array<WeeklyScheduleData>) {
-    return formValue.map(day => ({
-      ...day,
-      start: Number(day.start),
-      end: Number(day.end)
-    }));
-  }
-
-  getWeeklyOperatingSchedule(formValue: Array<WeeklyScheduleData>): number[] {
-    const hoursOnPerDay = formValue.map(day => {
+  getWeeklyOperatingSchedule(formValue: WeeklyOperatingSchedule): WeeklyOperatingSchedule {
+    const hoursOnMonToSun = formValue.days.map(day => {
       if (day.off) {
         return 0;
       } else if (day.allDay) {
@@ -40,25 +34,43 @@ export class WeeklyOperatingScheduleService {
       }
     });
 
-    return hoursOnPerDay;
+    return {
+      useSameSchedule: formValue.useSameSchedule,
+      hoursOnMonToSun: hoursOnMonToSun,
+      days: formValue.days.map(day => ({
+        ...day,
+        start: Number(day.start),
+        end: Number(day.end),
+      }) as DayScheduleData)
+    };  
   }
 
-  getDefaultDays(): Array<WeeklyScheduleData> {
-    return [
-      { off: false, start: 8, end: 17, allDay: false },
-      { off: false, start: 8, end: 17, allDay: false },
-      { off: false, start: 8, end: 17, allDay: false },
-      { off: false, start: 8, end: 17, allDay: false },
-      { off: false, start: 8, end: 17, allDay: false },
-      { off: true, start: 8, end: 17, allDay: false },
-      { off: true, start: 8, end: 17, allDay: false }
-    ];
+  getDefaultScheduleData(): WeeklyOperatingSchedule {
+    return {
+      useSameSchedule: false,
+      days: [
+        { off: false, start: 8, end: 17, allDay: false },
+        { off: false, start: 8, end: 17, allDay: false },
+        { off: false, start: 8, end: 17, allDay: false },
+        { off: false, start: 8, end: 17, allDay: false },
+        { off: false, start: 8, end: 17, allDay: false },
+        { off: true, start: 8, end: 17, allDay: false },
+        { off: true, start: 8, end: 17, allDay: false }
+      ],
+    }
   }
 
+  }
+
+export interface WeeklyOperatingScheduleForm {
+  useSameSchedule: FormControl<boolean>;
+  days: FormArray<FormGroup<DayScheduleForm>>;
 }
 
-export interface WeeklyScheduleForm {
-  days: FormArray<FormGroup<DayScheduleForm>>;
+export interface WeeklyOperatingSchedule {
+  useSameSchedule: boolean;
+  days: Array<DayScheduleData>;
+  hoursOnMonToSun?: number[];
 }
 
 export interface DayScheduleForm {
@@ -68,8 +80,7 @@ export interface DayScheduleForm {
   allDay: FormControl<boolean>;
 }
 
-
-export interface WeeklyScheduleData {
+export interface DayScheduleData {
   off: boolean;
   start: number;
   end: number;

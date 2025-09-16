@@ -1,8 +1,8 @@
 
 
 import { Component, OnInit, inject, DestroyRef, Signal } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
-import { WeeklyOperatingScheduleService, WeeklyScheduleForm } from '../../services/weekly-operating-schedule.service';
+import { FormArray, FormGroup, FormControl } from '@angular/forms';
+import { WeeklyOperatingScheduleService, WeeklyOperatingScheduleForm } from '../../services/weekly-operating-schedule.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
 import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
@@ -24,11 +24,10 @@ export class WeeklyOperatingScheduleComponent implements OnInit {
   DAY_LABELS = DAY_LABELS;
   HOUR_OPTIONS = HOUR_OPTIONS;
   
-  useSameSchedule = false;
-  form: FormGroup<WeeklyScheduleForm>;
+  form: FormGroup<WeeklyOperatingScheduleForm>;
 
   ngOnInit() {
-    const weeklySchedule = this.processCooling().weeklyOperatingSchedule ? this.processCooling().weeklyOperatingSchedule : this.weeklyOperatingScheduleService.getDefaultDays();
+    const weeklySchedule = this.processCooling().weeklyOperatingSchedule ? this.processCooling().weeklyOperatingSchedule : this.weeklyOperatingScheduleService.getDefaultScheduleData();
     this.form = this.weeklyOperatingScheduleService.getWeeklyScheduleForm(weeklySchedule);
     this.updateDayGroups();
     this.observeFormChanges();
@@ -38,7 +37,7 @@ export class WeeklyOperatingScheduleComponent implements OnInit {
     this.form.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => {
-      if (this.useSameSchedule) {
+      if (this.useSameSchedule.value) {
         this.setSameSchedule();
       }
       this.updateDayGroups();
@@ -53,8 +52,7 @@ export class WeeklyOperatingScheduleComponent implements OnInit {
   }
 
   onUseSameScheduleChange() {
-    this.useSameSchedule = !this.useSameSchedule;
-    if (this.useSameSchedule) {
+    if (this.useSameSchedule.value) {
       this.setSameSchedule();
       // * keep Monday enabled
       this.getDayGroup(0).enable({ emitEvent: false });
@@ -67,17 +65,17 @@ export class WeeklyOperatingScheduleComponent implements OnInit {
   }
   
   setSameSchedule() {
-     const monday = this.getDayGroup(0).getRawValue();
-      for (let dayGroup of this.daysFormArray.controls) {
-        dayGroup.patchValue(monday, { emitEvent: false });
-        dayGroup.disable({ emitEvent: false });
-      }
+    const monday = this.getDayGroup(0).getRawValue();
+    for (let dayGroup of this.daysFormArray.controls) {
+      dayGroup.patchValue(monday, { emitEvent: false });
+      dayGroup.disable({ emitEvent: false });
+    }
   }
 
   
   updateWeeklyOperatingSchedule() {
-    const weeklySchedule = this.weeklyOperatingScheduleService.getWeeklySchedule(this.form.getRawValue().days);
-    this.processCoolingAssessmentService.updateWeeklySchedule(weeklySchedule);
+    const weeklySchedule = this.weeklyOperatingScheduleService.getWeeklyOperatingSchedule(this.form.getRawValue());
+    this.processCoolingAssessmentService.updateWeeklyOperatingSchedule(weeklySchedule);
     console.log('weeklySchedule:', weeklySchedule);
     console.log('form:', this.form.getRawValue());
   }
@@ -136,6 +134,11 @@ export class WeeklyOperatingScheduleComponent implements OnInit {
   get daysFormArray(): FormArray {
     return this.form.get('days') as FormArray;
   }
+
+  get useSameSchedule(): FormControl {
+    return this.form.get('useSameSchedule') as FormControl;
+  }
+
   getDayGroup(dayIndex: number) {
     return this.daysFormArray.at(dayIndex) as FormGroup;
   }
