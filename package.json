@@ -51,7 +51,6 @@
     "@angular/service-worker": "19.2.2",
     "@ng-bootstrap/ng-bootstrap": "^18.0.0",
     "@popperjs/core": "^2.11.2",
-    "measur-tools-suite": "latest",
     "billboard.js": "^3.14.0",
     "bootstrap": "4.3.1",
     "core-js": "3.21.1",
