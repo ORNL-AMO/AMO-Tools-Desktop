@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CompressedAirAssessment, EndUseDayTypeSetup } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
-import { BaselineResults } from '../../compressed-air-assessment-results.service';
+import { BaselineResults } from '../../calculations/caCalculationModels';
 import { EndUseEnergy, EndUseEnergyData, EndUsesService } from '../../end-uses/end-uses.service';
 
 @Injectable()

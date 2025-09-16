@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfilesForPrint, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
-import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../../calculations/caCalculationModels';
 
 @Component({
     selector: 'app-system-profiles',

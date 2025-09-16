@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ReduceAirLeaks } from '../../../shared/models/compressed-air-assessment';
-import { BaselineResults } from '../../compressed-air-assessment-results.service';
+import { BaselineResults } from '../../calculations/caCalculationModels';
 
 @Injectable()
 export class ReduceAirLeaksService {

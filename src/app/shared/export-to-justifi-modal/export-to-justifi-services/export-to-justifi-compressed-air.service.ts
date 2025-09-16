@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import * as ExcelJS from 'exceljs';
-import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../../compressed-air-assessment/compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResultsService } from '../../../compressed-air-assessment/compressed-air-assessment-results.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../models/settings';
 import { Assessment } from '../../models/assessment';
 import { Modification } from '../../models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment/compressed-air-assessment.service';
+import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../../../compressed-air-assessment/calculations/caCalculationModels'
 
 @Injectable({
   providedIn: 'root'

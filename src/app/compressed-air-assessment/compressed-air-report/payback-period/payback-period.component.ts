@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Modification } from '../../../shared/models/compressed-air-assessment';
-import { DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
+import { DayTypeModificationResult } from '../../calculations/caCalculationModels';
 
 @Component({
     selector: 'app-payback-period',

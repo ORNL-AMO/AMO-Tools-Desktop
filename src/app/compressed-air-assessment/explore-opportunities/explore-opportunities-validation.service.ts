@@ -3,7 +3,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { AddPrimaryReceiverVolume, AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemProfileSetup, UseAutomaticSequencer } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
-import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import { AddReceiverVolumeService } from './add-receiver-volume/add-receiver-volume.service';
 import { AdjustCascadingSetPointsService, CompressorForm } from './adjust-cascading-set-points/adjust-cascading-set-points.service';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
@@ -12,6 +12,7 @@ import { ReduceAirLeaksService } from './reduce-air-leaks/reduce-air-leaks.servi
 import { ReduceRunTimeService } from './reduce-run-time/reduce-run-time.service';
 import { ReduceSystemAirPressureService } from './reduce-system-air-pressure/reduce-system-air-pressure.service';
 import { UseAutomaticSequencerService } from './use-automatic-sequencer/use-automatic-sequencer.service';
+import { BaselineResults, CompressedAirAssessmentResult } from '../calculations/caCalculationModels';
 
 @Injectable()
 export class ExploreOpportunitiesValidationService {

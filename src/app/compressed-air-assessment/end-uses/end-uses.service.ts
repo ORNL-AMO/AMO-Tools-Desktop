@@ -4,9 +4,10 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { CompressedAirAssessment, DayTypeAirflowTotals, DayTypeEndUse, EndUse, EndUseDayTypeSetup, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
-import { BaselineResult, BaselineResults, CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import { DayTypeSetupService } from './day-type-setup-form/day-type-setup.service';
 import { DayTypeUseFormService } from './day-type-use-form/day-type-use-form.service';
+import { BaselineResult, BaselineResults } from '../calculations/caCalculationModels';
 
 @Injectable()
 export class EndUsesService {

@@ -24,7 +24,8 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
  
 import { WasteWaterService } from '../../../waste-water/waste-water.service';
 import { WasteWaterResults } from '../../../shared/models/waste-water';
-import { BaselineResults, CompressedAirAssessmentResultsService } from '../../../compressed-air-assessment/compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResultsService } from '../../../compressed-air-assessment/compressed-air-assessment-results.service';
+import { BaselineResults } from '../../../compressed-air-assessment/calculations/caCalculationModels';
 
 @Component({
     selector: 'app-directory-summary',

@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormGroup, AbstractControl, FormGroup } from '@angular/forms';
-import { CompressedAirAssessment, CompressedAirDayType, EndUseEfficiencyItem, ProfileSummary, ProfileSummaryTotal, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { UntypedFormGroup, FormGroup } from '@angular/forms';
+import { CompressedAirDayType, EndUseEfficiencyItem, ProfileSummaryTotal, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
-import { BaselineResults } from '../../../compressed-air-assessment-results.service';
+import { BaselineResults } from '../../../calculations/caCalculationModels';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { ImproveEndUseEfficiencyService } from '../improve-end-use-efficiency.service';
 

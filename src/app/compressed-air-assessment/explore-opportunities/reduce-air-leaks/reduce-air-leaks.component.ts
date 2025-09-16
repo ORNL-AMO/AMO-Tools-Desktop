@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, Modification, ReduceAirLeaks } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
@@ -6,9 +6,9 @@ import * as _ from 'lodash';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { ReduceAirLeaksService } from './reduce-air-leaks.service';
-import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 import { Settings } from '../../../shared/models/settings';
+import { BaselineResults } from '../../calculations/caCalculationModels';
 
 @Component({
     selector: 'app-reduce-air-leaks',

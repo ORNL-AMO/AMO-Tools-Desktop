@@ -138,7 +138,7 @@ export class CompressedAirBaselineDayTypeProfileSummary {
         let allData: Array<ProfileSummaryData> = this.profileSummary.flatMap(summary => {
             return summary.profileSummaryData;
         });
-        let totals: Array<ProfileSummaryTotal> = new Array();
+        this.profileSummaryTotals = new Array();
         for (let interval = 0; interval < 24;) {
             let totalAirFlow: number = 0;
             let compressorPower: number = 0;
@@ -154,7 +154,7 @@ export class CompressedAirBaselineDayTypeProfileSummary {
             });
             //no aux power for baseline
             //   let auxiliaryPower: number = this.getTotalAuxiliaryPower(selectedDayType, interval, improveEndUseEfficiency);
-            totals.push({
+            this.profileSummaryTotals.push({
                 auxiliaryPower: 0,
                 airflow: totalAirFlow,
                 power: compressorPower,

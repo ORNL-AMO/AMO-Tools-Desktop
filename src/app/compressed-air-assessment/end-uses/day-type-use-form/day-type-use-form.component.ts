@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, DayTypeEndUse, EndUse } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, DayTypeEndUse, EndUse } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
-import { BaselineResult, BaselineResults } from '../../compressed-air-assessment-results.service';
+import { BaselineResult, BaselineResults } from '../../calculations/caCalculationModels';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { EndUseResults, EndUsesService, UpdatedEndUseData } from '../end-uses.service';
 import { DayTypeEndUseWarnings, DayTypeUseFormService } from './day-type-use-form.service';

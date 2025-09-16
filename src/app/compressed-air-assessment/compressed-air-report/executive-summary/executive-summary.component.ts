@@ -3,7 +3,7 @@ import { CompressedAirReportRollupService } from '../../../report-rollup/compres
 import { Assessment } from '../../../shared/models/assessment';
 import { Modification } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
-import { BaselineResults, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
+import { BaselineResults, DayTypeModificationResult } from '../../calculations/caCalculationModels';
 
 @Component({
     selector: 'app-executive-summary',

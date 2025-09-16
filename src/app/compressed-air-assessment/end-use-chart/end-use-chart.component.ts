@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { CompressedAirAssessment, CompressedAirDayType, EndUseDayTypeSetup } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
-import { BaselineResults, DayTypeProfileSummary } from '../compressed-air-assessment-results.service';
+import { BaselineResults, DayTypeProfileSummary } from '../calculations/caCalculationModels';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { DayTypeSetupService } from '../end-uses/day-type-setup-form/day-type-setup.service';
 import { EndUseEnergy, EndUseEnergyData, EndUsesService } from '../end-uses/end-uses.service';

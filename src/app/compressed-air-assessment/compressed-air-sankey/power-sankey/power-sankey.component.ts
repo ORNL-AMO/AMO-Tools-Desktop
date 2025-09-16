@@ -7,10 +7,11 @@ import { AirPropertiesCsvService } from '../../../shared/helper-services/air-pro
 import { CompressedAirAssessment, EndUseDayTypeSetup, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { PrintOptionsMenuService } from '../../../shared/print-options-menu/print-options-menu.service';
-import { BaselineResults, CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { DayTypeSetupService } from '../../end-uses/day-type-setup-form/day-type-setup.service';
-import { CompressedAirSankeyNode, CompressedAirSankeyResults, PowerSankeyService, SankeySystemInputs } from './power-sankey.service';
+import { CompressedAirSankeyNode, CompressedAirSankeyResults, PowerSankeyService } from './power-sankey.service';
+import { BaselineResults } from '../../calculations/caCalculationModels';
 
 @Component({
     selector: 'app-power-sankey',

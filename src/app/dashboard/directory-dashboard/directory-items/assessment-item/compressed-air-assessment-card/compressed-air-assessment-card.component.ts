@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../../../../compressed-air-assessment/compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResultsService } from '../../../../../compressed-air-assessment/compressed-air-assessment-results.service';
 import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../../../../../compressed-air-assessment/explore-opportunities/explore-opportunities-validation.service';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../../../shared/models/assessment';
@@ -8,6 +8,7 @@ import { CompressedAirDayType, ProfileSummary, ProfileSummaryTotal } from '../..
 import { Settings } from '../../../../../shared/models/settings';
 import { AssessmentService } from '../../../../assessment.service';
 import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment/compressed-air-assessment.service';
+import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../../../../../compressed-air-assessment/calculations/caCalculationModels'
 
 @Component({
     selector: 'app-compressed-air-assessment-card',

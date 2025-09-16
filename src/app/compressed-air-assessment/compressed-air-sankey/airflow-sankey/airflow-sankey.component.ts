@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, EndUseDayTypeSetup, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
-import { BaselineResults } from '../../compressed-air-assessment-results.service';
+import { BaselineResults } from '../../calculations/caCalculationModels';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { DayTypeSetupService } from '../../end-uses/day-type-setup-form/day-type-setup.service';
 import { EndUseEnergyData, EndUsesService } from '../../end-uses/end-uses.service';
