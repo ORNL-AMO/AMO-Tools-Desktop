@@ -67,24 +67,22 @@ export class CompressedAirReportComponent implements OnInit {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
       // this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.assessment.compressedAirAssessment, this.settings);
-      this.baselineResults = new CompressedAirAssessmentBaselineResults(this.assessment.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService).baselineResults;
-      
-      
-      
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.assessment.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      this.baselineResults = compressedAirAssessmentBaselineResults.baselineResults;
       this.assessmentResults = new Array();
       this.combinedDayTypeResults = new Array();
-      this.baselineProfileSummaries = new Array();
-      this.assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        let profileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.assessment.compressedAirAssessment, dayType, this.settings);
-        let profileSummaryTotals: Array<ProfileSummaryTotal> = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(
-          this.assessment.compressedAirAssessment.compressorInventoryItems, dayType, profileSummary, this.assessment.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval
-        )
-        this.baselineProfileSummaries.push({
-          dayType: dayType,
-          profileSummary: profileSummary,
-          profileSummaryTotals: profileSummaryTotals
-        });
-      });
+      this.baselineProfileSummaries = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries;
+      // this.assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      //   let profileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.assessment.compressedAirAssessment, dayType, this.settings);
+      //   let profileSummaryTotals: Array<ProfileSummaryTotal> = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(
+      //     this.assessment.compressedAirAssessment.compressorInventoryItems, dayType, profileSummary, this.assessment.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval
+      //   )
+      //   this.baselineProfileSummaries.push({
+      //     dayType: dayType,
+      //     profileSummary: profileSummary,
+      //     profileSummaryTotals: profileSummaryTotals
+      //   });
+      // });
 
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
         let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, undefined, this.baselineResults);
