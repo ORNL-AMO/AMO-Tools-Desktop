@@ -2,6 +2,9 @@ import { getNewIdString } from "../shared/helperFunctions";
 import { ChillerInventoryItem, CompressorChillerTypeEnum, FanType, ProcessCoolingAssessment, TowerSizeMetric, TowerType } from "../shared/models/process-cooling-assessment";
 import { Settings } from "../shared/models/settings";
 
+export const DAY_LABELS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+export const HOUR_OPTIONS = Array.from({ length: 25 }, (_, hour) => hour);
+
 export const getCondenserCoolingMethods = () => {
     return [
         { value: 0, name: 'Water' },

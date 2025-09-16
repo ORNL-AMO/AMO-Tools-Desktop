@@ -1,0 +1,45 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5 class="ml-2">
+        Weekly Operating Schedule
+    </h5>
+    <p class="text-muted p-2">
+        Enter the typical starting and stopping times for the chiller for each day of the week.  This information is used to remove non-operating daily hours from the temperature data. 
+    </p>
+    <hr class="my-1 hr-spacer">
+</div>
+<div class="form-group mb-2 pl-3">
+	<label class="font-weight-bold mb-1">
+		<input type="checkbox" [formControl]="useSameSchedule" (change)="onUseSameScheduleChange()" class="mr-2 use-same-schedule-checkbox" />
+		Use the same schedule for all days
+	</label>
+</div>
+<form [formGroup]="form" class="w-100">
+	<div class="table-responsive w-100">
+		<div class="d-flex flex-column w-100">
+			<div *ngFor="let dayLabel of DAY_LABELS; let dayIndex = index"
+					 [formGroup]="getDayGroup(dayIndex)"
+					 class="d-flex align-items-center w-100 mb-2 position-relative"
+					 [class.schedule-disabled]="useSameSchedule.value && dayIndex !== 0">
+				<label class="mb-0 mr-2 flex-shrink-0 day-label">{{ dayLabel }}</label>
+				<div class="btn-group btn-group-toggle mr-3" ngbRadioGroup name="scheduleType{{dayIndex}}" [value]="getScheduleType(dayIndex)" (change)="onScheduleTypeChange($event.target.value, dayIndex)">
+					<label class="btn btn-outline-secondary mb-0" [class.active]="getScheduleType(dayIndex) === 'off'" [ngClass]="{'bg-danger': getScheduleType(dayIndex) === 'off'}">
+						<input type="radio" [checked]="getScheduleType(dayIndex) === 'off'" value="off" autocomplete="off" > Off
+					</label>
+					<label class="btn btn-outline-secondary mb-0" [class.active]="getScheduleType(dayIndex) === 'allDay'">
+						<input type="radio" [checked]="getScheduleType(dayIndex) === 'allDay'" value="allDay" autocomplete="off"> On 24 Hours
+					</label>
+					<label class="btn btn-outline-secondary mb-0" [class.active]="getScheduleType(dayIndex) === 'custom'">
+						<input type="radio" [checked]="getScheduleType(dayIndex) === 'custom'" value="custom" autocomplete="off"> On (Set Hours)
+					</label>
+				</div>
+				<select formControlName="start" class="form-control mx-1 start-control">
+					<option *ngFor="let hour of HOUR_OPTIONS" [value]="hour">{{ hour }}:00</option>
+				</select>
+				<span class="mx-1">-</span>
+				<select formControlName="end" class="form-control mx-1 end-control">
+					<option *ngFor="let hour of HOUR_OPTIONS" [value]="hour">{{ hour }}:00</option>
+				</select>
+			</div>
+		</div>
+	</div>
+</form>

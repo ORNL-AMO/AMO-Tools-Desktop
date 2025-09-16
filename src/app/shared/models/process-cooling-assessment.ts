@@ -1,4 +1,5 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
+import { WeeklyOperatingSchedule } from "../../process-cooling-assessment/services/weekly-operating-schedule.service";
 import { WeatherContextData } from "../modules/weather-data/weather-context.token";
 
 // Output interfaces for process cooling API service
@@ -38,6 +39,7 @@ export interface ProcessCoolingAssessment {
     inventory: Array<ChillerInventoryItem>;
     modifications: Array<Modification>;
     weatherData?: WeatherContextData;
+    weeklyOperatingSchedule?: WeeklyOperatingSchedule;
 }
 
 export interface ProcessCoolingSystemBasics {
