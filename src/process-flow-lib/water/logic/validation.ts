@@ -11,19 +11,28 @@ export const getIsDiagramValid = (nodeErrors: NodeErrors) => {
    * @param calculatedValue retrived from getNodeFlowTotals()
    * @param userEnteredTotalFlow componentData.userEnteredData.totalSourceFlow or componentData.userEnteredData.totalSourceFlow 
    */
-export const validateTotalFlowValue = (connectedEdges: Edge[], calculatedTotalFlow: number, userEnteredTotalFlow: number, precision: number) => {
+export const validateTotalFlowValue = (connectedEdges: Edge[], calculatedTotalFlow: number, unaccountedFlow: number, userEnteredTotalFlow: number, precision: number) => {
     let shouldValidate = connectedEdges.length > 0 && calculatedTotalFlow !== null && calculatedTotalFlow !== undefined && userEnteredTotalFlow !== null && userEnteredTotalFlow !== undefined;
     // *If a user entered value exists, check that our calculated total does not differ with component saved value (useEnteredValue)\
     if (shouldValidate) {
         // console.log(`## validate totalFlow computed: ${calculatedTotalFlow} vs userEntered: ${userEnteredTotalFlow}`);
         const calculatedTotalFlowToPrecision = Number(calculatedTotalFlow?.toFixed(precision));
         const userEnteredFlowToPrecision = Number(userEnteredTotalFlow?.toFixed(precision));
-        if (userEnteredFlowToPrecision !== undefined && userEnteredFlowToPrecision !== null && userEnteredFlowToPrecision !== calculatedTotalFlowToPrecision) {
-            // console.log('## totalFlow invalid');
+        if (userEnteredFlowToPrecision !== undefined && userEnteredFlowToPrecision !== null
+            && userEnteredFlowToPrecision !== calculatedTotalFlowToPrecision) {
+            if (unaccountedFlow !== undefined && unaccountedFlow !== null) {
+                let adjustedFlowToPrecision;
+                if (calculatedTotalFlowToPrecision < userEnteredFlowToPrecision) {
+                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision - unaccountedFlow).toFixed(precision));
+                } else {
+                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision + unaccountedFlow).toFixed(precision));
+                }
+                const isAdjustedValid = adjustedFlowToPrecision === calculatedTotalFlowToPrecision;
+                return isAdjustedValid;
+            }
             return false;
         }
     }
-    // console.log('## totalFlow valid');
     return true;
 };
 
@@ -115,7 +124,7 @@ export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], calculat
 
         // * Source errors
         const totalSourceFlow = getTotalInflow(nd, calculatedData);
-        const isTotalFlowValid = validateTotalFlowValue(componentSourceEdges, totalSourceFlow, nd.data.userEnteredData.totalSourceFlow, settings.flowDecimalPrecision);
+        const isTotalFlowValid = validateTotalFlowValue(componentSourceEdges, totalSourceFlow, nd.data.userEnteredData.dischargeUnaccounted, nd.data.userEnteredData.totalSourceFlow, settings.flowDecimalPrecision);
         componentSourceEdges.map((edge: Edge<CustomEdgeData>) => {
             const validationMessage = validateFlowValue(edge.data.flowValue);
             flowErrors.source.flows.push(validationMessage);
@@ -130,7 +139,7 @@ export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], calculat
 
         // * Discharge errors
         const totalDischargeFlow = getTotalOutflow(nd, calculatedData);
-        const isTotalDischargeValid = validateTotalFlowValue(componentDischargeEdges, totalDischargeFlow, nd.data.userEnteredData.totalDischargeFlow, settings.flowDecimalPrecision);
+        const isTotalDischargeValid = validateTotalFlowValue(componentDischargeEdges, totalDischargeFlow, nd.data.userEnteredData.intakeUnaccounted, nd.data.userEnteredData.totalDischargeFlow, settings.flowDecimalPrecision);
         componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => {
             const validationMessage = validateFlowValue(edge.data.flowValue);
             flowErrors.discharge.flows.push(validationMessage);

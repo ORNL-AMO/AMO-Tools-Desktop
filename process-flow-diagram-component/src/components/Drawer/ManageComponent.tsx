@@ -20,6 +20,7 @@ const ManageComponent = (props: ManageComponentProps) => {
     const { selectedNode } = props;
     const componentTabs = useAppSelector(state => state.diagram.manageDataTabs);
     const isWaterUsingSystem = props.selectedNode.type === 'waterUsingSystem';
+    const isIntakeOrDischarge = props.selectedNode.type === 'waterIntake' || props.selectedNode.type === 'waterDischarge';
 
     const [selectedTab, setSelectedTab] = useState(0);
 
@@ -64,7 +65,9 @@ const ManageComponent = (props: ManageComponentProps) => {
 
                     <TabPanel value={selectedTab} index={isWaterUsingSystem ? 2 : 1}>
                         <Box>
-                            <ComponentHandles node={selectedNode}></ComponentHandles>
+                            {!isIntakeOrDischarge &&
+                                <ComponentHandles node={selectedNode}></ComponentHandles>
+                            }
                             <CustomizeNode node={selectedNode}></CustomizeNode>
                             <Button sx={{ width: '100%', marginY: 2 }} color="error" variant="outlined" onClick={() => dispatch(deleteNode())}>Delete Component</Button>
                         </Box>
