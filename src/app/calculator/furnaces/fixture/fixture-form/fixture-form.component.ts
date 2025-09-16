@@ -79,7 +79,7 @@ export class FixtureFormComponent implements OnInit {
       let energySource = this.fixtureService.energySourceType.getValue();
       this.setEnergySource(energySource);
     }
-    this.setSpecificHeat();
+    this.setProperties();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -152,20 +152,6 @@ export class FixtureFormComponent implements OnInit {
       this.setMaterials();
       this.fixtureForm.enable();
     }
-  }
-
-  setSpecificHeat() {
-    let selectedMaterial: SolidLoadChargeMaterial = this.materialTypes.find(material => { return material.id === this.fixtureForm.controls.materialName.value; });
-    if (selectedMaterial) {
-      let specificHeatSolid: number = selectedMaterial.specificHeatSolid;
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        specificHeatSolid = this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
-      }
-      this.fixtureForm.patchValue({
-        specificHeat: roundVal(specificHeatSolid, 3)
-      });
-    }
-    this.calculate();
   }
 
   setProperties() {

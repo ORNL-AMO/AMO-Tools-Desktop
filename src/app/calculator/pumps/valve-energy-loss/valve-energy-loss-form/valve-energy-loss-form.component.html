@@ -1,0 +1,247 @@
+<form [formGroup]="form">
+    <div class="form-group">
+        <label class="small" for="{{'hoursOperation_'+idString}}">Annual Operating Hours</label>
+        <div class="input-group">
+            <span class="input-group-addon op-hour-addon units">
+                <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+            </span>
+            <input class="form-control" name="hoursOperation" id="{{'hoursOperation_'+idString}}"
+                formControlName="hoursOperation" type="number" (input)="calculate()"
+                (focus)="focusField('hoursOperation')" onfocus="this.select();">
+            <span class="units input-group-addon">hrs/yr</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.hoursOperation.invalid && !form.controls.hoursOperation.pristine">
+            <span *ngIf="form.controls.hoursOperation.errors.required">Value required.</span>
+            <span *ngIf="form.controls.hoursOperation.errors.max">Value can't be greater than
+                {{form.controls.hoursOperation.errors.max.max}}.</span>
+            <span *ngIf="form.controls.hoursOperation.errors.min">Value can't be less than
+                {{form.controls.hoursOperation.errors.min.min}}.</span>
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label class="small" for="{{'electricalRate_'+idString}}">
+            Electrical Cost
+        </label>
+        <div class="input-group">
+            <input name="electricalRate" type="number" class="form-control" formControlName="electricalRate"
+                id="{{'electricalRate_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('electricalRate')">
+            <span class="input-group-addon units">$/kWh</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.electricalRate.invalid && !form.controls.electricalRate.pristine">
+            <span *ngIf="form.controls.electricalRate.errors.required">Value required.</span>
+            <span *ngIf="form.controls.electricalRate.errors.min">Value can't be less than
+                {{form.controls.electricalRate.errors.min.min}}.</span>
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label class="small" for="{{'efficiencyPump_'+idString}}">
+            Pump Efficiency
+        </label>
+        <div class="input-group">
+            <input name="efficiencyPump" type="number" class="form-control" formControlName="efficiencyPump"
+                id="{{'efficiencyPump_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('efficiencyPump')">
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.efficiencyPump.invalid && !form.controls.efficiencyPump.pristine">
+            <span *ngIf="form.controls.efficiencyPump.errors.required">Value required.</span>
+            <span *ngIf="form.controls.efficiencyPump.errors.max">Value can't be greater than
+                {{form.controls.efficiencyPump.errors.max.max}}.</span>
+            <span *ngIf="form.controls.efficiencyPump.errors.min">Value can't be less than
+                {{form.controls.efficiencyPump.errors.min.min}}.</span>
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label class="small" for="{{'efficiencyMotor_'+idString}}">
+            Motor Efficiency
+        </label>
+        <div class="input-group">
+            <input name="efficiencyMotor" type="number" class="form-control" formControlName="efficiencyMotor"
+                id="{{'efficiencyMotor_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('efficiencyMotor')">
+            <span class="input-group-addon units">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.efficiencyMotor.invalid && !form.controls.efficiencyMotor.pristine">
+            <span *ngIf="form.controls.efficiencyMotor.errors.required">Value required.</span>
+            <span *ngIf="form.controls.efficiencyMotor.errors.max">Value can't be greater than
+                {{form.controls.efficiencyMotor.errors.max.max}}.</span>
+            <span *ngIf="form.controls.efficiencyMotor.errors.min">Value can't be less than
+                {{form.controls.efficiencyMotor.errors.min.min}}.</span>
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label class="small" for="{{'SG_'+idString}}">
+            Specific Gravity
+        </label>
+        <div class="input-group">
+            <input name="SG" type="number" class="form-control" formControlName="SG" id="{{'SG_'+idString}}"
+                onfocus="this.select();" (input)="calculate()" (focus)="focusField('SG')">
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="form.controls.SG.invalid && !form.controls.SG.pristine">
+            <span *ngIf="form.controls.SG.errors.required">Value required.</span>
+            <span *ngIf="form.controls.SG.errors.max">Value can't be greater than
+                {{form.controls.SG.errors.max.max}}.</span>
+            <span *ngIf="form.controls.SG.errors.min">Value must be greater than 0.</span>
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label class="small" for="{{'flowRate_'+idString}}">
+            Flow Rate
+        </label>
+        <div class="input-group">
+            <input name="flowRate" type="number" class="form-control" formControlName="flowRate"
+                id="{{'flowRate_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('flowRate')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">gpm</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">L/min</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.flowRate.invalid && !form.controls.flowRate.pristine">
+            <span *ngIf="form.controls.flowRate.errors.required">Value required.</span>
+            <span *ngIf="form.controls.flowRate.errors.min">Value can't be less than
+                {{form.controls.flowRate.errors.min.min}}.</span>
+        </span>
+    </div>
+
+    <div class="form-group">
+        <label class="small" for="{{'upstreamPressure_'+idString}}">
+            Upstream Pressure
+        </label>
+        <div class="input-group">
+            <input name="upstreamPressure" type="number" class="form-control" formControlName="upstreamPressure"
+                id="{{'upstreamPressure_'+idString}}" onfocus="this.select();" (input)="setValidators()"
+                (focus)="focusField('upstreamPressure')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">psi</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">bar</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.upstreamPressure.invalid && !form.controls.upstreamPressure.pristine">
+            <span *ngIf="form.controls.upstreamPressure.errors.required">Value required.</span>
+            <span *ngIf="form.controls.upstreamPressure.errors.max">Value can't be greater than
+                {{form.controls.upstreamPressure.errors.max.max}}.</span>
+            <span *ngIf="form.controls.upstreamPressure.errors.min">Value can't be less than
+                {{form.controls.upstreamPressure.errors.min.min}}.</span>
+        </span>
+    </div>
+
+    <!-- * per Kristina hiding inputs that are not currently used in the math -->
+    <!-- <div class="form-group">
+        <label class="small" for="{{'upstreamDiameter_'+idString}}">
+            Upstream Pipe Inner Diameter
+        </label>
+        <div class="input-group">
+            <input name="upstreamDiameter" type="number" class="form-control" formControlName="upstreamDiameter" id="{{'upstreamDiameter_'+idString}}"
+                onfocus="this.select();" (input)="calculate()" (focus)="focusField('upstreamDiameter')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">in</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">cm</span>
+        </div>
+    </div> -->
+
+    <div class="form-group">
+        <label class="small" for="{{'upstreamHeight_'+idString}}">
+            Upstream Gage Elevation
+        </label>
+        <div class="input-group">
+            <input name="upstreamHeight" type="number" class="form-control" formControlName="upstreamHeight"
+                id="{{'upstreamHeight_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('upstreamHeight')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">ft</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">m</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.upstreamHeight.invalid && !form.controls.upstreamHeight.pristine">
+            <span *ngIf="form.controls.upstreamHeight.errors.required">Value required.</span>
+        </span>
+    </div>
+
+    <!-- * per Kristina hiding inputs that are not currently used in the math -->
+    <!-- <div class="form-group">
+        <label class="small" for="{{'valveDiameter_'+idString}}">
+            Valve Diameter
+        </label>
+        <div class="input-group">
+            <input name="valveDiameter" type="number" class="form-control" formControlName="valveDiameter" id="{{'valveDiameter_'+idString}}"
+                onfocus="this.select();" (input)="calculate()" (focus)="focusField('valveDiameter')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">in</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">cm</span>
+        </div>
+    </div> -->
+
+    <div class="form-group">
+        <label class="small" for="{{'downstreamPressure_'+idString}}">
+            Downstream Pressure
+        </label>
+        <div class="input-group">
+            <input name="downstreamPressure" type="number" class="form-control" formControlName="downstreamPressure"
+                id="{{'downstreamPressure_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('downstreamPressure')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">psi</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">bar</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.downstreamPressure.invalid && !form.controls.downstreamPressure.pristine">
+            <span *ngIf="form.controls.downstreamPressure.errors.required">Value required.</span>
+            <span *ngIf="form.controls.downstreamPressure.errors.max">Value can't be greater than
+                {{form.controls.downstreamPressure.errors.max.max}}.</span>
+            <span *ngIf="form.controls.downstreamPressure.errors.min">Value can't be less than
+                {{form.controls.downstreamPressure.errors.min.min}}.</span>
+        </span>
+    </div>
+
+    <!-- * per Kristina hiding inputs that are not currently used in the math -->
+    <!-- <div class="form-group">
+        <label class="small" for="{{'downstreamDiameter_'+idString}}">
+            Downstream Pipe Inner Diameter
+        </label>
+        <div class="input-group">
+            <input name="downstreamDiameter" type="number" class="form-control" formControlName="downstreamDiameter" id="{{'downstreamDiameter_'+idString}}"
+                onfocus="this.select();" (input)="calculate()" (focus)="focusField('downstreamDiameter')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">in</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">cm</span>
+        </div>
+    </div> -->
+
+    <div class="form-group">
+        <label class="small" for="{{'downstreamHeight_'+idString}}">
+            Downstream Gauge Elevation
+        </label>
+        <div class="input-group">
+            <input name="downstreamHeight" type="number" class="form-control" formControlName="downstreamHeight"
+                id="{{'downstreamHeight_'+idString}}" onfocus="this.select();" (input)="calculate()"
+                (focus)="focusField('downstreamHeight')">
+            <span *ngIf="settings.unitsOfMeasure === 'Imperial'" class="input-group-addon units">ft</span>
+            <span *ngIf="settings.unitsOfMeasure === 'Metric'" class="input-group-addon units">m</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.downstreamHeight.invalid && !form.controls.downstreamHeight.pristine">
+            <span *ngIf="form.controls.downstreamHeight.errors.required">Value required.</span>
+        </span>
+    </div>
+
+    <!-- * per Kristina hiding inputs that are not currently used in the math -->
+    <!-- <div class="form-group">
+        <label class="small" for="{{'pipeSizeFactor_'+idString}}">
+            Pipe Sizing Geometry Factor
+        </label>
+        <div class="input-group">
+            <input name="pipeSizeFactor" type="number" class="form-control" formControlName="pipeSizeFactor" id="{{'pipeSizeFactor_'+idString}}"
+                onfocus="this.select();" (input)="calculate()" (focus)="focusField('pipeSizeFactor')">
+        </div>
+    </div> -->
+
+</form>
+
+<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="true"
+    [operatingHours]="valveEnergyLossService.operatingHours">
+</app-operating-hours-modal>

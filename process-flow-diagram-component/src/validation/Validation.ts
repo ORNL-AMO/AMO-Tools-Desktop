@@ -1,5 +1,5 @@
 import { Edge } from "@xyflow/react";
-import { validateKnownLosses, validateTotalFlowValue } from "process-flow-lib";
+import { DiagramSettings, validateKnownLosses, validateTotalFlowValue } from "process-flow-lib";
 import * as Yup from 'yup';
 export const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be greater than 0`;
 export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
@@ -34,20 +34,36 @@ export const getEstimateSystemValidationSchema = (
     );
 };
 
-export const getDefaultFlowValidationSchema = (flowLabel: 'Source' | 'Discharge', connectedEdges: Edge[], totalCalculatedFlow: number, decimalPrecision: number, sumUserKnownLosses?: number): Yup.ObjectSchema<FlowForm> => {
+export const getDefaultFlowValidationSchema = (
+    flowLabel: 'Source' | 'Discharge', 
+    connectedEdges: Edge[], 
+    totalCalculatedFlow: number,
+    unaccountedFlow: number,
+    settings: DiagramSettings, 
+    sumUserKnownLosses?: number): Yup.ObjectSchema<FlowForm> => {
     const totalFlowError = flowLabel === 'Source' ? TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR : TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR;
+    const unit = settings.unitsOfMeasure === 'Imperial'? 'Mgal' : 'm<sup>3</sup>';
     let defaultSchema = {
         totalFlow: Yup.number()
             .nullable()
             .moreThan(0, totalFlowError)
-            .test('sum-differs',
-                (d) => {
-                    return `Total ${flowLabel} Flow must equal the sum of all flow values (${totalCalculatedFlow})`
-                },
-                (value) => {
-                    const isValid = validateTotalFlowValue(connectedEdges, totalCalculatedFlow, value, decimalPrecision);
-                    return isValid;
-                },
+            .test(
+                'sum-differs',
+                totalFlowError,
+                function (value) {
+                    const { path, createError } = this;
+                    const flowDifference = Math.abs(totalCalculatedFlow - value);
+                    const unallocated = Number((flowDifference).toFixed(settings.flowDecimalPrecision));
+                    const totalCalculatedFlowFixed = Number(totalCalculatedFlow.toFixed(settings.flowDecimalPrecision));
+                    const isValid = validateTotalFlowValue(connectedEdges, totalCalculatedFlow, unaccountedFlow, value, settings.flowDecimalPrecision);
+                    if (!isValid) {
+                        return createError({
+                            path,
+                            message: `Total Flow must be equal to the sum of individual flows. There is unallocated flow of ${unallocated} ${unit}.`,
+                        });
+                    }
+                    return true;
+                }
             ),
         flows: Yup.array().of(Yup.number()
             .nullable()

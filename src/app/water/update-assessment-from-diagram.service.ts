@@ -102,6 +102,8 @@ export class UpdateAssessmentFromDiagramService {
           totalDischargeFlow: waterProcessComponent.userEnteredData.totalDischargeFlow !== undefined? waterProcessComponent.userEnteredData.totalDischargeFlow : diagramCalculatedData.totalDischargeFlow,
           totalKnownLosses: waterProcessComponent.userEnteredData.totalKnownLosses !== undefined? waterProcessComponent.userEnteredData.totalKnownLosses : diagramCalculatedData.totalKnownLosses,
           waterInProduct: waterProcessComponent.userEnteredData.waterInProduct !== undefined? waterProcessComponent.userEnteredData.waterInProduct : diagramCalculatedData.waterInProduct,
+          intakeUnaccounted: waterProcessComponent.userEnteredData.intakeUnaccounted !== undefined? waterProcessComponent.userEnteredData.intakeUnaccounted : diagramCalculatedData.intakeUnaccounted,
+          dischargeUnaccounted: waterProcessComponent.userEnteredData.dischargeUnaccounted !== undefined? waterProcessComponent.userEnteredData.dischargeUnaccounted : diagramCalculatedData.dischargeUnaccounted,
         };
       }
       if (waterProcessComponent.processComponentType === 'water-intake') {

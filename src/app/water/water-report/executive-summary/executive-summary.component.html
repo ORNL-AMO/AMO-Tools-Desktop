@@ -18,7 +18,12 @@
         </thead>
         <tbody>
             <tr>
-                <td>Intake (Million Gallons)</td>
+                <td>
+                    Intake (
+                    <ng-container *ngIf="settings.unitsOfMeasure == 'Imperial'; else metricUnit">Mgal</ng-container>
+                    <ng-template #metricIntakeUnits>m<sup>3</sup></ng-template>
+                    )
+                </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     <span *ngIf="baselineResults.totalSourceWaterIntake">{{baselineResults.totalSourceWaterIntake |
                         number:'1.0-2'}}</span>
@@ -32,8 +37,10 @@
                 </td>
             </tr>
             <tr>
-                <td>Intake (kGal per 1000 {{assessment.water.systemBasics.productionUnit?
-                    assessment.water.systemBasics.productionUnit : 'lbs' }})</td>
+                <td>Intake (
+                    <ng-container *ngIf="settings.unitsOfMeasure == 'Imperial'; else metricUnit">kGal</ng-container>
+                    <ng-template #metricUnit>m<sup>3</sup></ng-template>
+                    per 1000 {{assessment.water.systemBasics.productionUnit? assessment.water.systemBasics.productionUnit : 'production units' }})</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     <span *ngIf="baselineResults.totalPerProductionUnit">{{baselineResults.totalPerProductionUnit |
                         number:'1.0-2'}}</span>
@@ -94,7 +101,7 @@
             </tr>
             <tr>
                 <td>True Cost ($ per 1000 {{assessment.water.systemBasics.productionUnit?
-                    assessment.water.systemBasics.productionUnit : 'lbs'}})</td>
+                    assessment.water.systemBasics.productionUnit : 'production units'}})</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     <span *ngIf="baselineResults.trueCostPerProductionUnit">${{baselineResults.trueCostPerProductionUnit
                         | number:'1.0-2'}}</span>

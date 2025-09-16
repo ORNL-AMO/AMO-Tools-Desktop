@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Alert from '@mui/material/Alert';
 import { Box, Slide } from '@mui/material';
-import { useAppDispatch } from '../../hooks/state';
+import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { diagramAlertChange } from './diagramReducer';
 
 export default function DiagramAlert(props: DiagramAlertProps) {
@@ -9,6 +9,7 @@ export default function DiagramAlert(props: DiagramAlertProps) {
         diagramAlertState
     } = props;
     const dispatch = useAppDispatch();
+    const isDrawerOpen = useAppSelector(state => state.diagram.isDataDrawerOpen);
 
     React.useEffect(() => {
         if (diagramAlertState.dismissMS > 0) {
@@ -17,13 +18,15 @@ export default function DiagramAlert(props: DiagramAlertProps) {
         }
     }, [diagramAlertState.dismissMS]);
 
+    const offsetRight: number = isDrawerOpen? 550 : 75;
+
     return (
         <Slide direction="up" in={diagramAlertState.open} mountOnEnter unmountOnExit>
             <Box
                 boxShadow={1}
                 sx={{
                     position: "absolute",
-                    right: 75,
+                    right: offsetRight,
                     bottom: 65,
                 }}>
                 <Alert severity={diagramAlertState.alertSeverity}>{diagramAlertState.alertMessage}</Alert>
