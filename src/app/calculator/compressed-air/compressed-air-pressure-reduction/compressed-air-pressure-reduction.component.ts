@@ -12,9 +12,10 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
  
 
 @Component({
-  selector: 'app-compressed-air-pressure-reduction',
-  templateUrl: './compressed-air-pressure-reduction.component.html',
-  styleUrls: ['./compressed-air-pressure-reduction.component.css']
+    selector: 'app-compressed-air-pressure-reduction',
+    templateUrl: './compressed-air-pressure-reduction.component.html',
+    styleUrls: ['./compressed-air-pressure-reduction.component.css'],
+    standalone: false
 })
 export class CompressedAirPressureReductionComponent implements OnInit {
   @Input()

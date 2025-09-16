@@ -1,12 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWater } from '../../../shared/models/waste-water';
 import { CompareService, WasteWaterDifferent } from '../../modify-conditions/compare.service';
 
 @Component({
-  selector: 'app-input-data',
-  templateUrl: './input-data.component.html',
-  styleUrls: ['./input-data.component.css']
+    selector: 'app-input-data',
+    templateUrl: './input-data.component.html',
+    styleUrls: ['./input-data.component.css'],
+    standalone: false
 })
 export class InputDataComponent implements OnInit {
   @Input()
@@ -17,6 +18,10 @@ export class InputDataComponent implements OnInit {
   printView: boolean;
 
   compareModifications: Array<WasteWaterDifferent>;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(private compareService: CompareService) { }
 
   ngOnInit(): void {
@@ -44,5 +49,9 @@ export class InputDataComponent implements OnInit {
   checkCo2DataItemDifferent(itemStr: string): boolean {
     let differentExists: WasteWaterDifferent = this.compareModifications.find(modDifferent => { return modDifferent.co2DataDifferent[itemStr] });
     return differentExists != undefined;
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

@@ -2,7 +2,7 @@
 
   <h4 class="show-print">Assessment Input Data</h4>
 
-  <table class="table table-hover table-striped">
+  <table #copyTable class="table table-hover table-striped">
     <thead>
       <tr>
         <th [ngStyle]="{'width.%': 100 /(wasteWater.modifications.length+2)}"></th>
@@ -13,14 +13,14 @@
     </thead>
     <tbody>
       <tr>
-        <th class="section-header">System Basics</th>
+        <th class="section-header">Baseline</th>
         <th></th>
         <th *ngFor="let modification of wasteWater.modifications">
           <div class="alert-danger small" *ngIf="!modification.valid.isValid">
             Invalid modification<br>
             <span *ngIf="!modification.valid.activatedSludgeValid">Errors found in Activated Sludge<br></span>
             <span *ngIf="!modification.valid.aeratorPerformanceValid">Errors found in Aerator Performance<br></span>
-            <span *ngIf="!modification.valid.systemBasicsValid">Errors found in System Basics<br></span>
+            <span *ngIf="!modification.valid.systemBasicsValid">Errors found in Baseline<br></span>
           </div>
         </th>
       </tr>
@@ -516,4 +516,6 @@
       </tr>
     </tbody>
   </table>
+  <app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 </div>

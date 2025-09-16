@@ -6,11 +6,13 @@ import { LossTab } from '../tabs';
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { LossesService } from '../losses/losses.service';
+import { SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
 
 @Component({
-  selector: 'app-explore-phast-opportunities',
-  templateUrl: './explore-phast-opportunities.component.html',
-  styleUrls: ['./explore-phast-opportunities.component.css']
+    selector: 'app-explore-phast-opportunities',
+    templateUrl: './explore-phast-opportunities.component.html',
+    styleUrls: ['./explore-phast-opportunities.component.css'],
+    standalone: false
 })
 export class ExplorePhastOpportunitiesComponent implements OnInit {
   @Input()
@@ -39,12 +41,10 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
 
   modExists: boolean = false;
   selectModificationSubscription: Subscription;
-  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
-  showToast: boolean = false;
   isModalOpen: boolean = false;
   modalOpenSubscription: Subscription;
   smallScreenTab: string = 'form';
-  constructor(private lossesService: LossesService) {
+  constructor(private lossesService: LossesService, private snackbarService: SnackbarService) {
   }
 
   ngOnInit() {
@@ -58,14 +58,14 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
     if (changes.exploreModIndex) {
       if (!changes.exploreModIndex.firstChange) {
         this.checkExists();
-        this.checkExploreOpps();
+        this.notifyExpertView();
       }
     }
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.checkExploreOpps();
+      this.notifyExpertView();
     }, 100)
   }
 
@@ -111,30 +111,11 @@ export class ExplorePhastOpportunitiesComponent implements OnInit {
   }
 
 
-  checkExploreOpps() {
+  notifyExpertView() {
     if (this.modExists) {
       if (!this.phast.modifications[this.exploreModIndex].exploreOpportunities) {
-        let title: string = 'Explore Opportunities';
-        let body: string = 'The selected modification was created using the expert view. There may be changes to the modification that are not visible from this screen.';
-        this.openToast(title, body);
-      } else if (this.showToast) {
-        this.hideToast();
+        this.snackbarService.setSnackbarMessage('exploreOpportunities', 'info', 'long');
       }
-    }
-  }
-
-  openToast(title: string, body: string) {
-    this.toastData.title = title;
-    this.toastData.body = body;
-    this.showToast = true;
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
     }
   }
 

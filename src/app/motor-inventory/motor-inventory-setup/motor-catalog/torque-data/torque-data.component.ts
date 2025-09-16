@@ -8,9 +8,10 @@ import { TorqueDataService } from './torque-data.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-torque-data',
-  templateUrl: './torque-data.component.html',
-  styleUrls: ['./torque-data.component.css']
+    selector: 'app-torque-data',
+    templateUrl: './torque-data.component.html',
+    styleUrls: ['./torque-data.component.css'],
+    standalone: false
 })
 export class TorqueDataComponent implements OnInit {
 

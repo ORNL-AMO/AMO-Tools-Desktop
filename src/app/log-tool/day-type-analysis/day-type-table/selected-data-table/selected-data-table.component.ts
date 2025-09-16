@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { DayTypeAnalysisService } from '../../day-type-analysis.service';
 import * as _ from 'lodash';
 @Component({
-  selector: 'app-selected-data-table',
-  templateUrl: './selected-data-table.component.html',
-  styleUrls: ['./selected-data-table.component.css']
+    selector: 'app-selected-data-table',
+    templateUrl: './selected-data-table.component.html',
+    styleUrls: ['./selected-data-table.component.css'],
+    standalone: false
 })
 export class SelectedDataTableComponent implements OnInit {
 
@@ -52,7 +53,7 @@ export class SelectedDataTableComponent implements OnInit {
   }
 
   getAverageValue(averages: Array<{ value: number, field: LogToolField }>): number {
-    let average = _.find(averages, (average) => { return average.field.fieldName == this.selectedDataField.fieldName });
+    let average = _.find(averages, (average) => { return average.field.fieldId == this.selectedDataField.fieldId; });
     if (average) {
       return average.value;
     }

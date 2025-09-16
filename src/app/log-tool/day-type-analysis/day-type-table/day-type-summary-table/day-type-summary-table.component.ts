@@ -6,9 +6,10 @@ import * as _ from 'lodash';
 import { VisualizeService } from '../../../visualize/visualize.service';
 
 @Component({
-  selector: 'app-day-type-summary-table',
-  templateUrl: './day-type-summary-table.component.html',
-  styleUrls: ['./day-type-summary-table.component.css']
+    selector: 'app-day-type-summary-table',
+    templateUrl: './day-type-summary-table.component.html',
+    styleUrls: ['./day-type-summary-table.component.css'],
+    standalone: false
 })
 export class DayTypeSummaryTableComponent implements OnInit {
 

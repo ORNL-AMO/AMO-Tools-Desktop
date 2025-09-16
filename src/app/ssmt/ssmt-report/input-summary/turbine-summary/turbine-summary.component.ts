@@ -1,11 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { SSMTInputs, CondensingTurbine, PressureTurbine, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-turbine-summary',
-  templateUrl: './turbine-summary.component.html',
-  styleUrls: ['./turbine-summary.component.css']
+    selector: 'app-turbine-summary',
+    templateUrl: './turbine-summary.component.html',
+    styleUrls: ['./turbine-summary.component.css'],
+    standalone: false
 })
 export class TurbineSummaryComponent implements OnInit {
   @Input()
@@ -16,6 +17,9 @@ export class TurbineSummaryComponent implements OnInit {
   settings: Settings;
   @Input()
   printView: boolean;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   collapse: boolean = true;
   numMods: number = 0;
@@ -119,5 +123,9 @@ export class TurbineSummaryComponent implements OnInit {
 
   toggleCollapse() {
     this.collapse = !this.collapse;
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

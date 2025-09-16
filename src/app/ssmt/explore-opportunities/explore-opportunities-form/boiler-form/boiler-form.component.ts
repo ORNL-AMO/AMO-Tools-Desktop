@@ -7,7 +7,6 @@ import { BoilerService } from '../../../boiler/boiler.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { StackLossInput } from '../../../../shared/models/steam/steam-inputs';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { Co2SavingsData } from '../../../../calculator/utilities/co2-savings/co2-savings.service';
 import { AssessmentCo2SavingsService, Co2SavingsDifferent } from '../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { OtherFuel, otherFuels } from '../../../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
@@ -16,9 +15,10 @@ import { CompareService } from '../../../compare.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-boiler-form',
-  templateUrl: './boiler-form.component.html',
-  styleUrls: ['./boiler-form.component.css']
+    selector: 'app-boiler-form',
+    templateUrl: './boiler-form.component.html',
+    styleUrls: ['./boiler-form.component.css'],
+    standalone: false
 })
 export class BoilerFormComponent implements OnInit {
   @Input()
@@ -67,7 +67,7 @@ export class BoilerFormComponent implements OnInit {
   constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, 
     private convertUnitsService: ConvertUnitsService,
     private compareService: CompareService,
-    private assessmentCo2SavingsService: AssessmentCo2SavingsService, private sqlDbApiService: SqlDbApiService, private boilerService: BoilerService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService, private boilerService: BoilerService,
     private ssmtService: SsmtService) { }
 
   ngOnInit() {

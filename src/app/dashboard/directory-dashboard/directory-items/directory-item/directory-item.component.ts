@@ -6,18 +6,19 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import * as _ from 'lodash';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
-import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
 import { AssessmentService } from '../../../assessment.service';
 import { DashboardService } from '../../../dashboard.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { DirectoryItem, FilterDashboardBy } from '../../../../shared/models/directory-dashboard';
 import { InventoryItem } from '../../../../shared/models/inventory/inventory';
+import { Diagram } from '../../../../shared/models/diagram';
 
 @Component({
-  selector: 'app-directory-item',
-  templateUrl: './directory-item.component.html',
-  styleUrls: ['./directory-item.component.css']
+    selector: 'app-directory-item',
+    templateUrl: './directory-item.component.html',
+    styleUrls: ['./directory-item.component.css'],
+    standalone: false
 })
 export class DirectoryItemComponent implements OnInit {
   @Input()
@@ -111,12 +112,15 @@ export class DirectoryItemComponent implements OnInit {
     }
   }
 
-  navigateWithSidebarOptions(item: InventoryItem) {
+  navigateWithSidebarOptions(item: InventoryItem | Diagram) {
     if (item.type === 'pumpInventory') {
       this.dashboardService.navigateWithSidebarOptions('/pump-inventory/' + item.id, {shouldCollapse: true})
     }
     if (item.type === 'motorInventory') {
       this.dashboardService.navigateWithSidebarOptions('/motor-inventory/' + item.id, {shouldCollapse: true})
+    }
+    if (item.type === 'diagram') {
+      this.dashboardService.navigateWithSidebarOptions('/process-flow-diagram/' + item.id, {shouldCollapse: true})
     }
   }
 

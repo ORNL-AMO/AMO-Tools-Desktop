@@ -7,9 +7,10 @@ import { StatePointAnalysisFormService } from '../state-point-analysis-form.serv
 import { StatePointAnalysisService } from '../state-point-analysis.service';
 
 @Component({
-  selector: 'app-state-point-analysis-form',
-  templateUrl: './state-point-analysis-form.component.html',
-  styleUrls: ['./state-point-analysis-form.component.css']
+    selector: 'app-state-point-analysis-form',
+    templateUrl: './state-point-analysis-form.component.html',
+    styleUrls: ['./state-point-analysis-form.component.css'],
+    standalone: false
 })
 export class StatePointAnalysisFormComponent implements OnInit {
   @Input()

@@ -1,6 +1,8 @@
+import { OpportunityUtilityType } from "../treasure-hunt"
+
 export interface WaterHeatingInput {
     operatingHours: number,
-    boilerUtilityType?: string,
+    boilerUtilityType?: OpportunityUtilityType,
     hxUtilityType?: string,
     fuelCost: number,
     fuelCostBoiler: number,

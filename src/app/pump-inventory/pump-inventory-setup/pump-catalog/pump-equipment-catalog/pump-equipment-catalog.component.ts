@@ -10,9 +10,10 @@ import { PumpCatalogService } from '../pump-catalog.service';
 import { PumpEquipmentCatalogService } from './pump-equipment-catalog.service';
 
 @Component({
-  selector: 'app-pump-equipment-catalog',
-  templateUrl: './pump-equipment-catalog.component.html',
-  styleUrls: ['./pump-equipment-catalog.component.css']
+    selector: 'app-pump-equipment-catalog',
+    templateUrl: './pump-equipment-catalog.component.html',
+    styleUrls: ['./pump-equipment-catalog.component.css'],
+    standalone: false
 })
 export class PumpEquipmentCatalogComponent implements OnInit {
   settingsSub: Subscription;

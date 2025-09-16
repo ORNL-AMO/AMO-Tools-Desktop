@@ -1,7 +1,9 @@
 
 export type AnalyticsEventString = 'page_view' |
     'measur_app_open_v2' |
+    'measur-auto-backup-on' |
     'create-assessment' |
+    'create-water-diagram' |
     'view-pump-assessment' |
     'view-process-heating-assessment' |
     'view-fan-assessment' |
@@ -9,9 +11,11 @@ export type AnalyticsEventString = 'page_view' |
     'view-treasure-hunt-assessment' |
     'view-waste-water-assessment' |
     'view-compressed-air-assessment' |
+    'view-water-assessment' |
     'create-inventory' |
     'view-motor-inventory' |
     'view-pump-inventory' |
+    'view-water-diagram' |
     'use-data-exporation' |
     'run-day-type-analysis' |
 
@@ -67,6 +71,7 @@ export type AnalyticsEventString = 'page_view' |
     'calculator-PUMP-achievable-efficiency' |
     'calculator-PUMP-head-tool' |
     'calculator-PUMP-specific-speed' |
+    'calculator-PUMP-valve-energy-loss' |
 
     'calculator-STEAM-boiler' |
     'calculator-STEAM-boiler-blowdown-rate' |
@@ -112,5 +117,6 @@ export type AnalyticsEventString = 'page_view' |
     'sent-email-PUMP-inventory'|
     'sent-email-MOTOR-inventory'|
     'sent-email-WW'|
-    'sent-email-CA';
+    'sent-email-CA'|
+    'email-list-subscribe';
 

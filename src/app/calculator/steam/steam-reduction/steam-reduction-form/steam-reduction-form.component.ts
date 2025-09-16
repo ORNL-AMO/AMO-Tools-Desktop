@@ -6,9 +6,10 @@ import { SteamReductionResult, SteamReductionData } from '../../../../shared/mod
 import { OperatingHours } from '../../../../shared/models/operations';
 
 @Component({
-  selector: 'app-steam-reduction-form',
-  templateUrl: './steam-reduction-form.component.html',
-  styleUrls: ['./steam-reduction-form.component.css']
+    selector: 'app-steam-reduction-form',
+    templateUrl: './steam-reduction-form.component.html',
+    styleUrls: ['./steam-reduction-form.component.css'],
+    standalone: false
 })
 export class SteamReductionFormComponent implements OnInit {
   @Input()
@@ -136,7 +137,7 @@ export class SteamReductionFormComponent implements OnInit {
   changeSteamVariableOption(){
     let steamVariableMin: number = 0;
     let steamVariableMax: number = 1472;
-    if (this.form.controls.utilityType.value == 0){
+    if (this.form.controls.steamVariableOption.value == 0){
       if (this.settings.unitsOfMeasure == 'Imperial') {
         steamVariableMin = 32;
         steamVariableMax = 1472;
@@ -144,7 +145,7 @@ export class SteamReductionFormComponent implements OnInit {
         steamVariableMin = 0;        
         steamVariableMax = 800;
       }
-    } else if (this.form.controls.utilityType.value == 3){
+    } else if (this.form.controls.steamVariableOption.value == 3){
       steamVariableMin = 0;      
       steamVariableMax = 1;
     }

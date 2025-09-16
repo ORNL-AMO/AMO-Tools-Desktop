@@ -9,11 +9,13 @@ import { Settings } from '../../../../shared/models/settings';
 import { TreasureHuntUtilityOption, treasureHuntUtilityOptions } from '../../furnace-defaults';
 import { LeakageFormService, LeakageWarnings } from '../leakage-form.service';
 import { LeakageService } from '../leakage.service';
+import { OpportunityUtilityType } from '../../../../shared/models/treasure-hunt';
 
 @Component({
-  selector: 'app-leakage-form',
-  templateUrl: './leakage-form.component.html',
-  styleUrls: ['./leakage-form.component.css']
+    selector: 'app-leakage-form',
+    templateUrl: './leakage-form.component.html',
+    styleUrls: ['./leakage-form.component.css'],
+    standalone: false
 })
 export class LeakageFormComponent implements OnInit {
   @Input()
@@ -50,7 +52,7 @@ export class LeakageFormComponent implements OnInit {
   trackingEnergySource: boolean;
   idString: string;
   outputSubscription: Subscription;
-  treasureHuntUtilityOptions: Array<string>;
+  treasureHuntUtilityOptions: Array<OpportunityUtilityType>;
   treasureHuntFuelCostSub: Subscription;
 
   constructor(private leakageFormService: LeakageFormService,

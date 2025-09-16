@@ -45,12 +45,26 @@ export class AirLeakTreasureHuntService {
 
   getTreasureHuntOpportunityResults(airLeakSurveyTreasureHunt: AirLeakSurveyTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
     let results: AirLeakSurveyOutput = this.airLeakService.getResults(settings, airLeakSurveyTreasureHunt.airLeakSurveyInput);
+
+    // 7419 temporary patch results
+    results.baselineData.annualTotalElectricity = results.savingsData.annualTotalElectricity;
+    results.baselineData.annualTotalElectricityCost = results.savingsData.annualTotalElectricityCost;
+    results.baselineData.annualTotalFlowRate = results.savingsData.annualTotalFlowRate;
+    results.baselineData.totalFlowRate = results.savingsData.totalFlowRate;
+
+    results.modificationData.annualTotalElectricity = 0;
+    results.modificationData.annualTotalElectricityCost = 0;
+    results.modificationData.annualTotalFlowRate = 0;
+    results.modificationData.totalFlowRate = 0;
+    // end 7419 patch
+
+
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: results.savingsData.annualTotalElectricityCost,
       energySavings: 0,
       baselineCost: results.baselineData.annualTotalElectricityCost,
       modificationCost: results.modificationData.annualTotalElectricityCost,
-      utilityType: '',
+      utilityType: 'Electricity',
     }
 
     // utility type: 0 = compressed air, 1 = electric
@@ -126,9 +140,7 @@ export class AirLeakTreasureHuntService {
   
   convertAirLeakSurveyInput(survey: AirLeakSurveyInput, oldSettings: Settings, newSettings: Settings): AirLeakSurveyInput {
     survey.compressedAirLeakSurveyInputVec.forEach(input => {
-      //cm, in
-      input.bagMethodData.height = this.convertUnitsService.convertInAndCmValue(input.bagMethodData.height, oldSettings, newSettings);
-      input.bagMethodData.diameter = this.convertUnitsService.convertInAndCmValue(input.bagMethodData.diameter, oldSettings, newSettings);
+      input.bagMethodData.bagVolume = this.convertUnitsService.convertGalAndLiterValue(input.bagMethodData.bagVolume, oldSettings, newSettings);
       //ft3 m3 
       input.estimateMethodData.leakRateEstimate = this.convertUnitsService.convertFt3AndM3Value(input.estimateMethodData.leakRateEstimate, oldSettings, newSettings);
       //psig kPag

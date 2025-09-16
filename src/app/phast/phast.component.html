@@ -3,18 +3,18 @@
   <div #header class="hide-print sticky-top">
     <app-phast-banner [assessment]="assessment" [settings]="settings"></app-phast-banner>
     <!-- phast-tabs = step tabs -->
-    <app-phast-tabs [assessment]="assessment" [tab1Status]="tab1Status" [tab2Status]="tab2Status" *ngIf="mainTab == 'system-setup'">
+    <app-phast-tabs [assessment]="assessment" [tab1Status]="tab1Status" [tab2Status]="tab2Status" *ngIf="mainTab == 'baseline'">
     </app-phast-tabs>
     <app-modification-navbar *ngIf="mainTab == 'assessment'" [phast]="_phast"></app-modification-navbar>
     <!--losses-tabs are tabs for heat balance/assessment, both inSetup and !inSetup -->
     <nav
-      *ngIf="(mainTab == 'assessment' && assessmentTab != 'explore-opportunities') || (mainTab == 'system-setup' && stepTab?.step == 2)">
-      <app-losses-tabs [phast]="_phast" [settings]="settings" [inSetup]="mainTab == 'system-setup'"></app-losses-tabs>
+      *ngIf="(mainTab == 'assessment' && assessmentTab != 'explore-opportunities') || (mainTab == 'baseline' && stepTab?.step == 2)">
+      <app-losses-tabs [phast]="_phast" [settings]="settings" [inSetup]="mainTab == 'baseline'"></app-losses-tabs>
     </nav>
     <app-phast-calculator-tabs *ngIf="mainTab =='calculators'"></app-phast-calculator-tabs>
   </div>
 
-  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'system-setup' && stepTab.step == 1">
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'baseline' && stepTab.step == 1">
     <div class="nav-item" (click)="setSmallScreenTab('form')"
       [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
       <a class="nav-link" >Assessment Settings</a>
@@ -26,10 +26,10 @@
   </div>
 
   <!--Furnace Setup -->
-  <div *ngIf="mainTab == 'system-setup' && stepTab.step == 1" class="assessment-container tab-content">
+  <div *ngIf="mainTab == 'baseline' && stepTab.step == 1" class="assessment-container tab-content">
     <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
       [ngClass]="{'modal-open': isModalOpen || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}">
-      <!--Step: 1 System Basics (Settings)-->
+      <!--Step: 1 baseline (Settings)-->
       <app-system-basics *ngIf="specTab.step == 1" [phast]="_phast" [settings]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()" (save)="saveDb()" (openUpdateUnitsModal)="initUpdateUnitsModal($event)">
       </app-system-basics>
@@ -38,7 +38,7 @@
       <app-help-panel [settingsTab]="specTab"></app-help-panel>
     </div>
   </div>
-  <div *ngIf="mainTab == 'system-setup' && stepTab.step != 1" class="assessment-tab-container tab-content">
+  <div *ngIf="mainTab == 'baseline' && stepTab.step != 1" class="assessment-tab-container tab-content">
     <!--Step: 4 Heat Balance-->
     <app-losses *ngIf="stepTab.step  == 2 && hasEgridDataInit" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="true"
       [containerHeight]="containerHeight"></app-losses>
@@ -114,15 +114,15 @@
       [inAssessment]="true" [assessment]="assessment"></app-pre-assessment>
     <app-unit-converter *ngIf="calcTab == 'convert-units'" [inAssessment]="true"></app-unit-converter>
   </div>
-  <div #footer class="d-none d-lg-block footer" *ngIf="mainTab == 'system-setup' || mainTab == 'assessment'">
+  <div #footer class="d-none d-lg-block footer" *ngIf="mainTab == 'baseline' || mainTab == 'assessment'">
     <div class="pull-left" *ngIf="stepTab.back || selectedLossTab.back || specTab.back || (mainTab == 'assessment')">
       <button class="btn btn-secondary" (click)="lastStep()">Back</button>
     </div>
     <div class="pull-right">
       <button class="btn btn-primary"
-        *ngIf="(mainTab == 'assessment' && selectedLossTab.next && assessmentTab == 'modify-conditions') || (mainTab == 'system-setup' && stepTab.next)"
+        *ngIf="(mainTab == 'assessment' && selectedLossTab.next && assessmentTab == 'modify-conditions') || (mainTab == 'baseline' && stepTab.next)"
         (click)="nextStep()">Next</button>
-      <button class="btn btn-primary" *ngIf="mainTab == 'system-setup' && !stepTab.next" [disabled]="!_phast.setupDone"
+      <button class="btn btn-primary" *ngIf="mainTab == 'baseline' && !stepTab.next" [disabled]="!_phast.setupDone"
         (click)="goToAssessment()">Go To Assessment</button>
       <button class="btn btn-primary ml-2" *ngIf="mainTab == 'assessment'" [disabled]="!_phast.setupDone"
         (click)="goToReport()">View Report</button>

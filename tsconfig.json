@@ -13,12 +13,15 @@
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "types": ["node"],
+    "types": ["node", "jasmine"],
     "target": "es2022",
     "module": "esnext",
     "lib": [
-      "es2019",
+      "es2022",
       "dom"
     ],
+    "paths": {
+      "process-flow-lib": ["./src/process-flow-lib"],
+    }
   }
 }

@@ -10,9 +10,10 @@ import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { ReportRollupService } from '../report-rollup.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
-  selector: 'app-fsat-rollup',
-  templateUrl: './fsat-rollup.component.html',
-  styleUrls: ['./fsat-rollup.component.css']
+    selector: 'app-fsat-rollup',
+    templateUrl: './fsat-rollup.component.html',
+    styleUrls: ['./fsat-rollup.component.css'],
+    standalone: false
 })
 export class FsatRollupComponent implements OnInit { 
 

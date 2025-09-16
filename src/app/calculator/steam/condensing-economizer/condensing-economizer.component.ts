@@ -8,9 +8,10 @@ import { CondensingEconomizerService } from './condensing-economizer.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-condensing-economizer',
-  templateUrl: './condensing-economizer.component.html',
-  styleUrls: ['./condensing-economizer.component.css']
+    selector: 'app-condensing-economizer',
+    templateUrl: './condensing-economizer.component.html',
+    styleUrls: ['./condensing-economizer.component.css'],
+    standalone: false
 })
 export class CondensingEconomizerComponent implements OnInit {
 
@@ -28,6 +29,8 @@ export class CondensingEconomizerComponent implements OnInit {
   @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef; 
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
+  modalOpenSubscription: Subscription;
+  isModalOpen: boolean;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     setTimeout(() => {
@@ -66,10 +69,15 @@ export class CondensingEconomizerComponent implements OnInit {
         this.calculate();
       }
     });
+
+    this.modalOpenSubscription = this.condensingEconomizerService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    });
   }
 
   ngOnDestroy() {
     this.condensingEconomizerInputSub.unsubscribe();
+    this.modalOpenSubscription.unsubscribe();
     if (this.inTreasureHunt) {
       this.condensingEconomizerService.condensingEconomizerInput.next(undefined);
     }
@@ -90,7 +98,7 @@ export class CondensingEconomizerComponent implements OnInit {
     this.emitSave.emit({
       inputData: inputData,
       energySourceData: {
-        energySourceType: 'Fuel',  
+        energySourceType: 'Other Fuel',  
         unit: 'MMBtu'
       },
       opportunityType: Treasure.condensingEconomizer

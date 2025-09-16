@@ -10,7 +10,8 @@ import { AssessmentService } from '../../../../assessment.service';
 @Component({
     selector: 'app-psat-summary-card',
     templateUrl: './psat-summary-card.component.html',
-    styleUrls: ['./psat-summary-card.component.css']
+    styleUrls: ['./psat-summary-card.component.css'],
+    standalone: false
 })
 export class PsatSummaryCardComponent implements OnInit {
     @Input()

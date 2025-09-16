@@ -2,9 +2,10 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 @Component({
-  selector: 'app-head-tool-suction-form',
-  templateUrl: './head-tool-suction-form.component.html',
-  styleUrls: ['./head-tool-suction-form.component.css']
+    selector: 'app-head-tool-suction-form',
+    templateUrl: './head-tool-suction-form.component.html',
+    styleUrls: ['./head-tool-suction-form.component.css'],
+    standalone: false
 })
 export class HeadToolSuctionFormComponent implements OnInit {
   @Input()

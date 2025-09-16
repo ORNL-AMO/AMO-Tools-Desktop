@@ -29,7 +29,6 @@ import { AeratorPerformanceHelpComponent } from './results-panel/help-panel/aera
 import { ActivatedSludgeHelpComponent } from './results-panel/help-panel/activated-sludge-help/activated-sludge-help.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
-import { SetupTabsComponent } from './waste-water-banner/setup-tabs/setup-tabs.component';
 import { AnalysisMenuComponent } from './waste-water-banner/analysis-menu/analysis-menu.component';
 import { WasteWaterAnalysisModule } from './waste-water-analysis/waste-water-analysis.module';
 import { ExploreOpportunitiesFormComponent } from './explore-opportunities/explore-opportunities-form/explore-opportunities-form.component';
@@ -37,7 +36,6 @@ import { ExploreAeratorFormComponent } from './explore-opportunities/explore-opp
 import { WasteWaterDiagramComponent } from './waste-water-diagram/waste-water-diagram.component';
 import { ExploreActivatedSludgeFormComponent } from './explore-opportunities/explore-opportunities-form/explore-activated-sludge-form/explore-activated-sludge-form.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
-import { ToastModule } from '../shared/toast/toast.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { WasteWaterOperationsComponent } from './waste-water-operations/waste-water-operations.component';
 import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
@@ -51,6 +49,8 @@ import { WasteWaterCalculatorsComponent } from './waste-water-calculators/waste-
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { SetupTabsComponent } from './waste-water-banner/setup-tabs/setup-tabs.component';
+import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 
 @NgModule({
   declarations: [
@@ -94,14 +94,14 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     WasteWaterAnalysisModule,
     TabsTooltipModule,
     SharedPipesModule,
-    ToastModule,
     UpdateUnitsModalModule,
     AssessmentCo2SavingsModule,
     O2UtilizationRateModule,
     StatePointAnalysisModule,
     WaterReductionModule,
     Co2HelpTextModule,
-    ImportExportModule
+    ImportExportModule,
+    SnackbarModule
   ],
   providers: [
     WasteWaterService,

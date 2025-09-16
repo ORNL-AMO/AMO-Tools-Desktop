@@ -14,7 +14,8 @@ import { PhastValidService } from '../phast-valid.service';
 @Component({
   selector: 'app-phast-report',
   templateUrl: './phast-report.component.html',
-  styleUrls: ['./phast-report.component.css']
+  styleUrls: ['./phast-report.component.css'],
+  standalone: false
 })
 export class PhastReportComponent implements OnInit {
 
@@ -50,11 +51,11 @@ export class PhastReportComponent implements OnInit {
   printOptions: PrintOptions;
   showPrintViewSub: Subscription;
   tabsCollapsed: boolean = true;
-  constructor(private settingsDbService: SettingsDbService, 
-              private directoryDbService: DirectoryDbService, 
-              private printOptionsMenuService: PrintOptionsMenuService, 
-              private phastValidService: PhastValidService,
-              private settingsService: SettingsService) { }
+  constructor(private settingsDbService: SettingsDbService,
+    private directoryDbService: DirectoryDbService,
+    private printOptionsMenuService: PrintOptionsMenuService,
+    private phastValidService: PhastValidService,
+    private settingsService: SettingsService) { }
 
   ngOnInit() {
     // this.initPrintLogic();

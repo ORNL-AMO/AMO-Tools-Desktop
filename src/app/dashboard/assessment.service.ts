@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PSAT, PsatInputs } from '../shared/models/psat';
-import { Assessment } from '../shared/models/assessment';
+import { Assessment, AssessmentType } from '../shared/models/assessment';
 import { PHAST } from '../shared/models/phast/phast';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { CompressedAirAssessment } from '../shared/models/compressed-air-assessm
 import { environment } from '../../environments/environment';
 
 import { DashboardService } from './dashboard.service';
+import { WaterAssessment } from 'process-flow-lib';
 
 @Injectable()
 export class AssessmentService {
@@ -21,11 +22,9 @@ export class AssessmentService {
   subTab: string;
   showLandingScreen: boolean = true;
 
-  updateAvailable: BehaviorSubject<boolean>;
   showTutorial: BehaviorSubject<string>;
   tutorialShown: boolean = false;
   constructor(private router: Router, private dashboardService: DashboardService) {
-    this.updateAvailable = new BehaviorSubject<boolean>(null);
     this.showTutorial = new BehaviorSubject<string>(null);
   }
 
@@ -33,7 +32,7 @@ export class AssessmentService {
     if (mainTab) {
       this.startingTab = mainTab;
     } else {
-      this.startingTab = 'system-setup';
+      this.startingTab = 'baseline';
     }
 
     if (subTab) {
@@ -76,13 +75,19 @@ export class AssessmentService {
         this.startingTab = 'assessment';
       }
       itemSegment = '/compressed-air/';
+    } else if (assessment.type == 'Water') {
+      // todo check setupDone or validation
+      if (assessment.water && !mainTab && !assessment.isExample) {
+        this.startingTab = 'baseline';
+      }
+      itemSegment = '/water/';
     }
 
     this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, {shouldCollapse: true})
 
   }
 
-  getNewAssessment(assessmentType: string): Assessment {
+  getNewAssessment(assessmentType: AssessmentType): Assessment {
     let newAssessment: Assessment = {
       name: null,
       createdDate: new Date(),
@@ -356,6 +361,31 @@ export class AssessmentService {
       systemBasics: {
         equipmentNotes: ''
       }
+    }
+  }
+
+  
+  getNewWaterAssessment(settings: Settings): WaterAssessment {
+    return {
+      name: 'Baseline',
+      modifications: new Array(),
+      setupDone: false,
+      systemBasics: {
+        utilityType: 'Electricity',
+        electricityCost: settings.electricityCost,
+        notes: undefined,
+        conductivityUnit: 'mmho',
+        fuelCost: settings.fuelCost,
+        productionUnit: 'lb',
+        annualProduction: undefined
+      },
+      diagramWaterSystemFlows:[],
+      intakeSources: [],
+      dischargeOutlets: [],
+      waterUsingSystems: [],
+      waterTreatments: [],
+      wasteWaterTreatments: [],
+      knownLosses: []
     }
   }
 

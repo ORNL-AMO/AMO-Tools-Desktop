@@ -6,100 +6,92 @@ import { LossesService } from '../../losses.service';
 import { Settings } from '../../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 import { WallFormService } from '../../../../calculator/furnaces/wall/wall-form.service';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { firstValueFrom } from 'rxjs';
 import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
   selector: 'app-wall-losses-form',
   templateUrl: './wall-losses-form.component.html',
-  styleUrls: ['./wall-losses-form.component.css']
+  styleUrls: ['./wall-losses-form.component.css'],
+  standalone: false
 })
 export class WallLossesFormComponent implements OnInit {
-  @Input()
-  wallLossesForm: UntypedFormGroup;
   @Output('calculate')
   calculate = new EventEmitter<boolean>();
-  @Input()
-  baselineSelected: boolean;
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Output('saveEmit')
   saveEmit = new EventEmitter<boolean>();
+
   @Input()
-  lossIndex: number;
+  wallLossesForm: UntypedFormGroup;
   @Input()
   settings: Settings;
   @Input()
   inSetup: boolean;
   @Input()
-  isBaseline: boolean;
+  lossIndex: number;
 
+  private _baselineSelected: boolean;
+  @Input()
+  set baselineSelected(isSelected: boolean) {
+    this._baselineSelected = isSelected;
+    if (this.wallLossesForm && !isSelected) {
+      this.wallLossesForm.controls.surfaceShape.disable();
+    } else {
+      this.setWallSurfaceOptions();
+      this.wallLossesForm.controls.surfaceShape.enable();
+    }
+  }
+  get baselineSelected(): boolean {
+    return this._baselineSelected;
+  }
+
+  private _isBaseline: boolean;
+  @Input()
+  set isBaseline(val: boolean) {
+    this._isBaseline = val;
+    this.idString = this._isBaseline ? '_baseline_' + this.lossIndex : '_modification_' + this.lossIndex;
+  }
+  get isBaseline(): boolean {
+    return this._isBaseline;
+  }
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
-
   hasDeletedCustomMaterial: boolean = false;
-  editExistingMaterial: boolean;
   existingMaterial: WallLossesSurface;
   surfaceOptions: Array<WallLossesSurface>;
   showModal: boolean = false;
   idString: string;
-  constructor(private wallLossCompareService: WallLossCompareService, private sqlDbApiService: SqlDbApiService, private wallFormService: WallFormService, private lossesService: LossesService, private wallLossesSurfaceDbService: WallLossesSurfaceDbService) { }
+  constructor(private wallLossCompareService: WallLossCompareService,
+    private wallFormService: WallFormService,
+    private lossesService: LossesService,
+    private wallLossesSurfaceDbService: WallLossesSurfaceDbService) { }
 
   ngOnInit() {
-    if (!this.isBaseline) {
-      this.idString = '_modification_' + this.lossIndex;
-    }
-    else {
-      this.idString = '_baseline_' + this.lossIndex;
-    }
-    this.surfaceOptions = this.sqlDbApiService.selectWallLossesSurface();
+    this.initForm();
+  }
+
+  async initForm() {
+    await this.setWallSurfaceOptions();
     if (this.surfaceOptions) {
       if (this.wallLossesForm.controls.surfaceShape.value && this.wallLossesForm.controls.surfaceShape.value !== '') {
         if (this.wallLossesForm.controls.conditionFactor.value === '') {
-          this.setProperties();
+          this.setConditionFactor();
         } else {
           this.checkForDeletedMaterial();
         }
       }
     }
-    //init warnings
-    if (!this.baselineSelected) {
-      this.disableForm();
-    }
   }
 
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.baselineSelected) {
-      if (!changes.baselineSelected.firstChange) {
-        //on changes to baseline selected enable/disable form
-        if (!this.baselineSelected) {
-          this.disableForm();
-        } else {
-          this.surfaceOptions = this.sqlDbApiService.selectWallLossesSurface();
-          this.enableForm();
-        }
-      }
-    }
+  async setWallSurfaceOptions() {
+    this.surfaceOptions = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
   }
 
-  //disable select input fields
-  disableForm() {
-    this.wallLossesForm.controls.surfaceShape.disable();
-  }
-  //enable select input fields
-  enableForm() {
-    this.wallLossesForm.controls.surfaceShape.enable();
-  }
-
-  //emits to wall-losses.component the focused field changed
   focusField(str: string) {
     this.changeField.emit(str);
-  }
-  //emits to default help on blur of input elements
-  focusOut() {
-    this.changeField.emit('default');
   }
 
   save() {
@@ -108,8 +100,8 @@ export class WallLossesFormComponent implements OnInit {
     this.saveEmit.emit(true);
   }
 
-  checkForDeletedMaterial() {
-    let selectedMaterial: WallLossesSurface = this.sqlDbApiService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
+  async checkForDeletedMaterial() {
+    let selectedMaterial: WallLossesSurface = await firstValueFrom(this.wallLossesSurfaceDbService.getByIdWithObservable(this.wallLossesForm.controls.surfaceShape.value));
     if (!selectedMaterial) {
       this.hasDeletedCustomMaterial = true;
       this.restoreMaterial();
@@ -118,66 +110,51 @@ export class WallLossesFormComponent implements OnInit {
   }
 
   async restoreMaterial() {
-    let customMaterial: WallLossesSurface = {
+    this.existingMaterial = {
       conditionFactor: this.wallLossesForm.controls.conditionFactor.value,
       surface: "Custom Material"
     };
-    let suiteDbResult = this.sqlDbApiService.insertWallLossesSurface(customMaterial);
-    if (suiteDbResult === true) {
-      await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(customMaterial));
-    }
-    this.surfaceOptions = this.sqlDbApiService.selectWallLossesSurface();
-    let newMaterial: WallLossesSurface = this.surfaceOptions.find(material => { return material.surface === customMaterial.surface; });
+    let addedMaterial = await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(this.existingMaterial));
+    this.surfaceOptions = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
     this.wallLossesForm.patchValue({
-      surfaceShape: newMaterial.id
+      surfaceShape: addedMaterial.id
     });
+    this.existingMaterial.id = addedMaterial.id;
   }
 
 
-  setProperties() {
-    let tmpFactor: WallLossesSurface = this.sqlDbApiService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
-    if (tmpFactor) {
+  setConditionFactor() {
+    const wallSurface: WallLossesSurface = this.surfaceOptions.find(material => material.id === this.wallLossesForm.controls.surfaceShape.value);
+    if (wallSurface) {
       this.wallLossesForm.patchValue({
-        conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
+        conditionFactor: roundVal(wallSurface.conditionFactor, 4)
       });
-      this.calculate.emit(true);
     }
     this.save();
   }
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
-  }
 
-  showMaterialModal(editExistingMaterial: boolean) {
-    this.editExistingMaterial = editExistingMaterial;
-    if(editExistingMaterial === true) {
-      this.existingMaterial = {
-        conditionFactor: this.wallLossesForm.controls.conditionFactor.value,
-        surface: "Custom Material"
-      };
-    }
+  showMaterialModal(isNewMaterial: boolean = false) {
+    this.existingMaterial = isNewMaterial ? undefined : this.existingMaterial;
     this.showModal = true;
     this.lossesService.modalOpen.next(this.showModal);
     this.materialModal.show();
   }
 
-  hideMaterialModal(event?: any) {
-    if (event) {
-      this.surfaceOptions = this.sqlDbApiService.selectWallLossesSurface();
-      let newMaterial: WallLossesSurface = this.surfaceOptions.find(material => { return material.surface === event.surface; });
-      if (newMaterial) {
-        this.wallLossesForm.patchValue({
-          surfaceShape: newMaterial.id
-        });
-        this.setProperties();
-      }
+  async hideMaterialModal(materialEvent?: WallLossesSurface) {
+    if (materialEvent && materialEvent.id) {
+      await this.setWallSurfaceOptions();
+      this.wallLossesForm.patchValue({
+        surfaceShape: materialEvent.id,
+        conditionFactor: roundVal(materialEvent.conditionFactor, 4)
+      });
+      this.save();
     }
     this.materialModal.hide();
     this.showModal = false;
     this.dismissMessage();
     this.lossesService.modalOpen.next(this.showModal);
   }
+
   canCompare() {
     if (this.wallLossCompareService.baselineWallLosses && this.wallLossCompareService.modifiedWallLosses && !this.inSetup) {
       return true;

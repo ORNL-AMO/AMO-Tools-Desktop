@@ -7,9 +7,10 @@ import { Settings } from '../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-other-losses',
-  templateUrl: './other-losses.component.html',
-  styleUrls: ['./other-losses.component.css']
+    selector: 'app-other-losses',
+    templateUrl: './other-losses.component.html',
+    styleUrls: ['./other-losses.component.css'],
+    standalone: false
 })
 export class OtherLossesComponent implements OnInit {
   @Input()

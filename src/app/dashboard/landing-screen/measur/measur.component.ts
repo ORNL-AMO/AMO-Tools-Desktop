@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-measur',
-  templateUrl: './measur.component.html',
-  styleUrls: ['./measur.component.css']
+    selector: 'app-measur',
+    templateUrl: './measur.component.html',
+    styleUrls: ['./measur.component.css'],
+    standalone: false
 })
 export class MeasurComponent implements OnInit {
 

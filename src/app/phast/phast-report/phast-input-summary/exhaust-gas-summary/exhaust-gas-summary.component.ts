@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
-  selector: 'app-exhaust-gas-summary',
-  templateUrl: './exhaust-gas-summary.component.html',
-  styleUrls: ['./exhaust-gas-summary.component.css']
+    selector: 'app-exhaust-gas-summary',
+    templateUrl: './exhaust-gas-summary.component.html',
+    styleUrls: ['./exhaust-gas-summary.component.css'],
+    standalone: false
 })
 export class ExhaustGasSummaryComponent implements OnInit {
   @Input()
@@ -26,6 +27,10 @@ export class ExhaustGasSummaryComponent implements OnInit {
   dustLoadingDiff: Array<boolean>;
 
   numMods: number = 0;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -93,4 +98,9 @@ export class ExhaustGasSummaryComponent implements OnInit {
     this.collapse = !this.collapse;
   }
 
+  
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+  
 }

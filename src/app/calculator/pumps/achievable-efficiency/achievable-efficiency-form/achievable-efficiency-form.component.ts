@@ -6,9 +6,10 @@ import { pumpTypesConstant } from '../../../../psat/psatConstants';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-achievable-efficiency-form',
-  templateUrl: './achievable-efficiency-form.component.html',
-  styleUrls: ['./achievable-efficiency-form.component.css']
+    selector: 'app-achievable-efficiency-form',
+    templateUrl: './achievable-efficiency-form.component.html',
+    styleUrls: ['./achievable-efficiency-form.component.css'],
+    standalone: false
 })
 export class AchievableEfficiencyFormComponent implements OnInit {
   @Input()

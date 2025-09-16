@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { HeatCascadingService } from '../heat-cascading.service';
 
 @Component({
-  selector: 'app-heat-cascading-results',
-  templateUrl: './heat-cascading-results.component.html',
-  styleUrls: ['./heat-cascading-results.component.css']
+    selector: 'app-heat-cascading-results',
+    templateUrl: './heat-cascading-results.component.html',
+    styleUrls: ['./heat-cascading-results.component.css'],
+    standalone: false
 })
 export class HeatCascadingResultsComponent implements OnInit {
   @Input()

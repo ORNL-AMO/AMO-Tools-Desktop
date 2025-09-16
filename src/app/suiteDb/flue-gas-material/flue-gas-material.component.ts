@@ -3,19 +3,18 @@ import { FlueGasMaterial } from '../../shared/models/materials';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PhastService } from '../../phast/phast.service';
-import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
-import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 
 @Component({
   selector: 'app-flue-gas-material',
   templateUrl: './flue-gas-material.component.html',
-  styleUrls: ['./flue-gas-material.component.css']
+  styleUrls: ['./flue-gas-material.component.css'],
+  standalone: false
 })
 export class FlueGasMaterialComponent implements OnInit {
   @Output('closeModal')
-  closeModal = new EventEmitter<FlueGasMaterial>();
+  closeModal = new EventEmitter<number>();
   @Input()
   settings: Settings;
   @Input()
@@ -58,11 +57,9 @@ export class FlueGasMaterialComponent implements OnInit {
   difference: number = 0;
   differenceError: boolean = false;
   idbEditMaterialId: number;
-  sdbEditMaterialId: number;
-  constructor(private sqlDbApiService: SqlDbApiService, private flueGasMaterialDbService: FlueGasMaterialDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
+  constructor(private flueGasMaterialDbService: FlueGasMaterialDbService, private convertUnitsService: ConvertUnitsService, private phastService: PhastService) { }
 
   ngOnInit() {
-
     if (this.editExistingMaterial) {
       this.idbEditMaterialId = this.existingMaterial.id;
       this.setAllMaterials();
@@ -71,17 +68,16 @@ export class FlueGasMaterialComponent implements OnInit {
     else {
       this.canAdd = true;
       this.checkInputMaterial()
-      this.allMaterials = this.sqlDbApiService.selectGasFlueGasMaterials();
+      this.setAllMaterials();
       this.setHHV();
       this.checkMaterialName();
       this.getTotalOfFlueGasses();
     }
   }
 
-  async setAllMaterials() {
-    this.allMaterials = this.sqlDbApiService.selectGasFlueGasMaterials();
-    this.allCustomMaterials = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-    this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+  setAllMaterials() {
+    this.allMaterials = this.flueGasMaterialDbService.getAllMaterials();
+    this.allCustomMaterials = this.flueGasMaterialDbService.getAllCustomMaterials();
     this.setExisting();
   }
 
@@ -117,20 +113,15 @@ export class FlueGasMaterialComponent implements OnInit {
     this.getDiff();
   }
 
- async addMaterial() {
+  async addMaterial() {
     if (this.canAdd) {
       this.canAdd = false;
       if (this.settings.unitsOfMeasure == 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
         this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('kJNm3').to('btuscf');
       }
-      let suiteDbResult = this.sqlDbApiService.insertGasFlueGasMaterial(this.newMaterial);
-      if (suiteDbResult == true) {
-        await firstValueFrom(this.flueGasMaterialDbService.addWithObservable(this.newMaterial));
-        let materials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-        this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
-        this.closeModal.emit(this.newMaterial);
-      }
+      let newMaterialId: number = await this.flueGasMaterialDbService.addMaterial(this.newMaterial);
+      this.closeModal.emit(newMaterialId);
     }
   }
 
@@ -139,27 +130,16 @@ export class FlueGasMaterialComponent implements OnInit {
       this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
       this.newMaterial.heatingValueVolume = this.convertUnitsService.value(this.newMaterial.heatingValueVolume).from('kJNm3').to('btuscf');
     }
-    this.newMaterial.id = this.sdbEditMaterialId;
-    let suiteDbResult = this.sqlDbApiService.updateGasFlueGasMaterial(this.newMaterial);
-    if (suiteDbResult == true) {
-      //need to set id for idb to put updates
-      this.newMaterial.id = this.idbEditMaterialId;
-      await firstValueFrom(this.flueGasMaterialDbService.updateWithObservable(this.newMaterial));
-      let materials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-      this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
-      this.closeModal.emit(this.newMaterial);
-    }
+    //need to set id for idb to put updates
+    this.newMaterial.id = this.idbEditMaterialId;
+    await this.flueGasMaterialDbService.updateMaterial(this.newMaterial);
+    this.closeModal.emit(this.newMaterial.id);
   }
 
   async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      let suiteDbResult = this.sqlDbApiService.deleteGasFlueGasMaterial(this.sdbEditMaterialId);
-      if (suiteDbResult == true) {
-        await firstValueFrom(this.flueGasMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
-        let materials: FlueGasMaterial[] = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-        this.flueGasMaterialDbService.dbFlueGasMaterials.next(materials);
-        this.closeModal.emit(this.newMaterial);
-      }
+      await this.flueGasMaterialDbService.deleteMaterial(this.idbEditMaterialId);
+      this.closeModal.emit(undefined);
     }
   }
 
@@ -235,11 +215,12 @@ export class FlueGasMaterialComponent implements OnInit {
     this.getTotalOfFlueGasses();
     this.isValidForm = true;
     for (let property in this.newMaterial) {
-      if (this.newMaterial[property] === null) {
-        this.isValidForm = false;
+      if(property != 'heatingValue' && property != 'heatingValueVolume' && property != 'specificGravity') {
+        if (this.newMaterial[property] === null) {
+          this.isValidForm = false;
+        }
       }
     }
-
     if (this.isValidForm) {
       const vals = this.phastService.flueGasByVolumeCalculateHeatingValue(this.newMaterial);
       if (isNaN(vals.heatingValue) === false && isNaN(vals.specificGravity) === false && isNaN(vals.heatingValueVolume) === false) {
@@ -265,7 +246,7 @@ export class FlueGasMaterialComponent implements OnInit {
 
   checkEditMaterialName() {
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id != this.sdbEditMaterialId) {
+      if (material.id != this.idbEditMaterialId) {
         return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
       }
     });

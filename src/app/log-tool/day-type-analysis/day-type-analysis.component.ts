@@ -11,9 +11,10 @@ import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms
 import { LogToolService } from '../log-tool.service';
 import { AnalyticsService } from '../../shared/analytics/analytics.service';
 @Component({
-  selector: 'app-day-type-analysis',
-  templateUrl: './day-type-analysis.component.html',
-  styleUrls: ['./day-type-analysis.component.css']
+    selector: 'app-day-type-analysis',
+    templateUrl: './day-type-analysis.component.html',
+    styleUrls: ['./day-type-analysis.component.css'],
+    standalone: false
 })
 export class DayTypeAnalysisComponent implements OnInit {
 
@@ -156,6 +157,7 @@ export class DayTypeAnalysisComponent implements OnInit {
     this.loadingSpinner = {show: true, msg: `Calculating Day Types. This may take a moment
     depending on the amount of data you have supplied.`};
     setTimeout(() => {
+      console.time('runDayTypeAnalysis');
       this.analyticsService.sendEvent('run-day-type-analysis');
       this.logToolDataService.setLogToolDays();
       this.dayTypeAnalysisService.setStartDateAndNumberOfMonths();
@@ -163,6 +165,7 @@ export class DayTypeAnalysisComponent implements OnInit {
       this.dayTypeAnalysisService.setDayTypeSummaries();
       this.dayTypeGraphService.setDayTypeScatterPlotData();
       this.dayTypeGraphService.setIndividualDayScatterPlotData();
+      console.timeEnd('runDayTypeAnalysis');
       this.dayTypeAnalysisService.dayTypesCalculated = true;
       this.hasRunDayTypeAnalysis = true;
       this.loadingSpinner = {show: false}

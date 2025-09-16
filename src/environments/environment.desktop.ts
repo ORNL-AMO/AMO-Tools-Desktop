@@ -6,6 +6,7 @@ export const environment = {
   name: 'desktop',
   version: packageInfo.version,
   useServiceWorker: false,
-  measurWeatherApi: 'https://weather.ornl.gov/',
-  measurUtilitiesApi: 'https://weather.ornl.gov/'
+  measurWeatherApi: 'https://ir-utilities.ornl.gov/',
+  measurUtilitiesApi: 'https://ir-utilities.ornl.gov/',
+  measurDocsUrl: 'https://industrialresources.ornl.gov/measur/suite/docs/'
 };

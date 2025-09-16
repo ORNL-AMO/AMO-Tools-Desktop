@@ -6,9 +6,10 @@ import { Subscription } from 'rxjs';
 import { AirFlowConversionInput } from '../../../../shared/models/compressed-air/compressed-air';
 
 @Component({
-  selector: 'app-air-flow-conversion-form',
-  templateUrl: './air-flow-conversion-form.component.html',
-  styleUrls: ['./air-flow-conversion-form.component.css']
+    selector: 'app-air-flow-conversion-form',
+    templateUrl: './air-flow-conversion-form.component.html',
+    styleUrls: ['./air-flow-conversion-form.component.css'],
+    standalone: false
 })
 export class AirFlowConversionFormComponent implements OnInit {
   @Input()

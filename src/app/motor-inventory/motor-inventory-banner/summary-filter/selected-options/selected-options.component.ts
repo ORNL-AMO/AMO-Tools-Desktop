@@ -7,9 +7,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { InventorySummaryGraphsService } from '../../../motor-inventory-summary/inventory-summary-graphs/inventory-summary-graphs.service';
 
 @Component({
-  selector: 'app-selected-options',
-  templateUrl: './selected-options.component.html',
-  styleUrls: ['./selected-options.component.css']
+    selector: 'app-selected-options',
+    templateUrl: './selected-options.component.html',
+    styleUrls: ['./selected-options.component.css'],
+    standalone: false
 })
 export class SelectedOptionsComponent implements OnInit {
 

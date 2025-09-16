@@ -2,9 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OpportunityCost } from '../../../../shared/models/treasure-hunt';
 
 @Component({
-  selector: 'app-costs-form',
-  templateUrl: './costs-form.component.html',
-  styleUrls: ['./costs-form.component.css']
+    selector: 'app-costs-form',
+    templateUrl: './costs-form.component.html',
+    styleUrls: ['./costs-form.component.css'],
+    standalone: false
 })
 export class CostsFormComponent implements OnInit {
   @Input()

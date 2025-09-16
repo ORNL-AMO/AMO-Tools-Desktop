@@ -4,9 +4,10 @@ import { Subscription } from 'rxjs';
 import { InventorySummaryOverviewService, InventorySummary } from '../inventory-summary-overview.service';
 
 @Component({
-  selector: 'app-inventory-overview-bar-chart',
-  templateUrl: './inventory-overview-bar-chart.component.html',
-  styleUrls: ['./inventory-overview-bar-chart.component.css']
+    selector: 'app-inventory-overview-bar-chart',
+    templateUrl: './inventory-overview-bar-chart.component.html',
+    styleUrls: ['./inventory-overview-bar-chart.component.css'],
+    standalone: false
 })
 export class PumpInventoryOverviewBarChartComponent implements OnInit {
 

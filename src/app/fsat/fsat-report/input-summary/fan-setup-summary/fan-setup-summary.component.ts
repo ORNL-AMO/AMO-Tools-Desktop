@@ -1,13 +1,14 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT, FanSetup } from '../../../../shared/models/fans';
 import { FanTypes, Drives } from '../../../fanOptions';
 import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-fan-setup-summary',
-  templateUrl: './fan-setup-summary.component.html',
-  styleUrls: ['./fan-setup-summary.component.css']
+    selector: 'app-fan-setup-summary',
+    templateUrl: './fan-setup-summary.component.html',
+    styleUrls: ['./fan-setup-summary.component.css'],
+    standalone: false
 })
 export class FanSetupSummaryComponent implements OnInit {
   @Input()
@@ -31,6 +32,9 @@ export class FanSetupSummaryComponent implements OnInit {
   fanEfficiencyDiff = new Array<boolean>();
   fanTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   constructor(private cd: ChangeDetectorRef) { }
 
@@ -107,5 +111,9 @@ export class FanSetupSummaryComponent implements OnInit {
     } else {
       return;
     }
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

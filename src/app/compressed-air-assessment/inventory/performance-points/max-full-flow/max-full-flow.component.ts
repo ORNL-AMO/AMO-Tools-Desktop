@@ -10,9 +10,10 @@ import { MaxFullFlowCalculationsService } from '../calculations/max-full-flow-ca
 import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 @Component({
-  selector: '[app-max-full-flow]',
-  templateUrl: './max-full-flow.component.html',
-  styleUrls: ['./max-full-flow.component.css']
+    selector: '[app-max-full-flow]',
+    templateUrl: './max-full-flow.component.html',
+    styleUrls: ['./max-full-flow.component.css'],
+    standalone: false
 })
 export class MaxFullFlowComponent implements OnInit {
 

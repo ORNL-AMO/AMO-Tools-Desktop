@@ -6,15 +6,17 @@ import { PhastService } from '../../../../phast/phast.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { FlueGas, FlueGasByMass, FlueGasWarnings, MaterialInputProperties } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { FlueGasFormService } from '../flue-gas-form.service';
 import { FlueGasService } from '../flue-gas.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid-material-db.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
   selector: 'app-flue-gas-form-mass',
   templateUrl: './flue-gas-form-mass.component.html',
-  styleUrls: ['./flue-gas-form-mass.component.css']
+  styleUrls: ['./flue-gas-form-mass.component.css'],
+  standalone: false
 })
 export class FlueGasFormMassComponent implements OnInit {
   @Input()
@@ -28,6 +30,7 @@ export class FlueGasFormMassComponent implements OnInit {
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
+  @ViewChild('moistureModal', { static: false }) public moistureModal: ModalDirective;
 
   resetDataSub: Subscription;
   byMassForm: UntypedFormGroup;
@@ -44,18 +47,24 @@ export class FlueGasFormMassComponent implements OnInit {
   warnings: FlueGasWarnings;
 
   higherHeatingValue: number;
-
+  showMoisture: boolean;
+  materialsSub: Subscription;
   constructor(private flueGasService: FlueGasService,
     private flueGasFormService: FlueGasFormService,
-    private sqlDbApiService: SqlDbApiService, 
     private convertUnitsService: ConvertUnitsService,
     private phastService: PhastService,
     private cd: ChangeDetectorRef,
-    ) { }
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService
+  ) { }
 
   ngOnInit() {
-    this.options = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
-    this.initSubscriptions();
+    this.materialsSub = this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.subscribe(val => {
+      this.options = val;
+    });
+    this.resetDataSub = this.flueGasService.resetData.subscribe(value => {
+      this.initForm();
+      this.cd.detectChanges();
+    });
   }
 
   ngOnDestroy() {
@@ -64,16 +73,8 @@ export class FlueGasFormMassComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.selected && !changes.selected.firstChange) {
-      this.options = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
       this.setFormState();
     }
-  }
-
-  initSubscriptions() {
-    this.resetDataSub = this.flueGasService.resetData.subscribe(value => {
-      this.initForm();
-      this.cd.detectChanges();
-    });
   }
 
   initFormSetup() {
@@ -171,10 +172,12 @@ export class FlueGasFormMassComponent implements OnInit {
 
   calculate() {
     this.byMassForm = this.flueGasFormService.setValidators(this.byMassForm);
-    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.byMassForm.controls.gasTypeId.value);
-    this.higherHeatingValue = this.phastService.flueGasByMassCalculateHeatingValue(tmpFlueGas);
-    if (this.settings.unitsOfMeasure === 'Metric') {
-      this.higherHeatingValue = this.convertUnitsService.value(this.higherHeatingValue).from('btuLb').to('kJkg');
+    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.options.find(option => { return option.id === this.byMassForm.controls.gasTypeId.value });
+    if (tmpFlueGas) {
+      this.higherHeatingValue = this.phastService.flueGasByMassCalculateHeatingValue(tmpFlueGas);
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        this.higherHeatingValue = this.convertUnitsService.value(this.higherHeatingValue).from('btuLb').to('kJkg');
+      }
     }
     this.checkWarnings();
     let currentDataByMass: FlueGas = this.flueGasFormService.buildByMassLossFromForm(this.byMassForm)
@@ -193,16 +196,16 @@ export class FlueGasFormMassComponent implements OnInit {
   }
 
   setProperties() {
-    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.byMassForm.controls.gasTypeId.value);
+    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.options.find(option => { return option.id === this.byMassForm.controls.gasTypeId.value });
     if (tmpFlueGas) {
       this.byMassForm.patchValue({
-        carbon: this.roundVal(tmpFlueGas.carbon, 4),
-        hydrogen: this.roundVal(tmpFlueGas.hydrogen, 4),
-        sulphur: this.roundVal(tmpFlueGas.sulphur, 4),
-        inertAsh: this.roundVal(tmpFlueGas.inertAsh, 4),
-        o2: this.roundVal(tmpFlueGas.o2, 4),
-        moisture: this.roundVal(tmpFlueGas.moisture, 4),
-        nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
+        carbon: roundVal(tmpFlueGas.carbon, 4),
+        hydrogen: roundVal(tmpFlueGas.hydrogen, 4),
+        sulphur: roundVal(tmpFlueGas.sulphur, 4),
+        inertAsh: roundVal(tmpFlueGas.inertAsh, 4),
+        o2: roundVal(tmpFlueGas.o2, 4),
+        moisture: roundVal(tmpFlueGas.moisture, 4),
+        nitrogen: roundVal(tmpFlueGas.nitrogen, 4)
       });
     }
     this.calculate();
@@ -216,10 +219,23 @@ export class FlueGasFormMassComponent implements OnInit {
     this.setCalcMethod();
   }
 
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
+  showMoistureModal() {
+    this.flueGasService.modalOpen.next(true);
+    this.showMoisture = true;
+    this.moistureModal.show();
   }
+
+  hideMoistureModal(moistureInAirCombustion?: number) {
+    if (moistureInAirCombustion) {
+      moistureInAirCombustion = Number(moistureInAirCombustion.toFixed(2));
+      this.byMassForm.controls.moistureInAirCombustion.patchValue(moistureInAirCombustion);
+    }
+    this.moistureModal.hide();
+    this.showMoisture = false;
+    this.flueGasService.modalOpen.next(false);
+    this.calculate();
+  }
+
 
   showMaterialModal() {
     this.flueGasService.modalOpen.next(true);
@@ -228,11 +244,10 @@ export class FlueGasFormMassComponent implements OnInit {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.options = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
-      let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: SolidLiquidFlueGasMaterial = this.options.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.byMassForm.patchValue({
-          gasTypeId: newMaterial[0].id
+          gasTypeId: newMaterial.id
         });
         this.setProperties();
       }

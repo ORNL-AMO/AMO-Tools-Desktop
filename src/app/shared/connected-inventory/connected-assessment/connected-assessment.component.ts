@@ -2,13 +2,14 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
 import { Router } from '@angular/router';
 import _ from 'lodash';
 import { AssessmentDbService } from '../../../indexedDb/assessment-db.service';
-import { Assessment } from '../../models/assessment';
-import { AssessmentType, ConnectedItem } from '../integrations';
+import { Assessment, AssessmentType } from '../../models/assessment';
+import { ConnectedItem } from '../integrations';
 
 @Component({
-  selector: 'app-connected-assessment',
-  templateUrl: './connected-assessment.component.html',
-  styleUrls: ['./connected-assessment.component.css']
+    selector: 'app-connected-assessment',
+    templateUrl: './connected-assessment.component.html',
+    styleUrls: ['./connected-assessment.component.css'],
+    standalone: false
 })
 export class ConnectedAssessmentComponent {
   @Input()

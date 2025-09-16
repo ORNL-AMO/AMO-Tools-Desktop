@@ -3,9 +3,10 @@ import { TurbineOutput, SSMTOutput } from '../../../../shared/models/steam/steam
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-hover-turbine-table',
-  templateUrl: './hover-turbine-table.component.html',
-  styleUrls: ['./hover-turbine-table.component.css']
+    selector: 'app-hover-turbine-table',
+    templateUrl: './hover-turbine-table.component.html',
+    styleUrls: ['./hover-turbine-table.component.css'],
+    standalone: false
 })
 export class HoverTurbineTableComponent implements OnInit {
   @Input()

@@ -13,7 +13,8 @@ import { WasteWaterService } from '../waste-water.service';
 @Component({
   selector: 'app-waste-water-report',
   templateUrl: './waste-water-report.component.html',
-  styleUrls: ['./waste-water-report.component.css']
+  styleUrls: ['./waste-water-report.component.css'],
+  standalone: false
 })
 export class WasteWaterReportComponent implements OnInit {
   @Input()
@@ -127,7 +128,7 @@ export class WasteWaterReportComponent implements OnInit {
     this.printOptionsMenuService.showPrintMenu.next(true);
     this.collapseTabs();
   }
-  
+
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
   }

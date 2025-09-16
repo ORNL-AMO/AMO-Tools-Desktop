@@ -5,9 +5,10 @@ import { EGridService } from '../../shared/helper-services/e-grid.service';
 import { PumpInventoryService } from '../pump-inventory.service';
 
 @Component({
-  selector: 'app-pump-inventory-setup',
-  templateUrl: './pump-inventory-setup.component.html',
-  styleUrls: ['./pump-inventory-setup.component.css']
+    selector: 'app-pump-inventory-setup',
+    templateUrl: './pump-inventory-setup.component.html',
+    styleUrls: ['./pump-inventory-setup.component.css'],
+    standalone: false
 })
 export class PumpInventorySetupComponent implements OnInit {
 

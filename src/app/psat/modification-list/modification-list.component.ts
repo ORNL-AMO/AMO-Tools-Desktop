@@ -10,9 +10,10 @@ import { Settings } from '../../shared/models/settings';
 import { getNewIdString } from '../../shared/helperFunctions';
 
 @Component({
-  selector: 'app-modification-list',
-  templateUrl: './modification-list.component.html',
-  styleUrls: ['./modification-list.component.css']
+    selector: 'app-modification-list',
+    templateUrl: './modification-list.component.html',
+    styleUrls: ['./modification-list.component.css'],
+    standalone: false
 })
 export class ModificationListComponent implements OnInit {
   @Input()

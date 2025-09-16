@@ -4,17 +4,17 @@ import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { PhastService } from '../../phast/phast.service';
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
-import { SqlDbApiService } from '../../tools-suite-api/sql-db-api.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
-import { firstValueFrom } from 'rxjs';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-solid-liquid-flue-gas-material',
   templateUrl: './solid-liquid-flue-gas-material.component.html',
-  styleUrls: ['./solid-liquid-flue-gas-material.component.css']
+  styleUrls: ['./solid-liquid-flue-gas-material.component.css'],
+  standalone: false
 })
 export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   @Output('closeModal')
-  closeModal = new EventEmitter<SolidLiquidFlueGasMaterial>();
+  closeModal = new EventEmitter<number>();
   @Input()
   settings: Settings;
   @Input()
@@ -49,26 +49,31 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   difference: number = 0;
   differenceError: boolean = false;
   idbEditMaterialId: number;
-  sdbEditMaterialId: number;
-  constructor(private sqlDbApiService: SqlDbApiService, private solidLiquidMaterialDbService: SolidLiquidMaterialDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
+
+  materialsSub: Subscription;
+
+  constructor(private solidLiquidMaterialDbService: SolidLiquidMaterialDbService, private phastService: PhastService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
-    if (this.editExistingMaterial) {
-      this.setAllMaterials();
-    }
-    else {
+    this.materialsSub = this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.subscribe(val => {
+      this.allMaterials = val;
+      this.setCustomMaterials();
+    });
+
+    if (!this.editExistingMaterial) {
       this.canAdd = true;
-      this.allMaterials = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
       this.checkMaterialName();
       this.setHHV();
     }
   }
 
-  async setAllMaterials() {
-    this.allMaterials = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
-    this.allCustomMaterials = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
-    this.sdbEditMaterialId = _.find(this.allMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
-    this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial.substance == material.substance }).id;
+  ngOnDestroy(){
+    this.materialsSub.unsubscribe();
+  }
+
+  setCustomMaterials() {
+    this.allCustomMaterials = this.solidLiquidMaterialDbService.getAllCustomMaterials();
+    this.idbEditMaterialId = _.find(this.allCustomMaterials, (material) => { return this.existingMaterial?.substance == material.substance })?.id;
     this.setExisting();
     this.setHHV();
   }
@@ -79,44 +84,26 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
       if (this.settings.unitsOfMeasure === 'Metric') {
         this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
       }
-
-      // * db insert converts user input percentage to fraction
-      let suiteDbResult = this.sqlDbApiService.insertSolidLiquidFlueGasMaterial(this.newMaterial);
-      if (suiteDbResult == true) {
-        await firstValueFrom(this.solidLiquidMaterialDbService.addWithObservable(this.newMaterial))
-        let materials: SolidLiquidFlueGasMaterial[] = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
-        this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.next(materials);
-        this.closeModal.emit(this.newMaterial);
-      }
+      let newMaterialId: number = await this.solidLiquidMaterialDbService.addMaterial(this.newMaterial)
+      this.closeModal.emit(newMaterialId);
     }
   }
 
- async updateMaterial() {
+  async updateMaterial() {
     this.convertDecimals();
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.newMaterial.heatingValue = this.convertUnitsService.value(this.newMaterial.heatingValue).from('kJkg').to('btuLb');
     }
-    this.newMaterial.id = this.sdbEditMaterialId;
-    let suiteDbResult = this.sqlDbApiService.updateSolidLiquidFlueGasMaterial(this.newMaterial);
-    if (suiteDbResult == true) {
-      //need to set id for idb to put updates
-      this.newMaterial.id = this.idbEditMaterialId;
-      await firstValueFrom(this.solidLiquidMaterialDbService.updateWithObservable(this.newMaterial));
-      let materials: SolidLiquidFlueGasMaterial[] = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
-      this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.next(materials);
-      this.closeModal.emit(this.newMaterial);
-    }
+    //need to set id for idb to put updates
+    this.newMaterial.id = this.idbEditMaterialId;
+    await this.solidLiquidMaterialDbService.updateMaterial(this.newMaterial);
+    this.closeModal.emit(this.newMaterial.id);
   }
 
- async deleteMaterial() {
+  async deleteMaterial() {
     if (this.deletingMaterial && this.existingMaterial) {
-      let suiteDbResult = this.sqlDbApiService.deleteSolidLiquidFlueGasMaterial(this.sdbEditMaterialId);
-      if (suiteDbResult == true) {
-        await firstValueFrom(this.solidLiquidMaterialDbService.deleteByIdWithObservable(this.idbEditMaterialId));
-        let materials: SolidLiquidFlueGasMaterial[] = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
-        this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.next(materials);
-        this.closeModal.emit(this.newMaterial);
-      }
+      await this.solidLiquidMaterialDbService.deleteMaterial(this.idbEditMaterialId);
+      this.closeModal.emit(undefined);
     }
   }
 
@@ -137,7 +124,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   fromPercent(num: number) {
     return Number((num / 100).toFixed(6));
   }
-  
+
   setExisting() {
     if (this.editExistingMaterial && this.existingMaterial) {
       this.newMaterial = {
@@ -179,7 +166,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   setHHV() {
     this.isValidForm = true;
     for (let property in this.newMaterial) {
-      if(this.newMaterial[property] === null) {
+      if (this.newMaterial[property] === null) {
         this.isValidForm = false;
       }
     }
@@ -211,7 +198,7 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
 
   checkEditMaterialName() {
     let test = _.filter(this.allMaterials, (material) => {
-      if (material.id != this.sdbEditMaterialId) {
+      if (material.id != this.idbEditMaterialId) {
         return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim();
       }
     });
@@ -233,7 +220,6 @@ export class SolidLiquidFlueGasMaterialComponent implements OnInit {
   checkMaterialName() {
     this.isNameValid = true;
     this.nameError = null;
-
     let uniqueName = _.filter(this.allMaterials, (material) => { return material.substance.toLowerCase().trim() == this.newMaterial.substance.toLowerCase().trim() })
     if (uniqueName.length > 0) {
       this.nameError = 'Cannot have same name as existing material';

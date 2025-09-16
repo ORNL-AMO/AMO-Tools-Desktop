@@ -15,9 +15,10 @@ import { Subscription } from 'rxjs';
 import { OperationsService } from '../../operations/operations.service';
 
 @Component({
-  selector: 'app-explore-opportunities-form',
-  templateUrl: './explore-opportunities-form.component.html',
-  styleUrls: ['./explore-opportunities-form.component.css']
+    selector: 'app-explore-opportunities-form',
+    templateUrl: './explore-opportunities-form.component.html',
+    styleUrls: ['./explore-opportunities-form.component.css'],
+    standalone: false
 })
 export class ExploreOpportunitiesFormComponent implements OnInit {
   @Input()

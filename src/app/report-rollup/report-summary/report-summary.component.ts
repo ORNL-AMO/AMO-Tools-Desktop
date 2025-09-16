@@ -12,9 +12,10 @@ import { WasteWaterReportRollupService } from '../waste-water-report-rollup.serv
 import { WindowRefService } from '../../indexedDb/window-ref.service';
 
 @Component({
-  selector: 'app-report-summary',
-  templateUrl: './report-summary.component.html',
-  styleUrls: ['./report-summary.component.css']
+    selector: 'app-report-summary',
+    templateUrl: './report-summary.component.html',
+    styleUrls: ['./report-summary.component.css'],
+    standalone: false
 })
 export class ReportSummaryComponent implements OnInit {
   @Output('hideSummary')

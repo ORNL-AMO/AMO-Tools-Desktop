@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-pump-fluid-help',
-  templateUrl: './pump-fluid-help.component.html',
-  styleUrls: ['./pump-fluid-help.component.css']
+    selector: 'app-pump-fluid-help',
+    templateUrl: './pump-fluid-help.component.html',
+    styleUrls: ['./pump-fluid-help.component.css'],
+    standalone: false
 })
 export class PumpFluidHelpComponent implements OnInit {
   @Input()

@@ -8,9 +8,10 @@ import { CurveDataService } from '../../curve-data.service';
 import { EquipmentInputs, ModificationEquipment } from '../../../../shared/models/system-and-equipment-curve';
 
 @Component({
-  selector: 'app-equipment-curve-form',
-  templateUrl: './equipment-curve-form.component.html',
-  styleUrls: ['./equipment-curve-form.component.css']
+    selector: 'app-equipment-curve-form',
+    templateUrl: './equipment-curve-form.component.html',
+    styleUrls: ['./equipment-curve-form.component.css'],
+    standalone: false
 })
 export class EquipmentCurveFormComponent implements OnInit {
   @Input()

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FanPsychrometricService, FanPsychrometricWarnings } from '../../../calculator/process-cooling/fan-psychrometric/fan-psychrometric.service';
 import { FsatReportRollupService } from '../../../report-rollup/fsat-report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
@@ -6,9 +6,10 @@ import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-detailed-results',
-  templateUrl: './detailed-results.component.html',
-  styleUrls: ['./detailed-results.component.css']
+    selector: 'app-detailed-results',
+    templateUrl: './detailed-results.component.html',
+    styleUrls: ['./detailed-results.component.css'],
+    standalone: false
 })
 export class DetailedResultsComponent implements OnInit {
 
@@ -24,6 +25,9 @@ export class DetailedResultsComponent implements OnInit {
   fsat: FSAT; 
   baselineWarnings: FanPsychrometricWarnings;
   modificationWarnings: FanPsychrometricWarnings;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
   
   constructor(private fsatReportRollupService: FsatReportRollupService, private fanPsychrometricService: FanPsychrometricService) { }
   
@@ -62,6 +66,10 @@ export class DetailedResultsComponent implements OnInit {
   checkShowPlaneResults() {
     let showModPlaneResults: boolean = this.fsat.modifications.some(modification => modification.fsat.outputs.planeResults !== undefined);
     this.showPlaneResults = this.fsat.outputs.planeResults !== undefined || showModPlaneResults;
+  }
+
+   updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 
 }

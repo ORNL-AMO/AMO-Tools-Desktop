@@ -7,9 +7,10 @@ import { ActivatedRoute, ActivatedRouteSnapshot, Router, RouterStateSnapshot } f
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-pre-assessment-item',
-  templateUrl: './pre-assessment-item.component.html',
-  styleUrls: ['./pre-assessment-item.component.css']
+    selector: 'app-pre-assessment-item',
+    templateUrl: './pre-assessment-item.component.html',
+    styleUrls: ['./pre-assessment-item.component.css'],
+    standalone: false
 })
 export class PreAssessmentItemComponent {
   @Input()

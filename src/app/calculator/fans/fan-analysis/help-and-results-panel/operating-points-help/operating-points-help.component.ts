@@ -3,9 +3,10 @@ import { FanAnalysisService } from '../../fan-analysis.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-operating-points-help',
-  templateUrl: './operating-points-help.component.html',
-  styleUrls: ['./operating-points-help.component.css']
+    selector: 'app-operating-points-help',
+    templateUrl: './operating-points-help.component.html',
+    styleUrls: ['./operating-points-help.component.css'],
+    standalone: false
 })
 export class OperatingPointsHelpComponent implements OnInit {
 

@@ -3,9 +3,10 @@ import { FanAnalysisService } from '../../../fan-analysis.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-fan-shaft-power-help',
-  templateUrl: './fan-shaft-power-help.component.html',
-  styleUrls: ['./fan-shaft-power-help.component.css']
+    selector: 'app-fan-shaft-power-help',
+    templateUrl: './fan-shaft-power-help.component.html',
+    styleUrls: ['./fan-shaft-power-help.component.css'],
+    standalone: false
 })
 export class FanShaftPowerHelpComponent implements OnInit {
 

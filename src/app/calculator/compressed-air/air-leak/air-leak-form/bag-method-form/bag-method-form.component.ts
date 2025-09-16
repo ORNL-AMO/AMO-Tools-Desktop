@@ -7,9 +7,10 @@ import { AirLeakSurveyData, AirLeakSurveyInput } from '../../../../../shared/mod
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-bag-method-form',
-  templateUrl: './bag-method-form.component.html',
-  styleUrls: ['./bag-method-form.component.css']
+    selector: 'app-bag-method-form',
+    templateUrl: './bag-method-form.component.html',
+    styleUrls: ['./bag-method-form.component.css'],
+    standalone: false
 })
 export class BagMethodFormComponent implements OnInit {
 
@@ -29,7 +30,7 @@ export class BagMethodFormComponent implements OnInit {
       let airLeakInput = this.airLeakService.airLeakInput.getValue();
       if (airLeakInput) {
         let tempLeak: AirLeakSurveyData = airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex]
-        this.bagMethodForm = this.airLeakFormService.getBagFormFromObj(tempLeak);
+        this.bagMethodForm = this.airLeakFormService.getBagFormFromObj(tempLeak, airLeakInput.facilityCompressorData.hoursPerYear);
       }
     })
   }
@@ -40,7 +41,8 @@ export class BagMethodFormComponent implements OnInit {
 
   save() {
     let airLeakSurveyInput: AirLeakSurveyInput = this.airLeakService.airLeakInput.getValue();
-    let bagMethodData = this.airLeakFormService.getBagObjFromForm(this.bagMethodForm);
+    let facilityCompressorData = this.airLeakService.airLeakInput.getValue().facilityCompressorData;
+    let bagMethodData = this.airLeakFormService.getBagObjFromForm(this.bagMethodForm, facilityCompressorData.hoursPerYear);
     airLeakSurveyInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex].bagMethodData = bagMethodData
     this.airLeakService.airLeakInput.next(airLeakSurveyInput);
   }

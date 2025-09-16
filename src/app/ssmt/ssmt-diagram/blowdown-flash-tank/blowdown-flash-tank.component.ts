@@ -3,9 +3,10 @@ import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-blowdown-flash-tank',
-  templateUrl: './blowdown-flash-tank.component.html',
-  styleUrls: ['./blowdown-flash-tank.component.css']
+    selector: 'app-blowdown-flash-tank',
+    templateUrl: './blowdown-flash-tank.component.html',
+    styleUrls: ['./blowdown-flash-tank.component.css'],
+    standalone: false
 })
 export class BlowdownFlashTankComponent implements OnInit {
   @Input()

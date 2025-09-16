@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
 import { SSMT } from '../models/steam/ssmt';
-import { CompressedAirPressureReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
+import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
-import { CompressedAirPressureReductionData, ElectricityReductionData } from '../models/standalone';
+import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData } from '../models/standalone';
 import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -153,6 +153,15 @@ export class UpdateDataService {
                     };
                 }
             })
+        }
+        if (assessment.compressedAirAssessment.modifications && assessment.compressedAirAssessment.modifications.length > 0) {
+            assessment.compressedAirAssessment.modifications.forEach(mod => {
+                if (mod.flowReallocation === undefined || mod.flowReallocation === null) {
+                    mod.flowReallocation = {
+                        implementationCost: 0
+                    }
+                }
+            });
         }
 
         return assessment;
@@ -383,6 +392,9 @@ export class UpdateDataService {
         assessment.ssmt = this.updateHeaders(assessment.ssmt);
         if (assessment.ssmt.modifications) {
             assessment.ssmt.modifications.forEach(mod => {
+                if(!mod.modificationId){
+                    mod.modificationId = getNewIdString();
+                }
                 mod.ssmt = this.updateHeaders(mod.ssmt);
             })
         };
@@ -438,6 +450,7 @@ export class UpdateDataService {
             }
             if (assessment.treasureHunt.compressedAirReductions) {
                 assessment.treasureHunt.compressedAirReductions.forEach(opportunity => {
+                    opportunity = this.updateCompressedAirReductionTreasureHunt(opportunity);
                     opportunity.opportunityType = Treasure.compressedAir;
                 });
             }
@@ -475,6 +488,7 @@ export class UpdateDataService {
             }
             if (assessment.treasureHunt.airLeakSurveys) {
                 assessment.treasureHunt.airLeakSurveys.forEach(opportunity => {
+                    opportunity = this.updateAirLeakSurveyTreasureHunt(opportunity);
                     opportunity.opportunityType = Treasure.airLeak;
                 });
             }
@@ -533,6 +547,30 @@ export class UpdateDataService {
         return compressedAirPressureReductionTreasureHunt;
     }
 
+    updateCompressedAirReductionTreasureHunt(compressedAirReductionTreasureHunt: CompressedAirReductionTreasureHunt): CompressedAirReductionTreasureHunt {
+        if (compressedAirReductionTreasureHunt.baseline) {
+            compressedAirReductionTreasureHunt.baseline.forEach(reduction => {
+                reduction = this.updateCompressedAirReduction(reduction);
+            });
+        }
+        if (compressedAirReductionTreasureHunt.modification) {
+            compressedAirReductionTreasureHunt.modification.forEach(reduction => {
+                reduction = this.updateCompressedAirReduction(reduction);
+            });
+        }
+        return compressedAirReductionTreasureHunt;
+    }
+
+    updateAirLeakSurveyTreasureHunt(airLeakSurveyTreasureHunt: AirLeakSurveyTreasureHunt): AirLeakSurveyTreasureHunt {
+        if (airLeakSurveyTreasureHunt.airLeakSurveyInput && airLeakSurveyTreasureHunt.airLeakSurveyInput.compressedAirLeakSurveyInputVec) {
+            airLeakSurveyTreasureHunt.airLeakSurveyInput.compressedAirLeakSurveyInputVec.forEach(airLeak => {
+                airLeak = this.updateAirLeakSurvey(airLeak);
+            });
+        }
+        return airLeakSurveyTreasureHunt;
+    }
+
+
 
     updateCompressedAirPressureReduction(compressedAirPressureReduction: CompressedAirPressureReductionData): CompressedAirPressureReductionData {
         if (compressedAirPressureReduction.powerType === undefined) {
@@ -540,6 +578,43 @@ export class UpdateDataService {
         }
         return compressedAirPressureReduction;
     }
+
+    updateCompressedAirReduction(compressedAirReductionData: CompressedAirReductionData): CompressedAirReductionData {
+        if (compressedAirReductionData.bagMethodData && (compressedAirReductionData.bagMethodData['height'] !== undefined || compressedAirReductionData.bagMethodData['diameter'] !== undefined)) {
+            // todo commenting this out because we currently have no way to access settings here
+            // Retrieve assessment settings from settingsDb based on settingsId
+            // const settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+            // const height = compressedAirReductionData.bagMethodData['height'];
+            // const diameter = compressedAirReductionData.bagMethodData['diameter'];
+            // if (height !== undefined && diameter !== undefined) {
+            //     compressedAirReductionData.bagMethodData.bagVolume = Math.PI * height * Math.pow(diameter / 2, 2);
+            //     if (settings.unitsOfMeasure === 'Metric') {
+            //         compressedAirReductionData.bagMethodData.bagVolume = this.convertUnitsService.value(compressedAirReductionData.bagMethodData.bagVolume).from('cm3').to('L');
+            //     } else {
+            //         compressedAirReductionData.bagMethodData.bagVolume = this.convertUnitsService.value(compressedAirReductionData.bagMethodData.bagVolume).from('in3').to('gal');
+            //     }
+            // } else {
+            //     compressedAirReductionData.bagMethodData.bagVolume = 0;
+            // }
+            compressedAirReductionData.bagMethodData.bagVolume = 0;
+            compressedAirReductionData.bagMethodData.bagFillTime = compressedAirReductionData.bagMethodData['fillTime'] ? compressedAirReductionData.bagMethodData['fillTime'] : 0;
+            compressedAirReductionData.bagMethodData.numberOfUnits = 1;
+            compressedAirReductionData.bagMethodData.operatingTime = compressedAirReductionData.hoursPerYear;
+        }
+        return compressedAirReductionData;
+    }
+
+
+    updateAirLeakSurvey(airLeakSurveyData: AirLeakSurveyData): AirLeakSurveyData {
+        if (airLeakSurveyData.bagMethodData && (airLeakSurveyData.bagMethodData['height'] !== undefined || airLeakSurveyData.bagMethodData['diameter'] !== undefined)) {
+            airLeakSurveyData.bagMethodData.bagVolume = 0;
+            airLeakSurveyData.bagMethodData.bagFillTime = airLeakSurveyData.bagMethodData['fillTime'] ? airLeakSurveyData.bagMethodData['fillTime'] : 0;
+            airLeakSurveyData.bagMethodData.numberOfUnits = 1;
+            airLeakSurveyData.bagMethodData.operatingTime = airLeakSurveyData.hoursPerYear;
+        }
+        return airLeakSurveyData;
+    }
+
 
     updateHeatCascadingTreasureHunt(heatCascadingTH: HeatCascadingTreasureHunt): HeatCascadingTreasureHunt {
         if (heatCascadingTH) {

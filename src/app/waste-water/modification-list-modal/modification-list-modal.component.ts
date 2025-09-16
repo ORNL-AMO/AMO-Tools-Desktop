@@ -6,9 +6,10 @@ import { WasteWaterService } from '../waste-water.service';
 import * as _ from 'lodash';
 import { CompareService } from '../modify-conditions/compare.service';
 @Component({
-  selector: 'app-modification-list-modal',
-  templateUrl: './modification-list-modal.component.html',
-  styleUrls: ['./modification-list-modal.component.css']
+    selector: 'app-modification-list-modal',
+    templateUrl: './modification-list-modal.component.html',
+    styleUrls: ['./modification-list-modal.component.css'],
+    standalone: false
 })
 export class ModificationListModalComponent implements OnInit {
 

@@ -15,9 +15,9 @@
     <div *ngIf="modExists" class="assessment-panel-container lookup-form panel-column scroll-item"
       [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}">
       <div class="header ml-2 mr-2">
-        <h3>Select Potential Adjustment Projects</h3>
+        <h3>Select Potential Energy Efficiency Measures</h3>
       </div>
-      <p>Select potential adjustment projects to explore opportunities to increase efficiency and the effectiveness of
+      <p>Select potential energy efficiency measures (EEMs) to explore opportunities to increase efficiency and the effectiveness of
         your
         system.
       </p>
@@ -56,7 +56,3 @@
 
 
 </div>
-
-
-<app-toast *ngIf="showToast" [title]="toastData.title" [body]="toastData.body" (emitCloseToast)="hideToast()"
-  [setTimeoutVal]="toastData.setTimeoutVal" [toastClass]="'explore-opps'"></app-toast>

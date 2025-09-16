@@ -7,7 +7,7 @@
 <div class="no-data no-data-phast no-data-no-add"
   *ngIf="(_atmosphereLosses.length == 0 && lossesLocked) || (_atmosphereLosses.length == 0 && !inSetup)">
   <h3>You have no Atmosphere Losses</h3>
-  <h4>To add Atmosphere Losses you will need to delete your current modifications and return to system setup.</h4>
+  <h4>To add Atmosphere Losses you will need to delete your current modifications and return to baseline.</h4>
 </div>
 
 <div class="card-form" *ngFor="let loss of _atmosphereLosses; let lossIndex = index;">

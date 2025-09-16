@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
-  selector: 'app-other-summary',
-  templateUrl: './other-summary.component.html',
-  styleUrls: ['./other-summary.component.css']
+    selector: 'app-other-summary',
+    templateUrl: './other-summary.component.html',
+    styleUrls: ['./other-summary.component.css'],
+    standalone: false
 })
 export class OtherSummaryComponent implements OnInit {
   @Input()
@@ -21,6 +22,10 @@ export class OtherSummaryComponent implements OnInit {
   openingTypeDiff: Array<boolean>;
   heatLossDiff: Array<boolean>;
   numMods: number = 0;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -79,4 +84,9 @@ export class OtherSummaryComponent implements OnInit {
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
+  
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+  
 }

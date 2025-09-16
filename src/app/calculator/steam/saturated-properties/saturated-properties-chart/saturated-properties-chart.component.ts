@@ -9,9 +9,10 @@ import { SaturatedPropertiesConversionService } from '../../saturated-properties
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-saturated-properties-chart',
-  templateUrl: './saturated-properties-chart.component.html',
-  styleUrls: ['./saturated-properties-chart.component.css']
+    selector: 'app-saturated-properties-chart',
+    templateUrl: './saturated-properties-chart.component.html',
+    styleUrls: ['./saturated-properties-chart.component.css'],
+    standalone: false
 })
 export class SaturatedPropertiesChartComponent implements OnChanges {
 

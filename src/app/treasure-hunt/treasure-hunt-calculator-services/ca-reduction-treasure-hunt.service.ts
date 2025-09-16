@@ -45,12 +45,27 @@ export class CaReductionTreasureHuntService {
   getTreasureHuntOpportunityResults(compressedAirReduction: CompressedAirReductionTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
     this.compressedAirReductionService.calculateResults(settings, compressedAirReduction.baseline, compressedAirReduction.modification);
     let results: CompressedAirReductionResults = this.compressedAirReductionService.compressedAirResults.getValue(); 
+
+
+    // 7419 temporary patch results
+    results.baselineAggregateResults.consumption = results.annualConsumptionReduction;
+    results.baselineAggregateResults.energyCost = results.annualCostSavings;
+    results.baselineAggregateResults.energyUse = results.annualEnergySavings;
+    results.baselineAggregateResults.flowRate = results.annualFlowRateReduction;
+
+    results.modificationAggregateResults.consumption = 0;
+    results.modificationAggregateResults.energyCost = 0;
+    results.modificationAggregateResults.energyUse = 0;
+    results.modificationAggregateResults.flowRate = 0;
+    results.modificationAggregateResults.singleNozzeFlowRate = 0;
+    // end 7419 patch
+
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
       costSavings: results.annualCostSavings,
       energySavings: results.annualEnergySavings,
       baselineCost: results.baselineAggregateResults.energyCost,
       modificationCost: results.modificationAggregateResults.energyCost,
-      utilityType: '',
+      utilityType: 'Electricity',
     }
 
     if (compressedAirReduction.baseline[0].utilityType == 0) {
@@ -131,10 +146,7 @@ export class CaReductionTreasureHuntService {
 
     //imperial: scf/min, metric: m3/min
     reduction.flowMeterMethodData.meterReading = this.convertUnitsService.convertFt3AndM3Value(reduction.flowMeterMethodData.meterReading, oldSettings, newSettings);
-    //imperial: in, metric: cm
-    reduction.bagMethodData.height = this.convertUnitsService.convertInAndCmValue(reduction.bagMethodData.height, oldSettings, newSettings);
-    //imperial: in, metric: cm
-    reduction.bagMethodData.diameter = this.convertUnitsService.convertInAndCmValue(reduction.bagMethodData.diameter, oldSettings, newSettings);
+    reduction.bagMethodData.bagVolume = this.convertUnitsService.convertFt3AndM3Value(reduction.bagMethodData.bagVolume, oldSettings, newSettings);
     //imperial: psig, metric: barg
     reduction.pressureMethodData.supplyPressure = this.convertUnitsService.convertPsigAndBargValue(reduction.pressureMethodData.supplyPressure, oldSettings, newSettings);
     //imperial: kscf/yr, metric: m3/yr

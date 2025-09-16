@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-results-panel',
-  templateUrl: './results-panel.component.html',
-  styleUrls: ['./results-panel.component.css']
+    selector: 'app-results-panel',
+    templateUrl: './results-panel.component.html',
+    styleUrls: ['./results-panel.component.css'],
+    standalone: false
 })
 export class ResultsPanelComponent implements OnInit {
 

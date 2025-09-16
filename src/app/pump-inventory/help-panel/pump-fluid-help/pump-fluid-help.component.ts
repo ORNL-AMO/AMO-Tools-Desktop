@@ -4,9 +4,10 @@ import { Settings } from '../../../shared/models/settings';
 import { PumpInventoryService } from '../../pump-inventory.service';
 
 @Component({
-  selector: 'app-pump-fluid-help',
-  templateUrl: './pump-fluid-help.component.html',
-  styleUrls: ['./pump-fluid-help.component.css']
+    selector: 'app-pump-fluid-help',
+    templateUrl: './pump-fluid-help.component.html',
+    styleUrls: ['./pump-fluid-help.component.css'],
+    standalone: false
 })
 export class PumpFluidHelpComponent {
 

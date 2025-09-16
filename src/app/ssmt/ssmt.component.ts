@@ -16,11 +16,13 @@ import { ConvertSsmtService } from './convert-ssmt.service';
 import { EGridService } from '../shared/helper-services/e-grid.service';
 import { SteamService } from '../calculator/steam/steam.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { SnackbarService } from '../shared/snackbar-notification/snackbar.service';
 
 @Component({
-  selector: 'app-ssmt',
-  templateUrl: './ssmt.component.html',
-  styleUrls: ['./ssmt.component.css'],
+    selector: 'app-ssmt',
+    templateUrl: './ssmt.component.html',
+    styleUrls: ['./ssmt.component.css'],
+    standalone: false
 })
 export class SsmtComponent implements OnInit {
   @ViewChild('header', { static: false }) header: ElementRef;
@@ -39,7 +41,7 @@ export class SsmtComponent implements OnInit {
   oldSettings: Settings;
 
   stepTabs: Array<string> = [
-    'system-basics',
+    'baseline',
     'operations',
     'boiler',
     'header',
@@ -75,8 +77,6 @@ export class SsmtComponent implements OnInit {
 
   saveSsmtSub: Subscription;
   modListOpen: boolean = false;
-  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
-  showToast: boolean = false;
 
   ssmtOptions: Array<any>;
   selectedSSMT: { ssmt: SSMT, name };
@@ -101,7 +101,8 @@ export class SsmtComponent implements OnInit {
     private settingsService: SettingsService,
     private steamService: SteamService,
     private convertSsmtService: ConvertSsmtService,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit() {
@@ -140,10 +141,10 @@ export class SsmtComponent implements OnInit {
 
     this.steamModelerErrorSubscription = this.steamService.steamModelerError.subscribe(error => {
       if (error) {
-        this.openToast('Invalid Inputs', error);
-        this.cd.detectChanges();
+        this.snackbarService.setSnackbarMessage(`Invalid Inputs: ${error}`, 'danger');
       }
     });
+    
     this.addNewModificationSubscription = this.ssmtService.openNewModificationModal.subscribe(val => {
       this.showAddModal = val;
       if (val) {
@@ -204,8 +205,8 @@ export class SsmtComponent implements OnInit {
     this.openModificationSelectSubscription.unsubscribe();
     this.modalOpenSubscription.unsubscribe();
     this.addNewModificationSubscription.unsubscribe();
-    this.ssmtService.mainTab.next('system-setup');
-    this.ssmtService.stepTab.next('system-basics');
+    this.ssmtService.mainTab.next('baseline');
+    this.ssmtService.stepTab.next('baseline');
     this.ssmtService.assessmentTab.next('explore-opportunities');
     this.ssmtService.steamModelTab.next('operations');
     this.calcTabSubscription.unsubscribe();
@@ -342,14 +343,14 @@ export class SsmtComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab === 'system-setup') {
-      if (this.stepTab !== 'system-basics') {
+    if (this.mainTab === 'baseline') {
+      if (this.stepTab !== 'baseline') {
         let assessmentTabIndex: number = this.stepTabIndex - 1;
         let nextTab: string = this.stepTabs[assessmentTabIndex];
         this.ssmtService.stepTab.next(nextTab);
       }
     } else if (this.mainTab === 'assessment') {
-      this.ssmtService.mainTab.next('system-setup');
+      this.ssmtService.mainTab.next('baseline');
     }
   }
 
@@ -370,7 +371,7 @@ export class SsmtComponent implements OnInit {
   getCanContinue() {
     let ssmtValid: SsmtValid = this.ssmtService.checkValid(this._ssmt, this.settings);
 
-    if (this.stepTab === 'system-basics') {
+    if (this.stepTab === 'baseline') {
       return true;
     } else if (this.stepTab === 'operations') {
       if (ssmtValid.operationsValid) {
@@ -507,8 +508,8 @@ export class SsmtComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.ssmtService.mainTab.next('system-setup');
-      this.ssmtService.stepTab.next('system-basics');
+      this.ssmtService.mainTab.next('baseline');
+      this.ssmtService.stepTab.next('baseline');
     }
     this.showUpdateUnitsModal = false;
     this.cd.detectChanges();
@@ -546,21 +547,6 @@ export class SsmtComponent implements OnInit {
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.ssmtService.modalOpen.next(false);
-  }
-
-  openToast(title: string, body: string) {
-    this.toastData.title = title;
-    this.toastData.body = body;
-    this.showToast = true;
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    }
   }
 
   setSmallScreenTab(selectedTab: string) {

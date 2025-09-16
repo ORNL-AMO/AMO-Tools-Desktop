@@ -10,7 +10,6 @@ export const MockCompressedAirAssessment: Assessment = {
     "modifiedDate": new Date("2022-08-03T21:13:37.500Z"),
     "type": "CompressedAir",
     "isExample": true,
-    "directoryId": 2,
     "compressedAirAssessment": {
         "name": "Baseline",
         "replacementCompressorInventoryItems": [],
@@ -18,6 +17,9 @@ export const MockCompressedAirAssessment: Assessment = {
             {
                 "name": "Scenario 1",
                 "modificationId": "wsth9ineg",
+                "flowReallocation": {
+                    "implementationCost": 0,
+                },
                 "reduceAirLeaks": {
                     "leakFlow": 2000,
                     "leakReduction": 10,
@@ -6160,6 +6162,9 @@ export const MockCompressedAirAssessment: Assessment = {
             {
                 "name": "Scenario 2",
                 "modificationId": "14hjlw1kc",
+                "flowReallocation": {
+                    "implementationCost": 0,
+                },
                 "reduceAirLeaks": {
                     "leakFlow": 2000,
                     "leakReduction": 15,
@@ -17357,7 +17362,6 @@ export const MockCompressedAirAssessment: Assessment = {
             ]
         }
     },
-    "id": 71,
     "selected": false,
     "appVersion": "1.1.0"
 }
@@ -17511,7 +17515,6 @@ export const MockCompressedAirCalculator: Calculator = {
     },
     "createdDate": new Date("2022-05-10T22:08:20.506Z"),
     "modifiedDate": new Date("2022-05-10T04:00:00.000Z"),
-    "id": 4,
     "airLeakInput": {
         "compressedAirLeakSurveyInputVec": [
             {
@@ -17522,10 +17525,11 @@ export const MockCompressedAirCalculator: Calculator = {
                 "estimateMethodData": {
                     "leakRateEstimate": 0
                 },
-                "bagMethodData": {
-                    "height": 15,
-                    "diameter": 10,
-                    "fillTime": 12
+                bagMethodData: {
+                    operatingTime: 8760,
+                    bagVolume: .6817,
+                    bagFillTime: 12,
+                    numberOfUnits: 1
                 },
                 "decibelsMethodData": {
                     "linePressure": 0,
@@ -17557,11 +17561,12 @@ export const MockCompressedAirCalculator: Calculator = {
                 "estimateMethodData": {
                     "leakRateEstimate": 0.1
                 },
-                "bagMethodData": {
-                    "height": 0,
-                    "diameter": 0,
-                    "fillTime": 0
-                },
+                bagMethodData: {
+                    operatingTime: 0,
+                    bagVolume: 0,
+                    bagFillTime: 0,
+                    numberOfUnits: 0
+                    },
                 "decibelsMethodData": {
                     "linePressure": 0,
                     "decibels": 0,
@@ -17589,10 +17594,11 @@ export const MockCompressedAirCalculator: Calculator = {
                 "leakDescription": "Enter notes about the leak here.",
                 "selected": false,
                 "measurementMethod": 3,
-                "bagMethodData": {
-                    "height": 0,
-                    "diameter": 0,
-                    "fillTime": 0
+                bagMethodData: {
+                    operatingTime: 0,
+                    bagVolume: 0,
+                    bagFillTime: 0,
+                    numberOfUnits: 0
                 },
                 "estimateMethodData": {
                     "leakRateEstimate": 0
@@ -17627,10 +17633,11 @@ export const MockCompressedAirCalculator: Calculator = {
                 "estimateMethodData": {
                     "leakRateEstimate": 0
                 },
-                "bagMethodData": {
-                    "height": 0,
-                    "diameter": 0,
-                    "fillTime": 0
+                bagMethodData: {
+                    operatingTime: 0,
+                    bagVolume: 0,
+                    bagFillTime: 0,
+                    numberOfUnits: 0
                 },
                 "decibelsMethodData": {
                     "linePressure": 130,

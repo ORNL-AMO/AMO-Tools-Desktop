@@ -4,18 +4,13 @@
       Feed Water Economizer Help
       <br>
       <small class="text-muted">
-        This tool is used to calculate energy and related cost saving when vent steam is used to heat domestic hot water. 
-        This is achieved using a steam to water heat exchanger.  The calculator requires data on steam flow and steam
-         conditions as well as water flow and inlet conditions.  The steam source can be deaerator water tanks, flash 
-         steam from condensate return tank or any other equipment / process that vents steam into the atmosphere.
-          Savings calculations are based on heat exchanger efficiency and reduction or elimination of energy cost 
-          used to heat domestic water that will be heated by using vent steam. 
+        This calculator can be used to calculate fuel savings resulting from boiler feed water economizer. 
+        Economizer is a non-condensing heat exchanger on the boiler exhaust duct. It can be a separate heat exchanger or an integral part of the boiler. 
+        Feed water heating reduces heat required to generate steam in a boiler. A non-condensing economizer is the most commonly used economizer design for boilers. 
+        In a non-condensing economizer, the boiler flue gases are cooled to a temperature high enough to avoid condensation of the water vapor component of the flue gases. 
+        An economizer is designed to recover 50% to 65% of the flue gas heat leaving a boiler. However, it is important to select a design and economizer effectiveness 
+        (sometimes called efficiency) that prevents condensation of the flue gas water vapor.
         <br>
-        <div class="mt-3 alert-info p-3 small text-left">
-          Additional energy savings are available on the steam/boiler side as vent steam is condensed back and recovered. 
-          Makeup water is also saved in addition to the chemical treatment costs. To quantify the additional savings, 
-          additional inputs of boiler efficiency, water and treatment costs, makeup water temperature are needed.
-        </div>
       </small>
       <hr>
     </h5>
@@ -132,12 +127,52 @@
       </h6>
     </div>
 
-    <div class="my-2" *ngIf="currentField == 'o2InFlueGas'">
+    <div class="my-2" *ngIf="currentField == 'materialTypeId'">
+      <h6>
+        Fuel
+        <br>
+        <small class="text-muted">
+          Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
+          are intended
+          to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
+          fuel
+          compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
+          edit
+          the composition or add a completely new material. You cannot use the name of a fuel already in the database.
+        </small>
+      </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="currentField == 'oxygenCalculationMethod'">
+      <h6>
+        Percent Oxygen Or Excess Air
+        <br>
+        <small class="text-muted">
+          Choose which value is known for the calculation of Available heat. Using Excess Air is recommended (for higher
+          accuracy)
+          if known.
+          <hr> O<sub>2</sub> in Flue Gas / Excess Air Dropdown options include
+          <u>
+            Excess Air
+          </u> or
+          <u>
+            Oxygen in Flue Gas
+          </u>
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'flueGasO2'">
       <h6>
         O<sub>2</sub> in Flue Gas
         <br>
         <small class="text-muted">
-          This is the percentage of oxygen in the flue gases of the boiler. This is usually determined using flue gas analysis using external combustion analyzer (dry basis) or in stack oxygen sensor (wet basis) measurement. An average value should be used.  
+          Molar (or volumetric) fraction (% Dry) of O<sub>2</sub> in outgoing flue gas (ignoring moisture content). 
+          Higher O<sub>2</sub> in the exhaust indicates higher excess air and a greater amount of heat contained within the flue gas (lowering the available heat). 
+          <br>
+          Flue gas O<sub>2</sub> (dry basis) reading is taken at the same location where flue gas temperature is measured to maintain accuracy of the calculations. 
+          For many applications this is less than 10%, though a few systems (e.g., thermal oxidizers, paint shop ovens) it may be higher, but still below 21%.
           <hr>
         </small>
       </h6>
@@ -155,6 +190,43 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'excessAir'">
+      <h6>
+        Excess Air
+        <br>
+        <small class="text-muted">
+          The excess air value represents excess air used in burners plus all air entering the furnace and going as flue gases form the furnace. 
+          The value is expressed in terms of percentage of stoichiometric air required for the fuel used and can be calculated as the difference 
+          between the measured O<sub>2</sub> and stoichiometric O<sub>2</sub> divided by the stoichiometric O<sub>2</sub>. 
+          <br>
+          This should be minimized while still ensuring adequate air for complete combustion. 
+          The absolute maximum value depends on the fuel, with some natural gas mixes near 500% and coal closer to 100%.
+          <hr>
+        </small>
+      </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="currentField == 'ambientAirTemperature' && settings.unitsOfMeasure == 'Imperial'">
+      <h6>
+        Ambient Air Temperature
+        <br>
+        <small class="text-muted">
+          Temperature of the air near the process heating unit. This is very likely to be less than 150&#8457;.
+        </small>
+      </h6>
+    </div>
+
+    <div class="my-2" *ngIf="currentField == 'ambientAirTemperature' && settings.unitsOfMeasure == 'Metric'">
+      <h6>
+        Ambient Air Temperature
+        <br>
+        <small class="text-muted">
+          Temperature of the air near the process heating unit. This is very likely to be less than 65&#8451;.
+        </small>
+      </h6>
     </div>
 
     <div class="my-2" *ngIf="currentField == 'combustionAirTemperature'">
@@ -237,7 +309,7 @@
         Feed Water Temperature
         <br>
         <small class="text-muted">
-          This is the average temperature of the feedwater. It is usually found in the range of 180 F to 228 F in the field. When feedwater is coming from Deaerator Tank (DA) it is usually on the higher side (228F), but if the feed water is coming as steam condensate it is usually 180F. An average measured value should be used. 
+          This is the average temperature of the feedwater. It is usually found in the range of 180 &#8457; to 228 &#8457; in the field. When feedwater is coming from Deaerator Tank (DA) it is usually on the higher side (228 &#8457;), but if the feed water is coming as steam condensate it is usually 180 &#8457;. An average measured value should be used. 
         </small>
       </h6>
     </div>
@@ -262,13 +334,12 @@
       </h6>
     </div>
 
-    <div class="my-2" *ngIf="currentField == 'priFuelHV'">
+    <div class="my-2" *ngIf="currentField == 'higherHeatingVal'">
       <h6>
-        Fuel Higher Heating Value
+        Higher Heating Value
         <br>
         <small class="text-muted">
-          This is the calorific value of the fuel used for the secondary process which will be saved. This can be obtained
-          from the fuel composition analysis report or fuel invoice.
+          The total amount of heat released when a specific quantity of fuel is completely burned, taking into account the heat generated by the condensation of water vapor produced during combustion, essentially representing the maximum potential energy a fuel can provide.
         </small>
       </h6>
     </div>

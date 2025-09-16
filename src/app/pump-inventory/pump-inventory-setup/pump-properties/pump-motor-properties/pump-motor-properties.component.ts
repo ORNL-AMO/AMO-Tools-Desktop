@@ -4,9 +4,10 @@ import { PumpInventoryService } from '../../../pump-inventory.service';
 import { PumpCatalogService } from '../../pump-catalog/pump-catalog.service';
 
 @Component({
-  selector: 'app-pump-motor-properties',
-  templateUrl: './pump-motor-properties.component.html',
-  styleUrls: ['./pump-motor-properties.component.css']
+    selector: 'app-pump-motor-properties',
+    templateUrl: './pump-motor-properties.component.html',
+    styleUrls: ['./pump-motor-properties.component.css'],
+    standalone: false
 })
 export class PumpMotorPropertiesComponent implements OnInit {
   displayForm: boolean;

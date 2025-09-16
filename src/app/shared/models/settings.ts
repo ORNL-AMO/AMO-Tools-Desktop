@@ -5,6 +5,7 @@ export interface Settings {
     assessmentId?: number,
     directoryId?: number,
     inventoryId?: number,
+    diagramId?: number,
     createdDate?: Date,
     modifiedDate?: Date
     flowMeasurement?: string,
@@ -33,6 +34,7 @@ export interface Settings {
     viscosityMeasurement?: string,
     voltageMeasurement?: string,
     temperatureMeasurement?: string,
+    flowDecimalPrecision?: number,
     id?: number,
     energySourceType?: string,
     furnaceType?: string,
@@ -59,6 +61,7 @@ export interface Settings {
     disableTreasureHuntTutorial?: boolean,
     disableDataExplorerTutorial?: boolean,
     disableCompressedAirTutorial?: boolean,
+    disableWaterTutorial?: boolean,
 
     //costs
     electricityCost?: number,
@@ -79,6 +82,8 @@ export interface Settings {
     printResults?: boolean,
     printInputData?: boolean,
     printExecutiveSummary?: boolean,
+    printWaterSystemCostReport?: boolean,
+    printWaterSystemSummary?: boolean,
     printEnergySummary?: boolean,
     printLossesSummary?: boolean,
     printReportOpportunityPayback?: boolean,
@@ -120,6 +125,9 @@ export interface Settings {
     steamRollupUnit?: string,
     wasteWaterRollupUnit?: string,
     compressedAirRollupUnit?: string,
+
+    //global
+    suiteDbItemsInitialized?: boolean;
 }
 
 

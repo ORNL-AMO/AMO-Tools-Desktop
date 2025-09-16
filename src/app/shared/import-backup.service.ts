@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
-import { BackupDataService, MeasurBackupFile } from './backup-data.service';
-import { ElectronService } from '../electron/electron.service';
+import { MeasurBackupFile } from './backup-data.service';
 import { ManageAppDataService } from './manage-app-data.service';
 import { DashboardService } from '../dashboard/dashboard.service';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
@@ -21,7 +20,8 @@ import { Assessment } from './models/assessment';
 import { InventoryItem } from './models/inventory/inventory';
 import { Settings } from './models/settings';
 import { Calculator } from './models/calculators';
-import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
+import { Diagram } from './models/diagram';
+import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,10 +34,14 @@ export class ImportBackupService {
   importDirectoryIdMap: { [oldId: number]: number };
   // get new assessmentId from old
   importAssessmentIdMap: { [oldId: number]: number };
+  // get new diagramId from old
+  importDiagramIdMap: { [oldId: number]: number };
   // get new settings id from old directory id
   importDirectorySettingsIdMap: { [oldId: number]: number };
   // get new settings id from old assessment id
   importAssessmentSettingsIdMap: { [oldId: number]: number };
+  // get new settings id from old diagram id
+  importDiagramSettingsIdMap: { [oldId: number]: number };
   // get new settings id from old inventory id
   importInventorySettingsIdMap: { [oldId: number]: number };
 
@@ -56,51 +60,12 @@ export class ImportBackupService {
     private atmosphereDbService: AtmosphereDbService,
     private inventoryDbService: InventoryDbService,
     private manageAppDataService: ManageAppDataService,
-    private backupDataService: BackupDataService,
-    private electronService: ElectronService,
-    private sqlDbApiService: SqlDbApiService,
+    private diagramDbService: DiagramIdbService,
     private dashboardService: DashboardService,
   ) {
 
     this.showImportBackupModal = new BehaviorSubject<boolean>(undefined);
   }
-
-  setImportFile(event: EventTarget): Promise<MeasurBackupFile> {
-    return new Promise((resolve, reject) => {
-      let files: FileList = (event as HTMLInputElement).files;
-      if (files) {
-        if (files.length !== 0) {
-          let fr: FileReader = new FileReader();
-          fr.readAsText(files[0]);
-          fr.onloadend = (e) => {
-            try {
-              this.selectedImportFile = JSON.parse(JSON.stringify(fr.result));
-              let testBackup = JSON.parse(this.selectedImportFile as any)
-              if (!testBackup.origin || testBackup.origin != "AMO-TOOLS-DESKTOP") {
-                this.backupFileError = "Selected file does not come from MEASUR and cannot be imported."
-              } else {
-                this.importName = testBackup.name;
-                this.backupFileError = undefined;
-                resolve(this.selectedImportFile)
-              }
-            } catch (err) {
-              console.log(err);
-              reject(fr);
-            }
-          };
-
-          fr.onerror = () => {
-            reject(fr);
-          };
-        }
-      } else {
-        reject(undefined);
-      }
-    });
-
-
-  }
-
 
   getImportDate(date: Date): Date {
     //date imported with timestap cause problems.
@@ -125,17 +90,18 @@ export class ImportBackupService {
   async importBackupFile() {
     this.importDirectoryIdMap = {};
     this.importAssessmentIdMap = {};
+    this.importDiagramIdMap = {};
     this.importDirectorySettingsIdMap = {};
     this.importAssessmentSettingsIdMap = {};
+    this.importDiagramSettingsIdMap = {};
     this.importInventorySettingsIdMap = {};
 
     try {
-      let backupFile: MeasurBackupFile = JSON.parse(this.selectedImportFile as any);
-      // this.backupExistingData();
       await this.manageAppDataService.deleteAllAppData();
-      await this.importMeasurBackupFile(backupFile);
+      await this.importMeasurBackupFile(this.selectedImportFile);
       this.dashboardService.updateDashboardData.next(true);
     } catch (err) {
+      console.log('Error importing backup file:', err);
       // todo 6925 eventually fallback to original data
     }
   }
@@ -152,22 +118,29 @@ export class ImportBackupService {
     for await (let settings of measurBackupFile.settings) {
       let oldDirectoryId = settings.directoryId;
       let oldAssessmentId = settings.assessmentId;
+      let oldDiagramId = settings.diagramId;
       let oldInventoryid = settings.inventoryId;
       delete settings.id;
       delete settings.assessmentId;
       delete settings.directoryId;
+      delete settings.diagramId;
       delete settings.inventoryId;
 
       // * set reassign imported root settings to current root directory
       if (oldDirectoryId === 1) {
-          settings.directoryId = 1;
-          oldDirectoryId = undefined;
+        settings.directoryId = 1;
+        oldDirectoryId = undefined;
       }
 
       let newSettings: Settings = await firstValueFrom(this.settingsDbService.addWithObservable(settings));
       if (oldAssessmentId !== undefined && oldAssessmentId !== null) {
         this.importAssessmentSettingsIdMap[oldAssessmentId] = newSettings.id;
       }
+
+      if (oldDiagramId !== undefined && oldDiagramId !== null) {
+        this.importDiagramSettingsIdMap[oldDiagramId] = newSettings.id;
+      }
+
       if (oldDirectoryId !== undefined && oldDirectoryId !== null) {
         this.importDirectorySettingsIdMap[oldDirectoryId] = newSettings.id;
       }
@@ -206,6 +179,28 @@ export class ImportBackupService {
     let assessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
 
+    for await (let diagram of measurBackupFile.diagrams) {
+      diagram.selected = false;
+      let oldDiagramId = diagram.id;
+      delete diagram.id;
+      diagram.directoryId = diagram.directoryId === 1 ? diagram.directoryId : this.importDirectoryIdMap[diagram.directoryId];
+      diagram.assessmentId = this.importAssessmentIdMap[diagram.assessmentId];
+      let newDiagram = await firstValueFrom(this.diagramDbService.addWithObservable(diagram));
+
+      await this.updateRelatedDiagramSettings(newDiagram, oldDiagramId);
+      this.importDiagramIdMap[oldDiagramId] = newDiagram.id;
+    };
+    let diagrams = await firstValueFrom(this.diagramDbService.getAllDiagrams());
+    this.diagramDbService.setAll(diagrams);
+
+    // * patch assessment diagram id
+    for await (let assessment of this.assessmentDbService.dbAssessments.getValue()) {
+      assessment.diagramId = this.importDiagramIdMap[assessment.diagramId];
+      await firstValueFrom(this.settingsDbService.updateWithObservable(assessment));
+    };
+    assessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    this.assessmentDbService.setAll(assessments);
+
 
     for await (let calculator of measurBackupFile.calculators) {
       delete calculator.id;
@@ -237,64 +232,43 @@ export class ImportBackupService {
     for await (let material of measurBackupFile.gasLoadChargeMaterials) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertGasLoadChargeMaterial(material);
-      if (isAdded) {
-        await firstValueFrom(this.gasLoadDbService.addWithObservable(material));
-      }
+      await firstValueFrom(this.gasLoadDbService.addWithObservable(material));
     };
 
     for await (let material of measurBackupFile.liquidLoadChargeMaterials) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertLiquidLoadChargeMaterial(material);
-      if (isAdded) {
-        await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(material));
-      }
+      await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(material));
     };
 
     for await (let material of measurBackupFile.solidLoadChargeMaterials) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertSolidLoadChargeMaterial(material);
-      if (isAdded) {
-        await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(material));
-      }
+      await firstValueFrom(this.solidLoadMaterialDbService.addWithObservable(material));
     };
 
     for await (let material of measurBackupFile.atmosphereSpecificHeats) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertAtmosphereSpecificHeat(material);
-      if (isAdded) {
-        await firstValueFrom(this.atmosphereDbService.addWithObservable(material));
-      }
+      await firstValueFrom(this.atmosphereDbService.addWithObservable(material));
     };
 
     for await (let material of measurBackupFile.wallLossesSurfaces) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertWallLossesSurface(material);
-      if (isAdded) {
-        await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(material));
-      }
+      await firstValueFrom(this.wallLossesSurfaceDbService.addWithObservable(material));
     };
 
     for await (let material of measurBackupFile.flueGasMaterials) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertGasFlueGasMaterial(material);
-      if (isAdded) {
-        await firstValueFrom(this.flueGasMaterialDbService.addWithObservable(material));
-      }
+      await this.flueGasMaterialDbService.addMaterial(material);
     };
 
     for await (let material of measurBackupFile.solidLiquidFlueGasMaterials) {
       material.selected = false;
       delete material.id;
-      let isAdded = this.sqlDbApiService.insertSolidLiquidFlueGasMaterial(material);
-      if (isAdded) {
-        await firstValueFrom(this.solidLiquidMaterialDbService.addWithObservable(material));
-      }
+      await this.solidLiquidMaterialDbService.addMaterial(material);
     };
   }
 
@@ -302,6 +276,14 @@ export class ImportBackupService {
     if (this.importDirectorySettingsIdMap[oldDirId] !== undefined) {
       let settings: Settings = this.settingsDbService.findById(this.importDirectorySettingsIdMap[oldDirId]);
       settings.directoryId = newDirectory.id;
+      await firstValueFrom(this.settingsDbService.updateWithObservable(settings));
+    }
+  }
+
+  async updateRelatedDiagramSettings(newDiagram: Diagram, oldDiagramId: number) {
+    if (this.importDiagramSettingsIdMap[oldDiagramId] !== undefined) {
+      let settings: Settings = this.settingsDbService.findById(this.importDiagramSettingsIdMap[oldDiagramId]);
+      settings.diagramId = newDiagram.id;
       await firstValueFrom(this.settingsDbService.updateWithObservable(settings));
     }
   }

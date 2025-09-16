@@ -6,9 +6,10 @@ import { SuiteDbMotor } from '../../../shared/models/materials';
 import { MotorInventoryData, MotorInventoryDepartment, MotorItem } from '../../motor-inventory';
 
 @Component({
-  selector: 'app-motor-catalog',
-  templateUrl: './motor-catalog.component.html',
-  styleUrls: ['./motor-catalog.component.css']
+    selector: 'app-motor-catalog',
+    templateUrl: './motor-catalog.component.html',
+    styleUrls: ['./motor-catalog.component.css'],
+    standalone: false
 })
 export class MotorCatalogComponent implements OnInit {
 

@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
-import { AssessmentService } from '../assessment.service';
-import { Subscription } from 'rxjs';
+import { combineLatestWith, Observable, Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
@@ -9,10 +8,14 @@ import { environment } from '../../../environments/environment';
 import { ExportService } from '../../shared/import-export/export.service';
 import { ApplicationInstanceData, ApplicationInstanceDbService } from '../../indexedDb/application-instance-db.service';
 import { MeasurSurveyService } from '../../shared/measur-survey/measur-survey.service';
+import { UpdateApplicationService } from '../../shared/update-application/update-application.service';
+import { ElectronService } from '../../electron/electron.service';
+import { EmailListSubscribeService } from '../../shared/subscribe-toast/email-list-subscribe.service';
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+    selector: 'app-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.css'],
+    standalone: false
 })
 export class SidebarComponent implements OnInit {
   @Output('openModal')
@@ -21,7 +24,6 @@ export class SidebarComponent implements OnInit {
   versionNum: any;
   isUpdateAvailable: boolean;
   showModal: boolean;
-  showVersionModal: boolean;
   updateSub: Subscription;
   updateDashboardDataSub: Subscription;
   rootDirectory: Directory;
@@ -35,18 +37,36 @@ export class SidebarComponent implements OnInit {
   expandedXWidth: number = 300;
   applicationInstanceDataSubscription: Subscription;
   showSurveyLink: boolean;
-  constructor(private assessmentService: AssessmentService, private directoryDbService: DirectoryDbService,
+  showSubscribeLink: boolean;
+  isEmailSubscriberSub: Subscription;
+
+  constructor(private directoryDbService: DirectoryDbService,
     private exportService: ExportService,
+    private updateApplicationService: UpdateApplicationService,
     private measurSurveyService: MeasurSurveyService,
     private applicationInstanceDbService: ApplicationInstanceDbService,
+    private electronService: ElectronService,
+    private emailSubscribeService: EmailListSubscribeService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.versionNum = environment.version;
-    this.updateSub = this.assessmentService.updateAvailable.subscribe(val => {
-      this.isUpdateAvailable = val;
-    });
+
+    if (this.electronService.isElectron) {
+      let isUpdateAvailable: Observable<any> = this.electronService.updateAvailable
+        .pipe(
+          combineLatestWith(this.electronService.releaseData)
+        );
+
+      this.updateSub = isUpdateAvailable.subscribe(([hasUpdate, releaseData]) => {
+        this.isUpdateAvailable = hasUpdate && releaseData;
+      });
+    } else {
+      this.updateSub = this.updateApplicationService.webUpdateAvailable.subscribe(hasUpdate => {
+        this.isUpdateAvailable = hasUpdate;
+      });
+    }
 
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.rootDirectory = this.directoryDbService.getById(1);
@@ -59,6 +79,10 @@ export class SidebarComponent implements OnInit {
     
     this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
       this.showSurveyLink = !applicationData?.isSurveyDone;
+    });
+
+    this.isEmailSubscriberSub = this.emailSubscribeService.isSubscribed.subscribe((isSubscribed: boolean) => {
+      this.showSubscribeLink = !isSubscribed;
     });
 
     this.collapseSidebarSub = this.dashboardService.collapseSidebar.subscribe(shouldCollapse => {
@@ -76,6 +100,7 @@ export class SidebarComponent implements OnInit {
     this.selectedDirectoryIdSub.unsubscribe();
     this.collapseSidebarSub.unsubscribe();
     this.applicationInstanceDataSubscription.unsubscribe();
+    this.isEmailSubscriberSub.unsubscribe();
   }
 
   downloadData() {
@@ -97,6 +122,15 @@ export class SidebarComponent implements OnInit {
     this.dashboardService.showCreateInventory.next('motorInventory');
   }
 
+  showCreateDiagram(){
+    this.dashboardService.createAssessment.next(false);
+    this.directoryDashboardService.createFolder.next(false);
+    this.dashboardService.showCreateInventory.next(undefined);
+    this.showNewDropdown = false;
+    this.dashboardService.showCreateDiagram.next(true);
+  }
+
+
   showCreateFolder(){
     this.dashboardService.createAssessment.next(false);
     this.dashboardService.showCreateInventory.next(undefined);
@@ -106,6 +140,10 @@ export class SidebarComponent implements OnInit {
 
   showSurvey() {
     this.measurSurveyService.showSurveyModal.next(true);
+  }
+
+  showSubscribeModal() {
+    this.emailSubscribeService.showModal.next(true);
   }
 
   initSidebarView() {
@@ -146,17 +184,11 @@ export class SidebarComponent implements OnInit {
   }
 
   openUpdateModal() {
-    this.assessmentService.updateAvailable.next(true);
+    this.updateApplicationService.showUpdateToast.next(true);
   }
 
   openVersionModal() {
-    this.openModal.emit(true);
-    this.showVersionModal = true;
-  }
-
-  closeVersionModal() {
-    this.openModal.emit(false);
-    this.showVersionModal = false;
+    this.updateApplicationService.showReleaseNotesModal.next(true);
   }
 
   toggleNewDropdown(){

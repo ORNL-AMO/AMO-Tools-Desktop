@@ -10,10 +10,11 @@ import { SankeyNode } from '../models/sankey';
 
 
 @Component({
-  selector: 'app-phast-sankey',
-  templateUrl: './phast-sankey.component.html',
-  styleUrls: ['./phast-sankey.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-phast-sankey',
+    templateUrl: './phast-sankey.component.html',
+    styleUrls: ['./phast-sankey.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PhastSankeyComponent implements OnInit, OnChanges {
 

@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
-  selector: 'app-boiler-efficiency-modal',
-  templateUrl: './boiler-efficiency-modal.component.html',
-  styleUrls: ['./boiler-efficiency-modal.component.css']
+    selector: 'app-boiler-efficiency-modal',
+    templateUrl: './boiler-efficiency-modal.component.html',
+    styleUrls: ['./boiler-efficiency-modal.component.css'],
+    standalone: false
 })
 export class BoilerEfficiencyModalComponent implements OnInit {
   @Input()

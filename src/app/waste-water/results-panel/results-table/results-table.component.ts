@@ -5,9 +5,10 @@ import { WasteWaterData, WasteWaterResults, WasteWaterValid } from '../../../sha
 import { WasteWaterService } from '../../waste-water.service';
 
 @Component({
-  selector: 'app-results-table',
-  templateUrl: './results-table.component.html',
-  styleUrls: ['./results-table.component.css']
+    selector: 'app-results-table',
+    templateUrl: './results-table.component.html',
+    styleUrls: ['./results-table.component.css'],
+    standalone: false
 })
 export class ResultsTableComponent implements OnInit {
 

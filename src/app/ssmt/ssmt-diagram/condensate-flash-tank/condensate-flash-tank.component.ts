@@ -3,9 +3,10 @@ import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-condensate-flash-tank',
-  templateUrl: './condensate-flash-tank.component.html',
-  styleUrls: ['./condensate-flash-tank.component.css']
+    selector: 'app-condensate-flash-tank',
+    templateUrl: './condensate-flash-tank.component.html',
+    styleUrls: ['./condensate-flash-tank.component.css'],
+    standalone: false
 })
 export class CondensateFlashTankComponent implements OnInit {
   @Input()

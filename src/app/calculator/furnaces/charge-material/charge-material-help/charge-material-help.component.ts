@@ -4,9 +4,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { ChargeMaterialService } from '../charge-material.service';
 
 @Component({
-  selector: 'app-charge-material-help',
-  templateUrl: './charge-material-help.component.html',
-  styleUrls: ['./charge-material-help.component.css']
+    selector: 'app-charge-material-help',
+    templateUrl: './charge-material-help.component.html',
+    styleUrls: ['./charge-material-help.component.css'],
+    standalone: false
 })
 export class ChargeMaterialHelpComponent implements OnInit {
   @Input()

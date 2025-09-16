@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, CombinedHeatPower, CombinedHeatPowerOutput, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, OperatingCostInput, OperatingCostOutput, PipeInsulationReductionInput, PipeInsulationReductionResult, PipeSizes, PipeSizingInput, PipeSizingOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput, ReceiverTankBridgingCompressor, ReceiverTankDedicatedStorage, ReceiverTankGeneral, ReceiverTankMeteredStorage } from '../shared/models/standalone';
+import { AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, CombinedHeatPower, CombinedHeatPowerOutput, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, OperatingCostInput, OperatingCostOutput, PipeInsulationReductionInput, PipeInsulationReductionResult, PipeSizes, PipeSizingInput, PipeSizingOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput, ReceiverTankBridgingCompressor, ReceiverTankDedicatedStorage, ReceiverTankGeneral, ReceiverTankMeteredResults, ReceiverTankMeteredStorage } from '../shared/models/standalone';
 import { SuiteApiHelperService } from './suite-api-helper.service';
+import { ToolsSuiteApiService } from './tools-suite-api.service';
 
-declare var Module: any;
 @Injectable()
 export class StandaloneSuiteApiService {
 
-  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService,
+    private toolsSuiteApiService: ToolsSuiteApiService
+  ) { }
 
   pneumaticAirRequirement(input: PneumaticAirRequirementInput): PneumaticAirRequirementOutput {
     let pistonType = this.suiteApiHelperService.getPistonTypeEnum(input.pistonType);
@@ -17,9 +19,9 @@ export class StandaloneSuiteApiService {
     input.cylinderStroke = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.cylinderStroke);
     input.pistonRodDiameter = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.pistonRodDiameter);
     if (input.pistonType === 1) {
-      PneumaticAirRequirement = new Module.PneumaticAirRequirement(pistonType, input.cylinderDiameter, input.cylinderStroke, input.pistonRodDiameter, input.airPressure, input.cyclesPerMinute);
+      PneumaticAirRequirement = new this.toolsSuiteApiService.ToolsSuiteModule.PneumaticAirRequirement(pistonType, input.cylinderDiameter, input.cylinderStroke, input.pistonRodDiameter, input.airPressure, input.cyclesPerMinute);
     } else {
-      PneumaticAirRequirement = new Module.PneumaticAirRequirement(pistonType, input.cylinderDiameter, input.cylinderStroke, input.airPressure, input.cyclesPerMinute);
+      PneumaticAirRequirement = new this.toolsSuiteApiService.ToolsSuiteModule.PneumaticAirRequirement(pistonType, input.cylinderDiameter, input.cylinderStroke, input.airPressure, input.cyclesPerMinute);
     }
     let output = PneumaticAirRequirement.calculate();
     let results: PneumaticAirRequirementOutput = {
@@ -36,7 +38,7 @@ export class StandaloneSuiteApiService {
     input.airDemand = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airDemand);
     input.allowablePressureDrop = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.allowablePressureDrop);
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
-    let ReceiverTank = new Module.ReceiverTank(Module.ReceiverTankMethod.General, input.airDemand, input.allowablePressureDrop, input.atmosphericPressure);
+    let ReceiverTank = new this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTank(this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTankMethod.General, input.airDemand, input.allowablePressureDrop, input.atmosphericPressure);
     let output: number = ReceiverTank.calculateSize();
     ReceiverTank.delete();
     return output;
@@ -48,7 +50,7 @@ export class StandaloneSuiteApiService {
     input.initialTankPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.initialTankPressure);
     input.lengthOfDemand = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.lengthOfDemand);
     input.finalTankPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.finalTankPressure);
-    let ReceiverTank = new Module.ReceiverTank(Module.ReceiverTankMethod.DedicatedStorage, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure);
+    let ReceiverTank = new this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTank(this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTankMethod.DedicatedStorage, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure);
     let output: number = ReceiverTank.calculateSize();
     ReceiverTank.delete();
     return output;
@@ -60,23 +62,29 @@ export class StandaloneSuiteApiService {
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
     input.airDemand = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airDemand);
     input.allowablePressureDrop = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.allowablePressureDrop);
-    let ReceiverTank = new Module.ReceiverTank(Module.ReceiverTankMethod.BridgingCompressorReactionDelay, input.distanceToCompressorRoom, input.speedOfAir, input.atmosphericPressure, input.airDemand, input.allowablePressureDrop);
+    let ReceiverTank = new this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTank(this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTankMethod.BridgingCompressorReactionDelay, input.distanceToCompressorRoom, input.speedOfAir, input.atmosphericPressure, input.airDemand, input.allowablePressureDrop);
     let output: number = ReceiverTank.calculateSize();
     ReceiverTank.delete();
     return output;
   }
 
-  receiverTankSizeMeteredStorage(input: ReceiverTankMeteredStorage): number {
+  receiverTankSizeMeteredStorage(input: ReceiverTankMeteredStorage): ReceiverTankMeteredResults {
     input.lengthOfDemand = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.lengthOfDemand);
     input.airFlowRequirement = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airFlowRequirement);
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
     input.initialTankPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.initialTankPressure);
     input.finalTankPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.finalTankPressure);
     input.meteredControl = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.meteredControl);
-    let ReceiverTank = new Module.ReceiverTank(Module.ReceiverTankMethod.MeteredStorage, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure, input.meteredControl);
-    let output: number = ReceiverTank.calculateSize();
+    let ReceiverTank = new this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTank(this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTankMethod.MeteredStorage, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure, input.meteredControl);
+    let volume: number = ReceiverTank.calculateSize();
+    let refillTime: number = ReceiverTank.calculateRefillTime();
     ReceiverTank.delete();
-    return output;
+
+    let results: ReceiverTankMeteredResults = {
+      volume: volume,
+      refillTime: refillTime,
+    }
+    return results;
   }
 
   operatingCost(input: OperatingCostInput): OperatingCostOutput {
@@ -88,7 +96,7 @@ export class StandaloneSuiteApiService {
     input.efficiencyUnloaded = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.efficiencyUnloaded);
     input.costOfElectricity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.costOfElectricity);
 
-    let OperatingCost = new Module.OperatingCost(
+    let OperatingCost = new this.toolsSuiteApiService.ToolsSuiteModule.OperatingCost(
       input.motorBhp,
       input.bhpUnloaded,
       input.annualOperatingHours,
@@ -115,7 +123,7 @@ export class StandaloneSuiteApiService {
     });
     let receiverCapacitiesInput = this.suiteApiHelperService.returnDoubleVector(receiverCapacities);
 
-    let PipeData = new Module.PipeData(
+    let PipeData = new this.toolsSuiteApiService.ToolsSuiteModule.PipeData(
       input.oneHalf,
       input.threeFourths,
       input.one,
@@ -138,7 +146,7 @@ export class StandaloneSuiteApiService {
       input.twentyFour,
     );
 
-    let AirSystemCapacity = new Module.AirSystemCapacity(PipeData, receiverCapacitiesInput);
+    let AirSystemCapacity = new this.toolsSuiteApiService.ToolsSuiteModule.AirSystemCapacity(PipeData, receiverCapacitiesInput);
     let rawOutput = AirSystemCapacity.calculate();
 
 
@@ -187,7 +195,7 @@ export class StandaloneSuiteApiService {
     input.airFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airFlow);
     input.pipePressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.pipePressure);
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
-    let AirVelocity = new Module.AirVelocity(input.airFlow, input.pipePressure, input.atmosphericPressure);
+    let AirVelocity = new this.toolsSuiteApiService.ToolsSuiteModule.AirVelocity(input.airFlow, input.pipePressure, input.atmosphericPressure);
     let output = AirVelocity.calculate();
     let results: PipeSizes = {
       oneHalf: output.oneHalf,
@@ -222,7 +230,7 @@ export class StandaloneSuiteApiService {
     input.designVelocity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.designVelocity);
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
 
-    let PipeSizing = new Module.PipeSizing(input.airFlow, input.airlinePressure, input.designVelocity, input.atmosphericPressure);
+    let PipeSizing = new this.toolsSuiteApiService.ToolsSuiteModule.PipeSizing(input.airFlow, input.airlinePressure, input.designVelocity, input.atmosphericPressure);
     let output = PipeSizing.calculate();
     let results: PipeSizingOutput = {
       crossSectionalArea: output.crossSectionalArea,
@@ -234,14 +242,14 @@ export class StandaloneSuiteApiService {
   }
 
   // pneumaticValveCalculateFlowRate(input: PneumaticValveFlowRateInput): PneumaticValveFlowRateOutput {
-  //   let PneumaticValve = new Module.PneumaticValve(input.inletPressure, input.outletPressure);
+  //   let PneumaticValve = new this.toolsSuiteApiService.ToolsSuiteModule.PneumaticValve(input.inletPressure, input.outletPressure);
   //   let output: PneumaticValveFlowRateOutput = PneumaticValve.calculate();
   //   PneumaticValve.delete();
   //   return output;
   // }
 
   // pneumaticValve(input: PneumaticValve): PneumaticValveFlowCoefficient {
-  //   let PneumaticValve = new Module.PneumaticValve(input.inletPressure, input.outletPressure, input.flowRate);
+  //   let PneumaticValve = new this.toolsSuiteApiService.ToolsSuiteModule.PneumaticValve(input.inletPressure, input.outletPressure, input.flowRate);
   //   let output: PneumaticValveFlowCoefficient = PneumaticValve.calculate();
   //   PneumaticValve.delete();
   //   return output;
@@ -249,9 +257,8 @@ export class StandaloneSuiteApiService {
 
   bagMethod(input: BagMethodInput): BagMethodOutput {
     input.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagFillTime);
-    input.diameterOfBag = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.diameterOfBag);
-    input.heightOfBag = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.heightOfBag);
-    let BagMethod = new Module.BagMethod(input.operatingTime, input.bagFillTime, input.heightOfBag, input.diameterOfBag, input.numberOfUnits);
+    input.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagVolume);
+    let BagMethod = new this.toolsSuiteApiService.ToolsSuiteModule.BagMethod(input.operatingTime, input.bagFillTime, input.bagVolume, input.numberOfUnits);
     let rawOutput = BagMethod.calculate();
     let output: BagMethodOutput = {
       flowRate: isNaN(rawOutput.flowRate) ? undefined : rawOutput.flowRate,
@@ -276,7 +283,7 @@ export class StandaloneSuiteApiService {
     input.thermalUtilization = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.thermalUtilization);
 
     let chpOption = this.suiteApiHelperService.getCHPOptionEnum(input.option);
-    let CHP = new Module.CHP(
+    let CHP = new this.toolsSuiteApiService.ToolsSuiteModule.CHP(
       input.annualOperatingHours,
       input.annualElectricityConsumption,
       input.annualThermalDemand,
@@ -307,7 +314,7 @@ export class StandaloneSuiteApiService {
   }
 
   usableAirCapacity(input: CalculateUsableCapacity): number {
-    let ReceiverTank = new Module.ReceiverTank();
+    let ReceiverTank = new this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTank();
     input.tankSize = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.tankSize);
     input.airPressureIn = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airPressureIn);
     input.airPressureOut = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airPressureOut);

@@ -8,9 +8,10 @@ import { FeedwaterEconomizerService } from './feedwater-economizer.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-feedwater-economizer',
-  templateUrl: './feedwater-economizer.component.html',
-  styleUrls: ['./feedwater-economizer.component.css']
+    selector: 'app-feedwater-economizer',
+    templateUrl: './feedwater-economizer.component.html',
+    styleUrls: ['./feedwater-economizer.component.css'],
+    standalone: false
 })
 export class FeedwaterEconomizerComponent implements OnInit {
 
@@ -35,6 +36,8 @@ export class FeedwaterEconomizerComponent implements OnInit {
     }, 100);
   }
   feedWaterInputSub: Subscription;
+  modalopenSub: Subscription;
+  isModalOpen: boolean;
   containerHeight: number;
   tabSelect: string = 'results';
   smallScreenTab: string = 'form';
@@ -66,10 +69,15 @@ export class FeedwaterEconomizerComponent implements OnInit {
         this.calculate();
       }
     });
+
+    this.modalopenSub = this.feedwaterEconomizerService.modalOpen.subscribe(isModalOpen => {
+      this.isModalOpen = isModalOpen;
+    });
   }
 
   ngOnDestroy() {
     this.feedWaterInputSub.unsubscribe();
+    this.modalopenSub.unsubscribe();
     if (this.inTreasureHunt) {
       this.feedwaterEconomizerService.feedwaterEconomizerInput.next(undefined);
     }
@@ -90,7 +98,7 @@ export class FeedwaterEconomizerComponent implements OnInit {
     this.emitSave.emit({
       inputData: inputData,
       energySourceData: {
-        energySourceType: 'Fuel',  
+        energySourceType: 'Other Fuel',  
         unit: 'MMBtu'
       },
       opportunityType: Treasure.feedwaterEconomizer

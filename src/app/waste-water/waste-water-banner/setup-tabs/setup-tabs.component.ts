@@ -9,9 +9,10 @@ import { WasteWaterOperationsService } from '../../waste-water-operations/waste-
 import { WasteWaterService } from '../../waste-water.service';
 
 @Component({
-  selector: 'app-setup-tabs',
-  templateUrl: './setup-tabs.component.html',
-  styleUrls: ['./setup-tabs.component.css']
+    selector: 'app-setup-tabs',
+    templateUrl: './setup-tabs.component.html',
+    styleUrls: ['./setup-tabs.component.css'],
+    standalone: false
 })
 export class SetupTabsComponent implements OnInit {
 
@@ -58,7 +59,7 @@ export class SetupTabsComponent implements OnInit {
   }
 
   changeSetupTab(str: string) {
-    if (str == 'system-basics') {
+    if (str == 'baseline') {
       this.wasteWaterService.setupTab.next(str);
     } else if (str == 'activated-sludge') {
       let canChange: boolean = (this.activatedSludgeClassStatus.includes("disabled") == false);
@@ -86,7 +87,7 @@ export class SetupTabsComponent implements OnInit {
     } else {
       this.systemBasicsClassStatus = ['success'];
     }
-    if (this.setupTab == 'system-basics') {
+    if (this.setupTab == 'baseline') {
       this.systemBasicsClassStatus.push('active');
     }
   }
@@ -168,7 +169,7 @@ export class SetupTabsComponent implements OnInit {
   }
 
   getCanContinue(): boolean {
-    if (this.setupTab === 'system-basics') {
+    if (this.setupTab === 'baseline') {
       this.canContinue = true;
     } else if (this.setupTab === 'operations') {
       this.canContinue = (this.operationsClassStatus.includes("missing-data") == false);

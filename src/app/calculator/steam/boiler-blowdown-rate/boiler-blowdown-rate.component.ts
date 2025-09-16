@@ -7,9 +7,10 @@ import { BoilerBlowdownRateTreasureHunt, Treasure } from '../../../shared/models
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-boiler-blowdown-rate',
-  templateUrl: './boiler-blowdown-rate.component.html',
-  styleUrls: ['./boiler-blowdown-rate.component.css']
+    selector: 'app-boiler-blowdown-rate',
+    templateUrl: './boiler-blowdown-rate.component.html',
+    styleUrls: ['./boiler-blowdown-rate.component.css'],
+    standalone: false
 })
 export class BoilerBlowdownRateComponent implements OnInit {
   @Input()

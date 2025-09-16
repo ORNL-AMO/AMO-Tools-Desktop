@@ -3,9 +3,10 @@ import { PhastService } from '../phast.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-phast-calculator-tabs',
-  templateUrl: './phast-calculator-tabs.component.html',
-  styleUrls: ['./phast-calculator-tabs.component.css']
+    selector: 'app-phast-calculator-tabs',
+    templateUrl: './phast-calculator-tabs.component.html',
+    styleUrls: ['./phast-calculator-tabs.component.css'],
+    standalone: false
 })
 export class PhastCalculatorTabsComponent implements OnInit {
   //same as PhastTabsComponent, BehaviorSubject for calculator tabs

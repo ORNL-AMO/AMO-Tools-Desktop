@@ -2,11 +2,13 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { SSMT, Modification } from '../../shared/models/steam/ssmt';
 import { SsmtService } from '../ssmt.service';
 import { Subscription } from 'rxjs';
+import { getNewIdString } from '../../shared/helperFunctions';
 
 @Component({
-  selector: 'app-add-modification',
-  templateUrl: './add-modification.component.html',
-  styleUrls: ['./add-modification.component.css']
+    selector: 'app-add-modification',
+    templateUrl: './add-modification.component.html',
+    styleUrls: ['./add-modification.component.css'],
+    standalone: false
 })
 export class AddModificationComponent implements OnInit {
   @Input()
@@ -43,7 +45,8 @@ export class AddModificationComponent implements OnInit {
     delete ssmtCopy.modifications;
     let modification: Modification = {
       ssmt: ssmtCopy,
-      exploreOpportunities: (this.assessmentTab === 'explore-opportunities')
+      exploreOpportunities: (this.assessmentTab === 'explore-opportunities'),
+      modificationId: getNewIdString()
     };
     modification.ssmt.co2SavingsData.userEnteredModificationEmissions = modification.ssmt.co2SavingsData.userEnteredBaselineEmissions;
     modification.ssmt.name = this.newModificationName;

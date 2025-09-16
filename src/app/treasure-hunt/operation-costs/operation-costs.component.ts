@@ -14,9 +14,10 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { current } from '../../shared/convert-units/definitions/current';
 
 @Component({
-  selector: 'app-operation-costs',
-  templateUrl: './operation-costs.component.html',
-  styleUrls: ['./operation-costs.component.css']
+    selector: 'app-operation-costs',
+    templateUrl: './operation-costs.component.html',
+    styleUrls: ['./operation-costs.component.css'],
+    standalone: false
 })
 export class OperationCostsComponent implements OnInit {
   @Input()

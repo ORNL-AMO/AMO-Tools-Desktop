@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { BatchAnalysisService, BatchAnalysisSettings } from '../batch-analysis.service';
 
 @Component({
-  selector: 'app-batch-analysis-banner',
-  templateUrl: './batch-analysis-banner.component.html',
-  styleUrls: ['./batch-analysis-banner.component.css']
+    selector: 'app-batch-analysis-banner',
+    templateUrl: './batch-analysis-banner.component.html',
+    styleUrls: ['./batch-analysis-banner.component.css'],
+    standalone: false
 })
 export class BatchAnalysisBannerComponent implements OnInit {
 

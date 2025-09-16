@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef, OnChanges } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ViewChild, OnChanges } from '@angular/core';
 import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { PhastService } from '../../../../../phast/phast.service';
@@ -7,12 +7,15 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { StackLossService } from '../../stack-loss.service';
 import { SolidLiquidFlueGasMaterial } from '../../../../../shared/models/materials';
 import { MaterialInputProperties } from '../../../../../shared/models/phast/losses/flueGas';
-import { SqlDbApiService } from '../../../../../tools-suite-api/sql-db-api.service';
+import { SolidLiquidMaterialDbService } from '../../../../../indexedDb/solid-liquid-material-db.service';
+import { roundVal } from '../../../../../shared/helperFunctions';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-stack-loss-by-mass',
   templateUrl: './stack-loss-by-mass.component.html',
-  styleUrls: ['./stack-loss-by-mass.component.css']
+  styleUrls: ['./stack-loss-by-mass.component.css'],
+  standalone: false
 })
 export class StackLossByMassComponent implements OnChanges {
   @Input()
@@ -30,6 +33,7 @@ export class StackLossByMassComponent implements OnChanges {
 
 
   options: Array<SolidLiquidFlueGasMaterial>;
+  optionsSub: Subscription;
 
   calculationMethods: Array<string> = [
     'Excess Air',
@@ -43,14 +47,16 @@ export class StackLossByMassComponent implements OnChanges {
   tempMin: number;
 
   constructor(
-    private sqlDbApiService: SqlDbApiService, 
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private phastService: PhastService,
     private convertUnitsService: ConvertUnitsService,
     private stackLossService: StackLossService) { }
 
 
   ngOnChanges() {
-    this.options = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
+    this.optionsSub = this.solidLiquidMaterialDbService.dbSolidLiquidFlueGasMaterials.subscribe(val => {
+      this.options = val;
+    });
     if (this.stackLossForm) {
       if (this.stackLossForm.controls.gasTypeId.value && this.stackLossForm.controls.gasTypeId.value !== '') {
         if (this.stackLossForm.controls.carbon.value === '') {
@@ -65,6 +71,10 @@ export class StackLossByMassComponent implements OnChanges {
     this.tempMin = this.convertUnitsService.value(this.tempMin).from('F').to(this.settings.steamTemperatureMeasurement);
     this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
     this.checkStackLossTemp();
+  }
+
+  ngOnDestroy(){
+    this.optionsSub.unsubscribe();
   }
 
   focusOut() {
@@ -82,11 +92,10 @@ export class StackLossByMassComponent implements OnChanges {
 
   hideMaterialModal(event?: any) {
     if (event) {
-      this.options = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
-      let newMaterial = this.options.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      let newMaterial: SolidLiquidFlueGasMaterial = this.options.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.stackLossForm.patchValue({
-          gasTypeId: newMaterial[0].id
+          gasTypeId: newMaterial.id
         });
         this.setProperties();
       }
@@ -159,16 +168,16 @@ export class StackLossByMassComponent implements OnChanges {
   }
 
   setProperties() {
-    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(this.stackLossForm.controls.gasTypeId.value);
+    let tmpFlueGas: SolidLiquidFlueGasMaterial = this.solidLiquidMaterialDbService.getById(this.stackLossForm.controls.gasTypeId.value);
     if (tmpFlueGas) {
       this.stackLossForm.patchValue({
-        carbon: this.roundVal(tmpFlueGas.carbon, 4),
-        hydrogen: this.roundVal(tmpFlueGas.hydrogen, 4),
-        sulphur: this.roundVal(tmpFlueGas.sulphur, 4),
-        inertAsh: this.roundVal(tmpFlueGas.inertAsh, 4),
-        o2: this.roundVal(tmpFlueGas.o2, 4),
-        moisture: this.roundVal(tmpFlueGas.moisture, 4),
-        nitrogen: this.roundVal(tmpFlueGas.nitrogen, 4)
+        carbon: roundVal(tmpFlueGas.carbon, 4),
+        hydrogen: roundVal(tmpFlueGas.hydrogen, 4),
+        sulphur: roundVal(tmpFlueGas.sulphur, 4),
+        inertAsh: roundVal(tmpFlueGas.inertAsh, 4),
+        o2: roundVal(tmpFlueGas.o2, 4),
+        moisture: roundVal(tmpFlueGas.moisture, 4),
+        nitrogen: roundVal(tmpFlueGas.nitrogen, 4)
       });
     }
   }
@@ -176,11 +185,6 @@ export class StackLossByMassComponent implements OnChanges {
     this.stackLossForm.controls.combustionAirTemperature.patchValue(this.stackLossForm.controls.ambientAirTemp.value);
     this.checkStackLossTemp();
     this.emitCalculate.emit(this.stackLossForm);
-  }
-
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
   }
 
   changeMethod() {

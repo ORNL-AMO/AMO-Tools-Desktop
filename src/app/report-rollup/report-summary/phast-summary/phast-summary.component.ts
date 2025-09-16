@@ -8,9 +8,10 @@ import * as _ from 'lodash';
 import { ReportUtilityTotal } from '../../report-rollup-models';
 
 @Component({
-  selector: 'app-phast-summary',
-  templateUrl: './phast-summary.component.html',
-  styleUrls: ['./phast-summary.component.css', '../report-summary.component.css']
+    selector: 'app-phast-summary',
+    templateUrl: './phast-summary.component.html',
+    styleUrls: ['./phast-summary.component.css', '../report-summary.component.css'],
+    standalone: false
 })
 export class PhastSummaryComponent implements OnInit {
   settings: Settings;

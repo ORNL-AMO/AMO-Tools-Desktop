@@ -114,7 +114,7 @@
             Add New Material</a>
         </label>
         <select name="{{'materialName_'+idString}}" class="form-control" formControlName="materialName" id="{{'materialName'+idString}}"
-          (change)="setSpecificHeat()" (focus)="focusField('materialName')" >
+          (change)="setProperties()" (focus)="focusField('materialName')" >
           <option *ngFor="let material of materialTypes" [ngValue]="material.id">{{material.substance}}</option>
         </select>
       </div>

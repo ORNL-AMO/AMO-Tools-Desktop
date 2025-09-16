@@ -5,9 +5,10 @@ import { WeatherBinsService } from '../weather-bins.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-weather-bins-help',
-  templateUrl: './weather-bins-help.component.html',
-  styleUrls: ['./weather-bins-help.component.css']
+    selector: 'app-weather-bins-help',
+    templateUrl: './weather-bins-help.component.html',
+    styleUrls: ['./weather-bins-help.component.css'],
+    standalone: false
 })
 export class WeatherBinsHelpComponent implements OnInit {
   @Input()

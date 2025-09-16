@@ -11,9 +11,10 @@ import * as Plotly from 'plotly.js-dist';
 
 
 @Component({
-  selector: 'app-visualize-graph',
-  templateUrl: './visualize-graph.component.html',
-  styleUrls: ['./visualize-graph.component.css']
+    selector: 'app-visualize-graph',
+    templateUrl: './visualize-graph.component.html',
+    styleUrls: ['./visualize-graph.component.css'],
+    standalone: false
 })
 export class VisualizeGraphComponent implements OnInit {
 
@@ -110,10 +111,14 @@ export class VisualizeGraphComponent implements OnInit {
     let toggleRangeButtonName = 'Toggle Range Slider';
 
     this.setTimeSeriesRangeSlider(this.selectedGraphObj);
-    let hasToggleRangeButton = this.selectedGraphObj.mode.modeBarButtonsToAdd.find(button => button.name === toggleRangeButtonName);
+    //* ensure we check for typeof click to avoid error from imported graphs
+    let hasToggleRangeButton = this.selectedGraphObj.mode.modeBarButtonsToAdd.find(button => button.name === toggleRangeButtonName && button.click && typeof button.click === 'function');
     if (this.selectedGraphObj.isTimeSeries && !hasToggleRangeButton) {
+      this.selectedGraphObj.mode.modeBarButtonsToAdd = this.selectedGraphObj.mode.modeBarButtonsToAdd.filter(
+        button => !(button && button.name === toggleRangeButtonName)
+      );
       this.selectedGraphObj.mode.modeBarButtonsToAdd.push({
-        name: 'Toggle Range Slider',
+        name: toggleRangeButtonName,
         icon: RangeSliderIcon,
         click: (gd) => {
           let isOn = Boolean(this.selectedGraphObj.layout.xaxis.rangeslider == undefined);

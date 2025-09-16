@@ -5,9 +5,10 @@ import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-deaerator-form',
-  templateUrl: './deaerator-form.component.html',
-  styleUrls: ['./deaerator-form.component.css']
+    selector: 'app-deaerator-form',
+    templateUrl: './deaerator-form.component.html',
+    styleUrls: ['./deaerator-form.component.css'],
+    standalone: false
 })
 export class DeaeratorFormComponent implements OnInit {
   @Input()

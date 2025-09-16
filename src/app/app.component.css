@@ -672,6 +672,16 @@ Reports
   padding: 9px 0 0px 30px;
 }
 
+.assessment-report.report-in-water .assessment-name,
+.assessment-report.report-in-rollup.report-in-water .assessment-name {
+  background-image: url('../assets/images/water-assessment-large.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 40px;
+  padding: 9px 0 0px 30px;
+}
+
+
 
 
 .assessment-report .report-header:after {
@@ -1645,7 +1655,7 @@ No Data Messaging
 
   /* debug trying something */
   .print-assessment-page {
-    page-break-before: always;
+    break-before: always;
     page-break-inside: avoid;
   }
 
@@ -1681,7 +1691,7 @@ No Data Messaging
   }
 
   .report-in-rollup {
-    page-break-before: always;
+    break-before: always;
   }
 
   .report-cover {
@@ -1720,7 +1730,7 @@ No Data Messaging
   }
 
   .break-before {
-    page-break-before: always;
+    break-before: always;
   }
 
   /* .output-summary table td {

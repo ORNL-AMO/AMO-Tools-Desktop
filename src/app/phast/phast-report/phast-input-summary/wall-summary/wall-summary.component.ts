@@ -1,13 +1,15 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { WallLossesSurface } from '../../../../shared/models/materials';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-wall-summary',
-  templateUrl: './wall-summary.component.html',
-  styleUrls: ['./wall-summary.component.css']
+    selector: 'app-wall-summary',
+    templateUrl: './wall-summary.component.html',
+    styleUrls: ['./wall-summary.component.css'],
+    standalone: false
 })
 export class WallSummaryComponent implements OnInit {
   @Input()
@@ -34,8 +36,12 @@ export class WallSummaryComponent implements OnInit {
   conditionFactorDiff: Array<boolean>;
   emissivityDiff: Array<boolean>;
   numMods: number = 0;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(
-    private sqlDbApiService: SqlDbApiService,
+    private wallDbService: WallLossesSurfaceDbService,
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -48,7 +54,7 @@ export class WallSummaryComponent implements OnInit {
     this.conditionFactorDiff = new Array();
     this.emissivityDiff = new Array();
     //get substances
-    this.surfaceOrientationOptions = this.sqlDbApiService.selectWallLossesSurface();
+    this.setWallSurfaces();
     //init array
     this.lossData = new Array();
     if (this.phast.losses) {
@@ -96,6 +102,11 @@ export class WallSummaryComponent implements OnInit {
     }
   }
 
+  async setWallSurfaces() {
+    this.surfaceOrientationOptions = await firstValueFrom(this.wallDbService.getAllWithObservable());
+
+  }
+
 
   //function used to check if baseline and modification values are different
   //called from html
@@ -132,5 +143,9 @@ export class WallSummaryComponent implements OnInit {
   //function called from html for collapsing
   toggleCollapse() {
     this.collapse = !this.collapse;
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

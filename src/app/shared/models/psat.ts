@@ -16,6 +16,7 @@ export interface PSAT {
   connectedItem?: ConnectedItem,
   valid?: PsatValid;
   existingDataUnits?: string;
+  selectedModificationId?: string 
 }
 
 export interface PsatValid {
@@ -66,7 +67,7 @@ export interface PsatOutputs {
   pump_efficiency?: number;
   motor_rated_power?: number;
   motor_shaft_power?: number;
-  pump_shaft_power?: number;
+  mover_shaft_power?: number;
   motor_efficiency?: number;
   motor_power_factor?: number;
   motor_current?: number;
@@ -90,7 +91,7 @@ export interface PsatCalcResults {
   pump_efficiency?: number[];
   motor_rated_power?: number[];
   motor_shaft_power?: number[];
-  pump_shaft_power?: number[];
+  mover_shaft_power?: number[];
   motor_efficiency?: number[];
   motor_power_factor?: number[];
   motor_current?: number[];

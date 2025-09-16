@@ -46,6 +46,7 @@ import { GraphSeriesComponent } from './visualize/visualize-sidebar/graph-series
 import { GraphAnnotationsComponent } from './visualize/visualize-sidebar/graph-annotations/graph-annotations.component';
 import { GraphSeriesManagementComponent } from './visualize/visualize-sidebar/graph-series-management/graph-series-management.component';
 import { VisualizeSidebarService } from './visualize/visualize-sidebar/visualize-sidebar.service';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { VisualizeSidebarService } from './visualize/visualize-sidebar/visualize
     ExportableResultsTableModule,
     UserMessageOverlayModule,
     SharedPipesModule,
-    DateFormatHelpModule
+    DateFormatHelpModule,
+    ImportExportModule
   ],
   providers: [
     LogToolService,

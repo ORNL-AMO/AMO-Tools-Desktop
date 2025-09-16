@@ -7,9 +7,10 @@ import { Subscription } from 'rxjs';
 import { CoolingTowerResult, CoolingTowerOutput, CoolingTowerData } from '../../../../shared/models/chillers';
 
 @Component({
-  selector: 'app-cooling-tower-form',
-  templateUrl: './cooling-tower-form.component.html',
-  styleUrls: ['./cooling-tower-form.component.css']
+    selector: 'app-cooling-tower-form',
+    templateUrl: './cooling-tower-form.component.html',
+    styleUrls: ['./cooling-tower-form.component.css'],
+    standalone: false
 })
 export class CoolingTowerFormComponent implements OnInit {
   @Input()

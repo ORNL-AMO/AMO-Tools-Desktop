@@ -21,10 +21,8 @@ import { CoreService } from './core.service';
 import { SsmtModule } from '../ssmt/ssmt.module';
 import { TreasureHuntModule } from '../treasure-hunt/treasure-hunt.module';
 import { HelperServicesModule } from '../shared/helper-services/helper-services.module';
-import { ToastModule } from '../shared/toast/toast.module';
 import { TutorialsModule } from '../tutorials/tutorials.module';
 import { DashboardModule } from '../dashboard/dashboard.module';
-import { UpdateToastComponent } from '../update-toast/update-toast.component';
 import { LogToolModule } from '../log-tool/log-tool.module';
 import { MotorInventoryModule } from '../motor-inventory/motor-inventory.module';
 import { WasteWaterModule } from '../waste-water/waste-water.module';
@@ -35,20 +33,28 @@ import { PlotlyViaWindowModule } from 'angular-plotly.js';
 import { IndexedDbModule } from '../indexedDb/indexed-db.module';
 import { AnalyticsModule } from '../shared/analytics/analytics.module';
 import { SecurityAndPrivacyModule } from '../shared/security-and-privacy/security-and-privacy.module';
-import { BrowsingDataToastModule } from '../shared/browsing-data-toast/browsing-data-toast.module';
 import { PumpInventoryModule } from '../pump-inventory/pump-inventory.module';
 import { EmailMeasurDataModule } from '../shared/email-measur-data/email-measur-data.module';
+import { WaterProcessDiagramModule } from '../water-process-diagram/water-process-diagram.module';
+import { WaterModule } from '../water/water.module';
 import { ImportBackupModalModule } from '../shared/import-backup-modal/import-backup-modal.module';
 import { SurveyToastModule } from '../shared/survey-toast/survey-toast.module';
 import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
+import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
+import { UpdateApplicationModule } from '../shared/update-application/update-application.module';
+import { SubscribeToastComponent } from '../shared/subscribe-toast/subscribe-toast.component';
+import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-subscribe.service';
+import { SubscribeModalComponent } from '../shared/subscribe-modal/subscribe-modal.component';
+import { ExportToJustifiModalModule } from '../shared/export-to-justifi-modal/export-to-justifi-modal.module';
+import { ShareDataModalModule } from '../shared/share-data-modal/share-data-modal.module';
 
 @NgModule({
   declarations: [
     CoreComponent,
-    UpdateToastComponent,
-    NotFoundComponent,
+    NotFoundComponent
   ],
   imports: [
+    IndexedDbModule,
     CommonModule,
     RouterModule,
     PsatModule,
@@ -66,7 +72,6 @@ import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module
     SsmtModule,
     TreasureHuntModule,
     HelperServicesModule,
-    ToastModule,
     TutorialsModule,
     DashboardModule,
     LogToolModule,
@@ -76,19 +81,26 @@ import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module
     ToolsSuiteApiModule,
     CompressedAirAssessmentModule,
     PlotlyViaWindowModule,
-    IndexedDbModule,
     SecurityAndPrivacyModule,
-    BrowsingDataToastModule,
     AnalyticsModule,
     EmailMeasurDataModule,
+    WaterProcessDiagramModule,
+    WaterModule,
     ImportBackupModalModule,
     SurveyToastModule,
-    MeasurSurveyModule
+    MeasurSurveyModule,
+    SnackbarModule,
+    UpdateApplicationModule,
+    SubscribeToastComponent,
+    SubscribeModalComponent,
+    ExportToJustifiModalModule,
+    ShareDataModalModule
   ],
   providers: [
     AssessmentService,
     CoreService,
     WindowRefService,
+    EmailListSubscribeService
   ]
 })
 

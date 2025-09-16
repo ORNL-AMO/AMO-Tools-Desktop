@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import {  FSAT, PlaneResults } from '../../../../shared/models/fans';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
-  selector: 'app-traverse-results',
-  templateUrl: './traverse-results.component.html',
-  styleUrls: ['./traverse-results.component.css']
+    selector: 'app-traverse-results',
+    templateUrl: './traverse-results.component.html',
+    styleUrls: ['./traverse-results.component.css'],
+    standalone: false
 })
 export class TraverseResultsComponent implements OnInit {
 
@@ -19,7 +20,8 @@ export class TraverseResultsComponent implements OnInit {
   planeResults: PlaneResults;
 
   
-
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
   
   constructor() { }
 
@@ -28,6 +30,8 @@ export class TraverseResultsComponent implements OnInit {
     
   }
 
-  
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
 
 }

@@ -1,9 +1,7 @@
 <div class="d-flex flex-row justify-content-end" [ngStyle]="{'height': isSidebarCollapsed? '100%' : undefined}">
-  <div>
-    <div class="d-flex justify-content-center p-2" (click)="collapseSidebar()">
-      <span *ngIf="isSidebarCollapsed" class="fa fa-chevron-circle-right h5"></span>
-      <span *ngIf="!isSidebarCollapsed" class="fa fa-chevron-circle-left h5"></span>
-    </div>
+  <div class="d-flex justify-content-center p-2" (click)="collapseSidebar()">
+    <span *ngIf="isSidebarCollapsed" class="fa fa-chevron-circle-right h5 mb-0"></span>
+    <span *ngIf="!isSidebarCollapsed" class="fa fa-chevron-circle-left h5 mb-0"></span>
   </div>
   <div *ngIf="isSidebarCollapsed" class="sidebar-border"></div>
 </div>
@@ -16,7 +14,7 @@
   </div>
   
   <div class="sidebar-group create-button">
-    <div class="p-3">
+    <div class="py-0 px-2">
       <div class="nav-item dropdown">
         <button type="button" class="btn btn-primary w-100" (click)="toggleNewDropdown()">
           <span class="dropdown-toggle">
@@ -31,6 +29,9 @@
             <a class="list-group-item list-group-item-action" (click)="showCreateInventory()">
               Add New Inventory
             </a>
+            <a class="list-group-item list-group-item-action" (click)="showCreateDiagram()">
+              Add New Diagram
+            </a>
             <a class="list-group-item list-group-item-action" (click)="showCreateFolder()">
               Add New Folder
             </a>
@@ -40,10 +41,32 @@
     </div>
   </div>
   
-  <div class="sidebar-group secondary" *ngIf="showSurveyLink">
+  <div *ngIf="isUpdateAvailable" class="sidebar-group secondary" (click)="openUpdateModal()">
+    <span routerLinkActive="selected" class="sidebar-item">
+      <span class="fa fa-info-circle mr-1 info-icon"></span>
+      Update Available!
+    </span>
+  </div>
+
+  <div class="sidebar-group secondary" (click)="openVersionModal()">
+    <span routerLinkActive="selected" class="sidebar-item">
+      <i class="fa fa-info-circle info-icon mr-1"></i>
+      v{{versionNum}} Release Notes
+    </span>
+  </div>
+  
+  <div *ngIf="showSurveyLink" class="sidebar-group secondary">
     <span routerLinkActive="selected" class="sidebar-item" (click)="showSurvey()">
       <span class="fa fa-info-circle mr-1 info-icon"></span>
-      MEASUR Survey 
+      MEASUR Survey
+    </span>
+  </div>
+
+  
+  <div *ngIf="showSubscribeLink" class="sidebar-group secondary">
+    <span routerLinkActive="selected" class="sidebar-item" (click)="showSubscribeModal()">
+      <span class="fa fa-info-circle mr-1 info-icon"></span>
+      Subscribe for MEASUR news 
     </span>
   </div>
 
@@ -59,6 +82,7 @@
   <span routerLinkActive="selected" class="sidebar-item" (click)="navigateWithSidebarOptions('/log-tool', true)">Data Exploration</span>
 </div>
 
+
 <div class="sidebar-group secondary">
   <app-calculator-list></app-calculator-list>
 </div>
@@ -73,13 +97,4 @@
   <span (click)="navigateWithSidebarOptions('/privacy')" routerLinkActive="selected" class="sidebar-item">Privacy Notice</span>
   <span (click)="navigateWithSidebarOptions('/acknowledgments')" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
   </div>
-  
-  <div class="sidebar-group">
-    <span class="version-num">v{{versionNum}}
-      <i class="fa fa-info-circle" (click)="openVersionModal()"></i>
-    </span>
-    <span *ngIf="isUpdateAvailable" class="update-available" (click)="openUpdateModal()">Update Available!</span>
-  </div>
-  
-  <app-version-modal *ngIf="showVersionModal" (closeModal)="closeVersionModal()"></app-version-modal>
 </ng-container>

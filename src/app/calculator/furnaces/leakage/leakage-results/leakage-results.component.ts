@@ -6,9 +6,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { LeakageService } from '../leakage.service';
 
 @Component({
-  selector: 'app-leakage-results',
-  templateUrl: './leakage-results.component.html',
-  styleUrls: ['./leakage-results.component.css']
+    selector: 'app-leakage-results',
+    templateUrl: './leakage-results.component.html',
+    styleUrls: ['./leakage-results.component.css'],
+    standalone: false
 })
 export class LeakageResultsComponent implements OnInit {
 

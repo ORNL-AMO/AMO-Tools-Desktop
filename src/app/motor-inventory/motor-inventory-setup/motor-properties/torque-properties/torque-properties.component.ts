@@ -3,9 +3,10 @@ import { TorqueOptions, MotorInventoryData } from '../../../motor-inventory';
 import { MotorInventoryService } from '../../../motor-inventory.service';
 
 @Component({
-  selector: 'app-torque-properties',
-  templateUrl: './torque-properties.component.html',
-  styleUrls: ['./torque-properties.component.css']
+    selector: 'app-torque-properties',
+    templateUrl: './torque-properties.component.html',
+    styleUrls: ['./torque-properties.component.css'],
+    standalone: false
 })
 export class TorquePropertiesComponent implements OnInit {
   

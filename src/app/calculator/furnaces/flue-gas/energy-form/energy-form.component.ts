@@ -7,9 +7,10 @@ import { EnergyFormService, FlueGasEnergyData } from '../energy-form.service';
 import { FlueGasService } from '../flue-gas.service';
 
 @Component({
-  selector: 'app-energy-form',
-  templateUrl: './energy-form.component.html',
-  styleUrls: ['./energy-form.component.css']
+    selector: 'app-energy-form',
+    templateUrl: './energy-form.component.html',
+    styleUrls: ['./energy-form.component.css'],
+    standalone: false
 })
 export class EnergyFormComponent implements OnInit {
   @Input()

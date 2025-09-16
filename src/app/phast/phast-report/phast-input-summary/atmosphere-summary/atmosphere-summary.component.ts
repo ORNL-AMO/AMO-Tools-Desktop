@@ -1,15 +1,18 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { AtmosphereDbService } from '../../../../indexedDb/atmosphere-db.service';
+import { firstValueFrom } from 'rxjs';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
-  selector: 'app-atmosphere-summary',
-  templateUrl: './atmosphere-summary.component.html',
-  styleUrls: ['./atmosphere-summary.component.css']
+    selector: 'app-atmosphere-summary',
+    templateUrl: './atmosphere-summary.component.html',
+    styleUrls: ['./atmosphere-summary.component.css'],
+    standalone: false
 })
 export class AtmosphereSummaryComponent implements OnInit {
   @Input()
@@ -34,9 +37,13 @@ export class AtmosphereSummaryComponent implements OnInit {
   flowRateDiff: Array<boolean>;
   correctionFactorDiff: Array<boolean>;
   numMods: number = 0;
-  constructor(private sqlDbApiService: SqlDbApiService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
 
-  ngOnInit() {
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
+  constructor(private atmosphereDbService: AtmosphereDbService, private cd: ChangeDetectorRef, private convertUnitsService: ConvertUnitsService) { }
+
+  async ngOnInit() {
     this.atmosphereGasDiff = new Array();
     this.specificHeatDiff = new Array();
     this.inletTempDiff = new Array();
@@ -44,7 +51,7 @@ export class AtmosphereSummaryComponent implements OnInit {
     this.flowRateDiff = new Array();
     this.correctionFactorDiff = new Array();
 
-    this.gasOptions = this.sqlDbApiService.selectAtmosphereSpecificHeat();
+    this.gasOptions = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.modifications) {
@@ -99,11 +106,11 @@ export class AtmosphereSummaryComponent implements OnInit {
   }
 
   checkSpecificHeat(loss: AtmosphereLoss) {
-    let material: AtmosphereSpecificHeat = this.sqlDbApiService.selectAtmosphereSpecificHeatById(loss.atmosphereGas);
+    let material: AtmosphereSpecificHeat = this.gasOptions.find(gas => gas.id === loss.atmosphereGas);
     if (material) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         let val = this.convertUnitsService.value(material.specificHeat).from('btulbF').to('kJkgC');
-        material.specificHeat = this.roundVal(val, 4);
+        material.specificHeat = roundVal(val, 4);
       }
       if (material.specificHeat !== loss.specificHeat) {
         return true;
@@ -111,11 +118,6 @@ export class AtmosphereSummaryComponent implements OnInit {
         return false;
       }
     }
-  }
-
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
   }
 
   getGas(id: number) {
@@ -133,4 +135,9 @@ export class AtmosphereSummaryComponent implements OnInit {
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
+  
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+  
 }

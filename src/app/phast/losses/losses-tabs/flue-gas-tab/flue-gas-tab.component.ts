@@ -2,16 +2,17 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { LossesService } from '../../losses.service';
 import { UntypedFormGroup } from '@angular/forms';
-import { FlueGasCompareService } from '../../flue-gas-losses/flue-gas-compare.service';
 import { FlueGas, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Subscription } from 'rxjs';
 import { FlueGasFormService } from '../../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FlueGasCompareService } from '../../flue-gas-losses/flue-gas-compare.service';
 
 @Component({
-  selector: 'app-flue-gas-tab',
-  templateUrl: './flue-gas-tab.component.html',
-  styleUrls: ['./flue-gas-tab.component.css']
+    selector: 'app-flue-gas-tab',
+    templateUrl: './flue-gas-tab.component.html',
+    styleUrls: ['./flue-gas-tab.component.css'],
+    standalone: false
 })
 export class FlueGasTabComponent implements OnInit {
   @Input()

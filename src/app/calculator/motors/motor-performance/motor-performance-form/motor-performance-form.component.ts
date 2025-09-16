@@ -5,9 +5,10 @@ import { UntypedFormGroup, Validators } from '@angular/forms';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 
 @Component({
-  selector: 'app-motor-performance-form',
-  templateUrl: './motor-performance-form.component.html',
-  styleUrls: ['./motor-performance-form.component.css']
+    selector: 'app-motor-performance-form',
+    templateUrl: './motor-performance-form.component.html',
+    styleUrls: ['./motor-performance-form.component.css'],
+    standalone: false
 })
 export class MotorPerformanceFormComponent implements OnInit {
   @Input()

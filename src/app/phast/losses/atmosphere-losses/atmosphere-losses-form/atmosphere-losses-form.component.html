@@ -16,7 +16,7 @@
       <label class="small" for="{{'atmosphereGas'+idString}}">Atmosphere Gas
         <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal(false)" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas</a>
       </label>
-      <select name="{{'atmosphereGas'+lossIndex}}" class="form-control" id="{{'atmosphereGas'+idString}}" formControlName="atmosphereGas" (change)="setProperties()"
+      <select name="{{'atmosphereGas'+lossIndex}}" class="form-control" id="{{'atmosphereGas'+idString}}" formControlName="atmosphereGas" (change)="changeMaterial()"
         (focus)="focusField('materialName')"  [ngClass]="{'indicate-different': compareAtmosphereGas(), 'invalid': atmosphereLossForm.controls.atmosphereGas.invalid}">
         <option *ngFor="let gas of materialTypes" [ngValue]="gas.id">{{gas.substance}}</option>
       </select>

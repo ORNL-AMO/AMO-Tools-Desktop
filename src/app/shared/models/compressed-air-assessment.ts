@@ -20,12 +20,13 @@ export interface CompressedAirAssessment {
     endUseData: EndUseData,
     compressedAirDayTypes: Array<CompressedAirDayType>,
     setupDone: boolean
+    selectedModificationId?: string
 }
 
 export interface Modification {
     name: string,
     modificationId: string,
-    // flowReallocation: FlowReallocation,
+    flowReallocation: FlowReallocation,
     reduceAirLeaks: ReduceAirLeaks,
     improveEndUseEfficiency: ImproveEndUseEfficiency,
     reduceSystemAirPressure: ReduceSystemAirPressure,
@@ -37,9 +38,9 @@ export interface Modification {
     notes?: string
 }
 
-// export interface FlowReallocation {
-//     // selected: boolean
-// }
+export interface FlowReallocation {
+    implementationCost: number,
+}
 
 export interface ReplaceCompressor {
     order: number

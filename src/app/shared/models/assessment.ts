@@ -5,22 +5,27 @@ import { SSMT } from './steam/ssmt';
 import { TreasureHunt } from './treasure-hunt';
 import { WasteWater } from './waste-water';
 import { CompressedAirAssessment } from './compressed-air-assessment';
+import { WaterAssessment } from 'process-flow-lib';
 
 export interface Assessment {
   id?: number,
   directoryId?: number,
+  diagramId?: number,
   psat?: PSAT,
   phast?: PHAST,
   fsat?: FSAT,
   ssmt?: SSMT,
   treasureHunt?: TreasureHunt,
   wasteWater?: WasteWater,
+  water?: WaterAssessment,
   compressedAirAssessment?: CompressedAirAssessment,
   createdDate?: Date,
   modifiedDate?: Date,
-  type: string;
+  type: AssessmentType;
   name: string;
   selected?: boolean;
   appVersion?: string;
   isExample?: boolean;
 }
+
+export type AssessmentType = 'PSAT' | 'PHAST' | 'FSAT' | 'SSMT' | 'TreasureHunt' | 'WasteWater' | 'Water' | 'CompressedAir';

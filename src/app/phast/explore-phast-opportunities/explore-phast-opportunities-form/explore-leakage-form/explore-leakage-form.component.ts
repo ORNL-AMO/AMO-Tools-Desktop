@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { LossTab } from '../../../tabs';
 
 @Component({
-  selector: 'app-explore-leakage-form',
-  templateUrl: './explore-leakage-form.component.html',
-  styleUrls: ['./explore-leakage-form.component.css']
+    selector: 'app-explore-leakage-form',
+    templateUrl: './explore-leakage-form.component.html',
+    styleUrls: ['./explore-leakage-form.component.css'],
+    standalone: false
 })
 export class ExploreLeakageFormComponent implements OnInit {
   @Input()

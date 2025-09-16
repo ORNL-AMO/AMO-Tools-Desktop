@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { ImportService } from '../import.service';
+import { FileImportStatus, ImportService } from '../import.service';
 import { ImportExportData } from '../importExportModel';
 import { DirectoryDashboardService } from '../../../dashboard/directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../../../dashboard/dashboard.service';
@@ -9,15 +9,15 @@ import * as pako from 'pako';
 @Component({
   selector: 'app-import-modal',
   templateUrl: './import-modal.component.html',
-  styleUrls: ['./import-modal.component.css']
+  styleUrls: ['./import-modal.component.css'],
+  standalone: false
 })
 export class ImportModalComponent implements OnInit {
 
   @ViewChild('importModal', { static: false }) public importModal: ModalDirective;
 
   importInProgress: boolean = false;
-  fileReference: any;
-  validFile: boolean;
+  fileImportStatus: FileImportStatus;
   treasureFile: boolean;
   importJson: any = null;
   constructor(private importService: ImportService, private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService) { }
@@ -40,82 +40,46 @@ export class ImportModalComponent implements OnInit {
     });
   }
 
-  setImportFile($event) {
-    if ($event.target.files) {
-      if ($event.target.files.length !== 0) {
-        let regex = /.gz$/;
-        if (regex.test($event.target.files[0].name)) {
-          let blob = new Blob([$event.target.files[0]], { type: 'application/gzip' });
-          let arrayBuffer;
-          let result;
-          let fileReader = new FileReader();
-          fileReader.onload = () => {
-            arrayBuffer = fileReader.result as ArrayBuffer;
-            result = pako.ungzip(new Uint8Array(arrayBuffer), { to: 'string' });
-            try {
-              this.importJson = JSON.parse(JSON.stringify(result));
-              this.validFile = true;
-            } catch (err) {
-              this.validFile = false;
-            }
-          };
-          fileReader.readAsArrayBuffer(blob);
+  async setImportFile($event) {
+    if ($event.target.files && $event.target.files.length !== 0) {
+      let gzRegex = /.gz$/;
+      let jsonRegex = /.json$/;
+      let importFile: File = $event.target.files[0];
+
+      if (gzRegex.test(importFile.name)) {
+        try {
+          const arrayBuffer = await this.importService.readFileAsArrayBuffer(importFile);
+          const jsonString = pako.ungzip(new Uint8Array(arrayBuffer), { to: 'string' });
+          this.importJson = JSON.parse(jsonString);
+          this.fileImportStatus = this.importService.getIsValidImportType(this.importJson, 'AMO-TOOLS-DESKTOP');
+        } catch (err) {
+          console.error('Error processing gzip file:', err);
+          this.fileImportStatus = { isValid: false, fileType: 'UNKNOWN' };
         }
-        else {
-          regex = /.json$/;
-          if (regex.test($event.target.files[0].name)) {
-            this.fileReference = $event;
-            this.validFile = true;
-          } else {
-            let fr: FileReader = new FileReader();
-            fr.readAsText($event.target.files[0]);
-            fr.onloadend = (e) => {
-              try {
-                this.importJson = JSON.parse(JSON.stringify(fr.result));
-                this.validFile = true;
-              } catch (err) { 
-                this.validFile = false;
-              }
-            };
-          }
+      }
+      else if (jsonRegex.test(importFile.name)) {
+        try {
+          const fileContent = await this.importService.readFileAsText(importFile);
+          this.importJson = JSON.parse(fileContent);
+          this.fileImportStatus = this.importService.getIsValidImportType(this.importJson, 'AMO-TOOLS-DESKTOP');
+        } catch (err) {
+          console.error('File reading/parsing error:', err);
+          this.fileImportStatus = { isValid: false, fileType: 'UNKNOWN' };
         }
+      } else {
+        this.fileImportStatus = { isValid: false, fileType: 'UNKNOWN' };
       }
     }
   }
 
-  importFile() {
-    if (!this.importJson) {
-      let fr: FileReader = new FileReader();
-      fr.readAsText(this.fileReference.target.files[0]);
-      fr.onloadend = (e) => {
-        this.importJson = JSON.parse(JSON.stringify(fr.result));
-        this.runImport(this.importJson)
-      };
-    }
-    else {
-      this.runImport(this.importJson);
-    }
+  async importFile() {
+    let importData: ImportExportData = this.importJson as ImportExportData;
+    this.importInProgress = true;
+    let workingDirectoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
+    await this.importService.importData(importData, workingDirectoryId);
+    this.hideImportModal();
+    this.importInProgress = false;
+    this.dashboardService.updateDashboardData.next(true);
   }
 
- async runImport(data: string) {
-    let importData: ImportExportData = JSON.parse(data);
-    if (importData.origin === "AMO-TOOLS-DESKTOP") {
-      this.importInProgress = true;
-      let workingDirectoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();
-      await this.importService.importData(importData, workingDirectoryId);
-      this.hideImportModal();
-      this.importInProgress = false;
-      this.dashboardService.updateDashboardData.next(true);
-    }
-    else if (importData.origin === "AMO-TOOLS-DESKTOP-OPPORTUNITIES") {
-      this.treasureFile = true;
-      this.validFile = false;
-      this.dashboardService.dashboardToastMessage.next('INVALID FILE DESTINATION - This is a treasure hunt opportunites file and must be imported from within a treasure hunt.');
-    }
-    else {
-      this.treasureFile = false;
-      this.validFile = false;
-      this.dashboardService.dashboardToastMessage.next('INVALID FILE');
-    }
-  }
 }

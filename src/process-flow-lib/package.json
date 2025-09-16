@@ -1,0 +1,7 @@
+{
+    "name": "process-flow-lib",
+    "version": "1.0.0",
+    "main": "../../process-flow-diagram-component/dist/process-flow-lib/index.js",
+    "types": "../../process-flow-diagram-component/dist/process-flow-lib/index.d.ts",
+    "private": true
+  }

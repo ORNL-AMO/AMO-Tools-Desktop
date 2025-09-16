@@ -7,9 +7,10 @@ import { DashboardService } from '../../dashboard.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 
 @Component({
-  selector: 'app-directory-item',
-  templateUrl: './directory-item.component.html',
-  styleUrls: ['./directory-item.component.css']
+    selector: 'app-directory-item',
+    templateUrl: './directory-item.component.html',
+    styleUrls: ['./directory-item.component.css'],
+    standalone: false
 })
 export class DirectoryItemComponent implements OnInit {
   @Input()
@@ -22,7 +23,7 @@ export class DirectoryItemComponent implements OnInit {
   sortBy: { value: string, direction: string };
   updateDashboardDataSub: Subscription;
   selectedDirectoryId: number;
-  constructor(private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private cd: ChangeDetectorRef, private directoryDbService: DirectoryDbService) { }
+  constructor(private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService, private directoryDbService: DirectoryDbService) { }
 
   ngOnInit() {
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {

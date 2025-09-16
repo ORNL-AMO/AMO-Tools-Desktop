@@ -12,9 +12,10 @@ import { ImportExportService } from '../shared/import-export/import-export.servi
 
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+    selector: 'app-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.css'],
+    standalone: false
 })
 export class DashboardComponent implements OnInit {
 
@@ -25,9 +26,6 @@ export class DashboardComponent implements OnInit {
 
   showCreateInventory: string;
   showCreateInventorySub: Subscription;
-
-  toastData: { title: string, body: string, setTimeoutVal: number } = { title: '', body: '', setTimeoutVal: undefined };
-  showToast: boolean = false;
 
   createFolder: boolean;
   createFolderSub: Subscription;
@@ -40,8 +38,6 @@ export class DashboardComponent implements OnInit {
 
   showImportModalSub: Subscription;
   showImportModal: boolean;
-
-  dashboardToastMessageSub: Subscription;
 
   showExportModalSub: Subscription;
   showExportModal: boolean;
@@ -67,6 +63,8 @@ export class DashboardComponent implements OnInit {
   showPrintViewSub: Subscription;
   exportInProgressSub: Subscription;
   showExportInProgress: boolean;
+  showCreateDiagramSub: Subscription;
+  showCreateDiagram: boolean;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -98,6 +96,10 @@ export class DashboardComponent implements OnInit {
       this.createAssessment = val;
     });
 
+    this.showCreateDiagramSub = this.dashboardService.showCreateDiagram.subscribe(val => {
+      this.showCreateDiagram = val;
+    });
+
     this.moveItemsSub = this.dashboardService.moveItems.subscribe(val => {
       this.moveItems = val;
     });
@@ -108,13 +110,6 @@ export class DashboardComponent implements OnInit {
 
     this.copyItemsSub = this.dashboardService.copyItems.subscribe(val => {
       this.copyItems = val;
-    });
-
-    this.dashboardToastMessageSub = this.dashboardService.dashboardToastMessage.subscribe(val => {
-      if (val != undefined) {
-        this.addToast(val);
-        this.dashboardService.dashboardToastMessage.next(undefined);
-      }
     });
 
     this.showImportModalSub = this.directoryDashboardService.showImportModal.subscribe(val => {
@@ -144,7 +139,6 @@ export class DashboardComponent implements OnInit {
   ngOnDestroy() {
     this.moveItemsSub.unsubscribe();
     this.createAssessmentSub.unsubscribe();
-    this.dashboardToastMessageSub.unsubscribe();
     this.createFolderSub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.sidebarWidthSub.unsubscribe();
@@ -170,21 +164,6 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  //TOAST HERE
-  addToast(msg: string) {
-    this.toastData.title = msg;
-    this.toastData.setTimeoutVal = 2000;
-    this.showToast = true;
-  }
-
-  hideToast() {
-    this.showToast = false;
-    this.toastData = {
-      title: '',
-      body: '',
-      setTimeoutVal: undefined
-    }
-  }  
 }
 
 export interface ImportDataObjects {

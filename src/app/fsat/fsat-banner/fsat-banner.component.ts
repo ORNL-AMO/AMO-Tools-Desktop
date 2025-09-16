@@ -5,11 +5,13 @@ import { Subscription } from 'rxjs';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
+import { CoreService } from '../../core/core.service';
 
 @Component({
   selector: 'app-fsat-banner',
   templateUrl: './fsat-banner.component.html',
-  styleUrls: ['./fsat-banner.component.css']
+  styleUrls: ['./fsat-banner.component.css'],
+  standalone: false
 })
 export class FsatBannerComponent implements OnInit {
   @Input()
@@ -18,9 +20,10 @@ export class FsatBannerComponent implements OnInit {
   mainTab: string;
   mainTabSubscription: Subscription;
   bannerCollapsed: boolean = true;
-  constructor(private fsatService: FsatService, 
+  constructor(private fsatService: FsatService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
+    private coreService: CoreService) { }
 
   ngOnInit() {
     this.mainTabSubscription = this.fsatService.mainTab.subscribe(val => {
@@ -33,7 +36,7 @@ export class FsatBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str === 'system-setup' || str === 'calculators') {
+    if (str === 'baseline' || str === 'calculators') {
       this.fsatService.mainTab.next(str);
     } else if (this.assessment.fsat.setupDone) {
       this.fsatService.mainTab.next(str);
@@ -52,10 +55,10 @@ export class FsatBannerComponent implements OnInit {
   }
 
   navigateHome() {
-    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', { shouldCollapse: false });
   }
 
-  back(){
+  back() {
     if (this.mainTab == 'calculators') {
       this.fsatService.mainTab.next('sankey');
     } else if (this.mainTab == 'sankey') {
@@ -65,12 +68,12 @@ export class FsatBannerComponent implements OnInit {
     } else if (this.mainTab == 'diagram') {
       this.fsatService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
-      this.fsatService.mainTab.next('system-setup');
+      this.fsatService.mainTab.next('baseline');
     }
   }
 
   continue() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab == 'baseline') {
       this.fsatService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
       this.fsatService.mainTab.next('diagram');
@@ -83,17 +86,17 @@ export class FsatBannerComponent implements OnInit {
     }
   }
 
-  openExportModal(){
+  openExportModal() {
     this.fsatService.showExportModal.next(true);
   }
 
-  emailTreasureHuntData() {
+  openShareDataModal() {
     this.emailMeasurDataService.measurItemAttachment = {
       itemType: 'assessment',
       itemName: this.assessment.name,
       itemData: this.assessment
     }
     this.emailMeasurDataService.emailItemType.next('FSAT');
-    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
+    this.coreService.showShareDataModal.next(true);
   }
 }

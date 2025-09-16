@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
@@ -6,9 +6,10 @@ import { CompareService } from '../../compare.service';
 import { PsatReportRollupService } from '../../../report-rollup/psat-report-rollup.service';
 
 @Component({
-  selector: 'app-output-summary',
-  templateUrl: './output-summary.component.html',
-  styleUrls: ['./output-summary.component.css']
+    selector: 'app-output-summary',
+    templateUrl: './output-summary.component.html',
+    styleUrls: ['./output-summary.component.css'],
+    standalone: false
 })
 export class OutputSummaryComponent implements OnInit {
   @Input()
@@ -21,6 +22,9 @@ export class OutputSummaryComponent implements OnInit {
   selectedModificationIndex: number;
   psat: PSAT;
   notes: Array<SummaryNote>;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   constructor(private psatReportRollupService: PsatReportRollupService, private compareService: CompareService) { }
 
@@ -128,6 +132,10 @@ export class OutputSummaryComponent implements OnInit {
       modificationScenario.push('Compare Two Pumps');
     }
     return modificationScenario;
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 
 }

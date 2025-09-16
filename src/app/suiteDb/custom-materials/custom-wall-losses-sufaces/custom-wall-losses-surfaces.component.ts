@@ -3,14 +3,14 @@ import { Settings } from '../../../shared/models/settings';
 import { WallLossesSurface } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CustomMaterialsService } from '../custom-materials.service';
-import * as _ from 'lodash';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surface-db.service';
 
 @Component({
-  selector: 'app-custom-wall-losses-surfaces',
-  templateUrl: './custom-wall-losses-surfaces.component.html',
-  styleUrls: ['./custom-wall-losses-surfaces.component.css']
+    selector: 'app-custom-wall-losses-surfaces',
+    templateUrl: './custom-wall-losses-surfaces.component.html',
+    styleUrls: ['./custom-wall-losses-surfaces.component.css'],
+    standalone: false
 })
 export class CustomWallLossesSurfacesComponent implements OnInit {
   @Input()
@@ -65,24 +65,21 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
   }
   
   async getCustomMaterials() {
-    this.wallLossesSurfaces = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
+    this.wallLossesSurfaces = await firstValueFrom(this.wallLossesSurfaceDbService.getAllCustomMaterials());
     this.emitNumMaterials.emit(this.wallLossesSurfaces.length);
   }
 
-  async editMaterial(id: number) {
-    this.existingMaterial = await firstValueFrom(this.wallLossesSurfaceDbService.getByIdWithObservable(id));
-    this.editExistingMaterial = true;
-    this.showMaterialModal();
+  editMaterial(id: number) {
+    this.showMaterialModal(id);
   }
 
-  async deleteMaterial(id: number) {
-    this.existingMaterial = await firstValueFrom(this.wallLossesSurfaceDbService.getByIdWithObservable(id));
-    this.editExistingMaterial = true;
+  deleteMaterial(id: number) {
     this.deletingMaterial = true;
-    this.showMaterialModal();
+    this.showMaterialModal(id);
   }
 
-  showMaterialModal() {
+  async showMaterialModal(id?: number) {
+    this.existingMaterial = id ? await firstValueFrom(this.wallLossesSurfaceDbService.getByIdWithObservable(id)) : undefined;
     this.showModal = true;
     this.materialModal.show();
   }
@@ -96,7 +93,7 @@ export class CustomWallLossesSurfacesComponent implements OnInit {
   }
 
   getSelected() {
-    let selected: Array<WallLossesSurface> = _.filter(this.wallLossesSurfaces, (material) => { return material.selected === true; });
+    let selected: Array<WallLossesSurface> = this.wallLossesSurfaces.filter((material) => { return material.selected === true; });
     this.customMaterialService.selectedWall = selected;
   }
 

@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-add-receiver-volume-help',
-  templateUrl: './add-receiver-volume-help.component.html',
-  styleUrls: ['./add-receiver-volume-help.component.css']
+    selector: 'app-add-receiver-volume-help',
+    templateUrl: './add-receiver-volume-help.component.html',
+    styleUrls: ['./add-receiver-volume-help.component.css'],
+    standalone: false
 })
 export class AddReceiverVolumeHelpComponent implements OnInit {
 

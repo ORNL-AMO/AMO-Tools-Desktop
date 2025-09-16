@@ -1,6 +1,6 @@
 <div class="output-summary">
     <h4 class="show-print print-section-header">Assessment Executive Summary</h4>
-    <table class="table table-hover">
+    <table #copyTable class="table table-hover">
         <thead>
             <tr>
                 <th [ngStyle]="{'width.%': 100 /(combinedDayTypeResults.length+2)}"></th>
@@ -41,7 +41,7 @@
                         &mdash; &mdash;
                     </div>
                     <div class="alert-danger" *ngIf="!result.validation.isValid">
-                        Invalid System Setup:<br>
+                        Invalid Baseline:<br>
                         <span *ngIf="!result.validation.addReceiverVolume">Errors found in Add Receiver
                             Volume<br></span>
                         <span *ngIf="!result.validation.adjustCascadingSetPoints">Errors found in Adjust Cascading Set
@@ -578,3 +578,6 @@
         </div>
     </div>
 </div>
+
+<app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>

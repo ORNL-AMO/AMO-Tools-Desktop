@@ -1,0 +1,115 @@
+<div class="d-flex flex-column panel-container">
+  <div class="header mr-2 ml-2">
+    <h3>{{assessment.name}} Settings</h3>
+    <br>
+  </div>
+  <div class="alert-warning mt-3 small mx-auto" *ngIf="showUpdateDataReminder">
+    <div>Units of measure were changed after assessment data was entered.
+      <br>Please update your assessment data for accurate results.
+    </div>
+    <a class="click-link" (click)="updateData(true)">Update Data</a>
+  </div>
+  <div class="alert-success mt-3 py-3 small mx-auto w-75 text-center" *ngIf="showSuccessMessage">
+    <div>
+      Data updated successfully!
+    </div>
+    <a class="click-link" (click)="dismissSuccessMessage()">Dismiss</a>
+  </div>
+  <app-application-settings [(settingsForm)]="settingsForm" [inPhast]="true" [inTreasureHunt]="true"
+    (startSavePolling)="saveSettings()">
+  </app-application-settings>
+
+  <form [formGroup]="systemBasicsForm">
+    <label class="group-label">Modeling Conditions</label>
+
+    <div class="form-group">
+      <label for="utilityType">Utility Type</label>
+      <select class="form-control" name="utilityType" formControlName="utilityType" (change)="saveSystemBasics()"
+        (focus)="focusField('utilityType')">
+        <option [ngValue]="'Electricity'">Electricity</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="electricityCost">Electricity Cost</label>
+      <div class="input-group">
+        <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost"
+          formControlName="electricityCost" (change)="saveSystemBasics()" (focus)="focusField('electricityCost')">
+        <span class="units input-group-addon">$/kWh</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="systemBasicsForm.controls.electricityCost.invalid && !systemBasicsForm.controls.electricityCost.pristine">
+        <span *ngIf="systemBasicsForm.controls.electricityCost.errors.required">Value Required</span>
+        <span *ngIf="systemBasicsForm.controls.electricityCost.errors.min">Value can't be less than
+          {{systemBasicsForm.controls.electricityCost.errors.min.min}} $/kWh.</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="fuelCost">Fuel Cost</label>
+      <div class="input-group">
+        <input name="fuelCost" type="number" step="0.01" class="form-control" id="fuelCost"
+          formControlName="fuelCost" (change)="saveSystemBasics()" (focus)="focusField('fuelCost')">
+        <span *ngIf="settingsForm.controls.unitsOfMeasure.value === 'Imperial'" class="units input-group-addon">$/MMBtu</span>
+        <span *ngIf="settingsForm.controls.unitsOfMeasure.value === 'Metric'" class="units input-group-addon">$/GJ</span>
+      </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="systemBasicsForm.controls.fuelCost.invalid && !systemBasicsForm.controls.fuelCost.pristine">
+        <span *ngIf="systemBasicsForm.controls.fuelCost.errors.required">Value Required</span>
+        <span *ngIf="systemBasicsForm.controls.fuelCost.errors.min">Value can't be less than
+          {{systemBasicsForm.controls.fuelCost.errors.min.min}} $/kWh.</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="productionUnit">Production Unit</label>
+      <div class="input-group">
+       <input name="productionUnit" type="text" class="form-control" id="productionUnit"
+          formControlName="productionUnit" (change)="saveSystemBasics()" (focus)="focusField('productionUnit')">
+      </div>
+    </div>
+
+    
+    <div class="form-group">
+      <label for="annualProduction">Annual Production (per 1,000 units)</label>
+      <div class="input-group">
+       <input name="annualProduction" type="number" class="form-control" id="annualProduction"
+          formControlName="annualProduction" (change)="saveSystemBasics()" (focus)="focusField('annualProduction')">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="conductivityUnit">Conductivity Unit</label>
+      <div class="input-group">
+        <select class="form-control" id="conductivityUnit" formControlName="conductivityUnit" (change)="saveSystemBasics()"
+        (focus)="focusField('conductivityUnit')">
+        <option [ngValue]="'mmho'">mmho</option>
+        <option [ngValue]="'TDS ppm'">TDS ppm</option>
+        <option [ngValue]="'MuS/cm'"><span>&#x3BC;</span>S/cm</option>
+        <option [ngValue]="'mS/cm'">mS/cm</option>
+      </select>
+      </div>
+    </div>
+  </form>
+
+  <form class="pt-0" [formGroup]="settingsForm">
+    <div class="form-group">
+      <label for="flowDecimalPrecision">Flow Value Decimal Precision</label>
+      <div class="input-group">
+        <select class="form-control" id="flowDecimalPrecision" formControlName="flowDecimalPrecision" (change)="saveSettings()"
+        (focus)="focusField('flowDecimalPrecision')">
+        <option *ngFor="let option of flowDecimalPrecisionOptions" [ngValue]="option.value">{{option.display}}</option>
+      </select>
+      </div>
+    </div>
+  </form>
+
+  <form [formGroup]="systemBasicsForm">
+    <div class="form-group pt-4">
+      <label class="group-label w-100">Equipment Notes</label>
+      <textarea name="notes" rows="4" id="notes" (input)="saveSystemBasics()" formControlName="notes"
+        placeholder="Add additional information for your equipment" (focus)="focusField('notes')"
+        class="w-100"></textarea>
+    </div>
+  </form>
+</div>

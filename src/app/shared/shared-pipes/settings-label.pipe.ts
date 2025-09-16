@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 
 @Pipe({
-  name: 'settingsLabel'
+    name: 'settingsLabel',
+    standalone: false
 })
 export class SettingsLabelPipe implements PipeTransform {
 

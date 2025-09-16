@@ -32,7 +32,14 @@ export class PowerFactorTriangleService {
       form.controls.apparentPower.setValidators([Validators.required, Validators.min(form.controls.reactivePower.value)]);   
       form.controls.reactivePower.setValidators([Validators.required, , Validators.min(0), Validators.max(form.controls.apparentPower.value)]);
 
+    } else if (form.controls.mode.value != 1 && form.controls.mode.value != 2 ){
+      form.controls.apparentPower.setValidators(Validators.required);
+      form.controls.realPower.setValidators([Validators.required, Validators.min(0)]);
+      form.controls.reactivePower.setValidators([Validators.required, , Validators.min(0)]);
+      
     }
+
+
     form.controls.apparentPower.updateValueAndValidity();    
     form.controls.realPower.updateValueAndValidity();
     form.controls.reactivePower.updateValueAndValidity();

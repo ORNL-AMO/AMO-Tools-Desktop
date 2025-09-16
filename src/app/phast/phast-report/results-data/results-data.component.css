@@ -59,3 +59,12 @@ tr > th:not(:first-child){
 .tr-border {
   border-top: 2px groove #bf3d00;
 }
+
+.hidden-copy-table {
+    z-index: -10;
+    position: fixed;
+    opacity: 0;
+    top: -1000px;
+    height: 0;
+    width: 0;
+}

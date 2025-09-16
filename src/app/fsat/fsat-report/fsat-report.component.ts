@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { FSAT, FsatOutput} from '../../shared/models/fans';
+import { FSAT } from '../../shared/models/fans';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
@@ -11,11 +11,11 @@ import { Subscription } from 'rxjs';
 import { PrintOptions } from '../../shared/models/printing';
 import { FsatService } from '../fsat.service';
 
-
 @Component({
   selector: 'app-fsat-report',
   templateUrl: './fsat-report.component.html',
-  styleUrls: ['./fsat-report.component.css']
+  styleUrls: ['./fsat-report.component.css'],
+  standalone: false
 })
 export class FsatReportComponent implements OnInit {
   @Output('closeReport')
@@ -38,7 +38,7 @@ export class FsatReportComponent implements OnInit {
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
- 
+
   showPrintView: boolean = false;
   showPrintViewSub: Subscription;
   showPrintMenu: boolean = false;
@@ -53,7 +53,9 @@ export class FsatReportComponent implements OnInit {
   printOptions: PrintOptions;
   tabsCollapsed: boolean = true;
 
-  constructor(private fsatService: FsatService, private printOptionsMenuService: PrintOptionsMenuService, private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService, private settingsService: SettingsService) { }
+  constructor(private fsatService: FsatService, private printOptionsMenuService: PrintOptionsMenuService,
+    private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
+    private settingsService: SettingsService) { }
 
   ngOnInit() {
     this.createdDate = new Date();
@@ -159,14 +161,15 @@ export class FsatReportComponent implements OnInit {
     this.assessment.fsat.valid = this.fsatService.checkValid(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.outputs = this.fsatService.getResults(this.assessment.fsat, true, this.settings);
     this.assessment.fsat.modifications.forEach(modification => {
-      if(modification.fsat){
-      modification.fsat.valid = this.fsatService.checkValid(modification.fsat, false, this.settings);
-      modification.fsat.outputs = this.fsatService.getResults(modification.fsat, false, this.settings);
-      modification.fsat.outputs.percentSavings = this.fsatService.getSavingsPercentage(this.assessment.fsat.outputs.annualCost, modification.fsat.outputs.annualCost);
-      modification.fsat.outputs.energySavings = this.assessment.fsat.outputs.annualEnergy - modification.fsat.outputs.annualEnergy;
-      modification.fsat.outputs.annualSavings = this.assessment.fsat.outputs.annualCost - modification.fsat.outputs.annualCost;
+      if (modification.fsat) {
+        modification.fsat.valid = this.fsatService.checkValid(modification.fsat, false, this.settings);
+        modification.fsat.outputs = this.fsatService.getResults(modification.fsat, false, this.settings);
+        modification.fsat.outputs.percentSavings = this.fsatService.getSavingsPercentage(this.assessment.fsat.outputs.annualCost, modification.fsat.outputs.annualCost);
+        modification.fsat.outputs.energySavings = this.assessment.fsat.outputs.annualEnergy - modification.fsat.outputs.annualEnergy;
+        modification.fsat.outputs.annualSavings = this.assessment.fsat.outputs.annualCost - modification.fsat.outputs.annualCost;
 
-    }}
+      }
+    }
     );
   }
 

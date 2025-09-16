@@ -9,9 +9,10 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { AtmosphereDbService } from '../../../indexedDb/atmosphere-db.service';
 @Component({
-  selector: 'app-custom-atmosphere-specific-heat-materials',
-  templateUrl: './custom-atmosphere-specific-heat-materials.component.html',
-  styleUrls: ['./custom-atmosphere-specific-heat-materials.component.css']
+    selector: 'app-custom-atmosphere-specific-heat-materials',
+    templateUrl: './custom-atmosphere-specific-heat-materials.component.html',
+    styleUrls: ['./custom-atmosphere-specific-heat-materials.component.css'],
+    standalone: false
 })
 export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   @Input()
@@ -73,7 +74,7 @@ export class CustomAtmosphereSpecificHeatMaterialsComponent implements OnInit {
   }
 
   async getCustomMaterials() {
-    this.atmosphereSpecificHeatMaterials = await firstValueFrom(this.atmospherDbService.getAllWithObservable());
+    this.atmosphereSpecificHeatMaterials = await firstValueFrom(this.atmospherDbService.getAllCustomMaterials());
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }

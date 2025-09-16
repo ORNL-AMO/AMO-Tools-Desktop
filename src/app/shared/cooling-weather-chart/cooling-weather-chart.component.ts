@@ -3,9 +3,10 @@ import * as Plotly from 'plotly.js-dist';
 import { WeatherBinnedChartData } from '../models/chillers';
 
 @Component({
-  selector: 'app-cooling-weather-chart',
-  templateUrl: './cooling-weather-chart.component.html',
-  styleUrls: ['./cooling-weather-chart.component.css']
+    selector: 'app-cooling-weather-chart',
+    templateUrl: './cooling-weather-chart.component.html',
+    styleUrls: ['./cooling-weather-chart.component.css'],
+    standalone: false
 })
 export class CoolingWeatherChartComponent implements OnInit {
   @Input()

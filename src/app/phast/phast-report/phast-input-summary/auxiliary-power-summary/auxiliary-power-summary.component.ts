@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-auxiliary-power-summary',
-  templateUrl: './auxiliary-power-summary.component.html',
-  styleUrls: ['./auxiliary-power-summary.component.css']
+    selector: 'app-auxiliary-power-summary',
+    templateUrl: './auxiliary-power-summary.component.html',
+    styleUrls: ['./auxiliary-power-summary.component.css'],
+    standalone: false
 })
 export class AuxiliaryPowerSummaryComponent implements OnInit {
   @Input()
@@ -24,6 +25,10 @@ export class AuxiliaryPowerSummaryComponent implements OnInit {
   powerFactorDiff: boolean = false;
   operatingTimeDiff: boolean = false;
   numMods: number = 0;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -76,4 +81,9 @@ export class AuxiliaryPowerSummaryComponent implements OnInit {
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
+  
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+  
 }

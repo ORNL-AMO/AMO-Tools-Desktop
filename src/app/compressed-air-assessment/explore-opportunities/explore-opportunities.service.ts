@@ -77,6 +77,9 @@ export class ExploreOpportunitiesService {
       name: 'Modification',
       modificationId: Math.random().toString(36).substr(2, 9),
       notes: undefined,
+      flowReallocation: {
+        implementationCost: 0,
+      },
       reduceAirLeaks: {
         leakReduction: undefined,
         leakFlow: undefined,

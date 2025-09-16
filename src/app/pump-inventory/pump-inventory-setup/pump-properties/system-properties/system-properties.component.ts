@@ -3,9 +3,10 @@ import { PumpInventoryData, SystemProperties, SystemPropertiesOptions } from '..
 import { PumpInventoryService } from '../../../pump-inventory.service';
 
 @Component({
-  selector: 'app-system-properties',
-  templateUrl: './system-properties.component.html',
-  styleUrls: ['./system-properties.component.css']
+    selector: 'app-system-properties',
+    templateUrl: './system-properties.component.html',
+    styleUrls: ['./system-properties.component.css'],
+    standalone: false
 })
 export class SystemPropertiesComponent implements OnInit {
   displayForm: boolean;

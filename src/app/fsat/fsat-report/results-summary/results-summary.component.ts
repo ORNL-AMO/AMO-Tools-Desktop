@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { FSAT } from '../../../shared/models/fans';
@@ -6,9 +6,10 @@ import { CompareService } from '../../compare.service';
 import { FsatReportRollupService } from '../../../report-rollup/fsat-report-rollup.service';
 
 @Component({
-  selector: 'app-results-summary',
-  templateUrl: './results-summary.component.html',
-  styleUrls: ['./results-summary.component.css'],
+    selector: 'app-results-summary',
+    templateUrl: './results-summary.component.html',
+    styleUrls: ['./results-summary.component.css'],
+    standalone: false
 })
 export class ResultsSummaryComponent implements OnInit {
 
@@ -24,6 +25,9 @@ export class ResultsSummaryComponent implements OnInit {
   
 
   notes: Array<SummaryNote>;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   constructor(private fsatReportRollupService: FsatReportRollupService, private compareService: CompareService) { }
 
@@ -141,6 +145,10 @@ export class ResultsSummaryComponent implements OnInit {
     } else {
       return diff;
     }
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 
 }

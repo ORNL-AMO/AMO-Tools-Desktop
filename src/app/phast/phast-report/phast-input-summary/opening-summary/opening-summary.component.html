@@ -25,7 +25,7 @@
       </table>
     </div>
 
-    <div class="card-body" *ngFor="let data of lossData; let index = index;">
+    <div #copyTable class="card-body" *ngFor="let data of lossData; let index = index;">
       <div class="output-summary">
         <table class="table table-hover table-striped">
           <thead>
@@ -181,5 +181,7 @@
         </table>
       </div>
     </div>
+    <app-exportable-results-table [tableString]="copyTableString"
+      (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
   </div>
 </div>

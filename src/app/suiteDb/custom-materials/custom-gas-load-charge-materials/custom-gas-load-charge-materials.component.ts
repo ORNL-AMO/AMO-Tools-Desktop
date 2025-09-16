@@ -9,9 +9,10 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-db.service';
 
 @Component({
-  selector: 'app-custom-gas-load-charge-materials',
-  templateUrl: './custom-gas-load-charge-materials.component.html',
-  styleUrls: ['./custom-gas-load-charge-materials.component.css']
+    selector: 'app-custom-gas-load-charge-materials',
+    templateUrl: './custom-gas-load-charge-materials.component.html',
+    styleUrls: ['./custom-gas-load-charge-materials.component.css'],
+    standalone: false
 })
 export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   @Input()
@@ -72,7 +73,7 @@ export class CustomGasLoadChargeMaterialsComponent implements OnInit {
   }
 
   async getCustomMaterials() {
-    this.gasChargeMaterials = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+    this.gasChargeMaterials = await firstValueFrom(this.gasLoadMaterialDbService.getAllCustomMaterials());
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }

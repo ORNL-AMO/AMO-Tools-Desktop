@@ -1,0 +1,57 @@
+name: "Template: Build"
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        required: true
+        type: string
+      artifact-path:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Get Node version
+        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> $GITHUB_ENV
+      - name: Node setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.BUILD_NODE_VER }}
+      - name: Attach SHA to build
+        if: github.ref_name != 'master'
+        run: |
+          BUILD_VERSION=$(grep -o -P -m 1 '(?<=version":\s").*(?=")' package.json)
+          sed -i "s/$BUILD_VERSION/$BUILD_VERSION-${GITHUB_SHA::7}/g" package.json
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+      - name: Install dependencies
+        run: |
+          find . -name "package-lock.json" -not -path "*/node_modules/*" -not -path "*/dist/*" -exec dirname {} \; | sort -u |
+          while read dir; do
+            echo "Installing dependencies for: $dir"
+            (cd $dir && npm ci $dir);
+          done
+      - name: Build
+        run: |
+          if [[ "${{ github.ref_name }}" == "master" ]]; then
+            npm run build-prod-web
+          else
+            npm run build-dev-web
+          fi
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: ./${{ inputs.artifact-path }}
+          if-no-files-found: error
+          retention-days: 3

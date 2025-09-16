@@ -7,9 +7,10 @@ import { ExplorerData, ExplorerDataSet, LogToolField, StepMovement } from '../..
 import { LogToolService } from '../../log-tool.service';
 
 @Component({
-  selector: 'app-refine-data',
-  templateUrl: './refine-data.component.html',
-  styleUrls: ['./refine-data.component.css']
+    selector: 'app-refine-data',
+    templateUrl: './refine-data.component.html',
+    styleUrls: ['./refine-data.component.css'],
+    standalone: false
 })
 export class RefineDataComponent implements OnInit {
   explorerData: ExplorerData;
@@ -21,6 +22,8 @@ export class RefineDataComponent implements OnInit {
   previewRowIndicies: Array<number> = [0, 1];
   changeStepSub: Subscription;
   applyToAll: boolean = false;
+
+  applyAllError: boolean = false;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -117,13 +120,17 @@ export class RefineDataComponent implements OnInit {
   applySelectionsToAll(dataSet: ExplorerDataSet) {
     dataSet.refineDataTabVisited = true;
     dataSet.fields.map((field, i) => {
-      // Only if fields have same original name
-      if (field.fieldName === this.selectedDataSet.fields[i].fieldName) {
-        field.alias = this.selectedDataSet.fields[i].alias;
+      if (!this.selectedDataSet.fields[i]) {
+        this.applyAllError = true;
+        this.applyToAll = false;
+      } else {
+        if (field.fieldName === this.selectedDataSet.fields[i].fieldName) {
+          field.alias = this.selectedDataSet.fields[i].alias;
+        }
+        field.useForDayTypeAnalysis = this.selectedDataSet.fields[i].useField;
+        field.useField = this.selectedDataSet.fields[i].useField;
+        field.unit = this.selectedDataSet.fields[i].unit;
       }
-      field.useForDayTypeAnalysis = this.selectedDataSet.fields[i].useField;
-      field.useField = this.selectedDataSet.fields[i].useField;
-      field.unit = this.selectedDataSet.fields[i].unit;
     })
   }
 

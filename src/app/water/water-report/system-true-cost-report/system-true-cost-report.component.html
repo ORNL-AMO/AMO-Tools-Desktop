@@ -1,0 +1,69 @@
+<!-- <div class="print-container">
+    <div class="page-break-before"> -->
+<div class="output-summary print-width w-75 mx-auto">
+    <h4 class="show-print print-section-header">True Cost of Water by System</h4>
+
+    @if (!isDiagramValid) {
+        <app-alert-info-container class="m-3 w-50"
+        [header]="'Diagram flow data contains errors'" 
+        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'"
+        [showIcon]="false"
+        [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
+
+    } @else {
+    <app-system-true-cost-bar class="print-width"></app-system-true-cost-bar>
+    <table #copyTable class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr class="text-center header-highlight">
+                <th>
+                    System
+                </th>
+                <th>
+                    Municipal Water Intake
+                </th>
+                <th>
+                    Municipal Wastewater Discharge
+                </th>
+                <th>
+                    Third-party Disposal
+                </th>
+                <th>
+                    Water Treatment
+                </th>
+                <th>
+                    Wastewater Treatment
+                </th>
+                <th>
+                    Pump and Motor Energy
+                </th>
+                <th>
+                    Heat Energy
+                </th>
+                <th>
+                    Total
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="item-row text-center" *ngFor="let systemCosts of trueCostOfSystemsReport">
+                <td>
+                    {{systemCosts.label}}
+                </td>
+                <ng-container *ngFor="let result of systemCosts.connectionCostByType">
+                    <td>
+                        <span *ngIf="result">${{result | number:'1.0-2'}}</span>
+                        <span *ngIf="!result">&mdash;&mdash;</span>
+                    </td>
+                </ng-container>
+            </tr>
+        </tbody>
+    </table>
+    <app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+    }
+
+
+</div>
+
+<!-- </div>
+</div> -->

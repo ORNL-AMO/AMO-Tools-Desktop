@@ -7,9 +7,10 @@ import { MotorInventoryService } from '../../../motor-inventory.service';
 import { ManualSpecificationDataService } from './manual-specification-data.service';
 
 @Component({
-  selector: 'app-manual-specification-data',
-  templateUrl: './manual-specification-data.component.html',
-  styleUrls: ['./manual-specification-data.component.css']
+    selector: 'app-manual-specification-data',
+    templateUrl: './manual-specification-data.component.html',
+    styleUrls: ['./manual-specification-data.component.css'],
+    standalone: false
 })
 export class ManualSpecificationDataComponent implements OnInit {
 

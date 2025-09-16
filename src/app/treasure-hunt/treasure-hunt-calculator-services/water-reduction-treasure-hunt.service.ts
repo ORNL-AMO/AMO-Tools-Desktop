@@ -47,11 +47,11 @@ export class WaterReductionTreasureHuntService {
       energySavings: results.annualWaterSavings,
       baselineCost: results.baselineResults.waterCost,
       modificationCost: results.modificationResults.waterCost,
-      utilityType: '',
+      utilityType: 'Electricity',
     }
 
     if (waterReduction.baseline[0].isWastewater == true) {
-      treasureHuntOpportunityResults.utilityType = 'Waste-Water';
+      treasureHuntOpportunityResults.utilityType = 'Waste Water';
     } else {
       treasureHuntOpportunityResults.utilityType = 'Water';
     }

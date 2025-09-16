@@ -3,9 +3,10 @@ import { Settings } from '../../../shared/models/settings';
 import { AnalysisGraphItem, WasteWaterAnalysisService } from '../../waste-water-analysis/waste-water-analysis.service';
 
 @Component({
-  selector: 'app-srt-graphs',
-  templateUrl: './srt-graphs.component.html',
-  styleUrls: ['./srt-graphs.component.css']
+    selector: 'app-srt-graphs',
+    templateUrl: './srt-graphs.component.html',
+    styleUrls: ['./srt-graphs.component.css'],
+    standalone: false
 })
 export class SrtGraphsComponent implements OnInit {
   @Input()

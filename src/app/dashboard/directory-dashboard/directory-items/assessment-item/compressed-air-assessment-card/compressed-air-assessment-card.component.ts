@@ -7,11 +7,13 @@ import { Assessment } from '../../../../../shared/models/assessment';
 import { CompressedAirDayType, ProfileSummary, ProfileSummaryTotal } from '../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../shared/models/settings';
 import { AssessmentService } from '../../../../assessment.service';
+import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment/compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-compressed-air-assessment-card',
-  templateUrl: './compressed-air-assessment-card.component.html',
-  styleUrls: ['./compressed-air-assessment-card.component.css']
+    selector: 'app-compressed-air-assessment-card',
+    templateUrl: './compressed-air-assessment-card.component.html',
+    styleUrls: ['./compressed-air-assessment-card.component.css'],
+    standalone: false
 })
 export class CompressedAirAssessmentCardComponent implements OnInit {
   @Input()
@@ -29,9 +31,11 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
 
   constructor(private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
+    this.compressedAirAssessmentService.setIsSetupDone(this.assessment.compressedAirAssessment);
     this.setupDone = this.assessment.compressedAirAssessment.setupDone;
     if (this.setupDone) {
       this.settings = this.settingsDbService.getByAssessmentId(this.assessment);

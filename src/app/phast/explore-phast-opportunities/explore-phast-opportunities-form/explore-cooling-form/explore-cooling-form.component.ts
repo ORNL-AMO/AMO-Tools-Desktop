@@ -5,9 +5,10 @@ import { LiquidCoolingLoss, GasCoolingLoss } from '../../../../shared/models/pha
 import { LossTab } from '../../../tabs';
 import { CoolingFormService, GasCoolingWarnings, LiquidCoolingWarnings } from '../../../../calculator/furnaces/cooling/cooling-form.service';
 @Component({
-  selector: 'app-explore-cooling-form',
-  templateUrl: './explore-cooling-form.component.html',
-  styleUrls: ['./explore-cooling-form.component.css']
+    selector: 'app-explore-cooling-form',
+    templateUrl: './explore-cooling-form.component.html',
+    styleUrls: ['./explore-cooling-form.component.css'],
+    standalone: false
 })
 export class ExploreCoolingFormComponent implements OnInit {
   @Input()

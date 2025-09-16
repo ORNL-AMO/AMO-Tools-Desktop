@@ -8,9 +8,10 @@ import { Subscription } from 'rxjs';
 import { O2EnrichmentFormService } from '../o2-enrichment-form.service';
 
 @Component({
-  selector: 'app-o2-enrichment-form',
-  templateUrl: './o2-enrichment-form.component.html',
-  styleUrls: ['./o2-enrichment-form.component.css']
+    selector: 'app-o2-enrichment-form',
+    templateUrl: './o2-enrichment-form.component.html',
+    styleUrls: ['./o2-enrichment-form.component.css'],
+    standalone: false
 })
 export class O2EnrichmentFormComponent implements OnInit {
   @Input()

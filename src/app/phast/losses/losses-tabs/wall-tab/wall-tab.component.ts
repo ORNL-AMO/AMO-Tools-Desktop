@@ -8,9 +8,10 @@ import { Subscription } from 'rxjs';
 import { WallFormService, WallLossWarnings } from '../../../../calculator/furnaces/wall/wall-form.service';
 
 @Component({
-  selector: 'app-wall-tab',
-  templateUrl: './wall-tab.component.html',
-  styleUrls: ['./wall-tab.component.css']
+    selector: 'app-wall-tab',
+    templateUrl: './wall-tab.component.html',
+    styleUrls: ['./wall-tab.component.css'],
+    standalone: false
 })
 export class WallTabComponent implements OnInit {
   @Input()

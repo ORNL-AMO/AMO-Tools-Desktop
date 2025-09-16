@@ -12,7 +12,8 @@ import { AssessmentService } from '../assessment.service';
 @Component({
   selector: 'app-directory-dashboard',
   templateUrl: './directory-dashboard.component.html',
-  styleUrls: ['./directory-dashboard.component.css']
+  styleUrls: ['./directory-dashboard.component.css'],
+  standalone: false
 })
 export class DirectoryDashboardComponent implements OnInit {
 
@@ -35,7 +36,6 @@ export class DirectoryDashboardComponent implements OnInit {
   sortBySub: Subscription;
 
   dashboardCollapsed: boolean = false;
-
   constructor(private activatedRoute: ActivatedRoute, private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
     private settingsDbService: SettingsDbService, private assessmentService: AssessmentService) { }
@@ -78,7 +78,7 @@ export class DirectoryDashboardComponent implements OnInit {
       this.sortBy = val;
     });
 
-    if(!this.settingsDbService.globalSettings.disableDashboardTutorial){
+    if (!this.settingsDbService.globalSettings.disableDashboardTutorial) {
       this.assessmentService.showTutorial.next('dashboard-tutorial');
     }
   }

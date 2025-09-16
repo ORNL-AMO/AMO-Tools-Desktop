@@ -15,8 +15,31 @@
                 <div class="row" *ngIf="!importInProgress">
                     <div class="col-12 form-group">
                         <input type="file" class="form-control-file" (change)="setImportFile($event)">
-                        <span class="alert-danger small" *ngIf="validFile == false">Invalid File Type - Must have a
-                            .json file extension</span>
+                    <ng-container *ngIf="fileImportStatus">
+                        <span class="alert alert-danger small"
+                            *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'AMO-TOOLS-DESKTOP-OPPORTUNITIES'">
+                            Invalid File Destination - This is a Treasure Hunt opportunites file and must be imported
+                            from within a
+                            Treasure Hunt.</span>
+                        <span class="alert alert-danger small"
+                            *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'AMO-TOOLS-DESKTOP'">
+                            Invalid File Destination - This is a MEASUR directory item and should be imported by visiting the directory and
+                            file dashboard</span>
+                        <span class="alert alert-danger small"
+                            *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'MEASUR-BACKUP'">
+                            Invalid File Destination - This is a MEASUR backup file and should be imported by visiting
+                            Data Storage and
+                            Backup.</span>
+                        <span class="alert alert-danger small"
+                            *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'AMO-LOG-TOOL-DATA'">
+                            Invalid File Destination - This is a Data Explorer export file and should be imported by
+                            visiting Data
+                            Explorer.</span>
+                        <span class="alert alert-danger small"
+                            *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'UNKNOWN'">Invalid
+                            File Type -
+                            This file is not recognized by MEASUR</span>
+                    </ng-container>
                     </div>
                 </div>
 
@@ -35,7 +58,7 @@
 
             </div>
             <div class="modal-footer" *ngIf="!importInProgress">
-                <button [disabled]="validFile !== true" class="btn btn-primary pull-right"
+                <button [disabled]="!fileImportStatus || (fileImportStatus && fileImportStatus.isValid !== true)" class="btn btn-primary pull-right"
                     (click)="importFile()">Import</button>
                 <button class="btn btn-secondary pull-left" (click)="hideImportModal()">Cancel</button>
             </div>

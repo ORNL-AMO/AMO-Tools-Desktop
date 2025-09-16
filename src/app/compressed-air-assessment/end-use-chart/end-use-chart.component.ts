@@ -10,9 +10,10 @@ import { DayTypeSetupService } from '../end-uses/day-type-setup-form/day-type-se
 import { EndUseEnergy, EndUseEnergyData, EndUsesService } from '../end-uses/end-uses.service';
 
 @Component({
-  selector: 'app-end-use-chart',
-  templateUrl: './end-use-chart.component.html',
-  styleUrls: ['./end-use-chart.component.css']
+    selector: 'app-end-use-chart',
+    templateUrl: './end-use-chart.component.html',
+    styleUrls: ['./end-use-chart.component.css'],
+    standalone: false
 })
 export class EndUseChartComponent implements OnInit {
   @ViewChild('overviewPieChart', { static: false }) overviewPieChart: ElementRef;

@@ -2,11 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { WallService } from '../wall.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
-  selector: 'app-wall-help',
-  templateUrl: './wall-help.component.html',
-  styleUrls: ['./wall-help.component.css']
+    selector: 'app-wall-help',
+    templateUrl: './wall-help.component.html',
+    styleUrls: ['./wall-help.component.css'],
+    standalone: false
 })
 export class WallHelpComponent implements OnInit {
   @Input()
@@ -16,7 +18,7 @@ export class WallHelpComponent implements OnInit {
   currentField: string;
   displaySuggestions: boolean;
 
-
+  docsLink: string = environment.measurDocsUrl;
   constructor(private wallService: WallService) { }
 
   ngOnInit(): void {

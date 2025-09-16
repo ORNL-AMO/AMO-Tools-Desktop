@@ -13,9 +13,10 @@ import { FieldDataService } from '../field-data/field-data.service';
 import { PumpOperationsService } from '../pump-operations/pump-operations.service';
 
 @Component({
-  selector: 'app-psat-tabs',
-  templateUrl: './psat-tabs.component.html',
-  styleUrls: ['./psat-tabs.component.css']
+    selector: 'app-psat-tabs',
+    templateUrl: './psat-tabs.component.html',
+    styleUrls: ['./psat-tabs.component.css'],
+    standalone: false
 })
 export class PsatTabsComponent implements OnInit {
   @Input()
@@ -141,7 +142,7 @@ export class PsatTabsComponent implements OnInit {
   }
 
   checkSettingsStatus() {
-    if (this.stepTab == 'system-basics') {
+    if (this.stepTab == 'baseline') {
       this.settingsClassStatus = ['active', 'success'];
     } else {
       this.settingsClassStatus = ['success'];
@@ -256,7 +257,7 @@ export class PsatTabsComponent implements OnInit {
   }
 
   getCanContinue() {
-    if (this.stepTab == 'system-basics') {
+    if (this.stepTab == 'baseline') {
       return true;
     }
     else if (this.stepTab == 'pump-fluid') {

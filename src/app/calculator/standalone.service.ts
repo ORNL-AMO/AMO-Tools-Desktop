@@ -11,11 +11,13 @@ import {
   PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput, SteamReductionOutput, SteamReductionResult,
   PowerFactorTriangleModeInputs,
   PowerFactorTriangleOutputs,
+  ReceiverTankMeteredResults,
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { StandaloneSuiteApiService } from '../tools-suite-api/standalone-suite-api.service';
 import { CalculatorSuiteApiService } from '../tools-suite-api/calculator-suite-api.service';
+import { ValveEnergyLossInputs, ValveEnergyLossResults } from '../shared/models/calculators';
 
 @Injectable()
 export class StandaloneService {
@@ -102,7 +104,7 @@ export class StandaloneService {
     }
   }
 
-  receiverTankSizeMeteredStorage(input: ReceiverTankMeteredStorage, settings: Settings): number {
+  receiverTankSizeMeteredStorage(input: ReceiverTankMeteredStorage, settings: Settings): ReceiverTankMeteredResults {
     let inputCpy: ReceiverTankMeteredStorage = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure === 'Metric') {
       //metric: m imperial: ft
@@ -114,11 +116,12 @@ export class StandaloneService {
       inputCpy.initialTankPressure = this.convertUnitsService.value(inputCpy.initialTankPressure).from('kPa').to('psi');
       inputCpy.finalTankPressure = this.convertUnitsService.value(inputCpy.finalTankPressure).from('kPa').to('psi');
       //metric: m3 imperial: gal
-      let calcVolume: number = this.standaloneSuiteApiService.receiverTankSizeMeteredStorage(inputCpy);
-      calcVolume = this.convertUnitsService.value(calcVolume).from('gal').to('m3');
-      return calcVolume;
+      let results: ReceiverTankMeteredResults = this.standaloneSuiteApiService.receiverTankSizeMeteredStorage(inputCpy);
+      results.volume = this.convertUnitsService.value(results.volume).from('gal').to('m3');
+      return results;
     } else {
-      return this.standaloneSuiteApiService.receiverTankSizeMeteredStorage(inputCpy);
+      let results: ReceiverTankMeteredResults = this.standaloneSuiteApiService.receiverTankSizeMeteredStorage(inputCpy)
+      return results;
     }
   }
 
@@ -287,16 +290,19 @@ export class StandaloneService {
   bagMethod(input: BagMethodInput, settings: Settings): BagMethodOutput {
     let inputCpy: BagMethodInput = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure === 'Metric') {
-      //metric: cm imperial: in
-      inputCpy.heightOfBag = this.convertUnitsService.value(inputCpy.heightOfBag).from('cm').to('in');
-      inputCpy.diameterOfBag = this.convertUnitsService.value(inputCpy.diameterOfBag).from('cm').to('in');
+      inputCpy.bagVolume = this.convertUnitsService.value(inputCpy.bagVolume).from('L').to('ft3');
       let results: BagMethodOutput = this.standaloneSuiteApiService.bagMethod(inputCpy);
-      //metric: m3 imperial: ft3
       results.flowRate = this.convertUnitsService.value(results.flowRate).from('ft3').to('m3');
+      // convert kscfm to scfm
+      results.annualConsumption = results.annualConsumption * 1000;
       results.annualConsumption = this.convertUnitsService.value(results.annualConsumption).from('ft3').to('m3');
       return results;
     } else {
-      return this.standaloneSuiteApiService.bagMethod(inputCpy);
+      inputCpy.bagVolume = this.convertUnitsService.value(inputCpy.bagVolume).from('gal').to('ft3');
+      let results: BagMethodOutput = this.standaloneSuiteApiService.bagMethod(inputCpy);
+      // convert kscf to scf
+      results.annualConsumption = results.annualConsumption * 1000;
+      return results;
     }
   }
 
@@ -366,5 +372,9 @@ export class StandaloneService {
 
   powerFactorTriangle(inputObj: PowerFactorTriangleModeInputs): PowerFactorTriangleOutputs {
     return this.calculatorSuiteApiService.powerFactorTriangle(inputObj);
+  }
+
+  valveEnergyLossCalc(baselineInputs: ValveEnergyLossInputs, modificationInputs: ValveEnergyLossInputs): ValveEnergyLossResults{
+    return this.calculatorSuiteApiService.valveEnergyLossCalc(baselineInputs, modificationInputs);
   }
 }

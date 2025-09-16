@@ -3,9 +3,10 @@ import { PrvOutput } from '../../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-prv-results',
-  templateUrl: './prv-results.component.html',
-  styleUrls: ['./prv-results.component.css']
+    selector: 'app-prv-results',
+    templateUrl: './prv-results.component.html',
+    styleUrls: ['./prv-results.component.css'],
+    standalone: false
 })
 export class PrvResultsComponent implements OnInit {
   @Input()

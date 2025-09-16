@@ -14,9 +14,10 @@ import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-pump-operations',
-  templateUrl: './pump-operations.component.html',
-  styleUrls: ['./pump-operations.component.css']
+    selector: 'app-pump-operations',
+    templateUrl: './pump-operations.component.html',
+    styleUrls: ['./pump-operations.component.css'],
+    standalone: false
 })
 export class PumpOperationsComponent implements OnInit {
   @Input()

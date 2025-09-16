@@ -5,9 +5,10 @@ import { Subscription } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-inventory-summary-graph',
-  templateUrl: './inventory-summary-graph.component.html',
-  styleUrls: ['./inventory-summary-graph.component.css']
+    selector: 'app-inventory-summary-graph',
+    templateUrl: './inventory-summary-graph.component.html',
+    styleUrls: ['./inventory-summary-graph.component.css'],
+    standalone: false
 })
 export class InventorySummaryGraphComponent implements OnInit {
 

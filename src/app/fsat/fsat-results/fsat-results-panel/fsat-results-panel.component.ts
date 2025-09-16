@@ -5,9 +5,10 @@ import { FsatService } from '../../fsat.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-fsat-results-panel',
-  templateUrl: './fsat-results-panel.component.html',
-  styleUrls: ['./fsat-results-panel.component.css']
+    selector: 'app-fsat-results-panel',
+    templateUrl: './fsat-results-panel.component.html',
+    styleUrls: ['./fsat-results-panel.component.css'],
+    standalone: false
 })
 export class FsatResultsPanelComponent implements OnInit {
   @Input()

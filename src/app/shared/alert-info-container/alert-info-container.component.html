@@ -1,0 +1,12 @@
+<div class="alert w-100 p-3 d-flex justify-content-center" [class]="bootstrapLevel? bootstrapLevel : 'alert-success'">
+    <div class="d-flex justify-content-center align-items-center flex-row">
+        <img *ngIf="showIcon" src="assets/images/app-icon.png" class="app-icon">
+        <div class="h5 bold m-0">{{header}}</div>
+    </div>
+    <p class="content text-left m-0 px-2">
+        {{content}}
+    </p>
+    <div *ngIf="navigateToLink" class="text-end">
+        <a class="click-link text-center" (click)="visitLink()">{{navigateToText}}</a>
+    </div>
+</div>

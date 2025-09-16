@@ -10,7 +10,8 @@ import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-ma
 @Component({
   selector: 'app-custom-solid-liquid-flue-gas-materials',
   templateUrl: './custom-solid-liquid-flue-gas-materials.component.html',
-  styleUrls: ['./custom-solid-liquid-flue-gas-materials.component.css']
+  styleUrls: ['./custom-solid-liquid-flue-gas-materials.component.css'],
+  standalone: false
 })
 export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
   @Input()
@@ -21,7 +22,7 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
   importing: boolean;
   @Output()
   emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
-  
+
   solidLiquidFlueGasMaterials: Array<SolidLiquidFlueGasMaterial>;
   editExistingMaterial: boolean = false;
   deletingMaterial: boolean = false;
@@ -63,19 +64,19 @@ export class CustomSolidLiquidFlueGasMaterialsComponent implements OnInit {
     }
   }
 
-  async getCustomMaterials() {
-    this.solidLiquidFlueGasMaterials = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
+  getCustomMaterials() {
+    this.solidLiquidFlueGasMaterials = this.solidLiquidMaterialDbService.getAllCustomMaterials();
     this.emitNumMaterials.emit(this.solidLiquidFlueGasMaterials.length);
   }
 
-  async editMaterial(id: number) {
-    this.existingMaterial = await firstValueFrom(this.solidLiquidMaterialDbService.getByIdWithObservable(id));
+  editMaterial(id: number) {
+    this.existingMaterial = this.solidLiquidMaterialDbService.getById(id);
     this.editExistingMaterial = true;
     this.showMaterialModal();
   }
 
-  async deleteMaterial(id: number) {
-    this.existingMaterial = await firstValueFrom(this.solidLiquidMaterialDbService.getByIdWithObservable(id));
+  deleteMaterial(id: number) {
+    this.existingMaterial = this.solidLiquidMaterialDbService.getById(id);
     this.editExistingMaterial = true;
     this.deletingMaterial = true;
     this.showMaterialModal();

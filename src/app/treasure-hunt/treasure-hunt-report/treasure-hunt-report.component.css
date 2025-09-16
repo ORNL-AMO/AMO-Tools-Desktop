@@ -13,8 +13,13 @@
 .date-modified {
     color: #999;
     font-size: 12px;
-    margin-top: 15px;
-    margin-left: 0;
+    /* margin-top: 15px;
+    margin-left: 0; */
+}
+
+.mt-auto{
+    margin-top: auto !important;
+    margin-bottom: 0;
 }
 
 .report-diagrams {
@@ -27,7 +32,7 @@
 
 @media print {
     .print-break-before {
-        page-break-before: always;
+        break-before: always;
         page-break-inside: avoid;
     }
     .date-modified {

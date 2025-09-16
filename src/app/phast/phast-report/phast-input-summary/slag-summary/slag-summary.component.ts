@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-slag-summary',
-  templateUrl: './slag-summary.component.html',
-  styleUrls: ['./slag-summary.component.css']
+    selector: 'app-slag-summary',
+    templateUrl: './slag-summary.component.html',
+    styleUrls: ['./slag-summary.component.css'],
+    standalone: false
 })
 export class SlagSummaryComponent implements OnInit {
   @Input()
@@ -25,6 +26,10 @@ export class SlagSummaryComponent implements OnInit {
   specificHeatDiff: boolean = false;
   correctionFactorDiff: boolean = false;
   numMods: number = 0;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -76,4 +81,9 @@ export class SlagSummaryComponent implements OnInit {
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
+  
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+  
 }

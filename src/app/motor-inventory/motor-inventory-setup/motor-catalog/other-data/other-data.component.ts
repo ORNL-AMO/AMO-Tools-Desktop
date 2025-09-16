@@ -8,9 +8,10 @@ import { OtherDataService } from './other-data.service';
 import { driveConstants } from '../../../../psat/psatConstants';
 
 @Component({
-  selector: 'app-other-data',
-  templateUrl: './other-data.component.html',
-  styleUrls: ['./other-data.component.css']
+    selector: 'app-other-data',
+    templateUrl: './other-data.component.html',
+    styleUrls: ['./other-data.component.css'],
+    standalone: false
 })
 export class OtherDataComponent implements OnInit {
 

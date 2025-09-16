@@ -6,9 +6,10 @@ import { LogToolDataService } from '../../../log-tool-data.service';
 import { VisualizeSidebarService } from '../visualize-sidebar.service';
 
 @Component({
-  selector: 'app-graph-data-selection',
-  templateUrl: './graph-data-selection.component.html',
-  styleUrls: ['./graph-data-selection.component.css']
+    selector: 'app-graph-data-selection',
+    templateUrl: './graph-data-selection.component.html',
+    styleUrls: ['./graph-data-selection.component.css'],
+    standalone: false
 })
 export class GraphDataSelectionComponent {
 

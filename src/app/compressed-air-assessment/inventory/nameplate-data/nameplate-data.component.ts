@@ -10,9 +10,10 @@ import { InventoryService } from '../inventory.service';
 import { CompressorTypeOptions } from '../inventoryOptions';
 
 @Component({
-  selector: 'app-nameplate-data',
-  templateUrl: './nameplate-data.component.html',
-  styleUrls: ['./nameplate-data.component.css']
+    selector: 'app-nameplate-data',
+    templateUrl: './nameplate-data.component.html',
+    styleUrls: ['./nameplate-data.component.css'],
+    standalone: false
 })
 export class NameplateDataComponent implements OnInit {
   settings: Settings;

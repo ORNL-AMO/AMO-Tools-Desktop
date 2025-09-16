@@ -6,9 +6,10 @@ import { DesignedEnergyService } from './designed-energy.service';
 import { PhastService } from '../phast.service';
 import { Subscription } from 'rxjs';
 @Component({
-  selector: 'app-designed-energy',
-  templateUrl: './designed-energy.component.html',
-  styleUrls: ['./designed-energy.component.css']
+    selector: 'app-designed-energy',
+    templateUrl: './designed-energy.component.html',
+    styleUrls: ['./designed-energy.component.css'],
+    standalone: false
 })
 export class DesignedEnergyComponent implements OnInit {
   @Input()

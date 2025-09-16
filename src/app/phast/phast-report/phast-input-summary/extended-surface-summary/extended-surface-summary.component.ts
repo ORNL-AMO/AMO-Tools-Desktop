@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 @Component({
-  selector: 'app-extended-surface-summary',
-  templateUrl: './extended-surface-summary.component.html',
-  styleUrls: ['./extended-surface-summary.component.css']
+    selector: 'app-extended-surface-summary',
+    templateUrl: './extended-surface-summary.component.html',
+    styleUrls: ['./extended-surface-summary.component.css'],
+    standalone: false
 })
 export class ExtendedSurfaceSummaryComponent implements OnInit {
   @Input()
@@ -23,6 +24,10 @@ export class ExtendedSurfaceSummaryComponent implements OnInit {
   ambientTemperatureDiff: Array<boolean>;
   surfaceEmissivityDiff: Array<boolean>;
   numMods: number = 0;
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -86,4 +91,9 @@ export class ExtendedSurfaceSummaryComponent implements OnInit {
   toggleCollapse() {
     this.collapse = !this.collapse;
   }
+  
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+  
 }

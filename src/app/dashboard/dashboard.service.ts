@@ -7,8 +7,10 @@ export class DashboardService {
 
   moveItems: BehaviorSubject<boolean>;
   newAssessmentType: string;
+  newDiagramType: string;
   updateDashboardData: BehaviorSubject<boolean>;
   createAssessment: BehaviorSubject<boolean>;
+  showCreateDiagram: BehaviorSubject<boolean>;
   dashboardToastMessage: BehaviorSubject<string>;
   sidebarX: BehaviorSubject<number>;
   showCreateInventory:BehaviorSubject<string>;
@@ -22,6 +24,7 @@ export class DashboardService {
     this.createAssessment = new BehaviorSubject<boolean>(false);
     this.sidebarX = new BehaviorSubject<number>(300);
     this.showCreateInventory = new BehaviorSubject<string>(undefined);
+    this.showCreateDiagram = new BehaviorSubject<boolean>(false);
     this.collapseSidebar = new BehaviorSubject<boolean>(false);
     this.copyItems = new BehaviorSubject<boolean>(false);
     this.totalScreenWidth = new BehaviorSubject<number>(undefined);

@@ -67,6 +67,10 @@
 	background-color: #7030A0;
 }
 
+.water-assessment .calculator-panel-container::-webkit-scrollbar-thumb{
+	background-color: #3055cf;
+}
+
 .calculator-panel-container::-webkit-scrollbar {
     width: .5em;
     height: .5rem;

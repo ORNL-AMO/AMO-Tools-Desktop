@@ -8,9 +8,10 @@ import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-f
 import { TraceData } from '../../../../shared/models/plotting';
 
 @Component({
-  selector: 'app-fan-psychrometric-form',
-  templateUrl: './fan-psychrometric-form.component.html',
-  styleUrls: ['./fan-psychrometric-form.component.css']
+    selector: 'app-fan-psychrometric-form',
+    templateUrl: './fan-psychrometric-form.component.html',
+    styleUrls: ['./fan-psychrometric-form.component.css'],
+    standalone: false
 })
 export class FanPsychrometricFormComponent implements OnInit {
 

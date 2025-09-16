@@ -15,12 +15,13 @@ import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
 import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
-import { MotorIntegrationService } from '../../../../shared/connected-inventory/motor-integration.service';
+import { PumpMotorIntegrationService } from '../../../../shared/connected-inventory/pump-motor-integration.service';
 
 @Component({
-  selector: 'app-inventory-item',
-  templateUrl: './inventory-item.component.html',
-  styleUrls: ['./inventory-item.component.css']
+    selector: 'app-inventory-item',
+    templateUrl: './inventory-item.component.html',
+    styleUrls: ['./inventory-item.component.css'],
+    standalone: false
 })
 export class InventoryItemComponent implements OnInit {
   @Input()
@@ -46,7 +47,7 @@ export class InventoryItemComponent implements OnInit {
     private directoryDbService: DirectoryDbService, 
     private settingsDbService: SettingsDbService,
     private motorInventoryService: MotorInventoryService,
-    private motorIntegrationService: MotorIntegrationService,
+    private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private pumpInventoryService: PumpInventoryService) { }
 
   ngOnInit(): void {
@@ -164,9 +165,9 @@ export class InventoryItemComponent implements OnInit {
     let settingsCopy: Settings = JSON.parse(JSON.stringify(tmpSettings));
     delete settingsCopy.id;
     if (inventoryCopy.motorInventoryData) {
-      this.motorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
+      this.pumpMotorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
     } else if (inventoryCopy.pumpInventoryData) {
-      this.motorIntegrationService.removeAllPumpConnectedItems(inventoryCopy);
+      this.pumpMotorIntegrationService.removeAllPumpConnectedItems(inventoryCopy);
     }
     
     inventoryCopy.name = this.copyForm.controls.name.value;

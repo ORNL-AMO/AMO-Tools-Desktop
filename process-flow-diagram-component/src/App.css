@@ -1,0 +1,517 @@
+/* :root {
+  --water-intake: #75a1ff;
+  --water-using-system: #00bbff;
+  --water-discharge: #7f7fff;
+  --water-treatment: #009386;
+  --waste-water-treatment: #93e200;
+  --known-loss-bg: #fff;
+  --known-loss-color: #000;
+  --summing-node-bg: rgb(108, 117, 125);
+  --summing-node-border: rgb(108, 117, 125);
+} */
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+.test-app {
+  color: black;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.wc-app-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.flow-wrapper {
+  flex-grow: 1;
+  font-size: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+    background: black;
+  }
+}
+
+/* todo showing not defined - potentially due to shadow dom styles*/
+/* :root {
+  --water-intake: #0792c0;
+  --water-using-system: #84c9f1;
+  --water-discharge: rgb(2 10 216);
+  --water-treatment: #B8B3BE;
+  --waster-water-treatment: #BBDB9B;
+  --metered-data: black;
+  --estimated-data: black;
+} */
+
+
+
+/*  Download Image */
+.process-flow-diagram .download-btn {
+  border: 1px solid #191919;
+  background: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.process-flow-diagram .download-btn:hover {
+  opacity: 0.9;
+}
+
+.react-flow__panel.left.controls-offset-space {
+  position: unset
+}
+
+
+
+.process-flow-diagram {
+  flex-direction: column;
+  display: flex;
+  flex-grow: 1;
+  height: 100%;
+}
+
+
+/* Sidebar */
+
+/*  mui grid */
+.process-flow-diagram .dndnode {
+  /* height: 50px; */
+  height: 100%;
+  /* padding: 6px; */
+  border: 2px solid #1a192b;
+  border-radius: 2px;
+  /* margin-bottom: 10px; */
+  /* display: flex; */
+  font-size: 14px;
+  font-weight: 500;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+  color: #fff;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)
+}
+
+.process-flow-diagram .dndnode.summing-node {
+  border: none;
+  background: rgb(108, 117, 125);
+}
+
+.process-flow-diagram .dndnode.water-intake {
+  border: none;
+  background: #75a1ff;
+}
+
+.process-flow-diagram .dndnode.water-using-system {
+  border: none;
+  background: #00bbff;
+}
+
+.process-flow-diagram .dndnode.water-discharge {
+  border: none;
+  background: #7f7fff;
+}
+
+.process-flow-diagram .dndnode.water-treatment {
+  border: none;
+  background: #009386;
+}
+
+.process-flow-diagram .dndnode.waste-water-treatment {
+  border: none;
+  color: #000;
+  background: #93e200;
+}
+
+.process-flow-diagram .dndnode.known-loss {
+  display: flex;
+  border: none;
+  background: #fff;
+  color: #000;
+}
+
+.process-flow-diagram .reactflow-wrapper {
+  flex-grow: 1;
+  height: 100%;
+}
+
+.process-flow-diagram .selectall {
+  margin-top: 10px;
+}
+
+.sidebar-options {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  height: 100%;
+}
+
+.sidebar-options label {
+  cursor: pointer;
+  margin: .25rem;
+  font-size: .75rem;
+}
+
+.sidebar-option-buttons {
+  margin-top: .5rem;
+  display: flex;
+  align-self: center;
+  width: 100%;
+}
+
+.sidebar-option-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: .5rem;
+  font-size: .75rem;
+  margin-bottom: 0;
+}
+
+.sidebar-option-container.checkbox {
+  margin-top: 0;
+}
+
+.sidebar-option-buttons .download-btn {
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .process-flow-diagram {
+    flex-direction: row-reverse;
+  }
+}
+
+/* End Sidebar */
+
+
+
+/* Custom Node Begin */
+.react-flow__node-waterIntake,
+.react-flow__node-waterUsingSystem,
+.react-flow__node-waterDischarge,
+.react-flow__node-waterTreatment,
+.react-flow__node-wasteWaterTreatment,
+.react-flow__node-group {
+  padding: 10px;
+  border-radius: 5px;
+  min-width: 150px;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  background-color: white;
+  border: 2px solid transparent;
+}
+
+.react-flow__node-knownLoss {
+  padding-top: 4px;
+  font-size: 12px;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+}
+
+.react-flow__node.selectable:focus,
+.react-flow__node.selectable:hover {
+  box-shadow: 0px 1px 5px 2px #787878;
+  border: 1px solid #000000;
+}
+
+.react-flow__node.selectable.selected {
+  box-shadow: 0px 1px 5px 2px #787878;
+  border: 1px solid #000000;
+}
+
+.react-flow__node-summingNode.expandIcon:hover {
+      box-shadow: 0px 3.54px 4.55px 0px #00000005, 
+      0px 3.54px 4.55px 0px #0000000D, 
+      0px 0.51px 1.01px 0px #0000001A
+}
+
+.react-flow__node-summingNode,
+.react-flow__node-group {
+  min-width: 150px;
+  border: 1px solid rgb(108, 117, 125);
+  background-color: rgb(108, 117, 125);
+}
+
+.react-flow__node-waterIntake,
+.react-flow__node-group {
+  /* background-color: var(--water-intake); */
+  background-color: #75a1ff;
+}
+
+.react-flow__node-waterUsingSystem,
+.react-flow__node-group {
+  /* background-color: var(--water-using-system); */
+  background-color: rgb(0, 187, 255);
+}
+
+.react-flow__node-waterDischarge,
+.react-flow__node-group {
+  /* background-color: var(--water-discharge); */
+  background-color: rgb(127, 127, 255);
+}
+
+.react-flow__node-waterTreatment,
+.react-flow__node-group {
+  background-color: #009386;
+}
+
+.react-flow__node-wasteWaterTreatment,
+.react-flow__node-group {
+  background-color: #93e200;
+}
+
+
+.react-flow__handle.knownLoss-handle {
+  background-color: #ffffff;
+  border-radius: 2px;
+  width: 16px;
+  height: 8px;
+  border: none;
+  min-width: 2px;
+  min-height: 2px;
+  z-index: -1;
+  border-left: solid 1px gray;
+  border-right: solid 1px gray;
+  border-top: solid 1px gray;
+}
+
+
+.react-flow__handle.custom-handle {
+  background-color: #bbb;
+  border-radius: 0;
+  width: 8px;
+  height: 4px;
+  border: none;
+  min-width: 2px;
+  min-height: 2px;
+  z-index: -1;
+}
+
+.react-flow__handle.custom-handle.source-handle {
+  background-color: #000 !important;
+  border: solid 1px #000;
+}
+
+.react-flow__handle.custom-handle.source-handle:hover {
+  background-color: #b6b6b6 !important;
+}
+.react-flow__handle.custom-handle.source-handle.block-connection:hover {
+  background-color: #ff0000 !important;
+}
+
+.react-flow__handle.custom-handle.target-handle {
+  background-color: #fff !important;
+  border: solid 1px #000;
+}
+
+.react-flow__handle.custom-handle.target-handle:hover {
+  background-color: #b6b6b6 !important;
+}
+.react-flow__handle.custom-handle.target-handle.block-connection:hover {
+  background-color: #ff0000 !important;
+}
+
+/* 
+.block-connection-icon {
+  visibility: hidden;
+  position: absolute;
+  color: red;
+  top: 20px;
+  left: -20px;
+  z-index: 9999;
+}
+
+.block-connection-icon:hover {
+  visibility: visible;
+} */
+
+
+.node-inner-input {
+  /* background: rgba(255, 255, 255, 0.5); */
+  flex-grow: 1;
+  position: relative;
+  padding: 10px;
+  border-radius: 4px;
+  width: 197px;
+  height: 100%;
+}
+/* Custom Node End */
+
+.react-flow__node.selectable .custom-node-toolbar {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.react-flow__node.selectable:hover .custom-node-toolbar,
+.react-flow__node.selectable.selected .custom-node-toolbar {
+  visibility: visible;
+  pointer-events: all;
+}
+
+
+.node-button {
+  width: 36px;
+  height: 36px;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.33), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+  padding: 2px;
+}
+
+.expand-button {
+  border-radius: 5px;
+}
+
+
+.hover-highlight:hover {
+  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.08);
+  background-color: rgb(48 85 207 / 25%);
+}
+
+
+.close-button {
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  /* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.33), 0 3px 6px rgba(0, 0, 0, 0.23); */
+  border-radius: 50%;
+  font-size: 10px;
+  line-height: 1;
+  padding: 2px;
+}
+
+.edge-color-picker {
+  box-shadow: 10px 19px 20px rgba(0, 0, 0, 10%);
+  position: relative;
+  display:block;
+  z-index: 11;
+}
+
+
+.picker-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 9px;
+  align-items: center;
+}
+
+.picker,
+.recents-wrapper {
+  align-self: baseline;
+  justify-content: space-between;
+  display: flex;
+  width: 100%;
+  padding: 12px 0px;
+}
+
+.color-input {
+  width: 150px;
+  height: 36px;
+}
+
+.color-input:hover {
+  cursor: pointer;
+}
+
+.recents {
+  display: flex;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.recents:hover {
+  cursor: pointer;
+}
+
+.recent {
+  width: 24px;
+  height: 24px;
+  margin: 4px;
+  border: none;
+  padding: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+}
+
+
+.selected-list-item {
+  background-color: rgb(48 85 207 / 33%);
+}
+
+
+.diagram-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.diagram-checkbox-label {
+  display: flex;
+  align-items: center;
+}
+
+
+.color-underlay {
+  background-color: #ececec;
+}
+
+.diagram-label {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-size: .85rem;
+}
+
+.diagram-select {
+  height: 25px;
+  margin: 0 .5rem;
+}
+
+select:hover {
+  cursor: pointer;
+}
+
+.water-flow-metric-group {
+  margin-top: 1.5rem;
+  border: 1px solid #1976d2;
+  padding: 1rem;
+  border-radius: 8px;
+}

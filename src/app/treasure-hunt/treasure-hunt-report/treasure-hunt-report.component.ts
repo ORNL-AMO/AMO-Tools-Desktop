@@ -19,10 +19,12 @@ import * as _ from 'lodash';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TreasureHuntPptService } from './treasure-hunt-ppt/treasure-hunt-ppt.service';
+
 @Component({
   selector: 'app-treasure-hunt-report',
   templateUrl: './treasure-hunt-report.component.html',
-  styleUrls: ['./treasure-hunt-report.component.css']
+  styleUrls: ['./treasure-hunt-report.component.css'],
+  standalone: false
 })
 export class TreasureHuntReportComponent implements OnInit {
   @Input()
@@ -56,7 +58,7 @@ export class TreasureHuntReportComponent implements OnInit {
   showPrintMenuSub: Subscription;
   showPrintDiv: boolean = false;
   selectAll: boolean = false;
-  
+
   tabsCollapsed: boolean = true;
 
   fileName: string;
@@ -196,16 +198,16 @@ export class TreasureHuntReportComponent implements OnInit {
   }
 
   getFileName(): string {
-    if (!this.fileName) {      
+    if (!this.fileName) {
       let formatedDate = this.treasureHuntPPTService.getCurrentDate();
       this.fileName = formatedDate + ' - Treasure Hunt Report';
     }
     return this.fileName;
   }
-  
+
   present() {
     if (this.dataCalculated) {
-      let settings = this.settingsDbService.getByAssessmentId(this.assessment, true);;    
+      let settings = this.settingsDbService.getByAssessmentId(this.assessment, true);;
       let pptx = new pptxgen();
       pptx = this.treasureHuntPPTService.createPPT(settings, this.assessment.treasureHunt, this.treasureHuntResults, this.opportunityCardsData, this.opportunitiesPaybackDetails, this.pptThemeOption);
       pptx.writeFile({ fileName: this.fileName + '.pptx' });
@@ -217,9 +219,7 @@ export class TreasureHuntReportComponent implements OnInit {
     this.tabsCollapsed = !this.tabsCollapsed;
   }
 
-  changePptTheme(option: number){
+  changePptTheme(option: number) {
     this.pptThemeOption = option;
   }
-
-
 }

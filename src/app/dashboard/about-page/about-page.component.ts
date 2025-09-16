@@ -3,9 +3,10 @@ import { ElectronService } from '../../electron/electron.service';
 
 
 @Component({
-  selector: 'app-about-page',
-  templateUrl: './about-page.component.html',
-  styleUrls: ['./about-page.component.css']
+    selector: 'app-about-page',
+    templateUrl: './about-page.component.html',
+    styleUrls: ['./about-page.component.css'],
+    standalone: false
 })
 export class AboutPageComponent implements OnInit {
 
@@ -18,7 +19,9 @@ export class AboutPageComponent implements OnInit {
   showTreasureHunt: boolean = false;
   showDataExplorer: boolean = false;
   showInventory: boolean = false;
-  showCompressedAir: boolean = false;
+  showCompressedAir: boolean = false;  
+  showWasteWater: boolean = false;    
+  showWater: boolean = false;
   isElectronApp: boolean;
   constructor(private electronService: ElectronService) { }
 
@@ -54,5 +57,11 @@ export class AboutPageComponent implements OnInit {
   }
   toggleCompressedAir() {
     this.showCompressedAir = !this.showCompressedAir;
+  }
+  toggleWater() {
+    this.showWater = !this.showWater;
+  }
+  toggleWasteWater() {
+    this.showWasteWater = !this.showWasteWater;
   }
 }

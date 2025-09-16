@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { ElectricityReductionResults } from '../../../../shared/models/standalone';
 
 @Component({
-  selector: 'app-electricity-reduction-results',
-  templateUrl: './electricity-reduction-results.component.html',
-  styleUrls: ['./electricity-reduction-results.component.css']
+    selector: 'app-electricity-reduction-results',
+    templateUrl: './electricity-reduction-results.component.html',
+    styleUrls: ['./electricity-reduction-results.component.css'],
+    standalone: false
 })
 export class ElectricityReductionResultsComponent implements OnInit {
   @Input()

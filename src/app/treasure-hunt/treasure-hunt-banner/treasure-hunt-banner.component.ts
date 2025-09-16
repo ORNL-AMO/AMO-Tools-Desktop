@@ -6,11 +6,13 @@ import { CalculatorsService } from '../calculators/calculators.service';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
+import { CoreService } from '../../core/core.service';
 
 @Component({
-  selector: 'app-treasure-hunt-banner',
-  templateUrl: './treasure-hunt-banner.component.html',
-  styleUrls: ['./treasure-hunt-banner.component.css']
+    selector: 'app-treasure-hunt-banner',
+    templateUrl: './treasure-hunt-banner.component.html',
+    styleUrls: ['./treasure-hunt-banner.component.css'],
+    standalone: false
 })
 export class TreasureHuntBannerComponent implements OnInit {
   @Input()
@@ -26,7 +28,8 @@ export class TreasureHuntBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   constructor(private treasureHuntService: TreasureHuntService, 
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private calculatorsService: CalculatorsService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+    private dashboardService: DashboardService, private calculatorsService: CalculatorsService, 
+    private securityAndPrivacyService: SecurityAndPrivacyService, private coreService: CoreService) { }
 
   ngOnInit() {
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
@@ -60,7 +63,7 @@ export class TreasureHuntBannerComponent implements OnInit {
 
   changeTab(str: string) {
     if (this.disableTabs == false) {
-      if (str == 'system-setup') {
+      if (str == 'baseline') {
         this.treasureHuntService.mainTab.next(str);
       } else if (this.assessment.treasureHunt.setupDone == true) {
         this.treasureHuntService.mainTab.next(str);
@@ -88,8 +91,8 @@ export class TreasureHuntBannerComponent implements OnInit {
     } else if (this.mainTab == 'treasure-chest') {
       this.treasureHuntService.mainTab.next('find-treasure');
     } else if (this.mainTab == 'find-treasure') {
-      this.treasureHuntService.mainTab.next('system-setup');
-    } else if (this.mainTab == 'system-setup') {
+      this.treasureHuntService.mainTab.next('baseline');
+    } else if (this.mainTab == 'baseline') {
       if (this.subTab == 'operation-costs') {
         this.treasureHuntService.subTab.next('settings');
       } else if (this.subTab == 'settings') {
@@ -99,7 +102,7 @@ export class TreasureHuntBannerComponent implements OnInit {
   }
 
   continue() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab == 'baseline') {
       if (this.subTab == 'settings') {
         this.treasureHuntService.subTab.next('operation-costs');
       } else if (this.subTab == 'operation-costs') {
@@ -118,14 +121,13 @@ export class TreasureHuntBannerComponent implements OnInit {
     this.treasureHuntService.showExportModal.next(true);
   }
 
-  emailTreasureHuntData() {
+  openShareDataModal() {
     this.emailMeasurDataService.measurItemAttachment = {
       itemType: 'assessment',
       itemName: this.assessment.name,
       itemData: this.assessment
     }
     this.emailMeasurDataService.emailItemType.next('TreasureHunt');
-    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
+    this.coreService.showShareDataModal.next(true);
   }
-
 }

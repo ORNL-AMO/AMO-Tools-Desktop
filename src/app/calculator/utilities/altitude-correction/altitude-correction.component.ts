@@ -9,9 +9,10 @@ import { AltitudeCorrectionService } from './altitude-correction.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-altitude-correction',
-  templateUrl: './altitude-correction.component.html',
-  styleUrls: ['./altitude-correction.component.css']
+    selector: 'app-altitude-correction',
+    templateUrl: './altitude-correction.component.html',
+    styleUrls: ['./altitude-correction.component.css'],
+    standalone: false
 })
 export class AltitudeCorrectionComponent implements OnInit {
   @Input()

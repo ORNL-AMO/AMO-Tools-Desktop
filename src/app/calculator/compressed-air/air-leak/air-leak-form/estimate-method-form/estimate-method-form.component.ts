@@ -7,9 +7,10 @@ import { AirLeakFormService } from '../air-leak-form.service';
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-estimate-method-form',
-  templateUrl: './estimate-method-form.component.html',
-  styleUrls: ['./estimate-method-form.component.css']
+    selector: 'app-estimate-method-form',
+    templateUrl: './estimate-method-form.component.html',
+    styleUrls: ['./estimate-method-form.component.css'],
+    standalone: false
 })
 export class EstimateMethodFormComponent implements OnInit {
 

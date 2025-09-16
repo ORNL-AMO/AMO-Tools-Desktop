@@ -29,6 +29,9 @@
                 <button class="btn btn-secondary action-btn menu-btn" (click)="showAddInventory()" type="button">
                     Add Inventory
                 </button>
+                <button class="btn btn-secondary action-btn menu-btn" (click)="showAddDiagram()" type="button">
+                    Add Diagram
+                </button>
                 <button class="btn btn-secondary action-btn menu-btn" [disabled]="!hasSelectedItem" type="button"
                     (click)="moveToFolder()">Move Items</button>
                 <button class="btn btn-secondary action-btn menu-btn" [disabled]="!canCopyItem" type="button"
@@ -37,6 +40,11 @@
                 <!-- <app-create-folder [(directory)]="directory" (newDirectory)="emitNewDir()"></app-create-folder> -->
                 <button class="btn btn-secondary action-btn menu-btn" [disabled]="!checkReport()" type="button"
                     (click)="generateReport()">Generate Report</button>
+                <button class="btn btn-secondary action-btn menu-btn" [disabled]="!hasSelectedItem" type="button"
+                    (click)="exportToJustifi()">
+                    <span class="fa fa-scale-unbalanced"></span>    
+                    Export To JUSTIFI
+                </button>
                 <button class="btn btn-secondary action-btn menu-btn" [disabled]="!hasSelectedItem" type="button"
                     (click)="showDeleteItemsModal()">Delete</button>
                 <button class="btn btn-secondary action-btn menu-btn" [disabled]="!hasSelectedItem" type="button"

@@ -1,0 +1,53 @@
+<div class="row no-gutters w-100 mh-100 scroll-item">
+    <div class="col-12">
+        <div class="row no-gutters">
+            <div class="col-12">
+                <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+                    <div *ngIf="setupTab !== 'system-basics'"
+                        class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': panelTabSelect == 'component-table'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('component-table')">
+                            <div>Components</div>
+                        </a>
+                    </div>
+                    <div *ngIf="showResultsContext.includes(setupTab)" 
+                        class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': panelTabSelect == 'results'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')">
+                            <div>Results</div>
+                        </a>
+                    </div>
+                    <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': panelTabSelect == 'help'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                            <div>Help</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row no-gutters">
+            <div class="col-12 pr-2 pl-2 pb-4 mt-1">
+                <ng-container *ngIf="panelTabSelect === 'component-table'">
+                    @if (waterUsingSystemTab === 'water-treatment') {
+                        <app-in-system-treatment-table></app-in-system-treatment-table>
+                    } 
+                    @else {
+                        <app-water-component-table></app-water-component-table>
+                    }
+                </ng-container>
+                
+                <ng-container *ngIf="panelTabSelect === 'results'">
+                    <ng-container *ngIf="selectedComponentType && selectedComponentType === 'water-using-system'">
+                        <app-water-balance-results-table></app-water-balance-results-table>
+                    </ng-container>
+                    <ng-container *ngIf="selectedComponentType && (selectedComponentType === 'water-intake' || selectedComponentType === 'water-discharge')">
+                        <app-monthly-flow-chart
+                            [settings]="settings"
+                            [componentType]="selectedComponentType"></app-monthly-flow-chart>
+                    </ng-container>
+                </ng-container>
+                
+                <app-help-panel *ngIf="panelTabSelect === 'help'">
+                </app-help-panel>
+            </div>
+        </div>
+    </div>
+</div>

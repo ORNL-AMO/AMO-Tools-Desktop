@@ -4,9 +4,10 @@ import { CompressedAirAssessment } from '../../../shared/models/compressed-air-a
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-assessment-notes',
-  templateUrl: './assessment-notes.component.html',
-  styleUrls: ['./assessment-notes.component.css']
+    selector: 'app-assessment-notes',
+    templateUrl: './assessment-notes.component.html',
+    styleUrls: ['./assessment-notes.component.css'],
+    standalone: false
 })
 export class AssessmentNotesComponent implements OnInit {
 

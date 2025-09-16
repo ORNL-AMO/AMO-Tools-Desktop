@@ -8,9 +8,10 @@ import { WaterHeatingService } from './water-heating.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-water-heating',
-  templateUrl: './water-heating.component.html',
-  styleUrls: ['./water-heating.component.css']
+    selector: 'app-water-heating',
+    templateUrl: './water-heating.component.html',
+    styleUrls: ['./water-heating.component.css'],
+    standalone: false
 })
 export class WaterHeatingComponent implements OnInit {
   @Input()

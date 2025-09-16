@@ -9,9 +9,10 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-saturated-properties-calculator',
-  templateUrl: './saturated-properties.component.html',
-  styleUrls: ['./saturated-properties.component.css']
+    selector: 'app-saturated-properties-calculator',
+    templateUrl: './saturated-properties.component.html',
+    styleUrls: ['./saturated-properties.component.css'],
+    standalone: false
 })
 export class SaturatedPropertiesComponent implements OnInit {
   @Input()

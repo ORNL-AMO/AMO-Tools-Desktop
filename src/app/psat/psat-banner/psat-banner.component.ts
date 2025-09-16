@@ -6,11 +6,13 @@ import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/sec
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
+import { CoreService } from '../../core/core.service';
 
 @Component({
   selector: 'app-psat-banner',
   templateUrl: './psat-banner.component.html',
-  styleUrls: ['./psat-banner.component.css']
+  styleUrls: ['./psat-banner.component.css'],
+  standalone: false
 })
 export class PsatBannerComponent implements OnInit {
   @Input()
@@ -22,10 +24,11 @@ export class PsatBannerComponent implements OnInit {
   connectedInventoryDataSub: Subscription;
   showConnectedItemIcon: boolean;
 
-  constructor(private psatTabService: PsatTabService, 
+  constructor(private psatTabService: PsatTabService,
     private integrationStateService: IntegrationStateService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
+    private coreService: CoreService) { }
 
   ngOnInit() {
     this.mainTabSub = this.psatTabService.mainTab.subscribe(val => {
@@ -52,9 +55,9 @@ export class PsatBannerComponent implements OnInit {
     this.securityAndPrivacyService.modalOpen.next(true);
     this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
   }
-  
+
   changeTab(str: string) {
-    if (str == 'system-setup' || str == 'calculators') {
+    if (str == 'baseline' || str == 'calculators') {
       this.psatTabService.mainTab.next(str);
     } else if (this.assessment.psat.setupDone) {
       this.psatTabService.mainTab.next(str);
@@ -63,10 +66,10 @@ export class PsatBannerComponent implements OnInit {
   }
 
   navigateHome() {
-    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', { shouldCollapse: false });
   }
 
-  back(){
+  back() {
     if (this.mainTab == 'calculators') {
       this.psatTabService.mainTab.next('sankey');
     } else if (this.mainTab == 'sankey') {
@@ -76,12 +79,12 @@ export class PsatBannerComponent implements OnInit {
     } else if (this.mainTab == 'diagram') {
       this.psatTabService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
-      this.psatTabService.mainTab.next('system-setup');
+      this.psatTabService.mainTab.next('baseline');
     }
   }
 
   continue() {
-    if (this.mainTab == 'system-setup') {
+    if (this.mainTab == 'baseline') {
       this.psatTabService.mainTab.next('assessment');
     } else if (this.mainTab == 'assessment') {
       this.psatTabService.mainTab.next('diagram');
@@ -94,17 +97,17 @@ export class PsatBannerComponent implements OnInit {
     }
   }
 
-  openExportModal(){
+  openExportModal() {
     this.psatTabService.showExportModal.next(true);
   }
 
-  emailTreasureHuntData() {
+  openShareDataModal() {
     this.emailMeasurDataService.measurItemAttachment = {
       itemType: 'assessment',
       itemName: this.assessment.name,
       itemData: this.assessment
     }
     this.emailMeasurDataService.emailItemType.next('PSAT');
-    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
+    this.coreService.showShareDataModal.next(true);
   }
 }

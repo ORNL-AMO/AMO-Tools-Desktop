@@ -7,9 +7,10 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
 import { EndUseResults, EndUsesService, UpdatedEndUseData } from '../../end-uses/end-uses.service';
 
 @Component({
-  selector: 'app-end-use-table',
-  templateUrl: './end-use-table.component.html',
-  styleUrls: ['./end-use-table.component.css']
+    selector: 'app-end-use-table',
+    templateUrl: './end-use-table.component.html',
+    styleUrls: ['./end-use-table.component.css'],
+    standalone: false
 })
 export class EndUseTableComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
@@ -36,6 +37,10 @@ export class EndUseTableComponent implements OnInit {
         this.compressedAirAssessment = compressedAirAssessment;
         this.compressedAirAssessment.endUseData.endUses.forEach(endUse => {
           endUse.isValid = this.endUsesService.isEndUseValid(endUse, this.compressedAirAssessment, this.settings);
+          if (!endUse.endUseName) {
+            endUse.endUseName = 'End Use ' + (this.compressedAirAssessment.endUseData.endUses.indexOf(endUse) + 1).toString();
+            endUse.isValid = this.endUsesService.isEndUseValid(endUse, this.compressedAirAssessment, this.settings);
+          }
         });
         this.hasInvalidEndUses = this.compressedAirAssessment.endUseData.endUses.some(endUse => !endUse.isValid);
       }

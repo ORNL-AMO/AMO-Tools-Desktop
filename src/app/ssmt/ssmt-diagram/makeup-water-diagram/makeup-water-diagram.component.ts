@@ -3,9 +3,10 @@ import { SteamPropertiesOutput, HeatExchangerOutput } from '../../../shared/mode
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-makeup-water-diagram',
-  templateUrl: './makeup-water-diagram.component.html',
-  styleUrls: ['./makeup-water-diagram.component.css']
+    selector: 'app-makeup-water-diagram',
+    templateUrl: './makeup-water-diagram.component.html',
+    styleUrls: ['./makeup-water-diagram.component.css'],
+    standalone: false
 })
 export class MakeupWaterDiagramComponent implements OnInit {
   @Input()

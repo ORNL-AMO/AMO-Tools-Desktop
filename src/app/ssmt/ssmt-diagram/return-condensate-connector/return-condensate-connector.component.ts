@@ -3,9 +3,10 @@ import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-output
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-return-condensate-connector',
-  templateUrl: './return-condensate-connector.component.html',
-  styleUrls: ['./return-condensate-connector.component.css']
+    selector: 'app-return-condensate-connector',
+    templateUrl: './return-condensate-connector.component.html',
+    styleUrls: ['./return-condensate-connector.component.css'],
+    standalone: false
 })
 export class ReturnCondensateConnectorComponent implements OnInit {
   @Output('emitSetHover')

@@ -5,9 +5,10 @@ import { BaselineResults, CompressedAirAssessmentResultsService } from '../../co
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-system-profile-annual-summary',
-  templateUrl: './system-profile-annual-summary.component.html',
-  styleUrls: ['./system-profile-annual-summary.component.css']
+    selector: 'app-system-profile-annual-summary',
+    templateUrl: './system-profile-annual-summary.component.html',
+    styleUrls: ['./system-profile-annual-summary.component.css'],
+    standalone: false
 })
 export class SystemProfileAnnualSummaryComponent implements OnInit {
 

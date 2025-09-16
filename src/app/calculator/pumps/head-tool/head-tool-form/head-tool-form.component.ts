@@ -3,9 +3,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-head-tool-form',
-  templateUrl: './head-tool-form.component.html',
-  styleUrls: ['./head-tool-form.component.css']
+    selector: 'app-head-tool-form',
+    templateUrl: './head-tool-form.component.html',
+    styleUrls: ['./head-tool-form.component.css'],
+    standalone: false
 })
 export class HeadToolFormComponent implements OnInit {
   @Input()

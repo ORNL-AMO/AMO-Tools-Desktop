@@ -11,9 +11,10 @@ import { WasteWaterReportRollupService } from '../waste-water-report-rollup.serv
 import { CompressedAirReportRollupService } from '../compressed-air-report-rollup.service';
 
 @Component({
-  selector: 'app-report-rollup-units',
-  templateUrl: './report-rollup-units.component.html',
-  styleUrls: ['./report-rollup-units.component.css']
+    selector: 'app-report-rollup-units',
+    templateUrl: './report-rollup-units.component.html',
+    styleUrls: ['./report-rollup-units.component.css'],
+    standalone: false
 })
 export class ReportRollupUnitsComponent implements OnInit {
 

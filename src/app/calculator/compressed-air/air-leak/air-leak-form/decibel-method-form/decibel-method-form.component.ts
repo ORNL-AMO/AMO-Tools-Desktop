@@ -7,9 +7,10 @@ import { AirLeakSurveyData, AirLeakSurveyInput } from '../../../../../shared/mod
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-decibel-method-form',
-  templateUrl: './decibel-method-form.component.html',
-  styleUrls: ['./decibel-method-form.component.css']
+    selector: 'app-decibel-method-form',
+    templateUrl: './decibel-method-form.component.html',
+    styleUrls: ['./decibel-method-form.component.css'],
+    standalone: false
 })
 export class DecibelMethodFormComponent implements OnInit {
 

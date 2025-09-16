@@ -10,14 +10,15 @@ import { motorEfficiencyConstants } from '../psatConstants';
 import { PsatService } from '../psat.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { ConnectedInventoryData, InventoryOption, InventorySelectOptions } from '../../shared/connected-inventory/integrations';
-import { MotorIntegrationService } from '../../shared/connected-inventory/motor-integration.service';
+import { PumpMotorIntegrationService } from '../../shared/connected-inventory/pump-motor-integration.service';
 import { Subscription } from 'rxjs';
 import { PsatIntegrationService } from '../../shared/connected-inventory/psat-integration.service';
 import { Assessment } from '../../shared/models/assessment';
 @Component({
-  selector: 'app-motor',
-  templateUrl: './motor.component.html',
-  styleUrls: ['./motor.component.css']
+    selector: 'app-motor',
+    templateUrl: './motor.component.html',
+    styleUrls: ['./motor.component.css'],
+    standalone: false
 })
 export class MotorComponent implements OnInit {
   @Input()
@@ -60,7 +61,7 @@ export class MotorComponent implements OnInit {
     private integrationStateService: IntegrationStateService,
     private compareService: CompareService, 
     private helpPanelService: HelpPanelService, 
-    private motorIntegrationService: MotorIntegrationService,
+    private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private motorService: MotorService) { }
 
   async ngOnInit() {
@@ -108,7 +109,7 @@ export class MotorComponent implements OnInit {
   }
 
   async setInventorySelectOptions() {
-    let motorInventoryOptions: Array<InventoryOption> = await this.motorIntegrationService.initInventoriesAndOptions();
+    let motorInventoryOptions: Array<InventoryOption> = await this.pumpMotorIntegrationService.initInventoriesAndOptions();
     this.inventorySelectOptions = {
       label: 'Connect an Existing Motor Inventory',
       itemName: 'Motor',

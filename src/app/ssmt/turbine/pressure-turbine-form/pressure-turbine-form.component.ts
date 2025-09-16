@@ -8,9 +8,10 @@ import { CompareService } from '../../compare.service';
 import { TurbineService } from '../turbine.service';
 
 @Component({
-  selector: 'app-pressure-turbine-form',
-  templateUrl: './pressure-turbine-form.component.html',
-  styleUrls: ['./pressure-turbine-form.component.css']
+    selector: 'app-pressure-turbine-form',
+    templateUrl: './pressure-turbine-form.component.html',
+    styleUrls: ['./pressure-turbine-form.component.css'],
+    standalone: false
 })
 export class PressureTurbineFormComponent implements OnInit {
   @Input()

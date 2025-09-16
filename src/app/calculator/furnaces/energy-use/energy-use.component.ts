@@ -11,9 +11,10 @@ import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-energy-use',
-  templateUrl: './energy-use.component.html',
-  styleUrls: ['./energy-use.component.css']
+    selector: 'app-energy-use',
+    templateUrl: './energy-use.component.html',
+    styleUrls: ['./energy-use.component.css'],
+    standalone: false
 })
 export class EnergyUseComponent implements OnInit {
   @Input()

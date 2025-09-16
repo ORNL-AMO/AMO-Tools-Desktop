@@ -9,9 +9,10 @@ import { CoolingLossesCompareService } from './cooling-losses-compare.service';
 import { CoolingFormService } from '../../../calculator/furnaces/cooling/cooling-form.service';
 
 @Component({
-  selector: 'app-cooling-losses',
-  templateUrl: './cooling-losses.component.html',
-  styleUrls: ['./cooling-losses.component.css']
+    selector: 'app-cooling-losses',
+    templateUrl: './cooling-losses.component.html',
+    styleUrls: ['./cooling-losses.component.css'],
+    standalone: false
 })
 export class CoolingLossesComponent implements OnInit {
   @Input()

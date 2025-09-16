@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-flue-gas-losses-help',
-  templateUrl: './flue-gas-losses-help.component.html',
-  styleUrls: ['./flue-gas-losses-help.component.css']
+    selector: 'app-flue-gas-losses-help',
+    templateUrl: './flue-gas-losses-help.component.html',
+    styleUrls: ['./flue-gas-losses-help.component.css'],
+    standalone: false
 })
 export class FlueGasLossesHelpComponent implements OnInit {
   @Input()

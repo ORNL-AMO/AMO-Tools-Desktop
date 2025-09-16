@@ -3,9 +3,10 @@ import { Settings, Contact, StreetAddress } from '../../shared/models/settings';
 import { UntypedFormGroup, UntypedFormBuilder } from '@angular/forms';
 
 @Component({
-  selector: 'app-facility-info',
-  templateUrl: './facility-info.component.html',
-  styleUrls: ['./facility-info.component.css']
+    selector: 'app-facility-info',
+    templateUrl: './facility-info.component.html',
+    styleUrls: ['./facility-info.component.css'],
+    standalone: false
 })
 export class FacilityInfoComponent implements OnInit {
   @Input()

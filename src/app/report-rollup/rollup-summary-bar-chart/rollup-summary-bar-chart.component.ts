@@ -2,9 +2,10 @@ import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 
 @Component({
-  selector: 'app-rollup-summary-bar-chart',
-  templateUrl: './rollup-summary-bar-chart.component.html',
-  styleUrls: ['./rollup-summary-bar-chart.component.css']
+    selector: 'app-rollup-summary-bar-chart',
+    templateUrl: './rollup-summary-bar-chart.component.html',
+    styleUrls: ['./rollup-summary-bar-chart.component.css'],
+    standalone: false
 })
 export class RollupSummaryBarChartComponent implements OnInit {
   @Input()

@@ -74,7 +74,7 @@ export class PhastService {
     this.modalOpen = new BehaviorSubject<boolean>(false);
   }
   initTabs() {
-    this.mainTab = new BehaviorSubject<string>('system-setup');
+    this.mainTab = new BehaviorSubject<string>('baseline');
     //this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
     this.stepTab = new BehaviorSubject<StepTab>(stepTabs[0]);
     this.specTab = new BehaviorSubject<StepTab>(specTabs[0]);
@@ -96,11 +96,11 @@ export class PhastService {
 
   back() {
     let tmpStepTab: StepTab = this.stepTab.getValue();
-    if (tmpStepTab.tabName !== 'Assessment Settings' && this.mainTab.getValue() == 'system-setup') {
+    if (tmpStepTab.tabName !== 'Assessment Settings' && this.mainTab.getValue() == 'baseline') {
       let nextTab: StepTab = stepTabs[tmpStepTab.back - 1];
       this.stepTab.next(nextTab);
     } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('system-setup');
+      this.mainTab.next('baseline');
     }
   }
 

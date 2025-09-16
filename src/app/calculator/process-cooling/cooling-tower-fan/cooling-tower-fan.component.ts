@@ -8,9 +8,10 @@ import { CoolingTowerFanService } from './cooling-tower-fan.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-cooling-tower-fan',
-  templateUrl: './cooling-tower-fan.component.html',
-  styleUrls: ['./cooling-tower-fan.component.css']
+    selector: 'app-cooling-tower-fan',
+    templateUrl: './cooling-tower-fan.component.html',
+    styleUrls: ['./cooling-tower-fan.component.css'],
+    standalone: false
 })
 export class CoolingTowerFanComponent implements OnInit {
   @Input()

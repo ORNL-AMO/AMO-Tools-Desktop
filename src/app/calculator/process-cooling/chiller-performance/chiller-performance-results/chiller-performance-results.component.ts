@@ -5,9 +5,10 @@ import { Settings } from '../../../../shared/models/settings';
 import { ChillerPerformanceService } from '../chiller-performance.service';
 
 @Component({
-  selector: 'app-chiller-performance-results',
-  templateUrl: './chiller-performance-results.component.html',
-  styleUrls: ['./chiller-performance-results.component.css']
+    selector: 'app-chiller-performance-results',
+    templateUrl: './chiller-performance-results.component.html',
+    styleUrls: ['./chiller-performance-results.component.css'],
+    standalone: false
 })
 export class ChillerPerformanceResultsComponent implements OnInit {
 

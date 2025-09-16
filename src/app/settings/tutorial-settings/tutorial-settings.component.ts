@@ -3,9 +3,10 @@ import { Settings } from '../../shared/models/settings';
 import { environment } from '../../../environments/environment';
 
 @Component({
-  selector: 'app-tutorial-settings',
-  templateUrl: './tutorial-settings.component.html',
-  styleUrls: ['./tutorial-settings.component.css']
+    selector: 'app-tutorial-settings',
+    templateUrl: './tutorial-settings.component.html',
+    styleUrls: ['./tutorial-settings.component.css'],
+    standalone: false
 })
 export class TutorialSettingsComponent implements OnInit {
   @Input()

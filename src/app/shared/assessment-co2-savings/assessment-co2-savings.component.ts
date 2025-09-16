@@ -9,9 +9,10 @@ import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 
 @Component({
-  selector: 'app-assessment-co2-savings',
-  templateUrl: './assessment-co2-savings.component.html',
-  styleUrls: ['./assessment-co2-savings.component.css']
+    selector: 'app-assessment-co2-savings',
+    templateUrl: './assessment-co2-savings.component.html',
+    styleUrls: ['./assessment-co2-savings.component.css'],
+    standalone: false
 })
 export class AssessmentCo2SavingsComponent implements OnInit {
   @Input()

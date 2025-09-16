@@ -2,7 +2,7 @@
 
     <h4 class="show-print">Report Results</h4>
 
-    <table class="table table-striped table-hover">
+    <table #copyTable class="table table-striped table-hover">
         <thead>
             <tr>
                 <th [ngStyle]="{'width.%': 100 /(wasteWater.modifications.length+2)}"></th>
@@ -37,7 +37,7 @@
                             Sludge<br></span>
                         <span *ngIf="!modification.valid.aeratorPerformanceValid">Errors found in Aerator
                             Performance<br></span>
-                        <span *ngIf="!modification.valid.systemBasicsValid">Errors found in System Basics<br></span>
+                        <span *ngIf="!modification.valid.systemBasicsValid">Errors found in Baseline<br></span>
                     </div>
                 </td>
             </tr>
@@ -432,4 +432,6 @@
             </tr>
         </tbody>
     </table>
+    <app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 </div>

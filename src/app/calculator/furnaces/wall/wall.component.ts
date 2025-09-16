@@ -4,7 +4,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
 import { WallLoss, WallLossOutput } from '../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../shared/models/settings';
-import { Treasure, WallLossTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { OpportunityUtilityType, Treasure, WallLossTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { FlueGasService } from '../flue-gas/flue-gas.service';
 import { WallService } from './wall.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
@@ -13,6 +13,7 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
   selector: "app-wall",
   templateUrl: "./wall.component.html",
   styleUrls: ["./wall.component.css"],
+  standalone: false
 })
 export class WallComponent implements OnInit {
   @Input()
@@ -57,7 +58,7 @@ export class WallComponent implements OnInit {
     private wallService: WallService,
     private flueGasService: FlueGasService,
     private analyticsService: AnalyticsService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('calculator-PH-wall');
@@ -70,7 +71,7 @@ export class WallComponent implements OnInit {
 
     let existingInputs = this.wallService.baselineData.getValue();
     if (!existingInputs) {
-     this.resetWallLossInputs();
+      this.resetWallLossInputs();
     }
     this.initSubscriptions();
     if (this.modificationData) {
@@ -169,11 +170,13 @@ export class WallComponent implements OnInit {
 
   save() {
     let output: WallLossOutput = this.wallService.output.getValue();
+    //energySourceType is OpportunityUtilityType when in treasure hunt
+    let opportunityUtilityType: OpportunityUtilityType = this.baselineData[0].energySourceType as OpportunityUtilityType;
     this.emitSave.emit({
       baseline: this.baselineData,
       modification: this.modificationData,
       energySourceData: {
-        energySourceType: this.baselineData[0].energySourceType,
+        energySourceType: opportunityUtilityType,
         unit: output.energyUnit,
       },
       opportunityType: Treasure.wallLoss
@@ -194,7 +197,7 @@ export class WallComponent implements OnInit {
     }
   }
 
-  
+
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
     if (this.smallScreenTab === 'baseline') {

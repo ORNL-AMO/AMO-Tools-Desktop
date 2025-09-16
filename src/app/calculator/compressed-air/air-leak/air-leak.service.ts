@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, AirLeakSurveyResult, BagMethodData, CompressorElectricityData, DecibelsMethodData, OrificeMethodData, EstimateMethodData, FacilityCompressorData } from '../../../shared/models/standalone';
+import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, AirLeakSurveyResult } from '../../../shared/models/standalone';
 import { Settings } from '../../../shared/models/settings';
 import { StandaloneService } from '../../standalone.service';
 import { ConvertAirLeakService } from './convert-air-leak.service';
@@ -107,6 +107,14 @@ export class AirLeakService {
 
   setLeakForModification(index: number, selected: boolean) {
     this.airLeakInput.value.compressedAirLeakSurveyInputVec[index].selected = selected;
+    this.airLeakInput.next(this.airLeakInput.value);
+  }
+
+
+  setLeakForModificationSelectAll(selectAll: boolean) {
+    this.airLeakInput.value.compressedAirLeakSurveyInputVec.forEach(leak => {
+      leak.selected = selectAll;
+    });
     this.airLeakInput.next(this.airLeakInput.value);
   }
 

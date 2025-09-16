@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { PHAST, PhastResults, ShowResultsCategories, Modification, ExecutiveSummary } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
@@ -10,9 +10,10 @@ import { ExecutiveSummaryService } from '../executive-summary.service';
 import { ConvertPhastService } from '../../convert-phast.service';
 
 @Component({
-  selector: 'app-results-data',
-  templateUrl: './results-data.component.html',
-  styleUrls: ['./results-data.component.css']
+    selector: 'app-results-data',
+    templateUrl: './results-data.component.html',
+    styleUrls: ['./results-data.component.css'],
+    standalone: false
 })
 export class ResultsDataComponent implements OnInit {
 
@@ -44,6 +45,10 @@ export class ResultsDataComponent implements OnInit {
   decimalCount: string;
   numMods: number = 0;
   selectedPhastsSub: Subscription;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+
   constructor(private phastResultsService: PhastResultsService, 
               private executiveSummaryService: ExecutiveSummaryService,
               private convertPhastService: ConvertPhastService,
@@ -136,5 +141,8 @@ export class ResultsDataComponent implements OnInit {
         this.decimalCount = '1.0-0';
       }
     }
+  }
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

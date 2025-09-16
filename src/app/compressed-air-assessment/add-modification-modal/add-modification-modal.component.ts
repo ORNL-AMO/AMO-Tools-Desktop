@@ -5,9 +5,10 @@ import { CompressedAirAssessmentService } from '../compressed-air-assessment.ser
 import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 
 @Component({
-  selector: 'app-add-modification-modal',
-  templateUrl: './add-modification-modal.component.html',
-  styleUrls: ['./add-modification-modal.component.css']
+    selector: 'app-add-modification-modal',
+    templateUrl: './add-modification-modal.component.html',
+    styleUrls: ['./add-modification-modal.component.css'],
+    standalone: false
 })
 export class AddModificationModalComponent implements OnInit {
 

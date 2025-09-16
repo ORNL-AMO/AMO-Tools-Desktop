@@ -143,6 +143,7 @@
         <span *ngIf="byMassForm.controls.moistureInAirCombustion.errors.min">Value can't be less than
           {{byMassForm.controls.moistureInAirCombustion.errors.min.min}} %.</span>
       </span>
+      <a id="moistureCalc" class="form-text small click-link" (click)="showMoistureModal()">Calculate</a>
     </div>
 
     <div class="form-group">
@@ -179,8 +180,8 @@
     </div>
   </div>
   
-  <div *ngIf="!inModal" class="form-group">
-    <label class="small" for="heatInput">Heat Delivered</label>
+  <div *ngIf="!inModal && isBaseline" class="form-group">
+    <label class="small" for="heatInput">Fuel Consumption</label>
     <div class="input-group">
       <input name="heatInput" type="number" step="10" class="form-control"
         formControlName="heatInput" id="heatInput" onfocus="this.select();"
@@ -206,6 +207,16 @@
         <app-solid-liquid-flue-gas-material *ngIf="materialModal.isShown" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
           [settings]="settings"></app-solid-liquid-flue-gas-material>
       </div>
+    </div>
+  </div>
+</div>
+
+<div bsModal #moistureModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="moistureModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg flue-gas-modal">
+    <div class="modal-content h-100">
+      <app-flue-gas-moisture-modal class="h-100" *ngIf="showMoisture" (closeModal)="hideMoistureModal($event)"
+        (hideModal)="hideMoistureModal($event)" [settings]="settings"></app-flue-gas-moisture-modal>
     </div>
   </div>
 </div>

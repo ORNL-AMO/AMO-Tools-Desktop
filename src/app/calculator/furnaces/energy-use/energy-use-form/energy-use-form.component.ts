@@ -6,9 +6,10 @@ import { UntypedFormGroup } from '@angular/forms';
 import { EnergyUseService } from '../energy-use.service';
 
 @Component({
-  selector: 'app-energy-use-form',
-  templateUrl: './energy-use-form.component.html',
-  styleUrls: ['./energy-use-form.component.css']
+    selector: 'app-energy-use-form',
+    templateUrl: './energy-use-form.component.html',
+    styleUrls: ['./energy-use-form.component.css'],
+    standalone: false
 })
 export class EnergyUseFormComponent implements OnInit {
   @Input()

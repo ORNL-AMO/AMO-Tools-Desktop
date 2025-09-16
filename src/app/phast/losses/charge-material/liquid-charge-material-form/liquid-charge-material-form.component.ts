@@ -8,13 +8,14 @@ import { UntypedFormGroup } from '@angular/forms';
 import { LiquidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { LiquidMaterialFormService, LiquidMaterialWarnings } from '../../../../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { firstValueFrom } from 'rxjs';
 import { LiquidLoadMaterialDbService } from '../../../../indexedDb/liquid-load-material-db.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 @Component({
   selector: 'app-liquid-charge-material-form',
   templateUrl: './liquid-charge-material-form.component.html',
-  styleUrls: ['./liquid-charge-material-form.component.css']
+  styleUrls: ['./liquid-charge-material-form.component.css'],
+  standalone: false
 })
 export class LiquidChargeMaterialFormComponent implements OnInit {
   @Input()
@@ -40,8 +41,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
-  materialTypes: any;
-  selectedMaterial: any;
+  materialTypes: Array<LiquidLoadChargeMaterial> = [];
+  selectedMaterial: LiquidLoadChargeMaterial;
 
   hasDeletedCustomMaterial: boolean = false;
   editExistingMaterial: boolean;
@@ -49,7 +50,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   warnings: LiquidMaterialWarnings;
   showModal: boolean = false;
   idString: string;
-  constructor(private sqlDbApiService: SqlDbApiService, private liquidMaterialFormService: LiquidMaterialFormService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private liquidLoadMaterialDbService: LiquidLoadMaterialDbService) { }
+  constructor(private liquidMaterialFormService: LiquidMaterialFormService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private liquidLoadMaterialDbService: LiquidLoadMaterialDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.baselineSelected) {
@@ -57,7 +58,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
-          this.materialTypes = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
+          this.setMaterialTypes();
           this.enableForm();
         }
       }
@@ -71,16 +72,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     else {
       this.idString = 'phast_baseline_solid_' + this.lossIndex;
     }
-    this.materialTypes = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
-    if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
-        if (this.chargeMaterialForm.controls.materialLatentHeat.value === '') {
-          this.setProperties();
-        } else {
-          this.checkForDeletedMaterial();
-        }
-      }
-    }
+    this.setMaterialTypes(true);
     this.checkWarnings();
     if (!this.baselineSelected) {
       this.disableForm();
@@ -89,6 +81,19 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
   ngOnDestroy() {
     this.lossesService.modalOpen.next(false);
+  }
+
+  async setMaterialTypes(onInit?: boolean) {
+    this.materialTypes = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+    if (onInit && this.chargeMaterialForm) {
+      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
+        if (this.chargeMaterialForm.controls.materialLatentHeat.value === '') {
+          this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
+        }
+      }
+    }
   }
 
   disableForm() {
@@ -109,11 +114,11 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   checkForDeletedMaterial() {
-    let selectedMaterial: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let selectedMaterial: LiquidLoadChargeMaterial = this.materialTypes.find(material => material.id === this.chargeMaterialForm.controls.materialId.value);
     if (!selectedMaterial) {
       this.hasDeletedCustomMaterial = true;
       this.restoreMaterial();
-    } 
+    }
     this.save();
   }
 
@@ -125,11 +130,8 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
       specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeatVapor.value,
       vaporizationTemperature: this.chargeMaterialForm.controls.materialVaporizingTemperature.value
     };
-    let suiteDbResult = this.sqlDbApiService.insertLiquidLoadChargeMaterial(customMaterial);
-    if (suiteDbResult === true) {
-      await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(customMaterial));
-    }
-    this.materialTypes = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
+    await firstValueFrom(this.liquidLoadMaterialDbService.addWithObservable(customMaterial));
+    await this.setMaterialTypes();
     let newMaterial: LiquidLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === customMaterial.substance; });
     this.chargeMaterialForm.patchValue({
       materialId: newMaterial.id
@@ -138,27 +140,27 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
 
 
   setProperties() {
-    let selectedMaterial: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let selectedMaterial: LiquidLoadChargeMaterial = this.materialTypes.find(material => material.id === this.chargeMaterialForm.controls.materialId.value);
     if (selectedMaterial) {
+      let vaporizationTemperature: number = selectedMaterial.vaporizationTemperature;
+      let latentHeat: number = selectedMaterial.latentHeat;
+      let specificHeatLiquid: number = selectedMaterial.specificHeatLiquid;
+      let specificHeatVapor: number = selectedMaterial.specificHeatVapor;
+
       if (this.settings.unitsOfMeasure === 'Metric') {
-        selectedMaterial.vaporizationTemperature = this.convertUnitsService.value(this.roundVal(selectedMaterial.vaporizationTemperature, 4)).from('F').to('C');
-        selectedMaterial.latentHeat = this.convertUnitsService.value(selectedMaterial.latentHeat).from('btuLb').to('kJkg');
-        selectedMaterial.specificHeatLiquid = this.convertUnitsService.value(selectedMaterial.specificHeatLiquid).from('btulbF').to('kJkgC');
-        selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+        vaporizationTemperature = this.convertUnitsService.value(roundVal(vaporizationTemperature, 4)).from('F').to('C');
+        latentHeat = this.convertUnitsService.value(latentHeat).from('btuLb').to('kJkg');
+        specificHeatLiquid = this.convertUnitsService.value(specificHeatLiquid).from('btulbF').to('kJkgC');
+        specificHeatVapor = this.convertUnitsService.value(specificHeatVapor).from('btulbF').to('kJkgC');
       }
       this.chargeMaterialForm.patchValue({
-        materialLatentHeat: this.roundVal(selectedMaterial.latentHeat, 4),
-        materialSpecificHeatLiquid: this.roundVal(selectedMaterial.specificHeatLiquid, 4),
-        materialSpecificHeatVapor: this.roundVal(selectedMaterial.specificHeatVapor, 4),
-        materialVaporizingTemperature: this.roundVal(selectedMaterial.vaporizationTemperature, 4)
+        materialLatentHeat: roundVal(latentHeat, 4),
+        materialSpecificHeatLiquid: roundVal(specificHeatLiquid, 4),
+        materialSpecificHeatVapor: roundVal(specificHeatVapor, 4),
+        materialVaporizingTemperature: roundVal(vaporizationTemperature, 4)
       });
     }
     this.save();
-  }
-
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
   }
 
   checkWarnings() {
@@ -176,13 +178,14 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   checkSpecificHeatDiffLiquid() {
-    let material: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: LiquidLoadChargeMaterial = this.materialTypes.find(material => material.id === this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      let specificHeatLiquid: number = material.specificHeatLiquid;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeatLiquid).from('btulbF').to('kJkgC');
-        material.specificHeatLiquid = this.roundVal(val, 4);
+        specificHeatLiquid = this.convertUnitsService.value(material.specificHeatLiquid).from('btulbF').to('kJkgC');
+        specificHeatLiquid = roundVal(specificHeatLiquid, 4);
       }
-      if (material.specificHeatLiquid !== this.chargeMaterialForm.controls.materialSpecificHeatLiquid.value) {
+      if (specificHeatLiquid !== this.chargeMaterialForm.controls.materialSpecificHeatLiquid.value) {
         return true;
       } else {
         return false;
@@ -191,13 +194,14 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   checkVaporizingTempDiff() {
-    let material: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: LiquidLoadChargeMaterial = this.materialTypes.find(material => material.id === this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      let vaporizationTemperature: number = material.vaporizationTemperature;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        let val = this.convertUnitsService.value(material.vaporizationTemperature).from('F').to('C');
-        material.vaporizationTemperature = this.roundVal(val, 4);
+        vaporizationTemperature = this.convertUnitsService.value(vaporizationTemperature).from('F').to('C');
+        vaporizationTemperature = roundVal(vaporizationTemperature, 4);
       }
-      if (material.vaporizationTemperature !== this.chargeMaterialForm.controls.materialVaporizingTemperature.value) {
+      if (vaporizationTemperature !== this.chargeMaterialForm.controls.materialVaporizingTemperature.value) {
         return true;
       } else {
         return false;
@@ -206,13 +210,14 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   checkLatentHeatDiff() {
-    let material: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: LiquidLoadChargeMaterial = this.materialTypes.find(material => material.id === this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      let latentHeat: number = material.latentHeat;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        let val = this.convertUnitsService.value(material.latentHeat).from('btuLb').to('kJkg');
-        material.latentHeat = this.roundVal(val, 4);
+        latentHeat = this.convertUnitsService.value(latentHeat).from('btuLb').to('kJkg');
+        latentHeat = roundVal(latentHeat, 4);
       }
-      if (material.latentHeat !== this.chargeMaterialForm.controls.materialLatentHeat.value) {
+      if (latentHeat !== this.chargeMaterialForm.controls.materialLatentHeat.value) {
         return true;
       } else {
         return false;
@@ -221,13 +226,14 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
 
   checkSpecificHeatVaporDiff() {
-    let material: LiquidLoadChargeMaterial = this.sqlDbApiService.selectLiquidLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let material: LiquidLoadChargeMaterial = this.materialTypes.find(material => material.id === this.chargeMaterialForm.controls.materialId.value);
     if (material) {
+      let specificHeatVapor: number = material.specificHeatVapor;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC');
-        material.specificHeatVapor = this.roundVal(val, 4);
+        specificHeatVapor = this.convertUnitsService.value(specificHeatVapor).from('btulbF').to('kJkgC');
+        specificHeatVapor = roundVal(specificHeatVapor, 4);
       }
-      if (material.specificHeatVapor !== this.chargeMaterialForm.controls.materialSpecificHeatVapor.value) {
+      if (specificHeatVapor !== this.chargeMaterialForm.controls.materialSpecificHeatVapor.value) {
         return true;
       } else {
         return false;
@@ -310,7 +316,7 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
   }
   showMaterialModal(editExistingMaterial: boolean) {
     this.editExistingMaterial = editExistingMaterial;
-    if(editExistingMaterial === true) {
+    if (editExistingMaterial === true) {
       this.existingMaterial = {
         id: this.chargeMaterialForm.controls.materialId.value,
         latentHeat: this.chargeMaterialForm.controls.materialLatentHeat.value,
@@ -324,13 +330,14 @@ export class LiquidChargeMaterialFormComponent implements OnInit {
     this.lossesService.modalOpen.next(true);
     this.materialModal.show();
   }
-  hideMaterialModal(event?: any) {
+  
+  async hideMaterialModal(event?: any) {
     if (event) {
-      this.materialTypes = this.sqlDbApiService.selectLiquidLoadChargeMaterials();
-      let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
-      if (newMaterial.length !== 0) {
+      await this.setMaterialTypes();
+      let newMaterial: LiquidLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === event.substance; });
+      if (newMaterial) {
         this.chargeMaterialForm.patchValue({
-          materialId: newMaterial[0].id
+          materialId: newMaterial.id
         });
         this.setProperties();
       }

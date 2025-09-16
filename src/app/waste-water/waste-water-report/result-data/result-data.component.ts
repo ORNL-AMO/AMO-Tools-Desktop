@@ -1,13 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { WasteWaterReportRollupService } from '../../../report-rollup/waste-water-report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
 
 @Component({
-  selector: 'app-result-data',
-  templateUrl: './result-data.component.html',
-  styleUrls: ['./result-data.component.css']
+    selector: 'app-result-data',
+    templateUrl: './result-data.component.html',
+    styleUrls: ['./result-data.component.css'],
+    standalone: false
 })
 export class ResultDataComponent implements OnInit {
   @Input()
@@ -19,6 +20,10 @@ export class ResultDataComponent implements OnInit {
 
   selectedModificationIndex: number;
   wasteWater: WasteWater;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
+  
   constructor(private wasteWaterReportRollupService: WasteWaterReportRollupService) { }
 
   ngOnInit(): void {
@@ -59,5 +64,9 @@ export class ResultDataComponent implements OnInit {
 
   useModification() {
     this.wasteWaterReportRollupService.updateSelectedWasteWater({ assessment: this.assessment, settings: this.settings }, this.selectedModificationIndex);
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 }

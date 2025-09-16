@@ -4,9 +4,10 @@ import { InventorySummary, InventorySummaryOverviewService } from '../inventory-
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
-  selector: 'app-pump-inventory-overview-table',
-  templateUrl: './inventory-overview-table.component.html',
-  styleUrls: ['./inventory-overview-table.component.css']
+    selector: 'app-pump-inventory-overview-table',
+    templateUrl: './inventory-overview-table.component.html',
+    styleUrls: ['./inventory-overview-table.component.css'],
+    standalone: false
 })
 export class InventoryOverviewTableComponent implements OnInit {
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;

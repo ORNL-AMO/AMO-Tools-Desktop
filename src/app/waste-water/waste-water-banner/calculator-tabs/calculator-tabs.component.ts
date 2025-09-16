@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { WasteWaterService } from '../../waste-water.service';
 
 @Component({
-  selector: 'app-calculator-tabs',
-  templateUrl: './calculator-tabs.component.html',
-  styleUrls: ['./calculator-tabs.component.css']
+    selector: 'app-calculator-tabs',
+    templateUrl: './calculator-tabs.component.html',
+    styleUrls: ['./calculator-tabs.component.css'],
+    standalone: false
 })
 export class WasteWaterCalculatorTabsComponent implements OnInit {
   calcTabSub: Subscription;

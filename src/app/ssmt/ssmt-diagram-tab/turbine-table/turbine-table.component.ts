@@ -4,9 +4,10 @@ import { Settings } from '../../../shared/models/settings';
 import { SsmtDiagramTabService } from '../ssmt-diagram-tab.service';
 
 @Component({
-  selector: 'app-turbine-table',
-  templateUrl: './turbine-table.component.html',
-  styleUrls: ['./turbine-table.component.css']
+    selector: 'app-turbine-table',
+    templateUrl: './turbine-table.component.html',
+    styleUrls: ['./turbine-table.component.css'],
+    standalone: false
 })
 export class TurbineTableComponent implements OnInit {
   @Input()

@@ -3,9 +3,10 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 
 @Component({
-  selector: 'app-use-automatic-sequencer-help',
-  templateUrl: './use-automatic-sequencer-help.component.html',
-  styleUrls: ['./use-automatic-sequencer-help.component.css']
+    selector: 'app-use-automatic-sequencer-help',
+    templateUrl: './use-automatic-sequencer-help.component.html',
+    styleUrls: ['./use-automatic-sequencer-help.component.css'],
+    standalone: false
 })
 export class UseAutomaticSequencerHelpComponent implements OnInit {
 

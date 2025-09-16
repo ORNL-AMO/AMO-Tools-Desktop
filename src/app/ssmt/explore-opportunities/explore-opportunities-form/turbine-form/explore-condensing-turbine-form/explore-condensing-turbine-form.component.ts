@@ -8,9 +8,10 @@ import { UntypedFormGroup, Validators } from '@angular/forms';
 import { TurbineService } from '../../../../turbine/turbine.service';
 
 @Component({
-  selector: 'app-explore-condensing-turbine-form',
-  templateUrl: './explore-condensing-turbine-form.component.html',
-  styleUrls: ['./explore-condensing-turbine-form.component.css']
+    selector: 'app-explore-condensing-turbine-form',
+    templateUrl: './explore-condensing-turbine-form.component.html',
+    styleUrls: ['./explore-condensing-turbine-form.component.css'],
+    standalone: false
 })
 export class ExploreCondensingTurbineFormComponent implements OnInit {
   @Input()

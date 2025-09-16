@@ -6,11 +6,13 @@ import { TreasureHuntService } from '../../treasure-hunt.service';
 import { ImportOpportunitiesService } from '../import-opportunities.service';
 import { OpportunityCardsService } from '../opportunity-cards/opportunity-cards.service';
 import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
+import { FileImportStatus, ImportService } from '../../../shared/import-export/import.service';
 
 @Component({
-  selector: 'app-import-opportunities',
-  templateUrl: './import-opportunities.component.html',
-  styleUrls: ['./import-opportunities.component.css']
+    selector: 'app-import-opportunities',
+    templateUrl: './import-opportunities.component.html',
+    styleUrls: ['./import-opportunities.component.css'],
+    standalone: false
 })
 export class ImportOpportunitiesComponent implements OnInit {
 
@@ -18,12 +20,13 @@ export class ImportOpportunitiesComponent implements OnInit {
 
   importInProgress: boolean = false;
   fileReference: any;
-  validFile: boolean;
+  fileImportStatus: FileImportStatus;
   importJson: any = null;
   treasureHuntSub: Subscription;
   treasureHunt: TreasureHunt;
   constructor(private treasureHuntService: TreasureHuntService,
     private importOpportunitiesService: ImportOpportunitiesService, private opportunityCardsService: OpportunityCardsService,
+    private importService: ImportService,
     private treasureChestMenuService: TreasureChestMenuService) { }
 
  ngOnInit() {
@@ -51,63 +54,26 @@ export class ImportOpportunitiesComponent implements OnInit {
     });
   }
 
-  setImportFile($event) {
-    if ($event.target.files) {
-      if ($event.target.files.length !== 0) {
-        let regex = /.json$/;
-        if (regex.test($event.target.files[0].name)) {
-          this.fileReference = $event;
-          let fr: FileReader = new FileReader();
-          fr.readAsText($event.target.files[0]);
-          fr.onloadend = (e) => {
-            try {
-              this.importJson = JSON.parse(JSON.stringify(fr.result));
-              this.checkData(this.importJson);
-            } catch (err) {
-              this.validFile = false;
-            }
-          };
-        } else {
-          let fr: FileReader = new FileReader();
-          fr.readAsText($event.target.files[0]);
-          fr.onloadend = (e) => {
-            try {
-              this.importJson = JSON.parse(JSON.stringify(fr.result));
-              this.checkData(this.importJson);
-            } catch (err) {
-              this.validFile = false;
-            }
-          };
-        }
+  async setImportFile($event) {
+    if ($event.target.files && $event.target.files.length !== 0) {
+      let jsonRegex = /.json$/;
+      this.fileReference = $event;
+      if (jsonRegex.test($event.target.files[0].name)) {
+        const fileContent = await this.importService.readFileAsText($event.target.files[0]);
+        this.importJson = JSON.parse(fileContent);
+
+        this.fileImportStatus = this.importService.getIsValidImportType(this.importJson, 'AMO-TOOLS-DESKTOP-OPPORTUNITIES');
+      } else {
+        this.fileImportStatus = {
+          fileType: 'UNKNOWN',
+          isValid: false
+        };
       }
     }
   }
 
   importFile() {
-    if (!this.importJson) {
-      let fr: FileReader = new FileReader();
-      fr.readAsText(this.fileReference.target.files[0]);
-      fr.onloadend = (e) => {
-        this.importJson = JSON.parse(JSON.stringify(fr.result));
-        this.importData(this.importJson);
-      };
-    }
-    else {
-      this.importData(this.importJson);
-    }
-  }
-
-  checkData(data: any) {
-    let importData = JSON.parse(data);
-    if (importData.origin == 'AMO-TOOLS-DESKTOP-OPPORTUNITIES') {
-      this.validFile = true;
-    } else {
-      this.validFile = false;
-    }
-  }
-
-  importData(data: any) {
-    let importData = JSON.parse(data);
+    let importData = this.importJson;
     this.treasureHunt = this.importOpportunitiesService.importData(importData, this.treasureHunt);
     this.treasureHuntService.treasureHunt.next(this.treasureHunt);
     this.opportunityCardsService.updateOpportunityCards.next(true);

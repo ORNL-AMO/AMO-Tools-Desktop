@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { GasLoadChargeMaterial } from '../shared/models/materials';
 import { GasLoadMaterialStoreMeta } from './dbConfig';
 
@@ -9,9 +9,19 @@ export class GasLoadMaterialDbService {
   storeName: string = GasLoadMaterialStoreMeta.store;
   dbGasLoadChargeMaterials: BehaviorSubject<Array<GasLoadChargeMaterial>>;
 
-  constructor(private dbService: NgxIndexedDBService) {
+  constructor(private dbService: NgxIndexedDBService
+  ) {
     this.dbGasLoadChargeMaterials = new BehaviorSubject<Array<GasLoadChargeMaterial>>([]);
+  }
 
+  insertDefaultMaterials(defaultMaterials: Array<GasLoadChargeMaterial>): Observable<number[]> {
+    return this.dbService.bulkAdd(this.storeName, defaultMaterials);
+  }
+
+  getAllCustomMaterials(): Observable<Array<GasLoadChargeMaterial>> {
+    return this.dbService.getAll(this.storeName).pipe(
+      map((materials: GasLoadChargeMaterial[]) => materials.filter((material: GasLoadChargeMaterial) => !material.isDefault))
+    );
   }
 
   getAllWithObservable(): Observable<Array<GasLoadChargeMaterial>> {

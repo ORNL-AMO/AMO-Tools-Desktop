@@ -15,9 +15,10 @@ import { FanInfoFormService } from './fan-analysis-form/fan-info-form/fan-info-f
 import { ConvertFanAnalysisService } from './convert-fan-analysis.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 @Component({
-  selector: 'app-fan-analysis',
-  templateUrl: './fan-analysis.component.html',
-  styleUrls: ['./fan-analysis.component.css']
+    selector: 'app-fan-analysis',
+    templateUrl: './fan-analysis.component.html',
+    styleUrls: ['./fan-analysis.component.css'],
+    standalone: false
 })
 export class FanAnalysisComponent implements OnInit {
   @Input()

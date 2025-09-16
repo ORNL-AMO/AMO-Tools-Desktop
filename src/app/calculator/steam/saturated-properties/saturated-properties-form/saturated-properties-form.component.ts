@@ -4,9 +4,10 @@ import { Settings } from "../../../../shared/models/settings";
 import { SaturatedPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
 
 @Component({
-  selector: 'app-saturated-properties-form',
-  templateUrl: './saturated-properties-form.component.html',
-  styleUrls: ['./saturated-properties-form.component.css']
+    selector: 'app-saturated-properties-form',
+    templateUrl: './saturated-properties-form.component.html',
+    styleUrls: ['./saturated-properties-form.component.css'],
+    standalone: false
 })
 export class SaturatedPropertiesFormComponent implements OnInit {
   @Input()

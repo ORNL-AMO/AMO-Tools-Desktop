@@ -4,9 +4,10 @@ import { UnitConverterService } from './unit-converter.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
-  selector: 'app-unit-converter',
-  templateUrl: './unit-converter.component.html',
-  styleUrls: ['./unit-converter.component.css']
+    selector: 'app-unit-converter',
+    templateUrl: './unit-converter.component.html',
+    styleUrls: ['./unit-converter.component.css'],
+    standalone: false
 })
 export class UnitConverterComponent implements OnInit {
   @Input()

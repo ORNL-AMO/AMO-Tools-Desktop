@@ -1,12 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { SSMTInputs, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { SSMTOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
-  selector: 'app-header-summary',
-  templateUrl: './header-summary.component.html',
-  styleUrls: ['./header-summary.component.css']
+    selector: 'app-header-summary',
+    templateUrl: './header-summary.component.html',
+    styleUrls: ['./header-summary.component.css'],
+    standalone: false
 })
 export class HeaderSummaryComponent implements OnInit {
   @Input()
@@ -19,6 +20,9 @@ export class HeaderSummaryComponent implements OnInit {
   printView: boolean;
   @Input()
   modificationOutputs: Array<SSMTOutput>;
+
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  copyTableString: any;
 
   collapse: boolean = true;
   numMods: number = 0;
@@ -47,6 +51,10 @@ export class HeaderSummaryComponent implements OnInit {
         }
       }
     })
+  }
+
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 
 }

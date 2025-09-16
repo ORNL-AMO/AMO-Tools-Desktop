@@ -1,0 +1,35 @@
+/* .beta-badge-measur {
+    color: #0c301c;
+    font-size: 14px;
+    background: #b6ff2e;
+    font-weight: 600;
+    border-radius: .5rem;
+    padding: 0.5rem .75rem;
+    display: flex;
+    align-self: center;
+    align-items: center;
+} */
+
+.beta-badge-measur {
+    color: #047334;
+    font-size: 18px;
+    background: #ecf7ef;
+    font-weight: 600;
+    border-radius: .5rem;
+    padding: 0.5rem .75rem;
+    display: flex;
+    align-self: center;
+    align-items: center;
+}
+
+.app-icon{
+    width: 22px;
+    border-radius: 8px;
+    margin-right: .25rem;
+  }
+
+  
+.info-icon {
+    font-size: 22px;
+    color: #156739;
+}

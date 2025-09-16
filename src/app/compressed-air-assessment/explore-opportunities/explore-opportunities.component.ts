@@ -9,9 +9,10 @@ import { CompressorTypeOption, CompressorTypeOptions } from '../inventory/invent
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
 
 @Component({
-  selector: 'app-explore-opportunities',
-  templateUrl: './explore-opportunities.component.html',
-  styleUrls: ['./explore-opportunities.component.css']
+    selector: 'app-explore-opportunities',
+    templateUrl: './explore-opportunities.component.html',
+    styleUrls: ['./explore-opportunities.component.css'],
+    standalone: false
 })
 export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
@@ -136,7 +137,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
         this.compressedAirAssessment.systemInformation.atmosphericPressure,
         this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval,
         this.compressedAirAssessment.systemInformation.totalAirStorage,
-        this.settings.electricityCost,
+        this.compressedAirAssessment.systemBasics.electricityCost,
         this.compressedAirAssessment.systemInformation
       );
     }
@@ -211,6 +212,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
     if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
       this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
     }    
+  }
+
+  focusedField(str: string) {
+    this.compressedAirAssessmentService.focusedField.next(str);
   }
 
 }

@@ -3,8 +3,9 @@ import * as _ from 'lodash';
 import { SummaryMotorData } from './inventory-summary-table.service';
 
 @Pipe({
-  name: 'motorSummaryTable',
-  pure: false
+    name: 'motorSummaryTable',
+    pure: false,
+    standalone: false
 })
 export class MotorSummaryTablePipe implements PipeTransform {
 

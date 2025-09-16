@@ -2,9 +2,10 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MeteredEnergyResults } from '../../../shared/models/phast/meteredEnergy';
 import { Settings } from '../../../shared/models/settings';
 @Component({
-  selector: 'app-metered-energy-results',
-  templateUrl: './metered-energy-results.component.html',
-  styleUrls: ['./metered-energy-results.component.css']
+    selector: 'app-metered-energy-results',
+    templateUrl: './metered-energy-results.component.html',
+    styleUrls: ['./metered-energy-results.component.css'],
+    standalone: false
 })
 export class MeteredEnergyResultsComponent implements OnInit {
   @Input()

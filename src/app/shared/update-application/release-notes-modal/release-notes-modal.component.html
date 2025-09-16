@@ -1,0 +1,107 @@
+<div bsModal #releaseNotesModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="versionModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header p-2">
+          <span class="card-header-text">
+            MEASUR v{{versionNum}} Release Notes
+          </span>
+          <button class="close" aria-label="Close" (click)="hideModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            MEASUR helps manufacturers increase industrial energy efficiency at the plant-level and in specific systems. 
+            Learn step-by-step ways to identify opportunities, monitor progress, and improve efficiency in any facility. 
+            Some tools help facilities implement an energy management system and prepare to become ISO 50001 and Superior Energy Performance certified. 
+            Based on older Department of Energy (DOE) tools, the Industrial Technologies office (ITO, formerlly the Advanced Manufacturing Office, AMO) 
+            has undertaken this effort to refactor the legacy tools into a modern environment. 
+            The suite includes 8 assessment modules (6 energy system, the treasure hunt, and the water balance modules), a Data Exploration Module, extensive help text, comprehensive reports, data visualization, and 80 calculators!
+          </p>
+          <p class="card-text-small">
+            MEASUR is a supported application, updates are expected and may impact previously created assessments.
+          </p>
+          <label class="header-label">Warnings</label>
+          <ul>
+            <li>Installing v1.0.0 or an earlier version of this tool will automatically reset your app data. Data can be
+              imported into an earlier version from v1.0.0</li>
+            <li>Do not install an earlier version of this tool without resetting your app data (in settings).</li>
+            <li>If MEASUR freezes during installation or fails to install, uninstall the previous version of MEASUR and
+              repeat installation of the new installer</li>
+            <li>Assessments created in MEASUR 0.8.0 or later are not compatible with older versions. </li>
+            <li>Exporting from v.0.8.0 and importing to a lower version will continue to work, though new features will
+              not be available.</li>
+          </ul>
+
+          <label class="header-label">Here are the details of what's new in version 1.6.2:</label>
+          <br>
+
+          <label>Application</label>
+          <ul>
+            <li>Enhanced: Notify users about browser storage requirement. Added detection for supported storage types.</li>
+            <li>Enhanced: Updated About page information on Water and Wastewater modules.</li>
+          </ul>
+
+          <label>Water</label>
+          <ul>
+            <li>Enhanced: Added highlighting for right side panel dependent on selected item</li>
+            <li>Enhanced: Consistent and user-definable result decimal places</li>
+            <li>Enhanced: Existing connections can be moved</li>
+            <li>Enhanced: Doubled allowable connections for Intakes and Outlets</li>
+            <li>Enhanced: Right side (data entry) panel is persistent when switching focus</li>
+            <li>Enhanced: Set line animations to off by default</li>
+            <li>Enhanced: The expected total flow is given in flow validation messages</li>
+            <li>Fixed: Diagram Result includes in-system treatment</li>
+            <li>Fixed: Field values are now synced between diagram and assessment</li>
+          </ul>
+
+          <!--  Include prev version -->
+          <label class="header-label">Here are the details of what's new in version 1.6.1:</label>
+          <br>
+
+          <label>Application</label>
+          <ul>
+            <li>Enhanced: Add detection and warning messages for incorrect imported MEASUR file types (importing into the wrong MEASUR location)</li>
+            <li>Enhanced: Added or updated copy table functionality for all reports</li>
+            <li>Enhanced: Updated project README with more detail on process-flow-diagram-component dependency</li>
+            <li>Enhanced: Added NEB (JUSTIFI) tool integration for all assessments</li>
+          </ul>
+
+          <label>Treasure Hunt</label>
+          <ul>
+            <li>Fixed: Treasure Hunt Opportunities export showing groups with no opportunities</li>
+          </ul>
+
+          <label>Compressed Air</label>
+
+          <ul>
+            <li>Enhanced: Added refill time result to Receiver Tank Sizing calculator</li>
+            <li>Fixed: Compressed Air tab name in Baseline reads "Explore opportunities", should say "Setup Profile"</li>
+            <li>Enhanced: Bag method updated to use bag volume in place of height and diameter for calculators Leak Loss Estimator, Air Leak Survey, and Compressed Air Reduction</li>
+          </ul>
+
+          <label>Data Explorer</label>
+          <ul>
+            <li>Fixed: Imports for large datasets where errors are thrown while processing Day Type Analysis</li>
+            <li>Enhanced: Large DE exports are now zipped to reduce long processing during export.</li>
+            <li>Fixed: In Refine Data, display error message if fields between 2 or more files do not match and "Apply my selections for all datasets" is checked</li>
+            <li>Fixed: Plotly.js custom modebar button function does not serialize properly</li>
+          </ul>
+
+          <label>Steam</label>
+          <ul>
+            <li>Fixed: Steam Reduction using incorrect validation for quality</li>
+          </ul>
+        </div>
+
+        <div class="modal-footer p-2 d-flex flex-row justify-content-end">
+          <div>
+            <button type="button" class="btn btn-secondary btn-sm mr-2 pull-right" (click)="hideModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

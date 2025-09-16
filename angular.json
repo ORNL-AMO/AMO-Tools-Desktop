@@ -32,7 +32,12 @@
               "src/favicon.ico",
               {
                 "glob": "**/*",
-                "input": "./node_modules/amo-tools-suite/bin/",
+                "input": "./node_modules/measur-tools-suite/bin/",
+                "output": "."
+              },
+              {
+                "glob": "**/*",
+                "input": "./process-flow-diagram-component/dist/",
                 "output": "."
               },
               "src/manifest.webmanifest"
@@ -152,10 +157,12 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "karmaConfig": "./karma.conf.js",
+            "karmaConfig": "karma.conf.js",
             "tsConfig": "src/tsconfig.spec.json",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "scripts": [],
             "styles": [
               "src/styles.css",
@@ -173,11 +180,6 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
-              {
-                "glob": "**/*",
-                "input": "./node_modules/amo-tools-suite/bin/",
-                "output": "./assets/"
-              },
               "src/manifest.webmanifest"
             ]
           }
@@ -206,6 +208,9 @@
     }
   },
   "cli": {
-    "analytics": "c7c821ee-29e2-4918-ab71-1e94bd66b1fb"
+    "analytics": "c7c821ee-29e2-4918-ab71-1e94bd66b1fb",
+    "cache": {
+      "enabled": false
+    }
   }
 }

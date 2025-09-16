@@ -17,10 +17,11 @@ import { PlotlyService } from "angular-plotly.js";
 import { SankeyNode } from "../models/sankey";
 
 @Component({
-  selector: 'app-psat-sankey',
-  templateUrl: './psat-sankey.component.html',
-  styleUrls: ['./psat-sankey.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-psat-sankey',
+    templateUrl: './psat-sankey.component.html',
+    styleUrls: ['./psat-sankey.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class PsatSankeyComponent implements OnInit {
   @Input()
@@ -263,22 +264,22 @@ export class PsatSankeyComponent implements OnInit {
 
   calcLosses(results) {
     var motorShaftPower;
-    var pumpShaftPower;
+    var moverShaftPower;
     if (this.settings.powerMeasurement === "hp") {
       motorShaftPower = this.convertUnitsService
         .value(results.motor_shaft_power)
         .from("hp")
         .to("kW");
-      pumpShaftPower = this.convertUnitsService
-        .value(results.pump_shaft_power)
+      moverShaftPower = this.convertUnitsService
+        .value(results.mover_shaft_power)
         .from("hp")
         .to("kW");
     } else {
       motorShaftPower = results.motor_shaft_power;
-      pumpShaftPower = results.pump_shaft_power;
+      moverShaftPower = results.mover_shaft_power;
     }
     this.motor = results.motor_power * (1 - results.motor_efficiency / 100);
-    this.drive = motorShaftPower - pumpShaftPower;
+    this.drive = motorShaftPower - moverShaftPower;
     this.pump =
       (results.motor_power - this.motor - this.drive) *
       (1 - results.pump_efficiency / 100);

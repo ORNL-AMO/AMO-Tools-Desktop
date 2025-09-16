@@ -4,7 +4,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
 import { OpeningLoss, OpeningLossOutput } from '../../../shared/models/phast/losses/openingLoss';
 import { Settings } from '../../../shared/models/settings';
-import { OpeningLossTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { OpeningLossTreasureHunt, OpportunityUtilityType, Treasure } from '../../../shared/models/treasure-hunt';
 import { FlueGasService } from '../flue-gas/flue-gas.service';
 import { OpeningService } from './opening.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
@@ -12,7 +12,8 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 @Component({
   selector: 'app-opening',
   templateUrl: './opening.component.html',
-  styleUrls: ['./opening.component.css']
+  styleUrls: ['./opening.component.css'],
+  standalone: false
 })
 export class OpeningComponent implements OnInit {
   @Input()
@@ -25,7 +26,7 @@ export class OpeningComponent implements OnInit {
   emitSave = new EventEmitter<OpeningLossTreasureHunt>();
   @Output("emitCancel")
   emitCancel = new EventEmitter<boolean>();
-  
+
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
@@ -50,8 +51,8 @@ export class OpeningComponent implements OnInit {
   smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService, private flueGasService: FlueGasService,
-              private openingService: OpeningService,
-              private analyticsService: AnalyticsService) { }
+    private openingService: OpeningService,
+    private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('calculator-PH-opening');
@@ -67,7 +68,7 @@ export class OpeningComponent implements OnInit {
       this.resetOpeningInputs();
     }
     this.initSubscriptions();
-    if(this.modificationData) {
+    if (this.modificationData) {
       this.modificationExists = true;
     }
   }
@@ -102,7 +103,7 @@ export class OpeningComponent implements OnInit {
       }
     })
   }
-  
+
   setTab(str: string) {
     this.tabSelect = str;
   }
@@ -119,9 +120,9 @@ export class OpeningComponent implements OnInit {
     this.openingService.initModification();
     this.modificationExists = true;
     this.setModificationSelected();
-   }
+  }
 
-   btnResetData() {
+  btnResetData() {
     this.modificationExists = false;
     this.resetOpeningInputs();
     this.openingService.resetData.next(true);
@@ -154,11 +155,13 @@ export class OpeningComponent implements OnInit {
 
   save() {
     let output: OpeningLossOutput = this.openingService.output.getValue();
+    //energySourceType is OpportunityUtilityType when in treasure hunt
+    let opportunityUtilityType: OpportunityUtilityType = this.baselineData[0].energySourceType as OpportunityUtilityType;
     this.emitSave.emit({
       baseline: this.baselineData,
       modification: this.modificationData,
       energySourceData: {
-        energySourceType: this.baselineData[0].energySourceType,
+        energySourceType: opportunityUtilityType,
         unit: output.energyUnit,
       },
       opportunityType: Treasure.openingLoss
@@ -169,7 +172,7 @@ export class OpeningComponent implements OnInit {
     this.openingService.initDefaultEmptyInputs();
     this.emitCancel.emit(true);
   }
-  
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.resizeTabs();
