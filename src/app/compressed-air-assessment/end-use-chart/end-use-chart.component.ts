@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
@@ -8,12 +8,15 @@ import { BaselineResults, DayTypeProfileSummary } from '../calculations/caCalcul
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { DayTypeSetupService } from '../end-uses/day-type-setup-form/day-type-setup.service';
 import { EndUseEnergy, EndUseEnergyData, EndUsesService } from '../end-uses/end-uses.service';
+import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
-    selector: 'app-end-use-chart',
-    templateUrl: './end-use-chart.component.html',
-    styleUrls: ['./end-use-chart.component.css'],
-    standalone: false
+  selector: 'app-end-use-chart',
+  templateUrl: './end-use-chart.component.html',
+  styleUrls: ['./end-use-chart.component.css'],
+  standalone: false
 })
 export class EndUseChartComponent implements OnInit {
   @ViewChild('overviewPieChart', { static: false }) overviewPieChart: ElementRef;
@@ -52,7 +55,9 @@ export class EndUseChartComponent implements OnInit {
     private endUsesService: EndUsesService,
     private cd: ChangeDetectorRef,
     private dayTypeSetupService: DayTypeSetupService,
-    private plotlyService: PlotlyService) { }
+    private plotlyService: PlotlyService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -64,7 +69,9 @@ export class EndUseChartComponent implements OnInit {
     } else {
       this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => dayType.dayTypeId === this.endUseDayTypeSetup.selectedDayTypeId);
     }
-    this.dayTypeBaselineResults = this.endUsesService.getBaselineResults(this.compressedAirAssessment, this.settings);
+
+    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+    this.dayTypeBaselineResults = compressedAirAssessmentBaselineResults.baselineResults;
     if (this.settings.unitsOfMeasure !== 'Imperial') {
       this.airflowUnits = 'm<sup>3</sup>/min';
     }
@@ -79,7 +86,8 @@ export class EndUseChartComponent implements OnInit {
   ngAfterViewInit() {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       this.compressedAirAssessment = compressedAirAssessment;
-      this.dayTypeBaselineResults = this.endUsesService.getBaselineResults(this.compressedAirAssessment, this.settings);
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      this.dayTypeBaselineResults = compressedAirAssessmentBaselineResults.baselineResults;
       this.showChart = true;
       this.setChartData();
     });
@@ -153,7 +161,7 @@ export class EndUseChartComponent implements OnInit {
       let text: Array<number> = endUseEnergyData.map(val => val.dayTypeAverageAirFlow);
       let colors: Array<string> = this.setChartColors(endUseEnergyData);
       let width: Array<number> = endUseEnergyData.map(val => 2);
-      
+
       if (otherEndUseData) {
         values.push(otherEndUseData.dayTypeAverageAirflowPercent);
         labels.push('Other End Use Airflow');

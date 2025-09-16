@@ -7,25 +7,30 @@ import { BaselineResult, BaselineResults } from '../../calculations/caCalculatio
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { EndUseResults, EndUsesService, UpdatedEndUseData } from '../end-uses.service';
 import { DayTypeEndUseWarnings, DayTypeUseFormService } from './day-type-use-form.service';
+import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
-    selector: 'app-day-type-use-form',
-    templateUrl: './day-type-use-form.component.html',
-    styleUrls: ['./day-type-use-form.component.css'],
-    standalone: false
+  selector: 'app-day-type-use-form',
+  templateUrl: './day-type-use-form.component.html',
+  styleUrls: ['./day-type-use-form.component.css'],
+  standalone: false
 })
 export class DayTypeUseFormComponent implements OnInit {
   settings: Settings;
   selectedDayTypeEndUseSubscription: Subscription;
-  warnings: DayTypeEndUseWarnings = {measuredPressure: undefined};
+  warnings: DayTypeEndUseWarnings = { measuredPressure: undefined };
   compressedAirAssessment: CompressedAirAssessment;
-  
+
   dayTypeEndUseResult: EndUseResults;
   form: UntypedFormGroup;
   isFormChange: boolean = false;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, 
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private dayTypeUseFormService: DayTypeUseFormService,
-    private endUsesService: EndUsesService) { }
+    private endUsesService: EndUsesService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -37,7 +42,7 @@ export class DayTypeUseFormComponent implements OnInit {
       this.warnings = this.dayTypeUseFormService.checkDayTypeEndUseWarnings(selectedDayTypeEndUse, selectedEndUse);
       this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
       this.form = this.dayTypeUseFormService.getDayTypeUseForm(selectedDayTypeEndUse, this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeAverageAirflow);
-      
+
       this.setResults(selectedDayTypeEndUse);
     });
   }
@@ -47,7 +52,8 @@ export class DayTypeUseFormComponent implements OnInit {
   }
 
   setResults(selectedDayTypeEndUse: DayTypeEndUse) {
-    let baselineResults: BaselineResults = this.endUsesService.getBaselineResults(this.compressedAirAssessment, this.settings);
+    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+    let baselineResults: BaselineResults = compressedAirAssessmentBaselineResults.baselineResults;
     let daytypeBaselineResults: BaselineResult = baselineResults.dayTypeResults.find(dayType => dayType.dayTypeId === selectedDayTypeEndUse.dayTypeId);
     let selectedEndUse: EndUse = this.endUsesService.selectedEndUse.getValue();
     this.dayTypeEndUseResult = this.endUsesService.getSingleDayTypeEndUseResults(selectedDayTypeEndUse, daytypeBaselineResults, selectedEndUse);
@@ -66,6 +72,6 @@ export class DayTypeUseFormComponent implements OnInit {
   focusField(str: string) {
     this.compressedAirAssessmentService.focusedField.next(str);
   }
-  
+
 
 }

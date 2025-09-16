@@ -12,26 +12,29 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
 import { DayTypeSetupService } from '../../end-uses/day-type-setup-form/day-type-setup.service';
 import { CompressedAirSankeyNode, CompressedAirSankeyResults, PowerSankeyService } from './power-sankey.service';
 import { BaselineResults } from '../../calculations/caCalculationModels';
+import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
-    selector: 'app-power-sankey',
-    templateUrl: './power-sankey.component.html',
-    styleUrls: ['./power-sankey.component.css'],
-    standalone: false
+  selector: 'app-power-sankey',
+  templateUrl: './power-sankey.component.html',
+  styleUrls: ['./power-sankey.component.css'],
+  standalone: false
 })
 export class PowerSankeyComponent implements OnInit {
   @Input()
   appBackground: boolean = true;
   @Input()
   inReport: boolean;
-  @ViewChild("powerChart", { static: false }) 
+  @ViewChild("powerChart", { static: false })
   ngChart: ElementRef;
-  
+
   labelStyle: string;
   settings: Settings;
   results;
   nodes: Array<CompressedAirSankeyNode> = [];
-  links: Array<{source: number, target: number}> = [
+  links: Array<{ source: number, target: number }> = [
     { source: 0, target: 1 },
     { source: 0, target: 2 },
     { source: 1, target: 2 },
@@ -64,7 +67,7 @@ export class PowerSankeyComponent implements OnInit {
   sankeyLabelStyle: string = 'both';
   profileDataComplete: boolean = true;
   baselineResults: BaselineResults;
-  dayTypeBaselineProfileSummaries: Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}>;
+  dayTypeBaselineProfileSummaries: Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>;
 
   endUseDayTypeSetup: EndUseDayTypeSetup;
   hasValidDayTypeSetup: boolean;
@@ -84,14 +87,18 @@ export class PowerSankeyComponent implements OnInit {
     private airPropertiesService: AirPropertiesCsvService,
     private resultsService: CompressedAirAssessmentResultsService,
     private plotlyService: PlotlyService,
-    private printOptionsMenuService: PrintOptionsMenuService
+    private printOptionsMenuService: PrintOptionsMenuService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService
   ) { }
 
- ngOnInit() {
+  ngOnInit() {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.dayTypeBaselineProfileSummaries = this.getDayTypeProfileSummaries();
-    this.baselineResults = this.resultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings, this.dayTypeBaselineProfileSummaries);
+
+    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+    this.baselineResults = compressedAirAssessmentBaselineResults.baselineResults;
     this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(showPrintView => {
       this.printView = showPrintView;
       this.checkShouldPrint();
@@ -117,7 +124,7 @@ export class PowerSankeyComponent implements OnInit {
   checkShouldPrint() {
     let hasPrintSankeyOption = this.printOptionsMenuService.printOptions.getValue().printReportSankey;
     if (this.printView && hasPrintSankeyOption && !this.printOptionsMenuService.isPowerSankeyPrintViewReady.getValue()) {
-        this.printOptionsMenuService.isPowerSankeyPrintViewReady.next(true);
+      this.printOptionsMenuService.isPowerSankeyPrintViewReady.next(true);
     }
   }
 
@@ -125,16 +132,16 @@ export class PowerSankeyComponent implements OnInit {
     this.dayTypeSetupServiceSubscription.unsubscribe();
     this.showPrintViewSub.unsubscribe();
   }
-  
+
   getDayTypeProfileSummaries() {
-    let baselineDayTypeProfileSummarries = new Array<{dayTypeId: string, profileSummary: Array<ProfileSummary>}>();
-      this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        let baselineProfileSummary: Array<ProfileSummary> = this.resultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType, this.settings);
-        baselineDayTypeProfileSummarries.push({
-          dayTypeId: dayType.dayTypeId,
-          profileSummary: baselineProfileSummary
-        });
+    let baselineDayTypeProfileSummarries = new Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>();
+    this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+      let baselineProfileSummary: Array<ProfileSummary> = this.resultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType, this.settings);
+      baselineDayTypeProfileSummarries.push({
+        dayTypeId: dayType.dayTypeId,
+        profileSummary: baselineProfileSummary
       });
+    });
     return baselineDayTypeProfileSummarries;
   }
 
@@ -154,11 +161,11 @@ export class PowerSankeyComponent implements OnInit {
     } else {
       selectedCompressorDayTypeSummary = this.dayTypeBaselineProfileSummaries.find(result => result.dayTypeId == this.endUseDayTypeSetup.selectedDayTypeId).profileSummary;
     }
-    
+
     if (selectedCompressorDayTypeSummary) {
       this.profileDataComplete = true;
     }
-    
+
     let canRenderSankey: boolean = this.compressedAirAssessment && this.compressedAirAssessment.setupDone && this.profileDataComplete && this.hasValidDayTypeSetup;
     if (canRenderSankey) {
       this.sankeyResults = this.powerSankeyService.getSankeyResults(this.compressedAirAssessment, this.dayTypeLeakRate, selectedCompressorDayTypeSummary);
@@ -224,13 +231,13 @@ export class PowerSankeyComponent implements OnInit {
       },
       xaxis: {
         showgrid: false,
-        showticklabels:false,
-        showline:false,
+        showticklabels: false,
+        showline: false,
       },
       yaxis: {
         showgrid: false,
-        showticklabels:false,
-        showline:false,
+        showticklabels: false,
+        showline: false,
       },
     };
 
@@ -240,37 +247,37 @@ export class PowerSankeyComponent implements OnInit {
     }
 
     let config = {
-      modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
+      modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian'],
       responsive: true,
       displayModeBar: true,
       displaylogo: true
     };
     if (this.printView) {
-        config.displaylogo = false;
-        config.displayModeBar = false;
-        config.responsive = false
+      config.displaylogo = false;
+      config.displayModeBar = false;
+      config.responsive = false
     }
 
     this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
-    .then(chart => {
-      this.addGradientElement();
-      this.buildSvgArrows();
-      chart.on('plotly_restyle', () => {
-        this.setGradient();
+      .then(chart => {
+        this.addGradientElement();
+        this.buildSvgArrows();
+        chart.on('plotly_restyle', () => {
+          this.setGradient();
+        });
+        chart.on('plotly_afterplot', () => {
+          this.setGradient();
+        });
+        chart.on('plotly_hover', () => {
+          this.setGradient();
+        });
+        chart.on('plotly_unhover', () => {
+          this.setGradient();
+        });
+        chart.on('plotly_relayout', () => {
+          this.setGradient();
+        });
       });
-      chart.on('plotly_afterplot', () => {
-        this.setGradient();
-      });
-      chart.on('plotly_hover', () => {
-        this.setGradient();
-      });
-      chart.on('plotly_unhover', () => {
-        this.setGradient();
-      });
-      chart.on('plotly_relayout', () => {
-        this.setGradient();
-      });
-    });
   }
 
   buildNodes() {
@@ -278,8 +285,8 @@ export class PowerSankeyComponent implements OnInit {
     let originConnectorPercentage: number = (originConnectorValue / this.sankeyResults.kWInSystem) * 100;
     let secondaryConnectorValue: number = originConnectorValue - this.sankeyResults.kWHeatOfcompressionSystem;
     let secondaryConnectorPercentage: number = (secondaryConnectorValue / this.sankeyResults.kWInSystem) * 100;
-    this.connectingNodes = [0,1,2,5];
-    
+    this.connectingNodes = [0, 1, 2, 5];
+
     let kWMechPercentage = (this.sankeyResults.kWMechSystem / this.sankeyResults.kWInSystem) * 100;
     let kwHocSysPercentage = (this.sankeyResults.kWHeatOfcompressionSystem / this.sankeyResults.kWInSystem) * 100;
     let kwLeakSysPercentage = (this.sankeyResults.kWLeakSystem / this.sankeyResults.kWInSystem) * 100;
@@ -297,7 +304,7 @@ export class PowerSankeyComponent implements OnInit {
         y: .6,
         source: 0,
         loss: this.sankeyResults.kWInSystem,
-        target: [1,2],
+        target: [1, 2],
         isConnector: true,
         nodeColor: this.gradientStartColorPurple,
         id: 'originalInputConnector'
@@ -320,7 +327,7 @@ export class PowerSankeyComponent implements OnInit {
         x: .475,
         y: .625,
         source: 2,
-        loss:  originConnectorValue,
+        loss: originConnectorValue,
         target: [4, 5],
         isConnector: true,
         nodeColor: this.gradientStartColorPurple,
@@ -420,12 +427,12 @@ export class PowerSankeyComponent implements OnInit {
     for (let i = 0; i < links.length; i++) {
       if (this.gradientLinkPaths.includes(i + 1)) {
         fill = 'url(#compressedAirGradientPurple) !important';
-      }  else {
+      } else {
         fill = `${this.gradientStartColorPurple} !important`;
       }
-    
+
       links[i].setAttribute('style', `fill: ${fill}; opacity: 1; fill-opacity: ${fillOpacity};`);
-      
+
       if (i == this.nodes.length - 1) {
         this.setNodeLabelSpacing(nodes[i]);
       }
@@ -458,7 +465,7 @@ export class PowerSankeyComponent implements OnInit {
       if (!this.connectingNodes.includes(i)) {
         const height = rects[i].getAttribute('height');
         const defaultY = rects[i].getAttribute('y');
-        
+
         let width = height;
         let verticalAlignment: number = 2.75;
         let sizingRatio: number = 1.75;
@@ -482,6 +489,6 @@ export class PowerSankeyComponent implements OnInit {
 }
 
 export interface SankeyOption {
-  name: string, 
+  name: string,
   compressedAirAssessment: CompressedAirAssessment,
 };

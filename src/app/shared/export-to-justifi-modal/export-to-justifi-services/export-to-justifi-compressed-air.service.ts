@@ -7,6 +7,9 @@ import { Assessment } from '../../models/assessment';
 import { Modification } from '../../models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment/compressed-air-assessment.service';
 import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../../../compressed-air-assessment/calculations/caCalculationModels'
+import { CompressedAirAssessmentBaselineResults } from '../../../compressed-air-assessment/calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirCalculationService } from '../../../compressed-air-assessment/compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../assessment-co2-savings/assessment-co2-savings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +18,9 @@ export class ExportToJustifiCompressedAirService {
 
   constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
     private settingsDbService: SettingsDbService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService
+    private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService
   ) { }
 
 
@@ -30,7 +35,9 @@ export class ExportToJustifiCompressedAirService {
     this.compressedAirAssessmentService.setIsSetupDone(assessment.compressedAirAssessment);
     if (assessment.compressedAirAssessment.setupDone) {
       let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-      let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(assessment.compressedAirAssessment, settings);
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(assessment.compressedAirAssessment, settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+
+      let baselineResults: BaselineResults = compressedAirAssessmentBaselineResults.baselineResults;
 
       //D: implementation costs not at assessment level for CA
       //E: electricity use

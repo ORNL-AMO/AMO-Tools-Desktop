@@ -9,12 +9,15 @@ import { Settings } from '../../../../../shared/models/settings';
 import { AssessmentService } from '../../../../assessment.service';
 import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment/compressed-air-assessment.service';
 import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../../../../../compressed-air-assessment/calculations/caCalculationModels'
+import { CompressedAirAssessmentBaselineResults } from '../../../../../compressed-air-assessment/calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirCalculationService } from '../../../../../compressed-air-assessment/compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
-    selector: 'app-compressed-air-assessment-card',
-    templateUrl: './compressed-air-assessment-card.component.html',
-    styleUrls: ['./compressed-air-assessment-card.component.css'],
-    standalone: false
+  selector: 'app-compressed-air-assessment-card',
+  templateUrl: './compressed-air-assessment-card.component.html',
+  styleUrls: ['./compressed-air-assessment-card.component.css'],
+  standalone: false
 })
 export class CompressedAirAssessmentCardComponent implements OnInit {
   @Input()
@@ -33,14 +36,17 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
   constructor(private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentService.setIsSetupDone(this.assessment.compressedAirAssessment);
     this.setupDone = this.assessment.compressedAirAssessment.setupDone;
     if (this.setupDone) {
       this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
-      this.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.assessment.compressedAirAssessment, this.settings);
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.assessment.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      this.baselineResults = compressedAirAssessmentBaselineResults.baselineResults;
       this.numMods = this.assessment.compressedAirAssessment.modifications.length;
 
       let baselineProfileSummaries: Array<{ profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }> = new Array();

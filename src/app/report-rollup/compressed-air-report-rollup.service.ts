@@ -6,6 +6,9 @@ import { CompressedAirAssessmentResultsService } from '../compressed-air-assessm
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../compressed-air-assessment/calculations/caCalculationModels';
+import { CompressedAirCalculationService } from '../compressed-air-assessment/compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { CompressedAirAssessmentBaselineResults } from '../compressed-air-assessment/calculations/CompressedAirAssessmentBaselineResults';
 @Injectable()
 export class CompressedAirReportRollupService {
 
@@ -15,7 +18,9 @@ export class CompressedAirReportRollupService {
   allAssessmentResults: Array<AllCompressedAirResultsData>;
   totals: ReportUtilityTotal;
   constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
-    private convertUnitsService: ConvertUnitsService) {
+    private convertUnitsService: ConvertUnitsService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) {
     this.initSummary();
   }
 
@@ -70,7 +75,8 @@ export class CompressedAirReportRollupService {
     this.allAssessmentResults = new Array<AllCompressedAirResultsData>();
     assessmentArr.forEach(val => {
       if (val.assessment.compressedAirAssessment.setupDone) {
-        let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(val.assessment.compressedAirAssessment, val.settings);
+        let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(val.assessment.compressedAirAssessment, val.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+        let baselineResults: BaselineResults = compressedAirAssessmentBaselineResults.baselineResults;
         if (val.assessment.compressedAirAssessment.modifications) {
           if (val.assessment.compressedAirAssessment.modifications.length !== 0) {
             let modResultsArr: Array<DayTypeModificationResult> = new Array<DayTypeModificationResult>();
@@ -97,7 +103,8 @@ export class CompressedAirReportRollupService {
   setAssessmentResultsFromSelected(selectedAssessments: Array<CompressedAirCompare>) {
     this.selectedAssessmentResults = new Array<CompressedAirResultsData>();
     selectedAssessments.forEach(val => {
-      let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(val.assessment.compressedAirAssessment, val.settings);
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(val.assessment.compressedAirAssessment, val.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      let baselineResults: BaselineResults = compressedAirAssessmentBaselineResults.baselineResults;
       if (val.modification) {
         let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, val.modification, val.settings, undefined, baselineResults);
         let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, baselineResults);
@@ -124,7 +131,7 @@ export class CompressedAirReportRollupService {
         diffEnergy = result.baselineResults.total.energyUse - result.modificationResults.allSavingsResults.adjustedResults.power;
         sumEnergy += result.modificationResults.allSavingsResults.adjustedResults.power;
         // * results already in ton/tonne (calculated from assessment)
-        sumCo2Savings += result.modificationResults.allSavingsResults.savings.annualEmissionOutputSavings; 
+        sumCo2Savings += result.modificationResults.allSavingsResults.savings.annualEmissionOutputSavings;
         sumCo2Emissions += result.modificationResults.annualEmissionOutput;
       } else {
         sumCost += result.baselineResults.total.totalAnnualOperatingCost;

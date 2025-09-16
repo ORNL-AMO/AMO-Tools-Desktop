@@ -3,11 +3,16 @@ import { CompressedAirAssessment, EndUseDayTypeSetup } from '../../../shared/mod
 import { Settings } from '../../../shared/models/settings';
 import { BaselineResults } from '../../calculations/caCalculationModels';
 import { EndUseEnergy, EndUseEnergyData, EndUsesService } from '../../end-uses/end-uses.service';
+import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Injectable()
 export class AirflowSankeyService {
   baseSize: number = 300;
-  constructor(private endUsesService: EndUsesService) { }
+  constructor(private endUsesService: EndUsesService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   getAirFlowSankeyResults(compressedAirAssessment: CompressedAirAssessment, endUseDayTypeSetup: EndUseDayTypeSetup, settings: Settings): AirFlowSankeyResults {
     let airflowSankeyResults: AirFlowSankeyResults = {
@@ -16,8 +21,9 @@ export class AirflowSankeyService {
     };
 
     if (compressedAirAssessment.endUseData.endUses.length > 0) {
-      let dayTypeBaselineResults: BaselineResults = this.endUsesService.getBaselineResults(compressedAirAssessment, settings);
-      let endUseEnergy: EndUseEnergy = this.endUsesService.getEndUseEnergyData(compressedAirAssessment, endUseDayTypeSetup, dayTypeBaselineResults);
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(compressedAirAssessment, settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      let baselineResults: BaselineResults = compressedAirAssessmentBaselineResults.baselineResults;
+      let endUseEnergy: EndUseEnergy = this.endUsesService.getEndUseEnergyData(compressedAirAssessment, endUseDayTypeSetup, baselineResults);
       if (endUseEnergy.hasValidEndUses) {
         let endUseEnergyData: Array<EndUseEnergyData> = endUseEnergy.endUseEnergyData;
         airflowSankeyResults.endUseEnergyData = endUseEnergy.endUseEnergyData;

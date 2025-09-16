@@ -21,17 +21,20 @@ import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { SsmtService } from '../../../ssmt/ssmt.service';
 import { SettingsService } from '../../../settings/settings.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
- 
+
 import { WasteWaterService } from '../../../waste-water/waste-water.service';
 import { WasteWaterResults } from '../../../shared/models/waste-water';
 import { CompressedAirAssessmentResultsService } from '../../../compressed-air-assessment/compressed-air-assessment-results.service';
 import { BaselineResults } from '../../../compressed-air-assessment/calculations/caCalculationModels';
+import { CompressedAirAssessmentBaselineResults } from '../../../compressed-air-assessment/calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirCalculationService } from '../../../compressed-air-assessment/compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
-    selector: 'app-directory-summary',
-    templateUrl: './directory-summary.component.html',
-    styleUrls: ['./directory-summary.component.css'],
-    standalone: false
+  selector: 'app-directory-summary',
+  templateUrl: './directory-summary.component.html',
+  styleUrls: ['./directory-summary.component.css'],
+  standalone: false
 })
 export class DirectorySummaryComponent implements OnInit {
 
@@ -55,8 +58,10 @@ export class DirectorySummaryComponent implements OnInit {
   constructor(private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private dashboardService: DashboardService, private settingsDbService: SettingsDbService, private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
-    private ssmtService: SsmtService, private settingsService: SettingsService,   
-    private wasteWaterService: WasteWaterService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService
+    private ssmtService: SsmtService, private settingsService: SettingsService,
+    private wasteWaterService: WasteWaterService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService
   ) { }
 
   ngOnInit() {
@@ -91,7 +96,7 @@ export class DirectorySummaryComponent implements OnInit {
       let convertedFsatEnergy: number = this.convertUnitsService.value(this.fsatSummary.totalEnergyUsed).from('MWh').to(this.directorySettings.energyResultUnit);
       let convertedPsatEnergy: number = this.convertUnitsService.value(this.psatSummary.totalEnergyUsed).from('MWh').to(this.directorySettings.energyResultUnit);
       let convertedWasteWaterEnergy: number = this.convertUnitsService.value(this.wasteWaterSummary.totalEnergyUsed).from('MWh').to(this.directorySettings.energyResultUnit);
-      let convertedCompressedAirEnergy: number =this.convertUnitsService.value(this.compressedAirSummary.totalEnergyUsed).from('MWh').to(this.directorySettings.energyResultUnit);
+      let convertedCompressedAirEnergy: number = this.convertUnitsService.value(this.compressedAirSummary.totalEnergyUsed).from('MWh').to(this.directorySettings.energyResultUnit);
       this.totalSummary = {
         totalAssessments: this.psatSummary.totalAssessments + this.phastSummary.totalAssessments + this.fsatSummary.totalAssessments + this.ssmtSummary.totalAssessments + this.wasteWaterSummary.totalAssessments + this.compressedAirSummary.totalAssessments,
         totalCost: this.psatSummary.totalCost + this.phastSummary.totalCost + this.fsatSummary.totalCost + this.ssmtSummary.totalCost + this.wasteWaterSummary.totalCost + this.compressedAirSummary.totalCost,
@@ -201,16 +206,16 @@ export class DirectorySummaryComponent implements OnInit {
     }
   }
 
-  calculateCompressedAirSummary(){
+  calculateCompressedAirSummary() {
     let compressedAirAssessments: Array<Assessment> = _.filter(this.directory.assessments, (assessment) => { return assessment.type == 'CompressedAir' });
     let totalEnergyUsed: number = 0;
     let totalCost: number = 0;
     compressedAirAssessments.forEach(assessment => {
-      if(assessment.compressedAirAssessment.setupDone){
+      if (assessment.compressedAirAssessment.setupDone) {
         let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(assessment);
-        let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(assessment.compressedAirAssessment, assessmentSettings);
-        totalCost += baselineResults.total.totalAnnualOperatingCost;
-        totalEnergyUsed += (baselineResults.total.energyUse / 1000);
+        let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(assessment.compressedAirAssessment, assessmentSettings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+        totalCost += compressedAirAssessmentBaselineResults.baselineResults.total.totalAnnualOperatingCost;
+        totalEnergyUsed += (compressedAirAssessmentBaselineResults.baselineResults.total.energyUse / 1000);
       }
     });
     this.compressedAirSummary = {
@@ -238,7 +243,7 @@ export class DirectorySummaryComponent implements OnInit {
     this.directorySettings.id = id;
     this.directorySettings.facilityInfo = facilityInfo;
     await firstValueFrom(this.settingsDbService.updateWithObservable(this.directorySettings));
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.calculateSummary();
     this.settingsModal.hide();

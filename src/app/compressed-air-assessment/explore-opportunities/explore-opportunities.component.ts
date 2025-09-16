@@ -8,17 +8,20 @@ import { InventoryService } from '../inventory/inventory.service';
 import { CompressorTypeOption, CompressorTypeOptions } from '../inventory/inventoryOptions';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
 import { CompressedAirAssessmentResult } from '../calculations/caCalculationModels';
+import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
-    selector: 'app-explore-opportunities',
-    templateUrl: './explore-opportunities.component.html',
-    styleUrls: ['./explore-opportunities.component.css'],
-    standalone: false
+  selector: 'app-explore-opportunities',
+  templateUrl: './explore-opportunities.component.html',
+  styleUrls: ['./explore-opportunities.component.css'],
+  standalone: false
 })
 export class ExploreOpportunitiesComponent implements OnInit {
   @Input()
   containerHeight: number;
-  
+
   @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -46,7 +49,9 @@ export class ExploreOpportunitiesComponent implements OnInit {
   showCascadingAndSequencer: boolean;
   smallScreenTab: string = 'form';
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
+    private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -128,7 +133,8 @@ export class ExploreOpportunitiesComponent implements OnInit {
         });
       });
       //set baseline results
-      this.exploreOpportunitiesService.baselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(this.compressedAirAssessment, this.settings, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries);
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      this.exploreOpportunitiesService.baselineResults = compressedAirAssessmentBaselineResults.baselineResults;
       //set flow reallocation data      
       this.compressedAirAssessmentResultsService.setFlowReallocationSummaries(
         this.compressedAirAssessment.compressedAirDayTypes,
@@ -212,7 +218,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   resizeTabs() {
     if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
       this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
-    }    
+    }
   }
 
   focusedField(str: string) {

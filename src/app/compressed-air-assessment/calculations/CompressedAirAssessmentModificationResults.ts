@@ -2,7 +2,7 @@ import { AssessmentCo2SavingsService } from "../../shared/assessment-co2-savings
 import { CompressedAirAssessment, Modification } from "../../shared/models/compressed-air-assessment";
 import { Settings } from "../../shared/models/settings";
 import { CompressedAirCalculationService } from "../compressed-air-calculation.service";
-import { CompressedAirAssessmentResult } from "./caCalculationModels";
+import { CompressedAirAssessmentResult, DayTypeModificationResult } from "./caCalculationModels";
 import { CompressedAirAssessmentBaselineResults } from "./CompressedAirAssessmentBaselineResults";
 
 
@@ -28,17 +28,17 @@ export class CompressedAirAssessmentModificationResults {
         _assessmentCo2SavingsService: AssessmentCo2SavingsService) {
         this.compressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(compressedAirAssessment, settings, _compressedAirCalculationService, _assessmentCo2SavingsService);
         
-        // let modificationOrders: Array<number> = [
-        //     modification.addPrimaryReceiverVolume.order,
-        //     modification.adjustCascadingSetPoints.order,
-        //     modification.improveEndUseEfficiency.order,
-        //     modification.reduceRuntime.order,
-        //     modification.reduceAirLeaks.order,
-        //     modification.reduceSystemAirPressure.order,
-        //     modification.useAutomaticSequencer.order,
-        // ]
-        // modificationOrders = modificationOrders.filter(order => { return order != 100 });
-        // let modificationResults: Array<DayTypeModificationResult> = new Array();
+        let modificationOrders: Array<number> = [
+            modification.addPrimaryReceiverVolume.order,
+            modification.adjustCascadingSetPoints.order,
+            modification.improveEndUseEfficiency.order,
+            modification.reduceRuntime.order,
+            modification.reduceAirLeaks.order,
+            modification.reduceSystemAirPressure.order,
+            modification.useAutomaticSequencer.order,
+        ]
+        modificationOrders = modificationOrders.filter(order => { return order != 100 });
+        let modificationResults: Array<DayTypeModificationResult> = new Array();
         // let compressedAirAssessmentCopy: CompressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         // if (modification.replaceCompressor.order != 100) {
         //     //TODO: swap out replacement compressors
