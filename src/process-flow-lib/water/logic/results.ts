@@ -1053,7 +1053,7 @@ export const getPlantSummaryResults = (
       );
       systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerYear = trueCost;
 
-      const directFlowTotal = systemAnnualSummaryResultsMap[currentSystem.id].sourceWaterIntake + systemAnnualSummaryResultsMap[currentSystem.id].dischargeWater;
+      const directFlowTotal = systemAnnualSummaryResultsMap[currentSystem.id].sourceWaterIntake;
       systemAnnualSummaryResultsMap[currentSystem.id].directCostPerYear = systemCostContributionsResultsMap[currentSystem.id].intake + systemCostContributionsResultsMap[currentSystem.id].discharge;
 
       let flowperKUnit = directFlowTotal * 1000;
@@ -1078,17 +1078,19 @@ export const getPlantSummaryResults = (
       plantSystemSummaryResults.sourceWaterIntake += systemAnnualSummaryResultsMap[currentSystem.id].sourceWaterIntake;
       plantSystemSummaryResults.directCostPerYear += systemAnnualSummaryResultsMap[currentSystem.id].directCostPerYear;
       plantSystemSummaryResults.trueCostPerYear += systemAnnualSummaryResultsMap[currentSystem.id].trueCostPerYear;
-      plantSystemSummaryResults.trueOverDirectResult += systemAnnualSummaryResultsMap[currentSystem.id].trueOverDirectResult;
+
       plantSystemSummaryResults.allSystemResults.push(systemAnnualSummaryResultsMap[currentSystem.id])
 
       systemCostContributionsResultsMap[currentSystem.id].total = Object.values(systemCostContributionsResultsMap[currentSystem.id]).reduce((total: number, cost: number) => total + cost, 0);
       trueCostOfSystems[currentSystem.id] = systemCostContributionsResultsMap[currentSystem.id];
     });
 
-    const plantSourceWaterIntake = getComponentTypeTotalFlow(intakeNodes as Node<ProcessFlowPart>[], 'totalDischargeFlow', calculatedData);
+    const plantSourceWaterIntake = plantSystemSummaryResults.sourceWaterIntake;
+
     if (plantSourceWaterIntake > 0) {
       plantSystemSummaryResults.directCostPerUnit = plantSystemSummaryResults.directCostPerYear / (plantSourceWaterIntake * 1000);
       plantSystemSummaryResults.trueCostPerUnit = plantSystemSummaryResults.trueCostPerYear / (plantSourceWaterIntake * 1000);
+      plantSystemSummaryResults.trueOverDirectResult = plantSystemSummaryResults.trueCostPerYear / plantSystemSummaryResults.directCostPerYear;
     }
   }
 

@@ -124,7 +124,7 @@ const DiagramResults = () => {
   });
 
   let estimatedUnknownLosses = diagramResults.estimatedUnknownLosses || 0;
-  const totalFacilityDischarge = totalDischarge + diagramResults.totalKnownLosses + estimatedUnknownLosses
+  const totalFacilityDischarge = totalDischarge + diagramResults.totalKnownLosses + estimatedUnknownLosses;
 
   estimatedUnknownLosses = estimatedUnknownLosses + dischargeUnaccounted;
 

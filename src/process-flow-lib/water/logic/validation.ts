@@ -21,7 +21,12 @@ export const validateTotalFlowValue = (connectedEdges: Edge[], calculatedTotalFl
         if (userEnteredFlowToPrecision !== undefined && userEnteredFlowToPrecision !== null
             && userEnteredFlowToPrecision !== calculatedTotalFlowToPrecision) {
             if (unaccountedFlow !== undefined && unaccountedFlow !== null) {
-                const adjustedFlowToPrecision = Number((userEnteredFlowToPrecision + unaccountedFlow).toFixed(precision));
+                let adjustedFlowToPrecision;
+                if (calculatedTotalFlowToPrecision < userEnteredFlowToPrecision) {
+                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision - unaccountedFlow).toFixed(precision));
+                } else {
+                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision + unaccountedFlow).toFixed(precision));
+                }
                 const isAdjustedValid = adjustedFlowToPrecision === calculatedTotalFlowToPrecision;
                 return isAdjustedValid;
             }
