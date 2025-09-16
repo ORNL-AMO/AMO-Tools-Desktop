@@ -9,6 +9,7 @@ import { getDefaultInventoryItem } from '../process-cooling-constants';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
+import { WeeklyScheduleData } from './weekly-operating-schedule.service';
 
 /**
  * Service currently uses both signals and observables for the same state. This is a prototype, 
@@ -97,6 +98,13 @@ export class ProcessCoolingAssessmentService {
   updateSystemInformation<K extends ProcessCoolingSystemInformationProperty>(key: K, value: SystemInformation[K]) {
     let updatedProcessCooling = { ...this.processCooling.getValue() };
     updatedProcessCooling.systemInformation[key] = value;
+    this.setProcessCooling(updatedProcessCooling);
+  }
+
+  updateWeeklySchedule(weeklySchedule: Array<WeeklyScheduleData>) {
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    // todo process weekly schedule into hours on per day see form service
+    updatedProcessCooling.weeklyOperatingSchedule = weeklySchedule;
     this.setProcessCooling(updatedProcessCooling);
   }
   
