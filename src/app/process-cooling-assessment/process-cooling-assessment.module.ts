@@ -62,6 +62,9 @@ import { ChillerLoadScheduleService } from './services/chiller-load-schedule.ser
 import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe';
 import { WEATHER_CONTEXT } from '../shared/modules/weather-data/weather-context.token';
 import { ProcessCoolingWeatherContextService } from './process-cooling-weather-context.service';
+import { OperatingScheduleComponent } from './operating-schedule/operating-schedule.component';
+import { WeeklyOperatingScheduleComponent } from './operating-schedule/weekly-operating-schedule/weekly-operating-schedule.component';
+import { MonthlyOperatingScheduleComponent } from './operating-schedule/monthly-operating-schedule/monthly-operating-schedule.component';
 
 
 export const ROUTE_TOKENS = {
@@ -80,6 +83,7 @@ export const ROUTE_TOKENS = {
   tower: 'tower',
   chillerInventory: 'chiller-inventory',
   loadSchedule: 'load-schedule',
+  operatingSchedule: 'operating-schedule',
 
   // Assessment sub-tabs
   exploreOpportunities: 'explore-opportunities',
@@ -147,7 +151,11 @@ const ROUTES: Route[] = [
             path: ROUTE_TOKENS.chillerInventory,
             component: ChillerInventoryComponent,
           },
-          { 
+          {
+            path: ROUTE_TOKENS.operatingSchedule,
+            component: OperatingScheduleComponent
+          },
+          {
             path: ROUTE_TOKENS.loadSchedule,
             component: LoadScheduleComponent
           }
@@ -225,7 +233,10 @@ const ROUTES: Route[] = [
     LoadScheduleComponent,
     ChillerLoadScheduleComponent,
     WeatherComponent,
-    ChillerCompressorTypePipe
+    ChillerCompressorTypePipe,
+  OperatingScheduleComponent,
+  WeeklyOperatingScheduleComponent,
+  MonthlyOperatingScheduleComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),

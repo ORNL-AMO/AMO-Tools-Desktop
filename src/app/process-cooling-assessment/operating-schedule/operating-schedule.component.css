@@ -1,0 +1,28 @@
+
+.schedule-flex {
+	display: flex;
+	flex-direction: row;
+	gap: 2rem;
+	flex-wrap: wrap;
+    max-width: 75%;
+	justify-content: space-between;
+    margin:auto;
+}
+
+.schedule-item {
+	flex: 1 1 0;
+	min-width: 320px;
+	max-width: 100%;
+	/* max-width: 48%; */
+}
+
+@media (max-width: 1080px) {
+	.schedule-flex {
+		flex-direction: column;
+		gap: 1.5rem;
+        max-width: 100%;
+	}
+	.schedule-item {
+		max-width: 100%;
+	}
+}

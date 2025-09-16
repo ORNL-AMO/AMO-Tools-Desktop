@@ -21,7 +21,7 @@ export class BaselineComponent {
   setupSubView: Signal<string> = this.processCoolingUiService.setupSubView;
 
   showResultsPanel: Signal<boolean> = computed(() => {
-    return this.setupSubView() !== this.ROUTE_TOKENS.weather;
+    return this.setupSubView() !== this.ROUTE_TOKENS.weather && this.setupView() !== this.ROUTE_TOKENS.operatingSchedule;
   });
 
   constructor() {
