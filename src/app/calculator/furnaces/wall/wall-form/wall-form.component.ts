@@ -1,17 +1,17 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { WallLoss, WallLossOutput, WallLossResult } from '../../../../shared/models/phast/losses/wallLoss';
 import { Settings } from '../../../../shared/models/settings';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { treasureHuntUtilityOptions } from '../../furnace-defaults';
 import { WallFormService } from '../wall-form.service';
 import { WallService } from '../wall.service';
 import { OpportunityUtilityType } from '../../../../shared/models/treasure-hunt';
+import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
 
 @Component({
     selector: 'app-wall-form',
@@ -62,7 +62,7 @@ export class WallFormComponent implements OnInit {
   idString: string;
 
   constructor(private wallFormService: WallFormService,
-    private sqlDbApiService: SqlDbApiService,
+    private wallDbService: WallLossesSurfaceDbService,
     private cd: ChangeDetectorRef,
     private wallService: WallService) { }
 
@@ -146,11 +146,11 @@ export class WallFormComponent implements OnInit {
     }
   }
 
-  setFormState() {
+  async setFormState() {
     if (this.selected == false) {
       this.wallLossesForm.disable();
     } else {
-      this.surfaceOptions = this.sqlDbApiService.selectWallLossesSurface();
+      this.surfaceOptions = await firstValueFrom(this.wallDbService.getAllWithObservable());
       this.wallLossesForm.enable();
     }
 
@@ -190,7 +190,7 @@ export class WallFormComponent implements OnInit {
     this.isEditingName = false;
   }
 
-  initForm() {
+  async initForm() {
     let updatedWallLossData: WallLoss;
     if (this.isBaseline) {
       let baselineData: Array<WallLoss> = this.wallService.baselineData.getValue();
@@ -208,7 +208,7 @@ export class WallFormComponent implements OnInit {
     }
 
     this.defaultFlueGasModalEnergySource = this.wallLossesForm.value.energySourceType;
-    this.surfaceOptions = this.sqlDbApiService.selectWallLossesSurface();
+    this.surfaceOptions = await firstValueFrom(this.wallDbService.getAllWithObservable());
     this.calculate();
     this.setFormState();
   }
@@ -234,8 +234,8 @@ export class WallFormComponent implements OnInit {
     this.wallService.removeLoss(this.index);
   }
 
-  setProperties() {
-    let tmpFactor: WallLossesSurface = this.sqlDbApiService.selectWallLossesSurfaceById(this.wallLossesForm.controls.surfaceShape.value);
+  async setConditionFactor() {
+    let tmpFactor: WallLossesSurface = await firstValueFrom(this.wallDbService.getByIdWithObservable(this.wallLossesForm.controls.surfaceShape.value));
     if (tmpFactor) {
       this.wallLossesForm.patchValue({
         conditionFactor: this.roundVal(tmpFactor.conditionFactor, 4)
@@ -255,16 +255,14 @@ export class WallFormComponent implements OnInit {
     this.surfaceModal.show();
   }
 
-  hideSurfaceShapeModal(event?: any) {
-    if (event) {
-      this.surfaceOptions = this.sqlDbApiService.selectWallLossesSurface();
-      let newMaterial: WallLossesSurface = this.surfaceOptions.find(material => { return material.surface === event.surface; });
-      if (newMaterial) {
-        this.wallLossesForm.patchValue({
-          surfaceShape: newMaterial.id
-        });
-        this.setProperties();
-      }
+  async hideSurfaceShapeModal(materialEvent?: WallLossesSurface) {
+    if (materialEvent && materialEvent.id) {
+      this.surfaceOptions = await firstValueFrom(this.wallDbService.getAllWithObservable());
+      this.wallLossesForm.patchValue({
+        surfaceShape: materialEvent.id,
+        conditionFactor: this.roundVal(materialEvent.conditionFactor, 4)
+      });
+      this.calculate();
     }
     this.surfaceModal.hide();
     this.showSurfaceModal = false;

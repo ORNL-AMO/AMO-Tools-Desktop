@@ -5,7 +5,7 @@
       edit the custom material, please use the Custom Materials database or click 'Restore Surface Material'.
     </div>
     <div class="d-flex justify-content-around">
-      <a class="click-link" (click)="showMaterialModal(true)">Restore Surface Material</a>
+      <a class="click-link" (click)="showMaterialModal()">Restore Surface Material</a>
       <a class="click-link" (click)="dismissMessage()">Dismiss Material</a>
     </div>
   </div>
@@ -68,11 +68,11 @@
 
     <div class="form-group">
       <label class="small" for="{{'surfaceShape'+idString}}">Surface Shape / Orientation
-        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal(false)" [ngClass]="{'disabled-link': !baselineSelected}">Add
+        <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal(true)" [ngClass]="{'disabled-link': !baselineSelected}">Add
           New Surface</a>
       </label>
       <select name="{{'surfaceShape'+lossIndex}}" class="form-control" id="{{'surfaceShape'+idString}}"
-        formControlName="surfaceShape" (change)="setProperties()" (focus)="focusField('surfaceShape')" 
+        formControlName="surfaceShape" (change)="setConditionFactor()" (focus)="focusField('surfaceShape')" 
         [ngClass]="{'indicate-different': compareSurfaceShape(), 'invalid': wallLossesForm.controls.surfaceShape.invalid}">
         <option *ngFor="let option of surfaceOptions" [ngValue]="option.id">{{option.surface}}</option>
       </select>
@@ -149,7 +149,7 @@
     <div class="modal-content">
       <div>
         <app-wall-losses-surface *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
-          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-wall-losses-surface>
+          [settings]="settings" [existingMaterial]="existingMaterial"></app-wall-losses-surface>
       </div>
     </div>
   </div>

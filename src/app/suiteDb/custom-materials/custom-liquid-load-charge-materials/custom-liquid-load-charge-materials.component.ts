@@ -77,7 +77,7 @@ export class CustomLiquidLoadChargeMaterialsComponent implements OnInit {
   }
 
   async getCustomMaterials() {
-    this.liquidChargeMaterials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
+    this.liquidChargeMaterials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllCustomMaterials());
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }

@@ -4,9 +4,8 @@ import {
 } from '@xyflow/react';
 import { Box, Button, Tab, Tabs } from "@mui/material";
 import React, { memo, useState } from 'react';
-import TabPanel, { TabPanelBox } from "./TabPanel";
+import TabPanel from "./TabPanel";
 import CustomizeEdge from "./CustomizeEdge";
-import DrawerToggleButton from "./DrawerToggleButton";
 import FlowConnectionText from "./FlowConnectionText";
 import { deleteEdge } from "../Diagram/diagramReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
@@ -32,7 +31,8 @@ const ManageEdge = (props: ManageEdgeProps) => {
                     target={target.data} 
                     style={{
                         padding: '0.5rem 0.5rem',
-                        fontSize: '16px'}} 
+                        fontSize: '20px'
+                    }} 
                         />
             </Box>
 
@@ -51,14 +51,8 @@ const ManageEdge = (props: ManageEdgeProps) => {
                 </Box>
 
                 <TabPanel value={selectedTab} index={0}>
-                    <TabPanelBox>
-                        <Box>
-                            <CustomizeEdge edge={selectedEdge}></CustomizeEdge>
-                        </Box>
-                    </TabPanelBox>
-                    <TabPanelBox>
+                        <CustomizeEdge edge={selectedEdge}></CustomizeEdge>
                         <Button sx={{ width: '100%', marginY: 2 }} variant="outlined" color="error" onClick={() => dispatch(deleteEdge(selectedEdge.id))}>Delete Selected Connection</Button>
-                    </TabPanelBox>
                 </TabPanel>
             </Box>
             </>

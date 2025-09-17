@@ -6,7 +6,6 @@ The suite includes 7 energy system assessment modules, a Data Exploration Module
 
 ## Dependencies
 - Node.js LTS (https://nodejs.org/en/)
-    - Due to legacy dependencies required by MEASUR and the dependent AMO-Tool-Suite, **MEASUR's targeted Node version must be used**. This version can be found in package.json "engines".
 
 ## Bundled Dependencies
 The repo includes two dependencies which are not part of the core Angular project.
@@ -17,8 +16,8 @@ MEASUR depends on this native web component built in React to leverage the React
 #### Process Flow Library
 Both MEASUR and the Process Flow Diagram Component depend on `/process-flow-lib` as a shared library of types, calculations, and utility methods.
 
-## Install Repo Node Dependencies
-Open a Bash shell and run: `npm run install-node-deps`
+## Install All Repo Node Dependencies
+`npm run install-packages`
 
 #### Alternative Method
 Change directory to `/process-flow-diagram-component`
@@ -35,10 +34,11 @@ Change directory to `/AMO-Tools-Desktop`
 - Build the desktop installer:
     - `npm run build-prod-desktop` 
     - `npm run dist`
-    - The package will be placed in `../output`
+    - The package will be placed in `output`
 - Build the web dist:
     - `npm run build-prod-web` 
 
-
+## Reset All Project Build Artifacts and Dependencies
+`npm run reset`
 
 

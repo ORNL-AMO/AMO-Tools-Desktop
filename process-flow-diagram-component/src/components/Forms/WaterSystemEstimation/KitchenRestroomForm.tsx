@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import { TextField, FormControl, InputAdornment, FormHelperText, Box } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../hooks/state';
 import { RootState } from '../../Diagram/store';
-import { EstimateSystemContext, EstimateSystemState } from './EstimateWaterSystem';
+import { EstimateSystemContext, EstimateSystemState, WaterAssessmentModuleConsumer } from './EstimateWaterSystem';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
 import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
 import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
@@ -18,7 +18,7 @@ const formLabelMapping: WaterSystemFormMapping = {
     hoursPerYear: { display: 'Hours Water Used Per Year', initialValue: 0 }
 }
 
-const KitchenRestroomForm = () => {
+const KitchenRestroomForm = (props: KitchenRestroomFormProps) => {
     const estimateSystemContext = useContext<EstimateSystemState>(EstimateSystemContext);
     const settings = useAppSelector((state: RootState) => state.diagram.settings);
     const dispatch = useAppDispatch();
@@ -41,7 +41,7 @@ const KitchenRestroomForm = () => {
             dailyUsePerEmployee: values.dailyUsePerEmployee
         }
 
-        const kitchenRestroomResults: KitchenRestroomResults = calculateKitchenRestroomResults(kitchenRestroom);
+        const kitchenRestroomResults: KitchenRestroomResults = calculateKitchenRestroomResults(kitchenRestroom, props.WaterAssessmentModule);
         kitchenRestroomResults.grossWaterUse = convertAnnualFlowResult(kitchenRestroomResults.grossWaterUse, settings);
 
         const estimatedFlowResults = adaptEstimatedFlowResults(
@@ -135,3 +135,4 @@ const KitchenRestroomForm = () => {
 };
 
 export default KitchenRestroomForm;
+export interface KitchenRestroomFormProps extends WaterAssessmentModuleConsumer { }

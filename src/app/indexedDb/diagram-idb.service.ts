@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DiagramStoreMeta } from './dbConfig';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { Observable, firstValueFrom } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { getNewIdString } from '../shared/helperFunctions';
 import { environment } from '../../environments/environment';
@@ -14,6 +14,7 @@ export class DiagramIdbService {
 
   storeName: string = DiagramStoreMeta.store;
   allDiagrams: Diagram[];
+  dbDiagrams: BehaviorSubject<Array<Diagram>> = new BehaviorSubject<Array<Diagram>>([]);
   constructor(private dbService: NgxIndexedDBService) { }
 
   async setAll(diagrams?: Array<Diagram>) {
@@ -22,6 +23,7 @@ export class DiagramIdbService {
     } else {
       this.allDiagrams = await firstValueFrom(this.getAllDiagrams());
     }
+    this.dbDiagrams.next(this.allDiagrams);
   }
 
   getAllDiagrams(): Observable<Array<Diagram>> {

@@ -99,8 +99,8 @@ const InSystemTreatmentForm = (props: InSystemTreatmentFormProps) => {
                         endAdornment:
                         <InputAdornment position="end" sx={{ zIndex: 1 }}>
                                 {settings.unitsOfMeasure === 'Imperial' ?
-                                    <span style={{ zIndex: 1, background: 'white' }}>$/kgal</span>
-                                    : <span style={{ zIndex: 1, background: 'white' }}>$/kL</span>
+                                    <span style={{ zIndex: 1, background: 'white' }}>$/kGal</span>
+                                    : <span style={{ zIndex: 1, background: 'white' }}>$/L</span>
                                 }
                             </InputAdornment>,
                     }}

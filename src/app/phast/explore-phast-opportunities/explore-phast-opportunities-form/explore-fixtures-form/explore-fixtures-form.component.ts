@@ -6,13 +6,15 @@ import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { FixtureFormService } from '../../../../calculator/furnaces/fixture/fixture-form.service';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { firstValueFrom } from 'rxjs';
+import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-material-db.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
-    selector: 'app-explore-fixtures-form',
-    templateUrl: './explore-fixtures-form.component.html',
-    styleUrls: ['./explore-fixtures-form.component.css'],
-    standalone: false
+  selector: 'app-explore-fixtures-form',
+  templateUrl: './explore-fixtures-form.component.html',
+  styleUrls: ['./explore-fixtures-form.component.css'],
+  standalone: false
 })
 export class ExploreFixturesFormComponent implements OnInit {
   @Input()
@@ -35,10 +37,10 @@ export class ExploreFixturesFormComponent implements OnInit {
   baselineWarnings: Array<{ specificHeatWarning: string, feedRateWarning: string }>;
   modificationWarnings: Array<{ specificHeatWarning: string, feedRateWarning: string }>;
   showInitialTemp: Array<boolean>;
-  constructor(private sqlDbApiService: SqlDbApiService, private convertUnitsService: ConvertUnitsService, private fixtureFormService: FixtureFormService) { }
+  constructor(private solidLoadMaterialDbService: SolidLoadMaterialDbService, private convertUnitsService: ConvertUnitsService, private fixtureFormService: FixtureFormService) { }
 
   ngOnInit() {
-    this.materials = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+    this.setMaterials();
     this.initData();
     this.initTempData();
   }
@@ -50,6 +52,10 @@ export class ExploreFixturesFormComponent implements OnInit {
         this.initTempData();
       }
     }
+  }
+
+  async setMaterials() {
+    this.materials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable())
   }
 
   initData() {
@@ -178,13 +184,15 @@ export class ExploreFixturesFormComponent implements OnInit {
   }
 
 
-  setSpecificHeat(loss: FixtureLoss) {
-    let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(loss.materialName);
+  async setSpecificHeat(loss: FixtureLoss) {
+    let material: SolidLoadChargeMaterial = await firstValueFrom(this.solidLoadMaterialDbService.getByIdWithObservable(loss.materialName));
     if (material) {
+      let specificHeatSolid: number = material.specificHeatSolid;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        material.specificHeatSolid = this.convertUnitsService.value(material.specificHeatSolid).from('btulbF').to('kJkgC');
+        specificHeatSolid = this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
       }
-      loss.specificHeat = Number(material.specificHeatSolid.toFixed(3));
+      specificHeatSolid = roundVal(specificHeatSolid, 4);
+      loss.specificHeat = Number(specificHeatSolid.toFixed(3));
     }
     this.calculate();
   }

@@ -1,22 +1,23 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { AtmosphereSpecificHeat } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { AtmosphereLoss, AtmosphereLossOutput, AtmosphereLossResults } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../../shared/models/settings';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { AtmosphereFormService, AtmosphereLossWarnings } from '../atmosphere-form.service';
 import { AtmosphereService } from '../atmosphere.service';
+import { AtmosphereDbService } from '../../../../indexedDb/atmosphere-db.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
-    selector: 'app-atmosphere-form',
-    templateUrl: './atmosphere-form.component.html',
-    styleUrls: ['./atmosphere-form.component.css'],
-    standalone: false
+  selector: 'app-atmosphere-form',
+  templateUrl: './atmosphere-form.component.html',
+  styleUrls: ['./atmosphere-form.component.css'],
+  standalone: false
 })
 export class AtmosphereFormComponent implements OnInit {
   @Input()
@@ -56,10 +57,10 @@ export class AtmosphereFormComponent implements OnInit {
   outputSubscription: Subscription;
 
   constructor(private atmosphereFormService: AtmosphereFormService,
-    private sqlDbApiService: SqlDbApiService,
     private convertUnitsService: ConvertUnitsService,
     private cd: ChangeDetectorRef,
-    private atmosphereService: AtmosphereService) { }
+    private atmosphereService: AtmosphereService,
+    private atmosphereDbService: AtmosphereDbService) { }
 
   ngOnInit(): void {
     if (!this.isBaseline) {
@@ -70,7 +71,7 @@ export class AtmosphereFormComponent implements OnInit {
     }
     this.trackingEnergySource = this.index > 0 || !this.isBaseline;
 
-    this.materialTypes = this.sqlDbApiService.selectAtmosphereSpecificHeat();
+    this.setMaterialTypes();
     this.initSubscriptions();
     this.energyUnit = this.atmosphereService.getAnnualEnergyUnit(this.atmosphereLossForm.controls.energySourceType.value, this.settings);
     if (this.isBaseline) {
@@ -99,6 +100,10 @@ export class AtmosphereFormComponent implements OnInit {
     if (this.trackingEnergySource) {
       this.energySourceTypeSub.unsubscribe();
     }
+  }
+
+  async setMaterialTypes() {
+    this.materialTypes = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
   }
 
   checkEnergySourceSub() {
@@ -140,23 +145,23 @@ export class AtmosphereFormComponent implements OnInit {
     }
   }
 
-  setFormState() {
+  async setFormState() {
     if (this.selected == false) {
       this.atmosphereLossForm.disable();
     } else {
-      this.materialTypes = this.sqlDbApiService.selectAtmosphereSpecificHeat();
+      await this.setMaterialTypes();
       this.atmosphereLossForm.enable();
     }
   }
 
-  setProperties() {
-    let selectedMaterial: AtmosphereSpecificHeat = this.sqlDbApiService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
+  async setProperties() {
+    let selectedMaterial: AtmosphereSpecificHeat = await firstValueFrom(this.atmosphereDbService.getByIdWithObservable(this.atmosphereLossForm.controls.atmosphereGas.value));
     if (selectedMaterial) {
       if (this.settings.unitsOfMeasure === 'Metric') {
         selectedMaterial.specificHeat = this.convertUnitsService.value(selectedMaterial.specificHeat).from('btuScfF').to('kJm3C');
       }
       this.atmosphereLossForm.patchValue({
-        specificHeat: this.roundVal(selectedMaterial.specificHeat, 4),
+        specificHeat: roundVal(selectedMaterial.specificHeat, 4),
       });
     }
     this.calculate();
@@ -172,26 +177,6 @@ export class AtmosphereFormComponent implements OnInit {
 
   removeLoss() {
     this.atmosphereService.removeLoss(this.index);
-  }
-
-  checkSpecificHeat() {
-    if (this.atmosphereLossForm.controls.atmosphereGas.value) {
-      let material: AtmosphereSpecificHeat = this.sqlDbApiService.selectAtmosphereSpecificHeatById(this.atmosphereLossForm.controls.atmosphereGas.value);
-      if (material) {
-        let val = material.specificHeat;
-        if (this.settings.unitsOfMeasure === 'Metric') {
-          val = this.convertUnitsService.value(val).from('btuScfF').to('kJm3C');
-        }
-        material.specificHeat = this.roundVal(val, 4);
-        if (material.specificHeat !== this.atmosphereLossForm.controls.specificHeat.value) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    } else {
-      return false;
-    }
   }
 
   setEnergySource(energySourceType: string) {
@@ -253,9 +238,9 @@ export class AtmosphereFormComponent implements OnInit {
     this.materialModal.show();
   }
 
-  hideSpecificHeatModal(event?: any) {
+  async hideSpecificHeatModal(event?: any) {
     if (event) {
-      this.materialTypes = this.sqlDbApiService.selectAtmosphereSpecificHeat();
+      await this.setMaterialTypes();
       let newMaterial: AtmosphereSpecificHeat = this.materialTypes.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.atmosphereLossForm.patchValue({
@@ -269,13 +254,6 @@ export class AtmosphereFormComponent implements OnInit {
     this.atmosphereService.modalOpen.next(this.showSpecificHeatModal);
   }
 
-
-  roundVal(val: number, digits: number) {
-    let rounded = Number(val.toFixed(digits));
-    return rounded;
-  }
-
-
   initFlueGasModal() {
     this.showFlueGasModal = true;
     this.atmosphereService.modalOpen.next(this.showFlueGasModal);
@@ -284,7 +262,7 @@ export class AtmosphereFormComponent implements OnInit {
 
   hideFlueGasModal(flueGasModalData?: FlueGasModalData) {
     if (flueGasModalData) {
-      flueGasModalData.calculatedAvailableHeat = this.roundVal(flueGasModalData.calculatedAvailableHeat, 1);
+      flueGasModalData.calculatedAvailableHeat = roundVal(flueGasModalData.calculatedAvailableHeat, 1);
       this.atmosphereLossForm.patchValue({
         availableHeat: flueGasModalData.calculatedAvailableHeat
       });

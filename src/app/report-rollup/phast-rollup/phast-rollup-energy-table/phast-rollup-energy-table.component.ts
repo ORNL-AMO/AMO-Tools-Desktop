@@ -8,13 +8,14 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { PhastResultsData } from '../../report-rollup-models';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
 import { PhastReportRollupService } from '../../phast-report-rollup.service';
-import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
+import { FlueGasMaterialDbService } from '../../../indexedDb/flue-gas-material-db.service';
+import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 
 @Component({
-    selector: 'app-phast-rollup-energy-table',
-    templateUrl: './phast-rollup-energy-table.component.html',
-    styleUrls: ['./phast-rollup-energy-table.component.css'],
-    standalone: false
+  selector: 'app-phast-rollup-energy-table',
+  templateUrl: './phast-rollup-energy-table.component.html',
+  styleUrls: ['./phast-rollup-energy-table.component.css'],
+  standalone: false
 })
 export class PhastRollupEnergyTableComponent implements OnInit {
   @Input()
@@ -30,13 +31,14 @@ export class PhastRollupEnergyTableComponent implements OnInit {
   energyPerMassUnit: string;
   energyPerTimeUnit: string;
   constructor(private convertUnitsService: ConvertUnitsService, private reportRollupService: ReportRollupService,
-    private phastReportRollupService: PhastReportRollupService, private sqlDbApiService: SqlDbApiService) { }
+    private phastReportRollupService: PhastReportRollupService, private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService) { }
 
   ngOnInit() {
     this.settings = this.reportRollupService.checkSettings(this.settings);
     this.setUnits();
     let phastResults: Array<PhastResultsData> = JSON.parse(JSON.stringify(this.phastReportRollupService.selectedPhastResults));
-    let fuelResults: Array<PhastResultsData> = phastResults.filter(resultItem => { return resultItem.settings.energySourceType != 'Steam'  });
+    let fuelResults: Array<PhastResultsData> = phastResults.filter(resultItem => { return resultItem.settings.energySourceType != 'Steam' });
     this.setFuelSummary(fuelResults);
     let electricityResults: Array<PhastResultsData> = phastResults.filter(resultItem => { return resultItem.settings.energySourceType == 'Electricity' });
     this.setElectricitySummary(electricityResults);
@@ -46,8 +48,8 @@ export class PhastRollupEnergyTableComponent implements OnInit {
 
   setFuelSummary(fuelResults: Array<PhastResultsData>) {
     this.fuelSummary = new Array();
-    fuelResults.forEach(result => {
-      let fuelItem: PhastRollupEnergySummaryItem = this.getFuel(result);
+    fuelResults.forEach(async result => {
+      let fuelItem: PhastRollupEnergySummaryItem = await this.getFuel(result);
       //combine values for same fuel type
       let findFuelItemExists: PhastRollupEnergySummaryItem = _.find(this.fuelSummary, (val) => { return val.name === fuelItem.name; });
       if (findFuelItemExists === undefined) {
@@ -127,7 +129,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       hhv: 0,
       cost: 0
     };
-    
+
     if (resultsData.settings.energySourceType === 'Electricity') {
       let totalFuelEnergyUsed = resultsData.baselineResultData.energyInputHeatDelivered + resultsData.baselineResultData.totalExhaustGas;
       rollupEnergyItem.energyUsed = this.convertUnitsService.value(totalFuelEnergyUsed).from(resultsData.settings.energyResultUnit).to(this.settings.phastRollupUnit);
@@ -139,7 +141,7 @@ export class PhastRollupEnergyTableComponent implements OnInit {
         rollupEnergyItem.name = 'Fuel';
         let electrodeHHV = this.convertHHV(resultsData.baselineResultData.hourlyEAFResults.electrodeHeatingValue, resultsData.settings);
         let coalHHVValue = this.convertHHV(resultsData.baselineResultData.hourlyEAFResults.coalHeatingValue, resultsData.settings);
-        let naturalGasHHV = this.convertHHV(resultsData.baselineResultData.hourlyEAFResults.naturalGasHeatingValue, resultsData.settings); 
+        let naturalGasHHV = this.convertHHV(resultsData.baselineResultData.hourlyEAFResults.naturalGasHeatingValue, resultsData.settings);
         rollupEnergyItem.hhv = electrodeHHV + coalHHVValue + naturalGasHHV;
       }
     } else {
@@ -147,20 +149,21 @@ export class PhastRollupEnergyTableComponent implements OnInit {
       rollupEnergyItem.energyUsed = resultsData.baselineResultData.grossHeatInput;
 
       if (resultsData.assessment.phast.losses.flueGasLosses && resultsData.assessment.phast.losses.flueGasLosses[0].flueGasType === 'By Mass') {
-        let gas: SolidLiquidFlueGasMaterial = this.sqlDbApiService.selectSolidLiquidFlueGasMaterialById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
+        let gas: SolidLiquidFlueGasMaterial = this.solidLiquidMaterialDbService.getById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByMass.gasTypeId);
         if (gas) {
           rollupEnergyItem.name = gas.substance;
           rollupEnergyItem.hhv = this.convertHHV(gas.heatingValue, resultsData.settings);
         }
       } else if (resultsData.assessment.phast.losses.flueGasLosses && resultsData.assessment.phast.losses.flueGasLosses[0].flueGasType === 'By Volume') {
-        let gas: FlueGasMaterial = this.sqlDbApiService.selectGasFlueGasMaterialById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
+        let gas: FlueGasMaterial = this.flueGasMaterialDbService.getById(resultsData.assessment.phast.losses.flueGasLosses[0].flueGasByVolume.gasTypeId);
         if (gas) {
           rollupEnergyItem.name = gas.substance;
-          rollupEnergyItem.hhv = this.convertHHV(gas.heatingValue, resultsData.settings);
+          let heatingValue: number = gas.heatingValue;
+          rollupEnergyItem.hhv = this.convertHHV(heatingValue, resultsData.settings);
         }
       }
     }
-    
+
     rollupEnergyItem.cost = resultsData.assessment.phast.operatingCosts.fuelCost;
 
     return rollupEnergyItem;

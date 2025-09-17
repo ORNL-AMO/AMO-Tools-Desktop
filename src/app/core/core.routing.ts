@@ -118,6 +118,7 @@ import { WaterProcessDiagramComponent } from '../water-process-diagram/water-pro
 import { WaterAssessmentComponent } from '../water/water-assessment.component';
 import { DataAndBackupComponent } from '../dashboard/data-and-backup/data-and-backup.component';
 import { PowerFactorTriangleComponent } from '../calculator/utilities/power-factor-triangle/power-factor-triangle.component';
+import { ValveEnergyLossComponent } from '../calculator/pumps/valve-energy-loss/valve-energy-loss.component';
 
 export const coreRoutes: Routes = [
   {
@@ -537,6 +538,10 @@ export const coreRoutes: Routes = [
           {
             path: 'state-point-analysis',
             component: StatePointAnalysisComponent
+          },
+          {
+            path: 'valve-energy-loss',
+            component: ValveEnergyLossComponent
           }
         ]
       }

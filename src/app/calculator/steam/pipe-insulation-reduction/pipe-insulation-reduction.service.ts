@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { PipeInsulationReductionInput, PipeInsulationReductionResult, PipeInsulationReductionResults } from '../../../shared/models/standalone';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { StandaloneService } from '../../standalone.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
@@ -55,6 +55,9 @@ export class PipeInsulationReductionService {
     if (settings.unitsOfMeasure === 'Metric') {
       maxPipeTemperature = this.convertUnitsService.roundVal(this.convertUnitsService.value(maxPipeTemperature).from('F').to('C') + 273.15, 0);
     }
+
+    let averageTemperature: number = (obj.pipeTemperature + obj.ambientTemperature) / 2;
+    let averageTemperatureValidation: Array<ValidatorFn> = this.getAverageTemperatureValidation(obj, settings);
     let form: UntypedFormGroup = this.fb.group({
       operatingHours: [obj.operatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [{ value: obj.utilityType, disabled: !isBaseline }],
@@ -69,7 +72,8 @@ export class PipeInsulationReductionService {
       insulationMaterialSelection: [obj.insulationMaterialSelection],
       insulationThickness: [obj.insulationThickness],
       pipeJacketMaterialSelection: [obj.pipeJacketMaterialSelection],
-      heatedOrChilled: [{ value: obj.heatedOrChilled, disabled: !isBaseline }]
+      heatedOrChilled: [{ value: obj.heatedOrChilled, disabled: !isBaseline }],
+      averageTemperature: [averageTemperature, averageTemperatureValidation]
     });
 
     form = this.updateFormValidators(obj.heatedOrChilled, form);
@@ -84,10 +88,39 @@ export class PipeInsulationReductionService {
     return form;
   }
 
-  updateFormValidators(heatedOrChilled: number, form: UntypedFormGroup) : UntypedFormGroup{
+  getAverageTemperatureValidation(obj: PipeInsulationReductionInput, settings: Settings) {
+    let averageTemperatureValidation: Array<ValidatorFn> = [];
+    if (obj.insulationMaterialSelection == 6) {
+      //glass and resin 206 degree F
+      let maxPipeTemperaturek: number = 206;
+      if (settings.unitsOfMeasure == 'Metric') {
+        maxPipeTemperaturek = this.convertUnitsService.roundVal(this.convertUnitsService.value(maxPipeTemperaturek).from('F').to('C'), 0);
+      }
+      averageTemperatureValidation.push(Validators.max(maxPipeTemperaturek));
+    } else if (obj.insulationMaterialSelection == 4) {
+      //Polystyrene 836.33 degree F
+      let maxPipeTemperaturek: number = 836;
+      if (settings.unitsOfMeasure == 'Metric') {
+        maxPipeTemperaturek = this.convertUnitsService.roundVal(this.convertUnitsService.value(maxPipeTemperaturek).from('F').to('C'), 0);
+      }
+      console.log(maxPipeTemperaturek);
+      averageTemperatureValidation.push(Validators.max(maxPipeTemperaturek));
+    }
+    return averageTemperatureValidation;
+  }
+
+  setAverageTemperatureValidation(form: UntypedFormGroup, obj: PipeInsulationReductionInput, settings: Settings) {
+    let averageTemperature: number = (obj.pipeTemperature + obj.ambientTemperature) / 2;
+    form.controls.averageTemperature.setValue(averageTemperature);
+    let averageTemperatureValidation: Array<ValidatorFn> = this.getAverageTemperatureValidation(obj, settings);
+    form.controls.averageTemperature.setValidators(averageTemperatureValidation);
+    form.controls.averageTemperature.updateValueAndValidity();
+  }
+
+  updateFormValidators(heatedOrChilled: number, form: UntypedFormGroup): UntypedFormGroup {
     if (heatedOrChilled == 0) {
       form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
-    } else if (heatedOrChilled == 1){
+    } else if (heatedOrChilled == 1) {
       form.controls.systemEfficiency.clearValidators();
       form.controls.systemEfficiency.setValidators([Validators.required, Validators.min(0)]);
     }
@@ -192,38 +225,68 @@ export class PipeInsulationReductionService {
     return example;
   }
 
-  getResults(settings: Settings, baseline: PipeInsulationReductionInput, modification?: PipeInsulationReductionInput) {
-    let baselineCopy: PipeInsulationReductionInput = JSON.parse(JSON.stringify(baseline));
-    let baselineResults: PipeInsulationReductionResult = this.calculate(baselineCopy, settings);
-    let modificationResults: PipeInsulationReductionResult = {
-      heatLength: 0,
-      annualHeatLoss: 0,
-      energyCost: 0,
-      energySourceType: baselineResults.energySourceType,
-      heatedOrChilled: baselineResults.heatedOrChilled
-    };
-    let annualHeatLossReduction: number = 0;
-    let annualCostSavings: number = 0;
+  getResults(settings: Settings, baseline: PipeInsulationReductionInput, modification?: PipeInsulationReductionInput): PipeInsulationReductionResults {
+    let isModificationValid: boolean = true;
+    let baselineForm: UntypedFormGroup = this.getFormFromObj(baseline, settings, true);
+    let isBaselineValid: boolean = baselineForm.valid;
     if (modification) {
-      let modificationCopy: PipeInsulationReductionInput = JSON.parse(JSON.stringify(modification));
-      modificationCopy.utilityType = baselineResults.energySourceType;
-      modificationCopy.utilityCost = baselineCopy.utilityCost;
-      modificationCopy.heatedOrChilled = baselineResults.heatedOrChilled;
-      modificationResults = this.calculate(modificationCopy, settings);
-      annualHeatLossReduction = baselineResults.annualHeatLoss - modificationResults.annualHeatLoss;
-      annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
-    } else {
-      modificationResults = baselineResults;
+      let modificationForm: UntypedFormGroup = this.getFormFromObj(modification, settings, false);
+      isModificationValid = modificationForm.valid;
     }
-    let energyUnit = this.getEnergyUnit(baselineCopy.utilityType, settings);
-    let pipeInsulationReductionResults: PipeInsulationReductionResults = {
-      baselineResults: baselineResults,
-      modificationResults: modificationResults,
-      annualHeatSavings: annualHeatLossReduction,
-      annualCostSavings: annualCostSavings,
-      energyUnit: energyUnit
-    };
-    return pipeInsulationReductionResults;
+    if (isBaselineValid && isModificationValid) {
+      let baselineCopy: PipeInsulationReductionInput = JSON.parse(JSON.stringify(baseline));
+      let baselineResults: PipeInsulationReductionResult = this.calculate(baselineCopy, settings);
+      let modificationResults: PipeInsulationReductionResult = {
+        heatLength: 0,
+        annualHeatLoss: 0,
+        energyCost: 0,
+        energySourceType: baselineResults.energySourceType,
+        heatedOrChilled: baselineResults.heatedOrChilled
+      };
+      let annualHeatLossReduction: number = 0;
+      let annualCostSavings: number = 0;
+      if (modification) {
+        let modificationCopy: PipeInsulationReductionInput = JSON.parse(JSON.stringify(modification));
+        modificationCopy.utilityType = baselineResults.energySourceType;
+        modificationCopy.utilityCost = baselineCopy.utilityCost;
+        modificationCopy.heatedOrChilled = baselineResults.heatedOrChilled;
+        modificationResults = this.calculate(modificationCopy, settings);
+        annualHeatLossReduction = baselineResults.annualHeatLoss - modificationResults.annualHeatLoss;
+        annualCostSavings = baselineResults.energyCost - modificationResults.energyCost;
+      } else {
+        modificationResults = baselineResults;
+      }
+      let energyUnit = this.getEnergyUnit(baselineCopy.utilityType, settings);
+      let pipeInsulationReductionResults: PipeInsulationReductionResults = {
+        baselineResults: baselineResults,
+        modificationResults: modificationResults,
+        annualHeatSavings: annualHeatLossReduction,
+        annualCostSavings: annualCostSavings,
+        energyUnit: energyUnit
+      };
+      return pipeInsulationReductionResults;
+    } else {
+      let energyUnit = this.getEnergyUnit(baseline.utilityType, settings);
+      return {
+        baselineResults: {
+          heatLength: 0,
+          annualHeatLoss: 0,
+          energyCost: 0,
+          energySourceType: baseline.utilityType,
+          heatedOrChilled: undefined
+        },
+        modificationResults: {
+          heatLength: 0,
+          annualHeatLoss: 0,
+          energyCost: 0,
+          energySourceType: modification?.utilityType,
+          heatedOrChilled: undefined
+        },
+        annualHeatSavings: 0,
+        annualCostSavings: 0,
+        energyUnit: energyUnit
+      }
+    }
   }
 
   calculate(input: PipeInsulationReductionInput, settings: Settings): PipeInsulationReductionResult {
@@ -236,7 +299,7 @@ export class PipeInsulationReductionService {
       results.energyCost = results.annualHeatLoss * input.utilityCost;
     } else {
       results.energyCost = results.annualHeatLoss * input.utilityCost;
-    }         
+    }
     return results;
   }
 
@@ -256,14 +319,14 @@ export class PipeInsulationReductionService {
   }
 
   convertResults(results: PipeInsulationReductionResult, settings: Settings): PipeInsulationReductionResult {
-    if ( results.energySourceType != 2 && settings.unitsOfMeasure == 'Imperial') {
+    if (results.energySourceType != 2 && settings.unitsOfMeasure == 'Imperial') {
       results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Wh').to('MMBtu');
-    } else if( results.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial'){
+    } else if (results.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial') {
       results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Wh').to('GJ');
     } else {
       results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Wh').to('kWh');
     }
-    if( results.heatedOrChilled == 1){
+    if (results.heatedOrChilled == 1) {
       results.annualHeatLoss = results.annualHeatLoss * (-1);
     }
 
@@ -455,7 +518,7 @@ export class PipeInsulationReductionService {
     if (utilityType === 2) {
       energyUnit = "kWh";
     } else {
-      if (settings.unitsOfMeasure == 'Metric'){
+      if (settings.unitsOfMeasure == 'Metric') {
         energyUnit = "GJ"
       } else {
         energyUnit = "MMBtu"

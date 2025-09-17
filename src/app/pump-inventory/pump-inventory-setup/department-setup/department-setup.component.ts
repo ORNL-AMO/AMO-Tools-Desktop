@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PumpInventoryData, PumpInventoryDepartment } from '../../pump-inventory';
 import { PumpInventoryService } from '../../pump-inventory.service';
-import { MotorIntegrationService } from '../../../shared/connected-inventory/motor-integration.service';
+import { PumpMotorIntegrationService } from '../../../shared/connected-inventory/pump-motor-integration.service';
 
 @Component({
     selector: 'app-department-setup',
@@ -13,7 +13,7 @@ export class DepartmentSetupComponent implements OnInit {
 
 
   pumpInventoryData: PumpInventoryData;
-  constructor(private pumpInventoryService: PumpInventoryService, private motorIntegrationService: MotorIntegrationService) { }
+  constructor(private pumpInventoryService: PumpInventoryService, private pumpMotorIntegrationService: PumpMotorIntegrationService) { }
 
   ngOnInit(): void {
     this.pumpInventoryData = this.pumpInventoryService.pumpInventoryData.getValue();
@@ -25,7 +25,7 @@ export class DepartmentSetupComponent implements OnInit {
 
   deleteDepartment(id: string) {
     let departmentIndex: number = this.pumpInventoryData.departments.findIndex((department) => { return department.id == id })
-    this.motorIntegrationService.removeDepartmentMotorConnections(this.pumpInventoryData, departmentIndex);
+    this.pumpMotorIntegrationService.removeDepartmentMotorConnections(this.pumpInventoryData, departmentIndex);
     this.pumpInventoryData.departments.splice(departmentIndex, 1);
     this.pumpInventoryService.setIsValidInventory(this.pumpInventoryData);
     this.pumpInventoryService.pumpInventoryData.next(this.pumpInventoryData);

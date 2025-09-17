@@ -17,7 +17,7 @@ import { PsatService } from '../../psat/psat.service';
 import { PumpInventoryService } from '../../pump-inventory/pump-inventory.service';
 import { MotorInventoryDepartment, MotorItem } from '../../motor-inventory/motor-inventory';
 import { ConvertMotorInventoryService } from '../../motor-inventory/convert-motor-inventory.service';
-import { MotorIntegrationService } from './motor-integration.service';
+import { PumpMotorIntegrationService } from './pump-motor-integration.service';
 import { copyObject } from '../helperFunctions';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class PsatIntegrationService {
     private settingsDbService: SettingsDbService,
     private psatService: PsatService,
     private pumpInventoryService: PumpInventoryService,
-    private motorIntegrationService: MotorIntegrationService,
+    private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private convertMotorInventoryService: ConvertMotorInventoryService,
     private settingsService: SettingsService,
     private convertUnitsService: ConvertUnitsService
@@ -268,7 +268,7 @@ export class PsatIntegrationService {
     
 
   async setFromConnectedMotorItem(psat: PSAT, assessment: Assessment, settings: Settings) {
-    let motorItem = this.motorIntegrationService.getConnectedMotorItem(psat.connectedItem, settings);
+    let motorItem = this.pumpMotorIntegrationService.getConnectedMotorItem(psat.connectedItem, settings);
     let connectedInventoryData: ConnectedInventoryData = this.integrationStateService.getEmptyConnectedInventoryData();
     connectedInventoryData.connectedItem = psat.connectedItem;
     connectedInventoryData.ownerItemId = String(psat.connectedItem.assessmentId);
@@ -307,7 +307,7 @@ export class PsatIntegrationService {
       if (assessment.psat.connectedItem.inventoryType === 'pump') {
         connectedItem = this.getConnectedPumpItem(assessment.psat.connectedItem);
       } else if (assessment.psat.connectedItem.inventoryType === 'motor') {
-        connectedItem = this.motorIntegrationService.getConnectedMotorItem(assessment.psat.connectedItem, settings);
+        connectedItem = this.pumpMotorIntegrationService.getConnectedMotorItem(assessment.psat.connectedItem, settings);
       }
       if (connectedItem) {
         connectedInventoryData.connectedItem = assessment.psat.connectedItem;

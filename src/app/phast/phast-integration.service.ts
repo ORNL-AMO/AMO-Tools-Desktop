@@ -15,7 +15,7 @@ export class PhastIntegrationService {
   constructor(private executiveSummaryService: ExecutiveSummaryService, private convertUnitsService: ConvertUnitsService,
     private phastResultService: PhastResultsService) { }
 
-  setIntegratedAssessmentData(integratedAssessment: IntegratedAssessment, settings: Settings, treasureHuntSettings: Settings) {
+  async setIntegratedAssessmentData(integratedAssessment: IntegratedAssessment, settings: Settings, treasureHuntSettings: Settings) {
     let energyOptions: IntegratedEnergyOptions = {
       baseline: undefined,
       modifications: []
@@ -24,7 +24,7 @@ export class PhastIntegrationService {
     let phast: PHAST = integratedAssessment.assessment.phast;
     let baselinePhastResults: PhastResults = this.phastResultService.getResults(phast, settings);
     
-    let energyUsed: EnergyUseReportData = this.phastResultService.getEnergyUseReportData(phast, baselinePhastResults, settings);
+    let energyUsed: EnergyUseReportData = await this.phastResultService.getEnergyUseReportData(phast, baselinePhastResults, settings);
     let baselineExecutiveSummary = this.executiveSummaryService.getSummary(phast, false, settings, phast);
     let baselineEnergies: EnergyUseItem[] = this.setEnergyUseItems(phast, energyUsed, baselinePhastResults, baselineExecutiveSummary, settings, treasureHuntSettings);
     let {energyValue, treasureHuntUnit} = this.checkConvertEnergy(baselinePhastResults.grossHeatInput, settings, treasureHuntSettings);
@@ -45,9 +45,9 @@ export class PhastIntegrationService {
     if (integratedAssessment.hasModifications) {
       let modificationEnergyOptions: Array<ModificationEnergyOption> = [];
 
-      phast.modifications.map(modification => {
+      phast.modifications.map(async modification => {
         let modificationPhastResults: PhastResults = this.phastResultService.getResults(modification.phast, settings);
-        let energyUsed: EnergyUseReportData = this.phastResultService.getEnergyUseReportData(modification.phast, modificationPhastResults, settings);
+        let energyUsed: EnergyUseReportData = await this.phastResultService.getEnergyUseReportData(modification.phast, modificationPhastResults, settings);
         let modificationExecutiveSummary: ExecutiveSummary = this.executiveSummaryService.getSummary(modification.phast, true, settings, phast);
         let modificationEnergyUseItems: EnergyUseItem[] = this.setEnergyUseItems(modification.phast, energyUsed, modificationPhastResults, modificationExecutiveSummary, settings, treasureHuntSettings);
         let {energyValue, treasureHuntUnit} = this.checkConvertEnergy(modificationPhastResults.grossHeatInput, settings, treasureHuntSettings);

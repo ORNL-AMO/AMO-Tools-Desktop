@@ -1,54 +1,53 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
+import { ToolsSuiteApiService } from './tools-suite-api.service';
 
-//wasm module
-declare var Module: any;
 @Injectable()
 export class SuiteApiHelperService {
 
-  constructor() {}
+  constructor(private toolsSuiteApiService: ToolsSuiteApiService) {}
   getPumpStyleEnum(pumpStyle: number): any {
     switch (pumpStyle) {
       case 0:
-        return Module.PumpStyle.END_SUCTION_SLURRY;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.END_SUCTION_SLURRY;
       case 1:
-        return Module.PumpStyle.END_SUCTION_SEWAGE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.END_SUCTION_SEWAGE;
       case 2:
-        return Module.PumpStyle.END_SUCTION_STOCK;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.END_SUCTION_STOCK;
       case 3:
-        return Module.PumpStyle.END_SUCTION_SUBMERSIBLE_SEWAGE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.END_SUCTION_SUBMERSIBLE_SEWAGE;
       case 4:
-        return Module.PumpStyle.API_DOUBLE_SUCTION;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.API_DOUBLE_SUCTION;
       case 5:
-        return Module.PumpStyle.MULTISTAGE_BOILER_FEED;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.MULTISTAGE_BOILER_FEED;
       case 6:
-        return Module.PumpStyle.END_SUCTION_ANSI_API;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.END_SUCTION_ANSI_API;
       case 7:
-        return Module.PumpStyle.AXIAL_FLOW;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.AXIAL_FLOW;
       case 8:
-        return Module.PumpStyle.DOUBLE_SUCTION;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.DOUBLE_SUCTION;
       case 9:
-        return Module.PumpStyle.VERTICAL_TURBINE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.VERTICAL_TURBINE;
       case 10:
-        return Module.PumpStyle.LARGE_END_SUCTION;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.LARGE_END_SUCTION;
       case 11:
-        return Module.PumpStyle.SPECIFIED_OPTIMAL_EFFICIENCY;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.SPECIFIED_OPTIMAL_EFFICIENCY;
     }
   }
 
   getPistonTypeEnum(pistonType: number): any {
     switch (pistonType) {
       case 0:
-        return Module.PistonType.SingleActing;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PistonType.SingleActing;
       case 1:
-        return Module.PistonType.DoubleActing;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PistonType.DoubleActing;
     }
   }
 
   getLineFrequencyEnum(lineFreq: number) {
-    let lineFrequency = Module.LineFrequency.FREQ50;
+    let lineFrequency = this.toolsSuiteApiService.ToolsSuiteModule.LineFrequency.FREQ50;
     if (lineFreq == 60) {
-      lineFrequency = Module.LineFrequency.FREQ60;
+      lineFrequency = this.toolsSuiteApiService.ToolsSuiteModule.LineFrequency.FREQ60;
     }
 
     return lineFrequency;
@@ -67,167 +66,167 @@ export class SuiteApiHelperService {
   getMotorEfficiencyEnum(motorEffVal: number): any {
     switch (motorEffVal) {
       case 0:
-        return Module.MotorEfficiencyClass.STANDARD;
+        return this.toolsSuiteApiService.ToolsSuiteModule.MotorEfficiencyClass.STANDARD;
       case 1:
-        return Module.MotorEfficiencyClass.ENERGY_EFFICIENT;
+        return this.toolsSuiteApiService.ToolsSuiteModule.MotorEfficiencyClass.ENERGY_EFFICIENT;
       case 2:
-        return Module.MotorEfficiencyClass.PREMIUM;
+        return this.toolsSuiteApiService.ToolsSuiteModule.MotorEfficiencyClass.PREMIUM;
       case 3:
-        return Module.MotorEfficiencyClass.SPECIFIED;
+        return this.toolsSuiteApiService.ToolsSuiteModule.MotorEfficiencyClass.SPECIFIED;
     }
   }
 
   getDriveEnum(drive: number) {
     switch (drive) {
       case 0:
-        return Module.Drive.DIRECT_DRIVE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Drive.DIRECT_DRIVE;
       case 1:
-        return Module.Drive.V_BELT_DRIVE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Drive.V_BELT_DRIVE;
       case 2:
-        return Module.Drive.N_V_BELT_DRIVE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Drive.N_V_BELT_DRIVE;
       case 3:
-        return Module.Drive.S_BELT_DRIVE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Drive.S_BELT_DRIVE;
       case 4:
-        return Module.Drive.SPECIFIED;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Drive.SPECIFIED;
     }
   }
 
   getFixedSpeedEnum(fixedSpeed: number) {
     if (fixedSpeed == 0) {
-      return Module.SpecificSpeed.FIXED_SPEED;
+      return this.toolsSuiteApiService.ToolsSuiteModule.SpecificSpeed.FIXED_SPEED;
     } else {
-      return Module.SpecificSpeed.NOT_FIXED_SPEED;
+      return this.toolsSuiteApiService.ToolsSuiteModule.SpecificSpeed.NOT_FIXED_SPEED;
     }
   }
 
   getLoadEstimationMethod(method: number) {
     if (method == 0) {
-      return Module.LoadEstimationMethod.POWER;
+      return this.toolsSuiteApiService.ToolsSuiteModule.LoadEstimationMethod.POWER;
     } else {
-      return Module.LoadEstimationMethod.CURRENT;
+      return this.toolsSuiteApiService.ToolsSuiteModule.LoadEstimationMethod.CURRENT;
     }
   }
 
   getBasGensityInputTypeEnum(type: string) {
     if (type == 'relativeHumidity') {
-      return Module.BaseGasDensityInputType.RelativeHumidity;
+      return this.toolsSuiteApiService.ToolsSuiteModule.BaseGasDensityInputType.RelativeHumidity;
     } else if (type == 'wetBulb') {
-      return Module.BaseGasDensityInputType.WetBulbTemp;
+      return this.toolsSuiteApiService.ToolsSuiteModule.BaseGasDensityInputType.WetBulbTemp;
     } else if (type == 'dewPoint') {
-      return Module.BaseGasDensityInputType.DewPoint;
+      return this.toolsSuiteApiService.ToolsSuiteModule.BaseGasDensityInputType.DewPoint;
     } else if (type == 'custom') {
       return;
     }
   }
   getGasTypeEnum(type: string) {
     if (type == 'AIR') {
-      return Module.GasType.AIR;
+      return this.toolsSuiteApiService.ToolsSuiteModule.GasType.AIR;
     } else if (type == 'OTHER') {
-      return Module.GasType.OTHER;
+      return this.toolsSuiteApiService.ToolsSuiteModule.GasType.OTHER;
     }
   }
 
   getCHPOptionEnum(option: number) {
     if (option === 0) {
-      return Module.CHPOption.PercentAvgkWhElectricCostAvoided;
+      return this.toolsSuiteApiService.ToolsSuiteModule.CHPOption.PercentAvgkWhElectricCostAvoided;
     } else if (option === 1) {
-      return Module.CHPOption.StandbyRate;
+      return this.toolsSuiteApiService.ToolsSuiteModule.CHPOption.StandbyRate;
     }
   }
 
   getFanTypeEnum(fanType: number) {
     switch (fanType) {
       case 0:
-        return Module.FanType.AirfoilSISW;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanType.AirfoilSISW;
       case 1:
-        return Module.FanType.BackwardCurvedSISW;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanType.BackwardCurvedSISW;
       case 2:
-        return Module.FanType.RadialSISW;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanType.RadialSISW;
       case 3:
-        return Module.FanType.RadialTipSISW;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanType.RadialTipSISW;
       case 4:
-        return Module.FanType.BackwardInclinedSISW;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanType.BackwardInclinedSISW;
       case 5:
-        return Module.FanType.AirfoilDIDW;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanType.AirfoilDIDW;
       case 6:
-        return Module.FanType.BackwardCurvedDIDW;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanType.BackwardCurvedDIDW;
       case 7:
-        return Module.FanType.BackwardInclinedDIDW;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanType.BackwardInclinedDIDW;
       case 8:
-        return Module.FanType.VaneAxial;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanType.VaneAxial;
     }
   }
 
   getFlowCalculationGasTypeEnum(gasType: number) {
     switch (gasType) {
       case 0:
-        return Module.Gas.AIR;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.AIR;
       case 1:
-        return Module.Gas.AMMONIA_DISSOCIATED;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.AMMONIA_DISSOCIATED;
       case 2:
-        return Module.Gas.ARGON;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.ARGON;
       case 3:
-        return Module.Gas.BUTANE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.BUTANE;
       case 4:
-        return Module.Gas.ENDOTHERMIC_AMMONIA;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.ENDOTHERMIC_AMMONIA;
       case 5:
-        return Module.Gas.EXOTHERMIC_CRACKED_LEAN;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.EXOTHERMIC_CRACKED_LEAN;
       case 6:
-        return Module.Gas.EXOTHERMIC_CRACKED_RICH;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.EXOTHERMIC_CRACKED_RICH;
       case 7:
-        return Module.Gas.HELIUM;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.HELIUM;
       case 8:
-        return Module.Gas.NATURAL_GAS;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.NATURAL_GAS;
       case 9:
-        return Module.Gas.NITROGEN;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.NITROGEN;
       case 10:
-        return Module.Gas.OXYGEN;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.OXYGEN;
       case 11:
-        return Module.Gas.PROPANE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.PROPANE;
       case 12:
-        return Module.Gas.OTHER;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.OTHER;
     }
   }
 
   getOpeningShapeEnum(openingShape: number) {
     switch (openingShape) {
       case 0:
-        return Module.OpeningShape.CIRCULAR;
+        return this.toolsSuiteApiService.ToolsSuiteModule.OpeningShape.CIRCULAR;
       case 1:
-        return Module.OpeningShape.SQUARE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.OpeningShape.SQUARE;
     }
   }
 
   getFlowCalculationSectionEnum(section: number) {
     switch (section) {
       case 0:
-        return Module.Section.SQUARE_EDGE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Section.SQUARE_EDGE;
       case 1:
-        return Module.Section.SHARP_EDGE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Section.SHARP_EDGE;
       case 2:
-        return Module.Section.VENTURI;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Section.VENTURI;
     }
   }
 
   getMaterialThermicReactionType(thermicReactionType: number) {
     switch (thermicReactionType) {
       case 0:
-        return Module.ThermicReactionType.ENDOTHERMIC;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ThermicReactionType.ENDOTHERMIC;
       case 1:
-        return Module.ThermicReactionType.EXOTHERMIC;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ThermicReactionType.EXOTHERMIC;
       case 2:
-        return Module.ThermicReactionType.NONE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ThermicReactionType.NONE;
     }
   }
 
   getCoolingTowerFanControlSpeedType(speedType: number) {
     switch (speedType) {
       case 0:
-        return Module.FanControlSpeedType.One;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanControlSpeedType.One;
       case 1:
-        return Module.FanControlSpeedType.Two;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanControlSpeedType.Two;
       case 2:
-        return Module.FanControlSpeedType.Variable;
+        return this.toolsSuiteApiService.ToolsSuiteModule.FanControlSpeedType.Variable;
 
     }
   }
@@ -235,9 +234,9 @@ export class SuiteApiHelperService {
   getCoolingTowerChillerType(chillerType: number) {
     switch (chillerType) {
       case 0:
-        return Module.ChillerType.Centrifugal;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ChillerType.Centrifugal;
       case 1:
-        return Module.ChillerType.Screw;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ChillerType.Screw;
 
     }
   }
@@ -245,9 +244,9 @@ export class SuiteApiHelperService {
   getCoolingTowerCondenserCoolingType(condenserType: number) {
     switch (condenserType) {
       case 0:
-        return Module.CondenserCoolingType.Water;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CondenserCoolingType.Water;
       case 1:
-        return Module.CondenserCoolingType.Air;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CondenserCoolingType.Air;
 
     }
   }
@@ -255,33 +254,33 @@ export class SuiteApiHelperService {
   getCoolingTowerCompressorConfigType(configType: number) {
     switch (configType) {
       case 0:
-        return Module.CompressorConfigType.NoVFD;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorConfigType.NoVFD;
       case 1:
-        return Module.CompressorConfigType.VFD;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorConfigType.VFD;
       case 2:
-        return Module.CompressorConfigType.MagneticBearing;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorConfigType.MagneticBearing;
     }
   }
 
   getThermodynamicQuantityType(thermodynamicQuantity: number) {
     switch (thermodynamicQuantity) {
       case 0:
-        return Module.ThermodynamicQuantity.TEMPERATURE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ThermodynamicQuantity.TEMPERATURE;
       case 1:
-        return Module.ThermodynamicQuantity.ENTHALPY;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ThermodynamicQuantity.ENTHALPY;
       case 2:
-        return Module.ThermodynamicQuantity.ENTROPY;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ThermodynamicQuantity.ENTROPY;
       case 3:
-        return Module.ThermodynamicQuantity.QUALITY;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ThermodynamicQuantity.QUALITY;
     }
   }
 
   getCondensingTurbineOperation(option: number) {
     switch (option) {
       case 0:
-        return Module.CondensingTurbineOperation.STEAM_FLOW;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CondensingTurbineOperation.STEAM_FLOW;
       case 1:
-        return Module.CondensingTurbineOperation.POWER_GENERATION;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CondensingTurbineOperation.POWER_GENERATION;
 
     }
   }
@@ -289,33 +288,33 @@ export class SuiteApiHelperService {
   getPressureTurbineOperation(option: number) {
     switch (option) {
       case 0:
-        return Module.PressureTurbineOperation.STEAM_FLOW;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PressureTurbineOperation.STEAM_FLOW;
       case 1:
-        return Module.PressureTurbineOperation.POWER_GENERATION;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PressureTurbineOperation.POWER_GENERATION;
       case 2:
-        return Module.PressureTurbineOperation.BALANCE_HEADER;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PressureTurbineOperation.BALANCE_HEADER;
       case 3:
-        return Module.PressureTurbineOperation.POWER_RANGE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PressureTurbineOperation.POWER_RANGE;
       case 4:
-        return Module.PressureTurbineOperation.FLOW_RANGE;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PressureTurbineOperation.FLOW_RANGE;
     }
   }
 
   getTurbineProperty(turbineProperty: number) {
     switch (turbineProperty) {
       case 0:
-        return Module.TurbineProperty.MassFlow;
+        return this.toolsSuiteApiService.ToolsSuiteModule.TurbineProperty.MassFlow;
       case 1:
-        return Module.TurbineProperty.PowerOut;
+        return this.toolsSuiteApiService.ToolsSuiteModule.TurbineProperty.PowerOut;
     }
   }
 
   getSolveForMethod(solve: number) {
     switch (solve) {
       case 0:
-        return Module.Solve.OutletProperties;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Solve.OutletProperties;
       case 1:
-        return Module.Solve.IsentropicEfficiency;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Solve.IsentropicEfficiency;
     }
   }
 
@@ -323,75 +322,75 @@ export class SuiteApiHelperService {
   getCompressorTypeEnum(compressorType: number) {
     switch (compressorType) {
       case 0:
-        return Module.CompressorType.Centrifugal;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorType.Centrifugal;
       case 1:
-        return Module.CompressorType.Screw;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorType.Screw;
       case 2:
-        return Module.CompressorType.Reciprocating;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorType.Reciprocating;
     }
   }
 
   getControlTypeEnum(controlType: number) {
     switch (controlType) {
       case 0:
-        return Module.ControlType.LoadUnload;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.LoadUnload;
       case 1:
-        return Module.ControlType.ModulationUnload;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.ModulationUnload;
       case 2:
-        return Module.ControlType.BlowOff;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.BlowOff;
       case 3:
-        return Module.ControlType.ModulationWOUnload;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.ModulationWOUnload;
       case 4:
-        return Module.ControlType.StartStop;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.StartStop;
       case 5:
-        return Module.ControlType.VariableDisplacementUnload;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.VariableDisplacementUnload;
       case 6:
-        return Module.ControlType.MultiStepUnloading;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.MultiStepUnloading;
       case 7:
-        return Module.ControlType.VFD;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.VFD;
     }
   }
 
   getLubricantEnum(lubricant: number) {
     switch (lubricant) {
       case 0:
-        return Module.Lubricant.Injected;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Lubricant.Injected;
       case 1:
-        return Module.Lubricant.Free;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Lubricant.Free;
       case 2:
-        return Module.Lubricant.None;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Lubricant.None;
     }
   }
 
   getStageEnum(stage: number) {
     switch (stage) {
       case 0:
-        return Module.Stage.Single;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Stage.Single;
       case 1:
-        return Module.Stage.Two;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Stage.Two;
       case 2:
-        return Module.Stage.Multiple;
+        return this.toolsSuiteApiService.ToolsSuiteModule.Stage.Multiple;
     }
   }
 
   getComputeFromEnum(computeFrom: number) {
     switch (computeFrom) {
       case 0:
-        return Module.ComputeFrom.PercentagePower;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PercentagePower;
       case 1:
-        return Module.ComputeFrom.PercentageCapacity;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PercentageCapacity;
       case 2:
-        return Module.ComputeFrom.PowerMeasured;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PowerMeasured;
       case 3:
-        return Module.ComputeFrom.CapacityMeasured;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.CapacityMeasured;
       case 4:
-        return Module.ComputeFrom.PowerFactor;
+        return this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PowerFactor;
     }
   }
 
 
   returnDoubleVector(doublesArray: Array<number>) {
-    let doubleVector = new Module.DoubleVector();
+    let doubleVector = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
     doublesArray.forEach(x => {
       doubleVector.push_back(x);
     });
@@ -399,7 +398,7 @@ export class SuiteApiHelperService {
   }
 
   returnIntVector(intsArray: Array<number>) {
-    let intVector = new Module.IntVector();
+    let intVector = new this.toolsSuiteApiService.ToolsSuiteModule.IntVector();
     intsArray.forEach(x => {
       intVector.push_back(x);
     });
@@ -408,7 +407,7 @@ export class SuiteApiHelperService {
 
 
   returnDoubleVector2d(doubles2dArray: Array<Array<number>>) {
-    let doubleVector2d = new Module.DoubleVector2D();
+    let doubleVector2d = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector2D();
     let doubleVectors: Array<any> = [];
     for (let i = 0; i < doubles2dArray.length; i++) {
       let innerArray = doubles2dArray[i];
@@ -446,70 +445,70 @@ export class SuiteApiHelperService {
   getSteamCondition(steamCondition: number) {
     switch (steamCondition) {
       case 0:
-        return Module.SteamConditionType.Superheated;
+        return this.toolsSuiteApiService.ToolsSuiteModule.SteamConditionType.Superheated;
       case 1:
-        return Module.SteamConditionType.Saturated;
+        return this.toolsSuiteApiService.ToolsSuiteModule.SteamConditionType.Saturated;
     }
   }
 
   getPowerFactorModeEnum(mode: number): any {
     switch (mode) {
       case 1:
-        return Module.PowerFactorModeType.ApparentPower_RealPower;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PowerFactorModeType.ApparentPower_RealPower;
       case 2:
-        return Module.PowerFactorModeType.ApparentPower_ReactivePower;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PowerFactorModeType.ApparentPower_ReactivePower;
       case 3:
-        return Module.PowerFactorModeType.ApparentPower_PhaseAngle;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PowerFactorModeType.ApparentPower_PhaseAngle;
       case 4:
-        return Module.PowerFactorModeType.ApparentPower_PowerFactor;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PowerFactorModeType.ApparentPower_PowerFactor;
       case 5:
-        return Module.PowerFactorModeType.RealPower_ReactivePower;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PowerFactorModeType.RealPower_ReactivePower;
       case 6:
-        return Module.PowerFactorModeType.RealPower_PhaseAngle;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PowerFactorModeType.RealPower_PhaseAngle;
       case 7:
-        return Module.PowerFactorModeType.RealPower_PowerFactor;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PowerFactorModeType.RealPower_PowerFactor;
       case 8:
-        return Module.PowerFactorModeType.ReactivePower_PhaseAngle;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PowerFactorModeType.ReactivePower_PhaseAngle;
       case 9:
-        return Module.PowerFactorModeType.ReactivePower_PowerFactor;
+        return this.toolsSuiteApiService.ToolsSuiteModule.PowerFactorModeType.ReactivePower_PowerFactor;
     }
   }
 
   getProcessCoolingFanTypeEnum(fanType: number | string) {
-    if (fanType === 0 || fanType === 'AxialFan') return Module.CellFanType.AxialFan;
-    if (fanType === 1 || fanType === 'CentrifugalFan') return Module.CellFanType.CentrifugalFan;
+    if (fanType === 0 || fanType === 'AxialFan') return this.toolsSuiteApiService.ToolsSuiteModule.CellFanType.AxialFan;
+    if (fanType === 1 || fanType === 'CentrifugalFan') return this.toolsSuiteApiService.ToolsSuiteModule.CellFanType.CentrifugalFan;
   }
 
   getProcessCoolingRefrigerantTypeEnum(type: number | string) {
     switch (type) {
       case 0:
-      case 'R_11': return Module.RefrigerantType.R_11;
+      case 'R_11': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_11;
       case 1:
-      case 'R_123': return Module.RefrigerantType.R_123;
+      case 'R_123': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_123;
       case 2:
-      case 'R_12': return Module.RefrigerantType.R_12;
+      case 'R_12': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_12;
       case 3:
-      case 'R_134a': return Module.RefrigerantType.R_134a;
+      case 'R_134a': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_134a;
       case 4:
-      case 'R_22': return Module.RefrigerantType.R_22;
+      case 'R_22': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_22;
       case 5:
-      case 'R_717': return Module.RefrigerantType.R_717;
+      case 'R_717': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_717;
     }
   }
 
   getProcessCoolingCoolingAirSourceEnum(loc: number | string) {
-    if (loc === 0 || loc === 'Inside') return Module.ACSourceLocation.Inside;
-    if (loc === 1 || loc === 'Outside') return Module.ACSourceLocation.Outside;
+    if (loc === 0 || loc === 'Inside') return this.toolsSuiteApiService.ToolsSuiteModule.ACSourceLocation.Inside;
+    if (loc === 1 || loc === 'Outside') return this.toolsSuiteApiService.ToolsSuiteModule.ACSourceLocation.Outside;
   }
 
   getProcessCoolingCoolingSystemTypeEnum(type: number | string) {
-    if (type === 0 || type === 'Water') return Module.CoolingSystemType.Water;
-    if (type === 1 || type === 'Air') return Module.CoolingSystemType.Air;
+    if (type === 0 || type === 'Water') return this.toolsSuiteApiService.ToolsSuiteModule.CoolingSystemType.Water;
+    if (type === 1 || type === 'Air') return this.toolsSuiteApiService.ToolsSuiteModule.CoolingSystemType.Air;
   }
 
   getProcessCoolingTowerSizedByEnum(val: number | string) {
-    if (val === 0 || val === 'Tonnage') return Module.TowerSizedBy.Tonnage;
-    if (val === 1 || val === 'Fan_HP') return Module.TowerSizedBy.Fan_HP;
+    if (val === 0 || val === 'Tonnage') return this.toolsSuiteApiService.ToolsSuiteModule.TowerSizedBy.Tonnage;
+    if (val === 1 || val === 'Fan_HP') return this.toolsSuiteApiService.ToolsSuiteModule.TowerSizedBy.Fan_HP;
   }
 
   
@@ -527,16 +526,16 @@ export class SuiteApiHelperService {
    * until the suite API is updated to reflect this distinction.
    */
   getProcessCoolingChillerCompressorTypeEnum(type: number | string) {
-    if (type === 0 || type === 'Centrifugal') return Module.ChillerCompressorType.Centrifugal;
+    if (type === 0 || type === 'Centrifugal') return this.toolsSuiteApiService.ToolsSuiteModule.ChillerCompressorType.Centrifugal;
     // This is actually HELICAL ROTARY in the old app but is referenced as 'Screw' in the suite
-    if (type === 1 || type === 'Screw') return Module.ChillerCompressorType.Screw;
-    if (type === 2 || type === 'Reciprocating') return Module.ChillerCompressorType.Reciprocating;
+    if (type === 1 || type === 'Screw') return this.toolsSuiteApiService.ToolsSuiteModule.ChillerCompressorType.Screw;
+    if (type === 2 || type === 'Reciprocating') return this.toolsSuiteApiService.ToolsSuiteModule.ChillerCompressorType.Reciprocating;
   }
 
   getProcessCoolingFanMotorSpeedTypeEnum(type: number | string) {
-    if (type === 0 || type === 'One') return Module.FanMotorSpeedType.One;
-    if (type === 1 || type === 'Two') return Module.FanMotorSpeedType.Two;
-    if (type === 2 || type === 'Variable') return Module.FanMotorSpeedType.Variable;
+    if (type === 0 || type === 'One') return this.toolsSuiteApiService.ToolsSuiteModule.FanMotorSpeedType.One;
+    if (type === 1 || type === 'Two') return this.toolsSuiteApiService.ToolsSuiteModule.FanMotorSpeedType.Two;
+    if (type === 2 || type === 'Variable') return this.toolsSuiteApiService.ToolsSuiteModule.FanMotorSpeedType.Variable;
   }
 
 

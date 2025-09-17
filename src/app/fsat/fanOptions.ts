@@ -1,5 +1,3 @@
-declare var Module: any;
-
 export const FanTypes: Array<{ value: number, display: string, enumVal?: any }> = [
   {
     value: 5,

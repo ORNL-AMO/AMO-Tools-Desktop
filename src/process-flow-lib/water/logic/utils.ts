@@ -1,6 +1,6 @@
 import { Node, Edge } from "@xyflow/react";
 import { FlowMetric } from "../constants";
-import { CustomEdgeData, DiagramCalculatedData, ProcessFlowPart } from "../types/diagram";
+import { CustomEdgeData, DiagramCalculatedData, NodeFlowData, ProcessFlowPart } from "../types/diagram";
 import { KnownLoss } from "../types/water-components";
 
 
@@ -22,17 +22,6 @@ const convertFlowValue = (value: number, newUnits: string) => {
   return value;
 }
 
-//   const convertFlowValue = (value: number, newUnits: string) => {
-//     if (newUnits === 'Metric') {
-//       // * return m3 
-//       return value * 3785.4118;
-//     } else if (newUnits === 'Imperial') {
-//       // * return mGal 
-//       return value / 3785.4118;
-//     }
-//   return value;
-// }
-
 const isValidNumber = (num: number): boolean => {
   return !isNaN(num) && num !== null && num !== undefined;
 }
@@ -42,15 +31,21 @@ export const convertFlowDiagramData = (flowDiagramData: { nodes: Node[], edges: 
   flowDiagramData.nodes = flowDiagramData.nodes.map((nd: Node<ProcessFlowPart>) => {
     const convertedTotalSourceFlow = convertFlowValue(nd.data.userEnteredData.totalSourceFlow, newUnits);
     const convertedTotalDischargeFlow = convertFlowValue(nd.data.userEnteredData.totalDischargeFlow, newUnits);
+    const convertedTotalKnownLosses = convertFlowValue(nd.data.userEnteredData.totalKnownLosses, newUnits);
+    const convertedWaterInProduct = convertFlowValue(nd.data.userEnteredData.waterInProduct, newUnits);
+
+    const convertedUserEnteredData: NodeFlowData = {
+      totalKnownLosses: convertedTotalKnownLosses,
+      waterInProduct: convertedWaterInProduct,
+      totalSourceFlow: convertedTotalSourceFlow,
+      totalDischargeFlow: convertedTotalDischargeFlow
+    };
+
     return {
       ...nd,
       data: {
         ...nd.data,
-        userEnteredData: {
-          ...nd.data.userEnteredData,
-          totalSourceFlow: convertedTotalSourceFlow,
-          totalDischargeFlow: convertedTotalDischargeFlow
-        }
+        userEnteredData: convertedUserEnteredData
       }
     }
   });
@@ -66,13 +61,28 @@ export const convertFlowDiagramData = (flowDiagramData: { nodes: Node[], edges: 
     }
   });
 
-  // todo update new type
-  // Object.keys(flowDiagramData.calculatedData).forEach((key: string) => {
-  //   flowDiagramData.calculatedData[key].totalSourceFlow = convertFlowValue(flowDiagramData.calculatedData[key].totalSourceFlow, newUnits);
-  //   flowDiagramData.calculatedData[key].totalDischargeFlow = convertFlowValue(flowDiagramData.calculatedData[key].totalDischargeFlow, newUnits);
-  // });
-
+  flowDiagramData.calculatedData = convertCalculatedData(flowDiagramData.calculatedData, newUnits);
 }
+
+  export const convertCalculatedData = (diagramCalculatedData: DiagramCalculatedData, newUnits: string): DiagramCalculatedData => {
+    if (diagramCalculatedData) {
+      let convertedCalculatedData: DiagramCalculatedData = {
+        nodes: {}
+      };
+      Object.entries(diagramCalculatedData.nodes).forEach(([nodeId, nodeData]) => {
+        let convertedNodeData: NodeFlowData = {
+          name: nodeData.name,
+          totalSourceFlow: convertFlowValue(nodeData.totalSourceFlow, newUnits),
+          totalDischargeFlow: convertFlowValue(nodeData.totalDischargeFlow, newUnits),
+          totalKnownLosses: convertFlowValue(nodeData.totalKnownLosses, newUnits),
+          waterInProduct: convertFlowValue(nodeData.waterInProduct, newUnits),
+        };
+        convertedCalculatedData.nodes[nodeId] = convertedNodeData;
+      });
+      return convertedCalculatedData;
+    }
+    return diagramCalculatedData;
+  }
 
 
 export const convertNullInputValueForObjectConstructor = (inputValue: number | string): number => {
