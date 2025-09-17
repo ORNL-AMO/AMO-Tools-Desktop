@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PumpsSuiteApiService } from './pumps-suite-api.service';
 import { FansSuiteApiService } from './fans-suite-api.service';
-import { SqlDbApiService } from './sql-db-api.service';
 import { ProcessHeatingApiService } from './process-heating-api.service';
 import { WasteWaterSuiteApiService } from './waste-water-suite-api.service';
 import { StandaloneSuiteApiService } from './standalone-suite-api.service';
@@ -13,8 +12,7 @@ import { CompressedAirSuiteApiService } from './compressed-air-suite-api.service
 import { SviSuiteApiService } from './svi-suite-api.service';
 import { WaterSuiteApiService } from './water-suite-api.service';
 import { ChillerCalculatorSuiteApiService } from './chiller-calculator-suite-api.service';
-
-
+import { MotorDataApiService } from './motor-data-api.service';
 
 @NgModule({
   declarations: [],
@@ -26,7 +24,6 @@ import { ChillerCalculatorSuiteApiService } from './chiller-calculator-suite-api
     SuiteApiHelperService,
     ProcessHeatingApiService,
     FansSuiteApiService,
-    SqlDbApiService,
     ChillerCalculatorSuiteApiService,
     WasteWaterSuiteApiService,
     StandaloneSuiteApiService,
@@ -35,6 +32,7 @@ import { ChillerCalculatorSuiteApiService } from './chiller-calculator-suite-api
     CompressedAirSuiteApiService,
     SviSuiteApiService,
     WaterSuiteApiService,
+    MotorDataApiService
   ]
 })
 export class ToolsSuiteApiModule { }

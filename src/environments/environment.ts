@@ -15,5 +15,6 @@ export const environment = {
   useServiceWorker: false,
   measurWeatherApi: 'https://lcd.ornl.gov/api',
   measurWeatherApiLegacy: 'https://dev.weather.ornl.gov/',
-  measurUtilitiesApi: 'http://127.0.0.1:3000/'
+  measurUtilitiesApi: 'http://127.0.0.1:3000/',
+  measurDocsUrl: 'https://dev.industrialresources.ornl.gov/measur/suite/docs/'
 };

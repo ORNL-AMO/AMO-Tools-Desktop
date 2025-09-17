@@ -23,7 +23,7 @@ import WarningDialog from './WarningDialog';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { AppStore, configureAppStore, RootState, selectEdges, selectNodes } from './store';
 import { Provider } from 'react-redux';
-import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected } from './diagramReducer';
+import { addNode, addNodes, connectEdge, diagramParentRender, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected, selectedIdChange } from './diagramReducer';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
 import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, getIsDiagramValid } from 'process-flow-lib';
@@ -31,6 +31,7 @@ import MenuSidebar from '../Drawer/MenuSidebar';
 import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer from '../Drawer/SharedDrawer';
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
+import { FlowServiceProvider } from '../../services/FlowService';
 
 
 export interface DiagramProps {
@@ -66,10 +67,9 @@ const Diagram = (props: DiagramProps) => {
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {
     return getEdgeTypesFromString(state.diagram.diagramOptions.edgeType, edgeTypes);
   });
-  // const diagramParentDimensions = useAppSelector((state) => state.diagram.diagramParentDimensions);
   const diagramParentDimensions = props.parentContainer;
   const diagramAlertState: DiagramAlertState = useAppSelector((state) => state.diagram.diagramAlert);
-
+  const isMenuDrawerOpen = useAppSelector((state) => state.diagram.isMenuDrawerOpen);
 
 
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
@@ -202,7 +202,7 @@ const Diagram = (props: DiagramProps) => {
             }}
             defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
             connectionLineType={ConnectionLineType.Bezier}
-            onNodeClick={(_, node) => dispatch(openDrawerWithSelected(node.id))}
+            onNodeClick={(_, node) => dispatch(selectedIdChange(node.id))}
             onEdgeClick={(_, edge) => dispatch(openDrawerWithSelected(edge.id))}
             onDrop={onDrop}
             // onError={onErrorWithSuppressed}
@@ -219,7 +219,13 @@ const Diagram = (props: DiagramProps) => {
               <MiniMap zoomable pannable nodeClassName={(node: Node) => node.type} />
             }
             {controlsVisible &&
-              <Controls />
+            // * Styles needed for Drawer operation no longer all constrain canvas width. We need to explicitly style controls or they are hidden
+            <Controls
+              style={{
+                left: isMenuDrawerOpen ? '540px' : '75px',
+                transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+            />
             }
             <Background />
           </ReactFlow>
@@ -231,7 +237,7 @@ const Diagram = (props: DiagramProps) => {
             shadowRootRef={props.shadowRoot}
             anchor={'left'}
           >
-              <MenuSidebar shadowRootRef={props.shadowRoot} diagramParentDimensions={diagramParentDimensions}/>
+              <MenuSidebar shadowRootRef={props.shadowRoot}/>
           </SharedDrawer>
         )}
 
@@ -265,7 +271,9 @@ export default (props: DiagramProps) => {
 
   return (
     <Provider store={storeRef.current}>
-      <Diagram {...props} />
+      <FlowServiceProvider>
+        <Diagram {...props} />
+      </FlowServiceProvider>
     </Provider>
   );
 }

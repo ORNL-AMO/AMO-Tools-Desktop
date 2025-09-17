@@ -49,6 +49,14 @@ const WarningDialog = (props: WarningDialogProps) => {
 
 export interface WarningDialogProps {
  isDialogOpen: boolean;
+
 }
 
 export default WarningDialog;
+
+export interface WarningActions {
+  title: string;
+  description: string;
+  entityType: 'node' | 'edge';
+  actionButtonLabel: string;
+}

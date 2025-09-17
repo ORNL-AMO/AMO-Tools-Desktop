@@ -1,6 +1,6 @@
 import { configureStore, createListenerMiddleware, createSelector, isAnyOf } from '@reduxjs/toolkit'
-import diagramReducer, { addNode, DiagramState, saveDiagramState } from './diagramReducer'
-import { addEdge, Edge, getConnectedEdges, Node } from '@xyflow/react';
+import diagramReducer, { addNode, saveDiagramState } from './diagramReducer'
+import { Edge, getConnectedEdges, Node } from '@xyflow/react';
 import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
 import { createGraphIndex, CustomEdgeData, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
 
@@ -17,7 +17,7 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
         composedNodeData: [],
         settings: {},
         diagramOptions: {},
-        isDrawerOpen: false,
+        isDataDrawerOpen: false,
         selectedDataId: undefined,
         focusedEdgeId: undefined,
         calculatedData: {nodes: {}},
@@ -78,7 +78,7 @@ export type AppDispatch = AppStore['dispatch']
 export const selectEdges = (state: RootState) => state.diagram.edges as Edge<CustomEdgeData>[];
 export const selectNodes = (state: RootState) => state.diagram.nodes;
 export const selectNodeErrors = (state: RootState) => state.diagram.nodeErrors;
-export const selectIsDrawerOpen = (state: RootState) => state.diagram.isDrawerOpen;
+export const selectisDataDrawerOpen = (state: RootState) => state.diagram.isDataDrawerOpen;
 export const selectIsModalOpen = (state: RootState) => state.diagram.isModalOpen;
 export const selectHasAssessment = (state: RootState) => state.diagram.assessmentId !== undefined;
 export const selectCurrentNode = (state: RootState) => state.diagram.nodes.find((node: Node<ProcessFlowPart>) => node.id === state.diagram.selectedDataId) as Node<ProcessFlowPart>;
@@ -89,8 +89,13 @@ export const selectNodeValidation = (state: RootState) => {
 
 export const selectNodeCalculatedFlowData = (state: RootState, nodeId: string) => {
   return state.diagram.calculatedData.nodes[nodeId]};
+
 export const selectNodeId = (state: RootState, nodeId?: number) => {
   return nodeId ? nodeId : state.diagram.selectedDataId;
+} 
+
+export const selectCurrentDataId = (state: RootState, selectedId?: string) => {
+  return state.diagram.selectedDataId;
 } 
 
 // * MEMOIZED SELECTORS
@@ -103,6 +108,19 @@ export const selectNodeId = (state: RootState, nodeId?: number) => {
 //   [selectNodeErrors],
 //   (nodeErrors) => ({ ...nodeErrors })
 // );
+
+export const selectedDataColor = createSelector(selectNodes, selectEdges, selectCurrentDataId,
+  (nodes: Node<ProcessFlowPart>[], edges: Edge<CustomEdgeData>[], selectedDataId: string) => {
+    const node: Node<ProcessFlowPart> = nodes.find((n: Node<ProcessFlowPart>) => n.id === selectedDataId) as Node<ProcessFlowPart>;
+    const edge = edges.find((e: Edge<CustomEdgeData>) => e.id === selectedDataId);
+    if (node) {
+      return node.style?.backgroundColor;
+    } else if (edge) {
+      return edge.style?.stroke;
+    } else {
+      return undefined;
+    }
+  });
 
 export const selectGraphIndex = createSelector(
   [selectNodes, selectEdges],

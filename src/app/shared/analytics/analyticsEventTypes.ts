@@ -72,6 +72,7 @@ export type AnalyticsEventString = 'page_view' |
     'calculator-PUMP-achievable-efficiency' |
     'calculator-PUMP-head-tool' |
     'calculator-PUMP-specific-speed' |
+    'calculator-PUMP-valve-energy-loss' |
 
     'calculator-STEAM-boiler' |
     'calculator-STEAM-boiler-blowdown-rate' |

@@ -8,7 +8,6 @@ import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
-import { SqlDbApiService } from '../tools-suite-api/sql-db-api.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService, ReleaseData } from '../electron/electron.service';
 import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur-data.service';
@@ -21,6 +20,11 @@ import { MeasurSurveyService } from '../shared/measur-survey/measur-survey.servi
 import { UpdateApplicationService } from '../shared/update-application/update-application.service';
 import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-subscribe.service';
 import { ExportToJustifiTemplateService } from '../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
+import { CORE_DATA_WARNING, SECONDARY_DATA_WARNING, SnackbarService } from '../shared/snackbar-notification/snackbar.service';
+import { BrowserStorageAvailable, BrowserStorageService } from '../shared/browser-storage.service';
+import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
+import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
+import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 
 @Component({
   selector: 'app-core',
@@ -30,7 +34,6 @@ import { ExportToJustifiTemplateService } from '../shared/export-to-justifi-moda
 })
 
 export class CoreComponent implements OnInit {
-  showBrowsingDataToast: boolean;
   hideTutorial: boolean = true;
   openingTutorialSub: Subscription;
   idbStarted: boolean = false;
@@ -62,6 +65,10 @@ export class CoreComponent implements OnInit {
   showShareDataModal: boolean = false;
   showShareDataModalSub: Subscription;
 
+  toolsSuiteInitialized: boolean;
+  toolsSuiteInitializedSub: Subscription;
+  loadingMessage: string;
+  defaultDbDataInitialized: boolean = false;
   constructor(public electronService: ElectronService,
     private assessmentService: AssessmentService,
     private changeDetectorRef: ChangeDetectorRef,
@@ -78,23 +85,29 @@ export class CoreComponent implements OnInit {
     private automaticBackupService: AutomaticBackupService,
     private applicationInstanceDbService: ApplicationInstanceDbService,
     private importBackupModalService: ImportBackupModalService,
-    private sqlDbApiService: SqlDbApiService,
     private measurSurveyService: MeasurSurveyService,
     private updateApplicationService: UpdateApplicationService,
     private emailSubscribeService: EmailListSubscribeService,
     private inventoryDbService: InventoryDbService,
-    private exportToJustifiTemplateService: ExportToJustifiTemplateService) {
+    private snackBarService: SnackbarService,
+    private browserStorageService: BrowserStorageService,
+    private exportToJustifiTemplateService: ExportToJustifiTemplateService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private toolsSuiteApiService: ToolsSuiteApiService
+  ) {
   }
 
   ngOnInit() {
-    if (!window.navigator.cookieEnabled) {
-      this.showBrowsingDataToast = true;
-    }
+    this.setLoadingMessage();
+    this.toolsSuiteInitializedSub = this.coreService.initializedToolsSuiteModule.subscribe(val => {
+      this.toolsSuiteInitialized = val;
+      this.initializeDefaultDbData();
+    });
 
     if (this.electronService.isElectron) {
       this.electronService.sendAppReady('ready');
     }
-
     this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
       if (applicationData) {
         this.setSurveyToastVisibility(applicationData);
@@ -138,6 +151,28 @@ export class CoreComponent implements OnInit {
       this.showReleaseNotesModal = val;
     });
 
+    this.browserStorageService.detectAppStorageOptions().subscribe((browserStorageOptions: BrowserStorageAvailable) => {
+      if (browserStorageOptions.indexedDB.success) {
+        let cookiesFunction = browserStorageOptions.cookies.navigatorEnabled && (browserStorageOptions.cookies.successfulWrite || (this.electronService.isElectron && !browserStorageOptions.cookies.successfulWrite));
+        if (!browserStorageOptions.localStorage || !cookiesFunction) {
+          this.snackBarService.setSnackbarMessage(SECONDARY_DATA_WARNING, 'info', 'none', [
+            { label: 'Data Storage and Backup', uri: '/data-and-backup' },
+            { label: 'Privacy', uri: '/privacy' }
+          ]);
+        } else if (!this.electronService.isElectron) {
+          setTimeout(() => {
+            this.snackBarService.setSnackbarMessage('appDataStorageNotice', 'info', 'none', [
+              { label: 'Data Storage and Backup', uri: '/data-and-backup' },
+              { label: 'Privacy', uri: '/privacy' }
+            ]);
+          }, 3000);
+        }
+        this.initData();
+      } else {
+        this.snackBarService.setSnackbarMessage(CORE_DATA_WARNING, 'danger', 'none');
+      }
+    });
+
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
       this.inTutorialsView = (this.router.url === '/tutorials');
       if (val && !this.assessmentService.tutorialShown) {
@@ -146,8 +181,6 @@ export class CoreComponent implements OnInit {
         this.changeDetectorRef.detectChanges();
       }
     });
-
-    this.initData();
 
     this.showSecurityAndPrivacyModalSub = this.securityAndPrivacyService.showSecurityAndPrivacyModal.subscribe(showSecurityAndPrivacyModal => {
       this.showSecurityAndPrivacyModal = showSecurityAndPrivacyModal;
@@ -188,9 +221,11 @@ export class CoreComponent implements OnInit {
     this.emailVisibilitySubscription.unsubscribe();
     this.showExportToJustifiModalSub.unsubscribe();
     this.showShareDataModalSub.unsubscribe();
+    this.toolsSuiteInitializedSub.unsubscribe();
   }
 
   async initData() {
+    console.log('=== IndexedDB Initializing data ===');
     const isFirstStartup = await this.getIsFirstStartup();
     if (isFirstStartup) {
       try {
@@ -205,8 +240,11 @@ export class CoreComponent implements OnInit {
     } else {
       await this.coreService.setApplicationInstanceData();
       this.setAllDbData();
+      //initialize db Behavior Subjects
+      //data initialized in createDefaultProcessHeatingMaterials on startup
+      await this.solidLiquidMaterialDbService.setAllMaterialsFromDb();
+      await this.flueGasMaterialDbService.setAllMaterialsFromDb();
     }
-
   }
 
   async setSurveyToastVisibility(applicationData: ApplicationInstanceData) {
@@ -249,7 +287,7 @@ export class CoreComponent implements OnInit {
           this.calculatorDbService.setAll(initializedData.calculators);
           this.inventoryDbService.setAll(initializedData.inventoryItems);
           this.idbStarted = true;
-          this.sqlDbApiService.initCustomDbMaterials();
+          this.initializeDefaultDbData();
           this.changeDetectorRef.detectChanges();
           if (this.electronService.isElectron) {
             this.automaticBackupService.saveVersionedBackup();
@@ -274,9 +312,12 @@ export class CoreComponent implements OnInit {
     this.applicationInstanceDbService.applicationInstanceData.next(appData);
   }
 
-  hideBrowsingDataToast() {
-    this.showBrowsingDataToast = false;
-    this.changeDetectorRef.detectChanges();
+  async initializeDefaultDbData() {
+    if (this.toolsSuiteInitialized && this.idbStarted && !this.defaultDbDataInitialized) {
+      console.log('==== Initialize Default DB Data ====');
+      await this.toolsSuiteApiService.initializeDefaultDbData();
+      this.defaultDbDataInitialized = true;
+    }
   }
 
   hideSubscribeToast() {
@@ -301,6 +342,28 @@ export class CoreComponent implements OnInit {
 
   closeReleaseNotes() {
     this.updateApplicationService.showReleaseNotesModal.next(false);
+  }
+
+  setLoadingMessage() {
+    const messages = [
+      "Loading... I hope you're having a nice day!",
+      "Just a moment, wishing you a wonderful day!",
+      "Preparing things for you. Hope your day is going well!",
+      "Hang tight! I hope you're having a fantastic day!",
+      "Almost there—hope your day is as great as you are!",
+      "Setting things up. I hope you're enjoying your day!",
+      "Loading your experience. Have a nice day!",
+      "Good things are coming. Hope your day is pleasant!",
+      "Getting ready... I hope you're having a nice day!",
+      "Thanks for your patience. Wishing you a great day!",
+      "Just a sec! I hope your day is going smoothly!",
+      "Loading magic. Hope you're having a nice day!",
+      "Almost done! I hope your day is wonderful!",
+      "Preparing your app. Have a fantastic day!",
+      "One moment please. I hope you're having a nice day!"
+    ];
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    this.loadingMessage = messages[randomIndex];
   }
 
 }

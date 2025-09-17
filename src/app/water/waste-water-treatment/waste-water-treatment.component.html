@@ -51,8 +51,8 @@
             <div class="input-group">
                 <input name="cost" type="number" class="form-control" id="cost" formControlName="cost" (input)="save()"
                     (focus)="focusField('cost')">
-                <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">$/kgal</span>
-                <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/kL</span>
+                <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Metric'">$/kGal</span>
+                <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Metric'">$/L</span>
             </div>
             <span class="alert-danger pull-right small"
                 *ngIf="form.controls.cost.invalid && !form.controls.cost.pristine">

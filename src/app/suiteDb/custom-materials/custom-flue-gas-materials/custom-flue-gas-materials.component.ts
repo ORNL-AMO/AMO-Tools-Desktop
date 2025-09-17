@@ -2,7 +2,6 @@ import { Component, OnInit, Input, ViewChild, SimpleChanges, Output, EventEmitte
  
 import { FlueGasMaterial } from '../../../shared/models/materials';
 import { Settings } from '../../../shared/models/settings';
-import { LossesService } from '../../../phast/losses/losses.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CustomMaterialsService } from '../custom-materials.service';
 import * as _ from 'lodash';
@@ -36,7 +35,7 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   selectedSub: Subscription;
   selectAllSub: Subscription;
 
-  constructor(private flueGasMaterialDbService: FlueGasMaterialDbService, private lossesService: LossesService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
+  constructor(private flueGasMaterialDbService: FlueGasMaterialDbService, private customMaterialService: CustomMaterialsService, private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
     this.flueGasMaterials = new Array<FlueGasMaterial>();
@@ -78,22 +77,22 @@ export class CustomFlueGasMaterialsComponent implements OnInit {
   }
 
 
-  async getCustomMaterials() {
-    this.flueGasMaterials = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
+  getCustomMaterials() {
+    this.flueGasMaterials = this.flueGasMaterialDbService.getAllCustomMaterials();
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.convertAllMaterials();
     }
     this.emitNumMaterials.emit(this.flueGasMaterials.length);
   }
 
-  async editMaterial(id: number) {
-    this.existingMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(id));
+  editMaterial(id: number) {
+    this.existingMaterial = this.flueGasMaterialDbService.getById(id);
     this.editExistingMaterial = true;
     this.showMaterialModal();
   }
 
-  async deleteMaterial(id: number) {
-    this.existingMaterial = await firstValueFrom(this.flueGasMaterialDbService.getByIdWithObservable(id));
+  deleteMaterial(id: number) {
+    this.existingMaterial = this.flueGasMaterialDbService.getById(id);
     this.editExistingMaterial = true;
     this.deletingMaterial = true;
     this.showMaterialModal();

@@ -1,22 +1,23 @@
 import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { FlueGasModalData } from '../../../../shared/models/phast/heatCascading';
 import { FixtureLoss, FixtureLossOutput, FixtureLossResults } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { Settings } from '../../../../shared/models/settings';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { FixtureFormService } from '../fixture-form.service';
 import { FixtureService } from '../fixture.service';
+import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-material-db.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
-    selector: 'app-fixture-form',
-    templateUrl: './fixture-form.component.html',
-    styleUrls: ['./fixture-form.component.css'],
-    standalone: false
+  selector: 'app-fixture-form',
+  templateUrl: './fixture-form.component.html',
+  styleUrls: ['./fixture-form.component.css'],
+  standalone: false
 })
 export class FixtureFormComponent implements OnInit {
   @Input()
@@ -33,7 +34,7 @@ export class FixtureFormComponent implements OnInit {
   @ViewChild('flueGasModal', { static: false }) public flueGasModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
-  
+
   materialTypes: Array<SolidLoadChargeMaterial>;
   showMaterialModal: boolean = false;
 
@@ -55,7 +56,7 @@ export class FixtureFormComponent implements OnInit {
   outputSubscription: Subscription;
 
   constructor(private fixtureFormService: FixtureFormService,
-    private sqlDbApiService: SqlDbApiService, 
+    private solidLoadMaterialDbService: SolidLoadMaterialDbService,
     private convertUnitsService: ConvertUnitsService,
     private cd: ChangeDetectorRef,
     private fixtureService: FixtureService) { }
@@ -69,7 +70,7 @@ export class FixtureFormComponent implements OnInit {
     }
     this.trackingEnergySource = this.index > 0 || !this.isBaseline;
 
-    this.materialTypes = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+    this.setMaterials();
     this.initSubscriptions();
     this.energyUnit = this.fixtureService.getAnnualEnergyUnit(this.fixtureForm.controls.energySourceType.value, this.settings);
     if (this.isBaseline) {
@@ -78,7 +79,7 @@ export class FixtureFormComponent implements OnInit {
       let energySource = this.fixtureService.energySourceType.getValue();
       this.setEnergySource(energySource);
     }
-    this.setSpecificHeat();
+    this.setProperties();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -99,6 +100,10 @@ export class FixtureFormComponent implements OnInit {
     if (this.trackingEnergySource) {
       this.energySourceTypeSub.unsubscribe();
     }
+  }
+
+  async setMaterials() {
+    this.materialTypes = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable())
   }
 
   checkEnergySourceSub() {
@@ -140,57 +145,25 @@ export class FixtureFormComponent implements OnInit {
     }
   }
 
-  setFormState() {
+  async setFormState() {
     if (this.selected == false) {
       this.fixtureForm.disable();
     } else {
-      this.materialTypes = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+      this.setMaterials();
       this.fixtureForm.enable();
     }
   }
 
-  setSpecificHeat() {
-    let tmpMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.fixtureForm.controls.materialName.value);
-    if (tmpMaterial) {
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        tmpMaterial.specificHeatSolid = this.convertUnitsService.value(tmpMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
-      }
-      this.fixtureForm.patchValue({
-        specificHeat: this.roundVal(tmpMaterial.specificHeatSolid, 3)
-      });
-    }
-    this.calculate();
-  }
-
-  checkSpecificHeat() {
-    if (this.fixtureForm.controls.materialName.value) {
-      let material: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.fixtureForm.controls.materialName.value);
-      if (material) {
-        let val = material.specificHeatSolid;
-        if (this.settings.unitsOfMeasure === 'Metric') {
-          val = this.convertUnitsService.value(val).from('btulbF').to('kJkgC');
-        }
-        material.specificHeatSolid = this.roundVal(val, 3);
-        if (material.specificHeatSolid !== this.fixtureForm.controls.specificHeat.value) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    } else {
-      return false;
-    }
-  }
-
   setProperties() {
-    let selectedMaterial: SolidLoadChargeMaterial = this.sqlDbApiService.selectSolidLoadChargeMaterialById(this.fixtureForm.controls.materialName.value);
+    let selectedMaterial: SolidLoadChargeMaterial = this.materialTypes.find(material => { return material.id === this.fixtureForm.controls.materialName.value; });
     if (selectedMaterial) {
+      let specificHeatSolid: number = selectedMaterial.specificHeatSolid;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        selectedMaterial.specificHeatSolid = this.convertUnitsService.value(selectedMaterial.specificHeatSolid).from('btulbF').to('kJkgC');
+        specificHeatSolid = this.convertUnitsService.value(specificHeatSolid).from('btulbF').to('kJkgC');
       }
 
       this.fixtureForm.patchValue({
-        specificHeat: this.roundVal(selectedMaterial.specificHeatSolid, 4)
+        specificHeat: roundVal(specificHeatSolid, 4)
       });
     }
     this.calculate();
@@ -261,9 +234,9 @@ export class FixtureFormComponent implements OnInit {
     this.materialModal.show();
   }
 
-  hideMaterialModal(event?: any) {
+  async hideMaterialModal(event?: any) {
     if (event) {
-      this.materialTypes = this.sqlDbApiService.selectSolidLoadChargeMaterials();
+      await this.setMaterials();
       let newMaterial: SolidLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === event.substance; });
       if (newMaterial) {
         this.fixtureForm.patchValue({
@@ -277,12 +250,6 @@ export class FixtureFormComponent implements OnInit {
     this.fixtureService.modalOpen.next(this.showMaterialModal);
   }
 
-
-  roundVal(val: number, digits: number) {
-    let rounded = Number(val.toFixed(digits));
-    return rounded;
-  }
-
   initFlueGasModal() {
     this.showFlueGasModal = true;
     this.fixtureService.modalOpen.next(this.showFlueGasModal);
@@ -291,7 +258,7 @@ export class FixtureFormComponent implements OnInit {
 
   hideFlueGasModal(flueGasModalData?: FlueGasModalData) {
     if (flueGasModalData) {
-      flueGasModalData.calculatedAvailableHeat = this.roundVal(flueGasModalData.calculatedAvailableHeat, 1);
+      flueGasModalData.calculatedAvailableHeat = roundVal(flueGasModalData.calculatedAvailableHeat, 1);
       this.fixtureForm.patchValue({
         availableHeat: flueGasModalData.calculatedAvailableHeat
       });

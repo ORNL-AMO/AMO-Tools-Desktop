@@ -4,7 +4,7 @@ import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange,
 import { CSSProperties } from 'react';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
+import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
 import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
@@ -17,7 +17,8 @@ export interface DiagramState {
   composedNodeData: ProcessFlowPart[];
   settings: DiagramSettings,
   diagramOptions: UserDiagramOptions,
-  isDrawerOpen: boolean,
+  isDataDrawerOpen: boolean,
+  isMenuDrawerOpen: boolean,
   // * Selected node or edge 
   selectedDataId: string,
   calculatedData: DiagramCalculatedData,
@@ -30,6 +31,7 @@ export interface DiagramState {
   assessmentId: number,
   validationWindowLocation: ValidationWindowLocation,
   isModalOpen: boolean,
+  manageDataTabs: ManageDataTab[],
   diagramAlert: DiagramAlertState
 }
 
@@ -41,7 +43,8 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     composedNodeData: [],
     settings: getDefaultSettings(),
     diagramOptions: getDefaultUserDiagramOptions(),
-    isDrawerOpen: false,
+    isDataDrawerOpen: false,
+    isMenuDrawerOpen: false,
     selectedDataId: undefined,
     focusedEdgeId: undefined,
     calculatedData: { nodes: {} },
@@ -57,6 +60,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     assessmentId: undefined,
     validationWindowLocation: 'diagram',
     isModalOpen: false,
+    manageDataTabs: [],
     diagramAlert: {
       open: false,
     }
@@ -83,7 +87,8 @@ const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{
   state.nodeErrors = diagramData.nodeErrors ? { ...diagramData.nodeErrors } : {};
   state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();
   state.recentEdgeColors = diagramData.recentEdgeColors.length !== 0 ? { ...diagramData.recentEdgeColors } : getDefaultColorPalette();
-  state.isDrawerOpen = false;
+  state.isDataDrawerOpen = false;
+  state.isMenuDrawerOpen = false;
   state.focusedEdgeId = undefined;
   state.selectedDataId = undefined;
   state.diagramParentDimensions = { ...parentContainer };
@@ -141,6 +146,7 @@ const sourceFlowValueChangeReducer = (state: DiagramState, action: PayloadAction
       // * update discharge edges of the node.id calculated data being set
       const nodeDischargeEdges = getNodeTargetEdges(state.edges, node.id);
       const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeDischargeEdges, state.nodes, node.id);
+      // console.log('sourceFlowValueChange --> setCalculatedNodeDataProperty', totalCalculatedDischargeFlow)
       setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalDischargeFlow', totalCalculatedDischargeFlow);
     }
   });
@@ -164,6 +170,7 @@ const dischargeFlowValueChangeReducer = (state: DiagramState, action: PayloadAct
       // * update source edges of the node.id calculated data being set
       const nodeSourceEdges = getNodeSourceEdges(state.edges, node.id);
       const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeSourceEdges, state.nodes, node.id);
+      // console.log('dischargeFlowValueChange --> setCalculatedNodeDataProperty', totalCalculatedSourceFlow)
       setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalSourceFlow', totalCalculatedSourceFlow);
     }
   });
@@ -273,7 +280,7 @@ const setNodeStyleReducer = (state: DiagramState, action: PayloadAction<CSSPrope
 const deleteNodeReducer = (state: DiagramState, action: PayloadAction<string>) => {
   state.nodes = state.nodes.filter((nd) => nd.id !== state.selectedDataId);
   state.edges = state.edges.filter((edge) => edge.source !== state.selectedDataId && edge.target !== state.selectedDataId);
-  state.isDrawerOpen = !state.isDrawerOpen;
+  state.isDataDrawerOpen = !state.isDataDrawerOpen;
   delete state.nodeErrors[state.selectedDataId];
   state.selectedDataId = action.payload ? action.payload : undefined;
 };
@@ -332,11 +339,40 @@ const edgesUpdateReducer = (state: DiagramState, action: PayloadAction<Edge[]>) 
   state.edges = action.payload;
 };
 
+/**
+ * @param action  Map of edgeId to flow value>
+ */
+const edgesChangeFromPropagationReducer = (state: DiagramState, action: PayloadAction<{
+  flowUpdates: Record<string, number>, 
+  startingNodeId: string
+}>) => {
+  const {flowUpdates, startingNodeId} = action.payload;
+  const updatedEdges: Edge[] = state.edges.map((edge) => {
+    const newFlow = flowUpdates[edge.id];
+    if (newFlow !== undefined) {
+      edge.data.flowValue = newFlow;
+    }
+    return edge;
+  });
+
+   if (flowUpdates) {
+    const sourceNode = state.nodes.find(node => node.id === startingNodeId);
+    const initialValue: number = Object.entries(flowUpdates)[0][1];
+
+    state.diagramAlert = {
+      open: true,
+      alertMessage: `Successfully set all path flows from ${sourceNode?.data.name || sourceNode.id} (${initialValue} Mgal) to end of path`,
+      alertSeverity: 'success',
+      dismissMS: 10000
+    };
+  }
+  state.edges = updatedEdges;
+};
 
 const deleteEdgeReducer = (state: DiagramState, action: PayloadAction<string>) => {
   state.edges = state.edges.filter((edg) => edg.id !== action.payload);
 
-  state.isDrawerOpen = !state.isDrawerOpen;
+  state.isDataDrawerOpen = !state.isDataDrawerOpen;
   state.selectedDataId = action.payload ? action.payload : undefined;
 }
 
@@ -461,23 +497,32 @@ const showMarkerEndArrowsReducer = (state: DiagramState, action: PayloadAction<b
 }
 
 const toggleDrawerReducer = (state: DiagramState, action?: PayloadAction<string>) => {
-  state.isDrawerOpen = !state.isDrawerOpen;
+  state.isDataDrawerOpen = !state.isDataDrawerOpen;
+};
+
+const toggleMenuDrawerReducer = (state: DiagramState, action?: PayloadAction<string>) => {
+  state.isMenuDrawerOpen = !state.isMenuDrawerOpen;
 };
 
 const openDrawerWithSelectedReducer = (state: DiagramState, action?: PayloadAction<string>) => {
-  if (!state.isDrawerOpen) {
-    state.isDrawerOpen = true;
+  if (!state.isDataDrawerOpen) {
+    state.isDataDrawerOpen = true;
   }
-  state.selectedDataId = action.payload ? action.payload : undefined;
+  setSelectedId(state, action);
 };
 
 const selectedIdChangeReducer = (state: DiagramState, action?: PayloadAction<string>) => {
-  state.selectedDataId = action.payload ? action.payload : undefined;
+  setSelectedId(state, action);
 };
 
-const calculatedDataUpdateReducer = (state: DiagramState, action: PayloadAction<DiagramCalculatedData>) => {
-  state.calculatedData = action.payload;
-}
+const setSelectedId = (state: DiagramState, action: PayloadAction<string>) => {
+  state.selectedDataId = action.payload ? action.payload : undefined;
+  const componentTabs = ComponentManageDataTabs[state.nodes.find((n: Node<ProcessFlowPart>) => n.id === action.payload)?.data.processComponentType as WaterProcessComponentType];
+  if (componentTabs) {
+    // * is component, not edge
+    state.manageDataTabs = componentTabs;
+  }
+};
 
 const modalOpenChangeReducer = (state: DiagramState, action: PayloadAction<boolean>) => {
   state.isModalOpen = action.payload;
@@ -515,7 +560,6 @@ export const diagramSlice = createSlice({
     focusedEdgeChange: focusedEdgeChangeReducer,
     defaultEdgeTypeChange: defaultEdgeTypeChangeReducer,
     customEdgeTypeChange: customEdgeTypeChangeReducer,
-    calculatedDataUpdate: calculatedDataUpdateReducer,
     diagramOptionsChange: diagramOptionsChangeReducer,
     unitsOfMeasureChange: unitsOfMeasureChangeReducer,
     flowDecimalPrecisionChange: flowDecimalPrecisionChangeReducer,
@@ -529,9 +573,11 @@ export const diagramSlice = createSlice({
     electricityCostChange: electricityCostChangeReducer,
     modalOpenChange: modalOpenChangeReducer,
     applyEstimatedFlowResults: applyEstimatedFlowResultsReducer,
-    selectedIdChange: selectedIdChangeReducer,
     openDrawerWithSelected: openDrawerWithSelectedReducer,
-    diagramAlertChange: diagramAlertChangeReducer
+    selectedIdChange: selectedIdChangeReducer,
+    diagramAlertChange: diagramAlertChangeReducer,
+    toggleMenuDrawer: toggleMenuDrawerReducer,
+    edgesChangeFromPropagation: edgesChangeFromPropagationReducer
   }
 })
 
@@ -563,7 +609,6 @@ export const {
   setNodeColor,
   setEdgeStrokeColor,
   resetDiagram,
-  calculatedDataUpdate,
   diagramOptionsChange,
   unitsOfMeasureChange,
   flowDecimalPrecisionChange,
@@ -574,9 +619,11 @@ export const {
   modalOpenChange,
   conductivityUnitChange,
   electricityCostChange,
-  selectedIdChange,
   openDrawerWithSelected,
-  diagramAlertChange
+  selectedIdChange,
+  diagramAlertChange,
+  toggleMenuDrawer,
+  edgesChangeFromPropagation
 } = diagramSlice.actions
 export default diagramSlice.reducer
 

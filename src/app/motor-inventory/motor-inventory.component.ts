@@ -11,7 +11,7 @@ import { InventoryItem } from '../shared/models/inventory/inventory';
 import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { BatchAnalysisService, BatchAnalysisSettings } from './batch-analysis/batch-analysis.service';
 import { environment } from '../../environments/environment';
-import { MotorIntegrationService } from '../shared/connected-inventory/motor-integration.service';
+import { PumpMotorIntegrationService } from '../shared/connected-inventory/pump-motor-integration.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 
 
@@ -50,7 +50,7 @@ export class MotorInventoryComponent implements OnInit {
     private inventoryDbService: InventoryDbService,
     private settingsDbService: SettingsDbService,
     private motorCatalogService: MotorCatalogService, 
-    private motorIntegrationService: MotorIntegrationService,
+    private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private batchAnalysisService: BatchAnalysisService, private cd: ChangeDetectorRef,
     private analyticsService: AnalyticsService) { }
 
@@ -64,7 +64,7 @@ export class MotorInventoryComponent implements OnInit {
       } else { 
         let settings: Settings = this.settingsDbService.getByInventoryId(this.motorInventoryItem);
         this.motorInventoryService.settings.next(settings);
-        this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
+        this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.pumpMotorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
         this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
         if (this.motorInventoryItem.batchAnalysisSettings) {
           this.batchAnalysisService.batchAnalysisSettings.next(this.motorInventoryItem.batchAnalysisSettings);
@@ -139,7 +139,7 @@ export class MotorInventoryComponent implements OnInit {
     this.motorInventoryItem.appVersion = environment.version;
     this.motorInventoryItem.motorInventoryData = inventoryData;
     this.motorInventoryItem.batchAnalysisSettings = batchAnalysisSettings;
-    this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
+    this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.pumpMotorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
     await firstValueFrom(this.inventoryDbService.updateWithObservable(this.motorInventoryItem));
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);

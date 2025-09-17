@@ -27,19 +27,20 @@
             </tr>
             <tr class="text-center header-highlight remove-border">
                 <th>
-                    Mgal/yr
+                    <ng-container *ngIf="settings.unitsOfMeasure == 'Imperial'; else metricUnit">Mgal/yr</ng-container>
+                    <ng-template #metricUnit>m<sup>3</sup>/yr</ng-template>
                 </th>
                 <th>
                     $/yr
                 </th>
                 <th>
-                    $/kGal
+                    {{ settings.unitsOfMeasure == 'Imperial' ? '$/kGal' : '$/L' }}
                 </th>
                 <th>
                     $/yr
                 </th>
                 <th>
-                    $/kGal
+                     {{ settings.unitsOfMeasure == 'Imperial' ? '$/kGal' : '$/L' }}
                 </th>
             </tr>
         </thead>
@@ -62,7 +63,7 @@
                 </td>
                 <td>
                     <span *ngIf="systemResult.directCostPerUnit">${{systemResult.directCostPerUnit |
-                        number:'1.0-2'}}</span>
+                        number:'1.0-4'}}</span>
                     <span *ngIf="!systemResult.directCostPerUnit">&mdash;</span>
                 </td>
                 <td>
@@ -70,7 +71,7 @@
                     <span *ngIf="!systemResult.trueCostPerYear">&mdash;</span>
                 </td>
                 <td>
-                    <span *ngIf="systemResult.trueCostPerUnit">${{systemResult.trueCostPerUnit | number:'1.0-2'}}</span>
+                    <span *ngIf="systemResult.trueCostPerUnit">${{systemResult.trueCostPerUnit | number:'1.0-4'}}</span>
                     <span *ngIf="!systemResult.trueCostPerUnit">&mdash;</span>
                 </td>
                 <td>
@@ -84,7 +85,7 @@
         <tfoot>
             <tr class="bold text-center footer-row">
                 <td>
-                    Plant Total
+                    Plant
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.sourceWaterIntake">{{plantSummaryResults.sourceWaterIntake |
@@ -98,7 +99,7 @@
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.directCostPerUnit">${{plantSummaryResults.directCostPerUnit |
-                        number:'1.0-2'}}</span>
+                        number:'1.0-4'}}</span>
                     <span *ngIf="!plantSummaryResults.directCostPerUnit">&mdash;</span>
                 </td>
                 <td>
@@ -108,7 +109,7 @@
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.trueCostPerUnit">${{plantSummaryResults.trueCostPerUnit |
-                        number:'1.0-2'}}</span>
+                        number:'1.0-4'}}</span>
                     <span *ngIf="!plantSummaryResults.trueCostPerUnit">&mdash;</span>
                 </td>
                 <td>

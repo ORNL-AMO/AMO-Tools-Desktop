@@ -19,6 +19,8 @@ import { AtmosphereSpecificHeat, FlueGasMaterial, GasLoadChargeMaterial, LiquidL
 import { ApplicationInstanceDbService } from '../indexedDb/application-instance-db.service';
 import { Settings } from './models/settings';
 import { firstValueFrom } from 'rxjs';
+import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
+import { Diagram } from './models/diagram';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +39,7 @@ export class BackupDataService {
     private solidLoadMaterialDbService: SolidLoadMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
+    private diagramDbService: DiagramIdbService,
     private atmosphereDbService: AtmosphereDbService,
   ) { }
 
@@ -52,6 +55,7 @@ export class BackupDataService {
       dataBackupId: Math.random().toString(36).substr(2, 9),
       directories: this.getDirectories(this.directoryDbService.dbDirectories.getValue()),
       assessments: this.getAssessments(this.assessmentDbService.dbAssessments.getValue()),
+      diagrams: this.getDiagrams(this.diagramDbService.dbDiagrams.getValue()),
       calculators: await firstValueFrom(this.calculatorDbService.getAllCalculators()),
       inventories: this.getInventories(this.inventoryDbService.dbInventories.getValue()),
       settings: this.getSettings(this.settingsDbService.dbSettings.getValue()),
@@ -81,6 +85,12 @@ export class BackupDataService {
     return assessments;
   }
 
+  getDiagrams(diagrams: Array<Diagram>) {
+    // diagrams = this.removeExamples(diagrams) as Array<Diagram>;
+    return diagrams;
+  }
+
+
   getInventories(inventories: Array<InventoryItem>) {
     // inventories = this.removeExamples(inventories) as Array<InventoryItem>;
     return inventories;
@@ -100,13 +110,13 @@ export class BackupDataService {
   }
 
   async setCustomMaterials(backupFile: MeasurBackupFile) {
-    backupFile.gasLoadChargeMaterials = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
-    backupFile.liquidLoadChargeMaterials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllWithObservable());
-    backupFile.solidLoadChargeMaterials = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
-    backupFile.atmosphereSpecificHeats = await firstValueFrom(this.atmosphereDbService.getAllWithObservable());
-    backupFile.wallLossesSurfaces = await firstValueFrom(this.wallLossesSurfaceDbService.getAllWithObservable());
-    backupFile.flueGasMaterials = await firstValueFrom(this.flueGasMaterialDbService.getAllWithObservable());
-    backupFile.solidLiquidFlueGasMaterials = await firstValueFrom(this.solidLiquidMaterialDbService.getAllWithObservable());
+    backupFile.gasLoadChargeMaterials = await firstValueFrom(this.gasLoadMaterialDbService.getAllCustomMaterials());
+    backupFile.liquidLoadChargeMaterials = await firstValueFrom(this.liquidLoadMaterialDbService.getAllCustomMaterials());
+    backupFile.solidLoadChargeMaterials = await firstValueFrom(this.solidLoadMaterialDbService.getAllCustomMaterials());
+    backupFile.atmosphereSpecificHeats = await firstValueFrom(this.atmosphereDbService.getAllCustomMaterials());
+    backupFile.wallLossesSurfaces = await firstValueFrom(this.wallLossesSurfaceDbService.getAllCustomMaterials());
+    backupFile.flueGasMaterials = this.flueGasMaterialDbService.getAllCustomMaterials();
+    backupFile.solidLiquidFlueGasMaterials = this.solidLiquidMaterialDbService.getAllCustomMaterials();
   }
   
   async downloadBackupFile() {
@@ -127,6 +137,7 @@ export interface MeasurBackupFile {
   timeStamp: Date,
   dataBackupId: string,
   assessments?: Assessment[],
+  diagrams?: Diagram[],
   directories?: Directory[],
   inventories?: InventoryItem[],
   settings: Settings[],

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ChillerPerformanceInput, ChillerPerformanceOutput, ChillerStagingInput, ChillerStagingOutput, CoolingTowerBasinInput, CoolingTowerBasinOutput, CoolingTowerBasinResult, CoolingTowerFanInput, CoolingTowerFanOutput, CoolingTowerInput, CoolingTowerOutput } from '../shared/models/chillers';
 import { SuiteApiHelperService } from './suite-api-helper.service';
-
-declare var Module: any;
+import { ToolsSuiteApiService } from './tools-suite-api.service';
 
 @Injectable()
 export class ChillerCalculatorSuiteApiService {
 
-  constructor(private suiteApiHelperService: SuiteApiHelperService) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService,
+    private toolsSuiteApiService: ToolsSuiteApiService
+  ) { }
 
   coolingTowerMakeupWater(input: CoolingTowerInput): CoolingTowerOutput {
     input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad);
@@ -15,23 +16,23 @@ export class ChillerCalculatorSuiteApiService {
     input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor);
     input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours);
 
-    let OperatingConditionsData = new Module.CoolingTowerOperatingConditionsData(
+    let OperatingConditionsData = new this.toolsSuiteApiService.ToolsSuiteModule.CoolingTowerOperatingConditionsData(
       input.coolingTowerMakeupWaterCalculator.operatingConditionsData.flowRate,
       input.coolingTowerMakeupWaterCalculator.operatingConditionsData.coolingLoad,
       input.coolingTowerMakeupWaterCalculator.operatingConditionsData.operationalHours,
       input.coolingTowerMakeupWaterCalculator.operatingConditionsData.lossCorrectionFactor,
     );
     input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration);
-    let BaselineWaterConservationData = new Module.CoolingTowerWaterConservationData(
+    let BaselineWaterConservationData = new this.toolsSuiteApiService.ToolsSuiteModule.CoolingTowerWaterConservationData(
       input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.cyclesOfConcentration,
       input.coolingTowerMakeupWaterCalculator.waterConservationBaselineData.driftLossFactor,
     );
     input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration);
-    let ModificationConservationData = new Module.CoolingTowerWaterConservationData(
+    let ModificationConservationData = new this.toolsSuiteApiService.ToolsSuiteModule.CoolingTowerWaterConservationData(
       input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.cyclesOfConcentration,
       input.coolingTowerMakeupWaterCalculator.waterConservationModificationData.driftLossFactor,
     );
-    let CoolingTowerMakeupWaterInstance = new Module.CoolingTowerMakeupWaterCalculator(
+    let CoolingTowerMakeupWaterInstance = new this.toolsSuiteApiService.ToolsSuiteModule.CoolingTowerMakeupWaterCalculator(
       OperatingConditionsData,
       BaselineWaterConservationData,
       ModificationConservationData
@@ -58,7 +59,7 @@ export class ChillerCalculatorSuiteApiService {
   }
 
   basinHeaterEnergyConsumption(input: CoolingTowerBasinInput) {
-    let output = Module.BasinHeaterEnergyConsumption(
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.BasinHeaterEnergyConsumption(
       input.ratedCapacity,
       input.ratedTempSetPoint,
       input.ratedTempDryBulb,
@@ -89,7 +90,7 @@ export class ChillerCalculatorSuiteApiService {
   fanEnergyConsumption(input: CoolingTowerFanInput): CoolingTowerFanOutput {
     let fanSpeedTypeBaseline: number = this.suiteApiHelperService.getCoolingTowerFanControlSpeedType(input.baselineSpeedType)
     let fanSpeedTypeModification: number = this.suiteApiHelperService.getCoolingTowerFanControlSpeedType(input.modSpeedType)
-    let output = Module.FanEnergyConsumption(
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.FanEnergyConsumption(
       input.ratedFanPower, 
       input.waterLeavingTemp,
       input.waterEnteringTemp,
@@ -119,7 +120,7 @@ export class ChillerCalculatorSuiteApiService {
     let condenserCoolingType: number = this.suiteApiHelperService.getCoolingTowerCondenserCoolingType(input.condenserCoolingType)
     let compressorConfigType: number = this.suiteApiHelperService.getCoolingTowerCompressorConfigType(input.compressorConfigType)
 
-    let output = Module.ChillerCapacityEfficiency(
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.ChillerCapacityEfficiency(
       chillerType, 
       condenserCoolingType, 
       compressorConfigType,
@@ -161,7 +162,7 @@ export class ChillerCalculatorSuiteApiService {
     let baselineLoadList = this.suiteApiHelperService.returnDoubleVector(input.baselineLoadList);
     let modLoadList = this.suiteApiHelperService.returnDoubleVector(input.modLoadList);
 
-    let rawOutput = Module.ChillerStagingEfficiency(
+    let rawOutput = this.toolsSuiteApiService.ToolsSuiteModule.ChillerStagingEfficiency(
       chillerType, 
       condenserCoolingType, 
       compressorConfigType,

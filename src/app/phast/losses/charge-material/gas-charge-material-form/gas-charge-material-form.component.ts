@@ -6,15 +6,15 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { GasLoadChargeMaterial } from '../../../../shared/models/materials';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
 import { GasLoadMaterialDbService } from '../../../../indexedDb/gas-load-material-db.service';
 import { firstValueFrom } from 'rxjs';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
-    selector: 'app-gas-charge-material-form',
-    templateUrl: './gas-charge-material-form.component.html',
-    styleUrls: ['./gas-charge-material-form.component.css'],
-    standalone: false
+  selector: 'app-gas-charge-material-form',
+  templateUrl: './gas-charge-material-form.component.html',
+  styleUrls: ['./gas-charge-material-form.component.css'],
+  standalone: false
 })
 export class GasChargeMaterialFormComponent implements OnInit {
   @Input()
@@ -41,10 +41,10 @@ export class GasChargeMaterialFormComponent implements OnInit {
   hasDeletedCustomMaterial: boolean = false;
   editExistingMaterial: boolean;
   existingMaterial: GasLoadChargeMaterial;
-  materialTypes: Array<GasLoadChargeMaterial>;
+  materialTypes: Array<GasLoadChargeMaterial> = [];
   showModal: boolean = false;
   idString: string;
-  constructor(private sqlDbApiService: SqlDbApiService, private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private gasLoadMaterialDbService: GasLoadMaterialDbService) { }
+  constructor(private chargeMaterialCompareService: ChargeMaterialCompareService, private lossesService: LossesService, private convertUnitsService: ConvertUnitsService, private gasLoadMaterialDbService: GasLoadMaterialDbService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isBaseline) {
@@ -58,23 +58,14 @@ export class GasChargeMaterialFormComponent implements OnInit {
         if (!this.baselineSelected) {
           this.disableForm();
         } else {
-          this.materialTypes = this.sqlDbApiService.selectGasLoadChargeMaterials();
+          this.setMaterials();
           this.enableForm();
         }
       }
     }
   }
   ngOnInit() {
-    this.materialTypes = this.sqlDbApiService.selectGasLoadChargeMaterials();
-    if (this.chargeMaterialForm) {
-      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
-        if (this.chargeMaterialForm.controls.materialSpecificHeat.value === '') {
-          this.setProperties();
-        } else {
-          this.checkForDeletedMaterial();
-        }
-      }
-    }
+    this.setMaterials(true);
     if (!this.baselineSelected) {
       this.disableForm();
     }
@@ -84,14 +75,28 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.lossesService.modalOpen.next(false);
   }
 
-  checkMaterialValues() {
-    let material: GasLoadChargeMaterial = this.sqlDbApiService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
-    if (material) {
-      if (this.settings.unitsOfMeasure === 'Metric') {
-        let val = this.convertUnitsService.value(material.specificHeatVapor).from('btulbF').to('kJkgC');
-        material.specificHeatVapor = this.roundVal(val, 4);
+  async setMaterials(onInit?: boolean) {
+    this.materialTypes = await firstValueFrom(this.gasLoadMaterialDbService.getAllWithObservable());
+    if (onInit && this.chargeMaterialForm) {
+      if (this.chargeMaterialForm.controls.materialId.value && this.chargeMaterialForm.controls.materialId.value !== '') {
+        if (this.chargeMaterialForm.controls.materialSpecificHeat.value === '') {
+          this.setProperties();
+        } else {
+          this.checkForDeletedMaterial();
+        }
       }
-      if (material.specificHeatVapor !== this.chargeMaterialForm.controls.materialSpecificHeat.value) {
+    }
+  }
+
+  checkMaterialValues() {
+    let material: GasLoadChargeMaterial = this.materialTypes.find(material => material.id === this.chargeMaterialForm.controls.materialId.value);
+    if (material) {
+      let specificHeatVapor: number = material.specificHeatVapor;
+      if (this.settings.unitsOfMeasure === 'Metric') {
+        specificHeatVapor = this.convertUnitsService.value(specificHeatVapor).from('btulbF').to('kJkgC');
+        specificHeatVapor = roundVal(specificHeatVapor, 4);
+      }
+      if (specificHeatVapor !== this.chargeMaterialForm.controls.materialSpecificHeat.value) {
         return true;
       } else {
         return false;
@@ -119,11 +124,11 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   checkForDeletedMaterial() {
-    let selectedMaterial: GasLoadChargeMaterial = this.sqlDbApiService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let selectedMaterial: GasLoadChargeMaterial = this.materialTypes.find(material => material.id === this.chargeMaterialForm.controls.materialId.value);
     if (!selectedMaterial) {
       this.hasDeletedCustomMaterial = true;
       this.restoreMaterial();
-    } 
+    }
     this.save();
   }
 
@@ -132,11 +137,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
       substance: "Custom Material",
       specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeat.value
     };
-    let suiteDbResult = this.sqlDbApiService.insertGasLoadChargeMaterial(customMaterial);
-    if (suiteDbResult === true) {
-      await firstValueFrom(this.gasLoadMaterialDbService.addWithObservable(customMaterial));
-    }
-    this.materialTypes = this.sqlDbApiService.selectGasLoadChargeMaterials();
+    await this.setMaterials();
     let newMaterial: GasLoadChargeMaterial = this.materialTypes.find(material => { return material.substance === customMaterial.substance; });
     this.chargeMaterialForm.patchValue({
       materialId: newMaterial.id
@@ -144,21 +145,17 @@ export class GasChargeMaterialFormComponent implements OnInit {
   }
 
   setProperties() {
-    let selectedMaterial: GasLoadChargeMaterial = this.sqlDbApiService.selectGasLoadChargeMaterialById(this.chargeMaterialForm.controls.materialId.value);
+    let selectedMaterial: GasLoadChargeMaterial = this.materialTypes.find(material => material.id === this.chargeMaterialForm.controls.materialId.value);
     if (selectedMaterial) {
+      let specificHeatVapor: number = selectedMaterial.specificHeatVapor;
       if (this.settings.unitsOfMeasure === 'Metric') {
-        selectedMaterial.specificHeatVapor = this.convertUnitsService.value(selectedMaterial.specificHeatVapor).from('btulbF').to('kJkgC');
+        specificHeatVapor = this.convertUnitsService.value(specificHeatVapor).from('btulbF').to('kJkgC');
       }
       this.chargeMaterialForm.patchValue({
-        materialSpecificHeat: this.roundVal(selectedMaterial.specificHeatVapor, 4)
+        materialSpecificHeat: roundVal(specificHeatVapor, 4)
       });
     }
     this.save();
-  }
-
-  roundVal(val: number, digits: number) {
-    let test = Number(val.toFixed(digits));
-    return test;
   }
 
   save() {
@@ -257,7 +254,7 @@ export class GasChargeMaterialFormComponent implements OnInit {
 
   showMaterialModal(editExistingMaterial: boolean) {
     this.editExistingMaterial = editExistingMaterial;
-    if(editExistingMaterial === true) {
+    if (editExistingMaterial === true) {
       this.existingMaterial = {
         id: this.chargeMaterialForm.controls.materialId.value,
         specificHeatVapor: this.chargeMaterialForm.controls.materialSpecificHeat.value,
@@ -269,9 +266,9 @@ export class GasChargeMaterialFormComponent implements OnInit {
     this.materialModal.show();
   }
 
-  hideMaterialModal(event?: any) {
+  async hideMaterialModal(event?: any) {
     if (event) {
-      this.materialTypes = this.sqlDbApiService.selectGasLoadChargeMaterials();
+      await this.setMaterials();
       let newMaterial = this.materialTypes.filter(material => { return material.substance === event.substance; });
       if (newMaterial.length !== 0) {
         this.chargeMaterialForm.patchValue({

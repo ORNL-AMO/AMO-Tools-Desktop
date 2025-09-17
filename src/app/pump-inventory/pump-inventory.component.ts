@@ -8,7 +8,7 @@ import { Settings } from '../shared/models/settings';
 import { PumpCatalogService } from './pump-inventory-setup/pump-catalog/pump-catalog.service';
 import { PumpInventoryData, PumpInventoryDepartment, PumpItem } from './pump-inventory';
 import { PumpInventoryService } from './pump-inventory.service';
-import { MotorIntegrationService } from '../shared/connected-inventory/motor-integration.service';
+import { PumpMotorIntegrationService } from '../shared/connected-inventory/pump-motor-integration.service';
 import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { ConnectedInventoryData } from '../shared/connected-inventory/integrations';
@@ -50,7 +50,7 @@ export class PumpInventoryComponent implements OnInit {
     private settingsDbService: SettingsDbService, 
     private inventoryDbService: InventoryDbService,
     private pumpCatalogService: PumpCatalogService, 
-    private motorIntegrationService: MotorIntegrationService,
+    private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private integrationStateService: IntegrationStateService,
     private psatIntegrationService: PsatIntegrationService,
     private cd: ChangeDetectorRef,
@@ -63,7 +63,7 @@ export class PumpInventoryComponent implements OnInit {
       this.pumpInventoryItem = this.inventoryDbService.getById(tmpItemId);
       let settings: Settings = this.settingsDbService.getByInventoryId(this.pumpInventoryItem);
       this.pumpInventoryService.settings.next(settings);
-      this.pumpInventoryItem.pumpInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
+      this.pumpInventoryItem.pumpInventoryData.hasConnectedInventoryItems = this.pumpMotorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
       this.pumpInventoryService.setIsValidInventory(this.pumpInventoryItem.pumpInventoryData);
       this.pumpInventoryService.pumpInventoryData.next(this.pumpInventoryItem.pumpInventoryData);
       this.pumpInventoryService.currentInventoryId = tmpItemId;
@@ -137,7 +137,7 @@ export class PumpInventoryComponent implements OnInit {
     this.pumpInventoryItem.modifiedDate = new Date();
     this.pumpInventoryItem.appVersion = environment.version;
     this.pumpInventoryItem.pumpInventoryData = inventoryData;
-    this.pumpInventoryItem.pumpInventoryData.hasConnectedInventoryItems = this.motorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
+    this.pumpInventoryItem.pumpInventoryData.hasConnectedInventoryItems = this.pumpMotorIntegrationService.getHasConnectedMotorItems(this.pumpInventoryItem);
     this.pumpInventoryItem.pumpInventoryData.hasConnectedPsat = this.psatIntegrationService.getHasConnectedPSAT(this.pumpInventoryItem);
     await firstValueFrom(this.inventoryDbService.updateWithObservable(this.pumpInventoryItem));
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());

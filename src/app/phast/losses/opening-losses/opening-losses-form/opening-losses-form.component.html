@@ -100,7 +100,7 @@
         (click)="calculateViewFactor()">Calculate</a>
       </label>
 
-      <input [readonly]="!baselineSelected" name="{{'viewFactor_'+lossIndex}}" type="number" step="0.1" min="0" max="1"
+      <input [readonly]="!baselineSelected" name="{{'viewFactor_'+lossIndex}}" type="number" step="0.1"
         class="form-control" formControlName="viewFactor" id="{{'viewFactor'+idString}}" onfocus="this.select();"
         (input)="save()" (focus)="focusField('viewFactor')" [ngClass]="{'indicate-different': compareViewFactor(), 'invalid': openingLossesForm.controls.viewFactor.invalid}">
         <span class="alert-danger pull-right small"

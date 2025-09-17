@@ -3,18 +3,18 @@ if: tag IS blank
 language: node_js
 node_js:
   - '12.8'
-  
+
 matrix:
   include:
     - name: "Linux Build"
       os: linux
-    
+
     - name: "Mac Build"
       os: osx
-      
+
     - name: "Windows Build"
       os: windows
-    
+
 before_install:
   - chmod 777 travis_scripts/*
   - travis_retry ./travis_scripts/before_install.sh
@@ -29,7 +29,7 @@ script:
   - travis_wait 40 ./travis_scripts/build.sh
   - echo "Build complete"
   #- export TRAVIS_TAG="release_draft"
-  
+
 before_deploy:
   #function keep_alive() {
   #  while true; do
@@ -44,13 +44,13 @@ deploy:
   api_key:
     secure: iRdxjibRf0cHrjX26NqqeH6jvqrnNbOYaxRe/zbQWXs3Lx1jZg8Rh7a3i5SCXY3UGKm0uVfeASPM7HAaRgwZaml2tXsJW4Gkz0YxOvfAWB+LRNredQSHHUHpfIxZU24oMDYgm2yWpsa2jEbJsdMtv3yoRyv2BHDCyCjmfwfFJpxqfrG1kJdjiGqahsuamv7mf3nPmnRCdVLPlwCPhp/BlcqYGNpkhXi0q4/RYU2BB4W+8ZOHfjkXN7ff8KHjz/Jux5U4LRHN0PBxfqnrLByZHFCXp7fT1SM8QUFTovHX7BsSdUWL2ufs+CMeG4H6pPk///VKx0AqVmY4T7pk0xnqbvTZvPQck0jXitDSjRQCo2J8v6tBzQfrWW5nnpqSGKsJyxXQMkjRMMn7VQ68H6VCJjgjKRV1duN7RMw2h8K04FZR0a0emyVyQZFw6HcnSlHQPSuy5/c04jpLZymKWlYVJXkXzrKO6W2ry0TTdRDJmQzxbeeYbmSKlnlZZWXnmeozVDy8mHv99134P93KzGDoet8CCo+WSiz7aYbcIvPwA72bSCnM+XOylHOD45kEV0a99xaLhHV6GjexY4yVPn0z4mRk5/f4WorR2te3rYJRobb29qRBR1TlMZb8LvHPz5cRSzHP2k5WdviEmuvTYhwx60CsOlxKKBo0cXi93ig3MJg=
   file:
-    - "../output/MEASUR-0.6.5-beta.AppImage"
-    - "../output/MEASUR-0.6.5-beta.tar.gz"
-    - "../output/latest-linux.yml"
-    - "../output/MEASUR-0.6.5-beta.dmg"
-    - "../output/latest-mac.yml"
-    - "../output/MEASUR-Setup-0.6.5-beta.exe"
-    - "../output/latest.yml"
+    - "output/MEASUR-0.6.5-beta.AppImage"
+    - "output/MEASUR-0.6.5-beta.tar.gz"
+    - "output/latest-linux.yml"
+    - "output/MEASUR-0.6.5-beta.dmg"
+    - "output/latest-mac.yml"
+    - "output/MEASUR-Setup-0.6.5-beta.exe"
+    - "output/latest.yml"
   overwrite: true
   skip_cleanup: true
   draft: true

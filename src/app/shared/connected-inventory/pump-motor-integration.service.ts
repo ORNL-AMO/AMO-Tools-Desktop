@@ -15,7 +15,7 @@ import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { copyObject } from '../helperFunctions';
 
 @Injectable()
-export class MotorIntegrationService {
+export class PumpMotorIntegrationService {
   constructor(private inventoryDbService: InventoryDbService, 
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
