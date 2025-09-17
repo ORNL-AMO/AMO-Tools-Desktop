@@ -38,23 +38,27 @@ export interface ConnectedItem {
   name: string,
   inventoryId: number,
   inventoryName?: string,
-  departmentId?: string,
+  departmentId?: string,  
+  systemId?: string,
   inventoryType?: InventoryType,
   assessmentType?: AssessmentType,
   assessmentId?: number,
   assessmentName?: string,
-  connectedFromState?: ConnectedFromState
+  connectedPumpFromState?: ConnectedPumpFromState,
+  connectedCompressorFromState?: ConnectedCompressorFromState,
 }
 
 // inventory values at time of assessment filled/connected
-//TODO rename this for pumps and create new for compressors
-export interface ConnectedFromState {
+export interface ConnectedPumpFromState {
   psatInputs?: PsatInputs;
   pumpMotor: PumpMotorProperties,
   pumpEquipment: PumpProperties,
   pumpSystem: SystemProperties,
   pumpFluid: FluidProperties,
-  compressorMotor?: CompressedAirMotorProperties
+}
+
+export interface ConnectedCompressorFromState {
+  compressorMotor: CompressedAirMotorProperties
 }
 
 export interface ConnectedInventoryData {
