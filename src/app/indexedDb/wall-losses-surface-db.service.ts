@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { WallLossesSurface } from '../shared/models/materials';
 import { WallLossesSurfaceStoreMeta } from './dbConfig';
 
@@ -10,9 +10,19 @@ export class WallLossesSurfaceDbService {
   storeName: string = WallLossesSurfaceStoreMeta.store;
   dbWallLossesSurfaceMaterials: BehaviorSubject<Array<WallLossesSurface>>;
 
-  constructor(private dbService: NgxIndexedDBService) {
+  constructor(private dbService: NgxIndexedDBService
+  ) {
     this.dbWallLossesSurfaceMaterials = new BehaviorSubject<Array<WallLossesSurface>>([]);
+  }
 
+  insertDefaultMaterials(defaultMaterials: Array<WallLossesSurface>): Observable<number[]> {
+    return this.dbService.bulkAdd(this.storeName, defaultMaterials);
+  }
+
+  getAllCustomMaterials(): Observable<Array<WallLossesSurface>> {
+    return this.dbService.getAll(this.storeName).pipe(
+      map((materials: WallLossesSurface[]) => materials.filter((material: WallLossesSurface) => !material.isDefault))
+    );
   }
 
   getAllWithObservable(): Observable<Array<WallLossesSurface>> {
@@ -38,5 +48,4 @@ export class WallLossesSurfaceDbService {
   clearWallLossesSurface(): Observable<boolean> {
     return this.dbService.clear(this.storeName);
   }
-
 }

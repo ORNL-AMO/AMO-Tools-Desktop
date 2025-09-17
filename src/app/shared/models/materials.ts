@@ -16,6 +16,7 @@ export interface FlueGasMaterial {
     selected?: boolean;
     specificGravity: number;
     substance: string;
+    isDefault?: boolean
 }
 
 export interface GasLoadChargeMaterial {
@@ -23,6 +24,7 @@ export interface GasLoadChargeMaterial {
     selected?: boolean;
     specificHeatVapor: number;
     substance: string;
+    isDefault?: boolean
 }
 
 export interface LiquidLoadChargeMaterial {
@@ -33,6 +35,7 @@ export interface LiquidLoadChargeMaterial {
     specificHeatVapor: number;
     substance: string;
     vaporizationTemperature: number;
+    isDefault?: boolean;
 }
 
 
@@ -48,6 +51,7 @@ export interface SolidLiquidFlueGasMaterial {
     substance: string;
     sulphur: number;
     heatingValue: number;
+    isDefault?: boolean;
 }
 
 export interface SolidLoadChargeMaterial {
@@ -58,6 +62,7 @@ export interface SolidLoadChargeMaterial {
     specificHeatLiquid: number;
     specificHeatSolid: number;
     substance: string;
+    isDefault?: boolean;
 }
 
 export interface AtmosphereSpecificHeat {
@@ -65,12 +70,14 @@ export interface AtmosphereSpecificHeat {
     selected?: boolean;
     specificHeat: number;
     substance: string;
+    isDefault?: boolean
 }
 
 
 export interface WallLossesSurface {
     conditionFactor: number;
     id?: number;
+    isDefault?: boolean;
     selected?: boolean;
     surface: string;
 }

@@ -2,7 +2,8 @@ import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } fr
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { WallLossesSurface } from '../../../../shared/models/materials';
-import { SqlDbApiService } from '../../../../tools-suite-api/sql-db-api.service';
+import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-wall-summary',
@@ -40,7 +41,7 @@ export class WallSummaryComponent implements OnInit {
   copyTableString: any;
 
   constructor(
-    private sqlDbApiService: SqlDbApiService,
+    private wallDbService: WallLossesSurfaceDbService,
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
@@ -53,7 +54,7 @@ export class WallSummaryComponent implements OnInit {
     this.conditionFactorDiff = new Array();
     this.emissivityDiff = new Array();
     //get substances
-    this.surfaceOrientationOptions = this.sqlDbApiService.selectWallLossesSurface();
+    this.setWallSurfaces();
     //init array
     this.lossData = new Array();
     if (this.phast.losses) {
@@ -99,6 +100,11 @@ export class WallSummaryComponent implements OnInit {
         });
       }
     }
+  }
+
+  async setWallSurfaces() {
+    this.surfaceOrientationOptions = await firstValueFrom(this.wallDbService.getAllWithObservable());
+
   }
 
 

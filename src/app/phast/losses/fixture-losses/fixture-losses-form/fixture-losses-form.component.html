@@ -16,7 +16,7 @@
           New Material</a>
       </label>
       <select name="{{'materialName_'+lossIndex}}" class="form-control" formControlName="materialName" id="{{'materialName'+idString}}"
-        (change)="setSpecificHeat()" (focus)="focusField('materialName')"  [ngClass]="{'indicate-different': compareMaterialName(), 'invalid': lossesForm.controls.materialName.invalid}">
+        (change)="setProperties()" (focus)="focusField('materialName')"  [ngClass]="{'indicate-different': compareMaterialName(), 'invalid': lossesForm.controls.materialName.invalid}">
         <option *ngFor="let material of materials" [ngValue]="material.id">{{material.substance}}</option>
       </select>
     </div>

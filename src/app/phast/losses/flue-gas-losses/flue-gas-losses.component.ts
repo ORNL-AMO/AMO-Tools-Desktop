@@ -7,13 +7,13 @@ import { Settings } from '../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 import { FlueGasFormService } from '../../../calculator/furnaces/flue-gas/flue-gas-form.service';
 import { SolidLiquidFlueGasMaterial } from '../../../shared/models/materials';
-import { SqlDbApiService } from '../../../tools-suite-api/sql-db-api.service';
 import { FlueGasCompareService } from './flue-gas-compare.service';
+import { SolidLiquidMaterialDbService } from '../../../indexedDb/solid-liquid-material-db.service';
 @Component({
-    selector: 'app-flue-gas-losses',
-    templateUrl: './flue-gas-losses.component.html',
-    styleUrls: ['./flue-gas-losses.component.css'],
-    standalone: false
+  selector: 'app-flue-gas-losses',
+  templateUrl: './flue-gas-losses.component.html',
+  styleUrls: ['./flue-gas-losses.component.css'],
+  standalone: false
 })
 export class FlueGasLossesComponent implements OnInit {
   @Input()
@@ -46,11 +46,11 @@ export class FlueGasLossesComponent implements OnInit {
   disableType: boolean = false;
   lossesLocked: boolean = false;
   idString: string;
-  constructor(private phastService: PhastService, 
-              private flueGasFormService: FlueGasFormService, 
-              private cd: ChangeDetectorRef,
-              private flueGasCompareService: FlueGasCompareService,
-              private sqlDbApiService: SqlDbApiService) { }
+  constructor(private phastService: PhastService,
+    private flueGasFormService: FlueGasFormService,
+    private cd: ChangeDetectorRef,
+    private flueGasCompareService: FlueGasCompareService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService) { }
 
   ngOnInit() {
     if (!this.isBaseline) {
@@ -71,7 +71,6 @@ export class FlueGasLossesComponent implements OnInit {
     if (this.inSetup && this.modExists) {
       this.lossesLocked = true;
     }
-    this.cd.detectChanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -189,8 +188,7 @@ export class FlueGasLossesComponent implements OnInit {
         loss.grossHeat = (heatInput / availableHeat) - sumAdditionalHeat;
         loss.systemLosses = (loss.grossHeat + sumAdditionalHeat) * (1 - availableHeat);
 
-        let gases: Array<SolidLiquidFlueGasMaterial> = this.sqlDbApiService.selectSolidLiquidFlueGasMaterials();
-        let selectedGas: SolidLiquidFlueGasMaterial = gases.find(gas => { return gas.id == tmpLoss.flueGasByMass.gasTypeId });
+        let selectedGas: SolidLiquidFlueGasMaterial = this.solidLiquidMaterialDbService.getById(tmpLoss.flueGasByMass.gasTypeId);
         if (tmpLoss.flueGasByMass.oxygenCalculationMethod == 'Excess Air' && selectedGas) {
           loss.calculatedExcessAir = tmpLoss.flueGasByMass.excessAirPercentage;
           let fluGasCo2Inputs: MaterialInputProperties = {

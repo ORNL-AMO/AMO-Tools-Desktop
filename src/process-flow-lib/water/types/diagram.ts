@@ -134,6 +134,8 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     totalDischargeFlow?: number,
     totalKnownLosses?: number,
     waterInProduct?: number,
+    intakeUnaccounted?: number,
+    dischargeUnaccounted?: number,
   }
 
   

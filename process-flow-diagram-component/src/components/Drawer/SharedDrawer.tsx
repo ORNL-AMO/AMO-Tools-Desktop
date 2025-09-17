@@ -8,7 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Box } from '@mui/material';
 import DrawerToggleButton from './DrawerToggleButton';
 import { ParentContainerDimensions } from 'process-flow-lib';
-import { toggleDrawer } from '../Diagram/diagramReducer';
+import { toggleDrawer, toggleMenuDrawer } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { selectedDataColor } from '../Diagram/store';
 const drawerWidth = 525;
@@ -87,17 +87,17 @@ const SharedDrawer = (props: SharedDrawerProps) => {
     const { diagramParentDimensions, anchor, shadowRootRef } = props;
     const dispatch = useAppDispatch();
     const selectedDataTypeColor = useAppSelector(selectedDataColor);
-    let [open, setOpen] = React.useState(true);
     let toggleDrawerOpen: () => void;
-
+    let open: boolean;
     if (anchor === 'right') {
-        open = useAppSelector((state) => state.diagram.isDrawerOpen);
+        open = useAppSelector((state) => state.diagram.isDataDrawerOpen);
         toggleDrawerOpen = () => {
             dispatch(toggleDrawer());
         };
     } else {
+        open = useAppSelector((state) => state.diagram.isMenuDrawerOpen);
         toggleDrawerOpen = () => {
-            setOpen(!open);
+            dispatch(toggleMenuDrawer());
         };
     }
 

@@ -44,7 +44,10 @@ export class FlueGasFormService {
       'CO2': [0, Validators.required],
       'SO2': [0, Validators.required], 
       'O2': [0, Validators.required],
-      'name': ['Loss #' + lossNumber]
+      'name': ['Loss #' + lossNumber],
+      'specificGravity': [0],
+      'heatingValue': [0],
+      'heatingValueVolume': [0]
     });
 
     if (!loss) {
@@ -260,7 +263,10 @@ export class FlueGasFormService {
         CO: form.controls.CO.value,
         CO2: form.controls.CO2.value,
         SO2: form.controls.SO2.value,
-        O2: form.controls.O2.value
+        O2: form.controls.O2.value,
+        heatingValue: form.controls.heatingValue.value,
+        heatingValueVolume: form.controls.heatingValueVolume.value,
+        specificGravity: form.controls.specificGravity.value
       }
     }
 

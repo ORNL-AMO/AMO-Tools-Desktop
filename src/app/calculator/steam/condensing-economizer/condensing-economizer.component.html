@@ -21,8 +21,8 @@
 		</div>
 	</div>
 	<div class="panel-group">
-		<div class="calculator-panel-container modification mh-100"
-			[ngClass]="{'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
+		<div class="calculator-panel-container modification mh-100" 
+			[ngClass]="{'small-screen-tab': smallScreenTab === 'form', 'modal-open': isModalOpen}" [ngStyle]="{'height.px': containerHeight}">
 			<div class="d-flex flex-column m-4">
 				<app-condensing-economizer-form [settings]="settings"></app-condensing-economizer-form>
 
@@ -40,7 +40,7 @@
 		</div>
 
 		<!-- help panel -->
-		<div class="calculator-panel-container help-panel"
+		<div class="calculator-panel-container help-panel" 
 			[ngClass]="{'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
 			<div class="d-flex flex-column mh-100">
 				<div class="d-flex flex-wrap tabs primary sticky-top">

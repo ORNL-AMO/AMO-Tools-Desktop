@@ -17,6 +17,7 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { StandaloneSuiteApiService } from '../tools-suite-api/standalone-suite-api.service';
 import { CalculatorSuiteApiService } from '../tools-suite-api/calculator-suite-api.service';
+import { ValveEnergyLossInputs, ValveEnergyLossResults } from '../shared/models/calculators';
 
 @Injectable()
 export class StandaloneService {
@@ -371,5 +372,9 @@ export class StandaloneService {
 
   powerFactorTriangle(inputObj: PowerFactorTriangleModeInputs): PowerFactorTriangleOutputs {
     return this.calculatorSuiteApiService.powerFactorTriangle(inputObj);
+  }
+
+  valveEnergyLossCalc(baselineInputs: ValveEnergyLossInputs, modificationInputs: ValveEnergyLossInputs): ValveEnergyLossResults{
+    return this.calculatorSuiteApiService.valveEnergyLossCalc(baselineInputs, modificationInputs);
   }
 }

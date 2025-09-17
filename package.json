@@ -1,6 +1,6 @@
 {
   "name": "amo-tools-desktop",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "main": "main.js",
   "license": "MIT",
   "description": "MEASUR",
@@ -12,7 +12,8 @@
     "npm": "10.9.2"
   },
   "scripts": {
-    "install-node-deps": "bash scripts/install-node-dependencies.sh",
+    "install-packages": "node scripts/install-all-node-dependencies.js",
+    "reset": "node scripts/reset-build-and-dependency-artifacts.js",
     "build-diagram": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development --watch",
     "build:process-flow-lib": "tsc -p src/process-flow-lib/tsconfig.json",
     "build": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href .",
@@ -28,7 +29,6 @@
     "electron-watch": "echo Type \"rs\" to manually restart. && nodemon --exec \"electron\" . --delay 1.5 --watch dist/main.js --watch dist/index.html --verbose true",
     "lint": "ng lint",
     "test": "ng test",
-    "postinstall": "electron-builder install-app-deps",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "build:stats": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --stats-json",
@@ -60,7 +60,7 @@
     "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
     "fs-jetpack": "^5.1.0",
-    "measur-tools-suite": "latest",
+    "measur-tools-suite": "1.0.12",
     "ngx-indexed-db": "^16.0.0",
     "ngx-webstorage": "^19.0.1",
     "pako": "^2.1.0",

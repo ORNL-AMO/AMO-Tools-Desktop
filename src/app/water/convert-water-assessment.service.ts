@@ -3,7 +3,8 @@ import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Assessment } from '../shared/models/assessment';
-import { BoilerWater, convertFlowDiagramData, CoolingTower, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, KnownLoss, Landscaping, LandscapingResults, MAX_FLOW_DECIMALS, Modification, MotorEnergy, NodeFlowData, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { BoilerWater, ConnectedFlowType, convertCalculatedData, convertFlowDiagramData, CoolingTower, DiagramCalculatedData, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, HeatEnergyResults, IntakeSource, KitchenRestroom, KnownLoss, Landscaping, LandscapingResults, MAX_FLOW_DECIMALS, Modification, MotorEnergy, NodeFlowData, ProcessUse, WasteWaterTreatment, WaterAssessment, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,9 +26,11 @@ export class ConvertWaterAssessmentService {
     let diagram = this.diagramIdbService.findById(assessment.diagramId);
     diagram.waterDiagram.flowDiagramData.settings.unitsOfMeasure = newSettings.unitsOfMeasure;
     convertFlowDiagramData(diagram.waterDiagram.flowDiagramData, newSettings.unitsOfMeasure);
+    await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
   }
 
   convertWaterAssessmentData(waterAssessment: WaterAssessment, oldSettings: Settings, newSettings: Settings): WaterAssessment {
+    waterAssessment.calculatedData = convertCalculatedData(waterAssessment.calculatedData, newSettings.unitsOfMeasure);
     waterAssessment.intakeSources = this.convertIntakeSources(waterAssessment.intakeSources, oldSettings, newSettings);
     waterAssessment.dischargeOutlets = this.convertDischargeOutlets(waterAssessment.dischargeOutlets, oldSettings, newSettings);
     waterAssessment.waterUsingSystems = this.convertWaterUsingSystems(waterAssessment.waterUsingSystems, oldSettings, newSettings);
@@ -73,21 +76,25 @@ export class ConvertWaterAssessmentService {
       }
       intakeSource.annualUse = this.convertUnitsService.roundVal(intakeSource.annualUse, newSettings.flowDecimalPrecision);
       intakeSource.userEnteredData = this.convertUserEnteredFlowData(intakeSource.userEnteredData, oldSettings, newSettings);
+      intakeSource.cost = this.convertUnitCost(intakeSource.cost, oldSettings, newSettings);
     });
     return intakeSources;
   }
 
   convertUserEnteredFlowData(userEnteredData: NodeFlowData, oldSettings: Settings, newSettings: Settings) {
-    if (userEnteredData.totalSourceFlow) {
-      userEnteredData.totalSourceFlow = this.convertFlowValue(userEnteredData.totalSourceFlow, oldSettings, newSettings);
-      userEnteredData.totalSourceFlow = this.convertUnitsService.roundVal(userEnteredData.totalSourceFlow, newSettings.flowDecimalPrecision);
+    const convertedUserEnteredData: NodeFlowData = {
+      name: userEnteredData.name,
+      totalSourceFlow: this.convertFlowValue(userEnteredData.totalSourceFlow, oldSettings, newSettings),
+      totalDischargeFlow: this.convertFlowValue(userEnteredData.totalDischargeFlow, oldSettings, newSettings),
+      totalKnownLosses: this.convertFlowValue(userEnteredData.totalKnownLosses, oldSettings, newSettings),
+      waterInProduct: this.convertFlowValue(userEnteredData.waterInProduct, oldSettings, newSettings),
+    };
 
-    }
-    if (userEnteredData.totalDischargeFlow) {
-      userEnteredData.totalDischargeFlow = this.convertFlowValue(userEnteredData.totalDischargeFlow, oldSettings, newSettings);
-      userEnteredData.totalDischargeFlow = this.convertUnitsService.roundVal(userEnteredData.totalDischargeFlow, newSettings.flowDecimalPrecision);
-    }
-    return userEnteredData;
+    convertedUserEnteredData.totalSourceFlow = convertedUserEnteredData.totalSourceFlow? this.convertUnitsService.roundVal(convertedUserEnteredData.totalSourceFlow, newSettings.flowDecimalPrecision) : 0;
+    convertedUserEnteredData.totalDischargeFlow = convertedUserEnteredData.totalDischargeFlow? this.convertUnitsService.roundVal(convertedUserEnteredData.totalDischargeFlow, newSettings.flowDecimalPrecision) : 0;
+    convertedUserEnteredData.totalKnownLosses = convertedUserEnteredData.totalKnownLosses? this.convertUnitsService.roundVal(convertedUserEnteredData.totalKnownLosses, newSettings.flowDecimalPrecision) : 0;
+    convertedUserEnteredData.waterInProduct = convertedUserEnteredData.waterInProduct? this.convertUnitsService.roundVal(convertedUserEnteredData.waterInProduct, newSettings.flowDecimalPrecision) : 0;
+    return convertedUserEnteredData;
   }
 
   convertDischargeOutlets(dischargeOutlet: DischargeOutlet[], oldSettings: Settings, newSettings: Settings): DischargeOutlet[] {
@@ -100,6 +107,8 @@ export class ConvertWaterAssessmentService {
       }
       dischargeOutlet.annualUse = this.convertUnitsService.roundVal(dischargeOutlet.annualUse, newSettings.flowDecimalPrecision);
       dischargeOutlet.userEnteredData = this.convertUserEnteredFlowData(dischargeOutlet.userEnteredData, oldSettings, newSettings);
+      dischargeOutlet.cost = this.convertUnitCost(dischargeOutlet.cost, oldSettings, newSettings);
+
     });
     return dischargeOutlet;
   }
@@ -107,7 +116,15 @@ export class ConvertWaterAssessmentService {
   convertWaterUsingSystems(waterUsingSystems: WaterUsingSystem[], oldSettings: Settings, newSettings: Settings): WaterUsingSystem[] {
     waterUsingSystems.forEach((waterUsingSystem: WaterUsingSystem) => {     
       waterUsingSystem.systemFlowTotals = this.convertWaterFlows(waterUsingSystem.systemFlowTotals, oldSettings, newSettings);
-      waterUsingSystem.userDiagramFlowOverrides = this.convertWaterFlows(waterUsingSystem.userDiagramFlowOverrides, oldSettings, newSettings);
+
+      Object.keys(waterUsingSystem.userDiagramFlowOverrides).forEach((key: ConnectedFlowType) => {
+          if (waterUsingSystem.userDiagramFlowOverrides[key] !== undefined && waterUsingSystem.userDiagramFlowOverrides[key] !== null) {
+            console.log('converting userDiagramFlowOverrides', key, waterUsingSystem.userDiagramFlowOverrides[key]);
+            let converted = this.convertFlowValue(waterUsingSystem.userDiagramFlowOverrides[key], oldSettings, newSettings);
+            converted = this.convertUnitsService.roundVal(converted, newSettings.flowDecimalPrecision);
+            waterUsingSystem.userDiagramFlowOverrides[key] = converted;
+          };
+        });
       
       waterUsingSystem.processUse = this.convertProcessUse(waterUsingSystem.processUse, newSettings, oldSettings);
       waterUsingSystem.coolingTower = this.convertCoolingTower(waterUsingSystem.coolingTower, newSettings, oldSettings);
@@ -135,6 +152,7 @@ export class ConvertWaterAssessmentService {
       }
       waterTreatment.flowValue = this.convertUnitsService.roundVal(waterTreatment.flowValue, newSettings.flowDecimalPrecision);
       waterTreatment.userEnteredData = this.convertUserEnteredFlowData(waterTreatment.userEnteredData, oldSettings, newSettings);
+      waterTreatment.cost = this.convertUnitCost(waterTreatment.cost, oldSettings, newSettings);
 
     });
     return waterTreatments;
@@ -149,6 +167,7 @@ export class ConvertWaterAssessmentService {
       }
       wasteWaterTreatment.flowValue = this.convertUnitsService.roundVal(wasteWaterTreatment.flowValue, newSettings.flowDecimalPrecision);
       wasteWaterTreatment.userEnteredData = this.convertUserEnteredFlowData(wasteWaterTreatment.userEnteredData, oldSettings, newSettings);
+      wasteWaterTreatment.cost = this.convertUnitCost(wasteWaterTreatment.cost, oldSettings, newSettings);
 
     });
     return wasteWaterTreatment;
@@ -163,7 +182,7 @@ export class ConvertWaterAssessmentService {
       }
       knownLoss.flowValue = this.convertUnitsService.roundVal(knownLoss.flowValue, newSettings.flowDecimalPrecision);
       knownLoss.userEnteredData = this.convertUserEnteredFlowData(knownLoss.userEnteredData, oldSettings, newSettings);
-
+      knownLoss.cost = this.convertUnitCost(knownLoss.cost, oldSettings, newSettings);
     });
     return knownLoss;
   }
@@ -229,6 +248,7 @@ export class ConvertWaterAssessmentService {
     return coolingTower;
   }
 
+  // todo these are ot longer persistent fields, conversion may not be needed
   convertBoilerWater(boilerWater: BoilerWater, oldSettings: Settings, newSettings: Settings) {
     if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       boilerWater.power = this.convertUnitsService.value(boilerWater.power).from('hp').to('MW');
@@ -236,8 +256,8 @@ export class ConvertWaterAssessmentService {
       // * lb/hr/BHP
       // boilerWater.steamPerPower = this.convertUnitsService.value(boilerWater.steamPerPower).from('F').to('C');
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      boilerWater.power = this.convertUnitsService.value(boilerWater.power).from('F').to('C');
-      boilerWater.loadFactor = this.convertUnitsService.value(boilerWater.loadFactor).from('F').to('C');
+      boilerWater.power = this.convertUnitsService.value(boilerWater.power).from('MW').to('hp');
+      boilerWater.loadFactor = this.convertUnitsService.value(boilerWater.loadFactor).from('kW').to('hp');
       // boilerWater.steamPerPower = this.convertUnitsService.value(boilerWater.steamPerPower).from('F').to('C');
     }
 
@@ -344,11 +364,25 @@ export class ConvertWaterAssessmentService {
     }
   }
 
+  // * this method is duplicated in the process-flow-lib
   convertFlowValue(val: number, oldSettings: Settings, newSettings: Settings): number {
-    if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      val = this.convertUnitsService.value(val).from('Mgal').to('m3');
-    } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      val = this.convertUnitsService.value(val).from('m3').to('Mgal');
+    if (val) {
+      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        val = this.convertUnitsService.value(val).from('Mgal').to('m3');
+      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        val = this.convertUnitsService.value(val).from('m3').to('Mgal');
+      }
+    }
+    return val;
+  }
+
+   convertUnitCost(val: number, oldSettings: Settings, newSettings: Settings): number {
+    if (val) {
+      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        val = val / 3785.41;
+      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        val = val * 3785.41;
+      }
     }
     return val;
   }

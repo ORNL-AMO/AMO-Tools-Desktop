@@ -9,7 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 import { PsatService } from '../../../../psat/psat.service';
 import { ConnectedItem } from '../../../../shared/connected-inventory/integrations';
-import { MotorIntegrationService } from '../../../../shared/connected-inventory/motor-integration.service';
+import { PumpMotorIntegrationService } from '../../../../shared/connected-inventory/pump-motor-integration.service';
 
 @Component({
     selector: 'app-nameplate-data',
@@ -31,7 +31,7 @@ export class NameplateDataComponent implements OnInit {
   connectedItem: ConnectedItem;
   connectedItems: Array<ConnectedItem>;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
-    private motorIntegrationService: MotorIntegrationService,
+    private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private nameplateDataService: NameplateDataService, private psatService: PsatService) { }
 
   ngOnInit(): void {
@@ -44,7 +44,7 @@ export class NameplateDataComponent implements OnInit {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.nameplateDataService.getFormFromNameplateData(selectedMotor.nameplateData);
-        this.motorIntegrationService.setConnectedItems(selectedMotor);
+        this.pumpMotorIntegrationService.setConnectedItems(selectedMotor);
         this.connectedItems = selectedMotor.connectedItems;
       }
     });
