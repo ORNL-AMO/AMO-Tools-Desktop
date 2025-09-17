@@ -40,6 +40,43 @@
 
           <label>Application</label>
           <ul>
+            <li>Fixed: Issues with browser storage detection blocking application on slow connections in Edge</li>
+          </ul>
+
+          <label>Pumps</label>
+          <ul>
+            <li>Added: Valve Energy Loss Calculator</li>
+          </ul>
+
+          <label>Process Heating</label>
+          <ul>
+            <li>Enhanced: Links to algorithm website added to help text and improved calculator descriptions in Atmosphere and Wall losses</li>
+            <li>Fixed: Fixture loss initial values</li>
+            <li>Fixed: Backdrop blocking Modal operations in Condensing Economizer material form</li>
+            <li>Fixed: bug when calculating results from Process Heating Assessment opening losses when empty</li>
+          </ul>
+
+          <label>Steam</label>
+          <ul>
+            <li>Added: validation and messaging for temperature and insulation material options in Pipe Insulation calculator</li>
+          </ul>
+
+          <label>Water</label>
+          <ul>
+            <li>Added: Add field for entering unaccounted flows, revised validation message for unallocated total flows</li>
+            <li>Enhanced: Added button to individual flow fields, allowing users to “cascade” flows - populating flow values to the end of the flow-component path</li>
+            <li>Fixed: Assessment values and results not being converted properly. Changed metric cost units to liters from kiloliters.</li>
+            <li>Fixed: True Cost $/unit results and Direct Cost $/unit results</li>
+            <li>Fixed: Add missing zoom in/zoom out arrow toolbar to diagram</li>
+            <li>Fixed: Display manage tab and delete button for Intake and Discharge components</li>
+          </ul>
+
+          <!--  Include prev version -->
+          <label class="header-label">Here are the details of what's new in version 1.6.2:</label>
+          <br>
+
+          <label>Application</label>
+          <ul>
             <li>Enhanced: Notify users about browser storage requirement. Added detection for supported storage types.</li>
             <li>Enhanced: Updated About page information on Water and Wastewater modules.</li>
           </ul>
@@ -55,44 +92,6 @@
             <li>Enhanced: The expected total flow is given in flow validation messages</li>
             <li>Fixed: Diagram Result includes in-system treatment</li>
             <li>Fixed: Field values are now synced between diagram and assessment</li>
-          </ul>
-
-          <!--  Include prev version -->
-          <label class="header-label">Here are the details of what's new in version 1.6.1:</label>
-          <br>
-
-          <label>Application</label>
-          <ul>
-            <li>Enhanced: Add detection and warning messages for incorrect imported MEASUR file types (importing into the wrong MEASUR location)</li>
-            <li>Enhanced: Added or updated copy table functionality for all reports</li>
-            <li>Enhanced: Updated project README with more detail on process-flow-diagram-component dependency</li>
-            <li>Enhanced: Added NEB (JUSTIFI) tool integration for all assessments</li>
-          </ul>
-
-          <label>Treasure Hunt</label>
-          <ul>
-            <li>Fixed: Treasure Hunt Opportunities export showing groups with no opportunities</li>
-          </ul>
-
-          <label>Compressed Air</label>
-
-          <ul>
-            <li>Enhanced: Added refill time result to Receiver Tank Sizing calculator</li>
-            <li>Fixed: Compressed Air tab name in Baseline reads "Explore opportunities", should say "Setup Profile"</li>
-            <li>Enhanced: Bag method updated to use bag volume in place of height and diameter for calculators Leak Loss Estimator, Air Leak Survey, and Compressed Air Reduction</li>
-          </ul>
-
-          <label>Data Explorer</label>
-          <ul>
-            <li>Fixed: Imports for large datasets where errors are thrown while processing Day Type Analysis</li>
-            <li>Enhanced: Large DE exports are now zipped to reduce long processing during export.</li>
-            <li>Fixed: In Refine Data, display error message if fields between 2 or more files do not match and "Apply my selections for all datasets" is checked</li>
-            <li>Fixed: Plotly.js custom modebar button function does not serialize properly</li>
-          </ul>
-
-          <label>Steam</label>
-          <ul>
-            <li>Fixed: Steam Reduction using incorrect validation for quality</li>
           </ul>
         </div>
 
