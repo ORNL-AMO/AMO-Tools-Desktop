@@ -76,7 +76,7 @@ export class PumpMotorIntegrationService {
       if (selectedPump.connectedAssessments && selectedPump.connectedAssessments.length > 0) {
         selectedPump.connectedAssessments.map(connectedAssessment => {
             let newConnectedFromState: MotorItem = copyObject(selectedMotorItem);
-            connectedAssessment.connectedFromState.pumpMotor = this.setPumpFieldsFromMotor(connectedAssessment.connectedFromState.pumpMotor, newConnectedFromState);
+            connectedAssessment.connectedPumpFromState.pumpMotor = this.setPumpFieldsFromMotor(connectedAssessment.connectedPumpFromState.pumpMotor, newConnectedFromState);
         });
       }
       motorInventory.motorInventoryData.departments.forEach(dept => {
@@ -195,7 +195,7 @@ export class PumpMotorIntegrationService {
   updateConnectedFromState(selectedPump: PumpItem, connectedMotorItem: MotorItem) {
     selectedPump.connectedAssessments.map(connectedAssessment => {
         let newConnectedFromState: MotorItem = copyObject(connectedMotorItem);
-        connectedAssessment.connectedFromState.pumpMotor = this.setPumpFieldsFromMotor(connectedAssessment.connectedFromState.pumpMotor, newConnectedFromState);
+        connectedAssessment.connectedPumpFromState.pumpMotor = this.setPumpFieldsFromMotor(connectedAssessment.connectedPumpFromState.pumpMotor, newConnectedFromState);
         });
   }
 

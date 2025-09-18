@@ -1,11 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem, ConnectedItem } from '../../compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem } from '../../compressed-air-inventory';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
 import { CompressedAirCatalogService } from './compressed-air-catalog.service';
+import { ConnectedItem } from '../../../shared/connected-inventory/integrations';
 
 @Component({
   selector: 'app-compressed-air-catalog',
