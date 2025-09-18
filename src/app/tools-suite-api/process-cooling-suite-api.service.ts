@@ -17,14 +17,15 @@ import { HttpClient } from '@angular/common/http';
 // import { drybulbValues, wetbulbValues, systemOnHoursYearly } from '../examples/CWSATExampleAirCooledConstant';
 import { drybulbValues, wetbulbValues, systemOnHoursYearly } from '../examples/CWSATExampleVINPLTConstants';
 import { WeatherContextData } from '../shared/modules/weather-data/weather-context.token';
-
-declare var Module: any;
+import { ToolsSuiteApiService } from './tools-suite-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProcessCoolingSuiteApiService {
-  constructor(private suiteApiHelperService: SuiteApiHelperService, private httpClient: HttpClient) { }
+  constructor(private suiteApiHelperService: SuiteApiHelperService, 
+    private toolsSuiteApiService: ToolsSuiteApiService,
+    private httpClient: HttpClient) { }
 
   /**
  * Calculates chiller energy for a water-cooled system.
@@ -156,7 +157,7 @@ export class ProcessCoolingSuiteApiService {
    * @returns {any} Module.ChillerInputV instance
    */
   private _createChillerInputVector(chillerInventoryItems: ChillerInventoryItem[], doChillerLoadSchedulesVary: boolean): any {
-    const chillers = new Module.ChillerInputV();
+    const chillers = new this.toolsSuiteApiService.ToolsSuiteModule.ChillerInputV();
 
     for (const input of chillerInventoryItems as ChillerInventoryItem[]) {
       // console.log('ChillerInventoryItem input:', input);
@@ -223,9 +224,9 @@ export class ProcessCoolingSuiteApiService {
     console.log('wetbulbUndefined', wetbulbUndefined);
     console.log('dryBulbUndefined', dryBulbUndefined);
 
-    let onHoursVector = new Module.IntVector();
-    let dryBulbHourlyTempVector = new Module.DoubleVector();
-    let wetBulbHourlyTempVector = new Module.DoubleVector();
+    let onHoursVector = new this.toolsSuiteApiService.ToolsSuiteModule.IntVector();
+    let dryBulbHourlyTempVector = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
+    let wetBulbHourlyTempVector = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
     onHoursVector = this.suiteApiHelperService.returnIntVector(systemOnHoursYearly);
     
     dryBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(dryBulbHourly);
@@ -279,7 +280,7 @@ export class ProcessCoolingSuiteApiService {
    * @returns {any} Module.WaterCooledSystemInput instance
    */
   private _createWaterCooledSystemInput(input: WaterCooledSystemInput, operations: Operations, condenserPumpInput: PumpInput, towerInput: TowerInput): any {
-    return new Module.WaterCooledSystemInput(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.WaterCooledSystemInput(
       operations.chilledWaterSupplyTemp,
       towerInput.usesFreeCooling,
       towerInput.HEXApproachTemp,
@@ -312,7 +313,7 @@ export class ProcessCoolingSuiteApiService {
     console.log('indoorTemp (Average Indoor Temp):', input.indoorTemp);
     console.log('followingTempDifferential:', input.followingTempDifferential);
 
-    return new Module.AirCooledSystemInput(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.AirCooledSystemInput(
       operations.chilledWaterSupplyTemp,
       input.outdoorAirTemp,
       ACSource,
@@ -358,7 +359,7 @@ export class ProcessCoolingSuiteApiService {
     chillerInputVector,
     towerInputInstance,
     coolingMethodSystemInputInstance) {
-    return new Module.ProcessCooling(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.ProcessCooling(
       onHoursVector,
       dryBulbHourlyTempVector,
       wetBulbHourlyTempVector,
@@ -378,7 +379,7 @@ export class ProcessCoolingSuiteApiService {
     wetBulbHourlyTempVector,
     chillerInputVector,
     coolingMethodSystemInputInstance) {
-    return new Module.ProcessCooling(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.ProcessCooling(
       onHoursVector,
       dryBulbHourlyTempVector,
       wetBulbHourlyTempVector,
@@ -411,7 +412,7 @@ export class ProcessCoolingSuiteApiService {
         installVSD,
         useARIloadScheduleByMonthchedule,
         chillerMonthlyLoad2D): any {
-    return new Module.ChillerInput(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.ChillerInput(
       chillerInputType,
       capacity,
       isFullLoadEffKnown,
@@ -439,7 +440,7 @@ export class ProcessCoolingSuiteApiService {
   private _createPumpInput(input: PumpInput): any {
     const efficiencyFraction = input.efficiency / 100;
     const motorEfficiencyFraction = input.motorEfficiency / 100;
-    return new Module.PumpInput(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.PumpInput(
       input.variableFlow,
       input.flowRate,
       efficiencyFraction,
@@ -468,7 +469,7 @@ export class ProcessCoolingSuiteApiService {
     const towerSizingEnum = this.suiteApiHelperService.getProcessCoolingTowerSizedByEnum(input.towerSizeMetric)
     const towerCellFanTypeEnum = this.suiteApiHelperService.getProcessCoolingFanTypeEnum(input.fanType)
 
-    return new Module.TowerInput(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.TowerInput(
       input.numberOfTowers,
       input.numberOfFans,
       fanSpeedTypeEnum,
