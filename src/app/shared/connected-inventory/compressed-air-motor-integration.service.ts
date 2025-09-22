@@ -157,9 +157,11 @@ export class CompressedAirMotorIntegrationService {
         let existingItem: CompressedAirItem | CompressedAirAssessment;
         if (connectedItem.inventoryType === 'compressed-air' && connectedItem.inventoryId) {
           existingItem = this.getConnectedCompressedAirItem(connectedItem);
-        } else if (connectedItem.inventoryType === 'motor' && connectedItem.assessmentId) {
-          //existingItem = this.getConnectedCAAssessmentItem(connectedItem);
-        }
+        } 
+        //   //TODO CA Assessment Integration
+        // else if (connectedItem.inventoryType === 'motor' && connectedItem.assessmentId) {
+        //   existingItem = this.getConnectedCAAssessmentItem(connectedItem);
+        // }
         return existingItem;
       });
       if (motorItem.connectedItems.length === 0) {

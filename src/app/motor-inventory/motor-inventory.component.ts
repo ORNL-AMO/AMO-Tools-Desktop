@@ -66,8 +66,7 @@ export class MotorInventoryComponent implements OnInit {
       } else { 
         let settings: Settings = this.settingsDbService.getByInventoryId(this.motorInventoryItem);
         this.motorInventoryService.settings.next(settings);
-        this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.pumpMotorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
-        this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.compressedAirMotorIntegrationService.getHasConnectedCompressedAirItems(this.motorInventoryItem);
+        this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.pumpMotorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem) || this.compressedAirMotorIntegrationService.getHasConnectedCompressedAirItems(this.motorInventoryItem);
         this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
         if (this.motorInventoryItem.batchAnalysisSettings) {
           this.batchAnalysisService.batchAnalysisSettings.next(this.motorInventoryItem.batchAnalysisSettings);
@@ -142,8 +141,7 @@ export class MotorInventoryComponent implements OnInit {
     this.motorInventoryItem.appVersion = environment.version;
     this.motorInventoryItem.motorInventoryData = inventoryData;
     this.motorInventoryItem.batchAnalysisSettings = batchAnalysisSettings;
-    this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.pumpMotorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
-    this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.compressedAirMotorIntegrationService.getHasConnectedCompressedAirItems(this.motorInventoryItem);
+    this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.pumpMotorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem) || this.compressedAirMotorIntegrationService.getHasConnectedCompressedAirItems(this.motorInventoryItem);
     await firstValueFrom(this.inventoryDbService.updateWithObservable(this.motorInventoryItem));
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);

@@ -94,6 +94,7 @@ export class CompressedAirInventoryComponent implements OnInit {
     });
 
     this.compressedAirInventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(data => {
+      //TODO: CA Assessment integration 
       //this.handleConnectedItemChanges();
       this.saveDbData();
     });
