@@ -39,7 +39,6 @@ export interface ConnectedItem {
   inventoryId: number,
   inventoryName?: string,
   departmentId?: string,  
-  systemId?: string,
   inventoryType?: InventoryType,
   assessmentType?: AssessmentType,
   assessmentId?: number,

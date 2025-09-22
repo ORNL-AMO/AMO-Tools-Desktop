@@ -17,6 +17,7 @@ import { Settings } from '../../shared/models/settings';
 import { DashboardService } from '../dashboard.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { PumpMotorIntegrationService } from '../../shared/connected-inventory/pump-motor-integration.service';
+import { CompressedAirMotorIntegrationService } from '../../shared/connected-inventory/compressed-air-motor-integration.service';
 
 
 @Component({
@@ -49,7 +50,8 @@ export class CopyItemsComponent implements OnInit {
     private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private calculatorDbService: CalculatorDbService,
     private inventoryDbService: InventoryDbService,
-    private settingsDbService: SettingsDbService) { }
+    private settingsDbService: SettingsDbService,
+    private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
 
   async ngOnInit() {
     this.selectedDirData = this.getResetSelectedDirData();
@@ -311,8 +313,11 @@ export class CopyItemsComponent implements OnInit {
           delete settingsCopy.id;
           if (inventoryCopy.motorInventoryData) {
             this.pumpMotorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
+            this.compressedAirMotorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
           } else if (inventoryCopy.pumpInventoryData) {
             this.pumpMotorIntegrationService.removeAllPumpConnectedItems(inventoryCopy);
+          } else if (inventoryCopy.compressedAirInventoryData) {
+            this.compressedAirMotorIntegrationService.removeAllCompressedAirConnectedItems(inventoryCopy);
           }
 
           inventoryCopy.selected = false;

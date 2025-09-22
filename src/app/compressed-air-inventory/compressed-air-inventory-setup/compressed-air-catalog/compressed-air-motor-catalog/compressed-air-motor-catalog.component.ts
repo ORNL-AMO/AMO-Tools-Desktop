@@ -40,7 +40,7 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
     });
     this.selectedCompressedAirItemSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(selectedCompressedAir => {
       if (selectedCompressedAir) {
-        this.form = this.compressedAirMotorCatalogService.getFormFromMotorProperties(selectedCompressedAir.compressedAirMotor);
+        this.initSelectedCompressor(selectedCompressedAir);
       }
     });
     this.displayOptions = this.compressedAirInventoryService.compressedAirInventoryData.getValue().displayOptions.compressedAirMotorPropertiesOptions;

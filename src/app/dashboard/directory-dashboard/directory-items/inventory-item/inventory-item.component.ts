@@ -17,6 +17,7 @@ import { MotorInventoryService } from '../../../../motor-inventory/motor-invento
 import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
 import { PumpMotorIntegrationService } from '../../../../shared/connected-inventory/pump-motor-integration.service';
 import { CompressedAirInventoryService } from '../../../../compressed-air-inventory/compressed-air-inventory.service';
+import { CompressedAirMotorIntegrationService } from '../../../../shared/connected-inventory/compressed-air-motor-integration.service';
 
 @Component({
     selector: 'app-inventory-item',
@@ -50,7 +51,8 @@ export class InventoryItemComponent implements OnInit {
     private motorInventoryService: MotorInventoryService,
     private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private pumpInventoryService: PumpInventoryService,
-    private compressedAirInventoryService: CompressedAirInventoryService) { }
+    private compressedAirInventoryService: CompressedAirInventoryService,
+    private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
 
   ngOnInit(): void {
     this.inventoryItem.selected = false;
@@ -173,8 +175,11 @@ export class InventoryItemComponent implements OnInit {
     delete settingsCopy.id;
     if (inventoryCopy.motorInventoryData) {
       this.pumpMotorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
+      this.compressedAirMotorIntegrationService.removeAllMotorConnectedItems(inventoryCopy);
     } else if (inventoryCopy.pumpInventoryData) {
       this.pumpMotorIntegrationService.removeAllPumpConnectedItems(inventoryCopy);
+    } else if (inventoryCopy.compressedAirInventoryData) {
+      this.compressedAirMotorIntegrationService.removeAllCompressedAirConnectedItems(inventoryCopy);
     }
     
     inventoryCopy.name = this.copyForm.controls.name.value;

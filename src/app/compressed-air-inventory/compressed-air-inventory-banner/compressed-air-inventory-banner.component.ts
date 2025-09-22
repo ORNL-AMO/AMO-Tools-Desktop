@@ -65,9 +65,9 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
       this.summaryTab = val;
     });
 
-    // this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
-    //   this.showConnectedItemBadge = connectedInventoryData.connectedItem !== undefined;
-    // });
+    this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
+      this.showConnectedItemBadge = connectedInventoryData.connectedItem !== undefined;
+    });
   }
 
   ngOnDestroy() {
@@ -76,7 +76,7 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     this.selectedSystemIdSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.summaryTabSub.unsubscribe();
-    //this.connectedInventoryDataSub.unsubscribe();
+    this.connectedInventoryDataSub.unsubscribe();
   }
 
   setSetupTab(str: string) {

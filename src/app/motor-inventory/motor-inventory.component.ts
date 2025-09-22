@@ -13,6 +13,7 @@ import { BatchAnalysisService, BatchAnalysisSettings } from './batch-analysis/ba
 import { environment } from '../../environments/environment';
 import { PumpMotorIntegrationService } from '../shared/connected-inventory/pump-motor-integration.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { CompressedAirMotorIntegrationService } from '../shared/connected-inventory/compressed-air-motor-integration.service';
 
 
 @Component({
@@ -52,7 +53,8 @@ export class MotorInventoryComponent implements OnInit {
     private motorCatalogService: MotorCatalogService, 
     private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private batchAnalysisService: BatchAnalysisService, private cd: ChangeDetectorRef,
-    private analyticsService: AnalyticsService) { }
+    private analyticsService: AnalyticsService,
+    private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-motor-inventory');
@@ -65,6 +67,7 @@ export class MotorInventoryComponent implements OnInit {
         let settings: Settings = this.settingsDbService.getByInventoryId(this.motorInventoryItem);
         this.motorInventoryService.settings.next(settings);
         this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.pumpMotorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
+        this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.compressedAirMotorIntegrationService.getHasConnectedCompressedAirItems(this.motorInventoryItem);
         this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
         if (this.motorInventoryItem.batchAnalysisSettings) {
           this.batchAnalysisService.batchAnalysisSettings.next(this.motorInventoryItem.batchAnalysisSettings);
@@ -140,6 +143,7 @@ export class MotorInventoryComponent implements OnInit {
     this.motorInventoryItem.motorInventoryData = inventoryData;
     this.motorInventoryItem.batchAnalysisSettings = batchAnalysisSettings;
     this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.pumpMotorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem);
+    this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.compressedAirMotorIntegrationService.getHasConnectedCompressedAirItems(this.motorInventoryItem);
     await firstValueFrom(this.inventoryDbService.updateWithObservable(this.motorInventoryItem));
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);

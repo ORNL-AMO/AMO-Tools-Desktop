@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { MotorItem } from '../../../motor-inventory/motor-inventory';
 import { PumpItem } from '../../../pump-inventory/pump-inventory';
 import * as _ from 'lodash';
+import { CompressedAirItem } from '../../../compressed-air-inventory/compressed-air-inventory';
 
 
 @Component({
@@ -103,6 +104,9 @@ export class InventoryIntegrationComponent {
         case 'pump':
           url = `/pump-inventory/${connectedItem.inventoryId}`;
           break;
+        case 'compressed-air':
+          url = `/compressed-air-inventory/${connectedItem.inventoryId}`;
+          break;
         default:
           url = undefined;
       }
@@ -169,16 +173,22 @@ export class InventoryIntegrationComponent {
   }
 
   setSelectedCatalogItem() {
-    let selectedCatalogItem: MotorItem | PumpItem = this.inventoryIntegrationForm.controls.selectedCatalogItem.value;
+    let selectedCatalogItem: MotorItem | PumpItem | CompressedAirItem = this.inventoryIntegrationForm.controls.selectedCatalogItem.value;
     let selectedInventoryId: number = this.inventoryIntegrationForm.controls.selectedInventoryId.value;
-    
+    let departmentId: string;
+    if ('departmentId' in selectedCatalogItem) {
+      departmentId = selectedCatalogItem.departmentId;
+    } else if ('systemId' in selectedCatalogItem) {
+      departmentId = selectedCatalogItem.systemId;
+    }
+
     let connectedInventoryData: ConnectedInventoryData = {
       connectedItem: {
         id: selectedCatalogItem.id,
         name: selectedCatalogItem.name,
         inventoryType: this.connectedInventoryType,
         inventoryId: this.inventoryIntegrationForm.controls.selectedInventoryId.value,
-        departmentId: selectedCatalogItem.departmentId,
+        departmentId: departmentId,
         inventoryName: this.selectOptions.inventoryOptions.find(option => option.id === selectedInventoryId).display,
       },
       canConnect: true,

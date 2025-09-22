@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CompressedAirInventoryData, CompressedAirInventorySystem } from '../../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
 import { Settings } from '../../../shared/models/settings';
+import { CompressedAirMotorIntegrationService } from '../../../shared/connected-inventory/compressed-air-motor-integration.service';
 
 @Component({
   selector: 'app-system-setup',
@@ -15,7 +16,7 @@ export class SystemSetupComponent implements OnInit {
   settings: Settings;
 
   compressedAirInventoryData: CompressedAirInventoryData;
-  constructor(private compressedAirInventoryService: CompressedAirInventoryService) { }
+  constructor(private compressedAirInventoryService: CompressedAirInventoryService, private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirInventoryService.settings.getValue();
@@ -28,7 +29,7 @@ export class SystemSetupComponent implements OnInit {
 
   deleteSystem(id: string) {
     let systemIndex: number = this.compressedAirInventoryData.systems.findIndex((system) => { return system.id == id })
-    //this.motorIntegrationService.removeDepartmentMotorConnections(this.pumpInventoryData, systemIndex);
+    this.compressedAirMotorIntegrationService.removeDepartmentMotorConnections(this.compressedAirInventoryData, systemIndex);
     this.compressedAirInventoryData.systems.splice(systemIndex, 1);
     this.compressedAirInventoryService.setIsValidInventory(this.compressedAirInventoryData);
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);
