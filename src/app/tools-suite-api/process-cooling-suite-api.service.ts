@@ -15,7 +15,7 @@ import {
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { HttpClient } from '@angular/common/http';
 // import { drybulbValues, wetbulbValues, systemOnHoursYearly } from '../examples/CWSATExampleAirCooledConstant';
-import { drybulbValues, wetbulbValues, systemOnHoursYearly } from '../examples/CWSATExampleVINPLTConstants';
+// import { drybulbValues, wetbulbValues, systemOnHoursYearly } from '../examples/CWSATExampleVINPLTConstants';
 import { WeatherContextData } from '../shared/modules/weather-data/weather-context.token';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
 
@@ -45,7 +45,7 @@ export class ProcessCoolingSuiteApiService {
     const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary);
     const towerInputInstance = this._createTowerInput(assessment.systemInformation.towerInput);
     const waterCooledSystemInputInstance = this._createWaterCooledSystemInput(assessment.systemInformation.waterCooledSystemInput, assessment.systemInformation.operations, assessment.systemInformation.condenserWaterPumpInput, assessment.systemInformation.towerInput);
-    const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, waterCooledSystemInputInstance, weatherData, towerInputInstance);
+    const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, waterCooledSystemInputInstance, assessment, weatherData, towerInputInstance);
 
     results.chiller = this._getChillerOutput(processCoolingInstance);
     results.tower = this.getTowerEnergy(processCoolingInstance);
@@ -74,7 +74,7 @@ export class ProcessCoolingSuiteApiService {
 
     const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary);
     const airCooledSystemInputInstance = this._createAirCooledSystemInput(assessment.systemInformation.airCooledSystemInput, assessment.systemInformation.operations);
-    const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, airCooledSystemInputInstance, weatherData);
+    const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, airCooledSystemInputInstance, assessment, weatherData);
 
     results.chiller = this._getChillerOutput(processCoolingInstance);
     results.pump = this.getAirCooledPumpEnergy(assessment, processCoolingInstance);
@@ -100,8 +100,8 @@ export class ProcessCoolingSuiteApiService {
     const pumpCWHOutput = processCoolingInstance.calculatePumpEnergy(pumpInputCHWInstance);
 
     const result: ProcessCoolingPumpOutput = {
-      chillerPumpingEnergy: this._extractArray(pumpCWHOutput.chillerPumpingEnergy),
-      condenserPumpingEnergy: this._extractArray(pumpCWOutput.chillerPumpingEnergy)
+      chillerPumpingEnergy: this.suiteApiHelperService.extractWASMArray(pumpCWHOutput.chillerPumpingEnergy),
+      condenserPumpingEnergy: this.suiteApiHelperService.extractWASMArray(pumpCWOutput.chillerPumpingEnergy)
     };
 
     pumpCWHOutput.delete();
@@ -124,7 +124,7 @@ export class ProcessCoolingSuiteApiService {
     const pumpInputCHWInstance = this._createPumpInput(assessment.systemInformation.chilledWaterPumpInput);
     const pumpCWHOutput = processCoolingInstance.calculatePumpEnergy(pumpInputCHWInstance);
     const result: ProcessCoolingPumpOutput = {
-      chillerPumpingEnergy: this._extractArray(pumpCWHOutput.chillerPumpingEnergy),
+      chillerPumpingEnergy: this.suiteApiHelperService.extractWASMArray(pumpCWHOutput.chillerPumpingEnergy),
     };
 
     pumpCWHOutput.delete();
@@ -142,8 +142,8 @@ export class ProcessCoolingSuiteApiService {
   getTowerEnergy(processCoolingInstance: any): ProcessCoolingTowerOutput {
     const towerOutput = processCoolingInstance.calculateTowerEnergy();
     const result: ProcessCoolingTowerOutput = {
-      hours: this._extractArray(towerOutput.hours),
-      energy: this._extractArray(towerOutput.energy)
+      hours: this.suiteApiHelperService.extractWASMArray(towerOutput.hours),
+      energy: this.suiteApiHelperService.extractWASMArray(towerOutput.energy)
     };
     console.log('towerOutput hours total', result.hours.reduce((a, b) => a + b, 0));
     towerOutput.delete();
@@ -199,7 +199,12 @@ export class ProcessCoolingSuiteApiService {
    * @param towerInputInstance {any} - (Optional) Tower input (Module.TowerInput)
    * @returns A new `ProcessCooling` instance 
    */
-  private _createProcessCoolingInput(chillerInputVector: any, coolingMethodSystemInputInstance: any, weatherData: WeatherContextData, towerInputInstance?: any): any {
+  private _createProcessCoolingInput(
+    chillerInputVector: any, 
+    coolingMethodSystemInputInstance: any, 
+    processCoolingAssessment: ProcessCoolingAssessment, 
+    weatherData: WeatherContextData, 
+    towerInputInstance?: any): any {
     const dryBulbHourly: (number)[] = [];
     const wetBulbHourly: (number)[] = [];
 
@@ -224,35 +229,49 @@ export class ProcessCoolingSuiteApiService {
     console.log('wetbulbUndefined', wetbulbUndefined);
     console.log('dryBulbUndefined', dryBulbUndefined);
 
-    let onHoursVector = new this.toolsSuiteApiService.ToolsSuiteModule.IntVector();
-    let dryBulbHourlyTempVector = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
-    let wetBulbHourlyTempVector = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
-    onHoursVector = this.suiteApiHelperService.returnIntVector(systemOnHoursYearly);
-    
-    dryBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(dryBulbHourly);
-    wetBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(wetBulbHourly);
-
-    console.log(dryBulbHourly);
-    console.log(wetBulbHourly);
-
+    // * test values
+    // let onHoursVector = new this.toolsSuiteApiService.ToolsSuiteModule.IntVector();
+    // getSysOpAnnualHours(const vector<int>& weeklyOpStartHour, const vector<int>& weeklyOpStopHour, const vector<int>& monthlyOpMaxHour)
+    // const pc = new this.toolsSuiteApiService.ToolsSuiteModule.ProcessCooling();
     // console.log(dryBulbHourlyTempVector.size());
     // let debug = this._extractArray(dryBulbHourlyTempVector);
     // console.log(debug);
-
     // dryBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(drybulbValues);
     // wetBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(wetbulbValues);
 
+
+    const startHoursWeekly = processCoolingAssessment.weeklyOperatingSchedule.days.map(day => day.start);
+    const stopHoursWeekly = processCoolingAssessment.weeklyOperatingSchedule.days.map(day => day.end);
+
+    const startHoursVector = this.suiteApiHelperService.returnIntVector(startHoursWeekly);
+    const stopHoursVector = this.suiteApiHelperService.returnIntVector(stopHoursWeekly);
+    const monthlyOpMaxHoursVector = this.suiteApiHelperService.returnIntVector(processCoolingAssessment.monthlyOperatingSchedule.hoursOnPerMonth);
+    
+    const systemAnnualOnHours = this.toolsSuiteApiService.ToolsSuiteModule.ProcessCooling.getSysOpAnnualHours(
+      startHoursVector,
+      stopHoursVector,
+      monthlyOpMaxHoursVector
+    );
+    const dryBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(dryBulbHourly);
+    const wetBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(wetBulbHourly);
+    const debugSystemAnnualOnHours = this.suiteApiHelperService.extractWASMArray(systemAnnualOnHours);
+
+    console.log(debugSystemAnnualOnHours);
+    console.log(dryBulbHourly);
+    console.log(wetBulbHourly);
+
+    let processCoolingInstance;
     if (!towerInputInstance) {
-      return this.createProcessCoolingAirCooled(
-        onHoursVector,
+      processCoolingInstance = this.createProcessCoolingAirCooled(
+        systemAnnualOnHours,
         dryBulbHourlyTempVector,
         wetBulbHourlyTempVector,
         chillerInputVector,
         coolingMethodSystemInputInstance
       );
     } else {
-      return this.createProcessCoolingWaterCooled(
-        onHoursVector,
+      processCoolingInstance = this.createProcessCoolingWaterCooled(
+        systemAnnualOnHours,
         dryBulbHourlyTempVector,
         wetBulbHourlyTempVector,
         chillerInputVector,
@@ -260,6 +279,15 @@ export class ProcessCoolingSuiteApiService {
         coolingMethodSystemInputInstance
       );
     }
+
+    startHoursVector.delete();
+    stopHoursVector.delete();
+    monthlyOpMaxHoursVector.delete();
+    dryBulbHourlyTempVector.delete();
+    wetBulbHourlyTempVector.delete();
+    systemAnnualOnHours.delete();
+
+    return processCoolingInstance;
 
   }
 
@@ -337,10 +365,10 @@ export class ProcessCoolingSuiteApiService {
     const numChillers = chillerOutputInstance.efficiency.size();
     for (let i = 0; i < numChillers; i++) {
       chillerOutput.push({
-        efficiency: this._extractArray(chillerOutputInstance.efficiency.get(i)),
-        hours: this._extractArray(chillerOutputInstance.hours.get(i)),
-        power: this._extractArray(chillerOutputInstance.power.get(i)),
-        energy: this._extractArray(chillerOutputInstance.energy.get(i))
+        efficiency: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.efficiency.get(i)),
+        hours: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i)),
+        power: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.power.get(i)),
+        energy: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.energy.get(i))
       });
     }
 
@@ -480,17 +508,4 @@ export class ProcessCoolingSuiteApiService {
     );
   }
 
-
-
-  // todo 7639 may use suite api helper service
-  // --- Helper to extract JS array from WASM vector ---
-  private _extractArray(wasmVec: any): number[] {
-    if (!wasmVec || typeof wasmVec.size !== 'function' || typeof wasmVec.get !== 'function') return [];
-    const arr = [];
-    for (let i = 0; i < wasmVec.size(); i++) {
-      arr.push(wasmVec.get(i));
-    }
-    wasmVec.delete && wasmVec.delete();
-    return arr;
-  }
 }

@@ -23,13 +23,13 @@
 				<label class="mb-0 mr-2 flex-shrink-0 day-label">{{ dayLabel }}</label>
 				<div class="btn-group btn-group-toggle mr-3" ngbRadioGroup name="scheduleType{{dayIndex}}" [value]="getScheduleType(dayIndex)" (change)="onScheduleTypeChange($event.target.value, dayIndex)">
 					<label class="btn btn-outline-secondary mb-0" [class.active]="getScheduleType(dayIndex) === 'off'" [ngClass]="{'bg-danger': getScheduleType(dayIndex) === 'off'}">
-						<input type="radio" [checked]="getScheduleType(dayIndex) === 'off'" value="off" autocomplete="off" > Off
+						<input type="radio" [checked]="getScheduleType(dayIndex) === 'off'" value="off"> Off
 					</label>
 					<label class="btn btn-outline-secondary mb-0" [class.active]="getScheduleType(dayIndex) === 'allDay'">
-						<input type="radio" [checked]="getScheduleType(dayIndex) === 'allDay'" value="allDay" autocomplete="off"> On 24 Hours
+						<input type="radio" [checked]="getScheduleType(dayIndex) === 'allDay'" value="allDay"> On 24 Hours
 					</label>
 					<label class="btn btn-outline-secondary mb-0" [class.active]="getScheduleType(dayIndex) === 'custom'">
-						<input type="radio" [checked]="getScheduleType(dayIndex) === 'custom'" value="custom" autocomplete="off"> On (Set Hours)
+						<input type="radio" [checked]="getScheduleType(dayIndex) === 'custom'" value="custom"> On (Set Hours)
 					</label>
 				</div>
 				<select formControlName="start" class="form-control mx-1 start-control">

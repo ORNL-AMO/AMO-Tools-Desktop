@@ -62,6 +62,7 @@ import { ChillerLoadScheduleService } from './services/chiller-load-schedule.ser
 import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe';
 import { WEATHER_CONTEXT } from '../shared/modules/weather-data/weather-context.token';
 import { ProcessCoolingWeatherContextService } from './process-cooling-weather-context.service';
+import { MonthlyOperatingScheduleService } from './services/monthly-operating-schedule.service';
 import { OperatingScheduleComponent } from './operating-schedule/operating-schedule.component';
 import { WeeklyOperatingScheduleComponent } from './operating-schedule/weekly-operating-schedule/weekly-operating-schedule.component';
 import { MonthlyOperatingScheduleComponent } from './operating-schedule/monthly-operating-schedule/monthly-operating-schedule.component';
@@ -272,6 +273,7 @@ const ROUTES: Route[] = [
     ProcessCoolingAssessmentResolver,
     ChillerInventoryService,
     ChillerLoadScheduleService,
+    MonthlyOperatingScheduleService,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })

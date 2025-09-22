@@ -442,6 +442,20 @@ export class SuiteApiHelperService {
     return validInput;
   }
 
+   /**
+  * Get JS array from WASM vector
+  * @param vector WASM vector to extract from
+  * @returns JS number array
+ */
+  extractWASMArray(vector: any): number[] {
+    if (!vector || typeof vector.size !== 'function' || typeof vector.get !== 'function') return [];
+    const arr = [];
+    for (let i = 0; i < vector.size(); i++) {
+      arr.push(vector.get(i));
+    }
+    return arr;
+  }
+
   getSteamCondition(steamCondition: number) {
     switch (steamCondition) {
       case 0:

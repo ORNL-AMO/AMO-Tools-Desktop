@@ -1,10 +1,11 @@
-import { Component, inject, Signal } from '@angular/core';
+import { Component, DestroyRef, inject, Signal } from '@angular/core';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
 import { map, Observable } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
-import { MAIN_VIEW_LINKS, MainView, ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { MAIN_VIEW_LINKS, MainView, ProcessCoolingUiService, ViewLink } from '../services/process-cooling-ui.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-process-cooling-banner',
@@ -16,12 +17,13 @@ export class ProcessCoolingBannerComponent {
   private readonly processCoolingService = inject(ProcessCoolingAssessmentService);
   private readonly processCoolingUiService = inject(ProcessCoolingUiService);
   private readonly dashboardService = inject(DashboardService);
+  private readonly destroyRef = inject(DestroyRef);
+  isBaselineValid: boolean = false
   
   readonly ROUTE_TOKENS = ROUTE_TOKENS;
   readonly MAIN_VIEW_LINKS = MAIN_VIEW_LINKS;
   readonly MainView = MainView; 
   readonly assessment$: Observable<Assessment> = this.processCoolingService.assessment$;
-  readonly isBaselineValid$: Observable<boolean> = this.processCoolingService.isBaselineValid$;
   readonly isButtonDisabled$: Observable<boolean> = this.assessment$.pipe(
     map(assessment => !assessment.processCooling.setupDone || this.mainView() === 'baseline')
   );
@@ -30,6 +32,11 @@ export class ProcessCoolingBannerComponent {
   bannerCollapsed: boolean = true;
 
   ngOnInit(): void {
+    this.processCoolingService.isBaselineValid$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(val => {
+      this.isBaselineValid = val;
+    });
   }
 
   collapseBanner() {
@@ -86,6 +93,10 @@ export class ProcessCoolingBannerComponent {
 
   get canGoBack(): boolean {
     return this.processCoolingUiService.canGoBack();
+  }
+
+  isLinkDisabled(link: ViewLink): boolean {
+    return link.view !== ROUTE_TOKENS.baseline && !this.isBaselineValid;
   }
 }
 

@@ -45,7 +45,8 @@
                 <a class="nav-link" 
                     routerLinkActive="active"
                     [routerLink]="[link.view]"       
-                    [ngClass]="{'disabled': link.view !== ROUTE_TOKENS.baseline && (!isBaselineValid$ | async)}"
+                    [ngClass]="{'disabled': link.view !== ROUTE_TOKENS.baseline && !isBaselineValid}"
+                    (click)="link.view !== ROUTE_TOKENS.baseline && !isBaselineValid ? $event.preventDefault() : null"
                 >{{link.label}}</a>
             </div>
         </ng-container>
@@ -57,7 +58,8 @@
                 <a class="nav-link" 
                     routerLinkActive="active"
                     [routerLink]="[link.view]"       
-                    [ngClass]="{'disabled': link.view !== ROUTE_TOKENS.baseline && (!isBaselineValid$ | async)}"
+                    [ngClass]="{'disabled': link.view !== ROUTE_TOKENS.baseline && !isBaselineValid}"
+                    (click)="link.view !== ROUTE_TOKENS.baseline && !isBaselineValid ? $event.preventDefault() : null"
                 >{{link.label}}</a>
         </div>
     </div>

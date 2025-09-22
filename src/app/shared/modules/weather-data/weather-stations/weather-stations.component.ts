@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NominatimLocation, StationSearchRequest, WeatherApiService, WeatherStation } from '../../../weather-api.service';
+import { NominatimLocation, WeatherApiService, WeatherStation } from '../../../weather-api.service';
 import { GEO_DATA_STATE_LINES } from '../geo-assets/geo-data-state-lines';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-weather-stations',
@@ -11,7 +12,7 @@ import { firstValueFrom } from 'rxjs';
 })
 export class WeatherStationsComponent {
 
-  furthestDistance: number = 70;
+  furthestDistance: number = environment.production? 75 : 5;
   stations: Array<WeatherStation> = [];
 
   fetchingData: boolean = false;

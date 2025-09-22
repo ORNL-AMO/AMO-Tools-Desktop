@@ -188,6 +188,7 @@ export class ProcessCoolingUiService {
   }
 
   canVisitView(index: number): boolean {
+    const processCooling = this.processCoolingAssessmentService.processCoolingSignal();
     switch (index) {
       case 0: return true;
       case 1: return true;
@@ -195,9 +196,9 @@ export class ProcessCoolingUiService {
       case 3: return this.weatherContextService.isValidWeatherData();
       case 4: return true;
       case 5: return true;
-      case 6: return this.processCoolingAssessmentService.isSystemInformationValid();
-      case 7: return this.processCoolingAssessmentService.isChillerInventoryValid();
-      case 8: return this.weatherContextService.isValidWeatherData();
+      case 6: return this.processCoolingAssessmentService.isSystemInformationValid(processCooling.systemInformation);
+      case 7: return this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory);
+      case 8: return this.weatherContextService.isValidWeatherData() && this.processCoolingAssessmentService.isSystemOperatingDataValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
       default: return false;
     }
   }

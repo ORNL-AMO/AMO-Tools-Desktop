@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DayScheduleData, WeeklyOperatingSchedule } from '../../shared/models/process-cooling-assessment';
 
 @Injectable()
 export class WeeklyOperatingScheduleService {
@@ -67,12 +68,6 @@ export interface WeeklyOperatingScheduleForm {
   days: FormArray<FormGroup<DayScheduleForm>>;
 }
 
-export interface WeeklyOperatingSchedule {
-  useSameSchedule: boolean;
-  days: Array<DayScheduleData>;
-  hoursOnMonToSun?: number[];
-}
-
 export interface DayScheduleForm {
   off: FormControl<boolean>;
   start: FormControl<number>;
@@ -80,9 +75,3 @@ export interface DayScheduleForm {
   allDay: FormControl<boolean>;
 }
 
-export interface DayScheduleData {
-  off: boolean;
-  start: number;
-  end: number;
-  allDay: boolean;
-}
