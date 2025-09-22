@@ -23,7 +23,7 @@ export class WeeklyOperatingScheduleComponent implements OnInit {
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
   DAY_LABELS = DAY_LABELS;
   HOUR_OPTIONS = HOUR_OPTIONS;
-  
+
   form: FormGroup<WeeklyOperatingScheduleForm>;
 
   ngOnInit() {
@@ -47,23 +47,26 @@ export class WeeklyOperatingScheduleComponent implements OnInit {
 
   updateDayGroups() {
     for (let dayGroup of this.daysFormArray.controls) {
-      this.updateDayControls(dayGroup as FormGroup);
+      this.updateDaysControlStatus(dayGroup as FormGroup);
     }
   }
 
   onUseSameScheduleChange() {
+    const monday = this.getDayGroup(0);
     if (this.useSameSchedule.value) {
       this.setSameSchedule();
       // * keep Monday enabled
-      this.getDayGroup(0).enable({ emitEvent: false });
+      monday.enable({ emitEvent: false });
     } else {
-      for (let dayGroup of this.daysFormArray.controls) {
-        dayGroup.enable({ emitEvent: false });
+      if (!monday.get('off').value && !monday.get('allDay').value) {
+        for (let dayGroup of this.daysFormArray.controls) {
+          dayGroup.enable({ emitEvent: false });
+        }
       }
     }
     this.updateWeeklyOperatingSchedule();
   }
-  
+
   setSameSchedule() {
     const monday = this.getDayGroup(0).getRawValue();
     for (let dayGroup of this.daysFormArray.controls) {
@@ -72,64 +75,67 @@ export class WeeklyOperatingScheduleComponent implements OnInit {
     }
   }
 
-  
   updateWeeklyOperatingSchedule() {
     const weeklySchedule = this.weeklyOperatingScheduleService.getWeeklyOperatingSchedule(this.form.getRawValue());
     this.processCoolingAssessmentService.updateWeeklyOperatingSchedule(weeklySchedule);
-    console.log('weeklySchedule:', weeklySchedule);
-    console.log('form:', this.form.getRawValue());
   }
 
-
-  onOffToggle(dayIndex: number) {
-    this.updateDayControls(this.getDayGroup(dayIndex));
-  }
-
-  updateDayControls(dayGroup: FormGroup) {
-    const isOff = dayGroup.get('off')?.value;
-    const isAllDay = dayGroup.get('allDay')?.value;
+  updateDaysControlStatus(dayGroup: FormGroup) {
+    const isOff = dayGroup.get('off').value;
+    const isAllDay = dayGroup.get('allDay').value;
 
     if (isOff) {
-      dayGroup.get('start')?.disable({ emitEvent: false });
-      dayGroup.get('end')?.disable({ emitEvent: false });
-      dayGroup.get('allDay')?.disable({ emitEvent: false });
+      dayGroup.get('start').disable({ emitEvent: false });
+      dayGroup.get('end').disable({ emitEvent: false });
+      dayGroup.get('allDay').disable({ emitEvent: false });
     } else {
-      dayGroup.get('allDay')?.enable({ emitEvent: false });
+      dayGroup.get('allDay').enable({ emitEvent: false });
       if (isAllDay) {
-        dayGroup.get('start')?.disable({ emitEvent: false });
-        dayGroup.get('end')?.disable({ emitEvent: false });
+        dayGroup.get('start').disable({ emitEvent: false });
+        dayGroup.get('end').disable({ emitEvent: false });
       } else {
-        dayGroup.get('start')?.enable({ emitEvent: false });
-        dayGroup.get('end')?.enable({ emitEvent: false });
+        dayGroup.get('start').enable({ emitEvent: false });
+        dayGroup.get('end').enable({ emitEvent: false });
       }
     }
-  }
-
-  getScheduleType(dayIndex: number): 'off' | 'allDay' | 'custom' {
-    const dayGroup = this.getDayGroup(dayIndex);
-    if (dayGroup.get('off')?.value) {
-      return 'off';
-    }
-    if (dayGroup.get('allDay')?.value) {
-      return 'allDay';
-    }
-    return 'custom';
   }
 
   onScheduleTypeChange(scheduleType: string, dayIndex: number) {
     const dayGroup = this.getDayGroup(dayIndex);
     if (scheduleType === 'off') {
-      dayGroup.get('off')?.setValue(true, { emitEvent: true });
-      dayGroup.get('allDay')?.setValue(false, { emitEvent: true });
+      dayGroup.get('off').setValue(true, { emitEvent: true });
+      dayGroup.get('allDay').setValue(false, { emitEvent: true });
+
+      dayGroup.get('start').setValue(0, { emitEvent: false });
+      dayGroup.get('end').setValue(0, { emitEvent: false });
     } else if (scheduleType === 'allDay') {
-      dayGroup.get('off')?.setValue(false, { emitEvent: true });
-      dayGroup.get('allDay')?.setValue(true, { emitEvent: true });
+      dayGroup.get('off').setValue(false, { emitEvent: true });
+      dayGroup.get('allDay').setValue(true, { emitEvent: true });
+
+      dayGroup.get('start').setValue(0, { emitEvent: false });
+      dayGroup.get('end').setValue(24, { emitEvent: false });
     } else {
-      dayGroup.get('off')?.setValue(false, { emitEvent: true });
-      dayGroup.get('allDay')?.setValue(false, { emitEvent: true });
+      dayGroup.get('off').setValue(false, { emitEvent: true });
+      dayGroup.get('allDay').setValue(false, { emitEvent: true });
     }
-    this.updateDayControls(dayGroup);
+
+    if (this.useSameSchedule.value) {
+      this.setSameSchedule();
+    }
+    this.updateDaysControlStatus(dayGroup);
   }
+
+  getScheduleType(dayIndex: number): 'off' | 'allDay' | 'custom' {
+    const dayGroup = this.getDayGroup(dayIndex);
+    if (dayGroup.get('off').value) {
+      return 'off';
+    }
+    if (dayGroup.get('allDay').value) {
+      return 'allDay';
+    }
+    return 'custom';
+  }
+
 
   get daysFormArray(): FormArray {
     return this.form.get('days') as FormArray;

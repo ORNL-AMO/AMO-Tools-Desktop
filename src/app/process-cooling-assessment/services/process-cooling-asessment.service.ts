@@ -1,7 +1,7 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { BehaviorSubject, debounceTime, firstValueFrom, map, tap } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
-import { ChillerInventoryItem, ProcessCoolingAssessment, ProcessCoolingDataProperty, ProcessCoolingSystemInformationProperty, SystemInformation } from '../../shared/models/process-cooling-assessment';
+import { ChillerInventoryItem, MonthlyOperatingSchedule, ProcessCoolingAssessment, ProcessCoolingDataProperty, ProcessCoolingSystemInformationProperty, SystemInformation, WeeklyOperatingSchedule } from '../../shared/models/process-cooling-assessment';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
@@ -9,7 +9,6 @@ import { getDefaultInventoryItem } from '../process-cooling-constants';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
-import { WeeklyOperatingSchedule } from './weekly-operating-schedule.service';
 
 /**
  * Service currently uses both signals and observables for the same state. This is a prototype, 
@@ -74,6 +73,7 @@ export class ProcessCoolingAssessmentService {
   // todo too many sources of truth
   setProcessCooling(processCooling: ProcessCoolingAssessment) {
     console.log('[ProcessCoolingService] processCooling:', processCooling);
+    // todo will have race conditions if used together (isBaselineValid$)
     this.processCooling.next(processCooling);
     this.processCoolingSignal.set(processCooling);
 
@@ -105,6 +105,13 @@ export class ProcessCoolingAssessmentService {
     let updatedProcessCooling = { ...this.processCooling.getValue() };
     // todo process weekly schedule into hours on per day see form service
     updatedProcessCooling.weeklyOperatingSchedule = weeklyOperatingSchedule;
+    this.setProcessCooling(updatedProcessCooling);
+  }
+
+  updateMonthlyOperatingSchedule(monthlyOperatingSchedule: MonthlyOperatingSchedule) {
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    // todo process monthly schedule into hours on per month
+    updatedProcessCooling.monthlyOperatingSchedule = monthlyOperatingSchedule;
     this.setProcessCooling(updatedProcessCooling);
   }
   
@@ -198,7 +205,18 @@ export class ProcessCoolingAssessmentService {
   }
 
   readonly isBaselineValid$ = this.processCooling$.pipe(
-    map((processCooling: ProcessCoolingAssessment) => processCooling ? processCooling.setupDone : false)
+    map((processCooling: ProcessCoolingAssessment) => {
+      if (processCooling) {
+        const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation) 
+        const isChillerInventoryValid = this.isChillerInventoryValid(processCooling.inventory) 
+        const isSystemOperatingDataValid = this.isSystemOperatingDataValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule)
+        const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData()
+        const isValid = isSystemInformationValid && isChillerInventoryValid && isSystemOperatingDataValid && isWeatherDataValid;
+        console.log('isBaselineValid', isValid);
+        return isValid;
+      }
+      return false;
+    })
   );
 
   get condenserCoolingMethod(): number {
@@ -210,10 +228,18 @@ export class ProcessCoolingAssessmentService {
     return assessment ? assessment.id : undefined;
   }
 
-  isSystemInformationValid(): boolean {
+  isSystemInformationValid(systemInformation: SystemInformation): boolean {
     return true;
   }
-  isChillerInventoryValid(): boolean {
-    return true;
+  isChillerInventoryValid(chillerInventory: ChillerInventoryItem[]): boolean {
+    return chillerInventory && chillerInventory.length > 0;
+  }
+  isSystemOperatingDataValid(weeklyOperatingSchedule: WeeklyOperatingSchedule, monthlyOperatingSchedule: MonthlyOperatingSchedule): boolean {
+    if (weeklyOperatingSchedule && monthlyOperatingSchedule) {
+      const validWeekly = weeklyOperatingSchedule.hoursOnMonToSun && weeklyOperatingSchedule.hoursOnMonToSun.some(hour => hour > 0);
+      const validMonthly = monthlyOperatingSchedule.hoursOnPerMonth && monthlyOperatingSchedule.hoursOnPerMonth.some(hour => hour > 0);
+      return validWeekly && validMonthly;
+    }
+    return false;
   }
 }

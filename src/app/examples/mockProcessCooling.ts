@@ -1,18 +1,19 @@
 import { Assessment } from "../shared/models/assessment";
 
 import {
-  EXAMPLE_AIR_COOLED_SYSTEM_INPUT,
-  EXAMPLE_WATER_COOLED_SYSTEM_INPUT,
-  EXAMPLE_TOWER_INPUT,
-  EXAMPLE_SYSTEM_BASICS,
-  EXAMPLE_SYSTEM_INFORMATION_OPERATIONS,
-  EXAMPLE_CO2_SAVINGS_DATA,
-  EXAMPLE_INVENTORY,
-  EXAMPLE_PUMP_INPUT_CONDENSER,
-  EXAMPLE_PUMP_INPUT_CHILLED
-// } from './CWSATExampleAirCooledConstant';
+    EXAMPLE_AIR_COOLED_SYSTEM_INPUT,
+    EXAMPLE_WATER_COOLED_SYSTEM_INPUT,
+    EXAMPLE_TOWER_INPUT,
+    EXAMPLE_SYSTEM_BASICS,
+    EXAMPLE_SYSTEM_INFORMATION_OPERATIONS,
+    EXAMPLE_CO2_SAVINGS_DATA,
+    EXAMPLE_INVENTORY,
+    EXAMPLE_PUMP_INPUT_CONDENSER,
+    EXAMPLE_PUMP_INPUT_CHILLED
+    // } from './CWSATExampleAirCooledConstant';
 } from './CWSATExampleVINPLTConstants';
 import { Settings } from "../shared/models/settings";
+import exampleWeatherData from "./exampleWeatherData";
 
 export const MockProcessCoolingAssessment: Assessment = {
     "name": "Process Cooling Example",
@@ -29,7 +30,7 @@ export const MockProcessCoolingAssessment: Assessment = {
         setupDone: true,
         systemBasics: { ...EXAMPLE_SYSTEM_BASICS },
         systemInformation: {
-            co2SavingsData: {...EXAMPLE_CO2_SAVINGS_DATA},
+            co2SavingsData: { ...EXAMPLE_CO2_SAVINGS_DATA },
             operations: { ...EXAMPLE_SYSTEM_INFORMATION_OPERATIONS },
             airCooledSystemInput: { ...EXAMPLE_AIR_COOLED_SYSTEM_INPUT },
             waterCooledSystemInput: { ...EXAMPLE_WATER_COOLED_SYSTEM_INPUT },
@@ -37,10 +38,152 @@ export const MockProcessCoolingAssessment: Assessment = {
             condenserWaterPumpInput: { ...EXAMPLE_PUMP_INPUT_CONDENSER },
             towerInput: { ...EXAMPLE_TOWER_INPUT }
         },
-        inventory: [ ...EXAMPLE_INVENTORY ],
+        inventory: [...EXAMPLE_INVENTORY],
         selectedModificationId: null,
         selected: false,
-        existingDataUnits: 'Imperial'
+        existingDataUnits: 'Imperial',
+        weatherData: exampleWeatherData,
+        weeklyOperatingSchedule: {
+            "useSameSchedule": false,
+            "hoursOnMonToSun": [
+                24,
+                24,
+                24,
+                24,
+                24,
+                24,
+                24
+            ],
+            "days": [
+                {
+                    "off": false,
+                    "start": 0,
+                    "end": 24,
+                    "allDay": true
+                },
+                {
+                    "off": false,
+                    "start": 0,
+                    "end": 24,
+                    "allDay": true
+                },
+                {
+                    "off": false,
+                    "start": 0,
+                    "end": 24,
+                    "allDay": true
+                },
+                {
+                    "off": false,
+                    "start": 0,
+                    "end": 24,
+                    "allDay": true
+                },
+                {
+                    "off": false,
+                    "start": 0,
+                    "end": 24,
+                    "allDay": true
+                },
+                {
+                    "off": false,
+                    "start": 0,
+                    "end": 24,
+                    "allDay": true
+                },
+                {
+                    "off": false,
+                    "start": 0,
+                    "end": 24,
+                    "allDay": true
+                },
+                {
+                    "off": false,
+                    "start": 0,
+                    "end": 24,
+                    "allDay": true
+                },
+                {
+                    "off": false,
+                    "start": 0,
+                    "end": 24,
+                    "allDay": true
+                },
+                {
+                    "off": false,
+                    "start": 0,
+                    "end": 24,
+                    "allDay": true
+                }
+            ]
+        },
+        monthlyOperatingSchedule: {
+            months: [
+                {
+                    name: "January",
+                    days: 31
+                },
+                {
+                    name: "February",
+                    days: 29
+                },
+                {
+                    name: "March",
+                    days: 31
+                },
+                {
+                    name: "April",
+                    days: 30
+                },
+                {
+                    name: "May",
+                    days: 31
+                },
+                {
+                    name: "June",
+                    days: 30
+                },
+                {
+                    name: "July",
+                    days: 31
+                },
+                {
+                    name: "August",
+                    days: 31
+                },
+                {
+                    name: "September",
+                    days: 30
+                },
+                {
+                    name: "October",
+                    days: 31
+                },
+                {
+                    name: "November",
+                    days: 30
+                },
+                {
+                    name: "December",
+                    days: 31
+                }
+            ],
+            "useMaxHours": true,
+            "hoursOnPerMonth": [
+                744,
+                696,
+                744,
+                720,
+                744,
+                720,
+                744,
+                744,
+                720,
+                744,
+                720,
+                744
+            ]
+        }
     },
     "selected": false,
 }

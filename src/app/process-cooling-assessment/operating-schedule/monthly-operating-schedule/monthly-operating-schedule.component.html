@@ -1,1 +1,42 @@
-<p>Monthly Operating Schedule works!</p>
+<div class="pt-2 d-flex flex-column help-info">
+	<h5 class="ml-2">Monthly Operating Schedule</h5>
+	<p class="text-muted p-2">
+		Enter number of typical operating days for each month. This information is used to calculate annual operating
+		hours.
+	</p>
+	<hr class="my-1 hr-spacer">
+</div>
+<form [formGroup]="form" class="w-100">
+	<div class="form-group mb-2 pl-3">
+		<label class="font-weight-bold mb-1 w-100">
+			<input type="checkbox" [formControl]="useMaxHours" class="mr-2 use-same-schedule-checkbox" />
+			Use Max Operating Days
+		</label>
+	</div>
+	<div class="table-responsive w-100">
+		<table class="table table-bordered table-sm w-100">
+			<thead class="thead-light">
+				<tr>
+					<th>Month</th>
+					<th>Operating Days</th>
+				</tr>
+			</thead>
+			<tbody>
+				<ng-container *ngFor="let month of months; let i = index" [formGroup]="monthsFormArray.at(i)">
+					<tr>
+						<td>{{ month.name }} <span class="text-muted">({{ month.days }} days)</span></td>
+						<td>
+							<input type="number" class="form-control text-center" formControlName="days"
+								[max]="month.days">
+						</td>
+					</tr>
+					<tr *ngIf="getMonthError(i)">
+						<td colspan="2">
+							<span class="alert-danger pull-right small">{{ getMonthError(i) }}</span>
+						</td>
+					</tr>
+				</ng-container>
+			</tbody>
+		</table>
+	</div>
+</form>
