@@ -199,8 +199,8 @@ export class CompressedAirMotorIntegrationService {
   }
 
   getHasConnectedCompressedAirItems(inventoryItem: InventoryItem) {
-    return inventoryItem.compressedAirInventoryData.systems.some(system => {
-      return system.catalog.some(item => item.connectedItems && item.connectedItems.length > 0);
+    return inventoryItem.motorInventoryData.departments.some(department => {
+      return department.catalog.some(item => item.connectedItems && item.connectedItems.length > 0);
     });
   }
 
