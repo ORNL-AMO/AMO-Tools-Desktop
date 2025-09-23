@@ -286,14 +286,6 @@ export class PumpMotorIntegrationService {
           delete item.connectedItems;
       })
     });
-  }
-
-  removeAllCompressedAirConnectedItems(inventory: InventoryItem) {
-    // inventory.compressedAirInventoryData.departments.forEach(dept => {
-    //   dept.catalog.map(item => {
-    //       delete item.connectedItems;
-    //   })
-    // });
-  }
+  } 
 
 }

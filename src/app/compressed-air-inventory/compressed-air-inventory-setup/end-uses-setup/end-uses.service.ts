@@ -194,13 +194,10 @@ export class EndUsesService {
 
     let endUses: Array<EndUse> = this.compressedAirInventoryService.compressedAirInventoryData.getValue().systems[systemIndex].endUses;
 
-    //todo CA Inventory
     let selectedSystem: CompressedAirInventorySystem;
     if (selectedSystemId) {
       selectedSystem = compressedAirInventoryData.systems.find(system => { return system.id == selectedSystemId });
     }
-
-    //let selectedSystem: CompressedAirInventorySystem = compressedAirInventoryData.systems[0];
 
     // end use airflow / Average system flow for day type
     let dayTypeEndUseResult: EndUseResults = {

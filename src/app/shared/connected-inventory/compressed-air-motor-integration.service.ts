@@ -8,10 +8,11 @@ import { ConnectedInventoryData, ConnectedItem, IntegrationState, InventoryOptio
 import { InventoryItem } from '../models/inventory/inventory';
 import { firstValueFrom } from 'rxjs';
 import _ from 'lodash';
-import { CompressedAirItem, CompressedAirMotorProperties } from '../../compressed-air-inventory/compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem, CompressedAirMotorProperties } from '../../compressed-air-inventory/compressed-air-inventory';
 import { Settings } from '../models/settings';
 import { MotorInventoryDepartment, MotorItem } from '../../motor-inventory/motor-inventory';
 import { copyObject } from '../helperFunctions';
+import { CompressedAirAssessment } from '../models/compressed-air-assessment';
 
 @Injectable()
 export class CompressedAirMotorIntegrationService {
@@ -23,7 +24,6 @@ export class CompressedAirMotorIntegrationService {
     private convertMotorInventoryService: ConvertMotorInventoryService,
     private integrationStateService: IntegrationStateService
   ) { }
-
 
   async initInventoriesAndOptions(): Promise<Array<InventoryOption>> {
     let allInventories: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.getAllInventory());
@@ -134,6 +134,42 @@ export class CompressedAirMotorIntegrationService {
     return motorItem;
   }
 
+  getConnectedCompressedAirItem(connectedItem: ConnectedItem) {
+    let compressedAirItem: CompressedAirItem;
+    let inventoryItem: InventoryItem = this.inventoryDbService.getById(connectedItem.inventoryId);
+    if (inventoryItem) {
+      let system: CompressedAirInventorySystem = inventoryItem.compressedAirInventoryData.systems.find(system => system.id === connectedItem.departmentId);
+      if (system) {
+        compressedAirItem = system.catalog.find(compressedAirItem => compressedAirItem.id === connectedItem.id);
+      }
+    }
+    return compressedAirItem;
+  }
+
+  getConnectedCAAssessmentItem(connectedItem: ConnectedItem) {
+    let existingAssessment = this.assessmentDbService.findById(connectedItem.assessmentId);
+    return existingAssessment;
+  }
+
+  setConnectedItems(motorItem: MotorItem) {
+    if (motorItem.connectedItems && motorItem.connectedItems.length > 0) {
+      motorItem.connectedItems = motorItem.connectedItems.filter(connectedItem => {
+        let existingItem: CompressedAirItem | CompressedAirAssessment;
+        if (connectedItem.inventoryType === 'compressed-air' && connectedItem.inventoryId) {
+          existingItem = this.getConnectedCompressedAirItem(connectedItem);
+        } 
+        //   //TODO CA Assessment Integration
+        // else if (connectedItem.inventoryType === 'motor' && connectedItem.assessmentId) {
+        //   existingItem = this.getConnectedCAAssessmentItem(connectedItem);
+        // }
+        return existingItem;
+      });
+      if (motorItem.connectedItems.length === 0) {
+        motorItem.connectedItems = undefined;
+      }
+    }
+  }
+
   setFromConnectedMotorItem(selectedCompressor: CompressedAirItem, ownerInventoryId: number, settings: Settings) {
     let motorItem = this.getConnectedMotorItem(selectedCompressor.connectedItem, settings);
     let connectedInventoryData: ConnectedInventoryData = this.integrationStateService.getEmptyConnectedInventoryData();
@@ -162,6 +198,28 @@ export class CompressedAirMotorIntegrationService {
     });
   }
 
+  getHasConnectedCompressedAirItems(inventoryItem: InventoryItem) {
+    return inventoryItem.motorInventoryData.departments.some(department => {
+      return department.catalog.some(item => item.connectedItems && item.connectedItems.length > 0);
+    });
+  }
+
+  getHasConnectedMotorItems(inventoryItem: InventoryItem) {
+    return inventoryItem.compressedAirInventoryData.systems.some(system => {
+      let compressedAirItem = system.catalog.find(item => item.connectedItem);
+      if (compressedAirItem) {
+        let motorInventory: InventoryItem = this.inventoryDbService.getById(compressedAirItem.connectedItem.inventoryId);
+        if (motorInventory) {
+          let system = motorInventory.motorInventoryData.departments.find(dept => compressedAirItem.connectedItem.departmentId === dept.id);
+          if (system) {
+            let motorItem = system.catalog.find(item => item.id === compressedAirItem.connectedItem.id);
+            return Boolean(motorItem);
+          }
+        }
+      }
+    });
+  }
+
   async removeCompressorConnectedItem(selectedCompressor: CompressedAirItem, connectedInventoryData: ConnectedInventoryData) {
     this.removeMotorConnectedItem(selectedCompressor);
     delete selectedCompressor.connectedItem;
@@ -185,7 +243,7 @@ export class CompressedAirMotorIntegrationService {
     let motorInventoryItem: InventoryItem = this.inventoryDbService.getById(selectedCompressor.connectedItem.inventoryId);
     if (motorInventoryItem) {
       motorInventoryItem.motorInventoryData.departments.find(department => {
-        if (department.id === selectedCompressor.connectedItem.systemId) {
+        if (department.id === selectedCompressor.connectedItem.departmentId) {
           department.catalog.map(motorItem => {
             if (motorItem.id === selectedCompressor.connectedItem.id) {
               let connectedPumpIndex = motorItem.connectedItems.findIndex(item => item.id === selectedCompressor.id);
@@ -201,6 +259,30 @@ export class CompressedAirMotorIntegrationService {
       let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
       this.inventoryDbService.setAll(updatedInventoryItems);
     }
+  }
+
+  removeDepartmentMotorConnections(pumpInventoryData: CompressedAirInventoryData, deleteSystemIndex: number) {
+    pumpInventoryData.systems[deleteSystemIndex].catalog.forEach(item => {
+      if (item.connectedItem) {
+        this.removeMotorConnectedItem(item);
+      }
+    });
+  }
+
+  removeAllCompressedAirConnectedItems(inventory: InventoryItem) {
+    inventory.compressedAirInventoryData.systems.forEach(system => {
+      system.catalog.map(item => {
+        delete item.connectedItem;
+      })
+    });
+  }
+
+  removeAllMotorConnectedItems(inventory: InventoryItem) {
+    inventory.motorInventoryData.departments.forEach(dept => {
+      dept.catalog.map(item => {
+        delete item.connectedItems;
+      })
+    });
   }
 
 

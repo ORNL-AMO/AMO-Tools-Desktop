@@ -10,6 +10,7 @@ import { motorEfficiencyConstants } from '../../../../psat/psatConstants';
 import { PsatService } from '../../../../psat/psat.service';
 import { ConnectedItem } from '../../../../shared/connected-inventory/integrations';
 import { PumpMotorIntegrationService } from '../../../../shared/connected-inventory/pump-motor-integration.service';
+import { CompressedAirMotorIntegrationService } from '../../../../shared/connected-inventory/compressed-air-motor-integration.service';
 
 @Component({
     selector: 'app-nameplate-data',
@@ -32,7 +33,7 @@ export class NameplateDataComponent implements OnInit {
   connectedItems: Array<ConnectedItem>;
   constructor(private motorCatalogService: MotorCatalogService, private motorInventoryService: MotorInventoryService,
     private pumpMotorIntegrationService: PumpMotorIntegrationService,
-    private nameplateDataService: NameplateDataService, private psatService: PsatService) { }
+    private nameplateDataService: NameplateDataService, private psatService: PsatService,  private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
 
   ngOnInit(): void {
     //TODO: add warnings for FLA
@@ -44,7 +45,8 @@ export class NameplateDataComponent implements OnInit {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.nameplateDataService.getFormFromNameplateData(selectedMotor.nameplateData);
-        this.pumpMotorIntegrationService.setConnectedItems(selectedMotor);
+        this.pumpMotorIntegrationService.setConnectedItems(selectedMotor);        
+        this.compressedAirMotorIntegrationService.setConnectedItems(selectedMotor);
         this.connectedItems = selectedMotor.connectedItems;
       }
     });

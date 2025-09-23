@@ -24,6 +24,8 @@ import { getNameDateString } from '../helperFunctions';
 import { WaterProcessDiagramService } from '../../water-process-diagram/water-process-diagram.service';
 import { Diagram } from '../models/diagram';
 import { UpdateAssessmentFromDiagramService } from '../../water/update-assessment-from-diagram.service';
+import { CompressedAirMotorIntegrationService } from '../connected-inventory/compressed-air-motor-integration.service';
+import { CompressedAirItem } from '../../compressed-air-inventory/compressed-air-inventory';
 
 @Component({
     selector: 'app-create-assessment-modal',
@@ -62,7 +64,8 @@ export class CreateAssessmentModalComponent {
     private psatIntegrationService: PsatIntegrationService,
     private integrationStateService: IntegrationStateService,
     private settingsService: SettingsService,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
+    private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService
     ) { }
 
   ngOnInit() {
@@ -119,6 +122,10 @@ export class CreateAssessmentModalComponent {
       if (assessmentType === 'Pump') {
         let selectedPumpItem: PumpItem = this.psatIntegrationService.getConnectedPumpItem(connectedInventoryData.connectedItem);
         assessmentName = `${selectedPumpItem.name}_${getNameDateString(currentDate)}`;
+      }
+      if (assessmentType === 'Compressed-Air') {
+        let selectedCompressedAirItem: CompressedAirItem = this.compressedAirMotorIntegrationService.getConnectedCompressedAirItem(connectedInventoryData.connectedItem);
+        assessmentName = `${selectedCompressedAirItem.name}_${getNameDateString(currentDate)}`;
       }
     }
     return assessmentName;

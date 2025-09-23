@@ -13,6 +13,7 @@ import { NameplateDataCatalogService } from './compressed-air-inventory-setup/co
 import { PerformancePointsCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/performance-points-catalog/performance-points-catalog.service';
 import _ from 'lodash';
 import { copyObject } from '../shared/helperFunctions';
+import { CompressedAirMotorIntegrationService } from '../shared/connected-inventory/compressed-air-motor-integration.service';
 
 @Injectable()
 export class CompressedAirInventoryService {
@@ -38,7 +39,8 @@ export class CompressedAirInventoryService {
     private designDetailsCatalogService: DesignDetailsCatalogService,
     private fieldMeasurementsCatalogService: FieldMeasurementsCatalogService,
     private nameplateDataCatalogService: NameplateDataCatalogService,
-    private performancePointsCatalogService: PerformancePointsCatalogService
+    private performancePointsCatalogService: PerformancePointsCatalogService,
+    private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService
 
   ) {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
@@ -320,10 +322,10 @@ export class CompressedAirInventoryService {
     let selectedSystemIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedCompressedAir.systemId });
     let compressedAirItemIndex: number = compressedAirInventoryData.systems[selectedSystemIndex].catalog.findIndex(compressedAirItem => { return compressedAirItem.id == selectedCompressedAir.id });
     compressedAirInventoryData.systems[selectedSystemIndex].catalog.splice(compressedAirItemIndex, 1);
-    // if (selectedCompressedAir.connectedItem) {
-    //  await this.motorIntegrationService.removeMotorConnectedItem(selectedCompressedAir);
-    //  compressedAirInventoryData.hasConnectedInventoryItems = false;
-    // }
+    if (selectedCompressedAir.connectedItem) {
+     await this.compressedAirMotorIntegrationService.removeMotorConnectedItem(selectedCompressedAir);
+     compressedAirInventoryData.hasConnectedInventoryItems = false;
+    }
     this.setIsValidInventory(compressedAirInventoryData);
     this.compressedAirInventoryData.next(compressedAirInventoryData);
   }
