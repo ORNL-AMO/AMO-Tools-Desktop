@@ -13,10 +13,17 @@ export class CompressorInventoryItemClass {
     designDetails: DesignDetails;
     performancePoints: CompressorPerformancePointsClass;
     centrifugalSpecifics: CentrifugalSpecifics;
+    isValid: boolean;
+    description: string;
+    modifiedDate: Date;
     // replacementCompressorId: string;
     // isReplacementCompressor: boolean;
     constructor(inventoryItem: CompressorInventoryItem) {
         this.itemId = inventoryItem.itemId;
+        this.description = inventoryItem.description;
+        this.isValid = inventoryItem.isValid;
+        this.modifiedDate = inventoryItem.modifiedDate;
+        this.compressorLibId = inventoryItem.compressorLibId;
         this.performancePoints = new CompressorPerformancePointsClass(inventoryItem.performancePoints);
         this.nameplateData = inventoryItem.nameplateData;
         this.name = inventoryItem.name;
@@ -29,5 +36,24 @@ export class CompressorInventoryItemClass {
 
     adjustCompressorPerformancePointsWithSequencer(systemInformation: SystemInformation, settings: Settings) {
         this.performancePoints.adjustCompressorPerformancePointsWithSequencer(systemInformation, this.nameplateData, this.centrifugalSpecifics, this.designDetails, this.compressorControls, settings);
+    }
+
+    toModel(): CompressorInventoryItem {
+        return {
+            itemId: this.itemId,
+            compressorLibId: this.compressorLibId,
+            name: this.name,
+            description: this.description,
+            isValid: this.isValid,
+            nameplateData: this.nameplateData,
+            compressorControls: this.compressorControls,
+            designDetails: this.designDetails,
+            performancePoints: this.performancePoints,
+            centrifugalSpecifics: this.centrifugalSpecifics,
+            modifiedDate: this.modifiedDate,
+            // replacementCompressorId: this.replacementCompressorId,
+            // isReplacementCompressor: this.isReplacementCompressor
+
+        }
     }
 }
