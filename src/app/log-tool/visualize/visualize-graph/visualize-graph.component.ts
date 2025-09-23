@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, HostListener, EventEmitter, Output, Renderer2, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener, EventEmitter, Output, Renderer2, Inject, DOCUMENT } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { debounce, interval, Subscription } from 'rxjs';
 import { AnnotationData, GraphObj, LoadingSpinner, VisualizerGraphData } from '../../log-tool-models';
 import { PlotlyService } from 'angular-plotly.js';
 import { LogToolDataService } from '../../log-tool-data.service';
 import * as _ from 'lodash';
-import { DOCUMENT } from '@angular/common';
+
 import { Router } from '@angular/router';
 import * as Plotly from 'plotly.js-dist';
 

@@ -23,6 +23,7 @@ const rootPkgPath = path.join(rootDir, 'package.json');
 const diagramVersion = getMeasurToolsSuiteVersion(diagramPkgPath);
 const rootVersion = getMeasurToolsSuiteVersion(rootPkgPath);
 
+// todo check against all of package shared packages
 if (diagramVersion !== rootVersion) {
   throw new Error(`measur-tools-suite version mismatch: process-flow-diagram-component (${diagramVersion}) vs. MEASUR root (${rootVersion})`);
 }
