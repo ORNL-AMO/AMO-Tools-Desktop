@@ -9,7 +9,6 @@ export class CentrifugalSpecificsCatalogService {
 
 
   getCentrifugalFormFromObj(compressor: CompressedAirItem): UntypedFormGroup {
-    //todo set validators base on compressor type
     let surgeAirFlowValidators: Array<ValidatorFn> = this.setSurgeAirFlowValidators(compressor);
     let maxFullLoadPressureValidators: Array<ValidatorFn> = this.setMaxFullLoadPressureValidators(compressor.centrifugalSpecifics);
     let maxFullLoadCapacityValidators: Array<ValidatorFn> = this.setMaxFullLoadCapacityValidators(compressor);
