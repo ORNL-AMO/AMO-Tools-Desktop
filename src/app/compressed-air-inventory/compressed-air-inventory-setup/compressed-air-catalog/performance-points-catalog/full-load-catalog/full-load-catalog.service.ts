@@ -3,11 +3,12 @@ import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-
 import { Settings } from '../../../../../shared/models/settings';
 import { PerformancePointsCatalogService } from '../performance-points-catalog.service';
 import * as regression from 'regression';
+import { ConvertCompressedAirInventoryService } from '../../../../convert-compressed-air-inventory.service';
 
 @Injectable()
 export class FullLoadCatalogService {
 
-  constructor(private performancePointsCatalogService: PerformancePointsCatalogService) { }
+  constructor(private performancePointsCatalogService: PerformancePointsCatalogService, private convertCompressedAirService: ConvertCompressedAirInventoryService) { }
 
   setFullLoad(selectedCompressor: CompressedAirItem, atmosphericPressure: number, settings: Settings): PerformancePoint {
     selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.dischargePressure = this.getFullLoadDischargePressure(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.isDefaultPressure, settings);
@@ -35,9 +36,7 @@ export class FullLoadCatalogService {
       } else {
         defaultAirflow = this.performancePointsCatalogService.calculateAirFlow(selectedCompressor.nameplateData.fullLoadRatedCapacity, selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, atmosphericPressure, settings);
       }
-      //TODO: CA Inventory Conversion
-      //return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
-      return defaultAirflow
+      return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
     } else {
       return selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.airflow;
     }
@@ -52,9 +51,7 @@ export class FullLoadCatalogService {
       } else {
         defaultPower = this.performancePointsCatalogService.calculatePower(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressedAirDesignDetailsProperties.inputPressure, selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.dischargePressure, selectedCompressor.nameplateData.fullLoadOperatingPressure, selectedCompressor.nameplateData.totalPackageInputPower, atmosphericPressure, settings);
       }
-      //TODO: CA Inventory Conversion
-      //return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
-      return defaultPower
+      return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
     } else {
       return selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.power;
     }
@@ -62,9 +59,7 @@ export class FullLoadCatalogService {
 
   getFullLoadDischargePressure(selectedCompressor: CompressedAirItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {
-      //TODO: CA Inventory Conversion
-      //return this.convertCompressedAirService.roundPressureForPresentation(selectedCompressor.nameplateData.fullLoadOperatingPressure, settings);
-      return selectedCompressor.nameplateData.fullLoadOperatingPressure
+      return this.convertCompressedAirService.roundPressureForPresentation(selectedCompressor.nameplateData.fullLoadOperatingPressure, settings);
     } else {
       return selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.dischargePressure;
     }

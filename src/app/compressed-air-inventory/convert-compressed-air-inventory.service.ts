@@ -32,7 +32,7 @@ export class ConvertCompressedAirInventoryService {
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       endUse.averageRequiredPressure = this.convertUnitsService.value(endUse.averageRequiredPressure).from('barg').to('psig');
       endUse.averageAirflow = this.convertUnitsService.value(endUse.averageAirflow).from('m3/min').to('ft3/min');
-      endUse.averageMeasuredPressure = this.convertUnitsService.value(endUse.averageMeasuredPressure).from('barg').to('psig');      
+      endUse.averageMeasuredPressure = this.convertUnitsService.value(endUse.averageMeasuredPressure).from('barg').to('psig');
       endUse.averageExcessPressure = this.convertUnitsService.value(endUse.averageExcessPressure).from('barg').to('psig');
 
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
@@ -189,5 +189,29 @@ export class ConvertCompressedAirInventoryService {
 
     return namePlateData;
   }
+
+  roundPressureForPresentation(dischargePressure: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      dischargePressure = this.convertUnitsService.roundVal(dischargePressure, 1);
+    } else {
+      dischargePressure = this.convertUnitsService.roundVal(dischargePressure, 2);
+    }
+    return dischargePressure;
+  }
+
+  roundAirFlowForPresentation(airflow: number, settings: Settings) {
+    if (settings.unitsOfMeasure == 'Imperial') {
+      airflow = this.convertUnitsService.roundVal(airflow, 0);
+    } else {
+      airflow = this.convertUnitsService.roundVal(airflow, 3);
+    }
+    return airflow;
+  }
+
+  roundPowerForPresentation(power: number) {
+    power = this.convertUnitsService.roundVal(power, 1);
+    return power;
+  }
+
 
 }

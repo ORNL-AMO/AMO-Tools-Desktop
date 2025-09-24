@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
 import { Settings } from '../../../../../shared/models/settings';
+import { ConvertCompressedAirInventoryService } from '../../../../convert-compressed-air-inventory.service';
 
 @Injectable()
 export class UnloadPointCatalogService {
 
-  constructor() { }
+  constructor(private convertCompressedAirService: ConvertCompressedAirInventoryService) { }
 
   setUnload(selectedCompressor: CompressedAirItem, settings: Settings): PerformancePoint {
     if (selectedCompressor.nameplateData.compressorType == 6) {
@@ -29,9 +30,7 @@ export class UnloadPointCatalogService {
       } else {
         defaultAirflow = this.calculateUnloadPointAirFlow(selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.airflow, selectedCompressor.compressedAirControlsProperties.unloadPointCapacity);
       }
-      //TODO: CA Inventory Conversion
-      //return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
-      return defaultAirflow;
+      return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
     } else {
       return selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.airflow;
     }
@@ -52,9 +51,7 @@ export class UnloadPointCatalogService {
         //variable displacement
         defaultPower = this.calculateUnloadPointPower(selectedCompressor.compressedAirDesignDetailsProperties.noLoadPowerFM, selectedCompressor.compressedAirControlsProperties.unloadPointCapacity, 2, selectedCompressor.compressedAirPerformancePointsProperties.maxFullFlow.power);
       }
-      //TODO: CA Inventory Conversion
-      //return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
-      return defaultPower;
+      return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
     }
     else {
       return selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.power;
@@ -70,9 +67,7 @@ export class UnloadPointCatalogService {
       } else {
         defaultPressure = this.calculateUnloadPointDischargePressure(selectedCompressor.compressedAirPerformancePointsProperties.maxFullFlow.dischargePressure, selectedCompressor.compressedAirDesignDetailsProperties.modulatingPressureRange, selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.airflow, selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.airflow);
       }
-      //TODO: CA Inventory Conversion
-      //return this.convertCompressedAirService.roundPressureForPresentation(defaultPressure, settings);
-      return defaultPressure;
+      return this.convertCompressedAirService.roundPressureForPresentation(defaultPressure, settings);
     } else {
       return selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.dischargePressure;
     }
