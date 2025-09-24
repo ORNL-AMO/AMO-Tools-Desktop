@@ -92,8 +92,6 @@ export class EndUsesChartComponent implements OnInit {
   }
 
   setChartData() {
-    //TODO warnings
-    //this.hasInvalidEndUsesWarning = undefined;
     if (this.selectedSystem.endUses.length > 0) {
       this.showChart = true;
       let endUseEnergy: EndUseEnergy = this.endUsesService.getEndUseEnergyData(this.selectedSystem);
@@ -101,24 +99,7 @@ export class EndUsesChartComponent implements OnInit {
       let otherEndUseData: EndUseEnergyData;
       if (endUseEnergy.hasValidEndUses) {
         if (endUseEnergyData.length > 10) {
-          let endUseEnergyDataCopy: Array<EndUseEnergyData> = JSON.parse(JSON.stringify(endUseEnergyData));
           endUseEnergyData = endUseEnergyData.slice(0, 10);
-          // otherEndUseData = endUseEnergyDataCopy.slice(10, endUseEnergyDataCopy.length).reduce((totalOtherEnergyData, data) => {
-          //   let thing = {
-          //     dayTypeAverageAirFlow: totalOtherEnergyData.dayTypeAverageAirFlow += data.averageAirFlow,
-          //     dayTypeAverageAirflowPercent: totalOtherEnergyData.dayTypeAverageAirflowPercent += data.averageAirflowPercent,
-          //     endUseName: totalOtherEnergyData.endUseName,
-          //     endUseId: totalOtherEnergyData.endUseId,
-          //     color: undefined,
-          //   };
-          //   return thing;
-          // }, {
-          //   dayTypeAverageAirFlow: 0,
-          //   dayTypeAverageAirflowPercent: 0,
-          //   endUseName: 'Other End Use Energy',
-          //   endUseId: Math.random().toString(36).substr(2, 9),
-          //   color: undefined,
-          // });
         }
       } else {
         this.showChart = false;

@@ -19,26 +19,19 @@ export class EndUsesService {
     this.selectedEndUse = new BehaviorSubject<EndUse>(undefined);
   }
 
-  //TODO
-  isEndUseValid(endUse: EndUse, compressedAirInventoryData: CompressedAirInventoryData, settings: Settings): boolean {
-    //   let allEndUseFieldsValid: boolean = true;
-    //   let dayTypeBaselineResults: BaselineResults = this.getBaselineResults(compressedAirInventoryData, settings);
-    //   let currentDayTypeResults: BaselineResult = dayTypeBaselineResults.dayTypeResults.find(result => result.dayTypeId == compressedAirInventoryData.endUseData.endUseDayTypeSetup.selectedDayTypeId);
-
-    //   let isValidEndUse: boolean = this.getEndUseFormFromObj(endUse, compressedAirInventoryData.endUseData.endUses).valid;
-    //   if (isValidEndUse) {
-    //     let dayTypeEndUse: DayTypeEndUse = endUse.dayTypeEndUses.find(dayTypeUse => dayTypeUse.dayTypeId == compressedAirInventoryData.endUseData.endUseDayTypeSetup.selectedDayTypeId);
-    //     if (dayTypeEndUse) {
-    //       let isValidDayTypeEndUse: boolean = this.dayTypeUseFormService.getDayTypeUseForm(dayTypeEndUse, currentDayTypeResults.averageAirFlow).valid;
-    //       if (!isValidDayTypeEndUse) {
-    //         allEndUseFieldsValid = false;
-    //       }
-    //     }
-    //   } else {
-    //     allEndUseFieldsValid = false;
-    //   }
-    //   return allEndUseFieldsValid;
-    return true;
+  isEndUseValid(endUse: EndUse, endUses: Array<EndUse>, system: CompressedAirInventorySystem, settings: Settings): boolean {
+    let allEndUseFieldsValid: boolean = true;
+    let isValidEndUse: boolean = this.getEndUseFormFromObj(endUse, endUses).valid;
+    if (isValidEndUse) {
+      if (endUse.averageMeasuredPressure && endUse.averageRequiredPressure) {
+        if (system.knownTotalAirflow <= endUse.averageAirflow) {
+          allEndUseFieldsValid = false;
+        }
+      }
+    } else {
+      allEndUseFieldsValid = false;
+    }
+    return allEndUseFieldsValid;
   }
 
   getNewEndUse(): EndUse {
