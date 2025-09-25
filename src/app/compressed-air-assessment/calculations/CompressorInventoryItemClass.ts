@@ -1,4 +1,4 @@
-import { CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoints, SystemInformation } from "../../shared/models/compressed-air-assessment";
+import { AdjustCascadingSetPoints, CascadingSetPointData, CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoints, ReduceSystemAirPressure, SystemInformation } from "../../shared/models/compressed-air-assessment";
 import { Settings } from "../../shared/models/settings";
 import { CompressorPerformancePointsClass } from "./performancePoints/CompressorPerformancePointsClass";
 
@@ -34,8 +34,90 @@ export class CompressorInventoryItemClass {
         // this.isReplacementCompressor = inventoryItem.isReplacementCompressor;
     }
 
-    adjustCompressorPerformancePointsWithSequencer(systemInformation: SystemInformation, settings: Settings) {
-        this.performancePoints.adjustCompressorPerformancePointsWithSequencer(systemInformation, this.nameplateData, this.centrifugalSpecifics, this.designDetails, this.compressorControls, settings);
+    adjustCompressorPerformancePointsWithSequencer(targetPressure: number, variance: number, systemInformation: SystemInformation, settings: Settings) {
+        this.performancePoints.fullLoad.isDefaultPressure = false;
+        this.performancePoints.fullLoad.isDefaultAirFlow = true;
+        this.performancePoints.fullLoad.isDefaultPower = true;
+        this.performancePoints.maxFullFlow.isDefaultAirFlow = true;
+        this.performancePoints.maxFullFlow.isDefaultPressure = true;
+        this.performancePoints.maxFullFlow.isDefaultPower = true;
+        this.performancePoints.noLoad.isDefaultAirFlow = true;
+        this.performancePoints.noLoad.isDefaultPressure = true;
+        this.performancePoints.noLoad.isDefaultPower = true;
+        this.performancePoints.unloadPoint.isDefaultAirFlow = true;
+        this.performancePoints.unloadPoint.isDefaultPressure = true;
+        this.performancePoints.unloadPoint.isDefaultPower = true;
+        this.performancePoints.blowoff.isDefaultAirFlow = true;
+        this.performancePoints.blowoff.isDefaultPressure = true;
+        this.performancePoints.blowoff.isDefaultPower = true;
+
+        this.performancePoints.fullLoad.dischargePressure = targetPressure - variance;
+
+        if (this.compressorControls.controlType == 2 || this.compressorControls.controlType == 3 || this.compressorControls.controlType == 8 || this.compressorControls.controlType == 10 || this.compressorControls.controlType == 5) {
+            this.performancePoints.unloadPoint.dischargePressure = targetPressure + variance;
+            this.performancePoints.unloadPoint.isDefaultPressure = false;
+            if (this.performancePoints.maxFullFlow.dischargePressure > this.performancePoints.fullLoad.dischargePressure) {
+                this.performancePoints.maxFullFlow.dischargePressure = this.performancePoints.fullLoad.dischargePressure;
+                this.performancePoints.maxFullFlow.isDefaultPressure = false;
+            }
+        } else if (this.compressorControls.controlType == 1) {
+            this.performancePoints.noLoad.dischargePressure = targetPressure + variance;
+            this.performancePoints.noLoad.isDefaultPressure = false;
+        } else if (this.compressorControls.controlType == 6 || this.compressorControls.controlType == 4) {
+            this.performancePoints.maxFullFlow.dischargePressure = targetPressure + variance;
+            this.performancePoints.maxFullFlow.isDefaultPressure = false;
+        } else if (this.compressorControls.controlType == 7 || this.compressorControls.controlType == 9) {
+            this.performancePoints.blowoff.dischargePressure = targetPressure + variance;
+            this.performancePoints.blowoff.isDefaultPressure = false;
+        }
+        this.performancePoints.updatePerformancePoints(this.nameplateData, this.centrifugalSpecifics, this.designDetails, this.compressorControls, systemInformation.atmosphericPressure, settings);
+    }
+
+    reduceSystemPressure(reduceSystemAirPressure: ReduceSystemAirPressure, atmosphericPressure: number, settings: Settings) {
+        this.performancePoints.fullLoad.dischargePressure = this.performancePoints.fullLoad.dischargePressure - reduceSystemAirPressure.averageSystemPressureReduction;
+        this.performancePoints.fullLoad.isDefaultPressure = false;
+        this.performancePoints.fullLoad.isDefaultAirFlow = false;
+        this.performancePoints.fullLoad.isDefaultPower = true;
+        this.performancePoints.maxFullFlow.isDefaultAirFlow = true;
+        this.performancePoints.maxFullFlow.isDefaultPressure = true;
+        this.performancePoints.maxFullFlow.isDefaultPower = true;
+        if (this.compressorControls.controlType != 1 && this.compressorControls.controlType != 7 && this.compressorControls.controlType != 9) {
+            this.performancePoints.maxFullFlow.isDefaultPressure = false;
+            this.performancePoints.maxFullFlow.dischargePressure = this.performancePoints.maxFullFlow.dischargePressure - reduceSystemAirPressure.averageSystemPressureReduction;
+        }
+        this.performancePoints.noLoad.isDefaultAirFlow = true;
+        this.performancePoints.noLoad.isDefaultPressure = true;
+        this.performancePoints.noLoad.isDefaultPower = true;
+        this.performancePoints.unloadPoint.isDefaultAirFlow = true;
+        this.performancePoints.unloadPoint.isDefaultPressure = true;
+        this.performancePoints.unloadPoint.isDefaultPower = true;
+        this.performancePoints.blowoff.isDefaultAirFlow = true;
+        this.performancePoints.blowoff.isDefaultPressure = true;
+        this.performancePoints.blowoff.isDefaultPower = true;
+        this.performancePoints.updatePerformancePoints(this.nameplateData, this.centrifugalSpecifics, this.designDetails, this.compressorControls, atmosphericPressure, settings);
+    }
+
+    adjustCascadingSetPoints(adjustCascadingSetPoints: AdjustCascadingSetPoints, atmosphericPressure: number, settings: Settings) {
+        let setPointData: CascadingSetPointData = adjustCascadingSetPoints.setPointData.find(data => { return data.compressorId == this.itemId });
+        this.performancePoints.fullLoad.dischargePressure = setPointData.fullLoadDischargePressure;
+        this.performancePoints.fullLoad.isDefaultPressure = false;
+        this.performancePoints.fullLoad.isDefaultAirFlow = false;
+        this.performancePoints.fullLoad.isDefaultPower = true;
+        this.performancePoints.maxFullFlow.isDefaultAirFlow = true;
+        this.performancePoints.maxFullFlow.isDefaultPressure = true;
+        this.performancePoints.maxFullFlow.isDefaultPower = true;
+        this.performancePoints.maxFullFlow.isDefaultPressure = false;
+        this.performancePoints.maxFullFlow.dischargePressure = setPointData.maxFullFlowDischargePressure;
+        this.performancePoints.noLoad.isDefaultAirFlow = true;
+        this.performancePoints.noLoad.isDefaultPressure = true;
+        this.performancePoints.noLoad.isDefaultPower = true;
+        this.performancePoints.unloadPoint.isDefaultAirFlow = true;
+        this.performancePoints.unloadPoint.isDefaultPressure = true;
+        this.performancePoints.unloadPoint.isDefaultPower = true;
+        this.performancePoints.blowoff.isDefaultAirFlow = true;
+        this.performancePoints.blowoff.isDefaultPressure = true;
+        this.performancePoints.blowoff.isDefaultPower = true;
+        this.performancePoints.updatePerformancePoints(this.nameplateData, this.centrifugalSpecifics, this.designDetails, this.compressorControls, atmosphericPressure, settings)
     }
 
     toModel(): CompressorInventoryItem {

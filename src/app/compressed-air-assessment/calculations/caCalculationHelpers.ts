@@ -1,7 +1,8 @@
-import { CompressorInventoryItem, ProfileSummary, ProfileSummaryData } from "../../shared/models/compressed-air-assessment";
+import { CompressedAirDayType, CompressorInventoryItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from "../../shared/models/compressed-air-assessment";
 import { EemSavingsResults } from "./caCalculationModels";
 import * as _ from 'lodash';
 import { CompressorInventoryItemClass } from "./CompressorInventoryItemClass";
+import { CompressedAirProfileSummary } from "./CompressedAirProfileSummary";
 
 export function getEmptyEemSavings(): EemSavingsResults {
     return {
@@ -89,4 +90,78 @@ export function getAvgPercentCapacity(profileSummaryData: Array<ProfileSummaryDa
     });
     let avgPercentCapacity: number = _.mean(percentCapacityData);
     return avgPercentCapacity;
+}
+
+export function getProfileSummaryTotals(selectedHourInterval: number,
+    profileSummary: Array<CompressedAirProfileSummary>,
+    isBaseline: boolean,
+    selectedDayType: CompressedAirDayType,
+    improveEndUseEfficiency: ImproveEndUseEfficiency): Array<ProfileSummaryTotal> {
+    let totalSystemCapacity: number = getTotalCapacity(this.inventoryItems);
+    let totalFullLoadPower: number = getTotalPower(this.inventoryItems);
+    //already baseline summary by day type
+    //let allData: Array<ProfileSummaryData> = new Array();
+    // this.profileSummary.forEach(summary => {
+    //   if (summary.dayTypeId == selectedDayType.dayTypeId) {
+    //     allData = allData.concat(summary.profileSummaryData);
+    //   }
+    // });
+    let allData: Array<ProfileSummaryData> = profileSummary.flatMap(summary => {
+        return summary.profileSummaryData;
+    });
+    let profileSummaryTotals: Array<ProfileSummaryTotal> = new Array();
+    for (let interval = 0; interval < 24;) {
+        let totalAirFlow: number = 0;
+        let compressorPower: number = 0;
+        allData.forEach(dataItem => {
+            if (dataItem.timeInterval == interval && dataItem.order != 0) {
+                if (isNaN(dataItem.airflow) == false) {
+                    totalAirFlow += dataItem.airflow;
+                }
+                if (isNaN(dataItem.power) == false) {
+                    compressorPower += dataItem.power;
+                }
+            }
+        });
+        //no aux power for baseline
+        let auxiliaryPower: number = 0;
+        // Get auxiliary power if not baseline
+        if (!isBaseline) {
+            auxiliaryPower = getTotalAuxiliaryPower(selectedDayType, interval, improveEndUseEfficiency);
+        }
+
+        profileSummaryTotals.push({
+            auxiliaryPower: auxiliaryPower,
+            airflow: totalAirFlow,
+            power: compressorPower,
+            totalPower: compressorPower,
+            percentCapacity: (totalAirFlow / totalSystemCapacity) * 100,
+            percentPower: (compressorPower / totalFullLoadPower) * 100,
+            timeInterval: interval
+        });
+        interval = interval + selectedHourInterval;
+    }
+    return profileSummaryTotals;
+}
+
+export function getTotalAuxiliaryPower(selectedDayType: CompressedAirDayType, interval: number, improveEndUseEfficiency?: ImproveEndUseEfficiency): number {
+    if (!improveEndUseEfficiency || improveEndUseEfficiency.order == 100) {
+        return 0;
+    } else {
+        let auxiliaryPower: number = 0;
+        improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
+            if (item.substituteAuxiliaryEquipment) {
+                let reductionData: EndUseEfficiencyReductionData = item.reductionData.find(data => {
+                    return data.dayTypeId == selectedDayType.dayTypeId;
+                });
+                let data: { hourInterval: number, applyReduction: boolean, reductionAmount: number } = reductionData.data.find(d => { return d.hourInterval == interval });
+                if (item.reductionType == 'Fixed' && data.applyReduction) {
+                    auxiliaryPower += item.equipmentDemand;
+                } else if (item.reductionType == 'Variable' && data.reductionAmount) {
+                    auxiliaryPower += item.equipmentDemand;
+                }
+            }
+        });
+        return auxiliaryPower;
+    }
 }

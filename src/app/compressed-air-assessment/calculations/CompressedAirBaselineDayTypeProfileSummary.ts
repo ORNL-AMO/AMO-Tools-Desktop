@@ -37,7 +37,7 @@ export class CompressedAirBaselineDayTypeProfileSummary {
         //Adjust perfomance points for sequencer
         if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
             this.inventoryItems.forEach(item => {
-                item.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation, settings);
+                item.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation.targetPressure, compressedAirAssessment.systemInformation.variance, compressedAirAssessment.systemInformation, settings);
             })
         }
         this.setDayTypeSummary(_compressedAirCalculationService, settings, compressedAirAssessment.systemInformation.atmosphericPressure, compressedAirAssessment.systemInformation.totalAirStorage)

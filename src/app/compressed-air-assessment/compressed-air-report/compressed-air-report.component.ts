@@ -15,6 +15,7 @@ import { CompressedAirAssessmentBaselineResults } from '../calculations/Compress
 import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../calculations/caCalculationModels';
+import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
 
 @Component({
   selector: 'app-compressed-air-report',
@@ -73,7 +74,8 @@ export class CompressedAirReportComponent implements OnInit {
       this.baselineProfileSummaries = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries;
 
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
-        let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, undefined, this.baselineResults);
+        let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
+        let modificationResults: CompressedAirAssessmentResult = compressedAirAssessmentModificationResults.getModificationResults();
         this.assessmentResults.push(modificationResults);
         let validation: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, this.baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings, modificationResults)
         this.combinedDayTypeResults.push({
