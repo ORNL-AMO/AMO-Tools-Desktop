@@ -44,8 +44,6 @@ export class DesignDetailsCatalogService {
       averageLoadFactorAndMotorEfficiencyValidators = [Validators.required, Validators.min(0), Validators.max(100)];
     }
 
-
-    //todo set validators based on control and comp type
     let form: FormGroup = this.formBuilder.group({
       blowdownTime: [designDetails.blowdownTime, blowdownTimeValidators],
       modulatingPressureRange: [designDetails.modulatingPressureRange, modulatingPressureValidators],

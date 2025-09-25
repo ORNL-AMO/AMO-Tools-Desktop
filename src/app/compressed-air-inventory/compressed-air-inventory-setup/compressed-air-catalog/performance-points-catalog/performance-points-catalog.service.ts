@@ -184,14 +184,6 @@ export class PerformancePointsCatalogService {
 
     if (performancePoint.dischargePressure !== null) {
       switch (pointName) {
-        // case 'fullLoad':
-        //   //TODO: CA Inventory validation
-        //   if (systemInformation.multiCompressorSystemControls == 'isentropicEfficiency') {
-        //     pressureValidators.push(Validators.min(systemInformation.plantMaxPressure));
-        //   } else {
-        //     pressureValidators.push(Validators.min(0));
-        //   }
-        //   break;
         case 'maxFullFlow':
           if (compressor.compressedAirControlsProperties.controlType == 4 || compressor.compressedAirControlsProperties.controlType == 5 || compressor.compressedAirControlsProperties.controlType == 6) {
             pressureValidators.push(GreaterThanValidator.greaterThan(compressor.compressedAirPerformancePointsProperties.fullLoad.dischargePressure));

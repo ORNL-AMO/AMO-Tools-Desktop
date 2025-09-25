@@ -3,11 +3,12 @@ import { PerformancePointsCatalogService } from '../performance-points-catalog.s
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
 import * as regression from 'regression';
+import { ConvertCompressedAirInventoryService } from '../../../../convert-compressed-air-inventory.service';
 
 @Injectable()
 export class MaxFullFlowCatalogService {
 
-  constructor(private performancePointsCatalogService: PerformancePointsCatalogService) { }
+  constructor(private performancePointsCatalogService: PerformancePointsCatalogService, private convertCompressedAirService: ConvertCompressedAirInventoryService) { }
 
   setMaxFullFlow(selectedCompressor: CompressedAirItem, atmosphericPressure: number, settings: Settings): PerformancePoint {
     selectedCompressor.compressedAirPerformancePointsProperties.maxFullFlow.dischargePressure = this.getMaxFullFlowPressure(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.maxFullFlow.isDefaultPressure, settings);
@@ -28,9 +29,7 @@ export class MaxFullFlowCatalogService {
         defaultAirflow = this.calculateCentrifugalAirflow(selectedCompressor);
         // defaultAirflow = selectedCompressor.performancePoints.fullLoad.airflow;
       }
-      //TODO: CA Inventory Conversion
-      //return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
-      return defaultAirflow;
+      return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
     } else {
       return selectedCompressor.compressedAirPerformancePointsProperties.maxFullFlow.airflow;
     }
@@ -46,9 +45,7 @@ export class MaxFullFlowCatalogService {
         //centrifugal
         defaultPower = selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.power;
       }
-      //TODO: CA Inventory Conversion
-      //return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
-      return defaultPower;
+      return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
     } else {
       return selectedCompressor.compressedAirPerformancePointsProperties.maxFullFlow.power;
     }
@@ -56,10 +53,7 @@ export class MaxFullFlowCatalogService {
 
   getMaxFullFlowPressure(selectedCompressor: CompressedAirItem, isDefault: boolean, settings: Settings): number {
     if (isDefault) {
-      //all control types the same
-      //TODO: CA Inventory Conversion
-      //return this.convertCompressedAirService.roundPressureForPresentation(selectedCompressor.compressedAirDesignDetailsProperties.maxFullFlowPressure, settings);
-      return selectedCompressor.compressedAirDesignDetailsProperties.maxFullFlowPressure;
+      return this.convertCompressedAirService.roundPressureForPresentation(selectedCompressor.compressedAirDesignDetailsProperties.maxFullFlowPressure, settings);
     } else {
       return selectedCompressor.compressedAirPerformancePointsProperties.maxFullFlow.dischargePressure;
     }

@@ -51,9 +51,7 @@ export class EndUsesSetupComponent implements OnInit {
         this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryData.systems[0].id);
       } else {
         let findSystem: CompressedAirInventorySystem = this.compressedAirInventoryData.systems.find(system => { return system.id == val });
-        //todo repalce catalog with endUses
         if (findSystem) {
-          //this.showDeleteCompressedAirButton = (findSystem.catalog.length > 1);
           let selectedEndUseItem: EndUse = this.endUsesService.selectedEndUse.getValue();
           this.selectedEndUses = findSystem.endUses;
           if (selectedEndUseItem) {

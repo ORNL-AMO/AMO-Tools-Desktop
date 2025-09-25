@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
+import { ConvertCompressedAirInventoryService } from '../../../../convert-compressed-air-inventory.service';
 
 @Injectable()
 export class NoLoadCatalogService {
 
-  constructor() { }
+  constructor(private convertCompressedAirService: ConvertCompressedAirInventoryService) { }
 
   setNoLoad(selectedCompressor: CompressedAirItem, settings: Settings): PerformancePoint {
     selectedCompressor.compressedAirPerformancePointsProperties.noLoad.dischargePressure = this.getNoLoadPressure(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.noLoad.isDefaultPressure, settings);
@@ -29,9 +30,7 @@ export class NoLoadCatalogService {
         //rest of options
         defaultPressure = selectedCompressor.compressedAirControlsProperties.unloadSumpPressure;
       }
-      //TODO: CA Inventory Conversion
-      //return this.convertCompressedAirService.roundPressureForPresentation(defaultPressure, settings);
-      return defaultPressure;
+      return this.convertCompressedAirService.roundPressureForPresentation(defaultPressure, settings);
     } else {
       return selectedCompressor.compressedAirPerformancePointsProperties.noLoad.dischargePressure;
     }
@@ -57,9 +56,7 @@ export class NoLoadCatalogService {
       } else {
         defaultPower = this.calculateNoLoadPower(selectedCompressor.compressedAirDesignDetailsProperties.noLoadPowerUL, selectedCompressor.nameplateData.totalPackageInputPower, selectedCompressor.compressedAirDesignDetailsProperties.designEfficiency);
       }
-      //TODO: CA Inventory Conversion
-      //return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
-      return defaultPower;
+      return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
     } else {
       return selectedCompressor.compressedAirPerformancePointsProperties.noLoad.power;
     }
