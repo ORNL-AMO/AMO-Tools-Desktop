@@ -19,9 +19,9 @@ export class EndUsesService {
     this.selectedEndUse = new BehaviorSubject<EndUse>(undefined);
   }
 
-  isEndUseValid(endUse: EndUse, endUses: Array<EndUse>, system: CompressedAirInventorySystem, settings: Settings): boolean {
+  isEndUseValid(endUse: EndUse, system: CompressedAirInventorySystem): boolean {
     let allEndUseFieldsValid: boolean = true;
-    let isValidEndUse: boolean = this.getEndUseFormFromObj(endUse, endUses).valid;
+    let isValidEndUse: boolean = this.getEndUseFormFromObj(endUse, system.endUses).valid;
     if (isValidEndUse) {
       if (endUse.averageMeasuredPressure && endUse.averageRequiredPressure) {
         if (system.knownTotalAirflow <= endUse.averageAirflow) {
