@@ -1,7 +1,7 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 import { AssessmentCo2SavingsService } from "../../shared/assessment-co2-savings/assessment-co2-savings.service";
 import { roundVal } from "../../shared/helperFunctions";
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from "../../shared/models/compressed-air-assessment";
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, CompressorSummary, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from "../../shared/models/compressed-air-assessment";
 import { Settings } from "../../shared/models/settings";
 import { CompressedAirCalculationService, CompressorCalcResult } from "../compressed-air-calculation.service";
 import { getTotalCapacity, getTotalPower } from "./caCalculationHelpers";
@@ -241,5 +241,24 @@ export class CompressedAirBaselineDayTypeProfileSummary {
             totalAnnualOperatingCost: demandCost + this.savingsItem.cost,
             maxAirFlow: maxAirFlow
         }
+    }
+
+    getCompressorDayTypeSummaries(settings: Settings): Array<CompressorSummary> {
+        let compressorSummaries: Array<CompressorSummary> = new Array<CompressorSummary>();
+        this.profileSummary.forEach(profile => {
+            let specificPowerAvgLoad: number = (profile.avgPower / profile.avgAirflow) * 100;
+            specificPowerAvgLoad = roundVal(specificPowerAvgLoad, 4);
+            let compressor: CompressorInventoryItemClass = this.inventoryItems.find(compressor => { return compressor.itemId == profile.compressorId });
+            let ratedSpecificPower: number = compressor.getRatedSpecificPower();
+            let ratedIsentropicEfficiency: number = compressor.getRatedIsentropicEfficiency(settings);
+            let compressorSummary: CompressorSummary = {
+                dayType: this.dayType,
+                specificPowerAvgLoad: specificPowerAvgLoad,
+                ratedSpecificPower: ratedSpecificPower,
+                ratedIsentropicEfficiency: ratedIsentropicEfficiency
+            }
+            compressorSummaries.push(compressorSummary);
+        });
+        return compressorSummaries;
     }
 }

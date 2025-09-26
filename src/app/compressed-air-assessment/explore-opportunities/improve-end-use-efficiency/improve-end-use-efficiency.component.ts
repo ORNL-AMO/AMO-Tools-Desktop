@@ -9,12 +9,15 @@ import { ExploreOpportunitiesValidationService } from '../explore-opportunities-
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { ImproveEndUseEfficiencyService } from './improve-end-use-efficiency.service';
 import { BaselineResults } from '../../calculations/caCalculationModels';
+import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
-    selector: 'app-improve-end-use-efficiency',
-    templateUrl: './improve-end-use-efficiency.component.html',
-    styleUrls: ['./improve-end-use-efficiency.component.css'],
-    standalone: false
+  selector: 'app-improve-end-use-efficiency',
+  templateUrl: './improve-end-use-efficiency.component.html',
+  styleUrls: ['./improve-end-use-efficiency.component.css'],
+  standalone: false
 })
 export class ImproveEndUseEfficiencyComponent implements OnInit {
 
@@ -33,7 +36,9 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   systemProfileSetup: SystemProfileSetup;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private improveEndUseEfficiencyService: ImproveEndUseEfficiencyService,
-    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -169,14 +174,12 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   }
 
   setBaselineProfileSummaries() {
-    this.baselineProfileSummaries = new Array();
-    this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-      let profileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType, this.settings);
-      let profileSummaryTotals: Array<ProfileSummaryTotal> = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(this.compressedAirAssessment.compressorInventoryItems, dayType, profileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
-      this.baselineProfileSummaries.push({
-        dayType: dayType,
-        profileSummaryTotals: profileSummaryTotals
-      });
+    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+    this.baselineProfileSummaries = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.map(dayTypeProfileSummary => {
+      return {
+        dayType: dayTypeProfileSummary.dayType,
+        profileSummaryTotals: dayTypeProfileSummary.profileSummaryTotals
+      }
     });
   }
 

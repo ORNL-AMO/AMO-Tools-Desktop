@@ -1,3 +1,5 @@
+import { ConvertValue } from "../../shared/convert-units/ConvertValue";
+import { roundVal } from "../../shared/helperFunctions";
 import { AdjustCascadingSetPoints, CascadingSetPointData, CentrifugalSpecifics, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoints, ReduceSystemAirPressure, SystemInformation } from "../../shared/models/compressed-air-assessment";
 import { Settings } from "../../shared/models/settings";
 import { CompressorPerformancePointsClass } from "./performancePoints/CompressorPerformancePointsClass";
@@ -137,5 +139,24 @@ export class CompressorInventoryItemClass {
             // isReplacementCompressor: this.isReplacementCompressor
 
         }
+    }
+
+    getRatedSpecificPower(): number {
+        let ratedSpecificPower: number = (this.nameplateData.totalPackageInputPower / this.nameplateData.fullLoadRatedCapacity) * 100;
+        return ratedSpecificPower;
+    }
+
+    getRatedIsentropicEfficiency(settings: Settings): number {
+        let ratedSpecificPower: number = this.getRatedSpecificPower();
+        let dischargePressure: number = this.nameplateData.fullLoadOperatingPressure;
+        if (settings.unitsOfMeasure == 'Metric') {
+            dischargePressure = new ConvertValue(dischargePressure, 'barg', 'psig').convertedValue;
+            let conversionHelper: number = new ConvertValue(1, 'm3/min', 'ft3/min').convertedValue;
+            ratedSpecificPower = roundVal((ratedSpecificPower / conversionHelper), 4);
+        }
+        let subNum: number = Math.pow(((dischargePressure + 14.5) / 14.5), 0.2857);
+        let ratedIsentropicEfficiency: number = ((16.52 * (subNum - 1)) / ratedSpecificPower) * 100;
+        ratedIsentropicEfficiency = roundVal(ratedIsentropicEfficiency, 4);
+        return ratedIsentropicEfficiency;
     }
 }

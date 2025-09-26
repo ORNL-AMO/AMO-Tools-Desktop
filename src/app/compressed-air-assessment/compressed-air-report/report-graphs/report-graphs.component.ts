@@ -1,9 +1,10 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../../calculations/caCalculationModels';
+import { DayTypeModificationResult } from '../../calculations/caCalculationModels';
 import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../../../shared/models/compressed-air-assessment';
 import { CurrencyPipe } from '@angular/common';
 import { PlotlyService } from 'angular-plotly.js';
 import { CompressedAirModificationValid } from '../../explore-opportunities/explore-opportunities-validation.service';
+import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
 
 @Component({
     selector: 'app-report-graphs',
@@ -13,7 +14,7 @@ import { CompressedAirModificationValid } from '../../explore-opportunities/expl
 })
 export class ReportGraphsComponent implements OnInit {
   @Input()
-  assessmentResults: Array<CompressedAirAssessmentResult>;
+  assessmentResults: Array<CompressedAirAssessmentModificationResults>;
   @Input()
   combinedDayTypeResults: Array<{modification: Modification, combinedResults: DayTypeModificationResult, validation: CompressedAirModificationValid}>;
   @Input()

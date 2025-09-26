@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import { CompressorInventoryItemClass } from '../../CompressorInventoryItemClass';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirProfileSummary } from '../../CompressedAirProfileSummary';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 
 export function systemPressureChangeAdjustProfile(originalCompressors: Array<CompressorInventoryItemClass>, settings: Settings, adjustedCompressors: Array<CompressorInventoryItemClass>, atmosphericPressure: number,
     profileSummary: Array<CompressedAirProfileSummary>
@@ -45,16 +46,14 @@ export function calculateReducedAirFlow(c_usage: number, adjustedFullLoadDischar
             return reduceFlow;
         } else {
             //for metric convert values to imperial calcs and then convert back to metric
-            //TODO: migrate convert units service to class
-            // let c_usage_imperial: number = this.convertUnitsService.value(JSON.parse(JSON.stringify(c_usage))).from('m3/min').to('ft3/min');
-            // let adjustedFullLoadDischargePressureImperial: number = this.convertUnitsService.value(JSON.parse(JSON.stringify(adjustedFullLoadDischargePressure))).from('barg').to('psig');
-            // let p_alt_imperial: number = this.convertUnitsService.value(JSON.parse(JSON.stringify(p_alt))).from('kPaa').to('psia');
-            // let ogDischargePressureImperial: number = this.convertUnitsService.value(JSON.parse(JSON.stringify(originalFullLoadDischargePressure))).from('barg').to('psig');
-            // let p: number = (adjustedFullLoadDischargePressureImperial + p_alt_imperial) / (ogDischargePressureImperial + 14.7);
-            // let reducedFlow: number = (c_usage_imperial - (c_usage_imperial - (c_usage_imperial * p)) * .6);
-            // reducedFlow = this.convertUnitsService.value(reducedFlow).from('ft3/min').to('m3/min');
-            // return reducedFlow;
-            return c_usage
+            let c_usage_imperial: number = new ConvertValue(c_usage, 'm3/min', 'ft3/min').convertedValue;
+            let adjustedFullLoadDischargePressureImperial: number = new ConvertValue(adjustedFullLoadDischargePressure, 'barg', 'psig').convertedValue;
+            let p_alt_imperial: number = new ConvertValue(p_alt, 'kPaa', 'psia').convertedValue;
+            let ogDischargePressureImperial: number = new ConvertValue(originalFullLoadDischargePressure, 'barg', 'psig').convertedValue;
+            let p: number = (adjustedFullLoadDischargePressureImperial + p_alt_imperial) / (ogDischargePressureImperial + 14.7);
+            let reducedFlow: number = (c_usage_imperial - (c_usage_imperial - (c_usage_imperial * p)) * .6);
+            reducedFlow = new ConvertValue(reducedFlow, 'ft3/min', 'm3/min').convertedValue;
+            return reducedFlow;
         }
     }
 }

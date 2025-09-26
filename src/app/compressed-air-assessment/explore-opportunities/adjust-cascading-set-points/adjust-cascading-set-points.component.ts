@@ -9,12 +9,13 @@ import { PerformancePointsFormService } from '../../inventory/performance-points
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { AdjustCascadingSetPointsService, CompressorForm } from './adjust-cascading-set-points.service';
+import { CompressorInventoryItemClass } from '../../calculations/CompressorInventoryItemClass';
 
 @Component({
-    selector: 'app-adjust-cascading-set-points',
-    templateUrl: './adjust-cascading-set-points.component.html',
-    styleUrls: ['./adjust-cascading-set-points.component.css'],
-    standalone: false
+  selector: 'app-adjust-cascading-set-points',
+  templateUrl: './adjust-cascading-set-points.component.html',
+  styleUrls: ['./adjust-cascading-set-points.component.css'],
+  standalone: false
 })
 export class AdjustCascadingSetPointsComponent implements OnInit {
 
@@ -81,7 +82,11 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
         this.inventoryItems = JSON.parse(JSON.stringify(this.compressedAirAssessment.compressorInventoryItems));
         let reduceSystemAirPressure: ReduceSystemAirPressure = this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure;
         if (reduceSystemAirPressure.order != 100 && (this.adjustCascadingSetPoints.order > reduceSystemAirPressure.order)) {
-          this.inventoryItems = this.compressedAirAssessmentResultsService.reduceSystemAirPressureAdjustCompressors(this.inventoryItems, this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure, this.compressedAirAssessment.systemInformation.atmosphericPressure, this.settings)
+          let inventoryItemsClass: Array<CompressorInventoryItemClass> = this.inventoryItems.map(item => { return new CompressorInventoryItemClass(item) });
+          inventoryItemsClass.forEach(itemClass => {
+            itemClass.reduceSystemPressure(reduceSystemAirPressure, this.compressedAirAssessment.systemInformation.atmosphericPressure, this.settings);
+          });
+          this.inventoryItems = inventoryItemsClass.map(itemClass => { return itemClass.toModel() });
         }
         this.checkAdjustCascadingPoints();
         this.compressorForms = this.adjustCascadingSetPointsService.getFormFromObj(this.adjustCascadingSetPoints.setPointData);

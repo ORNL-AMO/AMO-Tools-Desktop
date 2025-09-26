@@ -1,5 +1,5 @@
 import { AssessmentCo2SavingsService } from "../../shared/assessment-co2-savings/assessment-co2-savings.service";
-import { CompressedAirAssessment } from "../../shared/models/compressed-air-assessment";
+import { CompressedAirAssessment, CompressorSummary } from "../../shared/models/compressed-air-assessment";
 import { Settings } from "../../shared/models/settings";
 import { CompressedAirCalculationService } from "../compressed-air-calculation.service";
 import { BaselineResult, BaselineResults } from "./caCalculationModels";
@@ -70,5 +70,14 @@ export class CompressedAirAssessmentBaselineResults {
                 maxAirFlow: maxAirflow
             }
         }
+    }
+
+    getCompressorSummaries(settings: Settings): Array<Array<CompressorSummary>> {
+        let dayTypeCompressorSummaries: Array<Array<CompressorSummary>> = new Array<Array<CompressorSummary>>();
+        this.baselineDayTypeProfileSummaries.forEach(baselineProfileSummary => {
+            let compressorSummaries: Array<CompressorSummary> = baselineProfileSummary.getCompressorDayTypeSummaries(settings);
+            dayTypeCompressorSummaries.push(compressorSummaries);
+        });
+        return dayTypeCompressorSummaries;
     }
 }

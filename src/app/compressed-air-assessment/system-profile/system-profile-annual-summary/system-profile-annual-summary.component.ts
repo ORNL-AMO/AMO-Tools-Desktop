@@ -7,6 +7,7 @@ import { BaselineResults } from '../../calculations/caCalculationModels';
 import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { CompressedAirProfileSummary } from '../../calculations/CompressedAirProfileSummary';
 
 @Component({
   selector: 'app-system-profile-annual-summary',
@@ -29,7 +30,6 @@ export class SystemProfileAnnualSummaryComponent implements OnInit {
   baselineProfileSummaries: Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }> = [];
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
     private compressedAirCalculationService: CompressedAirCalculationService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
@@ -40,12 +40,13 @@ export class SystemProfileAnnualSummaryComponent implements OnInit {
       this.compressedAirAssessment.compressorInventoryItems.forEach(compressor => {
         this.compressorAnnualSummaryOptions.push({ compressorName: compressor.name, compressorId: compressor.itemId });
       });
-      this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        let profileSumary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType, this.settings)
-        this.baselineProfileSummaries.push({
-          dayTypeId: dayType.dayTypeId,
-          profileSummary: profileSumary
-        });
+
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      this.baselineProfileSummaries = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.map(dayTypeProfileSummary => {
+        return {
+          dayTypeId: dayTypeProfileSummary.dayType.dayTypeId,
+          profileSummary: dayTypeProfileSummary.profileSummary
+        }
       });
     }
     this.setSelectedAnnualSummary();

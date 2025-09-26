@@ -4,18 +4,19 @@ import { InventoryService } from '../inventory/inventory.service';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../compressed-air-calculation.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 import { TraceData } from '../../shared/models/plotting';
 import { Settings } from '../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 import { CompressedAirAssessmentResult } from '../calculations/caCalculationModels';
+import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
-    selector: 'app-inventory-performance-profile',
-    templateUrl: './inventory-performance-profile.component.html',
-    styleUrls: ['./inventory-performance-profile.component.css'],
-    standalone: false
+  selector: 'app-inventory-performance-profile',
+  templateUrl: './inventory-performance-profile.component.html',
+  styleUrls: ['./inventory-performance-profile.component.css'],
+  standalone: false
 })
 export class InventoryPerformanceProfileComponent implements OnInit {
   @Input()
@@ -70,12 +71,12 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     'diamond-tall'
   ];
   unloadingControlTypes: Array<number> = [2, 3, 4, 5, 8, 10];
-  
+
   constructor(private inventoryService: InventoryService, private compressedAirCalculationService: CompressedAirCalculationService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
-    private plotlyService: PlotlyService) { }
+    private plotlyService: PlotlyService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   ngOnInit(): void {
     if (!this.settings) {
@@ -336,7 +337,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
               text: dataItem.data.map(cData => { return dataItem.compressorName }),
               hovertemplate: "%{text}: (Airflow: %{x:.2f}%, Power: %{y:.2f}%) <extra></extra>",
               mode: 'markers',
-              marker:{
+              marker: {
                 size: 12,
                 symbol: currentMarkerShape
               },
@@ -390,7 +391,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   getInventoryChartData(): Array<ProfileChartData> {
     let compressorInventory: Array<CompressorInventoryItem>;
-    if(this.inReport){
+    if (this.inReport) {
       compressorInventory = this.compressedAirAssessment.compressorInventoryItems;
     } else {
       compressorInventory = this.compressedAirAssessmentService.compressedAirAssessment.getValue().compressorInventoryItems;
@@ -426,12 +427,9 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     return chartData;
   }
   getAvgOpPointsData(): Array<ProfileChartData> {
-    let profileSummary: Array<ProfileSummary> = new Array<ProfileSummary>();
-    this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-      let profiles: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType, this.settings);
-      profiles.forEach(val => {
-        profileSummary.push(val);
-      });
+    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+    let profileSummary: Array<ProfileSummary> = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.flatMap(dayTypeProfileSummary => {
+      return dayTypeProfileSummary.profileSummary;
     });
     let chartData: Array<ProfileChartData> = new Array();
     if (this.showAvgOpPoints && this.showAllCompressors) {

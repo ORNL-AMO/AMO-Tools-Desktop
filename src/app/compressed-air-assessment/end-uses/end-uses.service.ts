@@ -127,20 +127,6 @@ export class EndUsesService {
     }
   }
 
-
-  // getBaselineResults(compressedAirAssessment: CompressedAirAssessment, settings: Settings): BaselineResults {
-  //   let dayTypeProfileSummaries = [];
-  //   compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-  //     let profileSumary: Array<ProfileSummary> = this.compressedAirResultsService.calculateBaselineDayTypeProfileSummary(compressedAirAssessment, dayType, settings)
-  //     dayTypeProfileSummaries.push({
-  //       dayTypeId: dayType.dayTypeId,
-  //       profileSummary: profileSumary
-  //     });
-  //   });
-
-  //   return this.compressedAirResultsService.calculateBaselineResults(compressedAirAssessment, settings, dayTypeProfileSummaries);
-  // }
-
   getSingleDayTypeEndUseResults(dayTypeEndUse: DayTypeEndUse, dayTypeBaselineResults: BaselineResult, endUse: EndUse): EndUseResults {
     // end use airflow / Average system flow for day type
     let dayTypeEndUseResult: EndUseResults = {

@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemInformation, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { Settings } from '../../../shared/models/settings';
+import { CompressedAirBaselineDayTypeProfileSummary } from '../../calculations/CompressedAirBaselineDayTypeProfileSummary';
+import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
     selector: 'app-system-profile-summary',
@@ -26,7 +28,8 @@ export class SystemProfileSummaryComponent implements OnInit {
   systemProfileSetup: SystemProfileSetup;
   systemInformation: SystemInformation;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -34,8 +37,9 @@ export class SystemProfileSummaryComponent implements OnInit {
       this.systemInformation = val.systemInformation;
       this.systemProfileSetup = val.systemProfile.systemProfileSetup;
       let selectedDayType: CompressedAirDayType = val.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == val.systemProfile.systemProfileSetup.dayTypeId });
-      this.profileSummary = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(val, selectedDayType, this.settings);
-      this.totals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(val.compressorInventoryItems, selectedDayType, this.profileSummary, val.systemProfile.systemProfileSetup.dataInterval);
+      let compressedAirBaselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = new CompressedAirBaselineDayTypeProfileSummary(val, selectedDayType, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      this.profileSummary = compressedAirBaselineDayTypeProfileSummary.profileSummary;
+      this.totals = compressedAirBaselineDayTypeProfileSummary.profileSummaryTotals;
       this.inventoryItems = val.compressorInventoryItems;
     });
   }

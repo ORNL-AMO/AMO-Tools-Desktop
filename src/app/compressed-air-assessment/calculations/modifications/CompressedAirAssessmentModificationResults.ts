@@ -2,7 +2,7 @@ import { AssessmentCo2SavingsService } from "../../../shared/assessment-co2-savi
 import { CompressedAirAssessment, Modification } from "../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../compressed-air-calculation.service";
-import { CompressedAirAssessmentResult } from "./../caCalculationModels";
+import { CompressedAirAssessmentResult, DayTypeModificationResult } from "./../caCalculationModels";
 import { CompressedAirAssessmentBaselineResults } from "./../CompressedAirAssessmentBaselineResults";
 import { CompressedAirModifiedDayTypeProfileSummary } from "./CompressedAirModifiedDayTypeProfileSummary";
 

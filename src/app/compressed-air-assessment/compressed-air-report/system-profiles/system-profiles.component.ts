@@ -3,6 +3,10 @@ import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfilesFo
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../../calculations/caCalculationModels';
+import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirBaselineDayTypeProfileSummary } from '../../calculations/CompressedAirBaselineDayTypeProfileSummary';
+import { CompressedAirModifiedDayTypeProfileSummary } from '../../calculations/modifications/CompressedAirModifiedDayTypeProfileSummary';
 
 @Component({
     selector: 'app-system-profiles',
@@ -14,9 +18,9 @@ export class SystemProfilesComponent implements OnInit {
   @Input()
   compressedAirAssessment: CompressedAirAssessment;
   @Input()
-  baselineProfileSummaries: Array<{ profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType }>;
+  compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults
   @Input()
-  assessmentResults: Array<CompressedAirAssessmentResult>;
+  assessmentResults: Array<CompressedAirAssessmentModificationResults>;
   @Input()
   settings: Settings;
   @Input()
@@ -41,17 +45,19 @@ export class SystemProfilesComponent implements OnInit {
   setSelectedProfileSummary() {
     if (this.selectedDayType && !this.selectedModification) {
       //Day type and baseline
-      this.selectedProfileSummary = this.baselineProfileSummaries.find(summary => { return summary.dayType.dayTypeId == this.selectedDayType.dayTypeId }).profileSummary;
-      this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(this.compressedAirAssessment.compressorInventoryItems, this.selectedDayType, this.selectedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
+      let baselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = this.compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.find(summary => { return summary.dayType.dayTypeId == this.selectedDayType.dayTypeId });
+      this.selectedProfileSummary = baselineDayTypeProfileSummary.profileSummary;
+      this.selectedTotals = baselineDayTypeProfileSummary.profileSummaryTotals;
     } else if (this.selectedDayType && this.selectedModification) {
       //day type and modification
-      let assessmentResult: CompressedAirAssessmentResult = this.assessmentResults.find(result => { return result.modification.modificationId == this.selectedModification.modificationId });
-      let dayTypeModificationResult: DayTypeModificationResult = assessmentResult.dayTypeModificationResults.find(modificationResult => { return modificationResult.dayTypeId == this.selectedDayType.dayTypeId });
+      let modificationResults: CompressedAirAssessmentModificationResults = this.assessmentResults.find(result => { return result.modification.modificationId == this.selectedModification.modificationId });
+      let dayTypeModificationResults: CompressedAirModifiedDayTypeProfileSummary = modificationResults.modifiedDayTypeProfileSummaries.find(summary => { return summary.dayType.dayTypeId == this.selectedDayType.dayTypeId });
+      let dayTypeModificationResult: DayTypeModificationResult = dayTypeModificationResults.getDayTypeModificationResult();
       this.selectedProfileSummary = dayTypeModificationResult.adjustedProfileSummary;
-      this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(dayTypeModificationResult.adjustedCompressors, this.selectedDayType, this.selectedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval, this.selectedModification.improveEndUseEfficiency);
+      this.selectedTotals = dayTypeModificationResult.profileSummaryTotals;
     }     
     if (this.printView) {
-      this.profliesForPrint = this.compressedAirAssessmentResultsService.setProfileSummariesForPrinting(this.compressedAirAssessment, this.baselineProfileSummaries);
+      this.profliesForPrint = this.compressedAirAssessmentResultsService.setProfileSummariesForPrinting(this.compressedAirAssessmentBaselineResults);
     }
     // else if (!this.selectedDayType && this.selectedModification) {
     //   //no day type (combined) and modification

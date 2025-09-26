@@ -4,6 +4,7 @@ import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemIn
 import { Settings } from '../../shared/models/settings';
 import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import { SharedPointCalculationsService } from '../inventory/performance-points/calculations/shared-point-calculations.service';
+import { CompressorInventoryItemClass } from '../calculations/CompressorInventoryItemClass';
 
 @Injectable()
 export class SystemProfileService {
@@ -104,17 +105,12 @@ export class SystemProfileService {
   setAdjustedIsentropicEfficiencies(dayTypeSummaries: Array<ProfileSummary>, compressorInventory: Array<CompressorInventoryItem>, settings: Settings, systemInformation: SystemInformation): Array<ProfileSummary> {
     dayTypeSummaries.forEach(summary => {
       let compressor: CompressorInventoryItem = compressorInventory.find(item => { return item.itemId == summary.compressorId });
+      let compressorClass: CompressorInventoryItemClass = new CompressorInventoryItemClass(compressor);
       if (compressor.performancePoints.fullLoad.dischargePressure == systemInformation.plantMaxPressure) {
-        //calculate rated specific power
-        let ratedSpecificPower: number = this.compressedAirAssessmentResultsService.calculateRatedSpecificPower(compressor);
         //calculate rated isentropic efficiency
-        let ratedIsentropicEfficiency: number = this.compressedAirAssessmentResultsService.calculateRatedIsentropicEfficiency(compressor, ratedSpecificPower, settings);
+        let ratedIsentropicEfficiency: number = compressorClass.getRatedIsentropicEfficiency(settings);
         //calculate adjustedCompPower & adjustedAirflow
-        let adjustedPressure: number = compressor.performancePoints.fullLoad.dischargePressure;
-        let adjustedCompressorPower: number = compressor.performancePoints.fullLoad.power;
-        let adjustedAirFlow: number = compressor.performancePoints.fullLoad.airflow;
         summary.adjustedIsentropicEfficiency = ratedIsentropicEfficiency;
-        let adjustedSpecPower: number = ratedSpecificPower;
       } else {
         let adjustedPressure: number = systemInformation.plantMaxPressure;
         let a: number = ((adjustedPressure + systemInformation.atmosphericPressure) / systemInformation.atmosphericPressure);

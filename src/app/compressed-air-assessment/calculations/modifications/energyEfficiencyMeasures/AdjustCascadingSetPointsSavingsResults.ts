@@ -1,4 +1,4 @@
-import { AdjustCascadingSetPoints, CascadingSetPointData, CompressedAirAssessment, CompressedAirDayType, ProfileSummary, ProfileSummaryTotal, ReduceRuntime, SystemInformation } from "../../../../shared/models/compressed-air-assessment";
+import { AdjustCascadingSetPoints, CompressedAirDayType, ProfileSummaryTotal, ReduceRuntime, SystemInformation } from "../../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../../shared/models/settings";
 import { EemSavingsResults } from "../../caCalculationModels";
 import { CompressedAirProfileSummary } from "../../CompressedAirProfileSummary";

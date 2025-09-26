@@ -51,10 +51,12 @@ export class CompressedAirReportComponent implements OnInit {
   printOptions: PrintOptions;
 
   baselineResults: BaselineResults;
-  assessmentResults: Array<CompressedAirAssessmentResult>;
+  assessmentResults: Array<CompressedAirAssessmentModificationResults>;
   combinedDayTypeResults: Array<{ modification: Modification, combinedResults: DayTypeModificationResult, validation: CompressedAirModificationValid }>;
   baselineProfileSummaries: Array<{ profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }>;
   tabsCollapsed: boolean = true;
+
+  compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults;
   constructor(private settingsDbService: SettingsDbService, private printOptionsMenuService: PrintOptionsMenuService, private directoryDbService: DirectoryDbService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
@@ -67,20 +69,20 @@ export class CompressedAirReportComponent implements OnInit {
     if (this.assessment) {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
-      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.assessment.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-      this.baselineResults = compressedAirAssessmentBaselineResults.baselineResults;
+      this.compressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.assessment.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      this.baselineResults = this.compressedAirAssessmentBaselineResults.baselineResults;
       this.assessmentResults = new Array();
       this.combinedDayTypeResults = new Array();
-      this.baselineProfileSummaries = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries;
+      this.baselineProfileSummaries = this.compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries;
 
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
-        let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
-        let modificationResults: CompressedAirAssessmentResult = compressedAirAssessmentModificationResults.getModificationResults();
-        this.assessmentResults.push(modificationResults);
-        let validation: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, this.baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings, modificationResults)
+        let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, this.compressedAirAssessmentBaselineResults);
+        this.assessmentResults.push(compressedAirAssessmentModificationResults);
+        let compressedAirAssessmentResult: CompressedAirAssessmentResult = compressedAirAssessmentModificationResults.getModificationResults()
+        let validation: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, this.baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings, compressedAirAssessmentResult)
         this.combinedDayTypeResults.push({
           modification: modification,
-          combinedResults: this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, this.baselineResults),
+          combinedResults: this.compressedAirAssessmentResultsService.combineDayTypeResults(compressedAirAssessmentResult, this.baselineResults),
           validation: validation
         });
       });

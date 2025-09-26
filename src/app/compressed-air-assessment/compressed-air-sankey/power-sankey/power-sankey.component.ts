@@ -32,7 +32,6 @@ export class PowerSankeyComponent implements OnInit {
 
   labelStyle: string;
   settings: Settings;
-  results;
   nodes: Array<CompressedAirSankeyNode> = [];
   links: Array<{ source: number, target: number }> = [
     { source: 0, target: 1 },
@@ -66,7 +65,7 @@ export class PowerSankeyComponent implements OnInit {
   showSankeyLabelOptions: boolean;
   sankeyLabelStyle: string = 'both';
   profileDataComplete: boolean = true;
-  baselineResults: BaselineResults;
+  baselineResults: CompressedAirAssessmentBaselineResults;
   dayTypeBaselineProfileSummaries: Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>;
 
   endUseDayTypeSetup: EndUseDayTypeSetup;
@@ -97,8 +96,7 @@ export class PowerSankeyComponent implements OnInit {
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.dayTypeBaselineProfileSummaries = this.getDayTypeProfileSummaries();
 
-    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-    this.baselineResults = compressedAirAssessmentBaselineResults.baselineResults;
+    this.baselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
     this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(showPrintView => {
       this.printView = showPrintView;
       this.checkShouldPrint();
@@ -136,7 +134,7 @@ export class PowerSankeyComponent implements OnInit {
   getDayTypeProfileSummaries() {
     let baselineDayTypeProfileSummarries = new Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>();
     this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-      let baselineProfileSummary: Array<ProfileSummary> = this.resultsService.calculateBaselineDayTypeProfileSummary(this.compressedAirAssessment, dayType, this.settings);
+      let baselineProfileSummary: Array<ProfileSummary> = this.baselineResults.baselineDayTypeProfileSummaries.find(summary => summary.dayType.dayTypeId == dayType.dayTypeId).profileSummary;
       baselineDayTypeProfileSummarries.push({
         dayTypeId: dayType.dayTypeId,
         profileSummary: baselineProfileSummary
