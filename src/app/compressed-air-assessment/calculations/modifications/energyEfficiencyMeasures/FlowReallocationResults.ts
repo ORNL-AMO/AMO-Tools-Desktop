@@ -23,9 +23,9 @@ export class FlowReallocationResults {
         systemInformation: SystemInformation,
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService,
-        costKwh: number, 
-        implementationCost: number, 
-        summaryDataInterval: number, 
+        costKwh: number,
+        implementationCost: number,
+        summaryDataInterval: number,
         auxiliaryPowerUsage?: { cost: number, energyUse: number }) {
         this.reallocateFlow(dayType,
             settings,
@@ -145,6 +145,7 @@ export class FlowReallocationResults {
                 neededAirFlow = tmpNeededAirFlow;
                 let adjustedIndex: number = this.profileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == dayType.dayTypeId });
                 let adjustedSummaryIndex: number = this.profileSummary[adjustedIndex].profileSummaryData.findIndex(summaryData => { return summaryData.order == data.summaryData.order && summaryData.timeInterval == data.summaryData.timeInterval });
+
                 this.profileSummary[adjustedIndex].profileSummaryData[adjustedSummaryIndex] = {
                     power: calculateFullLoad.powerCalculated,
                     airflow: calculateFullLoad.capacityCalculated,

@@ -54,9 +54,9 @@ export class CompressedAirAssessmentModificationResults {
         this.modifiedDayTypeProfileSummaries.forEach(summary => {
             this.totalModificationCost += summary.modificationSavings.adjustedResults.cost;
             this.totalModificationPower += summary.modificationSavings.adjustedResults.power;
-            this.totalCostSavings += summary.modificationSavings.savings.cost;
-            this.totalCostPower += summary.modificationSavings.savings.power;
         });
+        this.totalCostSavings = this.totalBaselineCost - this.totalModificationCost;
+        this.totalCostPower = this.totalBaselinePower - this.totalModificationPower;
     }
 
     getModificationResults(): CompressedAirAssessmentResult {

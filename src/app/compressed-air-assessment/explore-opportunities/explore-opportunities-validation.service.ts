@@ -13,6 +13,9 @@ import { ReduceRunTimeService } from './reduce-run-time/reduce-run-time.service'
 import { ReduceSystemAirPressureService } from './reduce-system-air-pressure/reduce-system-air-pressure.service';
 import { UseAutomaticSequencerService } from './use-automatic-sequencer/use-automatic-sequencer.service';
 import { BaselineResults, CompressedAirAssessmentResult } from '../calculations/caCalculationModels';
+import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Injectable()
 export class ExploreOpportunitiesValidationService {
@@ -28,7 +31,9 @@ export class ExploreOpportunitiesValidationService {
     private improveEndUseEfficiencyService: ImproveEndUseEfficiencyService, private reduceAirLeaksService: ReduceAirLeaksService,
     private reduceSystemAirPressureService: ReduceSystemAirPressureService, private useAutomaticSequencerService: UseAutomaticSequencerService,
     private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private reduceRunTimeService: ReduceRunTimeService) {
+    private reduceRunTimeService: ReduceRunTimeService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) {
     this.addReceiverVolumeValid = new BehaviorSubject<boolean>(true);
     this.adjustCascadingSetPointsValid = new BehaviorSubject<boolean>(true);
     this.improveEndUseEfficiencyValid = new BehaviorSubject<boolean>(true);
@@ -41,7 +46,9 @@ export class ExploreOpportunitiesValidationService {
   checkModificationValid(modification: Modification, baselineResults: BaselineResults, baselineProfileSummaries: Array<{ dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }>,
     compressedAirAssessment: CompressedAirAssessment, settings: Settings, compressedAirAssessmentResult?: CompressedAirAssessmentResult): CompressedAirModificationValid {
     if (!compressedAirAssessmentResult) {
-      compressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(compressedAirAssessment, modification, settings);
+      //TODO: Check if there is a better way to get modification results without recalculating everything
+      let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(compressedAirAssessment, modification, settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      compressedAirAssessmentResult = compressedAirAssessmentModificationResults.getModificationResults()
     }
 
     let addReceiverVolume: boolean = this.checkAddReceiverVolumeValid(modification.addPrimaryReceiverVolume);
@@ -155,6 +162,7 @@ export class ExploreOpportunitiesValidationService {
       if (isValid) {
         compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
           if (isValid) {
+            //TODO: Use new compressor class
             let adjustedCompressors: Array<CompressorInventoryItem> = this.compressedAirAssessmentResultsService.useAutomaticSequencerAdjustCompressor(modification.useAutomaticSequencer, JSON.parse(JSON.stringify(compressedAirAssessment.compressorInventoryItems)), modification.useAutomaticSequencer.profileSummary, dayType.dayTypeId, compressedAirAssessment.systemInformation.atmosphericPressure, settings);
             let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(modification.useAutomaticSequencer.order, modification, modificationResults, dayType.dayTypeId);
             let eemSequencerProfileSummary: Array<ProfileSummary> = modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).useAutomaticSequencerProfileSummary;

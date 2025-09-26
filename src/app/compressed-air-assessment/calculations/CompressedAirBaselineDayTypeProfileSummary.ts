@@ -4,7 +4,7 @@ import { roundVal } from "../../shared/helperFunctions";
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from "../../shared/models/compressed-air-assessment";
 import { Settings } from "../../shared/models/settings";
 import { CompressedAirCalculationService, CompressorCalcResult } from "../compressed-air-calculation.service";
-import { getProfileSummaryDataAverages, getTotalCapacity, getTotalPower } from "./caCalculationHelpers";
+import { getTotalCapacity, getTotalPower } from "./caCalculationHelpers";
 import { BaselineResult, SavingsItem } from "./caCalculationModels";
 import { CompressedAirProfileSummary } from "./CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "./CompressorInventoryItemClass";

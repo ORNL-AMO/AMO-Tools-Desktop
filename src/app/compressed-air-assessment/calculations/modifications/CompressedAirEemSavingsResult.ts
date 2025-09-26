@@ -30,10 +30,10 @@ export class CompressedAirSavingsItem {
         this.power = sumPower;
     }
 
-    setSavings(baselinResults: CompressedAirSavingsItem, adjustedResults: CompressedAirSavingsItem) {
-        this.cost = baselinResults.cost - adjustedResults.cost;
-        this.power = baselinResults.power - adjustedResults.power;
-        this.percentSavings = ((baselinResults.cost - adjustedResults.cost) / baselinResults.cost) * 100;
+    setSavings(baselineResults: CompressedAirSavingsItem, adjustedResults: CompressedAirSavingsItem) {
+        this.cost = baselineResults.cost - adjustedResults.cost;
+        this.power = baselineResults.power - adjustedResults.power;
+        this.percentSavings = ((baselineResults.cost - adjustedResults.cost) / baselineResults.cost) * 100;
     }
 }
 

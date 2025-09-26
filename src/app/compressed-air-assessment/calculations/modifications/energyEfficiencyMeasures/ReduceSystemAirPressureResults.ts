@@ -7,6 +7,7 @@ import { CompressedAirProfileSummary } from "../../CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "../../CompressorInventoryItemClass";
 import { systemPressureChangeAdjustProfile } from "./compressorsAdjustment";
 import { FlowReallocationResults } from "./FlowReallocationResults";
+import * as _ from 'lodash';
 
 export class ReduceSystemAirPressureResults {
 

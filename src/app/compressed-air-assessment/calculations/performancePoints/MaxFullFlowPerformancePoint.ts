@@ -26,10 +26,6 @@ export class MaxFullFlowPerformancePoint implements PerformancePoint {
         this.setPressure(designDetails, settings);
         this.setAirFlow(nameplateData, fullLoad, maxFullFlow, centrifugalSpecifics, atmosphericPressure, settings);
         this.setPower(nameplateData, designDetails, fullLoad, maxFullFlow, atmosphericPressure, settings);
-        // selectedCompressor.performancePoints.maxFullFlow.dischargePressure = this.getMaxFullFlowPressure(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure, settings);
-        // selectedCompressor.performancePoints.maxFullFlow.airflow = this.getMaxFullFlowAirFlow(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultAirFlow, atmosphericPressure, settings);
-        // selectedCompressor.performancePoints.maxFullFlow.power = this.getMaxFullFlowPower(selectedCompressor, selectedCompressor.performancePoints.maxFullFlow.isDefaultPower, atmosphericPressure, settings);
-        // return selectedCompressor.performancePoints.maxFullFlow;
     }
 
     setPressure(designDetails: DesignDetails, settings: Settings) {
@@ -64,7 +60,7 @@ export class MaxFullFlowPerformancePoint implements PerformancePoint {
                 //centrifugal
                 defaultPower = fullLoad.power;
             }
-            this.airflow = roundPowerForPresentation(defaultPower);
+            this.power = roundPowerForPresentation(defaultPower);
         }
     }
 

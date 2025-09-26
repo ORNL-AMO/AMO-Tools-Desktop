@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { CompressedAirAssessmentResultsService } from '../../../../../compressed-air-assessment/compressed-air-assessment-results.service';
 import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../../../../../compressed-air-assessment/explore-opportunities/explore-opportunities-validation.service';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../../../shared/models/assessment';
@@ -8,10 +7,12 @@ import { CompressedAirDayType, ProfileSummary, ProfileSummaryTotal } from '../..
 import { Settings } from '../../../../../shared/models/settings';
 import { AssessmentService } from '../../../../assessment.service';
 import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment/compressed-air-assessment.service';
-import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../../../../../compressed-air-assessment/calculations/caCalculationModels'
+import { BaselineResults } from '../../../../../compressed-air-assessment/calculations/caCalculationModels'
 import { CompressedAirAssessmentBaselineResults } from '../../../../../compressed-air-assessment/calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirCalculationService } from '../../../../../compressed-air-assessment/compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { CompressedAirAssessmentModificationResults } from '../../../../../compressed-air-assessment/calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirBaselineDayTypeProfileSummary } from '../../../../../compressed-air-assessment/calculations/CompressedAirBaselineDayTypeProfileSummary';
 
 @Component({
   selector: 'app-compressed-air-assessment-card',
@@ -34,7 +35,6 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
   showReport: boolean;
 
   constructor(private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
     private compressedAirCalculationService: CompressedAirCalculationService,
@@ -51,10 +51,9 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
 
       let baselineProfileSummaries: Array<{ profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }> = new Array();
       this.assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-        let profileSummary: Array<ProfileSummary> = this.compressedAirAssessmentResultsService.calculateBaselineDayTypeProfileSummary(this.assessment.compressedAirAssessment, dayType, this.settings);
-        let profileSummaryTotals: Array<ProfileSummaryTotal> = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(
-          this.assessment.compressedAirAssessment.compressorInventoryItems, dayType, profileSummary, this.assessment.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval
-        )
+        let compressedAirBaselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.find(summary => { return summary.dayType.dayTypeId == dayType.dayTypeId });
+        let profileSummary: Array<ProfileSummary> = compressedAirBaselineDayTypeProfileSummary.profileSummary;
+        let profileSummaryTotals: Array<ProfileSummaryTotal> = compressedAirBaselineDayTypeProfileSummary.profileSummaryTotals;
         baselineProfileSummaries.push({
           dayType: dayType,
           profileSummary: profileSummary,
@@ -63,17 +62,17 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
       });
 
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
-        let modificationValid: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings)
+        let modificationValid: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings);
         if (modificationValid) {
-          let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.assessment.compressedAirAssessment, modification, this.settings);
-          let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, this.baselineResults);
-          let savings: number = this.baselineResults.total.totalAnnualOperatingCost - combinedResults.totalAnnualOperatingCost;
-          if (savings > this.maxCostSavings) {
-            this.maxCostSavings = savings;
+          let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
+          console.log(compressedAirAssessmentModificationResults);
+          // let savings: number = this.baselineResults.total.totalAnnualOperatingCost - compressedAirAssessmentModificationResults.totalCostSavings;
+          if (compressedAirAssessmentModificationResults.totalCostSavings > this.maxCostSavings) {
+            this.maxCostSavings = compressedAirAssessmentModificationResults.totalCostSavings;
           }
           //divide /1000 kWh -> MWh
-          if ((modificationResults.totalCostPower / 1000) > this.maxEnergySavings) {
-            this.maxEnergySavings = modificationResults.totalCostPower / 1000;
+          if ((compressedAirAssessmentModificationResults.totalCostPower / 1000) > this.maxEnergySavings) {
+            this.maxEnergySavings = compressedAirAssessmentModificationResults.totalCostPower / 1000;
           }
         }
       });

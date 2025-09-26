@@ -11,6 +11,7 @@ import { CompressedAirAssessmentResult } from '../calculations/caCalculationMode
 import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -187,8 +188,10 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   setCompressedAirAssessmentResults() {
     if (this.modification && this.compressedAirAssessmentResultsService.flowReallocationSummaries) {
-      let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification, this.settings, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries, this.exploreOpportunitiesService.baselineResults);
-      this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentResult);
+      //TODO: pass baseline results
+      // let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification, this.settings, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries, this.exploreOpportunitiesService.baselineResults);
+      let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.compressedAirAssessment, this.modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentModificationResults.getModificationResults());
     } else {
       this.exploreOpportunitiesService.modificationResults.next(undefined);
     }
