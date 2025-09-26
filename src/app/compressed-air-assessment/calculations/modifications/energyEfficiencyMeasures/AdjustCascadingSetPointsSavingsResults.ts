@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { getProfileSummaryTotals } from "../../caCalculationHelpers";
 import { FlowReallocationResults } from "./FlowReallocationResults";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
-import { systemPressureChangeAdjustProfile } from "./CompressorsAdjustment";
+import { systemPressureChangeAdjustProfile } from "./compressorsAdjustment";
 
 export class AdjustCascadingSetPointsResults {
 
@@ -45,7 +45,8 @@ export class AdjustCascadingSetPointsResults {
             this.profileSummary,
             false,
             dayType,
-            undefined);
+            undefined,
+            this.adjustedCompressors);
         let flowReallocationResults: FlowReallocationResults = new FlowReallocationResults(dayType,
             settings,
             previousProfileSummary,

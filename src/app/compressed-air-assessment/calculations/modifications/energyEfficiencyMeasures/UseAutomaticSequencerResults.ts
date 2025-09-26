@@ -28,7 +28,7 @@ export class UseAutomaticSequencerResults {
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService) {
         this.adjustedCompressors = adjustedCompressors;
-        
+
         this.profileSummary = previousProfileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
@@ -41,7 +41,8 @@ export class UseAutomaticSequencerResults {
             this.profileSummary,
             false,
             dayType,
-            undefined);
+            undefined,
+            this.adjustedCompressors);
         let flowReallocationResults: FlowReallocationResults = new FlowReallocationResults(dayType,
             settings,
             previousProfileSummary,

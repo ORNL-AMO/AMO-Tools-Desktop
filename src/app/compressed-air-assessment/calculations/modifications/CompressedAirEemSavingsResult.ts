@@ -75,3 +75,24 @@ export class CompressedAirEemSavingsResult extends CompressedAirSavingsItem {
         }
     }
 }
+
+export function getEmptyEemSavings(): EemSavingsResults {
+    return {
+        baselineResults: {
+            cost: 0,
+            power: 0,
+        },
+        adjustedResults: {
+            cost: 0,
+            power: 0,
+        },
+        savings: {
+            cost: 0,
+            power: 0,
+            percentSavings: 0,
+        },
+        implementationCost: 0,
+        paybackPeriod: 0,
+        dayTypeId: undefined,
+    };
+}

@@ -96,9 +96,10 @@ export function getProfileSummaryTotals(selectedHourInterval: number,
     profileSummary: Array<CompressedAirProfileSummary>,
     isBaseline: boolean,
     selectedDayType: CompressedAirDayType,
-    improveEndUseEfficiency: ImproveEndUseEfficiency): Array<ProfileSummaryTotal> {
-    let totalSystemCapacity: number = getTotalCapacity(this.inventoryItems);
-    let totalFullLoadPower: number = getTotalPower(this.inventoryItems);
+    improveEndUseEfficiency: ImproveEndUseEfficiency,
+    inventoryItems: Array<CompressorInventoryItemClass>): Array<ProfileSummaryTotal> {
+    let totalSystemCapacity: number = getTotalCapacity(inventoryItems);
+    let totalFullLoadPower: number = getTotalPower(inventoryItems);
     //already baseline summary by day type
     //let allData: Array<ProfileSummaryData> = new Array();
     // this.profileSummary.forEach(summary => {

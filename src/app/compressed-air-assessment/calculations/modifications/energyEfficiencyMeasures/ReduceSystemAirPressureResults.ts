@@ -5,7 +5,7 @@ import { getProfileSummaryTotals } from "../../caCalculationHelpers";
 import { EemSavingsResults } from "../../caCalculationModels";
 import { CompressedAirProfileSummary } from "../../CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "../../CompressorInventoryItemClass";
-import { systemPressureChangeAdjustProfile } from "./CompressorsAdjustment";
+import { systemPressureChangeAdjustProfile } from "./compressorsAdjustment";
 import { FlowReallocationResults } from "./FlowReallocationResults";
 
 export class ReduceSystemAirPressureResults {
@@ -45,7 +45,8 @@ export class ReduceSystemAirPressureResults {
             this.profileSummary,
             false,
             dayType,
-            undefined);
+            undefined,
+            this.adjustedCompressors);
         let flowReallocationResults: FlowReallocationResults = new FlowReallocationResults(dayType,
             settings,
             previousProfileSummary,

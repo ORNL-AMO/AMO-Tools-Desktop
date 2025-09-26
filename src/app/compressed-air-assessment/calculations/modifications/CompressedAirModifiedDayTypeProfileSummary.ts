@@ -8,7 +8,7 @@ import { DayTypeModificationResult } from "../caCalculationModels";
 import { CompressedAirBaselineDayTypeProfileSummary } from "../CompressedAirBaselineDayTypeProfileSummary";
 import { CompressedAirProfileSummary } from "../CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "../CompressorInventoryItemClass";
-import { CompressedAirEemSavingsResult } from "./CompressedAirEemSavingsResult";
+import { CompressedAirEemSavingsResult, getEmptyEemSavings } from "./CompressedAirEemSavingsResult";
 import { AdjustCascadingSetPointsResults } from "./energyEfficiencyMeasures/AdjustCascadingSetPointsSavingsResults";
 import { FlowReallocationResults } from "./energyEfficiencyMeasures/FlowReallocationResults";
 import { ImproveEndUseEfficiencyResults } from "./energyEfficiencyMeasures/ImproveEndUseEfficiencyResults";
@@ -78,6 +78,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             });
         }
         //Initial Flow Reallocation
+        this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, false, this.dayType, undefined, this.adjustedCompressors);
         this.setFlowReallocationResults(settings, _compressedAirCalculationService, modification.flowReallocation.implementationCost);
         //Apply Modifications in order
         let modificationOrders: Array<number> = this.getModificationOrders(modification);
@@ -86,7 +87,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         let reduceRuntime: ReduceRuntime;
         for (let orderIndex = 1; orderIndex <= modificationOrders.length; orderIndex++) {
             //Calculate totals for adjusted profile summary
-            this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, false, this.dayType, improveEndUseEfficiency);
+            this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, false, this.dayType, improveEndUseEfficiency, this.adjustedCompressors);
             //Primary receiver volume
             if (modification.addPrimaryReceiverVolume.order == orderIndex) {
                 this.setAddPrimaryReceiverVolumeResults(settings, reduceRuntime, _compressedAirCalculationService, modification.addPrimaryReceiverVolume.implementationCost, modification.addPrimaryReceiverVolume.increasedVolume);
@@ -119,7 +120,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             }
         }
         //Final profile totals
-        this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, true, this.dayType, improveEndUseEfficiency);
+        this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, true, this.dayType, improveEndUseEfficiency, this.adjustedCompressors);
         //Calculate total savings
         this.modificationSavings = new CompressedAirEemSavingsResult(baselineDayTypeProfileSummary.profileSummary, this.adjustedProfileSummary, dayType, this.costKwh, this.modificationImplementationCost, this.summaryDataInterval, this.auxiliaryPowerUsage);
         //Calculate CO2 savings
@@ -384,35 +385,34 @@ export class CompressedAirModifiedDayTypeProfileSummary {
 
     getDayTypeModificationResult(): DayTypeModificationResult {
         return {
-          adjustedProfileSummary: this.adjustedProfileSummary,
-          adjustedCompressors: this.adjustedCompressors,
-          profileSummaryTotals: this.adjustedProfileSummaryTotals,
-          allSavingsResults: this.modificationSavings,
-          flowReallocationSavings: this.flowReallocationResults.savings,
-          flowAllocationProfileSummary: this.flowReallocationResults.profileSummary,
-          addReceiverVolumeSavings: this.addPrimaryReceiverVolumeResults.savings,
-          addReceiverVolumeProfileSummary: this.addPrimaryReceiverVolumeResults.profileSummary,
-          adjustCascadingSetPointsSavings: this.adjustCascadingSetPointsResults.savings,
-          adjustCascadingSetPointsProfileSummary: this.adjustCascadingSetPointsResults.profileSummary,
-          improveEndUseEfficiencySavings: this.improveEndUseEfficiencyResults.savings,
-          improveEndUseEfficiencyProfileSummary: this.improveEndUseEfficiencyResults.profileSummary,
-          reduceAirLeaksSavings: this.reduceAirLeaksResults.savings,
-          reduceAirLeaksProfileSummary: this.reduceAirLeaksResults.profileSummary,
-          reduceRunTimeSavings: this.reduceRuntimeResults.savings,
-          reduceRunTimeProfileSummary: this.reduceRuntimeResults.profileSummary,
-          reduceSystemAirPressureSavings: this.reduceSystemAirPressureResults.savings,
-          reduceSystemAirPressureProfileSummary: this.reduceSystemAirPressureResults.profileSummary,
-          useAutomaticSequencerSavings: this.useAutomaticSequencerResults.savings,
-          useAutomaticSequencerProfileSummary: this.useAutomaticSequencerResults.profileSummary,
-          auxiliaryPowerUsage: this.auxiliaryPowerUsage,
-          dayTypeId: this.dayType.dayTypeId,
-          dayTypeName: this.dayType.name,
-          peakDemand: this.peakDemand,
-          peakDemandCost: this.peakDemandCost,
-          peakDemandCostSavings: this.peakDemandCostSavings,
-          totalAnnualOperatingCost: this.totalModifiedAnnualOperatingCost,
-          annualEmissionOutput: this.modificationSavings.adjustedResults.annualEmissionOutput
-
+            adjustedProfileSummary: this.adjustedProfileSummary,
+            adjustedCompressors: this.adjustedCompressors,
+            profileSummaryTotals: this.adjustedProfileSummaryTotals,
+            allSavingsResults: this.modificationSavings,
+            flowReallocationSavings: this.flowReallocationResults ? this.flowReallocationResults.savings : getEmptyEemSavings(),
+            flowAllocationProfileSummary: this.flowReallocationResults ? this.flowReallocationResults.profileSummary : [],
+            addReceiverVolumeSavings: this.addPrimaryReceiverVolumeResults ? this.addPrimaryReceiverVolumeResults.savings : getEmptyEemSavings(),
+            addReceiverVolumeProfileSummary: this.addPrimaryReceiverVolumeResults ? this.addPrimaryReceiverVolumeResults.profileSummary : [],
+            adjustCascadingSetPointsSavings: this.adjustCascadingSetPointsResults ? this.adjustCascadingSetPointsResults.savings : getEmptyEemSavings(),
+            adjustCascadingSetPointsProfileSummary: this.adjustCascadingSetPointsResults ? this.adjustCascadingSetPointsResults.profileSummary : [],
+            improveEndUseEfficiencySavings: this.improveEndUseEfficiencyResults ? this.improveEndUseEfficiencyResults.savings : getEmptyEemSavings(),
+            improveEndUseEfficiencyProfileSummary: this.improveEndUseEfficiencyResults ? this.improveEndUseEfficiencyResults.profileSummary : [],
+            reduceAirLeaksSavings: this.reduceAirLeaksResults ? this.reduceAirLeaksResults.savings : getEmptyEemSavings(),
+            reduceAirLeaksProfileSummary: this.reduceAirLeaksResults ? this.reduceAirLeaksResults.profileSummary : [],
+            reduceRunTimeSavings: this.reduceRuntimeResults ? this.reduceRuntimeResults.savings : getEmptyEemSavings(),
+            reduceRunTimeProfileSummary: this.reduceRuntimeResults ? this.reduceRuntimeResults.profileSummary : [],
+            reduceSystemAirPressureSavings: this.reduceSystemAirPressureResults ? this.reduceSystemAirPressureResults.savings : getEmptyEemSavings(),
+            reduceSystemAirPressureProfileSummary: this.reduceSystemAirPressureResults ? this.reduceSystemAirPressureResults.profileSummary : [],
+            useAutomaticSequencerSavings: this.useAutomaticSequencerResults ? this.useAutomaticSequencerResults.savings : getEmptyEemSavings(),
+            useAutomaticSequencerProfileSummary: this.useAutomaticSequencerResults ? this.useAutomaticSequencerResults.profileSummary : [],
+            auxiliaryPowerUsage: this.auxiliaryPowerUsage,
+            dayTypeId: this.dayType.dayTypeId,
+            dayTypeName: this.dayType.name,
+            peakDemand: this.peakDemand,
+            peakDemandCost: this.peakDemandCost,
+            peakDemandCostSavings: this.peakDemandCostSavings,
+            totalAnnualOperatingCost: this.totalModifiedAnnualOperatingCost,
+            annualEmissionOutput: this.modificationSavings.adjustedResults.annualEmissionOutput
         }
     }
 }
