@@ -164,7 +164,7 @@
     "lodash.foreach": "^4.5.0",
     "lodash.keys": "^4.2.0",
     "moment": "^2.29.2",
-    "ngx-bootstrap": "^19.0.2",
+    "ngx-bootstrap": "19.0.2",
     "ngx-clipboard": "15.0.1",
     "nodemon": "^3.0.1",
     "papaparse": "^5.1.0",
