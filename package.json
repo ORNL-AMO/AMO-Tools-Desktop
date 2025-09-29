@@ -141,7 +141,7 @@
     "@angular/cli": "19.2.3",
     "@types/jasmine": "~3.6.0",
     "@types/lodash": "4.14.100",
-    "@types/node": "^22.13.10",
+    "@types/node": "22.13.0",
     "@types/react": "^19.0.11",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
