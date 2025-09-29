@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { catchError, first, firstValueFrom, merge, Subscription } from 'rxjs';
+import { catchError, first, firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
@@ -9,7 +9,7 @@ import { CoreService } from './core.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
-import { ElectronService, ReleaseData } from '../electron/electron.service';
+import { ElectronService } from '../electron/electron.service';
 import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur-data.service';
 import { AppErrorService } from '../shared/errors/app-error.service';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
@@ -25,6 +25,8 @@ import { BrowserStorageAvailable, BrowserStorageService } from '../shared/browse
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
 import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
+import {Dialog, DialogRef} from '@angular/cdk/dialog';
+import { ModalDialogService } from '../shared/modal-dialog.service';
 
 @Component({
   selector: 'app-core',
@@ -69,6 +71,9 @@ export class CoreComponent implements OnInit {
   toolsSuiteInitializedSub: Subscription;
   loadingMessage: string;
   defaultDbDataInitialized: boolean = false;
+
+  appModalDialogSubscription: Subscription;
+  appModalDialog: DialogRef<any, any>;
   constructor(public electronService: ElectronService,
     private assessmentService: AssessmentService,
     private changeDetectorRef: ChangeDetectorRef,
@@ -94,7 +99,8 @@ export class CoreComponent implements OnInit {
     private exportToJustifiTemplateService: ExportToJustifiTemplateService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
-    private toolsSuiteApiService: ToolsSuiteApiService
+    private toolsSuiteApiService: ToolsSuiteApiService,
+    private modalDialogService: ModalDialogService
   ) {
   }
 
@@ -201,6 +207,10 @@ export class CoreComponent implements OnInit {
     this.showShareDataModalSub = this.coreService.showShareDataModal.subscribe((showShareDataModal: boolean) => {
       this.showShareDataModal = showShareDataModal;
     });
+
+    this.appModalDialogSubscription = this.modalDialogService.modalDialogRef$.subscribe((modalDialogRef) => {
+      this.appModalDialog = modalDialogRef;
+    });
   }
 
 
@@ -222,6 +232,7 @@ export class CoreComponent implements OnInit {
     this.showExportToJustifiModalSub.unsubscribe();
     this.showShareDataModalSub.unsubscribe();
     this.toolsSuiteInitializedSub.unsubscribe();
+    this.appModalDialogSubscription.unsubscribe();
   }
 
   async initData() {
