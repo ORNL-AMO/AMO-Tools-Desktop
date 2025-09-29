@@ -95,7 +95,7 @@ export class ProcessCoolingAssessmentService {
     }
   }
 
-  updateSystemInformation<K extends ProcessCoolingSystemInformationProperty>(key: K, value: SystemInformation[K]) {
+  updateSystemInformationProperty<K extends ProcessCoolingSystemInformationProperty>(key: K, value: SystemInformation[K]) {
     let updatedProcessCooling = { ...this.processCooling.getValue() };
     updatedProcessCooling.systemInformation[key] = value;
     this.setProcessCooling(updatedProcessCooling);

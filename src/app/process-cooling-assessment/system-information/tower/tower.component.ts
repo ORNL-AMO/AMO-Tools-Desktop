@@ -92,7 +92,7 @@ export class TowerComponent {
   updateAssessment() {
     let systemInformation = this.processCooling().systemInformation;
     const towerInput = this.systemInformationFormService.getTowerInput(this.form.getRawValue(), systemInformation.towerInput);
-    this.processCoolingAssessmentService.updateSystemInformation('towerInput', towerInput);
+    this.processCoolingAssessmentService.updateSystemInformationProperty('towerInput', towerInput);
   }
 
   focusField(str: string) {

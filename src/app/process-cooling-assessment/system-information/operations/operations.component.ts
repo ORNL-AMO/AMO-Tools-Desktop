@@ -81,13 +81,13 @@ export class OperationsComponent {
           let systemInformation = this.processCooling().systemInformation;
           // * use getRawValue (includes disabled fields)
           const operations = this.systemInformationFormService.getOperations(this.form.getRawValue(), systemInformation.operations);
-          this.processCoolingAssessmentService.updateSystemInformation('operations', operations);
+          this.processCoolingAssessmentService.updateSystemInformationProperty('operations', operations);
         }
     );
   }
 
   updateCo2SavingsData(co2SavingsData: Co2SavingsData) {
-    this.processCoolingAssessmentService.updateSystemInformation('co2SavingsData', co2SavingsData);
+    this.processCoolingAssessmentService.updateSystemInformationProperty('co2SavingsData', co2SavingsData);
   }
 
   // todo move to service

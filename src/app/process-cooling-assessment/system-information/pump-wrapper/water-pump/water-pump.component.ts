@@ -46,7 +46,7 @@ export class WaterPumpComponent {
         const processCooling = this.processCooling();
         const currentPumpInput = processCooling?.systemInformation[this.pumpFormType];
         const pumpInput = this.systemInformationFormService.getPumpInput(formValue, currentPumpInput);
-        this.processCoolingAssessmentService.updateSystemInformation(this.pumpFormType, pumpInput);
+        this.processCoolingAssessmentService.updateSystemInformationProperty(this.pumpFormType, pumpInput);
       }
     );
   }
