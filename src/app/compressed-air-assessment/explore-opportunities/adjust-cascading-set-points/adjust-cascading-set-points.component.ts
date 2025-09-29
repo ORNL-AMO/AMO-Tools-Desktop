@@ -3,7 +3,6 @@ import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AdjustCascadingSetPoints, CascadingSetPointData, ReduceSystemAirPressure, CompressedAirAssessment, CompressorInventoryItem, Modification } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
-import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
@@ -34,7 +33,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   implementationCostForm: UntypedFormGroup;
   hasInvalidForm: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private performancePointsFormService: PerformancePointsFormService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private performancePointsFormService: PerformancePointsFormService,
     private adjustCascadingSetPointsService: AdjustCascadingSetPointsService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {

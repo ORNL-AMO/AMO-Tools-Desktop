@@ -2,19 +2,29 @@ import { AssessmentCo2SavingsService } from "../../../shared/assessment-co2-savi
 import { CompressedAirAssessment, Modification } from "../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../compressed-air-calculation.service";
-import { CompressedAirAssessmentResult, DayTypeModificationResult } from "./../caCalculationModels";
+import { CompressedAirAssessmentResult } from "./../caCalculationModels";
 import { CompressedAirAssessmentBaselineResults } from "./../CompressedAirAssessmentBaselineResults";
 import { CompressedAirModifiedDayTypeProfileSummary } from "./CompressedAirModifiedDayTypeProfileSummary";
 
 export class CompressedAirAssessmentModificationResults {
 
     modifiedDayTypeProfileSummaries: Array<CompressedAirModifiedDayTypeProfileSummary>
+    
     totalBaselineCost: number;
     totalBaselinePower: number;
+    totalBaselineAnnualOperatingCost: number;
+    totalBaselineAnnualEmissionOutput: number;
+
     totalModificationCost: number;
     totalModificationPower: number;
+    totalModificationAnnualOperatingCost: number;
+    totalModificationAnnualEmissionOutput: number;
+    
     totalCostSavings: number;
-    totalCostPower: number;
+    totalPowerSavings: number;
+    totalAnnualOperatingCostSavings: number;
+    totalAnnualEmissionOutputSavings: number;
+
     modification: Modification
     constructor(compressedAirAssessment: CompressedAirAssessment,
         modification: Modification,
@@ -48,15 +58,24 @@ export class CompressedAirAssessmentModificationResults {
     setTotals(compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults) {
         this.totalBaselineCost = compressedAirAssessmentBaselineResults.baselineResults.total.cost;
         this.totalBaselinePower = compressedAirAssessmentBaselineResults.baselineResults.total.energyUse;
+        this.totalBaselineAnnualOperatingCost = compressedAirAssessmentBaselineResults.baselineResults.total.totalAnnualOperatingCost;
+        this.totalBaselineAnnualEmissionOutput = compressedAirAssessmentBaselineResults.baselineResults.total.annualEmissionOutput;
 
         this.totalModificationCost = 0;
         this.totalModificationPower = 0;
+        this.totalModificationAnnualEmissionOutput = 0;
+        let totalModificationAuxPowerCost: number = 0;
         this.modifiedDayTypeProfileSummaries.forEach(summary => {
             this.totalModificationCost += summary.modificationSavings.adjustedResults.cost;
             this.totalModificationPower += summary.modificationSavings.adjustedResults.power;
+            this.totalModificationAnnualEmissionOutput += summary.modificationSavings.adjustedResults.annualEmissionOutput;
+            totalModificationAuxPowerCost += summary.auxiliaryPowerUsage.cost;
         });
         this.totalCostSavings = this.totalBaselineCost - this.totalModificationCost;
-        this.totalCostPower = this.totalBaselinePower - this.totalModificationPower;
+        this.totalPowerSavings = this.totalBaselinePower - this.totalModificationPower;
+        this.totalModificationAnnualOperatingCost = this.totalModificationCost + totalModificationAuxPowerCost;
+        this.totalAnnualOperatingCostSavings = this.totalBaselineAnnualOperatingCost - this.totalModificationAnnualOperatingCost;
+        this.totalAnnualEmissionOutputSavings = this.totalBaselineAnnualEmissionOutput - this.totalModificationAnnualEmissionOutput;
     }
 
     getModificationResults(): CompressedAirAssessmentResult {
@@ -67,7 +86,7 @@ export class CompressedAirAssessmentModificationResults {
             totalModificationCost: this.totalModificationCost,
             totalModificationPower: this.totalModificationPower,
             totalCostSavings: this.totalCostSavings,
-            totalCostPower: this.totalCostPower,
+            totalPowerSavings: this.totalPowerSavings,
             modification: this.modification
         }
     }

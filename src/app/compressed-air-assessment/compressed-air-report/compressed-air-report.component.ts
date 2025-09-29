@@ -8,7 +8,6 @@ import { Directory } from '../../shared/models/directory';
 import { PrintOptions } from '../../shared/models/printing';
 import { Settings } from '../../shared/models/settings';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
-import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../explore-opportunities/explore-opportunities-validation.service';
 import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
@@ -16,6 +15,7 @@ import { CompressedAirCalculationService } from '../compressed-air-calculation.s
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../calculations/caCalculationModels';
 import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirCombinedDayTypeResults } from '../calculations/modifications/CompressedAirCombinedDayTypeResults';
 
 @Component({
   selector: 'app-compressed-air-report',
@@ -58,7 +58,7 @@ export class CompressedAirReportComponent implements OnInit {
 
   compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults;
   constructor(private settingsDbService: SettingsDbService, private printOptionsMenuService: PrintOptionsMenuService, private directoryDbService: DirectoryDbService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirCalculationService: CompressedAirCalculationService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
@@ -80,9 +80,11 @@ export class CompressedAirReportComponent implements OnInit {
         this.assessmentResults.push(compressedAirAssessmentModificationResults);
         let compressedAirAssessmentResult: CompressedAirAssessmentResult = compressedAirAssessmentModificationResults.getModificationResults()
         let validation: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, this.baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings, compressedAirAssessmentResult)
+        let combinedDayTypeResults: DayTypeModificationResult = new CompressedAirCombinedDayTypeResults(compressedAirAssessmentModificationResults).getDayTypeModificationResult();
+
         this.combinedDayTypeResults.push({
           modification: modification,
-          combinedResults: this.compressedAirAssessmentResultsService.combineDayTypeResults(compressedAirAssessmentResult, this.baselineResults),
+          combinedResults: combinedDayTypeResults,
           validation: validation
         });
       });

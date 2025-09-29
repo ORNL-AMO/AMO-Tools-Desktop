@@ -11,6 +11,7 @@ import { CompressedAirAssessmentBaselineResults } from '../../../compressed-air-
 import { CompressedAirCalculationService } from '../../../compressed-air-assessment/compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../assessment-co2-savings/assessment-co2-savings.service';
 import { CompressedAirAssessmentModificationResults } from '../../../compressed-air-assessment/calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirCombinedDayTypeResults } from '../../../compressed-air-assessment/calculations/modifications/CompressedAirCombinedDayTypeResults';
 
 @Injectable({
   providedIn: 'root'
@@ -55,8 +56,8 @@ export class ExportToJustifiCompressedAirService {
       }
       if (modification) {
         let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(assessment.compressedAirAssessment, modification, settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
-        let modResults: CompressedAirAssessmentResult = compressedAirAssessmentModificationResults.getModificationResults();
-        let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(modResults, baselineResults);
+        let compressedAirCombinedDayTypeResults: CompressedAirCombinedDayTypeResults = new CompressedAirCombinedDayTypeResults(compressedAirAssessmentModificationResults);
+        let combinedResults: DayTypeModificationResult = compressedAirCombinedDayTypeResults.getDayTypeModificationResult();
 
         let eemWorksheet = workbook.getWorksheet('Energy_Efficiency_Measures');
 

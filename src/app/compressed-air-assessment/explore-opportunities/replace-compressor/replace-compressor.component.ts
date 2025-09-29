@@ -4,7 +4,6 @@ import { CompressedAirAssessment, ReplaceCompressor } from '../../../shared/mode
 import { Settings } from '../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { ReplaceCompressorService } from './replace-compressor.service';
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 
@@ -27,7 +26,7 @@ export class ReplaceCompressorComponent {
   increasedVolumeError: string;
 
   form: UntypedFormGroup
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {

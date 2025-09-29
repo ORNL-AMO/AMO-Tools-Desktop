@@ -4,7 +4,8 @@ import { CompressedAirAssessment, CompressedAirDayType, ProfileSummary, ProfileS
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
-import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../../calculations/caCalculationModels';
+import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirModifiedDayTypeProfileSummary } from '../../calculations/modifications/CompressedAirModifiedDayTypeProfileSummary';
 
 @Component({
     selector: 'app-explore-opportunities-profile-table',
@@ -20,7 +21,7 @@ export class ExploreOpportunitiesProfileTableComponent implements OnInit {
   selectedDayTypeSub: Subscription;
   dayTypeOptions: Array<CompressedAirDayType>;
   compressedAirAssessment: CompressedAirAssessment;
-  modificationResults: CompressedAirAssessmentResult;
+  compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults;
   modificationResultsSub: Subscription;
   settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
@@ -40,8 +41,8 @@ export class ExploreOpportunitiesProfileTableComponent implements OnInit {
       }
     });
 
-    this.modificationResultsSub =  this.exploreOpportunitiesService.modificationResults.subscribe(val => {
-      this.modificationResults = val;
+    this.modificationResultsSub =  this.exploreOpportunitiesService.compressedAirAssessmentModificationResults.subscribe(val => {
+      this.compressedAirAssessmentModificationResults = val;
       this.setProfile();
     });
   }
@@ -53,10 +54,10 @@ export class ExploreOpportunitiesProfileTableComponent implements OnInit {
   }
 
   setProfile() {
-    if (this.selectedDayType && this.modificationResults) {
-      let dayTypeModificationResult: DayTypeModificationResult = this.modificationResults.dayTypeModificationResults.find(modResult => {return modResult.dayTypeId == this.selectedDayType.dayTypeId});
+    if (this.selectedDayType && this.compressedAirAssessmentModificationResults) {
+      let dayTypeModificationResult: CompressedAirModifiedDayTypeProfileSummary = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(modResult => {return modResult.dayType.dayTypeId == this.selectedDayType.dayTypeId});
       this.adjustedProfileSummary = dayTypeModificationResult.adjustedProfileSummary;
-      this.totals = dayTypeModificationResult.profileSummaryTotals;
+      this.totals = dayTypeModificationResult.adjustedProfileSummaryTotals;
     }
   }
 

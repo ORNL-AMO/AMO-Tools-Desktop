@@ -5,12 +5,13 @@ import { Settings } from '../../../../shared/models/settings';
 import { BaselineResults } from '../../../calculations/caCalculationModels';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { ImproveEndUseEfficiencyService } from '../improve-end-use-efficiency.service';
+import { CompressedAirAssessmentBaselineResults } from '../../../calculations/CompressedAirAssessmentBaselineResults';
 
 @Component({
-    selector: 'app-improve-end-use-efficiency-item',
-    templateUrl: './improve-end-use-efficiency-item.component.html',
-    styleUrls: ['./improve-end-use-efficiency-item.component.css'],
-    standalone: false
+  selector: 'app-improve-end-use-efficiency-item',
+  templateUrl: './improve-end-use-efficiency-item.component.html',
+  styleUrls: ['./improve-end-use-efficiency-item.component.css'],
+  standalone: false
 })
 export class ImproveEndUseEfficiencyItemComponent implements OnInit {
   @Input()
@@ -26,9 +27,7 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
   @Output()
   emitRemoveItem: EventEmitter<number> = new EventEmitter<number>();
   @Input()
-  baselineProfileSummaries: Array<{ dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }>;
-  @Input()
-  baselineResults: BaselineResults;
+  compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults;
   @Input()
   systemProfileSetup: SystemProfileSetup;
 
@@ -43,13 +42,13 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
-    if(this.settings.unitsOfMeasure == 'Metric'){
+    if (this.settings.unitsOfMeasure == 'Metric') {
       this.numberPipeDecimals = '1.0-2'
-    }else{
+    } else {
       this.numberPipeDecimals = '1.0-0'
     }
-    this.form = this.improveEndUseEfficiencyService.getFormFromObj(this.item, this.baselineResults);
-    this.dataForms = this.improveEndUseEfficiencyService.getDataForms(this.item, this.baselineProfileSummaries);
+    this.form = this.improveEndUseEfficiencyService.getFormFromObj(this.item, this.compressedAirAssessmentBaselineResults.baselineResults);
+    this.dataForms = this.improveEndUseEfficiencyService.getDataForms(this.item, this.compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries);
     this.setHasInvalidDataForm();
   }
 
@@ -74,13 +73,13 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
   }
 
   changeReductionType() {
-    this.form = this.improveEndUseEfficiencyService.setFormValidators(this.form, this.baselineResults);
+    this.form = this.improveEndUseEfficiencyService.setFormValidators(this.form, this.compressedAirAssessmentBaselineResults.baselineResults);
     this.save();
-    this.dataForms = this.improveEndUseEfficiencyService.getDataForms(this.item, this.baselineProfileSummaries);
+    this.dataForms = this.improveEndUseEfficiencyService.getDataForms(this.item, this.compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries);
   }
 
   changeAuxiliaryEquipment() {
-    this.form = this.improveEndUseEfficiencyService.setFormValidators(this.form, this.baselineResults);
+    this.form = this.improveEndUseEfficiencyService.setFormValidators(this.form, this.compressedAirAssessmentBaselineResults.baselineResults);
     this.save();
   }
 
@@ -90,10 +89,10 @@ export class ImproveEndUseEfficiencyItemComponent implements OnInit {
       let currentIndex = 0
       for (const [key, value] of Object.entries(form.controls)) {
         if (currentIndex > controlIndex)
-        form.get(key).patchValue(changedValue);
+          form.get(key).patchValue(changedValue);
         currentIndex++;
       }
-    } 
+    }
     this.saveDataForm();
   }
 

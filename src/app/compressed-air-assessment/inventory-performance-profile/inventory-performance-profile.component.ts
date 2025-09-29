@@ -11,6 +11,7 @@ import { PlotlyService } from 'angular-plotly.js';
 import { CompressedAirAssessmentResult } from '../calculations/caCalculationModels';
 import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
 
 @Component({
   selector: 'app-inventory-performance-profile',
@@ -42,7 +43,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   showAvgOpPoints: boolean = false;
   adjustedCompressors: Array<CompressorInventoryItem>;
   modificationResultsSub: Subscription;
-  modificationResults: CompressedAirAssessmentResult;
+  compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults;
   selectedDayType: CompressedAirDayType;
   selectedDayTypeSub: Subscription;
   // From Plotly source
@@ -108,9 +109,9 @@ export class InventoryPerformanceProfileComponent implements OnInit {
           this.setCompressorData();
         }
       });
-      this.modificationResultsSub = this.exploreOpportunitiesService.modificationResults.subscribe(modificationResults => {
+      this.modificationResultsSub = this.exploreOpportunitiesService.compressedAirAssessmentModificationResults.subscribe(modificationResults => {
         if (modificationResults) {
-          this.modificationResults = modificationResults;
+          this.compressedAirAssessmentModificationResults = modificationResults;
           this.setCompressorData();
         }
       });
@@ -138,9 +139,9 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   }
 
   setCompressorData() {
-    if (this.modificationResults && this.selectedDayType) {
+    if (this.compressedAirAssessmentModificationResults && this.selectedDayType) {
       this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-      this.adjustedCompressors = this.modificationResults.dayTypeModificationResults.find(result => { return result.dayTypeId == this.selectedDayType.dayTypeId }).adjustedCompressors;
+      this.adjustedCompressors = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(result => { return result.dayType.dayTypeId == this.selectedDayType.dayTypeId }).adjustedCompressors;
       this.drawChart();
     }
   }

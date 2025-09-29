@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { Settings } from '../../../shared/models/settings';
-import { BaselineResult, BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../../calculations/caCalculationModels';
+import { BaselineResult, BaselineResults, DayTypeModificationResult } from '../../calculations/caCalculationModels';
+import { CompressedAirCombinedDayTypeResults } from '../../calculations/modifications/CompressedAirCombinedDayTypeResults';
+import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
 
 @Component({
-    selector: 'app-explore-opportunities-results',
-    templateUrl: './explore-opportunities-results.component.html',
-    styleUrls: ['./explore-opportunities-results.component.css'],
-    standalone: false
+  selector: 'app-explore-opportunities-results',
+  templateUrl: './explore-opportunities-results.component.html',
+  styleUrls: ['./explore-opportunities-results.component.css'],
+  standalone: false
 })
 export class ExploreOpportunitiesResultsComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
@@ -25,10 +27,9 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   selectedDayType: CompressedAirDayType;
 
   modification: Modification;
-  modificationResults: CompressedAirAssessmentResult;
+  modificationResults: CompressedAirAssessmentModificationResults;
   modificationResultsSub: Subscription;
   dayTypeModificationResult: DayTypeModificationResult;
-  baselineResults: BaselineResults;
   dayTypeBaselineResult: BaselineResult;
 
   addReceiverVolumeValid: boolean;
@@ -49,7 +50,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
   isInit: boolean = true;
   settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private exploreOpportunitiesService: ExploreOpportunitiesService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
@@ -57,7 +58,6 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
     this.setValidationSubs();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val) {
-        this.baselineResults = this.exploreOpportunitiesService.baselineResults;
         this.compressedAirAssessment = val;
         this.dayTypeOptions = this.compressedAirAssessment.compressedAirDayTypes;
         let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
@@ -66,7 +66,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       }
     });
 
-    this.modificationResultsSub = this.exploreOpportunitiesService.modificationResults.subscribe(val => {
+    this.modificationResultsSub = this.exploreOpportunitiesService.compressedAirAssessmentModificationResults.subscribe(val => {
       this.modificationResults = val;
       if (this.modificationResults) {
         // Do this to pick up on modification change
@@ -77,10 +77,11 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
 
     this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
       this.selectedDayType = val;
-      if (this.baselineResults && val) {
-        this.dayTypeBaselineResult = this.baselineResults.dayTypeResults.find(result => { return result.dayTypeId == val.dayTypeId })
-      } else if (this.baselineResults) {
-        this.dayTypeBaselineResult = this.baselineResults.total;
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = this.exploreOpportunitiesService.compressedAirAssessmentBaselineResults.getValue();
+      if (compressedAirAssessmentBaselineResults && val) {
+        this.dayTypeBaselineResult = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.find(result => { return result.dayType.dayTypeId == val.dayTypeId }).baselineResult
+      } else if (compressedAirAssessmentBaselineResults) {
+        this.dayTypeBaselineResult = compressedAirAssessmentBaselineResults.baselineResults.total;
       }
       this.setResults();
     });
@@ -101,9 +102,9 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
 
   setResults() {
     if (this.modificationResults && this.selectedDayType) {
-      this.dayTypeModificationResult = this.modificationResults.dayTypeModificationResults.find(modResult => { return modResult.dayTypeId == this.selectedDayType.dayTypeId });
+      this.dayTypeModificationResult = this.modificationResults.modifiedDayTypeProfileSummaries.find(modResult => { return modResult.dayType.dayTypeId == this.selectedDayType.dayTypeId }).getDayTypeModificationResult();
     } else if (this.modificationResults && !this.selectedDayType) {
-      this.dayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(this.modificationResults, this.baselineResults);
+      this.dayTypeModificationResult = new CompressedAirCombinedDayTypeResults(this.modificationResults).getDayTypeModificationResult();
     }
   }
 

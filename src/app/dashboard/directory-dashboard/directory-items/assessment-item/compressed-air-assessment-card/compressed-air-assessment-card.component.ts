@@ -65,14 +65,12 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
         let modificationValid: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings);
         if (modificationValid) {
           let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
-          console.log(compressedAirAssessmentModificationResults);
-          // let savings: number = this.baselineResults.total.totalAnnualOperatingCost - compressedAirAssessmentModificationResults.totalCostSavings;
           if (compressedAirAssessmentModificationResults.totalCostSavings > this.maxCostSavings) {
             this.maxCostSavings = compressedAirAssessmentModificationResults.totalCostSavings;
           }
           //divide /1000 kWh -> MWh
-          if ((compressedAirAssessmentModificationResults.totalCostPower / 1000) > this.maxEnergySavings) {
-            this.maxEnergySavings = compressedAirAssessmentModificationResults.totalCostPower / 1000;
+          if ((compressedAirAssessmentModificationResults.totalPowerSavings / 1000) > this.maxEnergySavings) {
+            this.maxEnergySavings = compressedAirAssessmentModificationResults.totalPowerSavings / 1000;
           }
         }
       });

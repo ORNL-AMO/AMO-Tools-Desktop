@@ -7,7 +7,7 @@ export interface CompressedAirAssessmentResult {
   totalModificationCost: number,
   totalModificationPower: number,
   totalCostSavings: number,
-  totalCostPower: number,
+  totalPowerSavings: number,
   modification: Modification
 }
 export interface DayTypeProfileSummary { dayTypeId: string, profileSummary: Array<ProfileSummary> };

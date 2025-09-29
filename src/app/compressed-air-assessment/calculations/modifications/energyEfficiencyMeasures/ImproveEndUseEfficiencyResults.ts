@@ -1,15 +1,15 @@
 import { CompressedAirDayType, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, ProfileSummaryTotal, ReduceRuntime, SystemInformation } from "../../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
-import { EemSavingsResults } from "../../caCalculationModels";
 import { CompressedAirProfileSummary } from "../../CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "../../CompressorInventoryItemClass";
+import { CompressedAirEemSavingsResult } from "../CompressedAirEemSavingsResult";
 import { FlowReallocationResults } from "./FlowReallocationResults";
 import * as _ from 'lodash';
 
 export class ImproveEndUseEfficiencyResults {
 
-    savings: EemSavingsResults;
+    savings: CompressedAirEemSavingsResult;
     profileSummary: Array<CompressedAirProfileSummary>;
     auxiliaryPowerUsage: { cost: number, energyUse: number };
 

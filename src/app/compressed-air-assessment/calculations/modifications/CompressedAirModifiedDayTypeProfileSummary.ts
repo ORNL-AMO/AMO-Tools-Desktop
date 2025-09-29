@@ -1,4 +1,3 @@
-import { DayType } from "../../../log-tool/log-tool-models";
 import { AssessmentCo2SavingsService } from "../../../shared/assessment-co2-savings/assessment-co2-savings.service";
 import { AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, UseAutomaticSequencer } from "../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../shared/models/settings";
@@ -31,7 +30,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
     addPrimaryReceiverVolumeResults: FlowReallocationResults;
     adjustCascadingSetPointsResults: AdjustCascadingSetPointsResults;
     improveEndUseEfficiencyResults: ImproveEndUseEfficiencyResults;
-    reduceRuntimeResults: FlowReallocationResults;
+    reduceRunTimeResults: FlowReallocationResults;
     reduceAirLeaksResults: ReduceAirLeaksResults;
     reduceSystemAirPressureResults: ReduceSystemAirPressureResults
     useAutomaticSequencerResults: UseAutomaticSequencerResults;
@@ -104,7 +103,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             //Reduce runtime
             else if (modification.reduceRuntime.order == orderIndex) {
                 reduceRuntime = modification.reduceRuntime;
-                this.setReduceRuntimeResults(settings, reduceRuntime, _compressedAirCalculationService, modification.reduceRuntime.implementationCost);
+                this.setReduceRunTimeResults(settings, reduceRuntime, _compressedAirCalculationService, modification.reduceRuntime.implementationCost);
             }
             //Reduce air leaks
             else if (modification.reduceAirLeaks.order == orderIndex) {
@@ -250,12 +249,12 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         this.auxiliaryPowerUsage = this.improveEndUseEfficiencyResults.auxiliaryPowerUsage;
     }
 
-    setReduceRuntimeResults(
+    setReduceRunTimeResults(
         settings: Settings,
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService,
         implementationCost: number) {
-        this.reduceRuntimeResults = new FlowReallocationResults(this.dayType,
+        this.reduceRunTimeResults = new FlowReallocationResults(this.dayType,
             settings,
             this.adjustedProfileSummary,
             this.adjustedCompressors,
@@ -270,7 +269,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             implementationCost,
             this.summaryDataInterval,
             this.auxiliaryPowerUsage);
-        this.adjustedProfileSummary = this.reduceRuntimeResults.profileSummary;
+        this.adjustedProfileSummary = this.reduceRunTimeResults.profileSummary;
     }
 
     setReduceAirLeaksResults(reduceAirLeaks: ReduceAirLeaks,
@@ -399,8 +398,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             improveEndUseEfficiencyProfileSummary: this.improveEndUseEfficiencyResults ? this.improveEndUseEfficiencyResults.profileSummary : [],
             reduceAirLeaksSavings: this.reduceAirLeaksResults ? this.reduceAirLeaksResults.savings : getEmptyEemSavings(),
             reduceAirLeaksProfileSummary: this.reduceAirLeaksResults ? this.reduceAirLeaksResults.profileSummary : [],
-            reduceRunTimeSavings: this.reduceRuntimeResults ? this.reduceRuntimeResults.savings : getEmptyEemSavings(),
-            reduceRunTimeProfileSummary: this.reduceRuntimeResults ? this.reduceRuntimeResults.profileSummary : [],
+            reduceRunTimeSavings: this.reduceRunTimeResults ? this.reduceRunTimeResults.savings : getEmptyEemSavings(),
+            reduceRunTimeProfileSummary: this.reduceRunTimeResults ? this.reduceRunTimeResults.profileSummary : [],
             reduceSystemAirPressureSavings: this.reduceSystemAirPressureResults ? this.reduceSystemAirPressureResults.savings : getEmptyEemSavings(),
             reduceSystemAirPressureProfileSummary: this.reduceSystemAirPressureResults ? this.reduceSystemAirPressureResults.profileSummary : [],
             useAutomaticSequencerSavings: this.useAutomaticSequencerResults ? this.useAutomaticSequencerResults.savings : getEmptyEemSavings(),

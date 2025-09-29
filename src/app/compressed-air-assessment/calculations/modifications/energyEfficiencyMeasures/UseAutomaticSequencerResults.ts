@@ -1,15 +1,15 @@
-import { CompressedAirDayType, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReduceRuntime, SystemInformation, UseAutomaticSequencer } from "../../../../shared/models/compressed-air-assessment";
+import { CompressedAirDayType, ProfileSummaryTotal, ReduceRuntime, SystemInformation, UseAutomaticSequencer } from "../../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
 import { getProfileSummaryTotals } from "../../caCalculationHelpers";
-import { EemSavingsResults } from "../../caCalculationModels";
 import { CompressedAirProfileSummary } from "../../CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "../../CompressorInventoryItemClass";
+import { CompressedAirEemSavingsResult } from "../CompressedAirEemSavingsResult";
 import { FlowReallocationResults } from "./FlowReallocationResults";
 
 export class UseAutomaticSequencerResults {
 
-    savings: EemSavingsResults;
+    savings: CompressedAirEemSavingsResult;
     profileSummary: Array<CompressedAirProfileSummary>;
     adjustedCompressors: Array<CompressorInventoryItemClass>;
 

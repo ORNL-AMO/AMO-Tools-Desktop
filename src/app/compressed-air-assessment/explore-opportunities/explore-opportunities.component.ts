@@ -1,13 +1,11 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
-import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { CompressorTypeOption, CompressorTypeOptions } from '../inventory/inventoryOptions';
 import { ExploreOpportunitiesService } from './explore-opportunities.service';
-import { CompressedAirAssessmentResult } from '../calculations/caCalculationModels';
 import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
@@ -50,7 +48,7 @@ export class ExploreOpportunitiesComponent implements OnInit {
   showCascadingAndSequencer: boolean;
   smallScreenTab: string = 'form';
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private inventoryService: InventoryService, private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+    private inventoryService: InventoryService,
     private compressedAirCalculationService: CompressedAirCalculationService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
@@ -116,37 +114,15 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.secondaryAssessmentTabSub.unsubscribe();
     this.selectedDayTypeSub.unsubscribe();
     this.inventoryService.selectedCompressor.next(undefined);
-    this.exploreOpportunitiesService.baselineResults = undefined;
-    this.exploreOpportunitiesService.baselineDayTypeProfileSummarries = undefined;
-    // this.compressedAirAssessmentResultsService.flowReallocationSummaries = undefined;
+    this.exploreOpportunitiesService.compressedAirAssessmentBaselineResults.next(undefined);
+    this.exploreOpportunitiesService.compressedAirAssessmentModificationResults.next(undefined);
+    this.exploreOpportunitiesService.selectedDayType.next(undefined);
   }
 
   setBaselineResults() {
-    //data used in calculations stays constant in this context
-    if (!this.exploreOpportunitiesService.baselineResults) {
-      //set baseline results
-      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-      this.exploreOpportunitiesService.baselineResults = compressedAirAssessmentBaselineResults.baselineResults;
-      //set day type profile summarries
-      this.exploreOpportunitiesService.baselineDayTypeProfileSummarries = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.map(dayTypeProfileSummary => {
-        return {
-          dayTypeId: dayTypeProfileSummary.dayType.dayTypeId,
-          profileSummary: dayTypeProfileSummary.profileSummary
-        }
-      });
-      //set flow reallocation data      
-      // this.compressedAirAssessmentResultsService.setFlowReallocationSummaries(
-      //   this.compressedAirAssessment.compressedAirDayTypes,
-      //   this.settings,
-      //   this.exploreOpportunitiesService.baselineDayTypeProfileSummarries,
-      //   this.compressedAirAssessment.compressorInventoryItems,
-      //   this.compressedAirAssessment.systemInformation.atmosphericPressure,
-      //   this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval,
-      //   this.compressedAirAssessment.systemInformation.totalAirStorage,
-      //   this.compressedAirAssessment.systemBasics.electricityCost,
-      //   this.compressedAirAssessment.systemInformation
-      // );
-    }
+    //set baseline results
+    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+    this.exploreOpportunitiesService.compressedAirAssessmentBaselineResults.next(compressedAirAssessmentBaselineResults);
   }
 
   setHasSequencer() {
@@ -186,12 +162,11 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   setCompressedAirAssessmentResults() {
     if (this.modification) {
-      //TODO: pass baseline results
-      // let compressedAirAssessmentResult: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(this.compressedAirAssessment, this.modification, this.settings, this.exploreOpportunitiesService.baselineDayTypeProfileSummarries, this.exploreOpportunitiesService.baselineResults);
-      let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.compressedAirAssessment, this.modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-      this.exploreOpportunitiesService.modificationResults.next(compressedAirAssessmentModificationResults.getModificationResults());
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = this.exploreOpportunitiesService.compressedAirAssessmentBaselineResults.getValue();
+      let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.compressedAirAssessment, this.modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
+      this.exploreOpportunitiesService.compressedAirAssessmentModificationResults.next(compressedAirAssessmentModificationResults);
     } else {
-      this.exploreOpportunitiesService.modificationResults.next(undefined);
+      this.exploreOpportunitiesService.compressedAirAssessmentModificationResults.next(undefined);
     }
   }
 

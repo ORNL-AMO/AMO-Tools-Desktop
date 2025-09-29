@@ -1,17 +1,17 @@
-import { CompressedAirDayType, ProfileSummary, ProfileSummaryTotal, ReduceRuntime, ReduceSystemAirPressure, SystemInformation } from "../../../../shared/models/compressed-air-assessment";
+import { CompressedAirDayType, ProfileSummaryTotal, ReduceRuntime, ReduceSystemAirPressure, SystemInformation } from "../../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
 import { getProfileSummaryTotals } from "../../caCalculationHelpers";
-import { EemSavingsResults } from "../../caCalculationModels";
 import { CompressedAirProfileSummary } from "../../CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "../../CompressorInventoryItemClass";
+import { CompressedAirEemSavingsResult } from "../CompressedAirEemSavingsResult";
 import { systemPressureChangeAdjustProfile } from "./compressorsAdjustment";
 import { FlowReallocationResults } from "./FlowReallocationResults";
 import * as _ from 'lodash';
 
 export class ReduceSystemAirPressureResults {
 
-    savings: EemSavingsResults;
+    savings: CompressedAirEemSavingsResult;
     profileSummary: Array<CompressedAirProfileSummary>;
     adjustedCompressors: Array<CompressorInventoryItemClass>;
 

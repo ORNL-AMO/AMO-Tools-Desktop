@@ -8,13 +8,14 @@ import { InventoryService } from '../../inventory/inventory.service';
 import { ExploreOpportunitiesValidationService, ValidationDataArrays } from '../explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { ReduceRunTimeService } from './reduce-run-time.service';
-import { CompressedAirAssessmentResult } from '../../calculations/caCalculationModels';
+import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirModifiedDayTypeProfileSummary } from '../../calculations/modifications/CompressedAirModifiedDayTypeProfileSummary';
 
 @Component({
-    selector: 'app-reduce-run-time',
-    templateUrl: './reduce-run-time.component.html',
-    styleUrls: ['./reduce-run-time.component.css'],
-    standalone: false
+  selector: 'app-reduce-run-time',
+  templateUrl: './reduce-run-time.component.html',
+  styleUrls: ['./reduce-run-time.component.css'],
+  standalone: false
 })
 export class ReduceRunTimeComponent implements OnInit {
 
@@ -25,7 +26,7 @@ export class ReduceRunTimeComponent implements OnInit {
   orderOptions: Array<number>;
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
-  modificationResults: CompressedAirAssessmentResult;
+  compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults;
   modificationResultsSub: Subscription;
 
   dayTypeOptions: Array<{
@@ -55,9 +56,9 @@ export class ReduceRunTimeComponent implements OnInit {
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
-    if(this.settings.unitsOfMeasure == 'Metric'){
+    if (this.settings.unitsOfMeasure == 'Metric') {
       this.numberPipeDecimals = '1.0-2'
-    }else{
+    } else {
       this.numberPipeDecimals = '1.0-0'
     }
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
@@ -76,10 +77,10 @@ export class ReduceRunTimeComponent implements OnInit {
       }
       this.setOrderOptions();
     });
-    this.modificationResultsSub = this.exploreOpportunitiesService.modificationResults.subscribe(val => {
-      this.modificationResults = val;
-      if (this.modificationResults) {
-        this.setSelectedModificationIndex(this.modificationResults.modification.modificationId);
+    this.modificationResultsSub = this.exploreOpportunitiesService.compressedAirAssessmentModificationResults.subscribe(val => {
+      this.compressedAirAssessmentModificationResults = val;
+      if (this.compressedAirAssessmentModificationResults) {
+        this.setSelectedModificationIndex(this.compressedAirAssessmentModificationResults.modification.modificationId);
       }
       if (!this.isFormChange) {
         this.setData();
@@ -107,10 +108,10 @@ export class ReduceRunTimeComponent implements OnInit {
 
   setData() {
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    if (this.modificationResults && this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
+    if (this.compressedAirAssessmentModificationResults && this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       this.reduceRuntime = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime));
       this.form = this.reduceRunTimeService.getFormFromObj(this.reduceRuntime);
-      let isRuntimeOrderShown: boolean = this.reduceRuntime.order != 100; 
+      let isRuntimeOrderShown: boolean = this.reduceRuntime.order != 100;
       if (isRuntimeOrderShown) {
         this.setDayTypes(this.compressedAirAssessment.compressedAirDayTypes);
         this.setReduceRuntimeValid();
@@ -175,8 +176,9 @@ export class ReduceRunTimeComponent implements OnInit {
   setAirflowData() {
     if (this.reduceRuntime.order != 100 && this.selectedDayType) {
       let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
-      let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.reduceRuntime.order, modification, this.modificationResults, this.selectedDayType.dayType.dayTypeId);
-      let reduceRuntimeProfile: Array<ProfileSummary> = this.modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == this.selectedDayType.dayType.dayTypeId }).reduceRunTimeProfileSummary;
+      let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.reduceRuntime.order, modification, this.compressedAirAssessmentModificationResults.getModificationResults(), this.selectedDayType.dayType.dayTypeId);
+      let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
+      let reduceRuntimeProfile: Array<ProfileSummary> = modificationProfileSummary.reduceRunTimeResults.profileSummary;
       let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup, reduceRuntimeProfile, this.compressedAirAssessment.compressorInventoryItems, true);
       let dayTypeIndex: number = this.dayTypeOptions.findIndex(dayTypeOption => { return dayTypeOption.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
       this.dayTypeOptions[dayTypeIndex].availableAirflow = dataArrays.availableAirflow;
@@ -188,12 +190,13 @@ export class ReduceRunTimeComponent implements OnInit {
   }
 
   setDayTypes(compressedAirDayTypes: Array<CompressedAirDayType>) {
-    if (compressedAirDayTypes && this.modificationResults && this.reduceRuntime.order != 100) {
+    if (compressedAirDayTypes && this.compressedAirAssessmentModificationResults && this.reduceRuntime.order != 100) {
       this.dayTypeOptions = new Array();
       compressedAirDayTypes.forEach(dayType => {
         let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
-        let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.reduceRuntime.order, modification, this.modificationResults, dayType.dayTypeId);
-        let reduceRuntimeProfile: Array<ProfileSummary> = this.modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).reduceRunTimeProfileSummary;
+        let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.reduceRuntime.order, modification, this.compressedAirAssessmentModificationResults.getModificationResults(), dayType.dayTypeId);
+        let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
+        let reduceRuntimeProfile: Array<ProfileSummary> = modificationProfileSummary.reduceRunTimeResults.profileSummary;
         let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup, reduceRuntimeProfile, this.compressedAirAssessment.compressorInventoryItems, true);
         this.dayTypeOptions.push({
           dayType: dayType,

@@ -8,13 +8,13 @@ import { UntypedFormGroup } from '@angular/forms';
 import { ReduceAirLeaksService } from './reduce-air-leaks.service';
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 import { Settings } from '../../../shared/models/settings';
-import { BaselineResults } from '../../calculations/caCalculationModels';
+import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
 
 @Component({
-    selector: 'app-reduce-air-leaks',
-    templateUrl: './reduce-air-leaks.component.html',
-    styleUrls: ['./reduce-air-leaks.component.css'],
-    standalone: false
+  selector: 'app-reduce-air-leaks',
+  templateUrl: './reduce-air-leaks.component.html',
+  styleUrls: ['./reduce-air-leaks.component.css'],
+  standalone: false
 })
 export class ReduceAirLeaksComponent implements OnInit {
 
@@ -26,7 +26,7 @@ export class ReduceAirLeaksComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
   form: UntypedFormGroup;
-  baselineResults: BaselineResults;
+  compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults;
   settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private reduceAirLeaksService: ReduceAirLeaksService,
@@ -34,9 +34,9 @@ export class ReduceAirLeaksComponent implements OnInit {
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
+    this.compressedAirAssessmentBaselineResults = this.exploreOpportunitiesService.compressedAirAssessmentBaselineResults.getValue();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
-        this.baselineResults = this.exploreOpportunitiesService.baselineResults;
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
         this.setOrderOptions();
         this.setData()
@@ -69,7 +69,7 @@ export class ReduceAirLeaksComponent implements OnInit {
   setData() {
     if (this.compressedAirAssessment && this.selectedModificationIndex != undefined && this.compressedAirAssessment.modifications[this.selectedModificationIndex]) {
       let reduceAirLeaks: ReduceAirLeaks = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks));
-      this.form = this.reduceAirLeaksService.getFormFromObj(reduceAirLeaks, this.baselineResults);
+      this.form = this.reduceAirLeaksService.getFormFromObj(reduceAirLeaks, this.compressedAirAssessmentBaselineResults.baselineResults);
       if (reduceAirLeaks.order != 100) {
         this.exploreOpportunitiesValidationService.reduceAirLeaksValid.next(this.form.valid);
       }
