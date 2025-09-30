@@ -42,6 +42,72 @@ export interface ProcessCoolingAssessment {
     monthlyOperatingSchedule?: MonthlyOperatingSchedule;
 }
 
+export interface Modification {
+    name: string,
+    id: string,
+    increaseChilledWaterTemp: IncreaseChilledWaterTemp,
+    decreaseCondenserWaterTemp: DecreaseCondenserWaterTemp,
+    useSlidingCondenserWaterTemp: UseSlidingCondenserWaterTemp,
+    applyVariableSpeedControls: ApplyVariableSpeedControls,
+    replaceChillers: ReplaceChillers,
+    upgradeCoolingTowerFans: UpgradeCoolingTowerFans,
+    useFreeCooling: UseFreeCooling,
+    replaceRefrigerant: ReplaceRefrigerant,
+    installVSDOnCentrifugalCompressor: InstallVSDOnCentrifugalCompressor,
+    notes?: string
+}
+
+export interface EEM {
+    useOpportunity: boolean,
+    implementationCost?: number,
+}
+
+
+export interface IncreaseChilledWaterTemp extends EEM {
+    chilledWaterSupplyTemp: number,
+}
+
+export interface DecreaseCondenserWaterTemp extends EEM {
+    condenserWaterTemp: number,
+}
+
+export interface UseSlidingCondenserWaterTemp extends EEM {
+    followingTempDifferential: number,
+    // todo do we need original temp
+    // * constant temp should be false for this EEM
+    isConstantCondenserWaterTemp: boolean,
+}
+
+export interface ApplyVariableSpeedControls extends EEM {
+    // *should be set to Enum 1 (Variable)
+    fanSpeedType: FanSpeedType,
+}
+
+export interface ReplaceChillers extends EEM {
+    currentChillerId: string,
+    newChiller: ChillerInventoryItem,
+}
+
+export interface UpgradeCoolingTowerFans extends EEM {
+    // todo this seems to actually be tower type?ex. original CWSAT dropdown "2-cell with .."
+    numberOfFans: TowerType,
+}
+
+export interface UseFreeCooling extends EEM {
+    usesFreeCooling: boolean,
+    isHEXRequired: boolean,
+    HEXApproachTemp: number,
+}
+
+export interface ReplaceRefrigerant extends EEM {
+    currentRefrigerant: string,
+    newRefrigerant: string,
+}
+
+export interface InstallVSDOnCentrifugalCompressor extends EEM {
+    // todo original CWSAT - this one is the least clear what should happen
+}
+
 export interface MonthlyOperatingSchedule {
   months: { name: string, days: number }[];
   useMaxHours: boolean;
@@ -202,12 +268,6 @@ export interface ChillerInventoryItem {
     loadScheduleByMonth?: number[][]; // * This is hours per percent load for each month
     loadScheduleAllMonths?: number[]; 
     useSameMonthlyLoading: boolean;
-}
-
-export interface Modification {
-    name: string,
-    modificationId: string,
-    notes?: string
 }
 
 

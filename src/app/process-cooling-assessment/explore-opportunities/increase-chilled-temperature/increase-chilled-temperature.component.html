@@ -1,0 +1,49 @@
+<form [formGroup]="form" class="p-0">
+    <div class="checkbox">
+        <label class="group-label" for="increaseChilledWaterTemperatureSetpoint">
+            Increase Chilled Water Temperature Setpoint
+            <!-- <span class="supply-demand">
+                Demand
+            </span> -->
+            <!-- <span *ngIf="form.invalid">
+                <span class="fa fa-exclamation-circle"></span>
+            </span> -->
+        </label>
+    </div>
+
+    <div class="row no-gutters mt-3">
+        <div class="col-6 pr-2">
+            <h5>Baseline</h5>
+            <div class="form-group">
+                <label for="baselineChilledWaterTemp">
+                    Current Chilled Water Temperature
+                </label>
+                <div class="input-group">
+                    <input type="number" id="baselineChilledWaterTemp" class="form-control"
+                        [value]="baselineChilledWaterTemperature" readonly disabled>
+                    <div class="input-group-append">
+                        <span class="input-group-text">°F</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 pl-2">
+            <h5>Modification</h5>
+            <div class="form-group">
+                <label for="modificationChilledWaterTemp">
+                    Modified Chilled Water Temperature
+                </label>
+                <div class="input-group">
+                    <input type="number" id="modificationChilledWaterTemp" class="form-control"
+                        formControlName="chilledWaterTemperature" placeholder="Enter temperature">
+                    <div class="input-group-append">
+                        <span class="input-group-text">°F</span>
+                    </div>
+                </div>
+                <small class="form-text text-muted">
+                    Enter the increased chilled water temperature setpoint
+                </small>
+            </div>
+        </div>
+    </div>
+</form>

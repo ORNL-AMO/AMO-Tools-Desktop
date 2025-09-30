@@ -1,5 +1,5 @@
-
-<div class="navbar assessment-bar">
+<!-- * This component uses host component styling - see component.ts decorator -->
+<div *ngIf="selectedModification$ | async as selectedModification" class="navbar assessment-bar">
     <ul class="h-100 tabs subtabs progress-tabs process-cooling-assessment d-none d-lg-block p-2">
         @for (link of ASSESSMENT_VIEW_LINKS; track $index) {
                     <li routerLinkActive="active" [routerLink]="[link.view]">
@@ -77,10 +77,20 @@
     
 </div>
 
-<div [ngClass]="{'modal-open': isModalOpen == true}"
-    class="assessment-tab-container tab-content">
-    <router-outlet></router-outlet>
-  </div>
+
+<div class="assessment-container tab-content">
+    <div class="assessment-panel-container modification" >
+           <router-outlet></router-outlet>
+    </div>
+
+    <!-- @if (showResultsPanel()) { -->
+    <div class="assessment-panel-container scroll-item"
+        [ngClass]="{'small-screen-tab': smallScreenPanelTab === 'details'}">
+        <app-results-panel></app-results-panel>
+    </div>
+    <!-- } -->
+</div>
+
 
   <!--  todo use different results componet or modify styles (see compressed air) -->
   <!-- <div class="assessment-panel-container scroll-item"

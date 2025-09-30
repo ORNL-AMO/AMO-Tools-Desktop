@@ -1,0 +1,38 @@
+.group-label{
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+}
+
+.group-label:hover{
+	cursor: pointer;
+	background-color: lightgray;
+}
+
+
+.group-label .form-control{
+	width: fit-content;
+	display: inherit;
+    background-color: var(--process-cooling-assessment);
+    color: white;
+}
+
+.fa-exclamation-circle {
+    color: red !important;
+    font-size: .75rem;
+    padding-right: .5rem;
+}
+
+.supply-demand{
+	padding-left: .25rem;
+    border-left: solid #ddd 2px;
+    font-size: 11px;
+    font-style: italic;
+}/* increase-chilled-temperature component styles */
+
+h5{
+    text-align: center;
+    font-size: 18px !important;
+}

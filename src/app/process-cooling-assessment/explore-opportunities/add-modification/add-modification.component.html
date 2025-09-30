@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h3>Add New Scenario</h3>
+    <button class="close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body compressed-air">
+    <p class="small" *ngIf="!modificationsExists">The Explore
+        Opportunities section is a novice view to help you find and evaluate different opportunities for
+        your system.
+        Notes can be added in the right tab (NOTES), these will be added to your final report. Data will be
+        copied from your current baseline condition.</p>
+    <hr>
+    <form>
+        <div class="form-section">
+            <div class="form-group d-flex">
+                <label class="w-50">Scenario Name</label>
+                <input name="newAssessmentName" type="text" class="form-control w-50" [(ngModel)]="newModificationName">
+            </div>
+        </div>
+    </form>
+    <hr>
+    <button class="btn btn-primary pull-right" (click)="createModification()">Create</button>
+</div>
