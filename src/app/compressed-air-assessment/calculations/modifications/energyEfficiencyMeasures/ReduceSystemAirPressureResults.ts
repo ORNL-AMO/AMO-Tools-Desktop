@@ -1,4 +1,4 @@
-import { CompressedAirDayType, ProfileSummaryTotal, ReduceRuntime, ReduceSystemAirPressure, SystemInformation } from "../../../../shared/models/compressed-air-assessment";
+import { CompressedAirDayType, PerformancePoint, ProfileSummaryTotal, ReduceRuntime, ReduceSystemAirPressure, SystemInformation } from "../../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
 import { getProfileSummaryTotals } from "../../caCalculationHelpers";
@@ -36,11 +36,12 @@ export class ReduceSystemAirPressureResults {
         this.profileSummary = previousProfileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
-
-        //1. Adjust compressor set points
-        this.reduceSystemAirPressureAdjustCompressors(reduceSystemAirPressure, atmosphericPressure, settings);
-        //2. Adjust profile based on new set points
-        this.profileSummary = systemPressureChangeAdjustProfile(originalCompressors, settings, adjustedCompressors, atmosphericPressure, this.profileSummary);
+        if (reduceSystemAirPressure.averageSystemPressureReduction != 0) {
+            //1. Adjust compressor set points
+            this.reduceSystemAirPressureAdjustCompressors(reduceSystemAirPressure, atmosphericPressure, settings);
+            //2. Adjust profile based on new set points
+            this.profileSummary = systemPressureChangeAdjustProfile(originalCompressors, settings, adjustedCompressors, atmosphericPressure, this.profileSummary);
+        }
         //3. Reallocate flow based on new set points
         let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(
             summaryDataInterval,
@@ -72,6 +73,7 @@ export class ReduceSystemAirPressureResults {
 
     reduceSystemAirPressureAdjustCompressors(reduceSystemAirPressure: ReduceSystemAirPressure, atmosphericPressure: number, settings: Settings) {
         this.adjustedCompressors.forEach(compressor => {
+
             compressor.reduceSystemPressure(reduceSystemAirPressure, atmosphericPressure, settings);
         });
     }

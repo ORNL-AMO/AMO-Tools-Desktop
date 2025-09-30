@@ -26,10 +26,6 @@ export class FullLoadPerformancePoint implements PerformancePoint {
         this.setDischargePressure(nameplateData);
         this.setAirFlow(nameplateData, centrifugalSpecifics, atmosphericPressure, settings);
         this.setPower(nameplateData, designDetails, atmosphericPressure, settings);
-
-        // this.dischargePressure = this.getFullLoadDischargePressure(selectedCompressor, this.isDefaultPressure, settings);
-        // this.airflow = this.getFullLoadAirFlow(selectedCompressor, this.isDefaultAirFlow, atmosphericPressure, settings);
-        // this.power = this.getFullLoadPower(selectedCompressor, this.isDefaultPower, atmosphericPressure, settings);
     }
 
     setDischargePressure(nameplateData: CompressorNameplateData) {

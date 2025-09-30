@@ -1,4 +1,4 @@
-import { CompressedAirDayType, CompressorInventoryItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from "../../shared/models/compressed-air-assessment";
+import { CompressedAirDayType, CompressorInventoryItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, PerformancePoint, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from "../../shared/models/compressed-air-assessment";
 import { EemSavingsResults } from "./caCalculationModels";
 import * as _ from 'lodash';
 import { CompressorInventoryItemClass } from "./CompressorInventoryItemClass";
@@ -165,4 +165,40 @@ export function getTotalAuxiliaryPower(selectedDayType: CompressedAirDayType, in
         });
         return auxiliaryPower;
     }
+}
+
+
+export function compareOpratingPoints(originalCompressors: Array<CompressorInventoryItemClass>, adjustedCompressors: Array<CompressorInventoryItemClass>) {
+    adjustedCompressors.forEach((adjustedCompressor, index) => {
+        let ogCompressor: CompressorInventoryItemClass = originalCompressors.find(compressor => { return compressor.itemId == adjustedCompressor.itemId });
+        let ogOperatingPoints = ogCompressor.performancePoints;
+        let adjustedOperatingPoints = adjustedCompressor.performancePoints;
+        comparePoint(ogOperatingPoints.fullLoad, adjustedOperatingPoints.fullLoad, adjustedCompressor.name + ' Full Load');
+        comparePoint(ogOperatingPoints.maxFullFlow, adjustedOperatingPoints.maxFullFlow, adjustedCompressor.name + ' Max Full Flow');
+        if (ogOperatingPoints.midTurndown && adjustedOperatingPoints.midTurndown) {
+            comparePoint(ogOperatingPoints.midTurndown, adjustedOperatingPoints.midTurndown, adjustedCompressor.name + ' Mid Turndown');
+        }
+        if (ogOperatingPoints.turndown && adjustedOperatingPoints.turndown) {
+            comparePoint(ogOperatingPoints.turndown, adjustedOperatingPoints.turndown, adjustedCompressor.name + ' Turndown');
+        }
+        comparePoint(ogOperatingPoints.unloadPoint, adjustedOperatingPoints.unloadPoint, adjustedCompressor.name + ' Unload Point');
+        comparePoint(ogOperatingPoints.noLoad, adjustedOperatingPoints.noLoad, adjustedCompressor.name + ' No Load');
+        comparePoint(ogOperatingPoints.blowoff, adjustedOperatingPoints.blowoff, adjustedCompressor.name + ' Blowoff');
+    });
+}
+
+export function comparePoint(ogPoints: PerformancePoint, adjustedPoints: PerformancePoint, label: string) {
+    let dischargePressure = ogPoints.dischargePressure != adjustedPoints.dischargePressure;
+    if (dischargePressure) {
+        console.log(`${label} - discharge pressure changed`);
+    }
+    let airflow = ogPoints.airflow != adjustedPoints.airflow;
+    if (airflow) {
+        console.log(`${label} - airflow changed`);
+    }
+    let power = ogPoints.power != adjustedPoints.power;
+    if (power) {
+        console.log(`${label} - power changed`);
+    }
+
 }
