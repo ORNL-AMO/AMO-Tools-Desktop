@@ -175,11 +175,10 @@ export class ReduceRunTimeComponent implements OnInit {
 
   setAirflowData() {
     if (this.reduceRuntime.order != 100 && this.selectedDayType) {
-      let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
-      let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.reduceRuntime.order, modification, this.compressedAirAssessmentModificationResults.getModificationResults(), this.selectedDayType.dayType.dayTypeId);
       let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
       let reduceRuntimeProfile: Array<ProfileSummary> = modificationProfileSummary.reduceRunTimeResults.profileSummary;
-      let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup, reduceRuntimeProfile, this.compressedAirAssessment.compressorInventoryItems, true);
+      let previousOrderProfile: Array<ProfileSummary> = modificationProfileSummary.getProfileSummaryFromOrder(this.reduceRuntime.order - 1)
+      let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(previousOrderProfile, this.compressedAirAssessment.systemProfile.systemProfileSetup, reduceRuntimeProfile, this.compressedAirAssessment.compressorInventoryItems, true);
       let dayTypeIndex: number = this.dayTypeOptions.findIndex(dayTypeOption => { return dayTypeOption.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
       this.dayTypeOptions[dayTypeIndex].availableAirflow = dataArrays.availableAirflow;
       this.dayTypeOptions[dayTypeIndex].requiredAirflow = dataArrays.requiredAirflow;
@@ -193,11 +192,10 @@ export class ReduceRunTimeComponent implements OnInit {
     if (compressedAirDayTypes && this.compressedAirAssessmentModificationResults && this.reduceRuntime.order != 100) {
       this.dayTypeOptions = new Array();
       compressedAirDayTypes.forEach(dayType => {
-        let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
-        let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.reduceRuntime.order, modification, this.compressedAirAssessmentModificationResults.getModificationResults(), dayType.dayTypeId);
-        let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
+        let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == dayType.dayTypeId });
+        let previousOrderProfile: Array<ProfileSummary> = modificationProfileSummary.getProfileSummaryFromOrder(this.reduceRuntime.order - 1)
         let reduceRuntimeProfile: Array<ProfileSummary> = modificationProfileSummary.reduceRunTimeResults.profileSummary;
-        let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup, reduceRuntimeProfile, this.compressedAirAssessment.compressorInventoryItems, true);
+        let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(previousOrderProfile, this.compressedAirAssessment.systemProfile.systemProfileSetup, reduceRuntimeProfile, this.compressedAirAssessment.compressorInventoryItems, true);
         this.dayTypeOptions.push({
           dayType: dayType,
           isValid: dataArrays.isValid,

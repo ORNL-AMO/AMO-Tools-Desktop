@@ -62,9 +62,9 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
       });
 
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
-        let modificationValid: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings);
-        if (modificationValid) {
-          let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
+        let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
+        let modificationValid: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings, compressedAirAssessmentModificationResults);
+        if (modificationValid.isValid) {
           if (compressedAirAssessmentModificationResults.totalCostSavings > this.maxCostSavings) {
             this.maxCostSavings = compressedAirAssessmentModificationResults.totalCostSavings;
           }

@@ -14,7 +14,7 @@ export class ReduceSystemAirPressureResults {
     savings: CompressedAirEemSavingsResult;
     profileSummary: Array<CompressedAirProfileSummary>;
     adjustedCompressors: Array<CompressorInventoryItemClass>;
-
+    order: number
     constructor(
         dayType: CompressedAirDayType,
         adjustedCompressors: Array<CompressorInventoryItemClass>,
@@ -29,7 +29,8 @@ export class ReduceSystemAirPressureResults {
         totalAirStorage: number,
         systemInformation: SystemInformation,
         reduceRuntime: ReduceRuntime,
-        _compressedAirCalculationService: CompressedAirCalculationService) {
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        order: number) {
 
         this.adjustedCompressors = adjustedCompressors;
         this.profileSummary = previousProfileSummary.map(summary => {
@@ -62,9 +63,11 @@ export class ReduceSystemAirPressureResults {
             costKwh,
             reduceSystemAirPressure.implementationCost,
             summaryDataInterval,
-            auxiliaryPowerUsage);
+            auxiliaryPowerUsage,
+            order);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
+        this.order = order;
     }
 
     reduceSystemAirPressureAdjustCompressors(reduceSystemAirPressure: ReduceSystemAirPressure, atmosphericPressure: number, settings: Settings) {

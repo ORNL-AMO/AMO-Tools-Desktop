@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CascadingSetPointData, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../calculations/caCalculationModels';
 import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
 
@@ -236,27 +235,5 @@ export class ExploreOpportunitiesService {
       }
     }
     return modification;
-  }
-
-
-  getPreviousOrderProfileSummary(order: number, modification: Modification, modificationResults: CompressedAirAssessmentResult, dayTypeId: string): Array<ProfileSummary> {
-    let dayTypeModificationResults: DayTypeModificationResult = modificationResults.dayTypeModificationResults.find(dayTypeResults => { return dayTypeResults.dayTypeId == dayTypeId });
-    if (modification.addPrimaryReceiverVolume.order == order - 1) {
-      return dayTypeModificationResults.addReceiverVolumeProfileSummary;
-    } else if (modification.adjustCascadingSetPoints.order == order - 1) {
-      return dayTypeModificationResults.adjustCascadingSetPointsProfileSummary;
-    } else if (modification.improveEndUseEfficiency.order == order - 1) {
-      return dayTypeModificationResults.improveEndUseEfficiencyProfileSummary;
-    } else if (modification.reduceAirLeaks.order == order - 1) {
-      return dayTypeModificationResults.reduceAirLeaksProfileSummary;
-    } else if (modification.reduceRuntime.order == order - 1) {
-      return dayTypeModificationResults.reduceRunTimeProfileSummary;
-    } else if (modification.reduceSystemAirPressure.order == order - 1) {
-      return dayTypeModificationResults.reduceSystemAirPressureProfileSummary;
-    } else if (modification.useAutomaticSequencer.order == order - 1) {
-      return dayTypeModificationResults.useAutomaticSequencerProfileSummary;
-    } else {
-      return dayTypeModificationResults.flowAllocationProfileSummary;
-    }
   }
 }

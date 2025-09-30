@@ -14,7 +14,7 @@ export class AdjustCascadingSetPointsResults {
     savings: CompressedAirEemSavingsResult;
     profileSummary: Array<CompressedAirProfileSummary>;
     adjustedCompressors: Array<CompressorInventoryItemClass>;
-
+    order: number;
     constructor(
         dayType: CompressedAirDayType,
         adjustedCompressors: Array<CompressorInventoryItemClass>,
@@ -29,7 +29,8 @@ export class AdjustCascadingSetPointsResults {
         totalAirStorage: number,
         systemInformation: SystemInformation,
         reduceRuntime: ReduceRuntime,
-        _compressedAirCalculationService: CompressedAirCalculationService) {
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        order: number) {
         this.adjustedCompressors = adjustedCompressors;
         this.profileSummary = previousProfileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
@@ -61,9 +62,11 @@ export class AdjustCascadingSetPointsResults {
             costKwh,
             adjustCascadingSetPoints.implementationCost,
             summaryDataInterval,
-            auxiliaryPowerUsage);
+            auxiliaryPowerUsage,
+            order);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
+        this.order = order;
     }
 
     adjustCascadingSetPointsAdjustCompressors(adjustCascadingSetPoints: AdjustCascadingSetPoints, atmosphericPressure: number, settings: Settings) {

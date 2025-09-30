@@ -17,6 +17,7 @@ import { CompressedAirAssessmentModificationResults } from '../calculations/modi
 import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { CompressorInventoryItemClass } from '../calculations/CompressorInventoryItemClass';
+import { CompressedAirModifiedDayTypeProfileSummary } from '../calculations/modifications/CompressedAirModifiedDayTypeProfileSummary';
 
 @Injectable()
 export class ExploreOpportunitiesValidationService {
@@ -31,10 +32,7 @@ export class ExploreOpportunitiesValidationService {
   constructor(private addReceiverVolumeService: AddReceiverVolumeService, private adjustCascadingSetPointsService: AdjustCascadingSetPointsService,
     private improveEndUseEfficiencyService: ImproveEndUseEfficiencyService, private reduceAirLeaksService: ReduceAirLeaksService,
     private reduceSystemAirPressureService: ReduceSystemAirPressureService, private useAutomaticSequencerService: UseAutomaticSequencerService,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private reduceRunTimeService: ReduceRunTimeService,
-    private compressedAirCalculationService: CompressedAirCalculationService,
-    private assessmentCo2SavingsService: AssessmentCo2SavingsService) {
+    private reduceRunTimeService: ReduceRunTimeService) {
     this.addReceiverVolumeValid = new BehaviorSubject<boolean>(true);
     this.adjustCascadingSetPointsValid = new BehaviorSubject<boolean>(true);
     this.improveEndUseEfficiencyValid = new BehaviorSubject<boolean>(true);
@@ -45,20 +43,15 @@ export class ExploreOpportunitiesValidationService {
   }
 
   checkModificationValid(modification: Modification, baselineResults: BaselineResults, baselineProfileSummaries: Array<{ dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }>,
-    compressedAirAssessment: CompressedAirAssessment, settings: Settings, compressedAirAssessmentResult?: CompressedAirAssessmentResult): CompressedAirModificationValid {
-    if (!compressedAirAssessmentResult) {
-      //TODO: Check if there is a better way to get modification results without recalculating everything
-      let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(compressedAirAssessment, modification, settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-      compressedAirAssessmentResult = compressedAirAssessmentModificationResults.getModificationResults()
-    }
+    compressedAirAssessment: CompressedAirAssessment, settings: Settings, compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults): CompressedAirModificationValid {
 
     let addReceiverVolume: boolean = this.checkAddReceiverVolumeValid(modification.addPrimaryReceiverVolume);
     let adjustCascadingSetPoints: boolean = this.checkAdjustCascadingPointsValid(modification.adjustCascadingSetPoints);
     let improveEndUseEfficiency: boolean = this.checkImproveEndUseEfficiencyValid(modification.improveEndUseEfficiency, baselineResults, baselineProfileSummaries);
     let reduceAirLeaks: boolean = this.checkReduceAirLeaksValid(modification.reduceAirLeaks, baselineResults);
-    let reduceRuntime: boolean = this.checkReduceRuntimeValid(compressedAirAssessment, modification, compressedAirAssessmentResult);
+    let reduceRuntime: boolean = this.checkReduceRuntimeValid(compressedAirAssessment, modification, compressedAirAssessmentModificationResults);
     let reduceSystemPressure: boolean = this.checkReduceSystemAirPressureValid(modification.reduceSystemAirPressure, compressedAirAssessment.compressorInventoryItems);
-    let useAutomaticSequencer: boolean = this.checkUseAutomaticSequencerValid(compressedAirAssessment, modification, compressedAirAssessmentResult, settings);
+    let useAutomaticSequencer: boolean = this.checkUseAutomaticSequencerValid(compressedAirAssessment, modification, compressedAirAssessmentModificationResults, settings);
     return {
       isValid: addReceiverVolume && adjustCascadingSetPoints && improveEndUseEfficiency && reduceAirLeaks && reduceRuntime && reduceSystemPressure && useAutomaticSequencer,
       addReceiverVolume: addReceiverVolume,
@@ -127,7 +120,7 @@ export class ExploreOpportunitiesValidationService {
     return isValid;
   }
 
-  checkReduceRuntimeValid(compressedAirAssessment: CompressedAirAssessment, modification: Modification, modificationResults: CompressedAirAssessmentResult): boolean {
+  checkReduceRuntimeValid(compressedAirAssessment: CompressedAirAssessment, modification: Modification, compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults): boolean {
     let isValid: boolean = true;
     if (modification.reduceRuntime.order != 100) {
       let form: UntypedFormGroup = this.reduceRunTimeService.getFormFromObj(modification.reduceRuntime);
@@ -135,8 +128,9 @@ export class ExploreOpportunitiesValidationService {
       if (isValid) {
         compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
           if (isValid) {
-            let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(modification.reduceRuntime.order, modification, modificationResults, dayType.dayTypeId);
-            let eemSequencerProfileSummary: Array<ProfileSummary> = modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).reduceRunTimeProfileSummary;
+            let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == dayType.dayTypeId });
+            let adjustedProfileSummary: Array<ProfileSummary> = modificationProfileSummary.getProfileSummaryFromOrder(modification.reduceRuntime.order - 1);
+            let eemSequencerProfileSummary: Array<ProfileSummary> = modificationProfileSummary.reduceRunTimeResults.profileSummary;
             let dataArrays: ValidationDataArrays = this.getDataArrays(adjustedProfileSummary, compressedAirAssessment.systemProfile.systemProfileSetup, eemSequencerProfileSummary, compressedAirAssessment.compressorInventoryItems, false);
             isValid = dataArrays.isValid;
           }
@@ -155,7 +149,7 @@ export class ExploreOpportunitiesValidationService {
     return isValid;
   }
 
-  checkUseAutomaticSequencerValid(compressedAirAssessment: CompressedAirAssessment, modification: Modification, modificationResults: CompressedAirAssessmentResult, settings: Settings): boolean {
+  checkUseAutomaticSequencerValid(compressedAirAssessment: CompressedAirAssessment, modification: Modification, compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults, settings: Settings): boolean {
     let isValid: boolean = true;
     if (modification.useAutomaticSequencer.order != 100) {
       let form: UntypedFormGroup = this.useAutomaticSequencerService.getFormFromObj(modification.useAutomaticSequencer);
@@ -168,8 +162,9 @@ export class ExploreOpportunitiesValidationService {
               itemClass.adjustCompressorPerformancePointsWithSequencer(modification.useAutomaticSequencer.targetPressure, modification.useAutomaticSequencer.variance, compressedAirAssessment.systemInformation, settings);
             });
             let adjustedCompressors: Array<CompressorInventoryItem> = inventoryItemsClass.map(itemClass => { return itemClass.toModel() });
-            let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(modification.useAutomaticSequencer.order, modification, modificationResults, dayType.dayTypeId);
-            let eemSequencerProfileSummary: Array<ProfileSummary> = modificationResults.dayTypeModificationResults.find(dayTypeModResult => { return dayTypeModResult.dayTypeId == dayType.dayTypeId }).useAutomaticSequencerProfileSummary;
+            let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == dayType.dayTypeId });
+            let adjustedProfileSummary: Array<ProfileSummary> = modificationProfileSummary.getProfileSummaryFromOrder(modification.useAutomaticSequencer.order - 1);
+            let eemSequencerProfileSummary: Array<ProfileSummary> = modificationProfileSummary.useAutomaticSequencerResults.profileSummary;
             let dataArrays: ValidationDataArrays = this.getDataArrays(adjustedProfileSummary, compressedAirAssessment.systemProfile.systemProfileSetup, eemSequencerProfileSummary, adjustedCompressors, false);
             isValid = dataArrays.isValid;
           }
@@ -181,13 +176,13 @@ export class ExploreOpportunitiesValidationService {
   }
 
 
-  getDataArrays(adjustedProfileSummary: Array<ProfileSummary>, systemProfileSetup: SystemProfileSetup,
+  getDataArrays(previousOrderProfile: Array<ProfileSummary>, systemProfileSetup: SystemProfileSetup,
     eemProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItem>,
     profilePowerNeeded: boolean): ValidationDataArrays {
     let requiredAirflow: Array<number> = new Array();
     let availableAirflow: Array<number> = new Array();
     let profilePower: Array<number> = new Array();
-    adjustedProfileSummary.forEach(summary => {
+    previousOrderProfile.forEach(summary => {
       let index: number = 0;
       for (let i = 0; i < 24;) {
         if (requiredAirflow[index] == undefined) {

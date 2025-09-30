@@ -11,14 +11,14 @@ export class ReduceAirLeaksResults {
 
     savings: CompressedAirEemSavingsResult;
     profileSummary: Array<CompressedAirProfileSummary>;
-
+    order: number
     constructor(dayType: CompressedAirDayType, reduceAirLeaks: ReduceAirLeaks, totals: Array<ProfileSummaryTotal>,
         settings: Settings, previousProfileSummary: Array<CompressedAirProfileSummary>, adjustedCompressors: Array<CompressorInventoryItemClass>,
         atmosphericPressure: number, totalAirStorage: number, systemInformation: SystemInformation, reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService, costKwh: number,
         summaryDataInterval: number,
         auxiliaryPowerUsage: { cost: number, energyUse: number },
-
+        order: number
     ) {
         //1. Adjust totals based on air leak reduction
         let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = this.reduceAirLeaks(reduceAirLeaks, totals);
@@ -37,9 +37,11 @@ export class ReduceAirLeaksResults {
             costKwh,
             reduceAirLeaks.implementationCost,
             summaryDataInterval,
-            auxiliaryPowerUsage);
+            auxiliaryPowerUsage,
+            order);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
+        this.order = order;
     }
 
     reduceAirLeaks(reduceAirLeaks: ReduceAirLeaks, totals: Array<ProfileSummaryTotal>): Array<ProfileSummaryTotal> {

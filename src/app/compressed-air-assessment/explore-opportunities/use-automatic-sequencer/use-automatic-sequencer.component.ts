@@ -172,16 +172,11 @@ export class UseAutomaticSequencerComponent implements OnInit {
 
   setAirflowData() {
     if (this.useAutomaticSequencer.order != 100 && this.selectedDayType) {
-      let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
-      let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.useAutomaticSequencer.order, modification, this.compressedAirAssessmentModificationResults.getModificationResults(), this.selectedDayType.dayType.dayTypeId);
-      let inventoryItemsClass: Array<CompressorInventoryItemClass> = this.compressedAirAssessment.compressorInventoryItems.map(item => { return new CompressorInventoryItemClass(item) });
-      inventoryItemsClass.forEach(item => {
-        item.adjustCompressorPerformancePointsWithSequencer(this.useAutomaticSequencer.targetPressure, this.useAutomaticSequencer.variance, this.compressedAirAssessment.systemInformation, this.settings);
-      })
-      let adjustedCompressors: Array<CompressorInventoryItem> = inventoryItemsClass.map(itemClass => { return itemClass.toModel() });
       let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
+      let adjustedCompressors: Array<CompressorInventoryItem> = modificationProfileSummary.useAutomaticSequencerResults.adjustedCompressors.map(item => { return item.toModel() })
       let eemSequencerProfileSummary: Array<ProfileSummary> = modificationProfileSummary.useAutomaticSequencerResults.profileSummary;
-      let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup, eemSequencerProfileSummary, adjustedCompressors, true);
+      let previousOrderProfile: Array<ProfileSummary> = modificationProfileSummary.getProfileSummaryFromOrder(this.useAutomaticSequencer.order - 1)
+      let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(previousOrderProfile, this.compressedAirAssessment.systemProfile.systemProfileSetup, eemSequencerProfileSummary, adjustedCompressors, true);
       let dayTypeIndex: number = this.dayTypeOptions.findIndex(dayTypeOption => { return dayTypeOption.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
       this.dayTypeOptions[dayTypeIndex].availableAirflow = dataArrays.availableAirflow;
       this.dayTypeOptions[dayTypeIndex].requiredAirflow = dataArrays.requiredAirflow;
@@ -205,16 +200,11 @@ export class UseAutomaticSequencerComponent implements OnInit {
     if (compressedAirDayTypes && this.compressedAirAssessmentModificationResults && this.useAutomaticSequencer.order != 100) {
       this.dayTypeOptions = new Array();
       compressedAirDayTypes.forEach(dayType => {
-        let inventoryItemsClass: Array<CompressorInventoryItemClass> = this.compressedAirAssessment.compressorInventoryItems.map(item => { return new CompressorInventoryItemClass(item) });
-        inventoryItemsClass.forEach(item => {
-          item.adjustCompressorPerformancePointsWithSequencer(this.useAutomaticSequencer.targetPressure, this.useAutomaticSequencer.variance, this.compressedAirAssessment.systemInformation, this.settings);
-        })
-        let adjustedCompressors: Array<CompressorInventoryItem> = inventoryItemsClass.map(itemClass => { return itemClass.toModel() });
-        let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
-        let adjustedProfileSummary: Array<ProfileSummary> = this.exploreOpportunitiesService.getPreviousOrderProfileSummary(this.useAutomaticSequencer.order, modification, this.compressedAirAssessmentModificationResults.getModificationResults(), dayType.dayTypeId);
         let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
-      let eemSequencerProfileSummary: Array<ProfileSummary> = modificationProfileSummary.useAutomaticSequencerResults.profileSummary;
-       let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(adjustedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup, eemSequencerProfileSummary, adjustedCompressors, true);
+        let adjustedCompressors: Array<CompressorInventoryItem> = modificationProfileSummary.useAutomaticSequencerResults.adjustedCompressors.map(item => { return item.toModel() })
+        let eemSequencerProfileSummary: Array<ProfileSummary> = modificationProfileSummary.useAutomaticSequencerResults.profileSummary;
+        let previousOrderProfile: Array<ProfileSummary> = modificationProfileSummary.getProfileSummaryFromOrder(this.useAutomaticSequencer.order - 1)
+        let dataArrays: ValidationDataArrays = this.exploreOpportunitiesValidationService.getDataArrays(previousOrderProfile, this.compressedAirAssessment.systemProfile.systemProfileSetup, eemSequencerProfileSummary, adjustedCompressors, true);
         this.dayTypeOptions.push({
           dayType: dayType,
           isValid: dataArrays.isValid,

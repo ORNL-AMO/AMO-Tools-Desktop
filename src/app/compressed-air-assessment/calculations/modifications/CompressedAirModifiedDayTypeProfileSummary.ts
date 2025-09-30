@@ -78,7 +78,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         }
         //Initial Flow Reallocation
         this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, false, this.dayType, undefined, this.adjustedCompressors);
-        this.setFlowReallocationResults(settings, _compressedAirCalculationService, modification.flowReallocation.implementationCost);
+        this.setFlowReallocationResults(settings, _compressedAirCalculationService, modification.flowReallocation.implementationCost, 0);
         //Apply Modifications in order
         let modificationOrders: Array<number> = this.getModificationOrders(modification);
         //improveEndUseEfficiency and reduceRuntime will be set according to the order
@@ -89,33 +89,33 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, false, this.dayType, improveEndUseEfficiency, this.adjustedCompressors);
             //Primary receiver volume
             if (modification.addPrimaryReceiverVolume.order == orderIndex) {
-                this.setAddPrimaryReceiverVolumeResults(settings, reduceRuntime, _compressedAirCalculationService, modification.addPrimaryReceiverVolume.implementationCost, modification.addPrimaryReceiverVolume.increasedVolume);
+                this.setAddPrimaryReceiverVolumeResults(settings, reduceRuntime, _compressedAirCalculationService, modification.addPrimaryReceiverVolume.implementationCost, modification.addPrimaryReceiverVolume.increasedVolume, orderIndex);
             }
             //Adjust cascading set points
             else if (modification.adjustCascadingSetPoints.order == orderIndex) {
-                this.setAdjustCascadingSetPointsResults(modification.adjustCascadingSetPoints, settings, reduceRuntime, _compressedAirCalculationService);
+                this.setAdjustCascadingSetPointsResults(modification.adjustCascadingSetPoints, settings, reduceRuntime, _compressedAirCalculationService, orderIndex);
             }
             //Improve end use efficiency
             else if (modification.improveEndUseEfficiency.order == orderIndex) {
                 improveEndUseEfficiency = modification.improveEndUseEfficiency;
-                this.setImproveEndUseEfficiencyResults(improveEndUseEfficiency, settings, reduceRuntime, _compressedAirCalculationService);
+                this.setImproveEndUseEfficiencyResults(improveEndUseEfficiency, settings, reduceRuntime, _compressedAirCalculationService, orderIndex);
             }
             //Reduce runtime
             else if (modification.reduceRuntime.order == orderIndex) {
                 reduceRuntime = modification.reduceRuntime;
-                this.setReduceRunTimeResults(settings, reduceRuntime, _compressedAirCalculationService, modification.reduceRuntime.implementationCost);
+                this.setReduceRunTimeResults(settings, reduceRuntime, _compressedAirCalculationService, modification.reduceRuntime.implementationCost, orderIndex);
             }
             //Reduce air leaks
             else if (modification.reduceAirLeaks.order == orderIndex) {
-                this.setReduceAirLeaksResults(modification.reduceAirLeaks, settings, reduceRuntime, _compressedAirCalculationService);
+                this.setReduceAirLeaksResults(modification.reduceAirLeaks, settings, reduceRuntime, _compressedAirCalculationService, orderIndex);
             }
             //Reduce system air pressure
             else if (modification.reduceSystemAirPressure.order == orderIndex) {
-                this.setReduceSystemAirPressureResults(modification.reduceSystemAirPressure, settings, reduceRuntime, _compressedAirCalculationService);
+                this.setReduceSystemAirPressureResults(modification.reduceSystemAirPressure, settings, reduceRuntime, _compressedAirCalculationService, orderIndex);
             }
             //Use automatic sequencer
             else if (modification.useAutomaticSequencer.order == orderIndex) {
-                this.setUseAutomaticSequencerResults(modification.useAutomaticSequencer, settings, reduceRuntime, _compressedAirCalculationService);
+                this.setUseAutomaticSequencerResults(modification.useAutomaticSequencer, settings, reduceRuntime, _compressedAirCalculationService, orderIndex);
             }
         }
         //Final profile totals
@@ -159,7 +159,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
     setFlowReallocationResults(
         settings: Settings,
         _compressedAirCalculationService: CompressedAirCalculationService,
-        implementationCost: number) {
+        implementationCost: number,
+        order: number) {
         this.flowReallocationResults = new FlowReallocationResults(this.dayType,
             settings,
             this.adjustedProfileSummary,
@@ -173,8 +174,12 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             _compressedAirCalculationService,
             this.costKwh,
             implementationCost,
-            this.summaryDataInterval);
-        this.adjustedProfileSummary = this.flowReallocationResults.profileSummary;
+            this.summaryDataInterval,
+            undefined,
+            order);
+        this.adjustedProfileSummary = this.flowReallocationResults.profileSummary.map(summary => {
+            return new CompressedAirProfileSummary(summary, true);
+        });
     }
 
     // reallocate flow with additional receiver volume
@@ -183,7 +188,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService,
         implementationCost: number,
-        additionalReceiverVolume: number) {
+        additionalReceiverVolume: number,
+        order: number) {
         this.addPrimaryReceiverVolumeResults = new FlowReallocationResults(this.dayType,
             settings,
             this.adjustedProfileSummary,
@@ -198,15 +204,20 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.costKwh,
             implementationCost,
             this.summaryDataInterval,
-            this.auxiliaryPowerUsage);
-        this.adjustedProfileSummary = this.addPrimaryReceiverVolumeResults.profileSummary;
+            undefined,
+            order);
+        this.adjustedProfileSummary = this.addPrimaryReceiverVolumeResults.profileSummary.map(summary => {
+            return new CompressedAirProfileSummary(summary, true);
+        });
     }
 
     setAdjustCascadingSetPointsResults(
         adjustCascadingSetPoints: AdjustCascadingSetPoints,
         settings: Settings,
         reduceRuntime: ReduceRuntime,
-        _compressedAirCalculationService: CompressedAirCalculationService) {
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        order: number
+    ) {
         this.adjustCascadingSetPointsResults = new AdjustCascadingSetPointsResults(this.dayType,
             this.adjustedCompressors,
             adjustCascadingSetPoints,
@@ -216,19 +227,23 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.originalCompressors,
             this.costKwh,
             this.summaryDataInterval,
-            this.auxiliaryPowerUsage,
+            undefined,
             this.totalAirStorage,
             this.systemInformation,
             reduceRuntime,
-            _compressedAirCalculationService);
-        this.adjustedProfileSummary = this.adjustCascadingSetPointsResults.profileSummary;
+            _compressedAirCalculationService,
+            order);
+        this.adjustedProfileSummary = this.adjustCascadingSetPointsResults.profileSummary.map(summary => {
+            return new CompressedAirProfileSummary(summary, true);
+        });
         this.adjustedCompressors = this.adjustCascadingSetPointsResults.adjustedCompressors;
     }
 
     setImproveEndUseEfficiencyResults(improveEndUseEfficiency: ImproveEndUseEfficiency,
         settings: Settings,
         reduceRuntime: ReduceRuntime,
-        _compressedAirCalculationService: CompressedAirCalculationService
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        order: number
     ) {
         this.improveEndUseEfficiencyResults = new ImproveEndUseEfficiencyResults(this.dayType,
             improveEndUseEfficiency,
@@ -243,9 +258,12 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             _compressedAirCalculationService,
             this.costKwh,
             this.summaryDataInterval,
-            this.auxiliaryPowerUsage
+            undefined,
+            order
         );
-        this.adjustedProfileSummary = this.improveEndUseEfficiencyResults.profileSummary;
+        this.adjustedProfileSummary = this.improveEndUseEfficiencyResults.profileSummary.map(summary => {
+            return new CompressedAirProfileSummary(summary, true);
+        });
         this.auxiliaryPowerUsage = this.improveEndUseEfficiencyResults.auxiliaryPowerUsage;
     }
 
@@ -253,7 +271,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         settings: Settings,
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService,
-        implementationCost: number) {
+        implementationCost: number,
+        order: number) {
         this.reduceRunTimeResults = new FlowReallocationResults(this.dayType,
             settings,
             this.adjustedProfileSummary,
@@ -268,14 +287,18 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.costKwh,
             implementationCost,
             this.summaryDataInterval,
-            this.auxiliaryPowerUsage);
-        this.adjustedProfileSummary = this.reduceRunTimeResults.profileSummary;
+            undefined,
+            order);
+        this.adjustedProfileSummary = this.reduceRunTimeResults.profileSummary.map(summary => {
+            return new CompressedAirProfileSummary(summary, true);
+        });
     }
 
     setReduceAirLeaksResults(reduceAirLeaks: ReduceAirLeaks,
         settings: Settings,
         reduceRuntime: ReduceRuntime,
-        _compressedAirCalculationService: CompressedAirCalculationService
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        order: number
     ) {
         this.reduceAirLeaksResults = new ReduceAirLeaksResults(this.dayType,
             reduceAirLeaks,
@@ -290,16 +313,20 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             _compressedAirCalculationService,
             this.costKwh,
             this.summaryDataInterval,
-            this.auxiliaryPowerUsage
+            undefined,
+            order
         );
-        this.adjustedProfileSummary = this.reduceAirLeaksResults.profileSummary;
+        this.adjustedProfileSummary = this.reduceAirLeaksResults.profileSummary.map(summary => {
+            return new CompressedAirProfileSummary(summary, true);
+        });
     }
 
     setReduceSystemAirPressureResults(
         reduceSystemAirPressure: ReduceSystemAirPressure,
         settings: Settings,
         reduceRuntime: ReduceRuntime,
-        _compressedAirCalculationService: CompressedAirCalculationService) {
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        order: number) {
         this.reduceSystemAirPressureResults = new ReduceSystemAirPressureResults(this.dayType,
             this.adjustedCompressors,
             reduceSystemAirPressure,
@@ -309,12 +336,15 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.originalCompressors,
             this.costKwh,
             this.summaryDataInterval,
-            this.auxiliaryPowerUsage,
+            undefined,
             this.totalAirStorage,
             this.systemInformation,
             reduceRuntime,
-            _compressedAirCalculationService);
-        this.adjustedProfileSummary = this.reduceSystemAirPressureResults.profileSummary;
+            _compressedAirCalculationService,
+            order);
+        this.adjustedProfileSummary = this.reduceSystemAirPressureResults.profileSummary.map(summary => {
+            return new CompressedAirProfileSummary(summary, true);
+        });
         this.adjustedCompressors = this.reduceSystemAirPressureResults.adjustedCompressors;
     }
 
@@ -322,7 +352,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         useAutomaticSequencer: UseAutomaticSequencer,
         settings: Settings,
         reduceRuntime: ReduceRuntime,
-        _compressedAirCalculationService: CompressedAirCalculationService) {
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        order: number) {
         this.useAutomaticSequencerResults = new UseAutomaticSequencerResults(this.dayType,
             this.adjustedCompressors,
             useAutomaticSequencer,
@@ -331,12 +362,15 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.adjustedProfileSummary,
             this.costKwh,
             this.summaryDataInterval,
-            this.auxiliaryPowerUsage,
+            undefined,
             this.totalAirStorage,
             this.systemInformation,
             reduceRuntime,
-            _compressedAirCalculationService);
-        this.adjustedProfileSummary = this.useAutomaticSequencerResults.profileSummary;
+            _compressedAirCalculationService,
+            order);
+        this.adjustedProfileSummary = this.useAutomaticSequencerResults.profileSummary.map(summary => {
+            return new CompressedAirProfileSummary(summary, true);
+        });
         this.adjustedCompressors = this.useAutomaticSequencerResults.adjustedCompressors;
     }
 
@@ -412,6 +446,29 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             peakDemandCostSavings: this.peakDemandCostSavings,
             totalAnnualOperatingCost: this.totalModifiedAnnualOperatingCost,
             annualEmissionOutput: this.modificationSavings.adjustedResults.annualEmissionOutput
+        }
+    }
+
+    getProfileSummaryFromOrder(neededOrder: number) {
+        if (neededOrder == 0) {
+            return this.flowReallocationResults.profileSummary;
+        }
+        if (this.addPrimaryReceiverVolumeResults.order == neededOrder) {
+            return this.addPrimaryReceiverVolumeResults.profileSummary;
+        } else if (this.adjustCascadingSetPointsResults.order == neededOrder) {
+            return this.adjustCascadingSetPointsResults.profileSummary;
+        } else if (this.improveEndUseEfficiencyResults.order == neededOrder) {
+            return this.improveEndUseEfficiencyResults.profileSummary;
+        } else if (this.reduceAirLeaksResults.order == neededOrder) {
+            return this.reduceAirLeaksResults.profileSummary;
+        } else if (this.reduceRunTimeResults.order == neededOrder) {
+            return this.reduceRunTimeResults.profileSummary;
+        } else if (this.reduceSystemAirPressureResults.order == neededOrder) {
+            return this.reduceSystemAirPressureResults.profileSummary;
+        } else if (this.useAutomaticSequencerResults.order == neededOrder) {
+            return this.useAutomaticSequencerResults.profileSummary;
+        } else {
+            return this.flowReallocationResults.profileSummary;
         }
     }
 }

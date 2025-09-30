@@ -78,8 +78,7 @@ export class CompressedAirReportComponent implements OnInit {
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
         let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, this.compressedAirAssessmentBaselineResults);
         this.assessmentResults.push(compressedAirAssessmentModificationResults);
-        let compressedAirAssessmentResult: CompressedAirAssessmentResult = compressedAirAssessmentModificationResults.getModificationResults()
-        let validation: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, this.baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings, compressedAirAssessmentResult)
+        let validation: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, this.baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings, compressedAirAssessmentModificationResults)
         let combinedDayTypeResults: DayTypeModificationResult = new CompressedAirCombinedDayTypeResults(compressedAirAssessmentModificationResults).getDayTypeModificationResult();
 
         this.combinedDayTypeResults.push({

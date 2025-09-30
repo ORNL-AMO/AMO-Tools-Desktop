@@ -12,7 +12,7 @@ export class UseAutomaticSequencerResults {
     savings: CompressedAirEemSavingsResult;
     profileSummary: Array<CompressedAirProfileSummary>;
     adjustedCompressors: Array<CompressorInventoryItemClass>;
-
+    order: number
     constructor(
         dayType: CompressedAirDayType,
         adjustedCompressors: Array<CompressorInventoryItemClass>,
@@ -26,7 +26,8 @@ export class UseAutomaticSequencerResults {
         totalAirStorage: number,
         systemInformation: SystemInformation,
         reduceRuntime: ReduceRuntime,
-        _compressedAirCalculationService: CompressedAirCalculationService) {
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        order: number) {
         this.adjustedCompressors = adjustedCompressors;
 
         this.profileSummary = previousProfileSummary.map(summary => {
@@ -57,7 +58,8 @@ export class UseAutomaticSequencerResults {
             costKwh,
             useAutomaticSequencer.implementationCost,
             summaryDataInterval,
-            auxiliaryPowerUsage);
+            auxiliaryPowerUsage,
+            order);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
     }

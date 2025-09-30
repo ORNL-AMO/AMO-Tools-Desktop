@@ -11,7 +11,7 @@ export class FlowReallocationResults {
 
     savings: CompressedAirEemSavingsResult;
     profileSummary: Array<CompressedAirProfileSummary>;
-
+    order: number
     constructor(dayType: CompressedAirDayType,
         settings: Settings,
         previousProfileSummary: Array<CompressedAirProfileSummary>,
@@ -26,7 +26,9 @@ export class FlowReallocationResults {
         costKwh: number,
         implementationCost: number,
         summaryDataInterval: number,
-        auxiliaryPowerUsage?: { cost: number, energyUse: number }) {
+        auxiliaryPowerUsage: { cost: number, energyUse: number },
+        order: number) {
+        this.order = order;
         this.reallocateFlow(dayType,
             settings,
             previousProfileSummary,

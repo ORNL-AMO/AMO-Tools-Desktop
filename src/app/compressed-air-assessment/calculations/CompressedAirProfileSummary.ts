@@ -29,7 +29,7 @@ export class CompressedAirProfileSummary {
         this.adjustedIsentropicEfficiency = profileSummary.adjustedIsentropicEfficiency;
         if (includeSummaryData) {
             this.profileSummaryData = profileSummary.profileSummaryData.map(data => {
-                return data;
+                return {...data};
             })
         } else {
             this.profileSummaryData = new Array();

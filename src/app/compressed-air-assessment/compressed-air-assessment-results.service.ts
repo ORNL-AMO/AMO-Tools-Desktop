@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ImproveEndUseEfficiency, EndUseEfficiencyReductionData, ProfilesForPrint } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ProfilesForPrint } from '../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption } from '../shared/assessment-integration/assessment-integration.service';
 import { EnergyUseItem } from '../shared/models/treasure-hunt';
-import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult, EemSavingsResults } from './calculations/caCalculationModels';
-import { getEmptyEemSavings, getTotalCapacity, getTotalPower } from './calculations/caCalculationHelpers';
+import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from './calculations/caCalculationModels';
 import { CompressedAirAssessmentBaselineResults } from './calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirAssessmentModificationResults } from './calculations/modifications/CompressedAirAssessmentModificationResults';
 import { roundVal } from '../shared/helperFunctions';

@@ -34,7 +34,7 @@ export class CompressedAirCombinedDayTypeResults {
         this.setReduceRunTimeSavings(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
         this.setReduceSystemAirPressureSavings(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
         this.setUseAutomaticSequencerSavings(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
-        this.setPeakDemand(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
+        this.setPeakDemand(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries, compressedAirAssessmentModificationResults.baselineDemandCost);
         this.setAllSavingsResults(compressedAirAssessmentModificationResults);
     }
 
@@ -120,11 +120,15 @@ export class CompressedAirCombinedDayTypeResults {
 
     getTotalSavingsResults(savingsResults: Array<CompressedAirEemSavingsResult>, additionalCosts: number = 0): EemSavingsResults {
         let eemSavingsResults: EemSavingsResults = getEmptyEemSavings();
-        savingsResults.forEach(result => {
+        savingsResults.forEach((result, index) => {
             eemSavingsResults.savings.cost += result.savings.cost;
             eemSavingsResults.savings.power += result.savings.power;
-            eemSavingsResults.implementationCost += result.implementationCost;
+            //prevent double counting of implementation cost
+            if (index == 0) {
+                eemSavingsResults.implementationCost = result.implementationCost;
+            }
         });
+
         if (additionalCosts) {
             eemSavingsResults.savings.cost -= additionalCosts;
         }
@@ -157,10 +161,10 @@ export class CompressedAirCombinedDayTypeResults {
         };
     }
 
-    setPeakDemand(modifiedDayTypeProfileSummaries: Array<CompressedAirModifiedDayTypeProfileSummary>) {
+    setPeakDemand(modifiedDayTypeProfileSummaries: Array<CompressedAirModifiedDayTypeProfileSummary>, baselineDemandCost: number) {
         this.peakDemand = _.maxBy(modifiedDayTypeProfileSummaries, (result: CompressedAirModifiedDayTypeProfileSummary) => { return result.peakDemand }).peakDemand;
         this.peakDemandCost = _.maxBy(modifiedDayTypeProfileSummaries, (result: CompressedAirModifiedDayTypeProfileSummary) => { return result.peakDemandCost }).peakDemandCost;
-        this.peakDemandCostSavings = _.maxBy(modifiedDayTypeProfileSummaries, (result: CompressedAirModifiedDayTypeProfileSummary) => { return result.peakDemandCostSavings }).peakDemandCostSavings;
+        this.peakDemandCostSavings = baselineDemandCost - this.peakDemandCost;
     }
 
     setAllSavingsResults(compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults) {

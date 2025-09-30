@@ -12,14 +12,14 @@ export class ImproveEndUseEfficiencyResults {
     savings: CompressedAirEemSavingsResult;
     profileSummary: Array<CompressedAirProfileSummary>;
     auxiliaryPowerUsage: { cost: number, energyUse: number };
-
+    order: number;
     constructor(dayType: CompressedAirDayType, improveEndUseEfficiency: ImproveEndUseEfficiency, totals: Array<ProfileSummaryTotal>,
         settings: Settings, previousProfileSummary: Array<CompressedAirProfileSummary>, adjustedCompressors: Array<CompressorInventoryItemClass>,
         atmosphericPressure: number, totalAirStorage: number, systemInformation: SystemInformation, reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService, costKwh: number,
         summaryDataInterval: number,
         auxiliaryPowerUsage: { cost: number, energyUse: number },
-
+        order: number
     ) {
         //1. Adjust totals based on end use efficiency reductions
         let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = this.adjustTotalsWithImprovedEndUseEfficiency(dayType, improveEndUseEfficiency, totals);
@@ -42,9 +42,11 @@ export class ImproveEndUseEfficiencyResults {
             costKwh,
             implementationCost,
             summaryDataInterval,
-            auxiliaryPowerUsage);
+            this.auxiliaryPowerUsage,
+            order);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
+        this.order = order;
     }
 
     adjustTotalsWithImprovedEndUseEfficiency(dayType: CompressedAirDayType, improveEndUseEfficiency: ImproveEndUseEfficiency, totals: Array<ProfileSummaryTotal>): Array<ProfileSummaryTotal> {
