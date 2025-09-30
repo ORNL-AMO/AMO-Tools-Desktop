@@ -18,8 +18,8 @@ export class CompressorInventoryItemClass {
     isValid: boolean;
     description: string;
     modifiedDate: Date;
-    // replacementCompressorId: string;
-    // isReplacementCompressor: boolean;
+    originalCompressorId: string;
+    isReplacementCompressor: boolean;
     constructor(inventoryItem: CompressorInventoryItem) {
         this.itemId = inventoryItem.itemId;
         this.description = inventoryItem.description;
@@ -32,8 +32,8 @@ export class CompressorInventoryItemClass {
         this.compressorControls = inventoryItem.compressorControls;
         this.designDetails = inventoryItem.designDetails;
         this.centrifugalSpecifics = inventoryItem.centrifugalSpecifics;
-        // this.replacementCompressorId = inventoryItem.replacementCompressorId;
-        // this.isReplacementCompressor = inventoryItem.isReplacementCompressor;
+        this.originalCompressorId = inventoryItem.originalCompressorId;
+        this.isReplacementCompressor = inventoryItem.isReplacementCompressor;
     }
 
     adjustCompressorPerformancePointsWithSequencer(targetPressure: number, variance: number, systemInformation: SystemInformation, settings: Settings) {
@@ -135,8 +135,8 @@ export class CompressorInventoryItemClass {
             performancePoints: this.performancePoints,
             centrifugalSpecifics: this.centrifugalSpecifics,
             modifiedDate: this.modifiedDate,
-            // replacementCompressorId: this.replacementCompressorId,
-            // isReplacementCompressor: this.isReplacementCompressor
+            originalCompressorId: this.originalCompressorId,
+            isReplacementCompressor: this.isReplacementCompressor
 
         }
     }
@@ -158,5 +158,13 @@ export class CompressorInventoryItemClass {
         let ratedIsentropicEfficiency: number = ((16.52 * (subNum - 1)) / ratedSpecificPower) * 100;
         ratedIsentropicEfficiency = roundVal(ratedIsentropicEfficiency, 4);
         return ratedIsentropicEfficiency;
+    }
+
+    findItem(itemId: string): boolean {
+        if (this.isReplacementCompressor) {
+            return this.originalCompressorId == itemId;
+        } else {
+            return this.itemId == itemId;
+        }
     }
 }

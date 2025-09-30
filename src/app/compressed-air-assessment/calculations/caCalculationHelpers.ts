@@ -170,7 +170,7 @@ export function getTotalAuxiliaryPower(selectedDayType: CompressedAirDayType, in
 
 export function compareOpratingPoints(originalCompressors: Array<CompressorInventoryItemClass>, adjustedCompressors: Array<CompressorInventoryItemClass>) {
     adjustedCompressors.forEach((adjustedCompressor, index) => {
-        let ogCompressor: CompressorInventoryItemClass = originalCompressors.find(compressor => { return compressor.itemId == adjustedCompressor.itemId });
+        let ogCompressor: CompressorInventoryItemClass = originalCompressors.find(compressor => { return compressor.findItem(adjustedCompressor.itemId) });
         let ogOperatingPoints = ogCompressor.performancePoints;
         let adjustedOperatingPoints = adjustedCompressor.performancePoints;
         comparePoint(ogOperatingPoints.fullLoad, adjustedOperatingPoints.fullLoad, adjustedCompressor.name + ' Full Load');

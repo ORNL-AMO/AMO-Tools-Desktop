@@ -128,7 +128,7 @@ export class FlowReallocationResults {
                 reduceRuntimeShutdownTimer = reduceRuntimeData.automaticShutdownTimer;
             }
             if (data.summaryData.order != 0 && isTurnedOn) {
-                let compressor: CompressorInventoryItemClass = adjustedCompressors.find(item => { return item.itemId == data.compressorId });
+                let compressor: CompressorInventoryItemClass = adjustedCompressors.find(item => { return item.findItem(data.compressorId)});
                 if (reduceRuntime) {
                     compressor.compressorControls.automaticShutdown = reduceRuntimeShutdownTimer;
                 }
@@ -178,7 +178,7 @@ export class FlowReallocationResults {
 
 
     setBaseTrimOrdering(intervalData: Array<{ compressorId: string, summaryData: ProfileSummaryData }>, adjustedCompressors: Array<CompressorInventoryItemClass>, neededAirFlow: number, trimCompressorId: string, dayType: CompressedAirDayType, reduceRuntime?: ReduceRuntime): Array<{ compressorId: string, summaryData: ProfileSummaryData }> {
-        let trimCompressor: CompressorInventoryItemClass = adjustedCompressors.find(compressor => { return compressor.itemId == trimCompressorId });
+        let trimCompressor: CompressorInventoryItemClass = adjustedCompressors.find(compressor => { return compressor.findItem(trimCompressorId) });
         let additionalAirflow: number = neededAirFlow - trimCompressor.performancePoints.fullLoad.airflow;
         if (additionalAirflow <= 0) {
             //just need trim compressor
@@ -223,7 +223,7 @@ export class FlowReallocationResults {
             let totalAirflowInCombo: number = 0;
             baseCompressorCombo.forEach(baseCompressorId => {
                 let baseCompressor: CompressorInventoryItemClass = adjustedCompressors.find(compressor => {
-                    return compressor.itemId == baseCompressorId;
+                    return compressor.findItem(baseCompressorId);
                 });
                 totalAirflowInCombo += baseCompressor.performancePoints.fullLoad.airflow;
             });
@@ -247,7 +247,7 @@ export class FlowReallocationResults {
                 let totalPowerInCombo: number = 0;
                 baseCompressorCombo.forEach(baseCompressorId => {
                     let baseCompressor: CompressorInventoryItemClass = adjustedCompressors.find(compressor => {
-                        return compressor.itemId == baseCompressorId;
+                        return compressor.findItem(baseCompressorId);
                     });
                     totalAirflowInCombo += baseCompressor.performancePoints.fullLoad.airflow;
                     totalPowerInCombo += baseCompressor.performancePoints.fullLoad.power;
@@ -328,7 +328,7 @@ export class FlowReallocationResults {
         }> = new Array();
         for (let compressorIds of compressorCombinations) {
             let compressorsInCombo: Array<CompressorInventoryItemClass> = compressorIds.map(cId => {
-                return adjustedCompressors.find(adjustedCompressor => { return adjustedCompressor.itemId == cId });
+                return adjustedCompressors.find(adjustedCompressor => { return adjustedCompressor.findItem(cId) });
             });
             let totalRatedAirflow: number = 0;
             compressorsInCombo.forEach(compressor => {

@@ -9,8 +9,8 @@ export function systemPressureChangeAdjustProfile(originalCompressors: Array<Com
 ): Array<CompressedAirProfileSummary> {
     //reduce airflow
     profileSummary.forEach(profile => {
-        let ogCompressor: CompressorInventoryItemClass = originalCompressors.find(ogCompressor => { return ogCompressor.itemId == profile.compressorId });
-        let adjustedCompressor: CompressorInventoryItemClass = adjustedCompressors.find(adjustedCompressor => { return adjustedCompressor.itemId == profile.compressorId });
+        let ogCompressor: CompressorInventoryItemClass = originalCompressors.find(ogCompressor => { return ogCompressor.findItem(profile.compressorId) });
+        let adjustedCompressor: CompressorInventoryItemClass = adjustedCompressors.find(adjustedCompressor => { return adjustedCompressor.findItem(profile.compressorId) });
         profile.profileSummaryData.forEach(summaryData => {
             summaryData.airflow = calculateReducedAirFlow(summaryData.airflow, adjustedCompressor.performancePoints.fullLoad.dischargePressure, atmosphericPressure, ogCompressor.performancePoints.fullLoad.dischargePressure, settings);
         });

@@ -1,5 +1,5 @@
 import { AssessmentCo2SavingsService } from "../../../shared/assessment-co2-savings/assessment-co2-savings.service";
-import { AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, SystemInformation, UseAutomaticSequencer } from "../../../shared/models/compressed-air-assessment";
+import { AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, ReplaceCompressor, SystemInformation, UseAutomaticSequencer } from "../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../compressed-air-calculation.service";
 import { getProfileSummaryTotals } from "../caCalculationHelpers";
@@ -13,6 +13,7 @@ import { FlowReallocationResults } from "./energyEfficiencyMeasures/FlowRealloca
 import { ImproveEndUseEfficiencyResults } from "./energyEfficiencyMeasures/ImproveEndUseEfficiencyResults";
 import { ReduceAirLeaksResults } from "./energyEfficiencyMeasures/ReduceAirLeaksResults";
 import { ReduceSystemAirPressureResults } from "./energyEfficiencyMeasures/ReduceSystemAirPressureResults";
+import { ReplaceCompressorResults } from "./energyEfficiencyMeasures/ReplaceCompressorResults";
 import { UseAutomaticSequencerResults } from "./energyEfficiencyMeasures/UseAutomaticSequencerResults";
 import * as _ from 'lodash';
 
@@ -34,6 +35,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
     reduceAirLeaksResults: ReduceAirLeaksResults;
     reduceSystemAirPressureResults: ReduceSystemAirPressureResults
     useAutomaticSequencerResults: UseAutomaticSequencerResults;
+    replaceCompressorResults: ReplaceCompressorResults;
 
     auxiliaryPowerUsage: { cost: number, energyUse: number } = { cost: 0, energyUse: 0 };
     atmosphericPressure: number;
@@ -70,6 +72,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         });
         //initialize original and adjusted compressors
         this.setInventoryItems(compressedAirAssessment.compressorInventoryItems);
+
         //Apply target sequencer
         if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
             this.adjustedCompressors.forEach(compressor => {
@@ -79,6 +82,15 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         //Initial Flow Reallocation
         this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, false, this.dayType, undefined, this.adjustedCompressors);
         this.setFlowReallocationResults(settings, _compressedAirCalculationService, modification.flowReallocation.implementationCost, 0);
+
+        //replace compressors
+        if (modification.replaceCompressor.order != 100) {
+            let replacementCompressors: Array<CompressorInventoryItemClass> = compressedAirAssessment.replacementCompressorInventoryItems.map(item => {
+                return new CompressorInventoryItemClass(item);
+            });
+            this.setReplaceCompressorResults(modification.replaceCompressor, settings, _compressedAirCalculationService, modification.replaceCompressor.order, replacementCompressors);
+        }
+
         //Apply Modifications in order
         let modificationOrders: Array<number> = this.getModificationOrders(modification);
         //improveEndUseEfficiency and reduceRuntime will be set according to the order
@@ -154,6 +166,32 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             modification.useAutomaticSequencer.order,
         ]
         return modificationOrders.filter(order => { return order != 100 });
+    }
+
+    setReplaceCompressorResults(
+        replaceCompressor: ReplaceCompressor,
+        settings: Settings,
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        order: number,
+        replacementCompressors: Array<CompressorInventoryItemClass>
+    ) {
+        this.replaceCompressorResults = new ReplaceCompressorResults(this.dayType,
+            this.adjustedCompressors,
+            replaceCompressor,
+            this.atmosphericPressure,
+            settings,
+            this.adjustedProfileSummary,
+            replacementCompressors,
+            this.costKwh,
+            this.summaryDataInterval,
+            this.totalAirStorage,
+            this.systemInformation,
+            _compressedAirCalculationService,
+            order);
+        this.adjustedProfileSummary = this.replaceCompressorResults.profileSummary.map(summary => {
+            return new CompressedAirProfileSummary(summary, true);
+        });
+        this.adjustedCompressors = this.replaceCompressorResults.adjustedCompressors;
     }
 
     setFlowReallocationResults(
@@ -438,6 +476,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             reduceSystemAirPressureProfileSummary: this.reduceSystemAirPressureResults ? this.reduceSystemAirPressureResults.profileSummary : [],
             useAutomaticSequencerSavings: this.useAutomaticSequencerResults ? this.useAutomaticSequencerResults.savings : getEmptyEemSavings(),
             useAutomaticSequencerProfileSummary: this.useAutomaticSequencerResults ? this.useAutomaticSequencerResults.profileSummary : [],
+            replaceCompressorsProfileSummary: this.replaceCompressorResults ? this.replaceCompressorResults.profileSummary : [],
+            replaceCompressorsSavings: this.replaceCompressorResults ? this.replaceCompressorResults.savings : getEmptyEemSavings(),
             auxiliaryPowerUsage: this.auxiliaryPowerUsage,
             dayTypeId: this.dayType.dayTypeId,
             dayTypeName: this.dayType.name,

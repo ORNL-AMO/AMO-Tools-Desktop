@@ -149,7 +149,14 @@ export class UpdateDataService {
             assessment.compressedAirAssessment.modifications.forEach(mod => {
                 if (!mod.replaceCompressor) {
                     mod['replaceCompressor'] = {
-                        order: 100
+                        order: 100,
+                        implementationCost: 0,
+                        compressorsMapping: assessment.compressedAirAssessment.compressorInventoryItems.map(item => {
+                            return {
+                                originalCompressorId: item.itemId,
+                                replacementCompressorId: undefined
+                            };
+                        })
                     };
                 }
             })

@@ -44,6 +44,11 @@ export interface FlowReallocation {
 
 export interface ReplaceCompressor {
     order: number
+    implementationCost: number,
+    compressorsMapping: Array<{
+        originalCompressorId: string,
+        replacementCompressorId: string
+    }>
 }
 
 export interface ReduceAirLeaks {
@@ -212,7 +217,7 @@ export interface CompressorInventoryItem {
     performancePoints: PerformancePoints,
     centrifugalSpecifics: CentrifugalSpecifics,
     modifiedDate: Date,
-    replacementCompressorId?: string,
+    originalCompressorId?: string,
     isReplacementCompressor?: boolean
 
 }

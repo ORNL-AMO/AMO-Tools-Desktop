@@ -12,39 +12,43 @@
             </select>
         </label>
     </div>
-    <ng-container *ngIf="form.controls.order.value == 1">
-        <div class="scroll-item">
-            <table class="table bg-white">
-                <thead>
-                    <tr>
-                        <th class="w-50">
-                            <!-- Compressor -->
-                            Current
-                        </th>
-                        <th class="w-50">
-                            Replacement
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let compressor of compressedAirAssessment.compressorInventoryItems">
-                        <td>
-                            {{compressor.name}}
-                            <!-- <span class="pl-2" *ngIf="rData.compressorId == trimCompressorId">(Trim)</span> -->
-                        </td>
-                        <td class="text-center">
-                            <select class="form-select w-100">
-                                <option [ngValue]="undefined"></option>
-                                <option
-                                    *ngFor="let replacementCompressor of compressedAirAssessment.replacementCompressorInventoryItems"
-                                    [ngValue]="replacementCompressor.guid">
-                                    {{replacementCompressor.name}}
-                                </option>
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
-                <!-- <tfoot>
+</form>
+<form class="p-0" *ngIf="form.controls.order.value == 1">
+    <div class="scroll-item">
+        <table class="table bg-white">
+            <thead>
+                <tr>
+                    <th class="w-50">
+                        <!-- Compressor -->
+                        Current
+                    </th>
+                    <th class="w-50">
+                        Replacement
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let compressorMap of replaceCompressorMapping">
+                    <td>
+                        {{compressorMap.originalCompressorId | compressorInventoryItemName:compressedAirAssessment.compressorInventoryItems}}
+                        <!-- <span class="pl-2" *ngIf="rData.compressorId == trimCompressorId">(Trim)</span> -->
+                    </td>
+                    <td class="text-center">
+                        <select class="form-select w-100" [(ngModel)]="compressorMap.replacementCompressorId"
+                            name="{{compressorMap.originalCompressorId}}-replacement-compressor"
+                            id="{{compressorMap.originalCompressorId}}-replacement-compressor"
+                            (change)="save(false)">
+                            <option [ngValue]="undefined"></option>
+                            <option
+                                *ngFor="let replacementCompressor of compressedAirAssessment.replacementCompressorInventoryItems"
+                                [ngValue]="replacementCompressor.itemId">
+                                {{replacementCompressor.name}}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+            <!-- <tfoot>
                     <tr>
                         <td>
                             Available Airflow
@@ -89,12 +93,9 @@
                         </td>
                     </tr>
                 </tfoot> -->
-            </table>
-        </div>
-        <!-- <div *ngIf="!selectedDayType.isValid && reduceRuntime.order != 100" class="alert alert-danger p-2 text-center">
+        </table>
+    </div>
+    <!-- <div *ngIf="!selectedDayType.isValid && reduceRuntime.order != 100" class="alert alert-danger p-2 text-center">
             One or more hours have less available airflow then is required.
         </div> -->
-
-
-    </ng-container>
 </form>

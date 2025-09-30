@@ -120,7 +120,7 @@ export class CompressedAirBaselineDayTypeProfileSummary {
 
     getCompressor(compressorId: string): CompressorInventoryItemClass {
         return this.inventoryItems.find(item => {
-            return item.itemId == compressorId
+            return item.findItem(compressorId)
         });
     }
 
@@ -248,7 +248,7 @@ export class CompressedAirBaselineDayTypeProfileSummary {
         this.profileSummary.forEach(profile => {
             let specificPowerAvgLoad: number = (profile.avgPower / profile.avgAirflow) * 100;
             specificPowerAvgLoad = roundVal(specificPowerAvgLoad, 4);
-            let compressor: CompressorInventoryItemClass = this.inventoryItems.find(compressor => { return compressor.itemId == profile.compressorId });
+            let compressor: CompressorInventoryItemClass = this.inventoryItems.find(compressor => { return compressor.findItem(profile.compressorId) });
             let ratedSpecificPower: number = compressor.getRatedSpecificPower();
             let ratedIsentropicEfficiency: number = compressor.getRatedIsentropicEfficiency(settings);
             let compressorSummary: CompressorSummary = {

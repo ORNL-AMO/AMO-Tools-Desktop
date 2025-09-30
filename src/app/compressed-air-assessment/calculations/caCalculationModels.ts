@@ -33,6 +33,8 @@ export interface DayTypeModificationResult {
   reduceSystemAirPressureProfileSummary: Array<ProfileSummary>,
   useAutomaticSequencerSavings: EemSavingsResults,
   useAutomaticSequencerProfileSummary: Array<ProfileSummary>,
+  replaceCompressorsSavings: EemSavingsResults,
+  replaceCompressorsProfileSummary: Array<ProfileSummary>,
   auxiliaryPowerUsage: { cost: number, energyUse: number },
   dayTypeId: string,
   dayTypeName: string,

@@ -36,6 +36,7 @@ export class ExploreOpportunitiesService {
         dayTypeName: dayType.name,
         data: this.getDefaultReductionData(compressedAirAssessment.systemProfile.systemProfileSetup)
       });
+
       compressedAirAssessment.compressorInventoryItems.forEach(item => {
         let itemProfile: ProfileSummary = compressedAirAssessment.systemProfile.profileSummary.find(summary => {
           return summary.dayTypeId == dayType.dayTypeId && item.itemId == summary.compressorId;
@@ -128,7 +129,14 @@ export class ExploreOpportunitiesService {
         order: 100
       },
       replaceCompressor: {
-        order: 100
+        order: 100,
+        implementationCost: 0,
+        compressorsMapping: compressedAirAssessment.compressorInventoryItems.map(item => {
+          return {
+            originalCompressorId: item.itemId,
+            replacementCompressorId: undefined
+          }
+        })
       }
     }
   }

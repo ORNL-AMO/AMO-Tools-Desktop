@@ -14,6 +14,7 @@ export class CompressedAirCombinedDayTypeResults {
     reduceRunTimeSavings: EemSavingsResults;
     reduceSystemAirPressureSavings: EemSavingsResults;
     useAutomaticSequencerSavings: EemSavingsResults;
+    replaceCompressorsSavings: EemSavingsResults;
     auxiliaryPowerUsage: { cost: number, energyUse: number } = { cost: 0, energyUse: 0 };
 
     peakDemand: number = 0;
@@ -26,6 +27,7 @@ export class CompressedAirCombinedDayTypeResults {
         this.totalAnnualOperatingCost = compressedAirAssessmentModificationResults.totalModificationAnnualOperatingCost;
         this.annualEmissionOutput = compressedAirAssessmentModificationResults.totalModificationAnnualEmissionOutput;
         this.setAuxiliaryPowerUsage(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
+        this.setReplaceCompressorSavings(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
         this.setFlowReallocationSavings(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
         this.setAddReceiverVolumeSavings(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
         this.setAdjustCascadingSetPointsSavings(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
@@ -36,6 +38,16 @@ export class CompressedAirCombinedDayTypeResults {
         this.setUseAutomaticSequencerSavings(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
         this.setPeakDemand(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries, compressedAirAssessmentModificationResults.baselineDemandCost);
         this.setAllSavingsResults(compressedAirAssessmentModificationResults);
+    }
+
+    setReplaceCompressorSavings(modifiedDayTypeProfileSummaries: Array<CompressedAirModifiedDayTypeProfileSummary>) {
+        let summaries: Array<CompressedAirModifiedDayTypeProfileSummary> = modifiedDayTypeProfileSummaries.filter(summary => summary.replaceCompressorResults != undefined);
+        if (summaries.length != 0) {
+            let eemSavingsResults: Array<CompressedAirEemSavingsResult> = summaries.map(summary => summary.replaceCompressorResults.savings);
+            this.replaceCompressorsSavings = this.getTotalSavingsResults(eemSavingsResults);
+        } else {
+            this.replaceCompressorsSavings = getEmptyEemSavings();
+        }
     }
 
     setFlowReallocationSavings(modifiedDayTypeProfileSummaries: Array<CompressedAirModifiedDayTypeProfileSummary>) {
@@ -177,7 +189,8 @@ export class CompressedAirCombinedDayTypeResults {
             this.reduceAirLeaksSavings,
             this.reduceRunTimeSavings,
             this.reduceSystemAirPressureSavings,
-            this.useAutomaticSequencerSavings
+            this.useAutomaticSequencerSavings,
+            this.replaceCompressorsSavings
         ];
         let totalImplementationCost: number = _.sumBy(allEemSavingsItems, (item: EemSavingsResults) => { return item.implementationCost; });
         let paybackPeriod: number = this.getPaybackPeriod(totalImplementationCost, compressedAirAssessmentModificationResults.totalAnnualOperatingCostSavings);
@@ -219,6 +232,8 @@ export class CompressedAirCombinedDayTypeResults {
             reduceRunTimeSavings: this.reduceRunTimeSavings,
             reduceSystemAirPressureSavings: this.reduceSystemAirPressureSavings,
             useAutomaticSequencerSavings: this.useAutomaticSequencerSavings,
+            replaceCompressorsSavings: this.replaceCompressorsSavings,
+            replaceCompressorsProfileSummary: undefined,
             reduceRunTimeProfileSummary: undefined,
             flowAllocationProfileSummary: undefined,
             reduceAirLeaksProfileSummary: undefined,

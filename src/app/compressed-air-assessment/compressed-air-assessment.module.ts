@@ -152,6 +152,7 @@ import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-ai
 import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { ReplaceCompressorComponent } from './explore-opportunities/replace-compressor/replace-compressor.component';
+import { CompressorInventoryItemNamePipe } from './pipes/compressor-inventory-item-name';
 
 @NgModule({
   declarations: [
@@ -238,7 +239,8 @@ import { ReplaceCompressorComponent } from './explore-opportunities/replace-comp
     TurndownComponent,
     MidTurndownComponent,
     EndUseHelpComponent,
-    ReplaceCompressorComponent
+    ReplaceCompressorComponent,
+    CompressorInventoryItemNamePipe
   ],
   imports: [
     CommonModule,
