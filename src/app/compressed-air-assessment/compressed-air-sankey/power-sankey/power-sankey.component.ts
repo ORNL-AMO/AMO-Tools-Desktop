@@ -7,11 +7,9 @@ import { AirPropertiesCsvService } from '../../../shared/helper-services/air-pro
 import { CompressedAirAssessment, EndUseDayTypeSetup, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { PrintOptionsMenuService } from '../../../shared/print-options-menu/print-options-menu.service';
-import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { DayTypeSetupService } from '../../end-uses/day-type-setup-form/day-type-setup.service';
 import { CompressedAirSankeyNode, CompressedAirSankeyResults, PowerSankeyService } from './power-sankey.service';
-import { BaselineResults } from '../../calculations/caCalculationModels';
 import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
@@ -65,7 +63,6 @@ export class PowerSankeyComponent implements OnInit {
   showSankeyLabelOptions: boolean;
   sankeyLabelStyle: string = 'both';
   profileDataComplete: boolean = true;
-  baselineResults: CompressedAirAssessmentBaselineResults;
   dayTypeBaselineProfileSummaries: Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>;
 
   endUseDayTypeSetup: EndUseDayTypeSetup;
@@ -84,7 +81,6 @@ export class PowerSankeyComponent implements OnInit {
     private powerSankeyService: PowerSankeyService,
     private dayTypeSetupService: DayTypeSetupService,
     private airPropertiesService: AirPropertiesCsvService,
-    private resultsService: CompressedAirAssessmentResultsService,
     private plotlyService: PlotlyService,
     private printOptionsMenuService: PrintOptionsMenuService,
     private compressedAirCalculationService: CompressedAirCalculationService,
@@ -96,7 +92,6 @@ export class PowerSankeyComponent implements OnInit {
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.dayTypeBaselineProfileSummaries = this.getDayTypeProfileSummaries();
 
-    this.baselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
     this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(showPrintView => {
       this.printView = showPrintView;
       this.checkShouldPrint();
@@ -132,9 +127,11 @@ export class PowerSankeyComponent implements OnInit {
   }
 
   getDayTypeProfileSummaries() {
+    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+
     let baselineDayTypeProfileSummarries = new Array<{ dayTypeId: string, profileSummary: Array<ProfileSummary> }>();
     this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-      let baselineProfileSummary: Array<ProfileSummary> = this.baselineResults.baselineDayTypeProfileSummaries.find(summary => summary.dayType.dayTypeId == dayType.dayTypeId).profileSummary;
+      let baselineProfileSummary: Array<ProfileSummary> = compressedAirAssessmentBaselineResults.getDayTypeProfileSummary(dayType.dayTypeId)
       baselineDayTypeProfileSummarries.push({
         dayTypeId: dayType.dayTypeId,
         profileSummary: baselineProfileSummary

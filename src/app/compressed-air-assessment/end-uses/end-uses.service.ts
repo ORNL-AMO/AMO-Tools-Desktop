@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { CompressedAirAssessment, DayTypeAirflowTotals, DayTypeEndUse, EndUse, EndUseDayTypeSetup } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 import { DayTypeSetupService } from './day-type-setup-form/day-type-setup.service';
@@ -10,6 +9,7 @@ import { BaselineResult, BaselineResults } from '../calculations/caCalculationMo
 import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
+import { roundVal } from '../../shared/helperFunctions';
 
 @Injectable()
 export class EndUsesService {
@@ -19,7 +19,6 @@ export class EndUsesService {
   constructor(private formBuilder: UntypedFormBuilder,
     private dayTypeSetupService: DayTypeSetupService,
     private dayTypeUseFormService: DayTypeUseFormService,
-    private convertUnitsService: ConvertUnitsService,
     private compressedAirCalculationService: CompressedAirCalculationService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService) {
     this.selectedEndUse = new BehaviorSubject<EndUse>(undefined);
@@ -41,11 +40,10 @@ export class EndUsesService {
   // TODO cache these somewhere - update when daytypesetup changes
   getDayTypeAirflowTotals(compressedAirAssessment: CompressedAirAssessment, selectedDayTypeId: string, settings: Settings): DayTypeAirflowTotals {
     let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(compressedAirAssessment, settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-    let baselineResults: BaselineResults = compressedAirAssessmentBaselineResults.baselineResults;
-    let daytypeResult: BaselineResult = baselineResults.dayTypeResults.find(dayTypeResult => dayTypeResult.dayTypeId === selectedDayTypeId);
+    let daytypeResult: BaselineResult = compressedAirAssessmentBaselineResults.getDayTypeBaselineResult(selectedDayTypeId);
     let totalDayTypeAverageAirflow: number = 0;
     if (daytypeResult) {
-      totalDayTypeAverageAirflow = this.convertUnitsService.roundVal(daytypeResult.averageAirFlow, 1);
+      totalDayTypeAverageAirflow = roundVal(daytypeResult.averageAirFlow, 1);
     }
     let totalEndUseAirflow: number = 0;
     compressedAirAssessment.endUseData.endUses.forEach((endUse: EndUse) => {
@@ -66,19 +64,19 @@ export class EndUsesService {
     let unaccountedAirflow: number;
     let exceededAirflow: number;
     if (airflowDiff > 0) {
-      unaccountedAirflow = this.convertUnitsService.roundVal(airflowDiff, 1)
+      unaccountedAirflow = roundVal(airflowDiff, 1)
     } else if (airflowDiff < 0) {
-      exceededAirflow = this.convertUnitsService.roundVal(Math.abs(airflowDiff), 1)
+      exceededAirflow = roundVal(Math.abs(airflowDiff), 1)
     }
 
     return {
       unaccountedAirflow: unaccountedAirflow,
       exceededAirflow: exceededAirflow,
-      unaccountedAirflowPercent: this.convertUnitsService.roundVal((unaccountedAirflow / totalDayTypeAverageAirflow) * 100, 1),
-      exceededAirflowPercent: this.convertUnitsService.roundVal((exceededAirflow / totalDayTypeAverageAirflow) * 100, 1),
-      totalDayTypeEndUseAirflow: this.convertUnitsService.roundVal(totalEndUseAirflow, 1),
-      totalDayTypeEndUseAirflowPercent: this.convertUnitsService.roundVal((totalEndUseAirflow / totalDayTypeAverageAirflow) * 100, 1),
-      totalDayTypeAverageAirflow: this.convertUnitsService.roundVal(totalDayTypeAverageAirflow, 1)
+      unaccountedAirflowPercent: roundVal((unaccountedAirflow / totalDayTypeAverageAirflow) * 100, 1),
+      exceededAirflowPercent: roundVal((exceededAirflow / totalDayTypeAverageAirflow) * 100, 1),
+      totalDayTypeEndUseAirflow: roundVal(totalEndUseAirflow, 1),
+      totalDayTypeEndUseAirflowPercent: roundVal((totalEndUseAirflow / totalDayTypeAverageAirflow) * 100, 1),
+      totalDayTypeAverageAirflow: roundVal(totalDayTypeAverageAirflow, 1)
     };
   }
 
@@ -135,7 +133,7 @@ export class EndUsesService {
     }
     let dayTypeAverageAirflow: number = dayTypeBaselineResults.averageAirFlow;
     if (dayTypeAverageAirflow) {
-      let averagePercentCapacity = this.convertUnitsService.roundVal((dayTypeEndUse.averageAirflow / dayTypeAverageAirflow) * 100, 2);
+      let averagePercentCapacity = roundVal((dayTypeEndUse.averageAirflow / dayTypeAverageAirflow) * 100, 2);
       let excessPressure = dayTypeEndUse.measuredPressure - endUse.requiredPressure;
       dayTypeEndUseResult.averagePercentCapacity = averagePercentCapacity
       dayTypeEndUseResult.excessPressure = excessPressure

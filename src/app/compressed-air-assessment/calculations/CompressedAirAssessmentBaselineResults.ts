@@ -1,5 +1,5 @@
 import { AssessmentCo2SavingsService } from "../../shared/assessment-co2-savings/assessment-co2-savings.service";
-import { CompressedAirAssessment, CompressorSummary } from "../../shared/models/compressed-air-assessment";
+import { CompressedAirAssessment, CompressorSummary, ProfileSummary } from "../../shared/models/compressed-air-assessment";
 import { Settings } from "../../shared/models/settings";
 import { CompressedAirCalculationService } from "../compressed-air-calculation.service";
 import { BaselineResult, BaselineResults } from "./caCalculationModels";
@@ -79,5 +79,15 @@ export class CompressedAirAssessmentBaselineResults {
             dayTypeCompressorSummaries.push(compressorSummaries);
         });
         return dayTypeCompressorSummaries;
+    }
+
+    getDayTypeBaselineResult(dayTypeId: string): BaselineResult {
+        let dayTypeResult: BaselineResult = this.baselineResults.dayTypeResults.find(result => result.dayTypeId == dayTypeId);
+        return dayTypeResult;
+    }
+
+    getDayTypeProfileSummary(dayTypeId: string): Array<ProfileSummary> {
+        let dayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = this.baselineDayTypeProfileSummaries.find(summary => summary.dayType.dayTypeId == dayTypeId);
+        return dayTypeProfileSummary.profileSummary;
     }
 }
