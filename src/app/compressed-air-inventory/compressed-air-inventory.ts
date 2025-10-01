@@ -19,7 +19,7 @@ export interface SystemInformation {
   atmosphericPressureKnown: boolean,
 }
 
-export interface CompressedAirInventorySystem {
+export interface CompressedAirInventorySystem extends ConnectedInventoryProperties {
   name: string,
   operatingHours: number,
   totalAirStorage: number,

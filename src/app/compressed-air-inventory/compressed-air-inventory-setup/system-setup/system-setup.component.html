@@ -60,6 +60,14 @@
             </div>
         </form>
         <a class="click-link danger pull-right small" (click)="deleteSystem(system.id)"
-            *ngIf="compressedAirInventoryData.systems.length != 1">Delete</a>
+            *ngIf="compressedAirInventoryData.systems.length != 1">
+            Delete
+        </a>
+
+        <app-connected-assessment [assessmentType]="'CompressedAir'" [integratedCreateType]="'CompressedAir'"
+            [connectedInventoryItem]="system.connectedItem" [connectedAssessmentItems]="system.connectedAssessments"
+            [isItemValid]="system.isValid" (modalOpen)="setModalOpenView($event)">
+        </app-connected-assessment>
+
     </div>
 </div>

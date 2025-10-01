@@ -20,6 +20,7 @@ import { EndUsesSetupComponent } from './end-uses-setup/end-uses-setup.component
 import { EndUsesService } from './end-uses-setup/end-uses.service';
 import { EndUsesTableComponent } from './end-uses-table/end-uses-table.component';
 import { EndUsesChartComponent } from './end-uses-chart/end-uses-chart.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -47,7 +48,8 @@ import { EndUsesChartComponent } from './end-uses-chart/end-uses-chart.component
     HelpPanelModule,
     CompressedAirPropertiesModule,
     CompressedAirCatalogModule,
-    SystemCapacityModule
+    SystemCapacityModule,
+    RouterModule
   ],
   providers: [
     EndUsesService

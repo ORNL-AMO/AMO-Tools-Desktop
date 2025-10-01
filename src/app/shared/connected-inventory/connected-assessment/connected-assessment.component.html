@@ -45,7 +45,7 @@
             <div class="d-flex flex-row">
                 <label class="w-50">
                     <span class="integration-label border-0">
-                        This item can be connected to pump assessment Baseline data
+                        This item can be connected to an assessments Baseline data
                     </span>
                 </label>
                 <div class="w-50 input-group justify-content-center m-1 mb-0">
@@ -62,6 +62,6 @@
 
 <app-create-assessment-modal *ngIf="displayCreateAssessmentModal" 
 [connectedInventoryItem]="connectedInventoryItem" 
-[integratedCreateType]="'Pump'"
+[integratedCreateType]="integratedCreateType"
 (onClose)="hideCreateAssessmentModal()"></app-create-assessment-modal>
 
