@@ -83,14 +83,6 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, false, this.dayType, undefined, this.adjustedCompressors);
         this.setFlowReallocationResults(settings, _compressedAirCalculationService, modification.flowReallocation.implementationCost, 0);
 
-        //replace compressors
-        if (modification.replaceCompressor.order != 100) {
-            let replacementCompressors: Array<CompressorInventoryItemClass> = compressedAirAssessment.replacementCompressorInventoryItems.map(item => {
-                return new CompressorInventoryItemClass(item);
-            });
-            this.setReplaceCompressorResults(modification.replaceCompressor, settings, _compressedAirCalculationService, modification.replaceCompressor.order, replacementCompressors);
-        }
-
         //Apply Modifications in order
         let modificationOrders: Array<number> = this.getModificationOrders(modification);
         //improveEndUseEfficiency and reduceRuntime will be set according to the order
@@ -99,8 +91,16 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         for (let orderIndex = 1; orderIndex <= modificationOrders.length; orderIndex++) {
             //Calculate totals for adjusted profile summary
             this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, false, this.dayType, improveEndUseEfficiency, this.adjustedCompressors);
+
+            //replace compressors
+            if (modification.replaceCompressor.order == orderIndex) {
+                let replacementCompressors: Array<CompressorInventoryItemClass> = compressedAirAssessment.replacementCompressorInventoryItems.map(item => {
+                    return new CompressorInventoryItemClass(item);
+                });
+                this.setReplaceCompressorResults(modification.replaceCompressor, settings, _compressedAirCalculationService, modification.replaceCompressor.order, replacementCompressors);
+            }
             //Primary receiver volume
-            if (modification.addPrimaryReceiverVolume.order == orderIndex) {
+            else if (modification.addPrimaryReceiverVolume.order == orderIndex) {
                 this.setAddPrimaryReceiverVolumeResults(settings, reduceRuntime, _compressedAirCalculationService, modification.addPrimaryReceiverVolume.implementationCost, modification.addPrimaryReceiverVolume.increasedVolume, orderIndex);
             }
             //Adjust cascading set points
@@ -164,6 +164,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             modification.reduceAirLeaks.order,
             modification.reduceSystemAirPressure.order,
             modification.useAutomaticSequencer.order,
+            modification.replaceCompressor.order
         ]
         return modificationOrders.filter(order => { return order != 100 });
     }
@@ -493,20 +494,22 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         if (neededOrder == 0) {
             return this.flowReallocationResults.profileSummary;
         }
-        if (this.addPrimaryReceiverVolumeResults.order == neededOrder) {
+        if (this.addPrimaryReceiverVolumeResults?.order == neededOrder) {
             return this.addPrimaryReceiverVolumeResults.profileSummary;
-        } else if (this.adjustCascadingSetPointsResults.order == neededOrder) {
+        } else if (this.adjustCascadingSetPointsResults?.order == neededOrder) {
             return this.adjustCascadingSetPointsResults.profileSummary;
-        } else if (this.improveEndUseEfficiencyResults.order == neededOrder) {
+        } else if (this.improveEndUseEfficiencyResults?.order == neededOrder) {
             return this.improveEndUseEfficiencyResults.profileSummary;
-        } else if (this.reduceAirLeaksResults.order == neededOrder) {
+        } else if (this.reduceAirLeaksResults?.order == neededOrder) {
             return this.reduceAirLeaksResults.profileSummary;
-        } else if (this.reduceRunTimeResults.order == neededOrder) {
+        } else if (this.reduceRunTimeResults?.order == neededOrder) {
             return this.reduceRunTimeResults.profileSummary;
-        } else if (this.reduceSystemAirPressureResults.order == neededOrder) {
+        } else if (this.reduceSystemAirPressureResults?.order == neededOrder) {
             return this.reduceSystemAirPressureResults.profileSummary;
-        } else if (this.useAutomaticSequencerResults.order == neededOrder) {
+        } else if (this.useAutomaticSequencerResults?.order == neededOrder) {
             return this.useAutomaticSequencerResults.profileSummary;
+        } else if (this.replaceCompressorResults?.order == neededOrder) {
+            return this.replaceCompressorResults.profileSummary;
         } else {
             return this.flowReallocationResults.profileSummary;
         }

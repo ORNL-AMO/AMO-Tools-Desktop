@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CompressorNamePipe } from './compressor-name.pipe';
 import { CompressorTypePipe } from './compressor-type.pipe';
 import { ControlTypePipe } from './control-type.pipe';
+import { CompressorShowShutdownTimerPipe } from './compressor-show-shutdown-timer';
 
 
 
@@ -10,7 +11,8 @@ import { ControlTypePipe } from './control-type.pipe';
   declarations: [
     CompressorNamePipe,
     CompressorTypePipe,
-    ControlTypePipe
+    ControlTypePipe,
+    CompressorShowShutdownTimerPipe
   ],
   imports: [
     CommonModule
@@ -18,7 +20,8 @@ import { ControlTypePipe } from './control-type.pipe';
   exports:[
     CompressorNamePipe,
     CompressorTypePipe,
-    ControlTypePipe
+    ControlTypePipe,
+    CompressorShowShutdownTimerPipe
   ]
 })
 export class SharedCompressorPipesModule { }

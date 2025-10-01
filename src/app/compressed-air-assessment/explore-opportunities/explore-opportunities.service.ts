@@ -165,7 +165,8 @@ export class ExploreOpportunitiesService {
         modification.reduceRuntime.order,
         modification.reduceAirLeaks.order,
         modification.reduceSystemAirPressure.order,
-        modification.useAutomaticSequencer.order
+        modification.useAutomaticSequencer.order,
+        modification.replaceCompressor.order
       ]
       let selectedOrder: Array<number> = allOrders.filter(order => { return order == newOrder });
       let hasDuplicate: boolean = selectedOrder.length == 2;
@@ -219,6 +220,13 @@ export class ExploreOpportunitiesService {
           modification.useAutomaticSequencer.order++;
         }
       }
+      if (modification.replaceCompressor.order != 100 && changedOpportunity != 'replaceCompressor' && modification.replaceCompressor.order >= newOrder) {
+        if (hasDuplicate && modification.replaceCompressor.order == newOrder && previousOrder != 100) {
+          modification.replaceCompressor.order = previousOrder;
+        } else if (!hasDuplicate || previousOrder == 100) {
+          modification.replaceCompressor.order++;
+        }
+      }
     } else {
       if (modification.addPrimaryReceiverVolume.order != 100 && changedOpportunity != 'addPrimaryReceiverVolume' && modification.addPrimaryReceiverVolume.order > previousOrder) {
         modification.addPrimaryReceiverVolume.order--;
@@ -240,6 +248,9 @@ export class ExploreOpportunitiesService {
       }
       if (modification.useAutomaticSequencer.order != 100 && changedOpportunity != 'useAutomaticSequencer' && modification.useAutomaticSequencer.order > previousOrder) {
         modification.useAutomaticSequencer.order--;
+      }
+      if (modification.replaceCompressor.order != 100 && changedOpportunity != 'replaceCompressor' && modification.replaceCompressor.order > previousOrder) {
+        modification.replaceCompressor.order--;
       }
     }
     return modification;

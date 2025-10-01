@@ -6155,11 +6155,7 @@ export const MockCompressedAirAssessment: Assessment = {
                     "implementationCost": 0,
                     "order": 100
                 },
-                "replaceCompressor": {
-                    order: 100,
-                    compressorsMapping: [],
-                    implementationCost: 0
-                }
+                "replaceCompressor": undefined
             },
             {
                 "name": "Scenario 2",
@@ -6173,11 +6169,7 @@ export const MockCompressedAirAssessment: Assessment = {
                     "implementationCost": 1000,
                     "order": 1
                 },
-                "replaceCompressor": {
-                    order: 100,
-                    compressorsMapping: [],
-                    implementationCost: 0
-                },
+                "replaceCompressor": undefined,
                 "improveEndUseEfficiency": {
                     "endUseEfficiencyItems": [
                         {

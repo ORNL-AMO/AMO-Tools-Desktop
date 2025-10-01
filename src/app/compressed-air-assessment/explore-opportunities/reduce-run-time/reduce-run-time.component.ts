@@ -26,6 +26,7 @@ export class ReduceRunTimeComponent implements OnInit {
   orderOptions: Array<number>;
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
+  compressorInventoryItems: Array<CompressorInventoryItem>;
   compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults;
   modificationResultsSub: Subscription;
 
@@ -65,6 +66,7 @@ export class ReduceRunTimeComponent implements OnInit {
       if (compressedAirAssessment) {
         this.displayShutdownTimer = compressedAirAssessment.systemInformation.multiCompressorSystemControls != 'loadSharing';
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
+        this.compressorInventoryItems = this.compressedAirAssessment.compressorInventoryItems.concat(this.compressedAirAssessment.replacementCompressorInventoryItems);
         this.intervalAmount = this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
         this.setOrderOptions();
       }
@@ -134,7 +136,8 @@ export class ReduceRunTimeComponent implements OnInit {
           modification.improveEndUseEfficiency.order,
           modification.reduceAirLeaks.order,
           modification.reduceSystemAirPressure.order,
-          modification.useAutomaticSequencer.order
+          modification.useAutomaticSequencer.order,
+          modification.replaceCompressor.order
         ];
         allOrders = allOrders.filter(order => { return order != 100 });
         let numOrdersOn: number = allOrders.length;
@@ -221,11 +224,6 @@ export class ReduceRunTimeComponent implements OnInit {
       }
     });
     this.setReduceRuntimeValid();
-  }
-
-  checkShowShutdownTimer(compressorId: string): boolean {
-    let compressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(compressor => { return compressor.itemId == compressorId });
-    return this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType);
   }
 
   setReduceRuntimeValid() {

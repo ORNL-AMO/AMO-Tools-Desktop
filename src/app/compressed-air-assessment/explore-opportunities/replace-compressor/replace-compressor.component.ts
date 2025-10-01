@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, ReplaceCompressor } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, Modification, ReduceRuntime, ReplaceCompressor } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ReplaceCompressorService } from './replace-compressor.service';
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
+import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 
 @Component({
   selector: 'app-replace-compressor',
@@ -18,7 +19,7 @@ export class ReplaceCompressorComponent {
   selectedModificationIdSub: Subscription;
   isFormChange: boolean = false;
   selectedModificationIndex: number;
-  // orderOptions: Array<number>;
+  orderOptions: Array<number>;
   compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
   settingsSub: Subscription;
@@ -31,14 +32,14 @@ export class ReplaceCompressorComponent {
     replacementCompressorId: string
   }>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
+    private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && !this.isFormChange) {
         this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
-        // this.setOrderOptions();
+        this.setOrderOptions();
         this.setData()
       } else {
         this.isFormChange = false;
@@ -52,7 +53,7 @@ export class ReplaceCompressorComponent {
       } else {
         this.isFormChange = false;
       }
-      // this.setOrderOptions();
+      this.setOrderOptions();
     });
   }
 
@@ -67,39 +68,39 @@ export class ReplaceCompressorComponent {
     this.compressedAirAssessmentService.focusedField.next('replaceCompressor');
   }
 
-  // setOrderOptions() {
-  //   if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
-  //     this.orderOptions = new Array();
-  //     let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
-  //     if (modification) {
-  //       let allOrders: Array<number> = [
-  //         modification.reduceAirLeaks.order,
-  //         modification.adjustCascadingSetPoints.order,
-  //         modification.improveEndUseEfficiency.order,
-  //         modification.reduceRuntime.order,
-  //         modification.reduceSystemAirPressure.order,
-  //         modification.useAutomaticSequencer.order
-  //       ];
-  //       allOrders = allOrders.filter(order => { return order != 100 });
-  //       let numOrdersOn: number = allOrders.length;
-  //       for (let i = 1; i <= numOrdersOn + 1; i++) {
-  //         this.orderOptions.push(i);
-  //       }
-  //     }
-  //   }
-  // }
+  setOrderOptions() {
+    if (this.compressedAirAssessment && this.selectedModificationIndex != undefined) {
+      this.orderOptions = new Array();
+      let modification: Modification = this.compressedAirAssessment.modifications[this.selectedModificationIndex];
+      if (modification) {
+        let allOrders: Array<number> = [
+          modification.reduceAirLeaks.order,
+          modification.adjustCascadingSetPoints.order,
+          modification.improveEndUseEfficiency.order,
+          modification.reduceRuntime.order,
+          modification.reduceSystemAirPressure.order,
+          modification.useAutomaticSequencer.order,
+          modification.addPrimaryReceiverVolume.order
+        ];
+        allOrders = allOrders.filter(order => { return order != 100 });
+        let numOrdersOn: number = allOrders.length;
+        for (let i = 1; i <= numOrdersOn + 1; i++) {
+          this.orderOptions.push(i);
+        }
+      }
+    }
+  }
 
   save(isOrderChange: boolean) {
     this.isFormChange = true;
     let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].replaceCompressor.order));
-    console.log(this.replaceCompressorMapping);
     this.compressedAirAssessment.modifications[this.selectedModificationIndex].replaceCompressor = this.replaceCompressorService.getObjFromForm(this.form, this.replaceCompressorMapping);
-    
-    // if (isOrderChange) {
-    //   this.isFormChange = false;
-    //   let newOrder: number = this.form.controls.order.value;
-    //   this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'replaceCompressor', previousOrder, newOrder);
-    // }
+
+    if (isOrderChange) {
+      this.isFormChange = false;
+      let newOrder: number = this.form.controls.order.value;
+      this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'replaceCompressor', previousOrder, newOrder);
+    }
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     // this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
   }
@@ -109,19 +110,29 @@ export class ReplaceCompressorComponent {
       let replaceCompressor: ReplaceCompressor = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].replaceCompressor));
       this.form = this.replaceCompressorService.getFormFromObj(replaceCompressor);
       this.replaceCompressorMapping = replaceCompressor.compressorsMapping;
-      if(!this.replaceCompressorMapping || this.replaceCompressorMapping.length == 0){
-        console.log('setting mapping');
-        this.replaceCompressorMapping = this.compressedAirAssessment.compressorInventoryItems.map(item => {
-          return {
-            originalCompressorId: item.itemId,
-            replacementCompressorId: undefined
-          }
-        });
-        this.save(false);
-      }
       // if (replaceCompressor.order != 100) {
       //   this.exploreOpportunitiesValidationService.replaceCompressorValid.next(this.form.valid);
       // }
     }
+  }
+
+  setReplacement(compressorMap: { originalCompressorId: string, replacementCompressorId: string }) {
+    let reduceRuntime: ReduceRuntime = this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime;
+    reduceRuntime.runtimeData.forEach(runtimeData => {
+      if (runtimeData.compressorId == compressorMap.originalCompressorId && compressorMap.replacementCompressorId) {
+        let replacementCompressor: CompressorInventoryItem = this.compressedAirAssessment.replacementCompressorInventoryItems.find(item => { return item.itemId == compressorMap.replacementCompressorId });
+        runtimeData.compressorId = replacementCompressor.itemId;
+        runtimeData.fullLoadCapacity = replacementCompressor.performancePoints.fullLoad.airflow;
+        runtimeData.automaticShutdownTimer = replacementCompressor.compressorControls.automaticShutdown;
+        runtimeData.originalCompressorId = compressorMap.originalCompressorId;
+      } else if (runtimeData.originalCompressorId == compressorMap.originalCompressorId && !compressorMap.replacementCompressorId) {
+        let originalCompressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == compressorMap.originalCompressorId });
+        runtimeData.compressorId = originalCompressor.itemId;
+        runtimeData.fullLoadCapacity = originalCompressor.performancePoints.fullLoad.airflow;
+        runtimeData.automaticShutdownTimer = originalCompressor.compressorControls.automaticShutdown;
+      }
+    });
+    this.save(false)
+
   }
 }

@@ -8,12 +8,28 @@
             <select id="replaceCompressorOrder" formControlName="order" class="form-control pull-right"
                 (change)="save(true)">
                 <option [ngValue]=100>Off</option>
-                <option [ngValue]=1>On</option>
+                <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
             </select>
         </label>
     </div>
+    <div *ngIf="form.controls.order.value != 100" class="mb-0 pt-1 pl-0 pr-0">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.implementationCost.invalid}">
+            <label for="replaceCompressorImplementationCost">Implementation Cost</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="implementationCost"
+                    name="replaceCompressorImplementationCost" id="replaceCompressorImplementationCost" (input)="save(false)"
+                    (focus)="helpTextField('implementationCost')">
+                <span class="input-group-addon units">$</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.implementationCost.invalid && !form.controls.implementationCost.pristine">
+                <span *ngIf="form.controls.implementationCost.errors.min">Value can't be negative.
+                </span>
+            </span>
+        </div>
+    </div>
 </form>
-<form class="p-0" *ngIf="form.controls.order.value == 1">
+<form class="p-0" *ngIf="form.controls.order.value != 100">
     <div class="scroll-item">
         <table class="table bg-white">
             <thead>
@@ -30,14 +46,14 @@
             <tbody>
                 <tr *ngFor="let compressorMap of replaceCompressorMapping">
                     <td>
-                        {{compressorMap.originalCompressorId | compressorInventoryItemName:compressedAirAssessment.compressorInventoryItems}}
+                        {{compressorMap.originalCompressorId | compressorName:compressedAirAssessment.compressorInventoryItems}}
                         <!-- <span class="pl-2" *ngIf="rData.compressorId == trimCompressorId">(Trim)</span> -->
                     </td>
                     <td class="text-center">
                         <select class="form-select w-100" [(ngModel)]="compressorMap.replacementCompressorId"
                             name="{{compressorMap.originalCompressorId}}-replacement-compressor"
                             id="{{compressorMap.originalCompressorId}}-replacement-compressor"
-                            (change)="save(false)">
+                            (change)="setReplacement(compressorMap)">
                             <option [ngValue]="undefined"></option>
                             <option
                                 *ngFor="let replacementCompressor of compressedAirAssessment.replacementCompressorInventoryItems"

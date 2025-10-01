@@ -81,6 +81,7 @@ export class ReduceSystemAirPressureComponent implements OnInit {
           modification.reduceRuntime.order,
           modification.reduceAirLeaks.order,
           modification.useAutomaticSequencer.order,
+          modification.replaceCompressor.order
         ];
         allOrders = allOrders.filter(order => { return order != 100 });
         let numOrdersOn: number = allOrders.length;

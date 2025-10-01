@@ -116,7 +116,12 @@ export class FlowReallocationResults {
             let isTurnedOn: boolean = data.summaryData.order != 0;
             if (reduceRuntime && systemInformation.multiCompressorSystemControls != 'baseTrim') {
                 let reduceRuntimeData: ReduceRuntimeData = reduceRuntime.runtimeData.find(dataItem => {
-                    return dataItem.compressorId == data.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
+                    if (dataItem.originalCompressorId) {
+                        return dataItem.originalCompressorId == data.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
+                    } else {
+                        return dataItem.compressorId == data.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
+                    }
+
                 });
                 let intervalData: { isCompressorOn: boolean, timeInterval: number } = reduceRuntimeData.intervalData.find(iData => { return iData.timeInterval == data.summaryData.timeInterval });
                 isTurnedOn = intervalData.isCompressorOn;
@@ -128,7 +133,7 @@ export class FlowReallocationResults {
                 reduceRuntimeShutdownTimer = reduceRuntimeData.automaticShutdownTimer;
             }
             if (data.summaryData.order != 0 && isTurnedOn) {
-                let compressor: CompressorInventoryItemClass = adjustedCompressors.find(item => { return item.findItem(data.compressorId)});
+                let compressor: CompressorInventoryItemClass = adjustedCompressors.find(item => { return item.findItem(data.compressorId) });
                 if (reduceRuntime) {
                     compressor.compressorControls.automaticShutdown = reduceRuntimeShutdownTimer;
                 }

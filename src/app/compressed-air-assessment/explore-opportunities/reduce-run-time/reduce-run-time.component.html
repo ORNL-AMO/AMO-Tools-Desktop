@@ -52,7 +52,8 @@
         <div class="w-100 d-flex justify-content-start mb-1 mt-1">
             <div class="pl-2 pr-2" *ngIf="reduceRuntime.runtimeData && reduceRuntime.runtimeData.length > 0">
                 <label class="small" for="fillRightHourInterval">
-                    <input type="checkbox" [(ngModel)]="fillRightHourInterval" name="fillRightHourInterval" id="fillRightHourInterval">
+                    <input type="checkbox" [(ngModel)]="fillRightHourInterval" name="fillRightHourInterval"
+                        id="fillRightHourInterval">
                     Fill right on change
                 </label>
             </div>
@@ -82,7 +83,7 @@
                 <tr
                     *ngFor="let rData of reduceRuntime.runtimeData | dayTypeFilter:selectedDayType.dayType.dayTypeId; let rDataIndex = index;">
                     <td class="bold text-center">
-                        {{rData.compressorId | compressorName:compressedAirAssessment.compressorInventoryItems}}
+                        {{rData.compressorId | compressorName:compressorInventoryItems}}
                         <span class="pl-2" *ngIf="rData.compressorId == trimCompressorId">(Trim)</span>
                     </td>
                     <td class="text-center">
@@ -91,13 +92,15 @@
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                     </td>
                     <td *ngIf="displayShutdownTimer" class="text-center">
-                        <input *ngIf="checkShowShutdownTimer(rData.compressorId)" type="checkbox"
-                            [(ngModel)]="rData.automaticShutdownTimer" (change)="save()">
+                        <ng-container *ngIf="rData.compressorId | compressorShowShutdownTimer:compressorInventoryItems">
+                            <input type="checkbox" [(ngModel)]="rData.automaticShutdownTimer" (change)="save()">
+                        </ng-container>
                     </td>
                     <td class="text-center" *ngFor="let data of rData.intervalData; let dataIndex = index;">
                         <input type="checkbox" id="{{'isCompressorOn_'+rDataIndex+dataIndex}}"
                             name="{{'isCompressorOn_'+rDataIndex+dataIndex}}" [(ngModel)]="data.isCompressorOn"
-                            (focus)="helpTextField('checkbox')" (change)="setHourIntervalState(rData.intervalData, data, dataIndex)"
+                            (focus)="helpTextField('checkbox')"
+                            (change)="setHourIntervalState(rData.intervalData, data, dataIndex)"
                             [disabled]="rData.compressorId == trimCompressorId">
                     </td>
                 </tr>
