@@ -1,23 +1,23 @@
-import { ViewChild } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { Co2SavingsData } from '../../../../calculator/utilities/co2-savings/co2-savings.service';
+import { CompressedAirAssessment, SystemInformation } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { AltitudeCorrectionService } from '../../calculator/utilities/altitude-correction/altitude-correction.service';
-import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
-import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
-import { CompressedAirAssessment, SystemInformation } from '../../shared/models/compressed-air-assessment';
-import { Settings } from '../../shared/models/settings';
-import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { SystemProfileService } from '../system-profile/system-profile.service';
+import { UntypedFormGroup } from '@angular/forms';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { AssessmentCo2SavingsService } from '../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { SystemInformationFormService } from './system-information-form.service';
+import { SystemProfileService } from '../../../system-profile/system-profile.service';
+import { AltitudeCorrectionService } from '../../../../calculator/utilities/altitude-correction/altitude-correction.service';
 
 @Component({
-    selector: 'app-system-information',
-    templateUrl: './system-information.component.html',
-    styleUrls: ['./system-information.component.css'],
-    standalone: false
+  selector: 'app-system-information-form',
+  templateUrl: './system-information-form.component.html',
+  styleUrl: './system-information-form.component.css',
+  standalone: false
 })
-export class SystemInformationComponent implements OnInit {
+export class SystemInformationFormComponent {
+
   settings: Settings;
   @ViewChild('systemCapacityModal', { static: false }) public systemCapacityModal: ModalDirective;
   showSystemCapacityModal: boolean = false;

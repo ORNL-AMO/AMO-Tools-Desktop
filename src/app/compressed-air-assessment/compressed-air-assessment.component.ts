@@ -16,7 +16,7 @@ import { EndUsesService } from './end-uses/end-uses.service';
 import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './inventory/inventory.service';
-import { SystemInformationFormService } from './system-information/system-information-form.service';
+// import { SystemInformationFormService } from './system-information/system-information-form.service';
 import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-setup.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 
@@ -63,10 +63,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
   showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
     private endUseDayTypeSetupService: DayTypeSetupService,
-    private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
+    private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, 
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-      
-    private dayTypeService: DayTypeService,
     private egridService: EGridService,
     private endUseService: EndUsesService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
@@ -94,7 +92,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.compressedAirAsseementSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val && this.assessment) {
         this.save(val);
-        this.setDisableNext();
+        // this.setDisableNext();
       }
     })
     let tmpTab: string = this.assessmentService.getStartingTab();
@@ -109,7 +107,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
     this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
-      this.setDisableNext();
+      // this.setDisableNext();
       this.setContainerHeight();
     });
 
@@ -191,28 +189,28 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.compressedAirAssessmentService.settings.next(this.settings);
   }
 
-  setDisableNext() {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors(compressedAirAssessment);
-    let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings).valid;
-    let hasValidDayTypes: boolean = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
-    if (this.setupTab == 'system-information' && !hasValidSystemInformation) {
-      this.disableNext = true;
-    } else if (this.setupTab == 'day-types' && !hasValidDayTypes) {
-      this.disableNext = true;
-    } else if (hasValidCompressors == false && this.setupTab != 'system-basics' && this.setupTab != 'system-information') {
-      this.disableNext = true;
-    } else if (this.setupTab == 'system-profile') {
-      let hasValidSystemProfile: boolean = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment).isValid;
-      if (hasValidSystemProfile) {
-        this.disableNext = false;
-      } else {
-        this.disableNext = true;
-      }
-    } else {
-      this.disableNext = false;
-    }
-  }
+  // setDisableNext() {
+  //   let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+  //   let hasValidCompressors: boolean = this.inventoryService.hasValidCompressors(compressedAirAssessment);
+  //   let hasValidSystemInformation: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings).valid;
+  //   let hasValidDayTypes: boolean = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
+  //   if (this.setupTab == 'system-information' && !hasValidSystemInformation) {
+  //     this.disableNext = true;
+  //   } else if (this.setupTab == 'day-types' && !hasValidDayTypes) {
+  //     this.disableNext = true;
+  //   } else if (hasValidCompressors == false && this.setupTab != 'system-basics' && this.setupTab != 'system-information') {
+  //     this.disableNext = true;
+  //   } else if (this.setupTab == 'system-profile') {
+  //     let hasValidSystemProfile: boolean = this.compressedAirAssessmentService.hasValidProfileSummaryData(compressedAirAssessment).isValid;
+  //     if (hasValidSystemProfile) {
+  //       this.disableNext = false;
+  //     } else {
+  //       this.disableNext = true;
+  //     }
+  //   } else {
+  //     this.disableNext = false;
+  //   }
+  // }
 
   next() {
     if (this.setupTab == 'system-basics') {

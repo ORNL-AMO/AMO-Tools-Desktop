@@ -2,6 +2,7 @@ import { Routes } from "@angular/router";
 import { AssessessmentTabContentComponent } from "./assessessment-tab-content/assessessment-tab-content";
 import { BaselineTabContentComponent } from "./baseline-tab-content/baseline-tab-content";
 import { SystemBasicsComponent } from "./baseline-tab-content/system-basics/system-basics.component";
+import { SystemInformationComponent } from "./baseline-tab-content/system-information/system-information.component";
 
 
 
@@ -23,6 +24,10 @@ export const compressedAirAssessmentRoutes: Routes = [
             {
                 path: 'system-basics',
                 component: SystemBasicsComponent
+            },
+            {
+                path: 'system-information',
+                component: SystemInformationComponent
             }
         ]
     },

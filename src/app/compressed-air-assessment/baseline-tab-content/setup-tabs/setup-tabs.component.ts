@@ -5,7 +5,8 @@ import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { DayTypeService } from '../../day-types/day-type.service';
 import { InventoryService } from '../../inventory/inventory.service';
-import { SystemInformationFormService } from '../../system-information/system-information-form.service';
+import { SystemInformationFormService } from '../system-information/system-information-form/system-information-form.service';
+
 
 @Component({
     selector: 'app-setup-tabs',

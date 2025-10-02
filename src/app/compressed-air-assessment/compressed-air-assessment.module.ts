@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { SystemBasicsComponent } from './baseline-tab-content/system-basics/system-basics.component';
 import { SettingsModule } from '../settings/settings.module';
 import { SetupTabsComponent } from './baseline-tab-content/setup-tabs/setup-tabs.component';
-import { SystemInformationComponent } from './system-information/system-information.component';
+import { SystemInformationComponent } from './baseline-tab-content/system-information/system-information.component';
 import { DayTypesComponent } from './day-types/day-types.component';
 import { EndUsesComponent } from './end-uses/end-uses.component';
 import { InventoryComponent } from './inventory/inventory.component';
@@ -16,7 +16,7 @@ import { SystemProfileSummaryComponent } from './system-profile/system-profile-s
 import { SystemProfileGraphsModule } from './system-profile-graphs/system-profile-graphs.module';
 import { SystemBasicsFormService } from './baseline-tab-content/system-basics/system-basics-form.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SystemInformationFormService } from './system-information/system-information-form.service';
+import { SystemInformationFormService } from './baseline-tab-content/system-information/system-information-form/system-information-form.service';
 import { NameplateDataComponent } from './inventory/nameplate-data/nameplate-data.component';
 import { ControlDataComponent } from './inventory/control-data/control-data.component';
 import { DesignDetailsComponent } from './inventory/design-details/design-details.component';
@@ -52,7 +52,7 @@ import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { SystemBasicsHelpComponent } from './baseline-tab-content/system-basics/system-basics-help/system-basics-help.component';
-import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
+import { SystemInformationHelpComponent } from './baseline-tab-content/system-information/system-information-help/system-information-help.component';
 import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
 import { NameplateDataHelpComponent } from './results-panel/help-panel/inventory-help/nameplate-data-help/nameplate-data-help.component';
 import { ControlDataHelpComponent } from './results-panel/help-panel/inventory-help/control-data-help/control-data-help.component';
@@ -74,7 +74,7 @@ import { PipeSizingModule } from '../calculator/compressed-air/pipe-sizing/pipe-
 import { CompressedAirPressureReductionModule } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air-velocity.module';
 import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
-import { SystemCapacityModalComponent } from './system-information/system-capacity-modal/system-capacity-modal.component';
+import { SystemCapacityModalComponent } from './baseline-tab-content/system-information/system-capacity-modal/system-capacity-modal.component';
 import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { ReduceAirLeaksComponent } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.component';
@@ -156,6 +156,7 @@ import { AssessessmentTabContentComponent } from './assessessment-tab-content/as
 import { BaselineTabContentComponent } from './baseline-tab-content/baseline-tab-content';
 import { SystemBasicsFormComponent } from './baseline-tab-content/system-basics/system-basics-form/system-basics-form';
 import { BaselineFooterNavButtonsComponent } from './baseline-tab-content/baseline-footer-nav-buttons/baseline-footer-nav-buttons';
+import { SystemInformationFormComponent } from './baseline-tab-content/system-information/system-information-form/system-information-form.component';
 
 @NgModule({
   declarations: [
@@ -246,7 +247,8 @@ import { BaselineFooterNavButtonsComponent } from './baseline-tab-content/baseli
     AssessessmentTabContentComponent,
     BaselineTabContentComponent,
     SystemBasicsFormComponent,
-    BaselineFooterNavButtonsComponent
+    BaselineFooterNavButtonsComponent,
+    SystemInformationFormComponent
   ],
   imports: [
     CommonModule,

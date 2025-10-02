@@ -6,8 +6,8 @@ import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem,
 import { Settings } from '../shared/models/settings';
 import { DayTypeService } from './day-types/day-type.service';
 import { InventoryService } from './inventory/inventory.service';
-import { SystemInformationFormService } from './system-information/system-information-form.service';
 import { Assessment } from '../shared/models/assessment';
+import { SystemInformationFormService } from './baseline-tab-content/system-information/system-information-form/system-information-form.service';
 
 @Injectable({
   providedIn: 'root'

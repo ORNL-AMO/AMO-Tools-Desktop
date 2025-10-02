@@ -1,7 +1,6 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { Settings } from '../../../shared/models/settings';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { Settings } from '../../../../shared/models/settings';
 
 @Component({
     selector: 'app-system-capacity-modal',

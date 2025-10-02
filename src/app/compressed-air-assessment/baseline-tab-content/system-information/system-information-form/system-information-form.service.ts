@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { SystemInformation } from '../../shared/models/compressed-air-assessment';
-import { Settings } from '../../shared/models/settings';
-import { GreaterThanValidator } from '../../shared/validators/greater-than';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { SystemInformation } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
+import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 
 @Injectable()
 export class SystemInformationFormService {
