@@ -3,6 +3,7 @@ import { AssessessmentTabContentComponent } from "./assessessment-tab-content/as
 import { BaselineTabContentComponent } from "./baseline-tab-content/baseline-tab-content";
 import { SystemBasicsComponent } from "./baseline-tab-content/system-basics/system-basics.component";
 import { SystemInformationComponent } from "./baseline-tab-content/system-information/system-information.component";
+import { InventorySetupComponent } from "./baseline-tab-content/inventory-setup/inventory-setup.component";
 
 
 
@@ -28,6 +29,10 @@ export const compressedAirAssessmentRoutes: Routes = [
             {
                 path: 'system-information',
                 component: SystemInformationComponent
+            },
+            {
+                path: 'inventory-setup',
+                component: InventorySetupComponent
             }
         ]
     },

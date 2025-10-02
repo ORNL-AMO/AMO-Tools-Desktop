@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as Papa from 'papaparse';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import { CompressorTypeOptions, ControlTypes } from './inventory/inventoryOptions';
+import { CompressorTypeOptions, ControlTypes } from './baseline-tab-content/inventory-setup/inventory/inventoryOptions';
 @Injectable()
 export class GenericCompressorDbService {
 

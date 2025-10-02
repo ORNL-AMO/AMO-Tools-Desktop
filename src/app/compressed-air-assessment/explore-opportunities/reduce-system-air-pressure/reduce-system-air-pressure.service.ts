@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CompressorInventoryItem, ReduceSystemAirPressure } from '../../../shared/models/compressed-air-assessment';
-import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
+import { PerformancePointsFormService } from '../../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
 
 @Injectable()
 export class ReduceSystemAirPressureService {

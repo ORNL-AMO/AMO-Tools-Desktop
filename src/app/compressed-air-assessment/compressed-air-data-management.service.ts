@@ -3,8 +3,8 @@ import { CentrifugalSpecifics, CompressedAirAssessment, CompressorControls, Comp
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { GenericCompressor } from './generic-compressor-db.service';
-import { InventoryService } from './inventory/inventory.service';
-import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
+import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
+import { PerformancePointCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/performance-point-calculations.service';
 import { SystemProfileService } from './system-profile/system-profile.service';
 
 @Injectable()

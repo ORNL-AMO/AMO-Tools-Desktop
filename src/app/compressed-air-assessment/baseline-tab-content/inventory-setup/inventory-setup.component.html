@@ -1,0 +1,43 @@
+<div class="d-flex w-100 h-100">
+    <div class="assessment-panel-container lookup-form modification scroll-item w-50">
+        <app-inventory></app-inventory>
+    </div>
+    <div class="assessment-panel-container scroll-item w-50">
+        <div class="d-flex flex-column">
+            <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+                <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'inventory'}">
+                    <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('inventory')">
+                        <div>Current Inventory</div>
+                    </a>
+                </div>
+                <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'replacementInventory'}">
+                    <a class="h-100 d-flex justify-content-center align-items-center"
+                        (click)="setTab('replacementInventory')">
+                        <div>Replacement Inventory</div>
+                    </a>
+                </div>
+                <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': tabSelect == 'help'}">
+                    <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')">
+                        <div>Help</div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="p-2" *ngIf="tabSelect == 'inventory'">
+                <app-inventory-table></app-inventory-table>
+                <hr>
+                <app-inventory-performance-profile></app-inventory-performance-profile>
+                <app-centrifugal-graph></app-centrifugal-graph>
+            </div>
+            <div class="p-2" *ngIf="tabSelect == 'replacementInventory'">
+                <app-inventory-table [isReplacementInventory]="true"></app-inventory-table>
+                <hr>
+                <app-inventory-performance-profile></app-inventory-performance-profile>
+                <app-centrifugal-graph></app-centrifugal-graph>
+            </div>
+            <div class="p-2">
+                <app-inventory-help *ngIf="tabSelect == 'help'"></app-inventory-help>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,8 +4,8 @@ import { CompressorInventoryItem } from '../shared/models/compressed-air-assessm
 import { Settings } from '../shared/models/settings';
 import { CompressedAirSuiteApiService } from '../tools-suite-api/compressed-air-suite-api.service';
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
-import { InventoryService } from './inventory/inventory.service';
-import { CompressorTypeOptions, ControlTypes } from './inventory/inventoryOptions';
+import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
+import { CompressorTypeOptions, ControlTypes } from './baseline-tab-content/inventory-setup/inventory/inventoryOptions';
 import { CompressorInventoryItemClass } from './calculations/CompressorInventoryItemClass';
 
 

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { CompressorInventoryItem } from '../../shared/models/compressed-air-assessment';
-import { InventoryService } from '../inventory/inventory.service';
+import { InventoryService } from '../baseline-tab-content/inventory-setup/inventory/inventory.service';
 
 @Pipe({
   name: 'compressorShowShutdownTimer',

@@ -202,7 +202,7 @@
       "inlineTemplate": false,
       "prefix": "app",
       "style": "css",
-      "standalone": true,
+      "standalone": false,
       "type": "Component"
     },
     "@schematics/angular:directive": {

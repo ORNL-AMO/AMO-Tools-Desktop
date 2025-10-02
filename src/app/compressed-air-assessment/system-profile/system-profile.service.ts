@@ -3,7 +3,7 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemInformation, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
-import { SharedPointCalculationsService } from '../inventory/performance-points/calculations/shared-point-calculations.service';
+import { SharedPointCalculationsService } from '../baseline-tab-content/inventory-setup/inventory/performance-points/calculations/shared-point-calculations.service';
 import { CompressorInventoryItemClass } from '../calculations/CompressorInventoryItemClass';
 
 @Injectable()

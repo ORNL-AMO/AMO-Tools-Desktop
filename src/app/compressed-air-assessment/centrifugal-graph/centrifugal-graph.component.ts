@@ -5,7 +5,7 @@ import { CentrifugalSpecifics, CompressedAirAssessment, CompressorInventoryItem 
 import { TraceData } from '../../shared/models/plotting';
 import { Settings } from '../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { InventoryService } from '../inventory/inventory.service';
+import { InventoryService } from '../baseline-tab-content/inventory-setup/inventory/inventory.service';
 
 @Component({
     selector: 'app-centrifugal-graph',

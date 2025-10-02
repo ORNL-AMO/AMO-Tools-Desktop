@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
+import { PerformancePointsFormService } from '../../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
 import { SystemProfileService } from '../system-profile.service';
 
 @Component({

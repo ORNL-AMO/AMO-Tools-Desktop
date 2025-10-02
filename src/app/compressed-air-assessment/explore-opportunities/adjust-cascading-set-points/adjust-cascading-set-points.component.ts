@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { AdjustCascadingSetPoints, CascadingSetPointData, ReduceSystemAirPressure, CompressedAirAssessment, CompressorInventoryItem, Modification } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
+import { PerformancePointsFormService } from '../../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { AdjustCascadingSetPointsService, CompressorForm } from './adjust-cascading-set-points.service';

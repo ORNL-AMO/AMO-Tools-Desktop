@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { AdjustCascadingSetPoints, CascadingSetPointData } from '../../../shared/models/compressed-air-assessment';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
-import { PerformancePointsFormService } from '../../inventory/performance-points/performance-points-form.service';
+import { PerformancePointsFormService } from '../../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
 
 @Injectable()
 export class AdjustCascadingSetPointsService {

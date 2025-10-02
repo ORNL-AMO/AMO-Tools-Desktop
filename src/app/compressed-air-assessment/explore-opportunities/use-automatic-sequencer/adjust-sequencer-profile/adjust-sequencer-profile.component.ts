@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
-import { InventoryService } from '../../../inventory/inventory.service';
+import { InventoryService } from '../../../baseline-tab-content/inventory-setup/inventory/inventory.service';
 
 @Component({
     selector: 'app-adjust-sequencer-profile',

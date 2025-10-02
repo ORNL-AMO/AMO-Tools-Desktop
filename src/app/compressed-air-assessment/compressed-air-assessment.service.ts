@@ -5,7 +5,7 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, SystemProfileSetup } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { DayTypeService } from './day-types/day-type.service';
-import { InventoryService } from './inventory/inventory.service';
+import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { Assessment } from '../shared/models/assessment';
 import { SystemInformationFormService } from './baseline-tab-content/system-information/system-information-form/system-information-form.service';
 

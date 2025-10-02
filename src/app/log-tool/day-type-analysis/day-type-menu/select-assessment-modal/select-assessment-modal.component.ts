@@ -16,7 +16,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { DayTypeAnalysisService } from '../../day-type-analysis.service';
 import { LogToolService } from '../../../log-tool.service';
-import { InventoryService } from '../../../../compressed-air-assessment/inventory/inventory.service';
+import { InventoryService } from '../../../../compressed-air-assessment/baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { firstValueFrom } from 'rxjs';
 import { LogToolDataService } from '../../../log-tool-data.service';
 

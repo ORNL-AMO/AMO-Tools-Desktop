@@ -10,60 +10,60 @@ import { SetupTabsComponent } from './baseline-tab-content/setup-tabs/setup-tabs
 import { SystemInformationComponent } from './baseline-tab-content/system-information/system-information.component';
 import { DayTypesComponent } from './day-types/day-types.component';
 import { EndUsesComponent } from './end-uses/end-uses.component';
-import { InventoryComponent } from './inventory/inventory.component';
+import { InventoryComponent } from './baseline-tab-content/inventory-setup/inventory/inventory.component';
 import { SystemProfileSetupComponent } from './system-profile/system-profile-setup/system-profile-setup.component';
 import { SystemProfileSummaryComponent } from './system-profile/system-profile-summary/system-profile-summary.component';
 import { SystemProfileGraphsModule } from './system-profile-graphs/system-profile-graphs.module';
 import { SystemBasicsFormService } from './baseline-tab-content/system-basics/system-basics-form.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemInformationFormService } from './baseline-tab-content/system-information/system-information-form/system-information-form.service';
-import { NameplateDataComponent } from './inventory/nameplate-data/nameplate-data.component';
-import { ControlDataComponent } from './inventory/control-data/control-data.component';
-import { DesignDetailsComponent } from './inventory/design-details/design-details.component';
-import { InventoryService } from './inventory/inventory.service';
+import { NameplateDataComponent } from './baseline-tab-content/inventory-setup/inventory/nameplate-data/nameplate-data.component';
+import { ControlDataComponent } from './baseline-tab-content/inventory-setup/inventory/control-data/control-data.component';
+import { DesignDetailsComponent } from './baseline-tab-content/inventory-setup/inventory/design-details/design-details.component';
+import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
-import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
+import { InventoryTableComponent } from './baseline-tab-content/inventory-setup/inventory-table/inventory-table.component';
 import { ProfileSetupFormComponent } from './system-profile/profile-setup-form/profile-setup-form.component';
 import { CompressorOrderingTableComponent } from './system-profile/system-profile-setup/compressor-ordering-table/compressor-ordering-table.component';
 import { OperatingProfileTableComponent } from './system-profile/system-profile-setup/operating-profile-table/operating-profile-table.component';
 import { SystemProfileService } from './system-profile/system-profile.service';
-import { CentrifugalSpecificsComponent } from './inventory/centrifugal-specifics/centrifugal-specifics.component';
+import { CentrifugalSpecificsComponent } from './baseline-tab-content/inventory-setup/inventory/centrifugal-specifics/centrifugal-specifics.component';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
-import { PerformancePointsComponent } from './inventory/performance-points/performance-points.component';
-import { FullLoadComponent } from './inventory/performance-points/full-load/full-load.component';
-import { MaxFullFlowComponent } from './inventory/performance-points/max-full-flow/max-full-flow.component';
-import { NoLoadComponent } from './inventory/performance-points/no-load/no-load.component';
-import { UnloadPointComponent } from './inventory/performance-points/unload-point/unload-point.component';
-import { BlowoffComponent } from './inventory/performance-points/blowoff/blowoff.component';
+import { PerformancePointsComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/performance-points.component';
+import { FullLoadComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/full-load/full-load.component';
+import { MaxFullFlowComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/max-full-flow/max-full-flow.component';
+import { NoLoadComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/no-load/no-load.component';
+import { UnloadPointComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/unload-point/unload-point.component';
+import { BlowoffComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/blowoff/blowoff.component';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
-import { GenericCompressorModalComponent } from './inventory/generic-compressor-modal/generic-compressor-modal.component';
+import { GenericCompressorModalComponent } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/generic-compressor-modal.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { CompressorOptionsTableComponent } from './inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';
-import { FilterCompressorsComponent } from './inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
-import { FilterCompressorsPipe } from './inventory/generic-compressor-modal/filter-compressors.pipe';
-import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
-import { BlowoffCalculationsService } from './inventory/performance-points/calculations/blowoff-calculations.service';
-import { FullLoadCalculationsService } from './inventory/performance-points/calculations/full-load-calculations.service';
-import { MaxFullFlowCalculationsService } from './inventory/performance-points/calculations/max-full-flow-calculations.service';
-import { NoLoadCalculationsService } from './inventory/performance-points/calculations/no-load-calculations.service';
-import { UnloadPointCalculationsService } from './inventory/performance-points/calculations/unload-point-calculations.service';
-import { SharedPointCalculationsService } from './inventory/performance-points/calculations/shared-point-calculations.service';
+import { CompressorOptionsTableComponent } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';
+import { FilterCompressorsComponent } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
+import { FilterCompressorsPipe } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/filter-compressors.pipe';
+import { PerformancePointCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/performance-point-calculations.service';
+import { BlowoffCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/blowoff-calculations.service';
+import { FullLoadCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/full-load-calculations.service';
+import { MaxFullFlowCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/max-full-flow-calculations.service';
+import { NoLoadCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/no-load-calculations.service';
+import { UnloadPointCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/unload-point-calculations.service';
+import { SharedPointCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/shared-point-calculations.service';
 import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { SystemBasicsHelpComponent } from './baseline-tab-content/system-basics/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './baseline-tab-content/system-information/system-information-help/system-information-help.component';
-import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
-import { NameplateDataHelpComponent } from './results-panel/help-panel/inventory-help/nameplate-data-help/nameplate-data-help.component';
-import { ControlDataHelpComponent } from './results-panel/help-panel/inventory-help/control-data-help/control-data-help.component';
-import { DesignDetailsHelpComponent } from './results-panel/help-panel/inventory-help/design-details-help/design-details-help.component';
-import { CentrifugalSpecificsHelpComponent } from './results-panel/help-panel/inventory-help/centrifugal-specifics-help/centrifugal-specifics-help.component';
-import { PerformancePointsHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/performance-points-help.component';
-import { NoLoadHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/no-load-help/no-load-help.component';
-import { UnloadPointHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/unload-point-help/unload-point-help.component';
-import { BlowoffHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/blowoff-help/blowoff-help.component';
-import { FullLoadHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/full-load-help/full-load-help.component';
-import { MaxFullFlowHelpComponent } from './results-panel/help-panel/inventory-help/performance-points-help/max-full-flow-help/max-full-flow-help.component';
+import { InventoryHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/inventory-help.component';
+import { NameplateDataHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/nameplate-data-help/nameplate-data-help.component';
+import { ControlDataHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/control-data-help/control-data-help.component';
+import { DesignDetailsHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/design-details-help/design-details-help.component';
+import { CentrifugalSpecificsHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/centrifugal-specifics-help/centrifugal-specifics-help.component';
+import { PerformancePointsHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/performance-points-help/performance-points-help.component';
+import { NoLoadHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/performance-points-help/no-load-help/no-load-help.component';
+import { UnloadPointHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/performance-points-help/unload-point-help/unload-point-help.component';
+import { BlowoffHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/performance-points-help/blowoff-help/blowoff-help.component';
+import { FullLoadHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/performance-points-help/full-load-help/full-load-help.component';
+import { MaxFullFlowHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/performance-points-help/max-full-flow-help/max-full-flow-help.component';
 import { DayTypesHelpComponent } from './results-panel/help-panel/day-types-help/day-types-help.component';
 import { CompressedAirCalculatorsComponent } from './compressed-air-calculators/compressed-air-calculators.component';
 import { CalculatorTabsComponent } from './compressed-air-banner/calculator-tabs/calculator-tabs.component';
@@ -73,7 +73,7 @@ import { AirLeakModule } from '../calculator/compressed-air/air-leak/air-leak.mo
 import { PipeSizingModule } from '../calculator/compressed-air/pipe-sizing/pipe-sizing.module';
 import { CompressedAirPressureReductionModule } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air-velocity.module';
-import { PerformancePointsFormService } from './inventory/performance-points/performance-points-form.service';
+import { PerformancePointsFormService } from './baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
 import { SystemCapacityModalComponent } from './baseline-tab-content/system-information/system-capacity-modal/system-capacity-modal.component';
 import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
@@ -135,11 +135,11 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
 import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
 import { CentrifugalGraphModule } from './centrifugal-graph/centrifugal-graph.module';
 import { BleedTestModule } from '../calculator/compressed-air/bleed-test/bleed-test.module';
-import { TurndownComponent } from './inventory/performance-points/turndown/turndown.component';
-import { MidTurndownComponent } from './inventory/performance-points/mid-turndown/mid-turndown.component';
-import { MidTurndownCalculationService } from './inventory/performance-points/calculations/mid-turndown-calculation.service';
-import { TurndownCalculationService } from './inventory/performance-points/calculations/turndown-calculation.service';
-import { FlaModalComponent } from './inventory/nameplate-data/fla-modal/fla-modal.component';
+import { TurndownComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/turndown/turndown.component';
+import { MidTurndownComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/mid-turndown/mid-turndown.component';
+import { MidTurndownCalculationService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/mid-turndown-calculation.service';
+import { TurndownCalculationService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/turndown-calculation.service';
+import { FlaModalComponent } from './baseline-tab-content/inventory-setup/inventory/nameplate-data/fla-modal/fla-modal.component';
 import { EndUseTableComponent } from './results-panel/end-use-table/end-use-table.component';
 import { EndUseChartComponent } from './end-use-chart/end-use-chart.component';
 import { DayTypeUseFormComponent } from './end-uses/day-type-use-form/day-type-use-form.component';
@@ -157,6 +157,7 @@ import { BaselineTabContentComponent } from './baseline-tab-content/baseline-tab
 import { SystemBasicsFormComponent } from './baseline-tab-content/system-basics/system-basics-form/system-basics-form';
 import { BaselineFooterNavButtonsComponent } from './baseline-tab-content/baseline-footer-nav-buttons/baseline-footer-nav-buttons';
 import { SystemInformationFormComponent } from './baseline-tab-content/system-information/system-information-form/system-information-form.component';
+import { InventorySetupComponent } from './baseline-tab-content/inventory-setup/inventory-setup.component';
 
 @NgModule({
   declarations: [
@@ -248,7 +249,8 @@ import { SystemInformationFormComponent } from './baseline-tab-content/system-in
     BaselineTabContentComponent,
     SystemBasicsFormComponent,
     BaselineFooterNavButtonsComponent,
-    SystemInformationFormComponent
+    SystemInformationFormComponent,
+    InventorySetupComponent
   ],
   imports: [
     CommonModule,

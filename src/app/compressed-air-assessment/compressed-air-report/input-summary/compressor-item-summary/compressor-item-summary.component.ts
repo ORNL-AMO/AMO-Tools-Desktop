@@ -1,8 +1,8 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CompressorInventoryItem } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
-import { InventoryService } from '../../../inventory/inventory.service';
-import { PerformancePointsFormService } from '../../../inventory/performance-points/performance-points-form.service';
+import { InventoryService } from '../../../baseline-tab-content/inventory-setup/inventory/inventory.service';
+import { PerformancePointsFormService } from '../../../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
 
 @Component({
     selector: 'app-compressor-item-summary',

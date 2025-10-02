@@ -15,7 +15,7 @@ import { DayTypeService } from './day-types/day-type.service';
 import { EndUsesService } from './end-uses/end-uses.service';
 import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
-import { InventoryService } from './inventory/inventory.service';
+import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
 // import { SystemInformationFormService } from './system-information/system-information-form.service';
 import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-setup.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';

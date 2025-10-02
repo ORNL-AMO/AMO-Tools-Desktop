@@ -4,7 +4,7 @@ import { CompressedAirAssessment } from '../../../shared/models/compressed-air-a
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { DayTypeService } from '../../day-types/day-type.service';
-import { InventoryService } from '../../inventory/inventory.service';
+import { InventoryService } from '../inventory-setup/inventory/inventory.service';
 import { SystemInformationFormService } from '../system-information/system-information-form/system-information-form.service';
 
 

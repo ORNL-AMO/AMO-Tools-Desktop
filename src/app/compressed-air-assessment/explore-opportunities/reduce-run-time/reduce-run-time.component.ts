@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntime } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { InventoryService } from '../../inventory/inventory.service';
+import { InventoryService } from '../../baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { ExploreOpportunitiesValidationService, ValidationDataArrays } from '../explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { ReduceRunTimeService } from './reduce-run-time.service';
