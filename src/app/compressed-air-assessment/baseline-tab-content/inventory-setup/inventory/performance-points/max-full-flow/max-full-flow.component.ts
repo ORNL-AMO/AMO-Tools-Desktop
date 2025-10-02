@@ -1,19 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, PerformancePoint } from '../../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../../../../compressed-air-data-management.service';
 import { InventoryService } from '../../inventory.service';
-import { MaxFullFlowCalculationsService } from '../calculations/max-full-flow-calculations.service';
-import { PerformancePointCalculationsService } from '../calculations/performance-point-calculations.service';
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
+import { CompressorInventoryItemClass } from '../../../../../calculations/CompressorInventoryItemClass';
 @Component({
-    selector: '[app-max-full-flow]',
-    templateUrl: './max-full-flow.component.html',
-    styleUrls: ['./max-full-flow.component.css'],
-    standalone: false
+  selector: '[app-max-full-flow]',
+  templateUrl: './max-full-flow.component.html',
+  styleUrls: ['./max-full-flow.component.css'],
+  standalone: false
 })
 export class MaxFullFlowComponent implements OnInit {
 
@@ -28,21 +27,20 @@ export class MaxFullFlowComponent implements OnInit {
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
-  selectedCompressor: CompressorInventoryItem;
-  atmosphericPressure: number;
+  selectedCompressor: CompressorInventoryItemClass;
+  defaultCompressorSub: Subscription;
+  defaultCompressor: CompressorInventoryItemClass;
   constructor(private inventoryService: InventoryService,
     private performancePointsFormService: PerformancePointsFormService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private maxFullFlowCalculationsService: MaxFullFlowCalculationsService, private compressedAirDataManagementService: CompressedAirDataManagementService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.atmosphericPressure = compressedAirAssessment.systemInformation.atmosphericPressure;
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
-        this.checkShowCalc();
         this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.maxFullFlow.power, compressor);
 
         if (this.isFormChange == false) {
@@ -55,10 +53,17 @@ export class MaxFullFlowComponent implements OnInit {
         }
       }
     });
+    this.defaultCompressorSub = this.inventoryService.defaultCompressor.subscribe(compressor => {
+      if (compressor) {
+        this.defaultCompressor = compressor;
+        this.checkShowCalc();
+      }
+    });
   }
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.defaultCompressorSub.unsubscribe();
   }
 
   save() {
@@ -96,44 +101,38 @@ export class MaxFullFlowComponent implements OnInit {
 
   checkShowCalc() {
     if (!this.selectedCompressor.performancePoints.maxFullFlow.isDefaultAirFlow) {
-      let defaultValue: number = this.maxFullFlowCalculationsService.getMaxFullFlowAirFlow(this.selectedCompressor, true, this.atmosphericPressure, this.settings);
-      this.showAirflowCalc = (this.selectedCompressor.performancePoints.maxFullFlow.airflow != defaultValue);
+      this.showAirflowCalc = (this.selectedCompressor.performancePoints.maxFullFlow.airflow != this.defaultCompressor.performancePoints.maxFullFlow.airflow);
     } else {
       this.showAirflowCalc = false;
     }
 
     if (!this.selectedCompressor.performancePoints.maxFullFlow.isDefaultPower) {
-      let defaultValue: number = this.maxFullFlowCalculationsService.getMaxFullFlowPower(this.selectedCompressor, true, this.atmosphericPressure, this.settings);
-      this.showPowerCalc = (this.selectedCompressor.performancePoints.maxFullFlow.power != defaultValue);
+      this.showPowerCalc = (this.selectedCompressor.performancePoints.maxFullFlow.power != this.defaultCompressor.performancePoints.maxFullFlow.power);
     } else {
       this.showPowerCalc = false;
     }
 
     if (!this.selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure) {
-      let defaultValue: number = this.maxFullFlowCalculationsService.getMaxFullFlowPressure(this.selectedCompressor, true, this.settings);
-      this.showPressureCalc = (this.selectedCompressor.performancePoints.maxFullFlow.dischargePressure != defaultValue);
+      this.showPressureCalc = (this.selectedCompressor.performancePoints.maxFullFlow.dischargePressure != this.defaultCompressor.performancePoints.maxFullFlow.dischargePressure);
     } else {
       this.showPressureCalc = false;
     }
   }
 
   setAirFlow() {
-    let defaultValue: number = this.maxFullFlowCalculationsService.getMaxFullFlowAirFlow(this.selectedCompressor, true, this.atmosphericPressure, this.settings);
-    this.form.controls.airflow.patchValue(defaultValue);
+    this.form.controls.airflow.patchValue(this.defaultCompressor.performancePoints.maxFullFlow.airflow);
     this.form.controls.isDefaultAirFlow.patchValue(true);
     this.save();
   }
 
   setPower() {
-    let defaultValue: number = this.maxFullFlowCalculationsService.getMaxFullFlowPower(this.selectedCompressor, true, this.atmosphericPressure, this.settings);
-    this.form.controls.power.patchValue(defaultValue);
+    this.form.controls.power.patchValue(this.defaultCompressor.performancePoints.maxFullFlow.power);
     this.form.controls.isDefaultPower.patchValue(true);
     this.save();
   }
 
   setPressure() {
-    let defaultValue: number = this.maxFullFlowCalculationsService.getMaxFullFlowPressure(this.selectedCompressor, true, this.settings);
-    this.form.controls.dischargePressure.patchValue(defaultValue);
+    this.form.controls.dischargePressure.patchValue(this.defaultCompressor.performancePoints.maxFullFlow.dischargePressure);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();
   }

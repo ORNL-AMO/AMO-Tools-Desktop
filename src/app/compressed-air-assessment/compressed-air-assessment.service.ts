@@ -5,7 +5,6 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, SystemProfileSetup } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { DayTypeService } from './day-types/day-type.service';
-import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { Assessment } from '../shared/models/assessment';
 import { SystemInformationFormService } from './baseline-tab-content/system-information/system-information-form/system-information-form.service';
 
@@ -39,7 +38,7 @@ export class CompressedAirAssessmentService {
     'system-profile',
     'end-uses'
   ];
-  constructor(private systemInformationFormService: SystemInformationFormService, private convertUnitsService: ConvertUnitsService, private inventoryService: InventoryService,
+  constructor(private systemInformationFormService: SystemInformationFormService, private convertUnitsService: ConvertUnitsService,
     private dayTypeService: DayTypeService) {
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.mainTab = new BehaviorSubject<string>('baseline');
@@ -70,7 +69,9 @@ export class CompressedAirAssessmentService {
   setIsSetupDone(compressedAirAssessment: CompressedAirAssessment) {
     let settings: Settings = this.settings.getValue();
     let hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, settings).valid;
-    let hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
+    //TODO: move inventory service validation
+    // let hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
+    let hasValidCompressors: boolean = true;
     let hasValidDayTypes = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
     let profileSummaryValid = this.hasValidProfileSummaryData(compressedAirAssessment);
     compressedAirAssessment.setupDone = (hasValidSystemInformation && hasValidCompressors && hasValidDayTypes && profileSummaryValid.isValid);

@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressorInventoryItem, PerformancePoint } from '../../../../../../shared/models/compressed-air-assessment';
+import { PerformancePoint } from '../../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../../../../compressed-air-data-management.service';
 import { InventoryService } from '../../inventory.service';
-import { BlowoffCalculationsService } from '../calculations/blowoff-calculations.service';
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
+import { CompressorInventoryItemClass } from '../../../../../calculations/CompressorInventoryItemClass';
 
 @Component({
-    selector: '[app-blowoff]',
-    templateUrl: './blowoff.component.html',
-    styleUrls: ['./blowoff.component.css'],
-    standalone: false
+  selector: '[app-blowoff]',
+  templateUrl: './blowoff.component.html',
+  styleUrls: ['./blowoff.component.css'],
+  standalone: false
 })
 export class BlowoffComponent implements OnInit {
 
@@ -27,10 +27,12 @@ export class BlowoffComponent implements OnInit {
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
-  selectedCompressor: CompressorInventoryItem;
+  selectedCompressor: CompressorInventoryItemClass;
+  defaultCompressorSub: Subscription;
+  defaultCompressor: CompressorInventoryItemClass;
   constructor(private inventoryService: InventoryService,
     private performancePointsFormService: PerformancePointsFormService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService, private blowoffCalculationsService: BlowoffCalculationsService,
+    private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
@@ -38,7 +40,6 @@ export class BlowoffComponent implements OnInit {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
-        this.checkShowCalc();
         this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.blowoff.power, compressor);
         if (this.isFormChange == false) {
           this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.blowoff, compressor, 'blowoff', undefined);
@@ -49,10 +50,17 @@ export class BlowoffComponent implements OnInit {
         }
       }
     });
+    this.defaultCompressorSub = this.inventoryService.defaultCompressor.subscribe(compressor => {
+      if (compressor) {
+        this.defaultCompressor = compressor;
+        this.checkShowCalc();
+      }
+    });
   }
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.defaultCompressorSub.unsubscribe();
   }
 
   save() {
@@ -82,44 +90,38 @@ export class BlowoffComponent implements OnInit {
 
   checkShowCalc() {
     if (!this.selectedCompressor.performancePoints.blowoff.isDefaultAirFlow) {
-      let defaultValue: number = this.blowoffCalculationsService.getBlowoffAirFlow(this.selectedCompressor, true, this.settings);
-      this.showAirflowCalc = (this.selectedCompressor.performancePoints.blowoff.airflow != defaultValue);
+      this.showAirflowCalc = (this.selectedCompressor.performancePoints.blowoff.airflow != this.defaultCompressor.performancePoints.blowoff.airflow);
     } else {
       this.showAirflowCalc = false;
     }
 
     if (!this.selectedCompressor.performancePoints.blowoff.isDefaultPower) {
-      let defaultValue: number = this.blowoffCalculationsService.getBlowoffPower(this.selectedCompressor, true);
-      this.showPowerCalc = (this.selectedCompressor.performancePoints.blowoff.power != defaultValue);
+      this.showPowerCalc = (this.selectedCompressor.performancePoints.blowoff.power != this.defaultCompressor.performancePoints.blowoff.power);
     } else {
       this.showPowerCalc = false;
     }
 
     if (!this.selectedCompressor.performancePoints.blowoff.isDefaultPressure) {
-      let defaultValue: number = this.blowoffCalculationsService.getBlowoffDischargePressure(this.selectedCompressor, true, this.settings);
-      this.showPressureCalc = (this.selectedCompressor.performancePoints.blowoff.dischargePressure != defaultValue);
+      this.showPressureCalc = (this.selectedCompressor.performancePoints.blowoff.dischargePressure != this.defaultCompressor.performancePoints.blowoff.dischargePressure);
     } else {
       this.showPressureCalc = false;
     }
   }
 
   setAirFlow() {
-    let defaultValue: number = this.blowoffCalculationsService.getBlowoffAirFlow(this.selectedCompressor, true, this.settings);
-    this.form.controls.airflow.patchValue(defaultValue);
+    this.form.controls.airflow.patchValue(this.defaultCompressor.performancePoints.blowoff.airflow);
     this.form.controls.isDefaultAirFlow.patchValue(true);
     this.save();
   }
 
   setPower() {
-    let defaultValue: number = this.blowoffCalculationsService.getBlowoffPower(this.selectedCompressor, true);
-    this.form.controls.power.patchValue(defaultValue);
+    this.form.controls.power.patchValue(this.defaultCompressor.performancePoints.blowoff.power);
     this.form.controls.isDefaultPower.patchValue(true);
     this.save();
   }
 
   setPressure() {
-    let defaultValue: number = this.blowoffCalculationsService.getBlowoffDischargePressure(this.selectedCompressor, true, this.settings);
-    this.form.controls.dischargePressure.patchValue(defaultValue);
+    this.form.controls.dischargePressure.patchValue(this.defaultCompressor.performancePoints.blowoff.dischargePressure);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();
   }

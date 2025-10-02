@@ -67,7 +67,7 @@ export class InventoryTableComponent implements OnInit {
   }
 
   selectItem(item: CompressorInventoryItem) {
-    this.inventoryService.selectedCompressor.next(item);
+    this.inventoryService.setSelectedCompressor(item);
   }
 
   addNewCompressor() {
@@ -79,7 +79,7 @@ export class InventoryTableComponent implements OnInit {
       result = this.inventoryService.addReplacementCompressor(compressedAirAssessment);
     }
     this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
-    this.inventoryService.selectedCompressor.next(result.newInventoryItem);
+    this.inventoryService.setSelectedCompressor(result.newInventoryItem);
   }
 
   deleteItem() {
@@ -122,7 +122,7 @@ export class InventoryTableComponent implements OnInit {
       //TODO: update modificaitons
     }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
-    this.inventoryService.selectedCompressor.next(compressedAirAssessment.compressorInventoryItems[0]);
+    this.inventoryService.setSelectedCompressor(compressedAirAssessment.compressorInventoryItems[0]);
   }
 
   openConfirmDeleteModal(item: CompressorInventoryItem) {

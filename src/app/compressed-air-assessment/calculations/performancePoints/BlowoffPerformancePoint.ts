@@ -49,5 +49,11 @@ export class BlowoffPerformancePoint implements PerformancePoint {
             this.power = roundPowerForPresentation(defaultPower);
         }
     }
+    
+    setDefaultsOn(){
+        this.isDefaultAirFlow = true;
+        this.isDefaultPower = true;
+        this.isDefaultPressure = true;
+    }
 
 }

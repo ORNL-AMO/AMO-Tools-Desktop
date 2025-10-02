@@ -20,6 +20,13 @@ export class CompressorInventoryItemClass {
     modifiedDate: Date;
     originalCompressorId: string;
     isReplacementCompressor: boolean;
+
+    showMaxFullFlow: boolean;
+    showMidTurndown: boolean;
+    showTurndown: boolean;
+    showUnloadPoint: boolean;
+    showNoLoadPoint: boolean;
+    showBlowoffPoint: boolean;
     constructor(inventoryItem: CompressorInventoryItem) {
         this.itemId = inventoryItem.itemId;
         this.description = inventoryItem.description;
@@ -34,6 +41,12 @@ export class CompressorInventoryItemClass {
         this.centrifugalSpecifics = inventoryItem.centrifugalSpecifics;
         this.originalCompressorId = inventoryItem.originalCompressorId;
         this.isReplacementCompressor = inventoryItem.isReplacementCompressor;
+        this.setShowMaxFlowPerformancePoint();
+        this.setShowMidTurndownPerformancePoint();
+        this.setShowTurndownPerformancePoint();
+        this.setShowUnloadPerformancePoint();
+        this.setShowNoLoadPerformancePoint();
+        this.setShowBlowoffPerformancePoint();
     }
 
     adjustCompressorPerformancePointsWithSequencer(targetPressure: number, variance: number, systemInformation: SystemInformation, settings: Settings) {
@@ -166,5 +179,74 @@ export class CompressorInventoryItemClass {
         } else {
             return this.itemId == itemId;
         }
+    }
+
+    setShowMaxFlowPerformancePoint() {
+        if (this.nameplateData.compressorType == 6 && (this.compressorControls.controlType == 7 || this.compressorControls.controlType == 9)) {
+            this.showMaxFullFlow = false;
+        } else if (this.nameplateData.compressorType == 1 || this.nameplateData.compressorType == 2) {
+            if (this.compressorControls.controlType == 1) {
+                this.showMaxFullFlow = false;
+            } else {
+                this.showMaxFullFlow = true;
+            }
+        } else if (this.compressorControls.controlType === 11) {
+            this.showMaxFullFlow = false;
+        } else {
+            this.showMaxFullFlow = true;
+        }
+    }
+
+    setShowMidTurndownPerformancePoint() {
+        if (this.compressorControls.controlType !== 11) {
+            this.showMidTurndown = false;
+        } else {
+            this.showMidTurndown = true;
+        }
+    }
+
+    setShowTurndownPerformancePoint() {
+        if (this.compressorControls.controlType !== 11) {
+            this.showTurndown = false;
+        } else {
+            this.showTurndown = true;
+        }
+    }
+
+    setShowUnloadPerformancePoint() {
+        if (this.nameplateData.compressorType == 1 || this.nameplateData.compressorType == 2) {
+            if (this.compressorControls.controlType == 2 || this.compressorControls.controlType == 3) {
+                this.showUnloadPoint = true;
+            }
+        } else if (this.nameplateData.compressorType == 6 && (this.compressorControls.controlType == 8 || this.compressorControls.controlType == 10)) {
+            this.showUnloadPoint = true;
+        } else {
+            this.showUnloadPoint = false;
+        }
+    }
+
+    setShowNoLoadPerformancePoint() {
+        if (this.nameplateData.compressorType == 6) {
+            if (this.compressorControls.controlType == 7 || this.compressorControls.controlType == 9) {
+                this.showNoLoadPoint = false;
+            }
+        }
+        this.showNoLoadPoint = true;
+    }
+
+    setShowBlowoffPerformancePoint() {
+        //centrifugal
+        if (this.nameplateData.compressorType == 6) {
+            //"with blowoff"
+            if (this.compressorControls.controlType == 7 || this.compressorControls.controlType == 9) {
+                this.showBlowoffPoint = true;
+            }
+        } else {
+            this.showBlowoffPoint = false;
+        }
+    }
+
+    updatePerformancePoints(atmosphericPressure: number, settings: Settings) {
+        this.performancePoints.updatePerformancePoints(this.nameplateData, this.centrifugalSpecifics, this.designDetails, this.compressorControls, atmosphericPressure, settings);
     }
 }

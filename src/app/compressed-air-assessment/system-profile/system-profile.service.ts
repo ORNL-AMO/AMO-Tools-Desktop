@@ -2,16 +2,13 @@ import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemInformation, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
-import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
-import { SharedPointCalculationsService } from '../baseline-tab-content/inventory-setup/inventory/performance-points/calculations/shared-point-calculations.service';
 import { CompressorInventoryItemClass } from '../calculations/CompressorInventoryItemClass';
+import { calculateAirFlow } from '../calculations/performancePoints/performancePointHelpers';
 
 @Injectable()
 export class SystemProfileService {
 
-  constructor(private formBuilder: UntypedFormBuilder,
-    private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
-    private sharedPointCalculationsService: SharedPointCalculationsService) {
+  constructor(private formBuilder: UntypedFormBuilder) {
   }
 
   getProfileSetupFormFromObj(systemProfileSetup: SystemProfileSetup, dayTypes: Array<CompressedAirDayType>): UntypedFormGroup {
@@ -118,7 +115,7 @@ export class SystemProfileService {
         let b: number = ((compressor.performancePoints.fullLoad.dischargePressure + 14.7) / 14.7);
         b = Math.pow(b, .2857);
         let adjustedCompressorPower: number = compressor.performancePoints.fullLoad.power * ((a - 1) / (b - 1));
-        let adjustedAirFlow: number = this.sharedPointCalculationsService.calculateAirFlow(compressor.performancePoints.fullLoad.airflow, adjustedPressure, compressor.performancePoints.fullLoad.dischargePressure, systemInformation.atmosphericPressure, settings)
+        let adjustedAirFlow: number = calculateAirFlow(compressor.performancePoints.fullLoad.airflow, adjustedPressure, compressor.performancePoints.fullLoad.dischargePressure, systemInformation.atmosphericPressure, settings)
         //calculate adjustedSpecPower
         let adjustedSpecPower: number = (adjustedCompressorPower / adjustedAirFlow) * 100;
         //calculate adjustedIsentropicEfficiency

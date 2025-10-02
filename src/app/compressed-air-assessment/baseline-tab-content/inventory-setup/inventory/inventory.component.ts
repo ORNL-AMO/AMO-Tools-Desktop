@@ -64,11 +64,11 @@ export class InventoryComponent implements OnInit {
         let compressorExist: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == selectedCompressor.itemId });
         if (!compressorExist) {
           let lastItemModified: CompressorInventoryItem = _.maxBy(compressedAirAssessment.compressorInventoryItems, 'modifiedDate');
-          this.inventoryService.selectedCompressor.next(lastItemModified);
+          this.inventoryService.setSelectedCompressor(lastItemModified);
         }
       } else {
         let lastItemModified: CompressorInventoryItem = _.maxBy(compressedAirAssessment.compressorInventoryItems, 'modifiedDate');
-        this.inventoryService.selectedCompressor.next(lastItemModified);
+        this.inventoryService.setSelectedCompressor(lastItemModified);
       }
     }
   }
@@ -77,7 +77,7 @@ export class InventoryComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let result: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } = this.inventoryService.addNewCompressor(compressedAirAssessment);
     this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
-    this.inventoryService.selectedCompressor.next(result.newInventoryItem);
+    this.inventoryService.setSelectedCompressor(result.newInventoryItem);
     this.hasInventoryItems = true;
   }
 

@@ -41,13 +41,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { CompressorOptionsTableComponent } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';
 import { FilterCompressorsComponent } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
 import { FilterCompressorsPipe } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/filter-compressors.pipe';
-import { PerformancePointCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/performance-point-calculations.service';
-import { BlowoffCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/blowoff-calculations.service';
-import { FullLoadCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/full-load-calculations.service';
-import { MaxFullFlowCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/max-full-flow-calculations.service';
-import { NoLoadCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/no-load-calculations.service';
-import { UnloadPointCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/unload-point-calculations.service';
-import { SharedPointCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/shared-point-calculations.service';
 import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
@@ -137,8 +130,6 @@ import { CentrifugalGraphModule } from './centrifugal-graph/centrifugal-graph.mo
 import { BleedTestModule } from '../calculator/compressed-air/bleed-test/bleed-test.module';
 import { TurndownComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/turndown/turndown.component';
 import { MidTurndownComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/mid-turndown/mid-turndown.component';
-import { MidTurndownCalculationService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/mid-turndown-calculation.service';
-import { TurndownCalculationService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/turndown-calculation.service';
 import { FlaModalComponent } from './baseline-tab-content/inventory-setup/inventory/nameplate-data/fla-modal/fla-modal.component';
 import { EndUseTableComponent } from './results-panel/end-use-table/end-use-table.component';
 import { EndUseChartComponent } from './end-use-chart/end-use-chart.component';
@@ -298,13 +289,6 @@ import { InventorySetupComponent } from './baseline-tab-content/inventory-setup/
     SystemProfileService,
     CompressedAirCalculationService,
     GenericCompressorDbService,
-    PerformancePointCalculationsService,
-    BlowoffCalculationsService,
-    FullLoadCalculationsService,
-    MaxFullFlowCalculationsService,
-    NoLoadCalculationsService,
-    UnloadPointCalculationsService,
-    SharedPointCalculationsService,
     PerformancePointsFormService,
     ExploreOpportunitiesService,
     DayTypeService,
@@ -321,9 +305,7 @@ import { InventorySetupComponent } from './baseline-tab-content/inventory-setup/
     ReduceRunTimeService,
     ExploreOpportunitiesValidationService,
     EndUsesService,
-    DayTypeUseFormService,
-    MidTurndownCalculationService,
-    TurndownCalculationService
+    DayTypeUseFormService
   ],
 })
 export class CompressedAirAssessmentModule { }

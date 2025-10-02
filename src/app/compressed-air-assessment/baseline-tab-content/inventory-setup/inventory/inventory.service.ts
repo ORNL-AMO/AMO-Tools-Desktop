@@ -6,20 +6,38 @@ import { GreaterThanValidator } from '../../../../shared/validators/greater-than
 import { ExploreOpportunitiesService } from '../../../explore-opportunities/explore-opportunities.service';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
 import { PerformancePointsFormService } from './performance-points/performance-points-form.service';
+import { CompressorInventoryItemClass } from '../../../calculations/CompressorInventoryItemClass';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { Settings } from '../../../../shared/models/settings';
+import * as _ from 'lodash';
 
 @Injectable()
 export class InventoryService {
 
-  selectedCompressor: BehaviorSubject<CompressorInventoryItem>;
+  selectedCompressor: BehaviorSubject<CompressorInventoryItemClass>;
+  defaultCompressor: BehaviorSubject<CompressorInventoryItemClass>
   filterCompressorOptions: BehaviorSubject<FilterCompressorOptions>;
   collapseControls: boolean = false;
   collapseDesignDetails: boolean = true;
   collapsePerformancePoints: boolean = true;
   collapseCentrifugal: boolean = true;
   constructor(private formBuilder: UntypedFormBuilder, private performancePointsFormService: PerformancePointsFormService,
-    private exploreOpportunitiesService: ExploreOpportunitiesService) {
-    this.selectedCompressor = new BehaviorSubject<CompressorInventoryItem>(undefined);
+    private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private compressedAirAssessmentService: CompressedAirAssessmentService) {
+    this.selectedCompressor = new BehaviorSubject<CompressorInventoryItemClass>(undefined);
+    this.defaultCompressor = new BehaviorSubject<CompressorInventoryItemClass>(undefined);
     this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
+  }
+
+  setSelectedCompressor(compressor: CompressorInventoryItem){
+    let compressorInventoryItemClass: CompressorInventoryItemClass = new CompressorInventoryItemClass(compressor);
+    this.selectedCompressor.next(compressorInventoryItemClass);
+    let defaultCompressor: CompressorInventoryItemClass = new CompressorInventoryItemClass(_.cloneDeep(compressor));
+    let caAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
+    defaultCompressor.performancePoints.setDefaultsOn();
+    defaultCompressor.updatePerformancePoints(caAssessment.systemInformation.atmosphericPressure, settings);
+    this.defaultCompressor.next(defaultCompressor);
   }
 
   getNewInventoryItem(): CompressorInventoryItem {
@@ -441,7 +459,8 @@ export class InventoryService {
     let compressorControlsForm: UntypedFormGroup = this.getCompressorControlsFormFromObj(compressor.compressorControls, compressor.nameplateData.compressorType);
     let designDetailsForm: UntypedFormGroup = this.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
     let centrifugalSpecsValid: boolean = this.checkCentrifugalSpecsValid(compressor);
-    let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressor, systemInformation);
+    let compressorInventoryItemClass: CompressorInventoryItemClass = new CompressorInventoryItemClass(compressor);
+    let performancePointsValid: boolean = this.performancePointsFormService.checkPerformancePointsValid(compressorInventoryItemClass, systemInformation);
 
     return nameplateForm.valid && compressorControlsForm.valid && designDetailsForm.valid && centrifugalSpecsValid && performancePointsValid && compressorTypeValid;
   }

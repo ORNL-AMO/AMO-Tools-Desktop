@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem, PerformancePoint } from '../../../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, PerformancePoint } from '../../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../../../../compressed-air-data-management.service';
 import { InventoryService } from '../../inventory.service';
-import { MidTurndownCalculationService } from '../calculations/mid-turndown-calculation.service';
-import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
+import { PerformancePointsFormService, PerformancePointWarnings } from '../performance-points-form.service';
+import { CompressorInventoryItemClass } from '../../../../../calculations/CompressorInventoryItemClass';
 
 @Component({
-    selector: '[app-mid-turndown]',
-    templateUrl: './mid-turndown.component.html',
-    styleUrls: ['./mid-turndown.component.css'],
-    standalone: false
+  selector: '[app-mid-turndown]',
+  templateUrl: './mid-turndown.component.html',
+  styleUrls: ['./mid-turndown.component.css'],
+  standalone: false
 })
 export class MidTurndownComponent implements OnInit {
 
@@ -21,42 +21,47 @@ export class MidTurndownComponent implements OnInit {
   selectedCompressorSub: Subscription;
   form: UntypedFormGroup;
   isFormChange: boolean = false;
-  validationMessages: ValidationMessageMap;
   warnings: PerformancePointWarnings;
 
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
-  selectedCompressor: CompressorInventoryItem;
-  atmosphericPressure: number;
+  selectedCompressor: CompressorInventoryItemClass;
+  defaultCompressorSub: Subscription;
+  defaultCompressor: CompressorInventoryItemClass;
   constructor(private inventoryService: InventoryService,
     private performancePointsFormService: PerformancePointsFormService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private midTurndownCalculationService: MidTurndownCalculationService, private compressedAirDataManagementService: CompressedAirDataManagementService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.atmosphericPressure = compressedAirAssessment.systemInformation.atmosphericPressure;
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
-        this.checkShowCalc();
         this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.midTurndown.power, compressor);
 
         if (this.isFormChange == false) {
           this.form = this.performancePointsFormService.getPerformancePointFormFromObj(compressor.performancePoints.midTurndown, compressor, 'midTurndown', compressedAirAssessment.systemInformation);
-          // this.validationMessages = this.performancePointsFormService.validationMessageMap.getValue();
         } else {
           this.updateForm(this.selectedCompressor.performancePoints.midTurndown);
           this.isFormChange = false;
         }
       }
     });
+
+    this.defaultCompressorSub = this.inventoryService.defaultCompressor.subscribe(compressor => {
+      if (compressor) {
+        this.defaultCompressor = compressor;
+        this.checkShowCalc();
+      }
+    });
   }
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.defaultCompressorSub.unsubscribe();
   }
 
   save() {
@@ -87,44 +92,38 @@ export class MidTurndownComponent implements OnInit {
 
   checkShowCalc() {
     if (!this.selectedCompressor.performancePoints.midTurndown.isDefaultAirFlow) {
-      let defaultValue: number = this.midTurndownCalculationService.getMidTurndownAirflow(this.selectedCompressor, true, this.settings);
-      this.showAirflowCalc = (this.selectedCompressor.performancePoints.midTurndown.airflow != defaultValue);
+      this.showAirflowCalc = (this.selectedCompressor.performancePoints.midTurndown.airflow != this.defaultCompressor.performancePoints.midTurndown.airflow);
     } else {
       this.showAirflowCalc = false;
     }
 
     if (!this.selectedCompressor.performancePoints.midTurndown.isDefaultPower) {
-      let defaultValue: number = this.midTurndownCalculationService.getMidTurndownPower(this.selectedCompressor, true);
-      this.showPowerCalc = (this.selectedCompressor.performancePoints.midTurndown.power != defaultValue);
+      this.showPowerCalc = (this.selectedCompressor.performancePoints.midTurndown.power != this.defaultCompressor.performancePoints.midTurndown.power);
     } else {
       this.showPowerCalc = false;
     }
 
     if (!this.selectedCompressor.performancePoints.midTurndown.isDefaultPressure) {
-      let defaultValue: number = this.midTurndownCalculationService.getMidTurndownPressure(this.selectedCompressor, true, this.settings);
-      this.showPressureCalc = (this.selectedCompressor.performancePoints.midTurndown.dischargePressure != defaultValue);
+      this.showPressureCalc = (this.selectedCompressor.performancePoints.midTurndown.dischargePressure != this.defaultCompressor.performancePoints.midTurndown.dischargePressure);
     } else {
       this.showPressureCalc = false;
     }
   }
 
   setAirFlow() {
-    let defaultValue: number = this.midTurndownCalculationService.getMidTurndownAirflow(this.selectedCompressor, true, this.settings);
-    this.form.controls.airflow.patchValue(defaultValue);
+    this.form.controls.airflow.patchValue(this.defaultCompressor.performancePoints.midTurndown.airflow);
     this.form.controls.isDefaultAirFlow.patchValue(true);
     this.save();
   }
 
   setPower() {
-    let defaultValue: number = this.midTurndownCalculationService.getMidTurndownPower(this.selectedCompressor, true);
-    this.form.controls.power.patchValue(defaultValue);
+    this.form.controls.power.patchValue(this.defaultCompressor.performancePoints.midTurndown.power);
     this.form.controls.isDefaultPower.patchValue(true);
     this.save();
   }
 
   setPressure() {
-    let defaultValue: number = this.midTurndownCalculationService.getMidTurndownPressure(this.selectedCompressor, true, this.settings);
-    this.form.controls.dischargePressure.patchValue(defaultValue);
+    this.form.controls.dischargePressure.patchValue(this.defaultCompressor.performancePoints.midTurndown.dischargePressure);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();
   }

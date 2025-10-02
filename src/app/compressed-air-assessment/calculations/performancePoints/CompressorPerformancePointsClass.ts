@@ -223,6 +223,16 @@ export class CompressorPerformancePointsClass implements PerformancePoints {
         //noLoad
         this.noLoad.setPoints(nameplateData, compressorControls, designDetails, this.fullLoad, settings);
     }
+
+    setDefaultsOn() {
+        this.fullLoad.setDefaultsOn();
+        this.maxFullFlow.setDefaultsOn()
+        this.midTurndown.setDefaultsOn();
+        this.turndown.setDefaultsOn();
+        this.unloadPoint.setDefaultsOn();
+        this.noLoad.setDefaultsOn();
+        this.blowoff.setDefaultsOn();
+    }
 }
 
 

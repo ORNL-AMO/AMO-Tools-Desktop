@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment } from '../../../../../shared/models/compressed-air-assessment';
 import { InventoryService } from '../inventory.service';
 import { PerformancePointsFormService } from './performance-points-form.service';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service'
@@ -26,16 +26,16 @@ export class PerformancePointsComponent implements OnInit {
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapsePerformancePoints;
-    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
-      if (val) {
+    this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(selectedCompressor => {
+      if (selectedCompressor) {
         let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-        this.hasValidPerformancePoints = this.performancePointsFormService.checkPerformancePointsValid(val, compressedAirAssessment.systemInformation);
-        this.setShowMidTurndown(val);
-        this.setShowTurndown(val);
-        this.setShowMaxFlow(val);
-        this.setShowUnload(val);
-        this.setShowNoLoad(val);
-        this.setShowBlowoff(val);
+        this.hasValidPerformancePoints = this.performancePointsFormService.checkPerformancePointsValid(selectedCompressor, compressedAirAssessment.systemInformation);
+        this.showBlowoff = selectedCompressor.showBlowoffPoint;
+        this.showNoLoad = selectedCompressor.showNoLoadPoint;
+        this.showUnload = selectedCompressor.showUnloadPoint;
+        this.showTurndown = selectedCompressor.showTurndown;
+        this.showMidTurndown = selectedCompressor.showMidTurndown;
+        this.showMaxFullFlow = selectedCompressor.showMaxFullFlow;
       }
     });
   }
@@ -43,32 +43,6 @@ export class PerformancePointsComponent implements OnInit {
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
     this.inventoryService.collapsePerformancePoints = this.contentCollapsed;
-  }
-
-
-  setShowMaxFlow(selectedCompressor: CompressorInventoryItem) {
-    this.showMaxFullFlow = this.performancePointsFormService.checkShowMaxFlowPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
-  }
-
-  setShowMidTurndown(selectedCompressor: CompressorInventoryItem) {
-    this.showMidTurndown = this.performancePointsFormService.checkShowMidTurndown(selectedCompressor.compressorControls.controlType);
-  }
-
-  setShowTurndown(selectedCompressor: CompressorInventoryItem) {
-    this.showTurndown = this.performancePointsFormService.checkShowTurndown(selectedCompressor.compressorControls.controlType);
-  }
-
-  setShowUnload(selectedCompressor: CompressorInventoryItem) {
-    this.showUnload = this.performancePointsFormService.checkShowUnloadPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
-  }
-
-  setShowNoLoad(selectedCompressor: CompressorInventoryItem) {
-    this.showNoLoad = this.performancePointsFormService.checkShowNoLoadPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
-  }
-
-  setShowBlowoff(selectedCompressor: CompressorInventoryItem) {
-    this.showBlowoff = this.performancePointsFormService.checkShowBlowoffPerformancePoint(selectedCompressor.nameplateData.compressorType, selectedCompressor.compressorControls.controlType);
-
   }
 
   toggleCollapse(){

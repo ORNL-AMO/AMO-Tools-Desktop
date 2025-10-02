@@ -86,4 +86,10 @@ export class NoLoadPerformancePoint implements PerformancePoint {
     calculateNoLoadPowerWithoutUnloading(designDetails: DesignDetails, fullLoad: FullLoadPerformancePoint): number {
         return designDetails.noLoadPowerFM / 100 * fullLoad.power;
     }
+    
+    setDefaultsOn(){
+        this.isDefaultAirFlow = true;
+        this.isDefaultPower = true;
+        this.isDefaultPressure = true;
+    }
 }

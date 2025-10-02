@@ -78,4 +78,10 @@ export class MaxFullFlowPerformancePoint implements PerformancePoint {
         //prediction = [x (dischargePressure), y(airflow)];
         return prediction[1];
     }
+
+    setDefaultsOn(){
+        this.isDefaultAirFlow = true;
+        this.isDefaultPower = true;
+        this.isDefaultPressure = true;
+    }
 }

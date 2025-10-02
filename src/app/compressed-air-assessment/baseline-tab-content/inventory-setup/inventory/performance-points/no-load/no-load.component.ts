@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressorInventoryItem, PerformancePoint } from '../../../../../../shared/models/compressed-air-assessment';
+import { PerformancePoint } from '../../../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment.service';
 import { InventoryService } from '../../inventory.service';
-import { NoLoadCalculationsService } from '../calculations/no-load-calculations.service';
 import { PerformancePointsFormService, PerformancePointWarnings, ValidationMessageMap } from '../performance-points-form.service';
 import { CompressedAirDataManagementService } from '../../../../../compressed-air-data-management.service';
 import { Settings } from '../../../../../../shared/models/settings';
+import { CompressorInventoryItemClass } from '../../../../../calculations/CompressorInventoryItemClass';
 
 @Component({
-    selector: '[app-no-load]',
-    templateUrl: './no-load.component.html',
-    styleUrls: ['./no-load.component.css'],
-    standalone: false
+  selector: '[app-no-load]',
+  templateUrl: './no-load.component.html',
+  styleUrls: ['./no-load.component.css'],
+  standalone: false
 })
 export class NoLoadComponent implements OnInit {
 
@@ -28,10 +28,11 @@ export class NoLoadComponent implements OnInit {
   showPressureCalc: boolean;
   showAirflowCalc: boolean;
   showPowerCalc: boolean;
-  selectedCompressor: CompressorInventoryItem;
+  selectedCompressor: CompressorInventoryItemClass;
+  defaultCompressorSub: Subscription;
+  defaultCompressor: CompressorInventoryItemClass;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService,
-    private noLoadCalculationsService: NoLoadCalculationsService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
@@ -39,7 +40,6 @@ export class NoLoadComponent implements OnInit {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         this.selectedCompressor = compressor;
-        this.checkShowCalc();
         this.warnings = this.performancePointsFormService.checkMotorServiceFactorExceededWarning(compressor.performancePoints.noLoad.power, compressor);
         if (this.isFormChange == false) {
           this.setNoLoadLabel(compressor.compressorControls.controlType);
@@ -51,10 +51,17 @@ export class NoLoadComponent implements OnInit {
         }
       }
     });
+    this.defaultCompressorSub = this.inventoryService.defaultCompressor.subscribe(compressor => {
+      if (compressor) {
+        this.defaultCompressor = compressor;
+        this.checkShowCalc();
+      }
+    });
   }
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.defaultCompressorSub.unsubscribe();
   }
 
   save() {
@@ -94,44 +101,38 @@ export class NoLoadComponent implements OnInit {
 
   checkShowCalc() {
     if (!this.selectedCompressor.performancePoints.noLoad.isDefaultAirFlow) {
-      let defaultValue: number = this.noLoadCalculationsService.getNoLoadAirFlow(this.selectedCompressor, true);
-      this.showAirflowCalc = (this.selectedCompressor.performancePoints.noLoad.airflow != defaultValue);
+      this.showAirflowCalc = (this.selectedCompressor.performancePoints.noLoad.airflow != this.defaultCompressor.performancePoints.noLoad.airflow);
     } else {
       this.showAirflowCalc = false;
     }
 
     if (!this.selectedCompressor.performancePoints.noLoad.isDefaultPower) {
-      let defaultValue: number = this.noLoadCalculationsService.getNoLoadPower(this.selectedCompressor, true);
-      this.showPowerCalc = (this.selectedCompressor.performancePoints.noLoad.power != defaultValue);
+      this.showPowerCalc = (this.selectedCompressor.performancePoints.noLoad.power != this.defaultCompressor.performancePoints.noLoad.power);
     } else {
       this.showPowerCalc = false;
     }
 
     if (!this.selectedCompressor.performancePoints.noLoad.isDefaultPressure) {
-      let defaultValue: number = this.noLoadCalculationsService.getNoLoadPressure(this.selectedCompressor, true, this.settings);
-      this.showPressureCalc = (this.selectedCompressor.performancePoints.noLoad.dischargePressure != defaultValue);
+      this.showPressureCalc = (this.selectedCompressor.performancePoints.noLoad.dischargePressure != this.defaultCompressor.performancePoints.noLoad.dischargePressure);
     } else {
       this.showPressureCalc = false;
     }
   }
 
   setAirFlow() {
-    let defaultValue: number = this.noLoadCalculationsService.getNoLoadAirFlow(this.selectedCompressor, true);
-    this.form.controls.airflow.patchValue(defaultValue);
+    this.form.controls.airflow.patchValue(this.defaultCompressor.performancePoints.noLoad.airflow);
     this.form.controls.isDefaultAirFlow.patchValue(true);
     this.save();
   }
 
   setPower() {
-    let defaultValue: number = this.noLoadCalculationsService.getNoLoadPower(this.selectedCompressor, true);
-    this.form.controls.power.patchValue(defaultValue);
+    this.form.controls.power.patchValue(this.defaultCompressor.performancePoints.noLoad.power);
     this.form.controls.isDefaultPower.patchValue(true);
     this.save();
   }
 
   setPressure() {
-    let defaultValue: number = this.noLoadCalculationsService.getNoLoadPressure(this.selectedCompressor, true, this.settings);
-    this.form.controls.dischargePressure.patchValue(defaultValue);
+    this.form.controls.dischargePressure.patchValue(this.defaultCompressor.performancePoints.noLoad.dischargePressure);
     this.form.controls.isDefaultPressure.patchValue(true);
     this.save();
   }

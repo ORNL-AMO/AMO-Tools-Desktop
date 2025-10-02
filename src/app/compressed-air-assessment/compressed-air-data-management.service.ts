@@ -4,14 +4,15 @@ import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { GenericCompressor } from './generic-compressor-db.service';
 import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
-import { PerformancePointCalculationsService } from './baseline-tab-content/inventory-setup/inventory/performance-points/calculations/performance-point-calculations.service';
 import { SystemProfileService } from './system-profile/system-profile.service';
+import { CompressorInventoryItemClass } from './calculations/CompressorInventoryItemClass';
+import { roundVal } from '../shared/helperFunctions';
 
 @Injectable()
 export class CompressedAirDataManagementService {
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private inventoryService: InventoryService, private performancePointCalculationsService: PerformancePointCalculationsService,
+    private inventoryService: InventoryService,
     private systemProfileService: SystemProfileService) { }
 
 
@@ -46,7 +47,7 @@ export class CompressedAirDataManagementService {
     selectedCompressor.centrifugalSpecifics.surgeAirflow = this.overrideGenericDbValueForDisplay(genericCompressor.DesignSurgeFlow);
     selectedCompressor.centrifugalSpecifics.maxFullLoadPressure = this.overrideGenericDbValueForDisplay(genericCompressor.MaxSurgePressure);
     selectedCompressor.centrifugalSpecifics.maxFullLoadCapacity = this.overrideGenericDbValueForDisplay(genericCompressor.MaxPressSurgeFlow);
-    selectedCompressor.designDetails.designEfficiency = this.roundVal(genericCompressor.EffFL, 1);
+    selectedCompressor.designDetails.designEfficiency = roundVal(genericCompressor.EffFL, 1);
     selectedCompressor.nameplateData.fullLoadAmps = genericCompressor.AmpsFL;
 
     selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow = true;
@@ -195,25 +196,26 @@ export class CompressedAirDataManagementService {
   }
 
   updateAssessmentFromDependentCompressorItem(selectedCompressor: CompressorInventoryItem, modificationsNeedUpdate: boolean, performancePointUpdateNeeded: boolean) {
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let compressorInventoryItemClass: CompressorInventoryItemClass = new CompressorInventoryItemClass(selectedCompressor);
     //update performance points
     if (performancePointUpdateNeeded) {
-      let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
       let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
-      selectedCompressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor, compressedAirAssessment.systemInformation.atmosphericPressure, settings);
+      compressorInventoryItemClass.updatePerformancePoints(compressedAirAssessment.systemInformation.atmosphericPressure, settings);
+
     }
     //update assessment
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == selectedCompressor.itemId });
-    compressedAirAssessment.compressorInventoryItems[compressorIndex] = selectedCompressor;
+    let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == compressorInventoryItemClass.itemId });
+    compressedAirAssessment.compressorInventoryItems[compressorIndex] = compressorInventoryItemClass.toModel();
     if (modificationsNeedUpdate) {
-      compressedAirAssessment.modifications = this.updateModifications(selectedCompressor, compressedAirAssessment.modifications);
+      compressedAirAssessment.modifications = this.updateModifications(compressorInventoryItemClass, compressedAirAssessment.modifications);
     };
     //update system profile ordering
     let recalculateOrdering: boolean = false;
     compressedAirAssessment.systemProfile.profileSummary.forEach(summary => {
-      if (summary.compressorId == selectedCompressor.itemId) {
-        if (summary.fullLoadPressure != selectedCompressor.performancePoints.fullLoad.dischargePressure) {
-          summary.fullLoadPressure = selectedCompressor.performancePoints.fullLoad.dischargePressure;
+      if (summary.compressorId == compressorInventoryItemClass.itemId) {
+        if (summary.fullLoadPressure != compressorInventoryItemClass.performancePoints.fullLoad.dischargePressure) {
+          summary.fullLoadPressure = compressorInventoryItemClass.performancePoints.fullLoad.dischargePressure;
           recalculateOrdering = true;
         }
       }
@@ -235,7 +237,7 @@ export class CompressedAirDataManagementService {
     //update assessment
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     //update selected compressor
-    this.inventoryService.selectedCompressor.next(selectedCompressor);
+    this.inventoryService.setSelectedCompressor(compressorInventoryItemClass);
   }
 
   updateModifications(selectedCompressor: CompressorInventoryItem, modifications: Array<Modification>): Array<Modification> {
@@ -258,8 +260,5 @@ export class CompressedAirDataManagementService {
       }
     });
     return modification;
-  }
-  roundVal(val: number, digits: number) {
-    return Number((Math.round(val * 100) / 100).toFixed(digits));
   }
 }
