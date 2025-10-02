@@ -8,9 +8,9 @@ import { CompressedAirAssessment, EndUseDayTypeSetup, ProfileSummary } from '../
 import { Settings } from '../../../shared/models/settings';
 import { BaselineResults } from '../../calculations/caCalculationModels';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { DayTypeSetupService } from '../../end-uses/day-type-setup-form/day-type-setup.service';
-import { EndUseEnergyData, EndUsesService } from '../../end-uses/end-uses.service';
 import { AirflowSankeyService, CompressedAirSankeyNode, AirFlowSankeyResults } from './airflow-sankey.service';
+import { EndUseEnergyData, EndUsesFormService } from '../../baseline-tab-content/end-uses-setup/end-uses-form/end-uses-form.service';
+import { DayTypeSetupService } from '../../baseline-tab-content/end-uses-setup/end-uses-form/day-type-setup-form/day-type-setup.service';
 
 @Component({
     selector: 'app-airflow-sankey',
@@ -73,7 +73,7 @@ export class AirflowSankeyComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private decimalPipe: DecimalPipe,
     private airflowSankeyService: AirflowSankeyService,
-    private endUsesService: EndUsesService,
+    private endUsesFormService: EndUsesFormService,
     private dayTypeSetupService: DayTypeSetupService,
     private plotlyService: PlotlyService
   ) { }
@@ -104,7 +104,7 @@ export class AirflowSankeyComponent implements OnInit {
 
   setSankeyDayTypeSetup() {
     this.selectedDayTypeId = this.endUseDayTypeSetup.selectedDayTypeId;
-    this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals = this.endUsesService.getDayTypeAirflowTotals(this.compressedAirAssessment, this.selectedDayTypeId, this.settings);
+    this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals = this.endUsesFormService.getDayTypeAirflowTotals(this.compressedAirAssessment, this.selectedDayTypeId, this.settings);
     let endUseDayTypeSetupForm: UntypedFormGroup = this.dayTypeSetupService.getDayTypeSetupFormFromObj(this.endUseDayTypeSetup, this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals);
     this.dayTypeLeakRate = endUseDayTypeSetupForm.controls.dayTypeLeakRate.value;
     this.hasValidDayTypeSetup = endUseDayTypeSetupForm.valid;

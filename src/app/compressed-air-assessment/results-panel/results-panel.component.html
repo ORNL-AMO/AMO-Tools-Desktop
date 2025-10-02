@@ -3,7 +3,7 @@
         <div class="row no-gutters">
             <div class="col-12">
                 <!--end uses tabs-->
-                <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" *ngIf="displayEndUses">
+                <!-- <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" *ngIf="displayEndUses">
                     <div class="w-50 panel-tab-item h-100" [ngClass]="{'active': tabSelect == 'end-uses'}">
                         <a class="border-left-0 h-100 d-flex justify-content-center align-items-center"
                             (click)="setTab('end-uses')">
@@ -15,7 +15,7 @@
                             <div>Help</div>
                         </a>
                     </div>
-                </div>
+                </div> -->
 
                 <!--inventory tabs-->
                 <!-- <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" *ngIf="displayInventory">
@@ -59,12 +59,12 @@
                     <app-inventory-performance-profile></app-inventory-performance-profile>
                     <app-centrifugal-graph></app-centrifugal-graph>
                 </ng-container> -->
-
+<!-- 
                 <ng-container *ngIf="tabSelect == 'end-uses'">
                     <app-end-use-table></app-end-use-table>
                     <hr>
                     <app-end-use-chart></app-end-use-chart>
-                </ng-container>
+                </ng-container> -->
 
                 <app-help-panel *ngIf="tabSelect == 'help'">
                 </app-help-panel>

@@ -7,7 +7,7 @@ import { AirflowSankeyService } from './airflow-sankey/airflow-sankey.service';
 import { PowerSankeyService } from './power-sankey/power-sankey.service';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { EndUseDayTypeSetupModule } from '../end-uses/day-type-setup-form/end-use-day-type-setup.module';
+import { EndUseDayTypeSetupModule } from '../baseline-tab-content/end-uses-setup/end-uses-form/day-type-setup-form/end-use-day-type-setup.module';
 
 
 
@@ -22,7 +22,7 @@ import { EndUseDayTypeSetupModule } from '../end-uses/day-type-setup-form/end-us
     EndUseDayTypeSetupModule
   ],
   exports: [
-    CompressedAirSankeyComponent
+    PowerSankeyComponent, AirflowSankeyComponent, CompressedAirSankeyComponent
   ],
   providers: [ 
     AirflowSankeyService,

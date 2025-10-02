@@ -8,11 +8,11 @@ import { CompressedAirAssessment, EndUseDayTypeSetup, ProfileSummary } from '../
 import { Settings } from '../../../shared/models/settings';
 import { PrintOptionsMenuService } from '../../../shared/print-options-menu/print-options-menu.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { DayTypeSetupService } from '../../end-uses/day-type-setup-form/day-type-setup.service';
 import { CompressedAirSankeyNode, CompressedAirSankeyResults, PowerSankeyService } from './power-sankey.service';
 import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { DayTypeSetupService } from '../../baseline-tab-content/end-uses-setup/end-uses-form/day-type-setup-form/day-type-setup.service';
 
 @Component({
   selector: 'app-power-sankey',

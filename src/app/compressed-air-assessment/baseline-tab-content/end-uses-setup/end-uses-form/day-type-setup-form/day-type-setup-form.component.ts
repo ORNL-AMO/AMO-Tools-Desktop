@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, EndUseDayTypeSetup } from '../../../shared/models/compressed-air-assessment';
-import { Settings } from '../../../shared/models/settings';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { EndUsesService } from '../end-uses.service';
+import { CompressedAirAssessment, CompressedAirDayType, EndUseDayTypeSetup } from '../../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../../shared/models/settings';
+import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
+import { EndUsesFormService } from '../end-uses-form.service';
 import { DayTypeSetupService, DayTypeSetupWarnings } from './day-type-setup.service';
 
 @Component({
@@ -27,7 +27,7 @@ export class DayTypeSetupFormComponent implements OnInit {
   warnings: DayTypeSetupWarnings = {dayTypeLeakRate: undefined};
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, 
-    private endUsesService: EndUsesService,
+    private endUsesFormService: EndUsesFormService,
     private dayTypeSetupFormService: DayTypeSetupService) { }
 
   ngOnInit(): void {
@@ -46,7 +46,7 @@ export class DayTypeSetupFormComponent implements OnInit {
       });
     }
 
-    this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals = this.endUsesService.getDayTypeAirflowTotals(this.compressedAirAssessment, this.endUseDayTypeSetup.selectedDayTypeId, this.settings);
+    this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals = this.endUsesFormService.getDayTypeAirflowTotals(this.compressedAirAssessment, this.endUseDayTypeSetup.selectedDayTypeId, this.settings);
     this.form = this.dayTypeSetupFormService.getDayTypeSetupFormFromObj(this.endUseDayTypeSetup, this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals);
     if (this.inReportSankey) {
       this.form.controls.dayTypeLeakRate.disable();

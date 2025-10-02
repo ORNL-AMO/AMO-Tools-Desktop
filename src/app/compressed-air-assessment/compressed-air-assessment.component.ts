@@ -11,12 +11,12 @@ import { CompressedAirAssessment } from '../shared/models/compressed-air-assessm
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
-import { EndUsesService } from './end-uses/end-uses.service';
 import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
-import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-setup.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { EndUsesFormService } from './baseline-tab-content/end-uses-setup/end-uses-form/end-uses-form.service';
+import { DayTypeSetupService } from './baseline-tab-content/end-uses-setup/end-uses-form/day-type-setup-form/day-type-setup.service';
 
 @Component({
     selector: 'app-compressed-air-assessment',
@@ -64,7 +64,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, 
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private egridService: EGridService,
-    private endUseService: EndUsesService,
+    private endUseFormService: EndUsesFormService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService,
     private analyticsService: AnalyticsService) { }
@@ -154,8 +154,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.compressedAirAssessmentService.profileTab.next('setup');
     this.inventoryService.selectedCompressor.next(undefined);
     // this.endUseService.endUses.next(undefined);
-    this.endUseService.selectedEndUse.next(undefined);
-    this.endUseService.selectedDayTypeEndUse.next(undefined);
+    this.endUseFormService.selectedEndUse.next(undefined);
+    this.endUseFormService.selectedDayTypeEndUse.next(undefined);
     this.endUseDayTypeSetupService.endUseDayTypeSetup.next(undefined)
     this.exploreOpportunitiesService.compressedAirAssessmentModificationResults.next(undefined);
     this.exploreOpportunitiesService.compressedAirAssessmentBaselineResults.next(undefined);

@@ -9,7 +9,6 @@ import { SettingsModule } from '../settings/settings.module';
 import { SetupTabsComponent } from './baseline-tab-content/setup-tabs/setup-tabs.component';
 import { SystemInformationComponent } from './baseline-tab-content/system-information/system-information.component';
 import { DayTypesComponent } from './baseline-tab-content/day-types-setup/day-types/day-types.component';
-import { EndUsesComponent } from './end-uses/end-uses.component';
 import { InventoryComponent } from './baseline-tab-content/inventory-setup/inventory/inventory.component';
 import { SystemProfileSetupComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-setup/system-profile-setup.component';
 import { SystemProfileSummaryComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-summary/system-profile-summary.component';
@@ -131,16 +130,11 @@ import { BleedTestModule } from '../calculator/compressed-air/bleed-test/bleed-t
 import { TurndownComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/turndown/turndown.component';
 import { MidTurndownComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/mid-turndown/mid-turndown.component';
 import { FlaModalComponent } from './baseline-tab-content/inventory-setup/inventory/nameplate-data/fla-modal/fla-modal.component';
-import { EndUseTableComponent } from './results-panel/end-use-table/end-use-table.component';
-import { EndUseChartComponent } from './end-use-chart/end-use-chart.component';
-import { DayTypeUseFormComponent } from './end-uses/day-type-use-form/day-type-use-form.component';
-import { EndUsesService } from './end-uses/end-uses.service';
-import { DayTypeUseFormService } from './end-uses/day-type-use-form/day-type-use-form.service';
+import { EndUseTableComponent } from './baseline-tab-content/end-uses-setup/end-use-table/end-use-table.component';
+import { EndUseChartComponent } from './baseline-tab-content/end-uses-setup/end-use-chart/end-use-chart.component';
 import { ImproveEndUseFormControlsPipe } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-form-controls.pipe';
 import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-label.module';
-import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end-use-help.component';
-import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-air-sankey.module';
-import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
+import { EndUseHelpComponent } from './baseline-tab-content/end-uses-setup/end-use-help/end-use-help.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { ReplaceCompressorComponent } from './explore-opportunities/replace-compressor/replace-compressor.component';
 import { AssessessmentTabContentComponent } from './assessessment-tab-content/assessessment-tab-content';
@@ -152,6 +146,13 @@ import { InventorySetupComponent } from './baseline-tab-content/inventory-setup/
 import { DayTypesSetupComponent } from './baseline-tab-content/day-types-setup/day-types-setup.component';
 import { BaselineSystemProfileSetupComponent } from './baseline-tab-content/baseline-system-profile-setup/baseline-system-profile-setup.component';
 import { SystemProfileSetupTabsComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-setup-tabs/system-profile-setup-tabs.component';
+import { EndUsesSetupComponent } from './baseline-tab-content/end-uses-setup/end-uses-setup.component';
+import { EndUsesFormComponent } from './baseline-tab-content/end-uses-setup/end-uses-form/end-uses-form.component';
+import { DayTypeUseFormComponent } from './baseline-tab-content/end-uses-setup/end-uses-form/day-type-use-form/day-type-use-form.component';
+import { EndUsesFormService } from './baseline-tab-content/end-uses-setup/end-uses-form/end-uses-form.service';
+import { DayTypeUseFormService } from './baseline-tab-content/end-uses-setup/end-uses-form/day-type-use-form/day-type-use-form.service';
+import { EndUseDayTypeSetupModule } from './baseline-tab-content/end-uses-setup/end-uses-form/day-type-setup-form/end-use-day-type-setup.module';
+import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-air-sankey.module';
 
 @NgModule({
   declarations: [
@@ -161,7 +162,6 @@ import { SystemProfileSetupTabsComponent } from './baseline-tab-content/baseline
     SetupTabsComponent,
     SystemInformationComponent,
     DayTypesComponent,
-    EndUsesComponent,
     InventoryComponent,
     SystemProfileSetupComponent,
     SystemProfileSummaryComponent,
@@ -247,7 +247,9 @@ import { SystemProfileSetupTabsComponent } from './baseline-tab-content/baseline
     InventorySetupComponent,
     DayTypesSetupComponent,
     BaselineSystemProfileSetupComponent,
-    SystemProfileSetupTabsComponent
+    SystemProfileSetupTabsComponent,
+    EndUsesSetupComponent,
+    EndUsesFormComponent
   ],
   imports: [
     CommonModule,
@@ -283,9 +285,9 @@ import { SystemProfileSetupTabsComponent } from './baseline-tab-content/baseline
     CentrifugalGraphModule,
     BleedTestModule,
     IntervalHourLabelModule,
-    CompressedAirSankeyModule,
+    ImportExportModule,
     EndUseDayTypeSetupModule,
-    ImportExportModule
+    CompressedAirSankeyModule
   ],
   providers: [
     CompressedAirAssessmentService,
@@ -310,7 +312,7 @@ import { SystemProfileSetupTabsComponent } from './baseline-tab-content/baseline
     AdjustCascadingSetPointsService,
     ReduceRunTimeService,
     ExploreOpportunitiesValidationService,
-    EndUsesService,
+    EndUsesFormService,
     DayTypeUseFormService
   ],
 })

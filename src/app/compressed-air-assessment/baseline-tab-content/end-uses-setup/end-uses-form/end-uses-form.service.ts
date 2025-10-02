@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { CompressedAirAssessment, DayTypeAirflowTotals, DayTypeEndUse, EndUse, EndUseDayTypeSetup } from '../../shared/models/compressed-air-assessment';
-import { Settings } from '../../shared/models/settings';
+import { CompressedAirAssessment, DayTypeAirflowTotals, DayTypeEndUse, EndUse, EndUseDayTypeSetup } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
 import { DayTypeSetupService } from './day-type-setup-form/day-type-setup.service';
 import { DayTypeUseFormService } from './day-type-use-form/day-type-use-form.service';
-import { BaselineResult, BaselineResults } from '../calculations/caCalculationModels';
-import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
-import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
-import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
-import { roundVal } from '../../shared/helperFunctions';
+import { BaselineResult, BaselineResults } from '../../../calculations/caCalculationModels';
+import { CompressedAirAssessmentBaselineResults } from '../../../calculations/CompressedAirAssessmentBaselineResults';
+import { AssessmentCo2SavingsService } from '../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { CompressedAirCalculationService } from '../../../compressed-air-calculation.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Injectable()
-export class EndUsesService {
+export class EndUsesFormService {
 
   selectedEndUse: BehaviorSubject<EndUse>;
   selectedDayTypeEndUse: BehaviorSubject<DayTypeEndUse>;

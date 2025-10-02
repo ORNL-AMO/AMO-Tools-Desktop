@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { DayTypeEndUse, EndUse } from '../../../shared/models/compressed-air-assessment';
-import { GreaterThanValidator } from '../../../shared/validators/greater-than';
+import { DayTypeEndUse, EndUse } from '../../../../../shared/models/compressed-air-assessment';
+import { GreaterThanValidator } from '../../../../../shared/validators/greater-than';
 
 @Injectable()
 export class DayTypeUseFormService {

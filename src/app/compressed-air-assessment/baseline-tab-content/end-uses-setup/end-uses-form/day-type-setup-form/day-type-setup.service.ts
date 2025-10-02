@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { DayTypeAirflowTotals, EndUseDayTypeSetup } from '../../../shared/models/compressed-air-assessment';
+import { DayTypeAirflowTotals, EndUseDayTypeSetup } from '../../../../../shared/models/compressed-air-assessment';
+import { roundVal } from '../../../../../shared/helperFunctions';
 
 @Injectable()
 export class DayTypeSetupService {
@@ -10,7 +10,7 @@ export class DayTypeSetupService {
   endUseDayTypeSetup: BehaviorSubject<EndUseDayTypeSetup>;
   dayTypeSetupWarnings: DayTypeSetupWarnings;
 
-  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService) { 
+  constructor(private formBuilder: UntypedFormBuilder) { 
     this.endUseDayTypeSetup = new BehaviorSubject<EndUseDayTypeSetup>(undefined);
   }
 
@@ -67,7 +67,7 @@ export class DayTypeSetupService {
     if (endUseDaytypeSetup.selectedDayTypeId) {
       let selectedLeakRate = endUseDaytypeSetup.dayTypeLeakRates.find(leakRate => leakRate.dayTypeId === endUseDaytypeSetup.selectedDayTypeId);
       if (selectedLeakRate) {
-        let halfAirflowTotal: number = this.convertUnitsService.roundVal(dayTypeAirFlowTotals.totalDayTypeAverageAirflow / 2, 0);
+        let halfAirflowTotal: number = roundVal(dayTypeAirFlowTotals.totalDayTypeAverageAirflow / 2, 0);
         if (selectedLeakRate.dayTypeLeakRate !== undefined && selectedLeakRate.dayTypeLeakRate === halfAirflowTotal) {
           warning = `Leak rate is usually less than half of the System Profile average airflow for this day type. (${halfAirflowTotal})`;
         } 

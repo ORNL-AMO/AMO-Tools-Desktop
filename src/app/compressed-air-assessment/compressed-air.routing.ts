@@ -11,6 +11,7 @@ import { SystemProfileSummaryComponent } from "./baseline-tab-content/baseline-s
 import { SystemProfileGraphsComponent } from "./system-profile-graphs/system-profile-graphs.component";
 import { SystemProfileAnnualSummaryComponent } from "./baseline-tab-content/baseline-system-profile-setup/system-profile-annual-summary/system-profile-annual-summary.component";
 import { CompressorSummaryComponent } from "./baseline-tab-content/baseline-system-profile-setup/compressor-summary/compressor-summary.component";
+import { EndUsesSetupComponent } from "./baseline-tab-content/end-uses-setup/end-uses-setup.component";
 
 
 
@@ -75,6 +76,10 @@ export const compressedAirAssessmentRoutes: Routes = [
                         component: CompressorSummaryComponent
                     }
                 ]
+            },
+            {
+                path: 'end-uses',
+                component: EndUsesSetupComponent
             }
         ]
     },

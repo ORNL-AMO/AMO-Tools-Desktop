@@ -1,16 +1,16 @@
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { CompressedAirAssessment, CompressedAirDayType, EndUseDayTypeSetup } from '../../shared/models/compressed-air-assessment';
-import { Settings } from '../../shared/models/settings';
-import { BaselineResults, DayTypeProfileSummary } from '../calculations/caCalculationModels';
-import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { DayTypeSetupService } from '../end-uses/day-type-setup-form/day-type-setup.service';
-import { EndUseEnergy, EndUseEnergyData, EndUsesService } from '../end-uses/end-uses.service';
-import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
-import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
-import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { CompressedAirAssessment, CompressedAirDayType, EndUseDayTypeSetup } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
+import { BaselineResults, DayTypeProfileSummary } from '../../../calculations/caCalculationModels';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { CompressedAirAssessmentBaselineResults } from '../../../calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirCalculationService } from '../../../compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { DayTypeSetupService } from '../end-uses-form/day-type-setup-form/day-type-setup.service';
+import { EndUseEnergy, EndUseEnergyData, EndUsesFormService } from '../end-uses-form/end-uses-form.service';
 
 @Component({
   selector: 'app-end-use-chart',
@@ -52,7 +52,7 @@ export class EndUseChartComponent implements OnInit {
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private convertUnitsService: ConvertUnitsService,
-    private endUsesService: EndUsesService,
+    private endUsesFormService: EndUsesFormService,
     private cd: ChangeDetectorRef,
     private dayTypeSetupService: DayTypeSetupService,
     private plotlyService: PlotlyService,
@@ -61,29 +61,9 @@ export class EndUseChartComponent implements OnInit {
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
-    this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.endUseDayTypeSetup = this.dayTypeSetupService.endUseDayTypeSetup.getValue();
-    if (!this.endUseDayTypeSetup.selectedDayTypeId) {
-      // set default from setup
-      this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes[0];
-    } else {
-      this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => dayType.dayTypeId === this.endUseDayTypeSetup.selectedDayTypeId);
-    }
-
-    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-    this.dayTypeBaselineResults = compressedAirAssessmentBaselineResults.baselineResults;
     if (this.settings.unitsOfMeasure !== 'Imperial') {
       this.airflowUnits = 'm<sup>3</sup>/min';
     }
-  }
-
-  ngOnDestroy() {
-    this.compressedAirAssessmentSub.unsubscribe();
-    this.dayTypeSetupServiceSubscription.unsubscribe();
-  }
-
-
-  ngAfterViewInit() {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       this.compressedAirAssessment = compressedAirAssessment;
       let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
@@ -94,48 +74,66 @@ export class EndUseChartComponent implements OnInit {
     this.dayTypeSetupServiceSubscription = this.dayTypeSetupService.endUseDayTypeSetup.subscribe(endUseDayTypeSetup => {
       if (endUseDayTypeSetup) {
         this.endUseDayTypeSetup = endUseDayTypeSetup;
+        if (!this.endUseDayTypeSetup.selectedDayTypeId) {
+          // set default from setup
+          this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes[0];
+        } else {
+          this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => dayType.dayTypeId === this.endUseDayTypeSetup.selectedDayTypeId);
+        }
         this.setChartData();
       }
     });
   }
 
+  ngOnDestroy() {
+    this.compressedAirAssessmentSub.unsubscribe();
+    this.dayTypeSetupServiceSubscription.unsubscribe();
+  }
+
+
+  ngAfterViewInit() {
+    this.setChartData();
+  }
+
   setChartData() {
-    this.hasInvalidEndUsesWarning = undefined;
-    if (this.compressedAirAssessment.endUseData.endUses.length > 0) {
-      this.showChart = true;
-      this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals = this.endUsesService.getDayTypeAirflowTotals(this.compressedAirAssessment, this.selectedDayType.dayTypeId, this.settings);
-      let endUseEnergy: EndUseEnergy = this.endUsesService.getEndUseEnergyData(this.compressedAirAssessment, this.endUseDayTypeSetup, this.dayTypeBaselineResults);
-      let endUseEnergyData: Array<EndUseEnergyData> = endUseEnergy.endUseEnergyData;
-      let otherEndUseData: EndUseEnergyData;
-      if (endUseEnergy.hasValidEndUses) {
-        if (endUseEnergyData.length > 10) {
-          let endUseEnergyDataCopy: Array<EndUseEnergyData> = JSON.parse(JSON.stringify(endUseEnergyData));
-          endUseEnergyData = endUseEnergyData.slice(0, 10);
-          otherEndUseData = endUseEnergyDataCopy.slice(10, endUseEnergyDataCopy.length).reduce((totalOtherEnergyData, data) => {
-            let thing = {
-              dayTypeAverageAirFlow: totalOtherEnergyData.dayTypeAverageAirFlow += data.dayTypeAverageAirFlow,
-              dayTypeAverageAirflowPercent: totalOtherEnergyData.dayTypeAverageAirflowPercent += data.dayTypeAverageAirflowPercent,
-              endUseName: totalOtherEnergyData.endUseName,
-              endUseId: totalOtherEnergyData.endUseId,
+    if (this.overviewPieChart && this.selectedDayType) {
+      this.hasInvalidEndUsesWarning = undefined;
+      if (this.compressedAirAssessment.endUseData.endUses.length > 0) {
+        this.showChart = true;
+        this.compressedAirAssessment.endUseData.dayTypeAirFlowTotals = this.endUsesFormService.getDayTypeAirflowTotals(this.compressedAirAssessment, this.selectedDayType.dayTypeId, this.settings);
+        let endUseEnergy: EndUseEnergy = this.endUsesFormService.getEndUseEnergyData(this.compressedAirAssessment, this.endUseDayTypeSetup, this.dayTypeBaselineResults);
+        let endUseEnergyData: Array<EndUseEnergyData> = endUseEnergy.endUseEnergyData;
+        let otherEndUseData: EndUseEnergyData;
+        if (endUseEnergy.hasValidEndUses) {
+          if (endUseEnergyData.length > 10) {
+            let endUseEnergyDataCopy: Array<EndUseEnergyData> = JSON.parse(JSON.stringify(endUseEnergyData));
+            endUseEnergyData = endUseEnergyData.slice(0, 10);
+            otherEndUseData = endUseEnergyDataCopy.slice(10, endUseEnergyDataCopy.length).reduce((totalOtherEnergyData, data) => {
+              let thing = {
+                dayTypeAverageAirFlow: totalOtherEnergyData.dayTypeAverageAirFlow += data.dayTypeAverageAirFlow,
+                dayTypeAverageAirflowPercent: totalOtherEnergyData.dayTypeAverageAirflowPercent += data.dayTypeAverageAirflowPercent,
+                endUseName: totalOtherEnergyData.endUseName,
+                endUseId: totalOtherEnergyData.endUseId,
+                color: undefined,
+              };
+              return thing;
+            }, {
+              dayTypeAverageAirFlow: 0,
+              dayTypeAverageAirflowPercent: 0,
+              endUseName: 'Other End Use Energy',
+              endUseId: Math.random().toString(36).substr(2, 9),
               color: undefined,
-            };
-            return thing;
-          }, {
-            dayTypeAverageAirFlow: 0,
-            dayTypeAverageAirflowPercent: 0,
-            endUseName: 'Other End Use Energy',
-            endUseId: Math.random().toString(36).substr(2, 9),
-            color: undefined,
-          });
+            });
+          }
+        } else {
+          this.showChart = false;
         }
+        this.renderPieChart(endUseEnergyData, otherEndUseData);
       } else {
         this.showChart = false;
       }
-      this.renderPieChart(endUseEnergyData, otherEndUseData);
-    } else {
-      this.showChart = false;
+      this.cd.detectChanges();
     }
-    this.cd.detectChanges();
   }
 
   renderPieChart(endUseEnergyData: Array<EndUseEnergyData>, otherEndUseData: EndUseEnergyData) {

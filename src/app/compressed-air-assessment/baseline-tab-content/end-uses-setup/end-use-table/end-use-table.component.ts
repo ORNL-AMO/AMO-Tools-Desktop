@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
-import { CompressedAirAssessment, EndUse } from '../../../shared/models/compressed-air-assessment';
-import { Settings } from '../../../shared/models/settings';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { EndUseResults, EndUsesService, UpdatedEndUseData } from '../../end-uses/end-uses.service';
+import { ConfirmDeleteData } from '../../../../shared/confirm-delete-modal/confirmDeleteData';
+import { CompressedAirAssessment, EndUse } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { EndUsesFormService, UpdatedEndUseData } from '../end-uses-form/end-uses-form.service';
 
 @Component({
     selector: 'app-end-use-table',
@@ -25,21 +25,21 @@ export class EndUseTableComponent implements OnInit {
 
   settings: Settings;
   hasInvalidEndUses: boolean = false;
-  constructor(private endUsesService: EndUsesService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
+  constructor(private endUsesFormService: EndUsesFormService, private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
-    this.selectedEndUseSub = this.endUsesService.selectedEndUse.subscribe(val => {
+    this.selectedEndUseSub = this.endUsesFormService.selectedEndUse.subscribe(val => {
       this.selectedEndUse = val;
     })
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
       if (compressedAirAssessment && compressedAirAssessment.endUseData.endUses) {
         this.compressedAirAssessment = compressedAirAssessment;
         this.compressedAirAssessment.endUseData.endUses.forEach(endUse => {
-          endUse.isValid = this.endUsesService.isEndUseValid(endUse, this.compressedAirAssessment, this.settings);
+          endUse.isValid = this.endUsesFormService.isEndUseValid(endUse, this.compressedAirAssessment, this.settings);
           if (!endUse.endUseName) {
             endUse.endUseName = 'End Use ' + (this.compressedAirAssessment.endUseData.endUses.indexOf(endUse) + 1).toString();
-            endUse.isValid = this.endUsesService.isEndUseValid(endUse, this.compressedAirAssessment, this.settings);
+            endUse.isValid = this.endUsesFormService.isEndUseValid(endUse, this.compressedAirAssessment, this.settings);
           }
         });
         this.hasInvalidEndUses = this.compressedAirAssessment.endUseData.endUses.some(endUse => !endUse.isValid);
@@ -53,13 +53,13 @@ export class EndUseTableComponent implements OnInit {
   }
 
   selectItem(item: EndUse) {
-    this.endUsesService.selectedEndUse.next(item);
+    this.endUsesFormService.selectedEndUse.next(item);
   }
 
   addNewEndUse() {
-    let result: UpdatedEndUseData = this.endUsesService.addToAssessment(this.compressedAirAssessment, this.settings);
+    let result: UpdatedEndUseData = this.endUsesFormService.addToAssessment(this.compressedAirAssessment, this.settings);
     this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
-    this.endUsesService.selectedEndUse.next(result.endUse);
+    this.endUsesFormService.selectedEndUse.next(result.endUse);
   }
 
   deleteEndUse() {
@@ -73,7 +73,7 @@ export class EndUseTableComponent implements OnInit {
     });
 
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, true);
-    this.endUsesService.selectedEndUse.next(this.compressedAirAssessment.endUseData.endUses[0]);
+    this.endUsesFormService.selectedEndUse.next(this.compressedAirAssessment.endUseData.endUses[0]);
   }
 
   openConfirmDeleteModal(endUse: EndUse) {
@@ -98,7 +98,7 @@ export class EndUseTableComponent implements OnInit {
     let endUseCopy: EndUse = JSON.parse(JSON.stringify(endUse));
     endUseCopy.endUseId = Math.random().toString(36).substr(2, 9);
     endUseCopy.endUseName = endUseCopy.endUseName + ' (copy)';
-    let newEndUse: UpdatedEndUseData = this.endUsesService.addToAssessment(this.compressedAirAssessment, this.settings, endUseCopy);
+    let newEndUse: UpdatedEndUseData = this.endUsesFormService.addToAssessment(this.compressedAirAssessment, this.settings, endUseCopy);
     this.compressedAirAssessmentService.updateCompressedAir(newEndUse.compressedAirAssessment, true);
   }
 }
