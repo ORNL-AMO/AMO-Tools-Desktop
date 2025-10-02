@@ -7,11 +7,14 @@ import { Settings } from '../shared/models/settings';
 import { DayTypeService } from './day-types/day-type.service';
 import { InventoryService } from './inventory/inventory.service';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
+import { Assessment } from '../shared/models/assessment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompressedAirAssessmentService {
+
+  assessment: BehaviorSubject<Assessment>;
 
   settings: BehaviorSubject<Settings>;
   mainTab: BehaviorSubject<string>;
@@ -53,6 +56,7 @@ export class CompressedAirAssessmentService {
     this.showModificationListModal = new BehaviorSubject<boolean>(false);
     this.showAddModificationModal = new BehaviorSubject<boolean>(false);
     this.showExportModal = new BehaviorSubject<boolean>(false);
+    this.assessment = new BehaviorSubject<Assessment>(undefined);
   }
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {

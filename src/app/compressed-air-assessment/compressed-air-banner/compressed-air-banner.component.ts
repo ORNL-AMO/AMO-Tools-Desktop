@@ -15,7 +15,9 @@ import { CoreService } from '../../core/core.service';
   standalone: false
 })
 export class CompressedAirBannerComponent implements OnInit {
-  @Input()
+
+
+  assessmentSub: Subscription;
   assessment: Assessment;
 
   isBaselineValid: boolean = false;
@@ -35,6 +37,10 @@ export class CompressedAirBannerComponent implements OnInit {
     private coreService: CoreService) { }
 
   ngOnInit(): void {
+    this.assessmentSub = this.compressedAirAssessmentService.assessment.subscribe(val => {
+      this.assessment = val;
+    });
+
     this.mainTabSub = this.compressedAirAssessmentService.mainTab.subscribe(val => {
       this.mainTab = val;
     });
@@ -100,6 +106,7 @@ export class CompressedAirBannerComponent implements OnInit {
     this.assessmentTabSub.unsubscribe();
     this.secondaryAssessmentTabSub.unsubscribe();
     this.compresssedAirAssessmentSub.unsubscribe();
+    this.assessmentSub.unsubscribe();
   }
 
   navigateHome() {

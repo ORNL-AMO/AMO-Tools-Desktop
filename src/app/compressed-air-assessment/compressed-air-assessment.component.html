@@ -1,11 +1,14 @@
 <div #content class="compressed-air-container compressed-air d-flex flex-column" *ngIf="settings && assessment">
   <!--header-->
   <div #header class="w-100 hide-print sticky-top" id="compressedAirBanner">
-    <app-compressed-air-banner [assessment]="assessment"></app-compressed-air-banner>
+    <app-compressed-air-banner></app-compressed-air-banner>
+  </div>
+  <div class="tab-content w-100 flex-grow-1">
+    <router-outlet></router-outlet>
   </div>
   <!--end header-->
 
-  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'baseline' && setupTab != 'system-profile'">
+  <!-- <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'baseline' && setupTab != 'system-profile'">
     <div class="nav-item" (click)="setSmallScreenTab('form')"
       [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
       <a class="nav-link" *ngIf="setupTab == 'system-basics'">Assessment Basics</a>
@@ -50,39 +53,39 @@
       <app-compressor-summary class="w-100" *ngIf="profileTab == 'compressor-summary'">
       </app-compressor-summary>
     </div>
-  </div>
+  </div> -->
 
 
   <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment' && !showModificationList" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
+  <!-- <div *ngIf="mainTab == 'assessment' && !showModificationList" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
     class="assessment-tab-container tab-content">
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [containerHeight]="containerHeight">
     </app-explore-opportunities>
-  </div>
+  </div> -->
   <!--diagram-->
-  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'diagram'">
+  <!-- <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'diagram'">
     <app-compressed-air-diagram></app-compressed-air-diagram>
   </div>
 
   <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'sankey'">
     <app-compressed-air-sankey [assessment]="assessment"></app-compressed-air-sankey>
-  </div>
+  </div> -->
 
 
   <!--Report-->
-  <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
+  <!-- <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
       <app-compressed-air-report [assessment]="assessment" [inAssessment]="true" [containerHeight]="containerHeight">
       </app-compressed-air-report>
-  </div>
+  </div> -->
   <!--calculators-->
-  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
+  <!-- <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
     <app-compressed-air-calculators [assessment]="assessment">
     </app-compressed-air-calculators>
-  </div>
+  </div> -->
 
 
   <!--footer-->
-  <div #footer id="compressedAirFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'baseline'">
+  <!-- <div #footer id="compressedAirFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'baseline'">
     <div class="pull-left">
       <button class="btn btn-default" [disabled]="setupTab == 'system-basics'" (click)="back()">Back</button>
     </div>
@@ -92,18 +95,14 @@
         <span *ngIf="setupTab == 'end-uses'">Go To Assessment</span>
       </button>
     </div>
-  </div>
+  </div> -->
   <!--end footer-->
 </div>
 
-<app-modification-list-modal *ngIf="showModificationList"></app-modification-list-modal>
+<!-- <app-modification-list-modal *ngIf="showModificationList"></app-modification-list-modal>
 <app-add-modification-modal *ngIf="showAddModification"></app-add-modification-modal>
-
-<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()"
-  [assessmentType]="'compressed-air'" (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings">
-</app-update-units-modal>
 
 <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
 
 
-<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal>
+<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal> -->

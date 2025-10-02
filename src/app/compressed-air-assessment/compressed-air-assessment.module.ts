@@ -4,9 +4,9 @@ import { CompressedAirAssessmentComponent } from './compressed-air-assessment.co
 import { CompressedAirBannerComponent } from './compressed-air-banner/compressed-air-banner.component';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { RouterModule } from '@angular/router';
-import { SystemBasicsComponent } from './system-basics/system-basics.component';
+import { SystemBasicsComponent } from './baseline-tab-content/system-basics/system-basics.component';
 import { SettingsModule } from '../settings/settings.module';
-import { SetupTabsComponent } from './compressed-air-banner/setup-tabs/setup-tabs.component';
+import { SetupTabsComponent } from './baseline-tab-content/setup-tabs/setup-tabs.component';
 import { SystemInformationComponent } from './system-information/system-information.component';
 import { DayTypesComponent } from './day-types/day-types.component';
 import { EndUsesComponent } from './end-uses/end-uses.component';
@@ -14,7 +14,7 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { SystemProfileSetupComponent } from './system-profile/system-profile-setup/system-profile-setup.component';
 import { SystemProfileSummaryComponent } from './system-profile/system-profile-summary/system-profile-summary.component';
 import { SystemProfileGraphsModule } from './system-profile-graphs/system-profile-graphs.module';
-import { SystemBasicsFormService } from './system-basics/system-basics-form.service';
+import { SystemBasicsFormService } from './baseline-tab-content/system-basics/system-basics-form.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
 import { NameplateDataComponent } from './inventory/nameplate-data/nameplate-data.component';
@@ -51,7 +51,7 @@ import { SharedPointCalculationsService } from './inventory/performance-points/c
 import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
-import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
+import { SystemBasicsHelpComponent } from './baseline-tab-content/system-basics/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
 import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
 import { NameplateDataHelpComponent } from './results-panel/help-panel/inventory-help/nameplate-data-help/nameplate-data-help.component';
@@ -152,6 +152,10 @@ import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-ai
 import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { ReplaceCompressorComponent } from './explore-opportunities/replace-compressor/replace-compressor.component';
+import { AssessessmentTabContentComponent } from './assessessment-tab-content/assessessment-tab-content';
+import { BaselineTabContentComponent } from './baseline-tab-content/baseline-tab-content';
+import { SystemBasicsFormComponent } from './baseline-tab-content/system-basics/system-basics-form/system-basics-form';
+import { BaselineFooterNavButtonsComponent } from './baseline-tab-content/baseline-footer-nav-buttons/baseline-footer-nav-buttons';
 
 @NgModule({
   declarations: [
@@ -238,7 +242,11 @@ import { ReplaceCompressorComponent } from './explore-opportunities/replace-comp
     TurndownComponent,
     MidTurndownComponent,
     EndUseHelpComponent,
-    ReplaceCompressorComponent
+    ReplaceCompressorComponent,
+    AssessessmentTabContentComponent,
+    BaselineTabContentComponent,
+    SystemBasicsFormComponent,
+    BaselineFooterNavButtonsComponent
   ],
   imports: [
     CommonModule,

@@ -119,6 +119,7 @@ import { WaterAssessmentComponent } from '../water/water-assessment.component';
 import { DataAndBackupComponent } from '../dashboard/data-and-backup/data-and-backup.component';
 import { PowerFactorTriangleComponent } from '../calculator/utilities/power-factor-triangle/power-factor-triangle.component';
 import { ValveEnergyLossComponent } from '../calculator/pumps/valve-energy-loss/valve-energy-loss.component';
+import { compressedAirAssessmentRoutes } from '../compressed-air-assessment/compressed-air.routing';
 
 export const coreRoutes: Routes = [
   {
@@ -574,7 +575,8 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'compressed-air/:id',
-    component: CompressedAirAssessmentComponent
+    component: CompressedAirAssessmentComponent,
+    children: compressedAirAssessmentRoutes
   },
   {
     path: 'report-rollup',

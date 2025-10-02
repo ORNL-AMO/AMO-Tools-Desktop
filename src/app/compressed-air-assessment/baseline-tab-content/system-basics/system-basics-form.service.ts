@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { CASystemBasics } from '../../shared/models/compressed-air-assessment';
+import { CASystemBasics } from '../../../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class SystemBasicsFormService {

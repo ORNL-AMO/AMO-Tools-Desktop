@@ -41,53 +41,43 @@
 
     <div class="d-flex nav-pills nav-fill flex-wrap mx-auto d-none d-lg-inline-block">
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'baseline'}"
-                (click)="changeTab('baseline')">Baseline</a>
+            <a class="nav-link" routerLink="baseline" [routerLinkActive]="'active'">Baseline</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
-                (click)="changeTab('assessment')">Assessment</a>
+            <a class="nav-link" routerLink="assessment" [routerLinkActive]="'active'" [ngClass]="{'disabled': !isBaselineValid}">Assessment</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">Diagram</a>
+            <a class="nav-link"  routerLink="diagram" [routerLinkActive]="'active'">Diagram</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !isBaselineValid}"
-                (click)="changeTab('report')">Report</a>
+            <a class="nav-link"  routerLink="report" [routerLinkActive]="'active'" [ngClass]="{'disabled': !isBaselineValid}">Report</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !isBaselineValid}"
-                (click)="changeTab('sankey')">Sankey</a>
+            <a class="nav-link" routerLink="sankey" [routerLinkActive]="'active'" [ngClass]="{'disabled': !isBaselineValid}">Sankey</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !isBaselineValid}"
-                (click)="changeTab('calculators')">Calculators</a>
+            <a class="nav-link" routerLink="calculators" [routerLinkActive]="'active'">Calculators</a>
         </div>
     </div>
 
     <div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'baseline'}"
-                (click)="changeTab('baseline')">Baseline</a>
+            <a class="nav-link" routerLink="baseline" [routerLinkActive]="'active'">Baseline</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
-                (click)="changeTab('assessment')">Assessment</a>
+            <a class="nav-link" routerLink="assessment" [routerLinkActive]="'active'" [ngClass]="{'disabled': !isBaselineValid}">Assessment</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">Diagram</a>
+            <a class="nav-link" routerLink="diagram" [routerLinkActive]="'active'">Diagram</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !isBaselineValid}"
-                (click)="changeTab('report')">Report</a>
+            <a class="nav-link" routerLink="report" [routerLinkActive]="'active'" [ngClass]="{'disabled': !isBaselineValid}">Report</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !isBaselineValid}"
-                (click)="changeTab('sankey')">Sankey</a>
+            <a class="nav-link" routerLink="sankey" [routerLinkActive]="'active'" [ngClass]="{'disabled': !isBaselineValid}">Sankey</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !isBaselineValid}"
-                (click)="changeTab('calculators')">Calculators</a>
+            <a class="nav-link" routerLink="calculators" [routerLinkActive]="'active'">Calculators</a>
         </div>
     </div>
 
@@ -167,7 +157,7 @@
 </nav>
 
 
-<app-setup-tabs *ngIf="mainTab == 'baseline'"></app-setup-tabs>
+<!-- <app-setup-tabs *ngIf="mainTab == 'baseline'"></app-setup-tabs> -->
 <app-calculator-tabs *ngIf="mainTab == 'calculators'"></app-calculator-tabs>
 
 

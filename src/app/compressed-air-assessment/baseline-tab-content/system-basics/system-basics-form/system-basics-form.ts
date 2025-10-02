@@ -1,31 +1,30 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
- 
-import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { SettingsService } from '../../settings/settings.service';
-import { Assessment } from '../../shared/models/assessment';
-import { CASystemBasics, CompressedAirAssessment } from '../../shared/models/compressed-air-assessment';
-import { Settings } from '../../shared/models/settings';
-import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { ConvertCompressedAirService } from '../convert-compressed-air.service';
-import { SystemBasicsFormService } from './system-basics-form.service';
-import * as _ from 'lodash';
-import { firstValueFrom } from 'rxjs';
 
+import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
+import { SettingsService } from '../../../../settings/settings.service';
+import { Assessment } from '../../../../shared/models/assessment';
+import { CASystemBasics, CompressedAirAssessment } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { ConvertCompressedAirService } from '../../../convert-compressed-air.service';
+import { SystemBasicsFormService } from './../system-basics-form.service';
+import * as _ from 'lodash';
+import { firstValueFrom, Subscription } from 'rxjs';
 
 @Component({
-    selector: 'app-system-basics',
-    templateUrl: './system-basics.component.html',
-    styleUrls: ['./system-basics.component.css'],
-    standalone: false
+  selector: 'app-system-basics-form',
+  templateUrl: './system-basics-form.html',
+  styleUrl: './system-basics-form.css',
+  standalone: false
 })
-export class SystemBasicsComponent implements OnInit {
-  @Input()
+export class SystemBasicsFormComponent {
+
+  showUpdateUnitsModal: boolean = false;
+
+  assessmentSub: Subscription;
   assessment: Assessment;
-  @Output('openUpdateUnitsModal') 
-  openUpdateUnitsModal = new EventEmitter<Settings>();
-  
-  
+
   settingsForm: UntypedFormGroup;
   oldSettings: Settings;
   systemBasicsForm: UntypedFormGroup;
@@ -34,11 +33,14 @@ export class SystemBasicsComponent implements OnInit {
   constructor(private settingsService: SettingsService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private convertCompressedAirService: ConvertCompressedAirService,
-       private settingsDbService: SettingsDbService,
+    private settingsDbService: SettingsDbService,
     private systemBasicsFormService: SystemBasicsFormService) { }
 
 
   ngOnInit() {
+    this.assessmentSub = this.compressedAirAssessmentService.assessment.subscribe(val => {
+      this.assessment = val;
+    });
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.systemBasicsForm = this.systemBasicsFormService.getFormFromObj(compressedAirAssessment.systemBasics);
     let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
@@ -52,9 +54,12 @@ export class SystemBasicsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if(this.showUpdateDataReminder && this.oldSettings) {
-      this.openUpdateUnitsModal.emit(this.oldSettings);
-    }
+    this.assessmentSub.unsubscribe();
+
+    //TODO: ADD ROUTE GAURD TO SHOW UPDATE UNITS MODAL
+    // if(this.showUpdateDataReminder && this.oldSettings) {
+    //   this.openUpdateUnitsModal.emit(this.oldSettings);
+    // }
   }
 
   saveSystemBasics() {
@@ -86,13 +91,13 @@ export class SystemBasicsComponent implements OnInit {
     newSettings.createdDate = createdDate;
     newSettings.assessmentId = assessmentId;
     await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.compressedAirAssessmentService.settings.next(newSettings);
   }
 
   updateData(showSuccess?: boolean) {
-    if(showSuccess) {
+    if (showSuccess) {
       this.initSuccessMessage();
     }
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
@@ -110,7 +115,7 @@ export class SystemBasicsComponent implements OnInit {
 
   getExistingDataSettings(compressedAirAssessment: CompressedAirAssessment): Settings {
     let existingSettingsForm: UntypedFormGroup = _.cloneDeep(this.settingsForm);
-    existingSettingsForm.patchValue({unitsOfMeasure: compressedAirAssessment.existingDataUnits});
+    existingSettingsForm.patchValue({ unitsOfMeasure: compressedAirAssessment.existingDataUnits });
     let existingSettings = this.settingsService.setUnits(existingSettingsForm);
     return this.settingsService.getSettingsFromForm(existingSettings);
   }
@@ -125,4 +130,33 @@ export class SystemBasicsComponent implements OnInit {
   dismissSuccessMessage() {
     this.showSuccessMessage = false;
   }
+
+  initUpdateUnitsModal(oldSettings: Settings) {
+    this.oldSettings = oldSettings;
+    this.showUpdateUnitsModal = true;
+    // this.cd.detectChanges();
+  }
+
+  closeUpdateUnitsModal(updated?: boolean) {
+    if (updated) {
+      this.compressedAirAssessmentService.mainTab.next('baseline');
+      this.compressedAirAssessmentService.setupTab.next('system-basics');
+    }
+    this.showUpdateUnitsModal = false;
+    // this.cd.detectChanges();
+  }
+
+  selectUpdateAction(shouldUpdateData: boolean) {
+    if (shouldUpdateData == true) {
+      this.updateData();
+    }
+    this.closeUpdateUnitsModal(shouldUpdateData);
+  }
+
+  // updateData() {
+  //   let currentSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
+  //   this.assessment.compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(this.assessment.compressedAirAssessment, this.oldSettings, currentSettings);
+  //   this.assessment.compressedAirAssessment.existingDataUnits = currentSettings.unitsOfMeasure;
+  //   this.save(this.assessment.compressedAirAssessment);
+  // }
 }
