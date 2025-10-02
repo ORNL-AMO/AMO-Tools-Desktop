@@ -11,8 +11,8 @@ import { SystemInformationComponent } from './baseline-tab-content/system-inform
 import { DayTypesComponent } from './baseline-tab-content/day-types-setup/day-types/day-types.component';
 import { EndUsesComponent } from './end-uses/end-uses.component';
 import { InventoryComponent } from './baseline-tab-content/inventory-setup/inventory/inventory.component';
-import { SystemProfileSetupComponent } from './system-profile/system-profile-setup/system-profile-setup.component';
-import { SystemProfileSummaryComponent } from './system-profile/system-profile-summary/system-profile-summary.component';
+import { SystemProfileSetupComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-setup/system-profile-setup.component';
+import { SystemProfileSummaryComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-summary/system-profile-summary.component';
 import { SystemProfileGraphsModule } from './system-profile-graphs/system-profile-graphs.module';
 import { SystemBasicsFormService } from './baseline-tab-content/system-basics/system-basics-form.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -23,10 +23,10 @@ import { DesignDetailsComponent } from './baseline-tab-content/inventory-setup/i
 import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { InventoryTableComponent } from './baseline-tab-content/inventory-setup/inventory-table/inventory-table.component';
-import { ProfileSetupFormComponent } from './system-profile/profile-setup-form/profile-setup-form.component';
-import { CompressorOrderingTableComponent } from './system-profile/system-profile-setup/compressor-ordering-table/compressor-ordering-table.component';
-import { OperatingProfileTableComponent } from './system-profile/system-profile-setup/operating-profile-table/operating-profile-table.component';
-import { SystemProfileService } from './system-profile/system-profile.service';
+import { ProfileSetupFormComponent } from './baseline-tab-content/baseline-system-profile-setup/profile-setup-form/profile-setup-form.component';
+import { CompressorOrderingTableComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-setup/compressor-ordering-table/compressor-ordering-table.component';
+import { OperatingProfileTableComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-setup/operating-profile-table/operating-profile-table.component';
+import { SystemProfileService } from './baseline-tab-content/baseline-system-profile-setup/system-profile.service';
 import { CentrifugalSpecificsComponent } from './baseline-tab-content/inventory-setup/inventory/centrifugal-specifics/centrifugal-specifics.component';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 import { PerformancePointsComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/performance-points.component';
@@ -41,7 +41,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { CompressorOptionsTableComponent } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';
 import { FilterCompressorsComponent } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/filter-compressors/filter-compressors.component';
 import { FilterCompressorsPipe } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/filter-compressors.pipe';
-import { DayTypeFilterPipe } from './system-profile/day-type-filter.pipe';
+import { DayTypeFilterPipe } from './baseline-tab-content/baseline-system-profile-setup/day-type-filter.pipe';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { SystemBasicsHelpComponent } from './baseline-tab-content/system-basics/system-basics-help/system-basics-help.component';
@@ -99,7 +99,7 @@ import { ReduceSystemAirPressureHelpComponent } from './results-panel/help-panel
 import { UseAutomaticSequencerHelpComponent } from './results-panel/help-panel/assessment-help/use-automatic-sequencer-help/use-automatic-sequencer-help.component';
 import { ReduceRunTimeHelpComponent } from './results-panel/help-panel/assessment-help/reduce-run-time-help/reduce-run-time-help.component';
 import { AddReceiverVolumeHelpComponent } from './results-panel/help-panel/assessment-help/add-receiver-volume-help/add-receiver-volume-help.component';
-import { SystemProfileAnnualSummaryComponent } from './system-profile/system-profile-annual-summary/system-profile-annual-summary.component';
+import { SystemProfileAnnualSummaryComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-annual-summary/system-profile-annual-summary.component';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { AdjustSequencerProfileComponent } from './explore-opportunities/use-automatic-sequencer/adjust-sequencer-profile/adjust-sequencer-profile.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
@@ -122,7 +122,7 @@ import { ProfileSummaryTableModule } from './profile-summary-table/profile-summa
 import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-compressor-pipes.module';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { CompressorSummaryTableModule } from './compressor-summary-table/compressor-summary-table.module';
-import { CompressorSummaryComponent } from './system-profile/compressor-summary/compressor-summary.component';
+import { CompressorSummaryComponent } from './baseline-tab-content/baseline-system-profile-setup/compressor-summary/compressor-summary.component';
 import { InventoryPerformanceProfileModule } from './inventory-performance-profile/inventory-performance-profile.module';
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
@@ -150,6 +150,8 @@ import { BaselineFooterNavButtonsComponent } from './baseline-tab-content/baseli
 import { SystemInformationFormComponent } from './baseline-tab-content/system-information/system-information-form/system-information-form.component';
 import { InventorySetupComponent } from './baseline-tab-content/inventory-setup/inventory-setup.component';
 import { DayTypesSetupComponent } from './baseline-tab-content/day-types-setup/day-types-setup.component';
+import { BaselineSystemProfileSetupComponent } from './baseline-tab-content/baseline-system-profile-setup/baseline-system-profile-setup.component';
+import { SystemProfileSetupTabsComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-setup-tabs/system-profile-setup-tabs.component';
 
 @NgModule({
   declarations: [
@@ -243,7 +245,9 @@ import { DayTypesSetupComponent } from './baseline-tab-content/day-types-setup/d
     BaselineFooterNavButtonsComponent,
     SystemInformationFormComponent,
     InventorySetupComponent,
-    DayTypesSetupComponent
+    DayTypesSetupComponent,
+    BaselineSystemProfileSetupComponent,
+    SystemProfileSetupTabsComponent
   ],
   imports: [
     CommonModule,

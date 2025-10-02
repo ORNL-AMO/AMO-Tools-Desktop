@@ -45,7 +45,7 @@
                         </select>
                     </div>
                     <div class="alert alert-warning small"
-                        *ngIf="form.controls.dataInterval.disabled && profileTab == 'setup'">
+                        *ngIf="form.controls.dataInterval.disabled && hasModifications">
                         Data interval cannot be changed when modifications exist
                     </div>
                     <div class="form-group">

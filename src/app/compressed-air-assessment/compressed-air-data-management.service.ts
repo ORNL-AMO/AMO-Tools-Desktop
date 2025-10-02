@@ -4,7 +4,7 @@ import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { GenericCompressor } from './generic-compressor-db.service';
 import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
-import { SystemProfileService } from './system-profile/system-profile.service';
+import { SystemProfileService } from './baseline-tab-content/baseline-system-profile-setup/system-profile.service';
 import { CompressorInventoryItemClass } from './calculations/CompressorInventoryItemClass';
 import { roundVal } from '../shared/helperFunctions';
 

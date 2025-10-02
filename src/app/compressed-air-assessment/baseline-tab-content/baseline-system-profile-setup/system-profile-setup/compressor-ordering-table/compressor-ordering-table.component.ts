@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 import * as _ from 'lodash';
 @Component({
     selector: 'app-compressor-ordering-table',

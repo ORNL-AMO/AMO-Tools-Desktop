@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
-import { Settings } from '../../../shared/models/settings';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { PerformancePointsFormService } from '../../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { PerformancePointsFormService } from '../../inventory-setup/inventory/performance-points/performance-points-form.service';
 import { SystemProfileService } from '../system-profile.service';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
-    selector: 'app-profile-setup-form',
-    templateUrl: './profile-setup-form.component.html',
-    styleUrls: ['./profile-setup-form.component.css'],
-    standalone: false
+  selector: 'app-profile-setup-form',
+  templateUrl: './profile-setup-form.component.html',
+  styleUrls: ['./profile-setup-form.component.css'],
+  standalone: false
 })
 export class ProfileSetupFormComponent implements OnInit {
   settings: Settings;
@@ -19,8 +20,6 @@ export class ProfileSetupFormComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
   isFormChange: boolean = false;
   dayTypes: Array<CompressedAirDayType>;
-  profileTab: string;
-  profileTabSub: Subscription;
   pressureMin: number;
   pressureMax: number;
   settingsSub: Subscription;
@@ -31,8 +30,10 @@ export class ProfileSetupFormComponent implements OnInit {
   isProfileDataTypeChange: boolean = false;
   dayTypesWarningMessage: string = 'is valid';
   compressedAirAssessment: CompressedAirAssessment;
+  hasModifications: boolean = false;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private performancePointsFormService: PerformancePointsFormService) { }
+    private performancePointsFormService: PerformancePointsFormService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -45,20 +46,19 @@ export class ProfileSetupFormComponent implements OnInit {
         this.checkDayTypesForData();
       } else {
         this.isFormChange = false;
-      }  
+      }
     });
 
-    this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
-      this.profileTab = val;
-      this.enableDisableForm();
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.enableDisableForm();
+      }
     });
-
     this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
-    this.profileTabSub.unsubscribe();
     this.settingsSub.unsubscribe();
   }
 
@@ -94,7 +94,7 @@ export class ProfileSetupFormComponent implements OnInit {
   }
 
   enableDisableForm() {
-    if (this.profileTab != 'setup') {
+    if (this.router.url.includes('setup-profile') == false) {
       this.form.controls.profileDataType.disable();
       this.form.controls.dataInterval.disable();
     } else {
@@ -104,6 +104,9 @@ export class ProfileSetupFormComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (compressedAirAssessment.modifications.length != 0) {
       this.form.controls.dataInterval.disable();
+      this.hasModifications = true;
+    } else {
+      this.hasModifications = false;
     }
   }
 

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemInformation, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
-import { Settings } from '../../shared/models/settings';
-import { CompressorInventoryItemClass } from '../calculations/CompressorInventoryItemClass';
-import { calculateAirFlow } from '../calculations/performancePoints/performancePointHelpers';
+import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemInformation, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../shared/models/settings';
+import { CompressorInventoryItemClass } from '../../calculations/CompressorInventoryItemClass';
+import { calculateAirFlow } from '../../calculations/performancePoints/performancePointHelpers';
 
 @Injectable()
 export class SystemProfileService {

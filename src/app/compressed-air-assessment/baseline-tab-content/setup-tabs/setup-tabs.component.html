@@ -20,7 +20,7 @@
                 class="step-number">4</span>Day Types</a>
     </li>
     <li [ngClass]="systemProfileStatus" [routerLinkActive]="'active'">
-        <a routerLink="system-profile">
+        <a routerLink="system-profile-setup">
             <span (mouseenter)="showTooltip(systemProfileBadge)" (mouseleave)="hideTooltip(systemProfileBadge)"
                 class="step-number">5</span>System Profile</a>
     </li>
@@ -84,7 +84,7 @@
 </nav>
 
 
-<ul *ngIf="setupTab == 'system-profile'" class="tabs subtabs progress-tabs compressed-air d-none d-lg-block">
+<!-- <ul *ngIf="setupTab == 'system-profile'" class="tabs subtabs progress-tabs compressed-air d-none d-lg-block">
     <li [ngClass]="{'active': profileTab == 'setup'}">
         <a (click)="changeProfileTab('setup')">Setup Profile</a>
     </li>
@@ -100,7 +100,7 @@
     <li [ngClass]="{'active': profileTab == 'compressor-summary'}">
         <a (click)="changeProfileTab('compressor-summary')">Compressor Summary</a>
     </li>
-</ul>
+</ul> -->
 
 <nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs compressed-air flex-wrap flex-fill">
     <ul *ngIf="setupTab == 'system-profile'"

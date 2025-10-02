@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment } from '../../../shared/models/compressed-air-assessment';
-import { Settings } from '../../../shared/models/settings';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { CompressedAirAssessment } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 
 @Component({
     selector: 'app-compressor-summary',

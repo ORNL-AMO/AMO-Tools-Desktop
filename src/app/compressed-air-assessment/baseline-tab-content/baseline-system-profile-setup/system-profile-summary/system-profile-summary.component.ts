@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemInformation, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { Settings } from '../../../shared/models/settings';
-import { CompressedAirBaselineDayTypeProfileSummary } from '../../calculations/CompressedAirBaselineDayTypeProfileSummary';
-import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
-import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemInformation, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { Settings } from '../../../../shared/models/settings';
+import { CompressedAirBaselineDayTypeProfileSummary } from '../../../calculations/CompressedAirBaselineDayTypeProfileSummary';
+import { CompressedAirCalculationService } from '../../../compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
     selector: 'app-system-profile-summary',

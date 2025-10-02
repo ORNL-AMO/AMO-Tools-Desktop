@@ -1,13 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { CompressedAirAssessment, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
-import { Settings } from '../../../shared/models/settings';
-import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { BaselineResults } from '../../calculations/caCalculationModels';
-import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
-import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
-import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
-import { CompressedAirProfileSummary } from '../../calculations/CompressedAirProfileSummary';
+import { CompressedAirAssessment, ProfileSummary } from '../../../../shared/models/compressed-air-assessment';
+import { Settings } from '../../../../shared/models/settings';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { BaselineResults } from '../../../calculations/caCalculationModels';
+import { CompressedAirAssessmentBaselineResults } from '../../../calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirCalculationService } from '../../../compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Component({
   selector: 'app-system-profile-annual-summary',
@@ -48,6 +46,10 @@ export class SystemProfileAnnualSummaryComponent implements OnInit {
           profileSummary: dayTypeProfileSummary.profileSummary
         }
       });
+      this.baselineResults = compressedAirAssessmentBaselineResults.baselineResults;
+      if (this.selectedAnnualSummary) {
+        this.baselineResults.total.name = this.selectedAnnualSummary.compressorName + ' Totals';
+      }
     }
     this.setSelectedAnnualSummary();
   }
@@ -62,11 +64,6 @@ export class SystemProfileAnnualSummaryComponent implements OnInit {
           return s.compressorId == this.selectedAnnualSummary.compressorId
         });
       });
-    }
-    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-    this.baselineResults = compressedAirAssessmentBaselineResults.baselineResults;
-    if (this.selectedAnnualSummary) {
-      this.baselineResults.total.name = this.selectedAnnualSummary.compressorName + ' Totals';
     }
   }
 

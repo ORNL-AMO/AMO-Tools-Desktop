@@ -2,11 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
-import { DayTypeSummary, LogToolField } from '../../../../log-tool/log-tool-models';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService, ProfileSummaryValid, } from '../../../compressed-air-assessment.service';
-import { SystemProfileService } from '../../system-profile.service';
-
+import { DayTypeSummary, LogToolField } from '../../../../../log-tool/log-tool-models';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessmentService, ProfileSummaryValid, } from '../../../../compressed-air-assessment.service';
 @Component({
     selector: 'app-operating-profile-table',
     templateUrl: './operating-profile-table.component.html',
@@ -34,7 +32,7 @@ export class OperatingProfileTableComponent implements OnInit {
   assessmentDayTypes: Array<CompressedAirDayType>
   inventoryItems: Array<CompressorInventoryItem>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, 
-    private router: Router, private systemProfileService: SystemProfileService) { }
+    private router: Router) { }
 
   ngOnInit(): void {
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {

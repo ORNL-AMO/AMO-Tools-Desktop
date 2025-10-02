@@ -7,7 +7,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { AssessmentCo2SavingsService } from '../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { SystemInformationFormService } from './system-information-form.service';
-import { SystemProfileService } from '../../../system-profile/system-profile.service';
+import { SystemProfileService } from '../../baseline-system-profile-setup/system-profile.service';
 import { AltitudeCorrectionService } from '../../../../calculator/utilities/altitude-correction/altitude-correction.service';
 
 @Component({

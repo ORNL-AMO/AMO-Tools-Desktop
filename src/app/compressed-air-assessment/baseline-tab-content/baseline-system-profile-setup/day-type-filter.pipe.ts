@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ProfileSummary, ReduceRuntimeData } from '../../shared/models/compressed-air-assessment';
+import { ProfileSummary, ReduceRuntimeData } from '../../../shared/models/compressed-air-assessment';
 
 @Pipe({
     name: 'dayTypeFilter',

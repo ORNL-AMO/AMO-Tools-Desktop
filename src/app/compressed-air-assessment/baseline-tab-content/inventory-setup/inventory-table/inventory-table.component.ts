@@ -6,7 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { InventoryService } from '../inventory/inventory.service';
 import { PerformancePointsFormService } from '../inventory/performance-points/performance-points-form.service';
-import { SystemProfileService } from '../../../system-profile/system-profile.service';
+import { SystemProfileService } from '../../baseline-system-profile-setup/system-profile.service';
 
 @Component({
     selector: 'app-inventory-table',
