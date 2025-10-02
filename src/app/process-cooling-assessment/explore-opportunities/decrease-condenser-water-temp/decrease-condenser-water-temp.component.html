@@ -1,7 +1,7 @@
 <form *ngIf="form" [formGroup]="form" class="p-0">
     <div class="checkbox">
-        <label class="group-label" for="increaseChilledWaterTemperatureSetpoint">
-            Increase Chilled Water Temperature Setpoint
+        <label class="group-label" for="decreaseCondenserWaterTemperatureSetpoint">
+            Decrease Condenser Water Temperature Setpoint
         </label>
     </div>
 
@@ -9,12 +9,12 @@
         <div class="col-6 pr-2">
             <!-- <h5 class="version-header">Baseline</h5> -->
             <div class="form-group">
-                <label for="baselineChilledWaterTemp">
-                    Current Chilled Water Temperature
+                <label for="baselineCondenserWaterTemp">
+                    Current Condenser Water Temperature
                 </label>
                 <div class="input-group">
-                    <input type="number" id="baselineChilledWaterTemp" class="form-control"
-                        [value]="baselineChilledWaterTemperature" readonly disabled>
+                    <input type="number" id="baselineCondenserWaterTemp" class="form-control"
+                        [value]="baselineCondenserWaterTemperature" readonly disabled>
                     <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
                         [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
                 </div>
@@ -23,18 +23,15 @@
         <div class="col-6 pl-2">
             <!-- <h5 class="version-header">Modification</h5> -->
             <div class="form-group">
-                <label for="modificationChilledWaterTemp">
-                    Modified Chilled Water Temperature
+                <label for="modificationCondenserWaterTemp">
+                    Modified Condenser Water Temperature
                 </label>
                 <div class="input-group">
-                    <input type="number" class="form-control" id="modificationChilledWaterTemp" formControlName="chilledWaterTemperature"
-                        (focus)="focusField('modificationChilledWaterTemp')">
+                    <input type="number" class="form-control" id="modificationCondenserWaterTemp" formControlName="condenserWaterTemperature"
+                        (focus)="focusField('modificationCondenserWaterTemp')">
                     <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
                         [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
                 </div>
-                <small class="form-text text-muted">
-                    Enter the increased chilled water temperature setpoint
-                </small>
             </div>
         </div>
     </div>

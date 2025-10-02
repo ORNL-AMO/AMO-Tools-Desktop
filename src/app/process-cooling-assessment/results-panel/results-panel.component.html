@@ -26,10 +26,8 @@
         <div class="row no-gutters">
             <div class="col-12 pr-2 pl-2 pb-4 mt-1">
                 <app-inventory-table *ngIf="selectedPanelTab == 'inventory'"></app-inventory-table>
-                <app-help-panel *ngIf="selectedPanelTab == 'help'">
-                </app-help-panel>
-                <!-- <app-results-table *ngIf="tabSelect == 'results'">
-                </app-results-table> -->
+                <app-help-panel *ngIf="selectedPanelTab == 'help'"></app-help-panel>
+                <app-assessment-results *ngIf="selectedPanelTab == 'results'"></app-assessment-results>
             </div>
         </div>
     </div>

@@ -19,7 +19,7 @@ export class InventoryTableComponent {
   private processCoolingService: ProcessCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
   private destroyRef = inject(DestroyRef);
 
-  inventoryState$: Observable<InventoryState>;
+  inventoryUIState$: Observable<InventoryState>;
   inventoryValidState: WritableSignal<InventoryValidState> = this.inventoryService.inventoryValidState;
 
   showConfirmDeleteModal: boolean = false;
@@ -28,7 +28,7 @@ export class InventoryTableComponent {
   settings: Settings;
   
   ngOnInit(): void {
-    this.inventoryState$ = combineLatest({
+    this.inventoryUIState$ = combineLatest({
       processCooling: this.processCoolingService.processCooling$,
       selectedChiller: this.inventoryService.selectedChiller$,
     }).pipe(
@@ -57,7 +57,7 @@ export class InventoryTableComponent {
     this.inventoryService.setSelectedChiller(updatedInventory[0]);
   }
 
-
+// todo global modal component now ready
   openConfirmDeleteModal(item: ChillerInventoryItem) {
     // this.confirmDeleteData = {
     //   modalTitle: 'Delete Chiller Inventory Item',

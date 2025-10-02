@@ -57,6 +57,41 @@ export interface Modification {
     notes?: string
 }
 
+// Just an adapter to serve up values from the modification service
+export interface ExploreOppsBaseline {
+      increaseChilledWaterTemp: {
+          chilledWaterSupplyTemp: number,
+      },
+      decreaseCondenserWaterTemp: {
+          condenserWaterTemp: number,
+      },
+      useSlidingCondenserWaterTemp: {
+          followingTempDifferential: number,
+          isConstantCondenserWaterTemp: boolean,
+      },
+      applyVariableSpeedControls: {
+          fanSpeedType: FanSpeedType,
+      },
+      replaceChillers: {
+          currentChillerId: string,
+          newChiller: ChillerInventoryItem,
+      },
+      upgradeCoolingTowerFans: {
+          numberOfFans: TowerType,
+      },
+      useFreeCooling: {
+          usesFreeCooling: boolean,
+          isHEXRequired: boolean,
+          HEXApproachTemp: number,
+      },
+      replaceRefrigerant: {
+          currentRefrigerant: string,
+          newRefrigerant: string,
+      },
+      installVSDOnCentrifugalCompressor: {
+      },      
+}
+
 export interface EEM {
     useOpportunity: boolean,
     implementationCost?: number,
@@ -325,3 +360,5 @@ export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-infor
 export type ProcessCoolingDataProperty = keyof Pick<ProcessCoolingAssessment, 'systemBasics' | 'systemInformation' | 'inventory' | 'modifications'>;
 export type ProcessCoolingSystemInformationProperty = keyof Pick<SystemInformation, 'operations' | 'co2SavingsData' | 'airCooledSystemInput' | 'chilledWaterPumpInput' | 'condenserWaterPumpInput' | 'towerInput' | 'waterCooledSystemInput'>;
 export type CoolingWaterPumpType = keyof Pick<SystemInformation, 'chilledWaterPumpInput' | 'condenserWaterPumpInput'>;
+
+export type ModificationEEMProperty = keyof Omit<Modification, 'name' | 'id' | 'notes'>;

@@ -14,6 +14,7 @@ import { AssessmentComponent } from './assessment/assessment.component';
 import { BaselineComponent } from './baseline/baseline.component';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { IncreaseChilledTemperatureComponent } from './explore-opportunities/increase-chilled-temperature/increase-chilled-temperature.component';
+import { DecreaseCondenserWaterTempComponent } from './explore-opportunities/decrease-condenser-water-temp/decrease-condenser-water-temp.component';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { BaselineTabsComponent } from './baseline/baseline-tabs/baseline-tabs.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
@@ -217,6 +218,7 @@ const ROUTES: Route[] = [
     ReportComponent,
     ExploreOpportunitiesComponent,
     IncreaseChilledTemperatureComponent,
+    DecreaseCondenserWaterTempComponent,
     BaselineComponent,
     ResultsPanelComponent,
     BaselineTabsComponent,

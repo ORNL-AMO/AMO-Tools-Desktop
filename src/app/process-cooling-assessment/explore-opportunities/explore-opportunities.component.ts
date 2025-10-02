@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, Injector, DestroyRef } from '@angular/core';
+import { Component, inject, Injector } from '@angular/core';
 import { Modification } from '../../shared/models/process-cooling-assessment';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { AddModificationComponent } from './add-modification/add-modification.component';

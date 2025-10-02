@@ -1,5 +1,5 @@
 import { computed, inject, Injectable } from '@angular/core';
-import { Modification, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
+import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { BehaviorSubject, map } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
 import { copyObject, getNewIdString } from '../../shared/helperFunctions';
@@ -8,7 +8,6 @@ import { copyObject, getNewIdString } from '../../shared/helperFunctions';
 export class ModificationService {
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
   private processCoolingSignal = this.processCoolingAssessmentService.processCoolingSignal;
-  
   modifications = computed(() => {
     return this.processCoolingSignal().modifications;
   });
@@ -48,6 +47,15 @@ export class ModificationService {
     } 
   }
 
+  updateModificationEEM<K extends ModificationEEMProperty>(EEMName: K, value: Modification[K]) {
+    const selectedModificationId: string = this.selectedModificationId.getValue();
+    const modification = this.modifications().find(mod => mod.id === selectedModificationId);
+    if (modification) {
+      modification[EEMName] = value;
+      this.updateModification(modification);
+    }
+  }
+
   addNewModificationToAssessment(name?: string) {
     let processCoolingAssessment: ProcessCoolingAssessment = {...this.processCoolingSignal()};
     let modification: Modification = this.getNewModification();
@@ -82,19 +90,51 @@ export class ModificationService {
   }
     
   getNewModification(): Modification {
+    const baselineValues = this.getBaselineValues();
     return {
       name: 'Modification',
       id: getNewIdString(),
       notes: undefined,
-      increaseChilledWaterTemp: undefined,
-      decreaseCondenserWaterTemp: undefined,
-      useSlidingCondenserWaterTemp: undefined,
-      applyVariableSpeedControls: undefined,
-      replaceChillers: undefined,
-      upgradeCoolingTowerFans: undefined,
-      useFreeCooling: undefined,
-      replaceRefrigerant: undefined,
-      installVSDOnCentrifugalCompressor: undefined,
+      increaseChilledWaterTemp: {
+        chilledWaterSupplyTemp: baselineValues.increaseChilledWaterTemp.chilledWaterSupplyTemp,
+        useOpportunity: false,
+      },
+      decreaseCondenserWaterTemp: {
+        condenserWaterTemp: baselineValues.decreaseCondenserWaterTemp.condenserWaterTemp,
+        useOpportunity: false,
+      },
+      useSlidingCondenserWaterTemp: {
+        followingTempDifferential: baselineValues.useSlidingCondenserWaterTemp.followingTempDifferential,
+        isConstantCondenserWaterTemp: baselineValues.useSlidingCondenserWaterTemp.isConstantCondenserWaterTemp,
+        useOpportunity: false,
+      },
+      applyVariableSpeedControls: {
+        fanSpeedType: baselineValues.applyVariableSpeedControls.fanSpeedType,
+        useOpportunity: false,
+      },
+      replaceChillers: {
+        currentChillerId: '',
+        newChiller: {} as ChillerInventoryItem,
+        useOpportunity: false,
+      },
+      upgradeCoolingTowerFans: {
+        numberOfFans: baselineValues.upgradeCoolingTowerFans.numberOfFans,
+        useOpportunity: false,
+      },
+      useFreeCooling: {
+        usesFreeCooling: baselineValues.useFreeCooling.usesFreeCooling,
+        isHEXRequired: baselineValues.useFreeCooling.isHEXRequired,
+        HEXApproachTemp: baselineValues.useFreeCooling.HEXApproachTemp,
+        useOpportunity: false,
+      },
+      replaceRefrigerant: {
+        currentRefrigerant: undefined,
+        newRefrigerant: undefined,
+        useOpportunity: false,
+      },
+      installVSDOnCentrifugalCompressor: {
+        useOpportunity: false,
+      },
     }
   }
 
@@ -103,6 +143,47 @@ export class ModificationService {
     return {
       ...processCoolingAssessment,
     };
+  }
+
+  getBaselineValues(): ExploreOppsBaseline {
+    const processCooling = this.processCoolingSignal();
+    let exploreOpportunitiesBaseline: ExploreOppsBaseline = {
+      increaseChilledWaterTemp: {
+        chilledWaterSupplyTemp: processCooling.systemInformation.operations.chilledWaterSupplyTemp,
+      },
+      decreaseCondenserWaterTemp: {
+        condenserWaterTemp: processCooling.systemInformation.waterCooledSystemInput.condenserWaterTemp,
+      },
+      useSlidingCondenserWaterTemp: {
+        followingTempDifferential: processCooling.systemInformation.airCooledSystemInput.followingTempDifferential,
+        isConstantCondenserWaterTemp: processCooling.systemInformation.waterCooledSystemInput.isConstantCondenserWaterTemp,
+      },
+      applyVariableSpeedControls: {
+        fanSpeedType: processCooling.systemInformation.towerInput.fanSpeedType,
+      },
+      upgradeCoolingTowerFans: {
+        numberOfFans: processCooling.systemInformation.towerInput.numberOfFans,
+      },
+      useFreeCooling: {
+        usesFreeCooling: processCooling.systemInformation.towerInput.usesFreeCooling,
+        isHEXRequired: processCooling.systemInformation.towerInput.isHEXRequired,
+        HEXApproachTemp: processCooling.systemInformation.towerInput.HEXApproachTemp,
+      },
+      // todo below baseline equivalents
+      replaceChillers: {
+        currentChillerId: '',
+        newChiller: {} as ChillerInventoryItem,
+      },
+      replaceRefrigerant: {
+        currentRefrigerant: undefined,
+        newRefrigerant: undefined,
+      },
+      installVSDOnCentrifugalCompressor: {
+        compressorType: undefined,
+      },
+    }
+
+    return exploreOpportunitiesBaseline;
   }
 
   getEEMBadges(modification: Modification): Array<string> {

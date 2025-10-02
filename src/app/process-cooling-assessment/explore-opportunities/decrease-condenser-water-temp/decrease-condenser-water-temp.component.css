@@ -1,4 +1,4 @@
-.group-label{
+/* Component styles for decrease-condenser-water-temp */.group-label{
 	font-size: 16px;
     text-transform: none;
 	letter-spacing: 1px;
@@ -31,6 +31,7 @@
     font-size: 11px;
     font-style: italic;
 }/* increase-chilled-temperature component styles */
+
 
 .version-header {
     font-size: 16px;

@@ -44,7 +44,9 @@ export class TowerComponent {
   }
 
   observeFormChanges() {
-    this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((formValue) => this.updateAssessment());
+    this.form.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((formValue) => this.updateAssessment());
   }
 
   observeTowerTypeChange() {

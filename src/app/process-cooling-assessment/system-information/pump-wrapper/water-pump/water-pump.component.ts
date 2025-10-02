@@ -2,7 +2,6 @@
 import { Component, DestroyRef, ElementRef, inject, Input, Signal, ViewChild } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
-import { tap } from "rxjs";
 import { CoolingWaterPumpType, ProcessCoolingAssessment } from "../../../../shared/models/process-cooling-assessment";
 import { ProcessCoolingAssessmentService } from "../../../services/process-cooling-asessment.service";
 import { PumpInputForm, SystemInformationFormService } from "../../system-information-form.service";

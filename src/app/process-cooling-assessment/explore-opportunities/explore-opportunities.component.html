@@ -1,4 +1,4 @@
- <div *ngIf="selectedModification$ | async as selectedModification" class="d-flex flex-column panel-container pb-4">
+<div class="d-flex flex-column panel-container pb-4">
     <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
         <div class="nav-item" (click)="setSmallScreenTab('form')"
             [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
@@ -10,11 +10,13 @@
         </div>
     </div>
 
-    <div *ngIf="selectedModification" [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+        <div *ngIf="selectedModification$ | async as selectedModification; else noSelectedModification" 
+            [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
             <div class="header mr-2 ml-2">
                 <h3>Select Potential Energy Efficiency Measures</h3>
             </div>
-            <p>Select potential energy efficiency measures (EEMs) to explore opportunities to increase efficiency and the
+            <p>Select potential energy efficiency measures (EEMs) to explore opportunities to increase efficiency and
+                the
                 effectiveness of
                 your system.</p>
             <div class="d-flex flex-column mr-3 ml-3 mb-4">
@@ -22,19 +24,25 @@
                     <button class="btn btn-primary" (click)="addModification()">Add New Scenario</button>
                 </div>
                 <div class="d-flex flex-column">
-                <div class="form-group group-name">
-                    <label for="modificatonName">Modification Name</label>
-                    <input name="modificatonName" type="text" id="modificatonName" class="form-control"
-                        [(ngModel)]="selectedModification.name" (input)="saveModification(selectedModification)" />
-                </div>
-                <hr>
-                <app-increase-chilled-temperature></app-increase-chilled-temperature>
+                    <div class="form-group group-name">
+                        <label for="modificatonName">Modification Name</label>
+                        <input name="modificatonName" type="text" id="modificatonName" class="form-control"
+                            [(ngModel)]="selectedModification.name" (input)="saveModification(selectedModification)" />
+                    </div>
+                    <hr>
+                    <app-increase-chilled-temperature></app-increase-chilled-temperature>
+                    <app-decrease-condenser-water-temp></app-decrease-condenser-water-temp>
                 </div>
             </div>
-    </div>
-    <div *ngIf="!selectedModification" class="no-data assessment-panel-container lookup-form scroll-item" [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
-            <h2 class="h6">Explore energy efficiency measures (EEMs) to increase the efficiency and effectiveness of your system.</h2>
-            <p class="mt-2 small text-muted">EEMS will be modeled starting from Baseline conditions.</p>
-            <button type="button" class="btn btn-primary" (click)="addModification()">Explore Opportunities</button>
         </div>
+        <ng-template #noSelectedModification>
+            <div *ngIf="!selectedModification" class="no-data assessment-panel-container lookup-form scroll-item"
+                [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+                <h2 class="h6">Explore energy efficiency measures (EEMs) to increase the efficiency and effectiveness of
+                    your system.</h2>
+                <p class="mt-2 small text-muted">EEMS will be modeled starting from Baseline conditions.</p>
+                <button type="button" class="btn btn-primary" (click)="addModification()">Explore Opportunities</button>
+            </div>
+        </ng-template>
+
 </div>
