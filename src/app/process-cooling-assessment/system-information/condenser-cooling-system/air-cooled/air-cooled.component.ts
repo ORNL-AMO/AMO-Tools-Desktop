@@ -44,7 +44,7 @@ export class AirCooledComponent {
         const processCooling = this.processCooling();
         const currentInput: AirCooledSystemInput = processCooling.systemInformation.airCooledSystemInput;
         const airCooledInput = this.systemInformationFormService.getAirCooledSystemInput(this.form.getRawValue(), currentInput);
-        this.processCoolingAssessmentService.updateSystemInformation('airCooledSystemInput', airCooledInput);
+        this.processCoolingAssessmentService.updateSystemInformationProperty('airCooledSystemInput', airCooledInput);
       }
     );
   }

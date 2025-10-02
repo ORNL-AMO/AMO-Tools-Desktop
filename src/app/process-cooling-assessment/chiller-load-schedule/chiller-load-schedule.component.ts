@@ -1,8 +1,8 @@
 import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { ChillerInventoryItem } from '../../shared/models/process-cooling-assessment';
-import { debounce, debounceTime, of, tap } from 'rxjs';
-import { ChillerLoadScheduleService, LoadForm, LoadScheduleData } from '../services/chiller-load-schedule.service';
+import { debounceTime} from 'rxjs';
+import { ChillerLoadScheduleService, LoadForm } from '../services/chiller-load-schedule.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
 import { LOAD_LABELS, MONTHS } from '../process-cooling-constants';
@@ -35,12 +35,11 @@ export class ChillerLoadScheduleComponent implements OnInit {
   observeFormChanges() {
     this.form.valueChanges.pipe(
       debounceTime(150),
-      tap(formValue => {
-        this.chillerLoadScheduleService.setChillerLoadSchedule(this.form.getRawValue(), this.chiller);
-        this.processCoolingAssessmentService.updateAssessmentChiller(this.chiller);
-      }),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe();
+    ).subscribe((val)=> {
+      this.chillerLoadScheduleService.setChillerLoadSchedule(this.form.getRawValue(), this.chiller);
+      this.processCoolingAssessmentService.updateAssessmentChiller(this.chiller);
+    });
   }
 
   getTotal(row: FormArray): number {

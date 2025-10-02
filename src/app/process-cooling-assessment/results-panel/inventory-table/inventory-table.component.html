@@ -1,4 +1,4 @@
-<div *ngIf="inventoryState$ | async as inventoryState" class="card p-2">
+<div *ngIf="inventoryUIState$ | async as inventoryState" class="card p-2">
     <div class="card-body p-0" *ngIf="inventoryState.inventory && inventoryState.inventory.length > 0">
         <span class="alert-danger pull-right small" *ngIf="!inventoryValidState().isValid">
             One or more chiller is invalid - Review inventory and make changes to continue

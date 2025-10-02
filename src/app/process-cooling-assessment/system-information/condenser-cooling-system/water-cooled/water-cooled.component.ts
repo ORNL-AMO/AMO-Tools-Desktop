@@ -43,7 +43,7 @@ export class WaterCooledComponent {
         const processCooling = this.processCooling();
         const currentInput: WaterCooledSystemInput = processCooling.systemInformation.waterCooledSystemInput;
         const waterCooledInput = this.systemInformationFormService.getWaterCooledSystemInput(this.form.getRawValue(), currentInput);
-        this.processCoolingAssessmentService.updateSystemInformation('waterCooledSystemInput', waterCooledInput);
+        this.processCoolingAssessmentService.updateSystemInformationProperty('waterCooledSystemInput', waterCooledInput);
       }
     );
   }

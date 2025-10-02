@@ -1,4 +1,5 @@
 import { cloneDeep } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 
 export function copyObject(object) {
     return cloneDeep(object);
@@ -20,7 +21,7 @@ export function roundVal(val: number, places: number): number {
   }
 
 export function getNewIdString() {
-    return Math.random().toString(36).substr(2, 9);
+    return uuidv4();
 }
 
 export function getNameDateString(currentDate: Date) {

@@ -1,6 +1,6 @@
-import { Component, inject, Signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AnalyticsService } from '../../shared/analytics/analytics.service';
-import { MAIN_VIEW_LINKS, ProcessCoolingUiService, SETUP_VIEW_LINKS, ViewLink } from '../services/process-cooling-ui.service';
+import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 
 @Component({
   selector: 'app-process-cooling-assessment',

@@ -13,6 +13,8 @@ import { ReportComponent } from './report/report.component';
 import { AssessmentComponent } from './assessment/assessment.component';
 import { BaselineComponent } from './baseline/baseline.component';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
+import { IncreaseChilledTemperatureComponent } from './explore-opportunities/increase-chilled-temperature/increase-chilled-temperature.component';
+import { DecreaseCondenserWaterTempComponent } from './explore-opportunities/decrease-condenser-water-temp/decrease-condenser-water-temp.component';
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { BaselineTabsComponent } from './baseline/baseline-tabs/baseline-tabs.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
@@ -66,6 +68,9 @@ import { MonthlyOperatingScheduleService } from './services/monthly-operating-sc
 import { OperatingScheduleComponent } from './operating-schedule/operating-schedule.component';
 import { WeeklyOperatingScheduleComponent } from './operating-schedule/weekly-operating-schedule/weekly-operating-schedule.component';
 import { MonthlyOperatingScheduleComponent } from './operating-schedule/monthly-operating-schedule/monthly-operating-schedule.component';
+import { AddModificationComponent } from './explore-opportunities/add-modification/add-modification.component';
+import { ModificationService } from './services/modification.service';
+import { ModificationListComponent } from './explore-opportunities/modification-list/modification-list.component';
 
 
 export const ROUTE_TOKENS = {
@@ -212,6 +217,8 @@ const ROUTES: Route[] = [
     AssessmentComponent,
     ReportComponent,
     ExploreOpportunitiesComponent,
+    IncreaseChilledTemperatureComponent,
+    DecreaseCondenserWaterTempComponent,
     BaselineComponent,
     ResultsPanelComponent,
     BaselineTabsComponent,
@@ -235,9 +242,11 @@ const ROUTES: Route[] = [
     ChillerLoadScheduleComponent,
     WeatherComponent,
     ChillerCompressorTypePipe,
-  OperatingScheduleComponent,
-  WeeklyOperatingScheduleComponent,
-  MonthlyOperatingScheduleComponent
+    OperatingScheduleComponent,
+    WeeklyOperatingScheduleComponent,
+    MonthlyOperatingScheduleComponent,
+    AddModificationComponent,
+    ModificationListComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -261,7 +270,7 @@ const ROUTES: Route[] = [
     FormControlErrorsComponent,
     FormControlRequiredComponent,
     InputUnitComponent,
-    OperatingHoursModalModule,
+    OperatingHoursModalModule
   ],
   providers: [
     ProcessCoolingAssessmentService,
@@ -274,6 +283,7 @@ const ROUTES: Route[] = [
     ChillerInventoryService,
     ChillerLoadScheduleService,
     MonthlyOperatingScheduleService,
+    ModificationService,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })

@@ -42,6 +42,107 @@ export interface ProcessCoolingAssessment {
     monthlyOperatingSchedule?: MonthlyOperatingSchedule;
 }
 
+export interface Modification {
+    name: string,
+    id: string,
+    increaseChilledWaterTemp: IncreaseChilledWaterTemp,
+    decreaseCondenserWaterTemp: DecreaseCondenserWaterTemp,
+    useSlidingCondenserWaterTemp: UseSlidingCondenserWaterTemp,
+    applyVariableSpeedControls: ApplyVariableSpeedControls,
+    replaceChillers: ReplaceChillers,
+    upgradeCoolingTowerFans: UpgradeCoolingTowerFans,
+    useFreeCooling: UseFreeCooling,
+    replaceRefrigerant: ReplaceRefrigerant,
+    installVSDOnCentrifugalCompressor: InstallVSDOnCentrifugalCompressor,
+    notes?: string
+}
+
+// Just an adapter to serve up values from the modification service
+export interface ExploreOppsBaseline {
+      increaseChilledWaterTemp: {
+          chilledWaterSupplyTemp: number,
+      },
+      decreaseCondenserWaterTemp: {
+          condenserWaterTemp: number,
+      },
+      useSlidingCondenserWaterTemp: {
+          followingTempDifferential: number,
+          isConstantCondenserWaterTemp: boolean,
+      },
+      applyVariableSpeedControls: {
+          fanSpeedType: FanSpeedType,
+      },
+      replaceChillers: {
+          currentChillerId: string,
+          newChiller: ChillerInventoryItem,
+      },
+      upgradeCoolingTowerFans: {
+          numberOfFans: TowerType,
+      },
+      useFreeCooling: {
+          usesFreeCooling: boolean,
+          isHEXRequired: boolean,
+          HEXApproachTemp: number,
+      },
+      replaceRefrigerant: {
+          currentRefrigerant: string,
+          newRefrigerant: string,
+      },
+      installVSDOnCentrifugalCompressor: {
+      },      
+}
+
+export interface EEM {
+    useOpportunity: boolean,
+    implementationCost?: number,
+}
+
+
+export interface IncreaseChilledWaterTemp extends EEM {
+    chilledWaterSupplyTemp: number,
+}
+
+export interface DecreaseCondenserWaterTemp extends EEM {
+    condenserWaterTemp: number,
+}
+
+export interface UseSlidingCondenserWaterTemp extends EEM {
+    followingTempDifferential: number,
+    // todo do we need original temp
+    // * constant temp should be false for this EEM
+    isConstantCondenserWaterTemp: boolean,
+}
+
+export interface ApplyVariableSpeedControls extends EEM {
+    // *should be set to Enum 1 (Variable)
+    fanSpeedType: FanSpeedType,
+}
+
+export interface ReplaceChillers extends EEM {
+    currentChillerId: string,
+    newChiller: ChillerInventoryItem,
+}
+
+export interface UpgradeCoolingTowerFans extends EEM {
+    // todo this seems to actually be tower type?ex. original CWSAT dropdown "2-cell with .."
+    numberOfFans: TowerType,
+}
+
+export interface UseFreeCooling extends EEM {
+    usesFreeCooling: boolean,
+    isHEXRequired: boolean,
+    HEXApproachTemp: number,
+}
+
+export interface ReplaceRefrigerant extends EEM {
+    currentRefrigerant: string,
+    newRefrigerant: string,
+}
+
+export interface InstallVSDOnCentrifugalCompressor extends EEM {
+    // todo original CWSAT - this one is the least clear what should happen
+}
+
 export interface MonthlyOperatingSchedule {
   months: { name: string, days: number }[];
   useMaxHours: boolean;
@@ -204,12 +305,6 @@ export interface ChillerInventoryItem {
     useSameMonthlyLoading: boolean;
 }
 
-export interface Modification {
-    name: string,
-    modificationId: string,
-    notes?: string
-}
-
 
 export enum CondenserCoolingMethod {
     Water = 0,
@@ -265,3 +360,5 @@ export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-infor
 export type ProcessCoolingDataProperty = keyof Pick<ProcessCoolingAssessment, 'systemBasics' | 'systemInformation' | 'inventory' | 'modifications'>;
 export type ProcessCoolingSystemInformationProperty = keyof Pick<SystemInformation, 'operations' | 'co2SavingsData' | 'airCooledSystemInput' | 'chilledWaterPumpInput' | 'condenserWaterPumpInput' | 'towerInput' | 'waterCooledSystemInput'>;
 export type CoolingWaterPumpType = keyof Pick<SystemInformation, 'chilledWaterPumpInput' | 'condenserWaterPumpInput'>;
+
+export type ModificationEEMProperty = keyof Omit<Modification, 'name' | 'id' | 'notes'>;
