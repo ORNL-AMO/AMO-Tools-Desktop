@@ -3,6 +3,7 @@ import { CompressedAirInventoryData, CompressedAirInventorySystem } from '../../
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirMotorIntegrationService } from '../../../shared/connected-inventory/compressed-air-motor-integration.service';
+import { ConnectedItem } from '../../../shared/connected-inventory/integrations';
 
 @Component({
   selector: 'app-system-setup',
@@ -39,6 +40,10 @@ export class SystemSetupComponent implements OnInit {
     let newSystem: CompressedAirInventorySystem = this.compressedAirInventoryService.getNewSystem(this.compressedAirInventoryData.systems.length + 1);
     this.compressedAirInventoryData.systems.push(newSystem);
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);
+  }
+
+  setModalOpenView(event) {
+    this.compressedAirInventoryService.modalOpen.next(true);
   }
 
 }

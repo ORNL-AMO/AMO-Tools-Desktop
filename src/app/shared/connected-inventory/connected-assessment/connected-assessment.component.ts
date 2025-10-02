@@ -20,6 +20,8 @@ export class ConnectedAssessmentComponent {
   connectedAssessmentItems: Array<ConnectedItem>;
   @Input()
   isItemValid: boolean;
+  @Input()
+  integratedCreateType: string;
   @Output('focusedField')
   focusedField = new EventEmitter();  
   @Output('modalOpen')

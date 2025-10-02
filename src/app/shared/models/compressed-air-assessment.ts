@@ -1,6 +1,7 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
 import { ProfileSummaryValid } from "../../compressed-air-assessment/compressed-air-assessment.service";
 import { DayTypeSummary, LogToolField } from "../../log-tool/log-tool-models";
+import { ConnectedItem } from "../connected-inventory/integrations";
 
 export interface CompressedAirAssessment {
     name?: string;
@@ -19,7 +20,8 @@ export interface CompressedAirAssessment {
     endUseData: EndUseData,
     compressedAirDayTypes: Array<CompressedAirDayType>,
     setupDone: boolean
-    selectedModificationId?: string
+    selectedModificationId?: string    
+    connectedItem?: ConnectedItem,
 }
 
 export interface Modification {

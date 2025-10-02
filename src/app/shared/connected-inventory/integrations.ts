@@ -81,4 +81,4 @@ export interface AssessmentOption {
 export type IntegrationStatusString = 'settings-differ' | 'connected-to-inventory';
 export type AssessmentStatusString = 'connected-to-assessment' | 'connected-assessment-differs' | 'three-way-connected' | 'invalid';
 export type InventoryType = 'motor' | 'pump' | 'compressed-air';
-export type IntegrationFormGroupString = 'fluid' | 'pump' | 'motor' | 'system';
+export type IntegrationFormGroupString = 'fluid' | 'pump' | 'motor' | 'system' | 'compressed-air';
