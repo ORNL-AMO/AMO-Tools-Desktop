@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ConfirmDeleteData } from '../../shared/confirm-delete-modal/confirmDeleteData';
-import { CompressedAirAssessment, CompressedAirDayType } from '../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { InventoryService } from '../baseline-tab-content/inventory-setup/inventory/inventory.service';
+import { ConfirmDeleteData } from '../../../../shared/confirm-delete-modal/confirmDeleteData';
+import { CompressedAirAssessment, CompressedAirDayType } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
+import { InventoryService } from '../../inventory-setup/inventory/inventory.service';
 import { DayTypeService } from './day-type.service';
 
 @Component({

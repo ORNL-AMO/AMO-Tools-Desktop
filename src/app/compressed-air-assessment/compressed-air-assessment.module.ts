@@ -8,7 +8,7 @@ import { SystemBasicsComponent } from './baseline-tab-content/system-basics/syst
 import { SettingsModule } from '../settings/settings.module';
 import { SetupTabsComponent } from './baseline-tab-content/setup-tabs/setup-tabs.component';
 import { SystemInformationComponent } from './baseline-tab-content/system-information/system-information.component';
-import { DayTypesComponent } from './day-types/day-types.component';
+import { DayTypesComponent } from './baseline-tab-content/day-types-setup/day-types/day-types.component';
 import { EndUsesComponent } from './end-uses/end-uses.component';
 import { InventoryComponent } from './baseline-tab-content/inventory-setup/inventory/inventory.component';
 import { SystemProfileSetupComponent } from './system-profile/system-profile-setup/system-profile-setup.component';
@@ -57,7 +57,7 @@ import { UnloadPointHelpComponent } from './baseline-tab-content/inventory-setup
 import { BlowoffHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/performance-points-help/blowoff-help/blowoff-help.component';
 import { FullLoadHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/performance-points-help/full-load-help/full-load-help.component';
 import { MaxFullFlowHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/performance-points-help/max-full-flow-help/max-full-flow-help.component';
-import { DayTypesHelpComponent } from './results-panel/help-panel/day-types-help/day-types-help.component';
+import { DayTypesHelpComponent } from './baseline-tab-content/day-types-setup/day-types-help/day-types-help.component';
 import { CompressedAirCalculatorsComponent } from './compressed-air-calculators/compressed-air-calculators.component';
 import { CalculatorTabsComponent } from './compressed-air-banner/calculator-tabs/calculator-tabs.component';
 import { AirFlowConversionModule } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.module';
@@ -83,7 +83,7 @@ import { CompressedAirDiagramComponent } from './compressed-air-diagram/compress
 import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
 import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
 import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
-import { DayTypeService } from './day-types/day-type.service';
+import { DayTypeService } from './baseline-tab-content/day-types-setup/day-types/day-type.service';
 import { FullLoadAmpsModule } from '../calculator/motors/full-load-amps/full-load-amps.module';
 import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-correction/altitude-correction.module';
 import { CompressedAirDataManagementService } from './compressed-air-data-management.service';
@@ -149,6 +149,7 @@ import { SystemBasicsFormComponent } from './baseline-tab-content/system-basics/
 import { BaselineFooterNavButtonsComponent } from './baseline-tab-content/baseline-footer-nav-buttons/baseline-footer-nav-buttons';
 import { SystemInformationFormComponent } from './baseline-tab-content/system-information/system-information-form/system-information-form.component';
 import { InventorySetupComponent } from './baseline-tab-content/inventory-setup/inventory-setup.component';
+import { DayTypesSetupComponent } from './baseline-tab-content/day-types-setup/day-types-setup.component';
 
 @NgModule({
   declarations: [
@@ -241,7 +242,8 @@ import { InventorySetupComponent } from './baseline-tab-content/inventory-setup/
     SystemBasicsFormComponent,
     BaselineFooterNavButtonsComponent,
     SystemInformationFormComponent,
-    InventorySetupComponent
+    InventorySetupComponent,
+    DayTypesSetupComponent
   ],
   imports: [
     CommonModule,

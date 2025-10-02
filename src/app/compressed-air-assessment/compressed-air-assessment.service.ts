@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, SystemProfileSetup } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
-import { DayTypeService } from './day-types/day-type.service';
+import { DayTypeService } from './baseline-tab-content/day-types-setup/day-types/day-type.service';
 import { Assessment } from '../shared/models/assessment';
 import { SystemInformationFormService } from './baseline-tab-content/system-information/system-information-form/system-information-form.service';
 

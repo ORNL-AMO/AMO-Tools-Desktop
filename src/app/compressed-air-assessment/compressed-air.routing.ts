@@ -4,6 +4,7 @@ import { BaselineTabContentComponent } from "./baseline-tab-content/baseline-tab
 import { SystemBasicsComponent } from "./baseline-tab-content/system-basics/system-basics.component";
 import { SystemInformationComponent } from "./baseline-tab-content/system-information/system-information.component";
 import { InventorySetupComponent } from "./baseline-tab-content/inventory-setup/inventory-setup.component";
+import { DayTypesSetupComponent } from "./baseline-tab-content/day-types-setup/day-types-setup.component";
 
 
 
@@ -33,6 +34,10 @@ export const compressedAirAssessmentRoutes: Routes = [
             {
                 path: 'inventory-setup',
                 component: InventorySetupComponent
+            },
+            {
+                path: 'day-types-setup',
+                component: DayTypesSetupComponent
             }
         ]
     },

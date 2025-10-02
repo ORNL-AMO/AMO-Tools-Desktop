@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { CompressedAirDayType } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirDayType } from '../../../../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class DayTypeService {
