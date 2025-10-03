@@ -23,7 +23,6 @@ export class AddModificationModalComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.newModificationName = 'Scenario ' + (compressedAirAssessment.modifications.length + 1);
     this.modificationExists = (compressedAirAssessment.modifications && compressedAirAssessment.modifications.length != 0);
-    this.assessmentTab = this.compressedAirAssessmentService.assessmentTab.getValue();
   }
 
   ngAfterViewInit() {

@@ -150,9 +150,4 @@ export class ModificationListModalComponent implements OnInit {
     }
     return badges;
   }
-
-  goToModification(modificationId: string, componentStr: string) {
-    this.compressedAirAssessmentService.mainTab.next(componentStr);
-    this.selectModification(modificationId);
-  }
 }

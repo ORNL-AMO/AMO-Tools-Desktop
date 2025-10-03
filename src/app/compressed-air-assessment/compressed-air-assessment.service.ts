@@ -13,51 +13,28 @@ import { SystemInformationFormService } from './baseline-tab-content/system-info
 })
 export class CompressedAirAssessmentService {
 
-  assessment: BehaviorSubject<Assessment>;
   selectedModification: BehaviorSubject<Modification>;
-
   settings: BehaviorSubject<Settings>;
-  mainTab: BehaviorSubject<string>;
-  setupTab: BehaviorSubject<string>;
   focusedField: BehaviorSubject<string>;
   helpTextField: BehaviorSubject<string>;
-  profileTab: BehaviorSubject<string>;
-  calcTab: BehaviorSubject<string>;
-  assessmentTab: BehaviorSubject<string>;
-  secondaryAssessmentTab: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   compressedAirAssessment: BehaviorSubject<CompressedAirAssessment>;
-  // selectedModificationId: BehaviorSubject<string>;
   showModificationListModal: BehaviorSubject<boolean>;
   showAddModificationModal: BehaviorSubject<boolean>;
   showExportModal: BehaviorSubject<boolean>;
-  setupTabs: Array<string> = [
-    'system-basics',
-    'system-information',
-    'inventory',
-    'day-types',
-    'system-profile',
-    'end-uses'
-  ];
+  calcTab: BehaviorSubject<string>;
   constructor(private systemInformationFormService: SystemInformationFormService, private convertUnitsService: ConvertUnitsService,
     private dayTypeService: DayTypeService) {
     this.settings = new BehaviorSubject<Settings>(undefined);
-    this.mainTab = new BehaviorSubject<string>('baseline');
-    this.setupTab = new BehaviorSubject<string>('system-basics');
     this.focusedField = new BehaviorSubject<string>('default');
     this.helpTextField = new BehaviorSubject<string>('default');
-    this.profileTab = new BehaviorSubject<string>('setup');
-    this.calcTab = new BehaviorSubject<string>('air-flow-conversion');
-    this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
-    this.secondaryAssessmentTab = new BehaviorSubject<string>('modifications');
     this.compressedAirAssessment = new BehaviorSubject<CompressedAirAssessment>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
-    // this.selectedModificationId = new BehaviorSubject<string>(undefined);
     this.showModificationListModal = new BehaviorSubject<boolean>(false);
     this.showAddModificationModal = new BehaviorSubject<boolean>(false);
     this.showExportModal = new BehaviorSubject<boolean>(false);
-    this.assessment = new BehaviorSubject<Assessment>(undefined);
     this.selectedModification = new BehaviorSubject<Modification>(undefined);
+    this.calcTab = new BehaviorSubject<string>('air-flow-conversion');
   }
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {
@@ -365,30 +342,6 @@ export class CompressedAirAssessmentService {
 
     return hasMissingTrimSelection;
   }
-
-
-  continue() {
-    let tmpSetupTab: string = this.setupTab.getValue();
-    if (tmpSetupTab === 'end-uses') {
-      this.mainTab.next('assessment');
-    } else {
-      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-      let nextTab: string = this.setupTabs[assessmentTabIndex + 1];
-      this.setupTab.next(nextTab);
-    }
-  }
-
-  back() {
-    let tmpSetupTab: string = this.setupTab.getValue();
-    if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'baseline') {
-      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-      let nextTab: string = this.setupTabs[assessmentTabIndex - 1];
-      this.setupTab.next(nextTab);
-    } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('baseline');
-    }
-  }
-
 }
 
 export interface ProfileSummaryValid {

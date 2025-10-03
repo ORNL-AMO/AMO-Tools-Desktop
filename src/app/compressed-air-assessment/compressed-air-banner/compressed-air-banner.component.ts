@@ -15,20 +15,12 @@ import { CoreService } from '../../core/core.service';
   standalone: false
 })
 export class CompressedAirBannerComponent implements OnInit {
-
-
-  assessmentSub: Subscription;
+  @Input({required: true})
   assessment: Assessment;
 
   isBaselineValid: boolean = false;
-  mainTab: string;
-  mainTabSub: Subscription;
   selectedModificationSub: Subscription;
   selectedModification: Modification;
-  assessmentTab: string;
-  assessmentTabSub: Subscription;
-  secondaryAssessmentTabSub: Subscription;
-  secondaryAssessmentTab: string;
   compresssedAirAssessmentSub: Subscription;
   bannerCollapsed: boolean = true;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
@@ -37,26 +29,8 @@ export class CompressedAirBannerComponent implements OnInit {
     private coreService: CoreService) { }
 
   ngOnInit(): void {
-    this.assessmentSub = this.compressedAirAssessmentService.assessment.subscribe(val => {
-      this.assessment = val;
-    });
-
-    this.mainTabSub = this.compressedAirAssessmentService.mainTab.subscribe(val => {
-      this.mainTab = val;
-    });
-
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
-      if (!val && this.secondaryAssessmentTab && this.secondaryAssessmentTab != 'modifications') {
-        this.changeSecondaryAssessmentTab('modifications');
-      }
       this.selectedModification = val;
-    });
-
-    this.assessmentTabSub = this.compressedAirAssessmentService.assessmentTab.subscribe(val => {
-      this.assessmentTab = val;
-    });
-    this.secondaryAssessmentTabSub = this.compressedAirAssessmentService.secondaryAssessmentTab.subscribe(val => {
-      this.secondaryAssessmentTab = val;
     });
 
     this.compresssedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -71,41 +45,9 @@ export class CompressedAirBannerComponent implements OnInit {
     window.dispatchEvent(new Event("resize"));
   }
 
-  back() {
-    if (this.mainTab == 'calculators') {
-      this.compressedAirAssessmentService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.compressedAirAssessmentService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.compressedAirAssessmentService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.compressedAirAssessmentService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.compressedAirAssessmentService.mainTab.next('baseline');
-    }
-  }
-
-  continue() {
-    if (this.mainTab == 'baseline') {
-      this.compressedAirAssessmentService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.compressedAirAssessmentService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.compressedAirAssessmentService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.compressedAirAssessmentService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.compressedAirAssessmentService.mainTab.next('calculators');
-    }
-  }
-
   ngOnDestroy() {
-    this.mainTabSub.unsubscribe();
     this.selectedModificationSub.unsubscribe();
-    this.assessmentTabSub.unsubscribe();
-    this.secondaryAssessmentTabSub.unsubscribe();
     this.compresssedAirAssessmentSub.unsubscribe();
-    this.assessmentSub.unsubscribe();
   }
 
   navigateHome() {
@@ -117,46 +59,12 @@ export class CompressedAirBannerComponent implements OnInit {
     this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
   }
 
-  changeTab(str: string) {
-    if (str == 'baseline' || str == 'diagram' || this.isBaselineValid) {
-      this.compressedAirAssessmentService.mainTab.next(str);
-    }
-    this.collapseBanner();
-  }
 
   selectModification() {
     this.compressedAirAssessmentService.showModificationListModal.next(true);
   }
 
-  changeAssessmentTab(str: string) {
-    this.compressedAirAssessmentService.assessmentTab.next(str);
-  }
 
-  changeSecondaryAssessmentTab(str: string) {
-    if (this.selectedModification) {
-      this.compressedAirAssessmentService.secondaryAssessmentTab.next(str);
-    }
-  }
-
-  backAssessmentTab() {
-    if (this.selectedModification) {
-      if (this.secondaryAssessmentTab == 'graphs') {
-        this.compressedAirAssessmentService.secondaryAssessmentTab.next('table');
-      } else if (this.secondaryAssessmentTab == 'table') {
-        this.compressedAirAssessmentService.secondaryAssessmentTab.next('modifications');
-      }
-    }
-  }
-
-  continueAssessmentTab() {
-    if (this.selectedModification) {
-      if (this.secondaryAssessmentTab == 'modifications') {
-        this.compressedAirAssessmentService.secondaryAssessmentTab.next('table');
-      } else if (this.secondaryAssessmentTab == 'table') {
-        this.compressedAirAssessmentService.secondaryAssessmentTab.next('graphs');
-      }
-    }
-  }
 
   openExportModal() {
     this.compressedAirAssessmentService.showExportModal.next(true);

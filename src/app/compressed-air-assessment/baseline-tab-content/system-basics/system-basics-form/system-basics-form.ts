@@ -1,16 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { SettingsService } from '../../../../settings/settings.service';
-import { Assessment } from '../../../../shared/models/assessment';
 import { CASystemBasics, CompressedAirAssessment } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { ConvertCompressedAirService } from '../../../convert-compressed-air.service';
 import { SystemBasicsFormService } from './../system-basics-form.service';
 import * as _ from 'lodash';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-system-basics-form',
@@ -21,10 +20,6 @@ import { firstValueFrom, Subscription } from 'rxjs';
 export class SystemBasicsFormComponent {
 
   showUpdateUnitsModal: boolean = false;
-
-  assessmentSub: Subscription;
-  assessment: Assessment;
-
   settingsForm: UntypedFormGroup;
   oldSettings: Settings;
   systemBasicsForm: UntypedFormGroup;
@@ -38,23 +33,19 @@ export class SystemBasicsFormComponent {
 
 
   ngOnInit() {
-    this.assessmentSub = this.compressedAirAssessmentService.assessment.subscribe(val => {
-      this.assessment = val;
-    });
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.systemBasicsForm = this.systemBasicsFormService.getFormFromObj(compressedAirAssessment.systemBasics);
     let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
     this.settingsForm = this.settingsService.getFormFromSettings(settings);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
 
-    if (this.assessment.compressedAirAssessment.existingDataUnits && this.assessment.compressedAirAssessment.existingDataUnits != this.oldSettings.unitsOfMeasure) {
-      this.oldSettings = this.getExistingDataSettings(this.assessment.compressedAirAssessment);
+    if (compressedAirAssessment.existingDataUnits && compressedAirAssessment.existingDataUnits != this.oldSettings.unitsOfMeasure) {
+      this.oldSettings = this.getExistingDataSettings(compressedAirAssessment);
       this.showUpdateDataReminder = true;
     }
   }
 
   ngOnDestroy() {
-    this.assessmentSub.unsubscribe();
 
     //TODO: ADD ROUTE GAURD TO SHOW UPDATE UNITS MODAL
     // if(this.showUpdateDataReminder && this.oldSettings) {
@@ -138,10 +129,10 @@ export class SystemBasicsFormComponent {
   }
 
   closeUpdateUnitsModal(updated?: boolean) {
-    if (updated) {
-      this.compressedAirAssessmentService.mainTab.next('baseline');
-      this.compressedAirAssessmentService.setupTab.next('system-basics');
-    }
+    // if (updated) {
+    //   this.compressedAirAssessmentService.mainTab.next('baseline');
+    //   this.compressedAirAssessmentService.setupTab.next('system-basics');
+    // }
     this.showUpdateUnitsModal = false;
     // this.cd.detectChanges();
   }

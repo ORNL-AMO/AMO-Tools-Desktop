@@ -20,7 +20,6 @@ import { NameplateDataComponent } from './baseline-tab-content/inventory-setup/i
 import { ControlDataComponent } from './baseline-tab-content/inventory-setup/inventory/control-data/control-data.component';
 import { DesignDetailsComponent } from './baseline-tab-content/inventory-setup/inventory/design-details/design-details.component';
 import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
-import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { InventoryTableComponent } from './baseline-tab-content/inventory-setup/inventory-table/inventory-table.component';
 import { ProfileSetupFormComponent } from './baseline-tab-content/baseline-system-profile-setup/profile-setup-form/profile-setup-form.component';
 import { CompressorOrderingTableComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-setup/compressor-ordering-table/compressor-ordering-table.component';
@@ -42,7 +41,6 @@ import { FilterCompressorsComponent } from './baseline-tab-content/inventory-set
 import { FilterCompressorsPipe } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/filter-compressors.pipe';
 import { DayTypeFilterPipe } from './baseline-tab-content/baseline-system-profile-setup/day-type-filter.pipe';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { SystemBasicsHelpComponent } from './baseline-tab-content/system-basics/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './baseline-tab-content/system-information/system-information-help/system-information-help.component';
 import { InventoryHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/inventory-help.component';
@@ -171,7 +169,6 @@ import { AdjustCascadingSetPointsHelpComponent } from './assessment-tab-content/
     NameplateDataComponent,
     ControlDataComponent,
     DesignDetailsComponent,
-    ResultsPanelComponent,
     InventoryTableComponent,
     ProfileSetupFormComponent,
     CompressorOrderingTableComponent,
@@ -189,7 +186,6 @@ import { AdjustCascadingSetPointsHelpComponent } from './assessment-tab-content/
     FilterCompressorsPipe,
     DayTypeFilterPipe,
     SystemCapacityModalComponent,
-    HelpPanelComponent,
     SystemBasicsHelpComponent,
     SystemInformationHelpComponent,
     InventoryHelpComponent,

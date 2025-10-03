@@ -39,12 +39,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
   settings: Settings;
   showUpdateUnitsModal: boolean = false;
   oldSettings: Settings;
-  mainTab: string;
-  mainTabSub: Subscription;
-  setupTab: string;
-  setupTabSub: Subscription;
-  profileTab: string;
-  profileTabSub: Subscription;
   compressedAirAsseementSub: Subscription;
   disableNext: boolean = false;
   showModificationListSub: Subscription;
@@ -53,10 +47,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
   showAddModification: boolean = false;
   isModalOpen: boolean;
   modalOpenSub: Subscription;
-  assessmentTab: string;
-  assessmentTabSub: Subscription;
   showWelcomeScreen: boolean = false;
-  smallScreenTab: string = 'form';
   showExportModal: boolean = false;
   showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
@@ -74,7 +65,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
-      this.compressedAirAssessmentService.assessment.next(this.assessment);
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
@@ -93,21 +83,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
         // this.setDisableNext();
       }
     })
-    let tmpTab: string = this.assessmentService.getStartingTab();
-    if (tmpTab) {
-      this.compressedAirAssessmentService.mainTab.next(tmpTab);
-    }
-
-    this.mainTabSub = this.compressedAirAssessmentService.mainTab.subscribe(val => {
-      this.mainTab = val;
-      this.setContainerHeight();
-    });
-
-    this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
-      this.setupTab = val;
-      // this.setDisableNext();
-      this.setContainerHeight();
-    });
 
     this.showAddModificationSub = this.compressedAirAssessmentService.showAddModificationModal.subscribe(val => {
       this.showAddModification = val;
@@ -120,17 +95,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
       this.cd.detectChanges();
     });
 
-    this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
-      this.profileTab = val;
-    });
-
     this.modalOpenSub = this.compressedAirAssessmentService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
 
-    this.assessmentTabSub = this.compressedAirAssessmentService.assessmentTab.subscribe(val => {
-      this.assessmentTab = val;
-    });
 
     this.showExportModalSub = this.compressedAirAssessmentService.showExportModal.subscribe(val => {
       this.showExportModal = val;
@@ -140,18 +108,11 @@ export class CompressedAirAssessmentComponent implements OnInit {
   }
 
   ngOnDestroy() {    
-    this.mainTabSub.unsubscribe();
-    this.setupTabSub.unsubscribe();
-    this.profileTabSub.unsubscribe();
     this.compressedAirAsseementSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
-    this.assessmentTabSub.unsubscribe();
     this.showAddModificationSub.unsubscribe();
     this.showModificationListSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
-    this.compressedAirAssessmentService.mainTab.next('baseline');
-    this.compressedAirAssessmentService.setupTab.next('system-basics');
-    this.compressedAirAssessmentService.profileTab.next('setup');
     this.inventoryService.selectedCompressor.next(undefined);
     // this.endUseService.endUses.next(undefined);
     this.endUseFormService.selectedEndUse.next(undefined);
@@ -210,34 +171,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
   //   }
   // }
 
-  next() {
-    if (this.setupTab == 'system-basics') {
-      this.compressedAirAssessmentService.setupTab.next('system-information');
-    } else if (this.setupTab == 'system-information') {
-      this.compressedAirAssessmentService.setupTab.next('inventory');
-    } else if (this.setupTab == 'inventory') {
-      this.compressedAirAssessmentService.setupTab.next('day-types');
-    } else if (this.setupTab == 'day-types') {
-      this.compressedAirAssessmentService.setupTab.next('system-profile');
-    } else if (this.setupTab == 'system-profile') {
-      // this.compressedAirAssessmentService.mainTab.next('end-uses');
-      this.compressedAirAssessmentService.mainTab.next('assessment');
-    }
-  }
-
-  back() {
-    if (this.setupTab == 'system-information') {
-      this.compressedAirAssessmentService.setupTab.next('system-basics');
-    } else if (this.setupTab == 'inventory') {
-      this.compressedAirAssessmentService.setupTab.next('system-information');
-    } else if (this.setupTab == 'day-types') {
-      this.compressedAirAssessmentService.setupTab.next('inventory');
-    } else if (this.setupTab == 'system-profile') {
-      this.compressedAirAssessmentService.setupTab.next('day-types');
-    } else if (this.setupTab == 'end-uses') {
-      // this.compressedAirAssessmentService.mainTab.next('system-profile');
-    }
-  }
 
   setContainerHeight() {
     if (this.content) {
@@ -277,10 +210,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.settingsDbService.setAll(updatedSettings);
     this.showWelcomeScreen = false;
     this.compressedAirAssessmentService.modalOpen.next(false);
-  }
-
-  setSmallScreenTab(selectedTab: string) {
-    this.smallScreenTab = selectedTab;
   }
 
   closeExportModal(input: boolean){

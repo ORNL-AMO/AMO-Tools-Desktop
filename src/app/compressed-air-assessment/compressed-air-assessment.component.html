@@ -1,7 +1,7 @@
 <div #content class="compressed-air-container compressed-air d-flex flex-column" *ngIf="settings && assessment">
   <!--header-->
   <div #header class="w-100 hide-print sticky-top" id="compressedAirBanner">
-    <app-compressed-air-banner></app-compressed-air-banner>
+    <app-compressed-air-banner [assessment]="assessment"></app-compressed-air-banner>
   </div>
   <div class="tab-content w-100 flex-grow-1">
     <router-outlet></router-outlet>

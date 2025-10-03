@@ -16,11 +16,6 @@ import { DayTypeService } from '../day-types-setup/day-types/day-type.service';
 })
 export class SetupTabsComponent implements OnInit {
 
-  setupTabSub: Subscription;
-  setupTab: string;
-  disabledSetupTabs: Array<string>;
-  disableTabs: boolean;
-  canContinue: boolean;
 
   systemBasicsClassStatus: Array<string> = [];
   systemBasicsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
@@ -34,8 +29,6 @@ export class SetupTabsComponent implements OnInit {
   inventoryBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   systemProfileStatus: Array<string> = [];
   systemProfileBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
-  profileTab: string;
-  profileTabSub: Subscription;
   compressedAirAssessmentSub: Subscription;
   settingsSub: Subscription;
   settings: Settings;
@@ -45,21 +38,9 @@ export class SetupTabsComponent implements OnInit {
   ngOnInit(): void {
     this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(val => {
       this.settings = val;
-      this.disabledSetupTabs = [];
       this.setTabStatus();
     });
-    this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
-      this.setupTab = val;
-      this.disabledSetupTabs = [];
-      this.setTabStatus();
-    });
-
-    this.profileTabSub = this.compressedAirAssessmentService.profileTab.subscribe(val => {
-      this.profileTab = val;
-    });
-
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      this.disabledSetupTabs = [];
       this.setTabStatus();
     });
   }
@@ -89,40 +70,23 @@ export class SetupTabsComponent implements OnInit {
       canViewEndUses = canViewSystemProfile && hasValidSystemProfile;
 
     }
-    this.setSystemBasicsStatus();
     this.setSystemInformationStatus(hasValidSystemInformation);
     this.setInventoryStatus(hasValidCompressors, canViewInventory);
     this.setDayTypesStatus(hasValidDayTypes, canViewDayTypes);
     this.setSystemProfileStatus(hasValidSystemProfile, canViewSystemProfile);
     this.setEndUsesStatus(hasValidEndUses, canViewEndUses);
 
-    if ((hasValidDayTypes && hasValidSystemInformation && hasValidCompressors && hasValidSystemProfile && hasValidEndUses) || (this.setupTab == 'system-basics')) {
-      this.canContinue = true;
-    } else {
-      this.canContinue = false;
-    }
+    // if ((hasValidDayTypes && hasValidSystemInformation && hasValidCompressors && hasValidSystemProfile && hasValidEndUses) || (this.setupTab == 'system-basics')) {
+    //   this.canContinue = true;
+    // } else {
+    //   this.canContinue = false;
+    // }
 
   }
 
   ngOnDestroy() {
-    this.setupTabSub.unsubscribe();
-    this.profileTabSub.unsubscribe();
     this.compressedAirAssessmentSub.unsubscribe();
     this.settingsSub.unsubscribe();
-  }
-
-  changeSetupTab(str: string) {
-    if (!this.disabledSetupTabs.includes(str)) {
-      this.compressedAirAssessmentService.setupTab.next(str);
-    }
-  }
-
-  setSystemBasicsStatus() {
-    if (this.setupTab == "system-basics") {
-      this.systemBasicsClassStatus = ["active"];
-    } else {
-      this.systemBasicsClassStatus = [];
-    }
   }
 
   setSystemInformationStatus(hasValidSystemInformation: boolean) {
@@ -130,22 +94,15 @@ export class SetupTabsComponent implements OnInit {
     if (!hasValidSystemInformation) {
       this.systemInformationClassStatus.push("missing-data");
     }
-    if (this.setupTab == "system-information") {
-      this.systemInformationClassStatus.push("active");
-    }
   }
 
   setInventoryStatus(hasValidCompressors: boolean, canViewInventory: boolean) {
     this.inventoryStatus = [];
     if (!canViewInventory) {
       this.inventoryStatus.push('disabled');
-      this.disabledSetupTabs.push('inventory')
     }
     if (canViewInventory && !hasValidCompressors) {
       this.inventoryStatus.push("missing-data");
-    }
-    if (this.setupTab == "inventory") {
-      this.inventoryStatus.push("active");
     }
   }
 
@@ -153,13 +110,9 @@ export class SetupTabsComponent implements OnInit {
     this.dayTypesClassStatus = [];
     if (!canViewDayTypes) {
       this.dayTypesClassStatus.push("disabled");
-      this.disabledSetupTabs.push('day-types');
     }
     if (canViewDayTypes && !hasValidDayTypes) {
       this.dayTypesClassStatus.push("missing-data");
-    }
-    if (this.setupTab == "day-types") {
-      this.dayTypesClassStatus.push("active");
     }
   }
 
@@ -167,13 +120,9 @@ export class SetupTabsComponent implements OnInit {
     this.systemProfileStatus = [];
     if (!canViewSystemProfile) {
       this.systemProfileStatus.push("disabled");
-      this.disabledSetupTabs.push('system-profile');
     }
     if (canViewSystemProfile && !hasValidSystemProfile) {
       this.systemProfileStatus.push('missing-data');
-    }
-    if (this.setupTab == "system-profile") {
-      this.systemProfileStatus.push("active");
     }
   }
 
@@ -181,14 +130,9 @@ export class SetupTabsComponent implements OnInit {
     this.endUsesStatus = [];
     if (!canViewEndUses) {
       this.endUsesStatus.push("disabled");
-      this.disabledSetupTabs.push('end-uses');
     }
     if (canViewEndUses && !hasValidEndUses) {
       this.endUsesStatus.push('missing-data');
-    }
-
-    if (this.setupTab == "end-uses") {
-      this.endUsesStatus.push("active");
     }
   }
 
@@ -212,41 +156,4 @@ export class SetupTabsComponent implements OnInit {
       badge.display = false;
     }
   }
-
-  changeProfileTab(str: string) {
-    this.compressedAirAssessmentService.profileTab.next(str);
-  }
-
-  continue() {
-    this.compressedAirAssessmentService.continue();
-  }
-
-  back() {
-    this.compressedAirAssessmentService.back();
-  }
-
-  continueProfileTab() {
-    if(this.profileTab == 'setup') {
-      this.changeProfileTab('summary');
-    } else if (this.profileTab == 'summary') {      
-      this.changeProfileTab('graphs');
-    } else if (this.profileTab == 'graphs') {
-      this.changeProfileTab('annual-summary');
-    } else if (this.profileTab == 'annual-summary') {
-      this.changeProfileTab('compressor-summary');
-    } 
-  }
-
-  backProfileTab() {
-    if(this.profileTab == 'compressor-summary') {
-      this.changeProfileTab('annual-summary');
-    } else if (this.profileTab == 'annual-summary') {      
-      this.changeProfileTab('graphs');
-    } else if (this.profileTab == 'graphs') {
-      this.changeProfileTab('summary');
-    } else if (this.profileTab == 'summary') {
-      this.changeProfileTab('setup');
-    } 
-  }
-
 }
