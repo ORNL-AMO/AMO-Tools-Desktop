@@ -10,6 +10,7 @@ import { WaterProcessDiagramService } from './water-process-diagram.service';
 import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
 import { UpdateDiagramFromAssessmentService } from './update-diagram-from-assessment.service';
 import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
+import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
 
 
 
@@ -25,7 +26,8 @@ import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component
     ProcessFlowDiagramWrapperModule,
     RouterModule,
     CreateAssessmentModalModule,
-    AlertBadgeComponent
+    AlertBadgeComponent,
+    GenericBannerTooltipsModule
   ],
   exports: [
     WaterProcessDiagramComponent

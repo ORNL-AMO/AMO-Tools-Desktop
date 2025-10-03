@@ -48,6 +48,7 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
 import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
+import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
 
 @NgModule({
   imports: [
@@ -74,7 +75,8 @@ import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module'
     SystemAndEquipmentCurveModule,
     UpdateUnitsModalModule,
     AssessmentCo2SavingsModule,    
-    ImportExportModule
+    ImportExportModule,
+    GenericBannerTooltipsModule
   ],
   declarations: [
     FsatComponent,

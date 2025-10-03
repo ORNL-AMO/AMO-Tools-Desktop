@@ -61,6 +61,7 @@ import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 import { PowerFactorCorrectionTreasureHuntService } from './treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
+import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
 
 @NgModule({
   imports: [
@@ -79,6 +80,7 @@ import { PowerFactorCorrectionTreasureHuntService } from './treasure-hunt-calcul
     MixedCo2EmissionsModule,
     ImportExportModule,
     Co2HelpTextModule,
+    GenericBannerTooltipsModule
   ],
   declarations: [
     TreasureHuntComponent, 

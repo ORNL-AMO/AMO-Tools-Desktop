@@ -19,6 +19,7 @@ import { RouterModule } from '@angular/router';
 import { PrintSettingsComponent } from './print-settings/print-settings.component';
 import { Co2SavingsSettingsComponent } from './co2-savings-settings/co2-savings-settings.component';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
+import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/ass
         ReactiveFormsModule,
         ModalModule,
         AnimatedCheckmarkModule,
-        AssessmentCo2SavingsModule
+        AssessmentCo2SavingsModule,
+        GenericBannerTooltipsModule
     ],
     providers: [
         SettingsService,

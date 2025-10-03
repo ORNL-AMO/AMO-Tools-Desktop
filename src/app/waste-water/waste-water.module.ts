@@ -51,6 +51,7 @@ import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module'
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SetupTabsComponent } from './waste-water-banner/setup-tabs/setup-tabs.component';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
+import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
 
 @NgModule({
   declarations: [
@@ -101,7 +102,8 @@ import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module'
     WaterReductionModule,
     Co2HelpTextModule,
     ImportExportModule,
-    SnackbarModule
+    SnackbarModule,
+    GenericBannerTooltipsModule
   ],
   providers: [
     WasteWaterService,

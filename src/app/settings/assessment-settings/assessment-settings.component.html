@@ -4,12 +4,16 @@
       <div class="d-flex ml-auto justify-content-end p-1">
         <div class="pl-1">
           <button [routerLink]="['/directory-dashboard', 1]" class="btn btn-secondary action-btn">
-            <span class="fa fa-folder"></span>
+            <app-generic-banner-tooltips [message]="'Assessment Dashboard'" [adjustLeft]="-20">
+              <span class="fa fa-folder-open"></span>
+            </app-generic-banner-tooltips>          
           </button>
         </div>
         <div class="pl-1">
           <button [routerLink]="['/landing-screen']" class="btn btn-secondary action-btn">
-            <span class="fa fa-home"></span>
+            <app-generic-banner-tooltips [message]="'Home'" [adjustLeft]="-20">
+              <span class="fa fa-home"></span>
+            </app-generic-banner-tooltips>          
           </button>
         </div>
       </div>

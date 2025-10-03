@@ -160,28 +160,42 @@
 			<span class="fa fa-bars"></span>
 		</div>
     <div class="pl-2 pr-2 home-nav-item d-block" (click)="openShareDataModal()">
-			<span class="fa fa-share-square-o"></span>
-		</div>
+      <app-generic-banner-tooltips [message]="'Share'" [adjustLeft]="20">
+        <span class="fa fa-share-square-o"></span>
+      </app-generic-banner-tooltips>		
+    </div>
     <div class="pl-2 pr-2 home-nav-item d-block" (click)="showSecurityAndPrivacyModal()">
-      <span class="fa fa-lock"></span>
+      <app-generic-banner-tooltips [message]="'Security & Privacy'" [adjustLeft]="20">
+        <span class="fa fa-lock"></span>
+      </app-generic-banner-tooltips>    
     </div>
     <div class="pl-2 pr-2 download-nav-item home-nav-item d-block" (click)="openExportModal()">
-      <span class="fa fa-download"></span>
+      <app-generic-banner-tooltips [message]="'Export'" [adjustLeft]="20">
+          <span class="fa fa-download"></span>
+      </app-generic-banner-tooltips>    
     </div>
     <div class="pl-2 pr-2 home-nav-item d-block">
-      <a class="user-manual" href="assets/user-manuals/Process-Heating-User-Manual.pdf" target="_blank">
-        <span class="fa fa-book"></span>
-      </a>
+      <app-generic-banner-tooltips [message]="'Manual'" [adjustLeft]="20">
+        <a class="user-manual" href="assets/user-manuals/Process-Heating-User-Manual.pdf" target="_blank">
+          <span class="fa fa-book"></span>
+        </a>            
+      </app-generic-banner-tooltips>
     </div>
     <div class="pl-2 pr-2 home-nav-item d-block" [routerLink]="['/settings']">
-      <span class="fa fa-cog"></span>
+      <app-generic-banner-tooltips [message]="'Settings'" [adjustLeft]="20">
+        <span class="fa fa-cog"></span>
+      </app-generic-banner-tooltips>    
     </div>
     <div class="pl-2 pr-2 home-nav-item d-block"
       [routerLink]="['/directory-dashboard', assessment.directoryId]">
-      <span class="fa fa-folder-open"></span>
+      <app-generic-banner-tooltips [message]="'Assessment Dashboard'" [adjustLeft]="-20">
+          <span class="fa fa-folder-open"></span>
+      </app-generic-banner-tooltips>    
     </div>
     <div class="pl-2 pr-2 home-nav-item d-block" (click)="navigateHome()">
-      <span class="fa fa-home"></span>
+      <app-generic-banner-tooltips [message]="'Home'" [adjustLeft]="-20">
+        <span class="fa fa-home"></span>
+      </app-generic-banner-tooltips>    
     </div>
   </div>
 
