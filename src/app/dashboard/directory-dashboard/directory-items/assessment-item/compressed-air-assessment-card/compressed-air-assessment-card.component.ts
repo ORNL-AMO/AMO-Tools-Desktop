@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../../../../../compressed-air-assessment/explore-opportunities/explore-opportunities-validation.service';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { Assessment } from '../../../../../shared/models/assessment';
 import { CompressedAirDayType, ProfileSummary, ProfileSummaryTotal } from '../../../../../shared/models/compressed-air-assessment';
@@ -13,6 +12,7 @@ import { CompressedAirCalculationService } from '../../../../../compressed-air-a
 import { AssessmentCo2SavingsService } from '../../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { CompressedAirAssessmentModificationResults } from '../../../../../compressed-air-assessment/calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirBaselineDayTypeProfileSummary } from '../../../../../compressed-air-assessment/calculations/CompressedAirBaselineDayTypeProfileSummary';
+import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../../../../../compressed-air-assessment/assessment-tab-content/explore-opportunities/explore-opportunities-validation.service';
 
 @Component({
   selector: 'app-compressed-air-assessment-card',

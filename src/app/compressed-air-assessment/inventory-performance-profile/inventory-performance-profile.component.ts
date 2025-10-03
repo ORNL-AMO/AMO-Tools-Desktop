@@ -4,14 +4,13 @@ import { InventoryService } from '../baseline-tab-content/inventory-setup/invent
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../compressed-air-calculation.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 import { TraceData } from '../../shared/models/plotting';
 import { Settings } from '../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
-import { CompressedAirAssessmentResult } from '../calculations/caCalculationModels';
 import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { ExploreOpportunitiesService } from '../assessment-tab-content/explore-opportunities/explore-opportunities.service';
 
 @Component({
   selector: 'app-inventory-performance-profile',

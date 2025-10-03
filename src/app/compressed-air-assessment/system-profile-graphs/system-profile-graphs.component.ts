@@ -2,8 +2,6 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
-import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment-results.service';
 import * as _ from 'lodash';
 import { AxisRanges, HoverPositionData, SystemProfileGraphsService } from './system-profile-graphs.service';
 import { Settings } from '../../shared/models/settings';
@@ -12,6 +10,7 @@ import { CompressedAirBaselineDayTypeProfileSummary } from '../calculations/Comp
 import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { CompressedAirModifiedDayTypeProfileSummary } from '../calculations/modifications/CompressedAirModifiedDayTypeProfileSummary';
+import { ExploreOpportunitiesService } from '../assessment-tab-content/explore-opportunities/explore-opportunities.service';
 
 @Component({
   selector: 'app-system-profile-graphs',
@@ -122,8 +121,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems);
       this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
     } else if (this.compressedAirAssessment && this.selectedDayType && !this.isBaseline) {
-      let selectedModificationId: string = this.compressedAirAssessmentService.selectedModificationId.getValue();
-      let modification: Modification = this.compressedAirAssessment.modifications.find(mod => { return mod.modificationId == selectedModificationId });
+      let modification: Modification = this.compressedAirAssessmentService.selectedModification.getValue();
       let compressedAirModifiedDayTypeProfileSummary: CompressedAirModifiedDayTypeProfileSummary = new CompressedAirModifiedDayTypeProfileSummary(this.selectedDayType, [compressedAirBaselineDayTypeProfileSummary], this.settings, this.compressedAirCalculationService, this.compressedAirAssessment, modification, this.assessmentCo2SavingsService);
       this.profileSummary = compressedAirModifiedDayTypeProfileSummary.adjustedProfileSummary;
       this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems, compressedAirModifiedDayTypeProfileSummary.adjustedCompressors);

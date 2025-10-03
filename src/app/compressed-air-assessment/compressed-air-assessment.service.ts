@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { isNull, isUndefined } from 'lodash';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, SystemProfileSetup } from '../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, SystemProfileSetup } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { DayTypeService } from './baseline-tab-content/day-types-setup/day-types/day-type.service';
 import { Assessment } from '../shared/models/assessment';
@@ -14,6 +14,7 @@ import { SystemInformationFormService } from './baseline-tab-content/system-info
 export class CompressedAirAssessmentService {
 
   assessment: BehaviorSubject<Assessment>;
+  selectedModification: BehaviorSubject<Modification>;
 
   settings: BehaviorSubject<Settings>;
   mainTab: BehaviorSubject<string>;
@@ -26,7 +27,7 @@ export class CompressedAirAssessmentService {
   secondaryAssessmentTab: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
   compressedAirAssessment: BehaviorSubject<CompressedAirAssessment>;
-  selectedModificationId: BehaviorSubject<string>;
+  // selectedModificationId: BehaviorSubject<string>;
   showModificationListModal: BehaviorSubject<boolean>;
   showAddModificationModal: BehaviorSubject<boolean>;
   showExportModal: BehaviorSubject<boolean>;
@@ -51,19 +52,31 @@ export class CompressedAirAssessmentService {
     this.secondaryAssessmentTab = new BehaviorSubject<string>('modifications');
     this.compressedAirAssessment = new BehaviorSubject<CompressedAirAssessment>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
-    this.selectedModificationId = new BehaviorSubject<string>(undefined);
+    // this.selectedModificationId = new BehaviorSubject<string>(undefined);
     this.showModificationListModal = new BehaviorSubject<boolean>(false);
     this.showAddModificationModal = new BehaviorSubject<boolean>(false);
     this.showExportModal = new BehaviorSubject<boolean>(false);
     this.assessment = new BehaviorSubject<Assessment>(undefined);
+    this.selectedModification = new BehaviorSubject<Modification>(undefined);
   }
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {
     if (isBaselineChange) {
-      this.setIsSetupDone(compressedAirAssessment)  
+      this.setIsSetupDone(compressedAirAssessment)
     }
     //TODO? set modifications valid?
     this.compressedAirAssessment.next(compressedAirAssessment);
+  }
+
+  setSelectedModificationById(modificationId: string) {
+    let currentAssessment: CompressedAirAssessment = this.compressedAirAssessment.getValue();
+    if (modificationId) {
+      let modification: Modification = currentAssessment.modifications.find(mod => { return mod.modificationId == modificationId; });
+      this.selectedModification.next(modification);
+    } else if (currentAssessment.modifications.length > 0) {
+      let modification: Modification = currentAssessment.modifications[0];
+      this.selectedModification.next(modification);
+    }
   }
 
   setIsSetupDone(compressedAirAssessment: CompressedAirAssessment) {
@@ -186,7 +199,7 @@ export class CompressedAirAssessmentService {
     if (compressedAirAssessment.systemInformation && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
       profileSummaryValid.trimSelection = !this.getHasMissingTrimSelection(compressedAirAssessment);
       profileSummaryValid.isValid = profileSummaryValid.trimSelection;
-      
+
     } else {
       profileSummaryValid.trimSelection = false;
     }
@@ -232,7 +245,7 @@ export class CompressedAirAssessmentService {
     if (hours === undefined) {
       hours = systemProfileSetup.numberOfHours
     }
-    
+
     for (let index = 0; index < hours;) {
       hourIntervals.push(index);
       index = index + systemProfileSetup.dataInterval;
@@ -255,7 +268,7 @@ export class CompressedAirAssessmentService {
       profileSummaryValid.powerFactorError = `Power Factor must be 0 or greater`;
     }
 
-   if (this.checkIsInvalidNumber(volts)) {
+    if (this.checkIsInvalidNumber(volts)) {
       powerFactorInputValidationData.voltsValid = false;
       profileSummaryValid.voltError = `Volts must be 0 or greater`;
     }
@@ -276,9 +289,9 @@ export class CompressedAirAssessmentService {
   checkDayTypeProfileSummaryValid(compressedAirAssessment: CompressedAirAssessment, dayTypeId: string): boolean {
     let isDayTypeValid: boolean;
     let profileSummaryValid: ProfileSummaryValid = this.getDefaultProfileSummaryValid();
-    let profileSummary = compressedAirAssessment.systemProfile.profileSummary;   
+    let profileSummary = compressedAirAssessment.systemProfile.profileSummary;
 
-    profileSummary.forEach(summary => {          
+    profileSummary.forEach(summary => {
       if (summary.dayTypeId == dayTypeId) {
         let profileSummaryDayType: CompressedAirDayType = this.compressedAirAssessment.getValue().compressedAirDayTypes.find(dayType => dayType.dayTypeId === summary.dayTypeId);
         let profileDataType = profileSummaryDayType.profileDataType;
@@ -296,15 +309,15 @@ export class CompressedAirAssessmentService {
                 }
               }
             } else if (profileDataType == 'power') {
-              let isPowerValid = this.checkIsPowerValid(data.power, currentCompressor, profileSummaryValid);             
-              if (isPowerValid == false){
+              let isPowerValid = this.checkIsPowerValid(data.power, currentCompressor, profileSummaryValid);
+              if (isPowerValid == false) {
                 isDayTypeValid = false;
-              } 
+              }
             } else if (profileDataType == 'airflow') {
               let airFlowValidation: AirflowValidation = this.checkIsAirflowValid(data.airflow, currentCompressor, profileSummaryValid);
-              if (airFlowValidation.airFlowValid == false){
+              if (airFlowValidation.airFlowValid == false) {
                 isDayTypeValid = false;
-              } 
+              }
             } else if (profileDataType == 'percentPower') {
               let isPercentPowerValid = this.checkIsInvalidNumber(data.percentPower) !== true;
               if (isPercentPowerValid) {
@@ -317,20 +330,20 @@ export class CompressedAirAssessmentService {
               }
             } else if (profileDataType == 'powerFactor') {
               let powerFactorValid: PowerFactorInputValidationData = this.checkIsPowerFactorValid(data.powerFactor, data.amps, data.volts, currentCompressor, profileSummaryValid);
-              if(powerFactorValid.isValid == false){ 
+              if (powerFactorValid.isValid == false) {
                 isDayTypeValid = false;
-              } 
+              }
             }
           } else {
             isDayTypeValid = true;
           }
-        });                
+        });
       }
     });
     if (compressedAirAssessment.systemInformation && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
       profileSummaryValid.trimSelection = !this.getHasMissingTrimSelection(compressedAirAssessment);
       isDayTypeValid = this.checkDayTypeValidTrimSelection(compressedAirAssessment, dayTypeId);
-    } 
+    }
     return isDayTypeValid;
   }
 

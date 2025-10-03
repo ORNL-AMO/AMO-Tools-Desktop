@@ -68,54 +68,46 @@ import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air
 import { PerformancePointsFormService } from './baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
 import { SystemCapacityModalComponent } from './baseline-tab-content/system-information/system-capacity-modal/system-capacity-modal.component';
 import { SystemCapacityModule } from '../calculator/compressed-air/system-capacity/system-capacity.module';
-import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
-import { ReduceAirLeaksComponent } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.component';
-import { ImproveEndUseEfficiencyComponent } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency.component';
-import { ReduceSystemAirPressureComponent } from './explore-opportunities/reduce-system-air-pressure/reduce-system-air-pressure.component';
-import { AdjustCascadingSetPointsComponent } from './explore-opportunities/adjust-cascading-set-points/adjust-cascading-set-points.component';
-import { UseAutomaticSequencerComponent } from './explore-opportunities/use-automatic-sequencer/use-automatic-sequencer.component';
-import { ReduceRunTimeComponent } from './explore-opportunities/reduce-run-time/reduce-run-time.component';
-import { AddReceiverVolumeComponent } from './explore-opportunities/add-receiver-volume/add-receiver-volume.component';
-import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
+import { ExploreOpportunitiesComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities.component';
+import { ReduceAirLeaksComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/reduce-air-leaks/reduce-air-leaks.component';
+import { ImproveEndUseEfficiencyComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/improve-end-use-efficiency/improve-end-use-efficiency.component';
+import { ReduceSystemAirPressureComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/reduce-system-air-pressure/reduce-system-air-pressure.component';
+import { AdjustCascadingSetPointsComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/adjust-cascading-set-points/adjust-cascading-set-points.component';
+import { UseAutomaticSequencerComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/use-automatic-sequencer/use-automatic-sequencer.component';
+import { ReduceRunTimeComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/reduce-run-time/reduce-run-time.component';
+import { AddReceiverVolumeComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/add-receiver-volume/add-receiver-volume.component';
+import { ExploreOpportunitiesService } from './assessment-tab-content/explore-opportunities/explore-opportunities.service';
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
-import { ExploreOpportunitiesResultsComponent } from './explore-opportunities/explore-opportunities-results/explore-opportunities-results.component';
-import { ModificationListModalComponent } from './modification-list-modal/modification-list-modal.component';
-import { AddModificationModalComponent } from './add-modification-modal/add-modification-modal.component';
+import { ExploreOpportunitiesResultsComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/explore-opportunities-results/explore-opportunities-results.component';
+import { ModificationListModalComponent } from './assessment-tab-content/assessment-tabs/modification-list-modal/modification-list-modal.component';
+import { AddModificationModalComponent } from './assessment-tab-content/assessment-tabs/add-modification-modal/add-modification-modal.component';
 import { DayTypeService } from './baseline-tab-content/day-types-setup/day-types/day-type.service';
 import { FullLoadAmpsModule } from '../calculator/motors/full-load-amps/full-load-amps.module';
 import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-correction/altitude-correction.module';
 import { CompressedAirDataManagementService } from './compressed-air-data-management.service';
-import { ExploreOpportunitiesProfileTableComponent } from './explore-opportunities/explore-opportunities-profile-table/explore-opportunities-profile-table.component';
+import { ExploreOpportunitiesProfileTableComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/explore-opportunities-profile-table/explore-opportunities-profile-table.component';
 import { CompressedAirAssessmentResultsService } from './compressed-air-assessment-results.service';
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
-import { AssessmentHelpComponent } from './results-panel/help-panel/assessment-help/assessment-help.component';
-import { ReduceAirLeaksHelpComponent } from './results-panel/help-panel/assessment-help/reduce-air-leaks-help/reduce-air-leaks-help.component';
-import { ImproveEndUseEfficiencyHelpComponent } from './results-panel/help-panel/assessment-help/improve-end-use-efficiency-help/improve-end-use-efficiency-help.component';
-import { ReduceSystemAirPressureHelpComponent } from './results-panel/help-panel/assessment-help/reduce-system-air-pressure-help/reduce-system-air-pressure-help.component';
-import { UseAutomaticSequencerHelpComponent } from './results-panel/help-panel/assessment-help/use-automatic-sequencer-help/use-automatic-sequencer-help.component';
-import { ReduceRunTimeHelpComponent } from './results-panel/help-panel/assessment-help/reduce-run-time-help/reduce-run-time-help.component';
-import { AddReceiverVolumeHelpComponent } from './results-panel/help-panel/assessment-help/add-receiver-volume-help/add-receiver-volume-help.component';
 import { SystemProfileAnnualSummaryComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-annual-summary/system-profile-annual-summary.component';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
-import { AdjustSequencerProfileComponent } from './explore-opportunities/use-automatic-sequencer/adjust-sequencer-profile/adjust-sequencer-profile.component';
+import { AdjustSequencerProfileComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/use-automatic-sequencer/adjust-sequencer-profile/adjust-sequencer-profile.component';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { FacilityInfoSummaryModule } from '../shared/facility-info-summary/facility-info-summary.module';
 import { SystemProfileGraphsService } from './system-profile-graphs/system-profile-graphs.service'; 
-import { AdjustCascadingSetPointsHelpComponent } from './results-panel/help-panel/assessment-help/adjust-cascading-set-points-help/adjust-cascading-set-points-help.component';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
-import { AssessmentNotesComponent } from './explore-opportunities/assessment-notes/assessment-notes.component';
-import { AddReceiverVolumeService } from './explore-opportunities/add-receiver-volume/add-receiver-volume.service';
-import { ReduceAirLeaksService } from './explore-opportunities/reduce-air-leaks/reduce-air-leaks.service';
-import { ReduceSystemAirPressureService } from './explore-opportunities/reduce-system-air-pressure/reduce-system-air-pressure.service';
-import { ImproveEndUseEfficiencyItemComponent } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-efficiency-item.component';
-import { ImproveEndUseEfficiencyService } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency.service';
-import { UseAutomaticSequencerService } from './explore-opportunities/use-automatic-sequencer/use-automatic-sequencer.service';
-import { AdjustCascadingSetPointsService } from './explore-opportunities/adjust-cascading-set-points/adjust-cascading-set-points.service';
-import { ReduceRunTimeService } from './explore-opportunities/reduce-run-time/reduce-run-time.service';
-import { ExploreOpportunitiesValidationService } from './explore-opportunities/explore-opportunities-validation.service';
+import { AssessmentNotesComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-notes/assessment-notes.component';
+import { AddReceiverVolumeService } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/add-receiver-volume/add-receiver-volume.service';
+import { ReduceAirLeaksService } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/reduce-air-leaks/reduce-air-leaks.service';
+import { ReduceSystemAirPressureService } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/reduce-system-air-pressure/reduce-system-air-pressure.service';
+import { ImproveEndUseEfficiencyItemComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-efficiency-item.component';
+import { ImproveEndUseEfficiencyService } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/improve-end-use-efficiency/improve-end-use-efficiency.service';
+import { UseAutomaticSequencerService } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/use-automatic-sequencer/use-automatic-sequencer.service';
+import { AdjustCascadingSetPointsService } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/adjust-cascading-set-points/adjust-cascading-set-points.service';
+import { ReduceRunTimeService } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/reduce-run-time/reduce-run-time.service';
+import { ExploreOpportunitiesValidationService } from './assessment-tab-content/explore-opportunities/explore-opportunities-validation.service';
 import { CompressedAirReportModule } from './compressed-air-report/compressed-air-report.module';
 import { ProfileSummaryTableModule } from './profile-summary-table/profile-summary-table.module';
 import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-compressor-pipes.module';
@@ -132,12 +124,9 @@ import { MidTurndownComponent } from './baseline-tab-content/inventory-setup/inv
 import { FlaModalComponent } from './baseline-tab-content/inventory-setup/inventory/nameplate-data/fla-modal/fla-modal.component';
 import { EndUseTableComponent } from './baseline-tab-content/end-uses-setup/end-use-table/end-use-table.component';
 import { EndUseChartComponent } from './baseline-tab-content/end-uses-setup/end-use-chart/end-use-chart.component';
-import { ImproveEndUseFormControlsPipe } from './explore-opportunities/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-form-controls.pipe';
 import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-label.module';
 import { EndUseHelpComponent } from './baseline-tab-content/end-uses-setup/end-use-help/end-use-help.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
-import { ReplaceCompressorComponent } from './explore-opportunities/replace-compressor/replace-compressor.component';
-import { AssessessmentTabContentComponent } from './assessessment-tab-content/assessessment-tab-content';
 import { BaselineTabContentComponent } from './baseline-tab-content/baseline-tab-content';
 import { SystemBasicsFormComponent } from './baseline-tab-content/system-basics/system-basics-form/system-basics-form';
 import { BaselineFooterNavButtonsComponent } from './baseline-tab-content/baseline-footer-nav-buttons/baseline-footer-nav-buttons';
@@ -153,6 +142,20 @@ import { EndUsesFormService } from './baseline-tab-content/end-uses-setup/end-us
 import { DayTypeUseFormService } from './baseline-tab-content/end-uses-setup/end-uses-form/day-type-use-form/day-type-use-form.service';
 import { EndUseDayTypeSetupModule } from './baseline-tab-content/end-uses-setup/end-uses-form/day-type-setup-form/end-use-day-type-setup.module';
 import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-air-sankey.module';
+import { AssessmentTabsComponent } from './assessment-tab-content/assessment-tabs/assessment-tabs.component';
+import { AssessmentTabContentComponent } from './assessment-tab-content/assessment-tab-content.component';
+import { ImproveEndUseFormControlsPipe } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-form-controls.pipe';
+import { ReplaceCompressorComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/replace-compressor/replace-compressor.component';
+import { ExploreOpportunitiesFormComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/explore-opportunities-form.component';
+import { ExploreOpportunitiesSidePanelComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/explore-opportunities-side-panel.component';
+import { AssessmentHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/assessment-help.component';
+import { ReduceAirLeaksHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/reduce-air-leaks-help/reduce-air-leaks-help.component';
+import { ImproveEndUseEfficiencyHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/improve-end-use-efficiency-help/improve-end-use-efficiency-help.component';
+import { ReduceSystemAirPressureHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/reduce-system-air-pressure-help/reduce-system-air-pressure-help.component';
+import { UseAutomaticSequencerHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/use-automatic-sequencer-help/use-automatic-sequencer-help.component';
+import { ReduceRunTimeHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/reduce-run-time-help/reduce-run-time-help.component';
+import { AddReceiverVolumeHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/add-receiver-volume-help/add-receiver-volume-help.component';
+import { AdjustCascadingSetPointsHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/adjust-cascading-set-points-help/adjust-cascading-set-points-help.component';
 
 @NgModule({
   declarations: [
@@ -239,7 +242,6 @@ import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-ai
     MidTurndownComponent,
     EndUseHelpComponent,
     ReplaceCompressorComponent,
-    AssessessmentTabContentComponent,
     BaselineTabContentComponent,
     SystemBasicsFormComponent,
     BaselineFooterNavButtonsComponent,
@@ -249,7 +251,11 @@ import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-ai
     BaselineSystemProfileSetupComponent,
     SystemProfileSetupTabsComponent,
     EndUsesSetupComponent,
-    EndUsesFormComponent
+    EndUsesFormComponent,
+    AssessmentTabsComponent,
+    AssessmentTabContentComponent,
+    ExploreOpportunitiesFormComponent,
+    ExploreOpportunitiesSidePanelComponent
   ],
   imports: [
     CommonModule,

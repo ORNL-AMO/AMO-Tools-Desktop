@@ -1,0 +1,49 @@
+<div class="d-flex flex-column h-100 w-100">
+    <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+        <div class="nav-item" (click)="setSmallScreenTab('form')"
+            [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+            <a>Explore Opportunities</a>
+        </div>
+        <div class="nav-item" (click)="setSmallScreenTab('details')"
+            [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+            <a>Details</a>
+        </div>
+    </div>
+    <div class="d-flex">
+        <div class="assessment-container compressed-air modify-conditions panel-container w-50">
+            <app-explore-opportunities-form></app-explore-opportunities-form>
+        </div>
+        <div class="assessment-panel-container">
+            <app-explore-opportunities-side-panel></app-explore-opportunities-side-panel>
+        </div>
+    </div>
+</div>
+
+<!-- </div> -->
+
+<!-- <div class="d-flex flex-column compressed-air modify-conditions panel-container"
+    *ngIf="secondaryAssessmentTab == 'table' || secondaryAssessmentTab == 'graphs'"
+    [ngStyle]="{'height.px': containerHeight}">
+    <div class="p-2 text-center" *ngIf="dayTypeOptions.length > 1">
+        <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
+            (change)="changeDayType()">
+            <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType">{{dayType.name}}</option>
+        </select>
+    </div>
+    <app-explore-opportunities-profile-table class="w-100" *ngIf="secondaryAssessmentTab == 'table'">
+    </app-explore-opportunities-profile-table>
+    <div class="d-flex" *ngIf="secondaryAssessmentTab == 'graphs'">
+        <div class="col-lg-6 col-12">
+            <!-- <label class="group-label bg-white">Baseline</label> --
+            <app-system-profile-graphs class="w-100" [inModification]="true" [isBaseline]="true"
+                [labelName]="'Baseline'">
+            </app-system-profile-graphs>
+        </div>
+        <div class="col-lg-6 col-12">
+            <!-- <label class="group-label bg-white">{{modification.name}}</label> --
+            <app-system-profile-graphs class="w-100" [inModification]="true" [isBaseline]="false"
+                [labelName]="modification.name">
+            </app-system-profile-graphs>
+        </div>
+    </div>
+</div> -->

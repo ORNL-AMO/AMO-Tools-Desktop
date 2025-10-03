@@ -9,13 +9,13 @@ import { PrintOptions } from '../../shared/models/printing';
 import { Settings } from '../../shared/models/settings';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../explore-opportunities/explore-opportunities-validation.service';
 import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
-import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../calculations/caCalculationModels';
+import { BaselineResults, DayTypeModificationResult } from '../calculations/caCalculationModels';
 import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirCombinedDayTypeResults } from '../calculations/modifications/CompressedAirCombinedDayTypeResults';
+import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../assessment-tab-content/explore-opportunities/explore-opportunities-validation.service';
 
 @Component({
   selector: 'app-compressed-air-report',

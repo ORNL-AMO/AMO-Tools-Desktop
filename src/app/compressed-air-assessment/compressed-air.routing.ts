@@ -1,5 +1,4 @@
 import { Routes } from "@angular/router";
-import { AssessessmentTabContentComponent } from "./assessessment-tab-content/assessessment-tab-content";
 import { BaselineTabContentComponent } from "./baseline-tab-content/baseline-tab-content";
 import { SystemBasicsComponent } from "./baseline-tab-content/system-basics/system-basics.component";
 import { SystemInformationComponent } from "./baseline-tab-content/system-information/system-information.component";
@@ -12,7 +11,8 @@ import { SystemProfileGraphsComponent } from "./system-profile-graphs/system-pro
 import { SystemProfileAnnualSummaryComponent } from "./baseline-tab-content/baseline-system-profile-setup/system-profile-annual-summary/system-profile-annual-summary.component";
 import { CompressorSummaryComponent } from "./baseline-tab-content/baseline-system-profile-setup/compressor-summary/compressor-summary.component";
 import { EndUsesSetupComponent } from "./baseline-tab-content/end-uses-setup/end-uses-setup.component";
-
+import { AssessmentTabContentComponent } from "./assessment-tab-content/assessment-tab-content.component";
+import { ExploreOpportunitiesComponent } from "./assessment-tab-content/explore-opportunities/explore-opportunities.component";
 
 
 export const compressedAirAssessmentRoutes: Routes = [
@@ -85,6 +85,21 @@ export const compressedAirAssessmentRoutes: Routes = [
     },
     {
         path: 'assessment',
-        component: AssessessmentTabContentComponent
+        component: AssessmentTabContentComponent,
+        children: [
+            {
+                path: '',
+                redirectTo: 'explore-opportunities',
+                pathMatch: 'full'
+            },
+            {
+                path: 'explore-opportunities',
+                component: ExploreOpportunitiesComponent
+            },
+            {
+                path: 'explore-opportunities/:id',
+                component: ExploreOpportunitiesComponent
+            },
+        ]
     }
 ]

@@ -3,13 +3,13 @@ import { UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@
 import { BehaviorSubject } from 'rxjs';
 import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ReduceRuntimeData, SystemInformation, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
-import { ExploreOpportunitiesService } from '../../../explore-opportunities/explore-opportunities.service';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
 import { PerformancePointsFormService } from './performance-points/performance-points-form.service';
 import { CompressorInventoryItemClass } from '../../../calculations/CompressorInventoryItemClass';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
+import { ExploreOpportunitiesService } from '../../../assessment-tab-content/explore-opportunities/explore-opportunities.service';
 
 @Injectable()
 export class InventoryService {

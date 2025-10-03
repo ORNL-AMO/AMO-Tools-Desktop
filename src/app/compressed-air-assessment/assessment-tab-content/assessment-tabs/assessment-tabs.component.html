@@ -1,0 +1,93 @@
+<div class="navbar assessment-bar">
+    <ul class="h-100 tabs subtabs progress-tabs compressed-air d-none d-lg-block mt-auto">
+        <li [routerLinkActive]="'active'">
+            <a routerLink="explore-opportunities">Explore Opportunities</a>
+        </li>
+        <li [routerLinkActive]="'active'" [ngClass]="{'disabled': !selectedModification}">
+            <a routerLink="summary-table">Profile Summary Table</a>
+        </li>
+        <li [routerLinkActive]="'active'" [ngClass]="{'disabled': !selectedModification}">
+            <a routerLink="summary-graphs">Profile Summary Graphs</a>
+        </li>
+    </ul>
+
+    <div class="d-lg-flex d-none align-items-center tabs subtabs compressed-air ml-auto"
+        [ngClass]="{'br-color-white': selectedModification}">
+        <div class="mod-name active border-right" *ngIf="selectedModification">
+            <a>{{selectedModification.name}}
+                <br>
+                <span class="help-text">Selected Scenario</span>
+            </a>
+        </div>
+        <div class="mod-name border-right" *ngIf="!selectedModification">
+            <a>&mdash; &mdash;
+                <br>
+                <span class="help-text">Selected Scenario</span>
+            </a>
+        </div>
+        <div class="pl-2 pr-2">
+            <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View / Add
+                Scenarios</button>
+        </div>
+    </div>
+
+    <!-- <div class="d-lg-none d-flex flex-column flex-fill">
+        <div class="d-flex d-lg-none flex-fill align-items-center justify-content-center tabs subtabs compressed-air"
+            [ngClass]="{'br-color-white': selectedModification}">
+            <div class="mod-name active border-right flex-fill" *ngIf="selectedModification">
+                <a>{{selectedModification.name}}
+                    <br>
+                    <span class="help-text">Selected Scenario</span>
+                </a>
+            </div>
+            <div class="mod-name border-right flex-fill" *ngIf="!selectedModification">
+                <a>&mdash; &mdash;
+                    <br>
+                    <span class="help-text">Selected Scenario</span>
+                </a>
+            </div>
+            <div class="pl-2 pr-2 flex-fill">
+                <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View /
+                    Add
+                    Scenarios</button>
+            </div>
+        </div>
+
+        <ul
+            class="pagination d-flex d-lg-none justify-content-between tabs subtabs progress-tabs flex-fill compressed-air">
+            <li class="page-item" [ngClass]="{'disabled': secondaryAssessmentTab == 'modifications'}">
+                <a class="nav-link small" (click)="backAssessmentTab()"
+                    [ngClass]="{'disabled': secondaryAssessmentTab == 'modifications'}">
+                    <span class="fa fa-chevron-left"></span></a>
+            </li>
+            <li class="page-item" [ngClass]="{'active': secondaryAssessmentTab == 'modifications'}"
+                *ngIf="secondaryAssessmentTab == 'modifications'">
+                <a class="nav-link small" (click)="changeSecondaryAssessmentTab('modifications')">Explore
+                    Opportunities</a>
+            </li>
+            <li class="page-item"
+                [ngClass]="{'active': secondaryAssessmentTab == 'table', 'disabled': !selectedModification}"
+                *ngIf="secondaryAssessmentTab == 'table'">
+                <a class="nav-link small" (click)="changeSecondaryAssessmentTab('table')">Profile Summary Table</a>
+            </li>
+            <li class="page-item"
+                [ngClass]="{'active': secondaryAssessmentTab == 'graphs', 'disabled': !selectedModification}"
+                *ngIf="secondaryAssessmentTab == 'graphs'">
+                <a class="nav-link small" (click)="changeSecondaryAssessmentTab('graphs')">Profile Summary Graphs</a>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': secondaryAssessmentTab == 'graphs' || !selectedModification}">
+                <a class="nav-link small" (click)="continueAssessmentTab()"
+                    [ngClass]="{'disabled': secondaryAssessmentTab == 'graphs' || !selectedModification}">
+                    <span class="fa fa-chevron-right"></span></a>
+            </li>
+        </ul>
+
+        <div class="alert alert-info d-lg-none p-1 m-1 small">
+            This page is optimized to be viewed on a tablet-sized device or larger.
+        </div>
+    </div> -->
+
+</div>
+
+
+<app-modification-list-modal *ngIf="showModificationList"></app-modification-list-modal>

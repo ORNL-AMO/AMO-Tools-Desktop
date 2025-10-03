@@ -45,12 +45,11 @@ export class CompressedAirBannerComponent implements OnInit {
       this.mainTab = val;
     });
 
-    this.selectedModificationSub = this.compressedAirAssessmentService.selectedModificationId.subscribe(val => {
-      let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       if (!val && this.secondaryAssessmentTab && this.secondaryAssessmentTab != 'modifications') {
         this.changeSecondaryAssessmentTab('modifications');
       }
-      this.selectedModification = compressedAirAssessment.modifications.find(modification => { return modification.modificationId == val });
+      this.selectedModification = val;
     });
 
     this.assessmentTabSub = this.compressedAirAssessmentService.assessmentTab.subscribe(val => {

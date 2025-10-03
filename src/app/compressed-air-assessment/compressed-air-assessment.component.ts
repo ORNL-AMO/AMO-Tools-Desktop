@@ -11,12 +11,12 @@ import { CompressedAirAssessment } from '../shared/models/compressed-air-assessm
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
-import { ExploreOpportunitiesService } from './explore-opportunities/explore-opportunities.service';
 import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { EndUsesFormService } from './baseline-tab-content/end-uses-setup/end-uses-form/end-uses-form.service';
 import { DayTypeSetupService } from './baseline-tab-content/end-uses-setup/end-uses-form/day-type-setup-form/day-type-setup.service';
+import { ExploreOpportunitiesService } from './assessment-tab-content/explore-opportunities/explore-opportunities.service';
 
 @Component({
     selector: 'app-compressed-air-assessment',

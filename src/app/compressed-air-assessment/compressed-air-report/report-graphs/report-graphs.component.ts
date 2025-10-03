@@ -3,8 +3,8 @@ import { DayTypeModificationResult } from '../../calculations/caCalculationModel
 import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../../../shared/models/compressed-air-assessment';
 import { CurrencyPipe } from '@angular/common';
 import { PlotlyService } from 'angular-plotly.js';
-import { CompressedAirModificationValid } from '../../explore-opportunities/explore-opportunities-validation.service';
 import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirModificationValid } from '../../assessment-tab-content/explore-opportunities/explore-opportunities-validation.service';
 
 @Component({
     selector: 'app-report-graphs',
