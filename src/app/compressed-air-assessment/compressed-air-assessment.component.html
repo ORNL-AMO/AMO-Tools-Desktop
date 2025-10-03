@@ -28,6 +28,10 @@
       <app-system-basics *ngIf="setupTab == 'system-basics'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
         [assessment]="assessment"></app-system-basics>
       <app-system-information *ngIf="setupTab == 'system-information'"></app-system-information>
+      <app-integrate-compressed-air-inventory *ngIf="setupTab == 'system-basics'" [(assessment)]="assessment"
+        [(compressedAirAssessment)]="compressedAirAssessment" (saveCompressedAirAssessment)="save($event)"
+        (saved)="saveAndUpdateSettings()" [settings]="settings">
+      </app-integrate-compressed-air-inventory>
       <app-day-types *ngIf="setupTab == 'day-types'"></app-day-types>
       <app-end-uses *ngIf="setupTab == 'end-uses'"></app-end-uses>
       <app-inventory *ngIf="setupTab == 'inventory'"></app-inventory>

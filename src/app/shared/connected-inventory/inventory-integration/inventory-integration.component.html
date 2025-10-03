@@ -7,6 +7,8 @@
                         Item</span>
                     <span *ngIf="connectedInventoryData.connectedItem.inventoryType === 'pump'" class="integration-label">Connected Pump
                         Item</span>
+                    <span *ngIf="connectedInventoryData.connectedItem.inventoryType === 'compressed-air'" class="integration-label">Connected Compressed Air
+                        Item</span>
             </label>
             <div class="w-50 input-group justify-content-between">
                 <div>
@@ -29,6 +31,7 @@
                 <label class="w-50">
                     <span *ngIf="item.inventoryType === 'pump' && !item.assessmentName" class="integration-label">Connected Pump Item</span>
                     <span *ngIf="item.inventoryType === 'motor' && !item.assessmentName" class="integration-label">Connected Motor Item</span>
+                    <span *ngIf="item.inventoryType === 'compressed-air' && !item.assessmentName" class="integration-label">Connected Compressed Air Item</span>
                     <span *ngIf="item.assessmentName" class="integration-label">Connected Pump Assessment</span>
                 </label>
                 <div class="w-50 input-group justify-content-between">

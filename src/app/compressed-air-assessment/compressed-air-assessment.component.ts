@@ -38,6 +38,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.setContainerHeight();
   }
 
+  compressedAirAssessment: CompressedAirAssessment;
   assessment: Assessment;
   settings: Settings;
   showUpdateUnitsModal: boolean = false;
@@ -94,6 +95,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
     this.compressedAirAsseementSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val && this.assessment) {
+        this.compressedAirAssessment = val;
         this.save(val);
         this.setDisableNext();
       }
@@ -318,5 +320,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   closeExportModal(input: boolean){
     this.compressedAirAssessmentService.showExportModal.next(input);
+  }
+
+  saveAndUpdateSettings() {
+    // this.getSettings();
+    // this.save();
   }
 }

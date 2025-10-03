@@ -125,6 +125,9 @@ export class InventoryIntegrationComponent {
         case 'PSAT':
           url = `/psat/${connectedItem.assessmentId}`;
           break;
+        case 'CompressedAir':
+          url = `/compressed-air-assessment/${connectedItem.assessmentId}`;
+          break;
         default:
           url = undefined;
       }

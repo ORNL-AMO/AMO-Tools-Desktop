@@ -304,7 +304,7 @@ export class CompressedAirAssessmentIntegrationService {
     }
 
 
-    setcompressedAirAssessmentConnectedInventoryData(assessment: Assessment, settings: Settings) {
+    setCompressedAirAssessmentConnectedInventoryData(assessment: Assessment, settings: Settings) {
         let connectedInventoryData: ConnectedInventoryData = this.integrationStateService.getEmptyConnectedInventoryData();
         if (assessment.compressedAirAssessment.connectedItem) {
             let connectedItem: CompressedAirItem | MotorItem;

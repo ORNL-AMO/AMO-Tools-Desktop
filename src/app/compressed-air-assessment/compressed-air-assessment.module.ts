@@ -152,6 +152,7 @@ import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-ai
 import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
+import { IntegrateCompressedAirInventoryComponent } from './integrate-compressed-air-inventory/integrate-compressed-air-inventory.component';
 
 @NgModule({
   declarations: [
@@ -237,7 +238,8 @@ import { ConnectedInventoryModule } from '../shared/connected-inventory/connecte
     ImproveEndUseFormControlsPipe,
     TurndownComponent,
     MidTurndownComponent,
-    EndUseHelpComponent
+    EndUseHelpComponent,
+    IntegrateCompressedAirInventoryComponent
   ],
   imports: [
     CommonModule,
