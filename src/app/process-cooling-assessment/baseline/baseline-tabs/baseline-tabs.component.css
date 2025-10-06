@@ -3,3 +3,7 @@
 li.page-item{
     background-color:#ECECEC !important;
 }
+
+li.disabled, a.disabled {
+  pointer-events: none;
+}

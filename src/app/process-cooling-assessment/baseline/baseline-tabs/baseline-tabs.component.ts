@@ -1,5 +1,8 @@
-import { Component, effect, ElementRef, inject, Signal, ViewChild } from '@angular/core';
-import { ProcessCoolingUiService, SETUP_VIEW_LINKS } from '../../services/process-cooling-ui.service';
+import { Component, DestroyRef, ElementRef, inject, Signal, ViewChild } from '@angular/core';
+import { ProcessCoolingUiService, SETUP_VIEW_LINKS, ViewLink } from '../../services/process-cooling-ui.service';
+import { ROUTE_TOKENS } from '../../process-cooling-assessment.module';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
 
 @Component({
   selector: 'app-baseline-tabs',
@@ -9,6 +12,9 @@ import { ProcessCoolingUiService, SETUP_VIEW_LINKS } from '../../services/proces
 })
 export class BaselineTabsComponent {
   private readonly processCoolingUiService = inject(ProcessCoolingUiService);
+  private readonly processCoolingService = inject(ProcessCoolingAssessmentService);
+  private readonly destroyRef = inject(DestroyRef);
+
   smallScreenPanelTab: string = 'help';
   canContinue: boolean = true;
 
@@ -18,6 +24,24 @@ export class BaselineTabsComponent {
   containerHeight: number;
   mainView: Signal<string> = this.processCoolingUiService.mainView;
   setupView: Signal<string> = this.processCoolingUiService.childView;
+
+  isChillerInventoryValid: boolean = false;
+  isOperatingScheduleValid: boolean = false;
+
+  ngOnInit(): void {
+     this.processCoolingService.isChillerInventoryValid$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(val => {
+      this.isChillerInventoryValid = val;
+    });
+
+    this.processCoolingService.isOperatingScheduleValid$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(val => {
+      this.isOperatingScheduleValid = val;
+    });
+
+  }
 
   continue() {
     this.processCoolingUiService.continue();
@@ -32,25 +56,25 @@ export class BaselineTabsComponent {
     this.smallScreenPanelTab = tab;
   }
 
-  //   showTooltip(badge: { display: boolean, hover: boolean }) {
-  //   badge.hover = true;
-  //   setTimeout(() => {
-  //     this.checkHover(badge);
-  //   }, 1000);
-  // }
+  isLinkDisabled(link: ViewLink): boolean {
+    switch (link.view) {
+      case ROUTE_TOKENS.operatingSchedule:
+        return !this.isChillerInventoryValid;
+      case ROUTE_TOKENS.loadSchedule:
+        return !this.isChillerInventoryValid || !this.isOperatingScheduleValid;
+      default:
+        return false;
+    }
+  }
 
-  // hideTooltip(badge: { display: boolean, hover: boolean }) {
-  //   badge.hover = false;
-  //   badge.display = false;
-  // }
-
-  // checkHover(badge: { display: boolean, hover: boolean }) {
-  //   if (badge.hover) {
-  //     badge.display = true;
-  //   } else {
-  //     badge.display = false;
-  //   }
-  // }
+  handleCanNavigate(event: MouseEvent, link: ViewLink) {
+    if (this.isLinkDisabled(link)) {
+      event.preventDefault();
+      event.stopPropagation();
+      return false;
+    }
+    return true;
+  }
 
 
 }

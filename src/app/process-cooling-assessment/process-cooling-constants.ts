@@ -151,7 +151,7 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings ): Process
             getDefaultInventoryItem()
           ],
           selectedModificationId: '',
-          existingDataUnits: '',
+          existingDataUnits: 'Imperial',
           selected: false,
         }
       }
