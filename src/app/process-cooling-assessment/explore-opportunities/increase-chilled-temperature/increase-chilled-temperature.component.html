@@ -31,10 +31,8 @@
                         (focus)="focusField('modificationChilledWaterTemp')">
                     <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
                         [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+                    <app-form-control-errors [control]="chilledWaterTemperature"></app-form-control-errors>
                 </div>
-                <small class="form-text text-muted">
-                    Enter the increased chilled water temperature setpoint
-                </small>
             </div>
         </div>
     </div>

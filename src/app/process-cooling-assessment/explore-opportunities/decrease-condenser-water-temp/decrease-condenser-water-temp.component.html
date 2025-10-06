@@ -31,6 +31,7 @@
                         (focus)="focusField('modificationCondenserWaterTemp')">
                     <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
                         [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+                    <app-form-control-errors [control]="condenserWaterTemperature"></app-form-control-errors>
                 </div>
             </div>
         </div>
