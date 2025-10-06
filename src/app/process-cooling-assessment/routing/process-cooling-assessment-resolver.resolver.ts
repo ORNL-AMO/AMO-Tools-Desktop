@@ -1,15 +1,19 @@
-import { ActivatedRouteSnapshot, Resolve, ResolveFn, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, Inject, inject } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
-import { catchError, forkJoin, from, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
+import { catchError, forkJoin, from, map, Observable, of, switchMap, take, throwError } from 'rxjs';
 import { EGridService } from '../../shared/helper-services/e-grid.service';
 import { Settings } from '../../shared/models/settings';
 import { MeasurAppError } from '../../shared/errors/errors';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ChillerInventoryService } from '../services/chiller-inventory.service';
 import { WEATHER_CONTEXT, WeatherContext } from '../../shared/modules/weather-data/weather-context.token';
+import { LocalStorageService } from '../../shared/local-storage.service';
+import { PC_SELECTED_MODIFICATION_KEY } from '../../shared/models/app';
+import { ModificationService } from '../services/modification.service';
+import { AppErrorService } from '../../shared/errors/app-error.service';
 
 export interface ProcessCoolingResolverData {
   assessment: Assessment;
@@ -18,14 +22,17 @@ export interface ProcessCoolingResolverData {
 
 @Injectable()
 export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingResolverData> {
+  private appErrorService = inject(AppErrorService);
 
   constructor(
     private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService,
     private processCoolingAssessmentService: ProcessCoolingAssessmentService,
+    private modificationService: ModificationService,
     @Inject(WEATHER_CONTEXT) private processCoolingWeatherContextService: WeatherContext,
     private inventoryService: ChillerInventoryService,
     private egridService: EGridService,
+    private localStorageService: LocalStorageService,
     private router: Router
   ) { }
 
@@ -77,6 +84,17 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
         this.processCoolingAssessmentService.setAssessment(assessment);
         this.processCoolingAssessmentService.setProcessCooling(assessment.processCooling);
         this.processCoolingWeatherContextService.setWeatherData(assessment.processCooling.weatherData);
+
+        
+        let selectedModificationId: string;
+        try {
+          selectedModificationId = this.localStorageService.retrieve(PC_SELECTED_MODIFICATION_KEY);
+        } catch (error) {
+          this.appErrorService.handleAppError('Error retrieving selectedModificationId from localStorage', error);
+        }
+        if (selectedModificationId) {
+          this.modificationService.setSelectedModificationId(selectedModificationId);
+        }
 
         if (!this.egridService.subRegionsByZipcode) {
           this.egridService.getAllSubRegions();

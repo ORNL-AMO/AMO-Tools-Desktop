@@ -41,8 +41,6 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
           this.condenserWaterTemperature.setValidators([
               Validators.required,
               Validators.max(this.baselineCondenserWaterTemperature),
-              // todo set based on units
-              // Validators.min()
           ]);
           this.condenserWaterTemperature.updateValueAndValidity({ emitEvent: false });
       }

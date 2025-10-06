@@ -45,6 +45,7 @@ export interface ProcessCoolingAssessment {
 export interface Modification {
     name: string,
     id: string,
+    isValid: boolean,
     increaseChilledWaterTemp: IncreaseChilledWaterTemp,
     decreaseCondenserWaterTemp: DecreaseCondenserWaterTemp,
     useSlidingCondenserWaterTemp: UseSlidingCondenserWaterTemp,
@@ -120,7 +121,7 @@ export interface ApplyVariableSpeedControls extends EEM {
 
 export interface ReplaceChillers extends EEM {
     currentChillerId: string,
-    newChiller: ChillerInventoryItem,
+    newChiller?: ChillerInventoryItem,
 }
 
 export interface UpgradeCoolingTowerFans extends EEM {
@@ -361,4 +362,4 @@ export type ProcessCoolingDataProperty = keyof Pick<ProcessCoolingAssessment, 's
 export type ProcessCoolingSystemInformationProperty = keyof Pick<SystemInformation, 'operations' | 'co2SavingsData' | 'airCooledSystemInput' | 'chilledWaterPumpInput' | 'condenserWaterPumpInput' | 'towerInput' | 'waterCooledSystemInput'>;
 export type CoolingWaterPumpType = keyof Pick<SystemInformation, 'chilledWaterPumpInput' | 'condenserWaterPumpInput'>;
 
-export type ModificationEEMProperty = keyof Omit<Modification, 'name' | 'id' | 'notes'>;
+export type ModificationEEMProperty = keyof Omit<Modification, 'name' | 'id' | 'notes' | 'isValid'>;

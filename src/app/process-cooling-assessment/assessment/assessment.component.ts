@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Injector, Signal } from '@angular/core';
+import { Component, inject, Injector, Signal } from '@angular/core';
 import { ASSESSMENT_VIEW_LINKS, ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 import { Modification } from '../../shared/models/process-cooling-assessment';
 import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
@@ -23,7 +23,7 @@ export class AssessmentComponent {
   readonly ROUTE_TOKENS = ROUTE_TOKENS;
   smallScreenPanelTab: string = 'help';
   isModalOpen: boolean = false;
-  selectedModification$: Observable<Modification> = this.modificationService.selectedModification$;
+  selectedModification$: Observable<Modification> = this.modificationService.selectedModification$
 
   ASSESSMENT_VIEW_LINKS = ASSESSMENT_VIEW_LINKS;
   assessmentView: Signal<string> = this.processCoolingUiService.childView;

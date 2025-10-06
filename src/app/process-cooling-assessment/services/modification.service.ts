@@ -1,12 +1,17 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, EMPTY, map, Observable, of, switchMap, tap } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
 import { copyObject, getNewIdString } from '../../shared/helperFunctions';
+import { LocalStorageService } from '../../shared/local-storage.service';
+import { PC_SELECTED_MODIFICATION_KEY } from '../../shared/models/app';
+import { AppErrorService } from '../../shared/errors/app-error.service';
 
 @Injectable()
 export class ModificationService {
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private localStorageService = inject(LocalStorageService);
+  private appErrorService = inject(AppErrorService);
   private processCoolingSignal = this.processCoolingAssessmentService.processCoolingSignal;
   modifications = computed(() => {
     return this.processCoolingSignal().modifications;
@@ -15,19 +20,38 @@ export class ModificationService {
   private readonly selectedModificationId = new BehaviorSubject<string>(undefined);
   readonly selectedModificationId$ = this.selectedModificationId.asObservable();
 
-  readonly selectedModification$ = this.selectedModificationId$.pipe(
-    map(selectedModificationId => {
-      let selectedModification: Modification;
-      let processCooling: ProcessCoolingAssessment= this.processCoolingSignal();
-      if (selectedModificationId) {
-        selectedModification = this.getModificationById(selectedModificationId);
-      } else if (processCooling.modifications && processCooling.modifications.length > 0) {
-        this.setSelectedModificationId(processCooling.modifications[0].id);
+  // * this needs to be set from an assessment with mods that is being loaded for the first time
+    readonly selectedModification$: Observable<Modification> = this.selectedModificationId$.pipe(
+    tap(id => {
+      if (id) {
+        this.localStorageService.store(PC_SELECTED_MODIFICATION_KEY, id);
       }
-      return selectedModification;
-    })
+    }),
+    switchMap((selectedModificationId: string) => {
+      if (selectedModificationId) {
+        const selectedModification = this.getModificationById(selectedModificationId);
+        return of(selectedModification);
+      } else if (this.modifications() && this.modifications().length > 0) {
+        let defaultSelectedId = this.getStorageSelectedId();
+        defaultSelectedId = defaultSelectedId ? defaultSelectedId : this.modifications()[0].id;
+        this.setSelectedModificationId(defaultSelectedId);
+        return EMPTY;
+      } else {
+        return of(undefined);
+      }
+    }),
   );
-  
+
+  getStorageSelectedId(): string {
+    let userSelectedModificationId: string;
+    try {
+      userSelectedModificationId = this.localStorageService.retrieve(PC_SELECTED_MODIFICATION_KEY);
+    } catch (error) {
+      this.appErrorService.handleAppError('Error retrieving selectedModificationId from localStorage', error);
+    }
+    return userSelectedModificationId;
+  }
+
   setSelectedModificationId(modificationId: string) {
     this.selectedModificationId.next(modificationId);
   }
@@ -37,14 +61,14 @@ export class ModificationService {
   }
 
   updateModification(modification: Modification) {
-    let processCoolingAssessment: ProcessCoolingAssessment = {...this.processCoolingSignal()};
+    let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
     const modIndex = processCoolingAssessment.modifications.findIndex(mod => mod.id === modification.id);
     if (modIndex !== -1) {
-      const updatedModification = {...modification}
+      const updatedModification = { ...modification }
       processCoolingAssessment.modifications[modIndex] = updatedModification;
       console.log('Updating modification:', updatedModification);
       this.processCoolingAssessmentService.setProcessCooling(processCoolingAssessment);
-    } 
+    }
   }
 
   updateModificationEEM<K extends ModificationEEMProperty>(EEMName: K, value: Modification[K]) {
@@ -57,7 +81,7 @@ export class ModificationService {
   }
 
   addNewModificationToAssessment(name?: string) {
-    let processCoolingAssessment: ProcessCoolingAssessment = {...this.processCoolingSignal()};
+    let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
     let modification: Modification = this.getNewModification();
     modification.name = name ? name : modification.name;
     processCoolingAssessment.modifications.push(modification);
@@ -66,7 +90,7 @@ export class ModificationService {
   }
 
   deleteAssessmentModification(id: string) {
-    let processCoolingAssessment: ProcessCoolingAssessment = {...this.processCoolingSignal()};
+    let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
     if (id) {
       processCoolingAssessment.modifications = processCoolingAssessment.modifications.filter(mod => mod.id !== id);
     }
@@ -74,7 +98,7 @@ export class ModificationService {
   }
 
   copyModification(id: string) {
-    let processCoolingAssessment: ProcessCoolingAssessment = {...this.processCoolingSignal()};
+    let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
     let modificationToCopy = this.getModificationById(id);
     if (modificationToCopy) {
       let modificationCopy: Modification = copyObject(modificationToCopy);
@@ -88,13 +112,14 @@ export class ModificationService {
       this.setSelectedModificationId(modificationCopy.id);
     }
   }
-    
+
   getNewModification(): Modification {
     const baselineValues = this.getBaselineValues();
     return {
       name: 'Modification',
       id: getNewIdString(),
       notes: undefined,
+      isValid: true,
       increaseChilledWaterTemp: {
         chilledWaterSupplyTemp: baselineValues.increaseChilledWaterTemp.chilledWaterSupplyTemp,
         useOpportunity: false,
@@ -114,7 +139,7 @@ export class ModificationService {
       },
       replaceChillers: {
         currentChillerId: '',
-        newChiller: {} as ChillerInventoryItem,
+        newChiller: undefined,
         useOpportunity: false,
       },
       upgradeCoolingTowerFans: {
@@ -138,11 +163,23 @@ export class ModificationService {
     }
   }
 
-  // todo
+  
   getModifiedProcessCoolingAssessment(processCoolingAssessment: ProcessCoolingAssessment, modification: Modification): ProcessCoolingAssessment {
-    return {
-      ...processCoolingAssessment,
+    let modifiedProcessCoolingAssessment: ProcessCoolingAssessment = { ...processCoolingAssessment };
+
+    modifiedProcessCoolingAssessment.systemInformation = {
+      ...processCoolingAssessment.systemInformation,
+      operations: {
+        ...processCoolingAssessment.systemInformation.operations,
+        chilledWaterSupplyTemp: modification.increaseChilledWaterTemp.chilledWaterSupplyTemp,
+      },
+      waterCooledSystemInput: {
+        ...processCoolingAssessment.systemInformation.waterCooledSystemInput,
+        condenserWaterTemp: modification.decreaseCondenserWaterTemp.condenserWaterTemp,
+      }
     };
+
+    return modifiedProcessCoolingAssessment;
   }
 
   getBaselineValues(): ExploreOppsBaseline {

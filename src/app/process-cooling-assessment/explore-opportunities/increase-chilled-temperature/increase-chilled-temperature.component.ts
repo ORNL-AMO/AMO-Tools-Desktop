@@ -40,7 +40,6 @@ export class IncreaseChilledTemperatureComponent implements OnInit {
         this.chilledWaterTemperature.setValidators([
           Validators.required,
           Validators.min(this.baselineChilledWaterTemperature),
-          Validators.max(100)
         ]);
         this.chilledWaterTemperature.updateValueAndValidity({ emitEvent: false });
       }
