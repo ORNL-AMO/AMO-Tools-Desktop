@@ -17,7 +17,7 @@ export class ExploreOpportunitiesComponent {
   private injector = inject(Injector);
 
   smallScreenTab: string = 'details';
-  selectedModification$: Observable<Modification> = this.modificationService.selectedModification$;
+  selectedModification$: Observable<Modification> = this.modificationService.selectedModification$
   
   addModification() {
     this.modalService.openModal<AddModificationComponent>(

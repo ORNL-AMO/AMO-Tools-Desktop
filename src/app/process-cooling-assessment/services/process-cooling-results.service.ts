@@ -1,41 +1,57 @@
 import { inject, Injectable } from '@angular/core';
 import { ProcessCoolingSuiteApiService } from '../../tools-suite-api/process-cooling-suite-api.service';
-import { CondenserCoolingMethod, ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
-import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
-import { map } from 'rxjs';
 import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
+import { combineLatest, map, Observable } from 'rxjs';
+import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
+import { CondenserCoolingMethod, Modification, ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
+import { ModificationService } from './modification.service';
 
 @Injectable()
 export class ProcessCoolingResultsService {
   private readonly processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private readonly modificationService = inject(ModificationService);
   private readonly processCoolingWeatherContextService = inject(WEATHER_CONTEXT);
-
   private readonly suiteApi = inject(ProcessCoolingSuiteApiService);
 
-  readonly results$ = this.processCoolingAssessmentService.processCooling$.pipe(
-    map(processCooling => {
+  readonly baselineResults$: Observable<ProcessCoolingResults> = this.processCoolingAssessmentService.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      let results: ProcessCoolingResults;
       if (processCooling && processCooling.isValid) {
-        return this.getResults(processCooling);
+        results = this.getResults(processCooling);
       }
-      return undefined;
+      // console.log('[ProcessCoolingResultsService] baselineResults$ results:', results);
+      return results;
     })
   );
 
-  getResults(assessment: ProcessCoolingAssessment) {
-    console.log('[ProcessCoolingResultsService]  assessment:', assessment);
-    console.log('[ProcessCoolingResultsService]  weatherContextData:', this.processCoolingWeatherContextService.getWeatherData());
+  readonly modificationResults$: Observable<ProcessCoolingResults> = combineLatest([
+    this.processCoolingAssessmentService.processCooling$,
+    this.modificationService.selectedModification$
+  ]).pipe(
+    map(([processCooling, modification]: [ProcessCoolingAssessment, Modification]) => {
+      let results: ProcessCoolingResults;
+      if (processCooling && processCooling.isValid && modification && modification.isValid) {
+        const modifiedProcessCoolingAssessment = this.modificationService.getModifiedProcessCoolingAssessment(processCooling, modification);
+        results = this.getResults(modifiedProcessCoolingAssessment);
+      } 
+      // console.log('[ProcessCoolingResultsService] modificationResults$ results:', results);
+      return results;
+    })
+  );
+
+  getResults(processCoolingAssessment: ProcessCoolingAssessment): ProcessCoolingResults {
+    // console.log('[ProcessCoolingResultsService]  processCoolingAssessment:', processCoolingAssessment);
     let results: ProcessCoolingResults;
     const weatherData = this.processCoolingWeatherContextService.getWeatherData();
     const isValidWeatherData = this.processCoolingWeatherContextService.isValidWeatherData();
     
     if (isValidWeatherData) {
-      if (assessment.systemInformation.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
-        results = this.suiteApi.getWaterCooledResults(assessment, weatherData);
+      if (processCoolingAssessment.systemInformation.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
+        results = this.suiteApi.getWaterCooledResults(processCoolingAssessment, weatherData);
       } else {
-        results = this.suiteApi.getAirCooledResults(assessment, weatherData);
+        results = this.suiteApi.getAirCooledResults(processCoolingAssessment, weatherData);
       }
     }
-    console.log('[ProcessCoolingResultsService] getResults:', results);
     return results;
   }
 }

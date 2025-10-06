@@ -26,7 +26,53 @@ export const MockProcessCoolingAssessment: Assessment = {
     "processCooling": {
         name: "Baseline",
         isValid: true,
-        modifications: [],
+        modifications: [
+            {
+                "name": "Scenario 1",
+                "id": "8043e51b-34f3-4dd9-b318-54e8fd9b88fa",
+                "isValid": true,
+                "increaseChilledWaterTemp": {
+                    "chilledWaterSupplyTemp": 52,
+                    "useOpportunity": true
+                },
+                "decreaseCondenserWaterTemp": {
+                    "condenserWaterTemp": 65,
+                    "useOpportunity": true
+                },
+                "useSlidingCondenserWaterTemp": {
+                    "followingTempDifferential": 0,
+                    "isConstantCondenserWaterTemp": true,
+                    "useOpportunity": false
+                },
+                "applyVariableSpeedControls": {
+                    "fanSpeedType": 0,
+                    "useOpportunity": false
+                },
+                "replaceChillers": {
+                    "currentChillerId": "",
+                    "newChiller": undefined,
+                    "useOpportunity": false
+                },
+                "upgradeCoolingTowerFans": {
+                    "numberOfFans": 2,
+                    "useOpportunity": false
+                },
+                "useFreeCooling": {
+                    "usesFreeCooling": false,
+                    "isHEXRequired": false,
+                    "HEXApproachTemp": 0,
+                    "useOpportunity": false
+                },
+                "replaceRefrigerant": {
+                    "useOpportunity": false,
+                    "currentRefrigerant": "",
+                    "newRefrigerant": ""
+                },
+                "installVSDOnCentrifugalCompressor": {
+                    "useOpportunity": false
+                }
+            }
+        ],
         setupDone: true,
         systemBasics: { ...EXAMPLE_SYSTEM_BASICS },
         systemInformation: {

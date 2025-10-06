@@ -51,3 +51,18 @@ th, td {
     height: 0;
     width: 0;
 }
+
+.debug-results-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.debug-results-column {
+    flex: 1;
+    min-width: 300px;
+}
+
+.debug-results-column .debug-results {
+    margin-bottom: 0;
+}

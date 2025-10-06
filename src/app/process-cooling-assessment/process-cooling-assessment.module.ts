@@ -71,6 +71,7 @@ import { MonthlyOperatingScheduleComponent } from './operating-schedule/monthly-
 import { AddModificationComponent } from './explore-opportunities/add-modification/add-modification.component';
 import { ModificationService } from './services/modification.service';
 import { ModificationListComponent } from './explore-opportunities/modification-list/modification-list.component';
+import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
 
 
 export const ROUTE_TOKENS = {
@@ -246,7 +247,8 @@ const ROUTES: Route[] = [
     WeeklyOperatingScheduleComponent,
     MonthlyOperatingScheduleComponent,
     AddModificationComponent,
-    ModificationListComponent
+    ModificationListComponent,
+    AssessmentResultsComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -254,7 +256,7 @@ const ROUTES: Route[] = [
     AsyncPipe,
     RouterModule,
     SettingsModule,
-  ReactiveFormsModule,
+    ReactiveFormsModule,
     FormsModule,
     TabsTooltipModule,
     ConfirmDeleteModalModule,
@@ -270,7 +272,7 @@ const ROUTES: Route[] = [
     FormControlErrorsComponent,
     FormControlRequiredComponent,
     InputUnitComponent,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
   ],
   providers: [
     ProcessCoolingAssessmentService,

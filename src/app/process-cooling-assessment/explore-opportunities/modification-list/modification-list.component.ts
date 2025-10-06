@@ -1,7 +1,6 @@
 import { Component, DestroyRef, inject, Signal } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
 import { ModificationService } from '../../services/modification.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Modification } from '../../../shared/models/process-cooling-assessment';
 
 @Component({
@@ -13,12 +12,9 @@ import { Modification } from '../../../shared/models/process-cooling-assessment'
 export class ModificationListComponent {
   private modificationService = inject(ModificationService);
   private dialogRef = inject(DialogRef<ModificationListComponent>);
-  private destroyRef = inject(DestroyRef);
 
   readonly modifications: Signal<Modification[]> = this.modificationService.modifications;
-  readonly selectedModificationId$ = this.modificationService.selectedModificationId$.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    );
+  readonly selectedModificationId$ = this.modificationService.selectedModificationId$
 
   selectedModificationId: string;
   deleteModificationId: string;

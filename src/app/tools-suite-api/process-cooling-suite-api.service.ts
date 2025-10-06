@@ -256,9 +256,9 @@ export class ProcessCoolingSuiteApiService {
     const wetBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(wetBulbHourly);
     const debugSystemAnnualOnHours = this.suiteApiHelperService.extractWASMArray(systemAnnualOnHours);
 
-    console.log(debugSystemAnnualOnHours);
-    console.log(dryBulbHourly);
-    console.log(wetBulbHourly);
+    // console.log(debugSystemAnnualOnHours);
+    // console.log(dryBulbHourly);
+    // console.log(wetBulbHourly);
 
     let processCoolingInstance;
     if (!towerInputInstance) {
