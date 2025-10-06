@@ -112,7 +112,7 @@ export class CompressedAirBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str == 'baseline' || str == 'diagram' || this.isBaselineValid) {
+    if (str == 'baseline' || str == 'diagram' || str == 'sankey' || this.isBaselineValid) {
       this.compressedAirAssessmentService.mainTab.next(str);
     }
     this.collapseBanner();

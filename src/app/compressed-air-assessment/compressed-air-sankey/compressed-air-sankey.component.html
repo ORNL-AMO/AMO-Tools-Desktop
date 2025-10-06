@@ -12,6 +12,7 @@
         [ngClass]="{'disabled': assessment.compressedAirAssessment.endUseData.endUses.length === 0}">Airflow Sankey</a>
       </li>
     </ul>
+    <div class="alert alert-info" *ngIf="assessment.compressedAirAssessment.endUseData.endUses.length === 0">Note: You must supply End Uses to generate a Sankey Diagram.</div>
     <app-power-sankey [inReport]="inReport" *ngIf="sankeyTab === 'power'"></app-power-sankey>
     <app-airflow-sankey [inReport]="inReport" *ngIf="sankeyTab === 'airflow'"></app-airflow-sankey>
   </div>
@@ -32,5 +33,6 @@
         <app-airflow-sankey [inReport]="inReport" ></app-airflow-sankey>
       </div>
     </div>
+    <div class="alert alert-info" *ngIf="assessment.compressedAirAssessment.endUseData.endUses.length === 0">Note: You must supply End Uses to generate a Sankey Diagram.</div>
   </div>
 </div>
