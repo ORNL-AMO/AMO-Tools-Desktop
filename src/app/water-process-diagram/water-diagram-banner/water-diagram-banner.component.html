@@ -103,7 +103,7 @@
 
     <div *ngIf="bannerCollapsed" class="d-block d-lg-none ml-2 pr-2 h-100 flex-wrap">
         <div class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
-        <app-generic-banner-tooltips [message]="'Share'" [adjustLeft]="20">
+            <app-generic-banner-tooltips [message]="'Collapse'" [adjustLeft]="20">
                 <span class="fa fa-bars"></span>
             </app-generic-banner-tooltips>
         </div>
@@ -111,7 +111,7 @@
 
     <div *ngIf="!bannerCollapsed" class="d-block d-lg-none ml-auto pr-2 h-100">
         <div class="pl-2 pr-2 home-nav-item d-block" (click)="collapseBanner()">
-            <app-generic-banner-tooltips [message]="'Share'" [adjustLeft]="20">
+            <app-generic-banner-tooltips [message]="'Collapse'" [adjustLeft]="20">
                 <span class="fa fa-bars"></span>
             </app-generic-banner-tooltips>
         </div>
