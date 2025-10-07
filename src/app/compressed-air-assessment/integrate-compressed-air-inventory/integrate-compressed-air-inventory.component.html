@@ -2,7 +2,7 @@
     <h3>Connect Compressed Air Inventory</h3>
 </div>
 <div class="m-3">
-    <app-inventory-integration class="assessment-integration" *ngIf="inventorySelectOptions" [inPsat]="true"
+    <app-inventory-integration class="assessment-integration" *ngIf="inventorySelectOptions" [inCompressedAir]="true"
        (focusedField)="focusedField($event, true)" [connectedInventoryType]="'compressed-air'"
         [selectOptions]="inventorySelectOptions">
     </app-inventory-integration>

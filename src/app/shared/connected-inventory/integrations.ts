@@ -1,6 +1,7 @@
-import { CompressedAirMotorProperties } from "../../compressed-air-inventory/compressed-air-inventory";
+import { CentrifugalSpecifics, CompressedAirControlsProperties, CompressedAirDesignDetailsProperties, CompressedAirMotorProperties, CompressedAirPerformancePointsProperties, FieldMeasurements, NameplateData } from "../../compressed-air-inventory/compressed-air-inventory";
 import { FluidProperties, PumpMotorProperties, PumpProperties, SystemProperties } from "../../pump-inventory/pump-inventory";
 import { AssessmentType } from "../models/assessment";
+import { CompressedAirAssessment } from "../models/compressed-air-assessment";
 import { PsatInputs } from "../models/psat";
 
 export interface InventorySelectOptions {
@@ -57,7 +58,14 @@ export interface ConnectedPumpFromState {
 }
 
 export interface ConnectedCompressorFromState {
-  compressorMotor: CompressedAirMotorProperties
+  compressedAirAssessment?: CompressedAirAssessment,
+  compressorMotor: CompressedAirMotorProperties,
+  nameplateData: NameplateData,
+  compressedAirControlsProperties: CompressedAirControlsProperties,
+  compressedAirDesignDetailsProperties: CompressedAirDesignDetailsProperties,
+  compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties,
+  centrifugalSpecifics: CentrifugalSpecifics,  
+  fieldMeasurements: FieldMeasurements,
 }
 
 export interface ConnectedInventoryData {

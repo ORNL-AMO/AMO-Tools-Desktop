@@ -52,7 +52,7 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   compressedAirDesignDetailsProperties: CompressedAirDesignDetailsProperties,
   compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties,
   centrifugalSpecifics: CentrifugalSpecifics,
-  fieldMeasurements: FieldMeasurements;
+  fieldMeasurements: FieldMeasurements,
   validCompressedAir?: ValidCompressedAir,
   compressorLibId?: number,
 }

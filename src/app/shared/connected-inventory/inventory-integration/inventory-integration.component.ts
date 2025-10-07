@@ -27,6 +27,8 @@ export class InventoryIntegrationComponent {
   allowChanges: boolean = true;
   @Input() 
   inPsat: boolean;
+  @Input() 
+  inCompressedAir: boolean;
 
   @Output('focusedField')
   focusedField = new EventEmitter();
