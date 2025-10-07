@@ -18,6 +18,9 @@ export class CostsFormComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if (!this.opportunityCost.costDescription) {
+      this.opportunityCost.costDescription = 'Any Details that will be useful for implementation i.e. math, who is responsible, how to implement, where data came from.';
+    }
   }
 
   addOtherCost() {
