@@ -46,4 +46,15 @@ export class SystemSetupComponent implements OnInit {
     this.compressedAirInventoryService.modalOpen.next(true);
   }
 
+  setSelectedSystem(system: CompressedAirInventorySystem) {
+    let connectedCompressedAirItem: ConnectedItem = {
+      id: system.id,
+      name: system.name,
+      inventoryId: this.compressedAirInventoryService.currentInventoryId,
+      departmentId: system.id,
+      inventoryType: 'compressed-air',
+    }
+    return connectedCompressedAirItem;
+  }
+
 }

@@ -65,7 +65,7 @@
         </a>
 
         <app-connected-assessment [assessmentType]="'CompressedAir'" [integratedCreateType]="'CompressedAir'"
-            [connectedInventoryItem]="system.connectedItem" [connectedAssessmentItems]="system.connectedAssessments"
+            [connectedInventoryItem]="setSelectedSystem(system)" [connectedAssessmentItems]="system.connectedAssessments"
             [isItemValid]="system.isValid" (modalOpen)="setModalOpenView($event)">
         </app-connected-assessment>
 

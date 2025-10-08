@@ -24,7 +24,7 @@ import { getNameDateString } from '../helperFunctions';
 import { WaterProcessDiagramService } from '../../water-process-diagram/water-process-diagram.service';
 import { Diagram } from '../models/diagram';
 import { UpdateAssessmentFromDiagramService } from '../../water/update-assessment-from-diagram.service';
-import { CompressedAirItem } from '../../compressed-air-inventory/compressed-air-inventory';
+import { CompressedAirInventorySystem, CompressedAirItem } from '../../compressed-air-inventory/compressed-air-inventory';
 import { CompressedAirAssessmentIntegrationService } from '../connected-inventory/compressed-air-assessment-integration.service';
 
 @Component({
@@ -91,7 +91,7 @@ export class CreateAssessmentModalComponent {
   }
 
   initForm() {
-    let defaultType: string = this.integratedCreateType? this.integratedCreateType : 'Pump';
+    let defaultType: string = this.integratedCreateType? this.integratedCreateType : 'CompressedAir';
     let disableAssessmentType: boolean = Boolean(this.integratedCreateType);
     let defaultName: string = this.getAssessmentName(defaultType);
 
@@ -123,9 +123,9 @@ export class CreateAssessmentModalComponent {
         let selectedPumpItem: PumpItem = this.psatIntegrationService.getConnectedPumpItem(connectedInventoryData.connectedItem);
         assessmentName = `${selectedPumpItem.name}_${getNameDateString(currentDate)}`;
       }
-      if (assessmentType === 'Compressed-Air') {        
-          //! Nick - need to make sure this is being called
-        let selectedCompressedAirItem: CompressedAirItem = this.compressedAirAssessmentIntegrationService.getConnectedCompressedAirItem(connectedInventoryData.connectedItem);
+      if (assessmentType === 'CompressedAir') {
+        console.log('this is what i am working with');
+        let selectedCompressedAirItem: CompressedAirInventorySystem = this.compressedAirAssessmentIntegrationService.getConnectedCompressedAirItem(connectedInventoryData.connectedItem);
         assessmentName = `${selectedCompressedAirItem.name}_${getNameDateString(currentDate)}`;
       }
     }
@@ -208,7 +208,6 @@ export class CreateAssessmentModalComponent {
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
         let queryParams;
         if (this.connectedInventoryItem) {
-          //! Nick - need to make sure this is being called
           await this.createFromCompressedAirInventoryItem(createdAssessment);
           queryParams = { connectedInventory: true };
         }
