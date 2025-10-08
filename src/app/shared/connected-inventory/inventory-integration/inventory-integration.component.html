@@ -37,7 +37,7 @@
                 <div class="w-50 input-group justify-content-between">
                     <div>
                         <a class="click-link connected-inventory p-1" (click)="goToConnectedItem(item)">
-                            <span *ngIf="item.inventoryType === 'pump'">{{item.name}}</span>
+                            <span *ngIf="item.inventoryType === 'pump' || item.inventoryType === 'compressed-air'">{{item.name}}</span>
                             <span *ngIf="item.assessmentName">{{item.assessmentName}}</span>
                         </a>
                     </div>

@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { MotorItem } from '../../../motor-inventory/motor-inventory';
 import { PumpItem } from '../../../pump-inventory/pump-inventory';
 import * as _ from 'lodash';
-import { CompressedAirItem } from '../../../compressed-air-inventory/compressed-air-inventory';
+import { CompressedAirInventorySystem, CompressedAirItem } from '../../../compressed-air-inventory/compressed-air-inventory';
 
 
 @Component({
@@ -178,13 +178,13 @@ export class InventoryIntegrationComponent {
   }
 
   setSelectedCatalogItem() {
-    let selectedCatalogItem: MotorItem | PumpItem | CompressedAirItem = this.inventoryIntegrationForm.controls.selectedCatalogItem.value;
+    let selectedCatalogItem: MotorItem | PumpItem | CompressedAirInventorySystem = this.inventoryIntegrationForm.controls.selectedCatalogItem.value;
     let selectedInventoryId: number = this.inventoryIntegrationForm.controls.selectedInventoryId.value;
     let departmentId: string;
     if ('departmentId' in selectedCatalogItem) {
       departmentId = selectedCatalogItem.departmentId;
-    } else if ('systemId' in selectedCatalogItem) {
-      departmentId = selectedCatalogItem.systemId;
+    } else if ('id' in selectedCatalogItem) {
+      departmentId = selectedCatalogItem.id;
     }
 
     let connectedInventoryData: ConnectedInventoryData = {

@@ -55,13 +55,10 @@ export class CompressedAirAssessmentIntegrationService {
         compressedAirInventories = (_.orderBy(compressedAirInventories, 'modifiedDate'));
 
         let compressedAirInventoryOptions: Array<InventoryOption> = compressedAirInventories.map(inventory => {
-            let catalogItemOptions = inventory.compressedAirInventoryData.systems.map(system => {
-                let orderedCatalog = (_.orderBy(system.catalog, (item) => item.compressedAirMotor.motorPower, ['asc']));
-                return {
-                    department: system.name,
-                    catalog: orderedCatalog
-                }
-            });
+            let catalogItemOptions =  [{
+                    department: 'Compressed Air Systems',
+                    catalog: inventory.compressedAirInventoryData.systems
+                }];
 
             let inventoryOption: InventoryOption = {
                 display: inventory.name,
@@ -85,6 +82,7 @@ export class CompressedAirAssessmentIntegrationService {
         let selectedCompressedAirSystem: CompressedAirInventorySystem = this.getConnectedCompressedAirItem(connectedInventoryData.connectedItem);
         let compressedAirAssessment: CompressedAirAssessment = assessmentCompressedAirAssessment;
 
+        selectedCompressedAirSystem.isValid = this.compressedAirInventoryService.setIsValidSystem(compressedAirInventory.compressedAirInventoryData, selectedCompressedAirSystem);
         if (!selectedCompressedAirSystem.isValid) {
             connectedAssessmentState.connectedAssessmentStatus = 'invalid';
             connectedAssessmentState.msgHTML = `<b>${selectedCompressedAirSystem.name}</b> is invalid. Verify compressedAir catalog data and try again.`;

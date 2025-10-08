@@ -29,7 +29,7 @@
         [assessment]="assessment"></app-system-basics>
       <app-system-information *ngIf="setupTab == 'system-information'"></app-system-information>
       <app-integrate-compressed-air-inventory *ngIf="setupTab == 'system-basics'" [(assessment)]="assessment"
-        [(compressedAirAssessment)]="compressedAirAssessment" (saveCompressedAirAssessment)="save($event)"
+        [(compressedAirAssessment)]="compressedAirAssessment" (saveCompressedAirAssessment)="saveCompressedAirAssessment($event)"
         (saved)="saveAndUpdateSettings()" [settings]="settings">
       </app-integrate-compressed-air-inventory>
       <app-day-types *ngIf="setupTab == 'day-types'"></app-day-types>
