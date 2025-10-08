@@ -151,7 +151,6 @@ import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end
 import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-air-sankey.module';
 import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
-import { SimpleTooltipModule } from '../shared/simple-tooltip/simple-tooltip.module';
 
 import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
 
@@ -279,7 +278,6 @@ import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/g
     CompressedAirSankeyModule,
     EndUseDayTypeSetupModule,
     ImportExportModule,
-    SimpleTooltipModule,
     GenericBannerTooltipsModule
   ],
   providers: [

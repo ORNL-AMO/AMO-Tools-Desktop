@@ -30,8 +30,6 @@ export class CompressedAirBannerComponent implements OnInit {
   compresssedAirAssessmentSub: Subscription;
   bannerCollapsed: boolean = true;
 
-  hoverLock = false;
-  displayLockTooltip = false;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
@@ -168,25 +166,4 @@ export class CompressedAirBannerComponent implements OnInit {
     this.emailMeasurDataService.emailItemType.next('CompressedAir');
     this.coreService.showShareDataModal.next(true);
   }
-
-  hideTooltip(btnType: string) {
-    // if (btnType === "btnExpandChart") {
-    //   this.hoverBtnExpand = false;
-    //   this.displayExpandTooltip = false;
-    // } else if (btnType === "btnCollapseChart") {
-    //   this.hoverBtnCollapse = false;
-    //   this.displayCollapseTooltip = false;
-    // }
-  }
-
-  // initTooltip(btnType: string) {
-  //   if (btnType === "btnExpandChart") {
-  //     this.hoverBtnExpand = true;
-  //   } else if (btnType === "btnCollapseChart") {
-  //     this.hoverBtnCollapse = true;
-  //   } 
-  //   setTimeout(() => {
-  //     this.checkHover(btnType);
-  //   }, 200);
-  // }
 }
