@@ -1,5 +1,6 @@
 
 <div class="d-flex flex-column w-100 compressed-air">
+  <div class="alert alert-info" *ngIf="this.compressedAirAssessment.endUseData.endUses.length === 0">Note: You must supply End Uses to generate a Sankey Diagram.</div>
   <div class="row">
     <div class="navbar w-50 col-6">
       <div class="d-flex justify-content-center align-items-center w-100 flex-wrap">
