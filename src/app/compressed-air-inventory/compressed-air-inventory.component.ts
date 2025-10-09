@@ -15,6 +15,7 @@ import { CompressedAirMotorIntegrationService } from '../shared/connected-invent
 import { ConnectedInventoryData } from '../shared/connected-inventory/integrations';
 import { CompressedAirCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
+import { CompressedAirAssessmentIntegrationService } from '../shared/connected-inventory/compressed-air-assessment-integration.service';
 
 @Component({
   selector: 'app-compressed-air-inventory',
@@ -56,7 +57,9 @@ export class CompressedAirInventoryComponent implements OnInit {
     private existingCompressorDbService: ExistingCompressorDbService,
     private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService,
     private compressedAirCatalogService: CompressedAirCatalogService,
-    private integrationStateService: IntegrationStateService) { }
+    private integrationStateService: IntegrationStateService,
+    private compressedAirAssessmentIntegrationService: CompressedAirAssessmentIntegrationService
+  ) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
@@ -95,7 +98,7 @@ export class CompressedAirInventoryComponent implements OnInit {
 
     this.compressedAirInventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(data => {
       //TODO: CA Assessment integration 
-      //this.handleConnectedItemChanges();
+      this.handleConnectedItemChanges();
       this.saveDbData();
     });
 
@@ -145,7 +148,7 @@ export class CompressedAirInventoryComponent implements OnInit {
     this.compressedAirInventoryItem.compressedAirInventoryData = inventoryData;
     this.compressedAirInventoryItem.compressedAirInventoryData.hasConnectedInventoryItems = this.compressedAirMotorIntegrationService.getHasConnectedMotorItems(this.compressedAirInventoryItem);
     //TODO CA Assessment integration
-    //this.compressedAirInventoryItem.compressedAirInventoryData.hasConnectedPsat = this.psatIntegrationService.getHasConnectedPSAT(this.compressedAirInventoryItem);
+    this.compressedAirInventoryItem.compressedAirInventoryData.hasConnectedPsat = this.compressedAirAssessmentIntegrationService.getHasConnectedCompressedAirAssessment(this.compressedAirInventoryItem);
     await firstValueFrom(this.inventoryDbService.updateWithObservable(this.compressedAirInventoryItem));
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
@@ -183,17 +186,17 @@ export class CompressedAirInventoryComponent implements OnInit {
   restoreConnectedInventoryValues(connectedInventoryData: ConnectedInventoryData) {
     let selectedCompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     //TODO CA Assessment integration
-    //this.compressedAirMotorIntegrationService.restoreConnectedInventoryValues(selectedCompressedAirItem, connectedInventoryData);
+    this.compressedAirAssessmentIntegrationService.restoreConnectedInventoryValues(selectedCompressedAirItem, connectedInventoryData);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressedAirItem);
     this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAirItem);
   }
 
   handleConnectedItemChanges() {
-    //TODO: CA Assessment integration 
-    // let selectedPump = this.pumpCatalogService.selectedPumpItem.getValue();
-    // if (selectedPump && selectedPump.connectedAssessments) {
-    //   this.psatIntegrationService.checkConnectedAssessmentDiffers(selectedPump);
-    // }
+    //TODO: CA Assessment integration
+    let selectedCompressedAir = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    if (selectedCompressedAir && selectedCompressedAir.connectedAssessments) {
+      this.compressedAirAssessmentIntegrationService.checkConnectedAssessmentDiffers(selectedCompressedAir);
+    }
   }
 
 
