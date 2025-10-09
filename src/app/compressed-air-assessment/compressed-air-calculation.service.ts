@@ -7,6 +7,7 @@ import { ConvertCompressedAirService } from './convert-compressed-air.service';
 import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { CompressorTypeOptions, ControlTypes } from './baseline-tab-content/inventory-setup/inventory/inventoryOptions';
 import { CompressorInventoryItemClass } from './calculations/CompressorInventoryItemClass';
+import { InventoryFormService } from './baseline-tab-content/inventory-setup/inventory/inventory-form.service';
 
 
 // enum CompressorType {
@@ -55,8 +56,9 @@ import { CompressorInventoryItemClass } from './calculations/CompressorInventory
 @Injectable()
 export class CompressedAirCalculationService {
 
-  constructor(private inventoryService: InventoryService,
-    private convertUnitsService: ConvertUnitsService, private convertCompressedAirService: ConvertCompressedAirService, private compressedAirSuiteApiService: CompressedAirSuiteApiService) { }
+  constructor(
+    private convertUnitsService: ConvertUnitsService, private convertCompressedAirService: ConvertCompressedAirService, private compressedAirSuiteApiService: CompressedAirSuiteApiService,
+    private inventoryFormService: InventoryFormService) { }
 
 
   //computeFrom
@@ -68,7 +70,7 @@ export class CompressedAirCalculationService {
 
   compressorsCalc(compressor: CompressorInventoryItem | CompressorInventoryItemClass, settings: Settings, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number, canShutdown?: boolean, powerFactorData?: { amps: number, volts: number }): CompressorCalcResult {
     let isShutdown: boolean = false;
-    let hasShutdownTimer: boolean = this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType) && compressor.compressorControls.automaticShutdown;
+    let hasShutdownTimer: boolean = this.inventoryFormService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType) && compressor.compressorControls.automaticShutdown;
     if (canShutdown && (computeFrom == 1 || computeFrom == 3) && computeFromVal == 0) {
       if (hasShutdownTimer) {
         isShutdown = true;

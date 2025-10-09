@@ -179,14 +179,15 @@ export class CompressorInventoryItemClass {
     }
 
     setShowMaxFlowPerformancePoint() {
+        console.log('compressorType: ' + this.nameplateData.compressorType + ' controlType: ' + this.compressorControls.controlType);
         if (this.nameplateData.compressorType == 6 && (this.compressorControls.controlType == 7 || this.compressorControls.controlType == 9)) {
             this.showMaxFullFlow = false;
-        } else if (this.nameplateData.compressorType == 1 || this.nameplateData.compressorType == 2) {
-            if (this.compressorControls.controlType == 1) {
+        } else if ((this.nameplateData.compressorType == 1 || this.nameplateData.compressorType == 2) && this.compressorControls.controlType == 1) {
+            // if (this.compressorControls.controlType == 1) {
                 this.showMaxFullFlow = false;
-            } else {
-                this.showMaxFullFlow = true;
-            }
+            // } else {
+            //     this.showMaxFullFlow = true;
+            // }
         } else if (this.compressorControls.controlType === 11) {
             this.showMaxFullFlow = false;
         } else {

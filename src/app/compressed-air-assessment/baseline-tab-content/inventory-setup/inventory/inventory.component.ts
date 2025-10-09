@@ -37,7 +37,7 @@ export class InventoryComponent implements OnInit {
     this.initializeInventory();
 
     this.validationStatusSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => {
-      this.hasValidCompressors = val.compressorsValid;
+      this.hasValidCompressors = val?.compressorsValid;
     });
 
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {

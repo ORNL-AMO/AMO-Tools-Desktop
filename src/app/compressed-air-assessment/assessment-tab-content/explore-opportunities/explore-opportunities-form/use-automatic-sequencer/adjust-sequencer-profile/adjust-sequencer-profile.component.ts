@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../../shared/models/settings';
-import { InventoryService } from '../../../../../baseline-tab-content/inventory-setup/inventory/inventory.service';
+import { InventoryFormService } from '../../../../../baseline-tab-content/inventory-setup/inventory/inventory-form.service';
 
 @Component({
     selector: 'app-adjust-sequencer-profile',
@@ -35,7 +35,7 @@ export class AdjustSequencerProfileComponent implements OnInit {
   hourIntervals: Array<number>;
   fillRight: boolean = false;
   numberPipeDecimals: string;
-  constructor(private inventoryService: InventoryService) { }
+  constructor(private inventoryFormService: InventoryFormService) { }
 
   ngOnInit(): void {
     if(this.settings.unitsOfMeasure == 'Metric'){
@@ -189,6 +189,6 @@ export class AdjustSequencerProfileComponent implements OnInit {
 
   checkShowShutdownTimer(compressorId: string): boolean{
     let compressor: CompressorInventoryItem = this.adjustedCompressors.find(compressor => { return compressor.itemId == compressorId });
-    return this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType);
+    return this.inventoryFormService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType);
   }
 }
