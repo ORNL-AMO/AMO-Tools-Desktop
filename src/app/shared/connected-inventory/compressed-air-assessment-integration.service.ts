@@ -599,11 +599,16 @@ export class CompressedAirAssessmentIntegrationService {
             item.nameplateData.motorPower = currentAssessment.connectedCompressorFromState.compressorMotor.motorPower;
             item.nameplateData.fullLoadAmps = currentAssessment.connectedCompressorFromState.compressorMotor.motorFullLoadAmps;
             item.nameplateData.compressorType = currentAssessment.connectedCompressorFromState.nameplateData.compressorType;
+            item.nameplateData.fullLoadOperatingPressure = currentAssessment.connectedCompressorFromState.nameplateData.fullLoadOperatingPressure;
+            item.nameplateData.fullLoadRatedCapacity = currentAssessment.connectedCompressorFromState.nameplateData.fullLoadRatedCapacity;
+            item.nameplateData.totalPackageInputPower = currentAssessment.connectedCompressorFromState.nameplateData.totalPackageInputPower;
+
             item.compressorControls.controlType = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.controlType;
             item.compressorControls.unloadPointCapacity = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.unloadPointCapacity;
             item.compressorControls.numberOfUnloadSteps = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.numberOfUnloadSteps;
             item.compressorControls.automaticShutdown = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.automaticShutdown;
             item.compressorControls.unloadSumpPressure = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.unloadSumpPressure;
+            
             item.designDetails.blowdownTime = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.blowdownTime;
             item.designDetails.modulatingPressureRange = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.modulatingPressureRange;
             item.designDetails.inputPressure = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.inputPressure;
@@ -612,6 +617,7 @@ export class CompressedAirAssessmentIntegrationService {
             item.designDetails.noLoadPowerFM = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.noLoadPowerFM;
             item.designDetails.noLoadPowerUL = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.noLoadPowerUL;
             item.designDetails.maxFullFlowPressure = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.maxFullFlowPressure;
+            
             item.performancePoints.fullLoad = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.fullLoad;
             item.performancePoints.maxFullFlow = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.maxFullFlow;
             item.performancePoints.midTurndown = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.midTurndown;
@@ -619,6 +625,7 @@ export class CompressedAirAssessmentIntegrationService {
             item.performancePoints.unloadPoint = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.unloadPoint;
             item.performancePoints.noLoad = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.noLoad;
             item.performancePoints.blowoff = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.blowoff;
+            
             item.centrifugalSpecifics.surgeAirflow = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.surgeAirflow;
             item.centrifugalSpecifics.maxFullLoadPressure = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.maxFullLoadPressure;
             item.centrifugalSpecifics.maxFullLoadCapacity = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.maxFullLoadCapacity;
@@ -635,15 +642,42 @@ export class CompressedAirAssessmentIntegrationService {
         // * we don't care which connected assessment
         let currentAssessment = selectedCompressedAir.connectedAssessments[0];
         selectedCompressedAir.nameplateData.compressorType = currentAssessment.connectedCompressorFromState.nameplateData.compressorType;
-        selectedCompressedAir.compressedAirControlsProperties.controlType = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.controlType;
-        selectedCompressedAir.compressedAirDesignDetailsProperties.designEfficiency = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.designEfficiency;
+        selectedCompressedAir.nameplateData.fullLoadOperatingPressure = currentAssessment.connectedCompressorFromState.nameplateData.fullLoadOperatingPressure;
+        selectedCompressedAir.nameplateData.fullLoadRatedCapacity = currentAssessment.connectedCompressorFromState.nameplateData.fullLoadRatedCapacity;
+        selectedCompressedAir.nameplateData.totalPackageInputPower = currentAssessment.connectedCompressorFromState.nameplateData.totalPackageInputPower;
+        
         selectedCompressedAir.compressedAirMotor.motorFullLoadAmps = currentAssessment.connectedCompressorFromState.compressorMotor.motorFullLoadAmps;
         selectedCompressedAir.compressedAirMotor.motorPower = currentAssessment.connectedCompressorFromState.compressorMotor.motorPower;
+
+        selectedCompressedAir.compressedAirControlsProperties.controlType = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.controlType;
+        selectedCompressedAir.compressedAirControlsProperties.unloadPointCapacity = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.unloadPointCapacity;
+        selectedCompressedAir.compressedAirControlsProperties.numberOfUnloadSteps = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.numberOfUnloadSteps;
+        selectedCompressedAir.compressedAirControlsProperties.automaticShutdown = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.automaticShutdown;
+        selectedCompressedAir.compressedAirControlsProperties.unloadSumpPressure = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.unloadSumpPressure;
+
+        selectedCompressedAir.compressedAirDesignDetailsProperties.designEfficiency = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.designEfficiency;
+        selectedCompressedAir.compressedAirDesignDetailsProperties.blowdownTime = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.blowdownTime;
+        selectedCompressedAir.compressedAirDesignDetailsProperties.modulatingPressureRange = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.modulatingPressureRange;
+        selectedCompressedAir.compressedAirDesignDetailsProperties.inputPressure = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.inputPressure;
+        selectedCompressedAir.compressedAirDesignDetailsProperties.serviceFactor = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.serviceFactor;
+        selectedCompressedAir.compressedAirDesignDetailsProperties.noLoadPowerFM = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.noLoadPowerFM;
+        selectedCompressedAir.compressedAirDesignDetailsProperties.noLoadPowerUL = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.noLoadPowerUL;
+        selectedCompressedAir.compressedAirDesignDetailsProperties.maxFullFlowPressure = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.maxFullFlowPressure;
+
+        selectedCompressedAir.compressedAirPerformancePointsProperties.fullLoad = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.fullLoad;
+        selectedCompressedAir.compressedAirPerformancePointsProperties.maxFullFlow = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.maxFullFlow;   
+        selectedCompressedAir.compressedAirPerformancePointsProperties.midTurndown = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.midTurndown;
+        selectedCompressedAir.compressedAirPerformancePointsProperties.turndown = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.turndown;
+        selectedCompressedAir.compressedAirPerformancePointsProperties.unloadPoint = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.unloadPoint;
+        selectedCompressedAir.compressedAirPerformancePointsProperties.noLoad = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.noLoad;
+        selectedCompressedAir.compressedAirPerformancePointsProperties.blowoff = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.blowoff;
+        
         selectedCompressedAir.centrifugalSpecifics.maxFullLoadCapacity = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.maxFullLoadCapacity;
         selectedCompressedAir.centrifugalSpecifics.maxFullLoadPressure = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.maxFullLoadPressure;
         selectedCompressedAir.centrifugalSpecifics.minFullLoadCapacity = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.minFullLoadCapacity;
         selectedCompressedAir.centrifugalSpecifics.minFullLoadPressure = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.minFullLoadPressure;
         selectedCompressedAir.centrifugalSpecifics.surgeAirflow = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.surgeAirflow;
+        
         connectedInventoryData.shouldRestoreConnectedValues = false;
         this.integrationStateService.connectedInventoryData.next(connectedInventoryData)
     }

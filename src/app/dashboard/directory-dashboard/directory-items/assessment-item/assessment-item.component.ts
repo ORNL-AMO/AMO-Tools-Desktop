@@ -17,6 +17,7 @@ import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { PsatIntegrationService } from '../../../../shared/connected-inventory/psat-integration.service';
 import { UpdateAssessmentFromDiagramService } from '../../../../water/update-assessment-from-diagram.service';
+import { CompressedAirAssessmentIntegrationService } from '../../../../shared/connected-inventory/compressed-air-assessment-integration.service';
 
 @Component({
     selector: 'app-assessment-item',
@@ -45,7 +46,8 @@ export class AssessmentItemComponent implements OnInit {
     private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService,
     private updateAssessmentFromDiagramService: UpdateAssessmentFromDiagramService,
     private psatIntegrationService: PsatIntegrationService,
-    private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService) { }
+    private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
+    private compressedAirAssessmentIntegrationService: CompressedAirAssessmentIntegrationService) { }
 
 
   ngOnInit() {
@@ -241,6 +243,10 @@ export class AssessmentItemComponent implements OnInit {
         this.psatIntegrationService.removeConnectedPumpInventory(assessment.psat.connectedItem, assessment.id);
       } else if (assessment.psat.connectedItem.inventoryType === 'motor') {
         this.psatIntegrationService.removeMotorConnectedItem(assessment.psat.connectedItem);
+      } else if (assessment.compressedAirAssessment.connectedItem.inventoryType === 'compressed-air') {
+        this.compressedAirAssessmentIntegrationService.removeConnectedCompressedAirInventory(assessment.compressedAirAssessment.connectedItem, assessment.id);
+      } else if (assessment.compressedAirAssessment.connectedItem.inventoryType === 'motor') {
+        this.compressedAirAssessmentIntegrationService.removeMotorConnectedItem(assessment.compressedAirAssessment.connectedItem);
       }
     }
   }
