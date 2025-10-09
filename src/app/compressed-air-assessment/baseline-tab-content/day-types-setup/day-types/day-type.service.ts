@@ -36,24 +36,4 @@ export class DayTypeService {
     })
     return dayTypes;
   }
-
-  hasValidDayTypes(compressedAirDayTypes: Array<CompressedAirDayType>): boolean {
-    let hasValidDayTypes: boolean = false;
-    if (compressedAirDayTypes.length > 0) {
-      let isDayTypeFormValid = true;
-      let summedTotalDays: number = 0;
-      compressedAirDayTypes.forEach(dayType => {
-        if(isDayTypeFormValid){
-          isDayTypeFormValid = this.getDayTypeForm(dayType).valid;
-        }
-        if (dayType.numberOfDays > 0) {
-          summedTotalDays += dayType.numberOfDays;
-        } else {
-          return false;
-        }
-      });
-      hasValidDayTypes = isDayTypeFormValid && summedTotalDays > 0 && summedTotalDays <= 365;
-    }
-    return hasValidDayTypes;
-  }
 }

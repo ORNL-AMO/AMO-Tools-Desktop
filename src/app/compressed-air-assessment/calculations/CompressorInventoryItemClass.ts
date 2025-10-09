@@ -15,7 +15,6 @@ export class CompressorInventoryItemClass {
     designDetails: DesignDetails;
     performancePoints: CompressorPerformancePointsClass;
     centrifugalSpecifics: CentrifugalSpecifics;
-    isValid: boolean;
     description: string;
     modifiedDate: Date;
     originalCompressorId: string;
@@ -30,7 +29,6 @@ export class CompressorInventoryItemClass {
     constructor(inventoryItem: CompressorInventoryItem) {
         this.itemId = inventoryItem.itemId;
         this.description = inventoryItem.description;
-        this.isValid = inventoryItem.isValid;
         this.modifiedDate = inventoryItem.modifiedDate;
         this.compressorLibId = inventoryItem.compressorLibId;
         this.performancePoints = new CompressorPerformancePointsClass(inventoryItem.performancePoints);
@@ -141,7 +139,6 @@ export class CompressorInventoryItemClass {
             compressorLibId: this.compressorLibId,
             name: this.name,
             description: this.description,
-            isValid: this.isValid,
             nameplateData: this.nameplateData,
             compressorControls: this.compressorControls,
             designDetails: this.designDetails,

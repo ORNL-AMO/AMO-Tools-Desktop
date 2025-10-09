@@ -1,8 +1,8 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { CompressorInventoryItem } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
-import { InventoryService } from '../../../baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { PerformancePointsFormService } from '../../../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
+import { InventoryFormService } from '../../../baseline-tab-content/inventory-setup/inventory/inventory-form.service';
 
 @Component({
     selector: 'app-compressor-item-summary',
@@ -28,7 +28,9 @@ export class CompressorItemSummaryComponent implements OnInit {
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
   copyTableString: any;
   
-  constructor(private inventoryService: InventoryService, private performancePointsFormService: PerformancePointsFormService) { }
+  constructor(private performancePointsFormService: PerformancePointsFormService,
+    private inventoryFormService: InventoryFormService
+  ) { }
 
   ngOnInit(): void {
     this.setDisplayCentrifugalSection();
@@ -70,31 +72,31 @@ export class CompressorItemSummaryComponent implements OnInit {
 
 
   checkDisplayUnloadCapacity(controlType: number): boolean {
-    return this.inventoryService.checkDisplayUnloadCapacity(controlType);
+    return this.inventoryFormService.checkDisplayUnloadCapacity(controlType);
   }
 
   checkDisplayAutomaticShutdown(controlType: number): boolean {
-    return this.inventoryService.checkDisplayAutomaticShutdown(controlType);
+    return this.inventoryFormService.checkDisplayAutomaticShutdown(controlType);
   }
 
   checkDisplayUnloadSumpPressure(compressorType: number, controlType: number): boolean {
-    return this.inventoryService.checkDisplayUnloadSlumpPressure(compressorType, controlType);
+    return this.inventoryFormService.checkDisplayUnloadSlumpPressure(compressorType, controlType);
   }
 
   checkDisplayBlowdownTime(compressorType: number, controlType: number): boolean {
-    return this.inventoryService.checkDisplayBlowdownTime(compressorType, controlType);
+    return this.inventoryFormService.checkDisplayBlowdownTime(compressorType, controlType);
   }
 
   checkDisplayModulation(controlType: number): boolean {
-    return this.inventoryService.checkDisplayModulation(controlType);
+    return this.inventoryFormService.checkDisplayModulation(controlType);
   }
 
   checkDisplayNoLoadPowerFM(compressorType: number, controlType: number): boolean {
-    return this.inventoryService.checkDisplayNoLoadPowerFM(compressorType, controlType);
+    return this.inventoryFormService.checkDisplayNoLoadPowerFM(compressorType, controlType);
   }
 
   checkDisplayNoLoadPowerUL(compressorType: number, controlType: number): boolean {
-    return this.inventoryService.checkDisplayNoLoadPowerUL(compressorType, controlType);
+    return this.inventoryFormService.checkDisplayNoLoadPowerUL(compressorType, controlType);
   }
 
   checkDisplayMaxFullFlow(compressorType: number, controlType: number): boolean {

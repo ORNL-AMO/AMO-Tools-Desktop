@@ -1,5 +1,4 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
-import { ProfileSummaryValid } from "../../compressed-air-assessment/compressed-air-assessment.service";
 import { DayTypeSummary, LogToolField } from "../../log-tool/log-tool-models";
 
 export interface CompressedAirAssessment {
@@ -211,7 +210,7 @@ export interface CompressorInventoryItem {
     compressorLibId?: number,
     name: string,
     description: string,
-    isValid?: boolean,
+    // isValid?: boolean,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
     designDetails: DesignDetails,
@@ -285,8 +284,10 @@ export interface SystemProfileSetup {
     dayTypeId: string,
     numberOfHours: number,
     dataInterval: 1 | 24,
-    profileDataType: "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower"
+    profileDataType: ProfileDataType
 }
+
+export type ProfileDataType = "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower";
 
 export interface CentrifugalSpecifics {
     surgeAirflow: number,
@@ -312,7 +313,6 @@ export interface ProfileSummary {
     avgAirflow?: number,
     avgPrecentPower?: number,
     avgPercentCapacity?: number,
-    profileSummaryValid?: ProfileSummaryValid
     profileSummaryForPrint?: Array<Array<ProfileSummaryData>>,
     adjustedIsentropicEfficiency?: number
 }

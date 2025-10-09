@@ -6,6 +6,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
 import { InventoryService } from '../inventory.service';
+import { InventoryFormService } from '../inventory-form.service';
 
 @Component({
     selector: 'app-centrifugal-specifics',
@@ -22,7 +23,8 @@ export class CentrifugalSpecificsComponent implements OnInit {
   settings: Settings;
   constructor(private inventoryService: InventoryService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService,
+    private inventoryFormService: InventoryFormService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -30,7 +32,7 @@ export class CentrifugalSpecificsComponent implements OnInit {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
         if (this.isFormChange == false) {
-          this.form = this.inventoryService.getCentrifugalFormFromObj(compressor);
+          this.form = this.inventoryFormService.getCentrifugalFormFromObj(compressor);
         } else {
           this.isFormChange = false;
         }
@@ -46,7 +48,7 @@ export class CentrifugalSpecificsComponent implements OnInit {
 
   save() {
     this.isFormChange = true;
-    let centrifugalSpecifics: CentrifugalSpecifics = this.inventoryService.getCentrifugalObjFromForm(this.form);
+    let centrifugalSpecifics: CentrifugalSpecifics = this.inventoryFormService.getCentrifugalObjFromForm(this.form);
     this.compressedAirDataManagementService.updateCentrifugalSpecifics(centrifugalSpecifics, true);
   }
 

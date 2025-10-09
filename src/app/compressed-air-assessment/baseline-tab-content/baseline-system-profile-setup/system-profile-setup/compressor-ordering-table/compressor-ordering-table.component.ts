@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 import * as _ from 'lodash';
+import { getHasMissingTrimSelection, getHourIntervals } from '../../../../compressed-air-assessment-validation/compressedAirValidationFunctions';
 @Component({
     selector: 'app-compressor-ordering-table',
     templateUrl: './compressor-ordering-table.component.html',
@@ -32,10 +33,10 @@ export class CompressorOrderingTableComponent implements OnInit {
         this.selectedDayTypeId = val.systemProfile.systemProfileSetup.dayTypeId;
         this.hasMissingTrimSelection = false;
         this.setSelectedTrimCompressorForm(val);
-        this.hasMissingTrimSelection = this.compressedAirAssessmentService.getHasMissingTrimSelection(val);
+        this.hasMissingTrimSelection = getHasMissingTrimSelection(val);
         this.multiCompressorSystemControls = val.systemInformation.multiCompressorSystemControls;
         this.profileSummary = val.systemProfile.profileSummary;
-        this.hourIntervals = this.compressedAirAssessmentService.getHourIntervals(val.systemProfile.systemProfileSetup);
+        this.hourIntervals = getHourIntervals(val.systemProfile.systemProfileSetup);
         this.setOrderingOptions(val.compressorInventoryItems);
       } else {
         this.isFormChange = false;
@@ -108,7 +109,7 @@ export class CompressorOrderingTableComponent implements OnInit {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment.systemProfile.profileSummary = this.profileSummary;
     this.setSelectedTrimCompressorFromForm(compressedAirAssessment);
-    this.hasMissingTrimSelection = this.compressedAirAssessmentService.getHasMissingTrimSelection(compressedAirAssessment);
+    this.hasMissingTrimSelection = getHasMissingTrimSelection(compressedAirAssessment);
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 

@@ -74,8 +74,9 @@
         </thead>
         <tbody>
             <tr *ngFor="let summary of profileSummary | dayTypeFilter:selectedDayTypeId; let compressorIndex = index;">
+                @let compressor = summary.compressorId | compressorItem:inventoryItems;
                 <td class="bold text-center">
-                    {{summary.compressorId|compressorName:inventoryItems}}
+                    {{compressor.name}}
                 </td>
                 <td class="text-center">
                     <span *ngIf="profileDataType == 'power'">Power</span>
@@ -130,27 +131,26 @@
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.power"
                             step="any" min="0"
-                            [ngClass]="{'invalid': !findIsValidPower(summary.compressorId, dataIndex)}">
+                            [ngClass]="summaryData.power | powerValidation: compressor">
                         <input required *ngIf="profileDataType == 'airflow'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.airflow"
                             step="any" min="0"
-                            [ngClass]="{'invalid': !findIsValidAirflow(summary.compressorId, dataIndex),
-                                        'warning': findHasAirflowWarning(summary.compressorId, dataIndex)}"
+                            [ngClass]="summaryData.airflow | airflowValidation: compressor"
                             >
                         <input required *ngIf="profileDataType == 'percentCapacity'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.percentCapacity"
                             step="any" min="0"
-                            [ngClass]="{'invalid': !findIsValidPercentCapacity(summary.compressorId, dataIndex)}">
+                            [ngClass]="summaryData.percentCapacity | percentCapacityValidation">
                         <input required *ngIf="profileDataType == 'percentPower'" type="number" class="form-control"
                             id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.percentPower"
                             step="any" min="0"
-                            [ngClass]="{'invalid': !findIsValidPercentPower(summary.compressorId, dataIndex)}">
+                            [ngClass]="summaryData.percentPower | percentPowerValidation: compressor">
                     </span>
                     <div class="w-100 bold text-center" *ngIf="summaryData.order == 0">
                         &mdash; &mdash;
@@ -161,16 +161,16 @@
                             name="{{'summaryData_powerFactor_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.powerFactor"
                             step=".1" min="0"
-                            [ngClass]="{'invalid': !findIsValidPowerFactor(summary.compressorId, dataIndex)}">
+                            [ngClass]="summaryData.powerFactor | powerFactorValidation">
                         <input type="number" class="form-control" id="{{'order_amps_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_amps_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.amps" step="any" min="0"
-                            [ngClass]="{'invalid': !findIsValidAmps(summary.compressorId, dataIndex)}">
+                            [ngClass]="summaryData.amps | ampsValidation: compressor">
                         <input type="number" class="form-control" id="{{'order_'+compressorIndex+dataIndex}}"
                             name="{{'summaryData_volts_'+compressorIndex+dataIndex}}"
                             (input)="updateProfileSummary(summary, dataIndex)" [(ngModel)]="summaryData.volts"
                             step="any" min="0"
-                            [ngClass]="{'invalid': !findIsValidVolts(summary.compressorId, dataIndex)}">
+                            [ngClass]="summaryData.volts | voltsValidation">
                     </div>
                 </td>
             </tr>

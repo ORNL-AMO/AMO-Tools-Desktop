@@ -13,6 +13,8 @@ import { AssessmentCo2SavingsService } from '../../../../../shared/assessment-co
 import { CompressedAirAssessmentModificationResults } from '../../../../../compressed-air-assessment/calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirBaselineDayTypeProfileSummary } from '../../../../../compressed-air-assessment/calculations/CompressedAirBaselineDayTypeProfileSummary';
 import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../../../../../compressed-air-assessment/assessment-tab-content/explore-opportunities/explore-opportunities-validation.service';
+import { CompressedAirAssessmentValidationService } from '../../../../../compressed-air-assessment/compressed-air-assessment-validation/compressed-air-assessment-validation.service';
+import { CompressedAirAssessmentValidation } from '../../../../../compressed-air-assessment/compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 
 @Component({
   selector: 'app-compressed-air-assessment-card',
@@ -38,13 +40,14 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
     private compressedAirCalculationService: CompressedAirCalculationService,
-    private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService,
+    private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService) { }
 
   ngOnInit(): void {
-    this.compressedAirAssessmentService.setIsSetupDone(this.assessment.compressedAirAssessment);
-    this.setupDone = this.assessment.compressedAirAssessment.setupDone;
+    this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
+    let validationStatus: CompressedAirAssessmentValidation = this.compressedAirAssessmentValidationService.validateCompressedAirAssessment(this.assessment.compressedAirAssessment, this.settings);
+    this.setupDone = validationStatus.baselineValid;
     if (this.setupDone) {
-      this.settings = this.settingsDbService.getByAssessmentId(this.assessment);
       let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.assessment.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
       this.baselineResults = compressedAirAssessmentBaselineResults.baselineResults;
       this.numMods = this.assessment.compressedAirAssessment.modifications.length;

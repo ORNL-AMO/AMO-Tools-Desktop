@@ -7,6 +7,8 @@ import { CompressedAirAssessment, CompressedAirDayType } from '../../../../share
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { InventoryService } from '../../inventory-setup/inventory/inventory.service';
 import { DayTypeService } from './day-type.service';
+import { CompressedAirAssessmentValidation } from '../../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
+import { CompressedAirAssessmentValidationService } from '../../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
 
 @Component({
     selector: 'app-day-types',
@@ -31,17 +33,24 @@ export class DayTypesComponent implements OnInit {
   hasEndUses: boolean;
   hasModifications: boolean;
   hasDataExplorerData: boolean;
+
+  validationStatus: CompressedAirAssessmentValidation;
+  validationStatusSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private dayTypeService: DayTypeService, private router: Router,
-    private inventoryService: InventoryService) { }
+    private inventoryService: InventoryService,
+    private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService) { }
 
   ngOnInit(): void {
+    this.validationStatusSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => {
+      this.hasValidDayTypes = val.dayTypesValid;
+    });
+
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.compressedAirAssessment = val;
       this.hasDataExplorerData = (val.logToolData != undefined);
       this.checkLockDayTypes()
       this.setTotalDays();
-      this.hasValidDayTypes = this.dayTypeService.hasValidDayTypes(val.compressedAirDayTypes);
       if (this.isFormChange == false) {
         this.dayTypesFormArray = this.dayTypeService.getDayTypeFormArray(this.compressedAirAssessment.compressedAirDayTypes);
       } else {
@@ -65,6 +74,7 @@ export class DayTypesComponent implements OnInit {
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
+    this.validationStatusSub.unsubscribe();
   }
 
   openDataExplorer() {

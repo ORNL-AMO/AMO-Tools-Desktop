@@ -7,6 +7,7 @@ import { CompressedAirAssessmentService } from '../../../../compressed-air-asses
 import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
 import { InventoryService } from '../inventory.service';
 import { ControlTypes } from '../inventoryOptions';
+import { InventoryFormService } from '../inventory-form.service';
 
 @Component({
     selector: 'app-control-data',
@@ -26,7 +27,8 @@ export class ControlDataComponent implements OnInit {
   contentCollapsed: boolean;
   compressorType: number;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService,
+    private inventoryFormService: InventoryFormService) { }
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapseControls;
@@ -35,7 +37,7 @@ export class ControlDataComponent implements OnInit {
       if (val) {
         if (this.isFormChange == false) {
           this.compressorType = val.nameplateData.compressorType;
-          this.form = this.inventoryService.getCompressorControlsFormFromObj(val.compressorControls, this.compressorType);
+          this.form = this.inventoryFormService.getCompressorControlsFormFromObj(val.compressorControls, this.compressorType);
           this.toggleDisableControls();
           this.setControlTypeOptions(val.nameplateData.compressorType);
           this.setDisplayValues();
@@ -69,7 +71,7 @@ export class ControlDataComponent implements OnInit {
   }
 
   changeControlType() {
-    this.form = this.inventoryService.setCompressorControlValidators(this.form);
+    this.form = this.inventoryFormService.setCompressorControlValidators(this.form);
     if (this.form.controls.controlType.value == 2 || this.form.controls.controlType.value == 3
       || this.form.controls.controlType.value == 4 || this.form.controls.controlType.value == 6 || this.form.controls.controlType.value == 5) {
       this.form.controls.numberOfUnloadSteps.patchValue(2);
@@ -101,14 +103,14 @@ export class ControlDataComponent implements OnInit {
   }
 
   setDisplayValues() {
-    this.displayUnload = this.inventoryService.checkDisplayUnloadCapacity(this.form.controls.controlType.value);
-    this.displayAutomaticShutdown = this.inventoryService.checkDisplayAutomaticShutdown(this.form.controls.controlType.value);
-    this.displayUnloadSumpPressure = this.inventoryService.checkDisplayUnloadSlumpPressure(this.compressorType, this.form.controls.controlType.value)
+    this.displayUnload = this.inventoryFormService.checkDisplayUnloadCapacity(this.form.controls.controlType.value);
+    this.displayAutomaticShutdown = this.inventoryFormService.checkDisplayAutomaticShutdown(this.form.controls.controlType.value);
+    this.displayUnloadSumpPressure = this.inventoryFormService.checkDisplayUnloadSlumpPressure(this.compressorType, this.form.controls.controlType.value)
   }
 
   save(isControlTypeChange?: boolean) {
     this.isFormChange = true;
-    let compressorControls: CompressorControls = this.inventoryService.getCompressorControlsObjFromForm(this.form);
+    let compressorControls: CompressorControls = this.inventoryFormService.getCompressorControlsObjFromForm(this.form);
     this.compressedAirDataManagementService.updateControlData(compressorControls, true, isControlTypeChange);
   }
 

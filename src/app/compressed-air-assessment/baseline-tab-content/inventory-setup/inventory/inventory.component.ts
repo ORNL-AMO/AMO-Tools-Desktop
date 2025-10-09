@@ -6,6 +6,8 @@ import { CompressedAirAssessmentService } from '../../../compressed-air-assessme
 import { InventoryService } from './inventory.service';
 import * as _ from 'lodash';
 import { CompressedAirDataManagementService } from '../../../compressed-air-data-management.service';
+import { CompressedAirAssessmentValidationService } from '../../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
+import { InventoryFormService } from './inventory-form.service';
 @Component({
     selector: 'app-inventory',
     templateUrl: './inventory.component.html',
@@ -23,22 +25,29 @@ export class InventoryComponent implements OnInit {
   showCompressorModal: boolean = false;
   hasValidCompressors: boolean = true;
   selectedCompressor: CompressorInventoryItem;
+
+  validationStatusSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private inventoryService: InventoryService, private cd: ChangeDetectorRef,
-    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService,
+    private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService,
+    private inventoryFormService: InventoryFormService) { }
 
   ngOnInit(): void {
     this.initializeInventory();
+
+    this.validationStatusSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => {
+      this.hasValidCompressors = val.compressorsValid;
+    });
+
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         this.selectedCompressor = val;
         this.hasInventoryItems = true;
-        let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-        this.hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
         this.compressorType = val.nameplateData.compressorType;
         this.controlType = val.compressorControls.controlType;
         if (this.isFormChange == false) {
-          this.form = this.inventoryService.getGeneralInformationFormFromObj(val.name, val.description);
+          this.form = this.inventoryFormService.getGeneralInformationFormFromObj(val.name, val.description);
         } else {
           this.isFormChange = false;
         }
@@ -52,13 +61,13 @@ export class InventoryComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
+    this.validationStatusSub.unsubscribe();
   }
 
   initializeInventory() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.hasInventoryItems = (compressedAirAssessment.compressorInventoryItems.length != 0);
     if (this.hasInventoryItems) {
-      this.hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
       let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
       if (selectedCompressor) {
         let compressorExist: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == selectedCompressor.itemId });

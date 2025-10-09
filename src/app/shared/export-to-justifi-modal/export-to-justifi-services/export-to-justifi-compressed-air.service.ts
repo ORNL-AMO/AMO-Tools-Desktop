@@ -1,28 +1,28 @@
 import { Injectable } from '@angular/core';
 import * as ExcelJS from 'exceljs';
-import { CompressedAirAssessmentResultsService } from '../../../compressed-air-assessment/compressed-air-assessment-results.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../models/settings';
 import { Assessment } from '../../models/assessment';
 import { Modification } from '../../models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../../compressed-air-assessment/compressed-air-assessment.service';
-import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../../../compressed-air-assessment/calculations/caCalculationModels'
+import { BaselineResults, DayTypeModificationResult } from '../../../compressed-air-assessment/calculations/caCalculationModels'
 import { CompressedAirAssessmentBaselineResults } from '../../../compressed-air-assessment/calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirCalculationService } from '../../../compressed-air-assessment/compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../assessment-co2-savings/assessment-co2-savings.service';
 import { CompressedAirAssessmentModificationResults } from '../../../compressed-air-assessment/calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirCombinedDayTypeResults } from '../../../compressed-air-assessment/calculations/modifications/CompressedAirCombinedDayTypeResults';
+import { CompressedAirAssessmentValidationService } from '../../../compressed-air-assessment/compressed-air-assessment-validation/compressed-air-assessment-validation.service';
+import { CompressedAirAssessmentValidation } from '../../../compressed-air-assessment/compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExportToJustifiCompressedAirService {
 
-  constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
+  constructor(
     private settingsDbService: SettingsDbService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirCalculationService: CompressedAirCalculationService,
-    private assessmentCo2SavingsService: AssessmentCo2SavingsService
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService,
+    private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService
   ) { }
 
 
@@ -34,9 +34,9 @@ export class ExportToJustifiCompressedAirService {
     assessmentWorksheet.getCell('B' + assessmentRowIndex).value = 'Compressed Air';
 
 
-    this.compressedAirAssessmentService.setIsSetupDone(assessment.compressedAirAssessment);
-    if (assessment.compressedAirAssessment.setupDone) {
-      let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+    let validationStatus: CompressedAirAssessmentValidation = this.compressedAirAssessmentValidationService.validateCompressedAirAssessment(assessment.compressedAirAssessment, settings);
+    if (validationStatus.baselineValid) {
       let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(assessment.compressedAirAssessment, settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
 
       let baselineResults: BaselineResults = compressedAirAssessmentBaselineResults.baselineResults;

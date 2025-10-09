@@ -12442,7 +12442,6 @@ export const MockCompressedAirAssessment: Assessment = {
                         "dischargePressure": undefined,
                     }
                 },
-                "isValid": true,
                 "compressorLibId": 769
             },
             {
@@ -12542,7 +12541,6 @@ export const MockCompressedAirAssessment: Assessment = {
                         "dischargePressure": undefined,
                     }
                 },
-                "isValid": true,
                 "compressorLibId": 769
             },
             {
@@ -12642,7 +12640,6 @@ export const MockCompressedAirAssessment: Assessment = {
                         "dischargePressure": undefined,
                     }
                 },
-                "isValid": true,
                 "compressorLibId": 849
             },
             {
@@ -12742,7 +12739,6 @@ export const MockCompressedAirAssessment: Assessment = {
                         "dischargePressure": undefined,
                     }
                 },
-                "isValid": true,
                 "compressorLibId": 834
             },
             {
@@ -12842,7 +12838,6 @@ export const MockCompressedAirAssessment: Assessment = {
                         "dischargePressure": undefined,
                     }
                 },
-                "isValid": true,
                 "compressorLibId": 769
             },
             {
@@ -12942,7 +12937,6 @@ export const MockCompressedAirAssessment: Assessment = {
                         "dischargePressure": undefined,
                     }
                 },
-                "isValid": true,
                 "compressorLibId": 769
             },
             {
@@ -13042,7 +13036,6 @@ export const MockCompressedAirAssessment: Assessment = {
                         "dischargePressure": undefined,
                     }
                 },
-                "isValid": true,
                 "compressorLibId": 849
             },
             {
@@ -13142,7 +13135,6 @@ export const MockCompressedAirAssessment: Assessment = {
                         "dischargePressure": undefined,
                     }
                 },
-                "isValid": true,
                 "compressorLibId": 834
             }
         ],

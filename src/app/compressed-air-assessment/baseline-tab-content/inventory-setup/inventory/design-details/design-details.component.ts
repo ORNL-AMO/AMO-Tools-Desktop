@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem, DesignDetails } from '../../../../../shared/models/compressed-air-assessment';
+import { CompressorInventoryItem, DesignDetails } from '../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
 import { CompressorInventoryItemWarnings, InventoryService } from '../inventory.service';
 import { PerformancePointsFormService } from '../performance-points/performance-points-form.service';
+import { InventoryFormService } from '../inventory-form.service';
 
 @Component({
     selector: 'app-design-details',
@@ -28,16 +29,17 @@ export class DesignDetailsComponent implements OnInit {
   contentCollapsed: boolean;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService,
-    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService,
+    private inventoryFormService: InventoryFormService) { }
 
   ngOnInit(): void {
     this.contentCollapsed = this.inventoryService.collapseDesignDetails;
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(compressor => {
       if (compressor) {
-        this.warnings = this.inventoryService.checkWarnings(compressor);
+        this.warnings = this.inventoryFormService.checkWarnings(compressor);
         if (this.isFormChange == false) {
-          this.form = this.inventoryService.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
+          this.form = this.inventoryFormService.getDesignDetailsFormFromObj(compressor.designDetails, compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
           this.setDisplayBlowdownTime(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
           this.setDisplayModulation(compressor.compressorControls.controlType)
           this.setDisplayMaxFullFlow(compressor.nameplateData.compressorType, compressor.compressorControls.controlType);
@@ -58,7 +60,7 @@ export class DesignDetailsComponent implements OnInit {
 
   save(updatePerformancePoints: boolean) {
     this.isFormChange = true;
-    let designDetails: DesignDetails = this.inventoryService.getDesignDetailsObjFromForm(this.form);
+    let designDetails: DesignDetails = this.inventoryFormService.getDesignDetailsObjFromForm(this.form);
     this.compressedAirDataManagementService.updateDesignDetails(designDetails, updatePerformancePoints);
   }
 
@@ -67,19 +69,19 @@ export class DesignDetailsComponent implements OnInit {
   }
 
   setDisplayBlowdownTime(compressorType: number, controlType: number) {
-    this.displayBlowdownTime = this.inventoryService.checkDisplayBlowdownTime(compressorType, controlType);
+    this.displayBlowdownTime = this.inventoryFormService.checkDisplayBlowdownTime(compressorType, controlType);
   }
 
   setDisplayModulation(controlType: number) {
-    this.displayModulation = this.inventoryService.checkDisplayModulation(controlType);
+    this.displayModulation = this.inventoryFormService.checkDisplayModulation(controlType);
   }
 
   setDisplayNoLoadPowerFM(compressorType: number, controlType: number) {
-    this.displayNoLoadPowerFM = this.inventoryService.checkDisplayNoLoadPowerFM(compressorType, controlType);
+    this.displayNoLoadPowerFM = this.inventoryFormService.checkDisplayNoLoadPowerFM(compressorType, controlType);
   }
 
   setDisplayNoLoadPowerUL(compressorType: number, controlType: number) {
-    this.displayNoLoadPowerUL = this.inventoryService.checkDisplayNoLoadPowerUL(compressorType, controlType);
+    this.displayNoLoadPowerUL = this.inventoryFormService.checkDisplayNoLoadPowerUL(compressorType, controlType);
   }
 
   setDisplayMaxFullFlow(compressorType: number, controlType: number) {

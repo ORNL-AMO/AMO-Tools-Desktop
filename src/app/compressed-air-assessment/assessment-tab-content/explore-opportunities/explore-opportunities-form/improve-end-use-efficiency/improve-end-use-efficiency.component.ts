@@ -8,6 +8,7 @@ import { ExploreOpportunitiesValidationService } from '../../explore-opportuniti
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { ImproveEndUseEfficiencyService } from './improve-end-use-efficiency.service';
 import { CompressedAirAssessmentBaselineResults } from '../../../../calculations/CompressedAirAssessmentBaselineResults';
+import { getHourIntervals } from '../../../../compressed-air-assessment-validation/compressedAirValidationFunctions';
 
 @Component({
   selector: 'app-improve-end-use-efficiency',
@@ -45,7 +46,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
         this.setOrderOptions();
         this.setData()
         if (!this.hourIntervals || (this.hourIntervals && this.hourIntervals.length != this.systemProfileSetup.numberOfHours)) {
-          this.hourIntervals = this.compressedAirAssessmentService.getHourIntervals(this.systemProfileSetup, 24);
+          this.hourIntervals = getHourIntervals(this.systemProfileSetup, 24);
         }
       } else {
         this.isFormChange = false;

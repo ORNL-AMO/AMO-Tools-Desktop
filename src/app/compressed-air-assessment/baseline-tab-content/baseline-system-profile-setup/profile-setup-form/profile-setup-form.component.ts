@@ -7,6 +7,8 @@ import { CompressedAirAssessmentService } from '../../../compressed-air-assessme
 import { PerformancePointsFormService } from '../../inventory-setup/inventory/performance-points/performance-points-form.service';
 import { SystemProfileService } from '../system-profile.service';
 import { NavigationEnd, Router } from '@angular/router';
+import { CompressedAirAssessmentValidation } from '../../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
+import { CompressedAirAssessmentValidationService } from '../../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
 
 @Component({
   selector: 'app-profile-setup-form',
@@ -31,11 +33,18 @@ export class ProfileSetupFormComponent implements OnInit {
   dayTypesWarningMessage: string = 'is valid';
   compressedAirAssessment: CompressedAirAssessment;
   hasModifications: boolean = false;
+
+  validationStatusSub: Subscription;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService,
+    private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService,
     private router: Router) { }
 
   ngOnInit(): void {
+    this.validationStatusSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => { 
+      this.setDayTypeWarningMessage(val);
+    });
+
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.dayTypes = val.compressedAirDayTypes;
       this.compressedAirAssessment = val;
@@ -43,7 +52,6 @@ export class ProfileSetupFormComponent implements OnInit {
       if (val && this.isFormChange == false) {
         this.form = this.systemProfileService.getProfileSetupFormFromObj(val.systemProfile.systemProfileSetup, this.dayTypes);
         this.enableDisableForm();
-        this.checkDayTypesForData();
       } else {
         this.isFormChange = false;
       }
@@ -60,6 +68,7 @@ export class ProfileSetupFormComponent implements OnInit {
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
     this.settingsSub.unsubscribe();
+    this.validationStatusSub.unsubscribe();
   }
 
 
@@ -83,9 +92,6 @@ export class ProfileSetupFormComponent implements OnInit {
       });
       this.isProfileDataTypeChange = false;
     }
-
-    this.checkDayTypesForData();
-
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
@@ -159,14 +165,15 @@ export class ProfileSetupFormComponent implements OnInit {
     this.save();
   }
 
-  checkDayTypesForData() {
-    this.dayTypesWarningMessage = 'is valid';
-    this.dayTypes.forEach(day => {
-      day.hasValidData = this.compressedAirAssessmentService.checkDayTypeProfileSummaryValid(this.compressedAirAssessment, day.dayTypeId);
-      if (day.hasValidData == false) {
-        this.dayTypesWarningMessage = 'There are Day Types with missing or invalid data.';
-      }
+  setDayTypeWarningMessage(validationStatus: CompressedAirAssessmentValidation) {
+    let hasInvalidDayTypeProfile: boolean = validationStatus.dayTypeProfileSummariesValid.some(summary => {
+      return summary.isValid == false;
     });
+    if(hasInvalidDayTypeProfile) {
+      this.dayTypesWarningMessage = 'There are Day Types with missing or invalid data.';
+    } else {
+      this.dayTypesWarningMessage = 'is valid';
+    }
   }
 
 }

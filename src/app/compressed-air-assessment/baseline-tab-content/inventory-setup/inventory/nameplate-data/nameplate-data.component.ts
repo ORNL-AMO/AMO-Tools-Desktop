@@ -8,6 +8,7 @@ import { CompressedAirAssessmentService } from '../../../../compressed-air-asses
 import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
 import { InventoryService } from '../inventory.service';
 import { CompressorTypeOptions } from '../inventoryOptions';
+import { InventoryFormService } from '../inventory-form.service';
 
 @Component({
     selector: 'app-nameplate-data',
@@ -28,13 +29,14 @@ export class NameplateDataComponent implements OnInit {
   compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
   invalidCompressorType: boolean;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService,
+    private inventoryFormService: InventoryFormService) { }
 
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
         if (this.isFormChange == false) {
-          this.form = this.inventoryService.getNameplateDataFormFromObj(val.nameplateData);
+          this.form = this.inventoryFormService.getNameplateDataFormFromObj(val.nameplateData);
         } else {
           this.isFormChange = false;
         }
@@ -50,7 +52,7 @@ export class NameplateDataComponent implements OnInit {
 
   save() {
     this.isFormChange = true;
-    let nameplateData: CompressorNameplateData = this.inventoryService.getNameplateDataFromFrom(this.form);
+    let nameplateData: CompressorNameplateData = this.inventoryFormService.getNameplateDataFromFrom(this.form);
     this.compressedAirDataManagementService.updateNameplateData(nameplateData, true);
   }
 

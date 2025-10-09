@@ -1,21 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment } from '../../../shared/models/compressed-air-assessment';
-import { Settings } from '../../../shared/models/settings';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { InventoryService } from '../inventory-setup/inventory/inventory.service';
-import { SystemInformationFormService } from '../system-information/system-information-form/system-information-form.service';
-import { DayTypeService } from '../day-types-setup/day-types/day-type.service';
-
+import { CompressedAirAssessmentValidation } from '../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
+import { CompressedAirAssessmentValidationService } from '../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
 
 @Component({
-    selector: 'app-setup-tabs',
-    templateUrl: './setup-tabs.component.html',
-    styleUrls: ['./setup-tabs.component.css'],
-    standalone: false
+  selector: 'app-setup-tabs',
+  templateUrl: './setup-tabs.component.html',
+  styleUrls: ['./setup-tabs.component.css'],
+  standalone: false
 })
 export class SetupTabsComponent implements OnInit {
-
 
   systemBasicsClassStatus: Array<string> = [];
   systemBasicsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
@@ -29,20 +23,20 @@ export class SetupTabsComponent implements OnInit {
   inventoryBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   systemProfileStatus: Array<string> = [];
   systemProfileBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
-  compressedAirAssessmentSub: Subscription;
-  settingsSub: Subscription;
-  settings: Settings;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private dayTypeService: DayTypeService, private systemInformationFormService: SystemInformationFormService, private inventoryService: InventoryService) { }
+
+  validationSub: Subscription;
+  validationStatus: CompressedAirAssessmentValidation;
+  constructor(private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService) { }
 
   ngOnInit(): void {
-    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(val => {
-      this.settings = val;
+    this.validationSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => {
+      this.validationStatus = val;
       this.setTabStatus();
-    });
-    this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      this.setTabStatus();
-    });
+    })
+  }
+
+  ngOnDestroy() {
+    this.validationSub.unsubscribe();
   }
 
   setTabStatus() {
@@ -58,12 +52,11 @@ export class SetupTabsComponent implements OnInit {
     let canViewSystemProfile: boolean = false;
     let canViewEndUses: boolean = false;
 
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    if (compressedAirAssessment && this.settings) {
-      hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings).valid;
-      hasValidCompressors = this.inventoryService.hasValidCompressors(compressedAirAssessment);
-      hasValidDayTypes = this.dayTypeService.hasValidDayTypes(compressedAirAssessment.compressedAirDayTypes);
-      hasValidSystemProfile = this.compressedAirAssessmentService.hasValidProfileSummaryData().isValid;
+    if (this.validationStatus) {
+      hasValidSystemInformation = this.validationStatus.systemInformationValid;
+      hasValidCompressors = this.validationStatus.compressorsValid;
+      hasValidDayTypes = this.validationStatus.dayTypesValid;
+      hasValidSystemProfile = this.validationStatus.profileSummaryValid;
       canViewInventory = hasValidSystemInformation;
       canViewDayTypes = hasValidSystemInformation && hasValidCompressors;
       canViewSystemProfile = canViewDayTypes && hasValidDayTypes;
@@ -82,11 +75,6 @@ export class SetupTabsComponent implements OnInit {
     //   this.canContinue = false;
     // }
 
-  }
-
-  ngOnDestroy() {
-    this.compressedAirAssessmentSub.unsubscribe();
-    this.settingsSub.unsubscribe();
   }
 
   setSystemInformationStatus(hasValidSystemInformation: boolean) {
