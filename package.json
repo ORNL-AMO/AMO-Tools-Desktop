@@ -61,7 +61,7 @@
     "font-awesome": "4.7.0",
     "fs-jetpack": "5.1.0",
     "lodash.foreach": "4.5.0",
-    "measur-tools-suite": "1.0.12",
+    "measur-tools-suite": "1.0.13-beta.118",
     "ngx-bootstrap": "20.0.2",
     "ngx-indexed-db": "16.0.0",
     "ngx-webstorage": "20.0.0",
