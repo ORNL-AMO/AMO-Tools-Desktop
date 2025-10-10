@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CompressorTypeOption, CompressorTypeOptions } from '../../../baseline-tab-content/inventory-setup/inventory/inventoryOptions';
 import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../../../../shared/models/compressed-air-assessment';
-import { ExploreOpportunitiesService } from '../explore-opportunities.service';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { Subscription } from 'rxjs';
 
@@ -24,19 +23,14 @@ export class ExploreOpportunitiesFormComponent {
   hasSequencerOn: boolean;
   displayAddStorage: boolean;
   showCascadingAndSequencer: boolean;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
   ngOnInit(): void {
-    this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      if (val) {
-        this.compressedAirAssessment = val;
-        this.showCascadingAndSequencer = (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading' || this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer');
-        this.showCascadingSetPoints = this.compressedAirAssessment.compressorInventoryItems.length > 1;
-        this.modificationExists = (val.modifications && val.modifications.length != 0);
-        this.setHasSequencer();
-        this.setDisplayAddStorage();
-      }
-    });
+    this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.showCascadingAndSequencer = (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'cascading' || this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer');
+    this.showCascadingSetPoints = this.compressedAirAssessment.compressorInventoryItems.length > 1;
+    this.modificationExists = (this.compressedAirAssessment.modifications && this.compressedAirAssessment.modifications.length != 0);
+    this.setDisplayAddStorage();
 
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       this.modification = val;
@@ -51,11 +45,9 @@ export class ExploreOpportunitiesFormComponent {
   }
 
   setHasSequencer() {
-    if (this.compressedAirAssessment) {
-      this.hasSequencerOn = this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer';
-      if (!this.hasSequencerOn && this.modification) {
-        this.hasSequencerOn = (this.modification.useAutomaticSequencer.order != 100)
-      }
+    this.hasSequencerOn = this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer';
+    if (!this.hasSequencerOn && this.modification) {
+      this.hasSequencerOn = (this.modification.useAutomaticSequencer.order != 100)
     }
   }
 
@@ -64,10 +56,7 @@ export class ExploreOpportunitiesFormComponent {
   }
 
   save() {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let modIndex: number = compressedAirAssessment.modifications.findIndex(mod => { return mod.modificationId == this.modification.modificationId });
-    compressedAirAssessment.modifications[modIndex] = this.modification;
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, false);
+    this.compressedAirAssessmentService.updateModification(this.modification);
   }
 
   setDisplayAddStorage() {

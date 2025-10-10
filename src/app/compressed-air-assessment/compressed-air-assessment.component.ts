@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
-import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
  
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -41,29 +40,27 @@ export class CompressedAirAssessmentComponent implements OnInit {
   oldSettings: Settings;
   compressedAirAsseementSub: Subscription;
   disableNext: boolean = false;
-  showModificationListSub: Subscription;
-  showModificationList: boolean = false;
-  showAddModificationSub: Subscription;
-  showAddModification: boolean = false;
   isModalOpen: boolean;
   modalOpenSub: Subscription;
   showWelcomeScreen: boolean = false;
   showExportModal: boolean = false;
   showExportModalSub: Subscription;
+  initializingAssessment: boolean = true;
   constructor(private activatedRoute: ActivatedRoute,
     private endUseDayTypeSetupService: DayTypeSetupService,
-    private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, 
+    private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private egridService: EGridService,
     private endUseFormService: EndUsesFormService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
-    private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService,
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-compressed-air-assessment', undefined);
     this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
+      this.initializingAssessment = true;
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
@@ -74,7 +71,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
         this.compressedAirAssessmentService.settings.next(settings);
         this.genericCompressorDbService.getAllCompressors(this.settings);
       }
-      this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment, false);
+      this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment, true);
+      this.initializingAssessment = false;
     });
 
     this.compressedAirAsseementSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -82,17 +80,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
         this.save(val);
         // this.setDisableNext();
       }
-    })
-
-    this.showAddModificationSub = this.compressedAirAssessmentService.showAddModificationModal.subscribe(val => {
-      this.showAddModification = val;
-      this.cd.detectChanges();
-    });
-
-
-    this.showModificationListSub = this.compressedAirAssessmentService.showModificationListModal.subscribe(val => {
-      this.showModificationList = val;
-      this.cd.detectChanges();
     });
 
     this.modalOpenSub = this.compressedAirAssessmentService.modalOpen.subscribe(val => {
@@ -110,16 +97,14 @@ export class CompressedAirAssessmentComponent implements OnInit {
   ngOnDestroy() {    
     this.compressedAirAsseementSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
-    this.showAddModificationSub.unsubscribe();
-    this.showModificationListSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
     this.inventoryService.selectedCompressor.next(undefined);
     // this.endUseService.endUses.next(undefined);
     this.endUseFormService.selectedEndUse.next(undefined);
     this.endUseFormService.selectedDayTypeEndUse.next(undefined);
     this.endUseDayTypeSetupService.endUseDayTypeSetup.next(undefined)
-    this.exploreOpportunitiesService.compressedAirAssessmentModificationResults.next(undefined);
-    this.exploreOpportunitiesService.compressedAirAssessmentBaselineResults.next(undefined);
+    this.compressedAirAssessmentService.compressedAirAssessmentModificationResults.next(undefined);
+    this.compressedAirAssessmentService.compressedAirAssessmentBaselineResults.next(undefined);
     this.exploreOpportunitiesService.selectedDayType.next(undefined);
     this.compressedAirAssessmentService.compressedAirAssessment.next(undefined);
   }

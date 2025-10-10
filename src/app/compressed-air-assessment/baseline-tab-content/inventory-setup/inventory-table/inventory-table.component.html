@@ -3,7 +3,8 @@
         <span class="alert-danger pull-right small" *ngIf="hasInvalidCompressors">
             One or more compressor is invalid - Review inventory and make changes to continue
         </span>
-        <table class="table table-sm table-striped table-hover mb-0" *ngIf="selectedCompressor && compressorInventoryItems">
+        <table class="table table-sm table-striped table-hover mb-0"
+            *ngIf="selectedCompressor && compressorInventoryItems">
             <thead>
                 <tr>
                     <th>
@@ -19,7 +20,7 @@
             <tbody>
                 <tr *ngFor="let compressorInventoryItem of compressorInventoryItems"
                     [ngClass]="{'selected-item':compressorInventoryItem.itemId == selectedCompressor.itemId,
-                                'invalid-compressor': !compressorInventoryItem.isValid}">
+                                'invalid-compressor': compressorInventoryItem.itemId | isCompressorInvalid:validationStatus}">
                     <td>
                         <span *ngIf="compressorInventoryItem.itemId == selectedCompressor.itemId"
                             class="fa fa-chevron-right danger"></span>
@@ -37,7 +38,7 @@
                     </td>
                     <td>
                         <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(compressorInventoryItem)"></a>
-                        
+
                     </td>
                     <td>
                         <a class="fa fa-copy" (click)="createCopy(compressorInventoryItem)"></a>
@@ -52,5 +53,6 @@
 </div>
 
 
-<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteCompressorInventoryData" (emitShouldDelete)="onConfirmDeleteClose($event)">
+<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteCompressorInventoryData"
+    (emitShouldDelete)="onConfirmDeleteClose($event)">
 </app-confirm-delete-modal>

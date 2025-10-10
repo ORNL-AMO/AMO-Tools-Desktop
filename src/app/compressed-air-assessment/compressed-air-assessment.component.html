@@ -1,4 +1,4 @@
-<div #content class="compressed-air-container compressed-air d-flex flex-column" *ngIf="settings && assessment">
+<div #content class="compressed-air-container compressed-air d-flex flex-column" *ngIf="!initializingAssessment">
   <!--header-->
   <div #header class="w-100 hide-print sticky-top" id="compressedAirBanner">
     <app-compressed-air-banner [assessment]="assessment"></app-compressed-air-banner>

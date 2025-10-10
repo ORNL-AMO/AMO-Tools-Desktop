@@ -21,11 +21,11 @@
     </div>
 </div>
 
-<div *ngIf="!modificationExists">
+<div *ngIf="!modification">
     <p>Explore Opportunities to view results</p>
 </div>
 <div class="p-2 text-center"
-    *ngIf="modificationExists && (tabSelect == 'results' || tabSelect == 'compressor-profile') && dayTypeOptions.length > 1">
+    *ngIf="modification && (tabSelect == 'results' || tabSelect == 'compressor-profile') && dayTypeOptions.length > 1">
     <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
         (change)="changeDayType()">
         <option *ngIf="tabSelect == 'results'" [ngValue]=undefined>All Day Types</option>
@@ -33,16 +33,16 @@
     </select>
 </div>
 
-<app-explore-opportunities-results *ngIf="modificationExists && tabSelect == 'results'">
+<app-explore-opportunities-results *ngIf="modification && tabSelect == 'results'">
 </app-explore-opportunities-results>
 
-<div class="p-2" *ngIf="modificationExists && tabSelect == 'compressor-profile'">
+<div class="p-2" *ngIf="modification && tabSelect == 'compressor-profile'">
     <app-inventory-performance-profile [inAssessment]="true">
     </app-inventory-performance-profile>
 </div>
-<div class="p-2" *ngIf="modificationExists && tabSelect == 'help'">
+<div class="p-2" *ngIf="modification && tabSelect == 'help'">
     <app-assessment-help></app-assessment-help>
 </div>
-<div class="p-2" *ngIf="modificationExists && tabSelect == 'notes'">
+<div class="p-2" *ngIf="modification && tabSelect == 'notes'">
     <app-assessment-notes></app-assessment-notes>
 </div>

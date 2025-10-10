@@ -110,7 +110,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
           this.setCompressorData();
         }
       });
-      this.modificationResultsSub = this.exploreOpportunitiesService.compressedAirAssessmentModificationResults.subscribe(modificationResults => {
+      this.modificationResultsSub = this.compressedAirAssessmentService.compressedAirAssessmentModificationResults.subscribe(modificationResults => {
         if (modificationResults) {
           this.compressedAirAssessmentModificationResults = modificationResults;
           this.setCompressorData();

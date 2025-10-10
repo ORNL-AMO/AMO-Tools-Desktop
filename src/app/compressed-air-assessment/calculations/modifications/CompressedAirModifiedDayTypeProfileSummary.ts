@@ -14,6 +14,7 @@ import { ImproveEndUseEfficiencyResults } from "./energyEfficiencyMeasures/Impro
 import { ReduceAirLeaksResults } from "./energyEfficiencyMeasures/ReduceAirLeaksResults";
 import { ReduceSystemAirPressureResults } from "./energyEfficiencyMeasures/ReduceSystemAirPressureResults";
 import { ReplaceCompressorResults } from "./energyEfficiencyMeasures/ReplaceCompressorResults";
+import { ResultingSystemProfileValidation } from "./energyEfficiencyMeasures/ResultingSystemProfileValidation";
 import { UseAutomaticSequencerResults } from "./energyEfficiencyMeasures/UseAutomaticSequencerResults";
 import * as _ from 'lodash';
 
@@ -31,10 +32,16 @@ export class CompressedAirModifiedDayTypeProfileSummary {
     addPrimaryReceiverVolumeResults: FlowReallocationResults;
     adjustCascadingSetPointsResults: AdjustCascadingSetPointsResults;
     improveEndUseEfficiencyResults: ImproveEndUseEfficiencyResults;
+    
     reduceRunTimeResults: FlowReallocationResults;
+    reduceRunTimeProfileValidation: ResultingSystemProfileValidation;
+
     reduceAirLeaksResults: ReduceAirLeaksResults;
-    reduceSystemAirPressureResults: ReduceSystemAirPressureResults
+    reduceSystemAirPressureResults: ReduceSystemAirPressureResults;
+
     useAutomaticSequencerResults: UseAutomaticSequencerResults;
+    useAutomaticSequencerProfileValidation: ResultingSystemProfileValidation;
+    
     replaceCompressorResults: ReplaceCompressorResults;
 
     auxiliaryPowerUsage: { cost: number, energyUse: number } = { cost: 0, energyUse: 0 };
@@ -76,7 +83,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         //Apply target sequencer
         if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
             this.adjustedCompressors.forEach(compressor => {
-                compressor.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation.targetPressure, compressedAirAssessment.systemInformation.variance, compressedAirAssessment.systemInformation, settings)
+                compressor.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation.targetPressure, compressedAirAssessment.systemInformation.variance, compressedAirAssessment.systemInformation.atmosphericPressure, settings)
             });
         }
         //Initial Flow Reallocation
@@ -331,6 +338,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         this.adjustedProfileSummary = this.reduceRunTimeResults.profileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
+        this.reduceRunTimeProfileValidation = new ResultingSystemProfileValidation(this, order, this.summaryDataInterval);
     }
 
     setReduceAirLeaksResults(reduceAirLeaks: ReduceAirLeaks,
@@ -411,6 +419,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             return new CompressedAirProfileSummary(summary, true);
         });
         this.adjustedCompressors = this.useAutomaticSequencerResults.adjustedCompressors;
+        this.useAutomaticSequencerProfileValidation = new ResultingSystemProfileValidation(this, order, this.summaryDataInterval);
     }
 
     setTotalImplementationCost(modification: Modification) {

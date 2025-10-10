@@ -15,7 +15,8 @@ import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings
 import { BaselineResults, DayTypeModificationResult } from '../calculations/caCalculationModels';
 import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirCombinedDayTypeResults } from '../calculations/modifications/CompressedAirCombinedDayTypeResults';
-import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../assessment-tab-content/explore-opportunities/explore-opportunities-validation.service';
+import { ExploreOpportunitiesValidationService } from '../compressed-air-assessment-validation/explore-opportunities-validation.service';
+import { CompressedAirModificationValid } from '../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 
 @Component({
   selector: 'app-compressed-air-report',
@@ -78,7 +79,7 @@ export class CompressedAirReportComponent implements OnInit {
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
         let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, this.compressedAirAssessmentBaselineResults);
         this.assessmentResults.push(compressedAirAssessmentModificationResults);
-        let validation: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, this.baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings, compressedAirAssessmentModificationResults)
+        let validation: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.setModificationValid(modification, this.baselineResults, this.baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings, compressedAirAssessmentModificationResults)
         let combinedDayTypeResults: DayTypeModificationResult = new CompressedAirCombinedDayTypeResults(compressedAirAssessmentModificationResults).getDayTypeModificationResult();
 
         this.combinedDayTypeResults.push({

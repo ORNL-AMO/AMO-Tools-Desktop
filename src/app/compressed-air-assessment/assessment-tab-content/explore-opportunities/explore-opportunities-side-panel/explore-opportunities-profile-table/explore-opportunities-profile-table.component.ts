@@ -41,7 +41,7 @@ export class ExploreOpportunitiesProfileTableComponent implements OnInit {
       }
     });
 
-    this.modificationResultsSub =  this.exploreOpportunitiesService.compressedAirAssessmentModificationResults.subscribe(val => {
+    this.modificationResultsSub =  this.compressedAirAssessmentService.compressedAirAssessmentModificationResults.subscribe(val => {
       this.compressedAirAssessmentModificationResults = val;
       this.setProfile();
     });

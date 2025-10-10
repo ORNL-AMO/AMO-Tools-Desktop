@@ -31,6 +31,7 @@ export class SetupTabsComponent implements OnInit {
   ngOnInit(): void {
     this.validationSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => {
       this.validationStatus = val;
+      console.log(this.validationStatus);
       this.setTabStatus();
     })
   }

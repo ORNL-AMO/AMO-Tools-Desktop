@@ -8,6 +8,7 @@ import { InventoryService } from '../inventory/inventory.service';
 import { PerformancePointsFormService } from '../inventory/performance-points/performance-points-form.service';
 import { SystemProfileService } from '../../baseline-system-profile-setup/system-profile.service';
 import { CompressedAirAssessmentValidationService } from '../../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
+import { CompressedAirAssessmentValidation } from '../../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 
 @Component({
   selector: 'app-inventory-table',
@@ -32,6 +33,7 @@ export class InventoryTableComponent implements OnInit {
 
   settings: Settings;
   validationStatusSub: Subscription;
+  validationStatus: CompressedAirAssessmentValidation;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private systemProfileService: SystemProfileService, private performancePointsFormService: PerformancePointsFormService,
     private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService) { }
@@ -42,7 +44,8 @@ export class InventoryTableComponent implements OnInit {
       this.selectedCompressor = val;
     })
     this.validationStatusSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => {
-      this.hasInvalidCompressors = !val?.compressorsValid;
+      this.validationStatus = val;
+      this.hasInvalidCompressors = this.validationStatus.compressorsValid == false;
     });
 
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {

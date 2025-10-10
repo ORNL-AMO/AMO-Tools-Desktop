@@ -105,7 +105,7 @@ import { ImproveEndUseEfficiencyService } from './assessment-tab-content/explore
 import { UseAutomaticSequencerService } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/use-automatic-sequencer/use-automatic-sequencer.service';
 import { AdjustCascadingSetPointsService } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/adjust-cascading-set-points/adjust-cascading-set-points.service';
 import { ReduceRunTimeService } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/reduce-run-time/reduce-run-time.service';
-import { ExploreOpportunitiesValidationService } from './assessment-tab-content/explore-opportunities/explore-opportunities-validation.service';
+import { ExploreOpportunitiesValidationService } from './compressed-air-assessment-validation/explore-opportunities-validation.service';
 import { CompressedAirReportModule } from './compressed-air-report/compressed-air-report.module';
 import { ProfileSummaryTableModule } from './profile-summary-table/profile-summary-table.module';
 import { SharedCompressorPipesModule } from './shared-compressor-pipes/shared-compressor-pipes.module';

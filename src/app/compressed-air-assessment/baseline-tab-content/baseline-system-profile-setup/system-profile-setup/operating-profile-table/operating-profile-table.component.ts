@@ -60,9 +60,9 @@ export class OperatingProfileTableComponent implements OnInit {
         this.hourIntervals = getHourIntervals(val.systemProfile.systemProfileSetup);
         this.inventoryItems = val.compressorInventoryItems;
         this.setProfileSummaryValid();
-        if (this.profileDataType) {
-          this.initializeProfileSummary(val.compressorInventoryItems, val.systemProfile.systemProfileSetup, val.compressedAirDayTypes);
-        }
+        // if (this.profileDataType) {
+        //   this.initializeProfileSummary(val.compressorInventoryItems, val.systemProfile.systemProfileSetup, val.compressedAirDayTypes);
+        // }
       } else {
         this.isFormChange = false;
       }
@@ -116,27 +116,28 @@ export class OperatingProfileTableComponent implements OnInit {
     });
   }
 
-  initializeProfileSummary(compressorInventoryItems: Array<CompressorInventoryItem>, systemProfileSetup: SystemProfileSetup, dayTypes: Array<CompressedAirDayType>) {
-    //remove missing daytype/compressor combos
-    let inventoryItemIds: Array<string> = compressorInventoryItems.map(item => { return item.itemId });
-    let dayTypeIds: Array<string> = dayTypes.map(dayType => { return dayType.dayTypeId });
-    this.profileSummary.filter(summary => {
-      let inventoryItemExist: boolean = inventoryItemIds.includes(summary.compressorId);
-      let dayTypeItemExist: boolean = dayTypeIds.includes(summary.dayTypeId);
-      return (!inventoryItemExist || !dayTypeItemExist);
-    });
+  //TODO: this should be handled when changing/modifying day types.. not here
+  // initializeProfileSummary(compressorInventoryItems: Array<CompressorInventoryItem>, systemProfileSetup: SystemProfileSetup, dayTypes: Array<CompressedAirDayType>) {
+  //   //remove missing daytype/compressor combos
+  //   let inventoryItemIds: Array<string> = compressorInventoryItems.map(item => { return item.itemId });
+  //   let dayTypeIds: Array<string> = dayTypes.map(dayType => { return dayType.dayTypeId });
+  //   this.profileSummary.filter(summary => {
+  //     let inventoryItemExist: boolean = inventoryItemIds.includes(summary.compressorId);
+  //     let dayTypeItemExist: boolean = dayTypeIds.includes(summary.dayTypeId);
+  //     return (!inventoryItemExist || !dayTypeItemExist);
+  //   });
 
-    //add missing dayType/compressor combos
-    let updatedSummary: Array<ProfileSummary> = new Array();
-    compressorInventoryItems.forEach(item => {
-      dayTypes.forEach(dayType => {
-        let profileSummaryItem: ProfileSummary = this.checkProfileSummary(item, dayType.dayTypeId, this.profileSummary, systemProfileSetup);
-        updatedSummary.push(profileSummaryItem);
-      })
-    });
-    this.profileSummary = updatedSummary;
-    this.save();
-  }
+  //   //add missing dayType/compressor combos
+  //   let updatedSummary: Array<ProfileSummary> = new Array();
+  //   compressorInventoryItems.forEach(item => {
+  //     dayTypes.forEach(dayType => {
+  //       let profileSummaryItem: ProfileSummary = this.checkProfileSummary(item, dayType.dayTypeId, this.profileSummary, systemProfileSetup);
+  //       updatedSummary.push(profileSummaryItem);
+  //     })
+  //   });
+  //   this.profileSummary = updatedSummary;
+  //   this.save();
+  // }
 
   save() {
     this.isFormChange = true;
@@ -145,44 +146,44 @@ export class OperatingProfileTableComponent implements OnInit {
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
   }
 
-  checkProfileSummary(inventoryItem: CompressorInventoryItem, dayTypeId: string, allProfileSummaries: Array<ProfileSummary>, systemProfileSetup: SystemProfileSetup): ProfileSummary {
-    let profileSummary: ProfileSummary = allProfileSummaries.find(summary => { return summary.dayTypeId == dayTypeId && inventoryItem.itemId == summary.compressorId });
-    if (profileSummary && (profileSummary.profileSummaryData.length == (systemProfileSetup.numberOfHours / systemProfileSetup.dataInterval))) {
-      return profileSummary
-    } else {
-      let profileSummaryData: Array<ProfileSummaryData> = this.getDummyData(systemProfileSetup.numberOfHours, systemProfileSetup.dataInterval);
-      profileSummary = {
-        compressorId: inventoryItem.itemId,
-        // compressorName: inventoryItem.name,
-        dayTypeId: dayTypeId,
-        profileSummaryData: profileSummaryData,
-        fullLoadPressure: inventoryItem.performancePoints.fullLoad.dischargePressure,
-        fullLoadCapacity: inventoryItem.performancePoints.fullLoad.airflow
-      }
-    }
-    return profileSummary;
-  }
+  // checkProfileSummary(inventoryItem: CompressorInventoryItem, dayTypeId: string, allProfileSummaries: Array<ProfileSummary>, systemProfileSetup: SystemProfileSetup): ProfileSummary {
+  //   let profileSummary: ProfileSummary = allProfileSummaries.find(summary => { return summary.dayTypeId == dayTypeId && inventoryItem.itemId == summary.compressorId });
+  //   if (profileSummary && (profileSummary.profileSummaryData.length == (systemProfileSetup.numberOfHours / systemProfileSetup.dataInterval))) {
+  //     return profileSummary
+  //   } else {
+  //     let profileSummaryData: Array<ProfileSummaryData> = this.getDummyData(systemProfileSetup.numberOfHours, systemProfileSetup.dataInterval);
+  //     profileSummary = {
+  //       compressorId: inventoryItem.itemId,
+  //       // compressorName: inventoryItem.name,
+  //       dayTypeId: dayTypeId,
+  //       profileSummaryData: profileSummaryData,
+  //       fullLoadPressure: inventoryItem.performancePoints.fullLoad.dischargePressure,
+  //       fullLoadCapacity: inventoryItem.performancePoints.fullLoad.airflow
+  //     }
+  //   }
+  //   return profileSummary;
+  // }
 
-  getDummyData(numberOfHours: number, dataInterval: number): Array<ProfileSummaryData> {
-    let profileSummaryData: Array<ProfileSummaryData> = new Array();
-    for (let timeInterval = 0; timeInterval < numberOfHours;) {
-      profileSummaryData.push({
-        power: undefined,
-        airflow: undefined,
-        percentCapacity: undefined,
-        timeInterval: timeInterval,
-        percentPower: undefined,
-        percentSystemCapacity: 0,
-        percentSystemPower: 0,
-        order: 0,
-        powerFactor: 0,
-        amps: 0,
-        volts: 0
-      })
-      timeInterval = timeInterval + dataInterval;
-    }
-    return profileSummaryData;
-  }
+  // getDummyData(numberOfHours: number, dataInterval: number): Array<ProfileSummaryData> {
+  //   let profileSummaryData: Array<ProfileSummaryData> = new Array();
+  //   for (let timeInterval = 0; timeInterval < numberOfHours;) {
+  //     profileSummaryData.push({
+  //       power: undefined,
+  //       airflow: undefined,
+  //       percentCapacity: undefined,
+  //       timeInterval: timeInterval,
+  //       percentPower: undefined,
+  //       percentSystemCapacity: 0,
+  //       percentSystemPower: 0,
+  //       order: 0,
+  //       powerFactor: 0,
+  //       amps: 0,
+  //       volts: 0
+  //     })
+  //     timeInterval = timeInterval + dataInterval;
+  //   }
+  //   return profileSummaryData;
+  // }
 
   showDataFromExplorer() {
     this.showSelectField = true;

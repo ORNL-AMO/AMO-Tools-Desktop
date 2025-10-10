@@ -4,7 +4,7 @@ import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../
 import { CurrencyPipe } from '@angular/common';
 import { PlotlyService } from 'angular-plotly.js';
 import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
-import { CompressedAirModificationValid } from '../../assessment-tab-content/explore-opportunities/explore-opportunities-validation.service';
+import { CompressedAirModificationValid } from '../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 
 @Component({
     selector: 'app-report-graphs',

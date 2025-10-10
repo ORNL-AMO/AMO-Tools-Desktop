@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, EndUseEfficiencyItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, Modification, SystemProfileSetup } from '../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
-import { ExploreOpportunitiesValidationService } from '../../explore-opportunities-validation.service';
-import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
-import { ImproveEndUseEfficiencyService } from './improve-end-use-efficiency.service';
+import { ExploreOpportunitiesValidationService } from '../../../../compressed-air-assessment-validation/explore-opportunities-validation.service';
 import { CompressedAirAssessmentBaselineResults } from '../../../../calculations/CompressedAirAssessmentBaselineResults';
 import { getHourIntervals } from '../../../../compressed-air-assessment-validation/compressedAirValidationFunctions';
 
@@ -18,43 +15,32 @@ import { getHourIntervals } from '../../../../compressed-air-assessment-validati
 })
 export class ImproveEndUseEfficiencyComponent implements OnInit {
 
-  selectedModificationIdSub: Subscription;
+  selectedModificationSub: Subscription;
   improveEndUseEfficiency: ImproveEndUseEfficiency;
   isFormChange: boolean = false;
   hourIntervals: Array<number>;
   modification: Modification;
   orderOptions: Array<number>;
-  compressedAirAssessmentSub: Subscription;
-  compressedAirAssessment: CompressedAirAssessment;
-  hasInvalidForm: boolean;
 
   compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults;
 
   settings: Settings;
   systemProfileSetup: SystemProfileSetup;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private improveEndUseEfficiencyService: ImproveEndUseEfficiencyService,
-    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
+
+  hasInvalidForm: boolean;
+  validationStatusSub: Subscription;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService
+  ) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
-    this.compressedAirAssessmentBaselineResults = this.exploreOpportunitiesService.compressedAirAssessmentBaselineResults.getValue();
-    this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
-      if (compressedAirAssessment && !this.isFormChange) {
-        this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
-        this.systemProfileSetup = this.compressedAirAssessment.systemProfile.systemProfileSetup;
-        this.setOrderOptions();
-        this.setData()
-        if (!this.hourIntervals || (this.hourIntervals && this.hourIntervals.length != this.systemProfileSetup.numberOfHours)) {
-          this.hourIntervals = getHourIntervals(this.systemProfileSetup, 24);
-        }
-      } else {
-        this.isFormChange = false;
-      }
-    });
+    this.compressedAirAssessmentBaselineResults = this.compressedAirAssessmentService.compressedAirAssessmentBaselineResults.getValue();
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.systemProfileSetup = compressedAirAssessment.systemProfile.systemProfileSetup;
+    this.hourIntervals = getHourIntervals(this.systemProfileSetup, 24);
 
-
-    this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
+    this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       if (val && !this.isFormChange) {
         this.modification = val;
         this.setData()
@@ -63,11 +49,15 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
       }
       this.setOrderOptions();
     });
+
+    this.validationStatusSub = this.exploreOpportunitiesValidationService.compressedAirModificationValid.subscribe(val => {
+      this.hasInvalidForm = val.improveEndUseEfficiency == false;
+    })
   }
 
   ngOnDestroy() {
-    this.selectedModificationIdSub.unsubscribe();
-    this.compressedAirAssessmentSub.unsubscribe();
+    this.selectedModificationSub.unsubscribe();
+    this.validationStatusSub.unsubscribe();
   }
 
   helpTextField(str: string) {
@@ -76,32 +66,25 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   }
 
   setData() {
-    if (this.compressedAirAssessment && this.modification) {
-      this.improveEndUseEfficiency = this.modification.improveEndUseEfficiency;
-      if (this.improveEndUseEfficiency.order != 100) {
-        this.setHasInvalidForm();
-      }
-    }
+    this.improveEndUseEfficiency = this.modification.improveEndUseEfficiency;
   }
 
   setOrderOptions() {
-    if (this.compressedAirAssessment && this.modification) {
+    if (this.modification) {
       this.orderOptions = new Array();
-      if (this.modification) {
-        let allOrders: Array<number> = [
-          this.modification.addPrimaryReceiverVolume.order,
-          this.modification.adjustCascadingSetPoints.order,
-          this.modification.reduceAirLeaks.order,
-          this.modification.reduceRuntime.order,
-          this.modification.reduceSystemAirPressure.order,
-          this.modification.useAutomaticSequencer.order,
-          this.modification.replaceCompressor.order
-        ];
-        allOrders = allOrders.filter(order => { return order != 100 });
-        let numOrdersOn: number = allOrders.length;
-        for (let i = 1; i <= numOrdersOn + 1; i++) {
-          this.orderOptions.push(i);
-        }
+      let allOrders: Array<number> = [
+        this.modification.addPrimaryReceiverVolume.order,
+        this.modification.adjustCascadingSetPoints.order,
+        this.modification.reduceAirLeaks.order,
+        this.modification.reduceRuntime.order,
+        this.modification.reduceSystemAirPressure.order,
+        this.modification.useAutomaticSequencer.order,
+        this.modification.replaceCompressor.order
+      ];
+      allOrders = allOrders.filter(order => { return order != 100 });
+      let numOrdersOn: number = allOrders.length;
+      for (let i = 1; i <= numOrdersOn + 1; i++) {
+        this.orderOptions.push(i);
       }
     }
   }
@@ -117,14 +100,15 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     // } else {
     //   this.setHasInvalidForm();
     // }
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
+    // this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
+    this.modification.improveEndUseEfficiency = this.improveEndUseEfficiency;
+    this.compressedAirAssessmentService.updateModification(this.modification);
   }
 
   saveItemChange(saveData: { itemIndex: number, item: EndUseEfficiencyItem }) {
     this.improveEndUseEfficiency.endUseEfficiencyItems[saveData.itemIndex] = saveData.item;
     this.save(false);
   }
-
 
   toggleAll(itemIndex: number) {
     let toggleValue: boolean = !this.improveEndUseEfficiency.endUseEfficiencyItems[itemIndex].reductionData[0].data[0].applyReduction;
@@ -168,25 +152,5 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   removeEndUseEfficiency(itemIndex: number) {
     this.improveEndUseEfficiency.endUseEfficiencyItems.splice(itemIndex, 1);
     this.save(false);
-  }
-
-  setHasInvalidForm() {
-    this.hasInvalidForm = false;
-    this.improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
-      if (!this.hasInvalidForm) {
-        let form: UntypedFormGroup = this.improveEndUseEfficiencyService.getFormFromObj(item, this.compressedAirAssessmentBaselineResults.baselineResults);
-        if (form.invalid) {
-          this.hasInvalidForm = true;
-        } else {
-          let dataForms: Array<{ dayTypeName: string, dayTypeId: string, form: UntypedFormGroup }> = this.improveEndUseEfficiencyService.getDataForms(item, this.compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries);
-          dataForms.forEach(dataForm => {
-            if (dataForm.form.invalid) {
-              this.hasInvalidForm = true;
-            }
-          })
-        }
-      }
-    });
-    this.exploreOpportunitiesValidationService.improveEndUseEfficiencyValid.next(!this.hasInvalidForm);
   }
 }

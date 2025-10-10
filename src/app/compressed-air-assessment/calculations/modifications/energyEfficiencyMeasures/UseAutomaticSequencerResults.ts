@@ -75,7 +75,7 @@ export class UseAutomaticSequencerResults {
                 }
             });
             compressor.compressorControls.automaticShutdown = sequencerProfile.automaticShutdownTimer;
-            compressor.adjustCompressorPerformancePointsWithSequencer(useAutomaticSequencer.targetPressure, useAutomaticSequencer.variance, systemInformation, settings)
+            compressor.adjustCompressorPerformancePointsWithSequencer(useAutomaticSequencer.targetPressure, useAutomaticSequencer.variance, systemInformation.atmosphericPressure, settings)
         });
     }
 

@@ -47,7 +47,7 @@ export class CompressorInventoryItemClass {
         this.setShowBlowoffPerformancePoint();
     }
 
-    adjustCompressorPerformancePointsWithSequencer(targetPressure: number, variance: number, systemInformation: SystemInformation, settings: Settings) {
+    adjustCompressorPerformancePointsWithSequencer(targetPressure: number, variance: number, atmosphericPressure: number, settings: Settings) {
         this.performancePoints.fullLoad.isDefaultPressure = false;
         this.performancePoints.fullLoad.isDefaultAirFlow = true;
         this.performancePoints.fullLoad.isDefaultPower = true;
@@ -83,7 +83,7 @@ export class CompressorInventoryItemClass {
             this.performancePoints.blowoff.dischargePressure = targetPressure + variance;
             this.performancePoints.blowoff.isDefaultPressure = false;
         }
-        this.performancePoints.updatePerformancePoints(this.nameplateData, this.centrifugalSpecifics, this.designDetails, this.compressorControls, systemInformation.atmosphericPressure, settings);
+        this.performancePoints.updatePerformancePoints(this.nameplateData, this.centrifugalSpecifics, this.designDetails, this.compressorControls, atmosphericPressure, settings);
     }
 
     reduceSystemPressure(reduceSystemAirPressure: ReduceSystemAirPressure, atmosphericPressure: number, settings: Settings) {
@@ -179,7 +179,6 @@ export class CompressorInventoryItemClass {
     }
 
     setShowMaxFlowPerformancePoint() {
-        console.log('compressorType: ' + this.nameplateData.compressorType + ' controlType: ' + this.compressorControls.controlType);
         if (this.nameplateData.compressorType == 6 && (this.compressorControls.controlType == 7 || this.compressorControls.controlType == 9)) {
             this.showMaxFullFlow = false;
         } else if ((this.nameplateData.compressorType == 1 || this.nameplateData.compressorType == 2) && this.compressorControls.controlType == 1) {

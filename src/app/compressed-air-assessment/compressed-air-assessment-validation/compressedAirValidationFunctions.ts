@@ -11,13 +11,13 @@ export function checkIsPowerValid(power: number, currentCompressor: CompressorIn
     } else if (checkIsInvalidNumber(power)) {
         return `Power must be 0 or greater`;
     }
-    return null;
+    return undefined;
 }
 
 export function checkIsAirflowValid(airflow: number, currentCompressor: CompressorInventoryItem): AirflowValidation {
     let airFlowValidation: AirflowValidation = {
-        airFlowValid: null,
-        airFlowWarning: null,
+        airFlowValid: undefined,
+        airFlowWarning: undefined,
     }
     let airFlowLimit = currentCompressor.nameplateData.fullLoadRatedCapacity * 1.50;
     if (airflow >= airFlowLimit) {
@@ -34,7 +34,7 @@ export function checkPercentCapacityValid(percentValue: number): string {
     } else if (percentValue > 150) {
         return 'Percent must be less than 150%';
     }
-    return null;
+    return undefined;
 }
 
 export function checkPercentPowerValid(percentValue: number, compressor: CompressorInventoryItem): string {
@@ -46,7 +46,7 @@ export function checkPercentPowerValid(percentValue: number, compressor: Compres
             return 'Percent must be less than ' + serviceFactorPercent.toFixed(0) + '%';
         }
     }
-    return null;
+    return undefined;
 }
 
 export function checkPowerFactorInputData(powerFactor: number, amps: number, volts: number, compressor: CompressorInventoryItem): { powerFactorError: string, ampError: string, voltError: string, isValid: boolean } {
@@ -63,14 +63,14 @@ export function checkIsPowerFactorValid(powerFactor: number): string {
     } else if (checkIsInvalidNumber(powerFactor)) {
         return `Power Factor must be 0 or greater`;
     }
-    return null;
+    return undefined;
 }
 
 export function checkIsVoltsValid(volts: number): string {
     if (checkIsInvalidNumber(volts)) {
         return `Volts must be 0 or greater`;
     }
-    return null;
+    return undefined;
 }
 
 export function checkIsAmpsValid(amps: number, compressor: CompressorInventoryItem): string {
@@ -80,7 +80,7 @@ export function checkIsAmpsValid(amps: number, compressor: CompressorInventoryIt
     } else if (checkIsInvalidNumber(amps)) {
         return `Amps must be 0 or greater`;
     }
-    return null;
+    return undefined;
 }
 
 export function checkIsInvalidNumber(num: number): boolean {

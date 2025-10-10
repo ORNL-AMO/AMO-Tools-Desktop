@@ -5,16 +5,15 @@ import { Assessment } from '../../../../../shared/models/assessment';
 import { CompressedAirDayType, ProfileSummary, ProfileSummaryTotal } from '../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../shared/models/settings';
 import { AssessmentService } from '../../../../assessment.service';
-import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment/compressed-air-assessment.service';
 import { BaselineResults } from '../../../../../compressed-air-assessment/calculations/caCalculationModels'
 import { CompressedAirAssessmentBaselineResults } from '../../../../../compressed-air-assessment/calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirCalculationService } from '../../../../../compressed-air-assessment/compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { CompressedAirAssessmentModificationResults } from '../../../../../compressed-air-assessment/calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirBaselineDayTypeProfileSummary } from '../../../../../compressed-air-assessment/calculations/CompressedAirBaselineDayTypeProfileSummary';
-import { CompressedAirModificationValid, ExploreOpportunitiesValidationService } from '../../../../../compressed-air-assessment/assessment-tab-content/explore-opportunities/explore-opportunities-validation.service';
+import { ExploreOpportunitiesValidationService } from '../../../../../compressed-air-assessment/compressed-air-assessment-validation/explore-opportunities-validation.service';
 import { CompressedAirAssessmentValidationService } from '../../../../../compressed-air-assessment/compressed-air-assessment-validation/compressed-air-assessment-validation.service';
-import { CompressedAirAssessmentValidation } from '../../../../../compressed-air-assessment/compressed-air-assessment-validation/CompressedAirAssessmentValidation';
+import { CompressedAirAssessmentValidation, CompressedAirModificationValid } from '../../../../../compressed-air-assessment/compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 
 @Component({
   selector: 'app-compressed-air-assessment-card',
@@ -37,7 +36,6 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
   showReport: boolean;
 
   constructor(private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
     private compressedAirCalculationService: CompressedAirCalculationService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService,
@@ -66,7 +64,7 @@ export class CompressedAirAssessmentCardComponent implements OnInit {
 
       this.assessment.compressedAirAssessment.modifications.forEach(modification => {
         let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(this.assessment.compressedAirAssessment, modification, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
-        let modificationValid: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.checkModificationValid(modification, this.baselineResults, baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings, compressedAirAssessmentModificationResults);
+        let modificationValid: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.setModificationValid(modification, this.baselineResults, baselineProfileSummaries, this.assessment.compressedAirAssessment, this.settings, compressedAirAssessmentModificationResults);
         if (modificationValid.isValid) {
           if (compressedAirAssessmentModificationResults.totalCostSavings > this.maxCostSavings) {
             this.maxCostSavings = compressedAirAssessmentModificationResults.totalCostSavings;

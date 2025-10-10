@@ -8,12 +8,12 @@ import { CompressedAirAssessmentBaselineResults } from '../../calculations/Compr
 export class ExploreOpportunitiesService {
 
   selectedDayType: BehaviorSubject<CompressedAirDayType>;
-  compressedAirAssessmentModificationResults: BehaviorSubject<CompressedAirAssessmentModificationResults>;
-  compressedAirAssessmentBaselineResults: BehaviorSubject<CompressedAirAssessmentBaselineResults>;
+  // compressedAirAssessmentModificationResults: BehaviorSubject<CompressedAirAssessmentModificationResults>;
+  // compressedAirAssessmentBaselineResults: BehaviorSubject<CompressedAirAssessmentBaselineResults>;
   constructor() {
     this.selectedDayType = new BehaviorSubject<CompressedAirDayType>(undefined);
-    this.compressedAirAssessmentModificationResults = new BehaviorSubject<CompressedAirAssessmentModificationResults>(undefined);
-    this.compressedAirAssessmentBaselineResults = new BehaviorSubject<CompressedAirAssessmentBaselineResults>(undefined);
+    // this.compressedAirAssessmentModificationResults = new BehaviorSubject<CompressedAirAssessmentModificationResults>(undefined);
+    // this.compressedAirAssessmentBaselineResults = new BehaviorSubject<CompressedAirAssessmentBaselineResults>(undefined);
   }
 
   getNewModification(compressedAirAssessment: CompressedAirAssessment): Modification {
@@ -140,7 +140,6 @@ export class ExploreOpportunitiesService {
       }
     }
   }
-
 
   getDefaultReductionData(systemProfileSetup: SystemProfileSetup): Array<{ hourInterval: number, applyReduction: boolean, reductionAmount: number }> {
     let reductionData: Array<{ hourInterval: number, applyReduction: boolean, reductionAmount: number }> = new Array();

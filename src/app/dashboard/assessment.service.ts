@@ -71,6 +71,7 @@ export class AssessmentService {
       }
       itemSegment = '/waste-water/';
     } else if (assessment.type == 'CompressedAir') {
+      // TODO: update to use routing
       if (assessment.compressedAirAssessment.setupDone && !mainTab && !assessment.isExample) {
         this.startingTab = 'assessment';
       }

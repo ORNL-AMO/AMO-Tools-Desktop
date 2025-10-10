@@ -4,49 +4,37 @@ import { Subscription } from 'rxjs';
 import { AddPrimaryReceiverVolume, CompressedAirAssessment, Modification } from '../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
-import { ExploreOpportunitiesValidationService } from '../../explore-opportunities-validation.service';
+import { ExploreOpportunitiesValidationService } from '../../../../compressed-air-assessment-validation/explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { AddReceiverVolumeService } from './add-receiver-volume.service';
 
 @Component({
-    selector: 'app-add-receiver-volume',
-    templateUrl: './add-receiver-volume.component.html',
-    styleUrls: ['./add-receiver-volume.component.css'],
-    standalone: false
+  selector: 'app-add-receiver-volume',
+  templateUrl: './add-receiver-volume.component.html',
+  styleUrls: ['./add-receiver-volume.component.css'],
+  standalone: false
 })
 export class AddReceiverVolumeComponent implements OnInit {
 
-  selectedModificationIdSub: Subscription;
+  selectedModificationSub: Subscription;
   isFormChange: boolean = false;
   existingCapacity: number;
   modification: Modification;
   orderOptions: Array<number>;
-  compressedAirAssessmentSub: Subscription;
-  compressedAirAssessment: CompressedAirAssessment;
-  settingsSub: Subscription;
   settings: Settings;
   increasedVolumeError: string;
 
   form: UntypedFormGroup
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private addReceiverVolumeService: AddReceiverVolumeService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private addReceiverVolumeService: AddReceiverVolumeService) { }
 
   ngOnInit(): void {
+    this.settings = this.compressedAirAssessmentService.settings.getValue();
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.existingCapacity = compressedAirAssessment.systemInformation.totalAirStorage;
 
-    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
-    this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
-      if (compressedAirAssessment && !this.isFormChange) {
-        this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
-        this.setOrderOptions();
-        this.setData()
-      } else {
-        this.isFormChange = false;
-      }
-    });
-
-    this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
+    this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       if (val && !this.isFormChange) {
-        this.existingCapacity = this.compressedAirAssessment.systemInformation.totalAirStorage;
         this.modification = val;
         this.setData();
       } else {
@@ -57,9 +45,7 @@ export class AddReceiverVolumeComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.selectedModificationIdSub.unsubscribe();
-    this.compressedAirAssessmentSub.unsubscribe();
-    this.settingsSub.unsubscribe();
+    this.selectedModificationSub.unsubscribe();
   }
 
   helpTextField(str: string) {
@@ -68,17 +54,11 @@ export class AddReceiverVolumeComponent implements OnInit {
   }
 
   setData() {
-    if (this.compressedAirAssessment && this.modification) {
-      let addPrimaryReceiverVolume: AddPrimaryReceiverVolume = this.modification.addPrimaryReceiverVolume;
-      this.form = this.addReceiverVolumeService.getFormFromObj(addPrimaryReceiverVolume);
-      if (addPrimaryReceiverVolume.order != 100) {
-        this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
-      }
-    }
+    this.form = this.addReceiverVolumeService.getFormFromObj(this.modification.addPrimaryReceiverVolume);
   }
 
   setOrderOptions() {
-    if (this.compressedAirAssessment && this.modification) {
+    if (this.modification) {
       this.orderOptions = new Array();
       if (this.modification) {
         let allOrders: Array<number> = [
@@ -110,6 +90,8 @@ export class AddReceiverVolumeComponent implements OnInit {
     //   this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'addPrimaryReceiverVolume', previousOrder, newOrder);
     // }
     // this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
-    this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
+    // this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
+    this.modification.addPrimaryReceiverVolume = this.addReceiverVolumeService.getObjFromForm(this.form);
+    this.compressedAirAssessmentService.updateModification(this.modification);
   }
 }

@@ -37,3 +37,15 @@ export interface AirflowValidation {
   airFlowValid: string,
   airFlowWarning: string
 }
+
+//Modification Validations
+export interface CompressedAirModificationValid {
+  isValid: boolean,
+  addReceiverVolume: boolean,
+  adjustCascadingSetPoints: boolean,
+  improveEndUseEfficiency: boolean,
+  reduceAirLeaks: boolean,
+  reduceRuntime: boolean,
+  reduceSystemPressure: boolean,
+  useAutomaticSequencer: boolean
+}

@@ -15,9 +15,7 @@ export class ExploreOpportunitiesSidePanelComponent {
 
   tabSelect: 'results' | 'compressor-profile' | 'help' | 'notes' = 'results';
 
-  compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment;
-  modificationExists: boolean;
   selectedModificationSub: Subscription;
   modification: Modification;
   selectedDayTypeSub: Subscription;
@@ -30,12 +28,8 @@ export class ExploreOpportunitiesSidePanelComponent {
       this.selectedDayType = val;
     });
 
-    this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
-      if (val) {
-        this.compressedAirAssessment = val;
-        this.dayTypeOptions = val.compressedAirDayTypes;
-      }
-    });
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.dayTypeOptions = compressedAirAssessment.compressedAirDayTypes;
 
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       this.modification = val;
@@ -43,7 +37,6 @@ export class ExploreOpportunitiesSidePanelComponent {
   }
 
   ngOnDestroy() {
-    this.compressedAirAssessmentSub.unsubscribe();
     this.selectedModificationSub.unsubscribe();
     this.selectedDayTypeSub.unsubscribe();
   }

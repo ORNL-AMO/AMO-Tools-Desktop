@@ -5,10 +5,9 @@ import { AdjustCascadingSetPoints, CascadingSetPointData, ReduceSystemAirPressur
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 import { PerformancePointsFormService } from '../../../../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
-import { ExploreOpportunitiesValidationService } from '../../explore-opportunities-validation.service';
-import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { AdjustCascadingSetPointsService, CompressorForm } from './adjust-cascading-set-points.service';
 import { CompressorInventoryItemClass } from '../../../../calculations/CompressorInventoryItemClass';
+import { ExploreOpportunitiesValidationService } from '../../../../compressed-air-assessment-validation/explore-opportunities-validation.service';
 
 @Component({
   selector: 'app-adjust-cascading-set-points',
@@ -18,13 +17,11 @@ import { CompressorInventoryItemClass } from '../../../../calculations/Compresso
 })
 export class AdjustCascadingSetPointsComponent implements OnInit {
 
-  selectedModificationIdSub: Subscription;
+  selectedModificationSub: Subscription;
   adjustCascadingSetPoints: AdjustCascadingSetPoints
   isFormChange: boolean = false;
   modification: Modification;
   orderOptions: Array<number>;
-  compressedAirAssessmentSub: Subscription;
-  compressedAirAssessment: CompressedAirAssessment;
   inventoryItems: Array<CompressorInventoryItem>;
   baselineSetPoints: Array<CascadingSetPointData>;
   setPointView: 'baseline' | 'modification' = 'modification';
@@ -32,24 +29,15 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   settings: Settings;
   implementationCostForm: UntypedFormGroup;
   hasInvalidForm: boolean;
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private exploreOpportunitiesService: ExploreOpportunitiesService,
+  validationStatusSub: Subscription;
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService,
-    private adjustCascadingSetPointsService: AdjustCascadingSetPointsService, private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
+    private adjustCascadingSetPointsService: AdjustCascadingSetPointsService,
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService){ }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
-
-    this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
-      if (compressedAirAssessment && !this.isFormChange) {
-        this.compressedAirAssessment = JSON.parse(JSON.stringify(compressedAirAssessment));
-        this.setOrderOptions();
-        this.setData()
-      } else {
-        this.isFormChange = false;
-      }
-    });
-
-    this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
+    this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       if (val && !this.isFormChange) {
         this.modification = val;
         this.setData();
@@ -58,11 +46,15 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
       }
       this.setOrderOptions();
     });
+
+    this.validationStatusSub = this.exploreOpportunitiesValidationService.compressedAirModificationValid.subscribe(val => {
+      this.hasInvalidForm = val.adjustCascadingSetPoints == false;
+    });
   }
 
   ngOnDestroy() {
-    this.selectedModificationIdSub.unsubscribe();
-    this.compressedAirAssessmentSub.unsubscribe();
+    this.selectedModificationSub.unsubscribe();
+    this.validationStatusSub.unsubscribe();
   }
 
   focusField(str: string) {
@@ -74,45 +66,43 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   }
 
   setData() {
-    if (this.compressedAirAssessment && this.modification) {
+    if (this.modification) {
       this.adjustCascadingSetPoints = this.modification.adjustCascadingSetPoints;
       this.implementationCostForm = this.adjustCascadingSetPointsService.getImplementationCostForm(this.adjustCascadingSetPoints);
       if (this.adjustCascadingSetPoints.order != 100) {
-        this.inventoryItems = this.compressedAirAssessment.compressorInventoryItems;
+        let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+        this.inventoryItems = compressedAirAssessment.compressorInventoryItems;
         let reduceSystemAirPressure: ReduceSystemAirPressure = this.modification.reduceSystemAirPressure;
         if (reduceSystemAirPressure.order != 100 && (this.adjustCascadingSetPoints.order > reduceSystemAirPressure.order)) {
           let inventoryItemsClass: Array<CompressorInventoryItemClass> = this.inventoryItems.map(item => { return new CompressorInventoryItemClass(item) });
           inventoryItemsClass.forEach(itemClass => {
-            itemClass.reduceSystemPressure(reduceSystemAirPressure, this.compressedAirAssessment.systemInformation.atmosphericPressure, this.settings);
+            itemClass.reduceSystemPressure(reduceSystemAirPressure, compressedAirAssessment.systemInformation.atmosphericPressure, this.settings);
           });
           this.inventoryItems = inventoryItemsClass.map(itemClass => { return itemClass.toModel() });
         }
         this.checkAdjustCascadingPoints();
         this.compressorForms = this.adjustCascadingSetPointsService.getFormFromObj(this.adjustCascadingSetPoints.setPointData);
-        this.setHasInvalidForm()
         this.setBaselineSetPoints();
       }
     }
   }
 
   setOrderOptions() {
-    if (this.compressedAirAssessment && this.modification) {
+    if (this.modification) {
       this.orderOptions = new Array();
-      if (this.modification) {
-        let allOrders: Array<number> = [
-          this.modification.addPrimaryReceiverVolume.order,
-          this.modification.reduceAirLeaks.order,
-          this.modification.improveEndUseEfficiency.order,
-          this.modification.reduceRuntime.order,
-          this.modification.reduceSystemAirPressure.order,
-          this.modification.useAutomaticSequencer.order,
-          this.modification.replaceCompressor.order
-        ];
-        allOrders = allOrders.filter(order => { return order != 100 });
-        let numOrdersOn: number = allOrders.length;
-        for (let i = 1; i <= numOrdersOn + 1; i++) {
-          this.orderOptions.push(i);
-        }
+      let allOrders: Array<number> = [
+        this.modification.addPrimaryReceiverVolume.order,
+        this.modification.reduceAirLeaks.order,
+        this.modification.improveEndUseEfficiency.order,
+        this.modification.reduceRuntime.order,
+        this.modification.reduceSystemAirPressure.order,
+        this.modification.useAutomaticSequencer.order,
+        this.modification.replaceCompressor.order
+      ];
+      allOrders = allOrders.filter(order => { return order != 100 });
+      let numOrdersOn: number = allOrders.length;
+      for (let i = 1; i <= numOrdersOn + 1; i++) {
+        this.orderOptions.push(i);
       }
     }
   }
@@ -126,7 +116,9 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
     //   let newOrder: number = this.adjustCascadingSetPoints.order;
     //   this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'adjustCascadingSetPoints', previousOrder, newOrder);
     // }
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
+    this.modification.adjustCascadingSetPoints = this.adjustCascadingSetPoints;
+    this.compressedAirAssessmentService.updateModification(this.modification);
+    // this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
   }
 
 
@@ -202,24 +194,11 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
     compressorForm.form.controls.maxFullFlowDischargePressure.setValidators(maxFullFlowValidators);
     compressorForm.form.controls.maxFullFlowDischargePressure.updateValueAndValidity();
     this.adjustCascadingSetPoints.setPointData = this.adjustCascadingSetPointsService.updateObjFromForm(this.adjustCascadingSetPoints.setPointData, this.compressorForms);
-    this.setHasInvalidForm()
     this.save(false);
   }
 
   saveImplementationCost() {
     this.adjustCascadingSetPoints = this.adjustCascadingSetPointsService.updateObjImplmentationCost(this.implementationCostForm, this.adjustCascadingSetPoints);
     this.save(false);
-  }
-
-  setHasInvalidForm() {
-    if (this.adjustCascadingSetPoints.order != 100) {
-      this.hasInvalidForm = false;
-      this.compressorForms.forEach(compressorForm => {
-        if (compressorForm.form.invalid) {
-          this.hasInvalidForm = true;
-        }
-      });
-      this.exploreOpportunitiesValidationService.adjustCascadingSetPointsValid.next(!this.hasInvalidForm);
-    }
   }
 }
