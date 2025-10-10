@@ -115,11 +115,11 @@
   </div>
 </div>
 <!--Process heating-->
-<div routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
+<div  #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
   <span class="sidebar-item" [routerLink]="['/calculators/process-heating-list']" routerLinkActive="selected">Process
     Heating</span>
   <div class="directory-item">
-    <span [routerLink]="['/calculators/pre-assessment']" class="sidebar-item">Pre-Assessment
+    <span [routerLink]="['/calculators/pre-assessment']" routerLinkHook routerLinkActive="selected" class="sidebar-item">Pre-Assessment
       Screening</span>
     <span [routerLink]="['/calculators/flue-gas']" routerLinkActive="selected" class="sidebar-item">Flue Gas Loss</span>
     <span [routerLink]="['/calculators/charge-material']" routerLinkActive="selected" class="sidebar-item">Charge

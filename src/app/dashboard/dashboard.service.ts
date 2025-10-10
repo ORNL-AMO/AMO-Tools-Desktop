@@ -40,6 +40,19 @@ export class DashboardService {
     }
     this.router.navigate([routeURL], { queryParams: queryParams});
   }
+
+  conditionalNavigate(url: string) {
+    console.log(window.innerWidth, this.totalScreenWidth.getValue());
+    if (window.innerWidth < 1080) {
+      // Force rerender: this collapses sidebar children
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate([url]);
+      });
+    } else {
+      // Mimic routerLink: no rerender, preserves sidebar state
+      this.router.navigate([url], { skipLocationChange: false });
+    }
+  }
 }
 
 export interface SidebarDisplayOptions {
