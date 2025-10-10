@@ -215,6 +215,10 @@ export class ProcessCoolingAssessmentService {
         const isSystemOperatingDataValid = this.isSystemOperatingDataValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
         const isValid = isSystemInformationValid && isChillerInventoryValid && isSystemOperatingDataValid && isWeatherDataValid;
+        console.log('isSystemInformationValid', isSystemInformationValid);
+        console.log('isChillerInventoryValid', isChillerInventoryValid);
+        console.log('isSystemOperatingDataValid', isSystemOperatingDataValid);
+        console.log('isWeatherDataValid', isWeatherDataValid);
         console.log('isBaselineValid', isValid);
         return isValid;
       }
@@ -249,10 +253,7 @@ export class ProcessCoolingAssessmentService {
 
   readonly isLoadScheduleValid$ = this.processCooling$.pipe(
     map((processCooling: ProcessCoolingAssessment) => {
-      if (processCooling && processCooling.monthlyOperatingSchedule && processCooling.monthlyOperatingSchedule.hoursOnPerMonth) {
-        return processCooling.monthlyOperatingSchedule.hoursOnPerMonth.some(hour => hour > 0);
-      }
-      return false;
+      return this.isLoadScheduleValid(processCooling.inventory);
     })
   );
 
@@ -268,7 +269,7 @@ export class ProcessCoolingAssessmentService {
   }
 
   isSystemInformationValid(systemInformation: SystemInformation): boolean {
-    return this.systemInformationFormService.isValid(systemInformation);
+    return this.systemInformationFormService.isValidSystemInformationValid(systemInformation);
   }
   isChillerInventoryValid(chillerInventory: ChillerInventoryItem[]): boolean {
     return chillerInventory && chillerInventory.length > 0;
@@ -281,4 +282,15 @@ export class ProcessCoolingAssessmentService {
     }
     return false;
   }
+
+  isLoadScheduleValid(chillerInventory: ChillerInventoryItem[]): boolean {
+    if (chillerInventory && chillerInventory.length > 0) {
+      return chillerInventory.every(chiller => {
+        const hasByMonth = chiller.loadScheduleByMonth?.length > 0;
+        const hasAllMonths = chiller.loadScheduleAllMonths?.length > 0;
+        return hasByMonth || hasAllMonths;
+      });
+    }
+  }
+
 }

@@ -6,6 +6,40 @@
 </h5>
 <hr class="my-1 hr-spacer">
 
+
+    <div class="my-2" *ngIf="focusedField() == 'annualOperatingHours'">
+        <h6>
+            Annual Operating Hours
+            <br>
+            <small class="text-muted">
+                Enter the total number of hours the system operates per year. This value is used for energy and cost calculations.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField() == 'electricityCost'">
+        <h6>
+            Electricity Cost
+            <br>
+            <small class="text-muted">
+                Enter the cost of electricity per kWh. This is used to calculate the operating cost of the system.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField() == 'fuelCost'">
+        <h6>
+            Fuel Cost
+            <br>
+            <small class="text-muted">
+                Enter the cost of fuel. This is used for systems that use fuel for heating or other processes.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
     <div class="my-2" *ngIf="focusedField() == 'doChillerLoadSchedulesVary'">
         <h6>
             Do chiller load schedules vary?
@@ -17,5 +51,30 @@
             </small>
         </h6>
     </div>
+
+    <div class="my-2" *ngIf="focusedField() == 'chilledWaterSupplyTemp'">
+        <h6>
+            Chilled Water Supply Temperature
+            <br>
+            <small class="text-muted">
+                Enter the temperature of the chilled water supplied to the system. The allowable value ranges from 35 to 55 degrees Fahrenheit.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="focusedField() == 'condenserCoolingMethod'">
+        <h6>
+            Condenser Cooling Method
+            <br>
+            <small class="text-muted">
+                Chillers require cooling of the chiller condenser as part of the refrigeration cycle.  The condenser is typically cooled by a fan-driven air stream (Air-Cooled) or water flowing through a heat exchanger (Water-Cooled).  All chillers in the system are assumed to use the same condenser cooling method.  Select the method of cooling from the pull-down menu.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+
+
 
 <app-co2-help-text [currentField]="focusedField()"></app-co2-help-text>

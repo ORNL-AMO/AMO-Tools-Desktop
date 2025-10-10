@@ -29,7 +29,7 @@ export class AssessmentComponent {
   assessmentView: Signal<string> = this.processCoolingUiService.childView;
 
   selectModification() {
-    this.modalDialogService.openModal<ModificationListComponent>(
+    this.modalDialogService.openModal<ModificationListComponent, undefined>(
       ModificationListComponent, 
       {
         width: '1200px', 

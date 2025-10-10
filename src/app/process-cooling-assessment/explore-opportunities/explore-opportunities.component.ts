@@ -20,7 +20,7 @@ export class ExploreOpportunitiesComponent {
   selectedModification$: Observable<Modification> = this.modificationService.selectedModification$
   
   addModification() {
-    this.modalService.openModal<AddModificationComponent>(
+    this.modalService.openModal<AddModificationComponent, undefined>(
       AddModificationComponent, 
       {
         width: '800px',

@@ -1,10 +1,13 @@
 <!--  todo show print view -->
+<div class="my-3">
+    <h5>DEVELOPMENT Debug Results</h5>
+</div>
 <div class="debug-results-container">
     <div class="debug-results-column">
         <ng-container *ngIf="baselineResults$ | async as results">
             <div class="debug-results"
                 style="background: #f8f9fa; border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem;">
-                <h5>DEVELOPMENT Debug Results - <span class="bold">Baseline</span></h5>
+                <h5><span class="bold">Baseline</span></h5>
 
                 <div *ngIf="results">
                     <div *ngFor="let chiller of results.chiller; let i = index">
@@ -15,17 +18,17 @@
                                     <th>Bin</th>
                                     <th>Efficiency</th>
                                     <th>Hours</th>
-                                    <th>Power</th>
-                                    <th>Energy</th>
+                                    <th>Power(kW)</th>
+                                    <th>Energy (kWh)</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let bin of chiller.efficiency; let j = index">
-                                    <td>{{j}}</td>
-                                    <td>{{chiller.efficiency[j] | number:'1.0-3'}}</td>
-                                    <td>{{chiller.hours[j] | number:'1.0-3'}}</td>
-                                    <td>{{chiller.power[j] | number:'1.0-3'}}</td>
-                                    <td>{{chiller.energy[j] | number:'1.0-3'}}</td>
+                                    <td>{{LOAD_LABELS[j]}}</td>
+                                    <td>{{ (chiller.efficiency[j] * 100) | number:'1.0-1' }}%</td>
+                                    <td>{{chiller.hours[j] | number:'1.0-1'}}</td>
+                                    <td>{{chiller.power[j] | number:'1.0-1'}}</td>
+                                    <td>{{chiller.energy[j] | number:'1.0-2'}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -35,7 +38,7 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th *ngFor="let idx of results.pump.chillerPumpingEnergy; let i = index">{{i}}</th>
+                                <th *ngFor="let idx of results.pump.chillerPumpingEnergy; let i = index">Chiller {{i}}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,7 +58,9 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th *ngFor="let idx of results.tower.hours; let i = index">{{i}}</th>
+                                <th *ngFor="let idx of results.tower.hours; let i = index">{{WET_BULB_BINS[i]}}
+                                    <span [innerHTML]="TEMPERATURE_HTML.imperial"></span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -108,7 +113,7 @@
         <ng-container *ngIf="modificationResults$ | async as results">
             <div class="debug-results"
                 style="background: #f8f9fa; border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem;">
-                <h5>DEVELOPMENT Debug Results - <span class="bold">Modification</span></h5>
+                <h5><span class="bold">Explore Opportunities - Modification</span></h5>
 
                 <div *ngIf="results">
                     <div *ngFor="let chiller of results.chiller; let i = index">
@@ -119,17 +124,17 @@
                                     <th>Bin</th>
                                     <th>Efficiency</th>
                                     <th>Hours</th>
-                                    <th>Power</th>
-                                    <th>Energy</th>
+                                    <th>Power(kW)</th>
+                                    <th>Energy (kWh)</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let bin of chiller.efficiency; let j = index">
-                                    <td>{{j}}</td>
-                                    <td>{{chiller.efficiency[j] | number:'1.0-3'}}</td>
-                                    <td>{{chiller.hours[j] | number:'1.0-3'}}</td>
-                                    <td>{{chiller.power[j] | number:'1.0-3'}}</td>
-                                    <td>{{chiller.energy[j] | number:'1.0-3'}}</td>
+                                    <td>{{LOAD_LABELS[j]}}</td>
+                                    <td>{{ (chiller.efficiency[j] * 100) | number:'1.0-1' }}%</td>
+                                    <td>{{chiller.hours[j] | number:'1.0-1'}}</td>
+                                    <td>{{chiller.power[j] | number:'1.0-1'}}</td>
+                                    <td>{{chiller.energy[j] | number:'1.0-2'}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -139,16 +144,16 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th *ngFor="let idx of results.pump.chillerPumpingEnergy; let i = index">{{i}}</th>
+                                <th *ngFor="let idx of results.pump.chillerPumpingEnergy; let i = index">Chiller {{i}}</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th>Chiller Pumping Energy</th>
+                                <th>Chiller Pumping Energy (kWh)</th>
                                 <td *ngFor="let val of results.pump.chillerPumpingEnergy">{{val | number:'1.0-3'}}</td>
                             </tr>
                             <tr>
-                                <th>Condenser Pumping Energy</th>
+                                <th>Condenser Pumping Energy (kWh)</th>
                                 <td *ngFor="let val of results.pump.condenserPumpingEnergy">{{val | number:'1.0-3'}}
                                 </td>
                             </tr>
@@ -159,7 +164,9 @@
                         <thead>
                             <tr>
                                 <th></th>
-                                <th *ngFor="let idx of results.tower.hours; let i = index">{{i}}</th>
+                                <th *ngFor="let idx of results.tower.hours; let i = index">{{WET_BULB_BINS[i]}}
+                                    <span [innerHTML]="TEMPERATURE_HTML.imperial"></span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -168,7 +175,7 @@
                                 <td *ngFor="let val of results.tower.hours">{{val | number:'1.0-3'}}</td>
                             </tr>
                             <tr>
-                                <th>Energy</th>
+                                <th>Energy (kWh)</th>
                                 <td *ngFor="let val of results.tower.energy">{{val | number:'1.0-3'}}</td>
                             </tr>
                         </tbody>

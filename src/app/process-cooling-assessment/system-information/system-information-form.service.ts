@@ -16,7 +16,7 @@ export class SystemInformationFormService {
       electricityCost: [operations.electricityCost, [Validators.required, Validators.min(0)]],
       chilledWaterSupplyTemp: [operations.chilledWaterSupplyTemp, Validators.required],
       condenserCoolingMethod: [operations.condenserCoolingMethod, Validators.required],
-      doChillerLoadSchedulesVary: [operations.doChillerLoadSchedulesVary, Validators.required],
+      doChillerLoadSchedulesVary: [operations.doChillerLoadSchedulesVary],
     });
   }
 
@@ -99,7 +99,7 @@ export class SystemInformationFormService {
     };
   }
 
-  public isValid(systemInformationInput: SystemInformation): boolean {
+  public isValidSystemInformationValid(systemInformationInput: SystemInformation): boolean {
     let isValid: boolean = true;
     const operationsForm = this.getOperationsForm(systemInformationInput.operations);
     const pumpForm = this.getPumpInputForm(systemInformationInput.condenserWaterPumpInput);

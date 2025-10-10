@@ -1,6 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { Modification, FanSpeedType, TowerType, ChillerInventoryItem, CompressorChillerTypeEnum } from '../../../shared/models/process-cooling-assessment';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
+import { Component} from '@angular/core';
 
 @Component({
   selector: 'app-assessment-results',

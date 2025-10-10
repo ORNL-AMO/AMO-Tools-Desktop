@@ -1,3 +1,4 @@
+import { EemHelpComponent } from './results-panel/help-panel/eem-help/eem-help.component';
 import { NgModule } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { ProcessCoolingAssessmentComponent } from './process-cooling-assessment/process-cooling-assessment.component';
@@ -24,7 +25,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
-import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
@@ -72,6 +72,8 @@ import { AddModificationComponent } from './explore-opportunities/add-modificati
 import { ModificationService } from './services/modification.service';
 import { ModificationListComponent } from './explore-opportunities/modification-list/modification-list.component';
 import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
+import { ConfirmDeleteComponent } from './confirm-delete/confirm-delete.component';
+import { AlertInfoContainerComponent } from '../shared/alert-info-container/alert-info-container.component';
 
 
 export const ROUTE_TOKENS = {
@@ -108,8 +110,8 @@ const ROUTES: Route[] = [
   {
     path: '',
     component: ProcessCoolingAssessmentComponent,
-     resolve: { 
-      processCoolingData: ProcessCoolingAssessmentResolver 
+    resolve: {
+      processCoolingData: ProcessCoolingAssessmentResolver
     },
     children: [
       { path: '', redirectTo: ROUTE_TOKENS.baseline, pathMatch: 'full' },
@@ -248,7 +250,9 @@ const ROUTES: Route[] = [
     MonthlyOperatingScheduleComponent,
     AddModificationComponent,
     ModificationListComponent,
-    AssessmentResultsComponent
+    AssessmentResultsComponent,
+    EemHelpComponent,
+    ConfirmDeleteComponent,
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -259,7 +263,6 @@ const ROUTES: Route[] = [
     ReactiveFormsModule,
     FormsModule,
     TabsTooltipModule,
-    ConfirmDeleteModalModule,
     UpdateUnitsModalModule,
     SharedPipesModule,
     ExportableResultsTableModule,
@@ -273,6 +276,7 @@ const ROUTES: Route[] = [
     FormControlRequiredComponent,
     InputUnitComponent,
     OperatingHoursModalModule,
+    AlertInfoContainerComponent
   ],
   providers: [
     ProcessCoolingAssessmentService,

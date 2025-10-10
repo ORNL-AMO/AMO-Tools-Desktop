@@ -1,17 +1,19 @@
 import { Component, OnInit, inject, DestroyRef, Signal } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { debounceTime, Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
-import { ChillerInventoryService } from '../services/chiller-inventory.service';
+import { ChillerInventoryForm, ChillerInventoryService } from '../services/chiller-inventory.service';
+import { getChillerTypes } from '../process-cooling-constants';
+import { FormControlIds, generateFormControlIds } from '../../shared/helperFunctions';
 
 @Component({
   selector: 'app-chiller-inventory',
   standalone: false,
   templateUrl: './chiller-inventory.component.html',
-  styleUrl: './chiller-inventory.component.css'
+  styleUrls: ['./chiller-inventory.component.css']
 })
 export class ChillerInventoryComponent implements OnInit {
   private processCoolingUiService = inject(ProcessCoolingUiService);
@@ -20,12 +22,16 @@ export class ChillerInventoryComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
-  form: UntypedFormGroup;
+  form: FormGroup<ChillerInventoryForm>;
   showChillerModal = false;
+  controlIds: FormControlIds<ChillerInventoryForm>;
   selectedChiller$: Observable<ChillerInventoryItem> = this.inventoryService.selectedChiller$;
+  chillerTypes = getChillerTypes();
 
   ngOnInit(): void {
-    this.form = this.inventoryService.getChillerForm(this.inventoryService.selectedChillerValue);
+  this.form = this.inventoryService.getChillerForm(this.inventoryService.selectedChillerValue);
+  this.controlIds = generateFormControlIds(this.form.controls);
+
     this.observeFormChanges();
     this.inventoryService.selectedChiller$.pipe(
       takeUntilDestroyed(this.destroyRef)

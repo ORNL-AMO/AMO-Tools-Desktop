@@ -62,8 +62,8 @@
             <div class="d-none d-lg-flex">
                 <ul #reportBtns class="tabs primary hide-print">
                     @for (link of REPORT_VIEW_LINKS; track $index) {
-                    <li routerLinkActive="active" [routerLink]="[link.view]">
-                        <a [routerLink]="[link.view]">
+                    <li routerLinkActive="active" [routerLink]="[link.view]" [ngClass]="{'disabled': link.meta?.disabled}">
+                        <a [routerLink]="[link.view]" [ngClass]="{'disabled': link.meta?.disabled}">
                             {{link.label}}
                         </a>
                     </li>
@@ -80,8 +80,11 @@
                         <span class="small text-uppercase">Menu</span>
                     </div>
                     @for (link of REPORT_VIEW_LINKS; track $index) {
-                    <div routerLinkActive="active" [routerLink]="[link.view]">
-                        <a [routerLink]="[link.view]">
+                    <div routerLinkActive="active" 
+                    [ngClass]="{'disabled': link.meta?.disabled}"
+                    [routerLink]="[link.view]">
+                        <a [routerLink]="[link.view]" 
+                           [ngClass]="{'disabled': link.meta?.disabled}">
                             {{link.label}}
                         </a>
                     </div>

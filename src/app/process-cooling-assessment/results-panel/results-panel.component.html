@@ -3,7 +3,7 @@
         <div class="row no-gutters">
             <div class="col-12">
                 <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
-                    <div *ngIf="displayInventory"
+                    <div *ngIf="displayInventory()"
                         class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': selectedPanelTab == 'inventory'}">
                         <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('inventory')">
                             <div>Inventory</div>
@@ -25,7 +25,7 @@
         </div>
         <div class="row no-gutters">
             <div class="col-12 pr-2 pl-2 pb-4 mt-1">
-                <app-inventory-table *ngIf="selectedPanelTab == 'inventory'"></app-inventory-table>
+                <app-inventory-table *ngIf="displayInventory() && selectedPanelTab == 'inventory'"></app-inventory-table>
                 <app-help-panel *ngIf="selectedPanelTab == 'help'"></app-help-panel>
                 <app-assessment-results *ngIf="selectedPanelTab == 'results'"></app-assessment-results>
             </div>

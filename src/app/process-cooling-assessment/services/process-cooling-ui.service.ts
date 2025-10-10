@@ -258,6 +258,9 @@ export interface ViewLink {
   view: ProcessCoolingView;
   label: string;
   param?: string | number;
+  meta?: {
+    disabled?: boolean;
+  };
 }
 
 export const MAIN_VIEW_LINKS: ViewLink[] = [
@@ -338,13 +341,22 @@ export const REPORT_VIEW_LINKS: ViewLink[] = [
   {
     view: ReportView.PUMP_SUMMARY,
     label: 'Pump Summary',
+    meta: {
+      disabled: true
+    }
   },
   {
     view: ReportView.TOWER_SUMMARY,
     label: 'Tower Summary',
+    meta: {
+      disabled: true
+    }
   },
   {
     view: ReportView.GRAPHS,
     label: 'Graphs',
+    meta: {
+      disabled: true
+    }
   },
 ]

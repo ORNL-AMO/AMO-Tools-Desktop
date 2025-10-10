@@ -1,5 +1,5 @@
-import { Component, computed, inject, Signal } from '@angular/core';
-import { ProcessCoolingSetupTabString, ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { Component, computed, effect, inject, Signal } from '@angular/core';
+import { MainView, ProcessCoolingSetupTabString, ProcessCoolingUiService, SetupView } from '../services/process-cooling-ui.service';
 
 @Component({
   selector: 'app-results-panel',
@@ -15,8 +15,22 @@ export class ResultsPanelComponent {
   setupView: Signal<string> = this.processCoolingUIService.childView;
 
   displayInventory: Signal<boolean> = computed(() => {
-    return this.mainView() === 'baseline' && this.setupView() === 'inventory';
+    return this.mainView() === MainView.BASELINE && (this.setupView() === SetupView.INVENTORY || this.setupView() === SetupView.LOAD_SCHEDULE);
   });
+
+  displayResults: Signal<boolean> = computed(() => {
+    return this.mainView() === MainView.BASELINE && (this.setupView() === SetupView.INVENTORY || this.setupView() === SetupView.LOAD_SCHEDULE);
+  });
+
+  constructor() {
+    effect(() => {
+      if (this.setupView() === SetupView.INVENTORY || this.setupView() === SetupView.LOAD_SCHEDULE) {
+        this.setPanelTab('inventory');
+      } else {
+        this.setPanelTab('help');
+      }
+    });
+  }
 
   setPanelTab(str: PanelTab) {
     this.selectedPanelTab = str;
@@ -24,4 +38,4 @@ export class ResultsPanelComponent {
 }
 
 
-  export type PanelTab = ProcessCoolingSetupTabString | 'help' | 'results';
+export type PanelTab = ProcessCoolingSetupTabString | 'help' | 'results';

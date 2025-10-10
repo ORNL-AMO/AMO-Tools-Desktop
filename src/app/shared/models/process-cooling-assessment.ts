@@ -240,12 +240,11 @@ export interface WaterCooledSystemInput {
      * @property towerSize - (redundant fields) tonnage double, units ton, 20 - 3000
      */
 export interface TowerInput {
-    usesFreeCooling: boolean,
-    isHEXRequired: boolean,
-    HEXApproachTemp: number,  
+    usesFreeCooling: boolean;
+    isHEXRequired: boolean;
+    HEXApproachTemp: number;  
     numberOfTowers: number;
-    // todo make towerType required once logic to populate tower fields from type is known
-    towerType?: number;
+    towerType: number;
     numberOfFans: number; // * set by towerType choice - number of cells/fans
     fanSpeedType: number; // * set by towerType choice - 1 = Two Speed, 2 = Variable Speed
     towerSizeMetric: number; 

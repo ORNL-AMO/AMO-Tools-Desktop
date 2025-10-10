@@ -13,34 +13,37 @@ export class ProcessCoolingResultsService {
   private readonly processCoolingWeatherContextService = inject(WEATHER_CONTEXT);
   private readonly suiteApi = inject(ProcessCoolingSuiteApiService);
 
-  readonly baselineResults$: Observable<ProcessCoolingResults> = this.processCoolingAssessmentService.processCooling$.pipe(
-    map((processCooling: ProcessCoolingAssessment) => {
+  readonly baselineResults$: Observable<ProcessCoolingResults> = combineLatest([
+    this.processCoolingAssessmentService.processCooling$,
+    this.processCoolingAssessmentService.isBaselineValid$
+  ]).pipe(
+    map(([processCooling, isBaselineValid]: [ProcessCoolingAssessment, boolean]) => {
       let results: ProcessCoolingResults;
-      if (processCooling && processCooling.isValid) {
+      if (processCooling && isBaselineValid) {
         results = this.getResults(processCooling);
       }
-      // console.log('[ProcessCoolingResultsService] baselineResults$ results:', results);
       return results;
     })
   );
 
   readonly modificationResults$: Observable<ProcessCoolingResults> = combineLatest([
     this.processCoolingAssessmentService.processCooling$,
+    this.processCoolingAssessmentService.isBaselineValid$,
     this.modificationService.selectedModification$
   ]).pipe(
-    map(([processCooling, modification]: [ProcessCoolingAssessment, Modification]) => {
+    map(([processCooling, isBaselineValid, modification]: [ProcessCoolingAssessment, boolean, Modification]) => {
       let results: ProcessCoolingResults;
-      if (processCooling && processCooling.isValid && modification && modification.isValid) {
+      if (processCooling && isBaselineValid && modification && modification.isValid) {
         const modifiedProcessCoolingAssessment = this.modificationService.getModifiedProcessCoolingAssessment(processCooling, modification);
         results = this.getResults(modifiedProcessCoolingAssessment);
       } 
-      // console.log('[ProcessCoolingResultsService] modificationResults$ results:', results);
+      console.log('[ProcessCoolingResultsService] modificationResults$ results:', results);
       return results;
     })
   );
 
   getResults(processCoolingAssessment: ProcessCoolingAssessment): ProcessCoolingResults {
-    // console.log('[ProcessCoolingResultsService]  processCoolingAssessment:', processCoolingAssessment);
+    console.log('[ProcessCoolingResultsService]  processCoolingAssessment:', processCoolingAssessment);
     let results: ProcessCoolingResults;
     const weatherData = this.processCoolingWeatherContextService.getWeatherData();
     const isValidWeatherData = this.processCoolingWeatherContextService.isValidWeatherData();

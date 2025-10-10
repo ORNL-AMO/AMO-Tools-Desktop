@@ -1,10 +1,12 @@
 import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
-import { Settings } from 'http2';
 import { ExecutiveSummaryResults } from 'process-flow-lib';
 import { Assessment } from '../../../shared/models/assessment';
 import { ProcessCoolingResults } from '../../../shared/models/process-cooling-assessment';
 import { ProcessCoolingResultsService } from '../../services/process-cooling-results.service';
 import { Observable } from 'rxjs';
+import { LOAD_LABELS, WET_BULB_BINS } from '../../process-cooling-constants';
+import { TEMPERATURE_HTML } from '../../../shared/app-constants';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-executive-summary',
@@ -27,6 +29,10 @@ export class ExecutiveSummaryComponent {
     note: string
   }>;
   selectedModificationIndex: number = 1;
+
+  LOAD_LABELS = LOAD_LABELS;
+  WET_BULB_BINS = WET_BULB_BINS;
+  TEMPERATURE_HTML = TEMPERATURE_HTML;
 
   baselineResults: ExecutiveSummaryResults;
   modificationResults: ExecutiveSummaryResults[] = [];

@@ -49,8 +49,8 @@
         Tower Type
         <br>
         <small class="text-muted">
-            The type or configuration of the cooling tower. This may correspond to a specific design, manufacturer, or
-            internal code. (If unsure, consult system documentation.)
+            The supported towers are '1-Cell with 1-Speed Motor', '1-Cell with 2-Speed Motor', '2-Cell with 1-Speed Motors', '2-Cell with 2-Speed Motors', '3-Cell with 1-Speed Motors', '3-Cell with 2-Speed Motors', and 'Tower with Variable Speed Motor(s)'.  
+            By choosing one of the first six options, the number of cells per tower is automatically specified as 1, 2, or 3, where a cell is the number of identical zones (i.e. fans) operating within a cooling tower.  If the seventh option is selected, an additional menu appears at the bottom of the screen to specify the number of cells per tower.  It is believed that these seven options will cover the majority of cooling tower systems encountered.
         </small>
     </h6>
 </div>
@@ -59,8 +59,7 @@
         Number of Fans
         <br>
         <small class="text-muted">
-            The number of fans or cells per tower. This is typically set by the tower type or design. Enter an integer
-            value.
+            A cell is the number of identical, independent zones (i.e. fans) within a given cooling tower. The allowable range is 1 to 3.
         </small>
     </h6>
 </div>
@@ -79,8 +78,8 @@
         Tower Size Metric
         <br>
         <small class="text-muted">
-            Indicates how the tower is sized (e.g., by tonnage or fan horsepower). This is often an enumeration or code;
-            see your system documentation for details.
+             The tower size can be specified by tonnage, fan hp, or declared to be Unknown.
+             Axial fans are usually found on larger towers, and are roughly twice as efficient as centrifugal fans.  The fan hp will be determined by multiplying the tower tonnage by a coefficient to arrive at a typical fan hp. 
         </small>
     </h6>
 </div>

@@ -1,0 +1,5 @@
+li.disabled, div.disabled, a.disabled {
+  color: #6c757d;
+  pointer-events: none;
+  cursor: default;
+}
