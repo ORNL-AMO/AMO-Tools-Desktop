@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { DISABLED__DEFAULT_NOTIFICATIONS_KEY } from '../models/app';
 import { LocalStorageService } from '../local-storage.service';
+import { environment } from '../../../environments/environment';
 
 const snackbarHiddenStyle = { bottom: '-300px', pointerEvents: 'none' };
 const snackbarVisibleStyle = { bottom: '25px', pointerEvents: 'auto' };
@@ -43,7 +44,7 @@ export class SnackbarNotificationComponent {
                 this.disabledDefaultNotifications = [];
             }
 
-            let isMessageDisabled = this.disabledDefaultNotifications.includes(this.snackbarMessage?.appDefaultNotification);
+            let isMessageDisabled = this.disabledDefaultNotifications.includes(this.snackbarMessage?.appDefaultNotification) || !environment.production;
             if (this.snackbarMessage && !isMessageDisabled) {
                 this.showSnackbar();
             } else if (this.snackbarState === 'show') {

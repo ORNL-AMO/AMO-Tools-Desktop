@@ -34,8 +34,9 @@ export class EmailListSubscribeService {
   async setEmailSubscribeVisibility(applicationData: ApplicationInstanceData) {
     const isEmailSubscriber: boolean = await this.checkSubscriberExists(applicationData);
     const hasMetUsageRequirement: boolean = this.getHasMetUsageRequirements(applicationData);
+    const shouldShowToast = hasMetUsageRequirement && !isEmailSubscriber && environment.production;
     this.isSubscribed.next(isEmailSubscriber);
-    this.shouldShowToast.next(hasMetUsageRequirement && !isEmailSubscriber);
+    this.shouldShowToast.next(shouldShowToast);
   }
 
   submitSubscriberEmail(email: string): Observable<void> {
