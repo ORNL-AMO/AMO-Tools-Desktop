@@ -1,5 +1,5 @@
 import { getNewIdString } from "../shared/helperFunctions";
-import { ChillerInventoryItem, CompressorChillerTypeEnum, FanType, ProcessCoolingAssessment, TowerSizeMetric, TowerType } from "../shared/models/process-cooling-assessment";
+import { ChillerInventoryItem, CompressorChillerTypeEnum, DayScheduleData, FanType, MonthlyOperatingSchedule, ProcessCoolingAssessment, TowerSizeMetric, TowerType, WeeklyOperatingSchedule } from "../shared/models/process-cooling-assessment";
 import { Settings } from "../shared/models/settings";
 
 export const DAY_LABELS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -39,6 +39,14 @@ export const getTowerTypes = () => {
     ] as const;
 };
 
+export const getChillerTypes = () => {
+  return [
+    {value: CompressorChillerTypeEnum.CENTRIFUGAL, name: CompressorChillerTypes[CompressorChillerTypeEnum.CENTRIFUGAL]},
+    {value: CompressorChillerTypeEnum.RECIPROCATING, name: CompressorChillerTypes[CompressorChillerTypeEnum.RECIPROCATING]},
+    {value: CompressorChillerTypeEnum.SCREW, name: CompressorChillerTypes[CompressorChillerTypeEnum.SCREW]}
+  ]
+}
+
 export const CompressorChillerTypes =
 {
     [CompressorChillerTypeEnum.CENTRIFUGAL]: 'Centrifugal',
@@ -64,19 +72,19 @@ export const getDefaultInventoryItem = (): ChillerInventoryItem => {
         description: undefined,
         modifiedDate: new Date(),
         chillerType: CompressorChillerTypeEnum.CENTRIFUGAL,
-        capacity: 0,
-        isFullLoadEfficiencyKnown: false,
-        fullLoadEfficiency: 0,
-        age: 0,
+        capacity: 1000,
+        isFullLoadEfficiencyKnown: true,
+        fullLoadEfficiency: 0.65,
+        age: 10,
         installVSD: false,
         useARIloadScheduleByMonthchedule: false,
-        useSameMonthlyLoading: false,
-        loadScheduleAllMonths: undefined,
+        useSameMonthlyLoading: true,
+        loadScheduleAllMonths: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0],
         loadScheduleByMonth: Array(12).fill(Array(11).fill(0)),
     };
 }
 
-export const getDefaultProcessCoolingAssessment = (settings: Settings ): ProcessCoolingAssessment => {
+export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessCoolingAssessment => {
         return {
           name: 'Baseline',
           isValid: false,
@@ -130,7 +138,8 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings ): Process
               fanSpeedType: 0,
               towerSizeMetric: 0,
               fanType: 0,
-              towerSize: 78
+              towerSize: 78,
+              towerType: TowerType.OneCellOneSpeed
             },
             chilledWaterPumpInput: {
               variableFlow: true,
@@ -150,12 +159,75 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings ): Process
           inventory: [
             getDefaultInventoryItem()
           ],
+          weeklyOperatingSchedule: getDefaultWeeklyOperatingSchedule(),
+          monthlyOperatingSchedule: getDefaultMonthlyScheduleData(),
           selectedModificationId: '',
-          existingDataUnits: '',
+          existingDataUnits: 'Imperial',
           selected: false,
         }
       }
 
 
+export const getDefaultMonthlyScheduleData = (): MonthlyOperatingSchedule => {
+  const months = getMonthsMaxDays();
+  return {
+    months: months,
+    useMaxHours: false,
+    hoursOnPerMonth: months.map(month => month.days * 24)
+  };
+}
+
+ export const getDefaultWeeklyOperatingSchedule = (): WeeklyOperatingSchedule => {
+    const defaultSchedule: WeeklyOperatingSchedule = {
+      useSameSchedule: false,
+      days: [
+        { off: false, start: 8, end: 17, allDay: false },
+        { off: false, start: 8, end: 17, allDay: false },
+        { off: false, start: 8, end: 17, allDay: false },
+        { off: false, start: 8, end: 17, allDay: false },
+        { off: false, start: 8, end: 17, allDay: false },
+        { off: true, start: 8, end: 17, allDay: false },
+        { off: true, start: 8, end: 17, allDay: false }
+      ],
+    }
+    defaultSchedule.hoursOnMonToSun = getHoursOnMonToSun(defaultSchedule.days);
+    return defaultSchedule;
+  }
+
+export const getHoursOnMonToSun = (days: DayScheduleData[]) => {
+   const hoursOnMonToSun = days.map(day => {
+      if (day.off) {
+        return 0;
+      } else if (day.allDay) {
+        return 24;
+      } else {
+        return Math.max(0, day.end - day.start);
+      }
+    });
+  return hoursOnMonToSun;
+}
+
+export const getMonthsMaxDays = () => {
+  return [
+    { name: 'January', days: 31 },
+    // * Leap year max
+    { name: 'February', days: 29 },
+    { name: 'March', days: 31 },
+    { name: 'April', days: 30 },
+    { name: 'May', days: 31 },
+    { name: 'June', days: 30 },
+    { name: 'July', days: 31 },
+    { name: 'August', days: 31 },
+    { name: 'September', days: 30 },
+    { name: 'October', days: 31 },
+    { name: 'November', days: 30 },
+    { name: 'December', days: 31 }
+  ];
+}
+
+
+
+
 export const LOAD_LABELS = ['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'];
+export const WET_BULB_BINS = ['< 35', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'];
 export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

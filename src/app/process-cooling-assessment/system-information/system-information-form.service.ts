@@ -1,7 +1,7 @@
 // (TowerForm and methods moved into class below)
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput } from '../../shared/models/process-cooling-assessment';
+import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation } from '../../shared/models/process-cooling-assessment';
 
 
 @Injectable()
@@ -16,7 +16,7 @@ export class SystemInformationFormService {
       electricityCost: [operations.electricityCost, [Validators.required, Validators.min(0)]],
       chilledWaterSupplyTemp: [operations.chilledWaterSupplyTemp, Validators.required],
       condenserCoolingMethod: [operations.condenserCoolingMethod, Validators.required],
-      doChillerLoadSchedulesVary: [operations.doChillerLoadSchedulesVary, Validators.required],
+      doChillerLoadSchedulesVary: [operations.doChillerLoadSchedulesVary],
     });
   }
 
@@ -97,6 +97,22 @@ export class SystemInformationFormService {
       ...currentInput,
       ...formValue,
     };
+  }
+
+  public isValidSystemInformationValid(systemInformationInput: SystemInformation): boolean {
+    let isValid: boolean = true;
+    const operationsForm = this.getOperationsForm(systemInformationInput.operations);
+    const pumpForm = this.getPumpInputForm(systemInformationInput.condenserWaterPumpInput);
+    const towerForm = this.getTowerForm(systemInformationInput.towerInput);
+    let systemInputForm: FormGroup<any>;
+    if (operationsForm.controls.condenserCoolingMethod.value === CondenserCoolingMethod.Water) {
+      systemInputForm = this.getWaterCooledSystemInputForm(systemInformationInput.waterCooledSystemInput);
+    } else {
+      systemInputForm = this.getAirCooledSystemInputForm(systemInformationInput.airCooledSystemInput);
+    }
+
+    isValid = operationsForm.valid && pumpForm.valid && systemInputForm.valid && towerForm.valid;
+    return isValid;
   }
 }
 

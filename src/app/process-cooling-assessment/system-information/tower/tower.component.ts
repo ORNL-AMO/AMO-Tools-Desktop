@@ -1,7 +1,6 @@
 import { Component, DestroyRef, inject, Signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
-import { tap } from "rxjs";
 import { ProcessCoolingAssessment, TowerInput, TowerSizeMetric, TowerType } from "../../../shared/models/process-cooling-assessment";
 import { ProcessCoolingAssessmentService } from "../../services/process-cooling-asessment.service";
 import { TowerForm, SystemInformationFormService } from "../system-information-form.service";

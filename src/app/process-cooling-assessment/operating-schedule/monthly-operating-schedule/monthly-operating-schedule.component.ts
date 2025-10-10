@@ -4,6 +4,7 @@ import { ProcessCoolingAssessmentService } from '../../services/process-cooling-
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
 import { MonthlyOperatingScheduleService } from '../../services/monthly-operating-schedule.service';
+import { getDefaultMonthlyScheduleData, getMonthsMaxDays } from '../../process-cooling-constants';
 
 
 @Component({
@@ -18,11 +19,11 @@ export class MonthlyOperatingScheduleComponent implements OnInit {
   private monthlyOperatingScheduleService = inject(MonthlyOperatingScheduleService);
 
   form: FormGroup;
-  months = this.monthlyOperatingScheduleService.getMonthsMaxDays();
+  months = getMonthsMaxDays();
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
 
   ngOnInit() {
-    const monthlySchedule = this.processCooling().monthlyOperatingSchedule ? this.processCooling().monthlyOperatingSchedule : this.monthlyOperatingScheduleService.getDefaultScheduleData();
+    const monthlySchedule = this.processCooling().monthlyOperatingSchedule ? this.processCooling().monthlyOperatingSchedule : getDefaultMonthlyScheduleData();
     this.form = this.monthlyOperatingScheduleService.getMonthlyScheduleForm(monthlySchedule);
     if (monthlySchedule.useMaxHours) {
       this.setAllToMaxAndDisable();

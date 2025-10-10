@@ -30,6 +30,7 @@ export class OperationsComponent {
 
   @ViewChild('wrapperElement', { static: false }) wrapperElement: ElementRef;
   // * prefer resizeObserver over onResize - only triggers on element change, not viewport
+  // todo investigate, resize may no longer be needed with overhauled styling
   private resizeObserver: ResizeObserver;
 
   // * use typed forms - get intellisense on properties

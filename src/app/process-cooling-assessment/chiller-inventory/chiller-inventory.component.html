@@ -6,23 +6,63 @@
     </div>
     <div class="mr-2 ml-2" *ngIf="selectedChiller$ | async as selectedChiller; else hasNoChiller">
         <form [formGroup]="form">
+            <!-- <a class="click-link small pull-right" (click)="openChillerModal()">Set Data From Existing Chiller</a> -->
+
             <div class="form-group" [ngClass]="{'invalid': form.controls.name.invalid}">
-                <label for="name">Chiller Name</label>
+                <label for="{{controlIds.towerSizeMetric}}">Chiller Name</label>
                 <input type="text" class="form-control" name="name" formControlName="name"
                     (focus)="focusField('chiller-name')" />
-                <span class="alert-danger pull-right small"
-                    *ngIf="form.controls.name.invalid && !form.controls.name.pristine">
-                    <span *ngIf="form.controls.name.errors.required">Value Required</span>
-                </span>
+                <app-form-control-required [control]="form.controls.name"></app-form-control-required>
             </div>
             <div class="form-group">
-                <label>Description</label>
+                <label for="{{controlIds.description}}">Description</label>
                 <textarea class="form-control" type="text" id="description" formControlName="description"
                     (focus)="focusField('chiller-description')"></textarea>
             </div>
-            <a class="click-link small pull-right" (click)="openChillerModal()">Set Data From Existing Chiller</a>
+            <hr>
+            <div class="form-group">
+                <label for="{{controlIds.chillerType}}">Chiller Type</label>
+                <select class="form-control" id="{{controlIds.chillerType}}" formControlName="chillerType"
+                    (focus)="focusField('chillerType')">
+                    @for (chillerType of chillerTypes; track chillerType.value) {
+                    <option [ngValue]="chillerType.value">{{ chillerType.name }}</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="{{controlIds.isFullLoadEfficiencyKnown}}">Is Full Load Efficiency Known?</label>
+                <select class="form-control" id="isFullLoadEfficiencyKnown" formControlName="isFullLoadEfficiencyKnown"
+                    (focus)="focusField('isFullLoadEfficiencyKnown')">
+                    <option [ngValue]="true">Yes</option>
+                    <option [ngValue]="false">No</option>
+                </select>
+            </div>
+            <div class="form-group" *ngIf="form.controls.isFullLoadEfficiencyKnown.value">
+                <label for="{{controlIds.fullLoadEfficiency}}">Full Load Efficiency</label>
+                <div class="input-group">
 
-            
+                    <input type="number" class="form-control" id="fullLoadEfficiency"
+                        formControlName="fullLoadEfficiency" (focus)="focusField('fullLoadEfficiency')" />
+                    <app-input-unit [defaultUnit]="'kW/ton'"></app-input-unit>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <label for="{{controlIds.capacity}}">Capacity</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="capacity" formControlName="capacity"
+                        (focus)="focusField('capacity')" />
+                    <app-input-unit [defaultUnit]="'tons'"></app-input-unit>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="{{controlIds.age}}">Age</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="age" formControlName="age"
+                        (focus)="focusField('age')" />
+                    <app-input-unit [defaultUnit]="'years'"></app-input-unit>
+                </div>
+            </div>
         </form>
     </div>
     <ng-template #hasNoChiller>

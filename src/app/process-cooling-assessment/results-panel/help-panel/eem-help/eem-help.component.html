@@ -1,0 +1,45 @@
+<div class="pt-2 d-flex flex-column help-info">
+
+    <h5>
+        Energy Efficiency Measures Help
+        <br>
+        <small class="text-muted">Guidance for Energy Efficiency Measures (EEMs)</small>
+    </h5>
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2" *ngIf="focusedField() == 'modificationChilledWaterTemp'">
+        <h6>
+            Chilled Water Temperature
+            <br>
+            <small class="text-muted">
+                Enter the new chilled water supply temperature after the EEM is implemented. 
+                <br><br>
+                In certain systems, it may be possible to raise the chilled water temperature without any negative results.  
+                For example, in some industrial settings chilled water flow is throttled to reduce the flow rate for a particular process.  
+                Instead of reducing the flow via valve control, significant energy savings may be possible if the full flow is used, but at an increased temperature.  
+                In this case, the amount of cooling provided by the chilled water can remain unchanged.  A new chilled water supply temperature results in new chiller efficiency (kW/ton) for each load point.  
+                Raising the chilled water temperature set point 1°F typically saves 1% to 2% of the chiller compressor energy.  
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+        <div class="my-2" *ngIf="focusedField() == 'modificationCondenserWaterTemp'">
+        <h6>
+            Condenser Water Temperature
+            <br>
+            <small class="text-muted">
+                Enter the target condenser water temperature after the EEM is implemented. 
+                NOTE: When selecting to decrease the condenser water temperature, using a sliding condenser water temperature cannot be used and vice versa.
+                <br><br>
+                Lowering the condenser temperature results in less energy required in the compression cycle.  In water cooled systems, lowering the temperature is accomplished by increasing the speed 
+                of the cooling tower fans or by increasing the number of cooling tower fans running, both of which increase cooling tower energy usage.  
+                In air-cooled systems, lowering the condenser temperature is accomplished by operating the cooling fans more frequently.  There is a greater 
+                potential for condenser temperature reduction in water cooled systems since the condenser cooling water temperature leaving the tower approaches the 
+                ambient wet-bulb while the air-cooled temperature approaches the outdoor dry-bulb temperature.  At typical design conditions, a chiller 
+                will consume five to ten times as much energy as the cooling tower and therefore trading increased cooling tower energy for more efficient chiller operation is frequently justified.
+                <hr>
+            </small>
+        </h6>
+    </div>
+</div>

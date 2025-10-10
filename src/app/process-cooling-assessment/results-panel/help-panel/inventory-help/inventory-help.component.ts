@@ -1,4 +1,4 @@
-import { Component, WritableSignal } from '@angular/core';
+import { Component, inject, WritableSignal } from '@angular/core';
 import { ProcessCoolingUiService } from '../../../services/process-cooling-ui.service';
 
 @Component({
@@ -8,9 +8,6 @@ import { ProcessCoolingUiService } from '../../../services/process-cooling-ui.se
   styleUrl: './inventory-help.component.css'
 })
 export class InventoryHelpComponent {
-  focusedField: WritableSignal<string>;
-  constructor(private processCoolingService: ProcessCoolingUiService) { 
-    this.focusedField = this.processCoolingService.focusedFieldSignal;
-  }
-
+  private processCoolingService = inject(ProcessCoolingUiService);
+  focusedField: WritableSignal<string> = this.processCoolingService.focusedFieldSignal;
 }

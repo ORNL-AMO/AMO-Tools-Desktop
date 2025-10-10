@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DayScheduleData, WeeklyOperatingSchedule } from '../../shared/models/process-cooling-assessment';
+import { getHoursOnMonToSun } from '../process-cooling-constants';
 
 @Injectable()
 export class WeeklyOperatingScheduleService {
@@ -25,15 +26,7 @@ export class WeeklyOperatingScheduleService {
   }
 
   getWeeklyOperatingSchedule(formValue: WeeklyOperatingSchedule): WeeklyOperatingSchedule {
-    const hoursOnMonToSun = formValue.days.map(day => {
-      if (day.off) {
-        return 0;
-      } else if (day.allDay) {
-        return 24;
-      } else {
-        return Math.max(0, day.end - day.start);
-      }
-    });
+    const hoursOnMonToSun = getHoursOnMonToSun(formValue.days);
 
     return {
       useSameSchedule: formValue.useSameSchedule,
@@ -46,20 +39,6 @@ export class WeeklyOperatingScheduleService {
     };  
   }
 
-  getDefaultScheduleData(): WeeklyOperatingSchedule {
-    return {
-      useSameSchedule: false,
-      days: [
-        { off: false, start: 8, end: 17, allDay: false },
-        { off: false, start: 8, end: 17, allDay: false },
-        { off: false, start: 8, end: 17, allDay: false },
-        { off: false, start: 8, end: 17, allDay: false },
-        { off: false, start: 8, end: 17, allDay: false },
-        { off: true, start: 8, end: 17, allDay: false },
-        { off: true, start: 8, end: 17, allDay: false }
-      ],
-    }
-  }
 
   }
 

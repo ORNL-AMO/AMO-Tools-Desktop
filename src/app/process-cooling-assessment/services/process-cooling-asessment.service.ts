@@ -9,6 +9,7 @@ import { getDefaultInventoryItem } from '../process-cooling-constants';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
+import { SystemInformationFormService } from '../system-information/system-information-form.service';
 
 /**
  * Service currently uses both signals and observables for the same state. This is a prototype, 
@@ -20,6 +21,8 @@ export class ProcessCoolingAssessmentService {
   private readonly convertProcessCoolingService = inject(ConvertProcessCoolingService);
   private readonly assessmentDbService = inject(AssessmentDbService);
   private readonly processCoolingWeatherContextService = inject(WEATHER_CONTEXT);
+
+  private readonly systemInformationFormService = inject(SystemInformationFormService);
   
   private readonly assessment = new BehaviorSubject<Assessment>(undefined);
   readonly assessment$ = this.assessment.asObservable();
@@ -207,17 +210,54 @@ export class ProcessCoolingAssessmentService {
   readonly isBaselineValid$ = this.processCooling$.pipe(
     map((processCooling: ProcessCoolingAssessment) => {
       if (processCooling) {
-        const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation) 
-        const isChillerInventoryValid = this.isChillerInventoryValid(processCooling.inventory) 
-        const isSystemOperatingDataValid = this.isSystemOperatingDataValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule)
-        const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData()
+        const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation);
+        const isChillerInventoryValid = this.isChillerInventoryValid(processCooling.inventory);
+        const isSystemOperatingDataValid = this.isSystemOperatingDataValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
+        const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
         const isValid = isSystemInformationValid && isChillerInventoryValid && isSystemOperatingDataValid && isWeatherDataValid;
+        console.log('isSystemInformationValid', isSystemInformationValid);
+        console.log('isChillerInventoryValid', isChillerInventoryValid);
+        console.log('isSystemOperatingDataValid', isSystemOperatingDataValid);
+        console.log('isWeatherDataValid', isWeatherDataValid);
         console.log('isBaselineValid', isValid);
         return isValid;
       }
       return false;
     })
   );
+
+  readonly isSystemInformationValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      if (processCooling) {
+        const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation);
+        return isSystemInformationValid;
+      }
+      return false;
+    })
+  );
+
+  readonly isChillerInventoryValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      if (processCooling && processCooling.inventory) {
+        return this.isChillerInventoryValid(processCooling.inventory);
+      }
+      return false;
+    })
+  );
+
+  readonly isOperatingScheduleValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      return this.isSystemOperatingDataValid(processCooling?.weeklyOperatingSchedule, processCooling?.monthlyOperatingSchedule);
+    })
+  );
+
+  readonly isLoadScheduleValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      return this.isLoadScheduleValid(processCooling.inventory);
+    })
+  );
+
+
 
   get condenserCoolingMethod(): number {
     return this.processCoolingSignal()?.systemInformation.operations.condenserCoolingMethod;
@@ -229,7 +269,7 @@ export class ProcessCoolingAssessmentService {
   }
 
   isSystemInformationValid(systemInformation: SystemInformation): boolean {
-    return true;
+    return this.systemInformationFormService.isValidSystemInformationValid(systemInformation);
   }
   isChillerInventoryValid(chillerInventory: ChillerInventoryItem[]): boolean {
     return chillerInventory && chillerInventory.length > 0;
@@ -242,4 +282,15 @@ export class ProcessCoolingAssessmentService {
     }
     return false;
   }
+
+  isLoadScheduleValid(chillerInventory: ChillerInventoryItem[]): boolean {
+    if (chillerInventory && chillerInventory.length > 0) {
+      return chillerInventory.every(chiller => {
+        const hasByMonth = chiller.loadScheduleByMonth?.length > 0;
+        const hasAllMonths = chiller.loadScheduleAllMonths?.length > 0;
+        return hasByMonth || hasAllMonths;
+      });
+    }
+  }
+
 }

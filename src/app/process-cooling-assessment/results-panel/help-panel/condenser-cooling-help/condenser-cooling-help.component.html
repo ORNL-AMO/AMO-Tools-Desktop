@@ -38,7 +38,9 @@
         Following Temperature Differential
         <br>
         <small class="text-muted">
-            Enter the temperature differential to use when the air cooling source is outdoor. This is the difference between outdoor air and condenser water temperature.
+            This value is the difference between the condenser cooling water temperature achieved and the wet-bulb temperature of the air entering the cooling tower (the analysis assumes the condenser temperature achieved is equal to the cooling water temperature supplied to the chiller).  
+            The closer the condenser water temperature approaches the air wet-bulb temperature through evaporation in the cooling tower, the more efficiently the chiller will operate.  
+            Select the condenser following temperature differential from the pull-down menu.  Typical values are 7 to 10 degrees Fahrenheit, and the allowable range is 5 to 20.
         </small>
     </h6>
 </div>
@@ -49,7 +51,9 @@
         Is Condenser Water Temp Constant
         <br>
         <small class="text-muted">
-            Select whether the condenser water temperature is held constant (e.g., by a control system) or allowed to vary with ambient conditions.
+            Water-cooled chilled water systems typically use a cooling tower to remove heat from the chiller condenser and reject it to the atmosphere.  
+            Towers may operate to maintain a constant condenser cooling water temperature or allow the temperature to vary with the ambient conditions.  
+            If the condenser water temperature entering the chiller is held constant, select 'Yes' from the pull-down menu.  If the condenser water temperature is allowed to vary, select 'No'.
         </small>
     </h6>
 </div>
@@ -62,13 +66,5 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'followingTempDifferential'">
-    <h6>
-        Following Temperature Differential
-        <br>
-        <small class="text-muted">
-            Enter the temperature differential to use when the condenser water temperature is not constant. This is the difference between ambient wet-bulb temperature and condenser water temperature.
-        </small>
-    </h6>
-</div>
+
 

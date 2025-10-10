@@ -24,9 +24,6 @@ export class ProcessCoolingBannerComponent {
   readonly MAIN_VIEW_LINKS = MAIN_VIEW_LINKS;
   readonly MainView = MainView; 
   readonly assessment$: Observable<Assessment> = this.processCoolingService.assessment$;
-  readonly isButtonDisabled$: Observable<boolean> = this.assessment$.pipe(
-    map(assessment => !assessment.processCooling.setupDone || this.mainView() === 'baseline')
-  );
 
   mainView: Signal<string> = this.processCoolingUiService.mainView;
   bannerCollapsed: boolean = true;
@@ -36,6 +33,7 @@ export class ProcessCoolingBannerComponent {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(val => {
       this.isBaselineValid = val;
+      console.log('isBaselineValid change', this.isBaselineValid);
     });
   }
 
@@ -97,6 +95,16 @@ export class ProcessCoolingBannerComponent {
 
   isLinkDisabled(link: ViewLink): boolean {
     return link.view !== ROUTE_TOKENS.baseline && !this.isBaselineValid;
+  }
+
+  handleCanNavigate(event: MouseEvent, link: ViewLink) {
+    if (this.isLinkDisabled(link)) {
+      event.preventDefault();
+      event.stopPropagation();
+      return false;
+    } else {
+      return true;
+    }
   }
 }
 

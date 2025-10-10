@@ -6,7 +6,7 @@ import { WeeklyOperatingScheduleService, WeeklyOperatingScheduleForm } from '../
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
 import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
-import { DAY_LABELS, HOUR_OPTIONS } from '../../process-cooling-constants';
+import { DAY_LABELS, getDefaultWeeklyOperatingSchedule, HOUR_OPTIONS } from '../../process-cooling-constants';
 
 @Component({
   selector: 'app-weekly-operating-schedule',
@@ -27,7 +27,7 @@ export class WeeklyOperatingScheduleComponent implements OnInit {
   form: FormGroup<WeeklyOperatingScheduleForm>;
 
   ngOnInit() {
-    const weeklySchedule = this.processCooling().weeklyOperatingSchedule ? this.processCooling().weeklyOperatingSchedule : this.weeklyOperatingScheduleService.getDefaultScheduleData();
+    const weeklySchedule = this.processCooling().weeklyOperatingSchedule ? this.processCooling().weeklyOperatingSchedule : getDefaultWeeklyOperatingSchedule();
     this.form = this.weeklyOperatingScheduleService.getWeeklyScheduleForm(weeklySchedule);
     this.updateDayGroups();
     this.observeFormChanges();

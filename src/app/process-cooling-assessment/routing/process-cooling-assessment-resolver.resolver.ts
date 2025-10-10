@@ -45,8 +45,10 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
     }
 
     const assessmentValue = this.processCoolingAssessmentService.assessmentValue;
+    const isIdMatch = assessmentValue ? assessmentValue.id === Number(id) : false;
+
     const settingsValue = this.processCoolingAssessmentService.settingsValue;
-    if (assessmentValue && settingsValue) {
+    if (assessmentValue && isIdMatch && settingsValue) {
       // console.timeEnd('ProcessCoolingAssessmentResolver.resolve');
       return of({
         assessment: assessmentValue,
@@ -60,7 +62,7 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
     let assessment = this.assessmentDbService.findById(Number(id));
     let getAssessment$: Observable<Assessment>;
     if (assessment) {
-      // * is first load
+      // * is first load of this assessmet
       getAssessment$ = of(assessment);
     } else {
       // * is refresh or direct route access
