@@ -12,7 +12,7 @@ import { PreAssessmentItemComponent } from './pre-assessment-item/pre-assessment
 import { DiagramItemComponent } from './diagram-item/diagram-item.component';
 import { UpdateApplicationModule } from '../../shared/update-application/update-application.module';
 import { EmailListSubscribeService } from '../../shared/subscribe-toast/email-list-subscribe.service';
-import { RouterLinkHookDirective } from './calculator-list/calc-routerlink-hook/calc-routerlink-hook';
+import { CollapseSidebarDirective } from './calculator-list/collapse-sidebar-directive/collapse-sidebar-directive';
 @NgModule({
   declarations: [
     SidebarComponent,
@@ -29,7 +29,7 @@ import { RouterLinkHookDirective } from './calculator-list/calc-routerlink-hook/
     ModalModule,
     DashboardPipeModule,
     UpdateApplicationModule,
-    RouterLinkHookDirective
+    CollapseSidebarDirective
   ],
   exports: [
     SidebarComponent
