@@ -7,6 +7,7 @@ import { CompressedAirAssessmentService } from '../../../../compressed-air-asses
 import { ExploreOpportunitiesValidationService } from '../../../../compressed-air-assessment-validation/explore-opportunities-validation.service';
 import { ReduceRunTimeService } from './reduce-run-time.service';
 import { CompressedAirAssessmentModificationResults } from '../../../../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 
 @Component({
   selector: 'app-reduce-run-time',
@@ -47,7 +48,8 @@ export class ReduceRunTimeComponent implements OnInit {
   fillRightHourInterval: boolean;
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private reduceRunTimeService: ReduceRunTimeService) { }
+    private reduceRunTimeService: ReduceRunTimeService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -59,7 +61,6 @@ export class ReduceRunTimeComponent implements OnInit {
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.displayShutdownTimer = this.compressedAirAssessment.systemInformation.multiCompressorSystemControls != 'loadSharing';
     this.compressorInventoryItems = this.compressedAirAssessment.compressorInventoryItems.concat(this.compressedAirAssessment.replacementCompressorInventoryItems);
-
 
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       if (val && !this.isFormChange) {
@@ -87,7 +88,7 @@ export class ReduceRunTimeComponent implements OnInit {
   }
 
   setData() {
-    this.reduceRuntime = this.modification.reduceRuntime;
+    this.reduceRuntime = JSON.parse(JSON.stringify(this.modification.reduceRuntime));
     this.form = this.reduceRunTimeService.getFormFromObj(this.reduceRuntime);
   }
 
@@ -128,15 +129,10 @@ export class ReduceRunTimeComponent implements OnInit {
 
   save(isOrderChange: boolean) {
     this.isFormChange = true;
-    // let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime.order));
-    // this.reduceRuntime = this.reduceRunTimeService.updateObjFromForm(this.form, this.reduceRuntime);
-    // this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceRuntime = this.reduceRuntime;
-    // if (isOrderChange) {
-    //   this.isFormChange = false;
-    //   let newOrder: number = this.reduceRuntime.order;
-    //   this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'reduceRuntime', previousOrder, newOrder);
-    // }
-    // this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
+    if (isOrderChange) {
+      this.isFormChange = false;
+      this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'reduceRuntime', this.modification.reduceRuntime.order, this.form.controls.order.value);
+    }
     this.modification.reduceRuntime = this.reduceRunTimeService.updateObjFromForm(this.form, this.reduceRuntime);
     this.compressedAirAssessmentService.updateModification(this.modification);
   }

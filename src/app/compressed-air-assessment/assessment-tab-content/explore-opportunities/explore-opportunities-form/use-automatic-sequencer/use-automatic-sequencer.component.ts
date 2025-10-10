@@ -47,7 +47,8 @@ export class UseAutomaticSequencerComponent implements OnInit {
   hasInvalidDayType: boolean;
   settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private useAutomaticSequencerService: UseAutomaticSequencerService) { }
+    private useAutomaticSequencerService: UseAutomaticSequencerService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -81,7 +82,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
   setData() {
     // this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (this.modification) {
-      this.useAutomaticSequencer = this.modification.useAutomaticSequencer;
+      this.useAutomaticSequencer = JSON.parse(JSON.stringify(this.modification.useAutomaticSequencer));
       //TODO: update modifications logic from baseline
       // if (this.selectedDayType && this.compressedAirAssessment && (!this.useAutomaticSequencer.profileSummary || this.useAutomaticSequencer.profileSummary.length == 0)) {
       //   this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
@@ -119,15 +120,12 @@ export class UseAutomaticSequencerComponent implements OnInit {
 
   save(isOrderChange: boolean) {
     this.isFormChange = true;
-    // let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].useAutomaticSequencer.order));
-    // this.useAutomaticSequencer = this.useAutomaticSequencerService.updateObjFromForm(this.form, this.useAutomaticSequencer);
-    // this.compressedAirAssessment.modifications[this.selectedModificationIndex].useAutomaticSequencer = this.useAutomaticSequencer;
-    // if (isOrderChange) {
-    //   this.isFormChange = false;
-    //   let newOrder: number = this.useAutomaticSequencer.order;
-    //   this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'useAutomaticSequencer', previousOrder, newOrder);
-    // }
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
+    if (isOrderChange) {
+      this.isFormChange = false;
+      let newOrder: number = this.useAutomaticSequencer.order;
+      this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'useAutomaticSequencer', this.modification.useAutomaticSequencer.order, newOrder);
+    }
+    this.compressedAirAssessmentService.updateModification(this.modification);
   }
 
   resetOrdering() {

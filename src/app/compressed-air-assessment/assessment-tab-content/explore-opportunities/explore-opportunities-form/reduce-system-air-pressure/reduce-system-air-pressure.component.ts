@@ -5,6 +5,7 @@ import { CompressedAirAssessment, Modification } from '../../../../../shared/mod
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 import { ReduceSystemAirPressureService } from './reduce-system-air-pressure.service';
+import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 
 @Component({
   selector: 'app-reduce-system-air-pressure',
@@ -21,7 +22,8 @@ export class ReduceSystemAirPressureComponent implements OnInit {
   form: UntypedFormGroup;
   settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private reduceSystemAirPressureService: ReduceSystemAirPressureService) { }
+    private reduceSystemAirPressureService: ReduceSystemAirPressureService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -74,16 +76,12 @@ export class ReduceSystemAirPressureComponent implements OnInit {
 
   save(isOrderChange: boolean) {
     this.isFormChange = true;
-    // let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure.order));
-    // this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceSystemAirPressure = this.reduceSystemAirPressureService.getObjFromForm(this.form);
-    // if (isOrderChange) {
-    //   this.isFormChange = false;
-    //   let newOrder: number = this.form.controls.order.value;
-    //   this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'reduceSystemAirPressure', previousOrder, newOrder);
-    // }
-
+    if (isOrderChange) {
+      this.isFormChange = false;
+      let newOrder: number = this.form.controls.order.value;
+      this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'reduceSystemAirPressure', this.modification.reduceSystemAirPressure.order, newOrder);
+    }
     this.modification.reduceSystemAirPressure = this.reduceSystemAirPressureService.getObjFromForm(this.form);
     this.compressedAirAssessmentService.updateModification(this.modification);
-    // this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
   }
 }

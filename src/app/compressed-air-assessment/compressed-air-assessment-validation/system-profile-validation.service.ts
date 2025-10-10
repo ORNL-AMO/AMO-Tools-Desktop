@@ -50,6 +50,8 @@ export class SystemProfileValidationService {
     });
     if (compressedAirAssessment.systemInformation && compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
       trimSelection = !getHasMissingTrimSelection(compressedAirAssessment);
+    }else{
+      trimSelection = true;
     }
     let isValid: boolean = !(powerError || percentError || airFlowError || powerFactorError || voltError || ampError) && trimSelection;
     return {
@@ -65,19 +67,6 @@ export class SystemProfileValidationService {
       dayTypeId: selectedDayTypeId
     };
   }
-
-  // getHourIntervals(systemProfileSetup: SystemProfileSetup, hours?: number) {
-  //   let hourIntervals = new Array();
-  //   if (hours === undefined) {
-  //     hours = systemProfileSetup.numberOfHours
-  //   }
-
-  //   for (let index = 0; index < hours;) {
-  //     hourIntervals.push(index);
-  //     index = index + systemProfileSetup.dataInterval;
-  //   }
-  //   return hourIntervals;
-  // }
 
   checkDayTypeProfileSummaryValid(compressedAirAssessment: CompressedAirAssessment, dayTypeId: string): ProfileSummaryValid {
     let profileSummary = compressedAirAssessment.systemProfile.profileSummary;

@@ -1,19 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CascadingSetPointData, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
-import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
 
 @Injectable()
 export class ExploreOpportunitiesService {
 
   selectedDayType: BehaviorSubject<CompressedAirDayType>;
-  // compressedAirAssessmentModificationResults: BehaviorSubject<CompressedAirAssessmentModificationResults>;
-  // compressedAirAssessmentBaselineResults: BehaviorSubject<CompressedAirAssessmentBaselineResults>;
   constructor() {
     this.selectedDayType = new BehaviorSubject<CompressedAirDayType>(undefined);
-    // this.compressedAirAssessmentModificationResults = new BehaviorSubject<CompressedAirAssessmentModificationResults>(undefined);
-    // this.compressedAirAssessmentBaselineResults = new BehaviorSubject<CompressedAirAssessmentBaselineResults>(undefined);
   }
 
   getNewModification(compressedAirAssessment: CompressedAirAssessment): Modification {

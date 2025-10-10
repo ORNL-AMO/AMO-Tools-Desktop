@@ -6,6 +6,7 @@ import { CompressedAirAssessmentService } from '../../../../compressed-air-asses
 import { ExploreOpportunitiesValidationService } from '../../../../compressed-air-assessment-validation/explore-opportunities-validation.service';
 import { CompressedAirAssessmentBaselineResults } from '../../../../calculations/CompressedAirAssessmentBaselineResults';
 import { getHourIntervals } from '../../../../compressed-air-assessment-validation/compressedAirValidationFunctions';
+import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 
 @Component({
   selector: 'app-improve-end-use-efficiency',
@@ -30,7 +31,8 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   hasInvalidForm: boolean;
   validationStatusSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService
   ) { }
 
   ngOnInit(): void {
@@ -66,7 +68,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
   }
 
   setData() {
-    this.improveEndUseEfficiency = this.modification.improveEndUseEfficiency;
+    this.improveEndUseEfficiency = JSON.parse(JSON.stringify(this.modification.improveEndUseEfficiency));
   }
 
   setOrderOptions() {
@@ -91,16 +93,11 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
 
   save(isOrderChange: boolean) {
     this.isFormChange = true;
-    // let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].improveEndUseEfficiency.order));
-    // this.compressedAirAssessment.modifications[this.selectedModificationIndex].improveEndUseEfficiency = this.improveEndUseEfficiency;
-    // if (isOrderChange) {
-    //   this.isFormChange = false;
-    //   let newOrder: number = this.improveEndUseEfficiency.order;
-    //   this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'improveEndUseEfficiency', previousOrder, newOrder);
-    // } else {
-    //   this.setHasInvalidForm();
-    // }
-    // this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
+    if (isOrderChange) {
+      this.isFormChange = false;
+      let newOrder: number = this.improveEndUseEfficiency.order;
+      this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'improveEndUseEfficiency', this.modification.improveEndUseEfficiency.order, newOrder);
+    } 
     this.modification.improveEndUseEfficiency = this.improveEndUseEfficiency;
     this.compressedAirAssessmentService.updateModification(this.modification);
   }

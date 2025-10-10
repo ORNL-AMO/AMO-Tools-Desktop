@@ -6,6 +6,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { ReduceAirLeaksService } from './reduce-air-leaks.service';
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirAssessmentBaselineResults } from '../../../../calculations/CompressedAirAssessmentBaselineResults';
+import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 
 @Component({
   selector: 'app-reduce-air-leaks',
@@ -23,7 +24,8 @@ export class ReduceAirLeaksComponent implements OnInit {
   compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults;
   settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private reduceAirLeaksService: ReduceAirLeaksService) { }
+    private reduceAirLeaksService: ReduceAirLeaksService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -75,14 +77,11 @@ export class ReduceAirLeaksComponent implements OnInit {
 
   save(isOrderChange: boolean) {
     this.isFormChange = true;
-    // let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks.order));
-    // let reduceAirLeaks: ReduceAirLeaks = this.reduceAirLeaksService.getObjFromForm(this.form);
-    // this.compressedAirAssessment.modifications[this.selectedModificationIndex].reduceAirLeaks = reduceAirLeaks;
-    // if (isOrderChange) {
-    //   this.isFormChange = false;
-    //   let newOrder: number = this.form.controls.order.value;
-    //   this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'reduceAirLeaks', previousOrder, newOrder);
-    // }
+    if (isOrderChange) {
+      this.isFormChange = false;
+      let newOrder: number = this.form.controls.order.value;
+      this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'reduceAirLeaks', this.modification.reduceAirLeaks.order, newOrder);
+    }
     this.modification.reduceAirLeaks = this.reduceAirLeaksService.getObjFromForm(this.form);
     this.compressedAirAssessmentService.updateModification(this.modification);
   }

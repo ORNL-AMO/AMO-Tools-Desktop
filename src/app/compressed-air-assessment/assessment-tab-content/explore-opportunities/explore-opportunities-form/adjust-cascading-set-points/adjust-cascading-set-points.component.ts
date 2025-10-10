@@ -8,6 +8,7 @@ import { PerformancePointsFormService } from '../../../../baseline-tab-content/i
 import { AdjustCascadingSetPointsService, CompressorForm } from './adjust-cascading-set-points.service';
 import { CompressorInventoryItemClass } from '../../../../calculations/CompressorInventoryItemClass';
 import { ExploreOpportunitiesValidationService } from '../../../../compressed-air-assessment-validation/explore-opportunities-validation.service';
+import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 
 @Component({
   selector: 'app-adjust-cascading-set-points',
@@ -33,7 +34,8 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private performancePointsFormService: PerformancePointsFormService,
     private adjustCascadingSetPointsService: AdjustCascadingSetPointsService,
-    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService){ }
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -67,7 +69,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
 
   setData() {
     if (this.modification) {
-      this.adjustCascadingSetPoints = this.modification.adjustCascadingSetPoints;
+      this.adjustCascadingSetPoints = JSON.parse(JSON.stringify(this.modification.adjustCascadingSetPoints));
       this.implementationCostForm = this.adjustCascadingSetPointsService.getImplementationCostForm(this.adjustCascadingSetPoints);
       if (this.adjustCascadingSetPoints.order != 100) {
         let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
@@ -109,16 +111,13 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
 
   save(isOrderChange: boolean) {
     this.isFormChange = true;
-    // let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].adjustCascadingSetPoints.order));
-    // this.compressedAirAssessment.modifications[this.selectedModificationIndex].adjustCascadingSetPoints = this.adjustCascadingSetPoints;
-    // if (isOrderChange) {
-    //   this.isFormChange = false;
-    //   let newOrder: number = this.adjustCascadingSetPoints.order;
-    //   this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'adjustCascadingSetPoints', previousOrder, newOrder);
-    // }
+    if (isOrderChange) {
+      this.isFormChange = false;
+      let newOrder: number = this.adjustCascadingSetPoints.order;
+      this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'adjustCascadingSetPoints', this.modification.adjustCascadingSetPoints.order, newOrder);
+    }
     this.modification.adjustCascadingSetPoints = this.adjustCascadingSetPoints;
     this.compressedAirAssessmentService.updateModification(this.modification);
-    // this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
   }
 
 

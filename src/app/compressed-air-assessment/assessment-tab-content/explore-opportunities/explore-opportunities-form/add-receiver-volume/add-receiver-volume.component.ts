@@ -26,7 +26,8 @@ export class AddReceiverVolumeComponent implements OnInit {
 
   form: UntypedFormGroup
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private addReceiverVolumeService: AddReceiverVolumeService) { }
+    private addReceiverVolumeService: AddReceiverVolumeService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -81,16 +82,11 @@ export class AddReceiverVolumeComponent implements OnInit {
 
   save(isOrderChange: boolean) {
     this.isFormChange = true;
-    // let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].addPrimaryReceiverVolume.order));
-
-    // this.compressedAirAssessment.modifications[this.selectedModificationIndex].addPrimaryReceiverVolume = this.addReceiverVolumeService.getObjFromForm(this.form);
-    // if (isOrderChange) {
-    //   this.isFormChange = false;
-    //   let newOrder: number = this.form.controls.order.value;
-    //   this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'addPrimaryReceiverVolume', previousOrder, newOrder);
-    // }
-    // this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
-    // this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
+    if (isOrderChange) {
+      this.isFormChange = false;
+      let newOrder: number = this.form.controls.order.value;
+      this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'addPrimaryReceiverVolume', this.modification.addPrimaryReceiverVolume.order, newOrder);
+    }
     this.modification.addPrimaryReceiverVolume = this.addReceiverVolumeService.getObjFromForm(this.form);
     this.compressedAirAssessmentService.updateModification(this.modification);
   }
