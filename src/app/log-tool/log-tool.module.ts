@@ -47,7 +47,7 @@ import { GraphAnnotationsComponent } from './visualize/visualize-sidebar/graph-a
 import { GraphSeriesManagementComponent } from './visualize/visualize-sidebar/graph-series-management/graph-series-management.component';
 import { VisualizeSidebarService } from './visualize/visualize-sidebar/visualize-sidebar.service';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
-import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 
 @NgModule({
   declarations: [
@@ -95,7 +95,7 @@ import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/g
     SharedPipesModule,
     DateFormatHelpModule,
     ImportExportModule,
-    GenericBannerTooltipsModule
+    BannerTooltipsModule
   ],
   providers: [
     LogToolService,

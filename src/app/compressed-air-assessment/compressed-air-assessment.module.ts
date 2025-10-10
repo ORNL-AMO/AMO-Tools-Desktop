@@ -152,7 +152,7 @@ import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-ai
 import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 
-import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 
 
 @NgModule({
@@ -278,7 +278,7 @@ import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/g
     CompressedAirSankeyModule,
     EndUseDayTypeSetupModule,
     ImportExportModule,
-    GenericBannerTooltipsModule
+    BannerTooltipsModule
   ],
   providers: [
     CompressedAirAssessmentService,

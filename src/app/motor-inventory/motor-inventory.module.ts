@@ -23,7 +23,7 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
 import { ConvertMotorInventoryService } from './convert-motor-inventory.service';
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
-import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,7 @@ import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/g
     RouterModule,
     ConnectedInventoryModule,    
     ImportExportModule,
-    GenericBannerTooltipsModule
+    BannerTooltipsModule
   ],
   providers: [
     MotorInventoryService,

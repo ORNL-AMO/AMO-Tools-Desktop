@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-generic-banner-tooltips',
-  templateUrl: './generic-banner-tooltips.component.html',
-  styleUrls: ['./generic-banner-tooltips.component.css'],
+  selector: 'app-banner-tooltips',
+  templateUrl: './app-banner-tooltips.component.html',
+  styleUrls: ['./app-banner-tooltips.component.css'],
   standalone: false
 })
-export class GenericBannerTooltipsComponent implements OnInit {
+export class BannerTooltipsComponent implements OnInit {
   @Input() message: string;
   @Input() adjustLeft: number = 0;
   @Input() adjustPercent: boolean = false;

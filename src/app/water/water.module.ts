@@ -57,7 +57,7 @@ import { InSystemTreatmentTableComponent } from './results-panel/in-system-treat
 import { WaterReportModule } from './water-report/water-report.module';
 import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
 import { AlertInfoContainerComponent } from '../shared/alert-info-container/alert-info-container.component';
-import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 
 @NgModule({
   declarations: [
@@ -114,7 +114,7 @@ import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/g
     WaterReportModule,
     AlertBadgeComponent,
     AlertInfoContainerComponent,
-    GenericBannerTooltipsModule
+    BannerTooltipsModule
   ],
   providers: [
     WaterAssessmentService,

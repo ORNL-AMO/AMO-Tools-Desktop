@@ -63,7 +63,7 @@ import { IntegratePumpInventoryComponent } from './integrate-pump-inventory/inte
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
-import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 
 
 @NgModule({
@@ -125,7 +125,7 @@ import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/g
     ImportExportModule,
     SnackbarModule,
     ExportableResultsTableModule,
-    GenericBannerTooltipsModule
+    BannerTooltipsModule
 
   ],
   providers: [

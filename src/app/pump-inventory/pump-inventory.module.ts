@@ -23,7 +23,7 @@ import { StatusDropdownComponent } from './pump-inventory-banner/summary-filter/
 import { SelectedOptionsComponent } from './pump-inventory-banner/summary-filter/selected-options/selected-options.component';
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
-import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 
 @NgModule({
   declarations: [
@@ -52,7 +52,7 @@ import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/g
     PumpInventorySummaryModule,
     ConnectedInventoryModule,    
     ImportExportModule,
-    GenericBannerTooltipsModule
+    BannerTooltipsModule
   ],
   providers: [
     PumpInventoryService,

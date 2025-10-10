@@ -10,7 +10,7 @@ import { WaterProcessDiagramService } from './water-process-diagram.service';
 import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
 import { UpdateDiagramFromAssessmentService } from './update-diagram-from-assessment.service';
 import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
-import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/generic-banner-tooltips.module';
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 
 
 
@@ -27,7 +27,7 @@ import { GenericBannerTooltipsModule } from '../shared/generic-banner-tooltips/g
     RouterModule,
     CreateAssessmentModalModule,
     AlertBadgeComponent,
-    GenericBannerTooltipsModule
+    BannerTooltipsModule
   ],
   exports: [
     WaterProcessDiagramComponent
