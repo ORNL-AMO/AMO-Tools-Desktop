@@ -165,6 +165,7 @@ export class BoilerComponent implements OnInit {
   }
 
   showMaterialModal() {
+    console.log('show mmodal');
     this.showModal = true;
     this.ssmtService.modalOpen.next(this.showModal);
     this.materialModal.show();
@@ -247,6 +248,7 @@ export class BoilerComponent implements OnInit {
   }
 
   openBlowdownRateModal() {
+    console.log('open blowdown');
     this.showBlowdownRateModal = true;
     this.ssmtService.modalOpen.next(true);
   }
@@ -263,10 +265,12 @@ export class BoilerComponent implements OnInit {
   }
 
   openBoilerEfficiencyModal() {
+    console.log('open boiler eff');
     if (this.boilerInput && this.boilerInput.stackLossInput) {
       this.stackLossService.stackLossInput = this.boilerInput.stackLossInput;
     }
     this.showBoilerEfficiencyModal = true;
+    console.log(this.showBoilerEfficiencyModal, this.ssmtService.modalOpen);
     this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal);
   }
 
