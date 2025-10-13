@@ -14,7 +14,7 @@ export const getCondenserCoolingMethods = () => {
 
 export const getTowerSizeMetrics = () => {
     return [
-        { value: TowerSizeMetric.Tonnes, name: 'Tonnes' },
+        { value: TowerSizeMetric.Tons, name: 'Tons' },
         { value: TowerSizeMetric.HP, name: 'HP' },
     ] as const;
 };

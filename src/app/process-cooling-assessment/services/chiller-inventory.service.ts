@@ -30,11 +30,10 @@ export class ChillerInventoryService {
   } 
 
   setDefaultSelectedChiller(inventory: ChillerInventoryItem[]) {
-    let lastItemModified: ChillerInventoryItem;
     if (inventory && inventory.length > 0) {
-      lastItemModified = this.getLastModifiedInventory(inventory);
+      const lastItemModified = this.getLastModifiedInventory(inventory);
+      this.setSelectedChiller(lastItemModified);
     } 
-    this.setSelectedChiller(lastItemModified);
   }
 
   getLastModifiedInventory(inventory: ChillerInventoryItem[]): ChillerInventoryItem {

@@ -5,7 +5,9 @@
 <ul class="tabs subtabs progress-tabs process-cooling-assessment d-none d-lg-block">
     @for (link of SETUP_VIEW_LINKS; track $index) {
     <li routerLinkActive="active" [routerLink]="[link.view]" 
-        [ngClass]="{'disabled': isLinkDisabled(link)}"
+        [ngClass]="{'disabled': isLinkDisabled(link),
+            'missing-data': isTabInvalid(link)
+        }"
         (click)="handleCanNavigate($event, link)">
         <a routerLinkActive="active" [routerLink]="[link.view]" 
             [ngClass]="{'disabled': isLinkDisabled(link)}"

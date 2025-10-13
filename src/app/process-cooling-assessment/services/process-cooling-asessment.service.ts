@@ -269,7 +269,8 @@ export class ProcessCoolingAssessmentService {
   }
 
   isSystemInformationValid(systemInformation: SystemInformation): boolean {
-    return this.systemInformationFormService.isValidSystemInformationValid(systemInformation);
+    const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
+    return this.systemInformationFormService.isValidSystemInformationValid(systemInformation) && isWeatherDataValid;
   }
   isChillerInventoryValid(chillerInventory: ChillerInventoryItem[]): boolean {
     return chillerInventory && chillerInventory.length > 0;

@@ -8,6 +8,7 @@ export interface WeatherContext {
   getWeatherData(): WeatherContextData;
   setWeatherData(data: WeatherContextData): void;
   isValidWeatherData(): boolean;
+  getInvalidStatusMessage(): string;
   finishedRoute(): string;
 }
 

@@ -27,6 +27,7 @@ export class BaselineTabsComponent {
 
   isChillerInventoryValid: boolean = false;
   isOperatingScheduleValid: boolean = false;
+  isSystemInformationValid: boolean = false;
 
   ngOnInit(): void {
      this.processCoolingService.isChillerInventoryValid$.pipe(
@@ -39,6 +40,12 @@ export class BaselineTabsComponent {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(val => {
       this.isOperatingScheduleValid = val;
+    });
+
+    this.processCoolingService.isSystemInformationValid$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(val => {
+      this.isSystemInformationValid = val;
     });
 
   }
@@ -54,6 +61,15 @@ export class BaselineTabsComponent {
 
   setSmallScreenPanelTab(tab: string) {
     this.smallScreenPanelTab = tab;
+  }
+
+  isTabInvalid(link: ViewLink): boolean {
+    switch (link.view) {
+      case ROUTE_TOKENS.systemInformation:
+        return !this.isSystemInformationValid;
+      default:
+        return false;
+    }
   }
 
   isLinkDisabled(link: ViewLink): boolean {

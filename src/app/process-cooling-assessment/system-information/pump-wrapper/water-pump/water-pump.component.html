@@ -19,7 +19,7 @@
         <div class="input-group">
             <input name="flowRate" type="number" step="any" class="form-control" id="{{controlIds.flowRate}}"
                 formControlName="flowRate" (focus)="focusField('flowRate')">
-            <app-input-unit [defaultUnit]="'gpm/ton'"></app-input-unit>
+            <app-input-unit [settings]="settings()" [imperialUnit]="'gpm/ton'" [metricUnit]="'m<sup>3</sup>/kW'"></app-input-unit>
         </div>
         <app-form-control-errors [control]="flowRate"></app-form-control-errors>
     </div>

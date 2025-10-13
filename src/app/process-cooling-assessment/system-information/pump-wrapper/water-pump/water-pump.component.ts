@@ -1,5 +1,5 @@
 
-import { Component, DestroyRef, ElementRef, inject, Input, Signal, ViewChild } from "@angular/core";
+import { Component, DestroyRef, inject, Input, Signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
 import { CoolingWaterPumpType, ProcessCoolingAssessment } from "../../../../shared/models/process-cooling-assessment";
