@@ -13,6 +13,10 @@ import { CompressorSummaryComponent } from "./baseline-tab-content/baseline-syst
 import { EndUsesSetupComponent } from "./baseline-tab-content/end-uses-setup/end-uses-setup.component";
 import { AssessmentTabContentComponent } from "./assessment-tab-content/assessment-tab-content.component";
 import { ExploreOpportunitiesComponent } from "./assessment-tab-content/explore-opportunities/explore-opportunities.component";
+import { CompressedAirDiagramComponent } from "./compressed-air-diagram/compressed-air-diagram.component";
+import { CompressedAirReportComponent } from "./compressed-air-report/compressed-air-report.component";
+import { CompressedAirSankeyComponent } from "./compressed-air-sankey/compressed-air-sankey.component";
+import { CompressedAirCalculatorsComponent } from "./compressed-air-calculators/compressed-air-calculators.component";
 
 
 export const compressedAirAssessmentRoutes: Routes = [
@@ -101,5 +105,21 @@ export const compressedAirAssessmentRoutes: Routes = [
                 component: ExploreOpportunitiesComponent
             },
         ]
+    },
+    {
+        path: 'diagram',
+        component: CompressedAirDiagramComponent
+    },
+    {
+        path: 'report',
+        component: CompressedAirReportComponent
+    },
+    {
+        path: 'sankey',
+        component: CompressedAirSankeyComponent
+    },
+    {
+        path: 'calculators',
+        component: CompressedAirCalculatorsComponent
     }
 ]

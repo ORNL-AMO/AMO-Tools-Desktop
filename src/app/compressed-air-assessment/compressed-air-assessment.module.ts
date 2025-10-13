@@ -56,7 +56,7 @@ import { FullLoadHelpComponent } from './baseline-tab-content/inventory-setup/in
 import { MaxFullFlowHelpComponent } from './baseline-tab-content/inventory-setup/inventory-help/performance-points-help/max-full-flow-help/max-full-flow-help.component';
 import { DayTypesHelpComponent } from './baseline-tab-content/day-types-setup/day-types-help/day-types-help.component';
 import { CompressedAirCalculatorsComponent } from './compressed-air-calculators/compressed-air-calculators.component';
-import { CalculatorTabsComponent } from './compressed-air-banner/calculator-tabs/calculator-tabs.component';
+import { CalculatorTabsComponent } from './compressed-air-calculators/calculator-tabs/calculator-tabs.component';
 import { AirFlowConversionModule } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.module';
 import { ReceiverTankModule } from '../calculator/compressed-air/receiver-tank/receiver-tank.module';
 import { AirLeakModule } from '../calculator/compressed-air/air-leak/air-leak.module';

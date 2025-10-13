@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Assessment } from "../../shared/models/assessment";
+import { CompressedAirAssessmentService } from "../compressed-air-assessment.service";
+import { CompressedAirAssessment } from "../../shared/models/compressed-air-assessment";
 
 
 @Component({
@@ -10,7 +11,7 @@ import { Assessment } from "../../shared/models/assessment";
 })
 export class CompressedAirSankeyComponent implements OnInit {
   @Input()
-  assessment: Assessment;
+  compressedAirAssessment: CompressedAirAssessment;
   @Input()
   inReport: boolean;
   @Input()
@@ -19,13 +20,17 @@ export class CompressedAirSankeyComponent implements OnInit {
   
   sankeyTab: 'airflow' | 'power' = 'power';
   constructor(
+    private compressedAirAssessmentService: CompressedAirAssessmentService
   ) { }
 
   ngOnInit() {
+    if(!this.compressedAirAssessment){
+      this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    }
   }
 
   changeSankeyTab(sankeyTab: 'airflow' | 'power') {
-    if (sankeyTab === 'power' || (sankeyTab === 'airflow' && this.assessment.compressedAirAssessment.endUseData.endUses.length !== 0)) {
+    if (sankeyTab === 'power' || (sankeyTab === 'airflow' && this.compressedAirAssessment.endUseData.endUses.length !== 0)) {
       this.sankeyTab = sankeyTab;
     }
   }

@@ -9,7 +9,7 @@
       </li>
       <li [ngClass]="{'active': sankeyTab == 'airflow'}">
         <a (click)="changeSankeyTab('airflow')"
-        [ngClass]="{'disabled': assessment.compressedAirAssessment.endUseData.endUses.length === 0}">Airflow Sankey</a>
+        [ngClass]="{'disabled': compressedAirAssessment.endUseData.endUses.length === 0}">Airflow Sankey</a>
       </li>
     </ul>
     <app-power-sankey [inReport]="inReport" *ngIf="sankeyTab === 'power'"></app-power-sankey>

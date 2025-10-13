@@ -46,9 +46,6 @@ export class CompressedAirAssessmentService {
 
     this.compressedAirAssessmentBaselineResults = new BehaviorSubject<CompressedAirAssessmentBaselineResults>(undefined);
     this.compressedAirAssessmentModificationResults = new BehaviorSubject<CompressedAirAssessmentModificationResults>(undefined);
-    // this.selectedModification.subscribe(val => {
-    //   this.setModificationResults(val);
-    // });
   }
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {

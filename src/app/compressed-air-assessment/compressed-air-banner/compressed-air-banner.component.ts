@@ -26,7 +26,7 @@ export class CompressedAirBannerComponent implements OnInit {
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
-    private coreService: CoreService) { }
+    private coreService: CoreService,) { }
 
   ngOnInit(): void {
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
