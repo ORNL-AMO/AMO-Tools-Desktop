@@ -9,7 +9,6 @@ import { BehaviorSubject } from 'rxjs';
     standalone: false
 })
 export class CalculatorListComponent implements OnInit {
-  @ViewChild('sidebarWrapper', { static: true }) sidebarWrapper!: ElementRef;
  totalScreenWidth: BehaviorSubject<number>;
 
   constructor(private dashboardService: DashboardService, private router: Router) {
