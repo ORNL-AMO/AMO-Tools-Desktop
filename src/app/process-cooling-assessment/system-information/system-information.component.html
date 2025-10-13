@@ -1,10 +1,12 @@
 <!-- LARGE VIEWPORT TABS -->
 <ul class="tabs subtabs progress-tabs process-cooling-assessment d-none d-lg-block">
     @for (link of SYSTEM_INFORMATION_VIEW_LINKS; track $index) {
-    <li routerLinkActive="active" [routerLink]="[link.view]">
-        <a routerLinkActive="active" [routerLink]="[link.view]" 
-            [ngClass]="{'disabled': isLinkDisabled(link)}"
-            (click)="handleCanNavigate($event, link)">
+    <li routerLinkActive="active" [routerLink]="[link.view]" [ngClass]="{'disabled': isLinkDisabled(link),
+                'missing-data': isTabInvalid(link)
+            }">
+        <a routerLinkActive="active" [routerLink]="[link.view]" [ngClass]="{'disabled': isLinkDisabled(link),
+                'missing-data': isTabInvalid(link)
+            }" (click)="handleCanNavigate($event, link)">
             {{link.label}}
         </a>
     </li>

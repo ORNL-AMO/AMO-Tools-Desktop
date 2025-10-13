@@ -25,6 +25,10 @@ export class ProcessCoolingWeatherContextService implements WeatherContext {
       && weatherContextData.weatherDataPoints?.length > 0;
   }
 
+  getInvalidStatusMessage(): string {
+    return 'Weather data is required for assessment results. Follow instructions below to select weather data for your location.';
+  }
+
     /*
   * Route to navigate to after weather data is set
   */

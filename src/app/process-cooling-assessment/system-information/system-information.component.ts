@@ -15,7 +15,7 @@ export class SystemInformationComponent {
   private readonly processCoolingService = inject(ProcessCoolingAssessmentService);
   private readonly destroyRef = inject(DestroyRef);
   isSystemInformationValid: boolean = false;
-  
+
   smallScreenPanelTab: string = 'help';
 
   isModalOpen: boolean = false;
@@ -24,7 +24,7 @@ export class SystemInformationComponent {
   readonly ROUTE_TOKENS = ROUTE_TOKENS;
   SYSTEM_INFORMATION_VIEW_LINKS = SYSTEM_INFORMATION_VIEW_LINKS;
 
-    ngOnInit(): void {
+  ngOnInit(): void {
     this.processCoolingService.isSystemInformationValid$.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(val => {
@@ -40,15 +40,25 @@ export class SystemInformationComponent {
     this.processCoolingUiService.back();
   }
 
-   isLinkDisabled(link: ViewLink): boolean {
-      return link.view !== ROUTE_TOKENS.tower && !this.isSystemInformationValid;
+  isLinkDisabled(link: ViewLink): boolean {
+    return false;
+    // return link.view !== ROUTE_TOKENS.tower && !this.isSystemInformationValid;
+  }
+
+  isTabInvalid(link: ViewLink): boolean {
+    switch (link.view) {
+      case ROUTE_TOKENS.weather:
+        return !this.isSystemInformationValid;
+      default:
+        return false;
     }
-  
-    handleCanNavigate(event: MouseEvent, link: ViewLink) {
-      if (this.isLinkDisabled(link)) {
-        event.preventDefault();
-      } else {
-        return null;
-      }
+  }
+
+  handleCanNavigate(event: MouseEvent, link: ViewLink) {
+    if (this.isLinkDisabled(link)) {
+      event.preventDefault();
+    } else {
+      return null;
     }
+  }
 }

@@ -34,7 +34,7 @@
             <input name="towerSize" type="number" step="any" class="form-control" id="{{controlIds.towerSize}}"
                 formControlName="towerSize" (focus)="focusField('towerSize')">
             <app-input-unit
-                [defaultUnit]="towerSizeMetric.value === TowerSizeMetrics.Tonnes ? 'tonnes' : 'hp'"></app-input-unit>
+                [defaultUnit]="towerSizeMetric.value === TowerSizeMetrics.Tons ? 'tons' : 'hp'"></app-input-unit>
         </div>
         <app-form-control-errors [control]="towerSize"></app-form-control-errors>
     </div>

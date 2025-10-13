@@ -317,7 +317,7 @@ export enum AirCoolingSource {
 }
 
 export enum TowerSizeMetric {
-    Tonnes = 0,
+    Tons = 0,
     HP = 1
 }
 

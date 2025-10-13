@@ -6,7 +6,7 @@ import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/mod
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 import { ChillerInventoryForm, ChillerInventoryService } from '../services/chiller-inventory.service';
-import { getChillerTypes } from '../process-cooling-constants';
+import { getChillerTypes, getDefaultInventoryItem } from '../process-cooling-constants';
 import { FormControlIds, generateFormControlIds } from '../../shared/helperFunctions';
 
 @Component({
@@ -29,7 +29,8 @@ export class ChillerInventoryComponent implements OnInit {
   chillerTypes = getChillerTypes();
 
   ngOnInit(): void {
-  this.form = this.inventoryService.getChillerForm(this.inventoryService.selectedChillerValue);
+  const defaultChillerValues = this.inventoryService.selectedChillerValue ? this.inventoryService.selectedChillerValue : getDefaultInventoryItem();
+  this.form = this.inventoryService.getChillerForm(defaultChillerValues);
   this.controlIds = generateFormControlIds(this.form.controls);
 
     this.observeFormChanges();
