@@ -205,8 +205,13 @@ export class CompressedAirDataManagementService {
 
     }
     //update assessment
-    let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == compressorInventoryItemClass.itemId });
-    compressedAirAssessment.compressorInventoryItems[compressorIndex] = compressorInventoryItemClass.toModel();
+    if (compressorInventoryItemClass.isReplacementCompressor) {
+      let compressorIndex: number = compressedAirAssessment.replacementCompressorInventoryItems.findIndex(item => { return item.itemId == compressorInventoryItemClass.itemId });
+      compressedAirAssessment.replacementCompressorInventoryItems[compressorIndex] = compressorInventoryItemClass.toModel();
+    } else {
+      let compressorIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(item => { return item.itemId == compressorInventoryItemClass.itemId });
+      compressedAirAssessment.compressorInventoryItems[compressorIndex] = compressorInventoryItemClass.toModel();
+    }
     if (modificationsNeedUpdate) {
       compressedAirAssessment.modifications = this.updateModifications(compressorInventoryItemClass, compressedAirAssessment.modifications);
     };
@@ -234,6 +239,7 @@ export class CompressedAirDataManagementService {
         compressedAirAssessment.systemProfile.profileSummary = this.systemProfileService.updateCompressorOrderingIsentropicEfficiency(compressedAirAssessment.systemProfile.profileSummary, dayType, numberOfHourIntervals, compressedAirAssessment.compressorInventoryItems, settings, compressedAirAssessment.systemInformation);
       })
     }
+
     //update assessment
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     //update selected compressor

@@ -12,8 +12,6 @@ import { Subscription } from 'rxjs';
 })
 export class ExploreOpportunitiesFormComponent {
 
-
-  compressedAirAssessmentSub: Subscription;
   compressedAirAssessment: CompressedAirAssessment
   modificationExists: boolean;
   selectedModificationSub: Subscription;
@@ -40,7 +38,6 @@ export class ExploreOpportunitiesFormComponent {
 
 
   ngOnDestroy() {
-    this.compressedAirAssessmentSub.unsubscribe();
     this.selectedModificationSub.unsubscribe();
   }
 

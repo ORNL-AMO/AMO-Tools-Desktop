@@ -91,16 +91,13 @@ export class ReplaceCompressorComponent {
 
   save(isOrderChange: boolean) {
     this.isFormChange = true;
-    // let previousOrder: number = JSON.parse(JSON.stringify(this.compressedAirAssessment.modifications[this.selectedModificationIndex].replaceCompressor.order));
-    // this.compressedAirAssessment.modifications[this.selectedModificationIndex].replaceCompressor = this.replaceCompressorService.getObjFromForm(this.form, this.replaceCompressorMapping);
-
-    // if (isOrderChange) {
-    //   this.isFormChange = false;
-    //   let newOrder: number = this.form.controls.order.value;
-    //   this.compressedAirAssessment.modifications[this.selectedModificationIndex] = this.exploreOpportunitiesService.setOrdering(this.compressedAirAssessment.modifications[this.selectedModificationIndex], 'replaceCompressor', previousOrder, newOrder);
-    // }
-    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
-    // this.exploreOpportunitiesValidationService.addReceiverVolumeValid.next(this.form.valid);
+    if (isOrderChange) {
+      this.isFormChange = false;
+      let newOrder: number = this.form.controls.order.value;
+      this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'replaceCompressor', this.modification.replaceCompressor.order, newOrder);
+    }
+    this.modification.replaceCompressor = this.replaceCompressorService.getObjFromForm(this.form, this.replaceCompressorMapping);
+    this.compressedAirAssessmentService.updateModification(this.modification);
   }
 
   setData() {
@@ -108,9 +105,6 @@ export class ReplaceCompressorComponent {
       let replaceCompressor: ReplaceCompressor = this.modification.replaceCompressor;
       this.form = this.replaceCompressorService.getFormFromObj(replaceCompressor);
       this.replaceCompressorMapping = replaceCompressor.compressorsMapping;
-      // if (replaceCompressor.order != 100) {
-      //   this.exploreOpportunitiesValidationService.replaceCompressorValid.next(this.form.valid);
-      // }
     }
   }
 

@@ -31,7 +31,6 @@ export class SetupTabsComponent implements OnInit {
   ngOnInit(): void {
     this.validationSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => {
       this.validationStatus = val;
-      console.log(this.validationStatus);
       this.setTabStatus();
     })
   }
@@ -44,10 +43,8 @@ export class SetupTabsComponent implements OnInit {
     let hasValidDayTypes: boolean = false;
     let hasValidSystemInformation: boolean = false;
     let hasValidCompressors: boolean = false;
-    // TODO when validation in
     let hasValidSystemProfile: boolean = true;
     let hasValidEndUses: boolean = true;
-
     let canViewInventory: boolean = false;
     let canViewDayTypes: boolean = false;
     let canViewSystemProfile: boolean = false;

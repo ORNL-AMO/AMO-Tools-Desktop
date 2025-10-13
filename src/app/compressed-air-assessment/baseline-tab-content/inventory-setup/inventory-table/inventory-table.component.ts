@@ -42,7 +42,7 @@ export class InventoryTableComponent implements OnInit {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       this.selectedCompressor = val;
-    })
+    });
     this.validationStatusSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => {
       this.validationStatus = val;
       this.hasInvalidCompressors = this.validationStatus.compressorsValid == false;

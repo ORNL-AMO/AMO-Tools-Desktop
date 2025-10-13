@@ -7,19 +7,26 @@
         <br>
     </div>
     <div class="p-3 no-data" *ngIf="!hasInventoryItems">
-        <h3>Add your compressor Inventory for analysis..</h3>
-        <button type="button" class="btn btn-primary active" (click)="addInventoryItem()">+Add Compressor</button>
+        <ng-container *ngIf="inventoryTab == 'replacementInventory'">
+            <h3>Add replacement compressors for analysis.</h3>
+            <button type="button" class="btn btn-primary" (click)="addInventoryItem()">+Add Replacement Compressor</button>
+        </ng-container>
+        <ng-container *ngIf="inventoryTab != 'replacementInventory'">
+            <h3>Add compressors to the inventory for analysis.</h3>
+            <button type="button" class="btn btn-primary" (click)="addInventoryItem()">+Add Compressor</button>
+        </ng-container>
     </div>
     <div class="mr-2 ml-2" *ngIf="hasInventoryItems">
         <form [formGroup]="form">
             <div class="form-group">
                 <label for="name">Compressor Name</label>
-                <input type="text" class="form-control" name="name" formControlName="name" (focus)="focusField('compresorName')" (input)="save()" />
+                <input type="text" class="form-control" name="name" formControlName="name"
+                    (focus)="focusField('compresorName')" (input)="save()" />
             </div>
             <div class="form-group">
                 <label>Description</label>
                 <textarea class="form-control" type="text" id="description" formControlName="description"
-                (focus)="focusField('compresorDescription')" (input)="save()"></textarea>
+                    (focus)="focusField('compresorDescription')" (input)="save()"></textarea>
             </div>
             <a class="click-link small pull-right" (click)="openCompressorModal()">Set Data From Existing Compressor</a>
         </form>
@@ -27,7 +34,8 @@
         <app-control-data></app-control-data>
         <app-design-details *ngIf="compressorType != undefined && controlType != undefined"></app-design-details>
         <app-centrifugal-specifics *ngIf="compressorType == 6 && controlType != undefined"></app-centrifugal-specifics>
-        <app-performance-points *ngIf="compressorType != undefined && controlType != undefined"></app-performance-points>
+        <app-performance-points
+            *ngIf="compressorType != undefined && controlType != undefined"></app-performance-points>
     </div>
 </div>
 

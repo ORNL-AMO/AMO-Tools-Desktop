@@ -9,10 +9,10 @@ import { CompressedAirDataManagementService } from '../../../compressed-air-data
 import { CompressedAirAssessmentValidationService } from '../../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
 import { InventoryFormService } from './inventory-form.service';
 @Component({
-    selector: 'app-inventory',
-    templateUrl: './inventory.component.html',
-    styleUrls: ['./inventory.component.css'],
-    standalone: false
+  selector: 'app-inventory',
+  templateUrl: './inventory.component.html',
+  styleUrls: ['./inventory.component.css'],
+  standalone: false
 })
 export class InventoryComponent implements OnInit {
 
@@ -27,6 +27,9 @@ export class InventoryComponent implements OnInit {
   selectedCompressor: CompressorInventoryItem;
 
   validationStatusSub: Subscription;
+
+  inventoryTab: 'inventory' | 'replacementInventory' | 'help';
+  inventoryTabSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private inventoryService: InventoryService, private cd: ChangeDetectorRef,
     private compressedAirDataManagementService: CompressedAirDataManagementService,
@@ -34,7 +37,12 @@ export class InventoryComponent implements OnInit {
     private inventoryFormService: InventoryFormService) { }
 
   ngOnInit(): void {
-    this.initializeInventory();
+    this.inventoryTabSub = this.inventoryService.tabSelect.subscribe(val => {
+      if (val != 'help') {
+        this.inventoryTab = val;
+        this.initializeInventory();
+      }
+    });
 
     this.validationStatusSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => {
       this.hasValidCompressors = val?.compressorsValid;
@@ -62,22 +70,40 @@ export class InventoryComponent implements OnInit {
   ngOnDestroy() {
     this.selectedCompressorSub.unsubscribe();
     this.validationStatusSub.unsubscribe();
+    this.inventoryTabSub.unsubscribe();
   }
 
   initializeInventory() {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.hasInventoryItems = (compressedAirAssessment.compressorInventoryItems.length != 0);
-    if (this.hasInventoryItems) {
-      let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
-      if (selectedCompressor) {
-        let compressorExist: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == selectedCompressor.itemId });
-        if (!compressorExist) {
+    if (this.inventoryTab == 'inventory') {
+      this.hasInventoryItems = (compressedAirAssessment.compressorInventoryItems.length != 0);
+      if (this.hasInventoryItems) {
+        let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
+        if (selectedCompressor && !selectedCompressor.isReplacementCompressor) {
+          let compressorExist: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == selectedCompressor.itemId });
+          if (!compressorExist) {
+            let lastItemModified: CompressorInventoryItem = _.maxBy(compressedAirAssessment.compressorInventoryItems, 'modifiedDate');
+            this.inventoryService.setSelectedCompressor(lastItemModified);
+          }
+        } else {
           let lastItemModified: CompressorInventoryItem = _.maxBy(compressedAirAssessment.compressorInventoryItems, 'modifiedDate');
           this.inventoryService.setSelectedCompressor(lastItemModified);
         }
-      } else {
-        let lastItemModified: CompressorInventoryItem = _.maxBy(compressedAirAssessment.compressorInventoryItems, 'modifiedDate');
-        this.inventoryService.setSelectedCompressor(lastItemModified);
+      }
+    } else if (this.inventoryTab == 'replacementInventory') {
+      this.hasInventoryItems = (compressedAirAssessment.replacementCompressorInventoryItems.length != 0);
+      if (this.hasInventoryItems) {
+        let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
+        if (selectedCompressor && selectedCompressor.isReplacementCompressor) {
+          let compressorExist: CompressorInventoryItem = compressedAirAssessment.replacementCompressorInventoryItems.find(item => { return item.itemId == selectedCompressor.itemId });
+          if (!compressorExist) {
+            let lastItemModified: CompressorInventoryItem = _.maxBy(compressedAirAssessment.replacementCompressorInventoryItems, 'modifiedDate');
+            this.inventoryService.setSelectedCompressor(lastItemModified);
+          }
+        } else {
+          let lastItemModified: CompressorInventoryItem = _.maxBy(compressedAirAssessment.replacementCompressorInventoryItems, 'modifiedDate');
+          this.inventoryService.setSelectedCompressor(lastItemModified);
+        }
       }
     }
   }

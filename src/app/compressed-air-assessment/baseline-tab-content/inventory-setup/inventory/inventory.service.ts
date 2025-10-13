@@ -14,6 +14,7 @@ export class InventoryService {
   selectedCompressor: BehaviorSubject<CompressorInventoryItemClass>;
   defaultCompressor: BehaviorSubject<CompressorInventoryItemClass>
   filterCompressorOptions: BehaviorSubject<FilterCompressorOptions>;
+  tabSelect: BehaviorSubject<'inventory' | 'replacementInventory' | 'help'>;
   collapseControls: boolean = false;
   collapseDesignDetails: boolean = true;
   collapsePerformancePoints: boolean = true;
@@ -24,9 +25,10 @@ export class InventoryService {
     this.selectedCompressor = new BehaviorSubject<CompressorInventoryItemClass>(undefined);
     this.defaultCompressor = new BehaviorSubject<CompressorInventoryItemClass>(undefined);
     this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
+    this.tabSelect = new BehaviorSubject<'inventory' | 'replacementInventory' | 'help'>('inventory');
   }
 
-  setSelectedCompressor(compressor: CompressorInventoryItem){
+  setSelectedCompressor(compressor: CompressorInventoryItem) {
     let compressorInventoryItemClass: CompressorInventoryItemClass = new CompressorInventoryItemClass(compressor);
     this.selectedCompressor.next(compressorInventoryItemClass);
     let defaultCompressor: CompressorInventoryItemClass = new CompressorInventoryItemClass(_.cloneDeep(compressor));
@@ -139,51 +141,57 @@ export class InventoryService {
   }
 
   addNewCompressor(compressedAirAssessment: CompressedAirAssessment, newInventoryItem?: CompressorInventoryItem): { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } {
+
+    let inventoryTab: 'inventory' | 'replacementInventory' | 'help' = this.tabSelect.getValue();
+
     if (!newInventoryItem) {
       newInventoryItem = this.getNewInventoryItem();
     }
 
     newInventoryItem.modifiedDate = new Date();
-    // let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    compressedAirAssessment.compressorInventoryItems.push(newInventoryItem);
-    let intervalData: Array<{ isCompressorOn: boolean, timeInterval: number }> = new Array();
-    for (let i = 0; i < 24;) {
-      intervalData.push({
-        isCompressorOn: false,
-        timeInterval: i
-      })
-      i = i + compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval
-    }
-    compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-      compressedAirAssessment.systemProfile.profileSummary.push({
-        compressorId: newInventoryItem.itemId,
-        dayTypeId: dayType.dayTypeId,
-        profileSummaryData: this.getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup),
-        fullLoadPressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
-        fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow
-      });
-      compressedAirAssessment.modifications.forEach(modification => {
-        modification.reduceRuntime.runtimeData.push({
+    if (inventoryTab != 'inventory') {
+      compressedAirAssessment.compressorInventoryItems.push(newInventoryItem);
+      let intervalData: Array<{ isCompressorOn: boolean, timeInterval: number }> = new Array();
+      for (let i = 0; i < 24;) {
+        intervalData.push({
+          isCompressorOn: false,
+          timeInterval: i
+        })
+        i = i + compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval
+      }
+      compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+        compressedAirAssessment.systemProfile.profileSummary.push({
           compressorId: newInventoryItem.itemId,
           dayTypeId: dayType.dayTypeId,
-          fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow,
-          intervalData: intervalData,
-          automaticShutdownTimer: newInventoryItem.compressorControls.automaticShutdown
+          profileSummaryData: this.getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup),
+          fullLoadPressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
+          fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow
         });
-        modification.useAutomaticSequencer.order = 100;
-        modification.useAutomaticSequencer.profileSummary = new Array();
-      })
-    });
+        compressedAirAssessment.modifications.forEach(modification => {
+          modification.reduceRuntime.runtimeData.push({
+            compressorId: newInventoryItem.itemId,
+            dayTypeId: dayType.dayTypeId,
+            fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow,
+            intervalData: intervalData,
+            automaticShutdownTimer: newInventoryItem.compressorControls.automaticShutdown
+          });
+          modification.useAutomaticSequencer.order = 100;
+          modification.useAutomaticSequencer.profileSummary = new Array();
+        })
+      });
 
-    compressedAirAssessment.modifications.forEach(modification => {
-      modification.adjustCascadingSetPoints.setPointData.push({
-        compressorId: newInventoryItem.itemId,
-        controlType: newInventoryItem.compressorControls.controlType,
-        compressorType: newInventoryItem.nameplateData.compressorType,
-        fullLoadDischargePressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
-        maxFullFlowDischargePressure: newInventoryItem.performancePoints.maxFullFlow.dischargePressure
-      })
-    });
+      compressedAirAssessment.modifications.forEach(modification => {
+        modification.adjustCascadingSetPoints.setPointData.push({
+          compressorId: newInventoryItem.itemId,
+          controlType: newInventoryItem.compressorControls.controlType,
+          compressorType: newInventoryItem.nameplateData.compressorType,
+          fullLoadDischargePressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
+          maxFullFlowDischargePressure: newInventoryItem.performancePoints.maxFullFlow.dischargePressure
+        })
+      });
+    }else{
+      compressedAirAssessment.replacementCompressorInventoryItems.push(newInventoryItem);
+    }
     return {
       newInventoryItem: newInventoryItem,
       compressedAirAssessment: compressedAirAssessment

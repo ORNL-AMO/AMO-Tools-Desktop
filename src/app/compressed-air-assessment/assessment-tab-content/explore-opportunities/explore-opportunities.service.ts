@@ -149,207 +149,50 @@ export class ExploreOpportunitiesService {
   }
 
   setOrdering(modification: Modification, changedOpportunity: string, previousOrder: number, newOrder: number): Modification {
-    this.updateAddPrimaryReceiverVolumeOrdering(modification, changedOpportunity, previousOrder, newOrder);
-    this.updateAdjustCascadingSetPointsOrdering(modification, changedOpportunity, previousOrder, newOrder);
-    this.updateImproveEndUseEfficiencyOrdering(modification, changedOpportunity, previousOrder, newOrder);
-    this.updateReduceRunTimeOrdering(modification, changedOpportunity, previousOrder, newOrder);
-    this.updateReduceAirLeaksOrdering(modification, changedOpportunity, previousOrder, newOrder);
-    this.updateReduceSystemAirPressureOrdering(modification, changedOpportunity, previousOrder, newOrder);
-    this.updateUseAutomaticSequencerOrdering(modification, changedOpportunity, previousOrder, newOrder);
-    this.updateReplaceCompressorOrdering(modification, changedOpportunity, previousOrder, newOrder);
+    this.updateOrdering(modification, 'addPrimaryReceiverVolume', changedOpportunity, previousOrder, newOrder);
+    this.updateOrdering(modification, 'adjustCascadingSetPoints', changedOpportunity, previousOrder, newOrder);
+    this.updateOrdering(modification, 'improveEndUseEfficiency', changedOpportunity, previousOrder, newOrder);
+    this.updateOrdering(modification, 'reduceRuntime', changedOpportunity, previousOrder, newOrder);
+    this.updateOrdering(modification, 'reduceAirLeaks', changedOpportunity, previousOrder, newOrder);
+    this.updateOrdering(modification, 'reduceSystemAirPressure', changedOpportunity, previousOrder, newOrder);
+    this.updateOrdering(modification, 'useAutomaticSequencer', changedOpportunity, previousOrder, newOrder);
+    this.updateOrdering(modification, 'replaceCompressor', changedOpportunity, previousOrder, newOrder);
     return modification;
   }
 
-  //add primary receiver volume
-  updateAddPrimaryReceiverVolumeOrdering(modification: Modification, changedOpportunity: string, previousOrder: number, newOrder: number) {
+  private updateOrdering(
+    modification: Modification,
+    opportunityKey: keyof Modification,
+    changedOpportunity: string,
+    previousOrder: number,
+    newOrder: number
+  ) {
+    const opportunity = modification[opportunityKey] as { order: number };
     //EEM is on and is not the changed EEM
-    if (modification.addPrimaryReceiverVolume.order != 100 && changedOpportunity != 'addPrimaryReceiverVolume') {
+    if (opportunity.order != 100 && changedOpportunity != opportunityKey) {
       if (newOrder != 100) {
-        let duplicateOrder: boolean = newOrder == modification.addPrimaryReceiverVolume.order;
+        const duplicateOrder = newOrder == opportunity.order;
         //new order is less than or equal to current order
-        if (modification.addPrimaryReceiverVolume.order >= newOrder) {
+        if (opportunity.order >= newOrder) {
           //order changed to this EEM that was previously on
           if (duplicateOrder && previousOrder != 100) {
-            modification.addPrimaryReceiverVolume.order = previousOrder;
+            opportunity.order = previousOrder;
           } else if (previousOrder == 100) {
             //EEM is turned on that was previously off
-            modification.addPrimaryReceiverVolume.order++;
+            opportunity.order++;
           }
         }
       } else {
         //decrement all orders greater than previous order that was turned off
-        if (modification.addPrimaryReceiverVolume.order > previousOrder) {
-          modification.addPrimaryReceiverVolume.order--;
+        if (opportunity.order > previousOrder) {
+          opportunity.order--;
         }
       }
     }
   }
-  //adjust cascading set points
-  updateAdjustCascadingSetPointsOrdering(modification: Modification, changedOpportunity: string, previousOrder: number, newOrder: number) {
-    //EEM is on and is not the changed EEM
-    if (modification.adjustCascadingSetPoints.order != 100 && changedOpportunity != 'adjustCascadingSetPoints') {
-      if (newOrder != 100) {
-        let duplicateOrder: boolean = newOrder == modification.adjustCascadingSetPoints.order;
-        //new order is less than or equal to current order
-        if (modification.adjustCascadingSetPoints.order >= newOrder) {
-          //order changed to this EEM that was previously on
-          if (duplicateOrder && previousOrder != 100) {
-            modification.adjustCascadingSetPoints.order = previousOrder;
-          } else if (previousOrder == 100) {
-            //EEM is turned on that was previously off
-            modification.adjustCascadingSetPoints.order++;
-          }
-        }
-      } else {
-        //decrement all orders greater than previous order that was turned off
-        if (modification.adjustCascadingSetPoints.order > previousOrder) {
-          modification.adjustCascadingSetPoints.order--;
-        }
-      }
-    }
-  }
-  //improve end use efficiency
-  updateImproveEndUseEfficiencyOrdering(modification: Modification, changedOpportunity: string, previousOrder: number, newOrder: number) {
-    //EEM is on and is not the changed EEM
-    if (modification.improveEndUseEfficiency.order != 100 && changedOpportunity != 'improveEndUseEfficiency') {
-      if (newOrder != 100) {
-        let duplicateOrder: boolean = newOrder == modification.improveEndUseEfficiency.order;
-        //new order is less than or equal to current order
-        if (modification.improveEndUseEfficiency.order >= newOrder) {
-          //order changed to this EEM that was previously on
-          if (duplicateOrder && previousOrder != 100) {
-            modification.improveEndUseEfficiency.order = previousOrder;
-          } else if (previousOrder == 100) {
-            //EEM is turned on that was previously off
-            modification.improveEndUseEfficiency.order++;
-          }
-        }
-      } else {
-        //decrement all orders greater than previous order that was turned off
-        if (modification.improveEndUseEfficiency.order > previousOrder) {
-          modification.improveEndUseEfficiency.order--;
-        }
-      }
-    }
-  }
-  //reduce run time
-  updateReduceRunTimeOrdering(modification: Modification, changedOpportunity: string, previousOrder: number, newOrder: number) {
-    //EEM is on and is not the changed EEM
-    if (modification.reduceRuntime.order != 100 && changedOpportunity != 'reduceRuntime') {
-      if (newOrder != 100) {
-        let duplicateOrder: boolean = newOrder == modification.reduceRuntime.order;
-        //new order is less than or equal to current order
-        if (modification.reduceRuntime.order >= newOrder) {
-          //order changed to this EEM that was previously on
-          if (duplicateOrder && previousOrder != 100) {
-            modification.reduceRuntime.order = previousOrder;
-          } else if (previousOrder == 100) {
-            //EEM is turned on that was previously off
-            modification.reduceRuntime.order++;
-          }
-        }
-      } else {
-        //decrement all orders greater than previous order that was turned off
-        if (modification.reduceRuntime.order > previousOrder) {
-          modification.reduceRuntime.order--;
-        }
-      }
-    }
-  }
-  //reduce air leaks
-  updateReduceAirLeaksOrdering(modification: Modification, changedOpportunity: string, previousOrder: number, newOrder: number) {
-    //EEM is on and is not the changed EEM
-    if (modification.reduceAirLeaks.order != 100 && changedOpportunity != 'reduceAirLeaks') {
-      if (newOrder != 100) {
-        let duplicateOrder: boolean = newOrder == modification.reduceAirLeaks.order;
-        //new order is less than or equal to current order
-        if (modification.reduceAirLeaks.order >= newOrder) {
-          //order changed to this EEM that was previously on
-          if (duplicateOrder && previousOrder != 100) {
-            modification.reduceAirLeaks.order = previousOrder;
-          } else if (previousOrder == 100) {
-            //EEM is turned on that was previously off
-            modification.reduceAirLeaks.order++;
-          }
-        }
-      } else {
-        //decrement all orders greater than previous order that was turned off
-        if (modification.reduceAirLeaks.order > previousOrder) {
-          modification.reduceAirLeaks.order--;
-        }
-      }
-    }
-  }
-  //reduce system air pressure
-  updateReduceSystemAirPressureOrdering(modification: Modification, changedOpportunity: string, previousOrder: number, newOrder: number) {
-    //EEM is on and is not the changed EEM
-    if (modification.reduceSystemAirPressure.order != 100 && changedOpportunity != 'reduceSystemAirPressure') {
-      if (newOrder != 100) {
-        let duplicateOrder: boolean = newOrder == modification.reduceSystemAirPressure.order;
-        //new order is less than or equal to current order
-        if (modification.reduceSystemAirPressure.order >= newOrder) {
-          //order changed to this EEM that was previously on
-          if (duplicateOrder && previousOrder != 100) {
-            modification.reduceSystemAirPressure.order = previousOrder;
-          } else if (previousOrder == 100) {
-            //EEM is turned on that was previously off
-            modification.reduceSystemAirPressure.order++;
-          }
-        }
-      } else {
-        //decrement all orders greater than previous order that was turned off
-        if (modification.reduceSystemAirPressure.order > previousOrder) {
-          modification.reduceSystemAirPressure.order--;
-        }
-      }
-    }
-  }
-  //use automatic sequencer
-  updateUseAutomaticSequencerOrdering(modification: Modification, changedOpportunity: string, previousOrder: number, newOrder: number) {
-    //EEM is on and is not the changed EEM
-    if (modification.useAutomaticSequencer.order != 100 && changedOpportunity != 'useAutomaticSequencer') {
-      if (newOrder != 100) {
-        let duplicateOrder: boolean = newOrder == modification.useAutomaticSequencer.order;
-        //new order is less than or equal to current order
-        if (modification.useAutomaticSequencer.order >= newOrder) {
-          //order changed to this EEM that was previously on
-          if (duplicateOrder && previousOrder != 100) {
-            modification.useAutomaticSequencer.order = previousOrder;
-          } else if (previousOrder == 100) {
-            //EEM is turned on that was previously off
-            modification.useAutomaticSequencer.order++;
-          }
-        }
-      } else {
-        //decrement all orders greater than previous order that was turned off
-        if (modification.useAutomaticSequencer.order > previousOrder) {
-          modification.useAutomaticSequencer.order--;
-        }
-      }
-    }
-  }
+
+  //Compressor dependent EEMs
+  //reduce runtime
+  //cascading set points
   //replace compressor
-  updateReplaceCompressorOrdering(modification: Modification, changedOpportunity: string, previousOrder: number, newOrder: number) {
-    //EEM is on and is not the changed EEM
-    if (modification.replaceCompressor.order != 100 && changedOpportunity != 'replaceCompressor') {
-      if (newOrder != 100) {
-        let duplicateOrder: boolean = newOrder == modification.replaceCompressor.order;
-        //new order is less than or equal to current order
-        if (modification.replaceCompressor.order >= newOrder) {
-          //order changed to this EEM that was previously on
-          if (duplicateOrder && previousOrder != 100) {
-            modification.replaceCompressor.order = previousOrder;
-          } else if (previousOrder == 100) {
-            //EEM is turned on that was previously off
-            modification.replaceCompressor.order++;
-          }
-        }
-      } else {
-        //decrement all orders greater than previous order that was turned off
-        if (modification.replaceCompressor.order > previousOrder) {
-          modification.replaceCompressor.order--;
-        }
-      }
-    }
-  }
 }
