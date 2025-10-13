@@ -17,11 +17,7 @@ export class CostsFormComponent implements OnInit {
   effortLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   constructor() { }
 
-  ngOnInit() {
-    if (!this.opportunityCost.costDescription) {
-      this.opportunityCost.costDescription = 'Any details that will be useful for implementation i.e. math, who is responsible, how to implement, where data came from.';
-    }
-  }
+  ngOnInit() {}
 
   addOtherCost() {
     this.opportunityCost.otherCosts.push(

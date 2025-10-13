@@ -22,9 +22,6 @@ export class GeneralDetailsFormComponent implements OnInit {
   
   ngOnInit(): void {
     this.processEquipmentOptions = processEquipmentOptions;
-    if (!this.opportunitySheet.description) {
-      this.opportunitySheet.description = 'This is important information you want in the presentation or report.';
-    }
   }
 
   focusField(str: string) {
