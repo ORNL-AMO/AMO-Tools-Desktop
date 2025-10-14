@@ -343,3 +343,6 @@ export const ControlTypes: Array<ControlType> = [
 export interface CompressorInventoryItemWarnings {
   serviceFactor?: string;
 }
+
+
+export type CompressorDataGroup = 'nameplateData' | 'compressedAirMotor' | 'compressedAirControlsProperties' | 'compressedAirDesignDetailsProperties' | 'fieldMeasurements';

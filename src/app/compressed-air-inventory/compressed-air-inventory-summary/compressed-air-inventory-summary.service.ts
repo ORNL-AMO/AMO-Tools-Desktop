@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { CompressedAirControlsPropertiesOptions, CompressedAirDesignDetailsPropertiesOptions, CompressedAirInventoryData, CompressedAirItem, CompressedAirMotorPropertiesOptions, CompressedAirPropertyDisplayOptions, FieldMeasurementsOptions, NameplateDataOptions } from "../compressed-air-inventory";
+import { CompressedAirControlsPropertiesOptions, CompressedAirDesignDetailsPropertiesOptions, CompressedAirInventoryData, CompressedAirItem, CompressedAirMotorPropertiesOptions, CompressedAirPropertyDisplayOptions, CompressorDataGroup, FieldMeasurementsOptions, NameplateDataOptions } from "../compressed-air-inventory";
 import _ from "lodash";
 import { Settings } from "../../shared/models/settings";
 
@@ -69,10 +69,10 @@ export class CompressedAirInventorySummaryService {
     let fields: Array<CompressedAirField> = [];
     let units = settings.unitsOfMeasure === 'Imperial'? CompressorSummaryUnitsImperial.motor : CompressorSummaryUnitsMetric.motor;
     if (compressedAirMotorPropertiesOptions.motorPower) {
-      fields.push({ display: 'Motor Power', value: 'motorPower', group: 'compressedAirMotorProperties', unit: units.motorPower });
+      fields.push({ display: 'Motor Power', value: 'motorPower', group: 'compressedAirMotor', unit: units.motorPower });
     }
     if (compressedAirMotorPropertiesOptions.motorFullLoadAmps) {
-      fields.push({ display: 'Motor Full Load Amps', value: 'motorFullLoadAmps', group: 'compressedAirMotorProperties', unit: units.motorFullLoadAmps });
+      fields.push({ display: 'Motor Full Load Amps', value: 'motorFullLoadAmps', group: 'compressedAirMotor', unit: units.motorFullLoadAmps });
     }
     return fields;
   }
@@ -89,13 +89,13 @@ export class CompressedAirInventorySummaryService {
     let fields: Array<CompressedAirField> = [];
     let units = settings.unitsOfMeasure === 'Imperial'? CompressorSummaryUnitsImperial.designDetails : CompressorSummaryUnitsMetric.designDetails;
     if (compressedAirDesignDetailsPropertiesOptions.inputPressure) {
-      fields.push({ display: 'Design Inlet Pressure', value: 'inputPressure', group: 'compressedAirDesignDetails', unit: units.inletPressure });
+      fields.push({ display: 'Design Inlet Pressure', value: 'inputPressure', group: 'compressedAirDesignDetailsProperties', unit: units.inletPressure });
     }
     if (compressedAirDesignDetailsPropertiesOptions.designEfficiency) {
-      fields.push({ display: 'Motor Design Efficiency', value: 'designEfficiency', group: 'compressedAirDesignDetails', unit: units.designEfficiency });
+      fields.push({ display: 'Motor Design Efficiency', value: 'designEfficiency', group: 'compressedAirDesignDetailsProperties', unit: units.designEfficiency });
     }
     if (compressedAirDesignDetailsPropertiesOptions.serviceFactor) {
-      fields.push({ display: 'Motor Service Factor', value: 'serviceFactor', group: 'compressedAirDesignDetails' });
+      fields.push({ display: 'Motor Service Factor', value: 'serviceFactor', group: 'compressedAirDesignDetailsProperties' });
     }
     return fields;
   }
@@ -112,7 +112,7 @@ export interface InventorySummaryData {
 export interface CompressedAirField {
   display: string,
   value: string,
-  group: string,
+  group: CompressorDataGroup,
   unit?: string
 }
 
