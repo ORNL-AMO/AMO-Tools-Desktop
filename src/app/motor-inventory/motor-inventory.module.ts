@@ -23,6 +23,7 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
 import { ConvertMotorInventoryService } from './convert-motor-inventory.service';
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     ConfirmDeleteModalModule,
     RouterModule,
     ConnectedInventoryModule,    
-    ImportExportModule
+    ImportExportModule,
+    BannerTooltipsModule
   ],
   providers: [
     MotorInventoryService,

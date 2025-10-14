@@ -29,6 +29,7 @@ export class CompressedAirBannerComponent implements OnInit {
   secondaryAssessmentTab: string;
   compresssedAirAssessmentSub: Subscription;
   bannerCollapsed: boolean = true;
+
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
