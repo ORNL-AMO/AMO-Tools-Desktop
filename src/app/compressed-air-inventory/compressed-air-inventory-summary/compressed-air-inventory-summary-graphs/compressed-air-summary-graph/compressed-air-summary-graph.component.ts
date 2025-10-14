@@ -47,9 +47,9 @@ export class CompressedAirSummaryGraphComponent {
               values: chartData.yData,
               labels: chartData.xData,
               text: chartData.yData.map((fieldValue, index) => {
-                let pumpCountString = fieldValue > 1 ? `${fieldValue} pumps` : `${fieldValue} pump`;
+                let compressorCountString = fieldValue > 1 ? `${fieldValue} compressors` : `${fieldValue} compressor`;
                 let fieldValueString = selectedField.unit ? `${chartData.xData[index]} ${selectedField.unit}` : chartData.xData[index];
-                return `${fieldValueString} <br> ${pumpCountString}`;
+                return `${fieldValueString} <br> ${compressorCountString}`;
               }),
               type: type,
               textposition: 'auto',
