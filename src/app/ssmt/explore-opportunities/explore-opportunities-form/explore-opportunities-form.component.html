@@ -1,4 +1,4 @@
-<div class="d-flex flex-column mr-3 ml-3 explore-ops-margin-bottom">
+<div class="d-flex flex-column mr-3 ml-3 explore-ops-margin-bottom" [ngClass]="{'modal-open': isModalOpen == true}">
   <div class="w-100 justify-content-center p-2 d-flex">
     <button class="btn btn-primary" (click)="addNewMod()">Add New Scenario</button>
   </div>

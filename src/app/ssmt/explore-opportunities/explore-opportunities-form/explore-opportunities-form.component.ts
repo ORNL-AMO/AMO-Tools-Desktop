@@ -3,7 +3,7 @@ import { Settings } from '../../../shared/models/settings';
 import { SSMT } from '../../../shared/models/steam/ssmt';
 import { SsmtService } from '../../ssmt.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-
+import { Subscription } from 'rxjs';
 @Component({
     selector: 'app-explore-opportunities-form',
     templateUrl: './explore-opportunities-form.component.html',
@@ -22,13 +22,19 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   emitSave = new EventEmitter<SSMT>();
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
+  modalOpenSub: Subscription;
 
+  isModalOpen: boolean;
   showSizeMargin: boolean;
   modifyOperatingCostsForm: UntypedFormGroup;
   constructor(private ssmtService: SsmtService, private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.initForms();
+
+    this.modalOpenSub = this.ssmtService.modalOpen.subscribe(val => {
+      this.isModalOpen = val;
+    });
   }
 
   initForms() {
