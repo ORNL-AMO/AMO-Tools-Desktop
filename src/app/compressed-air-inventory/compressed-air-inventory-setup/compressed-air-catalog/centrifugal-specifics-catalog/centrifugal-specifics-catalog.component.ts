@@ -6,6 +6,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CompressedAirItem } from '../../../compressed-air-inventory';
+import { CompressorDataManagementService } from '../../../compressor-data-management.service';
 
 @Component({
   selector: 'app-centrifugal-specifics-catalog',
@@ -27,6 +28,7 @@ export class CentrifugalSpecificsCatalogComponent implements OnInit {
 
   constructor(private compressedAirCatalogService: CompressedAirCatalogService,
     private compressedAirInventoryService: CompressedAirInventoryService,
+    private compressorDataManagementService: CompressorDataManagementService,
     private centrifugalSpecificsCatalogService: CentrifugalSpecificsCatalogService) { }
 
   ngOnInit(): void {
@@ -51,7 +53,7 @@ export class CentrifugalSpecificsCatalogComponent implements OnInit {
     save() {
       let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
       selectedCompressedAir.centrifugalSpecifics = this.centrifugalSpecificsCatalogService.updateCentrifugalFromForm(this.form, selectedCompressedAir.centrifugalSpecifics);
-      this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
+      this.compressorDataManagementService.updateCompressorPropertyAndPoints('centrifugalSpecifics', selectedCompressedAir.centrifugalSpecifics);
     }
   
     focusField(str: string) {

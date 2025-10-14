@@ -6,6 +6,7 @@ import { CompressedAirInventoryService } from '../../../compressed-air-inventory
 import { CompressedAirCatalogService } from '../compressed-air-catalog.service';
 import { CompressedAirControlsCatalogService } from './compressed-air-controls-catalog.service';
 import { Settings } from '../../../../shared/models/settings';
+import { CompressorDataManagementService } from '../../../compressor-data-management.service';
 
 @Component({
   selector: 'app-compressed-air-controls-catalog',
@@ -28,6 +29,7 @@ export class CompressedAirControlsCatalogComponent implements OnInit {
   controlTypeOptions: Array<{ value: number, label: string, compressorTypes: Array<number> }>;
 
   constructor(private compressedAirCatalogService: CompressedAirCatalogService, private compressedAirInventoryService: CompressedAirInventoryService,
+    private compressorDataManagementService: CompressorDataManagementService,
     private compressedAirControlsCatalogService: CompressedAirControlsCatalogService) { }
 
   ngOnInit(): void {
@@ -77,7 +79,7 @@ export class CompressedAirControlsCatalogComponent implements OnInit {
     }
     this.toggleDisableControls();
     this.setDisplayValues();
-    this.save();
+    this.save(true);
   }
 
   ngOnDestroy() {
@@ -85,10 +87,10 @@ export class CompressedAirControlsCatalogComponent implements OnInit {
     this.settingsSub.unsubscribe();
   }
 
-  save() {
+  save(isControlTypeChange?: boolean) {
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressedAir.compressedAirControlsProperties = this.compressedAirControlsCatalogService.updateControlsPropertiesFromForm(this.form, selectedCompressedAir.compressedAirControlsProperties);
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
+    this.compressorDataManagementService.updateControlDataAndPoints(selectedCompressedAir.compressedAirControlsProperties, isControlTypeChange);
   }
 
   focusField(str: string) {

@@ -345,4 +345,4 @@ export interface CompressorInventoryItemWarnings {
 }
 
 
-export type CompressorDataGroup = 'nameplateData' | 'compressedAirMotor' | 'compressedAirControlsProperties' | 'compressedAirDesignDetailsProperties' | 'fieldMeasurements';
+export type CompressorDataGroup = 'nameplateData' | 'centrifugalSpecifics' | 'compressedAirMotor' | 'compressedAirControlsProperties' | 'compressedAirDesignDetailsProperties' | 'fieldMeasurements';

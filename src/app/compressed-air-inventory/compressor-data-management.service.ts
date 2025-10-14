@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { GenericCompressor } from './existing-compressor-db.service';
 import { CompressedAirInventoryService } from './compressed-air-inventory.service';
 import { CompressedAirCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
-import { CompressedAirInventoryData, CompressedAirItem, PerformancePoint } from './compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirItem, CompressorDataGroup, PerformancePoint } from './compressed-air-inventory';
 import { Settings } from '../shared/models/settings';
 import { PerformancePointsCalculationsService } from './compressed-air-inventory-setup/compressed-air-catalog/performance-points-catalog/calculations/performance-points-calculations.service';
+import { CompressorControls } from '../shared/models/compressed-air-assessment';
 
 @Injectable()
 export class CompressorDataManagementService {
@@ -85,25 +86,12 @@ export class CompressorDataManagementService {
   }
 
   updateCatalogFromDependentCompressorItem(selectedCompressor: CompressedAirItem, performancePointUpdateNeeded: boolean) {
-    //update performance points
     if (performancePointUpdateNeeded) {
       let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
       let settings: Settings = this.compressedAirInventoryService.settings.getValue();
       selectedCompressor.compressedAirPerformancePointsProperties = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor, compressedAirInventoryData.systemInformation.atmosphericPressure, settings);
     }
-    //update assessment
-    let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
-    let selectedSystemId: string = this.compressedAirCatalogService.selectedSystemId.getValue();
-    let systemIndex: number = compressedAirInventoryData.systems.findIndex(system => { return system.id == selectedSystemId });
-
-    let selectedCompressedAirItem: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    let itemIndex: number = compressedAirInventoryData.systems[systemIndex].catalog.findIndex(item => { return item.id == selectedCompressedAirItem.id });
-
-    compressedAirInventoryData.systems[systemIndex].catalog[itemIndex] = selectedCompressor;
-
-    // //update assessment
-    // this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
-    // //update selected compressor
+    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
   }
 
@@ -118,6 +106,20 @@ export class CompressorDataManagementService {
     return Number((Math.round(val * 100) / 100).toFixed(digits));
   }
 
+  updateControlDataAndPoints(compressorControls: CompressorControls, isControlTypeChange?: boolean) {
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    selectedCompressor.compressedAirControlsProperties = compressorControls;
+    if (isControlTypeChange && selectedCompressor.compressedAirControlsProperties.controlType == 11) {
+      selectedCompressor.compressedAirDesignDetailsProperties.noLoadPowerUL = 5;
+    }
+    this.updateCatalogFromDependentCompressorItem(selectedCompressor, true);
+  }
+
+  updateCompressorPropertyAndPoints<K extends CompressorDataGroup>(key: K, compressedAirItemGroupData: CompressedAirItem[K]) {
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    selectedCompressor[key] = compressedAirItemGroupData;
+    this.updateCatalogFromDependentCompressorItem(selectedCompressor, true);
+  }
 
   updateBlowoff(blowoff: PerformancePoint) {
     let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
