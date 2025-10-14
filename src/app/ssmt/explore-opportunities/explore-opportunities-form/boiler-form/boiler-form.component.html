@@ -483,3 +483,8 @@
 <app-blowdown-rate-modal *ngIf="showBlowdownRateModal" (emitClose)="closeBlowdownRateModal()" [width]="formWidth"
   [form]="modificationForm" (emitSave)="saveAndCloseBlowdownRateModal()">
 </app-blowdown-rate-modal>
+
+<!--  todo:6848 add markup for modal component -->
+ <app-boiler-efficiency-modal *ngIf="showBoilerEfficiencyModal" [settings]="settings" (emitClose)="closeBoilerEfficiencyModal()"
+  (emitSave)="setBoilerEfficiencyAndClose($event)">
+  </app-boiler-efficiency-modal>

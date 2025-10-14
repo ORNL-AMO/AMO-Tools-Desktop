@@ -380,10 +380,13 @@ export class BoilerFormComponent implements OnInit {
   }
 
   openBoilerEfficiencyModal() {
+    // todo:6848 - sets inputs for the stack loss calculator ('boiler efficiency modal') based on current boiiler 
     if (this.boilerInput && this.boilerInput.stackLossInput) {
       this.stackLossService.stackLossInput = this.boilerInput.stackLossInput;
     }
     this.showBoilerEfficiencyModal = true;
+
+    // todo:6848 calling next to trigger modal-open class on parent of boiler-form  
     this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal);
     console.log(this.showBoilerEfficiencyModal, this.ssmtService.modalOpen);
 
@@ -396,6 +399,7 @@ export class BoilerFormComponent implements OnInit {
   }
 
   setBoilerEfficiencyAndClose(efficiency: number) {
+    // todo:6848 the populate values from modal close. NOTE remember to update logic and form name to populate this component's form
     if (this.boilerInput && this.boilerInput.stackLossInput) {
       this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
     } else {

@@ -22,6 +22,8 @@ export class BoilerEfficiencyModalComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    // todo:6848 - log initialization so we know if modal is rendered but hidden
+    console.log('==== init boiler eff modal');
   }
 
   ngAfterViewInit() {

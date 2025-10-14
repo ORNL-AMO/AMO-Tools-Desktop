@@ -170,6 +170,7 @@ export class SsmtComponent implements OnInit {
     });
 
     this.modalOpenSubscription = this.ssmtService.modalOpen.subscribe(val => {
+      // todo:6848 - another subscriber
       this.isModalOpen = val;
     });
 

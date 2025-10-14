@@ -23,12 +23,14 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   @Output('emitAddNewMod')
   emitAddNewMod = new EventEmitter<boolean>();
 
+  // todo:6848 add class property to track isModalOpen which will apply our model-open css class
   showSizeMargin: boolean;
   modifyOperatingCostsForm: UntypedFormGroup;
   constructor(private ssmtService: SsmtService, private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.initForms();
+    // todo:6848 add subscription to modalOpen from ssmtService and unsub on destroy
   }
 
   initForms() {
