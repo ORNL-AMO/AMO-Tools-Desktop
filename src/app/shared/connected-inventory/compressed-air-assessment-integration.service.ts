@@ -512,6 +512,7 @@ export class CompressedAirAssessmentIntegrationService {
                         motorFullLoadAmps: item.nameplateData.fullLoadAmps,
                     }
 
+                    // todo connectedCompressorFromState is stale. connectedCompressedAirItem is fresh
                     Object.keys(compressedAirAssessmentMotor).every((key, index) => {
                         const newValue = compressedAirAssessmentMotor[key];
                         const connectedFromValue = currentAssessment.connectedCompressorFromState.compressorMotor[key];
@@ -629,6 +630,7 @@ export class CompressedAirAssessmentIntegrationService {
 
         connectedInventoryData.shouldRestoreConnectedValues = false;
         this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
+        //*Nick confirmed compressedAirAssessment is updated with restored state 
         return compressedAirAssessment;
     }
 
@@ -638,6 +640,8 @@ export class CompressedAirAssessmentIntegrationService {
         let currentAssessment = selectedCompressedAir.connectedAssessments[0];
         selectedCompressedAir.catalog.forEach(item => {
             console.log('restoring item ID: ', item.id);
+
+            //*Nick 2b connectedInventoryData.connectedItem is undefined here. 
             console.log('connected item ID: ', connectedInventoryData.connectedItem.id);
             if (item.id === connectedInventoryData.connectedItem.id) {                
                 item.nameplateData.compressorType = currentAssessment.connectedCompressorFromState.nameplateData.compressorType;

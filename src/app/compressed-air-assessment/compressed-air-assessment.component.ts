@@ -171,6 +171,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
       if (connectedInventoryData.shouldRestoreConnectedValues) {
         let updatedCAAssessment: CompressedAirAssessment = this.compressedAirAssessmentIntegrationService.restoreConnectedAssessmentValues(connectedInventoryData, this.compressedAirAssessment);
         this.compressedAirAssessment = copyObject(updatedCAAssessment);
+        //*Nick 1b - Simplest way to fix this right now is to find the selected compressor in the updated assessment and emit it again.
+        //*Nick 1c - there may be more required but I believe this to be root cause and should get you started
         this.save(this.compressedAirAssessment);
       }
     });

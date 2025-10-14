@@ -183,6 +183,9 @@ export class CompressedAirInventoryComponent implements OnInit {
   }
 
   restoreConnectedInventoryValues(connectedInventoryData: ConnectedInventoryData) {
+    //*Nick 2a connectedInventoryData.connectedItem is undefined here. 
+    //* This is leading to your issue in compressedAirAssessmentIntegrationService.restoreConnectedInventoryValues line 650
+    //* Look at psat/pump inv for examples of when connecteditem should be set to connectedInventoryData
     let selectedCompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     let selectedCompressedAirSystemId = this.compressedAirCatalogService.selectedSystemId.getValue();
     let system: CompressedAirInventorySystem = this.compressedAirInventoryItem.compressedAirInventoryData.systems.find(system => { return system.id == selectedCompressedAirSystemId });

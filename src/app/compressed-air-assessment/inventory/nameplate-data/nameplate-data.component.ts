@@ -30,6 +30,8 @@ export class NameplateDataComponent implements OnInit {
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
+    //*Nick 1a - Problem: After restoreConnectedAssessmentValues completes and saved the assessment, there is no logic that notifies this component to update from the new state. We would need to emit changes to selected compressor
+
   ngOnInit(): void {
     this.selectedCompressorSub = this.inventoryService.selectedCompressor.subscribe(val => {
       if (val) {
