@@ -580,6 +580,8 @@ export class CompressedAirAssessmentIntegrationService {
         return motorItem;
     }
 
+
+    //! NIck - this is called when changes are made to the connected assessment that is connected to the CA assessment but it is not retoring values 
     restoreConnectedAssessmentValues(connectedInventoryData: ConnectedInventoryData, compressedAirAssessment: CompressedAirAssessment): CompressedAirAssessment {
         // * we don't care which connected assessment
         let connectedCompressedAirItem: CompressedAirInventorySystem = this.getConnectedCompressedAirItem(compressedAirAssessment.connectedItem);
@@ -630,6 +632,7 @@ export class CompressedAirAssessmentIntegrationService {
         return compressedAirAssessment;
     }
 
+    //! Nick - this need to called when changes are made to the CA Inventory system that is connected to the assessment but it is not 
     restoreConnectedInventoryValues(selectedCompressedAir: CompressedAirInventorySystem, connectedInventoryData: ConnectedInventoryData) {
         // * we don't care which connected assessment
         let currentAssessment = selectedCompressedAir.connectedAssessments[0];
