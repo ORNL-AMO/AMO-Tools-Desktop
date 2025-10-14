@@ -634,6 +634,8 @@ export class CompressedAirAssessmentIntegrationService {
         // * we don't care which connected assessment
         let currentAssessment = selectedCompressedAir.connectedAssessments[0];
         selectedCompressedAir.catalog.forEach(item => {
+            console.log('restoring item ID: ', item.id);
+            console.log('connected item ID: ', connectedInventoryData.connectedItem.id);
             if (item.id === connectedInventoryData.connectedItem.id) {                
                 item.nameplateData.compressorType = currentAssessment.connectedCompressorFromState.nameplateData.compressorType;
                 item.nameplateData.fullLoadOperatingPressure = currentAssessment.connectedCompressorFromState.nameplateData.fullLoadOperatingPressure;

@@ -3,7 +3,8 @@ import { CompressedAirInventoryData, CompressedAirInventorySystem } from '../../
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirMotorIntegrationService } from '../../../shared/connected-inventory/compressed-air-motor-integration.service';
-import { ConnectedItem } from '../../../shared/connected-inventory/integrations';
+import { ConnectedItem, IntegrationState } from '../../../shared/connected-inventory/integrations';
+import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
 
 @Component({
   selector: 'app-system-setup',
@@ -17,8 +18,10 @@ export class SystemSetupComponent implements OnInit {
   settings: Settings;
   compressedAirInventoryData: CompressedAirInventoryData;
   selectedSystems = new Array<ConnectedItem>();
-
-  constructor(private compressedAirInventoryService: CompressedAirInventoryService, private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
+  connectedAssessmentState: IntegrationState;
+  constructor(private compressedAirInventoryService: CompressedAirInventoryService, 
+    private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService,  
+    private integrationStateService: IntegrationStateService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirInventoryService.settings.getValue();
@@ -59,6 +62,26 @@ export class SystemSetupComponent implements OnInit {
       }
       this.selectedSystems.push(connectedCompressedAirItem);
     });
+  }
+
+  setConnectedItemInfo() {
+    if (this.compressedAirInventoryData.hasConnectedInventoryItems && this.compressedAirInventoryData.hasConnectedCompressedAirAssessment) {
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: 'three-way-connected'
+      }
+    } else if (this.compressedAirInventoryData.hasConnectedInventoryItems) {      
+      this.integrationStateService.integrationState.next({ status: 'connected-to-inventory' });
+
+    } else if (this.compressedAirInventoryData.hasConnectedCompressedAirAssessment) {
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: 'connected-to-assessment'
+      }
+    } else {
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: undefined
+      }
+
+    }
   }
 
 }
