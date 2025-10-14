@@ -87,6 +87,7 @@ export class CompressedAirInventoryComponent implements OnInit {
 
     this.setupTabSub = this.compressedAirInventoryService.setupTab.subscribe(val => {
       this.setupTab = val;
+      this.handleConnectedItemChanges();
       this.getContainerHeight();
     });
 
@@ -97,7 +98,6 @@ export class CompressedAirInventoryComponent implements OnInit {
     });
 
     this.compressedAirInventoryDataSub = this.compressedAirInventoryService.compressedAirInventoryData.subscribe(data => {
-      //TODO: CA Assessment integration 
       this.handleConnectedItemChanges();
       this.saveDbData();
     });
@@ -147,8 +147,7 @@ export class CompressedAirInventoryComponent implements OnInit {
     this.compressedAirInventoryItem.appVersion = environment.version;
     this.compressedAirInventoryItem.compressedAirInventoryData = inventoryData;
     this.compressedAirInventoryItem.compressedAirInventoryData.hasConnectedInventoryItems = this.compressedAirMotorIntegrationService.getHasConnectedMotorItems(this.compressedAirInventoryItem);
-    //TODO CA Assessment integration
-    this.compressedAirInventoryItem.compressedAirInventoryData.hasConnectedPsat = this.compressedAirAssessmentIntegrationService.getHasConnectedCompressedAirAssessment(this.compressedAirInventoryItem);
+    this.compressedAirInventoryItem.compressedAirInventoryData.hasConnectedCompressedAirAssessment = this.compressedAirAssessmentIntegrationService.getHasConnectedCompressedAirAssessment(this.compressedAirInventoryItem);
     await firstValueFrom(this.inventoryDbService.updateWithObservable(this.compressedAirInventoryItem));
     let updatedInventoryItems: InventoryItem[] = await firstValueFrom(this.inventoryDbService.getAllInventory());
     this.inventoryDbService.setAll(updatedInventoryItems);
@@ -185,14 +184,14 @@ export class CompressedAirInventoryComponent implements OnInit {
 
   restoreConnectedInventoryValues(connectedInventoryData: ConnectedInventoryData) {
     let selectedCompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    //TODO CA Assessment integration
-    this.compressedAirAssessmentIntegrationService.restoreConnectedInventoryValues(selectedCompressedAirItem, connectedInventoryData);
+    let selectedCompressedAirSystemId = this.compressedAirCatalogService.selectedSystemId.getValue();
+    let system: CompressedAirInventorySystem = this.compressedAirInventoryItem.compressedAirInventoryData.systems.find(system => { return system.id == selectedCompressedAirSystemId });
+    this.compressedAirAssessmentIntegrationService.restoreConnectedInventoryValues(system, connectedInventoryData);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressedAirItem);
     this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAirItem);
   }
 
   handleConnectedItemChanges() {
-    //TODO: CA Assessment integration
     let selectedCompressedAir = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     if (selectedCompressedAir && selectedCompressedAir.connectedAssessments) {
       this.compressedAirAssessmentIntegrationService.checkConnectedAssessmentDiffers(selectedCompressedAir);

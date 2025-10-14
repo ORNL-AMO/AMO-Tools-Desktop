@@ -23,6 +23,12 @@
             </div>
             <a class="click-link small pull-right" (click)="openCompressorModal()">Set Data From Existing Compressor</a>
         </form>
+        <app-connected-assessment-status class="w-100" *ngIf="hasConnectedCompressedAirInventory" [connectedToType]="'inventory'"
+            [connectedFormGroupName]="'motor'">
+        </app-connected-assessment-status>
+        <app-connected-assessment-status class="w-100" *ngIf="hasConnectedCompressedAirInventory" [connectedToType]="'inventory'"
+            [connectedFormGroupName]="'compressed-air'">
+        </app-connected-assessment-status>
         <app-nameplate-data></app-nameplate-data>
         <app-control-data></app-control-data>
         <app-design-details *ngIf="compressorType != undefined && controlType != undefined"></app-design-details>

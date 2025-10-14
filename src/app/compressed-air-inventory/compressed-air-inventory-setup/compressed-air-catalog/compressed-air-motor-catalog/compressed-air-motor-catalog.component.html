@@ -4,9 +4,7 @@
     Motor
 </label>
 
-<!-- TODO Connect Assessment -->
-<!-- <app-connected-assessment-status *ngIf="displayForm" [connectedToType]="'assessment'" [connectedFormGroupName]="'motor'"></app-connected-assessment-status> -->
-
+<app-connected-assessment-status *ngIf="displayForm" [connectedToType]="'assessment'" [connectedFormGroupName]="'motor'"></app-connected-assessment-status>
 
 <app-inventory-integration *ngIf="displayForm && inventorySelectOptions" 
     (focusedField)="focusField($event, true)"

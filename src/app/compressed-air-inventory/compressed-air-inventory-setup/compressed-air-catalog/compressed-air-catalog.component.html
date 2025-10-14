@@ -12,6 +12,10 @@
         <a class="click-link small pull-right" (click)="openCompressorModal()">Set Data From Existing Compressor</a>
     </div>
     <div class="col-12">
+        <app-connected-assessment-status [connectedToType]="'assessment'" [connectedFormGroupName]="'compressed-air'"></app-connected-assessment-status>
+        <app-connected-assessment-status [connectedToType]="'assessment'" [connectedFormGroupName]="'motor'"></app-connected-assessment-status>
+    </div>
+    <div class="col-12">
         <app-nameplate-data-catalog
             *ngIf="compressedAirInventoryData.displayOptions.nameplateDataOptions.displayNameplateData"></app-nameplate-data-catalog>
     </div>

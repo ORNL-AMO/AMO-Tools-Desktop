@@ -5,7 +5,7 @@
         </div>
         <a class="click-link small pull-right" (click)="addSystem()">+Add System</a>
     </div>
-    <div class="col-12 pt-1 pb-2 form-section" *ngFor="let system of compressedAirInventoryData.systems">
+    <div class="col-12 pt-1 pb-2 form-section" *ngFor="let system of compressedAirInventoryData.systems; let i = index">
         <form class="p-0">
             <div class="form-group">
                 <label>System Name</label>
@@ -64,9 +64,12 @@
             Delete
         </a>
 
-        <app-connected-assessment [assessmentType]="'CompressedAir'" [integratedCreateType]="'CompressedAir'"
-            [connectedInventoryItem]="setSelectedSystem(system)" [connectedAssessmentItems]="system.connectedAssessments"
-            [isItemValid]="system.isValid" (modalOpen)="setModalOpenView($event)">
+        <app-connected-assessment [assessmentType]="'CompressedAir'" 
+            [integratedCreateType]="'CompressedAir'"
+            [connectedInventoryItem]="selectedSystems[i]" 
+            [connectedAssessmentItems]="system.connectedAssessments"
+            [isItemValid]="system.isValid" 
+            (modalOpen)="setModalOpenView($event)">
         </app-connected-assessment>
 
     </div>

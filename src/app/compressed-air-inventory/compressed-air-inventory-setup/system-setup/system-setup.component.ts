@@ -15,13 +15,15 @@ export class SystemSetupComponent implements OnInit {
 
 
   settings: Settings;
-
   compressedAirInventoryData: CompressedAirInventoryData;
+  selectedSystems = new Array<ConnectedItem>();
+
   constructor(private compressedAirInventoryService: CompressedAirInventoryService, private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirInventoryService.settings.getValue();
     this.compressedAirInventoryData = this.compressedAirInventoryService.compressedAirInventoryData.getValue();
+    this.setSelectedSystems();
   }
 
   save() {
@@ -46,15 +48,17 @@ export class SystemSetupComponent implements OnInit {
     this.compressedAirInventoryService.modalOpen.next(true);
   }
 
-  setSelectedSystem(system: CompressedAirInventorySystem) {
-    let connectedCompressedAirItem: ConnectedItem = {
-      id: system.id,
-      name: system.name,
-      inventoryId: this.compressedAirInventoryService.currentInventoryId,
-      departmentId: system.id,
-      inventoryType: 'compressed-air',
-    }
-    return connectedCompressedAirItem;
+  setSelectedSystems() {
+    this.compressedAirInventoryData.systems.forEach(system => {
+      let connectedCompressedAirItem: ConnectedItem = {
+        id: system.id,
+        name: system.name,
+        inventoryId: this.compressedAirInventoryService.currentInventoryId,
+        departmentId: system.id,
+        inventoryType: 'compressed-air',
+      }
+      this.selectedSystems.push(connectedCompressedAirItem);
+    });
   }
 
 }

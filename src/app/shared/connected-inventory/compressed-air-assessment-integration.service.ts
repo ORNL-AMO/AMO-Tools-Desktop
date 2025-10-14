@@ -123,9 +123,7 @@ export class CompressedAirAssessmentIntegrationService {
         }
 
         if (connectedInventoryData.canConnect) {
-
             selectedCompressedAirSystem.catalog.forEach(item => {
-                console.log('item', item);
                 let compressorInventoryItem: CompressorInventoryItem = this.getNewInventoryItem();
 
                 compressorInventoryItem.name = item.name;
@@ -188,31 +186,30 @@ export class CompressedAirAssessmentIntegrationService {
             assessment.compressedAirAssessment.systemInformation = compressedAirAssessment.systemInformation;
             assessmentCompressedAirAssessment.systemInformation = compressedAirAssessment.systemInformation;
 
-            compressedAirInventory.compressedAirInventoryData.systems.forEach(dept => {
-                dept.catalog.map(compressedAirItem => {
-                    if (compressedAirItem.id === connectedInventoryData.connectedItem.id) {
-                        let connectedCompressorFromState = copyObject(selectedCompressedAirSystem);
+            compressedAirInventory.compressedAirInventoryData.systems.forEach(system => {
+                if (system.id === connectedInventoryData.connectedItem.id) {
+                    system.catalog.map(item => {
                         let connectedAsssessment: ConnectedItem = {
                             assessmentId: assessment.id,
                             name: assessment.name,
                             inventoryId: connectedInventoryData.connectedItem.inventoryId,
                             connectedCompressorFromState: {
-                                compressorMotor: connectedCompressorFromState.compressedAirMotor,
-                                nameplateData: connectedCompressorFromState.nameplateData,
-                                compressedAirControlsProperties: connectedCompressorFromState.compressedAirControlsProperties,
-                                compressedAirDesignDetailsProperties: connectedCompressorFromState.compressedAirDesignDetailsProperties,
-                                compressedAirPerformancePointsProperties: connectedCompressorFromState.compressedAirPerformancePointsProperties,
-                                centrifugalSpecifics: connectedCompressorFromState.centrifugalSpecifics,
-                                fieldMeasurements: connectedCompressorFromState.fieldMeasurements,
+                                compressorMotor: item.compressedAirMotor,
+                                nameplateData: item.nameplateData,
+                                compressedAirControlsProperties: item.compressedAirControlsProperties,
+                                compressedAirDesignDetailsProperties: item.compressedAirDesignDetailsProperties,
+                                compressedAirPerformancePointsProperties: item.compressedAirPerformancePointsProperties,
+                                centrifugalSpecifics: item.centrifugalSpecifics,
+                                fieldMeasurements: item.fieldMeasurements,
                             }
                         }
-                        if (compressedAirItem.connectedAssessments) {
-                            compressedAirItem.connectedAssessments.push(connectedAsssessment);
+                        if (system.connectedAssessments) {
+                            system.connectedAssessments.push(connectedAsssessment);
                         } else {
-                            compressedAirItem.connectedAssessments = [connectedAsssessment];
+                            system.connectedAssessments = [connectedAsssessment];
                         }
-                    }
-                })
+                    });
+                }
             });
 
             await firstValueFrom(this.inventoryDbService.updateWithObservable(compressedAirInventory));
@@ -357,23 +354,19 @@ export class CompressedAirAssessmentIntegrationService {
     }
 
     getHasConnectedCompressedAirAssessment(inventoryItem: InventoryItem) {
-        return inventoryItem.compressedAirInventoryData.systems.some(system => {
-            return system.catalog.some(item => item.connectedAssessments && item.connectedAssessments.length != 0);
-        });
+        return inventoryItem.compressedAirInventoryData.systems.some(system => {system.connectedAssessments && system.connectedAssessments.length != 0});
     }
 
     async removeConnectedCompressedAirInventory(connectedItem: ConnectedItem, ownerAssessmentId: number) {
         let compressedAirInventory: InventoryItem = this.inventoryDbService.getById(connectedItem.inventoryId);
-        compressedAirInventory.compressedAirInventoryData.systems.forEach(dept => {
-            dept.catalog.map(compressedAirItem => {
-                if (compressedAirItem.id === connectedItem.id && compressedAirItem.connectedAssessments) {
-                    let connectedCompressedAirIndex = compressedAirItem.connectedAssessments.findIndex(item => item.assessmentId === ownerAssessmentId);
-                    compressedAirItem.connectedAssessments.splice(connectedCompressedAirIndex, 1);
-                    if (compressedAirItem.connectedAssessments.length === 0) {
-                        compressedAirItem.connectedAssessments = undefined;
-                    }
+        compressedAirInventory.compressedAirInventoryData.systems.forEach(system => {
+            if (system.id === connectedItem.id && system.connectedAssessments) {
+                let connectedCompressedAirIndex = system.connectedAssessments.findIndex(item => item.assessmentId === ownerAssessmentId);
+                system.connectedAssessments.splice(connectedCompressedAirIndex, 1);
+                if (system.connectedAssessments.length === 0) {
+                    system.connectedAssessments = undefined;
                 }
-            });
+            }
         });
 
         await firstValueFrom(this.inventoryDbService.updateWithObservable(compressedAirInventory));
@@ -422,7 +415,7 @@ export class CompressedAirAssessmentIntegrationService {
             isMotorMatch = Object.keys(selectedCompressedAir.compressedAirMotor).every((key, index) => {
                 let newValue = selectedCompressedAir.compressedAirMotor[key];
                 let connectedFromValue = connectedAssessment.connectedCompressorFromState.compressorMotor[key];
-                if (settingsDiffer && key === 'motorRatedPower') {
+                if (settingsDiffer && key === 'motorPower') {
                     let assessmentUnit: string = assessmentSettings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
                     let inventoryUnit: string = compressedAirInventorySettings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
                     connectedFromValue = this.convertUnitsService.value(connectedFromValue).from(assessmentUnit).to(inventoryUnit);
@@ -512,7 +505,6 @@ export class CompressedAirAssessmentIntegrationService {
             let currentAssessment = connectedCompressedAirItem.connectedAssessments.find((connectedAssessment: ConnectedItem) => {
                 return connectedAssessment.assessmentId === assessment.id;
             });
-
             if (currentAssessment) {
                 assessment.compressedAirAssessment.compressorInventoryItems.forEach(item => {
                     let compressedAirAssessmentMotor: CompressedAirMotorProperties = {
@@ -638,45 +630,50 @@ export class CompressedAirAssessmentIntegrationService {
         return compressedAirAssessment;
     }
 
-    restoreConnectedInventoryValues(selectedCompressedAir: CompressedAirItem, connectedInventoryData: ConnectedInventoryData) {
+    restoreConnectedInventoryValues(selectedCompressedAir: CompressedAirInventorySystem, connectedInventoryData: ConnectedInventoryData) {
         // * we don't care which connected assessment
         let currentAssessment = selectedCompressedAir.connectedAssessments[0];
-        selectedCompressedAir.nameplateData.compressorType = currentAssessment.connectedCompressorFromState.nameplateData.compressorType;
-        selectedCompressedAir.nameplateData.fullLoadOperatingPressure = currentAssessment.connectedCompressorFromState.nameplateData.fullLoadOperatingPressure;
-        selectedCompressedAir.nameplateData.fullLoadRatedCapacity = currentAssessment.connectedCompressorFromState.nameplateData.fullLoadRatedCapacity;
-        selectedCompressedAir.nameplateData.totalPackageInputPower = currentAssessment.connectedCompressorFromState.nameplateData.totalPackageInputPower;
+        selectedCompressedAir.catalog.forEach(item => {
+            if (item.id === connectedInventoryData.connectedItem.id) {                
+                item.nameplateData.compressorType = currentAssessment.connectedCompressorFromState.nameplateData.compressorType;
+                item.nameplateData.fullLoadOperatingPressure = currentAssessment.connectedCompressorFromState.nameplateData.fullLoadOperatingPressure;
+                item.nameplateData.fullLoadRatedCapacity = currentAssessment.connectedCompressorFromState.nameplateData.fullLoadRatedCapacity;
+                item.nameplateData.totalPackageInputPower = currentAssessment.connectedCompressorFromState.nameplateData.totalPackageInputPower;
+                
+                item.compressedAirMotor.motorFullLoadAmps = currentAssessment.connectedCompressorFromState.compressorMotor.motorFullLoadAmps;
+                item.compressedAirMotor.motorPower = currentAssessment.connectedCompressorFromState.compressorMotor.motorPower;
         
-        selectedCompressedAir.compressedAirMotor.motorFullLoadAmps = currentAssessment.connectedCompressorFromState.compressorMotor.motorFullLoadAmps;
-        selectedCompressedAir.compressedAirMotor.motorPower = currentAssessment.connectedCompressorFromState.compressorMotor.motorPower;
-
-        selectedCompressedAir.compressedAirControlsProperties.controlType = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.controlType;
-        selectedCompressedAir.compressedAirControlsProperties.unloadPointCapacity = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.unloadPointCapacity;
-        selectedCompressedAir.compressedAirControlsProperties.numberOfUnloadSteps = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.numberOfUnloadSteps;
-        selectedCompressedAir.compressedAirControlsProperties.automaticShutdown = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.automaticShutdown;
-        selectedCompressedAir.compressedAirControlsProperties.unloadSumpPressure = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.unloadSumpPressure;
-
-        selectedCompressedAir.compressedAirDesignDetailsProperties.designEfficiency = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.designEfficiency;
-        selectedCompressedAir.compressedAirDesignDetailsProperties.blowdownTime = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.blowdownTime;
-        selectedCompressedAir.compressedAirDesignDetailsProperties.modulatingPressureRange = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.modulatingPressureRange;
-        selectedCompressedAir.compressedAirDesignDetailsProperties.inputPressure = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.inputPressure;
-        selectedCompressedAir.compressedAirDesignDetailsProperties.serviceFactor = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.serviceFactor;
-        selectedCompressedAir.compressedAirDesignDetailsProperties.noLoadPowerFM = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.noLoadPowerFM;
-        selectedCompressedAir.compressedAirDesignDetailsProperties.noLoadPowerUL = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.noLoadPowerUL;
-        selectedCompressedAir.compressedAirDesignDetailsProperties.maxFullFlowPressure = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.maxFullFlowPressure;
-
-        selectedCompressedAir.compressedAirPerformancePointsProperties.fullLoad = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.fullLoad;
-        selectedCompressedAir.compressedAirPerformancePointsProperties.maxFullFlow = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.maxFullFlow;   
-        selectedCompressedAir.compressedAirPerformancePointsProperties.midTurndown = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.midTurndown;
-        selectedCompressedAir.compressedAirPerformancePointsProperties.turndown = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.turndown;
-        selectedCompressedAir.compressedAirPerformancePointsProperties.unloadPoint = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.unloadPoint;
-        selectedCompressedAir.compressedAirPerformancePointsProperties.noLoad = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.noLoad;
-        selectedCompressedAir.compressedAirPerformancePointsProperties.blowoff = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.blowoff;
+                item.compressedAirControlsProperties.controlType = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.controlType;
+                item.compressedAirControlsProperties.unloadPointCapacity = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.unloadPointCapacity;
+                item.compressedAirControlsProperties.numberOfUnloadSteps = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.numberOfUnloadSteps;
+                item.compressedAirControlsProperties.automaticShutdown = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.automaticShutdown;
+                item.compressedAirControlsProperties.unloadSumpPressure = currentAssessment.connectedCompressorFromState.compressedAirControlsProperties.unloadSumpPressure;
         
-        selectedCompressedAir.centrifugalSpecifics.maxFullLoadCapacity = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.maxFullLoadCapacity;
-        selectedCompressedAir.centrifugalSpecifics.maxFullLoadPressure = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.maxFullLoadPressure;
-        selectedCompressedAir.centrifugalSpecifics.minFullLoadCapacity = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.minFullLoadCapacity;
-        selectedCompressedAir.centrifugalSpecifics.minFullLoadPressure = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.minFullLoadPressure;
-        selectedCompressedAir.centrifugalSpecifics.surgeAirflow = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.surgeAirflow;
+                item.compressedAirDesignDetailsProperties.designEfficiency = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.designEfficiency;
+                item.compressedAirDesignDetailsProperties.blowdownTime = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.blowdownTime;
+                item.compressedAirDesignDetailsProperties.modulatingPressureRange = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.modulatingPressureRange;
+                item.compressedAirDesignDetailsProperties.inputPressure = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.inputPressure;
+                item.compressedAirDesignDetailsProperties.serviceFactor = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.serviceFactor;
+                item.compressedAirDesignDetailsProperties.noLoadPowerFM = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.noLoadPowerFM;
+                item.compressedAirDesignDetailsProperties.noLoadPowerUL = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.noLoadPowerUL;
+                item.compressedAirDesignDetailsProperties.maxFullFlowPressure = currentAssessment.connectedCompressorFromState.compressedAirDesignDetailsProperties.maxFullFlowPressure;
+
+                item.compressedAirPerformancePointsProperties.fullLoad = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.fullLoad;
+                item.compressedAirPerformancePointsProperties.maxFullFlow = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.maxFullFlow;   
+                item.compressedAirPerformancePointsProperties.midTurndown = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.midTurndown;
+                item.compressedAirPerformancePointsProperties.turndown = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.turndown;
+                item.compressedAirPerformancePointsProperties.unloadPoint = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.unloadPoint;
+                item.compressedAirPerformancePointsProperties.noLoad = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.noLoad;
+                item.compressedAirPerformancePointsProperties.blowoff = currentAssessment.connectedCompressorFromState.compressedAirPerformancePointsProperties.blowoff;
+
+                item.centrifugalSpecifics.maxFullLoadCapacity = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.maxFullLoadCapacity;
+                item.centrifugalSpecifics.maxFullLoadPressure = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.maxFullLoadPressure;
+                item.centrifugalSpecifics.minFullLoadCapacity = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.minFullLoadCapacity;
+                item.centrifugalSpecifics.minFullLoadPressure = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.minFullLoadPressure;
+                item.centrifugalSpecifics.surgeAirflow = currentAssessment.connectedCompressorFromState.centrifugalSpecifics.surgeAirflow;
+
+            }
+        });
         
         connectedInventoryData.shouldRestoreConnectedValues = false;
         this.integrationStateService.connectedInventoryData.next(connectedInventoryData)
