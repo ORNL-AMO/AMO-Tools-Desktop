@@ -1,0 +1,8 @@
+
+.progress-tabs{
+    display: none;
+}
+
+.progress-tabs.display{
+    display: block;
+}

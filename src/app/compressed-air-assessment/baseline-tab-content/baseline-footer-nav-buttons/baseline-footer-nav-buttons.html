@@ -3,7 +3,7 @@
         <button class="btn btn-default" [disabled]="setupTab == 'system-basics'" (click)="back()">Back</button>
     </div>
     <div class="pull-right">
-        <button class="btn btn-primary" [disabled]="disableNext" (click)="next()">
+        <button class="btn btn-primary" [disabled]="setupTab | caDisableNextButton: validationStatus" (click)="next()">
             <span *ngIf="setupTab != 'end-uses'">Next</span>
             <span *ngIf="setupTab == 'end-uses'">Go To Assessment</span>
         </button>

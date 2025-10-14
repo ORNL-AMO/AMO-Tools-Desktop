@@ -6,7 +6,7 @@ import { CompressedAirAssessmentService } from './compressed-air-assessment.serv
 import { RouterModule } from '@angular/router';
 import { SystemBasicsComponent } from './baseline-tab-content/system-basics/system-basics.component';
 import { SettingsModule } from '../settings/settings.module';
-import { SetupTabsComponent } from './baseline-tab-content/setup-tabs/setup-tabs.component';
+import { SetupTabsComponent } from './compressed-air-banner/setup-tabs/setup-tabs.component';
 import { SystemInformationComponent } from './baseline-tab-content/system-information/system-information.component';
 import { DayTypesComponent } from './baseline-tab-content/day-types-setup/day-types/day-types.component';
 import { InventoryComponent } from './baseline-tab-content/inventory-setup/inventory/inventory.component';
@@ -132,7 +132,7 @@ import { SystemInformationFormComponent } from './baseline-tab-content/system-in
 import { InventorySetupComponent } from './baseline-tab-content/inventory-setup/inventory-setup.component';
 import { DayTypesSetupComponent } from './baseline-tab-content/day-types-setup/day-types-setup.component';
 import { BaselineSystemProfileSetupComponent } from './baseline-tab-content/baseline-system-profile-setup/baseline-system-profile-setup.component';
-import { SystemProfileSetupTabsComponent } from './baseline-tab-content/baseline-system-profile-setup/system-profile-setup-tabs/system-profile-setup-tabs.component';
+import { SystemProfileSetupTabsComponent } from './compressed-air-banner/setup-tabs/system-profile-setup-tabs/system-profile-setup-tabs.component';
 import { EndUsesSetupComponent } from './baseline-tab-content/end-uses-setup/end-uses-setup.component';
 import { EndUsesFormComponent } from './baseline-tab-content/end-uses-setup/end-uses-form/end-uses-form.component';
 import { DayTypeUseFormComponent } from './baseline-tab-content/end-uses-setup/end-uses-form/day-type-use-form/day-type-use-form.component';
@@ -154,6 +154,7 @@ import { UseAutomaticSequencerHelpComponent } from './assessment-tab-content/exp
 import { ReduceRunTimeHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/reduce-run-time-help/reduce-run-time-help.component';
 import { AddReceiverVolumeHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/add-receiver-volume-help/add-receiver-volume-help.component';
 import { AdjustCascadingSetPointsHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/adjust-cascading-set-points-help/adjust-cascading-set-points-help.component';
+import { CaDisableNextButtonPipe } from './baseline-tab-content/baseline-footer-nav-buttons/ca-disable-next-button-pipe';
 
 @NgModule({
   declarations: [
@@ -251,7 +252,8 @@ import { AdjustCascadingSetPointsHelpComponent } from './assessment-tab-content/
     AssessmentTabsComponent,
     AssessmentTabContentComponent,
     ExploreOpportunitiesFormComponent,
-    ExploreOpportunitiesSidePanelComponent
+    ExploreOpportunitiesSidePanelComponent,
+    CaDisableNextButtonPipe
   ],
   imports: [
     CommonModule,

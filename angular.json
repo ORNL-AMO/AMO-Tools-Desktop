@@ -62,7 +62,8 @@
               "src/assets/styles/responsive-calculators.css",
               "src/assets/styles/explore-opps.css",
               "src/assets/styles/pagination.css",
-              "src/assets/styles/welcome-screen.css"
+              "src/assets/styles/welcome-screen.css",
+              "src/assets/styles/compressed-air.css"
             ],
             "scripts": [
               "node_modules/plotly.js-dist/plotly.js"

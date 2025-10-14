@@ -27,9 +27,10 @@ export function getEmptyEemSavings(): EemSavingsResults {
 
 
 export function getTotalCapacity(inventoryItems: Array<CompressorInventoryItemClass | CompressorInventoryItem>): number {
-    return _.sumBy(inventoryItems, (inventoryItem) => {
+    let totalCapacity = _.sumBy(inventoryItems, (inventoryItem: CompressorInventoryItemClass | CompressorInventoryItem) => {
         return inventoryItem.nameplateData.fullLoadRatedCapacity;
     });
+    return totalCapacity;
 }
 
 export function getTotalPower(inventoryItems: Array<CompressorInventoryItemClass | CompressorInventoryItem>): number {

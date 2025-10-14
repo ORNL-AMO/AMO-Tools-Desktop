@@ -1,0 +1,13 @@
+
+app-baseline-tab-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.compressed-air .my-content-container .main-content > router-outlet + * {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

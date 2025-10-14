@@ -30,10 +30,10 @@ export class CompressedAirBaselineDayTypeProfileSummary {
         _assessmentCo2SavingsService: AssessmentCo2SavingsService
     ) {
         this.dayType = dayType;
-        this.totalFullLoadCapacity = getTotalCapacity(this.inventoryItems);
-        this.totalFullLoadPower = getTotalPower(this.inventoryItems);
         this.setBaselineProfileSummary(compressedAirAssessment.systemProfile.profileSummary);
         this.setInventoryItems(compressedAirAssessment.compressorInventoryItems);
+        this.totalFullLoadCapacity = getTotalCapacity(this.inventoryItems);
+        this.totalFullLoadPower = getTotalPower(this.inventoryItems);
         //Adjust perfomance points for sequencer
         if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
             this.inventoryItems.forEach(item => {
@@ -254,7 +254,7 @@ export class CompressedAirBaselineDayTypeProfileSummary {
             let compressorSummary: CompressorSummary = {
                 dayType: this.dayType,
                 specificPowerAvgLoad: specificPowerAvgLoad,
-                ratedSpecificPower: ratedSpecificPower,
+                ratedSpecificPower: roundVal(ratedSpecificPower, 4),
                 ratedIsentropicEfficiency: ratedIsentropicEfficiency
             }
             compressorSummaries.push(compressorSummary);

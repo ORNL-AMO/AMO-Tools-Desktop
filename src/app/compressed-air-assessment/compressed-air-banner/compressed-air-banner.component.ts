@@ -7,6 +7,7 @@ import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/sec
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-compressed-air-banner',
@@ -15,7 +16,7 @@ import { CoreService } from '../../core/core.service';
   standalone: false
 })
 export class CompressedAirBannerComponent implements OnInit {
-  @Input({required: true})
+  @Input({ required: true })
   assessment: Assessment;
 
   isBaselineValid: boolean = false;
@@ -23,10 +24,13 @@ export class CompressedAirBannerComponent implements OnInit {
   selectedModification: Modification;
   compresssedAirAssessmentSub: Subscription;
   bannerCollapsed: boolean = true;
+
+  mainTab: 'baseline' | 'assessment' | 'calculators';
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
-    private coreService: CoreService,) { }
+    private coreService: CoreService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
@@ -38,6 +42,13 @@ export class CompressedAirBannerComponent implements OnInit {
         this.isBaselineValid = val.setupDone;
       }
     });
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.setMainTab();
+      }
+    });
+    this.setMainTab();
   }
 
   collapseBanner() {
@@ -78,5 +89,15 @@ export class CompressedAirBannerComponent implements OnInit {
     }
     this.emailMeasurDataService.emailItemType.next('CompressedAir');
     this.coreService.showShareDataModal.next(true);
+  }
+
+  setMainTab(){
+    if(this.router.url.includes('baseline')){
+      this.mainTab = 'baseline';
+    } else if(this.router.url.includes('assessment')){
+      this.mainTab = 'assessment';
+    } else if(this.router.url.includes('calculators')){
+      this.mainTab = 'calculators';
+    }
   }
 }

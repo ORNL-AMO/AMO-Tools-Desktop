@@ -29,6 +29,8 @@ export class CompressorInventoryValidationService {
 
 
   validateCompressorItem(compressor: CompressorInventoryItem, systemInformation: SystemInformation): CompressorItemValidation {
+    
+    let generalInformationValid: boolean = this.inventoryFormService.getGeneralInformationFormFromObj(compressor.name, compressor.description).valid;
     let nameplateValid: boolean = this.inventoryFormService.getNameplateDataFormFromObj(compressor.nameplateData).valid;
     let compressorTypeValid: boolean = true;
     if (systemInformation.multiCompressorSystemControls == 'loadSharing') {
@@ -48,7 +50,8 @@ export class CompressorInventoryValidationService {
       designDetailsValid: designDetailsValid,
       centrifugalSpecsValid: centrifugalSpecsValid,
       performancePointsValid: performancePointsValid,
-      isValid: (nameplateValid && compressorTypeValid && compressorControlsValid && designDetailsValid && centrifugalSpecsValid && performancePointsValid)
+      generalInformationValid: generalInformationValid,
+      isValid: (nameplateValid && compressorTypeValid && compressorControlsValid && designDetailsValid && centrifugalSpecsValid && performancePointsValid && generalInformationValid)
     }
   }
 

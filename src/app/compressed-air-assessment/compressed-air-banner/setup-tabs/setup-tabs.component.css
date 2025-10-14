@@ -1,0 +1,11 @@
+li.page-item{
+    background-color:#ECECEC !important;
+}
+
+.progress-tabs{
+    display: none;
+}
+
+.progress-tabs.display{
+    display: block;
+}

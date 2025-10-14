@@ -17,6 +17,7 @@ export interface CompressorItemValidation {
     designDetailsValid: boolean;
     centrifugalSpecsValid: boolean;
     performancePointsValid: boolean;
+    generalInformationValid: boolean;
     isValid: boolean;
 }
 

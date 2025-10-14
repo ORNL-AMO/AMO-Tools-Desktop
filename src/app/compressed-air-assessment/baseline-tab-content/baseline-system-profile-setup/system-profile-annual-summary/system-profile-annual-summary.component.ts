@@ -39,7 +39,7 @@ export class SystemProfileAnnualSummaryComponent implements OnInit {
         this.compressorAnnualSummaryOptions.push({ compressorName: compressor.name, compressorId: compressor.itemId });
       });
 
-      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = this.compressedAirAssessmentService.compressedAirAssessmentBaselineResults.getValue();
       this.baselineProfileSummaries = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.map(dayTypeProfileSummary => {
         return {
           dayTypeId: dayTypeProfileSummary.dayType.dayTypeId,
