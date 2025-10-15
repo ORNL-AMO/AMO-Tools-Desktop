@@ -4,7 +4,7 @@ import { CompressedAirInventorySummaryGraphsService } from '../compressed-air-in
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirInventoryData } from '../../../compressed-air-inventory';
-import { CompressedAirInventorySummaryService } from '../../compressed-air-inventory-summary.service';
+import { CompressedAirField, CompressedAirInventorySummaryService } from '../../compressed-air-inventory-summary.service';
 
 @Component({
   selector: 'app-compressed-air-summary-graphs-menu',
@@ -15,11 +15,11 @@ import { CompressedAirInventorySummaryService } from '../../compressed-air-inven
 export class CompressedAirSummaryGraphsMenuComponent {
 
   selectedFieldSub: Subscription;
-  selectedField: { display: string, value: string, group: string };
+  selectedField: CompressedAirField;
   graphTypeSub: Subscription;
   graphType: string;
   groups: Array<{
-    options: Array<{ display: string, value: string, group: string }>,
+    options: Array<CompressedAirField>,
     groupLabel: string,
     showGroup: boolean
   }>
@@ -77,7 +77,7 @@ export class CompressedAirSummaryGraphsMenuComponent {
 
   }
 
-  setSelectedField(option: { display: string, value: string, group: string }) {
+  setSelectedField(option: CompressedAirField) {
     this.compressedAirInventorySummaryGraphsService.selectedField.next(option);
   }
 

@@ -330,6 +330,10 @@ export class CompressedAirInventoryService {
     this.compressedAirInventoryData.next(compressedAirInventoryData);
   }
 
+  /**
+   * TODO change name - Actually updates compressedAirInventoryData, does NOT push changes to selectedCompressor
+   * @param selectedCompressedAir CompressedAirItem to update in the inventory data
+   */
   updateCompressedAirItem(selectedCompressedAir: CompressedAirItem) {
     let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
     let isValid: boolean = true;

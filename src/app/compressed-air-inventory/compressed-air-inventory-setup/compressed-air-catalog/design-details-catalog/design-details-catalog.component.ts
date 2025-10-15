@@ -6,6 +6,7 @@ import { CompressorTypeOptions, CompressedAirItem, CompressedAirDesignDetailsPro
 import { CompressedAirInventoryService } from '../../../compressed-air-inventory.service';
 import { CompressedAirCatalogService } from '../compressed-air-catalog.service';
 import { DesignDetailsCatalogService } from './design-details-catalog.service';
+import { CompressorDataManagementService } from '../../../compressor-data-management.service';
 
 @Component({
   selector: 'app-design-details-catalog',
@@ -32,7 +33,9 @@ export class DesignDetailsCatalogComponent implements OnInit {
   compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
   invalidCompressorType: boolean;
 
-  constructor(private compressedAirCatalogService: CompressedAirCatalogService, private compressedAirInventoryService: CompressedAirInventoryService,
+  constructor(private compressedAirCatalogService: CompressedAirCatalogService,
+    private compressorDataManagementService: CompressorDataManagementService, 
+     private compressedAirInventoryService: CompressedAirInventoryService,
     private designDetailsCatalogService: DesignDetailsCatalogService) { }
 
   ngOnInit(): void {
@@ -63,7 +66,7 @@ export class DesignDetailsCatalogComponent implements OnInit {
   save() {
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressedAir.compressedAirDesignDetailsProperties = this.designDetailsCatalogService.updateDesignDetailsFromForm(this.form, selectedCompressedAir.compressedAirDesignDetailsProperties);
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
+    this.compressorDataManagementService.updateCompressorPropertyAndPoints('compressedAirDesignDetailsProperties', selectedCompressedAir.compressedAirDesignDetailsProperties);
   }
 
   focusField(str: string) {

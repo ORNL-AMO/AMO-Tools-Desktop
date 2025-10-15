@@ -6,6 +6,7 @@ import { CompressedAirItem, CompressorTypeOptions, NameplateDataOptions } from '
 import { NameplateDataCatalogService } from './nameplate-data-catalog.service';
 import { CompressedAirCatalogService } from '../compressed-air-catalog.service';
 import { CompressedAirInventoryService } from '../../../compressed-air-inventory.service';
+import { CompressorDataManagementService } from '../../../compressor-data-management.service';
 @Component({
   selector: 'app-nameplate-data-catalog',
   templateUrl: './nameplate-data-catalog.component.html',
@@ -25,7 +26,7 @@ export class NameplateDataCatalogComponent implements OnInit {
   invalidCompressorType: boolean;
   
   constructor(private compressedAirCatalogService: CompressedAirCatalogService, private compressedAirInventoryService: CompressedAirInventoryService,
-    private nameplateDataCatalogService: NameplateDataCatalogService) { }
+    private nameplateDataCatalogService: NameplateDataCatalogService, private compressorDataManagementService: CompressorDataManagementService) { }
 
   ngOnInit(): void {
     this.settingsSub = this.compressedAirInventoryService.settings.subscribe(val => {
@@ -47,7 +48,7 @@ export class NameplateDataCatalogComponent implements OnInit {
   save() {
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressedAir.nameplateData = this.nameplateDataCatalogService.updateNameplateDataFromForm(this.form, selectedCompressedAir.nameplateData);
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
+    this.compressorDataManagementService.updateCompressorPropertyAndPoints('nameplateData', selectedCompressedAir.nameplateData);
   }
 
   focusField(str: string) {
