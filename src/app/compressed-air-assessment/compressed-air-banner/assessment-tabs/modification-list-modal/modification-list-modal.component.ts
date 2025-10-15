@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, Modification } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import * as _ from 'lodash';
-import { ExploreOpportunitiesService } from '../../explore-opportunities/explore-opportunities.service';
+import { ExploreOpportunitiesService } from '../../../assessment-tab-content/explore-opportunities/explore-opportunities.service';
 
 @Component({
     selector: 'app-modification-list-modal',

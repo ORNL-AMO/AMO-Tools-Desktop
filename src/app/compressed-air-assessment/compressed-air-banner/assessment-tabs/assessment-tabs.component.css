@@ -52,3 +52,11 @@
 li.page-item{
     background-color:#ECECEC !important;
 }
+
+.assessment-bar{
+    display: none;
+}
+
+.assessment-bar.display{
+    display: flex;
+}

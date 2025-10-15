@@ -78,8 +78,8 @@ import { ExploreOpportunitiesService } from './assessment-tab-content/explore-op
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
 import { ExploreOpportunitiesResultsComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/explore-opportunities-results/explore-opportunities-results.component';
-import { ModificationListModalComponent } from './assessment-tab-content/assessment-tabs/modification-list-modal/modification-list-modal.component';
-import { AddModificationModalComponent } from './assessment-tab-content/assessment-tabs/add-modification-modal/add-modification-modal.component';
+import { ModificationListModalComponent } from './compressed-air-banner/assessment-tabs/modification-list-modal/modification-list-modal.component';
+import { AddModificationModalComponent } from './compressed-air-banner/assessment-tabs/add-modification-modal/add-modification-modal.component';
 import { DayTypeService } from './baseline-tab-content/day-types-setup/day-types/day-type.service';
 import { FullLoadAmpsModule } from '../calculator/motors/full-load-amps/full-load-amps.module';
 import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-correction/altitude-correction.module';
@@ -140,7 +140,7 @@ import { EndUsesFormService } from './baseline-tab-content/end-uses-setup/end-us
 import { DayTypeUseFormService } from './baseline-tab-content/end-uses-setup/end-uses-form/day-type-use-form/day-type-use-form.service';
 import { EndUseDayTypeSetupModule } from './baseline-tab-content/end-uses-setup/end-uses-form/day-type-setup-form/end-use-day-type-setup.module';
 import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-air-sankey.module';
-import { AssessmentTabsComponent } from './assessment-tab-content/assessment-tabs/assessment-tabs.component';
+import { AssessmentTabsComponent } from './compressed-air-banner/assessment-tabs/assessment-tabs.component';
 import { AssessmentTabContentComponent } from './assessment-tab-content/assessment-tab-content.component';
 import { ImproveEndUseFormControlsPipe } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/improve-end-use-efficiency/improve-end-use-efficiency-item/improve-end-use-form-controls.pipe';
 import { ReplaceCompressorComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-form/replace-compressor/replace-compressor.component';

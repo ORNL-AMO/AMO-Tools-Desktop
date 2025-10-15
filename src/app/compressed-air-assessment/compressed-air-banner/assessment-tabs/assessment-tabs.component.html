@@ -1,13 +1,13 @@
-<div class="navbar assessment-bar">
+<div class="navbar assessment-bar" [routerLinkActive]="'display'">
     <ul class="h-100 tabs subtabs progress-tabs compressed-air d-none d-lg-block mt-auto">
         <li [routerLinkActive]="'active'">
-            <a routerLink="explore-opportunities">Explore Opportunities</a>
+            <a routerLink="assessment/explore-opportunities">Explore Opportunities</a>
         </li>
         <li [routerLinkActive]="'active'" [ngClass]="{'disabled': !selectedModification}">
-            <a routerLink="summary-table">Profile Summary Table</a>
+            <a routerLink="assessment/summary-table">Profile Summary Table</a>
         </li>
         <li [routerLinkActive]="'active'" [ngClass]="{'disabled': !selectedModification}">
-            <a routerLink="summary-graphs">Profile Summary Graphs</a>
+            <a routerLink="assessment/summary-graphs">Profile Summary Graphs</a>
         </li>
     </ul>
 
