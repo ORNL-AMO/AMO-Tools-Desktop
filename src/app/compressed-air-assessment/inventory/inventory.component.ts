@@ -6,6 +6,7 @@ import { CompressedAirAssessmentService } from '../compressed-air-assessment.ser
 import { InventoryService } from './inventory.service';
 import * as _ from 'lodash';
 import { CompressedAirDataManagementService } from '../compressed-air-data-management.service';
+import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 @Component({
     selector: 'app-inventory',
     templateUrl: './inventory.component.html',
@@ -22,10 +23,12 @@ export class InventoryComponent implements OnInit {
   controlType: number;
   showCompressorModal: boolean = false;
   hasValidCompressors: boolean = true;
-  selectedCompressor: CompressorInventoryItem;
+  selectedCompressor: CompressorInventoryItem;  
+  hasConnectedCompressedAirInventory: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private inventoryService: InventoryService, private cd: ChangeDetectorRef,
-    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService,
+    private integrationStateService: IntegrationStateService) { }
 
   ngOnInit(): void {
     this.initializeInventory();
@@ -71,6 +74,9 @@ export class InventoryComponent implements OnInit {
         this.inventoryService.selectedCompressor.next(lastItemModified);
       }
     }
+    let connectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();
+    this.hasConnectedCompressedAirInventory = connectedInventoryData.connectedItem && connectedInventoryData.connectedItem.inventoryType === 'compressed-air';
+    
   }
 
   addInventoryItem() {

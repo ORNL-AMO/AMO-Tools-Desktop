@@ -407,6 +407,23 @@ export class CompressedAirInventoryService {
     return filteredInventoryData;
   }
 
+  setIsValidSystem(compressedAirInventoryData: CompressedAirInventoryData, system: CompressedAirInventorySystem): boolean {
+    let isValid: boolean = true;
+    let isValidSystem: boolean = true;
+    if (compressedAirInventoryData) {
+      system.catalog.map(compressedAirItem => {
+        compressedAirItem.validCompressedAir = this.isCompressedAirValid(compressedAirItem, compressedAirInventoryData);
+        if (!compressedAirItem.validCompressedAir.isValid) {
+          isValid = false;
+          isValidSystem = false;
+        }
+      });
+      system.isValid = isValidSystem
+    }
+    compressedAirInventoryData.isValid = isValid;
+    return isValidSystem;
+  }
+
 
 }
 

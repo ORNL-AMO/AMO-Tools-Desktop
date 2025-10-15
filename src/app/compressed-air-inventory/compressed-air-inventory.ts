@@ -1,5 +1,5 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
-import { ConnectedCompressorFromState, ConnectedItem, InventoryType } from "../shared/connected-inventory/integrations";
+import { ConnectedItem } from "../shared/connected-inventory/integrations";
 import { OperatingHours } from "../shared/models/operations";
 
 export interface CompressedAirInventoryData {
@@ -8,7 +8,7 @@ export interface CompressedAirInventoryData {
   systems: Array<CompressedAirInventorySystem>,
   displayOptions: CompressedAirPropertyDisplayOptions,
   hasConnectedInventoryItems?: boolean,
-  hasConnectedPsat?: boolean,
+  hasConnectedCompressedAirAssessment?: boolean,
   isValid?: boolean,
   existingDataUnits?: string
 }
@@ -19,7 +19,7 @@ export interface SystemInformation {
   atmosphericPressureKnown: boolean,
 }
 
-export interface CompressedAirInventorySystem {
+export interface CompressedAirInventorySystem extends ConnectedInventoryProperties {
   name: string,
   operatingHours: number,
   totalAirStorage: number,
@@ -52,7 +52,7 @@ export interface CompressedAirItem extends ConnectedInventoryProperties {
   compressedAirDesignDetailsProperties: CompressedAirDesignDetailsProperties,
   compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties,
   centrifugalSpecifics: CentrifugalSpecifics,
-  fieldMeasurements: FieldMeasurements;
+  fieldMeasurements: FieldMeasurements,
   validCompressedAir?: ValidCompressedAir,
   compressorLibId?: number,
 }

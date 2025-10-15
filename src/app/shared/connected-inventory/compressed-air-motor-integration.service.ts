@@ -12,7 +12,8 @@ import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAir
 import { Settings } from '../models/settings';
 import { MotorInventoryDepartment, MotorItem } from '../../motor-inventory/motor-inventory';
 import { copyObject } from '../helperFunctions';
-import { CompressedAirAssessment } from '../models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem } from '../models/compressed-air-assessment';
+import { Assessment } from '../models/assessment';
 
 @Injectable()
 export class CompressedAirMotorIntegrationService {
@@ -154,14 +155,13 @@ export class CompressedAirMotorIntegrationService {
   setConnectedItems(motorItem: MotorItem) {
     if (motorItem.connectedItems && motorItem.connectedItems.length > 0) {
       motorItem.connectedItems = motorItem.connectedItems.filter(connectedItem => {
-        let existingItem: CompressedAirItem | CompressedAirAssessment;
+        let existingItem: CompressedAirItem | CompressorInventoryItem | Assessment;
         if (connectedItem.inventoryType === 'compressed-air' && connectedItem.inventoryId) {
           existingItem = this.getConnectedCompressedAirItem(connectedItem);
         } 
-        //   //TODO CA Assessment Integration
-        // else if (connectedItem.inventoryType === 'motor' && connectedItem.assessmentId) {
-        //   existingItem = this.getConnectedCAAssessmentItem(connectedItem);
-        // }
+        else if (connectedItem.inventoryType === 'motor' && connectedItem.assessmentId) {
+          existingItem = this.getConnectedCAAssessmentItem(connectedItem);
+        }
         return existingItem;
       });
       if (motorItem.connectedItems.length === 0) {

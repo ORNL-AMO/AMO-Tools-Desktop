@@ -24,8 +24,8 @@ import { getNameDateString } from '../helperFunctions';
 import { WaterProcessDiagramService } from '../../water-process-diagram/water-process-diagram.service';
 import { Diagram } from '../models/diagram';
 import { UpdateAssessmentFromDiagramService } from '../../water/update-assessment-from-diagram.service';
-import { CompressedAirMotorIntegrationService } from '../connected-inventory/compressed-air-motor-integration.service';
-import { CompressedAirItem } from '../../compressed-air-inventory/compressed-air-inventory';
+import { CompressedAirInventorySystem, CompressedAirItem } from '../../compressed-air-inventory/compressed-air-inventory';
+import { CompressedAirAssessmentIntegrationService } from '../connected-inventory/compressed-air-assessment-integration.service';
 
 @Component({
     selector: 'app-create-assessment-modal',
@@ -65,7 +65,7 @@ export class CreateAssessmentModalComponent {
     private integrationStateService: IntegrationStateService,
     private settingsService: SettingsService,
     private analyticsService: AnalyticsService,
-    private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService
+    private compressedAirAssessmentIntegrationService: CompressedAirAssessmentIntegrationService
     ) { }
 
   ngOnInit() {
@@ -91,7 +91,7 @@ export class CreateAssessmentModalComponent {
   }
 
   initForm() {
-    let defaultType: string = this.integratedCreateType? this.integratedCreateType : 'Pump';
+    let defaultType: string = this.integratedCreateType? this.integratedCreateType : 'CompressedAir';
     let disableAssessmentType: boolean = Boolean(this.integratedCreateType);
     let defaultName: string = this.getAssessmentName(defaultType);
 
@@ -123,8 +123,8 @@ export class CreateAssessmentModalComponent {
         let selectedPumpItem: PumpItem = this.psatIntegrationService.getConnectedPumpItem(connectedInventoryData.connectedItem);
         assessmentName = `${selectedPumpItem.name}_${getNameDateString(currentDate)}`;
       }
-      if (assessmentType === 'Compressed-Air') {
-        let selectedCompressedAirItem: CompressedAirItem = this.compressedAirMotorIntegrationService.getConnectedCompressedAirItem(connectedInventoryData.connectedItem);
+      if (assessmentType === 'CompressedAir') {
+        let selectedCompressedAirItem: CompressedAirInventorySystem = this.compressedAirAssessmentIntegrationService.getConnectedCompressedAirItem(connectedInventoryData.connectedItem);
         assessmentName = `${selectedCompressedAirItem.name}_${getNameDateString(currentDate)}`;
       }
     }
@@ -205,6 +205,11 @@ export class CreateAssessmentModalComponent {
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
         tmpAssessment.compressedAirAssessment = this.assessmentService.getNewCompressedAirAssessment(this.settings);
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+        let queryParams;
+        if (this.connectedInventoryItem) {
+          await this.createFromCompressedAirInventoryItem(createdAssessment);
+          queryParams = { connectedInventory: true };
+        }
         this.finishAndNavigate(createdAssessment, '/compressed-air/' + createdAssessment.id);
       } else if (this.newAssessmentForm.controls.assessmentType.value == 'Water') {
         this.analyticsService.sendEvent('create-assessment', undefined);
@@ -238,6 +243,14 @@ export class CreateAssessmentModalComponent {
     let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
     newSettings = this.settingsService.setPumpSettingsUnitType(newSettings);
     await this.psatIntegrationService.setPSATFromExistingPumpItem(connectedInventoryData, createdAssessment.psat, createdAssessment, newSettings);
+    await this.saveAssessmentAndSettings(newSettings, createdAssessment)
+  }
+
+  async createFromCompressedAirInventoryItem(createdAssessment: Assessment) {
+    let connectedInventoryData: ConnectedInventoryData = this.getConnectedInventoryData();
+    let assessmentSettings = this.settingsDbService.getByAssessmentId(createdAssessment, false);
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(assessmentSettings);
+    await this.compressedAirAssessmentIntegrationService.setCompressedAirAssessmentFromExistingCompressedAirItem(connectedInventoryData, createdAssessment.compressedAirAssessment, createdAssessment, newSettings);
     await this.saveAssessmentAndSettings(newSettings, createdAssessment)
   }
 

@@ -71,14 +71,14 @@ export class PlantSetupComponent implements OnInit {
   }
 
   setConnectedItemInfo() {
-    if (this.compressedAirInventoryData.hasConnectedInventoryItems && this.compressedAirInventoryData.hasConnectedPsat) {
+    if (this.compressedAirInventoryData.hasConnectedInventoryItems && this.compressedAirInventoryData.hasConnectedCompressedAirAssessment) {
       this.connectedAssessmentState = {
         connectedAssessmentStatus: 'three-way-connected'
       }
-    } else if (this.compressedAirInventoryData.hasConnectedInventoryItems) {
+    } else if (this.compressedAirInventoryData.hasConnectedInventoryItems) {      
       this.integrationStateService.integrationState.next({ status: 'connected-to-inventory' });
 
-    } else if (this.compressedAirInventoryData.hasConnectedPsat) {
+    } else if (this.compressedAirInventoryData.hasConnectedCompressedAirAssessment) {
       this.connectedAssessmentState = {
         connectedAssessmentStatus: 'connected-to-assessment'
       }

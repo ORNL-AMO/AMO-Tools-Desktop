@@ -11,6 +11,7 @@ import { CreateAssessmentModalModule } from '../create-assessment-modal/create-a
 import { ConnectedAssessmentComponent } from './connected-assessment/connected-assessment.component';
 import { ConnectedAssessmentStatusComponent } from './connected-assessment-status/connected-assessment-status.component';
 import { CompressedAirMotorIntegrationService } from './compressed-air-motor-integration.service';
+import { CompressedAirAssessmentIntegrationService } from './compressed-air-assessment-integration.service';
 
 
 
@@ -31,7 +32,8 @@ import { CompressedAirMotorIntegrationService } from './compressed-air-motor-int
     PumpMotorIntegrationService,
     PsatIntegrationService,
     IntegrationStateService,
-    CompressedAirMotorIntegrationService
+    CompressedAirMotorIntegrationService,
+    CompressedAirAssessmentIntegrationService
   ],
   exports: [
     IntegrationStateComponent, 

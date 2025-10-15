@@ -20,6 +20,9 @@ import { InventoryService } from './inventory/inventory.service';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
 import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-setup.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
+import { CompressedAirAssessmentIntegrationService } from '../shared/connected-inventory/compressed-air-assessment-integration.service';
+import { copyObject } from '../shared/helperFunctions';
 
 @Component({
     selector: 'app-compressed-air-assessment',
@@ -38,6 +41,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.setContainerHeight();
   }
 
+  compressedAirAssessment: CompressedAirAssessment;
   assessment: Assessment;
   settings: Settings;
   showUpdateUnitsModal: boolean = false;
@@ -61,19 +65,23 @@ export class CompressedAirAssessmentComponent implements OnInit {
   showWelcomeScreen: boolean = false;
   smallScreenTab: string = 'form';
   showExportModal: boolean = false;
-  showExportModalSub: Subscription;
+  showExportModalSub: Subscription;  
+  connectedInventoryDataSub: Subscription;  
+  hasConnectedMotorItem: boolean;
   constructor(private activatedRoute: ActivatedRoute,
     private airPropertiesService: AirPropertiesCsvService,
     private endUseDayTypeSetupService: DayTypeSetupService,
     private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
-    private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-      
+    private settingsDbService: SettingsDbService, 
+    private compressedAirAssessmentService: CompressedAirAssessmentService,  
     private dayTypeService: DayTypeService,
     private egridService: EGridService,
     private endUseService: EndUsesService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService,
-    private analyticsService: AnalyticsService) { }
+    private analyticsService: AnalyticsService,  
+    private integrationStateService: IntegrationStateService,
+    private compressedAirAssessmentIntegrationService: CompressedAirAssessmentIntegrationService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-compressed-air-assessment', undefined);
@@ -89,11 +97,25 @@ export class CompressedAirAssessmentComponent implements OnInit {
         this.compressedAirAssessmentService.settings.next(settings);
         this.genericCompressorDbService.getAllCompressors(this.settings);
       }
+
+      let fromConnectedItem = this.activatedRoute.snapshot.queryParamMap.get('fromConnectedItem');
+      if (fromConnectedItem) {
+        this.redirectFromConnectedInventory();
+      } else {
+        this.compressedAirAssessmentIntegrationService.setCompressedAirAssessmentConnectedInventoryData(this.assessment, this.settings);
+      }
+
+      let connectedInventory = this.activatedRoute.snapshot.queryParamMap.get('connectedInventory');
+      if (connectedInventory) {
+        this.save(this.assessment.compressedAirAssessment);
+      }
+
       this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment, false);
     });
 
     this.compressedAirAsseementSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       if (val && this.assessment) {
+        this.compressedAirAssessment = val;
         this.save(val);
         this.setDisableNext();
       }
@@ -110,6 +132,9 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
     this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
+      if (this.assessment.compressedAirAssessment.connectedItem && this.assessment.compressedAirAssessment.connectedItem.inventoryType === 'compressed-air') {
+        this.compressedAirAssessmentIntegrationService.checkConnectedInventoryDiffers(this.assessment);
+      }
       this.setDisableNext();
       this.setContainerHeight();
     });
@@ -141,6 +166,17 @@ export class CompressedAirAssessmentComponent implements OnInit {
       this.showExportModal = val;
     });
 
+    this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
+      this.hasConnectedMotorItem = this.compressedAirAssessment.connectedItem && this.compressedAirAssessment.connectedItem.inventoryType === 'motor';
+      if (connectedInventoryData.shouldRestoreConnectedValues) {
+        let updatedCAAssessment: CompressedAirAssessment = this.compressedAirAssessmentIntegrationService.restoreConnectedAssessmentValues(connectedInventoryData, this.compressedAirAssessment);
+        this.compressedAirAssessment = copyObject(updatedCAAssessment);
+        //*Nick 1b - Simplest way to fix this right now is to find the selected compressor in the updated assessment and emit it again.
+        //*Nick 1c - there may be more required but I believe this to be root cause and should get you started
+        this.save(this.compressedAirAssessment);
+      }
+    });
+
     this.checkShowWelcomeScreen();
   }
 
@@ -165,6 +201,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.exploreOpportunitiesService.modificationResults.next(undefined);
     this.exploreOpportunitiesService.selectedDayType.next(undefined);
     this.compressedAirAssessmentService.compressedAirAssessment.next(undefined);
+    this.connectedInventoryDataSub.unsubscribe();
+    this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
   }
 
   ngAfterViewInit() {
@@ -189,6 +227,11 @@ export class CompressedAirAssessmentComponent implements OnInit {
     }
     this.genericCompressorDbService.getAllCompressors(this.settings);
     this.compressedAirAssessmentService.settings.next(this.settings);
+  }
+
+  redirectFromConnectedInventory() {
+    this.compressedAirAssessmentService.mainTab.next('baseline');
+    this.compressedAirAssessmentService.setupTab.next('system-information');
   }
 
   setDisableNext() {
@@ -260,8 +303,18 @@ export class CompressedAirAssessmentComponent implements OnInit {
     }
   }
 
+  saveCompressedAirAssessment(getNewCompressedAirAssessment: CompressedAirAssessment) {
+    this.compressedAirAssessment = getNewCompressedAirAssessment;
+    this.save(this.compressedAirAssessment);
+  }
+
   async save(compressedAirAssessment: CompressedAirAssessment) {
-    this.assessment.compressedAirAssessment = compressedAirAssessment;
+    this.assessment.compressedAirAssessment = compressedAirAssessment;    
+    this.compressedAirAssessmentIntegrationService.setCompressedAirAssessmentConnectedInventoryData(this.assessment, this.settings);
+    this.hasConnectedMotorItem = compressedAirAssessment.connectedItem && compressedAirAssessment.connectedItem.inventoryType === 'motor';
+    if (this.assessment.compressedAirAssessment.connectedItem && this.assessment.compressedAirAssessment.connectedItem.inventoryType === 'compressed-air') {
+      this.compressedAirAssessmentIntegrationService.checkConnectedInventoryDiffers(this.assessment);
+    }
     await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
@@ -318,5 +371,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   closeExportModal(input: boolean){
     this.compressedAirAssessmentService.showExportModal.next(input);
+  }
+
+  saveAndUpdateSettings() {
+    // this.getSettings();
+    // this.save();
   }
 }
