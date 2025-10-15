@@ -147,23 +147,28 @@ export class CompressedAirMotorIntegrationService {
     return compressedAirItem;
   }
 
-  getConnectedCAAssessmentItem(connectedItem: ConnectedItem) {
-    let existingAssessment = this.assessmentDbService.findById(connectedItem.assessmentId);
-    return existingAssessment;
-  }
-
-  setConnectedItems(motorItem: MotorItem) {
+   /**
+   * Perform fresh set of connected items, in the event they have been deleted by the resource (assessment, or inventory) which owns them
+   * @borrows PumpMotorIntegrationService.setPumpConnectedItems
+   */
+  setMotorConnectedItems(motorItem: MotorItem) {
     if (motorItem.connectedItems && motorItem.connectedItems.length > 0) {
       motorItem.connectedItems = motorItem.connectedItems.filter(connectedItem => {
-        let existingItem: CompressedAirItem | CompressorInventoryItem | Assessment;
+        let existingItem: CompressedAirItem | Assessment;
+        if (connectedItem.inventoryType !== 'compressed-air' && connectedItem.inventoryType !== 'motor') {
+          // * is another type, deletion handled elsewhere
+          return connectedItem;
+        }
+        
         if (connectedItem.inventoryType === 'compressed-air' && connectedItem.inventoryId) {
           existingItem = this.getConnectedCompressedAirItem(connectedItem);
-        } 
+        }
         else if (connectedItem.inventoryType === 'motor' && connectedItem.assessmentId) {
-          existingItem = this.getConnectedCAAssessmentItem(connectedItem);
+          existingItem = this.assessmentDbService.findById(connectedItem.assessmentId);
         }
         return existingItem;
       });
+
       if (motorItem.connectedItems.length === 0) {
         motorItem.connectedItems = undefined;
       }

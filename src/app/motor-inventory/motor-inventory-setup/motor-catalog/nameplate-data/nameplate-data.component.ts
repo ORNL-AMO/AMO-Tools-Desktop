@@ -45,8 +45,8 @@ export class NameplateDataComponent implements OnInit {
     this.selectedMotorItemSub = this.motorCatalogService.selectedMotorItem.subscribe(selectedMotor => {
       if (selectedMotor) {
         this.motorForm = this.nameplateDataService.getFormFromNameplateData(selectedMotor.nameplateData);
-        this.pumpMotorIntegrationService.setConnectedItems(selectedMotor);        
-        this.compressedAirMotorIntegrationService.setConnectedItems(selectedMotor);
+        this.pumpMotorIntegrationService.setPumpConnectedItems(selectedMotor);
+        this.compressedAirMotorIntegrationService.setMotorConnectedItems(selectedMotor);
         this.connectedItems = selectedMotor.connectedItems;
       }
     });

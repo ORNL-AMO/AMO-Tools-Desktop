@@ -10,9 +10,9 @@ import { ConnectedInventoryData, ConnectedItem, IntegrationState, InventoryOptio
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { IntegrationStateService } from './integration-state.service';
 import { ConvertMotorInventoryService } from '../../motor-inventory/convert-motor-inventory.service';
-import { PSAT } from '../models/psat';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { copyObject } from '../helperFunctions';
+import { Assessment } from '../models/assessment';
 
 @Injectable()
 export class PumpMotorIntegrationService {
@@ -153,10 +153,19 @@ export class PumpMotorIntegrationService {
     return existingAssessment;
   }
 
-  setConnectedItems(motorItem: MotorItem) {
+ /**
+   * Perform fresh set of connected items, in the event they have been deleted by the resource (assessment, or inventory) which owns them
+   * @borrows CompressedAirMotorIntegrationService.setFromConnectedMotorItem
+   */
+  setPumpConnectedItems(motorItem: MotorItem) {
     if (motorItem.connectedItems && motorItem.connectedItems.length > 0) {
       motorItem.connectedItems = motorItem.connectedItems.filter(connectedItem => {
-        let existingItem: PumpItem | PSAT;
+        let existingItem: PumpItem | Assessment;
+        if (connectedItem.inventoryType !== 'pump' && connectedItem.inventoryType !== 'motor') {
+          // * is another type, deletion handled elsewhere
+          return connectedItem;
+        } 
+        
         if (connectedItem.inventoryType === 'pump' && connectedItem.inventoryId) {
           existingItem = this.getConnectedPumpItem(connectedItem);
         } else if (connectedItem.inventoryType === 'motor' && connectedItem.assessmentId) {
@@ -164,6 +173,7 @@ export class PumpMotorIntegrationService {
         }
         return existingItem;
       });
+
       if (motorItem.connectedItems.length === 0) {
         motorItem.connectedItems = undefined;
       }
