@@ -1,0 +1,23 @@
+.known-row-parent {
+    display: grid; 
+    grid-template-columns: auto 1fr 1fr 1fr; 
+    align-items: center; 
+    gap: 2rem;
+}
+
+.known-conditional-flex {
+    display: flex; 
+    flex-direction: column;
+}
+
+.known-conditional-position {
+    display: flex; 
+    align-items: center; 
+    gap: 1rem; 
+    white-space: nowrap; 
+    overflow: hidden;
+}
+
+.known-conditional-input-group {
+    flex-grow: 1; min-width: 12rem;
+}
