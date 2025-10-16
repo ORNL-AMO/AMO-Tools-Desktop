@@ -41,7 +41,7 @@
   </div>
 
   <label class="group-label">
-    <span *ngIf="pressureLevel == 'highPressure'">High Pressure Header</span>
+    <span *ngIf="pressureLevel == 'highPressure'">High Pressure Header12</span>
     <span *ngIf="pressureLevel == 'mediumPressure'">Medium Pressure Header</span>
     <span *ngIf="pressureLevel == 'lowPressure'">Low Pressure Header</span>
   </label>
@@ -50,7 +50,7 @@
     <label for="{{idString+pressureLevel+'_pressure'}}">Pressure</label>
     <div class="input-group">
       <input name="pressure" type="number" step="10" class="form-control" id="{{idString+pressureLevel+'_pressure'}}"
-        (input)="setDesuperheatSteam()" [readonly]="!selected" formControlName="pressure"
+        (input)="setDesuperheatSteam()" [readonly]="true" formControlName="pressure"
         (focus)="focusField('pressure')" [ngClass]="{'indicate-different': isPressureDifferent()}">
       <span class="units input-group-addon" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
     </div>

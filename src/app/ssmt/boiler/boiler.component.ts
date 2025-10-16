@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerWarnings } from './boiler.service';
 import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
-import { UntypedFormGroup } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from '../compare.service';
@@ -25,14 +25,19 @@ export class BoilerComponent implements OnInit {
   selected: boolean;
   @Input()
   settings: Settings;
-  @Output('emitSave')
-  emitSave = new EventEmitter<BoilerInput>();
   @Input()
   isBaseline: boolean;
   @Input()
   modificationIndex: number;
   @Input()
   ssmt: SSMT;
+  @Input()
+  ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
+
+  @Output('emitSave')
+  emitSave = new EventEmitter<BoilerInput>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
   
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
@@ -54,11 +59,13 @@ export class BoilerComponent implements OnInit {
   idString: string = 'baseline_';
   highPressureHeaderForm: UntypedFormGroup;
   lowPressureHeaderForm: UntypedFormGroup;
+  ressureOrTemperature: number;
   constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService, 
     private stackLossService: StackLossService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
-    private flueGasMaterialDbService: FlueGasMaterialDbService
+    private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -286,5 +293,22 @@ export class BoilerComponent implements OnInit {
     }
     this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
     this.closeBoilerEfficiencyModal();
+  }
+
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
+  }
+
+  setValidators() {
+    if (this.boilerForm.controls.pressureOrTemperature.value === 0) {
+      this.boilerForm.controls.saturatedPressure.setValidators([Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]);
+      this.boilerForm.controls.saturatedTemperature.clearValidators();
+      this.boilerForm.controls.saturatedTemperature.reset(this.boilerForm.controls.saturatedTemperature.value);
+    }else if (this.boilerForm.controls.pressureOrTemperature.value === 1) {
+      this.boilerForm.controls.saturatedTemperature.setValidators([Validators.required, Validators.min(this.ranges.minTemp), Validators.max(this.ranges.maxTemp)]);
+      this.boilerForm.controls.saturatedPressure.clearValidators();
+      this.boilerForm.controls.saturatedPressure.reset(this.boilerForm.controls.saturatedPressure.value);
+    }
+    this.cd.detectChanges();
   }
 }
