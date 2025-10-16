@@ -46,8 +46,10 @@ export class EndUsesSetupComponent implements OnInit {
       }
     });
 
+    // todo review
     this.selectedSystemIdSub = this.compressedAirCatalogService.selectedSystemId.subscribe(val => {
       if (!val) {
+        // todo move up in component hierarchy
         this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryData.systems[0].id);
       } else {
         let findSystem: CompressedAirInventorySystem = this.compressedAirInventoryData.systems.find(system => { return system.id == val });
@@ -63,6 +65,7 @@ export class EndUsesSetupComponent implements OnInit {
             this.endUsesService.selectedEndUse.next(findSystem.endUses[0]);
           }
         } else {
+          // todo move up in component hierarchy
           this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryData.systems[0].id);
           this.endUsesService.selectedEndUse.next(this.compressedAirInventoryData.systems[0].endUses[0]);
         }

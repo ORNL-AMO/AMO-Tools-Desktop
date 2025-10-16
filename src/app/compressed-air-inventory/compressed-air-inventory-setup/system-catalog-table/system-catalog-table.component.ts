@@ -147,6 +147,7 @@ export class SystemCatalogTableComponent implements OnInit {
   deleteItem() {
     this.compressedAirInventoryService.deleteCompressedAirItem(this.compressedAirItemToDelete);
     let selectedSystemId: string = this.compressedAirCatalogService.selectedSystemId.getValue();
+    // todo review
     this.compressedAirCatalogService.selectedSystemId.next(selectedSystemId);
   }
 

@@ -47,6 +47,7 @@ export class CompressedAirCatalogComponent implements OnInit {
       }
     });
 
+    // todo review
     this.selectedSystemIdSub = this.compressedAirCatalogService.selectedSystemId.subscribe(val => {
       if (!val) {
         this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryData.systems[0].id);
@@ -120,6 +121,7 @@ export class CompressedAirCatalogComponent implements OnInit {
     if (shouldDeleteCompressedAirItem) {
       this.compressedAirInventoryService.deleteCompressedAirItem(this.compressedAirItemToDelete);
       //re-select system to reset data process after deleting
+      // todo review
       let selectedSystemId: string = this.compressedAirCatalogService.selectedSystemId.getValue();
       this.compressedAirCatalogService.selectedSystemId.next(selectedSystemId);
     }
