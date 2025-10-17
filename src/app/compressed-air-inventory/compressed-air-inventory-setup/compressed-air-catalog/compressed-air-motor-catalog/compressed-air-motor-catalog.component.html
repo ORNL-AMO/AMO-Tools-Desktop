@@ -15,7 +15,7 @@
 
 <form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
 
-    <div class="form-group" *ngIf="displayOptions.motorPower">
+    <div class="form-group" *ngIf="displayOptions.motorPower" [ngClass]="{'invalid': form.controls.motorPower.invalid}">
         <label for="motorPower">Motor Power</label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('motorPower')" (input)="save()"
@@ -34,7 +34,7 @@
         </span>
     </div>
 
-    <div class="form-group" *ngIf="displayOptions.motorFullLoadAmps">
+    <div class="form-group" *ngIf="displayOptions.motorFullLoadAmps" [ngClass]="{'invalid': form.controls.motorFullLoadAmps.invalid}">
         <label for="motorFullLoadAmps">Motor Full Load Amps</label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('motorFullLoadAmps')" (input)="save()"

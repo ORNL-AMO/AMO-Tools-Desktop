@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <div class="form-group" *ngIf="displayOptions.fullLoadOperatingPressure">
+    <div class="form-group" *ngIf="displayOptions.fullLoadOperatingPressure" [ngClass]="{'invalid': form.controls.fullLoadOperatingPressure.invalid}">
         <label for="fullLoadOperatingPressure">Full Load Operating Pressure</label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('fullLoadOperatingPressure')" (input)="save()"
@@ -35,7 +35,7 @@
         </span>
     </div>
 
-    <div class="form-group" *ngIf="displayOptions.fullLoadRatedCapacity">
+    <div class="form-group" *ngIf="displayOptions.fullLoadRatedCapacity" [ngClass]="{'invalid': form.controls.fullLoadRatedCapacity.invalid}">
         <label for="fullLoadRatedCapacity">Rated Capacity at Full Load Pressure</label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('fullLoadRatedCapacity')" (input)="save()"
@@ -53,7 +53,7 @@
         </span>
     </div>
 
-    <div class="form-group" *ngIf="displayOptions.totalPackageInputPower">
+    <div class="form-group" *ngIf="displayOptions.totalPackageInputPower" [ngClass]="{'invalid': form.controls.totalPackageInputPower.invalid}">
         <label for="totalPackageInputPower">Total Package Input Power</label>
         <div class="input-group">
             <input type="number" class="form-control" (focus)="focusField('totalPackageInputPower')" (input)="save()"
