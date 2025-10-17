@@ -66,6 +66,11 @@ export class CompressedAirInventoryService {
     let initialSystem: CompressedAirInventorySystem = this.getNewSystem(1);
     let displayOptions: CompressedAirPropertyDisplayOptions = this.getDefaultDisplayOptions();
     let systemInformation: SystemInformation = this.getSystemInformation();
+    this.setIsValidInventory({
+      systemInformation: systemInformation,
+      systems: [initialSystem],
+      displayOptions: displayOptions
+    });
     return {
       systemInformation: systemInformation,
       systems: [initialSystem],
@@ -147,7 +152,7 @@ export class CompressedAirInventoryService {
     let endUseId: string = Math.random().toString(36).substr(2, 9);
     return [{
       endUseId: endUseId,
-      modifiedDate: new Date("2022-08-03T21:07:29.942Z"),
+      modifiedDate: new Date(),
       endUseName: "Pneumatic Tools 1",
       averageRequiredPressure: 110,
       location: "Production Line 1",
@@ -160,110 +165,114 @@ export class CompressedAirInventoryService {
     }]
   }
 
-  getNewCompressor(systemId: string): CompressedAirItem {
+  getNewCompressor(systemId: string, catalog?: CompressedAirItem[]): CompressedAirItem {
+    let compressorName: string = 'Compressor 1';
+    if (catalog) {
+      compressorName = 'Compressor ' + (catalog.length + 1);
+    }
     return {
       id: Math.random().toString(36).substr(2, 9),
       systemId: systemId,
       suiteDbItemId: undefined,
       description: '',
       notes: '',
-      name: 'New Compressor',
+      name: compressorName,
       centrifugalSpecifics: {
-        surgeAirflow: null,
-        maxFullLoadPressure: null,
-        maxFullLoadCapacity: null,
-        minFullLoadPressure: null,
-        minFullLoadCapacity: null
+        surgeAirflow: undefined,
+        maxFullLoadPressure: undefined,
+        maxFullLoadCapacity: undefined,
+        minFullLoadPressure: undefined,
+        minFullLoadCapacity: undefined
       },
       nameplateData: {
         compressorType: 1,
-        fullLoadOperatingPressure: 100,
-        fullLoadRatedCapacity: 1857,
-        totalPackageInputPower: 290.1
+        fullLoadOperatingPressure: undefined,
+        fullLoadRatedCapacity: undefined,
+        totalPackageInputPower: undefined
       },
       fieldMeasurements: {
-        yearlyOperatingHours: 8760,
+        yearlyOperatingHours: undefined,
       },
       compressedAirMotor: {
-        motorPower: 350,
-        motorFullLoadAmps: 385
+        motorPower: undefined,
+        motorFullLoadAmps: undefined
       },
       compressedAirControlsProperties: {
         controlType: 1,
-        unloadPointCapacity: 100,
-        numberOfUnloadSteps: 2,
-        automaticShutdown: true,
-        unloadSumpPressure: 15,
+        unloadPointCapacity: undefined,
+        numberOfUnloadSteps: undefined,
+        automaticShutdown: false,
+        unloadSumpPressure: undefined,
       },
       compressedAirDesignDetailsProperties: {
-        blowdownTime: 40,
-        modulatingPressureRange: 50,
-        inputPressure: 14.5,
-        designEfficiency: 94.5,
-        serviceFactor: 1.15,
-        noLoadPowerFM: 20,
-        noLoadPowerUL: 20,
-        maxFullFlowPressure: 110,
-        estimatedTimeLoaded: 100,
-        averageLoadFactor: 100,
-        motorEfficiencyAtLoad: 0
+        blowdownTime: undefined,
+        modulatingPressureRange: undefined,
+        inputPressure: undefined,
+        designEfficiency: undefined,
+        serviceFactor: undefined,
+        noLoadPowerFM: undefined,
+        noLoadPowerUL: undefined,
+        maxFullFlowPressure: undefined,
+        estimatedTimeLoaded: undefined,
+        averageLoadFactor: undefined,
+        motorEfficiencyAtLoad: undefined
       },
       compressedAirPerformancePointsProperties: {
         fullLoad: {
-          dischargePressure: 100,
+          dischargePressure: undefined,
           isDefaultPower: true,
-          airflow: 1857,
+          airflow: undefined,
           isDefaultAirFlow: true,
-          power: 290.1,
+          power: undefined,
           isDefaultPressure: true
         },
         maxFullFlow: {
-          dischargePressure: 110,
+          dischargePressure: undefined,
           isDefaultPower: true,
-          airflow: 1843,
+          airflow: undefined,
           isDefaultAirFlow: true,
-          power: 305.9,
+          power: undefined,
+          isDefaultPressure: true
+        },
+        midTurndown: {
+          dischargePressure: undefined,
+          isDefaultPower: true,
+          airflow: undefined,
+          isDefaultAirFlow: true,
+          power: undefined,
+          isDefaultPressure: true
+        },
+        turndown: {
+          dischargePressure: undefined,
+          isDefaultPower: true,
+          airflow: undefined,
+          isDefaultAirFlow: true,
+          power: undefined,
           isDefaultPressure: true
         },
         unloadPoint: {
-          isDefaultPower: true,
-          isDefaultAirFlow: true,
-          isDefaultPressure: true,
-          power: undefined,
-          airflow: undefined,
           dischargePressure: undefined,
+          isDefaultPower: true,
+          airflow: undefined,
+          isDefaultAirFlow: true,
+          power: undefined,
+          isDefaultPressure: true
         },
         noLoad: {
-          dischargePressure: 150,
+          dischargePressure: undefined,
           isDefaultPower: true,
-          airflow: 0,
+          airflow: undefined,
           isDefaultAirFlow: true,
-          power: 59.5,
+          power: undefined,
           isDefaultPressure: true
         },
         blowoff: {
-          isDefaultPower: true,
-          isDefaultAirFlow: true,
-          isDefaultPressure: true,
-          power: undefined,
-          airflow: undefined,
           dischargePressure: undefined,
-        },
-        midTurndown: {
           isDefaultPower: true,
-          isDefaultAirFlow: true,
-          isDefaultPressure: true,
-          power: undefined,
           airflow: undefined,
-          dischargePressure: undefined,
-        },
-        turndown: {
-          isDefaultPower: true,
           isDefaultAirFlow: true,
-          isDefaultPressure: true,
           power: undefined,
-          airflow: undefined,
-          dischargePressure: undefined,
+          isDefaultPressure: true
         }
       },
     }

@@ -69,12 +69,13 @@ export class SystemCatalogTableComponent implements OnInit {
   }
 
   addNewCompressor() {
-    let newCompressedAir: CompressedAirItem = this.compressedAirInventoryService.getNewCompressor(this.selectedSystemId);
+    let newCompressedAir: CompressedAirItem = this.compressedAirInventoryService.getNewCompressor(this.selectedSystemId, this.selectedCompressedAirSystem.catalog);
     this.compressedAirInventoryData.systems.forEach(system => {
       if (system.id == this.selectedSystemId) {
         system.catalog.push(newCompressedAir);
       }
     });
+    this.compressedAirInventoryService.setIsValidInventory(this.compressedAirInventoryData);
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(newCompressedAir);
   }
