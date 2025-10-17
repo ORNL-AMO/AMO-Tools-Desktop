@@ -45,12 +45,12 @@ export interface ConnectedItem {
   assessmentType?: AssessmentType,
   assessmentId?: number,
   assessmentName?: string,
-  connectedPumpFromState?: ConnectedPumpFromState,
-  connectedCompressorsFromState?: ConnectedCompressorFromState[],
+  connectedPumpFromState?: ConnectedPump,
+  connectedCompressorsFromState?: ConnectedCompressor[],
 }
 
 // inventory values at time of assessment filled/connected
-export interface ConnectedPumpFromState {
+export interface ConnectedPump {
   psatInputs?: PsatInputs;
   pumpMotor: PumpMotorProperties,
   pumpEquipment: PumpProperties,
@@ -58,8 +58,8 @@ export interface ConnectedPumpFromState {
   pumpFluid: FluidProperties,
 }
 
-// todo rename this and above once all else is working. (FromState is not the object name)
-export interface ConnectedCompressorFromState {
+// inventory values at time of assessment filled/connected
+export interface ConnectedCompressor {
   // compressedAirAssessment?: CompressedAirAssessment,
   originalCompressorId: string,
   connectedCompressorId: string,

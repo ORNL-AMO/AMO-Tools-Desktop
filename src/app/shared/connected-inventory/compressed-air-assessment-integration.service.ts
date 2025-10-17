@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
-import { AssessmentOption, ConnectedCompressorFromState, ConnectedInventoryData, ConnectedItem, ConnectedValueFormField, IntegrationState, InventoryOption } from './integrations';
+import { AssessmentOption, ConnectedCompressor, ConnectedInventoryData, ConnectedItem, ConnectedValueFormField, IntegrationState, InventoryOption } from './integrations';
 import { InventoryItem } from '../models/inventory/inventory';
 import { firstValueFrom } from 'rxjs';
 import { InventoryDbService } from '../../indexedDb/inventory-db.service';
@@ -203,7 +203,7 @@ export class CompressedAirAssessmentIntegrationService {
                         let originalCompressorItem: CompressedAirItem = { ...item };
 
                         // todo these actually represent connected-assessment-compressor (at original connected from state)
-                        const connectedCompressorsFromState: ConnectedCompressorFromState = {
+                        const connectedCompressorsFromState: ConnectedCompressor = {
                             originalCompressorId: originalCompressorItem.id,
                             connectedCompressorId: inventoryCompressorToConnectedCompressorMap[originalCompressorItem.id],
                             compressorMotor: { ...originalCompressorItem.compressedAirMotor },
@@ -427,7 +427,7 @@ export class CompressedAirAssessmentIntegrationService {
             let settingsDiffer: boolean = assessmentSettings.unitsOfMeasure !== compressedAirInventorySettings.unitsOfMeasure;
             let isMotorMatch: boolean = true;
 
-            const originalConnectedFromState = connectedAssessment.connectedCompressorsFromState.find((originalConnectedFromState: ConnectedCompressorFromState) => {
+            const originalConnectedFromState = connectedAssessment.connectedCompressorsFromState.find((originalConnectedFromState: ConnectedCompressor) => {
                 return originalConnectedFromState.originalCompressorId === selectedInventoryCompressor.id;
             });
 
@@ -546,7 +546,7 @@ export class CompressedAirAssessmentIntegrationService {
 
             if (connectedAssessment) {
                 assessment.compressedAirAssessment.compressorInventoryItems.forEach(item => {
-                    const originalConnectedFromState = connectedAssessment.connectedCompressorsFromState.find((originalConnectedFromState: ConnectedCompressorFromState) => {
+                    const originalConnectedFromState = connectedAssessment.connectedCompressorsFromState.find((originalConnectedFromState: ConnectedCompressor) => {
                         return originalConnectedFromState.connectedCompressorId === item.itemId;
                     });
 
@@ -749,7 +749,7 @@ export class CompressedAirAssessmentIntegrationService {
             return connectedAssessment.assessmentId === compressedAirAssessment.connectedItem.assessmentId;
         });
 
-        const originalConnectedFromState = currentAssessment.connectedCompressorsFromState.find((originalConnectedFromState: ConnectedCompressorFromState) => {
+        const originalConnectedFromState = currentAssessment.connectedCompressorsFromState.find((originalConnectedFromState: ConnectedCompressor) => {
                 return originalConnectedFromState.connectedCompressorId === selectedCompressor.itemId;
         });
 
@@ -803,7 +803,7 @@ export class CompressedAirAssessmentIntegrationService {
     restoreConnectedInventoryValues(selectedCompressedAirItem: CompressedAirItem, selectedSystem: CompressedAirInventorySystem, connectedInventoryData: ConnectedInventoryData) {
         let currentAssessment = selectedSystem.connectedAssessments[0];
 
-        const originalConnectedFromState = currentAssessment.connectedCompressorsFromState.find((originalConnectedFromState: ConnectedCompressorFromState) => {
+        const originalConnectedFromState = currentAssessment.connectedCompressorsFromState.find((originalConnectedFromState: ConnectedCompressor) => {
             return originalConnectedFromState.originalCompressorId === selectedCompressedAirItem.id;
         });
 

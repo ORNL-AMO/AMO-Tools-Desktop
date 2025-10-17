@@ -4,7 +4,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { ConvertMotorInventoryService } from '../../motor-inventory/convert-motor-inventory.service';
 import { IntegrationStateService } from './integration-state.service';
-import { ConnectedCompressorFromState, ConnectedInventoryData, ConnectedItem, IntegrationState, InventoryOption } from './integrations';
+import { ConnectedCompressor, ConnectedInventoryData, ConnectedItem, IntegrationState, InventoryOption } from './integrations';
 import { InventoryItem } from '../models/inventory/inventory';
 import { firstValueFrom } from 'rxjs';
 import _ from 'lodash';
@@ -82,7 +82,7 @@ export class CompressedAirMotorIntegrationService {
       if (selectedCompressor.connectedAssessments && selectedCompressor.connectedAssessments.length > 0) {
         selectedCompressor.connectedAssessments.map(connectedAssessment => {
           let newConnectedFromState: MotorItem = copyObject(selectedMotorItem);
-          connectedAssessment.connectedCompressorsFromState = connectedAssessment.connectedCompressorsFromState.map((originalConnectedFromState: ConnectedCompressorFromState) => {
+          connectedAssessment.connectedCompressorsFromState = connectedAssessment.connectedCompressorsFromState.map((originalConnectedFromState: ConnectedCompressor) => {
               originalConnectedFromState.compressorMotor = this.setCompressorFieldsFromMotor(originalConnectedFromState.compressorMotor, newConnectedFromState);
             return originalConnectedFromState;
           });
@@ -205,7 +205,7 @@ export class CompressedAirMotorIntegrationService {
   updateConnectedFromState(selectedCompressor: CompressedAirItem, connectedMotorItem: MotorItem) {
     selectedCompressor.connectedAssessments.map(connectedAssessment => {
       let newConnectedFromState: MotorItem = copyObject(connectedMotorItem);
-      connectedAssessment.connectedCompressorsFromState = connectedAssessment.connectedCompressorsFromState.map((originalConnectedFromState: ConnectedCompressorFromState) => {
+      connectedAssessment.connectedCompressorsFromState = connectedAssessment.connectedCompressorsFromState.map((originalConnectedFromState: ConnectedCompressor) => {
         if (originalConnectedFromState.originalCompressorId === selectedCompressor.id) {
           originalConnectedFromState.compressorMotor = this.setCompressorFieldsFromMotor(originalConnectedFromState.compressorMotor, newConnectedFromState);
         }
