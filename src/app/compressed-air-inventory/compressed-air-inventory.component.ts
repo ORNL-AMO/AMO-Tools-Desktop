@@ -195,7 +195,7 @@ export class CompressedAirInventoryComponent implements OnInit {
     let system: CompressedAirInventorySystem = this.compressedAirInventoryItem.compressedAirInventoryData.systems.find(system => { return system.id == selectedCompressedAirSystemId });
     this.compressedAirAssessmentIntegrationService.restoreConnectedInventoryValues(selectedCompressedAirItem, system, connectedInventoryData);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressedAirItem);
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAirItem);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressedAirItem);
   }
 
   handleConnectedItemChanges() {

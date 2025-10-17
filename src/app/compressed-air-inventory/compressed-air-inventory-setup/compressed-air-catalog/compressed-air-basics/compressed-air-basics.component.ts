@@ -33,8 +33,8 @@ export class CompressedAirBasicsComponent implements OnInit {
 
   save() {
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    selectedCompressedAir = this.compressedAirBasicsService.updateCompressedAirItemFromForm(this.form, selectedCompressedAir);
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
+    selectedCompressedAir = this.compressedAirBasicsService.updateCompressedAirInventoryDataFromForm(this.form, selectedCompressedAir);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressedAir);
   }
 
   focusField(str: string) {

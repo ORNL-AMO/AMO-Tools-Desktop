@@ -5,7 +5,7 @@ import { CompressedAirInventoryService } from '../../../compressed-air-inventory
 import { CompressedAirCatalogService } from '../../../compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
 
 @Component({
-  selector: 'app-max-full-flow-help',
+  selector: 'inventory-max-full-flow-help',
   standalone: false,
   templateUrl: './max-full-flow-help.component.html',
   styleUrl: './max-full-flow-help.component.css'

@@ -61,7 +61,7 @@ export class PerformancePointsCatalogComponent implements OnInit {
 
   save() {
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressedAir);
   }
 
   focusField(str: string) {

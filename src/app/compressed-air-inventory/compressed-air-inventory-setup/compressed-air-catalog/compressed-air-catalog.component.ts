@@ -75,7 +75,7 @@ export class CompressedAirCatalogComponent implements OnInit {
     this.selectedCompressedAirItemSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(selectedCompressedAir => {
       if (selectedCompressedAir) {
         this.selectedCompressedAirItem = selectedCompressedAir;
-        this.selectedCompressedAirItem.validCompressedAir = this.compressedAirInventoryService.isCompressedAirValid(selectedCompressedAir, this.compressedAirInventoryData);
+        this.selectedCompressedAirItem.validCompressedAir = this.compressedAirInventoryService.isCompressorValid(selectedCompressedAir, this.compressedAirInventoryData);
         this.connectedCompressedAirItem = {
           id: selectedCompressedAir.id,
           name: selectedCompressedAir.name,
@@ -98,7 +98,7 @@ export class CompressedAirCatalogComponent implements OnInit {
 
   save() {
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressedAir);
   }
 
   focusField(str: string) {

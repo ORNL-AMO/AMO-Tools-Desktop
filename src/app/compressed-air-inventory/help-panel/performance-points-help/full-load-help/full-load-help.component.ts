@@ -5,7 +5,7 @@ import { CompressedAirInventoryService } from '../../../compressed-air-inventory
 import { CompressedAirCatalogService } from '../../../compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
 
 @Component({
-  selector: 'app-full-load-help',
+  selector: 'inventory-full-load-help',
   standalone: false,
   templateUrl: './full-load-help.component.html',
   styleUrl: './full-load-help.component.css'

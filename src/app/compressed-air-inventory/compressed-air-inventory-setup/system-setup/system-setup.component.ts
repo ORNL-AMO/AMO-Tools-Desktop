@@ -44,7 +44,7 @@ export class SystemSetupComponent implements OnInit {
   addSystem() {
     let newSystem: CompressedAirInventorySystem = this.compressedAirInventoryService.getNewSystem(this.compressedAirInventoryData.systems.length + 1);
     this.compressedAirInventoryData.systems.push(newSystem);
-    this.compressedAirInventoryService.setIsValidInventory(this.compressedAirInventoryData);
+    this.compressedAirInventoryService.setIsValidSystem(this.compressedAirInventoryData, newSystem);
     this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryData);
   }
 

@@ -93,7 +93,7 @@ export class CompressedAirInventoryService {
       compressedAirInventoryData.systems.forEach(system => {
         let isValidSystem: boolean = true;
         system.catalog.map(compressedAirItem => {
-          compressedAirItem.validCompressedAir = this.isCompressedAirValid(compressedAirItem, compressedAirInventoryData);
+          compressedAirItem.validCompressedAir = this.isCompressorValid(compressedAirItem, compressedAirInventoryData);
           if (!compressedAirItem.validCompressedAir.isValid) {
             isValid = false;
             isValidSystem = false;
@@ -105,7 +105,7 @@ export class CompressedAirInventoryService {
     compressedAirInventoryData.isValid = isValid;
   }
 
-  isCompressedAirValid(compressor: CompressedAirItem, compressedAirInventoryData: CompressedAirInventoryData): ValidCompressedAir {
+  isCompressorValid(compressor: CompressedAirItem, compressedAirInventoryData: CompressedAirInventoryData): ValidCompressedAir {
     let nameplateDataForm: FormGroup = this.nameplateDataCatalogService.getFormFromNameplateData(compressor.nameplateData);
     let compressedAirMotorForm: FormGroup = this.compressedAirMotorCatalogService.getFormFromMotorProperties(compressor.compressedAirMotor);
     let controlsForm: FormGroup = this.compressedAirControlsCatalogService.getFormFromControlsProperties(compressor.compressedAirControlsProperties, compressor.nameplateData.compressorType);
@@ -343,7 +343,7 @@ export class CompressedAirInventoryService {
    * TODO change name - Actually updates compressedAirInventoryData, does NOT push changes to selectedCompressor
    * @param selectedCompressedAir CompressedAirItem to update in the inventory data
    */
-  updateCompressedAirItem(selectedCompressedAir: CompressedAirItem) {
+  updateCompressedAirInventoryData(selectedCompressedAir: CompressedAirItem) {
     let compressedAirInventoryData: CompressedAirInventoryData = this.compressedAirInventoryData.getValue();
     let isValid: boolean = true;
     compressedAirInventoryData.systems.map(system => {
@@ -352,7 +352,7 @@ export class CompressedAirInventoryService {
         if (selectedCompressedAir.id === compressedAirItem.id) {
           compressedAirItem = selectedCompressedAir;
         }
-        let isValidCompressedAir = this.isCompressedAirValid(compressedAirItem, compressedAirInventoryData);
+        let isValidCompressedAir = this.isCompressorValid(compressedAirItem, compressedAirInventoryData);
         compressedAirItem.validCompressedAir = isValidCompressedAir;
         if (!isValidCompressedAir.isValid) {
           isValid = false;
@@ -425,7 +425,7 @@ export class CompressedAirInventoryService {
     let isValidSystem: boolean = true;
     if (compressedAirInventoryData) {
       system.catalog.map(compressedAirItem => {
-        compressedAirItem.validCompressedAir = this.isCompressedAirValid(compressedAirItem, compressedAirInventoryData);
+        compressedAirItem.validCompressedAir = this.isCompressorValid(compressedAirItem, compressedAirInventoryData);
         if (!compressedAirItem.validCompressedAir.isValid) {
           isValid = false;
           isValidSystem = false;

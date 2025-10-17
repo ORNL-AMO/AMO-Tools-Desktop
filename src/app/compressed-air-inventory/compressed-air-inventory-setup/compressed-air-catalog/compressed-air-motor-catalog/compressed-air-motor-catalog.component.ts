@@ -56,7 +56,7 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
   save() {
     let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     this.compressedAirMotorCatalogService.updateMotorPropertiesFromForm(this.form, selectedCompressor.compressedAirMotor);
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressor);
   }
 
   focusField(str: string) {
@@ -107,13 +107,13 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
     if (!connectedInventoryData.isConnected) {
       if (connectedInventoryData.canConnect || connectedInventoryData.shouldConvertItemUnits) {
         this.connectInventoryItem(connectedInventoryData);
-        this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+        this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressor);
       }
     }
     if (connectedInventoryData.shouldDisconnect) {
       this.compressedAirMotorIntegrationService.removeCompressorConnectedItem(selectedCompressor, connectedInventoryData);
       this.form.enable();
-      this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+      this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressor);
     }
   }
 
