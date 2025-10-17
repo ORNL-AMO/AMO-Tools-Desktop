@@ -4,7 +4,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { ConvertMotorInventoryService } from '../../motor-inventory/convert-motor-inventory.service';
 import { IntegrationStateService } from './integration-state.service';
-import { ConnectedInventoryData, ConnectedItem, IntegrationState, InventoryOption } from './integrations';
+import { ConnectedCompressor, ConnectedInventoryData, ConnectedItem, IntegrationState, InventoryOption } from './integrations';
 import { InventoryItem } from '../models/inventory/inventory';
 import { firstValueFrom } from 'rxjs';
 import _ from 'lodash';
@@ -12,7 +12,7 @@ import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAir
 import { Settings } from '../models/settings';
 import { MotorInventoryDepartment, MotorItem } from '../../motor-inventory/motor-inventory';
 import { copyObject } from '../helperFunctions';
-import { CompressedAirAssessment, CompressorInventoryItem } from '../models/compressed-air-assessment';
+import { CompressorInventoryItem } from '../models/compressed-air-assessment';
 import { Assessment } from '../models/assessment';
 
 @Injectable()
@@ -77,10 +77,15 @@ export class CompressedAirMotorIntegrationService {
       connectedInventoryData.canConnect = false;
       selectedCompressor.connectedItem = connectedInventoryData.connectedItem;
 
+      // * sync changes to other assessments?
+      // todo investigate original in pumps, not sure this is the needed behavior here
       if (selectedCompressor.connectedAssessments && selectedCompressor.connectedAssessments.length > 0) {
         selectedCompressor.connectedAssessments.map(connectedAssessment => {
           let newConnectedFromState: MotorItem = copyObject(selectedMotorItem);
-          connectedAssessment.connectedCompressorFromState.compressorMotor = this.setCompressorFieldsFromMotor(connectedAssessment.connectedCompressorFromState.compressorMotor, newConnectedFromState);
+          connectedAssessment.connectedCompressorsFromState = connectedAssessment.connectedCompressorsFromState.map((originalConnectedFromState: ConnectedCompressor) => {
+              originalConnectedFromState.compressorMotor = this.setCompressorFieldsFromMotor(originalConnectedFromState.compressorMotor, newConnectedFromState);
+            return originalConnectedFromState;
+          });
         });
       }
       motorInventory.motorInventoryData.departments.forEach(dept => {
@@ -170,18 +175,23 @@ export class CompressedAirMotorIntegrationService {
     }
   }
 
+   /**
+   * Set and sync values from a connected item whose values may have changed
+   * 
+   */
   setFromConnectedMotorItem(selectedCompressor: CompressedAirItem, ownerInventoryId: number, settings: Settings) {
-    let motorItem = this.getConnectedMotorItem(selectedCompressor.connectedItem, settings);
+    let connectedMotor: MotorItem = this.getConnectedMotorItem(selectedCompressor.connectedItem, settings);
     let connectedInventoryData: ConnectedInventoryData = this.integrationStateService.getEmptyConnectedInventoryData();
     connectedInventoryData.connectedItem = selectedCompressor.connectedItem;
     connectedInventoryData.ownerItemId = selectedCompressor.id;
     connectedInventoryData.ownerInventoryId = ownerInventoryId;
     connectedInventoryData.isConnected = true;
 
-    if (motorItem) {
-      selectedCompressor.compressedAirMotor = this.setCompressorFieldsFromMotor(selectedCompressor.compressedAirMotor, motorItem);
+    if (connectedMotor) {
+      selectedCompressor.compressedAirMotor = this.setCompressorFieldsFromMotor(selectedCompressor.compressedAirMotor, connectedMotor);
       if (selectedCompressor.connectedAssessments) {
-        this.updateConnectedFromState(selectedCompressor, motorItem);
+        // * we only sync for motor connects 
+        this.updateConnectedFromState(selectedCompressor, connectedMotor);
       }
       this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
     } else {
@@ -191,10 +201,16 @@ export class CompressedAirMotorIntegrationService {
   }
 
   // updated connectedFromState (values at assessmnet to inventory connection)
+  // todo suspect map() usage, nothing returned or assigned
   updateConnectedFromState(selectedCompressor: CompressedAirItem, connectedMotorItem: MotorItem) {
     selectedCompressor.connectedAssessments.map(connectedAssessment => {
       let newConnectedFromState: MotorItem = copyObject(connectedMotorItem);
-      connectedAssessment.connectedCompressorFromState.compressorMotor = this.setCompressorFieldsFromMotor(connectedAssessment.connectedCompressorFromState.compressorMotor, newConnectedFromState);
+      connectedAssessment.connectedCompressorsFromState = connectedAssessment.connectedCompressorsFromState.map((originalConnectedFromState: ConnectedCompressor) => {
+        if (originalConnectedFromState.originalCompressorId === selectedCompressor.id) {
+          originalConnectedFromState.compressorMotor = this.setCompressorFieldsFromMotor(originalConnectedFromState.compressorMotor, newConnectedFromState);
+        }
+        return originalConnectedFromState;
+      });
     });
   }
 

@@ -14,9 +14,8 @@ export class CompressedAirMotorCatalogService {
     });
   }
 
-  updateMotorPropertiesFromForm(form: FormGroup, compressedAirMotor: CompressedAirMotorProperties): CompressedAirMotorProperties {
+  updateMotorPropertiesFromForm(form: FormGroup, compressedAirMotor: CompressedAirMotorProperties): void {
     compressedAirMotor.motorPower = form.controls.motorPower.value;
     compressedAirMotor.motorFullLoadAmps = form.controls.motorFullLoadAmps.value;
-    return compressedAirMotor;
   }
 }

@@ -124,8 +124,8 @@ export class CreateAssessmentModalComponent {
         assessmentName = `${selectedPumpItem.name}_${getNameDateString(currentDate)}`;
       }
       if (assessmentType === 'CompressedAir') {
-        let selectedCompressedAirItem: CompressedAirInventorySystem = this.compressedAirAssessmentIntegrationService.getConnectedCompressedAirItem(connectedInventoryData.connectedItem);
-        assessmentName = `${selectedCompressedAirItem.name}_${getNameDateString(currentDate)}`;
+        let selectedCompressedAirSystem: CompressedAirInventorySystem = this.compressedAirAssessmentIntegrationService.getConnectedSystem(connectedInventoryData.connectedItem);
+        assessmentName = `${selectedCompressedAirSystem.name}_${getNameDateString(currentDate)}`;
       }
     }
     return assessmentName;

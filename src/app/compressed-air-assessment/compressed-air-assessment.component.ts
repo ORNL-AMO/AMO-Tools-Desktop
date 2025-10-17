@@ -169,11 +169,12 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
       this.hasConnectedMotorItem = this.compressedAirAssessment.connectedItem && this.compressedAirAssessment.connectedItem.inventoryType === 'motor';
       if (connectedInventoryData.shouldRestoreConnectedValues) {
-        let updatedCAAssessment: CompressedAirAssessment = this.compressedAirAssessmentIntegrationService.restoreConnectedAssessmentValues(connectedInventoryData, this.compressedAirAssessment);
+        const selectedCompressor = this.inventoryService.selectedCompressor.getValue();
+        let updatedCAAssessment: CompressedAirAssessment = this.compressedAirAssessmentIntegrationService.restoreConnectedAssessmentValues(selectedCompressor, connectedInventoryData, this.compressedAirAssessment);
         this.compressedAirAssessment = copyObject(updatedCAAssessment);
-        //*Nick 1b - Simplest way to fix this right now is to find the selected compressor in the updated assessment and emit it again.
-        //*Nick 1c - there may be more required but I believe this to be root cause and should get you started
         this.save(this.compressedAirAssessment);
+        //* Emit required to update inventory form data with restored values
+        this.inventoryService.selectedCompressor.next(selectedCompressor);
       }
     });
 

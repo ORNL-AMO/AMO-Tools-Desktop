@@ -53,10 +53,10 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
     this.connectedInventoryDataSub.unsubscribe();
   }
 
-  async save() {
-    let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    selectedCompressedAir.compressedAirMotor = this.compressedAirMotorCatalogService.updateMotorPropertiesFromForm(this.form, selectedCompressedAir.compressedAirMotor);
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
+  save() {
+    let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    this.compressedAirMotorCatalogService.updateMotorPropertiesFromForm(this.form, selectedCompressor.compressedAirMotor);
+    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
   }
 
   focusField(str: string) {
@@ -119,7 +119,7 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
 
   connectInventoryItem(connectedInventoryData: ConnectedInventoryData) {
     let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    selectedCompressor.compressedAirMotor = this.compressedAirMotorCatalogService.updateMotorPropertiesFromForm(this.form, selectedCompressor.compressedAirMotor);
+    this.compressedAirMotorCatalogService.updateMotorPropertiesFromForm(this.form, selectedCompressor.compressedAirMotor);
     connectedInventoryData.ownerInventoryId = this.compressedAirInventoryService.currentInventoryId;
     this.compressedAirMotorIntegrationService.setCompressedAirMotorConnectedItem(selectedCompressor, connectedInventoryData, this.settings);
 
@@ -127,6 +127,6 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
     if (connectedInventoryData.isConnected) {
       this.form.disable();
     }
-  }
+  } 
 
 }

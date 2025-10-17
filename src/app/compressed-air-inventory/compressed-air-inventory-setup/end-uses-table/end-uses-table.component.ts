@@ -43,6 +43,7 @@ export class EndUsesTableComponent implements OnInit {
 
     this.selectedSystemIdSub = this.compressedAirCatalogService.selectedSystemId.subscribe(val => {
       if (!val) {
+        // todo move up in component hierarchy
         this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryData.systems[0].id);
       } else {
         this.selectedSystemId = val;
