@@ -20,10 +20,8 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let tableDataItem of tableDataItems"
-                [ngClass]="{'selected-item':tableDataItem.compressedAirItem.id == selectedCompressedAirItem.id}">
-                <!-- <tr *ngFor="let tableDataItem of tableDataItems" [ngClass]="{'selected-item':tableDataItem.compressedAirItem.id == selectedCompressedAirItem.id,
-                'invalid-item': !tableDataItem.compressedAirItem.validCompressedAir.isValid}"> -->
+            <tr *ngFor="let tableDataItem of tableDataItems" [ngClass]="{'selected-item':tableDataItem.compressedAirItem.id == selectedCompressedAirItem.id,
+                'invalid-item': !tableDataItem.compressedAirItem.validCompressedAir.isValid}">
                 <td>
                     <span *ngIf="tableDataItem.compressedAirItem.id == selectedCompressedAirItem.id"
                         class="fa fa-chevron-right"></span>
