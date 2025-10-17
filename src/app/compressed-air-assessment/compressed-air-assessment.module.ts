@@ -154,6 +154,9 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
 import { IntegrateCompressedAirInventoryComponent } from './integrate-compressed-air-inventory/integrate-compressed-air-inventory.component';
 
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
+
+
 @NgModule({
   declarations: [
     CompressedAirAssessmentComponent,
@@ -279,6 +282,7 @@ import { IntegrateCompressedAirInventoryComponent } from './integrate-compressed
     EndUseDayTypeSetupModule,
     ImportExportModule,
     ConnectedInventoryModule,    
+    BannerTooltipsModule
   ],
   providers: [
     CompressedAirAssessmentService,
