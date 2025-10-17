@@ -1,7 +1,6 @@
 import { CentrifugalSpecifics, CompressedAirControlsProperties, CompressedAirDesignDetailsProperties, CompressedAirMotorProperties, CompressedAirPerformancePointsProperties, FieldMeasurements, NameplateData } from "../../compressed-air-inventory/compressed-air-inventory";
 import { FluidProperties, PumpMotorProperties, PumpProperties, SystemProperties } from "../../pump-inventory/pump-inventory";
 import { AssessmentType } from "../models/assessment";
-import { CompressedAirAssessment } from "../models/compressed-air-assessment";
 import { PsatInputs } from "../models/psat";
 
 export interface InventorySelectOptions {
@@ -32,6 +31,8 @@ export interface IntegrationState {
 
 export interface ConnectedValueFormField {
   formGroup: IntegrationFormGroupString,
+  // * use if is specific inventory item diff inside of a broader connected item
+  itemId?: string,
 }
 
 export interface ConnectedItem {
@@ -45,7 +46,7 @@ export interface ConnectedItem {
   assessmentId?: number,
   assessmentName?: string,
   connectedPumpFromState?: ConnectedPumpFromState,
-  connectedCompressorFromState?: ConnectedCompressorFromState,
+  connectedCompressorsFromState?: ConnectedCompressorFromState[],
 }
 
 // inventory values at time of assessment filled/connected
@@ -57,8 +58,11 @@ export interface ConnectedPumpFromState {
   pumpFluid: FluidProperties,
 }
 
+// todo rename this and above once all else is working. (FromState is not the object name)
 export interface ConnectedCompressorFromState {
-  compressedAirAssessment?: CompressedAirAssessment,
+  // compressedAirAssessment?: CompressedAirAssessment,
+  originalCompressorId: string,
+  connectedCompressorId: string,
   compressorMotor: CompressedAirMotorProperties,
   nameplateData: NameplateData,
   compressedAirControlsProperties: CompressedAirControlsProperties,
@@ -89,4 +93,5 @@ export interface AssessmentOption {
 export type IntegrationStatusString = 'settings-differ' | 'connected-to-inventory';
 export type AssessmentStatusString = 'connected-to-assessment' | 'connected-assessment-differs' | 'three-way-connected' | 'invalid';
 export type InventoryType = 'motor' | 'pump' | 'compressed-air';
+// todo create for pumps and CA
 export type IntegrationFormGroupString = 'fluid' | 'pump' | 'motor' | 'system' | 'compressed-air';

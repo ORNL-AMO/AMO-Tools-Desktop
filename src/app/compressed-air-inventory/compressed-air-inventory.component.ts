@@ -75,8 +75,15 @@ export class CompressedAirInventoryComponent implements OnInit {
 
       let systemId = this.activatedRoute.snapshot.queryParamMap.get('systemId');
       let itemId = this.activatedRoute.snapshot.queryParamMap.get('itemId');
-      if (systemId && itemId) {
-        this.redirectFromConnectedInventory(systemId, itemId);
+
+      if (systemId) {
+        this.compressedAirCatalogService.selectedSystemId.next(systemId)
+        if (itemId) {
+          // * we know it's a connected item nav. These id's would otherwise be set elsewhere
+          this.redirectFromConnectedInventory(systemId, itemId);
+        }
+      } else {
+        this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryItem.compressedAirInventoryData.systems[0].id);
       }
     });
 
@@ -183,21 +190,20 @@ export class CompressedAirInventoryComponent implements OnInit {
   }
 
   restoreConnectedInventoryValues(connectedInventoryData: ConnectedInventoryData) {
-    //*Nick 2a connectedInventoryData.connectedItem is undefined here. 
-    //* This is leading to your issue in compressedAirAssessmentIntegrationService.restoreConnectedInventoryValues line 650
-    //* Look at psat/pump inv for examples of when connecteditem should be set to connectedInventoryData
     let selectedCompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     let selectedCompressedAirSystemId = this.compressedAirCatalogService.selectedSystemId.getValue();
     let system: CompressedAirInventorySystem = this.compressedAirInventoryItem.compressedAirInventoryData.systems.find(system => { return system.id == selectedCompressedAirSystemId });
-    this.compressedAirAssessmentIntegrationService.restoreConnectedInventoryValues(system, connectedInventoryData);
+    this.compressedAirAssessmentIntegrationService.restoreConnectedInventoryValues(selectedCompressedAirItem, system, connectedInventoryData);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressedAirItem);
     this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAirItem);
   }
 
   handleConnectedItemChanges() {
-    let selectedCompressedAir = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
-    if (selectedCompressedAir && selectedCompressedAir.connectedAssessments) {
-      this.compressedAirAssessmentIntegrationService.checkConnectedAssessmentDiffers(selectedCompressedAir);
+    const selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
+    const selectedSystemId = this.compressedAirCatalogService.selectedSystemId.getValue();
+    let currentSystem = this.compressedAirInventoryItem.compressedAirInventoryData.systems.find(system => { return system.id == selectedSystemId });
+    if (selectedCompressedAir && currentSystem?.connectedAssessments) {
+      this.compressedAirAssessmentIntegrationService.checkConnectedAssessmentDiffers(selectedCompressedAir, currentSystem);
     }
   }
 

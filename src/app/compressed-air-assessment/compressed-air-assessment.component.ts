@@ -169,11 +169,11 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
       this.hasConnectedMotorItem = this.compressedAirAssessment.connectedItem && this.compressedAirAssessment.connectedItem.inventoryType === 'motor';
       if (connectedInventoryData.shouldRestoreConnectedValues) {
-        let updatedCAAssessment: CompressedAirAssessment = this.compressedAirAssessmentIntegrationService.restoreConnectedAssessmentValues(connectedInventoryData, this.compressedAirAssessment);
+        const selectedCompressor = this.inventoryService.selectedCompressor.getValue();
+        let updatedCAAssessment: CompressedAirAssessment = this.compressedAirAssessmentIntegrationService.restoreConnectedAssessmentValues(selectedCompressor, connectedInventoryData, this.compressedAirAssessment);
         this.compressedAirAssessment = copyObject(updatedCAAssessment);
         this.save(this.compressedAirAssessment);
         //* Emit required to update inventory form data with restored values
-        const selectedCompressor = this.inventoryService.selectedCompressor.getValue();
         this.inventoryService.selectedCompressor.next(selectedCompressor);
       }
     });

@@ -6,6 +6,7 @@ import { CompressedAirInventoryData, CompressedAirItem, CompressorTypeOptions, C
 import { CompressedAirInventoryService } from '../../compressed-air-inventory.service';
 import { CompressedAirCatalogService } from '../compressed-air-catalog/compressed-air-catalog.service';
 import { PerformancePointsCatalogService } from '../compressed-air-catalog/performance-points-catalog/performance-points-catalog.service';
+import { copyObject } from '../../../shared/helperFunctions';
 
 @Component({
   selector: 'app-system-catalog-table',
@@ -110,7 +111,7 @@ export class SystemCatalogTableComponent implements OnInit {
   }
 
   createCopy(compressedAirItem: CompressedAirItem) {
-    let compressedAirItemCopy: CompressedAirItem = JSON.parse(JSON.stringify(compressedAirItem));
+    let compressedAirItemCopy: CompressedAirItem = copyObject(compressedAirItem);
     compressedAirItemCopy.name = compressedAirItem.name + ' (copy)';
     compressedAirItemCopy.id = Math.random().toString(36).substr(2, 9);
 
