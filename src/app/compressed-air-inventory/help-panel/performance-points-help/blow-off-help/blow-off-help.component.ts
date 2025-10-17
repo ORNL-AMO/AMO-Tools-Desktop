@@ -4,7 +4,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirInventoryService } from '../../../compressed-air-inventory.service';
 
 @Component({
-  selector: 'app-blow-off-help',
+  selector: 'inventory-blow-off-help',
   standalone: false,
   templateUrl: './blow-off-help.component.html',
   styleUrl: './blow-off-help.component.css'

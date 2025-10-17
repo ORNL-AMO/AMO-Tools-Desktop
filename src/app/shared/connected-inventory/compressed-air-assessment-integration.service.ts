@@ -425,86 +425,58 @@ export class CompressedAirAssessmentIntegrationService {
             let compressedAirInventory: InventoryItem = this.inventoryDbService.getById(connectedAssessment.inventoryId);
             let compressedAirInventorySettings: Settings = this.settingsDbService.getByInventoryId(compressedAirInventory);
             let settingsDiffer: boolean = assessmentSettings.unitsOfMeasure !== compressedAirInventorySettings.unitsOfMeasure;
-            let isMotorMatch: boolean = true;
 
             const originalConnectedFromState = connectedAssessment.connectedCompressorsFromState.find((originalConnectedFromState: ConnectedCompressor) => {
                 return originalConnectedFromState.originalCompressorId === selectedInventoryCompressor.id;
             });
 
-            // todo Only using 'compressed-air' for formgroup names right now. 
-            // todo connected-assessment-status component must be updated alongside integration service to better support invididual fields/groups
-
-
-            isMotorMatch = Object.keys(selectedInventoryCompressor.compressedAirMotor).every((key, index) => {
-                let newValue = selectedInventoryCompressor.compressedAirMotor[key];
-                let connectedFromValue = originalConnectedFromState.compressorMotor[key];
-                if (settingsDiffer && key === 'motorPower') {
-                    let assessmentUnit: string = assessmentSettings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
-                    let inventoryUnit: string = compressedAirInventorySettings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
-                    connectedFromValue = this.convertUnitsService.value(connectedFromValue).from(assessmentUnit).to(inventoryUnit);
-                    connectedFromValue = this.convertUnitsService.roundVal(connectedFromValue, 2)
-                }
-                let valuesEqual: boolean = newValue === connectedFromValue;
-                if (!valuesEqual) {
-                    let motorField: ConnectedValueFormField = {
-                        formGroup: 'compressed-air',
-                        itemId: selectedInventoryCompressor.id
-                    }
-                    differingConnectedValues.push(motorField);
-                }
-                return valuesEqual;
-            });
-
+            let isMotorMatch: boolean = true;
             let isNameplateDataMatch: boolean = true;
             let isControlsMatch: boolean = true;
             let isDesignDetailsMatch: boolean = true;
             let isPerformancePointsMatch: boolean = true;
             let isCentrifugalSpecificsMatch: boolean = true;
 
-            isNameplateDataMatch = Object.keys(selectedInventoryCompressor.nameplateData).every((key, index) => {
-                let newValue = selectedInventoryCompressor.nameplateData[key];
-                let connectedFromValue = originalConnectedFromState.nameplateData[key];
-                let valuesEqual: boolean = newValue === connectedFromValue;
-                if (!valuesEqual) {
-                    let nameplateField: ConnectedValueFormField = {
-                        formGroup: 'compressed-air',
-                        itemId: selectedInventoryCompressor.id
+            if (originalConnectedFromState) {
+                // todo Only using 'compressed-air' for formgroup names right now. 
+                // todo connected-assessment-status component must be updated alongside integration service to better support invididual fields/groups
+
+                isMotorMatch = Object.keys(selectedInventoryCompressor.compressedAirMotor).every((key, index) => {
+                    let newValue = selectedInventoryCompressor.compressedAirMotor[key];
+                    let connectedFromValue = originalConnectedFromState.compressorMotor[key];
+                    if (settingsDiffer && key === 'motorPower') {
+                        let assessmentUnit: string = assessmentSettings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
+                        let inventoryUnit: string = compressedAirInventorySettings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
+                        connectedFromValue = this.convertUnitsService.value(connectedFromValue).from(assessmentUnit).to(inventoryUnit);
+                        connectedFromValue = this.convertUnitsService.roundVal(connectedFromValue, 2)
                     }
-                    differingConnectedValues.push(nameplateField);
-                }
-                return valuesEqual;
-            });
-            isControlsMatch = Object.keys(selectedInventoryCompressor.compressedAirControlsProperties).every((key, index) => {
-                let newValue = selectedInventoryCompressor.compressedAirControlsProperties[key];
-                let connectedFromValue = originalConnectedFromState.compressedAirControlsProperties[key];
-                let valuesEqual: boolean = newValue === connectedFromValue;
-                if (!valuesEqual) {
-                    let controlsField: ConnectedValueFormField = {
-                        formGroup: 'compressed-air',
-                        itemId: selectedInventoryCompressor.id
+                    let valuesEqual: boolean = newValue === connectedFromValue;
+                    if (!valuesEqual) {
+                        let motorField: ConnectedValueFormField = {
+                            formGroup: 'compressed-air',
+                            itemId: selectedInventoryCompressor.id
+                        }
+                        differingConnectedValues.push(motorField);
                     }
-                    differingConnectedValues.push(controlsField);
-                }
-                return valuesEqual;
-            });
-            isDesignDetailsMatch = Object.keys(selectedInventoryCompressor.compressedAirDesignDetailsProperties).every((key, index) => {
-                let newValue = selectedInventoryCompressor.compressedAirDesignDetailsProperties[key];
-                let connectedFromValue = originalConnectedFromState.compressedAirDesignDetailsProperties[key];
-                let valuesEqual: boolean = newValue === connectedFromValue;
-                if (!valuesEqual) {
-                    let controlsField: ConnectedValueFormField = {
-                        formGroup: 'compressed-air',
-                        itemId: selectedInventoryCompressor.id
+                    return valuesEqual;
+                });
+
+                isNameplateDataMatch = Object.keys(selectedInventoryCompressor.nameplateData).every((key, index) => {
+                    let newValue = selectedInventoryCompressor.nameplateData[key];
+                    let connectedFromValue = originalConnectedFromState.nameplateData[key];
+                    let valuesEqual: boolean = newValue === connectedFromValue;
+                    if (!valuesEqual) {
+                        let nameplateField: ConnectedValueFormField = {
+                            formGroup: 'compressed-air',
+                            itemId: selectedInventoryCompressor.id
+                        }
+                        differingConnectedValues.push(nameplateField);
                     }
-                    differingConnectedValues.push(controlsField);
-                }
-                return valuesEqual;
-            });
-            isPerformancePointsMatch = Object.keys(selectedInventoryCompressor.compressedAirPerformancePointsProperties).every((key, index) => {
-                const performancePoint: PerformancePoint = selectedInventoryCompressor.compressedAirPerformancePointsProperties[key];
-                return Object.keys(performancePoint).every((pointKey, pointIndex) => {
-                    let newValue = performancePoint[pointKey];
-                    let connectedFromValue = originalConnectedFromState.compressedAirPerformancePointsProperties[key][pointKey];
+                    return valuesEqual;
+                });
+                isControlsMatch = Object.keys(selectedInventoryCompressor.compressedAirControlsProperties).every((key, index) => {
+                    let newValue = selectedInventoryCompressor.compressedAirControlsProperties[key];
+                    let connectedFromValue = originalConnectedFromState.compressedAirControlsProperties[key];
                     let valuesEqual: boolean = newValue === connectedFromValue;
                     if (!valuesEqual) {
                         let controlsField: ConnectedValueFormField = {
@@ -515,20 +487,49 @@ export class CompressedAirAssessmentIntegrationService {
                     }
                     return valuesEqual;
                 });
-            });
-            isCentrifugalSpecificsMatch = Object.keys(selectedInventoryCompressor.centrifugalSpecifics).every((key, index) => {
-                let newValue = selectedInventoryCompressor.centrifugalSpecifics[key];
-                let connectedFromValue = originalConnectedFromState.centrifugalSpecifics[key];
-                let valuesEqual: boolean = newValue === connectedFromValue;
-                if (!valuesEqual) {
-                    let controlsField: ConnectedValueFormField = {
-                        formGroup: 'compressed-air',
-                        itemId: selectedInventoryCompressor.id
+                isDesignDetailsMatch = Object.keys(selectedInventoryCompressor.compressedAirDesignDetailsProperties).every((key, index) => {
+                    let newValue = selectedInventoryCompressor.compressedAirDesignDetailsProperties[key];
+                    let connectedFromValue = originalConnectedFromState.compressedAirDesignDetailsProperties[key];
+                    let valuesEqual: boolean = newValue === connectedFromValue;
+                    if (!valuesEqual) {
+                        let controlsField: ConnectedValueFormField = {
+                            formGroup: 'compressed-air',
+                            itemId: selectedInventoryCompressor.id
+                        }
+                        differingConnectedValues.push(controlsField);
                     }
-                    differingConnectedValues.push(controlsField);
-                }
-                return valuesEqual;
-            });
+                    return valuesEqual;
+                });
+                isPerformancePointsMatch = Object.keys(selectedInventoryCompressor.compressedAirPerformancePointsProperties).every((key, index) => {
+                    const performancePoint: PerformancePoint = selectedInventoryCompressor.compressedAirPerformancePointsProperties[key];
+                    return Object.keys(performancePoint).every((pointKey, pointIndex) => {
+                        let newValue = performancePoint[pointKey];
+                        let connectedFromValue = originalConnectedFromState.compressedAirPerformancePointsProperties[key][pointKey];
+                        let valuesEqual: boolean = newValue === connectedFromValue;
+                        if (!valuesEqual) {
+                            let controlsField: ConnectedValueFormField = {
+                                formGroup: 'compressed-air',
+                                itemId: selectedInventoryCompressor.id
+                            }
+                            differingConnectedValues.push(controlsField);
+                        }
+                        return valuesEqual;
+                    });
+                });
+                isCentrifugalSpecificsMatch = Object.keys(selectedInventoryCompressor.centrifugalSpecifics).every((key, index) => {
+                    let newValue = selectedInventoryCompressor.centrifugalSpecifics[key];
+                    let connectedFromValue = originalConnectedFromState.centrifugalSpecifics[key];
+                    let valuesEqual: boolean = newValue === connectedFromValue;
+                    if (!valuesEqual) {
+                        let controlsField: ConnectedValueFormField = {
+                            formGroup: 'compressed-air',
+                            itemId: selectedInventoryCompressor.id
+                        }
+                        differingConnectedValues.push(controlsField);
+                    }
+                    return valuesEqual;
+                });
+            }
             return !(isMotorMatch && isNameplateDataMatch && isControlsMatch && isDesignDetailsMatch && isPerformancePointsMatch && isCentrifugalSpecificsMatch);
         });
 
@@ -556,146 +557,145 @@ export class CompressedAirAssessmentIntegrationService {
                     // todo find out why check connected inventory methods aren't returning to a diff array like check assessments is
 
                     // * we're comparing inside of an inventory context. We need to build the comparison objects from inventory interfaces (IF they differ - they do here)
-                    if (originalConnectedFromState) {
-                        let compressedAirAssessmentMotor: CompressedAirMotorProperties = {
-                            motorPower: item.nameplateData.motorPower,
-                            motorFullLoadAmps: item.nameplateData.fullLoadAmps,
-                        }
-                        Object.keys(compressedAirAssessmentMotor).every((key, index) => {
-                            const newValue = compressedAirAssessmentMotor[key];
-                            const connectedFromValue = originalConnectedFromState.compressorMotor[key];
-                            let valuesEqual: boolean = newValue === connectedFromValue;
-                            if (!valuesEqual) {
-                                let field: ConnectedValueFormField = {
-                                    formGroup: 'compressed-air',
-                                    itemId: item.itemId
-                                }
-                                differingConnectedValues.push(field);
-                            }
-                            return valuesEqual;
-                        });
-
-
-                        let centrifugal: CentrifugalSpecifics = {
-                            surgeAirflow: item.centrifugalSpecifics.surgeAirflow,
-                            maxFullLoadPressure: item.centrifugalSpecifics.maxFullLoadPressure,
-                            maxFullLoadCapacity: item.centrifugalSpecifics.maxFullLoadCapacity,
-                            minFullLoadPressure: item.centrifugalSpecifics.minFullLoadPressure,
-                            minFullLoadCapacity: item.centrifugalSpecifics.minFullLoadCapacity
-                        }
-                        Object.keys(centrifugal).every((key, index) => {
-                            const newValue = centrifugal[key];
-                            const connectedFromValue = originalConnectedFromState.centrifugalSpecifics[key];
-                            let valuesEqual: boolean = newValue === connectedFromValue;
-                            if (!valuesEqual) {
-                                let field: ConnectedValueFormField = {
-                                    formGroup: 'compressed-air',
-                                    itemId: item.itemId
-                                }
-                                differingConnectedValues.push(field);
-                            }
-                            return valuesEqual;
-                        });
-
-
-
-                        let nameplateData: NameplateData = {
-                            compressorType: item.nameplateData.compressorType,
-                            fullLoadOperatingPressure: item.nameplateData.fullLoadOperatingPressure,
-                            fullLoadRatedCapacity: item.nameplateData.fullLoadRatedCapacity,
-                            totalPackageInputPower: item.nameplateData.totalPackageInputPower
-                        }
-                        Object.keys(nameplateData).every((key, index) => {
-                            const newValue = nameplateData[key];
-                            const connectedFromValue = originalConnectedFromState.nameplateData[key];
-                            let valuesEqual: boolean = newValue === connectedFromValue;
-                            if (!valuesEqual) {
-                                let field: ConnectedValueFormField = {
-                                    formGroup: 'compressed-air',
-                                    itemId: item.itemId
-                                }
-                                differingConnectedValues.push(field);
-                            }
-                            return valuesEqual;
-                        });
-
-
-
-                        let controls: CompressedAirControlsProperties = {
-                            controlType: item.compressorControls.controlType,
-                            unloadPointCapacity: item.compressorControls.unloadPointCapacity,
-                            numberOfUnloadSteps: item.compressorControls.numberOfUnloadSteps,
-                            automaticShutdown: item.compressorControls.automaticShutdown,
-                            unloadSumpPressure: item.compressorControls.unloadSumpPressure,
-                        }
-                        Object.keys(controls).every((key, index) => {
-                            const newValue = controls[key];
-                            const connectedFromValue = originalConnectedFromState.compressedAirControlsProperties[key];
-                            let valuesEqual: boolean = newValue === connectedFromValue;
-                            if (!valuesEqual) {
-                                let field: ConnectedValueFormField = {
-                                    formGroup: 'compressed-air',
-                                    itemId: item.itemId
-                                }
-                                differingConnectedValues.push(field);
-                            }
-                            return valuesEqual;
-                        });
-
-
-                        let designDetails: Omit<CompressedAirDesignDetailsProperties, 'estimatedTimeLoaded' | 'averageLoadFactor' | 'motorEfficiencyAtLoad'> = {
-                            blowdownTime: item.designDetails.blowdownTime,
-                            modulatingPressureRange: item.designDetails.modulatingPressureRange,
-                            inputPressure: item.designDetails.inputPressure,
-                            designEfficiency: item.designDetails.designEfficiency,
-                            serviceFactor: item.designDetails.serviceFactor,
-                            noLoadPowerFM: item.designDetails.noLoadPowerFM,
-                            noLoadPowerUL: item.designDetails.noLoadPowerUL,
-                            maxFullFlowPressure: item.designDetails.maxFullFlowPressure,
-                        }
-                        Object.keys(designDetails).every((key, index) => {
-                            const newValue = designDetails[key];
-                            const connectedFromValue = originalConnectedFromState.compressedAirDesignDetailsProperties[key];
-                            let valuesEqual: boolean = newValue === connectedFromValue;
-                            if (!valuesEqual) {
-                                let field: ConnectedValueFormField = {
-                                    formGroup: 'compressed-air',
-                                    itemId: item.itemId
-                                }
-                                differingConnectedValues.push(field);
-                            }
-                            return valuesEqual;
-                        });
-
-
-                        let performancePoints: CompressedAirPerformancePointsProperties = {
-                            fullLoad: { ...item.performancePoints.fullLoad },
-                            maxFullFlow: { ...item.performancePoints.maxFullFlow },
-                            midTurndown: { ...item.performancePoints.midTurndown },
-                            turndown: { ...item.performancePoints.turndown },
-                            unloadPoint: { ...item.performancePoints.unloadPoint },
-                            noLoad: { ...item.performancePoints.noLoad },
-                            blowoff: { ...item.performancePoints.blowoff }
-                        }
-
-                        Object.keys(performancePoints).every((key, index) => {
-                            const performancePoint: PerformancePoint = performancePoints[key];
-                            return Object.keys(performancePoint).every((pointKey, pointIndex) => {
-                                let newValue = performancePoint[pointKey];
-                                let connectedFromValue = originalConnectedFromState.compressedAirPerformancePointsProperties[key][pointKey];
-                                let valuesEqual: boolean = newValue === connectedFromValue;
-                                if (!valuesEqual) {
-                                    let field: ConnectedValueFormField = {
-                                        formGroup: 'compressed-air',
-                                        itemId: item.itemId
-                                    }
-                                    differingConnectedValues.push(field);
-                                }
-                                return valuesEqual;
-                            });
-                        });
+                    let compressedAirAssessmentMotor: CompressedAirMotorProperties = {
+                        motorPower: item.nameplateData.motorPower,
+                        motorFullLoadAmps: item.nameplateData.fullLoadAmps,
                     }
+                    Object.keys(compressedAirAssessmentMotor).every((key, index) => {
+                        const newValue = compressedAirAssessmentMotor[key];
+                        const connectedFromValue = originalConnectedFromState.compressorMotor[key];
+                        let valuesEqual: boolean = newValue === connectedFromValue;
+                        if (!valuesEqual) {
+                            let motorField: ConnectedValueFormField = {
+                                formGroup: 'compressed-air',
+                                itemId: item.itemId
+                            }
+                            differingConnectedValues.push(motorField);
+                        }
+                        return valuesEqual;
+                    });
+
+
+                    let centrifugal: CentrifugalSpecifics = {
+                        surgeAirflow: item.centrifugalSpecifics.surgeAirflow,
+                        maxFullLoadPressure: item.centrifugalSpecifics.maxFullLoadPressure,
+                        maxFullLoadCapacity: item.centrifugalSpecifics.maxFullLoadCapacity,
+                        minFullLoadPressure: item.centrifugalSpecifics.minFullLoadPressure,
+                        minFullLoadCapacity: item.centrifugalSpecifics.minFullLoadCapacity
+                    }
+                    Object.keys(centrifugal).every((key, index) => {
+                        const newValue = centrifugal[key];
+                        const connectedFromValue = originalConnectedFromState.centrifugalSpecifics[key];
+                        let valuesEqual: boolean = newValue === connectedFromValue;
+                        if (!valuesEqual) {
+                            let motorField: ConnectedValueFormField = {
+                                formGroup: 'compressed-air',
+                                itemId: item.itemId
+                            }
+                            differingConnectedValues.push(motorField);
+                        }
+                        return valuesEqual;
+                    });
+
+
+
+                    let nameplateData: NameplateData = {
+                        compressorType: item.nameplateData.compressorType,
+                        fullLoadOperatingPressure: item.nameplateData.fullLoadOperatingPressure,
+                        fullLoadRatedCapacity: item.nameplateData.fullLoadRatedCapacity,
+                        totalPackageInputPower: item.nameplateData.totalPackageInputPower
+                    }
+                    Object.keys(nameplateData).every((key, index) => {
+                        const newValue = nameplateData[key];
+                        const connectedFromValue = originalConnectedFromState.nameplateData[key];
+                        let valuesEqual: boolean = newValue === connectedFromValue;
+                        if (!valuesEqual) {
+                            let motorField: ConnectedValueFormField = {
+                                formGroup: 'compressed-air',
+                                itemId: item.itemId
+                            }
+                            differingConnectedValues.push(motorField);
+                        }
+                        return valuesEqual;
+                    });
+
+
+
+                    let controls: CompressedAirControlsProperties = {
+                        controlType: item.compressorControls.controlType,
+                        unloadPointCapacity: item.compressorControls.unloadPointCapacity,
+                        numberOfUnloadSteps: item.compressorControls.numberOfUnloadSteps,
+                        automaticShutdown: item.compressorControls.automaticShutdown,
+                        unloadSumpPressure: item.compressorControls.unloadSumpPressure,
+                    }
+                    Object.keys(controls).every((key, index) => {
+                        const newValue = controls[key];
+                        const connectedFromValue = originalConnectedFromState.compressedAirControlsProperties[key];
+                        let valuesEqual: boolean = newValue === connectedFromValue;
+                        if (!valuesEqual) {
+                            let motorField: ConnectedValueFormField = {
+                                formGroup: 'compressed-air',
+                                itemId: item.itemId
+                            }
+                            differingConnectedValues.push(motorField);
+                        }
+                        return valuesEqual;
+                    });
+
+
+                    let designDetails: Omit<CompressedAirDesignDetailsProperties, 'estimatedTimeLoaded' | 'averageLoadFactor' | 'motorEfficiencyAtLoad'> = {
+                        blowdownTime: item.designDetails.blowdownTime,
+                        modulatingPressureRange: item.designDetails.modulatingPressureRange,
+                        inputPressure: item.designDetails.inputPressure,
+                        designEfficiency: item.designDetails.designEfficiency,
+                        serviceFactor: item.designDetails.serviceFactor,
+                        noLoadPowerFM: item.designDetails.noLoadPowerFM,
+                        noLoadPowerUL: item.designDetails.noLoadPowerUL,
+                        maxFullFlowPressure: item.designDetails.maxFullFlowPressure,
+                    }
+                    Object.keys(designDetails).every((key, index) => {
+                        const newValue = designDetails[key];
+                        const connectedFromValue = originalConnectedFromState.compressedAirDesignDetailsProperties[key];
+                        let valuesEqual: boolean = newValue === connectedFromValue;
+                        if (!valuesEqual) {
+                            let motorField: ConnectedValueFormField = {
+                                formGroup: 'compressed-air',
+                                itemId: item.itemId
+                            }
+                            differingConnectedValues.push(motorField);
+                        }
+                        return valuesEqual;
+                    });
+
+
+                    let performancePoints: CompressedAirPerformancePointsProperties = {
+                        fullLoad: { ...item.performancePoints.fullLoad },
+                        maxFullFlow: { ...item.performancePoints.maxFullFlow },
+                        midTurndown: { ...item.performancePoints.midTurndown },
+                        turndown: { ...item.performancePoints.turndown },
+                        unloadPoint: { ...item.performancePoints.unloadPoint },
+                        noLoad: { ...item.performancePoints.noLoad },
+                        blowoff: { ...item.performancePoints.blowoff }
+                    }
+
+                    Object.keys(performancePoints).every((key, index) => {
+                        const performancePoint: PerformancePoint = performancePoints[key];
+                        return Object.keys(performancePoint).every((pointKey, pointIndex) => {
+                            let newValue = performancePoint[pointKey];
+                            let connectedFromValue = originalConnectedFromState.compressedAirPerformancePointsProperties[key][pointKey];
+                            let valuesEqual: boolean = newValue === connectedFromValue;
+                            if (!valuesEqual) {
+                                let controlsField: ConnectedValueFormField = {
+                                    formGroup: 'compressed-air',
+                                    itemId: item.itemId
+                                }
+                                differingConnectedValues.push(controlsField);
+                            }
+                            return valuesEqual;
+                        });
+                    });
                 });
+
             }
         }
 
@@ -743,7 +743,7 @@ export class CompressedAirAssessmentIntegrationService {
    * Restore only the assessment compressor values for the most recently modified (selected compressor)
    * @param selectedCompressor The assessment selectedCompressor
    */
-    restoreConnectedAssessmentValues(selectedCompressor: CompressorInventoryItem, connectedInventoryData: ConnectedInventoryData, compressedAirAssessment: CompressedAirAssessment) {
+    restoreConnectedAssessmentValues(selectedCompressor: CompressorInventoryItem, connectedInventoryData: ConnectedInventoryData, compressedAirAssessment: CompressedAirAssessment): CompressedAirAssessment {
         let connectedSystem: CompressedAirInventorySystem = this.getConnectedSystem(compressedAirAssessment.connectedItem);
         let currentAssessment = connectedSystem.connectedAssessments.find((connectedAssessment: ConnectedItem) => {
             return connectedAssessment.assessmentId === compressedAirAssessment.connectedItem.assessmentId;
@@ -793,6 +793,7 @@ export class CompressedAirAssessmentIntegrationService {
 
         connectedInventoryData.shouldRestoreConnectedValues = false;
         this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
+        return compressedAirAssessment;
     }
 
     /**

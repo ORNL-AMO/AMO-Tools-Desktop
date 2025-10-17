@@ -4,7 +4,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirInventoryService } from '../../../compressed-air-inventory.service';
 
 @Component({
-  selector: 'app-unload-point-help',
+  selector: 'inventory-unload-point-help',
   standalone: false,
   templateUrl: './unload-point-help.component.html',
   styleUrl: './unload-point-help.component.css'

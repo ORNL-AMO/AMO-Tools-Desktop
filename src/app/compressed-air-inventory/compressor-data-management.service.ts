@@ -91,7 +91,7 @@ export class CompressorDataManagementService {
       let settings: Settings = this.compressedAirInventoryService.settings.getValue();
       selectedCompressor.compressedAirPerformancePointsProperties = this.performancePointCalculationsService.updatePerformancePoints(selectedCompressor, compressedAirInventoryData.systemInformation.atmosphericPressure, settings);
     }
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressor);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
   }
 
@@ -124,49 +124,49 @@ export class CompressorDataManagementService {
   updateBlowoff(blowoff: PerformancePoint) {
     let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressor.compressedAirPerformancePointsProperties.blowoff = blowoff;
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressor);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
   }
 
   updateFullLoad(fullLoad: PerformancePoint) {
     let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressor.compressedAirPerformancePointsProperties.fullLoad = fullLoad;
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressor);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
   }
 
   updateMaxFullFlow(maxFullFlow: PerformancePoint) {
     let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressor.compressedAirPerformancePointsProperties.maxFullFlow = maxFullFlow;
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressor);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
   }
 
   updateMidturndown(midTurndown: PerformancePoint) {
     let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressor.compressedAirPerformancePointsProperties.midTurndown = midTurndown;
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressor);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
   }
 
   updateTurndown(turndown: PerformancePoint) {
     let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressor.compressedAirPerformancePointsProperties.turndown = turndown;
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressor);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
   }
 
   updateNoLoad(noLoad: PerformancePoint) {
     let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressor.compressedAirPerformancePointsProperties.noLoad = noLoad;
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressor);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
   }
 
   updateUnloadPoint(unloadPoint: PerformancePoint) {
     let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint = unloadPoint;
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressor);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressor);
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedCompressor);
   }
 

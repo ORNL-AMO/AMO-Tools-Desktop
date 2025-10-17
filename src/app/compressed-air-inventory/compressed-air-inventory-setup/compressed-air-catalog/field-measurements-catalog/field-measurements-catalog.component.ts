@@ -60,7 +60,7 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
   save() {
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressedAir.fieldMeasurements = this.fieldMeasurementsCatalogService.updateFieldMeasurementsFromForm(this.form, selectedCompressedAir.fieldMeasurements);
-    this.compressedAirInventoryService.updateCompressedAirItem(selectedCompressedAir);
+    this.compressedAirInventoryService.updateCompressedAirInventoryData(selectedCompressedAir);
   }
 
   focusField(str: string) {

@@ -15,7 +15,7 @@ export class CompressedAirBasicsService {
     });
   }
 
-  updateCompressedAirItemFromForm(form: FormGroup, compressedAirItem: CompressedAirItem): CompressedAirItem {
+  updateCompressedAirInventoryDataFromForm(form: FormGroup, compressedAirItem: CompressedAirItem): CompressedAirItem {
     compressedAirItem.name = form.controls.name.value
     compressedAirItem.description = form.controls.description.value
     compressedAirItem.notes = form.controls.notes.value

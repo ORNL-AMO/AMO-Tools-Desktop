@@ -140,7 +140,6 @@ export class EndUsesSetupComponent implements OnInit {
   addEndUse() {
     let newEndUse: UpdatedEndUseData = this.endUsesService.addToInventory(this.compressedAirInventoryData, this.selectedEndUses);
     this.compressedAirInventoryData = newEndUse.compressedAirInventoryData;
-    //this.compressedAirInventoryService.updateCompressedAirItem(newEndUse.compressedAirInventoryData);
     this.endUsesService.selectedEndUse.next(newEndUse.endUse);
     this.hasEndUses = true;
   }
