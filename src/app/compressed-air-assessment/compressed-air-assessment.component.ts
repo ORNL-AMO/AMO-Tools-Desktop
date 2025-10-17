@@ -22,7 +22,7 @@ import { DayTypeSetupService } from './end-uses/day-type-setup-form/day-type-set
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { CompressedAirAssessmentIntegrationService } from '../shared/connected-inventory/compressed-air-assessment-integration.service';
-import { copyObject } from '../shared/helperFunctions';
+import { CompressedAirDataManagementService } from './compressed-air-data-management.service';
 
 @Component({
     selector: 'app-compressed-air-assessment',
@@ -71,7 +71,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,
     private airPropertiesService: AirPropertiesCsvService,
     private endUseDayTypeSetupService: DayTypeSetupService,
-    private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private systemInformationFormService: SystemInformationFormService,
+    private convertCompressedAirService: ConvertCompressedAirService, 
+    private assessmentDbService: AssessmentDbService, 
+    private cd: ChangeDetectorRef, 
+    private systemInformationFormService: SystemInformationFormService,
     private settingsDbService: SettingsDbService, 
     private compressedAirAssessmentService: CompressedAirAssessmentService,  
     private dayTypeService: DayTypeService,
@@ -81,6 +84,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService,
     private analyticsService: AnalyticsService,  
     private integrationStateService: IntegrationStateService,
+    private compressedAirDataManagementService: CompressedAirDataManagementService,
     private compressedAirAssessmentIntegrationService: CompressedAirAssessmentIntegrationService) { }
 
   ngOnInit() {
@@ -170,11 +174,10 @@ export class CompressedAirAssessmentComponent implements OnInit {
       this.hasConnectedMotorItem = this.compressedAirAssessment.connectedItem && this.compressedAirAssessment.connectedItem.inventoryType === 'motor';
       if (connectedInventoryData.shouldRestoreConnectedValues) {
         const selectedCompressor = this.inventoryService.selectedCompressor.getValue();
-        let updatedCAAssessment: CompressedAirAssessment = this.compressedAirAssessmentIntegrationService.restoreConnectedAssessmentValues(selectedCompressor, connectedInventoryData, this.compressedAirAssessment);
-        this.compressedAirAssessment = copyObject(updatedCAAssessment);
+        this.compressedAirAssessmentIntegrationService.restoreConnectedAssessmentValues(selectedCompressor, connectedInventoryData, this.compressedAirAssessment);
+        // * update compressor related properties, isValid, hasValidCompressors, etc.
+        this.compressedAirDataManagementService.updateAssessmentFromDependentCompressorItem(selectedCompressor, true, true);
         this.save(this.compressedAirAssessment);
-        //* Emit required to update inventory form data with restored values
-        this.inventoryService.selectedCompressor.next(selectedCompressor);
       }
     });
 
