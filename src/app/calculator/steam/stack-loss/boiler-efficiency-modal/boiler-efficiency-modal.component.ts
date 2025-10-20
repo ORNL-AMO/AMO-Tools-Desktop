@@ -21,8 +21,7 @@ export class BoilerEfficiencyModalComponent implements OnInit {
   calcualtedCombustionEfficiency: number;
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngAfterViewInit() {
     this.showModal();

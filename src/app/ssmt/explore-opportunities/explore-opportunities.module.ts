@@ -20,6 +20,7 @@ import { OperatingHoursModalModule } from '../../shared/operating-hours-modal/op
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { SsmtSankeyModule } from '../../shared/ssmt-sankey/ssmt-sankey.module';
 import { SnackbarModule } from '../../shared/snackbar-notification/snackbar.module';
+import { StackLossModule } from '../../calculator/steam/stack-loss/stack-loss.module';
 
 @NgModule({
   imports: [
@@ -32,7 +33,8 @@ import { SnackbarModule } from '../../shared/snackbar-notification/snackbar.modu
     OperatingHoursModalModule,
     SharedPipesModule,
     SsmtSankeyModule,
-    SnackbarModule
+    SnackbarModule,
+    StackLossModule
   ],
   declarations: [ExploreOpportunitiesComponent, ExploreOpportunitiesFormComponent, ExploreOpportunitiesHelpComponent, OperationsFormComponent, BoilerFormComponent, HeaderFormComponent, CondensateHandlingFormComponent, TurbineFormComponent, ExploreCondensingTurbineFormComponent, ExplorePressureTurbineFormComponent, ExploreTurbineFormComponent],
   exports: [ExploreOpportunitiesComponent],
