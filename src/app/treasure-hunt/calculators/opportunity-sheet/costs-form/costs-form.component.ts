@@ -17,8 +17,7 @@ export class CostsFormComponent implements OnInit {
   effortLevels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   addOtherCost() {
     this.opportunityCost.otherCosts.push(

@@ -1,0 +1,4 @@
+<span (mouseenter)="showTooltip()" (mouseleave)="hideTooltip()" class="tooltip-target">
+  <ng-content></ng-content>
+  <app-simple-tooltip [message]="message" [hover]="hover" [display]="display" [adjustLeft]="adjustLeft" [adjustPercent]="adjustPercent"></app-simple-tooltip>
+</span>
