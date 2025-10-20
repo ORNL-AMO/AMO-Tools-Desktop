@@ -74,6 +74,10 @@ export class CompressedAirInventoryComponent implements OnInit {
       this.existingCompressorDbService.getAllCompressors(settings);
 
       let systemId = this.activatedRoute.snapshot.queryParamMap.get('systemId');
+      if (!systemId) {
+        // * department will be changed to 'system' in all inventories 
+        systemId = this.activatedRoute.snapshot.queryParamMap.get('departmentId');
+      }
       let itemId = this.activatedRoute.snapshot.queryParamMap.get('itemId');
 
       if (systemId) {
