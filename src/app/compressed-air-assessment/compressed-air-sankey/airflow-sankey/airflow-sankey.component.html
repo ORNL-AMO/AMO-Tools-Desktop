@@ -1,6 +1,8 @@
-  <div class="alert alert-info" *ngIf="this.compressedAirAssessment.endUseData.endUses.length === 0">Note: You must supply End Uses to generate a Sankey Diagram.</div>
+<div class="alert alert-info" *ngIf="this.compressedAirAssessment.endUseData.endUses.length === 0">Note: You must supply
+  End Uses to generate a Sankey Diagram.</div>
 
-<div class="d-flex flex-column w-100 compressed-air"  *ngIf="this.compressedAirAssessment.endUseData.endUses.length > 0">
+@if (this.compressedAirAssessment.endUseData.endUses?.length > 0) {
+<div class="d-flex flex-column w-100 compressed-air">
   <div class="row">
     <div class="navbar w-50 col-6">
       <div class="d-flex justify-content-center align-items-center w-100 flex-wrap">
@@ -30,38 +32,39 @@
       <div class="alert-danger small px-4 py-2 mx-auto"
         *ngIf="compressedAirAssessment.endUseData.dayTypeAirFlowTotals.exceededAirflow">
         Total average airflow of end uses is
-        {{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.exceededAirflow}} 
-          <span [innerHTML]="units"></span>
-        
+        {{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.exceededAirflow}}
+        <span [innerHTML]="units"></span>
+
         greater than the System Profile average for this day type
         ({{compressedAirAssessment.endUseData.dayTypeAirFlowTotals.totalDayTypeAverageAirflow}}
         <span [innerHTML]="units"></span>)
       </div>
     </div>
-    </div>
-    <span *ngIf="airFlowSankeyResults && airFlowSankeyResults.warnings.minAirflow !== undefined"
-      class="alert-warning small px-4 py-2 mx-auto">{{ airFlowSankeyResults.warnings.minAirflow }}</span>
-    <span *ngIf="airFlowSankeyResults && airFlowSankeyResults.warnings.hasInvalidEndUses !== undefined"
-      class="alert-danger small px-4 py-2 mx-auto">{{ airFlowSankeyResults.warnings.hasInvalidEndUses }}</span>
-    <span *ngIf="!profileDataComplete" class="alert-danger small px-4 py-2 mx-auto">Airflow Sankey calculation requires
-      average airflow from
-      System Profile Setup. Please check System Profile Setup data for correctness.</span>
-    </div>
-
-  <div class="sankey-padding w-100">
-    <div #airflowChart></div>
-    <div>
-      <div *ngIf="minFlowes.length > 0" class="ml-5 w-50">
-        <div class="mt-4">
-          <label class="group-label bold mb-2">Negligible AirFlow</label>
-          <table class="small w-100 ml-3">
-            <tr *ngFor="let flow of minFlowes">
-              <td>{{flow}}</td>
-            </tr>
-          </table>
-        </div>
-      </div>
-
-    </div>
   </div>
-  
+  <span *ngIf="airFlowSankeyResults && airFlowSankeyResults.warnings.minAirflow !== undefined"
+    class="alert-warning small px-4 py-2 mx-auto">{{ airFlowSankeyResults.warnings.minAirflow }}</span>
+  <span *ngIf="airFlowSankeyResults && airFlowSankeyResults.warnings.hasInvalidEndUses !== undefined"
+    class="alert-danger small px-4 py-2 mx-auto">{{ airFlowSankeyResults.warnings.hasInvalidEndUses }}</span>
+  <span *ngIf="!profileDataComplete" class="alert-danger small px-4 py-2 mx-auto">Airflow Sankey calculation requires
+    average airflow from
+    System Profile Setup. Please check System Profile Setup data for correctness.</span>
+</div>
+
+<div class="sankey-padding w-100">
+  <div #airflowChart></div>
+  <div>
+    <div *ngIf="minFlowes.length > 0" class="ml-5 w-50">
+      <div class="mt-4">
+        <label class="group-label bold mb-2">Negligible AirFlow</label>
+        <table class="small w-100 ml-3">
+          <tr *ngFor="let flow of minFlowes">
+            <td>{{flow}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+}
