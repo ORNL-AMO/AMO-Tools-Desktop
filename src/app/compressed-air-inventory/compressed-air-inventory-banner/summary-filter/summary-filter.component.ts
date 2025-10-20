@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-summary-filter',
+  selector: 'inventory-summary-filter',
   templateUrl: './summary-filter.component.html',
-  styleUrl: './summary-filter.component.css',
+  styleUrls: ['./summary-filter.component.css'],
   standalone: false
 })
 export class SummaryFilterComponent {
-  filtersCollaped: boolean = true;
+  filtersCollapsed: boolean = true;
 
   constructor() { }
 
@@ -15,7 +15,7 @@ export class SummaryFilterComponent {
   }
 
   collapseFilters() {
-    this.filtersCollaped = !this.filtersCollaped;
+    this.filtersCollapsed = !this.filtersCollapsed;
     window.dispatchEvent(new Event("resize"));
   }
 

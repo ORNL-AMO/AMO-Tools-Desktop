@@ -4,9 +4,9 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 
 @Component({
-  selector: 'app-performance-points-help',
+  selector: 'inventory-performance-points-help',
   templateUrl: './performance-points-help.component.html',
-  styleUrl: './performance-points-help.component.css',
+  styleUrls: ['./performance-points-help.component.css'],
   standalone: false
 })
 export class PerformancePointsHelpComponent {
