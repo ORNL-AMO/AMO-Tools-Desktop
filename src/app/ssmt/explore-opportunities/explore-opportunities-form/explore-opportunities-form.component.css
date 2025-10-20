@@ -29,8 +29,3 @@ form{
 .explore-ops-margin-bottom{
 	margin-bottom: 3rem;
 }
-
-/* todo:6848 add class definition */
-.modal-open {
-    z-index: initial !important;
-}

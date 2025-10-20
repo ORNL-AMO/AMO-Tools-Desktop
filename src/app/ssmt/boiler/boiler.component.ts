@@ -7,7 +7,6 @@ import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from '../compare.service';
 import { HeaderService } from '../header/header.service';
-import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
@@ -56,7 +55,6 @@ export class BoilerComponent implements OnInit {
   lowPressureHeaderForm: UntypedFormGroup;
   constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService, 
-    private stackLossService: StackLossService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService
   ) { }
@@ -141,12 +139,9 @@ export class BoilerComponent implements OnInit {
 
   save() {
     this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
-    let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
-    this.setPressureForms(tmpBoiler);
-    if (this.boilerInput) {
-      tmpBoiler.stackLossInput = this.boilerInput.stackLossInput;
-    }    
-    this.emitSave.emit(tmpBoiler);
+    const boiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
+    this.setPressureForms(boiler);
+    this.emitSave.emit(boiler);
   }
 
   setPreheatMakeupWater() {
@@ -263,9 +258,6 @@ export class BoilerComponent implements OnInit {
   }
 
   openBoilerEfficiencyModal() {
-    if (this.boilerInput && this.boilerInput.stackLossInput) {
-      this.stackLossService.stackLossInput = this.boilerInput.stackLossInput;
-    }
     this.showBoilerEfficiencyModal = true;
     this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal);
   }
@@ -277,13 +269,6 @@ export class BoilerComponent implements OnInit {
   }
 
   setBoilerEfficiencyAndClose(efficiency: number) {
-    if (this.boilerInput && this.boilerInput.stackLossInput) {
-      this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
-    } else {
-      let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
-      this.boilerInput = tmpBoiler;
-      this.boilerInput.stackLossInput = this.stackLossService.stackLossInput;
-    }
     this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
     this.closeBoilerEfficiencyModal();
   }

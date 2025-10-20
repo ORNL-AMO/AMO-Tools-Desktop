@@ -24,17 +24,12 @@ export class ExploreOpportunitiesFormComponent implements OnInit {
   emitAddNewMod = new EventEmitter<boolean>();
   modalOpenSub: Subscription;
 
-  isModalOpen: boolean;
   showSizeMargin: boolean;
   modifyOperatingCostsForm: UntypedFormGroup;
   constructor(private ssmtService: SsmtService, private formBuilder: UntypedFormBuilder) { }
 
   ngOnInit() {
     this.initForms();
-
-    this.modalOpenSub = this.ssmtService.modalOpen.subscribe(val => {
-      this.isModalOpen = val;
-    });
   }
 
   initForms() {
