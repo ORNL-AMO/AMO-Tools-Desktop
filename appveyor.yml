@@ -4,7 +4,7 @@ branches:
   - develop
 image: Visual Studio 2017
 install:
-- ps: Install-Product node 24.5.0
+- ps: Install-Product node 24
 build_script:
 - cmd: >-
     npm ci
