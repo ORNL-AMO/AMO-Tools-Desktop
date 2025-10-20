@@ -26,6 +26,7 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
   displayForm: boolean = true;
   inventorySelectOptions: InventorySelectOptions;
   connectedInventoryDataSub: Subscription;
+  canConnectMotor: boolean = false;
 
   constructor(private compressedAirCatalogService: CompressedAirCatalogService,
     private compressedAirInventoryService: CompressedAirInventoryService,
@@ -42,6 +43,11 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
       if (selectedCompressedAir) {
         this.initSelectedCompressor(selectedCompressedAir);
       }
+    });
+    this.compressedAirInventoryService.compressedAirInventoryData.subscribe(data => {
+      this.displayOptions = data.displayOptions.compressedAirMotorPropertiesOptions;
+      // * connecting a motor after we have a connected assessment should be disabled until 3-way connection is implemented 
+      this.canConnectMotor = !data.hasConnectedCompressedAirAssessment;
     });
     this.displayOptions = this.compressedAirInventoryService.compressedAirInventoryData.getValue().displayOptions.compressedAirMotorPropertiesOptions;
     await this.initConnectedInventory();

@@ -4,7 +4,7 @@
     Motor
 </label>
 
-<app-inventory-integration *ngIf="displayForm && inventorySelectOptions" 
+<app-inventory-integration *ngIf="canConnectMotor && displayForm && inventorySelectOptions" 
     (focusedField)="focusField($event, true)"
     [connectedInventoryType]="'motor'"
     [selectOptions]="inventorySelectOptions">
