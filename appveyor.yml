@@ -4,9 +4,9 @@ branches:
   - develop
 image: Visual Studio 2017
 install:
-- ps: Install-Product node 16
+- ps: Install-Product node 24
 build_script:
 - cmd: >-
-    npm ci --legacy-peer-deps
+    npm ci
     npm run build
 test: off
