@@ -185,7 +185,7 @@ export class CompressedAirInventoryService {
         minFullLoadCapacity: undefined
       },
       nameplateData: {
-        compressorType: 1,
+        compressorType: undefined,
         fullLoadOperatingPressure: undefined,
         fullLoadRatedCapacity: undefined,
         totalPackageInputPower: undefined
@@ -198,7 +198,7 @@ export class CompressedAirInventoryService {
         motorFullLoadAmps: undefined
       },
       compressedAirControlsProperties: {
-        controlType: 1,
+        controlType: undefined,
         unloadPointCapacity: undefined,
         numberOfUnloadSteps: undefined,
         automaticShutdown: false,

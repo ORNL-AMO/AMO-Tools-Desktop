@@ -4,7 +4,7 @@
     Nameplate Data
 </label>
 <form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
-    <div class="form-group" *ngIf="displayOptions.compressorType">
+    <div class="form-group" *ngIf="displayOptions.compressorType" [ngClass]="{'invalid': form.controls.compressorType.invalid}">
         <label for="compressorType">Compressor Type</label>
         <div class="input-group">
             <select id="compressorType" name="compressorType" formControlName="compressorType" (change)="save()"

@@ -97,8 +97,12 @@ export class SystemCatalogTableComponent implements OnInit {
   }
 
   getCompressedAirItemData(compressedAirItem: CompressedAirItem): SystemCatalogTableDataItem {
-    let compressorType = CompressorTypeOptions.find(type => type.value == compressedAirItem.nameplateData.compressorType).label;
-    let controlType = ControlTypes.find(controlType => controlType.value == compressedAirItem.compressedAirControlsProperties.controlType).label;
+    let compressorType: string = undefined;
+    let controlType: string = undefined;
+    if (compressedAirItem.nameplateData.compressorType != undefined && compressedAirItem.compressedAirControlsProperties.controlType != undefined) {
+      compressorType = CompressorTypeOptions.find(type => type.value == compressedAirItem.nameplateData.compressorType).label;
+      controlType = ControlTypes.find(controlType => controlType.value == compressedAirItem.compressedAirControlsProperties.controlType).label;
+    }
     let pressureRange = this.getPressureMinMax(compressedAirItem);
     let tableDataItem: SystemCatalogTableDataItem = {
       name: compressedAirItem.name,      
