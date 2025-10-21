@@ -18,6 +18,10 @@ export class ConnectedAssessmentStatusComponent {
   @Input()
   // has priority over integrationStateService state
   parentIntegrationState: IntegrationState;
+  @Input()
+  // for connections with N items inside the connected resource (like compressors)
+  // to identify which item the status is for
+  itemId: string;
   
   connectedFieldMsgHTML: string;
 
@@ -41,9 +45,14 @@ export class ConnectedAssessmentStatusComponent {
     }
   }
 
+  // todo move to input getters/setters
   ngOnChanges(changes: SimpleChanges) {
     if (changes.parentIntegrationState) {
       this.integrationState = this.parentIntegrationState;
+      this.showStatus();
+    }
+
+    if (changes.itemId) {
       this.showStatus();
     }
   }
@@ -70,14 +79,20 @@ export class ConnectedAssessmentStatusComponent {
       return field.formGroup === this.connectedFormGroupName;
     });
     if (differingField) {
-        if (this.connectedToType === 'assessment') {
+      // todo update so field language is dynamic. Set messages in each integration service during validation
+        if (this.connectedFormGroupName === 'compressed-air') {
+          this.connectedFieldMsgHTML = `Compressor field value differs from the connected ${this.connectedToType}. 
+            <b>Changing connected values in nameplate, motor, controls, design details or performance points will end the ${this.connectedToType} connection. </b>`;
+        } else if (this.connectedToType === 'assessment') {
           this.connectedFieldMsgHTML = `${_.capitalize(differingField.formGroup)} field value differs from the connected ${this.connectedToType}. 
-          <b>Changing connected values in motor, equipment, system, or fluid will end the ${this.connectedToType} connection. </b>`;
+            <b>Changing connected values in motor, equipment, system, or fluid will end the ${this.connectedToType} connection. </b>`;
         } else {
           this.connectedFieldMsgHTML = `${_.capitalize(differingField.formGroup)} field value differs from the connected ${this.connectedToType}. 
-          <b>Changing connected values in pump, fluid, or motor will end the ${this.connectedToType} connection. </b>`;
+            <b>Changing connected values in pump, fluid, or motor will end the ${this.connectedToType} connection. </b>`;
         }
-        this.showIntegrationStatus = true;
+
+        const isCurrentResourceDiffering = this.itemId ? (differingField.itemId === this.itemId) : true;
+        this.showIntegrationStatus = isCurrentResourceDiffering;
     }
   }
 
