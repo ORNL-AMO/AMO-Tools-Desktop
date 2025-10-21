@@ -29,6 +29,8 @@ export class CompressedAirCatalogComponent implements OnInit {
   form: FormGroup;
   selectedCompressedAirItemSub: Subscription;
   showCompressorModal: boolean = false;
+  compressorType: number;
+  controlType: number;
 
   constructor(private compressedAirInventoryService: CompressedAirInventoryService, 
     private integrationStateService: IntegrationStateService, 
@@ -83,6 +85,11 @@ export class CompressedAirCatalogComponent implements OnInit {
           departmentId: this.compressedAirCatalogService.selectedSystemId.getValue(),
           inventoryType: 'compressed-air',
         }
+        this.compressorType = this.selectedCompressedAirItem.nameplateData.compressorType;
+        this.controlType = this.selectedCompressedAirItem.compressedAirControlsProperties.controlType;
+      } else {
+        this.compressorType = undefined;
+        this.controlType = undefined;
       }
     });
 
