@@ -27,7 +27,7 @@ export class ConvertAirLeakService {
         inputArray[i].orificeMethodData.compressorAirTemp = this.convertUnitsService.value(inputArray[i].orificeMethodData.compressorAirTemp).from('C').to('F');
         inputArray[i].orificeMethodData.atmosphericPressure = this.convertUnitsService.value(inputArray[i].orificeMethodData.atmosphericPressure).from('kPaa').to('psia');
         inputArray[i].orificeMethodData.orificeDiameter = this.convertUnitsService.value(inputArray[i].orificeMethodData.orificeDiameter).from('cm').to('in');
-        inputArray[i].orificeMethodData.supplyPressure = this.convertUnitsService.value(inputArray[i].orificeMethodData.supplyPressure).from('kPaa').to('psig');
+        inputArray[i].orificeMethodData.supplyPressure = this.convertUnitsService.value(inputArray[i].orificeMethodData.supplyPressure).from('kPaa').to('psig');    
         let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
         inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / conversionHelper;
       }
@@ -41,22 +41,45 @@ export class ConvertAirLeakService {
     return inputArray;
   }
 
-  convertSpecificPower(specificPower: number): number {
+  /**
+   *  Convert specific power to metric
+   * @param specificPower as a fraction
+   * @returns 
+   */
+  convertSpecificPowerToMetric(specificPower: number): number {
     let conversionHelper = this.convertUnitsService.value(1).from('ft3').to('m3');
     specificPower = specificPower / conversionHelper;
     return specificPower;
   }
 
+  /**
+   *  Convert leak flow rates and electricity for AirLeakSurveyResult. NOTE 
+   *  @param result the raw result returned from the suite. totalFlowRate is in scfm, annualTotalFlowRate in scf, energy in kWh
+   * 
+   */
   convertResult(result: AirLeakSurveyResult, settings: Settings) {
     if (settings.unitsOfMeasure == 'Metric') {
-      // convert from kscf to scf
-      result.annualTotalFlowRate = result.annualTotalFlowRate * 1000; 
-      
       result.totalFlowRate = this.convertUnitsService.value(result.totalFlowRate).from('ft3').to('m3');
       result.annualTotalFlowRate = this.convertUnitsService.value(result.annualTotalFlowRate).from('ft3').to('m3');
     } else {
-      result.annualTotalElectricity = result.annualTotalElectricity * 1000; 
+      result.annualTotalFlowRate = result.annualTotalFlowRate / 1000;
     }
+    return result;
+  }
+
+    /**
+   *  Convert AirLeakSurveyResult when Bag Method is selected (measurementMethod 2).
+   *  @param result the raw result returned from the suite. totalFlowRate is in scfm, annualTotalFlowRate is in kscf, energy in mWh
+   */
+  convertBagMethodResult(result: AirLeakSurveyResult, settings: Settings) {
+    result.annualTotalElectricity = result.annualTotalElectricity * 1000;
+    result.annualTotalElectricityCost = result.annualTotalElectricityCost * 1000;
+    if (settings.unitsOfMeasure == 'Metric') {
+      result.annualTotalFlowRate = result.annualTotalFlowRate * 1000;
+      result.totalFlowRate = this.convertUnitsService.value(result.totalFlowRate).from('ft3').to('m3');
+      result.annualTotalFlowRate = this.convertUnitsService.value(result.annualTotalFlowRate).from('ft3').to('m3');
+    } 
+
     return result;
   }
 
@@ -106,10 +129,9 @@ export class ConvertAirLeakService {
   }
 
   convertDefaultFacilityCompressorData(inputData: FacilityCompressorData): FacilityCompressorData {
-
     let conversionHelper = this.convertUnitsService.value(1).from('ft3').to('m3');
     // /100 per issue-4091
-    inputData.compressorElectricityData.compressorSpecificPower = this.convertSpecificPower((inputData.compressorElectricityData.compressorSpecificPower / 100));
+    inputData.compressorElectricityData.compressorSpecificPower = this.convertSpecificPowerToMetric((inputData.compressorElectricityData.compressorSpecificPower / 100));
     inputData.compressorElectricityData.compressorSpecificPower = this.roundVal(inputData.compressorElectricityData.compressorSpecificPower);
     if (inputData.utilityType == 0) {
       inputData.utilityCost = inputData.utilityCost / conversionHelper;

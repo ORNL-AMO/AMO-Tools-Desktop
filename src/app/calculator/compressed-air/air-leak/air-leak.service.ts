@@ -142,7 +142,8 @@ export class AirLeakService {
       leak.utilityCost = JSON.parse(JSON.stringify(inputCopy.facilityCompressorData.utilityCost));
       leak.utilityType = JSON.parse(JSON.stringify(inputCopy.facilityCompressorData.utilityType));
       leak.compressorElectricityData = JSON.parse(JSON.stringify(inputCopy.facilityCompressorData.compressorElectricityData));
-    })
+    });
+
     let inputArray: Array<AirLeakSurveyData> = this.convertAirleakService.convertInputs(inputCopy.compressedAirLeakSurveyInputVec, settings);
     let baselineLeaks: AirLeakSurveyInput = { compressedAirLeakSurveyInputVec: inputArray };
     let modificationLeaks: AirLeakSurveyInput = { compressedAirLeakSurveyInputVec: Array<AirLeakSurveyData>() };
@@ -156,8 +157,15 @@ export class AirLeakService {
       leakResult.name = leak.name;
       leakResult.leakDescription = leak.leakDescription;
       leakResult.selected = leak.selected;
-      let converted = this.convertAirleakService.convertResult(leakResult, settings);
-      leakResults.push(converted)
+
+      let convertedResult: AirLeakSurveyResult = leakResult;
+      if (leak.measurementMethod == 2) {
+        // * is bag method, different suite endpoint requires handling with different conversions
+        convertedResult = this.convertAirleakService.convertBagMethodResult(leakResult, settings);
+      } else {
+        convertedResult = this.convertAirleakService.convertResult(leakResult, settings);
+      }
+      leakResults.push(convertedResult);
     });
     // Get cumulative leak results
     let baselineResults: AirLeakSurveyResult = this.standaloneService.airLeakSurvey(baselineLeaks);
@@ -178,7 +186,7 @@ export class AirLeakService {
       savings.annualTotalElectricityCost = savings.annualTotalElectricityCost * (compressorControlAdjustment / 100);
     }
 
-      // overwrite estimated annualTotalElectricity value originally set in suite results
+      // * overwrite estimated annualTotalElectricity value originally set in suite results
     modificationResults.annualTotalElectricity = baselineResults.annualTotalElectricity - savings.annualTotalElectricity;
     modificationResults.annualTotalElectricityCost = baselineResults.annualTotalElectricityCost - savings.annualTotalElectricityCost;
 

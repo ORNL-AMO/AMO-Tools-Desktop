@@ -181,7 +181,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   getSpecificPower(compressorElectricityForm: UntypedFormGroup): number {
     let specificPower: number = this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower;
     if (this.settings.unitsOfMeasure != 'Imperial') {
-      specificPower = this.convertAirLeakService.convertSpecificPower(specificPower);
+      specificPower = this.convertAirLeakService.convertSpecificPowerToMetric(specificPower);
       specificPower = this.convertAirLeakService.roundVal(specificPower);
     } else {
       //per issue-4091
