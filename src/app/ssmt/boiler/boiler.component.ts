@@ -1,3 +1,4 @@
+import { SaturatedPropertiesOutput } from './../../shared/models/steam/steam-outputs';
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerWarnings } from './boiler.service';
@@ -11,7 +12,7 @@ import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.s
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
-
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 @Component({
     selector: 'app-boiler',
     templateUrl: './boiler.component.html',
@@ -33,12 +34,16 @@ export class BoilerComponent implements OnInit {
   ssmt: SSMT;
   @Input()
   ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
-
+  @Input()
+  output: SaturatedPropertiesOutput;
+  
+  @Output()
+  emitCalculate = new EventEmitter<UntypedFormGroup>();
   @Output('emitSave')
   emitSave = new EventEmitter<BoilerInput>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
-  
+
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -59,13 +64,15 @@ export class BoilerComponent implements OnInit {
   idString: string = 'baseline_';
   highPressureHeaderForm: UntypedFormGroup;
   lowPressureHeaderForm: UntypedFormGroup;
-  ressureOrTemperature: number;
+  saturatedPropertiesOutput: SaturatedPropertiesOutput;
+  validPlot: boolean = false;
   constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService, 
     private stackLossService: StackLossService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private convertUnitsService: ConvertUnitsService
   ) { }
 
   ngOnInit() {
@@ -79,6 +86,7 @@ export class BoilerComponent implements OnInit {
     if (this.selected === false) {
       this.disableForm();
     }
+    this.ranges = this.getRanges();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -147,6 +155,7 @@ export class BoilerComponent implements OnInit {
   }
 
   save() {
+    this.objToCalculate();
     this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
     this.setPressureForms(tmpBoiler);
@@ -302,13 +311,46 @@ export class BoilerComponent implements OnInit {
   setValidators() {
     if (this.boilerForm.controls.pressureOrTemperature.value === 0) {
       this.boilerForm.controls.saturatedPressure.setValidators([Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]);
-      this.boilerForm.controls.saturatedTemperature.clearValidators();
-      this.boilerForm.controls.saturatedTemperature.reset(this.boilerForm.controls.saturatedTemperature.value);
+      this.boilerForm.controls.steamTemperature.clearValidators();
+      this.boilerForm.controls.steamTemperature.reset(this.boilerForm.controls.steamTemperature.value);
     }else if (this.boilerForm.controls.pressureOrTemperature.value === 1) {
-      this.boilerForm.controls.saturatedTemperature.setValidators([Validators.required, Validators.min(this.ranges.minTemp), Validators.max(this.ranges.maxTemp)]);
+      this.boilerForm.controls.steamTemperature.setValidators([Validators.required, Validators.min(this.ranges.minTemp), Validators.max(this.ranges.maxTemp)]);
       this.boilerForm.controls.saturatedPressure.clearValidators();
       this.boilerForm.controls.saturatedPressure.reset(this.boilerForm.controls.saturatedPressure.value);
     }
     this.cd.detectChanges();
+  }
+
+  getRanges(): { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number } {
+    let minTemp: number, maxTemp: number;
+    if (this.settings.steamTemperatureMeasurement === 'F') {
+      minTemp = 32;
+      maxTemp = 705.1;
+    } else {
+      minTemp = 0;
+      maxTemp = 373.9;
+    }
+    let minPressure: number = Number(this.convertUnitsService.value(1).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
+    let maxPressure: number = Number(this.convertUnitsService.value(22064).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
+    return { minTemp: minTemp, maxTemp: maxTemp, minPressure: minPressure, maxPressure: maxPressure };
+  }
+
+  objToCalculate() {
+    // if (this.boilerForm.status === 'INVALID') {
+    //   this.output = {
+    //     saturatedPressure: 0,
+    //     saturatedTemperature: 0,
+    //     liquidEnthalpy: 0,
+    //     gasEnthalpy: 0,
+    //     evaporationEnthalpy: 0,
+    //     liquidEntropy: 0,
+    //     gasEntropy: 0,
+    //     evaporationEntropy: 0,
+    //     liquidVolume: 0,
+    //     gasVolume: 0,
+    //     evaporationVolume: 0
+    //   };
+    // }
+    this.emitCalculate.emit(this.boilerForm);
   }
 }

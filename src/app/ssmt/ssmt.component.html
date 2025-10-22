@@ -27,10 +27,10 @@
       <app-operations *ngIf="stepTab == 'operations'" [ssmt]="_ssmt" [settings]="settings"
         (emitSave)="saveSetup($event)" [selected]="true" [inSetup]="true" [isBaseline]="true"></app-operations>
       <app-boiler *ngIf="stepTab == 'boiler'" [ssmt]="_ssmt" [selected]="true" [inSetup]="true"
-        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true">
+        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true" (emitCalculate)="calculate($event)" [saturatedPropertiesOutput]="saturatedPropertiesOutput">
       </app-boiler>
       <app-header *ngIf="stepTab == 'header'" [ssmt]="_ssmt" [selected]="true" [inSetup]="true"
-        [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists"
+        [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists" [saturatedPropertiesOutputDisplayOnly]="saturatedPropertiesOutput"
         [isBaseline]="true"></app-header>
       <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput"
         [numberOfHeaders]="_ssmt.headerInput.numberOfHeaders" [selected]="true" [inSetup]="true" [settings]="settings"
@@ -71,7 +71,7 @@
     </app-saturated-properties-calculator>
     <app-stack-loss-calculator *ngIf="calcTab == 'stack-loss'" [settings]="settings"></app-stack-loss-calculator>
     <app-heat-loss-calculator *ngIf="calcTab == 'heat-loss'" [settings]="settings"></app-heat-loss-calculator>
-    <app-boiler-calculator *ngIf="calcTab == 'boiler'" [settings]="settings"></app-boiler-calculator>
+    <app-boiler-calculator *ngIf="calcTab == 'boiler'" [settings]="settings" ></app-boiler-calculator>
     <app-flash-tank-calculator *ngIf="calcTab == 'flash-tank'" [settings]="settings"></app-flash-tank-calculator>
     <app-prv-calculator *ngIf="calcTab == 'prv'" [settings]="settings"></app-prv-calculator>
     <app-deaerator-calculator *ngIf="calcTab == 'deaerator'" [settings]="settings"></app-deaerator-calculator>

@@ -17,6 +17,9 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
 import { SteamService } from '../calculator/steam/steam.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SnackbarService } from '../shared/snackbar-notification/snackbar.service';
+import { SaturatedPropertiesOutput } from '../shared/models/steam/steam-outputs';
+import { SaturatedPropertiesInput } from '../shared/models/steam/steam-inputs';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-ssmt',
@@ -88,6 +91,10 @@ export class SsmtComponent implements OnInit {
   smallScreenTab: string = 'form';
   showExportModal: boolean = false;
   showExportModalSub: Subscription;
+  saturatedPropertiesOutput: SaturatedPropertiesOutput;
+  pressureOrTemperature: number;
+  validPlot: boolean = false;
+
   constructor(
     private egridService: EGridService,
     private activatedRoute: ActivatedRoute,
@@ -136,6 +143,7 @@ export class SsmtComponent implements OnInit {
           this.ssmtService.mainTab.next(tmpTab);
         }
       }
+      // this.calculate();
     });
     this.subscribeTabs();
 
@@ -556,5 +564,24 @@ export class SsmtComponent implements OnInit {
   closeExportModal(input: boolean) {
     this.ssmtService.showExportModal.next(input);
   }
+
+  calculate(form: UntypedFormGroup) {
+      let input: SaturatedPropertiesInput = {
+        saturatedTemperature: form.controls.steamTemperature.value,
+        saturatedPressure: form.controls.saturatedPressure.value,
+      };
+      this.pressureOrTemperature = form.controls.pressureOrTemperature.value;
+      this.steamService.saturatedPropertiesInputs = {
+        pressureOrTemperature: this.pressureOrTemperature,
+        inputs: {
+          saturatedTemperature: form.controls.steamTemperature.value,
+          saturatedPressure: form.controls.saturatedPressure.value
+        }
+      };
+      if (form.status === 'VALID') {
+        this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
+        this.validPlot = true;
+      }
+    }
 
 }

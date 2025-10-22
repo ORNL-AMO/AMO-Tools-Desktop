@@ -11,6 +11,7 @@
 
 .saturated-row-label {
   white-space: nowrap;
+  visibility: hidden;
 }
 
 .saturated-conditional-column {
