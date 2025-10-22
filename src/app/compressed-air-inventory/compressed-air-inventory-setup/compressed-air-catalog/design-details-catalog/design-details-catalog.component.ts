@@ -32,6 +32,7 @@ export class DesignDetailsCatalogComponent implements OnInit {
 
   compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
   invalidCompressorType: boolean;
+  isFormChange: boolean = false;
 
   constructor(private compressedAirCatalogService: CompressedAirCatalogService,
     private compressorDataManagementService: CompressorDataManagementService, 
@@ -45,13 +46,17 @@ export class DesignDetailsCatalogComponent implements OnInit {
     this.selectedCompressedAirItemSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(selectedCompressedAir => {
       this.warnings = this.compressedAirCatalogService.checkWarnings(selectedCompressedAir);
       if (selectedCompressedAir) {
-        this.form = this.designDetailsCatalogService.getFormFromDesignDetails(selectedCompressedAir.compressedAirDesignDetailsProperties, selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
-        this.setDisplayBlowdownTime(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
-        this.setDisplayModulation(selectedCompressedAir.compressedAirControlsProperties.controlType)
-        this.setDisplayMaxFullFlow(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
-        this.setDisplayNoLoadPowerFM(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
-        this.setDisplayNoLoadPowerUL(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
-        this.setDisplayAverageLoadFactorAndMotorEfficiencyAtLoad(selectedCompressedAir.compressedAirControlsProperties.controlType);
+        if (this.isFormChange == false) {
+          this.form = this.designDetailsCatalogService.getFormFromDesignDetails(selectedCompressedAir.compressedAirDesignDetailsProperties, selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
+          this.setDisplayBlowdownTime(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
+          this.setDisplayModulation(selectedCompressedAir.compressedAirControlsProperties.controlType)
+          this.setDisplayMaxFullFlow(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
+          this.setDisplayNoLoadPowerFM(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
+          this.setDisplayNoLoadPowerUL(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
+          this.setDisplayAverageLoadFactorAndMotorEfficiencyAtLoad(selectedCompressedAir.compressedAirControlsProperties.controlType);
+        } else {
+          this.isFormChange = false;
+        }
         this.setCalculatedModulatingPressureRange(selectedCompressedAir);
       }
     });
@@ -64,6 +69,7 @@ export class DesignDetailsCatalogComponent implements OnInit {
   }
 
   save() {
+    this.isFormChange = true;
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressedAir.compressedAirDesignDetailsProperties = this.designDetailsCatalogService.updateDesignDetailsFromForm(this.form, selectedCompressedAir.compressedAirDesignDetailsProperties);
     this.compressorDataManagementService.updateCompressorPropertyAndPoints('compressedAirDesignDetailsProperties', selectedCompressedAir.compressedAirDesignDetailsProperties);

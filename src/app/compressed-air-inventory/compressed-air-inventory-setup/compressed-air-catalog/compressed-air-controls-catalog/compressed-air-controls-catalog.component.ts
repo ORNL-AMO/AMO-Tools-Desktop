@@ -25,6 +25,8 @@ export class CompressedAirControlsCatalogComponent implements OnInit {
   displayAutomaticShutdown: boolean;
   displayUnloadSumpPressure: boolean;
   compressorType: number;
+  isFormChange: boolean = false;
+
 
   controlTypeOptions: Array<{ value: number, label: string, compressorTypes: Array<number> }>;
 
@@ -38,11 +40,15 @@ export class CompressedAirControlsCatalogComponent implements OnInit {
     });
     this.selectedCompressedAirItemSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(selectedCompressedAir => {
       if (selectedCompressedAir) {
-        this.compressorType = selectedCompressedAir.nameplateData.compressorType;
-        this.form = this.compressedAirControlsCatalogService.getFormFromControlsProperties(selectedCompressedAir.compressedAirControlsProperties, selectedCompressedAir.nameplateData.compressorType);
-        this.toggleDisableControls();
-        this.setControlTypeOptions(selectedCompressedAir.nameplateData.compressorType);
-        this.setDisplayValues();
+        if (this.isFormChange == false) {
+          this.compressorType = selectedCompressedAir.nameplateData.compressorType;
+          this.form = this.compressedAirControlsCatalogService.getFormFromControlsProperties(selectedCompressedAir.compressedAirControlsProperties, selectedCompressedAir.nameplateData.compressorType);
+          this.toggleDisableControls();
+          this.setControlTypeOptions(selectedCompressedAir.nameplateData.compressorType);
+          this.setDisplayValues();
+        } else {
+          this.isFormChange = false;
+        }
       }
     });
     this.displayOptions = this.compressedAirInventoryService.compressedAirInventoryData.getValue().displayOptions.compressedAirControlsPropertiesOptions;
@@ -88,6 +94,7 @@ export class CompressedAirControlsCatalogComponent implements OnInit {
   }
 
   save(isControlTypeChange?: boolean) {
+    this.isFormChange = true;
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressedAir.compressedAirControlsProperties = this.compressedAirControlsCatalogService.updateControlsPropertiesFromForm(this.form, selectedCompressedAir.compressedAirControlsProperties);
     this.compressorDataManagementService.updateControlDataAndPoints(selectedCompressedAir.compressedAirControlsProperties, isControlTypeChange);
