@@ -140,9 +140,13 @@ export class AirLeakTreasureHuntService {
   
   convertAirLeakSurveyInput(survey: AirLeakSurveyInput, oldSettings: Settings, newSettings: Settings): AirLeakSurveyInput {
     survey.compressedAirLeakSurveyInputVec = survey.compressedAirLeakSurveyInputVec.map((input: AirLeakSurveyData) => {
-      return this.convertAirLeakService.convertInputDataImperialToMetric(input);
+      if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+        return this.convertAirLeakService.convertInputDataImperialToMetric(input);
+      } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+        return this.convertAirLeakService.convertInputDataMetricToImperial(input);
+      }
     });
-    survey.facilityCompressorData = this.convertAirLeakService.convertDefaultFacilityCompressorData(survey.facilityCompressorData);
+    survey.facilityCompressorData = this.convertAirLeakService.convertFacilityCompressorData(survey.facilityCompressorData, oldSettings, newSettings);
     return survey;
   }
 

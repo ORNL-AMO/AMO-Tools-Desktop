@@ -8,6 +8,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AirLeakFormService } from '../air-leak-form/air-leak-form.service';
 import { ConvertAirLeakService } from '../convert-air-leak.service';
+import { roundVal } from '../../../../shared/helperFunctions';
 
 @Component({
     selector: 'app-facility-compressor-data-form',
@@ -182,7 +183,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
     let specificPower: number = this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower;
     if (this.settings.unitsOfMeasure != 'Imperial') {
       specificPower = this.convertAirLeakService.convertSpecificPowerToMetric(specificPower);
-      specificPower = this.convertAirLeakService.roundVal(specificPower);
+      specificPower = roundVal(specificPower);
     } else {
       //per issue-4091
       specificPower = specificPower * 100;
