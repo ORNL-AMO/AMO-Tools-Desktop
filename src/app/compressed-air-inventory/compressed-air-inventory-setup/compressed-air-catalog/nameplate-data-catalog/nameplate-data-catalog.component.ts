@@ -24,6 +24,7 @@ export class NameplateDataCatalogComponent implements OnInit {
 
   compressorTypeOptions: Array<{ value: number, label: string }> = CompressorTypeOptions;
   invalidCompressorType: boolean;
+  isFormChange: boolean = false;
   
   constructor(private compressedAirCatalogService: CompressedAirCatalogService, private compressedAirInventoryService: CompressedAirInventoryService,
     private nameplateDataCatalogService: NameplateDataCatalogService, private compressorDataManagementService: CompressorDataManagementService) { }
@@ -34,7 +35,11 @@ export class NameplateDataCatalogComponent implements OnInit {
     });
     this.selectedCompressedAirItemSub = this.compressedAirCatalogService.selectedCompressedAirItem.subscribe(selectedCompressedAir => {
       if (selectedCompressedAir) {
-        this.form = this.nameplateDataCatalogService.getFormFromNameplateData(selectedCompressedAir.nameplateData);
+        if (this.isFormChange == false) {
+          this.form = this.nameplateDataCatalogService.getFormFromNameplateData(selectedCompressedAir.nameplateData);
+        } else {
+          this.isFormChange = false;
+        }
       }
     });
     this.displayOptions = this.compressedAirInventoryService.compressedAirInventoryData.getValue().displayOptions.nameplateDataOptions;
@@ -46,6 +51,7 @@ export class NameplateDataCatalogComponent implements OnInit {
   }
 
   save() {
+    this.isFormChange = true;
     let selectedCompressedAir: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     selectedCompressedAir.nameplateData = this.nameplateDataCatalogService.updateNameplateDataFromForm(this.form, selectedCompressedAir.nameplateData);
     this.compressorDataManagementService.updateCompressorPropertyAndPoints('nameplateData', selectedCompressedAir.nameplateData);
