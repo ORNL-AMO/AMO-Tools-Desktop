@@ -54,7 +54,7 @@ export class ConvertAirLeakService {
 
   /**
    *  Convert leak flow rates and electricity for AirLeakSurveyResult. NOTE 
-   *  @param result the raw result returned from the suite. totalFlowRate is in scfm (no conversion required for imperial), annualTotalFlowRate in scf 
+   *  @param result the raw result returned from the suite. totalFlowRate is in scfm, annualTotalFlowRate in scf, energy in kWh
    * 
    */
   convertResult(result: AirLeakSurveyResult, settings: Settings) {
@@ -68,8 +68,8 @@ export class ConvertAirLeakService {
   }
 
     /**
-   *  Convert AirLeakSurveyResult when Bag Method is selected (measurementMethod 2). NOTE 
-   *  @param result the raw result returned from the suite. totalFlowRate is in scfm, annualTotalFlowRate are in kscf (no conversion required for imperial)
+   *  Convert AirLeakSurveyResult when Bag Method is selected (measurementMethod 2).
+   *  @param result the raw result returned from the suite. totalFlowRate is in scfm, annualTotalFlowRate is in kscf, energy in mWh
    */
   convertBagMethodResult(result: AirLeakSurveyResult, settings: Settings) {
     result.annualTotalElectricity = result.annualTotalElectricity * 1000;
