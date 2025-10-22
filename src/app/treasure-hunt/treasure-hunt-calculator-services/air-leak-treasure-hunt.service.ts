@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { AirLeakService } from '../../calculator/compressed-air/air-leak/air-leak.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
-import { AirLeakSurveyInput, AirLeakSurveyOutput } from '../../shared/models/standalone';
+import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyOutput } from '../../shared/models/standalone';
 import { AirLeakSurveyTreasureHunt, EnergyUsage, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import * as _ from 'lodash';
+import { ConvertAirLeakService } from '../../calculator/compressed-air/air-leak/convert-air-leak.service';
 
 @Injectable()
 export class AirLeakTreasureHuntService {
 
   constructor(
     private airLeakService: AirLeakService,
-    private convertUnitsService: ConvertUnitsService,
+    private convertAirLeakService: ConvertAirLeakService
     ) { }
 
 
@@ -139,28 +139,10 @@ export class AirLeakTreasureHuntService {
   }
   
   convertAirLeakSurveyInput(survey: AirLeakSurveyInput, oldSettings: Settings, newSettings: Settings): AirLeakSurveyInput {
-    survey.compressedAirLeakSurveyInputVec.forEach(input => {
-      input.bagMethodData.bagVolume = this.convertUnitsService.convertGalAndLiterValue(input.bagMethodData.bagVolume, oldSettings, newSettings);
-      //ft3 m3 
-      input.estimateMethodData.leakRateEstimate = this.convertUnitsService.convertFt3AndM3Value(input.estimateMethodData.leakRateEstimate, oldSettings, newSettings);
-      //psig kPag
-      input.decibelsMethodData.linePressure = this.convertUnitsService.convertPsigAndKpag(input.decibelsMethodData.linePressure, oldSettings, newSettings);
-      input.decibelsMethodData.pressureA = this.convertUnitsService.convertPsigAndKpag(input.decibelsMethodData.pressureA, oldSettings, newSettings);
-      input.decibelsMethodData.pressureB = this.convertUnitsService.convertPsigAndKpag(input.decibelsMethodData.pressureB, oldSettings, newSettings);
-      //F C
-      input.orificeMethodData.compressorAirTemp = this.convertUnitsService.convertTemperatureValue(input.orificeMethodData.compressorAirTemp, oldSettings, newSettings);
-      //psia kPaa
-      input.orificeMethodData.atmosphericPressure = this.convertUnitsService.convertPsiaAndKpaa(input.orificeMethodData.atmosphericPressure, oldSettings, newSettings);
-      //in cm
-      input.orificeMethodData.orificeDiameter = this.convertUnitsService.convertInAndCmValue(input.orificeMethodData.orificeDiameter, oldSettings, newSettings);
-      //psia kPaa
-      input.orificeMethodData.supplyPressure = this.convertUnitsService.convertPsiaAndKpaa(input.orificeMethodData.supplyPressure, oldSettings, newSettings);
-      
-      if (input.compressorElectricityData) {
-        //1/m3 1/ft3
-        input.compressorElectricityData.compressorSpecificPower = this.convertUnitsService.convertDollarsPerFt3AndM3(input.compressorElectricityData.compressorSpecificPower, oldSettings, newSettings)
-      }
-    })
+    survey.compressedAirLeakSurveyInputVec = survey.compressedAirLeakSurveyInputVec.map((input: AirLeakSurveyData) => {
+      return this.convertAirLeakService.convertInputDataImperialToMetric(input);
+    });
+    survey.facilityCompressorData = this.convertAirLeakService.convertDefaultFacilityCompressorData(survey.facilityCompressorData);
     return survey;
   }
 
