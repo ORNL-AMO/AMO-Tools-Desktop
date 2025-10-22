@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AirLeakSurveyData, AirLeakSurveyResult, FacilityCompressorData, CompressorElectricityData, AirLeakSurveyInput } from '../../../shared/models/standalone';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
+import { roundVal } from '../../../shared/helperFunctions';
 
 @Injectable()
 export class ConvertAirLeakService {
@@ -86,10 +87,10 @@ export class ConvertAirLeakService {
 
   convertInputDataImperialToMetric(inputData: AirLeakSurveyData): AirLeakSurveyData {
     inputData.bagMethodData.bagVolume = this.convertUnitsService.value(inputData.bagMethodData.bagVolume).from('gal').to('L');
-    inputData.bagMethodData.bagVolume = this.roundVal(inputData.bagMethodData.bagVolume);
+    inputData.bagMethodData.bagVolume = roundVal(inputData.bagMethodData.bagVolume);
 
     inputData.estimateMethodData.leakRateEstimate = this.convertUnitsService.value(inputData.estimateMethodData.leakRateEstimate).from('ft3').to('m3');
-    inputData.estimateMethodData.leakRateEstimate = this.roundVal(inputData.estimateMethodData.leakRateEstimate);
+    inputData.estimateMethodData.leakRateEstimate = roundVal(inputData.estimateMethodData.leakRateEstimate);
 
     inputData.decibelsMethodData.linePressure = this.convertUnitsService.value(inputData.decibelsMethodData.linePressure).from('psig').to('kPag');
     inputData.decibelsMethodData.pressureA = this.convertUnitsService.value(inputData.decibelsMethodData.pressureA).from('psig').to('kPag');
@@ -101,22 +102,60 @@ export class ConvertAirLeakService {
     inputData.decibelsMethodData.secondFlowB = this.convertUnitsService.value(inputData.decibelsMethodData.secondFlowB).from('ft3').to('m3');
 
 
-    inputData.decibelsMethodData.linePressure = this.roundVal(inputData.decibelsMethodData.linePressure);
-    inputData.decibelsMethodData.pressureA = this.roundVal(inputData.decibelsMethodData.pressureA);
-    inputData.decibelsMethodData.pressureB = this.roundVal(inputData.decibelsMethodData.pressureB);
-    inputData.decibelsMethodData.firstFlowA = this.roundVal(inputData.decibelsMethodData.firstFlowA);
-    inputData.decibelsMethodData.secondFlowA = this.roundVal(inputData.decibelsMethodData.secondFlowA);
-    inputData.decibelsMethodData.firstFlowB = this.roundVal(inputData.decibelsMethodData.firstFlowB);
-    inputData.decibelsMethodData.secondFlowB = this.roundVal(inputData.decibelsMethodData.secondFlowB);
+    inputData.decibelsMethodData.linePressure = roundVal(inputData.decibelsMethodData.linePressure);
+    inputData.decibelsMethodData.pressureA = roundVal(inputData.decibelsMethodData.pressureA);
+    inputData.decibelsMethodData.pressureB = roundVal(inputData.decibelsMethodData.pressureB);
+    inputData.decibelsMethodData.firstFlowA = roundVal(inputData.decibelsMethodData.firstFlowA);
+    inputData.decibelsMethodData.secondFlowA = roundVal(inputData.decibelsMethodData.secondFlowA);
+    inputData.decibelsMethodData.firstFlowB = roundVal(inputData.decibelsMethodData.firstFlowB);
+    inputData.decibelsMethodData.secondFlowB = roundVal(inputData.decibelsMethodData.secondFlowB);
 
     inputData.orificeMethodData.compressorAirTemp = this.convertUnitsService.value(inputData.orificeMethodData.compressorAirTemp).from('F').to('C');
     inputData.orificeMethodData.atmosphericPressure = this.convertUnitsService.value(inputData.orificeMethodData.atmosphericPressure).from('psia').to('kPaa');
     inputData.orificeMethodData.orificeDiameter = this.convertUnitsService.value(inputData.orificeMethodData.orificeDiameter).from('in').to('cm');
     inputData.orificeMethodData.supplyPressure = this.convertUnitsService.value(inputData.orificeMethodData.supplyPressure).from('psig').to('kPaa');
-    inputData.orificeMethodData.compressorAirTemp = this.roundVal(inputData.orificeMethodData.compressorAirTemp);
-    inputData.orificeMethodData.atmosphericPressure = this.roundVal(inputData.orificeMethodData.atmosphericPressure);
-    inputData.orificeMethodData.orificeDiameter = this.roundVal(inputData.orificeMethodData.orificeDiameter);
-    inputData.orificeMethodData.supplyPressure = this.roundVal(inputData.orificeMethodData.supplyPressure);
+    inputData.orificeMethodData.compressorAirTemp = roundVal(inputData.orificeMethodData.compressorAirTemp);
+    inputData.orificeMethodData.atmosphericPressure = roundVal(inputData.orificeMethodData.atmosphericPressure);
+    inputData.orificeMethodData.orificeDiameter = roundVal(inputData.orificeMethodData.orificeDiameter);
+    inputData.orificeMethodData.supplyPressure = roundVal(inputData.orificeMethodData.supplyPressure);
+    return inputData;
+  }
+
+  /**
+   * Converts inputData from Metric to Imperial units
+   */
+  convertInputDataMetricToImperial(inputData: AirLeakSurveyData): AirLeakSurveyData {
+    inputData.bagMethodData.bagVolume = this.convertUnitsService.value(inputData.bagMethodData.bagVolume).from('L').to('gal');
+    inputData.bagMethodData.bagVolume = roundVal(inputData.bagMethodData.bagVolume);
+
+    inputData.estimateMethodData.leakRateEstimate = this.convertUnitsService.value(inputData.estimateMethodData.leakRateEstimate).from('m3').to('ft3');
+    inputData.estimateMethodData.leakRateEstimate = roundVal(inputData.estimateMethodData.leakRateEstimate);
+
+    inputData.decibelsMethodData.linePressure = this.convertUnitsService.value(inputData.decibelsMethodData.linePressure).from('kPag').to('psig');
+    inputData.decibelsMethodData.pressureA = this.convertUnitsService.value(inputData.decibelsMethodData.pressureA).from('kPag').to('psig');
+    inputData.decibelsMethodData.pressureB = this.convertUnitsService.value(inputData.decibelsMethodData.pressureB).from('kPag').to('psig');
+
+    inputData.decibelsMethodData.firstFlowA = this.convertUnitsService.value(inputData.decibelsMethodData.firstFlowA).from('m3').to('ft3');
+    inputData.decibelsMethodData.secondFlowA = this.convertUnitsService.value(inputData.decibelsMethodData.secondFlowA).from('m3').to('ft3');
+    inputData.decibelsMethodData.firstFlowB = this.convertUnitsService.value(inputData.decibelsMethodData.firstFlowB).from('m3').to('ft3');
+    inputData.decibelsMethodData.secondFlowB = this.convertUnitsService.value(inputData.decibelsMethodData.secondFlowB).from('m3').to('ft3');
+
+    inputData.decibelsMethodData.linePressure = roundVal(inputData.decibelsMethodData.linePressure);
+    inputData.decibelsMethodData.pressureA = roundVal(inputData.decibelsMethodData.pressureA);
+    inputData.decibelsMethodData.pressureB = roundVal(inputData.decibelsMethodData.pressureB);
+    inputData.decibelsMethodData.firstFlowA = roundVal(inputData.decibelsMethodData.firstFlowA);
+    inputData.decibelsMethodData.secondFlowA = roundVal(inputData.decibelsMethodData.secondFlowA);
+    inputData.decibelsMethodData.firstFlowB = roundVal(inputData.decibelsMethodData.firstFlowB);
+    inputData.decibelsMethodData.secondFlowB = roundVal(inputData.decibelsMethodData.secondFlowB);
+
+    inputData.orificeMethodData.compressorAirTemp = this.convertUnitsService.value(inputData.orificeMethodData.compressorAirTemp).from('C').to('F');
+    inputData.orificeMethodData.atmosphericPressure = this.convertUnitsService.value(inputData.orificeMethodData.atmosphericPressure).from('kPaa').to('psia');
+    inputData.orificeMethodData.orificeDiameter = this.convertUnitsService.value(inputData.orificeMethodData.orificeDiameter).from('cm').to('in');
+    inputData.orificeMethodData.supplyPressure = this.convertUnitsService.value(inputData.orificeMethodData.supplyPressure).from('kPaa').to('psig');
+    inputData.orificeMethodData.compressorAirTemp = roundVal(inputData.orificeMethodData.compressorAirTemp);
+    inputData.orificeMethodData.atmosphericPressure = roundVal(inputData.orificeMethodData.atmosphericPressure);
+    inputData.orificeMethodData.orificeDiameter = roundVal(inputData.orificeMethodData.orificeDiameter);
+    inputData.orificeMethodData.supplyPressure = roundVal(inputData.orificeMethodData.supplyPressure);
     return inputData;
   }
 
@@ -124,24 +163,42 @@ export class ConvertAirLeakService {
     airLeakInputExample.compressedAirLeakSurveyInputVec.forEach(inputData => {
       inputData = this.convertInputDataImperialToMetric(inputData)
     });
-    airLeakInputExample.facilityCompressorData = this.convertDefaultFacilityCompressorData(airLeakInputExample.facilityCompressorData);
+    airLeakInputExample.facilityCompressorData = this.convertImperialFacilityCompressorData(airLeakInputExample.facilityCompressorData);
     return airLeakInputExample;
   }
 
-  convertDefaultFacilityCompressorData(inputData: FacilityCompressorData): FacilityCompressorData {
-    let conversionHelper = this.convertUnitsService.value(1).from('ft3').to('m3');
-    // /100 per issue-4091
-    inputData.compressorElectricityData.compressorSpecificPower = this.convertSpecificPowerToMetric((inputData.compressorElectricityData.compressorSpecificPower / 100));
-    inputData.compressorElectricityData.compressorSpecificPower = this.roundVal(inputData.compressorElectricityData.compressorSpecificPower);
-    if (inputData.utilityType == 0) {
-      inputData.utilityCost = inputData.utilityCost / conversionHelper;
-      inputData.utilityCost = this.roundVal(inputData.utilityCost);
+
+ 
+  convertFacilityCompressorData(
+    inputData: FacilityCompressorData,
+    oldSettings: Settings,
+    newSettings?: Settings
+  ): FacilityCompressorData {
+    const conversionHelper = this.convertUnitsService.value(1).from('ft3').to('m3');
+
+    if (oldSettings.unitsOfMeasure === 'Imperial' && (!newSettings || newSettings.unitsOfMeasure === 'Metric')) {
+      inputData = this.convertImperialFacilityCompressorData(inputData, conversionHelper);
+    } else if (oldSettings.unitsOfMeasure === 'Metric' && (!newSettings || newSettings.unitsOfMeasure === 'Imperial')) {
+      inputData.compressorElectricityData.compressorSpecificPower = inputData.compressorElectricityData.compressorSpecificPower * conversionHelper * 100;
+      inputData.compressorElectricityData.compressorSpecificPower = roundVal(inputData.compressorElectricityData.compressorSpecificPower);
+      if (inputData.utilityType === 0) {
+        inputData.utilityCost = inputData.utilityCost * conversionHelper;
+        inputData.utilityCost = roundVal(inputData.utilityCost);
+      }
     }
     return inputData;
   }
 
-  roundVal(num: number): number {
-    return Number(num.toFixed(3));
+  convertImperialFacilityCompressorData(inputData: FacilityCompressorData, conversionHelper?: number): FacilityCompressorData {
+    conversionHelper = conversionHelper ? conversionHelper : this.convertUnitsService.value(1).from('ft3').to('m3');
+    inputData.compressorElectricityData.compressorSpecificPower = this.convertSpecificPowerToMetric((inputData.compressorElectricityData.compressorSpecificPower / 100));
+      inputData.compressorElectricityData.compressorSpecificPower = roundVal(inputData.compressorElectricityData.compressorSpecificPower);
+      if (inputData.utilityType === 0) {
+        inputData.utilityCost = inputData.utilityCost / conversionHelper;
+        inputData.utilityCost = roundVal(inputData.utilityCost);
+      }
+
+    return inputData;
   }
 
 }
