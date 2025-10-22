@@ -43,7 +43,6 @@
               "src/manifest.webmanifest"
             ],
             "styles": [
-              "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "src/assets/styles/two-panel.css",
@@ -165,7 +164,6 @@
             ],
             "scripts": [],
             "styles": [
-              "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "src/assets/styles/two-panel.css",
@@ -201,10 +199,30 @@
     "@schematics/angular:component": {
       "inlineTemplate": false,
       "prefix": "app",
-      "style": "css"
+      "style": "css",
+      "type": "component"
     },
     "@schematics/angular:directive": {
-      "prefix": "app"
+      "prefix": "app",
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
     }
   },
   "cli": {

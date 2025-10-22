@@ -7,21 +7,26 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "node10",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "types": ["node", "jasmine"],
-    "target": "es2022",
-    "module": "esnext",
+    "types": [
+      "node",
+      "jasmine"
+    ],
+    "target": "ES2022",
+    "module": "ES2022",
     "lib": [
       "es2022",
       "dom"
     ],
     "paths": {
-      "process-flow-lib": ["./src/process-flow-lib"],
+      "process-flow-lib": [
+        "./src/process-flow-lib"
+      ]
     }
   }
 }

@@ -5,7 +5,6 @@ import { Settings } from '../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { BoilerService } from '../../../boiler/boiler.service';
 import { UntypedFormGroup } from '@angular/forms';
-import { StackLossInput } from '../../../../shared/models/steam/steam-inputs';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
 import { Co2SavingsData } from '../../../../calculator/utilities/co2-savings/co2-savings.service';
 import { AssessmentCo2SavingsService, Co2SavingsDifferent } from '../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
@@ -13,6 +12,9 @@ import { OtherFuel, otherFuels } from '../../../../calculator/utilities/co2-savi
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { CompareService } from '../../../compare.service';
 import { Subscription } from 'rxjs';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid-material-db.service';
+import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
 
 @Component({
     selector: 'app-boiler-form',
@@ -30,6 +32,7 @@ export class BoilerFormComponent implements OnInit {
   @Output('emitSave')
   emitSave = new EventEmitter<SSMT>();
 
+  @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -37,6 +40,7 @@ export class BoilerFormComponent implements OnInit {
   }
   formWidth: number;
   showBlowdownRateModal: boolean = false;
+  showBoilerEfficiencyModal: boolean = false;
 
 
   baselineFuelOptions: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
@@ -49,6 +53,7 @@ export class BoilerFormComponent implements OnInit {
   showPreheatBlowdownWater: boolean = false;
   showInitialSteamTemperature: boolean = false;
   showDeaeratorConditions: boolean = false;
+  showModal: boolean;
 
   baselineForm: UntypedFormGroup;
   modificationForm: UntypedFormGroup;
@@ -57,7 +62,11 @@ export class BoilerFormComponent implements OnInit {
   isInitializingCo2SavingsData: boolean;
   co2SavingsDifferentSubscription: Subscription;
   co2SavingsDifferent: Co2SavingsDifferent;
+  boilerInput: BoilerInput;
+  boilerForm: UntypedFormGroup;
+  options: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
 
+  
   otherFuels: Array<OtherFuel>;
   fuelOptions: Array<{
     fuelType: string,
@@ -68,7 +77,9 @@ export class BoilerFormComponent implements OnInit {
     private convertUnitsService: ConvertUnitsService,
     private compareService: CompareService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService, private boilerService: BoilerService,
-    private ssmtService: SsmtService) { }
+    private ssmtService: SsmtService,
+    private solidLiquidMaterialDbService: SolidLiquidMaterialDbService, private flueGasMaterialDbService: FlueGasMaterialDbService) {
+  }
 
   ngOnInit() {
     this.setCo2SavingsData();
@@ -110,7 +121,6 @@ export class BoilerFormComponent implements OnInit {
     }
   }
 
-  
   setCo2SavingsData() {
     this.isInitializingCo2SavingsData = true;
     this.co2SavingsDifferent = this.compareService.isCo2SavingsDifferent(false, this.ssmt, this.ssmt.modifications[this.exploreModIndex].ssmt);
@@ -299,9 +309,7 @@ export class BoilerFormComponent implements OnInit {
   }
 
   save() {
-    let stackLossInput: StackLossInput = this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput.stackLossInput;
     let tmpModificationBoilerInput: BoilerInput = this.boilerService.initObjFromForm(this.modificationForm);
-    tmpModificationBoilerInput.stackLossInput = stackLossInput;
     this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput = tmpModificationBoilerInput;
     // Use copy so co2SavingsData isn't overwritten from ssmt.component.updateModificationCO2Savings()
     this.ssmt.modifications[this.exploreModIndex].ssmt.co2SavingsData = JSON.parse(JSON.stringify(this.modificationCo2SavingsData));  
@@ -340,5 +348,21 @@ export class BoilerFormComponent implements OnInit {
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
     }
+  }
+  
+  openBoilerEfficiencyModal() {
+    this.showBoilerEfficiencyModal = true;
+    this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal);
+  }
+
+  closeBoilerEfficiencyModal() {
+    this.showBoilerEfficiencyModal = false;
+    this.ssmtService.modalOpen.next(this.showBoilerEfficiencyModal);
+    this.save();
+  }
+
+  setBoilerEfficiencyAndClose(efficiency: number) {
+    this.modificationForm.controls.combustionEfficiency.patchValue(efficiency);
+    this.closeBoilerEfficiencyModal();
   }
 }

@@ -23,7 +23,7 @@ export class MeasurSurveyService {
       if (environment.production) {
         return applicationData.appOpenCount >= 10;
       } else {
-        return applicationData.appOpenCount >= 3;
+        return false;
       }
   }
 
@@ -31,7 +31,7 @@ export class MeasurSurveyService {
     if (environment.production) {
       return applicationData.appOpenCount >= 5;
     } else {
-      return applicationData.appOpenCount >= 2;
+      return false;
     }
   }
 

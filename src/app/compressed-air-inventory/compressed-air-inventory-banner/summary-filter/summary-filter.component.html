@@ -1,0 +1,40 @@
+<nav class="navbar d-none d-lg-flex justify-content-start" #navbar>
+    <app-system-dropdown></app-system-dropdown>
+    <div class="pl-1">
+        <app-compressor-type-dropdown></app-compressor-type-dropdown>
+    </div>
+    <div class="pl-1">
+        <app-control-type-dropdown></app-control-type-dropdown>
+    </div>
+    <div class="pl-1">
+        <app-horsepower-dropdown></app-horsepower-dropdown>
+    </div>
+    <div class="ml-auto">
+        <app-selected-options></app-selected-options>
+    </div>
+</nav>
+
+<nav class="navbar d-block d-lg-none" #navbar>
+    <div class="nav-item flex-fill pl-1 pt-1" [ngClass]="{'dropup': !filtersCollapsed}">
+        <span class="nav-link dropdown-toggle" (click)="collapseFilters()">
+            Filters
+        </span>
+    </div>
+    <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollapsed}">
+        <app-system-dropdown></app-system-dropdown>
+    </div>
+    <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollapsed}">
+        <app-compressor-type-dropdown></app-compressor-type-dropdown>
+    </div>
+    <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollapsed}">
+        <app-control-type-dropdown></app-control-type-dropdown>
+    </div>
+    <div class="flex-fill pl-1 pt-1" [ngClass]="{'collapse': filtersCollapsed}">
+        <app-horsepower-dropdown></app-horsepower-dropdown>
+    </div>
+    <div class="d-flex justify-content-end">
+        <div class="pt-1">
+            <app-selected-options></app-selected-options>
+        </div>
+    </div>
+</nav>

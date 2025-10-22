@@ -120,6 +120,11 @@ Tabs
     border-bottom: #2980b9 solid 3px;
   }
 
+  .compressed-air-inventory .tabs.primary .active a {
+    border: none;
+    border-bottom: #7030A0 solid 3px;
+  }
+
   .waste-water .tabs.primary .active a {
     border: none;
     border-bottom: #003087 solid 3px;
@@ -191,6 +196,10 @@ Tabs
 
   .tabs.subtabs.pump-inventory {
     border-bottom: #2980b9 solid 3px;
+  }
+
+  .tabs.subtabs.compressed-air-inventory {
+    border-bottom: #7030A0 solid 3px;
   }
   
   .tabs.subtabs.waste-water {
@@ -307,6 +316,10 @@ Tabs
 
       .tabs.subtabs.pump-inventory .active .step-number {
         background: #2980b9;
+      }
+
+      .tabs.subtabs.compressed-air-inventory .active .step-number {
+        background: #7030A0;
       }
 
       .tabs.subtabs.waste-water .active .step-number {
