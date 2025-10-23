@@ -336,21 +336,6 @@ export class BoilerComponent implements OnInit {
   }
 
   objToCalculate() {
-    // if (this.boilerForm.status === 'INVALID') {
-    //   this.output = {
-    //     saturatedPressure: 0,
-    //     saturatedTemperature: 0,
-    //     liquidEnthalpy: 0,
-    //     gasEnthalpy: 0,
-    //     evaporationEnthalpy: 0,
-    //     liquidEntropy: 0,
-    //     gasEntropy: 0,
-    //     evaporationEntropy: 0,
-    //     liquidVolume: 0,
-    //     gasVolume: 0,
-    //     evaporationVolume: 0
-    //   };
-    // }
     this.emitCalculate.emit(this.boilerForm);
   }
 }

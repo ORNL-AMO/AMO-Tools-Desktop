@@ -37,8 +37,6 @@ export class HeaderFormComponent implements OnInit {
   headerInput: HeaderNotHighestPressure | HeaderWithHighestPressure;
   @Input()
   ssmt: SSMT;
-  @Input()
-  saturatedPropertiesOutputDisplayOnly: SaturatedPropertiesOutput;
 
   warnings: HeaderWarnings;
   headerLabel: string;
@@ -74,7 +72,6 @@ export class HeaderFormComponent implements OnInit {
     if (changes.numberOfHeaders && !changes.numberOfHeaders.isFirstChange()) {
       this.setErrorMsgs();
     }
-    console.log('header check: ', this.saturatedPropertiesOutputDisplayOnly);
   }
 
   setErrorMsgs() {
