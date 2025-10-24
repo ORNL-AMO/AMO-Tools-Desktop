@@ -49,7 +49,6 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   //elements when they are updated/changed
   calculate() {
     //.emit() will tell the parent to do something
-    console.log('emit');
     this.emitCalculate.emit(this.data);
   }
 
