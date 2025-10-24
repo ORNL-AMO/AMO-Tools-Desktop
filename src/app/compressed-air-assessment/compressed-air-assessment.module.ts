@@ -151,6 +151,11 @@ import { EndUseHelpComponent } from './results-panel/help-panel/end-use-help/end
 import { CompressedAirSankeyModule } from './compressed-air-sankey/compressed-air-sankey.module';
 import { EndUseDayTypeSetupModule } from './end-uses/day-type-setup-form/end-use-day-type-setup.module';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
+import { IntegrateCompressedAirInventoryComponent } from './integrate-compressed-air-inventory/integrate-compressed-air-inventory.component';
+
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
+
 
 @NgModule({
   declarations: [
@@ -236,7 +241,8 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     ImproveEndUseFormControlsPipe,
     TurndownComponent,
     MidTurndownComponent,
-    EndUseHelpComponent
+    EndUseHelpComponent,
+    IntegrateCompressedAirInventoryComponent
   ],
   imports: [
     CommonModule,
@@ -274,7 +280,9 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
     IntervalHourLabelModule,
     CompressedAirSankeyModule,
     EndUseDayTypeSetupModule,
-    ImportExportModule
+    ImportExportModule,
+    ConnectedInventoryModule,    
+    BannerTooltipsModule
   ],
   providers: [
     CompressedAirAssessmentService,

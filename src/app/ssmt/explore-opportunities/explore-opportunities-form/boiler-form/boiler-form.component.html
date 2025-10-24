@@ -55,6 +55,7 @@
                 {{modificationForm.controls.combustionEfficiency.errors.min.min}} %.</span>
               </span>
           </div>
+          <a class="form-text small click-link" (click)="openBoilerEfficiencyModal()">Calculate Efficiency</a>
           </div>
         </form>
   </li>
@@ -482,3 +483,9 @@
 <app-blowdown-rate-modal *ngIf="showBlowdownRateModal" (emitClose)="closeBlowdownRateModal()" [width]="formWidth"
   [form]="modificationForm" (emitSave)="saveAndCloseBlowdownRateModal()">
 </app-blowdown-rate-modal>
+
+@if (showBoilerEfficiencyModal) {
+  <app-boiler-efficiency-modal [settings]="settings" (emitClose)="closeBoilerEfficiencyModal()"
+  (emitSave)="setBoilerEfficiencyAndClose($event)">
+</app-boiler-efficiency-modal>
+}

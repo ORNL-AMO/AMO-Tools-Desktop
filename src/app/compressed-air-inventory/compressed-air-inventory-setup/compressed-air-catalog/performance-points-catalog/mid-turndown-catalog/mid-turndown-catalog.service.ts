@@ -1,0 +1,50 @@
+import { Injectable } from '@angular/core';
+import { CompressedAirItem, PerformancePoint } from '../../../../compressed-air-inventory';
+import { Settings } from '../../../../../shared/models/settings';
+import { ConvertUnitsService } from '../../../../../shared/convert-units/convert-units.service';
+import { ConvertCompressedAirInventoryService } from '../../../../convert-compressed-air-inventory.service';
+
+@Injectable()
+export class MidTurndownCatalogService {
+
+  constructor(private convertUnitsService: ConvertUnitsService, private convertCompressedAirService: ConvertCompressedAirInventoryService) { }
+
+  setMidTurndown(selectedCompressor: CompressedAirItem, settings: Settings): PerformancePoint {
+    selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.airflow = this.getMidTurndownAirflow(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.isDefaultAirFlow, settings);
+    selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.dischargePressure = this.getMidTurndownPressure(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.isDefaultPressure, settings);
+    selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.power = this.getMidTurndownPower(selectedCompressor, selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.isDefaultPower);
+    return selectedCompressor.compressedAirPerformancePointsProperties.midTurndown;
+  }
+
+  getMidTurndownAirflow(selectedCompressor: CompressedAirItem, isDefault: boolean, settings: Settings): number {
+    if (isDefault) {
+      let defaultAirflow: number = ((1 - (selectedCompressor.compressedAirControlsProperties.unloadPointCapacity / 100)) / 2 + (selectedCompressor.compressedAirControlsProperties.unloadPointCapacity / 100)) * selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.airflow;
+      return this.convertCompressedAirService.roundAirFlowForPresentation(defaultAirflow, settings);
+    } else {
+      return selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.airflow;
+    }
+  }
+
+  getMidTurndownPressure(selectedCompressor: CompressedAirItem, isDefault: boolean, settings: Settings): number {
+    if (isDefault) {
+      let modPressureRange: number = 6;
+      if (settings.unitsOfMeasure == 'Metric') {
+        modPressureRange = this.convertUnitsService.value(modPressureRange).from('psig').to('barg');
+      }
+      let defaultPressure: number = selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.dischargePressure + (modPressureRange * (1 - (selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.airflow / selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.airflow)));
+      return this.convertCompressedAirService.roundPressureForPresentation(defaultPressure, settings);
+    } else {
+      return selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.dischargePressure;
+    }
+  }
+
+  getMidTurndownPower(selectedCompressor: CompressedAirItem, isDefault: boolean): number {
+    if (isDefault) {
+      let LFFM: number = 15;
+      let defaultPower: number = ((LFFM / 100) * (1 - Math.pow(selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.airflow / selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.airflow, 1)) + Math.pow(selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.airflow / selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.airflow, 1)) * selectedCompressor.compressedAirPerformancePointsProperties.fullLoad.power;
+      return this.convertCompressedAirService.roundPowerForPresentation(defaultPower);
+    } else {
+      return selectedCompressor.compressedAirPerformancePointsProperties.midTurndown.power;
+    }
+  }
+}

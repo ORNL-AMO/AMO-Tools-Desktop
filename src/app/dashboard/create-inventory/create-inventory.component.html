@@ -32,6 +32,7 @@
             <select class="form-control type-select" formControlName="inventoryType" (change)="setInventoryName()">
               <option [ngValue]="'motorInventory'">Motor</option>
               <option [ngValue]="'pumpInventory'">Pump</option>
+              <option [ngValue]="'compressedAirInventory'">Compressed Air</option>
             </select>
           </div>
 
@@ -52,7 +53,8 @@
 
         <div class="d-flex justify-content-between" [ngClass]="{
           'motor-inventory': newInventoryItemForm.controls.inventoryType.value == 'motorInventory',
-          'pump-inventory': newInventoryItemForm.controls.inventoryType.value == 'pumpInventory'}">
+          'pump-inventory': newInventoryItemForm.controls.inventoryType.value == 'pumpInventory',
+          'compressed-air-inventory': newInventoryItemForm.controls.inventoryType.value == 'compressedAirInventory'}">
           <div class="p-2">
             <button class="btn btn-secondary" type="button" (click)="hideCreateModal()">Close</button>
           </div>

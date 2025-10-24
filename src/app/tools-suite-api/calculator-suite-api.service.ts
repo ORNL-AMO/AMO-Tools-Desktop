@@ -167,7 +167,7 @@ export class CalculatorSuiteApiService {
       compressedAirReduction.compressorElectricityData.compressorSpecificPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.compressorElectricityData.compressorSpecificPower);
 
       let CompressedAirFlowMeterMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirFlowMeterMethodData(compressedAirReduction.flowMeterMethodData.meterReading);
-       // hardcoded 1 - always calculate as single unit
+      // hardcoded 1 - always calculate as single unit
       let BagMethod = new this.toolsSuiteApiService.ToolsSuiteModule.BagMethod(compressedAirReduction.bagMethodData.operatingTime, compressedAirReduction.bagMethodData.bagFillTime, compressedAirReduction.bagMethodData.bagVolume, 1);
       let PressureMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.PressureMethodData(compressedAirReduction.pressureMethodData.nozzleType, compressedAirReduction.pressureMethodData.numberOfNozzles,
         compressedAirReduction.pressureMethodData.supplyPressure);
@@ -207,6 +207,15 @@ export class CalculatorSuiteApiService {
     return results;
   }
 
+
+  /**
+   * Calculate Air Leak Survey results
+   * 
+   * Bag Method: totalFlowRate is in scfm, annualTotalFlowRate is in kscf, energy in mWh
+   * 
+   * All Other methods: totalFlowRate is in scfm, annualTotalFlowRate in scf, energy in kWh
+   * @returns AirLeakSurveyResult - units described above
+   */
   compressedAirLeakSurvey(inputObj: AirLeakSurveyInput): AirLeakSurveyResult {
     let convertedInput: Array<AirLeakSurveyData> = inputObj.compressedAirLeakSurveyInputVec.map(input => {
       input.utilityCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.utilityCost);

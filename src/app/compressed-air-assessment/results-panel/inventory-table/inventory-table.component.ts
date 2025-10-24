@@ -100,6 +100,7 @@ export class InventoryTableComponent implements OnInit {
         }
       })
     }
+
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     this.inventoryService.selectedCompressor.next(compressedAirAssessment.compressorInventoryItems[0]);
   }

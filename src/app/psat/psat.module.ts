@@ -63,6 +63,8 @@ import { IntegratePumpInventoryComponent } from './integrate-pump-inventory/inte
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
+
 
 @NgModule({
   declarations: [
@@ -122,7 +124,9 @@ import { ExportableResultsTableModule } from '../shared/exportable-results-table
     ConnectedInventoryModule,    
     ImportExportModule,
     SnackbarModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    BannerTooltipsModule
+
   ],
   providers: [
     PsatService,

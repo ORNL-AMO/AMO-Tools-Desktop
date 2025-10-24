@@ -1,0 +1,80 @@
+<label class="group-label" (click)="toggleForm()">
+    <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+    <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+    Controls
+</label>
+<form *ngIf="displayForm" class="p-1" #formElement [formGroup]="form">
+    <!-- controlType -->
+    <div class="form-group" [ngClass]="{'invalid': form.controls.controlType.invalid}">
+        <label for="controlType">Control Type</label>
+        <select id="controlType" name="controlType" formControlName="controlType" (change)="changeControlType(true)"
+            (focus)="focusField('controlType')" class="form-control">
+            <option *ngFor="let controlTypeOption of controlTypeOptions" [ngValue]="controlTypeOption.value">
+                {{controlTypeOption.label}}</option>
+        </select>
+    </div>
+    <div *ngIf="controlTypeOptions.length == 0" class="w-100 text-center">
+        <span class="alert alert-warning small w-100">
+            Select Compressor Type before selecting Control Type.
+        </span>
+    </div>
+    <label class="group-label secondary-group" *ngIf="displayUnload">Unload Controls</label>
+    <!-- unloadPointCapacity -->
+    <div class="form-group" *ngIf="displayUnload" [ngClass]="{'invalid': form.controls.unloadPointCapacity.invalid}">
+        <label for="unloadPointCapacity">Unload Point Capacity</label>
+        <div class="input-group">
+            <input name="unloadPointCapacity" type="number" step="any" class="form-control" id="unloadPointCapacity"
+                formControlName="unloadPointCapacity" (input)="save()" (focus)="focusField('unloadPointCapacity')">
+            <span class="units input-group-addon">%</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.unloadPointCapacity.invalid && !form.controls.unloadPointCapacity.pristine">
+            <span *ngIf="form.controls.unloadPointCapacity.errors.required">Value Required</span>
+            <span *ngIf="form.controls.unloadPointCapacity.errors.min">Value can't be less than
+                {{form.controls.unloadPointCapacity.errors.min.min}} </span>
+            <span *ngIf="form.controls.unloadPointCapacity.errors.max">Value can't be greater than
+                {{form.controls.unloadPointCapacity.errors.max.max}}</span>
+        </span>
+    </div>
+    <!-- numberOfUnloadSteps -->
+    <div class="form-group" *ngIf="displayUnload" [ngClass]="{'invalid': form.controls.numberOfUnloadSteps.invalid}">
+        <label for="numberOfUnloadSteps"># of Unloading Steps</label>
+        <div class="input-group">
+            <input name="numberOfUnloadSteps" type="number" step="any" class="form-control" id="numberOfUnloadSteps"
+                formControlName="numberOfUnloadSteps" (input)="save()" (focus)="focusField('numberOfUnloadSteps')">
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.numberOfUnloadSteps.invalid && !form.controls.numberOfUnloadSteps.pristine">
+            <span *ngIf="form.controls.numberOfUnloadSteps.errors.required">Value Required</span>
+            <span *ngIf="form.controls.numberOfUnloadSteps.errors.min">Value can't be less than
+                {{form.controls.numberOfUnloadSteps.errors.min.min}}</span>
+            <span *ngIf="form.controls.numberOfUnloadSteps.errors.max">Value can't be greater than
+                {{form.controls.numberOfUnloadSteps.errors.max.max}} </span>
+        </span>
+    </div>
+    <!-- automaticShutdown -->
+    <div class="form-group" *ngIf="displayAutomaticShutdown">
+        <label for="automaticShutdown">Automatic Shutdown Timer</label>
+        <select id="automaticShutdown" name="automaticShutdown" formControlName="automaticShutdown" (change)="save()"
+            (focus)="focusField('automaticShutdown')" class="form-control">
+            <option [ngValue]=true>Yes</option>
+            <option [ngValue]=false>No</option>
+        </select>
+    </div>
+    <!-- unloadSumpPressure -->
+    <div class="form-group" *ngIf="displayUnloadSumpPressure"
+        [ngClass]="{'invalid': form.controls.unloadSumpPressure.invalid}">
+        <label for="unloadSumpPressure">Unload Sump Pressure</label>
+        <div class="input-group">
+            <input name="unloadSumpPressure" type="number" step="any" class="form-control" id="unloadSumpPressure"
+                formControlName="unloadSumpPressure" (input)="save()" (focus)="focusField('unloadSumpPressure')">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="units input-group-addon">psig</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="units input-group-addon">barg</span>
+        </div>
+        <span class="alert-danger pull-right small"
+            *ngIf="form.controls.unloadSumpPressure.invalid && !form.controls.unloadSumpPressure.pristine">
+            <span *ngIf="form.controls.unloadSumpPressure.errors.required">Value Required</span>
+        </span>
+    </div>
+
+</form>

@@ -20,7 +20,7 @@ export class GeneralDetailsFormComponent implements OnInit {
   constructor() { 
   }
   
-  ngOnInit() {
+  ngOnInit(): void {
     this.processEquipmentOptions = processEquipmentOptions;
   }
 

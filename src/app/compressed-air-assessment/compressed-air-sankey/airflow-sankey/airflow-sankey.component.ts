@@ -90,7 +90,7 @@ export class AirflowSankeyComponent implements OnInit {
 
   ngAfterViewInit() {
     this.dayTypeSetupServiceSubscription = this.dayTypeSetupService.endUseDayTypeSetup.subscribe(endUseDayTypeSetup => {
-      if (endUseDayTypeSetup) {
+      if (endUseDayTypeSetup && this.compressedAirAssessment.endUseData.endUses?.length > 0) {
         this.endUseDayTypeSetup = endUseDayTypeSetup;
         this.setSankeyDayTypeSetup();
         this.renderSankey();

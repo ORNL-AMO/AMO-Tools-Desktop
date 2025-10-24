@@ -20,6 +20,8 @@ export class ConnectedAssessmentComponent {
   connectedAssessmentItems: Array<ConnectedItem>;
   @Input()
   isItemValid: boolean;
+  @Input()
+  integratedCreateType: string;
   @Output('focusedField')
   focusedField = new EventEmitter();  
   @Output('modalOpen')
@@ -64,17 +66,20 @@ export class ConnectedAssessmentComponent {
   }
 
   goToAssessment(assessment: Assessment) {
-      let url: string;
-      switch(this.assessmentType) {
-        case 'PSAT':
-          url = `/psat/${assessment.id}`;
-          break;
-        default:
-          url = undefined;
-      }
-      if (url) {
-        this.router.navigate([url]);
-      }
+    let url: string;
+    switch (this.assessmentType) {
+      case 'PSAT':
+        url = `/psat/${assessment.id}`;
+        break;
+      case 'CompressedAir':
+        url = `/compressed-air/${assessment.id}`;
+        break;
+      default:
+        url = undefined;
+    }
+    if (url) {
+      this.router.navigate([url]);
+    }
   }
 
   focusField(focusedField: string) {

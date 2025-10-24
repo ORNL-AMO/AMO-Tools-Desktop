@@ -1,0 +1,35 @@
+<!-- Unload Point Help  -->
+<div class="my-2"
+    *ngIf="focusedField == 'unloadPointDischargePressure'">
+    <h6>
+        Discharge Pressure
+        <br>
+        <small class="text-muted">
+            The pressure at which the air compressor no longer delivers air; at this point, the compressor may
+            unload, be fully modulated, or turn off.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'unloadPointAirflow'">
+    <h6>
+        Air Flow
+        <br>
+        <small class="text-muted">
+            The volume of air when the compressor reaches the cut-out point.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2" *ngIf="focusedField == 'unloadPointPower'">
+    <h6>
+        Power
+        <br>
+        <small class="text-muted">
+            Compressor power at the unload point.
+            <hr>
+        </small>
+    </h6>
+</div>

@@ -25,7 +25,7 @@ export class CompressedAirSankeyComponent implements OnInit {
   }
 
   changeSankeyTab(sankeyTab: 'airflow' | 'power') {
-    if (sankeyTab === 'power' || (sankeyTab === 'airflow' && this.assessment.compressedAirAssessment.endUseData.endUses.length !== 0)) {
+    if (sankeyTab === 'power' || (sankeyTab === 'airflow')) {
       this.sankeyTab = sankeyTab;
     }
   }

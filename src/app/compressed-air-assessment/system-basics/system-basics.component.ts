@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
  
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -11,6 +11,7 @@ import { ConvertCompressedAirService } from '../convert-compressed-air.service';
 import { SystemBasicsFormService } from './system-basics-form.service';
 import * as _ from 'lodash';
 import { firstValueFrom } from 'rxjs';
+import { IntegrationState } from '../../shared/connected-inventory/integrations';
 
 
 @Component({
@@ -30,7 +31,8 @@ export class SystemBasicsComponent implements OnInit {
   oldSettings: Settings;
   systemBasicsForm: UntypedFormGroup;
   showUpdateDataReminder: boolean = false;
-  showSuccessMessage: boolean = false;
+  showSuccessMessage: boolean = false;  
+  connectedAssessmentState: IntegrationState;
   constructor(private settingsService: SettingsService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private convertCompressedAirService: ConvertCompressedAirService,
@@ -54,6 +56,24 @@ export class SystemBasicsComponent implements OnInit {
   ngOnDestroy() {
     if(this.showUpdateDataReminder && this.oldSettings) {
       this.openUpdateUnitsModal.emit(this.oldSettings);
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.assessment) {
+      this.setConnectedInventoryWarning();
+    }
+  }
+
+  setConnectedInventoryWarning() {
+    if (this.assessment.compressedAirAssessment.connectedItem) {
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: 'connected-to-inventory'
+      }
+    } else {
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: undefined
+      }
     }
   }
 
