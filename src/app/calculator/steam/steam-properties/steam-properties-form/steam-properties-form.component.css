@@ -1,23 +1,28 @@
 .known-row-parent {
-    display: grid; 
-    grid-template-columns: auto 1fr 1fr 1fr; 
-    align-items: center; 
-    gap: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
 }
 
 .known-conditional-flex {
-    display: flex; 
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .known-conditional-position {
-    display: flex; 
-    align-items: center; 
-    gap: 1rem; 
-    white-space: nowrap; 
-    overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-grow: 0; /* prevent full stretch */
 }
 
 .known-conditional-input-group {
-    flex-grow: 1; min-width: 12rem;
+  flex-grow: 0; /* prevent input from stretching */
+  min-width: 12rem;
+}
+
+.input-group.calc-addon-group {
+  display: flex;
+  align-items: center;
 }
