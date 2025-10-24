@@ -46,17 +46,17 @@
     <span *ngIf="pressureLevel == 'lowPressure'">Low Pressure Header</span>
   </label>
 
-  <div class="form-group">
+  <div class="form-group" *ngIf="pressureLevel == 'highPressure'">
     <label for="{{idString+pressureLevel+'_pressure'}}">Pressure</label>
-      <div name="pressure" type="number" step="10" class="small text-center bold">{{this.ssmt.boilerInput.saturatedPressure | number:'1.0-4'}}
-        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
-  </div>
-  <div class="form-group">
+    <div name="pressure" type="number" step="10" class="small text-center bold">{{this.ssmt.boilerInput.saturatedPressure | number:'1.0-4'}}
+      <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+    </div>
+    <!-- <div class="form-group">
       <label >Temperature</label>
       <div class="small text-center bold">{{this.ssmt.boilerInput.steamTemperature | number:'1.0-2'}}
         <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <div class="form-group">
