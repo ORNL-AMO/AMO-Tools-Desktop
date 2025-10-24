@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MonthyInputs, PowerFactorCorrectionInputs } from '../power-factor-correction.component';
 import { PowerFactorCorrectionService } from '../power-factor-correction.service';
+import { forEach } from 'lodash';
 
 @Component({
     selector: 'app-power-factor-correction-form',
@@ -48,7 +49,22 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   //elements when they are updated/changed
   calculate() {
     //.emit() will tell the parent to do something
+    console.log('emit');
     this.emitCalculate.emit(this.data);
+  }
+
+  updateStartingYear(year: number) {   
+    const updatedInputs = this.data.monthyInputs.map((input) => {
+      if (input.month) {
+        const monthOnly = input.month.replace(/\d{4}$/, '').trim(); // remove trailing year
+        return { ...input, month: `${monthOnly} ${year}` };
+      }
+      return input;
+    });
+
+    this.data.monthyInputs = updatedInputs;
+
+    this.calculate();
   }
 
   focusField(str: string) {
