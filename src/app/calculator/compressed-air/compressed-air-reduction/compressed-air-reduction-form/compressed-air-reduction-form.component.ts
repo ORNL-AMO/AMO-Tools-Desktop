@@ -213,7 +213,7 @@ export class CompressedAirReductionFormComponent implements OnInit {
     let specificPower: number = this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower;
 
     if (this.settings.unitsOfMeasure != 'Imperial') {
-      specificPower = this.convertCompressedAirReductionService.convertSpecificPower(specificPower);
+      specificPower = this.convertCompressedAirReductionService.convertSpecificPowerToMetric(specificPower);
       specificPower = this.convertCompressedAirReductionService.roundVal(specificPower);
     } else {
       specificPower = specificPower * 100;

@@ -1,0 +1,76 @@
+<form class="p-2">
+    <div class="row no-gutters">
+        <div class="col-6">
+            <div class="form-group">
+                <label for="compressorTypeOption">Compressor Type</label>
+                <select [(ngModel)]="filterCompressorOptions.IDCompType" name="compressorTypeOption"
+                    id="compressorTypeOption" class="form-control" (change)="setControlTypes(true)">
+                    <option [ngValue]="undefined">All</option>
+                    <option *ngFor="let option of compressorTypeOptions" [ngValue]="option.value">
+                        {{option.label}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="controlTypeOption">Control Type</label>
+                <select [(ngModel)]="filterCompressorOptions.IDControlType" name="controlTypeOption"
+                    id="controlTypeOption" class="form-control" (change)="save()">
+                    <option [ngValue]="undefined">All</option>
+                    <option *ngFor="let option of controlTypes" [ngValue]="option.value">
+                        {{option.label}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="horsePowerOption">Horsepower</label>
+                <select [(ngModel)]="filterCompressorOptions.HP" name="horsePowerOption" id="horsePowerOption"
+                    class="form-control" (change)="save()">
+                    <option [ngValue]="undefined">All</option>
+                    <option *ngFor="let option of horsePowerOptions" [ngValue]="option">
+                        {{option}} hp
+                    </option>
+                </select>
+            </div>
+            <div class="w-100 justify-content-start btn-group btn-group-sm">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-sm nav-btn-clear pull-left" (click)="resetFilters()">Reset Filters</button>    
+                </div>
+            </div>
+        </div>
+        <div class="col-6 pl-2">
+            <div class="form-group d-flex flex-column">
+                <div class="d-flex">
+                    <label class="hide-text">no show</label>
+                    <input id="min" name="min" type="text" class="form-control disabled-input text-center"
+                        [disabled]="true" [(ngModel)]="minLabel">
+                    <input id="max" name="max" type="text" class="form-control disabled-input text-center"
+                        [disabled]="true" [(ngModel)]="maxLabel">
+                </div>
+                <!--ratedCapacity min/max-->
+                <div class="d-flex">
+                    <label for="efficiencyMin">Rated Capacity (acfm)</label>
+                    <input type="number" [(ngModel)]="filterCompressorOptions.ratedCapacityMin" name="ratedCapacityMin"
+                        id="ratedCapacityMin" (input)="save()" class="form-control">
+                    <input type="number" [(ngModel)]="filterCompressorOptions.ratedCapacityMax" name="ratedCapacityMax"
+                        id="ratedCapacityMax" (input)="save()" class="form-control">
+                </div>
+                <!--ratedPressure min/max-->
+                <div class="d-flex">
+                    <label for="ratedPressureMin">Rated Pressure (psig)</label>
+                    <input type="number" [(ngModel)]="filterCompressorOptions.ratedPressureMin" name="ratedPressureMin"
+                        id="ratedPressureMin" (input)="save()" class="form-control">
+                    <input type="number" [(ngModel)]="filterCompressorOptions.ratedPressureMax" name="ratedPressureMax"
+                        id="ratedPressureMax" (input)="save()" class="form-control">
+                </div>
+                <!--syncSpeed min/max-->
+                <div class="d-flex">
+                    <label for="maxFullFlowMin">Max Full Flow Pressure (psig)</label>
+                    <input type="number" [(ngModel)]="filterCompressorOptions.maxFullFlowMin" name="maxFullFlowMin"
+                        id="maxFullFlowMin" (input)="save()" class="form-control">
+                    <input type="number" [(ngModel)]="filterCompressorOptions.maxFullFlowMax" name="maxFullFlowMax"
+                        id="maxFullFlowMax" (input)="save()" class="form-control">
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

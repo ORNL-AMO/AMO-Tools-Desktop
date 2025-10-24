@@ -161,16 +161,16 @@ export class PsatIntegrationService {
       pumpInventory.pumpInventoryData.departments.forEach(dept => {
         dept.catalog.map(pumpItem => {
           if (pumpItem.id === connectedInventoryData.connectedItem.id) {
-            let connectedFromState = copyObject(selectedPumpItem);
+            let connectedPumpFromState = copyObject(selectedPumpItem);
             let connectedAsssessment: ConnectedItem = {
               assessmentId: assessment.id,
               name: assessment.name,
               inventoryId: connectedInventoryData.connectedItem.inventoryId,
-              connectedFromState: {
-                pumpMotor: connectedFromState.pumpMotor,
-                pumpEquipment: connectedFromState.pumpEquipment,
-                pumpSystem: connectedFromState.systemProperties,
-                pumpFluid: connectedFromState.fluid,
+              connectedPumpFromState: {
+                pumpMotor: connectedPumpFromState.pumpMotor,
+                pumpEquipment: connectedPumpFromState.pumpEquipment,
+                pumpSystem: connectedPumpFromState.systemProperties,
+                pumpFluid: connectedPumpFromState.fluid,
               }
             }
             if (pumpItem.connectedAssessments) {
@@ -386,7 +386,7 @@ export class PsatIntegrationService {
       let settingsDiffer: boolean = assessmentSettings.unitsOfMeasure !== pumpInventorySettings.unitsOfMeasure;
       let isMotorMatch = Object.keys(selectedPump.pumpMotor).every((key, index) => {
         let newValue = selectedPump.pumpMotor[key];
-        let connectedFromValue = connectedAssessment.connectedFromState.pumpMotor[key];
+        let connectedFromValue = connectedAssessment.connectedPumpFromState.pumpMotor[key];
         if (settingsDiffer && key === 'motorRatedPower') {
           let assessmentUnit: string = assessmentSettings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
           let inventoryUnit: string = pumpInventorySettings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
@@ -406,7 +406,7 @@ export class PsatIntegrationService {
       let isFluidMatch: boolean = true;
       let isEquipmentMatch: boolean = true;
       let isSystemPropertiesMatch: boolean = true;
-      if (selectedPump.fluid.fluidType !== connectedAssessment.connectedFromState.pumpFluid.fluidType) {
+      if (selectedPump.fluid.fluidType !== connectedAssessment.connectedPumpFromState.pumpFluid.fluidType) {
         isFluidMatch = false;
         let fluidFormField: ConnectedValueFormField = {
           formGroup: 'fluid',
@@ -414,8 +414,8 @@ export class PsatIntegrationService {
         differingConnectedValues.push(fluidFormField);
       }
 
-      if (selectedPump.pumpEquipment.numStages !== connectedAssessment.connectedFromState.pumpEquipment.numStages
-        || selectedPump.pumpEquipment.pumpType !== connectedAssessment.connectedFromState.pumpEquipment.pumpType) {
+      if (selectedPump.pumpEquipment.numStages !== connectedAssessment.connectedPumpFromState.pumpEquipment.numStages
+        || selectedPump.pumpEquipment.pumpType !== connectedAssessment.connectedPumpFromState.pumpEquipment.pumpType) {
         isEquipmentMatch = false;
         let numStagesField: ConnectedValueFormField = {
           formGroup: 'pump',
@@ -423,7 +423,7 @@ export class PsatIntegrationService {
         differingConnectedValues.push(numStagesField);
       }
 
-      if (selectedPump.systemProperties.driveType !== connectedAssessment.connectedFromState.pumpSystem.driveType) {
+      if (selectedPump.systemProperties.driveType !== connectedAssessment.connectedPumpFromState.pumpSystem.driveType) {
         isSystemPropertiesMatch = false;
         let driveTypeField: ConnectedValueFormField = {
           formGroup: 'system',
@@ -457,7 +457,7 @@ export class PsatIntegrationService {
 
         Object.keys(psatMotor).every((key, index) => {
           const newValue = psatMotor[key];
-          const connectedFromValue = currentAssessment.connectedFromState.pumpMotor[key];
+          const connectedFromValue = currentAssessment.connectedPumpFromState.pumpMotor[key];
           let valuesEqual: boolean = newValue === connectedFromValue;
           if (!valuesEqual) {
             let motorField: ConnectedValueFormField = {
@@ -468,16 +468,16 @@ export class PsatIntegrationService {
           return valuesEqual;
         });
 
-        if (assessment.psat.inputs.fluidType !== currentAssessment.connectedFromState.pumpFluid.fluidType
-          || assessment.psat.inputs.stages !== currentAssessment.connectedFromState.pumpEquipment.numStages) {
+        if (assessment.psat.inputs.fluidType !== currentAssessment.connectedPumpFromState.pumpFluid.fluidType
+          || assessment.psat.inputs.stages !== currentAssessment.connectedPumpFromState.pumpEquipment.numStages) {
           let fluidFormField: ConnectedValueFormField = {
             formGroup: 'fluid',
           }
           differingConnectedValues.push(fluidFormField);
         }
 
-        if (assessment.psat.inputs.pump_style !== currentAssessment.connectedFromState.pumpEquipment.pumpType ||
-          assessment.psat.inputs.drive !== currentAssessment.connectedFromState.pumpSystem.driveType) {
+        if (assessment.psat.inputs.pump_style !== currentAssessment.connectedPumpFromState.pumpEquipment.pumpType ||
+          assessment.psat.inputs.drive !== currentAssessment.connectedPumpFromState.pumpSystem.driveType) {
           let numStagesField: ConnectedValueFormField = {
             formGroup: 'pump',
           }
@@ -536,18 +536,18 @@ export class PsatIntegrationService {
       return connectedAssessment.assessmentId === psat.connectedItem.assessmentId;
     });
 
-    console.log(currentAssessment.connectedFromState.pumpMotor)
-    psat.inputs.pump_style = currentAssessment.connectedFromState.pumpEquipment.pumpType;
-    psat.inputs.drive = currentAssessment.connectedFromState.pumpSystem.driveType;
-    psat.inputs.stages = currentAssessment.connectedFromState.pumpEquipment.numStages;
-    psat.inputs.line_frequency = currentAssessment.connectedFromState.pumpMotor.lineFrequency;
-    psat.inputs.motor_rated_power = currentAssessment.connectedFromState.pumpMotor.motorRatedPower;
-    psat.inputs.motor_rated_speed = currentAssessment.connectedFromState.pumpMotor.motorRPM;
-    psat.inputs.efficiency_class = currentAssessment.connectedFromState.pumpMotor.motorEfficiencyClass;
-    psat.inputs.efficiency = currentAssessment.connectedFromState.pumpMotor.motorEfficiency;
-    psat.inputs.motor_rated_voltage = currentAssessment.connectedFromState.pumpMotor.motorRatedVoltage;
-    psat.inputs.motor_rated_fla = currentAssessment.connectedFromState.pumpMotor.motorFullLoadAmps;
-    psat.inputs.fluidType = currentAssessment.connectedFromState.pumpFluid.fluidType;
+    console.log(currentAssessment.connectedPumpFromState.pumpMotor)
+    psat.inputs.pump_style = currentAssessment.connectedPumpFromState.pumpEquipment.pumpType;
+    psat.inputs.drive = currentAssessment.connectedPumpFromState.pumpSystem.driveType;
+    psat.inputs.stages = currentAssessment.connectedPumpFromState.pumpEquipment.numStages;
+    psat.inputs.line_frequency = currentAssessment.connectedPumpFromState.pumpMotor.lineFrequency;
+    psat.inputs.motor_rated_power = currentAssessment.connectedPumpFromState.pumpMotor.motorRatedPower;
+    psat.inputs.motor_rated_speed = currentAssessment.connectedPumpFromState.pumpMotor.motorRPM;
+    psat.inputs.efficiency_class = currentAssessment.connectedPumpFromState.pumpMotor.motorEfficiencyClass;
+    psat.inputs.efficiency = currentAssessment.connectedPumpFromState.pumpMotor.motorEfficiency;
+    psat.inputs.motor_rated_voltage = currentAssessment.connectedPumpFromState.pumpMotor.motorRatedVoltage;
+    psat.inputs.motor_rated_fla = currentAssessment.connectedPumpFromState.pumpMotor.motorFullLoadAmps;
+    psat.inputs.fluidType = currentAssessment.connectedPumpFromState.pumpFluid.fluidType;
 
     connectedInventoryData.shouldRestoreConnectedValues = false;
     this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
@@ -557,17 +557,17 @@ export class PsatIntegrationService {
   restoreConnectedInventoryValues(selectedPump: PumpItem, connectedInventoryData: ConnectedInventoryData) {
     // * we don't care which connected assessment
     let currentAssessment = selectedPump.connectedAssessments[0];
-    selectedPump.pumpEquipment.pumpType = currentAssessment.connectedFromState.pumpEquipment.pumpType;
-    selectedPump.systemProperties.driveType = currentAssessment.connectedFromState.pumpSystem.driveType;
-    selectedPump.pumpEquipment.numStages = currentAssessment.connectedFromState.pumpEquipment.numStages;
-    selectedPump.pumpMotor.lineFrequency = currentAssessment.connectedFromState.pumpMotor.lineFrequency;
-    selectedPump.pumpMotor.motorRatedPower = currentAssessment.connectedFromState.pumpMotor.motorRatedPower;
-    selectedPump.pumpMotor.motorRPM = currentAssessment.connectedFromState.pumpMotor.motorRPM;
-    selectedPump.pumpMotor.motorEfficiencyClass = currentAssessment.connectedFromState.pumpMotor.motorEfficiencyClass;
-    selectedPump.pumpMotor.motorEfficiency = currentAssessment.connectedFromState.pumpMotor.motorEfficiency;
-    selectedPump.pumpMotor.motorRatedVoltage = currentAssessment.connectedFromState.pumpMotor.motorRatedVoltage;
-    selectedPump.pumpMotor.motorFullLoadAmps = currentAssessment.connectedFromState.pumpMotor.motorFullLoadAmps;
-    selectedPump.fluid.fluidType = currentAssessment.connectedFromState.pumpFluid.fluidType;
+    selectedPump.pumpEquipment.pumpType = currentAssessment.connectedPumpFromState.pumpEquipment.pumpType;
+    selectedPump.systemProperties.driveType = currentAssessment.connectedPumpFromState.pumpSystem.driveType;
+    selectedPump.pumpEquipment.numStages = currentAssessment.connectedPumpFromState.pumpEquipment.numStages;
+    selectedPump.pumpMotor.lineFrequency = currentAssessment.connectedPumpFromState.pumpMotor.lineFrequency;
+    selectedPump.pumpMotor.motorRatedPower = currentAssessment.connectedPumpFromState.pumpMotor.motorRatedPower;
+    selectedPump.pumpMotor.motorRPM = currentAssessment.connectedPumpFromState.pumpMotor.motorRPM;
+    selectedPump.pumpMotor.motorEfficiencyClass = currentAssessment.connectedPumpFromState.pumpMotor.motorEfficiencyClass;
+    selectedPump.pumpMotor.motorEfficiency = currentAssessment.connectedPumpFromState.pumpMotor.motorEfficiency;
+    selectedPump.pumpMotor.motorRatedVoltage = currentAssessment.connectedPumpFromState.pumpMotor.motorRatedVoltage;
+    selectedPump.pumpMotor.motorFullLoadAmps = currentAssessment.connectedPumpFromState.pumpMotor.motorFullLoadAmps;
+    selectedPump.fluid.fluidType = currentAssessment.connectedPumpFromState.pumpFluid.fluidType;
     connectedInventoryData.shouldRestoreConnectedValues = false;
     this.integrationStateService.connectedInventoryData.next(connectedInventoryData)
   }

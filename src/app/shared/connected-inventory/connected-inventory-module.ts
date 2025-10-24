@@ -10,6 +10,8 @@ import { PsatIntegrationService } from './psat-integration.service';
 import { CreateAssessmentModalModule } from '../create-assessment-modal/create-assessment-modal.module';
 import { ConnectedAssessmentComponent } from './connected-assessment/connected-assessment.component';
 import { ConnectedAssessmentStatusComponent } from './connected-assessment-status/connected-assessment-status.component';
+import { CompressedAirMotorIntegrationService } from './compressed-air-motor-integration.service';
+import { CompressedAirAssessmentIntegrationService } from './compressed-air-assessment-integration.service';
 
 
 
@@ -29,7 +31,9 @@ import { ConnectedAssessmentStatusComponent } from './connected-assessment-statu
   providers: [
     PumpMotorIntegrationService,
     PsatIntegrationService,
-    IntegrationStateService
+    IntegrationStateService,
+    CompressedAirMotorIntegrationService,
+    CompressedAirAssessmentIntegrationService
   ],
   exports: [
     IntegrationStateComponent, 

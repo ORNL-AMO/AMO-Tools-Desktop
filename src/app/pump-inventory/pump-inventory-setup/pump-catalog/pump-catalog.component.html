@@ -9,6 +9,7 @@
     <div class="col-12">
         <app-pump-basics></app-pump-basics>
         <app-connected-assessment [assessmentType]="'PSAT'" 
+            [integratedCreateType]="'Pump'"
             [connectedInventoryItem]="connectedPumpItem" 
             [connectedAssessmentItems]="selectedPumpItem.connectedAssessments" 
             [isItemValid]="selectedPumpItem.validPump.isValid" 

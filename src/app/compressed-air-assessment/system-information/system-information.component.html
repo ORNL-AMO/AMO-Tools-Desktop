@@ -132,6 +132,9 @@
                     <option [ngValue]="'baseTrim'">Base/Trim</option>
                 </select>
             </div>
+            <span *ngIf="hasConnectedCompressedAirInventory" class="alert-info pull-right small">
+                This assessment is connected to a compressed air inventory system, please make the appropriate changes to multi-compressor system controls.
+            </span>
         </div>
         <!-- Target Pressure (targetPressureSequencer)-->
         <div class="form-group" *ngIf="form.controls.multiCompressorSystemControls.value == 'targetPressureSequencer'"

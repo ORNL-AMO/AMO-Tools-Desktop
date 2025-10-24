@@ -12,7 +12,7 @@ import { PreAssessmentItemComponent } from './pre-assessment-item/pre-assessment
 import { DiagramItemComponent } from './diagram-item/diagram-item.component';
 import { UpdateApplicationModule } from '../../shared/update-application/update-application.module';
 import { EmailListSubscribeService } from '../../shared/subscribe-toast/email-list-subscribe.service';
-
+import { CollapseSidebarDirective } from './calculator-list/collapse-sidebar-directive/collapse-sidebar-directive';
 @NgModule({
   declarations: [
     SidebarComponent,
@@ -28,7 +28,8 @@ import { EmailListSubscribeService } from '../../shared/subscribe-toast/email-li
     RouterModule,
     ModalModule,
     DashboardPipeModule,
-    UpdateApplicationModule
+    UpdateApplicationModule,
+    CollapseSidebarDirective
   ],
   exports: [
     SidebarComponent

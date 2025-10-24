@@ -1,0 +1,22 @@
+<div class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" (click)="toggleDropdown()">
+        Horsepower Types
+    </a>
+    <div class="dropdown-menu p-0" [ngClass]="{'show': showDropdown == true}">
+        <div class="list-group">
+            <a class="list-group-item list-group-item-action"
+                [ngClass]="{'active': filterInventorySummary.horsepowerTypes.length == 0}" (click)="selectAll()">
+                All
+            </a>
+            <a class="list-group-item list-group-item-action" *ngFor="let option of horsepowerTypes"
+                [ngClass]="{'active': checkActive(option.value)}" (click)="select(option.value)">
+                {{option.value}} 
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
+                <span class="pull-right pl-2 pr-2 badge badge-pill">
+                    {{option.count}}
+                </span>
+            </a>
+        </div>
+    </div>
+</div>

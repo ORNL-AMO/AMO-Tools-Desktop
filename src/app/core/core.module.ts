@@ -42,6 +42,7 @@ import { SurveyToastModule } from '../shared/survey-toast/survey-toast.module';
 import { MeasurSurveyModule } from '../shared/measur-survey/measur-survey.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 import { UpdateApplicationModule } from '../shared/update-application/update-application.module';
+import { CompressedAirInventoryModule } from '../compressed-air-inventory/compressed-air-inventory.module';
 import { SubscribeToastComponent } from '../shared/subscribe-toast/subscribe-toast.component';
 import { EmailListSubscribeService } from '../shared/subscribe-toast/email-list-subscribe.service';
 import { SubscribeModalComponent } from '../shared/subscribe-modal/subscribe-modal.component';
@@ -91,6 +92,7 @@ import { ShareDataModalModule } from '../shared/share-data-modal/share-data-moda
     MeasurSurveyModule,
     SnackbarModule,
     UpdateApplicationModule,
+    CompressedAirInventoryModule,
     SubscribeToastComponent,
     SubscribeModalComponent,
     ExportToJustifiModalModule,

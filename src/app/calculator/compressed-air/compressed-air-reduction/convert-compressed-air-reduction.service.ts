@@ -79,7 +79,7 @@ export class ConvertCompressedAirReductionService {
     return inputData;
   }
 
-  convertSpecificPower(specificPower: number): number {
+  convertSpecificPowerToMetric(specificPower: number): number {
     let conversionHelper = this.convertUnitsService.value(1).from('ft3').to('m3');
     specificPower = specificPower / conversionHelper;
     return specificPower;

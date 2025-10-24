@@ -162,7 +162,7 @@ export class AirLeakFormService {
       },
     };
     if (settings && settings.unitsOfMeasure == 'Metric') {
-      emptyData = this.convertAirLeakService.convertDefaultFacilityCompressorData(emptyData);
+      emptyData = this.convertAirLeakService.convertImperialFacilityCompressorData(emptyData);
     }
     return emptyData;
   }

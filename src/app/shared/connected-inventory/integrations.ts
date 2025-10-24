@@ -1,3 +1,4 @@
+import { CentrifugalSpecifics, CompressedAirControlsProperties, CompressedAirDesignDetailsProperties, CompressedAirMotorProperties, CompressedAirPerformancePointsProperties, FieldMeasurements, NameplateData } from "../../compressed-air-inventory/compressed-air-inventory";
 import { FluidProperties, PumpMotorProperties, PumpProperties, SystemProperties } from "../../pump-inventory/pump-inventory";
 import { AssessmentType } from "../models/assessment";
 import { PsatInputs } from "../models/psat";
@@ -30,6 +31,8 @@ export interface IntegrationState {
 
 export interface ConnectedValueFormField {
   formGroup: IntegrationFormGroupString,
+  // * use if is specific inventory item diff inside of a broader connected item
+  itemId?: string,
 }
 
 export interface ConnectedItem {
@@ -37,21 +40,36 @@ export interface ConnectedItem {
   name: string,
   inventoryId: number,
   inventoryName?: string,
-  departmentId?: string,
+  departmentId?: string,  
   inventoryType?: InventoryType,
   assessmentType?: AssessmentType,
   assessmentId?: number,
   assessmentName?: string,
-  connectedFromState?: ConnectedFromState
+  connectedPumpFromState?: ConnectedPump,
+  connectedCompressorsFromState?: ConnectedCompressor[],
 }
 
 // inventory values at time of assessment filled/connected
-export interface ConnectedFromState {
+export interface ConnectedPump {
   psatInputs?: PsatInputs;
   pumpMotor: PumpMotorProperties,
   pumpEquipment: PumpProperties,
   pumpSystem: SystemProperties,
-  pumpFluid: FluidProperties
+  pumpFluid: FluidProperties,
+}
+
+// inventory values at time of assessment filled/connected
+export interface ConnectedCompressor {
+  // compressedAirAssessment?: CompressedAirAssessment,
+  originalCompressorId: string,
+  connectedCompressorId: string,
+  compressorMotor: CompressedAirMotorProperties,
+  nameplateData: NameplateData,
+  compressedAirControlsProperties: CompressedAirControlsProperties,
+  compressedAirDesignDetailsProperties: CompressedAirDesignDetailsProperties,
+  compressedAirPerformancePointsProperties: CompressedAirPerformancePointsProperties,
+  centrifugalSpecifics: CentrifugalSpecifics,  
+  fieldMeasurements: FieldMeasurements,
 }
 
 export interface ConnectedInventoryData {
@@ -74,5 +92,6 @@ export interface AssessmentOption {
 
 export type IntegrationStatusString = 'settings-differ' | 'connected-to-inventory';
 export type AssessmentStatusString = 'connected-to-assessment' | 'connected-assessment-differs' | 'three-way-connected' | 'invalid';
-export type InventoryType = 'motor' | 'pump';
-export type IntegrationFormGroupString = 'fluid' | 'pump' | 'motor' | 'system';
+export type InventoryType = 'motor' | 'pump' | 'compressed-air';
+// todo create for pumps and CA
+export type IntegrationFormGroupString = 'fluid' | 'pump' | 'motor' | 'system' | 'compressed-air';

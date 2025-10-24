@@ -255,6 +255,10 @@ export class StandaloneSuiteApiService {
   //   return output;
   // }
 
+  /**
+   * Calculate Bag Method for air leak or pressure reduction
+   * @returns BagMethodOutput - totalFlowRate is in scfm, annualTotalFlowRate is in kscf, energy in mWh
+   */
   bagMethod(input: BagMethodInput): BagMethodOutput {
     input.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagFillTime);
     input.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagVolume);

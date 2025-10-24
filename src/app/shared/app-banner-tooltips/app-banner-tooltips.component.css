@@ -1,0 +1,4 @@
+:host {
+  position: relative;
+  display: inline-block; /* Ensures the wrapper doesn't break layout */
+}
