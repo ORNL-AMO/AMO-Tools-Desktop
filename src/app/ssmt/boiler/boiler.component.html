@@ -109,38 +109,54 @@
         <span class="alert-warning pull-right small" *ngIf="warnings.steamQuality !== null">{{warnings.steamQuality}} <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
       </span>   -->
     </div>
-
-        <div class="form-group" *ngIf="boilerForm.controls.steamQuality.value == 0">
-          <label for="pressureOrTemperature" class="saturated-row-label">Pressure or Temperature</label>
-          <select (focus)="changeField('pressureOrTemperature')"  type="number" step="1" name="pressureOrTemperature" class="form-control"
-            formControlName="pressureOrTemperature" id="pressureOrTemperature"(change)="setValidators()" (input)="save()" autofocus>
+    <div [ngClass]="boilerForm.controls.steamQuality.value === 0 ? 'known-row-parent' : ''">
+      <div
+        *ngIf="boilerForm.controls.steamQuality.value == 0"
+        [ngClass]="boilerForm.controls.steamQuality.value === 0 ? 'saturated-conditional-column' : 'form-group'"
+      >
+        <div class="saturated-conditional-input-group">
+          <select (focus)="changeField('pressureOrTemperature')" type="number" step="1" name="pressureOrTemperature"
+            class="form-control" formControlName="pressureOrTemperature" id="pressureOrTemperature"
+            (change)="setValidators()" (input)="save()" autofocus>
             <option [ngValue]="0">Saturated Pressure</option>
             <option [ngValue]="1">Saturated Temperature</option>
           </select>
         </div>
+      </div>
 
-        <div *ngIf="boilerForm.controls.pressureOrTemperature.value == 0 || boilerForm.controls.steamQuality.value == 1"
-            class="form-group">
-          <label for="saturatedPressure" class="saturated-row-label" [ngStyle]="{ visibility: boilerForm.controls.steamQuality.value === 1 ? 'visible' : 'hidden' }">Saturated Pressure</label>
-          <div class="input-group calc-addon-group">
-            <input (focus)="changeField('saturatedPressure')" type="number" step="1" class="form-control"
-              formControlName="saturatedPressure" id="saturatedPressure" onfocus="this.select();" (input)="save()">
-            <span class="input-group-addon units"
-              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
-          </div>
+      <div
+        *ngIf="boilerForm.controls.pressureOrTemperature.value == 0 || boilerForm.controls.steamQuality.value == 1"
+        [ngClass]="boilerForm.controls.steamQuality.value === 0 ? 'saturated-conditional-column' : 'form-group'"
+      >
+        <label for="saturatedPressure" class="saturated-row-label"
+          [ngStyle]="{ visibility: boilerForm.controls.steamQuality.value === 1 ? 'visible' : 'hidden' }">
+          Saturated Pressure
+        </label>
+        <div class="input-group calc-addon-group saturated-conditional-input-group">
+          <input (focus)="changeField('saturatedPressure')" type="number" step="1" class="form-control"
+            formControlName="saturatedPressure" id="saturatedPressure" onfocus="this.select();" (input)="save()">
+          <span class="input-group-addon units"
+            [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
         </div>
+      </div>
 
-        <div *ngIf="boilerForm.controls.pressureOrTemperature.value == 1 || boilerForm.controls.steamQuality.value == 1"
-            class="form-group">
-          <label for="steamTemperature" class="saturated-row-label" [ngStyle]="{ visibility: boilerForm.controls.steamQuality.value === 1 ? 'visible' : 'hidden' }">Saturated Temperature</label>
-          <div class="input-group calc-addon-group">
-            <input (focus)="changeField('steamTemperature')" type="number" step="1" class="form-control"
-              formControlName="steamTemperature" id="steamTemperature" onfocus="this.select();" (input)="save()">
-            <span class="input-group-addon units">
-              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
-            </span>
-          </div>
+      <div
+        *ngIf="boilerForm.controls.pressureOrTemperature.value == 1 || boilerForm.controls.steamQuality.value == 1"
+        [ngClass]="boilerForm.controls.steamQuality.value === 0 ? 'saturated-conditional-column' : 'form-group'"
+      >
+        <label for="steamTemperature" class="saturated-row-label"
+          [ngStyle]="{ visibility: boilerForm.controls.steamQuality.value === 1 ? 'visible' : 'hidden' }">
+          Saturated Temperature
+        </label>
+        <div class="input-group calc-addon-group saturated-conditional-input-group">
+          <input (focus)="changeField('steamTemperature')" type="number" step="1" class="form-control"
+            formControlName="steamTemperature" id="steamTemperature" onfocus="this.select();" (input)="save()">
+          <span class="input-group-addon units">
+            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+          </span>
         </div>
+      </div>
+    </div>
 
 
       <!-- <div class="form-group">
