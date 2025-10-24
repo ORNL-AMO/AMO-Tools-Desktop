@@ -1,6 +1,6 @@
 .known-row-parent {
-  display: grid;
-  grid-template-columns: auto 1fr 2fr;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 2rem;
 }

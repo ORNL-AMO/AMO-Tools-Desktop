@@ -2,29 +2,16 @@
     top: inherit;
 }
 
-/* .known-row-parent {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-} */
-
-.saturated-row-label {
-  white-space: nowrap;
-  visibility: hidden;
-}
-
-/* .saturated-conditional-column {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-} */
-
 .known-row-parent {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 2rem;
+}
+
+.saturated-row-label {
+  white-space: nowrap;
+  visibility: hidden;
 }
 
 .saturated-conditional-column {
