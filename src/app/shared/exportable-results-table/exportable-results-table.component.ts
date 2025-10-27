@@ -16,6 +16,9 @@ export class ExportableResultsTableComponent implements OnInit {
   @Output('updateTableString')
   updateTableString = new EventEmitter<boolean>();
 
+  @Input()
+  horizontalAnchor: 'left' |'center'| 'right' = 'center';
+
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   showNotification: boolean = false;
   activateCheckmark: boolean = false;

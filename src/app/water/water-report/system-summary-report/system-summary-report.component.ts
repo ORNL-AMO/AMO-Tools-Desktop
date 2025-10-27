@@ -1,10 +1,12 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { getIsDiagramValid, NodeErrors, PlantSystemSummaryResults } from 'process-flow-lib';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
 import { Diagram } from '../../../shared/models/diagram';
+import { Subscription } from 'rxjs';
+import { WaterReportService } from '../water-report.service';
 
 @Component({
   selector: 'app-system-summary-report',
@@ -13,6 +15,10 @@ import { Diagram } from '../../../shared/models/diagram';
   styleUrl: './system-summary-report.component.css'
 })
 export class SystemSummaryReportComponent {
+  private readonly waterAssessmentResultsService = inject(WaterAssessmentResultsService);
+  private readonly updateDiagramFromAssessmentService = inject(UpdateDiagramFromAssessmentService);
+  private readonly waterReportService = inject(WaterReportService);
+
   @Input()
   inRollup: boolean;
   @Input()
@@ -31,37 +37,16 @@ export class SystemSummaryReportComponent {
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
   copyTableString: any;
-
-  constructor(
-    private waterAssessmentResultsService: WaterAssessmentResultsService,
-    private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService
-  ) { }
+  systemSummaryReportSubscription: Subscription;
 
   ngOnInit(): void {
     let diagram: Diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(this.assessment);
-    // let nodeErrors: NodeErrors = checkDiagramNodeErrors(
-    //   diagram.waterDiagram.flowDiagramData.nodes,
-    //   diagram.waterDiagram.flowDiagramData.edges,
-    //   diagram.waterDiagram.flowDiagramData.calculatedData,
-    //   diagram.waterDiagram.flowDiagramData.settings);
     let nodeErrors: NodeErrors = diagram.waterDiagram.flowDiagramData.nodeErrors;
-    this.isDiagramValid = getIsDiagramValid(nodeErrors);
-    if (this.isDiagramValid) {
-      this.plantSummaryResults = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
-    } else {
-      this.plantSummaryResults = {
-        id: undefined,
-        name: undefined,
-        sourceWaterIntake: undefined,
-        dischargeWater: undefined,
-        directCostPerYear: undefined,
-        directCostPerUnit: undefined,
-        trueCostPerYear: undefined,
-        trueCostPerUnit: undefined,
-        trueOverDirectResult: undefined,
-        allSystemResults: []
-      }
-    }
+
+    this.systemSummaryReportSubscription = this.waterReportService.systemSummaryReport.subscribe(report => {
+      this.isDiagramValid = getIsDiagramValid(nodeErrors);
+      this.plantSummaryResults = this.isDiagramValid ? report : this.waterAssessmentResultsService.getEmptyPlantSystemSummaryResults();
+    });
   }
 
   getFlowDecimalPrecisionPipeValue(): string {
