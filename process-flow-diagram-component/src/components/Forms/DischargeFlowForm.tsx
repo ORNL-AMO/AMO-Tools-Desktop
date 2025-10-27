@@ -3,10 +3,10 @@ import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, 
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
-import { dischargeFlowValueChange, distributeTotalDischargeFlow, focusedEdgeChange, nodeDataPropertyChange, totalFlowChange } from "../Diagram/diagramReducer";
+import { dischargeFlowValueChange, distributeTotalDischargeFlow, focusedEdgeChange, nodeDataPropertyChange, sumTotalFlowChange, totalFlowChange } from "../Diagram/diagramReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import InputField from "../StyledMUI/InputField";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
@@ -21,6 +21,8 @@ import { blue } from "@mui/material/colors";
 import { CustomEdgeData } from "process-flow-lib";
 import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
 import { useFlowService } from "../../services/FlowService";
+import CallMergeIcon from '@mui/icons-material/CallMerge';
+
 
 const blueBackground = blue[50];
 /**
@@ -186,7 +188,7 @@ const DischargeFlowForm = () => {
                                                                 }
                                                             }}>
                                                             <span>
-                                                                <Button variant="outlined" aria-label="populate" 
+                                                                <Button variant="outlined" aria-label="populate"
                                                                     disabled={canPropogate}
                                                                     size="small" sx={{ ml: 1 }} onClick={() => onPropogateFlow(edge)}>
                                                                     <AirlineStopsIcon fontSize="small" />
@@ -326,6 +328,7 @@ const TotaDischargeFlowField = () => {
     const { setFieldValue, values, handleChange, errors } = useFormikContext<any>();
     const dispatch = useAppDispatch();
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
+    const componentDischargeEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeTargetEdges) as Edge<CustomEdgeData>[];
     // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
 
     const onTotalFlowValueInputChange = (event: React.ChangeEvent<any>) => {
@@ -338,13 +341,18 @@ const TotaDischargeFlowField = () => {
         dispatch(distributeTotalDischargeFlow(totalFlowValue));
     }
 
+    const onClickSumFlows = () => {
+        dispatch(sumTotalFlowChange({ flowProperty: 'totalDischargeFlow' }));
+    }
+
     React.useEffect(() => {
         setFieldValue('totalFlow', totalDischargeFlow, true);
     }, [totalDischargeFlow, errors, values]);
 
     const hasError = Boolean(errors.totalFlow) && totalDischargeFlow !== null;
     return (
-        <>
+        <Box display={'flex'}>
+
             <SmallTooltip title="Set flows evenly from total discharge value"
                 slotProps={{
                     popper: {
@@ -387,7 +395,27 @@ const TotaDischargeFlowField = () => {
                     </InputAdornment>,
                 }}
             />
-        </>
+            <SmallTooltip title="Set total from sum of outflow"
+                slotProps={{
+                    popper: {
+                        disablePortal: true,
+                    }
+                }}>
+                <span>
+                    <Button onClick={() => onClickSumFlows()}
+                        disabled={componentDischargeEdges?.length === 0}
+                        variant="outlined"
+                        sx={{
+                            marginLeft: '1rem',
+                            padding: '2px 12px',
+                            display: 'inline-block',
+                            minWidth: 0
+                        }}>
+                        <CallMergeIcon />
+                    </Button>
+                </span>
+            </SmallTooltip>
+        </Box>
     );
 };
 
