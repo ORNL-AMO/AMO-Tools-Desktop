@@ -287,7 +287,7 @@ const TotalSourceFlowField = () => {
                     }
                 }}>
                 <span>
-                    <Button onClick={() => onClickSumFlows()}
+                    <Button onClick={onClickSumFlows}
                         disabled={!calculatedData || !componentSourceEdges?.length}
                         variant="outlined"
                         sx={{
