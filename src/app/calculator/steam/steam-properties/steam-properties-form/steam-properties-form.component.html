@@ -2,6 +2,7 @@
   <form [formGroup]="steamPropertiesForm">
 
     <div class="form-group">
+      <div class="known-row-parent"> 
       <label for="pressure">Pressure</label>
       <div class="input-group calc-addon-group">
         <input type="number" step="1" class="form-control" formControlName="pressure" id="pressure"
@@ -16,6 +17,7 @@
         <span *ngIf="steamPropertiesForm.controls.pressure.errors.min">Value can't be less than
           {{steamPropertiesForm.controls.pressure.errors.min.min}} {{settings.steamPressureMeasurement}}.</span>
       </span>
+      </div>
     </div>
 
     <div class="form-group">

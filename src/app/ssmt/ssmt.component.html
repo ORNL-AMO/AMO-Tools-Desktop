@@ -30,7 +30,7 @@
         [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true" (emitCalculate)="calculate($event)" [saturatedPropertiesOutput]="saturatedPropertiesOutput">
       </app-boiler>
       <app-header *ngIf="stepTab == 'header'" [ssmt]="_ssmt" [selected]="true" [inSetup]="true"
-        [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists"
+        [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists" [saturatedPropertiesOutput]="saturatedPropertiesOutput"
         [isBaseline]="true"></app-header>
       <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput"
         [numberOfHeaders]="_ssmt.headerInput.numberOfHeaders" [selected]="true" [inSetup]="true" [settings]="settings"

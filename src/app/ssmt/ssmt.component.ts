@@ -579,7 +579,7 @@ export class SsmtComponent implements OnInit {
         }
       };
       if (form.status === 'VALID') {
-        this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings);
+        this.saturatedPropertiesOutput = { ...this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings) };
         this.validPlot = true;
       }
     }

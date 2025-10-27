@@ -35,6 +35,8 @@ export class BoilerComponent implements OnInit {
   @Input()
   ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
   @Input()
+  saturatedPropertiesOutput: SaturatedPropertiesOutput;
+  @Input()
   output: SaturatedPropertiesOutput;
   
   @Output()
@@ -64,8 +66,8 @@ export class BoilerComponent implements OnInit {
   idString: string = 'baseline_';
   highPressureHeaderForm: UntypedFormGroup;
   lowPressureHeaderForm: UntypedFormGroup;
-  saturatedPropertiesOutput: SaturatedPropertiesOutput;
   validPlot: boolean = false;
+  
   constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService, 
     private stackLossService: StackLossService,
@@ -87,6 +89,7 @@ export class BoilerComponent implements OnInit {
       this.disableForm();
     }
     this.ranges = this.getRanges();
+    this.objToCalculate();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -310,10 +313,12 @@ export class BoilerComponent implements OnInit {
 
   setValidators() {
     if (this.boilerForm.controls.pressureOrTemperature.value === 0) {
+      console.log('if');
       this.boilerForm.controls.saturatedPressure.setValidators([Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]);
       this.boilerForm.controls.steamTemperature.clearValidators();
       this.boilerForm.controls.steamTemperature.reset(this.boilerForm.controls.steamTemperature.value);
     }else if (this.boilerForm.controls.pressureOrTemperature.value === 1) {
+      console.log('else if');
       this.boilerForm.controls.steamTemperature.setValidators([Validators.required, Validators.min(this.ranges.minTemp), Validators.max(this.ranges.maxTemp)]);
       this.boilerForm.controls.saturatedPressure.clearValidators();
       this.boilerForm.controls.saturatedPressure.reset(this.boilerForm.controls.saturatedPressure.value);
