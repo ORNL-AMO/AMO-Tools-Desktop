@@ -10,7 +10,7 @@ import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { distributeTotalSourceFlow, sourceFlowValueChange, totalFlowChange, nodeDataPropertyChange, sumTotalFlowChange } from "../Diagram/diagramReducer";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
-import { selectCurrentNode, selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
+import { selectCalculatedNodeData, selectCurrentNode, selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
 import { Formik, Form, FieldArray, useFormikContext } from 'formik';
 import { FlowForm, getDefaultFlowValidationSchema, TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR } from "../../validation/Validation";
 import UpdateNodeErrors from "./UpdateNodeErrors";
@@ -211,6 +211,7 @@ const TotalSourceFlowField = () => {
 
     const dispatch = useAppDispatch();
     const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
+    const calculatedData: NodeFlowData = useAppSelector(selectCalculatedNodeData);
     const componentSourceEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeSourceEdges) as Edge<CustomEdgeData>[];
 
     // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
@@ -237,7 +238,7 @@ const TotalSourceFlowField = () => {
 
     return (
         <Box display={'flex'}>
-            <SmallTooltip title="Set flows evenly from total source value"
+            <SmallTooltip title="Set flows evenly from total inflow"
                 slotProps={{
                     popper: {
                         disablePortal: true,
@@ -287,7 +288,7 @@ const TotalSourceFlowField = () => {
                 }}>
                 <span>
                     <Button onClick={() => onClickSumFlows()}
-                        disabled={componentSourceEdges?.length === 0}
+                        disabled={!calculatedData || !componentSourceEdges?.length}
                         variant="outlined"
                         sx={{
                             marginLeft: '1rem',

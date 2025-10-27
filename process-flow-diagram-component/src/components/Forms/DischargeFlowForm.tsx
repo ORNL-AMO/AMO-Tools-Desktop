@@ -353,7 +353,7 @@ const TotaDischargeFlowField = () => {
     return (
         <Box display={'flex'}>
 
-            <SmallTooltip title="Set flows evenly from total discharge value"
+            <SmallTooltip title="Set flows evenly from total outflow"
                 slotProps={{
                     popper: {
                         disablePortal: true,
