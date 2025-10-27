@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ReactFlow,
   Connection,
@@ -29,7 +29,7 @@ import StaticModal from '../Forms/StaticModal';
 import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, getIsDiagramValid } from 'process-flow-lib';
 import MenuSidebar from '../Drawer/MenuSidebar';
 import DataSidebar from '../Drawer/DataSidebar';
-import SharedDrawer from '../Drawer/SharedDrawer';
+import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawer/SharedDrawer';
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
 import { FlowServiceProvider } from '../../services/FlowService';
 
@@ -71,16 +71,10 @@ const Diagram = (props: DiagramProps) => {
   const diagramAlertState: DiagramAlertState = useAppSelector((state) => state.diagram.diagramAlert);
   const isMenuDrawerOpen = useAppSelector((state) => state.diagram.isMenuDrawerOpen);
 
-
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
   const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
-
-  // const newNodeErrors = checkDiagramNodeErrors(nodes, edges, calculatedData, settings);
-  // const isDiagramValid = getIsDiagramValid(newNodeErrors);
-  // console.log('=== newNodeErrors', newNodeErrors);
   const isDiagramValid = useMemo(() => getIsDiagramValid(nodeErrors), [nodeErrors]);
-  // console.log('=== isDiagramValid', isDiagramValid);
 
   // * on xyFlow instance ready
   useEffect(() => {
@@ -92,7 +86,6 @@ const Diagram = (props: DiagramProps) => {
       }
       dispatch(diagramParentRender(parentState));
 
-      // todo re-testtSbugger;
       if (assessmentCreatedNodes.length > 0) {
         const updatedNodes = updateAssessmentCreatedNodes(reactFlowInstance, [...assessmentCreatedNodes], props.height);
         setAssessmentCreatedNodes([]);
@@ -178,10 +171,14 @@ const Diagram = (props: DiagramProps) => {
       }
 
       {!isDiagramValid && validationWindowLocation === 'diagram' &&
-        <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation}/>
+      // * XY Flow Styles needed for Drawer operation no longer constrain canvas width. We need to explicitly style controls or they are hidden
+        <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation} 
+        style={{
+                left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
+                transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}/>
       }
-      {/* // * Only for development result checking */}
-      {/* <ResultsPanel></ResultsPanel> */}
+
       <ReactFlowProvider>
         <div className={'flow-wrapper'} style={{ height: props.height }}>
           <ReactFlow
@@ -192,7 +189,6 @@ const Diagram = (props: DiagramProps) => {
             onEdgesChange={(e) => dispatch(edgesChange(e))}
             onReconnect={onReconnect}
             onConnect={onConnect}
-            // onReconnect={onReconnect}
             onInit={setReactFlowInstance}
             nodeTypes={nodeTypes}
             edgeTypes={diagramEdgeTypes}
@@ -205,7 +201,6 @@ const Diagram = (props: DiagramProps) => {
             onNodeClick={(_, node) => dispatch(selectedIdChange(node.id))}
             onEdgeClick={(_, edge) => dispatch(openDrawerWithSelected(edge.id))}
             onDrop={onDrop}
-            // onError={onErrorWithSuppressed}
             onBeforeDelete={onBeforeDelete}
             onDragOver={onDragOver}
             fitView={true}
@@ -219,10 +214,10 @@ const Diagram = (props: DiagramProps) => {
               <MiniMap zoomable pannable nodeClassName={(node: Node) => node.type} />
             }
             {controlsVisible &&
-            // * Styles needed for Drawer operation no longer all constrain canvas width. We need to explicitly style controls or they are hidden
+            // * XY Flow  Styles needed for Drawer operation no longer constrain canvas width. We need to explicitly style controls or they are hidden
             <Controls
               style={{
-                left: isMenuDrawerOpen ? '540px' : '75px',
+                left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
                 transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             />
@@ -267,8 +262,6 @@ export default (props: DiagramProps) => {
     console.log('=== configureAppStore ===', props.processDiagram);
     storeRef.current = configureAppStore(props.processDiagram);
   }
-  // const storeRef = useMemo(() => configureAppStore(), []);
-
   return (
     <Provider store={storeRef.current}>
       <FlowServiceProvider>
