@@ -402,7 +402,7 @@ const TotaDischargeFlowField = () => {
                     }
                 }}>
                 <span>
-                    <Button onClick={() => onClickSumFlows()}
+                    <Button onClick={onClickSumFlows}
                         disabled={componentDischargeEdges?.length === 0}
                         variant="outlined"
                         sx={{
