@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
-import { NominatimLocation, StationSearchRequest, WeatherApiService, WeatherStation } from '../../../weather-api.service';
+import { NominatimLocation, WeatherApiService, WeatherStation } from '../../../weather-api.service';
 import { GEO_DATA_STATE_LINES } from '../geo-assets/geo-data-state-lines';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
-    selector: 'app-weather-stations',
-    templateUrl: './weather-stations.component.html',
-    styleUrls: ['./weather-stations.component.css'],
-    standalone: false
+  selector: 'app-weather-stations',
+  templateUrl: './weather-stations.component.html',
+  styleUrls: ['./weather-stations.component.css'],
+  standalone: false
 })
 export class WeatherStationsComponent {
 
-  furthestDistance: number = 70;
+  furthestDistance: number = environment.production ? 75 : 5;
   stations: Array<WeatherStation> = [];
 
   fetchingData: boolean = false;
@@ -34,13 +35,13 @@ export class WeatherStationsComponent {
   stateLines: any;
   constructor(
     private weatherApiService: WeatherApiService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.stateLines = GEO_DATA_STATE_LINES;
-    const weatherData = {...this.weatherApiService.getWeatherData()};
+    const weatherData = { ...this.weatherApiService.getWeatherData() };
 
-    if(weatherData?.addressString){
+    if (weatherData?.addressString) {
       this.addressString = weatherData.addressString;
       this.searchLatLong();
     }
@@ -56,31 +57,6 @@ export class WeatherStationsComponent {
 
     if (this.addressString) {
       try {
-        // todo remove - testing
-        // const testitem = {
-        //     "name": "MINNEAPOLIS-ST PAUL INTERNATIONAL AP",
-        //     "lat": 44.885,
-        //     "long": -93.231,
-        //     "distance": 8.11,
-        //     "country": "US",
-        //     "state": "MN",
-        //     "stationId": "72658014922",
-        //     "beginDate": "2010-01-01T00:00:00.000Z",
-        //     "endDate": "2025-08-25T00:00:00.000Z",
-        //     "isTMYData": false,
-        //     "ratingPercent": 99.8
-        //   };
-
-        //   this.selectedLocationId = Number(testitem.stationId)
-        //   this.addressLatLong = {
-        //     latitude: testitem.lat,
-        //     longitude: testitem.long
-        //   };
-
-        //   const weatherData = {...this.weatherApiService.getWeatherData()};
-        //   weatherData.addressString = this.addressString;
-        //   this.weatherApiService.setWeatherData(weatherData);
-
         this.addressLookupItems = await firstValueFrom(this.weatherApiService.getLocation(this.addressString));
         if (this.addressLookupItems?.length > 0) {
           this.addressLookupItems = this.addressLookupItems.sort((a, b) => {
@@ -88,9 +64,9 @@ export class WeatherStationsComponent {
             const bUS = b.display_name.includes('United States') ? 0 : 1;
             return aUS - bUS;
           });
-         this.selectedLocationId = this.addressLookupItems[0].place_id
+          this.selectedLocationId = this.addressLookupItems[0].place_id
           this.setLatLongFromItem(this.addressLookupItems[0]);
-          const weatherData = {...this.weatherApiService.getWeatherData()};
+          const weatherData = { ...this.weatherApiService.getWeatherData() };
           weatherData.addressString = this.addressString;
           this.weatherApiService.setWeatherData(weatherData);
         }
@@ -113,7 +89,7 @@ export class WeatherStationsComponent {
     this.clearStations();
   }
 
-     async setStations() {
+  async setStations() {
     if (this.addressLatLong.latitude && this.addressLatLong.longitude && this.furthestDistance) {
       this.fetchingData = true;
       this.stationSearchError = false;
@@ -148,7 +124,33 @@ export class WeatherStationsComponent {
 
 }
 
+// * test for searchLatLong
+ // const testitem = {
+        //     "name": "MINNEAPOLIS-ST PAUL INTERNATIONAL AP",
+        //     "lat": 44.885,
+        //     "long": -93.231,
+        //     "distance": 8.11,
+        //     "country": "US",
+        //     "state": "MN",
+        //     "stationId": "72658014922",
+        //     "beginDate": "2010-01-01T00:00:00.000Z",
+        //     "endDate": "2025-08-25T00:00:00.000Z",
+        //     "isTMYData": false,
+        //     "ratingPercent": 99.8
+        //   };
 
+        //   this.selectedLocationId = Number(testitem.stationId)
+        //   this.addressLatLong = {
+        //     latitude: testitem.lat,
+        //     longitude: testitem.long
+        //   };
+
+        //   const weatherData = {...this.weatherApiService.getWeatherData()};
+        //   weatherData.addressString = this.addressString;
+        //   this.weatherApiService.setWeatherData(weatherData);
+
+
+// * turn on stations for testing weather components/module logic without over hitting API 
 // const testingStations: WeatherStation[] =
 //   [
 //     {
@@ -194,4 +196,3 @@ export class WeatherStationsComponent {
 //   ];
 
 
-  

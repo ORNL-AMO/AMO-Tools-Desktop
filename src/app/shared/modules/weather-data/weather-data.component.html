@@ -1,4 +1,10 @@
+
 <div class="width-wrapper pt-3">
+    @if (!isWeatherDataValid) {
+    <div class="alert alert-danger p-3" role="alert">
+        {{ weatherDataInvalidMessage }}
+    </div>
+    }
     <!--  todo change to @input for shared -->
     <p>
         Ambient temperature is one of the factors used to determine chilled water system energy consumption. Use the search below to find the TMY3 data closest to your facility. 
