@@ -52,18 +52,20 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     this.emitCalculate.emit(this.data);
   }
 
-  updateStartingYear(year: number) {   
-    const updatedInputs = this.data.monthyInputs.map((input) => {
-      if (input.month) {
-        const monthOnly = input.month.replace(/\d{4}$/, '').trim(); // remove trailing year
-        return { ...input, month: `${monthOnly} ${year}` };
-      }
-      return input;
-    });
+  updateStartingYear() {   
+    if (this.data.startYear != null) {
+      const updatedInputs = this.data.monthyInputs.map((input) => {
+        if (input.month) {
+          const monthOnly = input.month.split(' ')[0];
+          return { ...input, month: `${monthOnly} ${this.data.startYear}` };
+        }
+        return input;
+      });
 
-    this.data.monthyInputs = updatedInputs;
+      this.data.monthyInputs = updatedInputs;
 
-    this.calculate();
+      this.calculate();
+    }
   }
 
   focusField(str: string) {
