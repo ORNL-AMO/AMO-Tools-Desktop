@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MonthyInputs, PowerFactorCorrectionInputs } from '../power-factor-correction.component';
 import { PowerFactorCorrectionService } from '../power-factor-correction.service';
-import { forEach } from 'lodash';
 
 @Component({
     selector: 'app-power-factor-correction-form',
