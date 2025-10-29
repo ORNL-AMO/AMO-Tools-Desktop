@@ -44,7 +44,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     settings: getDefaultSettings(),
     diagramOptions: getDefaultUserDiagramOptions(),
     isDataDrawerOpen: false,
-    isMenuDrawerOpen: false,
+    isMenuDrawerOpen: true,
     selectedDataId: undefined,
     focusedEdgeId: undefined,
     calculatedData: { nodes: {} },
@@ -88,7 +88,7 @@ const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{
   state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();
   state.recentEdgeColors = diagramData.recentEdgeColors.length !== 0 ? { ...diagramData.recentEdgeColors } : getDefaultColorPalette();
   state.isDataDrawerOpen = false;
-  state.isMenuDrawerOpen = false;
+  state.isMenuDrawerOpen = state.isMenuDrawerOpen ?? true;
   state.focusedEdgeId = undefined;
   state.selectedDataId = undefined;
   state.diagramParentDimensions = { ...parentContainer };
