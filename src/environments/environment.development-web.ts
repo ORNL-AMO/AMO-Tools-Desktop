@@ -8,5 +8,6 @@ export const environment = {
   useServiceWorker: true,
   measurWeatherApi: 'https://dev.ir-utilities.ornl.gov/',
   measurUtilitiesApi: 'https://dev.ir-utilities.ornl.gov/',
-  measurDocsUrl: 'https://dev.industrialresources.ornl.gov/measur/suite/docs/'
+  measurDocsUrl: 'https://dev.industrialresources.ornl.gov/measur/suite/docs/',
+  measurWeatherApiLegacy: 'https://dev.ir-utilities.ornl.gov/',
 };
