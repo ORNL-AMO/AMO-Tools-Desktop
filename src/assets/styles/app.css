@@ -1,0 +1,20 @@
+@import '@angular/cdk/overlay-prebuilt.css';
+
+.app-modal-dialog {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin: auto;
+}
+
+.cdk-overlay-dark-backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+/*  This is used on tabs throughout could be simplified and not needed in some cases */
+/* for ow, override aggressive z-index from bootstrap style */
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 100 !important;
+}

@@ -45,6 +45,8 @@
             "styles": [
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
+              "src/assets/styles/app.css",
+              "src/assets/styles/variables.css",
               "src/assets/styles/two-panel.css",
               "src/assets/styles/tabs.css",
               "src/assets/styles/utilities.css",
@@ -166,6 +168,7 @@
             "styles": [
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
+              "src/assets/styles/variables.css",
               "src/assets/styles/two-panel.css",
               "src/assets/styles/tabs.css",
               "src/assets/styles/utilities.css",
