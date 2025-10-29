@@ -74,10 +74,9 @@
 
   <div class="form-group">
     <label for="startYear">Starting Year</label>
-    <input name="startYear" class="form-control" type="number" step="any" [(ngModel)]="data.startYear"
-      id="startYear" (input)="calculate()" onfocus="this.select();" (focus)="focusField('startYear')">
+    <input name="startYear" class="form-control" type="number" step="any" [(ngModel)]="data.startYear" id="startYear" 
+    (input)="updateStartingYear()" onfocus="this.select();" (focus)="focusField('startYear')">
   </div>
-
 </form>
 
 <table class="table table-hover">
