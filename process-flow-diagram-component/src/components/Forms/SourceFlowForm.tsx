@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { List, TextField, InputAdornment, ListItem, Divider, Button, Box, useTheme } from "@mui/material";
+import { List, TextField, InputAdornment, ListItem, Button, Box, useTheme } from "@mui/material";
 import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
@@ -8,9 +8,9 @@ import FlowConnectionText from "../Drawer/FlowConnectionText";
 import InputField from "../StyledMUI/InputField";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { distributeTotalSourceFlow, modalOpenChange, focusedEdgeChange, sourceFlowValueChange, totalFlowChange, nodeDataPropertyChange } from "../Diagram/diagramReducer";
+import { distributeTotalSourceFlow, sourceFlowValueChange, totalFlowChange, nodeDataPropertyChange, sumTotalFlowChange } from "../Diagram/diagramReducer";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
-import { selectCurrentNode, selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
+import { selectCalculatedNodeData, selectCurrentNode, selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
 import { Formik, Form, FieldArray, useFormikContext } from 'formik';
 import { FlowForm, getDefaultFlowValidationSchema, TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR } from "../../validation/Validation";
 import UpdateNodeErrors from "./UpdateNodeErrors";
@@ -18,6 +18,8 @@ import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
 import { ObjectSchema } from "yup";
 import { CustomEdgeData, NodeFlowData } from "process-flow-lib";
+import CallMergeIcon from '@mui/icons-material/CallMerge';
+
 /**
    * Formik is used for validation only, while source of truth for values is redux store. This avoids state race conditions when rendering.
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility
@@ -209,6 +211,9 @@ const TotalSourceFlowField = () => {
 
     const dispatch = useAppDispatch();
     const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
+    const calculatedData: NodeFlowData = useAppSelector(selectCalculatedNodeData);
+    const componentSourceEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeSourceEdges) as Edge<CustomEdgeData>[];
+
     // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
 
     const onTotalFlowValueInputChange = (event: React.ChangeEvent<any>) => {
@@ -220,6 +225,10 @@ const TotalSourceFlowField = () => {
     const onClickDistributeFlowEvenly = (totalFlowValue: number,) => {
         dispatch(distributeTotalSourceFlow(totalFlowValue));
     }
+
+    const onClickSumFlows = () => {
+        dispatch(sumTotalFlowChange({ flowProperty: 'totalSourceFlow' }));
+    }
     
     React.useEffect(() => {
         setFieldValue('totalFlow', totalSourceFlow, true);
@@ -229,7 +238,7 @@ const TotalSourceFlowField = () => {
 
     return (
         <Box display={'flex'}>
-            <SmallTooltip title="Set flows evenly from total source value"
+            <SmallTooltip title="Set flows evenly from total inflow"
                 slotProps={{
                     popper: {
                         disablePortal: true,
@@ -271,6 +280,26 @@ const TotalSourceFlowField = () => {
                     </InputAdornment>,
                 }}
             />
+            <SmallTooltip title="Set total from sum of inflow"
+                slotProps={{
+                    popper: {
+                        disablePortal: true,
+                    }
+                }}>
+                <span>
+                    <Button onClick={onClickSumFlows}
+                        disabled={!calculatedData || !componentSourceEdges?.length}
+                        variant="outlined"
+                        sx={{
+                            marginLeft: '1rem',
+                            padding: '2px 12px',
+                            display: 'inline-block',
+                            minWidth: 0
+                        }}>
+                        <CallMergeIcon/>
+                    </Button>
+                </span>
+            </SmallTooltip>
         </Box>
     );
 };

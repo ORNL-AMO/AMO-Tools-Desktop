@@ -129,6 +129,14 @@ const totalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{ flo
   updateNode.data.userEnteredData[flowProperty] = totalFlow;
 }
 
+const sumTotalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{ flowProperty: NodeFlowProperty }>) => {
+  const { flowProperty } = action.payload;
+  const updateNode: Node<ProcessFlowPart> = state.nodes.find((node: Node<ProcessFlowPart>) => state.selectedDataId === node.id) as Node<ProcessFlowPart>;
+  const currentTotalFlow = updateNode.data.userEnteredData[flowProperty];
+  const calculatedNode = state.calculatedData.nodes[state.selectedDataId];
+  updateNode.data.userEnteredData[flowProperty] = calculatedNode? calculatedNode[flowProperty] : currentTotalFlow;
+}
+
 const sourceFlowValueChangeReducer = (state: DiagramState, action: PayloadAction<{ sourceEdgeId: string, flowValue: number }>) => {
   const { sourceEdgeId, flowValue } = action.payload;
   const sourceEdge: Edge<CustomEdgeData> = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === sourceEdgeId) as Edge<CustomEdgeData>;
@@ -577,7 +585,8 @@ export const diagramSlice = createSlice({
     selectedIdChange: selectedIdChangeReducer,
     diagramAlertChange: diagramAlertChangeReducer,
     toggleMenuDrawer: toggleMenuDrawerReducer,
-    edgesChangeFromPropagation: edgesChangeFromPropagationReducer
+    edgesChangeFromPropagation: edgesChangeFromPropagationReducer,
+    sumTotalFlowChange: sumTotalFlowChangeReducer,
   }
 })
 
@@ -596,6 +605,7 @@ export const {
   setNodeStyle,
   totalFlowChange,
   sourceFlowValueChange,
+  sumTotalFlowChange,
   dischargeFlowValueChange,
   distributeTotalSourceFlow,
   distributeTotalDischargeFlow,
