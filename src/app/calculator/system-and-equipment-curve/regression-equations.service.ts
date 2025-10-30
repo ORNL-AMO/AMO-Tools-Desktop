@@ -8,6 +8,14 @@ import { Settings } from '../../shared/models/settings';
 import { EquipmentCurveService } from './equipment-curve/equipment-curve.service';
 import { copyObject } from '../../shared/helperFunctions';
 
+export function shouldShowR2(mode: 'data'|'equation', nPts: number, degree: number): boolean {
+  return mode === 'data' && nPts > degree + 1;
+}
+
+export function fmtR2(r2: number): string {
+  return (Math.min(r2, 0.9999)).toFixed(4);
+}
+
 @Injectable()
 export class RegressionEquationsService {
 
@@ -19,15 +27,27 @@ export class RegressionEquationsService {
   baselineEquipmentRegressionEquation: BehaviorSubject<string>;
 
   systemCurveRegressionEquation: BehaviorSubject<string>;
+
+  baselineEquipmentPowerRegressionEquation: BehaviorSubject<string>;
+  modificationEquipmentPowerRegressionEquation: BehaviorSubject<string>;
+  baselineEquipmentPowerCurveByDataRSquared: BehaviorSubject<number>;
+  modificationEquipmentPowerCurveByDataRSquared: BehaviorSubject<number>;
+  isModificationPowerFromData: BehaviorSubject<boolean>;
   dataPairCoordinateIncrement: number = 1;
   constructor(private convertUnitsService: ConvertUnitsService, private equipmentCurveService: EquipmentCurveService) {
-    this.baselineEquipmentCurveByDataRegressionEquation = new BehaviorSubject<string>(undefined);
-    this.baselineEquipmentCurveByDataRSquared = new BehaviorSubject<number>(undefined);
+    this.baselineEquipmentCurveByDataRegressionEquation = new BehaviorSubject<string>('');
+    this.baselineEquipmentCurveByDataRSquared = new BehaviorSubject<number>(0);
 
-    this.modificationEquipmentRegressionEquation = new BehaviorSubject<string>(undefined);
+    this.modificationEquipmentRegressionEquation = new BehaviorSubject<string>('');
 
-    this.baselineEquipmentRegressionEquation = new BehaviorSubject<string>(undefined);
-    this.systemCurveRegressionEquation = new BehaviorSubject<string>(undefined);
+    this.baselineEquipmentRegressionEquation = new BehaviorSubject<string>('');
+    this.systemCurveRegressionEquation = new BehaviorSubject<string>('');
+
+    this.baselineEquipmentPowerRegressionEquation = new BehaviorSubject<string>('');
+    this.modificationEquipmentPowerRegressionEquation = new BehaviorSubject<string>('');
+    this.baselineEquipmentPowerCurveByDataRSquared = new BehaviorSubject<number>(0);
+    this.modificationEquipmentPowerCurveByDataRSquared = new BehaviorSubject<number>(0);
+    this.isModificationPowerFromData = new BehaviorSubject<boolean>(false);
   }
 
   getEquipmentCurveRegressionByData(
@@ -190,6 +210,20 @@ export class RegressionEquationsService {
     this.baselineEquipmentRegressionEquation.next(baselineRegressionEquation);
     this.modificationEquipmentRegressionEquation.next(modificationRegressionEquation);
 
+    let baselinePowerRegressionEquation = this.generatePowerEquationFromInputs(baselineEquationInputs);
+    this.baselineEquipmentPowerRegressionEquation.next(baselinePowerRegressionEquation);
+
+    if (modificationEquipment && modificationByEquation) {
+      let modificationPowerByEquationInputs = this.getModificationPowerByEquationInputs(baselineEquationInputs, modificationRatio);
+      let modificationPowerRegressionEquation = this.generatePowerEquationFromInputs(modificationPowerByEquationInputs);
+      this.modificationEquipmentPowerRegressionEquation.next(modificationPowerRegressionEquation);
+      
+      this.isModificationPowerFromData.next(false);
+    } else {
+      this.modificationEquipmentPowerRegressionEquation.next('');
+      this.isModificationPowerFromData.next(false);
+    }
+
     return {
       baselineDataPairs: baselineDataPairs,
       modifiedDataPairs: modifiedDataPairs,
@@ -245,6 +279,19 @@ export class RegressionEquationsService {
       let modificationByEquationInputs = this.getModificationPowerByEquationInputs(baselineEquationInputs, ratio);
       let modifiedData: { calculationData: Array<Array<number>>, dataPairs: Array<{ x: number, y: number }> } = this.calculateModifiedPowerByEquation(modificationByEquationInputs, maxFlowRate);
       modificationDataPairs = modifiedData.dataPairs;
+
+      let modificationPowerRegressionEquation = this.generatePowerEquationFromInputs(modificationByEquationInputs);
+      this.modificationEquipmentPowerRegressionEquation.next(modificationPowerRegressionEquation);
+
+      let modificationPolynomialCurve = regression.polynomial(modifiedData.calculationData, { order: byData.powerDataOrder || 2, precision: 50 });
+      this.setSigFigs(modificationPolynomialCurve);
+      
+      if (shouldShowR2('data', modifiedData.calculationData.length, byData.powerDataOrder || 2)) {
+        this.modificationEquipmentPowerCurveByDataRSquared.next(parseFloat(fmtR2(modificationPolynomialCurve.r2)));
+      } else {
+        this.modificationEquipmentPowerCurveByDataRSquared.next(0); // 0 indicates no R² to display
+      }
+      this.isModificationPowerFromData.next(true);
     }
 
     return {
@@ -279,6 +326,55 @@ export class RegressionEquationsService {
     return regressionEquation;
   }
 
+  formatPowerRegressionEquation(regressionEquation: string, order: number): string {
+    for (let i = 0; i < order; i++) {
+      regressionEquation = regressionEquation.replace(/x/, '(flow)');
+      regressionEquation = regressionEquation.replace('+ -', '- ');
+    }
+    regressionEquation = regressionEquation.replace('y', 'Power');
+    regressionEquation = regressionEquation.replace('^2', '&#x00B2;');
+    regressionEquation = regressionEquation.replace('^3', '&#x00B3;');
+    regressionEquation = regressionEquation.replace('^4', '&#x2074;');
+    regressionEquation = regressionEquation.replace('^5', '&#x2075;');
+    regressionEquation = regressionEquation.replace('^6', '&#x2076;');
+    return regressionEquation;
+  }
+
+  generatePowerEquationFromInputs(byEquationInputs: ByEquationInputs): string {
+    let terms: string[] = [];
+    
+    if (byEquationInputs.powerOrder > 5 && byEquationInputs.powerFlowSix !== 0) {
+      terms.push(byEquationInputs.powerFlowSix + '(flow)&#x2076;');
+    }
+    if (byEquationInputs.powerOrder > 4 && byEquationInputs.powerFlowFive !== 0) {
+      terms.push(byEquationInputs.powerFlowFive + '(flow)&#x2075;');
+    }
+    if (byEquationInputs.powerOrder > 3 && byEquationInputs.powerFlowFour !== 0) {
+      terms.push(byEquationInputs.powerFlowFour + '(flow)&#x2074;');
+    }
+    if (byEquationInputs.powerOrder > 2 && byEquationInputs.powerFlowThree !== 0) {
+      terms.push(byEquationInputs.powerFlowThree + '(flow)&#x00B3;');
+    }
+    if (byEquationInputs.powerFlowTwo !== 0) {
+      terms.push(byEquationInputs.powerFlowTwo + '(flow)&#x00B2;');
+    }
+    if (byEquationInputs.powerFlow !== 0) {
+      terms.push(byEquationInputs.powerFlow + '(flow)');
+    }
+    if (byEquationInputs.powerConstant !== 0) {
+      terms.push(byEquationInputs.powerConstant.toString());
+    }
+    
+    let powerRegressionEquation = 'Power = ';
+    if (terms.length === 0) {
+      powerRegressionEquation += '0';
+    } else {
+      powerRegressionEquation += terms.join(' + ');
+      powerRegressionEquation = powerRegressionEquation.replace(/\+ -/g, '- ');
+    }
+    
+    return powerRegressionEquation;
+  }
 
   getEquipmentPowerRegressionByEquation(baselineEquationInputs: ByEquationInputs, byEquationOutput: ByEquationOutput, equipmentInputs: EquipmentInputs, modificationEquipment: ModificationEquipment, yValueLabel: string, maxFlowRate: number): {
     baseline: Array<{ x: number, y: number }>,
@@ -316,6 +412,18 @@ export class RegressionEquationsService {
   
       let baselinePolynomialCurve = regression.polynomial(regressionInputs, { order: byData.powerDataOrder, precision: 50 });
       this.setSigFigs(baselinePolynomialCurve);
+
+      let baselinePowerRegressionEquation: string = this.formatPowerRegressionEquation(baselinePolynomialCurve.string, byData.powerDataOrder || 2);
+      this.baselineEquipmentPowerRegressionEquation.next(baselinePowerRegressionEquation);
+      
+      if (shouldShowR2('data', byData.dataRows.length, byData.powerDataOrder || 2)) {
+        this.baselineEquipmentPowerCurveByDataRSquared.next(parseFloat(fmtR2(baselinePolynomialCurve.r2)));
+      } else {
+        this.baselineEquipmentPowerCurveByDataRSquared.next(0); // 0 indicates no R² to display
+      }
+      
+      this.isModificationPowerFromData.next(false);
+
       let baselineDataPairs: Array<{ x: number, y: number }> = new Array(); 
       for (let i = 0; i <= maxFlowRate; i += this.dataPairCoordinateIncrement) {
         let yVal = baselinePolynomialCurve.predict(i);
@@ -390,7 +498,12 @@ export class RegressionEquationsService {
       }
   
       this.baselineEquipmentCurveByDataRegressionEquation.next(baselineRegressionEquation);
-      this.baselineEquipmentCurveByDataRSquared.next(baselinePolynomialCurve.r2);
+      
+      if (shouldShowR2('data', byData.dataRows.length, byData.dataOrder)) {
+        this.baselineEquipmentCurveByDataRSquared.next(parseFloat(fmtR2(baselinePolynomialCurve.r2)));
+      } else {
+        this.baselineEquipmentCurveByDataRSquared.next(0); // 0 indicates no R² to display
+      }
   
       let baselineByDataOutput: ByDataOutput = {
         baselinePolynomialCurve: baselinePolynomialCurve,
@@ -398,7 +511,6 @@ export class RegressionEquationsService {
       }
       return baselineByDataOutput;
   }
-
 
   calculateBaselineEquipmentByEquation(byEquationInputs: ByEquationInputs, maxFlowRate: number, yValueLabel: string, settings?: Settings, fluidPowerMultiplier?: number): { calculationData: Array<Array<number>>, dataPairs: Array<CurveCoordinatePairs> } {
     let calculationData: Array<Array<number>> = new Array();

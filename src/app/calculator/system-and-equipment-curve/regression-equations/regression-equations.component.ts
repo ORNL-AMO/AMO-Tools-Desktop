@@ -22,6 +22,11 @@ export class RegressionEquationsComponent implements OnInit {
   systemCurveRegressionEquationSub: Subscription;
   equipmentCurveCollapsedSub: Subscription;
   systemCurveCollapsedSub: Subscription;
+  baselineEquipmentPowerRegressionEquationSub: Subscription;
+  modificationEquipmentPowerRegressionEquationSub: Subscription;
+  baselineEquipmentPowerCurveByDataRSquaredSub: Subscription;
+  modificationEquipmentPowerCurveByDataRSquaredSub: Subscription;
+  isModificationPowerFromDataSub: Subscription;
 
   baselineEquipmentCurveByDataRSquared: number;
   modificationEquipmentRegressionEquation: string;
@@ -30,6 +35,12 @@ export class RegressionEquationsComponent implements OnInit {
   selectedEquipmentCurveFormView: string;
   equipmentCurveCollapsed: string;
   systemCurveCollapsed: string;
+
+  baselineEquipmentPowerRegressionEquation: string;
+  modificationEquipmentPowerRegressionEquation: string;
+  baselineEquipmentPowerCurveByDataRSquared: number;
+  modificationEquipmentPowerCurveByDataRSquared: number;
+  isModificationPowerFromData: boolean;
 
   equipmentLabel: string;
   constructor(private systemAndEquipmentCurveService: SystemAndEquipmentCurveService, private regressionEquationsService: RegressionEquationsService, private cd: ChangeDetectorRef) { }
@@ -71,6 +82,31 @@ export class RegressionEquationsComponent implements OnInit {
       this.systemCurveRegressionEquation = val;
       this.cd.detectChanges();
     });
+
+    this.baselineEquipmentPowerRegressionEquationSub = this.regressionEquationsService.baselineEquipmentPowerRegressionEquation.subscribe(val => {
+      this.baselineEquipmentPowerRegressionEquation = val;
+      this.cd.detectChanges();
+    });
+
+    this.modificationEquipmentPowerRegressionEquationSub = this.regressionEquationsService.modificationEquipmentPowerRegressionEquation.subscribe(val => {
+      this.modificationEquipmentPowerRegressionEquation = val;
+      this.cd.detectChanges();
+    });
+
+    this.baselineEquipmentPowerCurveByDataRSquaredSub = this.regressionEquationsService.baselineEquipmentPowerCurveByDataRSquared.subscribe(val => {
+      this.baselineEquipmentPowerCurveByDataRSquared = val;
+      this.cd.detectChanges();
+    });
+
+    this.modificationEquipmentPowerCurveByDataRSquaredSub = this.regressionEquationsService.modificationEquipmentPowerCurveByDataRSquared.subscribe(val => {
+      this.modificationEquipmentPowerCurveByDataRSquared = val;
+      this.cd.detectChanges();
+    });
+
+    this.isModificationPowerFromDataSub = this.regressionEquationsService.isModificationPowerFromData.subscribe(val => {
+      this.isModificationPowerFromData = val;
+      this.cd.detectChanges();
+    });
   }
 
   ngOnDestroy() {
@@ -81,5 +117,10 @@ export class RegressionEquationsComponent implements OnInit {
     this.selectedEquipmentCurveFormViewSub.unsubscribe();
     this.equipmentCurveCollapsedSub.unsubscribe();
     this.systemCurveCollapsedSub.unsubscribe();
+    this.baselineEquipmentPowerRegressionEquationSub.unsubscribe();
+    this.modificationEquipmentPowerRegressionEquationSub.unsubscribe();
+    this.baselineEquipmentPowerCurveByDataRSquaredSub.unsubscribe();
+    this.modificationEquipmentPowerCurveByDataRSquaredSub.unsubscribe();
+    this.isModificationPowerFromDataSub.unsubscribe();
   }
 }

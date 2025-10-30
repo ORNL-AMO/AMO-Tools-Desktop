@@ -25,8 +25,22 @@
                     <span [innerHTML]="baselineEquipmentRegressionEquation"></span>
                 </td>
             </tr>
-            <tr *ngIf="selectedEquipmentCurveFormView == 'Data'">
+            <tr *ngIf="selectedEquipmentCurveFormView == 'Data' && baselineEquipmentCurveByDataRSquared > 0">
                 <td class="pl-2">r<sup>2</sup>: {{baselineEquipmentCurveByDataRSquared | number: '.1-4'}} </td>
+            </tr>
+            <tr *ngIf="selectedEquipmentCurveFormView == 'Equation'">
+                <td class="pl-2"><span class="text-muted small">R²: N/A</span></td>
+            </tr>
+            <tr *ngIf="baselineEquipmentPowerRegressionEquation">
+                <td class="pl-2">
+                    <span [innerHTML]="baselineEquipmentPowerRegressionEquation"></span>
+                </td>
+            </tr>
+            <tr *ngIf="selectedEquipmentCurveFormView == 'Data' && baselineEquipmentPowerCurveByDataRSquared > 0">
+                <td class="pl-2">r<sup>2</sup>: {{baselineEquipmentPowerCurveByDataRSquared | number: '.1-4'}} </td>
+            </tr>
+            <tr *ngIf="selectedEquipmentCurveFormView == 'Equation' && baselineEquipmentPowerRegressionEquation">
+                <td class="pl-2"><span class="text-muted small">R²: N/A</span></td>
             </tr>
             <tr>
                 <td class="bold">Modified {{equipmentLabel}} Curve</td>
@@ -35,6 +49,17 @@
                 <td class="pl-2">
                     <span [innerHTML]="modificationEquipmentRegressionEquation"></span>
                 </td>
+            </tr>
+            <tr *ngIf="modificationEquipmentPowerRegressionEquation">
+                <td class="pl-2">
+                    <span [innerHTML]="modificationEquipmentPowerRegressionEquation"></span>
+                </td>
+            </tr>
+            <tr *ngIf="isModificationPowerFromData && modificationEquipmentPowerCurveByDataRSquared > 0">
+                <td class="pl-2">r<sup>2</sup>: {{modificationEquipmentPowerCurveByDataRSquared | number: '.1-4'}} </td>
+            </tr>
+            <tr *ngIf="selectedEquipmentCurveFormView == 'Equation' && !isModificationPowerFromData && modificationEquipmentPowerRegressionEquation">
+                <td class="pl-2"><span class="text-muted small">R²: N/A</span></td>
             </tr>
         </tbody>
     </table>
