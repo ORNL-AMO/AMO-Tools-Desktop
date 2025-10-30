@@ -1,61 +1,70 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Slider, Typography } from '@mui/material';
+import { Slider } from '@mui/material';
 
 
 export default function ContinuousSlider(props: SliderProps) {
+  let min = props.min;
+  let max = props.max;
+  if (props.marks) {
+    min = props.marks[0].value;
+    max = props.marks[props.marks.length - 1].value;
+  }
 
-  const MAX = props.max? props.max : 10;
-  const MIN = props.min? props.min : 1;
+
   const step = props.step? props.step : undefined;
-  const unit = props.unit !== undefined? props.unit : 'px'; 
-  const marks = [
+  const defaultMarks = [
     {
-      value: MIN,
+      value: min,
       label: '',
     },
     {
-      value: MAX,
+      value: max,
       label: '',
     },
   ];
 
     return (
-      <Box sx={{ width: 300, fontSize: '.75rem', marginLeft: '.5rem' }}>
+      <Box sx={{ width: 300, fontSize: '.75rem', marginLeft: '.5rem' }} style={{ ...props.style }}>
         <Slider
-          size="small"
+          size={props.size}
           aria-label="Small"
           valueLabelDisplay="auto"
-          min={MIN}
-          max={MAX}
+          min={min}
+          max={max}
           step={step}
-          marks={marks}
+          marks={props.marks? props.marks : defaultMarks}
           sx={{padding: 0}}
           value={props.value} onChange={props.setSliderValue}
         />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span
-            onClick={(event) => props.setSliderValue(event, MIN)}
-            style={{ cursor: 'pointer' }}
-          >
-            {MIN} {unit}
-          </span>
-          <span
-            onClick={(event) => props.setSliderValue(event, MAX)}
-            style={{ cursor: 'pointer' }}
-          >
-            {MAX} {unit}
-          </span>
-        </Box>
+        {!props.marks && (
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span
+              onClick={(event) => props.setSliderValue(event, min)}
+              style={{ cursor: 'pointer' }}
+            >
+              {min} {props.unit ? props.unit : undefined}
+            </span>
+            <span
+              onClick={(event) => props.setSliderValue(event, max)}
+              style={{ cursor: 'pointer' }}
+            >
+              {max} {props.unit ? props.unit : undefined}
+            </span>
+          </Box>
+        )}
       </Box>
     );
   }
 
-  export interface SliderProps {
+  export interface SliderProps extends React.HTMLAttributes<HTMLDivElement> {
     setSliderValue: (event: Event | React.MouseEvent, newValue: number) => void;
     min?: number,
     max?: number,
+    size?: 'small' | 'medium';
     step?: number,
     unit?: string,
     value: number;
+    marks?: { value: number; label: string }[];
+    style?: React.CSSProperties;
   }

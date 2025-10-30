@@ -52,6 +52,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
   const onDragStart = (event: React.DragEvent, nodeType: string) => {
+    // * see Diagram.tsx for onDrop event handler
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
   };
@@ -238,6 +239,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
               <Box className={'sidebar-option-container'}>
                 <label htmlFor={'strokeWidth'} >Line Thickness</label>
                 <ContinuousSlider
+                  size='small'
+                  unit='px'
+                  min={1}
+                  max={10}
                   setSliderValue={(e, newValue) => handleSliderChange(e, newValue, 'strokeWidth', ['updateEdgeProperties'])}
                   value={strokeWidth} />
               </Box>
@@ -245,6 +250,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
               <Box className={'sidebar-option-container'}>
                 <label htmlFor={'flowLabelSize'} >Flow Label Size Scale</label>
                 <ContinuousSlider
+                  size='small'
                   min={.5}
                   max={2}
                   step={.10}

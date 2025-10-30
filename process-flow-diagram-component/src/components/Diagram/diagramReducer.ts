@@ -1,10 +1,10 @@
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CSSProperties } from 'react';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
+import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getConnectionFromEdgeId, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
 import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
@@ -305,8 +305,24 @@ const keyboardDeleteNodeReducer = (state: DiagramState, action: PayloadAction<No
 };
 
 const updateNodeHandlesReducer = (state: DiagramState, action: PayloadAction<Handles>) => {
-  const updateNode = state.nodes.find((n: Node<ProcessFlowPart>) => n.id === state.selectedDataId);
-  updateNode.data.handles = action.payload;
+  const { inflowHandles, outflowHandles } = action.payload;
+  const updatedNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.id === state.selectedDataId) as Node<ProcessFlowPart>;
+  let activeEdges: Edge[] = [];
+
+  // * Need to check equality/changes because the user will modify one handle set at a time
+  if (inflowHandles && !getAreHandlesEqual(updatedNode.data.handles.inflowHandles, inflowHandles)) {
+    activeEdges.push(...state.edges.filter(edge => {
+      return getIsActiveTargetEdge(updatedNode, inflowHandles, edge.id);
+    }));
+  }
+  if (outflowHandles && !getAreHandlesEqual(updatedNode.data.handles.outflowHandles, outflowHandles)) {
+    activeEdges.push(...state.edges.filter(edge => {
+      return getIsActiveSourceEdge(updatedNode, outflowHandles, edge.id);
+    }));
+  }
+
+  state.edges = activeEdges;
+  updatedNode.data.handles = action.payload;
 }
 
 // * EDGES
@@ -696,4 +712,29 @@ const removeFlowErrors = (state: DiagramState, flowType: FlowType) => {
   if (Object.entries(state.nodeErrors[state.selectedDataId]).every(([, value]) => value === undefined)) {
     delete state.nodeErrors[state.selectedDataId];
   }
+}
+
+const getIsActiveTargetEdge = (updatedNode: Node, handleSet: Handles[keyof Handles], edgeId: string): boolean => {
+  const { source, target, sourceHandle, targetHandle } = getConnectionFromEdgeId(edgeId);
+  const isTargetConnection = target === updatedNode.id;
+  if (isTargetConnection) {
+    return target === updatedNode.id && handleSet[targetHandle];
+  }
+  return true;
+}
+
+const getIsActiveSourceEdge = (updatedNode: Node, handleSet: Handles[keyof Handles], edgeId: string): boolean => {
+  const { source, target, sourceHandle, targetHandle } = getConnectionFromEdgeId(edgeId);
+  const isSourceConnection = source === updatedNode.id;
+  if (isSourceConnection) {
+    return source === updatedNode.id && handleSet[sourceHandle];
+  }
+  return true;
+}
+
+
+const getAreHandlesEqual = (handleSet: Handles[keyof Handles], updatedHandleSet: Handles[keyof Handles]) => {
+  const keys = new Set([...Object.keys(handleSet), ...Object.keys(updatedHandleSet)]);
+  const isEqual = [...keys].every(key => handleSet[key] === updatedHandleSet[key]);
+  return isEqual;
 }
