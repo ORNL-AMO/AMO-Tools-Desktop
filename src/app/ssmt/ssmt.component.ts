@@ -92,8 +92,6 @@ export class SsmtComponent implements OnInit {
   showExportModal: boolean = false;
   showExportModalSub: Subscription;
   saturatedPropertiesOutput: SaturatedPropertiesOutput;
-  pressureOrTemperature: number;
-  validPlot: boolean = false;
 
   constructor(
     private egridService: EGridService,
@@ -326,8 +324,14 @@ export class SsmtComponent implements OnInit {
     this._ssmt.setupDone = ssmtValid.isValid;
   }
 
-  saveBoiler(boilerData: BoilerInput) {
-    this._ssmt.boilerInput = boilerData;
+  saveBoiler(boilerInput: BoilerInput) {
+    this._ssmt.boilerInput = boilerInput;
+    let input: SaturatedPropertiesInput = {
+      saturatedTemperature: boilerInput.steamTemperature,
+      saturatedPressure: boilerInput.saturatedPressure,
+    };
+    this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, boilerInput.pressureOrTemperature, this.settings);
+
     this.save();
   }
 
@@ -564,24 +568,5 @@ export class SsmtComponent implements OnInit {
   closeExportModal(input: boolean) {
     this.ssmtService.showExportModal.next(input);
   }
-
-  calculate(form: UntypedFormGroup) {
-      let input: SaturatedPropertiesInput = {
-        saturatedTemperature: form.controls.steamTemperature.value,
-        saturatedPressure: form.controls.saturatedPressure.value,
-      };
-      this.pressureOrTemperature = form.controls.pressureOrTemperature.value;
-      this.steamService.saturatedPropertiesInputs = {
-        pressureOrTemperature: this.pressureOrTemperature,
-        inputs: {
-          saturatedTemperature: form.controls.steamTemperature.value,
-          saturatedPressure: form.controls.saturatedPressure.value
-        }
-      };
-      if (form.status === 'VALID') {
-        this.saturatedPropertiesOutput = { ...this.steamService.saturatedProperties(input, this.pressureOrTemperature, this.settings) };
-        this.validPlot = true;
-      }
-    }
 
 }

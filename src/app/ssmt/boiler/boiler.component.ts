@@ -3,7 +3,7 @@ import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChil
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerWarnings } from './boiler.service';
 import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
-import { UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from '../compare.service';
@@ -12,7 +12,7 @@ import { StackLossService } from '../../calculator/steam/stack-loss/stack-loss.s
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { SteamPressureOrTemp, SteamQuality } from '../../shared/models/steam/steam-inputs';
 @Component({
     selector: 'app-boiler',
     templateUrl: './boiler.component.html',
@@ -33,12 +33,8 @@ export class BoilerComponent implements OnInit {
   @Input()
   ssmt: SSMT;
   @Input()
-  ranges: { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number };
-  @Input()
   saturatedPropertiesOutput: SaturatedPropertiesOutput;
-  @Input()
-  output: SaturatedPropertiesOutput;
-  
+
   @Output()
   emitCalculate = new EventEmitter<UntypedFormGroup>();
   @Output('emitSave')
@@ -66,15 +62,15 @@ export class BoilerComponent implements OnInit {
   idString: string = 'baseline_';
   highPressureHeaderForm: UntypedFormGroup;
   lowPressureHeaderForm: UntypedFormGroup;
-  validPlot: boolean = false;
+
+  SteamQuality = SteamQuality;
+  SteamPressureOrTemp = SteamPressureOrTemp;
   
   constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService, 
     private stackLossService: StackLossService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
-    private cd: ChangeDetectorRef,
-    private convertUnitsService: ConvertUnitsService
   ) { }
 
   ngOnInit() {
@@ -88,9 +84,6 @@ export class BoilerComponent implements OnInit {
     if (this.selected === false) {
       this.disableForm();
     }
-    this.ranges = this.getRanges();
-    this.objToCalculate();
-    this.setValidators();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -122,6 +115,16 @@ export class BoilerComponent implements OnInit {
     this.setPressureForms(this.boilerInput);
   }
 
+  setPressureOrTemperatureValidators() {
+    if (this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
+      this.boilerService.setSaturatedPressureValidators(this.saturatedPressure, this.settings);
+      this.steamTemperature.clearValidators();
+    } else if (this.pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE) {
+      this.boilerService.setSteamTemperatureValidators(this.steamTemperature, this.settings);
+      this.saturatedPressure.clearValidators();
+    }
+  }
+
   setFuelTypes() {
     if (this.boilerForm.controls.fuelType.value === 0) {
       this.options = this.solidLiquidMaterialDbService.getAllMaterials();
@@ -144,6 +147,7 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.preheatMakeupWater.disable();
   }
 
+  // todo for nbintertech - new issue after 7661, get these header forms out of the class/template and read header validation returned from a service call instead
   setPressureForms(boilerInput: BoilerInput) {
     if (boilerInput) {
       if (this.headerInput.highPressureHeader) {
@@ -159,7 +163,6 @@ export class BoilerComponent implements OnInit {
   }
 
   save() {
-    this.objToCalculate();
     this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
     this.setPressureForms(tmpBoiler);
@@ -312,34 +315,20 @@ export class BoilerComponent implements OnInit {
     this.emitChangeField.emit(str);
   }
 
-  setValidators() {
-    if (this.boilerForm.controls.pressureOrTemperature.value === 0) {
-      this.boilerForm.controls.saturatedPressure.setValidators([Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]);
-      this.boilerForm.controls.steamTemperature.clearValidators();
-      this.boilerForm.controls.steamTemperature.reset(this.boilerForm.controls.steamTemperature.value);
-    }else if (this.boilerForm.controls.pressureOrTemperature.value === 1) {
-      this.boilerForm.controls.steamTemperature.setValidators([Validators.required, Validators.min(this.ranges.minTemp), Validators.max(this.ranges.maxTemp)]);
-      this.boilerForm.controls.saturatedPressure.clearValidators();
-      this.boilerForm.controls.saturatedPressure.reset(this.boilerForm.controls.saturatedPressure.value);
-    }
-    this.cd.detectChanges();
+   get pressureOrTemperature() {
+    return this.boilerForm.get('pressureOrTemperature');
   }
 
-  getRanges(): { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number } {
-    let minTemp: number, maxTemp: number;
-    if (this.settings.steamTemperatureMeasurement === 'F') {
-      minTemp = 32;
-      maxTemp = 705.1;
-    } else {
-      minTemp = 0;
-      maxTemp = 373.9;
-    }
-    let minPressure: number = Number(this.convertUnitsService.value(1).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
-    let maxPressure: number = Number(this.convertUnitsService.value(22064).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
-    return { minTemp: minTemp, maxTemp: maxTemp, minPressure: minPressure, maxPressure: maxPressure };
+  get steamTemperature() {
+    return this.boilerForm.get('steamTemperature');
   }
 
-  objToCalculate() {
-    this.emitCalculate.emit(this.boilerForm);
+  get saturatedPressure() {
+    return this.boilerForm.get('saturatedPressure');  
   }
+
+  get steamQuality() {
+    return this.boilerForm.get('steamQuality');
+  }
+
 }

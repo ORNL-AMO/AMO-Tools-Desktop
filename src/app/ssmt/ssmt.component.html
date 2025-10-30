@@ -27,7 +27,7 @@
       <app-operations *ngIf="stepTab == 'operations'" [ssmt]="_ssmt" [settings]="settings"
         (emitSave)="saveSetup($event)" [selected]="true" [inSetup]="true" [isBaseline]="true"></app-operations>
       <app-boiler *ngIf="stepTab == 'boiler'" [ssmt]="_ssmt" [selected]="true" [inSetup]="true"
-        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true" (emitCalculate)="calculate($event)" [saturatedPropertiesOutput]="saturatedPropertiesOutput">
+        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true" [saturatedPropertiesOutput]="saturatedPropertiesOutput">
       </app-boiler>
       <app-header *ngIf="stepTab == 'header'" [ssmt]="_ssmt" [selected]="true" [inSetup]="true"
         [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists" [saturatedPropertiesOutput]="saturatedPropertiesOutput"

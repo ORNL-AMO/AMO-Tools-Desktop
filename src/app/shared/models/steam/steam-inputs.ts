@@ -145,3 +145,13 @@ export interface StackLossInput {
   name: string
 
 }
+
+export enum SteamQuality {
+    SATURATED = 0,
+    SUPERHEATED = 1
+}
+
+export enum SteamPressureOrTemp {
+    PRESSURE = 0,
+    TEMPERATURE = 1
+}
