@@ -39,7 +39,8 @@
         Enthalpy</label>
       <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 2" for="quantityValue">Specific
         Entropy</label>
-      <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 3" for="quantityValue">Quality</label>
+      <label *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 3" for="quantityValue">
+        Quality</label>
       <div class="input-group calc-addon-group">
         <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue"
           onfocus="this.select();" (input)="calculate()" (focus)="focusField('quantityValue')" autofocus>
@@ -60,6 +61,14 @@
             [innerHTML]="getOptionDisplayUnit(steamPropertiesForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>.
         </span>
       </span>
+      <!-- <span class="alert-warning pull-right small"
+        *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 1 && steamPropertiesOutput.temperature >= this.parent.ranges.maxQuantityValue">Temperature Value can't be greater than
+          {{steamPropertiesForm.controls.quantityValue.errors?.max.max}} 
+      </span>
+      <span class="alert-warning pull-right small"
+        *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value === 2 && steamPropertiesOutput.temperature >= this.parent.ranges.maxQuantityValue">Temperature Value can't be greater than
+          {{steamPropertiesForm.controls.quantityValue.errors?.max.max}}
+      </span> -->
     </div>
 
     <div class="form-group">

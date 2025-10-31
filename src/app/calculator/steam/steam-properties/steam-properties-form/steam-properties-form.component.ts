@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { UntypedFormGroup } from "@angular/forms";
+import { UntypedFormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SteamPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
-
+import { SteamPropertiesComponent}  from '../steam-properties.component';
 @Component({
     selector: 'app-steam-properties-form',
     templateUrl: './steam-properties-form.component.html',
@@ -24,7 +24,7 @@ export class SteamPropertiesFormComponent implements OnInit {
   emitQuantityChange = new EventEmitter<number>();
 
 
-  constructor() {
+  constructor(private parent: SteamPropertiesComponent) {
   }
 
   ngOnInit() {
@@ -47,6 +47,7 @@ export class SteamPropertiesFormComponent implements OnInit {
     };
   }
   calculate() {
+    this.pressureAdjustedValidation();
     if (this.steamPropertiesForm.status === 'INVALID') {
       this.steamPropertiesOutput = {
         pressure: 0,
@@ -76,4 +77,20 @@ export class SteamPropertiesFormComponent implements OnInit {
     }
   }
 
+  pressureAdjustedValidation() {
+    const tempControl = this.steamPropertiesForm.controls.quantityValue;
+    const pressure = this.steamPropertiesForm.controls.pressure?.value || 0;
+    const currentValidators = [ Validators.required ];
+    if(this.steamPropertiesForm.controls.thermodynamicQuantity.value === 0){
+      if (pressure < 50) {
+        currentValidators.push(Validators.max(1472), Validators.min(32));
+      } else {
+        currentValidators.push(Validators.max(3632), Validators.min(32));
+      }
+    } else {
+      currentValidators.push(Validators.min(this.parent.ranges.minQuantityValue), Validators.max(this.parent.ranges.maxQuantityValue));
+    }
+    tempControl.setValidators(currentValidators);
+    tempControl.updateValueAndValidity();
+  }
 }
