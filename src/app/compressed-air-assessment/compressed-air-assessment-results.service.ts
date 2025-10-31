@@ -717,6 +717,9 @@ export class CompressedAirAssessmentResultsService {
       }
     });
     selectedDayTypeSummary = this.getProfileSummaryDataAverages(selectedDayTypeSummary);
+    // Include flow reallocation in baseline for optimization
+    let totals = this.calculateProfileSummaryTotals(inventoryItems, dayType, selectedDayTypeSummary, compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
+    selectedDayTypeSummary = this.reallocateFlow(dayType, settings, selectedDayTypeSummary, inventoryItems, 0, totals, compressedAirAssessment.systemInformation.atmosphericPressure, compressedAirAssessment.systemInformation.totalAirStorage, compressedAirAssessment.systemInformation);
     return selectedDayTypeSummary;
   }
 
@@ -1259,7 +1262,10 @@ export class CompressedAirAssessmentResultsService {
       compressor.performancePoints.blowoff.isDefaultAirFlow = true;
       compressor.performancePoints.blowoff.isDefaultPressure = true;
       compressor.performancePoints.blowoff.isDefaultPower = true;
-      compressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(compressor, atmosphericPressure, settings);
+      // Only recalculate performance points if there is actual pressure reduction to avoid unnecessary changes
+      if (reduceSystemAirPressure.averageSystemPressureReduction > 0) {
+        compressor.performancePoints = this.performancePointCalculationsService.updatePerformancePoints(compressor, atmosphericPressure, settings);
+      }
     });
     return adjustedCompressors;
   }

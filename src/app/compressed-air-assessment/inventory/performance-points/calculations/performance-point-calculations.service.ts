@@ -18,6 +18,24 @@ export class PerformancePointCalculationsService {
     private blowoffCalculationsService: BlowoffCalculationsService, private unloadPointCalculationsService: UnloadPointCalculationsService) { }
 
   updatePerformancePoints(selectedCompressor: CompressorInventoryItem, atmosphericPressure: number, settings: Settings): PerformancePoints {
+    // Skip recalculation if all performance points are manually set (non-default)
+    if (!selectedCompressor.performancePoints.fullLoad.isDefaultPressure &&
+        !selectedCompressor.performancePoints.fullLoad.isDefaultAirFlow &&
+        !selectedCompressor.performancePoints.fullLoad.isDefaultPower &&
+        !selectedCompressor.performancePoints.maxFullFlow.isDefaultPressure &&
+        !selectedCompressor.performancePoints.maxFullFlow.isDefaultAirFlow &&
+        !selectedCompressor.performancePoints.maxFullFlow.isDefaultPower &&
+        !selectedCompressor.performancePoints.noLoad.isDefaultPressure &&
+        !selectedCompressor.performancePoints.noLoad.isDefaultAirFlow &&
+        !selectedCompressor.performancePoints.noLoad.isDefaultPower &&
+        !selectedCompressor.performancePoints.blowoff.isDefaultPressure &&
+        !selectedCompressor.performancePoints.blowoff.isDefaultAirFlow &&
+        !selectedCompressor.performancePoints.blowoff.isDefaultPower &&
+        !selectedCompressor.performancePoints.unloadPoint.isDefaultPressure &&
+        !selectedCompressor.performancePoints.unloadPoint.isDefaultAirFlow &&
+        !selectedCompressor.performancePoints.unloadPoint.isDefaultPower) {
+      return selectedCompressor.performancePoints;
+    }
     selectedCompressor.performancePoints = this.setPerformancePoints(selectedCompressor, atmosphericPressure, settings);
     return selectedCompressor.performancePoints;
   }
