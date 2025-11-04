@@ -1,3 +1,13 @@
+@if(dayTypeOptions.length > 1){
+<div class="p-2 text-center">
+    <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
+        (change)="changeDayType()">
+        <option *ngFor="let dayType of dayTypeOptions" [ngValue]="dayType">{{dayType.name}}</option>
+    </select>
+</div>
+}
+
+
 <app-profile-summary-table [inventoryItems]="compressedAirAssessment.compressorInventoryItems"
     [profileSummary]="adjustedProfileSummary" [totals]="totals" [settings]="settings"
     [systemProfileSetup]="compressedAirAssessment.systemProfile.systemProfileSetup"

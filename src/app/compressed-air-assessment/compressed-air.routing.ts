@@ -17,6 +17,7 @@ import { CompressedAirDiagramComponent } from "./compressed-air-diagram/compress
 import { CompressedAirReportComponent } from "./compressed-air-report/compressed-air-report.component";
 import { CompressedAirSankeyComponent } from "./compressed-air-sankey/compressed-air-sankey.component";
 import { CompressedAirCalculatorsComponent } from "./compressed-air-calculators/compressed-air-calculators.component";
+import { AssessmentProfileSummaryTableComponent } from "./assessment-tab-content/assessment-profile-summary-table/assessment-profile-summary-table.component";
 
 
 export const compressedAirAssessmentRoutes: Routes = [
@@ -100,6 +101,10 @@ export const compressedAirAssessmentRoutes: Routes = [
                 path: 'explore-opportunities',
                 component: ExploreOpportunitiesComponent
             },
+            {
+                path: 'profile-summary-table',
+                component: AssessmentProfileSummaryTableComponent
+            }
         ]
     },
     {

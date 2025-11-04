@@ -84,7 +84,6 @@ import { DayTypeService } from './baseline-tab-content/day-types-setup/day-types
 import { FullLoadAmpsModule } from '../calculator/motors/full-load-amps/full-load-amps.module';
 import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-correction/altitude-correction.module';
 import { CompressedAirDataManagementService } from './compressed-air-data-management.service';
-import { ExploreOpportunitiesProfileTableComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/explore-opportunities-profile-table/explore-opportunities-profile-table.component';
 import { CompressedAirAssessmentResultsService } from './compressed-air-assessment-results.service';
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 
@@ -159,6 +158,7 @@ import { ConnectedInventoryModule } from '../shared/connected-inventory/connecte
 import { IntegrateCompressedAirInventoryComponent } from './integrate-compressed-air-inventory/integrate-compressed-air-inventory.component';
 
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
+import { AssessmentProfileSummaryTableComponent } from './assessment-tab-content/assessment-profile-summary-table/assessment-profile-summary-table.component';
 
 
 @NgModule({
@@ -220,7 +220,6 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     ExploreOpportunitiesResultsComponent,
     ModificationListModalComponent,
     AddModificationModalComponent,
-    ExploreOpportunitiesProfileTableComponent,
     AssessmentHelpComponent,
     ReduceAirLeaksHelpComponent,
     ImproveEndUseEfficiencyHelpComponent,
@@ -259,7 +258,8 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     ExploreOpportunitiesFormComponent,
     ExploreOpportunitiesSidePanelComponent,
     CaDisableNextButtonPipe,
-    IntegrateCompressedAirInventoryComponent
+    IntegrateCompressedAirInventoryComponent,
+    AssessmentProfileSummaryTableComponent
   ],
   imports: [
     CommonModule,
