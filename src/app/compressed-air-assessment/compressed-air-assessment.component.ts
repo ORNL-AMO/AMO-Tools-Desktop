@@ -93,7 +93,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
         this.save(this.assessment.compressedAirAssessment);
       }
 
-      this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment, false);
+      this.compressedAirAssessmentService.updateCompressedAir(this.assessment.compressedAirAssessment, true);
       this.initializingAssessment = false;
     });
 

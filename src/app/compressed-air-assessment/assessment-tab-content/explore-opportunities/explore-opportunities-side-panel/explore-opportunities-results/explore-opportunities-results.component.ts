@@ -51,6 +51,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
 
     this.modificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       this.modification = val;
+      console.log(this.modification);
     });
 
     this.modificationResultsSub = this.compressedAirAssessmentService.compressedAirAssessmentModificationResults.subscribe(val => {

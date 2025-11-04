@@ -49,7 +49,6 @@ export class SetupTabsComponent implements OnInit {
     let canViewDayTypes: boolean = false;
     let canViewSystemProfile: boolean = false;
     let canViewEndUses: boolean = false;
-
     if (this.validationStatus) {
       hasValidSystemInformation = this.validationStatus.systemInformationValid;
       hasValidCompressors = this.validationStatus.compressorsValid;
@@ -59,7 +58,6 @@ export class SetupTabsComponent implements OnInit {
       canViewDayTypes = hasValidSystemInformation && hasValidCompressors;
       canViewSystemProfile = canViewDayTypes && hasValidDayTypes;
       canViewEndUses = canViewSystemProfile && hasValidSystemProfile;
-
     }
     this.setSystemInformationStatus(hasValidSystemInformation);
     this.setInventoryStatus(hasValidCompressors, canViewInventory);

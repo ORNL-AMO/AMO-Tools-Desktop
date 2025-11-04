@@ -75,12 +75,12 @@
                 {{dayTypeModificationResult.replaceCompressorsSavings.savings.power | number:'1.0-0'}} kWh
             </div>
         </div>
-        <div [style.order]="modification.addReceiverVolume.order" class="d-flex my-table-item"
+        <div [style.order]="modification.addPrimaryReceiverVolume.order" class="d-flex my-table-item"
             *ngIf="dayTypeModificationResult.addReceiverVolumeSavings.savings.power != 0">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.addReceiverVolume}">
                 <span class="table-text">
-                    {{modification.addReceiverVolumeSavings.order}}.
+                    {{modification.addPrimaryReceiverVolume.order}}.
                     Additional Receiver Volume Energy Savings</span>
             </div>
             <div class="d-flex align-items-center pl-1 pr-1 col-4">
@@ -325,12 +325,12 @@
         </div>
     </div>
     <div class="d-flex flex-column">
-        <div [style.order]="modification.reduceAirLeaks.order" class="d-flex my-table-item"
+        <div [style.order]="modification.addPrimaryReceiverVolume.order" class="d-flex my-table-item"
             *ngIf="dayTypeModificationResult.addReceiverVolumeSavings.savings.cost != 0">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.addReceiverVolume}">
                 <span class="table-text">
-                    {{modification.addReceiverVolumeSavings.order}}.
+                    {{modification.addPrimaryReceiverVolume.order}}.
                     Additional Receiver Volume Savings</span>
             </div>
             <div class="d-flex align-items-center pl-1 pr-1 col-4">

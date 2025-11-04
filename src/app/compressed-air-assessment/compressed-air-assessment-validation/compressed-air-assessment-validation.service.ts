@@ -23,6 +23,7 @@ export class CompressedAirAssessmentValidationService {
   }
 
   validateCompressedAirAssessment(compressedAirAssessment: CompressedAirAssessment, settings: Settings): CompressedAirAssessmentValidation {
+    console.log('set..')
     let systemInformationValid: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, settings).valid;
     let compressorItemValidation: Array<CompressorItemValidation> = this.compressorInventoryValidationService.validateCompressors(compressedAirAssessment);
     let compressorsValid: boolean = compressorItemValidation.every(item => { return item.isValid });
