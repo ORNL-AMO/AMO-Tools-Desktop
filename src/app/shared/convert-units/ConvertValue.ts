@@ -83,6 +83,24 @@ export class ConvertValue {
     destination: any;
     convertedValue: number;
     hasError: boolean;
+
+    /**
+     * Creates an instance of ConvertValue to convert a numeric value from one unit to another.
+     * 
+     * @param {number} value - The numeric value to be converted
+     * @param {string} from - The source unit abbreviation (e.g., 'ft', 'm', 'kg', 'lb')
+     * @param {string} to - The destination unit abbreviation (e.g., 'ft', 'm', 'kg', 'lb')
+     * 
+     * @example
+     * // Convert 10 feet to meters
+     * const converter = new ConvertValue(10, 'ft', 'm');
+     * console.log(converter.convertedValue); // Output: converted value in meters
+     * 
+     * @example
+     * // Convert 100 pounds to kilograms
+     * const converter = new ConvertValue(100, 'lb', 'kg');
+     * console.log(converter.convertedValue); // Output: converted value in kilograms
+     */
     constructor(value: number, from: string, to: string) {
         if (value != undefined) {
             this.origin = this.getUnit(from);

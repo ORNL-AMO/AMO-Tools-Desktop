@@ -1,0 +1,77 @@
+<!-- Mod Begins -->
+<div class="my-2"
+    *ngIf="(focusedField == 'maxFullFlowDischargePressure' && maxFullFlowLabel == '(mod begins)')">
+    <h6>
+        Discharge Pressure
+        <br>
+        <small class="text-muted">
+            The maximum pressure attainable at full flow (measured in pounds per square inch gauge); usually the
+            unload pressure setting for load/unload control or the maximum pressure attainable before capacity
+            control begins. May require additional power.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2"
+    *ngIf="(focusedField == 'maxFullFlowAirflow' && maxFullFlowLabel == '(mod begins)')">
+    <h6>
+        Air Flow
+        <br>
+        <small class="text-muted">
+            The airflow at the maximum full-load discharge pressure, in actual cubic feet per minute.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2"
+    *ngIf="(focusedField == 'maxFullFlowPower' && maxFullFlowLabel == '(mod begins)')">
+    <h6>
+        Power
+        <br>
+        <small class="text-muted">
+            The power at which the compressor reaches full flow, may require additional power above full load.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<!-- Cut-Out -->
+<div class="my-2"
+    *ngIf="(focusedField == 'maxFullFlowDischargePressure' && maxFullFlowLabel == '(cut-out)')">
+    <h6>
+        Discharge Pressure
+        <br>
+        <small class="text-muted">
+            The pressure at which the air compressor cuts out or unloads, in pounds per square inch gauge. May
+            require additional power. At this point, the compressor may unload, be fully modulated, or turn off.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2"
+    *ngIf="(focusedField == 'maxFullFlowAirflow' && maxFullFlowLabel == '(cut-out)')">
+    <h6>
+        Air Flow
+        <br>
+        <small class="text-muted">
+            The airflow at the maximum full-load discharge pressure, in actual cubic feet per minute.
+            <hr>
+        </small>
+    </h6>
+</div>
+
+<div class="my-2"
+    *ngIf="(focusedField == 'maxFullFlowPower' && maxFullFlowLabel == '(cut-out)')">
+    <h6>
+        Power
+        <br>
+        <small class="text-muted">
+            The power at which the air compressor cuts out or unloads. May require additional power above full load.
+            At this point, the compressor may unload, be fully modulated, or turn off.
+            <hr>
+        </small>
+    </h6>
+</div>

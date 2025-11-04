@@ -1,0 +1,22 @@
+.checkbox {
+    border-bottom: solid 1px lightgray;
+}
+
+label.group-label {
+    padding-bottom: 0px;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+    border-color: #7030A0;
+    background-color: #7030A0;
+}
+
+.custom-control.custom-switch {
+    border-bottom: #7030A0 solid 2px
+}
+
+label.group-label:hover,
+.checkbox:hover {
+    background-color: #efefef;
+    cursor: pointer;
+}

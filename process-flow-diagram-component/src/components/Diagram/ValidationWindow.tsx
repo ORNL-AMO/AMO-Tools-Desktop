@@ -1,5 +1,5 @@
 import { Paper, Typography, Stack, Alert, Button, Box, Collapse } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../hooks/state";
+import { useAppDispatch } from "../../hooks/state";
 import { Node } from '@xyflow/react';
 import { openDrawerWithSelected, validationWindowOpenChange } from "./diagramReducer";
 import InvalidIcon from "../../validation/InvalidIcon";
@@ -10,7 +10,7 @@ import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
 import { getHasErrorLevel, getHasFlowError, getHasTotalFlowError, NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "process-flow-lib";
 
-const ValidationWindow = (props) => {
+const ValidationWindow = (props: ValidationWindowProps) => {
   const dispatch = useAppDispatch();
   const {nodes, errors, openLocation} = props;
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -34,6 +34,7 @@ const ValidationWindow = (props) => {
     top: 90,
     width: 400,
     zIndex: 999,
+    ...props.style
   }
 
   return (
@@ -155,7 +156,7 @@ const ValidationWindow = (props) => {
 };
 
 export default memo(ValidationWindow);
-export interface ValidationWindowProps {
+export interface ValidationWindowProps extends React.HTMLAttributes<HTMLDivElement> {
   errors: NodeErrors;
   nodes: Node[];
   openLocation: ValidationWindowLocation;

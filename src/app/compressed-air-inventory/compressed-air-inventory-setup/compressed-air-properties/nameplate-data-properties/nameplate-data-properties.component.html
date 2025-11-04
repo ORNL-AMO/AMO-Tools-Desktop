@@ -1,0 +1,49 @@
+<div class="d-flex w-100" (mouseenter)="focusGroup()">
+    <div class="d-flex flex-fill">
+        <label class="group-label" (click)="toggleForm()">
+            <span class="fa fa-chevron-down" *ngIf="displayForm"></span>
+            <span class="fa fa-chevron-right" *ngIf="!displayForm"></span>
+            Nameplate Data
+        </label>
+    </div>
+    <div class="custom-control custom-switch">
+        <input type="checkbox" class="custom-control-input" (change)="setAll()"
+            [(ngModel)]="nameplateDataOptions.displayNameplateData" name="displayNameplateData"
+            id="displayNameplateData" disabled>
+        <label class="custom-control-label" for="displayNameplateData"></label>
+    </div>
+</div>
+
+<form class="p-1" *ngIf="displayForm">
+    <div class="checkbox" (mouseenter)="focusField('compressorType')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.compressorType"
+                name="compressorType" id="compressorType" disabled>
+            Compressor Type
+        </label>
+    </div>
+    <div class="checkbox" (mouseenter)="focusField('fullLoadOperatingPressure')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadOperatingPressure"
+                name="fullLoadOperatingPressure" id="fullLoadOperatingPressure" disabled>
+            Full Load Operating Pressure
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('fullLoadRatedCapacity')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.fullLoadRatedCapacity"
+                name="fullLoadRatedCapacity" id="fullLoadRatedCapacity" disabled>
+            Rated Capacity at Full Load Pressure
+        </label>
+    </div>
+
+    <div class="checkbox" (mouseenter)="focusField('totalPackageInputPower')">
+        <label>
+            <input type="checkbox" (change)="save()" [(ngModel)]="nameplateDataOptions.totalPackageInputPower"
+                name="totalPackageInputPower" id="totalPackageInputPower" disabled>
+            Total Package Input Power
+        </label>
+    </div>
+
+</form>

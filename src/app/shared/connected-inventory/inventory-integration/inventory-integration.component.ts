@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { MotorItem } from '../../../motor-inventory/motor-inventory';
 import { PumpItem } from '../../../pump-inventory/pump-inventory';
 import * as _ from 'lodash';
+import { CompressedAirInventorySystem, CompressedAirItem } from '../../../compressed-air-inventory/compressed-air-inventory';
 
 
 @Component({
@@ -26,6 +27,8 @@ export class InventoryIntegrationComponent {
   allowChanges: boolean = true;
   @Input() 
   inPsat: boolean;
+  @Input() 
+  inCompressedAir: boolean;
 
   @Output('focusedField')
   focusedField = new EventEmitter();
@@ -103,6 +106,9 @@ export class InventoryIntegrationComponent {
         case 'pump':
           url = `/pump-inventory/${connectedItem.inventoryId}`;
           break;
+        case 'compressed-air':
+          url = `/compressed-air-inventory/${connectedItem.inventoryId}`;
+          break;
         default:
           url = undefined;
       }
@@ -120,6 +126,9 @@ export class InventoryIntegrationComponent {
       switch(connectedItem.assessmentType) {
         case 'PSAT':
           url = `/psat/${connectedItem.assessmentId}`;
+          break;
+        case 'CompressedAir':
+          url = `/compressed-air-assessment/${connectedItem.assessmentId}`;
           break;
         default:
           url = undefined;
@@ -169,16 +178,22 @@ export class InventoryIntegrationComponent {
   }
 
   setSelectedCatalogItem() {
-    let selectedCatalogItem: MotorItem | PumpItem = this.inventoryIntegrationForm.controls.selectedCatalogItem.value;
+    let selectedCatalogItem: MotorItem | PumpItem | CompressedAirInventorySystem = this.inventoryIntegrationForm.controls.selectedCatalogItem.value;
     let selectedInventoryId: number = this.inventoryIntegrationForm.controls.selectedInventoryId.value;
-    
+    let departmentId: string;
+    if ('departmentId' in selectedCatalogItem) {
+      departmentId = selectedCatalogItem.departmentId;
+    } else if ('id' in selectedCatalogItem) {
+      departmentId = selectedCatalogItem.id;
+    }
+
     let connectedInventoryData: ConnectedInventoryData = {
       connectedItem: {
         id: selectedCatalogItem.id,
         name: selectedCatalogItem.name,
         inventoryType: this.connectedInventoryType,
         inventoryId: this.inventoryIntegrationForm.controls.selectedInventoryId.value,
-        departmentId: selectedCatalogItem.departmentId,
+        departmentId: departmentId,
         inventoryName: this.selectOptions.inventoryOptions.find(option => option.id === selectedInventoryId).display,
       },
       canConnect: true,

@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { CompressedAirDataManagementService } from '../../../compressed-air-data-management.service';
 import { CompressedAirAssessmentValidationService } from '../../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
 import { InventoryFormService } from './inventory-form.service';
+import { IntegrationStateService } from '../../../../shared/connected-inventory/integration-state.service';
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
@@ -30,11 +31,13 @@ export class InventoryComponent implements OnInit {
 
   inventoryTab: 'inventory' | 'replacementInventory' | 'help';
   inventoryTabSub: Subscription;
+  hasConnectedCompressedAirInventory: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private inventoryService: InventoryService, private cd: ChangeDetectorRef,
     private compressedAirDataManagementService: CompressedAirDataManagementService,
     private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService,
-    private inventoryFormService: InventoryFormService) { }
+    private inventoryFormService: InventoryFormService,
+    private integrationStateService: IntegrationStateService) { }
 
   ngOnInit(): void {
     this.inventoryTabSub = this.inventoryService.tabSelect.subscribe(val => {
@@ -106,6 +109,8 @@ export class InventoryComponent implements OnInit {
         }
       }
     }
+    let connectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();
+    this.hasConnectedCompressedAirInventory = connectedInventoryData.connectedItem && connectedInventoryData.connectedItem.inventoryType === 'compressed-air';
   }
 
   addInventoryItem() {

@@ -1,0 +1,66 @@
+.modal-open {
+    z-index: initial !important;
+}
+
+.compressed-air-inventory .assessment-panel-container::-webkit-scrollbar-thumb {
+    background-color: #7030A0;
+}
+
+/* Screens above  1024 */
+.assessment-container {
+    display: flex;
+    height: 100%;
+}
+
+.assessment-panel-container {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.small-tab-select {
+    display: none;
+}
+
+.full-width-panel {
+    width: 100%;
+}
+
+
+
+/* Screens below 1024 */
+@media screen and (max-width: 1024px) {
+    .assessment-container {
+        display: flex;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .assessment-panel-container {
+        display: none;
+        width: 100%;
+    }
+
+    .lookup-form {
+        height: 100%;
+    }
+
+    .small-screen-hide {
+        display: none;
+    }
+
+    .small-screen-tab {
+        display: flex;
+        min-height: 100%;
+        height: 100%;
+        width: 100%;
+    }
+
+    .small-tab-select {
+        display: flex;
+        width: 100%;
+        flex-wrap: wrap;
+        margin: auto;
+    }
+
+}

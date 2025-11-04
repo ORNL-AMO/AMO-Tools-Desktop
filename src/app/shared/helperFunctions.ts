@@ -1,4 +1,5 @@
 import { cloneDeep } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 
 export function copyObject(object) {
     return cloneDeep(object);
@@ -14,13 +15,17 @@ export function truncate(text: string, specifiedLimit?: number) {
 }
 
 
-export function roundVal(val: number, places: number): number {
+/**
+ * Rounds a value to a specified number of decimal places. Default is 3
+ * @returns 
+ */
+export function roundVal(val: number, places: number = 3): number {
     let rounded = Number(val.toFixed(places));
     return rounded;
   }
 
 export function getNewIdString() {
-    return Math.random().toString(36).substr(2, 9);
+    return uuidv4();
 }
 
 export function getNameDateString(currentDate: Date) {

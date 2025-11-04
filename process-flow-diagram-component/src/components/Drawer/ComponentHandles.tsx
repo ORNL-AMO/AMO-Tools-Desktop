@@ -1,129 +1,78 @@
-import { Box, FormControlLabel, FormGroup, FormLabel, Stack, Switch } from '@mui/material';
+import { Box, FormLabel } from '@mui/material';
 import { Node, useUpdateNodeInternals } from '@xyflow/react';
-import { JSX, useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary } from '../StyledMUI/AccordianComponents';
 import { useAppDispatch } from '../../hooks/state';
 import { updateNodeHandles } from '../Diagram/diagramReducer';
-import { ProcessFlowPart, Handles } from 'process-flow-lib';
+import { ProcessFlowPart, Handles, getComponentTypeMaxHandles } from 'process-flow-lib';
+import ContinuousSlider from './ContinuousSlider';
 
 
 export default function ComponentHandles({ node }: ComponentHandlesProps) {
   const dispatch = useAppDispatch();
   const nodeData = node.data as ProcessFlowPart;
   const updateNodeInternals = useUpdateNodeInternals();
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const [handles, setHandles] = useState<Handles>(nodeData.handles);
+  const maxHandles = getComponentTypeMaxHandles(nodeData.processComponentType);
 
-  const handleAccordianChange = (newExpanded: boolean) => {
-    setIsExpanded(newExpanded);
-  };
-
-  const toggleHandle = (event: React.ChangeEvent<HTMLInputElement>, handleId: string, isInflowHandle: boolean) => {
-    const updatedHandles = {inflowHandles: {...handles.inflowHandles}, outflowHandles: {...handles.outflowHandles}};
-
-    if (isInflowHandle) {
-      updatedHandles.inflowHandles[handleId] = event.target.checked;
-    } else {
-      updatedHandles.outflowHandles[handleId] = event.target.checked;
+  const getHandleCount = (handleSet: Handles[keyof Handles]) => {
+    if (!handleSet) {
+      return 0;
     }
-    setHandles(updatedHandles)
-    updateNodeInternals(node.id);
-    dispatch(updateNodeHandles(updatedHandles));
-    // todo update edges - removed handles with edges are stale inside the edges array
+    const count = Object.values(handleSet).reduce((sum, handle) => handle ? sum + 1 : sum, 0);
+    return count;
+  }
 
-  };
+  const onSliderChange = (selectedHandleCount: number, handleSetKey: keyof Handles) => {
+    const updatedHandles = {
+      inflowHandles: nodeData.handles.inflowHandles ? { ...nodeData.handles.inflowHandles } : undefined,
+      outflowHandles: nodeData.handles.outflowHandles ? { ...nodeData.handles.outflowHandles } : undefined
+    };
 
-  const getFlowHandleOption = (handleId: string, isVisible: boolean, isInflowHandle: boolean) => {
-    return (
-      <FormControlLabel key={handleId}
-        labelPlacement="start"
-        control={
-          <Switch size='small'
-            disabled={['a', 'e'].includes(handleId)}
-            checked={isVisible}
-            onChange={event => ['a', 'e'].includes(handleId) ? undefined : toggleHandle(event, handleId, isInflowHandle)}
-          />
+    if (updatedHandles[handleSetKey]) {
+      Object.entries(updatedHandles[handleSetKey]).forEach(([handle, _], index) => {
+        if (index + 1 <= selectedHandleCount) {
+          updatedHandles[handleSetKey][handle] = true;
+        } else {
+          updatedHandles[handleSetKey][handle] = false;
         }
-        label={handleId.toUpperCase()}
-      />
-    );
-  }
+      });
 
-  let handleImgSrc = './assets/component-handles.png';
-  let inflowOptions: JSX.Element[] = [];
-  let outflowOptions: JSX.Element[] = [];
-
-  const getHandleToggleElements = (flowHandleOptions: Object, isInflow: boolean) => {
-    return Object.entries(flowHandleOptions).map(([handle, isVisible]) => {
-      return getFlowHandleOption(handle, isVisible, isInflow);
-    });
-  }
-
-  const setAvailableHandleContext = () => {
-    if (nodeData.disableInflowConnections) {
-      handleImgSrc = './assets/intake-handles.png';
-      outflowOptions = getHandleToggleElements(handles.outflowHandles, false);
-    } else if (nodeData.disableOutflowConnections) {
-      handleImgSrc = './assets/discharge-handles.png';
-      inflowOptions = getHandleToggleElements(handles.inflowHandles, true);
-    } else {
-      inflowOptions = getHandleToggleElements(handles.inflowHandles, true);
-      outflowOptions = getHandleToggleElements(handles.outflowHandles, false);
+      dispatch(updateNodeHandles(updatedHandles));
+      updateNodeInternals(node.id);
     }
-  }
+  };
 
-  setAvailableHandleContext();
+  const handleItems = Array.from(Array(maxHandles).keys());
+  const marks: { value: number; label: string }[] = handleItems.map(index => ({ value: index + 1, label: String(index + 1) }));
+  const inflowHandleCount = getHandleCount(nodeData.handles.inflowHandles);
+  const outflowHandleCount = getHandleCount(nodeData.handles.outflowHandles);
+
   return (
-    <Accordion expanded={isExpanded} onChange={(event, newExpanded) => handleAccordianChange(newExpanded)}>
-      <AccordionSummary>
-        Connection Handles
-      </AccordionSummary>
-      <AccordionDetails sx={{ paddingX: '8px' }}>
-        <Box>
-          <img
-            src={handleImgSrc}
-            alt={'component-handles'}
-            style={{
-              width: '330px',
-              display: 'block',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              marginBottom: '1rem'
-            }}
-          />
-
-          <FormGroup sx={{ display: 'flex', width: '100%', flexDirection: 'row', justifyContent: 'space-around' }}>
-            {inflowOptions.length > 0 &&
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <FormLabel>Source In</FormLabel>
-                <Stack
-                  spacing={{ xs: 2, sm: 2, md: 2 }}
-                  direction="column"
-                  useFlexGap
-                  sx={{ flexWrap: 'wrap' }}
-                >
-                  {inflowOptions}
-                </Stack>
+          <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '3rem', paddingBottom: '2rem' }}>
+            {!nodeData.disableInflowConnections &&
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%'}}>
+                <FormLabel sx={{marginBottom: '1rem', fontSize: '.9rem'}}>Inflow Connections</FormLabel>
+                <ContinuousSlider
+                  step={1}
+                  marks={marks}
+                  setSliderValue={(e, newValue) => onSliderChange(newValue, 'inflowHandles')}
+                  value={inflowHandleCount} 
+                  style={{ width: '100%' }}
+                  />
               </Box>
             }
 
-            {outflowOptions.length > 0 &&
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <FormLabel>Discharge Out</FormLabel>
-                <Stack
-                  spacing={{ xs: 2, sm: 2, md: 2 }}
-                  direction="column"
-                  useFlexGap
-                  sx={{ flexWrap: 'wrap' }}
-                >
-                  {outflowOptions}
-                </Stack>
+            {!nodeData.disableOutflowConnections &&
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%'}}>
+                <FormLabel sx={{marginBottom: '1rem', fontSize: '.9rem'}}>Outflow Connections</FormLabel>
+                <ContinuousSlider
+                  step={1}
+                  marks={marks}
+                  setSliderValue={(e, newValue) => onSliderChange(newValue, 'outflowHandles')}
+                  value={outflowHandleCount} 
+                  style={{ width: '100%' }}
+                  />
               </Box>
             }
-          </FormGroup>
-        </Box>
-      </AccordionDetails>
-    </Accordion>
+          </Box>
   );
 }
 

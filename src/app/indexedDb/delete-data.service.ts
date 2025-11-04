@@ -15,6 +15,7 @@ import { firstValueFrom } from 'rxjs';
 import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
 import { DiagramIdbService } from './diagram-idb.service';
 import { Diagram } from '../shared/models/diagram';
+import { CompressedAirAssessmentIntegrationService } from '../shared/connected-inventory/compressed-air-assessment-integration.service';
 @Injectable()
 export class DeleteDataService {
 
@@ -22,7 +23,8 @@ export class DeleteDataService {
     private psatIntegrationService: PsatIntegrationService, 
     private diagramIdbService: DiagramIdbService,
     private assessmentDbService: AssessmentDbService, private directoryDbService: DirectoryDbService, private settingsDbService: SettingsDbService,
-    private inventoryDbService: InventoryDbService) { }
+    private inventoryDbService: InventoryDbService,
+    private compressedAirAssessmentIntegrationService: CompressedAirAssessmentIntegrationService) { }
 
   async deleteDirectory(directory: Directory, isWorkingDir?: boolean) {
     let assessments: Array<Assessment> =  [];
@@ -121,6 +123,9 @@ export class DeleteDataService {
   deleteConnectedInventoryItem(assessment: Assessment) {
     if (assessment.psat && assessment.psat.connectedItem) {
       this.psatIntegrationService.removeConnectedPumpInventory(assessment.psat.connectedItem, assessment.id);
+    }
+    if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.connectedItem) {
+      this.compressedAirAssessmentIntegrationService.removeConnectedCompressedAirInventory(assessment.compressedAirAssessment.connectedItem, assessment.id);
     }
   }
 

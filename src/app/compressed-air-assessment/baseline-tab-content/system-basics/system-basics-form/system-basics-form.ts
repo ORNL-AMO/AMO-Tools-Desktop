@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
@@ -10,6 +10,7 @@ import { ConvertCompressedAirService } from '../../../convert-compressed-air.ser
 import { SystemBasicsFormService } from './../system-basics-form.service';
 import * as _ from 'lodash';
 import { firstValueFrom } from 'rxjs';
+import { IntegrationState } from '../../../../shared/connected-inventory/integrations';
 
 @Component({
   selector: 'app-system-basics-form',
@@ -25,6 +26,7 @@ export class SystemBasicsFormComponent {
   systemBasicsForm: UntypedFormGroup;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
+  connectedAssessmentState: IntegrationState;
   constructor(private settingsService: SettingsService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private convertCompressedAirService: ConvertCompressedAirService,
@@ -43,6 +45,7 @@ export class SystemBasicsFormComponent {
       this.oldSettings = this.getExistingDataSettings(compressedAirAssessment);
       this.showUpdateDataReminder = true;
     }
+    this.setConnectedInventoryWarning(compressedAirAssessment);
   }
 
   ngOnDestroy() {
@@ -51,6 +54,25 @@ export class SystemBasicsFormComponent {
     // if(this.showUpdateDataReminder && this.oldSettings) {
     //   this.openUpdateUnitsModal.emit(this.oldSettings);
     // }
+  }
+
+  //Is this state going to change externally?
+  // ngOnChanges(changes: SimpleChanges) {
+  //   if (changes.assessment) {
+  //     this.setConnectedInventoryWarning();
+  //   }
+  // }
+
+  setConnectedInventoryWarning(compressedAirAssessment: CompressedAirAssessment) {
+    if (compressedAirAssessment.connectedItem) {
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: 'connected-to-inventory'
+      }
+    } else {
+      this.connectedAssessmentState = {
+        connectedAssessmentStatus: undefined
+      }
+    }
   }
 
   saveSystemBasics() {

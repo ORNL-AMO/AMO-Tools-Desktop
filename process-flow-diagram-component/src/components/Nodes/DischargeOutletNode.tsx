@@ -10,7 +10,7 @@ import { selectNodeCalculatedFlowData } from '../Diagram/store';
 import CustomNodeToolbar from './CustomNodeToolbar';
 import { openDrawerWithSelected } from '../Diagram/diagramReducer';
 
-const DischargeOutletNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
+const DischargeOutletNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
   const calculatedData: NodeFlowData = useAppSelector((state) => selectNodeCalculatedFlowData(state, id));
   let plantLevelFlow: number | string = data.userEnteredData.totalSourceFlow ? data.userEnteredData.totalSourceFlow : calculatedData && calculatedData.totalSourceFlow;
@@ -22,12 +22,37 @@ const DischargeOutletNode = ({ data, id, isConnectable, selected }: NodeProps<Di
 
   return (
     <>
-      <CustomHandle
-        type="target"
-        position={Position.Left}
-        id="a"
-        className='custom-handle target-handle'
-      />
+      <div
+        style={{
+          display: 'block',
+          position: 'absolute',
+          left: 0,
+          top: '20px',
+        }}
+      >
+        {/* // * LEFT SIDE */}
+        {data.handles.inflowHandles.a &&
+          <CustomHandle
+            type="target"
+            position={Position.Left}
+            id="a"
+            className='custom-handle target-handle'
+            customStyle={{
+              top: '30px'
+            }}
+          />
+        }
+        {data.handles.inflowHandles.b &&
+          <CustomHandle
+            type="target"
+            position={Position.Left}
+            id="b"
+            className='custom-handle target-handle'
+          />
+        }
+
+      </div>
+
       <div
         style={{
           display: 'flex',
@@ -38,25 +63,32 @@ const DischargeOutletNode = ({ data, id, isConnectable, selected }: NodeProps<Di
           justifyContent: 'space-around',
         }}
       >
-        <CustomHandle
-          type="target"
-          position={Position.Top}
-          id="b"
-          className='custom-handle target-handle'
-        />
-        <CustomHandle
-          type="target"
-          position={Position.Top}
-          id="c"
-          className='custom-handle target-handle'
-        />
+        {/* // * TOP */}
+        {data.handles.inflowHandles.c &&
+          <CustomHandle
+            type="target"
+            position={Position.Top}
+            id="c"
+            className='custom-handle target-handle'
+          />
+        }
+        {data.handles.inflowHandles.e &&
+          <CustomHandle
+            type="target"
+            position={Position.Top}
+            id="e"
+            className='custom-handle target-handle'
+          />
+        }
+        {data.handles.inflowHandles.g &&
+          <CustomHandle
+            type="target"
+            position={Position.Top}
+            id="g"
+            className='custom-handle target-handle'
+          />
+        }
 
-        <CustomHandle
-          type="target"
-          position={Position.Top}
-          id="d"
-          className='custom-handle target-handle'
-        />
       </div>
 
       <div className="node-inner-input" style={{
@@ -92,24 +124,31 @@ const DischargeOutletNode = ({ data, id, isConnectable, selected }: NodeProps<Di
           justifyContent: 'space-around',
         }}
       >
-        <CustomHandle
-          type="target"
-          position={Position.Bottom}
-          id="f"
-          className='custom-handle target-handle'
-        />
-        <CustomHandle
-          type="target"
-          position={Position.Bottom}
-          id="g"
-          className='custom-handle target-handle'
-        />
-        <CustomHandle
-          type="target"
-          position={Position.Bottom}
-          id="h"
-          className='custom-handle target-handle'
-        />
+        {/* // * BOTTOM */}
+        {data.handles.inflowHandles.d &&
+          <CustomHandle
+            type="target"
+            position={Position.Bottom}
+            id="d"
+            className='custom-handle target-handle'
+          />
+        }
+        {data.handles.inflowHandles.f &&
+          <CustomHandle
+            type="target"
+            position={Position.Bottom}
+            id="f"
+            className='custom-handle target-handle'
+          />
+        }
+        {data.handles.inflowHandles.h &&
+          <CustomHandle
+            type="target"
+            position={Position.Bottom}
+            id="h"
+            className='custom-handle target-handle'
+          />
+        }
       </div>
     </>
   );

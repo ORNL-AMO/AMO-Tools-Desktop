@@ -1,3 +1,4 @@
+@import "variables.css";
 .input-group-addon.left{
     font-size: 16px;
     border-left: inset 1px;
@@ -21,4 +22,8 @@
     padding-left: 8px;
     padding-top: 0px;
     padding-bottom: 0px;
+}
+
+input[type="checkbox"]:hover {
+  cursor: pointer;
 }

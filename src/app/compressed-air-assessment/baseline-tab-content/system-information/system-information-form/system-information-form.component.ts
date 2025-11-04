@@ -9,6 +9,7 @@ import { AssessmentCo2SavingsService } from '../../../../shared/assessment-co2-s
 import { SystemInformationFormService } from './system-information-form.service';
 import { SystemProfileService } from '../../baseline-system-profile-setup/system-profile.service';
 import { AltitudeCorrectionService } from '../../../../calculator/utilities/altitude-correction/altitude-correction.service';
+import { IntegrationStateService } from '../../../../shared/connected-inventory/integration-state.service';
 
 @Component({
   selector: 'app-system-information-form',
@@ -23,16 +24,21 @@ export class SystemInformationFormComponent {
   showSystemCapacityModal: boolean = false;
   form: UntypedFormGroup;
   co2SavingsData: Co2SavingsData;
+  hasConnectedCompressedAirInventory: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService,
     private systemInformationFormService: SystemInformationFormService, private systemProfileService: SystemProfileService,
-    private altitudeCorrectionService: AltitudeCorrectionService) { }
+    private altitudeCorrectionService: AltitudeCorrectionService,
+    private integrationStateService: IntegrationStateService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.form = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, this.settings);
     this.setCo2SavingsData(compressedAirAssessment);
+    let connectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();
+    this.hasConnectedCompressedAirInventory = connectedInventoryData.connectedItem && connectedInventoryData.connectedItem.inventoryType === 'compressed-air';
+    
   }
 
   save(co2SavingsData?: Co2SavingsData) {

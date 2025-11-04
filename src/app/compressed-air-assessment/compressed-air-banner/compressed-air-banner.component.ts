@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { Assessment } from '../../shared/models/assessment';
-import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
+import { Modification } from '../../shared/models/compressed-air-assessment';
 import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';

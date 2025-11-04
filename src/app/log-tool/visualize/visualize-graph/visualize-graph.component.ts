@@ -3,9 +3,9 @@ import { VisualizeService } from '../visualize.service';
 import { debounce, interval, Subscription } from 'rxjs';
 import { AnnotationData, GraphObj, LoadingSpinner, VisualizerGraphData } from '../../log-tool-models';
 import { PlotlyService } from 'angular-plotly.js';
+import { DOCUMENT } from '@angular/common';
 import { LogToolDataService } from '../../log-tool-data.service';
 import * as _ from 'lodash';
-import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
 import * as Plotly from 'plotly.js-dist';
 

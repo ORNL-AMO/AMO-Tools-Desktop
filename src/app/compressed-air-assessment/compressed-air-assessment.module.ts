@@ -155,6 +155,11 @@ import { ReduceRunTimeHelpComponent } from './assessment-tab-content/explore-opp
 import { AddReceiverVolumeHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/add-receiver-volume-help/add-receiver-volume-help.component';
 import { AdjustCascadingSetPointsHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/adjust-cascading-set-points-help/adjust-cascading-set-points-help.component';
 import { CaDisableNextButtonPipe } from './baseline-tab-content/baseline-footer-nav-buttons/ca-disable-next-button-pipe';
+import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
+import { IntegrateCompressedAirInventoryComponent } from './integrate-compressed-air-inventory/integrate-compressed-air-inventory.component';
+
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
+
 
 @NgModule({
   declarations: [
@@ -253,7 +258,8 @@ import { CaDisableNextButtonPipe } from './baseline-tab-content/baseline-footer-
     AssessmentTabContentComponent,
     ExploreOpportunitiesFormComponent,
     ExploreOpportunitiesSidePanelComponent,
-    CaDisableNextButtonPipe
+    CaDisableNextButtonPipe,
+    IntegrateCompressedAirInventoryComponent
   ],
   imports: [
     CommonModule,
@@ -291,7 +297,10 @@ import { CaDisableNextButtonPipe } from './baseline-tab-content/baseline-footer-
     IntervalHourLabelModule,
     ImportExportModule,
     EndUseDayTypeSetupModule,
-    CompressedAirSankeyModule
+    CompressedAirSankeyModule,
+    ImportExportModule,
+    ConnectedInventoryModule,    
+    BannerTooltipsModule
   ],
   providers: [
     CompressedAirAssessmentService,

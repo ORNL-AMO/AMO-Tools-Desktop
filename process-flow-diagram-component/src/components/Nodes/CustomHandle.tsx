@@ -1,5 +1,5 @@
-import React, { CSSProperties, Fragment } from 'react';
-import { Handle, HandleType, Position, useHandleConnections, useNodeConnections } from '@xyflow/react';
+import React, { CSSProperties } from 'react';
+import { Handle, HandleType, Position } from '@xyflow/react';
 
 const mainTargetHandleStyle: CSSProperties = {
     left: '-5px',
@@ -42,7 +42,7 @@ const mainTargetHandleStyle: CSSProperties = {
   
 const CustomHandle = (props: HandleProps) => {
     const { type, position, id } = props;
-    let { className, collapsedStyle } = props;
+    let { className, customStyle } = props;
 
     let style: CSSProperties = {};
     
@@ -72,13 +72,13 @@ const CustomHandle = (props: HandleProps) => {
         }
       }
 
-        if (collapsedStyle) {
+        if (customStyle) {
           style = {
             ...style,
-            top: collapsedStyle.top,
-            height: collapsedStyle.height,
-            width: collapsedStyle.width,
-            visibility: collapsedStyle.visibility,
+            top: customStyle.top? customStyle.top : style.top,
+            height: customStyle.height? customStyle.height : style.height,
+            width: customStyle.width? customStyle.width : style.width,
+            visibility: customStyle.visibility? customStyle.visibility : style.visibility,
           }
         }
 
@@ -104,6 +104,6 @@ export interface HandleProps {
     type: HandleType,
     position: Position,
     className?: string,
-    collapsedStyle?: CSSProperties,
+    customStyle?: CSSProperties,
     id: string,
 }

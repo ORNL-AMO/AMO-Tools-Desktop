@@ -1,3 +1,4 @@
+@import "variables.css";
 
 .panel-column{
 	box-shadow: 0px 0px 69px -1px rgba(0,0,0,0.2);
@@ -113,6 +114,10 @@
     border-bottom: #2980b9 solid 2px;
 }
 
+.compressed-air-inventory .header{
+    border-bottom: #7030A0 solid 2px;
+}
+
 .waste-water .header{
     border-bottom: #003087 solid 2px;
 }
@@ -188,6 +193,12 @@
 
 .pump-inventory .btn-secondary:not([disabled]):not(.disabled).active{
     background: #2980b9;
+    transition: all .5s ease-in-out;
+    color: black;
+}
+
+.compressed-air-inventory .btn-secondary:not([disabled]):not(.disabled).active{
+    background: #7030A0;
     transition: all .5s ease-in-out;
     color: black;
 }
@@ -327,6 +338,10 @@
     border-bottom: #ADC8E2 groove 2px;
 }
 
+.process-cooling-assessment .group-label{
+    border-bottom: var(--process-cooling-assessment) groove 2px;
+}
+
 .general .group-label{
     border-bottom: #145A32 solid 2px;
 }
@@ -358,6 +373,10 @@
 
 .pump-inventory .group-label{
     border-bottom: #2980b9 solid 2px;
+}
+
+.compressed-air-inventory .group-label{
+    border-bottom: #7030A0 solid 2px;
 }
 
 .waste-water .group-label{
@@ -546,6 +565,11 @@
 
 .pump-inventory .scroll-item::-webkit-scrollbar-thumb{
     background-color: #2980b9;
+    outline: 1px solid slategrey;
+}
+
+.compressed-air-inventory .scroll-item::-webkit-scrollbar-thumb{
+    background-color: #7030A0;
     outline: 1px solid slategrey;
 }
 .waste-water .scroll-item::-webkit-scrollbar-thumb{

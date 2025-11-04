@@ -70,12 +70,20 @@ export interface ProcessFlowPart extends Record<string, unknown> {
       b: boolean,
       c: boolean,
       d: boolean,
+      e?: boolean,
+      f?: boolean,
+      g?: boolean,
+      h?: boolean,
     },
     outflowHandles?: {
       e: boolean,
       f: boolean,
       g: boolean,
       h: boolean,
+      i?: boolean,
+      j?: boolean,
+      k?: boolean,
+      l?: boolean,
     }
   }
   
