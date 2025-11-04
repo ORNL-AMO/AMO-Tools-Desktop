@@ -17,7 +17,7 @@
       </small>
     </h6>
     <div class="w-100 justify-content-center">
-      <!-- <table class="table table-hover table-striped">
+      <table class="table table-hover table-striped">
         <tbody>
           <tr>
             <th class="w-50 text-center">Minimum</th>
@@ -32,16 +32,16 @@
             </td>
           </tr>
         </tbody>
-      </table> -->
-
-       <div *ngIf="thermodynamicQuantity === 0">
+      </table>
+<!-- Below is potential text instead of table -->
+       <!-- <div *ngIf="thermodynamicQuantity === 0">
         <ul>
           <li>Minimum {{ranges.minQuantityValue}}  <span *ngIf="thermodynamicQuantity != 3"
             [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></li>
           <li>Maximum {{ranges.maxQuantityValue}}  <span *ngIf="thermodynamicQuantity != 3"
             [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span></li>
           </ul>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="my-2" *ngIf="currentField == 'thermodynamicQuantity'">
@@ -79,7 +79,7 @@
       </small>
     </h6>
     <div class="w-100 justify-content-center">
-      <!-- <table class="table table-hover table-striped" *ngIf="thermodynamicQuantity != 0">
+      <table class="table table-hover table-striped" *ngIf="thermodynamicQuantity != 0">
         <tbody>
           <tr>
             <th class="w-50 text-center">Minimum</th>
@@ -96,8 +96,9 @@
             </td>
           </tr>
         </tbody>
-      </table> -->
-      <p><strong>These estimations are not valid for:</strong></p>
+      </table>
+<!-- Below is potential text instead of table -->
+      <!-- <p><strong>These estimations are not valid for:</strong></p>
       <div *ngIf="thermodynamicQuantity === 0">
         <ul>
           <li>Pressure &gt; 14489.072 psig</li>
@@ -114,7 +115,7 @@
           <li>Maximum &gt; {{ranges.maxQuantityValue}}  <span *ngIf="thermodynamicQuantity != 3"
             [innerHTML]="getOptionDisplayUnit(thermodynamicQuantity) | settingsLabel"></span></li>
           </ul>
-      </div>
+      </div> -->
     </div>
   </div>
 
