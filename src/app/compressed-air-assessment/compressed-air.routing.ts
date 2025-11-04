@@ -100,10 +100,6 @@ export const compressedAirAssessmentRoutes: Routes = [
                 path: 'explore-opportunities',
                 component: ExploreOpportunitiesComponent
             },
-            {
-                path: 'explore-opportunities/:id',
-                component: ExploreOpportunitiesComponent
-            },
         ]
     },
     {

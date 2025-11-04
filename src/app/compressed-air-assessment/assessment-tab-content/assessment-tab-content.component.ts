@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
-import { CompressedAirAssessment } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
 
 @Component({
   selector: 'app-assessment-tab-content',
@@ -11,8 +11,7 @@ import { CompressedAirAssessment } from '../../shared/models/compressed-air-asse
 })
 export class AssessmentTabContentComponent {
 
-  initializingModification: boolean = true;
-  constructor(private activatedRoute: ActivatedRoute, private compressedAirAssessmentService: CompressedAirAssessmentService,
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private router: Router
   ) { }
 
@@ -23,12 +22,29 @@ export class AssessmentTabContentComponent {
       let routerStr: string = this.router.url.replace(/\/assessment\/.*/, '')
       this.router.navigateByUrl(routerStr);
     } else {
-      this.activatedRoute.params.subscribe(params => {
-        this.initializingModification = true;
-        let modificationId: string = params['id'];
-        this.compressedAirAssessmentService.setSelectedModificationById(modificationId);
-        this.initializingModification = false;
-      });
+      let selectedModification: Modification = this.compressedAirAssessmentService.selectedModification.getValue();
+      if (!selectedModification) {
+        //no modification selected, navigate to first modification if exists
+        if (compressedAirAssessment.modifications && compressedAirAssessment.modifications.length != 0) {
+          this.compressedAirAssessmentService.setSelectedModificationById(compressedAirAssessment.modifications[0].modificationId);
+        }
+      } else {
+        //check modification exists in assessment
+        let modExists: boolean = false;
+        compressedAirAssessment.modifications.forEach(modification => {
+          if (modification.modificationId == selectedModification.modificationId) {
+            modExists = true;
+          }
+        });
+        if (!modExists) {
+          //modification no longer exists, navigate to first modification if exists
+          if (compressedAirAssessment.modifications && compressedAirAssessment.modifications.length != 0) {
+            this.compressedAirAssessmentService.setSelectedModificationById(compressedAirAssessment.modifications[0].modificationId);
+          } else {
+            this.compressedAirAssessmentService.selectedModification.next(undefined);
+          }
+        }
+      }
     }
   }
 }

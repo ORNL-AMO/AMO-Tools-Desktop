@@ -58,6 +58,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       if (val && !this.isFormChange) {
         this.modification = val;
+        this.setData();
       } else {
         this.isFormChange = false;
       }
