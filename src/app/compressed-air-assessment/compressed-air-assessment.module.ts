@@ -159,6 +159,7 @@ import { IntegrateCompressedAirInventoryComponent } from './integrate-compressed
 
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 import { AssessmentProfileSummaryTableComponent } from './assessment-tab-content/assessment-profile-summary-table/assessment-profile-summary-table.component';
+import { AssessmentProfileSummaryGraphsComponent } from './assessment-tab-content/assessment-profile-summary-graphs/assessment-profile-summary-graphs.component';
 
 
 @NgModule({
@@ -259,7 +260,8 @@ import { AssessmentProfileSummaryTableComponent } from './assessment-tab-content
     ExploreOpportunitiesSidePanelComponent,
     CaDisableNextButtonPipe,
     IntegrateCompressedAirInventoryComponent,
-    AssessmentProfileSummaryTableComponent
+    AssessmentProfileSummaryTableComponent,
+    AssessmentProfileSummaryGraphsComponent
   ],
   imports: [
     CommonModule,
