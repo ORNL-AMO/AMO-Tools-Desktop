@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CascadingSetPointData, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
+import { CompressorInventoryItemClass } from '../../calculations/CompressorInventoryItemClass';
 
 @Injectable()
 export class ExploreOpportunitiesService {
@@ -32,8 +33,9 @@ export class ExploreOpportunitiesService {
       });
 
       compressedAirAssessment.compressorInventoryItems.forEach(item => {
+        let compressorItem: CompressorInventoryItem = new CompressorInventoryItemClass(item).toModel()
         let itemProfile: ProfileSummary = compressedAirAssessment.systemProfile.profileSummary.find(summary => {
-          return summary.dayTypeId == dayType.dayTypeId && item.itemId == summary.compressorId;
+          return summary.dayTypeId == dayType.dayTypeId && compressorItem.itemId == summary.compressorId;
         })
         let intervalData: Array<{
           isCompressorOn: boolean,
@@ -46,18 +48,18 @@ export class ExploreOpportunitiesService {
           })
         });
         reduceRuntimeData.push({
-          compressorId: item.itemId,
-          fullLoadCapacity: item.performancePoints.fullLoad.airflow,
+          compressorId: compressorItem.itemId,
+          fullLoadCapacity: compressorItem.performancePoints.fullLoad.airflow,
           intervalData: intervalData,
           dayTypeId: dayType.dayTypeId,
-          automaticShutdownTimer: item.compressorControls.automaticShutdown
+          automaticShutdownTimer: compressorItem.compressorControls.automaticShutdown
         });
         setPointData.push({
-          compressorId: item.itemId,
-          controlType: item.compressorControls.controlType,
-          compressorType: item.nameplateData.compressorType,
-          fullLoadDischargePressure: item.performancePoints.fullLoad.dischargePressure,
-          maxFullFlowDischargePressure: item.performancePoints.maxFullFlow.dischargePressure
+          compressorId: compressorItem.itemId,
+          controlType: compressorItem.compressorControls.controlType,
+          compressorType: compressorItem.nameplateData.compressorType,
+          fullLoadDischargePressure: compressorItem.performancePoints.fullLoad.dischargePressure,
+          maxFullFlowDischargePressure: compressorItem.performancePoints.maxFullFlow.dischargePressure
         })
       });
     });
@@ -65,7 +67,11 @@ export class ExploreOpportunitiesService {
     let sequencerProfileSummary: Array<ProfileSummary> = JSON.parse(JSON.stringify(compressedAirAssessment.systemProfile.profileSummary));
     sequencerProfileSummary.forEach(summary => {
       let compressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == summary.compressorId });
-      summary.automaticShutdownTimer = compressor.compressorControls.automaticShutdown;
+      if(compressor.compressorControls.automaticShutdown){
+        summary.automaticShutdownTimer = true;
+      } else {
+        summary.automaticShutdownTimer = false;
+      }
     });
 
 

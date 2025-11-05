@@ -155,10 +155,10 @@ export class CompressedAirModifiedDayTypeProfileSummary {
 
     setInventoryItems(caInventoryItems: Array<CompressorInventoryItem>) {
         this.originalCompressors = caInventoryItems.map(item => {
-            return new CompressorInventoryItemClass(item);
+            return new CompressorInventoryItemClass(JSON.parse(JSON.stringify(item)));
         });
         this.adjustedCompressors = caInventoryItems.map(item => {
-            return new CompressorInventoryItemClass(item);
+            return new CompressorInventoryItemClass(JSON.parse(JSON.stringify(item)));
         });
     }
 

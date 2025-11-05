@@ -123,9 +123,11 @@ export class UseAutomaticSequencerComponent implements OnInit {
     this.isFormChange = true;
     if (isOrderChange) {
       this.isFormChange = false;
-      let newOrder: number = this.useAutomaticSequencer.order;
+      let newOrder: number = this.form.controls.order.value;
       this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'useAutomaticSequencer', this.modification.useAutomaticSequencer.order, newOrder);
     }
+    this.useAutomaticSequencer = this.useAutomaticSequencerService.updateObjFromForm(this.form, this.useAutomaticSequencer);
+    this.modification.useAutomaticSequencer = this.useAutomaticSequencer;
     this.compressedAirAssessmentService.updateModification(this.modification);
   }
 
@@ -133,7 +135,11 @@ export class UseAutomaticSequencerComponent implements OnInit {
     this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
     this.useAutomaticSequencer.profileSummary.forEach(summary => {
       let compressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == summary.compressorId });
-      summary.automaticShutdownTimer = compressor.compressorControls.automaticShutdown;
+      if (compressor.compressorControls.automaticShutdown) {
+        summary.automaticShutdownTimer = true;
+      } else {
+        summary.automaticShutdownTimer = false;
+      }
     });
 
     if (this.baselineHasSequencer) {
