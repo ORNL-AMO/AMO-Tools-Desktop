@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { CompressedAirAssessment, Modification } from '../../../../shared/models/compressed-air-assessment';
-import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
-import { ExploreOpportunitiesService } from '../../../assessment-tab-content/explore-opportunities/explore-opportunities.service';
+import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
+import { CompressedAirAssessment, Modification } from '../../../shared/models/compressed-air-assessment';
 
 @Component({
     selector: 'app-add-modification-modal',

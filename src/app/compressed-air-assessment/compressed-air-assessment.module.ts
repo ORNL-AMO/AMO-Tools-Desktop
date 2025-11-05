@@ -78,8 +78,6 @@ import { ExploreOpportunitiesService } from './assessment-tab-content/explore-op
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { CompressedAirDiagramComponent } from './compressed-air-diagram/compressed-air-diagram.component';
 import { ExploreOpportunitiesResultsComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/explore-opportunities-results/explore-opportunities-results.component';
-import { ModificationListModalComponent } from './compressed-air-banner/assessment-tabs/modification-list-modal/modification-list-modal.component';
-import { AddModificationModalComponent } from './compressed-air-banner/assessment-tabs/add-modification-modal/add-modification-modal.component';
 import { DayTypeService } from './baseline-tab-content/day-types-setup/day-types/day-type.service';
 import { FullLoadAmpsModule } from '../calculator/motors/full-load-amps/full-load-amps.module';
 import { AltitudeCorrectionModule } from '../calculator/utilities/altitude-correction/altitude-correction.module';
@@ -160,6 +158,8 @@ import { IntegrateCompressedAirInventoryComponent } from './integrate-compressed
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 import { AssessmentProfileSummaryTableComponent } from './assessment-tab-content/assessment-profile-summary-table/assessment-profile-summary-table.component';
 import { AssessmentProfileSummaryGraphsComponent } from './assessment-tab-content/assessment-profile-summary-graphs/assessment-profile-summary-graphs.component';
+import { ModificationListModalComponent } from './assessment-tab-content/modification-list-modal/modification-list-modal.component';
+import { AddModificationModalComponent } from './assessment-tab-content/add-modification-modal/add-modification-modal.component';
 
 
 @NgModule({

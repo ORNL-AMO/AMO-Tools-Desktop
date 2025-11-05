@@ -13,22 +13,20 @@ export class AssessmentTabsComponent {
 
   selectedModification: Modification;
   selectedModificationSub: Subscription;
-
-  showModificationList: boolean = false;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       this.selectedModification = val;
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.selectedModificationSub.unsubscribe();
   }
 
   selectModification() {
-   this.showModificationList = true;
+    this.compressedAirAssessmentService.showModificationListModal.next(true);
   }
 
 }

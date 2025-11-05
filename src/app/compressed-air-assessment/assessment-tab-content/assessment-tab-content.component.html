@@ -1,3 +1,5 @@
 <div class="h-100">
     <router-outlet></router-outlet>
 </div>
+<app-modification-list-modal *ngIf="showModificationList"></app-modification-list-modal>
+<app-add-modification-modal *ngIf="showAddModification"></app-add-modification-modal>

@@ -60,3 +60,8 @@ li.page-item{
 .assessment-bar.display{
     display: flex;
 }
+
+
+.list-modal{
+    z-index: 10000;
+}

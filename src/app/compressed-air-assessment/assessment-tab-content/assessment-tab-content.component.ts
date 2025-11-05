@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { CompressedAirAssessment, Modification } from '../../shared/models/compressed-air-assessment';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-assessment-tab-content',
@@ -11,6 +12,11 @@ import { CompressedAirAssessment, Modification } from '../../shared/models/compr
 })
 export class AssessmentTabContentComponent {
 
+  showModificationList: boolean;
+  showModificationListSub: Subscription;
+
+  showAddModification: boolean;
+  showAddModificationSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private router: Router
   ) { }
@@ -46,5 +52,20 @@ export class AssessmentTabContentComponent {
         }
       }
     }
+
+
+    this.showModificationListSub = this.compressedAirAssessmentService.showModificationListModal.subscribe(val => {
+      this.showModificationList = val;
+    });
+
+    this.showAddModificationSub = this.compressedAirAssessmentService.showAddModificationModal.subscribe(val => {
+      this.showAddModification = val;
+    });
   }
+
+  ngOnDestroy() {
+    this.showModificationListSub.unsubscribe();
+    this.showAddModificationSub.unsubscribe();
+  }
+  
 }
