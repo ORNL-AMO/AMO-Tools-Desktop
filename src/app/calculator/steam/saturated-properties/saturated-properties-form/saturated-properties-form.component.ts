@@ -65,4 +65,15 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   changeField(str: string) {
     this.emitChangeField.emit(str);
   }
+
+  getOptionDisplayUnit(quantity: number) {
+    let displayUnit: string;
+    if (quantity === 0) {
+      displayUnit = this.settings.pressureMeasurement;
+      return displayUnit;
+    } else if (quantity === 1) {
+      displayUnit = this.settings.temperatureMeasurement;
+      return displayUnit;
+    }
+  }
 }

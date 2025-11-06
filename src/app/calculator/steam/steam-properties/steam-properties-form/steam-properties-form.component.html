@@ -45,7 +45,7 @@
           <span class="alert-danger pull-right small"
             *ngIf="steamPropertiesForm.controls.quantityValue.invalid && !steamPropertiesForm.controls.quantityValue.pristine">
             <span *ngIf="steamPropertiesForm.controls.quantityValue.errors.required">Value Required</span>
-            <span *ngIf="steamPropertiesForm.controls.quantityValue.errors.max">Value can't be greater than{{steamPropertiesForm.controls.quantityValue.errors.max.max}}
+            <span *ngIf="steamPropertiesForm.controls.quantityValue.errors.max">Value can't be greater than {{steamPropertiesForm.controls.quantityValue.errors.max.max}}
               <span *ngIf="steamPropertiesForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(steamPropertiesForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>.
             </span>
             <span *ngIf="steamPropertiesForm.controls.quantityValue.errors.min">Value can't be less than {{steamPropertiesForm.controls.quantityValue.errors.min.min}}

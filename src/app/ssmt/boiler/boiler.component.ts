@@ -13,6 +13,7 @@ import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 import { SteamPressureOrTemp, SteamQuality } from '../../shared/models/steam/steam-inputs';
+
 @Component({
     selector: 'app-boiler',
     templateUrl: './boiler.component.html',
@@ -70,7 +71,7 @@ export class BoilerComponent implements OnInit {
     private compareService: CompareService, private headerService: HeaderService, 
     private stackLossService: StackLossService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
-    private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private flueGasMaterialDbService: FlueGasMaterialDbService
   ) { }
 
   ngOnInit() {
@@ -84,6 +85,7 @@ export class BoilerComponent implements OnInit {
     if (this.selected === false) {
       this.disableForm();
     }
+    this.setPressureOrTemperatureValidators();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -311,11 +313,29 @@ export class BoilerComponent implements OnInit {
     this.closeBoilerEfficiencyModal();
   }
 
+  private updateHiddenFieldValues(): void {
+    const showSaturatedPressure =
+      this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE ||
+      this.steamQuality.value === SteamQuality.SUPERHEATED;
+    if (!showSaturatedPressure) {
+      this.saturatedPressure.setValue(null);
+      this.saturatedPressure.markAsPristine();
+    }
+
+    const showSteamTemperature =
+      this.pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE ||
+      this.steamQuality.value === SteamQuality.SUPERHEATED;
+    if (!showSteamTemperature) {
+      this.steamTemperature.setValue(null);
+      this.steamTemperature.markAsPristine();
+    }
+  }
+
   changeField(str: string) {
     this.emitChangeField.emit(str);
   }
 
-   get pressureOrTemperature() {
+  get pressureOrTemperature() {
     return this.boilerForm.get('pressureOrTemperature');
   }
 
