@@ -1,7 +1,7 @@
 import { Dialog, DialogConfig, DialogRef } from '@angular/cdk/dialog';
 import { ComponentType } from '@angular/cdk/portal';
 import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 
 /**
@@ -30,7 +30,9 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class ModalDialogService {
-  private currentModalRef: BehaviorSubject<DialogRef<any, any> | null> = new BehaviorSubject(null);
+  private currentModalRef: BehaviorSubject<DialogRef<any, any> | null> = new BehaviorSubject<DialogRef<any, any> | null>(null);
+  closedResult: Subject<any> = new Subject<any>();
+
 
   constructor(private dialog: Dialog) { }
 
@@ -42,23 +44,26 @@ export class ModalDialogService {
    * Opens modal at core.component 
    * @param injector - required if modal has services or other injections provided at the module level
    */
-  openModal<T>(
+  openModal<T, D>(
     component: ComponentType<T>,
-    config?: DialogConfig<any>,
+    config?: DialogConfig<D>,
     injector?: Injector
-  ) {
-    // todo we should use a default flexible width
-    const dialogRef = this.dialog.open(component, {
+  ): DialogRef<T, any> {
+    // todo we should use a default flexible width with override passed in
+
+    const dialogRef = this.dialog.open<T, D>(component, {
       panelClass: 'app-modal-dialog',
       hasBackdrop: true,
       disableClose: false,
       injector: injector,
-      ...config
+      ...config,
+      data: config?.data
     });
 
-    this.currentModalRef.next(dialogRef);
+    this.currentModalRef.next(dialogRef as DialogRef<any, any>);
 
-    dialogRef.closed.subscribe(() => {
+    dialogRef.closed.subscribe((result) => {
+      this.closedResult.next(result);
       if (this.currentModalRef.value === dialogRef) {
         this.currentModalRef.next(null);
       }
