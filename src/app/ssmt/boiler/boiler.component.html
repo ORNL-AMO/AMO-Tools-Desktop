@@ -102,91 +102,174 @@
         <option [ngValue]="SteamQuality.SATURATED">Saturated</option>
         <option [ngValue]="SteamQuality.SUPERHEATED">Superheated</option>
       </select>
-      <!-- <span class="alert-danger pull-right small"
-          *ngIf="steamQuality.invalid && !steamQuality.pristine">
-          <span *ngIf="steamQuality.errors.required">Value Required</span>
-        </span>
-        <span class="alert-warning pull-right small" *ngIf="warnings.steamQuality !== null">{{warnings.steamQuality}} <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
-      </span>   -->
     </div>
-    <div [ngClass]="steamQuality.value === SteamQuality.SATURATED ? 'known-row-parent' : ''">
-      <div
-        *ngIf="steamQuality.value === SteamQuality.SATURATED"
-        [ngClass]="steamQuality.value === SteamQuality.SATURATED ? 'saturated-conditional-column' : 'form-group'"
-      >
-        <div class="saturated-conditional-input-group">
-          <select (focus)="changeField('pressureOrTemperature')" type="number" step="1" name="pressureOrTemperature"
-            class="form-control" formControlName="pressureOrTemperature" id="pressureOrTemperature"
-            (change)="setPressureOrTemperatureValidators()" (input)="save()" autofocus>
-            <option [ngValue]="SteamPressureOrTemp.PRESSURE">Steam Pressure</option>
-            <option [ngValue]="SteamPressureOrTemp.TEMPERATURE">Steam Temperature</option>
-          </select>
+
+    <div class="form-group">
+      <div *ngIf="steamQuality.value === SteamQuality.SATURATED" class="row">
+        <div class="col-sm-6">
+          <div class="form-group">
+            <select
+              (focus)="changeField('pressureOrTemperature')"
+              name="pressureOrTemperature"
+              class="form-control"
+              formControlName="pressureOrTemperature"
+              id="pressureOrTemperature"
+              (change)="setPressureOrTemperatureValidators()"
+              (input)="save()"
+              autofocus
+            >
+              <option [ngValue]="SteamPressureOrTemp.PRESSURE">Steam Pressure</option>
+              <option [ngValue]="SteamPressureOrTemp.TEMPERATURE">Steam Temperature</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div
+            *ngIf="pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE"
+            class="form-group"
+          >
+            <label for="saturatedPressure" class="saturated-row-label">
+              Steam Pressure
+            </label>
+            <div class="input-group calc-addon-group">
+              <input
+                (focus)="changeField('saturatedPressure')"
+                type="number"
+                step="1"
+                class="form-control"
+                formControlName="saturatedPressure"
+                id="saturatedPressure"
+                onfocus="this.select();"
+                (input)="save()"
+              />
+              <span class="input-group-addon units"
+                [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+            </div>
+
+            <span class="alert-warning pull-right small"
+              *ngIf="highPressureHeaderForm?.controls?.pressure?.invalid &&
+                    highPressureHeaderForm?.controls?.pressure?.errors?.boilerTemp">
+              Temperature must be greater than the
+              saturation temperature at the highest pressure header.
+              ({{highPressureHeaderForm.controls.pressure.errors.boilerTemp.val | number:'1.0-1'}}
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
+            </span>
+            <span class="alert-danger pull-right small"
+              *ngIf="saturatedPressure.invalid && !saturatedPressure.pristine">
+              <span *ngIf="saturatedPressure.errors?.required">Value Required</span>
+              <span *ngIf="saturatedPressure.errors?.max">Value can't be greater than
+                {{saturatedPressure.errors?.max?.max}}
+                <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.
+              </span>
+              <span *ngIf="saturatedPressure.errors?.min">Value can't be less than
+                {{saturatedPressure.errors?.min?.min}}
+                <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.
+              </span>
+            </span>
+          </div>
+
+          <div
+            *ngIf="pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE"
+            class="form-group"
+          >
+            <label for="steamTemperature" class="saturated-row-label">
+              Steam Temperature
+            </label>
+            <div class="input-group calc-addon-group">
+              <input
+                (focus)="changeField('steamTemperature')"
+                type="number"
+                step="1"
+                class="form-control"
+                formControlName="steamTemperature"
+                id="steamTemperature"
+                onfocus="this.select();"
+                (input)="save()"
+              />
+              <span class="input-group-addon units">
+                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+              </span>
+            </div>
+
+            <span class="alert-danger pull-right small"
+              *ngIf="steamTemperature.invalid && !steamTemperature.pristine">
+              <span *ngIf="steamTemperature.errors?.required">Value Required</span>
+              <span *ngIf="steamTemperature.errors?.max">Value can't be greater than
+                {{steamTemperature.errors?.max?.max}}
+                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.
+              </span>
+              <span *ngIf="steamTemperature.errors?.min">Value can't be less than
+                {{steamTemperature.errors?.min?.min}}
+                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.
+              </span>
+            </span>
+          </div>
         </div>
       </div>
 
-      <div
-        *ngIf="pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE || steamQuality.value === SteamQuality.SUPERHEATED"
-        [ngClass]="steamQuality.value === SteamQuality.SATURATED ? 'saturated-conditional-column' : 'form-group'"
-      >
-        <label for="saturatedPressure" class="saturated-row-label"
-          [ngStyle]="{ visibility: steamQuality.value === SteamQuality.SUPERHEATED ? 'visible' : 'hidden' }">
-          Steam Pressure
-        </label>
-        <div class="input-group calc-addon-group saturated-conditional-input-group">
-          <input (focus)="changeField('saturatedPressure')" type="number" step="1" class="form-control"
-            formControlName="saturatedPressure" id="saturatedPressure" onfocus="this.select();" (input)="save()">
-          <span class="input-group-addon units"
-            [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+      <div *ngIf="steamQuality.value !== SteamQuality.SATURATED">
+        <div class="form-group">
+          <label for="saturatedPressure" class="saturated-row-label">Steam Pressure</label>
+          <div class="input-group calc-addon-group">
+            <input
+              (focus)="changeField('saturatedPressure')"
+              type="number"
+              step="1"
+              class="form-control"
+              formControlName="saturatedPressure"
+              id="saturatedPressure"
+              onfocus="this.select();"
+              (input)="save()"
+            />
+            <span class="input-group-addon units"
+              [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="saturatedPressure.invalid && !saturatedPressure.pristine">
+            <span *ngIf="saturatedPressure.errors?.required">Value Required</span>
+            <span *ngIf="saturatedPressure.errors?.max">Value can't be greater than
+              {{saturatedPressure.errors?.max?.max}}
+              <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.
+            </span>
+            <span *ngIf="saturatedPressure.errors?.min">Value can't be less than
+              {{saturatedPressure.errors?.min?.min}}
+              <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.
+            </span>
+          </span>
         </div>
-      </div>
-       
-      <div
-        *ngIf="pressureOrTemperature.value == 1 || steamQuality.value == 1"
-        [ngClass]="steamQuality.value === 0 ? 'saturated-conditional-column' : 'form-group'"
-      >
-        <label for="steamTemperature" class="saturated-row-label"
-          [ngStyle]="{ visibility: steamQuality.value === 1 ? 'visible' : 'hidden' }">
-          Steam Temperature
-        </label>
-        <div class="input-group calc-addon-group saturated-conditional-input-group">
-          <input (focus)="changeField('steamTemperature')" type="number" step="1" class="form-control"
-            formControlName="steamTemperature" id="steamTemperature" onfocus="this.select();" (input)="save()">
-          <span class="input-group-addon units">
-            <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+
+        <div class="form-group">
+          <label for="steamTemperature" class="saturated-row-label">Steam Temperature</label>
+          <div class="input-group calc-addon-group">
+            <input
+              (focus)="changeField('steamTemperature')"
+              type="number"
+              step="1"
+              class="form-control"
+              formControlName="steamTemperature"
+              id="steamTemperature"
+              onfocus="this.select();"
+              (input)="save()"
+            />
+            <span class="input-group-addon units">
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+            </span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="steamTemperature.invalid && !steamTemperature.pristine">
+            <span *ngIf="steamTemperature.errors?.required">Value Required</span>
+            <span *ngIf="steamTemperature.errors?.max">Value can't be greater than
+              {{steamTemperature.errors?.max?.max}}
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.
+            </span>
+            <span *ngIf="steamTemperature.errors?.min">Value can't be less than
+              {{steamTemperature.errors?.min?.min}}
+              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.
+            </span>
           </span>
         </div>
       </div>
-    </div>
-
-    <div class="form-group">
-      <span class="alert-warning pull-right small"
-        *ngIf="highPressureHeaderForm && highPressureHeaderForm.controls.pressure.invalid 
-        && highPressureHeaderForm.controls.pressure.errors.boilerTemp">
-        Temperature must be greater than the
-          saturation temperature at the highest pressure header.
-          ({{highPressureHeaderForm.controls.pressure.errors.boilerTemp.val | number:'1.0-1'}} <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
-        </span>
-        <span class="alert-danger pull-right small" *ngIf="saturatedPressure.invalid && !saturatedPressure.pristine">
-        <span *ngIf="saturatedPressure.errors?.required">Value Required</span>
-        <span *ngIf="saturatedPressure.errors?.max">Value can't be greater than
-          {{saturatedPressure.errors?.max?.max}}
-        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-        <span *ngIf="saturatedPressure.errors?.min">Value can't be less than
-          {{saturatedPressure.errors?.min?.min}}
-        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      </span>
-    </div>
-    <div class="form-group">
-      <span class="alert-danger pull-right small"
-        *ngIf="steamTemperature.invalid && !steamTemperature.pristine">
-        <span *ngIf="steamTemperature.errors?.required">Value Required</span>
-        <span *ngIf="steamTemperature.errors?.max">Value can't be greater than
-          {{steamTemperature.errors?.max?.max}}
-        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-        <span *ngIf="steamTemperature.errors?.min">Value can't be less than
-          {{steamTemperature.errors?.min?.min}}
-        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-      </span>
     </div>
 
 

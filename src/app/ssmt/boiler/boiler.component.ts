@@ -118,13 +118,18 @@ export class BoilerComponent implements OnInit {
   }
 
   setPressureOrTemperatureValidators() {
-    if (this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
+    if (this.steamQuality.value === SteamQuality.SUPERHEATED) {
+      this.boilerService.setSaturatedPressureValidators(this.saturatedPressure, this.settings);
+      this.boilerService.setSteamTemperatureValidators(this.steamTemperature, this.settings);
+    } else if (this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
       this.boilerService.setSaturatedPressureValidators(this.saturatedPressure, this.settings);
       this.steamTemperature.clearValidators();
     } else if (this.pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE) {
       this.boilerService.setSteamTemperatureValidators(this.steamTemperature, this.settings);
       this.saturatedPressure.clearValidators();
     }
+    this.saturatedPressure.updateValueAndValidity();
+    this.steamTemperature.updateValueAndValidity();
   }
 
   setFuelTypes() {
@@ -172,6 +177,9 @@ export class BoilerComponent implements OnInit {
       tmpBoiler.stackLossInput = this.boilerInput.stackLossInput;
     }    
     this.emitSave.emit(tmpBoiler);
+    setTimeout(() => {
+      this.updateHiddenFieldValues();
+    });
   }
 
   setPreheatMakeupWater() {
@@ -319,7 +327,7 @@ export class BoilerComponent implements OnInit {
       this.steamQuality.value === SteamQuality.SUPERHEATED;
     if (!showSaturatedPressure) {
       this.saturatedPressure.setValue(null);
-      this.saturatedPressure.markAsPristine();
+      // this.saturatedPressure.markAsPristine();
     }
 
     const showSteamTemperature =
@@ -327,8 +335,10 @@ export class BoilerComponent implements OnInit {
       this.steamQuality.value === SteamQuality.SUPERHEATED;
     if (!showSteamTemperature) {
       this.steamTemperature.setValue(null);
-      this.steamTemperature.markAsPristine();
+      // this.steamTemperature.markAsPristine();
     }
+
+    this.setPressureOrTemperatureValidators();
   }
 
   changeField(str: string) {
