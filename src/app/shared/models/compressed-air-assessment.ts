@@ -46,9 +46,14 @@ export interface FlowReallocation {
 export interface ReplaceCompressor {
     order: number
     implementationCost: number,
-    compressorsMapping: Array<{
+    salvageValue: number,
+    currentCompressorMapping: Array<{
         originalCompressorId: string,
-        replacementCompressorId: string
+        isReplaced: boolean
+    }>,
+    replacementCompressorMapping: Array<{
+        replacementCompressorId: string,
+        isAdded: boolean
     }>
 }
 

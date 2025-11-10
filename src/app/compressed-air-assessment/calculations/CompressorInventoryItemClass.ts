@@ -171,11 +171,11 @@ export class CompressorInventoryItemClass {
     }
 
     findItem(itemId: string): boolean {
-        if (this.isReplacementCompressor) {
-            return this.originalCompressorId == itemId;
-        } else {
-            return this.itemId == itemId;
-        }
+        // if (this.isReplacementCompressor) {
+        //     return this.originalCompressorId == itemId;
+        // } else {
+        return this.itemId == itemId;
+        // }
     }
 
     setShowMaxFlowPerformancePoint() {
@@ -183,7 +183,7 @@ export class CompressorInventoryItemClass {
             this.showMaxFullFlow = false;
         } else if ((this.nameplateData.compressorType == 1 || this.nameplateData.compressorType == 2) && this.compressorControls.controlType == 1) {
             // if (this.compressorControls.controlType == 1) {
-                this.showMaxFullFlow = false;
+            this.showMaxFullFlow = false;
             // } else {
             //     this.showMaxFullFlow = true;
             // }

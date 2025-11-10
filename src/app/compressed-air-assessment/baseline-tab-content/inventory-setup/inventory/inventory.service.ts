@@ -189,7 +189,14 @@ export class InventoryService {
         })
       });
     }else{
+      newInventoryItem.isReplacementCompressor = true;
       compressedAirAssessment.replacementCompressorInventoryItems.push(newInventoryItem);
+      compressedAirAssessment.modifications.forEach(modification => {
+        modification.replaceCompressor.replacementCompressorMapping.push({
+          replacementCompressorId: newInventoryItem.itemId,
+          isAdded: false
+        });
+      });
     }
     return {
       newInventoryItem: newInventoryItem,

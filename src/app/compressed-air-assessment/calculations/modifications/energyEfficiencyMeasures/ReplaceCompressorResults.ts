@@ -33,7 +33,7 @@ export class ReplaceCompressorResults {
             return new CompressedAirProfileSummary(summary, true);
         });
         //1. Replace Compressors
-        this.replaceCompressors(replaceCompressor.compressorsMapping, replacementCompressors);
+        // this.replaceCompressors(replaceCompressor.compressorsMapping, replacementCompressors);
         //2. Reallocate flow based on new compressors..
         let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(
             summaryDataInterval,
@@ -63,17 +63,18 @@ export class ReplaceCompressorResults {
         this.order = order;
     }
 
-    replaceCompressors(compressorsMapping: Array<{ originalCompressorId: string, replacementCompressorId: string }>, replacementCompressors: Array<CompressorInventoryItemClass>) {
-        compressorsMapping.forEach(mapping => {
-            if (mapping.replacementCompressorId) {
-                let replacementCompressor: CompressorInventoryItemClass = replacementCompressors.find(comp => { return comp.itemId == mapping.replacementCompressorId });
-                let indexToReplace: number = this.adjustedCompressors.findIndex(comp => { return comp.itemId == mapping.originalCompressorId });
-                let replacementCompressorClass: CompressorInventoryItemClass = new CompressorInventoryItemClass(replacementCompressor);
-                replacementCompressorClass.isReplacementCompressor = true;
-                replacementCompressorClass.originalCompressorId = mapping.originalCompressorId;
-                this.adjustedCompressors[indexToReplace] = replacementCompressorClass;
-            }
-        });
-    }
+    //TODO: Update performance profile with new compressors and turned off compressors
+    // replaceCompressors(compressorsMapping: Array<{ originalCompressorId: string, replacementCompressorId: string }>, replacementCompressors: Array<CompressorInventoryItemClass>) {
+    //     compressorsMapping.forEach(mapping => {
+    //         if (mapping.replacementCompressorId) {
+    //             let replacementCompressor: CompressorInventoryItemClass = replacementCompressors.find(comp => { return comp.itemId == mapping.replacementCompressorId });
+    //             let indexToReplace: number = this.adjustedCompressors.findIndex(comp => { return comp.itemId == mapping.originalCompressorId });
+    //             let replacementCompressorClass: CompressorInventoryItemClass = new CompressorInventoryItemClass(replacementCompressor);
+    //             replacementCompressorClass.isReplacementCompressor = true;
+    //             replacementCompressorClass.originalCompressorId = mapping.originalCompressorId;
+    //             this.adjustedCompressors[indexToReplace] = replacementCompressorClass;
+    //         }
+    //     });
+    // }
 
 }

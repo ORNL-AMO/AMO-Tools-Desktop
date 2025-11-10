@@ -74,3 +74,16 @@ tfoot{
 option.invalid{
     color: red;
 }
+
+.replaced{
+  text-decoration: line-through;
+}
+
+.checkbox-cell{
+  width: 25px;
+  text-align: center;
+}
+
+.checkbox-cell input[type="checkbox"]{
+  vertical-align: middle;
+}

@@ -13,6 +13,7 @@
                     <th>Compressor Type</th>
                     <th>Control Type</th>
                     <th>Pressure Range</th>
+                    <th>Motor Power</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -35,6 +36,9 @@
                     </td>
                     <td>
                         {{getPressureMinMax(compressorInventoryItem)}}
+                    </td>
+                    <td>
+                        {{compressorInventoryItem.nameplateData.motorPower}} hp
                     </td>
                     <td>
                         <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(compressorInventoryItem)"></a>

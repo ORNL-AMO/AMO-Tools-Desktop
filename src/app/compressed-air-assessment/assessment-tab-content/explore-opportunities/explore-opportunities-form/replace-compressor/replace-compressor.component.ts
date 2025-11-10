@@ -6,6 +6,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 import { ReplaceCompressorService } from './replace-compressor.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
+import { PerformancePointsFormService } from '../../../../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
 
 @Component({
   selector: 'app-replace-compressor',
@@ -26,12 +27,17 @@ export class ReplaceCompressorComponent {
   increasedVolumeError: string;
 
   form: UntypedFormGroup
-  replaceCompressorMapping: Array<{
+  currentCompressorMapping: Array<{
     originalCompressorId: string,
-    replacementCompressorId: string
+    isReplaced: boolean
+  }>;
+  replacementCompressorMapping: Array<{
+    replacementCompressorId: string,
+    isAdded: boolean
   }>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+    private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private performancePointsFormService: PerformancePointsFormService) { }
 
   ngOnInit(): void {
     this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
@@ -96,7 +102,7 @@ export class ReplaceCompressorComponent {
       let newOrder: number = this.form.controls.order.value;
       this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'replaceCompressor', this.modification.replaceCompressor.order, newOrder);
     }
-    this.modification.replaceCompressor = this.replaceCompressorService.getObjFromForm(this.form, this.replaceCompressorMapping);
+    this.modification.replaceCompressor = this.replaceCompressorService.getObjFromForm(this.form, this.currentCompressorMapping, this.replacementCompressorMapping);
     this.compressedAirAssessmentService.updateModification(this.modification);
   }
 
@@ -104,26 +110,38 @@ export class ReplaceCompressorComponent {
     if (this.compressedAirAssessment && this.modification) {
       let replaceCompressor: ReplaceCompressor = this.modification.replaceCompressor;
       this.form = this.replaceCompressorService.getFormFromObj(replaceCompressor);
-      this.replaceCompressorMapping = replaceCompressor.compressorsMapping;
+      this.currentCompressorMapping = replaceCompressor.currentCompressorMapping;
+      this.replacementCompressorMapping = replaceCompressor.replacementCompressorMapping;
     }
   }
 
-  setReplacement(compressorMap: { originalCompressorId: string, replacementCompressorId: string }) {
-    let reduceRuntime: ReduceRuntime = this.modification.reduceRuntime;
-    reduceRuntime.runtimeData.forEach(runtimeData => {
-      if (runtimeData.compressorId == compressorMap.originalCompressorId && compressorMap.replacementCompressorId) {
-        let replacementCompressor: CompressorInventoryItem = this.compressedAirAssessment.replacementCompressorInventoryItems.find(item => { return item.itemId == compressorMap.replacementCompressorId });
-        runtimeData.compressorId = replacementCompressor.itemId;
-        runtimeData.fullLoadCapacity = replacementCompressor.performancePoints.fullLoad.airflow;
-        runtimeData.automaticShutdownTimer = replacementCompressor.compressorControls.automaticShutdown;
-        runtimeData.originalCompressorId = compressorMap.originalCompressorId;
-      } else if (runtimeData.originalCompressorId == compressorMap.originalCompressorId && !compressorMap.replacementCompressorId) {
-        let originalCompressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == compressorMap.originalCompressorId });
-        runtimeData.compressorId = originalCompressor.itemId;
-        runtimeData.fullLoadCapacity = originalCompressor.performancePoints.fullLoad.airflow;
-        runtimeData.automaticShutdownTimer = originalCompressor.compressorControls.automaticShutdown;
-      }
-    });
+  setReplacement(compressorMap: { originalCompressorId: string, isReplaced: string }) {
+    // let reduceRuntime: ReduceRuntime = this.modification.reduceRuntime;
+    // reduceRuntime.runtimeData.forEach(runtimeData => {
+    //   if (runtimeData.compressorId == compressorMap.originalCompressorId && compressorMap.replacementCompressorId) {
+    //     let replacementCompressor: CompressorInventoryItem = this.compressedAirAssessment.replacementCompressorInventoryItems.find(item => { return item.itemId == compressorMap.replacementCompressorId });
+    //     runtimeData.compressorId = replacementCompressor.itemId;
+    //     runtimeData.fullLoadCapacity = replacementCompressor.performancePoints.fullLoad.airflow;
+    //     runtimeData.automaticShutdownTimer = replacementCompressor.compressorControls.automaticShutdown;
+    //     runtimeData.originalCompressorId = compressorMap.originalCompressorId;
+    //   } else if (runtimeData.originalCompressorId == compressorMap.originalCompressorId && !compressorMap.replacementCompressorId) {
+    //     let originalCompressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == compressorMap.originalCompressorId });
+    //     runtimeData.compressorId = originalCompressor.itemId;
+    //     runtimeData.fullLoadCapacity = originalCompressor.performancePoints.fullLoad.airflow;
+    //     runtimeData.automaticShutdownTimer = originalCompressor.compressorControls.automaticShutdown;
+    //   }
+    // });
     this.save(false);
+  }
+
+  //TODO: Should be a pipe
+  getPressureMinMax(compressor: CompressorInventoryItem): string {
+    let minMax: { min: number, max: number } = this.performancePointsFormService.getCompressorPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
+    let unit: string = ' psig';
+    if (this.settings.unitsOfMeasure == 'Metric') {
+      unit = ' barg';
+    }
+
+    return minMax.min + ' - ' + minMax.max + unit;
   }
 }

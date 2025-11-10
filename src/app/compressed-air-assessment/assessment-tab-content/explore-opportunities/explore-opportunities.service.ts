@@ -131,10 +131,17 @@ export class ExploreOpportunitiesService {
       replaceCompressor: {
         order: 100,
         implementationCost: 0,
-        compressorsMapping: compressedAirAssessment.compressorInventoryItems.map(item => {
+        salvageValue: 0,
+        currentCompressorMapping: compressedAirAssessment.compressorInventoryItems.map(item => {
           return {
             originalCompressorId: item.itemId,
-            replacementCompressorId: undefined
+            isReplaced: false
+          }
+        }),
+        replacementCompressorMapping: compressedAirAssessment.replacementCompressorInventoryItems.map(item => {
+          return {
+            replacementCompressorId: item.itemId,
+            isAdded: false
           }
         })
       }

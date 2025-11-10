@@ -13,7 +13,8 @@ export class ReplaceCompressorService {
   getFormFromObj(replaceCompressor: ReplaceCompressor): UntypedFormGroup {
     let form: UntypedFormGroup = this.formBuilder.group({
       order: [replaceCompressor.order],
-      implementationCost: [replaceCompressor.implementationCost]
+      implementationCost: [replaceCompressor.implementationCost],
+      salvageValue: [replaceCompressor.salvageValue]
     });
     for (let key in form.controls) {
       if (form.controls[key].value) {
@@ -23,12 +24,13 @@ export class ReplaceCompressorService {
     return form;
   }
 
-  getObjFromForm(form: UntypedFormGroup, replaceCompressorMapping: Array<{originalCompressorId: string, replacementCompressorId: string}>): ReplaceCompressor {
+  getObjFromForm(form: UntypedFormGroup, currentCompressorMapping: Array<{originalCompressorId: string, isReplaced: boolean}>, replacementCompressorMapping: Array<{replacementCompressorId: string, isAdded: boolean}>): ReplaceCompressor {
     return {
       order: form.controls.order.value,
       implementationCost: form.controls.implementationCost.value,
-      compressorsMapping: replaceCompressorMapping,
-
+      currentCompressorMapping: currentCompressorMapping,
+      replacementCompressorMapping: replacementCompressorMapping,
+      salvageValue: form.controls.salvageValue.value
     };
   }
 }

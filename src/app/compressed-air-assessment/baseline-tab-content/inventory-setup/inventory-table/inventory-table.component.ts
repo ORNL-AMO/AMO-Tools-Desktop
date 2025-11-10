@@ -128,6 +128,9 @@ export class InventoryTableComponent implements OnInit {
       let itemIndex: number = compressedAirAssessment.replacementCompressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId });
       compressedAirAssessment.replacementCompressorInventoryItems.splice(itemIndex, 1);
       //TODO: update modificaitons
+      compressedAirAssessment.modifications.forEach(modification => {
+        modification.replaceCompressor.replacementCompressorMapping = modification.replaceCompressor.replacementCompressorMapping.filter(mapping => { return mapping.replacementCompressorId != this.deleteSelectedId });
+      });
     }
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     this.inventoryService.setSelectedCompressor(compressedAirAssessment.compressorInventoryItems[0]);

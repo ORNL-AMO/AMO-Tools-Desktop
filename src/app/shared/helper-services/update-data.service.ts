@@ -151,12 +151,14 @@ export class UpdateDataService {
                     mod['replaceCompressor'] = {
                         order: 100,
                         implementationCost: 0,
-                        compressorsMapping: assessment.compressedAirAssessment.compressorInventoryItems.map(item => {
+                        salvageValue: 0,
+                        currentCompressorMapping: assessment.compressedAirAssessment.compressorInventoryItems.map(item => {
                             return {
                                 originalCompressorId: item.itemId,
-                                replacementCompressorId: undefined
+                                isReplaced: false
                             };
-                        })
+                        }),
+                        replacementCompressorMapping: []
                     };
                 }
             })
