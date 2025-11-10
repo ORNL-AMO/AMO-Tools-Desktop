@@ -1,4 +1,4 @@
-<div class="d-flex flex-column h-100 w-100">
+<!-- <div class="d-flex flex-column h-100 w-100">
     <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
         <div class="nav-item" (click)="setSmallScreenTab('form')"
             [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
@@ -17,8 +17,7 @@
             <app-explore-opportunities-side-panel></app-explore-opportunities-side-panel>
         </div>
     </div>
-</div>
-
+</div> -->
 <!-- </div> -->
 
 <!-- <div class="d-flex flex-column compressed-air modify-conditions panel-container"
@@ -47,3 +46,20 @@
         </div>
     </div>
 </div> -->
+
+
+
+<div class="d-flex w-100" (mousemove)="drag($event)" (mouseup)="stopResizing($event)"
+    (mouseleave)="stopResizing($event)">
+    <div class="d-flex hide-print" [ngStyle]="{'width.px': formWidth}">
+        <div class="w-100 overflow-auto">
+            <app-explore-opportunities-form class="w-100"></app-explore-opportunities-form>
+        </div>
+        <div class="resize-handle pe-1 ps-1" (mousedown)="startResizing($event)">
+            
+        </div>
+    </div>
+    <div class="assessment-panel-container" [ngStyle]="{'width.px': resultsWidth}">
+        <app-explore-opportunities-side-panel></app-explore-opportunities-side-panel>
+    </div>
+</div>

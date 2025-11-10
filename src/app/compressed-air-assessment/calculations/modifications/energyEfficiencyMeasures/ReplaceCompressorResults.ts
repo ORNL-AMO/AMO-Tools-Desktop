@@ -48,14 +48,6 @@ export class ReplaceCompressorResults {
 
         // this.replaceCompressors(replaceCompressor.compressorsMapping, replacementCompressors);
         //2. Reallocate flow based on new compressors..
-        // let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(
-        //     summaryDataInterval,
-        //     this.profileSummary,
-        //     false,
-        //     dayType,
-        //     undefined,
-        //     this.adjustedCompressors);
-
         let implementationCost: number = replaceCompressor.implementationCost;
         if (replaceCompressor.salvageValue) {
             implementationCost = implementationCost - replaceCompressor.salvageValue;
@@ -103,7 +95,6 @@ export class ReplaceCompressorResults {
     addReplacementCompressors(replacementCompressors: Array<CompressorInventoryItemClass>, replacementCompressorMapping: Array<{ replacementCompressorId: string, isAdded: boolean }>,
         systemProfileSetup: SystemProfileSetup, dayType: CompressedAirDayType
     ) {
-
         let intervalData: Array<{ isCompressorOn: boolean, timeInterval: number }> = new Array();
         for (let i = 0; i < 24;) {
             intervalData.push({
@@ -122,26 +113,9 @@ export class ReplaceCompressorResults {
                 fullLoadPressure: replacement.performancePoints.fullLoad.dischargePressure,
                 fullLoadCapacity: replacement.performancePoints.fullLoad.airflow
             };
-            console.log(_profileSummary)
             this.profileSummary.push(new CompressedAirProfileSummary(_profileSummary, true));
         });
-        console.log(this.profileSummary)
     }
-
-    //TODO: Update performance profile with new compressors and turned off compressors
-    // replaceCompressors(compressorsMapping: Array<{ originalCompressorId: string, replacementCompressorId: string }>, replacementCompressors: Array<CompressorInventoryItemClass>) {
-    //     compressorsMapping.forEach(mapping => {
-    //         if (mapping.replacementCompressorId) {
-    //             let replacementCompressor: CompressorInventoryItemClass = replacementCompressors.find(comp => { return comp.itemId == mapping.replacementCompressorId });
-    //             let indexToReplace: number = this.adjustedCompressors.findIndex(comp => { return comp.itemId == mapping.originalCompressorId });
-    //             let replacementCompressorClass: CompressorInventoryItemClass = new CompressorInventoryItemClass(replacementCompressor);
-    //             replacementCompressorClass.isReplacementCompressor = true;
-    //             replacementCompressorClass.originalCompressorId = mapping.originalCompressorId;
-    //             this.adjustedCompressors[indexToReplace] = replacementCompressorClass;
-    //         }
-    //     });
-    // }
-
 
     getEmptyProfileSummaryData(systemProfileSetup: SystemProfileSetup): Array<ProfileSummaryData> {
         let summaryData: Array<ProfileSummaryData> = new Array();

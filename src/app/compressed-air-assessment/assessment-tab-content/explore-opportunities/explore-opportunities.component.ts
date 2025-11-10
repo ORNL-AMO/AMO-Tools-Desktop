@@ -1,15 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../../../shared/models/compressed-air-assessment';
-import { Settings } from '../../../shared/models/settings';
-import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
-import { InventoryService } from '../../baseline-tab-content/inventory-setup/inventory/inventory.service';
-import { CompressorTypeOption, CompressorTypeOptions } from '../../baseline-tab-content/inventory-setup/inventory/inventoryOptions';
-import { ExploreOpportunitiesService } from './explore-opportunities.service';
-import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
-import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
-import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
-import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -23,9 +12,16 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   smallScreenTab: string = 'form';
+
+  formWidth: number;
+  resultsWidth: number;
+
+  startingCursorX: number;
+  isDragging: boolean = false;
   constructor() { }
 
   ngOnInit(): void {
+    this.setResultsWidth();
   }
 
   ngAfterViewInit() {
@@ -36,6 +32,34 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
+  }
+
+  startResizing(event: MouseEvent): void {
+    this.startingCursorX = event.clientX;
+    this.isDragging = true;
+  }
+
+  stopResizing($event: MouseEvent) {
+    this.isDragging = false;
+    window.dispatchEvent(new Event("resize"));
+  }
+
+  drag(event: MouseEvent) {
+    if (this.isDragging) {
+      if (event.clientX > 200) {
+        this.formWidth = event.clientX;
+      } else {
+        this.formWidth = 200;
+      }
+      this.setResultsWidth();
+    }
+  }
+
+  setResultsWidth() {
+    if (!this.formWidth) {
+      this.formWidth = window.innerWidth / 2;
+    }
+    this.resultsWidth = (window.innerWidth - this.formWidth);
   }
 
 }
