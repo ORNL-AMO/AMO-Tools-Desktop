@@ -1,5 +1,5 @@
 import { SaturatedPropertiesOutput } from './../../shared/models/steam/steam-outputs';
-import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerWarnings } from './boiler.service';
 import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
@@ -85,7 +85,8 @@ export class BoilerComponent implements OnInit {
     if (this.selected === false) {
       this.disableForm();
     }
-    this.setPressureOrTemperatureValidators();
+    // todo we shouldn't need to call this on init, validation is already being (or should be) performed on initForm --> service call
+    // this.setPressureOrTemperatureValidators();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -132,6 +133,24 @@ export class BoilerComponent implements OnInit {
     this.steamTemperature.updateValueAndValidity();
   }
 
+    // todo this method should be a change handler that's triggered on a form control change. Bound in the component to (input), (change)
+  updateHiddenFieldValues(): void {
+    // * looking back at our earlier slack messages, I believe we only run the logic in this handler if the quality == saturated, 
+    // * because we'll have both values if it's super heated? you'll have to double check me on this
+    if (this.steamQuality.value === SteamQuality.SATURATED) {
+      if (this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
+        // todo use patchValue for these, not setValue
+        this.saturatedPressure.patchValue(null);
+      } else {
+        this.steamTemperature.patchValue(null);
+      }
+    }
+
+    // * we set validation any time pressureOrTemp metric changes. Is that right?
+    this.setPressureOrTemperatureValidators();
+  }
+
+
   setFuelTypes() {
     if (this.boilerForm.controls.fuelType.value === 0) {
       this.options = this.solidLiquidMaterialDbService.getAllMaterials();
@@ -158,6 +177,7 @@ export class BoilerComponent implements OnInit {
   setPressureForms(boilerInput: BoilerInput) {
     if (boilerInput) {
       if (this.headerInput.highPressureHeader) {
+        // * We need to do something here, not clear what yet
         this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, boilerInput, undefined);
       }
 
@@ -177,9 +197,10 @@ export class BoilerComponent implements OnInit {
       tmpBoiler.stackLossInput = this.boilerInput.stackLossInput;
     }    
     this.emitSave.emit(tmpBoiler);
-    setTimeout(() => {
-      this.updateHiddenFieldValues();
-    });
+    // todo we shouldn't need a timeout, nor a call to updatHiddenFieldValues here. What is this trying to solve?
+    // setTimeout(() => {
+    //   this.updateHiddenFieldValues();
+    // });
   }
 
   setPreheatMakeupWater() {
@@ -321,25 +342,23 @@ export class BoilerComponent implements OnInit {
     this.closeBoilerEfficiencyModal();
   }
 
-  private updateHiddenFieldValues(): void {
-    const showSaturatedPressure =
-      this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE ||
-      this.steamQuality.value === SteamQuality.SUPERHEATED;
-    if (!showSaturatedPressure) {
-      this.saturatedPressure.setValue(null);
-      // this.saturatedPressure.markAsPristine();
-    }
+  // * original method
+  // private updateHiddenFieldValues(): void {
+  //   const showSaturatedPressure =
+  //     this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE ||
+  //     this.steamQuality.value === SteamQuality.SUPERHEATED;
+  //   if (!showSaturatedPressure) {
+  //     this.saturatedPressure.setValue(null);
+  //     // this.saturatedPressure.markAsPristine();
+  //   }
 
-    const showSteamTemperature =
-      this.pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE ||
-      this.steamQuality.value === SteamQuality.SUPERHEATED;
-    if (!showSteamTemperature) {
-      this.steamTemperature.setValue(null);
-      // this.steamTemperature.markAsPristine();
-    }
-
-    this.setPressureOrTemperatureValidators();
-  }
+  //   const showSteamTemperature =
+  //     this.pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE ||
+  //     this.steamQuality.value === SteamQuality.SUPERHEATED;
+  //   if (!showSteamTemperature) {
+  //     this.steamTemperature.setValue(null);
+  //     // this.steamTemperature.markAsPristine();
+  //   }
 
   changeField(str: string) {
     this.emitChangeField.emit(str);
