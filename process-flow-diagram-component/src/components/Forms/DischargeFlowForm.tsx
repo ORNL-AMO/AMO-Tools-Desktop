@@ -1,4 +1,4 @@
-import { List, TextField, InputAdornment, ListItem, Button, useTheme, Box, Typography } from "@mui/material";
+import { List, TextField, InputAdornment, ListItem, Button, useTheme, Box, Typography, Collapse } from "@mui/material";
 import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getKnownLossComponentTotals, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
@@ -12,7 +12,7 @@ import InputField from "../StyledMUI/InputField";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import { selectCurrentNode, selectNodes, selectNodeTargetEdges, selectTotalDischargeFlow } from "../Diagram/store";
 import { FlowForm, getDefaultFlowValidationSchema, TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR } from "../../validation/Validation";
-import { FieldArray, Form, Formik, FormikErrors, useFormikContext } from "formik";
+import { FieldArray, Form, Formik, useFormikContext } from "formik";
 import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import { ObjectSchema } from "yup";
@@ -29,7 +29,8 @@ const blueBackground = blue[50];
    * Formik is used for validation only, while source of truth for values is redux store. This avoids state race conditions when rendering.
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility
    */
-const DischargeFlowForm = () => {
+const DischargeFlowForm = (props: DischargeFlowFormProps) => {
+    const { inView } = props;
     const theme = useTheme();
     const dispatch = useAppDispatch();
     const flowService = useFlowService();
@@ -42,18 +43,6 @@ const DischargeFlowForm = () => {
     const selectedNode = useAppSelector(selectCurrentNode);
     const settings = useAppSelector((state) => state.diagram.settings);
     const isIntakeSource = selectedNode.type === 'waterIntake';
-    // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
-    // const handleFieldState = (edgeId: string, stateProp: string, val: boolean) => {
-    //     if (stateProp === 'focused') {
-    //         dispatch(focusedEdgeChange({ edgeId: edgeId }));
-    //     }
-    //     setFieldState((prev) => {
-    //         return {
-    //             ...prev,
-    //             [stateProp]: val
-    //         }
-    //     });
-    // }
 
     const onFlowValueInputChange = (event, dischargeEdgeId: string, handleChange: (event: React.ChangeEvent<any>) => void) => {
         handleChange(event);
@@ -126,10 +115,11 @@ const DischargeFlowForm = () => {
                     <Form>
                         <UpdateNodeErrors flowType={'discharge'} errors={errors} />
                         <DistributeTotalFlowField componentEdges={componentDischargeEdges} setFieldValue={setFieldValue} />
-                        <TotaDischargeFlowField />
+                        <TotalDischargeFlowField inView={inView} />
+
 
                         {componentDischargeEdges.length > 0 &&
-                            <Box sx={{ border: `1px solid ${theme.palette.primary.main}`, padding: '1rem', borderRadius: '8px', marginTop: '1rem' }}>
+                            <Box sx={{ border: `1px solid ${theme.palette.primary.main}`, padding: '1rem', borderRadius: '8px', marginTop: '2rem', paddingTop: '2rem' }}>
                                 <ToggleDataEntryUnitButton inPercent={inPercent} disabled={disabledToggle} handleToggleDataEntryUnit={onToggleDataEntryUnit} />
 
                                 <FieldArray name="fields">
@@ -293,8 +283,6 @@ const DischargeFlowForm = () => {
                                     value={selectedNode.data.userEnteredData.intakeUnaccounted ?? ''}
                                     onChange={(event) => onUnaccountedFlowChange(event, handleChange)}
                                     sx={{ marginBottom: '1rem', width: '100%' }}
-                                    // warning={Boolean(errors.unaccountedFlow)}
-                                    // helperText={Boolean(errors.unaccountedFlow) ? String(errors.unaccountedFlow) : ""}
                                     InputProps={{
                                         endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
                                             <span style={{ zIndex: 1, background: 'white' }}>
@@ -324,12 +312,12 @@ const DischargeFlowForm = () => {
    * 1. the formik errors array reflects values from a previous render even when validation triggered immediately after setFieldValue is run
    * 2. the total flow field (and not the rest of the form) should rerender with value computed from other flow changes
    */
-const TotaDischargeFlowField = () => {
+const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
+    const { inView } = props;
     const { setFieldValue, values, handleChange, errors } = useFormikContext<any>();
     const dispatch = useAppDispatch();
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
     const componentDischargeEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeTargetEdges) as Edge<CustomEdgeData>[];
-    // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
 
     const onTotalFlowValueInputChange = (event: React.ChangeEvent<any>) => {
         handleChange(event);
@@ -351,75 +339,91 @@ const TotaDischargeFlowField = () => {
 
     const hasError = Boolean(errors.totalFlow) && totalDischargeFlow !== null;
     return (
-        <Box display={'flex'}>
+        <Box>
 
-            <SmallTooltip title="Set flows evenly from total outflow"
-                slotProps={{
-                    popper: {
-                        disablePortal: true,
-                    }
-                }}>
-                <span>
-                    <Button onClick={() => onClickDistributeFlowEvenly(totalDischargeFlow)}
-                        disabled={!totalDischargeFlow}
-                        variant="outlined"
-                        sx={{
-                            marginRight: '1rem',
-                            padding: '2px 12px',
-                            display: 'inline-block',
-                            minWidth: 0
-                        }}>
-                        <CallSplitOutlinedIcon
-                            sx={{
-                                transform: 'rotate(180deg) scaleX(-1)',
-
-                            }} />
-                    </Button>
-                </span>
-            </SmallTooltip>
             <TextField
                 label={'Total Flow'}
                 id={'totalFlow'}
                 type={'number'}
                 size="small"
                 value={values.totalFlow ?? ''}
+                fullWidth
                 onChange={(event) => onTotalFlowValueInputChange(event)}
-                // onFocus={() => setFieldState({ ...fieldState, focused: true })}
-                // onAbort={() => setFieldState({ ...fieldState, touched: true })}
                 error={hasError}
                 helperText={hasError ? String(errors.totalFlow) : ""}
-                FormHelperTextProps={{ sx: { whiteSpace: 'normal', maxWidth: 250 } }}
+                FormHelperTextProps={{ sx: { whiteSpace: 'normal'} }}
                 InputProps={{
                     endAdornment: <InputAdornment position="end">
                         <FlowDisplayUnit />
                     </InputAdornment>,
                 }}
             />
-            <SmallTooltip title="Set total from sum of outflow"
-                slotProps={{
-                    popper: {
-                        disablePortal: true,
-                    }
-                }}>
-                <span>
-                    <Button onClick={onClickSumFlows}
-                        disabled={componentDischargeEdges?.length === 0}
-                        variant="outlined"
+
+            <Collapse in={inView} timeout={{ enter: 10, exit: 100 }} unmountOnExit>
+                <Box display={'flex'} justifyContent={'center'} position={'absolute'} width="100%" marginTop={'1rem'}>
+                    <Box position={'relative'}
                         sx={{
-                            marginLeft: '1rem',
-                            padding: '2px 12px',
-                            display: 'inline-block',
-                            minWidth: 0
+                            backgroundColor: '#fff',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: '1rem',
+                            padding: '0 1rem',
                         }}>
-                        <CallMergeIcon />
-                    </Button>
-                </span>
-            </SmallTooltip>
+                        <SmallTooltip title="Set flows evenly from total outflow"
+                            slotProps={{
+                                popper: {
+                                    disablePortal: true,
+                                }
+                            }}>
+                            <span>
+                                <Button onClick={() => onClickDistributeFlowEvenly(totalDischargeFlow)}
+                                    disabled={!totalDischargeFlow}
+                                    variant="outlined"
+                                    sx={{
+                                        padding: '2px 12px',
+                                        display: 'inline-block',
+                                        minWidth: 0
+                                    }}>
+                                    <CallSplitOutlinedIcon
+                                        sx={{
+                                            transform: 'rotate(180deg) scaleX(-1)',
+
+                                        }} />
+                                </Button>
+                            </span>
+                        </SmallTooltip>
+                        <SmallTooltip title="Set total from sum of outflow"
+                            slotProps={{
+                                popper: {
+                                    disablePortal: true,
+                                }
+                            }}>
+                            <span>
+                                <Button onClick={onClickSumFlows}
+                                    disabled={componentDischargeEdges?.length === 0}
+                                    variant="outlined"
+                                    sx={{
+                                        padding: '2px 12px',
+                                        display: 'inline-block',
+                                        minWidth: 0
+                                    }}>
+                                    <CallMergeIcon />
+                                </Button>
+                            </span>
+                        </SmallTooltip>
+                    </Box>
+                </Box>
+            </Collapse>
         </Box>
     );
 };
 
 
 export default DischargeFlowForm;
+export interface DischargeFlowFormProps {
+    inView: boolean;
+}
 
-export interface DischargeFlowFormProps { }
+export interface TotalDischargeFlowFieldProps {
+    inView: boolean;
+}
