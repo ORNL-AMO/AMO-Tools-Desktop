@@ -38,15 +38,25 @@ export class SystemSummaryReportComponent {
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
   copyTableString: any;
   systemSummaryReportSubscription: Subscription;
+  percentView: boolean = false;
+
 
   ngOnInit(): void {
     let diagram: Diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(this.assessment);
     let nodeErrors: NodeErrors = diagram.waterDiagram.flowDiagramData.nodeErrors;
 
-    this.systemSummaryReportSubscription = this.waterReportService.systemSummaryReport.subscribe(report => {
+    this.systemSummaryReportSubscription = this.waterReportService.plantSummaryReport.subscribe(report => {
       this.isDiagramValid = getIsDiagramValid(nodeErrors);
       this.plantSummaryResults = this.isDiagramValid ? report : this.waterAssessmentResultsService.getEmptyPlantSystemSummaryResults();
     });
+    this.waterReportService.systemStackedBarPercentView.subscribe(val => {
+      this.percentView = val;
+    });
+  }
+  
+  togglePercentView() {
+    this.percentView = !this.percentView;
+    this.waterReportService.systemStackedBarPercentView.next(this.percentView);
   }
 
   getFlowDecimalPrecisionPipeValue(): string {
