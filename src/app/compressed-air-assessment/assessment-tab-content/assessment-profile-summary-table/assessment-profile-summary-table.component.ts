@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
@@ -24,6 +24,7 @@ export class AssessmentProfileSummaryTableComponent {
   compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults;
   modificationResultsSub: Subscription;
   settings: Settings;
+  inventoryItems: Array<CompressorInventoryItem>
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
@@ -62,6 +63,7 @@ export class AssessmentProfileSummaryTableComponent {
       let dayTypeModificationResult: CompressedAirModifiedDayTypeProfileSummary = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(modResult => { return modResult.dayType.dayTypeId == this.selectedDayType.dayTypeId });
       this.adjustedProfileSummary = dayTypeModificationResult.adjustedProfileSummary;
       this.totals = dayTypeModificationResult.adjustedProfileSummaryTotals;
+      this.inventoryItems = dayTypeModificationResult.adjustedCompressors;
     }
   }
 

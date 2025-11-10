@@ -100,6 +100,7 @@ export class InventoryTableComponent implements OnInit {
         modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(data => { return data.compressorId != this.deleteSelectedId });
         modification.adjustCascadingSetPoints.setPointData = modification.adjustCascadingSetPoints.setPointData.filter(data => { return data.compressorId != this.deleteSelectedId });
         modification.useAutomaticSequencer.profileSummary = modification.useAutomaticSequencer.profileSummary.filter(summary => { return summary.compressorId != this.deleteSelectedId })
+        modification.replaceCompressor.currentCompressorMapping = modification.replaceCompressor.currentCompressorMapping.filter(mapping => { return mapping.originalCompressorId != this.deleteSelectedId });
       });
 
       let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;

@@ -1,4 +1,4 @@
-import { CompressedAirDayType, CompressorInventoryItem, ProfileSummaryTotal, ReplaceCompressor, SystemInformation } from "../../../../shared/models/compressed-air-assessment";
+import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReplaceCompressor, SystemInformation, SystemProfileSetup } from "../../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
 import { getProfileSummaryTotals } from "../../caCalculationHelpers";
@@ -26,15 +26,13 @@ export class ReplaceCompressorResults {
         totalAirStorage: number,
         systemInformation: SystemInformation,
         _compressedAirCalculationService: CompressedAirCalculationService,
-        order: number
+        order: number,
+        systemProfileSetup: SystemProfileSetup
     ) {
         this.adjustedCompressors = adjustedCompressors;
         this.profileSummary = previousProfileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
-        //1. Replace Compressors
-        // this.replaceCompressors(replaceCompressor.compressorsMapping, replacementCompressors);
-        //2. Reallocate flow based on new compressors..
         let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(
             summaryDataInterval,
             this.profileSummary,
@@ -42,9 +40,30 @@ export class ReplaceCompressorResults {
             dayType,
             undefined,
             this.adjustedCompressors);
+
+        //1. Turn off old compressors..
+        this.turnOffCompressors(replaceCompressor.currentCompressorMapping);
+        //2. Add new compressors..
+        this.addReplacementCompressors(replacementCompressors, replaceCompressor.replacementCompressorMapping, systemProfileSetup, dayType);
+
+        // this.replaceCompressors(replaceCompressor.compressorsMapping, replacementCompressors);
+        //2. Reallocate flow based on new compressors..
+        // let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(
+        //     summaryDataInterval,
+        //     this.profileSummary,
+        //     false,
+        //     dayType,
+        //     undefined,
+        //     this.adjustedCompressors);
+
+        let implementationCost: number = replaceCompressor.implementationCost;
+        if (replaceCompressor.salvageValue) {
+            implementationCost = implementationCost - replaceCompressor.salvageValue;
+        }
+
         let flowReallocationResults: FlowReallocationResults = new FlowReallocationResults(dayType,
             settings,
-            previousProfileSummary,
+            this.profileSummary,
             this.adjustedCompressors,
             0,
             adjustedProfileSummaryTotal,
@@ -54,13 +73,59 @@ export class ReplaceCompressorResults {
             undefined,
             _compressedAirCalculationService,
             costKwh,
-            replaceCompressor.implementationCost,
+            implementationCost,
             summaryDataInterval,
             undefined,
             order);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
         this.order = order;
+    }
+
+
+    turnOffCompressors(
+        currentCompressorMapping: Array<{
+            originalCompressorId: string,
+            isReplaced: boolean
+        }>
+    ) {
+        let compressorToTurnOff: Array<string> = currentCompressorMapping.filter(mapping => { return mapping.isReplaced == true }).map(mapping => { return mapping.originalCompressorId });
+        this.profileSummary.forEach(summary => {
+            if (compressorToTurnOff.includes(summary.compressorId)) {
+                summary.isCompressorReplaced = true;
+                summary.profileSummaryData.forEach(data => {
+                    data.order = 0;
+                })
+            }
+        });
+    }
+
+    addReplacementCompressors(replacementCompressors: Array<CompressorInventoryItemClass>, replacementCompressorMapping: Array<{ replacementCompressorId: string, isAdded: boolean }>,
+        systemProfileSetup: SystemProfileSetup, dayType: CompressedAirDayType
+    ) {
+
+        let intervalData: Array<{ isCompressorOn: boolean, timeInterval: number }> = new Array();
+        for (let i = 0; i < 24;) {
+            intervalData.push({
+                isCompressorOn: false,
+                timeInterval: i
+            })
+            i = i + systemProfileSetup.dataInterval
+        }
+        replacementCompressorMapping.filter(mapping => { return mapping.isAdded == true }).forEach(mapping => {
+            let replacement: CompressorInventoryItem = replacementCompressors.find(comp => { return comp.itemId == mapping.replacementCompressorId });
+            this.adjustedCompressors.push(new CompressorInventoryItemClass(replacement));
+            let _profileSummary: ProfileSummary = {
+                compressorId: replacement.itemId,
+                dayTypeId: dayType.dayTypeId,
+                profileSummaryData: this.getEmptyProfileSummaryData(systemProfileSetup),
+                fullLoadPressure: replacement.performancePoints.fullLoad.dischargePressure,
+                fullLoadCapacity: replacement.performancePoints.fullLoad.airflow
+            };
+            console.log(_profileSummary)
+            this.profileSummary.push(new CompressedAirProfileSummary(_profileSummary, true));
+        });
+        console.log(this.profileSummary)
     }
 
     //TODO: Update performance profile with new compressors and turned off compressors
@@ -76,5 +141,24 @@ export class ReplaceCompressorResults {
     //         }
     //     });
     // }
+
+
+    getEmptyProfileSummaryData(systemProfileSetup: SystemProfileSetup): Array<ProfileSummaryData> {
+        let summaryData: Array<ProfileSummaryData> = new Array();
+        for (let i = 0; i < 24;) {
+            summaryData.push({
+                power: 0,
+                airflow: 0,
+                percentCapacity: 0,
+                timeInterval: i,
+                percentPower: undefined,
+                percentSystemCapacity: undefined,
+                percentSystemPower: undefined,
+                order: 100
+            })
+            i = i + systemProfileSetup.dataInterval;
+        }
+        return summaryData;
+    }
 
 }

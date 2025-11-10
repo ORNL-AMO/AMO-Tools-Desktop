@@ -213,6 +213,12 @@ export class InventoryService {
     newInventoryItem.isReplacementCompressor = true;
     newInventoryItem.modifiedDate = new Date();
     compressedAirAssessment.replacementCompressorInventoryItems.push(newInventoryItem);
+    compressedAirAssessment.modifications.forEach(modification => {
+      modification.replaceCompressor.replacementCompressorMapping.push({
+        replacementCompressorId: newInventoryItem.itemId,
+        isAdded: false
+      });
+    });
     return {
       newInventoryItem: newInventoryItem,
       compressedAirAssessment: compressedAirAssessment

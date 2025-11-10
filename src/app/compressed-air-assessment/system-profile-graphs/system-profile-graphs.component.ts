@@ -61,7 +61,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       if (!this.inModification) {
         this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
       }
-      this.inventoryItems = val.compressorInventoryItems;
+      this.inventoryItems = val.compressorInventoryItems.concat(val.replacementCompressorInventoryItems);
       this.setProfileData();
       this.drawCharts();
     });
@@ -114,22 +114,24 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   setProfileData() {
     //baseline daytype summary
-    let compressedAirBaselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = new CompressedAirBaselineDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+    if (this.selectedDayType) {
+      let compressedAirBaselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = new CompressedAirBaselineDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
 
-    if (!this.inModification && this.compressedAirAssessment && this.selectedDayType) {
-      this.profileSummary = compressedAirBaselineDayTypeProfileSummary.profileSummary;
-      this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems);
-      this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
-    } else if (this.compressedAirAssessment && this.selectedDayType && !this.isBaseline) {
-      let modification: Modification = this.compressedAirAssessmentService.selectedModification.getValue();
-      let compressedAirModifiedDayTypeProfileSummary: CompressedAirModifiedDayTypeProfileSummary = new CompressedAirModifiedDayTypeProfileSummary(this.selectedDayType, [compressedAirBaselineDayTypeProfileSummary], this.settings, this.compressedAirCalculationService, this.compressedAirAssessment, modification, this.assessmentCo2SavingsService);
-      this.profileSummary = compressedAirModifiedDayTypeProfileSummary.adjustedProfileSummary;
-      this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems, compressedAirModifiedDayTypeProfileSummary.adjustedCompressors);
-      this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
-    } else if (this.compressedAirAssessment && this.selectedDayType && this.isBaseline) {
-      this.profileSummary = compressedAirBaselineDayTypeProfileSummary.profileSummary;
-      this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems);
-      this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
+      if (!this.inModification && this.compressedAirAssessment) {
+        this.profileSummary = compressedAirBaselineDayTypeProfileSummary.profileSummary;
+        this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems);
+        this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
+      } else if (this.compressedAirAssessment && !this.isBaseline) {
+        let modification: Modification = this.compressedAirAssessmentService.selectedModification.getValue();
+        let compressedAirModifiedDayTypeProfileSummary: CompressedAirModifiedDayTypeProfileSummary = new CompressedAirModifiedDayTypeProfileSummary(this.selectedDayType, [compressedAirBaselineDayTypeProfileSummary], this.settings, this.compressedAirCalculationService, this.compressedAirAssessment, modification, this.assessmentCo2SavingsService);
+        this.profileSummary = compressedAirModifiedDayTypeProfileSummary.adjustedProfileSummary;
+        this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems, compressedAirModifiedDayTypeProfileSummary.adjustedCompressors);
+        this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
+      } else if (this.compressedAirAssessment && this.isBaseline) {
+        this.profileSummary = compressedAirBaselineDayTypeProfileSummary.profileSummary;
+        this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems);
+        this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
+      }
     }
   }
 

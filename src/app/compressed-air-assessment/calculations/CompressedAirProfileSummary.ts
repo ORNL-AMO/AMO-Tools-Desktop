@@ -14,9 +14,10 @@ export class CompressedAirProfileSummary {
     avgPercentCapacity: number;
     adjustedIsentropicEfficiency: number
 
-
+    isCompressorReplaced: boolean;
     profileSummaryData: Array<ProfileSummaryData>;
     constructor(profileSummary: ProfileSummary, includeSummaryData: boolean) {
+        this.isCompressorReplaced = profileSummary.isCompressorReplaced;
         this.fullLoadPressure = profileSummary.fullLoadPressure;
         this.fullLoadCapacity = profileSummary.fullLoadPressure;
         this.compressorId = profileSummary.compressorId;

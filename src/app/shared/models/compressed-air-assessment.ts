@@ -321,7 +321,8 @@ export interface ProfileSummary {
     avgPrecentPower?: number,
     avgPercentCapacity?: number,
     profileSummaryForPrint?: Array<Array<ProfileSummaryData>>,
-    adjustedIsentropicEfficiency?: number
+    adjustedIsentropicEfficiency?: number,
+    isCompressorReplaced?: boolean
 }
 
 export interface ProfileSummaryData {

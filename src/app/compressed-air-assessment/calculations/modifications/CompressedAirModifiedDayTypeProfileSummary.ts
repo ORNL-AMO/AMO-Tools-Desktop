@@ -1,5 +1,5 @@
 import { AssessmentCo2SavingsService } from "../../../shared/assessment-co2-savings/assessment-co2-savings.service";
-import { AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, ReplaceCompressor, SystemInformation, UseAutomaticSequencer } from "../../../shared/models/compressed-air-assessment";
+import { AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, ReplaceCompressor, SystemInformation, SystemProfileSetup, UseAutomaticSequencer } from "../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../compressed-air-calculation.service";
 import { getProfileSummaryTotals } from "../caCalculationHelpers";
@@ -104,7 +104,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
                 let replacementCompressors: Array<CompressorInventoryItemClass> = compressedAirAssessment.replacementCompressorInventoryItems.map(item => {
                     return new CompressorInventoryItemClass(item);
                 });
-                this.setReplaceCompressorResults(modification.replaceCompressor, settings, _compressedAirCalculationService, modification.replaceCompressor.order, replacementCompressors);
+                this.setReplaceCompressorResults(modification.replaceCompressor, settings, _compressedAirCalculationService, modification.replaceCompressor.order, replacementCompressors, compressedAirAssessment.systemProfile.systemProfileSetup);
             }
             //Primary receiver volume
             else if (modification.addPrimaryReceiverVolume.order == orderIndex) {
@@ -181,7 +181,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         settings: Settings,
         _compressedAirCalculationService: CompressedAirCalculationService,
         order: number,
-        replacementCompressors: Array<CompressorInventoryItemClass>
+        replacementCompressors: Array<CompressorInventoryItemClass>,
+        systemProfileSetup: SystemProfileSetup
     ) {
         this.replaceCompressorResults = new ReplaceCompressorResults(this.dayType,
             this.adjustedCompressors,
@@ -195,7 +196,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.totalAirStorage,
             this.systemInformation,
             _compressedAirCalculationService,
-            order);
+            order,
+            systemProfileSetup);
         this.adjustedProfileSummary = this.replaceCompressorResults.profileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
