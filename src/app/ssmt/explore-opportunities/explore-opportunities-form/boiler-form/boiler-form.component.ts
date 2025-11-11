@@ -91,9 +91,9 @@ export class BoilerFormComponent implements OnInit {
   }
 
   init() {
-    this.baselineForm = this.boilerService.initFormFromObj(this.ssmt.boilerInput, this.settings);
+    this.baselineForm = this.boilerService.initFormFromBoilerInput(this.ssmt.boilerInput, this.settings);
     this.baselineForm.disable();
-    this.modificationForm = this.boilerService.initFormFromObj(this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput, this.settings);
+    this.modificationForm = this.boilerService.initFormFromBoilerInput(this.ssmt.modifications[this.exploreModIndex].ssmt.boilerInput, this.settings);
 
     this.initCombustionEfficiency();
     this.initFuel();

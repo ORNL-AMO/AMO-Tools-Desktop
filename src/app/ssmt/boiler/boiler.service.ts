@@ -12,7 +12,7 @@ export class BoilerService {
 
   constructor(private formBuilder: UntypedFormBuilder, private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
-  initForm(settings: Settings) {
+  initEmptyForm(settings: Settings) {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
     
     const form = this.formBuilder.group({
@@ -38,7 +38,7 @@ export class BoilerService {
     return form;
   }
 
-  initFormFromObj(obj: BoilerInput, settings: Settings): UntypedFormGroup {
+  initFormFromBoilerInput(obj: BoilerInput, settings: Settings): UntypedFormGroup {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
 
     let approachTempValidators: Array<ValidatorFn> = [];
@@ -131,7 +131,7 @@ export class BoilerService {
 
   isBoilerValid(boilerInput: BoilerInput, settings: Settings): boolean {
     if (boilerInput) {
-      let form: UntypedFormGroup = this.initFormFromObj(boilerInput, settings);
+      let form: UntypedFormGroup = this.initFormFromBoilerInput(boilerInput, settings);
       if (form.status === 'VALID') {
         return true;
       } else {
