@@ -14,7 +14,7 @@ export class UnitConverterComponent implements OnInit {
   inAssessment: boolean;
 
   possibilities: Array<any> = [];
-  measure: any = 'length';
+  measure: any = 'energy';
   from: string;
   to: string;
   value1: number;
@@ -188,14 +188,21 @@ export class UnitConverterComponent implements OnInit {
       this.possibilities.push(tmpPossibility);
     });
     if (!this.to) {
-      this.to = this.possibilities[1].unit;
+      this.to = this.possibilities[17].unit;
     }
     if (!this.from) {
-      this.from = this.possibilities[0].unit;
+      this.from = this.possibilities[2].unit;
     }
     if (!this.value1) {
       this.value1 = 1;
     }
+    this.getValue2();
+  }
+
+  swapUnits() {
+    let tmpFrom = this.from;
+    this.from = this.to;
+    this.to = tmpFrom;
     this.getValue2();
   }
 

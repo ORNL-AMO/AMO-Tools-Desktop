@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="row value-row">
-          <div class="col-6">
+          <div class="col-5">
             <input type="number" step="any" class="form-control text-center input-field" id="value1" [(ngModel)]="value1"
               (input)="getValue2()">
             <select class="form-control" id="from" [(ngModel)]="from" (change)="getValue2()">
@@ -28,7 +28,13 @@
             </select>
           </div>
 
-          <div class="col-6 text-center">
+          <div class="col-2 text-center">
+            <button type="button" class="btn btn-outline-primary btn-sm p-1 input-swap-btn" (click)="swapUnits()">
+              <i class="fa fa-exchange input-swap-img"></i>
+            </button>
+          </div>
+
+          <div class="col-5 text-center">
             <small>
               <strong>{{value2 | number:'.0-6'}}</strong>
             </small>

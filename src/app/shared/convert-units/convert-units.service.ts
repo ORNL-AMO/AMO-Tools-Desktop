@@ -199,7 +199,6 @@ export class ConvertUnitsService {
 
   getUnit(abbr: string) {
     var found;
-
     _.each(this._measures, function (systems, measure) {
       _.each(systems, function (units, system) {
         if (system === '_anchors')
@@ -224,7 +223,6 @@ export class ConvertUnitsService {
       if (found)
         return false;
     });
-
     return found;
   }
 
