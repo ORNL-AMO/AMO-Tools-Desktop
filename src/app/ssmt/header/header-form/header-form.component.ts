@@ -6,6 +6,7 @@ import { SsmtService } from '../../ssmt.service';
 import { HeaderNotHighestPressure, HeaderWithHighestPressure, SSMT } from '../../../shared/models/steam/ssmt';
 import { CompareService } from '../../compare.service';
 import { BoilerWarnings } from '../../boiler/boiler.service';
+import { SaturatedPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
     selector: 'app-header-form',
@@ -34,6 +35,8 @@ export class HeaderFormComponent implements OnInit {
   isBaseline: boolean;
   @Input()
   headerInput: HeaderNotHighestPressure | HeaderWithHighestPressure;
+  @Input()
+  saturatedPropertiesOutput: SaturatedPropertiesOutput;
   @Input()
   ssmt: SSMT;
 

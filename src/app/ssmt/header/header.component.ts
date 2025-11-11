@@ -4,6 +4,7 @@ import { HeaderInput, HeaderWithHighestPressure, HeaderNotHighestPressure, Boile
 import { Settings } from '../../shared/models/settings';
 import { HeaderService } from './header.service';
 import { SsmtService } from '../ssmt.service';
+import { SaturatedPropertiesOutput } from '../../shared/models/steam/steam-outputs';
 
 @Component({
     selector: 'app-header',
@@ -28,6 +29,8 @@ export class HeaderComponent implements OnInit {
   modificationIndex: number;
   @Input()
   ssmt: SSMT;
+  @Input()
+  saturatedPropertiesOutput: SaturatedPropertiesOutput;
 
   headerInput: HeaderInput;
   boilerInput: BoilerInput;

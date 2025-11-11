@@ -1,3 +1,4 @@
+import { SaturatedPropertiesOutput } from './../../shared/models/steam/steam-outputs';
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerWarnings } from './boiler.service';
@@ -10,6 +11,7 @@ import { HeaderService } from '../header/header.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
+import { SteamPressureOrTemp, SteamQuality } from '../../shared/models/steam/steam-inputs';
 
 @Component({
     selector: 'app-boiler',
@@ -24,15 +26,22 @@ export class BoilerComponent implements OnInit {
   selected: boolean;
   @Input()
   settings: Settings;
-  @Output('emitSave')
-  emitSave = new EventEmitter<BoilerInput>();
   @Input()
   isBaseline: boolean;
   @Input()
   modificationIndex: number;
   @Input()
   ssmt: SSMT;
-  
+  @Input()
+  saturatedPropertiesOutput: SaturatedPropertiesOutput;
+
+  @Output()
+  emitCalculate = new EventEmitter<UntypedFormGroup>();
+  @Output('emitSave')
+  emitSave = new EventEmitter<BoilerInput>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -53,6 +62,10 @@ export class BoilerComponent implements OnInit {
   idString: string = 'baseline_';
   highPressureHeaderForm: UntypedFormGroup;
   lowPressureHeaderForm: UntypedFormGroup;
+
+  SteamQuality = SteamQuality;
+  SteamPressureOrTemp = SteamPressureOrTemp;
+  
   constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService, 
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
@@ -70,6 +83,8 @@ export class BoilerComponent implements OnInit {
     if (this.selected === false) {
       this.disableForm();
     }
+    // todo we shouldn't need to call this on init, validation is already being (or should be) performed on initForm --> service call
+    // this.setPressureOrTemperatureValidators();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -101,6 +116,39 @@ export class BoilerComponent implements OnInit {
     this.setPressureForms(this.boilerInput);
   }
 
+  setPressureOrTemperatureValidators() {
+    if (this.steamQuality.value === SteamQuality.SUPERHEATED) {
+      this.boilerService.setSaturatedPressureValidators(this.saturatedPressure, this.settings);
+      this.boilerService.setSteamTemperatureValidators(this.steamTemperature, this.settings);
+    } else if (this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
+      this.boilerService.setSaturatedPressureValidators(this.saturatedPressure, this.settings);
+      this.steamTemperature.clearValidators();
+    } else if (this.pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE) {
+      this.boilerService.setSteamTemperatureValidators(this.steamTemperature, this.settings);
+      this.saturatedPressure.clearValidators();
+    }
+    this.saturatedPressure.updateValueAndValidity();
+    this.steamTemperature.updateValueAndValidity();
+  }
+
+    // todo this method should be a change handler that's triggered on a form control change. Bound in the component to (input), (change)
+  updateHiddenFieldValues(): void {
+    // * looking back at our earlier slack messages, I believe we only run the logic in this handler if the quality == saturated, 
+    // * because we'll have both values if it's super heated? you'll have to double check me on this
+    if (this.steamQuality.value === SteamQuality.SATURATED) {
+      if (this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
+        // todo use patchValue for these, not setValue
+        this.saturatedPressure.patchValue(null);
+      } else {
+        this.steamTemperature.patchValue(null);
+      }
+    }
+
+    // * we set validation any time pressureOrTemp metric changes. Is that right?
+    this.setPressureOrTemperatureValidators();
+  }
+
+
   setFuelTypes() {
     if (this.boilerForm.controls.fuelType.value === 0) {
       this.options = this.solidLiquidMaterialDbService.getAllMaterials();
@@ -123,9 +171,11 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.preheatMakeupWater.disable();
   }
 
+  // todo for nbintertech - new issue after 7661, get these header forms out of the class/template and read header validation returned from a service call instead
   setPressureForms(boilerInput: BoilerInput) {
     if (boilerInput) {
       if (this.headerInput.highPressureHeader) {
+        // * We need to do something here, not clear what yet
         this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, boilerInput, undefined);
       }
 
@@ -272,4 +322,43 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
     this.closeBoilerEfficiencyModal();
   }
+
+  // * original method
+  // private updateHiddenFieldValues(): void {
+  //   const showSaturatedPressure =
+  //     this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE ||
+  //     this.steamQuality.value === SteamQuality.SUPERHEATED;
+  //   if (!showSaturatedPressure) {
+  //     this.saturatedPressure.setValue(null);
+  //     // this.saturatedPressure.markAsPristine();
+  //   }
+
+  //   const showSteamTemperature =
+  //     this.pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE ||
+  //     this.steamQuality.value === SteamQuality.SUPERHEATED;
+  //   if (!showSteamTemperature) {
+  //     this.steamTemperature.setValue(null);
+  //     // this.steamTemperature.markAsPristine();
+  //   }
+
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
+  }
+
+  get pressureOrTemperature() {
+    return this.boilerForm.get('pressureOrTemperature');
+  }
+
+  get steamTemperature() {
+    return this.boilerForm.get('steamTemperature');
+  }
+
+  get saturatedPressure() {
+    return this.boilerForm.get('saturatedPressure');  
+  }
+
+  get steamQuality() {
+    return this.boilerForm.get('steamQuality');
+  }
+
 }

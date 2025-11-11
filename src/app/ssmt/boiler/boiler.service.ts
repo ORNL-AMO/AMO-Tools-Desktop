@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
 import { SteamService } from '../../calculator/steam/steam.service';
+import { SteamPressureOrTemp, SteamQuality } from '../../shared/models/steam/steam-inputs';
 
 
 @Injectable()
@@ -13,17 +14,17 @@ export class BoilerService {
 
   initForm(settings: Settings) {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
-
-       // let defaultApproachTemp: number = this.convertUnitsService.value(20).from('F').to(settings.steamTemperatureMeasurement);
-    // defaultApproachTemp = this.convertUnitsService.roundVal(defaultApproachTemp, 0);
-
-    return this.formBuilder.group({
+    
+    const form = this.formBuilder.group({
       'fuelType': [1, Validators.required],
       'fuel': [1, Validators.required],
       'combustionEfficiency': [85, [Validators.required, Validators.min(50), Validators.max(100)]],
       'blowdownRate': ['', [Validators.required, Validators.min(0), Validators.max(25)]],
       'blowdownFlashed': [false, [Validators.required]],
       'preheatMakeupWater': [false, [Validators.required]],
+      'steamQuality': [SteamQuality.SATURATED, [Validators.required]],
+      'pressureOrTemperature': [SteamPressureOrTemp.TEMPERATURE, [Validators.required]],
+      'saturatedPressure': ['', [Validators.required]],
       'steamTemperature': ['', [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
       'deaeratorVentRate': ['', [Validators.required, Validators.min(0), Validators.max(10)]],
       'deaeratorPressure': ['', [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
@@ -31,6 +32,10 @@ export class BoilerService {
       'blowdownConductivity': [''],
       'feedwaterConductivity': ['']
     });
+
+    this.setSteamTemperatureValidators(form.controls.steamTemperature, settings);
+
+    return form;
   }
 
   initFormFromObj(obj: BoilerInput, settings: Settings): UntypedFormGroup {
@@ -48,17 +53,39 @@ export class BoilerService {
       'blowdownRate': [obj.blowdownRate, [Validators.required, Validators.min(0), Validators.max(25)]],
       'blowdownFlashed': [obj.blowdownFlashed, [Validators.required]],
       'preheatMakeupWater': [obj.preheatMakeupWater, [Validators.required]],
-      'steamTemperature': [obj.steamTemperature, [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
+      'steamQuality': [obj.steamQuality, [Validators.required]],
+      'pressureOrTemperature': [obj.pressureOrTemperature, [Validators.required]],
+      'saturatedPressure': [obj.saturatedPressure, [Validators.required]],
+      'steamTemperature': [obj.steamTemperature, [Validators.required]],
       'deaeratorVentRate': [obj.deaeratorVentRate, [Validators.required, Validators.min(0), Validators.max(10)]],
       'deaeratorPressure': [obj.deaeratorPressure, [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
       'approachTemperature': [obj.approachTemperature, approachTempValidators],
       'blowdownConductivity': [obj.blowdownConductivity],
       'feedwaterConductivity': [obj.feedwaterConductivity]
     });
+
+    this.setSteamTemperatureValidators(form.controls.steamTemperature, settings);
+
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
     return form;
+  }
+
+  // todo if these become the same as Sat Properties calculator, move to that service
+  setSteamTemperatureValidators(steamTemperatureControl: AbstractControl, settings: Settings) {
+    const validRanges: BoilerRanges = this.getRanges(settings);
+    steamTemperatureControl.setValidators([Validators.required, Validators.min(validRanges.steamTemperatureMin), Validators.max(validRanges.steamTemperatureMax)]);
+    steamTemperatureControl.updateValueAndValidity();
+  }
+
+  setSaturatedPressureValidators(saturatedPressureControl: AbstractControl, settings: Settings) {
+    // todo this is temporary
+    // todo we need to find out if this method should call steamService.getRanges() for original sat properties validation for the pressure min/max 
+    // todo OR if we need SSMT specific validation for it. using deaerator below as a default
+    const validRanges: BoilerRanges = this.getRanges(settings);
+    saturatedPressureControl.setValidators([Validators.required, Validators.min(validRanges.deaeratorPressureMin), Validators.max(validRanges.deaeratorPressureMax)]);
+    saturatedPressureControl.updateValueAndValidity();
   }
 
   initObjFromForm(form: UntypedFormGroup): BoilerInput {
@@ -69,6 +96,9 @@ export class BoilerService {
       blowdownRate: form.controls.blowdownRate.value,
       blowdownFlashed: form.controls.blowdownFlashed.value,
       preheatMakeupWater: form.controls.preheatMakeupWater.value,
+      steamQuality: form.controls.steamQuality.value,
+      pressureOrTemperature: form.controls.pressureOrTemperature.value,
+      saturatedPressure: form.controls.saturatedPressure.value,
       steamTemperature: form.controls.steamTemperature.value,
       deaeratorVentRate: form.controls.deaeratorVentRate.value,
       deaeratorPressure: form.controls.deaeratorPressure.value,
@@ -90,8 +120,6 @@ export class BoilerService {
     let tmpDeaeratorPressureMax: number = this.convertUnitsService.value(3185).from('psia').to(settings.steamPressureMeasurement);
     tmpDeaeratorPressureMax = this.convertUnitsService.roundVal(tmpDeaeratorPressureMax, 0);
 
-    // let tmpApproachTempMin: number = this.convertUnitsService.value(0).from('F').to(settings.steamTemperatureMeasurement);
-    // tmpApproachTempMin = this.convertUnitsService.roundVal(tmpApproachTempMin, 0);
     return {
       steamTemperatureMin: tmpSteamTemperatureMin,
       steamTemperatureMax: tmpSteamTemperatureMax,

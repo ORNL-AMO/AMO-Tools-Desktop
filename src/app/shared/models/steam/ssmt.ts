@@ -141,6 +141,9 @@ export interface BoilerInput {
     blowdownRate: number;
     blowdownFlashed: boolean;
     preheatMakeupWater: boolean;
+    steamQuality: number;
+    saturatedPressure: number;
+    pressureOrTemperature: number;
     steamTemperature: number;
     deaeratorVentRate: number;
     deaeratorPressure: number;

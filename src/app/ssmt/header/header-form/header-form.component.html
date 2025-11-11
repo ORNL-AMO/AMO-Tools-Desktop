@@ -46,33 +46,18 @@
     <span *ngIf="pressureLevel == 'lowPressure'">Low Pressure Header</span>
   </label>
 
-  <div class="form-group">
+  <div class="form-group" *ngIf="pressureLevel == 'highPressure'">
     <label for="{{idString+pressureLevel+'_pressure'}}">Pressure</label>
-    <div class="input-group">
-      <input name="pressure" type="number" step="10" class="form-control" id="{{idString+pressureLevel+'_pressure'}}"
-        (input)="setDesuperheatSteam()" [readonly]="!selected" formControlName="pressure"
-        (focus)="focusField('pressure')" [ngClass]="{'indicate-different': isPressureDifferent()}">
-      <span class="units input-group-addon" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+    <div name="pressure" type="number" step="10" class="small text-center bold">{{saturatedPropertiesOutput?.saturatedPressure | number:'1.0-4'}}
+      <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="headerForm.controls.pressure.invalid && !headerForm.controls.pressure.pristine">
-      <span class="d-block"*ngIf="headerForm.controls.pressure.errors.required">Value Required</span>
-      <span class="d-block" *ngIf="headerForm.controls.pressure.errors.greaterThan">{{minPressureErrorMsg}}
-        {{headerForm.controls.pressure.errors.greaterThan}}
-        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span class="d-block" *ngIf="headerForm.controls.pressure.errors.lessThan">{{maxPressureErrorMsg}}
-        {{headerForm.controls.pressure.errors.lessThan}}
-        <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
-      <span class="d-block" *ngIf="headerForm.controls.pressure.errors.boilerTemp">Temperature of steam in boiler is too low for this
-        pressure value.</span>
-        <span class="d-block" *ngIf="headerForm.controls.pressure.errors.deaeratorPressure">
-          Value must be greater than Deaerator Pressure: {{headerForm.controls.pressure.errors.deaeratorPressure.val}} <span
-            [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
-    </span>
-    </span>
-    <span class="alert-warning pull-right small" *ngIf="warnings.headerPressure !== null">{{warnings.headerPressure}}
-      <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
-    </span>
+    
+    <div class="form-group">
+      <label >Temperature</label>
+      <div class="small text-center bold">{{saturatedPropertiesOutput?.saturatedTemperature | number:'1.0-2'}}
+        <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+      </div>
+    </div>
   </div>
 
   <div class="form-group">
