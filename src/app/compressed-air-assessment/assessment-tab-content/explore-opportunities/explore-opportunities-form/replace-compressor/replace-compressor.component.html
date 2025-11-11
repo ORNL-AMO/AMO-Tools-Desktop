@@ -93,7 +93,7 @@
                         {{compressorInventoryItem.compressorControls.controlType | controlType}}
                     </td>
                     <td>
-                        {{getPressureMinMax(compressorInventoryItem)}}
+                        {{compressorInventoryItem | compressorPressureMinMax:settings}}
                     </td>
                     <td>
                         {{compressorInventoryItem.nameplateData.motorPower}} hp
@@ -148,7 +148,7 @@
                         {{compressorInventoryItem.compressorControls.controlType | controlType}}
                     </td>
                     <td>
-                        {{getPressureMinMax(compressorInventoryItem)}}
+                        {{compressorInventoryItem | compressorPressureMinMax:settings}}
                     </td>
                     <td>
                         {{compressorInventoryItem.nameplateData.motorPower}} hp

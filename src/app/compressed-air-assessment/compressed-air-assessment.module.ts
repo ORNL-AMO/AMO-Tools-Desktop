@@ -160,6 +160,7 @@ import { AssessmentProfileSummaryTableComponent } from './assessment-tab-content
 import { AssessmentProfileSummaryGraphsComponent } from './assessment-tab-content/assessment-profile-summary-graphs/assessment-profile-summary-graphs.component';
 import { ModificationListModalComponent } from './assessment-tab-content/modification-list-modal/modification-list-modal.component';
 import { AddModificationModalComponent } from './assessment-tab-content/add-modification-modal/add-modification-modal.component';
+import { CompressorPressureMinMaxPipe } from './shared-compressor-pipes/compressor-pressure-min-max.pipe';
 
 
 @NgModule({
@@ -261,7 +262,8 @@ import { AddModificationModalComponent } from './assessment-tab-content/add-modi
     CaDisableNextButtonPipe,
     IntegrateCompressedAirInventoryComponent,
     AssessmentProfileSummaryTableComponent,
-    AssessmentProfileSummaryGraphsComponent
+    AssessmentProfileSummaryGraphsComponent,
+    CompressorPressureMinMaxPipe
   ],
   imports: [
     CommonModule,

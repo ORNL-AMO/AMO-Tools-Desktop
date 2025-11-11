@@ -133,15 +133,4 @@ export class ReplaceCompressorComponent {
     // });
     this.save(false);
   }
-
-  //TODO: Should be a pipe
-  getPressureMinMax(compressor: CompressorInventoryItem): string {
-    let minMax: { min: number, max: number } = this.performancePointsFormService.getCompressorPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
-    let unit: string = ' psig';
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      unit = ' barg';
-    }
-
-    return minMax.min + ' - ' + minMax.max + unit;
-  }
 }

@@ -155,16 +155,6 @@ export class InventoryTableComponent implements OnInit {
     this.compressedAirAssessmentService.modalOpen.next(false);
   }
 
-  getPressureMinMax(compressor: CompressorInventoryItem): string {
-    let minMax: { min: number, max: number } = this.performancePointsFormService.getCompressorPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
-    let unit: string = ' psig';
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      unit = ' barg';
-    }
-
-    return minMax.min + ' - ' + minMax.max + unit;
-  }
-
   createCopy(compressor: CompressorInventoryItem) {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorCpy: CompressorInventoryItem = JSON.parse(JSON.stringify(compressor));

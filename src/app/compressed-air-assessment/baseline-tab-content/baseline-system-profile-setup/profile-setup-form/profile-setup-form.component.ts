@@ -4,11 +4,11 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
-import { PerformancePointsFormService } from '../../inventory-setup/inventory/performance-points/performance-points-form.service';
 import { SystemProfileService } from '../system-profile.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { CompressedAirAssessmentValidation } from '../../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 import { CompressedAirAssessmentValidationService } from '../../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
+import { getPressureMinMax } from '../../../calculations/caCalculationHelpers';
 
 @Component({
   selector: 'app-profile-setup-form',
@@ -36,7 +36,6 @@ export class ProfileSetupFormComponent implements OnInit {
 
   validationStatusSub: Subscription;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private performancePointsFormService: PerformancePointsFormService,
     private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService,
     private router: Router) { }
 
@@ -124,7 +123,7 @@ export class ProfileSetupFormComponent implements OnInit {
   }
 
   setPressureMinAndMax(inventoryItems: Array<CompressorInventoryItem>) {
-    let compressorMinMax: { min: number, max: number } = this.performancePointsFormService.getPressureMinMax(inventoryItems);
+    let compressorMinMax: { min: number, max: number } = getPressureMinMax(inventoryItems);
     this.pressureMin = compressorMinMax.min;
     this.pressureMax = compressorMinMax.max;
   }

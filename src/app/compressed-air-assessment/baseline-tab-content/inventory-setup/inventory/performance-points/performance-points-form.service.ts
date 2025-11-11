@@ -309,46 +309,6 @@ export class PerformancePointsFormService {
     }
     return false;
   }
-
-  getCompressorPressureMinMax(controlType: number, performancePoints: PerformancePoints): { min: number, max: number } {
-    let min: number = performancePoints.fullLoad.dischargePressure || 0;
-    let max: number = 0;
-
-    if (controlType == 2 || controlType == 3 || controlType == 8 || controlType == 10) {
-      max = performancePoints.unloadPoint.dischargePressure;
-    } else if (controlType == 1) {
-      max = performancePoints.noLoad.dischargePressure;
-    } else if (controlType == 6 || controlType == 4 || controlType == 5) {
-      max = performancePoints.maxFullFlow.dischargePressure;
-    } else if (controlType == 7 || controlType == 9) {
-      max = performancePoints.blowoff.dischargePressure;
-    } else if (controlType == 11) {
-      max = performancePoints.turndown.dischargePressure;
-    }
-    return { min: min, max: max };
-  }
-
-  getPressureMinMax(inventoryItems: Array<CompressorInventoryItem>): { min: number, max: number } {
-    let min: number;
-    let max: number;
-    inventoryItems.forEach(compressor => {
-      let minMax: { min: number, max: number } = this.getCompressorPressureMinMax(compressor.compressorControls.controlType, compressor.performancePoints);
-      if (min == undefined || minMax.min < min) {
-        min = minMax.min;
-      }
-      if (max == undefined || minMax.max > max) {
-        max = minMax.max;
-      }
-    });
-    return {
-      min: min,
-      max: max
-    }
-  }
-
-
-
-
 }
 
 
