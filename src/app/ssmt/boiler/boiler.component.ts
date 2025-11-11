@@ -108,9 +108,9 @@ export class BoilerComponent implements OnInit {
 
   initForm() {
     if (this.boilerInput) {
-      this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
+      this.boilerForm = this.boilerService.initFormFromBoilerInput(this.boilerInput, this.settings);
     } else {
-      this.boilerForm = this.boilerService.initForm(this.settings);
+      this.boilerForm = this.boilerService.initEmptyForm(this.settings);
     }
     this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
     this.setPressureForms(this.boilerInput);
@@ -196,7 +196,7 @@ export class BoilerComponent implements OnInit {
 
   setPreheatMakeupWater() {
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
-    this.boilerForm = this.boilerService.initFormFromObj(tmpBoiler, this.settings);
+    this.boilerForm = this.boilerService.initFormFromBoilerInput(tmpBoiler, this.settings);
     this.save();
   }
 
