@@ -288,6 +288,27 @@ export class HeaderService {
     return isHeaderValid;
   }
 
+  // * This error may not present now that we have greaterThan validation on the boiler pressure/temperature controls
+  getBoilerTempErrorValue(boilerInput: BoilerInput, headerInput: HeaderInput, settings: Settings): number {
+    if (headerInput.highPressureHeader) {
+      const highPressureHeaderForm = this.getHighestPressureHeaderFormFromObj(headerInput.highPressureHeader, settings, boilerInput, undefined);
+      return highPressureHeaderForm.controls.pressure.errors?.boilerTemp?.val;
+    }
+    return undefined;
+  }
+
+
+  getHeaderLowPressureMinErrorValue(boilerInput: BoilerInput, headerInput: HeaderInput, settings: Settings): number {
+    if (headerInput.numberOfHeaders == 1 && headerInput.highPressureHeader) {
+      const form = this.getHighestPressureHeaderFormFromObj(headerInput.highPressureHeader, settings, boilerInput, boilerInput.deaeratorPressure);
+      return form.controls.pressure.errors?.min?.val;
+    } else if (headerInput.lowPressureHeader && headerInput.numberOfHeaders > 1) {
+      const form = this.getHeaderFormFromObj(headerInput.lowPressureHeader, settings, boilerInput.deaeratorPressure, undefined);
+      return form.controls.pressure.errors?.min?.val;
+    }
+    return undefined;
+  }
+
   deaeratorPressureValidator(deaeratorPressure: number, settings: Settings): ValidatorFn {
     return (valueControl: AbstractControl): { [key: string]: { val: number } } => {
       if (valueControl.value !== '' && valueControl.value !== null) {

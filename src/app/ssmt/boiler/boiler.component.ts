@@ -58,12 +58,13 @@ export class BoilerComponent implements OnInit {
   options: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
   showModal: boolean;
   idString: string = 'baseline_';
-  highPressureHeaderForm: UntypedFormGroup;
-  lowPressureHeaderForm: UntypedFormGroup;
 
   SteamQuality = SteamQuality;
   SteamPressureOrTemp = SteamPressureOrTemp;
   saturatedPropertiesOutput$: Observable<SaturatedPropertiesOutput>;
+
+  boilerTempValidationErrorValue: number;
+  headerLowPressureValidationErrorValue: number;
   
   constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService, 
@@ -110,8 +111,8 @@ export class BoilerComponent implements OnInit {
     } else {
       this.boilerForm = this.boilerService.initEmptyForm(this.settings);
     }
+    this.setHeaderValidationErrors(this.boilerForm.getRawValue());
     this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
-    this.setPressureForms(this.ssmt.boilerInput);
   }
 
   updateSteamMeasurementField(): void {
@@ -126,7 +127,6 @@ export class BoilerComponent implements OnInit {
     this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings);
   }
 
-
   setFuelTypes() {
     if (this.boilerForm.controls.fuelType.value === 0) {
       this.options = this.solidLiquidMaterialDbService.getAllMaterials();
@@ -136,32 +136,16 @@ export class BoilerComponent implements OnInit {
   }
 
   enableForm() {
-    this.boilerForm.controls.fuelType.enable();
-    this.boilerForm.controls.fuel.enable();
-    this.boilerForm.controls.blowdownFlashed.enable();
-    this.boilerForm.controls.preheatMakeupWater.enable();
+    this.boilerForm.enable();
   }
 
   disableForm() {
-    this.boilerForm.controls.fuelType.disable();
-    this.boilerForm.controls.fuel.disable();
-    this.boilerForm.controls.blowdownFlashed.disable();
-    this.boilerForm.controls.preheatMakeupWater.disable();
+    this.boilerForm.disable();
   }
 
-  // todo - new issue after 7661, get these header forms out of the class/template and read header validation returned from a service call instead
-  setPressureForms(boilerInput: BoilerInput) {
-    if (boilerInput) {
-      if (this.ssmt.headerInput.highPressureHeader) {
-        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.headerInput.highPressureHeader, this.settings, boilerInput, undefined);
-      }
-
-      if (this.ssmt.headerInput.numberOfHeaders == 1 && this.ssmt.headerInput.highPressureHeader) {
-        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.headerInput.highPressureHeader, this.settings, this.ssmt.boilerInput, boilerInput.deaeratorPressure);
-      } else if (this.ssmt.headerInput.lowPressureHeader && this.ssmt.headerInput.numberOfHeaders > 1) {
-        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.ssmt.headerInput.lowPressureHeader, this.settings, boilerInput.deaeratorPressure, undefined);
-      }
-    }
+  setHeaderValidationErrors(boilerInput: BoilerInput) {
+      this.boilerTempValidationErrorValue = this.headerService.getBoilerTempErrorValue(boilerInput, this.ssmt.headerInput, this.settings);
+      this.headerLowPressureValidationErrorValue = this.headerService.getHeaderLowPressureMinErrorValue(boilerInput, this.ssmt.headerInput, this.settings);
   }
 
   updateSaturatedProperties() {
@@ -172,7 +156,7 @@ export class BoilerComponent implements OnInit {
   save() {
     this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
     const boiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
-    this.setPressureForms(boiler);
+    this.setHeaderValidationErrors(boiler);
     this.emitSave.emit(boiler);
   }
 

@@ -16,7 +16,7 @@
         </label>
         <div class="input-group">
           <input name="combustionEfficiency" type="number" step="1" class="form-control"
-            id="{{idString+'combustionEfficiency'}}" (input)="save()" [readonly]="!selected"
+            id="{{idString+'combustionEfficiency'}}" (input)="save()" 
             formControlName="combustionEfficiency" (focus)="focusField('combustionEfficiency')"
             [ngClass]="{'indicate-different': isCombustionEfficiencyDifferent()}">
           <span class="units input-group-addon">%</span>
@@ -37,7 +37,7 @@
         </label>
         <div class="input-group">
           <input name="blowdownRate" type="number" step="1" class="form-control" id="{{idString+'blowdownRate'}}"
-            (input)="save()" [readonly]="!selected" formControlName="blowdownRate" (focus)="focusField('blowdownRate')"
+            (input)="save()"  formControlName="blowdownRate" (focus)="focusField('blowdownRate')"
             [ngClass]="{'indicate-different': isBlowdownRateDifferent()}">
           <span class="units input-group-addon">%</span>
         </div>
@@ -80,7 +80,7 @@
         <label for="{{idString+'approachTemperature'}}">Approach Temperature</label>
         <div class="input-group">
           <input name="approachTemperature" type="number" step="any" class="form-control"
-            id="{{idString+'approachTemperature'}}" (input)="save()" [readonly]="!selected"
+            id="{{idString+'approachTemperature'}}" (input)="save()" 
             formControlName="approachTemperature" (focus)="focusField('approachTemperature')"
             [ngClass]="{'indicate-different': isApproachTemperatureDifferent()}">
           <span class="units input-group-addon"
@@ -124,7 +124,7 @@
         <label for="{{idString+'saturatedPressure'}}">Steam Pressure</label>
         <div class="input-group">
           <input name="saturatedPressure" type="number" step="any" class="form-control" id="{{idString+'saturatedPressure'}}"
-            (input)="updateSaturatedProperties()" [readonly]="!selected" formControlName="saturatedPressure"
+            (input)="updateSaturatedProperties()"  formControlName="saturatedPressure"
             [ngClass]="{'indicate-different': isSteamPressureDifferent()}"
             (focus)="focusField('saturatedPressure')">
           <span class="units input-group-addon" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
@@ -152,7 +152,7 @@
           <label for="{{idString+'steamTemperature'}}">Steam Temperature</label>
           <div class="input-group">
             <input name="steamTemperature" type="number" step="any" class="form-control" id="{{idString+'steamTemperature'}}"
-              (input)="updateSaturatedProperties()" [readonly]="!selected" formControlName="steamTemperature"
+              (input)="updateSaturatedProperties()"  formControlName="steamTemperature"
               [ngClass]="{'indicate-different': isSteamTemperatureDifferent()}"
               (focus)="focusField('steamTemperature')">
             <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
@@ -169,13 +169,11 @@
             </span>
           </span>
         
-          @if (highPressureHeaderForm?.controls?.pressure?.invalid &&
-          highPressureHeaderForm?.controls?.pressure?.errors?.boilerTemp) {
-          <span class="alert-warning pull-right small"
-            *ngIf="highPressureHeaderForm?.controls?.pressure?.invalid && highPressureHeaderForm?.controls?.pressure?.errors?.boilerTemp">
+          @if (boilerTempValidationErrorValue) {
+          <span class="alert-warning pull-right small">
             Temperature must be greater than the
             saturation temperature at the highest pressure header.
-            ({{highPressureHeaderForm.controls.pressure.errors.boilerTemp.val | number:'1.0-1'}}
+            ({{boilerTempValidationErrorValue | number:'1.0-1'}}
             <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>)
           </span>
           }
@@ -204,7 +202,7 @@
         <label for="{{idString+'deaeratorVentRate'}}">Deaerator Vent Rate</label>
         <div class="input-group">
           <input name="deaeratorVentRate" type="number" step="0.1" class="form-control"
-            id="{{idString+'deaeratorVentRate'}}" (input)="save()" [readonly]="!selected"
+            id="{{idString+'deaeratorVentRate'}}" (input)="save()" 
             formControlName="deaeratorVentRate" (focus)="focusField('deaeratorVentRate')"
             [ngClass]="{'indicate-different': isDeaeratorVentRateDifferent()}">
           <span class="units input-group-addon">%</span>
@@ -223,7 +221,7 @@
         <label for="{{idString+'deaeratorPressure'}}">Deaerator Pressure</label>
         <div class="input-group">
           <input name="deaeratorPressure" type="number" step="1" class="form-control"
-            id="{{idString+'deaeratorPressure'}}" (input)="save()" [readonly]="!selected"
+            id="{{idString+'deaeratorPressure'}}" (input)="save()" 
             formControlName="deaeratorPressure" (focus)="focusField('deaeratorPressure')"
             [ngClass]="{'indicate-different': isDeaeratorPressureDifferent()}">
           <span class="units input-group-addon" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
@@ -238,11 +236,12 @@
             {{boilerForm.controls.deaeratorPressure.errors.min.min}} <span
               [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
         </span>
-        <span class="alert-warning pull-right small"
-          *ngIf="lowPressureHeaderForm && lowPressureHeaderForm.controls.pressure.invalid && lowPressureHeaderForm.controls.pressure.errors.min">
-          <span *ngIf="lowPressureHeaderForm.controls.pressure.errors.min">Lowest pressure header can't be less than
-            dearator pressure.</span>
-        </span>
+        @if (headerLowPressureValidationErrorValue) {
+          <span class="alert-warning pull-right small">
+            <span>Lowest pressure header can't be less than
+              deaerator pressure.</span>
+            </span>
+          }
       </div>
     </form>
   </div>
