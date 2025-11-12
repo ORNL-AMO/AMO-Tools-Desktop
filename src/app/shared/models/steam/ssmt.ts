@@ -153,6 +153,12 @@ export interface BoilerInput {
     stackLossInput?: StackLossInput
 }
 
+export interface SteamPropertiesValidationRanges {
+    minPressure: number;
+    maxPressure: number;
+    minQuantityValue: number;
+    maxQuantityValue: number;
+}
 
 export interface HeaderInput {
     numberOfHeaders: number;

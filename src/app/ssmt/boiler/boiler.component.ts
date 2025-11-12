@@ -83,8 +83,6 @@ export class BoilerComponent implements OnInit {
     if (this.selected === false) {
       this.disableForm();
     }
-    // todo we shouldn't need to call this on init, validation is already being (or should be) performed on initForm --> service call
-    // this.setPressureOrTemperatureValidators();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -107,6 +105,8 @@ export class BoilerComponent implements OnInit {
   }
 
   initForm() {
+    console.log('[Boiler] boilerInput steamTemperature', this.boilerInput.steamTemperature);
+    console.log('[Boiler] boilerInput saturatedPressure', this.boilerInput.saturatedPressure);
     if (this.boilerInput) {
       this.boilerForm = this.boilerService.initFormFromBoilerInput(this.boilerInput, this.settings);
     } else {
@@ -116,36 +116,16 @@ export class BoilerComponent implements OnInit {
     this.setPressureForms(this.boilerInput);
   }
 
-  setPressureOrTemperatureValidators() {
-    if (this.steamQuality.value === SteamQuality.SUPERHEATED) {
-      this.boilerService.setSaturatedPressureValidators(this.saturatedPressure, this.settings);
-      this.boilerService.setSteamTemperatureValidators(this.steamTemperature, this.settings);
-    } else if (this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
-      this.boilerService.setSaturatedPressureValidators(this.saturatedPressure, this.settings);
-      this.steamTemperature.clearValidators();
-    } else if (this.pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE) {
-      this.boilerService.setSteamTemperatureValidators(this.steamTemperature, this.settings);
-      this.saturatedPressure.clearValidators();
-    }
-    this.saturatedPressure.updateValueAndValidity();
-    this.steamTemperature.updateValueAndValidity();
-  }
-
-    // todo this method should be a change handler that's triggered on a form control change. Bound in the component to (input), (change)
-  updateHiddenFieldValues(): void {
-    // * looking back at our earlier slack messages, I believe we only run the logic in this handler if the quality == saturated, 
-    // * because we'll have both values if it's super heated? you'll have to double check me on this
+  updateSteamMeasurementField(): void {
     if (this.steamQuality.value === SteamQuality.SATURATED) {
       if (this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
-        // todo use patchValue for these, not setValue
         this.saturatedPressure.patchValue(null);
       } else {
         this.steamTemperature.patchValue(null);
       }
     }
 
-    // * we set validation any time pressureOrTemp metric changes. Is that right?
-    this.setPressureOrTemperatureValidators();
+    this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings);
   }
 
 
@@ -175,7 +155,6 @@ export class BoilerComponent implements OnInit {
   setPressureForms(boilerInput: BoilerInput) {
     if (boilerInput) {
       if (this.headerInput.highPressureHeader) {
-        // * We need to do something here, not clear what yet
         this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, boilerInput, undefined);
       }
 
@@ -322,24 +301,6 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
     this.closeBoilerEfficiencyModal();
   }
-
-  // * original method
-  // private updateHiddenFieldValues(): void {
-  //   const showSaturatedPressure =
-  //     this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE ||
-  //     this.steamQuality.value === SteamQuality.SUPERHEATED;
-  //   if (!showSaturatedPressure) {
-  //     this.saturatedPressure.setValue(null);
-  //     // this.saturatedPressure.markAsPristine();
-  //   }
-
-  //   const showSteamTemperature =
-  //     this.pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE ||
-  //     this.steamQuality.value === SteamQuality.SUPERHEATED;
-  //   if (!showSteamTemperature) {
-  //     this.steamTemperature.setValue(null);
-  //     // this.steamTemperature.markAsPristine();
-  //   }
 
   changeField(str: string) {
     this.emitChangeField.emit(str);

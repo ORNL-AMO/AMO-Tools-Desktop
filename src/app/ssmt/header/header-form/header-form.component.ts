@@ -3,10 +3,8 @@ import { UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { HeaderService, HeaderRanges, HeaderWarnings} from '../header.service';
 import { SsmtService } from '../../ssmt.service';
-import { HeaderNotHighestPressure, HeaderWithHighestPressure, SSMT } from '../../../shared/models/steam/ssmt';
+import { BoilerInput, HeaderNotHighestPressure, HeaderWithHighestPressure, SSMT } from '../../../shared/models/steam/ssmt';
 import { CompareService } from '../../compare.service';
-import { BoilerWarnings } from '../../boiler/boiler.service';
-import { SaturatedPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 
 @Component({
     selector: 'app-header-form',
@@ -36,7 +34,7 @@ export class HeaderFormComponent implements OnInit {
   @Input()
   headerInput: HeaderNotHighestPressure | HeaderWithHighestPressure;
   @Input()
-  saturatedPropertiesOutput: SaturatedPropertiesOutput;
+  boilerInput: BoilerInput;
   @Input()
   ssmt: SSMT;
 

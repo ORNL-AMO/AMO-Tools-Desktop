@@ -3,7 +3,7 @@ import { SaturatedPropertiesInput, SteamPropertiesInput, BoilerInput, DeaeratorI
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 import { BoilerOutput, SaturatedPropertiesOutput, SteamPropertiesOutput, DeaeratorOutput, FlashTankOutput, HeaderOutput, HeatLossOutput, TurbineOutput, PrvOutput, HeatExchangerOutput, SSMTOutput, SSMTLosses } from '../../shared/models/steam/steam-outputs';
-import { SSMTInputs } from '../../shared/models/steam/ssmt';
+import { SSMTInputs, SteamPropertiesValidationRanges } from '../../shared/models/steam/ssmt';
 import { ConvertSteamService } from './convert-steam.service';
 import { SteamSuiteApiService } from '../../tools-suite-api/steam-suite-api.service';
 import { BehaviorSubject } from 'rxjs';
@@ -27,7 +27,16 @@ export class SteamService {
     this.steamModelerError = new BehaviorSubject<string>(undefined);
    }
 
-  test() {
+  getSteamPropertiesValidationRanges(quantityValue: number, settings: Settings): SteamPropertiesValidationRanges  {
+    let quantityRanges: { min: number, max: number } = this.getQuantityRange(settings, quantityValue);
+    let minPressure: number = Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3));
+    let maxPressure: number = Number(this.convertUnitsService.value(100).from('MPaa').to(settings.steamPressureMeasurement).toFixed(3));
+    return {
+      minQuantityValue: quantityRanges.min,
+      maxQuantityValue: quantityRanges.max,
+      minPressure: minPressure,
+      maxPressure: maxPressure
+    };
   }
 
   getQuantityRange(settings: Settings, thermodynamicQuantity: number): { min: number, max: number } {

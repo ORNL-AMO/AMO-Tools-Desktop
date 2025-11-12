@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
-import { BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
+import { BoilerInput, SSMT, SteamPropertiesValidationRanges } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
 import { SteamService } from '../../calculator/steam/steam.service';
-import { SteamPressureOrTemp, SteamQuality } from '../../shared/models/steam/steam-inputs';
+import { SaturatedPropertiesInput, SteamPressureOrTemp, SteamQuality } from '../../shared/models/steam/steam-inputs';
+import { GreaterThanValidator } from '../../shared/validators/greater-than';
+import { SaturatedPropertiesOutput } from '../../shared/models/steam/steam-outputs';
+import { roundVal } from '../../shared/helperFunctions';
 
 
 @Injectable()
@@ -64,7 +67,7 @@ export class BoilerService {
       'feedwaterConductivity': [obj.feedwaterConductivity]
     });
 
-    this.setSteamTemperatureValidators(form.controls.steamTemperature, settings);
+    this.setPressureAndTemperatureValidators(form, settings);
 
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
@@ -72,20 +75,57 @@ export class BoilerService {
     return form;
   }
 
-  // todo if these become the same as Sat Properties calculator, move to that service
-  setSteamTemperatureValidators(steamTemperatureControl: AbstractControl, settings: Settings) {
-    const validRanges: BoilerRanges = this.getRanges(settings);
-    steamTemperatureControl.setValidators([Validators.required, Validators.min(validRanges.steamTemperatureMin), Validators.max(validRanges.steamTemperatureMax)]);
+  setPressureAndTemperatureValidators(form: UntypedFormGroup, settings: Settings) {
+    const steamQualityControl = form.controls.steamQuality;
+    const pressureOrTemperatureControl = form.controls.pressureOrTemperature;
+    const steamTemperatureControl = form.controls.steamTemperature;
+    const steamPressureControl = form.controls.saturatedPressure;
+
+    if (steamQualityControl.value === SteamQuality.SUPERHEATED) {
+      this.setSaturatedPressureValidators(form, settings);
+      this.setSteamTemperatureValidators(steamTemperatureControl, settings);
+    } else if (steamQualityControl.value === SteamQuality.SATURATED) {
+       const saturatedPropertiesInput: SaturatedPropertiesInput = {
+        saturatedPressure: form.controls.saturatedPressure.value,
+        saturatedTemperature: form.controls.steamQuality.value
+      }
+      const saturatedPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(saturatedPropertiesInput, form.controls.pressureOrTemperature.value, settings);
+      console.log('[Validation] satProps inputs', saturatedPropertiesInput);
+      if (pressureOrTemperatureControl.value === SteamPressureOrTemp.PRESSURE) {
+        this.setSaturatedPressureValidators(form, settings, saturatedPropertiesOutput);
+        steamTemperatureControl.clearValidators();
+      } else if (pressureOrTemperatureControl.value === SteamPressureOrTemp.TEMPERATURE) {
+        this.setSteamTemperatureValidators(steamTemperatureControl, settings, saturatedPropertiesOutput);
+        steamPressureControl.clearValidators();
+      }
+    }
+      
+    steamPressureControl.updateValueAndValidity();
     steamTemperatureControl.updateValueAndValidity();
   }
 
-  setSaturatedPressureValidators(saturatedPressureControl: AbstractControl, settings: Settings) {
-    // todo this is temporary
-    // todo we need to find out if this method should call steamService.getRanges() for original sat properties validation for the pressure min/max 
-    // todo OR if we need SSMT specific validation for it. using deaerator below as a default
+  setSteamTemperatureValidators(steamTemperatureControl: AbstractControl, settings: Settings, saturatedPropertiesOutput?: SaturatedPropertiesOutput) {
     const validRanges: BoilerRanges = this.getRanges(settings);
-    saturatedPressureControl.setValidators([Validators.required, Validators.min(validRanges.deaeratorPressureMin), Validators.max(validRanges.deaeratorPressureMax)]);
-    saturatedPressureControl.updateValueAndValidity();
+    if (saturatedPropertiesOutput) {
+      steamTemperatureControl.setValidators([Validators.required, Validators.min(roundVal(saturatedPropertiesOutput.saturatedTemperature, 4)), Validators.max(validRanges.steamTemperatureMax)]);
+    } else {
+      steamTemperatureControl.setValidators([Validators.required, Validators.min(validRanges.steamTemperatureMin), Validators.max(validRanges.steamTemperatureMax)]);
+    }
+
+    steamTemperatureControl.updateValueAndValidity();
+  }
+
+  setSaturatedPressureValidators(form: UntypedFormGroup, settings: Settings, saturatedPropertiesOutput?: SaturatedPropertiesOutput) {
+    // todo what is 0
+    const validRanges: SteamPropertiesValidationRanges = this.steamService.getSteamPropertiesValidationRanges(0, settings);
+    if (saturatedPropertiesOutput) {
+      console.log('[Validation] has satProps validate greaterThan temp:', saturatedPropertiesOutput.saturatedTemperature);
+      form.controls.saturatedPressure.setValidators([Validators.required, GreaterThanValidator.greaterThan(roundVal(saturatedPropertiesOutput.saturatedTemperature, 2)), Validators.max(validRanges.maxPressure)]);
+    } else {
+      form.controls.saturatedPressure.setValidators([Validators.required, Validators.min(validRanges.minPressure), Validators.max(validRanges.maxPressure)]);
+    }
+
+    form.controls.saturatedPressure.updateValueAndValidity();
   }
 
   initObjFromForm(form: UntypedFormGroup): BoilerInput {
@@ -131,12 +171,10 @@ export class BoilerService {
 
   isBoilerValid(boilerInput: BoilerInput, settings: Settings): boolean {
     if (boilerInput) {
+      console.log('[TAB isvalid] boilerInput.steamTemperature', boilerInput.steamTemperature);
+      console.log('[TAB isvalid] boilerInput.saturatedPressure', boilerInput.saturatedPressure);
       let form: UntypedFormGroup = this.initFormFromBoilerInput(boilerInput, settings);
-      if (form.status === 'VALID') {
-        return true;
-      } else {
-        return false;
-      }
+      return form.valid;
     } else {
       return false;
     }

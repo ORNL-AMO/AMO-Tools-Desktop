@@ -18,8 +18,7 @@ import { SteamService } from '../calculator/steam/steam.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SnackbarService } from '../shared/snackbar-notification/snackbar.service';
 import { SaturatedPropertiesOutput } from '../shared/models/steam/steam-outputs';
-import { SaturatedPropertiesInput } from '../shared/models/steam/steam-inputs';
-import { UntypedFormGroup } from '@angular/forms';
+import { SaturatedPropertiesInput, SteamPressureOrTemp, SteamQuality } from '../shared/models/steam/steam-inputs';
 
 @Component({
     selector: 'app-ssmt',
@@ -136,12 +135,12 @@ export class SsmtComponent implements OnInit {
         this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
         this.getSettings();
         this.initSankeyList();
+        this.setBoilerQualityRelatedFields(this._ssmt.boilerInput);
         let tmpTab = this.assessmentService.getStartingTab();
         if (tmpTab) {
           this.ssmtService.mainTab.next(tmpTab);
         }
       }
-      // this.calculate();
     });
     this.subscribeTabs();
 
@@ -326,13 +325,42 @@ export class SsmtComponent implements OnInit {
 
   saveBoiler(boilerInput: BoilerInput) {
     this._ssmt.boilerInput = boilerInput;
-    let input: SaturatedPropertiesInput = {
-      saturatedTemperature: boilerInput.steamTemperature,
-      saturatedPressure: boilerInput.saturatedPressure,
-    };
-    this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, boilerInput.pressureOrTemperature, this.settings);
-
+    this.setBoilerQualityRelatedFields(boilerInput);
     this.save();
+  }
+
+ /**
+ * Update related fields on HeaderInput. 
+ * Header pressure should be set from either the user entered boiler pressure, or the output pressure from saturated properties using boiler fields as input. 
+ * boiler temperature will be shown as a result on the highest pressure header form
+ * @param boilerInput BoilerInput - current boiler form state
+ */
+  setBoilerQualityRelatedFields(boilerInput: BoilerInput) {
+    if (boilerInput.steamQuality === SteamQuality.SATURATED) {
+      const input: SaturatedPropertiesInput = {
+        saturatedTemperature: boilerInput.steamTemperature,
+        saturatedPressure: boilerInput.saturatedPressure,
+      };
+      console.log('[SSMT] satProps inputs:', input);
+      
+      this.saturatedPropertiesOutput = this.steamService.saturatedProperties(input, boilerInput.pressureOrTemperature, this.settings);
+      console.log('[SSMT] has satProps validate greaterThan temp:', this.saturatedPropertiesOutput);
+
+      if (boilerInput.pressureOrTemperature === SteamPressureOrTemp.PRESSURE) {
+        this._ssmt.boilerInput.steamTemperature = this.saturatedPropertiesOutput.saturatedTemperature;
+      } else {
+        this._ssmt.boilerInput.saturatedPressure = this.saturatedPropertiesOutput.saturatedPressure;
+      }
+
+      if (this._ssmt.headerInput && this._ssmt.headerInput.highPressureHeader) {
+        this._ssmt.headerInput.highPressureHeader.pressure = this.saturatedPropertiesOutput.saturatedPressure;
+      }
+    } else {
+      this.saturatedPropertiesOutput = undefined;
+      if (this._ssmt.headerInput && this._ssmt.headerInput.highPressureHeader) {
+        this._ssmt.headerInput.highPressureHeader.pressure = boilerInput.saturatedPressure;
+      }
+    }
   }
 
   saveHeaderData(headerInput: HeaderInput) {

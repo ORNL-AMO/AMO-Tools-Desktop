@@ -4,7 +4,6 @@ import { HeaderInput, HeaderWithHighestPressure, HeaderNotHighestPressure, Boile
 import { Settings } from '../../shared/models/settings';
 import { HeaderService } from './header.service';
 import { SsmtService } from '../ssmt.service';
-import { SaturatedPropertiesOutput } from '../../shared/models/steam/steam-outputs';
 
 @Component({
     selector: 'app-header',
@@ -29,8 +28,6 @@ export class HeaderComponent implements OnInit {
   modificationIndex: number;
   @Input()
   ssmt: SSMT;
-  @Input()
-  saturatedPropertiesOutput: SaturatedPropertiesOutput;
 
   headerInput: HeaderInput;
   boilerInput: BoilerInput;
@@ -184,7 +181,7 @@ export class HeaderComponent implements OnInit {
       } else if (this.headerInput.numberOfHeaders != 3 && this.headerInput.lowPressureHeader && this.headerInput.lowPressureHeader.pressure) {
         highPressureMin = this.headerInput.lowPressureHeader.pressure;
       }
-      this.headerService.updateHighestPressureHeaderFormValidation(this.highPressureForm, this.settings, this.boilerInput, highPressureMin);
+      this.headerService.updateHighestPressureHeaderFormValidation(this.highPressureForm, this.settings, highPressureMin);
     }
   }
 }
