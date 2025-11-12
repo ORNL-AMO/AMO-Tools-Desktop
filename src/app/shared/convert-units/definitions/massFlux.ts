@@ -1,13 +1,5 @@
 export const massFlux = {
     metric: {
-        'kg/m2h': {
-            name: {
-                singular: 'Kilogram per meters squared-hour'
-                , plural: 'Kilograms per meters squared-hour',
-                display: '(kg/m&#x00B2h)'
-            }
-            , to_anchor: 24
-        },
         'kg/m2d': {
             name: {
                 singular: 'Kilogram per meters squared-day'
@@ -15,6 +7,14 @@ export const massFlux = {
                 display: '(kg/m&#x00B2d)'
             }
             , to_anchor: 1
+        },
+        'kg/m2h': {
+            name: {
+                singular: 'Kilogram per meters squared-hour'
+                , plural: 'Kilograms per meters squared-hour',
+                display: '(kg/m&#x00B2h)'
+            }
+            , to_anchor: 24
         }
     },
 

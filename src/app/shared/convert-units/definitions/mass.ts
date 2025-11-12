@@ -1,6 +1,14 @@
 export const mass = {
     metric: {
-        mcg: {
+        u: {
+            name: {
+                singular: 'Atomic Mass Unite'
+                , plural: 'Atomic Mass Unites',
+                display: '(u)'
+            }
+            , to_anchor: 0.000000000166054 / 100000000000000
+        }
+        , mcg: {
             name: {
                 singular: 'Microgram'
                 , plural: 'Micrograms',
@@ -31,23 +39,14 @@ export const mass = {
                 display: '(kg)'
             }
             , to_anchor: 1000
-        },
-        tonne: {
+        }
+        , tonne: {
             name: {
                 singular: 'Tonne'
                 , plural: 'Tonne',
                 display: '(t)'
             }
             , to_anchor: 1000000
-        }
-
-        , u: {
-            name: {
-                singular: 'Atomic Mass Unite'
-                , plural: 'Atomic Mass Unites',
-                display: '(u)'
-            }
-            , to_anchor: 0.000000000166054 / 100000000000000
         }
         , sl: {
             name: {
@@ -75,15 +74,16 @@ export const mass = {
                 display: '(lb)'
             }
             , to_anchor: 1
-        },
-        klb: {
+        }
+        , klb: {
             name: {
                 singular: 'Thousand pound'
                 , plural: 'Thousand pounds',
                 display: '(klb)'
             }
             , to_anchor: 1000
-        }, ton: {
+        }
+        , ton: {
             name: {
                 singular: 'Imperial Ton'
                 , plural: 'Imperial Ton',

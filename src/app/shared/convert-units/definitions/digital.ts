@@ -94,5 +94,4 @@ export const digital = {
             , ratio: 8
         }
     }
-
 };

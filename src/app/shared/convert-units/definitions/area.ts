@@ -13,7 +13,6 @@ export const area = {
                 singular: 'Centimeter'
                 , plural: 'Centimeters',
                  display:  '(cm&#x00B2;)'
-
             }
             , to_anchor: 1 / 10000
         }
@@ -51,14 +50,6 @@ export const area = {
             }
             , to_anchor: 1 / 144
         }
-        , yd2: {
-            name: {
-                singular: 'Square Yard'
-                , plural: 'Square Yards',
-                 display:  '(yd&#x00B2)'
-            }
-            , to_anchor: 9
-        }
         , ft2: {
             name: {
                 singular: 'Square Foot'
@@ -66,6 +57,14 @@ export const area = {
                  display:  '(ft&#x00B2)'
             }
             , to_anchor: 1
+        }
+        , yd2: {
+            name: {
+                singular: 'Square Yard'
+                , plural: 'Square Yards',
+                 display:  '(yd&#x00B2)'
+            }
+            , to_anchor: 9
         }
         , ac: {
             name: {
