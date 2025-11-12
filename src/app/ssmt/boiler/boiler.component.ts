@@ -12,6 +12,8 @@ import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 import { SteamPressureOrTemp, SteamQuality } from '../../shared/models/steam/steam-inputs';
+import { Observable } from 'rxjs';
+
 
 @Component({
     selector: 'app-boiler',
@@ -32,8 +34,6 @@ export class BoilerComponent implements OnInit {
   modificationIndex: number;
   @Input()
   ssmt: SSMT;
-  @Input()
-  saturatedPropertiesOutput: SaturatedPropertiesOutput;
 
   @Output()
   emitCalculate = new EventEmitter<UntypedFormGroup>();
@@ -49,8 +49,6 @@ export class BoilerComponent implements OnInit {
     this.setBlowdownRateModalWidth();
   }
   
-  headerInput: HeaderInput;
-  boilerInput: BoilerInput;
   warnings: BoilerWarnings;
   formWidth: number;
   showBlowdownRateModal: boolean = false;
@@ -65,6 +63,7 @@ export class BoilerComponent implements OnInit {
 
   SteamQuality = SteamQuality;
   SteamPressureOrTemp = SteamPressureOrTemp;
+  saturatedPropertiesOutput$: Observable<SaturatedPropertiesOutput>;
   
   constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService, 
@@ -73,10 +72,11 @@ export class BoilerComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.boilerInput = this.ssmt.boilerInput;
-    this.headerInput = this.ssmt.headerInput;
-    if (!this.isBaseline) {
+    if (this.isBaseline) {
+      this.saturatedPropertiesOutput$ = this.boilerService.baselineSaturatedPropertiesOutput$;
+    } else {
       this.idString = 'modification_';
+      this.saturatedPropertiesOutput$ = this.boilerService.modificationSaturatedPropertiesOutput$;
     }
     this.initForm();
     this.setFuelTypes();
@@ -105,15 +105,13 @@ export class BoilerComponent implements OnInit {
   }
 
   initForm() {
-    console.log('[Boiler] boilerInput steamTemperature', this.boilerInput.steamTemperature);
-    console.log('[Boiler] boilerInput saturatedPressure', this.boilerInput.saturatedPressure);
-    if (this.boilerInput) {
-      this.boilerForm = this.boilerService.initFormFromBoilerInput(this.boilerInput, this.settings);
+    if (this.ssmt.boilerInput) {
+      this.boilerForm = this.boilerService.initFormFromBoilerInput(this.ssmt.boilerInput, this.settings);
     } else {
       this.boilerForm = this.boilerService.initEmptyForm(this.settings);
     }
     this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
-    this.setPressureForms(this.boilerInput);
+    this.setPressureForms(this.ssmt.boilerInput);
   }
 
   updateSteamMeasurementField(): void {
@@ -151,19 +149,24 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.preheatMakeupWater.disable();
   }
 
-  // todo for nbintertech - new issue after 7661, get these header forms out of the class/template and read header validation returned from a service call instead
+  // todo - new issue after 7661, get these header forms out of the class/template and read header validation returned from a service call instead
   setPressureForms(boilerInput: BoilerInput) {
     if (boilerInput) {
-      if (this.headerInput.highPressureHeader) {
-        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, boilerInput, undefined);
+      if (this.ssmt.headerInput.highPressureHeader) {
+        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.headerInput.highPressureHeader, this.settings, boilerInput, undefined);
       }
 
-      if (this.headerInput.numberOfHeaders == 1 && this.headerInput.highPressureHeader) {
-        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, this.boilerInput, boilerInput.deaeratorPressure);
-      } else if (this.headerInput.lowPressureHeader && this.headerInput.numberOfHeaders > 1) {
-        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.settings, boilerInput.deaeratorPressure, undefined);
+      if (this.ssmt.headerInput.numberOfHeaders == 1 && this.ssmt.headerInput.highPressureHeader) {
+        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.ssmt.headerInput.highPressureHeader, this.settings, this.ssmt.boilerInput, boilerInput.deaeratorPressure);
+      } else if (this.ssmt.headerInput.lowPressureHeader && this.ssmt.headerInput.numberOfHeaders > 1) {
+        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.ssmt.headerInput.lowPressureHeader, this.settings, boilerInput.deaeratorPressure, undefined);
       }
     }
+  }
+
+  updateSaturatedProperties() {
+    this.boilerService.updateFormSaturatedProperties(this.boilerForm, this.ssmt, this.settings, this.isBaseline);
+    this.save();
   }
 
   save() {
@@ -239,6 +242,13 @@ export class BoilerComponent implements OnInit {
   isSteamTemperatureDifferent() {
     if (this.canCompare()) {
       return this.compareService.isSteamTemperatureDifferent();
+    } else {
+      return false;
+    }
+  }
+  isSteamPressureDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSaturatedPressureDifferent();
     } else {
       return false;
     }

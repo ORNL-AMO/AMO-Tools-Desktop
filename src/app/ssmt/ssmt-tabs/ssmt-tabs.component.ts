@@ -155,8 +155,6 @@ export class SsmtTabsComponent implements OnInit {
   }
 
   checkBoilerStatus() {
-    console.log('[Tabs] boilerInput steamTemperature', this.ssmt.boilerInput.steamTemperature);
-    console.log('[Tabs] boilerInput saturatedPressure', this.ssmt.boilerInput.saturatedPressure);
     let boilerValid: boolean = this.boilerService.isBoilerValid(this.ssmt.boilerInput, this.settings);
     let operationsValid: boolean = this.operationsService.getForm(this.ssmt, this.settings).valid;
     if (!operationsValid) {

@@ -108,7 +108,6 @@
       </div>
 
       @if (steamQuality.value === SteamQuality.SATURATED) {
-        <!-- * we should just use a label for this, rather than left align the select and use it as a defacto label for the field. It's better usability, we have the space, and it without it, our expected style structure is bungled -->
         <div class="form-group">
           <label for="{{idString+'pressureOrTemperature'}}">Measurement Method</label>
           <select name="pressureOrTemperature" class="form-control" id="{{idString+'pressureOrTemperature'}}"
@@ -121,12 +120,12 @@
       }
 
       @if (steamQuality.value === SteamQuality.SUPERHEATED || (steamQuality.value === SteamQuality.SATURATED && pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE)) {
-
       <div class="form-group">
         <label for="{{idString+'saturatedPressure'}}">Steam Pressure</label>
         <div class="input-group">
           <input name="saturatedPressure" type="number" step="any" class="form-control" id="{{idString+'saturatedPressure'}}"
-            (input)="save()" [readonly]="!selected" formControlName="saturatedPressure"
+            (input)="updateSaturatedProperties()" [readonly]="!selected" formControlName="saturatedPressure"
+            [ngClass]="{'indicate-different': isSteamPressureDifferent()}"
             (focus)="focusField('saturatedPressure')">
           <span class="units input-group-addon" [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
         </div>
@@ -147,12 +146,14 @@
       </div>
       }
 
+      <!-- todo fields need to disable by select() -->
       @if (steamQuality.value === SteamQuality.SUPERHEATED || (steamQuality.value === SteamQuality.SATURATED && pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE)) {
         <div class="form-group">
           <label for="{{idString+'steamTemperature'}}">Steam Temperature</label>
           <div class="input-group">
             <input name="steamTemperature" type="number" step="any" class="form-control" id="{{idString+'steamTemperature'}}"
-              (input)="save()" [readonly]="!selected" formControlName="steamTemperature"
+              (input)="updateSaturatedProperties()" [readonly]="!selected" formControlName="steamTemperature"
+              [ngClass]="{'indicate-different': isSteamTemperatureDifferent()}"
               (focus)="focusField('steamTemperature')">
             <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
           </div>
@@ -181,21 +182,21 @@
         </div>
       }
 
-      @if (steamQuality.value === SteamQuality.SATURATED) {
+      @if (steamQuality.value === SteamQuality.SATURATED && saturatedPropertiesOutput$ | async; as saturatedPropertiesOutput) {
         <div class="form-group">
           <label for="saturatedPressure">Pressure</label>
           <div name="pressure" type="number" step="10" class="small text-center bold">
             {{saturatedPropertiesOutput?.saturatedPressure | number:'1.0-4'}}
-            <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
-          </div>
-          <div class="form-group">
-            <label>Temperature</label>
-            <div [ngClass]="{'indicate-different': isSteamTemperatureDifferent()}" class="small text-center bold">
-              {{saturatedPropertiesOutput?.saturatedTemperature | number:'1.0-2'}}
-              <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+              <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
+            </div>
+            <div class="form-group">
+              <label>Temperature</label>
+              <div [ngClass]="{'indicate-different': isSteamTemperatureDifferent()}" class="small text-center bold">
+                {{saturatedPropertiesOutput?.saturatedTemperature | number:'1.0-2'}}
+                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+              </div>
             </div>
           </div>
-        </div>
       }
 
 

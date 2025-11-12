@@ -11,10 +11,12 @@ import { AssessmentCo2SavingsService, Co2SavingsDifferent } from '../../../../sh
 import { OtherFuel, otherFuels } from '../../../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { CompareService } from '../../../compare.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid-material-db.service';
 import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
+import { SteamPressureOrTemp, SteamQuality } from '../../../../shared/models/steam/steam-inputs';
+import { SaturatedPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
 
 @Component({
     selector: 'app-boiler-form',
@@ -73,6 +75,10 @@ export class BoilerFormComponent implements OnInit {
     outputRate: number
   }>;
 
+  SteamQuality = SteamQuality;
+  SteamPressureOrTemp = SteamPressureOrTemp;
+  saturatedPropertiesOutput$: Observable<SaturatedPropertiesOutput>;
+
   constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, 
     private convertUnitsService: ConvertUnitsService,
     private compareService: CompareService,
@@ -82,6 +88,7 @@ export class BoilerFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.saturatedPropertiesOutput$ = this.boilerService.modificationSaturatedPropertiesOutput$;
     this.setCo2SavingsData();
     this.init();
   }
@@ -306,6 +313,11 @@ export class BoilerFormComponent implements OnInit {
       this.modificationForm.controls.deaeratorVentRate.patchValue(this.baselineForm.controls.deaeratorVentRate.value);
       this.save();
     }
+  }
+
+  updateSaturatedProperties() {
+    this.boilerService.updateFormSaturatedProperties(this.modificationForm, this.ssmt, this.settings, false);
+    this.save();
   }
 
   save() {
