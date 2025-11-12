@@ -1,14 +1,6 @@
 export const energy = {
   metric: {
-    Wh: {
-      name: {
-        singular: 'Watt-hour'
-        , plural: 'Watt-hours',
-        display: '(Wh)'
-      }
-      , to_anchor: 3600
-    }
-    , mWh: {
+    mWh: {
       name: {
         singular: 'Milliwatt-hour'
         , plural: 'Milliwatt-hours',
@@ -16,29 +8,13 @@ export const energy = {
       }
       , to_anchor: 3.6
     }
-    , kWh: {
+    , cal: {
       name: {
-        singular: 'Kilowatt-hour'
-        , plural: 'Kilowatt-hours',
-        display: '(kWh)'
+        singular: 'Calorie'
+        , plural: ' Calories',
+        display: '(cal)'
       }
-      , to_anchor: 3600000
-    }
-    , MWh: {
-      name: {
-        singular: 'Megawatt-hour'
-        , plural: 'Megawatt-hours',
-        display: '(MWh)'
-      }
-      , to_anchor: 3600000000
-    }
-    , GWh: {
-      name: {
-        singular: 'Gigawatt-hour'
-        , plural: 'Gigawatt-hours',
-        display: '(GWh)'
-      }
-      , to_anchor: 3600000000000
+      , to_anchor: 4.1868
     }
     , J: {
       name: {
@@ -48,38 +24,13 @@ export const energy = {
       }
       , to_anchor: 1
     }
-    , kJ: {
+    , Wh: {
       name: {
-        singular: 'Kilojoule'
-        , plural: 'Kilojoules',
-        display: '(kJ)'
+        singular: 'Watt-hour'
+        , plural: 'Watt-hours',
+        display: '(Wh)'
       }
-      , to_anchor: 1000
-    },
-    GJ: {
-      name: {
-        singular: 'Gigajoule'
-        , plural: 'Gigajoules',
-        display: '(GJ)'
-      }
-      , to_anchor: 1000000000
-    },
-    MJ: {
-      name: {
-        singular: 'Megajoule',
-        plural: 'Megajoules',
-        display: '(MJ)'
-      },
-      to_anchor: 1000000
-    }
-
-    , cal: {
-      name: {
-        singular: 'Calorie'
-        , plural: ' Calories',
-        display: '(cal)'
-      }
-      , to_anchor: 4.1868
+      , to_anchor: 3600
     }
     , kcal: {
       name: {
@@ -88,6 +39,54 @@ export const energy = {
         display: '(kcal)'
       }
       , to_anchor: 4184
+    }
+    , kJ: {
+      name: {
+        singular: 'Kilojoule'
+        , plural: 'Kilojoules',
+        display: '(kJ)'
+      }
+      , to_anchor: 1000
+    }
+    , kWh: {
+      name: {
+        singular: 'Kilowatt-hour'
+        , plural: 'Kilowatt-hours',
+        display: '(kWh)'
+      }
+      , to_anchor: 3600000
+    }
+    , MJ: {
+      name: {
+        singular: 'Megajoule',
+        plural: 'Megajoules',
+        display: '(MJ)'
+      },
+      to_anchor: 1000000
+    }
+    , MWh: {
+      name: {
+        singular: 'Megawatt-hour'
+        , plural: 'Megawatt-hours',
+        display: '(MWh)'
+      }
+      , to_anchor: 3600000000
+    }
+    , GJ: {
+      name: {
+        singular: 'Gigajoule'
+        , plural: 'Gigajoules',
+        display: '(GJ)'
+      }
+      , to_anchor: 1000000000
+    }
+    , GWh: {
+      name: {
+        singular: 'Gigawatt-hour'
+        , plural: 'Gigawatt-hours',
+        display: '(GWh)'
+      }
+      , to_anchor: 3600000000000
     }
     , kgce: {
       name: {
@@ -104,31 +103,31 @@ export const energy = {
         display: '(kgoe)'
       }
       , to_anchor: 41868000
-    },
-    TJ: {
+    }
+    , TJ: {
       name: {
         singular: 'Terajoule'
         , plural: 'Terajoules',
         display: '(TJ)'
       }
       , to_anchor: 1000000000000
-    },
-    PJ: {
+    }
+    , PJ: {
       name: {
         singular: 'Petajoule'
         , plural: 'Petajoules',
         display: '(PJ)'
       }
       , to_anchor: 1000000000000000
-    },
-    EJ: {
+    }
+    , EJ: {
       name: {
         singular: 'Exajoule'
         , plural: 'Exajoules',
         display: '(EJ)'
       }
       , to_anchor: 1000000000000000000
-    },
+    }
   },
   imperial: {
     Btu: {
@@ -146,8 +145,8 @@ export const energy = {
         display: '(MMBtu)'
       }
       , to_anchor: 1000000
-    },
-    BBtu: {
+    }
+    , BBtu: {
       name: {
         singular: 'Billion British Thermal Units'
         , plural: 'Billions British Thermal Units',

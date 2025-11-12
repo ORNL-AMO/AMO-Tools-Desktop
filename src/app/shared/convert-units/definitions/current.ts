@@ -1,20 +1,20 @@
 export const current = {
     current: {
-        A: {
-            name: {
-                singular: 'Ampere'
-                , plural: 'Amperes' ,
-                 display:  '(A)'
-            }
-            , to_anchor: 1
-        }
-        , mA: {
+        mA: {
             name: {
                 singular: 'Milliampere'
                 , plural: 'Milliamperes' ,
                  display:  '(mA)'
             }
             , to_anchor: .001
+        }
+        , A: {
+            name: {
+                singular: 'Ampere'
+                , plural: 'Amperes' ,
+                 display:  '(A)'
+            }
+            , to_anchor: 1
         }
         , kA: {
             name: {
@@ -23,7 +23,7 @@ export const current = {
                  display:  '(kA)'
             }
             , to_anchor: 1000
-        },
+        }
     },
     _anchors: {
         metric: {

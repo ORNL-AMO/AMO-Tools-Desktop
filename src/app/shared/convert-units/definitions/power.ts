@@ -1,6 +1,14 @@
 export const power = {
   metric: {
-    W: {
+    mW: {
+      name: {
+        singular: 'Milliwatt'
+        , plural: 'Milliwatts',
+        display: '(mW)'
+      }
+      , to_anchor: .001
+    }
+    , W: {
       name: {
         singular: 'Watt'
         , plural: 'Watts',
@@ -8,13 +16,21 @@ export const power = {
       }
       , to_anchor: 1
     }
-    , mW: {
+    , cals: {
       name: {
-        singular: 'Milliwatt'
-        , plural: 'Milliwatts',
-        display: '(mW)'
+        singular: 'Calorie per Second'
+        , plural: 'Calories per Second',
+        display: '(cal/s)'
       }
-      , to_anchor: .001
+      , to_anchor: 4.1868
+    }
+    , kcals: {
+      name: {
+        singular: 'Kilocalorie per second'
+        , plural: 'Kilocalories per second',
+        display: '(kcal/s)'
+      }
+      , to_anchor: 4186.8
     }
     , kW: {
       name: {
@@ -40,26 +56,32 @@ export const power = {
       }
       , to_anchor: 1000000000
     }
-
-    , cals: {
-      name: {
-        singular: 'Calorie per Second'
-        , plural: 'Calories per Second',
-        display: '(cal/s)'
-      }
-      , to_anchor: 4.1868
-    }
-
-    , kcals: {
-      name: {
-        singular: 'Kilocalorie per second'
-        , plural: 'Kilocalories per second',
-        display: '(kcal/s)'
-      }
-      , to_anchor: 4186.8
-    },
   },
   imperial: {
+    btuhr: {
+      name: {
+        singular: 'British thermal unit per hour'
+        , plural: 'British thermal unit per hour',
+        display: '(Btu/hr)'
+      }
+      , to_anchor: 1 / 2544.43
+    },
+    kJh: {
+      name: {
+        singular: 'Kilojoule per hour'
+        , plural: 'Kilojoules per hour',
+        display: '(kJ/hr)'
+      }
+      , to_anchor: .000372506136
+    },
+    MJh: {
+      name: {
+        singular: 'Megajoule per hour',
+        plural: 'Megajoules per hour',
+        display: '(MJ/hr)'
+      },
+      to_anchor: .372506136
+    },
     hp: {
       name: {
         singular: 'Horse Power',
@@ -84,31 +106,7 @@ export const power = {
       }
       , to_anchor: 4.71617735
     }
-    , btuhr: {
-      name: {
-        singular: 'British thermal unit per hour'
-        , plural: 'British thermal unit per hour',
-        display: '(Btu/hr)'
-      }
-      , to_anchor: 1 / 2544.43
-    },
-    MJh: {
-      name: {
-        singular: 'Megajoule per hour',
-        plural: 'Megajoules per hour',
-        display: '(MJ/hr)'
-      },
-      to_anchor: .372506136
-    },
-    kJh: {
-      name: {
-        singular: 'Kilojoule per hour'
-        , plural: 'Kilojoules per hour',
-        display: '(kJ/hr)'
-      }
-      , to_anchor: .000372506136
-    },
-    GJh: {
+    , GJh: {
       name: {
         singular: 'Gigajoule per hour'
         , plural: 'Gigajoules per hour',

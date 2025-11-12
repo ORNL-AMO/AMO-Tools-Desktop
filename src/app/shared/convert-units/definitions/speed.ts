@@ -1,13 +1,5 @@
 export const speed = {
     metric: {
-        'm/s': {
-            name: {
-                singular: 'Metre per second'
-                , plural: 'Metres per second' ,
-                 display:  '(m/s)'
-            }
-            , to_anchor: 3.6
-        },
         'm/d': {
             name: {
                 singular: 'Metre per day'
@@ -23,8 +15,16 @@ export const speed = {
                  display:  '(m/h)'
             }
             , to_anchor: 1000
-        }
-        , 'km/h': {
+        },
+        'm/s': {
+            name: {
+                singular: 'Metre per second'
+                , plural: 'Metres per second' ,
+                 display:  '(m/s)'
+            }
+            , to_anchor: 3.6
+        },
+        'km/h': {
             name: {
                 singular: 'Kilometre per hour'
                 , plural: 'Kilometres per hour' ,
@@ -34,6 +34,22 @@ export const speed = {
         }
     },
     imperial: {
+        'ft/min': {
+            name: {
+                singular: 'Foot per minute',
+                plural: 'Feet per minute',
+                display: '(ft/s)'
+            },
+            to_anchor: 0.0113636
+        },
+        'ft/s': {
+            name: {
+                singular: 'Foot per second'
+                , plural: 'Feet per second' ,
+                 display:  '(ft/s)'
+            }
+            , to_anchor: 0.681818
+        },
         'mph': {
             name: {
                 singular: 'Mile per hour'
@@ -41,29 +57,14 @@ export const speed = {
                  display:  '(mph)'
             }
             , to_anchor: 1
-        }
-        , knot: {
+        },
+        knot: {
             name: {
                 singular: 'Knot'
                 , plural: 'Knots' ,
                  display:  '(knot)'
             }
             , to_anchor: 1.150779
-        }
-        , 'ft/s': {
-            name: {
-                singular: 'Foot per second'
-                , plural: 'Feet per second' ,
-                 display:  '(ft/s)'
-            }
-            , to_anchor: 0.681818
-        }, 'ft/min': {
-            name: {
-                singular: 'Foot per minute',
-                plural: 'Feet per minute',
-                display: '(ft/s)'
-            },
-            to_anchor: 0.0113636
         }
     },
     _anchors: {

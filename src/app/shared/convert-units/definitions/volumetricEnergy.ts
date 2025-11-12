@@ -1,13 +1,5 @@
 export const volumetricEnergy = {
     metric: {
-        kJNm3: {
-            name: {
-                singular: 'Kilojoule per Normal meter cubed'
-                , plural: 'Kilojoules per Normal meter cubed',
-                display: '(kJ/Nm&#x00B3;)'
-            }
-            , to_anchor: 1
-        },
         MJNm3: {
             name: {
                 singular: 'Megajoule per Normal meter cubed'
@@ -15,6 +7,14 @@ export const volumetricEnergy = {
                 display: '(MJ/Nm&#x00B3;)'
             }
             , to_anchor: 1 / 1000
+        },
+        kJNm3: {
+            name: {
+                singular: 'Kilojoule per Normal meter cubed'
+                , plural: 'Kilojoules per Normal meter cubed',
+                display: '(kJ/Nm&#x00B3;)'
+            }
+            , to_anchor: 1
         }
     },
     imperial: {
