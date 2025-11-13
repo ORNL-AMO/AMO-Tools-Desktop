@@ -104,14 +104,17 @@ export class InventoryPerformanceProfileComponent implements OnInit {
         });
       }
     } else {
+      console.log('here...')
       this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(selectedDayType => {
         if (selectedDayType) {
+          console.log('here...1')
           this.selectedDayType = selectedDayType;
           this.setCompressorData();
         }
       });
       this.modificationResultsSub = this.compressedAirAssessmentService.compressedAirAssessmentModificationResults.subscribe(modificationResults => {
         if (modificationResults) {
+          console.log('here...2')
           this.compressedAirAssessmentModificationResults = modificationResults;
           this.setCompressorData();
         }
@@ -141,8 +144,10 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   setCompressorData() {
     if (this.compressedAirAssessmentModificationResults && this.selectedDayType) {
+      console.log('here...3')
       this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
       this.adjustedCompressors = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(result => { return result.dayType.dayTypeId == this.selectedDayType.dayTypeId }).adjustedCompressors;
+      console.log(this.adjustedCompressors);
       this.drawChart();
     }
   }
@@ -249,7 +254,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
       this.showAllCompressors = true;
     }
     let unloadingLines = [];
-    if (this.performanceProfileChart && (this.inAssessment || this.selectedCompressor) && this.compressedAirAssessment) {
+    if (this.performanceProfileChart && ((this.inAssessment && this.adjustedCompressors) || this.selectedCompressor) && this.compressedAirAssessment) {
       let chartData: Array<ProfileChartData>;
       let avgOpPointData: Array<ProfileChartData>;
       if (!this.inAssessment) {

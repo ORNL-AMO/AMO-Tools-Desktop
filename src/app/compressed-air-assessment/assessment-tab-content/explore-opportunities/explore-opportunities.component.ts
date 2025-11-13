@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { fromEvent, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -18,10 +19,19 @@ export class ExploreOpportunitiesComponent implements OnInit {
 
   startingCursorX: number;
   isDragging: boolean = false;
+
+  resizeSubscription: Subscription;
   constructor() { }
 
   ngOnInit(): void {
     this.setResultsWidth();
+    this.resizeSubscription = fromEvent(window, 'resize').subscribe(() => {
+      this.setResultsWidth();
+    });
+  }
+
+  ngOnDestroy() {
+    this.resizeSubscription?.unsubscribe();
   }
 
   ngAfterViewInit() {
