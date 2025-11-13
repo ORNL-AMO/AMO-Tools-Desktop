@@ -10,7 +10,7 @@
 
 **MEASUR (Manufacturing Energy Assessment Software for Utility Reduction)** is part of the **Oak Ridge National Laboratory (ORNL) Industrial Resources** suite. MEASUR empowers manufacturers to boost energy efficiency at both the plant and system levels. The application guides users step-by-step to identify opportunities, monitor progress, and drive continuous improvement. It also supports energy management system implementation and helps facilities prepare for ISO 50001 and Superior Energy Performance certification. MEASUR is a modern refactoring of legacy Department of Energy (DOE) tools, developed by ORNL to bring advanced energy analysis to today’s industrial environments.
 
-MEASUR, like it's sister applications [VERIFI](https://github.com/ORNL-AMO/VERIFI) and [JUSTIFI](https://github.com/ORNL-AMO/JUSTIFI), is developed as a web application but is also packaged and distributed as an installable desktop application.
+MEASUR, like it's sibling applications [VERIFI](https://github.com/ORNL-AMO/VERIFI) and [JUSTIFI](https://github.com/ORNL-AMO/JUSTIFI), is developed as a web application but is also packaged and distributed as an installable desktop application.
  
 The latest web version of the application can be found at [https://measur.ornl.gov](https://measur.ornl.gov)
 
@@ -21,6 +21,10 @@ Alternatively, downloads and additional information about ORNL's suite of tools 
 ### 📋 Project Board
 
 Track our progress and planned work on the [MEASUR GitHub Project Board](https://github.com/orgs/ORNL-AMO/projects/9/views/10).
+
+### MEASUR Tools Suite
+
+MEASUR calculations are powered by the [MEASUR-Tools-Suite](https://github.com/ORNL-AMO/MEASUR-Tools-Suite). A C++ library with a WebAssembly compilation target.
 
 ## MEASUR Modules 
 
