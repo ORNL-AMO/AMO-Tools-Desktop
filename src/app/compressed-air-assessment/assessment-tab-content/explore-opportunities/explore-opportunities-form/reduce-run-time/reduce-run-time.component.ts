@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntime } from '../../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, Modification, ReduceRuntime } from '../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
-import { ExploreOpportunitiesValidationService } from '../../../../compressed-air-assessment-validation/explore-opportunities-validation.service';
 import { ReduceRunTimeService } from './reduce-run-time.service';
 import { CompressedAirAssessmentModificationResults } from '../../../../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
+import { ResultingSystemProfileValidation } from '../../../../calculations/modifications/energyEfficiencyMeasures/ResultingSystemProfileValidation';
 
 @Component({
   selector: 'app-reduce-run-time',
@@ -26,20 +26,8 @@ export class ReduceRunTimeComponent implements OnInit {
   compressorInventoryItems: Array<CompressorInventoryItem>;
   modificationResultsSub: Subscription;
 
-  dayTypeOptions: Array<{
-    dayType: CompressedAirDayType,
-    isValid: boolean,
-    requiredAirflow: Array<number>,
-    availableAirflow: Array<number>,
-    profilePower: Array<number>,
-  }>;
-  selectedDayType: {
-    dayType: CompressedAirDayType,
-    isValid: boolean,
-    requiredAirflow: Array<number>,
-    availableAirflow: Array<number>,
-    profilePower: Array<number>,
-  }
+  dayTypeOptions: Array<ResultingSystemProfileValidation>;
+  selectedDayType: ResultingSystemProfileValidation;
   form: UntypedFormGroup;
   hasInvalidDayType: boolean;
   settings: Settings;
@@ -139,15 +127,7 @@ export class ReduceRunTimeComponent implements OnInit {
 
   setDayTypes(compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults) {
     if (compressedAirAssessmentModificationResults && this.reduceRuntime.order != 100) {
-      this.dayTypeOptions = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.map(dayTypeModResult => {
-        return {
-          dayType: dayTypeModResult.dayType,
-          isValid: dayTypeModResult.reduceRunTimeProfileValidation.isValid,
-          requiredAirflow: dayTypeModResult.reduceRunTimeProfileValidation.requiredAirflow,
-          availableAirflow: dayTypeModResult.reduceRunTimeProfileValidation.availableAirflow,
-          profilePower: dayTypeModResult.reduceRunTimeProfileValidation.profilePower,
-        };
-      });
+      this.dayTypeOptions = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.map(dayTypeModResult => { return dayTypeModResult.reduceRunTimeProfileValidation });
       if (!this.selectedDayType) {
         this.selectedDayType = this.dayTypeOptions[0];
       } else {

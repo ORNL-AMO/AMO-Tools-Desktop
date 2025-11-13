@@ -7,6 +7,7 @@ import { CompressedAirAssessmentService } from '../../../../compressed-air-asses
 import { ReplaceCompressorService } from './replace-compressor.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { PerformancePointsFormService } from '../../../../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
+import { ResultingSystemProfileValidation } from '../../../../calculations/modifications/energyEfficiencyMeasures/ResultingSystemProfileValidation';
 
 @Component({
   selector: 'app-replace-compressor',
@@ -35,9 +36,11 @@ export class ReplaceCompressorComponent {
     replacementCompressorId: string,
     isAdded: boolean
   }>;
+
+  profileValidation: Array<ResultingSystemProfileValidation>;
+  modificationResultsSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private performancePointsFormService: PerformancePointsFormService) { }
+    private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
   ngOnInit(): void {
     this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
@@ -53,12 +56,17 @@ export class ReplaceCompressorComponent {
 
     this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       if (val && !this.isFormChange) {
-        this.modification = val;;
+        this.modification = val;
         this.setData()
       } else {
         this.isFormChange = false;
       }
       this.setOrderOptions();
+    });
+
+    this.modificationResultsSub = this.compressedAirAssessmentService.compressedAirAssessmentModificationResults.subscribe(val => {
+      this.profileValidation = val.modifiedDayTypeProfileSummaries.map(dayTypeModResult => { return dayTypeModResult.replaceCompressorProfileValidation });
+      console.log(this.profileValidation);
     });
   }
 
@@ -66,6 +74,7 @@ export class ReplaceCompressorComponent {
     this.selectedModificationIdSub.unsubscribe();
     this.compressedAirAssessmentSub.unsubscribe();
     this.settingsSub.unsubscribe();
+    this.modificationResultsSub.unsubscribe();
   }
 
   helpTextField(str: string) {

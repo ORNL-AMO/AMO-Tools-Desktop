@@ -43,6 +43,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
     useAutomaticSequencerProfileValidation: ResultingSystemProfileValidation;
     
     replaceCompressorResults: ReplaceCompressorResults;
+    replaceCompressorProfileValidation: ResultingSystemProfileValidation;
 
     auxiliaryPowerUsage: { cost: number, energyUse: number } = { cost: 0, energyUse: 0 };
     atmosphericPressure: number;
@@ -202,6 +203,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             return new CompressedAirProfileSummary(summary, true);
         });
         this.adjustedCompressors = this.replaceCompressorResults.adjustedCompressors;
+        this.replaceCompressorProfileValidation = new ResultingSystemProfileValidation(this, order, this.summaryDataInterval);
     }
 
     setFlowReallocationResults(

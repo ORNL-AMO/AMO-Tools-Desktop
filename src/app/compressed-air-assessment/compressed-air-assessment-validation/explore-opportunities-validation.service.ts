@@ -14,6 +14,7 @@ import { BaselineResults } from '../calculations/caCalculationModels';
 import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirModifiedDayTypeProfileSummary } from '../calculations/modifications/CompressedAirModifiedDayTypeProfileSummary';
 import { CompressedAirModificationValid } from './CompressedAirAssessmentValidation';
+import { ReplaceCompressorService } from '../assessment-tab-content/explore-opportunities/explore-opportunities-form/replace-compressor/replace-compressor.service';
 
 @Injectable()
 export class ExploreOpportunitiesValidationService {
@@ -22,7 +23,8 @@ export class ExploreOpportunitiesValidationService {
   constructor(private addReceiverVolumeService: AddReceiverVolumeService, private adjustCascadingSetPointsService: AdjustCascadingSetPointsService,
     private improveEndUseEfficiencyService: ImproveEndUseEfficiencyService, private reduceAirLeaksService: ReduceAirLeaksService,
     private reduceSystemAirPressureService: ReduceSystemAirPressureService, private useAutomaticSequencerService: UseAutomaticSequencerService,
-    private reduceRunTimeService: ReduceRunTimeService) {
+    private reduceRunTimeService: ReduceRunTimeService,
+    private replaceCompressorService: ReplaceCompressorService) {
     this.compressedAirModificationValid = new BehaviorSubject<CompressedAirModificationValid>(undefined);
   }
 
@@ -35,15 +37,17 @@ export class ExploreOpportunitiesValidationService {
     let reduceRuntime: boolean = this.checkReduceRuntimeValid(compressedAirAssessment, modification, compressedAirAssessmentModificationResults);
     let reduceSystemPressure: boolean = this.checkReduceSystemAirPressureValid(modification.reduceSystemAirPressure, compressedAirAssessment.compressorInventoryItems);
     let useAutomaticSequencer: boolean = this.checkUseAutomaticSequencerValid(compressedAirAssessment, modification, compressedAirAssessmentModificationResults);
+    let replaceCompressor: boolean = this.checkReplaceCompressorValid(compressedAirAssessment, modification, compressedAirAssessmentModificationResults);
     let compressedAirModificationValid: CompressedAirModificationValid = {
-      isValid: addReceiverVolume && adjustCascadingSetPoints && improveEndUseEfficiency && reduceAirLeaks && reduceRuntime && reduceSystemPressure && useAutomaticSequencer,
+      isValid: addReceiverVolume && adjustCascadingSetPoints && improveEndUseEfficiency && reduceAirLeaks && reduceRuntime && reduceSystemPressure && useAutomaticSequencer && replaceCompressor,
       addReceiverVolume: addReceiverVolume,
       adjustCascadingSetPoints: adjustCascadingSetPoints,
       improveEndUseEfficiency: improveEndUseEfficiency,
       reduceAirLeaks: reduceAirLeaks,
       reduceRuntime: reduceRuntime,
       reduceSystemPressure: reduceSystemPressure,
-      useAutomaticSequencer: useAutomaticSequencer
+      useAutomaticSequencer: useAutomaticSequencer,
+      replaceCompressor: replaceCompressor
     }
     this.compressedAirModificationValid.next(compressedAirModificationValid);
     return compressedAirModificationValid;
@@ -146,6 +150,22 @@ export class ExploreOpportunitiesValidationService {
       }
     }
     return isValid;
+  }
 
+  checkReplaceCompressorValid(compressedAirAssessment: CompressedAirAssessment, modification: Modification, compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults): boolean {
+    let isValid: boolean = true;
+    if (modification.replaceCompressor.order != 100) {
+      let form: UntypedFormGroup = this.replaceCompressorService.getFormFromObj(modification.replaceCompressor);
+      isValid = form.valid;
+      if (isValid) {
+        compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+          if (isValid) {
+            let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == dayType.dayTypeId });
+            isValid = modificationProfileSummary.replaceCompressorProfileValidation.isValid;
+          }
+        });
+      }
+    }
+    return isValid;
   }
 }

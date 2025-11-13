@@ -48,5 +48,6 @@ export interface CompressedAirModificationValid {
   reduceAirLeaks: boolean,
   reduceRuntime: boolean,
   reduceSystemPressure: boolean,
-  useAutomaticSequencer: boolean
+  useAutomaticSequencer: boolean,
+  replaceCompressor: boolean
 }

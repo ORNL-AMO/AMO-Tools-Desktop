@@ -137,7 +137,8 @@
                             id="{{compressorMap.replacementCompressorId}}-replace-compressor" />
                     </td>
                     <td>
-                        {{compressorMap.replacementCompressorId | compressorName:compressedAirAssessment.replacementCompressorInventoryItems}}
+                        {{compressorMap.replacementCompressorId |
+                        compressorName:compressedAirAssessment.replacementCompressorInventoryItems}}
                     </td>
                     @let compressorInventoryItem = compressorMap.replacementCompressorId |
                     compressorItem:compressedAirAssessment.replacementCompressorInventoryItems;
@@ -156,7 +157,54 @@
                 </tr>
             </tbody>
         </table>
+        <ng-container *ngFor="let dayTypeValidation of profileValidation">
+            <ng-container *ngIf="!dayTypeValidation.isValid">
+                <hr class="my-2">
+                <table class="table bg-white">
+                    <thead>
+                        <tr>
+                            <th colspan="25" class="text-danger">
+                                {{dayTypeValidation.dayType.name}} - Resulting Profile Validation
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
 
-
+                            </th>
+                            <th class="text-center" *ngFor="let dataTimeInterval of dayTypeValidation.timeInterval;">
+                                {{dataTimeInterval | intervalHourLabel}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td>
+                                Available Airflow
+                            </td>
+                            <td *ngFor="let airflow of dayTypeValidation.availableAirflow; let index = index"
+                                [ngClass]="{'cell-error': (airflow - dayTypeValidation.requiredAirflow[index]) < 0}">
+                                {{airflow | number:numberPipeDecimals}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Required Airflow
+                            </td>
+                            <td *ngFor="let airflow of dayTypeValidation.requiredAirflow">
+                                {{airflow| number:numberPipeDecimals}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Power, kW
+                            </td>
+                            <td *ngFor="let power of dayTypeValidation.profilePower">
+                                {{power| number:'1.0-1'}}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </ng-container>
+        </ng-container>
     </div>
 </form>

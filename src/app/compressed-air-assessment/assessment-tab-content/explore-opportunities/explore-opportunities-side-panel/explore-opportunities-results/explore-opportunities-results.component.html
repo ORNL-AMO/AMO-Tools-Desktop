@@ -313,7 +313,8 @@
     <div class="d-flex flex-column">
         <div [style.order]="modification.replaceCompressor.order" class="d-flex my-table-item"
             *ngIf="dayTypeModificationResult.replaceCompressorsSavings.savings.cost != 0">
-            <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <div class="d-flex align-items-center pl-1 pr-1 col-4"
+                [ngClass]="{'invalid': !compressedAirModificationValid.replaceCompressor}">
                 <span class="table-text">
                     {{modification.replaceCompressor.order}}.
                     Replacement Compressor Savings</span>
