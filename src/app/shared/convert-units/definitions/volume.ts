@@ -2,240 +2,268 @@ export const volume = {
     metric: {
         mm3: {
             name: {
-                singular: 'Cubic Millimeter'
-                , plural: 'Cubic Millimeters',
-                 display:  '(mm&#x00B3;)'
-            }
-            , to_anchor: 1 / 1000000
+                singular: 'Cubic Millimeter',
+                plural: 'Cubic Millimeters',
+                display: '(mm&#x00B3;)'
+            },
+            to_anchor: 1 / 1000000,
+            group: 'Metric'
         },
         cm3: {
             name: {
-                singular: 'Cubic Centimeter'
-                , plural: 'Cubic Centimeters',
-                display:  '(cm&#x00B3;)'
-            }
-            , to_anchor: 1 / 1000
+                singular: 'Cubic Centimeter',
+                plural: 'Cubic Centimeters',
+                display: '(cm&#x00B3;)'
+            },
+            to_anchor: 1 / 1000,
+            group: 'Metric'
         },
         mL: {
             name: {
-                singular: 'Milliliter'
-                , plural: 'Milliliters' ,
-                 display:  '(mL)'
-            }
-            , to_anchor: 1 / 1000
+                singular: 'Milliliter',
+                plural: 'Milliliters',
+                display: '(mL)'
+            },
+            to_anchor: 1 / 1000,
+            group: 'Metric'
         },
         krm: {
             name: {
-                singular: 'Matsked'
-                , plural: 'Matskedar' ,
-              display:  '(krm)'
-            }
-            , to_anchor: 1 / 1000
+                singular: 'Matsked',
+                plural: 'Matskedar',
+                display: '(krm)'
+            },
+            to_anchor: 1 / 1000,
+            group: 'Metric'
         },
         cL: {
             name: {
-                singular: 'Centiliter'
-                , plural: 'Centiliters' ,
-                 display:  '(cL)'
-            }
-            , to_anchor: 1 / 100
+                singular: 'Centiliter',
+                plural: 'Centiliters',
+                display: '(cL)'
+            },
+            to_anchor: 1 / 100,
+            group: 'Metric'
         },
         tsk: {
             name: {
-                singular: 'Tesked'
-                , plural: 'Teskedar' ,
-                 display:  '(tsk)'
-            }
-            , to_anchor: 5 / 1000
+                singular: 'Tesked',
+                plural: 'Teskedar',
+                display: '(tsk)'
+            },
+            to_anchor: 5 / 1000,
+            group: 'Metric'
         },
         dL: {
             name: {
-                singular: 'Deciliter'
-                , plural: 'Deciliters' ,
-              display:  '(dL)'
-            }
-            , to_anchor: 1 / 10
+                singular: 'Deciliter',
+                plural: 'Deciliters',
+                display: '(dL)'
+            },
+            to_anchor: 1 / 10,
+            group: 'Metric'
         },
         msk: {
             name: {
-                singular: 'Matsked'
-                , plural: 'Matskedar' ,
-                 display:  '(msk)'
-            }
-            , to_anchor: 15 / 1000
+                singular: 'Matsked',
+                plural: 'Matskedar',
+                display: '(msk)'
+            },
+            to_anchor: 15 / 1000,
+            group: 'Metric'
         },
         kkp: {
             name: {
-                singular: 'Kaffekopp'
-                , plural: 'Kaffekoppar' ,
-                 display:  '(kkp)'
-            }
-            , to_anchor: 150 / 1000
+                singular: 'Kaffekopp',
+                plural: 'Kaffekoppar',
+                display: '(kkp)'
+            },
+            to_anchor: 150 / 1000,
+            group: 'Metric'
         },
         glas: {
             name: {
-                singular: 'Glas'
-                , plural: 'Glas' ,
-                 display:  '(glas)'
-            }
-            , to_anchor: 200 / 1000
+                singular: 'Glas',
+                plural: 'Glas',
+                display: '(glas)'
+            },
+            to_anchor: 200 / 1000,
+            group: 'Metric'
         },
         L: {
             name: {
-                singular: 'Liter'
-                , plural: 'Liters' ,
-                 display:  '(L)'
-            }
-            , to_anchor: 1
+                singular: 'Liter',
+                plural: 'Liters',
+                display: '(L)'
+            },
+            to_anchor: 1,
+            group: 'Metric'
         },
         kanna: {
             name: {
-                singular: 'Kanna'
-                , plural: 'Kannor' ,
-                 display:  '(kanna)'
-            }
-            , to_anchor: 2.617
+                singular: 'Kanna',
+                plural: 'Kannor',
+                display: '(kanna)'
+            },
+            to_anchor: 2.617,
+            group: 'Metric'
         },
         m3: {
             name: {
-                singular: 'Cubic meter'
-                , plural: 'Cubic meters',
-                 display:  '(m&#x00B3;)'
-            }
-            , to_anchor: 1000
+                singular: 'Cubic meter',
+                plural: 'Cubic meters',
+                display: '(m&#x00B3;)'
+            },
+            to_anchor: 1000,
+            group: 'Metric'
         },
         km3: {
             name: {
-                singular: 'Cubic kilometer'
-                , plural: 'Cubic kilometers',
-                 display:  '(km&#x00B3;)'
-            }
-            , to_anchor: 1000000000000
+                singular: 'Cubic kilometer',
+                plural: 'Cubic kilometers',
+                display: '(km&#x00B3;)'
+            },
+            to_anchor: 1000000000000,
+            group: 'Metric'
         }
     },
 
     imperial: {
         tsp: {
             name: {
-                singular: 'Teaspoon'
-                , plural: 'Teaspoons' ,
-                 display:  '(tsp)'
-            }
-            , to_anchor: 1 / 6
+                singular: 'Teaspoon',
+                plural: 'Teaspoons',
+                display: '(tsp)'
+            },
+            to_anchor: 1 / 6,
+            group: 'Imperial'
         },
         Tbs: {
             name: {
-                singular: 'Tablespoon'
-                , plural: 'Tablespoons' ,
-                 display:  '(Tbs)'
-            }
-            , to_anchor: 1 / 2
+                singular: 'Tablespoon',
+                plural: 'Tablespoons',
+                display: '(Tbs)'
+            },
+            to_anchor: 1 / 2,
+            group: 'Imperial'
         },
         in3: {
             name: {
-                singular: 'Cubic inch'
-                , plural: 'Cubic inches',
-                 display:  '(in&#x00B3;)'
-            }
-            , to_anchor: 0.55411
+                singular: 'Cubic inch',
+                plural: 'Cubic inches',
+                display: '(in&#x00B3;)'
+            },
+            to_anchor: 0.55411,
+            group: 'Imperial'
         },
         'fl-oz': {
             name: {
-                singular: 'Fluid Ounce'
-                , plural: 'Fluid Ounces' ,
-                 display:  '(fl-oz)'
-            }
-            , to_anchor: 1
+                singular: 'Fluid Ounce',
+                plural: 'Fluid Ounces',
+                display: '(fl-oz)'
+            },
+            to_anchor: 1,
+            group: 'Imperial'
         },
         cup: {
             name: {
-                singular: 'Cup'
-                , plural: 'Cups' ,
-              display:  '(cup)'
-            }
-            , to_anchor: 8
+                singular: 'Cup',
+                plural: 'Cups',
+                display: '(cup)'
+            },
+            to_anchor: 8,
+            group: 'Imperial'
         },
         pnt: {
             name: {
-                singular: 'Pint'
-                , plural: 'Pints' ,
-                 display:  '(pnt)'
-            }
-            , to_anchor: 16
+                singular: 'Pint',
+                plural: 'Pints',
+                display: '(pnt)'
+            },
+            to_anchor: 16,
+            group: 'Imperial'
         },
         qt: {
             name: {
-                singular: 'Quart'
-                , plural: 'Quarts' ,
-                 display:  '(qt)'
-            }
-            , to_anchor: 32
+                singular: 'Quart',
+                plural: 'Quarts',
+                display: '(qt)'
+            },
+            to_anchor: 32,
+            group: 'Imperial'
         },
         gal: {
             name: {
-                singular: 'U.S. Gallon'
-                , plural: 'U.S. Gallons' ,
-                 display:  '(gal)'
-            }
-            , to_anchor: 128
+                singular: 'U.S. Gallon',
+                plural: 'U.S. Gallons',
+                display: '(gal)'
+            },
+            to_anchor: 128,
+            group: 'Imperial'
         },
         kgal: {
             name: {
-                singular: 'Thousand U.S. Gallons'
-                , plural: 'Thousands U.S. Gallons' ,
-                 display:  '(kgal)'
-            }
-            , to_anchor: 128 * 1000
+                singular: 'Thousand U.S. Gallons',
+                plural: 'Thousands U.S. Gallons',
+                display: '(kgal)'
+            },
+            to_anchor: 128 * 1000,
+            group: 'Imperial'
         },
         Mgal: {
             name: {
-                singular: 'Million U.S. Gallons'
-                , plural: 'Million U.S. Gallons' ,
-                 display:  '(Mgal)'
-            }
-            , to_anchor: 128 * 1000000
+                singular: 'Million U.S. Gallons',
+                plural: 'Million U.S. Gallons',
+                display: '(Mgal)'
+            },
+            to_anchor: 128 * 1000000,
+            group: 'Imperial'
         },
         ft3: {
             name: {
-                singular: 'Cubic foot'
-                , plural: 'Cubic feet' ,
-                 display:  '(ft&#x00B3;)'
-            }
-            , to_anchor: 957.506
+                singular: 'Cubic foot',
+                plural: 'Cubic feet',
+                display: '(ft&#x00B3;)'
+            },
+            to_anchor: 957.506,
+            group: 'Imperial'
         },
         kscf: {
             name: {
-                singular: 'Thousand Standard Cubic foot'
-                , plural: 'Thousand Standard Cubic feet' ,
-                 display:  '(kscf)'
-            }
-            , to_anchor: 957.506 * 1000
+                singular: 'Thousand Standard Cubic foot',
+                plural: 'Thousand Standard Cubic feet',
+                display: '(kscf)'
+            },
+            to_anchor: 957.506 * 1000,
+            group: 'Imperial'
         },
         yd3: {
             name: {
-                singular: 'Cubic yard'
-                , plural: 'Cubic yards',
-                 display:  '(yd&#x00B3;)'
-            }
-            , to_anchor: 25852.7
+                singular: 'Cubic yard',
+                plural: 'Cubic yards',
+                display: '(yd&#x00B3;)'
+            },
+            to_anchor: 25852.7,
+            group: 'Imperial'
         },
         'impgal': {
-          name: {
-            singular: 'Imperial Gallon'
-            , plural: 'Imperial Gallons',
-            display:  '(imp gal)'
-          }
-          , to_anchor: 153.722
+            name: {
+                singular: 'Imperial Gallon',
+                plural: 'Imperial Gallons',
+                display: '(imp gal)'
+            },
+            to_anchor: 153.722,
+            group: 'Imperial'
         }
     },
     _anchors: {
         metric: {
-            unit: 'L'
-            , ratio: 33.8140226
+            unit: 'L',
+            ratio: 33.8140226
         },
         imperial: {
-            unit: 'fl-oz'
-            , ratio: 1 / 33.8140226
+            unit: 'fl-oz',
+            ratio: 1 / 33.8140226
         }
     }
 };
