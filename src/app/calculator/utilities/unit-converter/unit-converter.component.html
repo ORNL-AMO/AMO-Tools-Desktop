@@ -21,10 +21,23 @@
           <div class="col-5">
             <input type="number" step="any" class="form-control text-center input-field" id="value1" [(ngModel)]="value1"
               (input)="getValue2()">
-            <select class="form-control" id="from" [(ngModel)]="from" (change)="getValue2()">
-              <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}
-                <span [innerHTML]="possibility.displayUnit"></span>
-              </option>
+             <select class="form-control" id="from" [(ngModel)]="from" (change)="getValue2()">
+              <ng-container *ngIf="possibilities.length >= 10; else flatFromOptions">
+                <ng-container *ngFor="let group of groupedPossibilities | keyvalue">
+                  <optgroup [label]="group.key">
+                    <option *ngFor="let possibility of group.value" [value]="possibility.unit">
+                      {{possibility.display}}
+                      <span [innerHTML]="possibility.displayUnit"></span>
+                    </option>
+                  </optgroup>
+                </ng-container>
+              </ng-container>
+              <ng-template #flatFromOptions>
+                <option *ngFor="let possibility of possibilities" [value]="possibility.unit">
+                  {{possibility.display}}
+                  <span [innerHTML]="possibility.displayUnit"></span>
+                </option>
+              </ng-template>
             </select>
           </div>
 
@@ -38,18 +51,26 @@
             <small>
               <strong>{{value2 | number:'.0-6'}}</strong>
             </small>
-            <select class="form-control" id="to" [(ngModel)]="to" (change)="getValue2()">
-              <option *ngFor="let possibility of possibilities" [value]="possibility.unit">{{possibility.display}}
-                <span [innerHTML]="possibility.displayUnit"></span>
-              </option>
+             <select class="form-control" id="to" [(ngModel)]="to" (change)="getValue2()">
+              <ng-container *ngIf="possibilities.length >= 10; else flatToOptions">
+                <ng-container *ngFor="let group of groupedPossibilities | keyvalue">
+                  <optgroup [label]="group.key">
+                    <option *ngFor="let possibility of group.value" [value]="possibility.unit">
+                      {{possibility.display}}
+                      <span [innerHTML]="possibility.displayUnit"></span>
+                    </option>
+                  </optgroup>
+                </ng-container>
+              </ng-container>
+              <ng-template #flatToOptions>
+                <option *ngFor="let possibility of possibilities" [value]="possibility.unit">
+                  {{possibility.display}}
+                  <span [innerHTML]="possibility.displayUnit"></span>
+                </option>
+              </ng-template>
             </select>
           </div>
         </div>
-        <!-- <div class="d-block w-100 text-right p-2 btn-group btn-group-sm">
-          <button type="button" class="btn btn-danger btn-sm" (click)="btnResetData()">
-            Reset Data
-          </button>
-        </div> -->
       </div>
     </div>
   </div>

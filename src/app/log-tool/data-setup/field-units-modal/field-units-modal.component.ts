@@ -51,7 +51,7 @@ export class FieldUnitsModalComponent implements OnInit {
     if (this.selectedMeasure) {
       this.unitOptions = new Array();
       let tmpList = this.convertUnitsService.possibilities(this.selectedMeasure);
-      tmpList.forEach(unit => {
+      tmpList.possibilities.forEach(unit => {
         let tmpPossibility = {
           unit: unit,
           display: this.getUnitName(unit),

@@ -14,6 +14,7 @@ export class UnitConverterComponent implements OnInit {
   inAssessment: boolean;
 
   possibilities: Array<any> = [];
+  groupedPossibilities: {};
   measure: any = 'energy';
   from: string;
   to: string;
@@ -177,21 +178,27 @@ export class UnitConverterComponent implements OnInit {
     if (this.unitConverterService.measure) {
       this.measure = this.unitConverterService.measure;
     }
+
     this.possibilities = new Array();
     let tmpList = this.convertUnitsService.possibilities(this.measure);
-    tmpList.forEach(unit => {
+
+    tmpList.possibilities.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit),
-        displayUnit: this.getUnitDisplay(unit)
+        displayUnit: this.getUnitDisplay(unit),
+        group: this.getUnitGroup(unit)
       };
       this.possibilities.push(tmpPossibility);
     });
+
+    this.setGroups();
+
     if (!this.to) {
-      this.to = this.possibilities[17].unit;
+      this.to = this.possibilities[18].unit;
     }
     if (!this.from) {
-      this.from = this.possibilities[2].unit;
+      this.from = this.possibilities[6].unit;
     }
     if (!this.value1) {
       this.value1 = 1;
@@ -210,19 +217,41 @@ export class UnitConverterComponent implements OnInit {
     if (this.measure) {
       this.possibilities = new Array();
       let tmpList = this.convertUnitsService.possibilities(this.measure);
-      tmpList.forEach(unit => {
+
+      tmpList.possibilities.forEach(unit => {
         let tmpPossibility = {
           unit: unit,
           display: this.getUnitName(unit),
-          displayUnit: this.getUnitDisplay(unit)
+          displayUnit: this.getUnitDisplay(unit),
+          group: this.getUnitGroup(unit)
         };
         this.possibilities.push(tmpPossibility);
       });
+      
       this.from = this.possibilities[0].unit;
       this.to = this.possibilities[1].unit;
       this.value1 = 1;
       this.getValue2();
+
+      this.setGroups();
+
     }
+  }
+
+  setGroups() {
+    const grouped = {};
+
+    this.possibilities.forEach(possibility => {
+      const group = possibility.group || 'Other';
+      if(group) {
+        if (!grouped[group]) {
+        grouped[group] = [];
+      }
+      grouped[group].push(possibility);
+      }
+    });
+    this.groupedPossibilities = grouped;
+
   }
 
   getValue1() {
@@ -249,6 +278,11 @@ export class UnitConverterComponent implements OnInit {
   getUnitDisplay(unit: any) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
+    }
+  }
+  getUnitGroup(unit: any) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.group;
     }
   }
 }
