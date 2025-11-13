@@ -109,10 +109,9 @@ export class StackedBarIntakeCostsComponent {
     const layout = {
       barmode: 'stack',
       title: `System: Direct Costs vs. True Costs  (${this.showPercent ? '%' : 'USD'})`,
-      height: 500,
       width: this.printView ? 800 : undefined,
       autosize: true,
-      margin: { l: 40, r: 220, t: 80, b: 40 },
+      margin: { l: 25, r: 25, t: 80, b: 40 },
       legend: {
         orientation: 'v',
         x: 1.15,
@@ -135,7 +134,6 @@ export class StackedBarIntakeCostsComponent {
         side: 'left',
         ticks: 'outside',
         showline: true,
-        mirror: 'ticks',
         showgrid: true
       }
     };
@@ -151,7 +149,11 @@ export class StackedBarIntakeCostsComponent {
       responsive: this.printView ? false : true
     };
 
-    this.plotlyService.newPlot(this.intakeCostsChart.nativeElement, chartData, layout, configOptions);
+    this.plotlyService.newPlot(this.intakeCostsChart.nativeElement, chartData, layout, configOptions)
+    .then(chart => {
+          chart.on('plotly_legendclick', event => false);
+          chart.on('plotly_legenddoubleclick', event => false);
+        });
   }
 
   getPercentLabels(costsPercent: number[], costsRaw: number[], index: number, label: string): { dataLabel: string, hoverLabel: string } {

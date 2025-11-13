@@ -25,10 +25,8 @@ export class StackedBarIntakeFlowComponent {
   showPercent: boolean = false; 
   @ViewChild('intakeFlowsChart', { static: false }) intakeFlowsChart: ElementRef;
 
-  plantSummaryReport: Subscription;
   showPrintViewSub: Subscription;
   percentViewSubscription: Subscription;
-  updateChartSubscription: any;
 
   ngOnInit(): void {
     this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
@@ -37,13 +35,12 @@ export class StackedBarIntakeFlowComponent {
   }
 
   ngOnDestroy() {
-      this.plantSummaryReport.unsubscribe();
       this.showPrintViewSub.unsubscribe();
       this.percentViewSubscription?.unsubscribe();
   }
 
   ngAfterViewInit() {
-      this.updateChartSubscription = combineLatest([
+      combineLatest([
         this.waterReportService.plantSummaryReport,
         this.waterReportService.systemStackedBarPercentView
       ]).pipe(
@@ -104,7 +101,6 @@ export class StackedBarIntakeFlowComponent {
     const layout = {
       barmode: 'stack',
       title: `System Intake Volume (${units ? units : '%'})`,
-      height: 500,
       width: this.printView ? 800 : undefined,
       autosize: true,
       margin: { l: 40, r: 40, t: 80, b: 40 },
@@ -116,7 +112,11 @@ export class StackedBarIntakeFlowComponent {
       },
       yaxis: {
         title: yAxisTitle,
-        automargin: true
+        automargin: true,
+        side: 'left',
+        ticks: 'outside',
+        showline: true,
+        showgrid: true
       }
     };
 

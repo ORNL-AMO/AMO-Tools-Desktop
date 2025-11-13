@@ -134,9 +134,13 @@
             </label>
         </div>
     </div>
-    <div class="d-flex w-100 flex-wrap justify-content-center align-items-center mb-3" [style.gap]="100">
-        <app-stacked-bar-intake-flow></app-stacked-bar-intake-flow>
-        <app-stacked-bar-intake-costs></app-stacked-bar-intake-costs>
+    <div class="d-flex flex-wrap mb-3 w-100">
+        <div class="flex-shrink-0 intake-flow-bar-container">
+            <app-stacked-bar-intake-flow></app-stacked-bar-intake-flow>
+        </div>
+        <div class="flex-grow-1 ml-3 intake-cost-bar-container">
+            <app-stacked-bar-intake-costs></app-stacked-bar-intake-costs>
+        </div>
     </div>
 
     }
