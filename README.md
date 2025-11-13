@@ -34,9 +34,9 @@ Evaluating financial and energy impacts of modifications to different energy con
 | Pump                  | ✅ Available        | Assess pump system efficiency and savings        |
 | Compressed Air        | ✅ Available        | Analyze compressed air systems                   |
 | Process Heating       | ✅ Available        | Evaluate process heating improvements            |
-| Fan                   | ✅ Available        | Assess fan system performance                    |
+| Fan                   | ✅ Available        | Assess fan system efficiency and savings         |
 | Steam                 | ✅ Available        | Steam system analysis                            |
-| Treasure Hunt         | ✅ Available        | Identify energy-saving opportunities             |
+| Treasure Hunt         | ✅ Available        | Identify low-cost/no-cost energy-saving opportunities             |
 | Wastewater            | ✅ Available        | Wastewater system assessment                     |
 | Water                 | 🟡 Beta             | Water system analysis                            |
 | Process Cooling       | 🛠️ In Development  | Process cooling system assessment                |
@@ -49,17 +49,17 @@ Track facility equipment and populate assessment modules via equipment inventori
 | Motor                   | ✅ Available         | Track and manage motor inventory                  |
 | Pump                    | ✅ Available         | Track and manage pump inventory                   |
 | Compressed Air          | ✅ Available         | Track and manage compressed air equipment         |
-| Fans                    | ⏳ Planned          | Fan inventory management (planned)                |
-| Process Cooling         | ⏳ Planned          | Process cooling inventory (planned)               |
-| Hot and Cold Flows      | ⏳ Planned          | Hot/cold flow inventory (planned)                 |
-| Maintenance Logs        | ⏳ Planned          | Equipment maintenance logging (planned)           |
+| Fans                    | ⏳ Planned          | Fan inventory management               |
+| Process Cooling         | ⏳ Planned          | Process cooling inventory               |
+| Hot and Cold Flows      | ⏳ Planned          | Hot/cold flow inventory                |
+| Maintenance Logs        | ⏳ Planned          | Equipment maintenance logging          |
 
 ### Additional Modules
 Enhance your analysis and visualization with these supporting tools:
 
 | Module           | Status   | Description                                      |
 |------------------|----------|--------------------------------------------------|
-| Data Explorer    | ✅ Available | Visualize, filter, and analyze facility data      |
+| Data Explorer    | ✅ Available | Visualize, categorize, and analyze logger data      |
 | Water Diagram    | 🟡 Beta     | Interactive water system mapping and visualization |
 
 
