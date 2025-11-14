@@ -212,6 +212,21 @@ export class WaterAssessmentResultsService {
     return systemCosts;
   }
 
+  getEmptyPlantSystemSummaryResults(): PlantSystemSummaryResults {
+    return {
+      id: undefined,
+      name: undefined,
+      sourceWaterIntake: undefined,
+      dischargeWater: undefined,
+      directCostPerYear: undefined,
+      directCostPerUnit: undefined,
+      trueCostPerYear: undefined,
+      trueCostPerUnit: undefined,
+      trueOverDirectResult: undefined,
+      allSystemResults: []
+    }
+  }
+
 }
 
 export interface SystemTrueCostData {
