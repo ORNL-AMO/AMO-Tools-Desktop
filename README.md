@@ -67,6 +67,11 @@ Enhance your analysis and visualization with these supporting tools:
 | Water Diagram    | 🟡 Beta     | Interactive water system mapping and visualization |
 
 
+### 🧮 Standalone Calculators
+
+MEASUR includes a comprehensive suite of over 80 standalone equipment calculators for energy analysis, system optimization, and cost savings.  
+See the full categorized list with descriptions and links in [docs/calculator_list.md](docs/calculator_list.md).
+
 
 ## For Developers
 
