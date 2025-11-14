@@ -270,17 +270,17 @@ export class UnitConverterComponent implements OnInit {
     }
   }
 
-  getUnitName(unit: any) {
+  getUnitName(unit: string) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.plural;
     }
   }
-  getUnitDisplay(unit: any) {
+  getUnitDisplay(unit: string) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
     }
   }
-  getUnitGroup(unit: any) {
+  getUnitGroup(unit: string) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.group;
     }
