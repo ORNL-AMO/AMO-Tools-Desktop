@@ -4,10 +4,13 @@ import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange,
 import { CSSProperties } from 'react';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getConnectionFromEdgeId, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
+import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getConnectionFromEdgeId, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
 import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
+
+import packageJson from '../../../package.json';
+const CURRENT_DIAGRAM_VERSION: string = packageJson.version;
 
 export interface DiagramState {
   name: string,
@@ -72,8 +75,22 @@ export const getStoreSerializedDate = (dateObject: Date): string => {
 }
 
 
-const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{ diagramData: FlowDiagramData, parentContainer: ParentContainerDimensions, assessmentId: number }>) => {
+/**
+ * Sets initialized state on process-flow-diagram-component's parent first render
+ */
+const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ diagramData: FlowDiagramData, parentContainer: ParentContainerDimensions, assessmentId: number }>) => {
   const { diagramData, parentContainer, assessmentId } = action.payload;
+
+  if (diagramData.meta === undefined) {
+    diagramData.meta = {
+      version: '0.0.0',
+      upgrades: [],
+    } 
+  }
+
+  if (diagramData.meta.version !== CURRENT_DIAGRAM_VERSION) {
+    upgradeDiagram(diagramData);
+  }
 
   state.nodes = diagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
     if (node.position) {
@@ -118,7 +135,7 @@ const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType: W
   const { nodeType, position } = action.payload;
   const existingNames = state.nodes.map((node: Node<ProcessFlowPart>) => node.data.name);
   let newNode: Node = createNewNode(nodeType, position, existingNames);
-  // todo can we remove date completely?
+  // * modifiedDate is not currently being read in the app
   newNode.data.modifiedDate = getStoreSerializedDate(newNode.data.modifiedDate as Date);
   state.nodes.push(newNode);
 };
@@ -561,7 +578,7 @@ export const diagramSlice = createSlice({
   initialState: getDefaultDiagramData(),
   reducers: {
     resetDiagram: resetDiagramReducer,
-    diagramParentRender: diagramParentRenderReducer,
+    diagramInitialized: diagramInitializedReducer,
     nodesChange: nodesChangeReducer,
     addNode: addNodeReducer,
     addNodes: addNodesReducer,
@@ -616,7 +633,7 @@ export const {
   setNodeName,
   deleteNode,
   keyboardDeleteNode,
-  diagramParentRender,
+  diagramInitialized,
   nodeDataPropertyChange,
   setNodeStyle,
   totalFlowChange,
@@ -732,9 +749,77 @@ const getIsActiveSourceEdge = (updatedNode: Node, handleSet: Handles[keyof Handl
   return true;
 }
 
-
 const getAreHandlesEqual = (handleSet: Handles[keyof Handles], updatedHandleSet: Handles[keyof Handles]) => {
   const keys = new Set([...Object.keys(handleSet), ...Object.keys(updatedHandleSet)]);
   const isEqual = [...keys].every(key => handleSet[key] === updatedHandleSet[key]);
   return isEqual;
+}
+
+/**
+ * Apply upgrades to outdated diagram versions, such as: adding new properties, default data, and patches to avoid runtime errors
+ */
+const upgradeDiagram = (diagramData: FlowDiagramData) => {
+  upgradeNodeData(diagramData);
+
+  diagramData.meta.upgrades.push({
+    fromVersion: diagramData.meta.version,
+    toVersion: CURRENT_DIAGRAM_VERSION,
+    upgradeDate: getStoreSerializedDate(new Date()),
+  });
+  diagramData.meta.version = CURRENT_DIAGRAM_VERSION;
+}
+
+
+/**
+ * Upgrade node data for backwards compatibility with diagrams from prior versions
+ */
+const upgradeNodeData = (diagramData: FlowDiagramData) => {
+  diagramData.nodes.map((node: Node<ProcessFlowPart>) => {
+    upgradeHandles(node.data);
+    return node;
+  });
+}
+
+/**
+ * Update node data handles to include 4 additional inflow and outflow handles. 
+ * Version 0.1.0 Adds e,f,g,h for inflow and i,j,k,l for outflow, removes unused handles for water-intake and water-discharge nodes
+ */
+const upgradeHandles = (nodeData: ProcessFlowPart) => {
+  const nodeType: ProcessFlowNodeType = nodeData.processComponentType;
+  
+  if (nodeType == 'water-intake') {
+    delete nodeData.handles.inflowHandles;
+  }
+
+  if (nodeType == 'water-discharge') {
+    delete nodeData.handles.outflowHandles;
+  }
+
+  const newVersionInflowProperty = nodeData.handles.inflowHandles?.hasOwnProperty('e');
+  const newVersionOutflowProperty = nodeData.handles.outflowHandles?.hasOwnProperty('i');
+  
+  if (nodeData.handles.inflowHandles && !newVersionInflowProperty) {
+    nodeData.handles.inflowHandles = {
+      a: nodeData.handles.inflowHandles.a ?? true,
+      b: nodeData.handles.inflowHandles.b ?? true,
+      c: nodeData.handles.inflowHandles.c ?? true,
+      d: nodeData.handles.inflowHandles.d ?? true,
+      e: nodeData.handles.inflowHandles.e ?? false,
+      f: nodeData.handles.inflowHandles.f ?? false,
+      g: nodeData.handles.inflowHandles.g ?? false,
+      h: nodeData.handles.inflowHandles.h ?? false,
+    };
+  }
+  if (nodeData.handles.outflowHandles && !newVersionOutflowProperty) {
+    nodeData.handles.outflowHandles = {
+      e: nodeData.handles.outflowHandles.e ?? true,
+      f: nodeData.handles.outflowHandles.f ?? true,
+      g: nodeData.handles.outflowHandles.g ?? true,
+      h: nodeData.handles.outflowHandles.h ?? true,
+      i: nodeData.handles.outflowHandles.i ?? false,
+      j: nodeData.handles.outflowHandles.j ?? false,
+      k: nodeData.handles.outflowHandles.k ?? false,
+      l: nodeData.handles.outflowHandles.l ?? false,
+    };
+  }
 }
