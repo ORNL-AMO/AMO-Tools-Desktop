@@ -1,6 +1,6 @@
-# Calculator Modules
+# MEASUR Calculators
 
-Below is a categorized list of all available standalone calculators in MEASUR. Click the link to open the calculator in MEASUR. A code link is provided to it's implementation in the repository. ACtive work is being done to create algorithm documentation for each calculator in the [MEASUR-Tools-Suite](https://github.com/ORNL-AMO/MEASUR-Tools-Suite) repository. This page will be updated as more documentation becomes available.
+Below is a categorized list of all available standalone calculators in MEASUR. Click the link to open the calculator in MEASUR. A code link is provided to it's implementation in the repository. Active work is being done to create algorithm documentation for each calculator in the [MEASUR-Tools-Suite](https://github.com/ORNL-AMO/MEASUR-Tools-Suite) repository. This page will be updated as more documentation becomes available.
 
 ---
 
