@@ -1,32 +1,30 @@
 export const specificHeat = {
-  // Specific Heat
-  // 1 kJ/(kg- K) = 1 kJ/(kg- C) = 0.239 Btu/(lb- F) = 0.239 kcal/(kg-C)
-      metric: {
-      kJkgC: {
-        name: {
-          singular: 'Kilojoule per Kilogram Celsius'
-          , plural: 'Kilojoules per Kilogram Celsius',
-          display: '(kJ/kg-&#x2103;)'
-        }
-        , to_anchor: 1
+  metric: {
+    kcalkgC: {
+      name: {
+        singular: 'Kilocalorie per Kilogram Celsius'
+        , plural: 'Kilocalories per Kilogram Celsius',
+        display: '(kcal/kg-&#x2103;)'
       }
-      , kJkgK: {
-        name: {
-          singular: 'Kilojoule per Kilogram Kelvin'
-          , plural: 'Kilojoules per Kilogram Kelvin',
-          display: '(kJ/kg-&#x212a;)'
-        }
-        , to_anchor: 1
+      , to_anchor: 1 / 0.238845897
+    }
+    , kJkgC: {
+      name: {
+        singular: 'Kilojoule per Kilogram Celsius'
+        , plural: 'Kilojoules per Kilogram Celsius',
+        display: '(kJ/kg-&#x2103;)'
       }
-      , kcalkgC: {
-        name: {
-          singular: 'Kilocalorie per Kilogram Celsius'
-          , plural: 'Kilocalories per Kilogram Celsius',
-          display: '(kcal/kg-&#x2103;)'
-        }
-        , to_anchor: 1 / 0.238845897
+      , to_anchor: 1
+    }
+    , kJkgK: {
+      name: {
+        singular: 'Kilojoule per Kilogram Kelvin'
+        , plural: 'Kilojoules per Kilogram Kelvin',
+        display: '(kJ/kg-&#x212a;)'
       }
-    },
+      , to_anchor: 1
+    }
+  },
 
   imperial: {
     btulbF: {

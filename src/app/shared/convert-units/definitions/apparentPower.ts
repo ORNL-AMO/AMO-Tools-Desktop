@@ -1,21 +1,21 @@
 export const apparentPower = {
 
     apparentPower: {
-        VA: {
-            name: {
-                singular: 'Volt-Ampere'
-                , plural: 'Volt-Amperes',
-                 display:  '(VA)'
-            }
-            , to_anchor: 1
-        }
-        , mVA: {
+        mVA: {
             name: {
                 singular: 'Millivolt-Ampere'
                 , plural: 'Millivolt-Amperes',
                  display:  '(mVA)'
             }
             , to_anchor: .001
+        }
+        , VA: {
+            name: {
+                singular: 'Volt-Ampere'
+                , plural: 'Volt-Amperes',
+                 display:  '(VA)'
+            }
+            , to_anchor: 1
         }
         , kVA: {
             name: {
