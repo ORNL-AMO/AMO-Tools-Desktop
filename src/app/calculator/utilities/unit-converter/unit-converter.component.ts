@@ -24,6 +24,8 @@ export class UnitConverterComponent implements OnInit {
   fromDisp: string;
   toDisp: string;
 
+  
+
   options = [
     {
       measure: 'length',
@@ -195,10 +197,10 @@ export class UnitConverterComponent implements OnInit {
     this.setGroups();
 
     if (!this.to) {
-      this.to = this.possibilities[18].unit;
+      this.to = this.possibilities.find(initialUnit => initialUnit.unit === "MMBtu").unit;
     }
     if (!this.from) {
-      this.from = this.possibilities[6].unit;
+      this.from = this.possibilities.find(initialUnit => initialUnit.unit === "kWh").unit;
     }
     if (!this.value1) {
       this.value1 = 1;
