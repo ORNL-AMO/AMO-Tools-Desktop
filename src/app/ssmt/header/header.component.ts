@@ -181,7 +181,7 @@ export class HeaderComponent implements OnInit {
       } else if (this.headerInput.numberOfHeaders != 3 && this.headerInput.lowPressureHeader && this.headerInput.lowPressureHeader.pressure) {
         highPressureMin = this.headerInput.lowPressureHeader.pressure;
       }
-      this.headerService.updateHighestPressureHeaderFormValidation(this.highPressureForm, this.settings, this.boilerInput, highPressureMin);
+      this.headerService.updateHighestPressureHeaderFormValidation(this.highPressureForm, this.settings, highPressureMin);
     }
   }
 }

@@ -17,6 +17,8 @@ import { EGridService } from '../shared/helper-services/e-grid.service';
 import { SteamService } from '../calculator/steam/steam.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SnackbarService } from '../shared/snackbar-notification/snackbar.service';
+import { SaturatedPropertiesOutput } from '../shared/models/steam/steam-outputs';
+import { BoilerService } from './boiler/boiler.service';
 
 @Component({
     selector: 'app-ssmt',
@@ -88,9 +90,12 @@ export class SsmtComponent implements OnInit {
   smallScreenTab: string = 'form';
   showExportModal: boolean = false;
   showExportModalSub: Subscription;
+  saturatedPropertiesOutput: SaturatedPropertiesOutput;
+
   constructor(
     private egridService: EGridService,
     private activatedRoute: ActivatedRoute,
+    private boilerService: BoilerService,
     private router: Router,
     private ssmtService: SsmtService,
     private settingsDbService: SettingsDbService,
@@ -131,6 +136,9 @@ export class SsmtComponent implements OnInit {
         this._ssmt = (JSON.parse(JSON.stringify(this.assessment.ssmt)));
         this.getSettings();
         this.initSankeyList();
+        if (this._ssmt.boilerInput) {
+          this.boilerService.initializeSSMTCalculatedFields(this._ssmt.boilerInput, this._ssmt, this.settings, true);
+        }
         let tmpTab = this.assessmentService.getStartingTab();
         if (tmpTab) {
           this.ssmtService.mainTab.next(tmpTab);
@@ -318,8 +326,8 @@ export class SsmtComponent implements OnInit {
     this._ssmt.setupDone = ssmtValid.isValid;
   }
 
-  saveBoiler(boilerData: BoilerInput) {
-    this._ssmt.boilerInput = boilerData;
+  saveBoiler(boilerInput: BoilerInput) {
+    this._ssmt.boilerInput = boilerInput;
     this.save();
   }
 
