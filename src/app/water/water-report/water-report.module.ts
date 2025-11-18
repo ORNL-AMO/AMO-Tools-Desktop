@@ -10,6 +10,9 @@ import { WaterReportService } from './water-report.service';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { AlertInfoContainerComponent } from '../../shared/alert-info-container/alert-info-container.component';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
+import { TrueCostEditableTableComponent } from './true-cost-editable-table/true-cost-editable-table.component';
+import { TrueCostReportService } from '../services/true-cost-report.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,11 +20,14 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     ExecutiveSummaryComponent,
     SystemSummaryReportComponent,
     SystemTrueCostReportComponent,
-    SystemTrueCostBarComponent
+    SystemTrueCostBarComponent,
+    TrueCostEditableTableComponent
   ],
   imports: [
     CommonModule,
     SharedPipesModule,
+    ReactiveFormsModule,
+    FormsModule,
     PrintOptionsMenuModule,
     AlertInfoContainerComponent,
     ExportableResultsTableModule
@@ -30,7 +36,8 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     WaterReportComponent,
   ],
   providers: [
-    WaterReportService
+    WaterReportService,
+    TrueCostReportService,
   ],
 })
 export class WaterReportModule { }

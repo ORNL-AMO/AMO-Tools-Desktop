@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { getIsDiagramValid, NodeErrors, PlantSystemSummaryResults } from 'process-flow-lib';
+import { getIsDiagramValid, NodeErrors, PlantResults, PlantSystemSummaryResults } from 'process-flow-lib';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
 import { Diagram } from '../../../shared/models/diagram';
@@ -47,7 +47,8 @@ export class SystemSummaryReportComponent {
     let nodeErrors: NodeErrors = diagram.waterDiagram.flowDiagramData.nodeErrors;
     this.isDiagramValid = getIsDiagramValid(nodeErrors);
     if (this.isDiagramValid) {
-      this.plantSummaryResults = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
+      const plantSummaryResults: PlantResults = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
+      this.plantSummaryResults = plantSummaryResults.plantSystemSummaryResults;
     } else {
       this.plantSummaryResults = {
         id: undefined,
@@ -59,7 +60,7 @@ export class SystemSummaryReportComponent {
         trueCostPerYear: undefined,
         trueCostPerUnit: undefined,
         trueOverDirectResult: undefined,
-        allSystemResults: []
+        allSystemResults: [],
       }
     }
   }

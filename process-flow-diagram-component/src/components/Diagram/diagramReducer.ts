@@ -4,7 +4,7 @@ import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange,
 import { CSSProperties } from 'react';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getConnectionFromEdgeId, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
+import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getConnectionFromEdgeId, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection } from 'process-flow-lib';
 import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
@@ -760,6 +760,7 @@ const getAreHandlesEqual = (handleSet: Handles[keyof Handles], updatedHandleSet:
  */
 const upgradeDiagram = (diagramData: FlowDiagramData) => {
   upgradeNodeData(diagramData);
+  upgradeEdgeData(diagramData);
 
   diagramData.meta.upgrades.push({
     fromVersion: diagramData.meta.version,
@@ -777,6 +778,13 @@ const upgradeNodeData = (diagramData: FlowDiagramData) => {
   diagramData.nodes.map((node: Node<ProcessFlowPart>) => {
     upgradeHandles(node.data);
     return node;
+  });
+}
+
+const upgradeEdgeData = (diagramData: FlowDiagramData) => {
+  diagramData.edges.map((edge: Edge<CustomEdgeData>) => {
+    upgradeEdgeDescription(edge);
+    return edge;
   });
 }
 
@@ -821,5 +829,22 @@ const upgradeHandles = (nodeData: ProcessFlowPart) => {
       k: nodeData.handles.outflowHandles.k ?? false,
       l: nodeData.handles.outflowHandles.l ?? false,
     };
+  }
+}
+
+
+/**
+ * Update edge data with description of connection names
+ * Version 0.1.0
+ */
+export const upgradeEdgeDescription = (edge: Edge<CustomEdgeData>) => {
+  if (!edge.data) {
+    edge.data = {
+      flowValue: null,
+      hasOwnEdgeType: null,
+      edgeDescription: getEdgeDescription(edge)
+    };
+  } else if (!edge.data.edgeDescription) {
+    edge.data.edgeDescription = getEdgeDescription(edge);
   }
 }
