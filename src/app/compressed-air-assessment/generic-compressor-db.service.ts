@@ -3,12 +3,13 @@ import * as Papa from 'papaparse';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
 import { CompressorTypeOptions, ControlTypes } from './inventory/inventoryOptions';
+import { DefaultCompressorApiService } from '../tools-suite-api/default-compressor-api.service';
 @Injectable()
 export class GenericCompressorDbService {
 
   genericCompressors: Array<GenericCompressor>;
   unitsOfMeasure: string = 'Imperial';
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private defaultCompressorApiService: DefaultCompressorApiService) { }
 
   getAllCompressors(settings: Settings) {
     if (this.genericCompressors == undefined) {
@@ -22,6 +23,7 @@ export class GenericCompressorDbService {
           }
         }
       });
+      this.defaultCompressorApiService.getGenericCompressors();
     } else if (this.unitsOfMeasure != settings.unitsOfMeasure) {
       this.convertGenericCompressors(settings.unitsOfMeasure)
     }
