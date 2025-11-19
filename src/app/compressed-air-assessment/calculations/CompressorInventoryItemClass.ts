@@ -17,7 +17,7 @@ export class CompressorInventoryItemClass {
     centrifugalSpecifics: CentrifugalSpecifics;
     description: string;
     modifiedDate: Date;
-    originalCompressorId: string;
+    // originalCompressorId: string;
     isReplacementCompressor: boolean;
 
     showMaxFullFlow: boolean;
@@ -37,7 +37,7 @@ export class CompressorInventoryItemClass {
         this.compressorControls = inventoryItem.compressorControls;
         this.designDetails = inventoryItem.designDetails;
         this.centrifugalSpecifics = inventoryItem.centrifugalSpecifics;
-        this.originalCompressorId = inventoryItem.originalCompressorId;
+        // this.originalCompressorId = inventoryItem.originalCompressorId;
         this.isReplacementCompressor = inventoryItem.isReplacementCompressor;
         this.setShowMaxFlowPerformancePoint();
         this.setShowMidTurndownPerformancePoint();
@@ -145,7 +145,7 @@ export class CompressorInventoryItemClass {
             performancePoints: this.performancePoints,
             centrifugalSpecifics: this.centrifugalSpecifics,
             modifiedDate: this.modifiedDate,
-            originalCompressorId: this.originalCompressorId,
+            // originalCompressorId: this.originalCompressorId,
             isReplacementCompressor: this.isReplacementCompressor
 
         }

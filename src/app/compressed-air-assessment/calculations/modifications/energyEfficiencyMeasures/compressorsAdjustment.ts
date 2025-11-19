@@ -25,11 +25,7 @@ export function systemPressureChangeAdjustProfile(originalCompressors: Array<Com
         //iterate new ordered compressors and update corresponding summary order
         orderedCompressors.forEach(compressor => {
             let dayTypeSummary = profileSummary.find(summary => {
-                if (compressor.isReplacementCompressor) {
-                    return summary.compressorId == compressor.originalCompressorId;
-                } else {
-                    return summary.compressorId == compressor.itemId;
-                }
+                return summary.compressorId == compressor.itemId;
             });
             let intervalData = dayTypeSummary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == i });
             if (intervalData.order != 0) {

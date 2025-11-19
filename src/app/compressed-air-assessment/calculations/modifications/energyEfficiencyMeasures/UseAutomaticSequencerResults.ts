@@ -68,11 +68,7 @@ export class UseAutomaticSequencerResults {
     useAutomaticSequencerAdjustCompressor(useAutomaticSequencer: UseAutomaticSequencer, systemInformation: SystemInformation, settings: Settings) {
         this.adjustedCompressors.forEach(compressor => {
             let sequencerProfile: CompressedAirProfileSummary = this.profileSummary.find(profileItem => {
-                if (compressor.isReplacementCompressor) {
-                    return profileItem.compressorId == compressor.originalCompressorId;
-                } else {
-                    return profileItem.compressorId == compressor.itemId;
-                }
+                return profileItem.compressorId == compressor.itemId;
             });
             compressor.compressorControls.automaticShutdown = sequencerProfile.automaticShutdownTimer;
             compressor.adjustCompressorPerformancePointsWithSequencer(useAutomaticSequencer.targetPressure, useAutomaticSequencer.variance, systemInformation.atmosphericPressure, settings)

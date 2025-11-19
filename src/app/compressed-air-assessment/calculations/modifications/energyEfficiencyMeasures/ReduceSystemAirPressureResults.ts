@@ -33,6 +33,7 @@ export class ReduceSystemAirPressureResults {
         order: number) {
 
         this.adjustedCompressors = adjustedCompressors;
+        let ogCompressors: Array<CompressorInventoryItemClass> = _.cloneDeep(adjustedCompressors);
         this.profileSummary = previousProfileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
@@ -40,7 +41,7 @@ export class ReduceSystemAirPressureResults {
             //1. Adjust compressor set points
             this.reduceSystemAirPressureAdjustCompressors(reduceSystemAirPressure, atmosphericPressure, settings);
             //2. Adjust profile based on new set points
-            this.profileSummary = systemPressureChangeAdjustProfile(originalCompressors, settings, adjustedCompressors, atmosphericPressure, this.profileSummary);
+            this.profileSummary = systemPressureChangeAdjustProfile(ogCompressors, settings, adjustedCompressors, atmosphericPressure, this.profileSummary);
         }
         //3. Reallocate flow based on new set points
         let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(

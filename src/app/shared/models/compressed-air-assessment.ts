@@ -224,7 +224,7 @@ export interface CompressorInventoryItem {
     performancePoints: PerformancePoints,
     centrifugalSpecifics: CentrifugalSpecifics,
     modifiedDate: Date,
-    originalCompressorId?: string,
+    // originalCompressorId?: string,
     isReplacementCompressor?: boolean
 
 }
