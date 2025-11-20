@@ -5,7 +5,7 @@ import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { pumpTypesConstant, driveConstants, fluidProperties, fluidTypes } from '../psatConstants';
 import { PsatWarningService } from '../psat-warning.service';
 import { PumpFluidService } from './pump-fluid.service';
@@ -72,6 +72,7 @@ export class PumpFluidComponent implements OnInit {
     if (!this.selected) {
       this.disableForm();
     }
+    this.setValidation(this.psatForm, this.settings);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -115,6 +116,11 @@ export class PumpFluidComponent implements OnInit {
     this.psatForm.controls.stages.enable();
   }
 
+  setValidation(form: UntypedFormGroup, settings: Settings): UntypedFormGroup {
+    form.controls.stages.setValidators([Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')]);
+    return form
+  }
+
   addNum(str: string) {
     if (str == 'stages') {
       this.psatForm.patchValue({
@@ -126,7 +132,7 @@ export class PumpFluidComponent implements OnInit {
 
   subtractNum(str: string) {
     if (str == 'stages') {
-      if (this.psatForm.controls.stages.value != 0) {
+      if (this.psatForm.controls.stages.value != 1) {
         this.psatForm.patchValue({
           stages: this.psatForm.controls.stages.value - 1
         })

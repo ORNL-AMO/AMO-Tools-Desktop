@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, UntypedFormGroup, Validators} from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { driveConstants, pumpTypesConstant } from '../../../../psat/psatConstants';
+import { pumpTypesConstant } from '../../../../psat/psatConstants';
 import { Settings } from '../../../../shared/models/settings';
 import { PumpItem, PumpPropertiesOptions } from '../../../pump-inventory';
 import { PumpInventoryService, pumpInventoryShaftOrientations, pumpInventoryShaftSealTypes } from '../../../pump-inventory.service';
-import { FieldMeasurementsCatalogService } from '../field-measurements-catalog/field-measurements-catalog.service';
 import { PumpCatalogService } from '../pump-catalog.service';
 import { PumpEquipmentCatalogService } from './pump-equipment-catalog.service';
-
 @Component({
     selector: 'app-pump-equipment-catalog',
     templateUrl: './pump-equipment-catalog.component.html',
@@ -44,6 +42,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
       }
     });
     this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue().displayOptions.pumpPropertiesOptions;
+    this.setValidation(this.form, this.settings);
   }
 
   ngOnDestroy() {
@@ -70,7 +69,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   }
 
   subtractStage() {
-      if (this.form.controls.numStages.value != 0) {
+      if (this.form.controls.numStages.value != 1) {
         this.form.patchValue({
           numStages: this.form.controls.numStages.value - 1
         })
@@ -80,6 +79,11 @@ export class PumpEquipmentCatalogComponent implements OnInit {
 
   toggleForm() {
     this.displayForm = !this.displayForm;
+  }
+
+  setValidation(form: UntypedFormGroup, settings: Settings): UntypedFormGroup {
+    form.controls.numStages.setValidators([Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')]);
+    return form
   }
 
 }

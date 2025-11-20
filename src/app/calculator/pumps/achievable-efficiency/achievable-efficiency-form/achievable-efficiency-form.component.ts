@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { UntypedFormGroup } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { PsatWarningService } from '../../../../psat/psat-warning.service';
 import { pumpTypesConstant } from '../../../../psat/psatConstants';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -32,6 +32,7 @@ export class AchievableEfficiencyFormComponent implements OnInit {
     //remove specified efficiency
     this.pumpTypes.pop();
     this.checkWarnings();
+    this.setValidation(this.efficiencyForm, this.settings);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -60,6 +61,11 @@ export class AchievableEfficiencyFormComponent implements OnInit {
       dispUnit = dispUnit.replace(')', '');
       return dispUnit;
     }
+  }
+
+  setValidation(form: UntypedFormGroup, settings: Settings): UntypedFormGroup {
+    form.controls.stageCount.setValidators([Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')]);
+    return form
   }
 }
 
