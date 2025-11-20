@@ -146,65 +146,38 @@ const totalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{ flo
   updateNode.data.userEnteredData[flowProperty] = totalFlow;
 }
 
-const sumTotalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{ flowProperty: NodeFlowProperty }>) => {
-  const { flowProperty } = action.payload;
+const sumTotalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{ flowProperty: NodeFlowProperty, relatedEdges: Edge<CustomEdgeData>[] }>) => {
+  const { flowProperty, relatedEdges } = action.payload;
   const updateNode: Node<ProcessFlowPart> = state.nodes.find((node: Node<ProcessFlowPart>) => state.selectedDataId === node.id) as Node<ProcessFlowPart>;
   const currentTotalFlow = updateNode.data.userEnteredData[flowProperty];
-  const calculatedNode = state.calculatedData.nodes[state.selectedDataId];
-  updateNode.data.userEnteredData[flowProperty] = calculatedNode? calculatedNode[flowProperty] : currentTotalFlow;
+  
+  const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(relatedEdges, state.nodes, state.selectedDataId);
+  const sumAllFlows = flowProperty === 'totalSourceFlow' ? totalCalculatedSourceFlow : totalCalculatedDischargeFlow;
+  updateNode.data.userEnteredData[flowProperty] = sumAllFlows ?? currentTotalFlow;
 }
 
+/**
+ * Updates a node source edge flow value, updates the calculated node total flow, and propogates changes to connected inflow nodes and edges.
+ */
 const sourceFlowValueChangeReducer = (state: DiagramState, action: PayloadAction<{ sourceEdgeId: string, flowValue: number }>) => {
   const { sourceEdgeId, flowValue } = action.payload;
   const sourceEdge: Edge<CustomEdgeData> = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === sourceEdgeId) as Edge<CustomEdgeData>;
   sourceEdge.data.flowValue = flowValue;
 
-  const sourceEdges = getNodeSourceEdges(state.edges, state.selectedDataId);
+  const sourceEdges: Edge<CustomEdgeData>[] = getNodeSourceEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
   const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(sourceEdges, state.nodes, state.selectedDataId);
+  
   setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalSourceFlow', totalCalculatedSourceFlow);
-
-  // * set calculated totals for source nodes
-  // * alternatively, getNodeFlowTotals on ComponentFlowData rerender
-  const componentSourceNodeIds: string[] = sourceEdges.map((edge: Edge<CustomEdgeData>) => edge.source);
-  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
-    if (componentSourceNodeIds.includes(node.id)) {
-      // * update discharge edges of the node.id calculated data being set
-      const nodeDischargeEdges = getNodeTargetEdges(state.edges, node.id);
-      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeDischargeEdges, state.nodes, node.id);
-      // console.log('sourceFlowValueChange --> setCalculatedNodeDataProperty', totalCalculatedDischargeFlow)
-      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalDischargeFlow', totalCalculatedDischargeFlow);
-    }
-  });
+  populateConnectedInflowTotalsAndFlows(state, sourceEdges);
 }
 
-
-const dischargeFlowValueChangeReducer = (state: DiagramState, action: PayloadAction<{ dischargeEdgeId: string, flowValue: number }>) => {
-  const { dischargeEdgeId, flowValue } = action.payload;
-  const dischargeEdge: Edge<CustomEdgeData> = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === dischargeEdgeId) as Edge<CustomEdgeData>;
-  dischargeEdge.data.flowValue = flowValue;
-
-  const dischargeEdges = getNodeTargetEdges(state.edges, state.selectedDataId);
-  const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(dischargeEdges, state.nodes, state.selectedDataId);
-  setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalDischargeFlow', totalCalculatedDischargeFlow);
-
-  // * set calculated totals for dicharge nodes
-  // * alternatively, getNodeFlowTotals on ComponentFlowData rerender
-  const componentDischargeNodeIds: string[] = dischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.target);
-  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
-    if (componentDischargeNodeIds.includes(node.id)) {
-      // * update source edges of the node.id calculated data being set
-      const nodeSourceEdges = getNodeSourceEdges(state.edges, node.id);
-      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeSourceEdges, state.nodes, node.id);
-      // console.log('dischargeFlowValueChange --> setCalculatedNodeDataProperty', totalCalculatedSourceFlow)
-      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalSourceFlow', totalCalculatedSourceFlow);
-    }
-  });
-}
-
+/**
+ * Distributes a total flow value evenly across all source edges of the selected node. Propogates changes to connected inflow nodes and edges.
+ */
 const distributeTotalSourceFlowReducer = (state: DiagramState, action: PayloadAction<number>) => {
   const totalFlowValue = action.payload;
-  const componentSourceEdges: Edge[] = getNodeSourceEdges(state.edges, state.selectedDataId);
-  const componentSourceEdgeIds = componentSourceEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
+  const componentSourceEdges: Edge<CustomEdgeData>[] = getNodeSourceEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
+  const componentSourceEdgeIds: string[] = componentSourceEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
 
   let dividedTotalFlow = totalFlowValue / componentSourceEdges.length;
   dividedTotalFlow = Number(formatDecimalPlaces(dividedTotalFlow, MAX_FLOW_DECIMALS));
@@ -214,13 +187,30 @@ const distributeTotalSourceFlowReducer = (state: DiagramState, action: PayloadAc
     }
     return edge;
   });
-
-  // todo set connected nodes calculated data
+  populateConnectedInflowTotalsAndFlows(state, componentSourceEdges);
 }
 
+/**
+ * Updates a node discharge edge flow value, updates the calculated node total flow, and propogates changes to connected outflow nodes and edges.
+ */
+const dischargeFlowValueChangeReducer = (state: DiagramState, action: PayloadAction<{ dischargeEdgeId: string, flowValue: number }>) => {
+  const { dischargeEdgeId, flowValue } = action.payload;
+  const dischargeEdge: Edge<CustomEdgeData> = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === dischargeEdgeId) as Edge<CustomEdgeData>;
+  dischargeEdge.data.flowValue = flowValue;
+
+  const dischargeEdges: Edge<CustomEdgeData>[] = getNodeTargetEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
+  const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(dischargeEdges, state.nodes, state.selectedDataId);
+
+  setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalDischargeFlow', totalCalculatedDischargeFlow);
+  populateConnectedOutflowTotalsAndFlows(state, dischargeEdges);
+}
+
+/**
+ * Distributes a total flow value evenly across all discharge edges of the selected node. Propogates changes to connected outflow nodes and edges.
+ */
 const distributeTotalDischargeFlowReducer = (state: DiagramState, action: PayloadAction<number>) => {
   const totalFlowValue = action.payload;
-  const componentDischargeEdges: Edge[] = getNodeTargetEdges(state.edges, state.selectedDataId);
+  const componentDischargeEdges: Edge<CustomEdgeData>[] = getNodeTargetEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
   const componentDischargeEdgesIds = componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
 
   let dividedTotalFlow = totalFlowValue / componentDischargeEdges.length;
@@ -232,7 +222,7 @@ const distributeTotalDischargeFlowReducer = (state: DiagramState, action: Payloa
     return edge;
   });
 
-  // todo set connected nodes calculated data
+  populateConnectedOutflowTotalsAndFlows(state, componentDischargeEdges);
 }
 
 const nodeErrorsChangeReducer = (state: DiagramState, action: PayloadAction<{ flowType: FlowType, errors: FormikErrors<{ totalFlow: string | number; flows: (string | number)[] }> }>) => {
@@ -382,19 +372,20 @@ const edgesUpdateReducer = (state: DiagramState, action: PayloadAction<Edge[]>) 
 
 /**
  * @param action  Map of edgeId to flow value>
+ * @
  */
 const edgesChangeFromPropagationReducer = (state: DiagramState, action: PayloadAction<{
   flowUpdates: Record<string, number>, 
   startingNodeId: string
 }>) => {
   const {flowUpdates, startingNodeId} = action.payload;
-  const updatedEdges: Edge[] = state.edges.map((edge) => {
+  const updatedEdges: Edge<CustomEdgeData>[] = state.edges.map((edge) => {
     const newFlow = flowUpdates[edge.id];
     if (newFlow !== undefined) {
       edge.data.flowValue = newFlow;
     }
     return edge;
-  });
+  }) as Edge<CustomEdgeData>[];
 
    if (flowUpdates) {
     const sourceNode = state.nodes.find(node => node.id === startingNodeId);
@@ -407,6 +398,7 @@ const edgesChangeFromPropagationReducer = (state: DiagramState, action: PayloadA
       dismissMS: 10000
     };
   }
+
   state.edges = updatedEdges;
 };
 
@@ -754,6 +746,39 @@ const getAreHandlesEqual = (handleSet: Handles[keyof Handles], updatedHandleSet:
   const isEqual = [...keys].every(key => handleSet[key] === updatedHandleSet[key]);
   return isEqual;
 }
+
+/**
+ * update calculated total flow values for inflow connected nodes
+ */
+const populateConnectedInflowTotalsAndFlows = (state: DiagramState, sourceEdges: Edge<CustomEdgeData>[]) => {
+  const sourceNodeIds: string[] = sourceEdges.map((edge: Edge<CustomEdgeData>) => edge.source);
+  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
+    if (sourceNodeIds.includes(node.id)) {
+      const nodeDischargeEdges = getNodeTargetEdges(state.edges, node.id);
+      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeDischargeEdges, state.nodes, node.id);
+      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalDischargeFlow', totalCalculatedDischargeFlow);
+    }
+  });
+}
+
+
+/**
+ * update calculated total flow values for outflow connected nodes
+ */
+const populateConnectedOutflowTotalsAndFlows = (state: DiagramState, dischargeEdges: Edge<CustomEdgeData>[]) => {
+  const dischargeNodeIds: string[] = dischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.target);
+  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
+    if (dischargeNodeIds.includes(node.id)) {
+      const nodeSourceEdges = getNodeSourceEdges(state.edges, node.id);
+      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeSourceEdges, state.nodes, node.id);
+      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalSourceFlow', totalCalculatedSourceFlow);
+    }
+  });
+}
+
+
+
+
 
 /**
  * Apply upgrades to outdated diagram versions, such as: adding new properties, default data, and patches to avoid runtime errors

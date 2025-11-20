@@ -215,7 +215,7 @@ const TotalSourceFlowField = (props: TotalSourceFlowFieldProps) => {
     }
 
     const onClickSumFlows = () => {
-        dispatch(sumTotalFlowChange({ flowProperty: 'totalSourceFlow' }));
+        dispatch(sumTotalFlowChange({ flowProperty: 'totalSourceFlow', relatedEdges: componentSourceEdges }));
     }
 
     React.useEffect(() => {
@@ -245,62 +245,63 @@ const TotalSourceFlowField = (props: TotalSourceFlowFieldProps) => {
                 />
 
 
-
-            <Collapse in={inView} timeout={{ enter: 10, exit: 100 }} unmountOnExit>
-                <Box display={'flex'} justifyContent={'center'} position={'absolute'} width="100%" marginTop={'1rem'}>
-                    <Box position={'relative'} 
-                    sx={{
-                        backgroundColor: '#fff',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        gap: '1rem',
-                        padding: '0 1rem',
-                    }}>
-                <SmallTooltip title="Set flows evenly from total inflow"
-                    slotProps={{
-                        popper: {
-                            disablePortal: true,
-                        }
-                    }}>
-                    <span>
-                        <Button onClick={() => onClickDistributeFlowEvenly(totalSourceFlow)}
-                            disabled={!totalSourceFlow}
-                            variant="outlined"
-                            sx={{
-                                padding: '2px 12px',
-                                display: 'inline-block',
-                                minWidth: 0
-                            }}>
-                            <CallSplitOutlinedIcon
+            {/* This button group is being collapse-animated to smoothly hide/display it as absolute within the parent accordian. When we no longer have the parent accordian, this can be removed  */}
+            {componentSourceEdges?.length &&
+                <Collapse in={inView} timeout={{ enter: 10, exit: 100 }} unmountOnExit>
+                    <Box display={'flex'} justifyContent={'center'} position={'absolute'} width="100%" marginTop={'1rem'}>
+                        <Box position={'relative'} 
+                        sx={{
+                            backgroundColor: '#fff',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: '1rem',
+                            padding: '0 1rem',
+                        }}>
+                    <SmallTooltip title="Set flows evenly from total inflow"
+                        slotProps={{
+                            popper: {
+                                disablePortal: true,
+                            }
+                        }}>
+                        <span>
+                            <Button onClick={() => onClickDistributeFlowEvenly(totalSourceFlow)}
+                                disabled={!totalSourceFlow}
+                                variant="outlined"
                                 sx={{
-                                    transform: 'rotate(180deg) scaleX(-1)',
+                                    padding: '2px 12px',
+                                    display: 'inline-block',
+                                    minWidth: 0
+                                }}>
+                                <CallSplitOutlinedIcon
+                                    sx={{
+                                        transform: 'rotate(180deg) scaleX(-1)',
 
-                                }} />
-                        </Button>
-                    </span>
-                </SmallTooltip>
-                <SmallTooltip title="Set total from sum of inflow"
-                    slotProps={{
-                        popper: {
-                            disablePortal: true,
-                        }
-                    }}>
-                    <span>
-                        <Button onClick={onClickSumFlows}
-                            disabled={!calculatedData || !componentSourceEdges?.length}
-                            variant="outlined"
-                            sx={{
-                                padding: '2px 12px',
-                                display: 'inline-block',
-                                minWidth: 0
-                            }}>
-                            <CallMergeIcon />
-                        </Button>
-                    </span>
-                </SmallTooltip>
+                                    }} />
+                            </Button>
+                        </span>
+                    </SmallTooltip>
+                    <SmallTooltip title="Set total from sum of inflow"
+                        slotProps={{
+                            popper: {
+                                disablePortal: true,
+                            }
+                        }}>
+                        <span>
+                            <Button onClick={onClickSumFlows}
+                                variant="outlined"
+                                sx={{
+                                    padding: '2px 12px',
+                                    display: 'inline-block',
+                                    minWidth: 0
+                                }}>
+                                <CallMergeIcon />
+                            </Button>
+                        </span>
+                    </SmallTooltip>
+                        </Box>
                     </Box>
-                </Box>
-            </Collapse>
+                </Collapse>
+            }
         </Box>
 
     );

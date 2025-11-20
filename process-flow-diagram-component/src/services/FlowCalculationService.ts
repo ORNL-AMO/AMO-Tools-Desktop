@@ -10,6 +10,7 @@ export class FlowCalculationService {
    * Propagates flow value from starting node to end of path
    */
   propagateFlowFromNode(nodeId: string, edge: Edge<CustomEdgeData>): void {
+    console.time(`Flow propagation from node ${nodeId}`);
     const state: RootState = this.store.getState();
     const { nodes, edges } = state.diagram;
 
@@ -19,7 +20,7 @@ export class FlowCalculationService {
       startingNodeId: nodeId,
     }));
 
-
+    console.timeEnd(`Flow propagation from node ${nodeId}`);
   }
 
   /**
