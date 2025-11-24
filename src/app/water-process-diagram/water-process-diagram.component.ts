@@ -70,7 +70,6 @@ export class WaterProcessDiagramComponent {
     this.modalOpenSub = this.waterProcessDiagramService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
-
   }
 
   ngOnDestroy() {

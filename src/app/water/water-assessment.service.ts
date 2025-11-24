@@ -30,6 +30,11 @@ export class WaterAssessmentService {
   showExportModal: BehaviorSubject<boolean>;
   setupTabs: Array<WaterSetupTabString> = [
     'system-basics',
+    'water-intake',
+    'water-discharge',
+    'water-using-system',
+    'water-treatment',
+    'waste-water-treatment'
   ];
 
   constructor(
@@ -56,7 +61,6 @@ export class WaterAssessmentService {
   }
 
   updateWaterAssessment(waterAssessment: WaterAssessment) {
-    // console.log('updateWaterAssessment', waterAssessment);
     this.waterAssessment.next(waterAssessment);
   }
 

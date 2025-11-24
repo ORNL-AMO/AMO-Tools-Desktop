@@ -86,7 +86,6 @@ export class WaterAssessmentComponent {
     if (startingTab) {
       this.waterAssessmentService.mainTab.next(startingTab);
     }
-
     this.mainTabSub = this.waterAssessmentService.mainTab.subscribe(newMainTab => {
       if (this.mainTab === 'diagram') {
         this.updateAssessmentFromDiagram();
@@ -226,6 +225,10 @@ export class WaterAssessmentComponent {
     } else if (this.setupTab == 'water-intake') {
       this.waterAssessmentService.setupTab.next('system-basics');
     } 
+  }
+
+  continue() {
+    this.waterAssessmentService.continue();
   }
 
   setContainerHeight() {

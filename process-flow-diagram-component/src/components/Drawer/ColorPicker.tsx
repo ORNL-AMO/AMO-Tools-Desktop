@@ -30,8 +30,10 @@ const ColorPicker = (props: ColorPickerProps) => {
                         name="color"
                         className={'color-input'}
                         value={color}
-                        onChange={(event) => setSelectedColor(event.target.value)}
-                        onBlur={handleSetColor}
+                        onChange={(event) => {
+                            setSelectedColor(event.target.value);
+                            handleSetColor();
+                        }}
                         style={{marginLeft: '16px'}}
                         />
                 </div>
