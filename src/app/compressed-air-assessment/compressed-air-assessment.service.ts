@@ -49,6 +49,9 @@ export class CompressedAirAssessmentService {
   }
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {
+    if(!compressedAirAssessment.replacementCompressorInventoryItems){
+      compressedAirAssessment.replacementCompressorInventoryItems = [];
+    }
     if (isBaselineChange) {
       let settings: Settings = this.settings.getValue();
       let validation: CompressedAirAssessmentValidation = this.compressedAirAssessmentValidationService.validateCompressedAirAssessment(compressedAirAssessment, settings);

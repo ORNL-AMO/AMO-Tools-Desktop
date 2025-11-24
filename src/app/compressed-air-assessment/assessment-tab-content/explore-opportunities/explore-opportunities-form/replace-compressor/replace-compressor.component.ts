@@ -65,8 +65,9 @@ export class ReplaceCompressorComponent {
     });
 
     this.modificationResultsSub = this.compressedAirAssessmentService.compressedAirAssessmentModificationResults.subscribe(val => {
-      this.profileValidation = val.modifiedDayTypeProfileSummaries.map(dayTypeModResult => { return dayTypeModResult.replaceCompressorProfileValidation });
-      console.log(this.profileValidation);
+      if (val) {
+        this.profileValidation = val.modifiedDayTypeProfileSummaries.map(dayTypeModResult => { return dayTypeModResult.replaceCompressorProfileValidation });
+      }
     });
   }
 
