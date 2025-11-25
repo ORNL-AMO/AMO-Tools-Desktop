@@ -80,7 +80,6 @@ export class DefaultCompressorApiService {
         };
 
 
-        console.log(GenericCompressor);
         return GenericCompressor
     }
 }
