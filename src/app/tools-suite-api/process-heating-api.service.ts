@@ -50,9 +50,7 @@ export class ProcessHeatingApiService {
     input.finalTemperature = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.finalTemperature);
     input.correctionFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.correctionFactor);
 
-    let FixtureInstance = new this.toolsSuiteApiService.ToolsSuiteModule.FixtureLosses(input.specificHeat, input.feedRate, input.initialTemperature, input.finalTemperature, input.correctionFactor);
-    let output = FixtureInstance.getHeatLoss();
-    FixtureInstance.delete();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.fixtureTotalHeatLoss(input.specificHeat, input.feedRate, input.initialTemperature, input.finalTemperature, input.correctionFactor);
     return output;
   }
 
