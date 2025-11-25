@@ -12,6 +12,7 @@ import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
 import { environment } from '../../../environments/environment';
 import { getNewIdString } from '../helperFunctions';
 import { Calculator } from '../models/calculators';
+import { SteamPressureOrTemp, SteamQuality } from '../models/steam/steam-inputs';
 
 @Injectable()
 export class UpdateDataService {
@@ -381,12 +382,14 @@ export class UpdateDataService {
     updateSSMT(assessment: Assessment): Assessment {
         assessment.appVersion = environment.version;
         assessment.ssmt = this.updateHeaders(assessment.ssmt);
+        assessment.ssmt = this.updateBoiler(assessment.ssmt);
         if (assessment.ssmt.modifications) {
             assessment.ssmt.modifications.forEach(mod => {
                 if(!mod.modificationId){
                     mod.modificationId = getNewIdString();
                 }
                 mod.ssmt = this.updateHeaders(mod.ssmt);
+                mod.ssmt = this.updateBoiler(mod.ssmt);
             })
         };
         return assessment;
@@ -404,6 +407,33 @@ export class UpdateDataService {
         }
         return ssmt;
     }
+
+    /**
+     * Update Boiler Input to match changes added for Saturated Properties calculated inputs and results
+     * Version 1.6.5 Adds three properties to Boiler Input: steamQuality, pressureOrTemperature, saturatedPressure. 
+    */
+    updateBoiler(ssmt: SSMT) {
+        if (ssmt.boilerInput) {
+            if (ssmt.boilerInput.steamQuality === undefined) {
+                ssmt.boilerInput.steamQuality = SteamQuality.SUPERHEATED;
+            }
+            if (ssmt.boilerInput.pressureOrTemperature === undefined) {
+                ssmt.boilerInput.pressureOrTemperature = SteamPressureOrTemp.TEMPERATURE;
+            }
+            if (ssmt.boilerInput.steamTemperature === undefined) {
+                ssmt.boilerInput.steamTemperature = 212;
+            }
+            if (ssmt.boilerInput.saturatedPressure === undefined) {
+                let defaultSaturatedPressure = 0;
+                if (ssmt.headerInput && ssmt.headerInput.highPressureHeader?.pressure !== undefined) {
+                    defaultSaturatedPressure = ssmt.headerInput.highPressureHeader.pressure;
+                } 
+                ssmt.boilerInput.saturatedPressure = defaultSaturatedPressure;
+            }
+        }
+        return ssmt;
+    }
+
     updateTreasureHunt(assessment: Assessment): Assessment {
         assessment.appVersion = environment.version;
         if (assessment.treasureHunt) {
