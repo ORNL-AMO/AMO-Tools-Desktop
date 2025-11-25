@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CompressorTypeOption, CompressorTypeOptions, ControlType, ControlTypes } from '../../../../compressed-air-inventory';
 import { FilterCompressorOptions } from '../filter-compressors-pipe.pipe';
 import { Settings } from '../../../../../shared/models/settings';
-import { ExistingCompressorDbService, GenericCompressor } from '../../../../existing-compressor-db.service';
 import { CompressedAirCatalogService } from '../../compressed-air-catalog.service';
 import { CompressedAirInventoryService } from '../../../../compressed-air-inventory.service';
 import _ from 'lodash';
+import { GenericCompressor, GenericCompressorDbService } from '../../../../../shared/generic-compressor-db.service';
 
 @Component({
   selector: 'app-filter-compressors-inventory',
@@ -23,13 +23,13 @@ export class FilterCompressorsComponent implements OnInit {
   maxLabel: string = 'Max';
   settings: Settings;
 
-  constructor(private compressedAirCatalogService: CompressedAirCatalogService, private existingCompressorDbService: ExistingCompressorDbService,
+  constructor(private compressedAirCatalogService: CompressedAirCatalogService, private genericCompressorDbService: GenericCompressorDbService,
     private compressedAirInventoryService: CompressedAirInventoryService) { }
 
 
   ngOnInit(): void {
     this.settings = this.compressedAirInventoryService.settings.getValue();
-    let genericCompressors: Array<GenericCompressor> = this.existingCompressorDbService.genericCompressors;
+    let genericCompressors: Array<GenericCompressor> = this.genericCompressorDbService.genericCompressors;
 
     let uniqHpCompressors: Array<GenericCompressor> = _.uniqBy(genericCompressors, 'HP');
     this.horsePowerOptions = _.map(uniqHpCompressors, (compressor) => { return compressor.HP });
@@ -64,7 +64,7 @@ export class FilterCompressorsComponent implements OnInit {
   }
 
   resetFilters() {
-    let genericCompressors: Array<GenericCompressor> = this.existingCompressorDbService.genericCompressors;
+    let genericCompressors: Array<GenericCompressor> = this.genericCompressorDbService.genericCompressors;
     this.initFilterCompressorOptions(genericCompressors);
   }
 

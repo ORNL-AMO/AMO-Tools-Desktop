@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { GenericCompressor } from './existing-compressor-db.service';
 import { CompressedAirInventoryService } from './compressed-air-inventory.service';
 import { CompressedAirCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
 import { CompressedAirInventoryData, CompressedAirItem, CompressorDataGroup, PerformancePoint } from './compressed-air-inventory';
 import { Settings } from '../shared/models/settings';
 import { PerformancePointsCalculationsService } from './compressed-air-inventory-setup/compressed-air-catalog/performance-points-catalog/calculations/performance-points-calculations.service';
 import { CompressorControls } from '../shared/models/compressed-air-assessment';
+import { GenericCompressor } from '../shared/generic-compressor-db.service';
 
 @Injectable()
 export class CompressorDataManagementService {
