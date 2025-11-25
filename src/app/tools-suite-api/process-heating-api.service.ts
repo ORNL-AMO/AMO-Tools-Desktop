@@ -217,13 +217,11 @@ export class ProcessHeatingApiService {
     input.specificGravity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.specificGravity);
     input.correctionFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.correctionFactor);
 
-    let LeakageLossesInstance = new this.toolsSuiteApiService.ToolsSuiteModule.LeakageLosses(
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.leakageTotalHeatLoss(
       input.draftPressure, input.openingArea, input.leakageGasTemperature,
       input.ambientTemperature, input.coefficient,
       input.specificGravity, input.correctionFactor
     );
-    let output: number = LeakageLossesInstance.getExfiltratedGasesHeatContent();
-    LeakageLossesInstance.delete();
     return output;
   }
 
