@@ -42,7 +42,6 @@ export class PumpEquipmentCatalogComponent implements OnInit {
       }
     });
     this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue().displayOptions.pumpPropertiesOptions;
-    this.setValidation(this.form, this.settings);
   }
 
   ngOnDestroy() {
@@ -80,10 +79,4 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   toggleForm() {
     this.displayForm = !this.displayForm;
   }
-
-  setValidation(form: UntypedFormGroup, settings: Settings): UntypedFormGroup {
-    form.controls.numStages.setValidators([Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')]);
-    return form
-  }
-
 }

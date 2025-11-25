@@ -6,6 +6,7 @@ import { getNewIdString } from '../../../shared/helperFunctions';
 import { PSAT } from '../../../shared/models/psat';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../shared/models/settings';
+import { WholeNumberValidator } from '../../../shared/validators/whole-number';
 
 @Injectable()
 export class AchievableEfficiencyService {
@@ -34,7 +35,7 @@ export class AchievableEfficiencyService {
       flowRate: [pumpEfficiencyInputs.flowRate, [Validators.required, Validators.min(0)]],
       rpm: [pumpEfficiencyInputs.rpm, Validators.required],
       kinematicViscosity: [pumpEfficiencyInputs.kinematicViscosity, [Validators.required, Validators.min(0)]],
-      stageCount: [pumpEfficiencyInputs.stageCount, [Validators.required, Validators.min(1)]],
+      stageCount: [pumpEfficiencyInputs.stageCount, [Validators.required, Validators.min(1), WholeNumberValidator.wholeNumber()]],
       head: [pumpEfficiencyInputs.head, [Validators.required, Validators.min(0.1)]],
       pumpEfficiency: [pumpEfficiencyInputs.pumpEfficiency, Validators.required],
     });

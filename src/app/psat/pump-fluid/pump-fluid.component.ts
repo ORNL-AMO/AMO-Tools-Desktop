@@ -72,7 +72,6 @@ export class PumpFluidComponent implements OnInit {
     if (!this.selected) {
       this.disableForm();
     }
-    this.setValidation(this.psatForm, this.settings);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -114,11 +113,6 @@ export class PumpFluidComponent implements OnInit {
     this.psatForm.controls.gravity.enable();
     this.psatForm.controls.viscosity.enable();
     this.psatForm.controls.stages.enable();
-  }
-
-  setValidation(form: UntypedFormGroup, settings: Settings): UntypedFormGroup {
-    form.controls.stages.setValidators([Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')]);
-    return form
   }
 
   addNum(str: string) {
