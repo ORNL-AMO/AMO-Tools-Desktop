@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { FixtureService } from '../fixture.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-fixture-help',
@@ -17,7 +18,7 @@ export class FixtureHelpComponent implements OnInit {
   currentField: string;
   displaySuggestions: boolean;
 
-
+  docsLink: string = environment.measurDocsUrl;
   constructor(private fixtureService: FixtureService) { }
 
   ngOnInit(): void {
