@@ -11,11 +11,11 @@ export class ExhaustGasService {
   initForm(lossNum: number): UntypedFormGroup {
     return this.formBuilder.group({
       'offGasTemp': ['', Validators.required],
-      'CO': ['', Validators.required],
-      'H2': ['', Validators.required],
-      'combustibleGases': ['', Validators.required],
-      'vfr': ['', Validators.required],
-      'dustLoading': ['', Validators.required],
+      'CO': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      'H2': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      'combustibleGases': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      'vfr': ['', [Validators.required, Validators.min(0)]],
+      'dustLoading': ['', [Validators.required, Validators.min(0)]],
       'name': ['Loss #' + lossNum]
     });
   }
@@ -23,11 +23,11 @@ export class ExhaustGasService {
   getFormFromLoss(exhaustGas: ExhaustGasEAF): UntypedFormGroup {
     let tmpGroup = this.formBuilder.group({
       'offGasTemp': [exhaustGas.offGasTemp, Validators.required],
-      'CO': [exhaustGas.CO, Validators.required],
-      'H2': [exhaustGas.H2, Validators.required],
-      'combustibleGases': [exhaustGas.combustibleGases, Validators.required],
-      'vfr': [exhaustGas.vfr, Validators.required],
-      'dustLoading': [exhaustGas.dustLoading, Validators.required],
+      'CO': [exhaustGas.CO, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'H2': [exhaustGas.H2, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'combustibleGases': [exhaustGas.combustibleGases, [Validators.required, Validators.min(0), Validators.max(100)]],
+      'vfr': [exhaustGas.vfr, [Validators.required, Validators.min(0)]],
+      'dustLoading': [exhaustGas.dustLoading, [Validators.required, Validators.min(0)]],
       'name': exhaustGas.name
     });
     return tmpGroup;

@@ -109,7 +109,7 @@ export class ExhaustGasComponent implements OnInit {
     loss.collapse = !loss.collapse;
   }
   calculate(loss: ExhaustGasObj) {
-    if (loss.form.status === 'VALID') {
+    if (loss.form.valid) {
       let tmpGas = this.exhaustGasService.getLossFromForm(loss.form);
       loss.heatLoss = this.phastService.exhaustGasEAF(tmpGas, this.settings);
     } else {
