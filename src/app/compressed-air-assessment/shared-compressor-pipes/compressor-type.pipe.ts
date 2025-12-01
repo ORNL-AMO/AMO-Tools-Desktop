@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { GenericCompressorDbService } from '../generic-compressor-db.service';
+import { GenericCompressorDbService } from '../../shared/generic-compressor-db.service';
 
 @Pipe({
     name: 'compressorType',
