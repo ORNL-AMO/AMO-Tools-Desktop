@@ -10,6 +10,7 @@ import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, getComponentNam
   providedIn: 'root'
 })
 export class WaterAssessmentService {
+  isNavigating = false;
   assessmentId: number;
   settings: BehaviorSubject<Settings>;
   mainTab: BehaviorSubject<string>;
@@ -32,8 +33,8 @@ export class WaterAssessmentService {
     'system-basics',
     'water-intake',
     'water-discharge',
-    'water-using-system',
     'water-treatment',
+    'water-using-system',
     'waste-water-treatment'
   ];
 
@@ -200,21 +201,46 @@ export class WaterAssessmentService {
   }
 
   continue() {
-    let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
-    let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-    let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex + 1];
-    this.setupTab.next(nextTab);
-  }
 
-  back() {
+    if (this.isNavigating) return;
+    
+    this.isNavigating = true;
+
     let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
-    if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'baseline') {
+    let nextTab: WaterSetupTabString;
+
+    if (tmpSetupTab !== 'waste-water-treatment' && this.mainTab.getValue() == 'baseline') {
       let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-      let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex - 1];
+
+      nextTab = this.setupTabs[assessmentTabIndex + 1];
       this.setupTab.next(nextTab);
     } else if (this.mainTab.getValue() == 'assessment') {
       this.mainTab.next('baseline');
     }
+
+    setTimeout(() => {
+      this.isNavigating = false;
+    }, 200);
+  }
+
+  back() {
+    if (this.isNavigating) return;
+    
+    this.isNavigating = true;
+
+    let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
+    if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'baseline') {
+      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
+      let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex - 1];
+      
+      this.setupTab.next(nextTab);
+    } else if (this.mainTab.getValue() == 'assessment') {
+      this.mainTab.next('baseline');
+    }
+
+    setTimeout(() => {
+      this.isNavigating = false;
+    }, 200);
   }
 
   getHasWaterTreatments(waterAssessment?: WaterAssessment) {

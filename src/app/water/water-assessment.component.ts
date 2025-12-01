@@ -31,7 +31,6 @@ export class WaterAssessmentComponent {
     this.setContainerHeight();
   }
 
-  
   diagramId: number;
   diagramContainerDimensions: ParentContainerDimensions;
   integratedDiagram: IntegratedAssessmentDiagram;
@@ -212,23 +211,11 @@ export class WaterAssessmentComponent {
   }
 
   next() {
-    if (this.setupTab == 'system-basics') {
-      this.waterAssessmentService.setupTab.next('water-intake');
-    } else if (this.setupTab == 'water-intake') {
-      this.waterAssessmentService.setupTab.next('water-using-system');
-    } 
+    this.waterAssessmentService.continue();
   }
 
   back() {
-    if (this.setupTab == 'water-using-system') {
-      this.waterAssessmentService.setupTab.next('water-intake');
-    } else if (this.setupTab == 'water-intake') {
-      this.waterAssessmentService.setupTab.next('system-basics');
-    } 
-  }
-
-  continue() {
-    this.waterAssessmentService.continue();
+    this.waterAssessmentService.back();
   }
 
   setContainerHeight() {

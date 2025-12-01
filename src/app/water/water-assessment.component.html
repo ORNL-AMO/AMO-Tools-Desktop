@@ -10,6 +10,7 @@
         <a class="nav-link" *ngIf="setupTab == 'system-basics'">Assessment Settings</a>
         <a class="nav-link" *ngIf="setupTab == 'water-intake'">Water Intake</a>
         <a class="nav-link" *ngIf="setupTab == 'water-discharge'">Water Discharge</a>
+        <a class="nav-link" *ngIf="setupTab == 'water-treatment'">Water Treatment</a>
         <a class="nav-link" *ngIf="setupTab == 'water-using-system'">Water Using System</a>
         <a class="nav-link" *ngIf="setupTab == 'waste-water-treatment'">Waste Water Treatment</a>
       </div>
@@ -34,11 +35,11 @@
           @case ('water-discharge') {
             <app-discharge-outlet [assessment]="assessment"></app-discharge-outlet>
           }
-          @case ('water-using-system') {
-            <app-water-using-system [assessment]="assessment"></app-water-using-system>
-          }
           @case ('water-treatment') {
             <app-water-treatment [waterAssessment]="assessment"></app-water-treatment>
+          }
+          @case ('water-using-system') {
+            <app-water-using-system [assessment]="assessment"></app-water-using-system>
           }
           @case ('waste-water-treatment') {
             <app-waste-water-treatment [waterAssessment]="assessment.water"></app-waste-water-treatment>
@@ -78,7 +79,7 @@
       </div>
       <div class="pull-right">
         <button class="btn btn-primary" [disabled]="disableNext" (click)="next()">
-          <span *ngIf="setupTab != 'system-balance-results'" (click)="continue()">Next</span>
+          <span *ngIf="setupTab != 'system-balance-results'">Next</span>
           <span *ngIf="setupTab == 'system-balance-results'">Go To Assessment</span>
         </button>
       </div>
