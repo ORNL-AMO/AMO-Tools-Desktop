@@ -45,6 +45,7 @@ import { CompressorOptionsTableComponent } from './existing-compressor-modal/com
 import { FilterCompressorsComponent } from './existing-compressor-modal/filter-compressors/filter-compressors.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PerformancePointsCalculationsService } from './performance-points-catalog/calculations/performance-points-calculations.service';
+import { SharedCompressorPipesModule } from '../../../compressed-air-assessment/shared-compressor-pipes/shared-compressor-pipes.module';
 
 
 
@@ -77,6 +78,7 @@ import { PerformancePointsCalculationsService } from './performance-points-catal
     FormsModule,
     ModalModule,
     SharedPipesModule,
+    SharedCompressorPipesModule,
     OperatingHoursModalModule,
     ConfirmDeleteModalModule,
     ConnectedInventoryModule,

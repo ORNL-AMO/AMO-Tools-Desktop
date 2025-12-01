@@ -55,7 +55,6 @@ export class DefaultCompressorApiService {
             DesignInTemp: suiteDbCompressorPointer.designInTemp(),
             DesignSurgeFlow: suiteDbCompressorPointer.designSurgeFlow(),
             HP: suiteDbCompressorPointer.hp(),
-            IDCompLib: suiteDbCompressorPointer.ID(),
             IDCompType: suiteDbCompressorPointer.idCompType(),
             IDControlType: suiteDbCompressorPointer.idControlType(),
             MaxFullFlowPressure: suiteDbCompressorPointer.maxFullFlowPressure(),

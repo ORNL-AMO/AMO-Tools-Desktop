@@ -18,7 +18,6 @@ export class CompressorDataManagementService {
   setCompressorDataFromGenericCompressorDb(genericCompressor: GenericCompressor) {
     let selectedCompressor: CompressedAirItem = this.compressedAirCatalogService.selectedCompressedAirItem.getValue();
     ///selectedCompressor.modifiedDate = new Date();
-    selectedCompressor.compressorLibId = genericCompressor.IDCompLib;
 
     selectedCompressor.nameplateData.compressorType = genericCompressor.IDCompType;
     selectedCompressor.compressedAirControlsProperties.controlType = genericCompressor.IDControlType;

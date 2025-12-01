@@ -32,7 +32,6 @@ export class GenericCompressorDbService {
           DesignInTemp: Number(result['DesignInTemp']),
           DesignSurgeFlow: Number(result['DesignSurgeFlow']),
           HP: Number(result['HP']),
-          IDCompLib: Number(result['IDCompLib']),
           IDCompType: Number(result['IDCompType']),
           IDControlType: Number(result['IDControlType']),
           MaxFullFlowPressure: Number(result['MaxFullFlowPressure']),
@@ -57,12 +56,6 @@ export class GenericCompressorDbService {
         });
       }
     });
-  }
-
-
-  getCompressorById(IDCompLib: number): GenericCompressor {
-    let compressor: GenericCompressor = this.genericCompressors.find(compressor => { return compressor.IDCompLib == IDCompLib });
-    return compressor;
   }
 
   getCompressorTypeLabel(IDCompType: number): string {
@@ -137,7 +130,6 @@ export interface GenericCompressor {
   DesignInTemp: number,
   DesignSurgeFlow: number,
   HP: number,
-  IDCompLib: number,
   IDCompType: number,
   IDControlType: number,
   MaxFullFlowPressure: number,
