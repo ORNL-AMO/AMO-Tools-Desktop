@@ -1,21 +1,21 @@
 export const reactiveEnergy = {
 
     reactiveEnergy: {
-        VARh: {
-            name: {
-                singular: 'Volt-Ampere Reactive Hour'
-                , plural: 'Volt-Amperes Reactive Hour' ,
-                 display:  '(VAR/h)'
-            }
-            , to_anchor: 1
-        }
-        , mVARh: {
+        mVARh: {
             name: {
                 singular: 'Millivolt-Ampere Reactive Hour'
                 , plural: 'Millivolt-Amperes Reactive Hour' ,
                  display:  '(mVAR/h)'
             }
             , to_anchor: .001
+        }
+        , VARh: {
+            name: {
+                singular: 'Volt-Ampere Reactive Hour'
+                , plural: 'Volt-Amperes Reactive Hour' ,
+                 display:  '(VAR/h)'
+            }
+            , to_anchor: 1
         }
         , kVARh: {
             name: {

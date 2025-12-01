@@ -1,3 +1,4 @@
+import { SaturatedPropertiesOutput } from './../../shared/models/steam/steam-outputs';
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerWarnings } from './boiler.service';
@@ -10,6 +11,9 @@ import { HeaderService } from '../header/header.service';
 import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
+import { SteamPressureOrTemp, SteamQuality } from '../../shared/models/steam/steam-inputs';
+import { Observable } from 'rxjs';
+
 
 @Component({
     selector: 'app-boiler',
@@ -24,15 +28,20 @@ export class BoilerComponent implements OnInit {
   selected: boolean;
   @Input()
   settings: Settings;
-  @Output('emitSave')
-  emitSave = new EventEmitter<BoilerInput>();
   @Input()
   isBaseline: boolean;
   @Input()
   modificationIndex: number;
   @Input()
   ssmt: SSMT;
-  
+
+  @Output()
+  emitCalculate = new EventEmitter<UntypedFormGroup>();
+  @Output('emitSave')
+  emitSave = new EventEmitter<BoilerInput>();
+  @Output('emitChangeField')
+  emitChangeField = new EventEmitter<string>();
+
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -40,8 +49,6 @@ export class BoilerComponent implements OnInit {
     this.setBlowdownRateModalWidth();
   }
   
-  headerInput: HeaderInput;
-  boilerInput: BoilerInput;
   warnings: BoilerWarnings;
   formWidth: number;
   showBlowdownRateModal: boolean = false;
@@ -51,8 +58,14 @@ export class BoilerComponent implements OnInit {
   options: Array<FlueGasMaterial | SolidLiquidFlueGasMaterial>;
   showModal: boolean;
   idString: string = 'baseline_';
-  highPressureHeaderForm: UntypedFormGroup;
-  lowPressureHeaderForm: UntypedFormGroup;
+
+  SteamQuality = SteamQuality;
+  SteamPressureOrTemp = SteamPressureOrTemp;
+  saturatedPropertiesOutput$: Observable<SaturatedPropertiesOutput>;
+
+  boilerTempValidationErrorValue: number;
+  headerLowPressureValidationErrorValue: number;
+  
   constructor(private boilerService: BoilerService, private ssmtService: SsmtService,
     private compareService: CompareService, private headerService: HeaderService, 
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
@@ -60,10 +73,11 @@ export class BoilerComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.boilerInput = this.ssmt.boilerInput;
-    this.headerInput = this.ssmt.headerInput;
-    if (!this.isBaseline) {
+    if (this.isBaseline) {
+      this.saturatedPropertiesOutput$ = this.boilerService.baselineSaturatedPropertiesOutput$;
+    } else {
       this.idString = 'modification_';
+      this.saturatedPropertiesOutput$ = this.boilerService.modificationSaturatedPropertiesOutput$;
     }
     this.initForm();
     this.setFuelTypes();
@@ -92,13 +106,25 @@ export class BoilerComponent implements OnInit {
   }
 
   initForm() {
-    if (this.boilerInput) {
-      this.boilerForm = this.boilerService.initFormFromObj(this.boilerInput, this.settings);
+    if (this.ssmt.boilerInput) {
+      this.boilerForm = this.boilerService.initFormFromBoilerInput(this.ssmt.boilerInput, this.settings);
     } else {
-      this.boilerForm = this.boilerService.initForm(this.settings);
+      this.boilerForm = this.boilerService.initEmptyForm(this.settings);
     }
+    this.setHeaderValidationErrors(this.boilerForm.getRawValue());
     this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
-    this.setPressureForms(this.boilerInput);
+  }
+
+  updateSteamMeasurementField(): void {
+    if (this.steamQuality.value === SteamQuality.SATURATED) {
+      if (this.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
+        this.saturatedPressure.patchValue(null);
+      } else {
+        this.steamTemperature.patchValue(null);
+      }
+    }
+
+    this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings);
   }
 
   setFuelTypes() {
@@ -110,43 +136,33 @@ export class BoilerComponent implements OnInit {
   }
 
   enableForm() {
-    this.boilerForm.controls.fuelType.enable();
-    this.boilerForm.controls.fuel.enable();
-    this.boilerForm.controls.blowdownFlashed.enable();
-    this.boilerForm.controls.preheatMakeupWater.enable();
+    this.boilerForm.enable();
   }
 
   disableForm() {
-    this.boilerForm.controls.fuelType.disable();
-    this.boilerForm.controls.fuel.disable();
-    this.boilerForm.controls.blowdownFlashed.disable();
-    this.boilerForm.controls.preheatMakeupWater.disable();
+    this.boilerForm.disable();
   }
 
-  setPressureForms(boilerInput: BoilerInput) {
-    if (boilerInput) {
-      if (this.headerInput.highPressureHeader) {
-        this.highPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, boilerInput, undefined);
-      }
+  setHeaderValidationErrors(boilerInput: BoilerInput) {
+      this.boilerTempValidationErrorValue = this.headerService.getBoilerTempErrorValue(boilerInput, this.ssmt.headerInput, this.settings);
+      this.headerLowPressureValidationErrorValue = this.headerService.getHeaderLowPressureMinErrorValue(boilerInput, this.ssmt.headerInput, this.settings);
+  }
 
-      if (this.headerInput.numberOfHeaders == 1 && this.headerInput.highPressureHeader) {
-        this.lowPressureHeaderForm = this.headerService.getHighestPressureHeaderFormFromObj(this.headerInput.highPressureHeader, this.settings, this.boilerInput, boilerInput.deaeratorPressure);
-      } else if (this.headerInput.lowPressureHeader && this.headerInput.numberOfHeaders > 1) {
-        this.lowPressureHeaderForm = this.headerService.getHeaderFormFromObj(this.headerInput.lowPressureHeader, this.settings, boilerInput.deaeratorPressure, undefined);
-      }
-    }
+  updateSaturatedProperties() {
+    this.boilerService.updateFormSaturatedProperties(this.boilerForm, this.ssmt, this.settings, this.isBaseline);
+    this.save();
   }
 
   save() {
     this.warnings = this.boilerService.checkBoilerWarnings(this.boilerForm, this.ssmt, this.settings);
     const boiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
-    this.setPressureForms(boiler);
+    this.setHeaderValidationErrors(boiler);
     this.emitSave.emit(boiler);
   }
 
   setPreheatMakeupWater() {
     let tmpBoiler: BoilerInput = this.boilerService.initObjFromForm(this.boilerForm);
-    this.boilerForm = this.boilerService.initFormFromObj(tmpBoiler, this.settings);
+    this.boilerForm = this.boilerService.initFormFromBoilerInput(tmpBoiler, this.settings);
     this.save();
   }
 
@@ -214,6 +230,13 @@ export class BoilerComponent implements OnInit {
       return false;
     }
   }
+  isSteamPressureDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSaturatedPressureDifferent();
+    } else {
+      return false;
+    }
+  }
   isDeaeratorVentRateDifferent() {
     if (this.canCompare()) {
       return this.compareService.isDeaeratorVentRateDifferent();
@@ -272,4 +295,25 @@ export class BoilerComponent implements OnInit {
     this.boilerForm.controls.combustionEfficiency.patchValue(efficiency);
     this.closeBoilerEfficiencyModal();
   }
+
+  changeField(str: string) {
+    this.emitChangeField.emit(str);
+  }
+
+  get pressureOrTemperature() {
+    return this.boilerForm.get('pressureOrTemperature');
+  }
+
+  get steamTemperature() {
+    return this.boilerForm.get('steamTemperature');
+  }
+
+  get saturatedPressure() {
+    return this.boilerForm.get('saturatedPressure');  
+  }
+
+  get steamQuality() {
+    return this.boilerForm.get('steamQuality');
+  }
+
 }

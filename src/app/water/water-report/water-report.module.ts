@@ -5,26 +5,32 @@ import { WaterReportComponent } from './water-report.component';
 import { SystemSummaryReportComponent } from './system-summary-report/system-summary-report.component';
 import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
 import { SystemTrueCostReportComponent } from './system-true-cost-report/system-true-cost-report.component';
-import { SystemTrueCostBarComponent } from './system-true-cost-bar/system-true-cost-bar.component';
 import { WaterReportService } from './water-report.service';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { AlertInfoContainerComponent } from '../../shared/alert-info-container/alert-info-container.component';
+import { StackedBarIntakeCostsComponent } from './stacked-bar-intake-costs/stacked-bar-intake-costs.component';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
+import { StackedBarIntakeFlowComponent } from './stacked-bar-intake-flow/stacked-bar-intake-flow.component';
+import { SystemTrueCostBarComponent } from './system-true-cost-bar/system-true-cost-bar.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     WaterReportComponent,
     ExecutiveSummaryComponent,
     SystemSummaryReportComponent,
+    SystemTrueCostBarComponent,
     SystemTrueCostReportComponent,
-    SystemTrueCostBarComponent
+    StackedBarIntakeCostsComponent,
+    StackedBarIntakeFlowComponent
   ],
   imports: [
     CommonModule,
     SharedPipesModule,
     PrintOptionsMenuModule,
     AlertInfoContainerComponent,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    NgbModule,
   ],
   exports: [
     WaterReportComponent,

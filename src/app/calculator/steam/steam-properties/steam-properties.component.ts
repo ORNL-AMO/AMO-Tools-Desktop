@@ -88,7 +88,7 @@ export class SteamPropertiesComponent implements OnInit {
 
 
   getForm(quantityValue: number) {
-    this.ranges = this.getRanges(quantityValue);
+    this.ranges = this.steamService.getSteamPropertiesValidationRanges(quantityValue, this.settings);
     if (this.steamService.steamPropertiesInput) {
       this.steamPropertiesForm = this.formBuilder.group({
         'pressure': [this.steamService.steamPropertiesInput.pressure, [Validators.required, Validators.min(this.ranges.minPressure), LessThanValidator.lessThan(this.ranges.maxPressure)]],
@@ -105,7 +105,7 @@ export class SteamPropertiesComponent implements OnInit {
   }
 
   updateForm(quantityValue: number) {
-    this.ranges = this.getRanges(quantityValue);
+    this.ranges = this.steamService.getSteamPropertiesValidationRanges(quantityValue, this.settings);
     this.steamPropertiesForm.controls.quantityValue.setValidators([Validators.required, Validators.min(this.ranges.minQuantityValue), Validators.max(this.ranges.maxQuantityValue)]);
   }
 
@@ -186,18 +186,6 @@ export class SteamPropertiesComponent implements OnInit {
 
   toggleGraph() {
     this.graphToggle = this.graphToggleForm.controls.graphToggle.value.toString();
-  }
-
-  getRanges(quantityValue: number): { minPressure: number, maxPressure: number, minQuantityValue: number, maxQuantityValue: number } {
-    let quantityRanges: { min: number, max: number } = this.steamService.getQuantityRange(this.settings, quantityValue);
-    let minPressure: number = Number(this.convertUnitsService.value(1).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
-    let maxPressure: number = Number(this.convertUnitsService.value(100).from('MPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
-    return {
-      minQuantityValue: quantityRanges.min,
-      maxQuantityValue: quantityRanges.max,
-      minPressure: minPressure,
-      maxPressure: maxPressure
-    };
   }
 
   btnResetData() {

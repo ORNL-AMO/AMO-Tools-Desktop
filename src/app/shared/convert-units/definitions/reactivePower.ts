@@ -1,20 +1,20 @@
 export const reactivePower = {
     reactivePower: {
-        VAR: {
-            name: {
-                singular: 'Volt-Ampere Reactive'
-                , plural: 'Volt-Amperes Reactive' ,
-                 display:  '(VAR)'
-            }
-            , to_anchor: 1
-        }
-        , mVAR: {
+        mVAR: {
             name: {
                 singular: 'Millivolt-Ampere Reactive'
                 , plural: 'Millivolt-Amperes Reactive' ,
                  display:  '(mVAR)'
             }
             , to_anchor: .001
+        }
+        , VAR: {
+            name: {
+                singular: 'Volt-Ampere Reactive'
+                , plural: 'Volt-Amperes Reactive' ,
+                 display:  '(VAR)'
+            }
+            , to_anchor: 1
         }
         , kVAR: {
             name: {

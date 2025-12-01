@@ -1,15 +1,15 @@
 # Contributing to MEASUR (AMO-Tools-Desktop)
 
-We would love for you to contribute to MEASUR (AMO-Tools-Desktop) and help make it even better than it is today!
-
-Reading and following these guidelines will help us make the contribution process easy and effective for everyone involved. It also communicates that you agree to respect the time of the product team as well as the developers managing and developing this open source projects. In return, we will reciprocate that respect by addressing your issue, assessing changes, and helping you finalize your pull requests.
-
 ## Quicklinks
 
 * [Code of Conduct](#code-of-conduct)
 * [Getting Started](#getting-started)
     * [Issues](#issues)
+    * [Branching Conventions](#issues)
     * [Pull Requests](#pull-requests)
+* [Coding Style](#coding-style)
+* [Release Process](#release-process)
+* [Versioning](#versioning)
 * [Getting Help](#getting-help)
 
 ## Code of Conduct
@@ -17,6 +17,11 @@ Reading and following these guidelines will help us make the contribution proces
 We take our open source community seriously and hold ourselves and other contributors to high standards of communication. By participating and contributing to this project, you agree to uphold our [Code of Conduct](CODE_OF_CONDUCT.md)
 
 ## Getting Started
+
+We would love for you to contribute to MEASUR (AMO-Tools-Desktop) and help make it even better than it is today!
+
+Reading and following these guidelines will help us make the contribution process easy and effective for everyone involved. It also communicates that you agree to respect the time of the product team as well as the developers managing and developing this open source projects. In return, we will reciprocate that respect by addressing your issue, assessing changes, and helping you finalize your pull requests.
+
 
 Contributions are made to this repo via Issues and Pull Requests (PRs).
 
@@ -39,6 +44,15 @@ Please do not add information or comments to existing issues other than those re
 If you encounter a bug or have reproduction information related to an existing issue, please contact [measur-help@ornl.gov](measur-help@ornl.gov).
 
 
+### Branching Conventions
+
+This repository uses the following branch conventions:
+
+- master: Stable release version
+- develop: Development branch which contains the newest features and issues will be tracked in the latest release milestone. Code may be unstable as issues work through the QA phase.
+- issue-xxx[-description]: Feature or bug fix branch from develop, should reference a github issue number. You may provide an optional short description in the branch name.
+- fix-xxx[-description]: Bug fix branch from develop, should reference a github issue number. You may provide an optional short description in the branch name.
+- epic-xxx[-description]: In some cases, a large feature will be broken down into a subset of issues. Will the large feature is developed, the small issues can't be added to develop without the totality of the epic being finished. Use an epic branch to create incremental pull requests of smaller issues into the larger epic feature.
 
 ### Pull Requests
 
@@ -53,6 +67,44 @@ PRs should:
     - Contributors should do their best to follow the conventions of modern Angular, React, Typescript, and Javascript versions.
     - A project code and style conventions document is in progress. Maintainers acknowledge that legacy portions of the repository may not follow best practices for code styling conventions. 
 
+#### Please follow the "fork-and-pull" Git workflow
+
+Fork and pull process for contributors:
+
+1. Fork the repository to your own Github account
+2. Clone the project to your machine
+3. Create a branch locally with a succinct but descriptive name
+4. Commit changes to the branch
+5. Following any formatting and testing guidelines specific to this repo
+6. Push changes to your fork
+7. Open a PR in our repository and follow the PR template so that we can efficiently review the changes.
+
+
+#### More Information:
+[Git Hub - Creating a pull request from a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
+[Atlassian - Forking Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow).
+
+## Coding Style
+
+The team is working on a coding style document. Contributors should do their best to follow the conventions of modern Angular, React, Typescript, and Javascript versions.
+
+## Release Process
+
+Releases are managed by the core development team. An "Epic" issue and a Milestone are used to track the issues going into the next release of MEASUR. Our QA team will test issues via the project board. When QA has been completed on the full set of "Epic" issues develop is merged into main and a release will be drafted by the CI system. Release notes are compiled from the changelog entries in PRs. Version numbers follow semantic versioning. Only core maintainers should publish releases.
+
+## Versioning
+
+MEASUR uses [semantic verisoning 2.0.0](https://semver.org/spec/v2.0.0.html). An example version specification for MEASUR looks like `0.0.1-alpha`. Core developers will be responsible for version numbers and releases.
+
+The following is reproduced from semver.org:
+```
+Given a version number MAJOR.MINOR.PATCH, increment the:
+
+MAJOR version when you make incompatible API changes
+MINOR version when you add functionality in a backward compatible manner
+PATCH version when you make backward compatible bug fixes
+Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+```
 
 ## Getting Help
 The MEASUR development team cannot provide technical guidance beyond PR review

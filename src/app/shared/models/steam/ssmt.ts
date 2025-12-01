@@ -141,6 +141,9 @@ export interface BoilerInput {
     blowdownRate: number;
     blowdownFlashed: boolean;
     preheatMakeupWater: boolean;
+    steamQuality: number;
+    saturatedPressure: number;
+    pressureOrTemperature: number;
     steamTemperature: number;
     deaeratorVentRate: number;
     deaeratorPressure: number;
@@ -150,6 +153,12 @@ export interface BoilerInput {
     stackLossInput?: StackLossInput
 }
 
+export interface SteamPropertiesValidationRanges {
+    minPressure: number;
+    maxPressure: number;
+    minQuantityValue: number;
+    maxQuantityValue: number;
+}
 
 export interface HeaderInput {
     numberOfHeaders: number;
