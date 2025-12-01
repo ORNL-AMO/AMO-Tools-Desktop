@@ -90,6 +90,8 @@ export class FixtureLossesComponent implements OnInit {
         this._fixtureLosses.push(tmpLoss);
       });
       this.total = this.getTotal();
+      // * only saving here to deal with side-effect of stale state in tab component after name has been patched.
+      this.saveLosses();
     }
   }
 
@@ -126,11 +128,6 @@ export class FixtureLossesComponent implements OnInit {
     let tmpFixtureLosses = new Array<FixtureLoss>();
     let lossIndex = 1;
     this._fixtureLosses.forEach(loss => {
-      if (!loss.form.controls.name.value) {
-        loss.form.patchValue({
-          name: 'Loss #' + lossIndex
-        });
-      }
       lossIndex++;
       let tmpFixtureLoss: FixtureLoss = this.fixtureFormService.getLossFromForm(loss.form);
       tmpFixtureLoss.heatLoss = loss.heatLoss;

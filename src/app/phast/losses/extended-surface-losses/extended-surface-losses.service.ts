@@ -14,7 +14,7 @@ export class ExtendedSurfaceLossesService {
       'avgSurfaceTemp': ['', Validators.required],
       'ambientTemp': ['', Validators.required],
       'surfaceEmissivity': [0.9, Validators.required],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNum, , Validators.required]
     });
   }
 
@@ -24,7 +24,7 @@ export class ExtendedSurfaceLossesService {
       'avgSurfaceTemp': [wallLoss.surfaceTemperature, Validators.required],
       'ambientTemp': [wallLoss.ambientTemperature, Validators.required],
       'surfaceEmissivity': [wallLoss.surfaceEmissivity, Validators.required],
-      'name': [wallLoss.name]
+      'name': [wallLoss.name, Validators.required]
     });
   }
   //get WallLoss from form

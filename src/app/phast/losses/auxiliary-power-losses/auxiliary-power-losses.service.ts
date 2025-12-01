@@ -15,7 +15,7 @@ export class AuxiliaryPowerLossesService {
       avgCurrent: ['', Validators.required],
       powerFactor: ['', Validators.required],
       operatingTime: ['', Validators.required],
-      name: ['Loss #' + lossNum]
+      name: ['Loss #' + lossNum, Validators.required]
     });
   }
 
@@ -38,7 +38,7 @@ export class AuxiliaryPowerLossesService {
       avgCurrent: [loss.avgCurrent, Validators.required],
       powerFactor: [loss.powerFactor, Validators.required],
       operatingTime: [loss.operatingTime, Validators.required],
-      name: [loss.name]
+      name: [loss.name, Validators.required]
     });
   }
 

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { LeakageLoss } from '../../../shared/models/phast/losses/leakageLoss';
 import { GreaterThanValidator } from '../../../shared/validators/greater-than';
+import { V } from '@angular/cdk/scrolling-module.d-ud2XrbF8';
 
 @Injectable()
 export class LeakageFormService {
@@ -17,7 +18,7 @@ export class LeakageFormService {
       coefficient: [.8052, Validators.required],
       specificGravity: [1.0, [Validators.required, Validators.min(0)]],
       correctionFactor: [1.0, Validators.required],
-      name: ['Loss #' + lossNum]
+      name: ['Loss #' + lossNum, Validators.required]
     });
 
     if (!lossNum) {
@@ -39,7 +40,7 @@ export class LeakageFormService {
       coefficient: [loss.coefficient, Validators.required],
       specificGravity: [loss.specificGravity, [Validators.required, Validators.min(0)]],
       correctionFactor: [loss.correctionFactor, Validators.required],
-      name: [loss.name]
+      name: [loss.name, Validators.required]
     });
 
     if (!inAssessment) {

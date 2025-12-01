@@ -28,7 +28,7 @@ export class SolidMaterialFormService {
       'heatOfReaction': [0, [Validators.required, Validators.min(0)]],
       'endothermicOrExothermic': ['Endothermic', Validators.required],
       'additionalHeatRequired': [0, Validators.required],
-      'name': ['Material #' + lossNumber]
+      'name': ['Material #' + lossNumber, Validators.required]
     });
 
     return formGroup;
@@ -57,7 +57,7 @@ export class SolidMaterialFormService {
       'heatOfReaction': [chargeMaterial.solidChargeMaterial.reactionHeat, [Validators.required, Validators.min(0)]],
       'endothermicOrExothermic': [reactionType, Validators.required],
       'additionalHeatRequired': [chargeMaterial.solidChargeMaterial.additionalHeat, Validators.required],
-      'name': [chargeMaterial.name]
+      'name': [chargeMaterial.name, Validators.required]
     });
     
     formGroup = this.setInitialTempValidator(formGroup);

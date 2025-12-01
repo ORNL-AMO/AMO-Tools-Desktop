@@ -18,6 +18,9 @@
       </span>
       <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input"
         formControlName="name" (input)="setName(loss)">
+          <span class="alert-danger pull-right small" *ngIf="loss.formByMass.controls.name.invalid && !loss.formByMass.controls.name.pristine">
+        <span *ngIf="loss.formByMass.controls.name.errors.required">Value required.</span>
+      </span>
       <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked"
         (click)="removeLoss(lossIndex)">
         <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
@@ -32,6 +35,9 @@
       </span>
       <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input"
         formControlName="name" (input)="setName(loss)">
+          <span class="alert-danger pull-right small" *ngIf="loss.formByVolume.controls.name.invalid && !loss.formByVolume.controls.name.pristine">
+        <span *ngIf="loss.formByVolume.controls.name.errors.required">Value required.</span>
+      </span>
       <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked"
         (click)="removeLoss(lossIndex)">
         <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
