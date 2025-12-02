@@ -73,6 +73,7 @@ export class ExhaustGasComponent implements OnInit {
   initForms() {
     if (this.losses.exhaustGasEAF) {
       let lossIndex = 1;
+      let setDefaultName = false;
       this.losses.exhaustGasEAF.forEach(loss => {
         let tmpLoss = {
           form: this.exhaustGasService.getFormFromLoss(loss),
@@ -83,11 +84,15 @@ export class ExhaustGasComponent implements OnInit {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           });
+          setDefaultName = true;
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._exhaustGasLosses.push(tmpLoss);
       });
+      if (setDefaultName) {
+        this.saveLosses();
+      }
     }
   }
 
@@ -119,14 +124,7 @@ export class ExhaustGasComponent implements OnInit {
 
   saveLosses() {
     let tmpExhaustGases = new Array<ExhaustGasEAF>();
-    let lossIndex = 1;
     this._exhaustGasLosses.forEach(loss => {
-      if (!loss.form.controls.name.value) {
-        loss.form.patchValue({
-          name: 'Loss #' + lossIndex
-        });
-      }
-      lossIndex++;
       let tmpExhaustGas = this.exhaustGasService.getLossFromForm(loss.form);
       tmpExhaustGases.push(tmpExhaustGas);
     });

@@ -16,7 +16,7 @@ export class ExhaustGasService {
       'combustibleGases': ['', [Validators.required, Validators.min(0), Validators.max(100)]],
       'vfr': ['', [Validators.required, Validators.min(0)]],
       'dustLoading': ['', [Validators.required, Validators.min(0)]],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNum, Validators.required]
     });
   }
 
@@ -28,7 +28,7 @@ export class ExhaustGasService {
       'combustibleGases': [exhaustGas.combustibleGases, [Validators.required, Validators.min(0), Validators.max(100)]],
       'vfr': [exhaustGas.vfr, [Validators.required, Validators.min(0)]],
       'dustLoading': [exhaustGas.dustLoading, [Validators.required, Validators.min(0)]],
-      'name': exhaustGas.name
+      'name': [exhaustGas.name, Validators.required]
     });
     return tmpGroup;
   }
