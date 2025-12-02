@@ -1,5 +1,5 @@
 
-    <div #content class="d-none d-md-flex water-process-diagram-container water-process-diagram flex-column"  *ngIf="mainTab == 'diagram'">
+    <div #content class="d-none d-lg-flex water-process-diagram-container water-process-diagram flex-column"  *ngIf="mainTab == 'diagram'">
         <div #header *ngIf="!integratedDiagram" class="w-100 hide-print sticky-top">
             <app-water-diagram-banner [diagram]="diagram"></app-water-diagram-banner>
         </div>
@@ -26,7 +26,7 @@
 [integratedCreateType]="'Water'"
 (onClose)="hideCreateAssessmentModal()"></app-create-assessment-modal>
 
-<div class="d-flex d-md-none">
+<div class="d-flex d-lg-none" [class.d-none]="isTouchDevice">
   <span class="alert-warning pull-right small">
     Water Diagram is unavailable to view on your current device. 
     Please export the assessment and upload to a desktop or a device with a larger screen size.

@@ -6,7 +6,7 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { Assessment } from '../shared/models/assessment';
-import { WaterAssessmentService } from './water-assessment.service';
+import { WaterAssessmentService, WaterMainTabString } from './water-assessment.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
 import { IntegratedAssessmentDiagram } from '../shared/models/diagram';
@@ -81,7 +81,7 @@ export class WaterAssessmentComponent {
       }
     })
 
-    let startingTab: string = this.assessmentService.getStartingTab();
+    let startingTab: WaterMainTabString = this.assessmentService.getStartingTab() as WaterMainTabString;
     if (startingTab) {
       this.waterAssessmentService.mainTab.next(startingTab);
     }
@@ -211,11 +211,11 @@ export class WaterAssessmentComponent {
   }
 
   next() {
-    this.waterAssessmentService.continue();
+    this.waterAssessmentService.continueSetupTab();
   }
-
+  
   back() {
-    this.waterAssessmentService.back();
+    this.waterAssessmentService.backSetupTab();
   }
 
   setContainerHeight() {
