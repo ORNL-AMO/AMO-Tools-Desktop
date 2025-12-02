@@ -30,6 +30,11 @@ export class WaterAssessmentService {
   showExportModal: BehaviorSubject<boolean>;
   setupTabs: Array<WaterSetupTabString> = [
     'system-basics',
+    'water-intake',
+    'water-discharge',
+    'water-treatment',
+    'water-using-system',
+    'waste-water-treatment'
   ];
 
   constructor(
@@ -56,7 +61,6 @@ export class WaterAssessmentService {
   }
 
   updateWaterAssessment(waterAssessment: WaterAssessment) {
-    // console.log('updateWaterAssessment', waterAssessment);
     this.waterAssessment.next(waterAssessment);
   }
 
@@ -197,9 +201,14 @@ export class WaterAssessmentService {
 
   continue() {
     let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
-    let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-    let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex + 1];
-    this.setupTab.next(nextTab);
+    let nextTab: WaterSetupTabString;
+
+    if (tmpSetupTab !== 'waste-water-treatment' && this.mainTab.getValue() == 'baseline') {
+      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
+
+      nextTab = this.setupTabs[assessmentTabIndex + 1];
+      this.setupTab.next(nextTab);
+    }
   }
 
   back() {
@@ -207,9 +216,8 @@ export class WaterAssessmentService {
     if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'baseline') {
       let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
       let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex - 1];
+      
       this.setupTab.next(nextTab);
-    } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('baseline');
     }
   }
 
