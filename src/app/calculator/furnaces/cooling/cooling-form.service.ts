@@ -26,7 +26,7 @@ export class CoolingFormService {
       'inletTemp': ['', Validators.required],
       'outletTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
-      'name': ['Loss #' + lossNumber],
+      'name': ['Loss #' + lossNumber, Validators.required],
       'coolingMedium': ['Liquid']
     });
   }
@@ -49,7 +49,7 @@ export class CoolingFormService {
       'outletTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
       'gasDensity': [defaultDensity, [Validators.required, Validators.min(0)]],
-      'name': ['Loss #' + lossNumber],
+      'name': ['Loss #' + lossNumber, Validators.required],
       'coolingMedium': ['Gas']
     });
   }
@@ -62,8 +62,8 @@ export class CoolingFormService {
       'inletTemp': [loss.liquidCoolingLoss.initialTemperature, Validators.required],
       'outletTemp': [loss.liquidCoolingLoss.outletTemperature, Validators.required],
       'correctionFactor': [loss.liquidCoolingLoss.correctionFactor, Validators.required],
-      'name': [loss.name],
-      'coolingMedium': [loss.coolingMedium]
+      'name': [loss.name, Validators.required],
+      'coolingMedium': [loss.coolingMedium, ]
     });
 
     return formGroup;
@@ -93,7 +93,7 @@ export class CoolingFormService {
       'outletTemp': [loss.gasCoolingLoss.finalTemperature, Validators.required],
       'correctionFactor': [loss.gasCoolingLoss.correctionFactor, Validators.required],
       'gasDensity': [loss.gasCoolingLoss.gasDensity, [Validators.required, Validators.min(0)]],
-      'name': [loss.name],
+      'name': [loss.name, Validators.required ],
       'coolingMedium': [loss.coolingMedium]
     });
   }

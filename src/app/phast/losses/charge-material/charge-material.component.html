@@ -20,6 +20,9 @@
         </span>
         <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input"
           formControlName="name" (input)="setName(material)">
+          <span class="alert-danger pull-right small" *ngIf="material.solidForm.controls.name.invalid && !material.solidForm.controls.name.pristine">
+        <span *ngIf="material.solidForm.controls.name.errors.required">Value required.</span>
+      </span>
         <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked"
           (click)="removeMaterial(lossIndex)">
           <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
@@ -36,6 +39,9 @@
         </span>
         <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input"
           formControlName="name" (input)="setName(material)">
+          <span class="alert-danger pull-right small" *ngIf="material.gasForm.controls.name.invalid && !material.gasForm.controls.name.pristine">
+        <span *ngIf="material.gasForm.controls.name.errors.required">Value required.</span>
+      </span>
         <span class="input-group-addon" *ngIf="isBaseline && inSetup && !lossesLocked"
           (click)="removeMaterial(lossIndex)">
           <span aria-hidden="true" class="close" aria-label="Close">&times;</span>
@@ -52,6 +58,9 @@
         </span>
         <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input"
           formControlName="name" (input)="setName(material)">
+          <span class="alert-danger pull-right small" *ngIf="material.liquidForm.controls.name.invalid && !material.liquidForm.controls.name.pristine">
+        <span *ngIf="material.liquidForm.controls.name.errors.required">Value required.</span>
+      </span>
         <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked"
           (click)="removeMaterial(lossIndex)">
           <span aria-hidden="true" class="close" aria-label="Close">&times;</span>

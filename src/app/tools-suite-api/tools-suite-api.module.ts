@@ -13,6 +13,7 @@ import { CompressedAirSuiteApiService } from './compressed-air-suite-api.service
 import { SviSuiteApiService } from './svi-suite-api.service';
 import { WaterSuiteApiService } from './water-suite-api.service';
 import { MotorDataApiService } from './motor-data-api.service';
+import { DefaultCompressorApiService } from './default-compressor-api.service';
 
 @NgModule({
   declarations: [],
@@ -32,7 +33,8 @@ import { MotorDataApiService } from './motor-data-api.service';
     CompressedAirSuiteApiService,
     SviSuiteApiService,
     WaterSuiteApiService,
-    MotorDataApiService
+    MotorDataApiService,
+    DefaultCompressorApiService
   ]
 })
 export class ToolsSuiteApiModule { }
