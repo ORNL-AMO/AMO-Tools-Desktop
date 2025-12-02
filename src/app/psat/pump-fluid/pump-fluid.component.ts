@@ -5,11 +5,12 @@ import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
 import { HelpPanelService } from '../help-panel/help-panel.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { UntypedFormGroup, ValidatorFn } from '@angular/forms';
+import { UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { pumpTypesConstant, driveConstants, fluidProperties, fluidTypes } from '../psatConstants';
 import { PsatWarningService } from '../psat-warning.service';
 import { PumpFluidService } from './pump-fluid.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
+import { notWholeNumberMsg } from '../../psat/psatConstants';
 
 @Component({
     selector: 'app-pump-fluid',
@@ -36,6 +37,7 @@ export class PumpFluidComponent implements OnInit {
   modificationIndex: number;
 
   //Arrays holding <select> form data
+  notWholeNumberMsg: string = notWholeNumberMsg;
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
   //TODO: create Fluid Property interface
@@ -126,7 +128,7 @@ export class PumpFluidComponent implements OnInit {
 
   subtractNum(str: string) {
     if (str == 'stages') {
-      if (this.psatForm.controls.stages.value != 0) {
+      if (this.psatForm.controls.stages.value != 1) {
         this.psatForm.patchValue({
           stages: this.psatForm.controls.stages.value - 1
         })
