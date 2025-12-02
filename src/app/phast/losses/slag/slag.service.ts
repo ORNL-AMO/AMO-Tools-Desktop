@@ -14,7 +14,7 @@ export class SlagService {
       'outletTemperature': ['', Validators.required],
       'specificHeat': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNum, Validators.required]
     });
   }
 
@@ -25,7 +25,7 @@ export class SlagService {
       'outletTemperature': [slag.outletTemperature, Validators.required],
       'specificHeat': [slag.specificHeat, Validators.required],
       'correctionFactor': [slag.correctionFactor, Validators.required],
-      'name': [slag.name]
+      'name': [slag.name, Validators.required]
     });
   }
 

@@ -152,14 +152,7 @@ export class EnergyInputExhaustGasLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpExhaustGases = new Array<EnergyInputExhaustGasLoss>();
-    let lossIndex = 1;
     this._exhaustGasLosses.forEach(loss => {
-      if (!loss.form.controls.name.value) {
-        loss.form.patchValue({
-          name: 'Loss #' + lossIndex
-        });
-      }
-      lossIndex++;
       let tmpExhaustGas = this.energyInputExhaustGasService.getLossFromForm(loss.form);
       tmpExhaustGases.push(tmpExhaustGas);
     });

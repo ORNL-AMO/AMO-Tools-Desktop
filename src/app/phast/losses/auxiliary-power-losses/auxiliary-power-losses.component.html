@@ -17,8 +17,11 @@
         <span *ngIf="loss.collapse" class="fa fa-caret-down"></span>
         <span *ngIf="!loss.collapse" class="fa fa-caret-up"></span>
       </span>
-      <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input"
+      <input [readonly]="!baselineSelected && !inSetup" type="text" class="form-control name-input" (input)="saveLosses()"
         formControlName="name">
+          <span class="alert-danger pull-right small" *ngIf="loss.form.controls.name.invalid && !loss.form.controls.name.pristine">
+        <span *ngIf="loss.form.controls.name.errors.required">Value required.</span>
+      </span>
       <span class="input-group-addon units" *ngIf="isBaseline && inSetup && !lossesLocked"
         (click)="removeLoss(lossIndex)">
         <span aria-hidden="true" class="close" aria-label="Close">&times;</span>

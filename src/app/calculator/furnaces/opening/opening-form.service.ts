@@ -20,7 +20,7 @@ export class OpeningFormService {
       'ambientTemp': [0, Validators.required],
       'percentTimeOpen': [0, [Validators.required, Validators.min(0), Validators.max(100)]],
       'emissivity': [0.9, [Validators.required, Validators.min(0), Validators.max(1)]],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNum, Validators.required]
     });
 
     if (!lossNum) {
@@ -45,7 +45,7 @@ export class OpeningFormService {
       'ambientTemp': [loss.ambientTemperature, Validators.required],
       'percentTimeOpen': [loss.percentTimeOpen, [Validators.required, Validators.min(0), Validators.max(100)]],
       'emissivity': [loss.emissivity, [Validators.required, Validators.min(0), Validators.max(1)]],
-      'name': [loss.name]
+      'name': [loss.name, Validators.required]
     });
 
     if (!inAssessment) {

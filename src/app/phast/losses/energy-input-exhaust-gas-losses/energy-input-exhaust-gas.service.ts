@@ -11,7 +11,7 @@ export class EnergyInputExhaustGasService {
   initForm(lossNum: number): UntypedFormGroup {
     let form: FormGroup = this.formBuilder.group({
       'totalHeatInput': [0, Validators.required],
-      'name': ['Loss #' + lossNum],
+      'name': ['Loss #' + lossNum, Validators.required],
       'availableHeat': [100, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]],
       'electricalHeaterEfficiency': [100, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]]
     });
@@ -28,7 +28,7 @@ export class EnergyInputExhaustGasService {
   getFormFromLoss(energyInputExhaustGas: EnergyInputExhaustGasLoss): UntypedFormGroup {
     let form: FormGroup = this.formBuilder.group({
       'totalHeatInput': [energyInputExhaustGas.totalHeatInput, Validators.required],
-      'name': [energyInputExhaustGas.name],
+      'name': [energyInputExhaustGas.name, Validators.required],
       'availableHeat': [energyInputExhaustGas.availableHeat, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]],
       'electricalHeaterEfficiency': [energyInputExhaustGas.electricalHeaterEfficiency, [Validators.required,  GreaterThanValidator.greaterThan(0), Validators.max(100)]]
     });

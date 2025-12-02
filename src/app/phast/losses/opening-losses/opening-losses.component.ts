@@ -78,6 +78,7 @@ export class OpeningLossesComponent implements OnInit {
   initForms() {
     if (this.losses.openingLosses) {
       let lossIndex = 1;
+      let setDefaultName = false;
       this.losses.openingLosses.forEach(loss => {
         let tmpLoss = {
           form: this.openingFormService.getFormFromLoss(loss),
@@ -88,12 +89,17 @@ export class OpeningLossesComponent implements OnInit {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           });
+          setDefaultName = true;
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._openingLosses.push(tmpLoss);
       });
       this.total = this.getTotal();
+      if (setDefaultName) {
+      // * only saving here to deal with side-effect of stale state in tab component after name has been patched.
+        this.saveLosses();
+      }
     }
   }
 
@@ -137,14 +143,7 @@ export class OpeningLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpOpeningLosses = new Array<OpeningLoss>();
-    let lossIndex = 1;
     this._openingLosses.forEach(loss => {
-      if (!loss.form.controls.name.value) {
-        loss.form.patchValue({
-          name: 'Loss #' + lossIndex
-        });
-      }
-      lossIndex++;
       let tmpOpeningLoss = this.openingFormService.getLossFromForm(loss.form);
       tmpOpeningLoss.heatLoss = loss.totalOpeningLosses;
       tmpOpeningLosses.push(tmpOpeningLoss);
