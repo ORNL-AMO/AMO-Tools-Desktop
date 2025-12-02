@@ -69,9 +69,9 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem, calculate
   // systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct + waterSystem.systemFlowTotals.dischargeWater + waterSystem.systemFlowTotals.dischargeWaterRecycled + consumptiveIrrigationLoss;
 
   // * reconcile assessment value waterSystem.systemFlowTotals.sourceWater
-  const totalSourceFlow = calculatedData? getAssessmentNodeTotalInflow(waterSystem, calculatedData): waterSystem.userEnteredData.totalSourceFlow ?? 0;
+  const totalSourceFlow = calculatedData? getNodeTotalInflow(waterSystem, calculatedData): waterSystem.userEnteredData.totalSourceFlow ?? 0;
   // * reconcile asessment value waterSystem.systemFlowTotals.dischargeWater
-  const totalDischargeFlow = calculatedData? getAssessmentNodeTotalOutflow(waterSystem, calculatedData): waterSystem.userEnteredData.totalDischargeFlow ?? 0;
+  const totalDischargeFlow = calculatedData? getNodeTotalOutflow(waterSystem, calculatedData): waterSystem.userEnteredData.totalDischargeFlow ?? 0;
   const estimatedUnknownLosses = getSystemEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow);
 
     systemBalanceResults.incomingWater = totalSourceFlow;
@@ -88,18 +88,26 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem, calculate
   return systemBalanceResults;
 }
 
-// todo duplicated from results, join after beta
-const getAssessmentNodeTotalInflow = (node: WaterProcessComponent, calculatedData: DiagramCalculatedData): number => {
-  let totalInflow = node.userEnteredData?.totalSourceFlow;
+/**
+* Get total inflow for a node. If user entered data is not available, use calculated data.
+*/
+export const getNodeTotalInflow = (node: Node<ProcessFlowPart> | ProcessFlowPart | WaterProcessComponent, calculatedData: DiagramCalculatedData): number => {
+  const nodeData: ProcessFlowPart | WaterProcessComponent = 'data' in node ? node.data as WaterProcessComponent : node;
+  let totalInflow = nodeData.userEnteredData?.totalSourceFlow;
   if (totalInflow === undefined || totalInflow === null) {
-      totalInflow = calculatedData.nodes[node.diagramNodeId]?.totalSourceFlow;
+      totalInflow = calculatedData.nodes[nodeData.diagramNodeId]?.totalSourceFlow;
   }
   return totalInflow ?? 0;
 }
-const getAssessmentNodeTotalOutflow = (node: WaterProcessComponent, calculatedData: DiagramCalculatedData): number => {
-  let totalOutflow = node.userEnteredData?.totalDischargeFlow;
+
+/**
+* Get total outflow for a node. If user entered data is not available, use calculated data.
+*/
+export const getNodeTotalOutflow = (node: Node<ProcessFlowPart> | ProcessFlowPart | WaterProcessComponent, calculatedData: DiagramCalculatedData): number => {
+  const nodeData: ProcessFlowPart | WaterProcessComponent = 'data' in node ? node.data as WaterProcessComponent : node;
+  let totalOutflow = nodeData.userEnteredData?.totalDischargeFlow;
   if (totalOutflow === undefined || totalOutflow === null) {
-    totalOutflow = calculatedData.nodes[node.diagramNodeId]?.totalDischargeFlow;
+    totalOutflow = calculatedData.nodes[nodeData.diagramNodeId]?.totalDischargeFlow;
   }
   return totalOutflow ?? 0;
 }
@@ -396,9 +404,9 @@ export const getComponentTypeTotalCost = (components: Node<ProcessFlowPart>[], n
   return components.reduce((total: number, component: Node<ProcessFlowPart>) => {
     let totalFlow = 0;
     if (nodeFlowProperty === 'totalSourceFlow') {
-      totalFlow = getTotalInflow(component, calculatedData)
+      totalFlow = getNodeTotalInflow(component.data, calculatedData)
     } else if (nodeFlowProperty === 'totalDischargeFlow') {
-      totalFlow = getTotalOutflow(component, calculatedData)
+      totalFlow = getNodeTotalOutflow(component, calculatedData)
     }
     const unitCost = component.data.cost ?? 0;
     let cost = getFlowCost(unitCost, totalFlow, unitsOfMeasure);
@@ -416,9 +424,9 @@ export const getComponentTypeTotalFlow = (components: Node<ProcessFlowPart>[], n
   return components.reduce((total: number, component: Node<ProcessFlowPart>) => {
     let totalFlow = 0;
     if (nodeFlowProperty === 'totalSourceFlow') {
-      totalFlow = getTotalInflow(component, calculatedData)
+      totalFlow = getNodeTotalInflow(component.data, calculatedData)
     } else if (nodeFlowProperty === 'totalDischargeFlow') {
-      totalFlow = getTotalOutflow(component, calculatedData)
+      totalFlow = getNodeTotalOutflow(component, calculatedData)
     }
     return total + totalFlow;
   }, 0);
@@ -563,7 +571,7 @@ const setBlockCosts = (
   blockCosts: Record<string, BlockCosts>,
   unitsOfMeasure: string
 ) => {
-  const inflow = getTotalInflow(node, calculatedData);
+  const inflow = getNodeTotalInflow(node.data, calculatedData);
   const costPerKGal = node.data.cost ?? 0;
   const costOfInflow = getFlowCost(costPerKGal, inflow, unitsOfMeasure);
 
@@ -674,7 +682,7 @@ const getIntakeFlowProportionCost = (
           const immediateAncestorToSystem: Edge<CustomEdgeData> = Object.values(graph.edgeMap).find((e) => e.target === system && e.source === immediateAncestor);
           const immediateFlowValue = immediateAncestorToSystem.data?.flowValue ?? 0;
 
-          let totalFlowResponsiblity = getTotalOutflow(nodeMap[immediateReceiver], calculatedData) ?? 0;
+          let totalFlowResponsiblity = getNodeTotalOutflow(nodeMap[immediateReceiver], calculatedData) ?? 0;
           const isDirectIntakeToFlow = directPathAncestors.length === 2;
           if (isDirectIntakeToFlow) {
             totalFlowResponsiblity = immediateFlowValue;
@@ -776,7 +784,7 @@ const getDischargeFlowProportionCost = (
             // const debugName = `immediateAncestorToDischarge: ${nodeNameMap[dischargeImmediateAncestor]} -> ${nodeNameMap[dischargeDestinationId]}, systemToImmediateDescendant: ${nodeNameMap[system]} -> ${nodeNameMap[systemImmediateDescendantId]}`;
             // const debugName2 = `systemToImmediateDescendant: ${nodeNameMap[systemId]} -> ${nodeNameMap[systemImmediateDescendantId]}`;
             
-            let totalFlowResponsiblity = getTotalOutflow(nodeMap[dischargeImmediateAncestor], calculatedData) ?? 0;
+            let totalFlowResponsiblity = getNodeTotalOutflow(nodeMap[dischargeImmediateAncestor], calculatedData) ?? 0;
             const isDirectFlowToDischarge = directPathDescendants.length === 2;
             if (isDirectFlowToDischarge) {
               totalFlowResponsiblity = immediateFlowValue;
@@ -789,7 +797,7 @@ const getDischargeFlowProportionCost = (
               const fractionImmediateReceiverTotalOutflow = immediateFlowValue / totalFlowResponsiblity;
               const targetFlowReceived = immediateAncestorToDischarge.data.flowValue ?? 0;
               const targetPortion = targetFlowReceived * fractionImmediateReceiverTotalOutflow;
-              const totalDischargeFlow = getTotalInflow(nodeMap[dischargeDestinationId], calculatedData) ?? 0;
+              const totalDischargeFlow = getNodeTotalInflow(nodeMap[dischargeDestinationId].data, calculatedData) ?? 0;
               const totalDischargeCost = descendantCostMap[systemId].find((cost) => cost.targetId === dischargeDestinationId)?.selfTotalCost ?? 0;
               
               const targetPortionFractionOfInitialFlowSent = (targetPortion / totalDischargeFlow);
@@ -910,7 +918,7 @@ export const getPlantSummaryResults = (
       let waterUsingSystem = currentSystem.data as WaterUsingSystem;
       if (waterUsingSystem.heatEnergy) {
         // todo cleanup implementation
-        const totalInflow = getTotalInflow(currentSystem, calculatedData);
+        const totalInflow = getNodeTotalInflow(currentSystem.data, calculatedData);
         let heatEnergy = JSON.parse(JSON.stringify(waterUsingSystem.heatEnergy));
         heatEnergy.systemWaterUse = totalInflow;
         const unitCost = heatEnergy.heatingFuelType === 0 ? settings.electricityCost : settings.fuelCost;
@@ -918,7 +926,7 @@ export const getPlantSummaryResults = (
       }
 
       if (waterUsingSystem.inSystemTreatment && waterUsingSystem.inSystemTreatment.length > 0) {
-        const totalSystemInflow = getTotalInflow(currentSystem, calculatedData);
+        const totalSystemInflow = getNodeTotalInflow(currentSystem.data, calculatedData);
         const inSystemTreatmentCost = getInSystemTreatmentCost(waterUsingSystem.inSystemTreatment, totalSystemInflow, settings.unitsOfMeasure);
         systemCostContributionsResultsMap[currentSystem.id].treatment = inSystemTreatmentCost;
       }
@@ -1098,29 +1106,6 @@ const getPumpAndMotorEnergyContribution = (component: IntakeSource | DischargeOu
 }
 
 
-/**
-* Get total inflow for a node. If user entered data is not available, use calculated data.
-*/
-export const getTotalInflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalculatedData): number => {
-  let totalInflow = node.data.userEnteredData?.totalSourceFlow;
-  if (totalInflow === undefined || totalInflow === null) {
-      totalInflow = calculatedData.nodes[node.id]?.totalSourceFlow;
-  }
-  return totalInflow ?? 0;
-}
-
-/**
-* Get total outflow for a node. If user entered data is not available, use calculated data.
-*/
-export const getTotalOutflow = (node: Node<ProcessFlowPart>, calculatedData: DiagramCalculatedData): number => {
-  let totalOutflow = node.data.userEnteredData?.totalDischargeFlow;
-  if (totalOutflow === undefined || totalOutflow === null) {
-    totalOutflow = calculatedData.nodes[node.id]?.totalDischargeFlow;
-  }
-  return totalOutflow ?? 0;
-}
-
-
 export const getComponentAncestorCosts = (
   targetNode: Node<ProcessFlowPart>,
   calculatedData: DiagramCalculatedData,
@@ -1130,7 +1115,7 @@ export const getComponentAncestorCosts = (
   unitsOfMeasure: string
 ): Array<ConnectedCost> => {
   let systemConnectedCosts: ConnectedCost[] = [];
-  const targetNodeTotalInflow = getTotalInflow(targetNode, calculatedData);
+  const targetNodeTotalInflow = getNodeTotalInflow(targetNode.data as WaterProcessComponent, calculatedData);
 
   const ancestors: {
     nodeId: string;
@@ -1155,7 +1140,7 @@ export const getComponentAncestorCosts = (
     const node = nodeMap[nodeId];
     const costPerKGal = node.data.cost ?? 0;
 
-    const selfTotalFlow = getTotalOutflow(node, calculatedData);
+    const selfTotalFlow = getNodeTotalOutflow(node, calculatedData);
     // * starting outflow to target node (does not factor losses on the way)
     const outFlow = flowValue;
     // * AKA block costs 
@@ -1190,7 +1175,7 @@ export const getComponentAncestorCosts = (
       visited.add(nodeId);
     }
 
-    const inflow = getTotalInflow(node, calculatedData);
+    const inflow = getNodeTotalInflow(node.data, calculatedData);
     // * add ancestors of current ancestor to visit
     const ancestorEdges = Object.values(graph.edgeMap).filter((e) => e.target === nodeId);
     ancestorEdges.forEach((ancestorEdge: Edge<CustomEdgeData>) => {
@@ -1222,7 +1207,7 @@ export const getComponentDescendantCosts = (
   unitsOfMeasure: string
 ): Array<ConnectedCost> => {
   let systemConnectedCosts: ConnectedCost[] = [];
-  const sourceNodeTotalOutflow = getTotalOutflow(sourceNode, calculatedData);
+  const sourceNodeTotalOutflow = getNodeTotalOutflow(sourceNode, calculatedData);
 
   const descendants: {
     nodeId: string;
@@ -1253,7 +1238,7 @@ export const getComponentDescendantCosts = (
     const node = nodeMap[nodeId];
     const costPerKGal = node.data.cost ?? 0;
 
-    const selfTotalFlow = getTotalInflow(node, calculatedData);
+    const selfTotalFlow = getNodeTotalInflow(node.data, calculatedData);
     // * starting inflow to target node (does not factor losses on the way)
     const inflow = flowValue;
     // * fraction of flow leaving component (does not account for losses)
@@ -1285,7 +1270,7 @@ export const getComponentDescendantCosts = (
       visited.add(nodeId);
     }
 
-    const outflow = getTotalOutflow(node, calculatedData);
+    const outflow = getNodeTotalOutflow(node, calculatedData);
     // * add descendants of current descendant to visit
     const descendantEdges = Object.values(graph.edgeMap).filter((e) => e.source === nodeId);
     descendantEdges.forEach((descendantEdge: Edge<CustomEdgeData>) => {

@@ -19,7 +19,6 @@ export class FlowCalculationService {
       startingNodeId: nodeId,
     }));
 
-
   }
 
   /**

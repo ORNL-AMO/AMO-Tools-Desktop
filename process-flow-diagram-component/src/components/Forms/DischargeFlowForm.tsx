@@ -85,6 +85,9 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
         setInPercent(!inPercent);
     }
 
+    /**
+     * Populate form currentValue through all flows to end of path
+     */
     const onPropogateFlow = (edge: Edge<CustomEdgeData>) => {
         flowService.propagateFlowFromNode(selectedNode.id, edge);
     }
@@ -170,7 +173,6 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                                                                 </InputAdornment>,
                                                             }}
                                                         />
-                                                        {/* `Populate ${currentValue} through all flows to end of path` */}
                                                         <SmallTooltip title={`Set all flow values to the end of path`}
                                                             slotProps={{
                                                                 popper: {
@@ -330,7 +332,7 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
     }
 
     const onClickSumFlows = () => {
-        dispatch(sumTotalFlowChange({ flowProperty: 'totalDischargeFlow' }));
+        dispatch(sumTotalFlowChange({ flowProperty: 'totalDischargeFlow', relatedEdges: componentDischargeEdges }));
     }
 
     React.useEffect(() => {
@@ -359,6 +361,8 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
                 }}
             />
 
+            {/* This button group is being collapse-animated to smoothly hide/display it as absolute within the parent accordian. When we no longer have the parent accordian, this can be removed  */}
+            {componentDischargeEdges?.length &&
             <Collapse in={inView} timeout={{ enter: 10, exit: 100 }} unmountOnExit>
                 <Box display={'flex'} justifyContent={'center'} position={'absolute'} width="100%" marginTop={'1rem'}>
                     <Box position={'relative'}
@@ -414,6 +418,7 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
                     </Box>
                 </Box>
             </Collapse>
+            }
         </Box>
     );
 };
