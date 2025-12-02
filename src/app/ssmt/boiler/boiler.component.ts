@@ -155,7 +155,7 @@ export class BoilerComponent implements OnInit {
   }
 
   updateSaturatedProperties() {
-    this.boilerService.updateFormSaturatedProperties(this.boilerForm, this.ssmt, this.settings, this.isBaseline);
+    this.boilerService.updateFormAndRelatedState(this.boilerForm, this.ssmt, this.settings, this.isBaseline);
     this.save();
   }
 

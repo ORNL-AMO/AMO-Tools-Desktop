@@ -43,7 +43,7 @@ export class BoilerService {
       'feedwaterConductivity': ['']
     });
 
-    this.setSteamTemperatureValidators(form.controls.steamTemperature, settings);
+    this.setSteamTemperatureValidators(form, settings);
 
     return form;
   }
@@ -82,16 +82,17 @@ export class BoilerService {
     return form;
   }
 
-  updateFormSaturatedProperties(form: UntypedFormGroup, ssmt: SSMT, settings: Settings, isBaseline: boolean) {
+  updateFormAndRelatedState(form: UntypedFormGroup, ssmt: SSMT, settings: Settings, isBaseline: boolean) {
     let calculatedBoilerInput: BoilerInput = form.getRawValue();
     this.setBoilerRelatedSSMTFields(calculatedBoilerInput, ssmt, settings, isBaseline);
-    form.patchValue(
-      {
-        ...form.getRawValue(),
-        steamTemperature: calculatedBoilerInput.steamTemperature,
-        saturatedPressure: calculatedBoilerInput.saturatedPressure
+
+    if (form.controls.steamQuality.value === SteamQuality.SATURATED) {
+      if (form.controls.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
+        form.controls.steamTemperature.patchValue(calculatedBoilerInput.steamTemperature);
+      } else {
+        form.controls.saturatedPressure.patchValue(calculatedBoilerInput.saturatedPressure);
       }
-    );
+    }
     this.setPressureAndTemperatureValidators(form, settings);
   }
 
@@ -101,21 +102,22 @@ export class BoilerService {
     const steamTemperatureControl = form.controls.steamTemperature;
     const saturatedPressureControl = form.controls.saturatedPressure;
 
+    const saturatedPropertiesInput: SaturatedPropertiesInput = {
+     saturatedPressure: saturatedPressureControl.value,
+     saturatedTemperature: steamQualityControl.value
+   }
+    const saturatedPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(saturatedPropertiesInput, pressureOrTemperatureControl.value, settings);
+
     if (steamQualityControl.value === SteamQuality.SUPERHEATED) {
-      this.setSaturatedPressureValidators(form, settings);
-      this.setSteamTemperatureValidators(steamTemperatureControl, settings);
+      this.setSaturatedPressureValidators(form, settings, saturatedPropertiesOutput);
+      this.setSteamTemperatureValidators(form, settings, saturatedPropertiesOutput);
 
     } else if (steamQualityControl.value === SteamQuality.SATURATED) {
-       const saturatedPropertiesInput: SaturatedPropertiesInput = {
-        saturatedPressure: saturatedPressureControl.value,
-        saturatedTemperature: steamQualityControl.value
-      }
-      const saturatedPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(saturatedPropertiesInput, pressureOrTemperatureControl.value, settings);
       if (pressureOrTemperatureControl.value === SteamPressureOrTemp.PRESSURE) {
         this.setSaturatedPressureValidators(form, settings, saturatedPropertiesOutput);
         steamTemperatureControl.clearValidators();
       } else if (pressureOrTemperatureControl.value === SteamPressureOrTemp.TEMPERATURE) {
-        this.setSteamTemperatureValidators(steamTemperatureControl, settings, saturatedPropertiesOutput);
+        this.setSteamTemperatureValidators(form, settings, saturatedPropertiesOutput);
         saturatedPressureControl.clearValidators();
       }
     }
@@ -124,34 +126,43 @@ export class BoilerService {
     steamTemperatureControl.updateValueAndValidity();
   }
 
-  setSteamTemperatureValidators(steamTemperatureControl: AbstractControl, settings: Settings, saturatedPropertiesOutput?: SaturatedPropertiesOutput) {
+  setSteamTemperatureValidators(form: UntypedFormGroup, settings: Settings, saturatedPropertiesOutput?: SaturatedPropertiesOutput) {
     const validRanges: BoilerRanges = this.getRanges(settings);
-    if (saturatedPropertiesOutput) {
-      // * use constant of temprature output from steam critical pressure at 3,200 psig - per expert review
+    if (form.controls.steamQuality.value === SteamQuality.SATURATED) {
+      // * use constant of temprature output from steam critical pressure at 3185.415 psig - per expert review
       let temperatureMax: number = 705.1;
       if (settings.steamTemperatureMeasurement !== 'F') {
         temperatureMax = this.convertUnitsService.value(temperatureMax).from('F').to(settings.steamTemperatureMeasurement);
       }
-      steamTemperatureControl.setValidators([Validators.required, Validators.min(roundVal(saturatedPropertiesOutput.saturatedTemperature, 4)), Validators.max(temperatureMax)]);
-    } else {
-      steamTemperatureControl.setValidators([Validators.required, Validators.min(validRanges.steamTemperatureMin), Validators.max(validRanges.steamTemperatureMax)]);
+      form.controls.steamTemperature.setValidators([Validators.required, Validators.min(roundVal(saturatedPropertiesOutput.saturatedTemperature, 4)), Validators.max(temperatureMax)]);
+    } else  {
+      form.controls.steamTemperature.setValidators([Validators.required, Validators.min(validRanges.steamTemperatureMin), Validators.max(validRanges.steamTemperatureMax)]);
     }
 
-    steamTemperatureControl.updateValueAndValidity();
+    form.controls.steamTemperature.updateValueAndValidity();
   }
 
   setSaturatedPressureValidators(form: UntypedFormGroup, settings: Settings, saturatedPropertiesOutput?: SaturatedPropertiesOutput) {
     // todo what is 0
     const validRanges: SteamPropertiesValidationRanges = this.steamService.getSteamPropertiesValidationRanges(0, settings);
-    if (saturatedPropertiesOutput) {
-      // * use constant steam critical pressure as 3,200 psig - per expert review
-      let pressureMax: number = 3200;
+    if (form.controls.steamQuality.value === SteamQuality.SATURATED) {
+      // * use constant steam critical pressure as 3185.415 psig - per expert review
+      let pressureMax: number = 3185.415;
+      // * 0 psia
+      let pressureMin: number = 0;
       if (settings.steamPressureMeasurement !== 'psig') {
         pressureMax = this.convertUnitsService.value(pressureMax).from('psig').to(settings.steamPressureMeasurement);
       }
-      form.controls.saturatedPressure.setValidators([Validators.required, GreaterThanValidator.greaterThan(roundVal(saturatedPropertiesOutput.saturatedTemperature, 2)), Validators.max(pressureMax)]);
-    } else {
-      form.controls.saturatedPressure.setValidators([Validators.required, Validators.min(validRanges.minPressure), Validators.max(validRanges.maxPressure)]);
+      if (settings.steamPressureMeasurement !== 'psia') {
+        pressureMin = this.convertUnitsService.value(pressureMin).from('psia').to(settings.steamPressureMeasurement);
+      }
+      form.controls.saturatedPressure.setValidators([Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]);
+    } else if (form.controls.steamQuality.value === SteamQuality.SUPERHEATED) {
+      let minPressure: number = validRanges.minPressure;
+      if (saturatedPropertiesOutput && saturatedPropertiesOutput.saturatedTemperature > minPressure) {
+        minPressure = roundVal(saturatedPropertiesOutput.saturatedTemperature, 2);
+      }
+      form.controls.saturatedPressure.setValidators([Validators.required, GreaterThanValidator.greaterThan(minPressure), Validators.max(validRanges.maxPressure)]);
     }
 
     form.controls.saturatedPressure.updateValueAndValidity();
