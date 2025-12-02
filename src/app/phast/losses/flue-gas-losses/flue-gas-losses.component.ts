@@ -244,7 +244,6 @@ export class FlueGasLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpFlueGasLosses = new Array<FlueGas>();
-    let lossIndex = 1;
     this._flueGasLosses.forEach(loss => {
       if (loss.measurementType === "By Volume") {
         let tmpVolumeLoss: FlueGas = this.flueGasFormService.buildByVolumeLossFromForm(loss.formByVolume);
@@ -257,7 +256,6 @@ export class FlueGasLossesComponent implements OnInit {
           tmpFlueGasLosses.push(tmpVolumeLoss);
       }
     });
-    lossIndex++;
     this.losses.flueGasLosses = tmpFlueGasLosses;
     this.savedLoss.emit(true);
   }

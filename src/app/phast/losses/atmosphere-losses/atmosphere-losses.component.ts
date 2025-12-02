@@ -122,9 +122,7 @@ export class AtmosphereLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpAtmosphereLosses = new Array<AtmosphereLoss>();
-    let lossIndex = 1;
     this._atmosphereLosses.forEach(loss => {
-      lossIndex++;
       let tmpAtmosphereLoss = this.atmosphereFormService.getLossFromForm(loss.form);
       tmpAtmosphereLoss.heatLoss = loss.heatLoss;
       tmpAtmosphereLosses.push(tmpAtmosphereLoss);

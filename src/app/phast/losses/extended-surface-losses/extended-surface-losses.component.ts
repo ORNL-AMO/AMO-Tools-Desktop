@@ -140,8 +140,6 @@ export class ExtendedSurfaceLossesComponent implements OnInit {
   saveLosses() {
     let tmpSurfaceLosses = new Array<ExtendedSurface>();
     this._surfaceLosses.forEach(loss => {
-      let lossIndex = 1;
-      lossIndex++;
       let tmpSurfaceLoss = this.extendedSurfaceLossesService.getSurfaceLossFromForm(loss.form);
       tmpSurfaceLoss.heatLoss = loss.heatLoss;
       tmpSurfaceLosses.push(tmpSurfaceLoss);

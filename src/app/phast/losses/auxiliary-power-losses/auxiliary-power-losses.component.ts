@@ -115,9 +115,7 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpAuxLosses = new Array<AuxiliaryPowerLoss>();
-    let lossIndex = 1;
     this._auxiliaryPowerLosses.forEach(loss => {
-      lossIndex++;
       let tmpAuxLoss = this.auxiliaryPowerLossesService.getLossFromForm(loss.form);
       tmpAuxLoss.powerUsed = loss.powerUsed;
       tmpAuxLosses.push(tmpAuxLoss);

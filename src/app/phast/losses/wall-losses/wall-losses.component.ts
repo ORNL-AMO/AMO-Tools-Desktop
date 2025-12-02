@@ -134,9 +134,7 @@ export class WallLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpWallLosses = new Array<WallLoss>();
-    let lossIndex = 1;
     this._wallLosses.forEach(loss => {
-      lossIndex++;
       let tmpWallLoss = this.wallFormService.getWallLossFromForm(loss.form);
       tmpWallLoss.heatLoss = loss.heatLoss;
       tmpWallLosses.push(tmpWallLoss);

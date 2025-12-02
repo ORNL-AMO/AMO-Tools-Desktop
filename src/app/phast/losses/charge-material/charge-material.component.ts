@@ -208,21 +208,17 @@ export class ChargeMaterialComponent implements OnInit {
 
   saveLosses() {
     let tmpChargeMaterials = new Array<ChargeMaterial>();
-    let lossIndex = 1;
     this._chargeMaterial.forEach(material => {
       let tmpMaterial: ChargeMaterial;
       if (material.chargeMaterialType === 'Gas') {
-        lossIndex++;
         tmpMaterial = this.gasMaterialFormService.buildGasChargeMaterial(material.gasForm);
         tmpMaterial.gasChargeMaterial.heatRequired = material.heatRequired;
         tmpMaterial.chargeMaterialType = 'Gas';
       } else if (material.chargeMaterialType === 'Solid') {
-        lossIndex++;
         tmpMaterial = this.solidMaterialFormService.buildSolidChargeMaterial(material.solidForm);
         tmpMaterial.solidChargeMaterial.heatRequired = material.heatRequired;
         tmpMaterial.chargeMaterialType = 'Solid';
       } else if (material.chargeMaterialType === 'Liquid') {
-        lossIndex++;
         tmpMaterial = this.liquidMaterialFormService.buildLiquidChargeMaterial(material.liquidForm);
         tmpMaterial.liquidChargeMaterial.heatRequired = material.heatRequired;
         tmpMaterial.chargeMaterialType = 'Liquid';

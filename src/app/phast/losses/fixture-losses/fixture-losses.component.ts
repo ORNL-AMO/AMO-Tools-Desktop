@@ -126,9 +126,7 @@ export class FixtureLossesComponent implements OnInit {
 
   saveLosses() {
     let tmpFixtureLosses = new Array<FixtureLoss>();
-    let lossIndex = 1;
     this._fixtureLosses.forEach(loss => {
-      lossIndex++;
       let tmpFixtureLoss: FixtureLoss = this.fixtureFormService.getLossFromForm(loss.form);
       tmpFixtureLoss.heatLoss = loss.heatLoss;
       tmpFixtureLosses.push(tmpFixtureLoss);

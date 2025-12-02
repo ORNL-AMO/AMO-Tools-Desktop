@@ -114,9 +114,7 @@ export class SlagComponent implements OnInit {
 
   saveLosses() {
     let tmpSlagLosses = new Array<Slag>();
-    let lossIndex = 1;
     this._slagLosses.forEach(loss => {
-      lossIndex++;
       let tmpSlag = this.slagService.getLossFromForm(loss.form);
       tmpSlag.heatLoss = loss.heatLoss;
       tmpSlagLosses.push(tmpSlag);
