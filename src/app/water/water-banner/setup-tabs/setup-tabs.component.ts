@@ -257,11 +257,11 @@ export class SetupTabsComponent {
   }
   
   continue() {
-    this.waterAssessmentService.continue();
+    this.waterAssessmentService.continueSetupTab();
   }
 
   back() {
-    this.waterAssessmentService.back();
+    this.waterAssessmentService.backSetupTab();
   }
 
 }
