@@ -46,7 +46,7 @@ const ManageEdge = (props: ManageEdgeProps) => {
             }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
                     <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
-                        <Tab sx={{fontSize: '.75rem'}} label="Manage" />
+                        <Tab sx={{fontSize: '.75rem'}} label="Customize" />
                     </Tabs>
                 </Box>
 
