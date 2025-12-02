@@ -87,7 +87,7 @@ export class AchievableEfficiencyService {
       flowRate: [flowRate, [Validators.required, Validators.min(0)]],
       rpm: [psat.inputs.pump_rated_speed, Validators.required],
       kinematicViscosity: [psat.inputs.kinematic_viscosity, Validators.required],
-      stageCount: [psat.inputs.stages, Validators.required],
+      stageCount: [psat.inputs.stages, [Validators.required, WholeNumberValidator.wholeNumber(), Validators.min(1)]],
       head: [head, Validators.required],
       pumpEfficiency: [pumpEfficiency, Validators.required],
     });

@@ -10,6 +10,7 @@ import { pumpTypesConstant, driveConstants, fluidProperties, fluidTypes } from '
 import { PsatWarningService } from '../psat-warning.service';
 import { PumpFluidService } from './pump-fluid.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
+import { notWholeNumberMsg } from '../../psat/psatConstants';
 
 @Component({
     selector: 'app-pump-fluid',
@@ -36,6 +37,7 @@ export class PumpFluidComponent implements OnInit {
   modificationIndex: number;
 
   //Arrays holding <select> form data
+  notWholeNumberMsg: string = notWholeNumberMsg;
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
   //TODO: create Fluid Property interface

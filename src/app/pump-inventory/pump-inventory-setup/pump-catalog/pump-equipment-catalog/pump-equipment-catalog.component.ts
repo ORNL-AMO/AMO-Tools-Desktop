@@ -7,6 +7,8 @@ import { PumpItem, PumpPropertiesOptions } from '../../../pump-inventory';
 import { PumpInventoryService, pumpInventoryShaftOrientations, pumpInventoryShaftSealTypes } from '../../../pump-inventory.service';
 import { PumpCatalogService } from '../pump-catalog.service';
 import { PumpEquipmentCatalogService } from './pump-equipment-catalog.service';
+import { notWholeNumberMsg } from '../../../../psat/psatConstants';
+
 @Component({
     selector: 'app-pump-equipment-catalog',
     templateUrl: './pump-equipment-catalog.component.html',
@@ -22,6 +24,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   displayOptions: PumpPropertiesOptions;
   displayForm: boolean = true;
 
+  notWholeNumberMsg: string = notWholeNumberMsg;
   pumpTypes: Array<{value: number, display: string}>;
   shaftOrientations: Array<{value: number, display: string}>;
   shaftSealTypes: Array<{value: number, display: string}>;

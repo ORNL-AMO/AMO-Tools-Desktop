@@ -55,11 +55,11 @@
       <input name="stageCount" type="number" min="1" step="1" class="form-control" formControlName="stageCount" id="stageCount"
         (input)="emitChange()" onfocus="this.select();" (focus)="focusField('stageCount')">
     </div>
-    <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.stageCount.invalid && !efficiencyForm.controls.stageCount.pristine">
+    <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.stageCount.invalid">
       <span *ngIf="efficiencyForm.controls.stageCount.errors.required">Value required.</span>       
       <span *ngIf="efficiencyForm.controls.stageCount.errors.min">Value can't be less than
         {{efficiencyForm.controls.stageCount.errors.min.min}}.</span>
-      <span *ngIf="efficiencyForm.controls.stageCount.errors.notWholeNumber">Values must be a whole number.</span>  
+      <span *ngIf="efficiencyForm.controls.stageCount.errors.notWholeNumber">{{notWholeNumberMsg}}</span>  
     </span>
 
     <span class="alert-warning pull-right small"

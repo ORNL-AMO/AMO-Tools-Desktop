@@ -4,7 +4,7 @@ import { UntypedFormGroup, Validators } from '@angular/forms';
 import { PsatWarningService } from '../../../../psat/psat-warning.service';
 import { pumpTypesConstant } from '../../../../psat/psatConstants';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-
+import { notWholeNumberMsg } from '../../../../psat/psatConstants';
 @Component({
     selector: 'app-achievable-efficiency-form',
     templateUrl: './achievable-efficiency-form.component.html',
@@ -23,6 +23,7 @@ export class AchievableEfficiencyFormComponent implements OnInit {
   @Input()
   toggleExampleData: boolean;
 
+  notWholeNumberMsg: string = notWholeNumberMsg;
   pumpTypes: Array<{ display: string, value: number }>;
   flowRateWarning: string = null;
   constructor(private psatWarningsService: PsatWarningService, private convertUnitsService: ConvertUnitsService) { }
