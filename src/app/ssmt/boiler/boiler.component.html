@@ -100,7 +100,7 @@
 
       <div class="form-group">
         <label for="{{idString+'steamQuality'}}">Steam Quality</label>
-        <select name="steamQuality" class="form-control" id="{{idString+'steamQuality'}}" (change)="save()"
+        <select name="steamQuality" class="form-control" id="{{idString+'steamQuality'}}" (change)="updateSteamQuality()"
           (focus)="focusField('steamQuality')" formControlName="steamQuality">
           <option [ngValue]="SteamQuality.SATURATED">Saturated</option>
           <option [ngValue]="SteamQuality.SUPERHEATED">Superheated</option>
