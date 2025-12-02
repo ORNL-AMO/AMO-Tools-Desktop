@@ -127,7 +127,12 @@ export class BoilerService {
   setSteamTemperatureValidators(steamTemperatureControl: AbstractControl, settings: Settings, saturatedPropertiesOutput?: SaturatedPropertiesOutput) {
     const validRanges: BoilerRanges = this.getRanges(settings);
     if (saturatedPropertiesOutput) {
-      steamTemperatureControl.setValidators([Validators.required, Validators.min(roundVal(saturatedPropertiesOutput.saturatedTemperature, 4)), Validators.max(validRanges.steamTemperatureMax)]);
+      // * use constant of temprature output from steam critical pressure at 3,200 psig - per expert review
+      let temperatureMax: number = 705.1;
+      if (settings.steamTemperatureMeasurement !== 'F') {
+        temperatureMax = this.convertUnitsService.value(temperatureMax).from('F').to(settings.steamTemperatureMeasurement);
+      }
+      steamTemperatureControl.setValidators([Validators.required, Validators.min(roundVal(saturatedPropertiesOutput.saturatedTemperature, 4)), Validators.max(temperatureMax)]);
     } else {
       steamTemperatureControl.setValidators([Validators.required, Validators.min(validRanges.steamTemperatureMin), Validators.max(validRanges.steamTemperatureMax)]);
     }
@@ -139,7 +144,12 @@ export class BoilerService {
     // todo what is 0
     const validRanges: SteamPropertiesValidationRanges = this.steamService.getSteamPropertiesValidationRanges(0, settings);
     if (saturatedPropertiesOutput) {
-      form.controls.saturatedPressure.setValidators([Validators.required, GreaterThanValidator.greaterThan(roundVal(saturatedPropertiesOutput.saturatedTemperature, 2)), Validators.max(validRanges.maxPressure)]);
+      // * use constant steam critical pressure as 3,200 psig - per expert review
+      let pressureMax: number = 3200;
+      if (settings.steamPressureMeasurement !== 'psig') {
+        pressureMax = this.convertUnitsService.value(pressureMax).from('psig').to(settings.steamPressureMeasurement);
+      }
+      form.controls.saturatedPressure.setValidators([Validators.required, GreaterThanValidator.greaterThan(roundVal(saturatedPropertiesOutput.saturatedTemperature, 2)), Validators.max(pressureMax)]);
     } else {
       form.controls.saturatedPressure.setValidators([Validators.required, Validators.min(validRanges.minPressure), Validators.max(validRanges.maxPressure)]);
     }
