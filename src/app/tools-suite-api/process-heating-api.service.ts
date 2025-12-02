@@ -451,6 +451,7 @@ export class ProcessHeatingApiService {
     let AuxPowerInstance = new this.toolsSuiteApiService.ToolsSuiteModule.AuxiliaryPower(
       input.motorPhase, input.supplyVoltage,
       input.avgCurrent, input.powerFactor,
+      input.operatingTime
     );
     let output: number = AuxPowerInstance.getPowerUsed();
     AuxPowerInstance.delete();

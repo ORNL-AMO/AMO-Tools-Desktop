@@ -74,17 +74,26 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   initForms() {
     if (this.losses.auxiliaryPowerLosses) {
       let lossIndex = 1;
+      let setDefaultName = false;
       this.losses.auxiliaryPowerLosses.forEach(loss => {
         let tmpLoss = {
           form: this.auxiliaryPowerLossesService.getFormFromLoss(loss),
           powerUsed: loss.powerUsed || 0.0,
           collapse: false
         };
-
+        if (!tmpLoss.form.controls.name.value) {
+          tmpLoss.form.patchValue({
+            name: 'Loss #' + lossIndex
+          });
+          setDefaultName = true;
+        }
         lossIndex++;
         this.calculate(tmpLoss);
         this._auxiliaryPowerLosses.push(tmpLoss);
       });
+      if (setDefaultName) {
+        this.saveLosses();
+      }
     }
   }
 
@@ -105,8 +114,6 @@ export class AuxiliaryPowerLossesComponent implements OnInit {
   calculate(loss: AuxPowLossObj) {
     if (loss.form.status === 'VALID') {
       let tmpLoss: AuxiliaryPowerLoss = this.auxiliaryPowerLossesService.getLossFromForm(loss.form);
-      console.log('calculate, tmpLoss = ');
-      console.log(tmpLoss);
       loss.powerUsed = this.phastService.auxiliaryPowerLoss(tmpLoss, this.settings);
     } else {
       loss.powerUsed = null;
