@@ -139,7 +139,7 @@
             {{saturatedPressure.errors?.min?.min}}
             <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.
           </span>
-           <span *ngIf="saturatedPressure.errors.greaterThan">Value must be greater than calculated Saturated Temperature ({{saturatedPressure.errors.greaterThan}})
+           <span *ngIf="saturatedPressure.errors.greaterThan">Water is liquid, please check steam temperature and pressure, saturated temperature for this is input is ({{saturatedPressure.errors.greaterThan}})
             <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.
           </span>
         </span>
