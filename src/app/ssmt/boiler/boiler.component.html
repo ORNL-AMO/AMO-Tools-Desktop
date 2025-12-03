@@ -123,7 +123,7 @@
       <div class="form-group">
         <label for="{{idString+'saturatedPressure'}}">Steam Pressure</label>
         <div class="input-group">
-          <input name="saturatedPressure" type="number" step="any" class="form-control" id="{{idString+'saturatedPressure'}}"
+          <input name="saturatedPressure" type="number" class="form-control" id="{{idString+'saturatedPressure'}}"
             (input)="updateSaturatedProperties()"  formControlName="saturatedPressure"
             [ngClass]="{'indicate-different': isSteamPressureDifferent()}"
             (focus)="focusField('saturatedPressure')">
@@ -139,7 +139,7 @@
             {{saturatedPressure.errors?.min?.min}}
             <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.
           </span>
-           <span *ngIf="saturatedPressure.errors.greaterThan">Value must be greater than calculated Saturated Temperature ({{saturatedPressure.errors.greaterThan}})
+           <span *ngIf="saturatedPressure.errors.greaterThan">Water is liquid, please check steam temperature and pressure, saturated temperature for this is input is ({{saturatedPressure.errors.greaterThan}})
             <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.
           </span>
         </span>
@@ -151,7 +151,7 @@
         <div class="form-group">
           <label for="{{idString+'steamTemperature'}}">Steam Temperature</label>
           <div class="input-group">
-            <input name="steamTemperature" type="number" step="any" class="form-control" id="{{idString+'steamTemperature'}}"
+            <input name="steamTemperature" type="number" class="form-control" id="{{idString+'steamTemperature'}}"
               (input)="updateSaturatedProperties()"  formControlName="steamTemperature"
               [ngClass]="{'indicate-different': isSteamTemperatureDifferent()}"
               (focus)="focusField('steamTemperature')">
@@ -183,7 +183,7 @@
       @if (steamQuality.value === SteamQuality.SATURATED && saturatedPropertiesOutput$ | async; as saturatedPropertiesOutput) {
         <div class="form-group">
           <label for="saturatedPressure">Pressure</label>
-          <div name="pressure" type="number" step="10" class="small text-center bold">
+          <div name="pressure" type="number" class="small text-center bold">
             {{saturatedPropertiesOutput?.saturatedPressure | number:'1.0-4'}}
               <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
             </div>
