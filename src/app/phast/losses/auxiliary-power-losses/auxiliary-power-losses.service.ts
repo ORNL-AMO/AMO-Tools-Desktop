@@ -11,11 +11,11 @@ export class AuxiliaryPowerLossesService {
   initForm(lossNum: number): UntypedFormGroup {
     return this.formBuilder.group({
       motorPhase: ['', Validators.required],
-      supplyVoltage: ['', Validators.required],
-      avgCurrent: ['', Validators.required],
-      powerFactor: ['', Validators.required],
-      operatingTime: ['', Validators.required],
-      name: ['Loss #' + lossNum]
+      supplyVoltage: ['', [Validators.required, Validators.min(0)]],
+      avgCurrent: ['', [Validators.required, Validators.min(0)]],
+      powerFactor: ['', [Validators.required, Validators.min(0), Validators.max(1)]],
+      operatingTime: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      name: ['Loss #' + lossNum, Validators.required]
     });
   }
 
@@ -34,11 +34,11 @@ export class AuxiliaryPowerLossesService {
   getFormFromLoss(loss: AuxiliaryPowerLoss): UntypedFormGroup {
     return this.formBuilder.group({
       motorPhase: [loss.motorPhase, Validators.required],
-      supplyVoltage: [loss.supplyVoltage, Validators.required],
-      avgCurrent: [loss.avgCurrent, Validators.required],
-      powerFactor: [loss.powerFactor, Validators.required],
-      operatingTime: [loss.operatingTime, Validators.required],
-      name: [loss.name]
+      supplyVoltage: [loss.supplyVoltage, [Validators.required, Validators.min(0)]],
+      avgCurrent: [loss.avgCurrent, [Validators.required, Validators.min(0)]],
+      powerFactor: [loss.powerFactor, [Validators.required, Validators.min(0), Validators.max(1)]],
+      operatingTime: [loss.operatingTime, [Validators.required, Validators.min(0), Validators.max(100)]],
+      name: [loss.name, Validators.required]
     });
   }
 

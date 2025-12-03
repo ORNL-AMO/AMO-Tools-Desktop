@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { CompressedAirDataManagementService } from '../../../compressed-air-data-management.service';
-import { GenericCompressor, GenericCompressorDbService } from '../../../generic-compressor-db.service';
+import { GenericCompressor, GenericCompressorDbService } from '../../../../shared/generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
 import { FilterCompressorOptions, FilterCompressorsPipe } from '../filter-compressors.pipe';
 

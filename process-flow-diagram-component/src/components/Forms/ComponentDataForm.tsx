@@ -239,8 +239,8 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
                         />
                     </AccordionSummary>
-                    <AccordionDetails>
-                        <SourceFlowForm></SourceFlowForm>
+                    <AccordionDetails sx={{padding: '16px 0;'}}>
+                        <SourceFlowForm inView={sourcesExpanded}></SourceFlowForm>
                     </AccordionDetails>
                 </Accordion>
             }
@@ -268,7 +268,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                             sx={{ background: '#fff', borderRadius: '8px', marginRight: '1rem' }}
                         />
                     </AccordionSummary>
-                    <AccordionDetails>
+                    <AccordionDetails sx={{padding: '16px 0;'}}>
                         {isWaterUsingSystem && totalSourceFlow > totalDischargeFlow && totalUnknownLoss !== 0 &&
                             <Alert severity="warning" sx={{ marginBottom: '1rem', width: '100%' }}>
                                 <span>Estimated Unknown Loss: </span>
@@ -276,7 +276,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                                 <FlowDisplayUnit />
                             </Alert>
                         }
-                        <DischargeFlowForm></DischargeFlowForm>
+                        <DischargeFlowForm inView={dischargeExpanded}></DischargeFlowForm>
                     </AccordionDetails>
                 </Accordion>
             }

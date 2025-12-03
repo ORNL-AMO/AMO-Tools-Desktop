@@ -21,7 +21,6 @@ export class SsmtTabsComponent implements OnInit {
   @Input()
   ssmt: SSMT;
 
-
   mainTab: string;
   mainTabSubscription: Subscription;
   stepTab: string;

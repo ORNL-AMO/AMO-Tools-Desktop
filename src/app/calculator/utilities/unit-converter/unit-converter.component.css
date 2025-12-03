@@ -27,3 +27,12 @@
     max-width: 800px;
     height: 250px;
 }
+
+.input-swap-btn {
+    width:40px; 
+    height:32px;
+}
+
+.input-swap-img {
+    font-size:16px;
+}

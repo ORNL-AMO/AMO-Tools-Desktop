@@ -73,6 +73,7 @@ export class GasLeakageLossesComponent implements OnInit {
   initForms() {
     if (this.losses.leakageLosses) {
       let lossIndex = 1;
+      let setDefaultName = false;
       this.losses.leakageLosses.forEach(loss => {
         let tmpLoss = {
           form: this.leakageFormService.initFormFromLoss(loss),
@@ -83,12 +84,17 @@ export class GasLeakageLossesComponent implements OnInit {
           tmpLoss.form.patchValue({
             name: 'Loss #' + lossIndex
           });
+          setDefaultName = true;
         }
         lossIndex++;
         this.calculate(tmpLoss);
         this._leakageLosses.push(tmpLoss);
       });
       this.total = this.getTotal();
+      if (setDefaultName) {
+      // * only saving here to deal with side-effect of stale state in tab component after name has been patched.
+        this.saveLosses();
+      }
     }
   }
 
@@ -130,11 +136,6 @@ export class GasLeakageLossesComponent implements OnInit {
     let tmpLeakageLosses = new Array<LeakageLoss>();
     let lossIndex = 1;
     this._leakageLosses.forEach(loss => {
-      if (!loss.form.controls.name.value) {
-        loss.form.patchValue({
-          name: 'Loss #' + lossIndex
-        });
-      }
       lossIndex++;
       let tmpLeakageLoss = this.leakageFormService.initLossFromForm(loss.form);
       tmpLeakageLoss.heatLoss = loss.heatLoss;

@@ -1,13 +1,16 @@
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CSSProperties } from 'react';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
+import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getConnectionFromEdgeId, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeFromConnection } from 'process-flow-lib';
 import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
+
+import packageJson from '../../../package.json';
+const CURRENT_DIAGRAM_VERSION: string = packageJson.version;
 
 export interface DiagramState {
   name: string,
@@ -44,7 +47,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     settings: getDefaultSettings(),
     diagramOptions: getDefaultUserDiagramOptions(),
     isDataDrawerOpen: false,
-    isMenuDrawerOpen: false,
+    isMenuDrawerOpen: true,
     selectedDataId: undefined,
     focusedEdgeId: undefined,
     calculatedData: { nodes: {} },
@@ -72,8 +75,22 @@ export const getStoreSerializedDate = (dateObject: Date): string => {
 }
 
 
-const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{ diagramData: FlowDiagramData, parentContainer: ParentContainerDimensions, assessmentId: number }>) => {
+/**
+ * Sets initialized state on process-flow-diagram-component's parent first render
+ */
+const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ diagramData: FlowDiagramData, parentContainer: ParentContainerDimensions, assessmentId: number }>) => {
   const { diagramData, parentContainer, assessmentId } = action.payload;
+
+  if (diagramData.meta === undefined) {
+    diagramData.meta = {
+      version: '0.0.0',
+      upgrades: [],
+    } 
+  }
+
+  if (diagramData.meta.version !== CURRENT_DIAGRAM_VERSION) {
+    upgradeDiagram(diagramData);
+  }
 
   state.nodes = diagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
     if (node.position) {
@@ -88,7 +105,7 @@ const diagramParentRenderReducer = (state: DiagramState, action: PayloadAction<{
   state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();
   state.recentEdgeColors = diagramData.recentEdgeColors.length !== 0 ? { ...diagramData.recentEdgeColors } : getDefaultColorPalette();
   state.isDataDrawerOpen = false;
-  state.isMenuDrawerOpen = false;
+  state.isMenuDrawerOpen = state.isMenuDrawerOpen ?? true;
   state.focusedEdgeId = undefined;
   state.selectedDataId = undefined;
   state.diagramParentDimensions = { ...parentContainer };
@@ -118,7 +135,7 @@ const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType: W
   const { nodeType, position } = action.payload;
   const existingNames = state.nodes.map((node: Node<ProcessFlowPart>) => node.data.name);
   let newNode: Node = createNewNode(nodeType, position, existingNames);
-  // todo can we remove date completely?
+  // * modifiedDate is not currently being read in the app
   newNode.data.modifiedDate = getStoreSerializedDate(newNode.data.modifiedDate as Date);
   state.nodes.push(newNode);
 };
@@ -129,57 +146,38 @@ const totalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{ flo
   updateNode.data.userEnteredData[flowProperty] = totalFlow;
 }
 
+const sumTotalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{ flowProperty: NodeFlowProperty, relatedEdges: Edge<CustomEdgeData>[] }>) => {
+  const { flowProperty, relatedEdges } = action.payload;
+  const updateNode: Node<ProcessFlowPart> = state.nodes.find((node: Node<ProcessFlowPart>) => state.selectedDataId === node.id) as Node<ProcessFlowPart>;
+  const currentTotalFlow = updateNode.data.userEnteredData[flowProperty];
+  
+  const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(relatedEdges, state.nodes, state.selectedDataId);
+  const sumAllFlows = flowProperty === 'totalSourceFlow' ? totalCalculatedSourceFlow : totalCalculatedDischargeFlow;
+  updateNode.data.userEnteredData[flowProperty] = sumAllFlows ?? currentTotalFlow;
+}
+
+/**
+ * Updates a node source edge flow value, updates the calculated node total flow, and propogates changes to connected inflow nodes and edges.
+ */
 const sourceFlowValueChangeReducer = (state: DiagramState, action: PayloadAction<{ sourceEdgeId: string, flowValue: number }>) => {
   const { sourceEdgeId, flowValue } = action.payload;
   const sourceEdge: Edge<CustomEdgeData> = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === sourceEdgeId) as Edge<CustomEdgeData>;
   sourceEdge.data.flowValue = flowValue;
 
-  const sourceEdges = getNodeSourceEdges(state.edges, state.selectedDataId);
+  const sourceEdges: Edge<CustomEdgeData>[] = getNodeSourceEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
   const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(sourceEdges, state.nodes, state.selectedDataId);
+  
   setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalSourceFlow', totalCalculatedSourceFlow);
-
-  // * set calculated totals for source nodes
-  // * alternatively, getNodeFlowTotals on ComponentFlowData rerender
-  const componentSourceNodeIds: string[] = sourceEdges.map((edge: Edge<CustomEdgeData>) => edge.source);
-  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
-    if (componentSourceNodeIds.includes(node.id)) {
-      // * update discharge edges of the node.id calculated data being set
-      const nodeDischargeEdges = getNodeTargetEdges(state.edges, node.id);
-      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeDischargeEdges, state.nodes, node.id);
-      // console.log('sourceFlowValueChange --> setCalculatedNodeDataProperty', totalCalculatedDischargeFlow)
-      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalDischargeFlow', totalCalculatedDischargeFlow);
-    }
-  });
+  populateConnectedInflowTotalsAndFlows(state, sourceEdges);
 }
 
-
-const dischargeFlowValueChangeReducer = (state: DiagramState, action: PayloadAction<{ dischargeEdgeId: string, flowValue: number }>) => {
-  const { dischargeEdgeId, flowValue } = action.payload;
-  const dischargeEdge: Edge<CustomEdgeData> = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === dischargeEdgeId) as Edge<CustomEdgeData>;
-  dischargeEdge.data.flowValue = flowValue;
-
-  const dischargeEdges = getNodeTargetEdges(state.edges, state.selectedDataId);
-  const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(dischargeEdges, state.nodes, state.selectedDataId);
-  setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalDischargeFlow', totalCalculatedDischargeFlow);
-
-  // * set calculated totals for dicharge nodes
-  // * alternatively, getNodeFlowTotals on ComponentFlowData rerender
-  const componentDischargeNodeIds: string[] = dischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.target);
-  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
-    if (componentDischargeNodeIds.includes(node.id)) {
-      // * update source edges of the node.id calculated data being set
-      const nodeSourceEdges = getNodeSourceEdges(state.edges, node.id);
-      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeSourceEdges, state.nodes, node.id);
-      // console.log('dischargeFlowValueChange --> setCalculatedNodeDataProperty', totalCalculatedSourceFlow)
-      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalSourceFlow', totalCalculatedSourceFlow);
-    }
-  });
-}
-
+/**
+ * Distributes a total flow value evenly across all source edges of the selected node. Propogates changes to connected inflow nodes and edges.
+ */
 const distributeTotalSourceFlowReducer = (state: DiagramState, action: PayloadAction<number>) => {
   const totalFlowValue = action.payload;
-  const componentSourceEdges: Edge[] = getNodeSourceEdges(state.edges, state.selectedDataId);
-  const componentSourceEdgeIds = componentSourceEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
+  const componentSourceEdges: Edge<CustomEdgeData>[] = getNodeSourceEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
+  const componentSourceEdgeIds: string[] = componentSourceEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
 
   let dividedTotalFlow = totalFlowValue / componentSourceEdges.length;
   dividedTotalFlow = Number(formatDecimalPlaces(dividedTotalFlow, MAX_FLOW_DECIMALS));
@@ -189,13 +187,30 @@ const distributeTotalSourceFlowReducer = (state: DiagramState, action: PayloadAc
     }
     return edge;
   });
-
-  // todo set connected nodes calculated data
+  populateConnectedInflowTotalsAndFlows(state, componentSourceEdges);
 }
 
+/**
+ * Updates a node discharge edge flow value, updates the calculated node total flow, and propogates changes to connected outflow nodes and edges.
+ */
+const dischargeFlowValueChangeReducer = (state: DiagramState, action: PayloadAction<{ dischargeEdgeId: string, flowValue: number }>) => {
+  const { dischargeEdgeId, flowValue } = action.payload;
+  const dischargeEdge: Edge<CustomEdgeData> = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === dischargeEdgeId) as Edge<CustomEdgeData>;
+  dischargeEdge.data.flowValue = flowValue;
+
+  const dischargeEdges: Edge<CustomEdgeData>[] = getNodeTargetEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
+  const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(dischargeEdges, state.nodes, state.selectedDataId);
+
+  setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalDischargeFlow', totalCalculatedDischargeFlow);
+  populateConnectedOutflowTotalsAndFlows(state, dischargeEdges);
+}
+
+/**
+ * Distributes a total flow value evenly across all discharge edges of the selected node. Propogates changes to connected outflow nodes and edges.
+ */
 const distributeTotalDischargeFlowReducer = (state: DiagramState, action: PayloadAction<number>) => {
   const totalFlowValue = action.payload;
-  const componentDischargeEdges: Edge[] = getNodeTargetEdges(state.edges, state.selectedDataId);
+  const componentDischargeEdges: Edge<CustomEdgeData>[] = getNodeTargetEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
   const componentDischargeEdgesIds = componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
 
   let dividedTotalFlow = totalFlowValue / componentDischargeEdges.length;
@@ -207,7 +222,7 @@ const distributeTotalDischargeFlowReducer = (state: DiagramState, action: Payloa
     return edge;
   });
 
-  // todo set connected nodes calculated data
+  populateConnectedOutflowTotalsAndFlows(state, componentDischargeEdges);
 }
 
 const nodeErrorsChangeReducer = (state: DiagramState, action: PayloadAction<{ flowType: FlowType, errors: FormikErrors<{ totalFlow: string | number; flows: (string | number)[] }> }>) => {
@@ -297,8 +312,24 @@ const keyboardDeleteNodeReducer = (state: DiagramState, action: PayloadAction<No
 };
 
 const updateNodeHandlesReducer = (state: DiagramState, action: PayloadAction<Handles>) => {
-  const updateNode = state.nodes.find((n: Node<ProcessFlowPart>) => n.id === state.selectedDataId);
-  updateNode.data.handles = action.payload;
+  const { inflowHandles, outflowHandles } = action.payload;
+  const updatedNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.id === state.selectedDataId) as Node<ProcessFlowPart>;
+  let activeEdges: Edge[] = [];
+
+  // * Need to check equality/changes because the user will modify one handle set at a time
+  if (inflowHandles && !getAreHandlesEqual(updatedNode.data.handles.inflowHandles, inflowHandles)) {
+    activeEdges.push(...state.edges.filter(edge => {
+      return getIsActiveTargetEdge(updatedNode, inflowHandles, edge.id);
+    }));
+  }
+  if (outflowHandles && !getAreHandlesEqual(updatedNode.data.handles.outflowHandles, outflowHandles)) {
+    activeEdges.push(...state.edges.filter(edge => {
+      return getIsActiveSourceEdge(updatedNode, outflowHandles, edge.id);
+    }));
+  }
+
+  state.edges = activeEdges;
+  updatedNode.data.handles = action.payload;
 }
 
 // * EDGES
@@ -341,19 +372,20 @@ const edgesUpdateReducer = (state: DiagramState, action: PayloadAction<Edge[]>) 
 
 /**
  * @param action  Map of edgeId to flow value>
+ * @
  */
 const edgesChangeFromPropagationReducer = (state: DiagramState, action: PayloadAction<{
   flowUpdates: Record<string, number>, 
   startingNodeId: string
 }>) => {
   const {flowUpdates, startingNodeId} = action.payload;
-  const updatedEdges: Edge[] = state.edges.map((edge) => {
+  const updatedEdges: Edge<CustomEdgeData>[] = state.edges.map((edge) => {
     const newFlow = flowUpdates[edge.id];
     if (newFlow !== undefined) {
       edge.data.flowValue = newFlow;
     }
     return edge;
-  });
+  }) as Edge<CustomEdgeData>[];
 
    if (flowUpdates) {
     const sourceNode = state.nodes.find(node => node.id === startingNodeId);
@@ -366,6 +398,7 @@ const edgesChangeFromPropagationReducer = (state: DiagramState, action: PayloadA
       dismissMS: 10000
     };
   }
+
   state.edges = updatedEdges;
 };
 
@@ -537,7 +570,7 @@ export const diagramSlice = createSlice({
   initialState: getDefaultDiagramData(),
   reducers: {
     resetDiagram: resetDiagramReducer,
-    diagramParentRender: diagramParentRenderReducer,
+    diagramInitialized: diagramInitializedReducer,
     nodesChange: nodesChangeReducer,
     addNode: addNodeReducer,
     addNodes: addNodesReducer,
@@ -577,7 +610,8 @@ export const diagramSlice = createSlice({
     selectedIdChange: selectedIdChangeReducer,
     diagramAlertChange: diagramAlertChangeReducer,
     toggleMenuDrawer: toggleMenuDrawerReducer,
-    edgesChangeFromPropagation: edgesChangeFromPropagationReducer
+    edgesChangeFromPropagation: edgesChangeFromPropagationReducer,
+    sumTotalFlowChange: sumTotalFlowChangeReducer,
   }
 })
 
@@ -591,11 +625,12 @@ export const {
   setNodeName,
   deleteNode,
   keyboardDeleteNode,
-  diagramParentRender,
+  diagramInitialized,
   nodeDataPropertyChange,
   setNodeStyle,
   totalFlowChange,
   sourceFlowValueChange,
+  sumTotalFlowChange,
   dischargeFlowValueChange,
   distributeTotalSourceFlow,
   distributeTotalDischargeFlow,
@@ -685,5 +720,131 @@ const removeFlowErrors = (state: DiagramState, flowType: FlowType) => {
   delete state.nodeErrors[state.selectedDataId][flowType];
   if (Object.entries(state.nodeErrors[state.selectedDataId]).every(([, value]) => value === undefined)) {
     delete state.nodeErrors[state.selectedDataId];
+  }
+}
+
+const getIsActiveTargetEdge = (updatedNode: Node, handleSet: Handles[keyof Handles], edgeId: string): boolean => {
+  const { source, target, sourceHandle, targetHandle } = getConnectionFromEdgeId(edgeId);
+  const isTargetConnection = target === updatedNode.id;
+  if (isTargetConnection) {
+    return target === updatedNode.id && handleSet[targetHandle];
+  }
+  return true;
+}
+
+const getIsActiveSourceEdge = (updatedNode: Node, handleSet: Handles[keyof Handles], edgeId: string): boolean => {
+  const { source, target, sourceHandle, targetHandle } = getConnectionFromEdgeId(edgeId);
+  const isSourceConnection = source === updatedNode.id;
+  if (isSourceConnection) {
+    return source === updatedNode.id && handleSet[sourceHandle];
+  }
+  return true;
+}
+
+const getAreHandlesEqual = (handleSet: Handles[keyof Handles], updatedHandleSet: Handles[keyof Handles]) => {
+  const keys = new Set([...Object.keys(handleSet), ...Object.keys(updatedHandleSet)]);
+  const isEqual = [...keys].every(key => handleSet[key] === updatedHandleSet[key]);
+  return isEqual;
+}
+
+/**
+ * update calculated total flow values for inflow connected nodes
+ */
+const populateConnectedInflowTotalsAndFlows = (state: DiagramState, sourceEdges: Edge<CustomEdgeData>[]) => {
+  const sourceNodeIds: string[] = sourceEdges.map((edge: Edge<CustomEdgeData>) => edge.source);
+  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
+    if (sourceNodeIds.includes(node.id)) {
+      const nodeDischargeEdges = getNodeTargetEdges(state.edges, node.id);
+      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeDischargeEdges, state.nodes, node.id);
+      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalDischargeFlow', totalCalculatedDischargeFlow);
+    }
+  });
+}
+
+
+/**
+ * update calculated total flow values for outflow connected nodes
+ */
+const populateConnectedOutflowTotalsAndFlows = (state: DiagramState, dischargeEdges: Edge<CustomEdgeData>[]) => {
+  const dischargeNodeIds: string[] = dischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.target);
+  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
+    if (dischargeNodeIds.includes(node.id)) {
+      const nodeSourceEdges = getNodeSourceEdges(state.edges, node.id);
+      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeSourceEdges, state.nodes, node.id);
+      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalSourceFlow', totalCalculatedSourceFlow);
+    }
+  });
+}
+
+
+
+
+
+/**
+ * Apply upgrades to outdated diagram versions, such as: adding new properties, default data, and patches to avoid runtime errors
+ */
+const upgradeDiagram = (diagramData: FlowDiagramData) => {
+  upgradeNodeData(diagramData);
+
+  diagramData.meta.upgrades.push({
+    fromVersion: diagramData.meta.version,
+    toVersion: CURRENT_DIAGRAM_VERSION,
+    upgradeDate: getStoreSerializedDate(new Date()),
+  });
+  diagramData.meta.version = CURRENT_DIAGRAM_VERSION;
+}
+
+
+/**
+ * Upgrade node data for backwards compatibility with diagrams from prior versions
+ */
+const upgradeNodeData = (diagramData: FlowDiagramData) => {
+  diagramData.nodes.map((node: Node<ProcessFlowPart>) => {
+    upgradeHandles(node.data);
+    return node;
+  });
+}
+
+/**
+ * Update node data handles to include 4 additional inflow and outflow handles. 
+ * Version 0.1.0 Adds e,f,g,h for inflow and i,j,k,l for outflow, removes unused handles for water-intake and water-discharge nodes
+ */
+const upgradeHandles = (nodeData: ProcessFlowPart) => {
+  const nodeType: ProcessFlowNodeType = nodeData.processComponentType;
+  
+  if (nodeType == 'water-intake') {
+    delete nodeData.handles.inflowHandles;
+  }
+
+  if (nodeType == 'water-discharge') {
+    delete nodeData.handles.outflowHandles;
+  }
+
+  const newVersionInflowProperty = nodeData.handles.inflowHandles?.hasOwnProperty('e');
+  const newVersionOutflowProperty = nodeData.handles.outflowHandles?.hasOwnProperty('i');
+  
+  if (nodeData.handles.inflowHandles && !newVersionInflowProperty) {
+    nodeData.handles.inflowHandles = {
+      a: nodeData.handles.inflowHandles.a ?? true,
+      b: nodeData.handles.inflowHandles.b ?? true,
+      c: nodeData.handles.inflowHandles.c ?? true,
+      d: nodeData.handles.inflowHandles.d ?? true,
+      e: nodeData.handles.inflowHandles.e ?? false,
+      f: nodeData.handles.inflowHandles.f ?? false,
+      g: nodeData.handles.inflowHandles.g ?? false,
+      h: nodeData.handles.inflowHandles.h ?? false,
+    };
+  }
+  if (nodeData.handles.outflowHandles && !newVersionOutflowProperty) {
+    nodeData.handles.outflowHandles = {
+      e: nodeData.handles.outflowHandles.e ?? true,
+      f: nodeData.handles.outflowHandles.f ?? true,
+      g: nodeData.handles.outflowHandles.g ?? true,
+      h: nodeData.handles.outflowHandles.h ?? true,
+      i: nodeData.handles.outflowHandles.i ?? false,
+      j: nodeData.handles.outflowHandles.j ?? false,
+      k: nodeData.handles.outflowHandles.k ?? false,
+      l: nodeData.handles.outflowHandles.l ?? false,
+    };
   }
 }

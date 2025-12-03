@@ -1,0 +1,28 @@
+.known-row-parent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.known-conditional-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.known-conditional-position {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-grow: 0; /* prevent full stretch */
+}
+
+.known-conditional-input-group {
+  flex-grow: 0; /* prevent input from stretching */
+  min-width: 12rem;
+}
+
+.input-group.calc-addon-group {
+  display: flex;
+  align-items: center;
+}

@@ -17,7 +17,7 @@ export class FixtureFormService {
       'finalTemp': ['', Validators.required],
       'correctionFactor': [1.0, Validators.required],
       'specificHeat': ['', [Validators.required, Validators.min(0)]],
-      'name': ['Loss #' + lossNum],
+      'name': ['Loss #' + lossNum, Validators.required],
       'specificHeatLiquid': [''],
       'meltingPoint': [''],
       'latentHeat': ['']
@@ -41,7 +41,7 @@ export class FixtureFormService {
       'finalTemp': [loss.finalTemperature, Validators.required],
       'correctionFactor': [loss.correctionFactor, Validators.required],
       'specificHeat': [loss.specificHeat, [Validators.required, Validators.min(0)]],
-      'name': [loss.name],
+      'name': [loss.name, Validators.required],
       'specificHeatLiquid': [loss.specificHeatLiquid],
       'meltingPoint': [loss.meltingPoint],
       'latentHeat': [loss.latentHeat]

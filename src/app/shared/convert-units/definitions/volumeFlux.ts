@@ -1,13 +1,5 @@
 export const volumeFlux = {
     metric: {
-        'L/m2h': {
-            name: {
-                singular: 'Liter per meters squared-hour'
-                , plural: 'Liters per meters squared-hour',
-                display: '(L/m&#x00B2h)'
-            }
-            , to_anchor: 24
-        },
         'L/m2d': {
             name: {
                 singular: 'Liter per meters squared-day'
@@ -15,6 +7,14 @@ export const volumeFlux = {
                 display: '(L/m&#x00B2d)'
             }
             , to_anchor: 1
+        },
+        'L/m2h': {
+            name: {
+                singular: 'Liter per meters squared-hour'
+                , plural: 'Liters per meters squared-hour',
+                display: '(L/m&#x00B2h)'
+            }
+            , to_anchor: 24
         }
     },
 

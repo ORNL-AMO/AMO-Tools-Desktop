@@ -1,29 +1,40 @@
 import { Injectable } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn } from '@angular/forms';
-import { BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
+import { UntypedFormBuilder, UntypedFormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from '@angular/forms';
+import { BoilerInput, SSMT, SteamPropertiesValidationRanges } from '../../shared/models/steam/ssmt';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { Settings } from '../../shared/models/settings';
 import { SteamService } from '../../calculator/steam/steam.service';
+import { SaturatedPropertiesInput, SteamPressureOrTemp, SteamQuality } from '../../shared/models/steam/steam-inputs';
+import { GreaterThanValidator } from '../../shared/validators/greater-than';
+import { SaturatedPropertiesOutput } from '../../shared/models/steam/steam-outputs';
+import { roundVal } from '../../shared/helperFunctions';
+import { BehaviorSubject } from 'rxjs';
 
 
 @Injectable()
 export class BoilerService {
 
+  private readonly baselineSaturatedPropertiesOutput = new BehaviorSubject<SaturatedPropertiesOutput>(undefined);
+  readonly baselineSaturatedPropertiesOutput$ = this.baselineSaturatedPropertiesOutput.asObservable();
+
+  private readonly modificationSaturatedPropertiesOutput = new BehaviorSubject<SaturatedPropertiesOutput>(undefined);
+  readonly modificationSaturatedPropertiesOutput$ = this.modificationSaturatedPropertiesOutput.asObservable();
+
   constructor(private formBuilder: UntypedFormBuilder, private steamService: SteamService, private convertUnitsService: ConvertUnitsService) { }
 
-  initForm(settings: Settings) {
+  initEmptyForm(settings: Settings) {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
-
-       // let defaultApproachTemp: number = this.convertUnitsService.value(20).from('F').to(settings.steamTemperatureMeasurement);
-    // defaultApproachTemp = this.convertUnitsService.roundVal(defaultApproachTemp, 0);
-
-    return this.formBuilder.group({
+    
+    const form = this.formBuilder.group({
       'fuelType': [1, Validators.required],
       'fuel': [1, Validators.required],
       'combustionEfficiency': [85, [Validators.required, Validators.min(50), Validators.max(100)]],
       'blowdownRate': ['', [Validators.required, Validators.min(0), Validators.max(25)]],
       'blowdownFlashed': [false, [Validators.required]],
       'preheatMakeupWater': [false, [Validators.required]],
+      'steamQuality': [SteamQuality.SATURATED, [Validators.required]],
+      'pressureOrTemperature': [SteamPressureOrTemp.TEMPERATURE, [Validators.required]],
+      'saturatedPressure': ['', [Validators.required]],
       'steamTemperature': ['', [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
       'deaeratorVentRate': ['', [Validators.required, Validators.min(0), Validators.max(10)]],
       'deaeratorPressure': ['', [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
@@ -31,9 +42,13 @@ export class BoilerService {
       'blowdownConductivity': [''],
       'feedwaterConductivity': ['']
     });
+
+    this.setSteamTemperatureValidators(form, settings);
+
+    return form;
   }
 
-  initFormFromObj(obj: BoilerInput, settings: Settings): UntypedFormGroup {
+  initFormFromBoilerInput(obj: BoilerInput, settings: Settings): UntypedFormGroup {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
 
     let approachTempValidators: Array<ValidatorFn> = [];
@@ -48,17 +63,148 @@ export class BoilerService {
       'blowdownRate': [obj.blowdownRate, [Validators.required, Validators.min(0), Validators.max(25)]],
       'blowdownFlashed': [obj.blowdownFlashed, [Validators.required]],
       'preheatMakeupWater': [obj.preheatMakeupWater, [Validators.required]],
-      'steamTemperature': [obj.steamTemperature, [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
+      'steamQuality': [obj.steamQuality, [Validators.required]],
+      'pressureOrTemperature': [obj.pressureOrTemperature, [Validators.required]],
+      'saturatedPressure': [obj.saturatedPressure, [Validators.required]],
+      'steamTemperature': [obj.steamTemperature, [Validators.required]],
       'deaeratorVentRate': [obj.deaeratorVentRate, [Validators.required, Validators.min(0), Validators.max(10)]],
       'deaeratorPressure': [obj.deaeratorPressure, [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
       'approachTemperature': [obj.approachTemperature, approachTempValidators],
       'blowdownConductivity': [obj.blowdownConductivity],
       'feedwaterConductivity': [obj.feedwaterConductivity]
     });
+
+    this.setPressureAndTemperatureValidators(form, settings);
+
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
     return form;
+  }
+
+  updateFormAndRelatedState(form: UntypedFormGroup, ssmt: SSMT, settings: Settings, isBaseline: boolean) {
+    let calculatedBoilerInput: BoilerInput = form.getRawValue();
+    this.setBoilerRelatedSSMTFields(calculatedBoilerInput, ssmt, settings, isBaseline);
+
+    if (form.controls.steamQuality.value === SteamQuality.SATURATED) {
+      if (form.controls.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
+        form.controls.steamTemperature.patchValue(calculatedBoilerInput.steamTemperature);
+      } else {
+        form.controls.saturatedPressure.patchValue(calculatedBoilerInput.saturatedPressure);
+      }
+    }
+    this.setPressureAndTemperatureValidators(form, settings);
+  }
+
+  setPressureAndTemperatureValidators(form: UntypedFormGroup, settings: Settings) {
+    const steamQualityControl = form.controls.steamQuality;
+    const pressureOrTemperatureControl = form.controls.pressureOrTemperature;
+    const steamTemperatureControl = form.controls.steamTemperature;
+    const saturatedPressureControl = form.controls.saturatedPressure;
+
+    const saturatedPropertiesInput: SaturatedPropertiesInput = {
+      saturatedPressure: saturatedPressureControl.value,
+      saturatedTemperature: steamTemperatureControl.value
+    }
+
+    if (steamQualityControl.value === SteamQuality.SUPERHEATED) {
+      const saturatedPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(saturatedPropertiesInput, SteamPressureOrTemp.PRESSURE, settings);
+      this.setSaturatedPressureValidators(form, settings);
+      this.setSteamTemperatureValidators(form, settings, saturatedPropertiesOutput);
+
+    } else if (steamQualityControl.value === SteamQuality.SATURATED) {
+      if (pressureOrTemperatureControl.value === SteamPressureOrTemp.PRESSURE) {
+        this.setSaturatedPressureValidators(form, settings);
+        steamTemperatureControl.clearValidators();
+      } else if (pressureOrTemperatureControl.value === SteamPressureOrTemp.TEMPERATURE) {
+        this.setSteamTemperatureValidators(form, settings);
+        saturatedPressureControl.clearValidators();
+      }
+    }
+  }
+
+  setSteamTemperatureValidators(form: UntypedFormGroup, settings: Settings, saturatedPropertiesOutput?: SaturatedPropertiesOutput) {
+    // * use constant of temperature output from steam critical pressure at 3185.415 psig - per expert review
+    let temperatureMin: number = 32;
+    let temperatureMax: number = 705.1;
+    if (settings.steamTemperatureMeasurement !== 'F') {
+      temperatureMin = this.convertUnitsService.value(temperatureMin).from('F').to(settings.steamTemperatureMeasurement);
+      temperatureMax = this.convertUnitsService.value(temperatureMax).from('F').to(settings.steamTemperatureMeasurement);
+    }
+
+    if (form.controls.steamQuality.value === SteamQuality.SATURATED) {
+      form.controls.steamTemperature.setValidators([Validators.required, Validators.min(temperatureMin), Validators.max(temperatureMax)]);
+    } else if (form.controls.steamQuality.value === SteamQuality.SUPERHEATED)  {
+      form.controls.steamTemperature.setValidators([Validators.required, Validators.min(temperatureMin), GreaterThanValidator.greaterThan(saturatedPropertiesOutput.saturatedTemperature), Validators.max(temperatureMax)]);
+    }
+
+    form.controls.steamTemperature.updateValueAndValidity();
+  }
+
+  setSaturatedPressureValidators(form: UntypedFormGroup, settings: Settings) {
+    // * use constant steam critical pressure as 3185.415 psig - per expert review
+    let pressureMax: number = 3185.415;
+    // * -14.551 psig
+    let pressureMin: number = -14.551;
+    if (settings.steamPressureMeasurement !== 'psig') {
+      pressureMax = this.convertUnitsService.value(pressureMax).from('psig').to(settings.steamPressureMeasurement);
+      pressureMin = this.convertUnitsService.value(pressureMin).from('psig').to(settings.steamPressureMeasurement);
+    }
+
+    form.controls.saturatedPressure.setValidators([Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]);
+    form.controls.saturatedPressure.updateValueAndValidity();
+  }
+
+   /**
+  * Updates related SSMT fields on separate forms
+ * 
+ * Header pressure should be set from either the user entered boiler pressure, or the output pressure from saturated properties using boiler fields as input. 
+ * boiler temperature will be shown as a result on the highest pressure header form
+ */
+  setBoilerRelatedSSMTFields(boilerInput: BoilerInput, ssmt: SSMT, settings: Settings, isBaseline: boolean) {
+    let saturatedPropertiesOutput: SaturatedPropertiesOutput;
+    if (boilerInput.steamQuality === SteamQuality.SATURATED) {
+      const input: SaturatedPropertiesInput = {
+        saturatedTemperature: boilerInput.steamTemperature,
+        saturatedPressure: boilerInput.saturatedPressure,
+      };
+
+      saturatedPropertiesOutput = this.steamService.saturatedProperties(input, boilerInput.pressureOrTemperature, settings);
+      if (boilerInput.pressureOrTemperature === SteamPressureOrTemp.PRESSURE) {
+        boilerInput.steamTemperature = saturatedPropertiesOutput.saturatedTemperature;
+      } else {
+        boilerInput.saturatedPressure = saturatedPropertiesOutput.saturatedPressure;
+      }
+
+      if (ssmt.headerInput && ssmt.headerInput.highPressureHeader) {
+        ssmt.headerInput.highPressureHeader.pressure = saturatedPropertiesOutput.saturatedPressure;
+      }
+    } else {
+      if (ssmt.headerInput && ssmt.headerInput.highPressureHeader) {
+        ssmt.headerInput.highPressureHeader.pressure = boilerInput.saturatedPressure;
+      }
+    }
+
+    if (isBaseline) {
+      this.baselineSaturatedPropertiesOutput.next(saturatedPropertiesOutput);
+    } else {
+      this.modificationSaturatedPropertiesOutput.next(saturatedPropertiesOutput);
+    }
+  }
+
+  initializeSSMTCalculatedFields(boilerInput: BoilerInput, ssmt: SSMT, settings: Settings, isBaseline: boolean) {
+    if (!this.baselineSaturatedPropertiesOutput.getValue()) {
+      this.setBoilerRelatedSSMTFields(boilerInput, ssmt, settings, isBaseline);
+    }
+    if (!this.modificationSaturatedPropertiesOutput.getValue()) {
+      this.modificationSaturatedPropertiesOutput.next(this.baselineSaturatedPropertiesOutput.getValue());
+    }
+  }
+
+  setDefaultModificationSaturatedPropertiesOutput() {
+    if (!this.modificationSaturatedPropertiesOutput.getValue()) {
+      this.modificationSaturatedPropertiesOutput.next(this.baselineSaturatedPropertiesOutput.getValue());
+    }
   }
 
   initObjFromForm(form: UntypedFormGroup): BoilerInput {
@@ -69,6 +215,9 @@ export class BoilerService {
       blowdownRate: form.controls.blowdownRate.value,
       blowdownFlashed: form.controls.blowdownFlashed.value,
       preheatMakeupWater: form.controls.preheatMakeupWater.value,
+      steamQuality: form.controls.steamQuality.value,
+      pressureOrTemperature: form.controls.pressureOrTemperature.value,
+      saturatedPressure: form.controls.saturatedPressure.value,
       steamTemperature: form.controls.steamTemperature.value,
       deaeratorVentRate: form.controls.deaeratorVentRate.value,
       deaeratorPressure: form.controls.deaeratorPressure.value,
@@ -90,8 +239,6 @@ export class BoilerService {
     let tmpDeaeratorPressureMax: number = this.convertUnitsService.value(3185).from('psia').to(settings.steamPressureMeasurement);
     tmpDeaeratorPressureMax = this.convertUnitsService.roundVal(tmpDeaeratorPressureMax, 0);
 
-    // let tmpApproachTempMin: number = this.convertUnitsService.value(0).from('F').to(settings.steamTemperatureMeasurement);
-    // tmpApproachTempMin = this.convertUnitsService.roundVal(tmpApproachTempMin, 0);
     return {
       steamTemperatureMin: tmpSteamTemperatureMin,
       steamTemperatureMax: tmpSteamTemperatureMax,
@@ -103,12 +250,8 @@ export class BoilerService {
 
   isBoilerValid(boilerInput: BoilerInput, settings: Settings): boolean {
     if (boilerInput) {
-      let form: UntypedFormGroup = this.initFormFromObj(boilerInput, settings);
-      if (form.status === 'VALID') {
-        return true;
-      } else {
-        return false;
-      }
+      let form: UntypedFormGroup = this.initFormFromBoilerInput(boilerInput, settings);
+      return form.valid;
     } else {
       return false;
     }

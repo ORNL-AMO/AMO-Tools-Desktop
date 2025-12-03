@@ -12,7 +12,7 @@ import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, getComponentNam
 export class WaterAssessmentService {
   assessmentId: number;
   settings: BehaviorSubject<Settings>;
-  mainTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<WaterMainTabString>;
   setupTab: BehaviorSubject<WaterSetupTabString>;
   waterUsingSystemTab: BehaviorSubject<WaterUsingSystemTabString>;
   intakeSourceTab: BehaviorSubject<PlantIntakeDischargeTab>;
@@ -28,8 +28,20 @@ export class WaterAssessmentService {
   showModificationListModal: BehaviorSubject<boolean>;
   showAddModificationModal: BehaviorSubject<boolean>;
   showExportModal: BehaviorSubject<boolean>;
+  mainTabs: Array<WaterMainTabString> = [
+    'baseline',
+    // todo assessment tab not implemented yet
+    // 'assessment',
+    'diagram',
+    'report',
+  ];
   setupTabs: Array<WaterSetupTabString> = [
     'system-basics',
+    'water-intake',
+    'water-discharge',
+    'water-treatment',
+    'water-using-system',
+    'waste-water-treatment'
   ];
 
   constructor(
@@ -37,7 +49,7 @@ export class WaterAssessmentService {
     private waterUsingSystemService: WaterUsingSystemService,
     private convertUnitsService: ConvertUnitsService) {
     this.settings = new BehaviorSubject<Settings>(undefined);
-    this.mainTab = new BehaviorSubject<string>('baseline');
+    this.mainTab = new BehaviorSubject<WaterMainTabString>('baseline');
     this.setupTab = new BehaviorSubject<WaterSetupTabString>('system-basics');
     this.waterUsingSystemTab = new BehaviorSubject<WaterUsingSystemTabString>('system');
     this.intakeSourceTab = new BehaviorSubject<PlantIntakeDischargeTab>('data');
@@ -56,7 +68,6 @@ export class WaterAssessmentService {
   }
 
   updateWaterAssessment(waterAssessment: WaterAssessment) {
-    // console.log('updateWaterAssessment', waterAssessment);
     this.waterAssessment.next(waterAssessment);
   }
 
@@ -195,21 +206,41 @@ export class WaterAssessmentService {
     }
   }
 
-  continue() {
-    let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
-    let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-    let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex + 1];
-    this.setupTab.next(nextTab);
+  continueMainTab() {
+    let mainTab: WaterMainTabString = this.mainTab.getValue();
+    let nextTab: WaterMainTabString;
+    if (mainTab !== 'report') {
+      let assessmentTabIndex: number = this.mainTabs.indexOf(mainTab);
+      nextTab = this.mainTabs[assessmentTabIndex + 1];
+      this.mainTab.next(nextTab);
+    }
   }
 
-  back() {
+  backMainTab() {
+    let mainTab: WaterMainTabString = this.mainTab.getValue();
+    if (mainTab !== 'baseline') {
+      let assessmentTabIndex: number = this.mainTabs.indexOf(mainTab);
+      let nextTab: WaterMainTabString = this.mainTabs[assessmentTabIndex - 1];
+      this.mainTab.next(nextTab);
+    }
+  }
+
+  continueSetupTab() {
+    let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
+    let nextTab: WaterSetupTabString;
+    if (tmpSetupTab !== 'waste-water-treatment' && this.mainTab.getValue() == 'baseline') {
+      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
+      nextTab = this.setupTabs[assessmentTabIndex + 1];
+      this.setupTab.next(nextTab);
+    }
+  }
+
+  backSetupTab() {
     let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
     if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'baseline') {
       let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
       let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex - 1];
       this.setupTab.next(nextTab);
-    } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('baseline');
     }
   }
 
@@ -314,6 +345,7 @@ export class WaterAssessmentService {
 
 }
 
+export type WaterMainTabString = 'baseline' | 'assessment' | 'report' | 'diagram';
 export type WaterSetupTabString = WaterProcessComponentType | 'system-basics' | 'system-balance-results';
 export type WaterUsingSystemTabString = 'system' | 'added-energy' | 'water-treatment';
 export type PlantIntakeDischargeTab = 'data' | 'added-energy';

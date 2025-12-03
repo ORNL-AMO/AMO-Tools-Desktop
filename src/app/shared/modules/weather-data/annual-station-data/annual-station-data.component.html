@@ -1,0 +1,58 @@
+<ng-container *ngIf="weatherStation">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a class="click-link" (click)="goToStations()">Weather Stations</a></li>
+            <li class="breadcrumb-item active">{{weatherStation.name}} ({{weatherStation.lat}},
+                {{weatherStation.lon}})</li>
+        </ol>
+    </nav>
+    <form>
+        <div class="row">
+            <div class="col-1 btn-col">
+                <div class="btn-margin">
+                    <button class="btn nav-btn btn-secondary" (click)="goToStations()">
+                        <span class="fa fa-chevron-left"></span>
+                    </button>
+                </div>
+            </div>
+            <!-- @if(!weatherStation.isTMYData) {
+            <div class="col-lg-2 col-md-12 col-sm-12">
+                <label class="semibold" for="selectedYear">Select Year</label>
+                <select id="selectedYear" [(ngModel)]="selectedYear" class="form-select" name="selectedYear"
+                    (change)="setWeatherData()">
+                    <option *ngFor="let year of years" [ngValue]="year">
+                        {{year}}
+                    </option>
+                </select>
+            </div>
+            } @else {
+                TMY Data
+            } -->
+            <div class="col">
+                <div class="btn-margin">
+                    <button class="btn action-btn btn-primary" [disabled]="(!stationWeatherData || stationWeatherData.length === 0) || hasGapsInData" (click)="useDataset()">
+                        Use Dataset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <hr>
+    <div class="row" *ngIf="calculating">
+        <div class="col-12 text-center pb-4">
+            <app-loading-spinner [message]="'Calculating...'"></app-loading-spinner>
+        </div>
+    </div>
+    <div class="row" *ngIf="hasGapsInData">
+        <div class="col-12">
+            <div class="alert alert-danger text-center">
+                The selected year does not contain valid entries for all year hours (8760 hours) and cannot be used. Please select a different year.
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="stationWeatherData && stationWeatherData.length != 0">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <app-annual-station-graph [annualHourlyWeather]="stationWeatherData"></app-annual-station-graph>
+        </div>
+    </div>
+</ng-container>

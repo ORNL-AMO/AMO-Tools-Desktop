@@ -17,7 +17,7 @@ export class WeatherStationLookupService {
    }
 
   getStations(): Observable<Array<WeatherStation>> {
-    let url: string = environment.measurWeatherApi + 'stations';
+    let url: string = environment.measurWeatherApiLegacy + 'stations';
     return this.httpClient
       .get<Array<any>>(url, {
       })
@@ -36,7 +36,7 @@ export class WeatherStationLookupService {
   }
 
   getCSV(stationCsvId: number) {
-    let url: string = environment.measurWeatherApi + 'tmy3s/' + stationCsvId;
+    let url: string = environment.measurWeatherApiLegacy + 'tmy3s/' + stationCsvId;
     let httpOptions = {
       headers: new HttpHeaders({ 'Accept': 'text, text/csv, application/csv' }),
       // responseType must be cast to use 'text' with get() generic typing

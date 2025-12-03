@@ -22,19 +22,28 @@
   <div *ngIf="mainTab == 'baseline'" class="assessment-container tab-content">
     <div class="assessment-panel-container lookup-form modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}"
       [ngStyle]="{'height.px': containerHeight}">
-      <app-system-basics *ngIf="stepTab == 'baseline'" [(settings)]="settings" [assessment]="assessment"
-        (emitSave)="saveSettings($event)" (emitSaveSsmt)="saveSetup($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
-      <app-operations *ngIf="stepTab == 'operations'" [ssmt]="_ssmt" [settings]="settings"
-        (emitSave)="saveSetup($event)" [selected]="true" [inSetup]="true" [isBaseline]="true"></app-operations>
-      <app-boiler *ngIf="stepTab == 'boiler'" [ssmt]="_ssmt" [selected]="true" [inSetup]="true"
-        [settings]="settings" (emitSave)="saveBoiler($event)" [isBaseline]="true">
-      </app-boiler>
-      <app-header *ngIf="stepTab == 'header'" [ssmt]="_ssmt" [selected]="true" [inSetup]="true"
-        [settings]="settings" (emitSave)="saveHeaderData($event)" [modificationExists]="modificationExists"
-        [isBaseline]="true"></app-header>
-      <app-turbine *ngIf="stepTab == 'turbine'" [turbineInput]="_ssmt.turbineInput"
-        [numberOfHeaders]="_ssmt.headerInput.numberOfHeaders" [selected]="true" [inSetup]="true" [settings]="settings"
-        (emitSave)="saveTurbineData($event)" [isBaseline]="true"></app-turbine>
+        @switch (stepTab) {
+          @case ('baseline') {
+          <app-system-basics [(settings)]="settings" [assessment]="assessment" (emitSave)="saveSettings($event)"
+            (emitSaveSsmt)="saveSetup($event)" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
+          }
+          @case ('operations') {
+          <app-operations [ssmt]="_ssmt" [settings]="settings" (emitSave)="saveSetup($event)" [selected]="true" [inSetup]="true"
+            [isBaseline]="true"></app-operations>
+          }
+          @case ('boiler') {
+          <app-boiler [ssmt]="_ssmt" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveBoiler($event)"
+            [isBaseline]="true"></app-boiler>
+          }
+          @case ('header') {
+          <app-header [ssmt]="_ssmt" [selected]="true" [inSetup]="true" [settings]="settings" (emitSave)="saveHeaderData($event)"
+            [modificationExists]="modificationExists" [isBaseline]="true"></app-header>
+          }
+          @case ('turbine') {
+          <app-turbine [turbineInput]="_ssmt.turbineInput" [numberOfHeaders]="_ssmt.headerInput.numberOfHeaders" [selected]="true"
+            [inSetup]="true" [settings]="settings" (emitSave)="saveTurbineData($event)" [isBaseline]="true"></app-turbine>
+          }
+        }
     </div>
     <div class="assessment-panel-container scroll-item" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
       <app-help-panel [ssmt]="_ssmt" [settings]="settings" [inSetup]="true"></app-help-panel>
@@ -71,7 +80,7 @@
     </app-saturated-properties-calculator>
     <app-stack-loss-calculator *ngIf="calcTab == 'stack-loss'" [settings]="settings"></app-stack-loss-calculator>
     <app-heat-loss-calculator *ngIf="calcTab == 'heat-loss'" [settings]="settings"></app-heat-loss-calculator>
-    <app-boiler-calculator *ngIf="calcTab == 'boiler'" [settings]="settings"></app-boiler-calculator>
+    <app-boiler-calculator *ngIf="calcTab == 'boiler'" [settings]="settings" ></app-boiler-calculator>
     <app-flash-tank-calculator *ngIf="calcTab == 'flash-tank'" [settings]="settings"></app-flash-tank-calculator>
     <app-prv-calculator *ngIf="calcTab == 'prv'" [settings]="settings"></app-prv-calculator>
     <app-deaerator-calculator *ngIf="calcTab == 'deaerator'" [settings]="settings"></app-deaerator-calculator>

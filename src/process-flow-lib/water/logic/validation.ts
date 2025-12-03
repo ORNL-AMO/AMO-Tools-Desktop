@@ -1,6 +1,6 @@
 import { Edge, Node } from "@xyflow/react";
 import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowErrors, FlowType, NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "../types/diagram";
-import { getTotalInflow, getTotalOutflow } from "./results";
+import { getNodeTotalOutflow, getNodeTotalInflow } from "./results";
 
 export const getIsDiagramValid = (nodeErrors: NodeErrors) => {
     return !nodeErrors || Object.keys(nodeErrors).length === 0;
@@ -123,7 +123,7 @@ export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], calculat
         };
 
         // * Source errors
-        const totalSourceFlow = getTotalInflow(nd, calculatedData);
+        const totalSourceFlow = getNodeTotalInflow(nd.data, calculatedData);
         const isTotalFlowValid = validateTotalFlowValue(componentSourceEdges, totalSourceFlow, nd.data.userEnteredData.dischargeUnaccounted, nd.data.userEnteredData.totalSourceFlow, settings.flowDecimalPrecision);
         componentSourceEdges.map((edge: Edge<CustomEdgeData>) => {
             const validationMessage = validateFlowValue(edge.data.flowValue);
@@ -138,7 +138,7 @@ export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], calculat
         }
 
         // * Discharge errors
-        const totalDischargeFlow = getTotalOutflow(nd, calculatedData);
+        const totalDischargeFlow = getNodeTotalOutflow(nd.data, calculatedData);
         const isTotalDischargeValid = validateTotalFlowValue(componentDischargeEdges, totalDischargeFlow, nd.data.userEnteredData.intakeUnaccounted, nd.data.userEnteredData.totalDischargeFlow, settings.flowDecimalPrecision);
         componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => {
             const validationMessage = validateFlowValue(edge.data.flowValue);

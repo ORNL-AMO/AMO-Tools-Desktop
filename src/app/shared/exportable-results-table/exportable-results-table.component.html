@@ -1,5 +1,8 @@
 <textarea type="text" class="form-control clipboard-text" [(ngModel)]="tableString" placeholder="content will be copied after clicking the copy button"></textarea>
-<div class="d-flex w-100 justify-content-center pl-2 pr-2">
+<div class="d-flex w-100 justify-content-center pl-2 pr-2"
+     [ngClass]="{'justify-content-start': horizontalAnchor === 'left', 
+     'justify-content-center': horizontalAnchor === 'center',
+    'justify-content-end': horizontalAnchor === 'right'}">
   <span class="input-group-btn">
     <button (mouseenter)="emitUpdateTableString()" class="btn-copy-table" type="button" ngxClipboard [cbContent]="tableString"
       (cbOnSuccess)="copySuccess()">Copy Table</button>

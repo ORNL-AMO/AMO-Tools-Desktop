@@ -7,15 +7,16 @@ export const area = {
                  display:  '(mm&#x00B2;)'
             }
             , to_anchor: 1 / 1000000
+            , group: 'Metric'
         }
         , cm2: {
             name: {
                 singular: 'Centimeter'
                 , plural: 'Centimeters',
                  display:  '(cm&#x00B2;)'
-
             }
             , to_anchor: 1 / 10000
+            , group: 'Metric'
         }
         , m2: {
             name: {
@@ -24,6 +25,7 @@ export const area = {
                  display:  '(m&#x00B2;)'
             }
             , to_anchor: 1
+            , group: 'Metric'
         }
         , ha: {
             name: {
@@ -32,6 +34,7 @@ export const area = {
                  display:  '(ha)'
             }
             , to_anchor: 10000
+            , group: 'Metric'
         }
         , km2: {
             name: {
@@ -40,6 +43,7 @@ export const area = {
                  display:  '(km&#x00B2)'
             }
             , to_anchor: 1000000
+            , group: 'Metric'
         }
     },
     imperial: {
@@ -50,14 +54,7 @@ export const area = {
                  display:  '(in&#x00B2)'
             }
             , to_anchor: 1 / 144
-        }
-        , yd2: {
-            name: {
-                singular: 'Square Yard'
-                , plural: 'Square Yards',
-                 display:  '(yd&#x00B2)'
-            }
-            , to_anchor: 9
+            , group: 'Imperial'
         }
         , ft2: {
             name: {
@@ -66,6 +63,16 @@ export const area = {
                  display:  '(ft&#x00B2)'
             }
             , to_anchor: 1
+            , group: 'Imperial'
+        }
+        , yd2: {
+            name: {
+                singular: 'Square Yard'
+                , plural: 'Square Yards',
+                 display:  '(yd&#x00B2)'
+            }
+            , to_anchor: 9
+            , group: 'Imperial'
         }
         , ac: {
             name: {
@@ -74,6 +81,7 @@ export const area = {
                  display:  '(ac)'
             }
             , to_anchor: 43560
+            , group: 'Imperial'
         }
         , mi2: {
             name: {
@@ -82,6 +90,7 @@ export const area = {
                  display:  '(mi&#x00B2)'
             }
             , to_anchor: 27878400
+            , group: 'Imperial'
         }
     },
     _anchors: {

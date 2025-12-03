@@ -40,6 +40,7 @@ import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 import { CoolingFormService } from '../calculator/furnaces/cooling/cooling-form.service';
 import { EnergyEAFOutput, EnergyExhaustGasOutput, HeatingValueByVolumeOutput, ProcessHeatingApiService } from '../tools-suite-api/process-heating-api.service';
+import { ExhaustGasService } from './losses/exhaust-gas/exhaust-gas.service';
 
 
 @Injectable()
@@ -68,7 +69,8 @@ export class PhastService {
     private gasMaterialFormService: GasMaterialFormService,
     private solidMaterialFormService: SolidMaterialFormService,
     private processHeatingApiService: ProcessHeatingApiService,
-    private slagService: SlagService
+    private slagService: SlagService,
+    private exhaustGasFormService: ExhaustGasService
   ) {
     this.initTabs();
     this.modalOpen = new BehaviorSubject<boolean>(false);
@@ -796,7 +798,10 @@ export class PhastService {
   sumExhaustGasEAF(losses: ExhaustGasEAF[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.exhaustGasEAF(loss, settings);
+       const form = this.exhaustGasFormService.getFormFromLoss(loss);
+        if (form.valid) {
+          sum += this.exhaustGasEAF(loss, settings);
+        }
     });
     return sum;
   }

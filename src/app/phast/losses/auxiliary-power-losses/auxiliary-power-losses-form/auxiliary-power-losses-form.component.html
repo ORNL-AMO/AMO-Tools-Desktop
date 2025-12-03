@@ -1,49 +1,82 @@
-<form [formGroup]="auxLossesForm">
 
+  <form [formGroup]="auxLossesForm">
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="{{'motorPhase'+idString}}">Motor Current Phase(s)</label>
       <select name="{{'motorPhase_'+lossIndex}}" class="form-control" id="{{'motorPhase'+idString}}" (change)="save()"
-        formControlName="motorPhase" (focus)="focusField('motorPhase')"  [ngClass]="{'indicate-different': compareMotorPhase(), 'invalid': auxLossesForm.controls.motorPhase.status == 'INVALID'}">
+        formControlName="motorPhase" (focus)="focusField('motorPhase')"
+        [ngClass]="{'indicate-different': compareMotorPhase(), 'invalid': !auxLossesForm.controls.motorPhase.valid}">
         <option *ngFor="let phase of motorPhases" [ngValue]="phase">{{phase}}</option>
       </select>
     </div>
     <div class="form-group">
       <label class="small" for="{{'supplyVoltage'+idString}}">Supply Voltage</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareSupplyVoltage(), 'error': voltageWarning !== null, 'invalid': auxLossesForm.controls.supplyVoltage.status == 'INVALID'}">
-        <input [readonly]="!baselineSelected" name="{{'supplyVoltage_'+lossIndex}}" type="number" min="0" step="10"
-          class="form-control" formControlName="supplyVoltage" id="{{'supplyVoltage'+idString}}" onfocus="this.select();"
-          (input)="save()" (focus)="focusField('supplyVoltage')" >
+      <div class="input-group"
+        [ngClass]="{'indicate-different': compareSupplyVoltage(), 'error': voltageWarning !== null, 'invalid': !auxLossesForm.controls.supplyVoltage.valid}">
+        <input [readonly]="!baselineSelected" name="{{'supplyVoltage_'+lossIndex}}" type="number" step="10"
+          class="form-control" formControlName="supplyVoltage" id="{{'supplyVoltage'+idString}}"
+          onfocus="this.select();" (input)="save()" (focus)="focusField('supplyVoltage')">
         <span class="input-group-addon units">V</span>
       </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="auxLossesForm.controls.supplyVoltage.invalid">
+        <span *ngIf="auxLossesForm.controls.supplyVoltage.errors.required">Value required.</span>
+        <span *ngIf="auxLossesForm.controls.supplyVoltage.errors.min">Value can't be less than
+          {{auxLossesForm.controls.supplyVoltage.errors.min.min}}.</span>
+      </span>
       <span class="alert-warning pull-right small" *ngIf="voltageWarning !== null">{{voltageWarning}}</span>
     </div>
 
     <div class="form-group">
       <label class="small" for="{{'avgCurrent'+idString}}">Average Current</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareAvgCurrent(), 'invalid': auxLossesForm.controls.avgCurrent.status == 'INVALID'}">
-        <input [readonly]="!baselineSelected" name="{{'avgCurrent_'+lossIndex}}" type="number" min="0" step="10" class="form-control"
-          formControlName="avgCurrent" id="{{'avgCurrent'+idString}}" onfocus="this.select();" (input)="save()" (focus)="focusField('avgCurrent')"
-          >
+      <div class="input-group"
+        [ngClass]="{'indicate-different': compareAvgCurrent(), 'invalid': !auxLossesForm.controls.avgCurrent.valid}">
+        <input [readonly]="!baselineSelected" name="{{'avgCurrent_'+lossIndex}}" type="number" step="10"
+          class="form-control" formControlName="avgCurrent" id="{{'avgCurrent'+idString}}" onfocus="this.select();"
+          (input)="save()" (focus)="focusField('avgCurrent')">
         <span class="input-group-addon units">A</span>
       </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="auxLossesForm.controls.avgCurrent.invalid">
+        <span *ngIf="auxLossesForm.controls.avgCurrent.errors.required">Value required.</span>
+        <span *ngIf="auxLossesForm.controls.avgCurrent.errors.min">Value can't be less than
+          {{auxLossesForm.controls.avgCurrent.errors.min.min}}.</span>
+      </span>
     </div>
 
     <div class="form-group">
       <label class="small" for="{{'powerFactor'+idString}}">Power Factor</label>
-      <input [readonly]="!baselineSelected" name="{{'powerFactor_'+lossIndex}}" type="number" step="0.1" min="0" max="1"
+      <input [readonly]="!baselineSelected" name="{{'powerFactor_'+lossIndex}}" type="number" step="0.1"
         class="form-control" formControlName="powerFactor" id="{{'powerFactor'+idString}}" onfocus="this.select();"
-        (input)="save()" (focus)="focusField('powerFactor')"  [ngClass]="{'indicate-different': comparePowerFactor(), 'invalid': auxLossesForm.controls.powerFactor.status == 'INVALID'}">
+        (input)="save()" (focus)="focusField('powerFactor')"
+        [ngClass]="{'indicate-different': comparePowerFactor(), 'invalid': !auxLossesForm.controls.powerFactor.valid}">
+      <span class="alert-danger pull-right small"
+        *ngIf="auxLossesForm.controls.powerFactor.invalid">
+        <span *ngIf="auxLossesForm.controls.powerFactor.errors.required">Value required.</span>
+        <span *ngIf="auxLossesForm.controls.powerFactor.errors.min">Value can't be less than
+          {{auxLossesForm.controls.powerFactor.errors.min.min}}.</span>
+        <span *ngIf="auxLossesForm.controls.powerFactor.errors.max">Value can't be more than
+          {{auxLossesForm.controls.powerFactor.errors.max.max}}.</span>
+      </span>
     </div>
 
     <div class="form-group">
       <label class="small" for="{{'operatingTime'+idString}}">Operating Time</label>
-      <div class="input-group" [ngClass]="{'indicate-different': compareOperatingTime(), 'invalid': auxLossesForm.controls.operatingTime.status == 'INVALID'}">
-        <input [readonly]="!baselineSelected" name="{{'operatingTime_'+lossIndex}}" type="number" step="any" min="0" max="100"
-          step="any" class="form-control" formControlName="operatingTime" id="{{'operatingTime'+idString}}" onfocus="this.select();"
-          (input)="save()" (focus)="focusField('operatingTime')" >
+      <div class="input-group"
+        [ngClass]="{'indicate-different': compareOperatingTime(), 'invalid': !auxLossesForm.controls.operatingTime.valid}">
+        <input [readonly]="!baselineSelected" name="{{'operatingTime_'+lossIndex}}" type="number" step="any" step="any"
+          class="form-control" formControlName="operatingTime" id="{{'operatingTime'+idString}}"
+          onfocus="this.select();" (input)="save()" (focus)="focusField('operatingTime')">
         <span class="input-group-addon units">%</span>
       </div>
+      <span class="alert-danger pull-right small"
+        *ngIf="auxLossesForm.controls.operatingTime.invalid">
+        <span *ngIf="auxLossesForm.controls.operatingTime.errors.required">Value required.</span>
+        <span *ngIf="auxLossesForm.controls.operatingTime.errors.min">Value can't be less than
+          {{auxLossesForm.controls.operatingTime.errors.min.min}}.</span>
+        <span *ngIf="auxLossesForm.controls.operatingTime.errors.max">Value can't be more than
+          {{auxLossesForm.controls.operatingTime.errors.max.max}}.</span>
+      </span>
     </div>
-  </div>
+  </div> 
 </form>
