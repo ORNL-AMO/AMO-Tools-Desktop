@@ -119,6 +119,7 @@ export class BoilerComponent implements OnInit {
     this.saturatedPressure.clearValidators();
     this.steamTemperature.clearValidators();
     this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings);
+    this.save();
   }
 
   updateSteamMeasurementField(): void {
@@ -131,6 +132,12 @@ export class BoilerComponent implements OnInit {
     }
 
     this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings);
+    this.save();
+  }
+
+  updateSaturatedProperties() {
+    this.boilerService.updateFormAndRelatedState(this.boilerForm, this.ssmt, this.settings, this.isBaseline);
+    this.save();
   }
 
   setFuelTypes() {
@@ -152,11 +159,6 @@ export class BoilerComponent implements OnInit {
   setHeaderValidationErrors(boilerInput: BoilerInput) {
       this.boilerTempValidationErrorValue = this.headerService.getBoilerTempErrorValue(boilerInput, this.ssmt.headerInput, this.settings);
       this.headerLowPressureValidationErrorValue = this.headerService.getHeaderLowPressureMinErrorValue(boilerInput, this.ssmt.headerInput, this.settings);
-  }
-
-  updateSaturatedProperties() {
-    this.boilerService.updateFormAndRelatedState(this.boilerForm, this.ssmt, this.settings, this.isBaseline);
-    this.save();
   }
 
   save() {
