@@ -33,10 +33,10 @@
       </select>
     </div>
   </div>
-  <app-estimate-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == 0"></app-estimate-method-form>
-  <app-bag-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == 2"></app-bag-method-form>
-    <app-orifice-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == 3"></app-orifice-method-form>
-    <app-decibel-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == 1"></app-decibel-method-form>
+  <app-estimate-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == LeakMeasurementMethod.Estimate"></app-estimate-method-form>
+  <app-bag-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == LeakMeasurementMethod.Bag"></app-bag-method-form>
+    <app-orifice-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == LeakMeasurementMethod.Orifice"></app-orifice-method-form>
+    <app-decibel-method-form [settings]="settings" *ngIf="leakForm.controls.measurementMethod.value == LeakMeasurementMethod.Decibel"></app-decibel-method-form>
 
   <div class="d-flex w-100 justify-content-end">
     <a class="click-link small" (click)="addLeak()">+Add Another Leak</a>

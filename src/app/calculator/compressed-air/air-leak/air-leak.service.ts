@@ -5,7 +5,7 @@ import { StandaloneService } from '../../standalone.service';
 import { ConvertAirLeakService } from './convert-air-leak.service';
 import { BehaviorSubject } from 'rxjs';
 import { AirLeakFormService } from './air-leak-form/air-leak-form.service';
-import { exampleLeakInputs } from '../compressed-air-constants';
+import { exampleLeakInputs, LeakMeasurementMethod } from '../compressed-air-constants';
 
 
 
@@ -159,7 +159,7 @@ export class AirLeakService {
       leakResult.selected = leak.selected;
 
       let convertedResult: AirLeakSurveyResult = leakResult;
-      if (leak.measurementMethod == 2) {
+      if (leak.measurementMethod == LeakMeasurementMethod.Bag) {
         // * is bag method, different suite endpoint requires handling with different conversions
         convertedResult = this.convertAirleakService.convertBagMethodResult(leakResult, settings);
       } else {

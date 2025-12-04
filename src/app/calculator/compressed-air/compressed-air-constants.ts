@@ -330,3 +330,17 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
     units: 1
   }
 ];
+
+export enum LeakMeasurementMethod {
+    Estimate,
+    Decibel,
+    Bag,
+    Orifice
+}
+
+export const measurementMethods: Array<{ display: string, value: number }> = [
+    { display: 'Estimate', value: LeakMeasurementMethod.Estimate },
+    { display: 'Decibel Method', value: LeakMeasurementMethod.Decibel },
+    { display: 'Bag Method', value: LeakMeasurementMethod.Bag },
+    { display: 'Orifice Method', value: LeakMeasurementMethod.Orifice },
+  ];
