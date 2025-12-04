@@ -141,49 +141,39 @@ export class ProcessHeatingApiService {
   }
 
   viewFactorCalculation(input: ViewFactorInput): number {
-    let OpeningLossesInstance = new this.toolsSuiteApiService.ToolsSuiteModule.OpeningLosses();
     let output;
-
     if (input.openingShape == 0) {
-      // TODO find and change defaults for input where this is init
+      // circular
       if (input.thickness != 0 && input.diameter != 0) {
         input.thickness = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.thickness);
         input.diameter = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.diameter);
-        output = OpeningLossesInstance.calculateViewFactorCircular(input.thickness, input.diameter);
+        output = this.toolsSuiteApiService.ToolsSuiteModule.calculateViewFactorCircular(input.thickness, input.diameter);
       }
     } else {
+      // quad
       if (input.thickness != 0 && input.length != 0 && input.width != 0) {
         input.thickness = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.thickness);
         input.width = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.width);
         input.length = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.length);
-        output = OpeningLossesInstance.calculateViewFactorQuad(input.thickness, input.length, input.width);
+        output = this.toolsSuiteApiService.ToolsSuiteModule.calculateViewFactorQuad(input.thickness, input.length, input.width);
       }
     }
-    OpeningLossesInstance.delete();
     return output;
   }
 
   openingLossesQuad(input: QuadOpeningLoss): number {
     input.ratio = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.ratio);
-    let OpeningLossesQuadInstance = new this.toolsSuiteApiService.ToolsSuiteModule.OpeningLosses(
-      input.emissivity, input.length,
-      input.width, input.thickness, input.ratio, input.ambientTemperature,
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.openingTotalHeatLossQuad(
+      input.emissivity, input.length, input.width, input.ambientTemperature,
       input.insideTemperature, input.percentTimeOpen, input.viewFactor);
-
-    let output: number = OpeningLossesQuadInstance.getHeatLoss();
-    OpeningLossesQuadInstance.delete();
     return output;
   }
 
   openingLossesCircular(input: CircularOpeningLoss): number {
     input.ratio = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.ratio);
-    let OpeningLossesCircularInstance = new this.toolsSuiteApiService.ToolsSuiteModule.OpeningLosses(
-      input.emissivity, input.diameter,
-      input.thickness, input.ratio, input.ambientTemperature,
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.openingTotalHeatLossCircular(
+      input.emissivity, input.diameter, input.ambientTemperature,
       input.insideTemperature, input.percentTimeOpen, input.viewFactor);
-
-    let output: number = OpeningLossesCircularInstance.getHeatLoss();
-    OpeningLossesCircularInstance.delete();
     return output;
   }
 
