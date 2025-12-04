@@ -154,11 +154,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   setMaxAndAvgPoints() {
     let currentPoints: EfficiencyPoint[] = this.getCurrentPoints(false);
-    let isInvalidPlot: boolean = currentPoints.some(point => isNaN(point.x) || isNaN(point.y)
-      || !isFinite(point.x) || !isFinite(point.y)
-    );
+    let isInvalidPlot: boolean = currentPoints.some(point =>isNaN(point.x) || isNaN(point.y) ||!isFinite(point.x) || !isFinite(point.y));
+    let isDefinedPlot: boolean = currentPoints.length >= 2;
 
-    if (!isInvalidPlot) {
+    if (!isInvalidPlot && isDefinedPlot) {
       this.validEfficiency = true;
       let maximumPoint: EfficiencyPoint = {
         id: undefined,

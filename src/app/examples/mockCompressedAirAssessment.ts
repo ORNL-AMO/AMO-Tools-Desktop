@@ -12440,7 +12440,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     }
                 },
                 "isValid": true,
-                "compressorLibId": 769
             },
             {
                 "itemId": "1i1iaygyz",
@@ -12540,7 +12539,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     }
                 },
                 "isValid": true,
-                "compressorLibId": 769
             },
             {
                 "itemId": "ljepu4k8q",
@@ -12640,7 +12638,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     }
                 },
                 "isValid": true,
-                "compressorLibId": 849
             },
             {
                 "itemId": "wj0olxdhb",
@@ -12740,7 +12737,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     }
                 },
                 "isValid": true,
-                "compressorLibId": 834
             },
             {
                 "itemId": "o105l9t3y",
@@ -12840,7 +12836,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     }
                 },
                 "isValid": true,
-                "compressorLibId": 769
             },
             {
                 "itemId": "zsekn3poe",
@@ -12940,7 +12935,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     }
                 },
                 "isValid": true,
-                "compressorLibId": 769
             },
             {
                 "itemId": "ofeeuny8i",
@@ -13040,7 +13034,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     }
                 },
                 "isValid": true,
-                "compressorLibId": 849
             },
             {
                 "itemId": "ehg2shiz2",
@@ -13140,7 +13133,6 @@ export const MockCompressedAirAssessment: Assessment =  {
                     }
                 },
                 "isValid": true,
-                "compressorLibId": 834
             }
         ],
         "systemProfile": {

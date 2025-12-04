@@ -49,3 +49,24 @@ export const generateFormControlIds = <T extends Record<string, any>>(obj: T): F
   }
   return result;
 }
+
+export const getGraphColors = (): Array<any> => {
+    const defaultColors = [
+        '#1E7640',
+        '#2ABDDA',
+        '#84B641',
+        '#7030A0',
+        '#E1CD00',
+        '#306DBE',
+        '#A03123',
+        '#7FD7E9',
+        '#DE762D',
+        '#948A54',
+        '#A9D58B',
+        '#FFE166',
+        '#DD7164',
+        '#3f4a7d'
+    ];
+
+    return [...defaultColors];
+};

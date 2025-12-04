@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { WaterSuiteApiService } from '../tools-suite-api/water-suite-api.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
-import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults, getTotalInflow } from 'process-flow-lib';
+import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults, getNodeTotalInflow } from 'process-flow-lib';
 import { UpdateDiagramFromAssessmentService } from '../water-process-diagram/update-diagram-from-assessment.service';
 import { Assessment } from '../shared/models/assessment';
 import { Edge, Node } from '@xyflow/react';
@@ -149,7 +149,7 @@ export class WaterAssessmentResultsService {
       // todo rough quick fix for beta
       const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => {
         const node: Node<ProcessFlowPart> = diagram.waterDiagram.flowDiagramData.nodes.map(node => node).find((node: Node<ProcessFlowPart>) => node.data.diagramNodeId === system.diagramNodeId) as Node<ProcessFlowPart>;
-        const totalInflow = getTotalInflow(node, diagram.waterDiagram.flowDiagramData.calculatedData);
+        const totalInflow = getNodeTotalInflow(node.data, diagram.waterDiagram.flowDiagramData.calculatedData);
         system.heatEnergy.systemWaterUse = totalInflow;
         return system.heatEnergy;
       }).filter((heatEnergy: HeatEnergy) => heatEnergy !== undefined);
@@ -210,6 +210,21 @@ export class WaterAssessmentResultsService {
       });
     });
     return systemCosts;
+  }
+
+  getEmptyPlantSystemSummaryResults(): PlantSystemSummaryResults {
+    return {
+      id: undefined,
+      name: undefined,
+      sourceWaterIntake: undefined,
+      dischargeWater: undefined,
+      directCostPerYear: undefined,
+      directCostPerUnit: undefined,
+      trueCostPerYear: undefined,
+      trueCostPerUnit: undefined,
+      trueOverDirectResult: undefined,
+      allSystemResults: []
+    }
   }
 
 }

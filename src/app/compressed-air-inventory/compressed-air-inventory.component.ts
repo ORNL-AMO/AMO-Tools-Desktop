@@ -10,12 +10,12 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem } from './compressed-air-inventory';
 import { environment } from '../../environments/environment';
-import { ExistingCompressorDbService } from './existing-compressor-db.service';
 import { CompressedAirMotorIntegrationService } from '../shared/connected-inventory/compressed-air-motor-integration.service';
 import { ConnectedInventoryData } from '../shared/connected-inventory/integrations';
 import { CompressedAirCatalogService } from './compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { CompressedAirAssessmentIntegrationService } from '../shared/connected-inventory/compressed-air-assessment-integration.service';
+import { GenericCompressorDbService } from '../shared/generic-compressor-db.service';
 
 @Component({
   selector: 'app-compressed-air-inventory',
@@ -54,7 +54,7 @@ export class CompressedAirInventoryComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private settingsDbService: SettingsDbService,
     private inventoryDbService: InventoryDbService,
-    private existingCompressorDbService: ExistingCompressorDbService,
+    private genericCompressorDbService: GenericCompressorDbService,
     private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService,
     private compressedAirCatalogService: CompressedAirCatalogService,
     private integrationStateService: IntegrationStateService,
@@ -71,7 +71,7 @@ export class CompressedAirInventoryComponent implements OnInit {
       this.compressedAirInventoryService.setIsValidInventory(this.compressedAirInventoryItem.compressedAirInventoryData);
       this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryItem.compressedAirInventoryData);
       this.compressedAirInventoryService.currentInventoryId = tmpItemId;
-      this.existingCompressorDbService.getAllCompressors(settings);
+      this.genericCompressorDbService.getAllCompressors(settings);
 
       let systemId = this.activatedRoute.snapshot.queryParamMap.get('systemId');
       if (!systemId) {

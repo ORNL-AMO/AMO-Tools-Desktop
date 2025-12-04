@@ -22,11 +22,11 @@
     display: none;
 }
 
-.small-screen-active {
-    background: #fff;
-    color: black;
-    transition: all .1s ease-in-out;
+.full-width-panel {
+    width: 100%;
 }
+
+
 
 /* Screens below 1024 */
 @media screen and (max-width: 1024px) {

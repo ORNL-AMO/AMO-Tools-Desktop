@@ -52,7 +52,6 @@ const ComponentNameHeader = (props: { selectedNode: Node<ProcessFlowPart> }) => 
                             marginBottom: '1rem',
                             width: '100%',
                         }}
-                        autoFocus
                         InputProps={{
                             sx: {
                                 '& input': {

@@ -11,7 +11,6 @@
         [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
 
     } @else {
-    <app-system-true-cost-bar class="print-width"></app-system-true-cost-bar>
     <table #copyTable class="table table-bordered table-striped table-hover">
         <thead>
             <tr class="text-center header-highlight">
@@ -58,8 +57,11 @@
             </tr>
         </tbody>
     </table>
-    <app-exportable-results-table [tableString]="copyTableString"
+    <app-exportable-results-table [tableString]="copyTableString" [horizontalAnchor]="'right'"
     (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+
+    <app-system-true-cost-bar class="print-width"></app-system-true-cost-bar>
+
     }
 
 

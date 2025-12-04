@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { firstValueFrom, Subscription, take } from 'rxjs';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -20,6 +20,12 @@ import { roundVal } from '../../../../shared/helperFunctions';
   standalone: false
 })
 export class FixtureFormComponent implements OnInit {
+  private readonly solidLoadMaterialDbService = inject(SolidLoadMaterialDbService);
+  private readonly convertUnitsService = inject(ConvertUnitsService);
+  private readonly fixtureFormService = inject(FixtureFormService);
+  private readonly fixtureService = inject(FixtureService);
+  private readonly cd = inject(ChangeDetectorRef);
+
   @Input()
   settings: Settings;
   @Input()
@@ -55,11 +61,7 @@ export class FixtureFormComponent implements OnInit {
   idString: string;
   outputSubscription: Subscription;
 
-  constructor(private fixtureFormService: FixtureFormService,
-    private solidLoadMaterialDbService: SolidLoadMaterialDbService,
-    private convertUnitsService: ConvertUnitsService,
-    private cd: ChangeDetectorRef,
-    private fixtureService: FixtureService) { }
+  solidLoadMaterials$ = this.solidLoadMaterialDbService.getAllWithObservable();
 
   ngOnInit(): void {
     if (!this.isBaseline) {
@@ -70,7 +72,6 @@ export class FixtureFormComponent implements OnInit {
     }
     this.trackingEnergySource = this.index > 0 || !this.isBaseline;
 
-    this.setMaterials();
     this.initSubscriptions();
     this.energyUnit = this.fixtureService.getAnnualEnergyUnit(this.fixtureForm.controls.energySourceType.value, this.settings);
     if (this.isBaseline) {
@@ -79,7 +80,7 @@ export class FixtureFormComponent implements OnInit {
       let energySource = this.fixtureService.energySourceType.getValue();
       this.setEnergySource(energySource);
     }
-    this.setProperties();
+    this.initializeMaterials();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -100,6 +101,15 @@ export class FixtureFormComponent implements OnInit {
     if (this.trackingEnergySource) {
       this.energySourceTypeSub.unsubscribe();
     }
+  }
+
+  initializeMaterials() {
+    this.solidLoadMaterials$.pipe(
+      take(1)
+    ).subscribe(materialTypes => {
+      this.materialTypes = materialTypes;
+      this.setProperties();
+    });
   }
 
   async setMaterials() {

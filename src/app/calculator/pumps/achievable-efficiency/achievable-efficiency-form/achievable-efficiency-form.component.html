@@ -52,13 +52,19 @@
   <div class="form-group">
     <label for="stageCount">Stage Count</label>
     <div class="input-group">
-      <input name="stageCount" type="number" min="0" step="any" class="form-control" formControlName="stageCount" id="stageCount"
+      <input name="stageCount" type="number" min="1" step="1" class="form-control" formControlName="stageCount" id="stageCount"
         (input)="emitChange()" onfocus="this.select();" (focus)="focusField('stageCount')">
     </div>
-    <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.stageCount.invalid && !efficiencyForm.controls.stageCount.pristine">
+    <span class="alert-danger pull-right small" *ngIf="efficiencyForm.controls.stageCount.invalid">
       <span *ngIf="efficiencyForm.controls.stageCount.errors.required">Value required.</span>       
       <span *ngIf="efficiencyForm.controls.stageCount.errors.min">Value can't be less than
-        {{efficiencyForm.controls.stageCount.errors.min.min}}.</span>  
+        {{efficiencyForm.controls.stageCount.errors.min.min}}.</span>
+      <span *ngIf="efficiencyForm.controls.stageCount.errors.notWholeNumber">{{notWholeNumberMsg}}</span>  
+    </span>
+
+    <span class="alert-warning pull-right small"
+      *ngIf="efficiencyForm.controls.stageCount.value >= 15">
+      <span>Multistage pumps usually have less than 15 impellers.</span>
     </span>
   </div>
 

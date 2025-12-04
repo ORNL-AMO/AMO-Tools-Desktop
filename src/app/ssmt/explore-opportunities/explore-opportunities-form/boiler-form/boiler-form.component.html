@@ -328,13 +328,12 @@
     <div class="checkbox mt-2">
       <label for="modifySteamTemperature" class="steam-check-label">
         <input type="checkbox" id="modifySteamTemperature" (focus)="focusField('steamTemperature')"
-          (change)="toggleInitialSteamTemperature()" [(ngModel)]="showInitialSteampTemperature" /> Change Steam
-        Generation Conditions
+          (change)="toggleInitialSteamTemperature()" [(ngModel)]="showInitialSteamTemperature" /> Change Steam Generation Conditions
       </label>
     </div>
   </li>
   <hr class="mt-0 mb-0">
-<div *ngIf="showInitialSteampTemperature">
+<div *ngIf="showInitialSteamTemperature">
   <li class="explore-opps-header">
     <span class="explore-opps-title text-muted">Baseline</span>
     <span class="explore-opps-title text-muted">Modifications</span>
@@ -358,28 +357,48 @@
       </div>
       </div>
     </form>
-    <form [formGroup]="modificationForm" class="explore-opps-form">
-      <div class="form-group explore-opps-formgroup">
-        <label for="modificationSteamTemperature" class="mod-value-label">Initial Steam Temperature</label>
-        <div class="input-group mod-max-width">
-          <input name="modificationSteamTemperature" type="number" step="any" id="modificationSteamTemperature"
-            class="form-control" (focus)="focusField('steamTemperature')" (input)="save()"
-            formControlName="steamTemperature" />
-          <span class="units input-group-addon"
-            [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
-            <span class="alert-danger pull-right small"
-              *ngIf="modificationForm.controls.steamTemperature.invalid && !modificationForm.controls.steamTemperature.pristine">
-              <span *ngIf="modificationForm.controls.steamTemperature.errors.required">Value Required</span>
-              <span *ngIf="modificationForm.controls.steamTemperature.errors.max">Value can't be greater than
-                {{modificationForm.controls.steamTemperature.errors.max.max}}
-                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-              <span *ngIf="modificationForm.controls.steamTemperature.errors.min">Value can't be less than
-                {{modificationForm.controls.steamTemperature.errors.min.min}}
-                <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
-            </span>
-        </div>
-      </div>
-    </form>
+
+          @if (modificationForm.controls.steamQuality.value === SteamQuality.SUPERHEATED
+          || (modificationForm.controls.steamQuality.value === SteamQuality.SATURATED &&
+          modificationForm.controls.pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE)) {
+          <form [formGroup]="modificationForm" class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="modificationSteamTemperature" class="mod-value-label">Modified Steam Temperature</label>
+              <div class="input-group mod-max-width">
+                <input name="modificationSteamTemperature" type="number" step="any" id="modificationSteamTemperature"
+                  class="form-control" (focus)="focusField('steamTemperature')" (input)="updateSaturatedProperties()"
+                  formControlName="steamTemperature" />
+                <span class="units input-group-addon" [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+                <span class="alert-danger pull-right small"
+                  *ngIf="modificationForm.controls.steamTemperature.invalid && !modificationForm.controls.steamTemperature.pristine">
+                  <span *ngIf="modificationForm.controls.steamTemperature.errors.required">Value Required</span>
+                  <span *ngIf="modificationForm.controls.steamTemperature.errors.max">Value can't be greater than
+                    {{modificationForm.controls.steamTemperature.errors.max.max}}
+                    <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+                  <span *ngIf="modificationForm.controls.steamTemperature.errors.min">Value can't be less than
+                    {{modificationForm.controls.steamTemperature.errors.min.min}}
+                    <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>.</span>
+                </span>
+              </div>
+            </div>
+          </form>
+          }
+          
+          @if (modificationForm.controls.steamQuality.value === SteamQuality.SATURATED && saturatedPropertiesOutput$ | async; as saturatedPropertiesOutput)
+          {
+          <form [formGroup]="modificationForm" class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="modificationSteamTemperature" class="mod-value-label">Modified Saturated Temperature</label>
+              <div class="input-group mod-max-width">
+                <div class="small text-center bold">
+                  {{saturatedPropertiesOutput?.saturatedTemperature | number:'1.0-2'}}
+                  <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
+                </div>
+              </div>
+            </div>
+          </form>
+          }
+
   </li>
 </div>
 

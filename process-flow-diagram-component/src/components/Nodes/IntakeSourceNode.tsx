@@ -10,12 +10,12 @@ import { selectNodeCalculatedFlowData } from '../Diagram/store';
 import CustomNodeToolbar from './CustomNodeToolbar';
 import { openDrawerWithSelected } from '../Diagram/diagramReducer';
 
-const IntakeSourceNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
+const IntakeSourceNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
   const calculatedData: NodeFlowData = useAppSelector((state) => selectNodeCalculatedFlowData(state, id));
-  let plantLevelFlow: number | string = data.userEnteredData.totalDischargeFlow? data.userEnteredData.totalDischargeFlow : calculatedData && calculatedData.totalDischargeFlow;
+  let plantLevelFlow: number | string = data.userEnteredData.totalDischargeFlow ? data.userEnteredData.totalDischargeFlow : calculatedData && calculatedData.totalDischargeFlow;
   let condensedPadding: boolean = plantLevelFlow !== undefined && plantLevelFlow !== null;
-  
+
 
   const onEditNode = () => {
     dispatch(openDrawerWithSelected(id));
@@ -33,28 +33,36 @@ const IntakeSourceNode = ({ data, id, isConnectable, selected }: NodeProps<Diagr
           justifyContent: 'space-around',
         }}
       >
+        {/* // * TOP */}
+        {data.handles.outflowHandles.g &&
           <CustomHandle
             type="source"
             position={Position.Top}
-            id="b"
+            id="g"
             className='custom-handle source-handle'
           />
+        }
+        {data.handles.outflowHandles.i &&
           <CustomHandle
             type="source"
             position={Position.Top}
-            id="c"
+            id="i"
             className='custom-handle source-handle'
           />
+        }
+        {data.handles.outflowHandles.k &&
           <CustomHandle
             type="source"
             position={Position.Top}
-            id="d"
+            id="k"
             className='custom-handle source-handle'
           />
+        }
+
       </div>
 
       <div className="node-inner-input" style={{
-        padding: condensedPadding? '0' : undefined
+        padding: condensedPadding ? '0' : undefined
       }}>
         <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
 
@@ -63,25 +71,52 @@ const IntakeSourceNode = ({ data, id, isConnectable, selected }: NodeProps<Diagr
         </Typography>
 
         {plantLevelFlow !== undefined && plantLevelFlow !== null &&
-            <Chip label={
-              <>
-              <FlowValueDisplay flowValue={plantLevelFlow}/>
-              <FlowDisplayUnit/>
-              </>
-          } 
-            variant="outlined" 
-            sx={{background: '#fff', borderRadius: '8px', marginTop: '.25rem'}}
-            />
+          <Chip label={
+            <>
+              <FlowValueDisplay flowValue={plantLevelFlow} />
+              <FlowDisplayUnit />
+            </>
+          }
+            variant="outlined"
+            sx={{ background: '#fff', borderRadius: '8px', marginTop: '.25rem' }}
+          />
         }
       </div>
 
-        <CustomHandle
-          type="source"
-          position={Position.Right}
-          id="e"
-          className='custom-handle source-handle'
-        />
-        
+
+      <div
+        style={{
+          display: 'block',
+          position: 'absolute',
+          right: 0,
+          top: '20px',
+        }}
+      >
+
+        {/* // * RIGHT SIDE */}
+        {data.handles.outflowHandles.e &&
+          <CustomHandle
+            type="source"
+            position={Position.Right}
+            id="e"
+            className='custom-handle source-handle'
+            customStyle={{
+              top: '30px'
+            }}
+          />
+        }
+
+        {data.handles.outflowHandles.f &&
+          <CustomHandle
+            type="source"
+            position={Position.Right}
+            id="f"
+            className='custom-handle source-handle'
+          />
+        }
+
+      </div>
+
       <div
         style={{
           display: 'flex',
@@ -92,24 +127,32 @@ const IntakeSourceNode = ({ data, id, isConnectable, selected }: NodeProps<Diagr
           justifyContent: 'space-around',
         }}
       >
-          <CustomHandle
-            type="source"
-            position={Position.Bottom}
-            id="f"
-            className='custom-handle source-handle'
-          />
-          <CustomHandle
-            type="source"
-            position={Position.Bottom}
-            id="g"
-            className='custom-handle source-handle'
-          />
+        {/* // * BOTTOM */}
+        {data.handles.outflowHandles.h &&
           <CustomHandle
             type="source"
             position={Position.Bottom}
             id="h"
             className='custom-handle source-handle'
           />
+        }
+        {data.handles.outflowHandles.j &&
+          <CustomHandle
+            type="source"
+            position={Position.Bottom}
+            id="j"
+            className='custom-handle source-handle'
+          />
+        }
+        {data.handles.outflowHandles.l &&
+          <CustomHandle
+            type="source"
+            position={Position.Bottom}
+            id="l"
+            className='custom-handle source-handle'
+          />
+        }
+
       </div>
     </>
   );

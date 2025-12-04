@@ -18,32 +18,65 @@
           </div>
         </div>
         <div class="row value-row">
-          <div class="col-6">
+          <div class="col-5">
             <input type="number" step="any" class="form-control text-center input-field" id="value1" [(ngModel)]="value1"
               (input)="getValue2()">
             <select class="form-control" id="from" [(ngModel)]="from" (change)="getValue2()">
-              <option *ngFor="let possibility of possibilities | sortBy : 'display' : 'asc'" [value]="possibility.unit">{{possibility.display}}
-                <span [innerHTML]="possibility.displayUnit"></span>
-              </option>
+              @if (possibilities.length >= 10) {
+                @for (group of groupedPossibilities | keyvalue; track group.key) {
+                  <optgroup [label]="group.key">
+                    @for (possibility of group.value; track possibility.unit) {
+                      <option [value]="possibility.unit">
+                        {{possibility.display}}
+                        <span [innerHTML]="possibility.displayUnit"></span>
+                      </option>
+                    }
+                  </optgroup>
+                }
+              } @else {
+                  @for (possibility of possibilities; track possibility.unit) {
+                    <option [value]="possibility.unit">
+                      {{possibility.display}}
+                      <span [innerHTML]="possibility.displayUnit"></span>
+                    </option>
+                  }
+              }
             </select>
           </div>
 
-          <div class="col-6 text-center">
+          <div class="col-2 text-center">
+            <button type="button" class="btn btn-outline-primary btn-sm p-1 input-swap-btn" (click)="swapUnits()">
+              <i class="fa fa-exchange input-swap-img"></i>
+            </button>
+          </div>
+
+          <div class="col-5 text-center">
             <small>
               <strong>{{value2 | number:'.0-6'}}</strong>
             </small>
             <select class="form-control" id="to" [(ngModel)]="to" (change)="getValue2()">
-              <option *ngFor="let possibility of possibilities | sortBy : 'display' : 'asc'" [value]="possibility.unit">{{possibility.display}}
-                <span [innerHTML]="possibility.displayUnit"></span>
-              </option>
+              @if (possibilities.length >= 10) {
+                @for (group of groupedPossibilities | keyvalue; track group.key) {
+                  <optgroup [label]="group.key">
+                    @for (possibility of group.value; track possibility.unit) {
+                      <option [value]="possibility.unit">
+                        {{possibility.display}}
+                        <span [innerHTML]="possibility.displayUnit"></span>
+                      </option>
+                    }
+                  </optgroup>
+                }
+              } @else {
+                  @for (possibility of possibilities; track possibility.unit) {
+                    <option [value]="possibility.unit">
+                      {{possibility.display}}
+                      <span [innerHTML]="possibility.displayUnit"></span>
+                    </option>
+                  }
+              }
             </select>
           </div>
         </div>
-        <!-- <div class="d-block w-100 text-right p-2 btn-group btn-group-sm">
-          <button type="button" class="btn btn-danger btn-sm" (click)="btnResetData()">
-            Reset Data
-          </button>
-        </div> -->
       </div>
     </div>
   </div>

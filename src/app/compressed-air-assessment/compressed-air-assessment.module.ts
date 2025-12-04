@@ -35,7 +35,7 @@ import { MaxFullFlowComponent } from './inventory/performance-points/max-full-fl
 import { NoLoadComponent } from './inventory/performance-points/no-load/no-load.component';
 import { UnloadPointComponent } from './inventory/performance-points/unload-point/unload-point.component';
 import { BlowoffComponent } from './inventory/performance-points/blowoff/blowoff.component';
-import { GenericCompressorDbService } from './generic-compressor-db.service';
+import { GenericCompressorDbService } from '../shared/generic-compressor-db.service';
 import { GenericCompressorModalComponent } from './inventory/generic-compressor-modal/generic-compressor-modal.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CompressorOptionsTableComponent } from './inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';

@@ -14,7 +14,6 @@ import { HelpPanelModule } from './help-panel/help-panel.module';
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
 import { ConfirmDeleteModalModule } from '../shared/confirm-delete-modal/confirm-delete-modal.module';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
-import { ExistingCompressorDbService } from './existing-compressor-db.service';
 import { CompressorDataManagementService } from './compressor-data-management.service';
 import { ConvertCompressedAirInventoryService } from './convert-compressed-air-inventory.service';
 import { SummaryFilterComponent } from './compressed-air-inventory-banner/summary-filter/summary-filter.component';
@@ -23,6 +22,7 @@ import { SystemDropdownComponent } from './compressed-air-inventory-banner/summa
 import { HorsepowerDropdownComponent } from './compressed-air-inventory-banner/summary-filter/horsepower-dropdown/horsepower-dropdown.component';
 import { CompressorTypeDropdownComponent } from './compressed-air-inventory-banner/summary-filter/compressor-type-dropdown/compressor-type-dropdown.component';
 import { ControlTypeDropdownComponent } from './compressed-air-inventory-banner/summary-filter/control-type-dropdown/control-type-dropdown.component';
+import { GenericCompressorDbService } from '../shared/generic-compressor-db.service';
 
 
 
@@ -54,7 +54,7 @@ import { ControlTypeDropdownComponent } from './compressed-air-inventory-banner/
   ],
   providers: [
     CompressedAirInventoryService,
-    ExistingCompressorDbService,
+    GenericCompressorDbService,
     CompressorDataManagementService,
     ConvertCompressedAirInventoryService
   ]

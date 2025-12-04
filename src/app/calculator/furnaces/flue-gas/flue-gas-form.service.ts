@@ -44,7 +44,7 @@ export class FlueGasFormService {
       'CO2': [0, Validators.required],
       'SO2': [0, Validators.required], 
       'O2': [0, Validators.required],
-      'name': ['Loss #' + lossNumber],
+      'name': ['Loss #' + lossNumber, Validators.required],
       'specificGravity': [0],
       'heatingValue': [0],
       'heatingValueVolume': [0]
@@ -92,7 +92,7 @@ export class FlueGasFormService {
       'o2': [0, Validators.required],
       'moisture': [0, Validators.required],
       'nitrogen': [0, Validators.required],
-      'name': ['Loss #' + lossNumber]
+      'name': ['Loss #' + lossNumber, Validators.required]
     });
 
     if (!loss) {
@@ -125,7 +125,7 @@ export class FlueGasFormService {
       'CO2': [loss.flueGasByVolume.CO2, Validators.required],
       'SO2': [loss.flueGasByVolume.SO2, Validators.required],
       'O2': [loss.flueGasByVolume.O2, Validators.required],
-      'name': [loss.name],
+      'name': [loss.name, Validators.required],
       'specificGravity': [loss.flueGasByVolume.specificGravity],
       'heatingValue': [loss.flueGasByVolume.heatingValue],
       'heatingValueVolume': [loss.flueGasByVolume.heatingValueVolume]
@@ -159,7 +159,7 @@ export class FlueGasFormService {
       'o2': [loss.flueGasByMass.o2, Validators.required],
       'moisture': [loss.flueGasByMass.moisture, Validators.required],
       'nitrogen': [loss.flueGasByMass.nitrogen, Validators.required],
-      'name': [loss.name],
+      'name': [loss.name, Validators.required],
       'heatingValue': [loss.flueGasByMass.heatingValue]
     });
 

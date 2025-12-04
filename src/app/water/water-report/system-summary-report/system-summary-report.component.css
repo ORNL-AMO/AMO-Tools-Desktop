@@ -34,3 +34,42 @@ th, td {
     height: 0;
     width: 0;
 }
+
+
+
+.btn-group.btn-group-toggle {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.btn-group.btn-group-toggle .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.btn-group.btn-group-toggle .btn:hover,
+.btn-group.btn-group-toggle .btn.active {
+  background-color: #3055cf;
+  border-color: #3055cf;
+  color: #fff;
+}
+
+.start-control, .end-control {
+  max-width: 200px;
+}
+
+
+select:hover {
+  cursor: pointer;
+}
+
+.intake-flow-bar-container {
+  max-width: 500px;
+  width: 100%;
+}
+
+.intake-cost-bar-container {
+  min-width: 500px;
+}

@@ -13,24 +13,11 @@ export class FlowCalculationService {
     const state: RootState = this.store.getState();
     const { nodes, edges } = state.diagram;
 
-    const sourceNode = nodes.find(node => node.id === nodeId);
-    console.log('sourceNode, inputFlow', sourceNode, edge.data.flowValue || 0);
     const flowUpdates: Record<string, number> = this.calculateFlowPropagation(nodeId, edge, edges);
-    console.log('flow updates', flowUpdates);
     this.store.dispatch(diagramSlice.actions.edgesChangeFromPropagation({
       flowUpdates,
       startingNodeId: nodeId,
     }));
-
-    // debugging path
-    Object.entries(flowUpdates).forEach(([connectionId, flow]) => {
-        const { source, target, sourceHandle, targetHandle } = getConnectionFromEdgeId(connectionId);
-        const sourceNode = nodes.find(node => node.id === source);
-        const targetNode = nodes.find(node => node.id === target);
-        const sourceName = sourceNode?.data.name || source;
-        const targetName = targetNode?.data.name || target;
-        console.log(`Flow from ${sourceName} to ${targetName}: ${flow}`);
-    });
 
   }
 

@@ -87,6 +87,7 @@ export class CoolingLossesComponent implements OnInit {
 
   initCoolingLosses() {
     let lossIndex = 1;
+    let setDefaultName = false;
     this.losses.coolingLosses.forEach(loss => {
       let tmpLoss: any;
       if (loss.coolingLossType === 'Gas' || loss.coolingLossType === 'Air' || loss.coolingLossType === 'Other Gas') {
@@ -106,14 +107,14 @@ export class CoolingLossesComponent implements OnInit {
           collapse: false
         };
       }
-
+      setDefaultName = !tmpLoss.gasCoolingForm.controls.name.value || !tmpLoss.liquidCoolingForm.controls.name.value || setDefaultName;
       if (!tmpLoss.gasCoolingForm.controls.name.value) {
         tmpLoss.gasCoolingForm.patchValue({
           name: 'Loss #' + lossIndex
         });
       }
       if (!tmpLoss.liquidCoolingForm.controls.name.value) {
-        tmpLoss.gasCoolingForm.patchValue({
+        tmpLoss.liquidCoolingForm.patchValue({
           name: 'Loss #' + lossIndex
         });
       }
@@ -121,6 +122,11 @@ export class CoolingLossesComponent implements OnInit {
       this.calculate(tmpLoss);
       this._coolingLosses.push(tmpLoss);
     });
+    
+    if (setDefaultName) {
+      // * only saving here to deal with side-effect of stale state in tab component after name has been patched.
+      this.saveLosses();
+    }
   }
 
   addLoss() {
@@ -145,6 +151,7 @@ export class CoolingLossesComponent implements OnInit {
         name: loss.liquidCoolingForm.controls.name.value
       });
     }
+    this.saveLosses();
   }
 
   removeLoss(lossIndex) {

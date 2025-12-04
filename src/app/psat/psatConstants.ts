@@ -183,3 +183,5 @@ export const pumpTypeRanges: Array<{ range: { min: number, max: number }, value:
     }
 
 ];
+
+export const notWholeNumberMsg: string = 'Value must be a whole number.';

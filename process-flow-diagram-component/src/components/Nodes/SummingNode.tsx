@@ -44,7 +44,7 @@ const SummingNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
       <CustomHandle
         type="target"
         position={Position.Left}
-        collapsedStyle={isExpanded ? undefined : collapsedStyle}
+        customStyle={isExpanded ? undefined : collapsedStyle}
         id="a"
       />
 
@@ -59,21 +59,21 @@ const SummingNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
         <CustomHandle
           type="target"
           position={Position.Top}
-          collapsedStyle={isExpanded ? undefined : collapsedStyle}
+          customStyle={isExpanded ? undefined : collapsedStyle}
           id="b"
         />
 
         <CustomHandle
           type="target"
           position={Position.Top}
-          collapsedStyle={isExpanded ? undefined : collapsedStyle}
+          customStyle={isExpanded ? undefined : collapsedStyle}
           id="c"
         />
 
         <CustomHandle
           type="target"
           position={Position.Top}
-          collapsedStyle={isExpanded ? undefined : collapsedStyle}
+          customStyle={isExpanded ? undefined : collapsedStyle}
           id="d"
         />
       </div>
@@ -142,7 +142,7 @@ const SummingNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
         <CustomHandle
           type="source"
           position={Position.Right}
-          collapsedStyle={isExpanded ? undefined : collapsedStyle}
+          customStyle={isExpanded ? undefined : collapsedStyle}
           id="e"
         />
 
@@ -159,21 +159,21 @@ const SummingNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
           <CustomHandle
             type="source"
             position={Position.Bottom}
-            collapsedStyle={isExpanded ? undefined : collapsedStyle}
+            customStyle={isExpanded ? undefined : collapsedStyle}
             id="f"
           />
 
           <CustomHandle
             type="source"
             position={Position.Bottom}
-            collapsedStyle={isExpanded ? undefined : collapsedStyle}
+            customStyle={isExpanded ? undefined : collapsedStyle}
             id="g"
           />
 
           <CustomHandle
             type="source"
             position={Position.Bottom}
-            collapsedStyle={isExpanded ? undefined : collapsedStyle}
+            customStyle={isExpanded ? undefined : collapsedStyle}
             id="h"
           />
         </div>

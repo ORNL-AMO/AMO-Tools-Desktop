@@ -87,8 +87,9 @@ export const selectNodeValidation = (state: RootState) => {
   return state.diagram.nodeErrors[state.diagram.selectedDataId]
 };
 
-export const selectNodeCalculatedFlowData = (state: RootState, nodeId: string) => {
-  return state.diagram.calculatedData.nodes[nodeId]};
+export const selectNodeCalculatedFlowData = (state: RootState, nodeId: string): NodeFlowData => {
+  return state.diagram.calculatedData.nodes[nodeId];
+};
 
 export const selectNodeId = (state: RootState, nodeId?: number) => {
   return nodeId ? nodeId : state.diagram.selectedDataId;
@@ -135,7 +136,7 @@ export const selectNodeTargetEdges = createSelector([selectEdges, selectNodeId],
   return getNodeTargetEdges(edges, nodeId);
 });
 
-export const selectCalculatedNodeData = createSelector([selectCalculatedData, selectNodeId], (data: DiagramCalculatedData, nodeId?: string) => {
+export const selectCalculatedNodeData = createSelector([selectCalculatedData, selectNodeId], (data: DiagramCalculatedData, nodeId?: string): NodeFlowData => {
   return data.nodes[nodeId];
 });
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { PumpProperties } from '../../../pump-inventory';
-
+import { WholeNumberValidator } from '../../../../shared/validators/whole-number';
 @Injectable()
 export class PumpEquipmentCatalogService {
 
@@ -12,7 +12,7 @@ export class PumpEquipmentCatalogService {
       pumpType: [pumpEquipmentProperties.pumpType],
       shaftOrientation: [pumpEquipmentProperties.shaftOrientation],
       shaftSealType: [pumpEquipmentProperties.shaftSealType],
-      numStages: [pumpEquipmentProperties.numStages, [Validators.required, Validators.min(1)]],
+      numStages: [pumpEquipmentProperties.numStages, [Validators.required, Validators.min(1), WholeNumberValidator.wholeNumber()]],
       inletDiameter: [pumpEquipmentProperties.inletDiameter],
       outletDiameter: [pumpEquipmentProperties.outletDiameter],
       maxWorkingPressure: [pumpEquipmentProperties.maxWorkingPressure],

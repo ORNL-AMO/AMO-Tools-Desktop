@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { List, TextField, InputAdornment, ListItem, Divider, Button, Box, useTheme } from "@mui/material";
+import { List, TextField, InputAdornment, ListItem, Button, Box, useTheme, Fade, Collapse } from "@mui/material";
 import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
@@ -8,9 +8,9 @@ import FlowConnectionText from "../Drawer/FlowConnectionText";
 import InputField from "../StyledMUI/InputField";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { distributeTotalSourceFlow, modalOpenChange, focusedEdgeChange, sourceFlowValueChange, totalFlowChange, nodeDataPropertyChange } from "../Diagram/diagramReducer";
+import { distributeTotalSourceFlow, sourceFlowValueChange, totalFlowChange, nodeDataPropertyChange, sumTotalFlowChange } from "../Diagram/diagramReducer";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
-import { selectCurrentNode, selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
+import { selectCalculatedNodeData, selectCurrentNode, selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
 import { Formik, Form, FieldArray, useFormikContext } from 'formik';
 import { FlowForm, getDefaultFlowValidationSchema, TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR } from "../../validation/Validation";
 import UpdateNodeErrors from "./UpdateNodeErrors";
@@ -18,11 +18,15 @@ import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
 import { ObjectSchema } from "yup";
 import { CustomEdgeData, NodeFlowData } from "process-flow-lib";
+import CallMergeIcon from '@mui/icons-material/CallMerge';
+
 /**
    * Formik is used for validation only, while source of truth for values is redux store. This avoids state race conditions when rendering.
    * Functionality for SourceFlowForm.tsx vs DischargeFlowForm.tsx is similar, but separated for readability and future flexibility
    */
-const SourceFlowForm = () => {
+const SourceFlowForm = (props: SourceFlowFormProps) => {
+    const { inView } = props;
+
     const theme = useTheme();
     const dispatch = useAppDispatch();
     const nodes: Node[] = useAppSelector(selectNodes);
@@ -34,19 +38,6 @@ const SourceFlowForm = () => {
     const selectedNode = useAppSelector(selectCurrentNode);
     const isDischargeOutlet = selectedNode.type === 'waterDischarge';
 
-    // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
-    // const handleFieldState = (edgeId: string, stateProp: string, val: boolean) => {
-    //     if (stateProp === 'focused') {
-    //         dispatch(focusedEdgeChange({ edgeId: edgeId }));
-    //     }
-    //     setFieldState((prev) => {
-    //         return {
-    //             ...prev,
-    //             [stateProp]: val
-    //         }
-    //     });
-    // }
-
     const onFlowValueInputChange = (event, sourceEdgeId: string, handleChange: (event: React.ChangeEvent<any>) => void) => {
         handleChange(event);
         let flowValue = event.target.value === "" ? null : Number(event.target.value);
@@ -57,21 +48,21 @@ const SourceFlowForm = () => {
     }
 
     const onUnaccountedFlowChange = (event, handleChange: (event: React.ChangeEvent<any>) => void) => {
-            handleChange(event);
-            const updated: NodeFlowData = {
-                ...selectedNode.data.userEnteredData,
-                dischargeUnaccounted: event.target.value === "" ? null : Number(event.target.value)
-            }
-            dispatch(nodeDataPropertyChange({ optionsProp: 'userEnteredData', updatedValue: updated }));
+        handleChange(event);
+        const updated: NodeFlowData = {
+            ...selectedNode.data.userEnteredData,
+            dischargeUnaccounted: event.target.value === "" ? null : Number(event.target.value)
         }
-    
+        dispatch(nodeDataPropertyChange({ optionsProp: 'userEnteredData', updatedValue: updated }));
+    }
+
 
     const onToggleDataEntryUnit = () => {
         setInPercent(!inPercent);
     }
 
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentSourceEdges, nodes, selectedDataId);
-    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Source', componentSourceEdges, totalCalculatedSourceFlow,  selectedNode.data.userEnteredData.dischargeUnaccounted, settings);
+    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Source', componentSourceEdges, totalCalculatedSourceFlow, selectedNode.data.userEnteredData.dischargeUnaccounted, settings);
 
     return (
         <Formik
@@ -90,11 +81,11 @@ const SourceFlowForm = () => {
                 return (
                     <Form>
                         <UpdateNodeErrors flowType={'source'} errors={errors} />
-                        <DistributeTotalFlowField componentEdges={componentSourceEdges} setFieldValue={setFieldValue}/>
+                        <DistributeTotalFlowField componentEdges={componentSourceEdges} setFieldValue={setFieldValue} />
 
-                        <TotalSourceFlowField />
+                        <TotalSourceFlowField inView={inView} />
 
-                        <Box sx={{ border: `1px solid ${theme.palette.primary.main}`, padding: '1rem', borderRadius: '8px', marginTop: '1rem' }}>
+                        <Box sx={{ border: `1px solid ${theme.palette.primary.main}`, padding: '1rem', borderRadius: '8px', marginTop: '2rem', paddingTop: '2rem' }}>
 
                             <ToggleDataEntryUnitButton inPercent={inPercent} disabled={disabledToggle} handleToggleDataEntryUnit={onToggleDataEntryUnit} />
                             <FieldArray name="fields">
@@ -121,8 +112,6 @@ const SourceFlowForm = () => {
                                                         type={'number'}
                                                         size="small"
                                                         value={currentValue}
-                                                        // onFocus={() => handleFieldState(edge.id, 'focused', true)}
-                                                        // onBlur={() => handleFieldState(edge.id, 'touched', true)}
                                                         warning={hasWarning}
                                                         helperText={hasWarning ? String(errors.flows[index]) : ""}
                                                         FormHelperTextProps={{
@@ -204,11 +193,15 @@ const SourceFlowForm = () => {
    * 2. the total flow field (and not the rest of the form) should rerender with value computed from other flow changes
    * 
    */
-const TotalSourceFlowField = () => {
+const TotalSourceFlowField = (props: TotalSourceFlowFieldProps) => {
+    const { inView } = props;
     const { setFieldValue, values, handleChange, errors } = useFormikContext<any>();
 
     const dispatch = useAppDispatch();
     const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
+    const calculatedData: NodeFlowData = useAppSelector(selectCalculatedNodeData);
+    const componentSourceEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeSourceEdges) as Edge<CustomEdgeData>[];
+
     // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
 
     const onTotalFlowValueInputChange = (event: React.ChangeEvent<any>) => {
@@ -220,7 +213,11 @@ const TotalSourceFlowField = () => {
     const onClickDistributeFlowEvenly = (totalFlowValue: number,) => {
         dispatch(distributeTotalSourceFlow(totalFlowValue));
     }
-    
+
+    const onClickSumFlows = () => {
+        dispatch(sumTotalFlowChange({ flowProperty: 'totalSourceFlow', relatedEdges: componentSourceEdges }));
+    }
+
     React.useEffect(() => {
         setFieldValue('totalFlow', totalSourceFlow, true);
     }, [totalSourceFlow, errors, values]);
@@ -228,55 +225,95 @@ const TotalSourceFlowField = () => {
     const hasError = Boolean(errors.totalFlow) && totalSourceFlow !== null;
 
     return (
-        <Box display={'flex'}>
-            <SmallTooltip title="Set flows evenly from total source value"
-                slotProps={{
-                    popper: {
-                        disablePortal: true,
-                    }
-                }}>
-                <span>
-                    <Button onClick={() => onClickDistributeFlowEvenly(totalSourceFlow)}
-                        disabled={!totalSourceFlow}
-                        variant="outlined"
-                        sx={{
-                            marginRight: '1rem',
-                            padding: '2px 12px',
-                            display: 'inline-block',
-                            minWidth: 0
-                        }}>
-                        <CallSplitOutlinedIcon
-                            sx={{
-                                transform: 'rotate(180deg) scaleX(-1)',
+        <Box>
+                <TextField
+                    label={'Total Flow'}
+                    id={'totalFlow'}
+                    type={'number'}
+                    size="small"
+                    value={values.totalFlow ?? ''}
+                    fullWidth
+                    onChange={(event) => onTotalFlowValueInputChange(event)}
+                    error={hasError}
+                    helperText={hasError ? String(errors.totalFlow) : ""}
+                    FormHelperTextProps={{ sx: { whiteSpace: 'normal'} }}
+                    InputProps={{
+                        endAdornment: <InputAdornment position="end">
+                            <FlowDisplayUnit />
+                        </InputAdornment>,
+                    }}
+                />
 
-                            }} />
-                    </Button>
-                </span>
-            </SmallTooltip>
-            <TextField
-                label={'Total Flow'}
-                id={'totalFlow'}
-                type={'number'}
-                size="small"
-                value={values.totalFlow ?? ''}
-                onChange={(event) => onTotalFlowValueInputChange(event)}
-                // onFocus={() => setFieldState({ ...fieldState, focused: true })}
-                // onAbort={() => setFieldState({ ...fieldState, touched: true })}
-                error={hasError}
-                helperText={hasError ? String(errors.totalFlow) : ""}
-                FormHelperTextProps={{ sx: { whiteSpace: 'normal', maxWidth: 250 } }}
-                InputProps={{
-                    endAdornment: <InputAdornment position="end">
-                        <FlowDisplayUnit />
-                    </InputAdornment>,
-                }}
-            />
+
+            {/* This button group is being collapse-animated to smoothly hide/display it as absolute within the parent accordian. When we no longer have the parent accordian, this can be removed  */}
+            {componentSourceEdges?.length &&
+                <Collapse in={inView} timeout={{ enter: 10, exit: 100 }} unmountOnExit>
+                    <Box display={'flex'} justifyContent={'center'} position={'absolute'} width="100%" marginTop={'1rem'}>
+                        <Box position={'relative'} 
+                        sx={{
+                            backgroundColor: '#fff',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: '1rem',
+                            padding: '0 1rem',
+                        }}>
+                    <SmallTooltip title="Set flows evenly from total inflow"
+                        slotProps={{
+                            popper: {
+                                disablePortal: true,
+                            }
+                        }}>
+                        <span>
+                            <Button onClick={() => onClickDistributeFlowEvenly(totalSourceFlow)}
+                                disabled={!totalSourceFlow}
+                                variant="outlined"
+                                sx={{
+                                    padding: '2px 12px',
+                                    display: 'inline-block',
+                                    minWidth: 0
+                                }}>
+                                <CallSplitOutlinedIcon
+                                    sx={{
+                                        transform: 'rotate(180deg) scaleX(-1)',
+
+                                    }} />
+                            </Button>
+                        </span>
+                    </SmallTooltip>
+                    <SmallTooltip title="Set total from sum of inflow"
+                        slotProps={{
+                            popper: {
+                                disablePortal: true,
+                            }
+                        }}>
+                        <span>
+                            <Button onClick={onClickSumFlows}
+                                variant="outlined"
+                                sx={{
+                                    padding: '2px 12px',
+                                    display: 'inline-block',
+                                    minWidth: 0
+                                }}>
+                                <CallMergeIcon />
+                            </Button>
+                        </span>
+                    </SmallTooltip>
+                        </Box>
+                    </Box>
+                </Collapse>
+            }
         </Box>
+
     );
 };
 
 
 export default SourceFlowForm;
-export interface SourceFlowFormProps { }
+export interface SourceFlowFormProps {
+    inView: boolean;
+}
 
 
+export interface TotalSourceFlowFieldProps {
+    inView: boolean;
+ }
