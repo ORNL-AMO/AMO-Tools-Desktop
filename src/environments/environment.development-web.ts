@@ -10,5 +10,4 @@ export const environment = {
   measurWeatherApiLegacy: 'https://dev.ir-utilities.ornl.gov/',
   measurUtilitiesApi: 'https://dev.ir-utilities.ornl.gov/',
   measurDocsUrl: 'https://dev.industrialresources.ornl.gov/measur/suite/docs/',
-  measurWeatherApiLegacy: 'https://dev.ir-utilities.ornl.gov/',
 };
