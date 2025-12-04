@@ -360,6 +360,24 @@ export class CompareService {
       return false;
     }
   }
+
+   isSaturatedPressureDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boilerInput.saturatedPressure !== modification.boilerInput.saturatedPressure) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
   // deaeratorVentRate
   isDeaeratorVentRateDifferent(baseline?: SSMT, modification?: SSMT): boolean {
     if (!baseline) {

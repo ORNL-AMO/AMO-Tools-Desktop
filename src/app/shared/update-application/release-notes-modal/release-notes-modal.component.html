@@ -13,12 +13,16 @@
         </div>
         <div class="card-body">
           <p class="card-text">
-            MEASUR helps manufacturers increase industrial energy efficiency at the plant-level and in specific systems. 
-            Learn step-by-step ways to identify opportunities, monitor progress, and improve efficiency in any facility. 
-            Some tools help facilities implement an energy management system and prepare to become ISO 50001 and Superior Energy Performance certified. 
-            Based on older Department of Energy (DOE) tools, the Industrial Technologies office (ITO, formerlly the Advanced Manufacturing Office, AMO) 
-            has undertaken this effort to refactor the legacy tools into a modern environment. 
-            The suite includes 8 assessment modules (6 energy system, the treasure hunt, and the water balance modules), a Data Exploration Module, extensive help text, comprehensive reports, data visualization, and 80 calculators!
+            MEASUR helps manufacturers increase industrial energy efficiency at the plant-level and in specific systems.
+            Learn step-by-step ways to identify opportunities, monitor progress, and improve efficiency in any facility.
+            Some tools help facilities implement an energy management system and prepare to become ISO 50001 and
+            Superior Energy Performance certified.
+            Based on older Department of Energy (DOE) tools, the Industrial Technologies office (ITO, formerlly the
+            Advanced Manufacturing Office, AMO)
+            has undertaken this effort to refactor the legacy tools into a modern environment.
+            The suite includes 8 assessment modules (6 energy system, the treasure hunt, and the water balance modules),
+            a Data Exploration Module, extensive help text, comprehensive reports, data visualization, and 80
+            calculators!
           </p>
           <p class="card-text-small">
             MEASUR is a supported application, updates are expected and may impact previously created assessments.
@@ -40,15 +44,66 @@
 
           <label>Application</label>
           <ul>
+            <li>Added: Link to Industrial Resources page from MEASUR</li>
+            <li>Added: Unit converter swap units feature</li>
+            <li>Enhanced: Unit converter unit sorting</li>
+            <li>Fixed: Mouse behavior on hover for better user experience</li>
+            <li>Fixed: Power Factor Starting Year to apply to previously entered months</li>
+            <li>Fixed: Application icons to differentiate between inventories and assessments</li>
+          </ul>
+
+          <label>Pumps</label>
+          <ul>
+            <li>Fixed: Updated Pump Stages validation and defaults through PSAT and Pump inventory</li>
+            <li>Enhanced: Added warning for negative values in Pump Achievable Efficiency</li>
+          </ul>
+
+          <label>Fans</label>
+          <ul>
+            <li>Fixed: Fan Traverse analysis calculator text</li>
+          </ul>
+
+          <label>Process Heating</label>
+          <ul>
+            <li>Added: Update Fixture losses with documentation</li>
+            <li>Added: Update Leakage losses with documentation</li>
+            <li>Enhanced: Added validation messaging for Auxiliary Power and EAF</li>
+            <li>Fixed: Don't calculate Auxiliary Power or EAF until user input is valid</li>
+            <li>Fixed: Populate default loss name if none is given</li>
+            <li>Fixed: Added validation so loss name is a required field</li>
+            <li>Fixed: Field can be saved with a custom name</li>
+            <li>Fixed: Cooling form patching default name to gas instead of liquid</li>
+            <li>Fixed: Fixture Calculator material properties not being set on load</li>
+          </ul>
+
+          <label>Steam</label>
+          <ul>
+            <li>Enhanced: Steam Boiler form integrates steam properties to automatically provide saturated
+              temperature/pressure and collect temperature and pressure at the same time</li>
+          </ul>
+
+          <label>Water</label>
+          <ul>
+            <li>Added: Versioning to diagram to enhance backwards compatibility</li>
+            <li>Enhanced: Ensured visibility on small screens</li>
+          </ul>
+
+          <!--  Include prev version -->
+          <label class="header-label">Here are the details of what's new in version 1.6.4:</label>
+          <br>
+
+          <label>Application</label>
+          <ul>
             <li>New: Add Compressed Air Inventory and Inventory Integrations</li>
             <li>Fixed: Keep application sidebar open while navigating application calculators</li>
             <li>Enhanced: Add Hover tooltips to assessment banner icons</li>
           </ul>
-          
+
           <label>Treasure Hunt</label>
           <ul>
             <li>Enhanced: Add placeholder text describing Treasure Hunt opportunities</li>
-            <li>Fixed: Adjust Air Leak Survey conversions and results for Flow Rate, Air Loss, and Electricity Consumption</li>
+            <li>Fixed: Adjust Air Leak Survey conversions and results for Flow Rate, Air Loss, and Electricity
+              Consumption</li>
             <li>Fixed: Allow conversion of Air Leak survey Treasure Hunt opportunity from Metric to Imperial</li>
           </ul>
 
@@ -59,61 +114,29 @@
 
           <label>Compressed Air</label>
           <ul>
-            <li>Enhanced: Provide message to user explaining requirements for Compressed Air - Air Flow Sankey Visualization</li>
+            <li>Enhanced: Provide message to user explaining requirements for Compressed Air - Air Flow Sankey
+              Visualization</li>
             <li>New Feature: Compressed Air Inventory</li>
-            <li>New Feature: A compressor database allowing users to create a catalog of compressors in their facility</li>
+            <li>New Feature: A compressor database allowing users to create a catalog of compressors in their facility
+            </li>
             <li>New Feature: Integrated into Dashboard/Facility Framework</li>
             <li>New Feature: Sorting & filtering of database</li>
             <li>New Feature: Summary graphs, tables and printouts</li>
-            <li>New Feature: Comprehensive help text and links to calculators to populate certain fields</li> 
+            <li>New Feature: Comprehensive help text and links to calculators to populate certain fields</li>
             <li>New Feature: Summary page</li>
             <li>New Feature: Ability to link a motor inventory item to a compressor inventory item</li>
-            <li>New Feature: Ability to create an assessment from a compressor inventory system and link an assessment to an existing compressor inventory item</li>
+            <li>New Feature: Ability to create an assessment from a compressor inventory system and link an assessment
+              to an existing compressor inventory item</li>
           </ul>
 
-          <!--  Include prev version -->
-          <label class="header-label">Here are the details of what's new in version 1.6.3:</label>
-          <br>
 
-          <label>Application</label>
-          <ul>
-            <li>Fixed: Issues with browser storage detection blocking application on slow connections in Edge</li>
-          </ul>
-
-          <label>Pumps</label>
-          <ul>
-            <li>Added: Valve Energy Loss Calculator</li>
-          </ul>
-
-          <label>Process Heating</label>
-          <ul>
-            <li>Enhanced: Links to algorithm website added to help text and improved calculator descriptions in Atmosphere and Wall losses</li>
-            <li>Fixed: Fixture loss initial values</li>
-            <li>Fixed: Backdrop blocking Modal operations in Condensing Economizer material form</li>
-            <li>Fixed: bug when calculating results from Process Heating Assessment opening losses when empty</li>
-          </ul>
-
-          <label>Steam</label>
-          <ul>
-            <li>Added: validation and messaging for temperature and insulation material options in Pipe Insulation calculator</li>
-          </ul>
-
-          <label>Water</label>
-          <ul>
-            <li>Added: Add field for entering unaccounted flows, revised validation message for unallocated total flows</li>
-            <li>Enhanced: Added button to individual flow fields, allowing users to “cascade” flows - populating flow values to the end of the flow-component path</li>
-            <li>Fixed: Assessment values and results not being converted properly. Changed metric cost units to liters from kiloliters.</li>
-            <li>Fixed: True Cost $/unit results and Direct Cost $/unit results</li>
-            <li>Fixed: Add missing zoom in/zoom out arrow toolbar to diagram</li>
-            <li>Fixed: Display manage tab and delete button for Intake and Discharge components</li>
-          </ul>
-
-        <div class="modal-footer p-2 d-flex flex-row justify-content-end">
-          <div>
-            <button type="button" class="btn btn-secondary btn-sm mr-2 pull-right" (click)="hideModal()">Close</button>
+          <div class="modal-footer p-2 d-flex flex-row justify-content-end">
+            <div>
+              <button type="button" class="btn btn-secondary btn-sm mr-2 pull-right"
+                (click)="hideModal()">Close</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>

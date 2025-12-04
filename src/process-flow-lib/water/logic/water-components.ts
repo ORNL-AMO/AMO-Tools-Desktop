@@ -6,6 +6,7 @@ import { getNewIdString } from "./utils";
 
 
 const getDefaultHandles = (componentType?: ProcessFlowNodeType): Handles => {
+  // * IMPORTANT: Must keep inflow: a,b,c,d and outflow: e,f,g,h for compatibility with existing edges and user diagram or manage migrations
   let handles = {
     inflowHandles: {
       a: true,
@@ -22,16 +23,53 @@ const getDefaultHandles = (componentType?: ProcessFlowNodeType): Handles => {
   }
 
   if ('water-intake' === componentType) {
-    return { outflowHandles: handles.outflowHandles };
+    return { outflowHandles: {
+      e: true,
+      f: true,
+      g: true,
+      h: true,
+      i: false,
+      j: false,
+      k: false,
+      l: false,
+    } };
   }
 
   if ('water-discharge' === componentType) {
-    return { inflowHandles: handles.inflowHandles };
+    return { inflowHandles: {
+      a: true,
+      b: true,
+      c: true,
+      d: true,
+      e: false,
+      f: false,
+      g: false,
+      h: false,
+    } };
   }
 
   return handles;
 }
 
+export const getComponentTypeMaxHandles = (componentType: ProcessFlowNodeType): number => {
+  let maxHandles: number;
+  switch (componentType) {
+    case 'water-intake':
+      maxHandles = 8;
+      break;
+    case 'water-discharge':
+      maxHandles = 8;
+      break;
+    case 'water-using-system':
+      maxHandles = 4;
+      break;
+    default:
+      maxHandles = 4;
+      break;
+  }
+
+  return maxHandles;
+}
 
 export const processFlowDiagramParts: ProcessFlowPart[] = [
   {
@@ -157,7 +195,7 @@ const defaultTabs: ManageDataTab[] = [
     index: 0
   },
   {
-    label: 'Manage',
+    label: 'Customize',
     index: 1
   },
 ]
@@ -169,7 +207,7 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
       index: 0
     },
     {
-        label: 'Manage',
+        label: 'Customize',
         index: 1
       }
   ],
@@ -179,7 +217,7 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
       index: 0
     },
     {
-        label: 'Manage',
+        label: 'Customize',
         index: 1
       }
   ],
@@ -194,7 +232,7 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
         index: 1
       },
       {
-        label: 'Manage',
+        label: 'Customize',
         index: 2
       }
     ],

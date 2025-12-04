@@ -70,31 +70,11 @@ export class WaterBannerComponent {
   }
 
   back(){
-    // if (this.mainTab == 'calculators') {
-    //   this.waterAssessmentService.mainTab.next('sankey');
-    // } else if (this.mainTab == 'sankey') {
-    //   this.waterAssessmentService.mainTab.next('report');
-    // } else if (this.mainTab == 'report') {
-    //   this.waterAssessmentService.mainTab.next('diagram');
-    // } else if (this.mainTab == 'diagram') {
-    //   this.waterAssessmentService.mainTab.next('assessment');
-    // } else if (this.mainTab == 'assessment') {
-    //   this.waterAssessmentService.mainTab.next('baseline');
-    // }
+    this.waterAssessmentService.backMainTab();
   }
 
   continue() {
-    // if (this.mainTab == 'baseline') {
-    //   this.waterAssessmentService.mainTab.next('assessment');
-    // } else if (this.mainTab == 'assessment') {
-    //   this.waterAssessmentService.mainTab.next('diagram');
-    // } else if (this.mainTab == 'diagram') {
-    //   this.waterAssessmentService.mainTab.next('report');
-    // } else if (this.mainTab == 'report') {
-    //   this.waterAssessmentService.mainTab.next('sankey');
-    // } else if (this.mainTab == 'sankey') {
-    //   this.waterAssessmentService.mainTab.next('calculators');
-    // }
+    this.waterAssessmentService.continueMainTab();
   }
 
   ngOnDestroy() {
@@ -136,23 +116,11 @@ export class WaterBannerComponent {
   }
 
   backAssessmentTab(){
-    // if (this.selectedModification) {
-    //   if (this.secondaryAssessmentTab == 'graphs') {
-    //     this.waterAssessmentService.secondaryAssessmentTab.next('table');
-    //   } else if (this.secondaryAssessmentTab == 'table') {
-    //     this.waterAssessmentService.secondaryAssessmentTab.next('modifications');
-    //   }
-    // }
+   this.waterAssessmentService.backMainTab();
   }
 
   continueAssessmentTab() {
-    // if (this.selectedModification) {
-    //   if (this.secondaryAssessmentTab == 'modifications') {
-    //     this.waterAssessmentService.secondaryAssessmentTab.next('table');
-    //   } else if (this.secondaryAssessmentTab == 'table') {
-    //     this.waterAssessmentService.secondaryAssessmentTab.next('graphs');
-    //   }
-    // }
+   this.waterAssessmentService.continueMainTab();
   }
 
   openExportModal(){

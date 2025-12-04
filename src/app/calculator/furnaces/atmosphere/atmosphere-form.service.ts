@@ -15,7 +15,7 @@ export class AtmosphereFormService {
       'outletTemp': ['', Validators.required],
       'flowRate': ['', [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'correctionFactor': [1.0, Validators.required],
-      'name': ['Loss #' + lossNum]
+      'name': ['Loss #' + lossNum, Validators.required]
     });
 
     if (!lossNum) {
@@ -36,7 +36,7 @@ export class AtmosphereFormService {
       'outletTemp': [loss.outletTemperature, Validators.required],
       'flowRate': [loss.flowRate, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       'correctionFactor': [loss.correctionFactor, Validators.required],
-      'name': [loss.name]
+      'name': [loss.name, Validators.required]
     });
 
     if (!inAssessment) {

@@ -50,9 +50,7 @@ export class ProcessHeatingApiService {
     input.finalTemperature = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.finalTemperature);
     input.correctionFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.correctionFactor);
 
-    let FixtureInstance = new this.toolsSuiteApiService.ToolsSuiteModule.FixtureLosses(input.specificHeat, input.feedRate, input.initialTemperature, input.finalTemperature, input.correctionFactor);
-    let output = FixtureInstance.getHeatLoss();
-    FixtureInstance.delete();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.fixtureTotalHeatLoss(input.specificHeat, input.feedRate, input.initialTemperature, input.finalTemperature, input.correctionFactor);
     return output;
   }
 
@@ -217,13 +215,11 @@ export class ProcessHeatingApiService {
     input.specificGravity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.specificGravity);
     input.correctionFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.correctionFactor);
 
-    let LeakageLossesInstance = new this.toolsSuiteApiService.ToolsSuiteModule.LeakageLosses(
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.leakageTotalHeatLoss(
       input.draftPressure, input.openingArea, input.leakageGasTemperature,
       input.ambientTemperature, input.coefficient,
       input.specificGravity, input.correctionFactor
     );
-    let output: number = LeakageLossesInstance.getExfiltratedGasesHeatContent();
-    LeakageLossesInstance.delete();
     return output;
   }
 
@@ -455,6 +451,7 @@ export class ProcessHeatingApiService {
     let AuxPowerInstance = new this.toolsSuiteApiService.ToolsSuiteModule.AuxiliaryPower(
       input.motorPhase, input.supplyVoltage,
       input.avgCurrent, input.powerFactor,
+      input.operatingTime
     );
     let output: number = AuxPowerInstance.getPowerUsed();
     AuxPowerInstance.delete();

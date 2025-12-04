@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CentrifugalSpecifics, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, Modification, PerformancePoint } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
-import { GenericCompressor } from './generic-compressor-db.service';
+import { GenericCompressor } from '../shared/generic-compressor-db.service';
 import { InventoryService } from './inventory/inventory.service';
 import { PerformancePointCalculationsService } from './inventory/performance-points/calculations/performance-point-calculations.service';
 import { SystemProfileService } from './system-profile/system-profile.service';
@@ -19,7 +19,6 @@ export class CompressedAirDataManagementService {
   setCompressorDataFromGenericCompressorDb(genericCompressor: GenericCompressor) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
-    selectedCompressor.compressorLibId = genericCompressor.IDCompLib;
 
     selectedCompressor.nameplateData.compressorType = genericCompressor.IDCompType;
     selectedCompressor.compressorControls.controlType = genericCompressor.IDControlType;

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, UntypedFormGroup, Validators} from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { driveConstants, pumpTypesConstant } from '../../../../psat/psatConstants';
+import { pumpTypesConstant } from '../../../../psat/psatConstants';
 import { Settings } from '../../../../shared/models/settings';
 import { PumpItem, PumpPropertiesOptions } from '../../../pump-inventory';
 import { PumpInventoryService, pumpInventoryShaftOrientations, pumpInventoryShaftSealTypes } from '../../../pump-inventory.service';
-import { FieldMeasurementsCatalogService } from '../field-measurements-catalog/field-measurements-catalog.service';
 import { PumpCatalogService } from '../pump-catalog.service';
 import { PumpEquipmentCatalogService } from './pump-equipment-catalog.service';
+import { notWholeNumberMsg } from '../../../../psat/psatConstants';
 
 @Component({
     selector: 'app-pump-equipment-catalog',
@@ -24,6 +24,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   displayOptions: PumpPropertiesOptions;
   displayForm: boolean = true;
 
+  notWholeNumberMsg: string = notWholeNumberMsg;
   pumpTypes: Array<{value: number, display: string}>;
   shaftOrientations: Array<{value: number, display: string}>;
   shaftSealTypes: Array<{value: number, display: string}>;
@@ -70,7 +71,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   }
 
   subtractStage() {
-      if (this.form.controls.numStages.value != 0) {
+      if (this.form.controls.numStages.value != 1) {
         this.form.patchValue({
           numStages: this.form.controls.numStages.value - 1
         })
@@ -81,5 +82,4 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   toggleForm() {
     this.displayForm = !this.displayForm;
   }
-
 }

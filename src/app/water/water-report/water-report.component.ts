@@ -44,7 +44,6 @@ export class WaterReportComponent {
   showPrintDiv: boolean;
   printOptions: PrintOptions;
 
-  // assessmentResults: WaterResults;
   tabsCollapsed: boolean = true;
   systemTrueCostReportSubscription: Subscription;
   constructor(private settingsDbService: SettingsDbService, 
@@ -61,7 +60,10 @@ export class WaterReportComponent {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
 
-      let systemTrueCostReport = this.waterAssessmentResultsService.getTrueCostOfSystemsReport(this.assessment, this.settings);
+      const systemTrueCostReport = this.waterAssessmentResultsService.getTrueCostOfSystemsReport(this.assessment, this.settings);
+      const plantSummaryReport = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
+      
+      this.waterReportService.plantSummaryReport.next(plantSummaryReport);
       this.waterReportService.systemTrueCostReport.next(systemTrueCostReport);
     }
 

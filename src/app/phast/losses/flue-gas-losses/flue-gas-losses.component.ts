@@ -239,34 +239,23 @@ export class FlueGasLossesComponent implements OnInit {
         name: loss.formByMass.controls.name.value
       });
     }
+    this.saveLosses();
   }
 
   saveLosses() {
     let tmpFlueGasLosses = new Array<FlueGas>();
-    let lossIndex = 1;
     this._flueGasLosses.forEach(loss => {
       if (loss.measurementType === "By Volume") {
-        if (!loss.formByVolume.controls.name.value) {
-          loss.formByVolume.patchValue({
-            name: 'Loss #' + lossIndex
-          });
-        }
         let tmpVolumeLoss: FlueGas = this.flueGasFormService.buildByVolumeLossFromForm(loss.formByVolume);
         tmpVolumeLoss.flueGasType = 'By Volume';
         tmpFlueGasLosses.push(tmpVolumeLoss);
       }
       else if (loss.measurementType === "By Mass") {
-        if (!loss.formByMass.controls.name.value) {
-          loss.formByMass.patchValue({
-            name: 'Loss #' + lossIndex
-          });
-        }
         let tmpVolumeLoss: FlueGas = this.flueGasFormService.buildByMassLossFromForm(loss.formByMass);
         tmpVolumeLoss.flueGasType = 'By Mass',
           tmpFlueGasLosses.push(tmpVolumeLoss);
       }
     });
-    lossIndex++;
     this.losses.flueGasLosses = tmpFlueGasLosses;
     this.savedLoss.emit(true);
   }

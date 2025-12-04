@@ -1,20 +1,22 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 
 import { styled, Theme, CSSObject } from '@mui/material/styles';
 import MuiDrawer, { DrawerProps } from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Box } from '@mui/material';
 import DrawerToggleButton from './DrawerToggleButton';
 import { ParentContainerDimensions } from 'process-flow-lib';
 import { toggleDrawer, toggleMenuDrawer } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { selectedDataColor } from '../Diagram/store';
-const drawerWidth = 525;
+
+export const drawerWidthPx = 525;
+export const drawerOpenOffsetPx = drawerWidthPx + 15;
+export const drawerClosedOffsetPx = 75;
 
 const openedMixin = (theme: Theme, parentContainer: ParentContainerDimensions, anchorProps): CSSObject => ({
-    width: drawerWidth,
+    width: drawerWidthPx,
     transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,

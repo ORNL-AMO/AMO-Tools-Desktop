@@ -1,4 +1,3 @@
-import { getConnectedEdges } from '@xyflow/react';
 import React, { memo, useEffect, useState } from 'react';
 import {
     type Node,
@@ -20,8 +19,6 @@ const ManageComponent = (props: ManageComponentProps) => {
     const { selectedNode } = props;
     const componentTabs = useAppSelector(state => state.diagram.manageDataTabs);
     const isWaterUsingSystem = props.selectedNode.type === 'waterUsingSystem';
-    const isIntakeOrDischarge = props.selectedNode.type === 'waterIntake' || props.selectedNode.type === 'waterDischarge';
-
     const [selectedTab, setSelectedTab] = useState(0);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -64,10 +61,8 @@ const ManageComponent = (props: ManageComponentProps) => {
                     }
 
                     <TabPanel value={selectedTab} index={isWaterUsingSystem ? 2 : 1}>
-                        <Box>
-                            {!isIntakeOrDischarge &&
-                                <ComponentHandles node={selectedNode}></ComponentHandles>
-                            }
+                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingX: 2 }}>
+                            <ComponentHandles node={selectedNode}></ComponentHandles>
                             <CustomizeNode node={selectedNode}></CustomizeNode>
                             <Button sx={{ width: '100%', marginY: 2 }} color="error" variant="outlined" onClick={() => dispatch(deleteNode())}>Delete Component</Button>
                         </Box>

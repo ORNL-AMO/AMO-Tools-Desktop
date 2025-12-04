@@ -99,18 +99,16 @@ export class SaturatedPropertiesComponent implements OnInit {
   }
 
   initForm() {
-    let pressureMin: number = Number(this.convertUnitsService.value(1).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
-    let pressureMax: number = Number(this.convertUnitsService.value(22064).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
     if (this.steamService.saturatedPropertiesInputs) {
       this.saturatedPropertiesForm = this.formBuilder.group({
         'pressureOrTemperature': [this.steamService.saturatedPropertiesInputs.pressureOrTemperature, Validators.required],
-        'saturatedPressure': [this.steamService.saturatedPropertiesInputs.inputs.saturatedPressure, [Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]],
+        'saturatedPressure': [this.steamService.saturatedPropertiesInputs.inputs.saturatedPressure, [Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]],
         'saturatedTemperature': [this.steamService.saturatedPropertiesInputs.inputs.saturatedTemperature]
       });
     } else {
       this.saturatedPropertiesForm = this.formBuilder.group({
         'pressureOrTemperature': [0, Validators.required],
-        'saturatedPressure': ['', [Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]],
+        'saturatedPressure': ['', [Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]],
         'saturatedTemperature': ['']
       });
     }

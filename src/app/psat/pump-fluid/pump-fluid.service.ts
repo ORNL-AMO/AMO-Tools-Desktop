@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PsatInputs } from '../../shared/models/psat';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, ValidatorFn } from '@angular/forms';
+import{ WholeNumberValidator } from '../../shared/validators/whole-number';
 
 @Injectable()
 export class PumpFluidService {
@@ -20,7 +21,7 @@ export class PumpFluidService {
       fluidTemperature: [psatInputs.fluidTemperature, Validators.required],
       gravity: [psatInputs.specific_gravity, [Validators.required, Validators.min(0)]],
       viscosity: [psatInputs.kinematic_viscosity, [Validators.required, Validators.min(0)]],
-      stages: [psatInputs.stages, [Validators.required, Validators.min(1)]]
+      stages: [psatInputs.stages, [Validators.required, Validators.min(1), WholeNumberValidator.wholeNumber()]]
     })
     for (let key in form.controls) {
       if (form.controls[key].value) {

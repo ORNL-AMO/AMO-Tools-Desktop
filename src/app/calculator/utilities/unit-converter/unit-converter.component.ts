@@ -14,7 +14,8 @@ export class UnitConverterComponent implements OnInit {
   inAssessment: boolean;
 
   possibilities: Array<any> = [];
-  measure: any = 'length';
+  groupedPossibilities: {};
+  measure: any = 'energy';
   from: string;
   to: string;
   value1: number;
@@ -22,6 +23,8 @@ export class UnitConverterComponent implements OnInit {
   results: number;
   fromDisp: string;
   toDisp: string;
+
+  
 
   options = [
     {
@@ -177,21 +180,27 @@ export class UnitConverterComponent implements OnInit {
     if (this.unitConverterService.measure) {
       this.measure = this.unitConverterService.measure;
     }
+
     this.possibilities = new Array();
     let tmpList = this.convertUnitsService.possibilities(this.measure);
-    tmpList.forEach(unit => {
+
+    tmpList.possibilities.forEach(unit => {
       let tmpPossibility = {
         unit: unit,
         display: this.getUnitName(unit),
-        displayUnit: this.getUnitDisplay(unit)
+        displayUnit: this.getUnitDisplay(unit),
+        group: this.getUnitGroup(unit)
       };
       this.possibilities.push(tmpPossibility);
     });
+
+    this.setGroups();
+
     if (!this.to) {
-      this.to = this.possibilities[1].unit;
+      this.to = this.possibilities.find(initialUnit => initialUnit.unit === "MMBtu").unit;
     }
     if (!this.from) {
-      this.from = this.possibilities[0].unit;
+      this.from = this.possibilities.find(initialUnit => initialUnit.unit === "kWh").unit;
     }
     if (!this.value1) {
       this.value1 = 1;
@@ -199,23 +208,52 @@ export class UnitConverterComponent implements OnInit {
     this.getValue2();
   }
 
+  swapUnits() {
+    let tmpFrom = this.from;
+    this.from = this.to;
+    this.to = tmpFrom;
+    this.getValue2();
+  }
+
   getMeasures() {
     if (this.measure) {
       this.possibilities = new Array();
       let tmpList = this.convertUnitsService.possibilities(this.measure);
-      tmpList.forEach(unit => {
+
+      tmpList.possibilities.forEach(unit => {
         let tmpPossibility = {
           unit: unit,
           display: this.getUnitName(unit),
-          displayUnit: this.getUnitDisplay(unit)
+          displayUnit: this.getUnitDisplay(unit),
+          group: this.getUnitGroup(unit)
         };
         this.possibilities.push(tmpPossibility);
       });
+      
       this.from = this.possibilities[0].unit;
       this.to = this.possibilities[1].unit;
       this.value1 = 1;
       this.getValue2();
+
+      this.setGroups();
+
     }
+  }
+
+  setGroups() {
+    const grouped = {};
+
+    this.possibilities.forEach(possibility => {
+      const group = possibility.group || 'Other';
+      if(group) {
+        if (!grouped[group]) {
+        grouped[group] = [];
+      }
+      grouped[group].push(possibility);
+      }
+    });
+    this.groupedPossibilities = grouped;
+
   }
 
   getValue1() {
@@ -234,14 +272,19 @@ export class UnitConverterComponent implements OnInit {
     }
   }
 
-  getUnitName(unit: any) {
+  getUnitName(unit: string) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.plural;
     }
   }
-  getUnitDisplay(unit: any) {
+  getUnitDisplay(unit: string) {
     if (unit) {
       return this.convertUnitsService.getUnit(unit).unit.name.display;
+    }
+  }
+  getUnitGroup(unit: string) {
+    if (unit) {
+      return this.convertUnitsService.getUnit(unit).unit.group;
     }
   }
 }

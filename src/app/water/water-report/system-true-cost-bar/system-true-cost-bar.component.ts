@@ -36,7 +36,6 @@ export class SystemTrueCostBarComponent {
   ngAfterViewInit() {
     // todo needs print logic, programmatic colors
     this.systemTrueCostReportSubscription = this.waterReportService.systemTrueCostReport.subscribe(report => {
-    
     let costTypes = [
       "Municipal Water Intake", 
       "Municipal Wastewater Disposal", 

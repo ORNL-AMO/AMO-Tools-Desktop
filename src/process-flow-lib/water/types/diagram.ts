@@ -70,18 +70,27 @@ export interface ProcessFlowPart extends Record<string, unknown> {
       b: boolean,
       c: boolean,
       d: boolean,
+      e?: boolean,
+      f?: boolean,
+      g?: boolean,
+      h?: boolean,
     },
     outflowHandles?: {
       e: boolean,
       f: boolean,
       g: boolean,
       h: boolean,
+      i?: boolean,
+      j?: boolean,
+      k?: boolean,
+      l?: boolean,
     }
   }
   
   
   export interface FlowDiagramData {
     name: string,
+    meta?: DiagramMetaData,
     nodes: Node[],
     edges: Edge[],
     nodeErrors: NodeErrors,
@@ -91,6 +100,17 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     recentNodeColors: string[];
     recentEdgeColors: string[];
   }
+
+  export interface DiagramMetaData {
+    version: string,
+    upgrades?: DiagramUpgrade[],
+  }
+
+  export interface DiagramUpgrade {
+    fromVersion: string,
+    toVersion: string,
+    upgradeDate: string,
+  };
   
   export type NodeErrors = Record<string, NodeFlowTypeErrors>; 
   

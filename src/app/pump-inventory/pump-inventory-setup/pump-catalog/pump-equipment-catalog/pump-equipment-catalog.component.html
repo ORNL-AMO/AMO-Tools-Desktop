@@ -44,22 +44,27 @@
     <div class="form-group" *ngIf="displayOptions.numStages">
         <label for="numStages">Number of Stages</label>
         <div class="input-group">
-                <div name="numStages" class="incrementor form-control input-group">
-                    <button class="btn input-group-btn" (click)="subtractStage()">
-                      <i class="fa fa-minus"></i>
-                    </button>
-                    <button class="btn input-group-btn" (click)="addStage()">
-                      <i class="fa fa-plus"></i>
-                    </button>
-                    <input type="number" min="1" step="any" class="form-control" formControlName="numStages"
-                      id="{{'numStages'+idString}}" (input)="save()" (focus)="focusField('numStages')">
-                  </div>
-                <span class="alert-danger pull-right small"
-                *ngIf="form.controls.numStages.invalid && !form.controls.numStages.pristine">
+            <div name="numStages" class="incrementor form-control input-group">
+                <button class="btn input-group-btn" (click)="subtractStage()">
+                    <i class="fa fa-minus"></i>
+                </button>
+                <button class="btn input-group-btn" (click)="addStage()">
+                    <i class="fa fa-plus"></i>
+                </button>
+                <input type="number" step="1" class="form-control" formControlName="numStages"
+                    id="{{'numStages'+idString}}" (input)="save()" (focus)="focusField('numStages')">
+                </div>
+            <span class="alert-danger pull-right small"
+            *ngIf="form.controls.numStages.invalid && !form.controls.numStages.pristine">
                 <span *ngIf="form.controls.numStages.errors.required">Value Required</span>
-                  <span *ngIf="form.controls.numStages.errors.min">Value can't be less than
+                <span *ngIf="form.controls.numStages.errors.min">Value can't be less than
                     {{form.controls.numStages.errors.min.min}}.</span>
-              </span>
+                <span *ngIf="form.controls.numStages.errors.notWholeNumber">{{notWholeNumberMsg}}</span>  
+            </span>
+            <span class="alert-warning pull-right small"
+            *ngIf="form.controls.numStages.value >= 15">
+            <span>Multistage pumps usually have less than 15 impellers.</span>
+            </span>
         </div>
     </div>
 

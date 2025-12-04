@@ -1,11 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { ExistingCompressorDbService, GenericCompressor } from '../../../../existing-compressor-db.service';
 import { Subscription } from 'rxjs';
 import { FilterCompressorOptions, FilterCompressorsPipePipe } from '../filter-compressors-pipe.pipe';
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirCatalogService } from '../../compressed-air-catalog.service';
 import { CompressedAirInventoryService } from '../../../../compressed-air-inventory.service';
 import { CompressorDataManagementService } from '../../../../compressor-data-management.service';
+import { GenericCompressor, GenericCompressorDbService } from '../../../../../shared/generic-compressor-db.service';
 
 @Component({
   selector: 'app-compressor-options-table-inventory',
@@ -25,12 +25,12 @@ export class CompressorOptionsTableComponent implements OnInit {
     pageNumber: number = 1;
     filteredCompressors: Array<GenericCompressor>;
     settings: Settings;
-    constructor(private existingCompressorDbService: ExistingCompressorDbService, private compressedAirCatalogService: CompressedAirCatalogService,
+    constructor(private genericCompressorDbService: GenericCompressorDbService, private compressedAirCatalogService: CompressedAirCatalogService,
       private compressorDataManagementService: CompressorDataManagementService, private compressedAirInventoryService: CompressedAirInventoryService) { }
   
     ngOnInit(): void {
       this.settings = this.compressedAirInventoryService.settings.getValue();
-      this.genericCompressors = this.existingCompressorDbService.genericCompressors;
+      this.genericCompressors = this.genericCompressorDbService.genericCompressors;
       this.filterCompressorOptionsSub = this.compressedAirCatalogService.filterCompressorOptions.subscribe(val => {
         this.filterCompressorOptions = val;
         let genericCompressorsCopy: Array<GenericCompressor> = JSON.parse(JSON.stringify(this.genericCompressors));

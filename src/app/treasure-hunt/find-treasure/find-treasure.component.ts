@@ -38,7 +38,7 @@ export class FindTreasureComponent implements OnInit {
     });
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
-    })
+    });
   }
 
   ngOnDestroy() {

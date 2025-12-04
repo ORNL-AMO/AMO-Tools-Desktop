@@ -39,6 +39,7 @@ export class WaterProcessDiagramComponent {
   diagram: Diagram;
   isModalOpen: boolean;
   displayCreateAssessmentModal: boolean;
+  isTouchDevice: boolean = false;
   
   constructor( 
     private waterProcessDiagramService: WaterProcessDiagramService,
@@ -50,6 +51,8 @@ export class WaterProcessDiagramComponent {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
+     // * diagram does not yet support mobile/touch for the drag and drop functions
+    this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     this.analyticsService.sendEvent('view-water-diagram');
     if (this.integratedDiagram) {
       this.initDiagram(this.integratedDiagram.diagramId)
@@ -70,7 +73,6 @@ export class WaterProcessDiagramComponent {
     this.modalOpenSub = this.waterProcessDiagramService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
-
   }
 
   ngOnDestroy() {

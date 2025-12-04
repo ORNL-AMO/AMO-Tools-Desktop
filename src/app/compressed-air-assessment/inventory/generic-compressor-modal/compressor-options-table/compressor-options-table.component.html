@@ -2,7 +2,6 @@
     <table class="table table-sm table-hover">
         <tr class="header-row">
             <th></th>
-            <th>ID</th>
             <th>
                 Compressor
             </th>
@@ -26,9 +25,6 @@
             *ngFor="let compressor of filteredCompressors | slice: ((pageNumber-1) * itemsPerPage): pageNumber * itemsPerPage">
             <td>
                 <a class="click-link" (click)="selectCompressor(compressor)">Use</a>
-            </td>
-            <td>
-                {{compressor.IDCompLib}}
             </td>
             <td>
                 {{compressor.IDCompType | compressorType}}
