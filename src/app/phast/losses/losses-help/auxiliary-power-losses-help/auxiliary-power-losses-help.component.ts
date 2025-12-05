@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-auxiliary-power-losses-help',
@@ -14,6 +15,7 @@ export class AuxiliaryPowerLossesHelpComponent implements OnInit {
   currentField: string;
   displaySuggestions: boolean = false;
 
+  docsLink: string = environment.measurDocsUrl;
   constructor() { }
 
   ngOnInit() {

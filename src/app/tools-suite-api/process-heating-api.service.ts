@@ -448,13 +448,11 @@ export class ProcessHeatingApiService {
   }
 
   auxiliaryPowerLoss(input: AuxiliaryPowerLoss): number {
-    let AuxPowerInstance = new this.toolsSuiteApiService.ToolsSuiteModule.AuxiliaryPower(
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.auxiliaryCalculatePowerUsed(
       input.motorPhase, input.supplyVoltage,
       input.avgCurrent, input.powerFactor,
       input.operatingTime
     );
-    let output: number = AuxPowerInstance.getPowerUsed();
-    AuxPowerInstance.delete();
     return output;
   }
 
