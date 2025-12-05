@@ -55,24 +55,20 @@ export class ProcessHeatingApiService {
   }
 
   gasCoolingLosses(input: GasCoolingLoss): number {
-    let CoolingInstance = new this.toolsSuiteApiService.ToolsSuiteModule.GasCoolingLosses(
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.gasCoolingTotalHeatLoss(
       input.flowRate, input.initialTemperature,
       input.finalTemperature, input.specificHeat,
       input.correctionFactor, input.gasDensity
     );
-    let output = CoolingInstance.getHeatLoss();
-    CoolingInstance.delete();
     return output;
   }
 
   liquidCoolingLosses(input: LiquidCoolingLoss): number {
-    let LiquidCoolingInstance = new this.toolsSuiteApiService.ToolsSuiteModule.LiquidCoolingLosses(
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.liquidCoolingTotalHeatLoss(
       input.flowRate, input.density,
       input.initialTemperature, input.outletTemperature,
       input.specificHeat, input.correctionFactor,
     );
-    let output: number = LiquidCoolingInstance.getHeatLoss();
-    LiquidCoolingInstance.delete();
     return output;
   }
 
