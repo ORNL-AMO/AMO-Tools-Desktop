@@ -7,3 +7,9 @@ assignees: ''
 
 ---
 
+**Overview and Notes**
+Description and context related to the epic
+
+**Events, In-plants, and Trainings**
+Events and dates where requested features will be used 
+
