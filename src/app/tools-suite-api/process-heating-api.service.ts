@@ -467,15 +467,15 @@ export class ProcessHeatingApiService {
     input.otherFuels = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.otherFuels);
     input.electricityInput = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.electricityInput);
 
-    let EnergyInputEAFInstance = new this.toolsSuiteApiService.ToolsSuiteModule.EnergyInputEAF(
+    let EnergyInputEAFInstance = new this.toolsSuiteApiService.ToolsSuiteModule.energyInputEAFTotalChemicalEnergyInput(
       input.naturalGasHeatInput, input.coalCarbonInjection,
       input.coalHeatingValue, input.electrodeUse,
       input.electrodeHeatingValue, input.otherFuels,
       input.electricityInput
     );
     let output: EnergyEAFOutput = {
-      heatDelivered: EnergyInputEAFInstance.getHeatDelivered(),
-      totalChemicalEnergyInput: EnergyInputEAFInstance.getTotalChemicalEnergyInput()
+      heatDelivered: EnergyInputEAFInstance.energyInputEAFTotalHeatDelivered(),
+      totalChemicalEnergyInput: EnergyInputEAFInstance.energyInputEAFTotalChemicalEnergyInput()
     }
 
     EnergyInputEAFInstance.delete();
