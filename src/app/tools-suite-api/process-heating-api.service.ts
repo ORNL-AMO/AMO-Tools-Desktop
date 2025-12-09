@@ -436,8 +436,8 @@ export class ProcessHeatingApiService {
     return output;
   }
 
-  slagOtherMaterialLosses(input: Slag): number {
-    let SlagInstance = new this.toolsSuiteApiService.ToolsSuiteModule.SlagOtherMaterialLosses(
+  slagOtherMaterialTotalHeatLoss(input: Slag): number {
+    let SlagInstance = new this.toolsSuiteApiService.ToolsSuiteModule.SlagOtherMaterialTotalHeatLoss(
       input.weight, input.inletTemperature,
       input.outletTemperature, input.specificHeat,
       input.correctionFactor,

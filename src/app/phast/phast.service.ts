@@ -487,7 +487,7 @@ export class PhastService {
     return results;
   }
 
-  slagOtherMaterialLosses(input: Slag, settings: Settings) {
+  slagOtherMaterialTotalHeatLoss(input: Slag, settings: Settings) {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -496,7 +496,7 @@ export class PhastService {
       inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
     }
-    results = this.processHeatingApiService.slagOtherMaterialLosses(inputs);
+    results = this.processHeatingApiService.slagOtherMaterialTotalHeatLoss(inputs);
     results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
@@ -906,7 +906,7 @@ export class PhastService {
     losses.forEach(loss => {
       let tmpForm = this.slagService.getFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
-        sum += this.slagOtherMaterialLosses(loss, settings);
+        sum += this.slagOtherMaterialTotalHeatLoss(loss, settings);
       }
     });
     return sum;
