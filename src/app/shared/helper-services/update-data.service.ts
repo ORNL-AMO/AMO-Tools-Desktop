@@ -4,7 +4,7 @@ import { SSMT } from '../models/steam/ssmt';
 import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
-import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData } from '../models/standalone';
+import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData, FacilityCompressorData } from '../models/standalone';
 import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -585,7 +585,7 @@ export class UpdateDataService {
     updateAirLeakSurveyTreasureHunt(airLeakSurveyTreasureHunt: AirLeakSurveyTreasureHunt): AirLeakSurveyTreasureHunt {
         if (airLeakSurveyTreasureHunt.airLeakSurveyInput && airLeakSurveyTreasureHunt.airLeakSurveyInput.compressedAirLeakSurveyInputVec) {
             airLeakSurveyTreasureHunt.airLeakSurveyInput.compressedAirLeakSurveyInputVec.forEach(airLeak => {
-                airLeak = this.updateAirLeakSurvey(airLeak);
+                airLeak = this.updateAirLeakSurvey(airLeak, airLeakSurveyTreasureHunt.airLeakSurveyInput.facilityCompressorData);
             });
         }
         return airLeakSurveyTreasureHunt;
@@ -626,12 +626,12 @@ export class UpdateDataService {
     }
 
 
-    updateAirLeakSurvey(airLeakSurveyData: AirLeakSurveyData): AirLeakSurveyData {
+    updateAirLeakSurvey(airLeakSurveyData: AirLeakSurveyData, facilityCompressorData: FacilityCompressorData): AirLeakSurveyData {
         if (airLeakSurveyData.bagMethodData && (airLeakSurveyData.bagMethodData['height'] !== undefined || airLeakSurveyData.bagMethodData['diameter'] !== undefined)) {
             airLeakSurveyData.bagMethodData.bagVolume = 0;
             airLeakSurveyData.bagMethodData.bagFillTime = airLeakSurveyData.bagMethodData['fillTime'] ? airLeakSurveyData.bagMethodData['fillTime'] : 0;
             airLeakSurveyData.bagMethodData.numberOfUnits = 1;
-            airLeakSurveyData.bagMethodData.operatingTime = airLeakSurveyData.hoursPerYear;
+            airLeakSurveyData.bagMethodData.operatingTime = facilityCompressorData.hoursPerYear;
         }
         return airLeakSurveyData;
     }

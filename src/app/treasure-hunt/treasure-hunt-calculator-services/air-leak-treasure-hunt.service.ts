@@ -47,32 +47,32 @@ export class AirLeakTreasureHuntService {
     let results: AirLeakSurveyOutput = this.airLeakService.getResults(settings, airLeakSurveyTreasureHunt.airLeakSurveyInput);
 
     // 7419 temporary patch results
-    results.baselineData.annualTotalElectricity = results.savingsData.annualTotalElectricity;
-    results.baselineData.annualTotalElectricityCost = results.savingsData.annualTotalElectricityCost;
-    results.baselineData.annualTotalFlowRate = results.savingsData.annualTotalFlowRate;
-    results.baselineData.totalFlowRate = results.savingsData.totalFlowRate;
+    results.baselineTotal.annualTotalElectricity = results.savings.annualTotalElectricity;
+    results.baselineTotal.annualTotalElectricityCost = results.savings.annualTotalElectricityCost;
+    results.baselineTotal.annualTotalFlowRate = results.savings.annualTotalFlowRate;
+    results.baselineTotal.totalFlowRate = results.savings.totalFlowRate;
 
-    results.modificationData.annualTotalElectricity = 0;
-    results.modificationData.annualTotalElectricityCost = 0;
-    results.modificationData.annualTotalFlowRate = 0;
-    results.modificationData.totalFlowRate = 0;
+    results.modificationTotal.annualTotalElectricity = 0;
+    results.modificationTotal.annualTotalElectricityCost = 0;
+    results.modificationTotal.annualTotalFlowRate = 0;
+    results.modificationTotal.totalFlowRate = 0;
     // end 7419 patch
 
 
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
-      costSavings: results.savingsData.annualTotalElectricityCost,
+      costSavings: results.savings.annualTotalElectricityCost,
       energySavings: 0,
-      baselineCost: results.baselineData.annualTotalElectricityCost,
-      modificationCost: results.modificationData.annualTotalElectricityCost,
+      baselineCost: results.baselineTotal.annualTotalElectricityCost,
+      modificationCost: results.modificationTotal.annualTotalElectricityCost,
       utilityType: 'Electricity',
     }
 
     // utility type: 0 = compressed air, 1 = electric
     if (airLeakSurveyTreasureHunt.airLeakSurveyInput.facilityCompressorData.utilityType == 0) {
-      treasureHuntOpportunityResults.energySavings = results.savingsData.annualTotalFlowRate;
+      treasureHuntOpportunityResults.energySavings = results.savings.annualTotalFlowRate;
       treasureHuntOpportunityResults.utilityType = 'Compressed Air';
     } else {
-      treasureHuntOpportunityResults.energySavings = results.savingsData.annualTotalElectricity;
+      treasureHuntOpportunityResults.energySavings = results.savings.annualTotalElectricity;
       treasureHuntOpportunityResults.utilityType = 'Electricity';
     }
 
