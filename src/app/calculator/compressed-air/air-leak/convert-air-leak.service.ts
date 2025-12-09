@@ -10,7 +10,7 @@ export class ConvertAirLeakService {
   constructor(private convertUnitsService: ConvertUnitsService) { }
 
   //input metric => imperial
-  convertInputs(inputArray: Array<AirLeakSurveyData>, settings: Settings): Array<AirLeakSurveyData> {
+  convertInputs(inputArray: Array<AirLeakSurveyData>, settings: Settings): void {
     if (settings.unitsOfMeasure == 'Metric') {
       for (let i = 0; i < inputArray.length; i++) {
         inputArray[i].bagMethodData.bagVolume = this.convertUnitsService.value(inputArray[i].bagMethodData.bagVolume).from('L').to('ft3');
@@ -29,17 +29,22 @@ export class ConvertAirLeakService {
         inputArray[i].orificeMethodData.atmosphericPressure = this.convertUnitsService.value(inputArray[i].orificeMethodData.atmosphericPressure).from('kPaa').to('psia');
         inputArray[i].orificeMethodData.orificeDiameter = this.convertUnitsService.value(inputArray[i].orificeMethodData.orificeDiameter).from('cm').to('in');
         inputArray[i].orificeMethodData.supplyPressure = this.convertUnitsService.value(inputArray[i].orificeMethodData.supplyPressure).from('kPaa').to('psig');    
-        let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
-        inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / conversionHelper;
       }
     } else {
       for (let i = 0; i < inputArray.length; i++) {
         inputArray[i].bagMethodData.bagVolume = this.convertUnitsService.value(inputArray[i].bagMethodData.bagVolume).from('gal').to('ft3');
-        //per issue-4091
-        inputArray[i].compressorElectricityData.compressorSpecificPower = inputArray[i].compressorElectricityData.compressorSpecificPower / 100;
       }
     }
-    return inputArray;
+  }
+
+  convertCompressorSpecificPower(compressorSpecificPower: number, settings: Settings): number {
+    if (settings.unitsOfMeasure == 'Metric') {
+      let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
+      return compressorSpecificPower / conversionHelper;
+    } else {
+      //per issue-4091
+      return compressorSpecificPower / 100;
+    }
   }
 
   /**

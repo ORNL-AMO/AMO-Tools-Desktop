@@ -102,7 +102,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
 
   initSubscriptions() {
     this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
-      this.annualTotalElectricity = value.baselineData.annualTotalElectricity;
+      this.annualTotalElectricity = value.baselineTotal.annualTotalElectricity;
     });
 
     this.generateExampleSub = this.airLeakService.generateExample.subscribe(val => {
