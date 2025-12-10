@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { WaterSuiteApiService } from '../tools-suite-api/water-suite-api.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
-import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults, getNodeTotalInflow } from 'process-flow-lib';
+import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults, PlantResults, ComponentAttribution, getNodeTotalInflow } from 'process-flow-lib';
 import { UpdateDiagramFromAssessmentService } from '../water-process-diagram/update-diagram-from-assessment.service';
 import { Assessment } from '../shared/models/assessment';
 import { Edge, Node } from '@xyflow/react';
@@ -83,22 +83,6 @@ export class WaterAssessmentResultsService {
     return waterSystemResults;
   }
 
-
-  getPlantSummaryReport(assessment: Assessment, settings: Settings): PlantSystemSummaryResults {
-    let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
-    
-    // todo why not use assessment calculatedData here?
-    let plantResults = getPlantSummaryResults(
-      diagram.waterDiagram.flowDiagramData.nodes,
-      diagram.waterDiagram.flowDiagramData.calculatedData,
-      diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[],
-      settings.electricityCost,
-      diagram.waterDiagram.flowDiagramData.settings
-    )
-
-    return plantResults.plantSystemSummaryResults;
-  }
-
   getExecutiveSummaryReport(assessment: Assessment, settings: Settings): ExecutiveSummaryResults {
     let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
     let results: ExecutiveSummaryResults = {
@@ -174,23 +158,48 @@ export class WaterAssessmentResultsService {
         trueOverDirectResult: trueCost / directCosts,
       }
     }
+
     return results;
   }
 
+  // todo 7745 performance - getPlantSummaryResults should be called one time at the top level report and emitted to a BS. The whole algorithm is currently being run 2/3 times
   getTrueCostOfSystemsReport(assessment: Assessment, settings: Settings): SystemTrueCostData[] {
     let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
+    let flowAttributionMap: Record<string, ComponentAttribution> = assessment.water.flowAttributionMap? assessment.water.flowAttributionMap : {};
+  
     let plantResults = getPlantSummaryResults(
       diagram.waterDiagram.flowDiagramData.nodes,
       diagram.waterDiagram.flowDiagramData.calculatedData,
       diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[],
       assessment.water.systemBasics.electricityCost,
-      diagram.waterDiagram.flowDiagramData.settings
+      diagram.waterDiagram.flowDiagramData.settings,
+      flowAttributionMap
     )
 
     let systemTrueCostReport = this.getSystemTrueCostData(plantResults.trueCostOfSystems, diagram.waterDiagram.flowDiagramData.nodes);
     console.log('trueCostOfSystems', plantResults.trueCostOfSystems);
     return systemTrueCostReport;
   }
+
+
+  getPlantSummaryReport(assessment: Assessment, settings: Settings): PlantResults {
+    let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
+    let flowAttributionMap: Record<string, ComponentAttribution> = assessment.water.flowAttributionMap? assessment.water.flowAttributionMap : {};
+
+    let plantResults = getPlantSummaryResults(
+      diagram.waterDiagram.flowDiagramData.nodes,
+      diagram.waterDiagram.flowDiagramData.calculatedData,
+      diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[],
+      settings.electricityCost,
+      diagram.waterDiagram.flowDiagramData.settings,
+      flowAttributionMap
+    )
+
+    console.log('plantResults', plantResults);
+    return plantResults;
+  }
+
+  
 
   getSystemTrueCostData(trueCostOfSystems: TrueCostOfSystems, nodes: Node[]): SystemTrueCostData[] {
     let systemCosts = [];

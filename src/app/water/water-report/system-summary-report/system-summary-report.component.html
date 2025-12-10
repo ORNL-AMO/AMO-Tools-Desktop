@@ -120,9 +120,6 @@
             </tr>
         </tfoot>
     </table>
-    <app-exportable-results-table [tableString]="copyTableString" [horizontalAnchor]="'right'"
-        (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
-
     <hr class="mt-5 mb-3">
     <div class="d-flex w-100 align-items-center justify-content-center mb-3">
         <div class="btn-group btn-group-toggle mr-3 flex-shrink-0" ngbRadioGroup name="percentView" (change)="togglePercentView()">
@@ -143,6 +140,9 @@
         </div>
     </div>
 
+    <app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
     }
+
 
 </div>

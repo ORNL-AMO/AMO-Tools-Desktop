@@ -77,3 +77,32 @@ td {
     height: 0;
     width: 0;
 }
+
+
+
+.fa-calculator {
+    color: var(--water-assessment);;
+}
+
+.btn-outline-primary:hover .fa-calculator {
+    color: #fff;
+}
+
+
+.btn-outline-primary {
+    color: var(--water-assessment);
+    border-color: var(--water-assessment);
+}
+
+.btn-outline-primary:hover {
+    color: #fff !important;
+    background-color: var(--water-assessment);
+    border-color: var(--water-assessment);
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active, .show > .btn-outline-primary.dropdown-toggle
+ {
+    color: #fff !important;
+    background-color: var(--water-assessment);
+    border-color: var(--water-assessment);
+}

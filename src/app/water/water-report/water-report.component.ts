@@ -63,7 +63,7 @@ export class WaterReportComponent {
       const systemTrueCostReport = this.waterAssessmentResultsService.getTrueCostOfSystemsReport(this.assessment, this.settings);
       const plantSummaryReport = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
       
-      this.waterReportService.plantSummaryReport.next(plantSummaryReport);
+      this.waterReportService.plantSummaryReport.next(plantSummaryReport.plantSystemSummaryResults);
       this.waterReportService.systemTrueCostReport.next(systemTrueCostReport);
     }
 
