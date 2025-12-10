@@ -1,14 +1,12 @@
 import { Edge, Node } from "@xyflow/react";
 import { CustomEdgeData } from "./water/types/diagram";
-import { RecycledFlowData } from "./water/logic/results";
+import { getEdgeDescription } from "./water/logic/water-components";
 
 export interface NodeGraphIndex {
   // nodeId, nodeId
   parentMap: Record<string, string[]>;
   // nodeId, nodeId
   childMap: Record<string, string[]>;
-  // nodeId, nodeId
-  siblingMap: Record<string, string[]>;
   // edgeId, edge
   edgeMap: Record<string, Edge<CustomEdgeData>>;
   // nodeId, edge[]
@@ -19,7 +17,6 @@ export const createGraphIndex = (nodes: Node[], edges: Edge<CustomEdgeData>[]) =
   const graph: NodeGraphIndex = {
     parentMap: {},
     childMap: {},
-    siblingMap: {},
     edgeMap: {},
     edgesByNode: {},
   }
@@ -27,16 +24,19 @@ export const createGraphIndex = (nodes: Node[], edges: Edge<CustomEdgeData>[]) =
   for (const edge of edges) {
     const { source, target } = edge;
 
-    // parent -> child
     graph.childMap[source] = [...(graph.childMap[source] || []), target];
     graph.parentMap[target] = [...(graph.parentMap[target] || []), source];
 
-    // edges by node
     graph.edgesByNode[source] = [...(graph.edgesByNode[source] || []), edge];
     graph.edgesByNode[target] = [...(graph.edgesByNode[target] || []), edge];
 
-    // edge map
-    graph.edgeMap[edge.id] = edge;
+    graph.edgeMap[edge.id] = {
+      ...edge,
+      data: {
+        ...edge.data,
+        edgeDescription: getEdgeDescription(edge, graph)
+      }
+    };
   }
 
   return graph;

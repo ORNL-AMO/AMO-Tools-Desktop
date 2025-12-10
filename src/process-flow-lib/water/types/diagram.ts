@@ -1,5 +1,6 @@
 import { Node, Edge } from "@xyflow/react";
 import { WaterTreatment } from "./water-components";
+import { ComponentAttribution } from "./results";
 
 /**
 * Respresents a diagram node. is extended by types which hold assessment data
@@ -28,6 +29,8 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   export interface CustomEdgeData extends Record<string, unknown> {
     flowValue: number,
     hasOwnEdgeType: string,
+    edgeDescription: string,
+    componentAttribution?: ComponentAttribution,
   }
   
   // * patches v11 -> v12 typing changes

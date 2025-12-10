@@ -1,16 +1,19 @@
 <!-- <div class="print-container">
     <div class="page-break-before"> -->
-<div class="output-summary print-width w-75 mx-auto">
+<div class="output-summary print-width w-75 mx-auto p-5">
     <h4 class="show-print print-section-header">True Cost of Water by System</h4>
 
     @if (!isDiagramValid) {
-        <app-alert-info-container class="m-3 w-50"
-        [header]="'Diagram flow data contains errors'" 
-        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'"
-        [showIcon]="false"
+    <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
+        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
         [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
-
     } @else {
+    <div class="d-flex justify-content-end align-items-center mb-2">
+        <button class="btn btn-outline-primary d-flex align-items-center" (click)="openTrueCostEditableTableModal()">
+            <span class="fa fa-calculator mr-3"></span>
+            Adjust Cost Attribution
+        </button>
+    </div>
     <table #copyTable class="table table-bordered table-striped table-hover">
         <thead>
             <tr class="text-center header-highlight">
@@ -57,8 +60,10 @@
             </tr>
         </tbody>
     </table>
+    <app-system-true-cost-bar class="print-width"></app-system-true-cost-bar>
+
     <app-exportable-results-table [tableString]="copyTableString" [horizontalAnchor]="'right'"
-    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+        (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 
     <app-system-true-cost-bar class="print-width"></app-system-true-cost-bar>
 
@@ -66,6 +71,3 @@
 
 
 </div>
-
-<!-- </div>
-</div> -->

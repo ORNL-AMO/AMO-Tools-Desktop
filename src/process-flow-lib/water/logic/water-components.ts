@@ -3,6 +3,7 @@ import { Connection, Edge, MarkerType, Node } from "@xyflow/react";
 import { DiagramSettings, Handles, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../types/diagram";
 import { ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, WasteWaterTreatment, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { getNewIdString } from "./utils";
+import { NodeGraphIndex } from "../..";
 
 
 const getDefaultHandles = (componentType?: ProcessFlowNodeType): Handles => {
@@ -549,6 +550,7 @@ export const getEdgeFromConnection = (
 
   connectedParams.data = {
     flowValue: null,
+    edgeDescription: getEdgeDescription(connectedParams),
   }
 
   if (connectedParams.style === undefined) {
@@ -563,6 +565,17 @@ export const getEdgeFromConnection = (
   }
 
   return connectedParams;
+}
+
+// todo pull names from graph, requires setting name and lookup on edge init
+export const getEdgeDescription = (
+  edge: Edge, 
+  graph?: NodeGraphIndex,
+  {source, target}: {source?: string, target?: string} = {}, 
+): string => {
+  const sourceName = source ?? edge.source;
+  const targetName = target ?? edge.target;
+  return `edge-desc__${sourceName}-${targetName}`;
 }
 
 export const getNewEdgeId = (connectedParams: Connection | Edge): string => {
@@ -617,6 +630,20 @@ export const getDefaultSettings = (): DiagramSettings => {
 
 export const getDefaultColorPalette = () => {
   return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#93e200'];
+}
+
+
+export const getComponentTypeLabel = (processComponentType: ProcessFlowNodeType): string => {
+  const componentTypeLabels: Record<ProcessFlowNodeType, string> = {
+    'water-intake': 'Water Intake',
+    'water-discharge': 'Water Discharge',
+    'water-treatment': 'Water Treatment',
+    'waste-water-treatment': 'Waste Water Treatment',
+    'water-using-system': 'Water Using System',
+    'known-loss': 'Known Loss',
+    'summing-node': 'Summing Connector'
+  };
+  return componentTypeLabels[processComponentType] || processComponentType;
 }
 
 

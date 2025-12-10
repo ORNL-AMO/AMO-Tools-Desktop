@@ -13,6 +13,9 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
 import { StackedBarIntakeFlowComponent } from './stacked-bar-intake-flow/stacked-bar-intake-flow.component';
 import { SystemTrueCostBarComponent } from './system-true-cost-bar/system-true-cost-bar.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TrueCostEditableTableComponent } from './true-cost-editable-table/true-cost-editable-table.component';
+import { TrueCostReportService } from '../services/true-cost-report.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,11 +25,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     SystemTrueCostBarComponent,
     SystemTrueCostReportComponent,
     StackedBarIntakeCostsComponent,
-    StackedBarIntakeFlowComponent
+    StackedBarIntakeFlowComponent,
+    TrueCostEditableTableComponent
   ],
   imports: [
     CommonModule,
     SharedPipesModule,
+    ReactiveFormsModule,
+    FormsModule,
     PrintOptionsMenuModule,
     AlertInfoContainerComponent,
     ExportableResultsTableModule,
@@ -36,7 +42,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     WaterReportComponent,
   ],
   providers: [
-    WaterReportService
+    WaterReportService,
+    TrueCostReportService,
   ],
 })
 export class WaterReportModule { }
