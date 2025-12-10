@@ -483,7 +483,7 @@ export class ProcessHeatingApiService {
   }
 
   exhaustGasEAF(input: ExhaustGasEAF): number {
-    let ExhaustGasEAFInstance = new this.toolsSuiteApiService.ToolsSuiteModule.ExhaustGasEAF(
+    let ExhaustGasEAFInstance = new this.toolsSuiteApiService.ToolsSuiteModule.exhaustGasEAFTotalHeatLoss(
       input.offGasTemp, input.CO,
       input.H2, input.combustibleGases, input.vfr,
       input.dustLoading,
