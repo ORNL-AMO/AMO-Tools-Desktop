@@ -437,13 +437,12 @@ export class ProcessHeatingApiService {
   }
 
   slagOtherMaterialTotalHeatLoss(input: Slag): number {
-    let SlagInstance = new this.toolsSuiteApiService.ToolsSuiteModule.SlagOtherMaterialTotalHeatLoss(
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.slagOtherMaterialTotalHeatLoss(
       input.weight, input.inletTemperature,
       input.outletTemperature, input.specificHeat,
       input.correctionFactor,
     );
-    let output: number = SlagInstance.getHeatLoss();
-    SlagInstance.delete();
+
     return output;
   }
 
@@ -467,30 +466,27 @@ export class ProcessHeatingApiService {
     input.otherFuels = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.otherFuels);
     input.electricityInput = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.electricityInput);
 
-    let EnergyInputEAFInstance = new this.toolsSuiteApiService.ToolsSuiteModule.energyInputEAFTotalChemicalEnergyInput(
+    let EnergyInputEAFInstance = this.toolsSuiteApiService.ToolsSuiteModule.energyInputEAFTotalChemicalEnergyInput(
       input.naturalGasHeatInput, input.coalCarbonInjection,
       input.coalHeatingValue, input.electrodeUse,
-      input.electrodeHeatingValue, input.otherFuels,
-      input.electricityInput
+      input.electrodeHeatingValue, input.otherFuels
     );
     let output: EnergyEAFOutput = {
-      heatDelivered: EnergyInputEAFInstance.energyInputEAFTotalHeatDelivered(),
-      totalChemicalEnergyInput: EnergyInputEAFInstance.energyInputEAFTotalChemicalEnergyInput()
+      heatDelivered:this.toolsSuiteApiService.ToolsSuiteModule.energyInputEAFTotalHeatDelivered( EnergyInputEAFInstance, input.electricityInput),
+      totalChemicalEnergyInput:EnergyInputEAFInstance
     }
 
-    EnergyInputEAFInstance.delete();
     return output;
   }
 
   exhaustGasEAF(input: ExhaustGasEAF): number {
-    let ExhaustGasEAFInstance = new this.toolsSuiteApiService.ToolsSuiteModule.exhaustGasEAFTotalHeatLoss(
+    let ExhaustGasEAFInstance = this.toolsSuiteApiService.ToolsSuiteModule.exhaustGasEAFTotalHeatLoss(
       input.offGasTemp, input.CO,
       input.H2, input.combustibleGases, input.vfr,
       input.dustLoading,
     );
     let output: number = ExhaustGasEAFInstance.getTotalHeatExhaust();
 
-    ExhaustGasEAFInstance.delete();
     return output;
   }
 
