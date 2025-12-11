@@ -434,15 +434,14 @@ export class PowerFactorCorrectionService {
       let proposedCapacitanceList: Array<number> = new Array();
       if(monthlyOutputs.length > 0){
         monthlyOutputs.forEach(output =>{
-          let avgPenalty = 0;
-          if (monthlyOutputs.length > 0) {
-            avgPenalty = monthlyOutputs.reduce((sum, o) => sum + o.penaltyCost, 0) / monthlyOutputs.length;
-          }
-          annualPFPenalty = avgPenalty * 12;
+          if (output.penaltyCost !== 0){
+            annualPFPenalty += output.penaltyCost;
+          } 
           if (output.proposedCapacitance !== 0) {
             proposedCapacitanceList.push(output.proposedCapacitance);
           }
         });
+        annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
   
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
@@ -491,15 +490,14 @@ export class PowerFactorCorrectionService {
   
       if(monthlyOutputs.length > 0){
         monthlyOutputs.forEach(output =>{
-          let avgPenalty = 0;
-          if (monthlyOutputs.length > 0) {
-            avgPenalty = monthlyOutputs.reduce((sum, o) => sum + o.penaltyCost, 0) / monthlyOutputs.length;
-          }
-          annualPFPenalty = avgPenalty * 12;
+          if (output.penaltyCost !== 0){
+            annualPFPenalty += output.penaltyCost;
+          } 
           if (output.proposedCapacitance !== 0) {
             proposedCapacitanceList.push(output.proposedCapacitance);
           }
         });
+        annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
   
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
@@ -541,15 +539,14 @@ export class PowerFactorCorrectionService {
   
       if(monthlyOutputs.length > 0){
         monthlyOutputs.forEach(output =>{
-          let avgPenalty = 0;
-          if (monthlyOutputs.length > 0) {
-            avgPenalty = monthlyOutputs.reduce((sum, o) => sum + o.penaltyCost, 0) / monthlyOutputs.length;
-          }
-          annualPFPenalty = avgPenalty * 12;
+          if (output.penaltyCost !== 0){
+            annualPFPenalty += output.penaltyCost;
+          } 
           if (output.proposedCapacitance !== 0) {
             proposedCapacitanceList.push(output.proposedCapacitance);
           }
         });
+        annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
   
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
@@ -590,19 +587,14 @@ export class PowerFactorCorrectionService {
   
       if(monthlyOutputs.length > 0){
         monthlyOutputs.forEach(output =>{
-          // if (output.penaltyCost !== 0){
-          //   annualPFPenalty += output.penaltyCost;
-          // } 
-
-          let avgPenalty = 0;
-          if (monthlyOutputs.length > 0) {
-            avgPenalty = monthlyOutputs.reduce((sum, o) => sum + o.penaltyCost, 0) / monthlyOutputs.length;
-          }
-          annualPFPenalty = avgPenalty * 12;
+          if (output.penaltyCost !== 0){
+            annualPFPenalty += output.penaltyCost;
+          } 
           if (output.proposedCapacitance !== 0) {
             proposedCapacitanceList.push(output.proposedCapacitance);
           }
         });
+        annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
   
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
@@ -644,15 +636,14 @@ export class PowerFactorCorrectionService {
   
       if(monthlyOutputs.length > 0){
         monthlyOutputs.forEach(output =>{ 
-          let avgPenalty = 0;
-          if (monthlyOutputs.length > 0) {
-            avgPenalty = monthlyOutputs.reduce((sum, o) => sum + o.penaltyCost, 0) / monthlyOutputs.length;
+          if (output.penaltyCost !== 0){
+            annualPFPenalty += output.penaltyCost;
           }
-          annualPFPenalty = avgPenalty * 12;
           if (output.proposedCapacitance !== 0) {
             proposedCapacitanceList.push(output.proposedCapacitance);
           }
         });
+        annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
   
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
