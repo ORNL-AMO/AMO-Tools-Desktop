@@ -422,6 +422,9 @@ export class PowerFactorCorrectionService {
         monthOutput.demandPenalty = input.input1 - monthOutput.realDemand; 
         monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
         monthOutput.currentReactivePower = monthOutput.realDemand * Math.tan(Math.acos(input.input2)); 
+        if (isNaN(monthOutput.currentReactivePower)) {
+          monthOutput.currentReactivePower = 0;
+        }
         if(input.input2 >= inputData.minimumPowerFactor){
           monthOutput.proposedReactivePower = monthOutput.currentReactivePower;
         } else {
@@ -443,7 +446,6 @@ export class PowerFactorCorrectionService {
         });
         annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
-  
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
       proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
       capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
@@ -477,6 +479,9 @@ export class PowerFactorCorrectionService {
         monthOutput.demandPenalty = monthOutput.pfAdjustedDemand - input.input1;
         monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
         monthOutput.currentReactivePower = input.input1 * Math.tan(Math.acos(input.input2));
+        if (isNaN(monthOutput.currentReactivePower)) {
+          monthOutput.currentReactivePower = 0;
+        }
         if(input.input2 >= inputData.minimumPowerFactor){
           monthOutput.proposedReactivePower = monthOutput.currentReactivePower
         } else {
@@ -623,10 +628,13 @@ export class PowerFactorCorrectionService {
     if (inputData.monthyInputs.length >= 3){
       inputData.monthyInputs.forEach( input => {
         let monthOutput: PFMonthlyOutputs = this.getEmptyMonthyOutput();
-        monthOutput.demandPenalty = input.input1 - input.input3;
-        // monthOutput.demandPenalty = input.input3 - input.input1 
+        // monthOutput.demandPenalty = input.input1 - input.input3;
+        monthOutput.demandPenalty = input.input3 - input.input1;
         monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
         monthOutput.currentReactivePower = input.input3 * Math.tan(Math.acos(input.input2));  
+        if (isNaN(monthOutput.currentReactivePower)) {
+          monthOutput.currentReactivePower = 0;
+        }
         monthOutput.proposedReactivePower = Math.min(monthOutput.currentReactivePower, input.input3 * Math.tan(Math.acos(inputData.minimumPowerFactor)));
         monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
         monthlyOutputs.push(monthOutput);
