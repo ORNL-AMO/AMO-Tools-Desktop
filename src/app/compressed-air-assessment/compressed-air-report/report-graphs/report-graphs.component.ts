@@ -22,6 +22,8 @@ export class ReportGraphsComponent implements OnInit {
   printView: boolean;
   
   @ViewChild("modificationGraph", { static: false }) modificationGraph: ElementRef;
+  @ViewChild("airflowGraph", { static: false }) airflowGraph: ElementRef;
+  @ViewChild("energyGraph", { static: false }) energyGraph: ElementRef;
 
   selectedDayType: CompressedAirDayType;
   reduceAirLeaks: boolean;
@@ -192,7 +194,75 @@ export class ReportGraphsComponent implements OnInit {
       this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
     }
   }
+// air flow changes instead of cost. Also, while were there, add one for energy.
 
+  drawAirflowGraph() {
+    if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.airflowGraph) {
+      let x: Array<string> = this.combinedDayTypeResults.map(result => { return result.modification.name });
+      x.unshift('Baseline');
+      let yValue = this.getAnnualCost();
+      let traceData = new Array();
+      // let currencyPipe = new CurrencyPipe('en-US')
+
+      //each trace will display the data we are looking for. I do not know what values are to be shown, I need to ask. 
+      // each of below will become a data stack on the y axis.
+      traceData.push({
+        x: x,
+        y: yValue,
+        text: yValue.map(value => `${value.toLocaleString()} ton CO₂`),        
+        textposition: 'auto',
+        type: 'bar',
+        name: 'Adjusted Annual Cost',
+        hoverinfo: "name+y",
+        marker: {
+          line: {
+            width: 3
+          }
+        },
+      });
+
+      var layout = this.getLayout("Air Flow Changes");
+      var config = {
+        responsive: true,
+        displaylogo: false
+      };
+      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
+    }
+  }
+
+    drawEnergyGraph() {
+    if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.energyGraph) {
+      let x: Array<string> = this.combinedDayTypeResults.map(result => { return result.modification.name });
+      x.unshift('Baseline');
+      let yValue = this.getAnnualCost();
+      let traceData = new Array();
+      // let currencyPipe = new CurrencyPipe('en-US')
+
+      //each trace will display the data we are looking for. I do not know what values are to be shown, I need to ask. 
+      // each of below will become a data stack on the y axis.
+      traceData.push({
+        x: x,
+        y: yValue,
+        text: yValue.map(value => `${value.toLocaleString()} ton CO₂`),        
+        textposition: 'auto',
+        type: 'bar',
+        name: 'Adjusted Annual Cost',
+        hoverinfo: "name+y",
+        marker: {
+          line: {
+            width: 3
+          }
+        },
+      });
+
+      var layout = this.getLayout("Energy");
+      var config = {
+        responsive: true,
+        displaylogo: false
+      };
+      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
+    }
+  }
 
   getReduceAirLeaksTrace(): Array<number> {
     let y: Array<number> = [0];
@@ -287,7 +357,32 @@ export class ReportGraphsComponent implements OnInit {
       legend: {
         // orientation: "h",
         // y: 1.5
-      }
+      },
+      updatemenus: [{
+        buttons: [
+          {
+            method: 'update',
+            args: [{'visible': [true, true, true]}, {'title': 'Cost'}],
+            label: 'Cost'
+          },
+          {
+            method: 'update',
+            args: [{'visible': [false, true, false]}, {'title': 'Air Flow'}],
+            label: 'Air Flow'
+          },
+          {
+            method: 'update',
+            args: [{'visible': [false, false, true]}, {'title': 'Energy'}],
+            label: 'Energy'
+          }
+        ],
+        direction: 'down',
+        showactive: true,
+        x: 0.0,
+        xanchor: 'left',
+        y: 1.2,
+        yanchor: 'top'
+      }]
     };
   }
 

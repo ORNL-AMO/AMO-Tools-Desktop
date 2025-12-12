@@ -83,6 +83,7 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       }
       this.setResults();
     });
+    console.log(this.totals);
   }
 
   ngOnDestroy() {

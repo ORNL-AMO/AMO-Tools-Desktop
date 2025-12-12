@@ -254,4 +254,13 @@ export class ExploreOpportunitiesService {
       return dayTypeModificationResults.flowAllocationProfileSummary;
     }
   }
+
+  calculateTotalflow(selectedDayType: CompressedAirDayType): number {
+// I need As "total flow" changes for each hour and each daytype, will need calculations for each daytype - average over day and peak.
+
+
+    // return this._totalflow;
+    return 2;
+  }
+
 }
