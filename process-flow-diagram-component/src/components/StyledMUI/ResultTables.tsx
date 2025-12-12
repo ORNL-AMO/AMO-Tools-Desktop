@@ -1,5 +1,5 @@
 import { Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableContainerProps, TableHead, TableRow } from "@mui/material";
-import { DiagramCalculatedData, ProcessFlowPart, SystemTrueCostContributions, TrueCostOfSystems } from "process-flow-lib";
+import { DiagramCalculatedData, ProcessFlowPart, sortTrueCostReport, SystemTrueCostContributions, SystemTrueCostData, TrueCostOfSystems } from "process-flow-lib";
 import { JSX } from "react";
 import { Node } from "@xyflow/react";
 
@@ -82,7 +82,7 @@ export const TwoCellResultTable = (props: TwoCellTablResultProps) => {
 }
 
 
-export interface SystemTrueCostResultRow {
+export interface SystemTrueCostResultRow extends Partial<SystemTrueCostData> {
   label: string,
   results: Array<string>,
 }
@@ -119,7 +119,7 @@ const headerCells = [
 
 export const TrueCostOfSystemResultTable = (props: TrueCostOfSystemTableProps) => {
   const { trueCostOfSystems, nodes } = props;
-  const systemCosts = [];
+  let systemCosts: SystemTrueCostData[]= [];
 
   const currency = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -139,16 +139,18 @@ export const TrueCostOfSystemResultTable = (props: TrueCostOfSystemTableProps) =
           return currency.format(value);
       });
       systemCosts.push({
-        label: component.name || systemKey,
-        results: results,
+        label: component.name || String(systemKey),
+        connectionCostByType: results,
         unit: '$',
       });
     }
   });
 
+  sortTrueCostReport(systemCosts);
+
   return (
     <TableContainer component={Paper} sx={{ ...props.style }}>
-      <h2 style={{color: 'red', fontWeight: 'bold'}}>This table is for development cost checking only</h2>
+      <p style={{color: 'red', fontWeight: 'bold'}}>DEVELOPMENT ONLY</p>
       <Table sx={{ minWidth: 300 }} size="small" aria-label="customized table">
         <TableHead>
           <StyledHeadTableRow>
@@ -163,12 +165,12 @@ export const TrueCostOfSystemResultTable = (props: TrueCostOfSystemTableProps) =
           </StyledHeadTableRow>
         </TableHead>
         <TableBody>
-          {systemCosts.map((row: SystemTrueCostResultRow, index: number) => (
+          {systemCosts.map((row: SystemTrueCostData, index: number) => (
             <StyledTableRow key={index}>
               <StyledTableCell component="th" scope="row">
                 {row.label}
               </StyledTableCell>
-              {row.results.map((result, index) => (
+              {row.connectionCostByType.map((result, index) => (
                 <StyledTableCell key={index} align="right">
                   {result}
                 </StyledTableCell>

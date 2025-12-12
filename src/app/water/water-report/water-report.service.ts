@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { SystemTrueCostData } from '../water-assessment-results.service';
 import * as _ from 'lodash';
-import { PlantSystemSummaryResults } from 'process-flow-lib';
+import { PlantSystemSummaryResults, sortTrueCostReport, SystemTrueCostData } from 'process-flow-lib';
 
 @Injectable()
 export class WaterReportService {
@@ -17,7 +16,7 @@ export class WaterReportService {
   }
 
   getSortedTrueCostReport(report: SystemTrueCostData[]): SystemTrueCostData[] {
-    // todo hardcoded index, investigate, improve
-    return _.orderBy(report, item => item.connectionCostByType[7] || 0, 'desc');
+    return sortTrueCostReport(report);
+
   }
 }

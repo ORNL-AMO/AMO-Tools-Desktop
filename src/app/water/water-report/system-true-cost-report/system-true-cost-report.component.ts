@@ -1,12 +1,12 @@
 import { Component, DestroyRef, ElementRef, inject, Injector, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { SystemTrueCostData, WaterAssessmentResultsService } from '../../water-assessment-results.service';
+import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { WaterReportService } from '../water-report.service';
 import * as _ from 'lodash';
 import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
 import { Diagram } from '../../../shared/models/diagram';
-import { getIsDiagramValid, NodeErrors } from 'process-flow-lib';
+import { getIsDiagramValid, NodeErrors, SystemTrueCostData } from 'process-flow-lib';
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
 import { TrueCostEditableTableComponent, TrueCostEditableTableDataInputs } from '../true-cost-editable-table/true-cost-editable-table.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

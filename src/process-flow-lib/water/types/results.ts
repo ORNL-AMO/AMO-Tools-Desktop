@@ -33,20 +33,12 @@ export interface PlantResults {
     flowAttributionMap: Record<string, ComponentAttribution>;
 }
 
-export interface ConnectedCost {
-  name: string,
-  componentType: ProcessFlowNodeType,
-  selfTotalCost: number,
-  selfTotalFlow: number,
-  cost: number,
-  flow: number,
-  destinationCost?: number,
-  fractionSelfTotalFlowToTarget?: number,
-  sourceId: string,
-  targetId: string,
-  sourceName: string,
-  targetName: string,
+export interface SystemTrueCostData {
+  label: string,
+  connectionCostByType: Array<string>,
+  unit: string,
 }
+
 
 export interface TrueCostOfSystems {
   [systemId: string]: SystemTrueCostContributions
@@ -112,6 +104,24 @@ export interface ComponentAttribution {
   }
   costAttributedToSystem: number;
   costComponentId: string;
+}
+
+/**
+ * Represents a cost from a connected cost component (ex. intake, discharge, treatment etc)
+ */
+export interface ConnectedCost {
+  name: string,
+  componentType: ProcessFlowNodeType,
+  selfTotalCost: number,
+  selfTotalFlow: number,
+  cost: number,
+  flow: number,
+  destinationCost?: number,
+  fractionSelfTotalFlowToTarget?: number,
+  sourceId: string,
+  targetId: string,
+  sourceName: string,
+  targetName: string,
 }
 
 
