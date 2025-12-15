@@ -450,28 +450,29 @@ export class ProcessHeatingApiService {
     input.otherFuels = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.otherFuels);
     input.electricityInput = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.electricityInput);
 
-    let EnergyInputEAFInstance = this.toolsSuiteApiService.ToolsSuiteModule.energyInputEAFTotalChemicalEnergyInput(
+    const totalChemicalEnergyInput = this.toolsSuiteApiService.ToolsSuiteModule.energyInputEAFTotalChemicalEnergyInput(
       input.naturalGasHeatInput, input.coalCarbonInjection,
       input.coalHeatingValue, input.electrodeUse,
       input.electrodeHeatingValue, input.otherFuels
     );
+    const heatDelivered = this.toolsSuiteApiService.ToolsSuiteModule.energyInputEAFTotalHeatDelivered(totalChemicalEnergyInput, input.electricityInput);
+
     let output: EnergyEAFOutput = {
-      heatDelivered:this.toolsSuiteApiService.ToolsSuiteModule.energyInputEAFTotalHeatDelivered( EnergyInputEAFInstance, input.electricityInput),
-      totalChemicalEnergyInput:EnergyInputEAFInstance
+      heatDelivered: heatDelivered,
+      totalChemicalEnergyInput:totalChemicalEnergyInput
     }
 
     return output;
   }
 
   exhaustGasEAF(input: ExhaustGasEAF): number {
-    let ExhaustGasEAFInstance = this.toolsSuiteApiService.ToolsSuiteModule.exhaustGasEAFTotalHeatLoss(
+    const totalHeatLoss = this.toolsSuiteApiService.ToolsSuiteModule.exhaustGasEAFTotalHeatLoss(
       input.offGasTemp, input.CO,
       input.H2, input.combustibleGases, input.vfr,
       input.dustLoading,
     );
-    let output: number = ExhaustGasEAFInstance.getTotalHeatExhaust();
 
-    return output;
+    return totalHeatLoss;
   }
 
   efficiencyImprovement(input: EfficiencyImprovementInputs): EfficiencyImprovementOutputs {
