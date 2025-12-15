@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { WaterSuiteApiService } from '../tools-suite-api/water-suite-api.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
-import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults, PlantResults, ComponentAttribution, getNodeTotalInflow, SystemTrueCostData } from 'process-flow-lib';
+import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults, PlantResults, ComponentAttribution, getNodeTotalInflow, SystemTrueCostData, getSystemTrueCostData } from 'process-flow-lib';
 import { UpdateDiagramFromAssessmentService } from '../water-process-diagram/update-diagram-from-assessment.service';
 import { Assessment } from '../shared/models/assessment';
 import { Edge, Node } from '@xyflow/react';
@@ -143,6 +143,8 @@ export class WaterAssessmentResultsService {
         return total + getHeatEnergyCost(heatEnergy, unitCost, settings.unitsOfMeasure);
       }, 0);
 
+      // ! 7762-A these will yield different results than the true/direct in the true cost table. Not clear who source of truth should be. 
+      // ! these are calculating costs based on total flow
       const directCosts = intakeCost + dischargeCost;
       const trueCost = getWaterTrueCost(intakeCost, dischargeCost, motorEnergyCosts, heatEnergyCosts, treatmentCost, wasteTreatmentCost);
 
@@ -176,7 +178,7 @@ export class WaterAssessmentResultsService {
       flowAttributionMap
     )
 
-    let systemTrueCostReport = this.getSystemTrueCostData(plantResults.trueCostOfSystems, diagram.waterDiagram.flowDiagramData.nodes);
+    let systemTrueCostReport = getSystemTrueCostData(plantResults.trueCostOfSystems, diagram.waterDiagram.flowDiagramData.nodes);
     console.log('trueCostOfSystems', plantResults.trueCostOfSystems);
     return systemTrueCostReport;
   }
@@ -199,27 +201,6 @@ export class WaterAssessmentResultsService {
     return plantResults;
   }
 
-  
-
-  getSystemTrueCostData(trueCostOfSystems: TrueCostOfSystems, nodes: Node[]): SystemTrueCostData[] {
-    let systemCosts = [];
-    Object.entries(trueCostOfSystems).forEach(([key, systemCostContributions]: [key: string, systemCostContributions: SystemTrueCostContributions]) => {
-      const systemKey = key as keyof TrueCostOfSystems;
-      const component = nodes.find((node: Node<ProcessFlowPart>) => node.id === systemKey)?.data as WaterUsingSystem;
-      const results = Object.values(systemCostContributions).map((value: number) => {
-        if (value === 0) {
-          return undefined;
-        }
-        return value;
-      });
-      systemCosts.push({
-        label: component.name,
-        connectionCostByType: results,
-        unit: 'currency',
-      });
-    });
-    return systemCosts;
-  }
 
   getEmptyPlantSystemSummaryResults(): PlantSystemSummaryResults {
     return {

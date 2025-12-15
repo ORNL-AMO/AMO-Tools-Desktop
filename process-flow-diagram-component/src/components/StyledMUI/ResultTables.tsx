@@ -1,5 +1,5 @@
 import { Paper, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableContainerProps, TableHead, TableRow } from "@mui/material";
-import { DiagramCalculatedData, ProcessFlowPart, sortTrueCostReport, SystemTrueCostContributions, SystemTrueCostData, TrueCostOfSystems } from "process-flow-lib";
+import { DiagramCalculatedData, getSystemTrueCostData, ProcessFlowPart, sortTrueCostReport, SystemTrueCostContributions, SystemTrueCostData, TrueCostOfSystems } from "process-flow-lib";
 import { JSX } from "react";
 import { Node } from "@xyflow/react";
 
@@ -125,32 +125,13 @@ export const TrueCostOfSystemResultTable = (props: TrueCostOfSystemTableProps) =
     style: 'currency',
     currency: 'USD'
   });
-
-  Object.entries(trueCostOfSystems).forEach(([key, systemCostContributions]:
-    [key: string, systemCostContributions: SystemTrueCostContributions]) => {
-    const systemKey = key as keyof TrueCostOfSystems;
-    // todo filter out non-systems earlier
-    const component = nodes.find((node: Node<ProcessFlowPart>) => node.id === systemKey)?.data as ProcessFlowPart;
-    if (component.processComponentType === 'water-using-system') {
-      const results = Object.values(systemCostContributions).map((value: number) => {
-          if (value === 0) {
-            return '-';
-          }
-          return currency.format(value);
-      });
-      systemCosts.push({
-        label: component.name || String(systemKey),
-        connectionCostByType: results,
-        unit: '$',
-      });
-    }
-  });
-
+  
+  systemCosts = getSystemTrueCostData(trueCostOfSystems, nodes)
   sortTrueCostReport(systemCosts);
 
   return (
     <TableContainer component={Paper} sx={{ ...props.style }}>
-      <p style={{color: 'red', fontWeight: 'bold'}}>DEVELOPMENT ONLY</p>
+      <p style={{color: 'red', fontWeight: 'bold'}}>TABLE IS NOT USER-FACING. DEVELOPMENT ONLY</p>
       <Table sx={{ minWidth: 300 }} size="small" aria-label="customized table">
         <TableHead>
           <StyledHeadTableRow>
@@ -172,7 +153,7 @@ export const TrueCostOfSystemResultTable = (props: TrueCostOfSystemTableProps) =
               </StyledTableCell>
               {row.connectionCostByType.map((result, index) => (
                 <StyledTableCell key={index} align="right">
-                  {result}
+                  {result? currency.format(Number(result)) : '-'}
                 </StyledTableCell>
               ))}
             </StyledTableRow>

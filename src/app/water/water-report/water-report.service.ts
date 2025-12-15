@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import * as _ from 'lodash';
 import { PlantSystemSummaryResults, sortTrueCostReport, SystemTrueCostData } from 'process-flow-lib';
 
 @Injectable()
@@ -17,6 +16,6 @@ export class WaterReportService {
 
   getSortedTrueCostReport(report: SystemTrueCostData[]): SystemTrueCostData[] {
     return sortTrueCostReport(report);
-
+  
   }
 }

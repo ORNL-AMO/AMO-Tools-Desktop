@@ -176,6 +176,34 @@ export const getDescendantPathToNode = (
   return path;
 };
 
+export const getAllAncestorPathsToNode = (
+  nodeId: string,
+  graph: NodeGraphIndex,
+  searchAncestorId?: string
+): string[][] => {
+  const allPaths: string[][] = [];
+  const path: string[] = [];
+
+  const dfs = (current: string) => {
+    path.push(current);
+
+    if (current === searchAncestorId) {
+      allPaths.push([...path]);
+      path.pop();
+      return;
+    }
+
+    for (const parent of graph.parentMap[current] || []) {
+      dfs(parent);
+    }
+
+    path.pop();
+  };
+
+  dfs(nodeId);
+  return allPaths;
+};
+
 
 export const getAllDescendantPathsToNode = (
   nodeId: string,
