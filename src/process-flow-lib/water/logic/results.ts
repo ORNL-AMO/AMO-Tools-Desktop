@@ -828,18 +828,6 @@ const getDescendantTreatmentCosts = (
 //           const flowValue = edge.data.flowValue ?? 0;
 //           systemAnnualSummaryResults.sourceWaterIntake += flowValue;
 
-//             if (nodeNameMap[system] == 'Quench Tank') {
-//               console.log('--- Intake Flow Proportion Legacy  directPathAncestors---', directPathAncestors);
-//               console.log('systemAnnualSummaryResults.sourceWaterIntake', systemAnnualSummaryResults.sourceWaterIntake);
-//               console.log('immediate flow value', flowValue);
-
-//               console.log('&&& Quench Tank ---');
-//               console.log('systemId', system, nodeNameMap[system]);
-//               console.log('systemImmediateAncestorId', immediateAncestor, nodeNameMap[immediateAncestor]);
-//               console.log('&&& END ---');
-//             }
-
-
 //           let fractionFlowAttributed = flowValue / connectedAncestorCost.selfTotalFlow;
 //           let flowAttributionFraction = {
 //             default: fractionFlowAttributed,
@@ -855,12 +843,6 @@ const getDescendantTreatmentCosts = (
 //           } else {
 //             const targetPortionCost = fractionFlowAttributed * connectedAncestorCost.selfTotalCost;
 //             portionIntakeCosts = targetPortionCost;
-
-//                   if (nodeNameMap[system] == 'Quench Tank') {
-//                 console.log('&&& targetPortionCost', targetPortionCost);
-//                 console.log('&&& trueCostContribution', systemCostContributionsResults);
-//               }
-
 
 //             flowAttributionMap[edge.id] = {
 //               systemId: currentSystem.id,
@@ -922,16 +904,13 @@ const getIntakeFlowProportionCost = (
 
     if (allDirectAncestorPaths.length > 0) {
       allDirectAncestorPaths.forEach((directPathDescendents: string[]) => {
-        // todo we may eventually need to ignore reuse/recycled types here. See getDischargeFlowProportionCost implementation
+        //  we may eventually need to ignore reuse/recycled types here. See getDischargeFlowProportionCost implementation
         const [systemId, systemImmediateAncestorId] = directPathDescendents;
         const intakeSourceId: string = directPathDescendents[directPathDescendents.length - 1];
         const immediateDescendantToIntakeId: string = directPathDescendents[directPathDescendents.length - 2];
         const immediateDescendantToIntakeEdge: Edge<CustomEdgeData> = Object.values(graph.edgeMap).find((e) => e.source === intakeSourceId && e.target === immediateDescendantToIntakeId);
         const immediateAncestorToSystemEdge: Edge<CustomEdgeData> = Object.values(graph.edgeMap).find((e) => e.source === systemImmediateAncestorId && e.target === systemId);
         const immediateFlowValue = immediateAncestorToSystemEdge.data?.flowValue ?? 0;
-          // const debugName = `immediateDescendantToIntakeEdge: ${nodeNameMap[immediateDescendantToIntakeId]} -> ${nodeNameMap[intakeSourceId]}, systemToImmediateDescendant: ${nodeNameMap[systemId]} -> ${nodeNameMap[systemImmediateAncestorId]}`;
-          // const debugName2 = `systemToImmediateDescendant: ${nodeNameMap[systemId]} -> ${nodeNameMap[systemImmediateAncestorId]}`;
-
         
         // todo examine totalFlowResponsibility purpose, may have become redundant to logic performed after exits check
         let totalFlowResponsiblity = getNodeTotalInflow(nodeMap[immediateDescendantToIntakeId], calculatedData);
@@ -955,11 +934,42 @@ const getIntakeFlowProportionCost = (
           systemAnnualSummaryResults.sourceWaterIntake += targetPortion;
           
           const totalIntakeFlow = getNodeTotalOutflow(nodeMap[intakeSourceId], calculatedData) ?? 0;
-          const targetFractionOfInitialFlowSent = (targetPortion / totalIntakeFlow);
+          let targetFractionOfInitialFlowSent = (targetPortion / totalIntakeFlow);
           const totalIntakeCost = ancestorCostsMap[systemId].find((cost) => cost.sourceId === intakeSourceId)?.selfTotalCost ?? 0;
-          const targetPortionCost = targetFractionOfInitialFlowSent * totalIntakeCost;
-          portionIntakeCosts += targetPortionCost;
-          
+
+          let flowAttributionFraction = {
+            default: targetFractionOfInitialFlowSent,
+            adjusted: undefined
+          };
+          let targetPortionCost = 0;
+
+          if (flowAttributionMap[immediateDescendantToIntakeEdge.id] && flowAttributionMap[immediateDescendantToIntakeEdge.id].flowAttributionFraction.adjusted) {
+            flowAttributionFraction.adjusted = flowAttributionMap[immediateDescendantToIntakeEdge.id].flowAttributionFraction.adjusted;
+            targetFractionOfInitialFlowSent = flowAttributionFraction.adjusted;
+            targetPortionCost = flowAttributionFraction.adjusted * totalIntakeCost;
+            portionIntakeCosts += targetPortionCost;
+          } else {
+            targetPortionCost = targetFractionOfInitialFlowSent * totalIntakeCost;
+            portionIntakeCosts += targetPortionCost;
+
+            flowAttributionMap[immediateDescendantToIntakeEdge.id] = {
+              systemId: currentSystem.id,
+              systemName: nodeNameMap[currentSystem.id],
+              flowValue: targetFlowReceived,
+              flowEdgeId: immediateDescendantToIntakeEdge.id,
+              flowEdgeDescription: getEdgeDescription(
+                immediateDescendantToIntakeEdge, 
+                undefined, { 
+                  source: nodeNameMap[systemImmediateAncestorId], 
+                  target: nodeNameMap[currentSystem.id] 
+                }),
+              flowAttributionFraction: flowAttributionFraction,
+              costAttributedToSystem: targetPortionCost,
+              costComponentId: intakeSourceId
+            };
+          }
+
+
           debugLogIntakeCosts(
             ['Quench Tank'],
             nodeNameMap,
