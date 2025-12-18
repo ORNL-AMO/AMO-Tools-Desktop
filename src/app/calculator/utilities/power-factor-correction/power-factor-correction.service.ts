@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PFMonthlyOutputs, PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from './power-factor-correction.component';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn, FormArray, FormGroup } from '@angular/forms';
 
 @Injectable()
 export class PowerFactorCorrectionService {
@@ -415,7 +416,7 @@ export class PowerFactorCorrectionService {
       minimumPowerFactor: [inputData.minimumPowerFactor],
       targetPowerFactor: [inputData.targetPowerFactor],
       adjustedOrActual: [inputData.adjustedOrActual],
-      marginalCostOfDemand: [inputData.marginalCostOfDemand],
+      marginalCostOfDemand: [inputData.marginalCostOfDemand, [Validators.required, Validators.min(0)]],
       costOfStaticCapacitance: [inputData.costOfStaticCapacitance],
       costOfDynamicCapacitance: [inputData.costOfDynamicCapacitance],
       monthyInputs: this.formBuilder.array(
@@ -424,7 +425,7 @@ export class PowerFactorCorrectionService {
           input1: [m.input1, [Validators.required, Validators.min(0)]],
           input2: [m.input2, [Validators.required, Validators.min(0)]],
           input3: [m.input3, [Validators.required, Validators.min(0)]]
-        }))
+        }, {validators: this.input1LessThanInput2Validator()}))
       ),
       startMonth: [inputData.startMonth],
       startYear: [inputData.startYear]
@@ -433,10 +434,47 @@ export class PowerFactorCorrectionService {
     return form;
   }
 
+ input1LessThanInput2Validator(): ValidatorFn {
+  return (group: AbstractControl): ValidationErrors | null => {
+    const input1Control = group.get('input1');
+    const input2Control = group.get('input2');
+    const input1 = input1Control?.value;
+    const input2 = input2Control?.value;
+
+    if (input1 != null && input2 != null && input1 < input2) {
+      input1Control?.setErrors({ ...input1Control.errors, input1NotLessThanInput2: true });
+      return { input1NotLessThanInput2: true };
+    } else {
+      if (input1Control?.errors) {
+        const { input1NotLessThanInput2, ...otherErrors } = input1Control.errors;
+        input1Control.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
+      }
+    }
+    return null;
+  };
+}
+
+pfAdjustedVsActualValidator(input1Key: string, input3Key: string): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const formArray = control as FormArray;
+    if (!formArray) return null;
+
+    for (let i = 0; i < formArray.length; i++) {
+      const group = formArray.at(i) as FormGroup;
+      const input1 = group.get(input1Key)?.value;
+      const input3 = group.get(input3Key)?.value;
+      if (input1 > input3) {
+        return { pfAdjustedVsActual: { index: i, input1, input3 } };
+      }
+    }
+    return null;
+  };
+}
+
   setPowerFactorValidators(form: UntypedFormGroup): UntypedFormGroup {
 
     form.controls.minimumPowerFactor.setValidators([Validators.required, Validators.min(0), Validators.max(1)]);
-    form.controls.marginalCostOfDemand.setValidators([Validators.required, Validators.min(0)]);
+    // form.controls.marginalCostOfDemand.setValidators([Validators.required, Validators.min(0)]);
     form.controls.costOfStaticCapacitance.setValidators([Validators.required, Validators.min(0)]);
     form.controls.costOfDynamicCapacitance.setValidators([Validators.required, Validators.min(0)]);
 

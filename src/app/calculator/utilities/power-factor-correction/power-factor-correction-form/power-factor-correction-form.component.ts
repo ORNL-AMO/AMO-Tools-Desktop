@@ -11,18 +11,15 @@ import { FormBuilder, FormGroup, UntypedFormGroup, FormArray, Validators } from 
 })
 export class PowerFactorCorrectionFormComponent implements OnInit {
   
-  // the @Input() decorator defines a variable that will be passed in from the parent
-  //updates to this variable in the parent will update automatically in the child
   @Input()
   data: PowerFactorCorrectionInputs;
   @Output('changeField')
   changeField = new EventEmitter<string>();
   form: UntypedFormGroup;
-  //the @Output decorator defines a variable as an output to the parent component
+
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<PowerFactorCorrectionInputs>();
-  //to emit a change, we need to define an EventEmitter<Type>() to be able
-  //to call .emit()
+
   minGreaterThanTargetError: boolean = false;
 
   monthList: Array<{ value: number, name: string }> = [
@@ -49,28 +46,7 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     this.form = this.powerFactorCorrectionService.getApparentPowerAndPowerFactor(this.data);
   }
 
-  validatePowerFactorInputs() {
-    let monthyInputs = this.form.get('monthyInputs') as FormArray;
-    if (monthyInputs && monthyInputs.controls) {
-      for (let group of monthyInputs.controls) {
-        let input1 = group.get('input1')?.value;
-        let input2 = group.get('input2')?.value;
-          console.log(input1, input2);
-        if (input1 >= input2) {
-          this.minGreaterThanTargetError = true;
-          return;
-        } else {
-          this.minGreaterThanTargetError = false;
-          this.calculate();
-          return;
-        }
-      }
-    }
-  }
-
-  //elements when they are updated/changed
   calculate() {
-    //.emit() will tell the parent to do something
     this.emitCalculate.emit(this.form.value);
   }
 
@@ -111,26 +87,8 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     this.calculate();
   }
 
-  // btnAddMonth(){;
-  //   let newMonthyInputs: MonthyInputs = {
-  //     month: "new month",
-  //     input1: 0,
-  //     input2: 0,
-  //     input3: 0
-  //   }
-  //   this.data.monthyInputs.push(newMonthyInputs);    
-  //   this.setMonthNames();
-  //   this.calculate();
-  // }
 
   btnAddMonth() {
-
-    // let newMonthyInputs: MonthyInputs = {
-    //   month: "new month",
-    //   input1: 0,
-    //   input2: 0,
-    //   input3: 0
-    // }
     this.monthyInputsFormArray.push(this.createMonthInputGroup());
     this.setMonthNames();
     this.calculate();

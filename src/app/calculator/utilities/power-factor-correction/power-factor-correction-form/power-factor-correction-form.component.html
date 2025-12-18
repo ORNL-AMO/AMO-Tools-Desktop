@@ -98,11 +98,6 @@
   </div>
 </form>
 
-  <!-- Display error from validatePowerFactorInputs above the table -->
-<div class="alert-danger pull-right small" *ngIf="minGreaterThanTargetError">
-  Minimum Power Factor must be less than Target Power Factor.
-</div>
-
 <table class="table table-hover">
   <tr>
     <th>
@@ -147,21 +142,34 @@
       <input type="number" step="any"
         formControlName="input3" id="{{'input3_'+i}}" (input)="calculate()" onfocus="this.select();"
         (focus)="focusField('input3')">
-      <span class="alert-danger pull-right"
-        *ngIf="group.get('input3')?.invalid && (group.get('input3')?.dirty || group.get('input3')?.touched)">
-        <span *ngIf="group.get('input3')?.errors?.required">Value required.</span>
-        <span *ngIf="group.get('input3')?.errors?.min">Must be &ge; 0.</span>
-      </span>
+        <span class="alert-danger pull-right small"
+          *ngIf="group.get('input3')?.invalid && (group.get('input3')?.dirty || group.get('input3')?.touched)">
+          <span *ngIf="group.get('input3')?.errors?.required">Value required.</span>
+          <span *ngIf="group.get('input3')?.errors?.min">Must be &ge; 0.</span>
+          <span *ngIf="group.get('input3')?.errors?.input1NotLessThanInput2">Power Factor Adjusted Demand must be greater than or equal to Actual Demand.</span>
+        </span>
     </td>
     <td>
       <input type="number" step="any"
-        formControlName="input1" id="{{'input1_'+i}}" (input)="validatePowerFactorInputs()" onfocus="this.select();"
+        formControlName="input1" id="{{'input1_'+i}}" (input)="calculate()" onfocus="this.select();"
         (focus)="focusField('input1')">
+        <span class="alert-danger pull-right small"
+          *ngIf="group.get('input1')?.invalid && (group.get('input1')?.dirty || group.get('input1')?.touched)">
+          <span *ngIf="group.get('input1')?.errors?.required">Value required.</span>
+          <span *ngIf="group.get('input1')?.errors?.min">Must be &ge; 0.</span>
+          <span *ngIf="group.get('input1')?.errors?.input1NotLessThanInput2">Power Factor Adjusted Demand must be greater than or equal to Actual Demand.</span>
+        </span>
     </td>   
     <td>
       <input type="number" step="any"
-        formControlName="input2" id="{{'input2_'+i}}" (input)="validatePowerFactorInputs()" onfocus="this.select();"
-        (focus)="focusField('input2')">   
+        formControlName="input2" id="{{'input2_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('input2')">
+        <span class="alert-danger pull-right small"
+          *ngIf="group.get('input2')?.invalid && (group.get('input2')?.dirty || group.get('input2')?.touched)">
+          <span *ngIf="group.get('input2')?.errors?.required">Value required.</span>
+          <span *ngIf="group.get('input2')?.errors?.min">Must be &ge; 0.</span>
+          <span *ngIf="group.get('input2')?.errors?.input1NotLessThanInput3">Power Factor Adjusted Demand must be greater than or equal to Actual Demand.</span>
+        </span>
     </td>
     </ng-container>
   </tr>
