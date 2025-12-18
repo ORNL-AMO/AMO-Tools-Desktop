@@ -1,72 +1,91 @@
 
-<form>
+<form [formGroup]="form" #formElement>
+
 
   <div class="form-group">
     <label for="billedForDemand">How are you billed for Demand</label>
-    <select id="billedForDemand" name="billedForDemand" class="form-control" [(ngModel)]="data.billedForDemand"
+    <select id="billedForDemand" class="form-control" formControlName="billedForDemand"
       (focus)="focusField('billedForDemand')" (change)="setBilledForDemand()">
       <!-- <option *ngFor="let option of billedOptions" [ngValue]="option.value" [disabled]="true">{{option.name}}</option> -->
       <option value="0">Real Power (kW)</option>
-      <option value="1" *ngIf="data.adjustedOrActual != 2">Apperent Power (kVA)</option>
+      <option value="1" *ngIf="form.value.adjustedOrActual != 2">Apperent Power (kVA)</option>
     </select>
   </div>
 
-  <div *ngIf="data.billedForDemand == 0" class="form-group">
+  <div *ngIf="form.value.billedForDemand == 0" class="form-group">
     <label for="minimumPowerFactor">Minimum Required Power Factor</label>
-    <input name="minimumPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.minimumPowerFactor"
+    <input class="form-control" type="number" step="any" formControlName="minimumPowerFactor"
       id="minimumPowerFactor" (input)="calculate()" onfocus="this.select();" (focus)="focusField('minimumPowerFactor')">
+    <div class="alert-danger pull-right small" *ngIf="form.get('minimumPowerFactor').invalid && (form.get('minimumPowerFactor').dirty || form.get('minimumPowerFactor').touched)">
+      <span *ngIf="form.get('minimumPowerFactor').errors?.required">Required.</span>
+      <span *ngIf="form.get('minimumPowerFactor').errors?.min">Must be greater than 0.</span>
+      <span *ngIf="form.get('minimumPowerFactor').errors?.max">Must be less than 1.</span>
+    </div>
   </div>
 
-  <div *ngIf="data.billedForDemand == 1" class="form-group">
+  <div *ngIf="form.value.billedForDemand == 1" class="form-group">
     <label for="targetPowerFactor">Target Power Factor</label>
-    <input name="targetPowerFactor" class="form-control" type="number" step="any" [(ngModel)]="data.targetPowerFactor"
+    <input class="form-control" type="number" step="any" formControlName="targetPowerFactor"
       id="targetPowerFactor" (input)="calculate()" onfocus="this.select();" (focus)="focusField('targetPowerFactor')">
   </div>
 
   <div class="form-group">
     <label for="adjustedOrActual">PF Adjusted or Actual Demand</label>
-    <select id="adjustedOrActual" name="adjustedOrActual" class="form-control" [(ngModel)]="data.adjustedOrActual"
+    <select id="adjustedOrActual"  class="form-control" formControlName="adjustedOrActual"
       (focus)="focusField('adjustedOrActual')" (change)="setAdjustedOrActual()">
       <!-- <option *ngFor="let option of demandOptions" [ngValue]="option.value">{{option.name}}</option> -->
       <option value="0">Power Factor</option>
       <option value="1">Actual Demand</option>
-      <option *ngIf="data.billedForDemand != 1" value="2">Both</option>
+      <option *ngIf="form.value.billedForDemand != 1" value="2">Both</option>
     </select>
   </div>
 
   <div class="form-group">
     <label for="marginalCostOfDemand">Marginal Cost of Demand</label>
     <div class="input-group  calc-addon-group">
-      <input name="marginalCostOfDemand" class="form-control" type="number" step="any"
-        [(ngModel)]="data.marginalCostOfDemand" id="marginalCostOfDemand" (input)="calculate()" onfocus="this.select();"
+      <input class="form-control" type="number" step="any"
+        name= "marginalCostOfDemand" formControlName="marginalCostOfDemand" id="marginalCostOfDemand" (input)="calculate()" onfocus="this.select();"
         (focus)="focusField('marginalCostOfDemand')">
         <span class="input-group-addon units">$/kVA</span>
+    </div>
+     <div class="alert-danger pull-right small" *ngIf="form.get('marginalCostOfDemand').invalid && (form.get('marginalCostOfDemand').dirty || form.get('marginalCostOfDemand').touched)">
+      <span *ngIf="form.get('marginalCostOfDemand').errors?.required">Required.</span>
+      <span *ngIf="form.get('marginalCostOfDemand').errors?.min">Must be greater than 0.</span>
+      <span *ngIf="form.get('marginalCostOfDemand').errors?.max">Must be less than 1.</span>
     </div>
   </div>
 
   <div class="form-group">
     <label for="costOfStaticCapacitance">Cost of Static Capacitance</label>
     <div class="input-group  calc-addon-group">
-      <input name="costOfStaticCapacitance" class="form-control" type="number" step="any"
-        [(ngModel)]="data.costOfStaticCapacitance" id="costOfStaticCapacitance" (input)="calculate()"
+      <input class="form-control" type="number" step="any"
+        formControlName="costOfStaticCapacitance" id="costOfStaticCapacitance" (input)="calculate()"
         onfocus="this.select();" (focus)="focusField('costOfStaticCapacitance')">
         <span class="input-group-addon units">$/kVAr</span>
+    </div>
+     <div class="alert-danger pull-right small" *ngIf="form.get('costOfStaticCapacitance').invalid && (form.get('costOfStaticCapacitance').dirty || form.get('costOfStaticCapacitance').touched)">
+      <span *ngIf="form.get('costOfStaticCapacitance').errors?.required">Required.</span>
+      <span *ngIf="form.get('costOfStaticCapacitance').errors?.min">Must be greater than 0.</span>
     </div>
   </div>
 
   <div class="form-group">
     <label for="costOfDynamicCapacitance">Cost of Dynamic Capacitance</label>
-    <div class="input-group  calc-addon-group">
-      <input name="costOfDynamicCapacitance" class="form-control" type="number" step="any"
-        [(ngModel)]="data.costOfDynamicCapacitance" id="costOfDynamicCapacitance" (input)="calculate()"
+    <div class="input-group">
+      <input class="form-control" type="number" step="any"
+        formControlName="costOfDynamicCapacitance" id="costOfDynamicCapacitance" (input)="calculate()"
         onfocus="this.select();" (focus)="focusField('costOfDynamicCapacitance')">
         <span class="input-group-addon units">$/kVAr</span>
+    </div>
+     <div class="alert-danger pull-right small" *ngIf="form.get('costOfDynamicCapacitance').invalid">
+      <span *ngIf="form.get('costOfDynamicCapacitance').errors?.required">Required.</span>
+      <span *ngIf="form.get('costOfDynamicCapacitance').errors?.min">Must be greater than 0.</span>
     </div>
   </div>
 
   <div class="form-group">
     <label for="startMonth">Starting Month</label>
-    <select id="startMonth" name="startMonth" class="form-control" [(ngModel)]="data.startMonth"
+    <select id="startMonth" class="form-control" formControlName="startMonth"
       (focus)="focusField('startMonth')" (change)="setMonthNames()">
       <option *ngFor="let option of monthList" [ngValue]="option.value">{{option.name}}</option>
     </select>
@@ -74,10 +93,15 @@
 
   <div class="form-group">
     <label for="startYear">Starting Year</label>
-    <input name="startYear" class="form-control" type="number" step="any" [(ngModel)]="data.startYear" id="startYear" 
+    <input class="form-control" type="number" step="any" formControlName="startYear" id="startYear" 
     (input)="updateStartingYear()" onfocus="this.select();" (focus)="focusField('startYear')">
   </div>
 </form>
+
+  <!-- Display error from validatePowerFactorInputs above the table -->
+<div class="alert-danger pull-right small" *ngIf="minGreaterThanTargetError">
+  Minimum Power Factor must be less than Target Power Factor.
+</div>
 
 <table class="table table-hover">
   <tr>
@@ -111,28 +135,35 @@
       </span>
     </th>
    
-  </tr>
+  </tr> 
 
-  <tr *ngFor="let input of data.monthyInputs; let i = index; let last = last">
+  <tr class="form-group form-array" *ngFor="let group of monthyInputsFormArray.controls; let i = index; let last = last">
+    <ng-container [formGroup]="group">
     <td>
-      <input name="{{'month_'+i}}" type="text" step="any"
-        [(ngModel)]="input.month" id="{{'month_'+i}}" (input)="calculate()" onfocus="this.select();">
+      <input type="text" step="any"
+        formControlName="month" id="{{'month_'+i}}" (input)="calculate()" onfocus="this.select();">
     </td> 
-    <td *ngIf="data.billedForDemand == 0 && data.adjustedOrActual == 2">
-      <input name="{{'input3_'+i}}" type="number" step="any"
-        [(ngModel)]="input.input3" id="{{'input3_'+i}}" (input)="calculate()" onfocus="this.select();"
-        (focus)="focusField('input3')">   
+    <td *ngIf="form.value.billedForDemand == 0 && form.value.adjustedOrActual == 2">
+      <input type="number" step="any"
+        formControlName="input3" id="{{'input3_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('input3')">
+      <span class="alert-danger pull-right"
+        *ngIf="group.get('input3')?.invalid && (group.get('input3')?.dirty || group.get('input3')?.touched)">
+        <span *ngIf="group.get('input3')?.errors?.required">Value required.</span>
+        <span *ngIf="group.get('input3')?.errors?.min">Must be &ge; 0.</span>
+      </span>
     </td>
     <td>
-      <input name="{{'input1_'+i}}" type="number" step="any"
-        [(ngModel)]="input.input1" id="{{'input1_'+i}}" (input)="calculate()" onfocus="this.select();"
-        (focus)="focusField('input1')">      
+      <input type="number" step="any"
+        formControlName="input1" id="{{'input1_'+i}}" (input)="validatePowerFactorInputs()" onfocus="this.select();"
+        (focus)="focusField('input1')">
     </td>   
     <td>
-      <input name="{{'input2_'+i}}" type="number" step="any"
-        [(ngModel)]="input.input2" id="{{'input2_'+i}}" (input)="calculate()" onfocus="this.select();"
+      <input type="number" step="any"
+        formControlName="input2" id="{{'input2_'+i}}" (input)="validatePowerFactorInputs()" onfocus="this.select();"
         (focus)="focusField('input2')">   
     </td>
+    </ng-container>
   </tr>
 
 </table>

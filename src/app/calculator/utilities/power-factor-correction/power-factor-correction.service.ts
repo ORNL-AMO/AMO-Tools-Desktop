@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { MonthyInputs, PFMonthlyOutputs, PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from './power-factor-correction.component';
+import { PFMonthlyOutputs, PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from './power-factor-correction.component';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 @Injectable()
 export class PowerFactorCorrectionService {
   inputData: PowerFactorCorrectionInputs;
-  constructor() { }
+
+  constructor(private formBuilder: UntypedFormBuilder) { 
+  }
 
   generateExample(): PowerFactorCorrectionInputs {
     return {
@@ -401,6 +404,43 @@ export class PowerFactorCorrectionService {
       };
     }
     return results;
+  }
+
+  getApparentPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
+      existingDemand: [inputData.existingDemand],
+      currentPowerFactor: [inputData.currentPowerFactor],
+      proposedPowerFactor: [inputData.proposedPowerFactor],
+      billedForDemand: [inputData.billedForDemand],
+      minimumPowerFactor: [inputData.minimumPowerFactor],
+      targetPowerFactor: [inputData.targetPowerFactor],
+      adjustedOrActual: [inputData.adjustedOrActual],
+      marginalCostOfDemand: [inputData.marginalCostOfDemand],
+      costOfStaticCapacitance: [inputData.costOfStaticCapacitance],
+      costOfDynamicCapacitance: [inputData.costOfDynamicCapacitance],
+      monthyInputs: this.formBuilder.array(
+        inputData.monthyInputs.map(m => this.formBuilder.group({
+          month: [m.month, Validators.required],
+          input1: [m.input1, [Validators.required, Validators.min(0)]],
+          input2: [m.input2, [Validators.required, Validators.min(0)]],
+          input3: [m.input3, [Validators.required, Validators.min(0)]]
+        }))
+      ),
+      startMonth: [inputData.startMonth],
+      startYear: [inputData.startYear]
+    });
+    form = this.setPowerFactorValidators(form);
+    return form;
+  }
+
+  setPowerFactorValidators(form: UntypedFormGroup): UntypedFormGroup {
+
+    form.controls.minimumPowerFactor.setValidators([Validators.required, Validators.min(0), Validators.max(1)]);
+    form.controls.marginalCostOfDemand.setValidators([Validators.required, Validators.min(0)]);
+    form.controls.costOfStaticCapacitance.setValidators([Validators.required, Validators.min(0)]);
+    form.controls.costOfDynamicCapacitance.setValidators([Validators.required, Validators.min(0)]);
+
+    return form;
   }
 
   calculateRealPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
