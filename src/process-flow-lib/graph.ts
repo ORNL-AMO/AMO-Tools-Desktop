@@ -1,3 +1,4 @@
+
 import { Edge, Node } from "@xyflow/react";
 import { CustomEdgeData } from "./water/types/diagram";
 import { getEdgeDescription } from "./water/logic/water-components";
@@ -140,6 +141,8 @@ export const getAncestorPathToNode = (
 
 
 
+
+
 export const getDescendantPathToNode = (
   nodeId: string,
   graph: NodeGraphIndex,
@@ -202,6 +205,69 @@ export const getAllAncestorPathsToNode = (
 
   dfs(nodeId);
   return allPaths;
+};
+
+
+export const getAllAncestorFullPaths = (
+  nodeId: string,
+  graph: NodeGraphIndex
+): string[][] => {
+  const allPaths: string[][] = [];
+  const path: string[] = [];
+
+  const dfs = (current: string) => {
+    path.push(current);
+    const parents = graph.parentMap[current] || [];
+    if (parents.length === 0) {
+      allPaths.push([...path]);
+    } else {
+      for (const parent of parents) {
+        dfs(parent);
+      }
+    }
+    path.pop();
+  };
+
+  dfs(nodeId);
+  return allPaths;
+};
+
+export const getAllUpstreamEdgePaths = (
+  nodeId: string,
+  graph: NodeGraphIndex
+): string[][] => {
+  const allPaths: string[][] = [];
+  const path: string[] = [];
+
+  const dfs = (current: string) => {
+    const parents = graph.parentMap[current] || [];
+    if (parents.length === 0) {
+      allPaths.push([...path]);
+    } else {
+      for (const parent of parents) {
+        // Find the edge id connecting parent -> current
+        const edges = graph.edgesByNode[current] || [];
+        const edge = edges.find(e => e.source === parent && e.target === current);
+        if (edge) {
+          path.push(edge.id);
+          dfs(parent);
+          path.pop();
+        }
+      }
+    }
+  };
+
+  dfs(nodeId);
+  return allPaths;
+};
+
+export const getEdgeSourceTarget = (
+  edgeId: string,
+  graph: NodeGraphIndex
+): { source: string; target: string } | undefined => {
+  const edge = graph.edgeMap[edgeId];
+  if (!edge) return undefined;
+  return { source: edge.source, target: edge.target };
 };
 
 

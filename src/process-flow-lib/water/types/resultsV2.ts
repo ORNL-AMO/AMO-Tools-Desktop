@@ -84,6 +84,15 @@ export interface BlockCosts {
   unpaidCostRemaining: number 
 }
 
+export interface BlockCostsV2 { 
+  name: string, 
+  processComponentType: ProcessFlowNodeType,
+  totalBlockCost: number, 
+  totalFlow?: number, 
+}
+
+
+
 
 
 // * Cost Components - nodes that carry block costs that then get attributed to systems depending on flow responsibility and proportions
