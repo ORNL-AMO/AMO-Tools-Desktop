@@ -52,6 +52,7 @@ export interface CostComponentPathData {
     blockCosts: BlockCostsV2;
     // edge id, id list
     upstreamPathsByEdgeId?: string[][];
+    downstreamPathsByEdgeId?: string[][];
   }
 
 // each property = total cost * flow fraction for all connected to system

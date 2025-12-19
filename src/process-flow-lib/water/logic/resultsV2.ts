@@ -673,6 +673,27 @@ const getOutflowBlockCosts = (
   return blockCosts;
 }
 
+const getOutflowBlockCostsV2 = (
+  node: Node<ProcessFlowPart>,
+  calculatedData: DiagramCalculatedData,
+  unitsOfMeasure: string
+) => {
+  const outflow = getNodeTotalOutflow(node, calculatedData);
+  const costPerKGal = node.data.cost ?? 0;
+  const costOfOutflow = getFlowCost(costPerKGal, outflow, unitsOfMeasure);
+
+  const blockCosts: BlockCostsV2 = {
+    name: node.data.name,
+    processComponentType: node.data.processComponentType,
+    totalBlockCost: costOfOutflow,
+    totalFlow: outflow,
+  };
+
+  return blockCosts;
+}
+
+
+
 
 
 const getAncestorTreatmentCosts = (
@@ -966,6 +987,87 @@ const getDischargeFlowProportionCost = (
 }
 
 
+/** Calculate and set intake costs for each system based on their flow responsibility from each intake component
+ * 
+ * From Algorithm (Dec 2026):
+  •	What to follow: Start at the intake node; go downstream through any water treatment units.
+  •	Where to stop: At the first water using systems reached on each path. 
+      Do not continue into other users even if they later receive recycled water.
+  •	How to split: Split the intake’s cost among those first users by the volume each receives from that intake.
+*/
+const applySystemIntakeCosts = (
+  trueCostOfSystems: TrueCostOfSystems,
+  graph: NodeGraphIndex,
+  intakeCostData: CostComponentMap,
+  flowAttributionMap: Record<string, ComponentAttribution>,
+  settings: DiagramSettings,
+  debuggingNameMap: Record<string, string>,
+) => {
+  Object.entries(intakeCostData).forEach(([intakeId, intakeData]: [string, CostComponentPathData]) => {
+    let visitedSystemIds: string[] = [];
+
+    intakeData.downstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
+      const intakeEdge = graph.edgeMap[path[0]];
+
+      for (const edgeId of path) {
+        const currentNode = graph.nodeMap[graph.edgeMap[edgeId].target];
+        if (visitedSystemIds.includes(currentNode.id)) {
+          break;
+        }
+
+        if (currentNode.data.processComponentType === 'water-using-system') {
+          const systemIntake = graph.edgeMap[edgeId].data.flowValue ?? 0;
+          const pathIntake = intakeEdge.data.flowValue ?? 0;
+
+          // * fractionPathIntakeReceived ternary will ignore cases where systemIntake > pathIntake due to flow from other intakes. We will observe other intakes on another iteration
+          let fractionPathIntakeReceived = (systemIntake / pathIntake) > 1 ? 1 : (systemIntake / pathIntake);
+          let systemFlowResponsibility = pathIntake * fractionPathIntakeReceived;
+          let systemAttributionFraction = (systemFlowResponsibility / intakeData.blockCosts.totalFlow);
+          let costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
+
+          if (flowAttributionMap[intakeEdge.id] && flowAttributionMap[intakeEdge.id].flowAttributionFraction.adjusted) {
+            systemAttributionFraction = flowAttributionMap[intakeEdge.id].flowAttributionFraction.adjusted;
+            costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
+          } else {
+            flowAttributionMap[intakeEdge.id] = {
+              systemId: currentNode.id,
+              systemName: debuggingNameMap[currentNode.id],
+              flowValue: systemIntake,
+              flowEdgeId: intakeEdge.id,
+              flowEdgeDescription: getEdgeDescription(
+                intakeEdge,
+                undefined,
+                {
+                  source: debuggingNameMap[intakeEdge.source],
+                  target: debuggingNameMap[intakeEdge.target]
+                }),
+              flowAttributionFraction: {
+                default: systemAttributionFraction,
+                adjusted: undefined
+              },
+              costAttributedToSystem: costToSystem,
+              costComponentId: intakeId
+            };
+          }
+
+          // * apply intake flow cost
+          trueCostOfSystems[currentNode.id].intake += costToSystem;
+
+          // * apply pump energy costs
+          const intakeNode = graph.nodeMap[intakeId];
+          const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(intakeNode.data as IntakeSource, settings.electricityCost, settings.unitsOfMeasure);
+          const energyCost = pumpAndMotorEnergyCost * systemAttributionFraction;
+          trueCostOfSystems[currentNode.id].systemPumpAndMotorEnergy += energyCost;
+
+          // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
+          visitedSystemIds.push(currentNode.id);
+          break;
+        }
+      }
+    });
+  });
+}
+
 /** Calculate and set discharge costs for each system based on their flow responsibility to each discharge component
  * 
  * From Algorithm (Dec 2026):
@@ -973,9 +1075,10 @@ const getDischargeFlowProportionCost = (
  * - Where to stop: At the first user encountered on each path (the final user causing the discharge).
  * - Do not charge upstream users whose water was reused  before discharging.
  * - How to split: Split the discharge cost by how much final discharge each user causes to that discharge node.
-
+ 
+ * TODO : This may need additional specifics to deal with splits after the nearest upstream edge from the discharge. See implementation of systemAttributionFraction in applySystemIntakeCosts
 */
-const setSystemDischargeCosts = (
+const applySystemDischargeCosts = (
   trueCostOfSystems: TrueCostOfSystems,
   graph: NodeGraphIndex,
   dischargeCostData: CostComponentMap,
@@ -997,12 +1100,12 @@ const setSystemDischargeCosts = (
         }
 
         if (currentNode.data.processComponentType === 'water-using-system') {
-          let costFraction = systemFlowResponsibility / dischargeData.blockCosts.totalFlow;
-          let costToSystem = costFraction * dischargeData.blockCosts.totalBlockCost;
+          let systemAttributionFraction = systemFlowResponsibility / dischargeData.blockCosts.totalFlow;
+          let costToSystem = systemAttributionFraction * dischargeData.blockCosts.totalBlockCost;
 
           if (flowAttributionMap[dischargeEdge.id] && flowAttributionMap[dischargeEdge.id].flowAttributionFraction.adjusted) {
-            costFraction = flowAttributionMap[dischargeEdge.id].flowAttributionFraction.adjusted;
-            costToSystem = costFraction * dischargeData.blockCosts.totalBlockCost;
+            systemAttributionFraction = flowAttributionMap[dischargeEdge.id].flowAttributionFraction.adjusted;
+            costToSystem = systemAttributionFraction * dischargeData.blockCosts.totalBlockCost;
           } else {
             flowAttributionMap[dischargeEdge.id] = {
               systemId: currentNode.id,
@@ -1017,7 +1120,7 @@ const setSystemDischargeCosts = (
                 target: debuggingNameMap[dischargeEdge.target]
               }),
               flowAttributionFraction: {
-                default: costFraction,
+                default: systemAttributionFraction,
                 adjusted: undefined
               },
               costAttributedToSystem: costToSystem,
@@ -1031,7 +1134,7 @@ const setSystemDischargeCosts = (
           // * apply pump energy costs
           const dischargeNode = graph.nodeMap[dischargeId];
           const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(dischargeNode.data as DischargeOutlet, settings.electricityCost, settings.unitsOfMeasure);
-          const energyCost = pumpAndMotorEnergyCost * costFraction;
+          const energyCost = pumpAndMotorEnergyCost * systemAttributionFraction;
           trueCostOfSystems[currentNode.id].systemPumpAndMotorEnergy += energyCost;
 
           // * the last system in the path is the only one responsible for the cost, no need to visit further upstream systems
@@ -1137,11 +1240,28 @@ export const getPlantSummaryResults = (
   const waterTreatmentNodes: Node<ProcessFlowPart>[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-treatment') as Node<ProcessFlowPart>[];
   const wasteTreatmentNodes: Node<ProcessFlowPart>[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment') as Node<ProcessFlowPart>[];
 
+  let intakeCostData: CostComponentMap = {};
   if (intakeNodes?.length > 0) {
     intakeNodes.forEach((node: Node<ProcessFlowPart>) => {
-      const blockCosts = getOutflowBlockCosts(node, calculatedData, settings.unitsOfMeasure);
-      costComponentsTotalsMap[node.id] = blockCosts;
+      const blockCosts = getOutflowBlockCostsV2(node, calculatedData, settings.unitsOfMeasure);
+        let downstreamPaths: string[][] = getAllDownstreamEdgePaths(node.id, graph);
+        intakeCostData[node.id] = {
+            blockCosts: blockCosts,
+            downstreamPathsByEdgeId: downstreamPaths,
+        }
+
+      const legacyblockCosts = getOutflowBlockCosts(node, calculatedData, settings.unitsOfMeasure);
+      costComponentsTotalsMap[node.id] = legacyblockCosts;
     });
+
+     applySystemIntakeCosts(
+      trueCostOfSystems, 
+      graph, 
+      intakeCostData, 
+      flowAttributionMap,
+      settings, 
+      nodeNameMap
+    );
   }
 
   // todo could be an array of the object, we must iterate over keys anyway
@@ -1160,7 +1280,7 @@ export const getPlantSummaryResults = (
         costComponentsTotalsMap[node.id] = legacyblockCosts;
     });
 
-    setSystemDischargeCosts(
+    applySystemDischargeCosts(
       trueCostOfSystems, 
       graph, 
       dischargeCostData, 
@@ -1168,8 +1288,6 @@ export const getPlantSummaryResults = (
       settings, 
       nodeNameMap
     );
-    console.log('flowAttributionMap', flowAttributionMap);
-    console.log('dischargeCostData', dischargeCostData);
   }
 
   // * Special cases:
@@ -1199,8 +1317,6 @@ export const getPlantSummaryResults = (
     waterUsingSystems.forEach((currentSystem: Node<ProcessFlowPart>) => {
       ancestorCostsMap[currentSystem.id] = getComponentAncestorCosts(currentSystem, calculatedData, nodeMap, graph, nodeNameMap, settings.unitsOfMeasure);
       descendantCostsMap[currentSystem.id] = getComponentDescendantCosts(currentSystem, calculatedData, nodeMap, graph, nodeNameMap, settings.unitsOfMeasure);
-      console.log(`ancestorCostsMap for system: ${currentSystem.data.name}`, ancestorCostsMap[currentSystem.id]);
-      console.log(`descendantCostsMap for system: ${currentSystem.data.name}`, descendantCostsMap[currentSystem.id]);
 
       systemAnnualSummaryResultsMap[currentSystem.id] = {
         id: currentSystem.id,
@@ -1230,21 +1346,6 @@ export const getPlantSummaryResults = (
         trueCostOfSystems[currentSystem.id].treatment = inSystemTreatmentCost;
       }
       trueCostOfSystems[currentSystem.id].systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, electricityCost, settings.unitsOfMeasure);
-
-      let intakeCosts = getIntakeFlowProportionCost(
-        graph,
-        currentSystem,
-        ancestorCostsMap,
-        calculatedData,
-        nodeMap,
-        systemAnnualSummaryResultsMap[currentSystem.id],
-        trueCostOfSystems[currentSystem.id],
-        electricityCost,
-        settings,
-        nodeNameMap,
-        flowAttributionMap
-      );
-      trueCostOfSystems[currentSystem.id].intake += intakeCosts;
 
       // * Does the system receive recycled or reused flows?
       //    * Current system owns costs for water-treatment, and waste-water-treatment flows (if recycled into their system)
