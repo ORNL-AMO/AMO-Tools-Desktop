@@ -67,7 +67,7 @@ export class ToolsSuiteApiService {
     }
 
     private async insertAtmosphereData() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.atmosphereGasTypes();
+        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultGasTypes();
         let defaultMaterials: Array<AtmosphereSpecificHeat> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
             let wasmClass = suiteDefaultMaterials.get(i);
@@ -191,7 +191,7 @@ export class ToolsSuiteApiService {
     }
 
     private async insertWallLossSurfaces() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.wallTypes();
+        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultWallTypes();
         let defaultMaterials: Array<WallLossesSurface> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
             let shapeFactor = suiteDefaultMaterials.get(i);
