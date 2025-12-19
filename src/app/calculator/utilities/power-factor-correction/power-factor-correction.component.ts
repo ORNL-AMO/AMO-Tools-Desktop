@@ -31,75 +31,75 @@ export class PowerFactorCorrectionComponent implements OnInit {
     monthyInputs: [
       {
         month: 'January 2024',
-        input1: 462,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 462,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
       {
         month: 'February 2024',
-        input1: 528,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 528,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
       {
         month: 'March 2024',
-        input1: 492,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 492,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
       {
         month: 'April 2024',
-        input1: 474,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 474,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
       {
         month: 'May 2024',
-        input1: 499,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 499,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
       {
         month: 'June 2024',
-        input1: 513,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 513,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
       {
         month: 'July 2024',
-        input1: 530,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 530,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
       {
         month: 'August 2024',
-        input1: 523,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 523,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
       {
         month: 'September 2024',
-        input1: 547,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 547,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
       {
         month: 'October 2024',
-        input1: 589,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 589,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
       {
         month: 'November 2024',
-        input1: 621,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 621,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
       {
         month: 'December 2024',
-        input1: 607,
-        input2: 0.8,
-        input3: 0
+        actualDemand: 607,
+        powerFactor: 0.8,
+        pfAdjustedDemand: 0
       },
     ],
     startMonth: 1,
@@ -220,9 +220,9 @@ export interface PowerFactorCorrectionInputs {
 
 export interface MonthyInputs {
   month: string;
-  input1: number;
-  input2: number;
-  input3: number;
+  actualDemand: number;
+  powerFactor: number;
+  pfAdjustedDemand: number;
 }
 
 
