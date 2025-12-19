@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-charge-material-help',
@@ -13,6 +14,8 @@ export class ChargeMaterialHelpComponent implements OnInit {
   @Input()
   currentField: string;
   displaySuggestions: boolean = false;
+
+  docsLink: string = environment.measurDocsUrl;
 
   constructor() { }
 

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { ChargeMaterialService } from '../charge-material.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-charge-material-help',
@@ -15,6 +16,8 @@ export class ChargeMaterialHelpComponent implements OnInit {
   displaySuggestions: boolean = false;
   currentFieldSub: Subscription;
   currentField: string;
+
+  docsLink: string = environment.measurDocsUrl;
 
   constructor(private chargeMaterialService: ChargeMaterialService) { }
   
