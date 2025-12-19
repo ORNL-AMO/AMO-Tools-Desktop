@@ -12,6 +12,8 @@ export interface NodeGraphIndex {
   edgeMap: Record<string, Edge<CustomEdgeData>>;
   // nodeId, edge[]
   edgesByNode: Record<string, Edge<CustomEdgeData>[]>;
+  // nodeId, node
+  nodeMap?: Record<string, Node>;
 }
 
 export const createGraphIndex = (nodes: Node[], edges: Edge<CustomEdgeData>[]) => {
@@ -38,6 +40,11 @@ export const createGraphIndex = (nodes: Node[], edges: Edge<CustomEdgeData>[]) =
         edgeDescription: getEdgeDescription(edge, graph)
       }
     };
+
+    graph.nodeMap = {};
+    for (const node of nodes) {
+      graph.nodeMap[node.id] = node;
+    }
   }
 
   return graph;
@@ -251,6 +258,36 @@ export const getAllUpstreamEdgePaths = (
         if (edge) {
           path.push(edge.id);
           dfs(parent);
+          path.pop();
+        }
+      }
+    }
+  };
+
+  dfs(nodeId);
+  return allPaths;
+};
+
+
+export const getAllDownstreamEdgePaths = (
+  nodeId: string,
+  graph: NodeGraphIndex
+): string[][] => {
+  const allPaths: string[][] = [];
+  const path: string[] = [];
+
+  const dfs = (current: string) => {
+    const children = graph.childMap[current] || [];
+    if (children.length === 0) {
+      allPaths.push([...path]);
+    } else {
+      for (const child of children) {
+        // Find the edge id connecting current -> child
+        const edges = graph.edgesByNode[current] || [];
+        const edge = edges.find(e => e.source === current && e.target === child);
+        if (edge) {
+          path.push(edge.id);
+          dfs(child);
           path.pop();
         }
       }

@@ -44,6 +44,16 @@ export interface TrueCostOfSystems {
   [systemId: string]: SystemTrueCostContributions
 }
 
+export interface CostComponentMap {
+  [costComponentId: string]: CostComponentPathData;
+}
+
+export interface CostComponentPathData {
+    blockCosts: BlockCostsV2;
+    // edge id, id list
+    upstreamPathsByEdgeId?: string[][];
+  }
+
 // each property = total cost * flow fraction for all connected to system
 export interface SystemTrueCostContributions {
   intake: number,
