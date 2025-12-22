@@ -46,9 +46,8 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     this.form = this.powerFactorCorrectionService.getApparentPowerAndPowerFactor(this.data);
   }
 
-  calculate(group?: any) {
-
-    console.log('thing: ', group);
+  calculate() {
+    console.log('form', this.form);
     this.emitCalculate.emit(this.form.value);
   }
 
@@ -74,7 +73,8 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   }
 
   setBilledForDemand(){
-    this.powerFactorCorrectionService.conditionalInputValidator();
+    // call is not needed
+    // this.powerFactorCorrectionService.conditionalInputValidator();
     if (this.form.value.billedForDemand === 0) {
       this.form.value.minimumPowerFactor = 0.95;
     } else if (this.form.value.billedForDemand === 1) {
@@ -87,7 +87,8 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     if (this.form.value.adjustedOrActual === 2){
       this.form.value.billedForDemand = 0;
     }
-    this.powerFactorCorrectionService.conditionalInputValidator();
+    // call is not needed
+    // this.powerFactorCorrectionService.conditionalInputValidator();
     this.calculate();
   }
 

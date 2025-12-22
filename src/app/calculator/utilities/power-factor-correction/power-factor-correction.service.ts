@@ -408,6 +408,7 @@ export class PowerFactorCorrectionService {
   }
 
   getApparentPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): UntypedFormGroup {
+
     let form: UntypedFormGroup = this.formBuilder.group({
       existingDemand: [inputData.existingDemand],
       currentPowerFactor: [inputData.currentPowerFactor],
@@ -420,63 +421,101 @@ export class PowerFactorCorrectionService {
       costOfStaticCapacitance: [inputData.costOfStaticCapacitance, [Validators.required, Validators.min(0)]],
       costOfDynamicCapacitance: [inputData.costOfDynamicCapacitance, [Validators.required, Validators.min(0)]],
       monthyInputs: this.formBuilder.array(
-        inputData.monthyInputs.map(m => this.formBuilder.group({
-          month: [m.month, Validators.required],
-          actualDemand: [m.actualDemand, [Validators.required, Validators.min(0)]],
-          powerFactor: [m.powerFactor, [Validators.required, Validators.min(0)]],
-          pfAdjustedDemand: [m.pfAdjustedDemand, [Validators.required, Validators.min(0)]]
-        }, {validators: this.conditionalInputValidator()}))
+        inputData.monthyInputs.map(m => {
+          const group = this.formBuilder.group({
+            month: [m.month, Validators.required],
+            actualDemand: [m.actualDemand, [Validators.required, Validators.min(0), this.actualDemandValidator]],
+            powerFactor: [m.powerFactor, [Validators.required, Validators.min(0), this.powerFactorValidator]],
+            pfAdjustedDemand: [m.pfAdjustedDemand, [Validators.required, Validators.min(0)]]
+          });
+          return group;
+        })
       ),
       startMonth: [inputData.startMonth],
       startYear: [inputData.startYear]
     });
-    // form = this.setPowerFactorValidators(form);
     return form;
   }
 
- conditionalInputValidator(): ValidatorFn {
-  return (group: AbstractControl): ValidationErrors | null => {
-    const parent = group.parent;
-    const parentofParent = parent?.parent;
+//  conditionalInputValidator(): ValidatorFn {
+//   return (group: AbstractControl): ValidationErrors | null => {
+//     const parent = group.parent;
+//     const parentofParent = parent?.parent;
 
-    const actualDemandControl = group.get('actualDemand');
-    const powerFactorControl = group.get('powerFactor');
+//     const actualDemandControl = group.get('actualDemand');
+//     const powerFactorControl = group.get('powerFactor');
 
-    const actualDemand = actualDemandControl?.value;
-    const powerFactor = powerFactorControl?.value;
+//     const actualDemand = actualDemandControl?.value;
+//     const powerFactor = powerFactorControl?.value;
 
-    const billedForDemand = Number(parentofParent?.get('billedForDemand')?.value);
-    const adjustedOrActual = Number(parentofParent?.get('adjustedOrActual')?.value);
+//     const billedForDemand = Number(parentofParent?.get('billedForDemand')?.value);
+//     const adjustedOrActual = Number(parentofParent?.get('adjustedOrActual')?.value);
 
-    if(billedForDemand == 1 && adjustedOrActual == 1) {
-      if (actualDemand != null && powerFactor != null && actualDemand > powerFactor) {
-        powerFactorControl?.setErrors({ ...powerFactorControl.errors, actualDemandNotLessThanpfAdjustedDemand: true });
+//     if(billedForDemand == 1 && adjustedOrActual == 1) {
+//       if (actualDemand != null && powerFactor != null && actualDemand > powerFactor) {
+//         powerFactorControl?.setErrors({ ...powerFactorControl.errors, actualDemandNotLessThanpfAdjustedDemand: true });
 
-        return { actualDemandNotLessThanpfAdjustedDemand: true };
-      } else {
-        if (powerFactorControl?.errors) {
-          const { actualDemandNotLessThanpfAdjustedDemand, ...otherErrors } = powerFactorControl.errors;
-          powerFactorControl.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
-        }
-      }
-    } else {
-      if (actualDemand != null && powerFactor != null && actualDemand < powerFactor) {
-        actualDemandControl?.setErrors({ ...actualDemandControl.errors, actualDemandNotLessThanpowerFactor: true });
+//         return { actualDemandNotLessThanpfAdjustedDemand: true };
+//       } else {
+//         if (powerFactorControl?.errors) {
+//           const { actualDemandNotLessThanpfAdjustedDemand, ...otherErrors } = powerFactorControl.errors;
+//           powerFactorControl.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
+//         }
+//       }
+//     } else {
+//       if (actualDemand != null && powerFactor != null && actualDemand < powerFactor) {
+//         actualDemandControl?.setErrors({ ...actualDemandControl.errors, actualDemandNotLessThanpowerFactor: true });
 
-        return { actualDemandNotLessThanpowerFactor: true };
-      } else {
-        if (actualDemandControl?.errors) {
-          const { actualDemandNotLessThanpowerFactor, ...otherErrors } = actualDemandControl.errors;
-          actualDemandControl.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
-        }
-      }
-    }
-    actualDemandControl?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-    powerFactorControl?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+//         return { actualDemandNotLessThanpowerFactor: true };
+//       } else {
+//         if (actualDemandControl?.errors) {
+//           const { actualDemandNotLessThanpowerFactor, ...otherErrors } = actualDemandControl.errors;
+//           actualDemandControl.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
+//         }
+//       }
+//     }
+//     actualDemandControl?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+//     powerFactorControl?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
     
-    return null;
-  };
-}
+//     return null;
+//   };
+// }
+
+  // * Another note, in the componen.ts you must use patchValue() or setValue() on ng reactive forms to update values so that change detection works correctly - there are places where that's not happening 
+
+    // * test individual validators with arbitrary rules
+    powerFactorValidator: ValidatorFn = (powerFactorControl: AbstractControl): ValidationErrors | null => {
+      // * this is the formArray item group
+      const group = powerFactorControl.parent as FormGroup;
+      // * parent formgroup
+      const parentForm = group?.parent?.parent as FormGroup; 
+
+      // * test meaningless rules using values from parent and group
+      const ruleValue = 333;
+      if (powerFactorControl.value === ruleValue && Number(parentForm.get('billedForDemand')?.value) == 0) {
+        console.log('pf invalid');
+        return { someError: 'Power factor validation working' };
+      } 
+      console.log('pf valid');
+
+      return null;
+    };
+
+    actualDemandValidator: ValidatorFn = (actualDemandControl: AbstractControl): ValidationErrors | null => {
+      const group = actualDemandControl.parent as FormGroup;
+      const parentForm = group?.parent?.parent as FormGroup; 
+
+      const ruleValue = 333;
+      if (actualDemandControl.value === ruleValue && Number(parentForm.get('billedForDemand')?.value) == 0) {
+        console.log('ad invalid');
+        return { someError: 'actual Demand validation working' };
+      } 
+      console.log('ad valid');
+
+      return null;
+    };
+
+
 
   calculateRealPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
     let outputData: PowerFactorCorrectionOutputs = this.getEmptyPowerFactorCorrectionOutputs();
