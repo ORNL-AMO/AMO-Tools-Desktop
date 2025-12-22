@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressorInventoryItem, Modification, ReduceRuntime, ReplaceCompressor } from '../../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, Modification, ReplaceCompressor } from '../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
 import { ReplaceCompressorService } from './replace-compressor.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
-import { PerformancePointsFormService } from '../../../../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
 import { ResultingSystemProfileValidation } from '../../../../calculations/modifications/energyEfficiencyMeasures/ResultingSystemProfileValidation';
+import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
 
 @Component({
   selector: 'app-replace-compressor',
@@ -40,7 +40,8 @@ export class ReplaceCompressorComponent {
   profileValidation: Array<ResultingSystemProfileValidation>;
   modificationResultsSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+    private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
@@ -113,6 +114,9 @@ export class ReplaceCompressorComponent {
       this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'replaceCompressor', this.modification.replaceCompressor.order, newOrder);
     }
     this.modification.replaceCompressor = this.replaceCompressorService.getObjFromForm(this.form, this.currentCompressorMapping, this.replacementCompressorMapping);
+    //update other modifications that depend on replacement compressors
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    this.modification = this.compressedAirDataManagementService.updateReplacementCompressors(this.modification, compressedAirAssessment);
     this.compressedAirAssessmentService.updateModification(this.modification);
   }
 
@@ -123,24 +127,5 @@ export class ReplaceCompressorComponent {
       this.currentCompressorMapping = replaceCompressor.currentCompressorMapping;
       this.replacementCompressorMapping = replaceCompressor.replacementCompressorMapping;
     }
-  }
-
-  setReplacement(compressorMap: { originalCompressorId: string, isReplaced: string }) {
-    // let reduceRuntime: ReduceRuntime = this.modification.reduceRuntime;
-    // reduceRuntime.runtimeData.forEach(runtimeData => {
-    //   if (runtimeData.compressorId == compressorMap.originalCompressorId && compressorMap.replacementCompressorId) {
-    //     let replacementCompressor: CompressorInventoryItem = this.compressedAirAssessment.replacementCompressorInventoryItems.find(item => { return item.itemId == compressorMap.replacementCompressorId });
-    //     runtimeData.compressorId = replacementCompressor.itemId;
-    //     runtimeData.fullLoadCapacity = replacementCompressor.performancePoints.fullLoad.airflow;
-    //     runtimeData.automaticShutdownTimer = replacementCompressor.compressorControls.automaticShutdown;
-    //     runtimeData.originalCompressorId = compressorMap.originalCompressorId;
-    //   } else if (runtimeData.originalCompressorId == compressorMap.originalCompressorId && !compressorMap.replacementCompressorId) {
-    //     let originalCompressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == compressorMap.originalCompressorId });
-    //     runtimeData.compressorId = originalCompressor.itemId;
-    //     runtimeData.fullLoadCapacity = originalCompressor.performancePoints.fullLoad.airflow;
-    //     runtimeData.automaticShutdownTimer = originalCompressor.compressorControls.automaticShutdown;
-    //   }
-    // });
-    this.save(false);
   }
 }

@@ -172,7 +172,6 @@ export interface ReduceRuntime {
 
 export interface ReduceRuntimeData {
     compressorId: string,
-    originalCompressorId?: string,
     fullLoadCapacity: number,
     automaticShutdownTimer: boolean,
     intervalData: Array<{
@@ -224,7 +223,6 @@ export interface CompressorInventoryItem {
     performancePoints: PerformancePoints,
     centrifugalSpecifics: CentrifugalSpecifics,
     modifiedDate: Date,
-    // originalCompressorId?: string,
     isReplacementCompressor?: boolean
 
 }

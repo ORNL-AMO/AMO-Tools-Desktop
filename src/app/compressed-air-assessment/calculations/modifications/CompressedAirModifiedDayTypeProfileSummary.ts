@@ -32,7 +32,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
     addPrimaryReceiverVolumeResults: FlowReallocationResults;
     adjustCascadingSetPointsResults: AdjustCascadingSetPointsResults;
     improveEndUseEfficiencyResults: ImproveEndUseEfficiencyResults;
-    
+
     reduceRunTimeResults: FlowReallocationResults;
     reduceRunTimeProfileValidation: ResultingSystemProfileValidation;
 
@@ -41,7 +41,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
 
     useAutomaticSequencerResults: UseAutomaticSequencerResults;
     useAutomaticSequencerProfileValidation: ResultingSystemProfileValidation;
-    
+
     replaceCompressorResults: ReplaceCompressorResults;
     replaceCompressorProfileValidation: ResultingSystemProfileValidation;
 
@@ -203,6 +203,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             return new CompressedAirProfileSummary(summary, true);
         });
         this.adjustedCompressors = this.replaceCompressorResults.adjustedCompressors;
+        this.originalCompressors = this.adjustedCompressors.map(item => { return new CompressorInventoryItemClass(item); });
         this.replaceCompressorProfileValidation = new ResultingSystemProfileValidation(this, order, this.summaryDataInterval);
     }
 

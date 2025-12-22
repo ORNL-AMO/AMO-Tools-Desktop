@@ -1,7 +1,7 @@
 import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReplaceCompressor, SystemInformation, SystemProfileSetup } from "../../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
-import { getProfileSummaryTotals } from "../../caCalculationHelpers";
+import { getEmptyProfileSummaryData, getProfileSummaryTotals } from "../../caCalculationHelpers";
 import { CompressedAirProfileSummary } from "../../CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "../../CompressorInventoryItemClass";
 import { CompressedAirEemSavingsResult } from "../CompressedAirEemSavingsResult";
@@ -95,44 +95,17 @@ export class ReplaceCompressorResults {
     addReplacementCompressors(replacementCompressors: Array<CompressorInventoryItemClass>, replacementCompressorMapping: Array<{ replacementCompressorId: string, isAdded: boolean }>,
         systemProfileSetup: SystemProfileSetup, dayType: CompressedAirDayType
     ) {
-        let intervalData: Array<{ isCompressorOn: boolean, timeInterval: number }> = new Array();
-        for (let i = 0; i < 24;) {
-            intervalData.push({
-                isCompressorOn: false,
-                timeInterval: i
-            })
-            i = i + systemProfileSetup.dataInterval
-        }
         replacementCompressorMapping.filter(mapping => { return mapping.isAdded == true }).forEach(mapping => {
             let replacement: CompressorInventoryItem = replacementCompressors.find(comp => { return comp.itemId == mapping.replacementCompressorId });
             this.adjustedCompressors.push(new CompressorInventoryItemClass(replacement));
             let _profileSummary: ProfileSummary = {
                 compressorId: replacement.itemId,
                 dayTypeId: dayType.dayTypeId,
-                profileSummaryData: this.getEmptyProfileSummaryData(systemProfileSetup),
+                profileSummaryData: getEmptyProfileSummaryData(systemProfileSetup),
                 fullLoadPressure: replacement.performancePoints.fullLoad.dischargePressure,
                 fullLoadCapacity: replacement.performancePoints.fullLoad.airflow
             };
             this.profileSummary.push(new CompressedAirProfileSummary(_profileSummary, true));
         });
     }
-
-    getEmptyProfileSummaryData(systemProfileSetup: SystemProfileSetup): Array<ProfileSummaryData> {
-        let summaryData: Array<ProfileSummaryData> = new Array();
-        for (let i = 0; i < 24;) {
-            summaryData.push({
-                power: 0,
-                airflow: 0,
-                percentCapacity: 0,
-                timeInterval: i,
-                percentPower: undefined,
-                percentSystemCapacity: undefined,
-                percentSystemPower: undefined,
-                order: 100
-            })
-            i = i + systemProfileSetup.dataInterval;
-        }
-        return summaryData;
-    }
-
 }

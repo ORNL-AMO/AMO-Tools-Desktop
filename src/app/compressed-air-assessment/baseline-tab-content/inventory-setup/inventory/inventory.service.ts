@@ -7,6 +7,7 @@ import { CompressedAirAssessmentService } from '../../../compressed-air-assessme
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import { ExploreOpportunitiesService } from '../../../assessment-tab-content/explore-opportunities/explore-opportunities.service';
+import { getEmptyProfileSummaryData } from '../../../calculations/caCalculationHelpers';
 
 @Injectable()
 export class InventoryService {
@@ -162,7 +163,7 @@ export class InventoryService {
         compressedAirAssessment.systemProfile.profileSummary.push({
           compressorId: newInventoryItem.itemId,
           dayTypeId: dayType.dayTypeId,
-          profileSummaryData: this.getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup),
+          profileSummaryData: getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup),
           fullLoadPressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
           fullLoadCapacity: newInventoryItem.performancePoints.fullLoad.airflow
         });
@@ -241,7 +242,7 @@ export class InventoryService {
       let profileSummary: ProfileSummary = {
         compressorId: item.itemId,
         dayTypeId: newDayType.dayTypeId,
-        profileSummaryData: this.getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup),
+        profileSummaryData: getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup),
         fullLoadPressure: item.performancePoints.fullLoad.dischargePressure,
         fullLoadCapacity: item.performancePoints.fullLoad.airflow
       }
@@ -284,25 +285,8 @@ export class InventoryService {
     });
     return compressedAirAssessment;
   }
-
-  getEmptyProfileSummaryData(systemProfileSetup: SystemProfileSetup): Array<ProfileSummaryData> {
-    let summaryData: Array<ProfileSummaryData> = new Array();
-    for (let i = 0; i < 24;) {
-      summaryData.push({
-        power: 0,
-        airflow: 0,
-        percentCapacity: 0,
-        timeInterval: i,
-        percentPower: undefined,
-        percentSystemCapacity: undefined,
-        percentSystemPower: undefined,
-        order: 0
-      })
-      i = i + systemProfileSetup.dataInterval;
-    }
-    return summaryData;
-  }
 }
+
 export interface CompressorInventoryItemWarnings {
   serviceFactor?: string;
 }

@@ -119,12 +119,7 @@ export class FlowReallocationResults {
                 let isTurnedOn: boolean = data.summaryData.order != 0;
                 if (reduceRuntime && systemInformation.multiCompressorSystemControls != 'baseTrim') {
                     let reduceRuntimeData: ReduceRuntimeData = reduceRuntime.runtimeData.find(dataItem => {
-                        if (dataItem.originalCompressorId) {
-                            return dataItem.originalCompressorId == data.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
-                        } else {
-                            return dataItem.compressorId == data.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
-                        }
-
+                        return dataItem.compressorId == data.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
                     });
                     let intervalData: { isCompressorOn: boolean, timeInterval: number } = reduceRuntimeData.intervalData.find(iData => { return iData.timeInterval == data.summaryData.timeInterval });
                     isTurnedOn = intervalData.isCompressorOn;

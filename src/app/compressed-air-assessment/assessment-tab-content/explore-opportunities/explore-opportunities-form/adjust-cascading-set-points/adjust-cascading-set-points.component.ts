@@ -9,6 +9,7 @@ import { AdjustCascadingSetPointsService, CompressorForm } from './adjust-cascad
 import { CompressorInventoryItemClass } from '../../../../calculations/CompressorInventoryItemClass';
 import { ExploreOpportunitiesValidationService } from '../../../../compressed-air-assessment-validation/explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
+import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
 
 @Component({
   selector: 'app-adjust-cascading-set-points',
@@ -35,7 +36,8 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
     private performancePointsFormService: PerformancePointsFormService,
     private adjustCascadingSetPointsService: AdjustCascadingSetPointsService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
-    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+    private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -73,7 +75,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
       this.implementationCostForm = this.adjustCascadingSetPointsService.getImplementationCostForm(this.adjustCascadingSetPoints);
       if (this.adjustCascadingSetPoints.order != 100) {
         let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-        this.inventoryItems = compressedAirAssessment.compressorInventoryItems;
+        this.inventoryItems = compressedAirAssessment.compressorInventoryItems.concat(compressedAirAssessment.replacementCompressorInventoryItems);
         let reduceSystemAirPressure: ReduceSystemAirPressure = this.modification.reduceSystemAirPressure;
         if (reduceSystemAirPressure.order != 100 && (this.adjustCascadingSetPoints.order > reduceSystemAirPressure.order)) {
           let inventoryItemsClass: Array<CompressorInventoryItemClass> = this.inventoryItems.map(item => { return new CompressorInventoryItemClass(item) });
@@ -117,6 +119,10 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
       this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'adjustCascadingSetPoints', this.modification.adjustCascadingSetPoints.order, newOrder);
     }
     this.modification.adjustCascadingSetPoints = this.adjustCascadingSetPoints;
+    if (isOrderChange) {
+      let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+      this.modification = this.compressedAirDataManagementService.updateReplacementCompressors(this.modification, compressedAirAssessment);
+    }
     this.compressedAirAssessmentService.updateModification(this.modification);
   }
 

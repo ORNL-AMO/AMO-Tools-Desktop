@@ -1,4 +1,4 @@
-import { CompressedAirDayType, CompressorInventoryItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from "../../shared/models/compressed-air-assessment";
+import { CompressedAirDayType, CompressorInventoryItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, SystemProfileSetup } from "../../shared/models/compressed-air-assessment";
 import { EemSavingsResults } from "./caCalculationModels";
 import * as _ from 'lodash';
 import { CompressorInventoryItemClass } from "./CompressorInventoryItemClass";
@@ -238,4 +238,23 @@ export function getPressureMinMax(inventoryItems: Array<CompressorInventoryItem>
         min: min,
         max: max
     }
+}
+
+
+export function getEmptyProfileSummaryData(systemProfileSetup: SystemProfileSetup): Array<ProfileSummaryData> {
+    let summaryData: Array<ProfileSummaryData> = new Array();
+    for (let i = 0; i < 24;) {
+        summaryData.push({
+            power: 0,
+            airflow: 0,
+            percentCapacity: 0,
+            timeInterval: i,
+            percentPower: undefined,
+            percentSystemCapacity: undefined,
+            percentSystemPower: undefined,
+            order: 0
+        })
+        i = i + systemProfileSetup.dataInterval;
+    }
+    return summaryData;
 }

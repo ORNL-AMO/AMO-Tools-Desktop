@@ -76,7 +76,7 @@
                     [ngClass]="{'replaced': compressorMap.isReplaced}">
                     <td class="checkbox-cell">
                         <input type="checkbox" [(ngModel)]="compressorMap.isReplaced"
-                            (change)="setReplacement(compressorMap)"
+                            (change)="save(false)"
                             name="{{compressorMap.originalCompressorId}}-replace-compressor"
                             id="{{compressorMap.originalCompressorId}}-replace-compressor" />
                     </td>
@@ -132,7 +132,7 @@
                 <tr *ngFor="let compressorMap of replacementCompressorMapping">
                     <td class="checkbox-cell">
                         <input type="checkbox" [(ngModel)]="compressorMap.isAdded"
-                            (change)="setReplacement(compressorMap)"
+                            (change)="save(false)"
                             name="{{compressorMap.replacementCompressorId}}-replace-compressor"
                             id="{{compressorMap.replacementCompressorId}}-replace-compressor" />
                     </td>

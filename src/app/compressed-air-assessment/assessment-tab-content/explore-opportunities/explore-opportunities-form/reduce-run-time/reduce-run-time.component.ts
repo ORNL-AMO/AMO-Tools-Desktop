@@ -8,6 +8,7 @@ import { ReduceRunTimeService } from './reduce-run-time.service';
 import { CompressedAirAssessmentModificationResults } from '../../../../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { ResultingSystemProfileValidation } from '../../../../calculations/modifications/energyEfficiencyMeasures/ResultingSystemProfileValidation';
+import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
 
 @Component({
   selector: 'app-reduce-run-time',
@@ -37,7 +38,8 @@ export class ReduceRunTimeComponent implements OnInit {
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private reduceRunTimeService: ReduceRunTimeService,
-    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+    private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -122,6 +124,10 @@ export class ReduceRunTimeComponent implements OnInit {
       this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'reduceRuntime', this.modification.reduceRuntime.order, this.form.controls.order.value);
     }
     this.modification.reduceRuntime = this.reduceRunTimeService.updateObjFromForm(this.form, this.reduceRuntime);
+    if (isOrderChange) {
+      let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+      this.modification = this.compressedAirDataManagementService.updateReplacementCompressors(this.modification, compressedAirAssessment);
+    }
     this.compressedAirAssessmentService.updateModification(this.modification);
   }
 

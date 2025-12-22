@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CentrifugalSpecifics, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, Modification, PerformancePoint } from '../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, Modification, PerformancePoint, ProfileSummaryData } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { GenericCompressor } from './generic-compressor-db.service';
@@ -7,6 +7,7 @@ import { InventoryService } from './baseline-tab-content/inventory-setup/invento
 import { SystemProfileService } from './baseline-tab-content/baseline-system-profile-setup/system-profile.service';
 import { CompressorInventoryItemClass } from './calculations/CompressorInventoryItemClass';
 import { roundVal } from '../shared/helperFunctions';
+import { getEmptyProfileSummaryData } from './calculations/caCalculationHelpers';
 
 @Injectable()
 export class CompressedAirDataManagementService {
@@ -254,7 +255,10 @@ export class CompressedAirDataManagementService {
   }
 
   updateModification(selectedCompressor: CompressorInventoryItem, modification: Modification): Modification {
+    //reduce runtime
     modification = this.updateReduceRuntimeModification(selectedCompressor, modification);
+    //cascading set points
+    modification = this.updateCascadingSetPointsModification(selectedCompressor, modification);
     return modification;
   }
 
@@ -263,6 +267,249 @@ export class CompressedAirDataManagementService {
     modification.reduceRuntime.runtimeData.forEach(dataItem => {
       if (dataItem.compressorId == selectedCompressor.itemId) {
         dataItem.fullLoadCapacity = selectedCompressor.performancePoints.fullLoad.airflow;
+      }
+    });
+    return modification;
+  }
+
+  updateCascadingSetPointsModification(selectedCompressor: CompressorInventoryItem, modification: Modification): Modification {
+    //cascading set points
+    modification.adjustCascadingSetPoints.setPointData.forEach(dataItem => {
+      if (dataItem.compressorId == selectedCompressor.itemId) {
+        dataItem.maxFullFlowDischargePressure = selectedCompressor.performancePoints.maxFullFlow.dischargePressure;
+        dataItem.controlType = selectedCompressor.compressorControls.controlType;
+        dataItem.compressorType = selectedCompressor.nameplateData.compressorType;
+      }
+    });
+    return modification;
+  }
+
+  updateReplacementCompressors(modification: Modification, compressedAirAssessment: CompressedAirAssessment): Modification {
+    if (modification.replaceCompressor.order != 100) {
+      let replacementCompressorIds: Array<string> = new Array();
+      let nonAddedReplacementCompressorIds: Array<string> = new Array();
+      let salvagedCompressorIds: Array<string> = new Array();
+      let nonSalvagedCompressorIds: Array<string> = new Array();
+      //get salvaged compressors
+      modification.replaceCompressor.currentCompressorMapping.forEach(replacementData => {
+        if (replacementData.isReplaced) {
+          salvagedCompressorIds.push(replacementData.originalCompressorId);
+        } else {
+          nonSalvagedCompressorIds.push(replacementData.originalCompressorId);
+        }
+      });
+      //get added replacement compressors
+      modification.replaceCompressor.replacementCompressorMapping.forEach(replacementData => {
+        if (replacementData.isAdded) {
+          replacementCompressorIds.push(replacementData.replacementCompressorId);
+        } else {
+          nonAddedReplacementCompressorIds.push(replacementData.replacementCompressorId);
+        }
+      });
+      //Reduce runtime is after replace compressor
+      if (modification.reduceRuntime.order != 100 && (modification.replaceCompressor.order < modification.reduceRuntime.order)) {
+        modification = this.updateReduceRuntimeWithReplacementCompressors(modification, compressedAirAssessment.replacementCompressorInventoryItems, compressedAirAssessment.compressorInventoryItems, salvagedCompressorIds, nonSalvagedCompressorIds, replacementCompressorIds, nonAddedReplacementCompressorIds, compressedAirAssessment);
+      } else {
+        //resetu reduce runtime with baseline
+        modification = this.resetReduceRuntimeToBaseline(modification, compressedAirAssessment.compressorInventoryItems);
+      }
+
+      //Adjust cascading is after replace compressor
+      if (modification.adjustCascadingSetPoints.order != 100 && (modification.replaceCompressor.order < modification.adjustCascadingSetPoints.order)) {
+        modification = this.updateSetPointDataWithReplacementCompressors(modification, compressedAirAssessment.replacementCompressorInventoryItems, compressedAirAssessment.compressorInventoryItems, salvagedCompressorIds, nonSalvagedCompressorIds, replacementCompressorIds, nonAddedReplacementCompressorIds);
+      } else {
+        //reset set point data with baseline
+        modification = this.resetCascadingSetPointsToBaseline(modification, compressedAirAssessment.compressorInventoryItems);
+      }
+    }
+    if (modification.replaceCompressor.order == 100) {
+      //reset both reduce runtime and cascading set points with baseline
+      modification = this.resetReduceRuntimeToBaseline(modification, compressedAirAssessment.compressorInventoryItems);
+      modification = this.resetCascadingSetPointsToBaseline(modification, compressedAirAssessment.compressorInventoryItems);
+    }
+    return modification;
+  }
+
+  updateReduceRuntimeWithReplacementCompressors(modification: Modification,
+    replacementCompressorInventoryItems: Array<CompressorInventoryItem>,
+    currentCompressorInventoryItems: Array<CompressorInventoryItem>,
+    salvagedCompressorIds: Array<string>, nonSalvagedCompressorIds: Array<string>,
+    replacementCompressorIds: Array<string>,
+    nonAddedReplacementCompressorIds: Array<string>,
+    compressedAirAssessment: CompressedAirAssessment): Modification {
+    //remove salvaged compressors from replacement list
+    modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(dataItem => {
+      if (salvagedCompressorIds.includes(dataItem.compressorId)) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    //add non-salvaged compressors back to reduce runtime if removed earlier
+    nonSalvagedCompressorIds.forEach(nonSalvagedCompressorId => {
+      //check missing in data
+      if (!modification.reduceRuntime.runtimeData.find(dataItem => { return dataItem.compressorId == nonSalvagedCompressorId })) {
+        let nonSalvagedCompressor: CompressorInventoryItem = currentCompressorInventoryItems.find(item => { return item.itemId == nonSalvagedCompressorId });
+        if (nonSalvagedCompressor) {
+          //TODO: day type and inverval data need to be handled properly
+          let intervalData: Array<ProfileSummaryData> = getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup);
+          compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+            modification.reduceRuntime.runtimeData.push({
+              compressorId: nonSalvagedCompressor.itemId,
+              fullLoadCapacity: nonSalvagedCompressor.performancePoints.fullLoad.airflow,
+              intervalData: intervalData.map(data => { return { timeInterval: data.timeInterval, isCompressorOn: true } }),
+              dayTypeId: dayType.dayTypeId,
+              automaticShutdownTimer: nonSalvagedCompressor.compressorControls.automaticShutdown
+            });
+          });
+        }
+      }
+    });
+    //add new replacement compressors to replacement list
+    replacementCompressorIds.forEach(replacementCompressorId => {
+      //check missing in data
+      if (!modification.reduceRuntime.runtimeData.find(dataItem => { return dataItem.compressorId == replacementCompressorId })) {
+        let replacementCompressor: CompressorInventoryItem = replacementCompressorInventoryItems.find(item => { return item.itemId == replacementCompressorId });
+        if (replacementCompressor) {
+          let intervalData: Array<ProfileSummaryData> = getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup);
+          compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+            modification.reduceRuntime.runtimeData.push({
+              compressorId: replacementCompressor.itemId,
+              fullLoadCapacity: replacementCompressor.performancePoints.fullLoad.airflow,
+              intervalData: intervalData.map(data => { return { timeInterval: data.timeInterval, isCompressorOn: true } }),
+              dayTypeId: dayType.dayTypeId,
+              automaticShutdownTimer: replacementCompressor.compressorControls.automaticShutdown
+            });
+          });
+        }
+      }
+    });
+    //remove replacement compressors that are no longer added
+    nonAddedReplacementCompressorIds.forEach(nonAddedReplacementCompressorId => {
+      modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(dataItem => {
+        if (dataItem.compressorId == nonAddedReplacementCompressorId) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+    });
+    return modification;
+  }
+
+  updateSetPointDataWithReplacementCompressors(modification: Modification,
+    replacementCompressorInventoryItems: Array<CompressorInventoryItem>,
+    currentCompressorInventoryItems: Array<CompressorInventoryItem>,
+    salvagedCompressorIds: Array<string>, nonSalvagedCompressorIds: Array<string>,
+    replacementCompressorIds: Array<string>,
+    nonAddedReplacementCompressorIds: Array<string>): Modification {
+    //remove salvaged compressors from replacement list and replacement compressors no longer in list
+    modification.adjustCascadingSetPoints.setPointData = modification.adjustCascadingSetPoints.setPointData.filter(dataItem => {
+      if (salvagedCompressorIds.includes(dataItem.compressorId)) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    //add non-salvaged compressors back to reduce runtime if removed earlier
+    nonSalvagedCompressorIds.forEach(nonSalvagedCompressorId => {
+      //check missing in data
+      if (!modification.adjustCascadingSetPoints.setPointData.find(dataItem => { return dataItem.compressorId == nonSalvagedCompressorId })) {
+        let nonSalvagedCompressor: CompressorInventoryItem = currentCompressorInventoryItems.find(item => { return item.itemId == nonSalvagedCompressorId });
+        if (nonSalvagedCompressor) {
+          modification.adjustCascadingSetPoints.setPointData.push({
+            compressorId: nonSalvagedCompressor.itemId,
+            controlType: nonSalvagedCompressor.compressorControls.controlType,
+            compressorType: nonSalvagedCompressor.nameplateData.compressorType,
+            fullLoadDischargePressure: nonSalvagedCompressor.performancePoints.fullLoad.dischargePressure,
+            maxFullFlowDischargePressure: nonSalvagedCompressor.performancePoints.maxFullFlow.dischargePressure
+          });
+        }
+      }
+    });
+    //add new replacement compressors to replacement list
+    replacementCompressorIds.forEach(replacementCompressorId => {
+      //check missing in data
+      if (!modification.adjustCascadingSetPoints.setPointData.find(dataItem => { return dataItem.compressorId == replacementCompressorId })) {
+        let replacementCompressor: CompressorInventoryItem = replacementCompressorInventoryItems.find(item => { return item.itemId == replacementCompressorId });
+        if (replacementCompressor) {
+          modification.adjustCascadingSetPoints.setPointData.push({
+            compressorId: replacementCompressor.itemId,
+            controlType: replacementCompressor.compressorControls.controlType,
+            compressorType: replacementCompressor.nameplateData.compressorType,
+            fullLoadDischargePressure: replacementCompressor.performancePoints.fullLoad.dischargePressure,
+            maxFullFlowDischargePressure: replacementCompressor.performancePoints.maxFullFlow.dischargePressure
+          });
+        }
+      }
+    });
+    //remove replacement compressors that are no longer added
+    nonAddedReplacementCompressorIds.forEach(nonAddedReplacementCompressorId => {
+      modification.adjustCascadingSetPoints.setPointData = modification.adjustCascadingSetPoints.setPointData.filter(dataItem => {
+        if (dataItem.compressorId == nonAddedReplacementCompressorId) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+    });
+    return modification;
+  }
+
+  resetReduceRuntimeToBaseline(modification: Modification, currentCompressorInventoryItems: Array<CompressorInventoryItem>): Modification {
+    //baseline compressors
+    let baselineCompressorIds: Array<string> = currentCompressorInventoryItems.map(item => { return item.itemId });
+    //remove replaced compressors
+    modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(dataItem => {
+      if (baselineCompressorIds.includes(dataItem.compressorId)) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    //add back missing compressors
+    baselineCompressorIds.forEach(baselineCompressorId => {
+      if (!modification.reduceRuntime.runtimeData.find(dataItem => { return dataItem.compressorId == baselineCompressorId })) {
+        let baselineCompressor: CompressorInventoryItem = currentCompressorInventoryItems.find(item => { return item.itemId == baselineCompressorId });
+        if (baselineCompressor) {
+          //TODO: day type and inverval data need to be handled properly
+          modification.reduceRuntime.runtimeData.push({
+            compressorId: baselineCompressor.itemId,
+            fullLoadCapacity: baselineCompressor.performancePoints.fullLoad.airflow,
+            intervalData: new Array(),
+            dayTypeId: '',
+            automaticShutdownTimer: baselineCompressor.compressorControls.automaticShutdown
+          });
+        }
+      }
+    });
+    return modification;
+  }
+
+  resetCascadingSetPointsToBaseline(modification: Modification, currentCompressorInventoryItems: Array<CompressorInventoryItem>): Modification {
+    //baseline compressors
+    let baselineCompressorIds: Array<string> = currentCompressorInventoryItems.map(item => { return item.itemId });
+    //remove replaced compressors
+    modification.adjustCascadingSetPoints.setPointData = modification.adjustCascadingSetPoints.setPointData.filter(dataItem => {
+      if (baselineCompressorIds.includes(dataItem.compressorId)) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    //add back missing compressors
+    baselineCompressorIds.forEach(baselineCompressorId => {
+      if (!modification.adjustCascadingSetPoints.setPointData.find(dataItem => { return dataItem.compressorId == baselineCompressorId })) {
+        let baselineCompressor: CompressorInventoryItem = currentCompressorInventoryItems.find(item => { return item.itemId == baselineCompressorId });
+        if (baselineCompressor) {
+          modification.adjustCascadingSetPoints.setPointData.push({
+            compressorId: baselineCompressor.itemId,
+            controlType: baselineCompressor.compressorControls.controlType,
+            compressorType: baselineCompressor.nameplateData.compressorType,
+            fullLoadDischargePressure: baselineCompressor.performancePoints.fullLoad.dischargePressure,
+            maxFullFlowDischargePressure: baselineCompressor.performancePoints.maxFullFlow.dischargePressure
+          });
+        }
       }
     });
     return modification;
