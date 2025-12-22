@@ -446,7 +446,7 @@ export class PhastService {
       inputCopy.fuelTemperature = this.convertUnitsService.value(inputCopy.fuelTemperature).from('C').to('F');
       inputCopy.ambientAirTempF = this.convertUnitsService.value(inputCopy.ambientAirTempF).from('C').to('F');
     }
-    let results = this.processHeatingApiService.flueGasLossesByMass(inputCopy);;
+    let results = this.processHeatingApiService.flueGasLossesByMass(inputCopy);
     return results
   }
 

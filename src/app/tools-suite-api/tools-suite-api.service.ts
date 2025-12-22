@@ -50,15 +50,13 @@ export class ToolsSuiteApiService {
         if (!globalSettings.suiteDbItemsInitialized) {
             console.log('==== Initializing default database items');
             // Initialize default data here
-            let DefaultData = new this.ToolsSuiteModule.DefaultData();
             await this.insertAtmosphereData();
-            await this.insertFlueGasMaterials(DefaultData);
-            await this.insertGasLoadMaterials(DefaultData);
-            await this.insertLiquidLoadMaterials(DefaultData);
-            await this.insertSolidLiquidFlueGasMaterials(DefaultData);
-            await this.insertSolidLoadMaterials(DefaultData);
+            await this.insertFlueGasMaterials();
+            await this.insertGasLoadMaterials();
+            await this.insertLiquidLoadMaterials();
+            await this.insertSolidLiquidFlueGasMaterials();
+            await this.insertSolidLoadMaterials();
             await this.insertWallLossSurfaces();
-            DefaultData.delete();
             globalSettings.suiteDbItemsInitialized = true;
             this.settingsDbService.globalSettings = await firstValueFrom(this.settingsDbService.updateWithObservable(globalSettings));
             let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
@@ -67,7 +65,7 @@ export class ToolsSuiteApiService {
     }
 
     private async insertAtmosphereData() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.atmosphereGasTypes();
+        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultGasTypes();
         let defaultMaterials: Array<AtmosphereSpecificHeat> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
             let wasmClass = suiteDefaultMaterials.get(i);
@@ -81,117 +79,107 @@ export class ToolsSuiteApiService {
         await firstValueFrom(this.atmosphereDbService.insertDefaultMaterials(defaultMaterials));
     }
 
-    private async insertFlueGasMaterials(DefaultData: any) {
-        let suiteDefaultMaterials = DefaultData.getGasFlueGasMaterials();
+    private async insertFlueGasMaterials() {
+        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultGasFlueGasMaterials();
         let defaultMaterials: Array<FlueGasMaterial> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
             //GasComposition
-            let wasmClass = suiteDefaultMaterials.get(i);
+            let material = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
-                substance: wasmClass.getSubstance(),
-                C2H6: wasmClass.getGasByVol("C2H6"),
-                C3H8: wasmClass.getGasByVol("C3H8"),
-                C4H10_CnH2n: wasmClass.getGasByVol("C4H10_CnH2n"),
-                CH4: wasmClass.getGasByVol("CH4"),
-                CO: wasmClass.getGasByVol("CO"),
-                CO2: wasmClass.getGasByVol("CO2"),
-                H2: wasmClass.getGasByVol("H2"),
-                H2O: wasmClass.getGasByVol("H2O"),
-                N2: wasmClass.getGasByVol("N2"),
-                O2: wasmClass.getGasByVol("O2"),
-                SO2: wasmClass.getGasByVol("SO2"),
-                heatingValue: wasmClass.getHeatingValue(),
-                heatingValueVolume: wasmClass.getHeatingValueVolume(),
-                specificGravity: wasmClass.getSpecificGravity(),
+                substance: material.substance,
+                C2H6: material.C2H6,
+                C3H8: material.C3H8,
+                C4H10_CnH2n: material.C4H10_CnH2n,
+                CH4: material.CH4,
+                CO: material.CO,
+                CO2: material.CO2,
+                H2: material.H2,
+                H2O: material.H2O,
+                N2: material.N2,
+                O2: material.O2,
+                SO2: material.SO2,
+                heatingValue: material.heatingValue,
+                heatingValueVolume: material.heatingValueVolume,
+                specificGravity: material.specificGravity,
                 isDefault: true
             });
-            wasmClass.delete();
         }
-        suiteDefaultMaterials.delete();
         await this.flueGasMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    private async insertGasLoadMaterials(DefaultData: any) {
-        let suiteDefaultMaterials = DefaultData.getGasLoadChargeMaterials();
+    private async insertGasLoadMaterials() {
+        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultGasLoadChargeMaterials();
         let defaultMaterials: Array<GasLoadChargeMaterial> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-            let wasmClass = suiteDefaultMaterials.get(i);
+            let material = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
-                specificHeatVapor: wasmClass.getSpecificHeatVapor(),
-                substance: wasmClass.getSubstance(),
+                specificHeatVapor: material.specificHeatVapor,
+                substance: material.substance,
                 isDefault: true
             });
-            wasmClass.delete();
         }
         await this.gasLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    private async insertLiquidLoadMaterials(DefaultData: any) {
-        let suiteDefaultMaterials = DefaultData.getLiquidLoadChargeMaterials();
-
+    private async insertLiquidLoadMaterials() {
+        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultLiquidLoadChargeMaterials();
         let defaultMaterials: Array<LiquidLoadChargeMaterial> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-            let wasmClass = suiteDefaultMaterials.get(i);
+            let material = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
-                latentHeat: wasmClass.getLatentHeat(),
-                specificHeatLiquid: wasmClass.getSpecificHeatLiquid(),
-                specificHeatVapor: wasmClass.getSpecificHeatVapor(),
-                vaporizationTemperature: wasmClass.getVaporizingTemperature(),
-                substance: wasmClass.getSubstance(),
+                latentHeat: material.latentHeat,
+                specificHeatLiquid: material.specificHeatLiquid,
+                specificHeatVapor: material.specificHeatVapor,
+                vaporizationTemperature: material.vaporizationTemperature,
+                substance: material.substance,
                 isDefault: true
             });
-            wasmClass.delete();
         }
-        suiteDefaultMaterials.delete();
         await this.liquidLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    private async insertSolidLiquidFlueGasMaterials(DefaultData: any) {
-        let suiteDefaultMaterials = DefaultData.getSolidLiquidFlueGasMaterials();
+    private async insertSolidLiquidFlueGasMaterials() {
+        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultSolidLiquidFlueGasMaterials();
         let defaultMaterials: Array<SolidLiquidFlueGasMaterial> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
             //GasComposition
-            let wasmClass = suiteDefaultMaterials.get(i);
+            let material = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
-                substance: wasmClass.getSubstance(),
-                carbon: wasmClass.getCarbon(),
-                hydrogen: wasmClass.getHydrogen(),
-                inertAsh: wasmClass.getInertAsh(),
-                moisture: wasmClass.getMoisture(),
-                nitrogen: wasmClass.getNitrogen(),
-                o2: wasmClass.getO2(),
-                sulphur: wasmClass.getSulphur(),
-                heatingValue: wasmClass.getHeatingValueFuel(),
+                substance: material.substance,
+                carbon: material.carbon,
+                hydrogen: material.hydrogen,
+                inertAsh: material.inertAsh,
+                moisture: material.moisture,
+                nitrogen: material.nitrogen,
+                o2: material.oxygen,
+                sulphur: material.sulphur,
+                heatingValue: this.ToolsSuiteModule.calculateHeatingValueFuel(material.carbon, material.hydrogen, material.sulphur, material.inertAsh, material.oxygen, material.moisture, material.nitrogen),
                 isDefault: true
             });
-            wasmClass.delete();
         }
-        suiteDefaultMaterials.delete();
         await this.solidLiquidMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    private async insertSolidLoadMaterials(DefaultData: any) {
-        let suiteDefaultMaterials = DefaultData.getSolidLoadChargeMaterials();
+    private async insertSolidLoadMaterials() {
+        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultSolidLoadChargeMaterials();
 
         let defaultMaterials: Array<SolidLoadChargeMaterial> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-            let wasmClass = suiteDefaultMaterials.get(i);
+            let material = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
-                latentHeat: wasmClass.getLatentHeat(),
-                meltingPoint: wasmClass.getMeltingPoint(),
-                specificHeatLiquid: wasmClass.getSpecificHeatLiquid(),
-                specificHeatSolid: wasmClass.getSpecificHeatSolid(),
-                substance: wasmClass.getSubstance(),
+                latentHeat: material.latentHeat,
+                meltingPoint: material.meltingPoint,
+                specificHeatLiquid: material.specificHeatLiquid,
+                specificHeatSolid: material.specificHeatSolid,
+                substance: material.substance,
                 isDefault: true
             });
-            wasmClass.delete();
         }
-        suiteDefaultMaterials.delete();
         await this.solidLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
     private async insertWallLossSurfaces() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.wallTypes();
+        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultWallTypes();
         let defaultMaterials: Array<WallLossesSurface> = [];
         for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
             let shapeFactor = suiteDefaultMaterials.get(i);

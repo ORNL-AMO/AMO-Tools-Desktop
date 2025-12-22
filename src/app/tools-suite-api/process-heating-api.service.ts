@@ -74,7 +74,7 @@ export class ProcessHeatingApiService {
 
   gasLoadChargeMaterial(input: GasChargeMaterial): number {
     let thermicReactionType = this.suiteApiHelperService.getMaterialThermicReactionType(input.thermicReactionType);
-    let GasChargeMaterialInstance = new this.toolsSuiteApiService.ToolsSuiteModule.GasLoadChargeMaterial(
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.gasLoadChargeMaterialTotalHeatRequired(
       thermicReactionType,
       input.specificHeatGas,
       input.feedRate,
@@ -86,14 +86,12 @@ export class ProcessHeatingApiService {
       input.reactionHeat,
       input.additionalHeat
     );
-    let output: number = GasChargeMaterialInstance.getTotalHeat();
-    GasChargeMaterialInstance.delete();
     return output;
   }
 
   liquidLoadChargeMaterial(input: LiquidChargeMaterial): number {
     let thermicReactionType = this.suiteApiHelperService.getMaterialThermicReactionType(input.thermicReactionType);
-    let LiquidChargeMaterialInstance = new this.toolsSuiteApiService.ToolsSuiteModule.LiquidLoadChargeMaterial(
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.liquidLoadChargeMaterialTotalHeatRequired(
       thermicReactionType,
       input.specificHeatLiquid,
       input.vaporizingTemperature,
@@ -107,14 +105,12 @@ export class ProcessHeatingApiService {
       input.reactionHeat,
       input.additionalHeat
     );
-    let output: number = LiquidChargeMaterialInstance.getTotalHeat();
-    LiquidChargeMaterialInstance.delete();
     return output;
   }
 
   solidLoadChargeMaterial(input: SolidChargeMaterial): number {
     let thermicReactionType = this.suiteApiHelperService.getMaterialThermicReactionType(input.thermicReactionType);
-    let SolidChargeMaterialInstance = new this.toolsSuiteApiService.ToolsSuiteModule.SolidLoadChargeMaterial(
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.solidLoadChargeMaterialTotalHeatRequired(
       thermicReactionType,
       input.specificHeatSolid,
       input.latentHeat,
@@ -131,8 +127,6 @@ export class ProcessHeatingApiService {
       input.reactionHeat,
       input.additionalHeat
     );
-    let output: number = SolidChargeMaterialInstance.getTotalHeat();
-    SolidChargeMaterialInstance.delete();
     return output;
   }
 
@@ -229,7 +223,8 @@ export class ProcessHeatingApiService {
     let flueO2 = input.flueGasO2Percentage / 100;
     let excessAir = input.excessAirPercentage / 100;
 
-    let output = GasCompositionsInstance.getProcessHeatProperties(
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.gasFlueGasMaterialProcessHeatProperties(
+      GasCompositionsInstance,
       input.flueGasTemperature,
       flueO2,
       input.combustionAirTemperature,
@@ -243,13 +238,12 @@ export class ProcessHeatingApiService {
       excessAir: output.excessAir,
       availableHeat: output.availableHeat,
     }
-    output.delete();
     GasCompositionsInstance.delete();
     return results;
   }
 
   flueGasLossesByMass(input: FlueGasByMass): number {
-    let SolidLiquidFlueGasMaterial = new this.toolsSuiteApiService.ToolsSuiteModule.SolidLiquidFlueGasMaterial(
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.solidLiquidFlueGasMaterialTotalHeatLoss(
       input.flueGasTemperature,
       input.excessAirPercentage,
       input.combustionAirTemperature,
@@ -266,9 +260,6 @@ export class ProcessHeatingApiService {
       input.nitrogen,
       input.ambientAirTempF
     );
-
-    let output: number = SolidLiquidFlueGasMaterial.getHeatLoss();
-    SolidLiquidFlueGasMaterial.delete();
     return output;
   }
 
@@ -332,20 +323,8 @@ export class ProcessHeatingApiService {
 
     // todo fix phast 4855
     input.moistureInAirCombustion = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.moistureInAirCombustion)
-    let SolidLiquidFlueGasMaterial = new this.toolsSuiteApiService.ToolsSuiteModule.SolidLiquidFlueGasMaterial(
-      '',
-      input.carbon,
-      input.hydrogen,
-      input.sulphur,
-      input.inertAsh,
-      input.o2,
-      input.moisture,
-      input.nitrogen
-    );
-
-    let output: number = SolidLiquidFlueGasMaterial.calculateExcessAirFromFlueGasO2(input.o2InFlueGas, input.carbon, input.hydrogen, input.sulphur, input.inertAsh, input.o2, input.moisture, input.nitrogen, input.moistureInAirCombustion);
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.calculateExcessAirFromFlueGasO2(input.o2InFlueGas, input.carbon, input.hydrogen, input.sulphur, input.inertAsh, input.o2, input.moisture, input.nitrogen, input.moistureInAirCombustion);
     output = output * 100;
-    SolidLiquidFlueGasMaterial.delete();
     return output;
   }
 
@@ -359,12 +338,9 @@ export class ProcessHeatingApiService {
     input.moisture = input.moisture / 100;
     input.nitrogen = input.nitrogen / 100;
 
-    let SolidLiquidFlueGasMaterial = new this.toolsSuiteApiService.ToolsSuiteModule.SolidLiquidFlueGasMaterial();
-
-
     // todo fix phast 4855
     input.moistureInAirCombustion = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.moistureInAirCombustion)
-    let output: number = SolidLiquidFlueGasMaterial.calculateFlueGasO2(
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.calculateFlueGasO2(
       input.excessAir,
       input.carbon,
       input.hydrogen,
@@ -376,7 +352,6 @@ export class ProcessHeatingApiService {
       input.moistureInAirCombustion);
     output = output * 100;
 
-    SolidLiquidFlueGasMaterial.delete();
     return output;
   }
 
@@ -397,9 +372,9 @@ export class ProcessHeatingApiService {
     );
 
     let output: HeatingValueByVolumeOutput = {
-      heatingValue: GasCompositions.getHeatingValue(),
-      heatingValueVolume: GasCompositions.getHeatingValueVolume(),
-      specificGravity: GasCompositions.getSpecificGravity(),
+      heatingValue: GasCompositions.heatingValue,
+      heatingValueVolume: GasCompositions.heatingValueVolume,
+      specificGravity: GasCompositions.specificGravity,
     }
 
     GasCompositions.delete();
@@ -407,9 +382,7 @@ export class ProcessHeatingApiService {
   }
 
   flueGasByMassCalculateHeatingValue(input: MaterialInputProperties): number {
-    let SolidLiquidFlueGasMaterial = new this.toolsSuiteApiService.ToolsSuiteModule.SolidLiquidFlueGasMaterial();
-
-    let output: number = SolidLiquidFlueGasMaterial.calculateHeatingValueFuel(
+    let output: number = this.toolsSuiteApiService.ToolsSuiteModule.calculateHeatingValueFuel(
       input.carbon,
       input.hydrogen,
       input.sulphur,
@@ -417,8 +390,6 @@ export class ProcessHeatingApiService {
       input.o2,
       input.moisture,
       input.nitrogen);
-
-    SolidLiquidFlueGasMaterial.delete();
     return output;
   }
 
@@ -459,7 +430,7 @@ export class ProcessHeatingApiService {
 
     let output: EnergyEAFOutput = {
       heatDelivered: heatDelivered,
-      totalChemicalEnergyInput:totalChemicalEnergyInput
+      totalChemicalEnergyInput: totalChemicalEnergyInput
     }
 
     return output;
