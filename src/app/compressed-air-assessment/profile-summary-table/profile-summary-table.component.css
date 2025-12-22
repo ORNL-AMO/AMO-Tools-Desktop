@@ -37,3 +37,8 @@ td, th{
     page-break-after: always;
   }
 }
+
+.italic{
+  font-style: italic;
+  font-weight: bolder;
+}

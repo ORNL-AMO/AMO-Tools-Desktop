@@ -20,6 +20,13 @@
                     </span>
                 </td>
             </tr>
+            @if(summary.isCompressorReplaced){
+            <tr>
+                <td colspan="100" class="italic">
+                    {{(summary.compressorId | compressorName: inventoryItems)}} was marked for replacement/salvage.
+                </td>
+            </tr>
+            }@else{
             <tr>
                 <td class="pl-2">
                     Power, kW
@@ -80,19 +87,20 @@
                 </td>
                 <td *ngFor="let data of summary.profileSummaryData;">
                     @if (systemInformation.multiCompressorSystemControls == 'baseTrim') {
-                        <span *ngIf="data.order != 0 && summary.compressorId === selectedTrimCompressorId">Trim</span>
-                        <span *ngIf="data.order != 0 && summary.compressorId !== selectedTrimCompressorId">Base</span>
-                        <span *ngIf="data.order == 0">&mdash;</span>
+                    <span *ngIf="data.order != 0 && summary.compressorId === selectedTrimCompressorId">Trim</span>
+                    <span *ngIf="data.order != 0 && summary.compressorId !== selectedTrimCompressorId">Base</span>
+                    <span *ngIf="data.order == 0">&mdash;</span>
                     } @else {
-                        <span *ngIf="data.order != 0">
-                            {{data.order}}
-                        </span>
-                        <span *ngIf="data.order == 0">
-                            &mdash;
-                        </span>
+                    <span *ngIf="data.order != 0">
+                        {{data.order}}
+                    </span>
+                    <span *ngIf="data.order == 0">
+                        &mdash;
+                    </span>
                     }
                 </td>
             </tr>
+            }
         </tbody>
         <tbody>
             <tr class="compressor-name-row">
@@ -161,7 +169,8 @@
 <div class="pl-2 pt-3 pr-2" *ngIf="profileSummary && printView">
     <table class="table table-hover bg-white print-container"
         *ngFor="let profileData of profileSummary[0].profileSummaryForPrint; let index = index;">
-        <caption *ngIf="profileSummary[0].profileSummaryData.length !== 1">Intervals:{{profileData[0].timeInterval}}-{{profileData[profileData.length-1].timeInterval}}</caption>
+        <caption *ngIf="profileSummary[0].profileSummaryData.length !== 1">
+            Intervals:{{profileData[0].timeInterval}}-{{profileData[profileData.length-1].timeInterval}}</caption>
         <thead>
             <tr>
                 <th [ngClass]="{'w-50': profileSummary[0].profileSummaryData.length == 1}">
