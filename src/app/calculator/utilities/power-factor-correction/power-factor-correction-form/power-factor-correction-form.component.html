@@ -160,7 +160,7 @@
           <span *ngIf="group.get('actualDemand')?.errors?.min">Value can't be
                     greater than {{group.get('actualDemand')?.errors?.min}}</span>
           <!-- <span *ngIf="group.get('actualDemand')?.errors?.actualDemandNotLessThanpowerFactor">Power Factor Adjusted Demand must be greater than or equal to Actual Demand.</span> -->
-          <span *ngIf="group.get('actualDemand')?.errors?.someError">actualDemand custom validator works</span>
+          <span *ngIf="group.get('actualDemand')?.errors?.combinedError">combined custom validator works</span>
         <span></span>
         </span>
     </td>   
@@ -174,7 +174,7 @@
           <span *ngIf="group.get('powerFactor')?.errors?.min">Value can't be
                     greater than {{group.get('powerFactor')?.errors?.min}}</span>
           <!-- <span *ngIf="group.get('powerFactor')?.errors?.actualDemandNotLessThanpfAdjustedDemand">Read Demand must be greater than or equal to Apparent Power.</span> -->
-          <span *ngIf="group.get('powerFactor')?.errors?.someError">powerFactor custom validator works</span>
+          <span *ngIf="group.get('powerFactor')?.errors?.combinedError">combined custom validator works</span>
         </span>
     </td>
     </ng-container>

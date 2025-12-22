@@ -407,7 +407,34 @@ export class PowerFactorCorrectionService {
     return results;
   }
 
+    monthlyGroupValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
+      const actualDemandControl = (group as FormGroup).get('actualDemand');
+      const powerFactorControl = (group as FormGroup).get('powerFactor');
+      const parentForm = group.parent?.parent as FormGroup; 
+
+      const isInvalid = ((actualDemandControl && actualDemandControl.value === 333) || (powerFactorControl && powerFactorControl.value === 333)) && Number(parentForm?.get('billedForDemand')?.value) === 1;
+
+      if (isInvalid) {
+        if (actualDemandControl) actualDemandControl.setErrors({ ...actualDemandControl.errors, combinedError: 'Either value is 333 (test rule)' });
+        if (powerFactorControl) powerFactorControl.setErrors({ ...powerFactorControl.errors, combinedError: 'Either value is 333 (test rule)' });
+        return { combinedError: true };
+      }
+
+      // * copilot generated
+      // The below code definitely smells, but as a prototype it does work
+      if (actualDemandControl && actualDemandControl.errors && actualDemandControl.errors['combinedError']) {
+        const { combinedError, ...otherErrors } = actualDemandControl.errors;
+        actualDemandControl.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
+      }
+      if (powerFactorControl && powerFactorControl.errors && powerFactorControl.errors['combinedError']) {
+        const { combinedError, ...otherErrors } = powerFactorControl.errors;
+        powerFactorControl.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
+      }
+      return null;
+    };
+
   getApparentPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): UntypedFormGroup {
+
 
     let form: UntypedFormGroup = this.formBuilder.group({
       existingDemand: [inputData.existingDemand],
@@ -424,10 +451,10 @@ export class PowerFactorCorrectionService {
         inputData.monthyInputs.map(m => {
           const group = this.formBuilder.group({
             month: [m.month, Validators.required],
-            actualDemand: [m.actualDemand, [Validators.required, Validators.min(0), this.actualDemandValidator]],
-            powerFactor: [m.powerFactor, [Validators.required, Validators.min(0), this.powerFactorValidator]],
+            actualDemand: [m.actualDemand, [Validators.required, Validators.min(0)]],
+            powerFactor: [m.powerFactor, [Validators.required, Validators.min(0)]],
             pfAdjustedDemand: [m.pfAdjustedDemand, [Validators.required, Validators.min(0)]]
-          });
+          }, { validators: this.monthlyGroupValidator });
           return group;
         })
       ),
@@ -484,36 +511,7 @@ export class PowerFactorCorrectionService {
   // * Another note, in the componen.ts you must use patchValue() or setValue() on ng reactive forms to update values so that change detection works correctly - there are places where that's not happening 
 
     // * test individual validators with arbitrary rules
-    powerFactorValidator: ValidatorFn = (powerFactorControl: AbstractControl): ValidationErrors | null => {
-      // * this is the formArray item group
-      const group = powerFactorControl.parent as FormGroup;
-      // * parent formgroup
-      const parentForm = group?.parent?.parent as FormGroup; 
 
-      // * test meaningless rules using values from parent and group
-      const ruleValue = 333;
-      if (powerFactorControl.value === ruleValue && Number(parentForm.get('billedForDemand')?.value) == 0) {
-        console.log('pf invalid');
-        return { someError: 'Power factor validation working' };
-      } 
-      console.log('pf valid');
-
-      return null;
-    };
-
-    actualDemandValidator: ValidatorFn = (actualDemandControl: AbstractControl): ValidationErrors | null => {
-      const group = actualDemandControl.parent as FormGroup;
-      const parentForm = group?.parent?.parent as FormGroup; 
-
-      const ruleValue = 333;
-      if (actualDemandControl.value === ruleValue && Number(parentForm.get('billedForDemand')?.value) == 0) {
-        console.log('ad invalid');
-        return { someError: 'actual Demand validation working' };
-      } 
-      console.log('ad valid');
-
-      return null;
-    };
 
 
 
