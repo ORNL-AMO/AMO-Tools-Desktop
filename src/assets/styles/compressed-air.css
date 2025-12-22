@@ -11,3 +11,8 @@ app-baseline-tab-content {
   display: flex;
   flex-direction: column;
 }
+
+
+.compressed-air-container app-assessment-tab-content, .compressed-air-container app-explore-opportunities{
+    height: 100%;
+}

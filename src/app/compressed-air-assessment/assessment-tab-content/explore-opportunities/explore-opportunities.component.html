@@ -49,7 +49,7 @@
 
 
 
-<div class="d-flex w-100" (mousemove)="drag($event)" (mouseup)="stopResizing($event)"
+<div class="d-flex w-100 h-100" (mousemove)="drag($event)" (mouseup)="stopResizing($event)"
     (mouseleave)="stopResizing($event)">
     <div class="d-flex hide-print" [ngStyle]="{'width.px': formWidth}">
         <div class="w-100 overflow-auto">
