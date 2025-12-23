@@ -9,7 +9,7 @@ import { MockTreasureHunt, MockTreasureHuntSettings } from '../examples/mockTrea
 import { MockMotorInventory } from '../examples/mockMotorInventoryData';
 import { BehaviorSubject, firstValueFrom, forkJoin } from 'rxjs';
 import { MockWasteWater, MockWasteWaterSettings } from '../examples/mockWasteWater';
-import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../examples/mockCompressedAirAssessment';
+// import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../examples/mockCompressedAirAssessment';
 import { DirectoryDbService } from '../indexedDb/directory-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -139,7 +139,7 @@ export class CoreService {
     MockMotorInventory.directoryId = this.exampleDirectoryId;
     MockPumpInventory.directoryId = this.exampleDirectoryId;
     MockWasteWater.directoryId = this.exampleDirectoryId;
-    MockCompressedAirAssessment.directoryId = this.exampleDirectoryId;
+    // MockCompressedAirAssessment.directoryId = this.exampleDirectoryId;
     MockCompressedAirInventory.directoryId = this.exampleDirectoryId;
     MockWaterAssessment.directoryId = this.exampleDirectoryId;
     MockWaterdiagram.directoryId = this.exampleDirectoryId;
@@ -150,11 +150,11 @@ export class CoreService {
     let exampleMotorInventory: Assessment = await firstValueFrom(this.inventoryDbService.addWithObservable(MockMotorInventory));
     let examplePumpInventory: Assessment = await firstValueFrom(this.inventoryDbService.addWithObservable(MockPumpInventory));
     let exampleWasteWater: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockWasteWater));
-    let exampleCompressedAirAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockCompressedAirAssessment));
+    // let exampleCompressedAirAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockCompressedAirAssessment));
     let examplePsat: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockPsat));
     let exampleFsat: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockFsat));
     let exampleCompressedAirInventory: Assessment = await firstValueFrom(this.inventoryDbService.addWithObservable(MockCompressedAirInventory));
-    
+
 
     let exampleWaterDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(MockWaterdiagram));
     MockWaterAssessment.diagramId = exampleWaterDiagram.id;
@@ -169,7 +169,7 @@ export class CoreService {
     this.exampleMotorInventoryId = exampleMotorInventory.id;
     this.examplePumpInventoryId = examplePumpInventory.id;
     this.exampleWasteWaterId = exampleWasteWater.id;
-    this.exampleCompressedAirAssessmentId = exampleCompressedAirAssessment.id;
+    // this.exampleCompressedAirAssessmentId = exampleCompressedAirAssessment.id;
     this.exampleWaterAssessmentId = exampleWaterAssessment.id;
     this.exampleWaterDiagramId = exampleWaterDiagram.id;
     this.examplePsatId = examplePsat.id;
@@ -224,8 +224,8 @@ export class CoreService {
     MockWasteWaterSettings.assessmentId = this.exampleWasteWaterId;
     await firstValueFrom(this.settingsDbService.addWithObservable(MockWasteWaterSettings));
 
-    MockCompressedAirAssessmentSettings.assessmentId = this.exampleCompressedAirAssessmentId;
-    await firstValueFrom(this.settingsDbService.addWithObservable(MockCompressedAirAssessmentSettings));
+    // MockCompressedAirAssessmentSettings.assessmentId = this.exampleCompressedAirAssessmentId;
+    // await firstValueFrom(this.settingsDbService.addWithObservable(MockCompressedAirAssessmentSettings));
 
     // TODO MockCompressedAirSettings.inventoryId = this.exampleCompressedAirInventoryId;
     // await firstValueFrom(this.settingsDbService.addWithObservable(MockPsatSettings));

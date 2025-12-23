@@ -8,6 +8,7 @@ import { ExploreOpportunitiesValidationService } from '../../../../compressed-ai
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { UseAutomaticSequencerService } from './use-automatic-sequencer.service';
 import { CompressedAirAssessmentModificationResults } from '../../../../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
 
 @Component({
   selector: 'app-use-automatic-sequencer',
@@ -48,7 +49,8 @@ export class UseAutomaticSequencerComponent implements OnInit {
   settings: Settings;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private useAutomaticSequencerService: UseAutomaticSequencerService,
-    private exploreOpportunitiesService: ExploreOpportunitiesService) { }
+    private exploreOpportunitiesService: ExploreOpportunitiesService,
+    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -128,6 +130,10 @@ export class UseAutomaticSequencerComponent implements OnInit {
     }
     this.useAutomaticSequencer = this.useAutomaticSequencerService.updateObjFromForm(this.form, this.useAutomaticSequencer);
     this.modification.useAutomaticSequencer = this.useAutomaticSequencer;
+    if (isOrderChange) {
+      let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+      this.modification = this.compressedAirDataManagementService.updateReplacementCompressors(this.modification, compressedAirAssessment);
+    }
     this.compressedAirAssessmentService.updateModification(this.modification);
   }
 
@@ -146,7 +152,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
       this.useAutomaticSequencer.targetPressure = this.compressedAirAssessment.systemInformation.targetPressure;
       this.useAutomaticSequencer.variance = this.compressedAirAssessment.systemInformation.variance;
     }
-    this.save(false);
+    this.save(true);
   }
 
   changeTargetPressure() {

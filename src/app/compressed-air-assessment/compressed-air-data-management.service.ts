@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CentrifugalSpecifics, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, Modification, PerformancePoint, ProfileSummaryData } from '../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, Modification, PerformancePoint, ProfileSummary, ProfileSummaryData, UseAutomaticSequencerProfileSummary } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { GenericCompressor } from './generic-compressor-db.service';
@@ -311,7 +311,7 @@ export class CompressedAirDataManagementService {
         modification = this.updateReduceRuntimeWithReplacementCompressors(modification, compressedAirAssessment.replacementCompressorInventoryItems, compressedAirAssessment.compressorInventoryItems, salvagedCompressorIds, nonSalvagedCompressorIds, replacementCompressorIds, nonAddedReplacementCompressorIds, compressedAirAssessment);
       } else {
         //resetu reduce runtime with baseline
-        modification = this.resetReduceRuntimeToBaseline(modification, compressedAirAssessment.compressorInventoryItems);
+        modification = this.resetReduceRuntimeToBaseline(modification, compressedAirAssessment);
       }
 
       //Adjust cascading is after replace compressor
@@ -321,11 +321,20 @@ export class CompressedAirDataManagementService {
         //reset set point data with baseline
         modification = this.resetCascadingSetPointsToBaseline(modification, compressedAirAssessment.compressorInventoryItems);
       }
+      //Use automatic sequencer after replace compressor
+      if (modification.useAutomaticSequencer.order != 100 && (modification.replaceCompressor.order < modification.useAutomaticSequencer.order)) {
+        modification = this.updateUseAutomaticSequencerWithReplacementCompressors(modification, compressedAirAssessment, salvagedCompressorIds, nonSalvagedCompressorIds, replacementCompressorIds, nonAddedReplacementCompressorIds);
+      } else {
+        //reset use automatic sequencer with baseline
+        modification = this.resetUseAutomaticSequencerToBaseline(modification, compressedAirAssessment);
+      }
     }
     if (modification.replaceCompressor.order == 100) {
       //reset both reduce runtime and cascading set points with baseline
-      modification = this.resetReduceRuntimeToBaseline(modification, compressedAirAssessment.compressorInventoryItems);
+      modification = this.resetReduceRuntimeToBaseline(modification, compressedAirAssessment);
       modification = this.resetCascadingSetPointsToBaseline(modification, compressedAirAssessment.compressorInventoryItems);
+      modification = this.resetUseAutomaticSequencerToBaseline(modification, compressedAirAssessment);
+
     }
     return modification;
   }
@@ -351,7 +360,6 @@ export class CompressedAirDataManagementService {
       if (!modification.reduceRuntime.runtimeData.find(dataItem => { return dataItem.compressorId == nonSalvagedCompressorId })) {
         let nonSalvagedCompressor: CompressorInventoryItem = currentCompressorInventoryItems.find(item => { return item.itemId == nonSalvagedCompressorId });
         if (nonSalvagedCompressor) {
-          //TODO: day type and inverval data need to be handled properly
           let intervalData: Array<ProfileSummaryData> = getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup);
           compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
             modification.reduceRuntime.runtimeData.push({
@@ -456,9 +464,9 @@ export class CompressedAirDataManagementService {
     return modification;
   }
 
-  resetReduceRuntimeToBaseline(modification: Modification, currentCompressorInventoryItems: Array<CompressorInventoryItem>): Modification {
+  resetReduceRuntimeToBaseline(modification: Modification, compressedAirAssessment: CompressedAirAssessment): Modification {
     //baseline compressors
-    let baselineCompressorIds: Array<string> = currentCompressorInventoryItems.map(item => { return item.itemId });
+    let baselineCompressorIds: Array<string> = compressedAirAssessment.compressorInventoryItems.map(item => { return item.itemId });
     //remove replaced compressors
     modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(dataItem => {
       if (baselineCompressorIds.includes(dataItem.compressorId)) {
@@ -470,15 +478,17 @@ export class CompressedAirDataManagementService {
     //add back missing compressors
     baselineCompressorIds.forEach(baselineCompressorId => {
       if (!modification.reduceRuntime.runtimeData.find(dataItem => { return dataItem.compressorId == baselineCompressorId })) {
-        let baselineCompressor: CompressorInventoryItem = currentCompressorInventoryItems.find(item => { return item.itemId == baselineCompressorId });
+        let baselineCompressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == baselineCompressorId });
         if (baselineCompressor) {
-          //TODO: day type and inverval data need to be handled properly
-          modification.reduceRuntime.runtimeData.push({
-            compressorId: baselineCompressor.itemId,
-            fullLoadCapacity: baselineCompressor.performancePoints.fullLoad.airflow,
-            intervalData: new Array(),
-            dayTypeId: '',
-            automaticShutdownTimer: baselineCompressor.compressorControls.automaticShutdown
+          let intervalData: Array<ProfileSummaryData> = getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup);
+          compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+            modification.reduceRuntime.runtimeData.push({
+              compressorId: baselineCompressor.itemId,
+              fullLoadCapacity: baselineCompressor.performancePoints.fullLoad.airflow,
+              intervalData: intervalData.map(data => { return { timeInterval: data.timeInterval, isCompressorOn: true } }),
+              dayTypeId: dayType.dayTypeId,
+              automaticShutdownTimer: baselineCompressor.compressorControls.automaticShutdown
+            });
           });
         }
       }
@@ -512,6 +522,89 @@ export class CompressedAirDataManagementService {
         }
       }
     });
+    return modification;
+  }
+
+  updateUseAutomaticSequencerWithReplacementCompressors(modification: Modification, compressedAirAssessment: CompressedAirAssessment,
+    salvagedCompressorIds: Array<string>, nonSalvagedCompressorIds: Array<string>,
+    replacementCompressorIds: Array<string>,
+    nonAddedReplacementCompressorIds: Array<string>): Modification {
+    //current profile
+    let profileSummary: Array<UseAutomaticSequencerProfileSummary> = modification.useAutomaticSequencer.profileSummary;
+    //remove salvaged compressors from profile
+    profileSummary = profileSummary.filter(summary => {
+      if (salvagedCompressorIds.includes(summary.compressorId)) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    //add non-salvaged compressors back to profile if removed earlier
+    nonSalvagedCompressorIds.forEach(nonSalvagedCompressorId => {
+      //check missing in data
+      if (!profileSummary.find(summary => { return summary.compressorId == nonSalvagedCompressorId })) {
+        let baselineCompressor: CompressorInventoryItem = compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == nonSalvagedCompressorId });
+        if (baselineCompressor) {
+          let intervalData: Array<ProfileSummaryData> = getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup);
+          compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+            profileSummary.push({
+              compressorId: baselineCompressor.itemId,
+              fullLoadCapacity: baselineCompressor.performancePoints.fullLoad.airflow,
+              fullLoadPressure: baselineCompressor.performancePoints.fullLoad.dischargePressure,
+              profileSummaryData: intervalData.map(data => { return { timeInterval: data.timeInterval, order: 0 } }),
+              dayTypeId: dayType.dayTypeId,
+              automaticShutdownTimer: baselineCompressor.compressorControls.automaticShutdown
+            });
+          });
+        }
+      }
+    });
+    //add new replacement compressors to profile
+    replacementCompressorIds.forEach(replacementCompressorId => {
+      //check missing in data
+      if (!profileSummary.find(summary => { return summary.compressorId == replacementCompressorId })) {
+        let replacementCompressor: CompressorInventoryItem = compressedAirAssessment.replacementCompressorInventoryItems.find(item => { return item.itemId == replacementCompressorId });
+        if (replacementCompressor) {
+          let intervalData: Array<ProfileSummaryData> = getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup);
+          compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+            profileSummary.push({
+              compressorId: replacementCompressor.itemId,
+              fullLoadCapacity: replacementCompressor.performancePoints.fullLoad.airflow,
+              fullLoadPressure: replacementCompressor.performancePoints.fullLoad.dischargePressure,
+              profileSummaryData: intervalData.map(data => { return { timeInterval: data.timeInterval, order: 0 } }),
+              dayTypeId: dayType.dayTypeId,
+              automaticShutdownTimer: replacementCompressor.compressorControls.automaticShutdown
+            });
+          });
+        }
+      }
+    });
+    //remove replacement compressors that are no longer added
+    nonAddedReplacementCompressorIds.forEach(nonAddedReplacementCompressorId => {
+      profileSummary = profileSummary.filter(summary => {
+        if (summary.compressorId == nonAddedReplacementCompressorId) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+    });
+    modification.useAutomaticSequencer.profileSummary = profileSummary;
+    return modification;
+  }
+
+  resetUseAutomaticSequencerToBaseline(modification: Modification, compressedAirAssessment: CompressedAirAssessment): Modification {
+    let profileSummary: Array<UseAutomaticSequencerProfileSummary> = compressedAirAssessment.systemProfile.profileSummary.map(summary => {
+      return {
+        compressorId: summary.compressorId,
+        fullLoadCapacity: summary.fullLoadCapacity,
+        fullLoadPressure: summary.fullLoadPressure,
+        profileSummaryData: summary.profileSummaryData.map(data => { return { timeInterval: data.timeInterval, order: data.order } }),
+        dayTypeId: summary.dayTypeId,
+        automaticShutdownTimer: summary.automaticShutdownTimer
+      }
+    });
+    modification.useAutomaticSequencer.profileSummary = profileSummary;
     return modification;
   }
 }

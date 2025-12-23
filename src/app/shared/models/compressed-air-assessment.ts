@@ -20,7 +20,7 @@ export interface CompressedAirAssessment {
     endUseData: EndUseData,
     compressedAirDayTypes: Array<CompressedAirDayType>,
     setupDone: boolean
-    selectedModificationId?: string    
+    selectedModificationId?: string
     connectedItem?: ConnectedItem,
 }
 
@@ -160,9 +160,22 @@ export interface UseAutomaticSequencer {
     targetPressure: number,
     variance: number,
     order: number,
-    profileSummary: Array<ProfileSummary>,
+    profileSummary: Array<UseAutomaticSequencerProfileSummary>,
     implementationCost: number,
 }
+
+export interface UseAutomaticSequencerProfileSummary {
+        fullLoadPressure: number,
+        fullLoadCapacity?: number,
+        compressorId: string,
+        dayTypeId: string,
+        automaticShutdownTimer?: boolean
+        profileSummaryData: Array<{
+            timeInterval: number,
+            order: number,
+        }>
+}
+
 
 export interface ReduceRuntime {
     runtimeData: Array<ReduceRuntimeData>,

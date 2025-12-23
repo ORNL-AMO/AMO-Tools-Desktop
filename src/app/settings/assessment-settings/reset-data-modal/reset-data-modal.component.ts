@@ -17,7 +17,7 @@ import { InventoryDbService } from '../../../indexedDb/inventory-db.service';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
 import { MockMotorInventory } from '../../../examples/mockMotorInventoryData';
 import { MockWasteWater, MockWasteWaterSettings } from '../../../examples/mockWasteWater';
-import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../../../examples/mockCompressedAirAssessment';
+// import { MockCompressedAirAssessment, MockCompressedAirAssessmentSettings } from '../../../examples/mockCompressedAirAssessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surface-db.service';
 import { catchError, firstValueFrom} from 'rxjs';
@@ -283,10 +283,10 @@ async resetAllExampleAssessments(dirId: number) {
   MockTreasureHuntSettings.assessmentId = createdTreasureHunt.id;
   await firstValueFrom(this.settingsDbService.addWithObservable(MockTreasureHuntSettings));
 
-  MockCompressedAirAssessment.directoryId = dirId;
-  let createdCompressedAir: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockCompressedAirAssessment));
-  MockCompressedAirAssessmentSettings.assessmentId = createdCompressedAir.id;
-  await firstValueFrom(this.settingsDbService.addWithObservable(MockCompressedAirAssessmentSettings));
+  // MockCompressedAirAssessment.directoryId = dirId;
+  // let createdCompressedAir: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(MockCompressedAirAssessment));
+  // MockCompressedAirAssessmentSettings.assessmentId = createdCompressedAir.id;
+  // await firstValueFrom(this.settingsDbService.addWithObservable(MockCompressedAirAssessmentSettings));
 
 
   MockWaterAssessment.directoryId = dirId;

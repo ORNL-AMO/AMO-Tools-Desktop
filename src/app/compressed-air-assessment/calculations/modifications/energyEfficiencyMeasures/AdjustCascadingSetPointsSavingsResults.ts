@@ -70,8 +70,13 @@ export class AdjustCascadingSetPointsResults {
     }
 
     adjustCascadingSetPointsAdjustCompressors(adjustCascadingSetPoints: AdjustCascadingSetPoints, atmosphericPressure: number, settings: Settings) {
-        this.adjustedCompressors.forEach(compressor => {
-            compressor.adjustCascadingSetPoints(adjustCascadingSetPoints, atmosphericPressure, settings);
+        adjustCascadingSetPoints.setPointData.forEach(setPointData => {
+            let compressorToAdjust: CompressorInventoryItemClass = _.find(this.adjustedCompressors, (compressor) => { return compressor.itemId == setPointData.compressorId; });
+            if (compressorToAdjust) {
+                compressorToAdjust.adjustCascadingSetPoints(adjustCascadingSetPoints, atmosphericPressure, settings);
+            }
         });
     }
+
+
 }
