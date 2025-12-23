@@ -420,63 +420,104 @@ export class PowerFactorCorrectionService {
       costOfStaticCapacitance: [inputData.costOfStaticCapacitance, [Validators.required, Validators.min(0)]],
       costOfDynamicCapacitance: [inputData.costOfDynamicCapacitance, [Validators.required, Validators.min(0)]],
       monthyInputs: this.formBuilder.array(
-        inputData.monthyInputs.map(m => this.formBuilder.group({
-          month: [m.month, Validators.required],
-          actualDemand: [m.actualDemand, [Validators.required, Validators.min(0)]],
-          powerFactor: [m.powerFactor, [Validators.required, Validators.min(0)]],
-          pfAdjustedDemand: [m.pfAdjustedDemand, [Validators.required, Validators.min(0)]]
-        }, {validators: this.conditionalInputValidator()}))
+       inputData.monthyInputs.map(m => {
+          const group = this.formBuilder.group({
+            month: [m.month, Validators.required],
+            actualDemand: [m.actualDemand, [Validators.required, Validators.min(0), this.actualDemandValidator]],
+            powerFactor: [m.powerFactor, [Validators.required, Validators.min(0), this.powerFactorValidator]],
+            pfAdjustedDemand: [m.pfAdjustedDemand, [Validators.required, Validators.min(0)]]
+          });
+          return group;
+        })
       ),
       startMonth: [inputData.startMonth],
       startYear: [inputData.startYear]
     });
-    // form = this.setPowerFactorValidators(form);
     return form;
   }
 
- conditionalInputValidator(): ValidatorFn {
-  return (group: AbstractControl): ValidationErrors | null => {
-    const parent = group.parent;
-    const parentofParent = parent?.parent;
+
+  powerFactorValidator: ValidatorFn = (powerFactorControl: AbstractControl): ValidationErrors | null => {
+    // Stops recursion loop
+    if ((powerFactorControl as any)._updatingSibling) {
+      return null;
+    }
+
+    const group = powerFactorControl.parent as FormGroup | null;
+    if (!group) return null;
+
+    const parentForm = group?.parent?.parent as FormGroup;
+    const actualDemandControl = group.get('actualDemand');
+
+    const billedForDemandControl = parentForm?.get('billedForDemand');
+    const adjustedOrActualControl = parentForm?.get('adjustedOrActual');
+
+    const actualDemand = actualDemandControl?.value;
+    const powerFactor = powerFactorControl.value;
+    const billedForDemand = billedForDemandControl?.value;
+    const adjustedOrActual = adjustedOrActualControl?.value;
+
+    // Trigger sibling validation with flag to stop infinite recursion
+    if (actualDemandControl && actualDemandControl !== powerFactorControl) {
+      (actualDemandControl as any)._updatingSibling = true;
+      actualDemandControl.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+      delete (actualDemandControl as any)._updatingSibling;
+    }
+
+    if (parseInt(billedForDemand) === 1 && parseInt(adjustedOrActual) === 1) {
+      if (actualDemand != null && powerFactor != null && actualDemand > powerFactor) {
+        return { someError: 'Read Demand must be greater than or equal to Apparent Power.' };
+      }
+    } else {
+      if (actualDemand != null && powerFactor != null && actualDemand < powerFactor) {
+        return { someError: 'Power Factor Adjusted Demand must be greater than or equal to Actual Demand.' };
+      }
+    }
+
+    return null;
+  };
+
+  actualDemandValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    // Stops recursion loop
+    if ((control as any)._updatingSibling) {
+      return null;
+    }
+
+    const group = control.parent as FormGroup;
+    if (!group) return null;
+
+    const parentForm = group?.parent?.parent as FormGroup;
 
     const actualDemandControl = group.get('actualDemand');
     const powerFactorControl = group.get('powerFactor');
 
+    const billedForDemandControl = parentForm?.get('billedForDemand');
+    const adjustedOrActualControl = parentForm?.get('adjustedOrActual');
+
     const actualDemand = actualDemandControl?.value;
-    const powerFactor = powerFactorControl?.value;
+    const powerFactor = powerFactorControl.value;
+    const billedForDemand = billedForDemandControl?.value;
+    const adjustedOrActual = adjustedOrActualControl?.value;
 
-    const billedForDemand = Number(parentofParent?.get('billedForDemand')?.value);
-    const adjustedOrActual = Number(parentofParent?.get('adjustedOrActual')?.value);
+    // Trigger sibling validation with flag to stop infinite recursion
+    if (powerFactorControl && powerFactorControl !== control) {
+      (powerFactorControl as any)._updatingSibling = true;
+      powerFactorControl.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+      delete (powerFactorControl as any)._updatingSibling;
+    }
 
-    if(billedForDemand == 1 && adjustedOrActual == 1) {
+    if (parseInt(billedForDemand) === 1 && parseInt(adjustedOrActual) === 1) {
       if (actualDemand != null && powerFactor != null && actualDemand > powerFactor) {
-        powerFactorControl?.setErrors({ ...powerFactorControl.errors, actualDemandNotLessThanpfAdjustedDemand: true });
-
-        return { actualDemandNotLessThanpfAdjustedDemand: true };
-      } else {
-        if (powerFactorControl?.errors) {
-          const { actualDemandNotLessThanpfAdjustedDemand, ...otherErrors } = powerFactorControl.errors;
-          powerFactorControl.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
-        }
+        return { someError: 'Read Demand must be greater than or equal to Apparent Power.' };
       }
     } else {
       if (actualDemand != null && powerFactor != null && actualDemand < powerFactor) {
-        actualDemandControl?.setErrors({ ...actualDemandControl.errors, actualDemandNotLessThanpowerFactor: true });
-
-        return { actualDemandNotLessThanpowerFactor: true };
-      } else {
-        if (actualDemandControl?.errors) {
-          const { actualDemandNotLessThanpowerFactor, ...otherErrors } = actualDemandControl.errors;
-          actualDemandControl.setErrors(Object.keys(otherErrors).length ? otherErrors : null);
-        }
+        return { someError: 'Power Factor Adjusted Demand must be greater than or equal to Actual Demand.' };
       }
     }
-    actualDemandControl?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-    powerFactorControl?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-    
+
     return null;
   };
-}
 
   calculateRealPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
     let outputData: PowerFactorCorrectionOutputs = this.getEmptyPowerFactorCorrectionOutputs();

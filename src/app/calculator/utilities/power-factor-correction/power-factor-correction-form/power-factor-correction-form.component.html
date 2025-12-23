@@ -152,28 +152,27 @@
     </td>
     <td>
       <input type="number" step="any"
-        formControlName="actualDemand" id="{{'actualDemand_'+i}}" (input)="calculate(group.get('actualDemand'))" onfocus="this.select();"
-        (focus)="focusField('actualDemand')">
+        formControlName="actualDemand" id="{{'actualDemand_'+i}}" (input)="calculate()" onfocus="this.select();"        (focus)="focusField('actualDemand')">
         <span class="alert-danger pull-right small"
-          *ngIf="group.get('actualDemand')?.invalid && (group.get('actualDemand')?.dirty || group.get('actualDemand')?.touched)">
+          *ngIf="group.get('actualDemand')?.invalid">          
           <span *ngIf="group.get('actualDemand')?.errors?.required">Value Required1.</span>
           <span *ngIf="group.get('actualDemand')?.errors?.min">Value can't be
                     greater than {{group.get('actualDemand')?.errors?.min}}</span>
-          <span *ngIf="group.get('actualDemand')?.errors?.actualDemandNotLessThanpowerFactor">Power Factor Adjusted Demand must be greater than or equal to Actual Demand.</span>
-          <span *ngIf="group.get('actualDemand')?.errors?.actualDemandNotLessThanpfAdjustedDemand">Read Demand must be greater than or equal to Apparent Power.</span>
+          <!-- <span *ngIf="group.get('actualDemand')?.errors?.actualDemandNotLessThanpowerFactor">Power Factor Adjusted Demand must be greater than or equal to Actual Demand.</span> -->
+          <span *ngIf="group.get('actualDemand')?.errors?.someError">{{ group.get('actualDemand')?.errors?.someError }}</span>
         <span></span>
         </span>
     </td>   
     <td>
       <input type="number" step="any"
-        formControlName="powerFactor" id="{{'powerFactor_'+i}}" (input)="calculate(group.get('powerFactor'))" onfocus="this.select();"
-        (focus)="focusField('powerFactor')">
+        formControlName="powerFactor" id="{{'powerFactor_'+i}}" (input)="calculate()" onfocus="this.select();"        (focus)="focusField('powerFactor')">
         <span class="alert-danger pull-right small"
           *ngIf="group.get('powerFactor')?.invalid">
           <span *ngIf="group.get('powerFactor')?.errors?.required">Value Required2.</span>
           <span *ngIf="group.get('powerFactor')?.errors?.min">Value can't be
                     greater than {{group.get('powerFactor')?.errors?.min}}</span>
-          <span *ngIf="group.get('powerFactor')?.errors?.actualDemandNotLessThanpfAdjustedDemand">Read Demand must be greater than or equal to Apparent Power.</span>
+          <!-- <span *ngIf="group.get('powerFactor')?.errors?.actualDemandNotLessThanpfAdjustedDemand">Read Demand must be greater than or equal to Apparent Power.</span> -->
+          <span *ngIf="group.get('powerFactor')?.errors?.someError">{{ group.get('powerFactor')?.errors?.someError }}</span>
         </span>
     </td>
     </ng-container>
