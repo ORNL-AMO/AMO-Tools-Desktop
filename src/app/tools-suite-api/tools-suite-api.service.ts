@@ -128,9 +128,9 @@ export class ToolsSuiteApiService {
             let material = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
                 latentHeat: material.latentHeat,
-                specificHeatLiquid: material.specificHeatLiquid,
-                specificHeatVapor: material.specificHeatVapor,
-                vaporizationTemperature: material.vaporizationTemperature,
+                specificHeatLiquid: material.specificHeat,
+                specificHeatVapor: material.vaporSpecificHeat,
+                vaporizationTemperature: material.boilingPoint,
                 substance: material.substance,
                 isDefault: true
             });
