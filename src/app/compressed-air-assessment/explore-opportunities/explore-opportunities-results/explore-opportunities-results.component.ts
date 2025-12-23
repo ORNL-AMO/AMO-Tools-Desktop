@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { BaselineResult, BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
 import { ExploreOpportunitiesValidationService } from '../explore-opportunities-validation.service';
@@ -16,7 +16,6 @@ import { Settings } from '../../../shared/models/settings';
 export class ExploreOpportunitiesResultsComponent implements OnInit {
   compressedAirAssessmentSub: Subscription;
   adjustedProfileSummary: Array<ProfileSummary>;
-  totals: Array<ProfileSummaryTotal>;
   dayTypeOptions: Array<CompressedAirDayType>;
   compressedAirAssessment: CompressedAirAssessment;
 
@@ -83,7 +82,6 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
       }
       this.setResults();
     });
-    console.log(this.totals);
   }
 
   ngOnDestroy() {
