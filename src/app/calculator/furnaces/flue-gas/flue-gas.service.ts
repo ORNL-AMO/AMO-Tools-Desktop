@@ -54,6 +54,11 @@ export class FlueGasService {
     let baselineResults: FlueGasResult = this.getFlueGasResult(baselineFlueGas, baselineEnergyData, settings, inModal, isStandAlone);
     output.baseline = baselineResults;
     if (modificationFlueGas && modificationEnergyData) {
+      //name is required but there is not field in the calculator
+      //fix for issue 8045 but probably needs a update to the validation
+      if(!modificationFlueGas.name || modificationFlueGas.name === ''){
+        modificationFlueGas.name = 'Modification Flue Gas';
+      }
       let modificationResults: FlueGasResult = this.getFlueGasResult(modificationFlueGas, modificationEnergyData, settings, inModal, isStandAlone);
       output.modification = modificationResults;
       let baselineHeatInput: number = baselineFlueGas.flueGasType === 'By Volume' ? baselineFlueGas.flueGasByVolume.heatInput : baselineFlueGas.flueGasByMass.heatInput;
