@@ -280,6 +280,7 @@ export class CompressedAirAssessmentResultsService {
       totalModificationPower: _.sumBy(modificationResults, (result) => { return result.allSavingsResults.adjustedResults.power }),
       totalCostSavings: _.sumBy(modificationResults, (result) => { return result.allSavingsResults.savings.cost }),
       totalCostPower: _.sumBy(modificationResults, (result) => { return result.allSavingsResults.savings.power }),
+      totalAverageAirFlow: baselineResults.total.averageAirFlow,
       modification: modification
     }
   }
@@ -1600,6 +1601,7 @@ export interface CompressedAirAssessmentResult {
   totalModificationPower: number,
   totalCostSavings: number,
   totalCostPower: number,
+  totalAverageAirFlow: number,
   modification: Modification
 }
 export interface DayTypeProfileSummary { dayTypeId: string, profileSummary: Array<ProfileSummary> };

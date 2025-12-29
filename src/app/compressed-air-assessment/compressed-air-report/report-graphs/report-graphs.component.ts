@@ -4,7 +4,7 @@ import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../
 import { CurrencyPipe } from '@angular/common';
 import { PlotlyService } from 'angular-plotly.js';
 import { CompressedAirModificationValid } from '../../explore-opportunities/explore-opportunities-validation.service';
-
+import {BaselineResults } from '../../compressed-air-assessment-results.service';
 @Component({
     selector: 'app-report-graphs',
     templateUrl: './report-graphs.component.html',
@@ -12,6 +12,7 @@ import { CompressedAirModificationValid } from '../../explore-opportunities/expl
     standalone: false
 })
 export class ReportGraphsComponent implements OnInit {
+    selectedGraph: 'cost' | 'airflow' | 'energy' = 'cost';
   @Input()
   assessmentResults: Array<CompressedAirAssessmentResult>;
   @Input()
@@ -22,8 +23,6 @@ export class ReportGraphsComponent implements OnInit {
   printView: boolean;
   
   @ViewChild("modificationGraph", { static: false }) modificationGraph: ElementRef;
-  @ViewChild("airflowGraph", { static: false }) airflowGraph: ElementRef;
-  @ViewChild("energyGraph", { static: false }) energyGraph: ElementRef;
 
   selectedDayType: CompressedAirDayType;
   reduceAirLeaks: boolean;
@@ -41,12 +40,23 @@ export class ReportGraphsComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.drawModificationGraph();
+    this.showSelectedGraph();
+  }
+
+  showSelectedGraph() {
+    if (this.selectedGraph === 'cost') {
+      this.drawModificationGraph();
+    } else if (this.selectedGraph === 'airflow') {
+      this.drawAirflowGraph();
+    } else if (this.selectedGraph === 'energy') {
+      this.drawEnergyGraph();
+    }
   }
 
   drawModificationGraph() {
     if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.modificationGraph) {
-      let x: Array<string> = this.combinedDayTypeResults.map(result => { return result.modification.name });
+      let x: Array<string> = this.combinedDayTypeResults.map(result => { 
+        return result.modification.name });
       x.unshift('Baseline');
       let yValue = this.getAnnualCost();
       let traceData = new Array();
@@ -65,7 +75,7 @@ export class ReportGraphsComponent implements OnInit {
           }
         },
       })
-      // let traceData = new Array();
+      
       let trace = {
         x: x,
         y: this.getFlowReallocationTrace(),
@@ -186,7 +196,7 @@ export class ReportGraphsComponent implements OnInit {
       }
 
 
-      var layout = this.getLayout("Modification Project Savings");
+      var layout = this.getLayout("Modification Project Savings", "$");
       var config = {
         responsive: true,
         displaylogo: false
@@ -194,25 +204,24 @@ export class ReportGraphsComponent implements OnInit {
       this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
     }
   }
-// air flow changes instead of cost. Also, while were there, add one for energy.
 
   drawAirflowGraph() {
-    if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.airflowGraph) {
+    if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.modificationGraph) {
+
       let x: Array<string> = this.combinedDayTypeResults.map(result => { return result.modification.name });
       x.unshift('Baseline');
-      let yValue = this.getAnnualCost();
+      let yValue = this.getAverageAirFlow();
       let traceData = new Array();
-      // let currencyPipe = new CurrencyPipe('en-US')
 
-      //each trace will display the data we are looking for. I do not know what values are to be shown, I need to ask. 
+      //each trace will display the data we are looking for.
       // each of below will become a data stack on the y axis.
       traceData.push({
         x: x,
         y: yValue,
-        text: yValue.map(value => `${value.toLocaleString()} ton CO₂`),        
+        text: yValue.map(value => `${value.toLocaleString()} acfm`),
         textposition: 'auto',
         type: 'bar',
-        name: 'Adjusted Annual Cost',
+        name: 'Total Average Air Flow',
         hoverinfo: "name+y",
         marker: {
           line: {
@@ -221,7 +230,7 @@ export class ReportGraphsComponent implements OnInit {
         },
       });
 
-      var layout = this.getLayout("Air Flow Changes");
+      var layout = this.getLayout("Total Average Air Flow", "acfm ");
       var config = {
         responsive: true,
         displaylogo: false
@@ -230,23 +239,22 @@ export class ReportGraphsComponent implements OnInit {
     }
   }
 
-    drawEnergyGraph() {
-    if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.energyGraph) {
+  drawEnergyGraph() {
+    if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.modificationGraph) {
       let x: Array<string> = this.combinedDayTypeResults.map(result => { return result.modification.name });
       x.unshift('Baseline');
-      let yValue = this.getAnnualCost();
+      let yValue = this.getTotalEnergyConsumption();
       let traceData = new Array();
-      // let currencyPipe = new CurrencyPipe('en-US')
 
-      //each trace will display the data we are looking for. I do not know what values are to be shown, I need to ask. 
+      //each trace will display the data we are looking for.
       // each of below will become a data stack on the y axis.
       traceData.push({
         x: x,
         y: yValue,
-        text: yValue.map(value => `${value.toLocaleString()} ton CO₂`),        
+        text: yValue.map(value => `${value.toLocaleString()} kWh`),        
         textposition: 'auto',
         type: 'bar',
-        name: 'Adjusted Annual Cost',
+        name: 'Total Energy Consumption',
         hoverinfo: "name+y",
         marker: {
           line: {
@@ -255,7 +263,7 @@ export class ReportGraphsComponent implements OnInit {
         },
       });
 
-      var layout = this.getLayout("Energy");
+      var layout = this.getLayout("Energy", "kWh ");
       var config = {
         responsive: true,
         displaylogo: false
@@ -331,7 +339,23 @@ export class ReportGraphsComponent implements OnInit {
     return y;
   }
 
-  getLayout(yAxisTitle: string) {
+  getAverageAirFlow(): Array<number> {
+    let y: Array<number> = [this.assessmentResults[0].totalAverageAirFlow];
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.averageAirFlow);
+    });
+    return y;
+  }
+
+  getTotalEnergyConsumption(): Array<number> {
+    let y: Array<number> = [this.assessmentResults[0].totalBaselinePower];
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.allSavingsResults.adjustedResults.power);
+    });
+    return y;
+  }
+
+  getLayout(yAxisTitle: string, tickPrefix: string) {
     return {
       showlegend: true,
       barmode: 'stack',
@@ -341,48 +365,11 @@ export class ReportGraphsComponent implements OnInit {
       },
       title: yAxisTitle,
       yaxis: {
-        tickprefix: '$',
-        // title: {
-        //   text: yAxisTitle,
-        //   font: {
-        //     size: 16
-        //   },
-        // },
+        tickprefix: tickPrefix,
         hoverformat: ",.0f",
       },
-      margin: {
-        // t: 20,
-        // r: 20
-      },
-      legend: {
-        // orientation: "h",
-        // y: 1.5
-      },
-      updatemenus: [{
-        buttons: [
-          {
-            method: 'update',
-            args: [{'visible': [true, true, true]}, {'title': 'Cost'}],
-            label: 'Cost'
-          },
-          {
-            method: 'update',
-            args: [{'visible': [false, true, false]}, {'title': 'Air Flow'}],
-            label: 'Air Flow'
-          },
-          {
-            method: 'update',
-            args: [{'visible': [false, false, true]}, {'title': 'Energy'}],
-            label: 'Energy'
-          }
-        ],
-        direction: 'down',
-        showactive: true,
-        x: 0.0,
-        xanchor: 'left',
-        y: 1.2,
-        yanchor: 'top'
-      }]
+      margin: {},
+      legend: {},
     };
   }
 

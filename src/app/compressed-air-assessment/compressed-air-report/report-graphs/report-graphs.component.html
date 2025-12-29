@@ -1,5 +1,12 @@
+
+<div class="btn-group mb-3" role="group" aria-label="Graph selection">
+    <button type="button" class="btn btn-primary" [class.active]="selectedGraph === 'cost'" (click)="selectedGraph = 'cost'; showSelectedGraph()">Cost</button>
+    <button type="button" class="btn btn-primary" [class.active]="selectedGraph === 'airflow'" (click)="selectedGraph = 'airflow'; showSelectedGraph()">Air Flow</button>
+    <button type="button" class="btn btn-primary" [class.active]="selectedGraph === 'energy'" (click)="selectedGraph = 'energy'; showSelectedGraph()">Energy</button>
+</div>
+
 <div class="page-break-before" [ngClass]="{'print-graphs-container': printView}">
-    <div #modificationGraph id="modificationGraph"></div>
+        <div #modificationGraph id="modificationGraph"></div>
 </div>
 
 <div class="alert alert-warning p-2" *ngIf="assessmentResults && assessmentResults.length == 0">
