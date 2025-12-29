@@ -148,6 +148,9 @@ export class ModificationListModalComponent implements OnInit {
     if (modification.useAutomaticSequencer.order != 100) {
       badges.push('Use Automatic Sequencer');
     }
+    if(modification.replaceCompressor.order != 100){
+      badges.push('Replace Compressor');
+    }
     return badges;
   }
 }

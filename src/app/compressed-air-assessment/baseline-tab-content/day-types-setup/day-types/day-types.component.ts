@@ -87,8 +87,6 @@ export class DayTypesComponent implements OnInit {
     this.save();
   }
 
-  focusField(currentField: string) { }
-
   save() {
     //update modification day type names on changes
     let compressedAirDaytypes: Array<CompressedAirDayType> = this.dayTypeService.getDayTypesFromForm(this.dayTypesFormArray);
@@ -143,9 +141,9 @@ export class DayTypesComponent implements OnInit {
       modalTitle: 'Delete Day Type',
       confirmMessage: `Are you sure you want to delete '${deleteDayType.name}'?`
     }
+    this.compressedAirAssessmentService.modalOpen.next(true);
     this.showConfirmDeleteModal = true;
     this.deleteSelectedDayTypeId = dayTypeId;
-    this.compressedAirAssessmentService.modalOpen.next(true);
   }
 
   onConfirmDeleteClose(deleteDayType: boolean) {

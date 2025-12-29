@@ -24,6 +24,12 @@ export class CompressorInventoryValidationService {
         compressorValidations.push(compressorItemValidation);
       });
     }
+    if(compressedAirAssessment.replacementCompressorInventoryItems && compressedAirAssessment.replacementCompressorInventoryItems.length > 0){
+      compressedAirAssessment.replacementCompressorInventoryItems.forEach(replacementCompressorItem => {
+        let replacementCompressorItemValidation: CompressorItemValidation = this.validateCompressorItem(replacementCompressorItem, compressedAirAssessment.systemInformation);
+        compressorValidations.push(replacementCompressorItemValidation);
+      });
+    }
     return compressorValidations;
   }
 

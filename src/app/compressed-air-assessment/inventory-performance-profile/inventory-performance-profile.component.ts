@@ -104,17 +104,14 @@ export class InventoryPerformanceProfileComponent implements OnInit {
         });
       }
     } else {
-      console.log('here...')
       this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(selectedDayType => {
         if (selectedDayType) {
-          console.log('here...1')
           this.selectedDayType = selectedDayType;
           this.setCompressorData();
         }
       });
       this.modificationResultsSub = this.compressedAirAssessmentService.compressedAirAssessmentModificationResults.subscribe(modificationResults => {
         if (modificationResults) {
-          console.log('here...2')
           this.compressedAirAssessmentModificationResults = modificationResults;
           this.setCompressorData();
         }
@@ -144,10 +141,8 @@ export class InventoryPerformanceProfileComponent implements OnInit {
 
   setCompressorData() {
     if (this.compressedAirAssessmentModificationResults && this.selectedDayType) {
-      console.log('here...3')
       this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
       this.adjustedCompressors = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(result => { return result.dayType.dayTypeId == this.selectedDayType.dayTypeId }).adjustedCompressors;
-      console.log(this.adjustedCompressors);
       this.drawChart();
     }
   }
@@ -400,8 +395,15 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     let compressorInventory: Array<CompressorInventoryItem>;
     if (this.inReport) {
       compressorInventory = this.compressedAirAssessment.compressorInventoryItems;
+      if(this.compressedAirAssessment.replacementCompressorInventoryItems && this.compressedAirAssessment.replacementCompressorInventoryItems.length > 0){
+        compressorInventory = compressorInventory.concat(this.compressedAirAssessment.replacementCompressorInventoryItems);
+      }
     } else {
-      compressorInventory = this.compressedAirAssessmentService.compressedAirAssessment.getValue().compressorInventoryItems;
+      let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+      compressorInventory = compressedAirAssessment.compressorInventoryItems;
+      if(compressedAirAssessment.replacementCompressorInventoryItems && compressedAirAssessment.replacementCompressorInventoryItems.length > 0){
+        compressorInventory = compressorInventory.concat(compressedAirAssessment.replacementCompressorInventoryItems);
+      }
     }
     let chartData: Array<ProfileChartData> = new Array();
     if (this.showAllCompressors) {

@@ -23,8 +23,7 @@
                     <ng-container [formGroup]="dayTypeForm">
                         <td class="w-45">
                             <input class="form-control w-100" name="{{'name'+i}}" id="{{'name'+i}}"
-                                formControlName="name" type="text" (input)="save()" (focus)="focusField('name')"
-                                onfocus="this.select();">
+                                formControlName="name" type="text" (input)="save()" onfocus="this.select();">
                             <span class="alert-danger pull-right"
                                 *ngIf="dayTypeForm.controls.name.invalid && !dayTypeForm.controls.name.pristine">
                                 <span *ngIf="dayTypeForm.controls.name.errors.required">Value required.</span>
@@ -32,8 +31,7 @@
                         </td>
                         <td class="w-45">
                             <input class="form-control w-100" name="{{'numberOfDays'+i}}" id="{{'numberOfDays'+i}}"
-                                formControlName="numberOfDays" type="number" (input)="save()"
-                                (focus)="focusField('numberOfDays')" onfocus="this.select();">
+                                formControlName="numberOfDays" type="number" (input)="save()" onfocus="this.select();">
                             <span class="alert-danger pull-right"
                                 *ngIf="dayTypeForm.controls.numberOfDays.invalid && !dayTypeForm.controls.numberOfDays.pristine">
                                 <span *ngIf="dayTypeForm.controls.numberOfDays.errors.required">Value required.</span>
@@ -75,7 +73,8 @@
                 </tr>
             </tfoot>
         </table>
-        <a class="click-link pull-right small" (click)="addDayType()" *ngIf="!hasModifications && !hasEndUses">+Add Day Type</a>
+        <a class="click-link pull-right small" (click)="addDayType()" *ngIf="!hasModifications && !hasEndUses">+Add Day
+            Type</a>
     </div>
     <div class="py-2" *ngIf="hasValidDayTypes === false" class="alert-danger pull-right small">Total annual days must be
         greater than 0 and less than or equal to 365.
@@ -101,7 +100,7 @@
             Types.
         </div>
     </div>
-    
+
 </div>
 
 <app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteDayTypeData"
