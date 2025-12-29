@@ -1232,7 +1232,6 @@ const applySystemTreatmentCosts = (
           const systemInflow = graph.edgeMap[edgeId].data.flowValue ?? 0;
           const pathInflow = treatmentEdge.data.flowValue ?? 0;
 
-          debugger;
           // * fractionPathIntakeReceived ternary will ignore cases where systemTreatment > pathIntake due to flow from other intakes. We will observe other intakes on another iteration
           let fractionPathIntakeReceived = (systemInflow / pathInflow) > 1 ? 1 : (systemInflow / pathInflow);
           let systemFlowResponsibility = pathInflow * fractionPathIntakeReceived;
@@ -1308,34 +1307,31 @@ const applySystemWasteTreatmentCosts = (
   flowAttributionMap: Record<string, ComponentAttribution>,
   debuggingNameMap: Record<string, string>,
 ) => {
+  // * used to deduct flow responsibility from upstream WWT systems
+  let downstreamTreatmentAttributionMap: Record<string, {
+    chargedPortion: number,
+    chargedSystems: string[]
+  }> = {};
+
   Object.entries(wasteTreatmentCostData).forEach(([treatmentId, treatmentData]: [string, CostComponentPathData]) => {
     let visitedSystemIds: string[] = [];
-
-    const debuggingPathNames = treatmentData.downstreamPathsByEdgeId?.map((path: string[]) => {
-      return path.map((edgeId: string) => {
-        const edge = graph.edgeMap[edgeId];
-        return `${debuggingNameMap[edge.source]} -> ${debuggingNameMap[edge.target]}`;
-      });
-    });
-    console.log('debuggingPathNames', debuggingPathNames);
-
     treatmentData.downstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
-      
+
       for (const edgeId of path) {
         const currentNode = graph.nodeMap[graph.edgeMap[edgeId].target];
         if (visitedSystemIds.includes(currentNode.id)) {
           break;
         }
         
-        // * attribute recycled costs to system
+        // * attribute recycled costs to downstream systems
         if (currentNode.data.processComponentType === 'water-using-system') {
           const treatmentEdge = graph.edgeMap[path[0]];
           const systemInflow = graph.edgeMap[edgeId].data.flowValue ?? 0;
           const pathInflow = treatmentEdge.data.flowValue ?? 0;
 
-          // * fractionPathIntakeReceived ternary will ignore cases where systemTreatment > pathIntake due to flow from other intakes. We will observe other intakes on another iteration
-          let fractionPathIntakeReceived = (systemInflow / pathInflow) > 1 ? 1 : (systemInflow / pathInflow);
-          let systemFlowResponsibility = pathInflow * fractionPathIntakeReceived;
+          // * fractionPathInflowReceived ternary will ignore cases where systemTreatment > pathIntake due to flow from other intakes. We will observe other intakes on another iteration
+          let fractionPathInflowReceived = (systemInflow / pathInflow) > 1 ? 1 : (systemInflow / pathInflow);
+          let systemFlowResponsibility = pathInflow * fractionPathInflowReceived;
           let systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
           let costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
 
@@ -1370,7 +1366,7 @@ const applySystemWasteTreatmentCosts = (
             currentNode,
             pathInflow,
             systemInflow,
-            fractionPathIntakeReceived,
+            fractionPathInflowReceived,
             systemFlowResponsibility,
             systemAttributionFraction,
             costToSystem
@@ -1378,14 +1374,24 @@ const applySystemWasteTreatmentCosts = (
 
           // * apply treatment flow cost
           trueCostOfSystems[currentNode.id].wasteTreatment += costToSystem;
-
           // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
           visitedSystemIds.push(currentNode.id);
+
+          downstreamTreatmentAttributionMap[treatmentId] = {
+            chargedPortion: systemFlowResponsibility,
+            chargedSystems: visitedSystemIds
+          };
+
           break;
-        } 
-      }
+        }  
+    }
     });
 
+  });
+
+
+  Object.entries(wasteTreatmentCostData).forEach(([treatmentId, treatmentData]: [string, CostComponentPathData]) => {
+    let visitedSystemIds: string[] = [...downstreamTreatmentAttributionMap[treatmentId]?.chargedSystems || []];
 
     treatmentData.upstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
       
@@ -1395,16 +1401,21 @@ const applySystemWasteTreatmentCosts = (
           break;
         }
         
-        // * attribute recycled costs to system
+        // * attribute costs to upstream water systems
         if (currentNode.data.processComponentType === 'water-using-system') {
           const treatmentEdge = graph.edgeMap[path[0]];
-          // todo double check this is outflow
           const systemOutflow = graph.edgeMap[edgeId].data.flowValue ?? 0;
           const pathOutflow = treatmentEdge.data.flowValue ?? 0;
 
-          // * fractionPathIntakeReceived ternary will ignore cases where sstemOutflow > pathOutflow due to flow from other treatment. We will observe other treatment on another iteration
-          let fractionPathIntakeReceived = (systemOutflow / pathOutflow) > 1 ? 1 : (systemOutflow / pathOutflow);
-          let systemFlowResponsibility = pathOutflow * fractionPathIntakeReceived;
+          // * fractionPathInflowReceived ternary will ignore cases where sstemOutflow > pathOutflow due to flow from other treatment. We will observe other treatment on another iteration
+          let fractionPathInflowReceived = (systemOutflow / pathOutflow) > 1 ? 1 : (systemOutflow / pathOutflow);
+          let systemFlowResponsibility = pathOutflow * fractionPathInflowReceived;
+
+          // * remove recycled flow portion already attributed to recycled flows (downstream from WWT)
+          if (downstreamTreatmentAttributionMap[treatmentId]) {
+            systemFlowResponsibility = systemFlowResponsibility - downstreamTreatmentAttributionMap[treatmentId].chargedPortion;
+          }
+
           let systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
           let costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
 
@@ -1439,7 +1450,7 @@ const applySystemWasteTreatmentCosts = (
             currentNode,
             pathOutflow,
             systemOutflow,
-            fractionPathIntakeReceived,
+            fractionPathInflowReceived,
             systemFlowResponsibility,
             systemAttributionFraction,
             costToSystem
@@ -1454,20 +1465,8 @@ const applySystemWasteTreatmentCosts = (
         } 
       }
     });
-
-
-
-
-
-
   });
 }
-
-
-
-
-
-
 
 
 /** Vocabulary
@@ -1475,6 +1474,7 @@ const applySystemWasteTreatmentCosts = (
 * Recycled - Water is considered recycled if it comes from a wastewater treatment system into a water-using system.
 * 
 * Cost Component - Components that carry costs, e.g. water intake, water treatment, waste-water treatment, discharge outlet which must be attributed to water systems. 
+* Block Costs - Total costs associated with a cost component block, e.g. intake costs, treatment costs etc.
 */
 
 
@@ -1499,7 +1499,7 @@ export const getPlantSummaryResults = (
   settings: DiagramSettings,
   flowAttributionMap: Record<string, ComponentAttribution>,
 ): PlantResults => {
-  // console.time('getPlantSummaryResults');
+  console.time('getPlantSummaryResults');
   const graph: NodeGraphIndex = createGraphIndex(nodes, edges as Edge<CustomEdgeData>[]);
 
   // * STEP 1 - Set block costs and prepare results mapping
@@ -1516,13 +1516,8 @@ export const getPlantSummaryResults = (
 
   const trueCostOfSystems: TrueCostOfSystems = {};
   const systemAnnualSummaryResultsMap: Record<string, SystemAnnualSummaryResults> = {};
-
-  // const recycledSourcesMap: Record<string, RecycledFlowData> = {};
   const waterUsingSystems = nodes.map((node: Node<ProcessFlowPart>) => {
     if (node.data.processComponentType === 'water-using-system') {
-      // // * Important: preprocess recycled nodes
-      // setRecycledFlowData(node, graph, nodeMap, recycledSourcesMap);
-
       trueCostOfSystems[node.id] = {
         intake: 0,
         discharge: 0,
@@ -1565,12 +1560,9 @@ export const getPlantSummaryResults = (
     allSystemResults: [],
   }
 
-  // const ancestorCostsMap: Record<string, ConnectedCost[]> = {};
-  // const descendantCostsMap: Record<string, ConnectedCost[]> = {};
-  const costComponentsTotalsMap: Record<string, BlockCosts> = {};
-
 
   // * STEP 2 - Iterate through intakes, discharges, water-treatment, and waste-water-treatment and apply costs
+  const costComponentsTotalsMap: Record<string, BlockCosts> = {};
   const intakeNodes: Node[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-intake');
   const dischargeNodes: Node[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-discharge');
   const waterTreatmentNodes: Node<ProcessFlowPart>[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-treatment') as Node<ProcessFlowPart>[];
@@ -1680,78 +1672,12 @@ export const getPlantSummaryResults = (
 
 
   if (waterUsingSystems.length > 0) {
-    // waterUsingSystems.forEach((currentSystem: Node<ProcessFlowPart>) => {
-      // ancestorCostsMap[currentSystem.id] = getComponentAncestorCosts(currentSystem, calculatedData, nodeMap, graph, nodeNameMap, settings.unitsOfMeasure);
-      // descendantCostsMap[currentSystem.id] = getComponentDescendantCosts(currentSystem, calculatedData, nodeMap, graph, nodeNameMap, settings.unitsOfMeasure);
-
-      // let waterUsingSystem = currentSystem.data as WaterUsingSystem;
-      // if (waterUsingSystem.heatEnergy) {
-      //   // todo cleanup implementation
-      //   const totalInflow = getNodeTotalInflow(currentSystem.data, calculatedData);
-      //   let heatEnergy = JSON.parse(JSON.stringify(waterUsingSystem.heatEnergy));
-      //   heatEnergy.systemWaterUse = totalInflow;
-      //   const unitCost = heatEnergy.heatingFuelType === 0 ? settings.electricityCost : settings.fuelCost;
-      //   trueCostOfSystems[currentSystem.id].heatEnergyWastewater = getHeatEnergyCost(heatEnergy, unitCost, settings.unitsOfMeasure);
-      // }
-
-      // if (waterUsingSystem.inSystemTreatment && waterUsingSystem.inSystemTreatment.length > 0) {
-      //   const totalSystemInflow = getNodeTotalInflow(currentSystem.data, calculatedData);
-      //   const inSystemTreatmentCost = getInSystemTreatmentCost(waterUsingSystem.inSystemTreatment, totalSystemInflow, settings.unitsOfMeasure);
-      //   trueCostOfSystems[currentSystem.id].treatment = inSystemTreatmentCost;
-      // }
-      // trueCostOfSystems[currentSystem.id].systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, electricityCost, settings.unitsOfMeasure);
-
-      // // * Does the system receive recycled or reused flows?
-      // //    * Current system owns costs for water-treatment, and waste-water-treatment flows (if recycled into their system)
-      // ancestorCostsMap[currentSystem.id].forEach((connectedAncestorCost: ConnectedCost) => {
-      //   const ancestorId = connectedAncestorCost.sourceId;
-
-      //   let isImmediateAncestor = false;
-      //   switch (connectedAncestorCost.componentType) {
-      //     case 'water-treatment':
-      //       // * only apply cost while visiting immediate ancestor so we can manage reused flows
-      //       isImmediateAncestor = getIsImmediateAncestor(ancestorId, graph, currentSystem.id);
-      //       if (isImmediateAncestor && connectedAncestorCost.flow > 0) {
-      //         const totalTreatmentCosts = getAncestorTreatmentCosts(
-      //           costComponentsTotalsMap,
-      //           connectedAncestorCost,
-      //           nodeMap,
-      //           graph,
-      //           nodeNameMap
-      //         );
-
-      //         trueCostOfSystems[currentSystem.id].treatment += totalTreatmentCosts;
-      //       }
-
-      //       break;
-      //     case 'waste-water-treatment':
-      //       // * only apply cost while visiting immediate ancestor so we can manage recycled flows
-      //       isImmediateAncestor = getIsImmediateAncestor(ancestorId, graph, currentSystem.id);
-      //       if (isImmediateAncestor && connectedAncestorCost.flow > 0) {
-      //         const totalWWTCosts = getAncestorTreatmentCosts(
-      //           costComponentsTotalsMap,
-      //           connectedAncestorCost,
-      //           nodeMap,
-      //           graph,
-      //           nodeNameMap
-      //         );
-
-      //         trueCostOfSystems[currentSystem.id].wasteTreatment += totalWWTCosts;
-      //       }
-      //       break;
-      //   }
-      // });
-    // });
-
-
     // * STEP 3 - Iterate through all systems and:
     // *   - calculate in-system treatment, and energy costs
     // *   - calculate system true costs, direct costs, cost per unit
     // *   - calculate plant level results - aggregate costs from systems
     waterUsingSystems.forEach((currentSystem: Node<ProcessFlowPart>) => {
-
-      // todo this block was moved. - needs review
-       let waterUsingSystem = currentSystem.data as WaterUsingSystem;
+      let waterUsingSystem = currentSystem.data as WaterUsingSystem;
       if (waterUsingSystem.heatEnergy) {
         // todo cleanup implementation
         const totalInflow = getNodeTotalInflow(currentSystem.data, calculatedData);
@@ -1768,45 +1694,7 @@ export const getPlantSummaryResults = (
       }
       trueCostOfSystems[currentSystem.id].systemPumpAndMotorEnergy = getPumpAndMotorEnergyContribution(waterUsingSystem, electricityCost, settings.unitsOfMeasure);
 
-      // // * Does the system send flow through water-treatment, and waste-water-treatment components whose flows are NOT recycled by another system?
-      // //    * Current system owns costs for water-treatment, waste-water-treatment (if their flow is NOT recycled by another system)
-      // descendantCostsMap[currentSystem.id].forEach((connectedDescendantCost: ConnectedCost) => {
-      //   const descendantId = connectedDescendantCost.targetId;
-        
-      //   let isImmediateDescendant = false;
-      //   switch (connectedDescendantCost.componentType) {
-      //     case 'water-treatment':
-      //       // * only apply cost at immediate descendant so we can manage recycled flows
-      //       isImmediateDescendant = getIsImmediateDescendant(descendantId, graph, currentSystem.id);
-      //       if (isImmediateDescendant && connectedDescendantCost.flow > 0) {
-      //         const totalTreatmentCosts = getDescendantTreatmentCosts(
-      //           costComponentsTotalsMap,
-      //           connectedDescendantCost,
-      //           nodeMap,
-      //           graph,
-      //           nodeNameMap
-      //         );
-      //         trueCostOfSystems[currentSystem.id].treatment += totalTreatmentCosts;
-      //       }
-      //       break;
-      //     case 'waste-water-treatment':
-      //       // * only apply cost at immediate descendant so we can manage recycled flows
-      //       isImmediateDescendant = getIsImmediateDescendant(descendantId, graph, currentSystem.id);
-      //       if (isImmediateDescendant && connectedDescendantCost.flow > 0) {
-      //         const totalWWTCosts = getDescendantTreatmentCosts(
-      //           costComponentsTotalsMap,
-      //           connectedDescendantCost,
-      //           nodeMap,
-      //           graph,
-      //           nodeNameMap
-      //         );
-      //         trueCostOfSystems[currentSystem.id].wasteTreatment += totalWWTCosts;
-      //       }
-      //       break;
-      //   }
-      // });
-
-      // console.log('results flowAttributionMap', flowAttributionMap);
+      console.log('results flowAttributionMap', flowAttributionMap);
       setSystemCostsAndTotals(currentSystem, trueCostOfSystems, systemAnnualSummaryResultsMap);
 
       plantSystemSummaryResults.sourceWaterIntake += systemAnnualSummaryResultsMap[currentSystem.id].sourceWaterIntake;
@@ -1824,7 +1712,7 @@ export const getPlantSummaryResults = (
 
   }
 
-  // console.timeEnd('getPlantSummaryResults');
+  console.timeEnd('getPlantSummaryResults');
   return { trueCostOfSystems, plantSystemSummaryResults, costComponentsTotalsMap, flowAttributionMap };
 }
 
