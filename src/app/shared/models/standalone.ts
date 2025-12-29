@@ -419,18 +419,14 @@ export interface CompressedAirReductionResult {
 
 export interface AirLeakSurveyInput {
   compressedAirLeakSurveyInputVec: Array<AirLeakSurveyData>
-  facilityCompressorData?: FacilityCompressorData;
+  facilityCompressorData: FacilityCompressorData;
 }
   
 export interface AirLeakSurveyData {
   selected: boolean;
-  hoursPerYear?: number;
-  utilityType?: number;
-  utilityCost?: number;
   name: string;
   leakDescription: string,
   measurementMethod: number;
-  compressorElectricityData?: CompressorElectricityData,
   bagMethodData: BagMethodInput,
   estimateMethodData: EstimateMethodData,
   orificeMethodData: OrificeMethodData,
@@ -439,10 +435,10 @@ export interface AirLeakSurveyData {
 }
 
 export interface AirLeakSurveyOutput {
-  leakResults: Array<AirLeakSurveyResult>;
-  baselineData: AirLeakSurveyResult;
-  modificationData: AirLeakSurveyResult;
-  savingsData: AirLeakSurveyResult;
+  individualLeaks: Array<AirLeakSurveyResult>;
+  baselineTotal: AirLeakSurveyResult;
+  modificationTotal: AirLeakSurveyResult;
+  savings: AirLeakSurveyResult;
   facilityCompressorData?: FacilityCompressorData,
 }
 

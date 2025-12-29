@@ -1,8 +1,7 @@
 <nav class="water-assessment navbar banner d-flex mr-auto p-0 flex-nowrap">
     <div class="d-block d-lg-none mr-0 mr-2 pl-2 h-100">
         <div class="pr-2 border-right home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
-            <button type="button" class="btn chevron-btn p-0" (click)="back()"
-                [disabled]="(!assessment.water.setupDone || mainTab == 'baseline')">
+            <button type="button" class="btn chevron-btn p-0" (click)="back()">
                 <span class="fa fa-chevron-left"></span>
             </button>
         </div>
@@ -54,7 +53,7 @@
             <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">Diagram</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': false}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'report'}"
                 (click)="changeTab('report')">Report</a>
         </div>
     </div>
@@ -68,11 +67,11 @@
             <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
                 (click)="changeTab('assessment')">Assessment</a>
         </div>
-        <!-- <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">Diagram</a>
-        </div> -->
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram'}" (click)="changeTab('diagram')">Diagram</a>
+        </div>
+        <div class="nav-item">
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'report'}"
                 (click)="changeTab('report')">Report</a>
         </div>
     </div>
@@ -119,14 +118,13 @@
 
     <div class="d-block d-lg-none ml-2 mr-0 pr-1 h-100">
         <div class="pl-2 border-left home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
-            <button type="button" class="btn chevron-btn p-0" (click)="continue()"
-                [disabled]="(!assessment.water.setupDone || mainTab == 'calculators')">
+            <button type="button" class="btn chevron-btn p-0" (click)="continue()">
                 <span class="fa fa-chevron-right"></span>
             </button>
         </div>
     </div>
 
-    <div  class="d-block d-lg-none ml-2 pr-2 h-100 flex-wrap">
+    <div *ngIf="bannerCollapsed" class="d-block d-lg-none ml-2 pr-2 h-100 flex-wrap">
         <div class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
             <app-banner-tooltips [message]="'Collapse'" [adjustLeft]="20">
                 <span class="fa fa-bars"></span>
@@ -190,7 +188,7 @@
 <div class="navbar assessment-bar" *ngIf="mainTab == 'assessment'">
     <ul class="h-100 tabs subtabs progress-tabs water-assessment d-none d-lg-block">
         <li [ngClass]="{'active': secondaryAssessmentTab == 'modifications'}">
-            <a (click)="changeSecondaryAssessmentTab('modifications')">Demo Assessment Tab</a>
+            <a (click)="changeSecondaryAssessmentTab('modifications')">Explore Opportunities</a>
         </li>
     </ul>
     

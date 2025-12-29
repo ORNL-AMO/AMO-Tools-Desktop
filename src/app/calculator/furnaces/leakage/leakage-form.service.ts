@@ -17,7 +17,7 @@ export class LeakageFormService {
       coefficient: [.8052, Validators.required],
       specificGravity: [1.0, [Validators.required, Validators.min(0)]],
       correctionFactor: [1.0, Validators.required],
-      name: ['Loss #' + lossNum]
+      name: ['Loss #' + lossNum, Validators.required]
     });
 
     if (!lossNum) {
@@ -39,7 +39,7 @@ export class LeakageFormService {
       coefficient: [loss.coefficient, Validators.required],
       specificGravity: [loss.specificGravity, [Validators.required, Validators.min(0)]],
       correctionFactor: [loss.correctionFactor, Validators.required],
-      name: [loss.name]
+      name: [loss.name, Validators.required]
     });
 
     if (!inAssessment) {

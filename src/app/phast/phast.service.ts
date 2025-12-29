@@ -40,6 +40,7 @@ import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 import { CoolingFormService } from '../calculator/furnaces/cooling/cooling-form.service';
 import { EnergyEAFOutput, EnergyExhaustGasOutput, HeatingValueByVolumeOutput, ProcessHeatingApiService } from '../tools-suite-api/process-heating-api.service';
+import { ExhaustGasService } from './losses/exhaust-gas/exhaust-gas.service';
 
 
 @Injectable()
@@ -68,7 +69,8 @@ export class PhastService {
     private gasMaterialFormService: GasMaterialFormService,
     private solidMaterialFormService: SolidMaterialFormService,
     private processHeatingApiService: ProcessHeatingApiService,
-    private slagService: SlagService
+    private slagService: SlagService,
+    private exhaustGasFormService: ExhaustGasService
   ) {
     this.initTabs();
     this.modalOpen = new BehaviorSubject<boolean>(false);
@@ -444,7 +446,7 @@ export class PhastService {
       inputCopy.fuelTemperature = this.convertUnitsService.value(inputCopy.fuelTemperature).from('C').to('F');
       inputCopy.ambientAirTempF = this.convertUnitsService.value(inputCopy.ambientAirTempF).from('C').to('F');
     }
-    let results = this.processHeatingApiService.flueGasLossesByMass(inputCopy);;
+    let results = this.processHeatingApiService.flueGasLossesByMass(inputCopy);
     return results
   }
 
@@ -485,7 +487,7 @@ export class PhastService {
     return results;
   }
 
-  slagOtherMaterialLosses(input: Slag, settings: Settings) {
+  slagOtherMaterialTotalHeatLoss(input: Slag, settings: Settings) {
     let inputs = this.createInputCopy(input);
     let results = 0;
     if (settings.unitsOfMeasure === 'Metric') {
@@ -494,7 +496,7 @@ export class PhastService {
       inputs.outletTemperature = this.convertUnitsService.value(inputs.outletTemperature).from('C').to('F');
       inputs.specificHeat = this.convertUnitsService.value(inputs.specificHeat).from('kJkgC').to('btulbF');
     }
-    results = this.processHeatingApiService.slagOtherMaterialLosses(inputs);
+    results = this.processHeatingApiService.slagOtherMaterialTotalHeatLoss(inputs);
     results = this.convertResult(results, settings.energyResultUnit);
     return results;
   }
@@ -796,7 +798,10 @@ export class PhastService {
   sumExhaustGasEAF(losses: ExhaustGasEAF[], settings: Settings): number {
     let sum = 0;
     losses.forEach(loss => {
-      sum += this.exhaustGasEAF(loss, settings);
+       const form = this.exhaustGasFormService.getFormFromLoss(loss);
+        if (form.valid) {
+          sum += this.exhaustGasEAF(loss, settings);
+        }
     });
     return sum;
   }
@@ -901,7 +906,7 @@ export class PhastService {
     losses.forEach(loss => {
       let tmpForm = this.slagService.getFormFromLoss(loss);
       if (tmpForm.status === 'VALID') {
-        sum += this.slagOtherMaterialLosses(loss, settings);
+        sum += this.slagOtherMaterialTotalHeatLoss(loss, settings);
       }
     });
     return sum;

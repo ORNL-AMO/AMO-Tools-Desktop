@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { GenericCompressor } from '../../../../generic-compressor-db.service';
 import * as _ from 'lodash';
+import { GenericCompressor } from '../../../../../shared/generic-compressor-db.service';
 
 @Pipe({
     name: 'filterCompressors',

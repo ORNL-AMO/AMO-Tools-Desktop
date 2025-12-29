@@ -183,7 +183,7 @@
         <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('stages')">
           <i class="fa fa-plus"></i>
         </button>
-        <input  type="number" min="1" step="any" class="form-control" formControlName="stages"
+        <input  type="number" step="1" class="form-control" formControlName="stages"
           id="{{'stages_'+idString}}" (input)="save()" (focus)="focusField('stages')" onfocus="this.select();">
       </div>
       <span class="alert-danger pull-right small"
@@ -191,7 +191,14 @@
         <span *ngIf="psatForm.controls.stages.errors.required">Value Required</span>
         <span *ngIf="psatForm.controls.stages.errors.min">Value can't be less than
           {{psatForm.controls.stages.errors.min.min}}.</span>
+        <span *ngIf="psatForm.controls.stages.errors.notWholeNumber">{{notWholeNumberMsg}}</span>
       </span>
+
+      <span class="alert-warning pull-right small"
+        *ngIf="psatForm.controls.stages.value >= 15">
+        <span>Multistage pumps usually have less than 15 impellers.</span>
+      </span>
+
     </div>
   </div>
 </form>

@@ -33,7 +33,6 @@ import { MaxFullFlowComponent } from './baseline-tab-content/inventory-setup/inv
 import { NoLoadComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/no-load/no-load.component';
 import { UnloadPointComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/unload-point/unload-point.component';
 import { BlowoffComponent } from './baseline-tab-content/inventory-setup/inventory/performance-points/blowoff/blowoff.component';
-import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { GenericCompressorModalComponent } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/generic-compressor-modal.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CompressorOptionsTableComponent } from './baseline-tab-content/inventory-setup/inventory/generic-compressor-modal/compressor-options-table/compressor-options-table.component';
@@ -161,6 +160,7 @@ import { AssessmentProfileSummaryGraphsComponent } from './assessment-tab-conten
 import { ModificationListModalComponent } from './assessment-tab-content/modification-list-modal/modification-list-modal.component';
 import { AddModificationModalComponent } from './assessment-tab-content/add-modification-modal/add-modification-modal.component';
 import { CompressorPressureMinMaxPipe } from './shared-compressor-pipes/compressor-pressure-min-max.pipe';
+import { GenericCompressorDbService } from '../shared/generic-compressor-db.service';
 
 
 @NgModule({

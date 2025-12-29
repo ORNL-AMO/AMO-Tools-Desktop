@@ -27,7 +27,7 @@ export class EnergyInputService {
       electrodeHeatingValue: [electrodeHeatingDefault, Validators.required],
       otherFuels: ['', Validators.required],
       electricityInput: ['', Validators.required],
-      name: ['Loss #' + lossNum]
+      name: ['Loss #' + lossNum, Validators.required]
     })
   }
 
@@ -57,7 +57,7 @@ export class EnergyInputService {
       electrodeHeatingValue: [loss.electrodeHeatingValue, Validators.required],
       otherFuels: [loss.otherFuels, Validators.required],
       electricityInput: [loss.electricityInput, electricityInputValidators],
-      name: [loss.name]
+      name: [loss.name, , Validators.required]
     })
   }
 

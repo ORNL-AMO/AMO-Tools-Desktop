@@ -1,22 +1,14 @@
 export const density = {
   metric: {
-    kgNm3: {
+    'mg/L': {
       name: {
-        singular: 'Kilogram per Cubic Meter'
-        , plural: 'Kilograms per Cubic Meter',
-        display: '(kg/m&#x00B3)'
-      }
-      , to_anchor: 1
-    }
-    , kgL: {
-      name: {
-        singular: 'Kilogram per Litter'
-        , plural: 'Kilograms per Litter',
-        display: '(kg/L)'
+        singular: 'Milligram per liter'
+        , plural: 'Milligrams per liter',
+        display: '(mg/L)'
       }
       , to_anchor: 1000
-    }
-    , 'g/L': {
+    },
+    'g/L': {
       name: {
         singular: 'Gram per liter'
         , plural: 'Grams per liter',
@@ -24,11 +16,19 @@ export const density = {
       }
       , to_anchor: 1
     },
-    'mg/L': {
+    kgNm3: {
       name: {
-        singular: 'Milligram per liter'
-        , plural: 'Milligrams per liter',
-        display: '(mg/L)'
+        singular: 'Kilogram per Cubic Meter'
+        , plural: 'Kilograms per Cubic Meter',
+        display: '(kg/m&#x00B3)'
+      }
+      , to_anchor: 1
+    },
+    kgL: {
+      name: {
+        singular: 'Kilogram per Litter'
+        , plural: 'Kilograms per Litter',
+        display: '(kg/L)'
       }
       , to_anchor: 1000
     }
@@ -41,16 +41,16 @@ export const density = {
         display: '(lb/ft&#x00B3)'
       }
       , to_anchor: 1
-    }
-    , lbgal: {
+    },
+    lbgal: {
       name: {
         singular: 'Pound per Gallon'
         , plural: 'Pounds per Gallon',
         display: '(lb/gal)'
       }
       , to_anchor: 7.48052
-    }
-    , lbkft3: {
+    },
+    lbkft3: {
       name: {
         singular: 'Pound per Thousand Cubic Feet'
         , plural: 'Pounds per Thousand Cubic Feet',
@@ -70,5 +70,3 @@ export const density = {
     }
   }
 };
-
-

@@ -106,7 +106,7 @@ export class SlagComponent implements OnInit {
   calculate(loss: SlagLossObj) {
     if (loss.form.status === 'VALID') {
       let tmpLoss: Slag = this.slagService.getLossFromForm(loss.form);
-      loss.heatLoss = this.phastService.slagOtherMaterialLosses(tmpLoss, this.settings);
+      loss.heatLoss = this.phastService.slagOtherMaterialTotalHeatLoss(tmpLoss, this.settings);
     } else {
       loss.heatLoss = null;
     }
@@ -114,14 +114,7 @@ export class SlagComponent implements OnInit {
 
   saveLosses() {
     let tmpSlagLosses = new Array<Slag>();
-    let lossIndex = 1;
     this._slagLosses.forEach(loss => {
-      if (!loss.form.controls.name.value) {
-        loss.form.patchValue({
-          name: 'Loss #' + lossIndex
-        });
-      }
-      lossIndex++;
       let tmpSlag = this.slagService.getLossFromForm(loss.form);
       tmpSlag.heatLoss = loss.heatLoss;
       tmpSlagLosses.push(tmpSlag);

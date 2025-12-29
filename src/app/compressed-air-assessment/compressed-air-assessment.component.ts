@@ -10,7 +10,6 @@ import { CompressedAirAssessment } from '../shared/models/compressed-air-assessm
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
-import { GenericCompressorDbService } from './generic-compressor-db.service';
 import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { EndUsesFormService } from './baseline-tab-content/end-uses-setup/end-uses-form/end-uses-form.service';
@@ -19,6 +18,7 @@ import { ExploreOpportunitiesService } from './assessment-tab-content/explore-op
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { CompressedAirAssessmentIntegrationService } from '../shared/connected-inventory/compressed-air-assessment-integration.service';
 import { CompressedAirDataManagementService } from './compressed-air-data-management.service';
+import { GenericCompressorDbService } from '../shared/generic-compressor-db.service';
 
 @Component({
     selector: 'app-compressed-air-assessment',

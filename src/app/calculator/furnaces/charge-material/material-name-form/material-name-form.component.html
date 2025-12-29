@@ -15,7 +15,7 @@
 
     <span *ngIf="isEditingName">
       <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
-      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
+      <input type="text" id="equipmentName" formControlName="name" onfocus="select();">
       <span class="alert-danger small ml-2" *ngIf="materialNameForm.controls.name.invalid && !materialNameForm.controls.name.pristine">
         <span *ngIf="materialNameForm.controls.name.errors.required">Please enter a loss name.</span>
       </span>

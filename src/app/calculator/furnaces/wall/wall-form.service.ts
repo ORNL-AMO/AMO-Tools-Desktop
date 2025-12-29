@@ -42,7 +42,7 @@ export class WallFormService {
       'conditionFactor': [wallLoss.conditionFactor, Validators.required],
       'surfaceEmissivity': [wallLoss.surfaceEmissivity, [Validators.required, Validators.min(0), Validators.max(1)]],
       'surfaceShape': [wallLoss.surfaceShape],
-      'name': [wallLoss.name],
+      'name': [wallLoss.name, Validators.required],
     });
 
     if (!inAssessment) {

@@ -1,20 +1,12 @@
 export const partsPer = {
     metric: {
-        ppm: {
+        ppq: {
             name: {
-                singular: 'Part-per Million'
-                , plural: 'Parts-per Million' ,
-                 display:  '(ppm)'
+                singular: 'Part-per Quadrillion'
+                , plural: 'Parts-per Quadrillion' ,
+                 display:  '(ppq)'
             }
-            , to_anchor: 1
-        }
-        , ppb: {
-            name: {
-                singular: 'Part-per Billion'
-                , plural: 'Parts-per Billion' ,
-                 display:  '(ppb)'
-            }
-            , to_anchor: .001
+            , to_anchor: .000000001
         }
         , ppt: {
             name: {
@@ -24,13 +16,21 @@ export const partsPer = {
             }
             , to_anchor: .000001
         }
-        , ppq: {
+        , ppb: {
             name: {
-                singular: 'Part-per Quadrillion'
-                , plural: 'Parts-per Quadrillion' ,
-                 display:  '(ppq)'
+                singular: 'Part-per Billion'
+                , plural: 'Parts-per Billion' ,
+                 display:  '(ppb)'
             }
-            , to_anchor: .000000001
+            , to_anchor: .001
+        }
+        , ppm: {
+            name: {
+                singular: 'Part-per Million'
+                , plural: 'Parts-per Million' ,
+                 display:  '(ppm)'
+            }
+            , to_anchor: 1
         }
     },
     imperial: {},

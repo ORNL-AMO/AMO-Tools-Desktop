@@ -90,6 +90,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   
   export interface FlowDiagramData {
     name: string,
+    meta?: DiagramMetaData,
     nodes: Node[],
     edges: Edge[],
     nodeErrors: NodeErrors,
@@ -99,6 +100,17 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     recentNodeColors: string[];
     recentEdgeColors: string[];
   }
+
+  export interface DiagramMetaData {
+    version: string,
+    upgrades?: DiagramUpgrade[],
+  }
+
+  export interface DiagramUpgrade {
+    fromVersion: string,
+    toVersion: string,
+    upgradeDate: string,
+  };
   
   export type NodeErrors = Record<string, NodeFlowTypeErrors>; 
   

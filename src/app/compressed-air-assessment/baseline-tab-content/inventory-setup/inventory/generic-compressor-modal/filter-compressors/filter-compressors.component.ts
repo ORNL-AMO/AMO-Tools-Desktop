@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { GenericCompressor, GenericCompressorDbService } from '../../../../../generic-compressor-db.service';
 import { InventoryService } from '../../inventory.service';
 import { CompressorTypeOption, CompressorTypeOptions, ControlType, ControlTypes } from '../../inventoryOptions';
 import { FilterCompressorOptions } from '../filter-compressors.pipe';
 import * as _ from 'lodash';
 import { Settings } from '../../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../../compressed-air-assessment.service';
-import { ConvertUnitsService } from '../../../../../../shared/convert-units/convert-units.service';
+import { GenericCompressor, GenericCompressorDbService } from '../../../../../../shared/generic-compressor-db.service';
 
 @Component({
     selector: 'app-filter-compressors',

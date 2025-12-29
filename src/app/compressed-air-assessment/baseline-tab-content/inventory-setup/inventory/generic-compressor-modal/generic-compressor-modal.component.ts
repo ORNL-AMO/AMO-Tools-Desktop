@@ -2,8 +2,7 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
-import { GenericCompressorDbService } from '../../../../generic-compressor-db.service';
-
+import { GenericCompressorDbService } from '../../../../../shared/generic-compressor-db.service';
 @Component({
     selector: 'app-generic-compressor-modal',
     templateUrl: './generic-compressor-modal.component.html',
@@ -16,7 +15,7 @@ export class GenericCompressorModalComponent implements OnInit {
 
   @ViewChild('compressorModal', { static: false }) public compressorModal: ModalDirective;
 
-  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private genericCompressorDbService: GenericCompressorDbService,) { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private genericCompressorDbService: GenericCompressorDbService) { }
 
   ngOnInit() {
     let settings: Settings = this.compressedAirAssessmentService.settings.getValue();

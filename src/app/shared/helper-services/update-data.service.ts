@@ -4,7 +4,7 @@ import { SSMT } from '../models/steam/ssmt';
 import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
-import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData } from '../models/standalone';
+import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData, FacilityCompressorData } from '../models/standalone';
 import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -12,6 +12,7 @@ import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
 import { environment } from '../../../environments/environment';
 import { getNewIdString } from '../helperFunctions';
 import { Calculator } from '../models/calculators';
+import { SteamPressureOrTemp, SteamQuality } from '../models/steam/steam-inputs';
 
 @Injectable()
 export class UpdateDataService {
@@ -399,12 +400,14 @@ export class UpdateDataService {
     updateSSMT(assessment: Assessment): Assessment {
         assessment.appVersion = environment.version;
         assessment.ssmt = this.updateHeaders(assessment.ssmt);
+        assessment.ssmt = this.updateBoiler(assessment.ssmt);
         if (assessment.ssmt.modifications) {
             assessment.ssmt.modifications.forEach(mod => {
                 if(!mod.modificationId){
                     mod.modificationId = getNewIdString();
                 }
                 mod.ssmt = this.updateHeaders(mod.ssmt);
+                mod.ssmt = this.updateBoiler(mod.ssmt);
             })
         };
         return assessment;
@@ -422,6 +425,33 @@ export class UpdateDataService {
         }
         return ssmt;
     }
+
+    /**
+     * Update Boiler Input to match changes added for Saturated Properties calculated inputs and results
+     * Version 1.6.5 Adds three properties to Boiler Input: steamQuality, pressureOrTemperature, saturatedPressure. 
+    */
+    updateBoiler(ssmt: SSMT) {
+        if (ssmt.boilerInput) {
+            if (ssmt.boilerInput.steamQuality === undefined) {
+                ssmt.boilerInput.steamQuality = SteamQuality.SUPERHEATED;
+            }
+            if (ssmt.boilerInput.pressureOrTemperature === undefined) {
+                ssmt.boilerInput.pressureOrTemperature = SteamPressureOrTemp.TEMPERATURE;
+            }
+            if (ssmt.boilerInput.steamTemperature === undefined) {
+                ssmt.boilerInput.steamTemperature = 212;
+            }
+            if (ssmt.boilerInput.saturatedPressure === undefined) {
+                let defaultSaturatedPressure = 0;
+                if (ssmt.headerInput && ssmt.headerInput.highPressureHeader?.pressure !== undefined) {
+                    defaultSaturatedPressure = ssmt.headerInput.highPressureHeader.pressure;
+                } 
+                ssmt.boilerInput.saturatedPressure = defaultSaturatedPressure;
+            }
+        }
+        return ssmt;
+    }
+
     updateTreasureHunt(assessment: Assessment): Assessment {
         assessment.appVersion = environment.version;
         if (assessment.treasureHunt) {
@@ -573,7 +603,7 @@ export class UpdateDataService {
     updateAirLeakSurveyTreasureHunt(airLeakSurveyTreasureHunt: AirLeakSurveyTreasureHunt): AirLeakSurveyTreasureHunt {
         if (airLeakSurveyTreasureHunt.airLeakSurveyInput && airLeakSurveyTreasureHunt.airLeakSurveyInput.compressedAirLeakSurveyInputVec) {
             airLeakSurveyTreasureHunt.airLeakSurveyInput.compressedAirLeakSurveyInputVec.forEach(airLeak => {
-                airLeak = this.updateAirLeakSurvey(airLeak);
+                airLeak = this.updateAirLeakSurvey(airLeak, airLeakSurveyTreasureHunt.airLeakSurveyInput.facilityCompressorData);
             });
         }
         return airLeakSurveyTreasureHunt;
@@ -614,12 +644,12 @@ export class UpdateDataService {
     }
 
 
-    updateAirLeakSurvey(airLeakSurveyData: AirLeakSurveyData): AirLeakSurveyData {
+    updateAirLeakSurvey(airLeakSurveyData: AirLeakSurveyData, facilityCompressorData: FacilityCompressorData): AirLeakSurveyData {
         if (airLeakSurveyData.bagMethodData && (airLeakSurveyData.bagMethodData['height'] !== undefined || airLeakSurveyData.bagMethodData['diameter'] !== undefined)) {
             airLeakSurveyData.bagMethodData.bagVolume = 0;
             airLeakSurveyData.bagMethodData.bagFillTime = airLeakSurveyData.bagMethodData['fillTime'] ? airLeakSurveyData.bagMethodData['fillTime'] : 0;
             airLeakSurveyData.bagMethodData.numberOfUnits = 1;
-            airLeakSurveyData.bagMethodData.operatingTime = airLeakSurveyData.hoursPerYear;
+            airLeakSurveyData.bagMethodData.operatingTime = facilityCompressorData.hoursPerYear;
         }
         return airLeakSurveyData;
     }

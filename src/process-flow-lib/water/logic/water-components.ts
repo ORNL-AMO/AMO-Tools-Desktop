@@ -195,7 +195,7 @@ const defaultTabs: ManageDataTab[] = [
     index: 0
   },
   {
-    label: 'Manage',
+    label: 'Customize',
     index: 1
   },
 ]
@@ -207,7 +207,7 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
       index: 0
     },
     {
-        label: 'Manage',
+        label: 'Customize',
         index: 1
       }
   ],
@@ -217,7 +217,7 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
       index: 0
     },
     {
-        label: 'Manage',
+        label: 'Customize',
         index: 1
       }
   ],
@@ -232,7 +232,7 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
         index: 1
       },
       {
-        label: 'Manage',
+        label: 'Customize',
         index: 2
       }
     ],

@@ -1,4 +1,3 @@
-import { NgModel } from "@angular/forms";
 
 export interface ChargeMaterial {
   chargeMaterialType?: string;

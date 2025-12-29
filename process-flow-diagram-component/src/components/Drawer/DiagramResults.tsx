@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { Box } from '@mui/material';
-import { checkDiagramNodeErrors, CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getInSystemTreatmentCost, getIsDiagramValid, getMotorEnergyCost, getTotalInflow, getTotalOutflow, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
+import { checkDiagramNodeErrors, CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getInSystemTreatmentCost, getIsDiagramValid, getMotorEnergyCost, getNodeTotalInflow, getNodeTotalOutflow, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
 import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
 import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
@@ -42,7 +42,7 @@ const DiagramResults = () => {
       let inSystemTreatmentCost = 0;
       const system = node.data as WaterUsingSystem;
       if (system.inSystemTreatment && system.inSystemTreatment.length > 0) {
-        const totalSystemInflow = getTotalInflow(node, calculatedData);
+        const totalSystemInflow = getNodeTotalInflow(node, calculatedData);
         inSystemTreatmentCost = getInSystemTreatmentCost(system.inSystemTreatment, totalSystemInflow, settings.unitsOfMeasure);
         return total + inSystemTreatmentCost;
       } 
@@ -103,7 +103,7 @@ const DiagramResults = () => {
   const intakeTitle = "Annual Intake";
   let totalIntake = 0;
   let intakeRows = intakes.map((intake: Node<ProcessFlowPart>) => {
-    let totalOutflow = getTotalOutflow(intake, calculatedData);
+    let totalOutflow = getNodeTotalOutflow(intake, calculatedData);
     totalIntake += totalOutflow;
     const totalOutflowFormatted = formatDecimalPlaces(totalOutflow, settings.flowDecimalPrecision);
     return { label: intake.data.name, result: totalOutflowFormatted, unit: <FlowDisplayUnit /> };
@@ -117,7 +117,7 @@ const DiagramResults = () => {
   const dischargeTitle = "Annual Discharge";
   let totalDischarge = 0;
   let dischargeRows: TwoCellResultRow[] = discharges.map((discharge: Node<ProcessFlowPart>) => {
-    let totalInflow = getTotalInflow(discharge, calculatedData);
+    let totalInflow = getNodeTotalInflow(discharge, calculatedData);
     totalDischarge += totalInflow;
     const totalInflowFormatted = formatDecimalPlaces(totalInflow, settings.flowDecimalPrecision);
     return { label: discharge.data.name, result: totalInflowFormatted, unit: <FlowDisplayUnit /> };

@@ -1,28 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
-import * as Papa from 'papaparse';
-import { CompressorTypeOptions, ControlTypes } from './compressed-air-inventory';
-
+import { CompressorTypeOptions, ControlTypes } from '../compressed-air-assessment/baseline-tab-content/inventory-setup/inventory/inventoryOptions';
+import { DefaultCompressorApiService } from '../tools-suite-api/default-compressor-api.service';
 @Injectable()
-export class ExistingCompressorDbService {
+export class GenericCompressorDbService {
 
   genericCompressors: Array<GenericCompressor>;
   unitsOfMeasure: string = 'Imperial';
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+  constructor(private convertUnitsService: ConvertUnitsService, private defaultCompressorApiService: DefaultCompressorApiService) { }
 
   getAllCompressors(settings: Settings) {
     if (this.genericCompressors == undefined) {
-      Papa.parse("assets/compressor-lib.csv", {
-        header: true,
-        download: true,
-        complete: results => {
-          this.setGenericCompressors(results.data);
-          if (settings.unitsOfMeasure == 'Metric') {
-            this.convertGenericCompressors(settings.unitsOfMeasure);
-          }
-        }
-      });
+      this.genericCompressors = this.defaultCompressorApiService.getGenericCompressors();
+      if (settings.unitsOfMeasure == 'Metric') {
+        this.convertGenericCompressors(settings.unitsOfMeasure);
+      }
     } else if (this.unitsOfMeasure != settings.unitsOfMeasure) {
       this.convertGenericCompressors(settings.unitsOfMeasure)
     }
@@ -38,7 +31,6 @@ export class ExistingCompressorDbService {
           DesignInTemp: Number(result['DesignInTemp']),
           DesignSurgeFlow: Number(result['DesignSurgeFlow']),
           HP: Number(result['HP']),
-          IDCompLib: Number(result['IDCompLib']),
           IDCompType: Number(result['IDCompType']),
           IDControlType: Number(result['IDControlType']),
           MaxFullFlowPressure: Number(result['MaxFullFlowPressure']),
@@ -63,12 +55,6 @@ export class ExistingCompressorDbService {
         });
       }
     });
-  }
-
-
-  getCompressorById(IDCompLib: number): GenericCompressor {
-    let compressor: GenericCompressor = this.genericCompressors.find(compressor => { return compressor.IDCompLib == IDCompLib });
-    return compressor;
   }
 
   getCompressorTypeLabel(IDCompType: number): string {
@@ -143,7 +129,6 @@ export interface GenericCompressor {
   DesignInTemp: number,
   DesignSurgeFlow: number,
   HP: number,
-  IDCompLib: number,
   IDCompType: number,
   IDControlType: number,
   MaxFullFlowPressure: number,

@@ -199,7 +199,6 @@ export class ConvertUnitsService {
 
   getUnit(abbr: string) {
     var found;
-
     _.each(this._measures, function (systems, measure) {
       _.each(systems, function (units, system) {
         if (system === '_anchors')
@@ -224,7 +223,6 @@ export class ConvertUnitsService {
       if (found)
         return false;
     });
-
     return found;
   }
 
@@ -244,6 +242,7 @@ export class ConvertUnitsService {
 
   possibilities(measure) {
     var possibilities = [];
+    var groups = undefined;
     if (!this.origin && !measure) {
       _.each(_.keys(this._measures), function (measure) {
         _.each(this._measures[measure], function (units, system) {
@@ -262,8 +261,11 @@ export class ConvertUnitsService {
         possibilities = possibilities.concat(_.keys(units));
       });
     }
+    if (this._measures[measure].groups) {
+      groups = this._measures[measure].groups;
+    }
 
-    return possibilities;
+    return { possibilities: possibilities, groups: groups };
   }
 
   roundVal(val: number, digits: number) {

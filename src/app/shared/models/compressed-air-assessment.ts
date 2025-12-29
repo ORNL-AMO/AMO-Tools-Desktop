@@ -226,7 +226,6 @@ export interface SystemInformation {
 
 export interface CompressorInventoryItem {
     itemId: string,
-    compressorLibId?: number,
     name: string,
     description: string,
     // isValid?: boolean,

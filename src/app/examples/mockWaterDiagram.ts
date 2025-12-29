@@ -1444,56 +1444,7 @@ export const MockWaterdiagram: Diagram =
                 "animated": false
             },
             "calculatedData": {
-                "nodes": {
-                    "n_5dbkq13": {
-                        "totalDischargeFlow": 30
-                    },
-                    "n_f17xaj2": {
-                        "totalSourceFlow": 3
-                    },
-                    "n_l5at36g": {
-                        "totalSourceFlow": 3
-                    },
-                    "n_tgz44ln": {
-                        "totalSourceFlow": 16
-                    },
-                    "n_2sjnlil": {
-                        "totalSourceFlow": 16,
-                        "totalDischargeFlow": 12
-                    },
-                    "n_wu9uibb": {
-                        "totalDischargeFlow": 20
-                    },
-                    "n_d7xoxtb": {
-                        "totalSourceFlow": 10,
-                        "totalDischargeFlow": 8
-                    },
-                    "n_hfbkilc": {
-                        "totalSourceFlow": 2,
-                        "totalDischargeFlow": 1.5
-                    },
-                    "n_w73lf6y": {
-                        "totalDischargeFlow": 12,
-                        "totalSourceFlow": 12
-                    },
-                    "n_j3ewbod": {
-                        "totalSourceFlow": 22,
-                        "totalDischargeFlow": 12
-                    },
-                    "n_u3srsoc": {
-                        "totalSourceFlow": 4
-                    },
-                    "n_yhhvgv7": {
-                        "totalSourceFlow": 12.5
-                    },
-                    "n_eg0ir4y": {
-                        "totalSourceFlow": 12,
-                        "totalDischargeFlow": 12
-                    },
-                    "n_dy755kl": {
-                        "totalSourceFlow": 12
-                    }
-                }
+                "nodes": {}
             },
             "recentNodeColors": [
                 "#75a1ff",

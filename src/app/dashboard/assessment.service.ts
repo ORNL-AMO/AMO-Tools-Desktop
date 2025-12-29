@@ -302,7 +302,14 @@ export class AssessmentService {
       },
       headerInput: {
         numberOfHeaders: 1,
-        highPressureHeader: undefined,
+        highPressureHeader: {
+          pressure: undefined,
+          processSteamUsage: undefined,
+          condensationRecoveryRate: undefined,
+          heatLoss: .1,
+          condensateReturnTemperature: undefined,
+          flashCondensateReturn: false
+        },
         mediumPressureHeader: undefined,
         lowPressureHeader: undefined
       }

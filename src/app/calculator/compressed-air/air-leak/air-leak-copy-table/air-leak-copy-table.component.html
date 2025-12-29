@@ -1,4 +1,4 @@
-<div *ngIf="airLeakOutput.leakResults.length > 0">
+<div *ngIf="airLeakOutput.individualLeaks.length > 0">
     <div class="hidden-copy-table">
       <table #leaksTable>
         <tbody >
@@ -19,7 +19,7 @@
             </td>
             <td>Electricity Consumption (kWh/yr)</td>
           </tr>
-          <tr *ngFor="let leak of airLeakOutput.leakResults">
+          <tr *ngFor="let leak of airLeakOutput.individualLeaks">
             <td>
               {{leak.name}}
             </td>
@@ -61,6 +61,6 @@
         </tbody>
       </table>
     </div>
-    <app-exportable-results-table *ngIf="airLeakOutput.leakResults.length > 0" [tableString]="leaksTableString"
+    <app-exportable-results-table *ngIf="airLeakOutput.individualLeaks.length > 0" [tableString]="leaksTableString"
       (updateTableString)="updateLeaksTableString()"></app-exportable-results-table>
     </div>

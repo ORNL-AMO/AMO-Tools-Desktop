@@ -40,7 +40,7 @@
                     $/yr
                 </th>
                 <th>
-                     {{ settings.unitsOfMeasure == 'Imperial' ? '$/kGal' : '$/L' }}
+                    {{ settings.unitsOfMeasure == 'Imperial' ? '$/kGal' : '$/L' }}
                 </th>
             </tr>
         </thead>
@@ -120,22 +120,29 @@
             </tr>
         </tfoot>
     </table>
-    <app-exportable-results-table [tableString]="copyTableString"
-    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+    <app-exportable-results-table [tableString]="copyTableString" [horizontalAnchor]="'right'"
+        (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+
+    <hr class="mt-5 mb-3">
+    <div class="d-flex w-100 align-items-center justify-content-center mb-3">
+        <div class="btn-group btn-group-toggle mr-3 flex-shrink-0" ngbRadioGroup name="percentView" (change)="togglePercentView()">
+            <label class="btn btn-outline-secondary mb-0" [class.active]="!percentView">
+                <input type="radio" [checked]="!percentView" value="false">View Units/Cost
+            </label>
+            <label class="btn btn-outline-secondary mb-0" [class.active]="percentView">
+                <input type="radio" [checked]="percentView" value="true">View Percent
+            </label>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap mb-3 w-100">
+        <div class="flex-shrink-0 intake-flow-bar-container">
+            <app-stacked-bar-intake-flow></app-stacked-bar-intake-flow>
+        </div>
+        <div class="flex-grow-1 ml-3 intake-cost-bar-container">
+            <app-stacked-bar-intake-costs></app-stacked-bar-intake-costs>
+        </div>
+    </div>
+
     }
 
-
-    <!-- <div class="row" *ngIf="notes.length != 0">
-        <div class="col">
-            <h5>Modification Notes</h5>
-            <p>
-                <small>
-                    <span *ngFor="let note of notes">
-                        <b>{{note.modificationName}}:</b> {{note.note}}
-                        <br>
-                    </span>
-                </small>
-            </p>
-        </div>
-    </div> -->
 </div>
