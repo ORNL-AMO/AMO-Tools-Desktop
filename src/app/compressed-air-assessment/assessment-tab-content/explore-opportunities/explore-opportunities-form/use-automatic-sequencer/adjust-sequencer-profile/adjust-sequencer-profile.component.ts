@@ -44,7 +44,7 @@ export class AdjustSequencerProfileComponent implements OnInit {
       this.numberPipeDecimals = '1.0-0'
     }
     this.setHourIntervals(this.compressedAirAssessment.systemProfile.systemProfileSetup);
-    this.setOrderingOptions(this.compressedAirAssessment.compressorInventoryItems);
+    this.setOrderingOptions(this.adjustedCompressors);
   }
 
   setHourIntervals(systemProfileSetup: SystemProfileSetup) {

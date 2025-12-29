@@ -334,7 +334,6 @@ export class CompressedAirDataManagementService {
       modification = this.resetReduceRuntimeToBaseline(modification, compressedAirAssessment);
       modification = this.resetCascadingSetPointsToBaseline(modification, compressedAirAssessment.compressorInventoryItems);
       modification = this.resetUseAutomaticSequencerToBaseline(modification, compressedAirAssessment);
-
     }
     return modification;
   }

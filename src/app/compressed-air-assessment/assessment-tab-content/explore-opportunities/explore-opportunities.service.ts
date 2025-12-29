@@ -170,6 +170,13 @@ export class ExploreOpportunitiesService {
     this.updateOrdering(modification, 'reduceSystemAirPressure', changedOpportunity, previousOrder, newOrder);
     this.updateOrdering(modification, 'useAutomaticSequencer', changedOpportunity, previousOrder, newOrder);
     this.updateOrdering(modification, 'replaceCompressor', changedOpportunity, previousOrder, newOrder);
+    if(modification.replaceCompressor?.order != 100 && modification.useAutomaticSequencer.order != 100){
+      //force autmatic sequencer to be directly after compressor replacement
+      if(modification.replaceCompressor.order + 1 != modification.useAutomaticSequencer.order){
+        this.updateOrdering(modification, 'useAutomaticSequencer', 'replaceCompressor', modification.useAutomaticSequencer.order, modification.replaceCompressor.order + 1);
+        modification.useAutomaticSequencer.order = modification.replaceCompressor.order + 1;
+      }
+    }
     return modification;
   }
 
@@ -203,9 +210,4 @@ export class ExploreOpportunitiesService {
       }
     }
   }
-
-  //Compressor dependent EEMs
-  //reduce runtime
-  //cascading set points
-  //replace compressor
 }

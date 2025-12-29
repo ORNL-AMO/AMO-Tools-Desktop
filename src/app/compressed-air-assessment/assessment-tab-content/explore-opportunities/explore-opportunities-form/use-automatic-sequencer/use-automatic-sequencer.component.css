@@ -51,3 +51,12 @@ td, th{
     font-size: 11px;
     font-style: italic;
   }
+
+  .group-label .form-control:disabled{
+    background-color: #e9ecef;
+    color: black;
+  }
+
+  .italic{
+    font-style: italic;
+  }

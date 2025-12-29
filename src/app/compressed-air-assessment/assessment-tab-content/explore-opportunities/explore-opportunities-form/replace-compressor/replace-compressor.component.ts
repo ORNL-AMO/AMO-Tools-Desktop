@@ -94,7 +94,7 @@ export class ReplaceCompressorComponent {
           this.modification.improveEndUseEfficiency.order,
           this.modification.reduceRuntime.order,
           this.modification.reduceSystemAirPressure.order,
-          this.modification.useAutomaticSequencer.order,
+          // this.modification.useAutomaticSequencer.order,
           this.modification.addPrimaryReceiverVolume.order
         ];
         allOrders = allOrders.filter(order => { return order != 100 });
@@ -108,14 +108,20 @@ export class ReplaceCompressorComponent {
 
   save(isOrderChange: boolean) {
     this.isFormChange = true;
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (isOrderChange) {
       this.isFormChange = false;
       let newOrder: number = this.form.controls.order.value;
       this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'replaceCompressor', this.modification.replaceCompressor.order, newOrder);
+      if (newOrder != 100) {
+        if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer' || this.modification.useAutomaticSequencer.order != 100) {
+          this.modification = this.exploreOpportunitiesService.setOrdering(this.modification, 'useAutomaticSequencer', this.modification.useAutomaticSequencer.order, newOrder + 1);
+          this.modification.useAutomaticSequencer.order = newOrder + 1;
+        }
+      }
     }
     this.modification.replaceCompressor = this.replaceCompressorService.getObjFromForm(this.form, this.currentCompressorMapping, this.replacementCompressorMapping);
     //update other modifications that depend on replacement compressors
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.modification = this.compressedAirDataManagementService.updateReplacementCompressors(this.modification, compressedAirAssessment);
     this.compressedAirAssessmentService.updateModification(this.modification);
   }

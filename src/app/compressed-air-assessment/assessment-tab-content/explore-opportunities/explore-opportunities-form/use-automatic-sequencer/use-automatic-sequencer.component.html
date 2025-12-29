@@ -9,13 +9,26 @@
             <span *ngIf="(form.invalid || hasInvalidDayType) && form.controls.order.value != 100">
                 <span class="fa fa-exclamation-circle"></span>
             </span>
+            @if(modification.replaceCompressor?.order != 100){
+            <select id="useAutomaticSequencerOrder" formControlName="order" class="form-control pull-right"
+                (change)="save(true)">
+                <option [ngValue]=100>Off</option>
+                <option [ngValue]="modification.replaceCompressor.order+1">On</option>
+            </select>
+            }@else {
             <select id="useAutomaticSequencerOrder" formControlName="order" class="form-control pull-right"
                 (change)="save(true)">
                 <option [ngValue]=100>Off</option>
                 <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
             </select>
+            }
         </label>
     </div>
+    @if(modification.replaceCompressor?.order != 100){
+    <p class="italic text-center small mb-0 fw-light">
+        Automatic sequencer EEM must be implemented directly after compressor replacement.
+    </p>
+    }
 
     <div *ngIf="form.controls.order.value != 100" class="mb-0 pt-1 pl-0 pr-0">
         <div class="form-group" [ngClass]="{'invalid': form.controls.implementationCost.invalid}">

@@ -97,6 +97,9 @@ export class UseAutomaticSequencerComponent implements OnInit {
       //   this.useAutomaticSequencer.variance = this.compressedAirAssessment.systemInformation.variance;
       // }
       this.form = this.useAutomaticSequencerService.getFormFromObj(this.useAutomaticSequencer);
+      if (this.modification.replaceCompressor?.order != 100 && this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
+        this.form.controls.order.disable();
+      }
       this.form.updateValueAndValidity();
     }
   }
