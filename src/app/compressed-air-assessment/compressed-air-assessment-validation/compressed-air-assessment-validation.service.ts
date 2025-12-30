@@ -25,7 +25,7 @@ export class CompressedAirAssessmentValidationService {
   validateCompressedAirAssessment(compressedAirAssessment: CompressedAirAssessment, settings: Settings): CompressedAirAssessmentValidation {
     let systemInformationValid: boolean = this.systemInformationFormService.getFormFromObj(compressedAirAssessment.systemInformation, settings).valid;
     let compressorItemValidation: Array<CompressorItemValidation> = this.compressorInventoryValidationService.validateCompressors(compressedAirAssessment);
-    let compressorsValid: boolean = compressorItemValidation.every(item => { return item.isValid });
+    let compressorsValid: boolean = compressorItemValidation.length > 0 && compressorItemValidation.every(item => { return item.isValid });
     let dayTypesValid: boolean = this.validateDayTypes(compressedAirAssessment.compressedAirDayTypes);
     let dayTypeProfileSummariesValid: Array<ProfileSummaryValid> = new Array();
     let profileSummaryValid: boolean = true;

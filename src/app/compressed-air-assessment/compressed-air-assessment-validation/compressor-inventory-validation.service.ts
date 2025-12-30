@@ -15,7 +15,6 @@ export class CompressorInventoryValidationService {
     private performancePointsFormService: PerformancePointsFormService
   ) { }
 
-  //TODO: Need to also validate replacement compressors..
   validateCompressors(compressedAirAssessment: CompressedAirAssessment): Array<CompressorItemValidation> {
     let compressorValidations: Array<CompressorItemValidation> = new Array();
     if (compressedAirAssessment.compressorInventoryItems && compressedAirAssessment.compressorInventoryItems.length > 0) {

@@ -30,14 +30,19 @@ export class InventoryService {
   }
 
   setSelectedCompressor(compressor: CompressorInventoryItem) {
-    let compressorInventoryItemClass: CompressorInventoryItemClass = new CompressorInventoryItemClass(compressor);
-    this.selectedCompressor.next(compressorInventoryItemClass);
-    let defaultCompressor: CompressorInventoryItemClass = new CompressorInventoryItemClass(_.cloneDeep(compressor));
-    let caAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
-    defaultCompressor.performancePoints.setDefaultsOn();
-    defaultCompressor.updatePerformancePoints(caAssessment.systemInformation.atmosphericPressure, settings);
-    this.defaultCompressor.next(defaultCompressor);
+    if (compressor) {
+      let compressorInventoryItemClass: CompressorInventoryItemClass = new CompressorInventoryItemClass(compressor);
+      this.selectedCompressor.next(compressorInventoryItemClass);
+      let defaultCompressor: CompressorInventoryItemClass = new CompressorInventoryItemClass(_.cloneDeep(compressor));
+      let caAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+      let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
+      defaultCompressor.performancePoints.setDefaultsOn();
+      defaultCompressor.updatePerformancePoints(caAssessment.systemInformation.atmosphericPressure, settings);
+      this.defaultCompressor.next(defaultCompressor);
+    } else {
+      this.selectedCompressor.next(undefined);
+      this.defaultCompressor.next(undefined);
+    }
   }
 
   getNewInventoryItem(): CompressorInventoryItem {
@@ -189,7 +194,7 @@ export class InventoryService {
           maxFullFlowDischargePressure: newInventoryItem.performancePoints.maxFullFlow.dischargePressure
         })
       });
-    }else{
+    } else {
       newInventoryItem.isReplacementCompressor = true;
       compressedAirAssessment.replacementCompressorInventoryItems.push(newInventoryItem);
       compressedAirAssessment.modifications.forEach(modification => {

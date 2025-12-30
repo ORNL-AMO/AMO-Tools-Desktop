@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { SystemProfileService } from '../system-profile.service';
@@ -35,12 +35,13 @@ export class ProfileSetupFormComponent implements OnInit {
   hasModifications: boolean = false;
 
   validationStatusSub: Subscription;
+  routerEventsSub: Subscription;
   constructor(private systemProfileService: SystemProfileService, private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService,
     private router: Router) { }
 
   ngOnInit(): void {
-    this.validationStatusSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => { 
+    this.validationStatusSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => {
       this.setDayTypeWarningMessage(val);
     });
 
@@ -55,35 +56,34 @@ export class ProfileSetupFormComponent implements OnInit {
         this.isFormChange = false;
       }
     });
-
-    this.router.events.subscribe(event => {
+    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
+    this.routerEventsSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.enableDisableForm();
       }
     });
-    this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
   }
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
     this.settingsSub.unsubscribe();
     this.validationStatusSub.unsubscribe();
+    this.routerEventsSub.unsubscribe();
   }
 
 
   save(dataIntervalProfile?: Array<ProfileSummary>) {
     this.isFormChange = true;
     let systemProfileSetup: SystemProfileSetup = this.systemProfileService.getProfileSetupFromForm(this.form);
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let dayTypeIndex: number = compressedAirAssessment.compressedAirDayTypes.findIndex(dayType => { return dayType.dayTypeId == systemProfileSetup.dayTypeId });
-    compressedAirAssessment.compressedAirDayTypes[dayTypeIndex].profileDataType = systemProfileSetup.profileDataType;
+    let dayTypeIndex: number = this.compressedAirAssessment.compressedAirDayTypes.findIndex(dayType => { return dayType.dayTypeId == systemProfileSetup.dayTypeId });
+    this.compressedAirAssessment.compressedAirDayTypes[dayTypeIndex].profileDataType = systemProfileSetup.profileDataType;
     if (dataIntervalProfile) {
-      compressedAirAssessment.systemProfile.profileSummary = dataIntervalProfile;
+      this.compressedAirAssessment.systemProfile.profileSummary = dataIntervalProfile;
     }
-    compressedAirAssessment.systemProfile.systemProfileSetup = systemProfileSetup;
+    this.compressedAirAssessment.systemProfile.systemProfileSetup = systemProfileSetup;
 
     if (this.isProfileDataTypeChange) {
-      compressedAirAssessment.systemProfile.profileSummary.forEach(summary => {
+      this.compressedAirAssessment.systemProfile.profileSummary.forEach(summary => {
         summary.logToolFieldId = undefined;
         summary.logToolFieldIdAmps = undefined;
         summary.logToolFieldIdPowerFactor = undefined;
@@ -91,7 +91,7 @@ export class ProfileSetupFormComponent implements OnInit {
       });
       this.isProfileDataTypeChange = false;
     }
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
+    this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, true);
   }
 
   focusField(str: string) {
@@ -106,8 +106,7 @@ export class ProfileSetupFormComponent implements OnInit {
       this.form.controls.profileDataType.enable();
       this.form.controls.dataInterval.enable();
     }
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    if (compressedAirAssessment.modifications.length != 0) {
+    if (this.compressedAirAssessment.modifications.length != 0) {
       this.form.controls.dataInterval.disable();
       this.hasModifications = true;
     } else {
@@ -116,8 +115,7 @@ export class ProfileSetupFormComponent implements OnInit {
   }
 
   changeDayType() {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    let selectedDayType: CompressedAirDayType = compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.form.controls.dayTypeId.value });
+    let selectedDayType: CompressedAirDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.form.controls.dayTypeId.value });
     this.form.controls.profileDataType.patchValue(selectedDayType.profileDataType);
     this.save();
   }
@@ -130,34 +128,47 @@ export class ProfileSetupFormComponent implements OnInit {
 
   changeDataInterval() {
     //when interval changes, hold previous interval summary data in case they change back
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    if (compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval != this.form.controls.dataInterval.value) {
+    if (this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval != this.form.controls.dataInterval.value) {
       //current assessment holds current profile
-      if (compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 24) {
-        this.dayIntervalData = compressedAirAssessment.systemProfile.profileSummary;
-      } else if (compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 1) {
-        this.hourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
-      } else if (compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == .5) {
-        this.halfHourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
-      } else if (compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == .25) {
-        this.quarterHourIntervalData = compressedAirAssessment.systemProfile.profileSummary;
+      if (this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 24) {
+        this.dayIntervalData = this.compressedAirAssessment.systemProfile.profileSummary;
+      } else if (this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == 1) {
+        this.hourIntervalData = this.compressedAirAssessment.systemProfile.profileSummary;
+      } else if (this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == .5) {
+        this.halfHourIntervalData = this.compressedAirAssessment.systemProfile.profileSummary;
+      } else if (this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval == .25) {
+        this.quarterHourIntervalData = this.compressedAirAssessment.systemProfile.profileSummary;
       }
       //form value holds changed data interval option
-      if (this.form.controls.dataInterval.value == 1 && this.hourIntervalData) {
+      if (this.form.controls.dataInterval.value == 1) {
+        if (!this.hourIntervalData) {
+          //initialize hourIntervalData
+          this.hourIntervalData = this.initializeIntervalData(this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours, this.form.controls.dataInterval.value);
+        }
         this.save(this.hourIntervalData);
-      } else if (this.form.controls.dataInterval.value == 24 && this.dayIntervalData) {
+      } else if (this.form.controls.dataInterval.value == 24) {
+        if (!this.dayIntervalData) {
+          //initialize dayIntervalData
+          this.dayIntervalData = this.initializeIntervalData(this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours, this.form.controls.dataInterval.value);
+        }
         this.save(this.dayIntervalData);
-      } else if (this.form.controls.dataInterval.value == .5 && this.halfHourIntervalData) {
+      } else if (this.form.controls.dataInterval.value == .5) {
+        if (!this.halfHourIntervalData) {
+          //initialize halfHourIntervalData
+          this.halfHourIntervalData = this.initializeIntervalData(this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours, this.form.controls.dataInterval.value);
+        }
         this.save(this.halfHourIntervalData);
-      } else if (this.form.controls.dataInterval.value == .25 && this.quarterHourIntervalData) {
+      } else if (this.form.controls.dataInterval.value == .25) {
+        if (!this.quarterHourIntervalData) {
+          //initialize quarterHourIntervalData
+          this.quarterHourIntervalData = this.initializeIntervalData(this.compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours, this.form.controls.dataInterval.value);
+        }
         this.save(this.quarterHourIntervalData);
       } else {
         this.save();
       }
     }
-    this.save();
   }
-
 
   changeProfileDataType() {
     this.isProfileDataTypeChange = true;
@@ -168,11 +179,48 @@ export class ProfileSetupFormComponent implements OnInit {
     let hasInvalidDayTypeProfile: boolean = validationStatus.dayTypeProfileSummariesValid.some(summary => {
       return summary.isValid == false;
     });
-    if(hasInvalidDayTypeProfile) {
+    if (hasInvalidDayTypeProfile) {
       this.dayTypesWarningMessage = 'There are Day Types with missing or invalid data.';
     } else {
       this.dayTypesWarningMessage = 'is valid';
     }
+  }
+
+  initializeIntervalData(numberOfHours: number, dataInterval: number): Array<ProfileSummary> {
+    let profileSummary: Array<ProfileSummary> = new Array();
+    let compressors: Array<CompressorInventoryItem> = this.compressedAirAssessment.compressorInventoryItems;
+    let dayTypes: Array<CompressedAirDayType> = this.compressedAirAssessment.compressedAirDayTypes;
+    dayTypes.forEach(dayType => {
+      compressors.forEach(compressor => {
+        let profileSummaryData: Array<ProfileSummaryData> = new Array();
+        for (let timeInterval = 0; timeInterval < numberOfHours;) {
+          profileSummaryData.push({
+            power: undefined,
+            airflow: undefined,
+            percentCapacity: undefined,
+            timeInterval: timeInterval,
+            percentPower: undefined,
+            percentSystemCapacity: 0,
+            percentSystemPower: 0,
+            order: 0,
+            powerFactor: 0,
+            amps: 0,
+            volts: 0
+          })
+          timeInterval = timeInterval + dataInterval;
+        }
+        let dayTypeProfileSummary: ProfileSummary = {
+          compressorId: compressor.itemId,
+          // compressorName: compressor.name,
+          dayTypeId: dayType.dayTypeId,
+          profileSummaryData: profileSummaryData,
+          fullLoadPressure: compressor.performancePoints.fullLoad.dischargePressure,
+          fullLoadCapacity: compressor.performancePoints.fullLoad.airflow
+        }
+        profileSummary.push(dayTypeProfileSummary);
+      });
+    });
+    return profileSummary;
   }
 
 }
