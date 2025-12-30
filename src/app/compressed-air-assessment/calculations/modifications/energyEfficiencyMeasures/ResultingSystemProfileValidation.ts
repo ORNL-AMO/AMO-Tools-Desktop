@@ -21,10 +21,12 @@ export class ResultingSystemProfileValidation {
 
     setDataArrays(previousOrderProfile: Array<ProfileSummary>, dataInterval: number,
         eemProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItemClass>) {
-        this.requiredAirflow = new Array(24).fill(0)
-        this.availableAirflow = new Array(24).fill(0)
-        this.profilePower = new Array(24).fill(0)
-        this.timeInterval = new Array(24).fill(0).map((x, i) => i);
+        
+        let totalIntervals: number = 24 / dataInterval;
+        this.requiredAirflow = new Array(totalIntervals).fill(0)
+        this.availableAirflow = new Array(totalIntervals).fill(0)
+        this.profilePower = new Array(totalIntervals).fill(0)
+        this.timeInterval = new Array(totalIntervals).fill(0).map((x, i) => i);
         previousOrderProfile.forEach(summary => {
             let index: number = 0;
             for (let i = 0; i < 24;) {

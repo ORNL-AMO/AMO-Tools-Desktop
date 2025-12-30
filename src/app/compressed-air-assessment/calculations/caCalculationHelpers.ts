@@ -241,9 +241,9 @@ export function getPressureMinMax(inventoryItems: Array<CompressorInventoryItem>
 }
 
 
-export function getEmptyProfileSummaryData(systemProfileSetup: SystemProfileSetup): Array<ProfileSummaryData> {
+export function getEmptyProfileSummaryData(systemProfileSetup: SystemProfileSetup, isOn?: boolean): Array<ProfileSummaryData> {
     let summaryData: Array<ProfileSummaryData> = new Array();
-    for (let i = 0; i < 24;) {
+    for (let i = 0; i < systemProfileSetup.numberOfHours;) {
         summaryData.push({
             power: 0,
             airflow: 0,
@@ -252,7 +252,7 @@ export function getEmptyProfileSummaryData(systemProfileSetup: SystemProfileSetu
             percentPower: undefined,
             percentSystemCapacity: undefined,
             percentSystemPower: undefined,
-            order: 0
+            order: isOn ? 1 : 0
         })
         i = i + systemProfileSetup.dataInterval;
     }

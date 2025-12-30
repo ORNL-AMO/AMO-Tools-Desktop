@@ -87,13 +87,12 @@ export class FlowReallocationResults {
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService) {
 
-        let intervalData: Array<{ compressorId: string, summaryData: ProfileSummaryData, isCompressorReplaced: boolean }> = new Array();
+        let intervalData: Array<{ compressorId: string, summaryData: ProfileSummaryData }> = new Array();
         this.profileSummary.forEach(summary => {
             if (summary.dayTypeId == dayType.dayTypeId) {
                 intervalData.push({
                     compressorId: summary.compressorId,
-                    summaryData: summary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == timeInterval }),
-                    isCompressorReplaced: summary.isCompressorReplaced
+                    summaryData: summary.profileSummaryData.find(summaryData => { return summaryData.timeInterval == timeInterval })
                 });
             }
         });
@@ -115,77 +114,76 @@ export class FlowReallocationResults {
         intervalData = _.orderBy(intervalData, (data) => { return data.summaryData.order });
         let orderCount: number = 1;
         intervalData.forEach(data => {
-            if (!data.isCompressorReplaced) {
-                let isTurnedOn: boolean = data.summaryData.order != 0;
-                if (reduceRuntime && systemInformation.multiCompressorSystemControls != 'baseTrim') {
-                    let reduceRuntimeData: ReduceRuntimeData = reduceRuntime.runtimeData.find(dataItem => {
-                        return dataItem.compressorId == data.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
-                    });
-                    let intervalData: { isCompressorOn: boolean, timeInterval: number } = reduceRuntimeData.intervalData.find(iData => { return iData.timeInterval == data.summaryData.timeInterval });
-                    isTurnedOn = intervalData.isCompressorOn;
-                    if (!isTurnedOn) {
-                        data.summaryData.order = 0;
-                    } else if (isTurnedOn && data.summaryData.order == 0) {
-                        data.summaryData.order = orderCount;
-                    }
-                    reduceRuntimeShutdownTimer = reduceRuntimeData.automaticShutdownTimer;
+            let isTurnedOn: boolean = data.summaryData.order != 0;
+            if (reduceRuntime && systemInformation.multiCompressorSystemControls != 'baseTrim') {
+                let reduceRuntimeData: ReduceRuntimeData = reduceRuntime.runtimeData.find(dataItem => {
+                    return dataItem.compressorId == data.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
+                });
+                let intervalData: { isCompressorOn: boolean, timeInterval: number } = reduceRuntimeData.intervalData.find(iData => { return iData.timeInterval == data.summaryData.timeInterval });
+                isTurnedOn = intervalData.isCompressorOn;
+                if (!isTurnedOn) {
+                    data.summaryData.order = 0;
+                } else if (isTurnedOn && data.summaryData.order == 0) {
+                    data.summaryData.order = orderCount;
                 }
-                if (data.summaryData.order != 0 && isTurnedOn) {
-                    let compressor: CompressorInventoryItemClass = adjustedCompressors.find(item => { return item.findItem(data.compressorId) });
-                    if (reduceRuntime) {
-                        compressor.compressorControls.automaticShutdown = reduceRuntimeShutdownTimer;
-                    }
-                    let fullLoadAirFlow: number = compressor.performancePoints.fullLoad.airflow;
-                    if (Math.abs(neededAirFlow) < 0.01) {
-                        fullLoadAirFlow = 0;
-                    }
-                    //calc with full load
-                    let calculateFullLoad: CompressorCalcResult = _compressedAirCalculationService.compressorsCalc(compressor, settings, 3, fullLoadAirFlow, atmosphericPressure, totalAirStorage, additionalRecieverVolume, true, undefined);
-                    let tmpNeededAirFlow: number = neededAirFlow - calculateFullLoad.capacityCalculated;
-                    //if excess air added then reduce amount and calc again
-                    if (tmpNeededAirFlow < 0 && (fullLoadAirFlow + tmpNeededAirFlow) > 0) {
-                        calculateFullLoad = _compressedAirCalculationService.compressorsCalc(compressor, settings, 3, fullLoadAirFlow + tmpNeededAirFlow, atmosphericPressure, totalAirStorage, additionalRecieverVolume, true);
-                        tmpNeededAirFlow = neededAirFlow - calculateFullLoad.capacityCalculated;
-                    }
-                    neededAirFlow = tmpNeededAirFlow;
-                    let adjustedIndex: number = this.profileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == dayType.dayTypeId });
-                    let adjustedSummaryIndex: number = this.profileSummary[adjustedIndex].profileSummaryData.findIndex(summaryData => { return summaryData.order == data.summaryData.order && summaryData.timeInterval == data.summaryData.timeInterval });
+                reduceRuntimeShutdownTimer = reduceRuntimeData.automaticShutdownTimer;
+            }
+            if (data.summaryData.order != 0 && isTurnedOn) {
+                let compressor: CompressorInventoryItemClass = adjustedCompressors.find(item => { return item.findItem(data.compressorId) });
+                if (reduceRuntime) {
+                    compressor.compressorControls.automaticShutdown = reduceRuntimeShutdownTimer;
+                }
+                let fullLoadAirFlow: number = compressor.performancePoints.fullLoad.airflow;
+                if (Math.abs(neededAirFlow) < 0.01) {
+                    fullLoadAirFlow = 0;
+                }
+                //calc with full load
+                let calculateFullLoad: CompressorCalcResult = _compressedAirCalculationService.compressorsCalc(compressor, settings, 3, fullLoadAirFlow, atmosphericPressure, totalAirStorage, additionalRecieverVolume, true, undefined);
+                let tmpNeededAirFlow: number = neededAirFlow - calculateFullLoad.capacityCalculated;
+                //if excess air added then reduce amount and calc again
+                if (tmpNeededAirFlow < 0 && (fullLoadAirFlow + tmpNeededAirFlow) > 0) {
+                    calculateFullLoad = _compressedAirCalculationService.compressorsCalc(compressor, settings, 3, fullLoadAirFlow + tmpNeededAirFlow, atmosphericPressure, totalAirStorage, additionalRecieverVolume, true);
+                    tmpNeededAirFlow = neededAirFlow - calculateFullLoad.capacityCalculated;
+                }
+                neededAirFlow = tmpNeededAirFlow;
+                let adjustedIndex: number = this.profileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == dayType.dayTypeId });
+                let adjustedSummaryIndex: number = this.profileSummary[adjustedIndex].profileSummaryData.findIndex(summaryData => { return summaryData.order == data.summaryData.order && summaryData.timeInterval == data.summaryData.timeInterval });
 
-                    this.profileSummary[adjustedIndex].profileSummaryData[adjustedSummaryIndex] = {
-                        power: calculateFullLoad.powerCalculated,
-                        airflow: calculateFullLoad.capacityCalculated,
-                        percentCapacity: calculateFullLoad.percentageCapacity,
-                        timeInterval: data.summaryData.timeInterval,
-                        percentPower: calculateFullLoad.percentagePower,
-                        percentSystemCapacity: (calculateFullLoad.capacityCalculated / totalFullLoadCapacity) * 100,
-                        percentSystemPower: (calculateFullLoad.powerCalculated / totalFullLoadPower) * 100,
-                        order: orderCount,
-                    };
-                    orderCount++;
-                } else {
-                    let adjustedIndex: number = this.profileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == dayType.dayTypeId });
-                    let adjustedSummaryIndex: number = this.profileSummary[adjustedIndex].profileSummaryData.findIndex(summaryData => { return summaryData.order == data.summaryData.order && summaryData.timeInterval == data.summaryData.timeInterval });
-                    this.profileSummary[adjustedIndex].profileSummaryData[adjustedSummaryIndex] = {
-                        power: 0,
-                        airflow: 0,
-                        percentCapacity: 0,
-                        timeInterval: data.summaryData.timeInterval,
-                        percentPower: 0,
-                        percentSystemCapacity: 0,
-                        percentSystemPower: 0,
-                        order: 0,
-                    };
-                }
+                this.profileSummary[adjustedIndex].profileSummaryData[adjustedSummaryIndex] = {
+                    power: calculateFullLoad.powerCalculated,
+                    airflow: calculateFullLoad.capacityCalculated,
+                    percentCapacity: calculateFullLoad.percentageCapacity,
+                    timeInterval: data.summaryData.timeInterval,
+                    percentPower: calculateFullLoad.percentagePower,
+                    percentSystemCapacity: (calculateFullLoad.capacityCalculated / totalFullLoadCapacity) * 100,
+                    percentSystemPower: (calculateFullLoad.powerCalculated / totalFullLoadPower) * 100,
+                    order: orderCount,
+                };
+                orderCount++;
+            } else {
+                let adjustedIndex: number = this.profileSummary.findIndex(summary => { return summary.compressorId == data.compressorId && summary.dayTypeId == dayType.dayTypeId });
+                let adjustedSummaryIndex: number = this.profileSummary[adjustedIndex].profileSummaryData.findIndex(summaryData => { return summaryData.order == data.summaryData.order && summaryData.timeInterval == data.summaryData.timeInterval });
+                this.profileSummary[adjustedIndex].profileSummaryData[adjustedSummaryIndex] = {
+                    power: 0,
+                    airflow: 0,
+                    percentCapacity: 0,
+                    timeInterval: data.summaryData.timeInterval,
+                    percentPower: 0,
+                    percentSystemCapacity: 0,
+                    percentSystemPower: 0,
+                    order: 0,
+                };
             }
         });
     }
 
 
-    setBaseTrimOrdering(intervalData: Array<{ compressorId: string, summaryData: ProfileSummaryData, isCompressorReplaced: boolean }>, adjustedCompressors: Array<CompressorInventoryItemClass>, neededAirFlow: number, trimCompressorId: string, dayType: CompressedAirDayType, reduceRuntime?: ReduceRuntime): Array<{ compressorId: string, summaryData: ProfileSummaryData, isCompressorReplaced: boolean }> {
+    setBaseTrimOrdering(intervalData: Array<{ compressorId: string, summaryData: ProfileSummaryData }>, adjustedCompressors: Array<CompressorInventoryItemClass>, neededAirFlow: number, trimCompressorId: string, dayType: CompressedAirDayType, reduceRuntime?: ReduceRuntime): Array<{ compressorId: string, summaryData: ProfileSummaryData }> {
         let trimCompressor: CompressorInventoryItemClass = adjustedCompressors.find(compressor => { return compressor.findItem(trimCompressorId) });
         let additionalAirflow: number = neededAirFlow - trimCompressor.performancePoints.fullLoad.airflow;
         if (additionalAirflow <= 0) {
             //just need trim compressor
+            //TODO: if reduce runtime is on an trim compressor is turned off how to handle?
             intervalData.forEach(interval => {
                 if (interval.compressorId == trimCompressorId) {
                     interval.summaryData.order = 1;
@@ -199,24 +197,22 @@ export class FlowReallocationResults {
         let baseCompressors: Array<string> = new Array();
         let order: number = 1;
         intervalData.forEach(iDataItem => {
-            if (!iDataItem.isCompressorReplaced) {
-                if (reduceRuntime) {
-                    let reduceRuntimeData: ReduceRuntimeData = reduceRuntime.runtimeData.find(dataItem => {
-                        return dataItem.compressorId == iDataItem.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
-                    });
-                    let reduceRuntimeDataItem: { isCompressorOn: boolean, timeInterval: number } = reduceRuntimeData.intervalData.find(iData => { return iData.timeInterval == iDataItem.summaryData.timeInterval });
-                    if (!reduceRuntimeDataItem.isCompressorOn) {
-                        iDataItem.summaryData.order = 0;
-                    } else if (reduceRuntimeDataItem.isCompressorOn && iDataItem.summaryData.order == 0) {
-                        iDataItem.summaryData.order = order++;
-                    } else if (iDataItem.summaryData.order != 0) {
-                        order++;
-                    }
+            if (reduceRuntime) {
+                let reduceRuntimeData: ReduceRuntimeData = reduceRuntime.runtimeData.find(dataItem => {
+                    return dataItem.compressorId == iDataItem.compressorId && dataItem.dayTypeId == dayType.dayTypeId;
+                });
+                let reduceRuntimeDataItem: { isCompressorOn: boolean, timeInterval: number } = reduceRuntimeData.intervalData.find(iData => { return iData.timeInterval == iDataItem.summaryData.timeInterval });
+                if (!reduceRuntimeDataItem.isCompressorOn) {
+                    iDataItem.summaryData.order = 0;
+                } else if (reduceRuntimeDataItem.isCompressorOn && iDataItem.summaryData.order == 0) {
+                    iDataItem.summaryData.order = order++;
+                } else if (iDataItem.summaryData.order != 0) {
+                    order++;
+                }
 
-                }
-                if (iDataItem.compressorId != trimCompressorId && iDataItem.summaryData.order != 0) {
-                    baseCompressors.push(iDataItem.compressorId);
-                }
+            }
+            if (iDataItem.compressorId != trimCompressorId && iDataItem.summaryData.order != 0) {
+                baseCompressors.push(iDataItem.compressorId);
             }
         })
         let combinations: Array<Array<string>> = this.getCombinations(baseCompressors);
@@ -303,6 +299,8 @@ export class FlowReallocationResults {
         _compressedAirCalculationService: CompressedAirCalculationService) {
         let compressorIds: Array<string> = new Array();
         let order: number = 1;
+        console.log(intervalData);
+        console.log(adjustedCompressors);
         intervalData.forEach(iDataItem => {
             if (reduceRuntime) {
                 let reduceRuntimeData: ReduceRuntimeData = reduceRuntime.runtimeData.find(dataItem => {

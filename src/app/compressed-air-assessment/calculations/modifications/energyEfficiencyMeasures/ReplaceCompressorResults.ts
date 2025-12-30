@@ -101,7 +101,7 @@ export class ReplaceCompressorResults {
             let _profileSummary: ProfileSummary = {
                 compressorId: replacement.itemId,
                 dayTypeId: dayType.dayTypeId,
-                profileSummaryData: getEmptyProfileSummaryData(systemProfileSetup),
+                profileSummaryData: getEmptyProfileSummaryData(systemProfileSetup, true),
                 fullLoadPressure: replacement.performancePoints.fullLoad.dischargePressure,
                 fullLoadCapacity: replacement.performancePoints.fullLoad.airflow
             };
