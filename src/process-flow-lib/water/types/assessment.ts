@@ -1,5 +1,5 @@
 import { DiagramCalculatedData } from "./diagram";
-import { ComponentAttribution } from "./results";
+import { FlowAttributionMap } from "./results";
 import { DiagramWaterSystemFlows, DischargeOutlet, IntakeSource, KnownLoss, WasteWaterTreatment, WaterTreatment, WaterUsingSystem } from "./water-components";
 
 export interface WaterAssessment {
@@ -20,7 +20,7 @@ export interface WaterAssessment {
      /**
    * Flow (edge) attribution related to each cost component
    */
-    flowAttributionMap?: Record<string, ComponentAttribution>,
+    flowAttributionMap?: FlowAttributionMap,
     setupDone: boolean
 }
 

@@ -30,7 +30,7 @@ export interface PlantResults {
     trueCostOfSystems: TrueCostOfSystems;
     plantSystemSummaryResults: PlantSystemSummaryResults;
     costComponentsTotalsMap: Record<string, BlockCosts>;
-    flowAttributionMap: Record<string, ComponentAttribution>;
+    flowAttributionMap: FlowAttributionMap;
 }
 
 export interface SystemTrueCostData {
@@ -43,6 +43,23 @@ export interface SystemTrueCostData {
 export interface TrueCostOfSystems {
   [systemId: string]: SystemTrueCostContributions
 }
+
+// * Edge id and corresponding attributions by system
+export interface FlowAttributionMap {
+  [edgeId: string]: Record<string, ComponentAttribution>;
+}
+
+
+export interface CostComponentMap {
+  [costComponentId: string]: CostComponentPathData;
+}
+
+export interface CostComponentPathData {
+    blockCosts: BlockCostsV2;
+    // edge id, id list
+    upstreamPathsByEdgeId?: string[][];
+    downstreamPathsByEdgeId?: string[][];
+  }
 
 // each property = total cost * flow fraction for all connected to system
 export interface SystemTrueCostContributions {
@@ -84,6 +101,13 @@ export interface BlockCosts {
   unpaidCostRemaining: number 
 }
 
+export interface BlockCostsV2 { 
+  name: string, 
+  processComponentType: ProcessFlowNodeType,
+  totalBlockCost: number, 
+  totalFlow?: number, 
+}
+
 
 
 // * Cost Components - nodes that carry block costs that then get attributed to systems depending on flow responsibility and proportions
@@ -92,7 +116,6 @@ export interface BlockCosts {
  * Represented system costs/flows from a given cost component
  */
 export interface ComponentAttribution {
-  flowValue: number;
   systemId: string;
   systemName: string;
   flowEdgeId: string;
@@ -101,7 +124,6 @@ export interface ComponentAttribution {
     default: number;
     adjusted?: number;
   }
-  costAttributedToSystem: number;
   costComponentId: string;
 }
 

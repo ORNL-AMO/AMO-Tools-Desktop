@@ -58,18 +58,18 @@
                 </td>
                 <ng-container *ngFor="let system of systems; let systemIndex = index">
                   <td class="system-cell text-center">
-                    @let adjustmentExists = getAdjustmentExists(system.id, costComponents[componentIndex].id);
+                    @let systemAdjustedAttributions = getSystemAdjustedAttributions(system.id, costComponents[componentIndex].id);
                     @let hasNullDefaultAttribution = nullDefaultAttribution[costComponents[componentIndex]?.id] &&
                     nullDefaultAttribution[costComponents[componentIndex]?.id][system.id] !== undefined;
 
                     @if (hasNullDefaultAttribution) {
                     <span>&mdash;</span>
                     } @else {
-                    <div class="input-group d-inline-flex" [class.border-adjusted]="adjustmentExists && !isEditingRow">
-                      @if (adjustmentExists) {
+                    <div class="input-group d-inline-flex" [class.border-adjusted]="systemAdjustedAttributions && !isEditingRow">
+                      @if (systemAdjustedAttributions) {
                       <span class="input-group-addon calc-addon units">
                         <a class="click-link" title="Revert to MEASUR calculated value."
-                          (click)="revertToDefaultAttribution(system.id, componentIndex, systemIndex)"><span
+                          (click)="revertToDefaultAttribution(systemAdjustedAttributions, system.id, componentIndex, systemIndex)"><span
                             class="fa fa-refresh"></span></a>
                       </span>
                       }

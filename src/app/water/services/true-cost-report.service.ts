@@ -25,7 +25,7 @@ export class TrueCostReportService {
           const componentAttribution: ComponentAttribution = systemToCostComponentAttributions[systemId].componentAttribution[componentId];
           let systemAttributionToComponent: number = null;
           if (componentAttribution) {
-            systemAttributionToComponent = componentAttribution.flowAttributionFraction.adjusted?  
+            systemAttributionToComponent = componentAttribution.flowAttributionFraction.adjusted !== undefined ?  
             (componentAttribution.flowAttributionFraction.adjusted * 100) 
             : (componentAttribution.flowAttributionFraction.default * 100);
           } else {

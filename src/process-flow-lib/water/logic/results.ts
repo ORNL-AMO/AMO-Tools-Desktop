@@ -4,7 +4,7 @@ import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, Dia
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getEdgeDescription, getWaterFlowTotals } from "./water-components";
 import { NodeGraphIndex, createGraphIndex, getAllUpstreamEdgePaths, getAllDownstreamEdgePaths } from "../../graph";
-import { BlockCosts, BlockCostsV2, ComponentAttribution, ConnectedCost, CostComponentMap, CostComponentPathData, PlantResults, PlantSystemSummaryResults, SystemAnnualSummaryResults, SystemTrueCostContributions, SystemTrueCostData, TrueCostOfSystems } from "../types/resultsV2";
+import { BlockCosts, BlockCostsV2, ComponentAttribution, ConnectedCost, CostComponentMap, CostComponentPathData, FlowAttributionMap, PlantResults, PlantSystemSummaryResults, SystemAnnualSummaryResults, SystemTrueCostContributions, SystemTrueCostData, TrueCostOfSystems } from "../types/results";
 
 export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[], calculatedData: DiagramCalculatedData): WaterBalanceResults => {
   let allSystemBalanceResults = [];
@@ -665,6 +665,37 @@ const getOutflowBlockCostsV2 = (
   return blockCosts;
 }
 
+const setFlowAttribution = (
+  flowAttributionMap: FlowAttributionMap, 
+  edge: Edge<CustomEdgeData>, 
+  currentSystemId: string,
+  systemAttributionFraction: number,
+  costComponentId: string,
+  debuggingNameMap: Record<string, string>
+) => {
+    if (flowAttributionMap[edge.id] === undefined) {
+      flowAttributionMap[edge.id] = {};
+    }
+    const newAttribution: ComponentAttribution = {
+      systemId: currentSystemId,
+      systemName: debuggingNameMap[currentSystemId],
+      flowEdgeId: edge.id,
+      flowEdgeDescription: getEdgeDescription(
+        edge,
+        undefined,
+        {
+          source: debuggingNameMap[edge.source],
+          target: debuggingNameMap[edge.target]
+        }),
+      flowAttributionFraction: {
+        default: systemAttributionFraction,
+        adjusted: undefined
+      },
+      costComponentId: costComponentId
+    }
+    flowAttributionMap[edge.id][currentSystemId] = newAttribution;
+}
+
 
 /** Calculate and set intake costs for each system based on their flow responsibility from each intake component
  * 
@@ -679,7 +710,7 @@ const applySystemIntakeCosts = (
   systemAnnualSummaryResultsMap: Record<string, SystemAnnualSummaryResults>,
   graph: NodeGraphIndex,
   intakeCostData: CostComponentMap,
-  flowAttributionMap: Record<string, ComponentAttribution>,
+  flowAttributionMap: FlowAttributionMap,
   settings: DiagramSettings,
   debuggingNameMap: Record<string, string>,
 ) => {
@@ -687,13 +718,13 @@ const applySystemIntakeCosts = (
     let visitedSystemIds: string[] = [];
 
     intakeData.downstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
-      
+
       for (const edgeId of path) {
         const currentNode = graph.nodeMap[graph.edgeMap[edgeId].target];
         if (visitedSystemIds.includes(currentNode.id)) {
           break;
         }
-        
+
         if (currentNode.data.processComponentType === 'water-using-system') {
           const intakeEdge = graph.edgeMap[path[0]];
           const systemIntake = graph.edgeMap[edgeId].data.flowValue ?? 0;
@@ -705,30 +736,20 @@ const applySystemIntakeCosts = (
           let systemAttributionFraction = (systemFlowResponsibility / intakeData.blockCosts.totalFlow);
           let costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
 
-          if (flowAttributionMap[intakeEdge.id] && flowAttributionMap[intakeEdge.id].flowAttributionFraction.adjusted) {
-            systemAttributionFraction = flowAttributionMap[intakeEdge.id].flowAttributionFraction.adjusted;
-            costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
+          if (flowAttributionMap[intakeEdge.id]?.[currentNode.id]?.flowAttributionFraction.adjusted !== undefined) {
+            systemAttributionFraction = flowAttributionMap[intakeEdge.id][currentNode.id].flowAttributionFraction.adjusted;
           } else {
-            flowAttributionMap[intakeEdge.id] = {
-              systemId: currentNode.id,
-              systemName: debuggingNameMap[currentNode.id],
-              flowValue: systemIntake,
-              flowEdgeId: intakeEdge.id,
-              flowEdgeDescription: getEdgeDescription(
-                intakeEdge,
-                undefined,
-                {
-                  source: debuggingNameMap[intakeEdge.source],
-                  target: debuggingNameMap[intakeEdge.target]
-                }),
-              flowAttributionFraction: {
-                default: systemAttributionFraction,
-                adjusted: undefined
-              },
-              costAttributedToSystem: costToSystem,
-              costComponentId: intakeId
-            };
+            setFlowAttribution(
+              flowAttributionMap,
+              intakeEdge,
+              currentNode.id,
+              systemAttributionFraction,
+              intakeId,
+              debuggingNameMap
+            );
           }
+
+          costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
 
           debugLogApplyIntakeCosts(
             [],
@@ -777,7 +798,7 @@ const applySystemDischargeCosts = (
   systemAnnualSummaryResultsMap: Record<string, SystemAnnualSummaryResults>,
   graph: NodeGraphIndex,
   dischargeCostData: CostComponentMap,
-  flowAttributionMap: Record<string, ComponentAttribution>,
+  flowAttributionMap: FlowAttributionMap,
   settings: DiagramSettings,
   debuggingNameMap: Record<string, string>,
 ) => {
@@ -796,32 +817,21 @@ const applySystemDischargeCosts = (
           const dischargeEdge = graph.edgeMap[path[0]];
           const systemFlowResponsibility = dischargeEdge?.data.flowValue ?? 0;
           let systemAttributionFraction = systemFlowResponsibility / dischargeData.blockCosts.totalFlow;
-          let costToSystem = systemAttributionFraction * dischargeData.blockCosts.totalBlockCost;
 
-          if (flowAttributionMap[dischargeEdge.id] && flowAttributionMap[dischargeEdge.id].flowAttributionFraction.adjusted) {
-            systemAttributionFraction = flowAttributionMap[dischargeEdge.id].flowAttributionFraction.adjusted;
-            costToSystem = systemAttributionFraction * dischargeData.blockCosts.totalBlockCost;
+          if (flowAttributionMap[dischargeEdge.id]?.[currentNode.id]?.flowAttributionFraction.adjusted !== undefined) {
+            systemAttributionFraction = flowAttributionMap[dischargeEdge.id][currentNode.id].flowAttributionFraction.adjusted;
           } else {
-            flowAttributionMap[dischargeEdge.id] = {
-              systemId: currentNode.id,
-              systemName: debuggingNameMap[currentNode.id],
-              flowValue: systemFlowResponsibility,
-              flowEdgeId: dischargeEdge.id,
-              flowEdgeDescription: getEdgeDescription(
-                dischargeEdge,
-                undefined, 
-                {
-                source: debuggingNameMap[dischargeEdge.source],
-                target: debuggingNameMap[dischargeEdge.target]
-              }),
-              flowAttributionFraction: {
-                default: systemAttributionFraction,
-                adjusted: undefined
-              },
-              costAttributedToSystem: costToSystem,
-              costComponentId: dischargeId
-            };
+            setFlowAttribution(
+              flowAttributionMap,
+              dischargeEdge,
+              currentNode.id,
+              systemAttributionFraction,
+              dischargeId,
+              debuggingNameMap
+            );
           }
+
+          let costToSystem = systemAttributionFraction * dischargeData.blockCosts.totalBlockCost;
 
           debugLogApplyDischargeCosts(
             [],
@@ -863,7 +873,7 @@ const applySystemTreatmentCosts = (
   trueCostOfSystems: TrueCostOfSystems,
   graph: NodeGraphIndex,
   treatmentCostData: CostComponentMap,
-  flowAttributionMap: Record<string, ComponentAttribution>,
+  flowAttributionMap: FlowAttributionMap,
   debuggingNameMap: Record<string, string>,
 ) => {
   Object.entries(treatmentCostData).forEach(([treatmentId, treatmentData]: [string, CostComponentPathData]) => {
@@ -895,32 +905,22 @@ const applySystemTreatmentCosts = (
           let fractionPathIntakeReceived = (systemInflow / pathInflow) > 1 ? 1 : (systemInflow / pathInflow);
           let systemFlowResponsibility = pathInflow * fractionPathIntakeReceived;
           let systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
+
+         if (flowAttributionMap[treatmentEdge.id]?.[currentNode.id]?.flowAttributionFraction.adjusted !== undefined) {
+            systemAttributionFraction = flowAttributionMap[treatmentEdge.id][currentNode.id].flowAttributionFraction.adjusted;
+          } else {
+            setFlowAttribution(
+              flowAttributionMap,
+              treatmentEdge,
+              currentNode.id,
+              systemAttributionFraction,
+              treatmentId,
+              debuggingNameMap
+            );
+          }
+
           let costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
 
-          if (flowAttributionMap[treatmentEdge.id] && flowAttributionMap[treatmentEdge.id].flowAttributionFraction.adjusted) {
-            systemAttributionFraction = flowAttributionMap[treatmentEdge.id].flowAttributionFraction.adjusted;
-            costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
-          } else {
-            flowAttributionMap[treatmentEdge.id] = {
-              systemId: currentNode.id,
-              systemName: debuggingNameMap[currentNode.id],
-              flowValue: systemInflow,
-              flowEdgeId: treatmentEdge.id,
-              flowEdgeDescription: getEdgeDescription(
-                treatmentEdge,
-                undefined,
-                {
-                  source: debuggingNameMap[treatmentEdge.source],
-                  target: debuggingNameMap[treatmentEdge.target]
-                }),
-              flowAttributionFraction: {
-                default: systemAttributionFraction,
-                adjusted: undefined
-              },
-              costAttributedToSystem: costToSystem,
-              costComponentId: treatmentId
-            };
-          }
 
           debugLogApplySystemTreatmentCosts(
             [],
@@ -963,7 +963,7 @@ const applySystemWasteTreatmentCosts = (
   trueCostOfSystems: TrueCostOfSystems,
   graph: NodeGraphIndex,
   wasteTreatmentCostData: CostComponentMap,
-  flowAttributionMap: Record<string, ComponentAttribution>,
+  flowAttributionMap: FlowAttributionMap,
   debuggingNameMap: Record<string, string>,
 ) => {
   // * used to deduct flow responsibility from upstream WWT systems
@@ -992,32 +992,21 @@ const applySystemWasteTreatmentCosts = (
           let fractionPathInflowReceived = (systemInflow / pathInflow) > 1 ? 1 : (systemInflow / pathInflow);
           let systemFlowResponsibility = pathInflow * fractionPathInflowReceived;
           let systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
-          let costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
 
-          if (flowAttributionMap[treatmentEdge.id] && flowAttributionMap[treatmentEdge.id].flowAttributionFraction.adjusted) {
-            systemAttributionFraction = flowAttributionMap[treatmentEdge.id].flowAttributionFraction.adjusted;
-            costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
+          if (flowAttributionMap[treatmentEdge.id]?.[currentNode.id]?.flowAttributionFraction.adjusted !== undefined) {
+            systemAttributionFraction = flowAttributionMap[treatmentEdge.id][currentNode.id].flowAttributionFraction.adjusted;
           } else {
-            flowAttributionMap[treatmentEdge.id] = {
-              systemId: currentNode.id,
-              systemName: debuggingNameMap[currentNode.id],
-              flowValue: systemInflow,
-              flowEdgeId: treatmentEdge.id,
-              flowEdgeDescription: getEdgeDescription(
-                treatmentEdge,
-                undefined,
-                {
-                  source: debuggingNameMap[treatmentEdge.source],
-                  target: debuggingNameMap[treatmentEdge.target]
-                }),
-              flowAttributionFraction: {
-                default: systemAttributionFraction,
-                adjusted: undefined
-              },
-              costAttributedToSystem: costToSystem,
-              costComponentId: treatmentId
-            };
+            setFlowAttribution(
+              flowAttributionMap,
+              treatmentEdge,
+              currentNode.id,
+              systemAttributionFraction,
+              treatmentId,
+              debuggingNameMap
+            );
           }
+
+          let costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
 
           debugLogApplySystemTreatmentCosts(
             [],
@@ -1035,7 +1024,7 @@ const applySystemWasteTreatmentCosts = (
           trueCostOfSystems[currentNode.id].wasteTreatment += costToSystem;
           // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
           visitedSystemIds.push(currentNode.id);
-
+          
           downstreamTreatmentAttributionMap[treatmentId] = {
             chargedPortion: systemFlowResponsibility,
             chargedSystems: visitedSystemIds
@@ -1053,7 +1042,7 @@ const applySystemWasteTreatmentCosts = (
     let visitedSystemIds: string[] = [...downstreamTreatmentAttributionMap[treatmentId]?.chargedSystems || []];
 
     treatmentData.upstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
-      
+
       for (const edgeId of path) {
         const currentNode = graph.nodeMap[graph.edgeMap[edgeId].target];
         if (visitedSystemIds.includes(currentNode.id)) {
@@ -1070,38 +1059,50 @@ const applySystemWasteTreatmentCosts = (
           let fractionPathInflowReceived = (systemOutflow / pathOutflow) > 1 ? 1 : (systemOutflow / pathOutflow);
           let systemFlowResponsibility = pathOutflow * fractionPathInflowReceived;
 
-          // * remove recycled flow portion already attributed to recycled flows (downstream from WWT)
+          // * WWT component has split attribution - below logic is required for accurate attribution of chained WWT components
           if (downstreamTreatmentAttributionMap[treatmentId]) {
+            // * remove recycled flow portion already attributed to recycled flows (downstream from WWT)
             systemFlowResponsibility = systemFlowResponsibility - downstreamTreatmentAttributionMap[treatmentId].chargedPortion;
           }
 
           let systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
           let costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
 
-          if (flowAttributionMap[treatmentEdge.id] && flowAttributionMap[treatmentEdge.id].flowAttributionFraction.adjusted) {
-            systemAttributionFraction = flowAttributionMap[treatmentEdge.id].flowAttributionFraction.adjusted;
-            costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
+          if (flowAttributionMap[treatmentEdge.id]?.[currentNode.id]?.flowAttributionFraction.adjusted !== undefined) {
+            systemAttributionFraction = flowAttributionMap[treatmentEdge.id][currentNode.id].flowAttributionFraction.adjusted;
           } else {
-            flowAttributionMap[treatmentEdge.id] = {
-              systemId: currentNode.id,
-              systemName: debuggingNameMap[currentNode.id],
-              flowValue: systemOutflow,
-              flowEdgeId: treatmentEdge.id,
-              flowEdgeDescription: getEdgeDescription(
-                treatmentEdge,
-                undefined,
-                {
-                  source: debuggingNameMap[treatmentEdge.source],
-                  target: debuggingNameMap[treatmentEdge.target]
-                }),
-              flowAttributionFraction: {
-                default: systemAttributionFraction,
-                adjusted: undefined
-              },
-              costAttributedToSystem: costToSystem,
-              costComponentId: treatmentId
-            };
+            setFlowAttribution(
+              flowAttributionMap,
+              treatmentEdge,
+              currentNode.id,
+              systemAttributionFraction,
+              treatmentId,
+              debuggingNameMap
+            );
           }
+
+          // * WWT component has split attribution - below logic is required for accurate attribution of chained WWT components
+          if (downstreamTreatmentAttributionMap[treatmentId] && flowAttributionMap[treatmentEdge.id]) {
+            // * set flow attribution map for any downstream system already processed related to this edge - its default attribution must be adjusted to reflect the WWT's split
+            Object.entries(flowAttributionMap[treatmentEdge.id]).forEach(([systemId, attribution]) => {
+              if (systemId !== currentNode.id) {
+                const edgeDownstreamAttribution = downstreamTreatmentAttributionMap[treatmentId];
+                const systemAttributionFraction = (edgeDownstreamAttribution.chargedPortion / treatmentData.blockCosts.totalFlow);
+                // costToSystem is calculated and assigned in downstream logic above
+
+                const downStreamSystemAttribution: ComponentAttribution = {
+                  ...attribution,
+                  flowAttributionFraction: {
+                    default: systemAttributionFraction,
+                    adjusted: attribution.flowAttributionFraction.adjusted
+                  },
+                };
+                flowAttributionMap[treatmentEdge.id][systemId] = downStreamSystemAttribution;
+              }
+            });
+          }
+
+          costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
 
           debugLogApplySystemTreatmentCosts(
             [],
@@ -1113,7 +1114,7 @@ const applySystemWasteTreatmentCosts = (
             systemFlowResponsibility,
             systemAttributionFraction,
             costToSystem
-          )
+          );
 
           // * apply treatment flow cost
           trueCostOfSystems[currentNode.id].wasteTreatment += costToSystem;
@@ -1156,7 +1157,7 @@ export const getPlantSummaryResults = (
   edges: Edge<CustomEdgeData>[],
   electricityCost: number,
   settings: DiagramSettings,
-  flowAttributionMap: Record<string, ComponentAttribution>,
+  flowAttributionMap: FlowAttributionMap,
 ): PlantResults => {
   console.time('getPlantSummaryResults');
   const graph: NodeGraphIndex = createGraphIndex(nodes, edges as Edge<CustomEdgeData>[]);
