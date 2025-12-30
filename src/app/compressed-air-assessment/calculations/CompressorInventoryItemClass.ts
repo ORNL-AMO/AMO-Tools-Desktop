@@ -8,7 +8,6 @@ import { CompressorPerformancePointsClass } from "./performancePoints/Compressor
 export class CompressorInventoryItemClass {
 
     itemId: string;
-    compressorLibId: number;
     name: string;
     nameplateData: CompressorNameplateData;
     compressorControls: CompressorControls;
@@ -30,7 +29,6 @@ export class CompressorInventoryItemClass {
         this.itemId = inventoryItem.itemId;
         this.description = inventoryItem.description;
         this.modifiedDate = inventoryItem.modifiedDate;
-        this.compressorLibId = inventoryItem.compressorLibId;
         this.performancePoints = new CompressorPerformancePointsClass(inventoryItem.performancePoints);
         this.nameplateData = inventoryItem.nameplateData;
         this.name = inventoryItem.name;
@@ -136,7 +134,6 @@ export class CompressorInventoryItemClass {
     toModel(): CompressorInventoryItem {
         return {
             itemId: this.itemId,
-            compressorLibId: this.compressorLibId,
             name: this.name,
             description: this.description,
             nameplateData: this.nameplateData,

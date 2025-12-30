@@ -7,7 +7,8 @@
     </div>
 
     <div *ngIf="!collapse || printView">
-            <div class="card-body">
+        <div class="card-body">
+            @if(endUses?.length > 0) {
             <div class="output-summary">
                 <!-- <div class="output-summary pl-2 pt-3 pr-2"> -->
                 <table #copyTable #profileTable class="table table-hover bg-white">
@@ -114,6 +115,11 @@
                 <app-exportable-results-table [tableString]="copyTableString"
                     (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
             </div>
+            }@else {
+            <div class="alert alert-info">
+                No End Uses have been added.
+            </div>
+            }
         </div>
 
     </div>

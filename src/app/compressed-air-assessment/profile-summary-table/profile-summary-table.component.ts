@@ -36,7 +36,6 @@ export class ProfileSummaryTableComponent implements OnInit {
       let selection = this.systemInformation.trimSelections.find(selection => selection.dayTypeId == this.systemProfileSetup.dayTypeId);
       this.selectedTrimCompressorId = selection? selection.compressorId : undefined;
     }
-    console.log(this.profileSummary);
   }
 
   updateTableString() {

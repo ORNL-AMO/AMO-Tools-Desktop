@@ -13,6 +13,9 @@ app-baseline-tab-content {
 }
 
 
-.compressed-air-container app-assessment-tab-content, .compressed-air-container app-explore-opportunities{
+.compressed-air-container app-assessment-tab-content, 
+.compressed-air-container app-explore-opportunities, 
+.compressed-air-container app-compressed-air-calculators,
+.compressed-air-container app-compressed-air-report{
     height: 100%;
 }
