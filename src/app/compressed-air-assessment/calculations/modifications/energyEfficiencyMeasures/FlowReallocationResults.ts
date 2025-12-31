@@ -96,7 +96,6 @@ export class FlowReallocationResults {
                 });
             }
         });
-        // console.log(intervalData);
         if (systemInformation.multiCompressorSystemControls == 'loadSharing') {
             this.shareLoad(intervalData, adjustedCompressors, neededAirFlow, settings, additionalRecieverVolume, atmosphericPressure, totalAirStorage, reduceRuntime, dayType, _compressedAirCalculationService);
             return;
@@ -299,8 +298,6 @@ export class FlowReallocationResults {
         _compressedAirCalculationService: CompressedAirCalculationService) {
         let compressorIds: Array<string> = new Array();
         let order: number = 1;
-        console.log(intervalData);
-        console.log(adjustedCompressors);
         intervalData.forEach(iDataItem => {
             if (reduceRuntime) {
                 let reduceRuntimeData: ReduceRuntimeData = reduceRuntime.runtimeData.find(dataItem => {

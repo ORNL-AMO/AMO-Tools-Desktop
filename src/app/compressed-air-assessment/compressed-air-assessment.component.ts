@@ -144,6 +144,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.modalOpenSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
     this.inventoryService.selectedCompressor.next(undefined);
+    this.inventoryService.tabSelect.next('inventory');
     // this.endUseService.endUses.next(undefined);
     this.endUseFormService.selectedEndUse.next(undefined);
     this.endUseFormService.selectedDayTypeEndUse.next(undefined);

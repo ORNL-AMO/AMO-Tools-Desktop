@@ -21,6 +21,7 @@ export class ImproveEndUseEfficiencyResults {
         auxiliaryPowerUsage: { cost: number, energyUse: number },
         order: number
     ) {
+        this.order = order;
         //1. Adjust totals based on end use efficiency reductions
         let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = this.adjustTotalsWithImprovedEndUseEfficiency(dayType, improveEndUseEfficiency, totals);
         //2. Calculate auxiliary power usage
@@ -46,7 +47,6 @@ export class ImproveEndUseEfficiencyResults {
             order);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
-        this.order = order;
     }
 
     adjustTotalsWithImprovedEndUseEfficiency(dayType: CompressedAirDayType, improveEndUseEfficiency: ImproveEndUseEfficiency, totals: Array<ProfileSummaryTotal>): Array<ProfileSummaryTotal> {

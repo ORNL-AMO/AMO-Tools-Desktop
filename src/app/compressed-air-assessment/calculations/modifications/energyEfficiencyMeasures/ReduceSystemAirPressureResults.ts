@@ -31,7 +31,7 @@ export class ReduceSystemAirPressureResults {
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService,
         order: number) {
-
+        this.order = order;
         this.adjustedCompressors = adjustedCompressors;
         let ogCompressors: Array<CompressorInventoryItemClass> = _.cloneDeep(adjustedCompressors);
         this.profileSummary = previousProfileSummary.map(summary => {
@@ -69,7 +69,6 @@ export class ReduceSystemAirPressureResults {
             order);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
-        this.order = order;
     }
 
     reduceSystemAirPressureAdjustCompressors(reduceSystemAirPressure: ReduceSystemAirPressure, atmosphericPressure: number, settings: Settings) {

@@ -31,6 +31,7 @@ export class AdjustCascadingSetPointsResults {
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService,
         order: number) {
+        this.order = order;
         this.adjustedCompressors = adjustedCompressors;
         this.profileSummary = previousProfileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
@@ -66,7 +67,6 @@ export class AdjustCascadingSetPointsResults {
             order);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
-        this.order = order;
     }
 
     adjustCascadingSetPointsAdjustCompressors(adjustCascadingSetPoints: AdjustCascadingSetPoints, atmosphericPressure: number, settings: Settings) {

@@ -20,6 +20,7 @@ export class ReduceAirLeaksResults {
         auxiliaryPowerUsage: { cost: number, energyUse: number },
         order: number
     ) {
+        this.order = order;
         //1. Adjust totals based on air leak reduction
         let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = this.reduceAirLeaks(reduceAirLeaks, totals);
         //2. Reallocate flow based on new totals
@@ -41,7 +42,6 @@ export class ReduceAirLeaksResults {
             order);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
-        this.order = order;
     }
 
     reduceAirLeaks(reduceAirLeaks: ReduceAirLeaks, totals: Array<ProfileSummaryTotal>): Array<ProfileSummaryTotal> {

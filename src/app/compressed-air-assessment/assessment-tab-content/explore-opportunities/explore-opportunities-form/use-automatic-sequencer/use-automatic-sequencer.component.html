@@ -24,7 +24,7 @@
             }
         </label>
     </div>
-    @if(modification.replaceCompressor?.order != 100){
+    @if(modification.replaceCompressor?.order != 100 && form.controls.order.value != 100){
     <p class="italic text-center small mb-0 fw-light">
         Automatic sequencer EEM must be implemented directly after compressor replacement.
     </p>

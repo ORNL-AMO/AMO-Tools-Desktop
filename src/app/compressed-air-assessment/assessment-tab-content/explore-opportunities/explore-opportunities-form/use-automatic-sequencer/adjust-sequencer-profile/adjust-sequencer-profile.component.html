@@ -48,8 +48,9 @@
                     {{getFullLoadCapacity(summary.compressorId)}}
                 </td>
                 <td class="text-center">
-                    <input *ngIf="checkShowShutdownTimer(summary.compressorId)" type="checkbox"
-                        [(ngModel)]="summary.automaticShutdownTimer" (change)="save()">
+                    @if(checkShowShutdownTimer(summary.compressorId)){
+                    <input type="checkbox" [(ngModel)]="summary.automaticShutdownTimer" (change)="save()">
+                    }
                 </td>
                 <td class="input-cell"
                     *ngFor="let summaryData of summary.profileSummaryData; let orderIndex = index; trackBy:trackByIdx">

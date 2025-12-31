@@ -1,4 +1,4 @@
-import { CompressedAirDayType, ProfileSummaryTotal, ReduceRuntime, SystemInformation, UseAutomaticSequencer } from "../../../../shared/models/compressed-air-assessment";
+import { CompressedAirDayType, ProfileSummaryTotal, ReduceRuntime, SystemInformation, UseAutomaticSequencer, UseAutomaticSequencerProfileSummary } from "../../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
 import { getProfileSummaryTotals } from "../../caCalculationHelpers";
@@ -28,14 +28,16 @@ export class UseAutomaticSequencerResults {
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService,
         order: number) {
-        this.adjustedCompressors = adjustedCompressors;
+        this.order = order;
+        // this.adjustedCompressors = adjustedCompressors;
 
         this.profileSummary = previousProfileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
-
         //1. Adjust compressor set points
-        this.useAutomaticSequencerAdjustCompressor(useAutomaticSequencer, systemInformation, settings);
+        this.adjustedCompressors = this.useAutomaticSequencerAdjustCompressor(useAutomaticSequencer, systemInformation, settings, adjustedCompressors);
+        //2. Adjust profile based on new orders
+        this.profileSummary = this.useAutomaticSequencerMapOrders(useAutomaticSequencer.profileSummary, this.profileSummary);       
         //3. Reallocate flow based on new set points
         let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(
             summaryDataInterval,
@@ -46,7 +48,7 @@ export class UseAutomaticSequencerResults {
             this.adjustedCompressors);
         let flowReallocationResults: FlowReallocationResults = new FlowReallocationResults(dayType,
             settings,
-            previousProfileSummary,
+            this.profileSummary,
             this.adjustedCompressors,
             0,
             adjustedProfileSummaryTotal,
@@ -65,25 +67,29 @@ export class UseAutomaticSequencerResults {
     }
 
 
-    useAutomaticSequencerAdjustCompressor(useAutomaticSequencer: UseAutomaticSequencer, systemInformation: SystemInformation, settings: Settings) {
-        this.adjustedCompressors.forEach(compressor => {
-            let sequencerProfile: CompressedAirProfileSummary = this.profileSummary.find(profileItem => {
+    useAutomaticSequencerAdjustCompressor(useAutomaticSequencer: UseAutomaticSequencer, systemInformation: SystemInformation, settings: Settings, adjustedCompressors: Array<CompressorInventoryItemClass>) {
+        adjustedCompressors.forEach(compressor => {
+            let sequencerProfile: UseAutomaticSequencerProfileSummary = useAutomaticSequencer.profileSummary.find(profileItem => {
                 return profileItem.compressorId == compressor.itemId;
             });
             compressor.compressorControls.automaticShutdown = sequencerProfile.automaticShutdownTimer;
             compressor.adjustCompressorPerformancePointsWithSequencer(useAutomaticSequencer.targetPressure, useAutomaticSequencer.variance, systemInformation.atmosphericPressure, settings)
         });
+        return adjustedCompressors
     }
 
-    // useAutomaticSequencerMapOrders(automaticSequencerProfile: Array<ProfileSummary>, adjustedProfile: Array<ProfileSummary>): Array<ProfileSummary> {
-    //     adjustedProfile.forEach(profileItem => {
-    //         let automaticSequencerProfileItem: ProfileSummary = automaticSequencerProfile.find(sequencerItem => { return sequencerItem.dayTypeId == profileItem.dayTypeId && sequencerItem.compressorId == profileItem.compressorId });
-    //         profileItem.profileSummaryData.forEach(profileSummaryDataItem => {
-    //             let sequencerProfileDataItem: ProfileSummaryData = automaticSequencerProfileItem.profileSummaryData.find(profileData => { return profileData.timeInterval == profileSummaryDataItem.timeInterval });
-    //             profileSummaryDataItem.order = sequencerProfileDataItem.order;
-    //         });
-    //     });
-    //     return adjustedProfile;
-    // }
+    useAutomaticSequencerMapOrders(automaticSequencerProfile: Array<UseAutomaticSequencerProfileSummary>, adjustedProfile: Array<CompressedAirProfileSummary>): Array<CompressedAirProfileSummary> {
+        adjustedProfile.forEach(profileItem => {
+            let automaticSequencerProfileItem: UseAutomaticSequencerProfileSummary = automaticSequencerProfile.find(sequencerItem => { return sequencerItem.dayTypeId == profileItem.dayTypeId && sequencerItem.compressorId == profileItem.compressorId });
+            profileItem.profileSummaryData.forEach(profileSummaryDataItem => {
+                let sequencerProfileDataItem: {
+                    timeInterval: number,
+                    order: number,
+                } = automaticSequencerProfileItem.profileSummaryData.find(profileData => { return profileData.timeInterval == profileSummaryDataItem.timeInterval });
+                profileSummaryDataItem.order = sequencerProfileDataItem.order;
+            });
+        });
+        return adjustedProfile;
+    }
 
 }

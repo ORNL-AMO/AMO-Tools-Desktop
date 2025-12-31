@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CentrifugalSpecifics, CompressedAirAssessment, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, Modification, PerformancePoint, ProfileSummary, ProfileSummaryData, UseAutomaticSequencerProfileSummary } from '../shared/models/compressed-air-assessment';
+import { CentrifugalSpecifics, CompressedAirAssessment, CompressedAirDayType, CompressorControls, CompressorInventoryItem, CompressorNameplateData, DesignDetails, Modification, PerformancePoint, ProfileSummary, ProfileSummaryData, UseAutomaticSequencerProfileSummary } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentService } from './compressed-air-assessment.service';
 import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
@@ -309,7 +309,7 @@ export class CompressedAirDataManagementService {
       if (modification.reduceRuntime.order != 100 && (modification.replaceCompressor.order < modification.reduceRuntime.order)) {
         modification = this.updateReduceRuntimeWithReplacementCompressors(modification, compressedAirAssessment.replacementCompressorInventoryItems, compressedAirAssessment.compressorInventoryItems, salvagedCompressorIds, nonSalvagedCompressorIds, replacementCompressorIds, nonAddedReplacementCompressorIds, compressedAirAssessment);
       } else {
-        //resetu reduce runtime with baseline
+        //reset reduce runtime with baseline
         modification = this.resetReduceRuntimeToBaseline(modification, compressedAirAssessment);
       }
 
@@ -344,6 +344,7 @@ export class CompressedAirDataManagementService {
     replacementCompressorIds: Array<string>,
     nonAddedReplacementCompressorIds: Array<string>,
     compressedAirAssessment: CompressedAirAssessment): Modification {
+
     //remove salvaged compressors from replacement list
     modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(dataItem => {
       if (salvagedCompressorIds.includes(dataItem.compressorId)) {
@@ -360,13 +361,7 @@ export class CompressedAirDataManagementService {
         if (nonSalvagedCompressor) {
           let intervalData: Array<ProfileSummaryData> = getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup);
           compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-            modification.reduceRuntime.runtimeData.push({
-              compressorId: nonSalvagedCompressor.itemId,
-              fullLoadCapacity: nonSalvagedCompressor.performancePoints.fullLoad.airflow,
-              intervalData: intervalData.map(data => { return { timeInterval: data.timeInterval, isCompressorOn: true } }),
-              dayTypeId: dayType.dayTypeId,
-              automaticShutdownTimer: nonSalvagedCompressor.compressorControls.automaticShutdown
-            });
+            modification.reduceRuntime.runtimeData.push(this.getCompressorRuntimeData(nonSalvagedCompressor, dayType, intervalData));
           });
         }
       }
@@ -379,13 +374,7 @@ export class CompressedAirDataManagementService {
         if (replacementCompressor) {
           let intervalData: Array<ProfileSummaryData> = getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup);
           compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-            modification.reduceRuntime.runtimeData.push({
-              compressorId: replacementCompressor.itemId,
-              fullLoadCapacity: replacementCompressor.performancePoints.fullLoad.airflow,
-              intervalData: intervalData.map(data => { return { timeInterval: data.timeInterval, isCompressorOn: true } }),
-              dayTypeId: dayType.dayTypeId,
-              automaticShutdownTimer: replacementCompressor.compressorControls.automaticShutdown
-            });
+            modification.reduceRuntime.runtimeData.push(this.getCompressorRuntimeData(replacementCompressor, dayType, intervalData));
           });
         }
       }
@@ -480,13 +469,7 @@ export class CompressedAirDataManagementService {
         if (baselineCompressor) {
           let intervalData: Array<ProfileSummaryData> = getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup);
           compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-            modification.reduceRuntime.runtimeData.push({
-              compressorId: baselineCompressor.itemId,
-              fullLoadCapacity: baselineCompressor.performancePoints.fullLoad.airflow,
-              intervalData: intervalData.map(data => { return { timeInterval: data.timeInterval, isCompressorOn: true } }),
-              dayTypeId: dayType.dayTypeId,
-              automaticShutdownTimer: baselineCompressor.compressorControls.automaticShutdown
-            });
+            modification.reduceRuntime.runtimeData.push(this.getCompressorRuntimeData(baselineCompressor, dayType, intervalData));
           });
         }
       }
@@ -545,14 +528,7 @@ export class CompressedAirDataManagementService {
         if (baselineCompressor) {
           let intervalData: Array<ProfileSummaryData> = getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup);
           compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-            profileSummary.push({
-              compressorId: baselineCompressor.itemId,
-              fullLoadCapacity: baselineCompressor.performancePoints.fullLoad.airflow,
-              fullLoadPressure: baselineCompressor.performancePoints.fullLoad.dischargePressure,
-              profileSummaryData: intervalData.map(data => { return { timeInterval: data.timeInterval, order: 0 } }),
-              dayTypeId: dayType.dayTypeId,
-              automaticShutdownTimer: baselineCompressor.compressorControls.automaticShutdown
-            });
+            profileSummary.push(this.getCompressorProfileData(baselineCompressor, dayType, intervalData, 0));
           });
         }
       }
@@ -565,14 +541,7 @@ export class CompressedAirDataManagementService {
         if (replacementCompressor) {
           let intervalData: Array<ProfileSummaryData> = getEmptyProfileSummaryData(compressedAirAssessment.systemProfile.systemProfileSetup);
           compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-            profileSummary.push({
-              compressorId: replacementCompressor.itemId,
-              fullLoadCapacity: replacementCompressor.performancePoints.fullLoad.airflow,
-              fullLoadPressure: replacementCompressor.performancePoints.fullLoad.dischargePressure,
-              profileSummaryData: intervalData.map(data => { return { timeInterval: data.timeInterval, order: 0 } }),
-              dayTypeId: dayType.dayTypeId,
-              automaticShutdownTimer: replacementCompressor.compressorControls.automaticShutdown
-            });
+            profileSummary.push(this.getCompressorProfileData(replacementCompressor, dayType, intervalData, 0));
           });
         }
       }
@@ -604,5 +573,41 @@ export class CompressedAirDataManagementService {
     });
     modification.useAutomaticSequencer.profileSummary = profileSummary;
     return modification;
+  }
+
+  private getCompressorProfileData(compressor: CompressorInventoryItem, dayType: CompressedAirDayType, intervalData: Array<{ timeInterval: number }>, order: number): {
+    compressorId: string,
+    fullLoadCapacity: number,
+    fullLoadPressure: number,
+    profileSummaryData: Array<{ timeInterval: number, order: number }>,
+    dayTypeId: string,
+    automaticShutdownTimer: boolean
+  } {
+    let compressorCopy: CompressorInventoryItem = new CompressorInventoryItemClass(compressor).toModel();
+    return {
+      compressorId: compressorCopy.itemId,
+      fullLoadCapacity: compressorCopy.performancePoints.fullLoad.airflow,
+      fullLoadPressure: compressorCopy.performancePoints.fullLoad.dischargePressure,
+      profileSummaryData: intervalData.map(data => { return { timeInterval: data.timeInterval, order: order } }),
+      dayTypeId: dayType.dayTypeId,
+      automaticShutdownTimer: compressorCopy.compressorControls.automaticShutdown
+    }
+  }
+
+  private getCompressorRuntimeData(compressor: CompressorInventoryItem, dayType: CompressedAirDayType, intervalData: Array<{ timeInterval: number }>): {
+    compressorId: string,
+    fullLoadCapacity: number,
+    intervalData: Array<{ timeInterval: number, isCompressorOn: boolean }>,
+    dayTypeId: string,
+    automaticShutdownTimer: boolean
+  } {
+    let compressorCopy: CompressorInventoryItem = new CompressorInventoryItemClass(compressor).toModel();
+    return {
+      compressorId: compressorCopy.itemId,
+      fullLoadCapacity: compressorCopy.performancePoints.fullLoad.airflow,
+      intervalData: intervalData.map(data => { return { timeInterval: data.timeInterval, isCompressorOn: true } }),
+      dayTypeId: dayType.dayTypeId,
+      automaticShutdownTimer: compressorCopy.compressorControls.automaticShutdown
+    }
   }
 }

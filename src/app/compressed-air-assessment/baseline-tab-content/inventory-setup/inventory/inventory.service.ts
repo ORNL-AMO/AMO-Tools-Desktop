@@ -192,24 +192,19 @@ export class InventoryService {
           compressorType: newInventoryItem.nameplateData.compressorType,
           fullLoadDischargePressure: newInventoryItem.performancePoints.fullLoad.dischargePressure,
           maxFullFlowDischargePressure: newInventoryItem.performancePoints.maxFullFlow.dischargePressure
-        })
-      });
-    } else {
-      newInventoryItem.isReplacementCompressor = true;
-      compressedAirAssessment.replacementCompressorInventoryItems.push(newInventoryItem);
-      compressedAirAssessment.modifications.forEach(modification => {
-        modification.replaceCompressor.replacementCompressorMapping.push({
-          replacementCompressorId: newInventoryItem.itemId,
-          isAdded: false
+        });
+        modification.replaceCompressor.currentCompressorMapping.push({
+          originalCompressorId: newInventoryItem.itemId,
+          isReplaced: false
         });
       });
+      return {
+        newInventoryItem: newInventoryItem,
+        compressedAirAssessment: compressedAirAssessment
+      }
+    } else {
+      return this.addReplacementCompressor(compressedAirAssessment, newInventoryItem);
     }
-    return {
-      newInventoryItem: newInventoryItem,
-      compressedAirAssessment: compressedAirAssessment
-    }
-    // this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment);
-    // this.selectedCompressor.next(newInventoryItem);
   }
 
   addReplacementCompressor(compressedAirAssessment: CompressedAirAssessment, newInventoryItem?: CompressorInventoryItem): { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } {
