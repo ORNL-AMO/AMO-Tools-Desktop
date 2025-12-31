@@ -46,13 +46,11 @@
 <form class="p-0" *ngIf="form.controls.order.value != 100">
     <div class="scroll-item">
         <!--Original Compressors-->
+        <label class="w-100">
+            Select Current Compressors to Salvage/Replace
+        </label>
         <table class="table bg-white">
             <thead>
-                <tr>
-                    <th colspan="6">
-                        Select Current Compressors to Salvage/Replace
-                    </th>
-                </tr>
                 <tr>
                     <th colspan="2">
                         Compressor Name
@@ -75,8 +73,7 @@
                 <tr *ngFor="let compressorMap of currentCompressorMapping"
                     [ngClass]="{'replaced': compressorMap.isReplaced}">
                     <td class="checkbox-cell">
-                        <input type="checkbox" [(ngModel)]="compressorMap.isReplaced"
-                            (change)="save(false)"
+                        <input type="checkbox" [(ngModel)]="compressorMap.isReplaced" (change)="save(false)"
                             name="{{compressorMap.originalCompressorId}}-replace-compressor"
                             id="{{compressorMap.originalCompressorId}}-replace-compressor" />
                     </td>
@@ -101,15 +98,13 @@
                 </tr>
             </tbody>
         </table>
-        <hr class="my-2">
+        <!-- <hr class="my-2"> -->
         <!--Replacement Compressors-->
+        <label class="w-100">
+            Select Replacement Compressors to Install
+        </label>
         <table class="table bg-white">
             <thead>
-                <tr>
-                    <th colspan="6">
-                        Select Replacement Compressors to Install
-                    </th>
-                </tr>
                 <tr>
                     <th colspan="2">
                         Compressor Name
@@ -129,10 +124,18 @@
                 </tr>
             </thead>
             <tbody>
+                @if(replacementCompressorMapping.length == 0){
+                <tr>
+                    <td colspan="6" class="text-center">
+                        <a class="click-link" (click)="goToReplacementInventory()"> Click here to add replacement
+                            compressors to the
+                            compressor inventory.</a>
+                    </td>
+                </tr>
+                }@else{
                 <tr *ngFor="let compressorMap of replacementCompressorMapping">
                     <td class="checkbox-cell">
-                        <input type="checkbox" [(ngModel)]="compressorMap.isAdded"
-                            (change)="save(false)"
+                        <input type="checkbox" [(ngModel)]="compressorMap.isAdded" (change)="save(false)"
                             name="{{compressorMap.replacementCompressorId}}-replace-compressor"
                             id="{{compressorMap.replacementCompressorId}}-replace-compressor" />
                     </td>
@@ -155,56 +158,63 @@
                         {{compressorInventoryItem.nameplateData.motorPower}} hp
                     </td>
                 </tr>
+                }
             </tbody>
         </table>
+        @if(replacementCompressorMapping.length != 0){
+        <div class="w-100 text-right">
+            <a class="click-link small" (click)="goToReplacementInventory()">
+                <span class="fa fa-plus"></span>
+                Add Replacement Compressor</a>
+        </div>
+        }
         <ng-container *ngFor="let dayTypeValidation of profileValidation">
-            <ng-container *ngIf="!dayTypeValidation.isValid">
-                <hr class="my-2">
-                <table class="table bg-white">
-                    <thead>
-                        <tr>
-                            <th colspan="25" class="text-danger">
-                                {{dayTypeValidation.dayType.name}} - Resulting Profile Validation
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
+            <!-- <ng-container *ngIf="!dayTypeValidation.isValid"> -->
+            <!-- <hr class="my-2"> -->
+            <label>
+                Resulting Profile Validation
+            </label>
+            <table class="table bg-white">
+                <thead>
+                    <tr>
+                        <th [ngClass]="{'text-danger':!dayTypeValidation.isValid}">
+                            {{dayTypeValidation.dayType.name}}
+                        </th>
 
-                            </th>
-                            <th class="text-center" *ngFor="let dataTimeInterval of dayTypeValidation.timeInterval;">
-                                {{dataTimeInterval | intervalHourLabel}}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <td>
-                                Available Airflow
-                            </td>
-                            <td *ngFor="let airflow of dayTypeValidation.availableAirflow; let index = index"
-                                [ngClass]="{'cell-error': (airflow - dayTypeValidation.requiredAirflow[index]) < 0}">
-                                {{airflow | number:numberPipeDecimals}}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Required Airflow
-                            </td>
-                            <td *ngFor="let airflow of dayTypeValidation.requiredAirflow">
-                                {{airflow| number:numberPipeDecimals}}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Power, kW
-                            </td>
-                            <td *ngFor="let power of dayTypeValidation.profilePower">
-                                {{power| number:'1.0-1'}}
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </ng-container>
+                        <th class="text-center" *ngFor="let dataTimeInterval of dayTypeValidation.timeInterval;">
+                            {{dataTimeInterval | intervalHourLabel}}
+                        </th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td>
+                            Available Airflow
+                        </td>
+                        <td *ngFor="let airflow of dayTypeValidation.availableAirflow; let index = index"
+                            [ngClass]="{'cell-error': (airflow - dayTypeValidation.requiredAirflow[index]) < 0}">
+                            {{airflow | number:numberPipeDecimals}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Required Airflow
+                        </td>
+                        <td *ngFor="let airflow of dayTypeValidation.requiredAirflow">
+                            {{airflow| number:numberPipeDecimals}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Power, kW
+                        </td>
+                        <td *ngFor="let power of dayTypeValidation.profilePower">
+                            {{power| number:'1.0-1'}}
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <!-- </ng-container> -->
         </ng-container>
     </div>
 </form>

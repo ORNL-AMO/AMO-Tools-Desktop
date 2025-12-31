@@ -53,7 +53,7 @@ export class ImproveEndUseEfficiencyComponent implements OnInit {
     });
 
     this.validationStatusSub = this.exploreOpportunitiesValidationService.compressedAirModificationValid.subscribe(val => {
-      this.hasInvalidForm = val.improveEndUseEfficiency == false;
+      this.hasInvalidForm = val?.improveEndUseEfficiency == false;
     })
   }
 

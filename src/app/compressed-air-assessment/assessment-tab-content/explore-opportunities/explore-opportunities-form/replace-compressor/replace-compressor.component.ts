@@ -8,6 +8,8 @@ import { ReplaceCompressorService } from './replace-compressor.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { ResultingSystemProfileValidation } from '../../../../calculations/modifications/energyEfficiencyMeasures/ResultingSystemProfileValidation';
 import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { InventoryService } from '../../../../baseline-tab-content/inventory-setup/inventory/inventory.service';
 
 @Component({
   selector: 'app-replace-compressor',
@@ -41,7 +43,10 @@ export class ReplaceCompressorComponent {
   modificationResultsSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private inventoryService: InventoryService) { }
 
   ngOnInit(): void {
     this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
@@ -133,5 +138,10 @@ export class ReplaceCompressorComponent {
       this.currentCompressorMapping = replaceCompressor.currentCompressorMapping;
       this.replacementCompressorMapping = replaceCompressor.replacementCompressorMapping;
     }
+  }
+
+  goToReplacementInventory() {
+    this.inventoryService.tabSelect.next('replacementInventory');
+    this.router.navigate(['../../baseline/inventory-setup'], {relativeTo: this.activatedRoute});
   }
 }
