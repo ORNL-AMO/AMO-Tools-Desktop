@@ -34,6 +34,8 @@ export class EmailMeasurDataService {
   }
 
   setEmailData(measurEmailForm: FormGroup) {
+// WK Get opportunities from the export functionality, then pass to the correct locaiton for future implementation
+    console.log(this.measurItemAttachment.itemType);
     if (measurEmailForm.valid && this.measurItemAttachment) {
       let attachmentExportData: ImportExportData | LogToolDbData;
       if (this.measurItemAttachment.itemType === 'assessment') {

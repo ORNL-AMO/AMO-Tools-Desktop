@@ -6,6 +6,7 @@ import * as _ from 'lodash';
 import { ImportExportService } from '../../../shared/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
+import { EmailMeasurDataService } from '../../../shared/email-measur-data/email-measur-data.service';
 @Component({
     selector: 'app-export-opportunities',
     templateUrl: './export-opportunities.component.html',
@@ -19,8 +20,11 @@ export class ExportOpportunitiesComponent implements OnInit {
   treasureHunt: TreasureHunt;
   treasureHuntSub: Subscription;
   exportName: string = 'Opportunites Data';
-  constructor(private importExportService: ImportExportService, private treasureHuntService: TreasureHuntService,
-    private treasureChestMenuService: TreasureChestMenuService) { }
+  constructor(private importExportService: ImportExportService, 
+    private treasureHuntService: TreasureHuntService,
+    private treasureChestMenuService: TreasureChestMenuService,
+    private emailMeasurDataService: EmailMeasurDataService
+  ) { }
 
   ngOnInit() {
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
@@ -90,6 +94,16 @@ export class ExportOpportunitiesComponent implements OnInit {
 
   exportData() {
     this.importExportService.downloadOpportunities(this.exportOpportunities, this.exportName);
+    this.hideExportModal();
+  }
+
+  showEmailMeasurDataModal() {
+    this.emailMeasurDataService.measurItemAttachment = {
+      itemType: 'opportunities',
+      itemName: '',
+      itemData: ''
+    }
+    this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
     this.hideExportModal();
   }
 }
