@@ -718,8 +718,6 @@ const applySystemIntakeCosts = (
     let visitedSystemIds: string[] = [];
 
     intakeData.downstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
-
-      debugger;
       const debuggingPathNames = path.map((edgeId: string) => {
         const edge = graph.edgeMap[edgeId];
         return getEdgeDescription(
@@ -1062,19 +1060,10 @@ const applySystemWasteTreatmentCosts = (
 
   Object.entries(wasteTreatmentCostData).forEach(([treatmentId, treatmentData]: [string, CostComponentPathData]) => {
     let visitedSystemIds: string[] = [...downstreamTreatmentAttributionMap[treatmentId]?.chargedSystems || []];
-
-    const debuggingPathNames = treatmentData.downstreamPathsByEdgeId?.map((path: string[]) => {
-      return path.map((edgeId: string) => {
-        const edge = graph.edgeMap[edgeId];
-        return `${debuggingNameMap[edge.source]} -> ${debuggingNameMap[edge.target]}`;
-      });
-    });
-    console.log('debuggingPathNames', debuggingPathNames);
-
     treatmentData.upstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
 
       for (const edgeId of path) {
-        const currentNode = graph.nodeMap[graph.edgeMap[edgeId].target];
+        const currentNode = graph.nodeMap[graph.edgeMap[edgeId].source];
         if (visitedSystemIds.includes(currentNode.id)) {
           break;
         }
@@ -1082,8 +1071,9 @@ const applySystemWasteTreatmentCosts = (
         // * attribute costs to upstream water systems
         if (currentNode.data.processComponentType === 'water-using-system') {
           const treatmentEdge = graph.edgeMap[path[0]];
-          const systemOutflow = graph.edgeMap[edgeId].data.flowValue ?? 0;
-          const pathOutflow = treatmentEdge.data.flowValue ?? 0;
+
+          const systemOutflow = treatmentEdge.data.flowValue ?? 0;
+          const pathOutflow = graph.edgeMap[edgeId].data.flowValue ?? 0;
 
           // * fractionPathInflowReceived ternary will ignore cases where sstemOutflow > pathOutflow due to flow from other treatment. We will observe other treatment on another iteration
           const fractionPathInflowReceived = (systemOutflow / pathOutflow) > 1 ? 1 : (systemOutflow / pathOutflow);
