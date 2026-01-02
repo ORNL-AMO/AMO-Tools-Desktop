@@ -65,7 +65,7 @@ export class TrueCostEditableTableComponent {
     if (this.isDiagramValid) {
       this.plantResults = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
       if (this.plantResults.flowAttributionMap) {
-        Object.entries(this.assessment.water.flowAttributionMap).forEach(([edgeId, attributionMap]) => {
+        Object.entries(this.plantResults.flowAttributionMap).forEach(([edgeId, attributionMap]) => {
           const hasAdjustment = Object.values(attributionMap).some(attribution => attribution.flowAttributionFraction.adjusted !== undefined);
           if (hasAdjustment) {
             this.adjustedFlowAttributionMap[edgeId] = {...attributionMap};
