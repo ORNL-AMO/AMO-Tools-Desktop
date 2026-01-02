@@ -8,7 +8,7 @@
       (focus)="focusField('billedForDemand')" (change)="setBilledForDemand()">
       <!-- <option *ngFor="let option of billedOptions" [ngValue]="option.value" [disabled]="true">{{option.name}}</option> -->
       <option value="0">Real Power (kW)</option>
-      <option value="1" *ngIf="form.value.adjustedOrActual != 2">Apperent Power (kVA)</option>
+      <option value="1" *ngIf="form.value.adjustedOrActual != 2">Apparent Power (kVA)</option>
     </select>
   </div>
 
@@ -140,35 +140,36 @@
     </td> 
     <td *ngIf="form.value.billedForDemand == 0 && form.value.adjustedOrActual == 2">
       <input type="number" step="any"
-        formControlName="input3" id="{{'input3_'+i}}" (input)="calculate()" onfocus="this.select();"
-        (focus)="focusField('input3')">
+        formControlName="pfAdjustedDemand" id="{{'pfAdjustedDemand_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('pfAdjustedDemand')">
         <span class="alert-danger pull-right small"
-          *ngIf="group.get('input3')?.invalid && (group.get('input3')?.dirty || group.get('input3')?.touched)">
-          <span *ngIf="group.get('input3')?.errors?.required">Value required.</span>
-          <span *ngIf="group.get('input3')?.errors?.min">Must be &ge; 0.</span>
-          <span *ngIf="group.get('input3')?.errors?.input1NotLessThanInput2">Power Factor Adjusted Demand must be greater than or equal to Actual Demand.</span>
+          *ngIf="group.get('pfAdjustedDemand')?.invalid && (group.get('pfAdjustedDemand')?.dirty || group.get('pfAdjustedDemand')?.touched)">
+          <span *ngIf="group.get('pfAdjustedDemand')?.errors?.required">Value Required3.</span>
+          <span *ngIf="group.get('pfAdjustedDemand')?.errors?.min">Value can't be
+                    greater than {{group.get('pfAdjustedDemand')?.errors?.min}}.</span>
         </span>
     </td>
     <td>
       <input type="number" step="any"
-        formControlName="input1" id="{{'input1_'+i}}" (input)="calculate()" onfocus="this.select();"
-        (focus)="focusField('input1')">
+        formControlName="actualDemand" id="{{'actualDemand_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('actualDemand')">
         <span class="alert-danger pull-right small"
-          *ngIf="group.get('input1')?.invalid && (group.get('input1')?.dirty || group.get('input1')?.touched)">
-          <span *ngIf="group.get('input1')?.errors?.required">Value required.</span>
-          <span *ngIf="group.get('input1')?.errors?.min">Must be &ge; 0.</span>
-          <span *ngIf="group.get('input1')?.errors?.input1NotLessThanInput2">Power Factor Adjusted Demand must be greater than or equal to Actual Demand.</span>
+          *ngIf="group.get('actualDemand')?.invalid && (group.get('actualDemand')?.dirty || group.get('actualDemand')?.touched)">
+          <span *ngIf="group.get('actualDemand')?.errors?.required">Value Required1.</span>
+          <span *ngIf="group.get('actualDemand')?.errors?.min">Value can't be
+                    greater than {{group.get('actualDemand')?.errors?.min}}</span>
+        <span></span>
         </span>
     </td>   
     <td>
       <input type="number" step="any"
-        formControlName="input2" id="{{'input2_'+i}}" (input)="calculate()" onfocus="this.select();"
-        (focus)="focusField('input2')">
+        formControlName="powerFactor" id="{{'powerFactor_'+i}}" (input)="calculate()" onfocus="this.select();"
+        (focus)="focusField('powerFactor')">
         <span class="alert-danger pull-right small"
-          *ngIf="group.get('input2')?.invalid && (group.get('input2')?.dirty || group.get('input2')?.touched)">
-          <span *ngIf="group.get('input2')?.errors?.required">Value required.</span>
-          <span *ngIf="group.get('input2')?.errors?.min">Must be &ge; 0.</span>
-          <span *ngIf="group.get('input2')?.errors?.input1NotLessThanInput3">Power Factor Adjusted Demand must be greater than or equal to Actual Demand.</span>
+          *ngIf="group.get('powerFactor')?.invalid">
+          <span *ngIf="group.get('powerFactor')?.errors?.required">Value Required2.</span>
+          <span *ngIf="group.get('powerFactor')?.errors?.min">Value can't be
+                    greater than {{group.get('powerFactor')?.errors?.min}}</span>
         </span>
     </td>
     </ng-container>

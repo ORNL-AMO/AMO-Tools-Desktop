@@ -97,9 +97,9 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   createMonthInputGroup(): FormGroup {
     return this.fb.group({
       'month': ['', Validators.required],
-      'input1': [null, Validators.required],
-      'input2': [null, Validators.required],
-      'input3': [null, Validators.required]
+      'actualDemand': [null, Validators.required],
+      'powerFactor': [null, Validators.required],
+      'pfAdjustedDemand': [null, Validators.required]
     });
   }
 
