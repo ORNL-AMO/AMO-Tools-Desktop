@@ -135,7 +135,14 @@ export class BoilerService {
     if (form.controls.steamQuality.value === SteamQuality.SATURATED) {
       form.controls.steamTemperature.setValidators([Validators.required, Validators.min(temperatureMin), Validators.max(temperatureMax)]);
     } else if (form.controls.steamQuality.value === SteamQuality.SUPERHEATED)  {
-      form.controls.steamTemperature.setValidators([Validators.required, Validators.min(temperatureMin), GreaterThanValidator.greaterThan(saturatedPropertiesOutput.saturatedTemperature), Validators.max(temperatureMax)]);
+      let validators = [Validators.required, Validators.min(temperatureMin), Validators.max(temperatureMax)];
+
+      // * steamTemperature can't be calculated ((will be NAN)) for reference when saturatedPressure is at min
+      if (!form.get('saturatedPressure').errors?.min && !isNaN(saturatedPropertiesOutput.saturatedTemperature)) {
+        console.log('settings greater than validator for steam temperature', saturatedPropertiesOutput.saturatedTemperature);
+        validators.push(GreaterThanValidator.greaterThan(saturatedPropertiesOutput.saturatedTemperature));
+      }
+      form.controls.steamTemperature.setValidators(validators);
     }
 
     form.controls.steamTemperature.updateValueAndValidity();
