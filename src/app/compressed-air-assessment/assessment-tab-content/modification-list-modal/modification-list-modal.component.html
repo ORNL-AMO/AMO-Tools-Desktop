@@ -28,16 +28,16 @@
                             </li>
 
                             <li class="list-group-item modification-item"
-                                *ngFor="let modification of compressedAirAssessment.modifications"
-                                [ngClass]="{'active-item': selectedModificationId == modification.modificationId}">
+                                *ngFor="let modificationOption of compressedAirAssessment.modifications"
+                                [ngClass]="{'active-item': modificationOption.modificationId == modification.modificationId}">
                                 <div class="row">
                                     <div class="col-6 border-right">
                                         <div
-                                            *ngIf="modification.modificationId != deleteModificationId && modification.modificationId != renameModificationId">
+                                            *ngIf="modificationOption.modificationId != deleteModificationId && modificationOption.modificationId != renameModificationId">
                                             <a class="click-link small"
-                                                (click)="selectModification(modification.modificationId)">{{modification.name}}</a>
+                                                (click)="selectModification(modificationOption.modificationId)">{{modificationOption.name}}</a>
                                         </div>
-                                        <div *ngIf="modification.modificationId == renameModificationId">
+                                        <div *ngIf="modificationOption.modificationId == renameModificationId">
                                             <div class="input-group">
                                                 <input class="form-control" [(ngModel)]="renameModificationName">
                                                 <span class="input-group-addon units"
@@ -46,7 +46,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="d-flex" *ngIf="modification.modificationId == deleteModificationId">
+                                        <div class="d-flex" *ngIf="modificationOption.modificationId == deleteModificationId">
                                             <div class="p-0 w-50 text-center small bold">
                                                 Are you sure you want to delete?
                                                 <br>
@@ -65,22 +65,22 @@
                                     <div class="col-1 border-right text-center">
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary dropdown-toggle"
-                                                (click)="showDropdown(modification.modificationId)">
+                                                (click)="showDropdown(modificationOption.modificationId)">
                                             </button>
                                             <div class="dropdown-menu"
-                                                [ngClass]="{'shown': dropdownId == modification.modificationId}">
+                                                [ngClass]="{'shown': dropdownId == modificationOption.modificationId}">
                                                 <span class="dropdown-item"
-                                                    (click)="selectRename(modification)">Rename</span>
+                                                    (click)="selectRename(modificationOption)">Rename</span>
                                                 <span class="dropdown-item"
-                                                    (click)="selectDelete(modification.modificationId)">Delete</span>
+                                                    (click)="selectDelete(modificationOption.modificationId)">Delete</span>
                                                 <span class="dropdown-item"
-                                                    (click)="createCopy(modification)">Create Copy</span>
+                                                    (click)="createCopy(modificationOption)">Create Copy</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-5">
                                         <div class="d-flex flex-wrap">
-                                            <div *ngFor="let badge of getBadges(modification)"
+                                            <div *ngFor="let badge of getBadges(modificationOption)"
                                                 class="badge badge-primary">{{badge}}
                                             </div>
                                         </div>

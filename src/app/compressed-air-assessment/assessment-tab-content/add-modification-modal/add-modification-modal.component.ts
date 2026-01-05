@@ -41,7 +41,7 @@ export class AddModificationModalComponent implements OnInit {
     modification.name = this.newModificationName? this.newModificationName : modification.name;
     compressedAirAssessment.modifications.push(modification);
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, false);
-    this.compressedAirAssessmentService.selectedModification.next(modification);
+    this.compressedAirAssessmentService.updateModification(modification);
     this.closeAddNewModal();
   }
 }

@@ -7,10 +7,10 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
 import { ExploreOpportunitiesService } from '../explore-opportunities/explore-opportunities.service';
 
 @Component({
-    selector: 'app-modification-list-modal',
-    templateUrl: './modification-list-modal.component.html',
-    styleUrls: ['./modification-list-modal.component.css'],
-    standalone: false
+  selector: 'app-modification-list-modal',
+  templateUrl: './modification-list-modal.component.html',
+  styleUrls: ['./modification-list-modal.component.css'],
+  standalone: false
 })
 export class ModificationListModalComponent implements OnInit {
 
@@ -19,7 +19,7 @@ export class ModificationListModalComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment;
   compressedAirSub: Subscription;
   modification: Modification;
-  selectedModificationIdSub: Subscription;
+  selectedModificationSub: Subscription;
 
   deleteModificationId: string;
   renameModificationId: string;
@@ -30,7 +30,7 @@ export class ModificationListModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.compressedAirAssessmentService.modalOpen.next(true);
-    this.selectedModificationIdSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
+    this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       this.modification = val;
     });
     this.compressedAirSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
@@ -40,7 +40,7 @@ export class ModificationListModalComponent implements OnInit {
 
   ngOnDestroy() {
     this.compressedAirSub.unsubscribe();
-    this.selectedModificationIdSub.unsubscribe();
+    this.selectedModificationSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -58,9 +58,9 @@ export class ModificationListModalComponent implements OnInit {
     this.compressedAirAssessment.modifications.splice(deleteModIndex, 1);
     if (this.deleteModificationId == this.modification.modificationId) {
       if (this.compressedAirAssessment.modifications.length != 0) {
-        this.compressedAirAssessmentService.selectedModification.next(this.compressedAirAssessment.modifications[0]);
+        this.compressedAirAssessmentService.setSelectedModification(this.compressedAirAssessment.modifications[0])
       } else {
-        this.compressedAirAssessmentService.selectedModification.next(undefined);
+        this.compressedAirAssessmentService.setSelectedModification(undefined);
       }
     }
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
@@ -81,7 +81,7 @@ export class ModificationListModalComponent implements OnInit {
 
   selectModification(modId: string) {
     this.modification = this.compressedAirAssessment.modifications.find(mod => mod.modificationId === modId);
-    this.compressedAirAssessmentService.selectedModification.next(this.modification);
+    this.compressedAirAssessmentService.setSelectedModification(this.modification);
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
     this.closeModal();
   }
@@ -121,7 +121,7 @@ export class ModificationListModalComponent implements OnInit {
     modification.name = this.newModificationName ? this.newModificationName : modification.name;
     this.compressedAirAssessment.modifications.push(modification);
     this.compressedAirAssessmentService.updateCompressedAir(this.compressedAirAssessment, false);
-    this.compressedAirAssessmentService.selectedModification.next(modification);
+    this.compressedAirAssessmentService.setSelectedModification(this.modification);
     this.closeModal();
   }
 
@@ -148,7 +148,7 @@ export class ModificationListModalComponent implements OnInit {
     if (modification.useAutomaticSequencer.order != 100) {
       badges.push('Use Automatic Sequencer');
     }
-    if(modification.replaceCompressor.order != 100){
+    if (modification.replaceCompressor.order != 100) {
       badges.push('Replace Compressor');
     }
     return badges;
