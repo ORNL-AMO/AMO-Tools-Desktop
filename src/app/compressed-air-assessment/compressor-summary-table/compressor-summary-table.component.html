@@ -30,7 +30,7 @@
                     </td>
                     <td *ngFor="let compressor of compressorSummary">
                         <span *ngIf="compressor.specificPowerAvgLoad && !getIsFinite(compressor.specificPowerAvgLoad)">No Flow</span>
-                        <span *ngIf="compressor.specificPowerAvgLoad && getIsFinite(compressor.specificPowerAvgLoad)">{{compressor.specificPowerAvgLoad}}</span>
+                        <span *ngIf="compressor.specificPowerAvgLoad && getIsFinite(compressor.specificPowerAvgLoad)">{{compressor.specificPowerAvgLoad | number:'1.0-2'}}</span>
                         <span *ngIf="!compressor.specificPowerAvgLoad">&mdash;</span>
                     </td>
 
@@ -42,7 +42,7 @@
                     </th>
                     <td *ngFor="let compressor of compressorSummaries[0]">
                         <span *ngIf="compressor.ratedSpecificPower && !getIsFinite(compressor.ratedSpecificPower)">No Flow</span>
-                        <span *ngIf="compressor.ratedSpecificPower && getIsFinite(compressor.ratedSpecificPower)">{{compressor.ratedSpecificPower}}</span>
+                        <span *ngIf="compressor.ratedSpecificPower && getIsFinite(compressor.ratedSpecificPower)">{{compressor.ratedSpecificPower | number:'1.0-2'}}</span>
                         <span *ngIf="!compressor.ratedSpecificPower">&mdash;</span>
                     </td>
                 </tr>
@@ -50,7 +50,7 @@
                     <th colspan="2">Rated Isentropic Efficiency, %</th>
                     <td *ngFor="let compressor of compressorSummaries[0]">
                         <span *ngIf="compressor.ratedIsentropicEfficiency">
-                            {{compressor.ratedIsentropicEfficiency}}
+                            {{compressor.ratedIsentropicEfficiency | number:'1.0-2'}}
                         </span>
                         <span *ngIf="!compressor.ratedIsentropicEfficiency">
                             &mdash;

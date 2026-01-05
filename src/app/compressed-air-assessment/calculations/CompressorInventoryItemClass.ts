@@ -4,6 +4,7 @@ import { AdjustCascadingSetPoints, CascadingSetPointData, CentrifugalSpecifics, 
 import { Settings } from "../../shared/models/settings";
 import { CompressorPerformancePointsClass } from "./performancePoints/CompressorPerformancePointsClass";
 
+//see inventoryOptions.ts for ControlTypes definitions
 
 export class CompressorInventoryItemClass {
 
@@ -87,7 +88,8 @@ export class CompressorInventoryItemClass {
     reduceSystemPressure(reduceSystemAirPressure: ReduceSystemAirPressure, atmosphericPressure: number, settings: Settings) {
         this.performancePoints.fullLoad.dischargePressure = this.performancePoints.fullLoad.dischargePressure - reduceSystemAirPressure.averageSystemPressureReduction;
         this.performancePoints.fullLoad.isDefaultPressure = false;
-        this.performancePoints.fullLoad.isDefaultAirFlow = false;
+        //default airflow set true after discussion with Alex (1/5/26)
+        this.performancePoints.fullLoad.isDefaultAirFlow = true;
         this.performancePoints.fullLoad.isDefaultPower = true;
         this.performancePoints.maxFullFlow.isDefaultAirFlow = true;
         this.performancePoints.maxFullFlow.isDefaultPressure = true;

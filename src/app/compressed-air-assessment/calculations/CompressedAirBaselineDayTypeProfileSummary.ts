@@ -114,6 +114,10 @@ export class CompressedAirBaselineDayTypeProfileSummary {
                 }
                 summary.profileSummaryData.push(summaryData);
             });
+            summary.setAvgAirflow();
+            summary.setAvgPower();
+            summary.setAvgPercentPower();
+            summary.setAvgPercentCapacity();
             this.profileSummary.push(summary);
         });
     }
