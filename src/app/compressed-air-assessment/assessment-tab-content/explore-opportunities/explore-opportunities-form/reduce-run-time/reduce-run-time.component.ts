@@ -9,6 +9,7 @@ import { CompressedAirAssessmentModificationResults } from '../../../../calculat
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { ResultingSystemProfileValidation } from '../../../../calculations/modifications/energyEfficiencyMeasures/ResultingSystemProfileValidation';
 import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
+import { CompressorInventoryItemClass } from '../../../../calculations/CompressorInventoryItemClass';
 
 @Component({
   selector: 'app-reduce-run-time',
@@ -36,6 +37,7 @@ export class ReduceRunTimeComponent implements OnInit {
   displayShutdownTimer: boolean;
   fillRightHourInterval: boolean;
 
+  trimCompressorId: string;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private reduceRunTimeService: ReduceRunTimeService,
     private exploreOpportunitiesService: ExploreOpportunitiesService,
@@ -50,8 +52,8 @@ export class ReduceRunTimeComponent implements OnInit {
     }
     this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     this.displayShutdownTimer = this.compressedAirAssessment.systemInformation.multiCompressorSystemControls != 'loadSharing';
-    this.compressorInventoryItems = this.compressedAirAssessment.compressorInventoryItems.concat(this.compressedAirAssessment.replacementCompressorInventoryItems);
-
+    let allInventoryItems: Array<CompressorInventoryItem> = this.compressedAirAssessment.compressorInventoryItems.concat(this.compressedAirAssessment.replacementCompressorInventoryItems);
+    this.compressorInventoryItems = allInventoryItems.map(item => { return new CompressorInventoryItemClass(item).toModel() });
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
       if (val && !this.isFormChange) {
         this.modification = val;
@@ -140,6 +142,25 @@ export class ReduceRunTimeComponent implements OnInit {
         this.selectedDayType = this.dayTypeOptions.find(dayTypeOption => { return dayTypeOption.dayType.dayTypeId == this.selectedDayType.dayType.dayTypeId });
       }
       this.hasInvalidDayType = this.dayTypeOptions.some(dayTypeOption => { return dayTypeOption.isValid == false });
+      this.setTrimCompressorId();
+    }
+  }
+
+  setTrimCompressorId() {
+    if (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+      if (this.modification.replaceCompressor.order != 100 && this.modification.replaceCompressor.order < this.reduceRuntime.order) {
+        let trimSelection = this.modification.replaceCompressor.trimSelections.find(selection => {
+          return selection.dayTypeId == this.selectedDayType.dayType.dayTypeId;
+        });
+        this.trimCompressorId = trimSelection ? trimSelection.compressorId : null;
+      } else {
+        let trimSelection = this.compressedAirAssessment.systemInformation.trimSelections.find(selection => {
+          return selection.dayTypeId == this.selectedDayType.dayType.dayTypeId;
+        });
+        this.trimCompressorId = trimSelection ? trimSelection.compressorId : null;
+      }
+    } else {
+      this.trimCompressorId = null;
     }
   }
 }

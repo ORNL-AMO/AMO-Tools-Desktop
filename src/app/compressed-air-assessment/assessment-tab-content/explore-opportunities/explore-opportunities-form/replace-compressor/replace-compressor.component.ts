@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CompressedAirAssessment, Modification, ReplaceCompressor } from '../../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, Modification, ReplaceCompressor } from '../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
@@ -39,9 +39,16 @@ export class ReplaceCompressorComponent {
     replacementCompressorId: string,
     isAdded: boolean
   }>;
+  trimSelections: Array<{
+    dayTypeId: string,
+    compressorId: string
+  }>;
 
   profileValidation: Array<ResultingSystemProfileValidation>;
   modificationResultsSub: Subscription;
+
+  hasTrimCompressor: boolean;
+  compressorInventoryItems: Array<CompressorInventoryItem>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private compressedAirDataManagementService: CompressedAirDataManagementService,
@@ -126,10 +133,12 @@ export class ReplaceCompressorComponent {
         }
       }
     }
-    this.modification.replaceCompressor = this.replaceCompressorService.getObjFromForm(this.form, this.currentCompressorMapping, this.replacementCompressorMapping);
+    this.modification.replaceCompressor = this.replaceCompressorService.getObjFromForm(this.form, this.currentCompressorMapping, this.replacementCompressorMapping, this.trimSelections);
+    this.modification = this.setReplaceCompressorTrimSelections(this.modification);
     //update other modifications that depend on replacement compressors
     this.modification = this.compressedAirDataManagementService.updateReplacementCompressors(this.modification, compressedAirAssessment);
     this.compressedAirAssessmentService.updateModification(this.modification);
+    this.setCompressorInventoryItems();
   }
 
   setData() {
@@ -143,7 +152,10 @@ export class ReplaceCompressorComponent {
           isTrimCompressor: this.getIsTrimCompressor(currentMapping.originalCompressorId)
         }
       });
+      this.hasTrimCompressor = this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim';
       this.replacementCompressorMapping = replaceCompressor.replacementCompressorMapping;
+      this.trimSelections = replaceCompressor.trimSelections;
+      this.setCompressorInventoryItems();
     }
   }
 
@@ -152,9 +164,54 @@ export class ReplaceCompressorComponent {
     this.router.navigate(['../../baseline/inventory-setup'], { relativeTo: this.activatedRoute });
   }
 
-  getIsTrimCompressor(compressorId: string):boolean{
-    let isTrimCompressor: boolean = false;
+  getIsTrimCompressor(compressorId: string): boolean {
+    if (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+      return this.compressedAirAssessment.systemInformation.trimSelections.find(selection => {
+        return selection.compressorId == compressorId;
+      }) ? true : false;
+    }
+    return false;
+  }
 
-    return isTrimCompressor;
+  setCompressorInventoryItems() {
+    this.compressorInventoryItems = new Array();
+    this.currentCompressorMapping.forEach(mapping => {
+      if (!mapping.isReplaced) {
+        let inventoryItem: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == mapping.originalCompressorId; });
+        if (inventoryItem) {
+          this.compressorInventoryItems.push(inventoryItem);
+        }
+      }
+    });
+    this.replacementCompressorMapping.forEach(mapping => {
+      if (mapping.isAdded) {
+        let inventoryItem: CompressorInventoryItem = this.compressedAirAssessment.replacementCompressorInventoryItems.find(item => { return item.itemId == mapping.replacementCompressorId; });
+        if (inventoryItem) {
+          this.compressorInventoryItems.push(inventoryItem);
+        }
+      }
+    });
+  }
+  
+  setReplaceCompressorTrimSelections(modification: Modification) {
+    let compressorsIdsInSystem: Array<string> = new Array();
+    modification.replaceCompressor.currentCompressorMapping.forEach(mapping => {
+      if (!mapping.isReplaced) {
+        compressorsIdsInSystem.push(mapping.originalCompressorId);
+      }
+    });
+    modification.replaceCompressor.replacementCompressorMapping.forEach(mapping => {
+      if (mapping.isAdded) {
+        compressorsIdsInSystem.push(mapping.replacementCompressorId);
+      }
+    });
+    //update trim selections
+    modification.replaceCompressor.trimSelections.forEach(trimSelection => {
+      if (!compressorsIdsInSystem.includes(trimSelection.compressorId)) {
+        console.log('updating trim selection compressor id...');
+        trimSelection.compressorId = compressorsIdsInSystem[0];
+      }
+    });
+    return modification;
   }
 }

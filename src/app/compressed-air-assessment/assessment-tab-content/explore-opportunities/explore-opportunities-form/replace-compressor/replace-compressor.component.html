@@ -75,9 +75,13 @@
                     <td class="checkbox-cell">
                         <input type="checkbox" [(ngModel)]="compressorMap.isReplaced" (change)="save(false)"
                             name="{{compressorMap.originalCompressorId}}-replace-compressor"
-                            id="{{compressorMap.originalCompressorId}}-replace-compressor" />
+                            id="{{compressorMap.originalCompressorId}}-replace-compressor"
+                            [disabled]="compressorInventoryItems.length == 1 && !compressorMap.isReplaced" />
                     </td>
                     <td>
+                        @if(compressorMap.isTrimCompressor){
+                        <span class="fa fa-asterisk"></span>
+                        }
                         {{compressorMap.originalCompressorId |
                         compressorName:compressedAirAssessment.compressorInventoryItems}}
                     </td>
@@ -98,6 +102,12 @@
                 </tr>
             </tbody>
         </table>
+        @if(hasTrimCompressor){
+        <div class="trim-note mb-2">
+            <span class="fa fa-asterisk"></span> Indicates a baseline trim compressor in a base-trim control setup.
+            Update the selection below if replacing this compressor.
+        </div>
+        }
         <!--Replacement Compressors-->
         <label class="w-100">
             Select Replacement Compressors to Install
@@ -132,7 +142,8 @@
                     </td>
                 </tr>
                 }@else{
-                <tr *ngFor="let compressorMap of replacementCompressorMapping">
+                <tr *ngFor="let compressorMap of replacementCompressorMapping"
+                    [ngClass]="{'replaced': !compressorMap.isAdded}">
                     <td class="checkbox-cell">
                         <input type="checkbox" [(ngModel)]="compressorMap.isAdded" (change)="save(false)"
                             name="{{compressorMap.replacementCompressorId}}-replace-compressor"
@@ -167,6 +178,42 @@
                 Add Replacement Compressor</a>
         </div>
         }
+
+        @if(hasTrimCompressor){
+        <label>
+            Select Trim Compressor
+        </label>
+        <table class="table bg-white">
+            <thead>
+                <tr>
+                    <th class="w-50">
+                        Day Type
+                    </th>
+                    <th>
+                        Trim Compressor
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let trimCompressor of trimSelections">
+                    <td>
+                        {{trimCompressor.dayTypeId}}
+                    </td>
+                    <td>
+                        <select class="form-control w-100" [(ngModel)]="trimCompressor.compressorId"
+                            (change)="save(false)" name="{{trimCompressor.compressorId+trimCompressor.dayTypeId}}-trim-compressor"
+                            id="{{trimCompressor.compressorId+trimCompressor.dayTypeId}}-trim-compressor">
+                            <option *ngFor="let compressor of compressorInventoryItems" [ngValue]="compressor.itemId">
+                                {{compressor.name}}
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+        }
+
         <ng-container *ngFor="let dayTypeValidation of profileValidation">
             <label>
                 Resulting Profile Validation

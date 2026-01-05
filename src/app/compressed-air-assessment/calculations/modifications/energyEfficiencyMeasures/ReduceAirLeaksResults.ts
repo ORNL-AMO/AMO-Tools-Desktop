@@ -18,7 +18,8 @@ export class ReduceAirLeaksResults {
         _compressedAirCalculationService: CompressedAirCalculationService, costKwh: number,
         summaryDataInterval: number,
         auxiliaryPowerUsage: { cost: number, energyUse: number },
-        order: number
+        order: number,
+        trimSelections: Array<{ dayTypeId: string, compressorId: string }>
     ) {
         this.order = order;
         //1. Adjust totals based on air leak reduction
@@ -39,7 +40,8 @@ export class ReduceAirLeaksResults {
             reduceAirLeaks.implementationCost,
             summaryDataInterval,
             auxiliaryPowerUsage,
-            order);
+            order,
+            trimSelections);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
     }

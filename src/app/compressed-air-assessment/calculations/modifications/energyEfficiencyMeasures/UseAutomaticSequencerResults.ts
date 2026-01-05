@@ -27,7 +27,8 @@ export class UseAutomaticSequencerResults {
         systemInformation: SystemInformation,
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService,
-        order: number) {
+        order: number,
+        trimSelections: Array<{ dayTypeId: string, compressorId: string }>) {
         this.order = order;
         // this.adjustedCompressors = adjustedCompressors;
 
@@ -61,7 +62,8 @@ export class UseAutomaticSequencerResults {
             useAutomaticSequencer.implementationCost,
             summaryDataInterval,
             auxiliaryPowerUsage,
-            order);
+            order,
+            trimSelections);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
     }

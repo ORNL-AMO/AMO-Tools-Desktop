@@ -27,19 +27,22 @@ export class FlowReallocationResults {
         implementationCost: number,
         summaryDataInterval: number,
         auxiliaryPowerUsage: { cost: number, energyUse: number },
-        order: number) {
+        order: number,
+        trimSelections: Array<{ dayTypeId: string, compressorId: string }>) {
         this.order = order;
+        let adjustedCompressorCopys: Array<CompressorInventoryItemClass> = adjustedCompressors.map(compressor => { return new CompressorInventoryItemClass(compressor) });
         this.reallocateFlow(dayType,
             settings,
             previousProfileSummary,
-            adjustedCompressors,
+            adjustedCompressorCopys,
             additionalReceiverVolume,
             totals,
             atmosphericPressure,
             totalAirStorage,
             systemInformation,
             reduceRuntime,
-            _compressedAirCalculationService);
+            _compressedAirCalculationService,
+            trimSelections);
         this.savings = new CompressedAirEemSavingsResult(previousProfileSummary, this.profileSummary, dayType, costKwh, implementationCost, summaryDataInterval, auxiliaryPowerUsage);
     }
 
@@ -53,7 +56,8 @@ export class FlowReallocationResults {
         totalAirStorage: number,
         systemInformation: SystemInformation,
         reduceRuntime: ReduceRuntime,
-        _compressedAirCalculationService: CompressedAirCalculationService) {
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        trimSelections: Array<{ dayTypeId: string, compressorId: string }>) {
 
         this.profileSummary = previousProfileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
@@ -71,7 +75,8 @@ export class FlowReallocationResults {
                 totalAirStorage,
                 systemInformation,
                 reduceRuntime,
-                _compressedAirCalculationService);
+                _compressedAirCalculationService,
+                trimSelections);
         });
     }
 
@@ -85,7 +90,8 @@ export class FlowReallocationResults {
         totalAirStorage: number,
         systemInformation: SystemInformation,
         reduceRuntime: ReduceRuntime,
-        _compressedAirCalculationService: CompressedAirCalculationService) {
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        trimSelections: Array<{ dayTypeId: string, compressorId: string }>) {
 
         let intervalData: Array<{ compressorId: string, summaryData: ProfileSummaryData }> = new Array();
         this.profileSummary.forEach(summary => {
@@ -101,7 +107,7 @@ export class FlowReallocationResults {
             return;
         } else if (systemInformation.multiCompressorSystemControls == 'baseTrim') {
             //set base trim ordering
-            let trimSelection: { dayTypeId: string, compressorId: string } = systemInformation.trimSelections.find(selection => { return selection.dayTypeId == dayType.dayTypeId });
+            let trimSelection: { dayTypeId: string, compressorId: string } = trimSelections.find(selection => { return selection.dayTypeId == dayType.dayTypeId });
             if (trimSelection.compressorId) {
                 intervalData = this.setBaseTrimOrdering(intervalData, adjustedCompressors, neededAirFlow, trimSelection.compressorId, dayType, reduceRuntime);
             }
@@ -126,10 +132,11 @@ export class FlowReallocationResults {
                     data.summaryData.order = orderCount;
                 }
                 reduceRuntimeShutdownTimer = reduceRuntimeData.automaticShutdownTimer;
+                console.log(reduceRuntimeShutdownTimer);
             }
             if (data.summaryData.order != 0 && isTurnedOn) {
                 let compressor: CompressorInventoryItemClass = adjustedCompressors.find(item => { return item.findItem(data.compressorId) });
-                if (reduceRuntime) {
+                if (reduceRuntime && systemInformation.multiCompressorSystemControls != 'baseTrim') {
                     compressor.compressorControls.automaticShutdown = reduceRuntimeShutdownTimer;
                 }
                 let fullLoadAirFlow: number = compressor.performancePoints.fullLoad.airflow;
@@ -182,7 +189,6 @@ export class FlowReallocationResults {
         let additionalAirflow: number = neededAirFlow - trimCompressor.performancePoints.fullLoad.airflow;
         if (additionalAirflow <= 0) {
             //just need trim compressor
-            //TODO: if reduce runtime is on an trim compressor is turned off how to handle?
             intervalData.forEach(interval => {
                 if (interval.compressorId == trimCompressorId) {
                     interval.summaryData.order = 1;

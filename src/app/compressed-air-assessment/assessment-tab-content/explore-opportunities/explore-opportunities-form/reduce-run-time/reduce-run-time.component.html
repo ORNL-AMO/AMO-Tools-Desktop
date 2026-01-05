@@ -39,7 +39,7 @@
         <label for="selectedDayType">Day Type</label>
         <div class="input-group">
             <select class="form-control" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
-                (focus)="helpTextField('dayType')">
+                (focus)="helpTextField('dayType')" (change)="setTrimCompressorId()">
                 <option *ngFor="let dayTypeOption of dayTypeOptions" [ngValue]="dayTypeOption"
                     [ngClass]="{'alert-danger': !dayTypeOption.isValid}">
                     {{dayTypeOption.dayType.name}}
@@ -83,8 +83,10 @@
                 <tr
                     *ngFor="let rData of reduceRuntime.runtimeData | dayTypeFilter:selectedDayType.dayType.dayTypeId; let rDataIndex = index;">
                     <td class="bold text-center">
+                        @if(rData.compressorId == trimCompressorId){
+                        <span class="fa fa-asterisk"></span>
+                        }
                         {{rData.compressorId | compressorName:compressorInventoryItems}}
-                        <span class="pl-2" *ngIf="rData.compressorId == trimCompressorId">(Trim)</span>
                     </td>
                     <td class="text-center">
                         {{rData.fullLoadCapacity}}
@@ -155,4 +157,8 @@
     <div *ngIf="!selectedDayType.isValid && reduceRuntime.order != 100" class="alert alert-danger p-2 text-center">
         One or more hours have less available airflow then is required.
     </div>
+</div>
+
+<div *ngIf="trimCompressorId" class="trim-note mb-2">
+    <span class="fa fa-asterisk"></span> Indicates a trim compressor in a base-trim control setup. Trim compressors cannot be selected to reduce run time.
 </div>

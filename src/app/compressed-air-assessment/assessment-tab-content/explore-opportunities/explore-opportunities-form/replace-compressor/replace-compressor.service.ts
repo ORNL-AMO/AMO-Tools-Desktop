@@ -24,13 +24,14 @@ export class ReplaceCompressorService {
     return form;
   }
 
-  getObjFromForm(form: UntypedFormGroup, currentCompressorMapping: Array<{originalCompressorId: string, isReplaced: boolean}>, replacementCompressorMapping: Array<{replacementCompressorId: string, isAdded: boolean}>): ReplaceCompressor {
+  getObjFromForm(form: UntypedFormGroup, currentCompressorMapping: Array<{originalCompressorId: string, isReplaced: boolean}>, replacementCompressorMapping: Array<{replacementCompressorId: string, isAdded: boolean}>, trimSelections: Array<{dayTypeId: string, compressorId: string}>): ReplaceCompressor {
     return {
       order: form.controls.order.value,
       implementationCost: form.controls.implementationCost.value,
       currentCompressorMapping: currentCompressorMapping,
       replacementCompressorMapping: replacementCompressorMapping,
-      salvageValue: form.controls.salvageValue.value
+      salvageValue: form.controls.salvageValue.value,
+      trimSelections: trimSelections
     };
   }
 }

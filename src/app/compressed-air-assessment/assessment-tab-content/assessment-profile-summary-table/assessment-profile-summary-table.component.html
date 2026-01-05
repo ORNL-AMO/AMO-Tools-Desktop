@@ -8,7 +8,7 @@
 }
 
 
-<app-profile-summary-table [inventoryItems]="inventoryItems"
-    [profileSummary]="adjustedProfileSummary" [totals]="totals" [settings]="settings"
-    [systemProfileSetup]="compressedAirAssessment.systemProfile.systemProfileSetup"
-    [systemInformation]="compressedAirAssessment.systemInformation"></app-profile-summary-table>
+<app-profile-summary-table [inventoryItems]="inventoryItems" [profileSummary]="adjustedProfileSummary" [totals]="totals"
+    [settings]="settings" [systemProfileSetup]="compressedAirAssessment.systemProfile.systemProfileSetup"
+    [multiCompressorSystemControls]="compressedAirAssessment.systemInformation.multiCompressorSystemControls"
+    [trimSelections]="trimSelections"></app-profile-summary-table>

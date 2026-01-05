@@ -54,6 +54,10 @@ export interface ReplaceCompressor {
     replacementCompressorMapping: Array<{
         replacementCompressorId: string,
         isAdded: boolean
+    }>,
+    trimSelections: Array<{
+        dayTypeId: string,
+        compressorId: string
     }>
 }
 
@@ -217,12 +221,14 @@ export interface SystemInformation {
     variance: number,
     co2SavingsData?: Co2SavingsData,
     plantMaxPressure: number,
-    multiCompressorSystemControls: 'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim',
+    multiCompressorSystemControls: MultiCompressorSystemControls,
     trimSelections?: Array<{
         dayTypeId: string,
         compressorId: string
     }>
 }
+
+export type MultiCompressorSystemControls = 'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim'
 
 export interface CompressorInventoryItem {
     itemId: string,

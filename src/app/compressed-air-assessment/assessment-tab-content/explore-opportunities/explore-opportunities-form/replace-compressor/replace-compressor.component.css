@@ -87,3 +87,9 @@ option.invalid{
 .checkbox-cell input[type="checkbox"]{
   vertical-align: middle;
 }
+
+.trim-note{
+    font-size: small;
+    font-style: italic;
+    font-weight: normal;
+}

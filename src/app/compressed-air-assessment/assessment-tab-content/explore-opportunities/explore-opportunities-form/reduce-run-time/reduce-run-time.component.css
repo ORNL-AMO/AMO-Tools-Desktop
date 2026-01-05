@@ -74,3 +74,9 @@ tfoot{
 option.invalid{
     color: red;
 }
+
+.trim-note{
+    font-size: small;
+    font-style: italic;
+    font-weight: normal;
+}

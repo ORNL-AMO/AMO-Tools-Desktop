@@ -159,7 +159,13 @@ export class UpdateDataService {
                                 isReplaced: false
                             };
                         }),
-                        replacementCompressorMapping: []
+                        replacementCompressorMapping: [],
+                        trimSelections: assessment.compressedAirAssessment.systemInformation.trimSelections.map(selection => {
+                            return {
+                                dayTypeId: selection.dayTypeId,
+                                compressorId: selection.compressorId
+                            };
+                        })
                     };
                 }
             })

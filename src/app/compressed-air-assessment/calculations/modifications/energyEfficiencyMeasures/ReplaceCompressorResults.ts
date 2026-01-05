@@ -69,7 +69,8 @@ export class ReplaceCompressorResults {
             implementationCost,
             summaryDataInterval,
             undefined,
-            order);
+            order,
+            replaceCompressor.trimSelections);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
     }

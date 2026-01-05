@@ -25,6 +25,7 @@ export class AssessmentProfileSummaryTableComponent {
   modificationResultsSub: Subscription;
   settings: Settings;
   inventoryItems: Array<CompressorInventoryItem>
+  trimSelections: Array<{ dayTypeId: string, compressorId: string }>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private exploreOpportunitiesService: ExploreOpportunitiesService) { }
 
@@ -64,6 +65,7 @@ export class AssessmentProfileSummaryTableComponent {
       this.adjustedProfileSummary = dayTypeModificationResult.adjustedProfileSummary;
       this.totals = dayTypeModificationResult.adjustedProfileSummaryTotals;
       this.inventoryItems = dayTypeModificationResult.adjustedCompressors;
+      this.trimSelections = dayTypeModificationResult.trimSelections;
     }
   }
 

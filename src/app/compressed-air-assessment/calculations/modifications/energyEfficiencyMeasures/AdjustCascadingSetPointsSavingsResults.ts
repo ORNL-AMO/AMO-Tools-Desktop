@@ -30,7 +30,8 @@ export class AdjustCascadingSetPointsResults {
         systemInformation: SystemInformation,
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService,
-        order: number) {
+        order: number,
+        trimSelections: Array<{ dayTypeId: string, compressorId: string }>) {
         this.order = order;
         this.adjustedCompressors = adjustedCompressors;
         this.profileSummary = previousProfileSummary.map(summary => {
@@ -64,7 +65,8 @@ export class AdjustCascadingSetPointsResults {
             adjustCascadingSetPoints.implementationCost,
             summaryDataInterval,
             auxiliaryPowerUsage,
-            order);
+            order,
+            trimSelections);
         this.profileSummary = flowReallocationResults.profileSummary;
         this.savings = flowReallocationResults.savings;
     }

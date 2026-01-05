@@ -133,15 +133,23 @@ export class ExploreOpportunitiesService {
         implementationCost: 0,
         salvageValue: 0,
         currentCompressorMapping: compressedAirAssessment.compressorInventoryItems.map(item => {
+          let _item: CompressorInventoryItem = new CompressorInventoryItemClass(item).toModel()
           return {
-            originalCompressorId: item.itemId,
+            originalCompressorId: _item.itemId,
             isReplaced: false
           }
         }),
         replacementCompressorMapping: compressedAirAssessment.replacementCompressorInventoryItems.map(item => {
+          let _item: CompressorInventoryItem = new CompressorInventoryItemClass(item).toModel()
           return {
-            replacementCompressorId: item.itemId,
+            replacementCompressorId: _item.itemId,
             isAdded: false
+          }
+        }),
+        trimSelections: compressedAirAssessment.systemInformation.trimSelections.map(selection => {
+          return {
+            dayTypeId: selection.dayTypeId,
+            compressorId: selection.compressorId
           }
         })
       }

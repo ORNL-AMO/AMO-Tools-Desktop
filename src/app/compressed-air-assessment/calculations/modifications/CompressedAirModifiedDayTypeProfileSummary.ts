@@ -58,6 +58,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
     peakDemandCost: number;
     peakDemandCostSavings: number;
     totalModifiedAnnualOperatingCost: number;
+    trimSelections: Array<{ dayTypeId: string, compressorId: string }>;
     constructor(dayType: CompressedAirDayType,
         baselineDayTypeProfileSummaries: Array<CompressedAirBaselineDayTypeProfileSummary>,
         settings: Settings,
@@ -72,6 +73,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         this.systemInformation = compressedAirAssessment.systemInformation;
         this.costKwh = compressedAirAssessment.systemBasics.electricityCost;
         this.summaryDataInterval = compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
+        this.trimSelections = compressedAirAssessment.systemInformation.trimSelections;
 
         //baseline profile summary
         let baselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = baselineDayTypeProfileSummaries.find(summary => { return summary.dayType.dayTypeId == dayType.dayTypeId });
@@ -204,6 +206,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         });
         this.adjustedCompressors = this.replaceCompressorResults.adjustedCompressors;
         this.originalCompressors = this.adjustedCompressors.map(item => { return new CompressorInventoryItemClass(item); });
+        this.trimSelections = replaceCompressor.trimSelections;
         this.replaceCompressorProfileValidation = new ResultingSystemProfileValidation(this, order, this.summaryDataInterval);
     }
 
@@ -227,7 +230,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             implementationCost,
             this.summaryDataInterval,
             undefined,
-            order);
+            order,
+            this.trimSelections);
         this.adjustedProfileSummary = this.flowReallocationResults.profileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
@@ -256,7 +260,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             implementationCost,
             this.summaryDataInterval,
             undefined,
-            order);
+            order,
+            this.trimSelections);
         this.adjustedProfileSummary = this.addPrimaryReceiverVolumeResults.profileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
@@ -283,7 +288,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.systemInformation,
             reduceRuntime,
             _compressedAirCalculationService,
-            order);
+            order,
+            this.trimSelections);
         this.adjustedProfileSummary = this.adjustCascadingSetPointsResults.profileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
@@ -310,7 +316,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.costKwh,
             this.summaryDataInterval,
             undefined,
-            order
+            order,
+            this.trimSelections
         );
         this.adjustedProfileSummary = this.improveEndUseEfficiencyResults.profileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
@@ -339,7 +346,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             implementationCost,
             this.summaryDataInterval,
             undefined,
-            order);
+            order,
+            this.trimSelections);
         this.adjustedProfileSummary = this.reduceRunTimeResults.profileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
@@ -366,7 +374,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.costKwh,
             this.summaryDataInterval,
             undefined,
-            order
+            order,
+            this.trimSelections
         );
         this.adjustedProfileSummary = this.reduceAirLeaksResults.profileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
@@ -393,7 +402,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.systemInformation,
             reduceRuntime,
             _compressedAirCalculationService,
-            order);
+            order,
+            this.trimSelections);
         this.adjustedProfileSummary = this.reduceSystemAirPressureResults.profileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
@@ -419,7 +429,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             this.systemInformation,
             reduceRuntime,
             _compressedAirCalculationService,
-            order);
+            order,
+            this.trimSelections);
         this.adjustedProfileSummary = this.useAutomaticSequencerResults.profileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });

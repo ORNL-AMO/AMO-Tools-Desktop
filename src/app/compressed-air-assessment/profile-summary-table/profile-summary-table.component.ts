@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { CompressorInventoryItem, ProfileSummary, ProfileSummaryTotal, SystemInformation, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
+import { CompressorInventoryItem, MultiCompressorSystemControls, ProfileSummary, ProfileSummaryTotal, SystemInformation, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
@@ -24,7 +24,10 @@ export class ProfileSummaryTableComponent implements OnInit {
   @Input()
   systemProfileSetup: SystemProfileSetup;
   @Input()
-  systemInformation: SystemInformation;
+  multiCompressorSystemControls: MultiCompressorSystemControls;
+  @Input()
+  trimSelections: Array<{ dayTypeId: string, compressorId: string }>;
+
   selectedTrimCompressorId: string;
 
   @ViewChild('profileTable', { static: false }) profileTable: ElementRef;
@@ -32,8 +35,8 @@ export class ProfileSummaryTableComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    if (this.systemInformation.trimSelections && this.systemProfileSetup.dayTypeId) {
-      let selection = this.systemInformation.trimSelections.find(selection => selection.dayTypeId == this.systemProfileSetup.dayTypeId);
+    if (this.multiCompressorSystemControls == 'baseTrim' && this.trimSelections && this.systemProfileSetup) {
+      let selection = this.trimSelections.find(selection => selection.dayTypeId == this.systemProfileSetup.dayTypeId);
       this.selectedTrimCompressorId = selection? selection.compressorId : undefined;
     }
   }

@@ -86,7 +86,7 @@
                     Order
                 </td>
                 <td *ngFor="let data of summary.profileSummaryData;">
-                    @if (systemInformation.multiCompressorSystemControls == 'baseTrim') {
+                    @if (multiCompressorSystemControls == 'baseTrim') {
                     <span *ngIf="data.order != 0 && summary.compressorId === selectedTrimCompressorId">Trim</span>
                     <span *ngIf="data.order != 0 && summary.compressorId !== selectedTrimCompressorId">Base</span>
                     <span *ngIf="data.order == 0">&mdash;</span>
