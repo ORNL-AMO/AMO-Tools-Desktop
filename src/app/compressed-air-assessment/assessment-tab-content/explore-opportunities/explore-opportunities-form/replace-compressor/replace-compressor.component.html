@@ -147,7 +147,8 @@
                     <td class="checkbox-cell">
                         <input type="checkbox" [(ngModel)]="compressorMap.isAdded" (change)="save(false)"
                             name="{{compressorMap.replacementCompressorId}}-replace-compressor"
-                            id="{{compressorMap.replacementCompressorId}}-replace-compressor" />
+                            id="{{compressorMap.replacementCompressorId}}-replace-compressor"
+                            [disabled]="compressorInventoryItems.length == 1 && compressorMap.isAdded"  />
                     </td>
                     <td>
                         {{compressorMap.replacementCompressorId |

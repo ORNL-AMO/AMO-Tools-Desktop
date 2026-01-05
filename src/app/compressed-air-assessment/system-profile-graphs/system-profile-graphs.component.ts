@@ -47,6 +47,7 @@ export class SystemProfileGraphsComponent implements OnInit {
   showingPowerMaxSub: Subscription;
   settings: Settings;
   timeInterval: number;
+  trimSelections: Array<{ dayTypeId: string, compressorId: string }>;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService, private systemProfileGraphService: SystemProfileGraphsService,
     private exploreOpportunitiesService: ExploreOpportunitiesService,
     private plotlyService: PlotlyService,
@@ -116,18 +117,21 @@ export class SystemProfileGraphsComponent implements OnInit {
     //baseline daytype summary
     if (this.selectedDayType) {
       let compressedAirBaselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = new CompressedAirBaselineDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-
+      
       if (!this.inModification && this.compressedAirAssessment) {
+        this.trimSelections = this.compressedAirAssessment.systemInformation.trimSelections;
         this.profileSummary = compressedAirBaselineDayTypeProfileSummary.profileSummary;
         this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems);
         this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
       } else if (this.compressedAirAssessment && !this.isBaseline) {
         let modification: Modification = this.compressedAirAssessmentService.selectedModification.getValue();
         let compressedAirModifiedDayTypeProfileSummary: CompressedAirModifiedDayTypeProfileSummary = new CompressedAirModifiedDayTypeProfileSummary(this.selectedDayType, [compressedAirBaselineDayTypeProfileSummary], this.settings, this.compressedAirCalculationService, this.compressedAirAssessment, modification, this.assessmentCo2SavingsService);
+        this.trimSelections = compressedAirModifiedDayTypeProfileSummary.trimSelections;
         this.profileSummary = compressedAirModifiedDayTypeProfileSummary.adjustedProfileSummary;
         this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems, compressedAirModifiedDayTypeProfileSummary.adjustedCompressors);
         this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
       } else if (this.compressedAirAssessment && this.isBaseline) {
+        this.trimSelections = this.compressedAirAssessment.systemInformation.trimSelections;
         this.profileSummary = compressedAirBaselineDayTypeProfileSummary.profileSummary;
         this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems);
         this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
@@ -530,7 +534,7 @@ export class SystemProfileGraphsComponent implements OnInit {
 
     if (compressor && this.selectedDayType) {
       if (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
-        let selection = this.compressedAirAssessment.systemInformation.trimSelections.find(selection => { return selection.dayTypeId == this.selectedDayType.dayTypeId && selection.compressorId == compressorId });
+        let selection = this.trimSelections.find(selection => { return selection.dayTypeId == this.selectedDayType.dayTypeId && selection.compressorId == compressorId });
         if (selection != undefined) {
           return compressor.name + ' (Trim)';
         } else {
