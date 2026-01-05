@@ -16,7 +16,7 @@ jobs:
     needs: call_build
     uses: ./.github/workflows/template_deploy.yml
     with:
-      app-dir: qa.measur
+      app-dir: measur
       artifact-name: dist
       deploy-dir: /var/www/html
       tag: dev
