@@ -21,7 +21,8 @@ export class EquipmentsDropdownComponent implements OnInit {
   settings: Settings;
   @Input()
   inReport: boolean;
-
+  @Input()
+  dropdownShown: boolean;
   
   equipments: Array<FilterOption>;
   displayEquipment: boolean = false;

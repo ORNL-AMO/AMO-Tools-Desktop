@@ -20,7 +20,8 @@ export class TeamsDropdownComponent implements OnInit {
   settings: Settings;
   @Input()
   inReport: boolean;
-
+  @Input()
+  dropdownShown: boolean;
   teams: Array<FilterOption>;
   displayTeamDropdown: boolean = false;
   sortCardsData: SortCardsData;

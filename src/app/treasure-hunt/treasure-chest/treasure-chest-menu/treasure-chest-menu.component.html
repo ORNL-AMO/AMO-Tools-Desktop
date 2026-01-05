@@ -37,9 +37,8 @@
       </div>
       <app-utility-type-dropdown [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-utility-type-dropdown>
       <app-calculator-type-dropdown [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-calculator-type-dropdown>
-      <div class="nav-item dropdown">
-        <button type="button" class="nav-btn btn-block" (click)="toggleAdditionalFilters()">Add'l Filters</button>
-      </div>
+      <app-teams-dropdown [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-teams-dropdown>
+      <app-equipments-dropdown [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-equipments-dropdown>
 
     </div>
   </div>
@@ -66,7 +65,7 @@
       </div>
     </div>
   </div>
-
+<!-- Nick Is this Relevant?  toggleAdditonalFilters() reveals displayAdditionalFiltersDropdown menuModal below-->
   <app-utility-type-dropdown class="d-lg-none" [settings]="settings" [dropdownShown]="!bannerCollapsed" [ngClass]="{'collapse': bannerCollapsed}"></app-utility-type-dropdown>
   
   <app-calculator-type-dropdown class="d-lg-none" [settings]="settings" [dropdownShown]="!bannerCollapsed" [ngClass]="{'collapse': bannerCollapsed}"></app-calculator-type-dropdown>
@@ -74,7 +73,7 @@
   <div *ngIf="!inReport" class="nav-item dropdown d-lg-none" [ngClass]="{'collapse': bannerCollapsed}">
     <button type="button" class="nav-btn" (click)="toggleAdditionalFilters()">Add'l Filters</button>
   </div>
-  
+  <!-- End -->
   <app-teams-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-teams-dropdown>
   
   <app-equipments-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-equipments-dropdown>
