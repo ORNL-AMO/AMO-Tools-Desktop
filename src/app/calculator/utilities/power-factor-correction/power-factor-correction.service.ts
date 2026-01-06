@@ -319,8 +319,8 @@ export class PowerFactorCorrectionService {
           this.setCustomError(pfAdjustedDemandCtrl, 'customPowerFactorError', 'Power Factor cannot be greater than PF Adjusted Demand');
           this.setCustomError(powerFactorCtrl, 'customPowerFactorError', 'Power Factor cannot be greater than PF Adjusted Demand');
         } else if (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND && actualDemandCtrl.value < pfAdjustedDemandCtrl.value) {
-          this.setCustomError(actualDemandCtrl, 'customDemandError', 'Actual Demand cannot be less than PF Adjusted Demand');
-          this.setCustomError(pfAdjustedDemandCtrl, 'customDemandError', 'Actual Demand cannot be less than PF Adjusted Demand');
+          this.setCustomError(actualDemandCtrl, 'customDemandError', 'Actual Demand cannot be less than Apparent Power');
+          this.setCustomError(pfAdjustedDemandCtrl, 'customDemandError', 'Actual Demand cannot be less than Apparent Power');
         } else {
           this.setCustomError(powerFactorCtrl, 'customPowerFactorError', null);
           this.setCustomError(pfAdjustedDemandCtrl, 'customPowerFactorError', null);

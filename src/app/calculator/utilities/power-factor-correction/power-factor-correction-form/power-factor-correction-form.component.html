@@ -161,9 +161,6 @@
         <span *ngIf="group.get('actualDemand')?.errors?.required" class="alert-danger pull-right small">Value Required</span>
         <span *ngIf="group.get('actualDemand')?.errors?.min" class="alert-danger pull-right small">Value can't be
           less than {{group.get('actualDemand')?.errors?.min.min}}</span>
-        <span *ngIf="group.get('actualDemand')?.errors?.customDemandError" class="alert-danger pull-right small">
-          {{group.get('actualDemand').errors.customDemandError}}
-        </span>
         <span class="alert-danger pull-right small"
           *ngIf="group.get('actualDemand')?.invalid && group.get('actualDemand')?.errors?.customDemandError">
           {{group.get('actualDemand').errors.customDemandError}}
@@ -175,7 +172,7 @@
           (focus)="focusField('powerFactor')">
           <span *ngIf="group.get('powerFactor')?.errors?.required" class="alert-danger pull-right small">Value Required.</span>
           <span *ngIf="group.get('powerFactor')?.errors?.min" class="alert-danger pull-right small">Value can't be less than {{group.get('powerFactor')?.errors?.min.min}}</span>
-          <span *ngIf="group.get('powerFactor')?.errors?.max" class="alert-danger pull-right small">Value must be greater than {{group.get('powerFactor')?.errors?.max.max}}</span>
+          <span *ngIf="group.get('powerFactor')?.errors?.max" class="alert-danger pull-right small">Value can't be greater than {{group.get('powerFactor')?.errors?.max.max}}</span>
           <span class="alert-danger pull-right small"
             *ngIf="group.get('powerFactor')?.invalid && group.get('powerFactor')?.errors?.customPowerFactorError">
             {{group.get('powerFactor').errors.customPowerFactorError}}
