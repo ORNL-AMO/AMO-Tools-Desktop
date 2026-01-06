@@ -52,7 +52,6 @@
       *ngIf="form.get('marginalCostOfDemand').invalid && (form.get('marginalCostOfDemand').dirty || form.get('marginalCostOfDemand').touched)">
       <span *ngIf="form.get('marginalCostOfDemand').errors?.required">Required.</span>
       <span *ngIf="form.get('marginalCostOfDemand').errors?.min">Must be greater than 0.</span>
-      <span *ngIf="form.get('marginalCostOfDemand').errors?.max">Must be less than 1.</span>
     </div>
   </div>
 
