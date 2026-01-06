@@ -12,7 +12,7 @@ import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 import { SteamPressureOrTemp, SteamQuality } from '../../shared/models/steam/steam-inputs';
-import { Observable } from 'rxjs';
+import { Observable, shareReplay, tap } from 'rxjs';
 
 
 @Component({
@@ -74,10 +74,16 @@ export class BoilerComponent implements OnInit {
 
   ngOnInit() {
     if (this.isBaseline) {
-      this.saturatedPropertiesOutput$ = this.boilerService.baselineSaturatedPropertiesOutput$;
+      this.saturatedPropertiesOutput$ = this.boilerService.baselineSaturatedPropertiesOutput$
+      // .pipe(
+      //   shareReplay(1)
+      // );
     } else {
       this.idString = 'modification_';
-      this.saturatedPropertiesOutput$ = this.boilerService.modificationSaturatedPropertiesOutput$;
+      this.saturatedPropertiesOutput$ = this.boilerService.modificationSaturatedPropertiesOutput$
+      // .pipe(
+      //   shareReplay(1)
+      // );
     }
     this.initForm();
     this.setFuelTypes();
@@ -118,7 +124,7 @@ export class BoilerComponent implements OnInit {
   updateSteamQuality(): void {
     this.saturatedPressure.clearValidators();
     this.steamTemperature.clearValidators();
-    this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings);
+    this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings, this.isBaseline);
     this.save();
   }
 
@@ -131,7 +137,7 @@ export class BoilerComponent implements OnInit {
       }
     }
 
-    this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings);
+    this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings, this.isBaseline);
     this.save();
   }
 

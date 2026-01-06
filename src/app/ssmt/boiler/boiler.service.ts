@@ -93,10 +93,10 @@ export class BoilerService {
         form.controls.saturatedPressure.patchValue(calculatedBoilerInput.saturatedPressure);
       }
     }
-    this.setPressureAndTemperatureValidators(form, settings);
+    this.setPressureAndTemperatureValidators(form, settings, isBaseline);
   }
 
-  setPressureAndTemperatureValidators(form: UntypedFormGroup, settings: Settings) {
+  setPressureAndTemperatureValidators(form: UntypedFormGroup, settings: Settings, isBaseline: boolean = true) {
     const steamQualityControl = form.controls.steamQuality;
     const pressureOrTemperatureControl = form.controls.pressureOrTemperature;
     const steamTemperatureControl = form.controls.steamTemperature;
@@ -107,12 +107,17 @@ export class BoilerService {
       saturatedTemperature: steamTemperatureControl.value
     }
 
+    const saturatedPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(saturatedPropertiesInput, SteamPressureOrTemp.PRESSURE, settings);
     if (steamQualityControl.value === SteamQuality.SUPERHEATED) {
-      const saturatedPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(saturatedPropertiesInput, SteamPressureOrTemp.PRESSURE, settings);
       this.setSaturatedPressureValidators(form, settings);
       this.setSteamTemperatureValidators(form, settings, saturatedPropertiesOutput);
-
     } else if (steamQualityControl.value === SteamQuality.SATURATED) {
+      if (isBaseline) {
+        this.baselineSaturatedPropertiesOutput.next(saturatedPropertiesOutput);
+      } else {
+        this.modificationSaturatedPropertiesOutput.next(saturatedPropertiesOutput);
+      }
+
       if (pressureOrTemperatureControl.value === SteamPressureOrTemp.PRESSURE) {
         this.setSaturatedPressureValidators(form, settings);
         steamTemperatureControl.clearValidators();
