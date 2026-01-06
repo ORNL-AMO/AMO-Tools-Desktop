@@ -1,186 +1,155 @@
-# CompressedAirAssessmentBaselineResults
+# Baseline System Characterization Algorithm
 
 ## Overview
 
-The `CompressedAirAssessmentBaselineResults` class calculates and stores the baseline (current state) performance metrics for a compressed air system. It aggregates results across all configured day types to provide both detailed and summary views of system operation.
+The baseline characterization algorithm quantifies current compressed air system performance by analyzing operational data across different day types and aggregating to annual totals. This establishes the reference point for evaluating energy efficiency improvements.
 
-**Source File:** `CompressedAirAssessmentBaselineResults.ts`
+## Algorithm Purpose
 
-## Purpose
+The baseline algorithm:
+1. Quantifies current system energy consumption and costs
+2. Analyzes performance variations across operational patterns (day types)
+3. Calculates annual totals from time-weighted operational data
+4. Establishes comparison metrics for efficiency measure evaluation
 
-This class serves as the foundation for compressed air assessment by:
-1. Establishing baseline performance metrics before any modifications
-2. Breaking down system performance by day type (e.g., weekdays, weekends, shutdown days)
-3. Calculating annual totals for energy use, costs, emissions, and air flow
-4. Providing comparison data for evaluating energy efficiency measures
+## Algorithm Inputs
 
-## Class Properties
+### System Configuration Data
+- Compressor inventory (capacity, pressure, power ratings, type, control method)
+- System air storage volume
+- Atmospheric pressure at site
+- Target operating pressure and control band
 
-### baselineDayTypeProfileSummaries
-- **Type:** `Array<CompressedAirBaselineDayTypeProfileSummary>`
-- **Description:** Array containing detailed calculation results for each day type. Each summary includes hourly profile data, compressor performance, and day-type specific totals.
+### Operational Profile Data
+- Hourly air demand for each day type
+- Number of annual occurrences per day type
+- Data sampling interval (e.g., 1-hour, 15-minute)
 
-### baselineResults
-- **Type:** `BaselineResults`
-- **Description:** Aggregated results containing both day-type specific results and overall system totals.
+### Economic Parameters
+- Electricity energy rate ($/kWh)
+- Electrical demand charge rate ($/kW-month)
+- CO2 emission factors
 
-## Constructor
+## Calculation Methodology
 
-```typescript
-constructor(
-  compressedAirAssessment: CompressedAirAssessment,
-  settings: Settings,
-  _compressedAirCalculationService: CompressedAirCalculationService,
-  _assessmentCo2SavingsService: AssessmentCo2SavingsService
-)
+### Step 1: Day Type Profile Analysis
+
+For each operational day type:
+
+**a) Compressor Performance Evaluation**
+- For each time interval in the profile:
+  - Determine required system air flow
+  - Allocate load to available compressors based on control strategy
+  - Calculate power consumption for each compressor at allocated load
+  - Sum compressor power for interval
+
+**b) Apply Sequencer Control (if configured)**
+- Adjust compressor pressure setpoints for coordinated control
+- Set base compressor to targetPressure - variance
+- Set trim compressor to targetPressure + variance
+- Optimize loading sequence to minimize energy
+
+**c) Calculate Day Type Metrics**
+- Sum energy consumption across all intervals: ΣPower × TimeInterval
+- Calculate average air flow: (Σ(Flow × Days)) / TotalDays
+- Identify peak power demand: max(PowerInterval)
+- Calculate average capacity utilization
+- Determine load factor: AveragePower / PeakPower
+- Calculate CO2 emissions based on energy and emission factors
+
+### Step 2: Annual Aggregation
+
+Combine day type results into system totals:
+
+**Annual Energy Metrics:**
+```
+Total Annual Energy = Σ(DayType Energy × Annual Occurrences)
+Total Annual Cost = Total Energy × Energy Rate
+Total CO2 Emissions = Σ(DayType Emissions × Annual Occurrences)
 ```
 
-**Parameters:**
-- `compressedAirAssessment` - Complete compressed air system data including inventory, profiles, and system information
-- `settings` - Application settings (units, calculation preferences)
-- `_compressedAirCalculationService` - Service for performing compressor calculations
-- `_assessmentCo2SavingsService` - Service for calculating CO2 emissions
-
-**Process Flow:**
-1. Creates baseline profile summaries for each day type
-2. Aggregates results across all day types
-3. Calculates system-wide totals
-
-## Key Methods
-
-### setBaselineProfileSummaries()
-
-Creates a `CompressedAirBaselineDayTypeProfileSummary` object for each configured day type.
-
-**Process:**
-- Iterates through all day types in the assessment
-- For each day type, creates a detailed profile summary
-- Stores results in `baselineDayTypeProfileSummaries` array
-
-### setBaselineResults()
-
-Aggregates day-type results into system-wide totals.
-
-**Calculated Metrics:**
-
-#### Annual Totals:
-- **Total Energy Use** - Sum of energy consumption across all day types (kWh or appropriate energy unit)
-- **Total Energy Cost** - Annual electricity cost based on energy use and rates
-- **Annual Emission Output** - Total CO2 emissions based on energy use and emission factors
-- **Total Operating Days** - Sum of operating days across all day types (typically 365)
-- **Total Operating Hours** - Sum of operating hours across all day types
-
-#### Weighted Averages:
-- **Average Air Flow** - Weighted by operating days for each day type
-- **Average Air Flow Percent Capacity** - Weighted average capacity utilization
-- **Load Factor Percent** - Weighted average load factor across all day types
-
-#### Peak Values:
-- **Peak Demand** - Maximum power demand across all day types (kW)
-- **Max Air Flow** - Maximum air flow requirement across all day types
-- **Demand Cost** - Monthly demand charges based on peak demand (peak demand × 12 months × demand rate)
-
-#### Total Annual Operating Cost:
-- **Total Annual Operating Cost** = Annual Energy Cost + Annual Demand Cost
-
-**Aggregation Logic:**
-```typescript
-// Weighted averages calculated as:
-averageValue = sum(dayTypeValue × operatingDays) / totalDays
-
-// Peak values use maximum across all day types:
-peakDemand = max(dayTypeResults.peakDemand)
+**Time-Weighted Averages:**
+```
+Average Air Flow = Σ(DayType Avg Flow × Days) / 365
+Average Capacity % = Σ(DayType Capacity % × Days) / 365
+Average Load Factor = Σ(DayType Load Factor × Days) / 365
 ```
 
-### getCompressorSummaries()
-
-Returns compressor performance summaries organized by day type.
-
-**Returns:** `Array<Array<CompressorSummary>>`
-
-**Description:** Provides a detailed breakdown of each compressor's performance for each day type, including:
-- Energy consumption per compressor
-- Operating hours and modes
-- Air flow contribution
-- Power usage
-
-### getDayTypeBaselineResult()
-
-Retrieves baseline results for a specific day type.
-
-**Parameters:**
-- `dayTypeId: string` - Unique identifier for the day type
-
-**Returns:** `BaselineResult` - Complete result set for the specified day type
-
-### getDayTypeProfileSummary()
-
-Retrieves the detailed profile summary for a specific day type.
-
-**Parameters:**
-- `dayTypeId: string` - Unique identifier for the day type
-
-**Returns:** `Array<ProfileSummary>` - Hourly or interval-based profile data for the day type
-
-## BaselineResults Interface
-
-```typescript
-interface BaselineResults {
-  total: BaselineResult;
-  dayTypeResults: Array<BaselineResult>;
-}
+**Peak Values:**
+```
+System Peak Demand = max(All DayType Peak Demands)
+System Max Air Flow = max(All DayType Max Flows)
 ```
 
-## BaselineResult Interface
+**Demand Charges:**
+```
+Annual Demand Cost = Peak Demand × 12 months × Demand Rate ($/kW-month)
+Total Annual Operating Cost = Energy Cost + Demand Cost
+```
 
-Each baseline result (whether for a day type or system total) contains:
+## Algorithm Outputs
 
-| Property | Type | Description |
-|----------|------|-------------|
-| cost | number | Annual energy cost for this scope |
-| energyUse | number | Annual energy consumption |
-| peakDemand | number | Peak power demand (kW) |
-| demandCost | number | Annual demand charges |
-| name | string | Name/label for this result |
-| maxAirFlow | number | Maximum air flow |
-| averageAirFlow | number | Average air flow |
-| averageAirFlowPercentCapacity | number | Average capacity utilization (%) |
-| operatingDays | number | Number of operating days |
-| totalOperatingHours | number | Total hours of operation |
-| annualEmissionOutput | number | Annual CO2 emissions |
-| loadFactorPercent | number | Average load factor (%) |
-| dayTypeId | string (optional) | Day type identifier |
-| totalAnnualOperatingCost | number | Total annual cost (energy + demand) |
+The baseline algorithm produces the following results:
 
-## Day Type Breakdown
+### System-Wide Annual Totals
+| Metric | Description |
+|--------|-------------|
+| Total Energy Consumption | Annual kWh across all day types |
+| Total Energy Cost | Annual electricity cost (energy charges only) |
+| Peak Power Demand | Maximum kW draw across all operational periods |
+| Annual Demand Cost | 12 months × peak kW × demand rate |
+| Total Annual Operating Cost | Sum of energy and demand costs |
+| Annual CO2 Emissions | Total emissions based on energy use |
+| Average Air Flow | Time-weighted average system flow |
+| Average Capacity Utilization | Percentage of installed capacity utilized |
+| Average Load Factor | Ratio of average to peak power |
+| Maximum System Air Flow | Peak air demand across all periods |
+| Total Operating Hours | Sum of compressor operating hours |
 
-The system supports multiple day types to accurately model varying operational patterns:
+### Day Type Specific Results
 
-### Common Day Type Examples:
+For each operational day type:
+| Metric | Description |
+|--------|-------------|
+| Day Type Energy Use | Energy consumption for this operational pattern |
+| Day Type Cost | Energy cost for this pattern |
+| Day Type Peak Demand | Maximum power for this pattern |
+| Day Type Average Flow | Average air flow for this pattern |
+| Operating Days per Year | Annual occurrence frequency |
+| Day Type Operating Hours | Hours per occurrence |
 
-1. **Weekday**
-   - Typical production schedule
-   - Full compressor utilization
-   - Variable load throughout the day
+## Operational Pattern Analysis
 
-2. **Weekend**
-   - Reduced production or maintenance
-   - Lower air demand
-   - Fewer operating hours
+The algorithm supports segmented analysis by operational pattern:
 
-3. **Shutdown**
-   - No production
-   - Minimal compressor use (for maintaining pressure)
-   - Very low energy consumption
+### Typical Operational Patterns:
 
-### Benefits of Day Type Analysis:
+**Production Days** (e.g., Weekdays: 250 days/year)
+- Full manufacturing operations
+- Variable hourly air demand following production schedule
+- Multiple compressors operating
+- High capacity utilization
 
-- **Accuracy**: Captures real-world variation in compressed air demand
-- **Precision**: Annual projections based on actual operating patterns
-- **Insights**: Identifies opportunities specific to different operational modes
-- **Validation**: Ensures calculations match observed energy bills
+**Reduced Schedule Days** (e.g., Weekends: 100 days/year)
+- Partial production or maintenance activities
+- Lower average air demand
+- Fewer compressors required
+- Reduced capacity utilization
 
-## Calculation Example
+**Shutdown Periods** (e.g., Holidays: 15 days/year)
+- No production activity
+- Minimal air demand for pressure maintenance
+- Single compressor intermittent operation
+- Very low energy consumption
+
+### Analysis Benefits:
+
+- **Operational Accuracy**: Captures actual demand variation patterns
+- **Cost Precision**: Annual costs based on real operating schedules
+- **Opportunity Identification**: Reveals inefficiencies specific to operating modes
+- **Validation**: Results correlate with utility billing data
+
+## Example Calculation
 
 For a system with three day types:
 
@@ -200,7 +169,7 @@ Day Type 3 (Shutdown): 15 days/year
   - Energy Use: 5,000 kWh
   - Peak Demand: 50 kW
 
-System Totals:
+System Totals Calculation:
   - Total Operating Days: 365
   - Average Air Flow: (1,200×250 + 600×100 + 50×15) / 365 = 988 CFM
   - Total Energy Use: 555,000 kWh
@@ -210,28 +179,28 @@ System Totals:
   - Total Annual Operating Cost: $100,500
 ```
 
-## Usage in Application
+## Algorithm Applications
 
-The baseline results are used throughout the application:
+The baseline characterization algorithm provides:
 
-1. **Assessment Reports** - Display current system performance
-2. **Modification Analysis** - Provide comparison baseline for savings calculations
-3. **Graphical Displays** - Show system load profiles and compressor utilization
-4. **Cost Analysis** - Break down energy and demand costs
+1. **System Performance Quantification** - Current energy use and costs
+2. **Efficiency Measure Baseline** - Reference for calculating savings
+3. **Operational Analysis** - Load profiles and compressor utilization patterns
+4. **Cost Attribution** - Energy and demand charge breakdown
 
-## Related Classes
+## Related Algorithms
 
-- **CompressedAirBaselineDayTypeProfileSummary** - Detailed calculations for a single day type
-- **CompressorInventoryItemClass** - Individual compressor modeling
-- **CompressedAirAssessmentModificationResults** - Modification analysis that uses baseline results
+- **Day Type Profile Analysis** - Detailed calculations for individual operational patterns
+- **Compressor Performance Modeling** - Power consumption calculations for individual units
+- **Energy Efficiency Measure Evaluation** - Uses baseline as comparison reference
 
-## Notes
+## Algorithm Considerations
 
-- All calculations respect the configured units of measure (Imperial or Metric)
-- Peak demand calculations consider all day types to find the system-wide maximum
-- Demand costs are annualized (monthly peak × 12 months)
-- Emission calculations use site-specific or default emission factors
-- The class uses lodash for efficient array operations (e.g., `_.maxBy`, `_.sumBy`)
+- Calculations support both Imperial and Metric unit systems
+- Peak demand determination evaluates all operational patterns
+- Demand charges calculated as monthly peak extended annually
+- Emission calculations use location-specific emission factors
+- Time-weighted averaging accounts for varying annual frequencies
 
 ---
 
