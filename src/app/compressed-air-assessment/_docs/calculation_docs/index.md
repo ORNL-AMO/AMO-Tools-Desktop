@@ -76,7 +76,14 @@ The performance points used depend on the compressor type and control type:
 #### Centrifugal-Specific Performance Points:
 - **Blowoff** - Operating point with blowoff valve active
 
-For detailed information about which performance points apply to specific compressor and control type combinations, see the [CompressorInventoryItemClass documentation](./compressor_inventory_item_class.md).
+For detailed information about which performance points apply to specific compressor and control type combinations, see the [CompressorInventoryItemClass documentation](./compressor_inventory_item_class.md) and the [Performance Points System documentation](./performance_points_system.md).
+
+### Additional Documentation
+
+For deeper technical understanding, see:
+
+- **[Performance Points System](./performance_points_system.md)** - Detailed documentation on how performance points are calculated for different compressor and control type combinations
+- **[Energy Efficiency Measures](./energy_efficiency_measures.md)** - Comprehensive guide to all available energy efficiency measures, their calculations, and implementation considerations
 
 ## Calculation Flow
 
