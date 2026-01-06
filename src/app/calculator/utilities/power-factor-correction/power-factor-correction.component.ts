@@ -236,7 +236,7 @@ export interface PowerFactorCorrectionOutputs {
 }
 
 export interface PFMonthlyOutputs {
-  realDemand: number;
+  actualDemand: number;
   pfAdjustedDemand: number;
   proposedApparentPower: number;
   demandPenalty: number;

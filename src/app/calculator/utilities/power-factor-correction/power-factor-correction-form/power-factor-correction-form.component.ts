@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PowerFactorCorrectionInputs } from '../power-factor-correction.component';
-import { PowerFactorCorrectionService } from '../power-factor-correction.service';
+import { AdjustedOrActual, BilledForDemand, PowerFactorCorrectionService } from '../power-factor-correction.service';
 import { FormBuilder, FormGroup, UntypedFormGroup, FormArray, Validators } from '@angular/forms';
 
 @Component({
@@ -20,8 +20,6 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<PowerFactorCorrectionInputs>();
 
-  minGreaterThanTargetError: boolean = false;
-
   monthList: Array<{ value: number, name: string }> = [
     { value: 1, name: 'January' },
     { value: 2, name: 'February' },
@@ -36,7 +34,10 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     { value: 11, name: 'November' },
     { value: 12, name: 'December' }
   ];
-  
+
+  BilledForDemand = BilledForDemand;
+  AdjustedOrActual = AdjustedOrActual;
+
 
   constructor(private powerFactorCorrectionService: PowerFactorCorrectionService,
     private fb: FormBuilder
@@ -125,5 +126,13 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   get monthyInputsFormArray(): FormArray {
     return this.form.get('monthyInputs') as FormArray;
   }
+
+  get billedForDemand(): number {
+    return this.form.value.billedForDemand;
+  }
+
+  get adjustedOrActual(): number {
+    return this.form.value.adjustedOrActual;
+  } 
   
 }

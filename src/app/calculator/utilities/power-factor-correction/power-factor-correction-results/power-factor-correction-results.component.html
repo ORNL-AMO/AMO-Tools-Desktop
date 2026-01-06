@@ -5,7 +5,7 @@
         Month
       </th>
       <th *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 0">
-        Real Demand (kW)
+        Actual Demand (kW)
       </th>
       <th *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 1">
         PF Adjusted Demand (kW)
@@ -44,7 +44,7 @@
       </td>
 
       <td *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 0">
-        {{output.realDemand | number:'1.2-2'}}
+        {{output.actualDemand | number:'1.2-2'}}
       </td>
       <td *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 1">
        {{output.pfAdjustedDemand | number:'1.2-2'}}
