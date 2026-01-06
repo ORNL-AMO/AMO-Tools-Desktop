@@ -1,14 +1,14 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { CompressorInventoryItem, MultiCompressorSystemControls, ProfileSummary, ProfileSummaryTotal, SystemInformation, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
+import { Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/core';
+import { CompressedAirDayType, CompressorInventoryItem, MultiCompressorSystemControls, ProfileSummary, ProfileSummaryTotal } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
-    selector: 'app-profile-summary-table',
-    templateUrl: './profile-summary-table.component.html',
-    styleUrls: ['./profile-summary-table.component.css'],
-    standalone: false
+  selector: 'app-profile-summary-table',
+  templateUrl: './profile-summary-table.component.html',
+  styleUrls: ['./profile-summary-table.component.css'],
+  standalone: false
 })
-export class ProfileSummaryTableComponent implements OnInit {
+export class ProfileSummaryTableComponent implements OnChanges {
   @Input()
   inventoryItems: Array<CompressorInventoryItem>;
   @Input()
@@ -22,7 +22,7 @@ export class ProfileSummaryTableComponent implements OnInit {
   @Input()
   totalsForPrint: Array<Array<ProfileSummaryTotal>>;
   @Input()
-  systemProfileSetup: SystemProfileSetup;
+  dayType: CompressedAirDayType;
   @Input()
   multiCompressorSystemControls: MultiCompressorSystemControls;
   @Input()
@@ -32,12 +32,11 @@ export class ProfileSummaryTableComponent implements OnInit {
 
   @ViewChild('profileTable', { static: false }) profileTable: ElementRef;
   allTablesString: string;
-  constructor() { }
 
-  ngOnInit(): void {
-    if (this.multiCompressorSystemControls == 'baseTrim' && this.trimSelections && this.systemProfileSetup) {
-      let selection = this.trimSelections.find(selection => selection.dayTypeId == this.systemProfileSetup.dayTypeId);
-      this.selectedTrimCompressorId = selection? selection.compressorId : undefined;
+  ngOnChanges() {
+    if (this.multiCompressorSystemControls == 'baseTrim' && this.trimSelections && this.dayType) {
+      let selection = this.trimSelections.find(selection => selection.dayTypeId == this.dayType.dayTypeId);
+      this.selectedTrimCompressorId = selection ? selection.compressorId : undefined;
     }
   }
 

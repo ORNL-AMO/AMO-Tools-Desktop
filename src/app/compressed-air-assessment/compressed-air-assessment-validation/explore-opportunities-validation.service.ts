@@ -170,7 +170,7 @@ export class ExploreOpportunitiesValidationService {
           compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
             if (isValid) {
               let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == dayType.dayTypeId });
-              isValid = modificationProfileSummary.replaceCompressorProfileValidation.isValid;
+              isValid = modificationProfileSummary?.replaceCompressorProfileValidation?.isValid;
             }
           });
         }

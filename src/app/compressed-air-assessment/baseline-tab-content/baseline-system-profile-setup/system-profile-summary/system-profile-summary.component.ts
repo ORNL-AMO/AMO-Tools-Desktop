@@ -25,7 +25,7 @@ export class SystemProfileSummaryComponent implements OnInit {
   }>;
   inventoryItems: Array<CompressorInventoryItem>;
   settings: Settings;
-  systemProfileSetup: SystemProfileSetup;
+  selectedDayType: CompressedAirDayType;
   systemInformation: SystemInformation;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirCalculationService: CompressedAirCalculationService,
@@ -35,9 +35,8 @@ export class SystemProfileSummaryComponent implements OnInit {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.systemInformation = val.systemInformation;
-      this.systemProfileSetup = val.systemProfile.systemProfileSetup;
-      let selectedDayType: CompressedAirDayType = val.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == val.systemProfile.systemProfileSetup.dayTypeId });
-      let compressedAirBaselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = new CompressedAirBaselineDayTypeProfileSummary(val, selectedDayType, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      this.selectedDayType = val.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == val.systemProfile.systemProfileSetup.dayTypeId });
+      let compressedAirBaselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = new CompressedAirBaselineDayTypeProfileSummary(val, this.selectedDayType, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
       this.profileSummary = compressedAirBaselineDayTypeProfileSummary.profileSummary;
       this.totals = compressedAirBaselineDayTypeProfileSummary.profileSummaryTotals;
       this.inventoryItems = val.compressorInventoryItems;

@@ -28,8 +28,7 @@ export class ReplaceCompressorComponent {
   compressedAirAssessment: CompressedAirAssessment;
   settingsSub: Subscription;
   settings: Settings;
-  increasedVolumeError: string;
-
+  
   form: UntypedFormGroup
   currentCompressorMapping: Array<{
     originalCompressorId: string,
@@ -217,7 +216,6 @@ export class ReplaceCompressorComponent {
     //update trim selections
     modification.replaceCompressor.trimSelections.forEach(trimSelection => {
       if (!compressorsIdsInSystem.includes(trimSelection.compressorId)) {
-        console.log('updating trim selection compressor id...');
         trimSelection.compressorId = compressorsIdsInSystem[0];
       }
     });
