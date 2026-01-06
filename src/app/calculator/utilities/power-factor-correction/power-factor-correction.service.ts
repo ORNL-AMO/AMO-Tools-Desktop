@@ -291,7 +291,7 @@ export class PowerFactorCorrectionService {
         inputData.monthyInputs.map(m => this.formBuilder.group({
           month: [m.month, Validators.required],
           actualDemand: [m.actualDemand, [Validators.required, Validators.min(0)]],
-          powerFactor: [m.powerFactor, [Validators.required, Validators.min(0)]],
+          powerFactor: [m.powerFactor, [Validators.required, Validators.min(0), Validators.max(1)]],
           pfAdjustedDemand: [m.pfAdjustedDemand, [Validators.required, Validators.min(0)]]
         }))
       ),
@@ -316,21 +316,33 @@ export class PowerFactorCorrectionService {
         const pfAdjustedDemandCtrl = group.get('pfAdjustedDemand');
 
         if (billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.POWER_FACTOR && powerFactorCtrl.value > pfAdjustedDemandCtrl.value) {
-          pfAdjustedDemandCtrl.setErrors({ customPowerFactorError: 'Power Factor cannot be greater than PF Adjusted Demand' });
-          powerFactorCtrl.setErrors({ customPowerFactorError: 'Power Factor cannot be greater than PF Adjusted Demand' });
+          this.setCustomError(pfAdjustedDemandCtrl, 'customPowerFactorError', 'Power Factor cannot be greater than PF Adjusted Demand');
+          this.setCustomError(powerFactorCtrl, 'customPowerFactorError', 'Power Factor cannot be greater than PF Adjusted Demand');
         } else if (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND && actualDemandCtrl.value < pfAdjustedDemandCtrl.value) {
-          actualDemandCtrl.setErrors({ customDemandError: 'Actual Demand must be greater than or equal to Apparent Power' });
-          pfAdjustedDemandCtrl.setErrors({ customDemandError: 'Actual Demand must be greater than or equal to Apparent Power' });
+          this.setCustomError(actualDemandCtrl, 'customDemandError', 'Actual Demand cannot be less than PF Adjusted Demand');
+          this.setCustomError(pfAdjustedDemandCtrl, 'customDemandError', 'Actual Demand cannot be less than PF Adjusted Demand');
         } else {
-          actualDemandCtrl.setErrors(null);
-          pfAdjustedDemandCtrl.setErrors(null);
-          powerFactorCtrl.setErrors(null);
+          this.setCustomError(powerFactorCtrl, 'customPowerFactorError', null);
+          this.setCustomError(pfAdjustedDemandCtrl, 'customPowerFactorError', null);
+          this.setCustomError(actualDemandCtrl, 'customDemandError', null);
+          this.setCustomError(pfAdjustedDemandCtrl, 'customDemandError', null);
         }
       }
 
       return null;
     };
   }
+
+  // * preserve ng built in validator errors
+  setCustomError = (ctrl: AbstractControl, errorKey: string, message: string | null) => {
+    const errors = { ...ctrl.errors };
+    if (message) {
+      ctrl.setErrors({ ...errors, [errorKey]: message });
+    } else {
+      const { [errorKey]: _, ...rest } = errors;
+      ctrl.setErrors(Object.keys(rest).length ? rest : null);
+    }
+  };
 
   calculateRealPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
     let outputData: PowerFactorCorrectionOutputs = this.getEmptyPowerFactorCorrectionOutputs();
