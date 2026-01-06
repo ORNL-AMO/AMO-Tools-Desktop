@@ -39,6 +39,7 @@ export class ExecutiveSummaryComponent implements OnInit {
   displayReduceSystemPressure: boolean;
   displayUseAutomaticSequencer: boolean;
   displayAuxiliaryPower: boolean;
+  displayReplaceCompressor: boolean;
   selectedModificationIndex: number;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
@@ -78,6 +79,9 @@ export class ExecutiveSummaryComponent implements OnInit {
       }
       if(!this.displayFlowReallocation){
         this.displayFlowReallocation = modResult.combinedResults.flowReallocationSavings.savings.power != 0;
+      }
+      if(!this.displayReplaceCompressor){
+        this.displayReplaceCompressor = modResult.combinedResults.replaceCompressorsSavings.savings.power != 0;
       }
     });
     this.setNotes();

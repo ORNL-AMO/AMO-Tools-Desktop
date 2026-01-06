@@ -13,6 +13,7 @@ import { PowerValidationPipe } from './profile-table-validation-pipes/power-vali
 import { VoltsValidationPipe } from './profile-table-validation-pipes/volts-validation-pipe';
 import { IsCompressorInvalidPipe } from './is-compressor-invalid-pipe';
 import { PercentCapacityValidationPipe } from './profile-table-validation-pipes/percent-capacity-validation-pipe';
+import { DayTypeNamePipe } from './day-type-name.pipe';
 
 
 
@@ -30,7 +31,8 @@ import { PercentCapacityValidationPipe } from './profile-table-validation-pipes/
     PowerValidationPipe,
     VoltsValidationPipe,
     IsCompressorInvalidPipe,
-    PercentCapacityValidationPipe
+    PercentCapacityValidationPipe,
+    DayTypeNamePipe
   ],
   imports: [
     CommonModule
@@ -48,7 +50,8 @@ import { PercentCapacityValidationPipe } from './profile-table-validation-pipes/
     PowerValidationPipe,
     VoltsValidationPipe,
     IsCompressorInvalidPipe,
-    PercentCapacityValidationPipe
+    PercentCapacityValidationPipe,
+    DayTypeNamePipe
   ]
 })
 export class SharedCompressorPipesModule { }

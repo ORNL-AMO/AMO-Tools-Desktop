@@ -39,6 +39,23 @@
                             {{result.combinedResults.flowReallocationSavings.paybackPeriod | number:'1.0-2'}}
                         </td>
                     </tr>
+                    <tr>
+                        <td class="bold">
+                            Replace Compressors
+                        </td>
+                        <td>
+                            {{result.combinedResults.replaceCompressorsSavings.savings.cost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            &mdash;
+                        </td>
+                        <td>
+                            {{result.combinedResults.replaceCompressorsSavings.implementationCost | number:'1.0-0'}}
+                        </td>
+                        <td>
+                            {{result.combinedResults.replaceCompressorsSavings.paybackPeriod | number:'1.0-2'}}
+                        </td>
+                    </tr>
                     <tr *ngIf="result.combinedResults.addReceiverVolumeSavings.savings.cost">
                         <td class="bold">
                             Add Receiver Volume

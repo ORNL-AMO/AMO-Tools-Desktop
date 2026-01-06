@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfilesForPrint, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfilesForPrint, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
 import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../../calculations/caCalculationModels';
@@ -9,10 +9,10 @@ import { CompressedAirBaselineDayTypeProfileSummary } from '../../calculations/C
 import { CompressedAirModifiedDayTypeProfileSummary } from '../../calculations/modifications/CompressedAirModifiedDayTypeProfileSummary';
 
 @Component({
-    selector: 'app-system-profiles',
-    templateUrl: './system-profiles.component.html',
-    styleUrls: ['./system-profiles.component.css'],
-    standalone: false
+  selector: 'app-system-profiles',
+  templateUrl: './system-profiles.component.html',
+  styleUrls: ['./system-profiles.component.css'],
+  standalone: false
 })
 export class SystemProfilesComponent implements OnInit {
   @Input()
@@ -34,18 +34,22 @@ export class SystemProfilesComponent implements OnInit {
   selectedDayType: CompressedAirDayType;
   selectedModification: Modification;
   profliesForPrint: Array<ProfilesForPrint>;
+  compressorInventoryItems: Array<CompressorInventoryItem>;
+  trimSelections: Array<{ dayTypeId: string, compressorId: string }>;
 
   constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
     this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes[0];
     this.setSelectedProfileSummary();
+    this.compressorInventoryItems = this.compressedAirAssessment.compressorInventoryItems.concat(this.compressedAirAssessment.replacementCompressorInventoryItems);
   }
 
   setSelectedProfileSummary() {
     if (this.selectedDayType && !this.selectedModification) {
       //Day type and baseline
       let baselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = this.compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.find(summary => { return summary.dayType.dayTypeId == this.selectedDayType.dayTypeId });
+      this.trimSelections = this.compressedAirAssessment.systemInformation.trimSelections;
       this.selectedProfileSummary = baselineDayTypeProfileSummary.profileSummary;
       this.selectedTotals = baselineDayTypeProfileSummary.profileSummaryTotals;
     } else if (this.selectedDayType && this.selectedModification) {
@@ -53,9 +57,10 @@ export class SystemProfilesComponent implements OnInit {
       let modificationResults: CompressedAirAssessmentModificationResults = this.assessmentResults.find(result => { return result.modification.modificationId == this.selectedModification.modificationId });
       let dayTypeModificationResults: CompressedAirModifiedDayTypeProfileSummary = modificationResults.modifiedDayTypeProfileSummaries.find(summary => { return summary.dayType.dayTypeId == this.selectedDayType.dayTypeId });
       let dayTypeModificationResult: DayTypeModificationResult = dayTypeModificationResults.getDayTypeModificationResult();
+      this.trimSelections = dayTypeModificationResults.trimSelections;
       this.selectedProfileSummary = dayTypeModificationResult.adjustedProfileSummary;
       this.selectedTotals = dayTypeModificationResult.profileSummaryTotals;
-    }     
+    }
     if (this.printView) {
       this.profliesForPrint = this.compressedAirAssessmentResultsService.setProfileSummariesForPrinting(this.compressedAirAssessmentBaselineResults);
     }

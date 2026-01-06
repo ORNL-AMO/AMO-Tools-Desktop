@@ -2,7 +2,7 @@
     <div class="checkbox">
         <label class="group-label w-100" for="reduceRuntime">
             Replace Compressors
-            <span *ngIf="(hasInvalidDayType || form.invalid) && form.controls.order.value != 100">
+            <span *ngIf="(hasInvalidForm || form.invalid) && form.controls.order.value != 100">
                 <span class="fa fa-exclamation-circle"></span>
             </span>
             <select id="replaceCompressorOrder" formControlName="order" class="form-control pull-right"
@@ -148,7 +148,7 @@
                         <input type="checkbox" [(ngModel)]="compressorMap.isAdded" (change)="save(false)"
                             name="{{compressorMap.replacementCompressorId}}-replace-compressor"
                             id="{{compressorMap.replacementCompressorId}}-replace-compressor"
-                            [disabled]="compressorInventoryItems.length == 1 && compressorMap.isAdded"  />
+                            [disabled]="compressorInventoryItems.length == 1 && compressorMap.isAdded" />
                     </td>
                     <td>
                         {{compressorMap.replacementCompressorId |
@@ -179,7 +179,7 @@
                 Add Replacement Compressor</a>
         </div>
         }
-
+        <!--TRIM COMPRESSOR SELECTION-->
         @if(hasTrimCompressor){
         <label>
             Select Trim Compressor
@@ -198,16 +198,20 @@
             <tbody>
                 <tr *ngFor="let trimCompressor of trimSelections">
                     <td>
-                        {{trimCompressor.dayTypeId}}
+                        {{trimCompressor.dayTypeId | dayTypeName:compressedAirAssessment.compressedAirDayTypes}}
                     </td>
                     <td>
-                        <select class="form-control w-100" [(ngModel)]="trimCompressor.compressorId"
-                            (change)="save(false)" name="{{trimCompressor.compressorId+trimCompressor.dayTypeId}}-trim-compressor"
-                            id="{{trimCompressor.compressorId+trimCompressor.dayTypeId}}-trim-compressor">
-                            <option *ngFor="let compressor of compressorInventoryItems" [ngValue]="compressor.itemId">
-                                {{compressor.name}}
-                            </option>
-                        </select>
+                        <div class="form-group w-100" [ngClass]="{'invalid': !trimCompressor.compressorId}">
+                            <select class="form-control w-100" [(ngModel)]="trimCompressor.compressorId"
+                                (change)="save(false)"
+                                name="{{trimCompressor.compressorId+trimCompressor.dayTypeId}}-trim-compressor"
+                                id="{{trimCompressor.compressorId+trimCompressor.dayTypeId}}-trim-compressor">
+                                <option *ngFor="let compressor of compressorInventoryItems"
+                                    [ngValue]="compressor.itemId">
+                                    {{compressor.name}}
+                                </option>
+                            </select>
+                        </div>
                     </td>
                 </tr>
             </tbody>

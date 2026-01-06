@@ -10,6 +10,7 @@ import { ResultingSystemProfileValidation } from '../../../../calculations/modif
 import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InventoryService } from '../../../../baseline-tab-content/inventory-setup/inventory/inventory.service';
+import { ExploreOpportunitiesValidationService } from '../../../../compressed-air-assessment-validation/explore-opportunities-validation.service';
 
 @Component({
   selector: 'app-replace-compressor',
@@ -49,12 +50,15 @@ export class ReplaceCompressorComponent {
 
   hasTrimCompressor: boolean;
   compressorInventoryItems: Array<CompressorInventoryItem>;
+  validationStatusSub: Subscription;
+  hasInvalidForm: boolean;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private replaceCompressorService: ReplaceCompressorService, private exploreOpportunitiesService: ExploreOpportunitiesService,
     private compressedAirDataManagementService: CompressedAirDataManagementService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private inventoryService: InventoryService) { }
+    private inventoryService: InventoryService,
+    private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService) { }
 
   ngOnInit(): void {
     this.settingsSub = this.compressedAirAssessmentService.settings.subscribe(settings => this.settings = settings);
@@ -83,6 +87,10 @@ export class ReplaceCompressorComponent {
         this.profileValidation = val.modifiedDayTypeProfileSummaries.map(dayTypeModResult => { return dayTypeModResult.replaceCompressorProfileValidation });
       }
     });
+
+    this.validationStatusSub = this.exploreOpportunitiesValidationService.compressedAirModificationValid.subscribe(val => {
+      this.hasInvalidForm = val?.replaceCompressor == false;
+    });
   }
 
   ngOnDestroy() {
@@ -90,6 +98,7 @@ export class ReplaceCompressorComponent {
     this.compressedAirAssessmentSub.unsubscribe();
     this.settingsSub.unsubscribe();
     this.modificationResultsSub.unsubscribe();
+    this.validationStatusSub.unsubscribe();
   }
 
   helpTextField(str: string) {

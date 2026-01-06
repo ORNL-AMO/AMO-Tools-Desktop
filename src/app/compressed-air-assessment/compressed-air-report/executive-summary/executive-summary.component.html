@@ -73,6 +73,20 @@
                     <span *ngIf="!result.combinedResults.flowReallocationSavings.savings.power">&mdash; &mdash;</span>
                 </td>
             </tr>
+            <tr *ngIf="displayReplaceCompressor">
+                <td>Replace Compressor Savings
+                    <span> (kWh)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    &mdash; &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.replaceCompressorsSavings.savings.power">{{result.combinedResults.replaceCompressorsSavings.savings.power
+                        | number:'1.0-0'}}</span>
+                    <span *ngIf="!result.combinedResults.replaceCompressorsSavings.savings.power">&mdash; &mdash;</span>
+                </td>
+            </tr>
             <tr *ngIf="displayAddReceiverVolume">
                 <td>Add Receiver Volume Savings
                     <span> (kWh)</span>
@@ -294,6 +308,20 @@
                         *ngIf="result.combinedResults.flowReallocationSavings.savings.cost">{{result.combinedResults.flowReallocationSavings.savings.cost
                         | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.flowReallocationSavings.savings.cost">&mdash; &mdash;</span>
+                </td>
+            </tr>
+            <tr *ngIf="displayReplaceCompressor">
+                <td>Replace Compressor Savings
+                    <span> ($)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    &mdash; &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.replaceCompressorsSavings.savings.cost">{{result.combinedResults.replaceCompressorsSavings.savings.cost
+                        | number:'1.0-0'}}</span>
+                    <span *ngIf="!result.combinedResults.replaceCompressorsSavings.savings.cost">&mdash; &mdash;</span>
                 </td>
             </tr>
             <tr *ngIf="displayAddReceiverVolume">

@@ -158,12 +158,22 @@ export class ExploreOpportunitiesValidationService {
       let form: UntypedFormGroup = this.replaceCompressorService.getFormFromObj(modification.replaceCompressor);
       isValid = form.valid;
       if (isValid) {
-        compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-          if (isValid) {
-            let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == dayType.dayTypeId });
-            isValid = modificationProfileSummary.replaceCompressorProfileValidation.isValid;
-          }
-        });
+        if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
+          let trimSelections: Array<{ dayTypeId: string, compressorId: string }> = modification.replaceCompressor.trimSelections;
+          trimSelections.forEach(selection => {
+            if (isValid) {
+              isValid = selection.compressorId != undefined && selection.compressorId != null && selection.compressorId != '';
+            }
+          });
+        }
+        if (isValid) {
+          compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
+            if (isValid) {
+              let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == dayType.dayTypeId });
+              isValid = modificationProfileSummary.replaceCompressorProfileValidation.isValid;
+            }
+          });
+        }
       }
     }
     return isValid;

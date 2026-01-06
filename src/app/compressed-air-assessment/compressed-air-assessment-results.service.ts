@@ -125,6 +125,7 @@ export class CompressedAirAssessmentResultsService {
   }
 
   setProfileSummariesForPrinting(compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults): Array<ProfilesForPrint> {
+    //TODO: Update with trimSelections and replacement compressors
     let profliesForPrint: Array<ProfilesForPrint> = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.map(dayTypeProfileSummary => {
       return {
         dayType: dayTypeProfileSummary.dayType,

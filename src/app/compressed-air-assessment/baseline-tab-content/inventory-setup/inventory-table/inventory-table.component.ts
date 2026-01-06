@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../../shared/confirm-delete-modal/confirmDeleteData';
-import { CompressedAirAssessment, CompressorInventoryItem, ProfileSummary } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressorInventoryItem, Modification, ProfileSummary } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { InventoryService } from '../inventory/inventory.service';
@@ -95,12 +95,16 @@ export class InventoryTableComponent implements OnInit {
     if (!this.isReplacementInventory) {
       let itemIndex: number = compressedAirAssessment.compressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId });
       compressedAirAssessment.compressorInventoryItems.splice(itemIndex, 1);
-
       compressedAirAssessment.modifications.forEach(modification => {
         modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(data => { return data.compressorId != this.deleteSelectedId });
         modification.adjustCascadingSetPoints.setPointData = modification.adjustCascadingSetPoints.setPointData.filter(data => { return data.compressorId != this.deleteSelectedId });
         modification.useAutomaticSequencer.profileSummary = modification.useAutomaticSequencer.profileSummary.filter(summary => { return summary.compressorId != this.deleteSelectedId })
         modification.replaceCompressor.currentCompressorMapping = modification.replaceCompressor.currentCompressorMapping.filter(mapping => { return mapping.originalCompressorId != this.deleteSelectedId });
+        modification.replaceCompressor.trimSelections.forEach(selection => {
+          if (selection.compressorId == this.deleteSelectedId) {
+            selection.compressorId = undefined;
+          }
+        });
       });
 
       let numberOfHourIntervals: number = compressedAirAssessment.systemProfile.systemProfileSetup.numberOfHours / compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
@@ -125,16 +129,28 @@ export class InventoryTableComponent implements OnInit {
           }
         })
       }
+      this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
+      this.inventoryService.setSelectedCompressor(compressedAirAssessment.compressorInventoryItems[0]);
     } else {
       let itemIndex: number = compressedAirAssessment.replacementCompressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId });
       compressedAirAssessment.replacementCompressorInventoryItems.splice(itemIndex, 1);
+      let selectedModification: Modification = this.compressedAirAssessmentService.selectedModification.getValue();
       //TODO: update modificaitons
       compressedAirAssessment.modifications.forEach(modification => {
         modification.replaceCompressor.replacementCompressorMapping = modification.replaceCompressor.replacementCompressorMapping.filter(mapping => { return mapping.replacementCompressorId != this.deleteSelectedId });
+        modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(data => { return data.compressorId != this.deleteSelectedId });
+        modification.replaceCompressor.trimSelections.forEach(selection => {
+          if (selection.compressorId == this.deleteSelectedId) {
+            selection.compressorId = undefined;
+          }
+        });
+        if(modification.modificationId == selectedModification.modificationId){
+          this.compressedAirAssessmentService.updateModification(modification);
+        }
       });
+      this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
+      this.inventoryService.setSelectedCompressor(compressedAirAssessment.replacementCompressorInventoryItems[0]);
     }
-    this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
-    this.inventoryService.setSelectedCompressor(compressedAirAssessment.compressorInventoryItems[0]);
   }
 
   openConfirmDeleteModal(item: CompressorInventoryItem) {
