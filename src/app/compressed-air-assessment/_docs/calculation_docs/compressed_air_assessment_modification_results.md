@@ -1,408 +1,334 @@
-# CompressedAirAssessmentModificationResults
+# Energy Efficiency Measure Evaluation Algorithm
 
 ## Overview
 
-The `CompressedAirAssessmentModificationResults` class evaluates the impact of energy efficiency measures (EEMs) on a compressed air system. It applies one or more modifications to the baseline system and calculates the resulting energy, cost, and emissions savings.
+The energy efficiency measure (EEM) evaluation algorithm calculates the energy, cost, and emissions impact of proposed system improvements. It applies modifications sequentially to quantify cumulative savings potential.
 
-**Source File:** `modifications/CompressedAirAssessmentModificationResults.ts`
+## Algorithm Purpose
 
-## Purpose
+The EEM evaluation algorithm:
+1. Applies individual or combined efficiency measures to baseline system
+2. Calculates energy and cost savings for each measure
+3. Aggregates results across operational day types
+4. Compares modified system performance to baseline
+5. Determines implementation costs and payback periods
 
-This class:
-1. Applies energy efficiency measures to the baseline system
-2. Calculates savings for each modification
-3. Aggregates results across all day types
-4. Provides comprehensive comparison between baseline and modified system performance
-5. Calculates implementation costs and payback periods
+## Algorithm Inputs
 
-## Class Properties
+### Baseline System Data
+- Baseline energy consumption by day type
+- Baseline costs (energy and demand charges)
+- Baseline operational profiles
+- Baseline CO2 emissions
 
-### Modification Summaries
+### Energy Efficiency Measure Specifications
 
-#### modifiedDayTypeProfileSummaries
-- **Type:** `Array<CompressedAirModifiedDayTypeProfileSummary>`
-- **Description:** Detailed modification results for each day type, including all EEM calculations and adjusted profiles
+For each enabled measure:
+- Measure type (leak reduction, pressure reduction, etc.)
+- Measure-specific parameters (reduction amounts, setpoints, etc.)
+- Implementation cost estimate
 
-### Baseline Totals
+### System Configuration
+- Compressor inventory and performance characteristics
+- Control system capabilities
+- System pressure requirements
+- Air storage capacity
 
-| Property | Type | Description |
-|----------|------|-------------|
-| totalBaselineCost | number | Total baseline annual energy cost |
-| totalBaselinePower | number | Total baseline annual energy consumption |
-| totalBaselineAnnualOperatingCost | number | Total baseline cost including demand charges |
-| totalBaselineAnnualEmissionOutput | number | Total baseline annual CO2 emissions |
-| baselineDemandCost | number | Baseline annual demand charges |
+## Calculation Methodology
 
-### Modified System Totals
+### Sequential Application Process
 
-| Property | Type | Description |
-|----------|------|-------------|
-| totalModificationCost | number | Total modified annual energy cost |
-| totalModificationPower | number | Total modified annual energy consumption |
-| totalModificationAnnualOperatingCost | number | Total modified cost including demand charges |
-| totalModificationAnnualEmissionOutput | number | Total modified annual CO2 emissions |
+Energy efficiency measures are applied in sequence, with each measure using the previous measure's results as its baseline:
 
-### Savings
+```
+Step 1: Initialize
+├── Use baseline system characterization
+├── Or calculate baseline if not provided
 
-| Property | Type | Description |
-|----------|------|-------------|
-| totalCostSavings | number | Annual energy cost savings |
-| totalPowerSavings | number | Annual energy savings |
-| totalAnnualOperatingCostSavings | number | Total annual operating cost savings (including demand) |
-| totalAnnualEmissionOutputSavings | number | Annual CO2 emission reductions |
+Step 2: For Each Day Type
+├── Apply enabled measures in configured sequence
+├── Calculate energy consumption after each measure
+├── Track incremental savings from each measure
 
-### Other Properties
-
-- **modification**: `Modification` - The modification configuration including all EEM settings
-- **baselineDemandCost**: `number` - Baseline demand cost for comparison
-
-## Constructor
-
-```typescript
-constructor(
-  compressedAirAssessment: CompressedAirAssessment,
-  modification: Modification,
-  settings: Settings,
-  _compressedAirCalculationService: CompressedAirCalculationService,
-  _assessmentCo2SavingsService: AssessmentCo2SavingsService,
-  compressedAirAssessmentBaselineResults?: CompressedAirAssessmentBaselineResults
-)
+Step 3: Aggregate Results
+├── Sum energy consumption across day types
+├── Calculate total savings
+├── Determine modified peak demand
+└── Calculate payback periods
 ```
 
-**Parameters:**
-- `compressedAirAssessment` - Complete system data
-- `modification` - Configuration of EEMs to apply
-- `settings` - Application settings
-- `_compressedAirCalculationService` - Calculation service
-- `_assessmentCo2SavingsService` - Emissions calculation service
-- `compressedAirAssessmentBaselineResults` (optional) - Pre-calculated baseline; if not provided, it will be calculated
+### Savings Calculation Algorithm
 
-**Process Flow:**
-1. Calculate or use provided baseline results
-2. Create modified day type summaries by applying EEMs to each day type
-3. Aggregate savings across all day types
-4. Calculate total system savings
+For each efficiency measure:
 
-## Key Methods
+**Energy Savings:**
+```
+Measure Energy Savings = Baseline Energy - Modified Energy
+Annual Energy Cost Savings = Energy Savings × Electricity Rate
+```
 
-### setModifiedDayTypeProfileSummaries()
+**Demand Savings:**
+```
+Modified Peak Demand = max(Modified Power across all Day Types)
+Demand Cost Savings = (Baseline Peak - Modified Peak) × 12 × Demand Rate
+```
 
-Creates a `CompressedAirModifiedDayTypeProfileSummary` for each day type by applying all enabled EEMs.
+**Total Savings:**
+```
+Total Annual Operating Cost Savings = Energy Cost Savings + Demand Cost Savings
+```
 
-**Process:**
-- Iterates through each day type
-- Applies modifications in the configured order
-- Calculates cumulative impact of all EEMs
-- Stores results for each day type
+**Payback Period:**
+```
+Simple Payback = Implementation Cost / Annual Operating Cost Savings
+```
 
-### setTotals()
+### Cumulative Savings Tracking
 
-Aggregates savings across all day types and calculates system-wide totals.
+Measures build upon each other:
+```
+Original Baseline (100% energy)
+   ↓ Apply Measure 1 (e.g., leak reduction)
+Adjusted State 1 (95% energy) → Measure 1 savings = 5%
+   ↓ Apply Measure 2 (e.g., pressure reduction)
+Adjusted State 2 (90% energy) → Measure 2 savings = 5% of Adjusted State 1
+   ↓ Apply Measure 3 (e.g., sequencer)
+Final Modified System (85% energy) → Measure 3 savings = 5% of Adjusted State 2
 
-**Calculations:**
+Total Cumulative Savings = 15% (not simply 5% + 5% + 5%)
+```
 
-1. **Baseline Totals** (from baseline results):
-   - Energy cost
-   - Energy consumption
-   - Annual operating cost
-   - Annual emissions
+This sequential approach captures interaction effects between measures.
 
-2. **Modified System Totals** (sum across all modified day types):
-   - Modified energy cost
-   - Modified energy consumption
-   - Modified emissions
+## Algorithm Outputs
 
-3. **Savings** (baseline - modified):
-   - Cost savings
-   - Energy savings
-   - Operating cost savings (including demand charge impacts)
-   - Emission reductions
+### System-Level Results
 
-4. **Peak Demand Adjustments**:
-   - Identifies new peak demand across modified day types
-   - Calculates modified demand charges
-   - Computes demand cost savings
+| Metric | Description |
+|--------|-------------|
+| Total Baseline Energy | Annual kWh before modifications |
+| Total Modified Energy | Annual kWh after all measures applied |
+| Total Energy Savings | Baseline - Modified energy |
+| Total Energy Cost Savings | Energy savings × electricity rate |
+| Baseline Peak Demand | Maximum kW in baseline operation |
+| Modified Peak Demand | Maximum kW after modifications |
+| Demand Cost Savings | Peak demand reduction × 12 × rate |
+| Total Operating Cost Savings | Energy + demand cost savings |
+| Total CO2 Reduction | Emissions savings from energy reduction |
 
-### getModificationResults()
+### Measure-Specific Results
 
-Returns a structured summary of modification results.
+For each efficiency measure applied:
+| Metric | Description |
+|--------|-------------|
+| Measure Baseline | Energy state before this measure |
+| Measure Modified | Energy state after this measure |
+| Incremental Savings | Savings from this specific measure |
+| Implementation Cost | Capital cost for this measure |
+| Simple Payback | Cost / annual savings |
 
-**Returns:** `CompressedAirAssessmentResult`
+## Available Energy Efficiency Measures
 
-**Includes:**
-- Day-type specific modification results
-- Total baseline and modified system metrics
-- Total savings
-- Modification configuration
+The algorithm supports the following system improvement measures:
 
-## Energy Efficiency Measures (EEMs)
+### 1. Air Leak Reduction
+**Objective:** Quantify savings from repairing compressed air leaks
 
-The modification system supports multiple types of energy efficiency measures, applied in a configurable order:
+**Algorithm:**
+```
+Adjusted Air Flow = Baseline Air Flow - (Leak Rate × Reduction %)
+Modified Energy = Calculate power for adjusted flow
+Savings = Baseline Energy - Modified Energy
+```
 
-### 1. Reduce Air Leaks
+**Typical Savings:** 10-25% of baseline energy
 
-**Purpose:** Models the impact of fixing compressed air leaks
+### 2. System Pressure Reduction
+**Objective:** Calculate energy savings from lower operating pressure
 
-**Configuration:**
-- `leakFlow` - Current leak rate (CFM or m³/min)
-- `leakReduction` - Percentage of leaks to be fixed (0-100%)
-- `implementationCost` - Cost to implement leak repairs
+**Algorithm:**
+```
+For each compressor:
+  New Pressure = Current Pressure - Reduction Amount
+  Power Reduction ≈ 1% per 2 psi reduction (rule of thumb)
+  Modified Power = Baseline Power × (1 - Reduction Factor)
+```
 
-**Impact:**
-- Reduces system air demand
-- Lowers compressor power consumption
-- May allow compressors to run in more efficient modes
+**Typical Savings:** 5-10% for 10-20 psi reduction
 
-**Source:** `energyEfficiencyMeasures/ReduceAirLeaksResults.ts`
+### 3. End-Use Efficiency Improvements
+**Objective:** Model impact of more efficient air-consuming equipment
 
-### 2. Reduce System Air Pressure
+**Algorithm:**
+```
+For each time interval:
+  Adjusted Demand = Baseline Demand - Equipment Improvement
+  Modified Energy = Recalculate with adjusted demand profile
+```
 
-**Purpose:** Evaluates lowering the system discharge pressure
+**Typical Savings:** Variable, 5-30% depending on improvements
 
-**Configuration:**
-- `averageSystemPressureReduction` - Pressure reduction amount (psi or bar)
-- `implementationCost` - Cost to implement changes
+### 4. Automatic Sequencer Control
+**Objective:** Optimize compressor loading through coordinated control
 
-**Impact:**
-- Reduces compressor power consumption (proportional to pressure reduction)
-- Adjusts performance points for all compressors
-- Affects both full load and max flow pressure settings
+**Algorithm:**
+```
+Establish pressure control band:
+  Base Load Target = System Pressure - Variance
+  Trim Load Target = System Pressure + Variance
 
-**Source:** `energyEfficiencyMeasures/ReduceSystemAirPressureResults.ts`
+Load sequence optimization:
+  1. Assign most efficient unit as base load
+  2. Stage additional units in efficiency order
+  3. Designate most flexible unit as trim
+  4. Minimize part-load and blow-off operation
+```
 
-### 3. Improve End-Use Efficiency
+**Typical Savings:** 10-25% from reduced inefficient operation
 
-**Purpose:** Models improvements to air-consuming equipment
+### 5. Cascading Setpoint Optimization
+**Objective:** Establish optimal pressure staging for multiple compressors
 
-**Configuration:**
-- `reductionType` - Type of reduction (flow or run time)
-- `reductionData` - Array of reduction amounts by time interval
-- `implementationCost` - Cost to implement improvements
+**Algorithm:**
+```
+Setpoint Assignment:
+  Compressor 1 (most efficient): Pressure P
+  Compressor 2 (medium efficient): Pressure P + ΔP
+  Compressor 3 (least efficient): Pressure P + 2ΔP
 
-**Impact:**
-- Reduces air demand at specific times or across the profile
-- Can shift compressor loading patterns
-- May allow compressors to operate more efficiently
+Where ΔP = 5-10 psi typical staging increment
+```
 
-**Source:** `energyEfficiencyMeasures/ImproveEndUseEfficiencyResults.ts`
+**Typical Savings:** 5-15% for load/unload compressors
 
-### 4. Use Automatic Sequencer
+### 6. Compressor Replacement
+**Objective:** Calculate savings from replacing with more efficient unit
 
-**Purpose:** Implements coordinated compressor control
+**Algorithm:**
+```
+Remove old compressor performance from system
+Add new compressor performance to system
+Reallocate loads based on updated efficiencies
+Modified Energy = Recalculate with new configuration
+```
 
-**Configuration:**
-- `targetPressure` - Desired system pressure setpoint
-- `variance` - Pressure control band
-- `profileSummary` - Target air flow profile
-- `implementationCost` - Cost for sequencer and installation
+**Typical Savings:** 10-30% when replacing with modern VFD unit
 
-**Impact:**
-- Optimizes compressor loading order
-- Minimizes part-load operation
-- Reduces blow-off and unloaded running time
-- Improves pressure control
+### 7. Receiver Volume Addition
+**Objective:** Reduce cycling losses through increased storage
 
-**Source:** `energyEfficiencyMeasures/UseAutomaticSequencerResults.ts`
+**Algorithm:**
+```
+Cycling Frequency ∝ 1 / Storage Volume
+New Cycling Rate = Old Rate × (Old Volume + New Volume) / Old Volume
+Cycling Losses ≈ 1-3% per cycle
+Savings = Reduced cycling frequency × cycle loss factor
+```
 
-### 5. Adjust Cascading Set Points
-
-**Purpose:** Optimizes pressure set points for multiple compressors
-
-**Configuration:**
-- `setPointData` - Array of compressor-specific pressure setpoints
-- `implementationCost` - Cost to adjust controls
-
-**Impact:**
-- Establishes optimal load/unload sequence
-- Minimizes system pressure while meeting demand
-- Reduces compressor cycling
-- Improves overall efficiency
-
-**Source:** `energyEfficiencyMeasures/AdjustCascadingSetPointsSavingsResults.ts`
-
-### 6. Replace Compressor
-
-**Purpose:** Models replacing an existing compressor with a more efficient unit
-
-**Configuration:**
-- `compressorId` - ID of compressor to replace
-- `replaceWith` - New compressor specifications
-- `implementationCost` - Cost of new compressor and installation
-
-**Impact:**
-- Changes compressor performance characteristics
-- Typically improves specific power (kW per CFM)
-- May enable different control strategies
-- Updates system capacity
-
-**Source:** `energyEfficiencyMeasures/ReplaceCompressorResults.ts`
-
-### 7. Add Receiver Volume
-
-**Purpose:** Evaluates adding compressed air storage capacity
-
-**Configuration:**
-- `additionalVolume` - Storage volume to add (gallons or liters)
-- `implementationCost` - Cost of receiver and installation
-
-**Impact:**
-- Reduces compressor cycling
-- Improves pressure stability
-- Allows better handling of transient demands
-- May reduce peak power demand
-
-**Source:** `energyEfficiencyMeasures/FlowReallocationResults.ts`
+**Typical Savings:** 2-8% primarily from reduced cycling
 
 ### 8. Flow Reallocation
+**Objective:** Optimize load distribution among compressors
 
-**Purpose:** Optimizes distribution of air flow among compressors
-
-**Configuration:**
-- Automatically calculated based on compressor characteristics
-- `implementationCost` - Cost if control changes needed
-
-**Impact:**
-- Assigns load to most efficient compressors first
-- Minimizes part-load operation
-- Balances compressor utilization
-- Reduces total system power consumption
-
-**Source:** `energyEfficiencyMeasures/FlowReallocationResults.ts`
-
-## Modification Order
-
-EEMs are applied sequentially, with each building on the results of the previous one. The order matters because:
-
-1. Earlier modifications affect the baseline for later ones
-2. Savings are calculated incrementally
-3. Interactive effects are captured accurately
-
-**Typical Order:**
-1. Flow Reallocation (initial optimization)
-2. Reduce Air Leaks
-3. Reduce System Air Pressure
-4. Improve End-Use Efficiency
-5. Use Automatic Sequencer
-6. Adjust Cascading Set Points
-7. Replace Compressor
-8. Add Receiver Volume
-
-The order can be configured via the modification's `order` properties for each EEM.
-
-## Day Type Breakdown
-
-Like baseline calculations, modifications are evaluated separately for each day type:
-
-- Each day type may have different EEM impacts
-- Day-specific load profiles affect savings
-- Results are aggregated for annual totals
-
-This approach ensures accurate representation of varying operational patterns.
-
-## Savings Calculation
-
-For each EEM and for the overall modification:
-
-```typescript
-interface EemSavingsResults {
-  baselineResults: SavingsItem;     // Before this EEM
-  adjustedResults: SavingsItem;     // After this EEM
-  savings: SavingsItem;              // Difference
-  implementationCost: number;        // Cost to implement
-  paybackPeriod: number;             // Years to recover cost
-  dayTypeId: string;                 // Associated day type
-}
-
-interface SavingsItem {
-  cost: number;                      // Annual energy cost
-  power: number;                     // Annual energy consumption
-  annualEmissionOutput?: number;     // Annual CO2 emissions
-  annualEmissionOutputSavings?: number;
-  percentSavings?: number;           // Percentage reduction
-}
+**Algorithm:**
+```
+For each time interval:
+  1. Sort compressors by specific power (efficiency)
+  2. Load most efficient unit first to capacity
+  3. Load next efficient unit for remaining demand
+  4. Continue until demand met
+  5. Select most efficient operating mode for each unit
 ```
 
-**Payback Calculation:**
+**Typical Savings:** 5-15% of baseline energy
+
+## Measure Application Sequence
+
+Recommended application order for capturing interaction effects:
+
+1. **Flow Reallocation** - Initial optimization baseline
+2. **Air Leak Reduction** - Reduces total demand
+3. **System Pressure Reduction** - Lowers power per unit flow
+4. **End-Use Efficiency** - Further demand reduction
+5. **Automatic Sequencer** - Optimizes control strategy
+6. **Cascading Setpoints** - Refines pressure staging
+7. **Compressor Replacement** - Technology upgrade
+8. **Receiver Addition** - Reduces cycling losses
+
+The sequence matters because:
+- Earlier measures change the baseline for later measures
+- Demand reductions amplify control optimization benefits
+- Interactive effects are automatically captured
+
+## Demand Charge Impact
+
+Peak electrical demand significantly affects total operating costs:
+
+**Baseline Peak Determination:**
 ```
-paybackPeriod = implementationCost / annualCostSavings
-```
-
-## Peak Demand Handling
-
-Peak demand calculations are critical for accurate cost projections:
-
-1. **Baseline Peak Demand** - Maximum demand across all baseline day types
-2. **Modified Peak Demand** - Maximum demand across all modified day types
-3. **Demand Cost Impact** - Difference in monthly demand charges
-
-```typescript
-peakDemand = max(allDayTypes.peakDemand)
-demandCost = peakDemand × 12 months × demandRate
-```
-
-Some modifications (like sequencers or pressure reduction) can reduce peak demand, providing additional savings beyond energy cost.
-
-## Validation
-
-The system includes validation for modified profiles:
-
-- **ResultingSystemProfileValidation** - Ensures modified profiles are achievable
-- Checks for:
-  - Pressure requirements met
-  - Capacity constraints satisfied
-  - Compressor operating limits respected
-  - Storage capacity adequate for demand fluctuations
-
-Invalid configurations are flagged for user review.
-
-## Usage Example
-
-```typescript
-// Create modification configuration
-const modification: Modification = {
-  name: "Efficiency Improvement Package",
-  reduceAirLeaks: {
-    leakFlow: 200,           // CFM
-    leakReduction: 50,        // 50% reduction
-    implementationCost: 15000
-  },
-  reduceSystemAirPressure: {
-    averageSystemPressureReduction: 10,  // 10 psi
-    implementationCost: 5000
-  },
-  // ... other EEMs
-};
-
-// Calculate modification results
-const modResults = new CompressedAirAssessmentModificationResults(
-  assessment,
-  modification,
-  settings,
-  calculationService,
-  co2Service
-);
-
-// Access results
-console.log(`Annual Savings: $${modResults.totalCostSavings}`);
-console.log(`Energy Reduction: ${modResults.totalPowerSavings} kWh`);
-console.log(`Payback: ${modification.totalImplementationCost / modResults.totalCostSavings} years`);
+Baseline Peak Demand = max(Peak Power across all Day Types)
 ```
 
-## Related Classes
+**Modified Peak Determination:**
+```
+Modified Peak Demand = max(Peak Power after Measures across all Day Types)
+```
 
-- **CompressedAirAssessmentBaselineResults** - Baseline calculations
-- **CompressedAirModifiedDayTypeProfileSummary** - Day-type specific modification results
-- **CompressedAirEemSavingsResult** - Individual EEM savings tracking
-- **FlowReallocationResults** - Flow optimization calculations
+**Demand Cost Calculation:**
+```
+Annual Demand Cost = Peak Demand × 12 months × Demand Rate ($/kW)
+Demand Cost Savings = (Baseline Peak - Modified Peak) × 12 × Rate
+```
 
-## Notes
+Measures affecting peak demand include:
+- Automatic sequencer (optimized staging reduces peaks)
+- Pressure reduction (lower power requirements)
+- Air leak reduction (reduced simultaneous compressor operation)
+- Compressor replacement (more efficient units, lower power)
 
-- Modifications are applied to a copy of the baseline; the original baseline is preserved
-- All EEMs can be enabled/disabled independently
-- Implementation costs are user-configurable
-- Payback periods are calculated using simple payback (no discounting)
-- Emission savings use the same factors as baseline calculations
-- Results are always calculated in the system's configured units
+## Validation Criteria
+
+Modified system configurations must satisfy:
+
+**Capacity Validation:**
+- Total available capacity ≥ maximum demand at all times
+- Individual compressor limits not exceeded
+- Turndown limits respected for VFD units
+
+**Pressure Validation:**
+- System can maintain minimum required pressure
+- Pressure drops in distribution accounted for
+- Compressor discharge pressure adequate
+
+**Control Validation:**
+- Sequencer configuration feasible with available instrumentation
+- Cascading setpoints provide adequate staging separation
+- Storage volume adequate for demand fluctuations
+
+## Algorithm Applications
+
+The EEM evaluation algorithm provides:
+
+1. **Opportunity Quantification** - Energy and cost savings for each measure
+2. **Implementation Prioritization** - Payback periods guide investment decisions
+3. **Package Optimization** - Combined measures show cumulative benefits
+4. **Financial Analysis** - Simple payback and annual savings
+
+## Related Algorithms
+
+- **Baseline System Characterization** - Provides comparison baseline
+- **Day Type Modification Analysis** - Applies measures to individual operational patterns
+- **Individual EEM Algorithms** - Detailed calculation methods for each measure type
+- **Flow Reallocation Algorithm** - Load optimization calculations
+
+## Algorithm Considerations
+
+- Sequential application captures measure interactions
+- Simple payback calculation (no discounting or inflation)
+- Both Imperial and Metric unit systems supported
+- Emission reductions use site-specific factors
+- Validation prevents infeasible configurations
+- Day-type granularity maintains accuracy across operational patterns
 
 ---
 
