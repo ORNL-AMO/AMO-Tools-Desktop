@@ -1,482 +1,274 @@
-# CompressorInventoryItemClass
+# Compressor Performance Modeling Algorithm
 
 ## Overview
 
-The `CompressorInventoryItemClass` models individual compressor performance characteristics and behavior. It calculates performance at various operating points based on compressor type, control type, and operating conditions. This class is fundamental to accurate system simulation and modification analysis.
+The compressor performance modeling algorithm predicts individual compressor power consumption and air delivery at various operating points. Calculations adapt to compressor type (rotary screw, reciprocating, centrifugal), control strategy (load/unload, modulation, VFD), and system modifications.
 
-**Source File:** `CompressorInventoryItemClass.ts`
+## Algorithm Purpose
 
-## Purpose
+The compressor model:
+1. Calculates power consumption at defined operating points
+2. Determines air flow and pressure characteristics
+3. Adapts to different compressor types and control strategies
+4. Adjusts for system modifications (pressure changes, sequencer control)
+5. Computes efficiency metrics (specific power, isentropic efficiency)
 
-This class:
-1. Defines compressor performance at multiple operating points
-2. Adjusts calculations based on compressor and control types
-3. Handles modification scenarios (pressure changes, sequencer adjustments)
-4. Determines which performance points are applicable for a given configuration
-5. Calculates derived metrics like specific power and isentropic efficiency
+## Required Input Parameters
 
-## Class Properties
+### Compressor Specifications
+- Rated capacity (CFM or m³/min)
+- Rated discharge pressure (psi or bar)
+- Rated power consumption (kW or hp)
+- Compressor type (rotary screw, reciprocating, centrifugal)
+- Staging configuration (single stage, two stage, multiple stage)
+- Lubrication method (oil-injected, oil-free)
 
-### Basic Information
+### Control System Configuration
+- Control type (load/unload, modulation, VFD, etc.)
+- Control band (variance in psi or bar)
+- Unload power consumption (% of full load)
+- Modulation type (inlet, variable displacement, guide vanes)
 
-| Property | Type | Description |
-|----------|------|-------------|
-| itemId | string | Unique identifier for the compressor |
-| name | string | User-assigned compressor name |
-| description | string | Optional description |
-| modifiedDate | Date | Last modification timestamp |
-| isReplacementCompressor | boolean | Indicates if this is a replacement unit |
+### Installation Details
+- Atmospheric pressure at site
+- Design pressure settings
+- Storage volume
+- System target pressure
 
-### Technical Specifications
+### Centrifugal-Specific Data (when applicable)
+- Surge line limits (pressure vs. flow)
+- Stonewall line limits (pressure vs. flow)
+- Performance curve coefficients
 
-| Property | Type | Description |
-|----------|------|-------------|
-| nameplateData | CompressorNameplateData | Rated capacity, pressure, power, and compressor type |
-| compressorControls | CompressorControls | Control type and configuration |
-| designDetails | DesignDetails | Installation details and design parameters |
-| centrifugalSpecifics | CentrifugalSpecifics | Additional data for centrifugal compressors |
+## Performance Operating Points
 
-### Performance Points
+The algorithm evaluates compressor operation at key operating conditions. The specific points used depend on compressor and control type.
 
-| Property | Type | Description |
-|----------|------|-------------|
-| performancePoints | CompressorPerformancePointsClass | Complete set of performance points |
+### 1. Full Load Point
+**Applicability:** All compressors
 
-### Performance Point Visibility Flags
+**Description:** Rated operation at design capacity and pressure
 
-| Property | Type | Description |
-|----------|------|-------------|
-| showMaxFullFlow | boolean | Whether max full flow point applies |
-| showMidTurndown | boolean | Whether mid turndown point applies (VFD only) |
-| showTurndown | boolean | Whether turndown point applies (VFD only) |
-| showUnloadPoint | boolean | Whether unload point applies |
-| showNoLoadPoint | boolean | Whether no load point applies |
-| showBlowoffPoint | boolean | Whether blowoff point applies (centrifugal only) |
+**Calculation Inputs:**
+- Nameplate rated capacity
+- Nameplate rated pressure
+- Nameplate rated power
 
-## Constructor
-
-```typescript
-constructor(inventoryItem: CompressorInventoryItem)
+**Power Calculation (Rotary Screw/Reciprocating):**
+```
+Pressure Ratio = (Discharge Pressure + Atmospheric) / Atmospheric
+Rated Pressure Ratio = (Rated Pressure + Atmospheric) / Atmospheric
+Power = Rated Power × (Pressure Ratio / Rated Pressure Ratio)^0.286
 ```
 
-**Process:**
-1. Copies all properties from the inventory item
-2. Initializes `CompressorPerformancePointsClass` with performance points
-3. Calls visibility methods to determine which performance points apply
+**Air Flow Calculation (Centrifugal):**
+```
+Use polynomial regression with 3 points:
+- (Max Surge Pressure, Max Surge Flow)
+- (Rated Pressure, Rated Capacity)
+- (Min Stonewall Pressure, Min Stonewall Capacity)
 
-## Performance Points
+Interpolate flow at current discharge pressure
+```
 
-Performance points define compressor operation at specific conditions. The applicable points depend on compressor type and control type.
+### 2. Maximum Full Flow Point
+**Applicability:** Most configurations except VFD and centrifugal with blowoff
 
-### Full Load Performance Point
+**Description:** Maximum capacity at upper control band pressure
 
-**Applies to:** All compressors (always visible)
+**Calculation:**
+- Pressure = Control target + variance
+- Air flow and power calculated using same methods as full load
 
-**Description:** Operating point at rated capacity and design pressure
+### 3. Mid Turndown Point (VFD Only)
+**Applicability:** VFD-controlled compressors only
 
-**Properties:**
-- `dischargePressure` - Outlet pressure (psi or bar)
-- `airflow` - Air delivery rate (CFM or m³/min)
-- `power` - Power consumption (kW or hp)
-- `isDefaultPressure`, `isDefaultAirFlow`, `isDefaultPower` - Flags indicating if values are calculated or user-specified
+**Description:** Intermediate capacity between full load and minimum
 
-**Calculation:** Based on nameplate data (rated capacity, pressure, and power)
+**Calculation:**
+```
+Air Flow = Full Load Capacity × Turndown Ratio (typically 0.70-0.75)
+Power = Full Load Power × (Turndown Ratio)³ × Motor Efficiency Factor
+```
 
-### Max Full Flow Performance Point
+### 4. Minimum Turndown Point (VFD Only)
+**Applicability:** VFD-controlled compressors only
 
-**Applies to:** Most configurations except:
-- Centrifugal compressors with blowoff controls (control types 7, 9)
-- Rotary screw with inlet modulation without unloading (control type 1)
-- VFD control (control type 11)
+**Description:** Minimum stable operating capacity
 
-**Description:** Maximum capacity at a specified pressure, typically at or near full load pressure
+**Calculation:**
+```
+Air Flow = Full Load Capacity × Minimum Turndown Ratio (typically 0.40-0.50)
+Power = Full Load Power × (Minimum Ratio)³ + Fixed Losses
+```
 
-**Properties:** Same as Full Load
+### 5. Unload Point
+**Applicability:** Modulation with unloading controls
 
-**Calculation:** 
-- For non-centrifugal: Typically same as or slightly above full load
-- For centrifugal: Maximum capacity before surge conditions
-- Pressure may be adjusted for modifications (sequencer, pressure reduction)
+**Description:** Transition to unloaded state (zero air production)
 
-### Mid Turndown Performance Point
+**Calculation:**
+```
+Air Flow = 0
+Pressure = Control target + variance
+Power = Full Load Power × Unload Factor (typically 0.25-0.40)
+```
 
-**Applies to:** VFD-controlled compressors (control type 11) only
+### 6. No Load Point
+**Applicability:** Most compressors except centrifugal with blowoff
 
-**Description:** Intermediate operating point between full load and minimum turndown
+**Description:** Running with zero air production
 
-**Properties:** Same as Full Load
+**Calculation:**
+```
+Air Flow = 0
+Pressure = System pressure
+Power = Full Load Power × No Load Factor (typically 0.20-0.30)
+```
 
-**Calculation:** Based on compressor curve, typically around 70-75% of full load capacity with proportionally reduced power
+### 7. Blowoff Point (Centrifugal Only)
+**Applicability:** Centrifugal with blowoff surge prevention
 
-### Turndown Performance Point
+**Description:** Operation with surge prevention valve active
 
-**Applies to:** VFD-controlled compressors (control type 11) only
+**Calculation:**
+```
+Pressure = At or below surge pressure
+Air Flow = From surge curve (portion vented)
+Power = 50-70% of full load power (compression work on vented air)
+```
 
-**Description:** Minimum stable operating point for VFD compressors
+## Operating Point Applicability Matrix
 
-**Properties:** Same as Full Load
+| Compressor Type | Control Type | Applicable Points |
+|----------------|--------------|-------------------|
+| Rotary Screw | Load/Unload | Full Load, Max Flow, No Load |
+| Rotary Screw | Modulation w/ Unload | Full Load, Max Flow, Unload, No Load |
+| Rotary Screw | VFD | Full Load, Mid Turndown, Turndown, No Load |
+| Reciprocating | Load/Unload | Full Load, Max Flow, No Load |
+| Reciprocating | Multi-Step Unload | Full Load, Max Flow, Unload, No Load |
+| Centrifugal | Modulation w/ Unload | Full Load, Max Flow, Unload |
+| Centrifugal | Modulation w/ Blowoff | Full Load, Blowoff |
 
-**Calculation:** Typically 40-50% of full load capacity, depends on compressor design
+## Modification Adjustments
 
-### Unload Point Performance Point
+### Sequencer Control Adjustment
+**Objective:** Coordinate multiple compressor operation
 
-**Applies to:**
-- Rotary screw with inlet modulation with unloading (control type 2)
-- Rotary screw with variable displacement with unloading (control type 3)
-- Centrifugal with inlet modulation with unloading (control types 8, 10)
-- Reciprocating with multi-step unloading (control type 5)
+**Algorithm:**
+```
+For base load compressor:
+  Full Load Pressure = Target Pressure - Variance
 
-**Description:** Operating point where compressor transitions from loaded to unloaded state
+For trim/backup compressors:
+  Unload/No Load/Blowoff Pressure = Target Pressure + Variance
 
-**Properties:** Same as Full Load
+Recalculate all performance points with new pressures
+```
 
-**Typical Values:**
-- Airflow: 0 CFM (no air delivery)
-- Pressure: Slightly higher than full load (upper control band)
-- Power: Reduced but non-zero (compressor still running)
+### System Pressure Reduction
+**Objective:** Lower overall operating pressure
 
-**Calculation:** Power based on unload power consumption percentage (typically 25-40% of full load power)
+**Algorithm:**
+```
+For all compressors:
+  New Full Load Pressure = Current Pressure - Reduction Amount
+  New Max Flow Pressure = Current Max Pressure - Reduction Amount
+  
+Recalculate power (proportional to pressure ratio)
+Power Savings ≈ 1% per 2 psi reduction (rule of thumb)
+```
 
-### No Load Performance Point
+### Cascading Setpoint Adjustment
+**Objective:** Stage compressors at different pressures
 
-**Applies to:** Most compressors, except:
-- Centrifugal with blowoff controls (control types 7, 9)
+**Algorithm:**
+```
+Assign specific setpoints to each compressor:
+  Most efficient unit: Pressure P
+  Medium efficient: Pressure P + ΔP
+  Least efficient: Pressure P + 2ΔP
+  
+Where ΔP = 5-10 psi typical staging increment
+```
 
-**Description:** Compressor running but not producing compressed air
+## Efficiency Metrics
 
-**Properties:** Same as Full Load
+### Specific Power
+**Definition:** Power per unit flow
 
-**Typical Values:**
-- Airflow: 0 CFM
-- Pressure: At or near full load pressure
-- Power: Reduced consumption (often similar to unload point)
+**Calculation:**
+```
+Specific Power = (Total Package Input Power / Full Load Capacity) × 100
+Units: kW per 100 CFM or kW per m³/min
 
-**Calculation:** Power typically 20-30% of full load for rotary screw, varies by type
+Lower values indicate better efficiency
+```
 
-### Blowoff Performance Point
+### Isentropic Efficiency
+**Definition:** Actual vs. ideal thermodynamic efficiency
 
-**Applies to:** Centrifugal compressors with blowoff controls (control types 7, 9) only
+**Calculation:**
+```
+Pressure Ratio = (Discharge Pressure + 14.5) / 14.5
+Ideal Work = 16.52 × (Pressure Ratio^0.2857 - 1)
+Isentropic Efficiency = (Ideal Work / Specific Power) × 100
 
-**Description:** Operating point with blowoff valve open to prevent surge
-
-**Properties:** Same as Full Load
-
-**Typical Values:**
-- Airflow: Reduced (some air vented through blowoff)
-- Pressure: At or below surge pressure
-- Power: Reduced but higher than unload
-
-**Calculation:** Based on centrifugal performance curve and blowoff valve capacity
-
-## Performance Point Visibility Logic
-
-The class automatically determines which performance points apply based on compressor and control type combinations.
-
-### setShowMaxFlowPerformancePoint()
-
-**Visibility Rules:**
-- **Hidden for:**
-  - Centrifugal (type 6) with blowoff controls (types 7, 9)
-  - Rotary screw (types 1, 2) with inlet modulation without unloading (type 1)
-  - VFD control (type 11)
-- **Shown for:** All other combinations
-
-### setShowMidTurndownPerformancePoint()
-
-**Visibility Rules:**
-- **Shown only for:** VFD control (type 11)
-- **Hidden for:** All other control types
-
-### setShowTurndownPerformancePoint()
-
-**Visibility Rules:**
-- **Shown only for:** VFD control (type 11)
-- **Hidden for:** All other control types
-
-### setShowUnloadPerformancePoint()
-
-**Visibility Rules:**
-- **Shown for:**
-  - Rotary screw (types 1, 2) with controls 2 or 3
-  - Centrifugal (type 6) with controls 8 or 10
-- **Hidden for:** All other combinations
-
-### setShowNoLoadPerformancePoint()
-
-**Visibility Rules:**
-- **Hidden only for:** Centrifugal (type 6) with blowoff controls (types 7, 9)
-- **Shown for:** All other combinations
-
-### setShowBlowoffPerformancePoint()
-
-**Visibility Rules:**
-- **Shown only for:** Centrifugal (type 6) with blowoff controls (types 7, 9)
-- **Hidden for:** All other combinations
+Higher values indicate better thermodynamic efficiency
+```
 
 ## Compressor Types
 
-Reference from `inventoryOptions.md`:
-
-| Value | Description |
-|-------|-------------|
+| Type | Value | Description |
+|------|-------|-------------|
 | 1 | Single stage lubricant-injected rotary screw |
 | 2 | Two stage lubricant-injected rotary screw |
 | 3 | Two stage lubricant-free rotary screw |
 | 4 | Single stage reciprocating |
 | 5 | Two stage reciprocating |
-| 6 | Multiple Stage Centrifugal |
+| 6 | Multiple stage centrifugal |
 
 ## Control Types
 
-Reference from `inventoryOptions.md`:
-
-| Value | Description |
-|-------|-------------|
-| 1 | Inlet modulation without unloading |
-| 2 | Inlet modulation with unloading |
-| 3 | Variable displacement with unloading |
-| 4 | Load/unload |
-| 5 | Multi-step unloading |
-| 6 | Start/Stop |
-| 7 | Inlet butterfly modulation with blowoff |
-| 8 | Inlet butterfly modulation with unloading |
-| 9 | Inlet guide vane modulation with blowoff |
-| 10 | Inlet guide vane modulation with unloading |
-| 11 | VFD |
-
-## Key Methods
-
-### adjustCompressorPerformancePointsWithSequencer()
-
-**Purpose:** Adjusts performance points when an automatic sequencer is used
-
-**Parameters:**
-- `targetPressure` - Sequencer target pressure
-- `variance` - Pressure control band (±)
-- `atmosphericPressure` - Local atmospheric pressure
-- `settings` - Application settings
-
-**Process:**
-1. Sets full load pressure to `targetPressure - variance`
-2. Adjusts upper control points (unload, no load, blowoff) to `targetPressure + variance`
-3. Flags modified values as non-default
-4. Recalculates performance points
-
-**Impact:**
-- Optimizes compressor staging
-- Minimizes pressure band operation
-- Improves control efficiency
-
-### reduceSystemPressure()
-
-**Purpose:** Models the effect of reducing system discharge pressure
-
-**Parameters:**
-- `reduceSystemAirPressure` - Configuration including pressure reduction amount
-- `atmosphericPressure` - Local atmospheric pressure
-- `settings` - Application settings
-
-**Process:**
-1. Reduces full load pressure by specified amount
-2. Adjusts max full flow pressure (except for certain control types)
-3. Sets flags to indicate non-default values
-4. Recalculates performance points
-
-**Impact:**
-- Reduces power consumption (lower pressure = less work)
-- Maintains proportional compressor relationships
-- Adjusts for compressor curve characteristics
-
-### adjustCascadingSetPoints()
-
-**Purpose:** Sets specific pressure setpoints for coordinated compressor control
-
-**Parameters:**
-- `adjustCascadingSetPoints` - Configuration with compressor-specific setpoints
-- `atmosphericPressure` - Local atmospheric pressure
-- `settings` - Application settings
-
-**Process:**
-1. Finds setpoint data for this compressor
-2. Sets full load and max flow pressures to specified values
-3. Marks pressures as user-defined (non-default)
-4. Recalculates performance points
-
-**Impact:**
-- Enables staged compressor operation
-- Optimizes pressure control strategy
-- Reduces simultaneous operation
-
-### updatePerformancePoints()
-
-**Purpose:** Recalculates all performance point values based on current settings
-
-**Parameters:**
-- `atmosphericPressure` - Local atmospheric pressure
-- `settings` - Application settings
-
-**Process:**
-1. Calls `performancePoints.updatePerformancePoints()`
-2. Applies compressor-specific calculations for each point
-3. Respects default flags (only recalculates default values)
-
-**Called by:** All adjustment methods after changing pressure setpoints
-
-### getRatedSpecificPower()
-
-**Purpose:** Calculates specific power consumption
-
-**Returns:** `number` - Power per unit flow (kW per 100 CFM or kW per m³/min)
-
-**Calculation:**
-```
-specificPower = (totalPackageInputPower / fullLoadRatedCapacity) × 100
-```
-
-**Use:** Compressor efficiency metric; lower is better
-
-### getRatedIsentropicEfficiency()
-
-**Purpose:** Calculates theoretical thermodynamic efficiency
-
-**Parameters:**
-- `settings` - For unit conversion
-
-**Returns:** `number` - Isentropic efficiency (%)
-
-**Calculation:**
-```
-efficiency = ((16.52 × (pressureRatio^0.2857 - 1)) / specificPower) × 100
-where pressureRatio = (dischargePressure + 14.5) / 14.5
-```
-
-**Use:** Indicates compressor efficiency relative to ideal process
-
-### toModel()
-
-**Purpose:** Converts class instance back to data model
-
-**Returns:** `CompressorInventoryItem`
-
-**Use:** Serialization for storage or transmission
-
-### findItem()
-
-**Purpose:** Checks if this compressor matches a given ID
-
-**Parameters:**
-- `itemId: string` - ID to compare
-
-**Returns:** `boolean` - True if match
-
-## Performance Point Calculation
-
-Each performance point has a calculation method that determines airflow, pressure, and power based on:
-
-### Input Factors:
-- Nameplate data (rated values)
-- Control type
-- Atmospheric pressure
-- Current discharge pressure setting
-- Design details (modulation, capacity ratios)
-- Centrifugal specifics (surge/stonewall limits for centrifugal)
-
-### Calculation Methods:
-
-#### For Rotary Screw and Reciprocating:
-- Linear/polynomial relationships between pressure and power
-- Capacity adjustments for modulation
-- Part-load efficiency curves
-
-#### For Centrifugal:
-- Polynomial performance curves (pressure vs. flow)
-- Surge and stonewall limit constraints
-- Pressure ratio calculations for power
-
-See individual performance point class files for detailed calculation formulas:
-- `FullLoadPerformancePoint.ts`
-- `MaxFullFlowPerformancePoint.ts`
-- `MidTurndownPerformancePoint.ts`
-- `TurndownPerformancePoint.ts`
-- `UnloadPointPerformancePoint.ts`
-- `NoLoadPerformancePoint.ts`
-- `BlowoffPerformancePoint.ts`
-
-## Usage in System Calculations
-
-The `CompressorInventoryItemClass` is used throughout system calculations:
-
-1. **Baseline Calculations** - Determine current compressor operation
-2. **Modification Scenarios** - Adjust for pressure changes, control changes
-3. **Flow Allocation** - Assign load to most efficient compressors
-4. **Capacity Analysis** - Verify system can meet demand
-5. **Energy Calculations** - Sum individual compressor power consumption
-
-## Example: Performance Points for Different Configurations
-
-### Example 1: Rotary Screw with Load/Unload Control
-
-**Compressor Type:** 1 (Single stage lubricant-injected rotary screw)
-**Control Type:** 4 (Load/unload)
-
-**Applicable Performance Points:**
-- ✓ Full Load
-- ✓ Max Full Flow
-- ✗ Mid Turndown
-- ✗ Turndown
-- ✗ Unload Point
-- ✓ No Load
-- ✗ Blowoff
-
-**Operation:** Compressor runs at full load or no load. Cycles between states based on pressure band.
-
-### Example 2: Centrifugal with Blowoff
-
-**Compressor Type:** 6 (Centrifugal)
-**Control Type:** 9 (Inlet guide vane modulation with blowoff)
-
-**Applicable Performance Points:**
-- ✓ Full Load
-- ✗ Max Full Flow (blowoff takes precedence)
-- ✗ Mid Turndown
-- ✗ Turndown
-- ✗ Unload Point
-- ✗ No Load (blowoff prevents true no-load)
-- ✓ Blowoff
-
-**Operation:** Modulates capacity via inlet guide vanes. Uses blowoff to prevent surge at low flows.
-
-### Example 3: Rotary Screw with VFD
-
-**Compressor Type:** 1 (Single stage lubricant-injected rotary screw)
-**Control Type:** 11 (VFD)
-
-**Applicable Performance Points:**
-- ✓ Full Load
-- ✗ Max Full Flow (VFD provides continuous control)
-- ✓ Mid Turndown
-- ✓ Turndown
-- ✗ Unload Point
-- ✓ No Load
-- ✗ Blowoff
-
-**Operation:** Continuously variable capacity from turndown to full load. Most efficient control method.
-
-## Related Classes
-
-- **CompressorPerformancePointsClass** - Container for all performance points
-- **Individual Performance Point Classes** - Calculation logic for each point type
-- **CompressedAirBaselineDayTypeProfileSummary** - Uses compressor class for baseline
-- **CompressedAirModifiedDayTypeProfileSummary** - Applies modifications to compressors
-
-## Notes
-
-- All calculations respect configured units (Imperial or Metric)
-- Performance points are recalculated when operating conditions change
-- Default flags allow user overrides while maintaining calculated values for non-overridden fields
-- Centrifugal compressors require additional specifics (surge/stonewall limits)
-- VFD compressors have the most flexible operating range
-- The visibility flags guide the UI on which fields to display
+| Type | Value | Description | Applicable Compressors |
+|------|-------|-------------|----------------------|
+| 1 | Inlet modulation without unloading | Rotary screw |
+| 2 | Inlet modulation with unloading | Rotary screw |
+| 3 | Variable displacement with unloading | Rotary screw |
+| 4 | Load/unload | All types |
+| 5 | Multi-step unloading | Reciprocating |
+| 6 | Start/Stop | All except centrifugal |
+| 7 | Inlet butterfly modulation with blowoff | Centrifugal |
+| 8 | Inlet butterfly modulation with unloading | Centrifugal |
+| 9 | Inlet guide vane modulation with blowoff | Centrifugal |
+| 10 | Inlet guide vane modulation with unloading | Centrifugal |
+| 11 | VFD | All except centrifugal |
+
+## Algorithm Applications
+
+The compressor performance model is used in:
+
+1. **Baseline Energy Calculation** - Determine power at each operating interval
+2. **Efficiency Measure Evaluation** - Model modifications to operating points
+3. **Flow Allocation Optimization** - Select most efficient compressors for load
+4. **Capacity Analysis** - Verify system can meet demand requirements
+5. **Control Strategy Evaluation** - Compare different control methods
+
+## Related Algorithms
+
+- **Baseline System Characterization** - Uses compressor models for system calculation
+- **Energy Efficiency Measure Evaluation** - Adjusts compressor performance for modifications
+- **Performance Points Algorithm** - Detailed calculation methods for each operating point
+- **Flow Reallocation** - Uses efficiency metrics to optimize loading
+
+## Algorithm Considerations
+
+- Calculations support both Imperial and Metric units
+- Atmospheric pressure corrections applied for site elevation
+- Performance points recalculated when system parameters change
+- User overrides allowed for specific values (preserves specified data)
+- Centrifugal compressors require surge/stonewall limit data
+- VFD compressors offer most flexible operating range with best part-load efficiency
 
 ---
 
