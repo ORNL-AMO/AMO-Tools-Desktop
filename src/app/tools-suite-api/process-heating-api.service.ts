@@ -587,8 +587,7 @@ export class ProcessHeatingApiService {
   }
 
   waterHeatingUsingSteam(input: WaterHeatingInput): WaterHeatingOutput {
-    let WaterHeatingInstance = new this.toolsSuiteApiService.ToolsSuiteModule.WaterHeatingUsingSteam();
-    let output = WaterHeatingInstance.calculate(
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.waterHeatingUsingSteam(
       input.pressureSteamIn, input.flowSteamRate,
       input.temperatureWaterIn, input.pressureWaterOut,
       input.flowWaterRate, input.tempMakeupWater,
@@ -614,10 +613,7 @@ export class ProcessHeatingApiService {
       costSavingsBoiler: output.costSavingsBoiler,
       costSavingsWNT: output.costSavingsWNT,
       costSavingsDWH: output.costSavingsDWH,
-
     }
-    output.delete();
-    WaterHeatingInstance.delete();
     return results;
   }
 
@@ -750,9 +746,8 @@ export class ProcessHeatingApiService {
     );
 
     let steamCondition = this.suiteApiHelperService.getSteamCondition(input.condSteam);
-    let WaterHeatingUsingFlueInstance = new this.toolsSuiteApiService.ToolsSuiteModule.WaterHeatingUsingFlue();
 
-    let output = WaterHeatingUsingFlueInstance.calculate(GasCompositionsInstance,
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.waterHeatingUsingFlue(GasCompositionsInstance,
       input.tempFlueGas,
       input.percO2,
       input.tempCombAir,
@@ -789,9 +784,6 @@ export class ProcessHeatingApiService {
       costSavingsBoiler: output.costSavingsBoiler,
       energySavedTotal: output.energySavedTotal,
     }
-
-    output.delete();
-    WaterHeatingUsingFlueInstance.delete();
     GasCompositionsInstance.delete();
     return results;
   }
@@ -854,8 +846,7 @@ export class ProcessHeatingApiService {
   }
 
   waterHeatingUsingExhaust(input: WasteHeatInput): WasteHeatOutput {
-    let WaterHeatingInstance = new this.toolsSuiteApiService.ToolsSuiteModule.WaterHeatingUsingExhaust();
-    let output = WaterHeatingInstance.calculate(input.availableHeat, input.heatInput,
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.waterHeatingUsingExhaust(input.availableHeat, input.heatInput,
       input.hxEfficiency, input.chillerInTemperature,
       input.chillerOutTemperature, input.copChiller,
       input.chillerEfficiency, input.copCompressor);
@@ -868,8 +859,6 @@ export class ProcessHeatingApiService {
       annualEnergy: output.annualEnergy,
       annualCost: output.annualCost
     }
-    output.delete();
-    WaterHeatingInstance.delete();
     return results;
   }
 
